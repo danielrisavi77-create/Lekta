@@ -10116,6 +10116,256 @@
       "autoFixable": true
     }
   ],
+  "sois-ft-vojno-inzenjerstvo-diplomski": [
+    {
+      "ruleId": "sois-ft-vojno-inzenjerstvo-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-inzenjerstvo-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-inzenjerstvo-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-inzenjerstvo-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-inzenjerstvo-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-inzenjerstvo-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
+  "sois-ft-vojno-inzenjerstvo-zavrsni": [
+    {
+      "ruleId": "sois-ft-vojno-inzenjerstvo-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-inzenjerstvo-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-inzenjerstvo-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-inzenjerstvo-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-inzenjerstvo-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-inzenjerstvo-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
+  "sois-ft-vojno-pomorstvo-diplomski": [
+    {
+      "ruleId": "sois-ft-vojno-pomorstvo-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-pomorstvo-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-pomorstvo-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-pomorstvo-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-pomorstvo-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-pomorstvo-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
+  "sois-ft-vojno-vodjenje-diplomski": [
+    {
+      "ruleId": "sois-ft-vojno-vodjenje-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-vodjenje-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-vodjenje-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-vodjenje-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-vodjenje-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-vodjenje-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
+  "sois-ft-vojno-vodjenje-zavrsni": [
+    {
+      "ruleId": "sois-ft-vojno-vodjenje-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-vodjenje-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-vodjenje-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-vodjenje-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-vodjenje-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sois-ft-vojno-vodjenje-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
   "sumfak-diplomski": [
     {
       "ruleId": "sumfak-diplomski--font",

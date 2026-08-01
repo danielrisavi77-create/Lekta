@@ -2025,6 +2025,46 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "sois-ft-vojno-inzenjerstvo-diplomski",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-08-01"
+    },
+    {
+      "profileId": "sois-ft-vojno-inzenjerstvo-zavrsni",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-08-01"
+    },
+    {
+      "profileId": "sois-ft-vojno-pomorstvo-diplomski",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-08-01"
+    },
+    {
+      "profileId": "sois-ft-vojno-vodjenje-diplomski",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-08-01"
+    },
+    {
+      "profileId": "sois-ft-vojno-vodjenje-zavrsni",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-08-01"
+    },
+    {
       "profileId": "sumfak-diplomski",
       "scored": 2,
       "machineCheckable": 9,
@@ -2977,5 +3017,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 2009
+  "totalScored": 2044
 }

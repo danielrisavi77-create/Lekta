@@ -13,7 +13,7 @@ bajt-identicno (`src/repair/apply-fixers.ts`).
 Ulogu "prompta" ima recept: niz `{fixerId, ruleId, params}` koji klijent slozi iz
 PROFILA prije slanja. Server pravila ne izvodi - provjeri je li fixer poznat i ziv,
 sanira parametre i izvrsi. Zato je recept po fakultetu izrazen kao PODACI, ne kao tekst:
-jedna masina, `395` skupova vrijednosti.
+jedna masina, `400` skupova vrijednosti.
 
 Vrijednosti dolaze iz onoga sto zivi engine stvarno cita (`rules` profila; ciljane
 vrijednosti racuna `paramsForCheck` u `src/ui/repair-items.ts`), a provenijencija
@@ -22,10 +22,10 @@ pravilo nije vezano uz potvrdjen izvor - ne nagadja se.
 
 ## Opseg
 
-- profila: **395**
-- s popravkom po UPUTI FAKULTETA: **356**
+- profila: **400**
+- s popravkom po UPUTI FAKULTETA: **361**
 - samo univerzalna higijena (prazni odlomci), bez potvrdjenih tehnickih pravila: **39**
-- ukupno stavki recepta: **2173**
+- ukupno stavki recepta: **2208**
 
 Sto se NE popravlja automatski: sadrzaj, argument, citati i literatura (osim provjere
 postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
@@ -3465,6 +3465,78 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 | Velicina slova | `font-fixer` | 12 pt | [Pravilnik o studiranju na preddiplomskim studijima i diplomskom studiju Metalurskog fakulteta (Prilog II: Naputak o zavrsnom radu)](https://arhiva.simet.hr/vidik.simet.hr/simet/hr/nastava/osnovna-pravila-studiranja/pravilnik-o-studiranju/Pravilnik%20o%20studiranju%20na%20preddiplomskim%20i%20diplomskom%20studiju%20Metalurskog%20fakulteta.pdf) | Prilog II, t.6 Izgled teksta (str. 45) |
 | Prored (jednostruki) | `line-spacing-fixer` | prored 1 | [Pravilnik o studiranju na preddiplomskim studijima i diplomskom studiju Metalurskog fakulteta (Prilog II: Naputak o zavrsnom radu)](https://arhiva.simet.hr/vidik.simet.hr/simet/hr/nastava/osnovna-pravila-studiranja/pravilnik-o-studiranju/Pravilnik%20o%20studiranju%20na%20preddiplomskim%20i%20diplomskom%20studiju%20Metalurskog%20fakulteta.pdf) | Prilog II, t.6 Izgled teksta (str. 45) |
 | A4 format | `paper-size-fixer` | 21 x 29,7 cm | [Pravilnik o studiranju na preddiplomskim studijima i diplomskom studiju Metalurskog fakulteta (Prilog II: Naputak o zavrsnom radu)](https://arhiva.simet.hr/vidik.simet.hr/simet/hr/nastava/osnovna-pravila-studiranja/pravilnik-o-studiranju/Pravilnik%20o%20studiranju%20na%20preddiplomskim%20i%20diplomskom%20studiju%20Metalurskog%20fakulteta.pdf) | Prilog II, Shema izgleda zavrsnog rada, t.1 (str. 44) |
+| Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
+
+### sois-ft
+
+#### SOIS-FT, Vojno inzenjerstvo, diplomski rad
+
+`sois-ft-vojno-inzenjerstvo-diplomski` · status: partial · vrste rada: graduate
+
+| Pravilo | Fixer | Ciljana vrijednost | Izvor | Str. |
+|---|---|---|---|---|
+| Font | `font-fixer` | Times New Roman | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Poravnanje | `alignment-fixer` | obostrano | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Format papira A4 | `paper-size-fixer` | 21 x 29,7 cm | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
+
+#### SOIS-FT, Vojno inzenjerstvo, zavrsni rad
+
+`sois-ft-vojno-inzenjerstvo-zavrsni` · status: partial · vrste rada: final
+
+| Pravilo | Fixer | Ciljana vrijednost | Izvor | Str. |
+|---|---|---|---|---|
+| Font | `font-fixer` | Times New Roman | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Poravnanje | `alignment-fixer` | obostrano | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Format papira A4 | `paper-size-fixer` | 21 x 29,7 cm | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
+
+#### SOIS-FT, Vojno pomorstvo, integrirani diplomski rad
+
+`sois-ft-vojno-pomorstvo-diplomski` · status: partial · vrste rada: graduate
+
+| Pravilo | Fixer | Ciljana vrijednost | Izvor | Str. |
+|---|---|---|---|---|
+| Font | `font-fixer` | Times New Roman | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Poravnanje | `alignment-fixer` | obostrano | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Format papira A4 | `paper-size-fixer` | 21 x 29,7 cm | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
+
+#### SOIS-FT, Vojno vodjenje i upravljanje, diplomski rad
+
+`sois-ft-vojno-vodjenje-diplomski` · status: partial · vrste rada: graduate
+
+| Pravilo | Fixer | Ciljana vrijednost | Izvor | Str. |
+|---|---|---|---|---|
+| Font | `font-fixer` | Times New Roman | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Poravnanje | `alignment-fixer` | obostrano | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Format papira A4 | `paper-size-fixer` | 21 x 29,7 cm | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
+
+#### SOIS-FT, Vojno vodjenje i upravljanje, zavrsni rad
+
+`sois-ft-vojno-vodjenje-zavrsni` · status: partial · vrste rada: final
+
+| Pravilo | Fixer | Ciljana vrijednost | Izvor | Str. |
+|---|---|---|---|---|
+| Font | `font-fixer` | Times New Roman | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Poravnanje | `alignment-fixer` | obostrano | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
+| Format papira A4 | `paper-size-fixer` | 21 x 29,7 cm | [Upute za pisanje zavrsnih/diplomskih radova na SOIS FT](https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf) | Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5 |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 
 ### sumfak

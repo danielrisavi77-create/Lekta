@@ -86,11 +86,11 @@
     "dynamicEmitters": [
       {
         "file": "src/analysis/analyze-docx.ts",
-        "line": 136
+        "line": 194
       },
       {
         "file": "src/analysis/analyze-docx.ts",
-        "line": 157
+        "line": 215
       },
       {
         "file": "src/audits/structure.ts",
@@ -103,14 +103,14 @@
     ]
   },
   "counts": {
-    "checks": 71,
+    "checks": 72,
     "scoredChecks": 54,
-    "informativeChecks": 11,
+    "informativeChecks": 12,
     "dynamicScoredChecks": 6,
-    "uniqueIssueTitles": 92,
+    "uniqueIssueTitles": 93,
     "intakeRejectCodes": 6,
-    "compiledCheckIds": 17,
-    "profiles": 395,
+    "compiledCheckIds": 28,
+    "profiles": 400,
     "checksWithoutSource": 3,
     "checksWithStableId": 0
   },
@@ -126,7 +126,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 167,
+          "line": 227,
           "provenance": "emitter",
           "titleLiteral": "Abecedni poredak literature"
         }
@@ -144,7 +144,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 163,
+          "line": 223,
           "provenance": "emitter",
           "titleLiteral": "Automatizacija citatnog stila"
         }
@@ -163,7 +163,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 161,
+          "line": 219,
           "provenance": "emitter",
           "titleLiteral": "Citirano → literatura"
         }
@@ -181,7 +181,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 170,
+          "line": 230,
           "provenance": "emitter",
           "titleLiteral": "Datumi pristupa mrežnim izvorima"
         }
@@ -199,7 +199,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 166,
+          "line": 226,
           "provenance": "emitter",
           "titleLiteral": "Dosljednost interpunkcije citatnica"
         }
@@ -235,7 +235,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 168,
+          "line": 228,
           "provenance": "emitter",
           "titleLiteral": "Isti autor i godina (a/b/c)"
         }
@@ -289,7 +289,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 161,
+          "line": 219,
           "provenance": "emitter",
           "titleLiteral": "Literatura → citirano"
         }
@@ -307,7 +307,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 165,
+          "line": 225,
           "provenance": "emitter",
           "titleLiteral": "Lokator uz izravne citate"
         }
@@ -325,7 +325,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 169,
+          "line": 229,
           "provenance": "emitter",
           "titleLiteral": "Minimalan broj izvora profila"
         }
@@ -361,7 +361,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 164,
+          "line": 224,
           "provenance": "emitter",
           "titleLiteral": "Potpunost bibliografskih zapisa"
         }
@@ -416,7 +416,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 161,
+          "line": 219,
           "provenance": "emitter",
           "titleLiteral": "Prepoznate citatnice"
         }
@@ -488,7 +488,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 173,
+          "line": 233,
           "provenance": "emitter",
           "titleLiteral": "Izvori ispod slika i tablica"
         }
@@ -506,7 +506,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 172,
+          "line": 232,
           "provenance": "emitter",
           "titleLiteral": "Naslovi slika i grafikona"
         }
@@ -524,7 +524,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 171,
+          "line": 231,
           "provenance": "emitter",
           "titleLiteral": "Naslovi tablica"
         }
@@ -542,7 +542,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 175,
+          "line": 235,
           "provenance": "emitter",
           "titleLiteral": "Oblik poveznica"
         }
@@ -560,7 +560,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 174,
+          "line": 234,
           "provenance": "emitter",
           "titleLiteral": "Popisi slika i tablica"
         }
@@ -578,7 +578,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 176,
+          "line": 236,
           "provenance": "emitter",
           "titleLiteral": "Prazni odlomci"
         }
@@ -597,7 +597,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 137,
+          "line": 195,
           "provenance": "emitter",
           "titleLiteral": "Automatske fusnote"
         }
@@ -616,7 +616,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 131,
+          "line": 189,
           "provenance": "emitter",
           "titleLiteral": "Dominantni font"
         }
@@ -646,7 +646,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 136,
+          "line": 194,
           "provenance": "emitter",
           "titleLiteral": "Format stranice A4"
         }
@@ -666,7 +666,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 134,
+          "line": 192,
           "provenance": "emitter",
           "titleLiteral": "Margine dokumenta"
         }
@@ -685,7 +685,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 137,
+          "line": 195,
           "provenance": "emitter",
           "titleLiteral": "Oblikovanje fusnota"
         }
@@ -703,7 +703,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 140,
+          "line": 198,
           "provenance": "emitter",
           "titleLiteral": "Položaj i stil oznaka fusnota"
         }
@@ -722,7 +722,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 135,
+          "line": 193,
           "provenance": "emitter",
           "titleLiteral": "Poravnanje osnovnog teksta"
         }
@@ -741,7 +741,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 133,
+          "line": 191,
           "provenance": "emitter",
           "titleLiteral": "Prored osnovnog teksta"
         }
@@ -782,7 +782,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 132,
+          "line": 190,
           "provenance": "emitter",
           "titleLiteral": "Veličina osnovnog teksta"
         }
@@ -798,7 +798,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 152,
+          "line": 210,
           "provenance": "emitter",
           "titleLiteral": "Broj glavnih poglavlja"
         }
@@ -816,7 +816,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 144,
+          "line": 202,
           "provenance": "emitter",
           "titleLiteral": "Brojevi stranica"
         }
@@ -834,7 +834,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 25,
+          "line": 40,
           "provenance": "emitter",
           "titleLiteral": "Brojevi stranica u sadržaju"
         }
@@ -850,7 +850,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 25,
+          "line": 40,
           "provenance": "emitter",
           "titleLiteral": "Detalji automatskog sadržaja"
         }
@@ -869,7 +869,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 147,
+          "line": 205,
           "provenance": "emitter",
           "titleLiteral": "Dijelovi verificiranog profila"
         }
@@ -887,7 +887,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 142,
+          "line": 200,
           "provenance": "emitter",
           "titleLiteral": "Dubina decimalnog numeriranja"
         }
@@ -906,7 +906,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 157,
+          "line": 215,
           "provenance": "emitter",
           "titleLiteral": "Elementi naslovne stranice"
         }
@@ -922,7 +922,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 148,
+          "line": 206,
           "provenance": "emitter",
           "titleLiteral": "Etički aspekti empirijskog istraživanja"
         }
@@ -940,7 +940,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 25,
+          "line": 40,
           "provenance": "emitter",
           "titleLiteral": "Font i veličina sadržaja"
         }
@@ -958,7 +958,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 141,
+          "line": 199,
           "provenance": "emitter",
           "titleLiteral": "Hijerarhija naslova"
         }
@@ -977,7 +977,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 154,
+          "line": 212,
           "provenance": "emitter",
           "titleLiteral": "Ključne riječi u samom radu"
         }
@@ -993,7 +993,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 148,
+          "line": 206,
           "provenance": "emitter",
           "titleLiteral": "Metodološka varijanta rada"
         }
@@ -1011,7 +1011,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 25,
+          "line": 40,
           "provenance": "emitter",
           "titleLiteral": "Naslovi dokumenta ↔ sadržaj"
         }
@@ -1029,7 +1029,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 144,
+          "line": 202,
           "provenance": "emitter",
           "titleLiteral": "Naslovnica bez broja stranice"
         }
@@ -1065,7 +1065,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 144,
+          "line": 202,
           "provenance": "emitter",
           "titleLiteral": "Numeriranje od prve stranice Uvoda"
         }
@@ -1103,7 +1103,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 156,
+          "line": 214,
           "provenance": "emitter",
           "titleLiteral": "Omjer Uvoda i Zaključka"
         }
@@ -1119,7 +1119,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 151,
+          "line": 209,
           "provenance": "emitter",
           "titleLiteral": "Opseg u autorskim karticama"
         }
@@ -1137,7 +1137,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 150,
+          "line": 208,
           "provenance": "emitter",
           "titleLiteral": "Opseg u stranicama"
         }
@@ -1156,7 +1156,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 146,
+          "line": 204,
           "provenance": "emitter",
           "titleLiteral": "Osnovni dijelovi rada"
         }
@@ -1174,7 +1174,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 144,
+          "line": 202,
           "provenance": "emitter",
           "titleLiteral": "Položaj broja stranice"
         }
@@ -1210,7 +1210,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 155,
+          "line": 213,
           "provenance": "emitter",
           "titleLiteral": "Profilni opseg riječi"
         }
@@ -1228,7 +1228,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 27,
+          "line": 42,
           "provenance": "emitter",
           "titleLiteral": "Raspored naslovne stranice"
         }
@@ -1246,7 +1246,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 157,
+          "line": 215,
           "provenance": "emitter",
           "titleLiteral": "Redoslijed elemenata naslovnice"
         }
@@ -1264,7 +1264,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 143,
+          "line": 201,
           "provenance": "emitter",
           "titleLiteral": "Sadržaj dokumenta"
         }
@@ -1283,7 +1283,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 153,
+          "line": 211,
           "provenance": "emitter",
           "titleLiteral": "Sažeci u samom radu"
         }
@@ -1301,7 +1301,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 145,
+          "line": 203,
           "provenance": "emitter",
           "titleLiteral": "Shema numeriranja stranica"
         }
@@ -1317,7 +1317,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 148,
+          "line": 206,
           "provenance": "emitter",
           "titleLiteral": "Struktura metodološkog profila"
         }
@@ -1335,7 +1335,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 27,
+          "line": 42,
           "provenance": "emitter",
           "titleLiteral": "Tipografija korica i naslovnice"
         }
@@ -1353,7 +1353,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 159,
+          "line": 217,
           "provenance": "emitter",
           "titleLiteral": "Uporaba Word stilova naslova"
         }
@@ -1371,12 +1371,36 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 158,
+          "line": 216,
           "provenance": "emitter",
           "titleLiteral": "Zahtjevi za ručnu završnu provjeru"
         }
       ],
       "exampleDetail": "7 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda"
+    },
+    {
+      "title": "Tehničko-tipografska dosljednost",
+      "category": "typography",
+      "scored": false,
+      "statuses": [
+        "pass"
+      ],
+      "observedAtRuntime": true,
+      "sources": [
+        {
+          "file": "src/analysis/analyze-docx.ts",
+          "line": 247,
+          "provenance": "emitter",
+          "titleLiteral": "Tehničko-tipografska dosljednost"
+        },
+        {
+          "file": "src/analysis/analyze-docx.ts",
+          "line": 251,
+          "provenance": "emitter",
+          "titleLiteral": "Tehničko-tipografska dosljednost"
+        }
+      ],
+      "exampleDetail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu"
     }
   ],
   "issues": [
@@ -1390,7 +1414,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 166,
+          "line": 226,
           "provenance": "emitter",
           "titleLiteral": "Citatnice koriste nedosljednu interpunkciju"
         }
@@ -1406,7 +1430,7 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 621,
+          "line": 728,
           "provenance": "demo",
           "titleLiteral": "Četiri Ibid. bilješke nemaju jasnu prethodnu bilješku"
         }
@@ -1422,7 +1446,7 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 621,
+          "line": 728,
           "provenance": "demo",
           "titleLiteral": "Dva propisa navedena su bez broja Narodnih novina"
         }
@@ -1470,7 +1494,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 168,
+          "line": 228,
           "provenance": "emitter",
           "titleLiteral": "Isti autor i godina možda nisu razlučeni slovima"
         }
@@ -1486,7 +1510,7 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 625,
+          "line": 732,
           "provenance": "demo",
           "titleLiteral": "Jedna citatnica nije pronađena u literaturi"
         }
@@ -1534,7 +1558,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 169,
+          "line": 229,
           "provenance": "emitter",
           "titleLiteral": "Moguće premalo izvora prema verificiranom profilu"
         }
@@ -1550,7 +1574,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 165,
+          "line": 225,
           "provenance": "emitter",
           "titleLiteral": "Mogući izravni citati bez broja stranice"
         }
@@ -1566,7 +1590,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 164,
+          "line": 224,
           "provenance": "emitter",
           "titleLiteral": "Mogući nepotpuni izvori u literaturi"
         }
@@ -1614,7 +1638,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 170,
+          "line": 230,
           "provenance": "emitter",
           "titleLiteral": "Mrežni izvori bez datuma pristupa"
         }
@@ -1646,7 +1670,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 161,
+          "line": 219,
           "provenance": "emitter",
           "titleLiteral": "Neke citatnice nisu pronađene u literaturi"
         }
@@ -1662,7 +1686,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 161,
+          "line": 219,
           "provenance": "emitter",
           "titleLiteral": "Neki izvori iz literature nisu pronađeni u tekstu"
         }
@@ -1694,7 +1718,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 161,
+          "line": 219,
           "provenance": "emitter",
           "titleLiteral": "Nisu prepoznate autor-godina citatnice"
         }
@@ -1710,7 +1734,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 137,
+          "line": 195,
           "provenance": "emitter",
           "titleLiteral": "Nisu pronađene automatske fusnote"
         }
@@ -1726,7 +1750,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 163,
+          "line": 223,
           "provenance": "emitter",
           "titleLiteral": "Odabrani citatni stil nije u potpunosti automatiziran"
         }
@@ -1742,7 +1766,7 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 615,
+          "line": 722,
           "provenance": "demo",
           "titleLiteral": "Pet citatnica nije pronađeno u literaturi"
         }
@@ -1758,7 +1782,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 167,
+          "line": 227,
           "provenance": "emitter",
           "titleLiteral": "Popis literature možda nije abecedno poredan"
         }
@@ -1788,7 +1812,7 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 621,
+          "line": 728,
           "provenance": "demo",
           "titleLiteral": "Tri izvora iz fusnota nisu u popisu literature"
         }
@@ -1804,7 +1828,7 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 615,
+          "line": 722,
           "provenance": "demo",
           "titleLiteral": "Tri mrežna izvora nemaju datum pristupa"
         }
@@ -1820,7 +1844,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 176,
+          "line": 236,
           "provenance": "emitter",
           "titleLiteral": "Dokument sadrži mnogo praznih odlomaka"
         }
@@ -1836,7 +1860,7 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 625,
+          "line": 732,
           "provenance": "demo",
           "titleLiteral": "Dvije gole poveznice"
         }
@@ -1852,7 +1876,7 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 615,
+          "line": 722,
           "provenance": "demo",
           "titleLiteral": "Dvije tablice nemaju prepoznat naslov"
         }
@@ -1868,7 +1892,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 173,
+          "line": 233,
           "provenance": "emitter",
           "titleLiteral": "Mogu nedostajati izvori uz grafičke elemente"
         }
@@ -1884,7 +1908,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 174,
+          "line": 234,
           "provenance": "emitter",
           "titleLiteral": "Mogu nedostajati popisi ilustracija"
         }
@@ -1900,7 +1924,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 175,
+          "line": 235,
           "provenance": "emitter",
           "titleLiteral": "Moguće neispravno zapisane poveznice"
         }
@@ -1916,7 +1940,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 171,
+          "line": 231,
           "provenance": "emitter",
           "titleLiteral": "Neke tablice nemaju prepoznat naslov"
         }
@@ -1932,7 +1956,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 172,
+          "line": 232,
           "provenance": "emitter",
           "titleLiteral": "Neki grafički elementi nemaju prepoznat naslov"
         }
@@ -1948,7 +1972,7 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 621,
+          "line": 728,
           "provenance": "demo",
           "titleLiteral": "Povećan udio praznih odlomaka"
         }
@@ -1964,7 +1988,7 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 615,
+          "line": 722,
           "provenance": "demo",
           "titleLiteral": "Desna margina odstupa od profila"
         }
@@ -1980,7 +2004,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 131,
+          "line": 189,
           "provenance": "emitter",
           "titleLiteral": "Dominantni font ne odgovara profilu"
         }
@@ -1996,7 +2020,7 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 625,
+          "line": 732,
           "provenance": "demo",
           "titleLiteral": "Font nije ujednačen kroz dokument"
         }
@@ -2012,7 +2036,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 136,
+          "line": 194,
           "provenance": "emitter",
           "titleLiteral": "Format stranice možda nije A4"
         }
@@ -2028,7 +2052,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 136,
+          "line": 194,
           "provenance": "emitter",
           "titleLiteral": "Format stranice ne odgovara profilu"
         }
@@ -2044,7 +2068,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 137,
+          "line": 195,
           "provenance": "emitter",
           "titleLiteral": "Fusnote odstupaju od pravnog profila"
         }
@@ -2060,7 +2084,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 134,
+          "line": 192,
           "provenance": "emitter",
           "titleLiteral": "Margine nisu jednake očekivanim postavkama"
         }
@@ -2076,7 +2100,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 135,
+          "line": 193,
           "provenance": "emitter",
           "titleLiteral": "Osnovni tekst nije dominantno obostrano poravnat"
         }
@@ -2092,7 +2116,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 140,
+          "line": 198,
           "provenance": "emitter",
           "titleLiteral": "Oznake fusnota nisu pravilno postavljene"
         }
@@ -2108,7 +2132,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 133,
+          "line": 191,
           "provenance": "emitter",
           "titleLiteral": "Prored nije usklađen s profilom"
         }
@@ -2124,7 +2148,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 132,
+          "line": 190,
           "provenance": "emitter",
           "titleLiteral": "Veličina osnovnog teksta odstupa"
         }
@@ -2140,7 +2164,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 155,
+          "line": 213,
           "provenance": "emitter",
           "titleLiteral": "Broj riječi je izvan raspona odabranog profila"
         }
@@ -2156,7 +2180,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 144,
+          "line": 202,
           "provenance": "emitter",
           "titleLiteral": "Broj stranice nije postavljen desno"
         }
@@ -2172,7 +2196,7 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 603,
+          "line": 710,
           "provenance": "demo",
           "titleLiteral": "Dokument ne izgleda kao završni ili diplomski rad"
         }
@@ -2188,7 +2212,7 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 625,
+          "line": 732,
           "provenance": "demo",
           "titleLiteral": "Dokument nema automatske brojeve stranica"
         }
@@ -2204,7 +2228,7 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 615,
+          "line": 722,
           "provenance": "demo",
           "titleLiteral": "Dva naslova možda su ručno oblikovana"
         }
@@ -2220,7 +2244,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 27,
+          "line": 42,
           "provenance": "emitter",
           "titleLiteral": "Elementi naslovnice nisu centrirani"
         }
@@ -2272,7 +2296,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 27,
+          "line": 42,
           "provenance": "emitter",
           "titleLiteral": "Korice ili naslovnica odstupaju od predloška"
         }
@@ -2288,7 +2312,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 148,
+          "line": 206,
           "provenance": "emitter",
           "titleLiteral": "Metodološku varijantu nije moguće pouzdano prepoznati"
         }
@@ -2336,7 +2360,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 141,
+          "line": 199,
           "provenance": "emitter",
           "titleLiteral": "Naslovi preskaču razinu hijerarhije"
         }
@@ -2352,7 +2376,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 157,
+          "line": 215,
           "provenance": "emitter",
           "titleLiteral": "Naslovna stranica možda nije potpuna"
         }
@@ -2368,7 +2392,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 148,
+          "line": 206,
           "provenance": "emitter",
           "titleLiteral": "Nedostaju dijelovi odabranog metodološkog profila"
         }
@@ -2384,7 +2408,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 147,
+          "line": 205,
           "provenance": "emitter",
           "titleLiteral": "Nedostaju mogući obvezni dijelovi verificiranog profila"
         }
@@ -2400,7 +2424,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 25,
+          "line": 40,
           "provenance": "emitter",
           "titleLiteral": "Neke stavke sadržaja nemaju broj stranice"
         }
@@ -2416,7 +2440,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 159,
+          "line": 217,
           "provenance": "emitter",
           "titleLiteral": "Neki naslovi možda nisu označeni Word stilom"
         }
@@ -2432,7 +2456,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 148,
+          "line": 206,
           "provenance": "emitter",
           "titleLiteral": "Nije prepoznat osvrt na etičke aspekte"
         }
@@ -2448,7 +2472,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 143,
+          "line": 201,
           "provenance": "emitter",
           "titleLiteral": "Nije pronađen sadržaj"
         }
@@ -2464,7 +2488,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 146,
+          "line": 204,
           "provenance": "emitter",
           "titleLiteral": "Nisu prepoznati svi osnovni dijelovi rada"
         }
@@ -2480,7 +2504,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 144,
+          "line": 202,
           "provenance": "emitter",
           "titleLiteral": "Nisu pronađeni automatski brojevi stranica"
         }
@@ -2512,7 +2536,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 148,
+          "line": 206,
           "provenance": "emitter",
           "titleLiteral": "Odabrana metodološka varijanta možda ne odgovara dokumentu"
         }
@@ -2528,7 +2552,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 156,
+          "line": 214,
           "provenance": "emitter",
           "titleLiteral": "Omjer Uvoda ili Zaključka odstupa od FPZG smjernice"
         }
@@ -2542,7 +2566,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 151,
+          "line": 209,
           "provenance": "emitter",
           "titleLiteral": "Opseg je izvan katedarskog raspona"
         }
@@ -2558,7 +2582,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 142,
+          "line": 200,
           "provenance": "emitter",
           "titleLiteral": "Previše razina numeriranja naslova"
         }
@@ -2574,7 +2598,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 130,
+          "line": 188,
           "provenance": "emitter",
           "titleLiteral": "Profil ograničeno terenski testiran"
         }
@@ -2590,7 +2614,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 144,
+          "line": 202,
           "provenance": "emitter",
           "titleLiteral": "Provjeri je li naslovnica bez broja stranice"
         }
@@ -2606,7 +2630,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 154,
+          "line": 212,
           "provenance": "emitter",
           "titleLiteral": "Provjeri ključne riječi u samom radu"
         }
@@ -2622,7 +2646,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 144,
+          "line": 202,
           "provenance": "emitter",
           "titleLiteral": "Provjeri početak numeriranja na Uvodu"
         }
@@ -2638,7 +2662,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 145,
+          "line": 203,
           "provenance": "emitter",
           "titleLiteral": "Provjeri rimsku i arapsku numeraciju"
         }
@@ -2654,7 +2678,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 153,
+          "line": 211,
           "provenance": "emitter",
           "titleLiteral": "Provjeri sažetke u samom radu"
         }
@@ -2670,7 +2694,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 152,
+          "line": 210,
           "provenance": "emitter",
           "titleLiteral": "Rad ima više glavnih poglavlja od katedarske preporuke"
         }
@@ -2686,7 +2710,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 157,
+          "line": 215,
           "provenance": "emitter",
           "titleLiteral": "Redoslijed naslovne stranice nije očekivan"
         }
@@ -2702,7 +2726,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 158,
+          "line": 216,
           "provenance": "emitter",
           "titleLiteral": "Ručna završna provjera verificiranog profila"
         }
@@ -2718,7 +2742,7 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 625,
+          "line": 732,
           "provenance": "demo",
           "titleLiteral": "Sadržaj (tablica sadržaja) nije pronađen"
         }
@@ -2734,7 +2758,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 25,
+          "line": 40,
           "provenance": "emitter",
           "titleLiteral": "Sadržaj možda nije ažuriran"
         }
@@ -2750,7 +2774,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 25,
+          "line": 40,
           "provenance": "emitter",
           "titleLiteral": "Sadržaj nije oblikovan kao glavni tekst"
         }
@@ -2775,7 +2799,7 @@
       "sources": [
         {
           "file": "src/analysis/analyze-docx.ts",
-          "line": 150,
+          "line": 208,
           "provenance": "emitter",
           "titleLiteral": "Spremljeni broj stranica je izvan profilnog raspona"
         }
@@ -2791,7 +2815,7 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 621,
+          "line": 728,
           "provenance": "demo",
           "titleLiteral": "Tri naslova možda su ručno oblikovana"
         }
@@ -2807,9 +2831,31 @@
       "sources": [
         {
           "file": "src/ui/app.ts",
-          "line": 615,
+          "line": 722,
           "provenance": "demo",
           "titleLiteral": "Tri naslova preskaču razinu hijerarhije"
+        }
+      ]
+    },
+    {
+      "title": "Pronađene su tehničko-tipografske nedosljednosti",
+      "category": "typography",
+      "severities": [
+        "warning"
+      ],
+      "observedAtRuntime": false,
+      "sources": [
+        {
+          "file": "src/analysis/analyze-docx.ts",
+          "line": 247,
+          "provenance": "emitter",
+          "titleLiteral": "Pronađene su tehničko-tipografske nedosljednosti"
+        },
+        {
+          "file": "src/analysis/analyze-docx.ts",
+          "line": 251,
+          "provenance": "emitter",
+          "titleLiteral": "Pronađene su tehničko-tipografske nedosljednosti"
         }
       ]
     }
@@ -2868,7 +2914,18 @@
     "footnote-font",
     "footnote-size",
     "footnote-spacing",
-    "heading-rules"
+    "heading-rules",
+    "element-caption-rules",
+    "bibliography-rules",
+    "citation-sync-rules",
+    "legal-footnote-repair-rules",
+    "table-figure-rescue-rules",
+    "section-surgery-rules",
+    "croatian-typography-rules",
+    "consistency-rules",
+    "required-section-rules",
+    "link-rules",
+    "cross-file-submission-rules"
   ],
   "scoredDimensions": [
     "font",
@@ -10777,6 +10834,106 @@
         "margins": 1,
         "paper": 1,
         "justify": 0,
+        "toc": 0,
+        "pagenums": 0,
+        "sections": 0,
+        "words": 0,
+        "struktura": 1,
+        "fusnote": 0
+      }
+    },
+    {
+      "profileId": "sois-ft-vojno-inzenjerstvo-zavrsni",
+      "unitId": "sois-ft",
+      "status": "partial",
+      "workType": "final",
+      "dims": {
+        "font": 1,
+        "size": 1,
+        "spacing": 1,
+        "margins": 1,
+        "paper": 1,
+        "justify": 1,
+        "toc": 0,
+        "pagenums": 0,
+        "sections": 0,
+        "words": 0,
+        "struktura": 1,
+        "fusnote": 0
+      }
+    },
+    {
+      "profileId": "sois-ft-vojno-inzenjerstvo-diplomski",
+      "unitId": "sois-ft",
+      "status": "partial",
+      "workType": "graduate",
+      "dims": {
+        "font": 1,
+        "size": 1,
+        "spacing": 1,
+        "margins": 1,
+        "paper": 1,
+        "justify": 1,
+        "toc": 0,
+        "pagenums": 0,
+        "sections": 0,
+        "words": 0,
+        "struktura": 1,
+        "fusnote": 0
+      }
+    },
+    {
+      "profileId": "sois-ft-vojno-vodjenje-zavrsni",
+      "unitId": "sois-ft",
+      "status": "partial",
+      "workType": "final",
+      "dims": {
+        "font": 1,
+        "size": 1,
+        "spacing": 1,
+        "margins": 1,
+        "paper": 1,
+        "justify": 1,
+        "toc": 0,
+        "pagenums": 0,
+        "sections": 0,
+        "words": 0,
+        "struktura": 1,
+        "fusnote": 0
+      }
+    },
+    {
+      "profileId": "sois-ft-vojno-vodjenje-diplomski",
+      "unitId": "sois-ft",
+      "status": "partial",
+      "workType": "graduate",
+      "dims": {
+        "font": 1,
+        "size": 1,
+        "spacing": 1,
+        "margins": 1,
+        "paper": 1,
+        "justify": 1,
+        "toc": 0,
+        "pagenums": 0,
+        "sections": 0,
+        "words": 0,
+        "struktura": 1,
+        "fusnote": 0
+      }
+    },
+    {
+      "profileId": "sois-ft-vojno-pomorstvo-diplomski",
+      "unitId": "sois-ft",
+      "status": "partial",
+      "workType": "graduate",
+      "dims": {
+        "font": 1,
+        "size": 1,
+        "spacing": 1,
+        "margins": 1,
+        "paper": 1,
+        "justify": 1,
         "toc": 0,
         "pagenums": 0,
         "sections": 0,

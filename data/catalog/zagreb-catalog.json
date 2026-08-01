@@ -2034,5 +2034,25 @@
         ]
       }
     ]
+  },
+  {
+    "id": "sois-ft",
+    "name": "Sveuciliste obrane i sigurnosti \"Dr. Franjo Tudjman\"",
+    "units": [
+      {
+        "id": "sois-ft",
+        "name": "Sveuciliste obrane i sigurnosti \"Dr. Franjo Tudjman\"",
+        "family": "mixed",
+        "programs": [
+          "Vojno inzenjerstvo (prijediplomski)",
+          "Vojno inzenjerstvo (diplomski)",
+          "Vojno vodjenje i upravljanje (prijediplomski)",
+          "Vojno vodjenje i upravljanje (diplomski)",
+          "Vojno pomorstvo (integrirani prijediplomski i diplomski)",
+          "Domovinska sigurnost (poslijediplomski specijalisticki, zajednicki sa Sveucilistem u Zagrebu)"
+        ],
+        "status": "partial"
+      }
+    ]
   }
 ]

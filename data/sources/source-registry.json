@@ -3673,5 +3673,31 @@
     "validityClass": "stable",
     "lastChecked": "2026-08-01",
     "note": "Usvojen 17.2.2016 (Vijece Studija dizajna), potvrdjena nepromijenjenost preko Wayback CDX (isti digest 2022 i 2024). NEMA nijedne rijeci o fontu/velicini/proredu/marginama/formatu papira/poravnanju (potvrdjeno grep + rucno citanje svih 11 clanaka) - za razliku od arh-diplomski (Arhitektura, 2013 Pravilnik) koji EKSPLICITNO objasnjava odsustvo tipografije (izlozbeni A0 poster + A3 knjizice), ovaj Pravilnik o tome jednostavno SUTI (ne kaze zasto nema tipografije). Nema skrivenog \"Naputka za oblikovanje\" (provjereno zivo + Wayback 2017) - obrazac ADU/ALU/MATHOS/FFST ovdje se NE ponavlja. Cl.3: rad se sastoji od istrazivacko-teorijskog i projektnog dijela (\"sastoji se\" - binding, potvrdjuje vec postojecu legacy requiredSections vrijednost bez izmjene)."
+  },
+  {
+    "id": "sois-ft-upute-zavrsni-diplomski-2025",
+    "kind": "guidelines",
+    "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+    "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf",
+    "publisher": "Sveuciliste obrane i sigurnosti \"Dr. Franjo Tudjman\"",
+    "fetchedAt": "2026-08-01",
+    "snapshotPath": "data/sources/sois-ft/sois-ft-upute-zavrsni-diplomski-2025.pdf",
+    "snapshotHash": "613fad0e40a69395108cc1934c92707e6472543146e0abe132ff1ce1aaf8937d",
+    "validityClass": "stable",
+    "lastChecked": "2026-08-01",
+    "note": "Prilog Pravilnika (sois-ft-pravilnik-zavrsni-diplomski-2025, Cl.15(1): \"tehnicko oblikovanje rada... uredjeni su u Uputama...\"). Bez vlastitog KLASA/datuma u samom dokumentu - provenijencija ide preko Pravilnika. Odjeljak 2.2 \"Tehnicke upute\": font/velicina/prored/poravnanje/margine SVI \"treba\" (binding). Stil citiranja (APA drustvena/interdisciplinarna, IEEE tehnicka polja) namjerno NIJE draftan - izvor ne mapira eksplicitno koji od pet SOIS-FT programa spada u koju kategoriju. Predlozak (.docx) provjeren neovisno preko XML-a: potvrdjuje font/velicinu/prored/poravnanje TOCNO, ALI margine u predlosku su 2,0cm gore/desno/dolje + 2,5cm lijevo (ne uniformno 2,5 kako Upute tekst kaze) - pisana Uputa nadjacava predlozak artefakt (CLAUDE.md hijerarhija), margine draftane kao 2,5cm sve strane po tekstu."
+  },
+  {
+    "id": "sois-ft-pravilnik-zavrsni-diplomski-2025",
+    "kind": "regulation",
+    "title": "Pravilnik o zavrsnom i diplomskom radu za studijske programe koji se izvode na SOIS FT",
+    "url": "https://www.sois-ft.hr/_download/repository/Pravilnik_o%20zavrsnom%20i%20diplomskom%20radu%20za%20studijske%20programe%20koji%20se%20izvode%20na%20SOIS%20FT.pdf",
+    "publisher": "Sveuciliste obrane i sigurnosti \"Dr. Franjo Tudjman\"",
+    "fetchedAt": "2026-08-01",
+    "snapshotPath": "data/sources/sois-ft/sois-ft-pravilnik-zavrsni-diplomski-2025.pdf",
+    "snapshotHash": "04f0516d78c27cd15f2952e85bff8add691bcc3213ccec2b756f414b34a8da24",
+    "validityClass": "stable",
+    "lastChecked": "2026-08-01",
+    "note": "Senat, 24. sjednica, 22.4.2025 (KLASA: 025-03/25-02/01), na snazi od cca 6.5.2025. Izmijenjen 27.11.2025 (Odluka, na snazi 5.12.2025) ALI izmjena dira samo komentorstvo/Povjerenstvo (Cl.7/8), NE format - opseg pravilo Cl.10(3) i inkorporacija Uputa (Cl.15(1)) ostaju vazeci nepromijenjeni. Pokriva prijediplomski/diplomski/integrirani; NE spominje poslijediplomski specijalisticki (Domovinska sigurnost) - taj studij namjerno NIJE draftan (zajednicki sa Sveucilistem u Zagrebu, drugaciji status, nema potvrdjen izvor)."
   }
 ]

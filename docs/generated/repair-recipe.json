@@ -27519,6 +27519,666 @@
     ]
   },
   {
+    "id": "sois-ft-vojno-inzenjerstvo-diplomski",
+    "label": "SOIS-FT, Vojno inzenjerstvo, diplomski rad",
+    "unitId": "sois-ft",
+    "status": "partial",
+    "workTypes": [
+      "graduate"
+    ],
+    "items": [
+      {
+        "ruleId": "sois-ft-vojno-inzenjerstvo-diplomski--font",
+        "fixerId": "font-fixer",
+        "label": "Font",
+        "scope": "profil",
+        "target": "Times New Roman",
+        "params": {
+          "fontName": "Times New Roman"
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-inzenjerstvo-diplomski--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-inzenjerstvo-diplomski--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored",
+        "scope": "profil",
+        "target": "prored 1,5",
+        "params": {
+          "multiplier": 1.5
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-inzenjerstvo-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-inzenjerstvo-diplomski--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-inzenjerstvo-diplomski--paper-size",
+        "fixerId": "paper-size-fixer",
+        "label": "Format papira A4",
+        "scope": "profil",
+        "target": "21 x 29,7 cm",
+        "params": {
+          "w": 21,
+          "h": 29.7
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "sois-ft-vojno-inzenjerstvo-zavrsni",
+    "label": "SOIS-FT, Vojno inzenjerstvo, zavrsni rad",
+    "unitId": "sois-ft",
+    "status": "partial",
+    "workTypes": [
+      "final"
+    ],
+    "items": [
+      {
+        "ruleId": "sois-ft-vojno-inzenjerstvo-zavrsni--font",
+        "fixerId": "font-fixer",
+        "label": "Font",
+        "scope": "profil",
+        "target": "Times New Roman",
+        "params": {
+          "fontName": "Times New Roman"
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-inzenjerstvo-zavrsni--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-inzenjerstvo-zavrsni--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored",
+        "scope": "profil",
+        "target": "prored 1,5",
+        "params": {
+          "multiplier": 1.5
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-inzenjerstvo-zavrsni--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-inzenjerstvo-zavrsni--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-inzenjerstvo-zavrsni--paper-size",
+        "fixerId": "paper-size-fixer",
+        "label": "Format papira A4",
+        "scope": "profil",
+        "target": "21 x 29,7 cm",
+        "params": {
+          "w": 21,
+          "h": 29.7
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "sois-ft-vojno-pomorstvo-diplomski",
+    "label": "SOIS-FT, Vojno pomorstvo, integrirani diplomski rad",
+    "unitId": "sois-ft",
+    "status": "partial",
+    "workTypes": [
+      "graduate"
+    ],
+    "items": [
+      {
+        "ruleId": "sois-ft-vojno-pomorstvo-diplomski--font",
+        "fixerId": "font-fixer",
+        "label": "Font",
+        "scope": "profil",
+        "target": "Times New Roman",
+        "params": {
+          "fontName": "Times New Roman"
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-pomorstvo-diplomski--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-pomorstvo-diplomski--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored",
+        "scope": "profil",
+        "target": "prored 1,5",
+        "params": {
+          "multiplier": 1.5
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-pomorstvo-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-pomorstvo-diplomski--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-pomorstvo-diplomski--paper-size",
+        "fixerId": "paper-size-fixer",
+        "label": "Format papira A4",
+        "scope": "profil",
+        "target": "21 x 29,7 cm",
+        "params": {
+          "w": 21,
+          "h": 29.7
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "sois-ft-vojno-vodjenje-diplomski",
+    "label": "SOIS-FT, Vojno vodjenje i upravljanje, diplomski rad",
+    "unitId": "sois-ft",
+    "status": "partial",
+    "workTypes": [
+      "graduate"
+    ],
+    "items": [
+      {
+        "ruleId": "sois-ft-vojno-vodjenje-diplomski--font",
+        "fixerId": "font-fixer",
+        "label": "Font",
+        "scope": "profil",
+        "target": "Times New Roman",
+        "params": {
+          "fontName": "Times New Roman"
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-vodjenje-diplomski--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-vodjenje-diplomski--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored",
+        "scope": "profil",
+        "target": "prored 1,5",
+        "params": {
+          "multiplier": 1.5
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-vodjenje-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-vodjenje-diplomski--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-vodjenje-diplomski--paper-size",
+        "fixerId": "paper-size-fixer",
+        "label": "Format papira A4",
+        "scope": "profil",
+        "target": "21 x 29,7 cm",
+        "params": {
+          "w": 21,
+          "h": 29.7
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "sois-ft-vojno-vodjenje-zavrsni",
+    "label": "SOIS-FT, Vojno vodjenje i upravljanje, zavrsni rad",
+    "unitId": "sois-ft",
+    "status": "partial",
+    "workTypes": [
+      "final"
+    ],
+    "items": [
+      {
+        "ruleId": "sois-ft-vojno-vodjenje-zavrsni--font",
+        "fixerId": "font-fixer",
+        "label": "Font",
+        "scope": "profil",
+        "target": "Times New Roman",
+        "params": {
+          "fontName": "Times New Roman"
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-vodjenje-zavrsni--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-vodjenje-zavrsni--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored",
+        "scope": "profil",
+        "target": "prored 1,5",
+        "params": {
+          "multiplier": 1.5
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-vodjenje-zavrsni--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-vodjenje-zavrsni--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "sois-ft-vojno-vodjenje-zavrsni--paper-size",
+        "fixerId": "paper-size-fixer",
+        "label": "Format papira A4",
+        "scope": "profil",
+        "target": "21 x 29,7 cm",
+        "params": {
+          "w": 21,
+          "h": 29.7
+        },
+        "source": {
+          "id": "sois-ft-upute-zavrsni-diplomski-2025",
+          "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+          "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+        },
+        "sourcePage": "Odjeljak 2.2 Tehnicke upute za pisanje zavrsnog/diplomskog rada, str. 5",
+        "authority": "binding",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
     "id": "sumfak-diplomski",
     "label": "Fakultet šumarstva i drvne tehnologije, diplomski rad",
     "unitId": "sumfak",

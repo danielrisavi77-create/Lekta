@@ -33051,5 +33051,320 @@
       "Jezik rada"
     ],
     "advisoryScope": []
+  },
+  "sois-ft-vojno-inzenjerstvo-zavrsni": {
+    "id": "sois-ft-vojno-inzenjerstvo-zavrsni",
+    "unitId": "sois-ft",
+    "programs": [
+      "Sveucilisni prijediplomski studij Vojno inzenjerstvo"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "SOIS-FT, Vojno inzenjerstvo, zavrsni rad",
+    "verifiedAt": "2026-08-01",
+    "documentDate": "Pravilnik o zavrsnom i diplomskom radu, Senat 22.4.2025 (KLASA: 025-03/25-02/01); Upute za pisanje bez vlastitog datuma, prilog istog Pravilnika.",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [
+      "najmanje 30 stranica (zavrsni rad)"
+    ],
+    "note": "Tehnicko oblikovanje iz Uputa za pisanje zavrsnih/diplomskih radova (prilog Pravilnika), citano izravno. Stil citiranja (APA za drustvena/interdisciplinarna, IEEE za tehnicka polja) namjerno nije postavljen - izvor ne mapira eksplicitno koji od pet programa spada u koju kategoriju.",
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+        "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu za studijske programe koji se izvode na SOIS FT (2025)",
+        "url": "https://www.sois-ft.hr/_download/repository/Pravilnik_o%20zavrsnom%20i%20diplomskom%20radu%20za%20studijske%20programe%20koji%20se%20izvode%20na%20SOIS%20FT.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom i diplomskom radu za studijske programe koji se izvode na SOIS FT (2025)",
+      "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje",
+      "Prored",
+      "Opseg"
+    ],
+    "advisoryScope": [
+      "Stil citiranja (APA ili IEEE ovisno o podrucju, mentor odlucuje)",
+      "Koristenje MS Worda (preporuka, alat je dogovoriv s mentorom)"
+    ]
+  },
+  "sois-ft-vojno-inzenjerstvo-diplomski": {
+    "id": "sois-ft-vojno-inzenjerstvo-diplomski",
+    "unitId": "sois-ft",
+    "programs": [
+      "Diplomski studij Vojno inzenjerstvo"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "SOIS-FT, Vojno inzenjerstvo, diplomski rad",
+    "verifiedAt": "2026-08-01",
+    "documentDate": "Pravilnik o zavrsnom i diplomskom radu, Senat 22.4.2025 (KLASA: 025-03/25-02/01); Upute za pisanje bez vlastitog datuma, prilog istog Pravilnika.",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [
+      "najmanje 50 stranica (diplomski rad)"
+    ],
+    "note": "Tehnicko oblikovanje iz Uputa za pisanje zavrsnih/diplomskih radova (prilog Pravilnika), citano izravno. Stil citiranja (APA za drustvena/interdisciplinarna, IEEE za tehnicka polja) namjerno nije postavljen - izvor ne mapira eksplicitno koji od pet programa spada u koju kategoriju.",
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+        "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu za studijske programe koji se izvode na SOIS FT (2025)",
+        "url": "https://www.sois-ft.hr/_download/repository/Pravilnik_o%20zavrsnom%20i%20diplomskom%20radu%20za%20studijske%20programe%20koji%20se%20izvode%20na%20SOIS%20FT.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom i diplomskom radu za studijske programe koji se izvode na SOIS FT (2025)",
+      "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje",
+      "Prored",
+      "Opseg"
+    ],
+    "advisoryScope": [
+      "Stil citiranja (APA ili IEEE ovisno o podrucju, mentor odlucuje)",
+      "Koristenje MS Worda (preporuka, alat je dogovoriv s mentorom)"
+    ]
+  },
+  "sois-ft-vojno-vodjenje-zavrsni": {
+    "id": "sois-ft-vojno-vodjenje-zavrsni",
+    "unitId": "sois-ft",
+    "programs": [
+      "Sveucilisni prijediplomski studij Vojno vodjenje i upravljanje"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "SOIS-FT, Vojno vodjenje i upravljanje, zavrsni rad",
+    "verifiedAt": "2026-08-01",
+    "documentDate": "Pravilnik o zavrsnom i diplomskom radu, Senat 22.4.2025 (KLASA: 025-03/25-02/01); Upute za pisanje bez vlastitog datuma, prilog istog Pravilnika.",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [
+      "najmanje 30 stranica (zavrsni rad)"
+    ],
+    "note": "Tehnicko oblikovanje iz Uputa za pisanje zavrsnih/diplomskih radova (prilog Pravilnika), citano izravno. Stil citiranja (APA za drustvena/interdisciplinarna, IEEE za tehnicka polja) namjerno nije postavljen - izvor ne mapira eksplicitno koji od pet programa spada u koju kategoriju.",
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+        "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu za studijske programe koji se izvode na SOIS FT (2025)",
+        "url": "https://www.sois-ft.hr/_download/repository/Pravilnik_o%20zavrsnom%20i%20diplomskom%20radu%20za%20studijske%20programe%20koji%20se%20izvode%20na%20SOIS%20FT.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom i diplomskom radu za studijske programe koji se izvode na SOIS FT (2025)",
+      "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje",
+      "Prored",
+      "Opseg"
+    ],
+    "advisoryScope": [
+      "Stil citiranja (APA ili IEEE ovisno o podrucju, mentor odlucuje)",
+      "Koristenje MS Worda (preporuka, alat je dogovoriv s mentorom)"
+    ]
+  },
+  "sois-ft-vojno-vodjenje-diplomski": {
+    "id": "sois-ft-vojno-vodjenje-diplomski",
+    "unitId": "sois-ft",
+    "programs": [
+      "Diplomski studij Vojno vodjenje i upravljanje"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "SOIS-FT, Vojno vodjenje i upravljanje, diplomski rad",
+    "verifiedAt": "2026-08-01",
+    "documentDate": "Pravilnik o zavrsnom i diplomskom radu, Senat 22.4.2025 (KLASA: 025-03/25-02/01); Upute za pisanje bez vlastitog datuma, prilog istog Pravilnika.",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [
+      "najmanje 50 stranica (diplomski rad)"
+    ],
+    "note": "Tehnicko oblikovanje iz Uputa za pisanje zavrsnih/diplomskih radova (prilog Pravilnika), citano izravno. Stil citiranja (APA za drustvena/interdisciplinarna, IEEE za tehnicka polja) namjerno nije postavljen - izvor ne mapira eksplicitno koji od pet programa spada u koju kategoriju.",
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+        "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu za studijske programe koji se izvode na SOIS FT (2025)",
+        "url": "https://www.sois-ft.hr/_download/repository/Pravilnik_o%20zavrsnom%20i%20diplomskom%20radu%20za%20studijske%20programe%20koji%20se%20izvode%20na%20SOIS%20FT.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom i diplomskom radu za studijske programe koji se izvode na SOIS FT (2025)",
+      "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje",
+      "Prored",
+      "Opseg"
+    ],
+    "advisoryScope": [
+      "Stil citiranja (APA ili IEEE ovisno o podrucju, mentor odlucuje)",
+      "Koristenje MS Worda (preporuka, alat je dogovoriv s mentorom)"
+    ]
+  },
+  "sois-ft-vojno-pomorstvo-diplomski": {
+    "id": "sois-ft-vojno-pomorstvo-diplomski",
+    "unitId": "sois-ft",
+    "programs": [
+      "Integrirani prijediplomski i diplomski studij Vojno pomorstvo"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "SOIS-FT, Vojno pomorstvo, integrirani diplomski rad",
+    "verifiedAt": "2026-08-01",
+    "documentDate": "Pravilnik o zavrsnom i diplomskom radu, Senat 22.4.2025 (KLASA: 025-03/25-02/01); Upute za pisanje bez vlastitog datuma, prilog istog Pravilnika.",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [
+      "najmanje 50 stranica (diplomski rad)"
+    ],
+    "note": "Tehnicko oblikovanje iz Uputa za pisanje zavrsnih/diplomskih radova (prilog Pravilnika), citano izravno. Stil citiranja (APA za drustvena/interdisciplinarna, IEEE za tehnicka polja) namjerno nije postavljen - izvor ne mapira eksplicitno koji od pet programa spada u koju kategoriju.",
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT",
+        "url": "https://www.sois-ft.hr/_download/repository/6.%20Upute%20za%20pisanje%20zavrsnih_dipkomskih%20i%20pripremu%20ppt_SOIS%20FT.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu za studijske programe koji se izvode na SOIS FT (2025)",
+        "url": "https://www.sois-ft.hr/_download/repository/Pravilnik_o%20zavrsnom%20i%20diplomskom%20radu%20za%20studijske%20programe%20koji%20se%20izvode%20na%20SOIS%20FT.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom i diplomskom radu za studijske programe koji se izvode na SOIS FT (2025)",
+      "Upute za pisanje zavrsnih/diplomskih radova na SOIS FT"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje",
+      "Prored",
+      "Opseg"
+    ],
+    "advisoryScope": [
+      "Stil citiranja (APA ili IEEE ovisno o podrucju, mentor odlucuje)",
+      "Koristenje MS Worda (preporuka, alat je dogovoriv s mentorom)"
+    ]
   }
 }

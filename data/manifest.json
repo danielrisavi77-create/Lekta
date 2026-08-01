@@ -2,7 +2,7 @@
   {
     "name": "VERIFIED_PROFILE_REGISTRY",
     "file": "data/profiles/verified-profiles.json",
-    "entries": 395
+    "entries": 400
   },
   {
     "name": "LEGAL_DEPARTMENT_REGISTRY",
@@ -32,7 +32,7 @@
   {
     "name": "ZAGREB_CATALOG",
     "file": "data/catalog/zagreb-catalog.json",
-    "entries": 43
+    "entries": 44
   },
   {
     "name": "INSTITUTIONAL_COVERAGE_MATRIX",
@@ -77,7 +77,7 @@
   {
     "name": "SOURCE_REGISTRY",
     "file": "data/sources/source-registry.json",
-    "entries": 285
+    "entries": 287
   },
   {
     "name": "VERIFICATION_LEDGER",
@@ -92,7 +92,7 @@
   {
     "name": "SCORED_COVERAGE",
     "file": "data/coverage/scored-coverage.json",
-    "entries": 372
+    "entries": 377
   },
   {
     "name": "TITLE_PAGE_TEMPLATES",

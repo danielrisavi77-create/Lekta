@@ -1333,6 +1333,26 @@
     "justify",
     "paper-size"
   ],
+  "sois-ft-vojno-inzenjerstvo-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "sois-ft-vojno-inzenjerstvo-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "sois-ft-vojno-pomorstvo-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "sois-ft-vojno-vodjenje-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "sois-ft-vojno-vodjenje-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
   "sumfak-diplomski": [
     "font",
     "font-size",
