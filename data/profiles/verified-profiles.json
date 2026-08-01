@@ -16333,7 +16333,8 @@
     "id": "libertas-diplomski",
     "unitId": "libertas",
     "programs": [
-      "Diplomski studiji Libertas"
+      "Diplomski studiji Libertas",
+      "Međunarodni odnosi i diplomacija"
     ],
     "workTypes": [
       "graduate"
@@ -16423,12 +16424,52 @@
       "pageMin": 35,
       "pageMax": 50,
       "requiredSections": [
-        { "key": "sazetak", "label": "sažetak", "terms": ["sažetak", "sazetak"] },
-        { "key": "abstract", "label": "abstract", "terms": ["abstract"] },
-        { "key": "sadrzaj", "label": "sadržaj", "terms": ["sadržaj", "sadrzaj"] },
-        { "key": "uvod", "label": "uvodni dio", "terms": ["uvod"] },
-        { "key": "zakljucak", "label": "zaključak", "terms": ["zaključak", "zakljucak"] },
-        { "key": "literatura", "label": "popis literature", "terms": ["literatura", "popis literature"] }
+        {
+          "key": "sazetak",
+          "label": "sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "abstract",
+          "terms": [
+            "abstract"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "uvodni dio",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "zaključak",
+          "terms": [
+            "zaključak",
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
       ]
     },
     "facts": [],
@@ -16548,12 +16589,52 @@
       "pageMin": 50,
       "pageMax": 80,
       "requiredSections": [
-        { "key": "sazetak", "label": "sažetak", "terms": ["sažetak", "sazetak"] },
-        { "key": "abstract", "label": "abstract", "terms": ["abstract"] },
-        { "key": "sadrzaj", "label": "sadržaj", "terms": ["sadržaj", "sadrzaj"] },
-        { "key": "uvod", "label": "uvodni dio", "terms": ["uvod"] },
-        { "key": "zakljucak", "label": "zaključak", "terms": ["zaključak", "zakljucak"] },
-        { "key": "literatura", "label": "popis literature", "terms": ["literatura", "popis literature"] }
+        {
+          "key": "sazetak",
+          "label": "sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "abstract",
+          "terms": [
+            "abstract"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "uvodni dio",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "zaključak",
+          "terms": [
+            "zaključak",
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
       ]
     },
     "facts": [],
@@ -16694,7 +16775,9 @@
     "id": "pvzg-zavrsni",
     "unitId": "pvzg",
     "programs": [
-      "Prijediplomski strucni studiji PVZG (zavrsni rad)"
+      "Prijediplomski strucni studiji PVZG (zavrsni rad)",
+      "Marketing i komunikacije",
+      "Upravljanje i poslovanje"
     ],
     "workTypes": [
       "final"
@@ -16751,7 +16834,9 @@
     "id": "pvzg-specijalisticki",
     "unitId": "pvzg",
     "programs": [
-      "Specijalisticki diplomski strucni studiji PVZG"
+      "Specijalisticki diplomski strucni studiji PVZG",
+      "Marketing i komunikacije",
+      "Upravljanje i poslovanje"
     ],
     "workTypes": [
       "graduate"
@@ -17102,7 +17187,13 @@
     "id": "hks-diplomski",
     "unitId": "hks",
     "programs": [
-      "Diplomski sveucilisni studiji HKS"
+      "Diplomski sveucilisni studiji HKS",
+      "Povijest",
+      "Sociologija",
+      "Psihologija",
+      "Komunikologija",
+      "Sestrinstvo",
+      "Medicina"
     ],
     "workTypes": [
       "graduate"
@@ -43267,7 +43358,8 @@
     "id": "sois-ft-vojno-inzenjerstvo-zavrsni",
     "unitId": "sois-ft",
     "programs": [
-      "Sveucilisni prijediplomski studij Vojno inzenjerstvo"
+      "Sveucilisni prijediplomski studij Vojno inzenjerstvo",
+      "Vojno inzenjerstvo (prijediplomski)"
     ],
     "workTypes": [
       "final"
@@ -43331,7 +43423,8 @@
     "id": "sois-ft-vojno-inzenjerstvo-diplomski",
     "unitId": "sois-ft",
     "programs": [
-      "Diplomski studij Vojno inzenjerstvo"
+      "Diplomski studij Vojno inzenjerstvo",
+      "Vojno inzenjerstvo (diplomski)"
     ],
     "workTypes": [
       "graduate"
@@ -43395,7 +43488,8 @@
     "id": "sois-ft-vojno-vodjenje-zavrsni",
     "unitId": "sois-ft",
     "programs": [
-      "Sveucilisni prijediplomski studij Vojno vodjenje i upravljanje"
+      "Sveucilisni prijediplomski studij Vojno vodjenje i upravljanje",
+      "Vojno vodjenje i upravljanje (prijediplomski)"
     ],
     "workTypes": [
       "final"
@@ -43459,7 +43553,8 @@
     "id": "sois-ft-vojno-vodjenje-diplomski",
     "unitId": "sois-ft",
     "programs": [
-      "Diplomski studij Vojno vodjenje i upravljanje"
+      "Diplomski studij Vojno vodjenje i upravljanje",
+      "Vojno vodjenje i upravljanje (diplomski)"
     ],
     "workTypes": [
       "graduate"
@@ -43523,7 +43618,8 @@
     "id": "sois-ft-vojno-pomorstvo-diplomski",
     "unitId": "sois-ft",
     "programs": [
-      "Integrirani prijediplomski i diplomski studij Vojno pomorstvo"
+      "Integrirani prijediplomski i diplomski studij Vojno pomorstvo",
+      "Vojno pomorstvo (integrirani prijediplomski i diplomski)"
     ],
     "workTypes": [
       "graduate"
