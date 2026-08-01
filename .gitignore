@@ -13,6 +13,9 @@ tmp/
 .env.*
 .DS_Store
 __pycache__/
+*.egg-info/
+# Chromium/Electron debug log koji tu i tamo ispisu alati s ugradjenim preglednikom.
+debug.log
 # Cache harvest citata (doi.org/CSL) - transient, ne commitati
 .harvest-cache/
 .playwright-mcp/
@@ -39,6 +42,8 @@ scripts/demo-video/*.png
 # harvestane materijale ravno u index.
 training-pipeline/output/
 training-pipeline/sources/
+# lekta-pipeline/ je zaseban git repo (vlastiti .git) za M4 korpus, ne dio ovog stabla.
+/lekta-pipeline/
 # Korpusni indeksi (sqlite/db) nikad u glavni repo; veliki i regenerabilni.
 # lekta-pipeline/korpus.db je 1.4G. *.db* je mreza ispod (parent je prije imao samo *.sqlite*).
 *.sqlite
