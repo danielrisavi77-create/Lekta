@@ -198,6 +198,16 @@
     "toc",
     "page-numbers"
   ],
+  "dizajn-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
   "effectus-diplomski": [
     "toc",
     "page-numbers"

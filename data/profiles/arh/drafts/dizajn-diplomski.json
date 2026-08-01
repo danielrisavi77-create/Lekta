@@ -1,0 +1,45 @@
+{
+  "profileId": "dizajn-diplomski",
+  "entries": [
+    {
+      "ruleId": "dizajn-diplomski--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "istrazivacko-teorijski",
+          "label": "Istrazivacko-teorijski dio",
+          "terms": [
+            "istrazivacko-teorijski",
+            "istraživačko-teorijski",
+            "teorijski dio",
+            "istrazivacki dio",
+            "istraživački dio"
+          ]
+        },
+        {
+          "key": "projektni",
+          "label": "Projektni dio",
+          "terms": [
+            "projektni dio",
+            "projektni",
+            "projekt"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezne cjeline diplomskog rada (istrazivacko-teorijski + projektni dio)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "dizajn-pravilnik-diplomski-2016",
+      "sourcePage": "Clanak 3",
+      "quote": "Diplomski rad je cjelovita obrada utvrdjene teme, a sastoji se od dva dijela: istrazivacko-teorijskog dijela i projektnog dijela.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-08-01",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "c3aef7aabca1e40c3e51d4e9a9ec5f84cf844fc8c97582e54c389453b75fd109"
+    }
+  ]
+}

@@ -241,6 +241,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "dizajn-diplomski",
+      "scored": 1,
+      "machineCheckable": 1,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-08-01"
+    },
+    {
       "profileId": "effectus-diplomski",
       "scored": 8,
       "machineCheckable": 7,
@@ -2969,5 +2977,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 2079
+  "totalScored": 2080
 }

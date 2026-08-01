@@ -3660,5 +3660,18 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-30",
     "note": "Odsjecki Pravilnik (obje generacije, 2021 I 2026) NEMA nijednu odredbu o oblikovanju - opci PMF Pravilnik o studiranju Cl.56(6) izricito delegira \"opremanje\" na odsjecki akt, koji tu prazninu nikad nije popunio. Predlozak je ponudjen PERMISIVNIM jezikom (\"Mozete preuzeti i predlozak...\"), ne imperativom - ADVISORY, sourcePage:null (nema clanka/stavka, samo predlozak). Vrijednosti neovisno provjerene raspakiravanjem docx-a: w:pgMar top/right/bottom=1418 twips (2,5cm), left=1701 twips (3,0cm, prostor za uvez); Normal stil w:rFonts=Cambria, w:sz=24 (12pt), w:spacing w:line=360 auto (prored 1,5), w:jc=both (obostrano). Font je Cambria, NE Times New Roman - neuobicajeno, provjereno dva puta."
+  },
+  {
+    "id": "dizajn-pravilnik-diplomski-2016",
+    "kind": "regulation",
+    "title": "Pravilnik o izradi i obrani diplomskog rada na diplomskom sveucilisnom studiju dizajna (Arhitektonski fakultet, 2016)",
+    "url": "https://www.studijdizajna.com/sites/default/files/objave/2016_pravilnik_o_izradi_i_obrani_diplomskog_rada_diplomski_studij.pdf",
+    "publisher": "Arhitektonski fakultet Sveucilista u Zagrebu, Studij dizajna",
+    "fetchedAt": "2026-08-01",
+    "snapshotPath": "data/sources/arh/dizajn-pravilnik-diplomski-2016.pdf",
+    "snapshotHash": "c3aef7aabca1e40c3e51d4e9a9ec5f84cf844fc8c97582e54c389453b75fd109",
+    "validityClass": "stable",
+    "lastChecked": "2026-08-01",
+    "note": "Usvojen 17.2.2016 (Vijece Studija dizajna), potvrdjena nepromijenjenost preko Wayback CDX (isti digest 2022 i 2024). NEMA nijedne rijeci o fontu/velicini/proredu/marginama/formatu papira/poravnanju (potvrdjeno grep + rucno citanje svih 11 clanaka) - za razliku od arh-diplomski (Arhitektura, 2013 Pravilnik) koji EKSPLICITNO objasnjava odsustvo tipografije (izlozbeni A0 poster + A3 knjizice), ovaj Pravilnik o tome jednostavno SUTI (ne kaze zasto nema tipografije). Nema skrivenog \"Naputka za oblikovanje\" (provjereno zivo + Wayback 2017) - obrazac ADU/ALU/MATHOS/FFST ovdje se NE ponavlja. Cl.3: rad se sastoji od istrazivacko-teorijskog i projektnog dijela (\"sastoji se\" - binding, potvrdjuje vec postojecu legacy requiredSections vrijednost bez izmjene)."
   }
 ]
