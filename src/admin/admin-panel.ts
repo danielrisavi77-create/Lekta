@@ -10,7 +10,7 @@
  */
 
 import './admin-panel.css';
-import { fetchAdminStats, toStatTiles, toWorkTypeRows, type AdminStatsConfig } from './admin-stats.ts';
+import { fetchAdminStats, toStatTiles, toWorkTypeRows, toAnalyticsRows, type AdminStatsConfig } from './admin-stats.ts';
 
 const WORK_TYPE_LABELS: Record<string, string> = {
   seminarski: 'Seminarski',
@@ -96,6 +96,16 @@ export async function openAdminPanel(opts: AdminPanelOptions): Promise<void> {
       const list = el('ul', 'plain-list');
       for (const row of rows) {
         list.appendChild(el('li', undefined, `${WORK_TYPE_LABELS[row.workType] ?? row.workType}: ${row.count}`));
+      }
+      body.appendChild(list);
+    }
+
+    const analyticsRows = toAnalyticsRows(stats);
+    if (analyticsRows.length) {
+      body.appendChild(el('h4', undefined, 'Analytics dogadjaji (7 dana)'));
+      const list = el('ul', 'plain-list');
+      for (const row of analyticsRows) {
+        list.appendChild(el('li', undefined, `${row.event}: ${row.count}`));
       }
       body.appendChild(list);
     }

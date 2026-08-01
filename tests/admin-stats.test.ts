@@ -4,6 +4,7 @@ import {
   formatBytes,
   toStatTiles,
   toWorkTypeRows,
+  toAnalyticsRows,
   type BetaStats,
 } from '../src/admin/admin-stats';
 
@@ -59,6 +60,32 @@ describe('toStatTiles', () => {
   it('prikazuje rate_limited iz zadnja 24 h', () => {
     const tiles = toStatTiles({ generations24h: { rate_limited: 7 } });
     expect(tiles.find((t) => t.label === 'Odbijeno zbog limita (24 h)')?.value).toBe('7');
+  });
+
+  it('prikazuje analytics eventе iz zadnjih 24h i 7 dana', () => {
+    const tiles = toStatTiles({ analytics: { last24h: 12, last7d: 84 } });
+    const tile = tiles.find((t) => t.label === 'Analytics eventi (24 h)');
+    expect(tile?.value).toBe('12');
+    expect(tile?.hint).toBe('84 u 7 dana');
+  });
+
+  it('analytics tile ne rusi prazno stanje', () => {
+    const tile = toStatTiles({}).find((t) => t.label === 'Analytics eventi (24 h)');
+    expect(tile?.value).toBe('0');
+  });
+});
+
+describe('toAnalyticsRows', () => {
+  it('sortira silazno i izbacuje nule', () => {
+    const rows = toAnalyticsRows({ analytics: { byEvent7d: { score_shared: 3, file_selected: 20, demo_played: 0 } } });
+    expect(rows).toEqual([
+      { event: 'file_selected', count: 20 },
+      { event: 'score_shared', count: 3 },
+    ]);
+  });
+
+  it('prazno kad nema podataka', () => {
+    expect(toAnalyticsRows({})).toEqual([]);
   });
 });
 

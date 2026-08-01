@@ -23,6 +23,7 @@ export interface BetaStats {
   byWorkType?: Record<string, number>;
   users?: { total?: number; last7d?: number };
   storage?: { objects?: number; bytes?: number };
+  analytics?: { last24h?: number; last7d?: number; byEvent7d?: Record<string, number> };
 }
 
 export type AdminStatsResult =
@@ -89,7 +90,17 @@ export function toStatTiles(stats: BetaStats): StatTile[] {
     { label: 'Neuspjelih popravaka', value: String(failed), hint: failed ? 'provjeri Edge logove' : 'bez grešaka' },
     { label: 'Odbijeno zbog limita (24 h)', value: String(rateLimited) },
     { label: 'Pohrana', value: formatBytes(s.bytes), hint: `${num(s.objects)} datoteka` },
+    { label: 'Analytics eventi (24 h)', value: String(num(stats.analytics?.last24h)), hint: `${num(stats.analytics?.last7d)} u 7 dana` },
   ];
+}
+
+/** Raspodjela analytics dogadjaja (zadnjih 7 dana), sortirana silazno; prazno kad jos nema podataka. */
+export function toAnalyticsRows(stats: BetaStats): Array<{ event: string; count: number }> {
+  const by = stats.analytics?.byEvent7d ?? {};
+  return Object.entries(by)
+    .map(([event, count]) => ({ event, count: Number(count) || 0 }))
+    .filter((x) => x.count > 0)
+    .sort((a, b) => b.count - a.count || a.event.localeCompare(b.event, 'hr'));
 }
 
 /** Raspodjela po vrsti rada, sortirana silazno; prazno kad jos nema podataka. */
