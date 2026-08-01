@@ -2664,7 +2664,10 @@
     "id": "libertas-zavrsni",
     "unitId": "libertas",
     "programs": [
-      "Prijediplomski studiji Libertas (zavrsni rad)"
+      "Prijediplomski studiji Libertas (zavrsni rad)",
+      "Međunarodni odnosi i diplomacija",
+      "Poslovna ekonomija",
+      "Turizam i hotelijerstvo"
     ],
     "workTypes": [
       "final"
@@ -2676,7 +2679,9 @@
     "unitId": "libertas",
     "programs": [
       "Diplomski studiji Libertas",
-      "Međunarodni odnosi i diplomacija"
+      "Međunarodni odnosi i diplomacija",
+      "Poslovna ekonomija",
+      "Turizam i hotelijerstvo"
     ],
     "workTypes": [
       "graduate"
@@ -2742,7 +2747,9 @@
     "id": "rrif-zavrsni",
     "unitId": "rrif",
     "programs": [
-      "Prijediplomski strucni studij RRiF (zavrsni rad)"
+      "Prijediplomski strucni studij RRiF (zavrsni rad)",
+      "Računovodstvo i financije",
+      "Poduzetništvo"
     ],
     "workTypes": [
       "final"
@@ -2779,7 +2786,13 @@
     "id": "zvu-zavrsni",
     "unitId": "zvu",
     "programs": [
-      "Prijediplomski strucni studiji ZVU (zavrsni rad)"
+      "Prijediplomski strucni studiji ZVU (zavrsni rad)",
+      "Sestrinstvo",
+      "Fizioterapija",
+      "Radiološka tehnologija",
+      "Sanitarno inženjerstvo",
+      "Radna terapija",
+      "Medicinsko-laboratorijska dijagnostika"
     ],
     "workTypes": [
       "final"
@@ -2790,7 +2803,13 @@
     "id": "zvu-specijalisticki",
     "unitId": "zvu",
     "programs": [
-      "Specijalisticki diplomski strucni studiji ZVU"
+      "Specijalisticki diplomski strucni studiji ZVU",
+      "Sestrinstvo",
+      "Fizioterapija",
+      "Radiološka tehnologija",
+      "Sanitarno inženjerstvo",
+      "Radna terapija",
+      "Medicinsko-laboratorijska dijagnostika"
     ],
     "workTypes": [
       "graduate"
@@ -2801,7 +2820,8 @@
     "id": "vsite-zavrsni",
     "unitId": "vsite",
     "programs": [
-      "Prijediplomski strucni studiji VSITE (zavrsni rad)"
+      "Prijediplomski strucni studiji VSITE (zavrsni rad)",
+      "Informacijske tehnologije"
     ],
     "workTypes": [
       "final"
@@ -2812,7 +2832,8 @@
     "id": "vsite-diplomski",
     "unitId": "vsite",
     "programs": [
-      "Diplomski strucni studiji VSITE"
+      "Diplomski strucni studiji VSITE",
+      "Informacijske tehnologije"
     ],
     "workTypes": [
       "graduate"
@@ -2823,7 +2844,9 @@
     "id": "vkjs-zavrsni",
     "unitId": "vkjs",
     "programs": [
-      "Prijediplomski strucni studij VKJS (zavrsni rad)"
+      "Prijediplomski strucni studij VKJS (zavrsni rad)",
+      "Kriminalistika",
+      "Javna sigurnost"
     ],
     "workTypes": [
       "final"
@@ -2837,7 +2860,9 @@
     "id": "vkjs-diplomski",
     "unitId": "vkjs",
     "programs": [
-      "Specijalisticki diplomski strucni studij VKJS (diplomski rad)"
+      "Specijalisticki diplomski strucni studij VKJS (diplomski rad)",
+      "Kriminalistika",
+      "Javna sigurnost"
     ],
     "workTypes": [
       "graduate"
