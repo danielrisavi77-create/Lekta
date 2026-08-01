@@ -2948,13 +2948,11 @@
     "id": "ffri-zavrsni",
     "unitId": "ffri",
     "programs": [
-      "Prijediplomski studij Hrvatski jezik i književnost",
       "Prijediplomski studij Engleski jezik i književnost",
       "Prijediplomski studij Talijanski jezik i književnost",
       "Prijediplomski studij Filozofija",
       "Prijediplomski studij Povijest",
       "Prijediplomski studij Pedagogija",
-      "Prijediplomski studij Psihologija",
       "Prijediplomski studij Kulturalni studiji"
     ],
     "workTypes": [
@@ -8268,10 +8266,7 @@
     "id": "algebra-zavrsni",
     "unitId": "algebra",
     "programs": [
-      "Stručni prijediplomski studij 3D oblikovanje tržišnih komunikacija",
       "Stručni prijediplomski studij Digitalni marketing",
-      "Stručni prijediplomski studij Dizajn interijera",
-      "Stručni prijediplomski studij Dizajn",
       "Stručni prijediplomski studij Kibernetička sigurnost",
       "Stručni prijediplomski studij Komunikacijski menadžment",
       "Stručni prijediplomski studij Multimedijska produkcija",
@@ -8491,6 +8486,17 @@
     ],
     "workTypes": [
       "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "ffri-kroatistika-zavrsni",
+    "unitId": "ffri",
+    "programs": [
+      "Prijediplomski studij Hrvatski jezik i književnost"
+    ],
+    "workTypes": [
+      "final"
     ],
     "status": "partial"
   }

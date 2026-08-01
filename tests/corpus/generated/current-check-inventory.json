@@ -110,7 +110,7 @@
     "uniqueIssueTitles": 93,
     "intakeRejectCodes": 6,
     "compiledCheckIds": 28,
-    "profiles": 400,
+    "profiles": 401,
     "checksWithoutSource": 3,
     "checksWithStableId": 0
   },
@@ -10936,6 +10936,26 @@
         "justify": 1,
         "toc": 0,
         "pagenums": 0,
+        "sections": 0,
+        "words": 0,
+        "struktura": 1,
+        "fusnote": 0
+      }
+    },
+    {
+      "profileId": "ffri-kroatistika-zavrsni",
+      "unitId": "ffri",
+      "status": "partial",
+      "workType": "final",
+      "dims": {
+        "font": 1,
+        "size": 1,
+        "spacing": 1,
+        "margins": 1,
+        "paper": 1,
+        "justify": 1,
+        "toc": 0,
+        "pagenums": 1,
         "sections": 0,
         "words": 0,
         "struktura": 1,

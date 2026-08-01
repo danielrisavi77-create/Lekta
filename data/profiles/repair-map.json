@@ -3246,6 +3246,56 @@
       "autoFixable": true
     }
   ],
+  "ffri-kroatistika-zavrsni": [
+    {
+      "ruleId": "ffri-kroatistika-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-kroatistika-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (tijelo, 14pt - odstupa od opce FFRI vrijednosti)",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-kroatistika-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-kroatistika-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-kroatistika-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-kroatistika-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
   "ffri-kulturalni-diplomski": [
     {
       "ruleId": "ffri-kulturalni-diplomski--font",

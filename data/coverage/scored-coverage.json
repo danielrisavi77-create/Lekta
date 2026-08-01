@@ -633,6 +633,14 @@
       "lastVerified": "2026-07-28"
     },
     {
+      "profileId": "ffri-kroatistika-zavrsni",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-08-01"
+    },
+    {
       "profileId": "ffri-kulturalni-diplomski",
       "scored": 7,
       "machineCheckable": 7,
@@ -666,11 +674,11 @@
     },
     {
       "profileId": "ffri-zavrsni",
-      "scored": 6,
-      "machineCheckable": 6,
+      "scored": 7,
+      "machineCheckable": 7,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-08-01"
     },
     {
       "profileId": "ffrz-bakalaureatski",
@@ -3017,5 +3025,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 2044
+  "totalScored": 2053
 }

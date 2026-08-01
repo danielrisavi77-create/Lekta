@@ -454,6 +454,9 @@
     "toc",
     "page-numbers"
   ],
+  "ffri-kroatistika-zavrsni": [
+    "toc"
+  ],
   "ffri-kulturalni-diplomski": [
     "toc",
     "page-numbers"
@@ -474,8 +477,7 @@
     "page-numbers"
   ],
   "ffri-zavrsni": [
-    "toc",
-    "page-numbers"
+    "toc"
   ],
   "ffrz-bakalaureatski": [
     "justify"

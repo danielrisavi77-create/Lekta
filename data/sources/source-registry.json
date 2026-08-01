@@ -2620,7 +2620,8 @@
     "lastChecked": "2026-07-17",
     "validityClass": "stable",
     "snapshotPath": "data/sources/algebra/algebra-pravilnik-2026-hr.pdf",
-    "snapshotHash": "e9ca604d0591b5401e655b59a9bd7b625b460d6b677dcfd7af5e342d3232846e"
+    "snapshotHash": "e9ca604d0591b5401e655b59a9bd7b625b460d6b677dcfd7af5e342d3232846e",
+    "note": " DOPUNA (2026-08-01, neovisno provjereno u ovom vec-registriranom PDF-u): \"Zavrsni rad za strucni prijediplomski studij Oblikovanja trzisnih komunikacija sastoji se od pisanog dijela rada koji se oblikuje u skladu sa uputama... u Prilogu 2 i vizualnih predlozaka... Pisani dio rada se ispisuje u boji... uvezuje... Vizualni predlosci... mogu se ispisati i u formatu vecem od A4 i uvezati spiralnim ili tvrdim uvezom\" (starija 2021/2023 inacica, tekst identican u 2026). Ovo pokriva 3D oblikovanje trzisnih komunikacija/Dizajn/Dizajn interijera (svi pod krovnim akreditiranim studijem \"Oblikovanje trzisnih komunikacija\") - STRUKTURNO drugaciji format od standardnog pisanog rada, pa su ta 3 smjera UKLONJENA iz algebra-zavrsni.programs (vidi taj profil)."
   },
   {
     "id": "algebra-pravilnik-radovi-2026-en",
@@ -3699,5 +3700,31 @@
     "validityClass": "stable",
     "lastChecked": "2026-08-01",
     "note": "Senat, 24. sjednica, 22.4.2025 (KLASA: 025-03/25-02/01), na snazi od cca 6.5.2025. Izmijenjen 27.11.2025 (Odluka, na snazi 5.12.2025) ALI izmjena dira samo komentorstvo/Povjerenstvo (Cl.7/8), NE format - opseg pravilo Cl.10(3) i inkorporacija Uputa (Cl.15(1)) ostaju vazeci nepromijenjeni. Pokriva prijediplomski/diplomski/integrirani; NE spominje poslijediplomski specijalisticki (Domovinska sigurnost) - taj studij namjerno NIJE draftan (zajednicki sa Sveucilistem u Zagrebu, drugaciji status, nema potvrdjen izvor)."
+  },
+  {
+    "id": "ffri-pravilnik-zavrsni-2026",
+    "kind": "regulation",
+    "title": "Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)",
+    "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf",
+    "publisher": "Filozofski fakultet u Rijeci, Sveuciliste u Rijeci",
+    "fetchedAt": "2026-08-01",
+    "snapshotPath": "data/sources/ffri/ffri-pravilnik-zavrsni-2026.pdf",
+    "snapshotHash": "2d34e70f1497f6bd1e5b14a5291cf427a0b0f9bab1aed20e50b922bc7a3bcc80",
+    "validityClass": "stable",
+    "lastChecked": "2026-08-01",
+    "note": "KLASA 007-01/23-01/60, URBROJ 2170-1-41-01-03-04-26-5 od 29.1.2026, na snazi 6.2.2026 - nadomjesta ffri-pravilnik-zavrsni-2023. Skeniran PDF (nema tekstualni sloj), procitan vizualno stranica-po-stranica. Cl.8: format/margine/font/velicina/prored/poravnanje NEPROMIJENJENI naspram 2023 (verificirano usporedbom) - postojeci ffri-zavrsni entryji OSTAJU tocni, nisu re-pointani. NOVO u ovoj izmjeni: \"Obrojcavanje stranica: u podnozju, desno, pocevsi od Uvoda\" - ranije nije bilo eksplicitno u tekstu, sad je binding i strojno-provjerljivo pa je dodan zaseban page-numbers ruleEntry citiran na OVAJ izvor. Cl.10: prozirne folije + meki spiralni uvez (podaci, nema checkId)."
+  },
+  {
+    "id": "ffri-hjk-upute-zavrsni",
+    "kind": "guidelines",
+    "title": "Upute za izradu zavrsnoga rada (Odsjek za kroatistiku, FFRI)",
+    "url": "https://ffri.uniri.hr/wp-content/uploads/2022/09/HJK-Upute_za_izradu_zavrsnoga_rada.doc",
+    "publisher": "Filozofski fakultet u Rijeci, Odsjek za kroatistiku",
+    "fetchedAt": "2026-08-01",
+    "snapshotPath": "data/sources/ffri/ffri-hjk-upute-zavrsni.doc",
+    "snapshotHash": "8b198fa9e6e2d43b2e8b2178abef7cfa2cd3acb03fae59da6cb4ccee2fa9b446",
+    "validityClass": "stable",
+    "lastChecked": "2026-08-01",
+    "note": "ODSTUPA od opce FFRI zavrsni Uputa: velicina tijela teksta 14pt (NE 12pt kao opca FFRI vrijednost) - font za tijelo Times New Roman 14pt, fusnote 10pt, prored 1,5 (tijelo i fusnote), prvi redak uvucen 1,25cm (nema checkId), poravnanje obostrano, obrojcavanje u podnozju desno od Uvoda, margine 2,5cm sve strane (isto kao opca vrijednost). Dokument dopusta odstupanje uz dogovor s mentorom (\"po potrebi i u dogovoru s mentorom moguca je uporaba i drugih fontova\") ali BAZNA vrijednost je 14pt. Zbog ovog odstupanja Hrvatski jezik i knjizevnost (Kroatistika) je IZDVOJEN iz opceg ffri-zavrsni bundlea u zaseban profil ffri-kroatistika-zavrsni."
   }
 ]

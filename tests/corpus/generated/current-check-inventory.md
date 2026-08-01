@@ -10,7 +10,7 @@ Hibridni inventar: STATICKI (makeCheck/issue izvor) UNIJA RUNTIME (analyzeDocx n
 - Jedinstveni naslovi nalaza (issue): **93**
 - Intake reject kodovi: **6** (+ suspicious signal)
 - COMPILED_CHECK_IDS: **28**
-- Profili u registru: **400**
+- Profili u registru: **401**
 - Provjere bez stabilnog ID-a (faza 1): **72** (svi; ID dolazi u fazi 2)
 
 ## Provjere

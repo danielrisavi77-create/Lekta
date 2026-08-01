@@ -14648,13 +14648,11 @@
     "id": "ffri-zavrsni",
     "unitId": "ffri",
     "programs": [
-      "Prijediplomski studij Hrvatski jezik i književnost",
       "Prijediplomski studij Engleski jezik i književnost",
       "Prijediplomski studij Talijanski jezik i književnost",
       "Prijediplomski studij Filozofija",
       "Prijediplomski studij Povijest",
       "Prijediplomski studij Pedagogija",
-      "Prijediplomski studij Psihologija",
       "Prijediplomski studij Kulturalni studiji"
     ],
     "workTypes": [
@@ -14682,7 +14680,7 @@
       }
     },
     "facts": [],
-    "note": "Tehničko uređenje rada iz službenog izvora (Filozofski fakultet u Rijeci, Sveučilište u Rijeci), čitano izravno.",
+    "note": "Tehničko uređenje rada iz službenog izvora (Filozofski fakultet u Rijeci, Sveučilište u Rijeci), čitano izravno. NAPOMENA (2026-08-01): \"Prijediplomski studij Psihologija\" uklonjen - taj program NEMA zavrsni rad kao zanr (zavrsava se pismenim ispitom, potvrdjeno na 3 nacina: stranica odsjeka, izvedbeni plan 2024/25, Pravilnik Cl.17(3) \"studenti koji su u obvezi polagati zavrsni ispit ne izradjuju zavrsni rad\"). \"Prijediplomski studij Hrvatski jezik i knjizevnost\" uklonjen - vlastita Uputa Odsjeka za kroatistiku propisuje 14pt (ne 12pt), izdvojen u ffri-kroatistika-zavrsni.",
     "sources": [
       {
         "title": "Pravilnik o zavrsnom radu (FFRI, 2023)",
@@ -32450,10 +32448,7 @@
     "id": "algebra-zavrsni",
     "unitId": "algebra",
     "programs": [
-      "Stručni prijediplomski studij 3D oblikovanje tržišnih komunikacija",
       "Stručni prijediplomski studij Digitalni marketing",
-      "Stručni prijediplomski studij Dizajn interijera",
-      "Stručni prijediplomski studij Dizajn",
       "Stručni prijediplomski studij Kibernetička sigurnost",
       "Stručni prijediplomski studij Komunikacijski menadžment",
       "Stručni prijediplomski studij Multimedijska produkcija",
@@ -32475,7 +32470,7 @@
       "wordMax": 15000
     },
     "facts": [],
-    "note": "Pravilnik propisuje opseg rada, a tehničko oblikovanje (font, veličina, prored, margine, format papira) delegira na elektronički predložak dostupan samo u sustavu digitalne referade, pa se te dimenzije ne provjeravaju. Stil citiranja nije propisan. Opseg je propisan \"od uvoda do zaključka\", a provjera broji riječi cijelog dokumenta, pa rad ispod donje granice sigurno odstupa, dok rad iznad nje može imati kraće tijelo. Pravilnik dopušta pisanje na hrvatskom ili engleskom jeziku, pa jezik odabire student.",
+    "note": "Pravilnik propisuje opseg rada, a tehničko oblikovanje (font, veličina, prored, margine, format papira) delegira na elektronički predložak dostupan samo u sustavu digitalne referade, pa se te dimenzije ne provjeravaju. Stil citiranja nije propisan. Opseg je propisan \"od uvoda do zaključka\", a provjera broji riječi cijelog dokumenta, pa rad ispod donje granice sigurno odstupa, dok rad iznad nje može imati kraće tijelo. Pravilnik dopušta pisanje na hrvatskom ili engleskom jeziku, pa jezik odabire student. NAPOMENA (2026-08-01): dizajnerski smjerovi (3D oblikovanje trzisnih komunikacija, Dizajn, Dizajn interijera - svi pod krovnim akreditiranim studijem \"Oblikovanje trzisnih komunikacija\") NAMJERNO iskljuceni iz ovog profila - Pravilnik Cl. o opsegu i jeziku rada, st.5 propisuje STRUKTURNO drugaciji format (pisani dio po zasebnom Prilogu 2 + vizualni portfolio na CD-u, dopusten format veci od A4, u boji, spiralni uvez), potvrdjeno kroz tri generacije pravilnika (2021/2023/2025/2026, isti tekst). Ostaju u katalogu kao odabirljiv program (padaju na opci profil), ali BEZ ovog profila.",
     "sources": [
       {
         "title": "Pravilnik o zavrsnom, diplomskom odnosno specijalistickom radu i zavrsnom ispitu (Sveuciliste Algebra Bernays, 20.02.2026.)",
@@ -33365,6 +33360,67 @@
     "advisoryScope": [
       "Stil citiranja (APA ili IEEE ovisno o podrucju, mentor odlucuje)",
       "Koristenje MS Worda (preporuka, alat je dogovoriv s mentorom)"
+    ]
+  },
+  "ffri-kroatistika-zavrsni": {
+    "id": "ffri-kroatistika-zavrsni",
+    "unitId": "ffri",
+    "programs": [
+      "Prijediplomski studij Hrvatski jezik i književnost"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FFRI, Hrvatski jezik i knjizevnost (Kroatistika), zavrsni rad",
+    "verifiedAt": "2026-08-01",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        14
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requirePageNumbers": true,
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Odsjek za kroatistiku ima vlastitu Uputu koja ODSTUPA od opce FFRI zavrsni Upute: tijelo teksta 14pt (ne 12pt), uz dopusteno odstupanje po dogovoru s mentorom. Izdvojeno iz opceg ffri-zavrsni profila zbog ove razlike.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnoga rada (Odsjek za kroatistiku, FFRI)",
+        "url": "https://ffri.uniri.hr/wp-content/uploads/2022/09/HJK-Upute_za_izradu_zavrsnoga_rada.doc"
+      },
+      {
+        "title": "Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)",
+        "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnoga rada (Odsjek za kroatistiku, FFRI)",
+      "Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026) - format papira (A4), Kroatistika Uputa o tome suti pa opci Pravilnik ostaje mjerodavan"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje",
+      "Prored",
+      "Numeracija stranica"
+    ],
+    "advisoryScope": [
+      "Odstupanje od fonta/velicine po dogovoru s mentorom (izricito dopusteno u izvoru)"
     ]
   }
 }
