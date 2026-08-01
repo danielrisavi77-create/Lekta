@@ -6,12 +6,12 @@ Hibridni inventar: STATICKI (makeCheck/issue izvor) UNIJA RUNTIME (analyzeDocx n
 
 ## Brojke
 
-- Provjere ukupno: **72** (bodovane 54, informativne 12, dinamicne/neokinute 6)
+- Provjere ukupno: **73** (bodovane 55, informativne 12, dinamicne/neokinute 6)
 - Jedinstveni naslovi nalaza (issue): **93**
 - Intake reject kodovi: **6** (+ suspicious signal)
 - COMPILED_CHECK_IDS: **28**
-- Profili u registru: **401**
-- Provjere bez stabilnog ID-a (faza 1): **72** (svi; ID dolazi u fazi 2)
+- Profili u registru: **407**
+- Provjere bez stabilnog ID-a (faza 1): **73** (svi; ID dolazi u fazi 2)
 
 ## Provjere
 
@@ -46,6 +46,7 @@ Hibridni inventar: STATICKI (makeCheck/issue izvor) UNIJA RUNTIME (analyzeDocx n
 | formatting | Automatske fusnote | da | pass/fail | src/analysis/analyze-docx.ts:195 |
 | formatting | Dominantni font | da | pass/fail | src/analysis/analyze-docx.ts:189 |
 | formatting | Format stranice (A3/A0) | da | warn | (samo runtime) |
+| formatting | Format stranice (A4) | da | pass/warn | (samo runtime) |
 | formatting | Format stranice A4 | da | pass/warn | src/analysis/analyze-docx.ts:194 |
 | formatting | Margine dokumenta | da | pass/fail/warn | src/analysis/analyze-docx.ts:192 |
 | formatting | Oblikovanje fusnota | da | warn/pass | src/analysis/analyze-docx.ts:195 |
