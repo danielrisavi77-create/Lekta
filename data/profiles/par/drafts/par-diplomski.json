@@ -1,0 +1,33 @@
+{
+  "profileId": "par-diplomski",
+  "entries": [
+    {
+      "ruleId": "par-diplomski--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "declaration",
+          "label": "izjava o akademskoj cestitosti",
+          "terms": [
+            "izjava o akademskoj cestitosti",
+            "izjava o akademskoj čestitosti"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dio rada (izjava o akademskoj cestitosti)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "par-pravilnik-2023",
+      "sourcePage": "Clanak 10 stavak 2 (str. 3)",
+      "quote": "Izjava o akademskoj čestitosti sastavni je dio završnog / diplomskog rada.",
+      "status": "verified",
+      "scored": true,
+      "lastVerified": "2026-08-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "ai-1pass-batch"
+    }
+  ],
+  "generatedAt": "2026-08-01"
+}

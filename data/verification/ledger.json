@@ -42166,5 +42166,29 @@
     "sourcePage": "Upute (Prilog 1), tč. 5.8.1 Citiranje literature (str. 9-10)",
     "quote": "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju brojčanim redoslijedom.",
     "note": "Deepen pass (2026-08-01): isti citat kao za effectus-zavrsni/effectus-diplomski (institucija-wide klauzula, cl. 5.8.1 ne razlikuje vrstu rada)."
+  },
+  {
+    "id": "led-par-zavrsni--required-sections-verified-2026-08-02",
+    "ruleId": "par-zavrsni--required-sections",
+    "profileId": "par-zavrsni",
+    "action": "verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-08-02",
+    "sourceId": "par-pravilnik-2023",
+    "sourcePage": "Clanak 10 stavak 2 (str. 3)",
+    "quote": "Izjava o akademskoj čestitosti sastavni je dio završnog / diplomskog rada.",
+    "note": "ai-1pass-batch: draftano iz snapshotiranog izvora, vlasnik odobrio u bulk prolazu; izvor naknadno registriran u source-registry.json (URL potvrdjen usporedbom sha256 snapshotа sa sluzbenim par.hr PDF-om)."
+  },
+  {
+    "id": "led-par-diplomski--required-sections-verified-2026-08-02",
+    "ruleId": "par-diplomski--required-sections",
+    "profileId": "par-diplomski",
+    "action": "verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-08-02",
+    "sourceId": "par-pravilnik-2023",
+    "sourcePage": "Clanak 10 stavak 2 (str. 3)",
+    "quote": "Izjava o akademskoj čestitosti sastavni je dio završnog / diplomskog rada.",
+    "note": "ai-1pass-batch: draftano iz snapshotiranog izvora, vlasnik odobrio u bulk prolazu; izvor naknadno registriran u source-registry.json (URL potvrdjen usporedbom sha256 snapshotа sa sluzbenim par.hr PDF-om)."
   }
 ]

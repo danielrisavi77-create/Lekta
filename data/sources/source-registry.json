@@ -3726,5 +3726,18 @@
     "validityClass": "stable",
     "lastChecked": "2026-08-01",
     "note": "ODSTUPA od opce FFRI zavrsni Uputa: velicina tijela teksta 14pt (NE 12pt kao opca FFRI vrijednost) - font za tijelo Times New Roman 14pt, fusnote 10pt, prored 1,5 (tijelo i fusnote), prvi redak uvucen 1,25cm (nema checkId), poravnanje obostrano, obrojcavanje u podnozju desno od Uvoda, margine 2,5cm sve strane (isto kao opca vrijednost). Dokument dopusta odstupanje uz dogovor s mentorom (\"po potrebi i u dogovoru s mentorom moguca je uporaba i drugih fontova\") ali BAZNA vrijednost je 14pt. Zbog ovog odstupanja Hrvatski jezik i knjizevnost (Kroatistika) je IZDVOJEN iz opceg ffri-zavrsni bundlea u zaseban profil ffri-kroatistika-zavrsni."
+  },
+  {
+    "id": "par-pravilnik-2023",
+    "kind": "guidelines",
+    "title": "Pravilnik o izradi i obrani završnih i diplomskih radova Veleučilišta PAR (2023)",
+    "url": "https://par.hr/wp-content/uploads/2025/01/8-Pravilnik-o-izradi-i-obrani-zavrsnih-i-diplomskih-radova-Veleucilista-PAR.pdf",
+    "publisher": "Veleučilište PAR, Pula",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/par/par-pravilnik-2023.pdf",
+    "snapshotHash": "4cdcd0c16988092d2247bbcb2b108f74e2aca6f32fbf182a486866aaed28fc39",
+    "validityClass": "stable",
+    "lastChecked": "2026-08-02",
+    "note": "Sluzbeno donesen 21.4.2023 (KLASA 600-01/23-02/01). Iskljucivo proceduralni akt (prijava teme, mentorstvo, rokovi, povjerenstvo, obrana, ocjenjivanje); tehnicke upute za oblikovanje (font, margine, prored, opseg, nacin citiranja) NISU u ovom dokumentu - clanak 22 upucuje na zasebne \"Upute za pisanje\" koje jos nisu snapshotirane."
   }
 ]
