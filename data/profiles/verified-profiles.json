@@ -7344,7 +7344,9 @@
     "id": "mef-diplomski",
     "unitId": "mef",
     "programs": [
-      "Diplomski studiji Medicinskog fakulteta"
+      "Diplomski studiji Medicinskog fakulteta",
+      "Medicina",
+      "Sestrinstvo"
     ],
     "workTypes": [
       "graduate"
@@ -7459,7 +7461,8 @@
     "id": "vef-diplomski",
     "unitId": "vef",
     "programs": [
-      "Diplomski studiji Veterinarskog fakulteta Sveucilista u Zagrebu"
+      "Diplomski studiji Veterinarskog fakulteta Sveucilista u Zagrebu",
+      "Veterinarska medicina"
     ],
     "workTypes": [
       "graduate"
@@ -7584,7 +7587,9 @@
     "id": "kif-diplomski",
     "unitId": "kif",
     "programs": [
-      "Diplomski studiji Kineziološkog fakulteta"
+      "Diplomski studiji Kineziološkog fakulteta",
+      "Kineziologija",
+      "Izobrazba trenera"
     ],
     "workTypes": [
       "graduate"
@@ -7679,7 +7684,9 @@
     "id": "sumfak-diplomski",
     "unitId": "sumfak",
     "programs": [
-      "Diplomski studiji Fakulteta šumarstva i drvne tehnologije"
+      "Diplomski studiji Fakulteta šumarstva i drvne tehnologije",
+      "Šumarstvo",
+      "Drvna tehnologija"
     ],
     "workTypes": [
       "graduate"
@@ -7809,7 +7816,9 @@
     "id": "sumfak-zavrsni",
     "unitId": "sumfak",
     "programs": [
-      "Prijediplomski studiji Fakulteta šumarstva i drvne tehnologije (zavrsni rad)"
+      "Prijediplomski studiji Fakulteta šumarstva i drvne tehnologije (zavrsni rad)",
+      "Šumarstvo",
+      "Drvna tehnologija"
     ],
     "workTypes": [
       "final"
@@ -7934,7 +7943,8 @@
     "id": "ttf-diplomski",
     "unitId": "ttf",
     "programs": [
-      "Diplomski studiji Tekstilno-tehnološkog fakulteta"
+      "Diplomski studiji Tekstilno-tehnološkog fakulteta",
+      "Tekstilna tehnologija i inženjerstvo"
     ],
     "workTypes": [
       "graduate"
@@ -8086,7 +8096,8 @@
     "id": "ttf-zavrsni",
     "unitId": "ttf",
     "programs": [
-      "Prijediplomski studiji Tekstilno-tehnološkog fakulteta (zavrsni rad)"
+      "Prijediplomski studiji Tekstilno-tehnološkog fakulteta (zavrsni rad)",
+      "Tekstilna tehnologija i inženjerstvo"
     ],
     "workTypes": [
       "final"
@@ -8239,7 +8250,8 @@
     "id": "grad-diplomski",
     "unitId": "grad",
     "programs": [
-      "Diplomski studiji Građevinskog fakulteta"
+      "Diplomski studiji Građevinskog fakulteta",
+      "Građevinarstvo"
     ],
     "workTypes": [
       "graduate"
@@ -8355,7 +8367,8 @@
     "id": "grad-zavrsni",
     "unitId": "grad",
     "programs": [
-      "Prijediplomski studiji Građevinskog fakulteta (zavrsni rad)"
+      "Prijediplomski studiji Građevinskog fakulteta (zavrsni rad)",
+      "Građevinarstvo"
     ],
     "workTypes": [
       "final"
@@ -9111,7 +9124,8 @@
     "id": "sfzg-diplomski",
     "unitId": "sfzg",
     "programs": [
-      "Diplomski studiji Stomatološkog fakulteta"
+      "Diplomski studiji Stomatološkog fakulteta",
+      "Dentalna medicina"
     ],
     "workTypes": [
       "graduate"
@@ -9231,7 +9245,10 @@
     "id": "fpz-zavrsni",
     "unitId": "fpz",
     "programs": [
-      "Prijediplomski studiji Fakulteta prometnih znanosti (zavrsni rad)"
+      "Prijediplomski studiji Fakulteta prometnih znanosti (zavrsni rad)",
+      "Promet",
+      "Aeronautika",
+      "Inteligentni transportni sustavi i logistika"
     ],
     "workTypes": [
       "final"
@@ -9413,7 +9430,10 @@
     "id": "fpz-diplomski",
     "unitId": "fpz",
     "programs": [
-      "Diplomski studiji Fakulteta prometnih znanosti"
+      "Diplomski studiji Fakulteta prometnih znanosti",
+      "Promet",
+      "Aeronautika",
+      "Inteligentni transportni sustavi i logistika"
     ],
     "workTypes": [
       "graduate"
@@ -9777,7 +9797,9 @@
     "id": "grf-zavrsni",
     "unitId": "grf",
     "programs": [
-      "Prijediplomski studiji Grafičkog fakulteta (zavrsni rad)"
+      "Prijediplomski studiji Grafičkog fakulteta (zavrsni rad)",
+      "Grafička tehnologija",
+      "Dizajn grafičkih proizvoda"
     ],
     "workTypes": [
       "final"
@@ -10006,7 +10028,9 @@
     "id": "ufzg-zavrsni",
     "unitId": "ufzg",
     "programs": [
-      "Prijediplomski studiji Učiteljskog fakulteta (zavrsni rad)"
+      "Prijediplomski studiji Učiteljskog fakulteta (zavrsni rad)",
+      "Učiteljski studij",
+      "Rani i predškolski odgoj i obrazovanje"
     ],
     "workTypes": [
       "final"
@@ -10180,7 +10204,9 @@
     "id": "ufzg-diplomski",
     "unitId": "ufzg",
     "programs": [
-      "Diplomski studiji Učiteljskog fakulteta"
+      "Diplomski studiji Učiteljskog fakulteta",
+      "Učiteljski studij",
+      "Rani i predškolski odgoj i obrazovanje"
     ],
     "workTypes": [
       "graduate"
@@ -10375,7 +10401,8 @@
     "id": "arh-diplomski",
     "unitId": "arh",
     "programs": [
-      "Diplomski studiji Arhitektonskog fakulteta"
+      "Diplomski studiji Arhitektonskog fakulteta",
+      "Arhitektura i urbanizam"
     ],
     "workTypes": [
       "graduate"
@@ -10501,7 +10528,10 @@
     "id": "fkit-diplomski",
     "unitId": "fkit",
     "programs": [
-      "Diplomski studiji Fakulteta kemijskog inženjerstva i tehnologije"
+      "Diplomski studiji Fakulteta kemijskog inženjerstva i tehnologije",
+      "Kemijsko inženjerstvo",
+      "Primijenjena kemija",
+      "Ekoinženjerstvo"
     ],
     "workTypes": [
       "graduate"
@@ -10604,7 +10634,10 @@
     "id": "fkit-zavrsni",
     "unitId": "fkit",
     "programs": [
-      "Prijediplomski studiji Fakulteta kemijskog inženjerstva i tehnologije (zavrsni rad)"
+      "Prijediplomski studiji Fakulteta kemijskog inženjerstva i tehnologije (zavrsni rad)",
+      "Kemijsko inženjerstvo",
+      "Primijenjena kemija",
+      "Ekoinženjerstvo"
     ],
     "workTypes": [
       "final"
@@ -10706,7 +10739,10 @@
     "id": "pbf-diplomski",
     "unitId": "pbf",
     "programs": [
-      "Diplomski studiji Prehrambeno-biotehnološkog fakulteta"
+      "Diplomski studiji Prehrambeno-biotehnološkog fakulteta",
+      "Prehrambena tehnologija",
+      "Biotehnologija",
+      "Nutricionizam"
     ],
     "workTypes": [
       "graduate"
@@ -10897,7 +10933,9 @@
     "id": "ffrz-diplomski",
     "unitId": "ffrz",
     "programs": [
-      "Diplomski studiji Fakulteta filozofije i religijskih znanosti"
+      "Diplomski studiji Fakulteta filozofije i religijskih znanosti",
+      "Filozofija",
+      "Religijske znanosti"
     ],
     "workTypes": [
       "graduate"
@@ -11071,7 +11109,9 @@
     "id": "ffrz-bakalaureatski",
     "unitId": "ffrz",
     "programs": [
-      "Prijediplomski studiji Fakulteta filozofije i religijskih znanosti (zavrsni rad)"
+      "Prijediplomski studiji Fakulteta filozofije i religijskih znanosti (zavrsni rad)",
+      "Filozofija",
+      "Religijske znanosti"
     ],
     "workTypes": [
       "final"
@@ -11217,7 +11257,12 @@
     "id": "fhs-diplomski",
     "unitId": "fhs",
     "programs": [
-      "Diplomski studiji Fakulteta hrvatskih studija"
+      "Diplomski studiji Fakulteta hrvatskih studija",
+      "Povijest",
+      "Sociologija",
+      "Psihologija",
+      "Komunikologija",
+      "Kroatologija"
     ],
     "workTypes": [
       "graduate"
@@ -11392,7 +11437,12 @@
     "id": "fhs-zavrsni",
     "unitId": "fhs",
     "programs": [
-      "Prijediplomski studiji Fakulteta hrvatskih studija (zavrsni rad)"
+      "Prijediplomski studiji Fakulteta hrvatskih studija (zavrsni rad)",
+      "Povijest",
+      "Sociologija",
+      "Psihologija",
+      "Komunikologija",
+      "Kroatologija"
     ],
     "workTypes": [
       "final"
@@ -11564,7 +11614,9 @@
     "id": "kbf-zavrsni",
     "unitId": "kbf",
     "programs": [
-      "Prijediplomski studiji Katolickog bogoslovnog fakulteta (zavrsni rad)"
+      "Prijediplomski studiji Katolickog bogoslovnog fakulteta (zavrsni rad)",
+      "Filozofsko-teološki studij",
+      "Religijska pedagogija i katehetika"
     ],
     "workTypes": [
       "final"
@@ -11736,7 +11788,9 @@
     "id": "kbf-diplomski",
     "unitId": "kbf",
     "programs": [
-      "Diplomski studiji Katolickog bogoslovnog fakulteta"
+      "Diplomski studiji Katolickog bogoslovnog fakulteta",
+      "Filozofsko-teološki studij",
+      "Religijska pedagogija i katehetika"
     ],
     "workTypes": [
       "graduate"
@@ -11974,7 +12028,13 @@
     "id": "muza-diplomski",
     "unitId": "muza",
     "programs": [
-      "Diplomski studiji Muzičke akademije"
+      "Diplomski studiji Muzičke akademije",
+      "Kompozicija",
+      "Dirigiranje",
+      "Instrumentalni studiji",
+      "Pjevanje",
+      "Muzikologija",
+      "Glazbena pedagogija"
     ],
     "workTypes": [
       "graduate"
@@ -14165,7 +14225,9 @@
     "id": "grf-diplomski",
     "unitId": "grf",
     "programs": [
-      "Diplomski studiji Grafičkog fakulteta"
+      "Diplomski studiji Grafičkog fakulteta",
+      "Grafička tehnologija",
+      "Dizajn grafičkih proizvoda"
     ],
     "workTypes": [
       "graduate"
@@ -15929,7 +15991,10 @@
     "id": "rgnf-zavrsni",
     "unitId": "rgnf",
     "programs": [
-      "Prijediplomski studiji Rudarsko-geolosko-naftnog fakulteta (zavrsni rad)"
+      "Prijediplomski studiji Rudarsko-geolosko-naftnog fakulteta (zavrsni rad)",
+      "Rudarstvo",
+      "Geološko inženjerstvo",
+      "Naftno rudarstvo"
     ],
     "workTypes": [
       "final"
@@ -16045,7 +16110,10 @@
     "id": "rgnf-diplomski",
     "unitId": "rgnf",
     "programs": [
-      "Diplomski studiji Rudarsko-geolosko-naftnog fakulteta"
+      "Diplomski studiji Rudarsko-geolosko-naftnog fakulteta",
+      "Rudarstvo",
+      "Geološko inženjerstvo",
+      "Naftno rudarstvo"
     ],
     "workTypes": [
       "graduate"
@@ -16282,7 +16350,10 @@
     "id": "libertas-zavrsni",
     "unitId": "libertas",
     "programs": [
-      "Prijediplomski studiji Libertas (zavrsni rad)"
+      "Prijediplomski studiji Libertas (zavrsni rad)",
+      "Međunarodni odnosi i diplomacija",
+      "Poslovna ekonomija",
+      "Turizam i hotelijerstvo"
     ],
     "workTypes": [
       "final"
@@ -16333,7 +16404,10 @@
     "id": "libertas-diplomski",
     "unitId": "libertas",
     "programs": [
-      "Diplomski studiji Libertas"
+      "Diplomski studiji Libertas",
+      "Međunarodni odnosi i diplomacija",
+      "Poslovna ekonomija",
+      "Turizam i hotelijerstvo"
     ],
     "workTypes": [
       "graduate"
@@ -16423,12 +16497,52 @@
       "pageMin": 35,
       "pageMax": 50,
       "requiredSections": [
-        { "key": "sazetak", "label": "sažetak", "terms": ["sažetak", "sazetak"] },
-        { "key": "abstract", "label": "abstract", "terms": ["abstract"] },
-        { "key": "sadrzaj", "label": "sadržaj", "terms": ["sadržaj", "sadrzaj"] },
-        { "key": "uvod", "label": "uvodni dio", "terms": ["uvod"] },
-        { "key": "zakljucak", "label": "zaključak", "terms": ["zaključak", "zakljucak"] },
-        { "key": "literatura", "label": "popis literature", "terms": ["literatura", "popis literature"] }
+        {
+          "key": "sazetak",
+          "label": "sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "abstract",
+          "terms": [
+            "abstract"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "uvodni dio",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "zaključak",
+          "terms": [
+            "zaključak",
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
       ]
     },
     "facts": [],
@@ -16548,12 +16662,52 @@
       "pageMin": 50,
       "pageMax": 80,
       "requiredSections": [
-        { "key": "sazetak", "label": "sažetak", "terms": ["sažetak", "sazetak"] },
-        { "key": "abstract", "label": "abstract", "terms": ["abstract"] },
-        { "key": "sadrzaj", "label": "sadržaj", "terms": ["sadržaj", "sadrzaj"] },
-        { "key": "uvod", "label": "uvodni dio", "terms": ["uvod"] },
-        { "key": "zakljucak", "label": "zaključak", "terms": ["zaključak", "zakljucak"] },
-        { "key": "literatura", "label": "popis literature", "terms": ["literatura", "popis literature"] }
+        {
+          "key": "sazetak",
+          "label": "sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "abstract",
+          "terms": [
+            "abstract"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "uvodni dio",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "zaključak",
+          "terms": [
+            "zaključak",
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
       ]
     },
     "facts": [],
@@ -16636,7 +16790,9 @@
     "id": "rrif-zavrsni",
     "unitId": "rrif",
     "programs": [
-      "Prijediplomski strucni studij RRiF (zavrsni rad)"
+      "Prijediplomski strucni studij RRiF (zavrsni rad)",
+      "Računovodstvo i financije",
+      "Poduzetništvo"
     ],
     "workTypes": [
       "final"
@@ -16694,7 +16850,9 @@
     "id": "pvzg-zavrsni",
     "unitId": "pvzg",
     "programs": [
-      "Prijediplomski strucni studiji PVZG (zavrsni rad)"
+      "Prijediplomski strucni studiji PVZG (zavrsni rad)",
+      "Marketing i komunikacije",
+      "Upravljanje i poslovanje"
     ],
     "workTypes": [
       "final"
@@ -16751,7 +16909,9 @@
     "id": "pvzg-specijalisticki",
     "unitId": "pvzg",
     "programs": [
-      "Specijalisticki diplomski strucni studiji PVZG"
+      "Specijalisticki diplomski strucni studiji PVZG",
+      "Marketing i komunikacije",
+      "Upravljanje i poslovanje"
     ],
     "workTypes": [
       "graduate"
@@ -16808,7 +16968,13 @@
     "id": "zvu-zavrsni",
     "unitId": "zvu",
     "programs": [
-      "Prijediplomski strucni studiji ZVU (zavrsni rad)"
+      "Prijediplomski strucni studiji ZVU (zavrsni rad)",
+      "Sestrinstvo",
+      "Fizioterapija",
+      "Radiološka tehnologija",
+      "Sanitarno inženjerstvo",
+      "Radna terapija",
+      "Medicinsko-laboratorijska dijagnostika"
     ],
     "workTypes": [
       "final"
@@ -16862,7 +17028,13 @@
     "id": "zvu-specijalisticki",
     "unitId": "zvu",
     "programs": [
-      "Specijalisticki diplomski strucni studiji ZVU"
+      "Specijalisticki diplomski strucni studiji ZVU",
+      "Sestrinstvo",
+      "Fizioterapija",
+      "Radiološka tehnologija",
+      "Sanitarno inženjerstvo",
+      "Radna terapija",
+      "Medicinsko-laboratorijska dijagnostika"
     ],
     "workTypes": [
       "graduate"
@@ -16916,7 +17088,8 @@
     "id": "vsite-zavrsni",
     "unitId": "vsite",
     "programs": [
-      "Prijediplomski strucni studiji VSITE (zavrsni rad)"
+      "Prijediplomski strucni studiji VSITE (zavrsni rad)",
+      "Informacijske tehnologije"
     ],
     "workTypes": [
       "final"
@@ -16952,7 +17125,8 @@
     "id": "vsite-diplomski",
     "unitId": "vsite",
     "programs": [
-      "Diplomski strucni studiji VSITE"
+      "Diplomski strucni studiji VSITE",
+      "Informacijske tehnologije"
     ],
     "workTypes": [
       "graduate"
@@ -16988,7 +17162,9 @@
     "id": "vkjs-zavrsni",
     "unitId": "vkjs",
     "programs": [
-      "Prijediplomski strucni studij VKJS (zavrsni rad)"
+      "Prijediplomski strucni studij VKJS (zavrsni rad)",
+      "Kriminalistika",
+      "Javna sigurnost"
     ],
     "workTypes": [
       "final"
@@ -17045,7 +17221,9 @@
     "id": "vkjs-diplomski",
     "unitId": "vkjs",
     "programs": [
-      "Specijalisticki diplomski strucni studij VKJS (diplomski rad)"
+      "Specijalisticki diplomski strucni studij VKJS (diplomski rad)",
+      "Kriminalistika",
+      "Javna sigurnost"
     ],
     "workTypes": [
       "graduate"
@@ -17102,7 +17280,13 @@
     "id": "hks-diplomski",
     "unitId": "hks",
     "programs": [
-      "Diplomski sveucilisni studiji HKS"
+      "Diplomski sveucilisni studiji HKS",
+      "Povijest",
+      "Sociologija",
+      "Psihologija",
+      "Komunikologija",
+      "Sestrinstvo",
+      "Medicina"
     ],
     "workTypes": [
       "graduate"
@@ -23339,7 +23523,7 @@
     "id": "fizri-zavrsni",
     "unitId": "fizri",
     "programs": [
-      "Sveučilišni prijediplomski studiji fizike (završni rad, Rijeka)"
+      "Prijediplomski studij Fizika"
     ],
     "workTypes": [
       "final"
@@ -23384,7 +23568,11 @@
     "id": "fizri-diplomski",
     "unitId": "fizri",
     "programs": [
-      "Sveučilišni diplomski studiji fizike (Rijeka)"
+      "Diplomski studij Fizika",
+      "Diplomski studij Fizika i matematika",
+      "Diplomski studij Fizika i informatika",
+      "Diplomski studij Fizika i filozofija",
+      "Diplomski studij Inženjerstvo i fizika materijala"
     ],
     "workTypes": [
       "graduate"
@@ -42020,7 +42208,10 @@
     "id": "mapu-glazbena-pedagogija-diplomski",
     "unitId": "mapu",
     "programs": [
-      "Sveučilišni diplomski studij Glazbena pedagogija"
+      "Sveučilišni diplomski studij Glazbena pedagogija",
+      "Sveučilišni diplomski studij Klavir",
+      "Sveučilišni diplomski studij Klasična harmonika",
+      "Sveučilišni diplomski studij Solo pjevanje"
     ],
     "workTypes": [
       "graduate"
@@ -43267,7 +43458,8 @@
     "id": "sois-ft-vojno-inzenjerstvo-zavrsni",
     "unitId": "sois-ft",
     "programs": [
-      "Sveucilisni prijediplomski studij Vojno inzenjerstvo"
+      "Sveucilisni prijediplomski studij Vojno inzenjerstvo",
+      "Vojno inzenjerstvo (prijediplomski)"
     ],
     "workTypes": [
       "final"
@@ -43331,7 +43523,8 @@
     "id": "sois-ft-vojno-inzenjerstvo-diplomski",
     "unitId": "sois-ft",
     "programs": [
-      "Diplomski studij Vojno inzenjerstvo"
+      "Diplomski studij Vojno inzenjerstvo",
+      "Vojno inzenjerstvo (diplomski)"
     ],
     "workTypes": [
       "graduate"
@@ -43395,7 +43588,8 @@
     "id": "sois-ft-vojno-vodjenje-zavrsni",
     "unitId": "sois-ft",
     "programs": [
-      "Sveucilisni prijediplomski studij Vojno vodjenje i upravljanje"
+      "Sveucilisni prijediplomski studij Vojno vodjenje i upravljanje",
+      "Vojno vodjenje i upravljanje (prijediplomski)"
     ],
     "workTypes": [
       "final"
@@ -43459,7 +43653,8 @@
     "id": "sois-ft-vojno-vodjenje-diplomski",
     "unitId": "sois-ft",
     "programs": [
-      "Diplomski studij Vojno vodjenje i upravljanje"
+      "Diplomski studij Vojno vodjenje i upravljanje",
+      "Vojno vodjenje i upravljanje (diplomski)"
     ],
     "workTypes": [
       "graduate"
@@ -43523,7 +43718,8 @@
     "id": "sois-ft-vojno-pomorstvo-diplomski",
     "unitId": "sois-ft",
     "programs": [
-      "Integrirani prijediplomski i diplomski studij Vojno pomorstvo"
+      "Integrirani prijediplomski i diplomski studij Vojno pomorstvo",
+      "Vojno pomorstvo (integrirani prijediplomski i diplomski)"
     ],
     "workTypes": [
       "graduate"
