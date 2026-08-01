@@ -796,11 +796,34 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [
         "line-spacing-fixer-rule",
+        "alignment-fixer-rule",
         "empty-paragraph-fixer-rule",
       ],
     },
     "alignment-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "val": "both",
+      },
+      "skipped": [
+        "alignment-fixer-rule",
+      ],
+    },
+    "alignment-fixer(deep)": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "deep": true,
+        "val": "both",
+      },
+      "skipped": [
+        "alignment-fixer-rule",
+      ],
     },
     "bibliography-repair-fixer": {
       "params": "nema-cilja-u-profilu",
@@ -5608,11 +5631,34 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [
         "line-spacing-fixer-rule",
+        "alignment-fixer-rule",
         "empty-paragraph-fixer-rule",
       ],
     },
     "alignment-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "val": "both",
+      },
+      "skipped": [
+        "alignment-fixer-rule",
+      ],
+    },
+    "alignment-fixer(deep)": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "deep": true,
+        "val": "both",
+      },
+      "skipped": [
+        "alignment-fixer-rule",
+      ],
     },
     "bibliography-repair-fixer": {
       "params": "nema-cilja-u-profilu",
