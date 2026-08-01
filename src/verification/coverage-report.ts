@@ -43,16 +43,26 @@ function latestVerified(dates: Array<string | null | undefined>): string | null 
   return best;
 }
 
-/** Racuna coverage celiju za jedan profil. */
+/**
+ * Racuna coverage celiju za jedan profil.
+ *
+ * `scored` (od `computePublishedRules`) ukljucuje SVAKO verificirano pravilo sa sluzbenim
+ * izvorom, bez obzira na `machineCheckable` - to je ispravno za `effectiveScored` (npr.
+ * citation-style JEST stvaran ucinak na engine iako nije strojno "provjeren" u smislu
+ * checka). Ali brojnik omjera MORA gledati istu populaciju kao nazivnik (samo strojno
+ * provjerljiva pravila), inace omjer moze preci 100% (npr. "8/7") kad profil ima vise
+ * verificiranih ne-strojnih pravila nego strojno provjerljivih - vidi tests/coverage-report.test.ts.
+ */
 export function computeCoverageCell(profile: ThesisProfile, sources: SourceEntry[]): CoverageCell {
   const { scored, advisory } = computePublishedRules(profile, sources);
+  const machineCheckableScored = scored.filter((e) => e.machineCheckable);
   const machineCheckable = (profile.ruleEntries ?? []).filter((e) => e.machineCheckable).length;
   return {
     profileId: profile.id,
-    scored: scored.length,
+    scored: machineCheckableScored.length,
     machineCheckable,
     advisory: advisory.length,
-    ratio: machineCheckable ? scored.length / machineCheckable : 0,
+    ratio: machineCheckable ? machineCheckableScored.length / machineCheckable : 0,
     lastVerified: latestVerified(scored.map((e) => e.lastVerified)),
   };
 }

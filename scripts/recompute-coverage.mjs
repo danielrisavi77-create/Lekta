@@ -86,13 +86,17 @@ for (const profile of [...verified, ...legal]) {
   const entries = mergedDrafts[profile.id] ?? [];
   if (!entries.length) continue;
   const scored = entries.filter(isScored);
+  // Brojnik omjera mora gledati istu populaciju kao nazivnik (samo machineCheckable), inace
+  // omjer moze preci 100% kad profil ima vise verificiranih ne-strojnih pravila (npr.
+  // citation-style) nego strojno provjerljivih - isti fix kao src/verification/coverage-report.ts.
+  const scoredMachineCheckable = scored.filter((e) => e.machineCheckable).length;
   const machineCheckable = entries.filter((e) => e.machineCheckable).length;
   cells.push({
     profileId: profile.id,
-    scored: scored.length,
+    scored: scoredMachineCheckable,
     machineCheckable,
     advisory: entries.length - scored.length,
-    ratio: machineCheckable ? scored.length / machineCheckable : 0,
+    ratio: machineCheckable ? scoredMachineCheckable / machineCheckable : 0,
     lastVerified: latest(scored.map((e) => e.lastVerified)),
   });
 }

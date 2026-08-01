@@ -52,6 +52,15 @@ for (const [file, marker] of legalChecks) {
   if (!fs.readFileSync(p, 'utf8').includes(marker)) fail(`dist/${file} ne sadrzi "${marker}"`);
 }
 
+// 3b. javna coverage stranica postoji i nije prazna (generate-coverage-page.mjs)
+{
+  const p = path.join(DIST, 'pokrivenost.html');
+  if (!fs.existsSync(p)) fail('dist/pokrivenost.html ne postoji (generate-coverage-page nije prosao?)');
+  const html = fs.readFileSync(p, 'utf8');
+  if (!html.includes('Potpuno pokriveno')) fail('dist/pokrivenost.html ne sadrzi ocekivane oznake statusa');
+  if (!html.includes('details class="unit"')) fail('dist/pokrivenost.html nema nijednu ustrojbenu jedinicu (prazan podatak?)');
+}
+
 // 4. interna verifikacijska konzola ne smije u javni build (postojeca DEPLOY invarijanta)
 if (fs.existsSync(path.join(DIST, 'verification.html'))) fail('dist/verification.html postoji u DEPLOY buildu');
 

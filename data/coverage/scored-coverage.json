@@ -146,10 +146,10 @@
     },
     {
       "profileId": "arh-diplomski",
-      "scored": 2,
+      "scored": 1,
       "machineCheckable": 2,
       "advisory": 1,
-      "ratio": 1,
+      "ratio": 0.5,
       "lastVerified": "2026-07-02"
     },
     {
@@ -250,18 +250,18 @@
     },
     {
       "profileId": "effectus-diplomski",
-      "scored": 8,
+      "scored": 7,
       "machineCheckable": 7,
       "advisory": 0,
-      "ratio": 1.1428571428571428,
+      "ratio": 1,
       "lastVerified": "2026-07-03"
     },
     {
       "profileId": "effectus-zavrsni",
-      "scored": 8,
+      "scored": 7,
       "machineCheckable": 7,
       "advisory": 0,
-      "ratio": 1.1428571428571428,
+      "ratio": 1,
       "lastVerified": "2026-07-03"
     },
     {
@@ -290,18 +290,18 @@
     },
     {
       "profileId": "efri-diplomski",
-      "scored": 8,
+      "scored": 7,
       "machineCheckable": 7,
       "advisory": 0,
-      "ratio": 1.1428571428571428,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "efri-zavrsni",
-      "scored": 8,
+      "scored": 7,
       "machineCheckable": 7,
       "advisory": 0,
-      "ratio": 1.1428571428571428,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -330,10 +330,10 @@
     },
     {
       "profileId": "efzg-diplomski",
-      "scored": 7,
+      "scored": 6,
       "machineCheckable": 8,
       "advisory": 3,
-      "ratio": 0.875,
+      "ratio": 0.75,
       "lastVerified": "2026-07-02"
     },
     {
@@ -346,10 +346,10 @@
     },
     {
       "profileId": "efzg-specijalisticki",
-      "scored": 7,
+      "scored": 6,
       "machineCheckable": 8,
       "advisory": 3,
-      "ratio": 0.875,
+      "ratio": 0.75,
       "lastVerified": "2026-07-02"
     },
     {
@@ -362,18 +362,18 @@
     },
     {
       "profileId": "efzg-zavrsni",
-      "scored": 8,
+      "scored": 7,
       "machineCheckable": 9,
       "advisory": 3,
-      "ratio": 0.8888888888888888,
+      "ratio": 0.7777777777777778,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "erf-diplomski",
-      "scored": 5,
+      "scored": 4,
       "machineCheckable": 5,
       "advisory": 2,
-      "ratio": 1,
+      "ratio": 0.8,
       "lastVerified": "2026-07-02"
     },
     {
@@ -402,18 +402,18 @@
     },
     {
       "profileId": "fazos-diplomski",
-      "scored": 8,
+      "scored": 7,
       "machineCheckable": 7,
       "advisory": 0,
-      "ratio": 1.1428571428571428,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "fazos-zavrsni",
-      "scored": 8,
+      "scored": 7,
       "machineCheckable": 7,
       "advisory": 0,
-      "ratio": 1.1428571428571428,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -426,10 +426,10 @@
     },
     {
       "profileId": "fbf-specijalisticki",
-      "scored": 7,
+      "scored": 5,
       "machineCheckable": 6,
       "advisory": 1,
-      "ratio": 1.1666666666666667,
+      "ratio": 0.8333333333333334,
       "lastVerified": "2026-07-02"
     },
     {
@@ -674,18 +674,18 @@
     },
     {
       "profileId": "ffrz-bakalaureatski",
-      "scored": 10,
+      "scored": 8,
       "machineCheckable": 8,
       "advisory": 0,
-      "ratio": 1.25,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "ffrz-diplomski",
-      "scored": 10,
+      "scored": 8,
       "machineCheckable": 8,
       "advisory": 0,
-      "ratio": 1.25,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -730,18 +730,18 @@
     },
     {
       "profileId": "ffzg-filozofija-diplomski",
-      "scored": 9,
+      "scored": 7,
       "machineCheckable": 7,
       "advisory": 0,
-      "ratio": 1.2857142857142858,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "ffzg-informacijske-zavrsni",
-      "scored": 3,
+      "scored": 2,
       "machineCheckable": 4,
       "advisory": 3,
-      "ratio": 0.75,
+      "ratio": 0.5,
       "lastVerified": "2026-07-02"
     },
     {
@@ -810,10 +810,10 @@
     },
     {
       "profileId": "fhs-diplomski",
-      "scored": 8,
+      "scored": 7,
       "machineCheckable": 8,
       "advisory": 2,
-      "ratio": 1,
+      "ratio": 0.875,
       "lastVerified": "2026-07-02"
     },
     {
@@ -826,10 +826,10 @@
     },
     {
       "profileId": "fhs-zavrsni",
-      "scored": 8,
+      "scored": 7,
       "machineCheckable": 8,
       "advisory": 2,
-      "ratio": 1,
+      "ratio": 0.875,
       "lastVerified": "2026-07-02"
     },
     {
@@ -962,18 +962,18 @@
     },
     {
       "profileId": "fpz-diplomski",
-      "scored": 3,
+      "scored": 2,
       "machineCheckable": 6,
       "advisory": 5,
-      "ratio": 0.5,
+      "ratio": 0.3333333333333333,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "fpz-zavrsni",
-      "scored": 3,
+      "scored": 2,
       "machineCheckable": 6,
       "advisory": 5,
-      "ratio": 0.5,
+      "ratio": 0.3333333333333333,
       "lastVerified": "2026-07-02"
     },
     {
@@ -1162,26 +1162,26 @@
     },
     {
       "profileId": "geof-diplomski",
-      "scored": 2,
+      "scored": 1,
       "machineCheckable": 1,
       "advisory": 1,
-      "ratio": 2,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "geof-doktorski",
-      "scored": 2,
+      "scored": 1,
       "machineCheckable": 1,
       "advisory": 1,
-      "ratio": 2,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "grad-diplomski",
-      "scored": 6,
+      "scored": 5,
       "machineCheckable": 7,
       "advisory": 3,
-      "ratio": 0.8571428571428571,
+      "ratio": 0.7142857142857143,
       "lastVerified": "2026-07-02"
     },
     {
@@ -1194,10 +1194,10 @@
     },
     {
       "profileId": "grad-zavrsni",
-      "scored": 6,
+      "scored": 5,
       "machineCheckable": 7,
       "advisory": 3,
-      "ratio": 0.8571428571428571,
+      "ratio": 0.7142857142857143,
       "lastVerified": "2026-07-02"
     },
     {
@@ -1298,10 +1298,10 @@
     },
     {
       "profileId": "kbf-diplomski",
-      "scored": 9,
+      "scored": 7,
       "machineCheckable": 8,
       "advisory": 1,
-      "ratio": 1.125,
+      "ratio": 0.875,
       "lastVerified": "2026-07-02"
     },
     {
@@ -1314,10 +1314,10 @@
     },
     {
       "profileId": "kbf-zavrsni",
-      "scored": 9,
+      "scored": 7,
       "machineCheckable": 8,
       "advisory": 1,
-      "ratio": 1.125,
+      "ratio": 0.875,
       "lastVerified": "2026-07-02"
     },
     {
@@ -1354,10 +1354,10 @@
     },
     {
       "profileId": "kif-diplomski",
-      "scored": 8,
+      "scored": 7,
       "machineCheckable": 7,
       "advisory": 1,
-      "ratio": 1.1428571428571428,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -1370,26 +1370,26 @@
     },
     {
       "profileId": "kifos-diplomski",
-      "scored": 9,
+      "scored": 8,
       "machineCheckable": 8,
       "advisory": 0,
-      "ratio": 1.125,
+      "ratio": 1,
       "lastVerified": "2026-07-16"
     },
     {
       "profileId": "kifos-zavrsni",
-      "scored": 9,
+      "scored": 8,
       "machineCheckable": 8,
       "advisory": 0,
-      "ratio": 1.125,
+      "ratio": 1,
       "lastVerified": "2026-07-16"
     },
     {
       "profileId": "kifst-diplomski",
-      "scored": 6,
+      "scored": 5,
       "machineCheckable": 5,
       "advisory": 0,
-      "ratio": 1.2,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -1522,10 +1522,10 @@
     },
     {
       "profileId": "mef-diplomski",
-      "scored": 7,
+      "scored": 5,
       "machineCheckable": 7,
       "advisory": 3,
-      "ratio": 1,
+      "ratio": 0.7142857142857143,
       "lastVerified": "2026-07-02"
     },
     {
@@ -1658,10 +1658,10 @@
     },
     {
       "profileId": "pbf-diplomski",
-      "scored": 8,
+      "scored": 7,
       "machineCheckable": 7,
       "advisory": 1,
-      "ratio": 1.1428571428571428,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -1730,10 +1730,10 @@
     },
     {
       "profileId": "pmf-geografija-diplomski",
-      "scored": 8,
+      "scored": 6,
       "machineCheckable": 8,
       "advisory": 2,
-      "ratio": 1,
+      "ratio": 0.75,
       "lastVerified": "2026-07-02"
     },
     {
@@ -1946,34 +1946,34 @@
     },
     {
       "profileId": "rgnf-diplomski",
-      "scored": 6,
+      "scored": 5,
       "machineCheckable": 5,
       "advisory": 1,
-      "ratio": 1.2,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "rgnf-zavrsni",
-      "scored": 6,
+      "scored": 5,
       "machineCheckable": 5,
       "advisory": 1,
-      "ratio": 1.2,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "riteh-diplomski",
-      "scored": 2,
+      "scored": 1,
       "machineCheckable": 6,
       "advisory": 5,
-      "ratio": 0.3333333333333333,
+      "ratio": 0.16666666666666666,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "riteh-zavrsni",
-      "scored": 2,
+      "scored": 1,
       "machineCheckable": 6,
       "advisory": 5,
-      "ratio": 0.3333333333333333,
+      "ratio": 0.16666666666666666,
       "lastVerified": "2026-07-02"
     },
     {
@@ -1986,18 +1986,18 @@
     },
     {
       "profileId": "securus-zavrsni",
-      "scored": 6,
+      "scored": 5,
       "machineCheckable": 6,
       "advisory": 1,
-      "ratio": 1,
+      "ratio": 0.8333333333333334,
       "lastVerified": "2026-07-17"
     },
     {
       "profileId": "sfzg-diplomski",
-      "scored": 9,
+      "scored": 8,
       "machineCheckable": 8,
       "advisory": 1,
-      "ratio": 1.125,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -2130,10 +2130,10 @@
     },
     {
       "profileId": "ufzg-diplomski",
-      "scored": 12,
+      "scored": 9,
       "machineCheckable": 9,
       "advisory": 0,
-      "ratio": 1.3333333333333333,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -2146,10 +2146,10 @@
     },
     {
       "profileId": "ufzg-zavrsni",
-      "scored": 11,
+      "scored": 9,
       "machineCheckable": 9,
       "advisory": 1,
-      "ratio": 1.2222222222222223,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -2194,10 +2194,10 @@
     },
     {
       "profileId": "unidu-komunikologija-diplomski",
-      "scored": 7,
+      "scored": 6,
       "machineCheckable": 6,
       "advisory": 0,
-      "ratio": 1.1666666666666667,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -2250,50 +2250,50 @@
     },
     {
       "profileId": "unin-biomedicina-diplomski",
-      "scored": 7,
+      "scored": 6,
       "machineCheckable": 6,
       "advisory": 0,
-      "ratio": 1.1666666666666667,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "unin-biomedicina-zavrsni",
-      "scored": 7,
+      "scored": 6,
       "machineCheckable": 6,
       "advisory": 0,
-      "ratio": 1.1666666666666667,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "unin-drustveni-diplomski",
-      "scored": 7,
+      "scored": 6,
       "machineCheckable": 6,
       "advisory": 0,
-      "ratio": 1.1666666666666667,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "unin-drustveni-zavrsni",
-      "scored": 7,
+      "scored": 6,
       "machineCheckable": 6,
       "advisory": 0,
-      "ratio": 1.1666666666666667,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "unin-tehnicki-diplomski",
-      "scored": 7,
+      "scored": 6,
       "machineCheckable": 6,
       "advisory": 0,
-      "ratio": 1.1666666666666667,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "unin-tehnicki-zavrsni",
-      "scored": 7,
+      "scored": 6,
       "machineCheckable": 6,
       "advisory": 0,
-      "ratio": 1.1666666666666667,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -2490,10 +2490,10 @@
     },
     {
       "profileId": "unizd-pedagogija-diplomski",
-      "scored": 6,
+      "scored": 5,
       "machineCheckable": 5,
       "advisory": 0,
-      "ratio": 1.2,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -2554,10 +2554,10 @@
     },
     {
       "profileId": "unizd-psihologija-zavrsni",
-      "scored": 7,
+      "scored": 6,
       "machineCheckable": 6,
       "advisory": 0,
-      "ratio": 1.1666666666666667,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -2706,26 +2706,26 @@
     },
     {
       "profileId": "vhzk-zavrsni",
-      "scored": 6,
+      "scored": 5,
       "machineCheckable": 5,
       "advisory": 0,
-      "ratio": 1.2,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "vkjs-diplomski",
-      "scored": 7,
+      "scored": 6,
       "machineCheckable": 6,
       "advisory": 0,
-      "ratio": 1.1666666666666667,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "vkjs-zavrsni",
-      "scored": 7,
+      "scored": 6,
       "machineCheckable": 6,
       "advisory": 0,
-      "ratio": 1.1666666666666667,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -2746,18 +2746,18 @@
     },
     {
       "profileId": "vsig-diplomski",
-      "scored": 6,
+      "scored": 5,
       "machineCheckable": 6,
       "advisory": 1,
-      "ratio": 1,
+      "ratio": 0.8333333333333334,
       "lastVerified": "2026-07-17"
     },
     {
       "profileId": "vsig-zavrsni",
-      "scored": 6,
+      "scored": 5,
       "machineCheckable": 6,
       "advisory": 1,
-      "ratio": 1,
+      "ratio": 0.8333333333333334,
       "lastVerified": "2026-07-17"
     },
     {
@@ -2778,26 +2778,26 @@
     },
     {
       "profileId": "vss-diplomski",
-      "scored": 8,
+      "scored": 7,
       "machineCheckable": 7,
       "advisory": 0,
-      "ratio": 1.1428571428571428,
+      "ratio": 1,
       "lastVerified": "2026-07-27"
     },
     {
       "profileId": "vss-zavrsni",
-      "scored": 8,
+      "scored": 7,
       "machineCheckable": 7,
       "advisory": 0,
-      "ratio": 1.1428571428571428,
+      "ratio": 1,
       "lastVerified": "2026-07-27"
     },
     {
       "profileId": "vub-diplomski",
-      "scored": 7,
+      "scored": 6,
       "machineCheckable": 6,
       "advisory": 0,
-      "ratio": 1.1666666666666667,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -2922,18 +2922,18 @@
     },
     {
       "profileId": "vvg-diplomski",
-      "scored": 3,
+      "scored": 2,
       "machineCheckable": 2,
       "advisory": 0,
-      "ratio": 1.5,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "vvg-zavrsni",
-      "scored": 3,
+      "scored": 2,
       "machineCheckable": 2,
       "advisory": 0,
-      "ratio": 1.5,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -2977,5 +2977,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 2080
+  "totalScored": 2009
 }

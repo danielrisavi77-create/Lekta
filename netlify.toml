@@ -13,7 +13,10 @@
   # potom doda staticke SEO stranice u dist/alati/** koje se objave iz istog artefakta.
   # Naslovnica NEMA zasebne per-fakultet stranice: sve opcije su na jednom alatu naslovnica.html
   # (kaskada fakultet/razina/smjer), pa se generate-title-page-tools NE poziva.
-  command = "npm run build && npm run generate-citation-tools && npm run generate-legal-pages && node scripts/verify-deploy-dist.mjs"
+  # generate-coverage-page: javna coverage matrica (VERIFICATION_PIPELINE.md sekcija 9),
+  # cita samo vec-preracunate JSON podatke (scored-coverage.json), pa ne treba nikakav poredak
+  # naspram ostalih generatora, samo da bude poslije `vite build`.
+  command = "npm run build && npm run generate-citation-tools && npm run generate-legal-pages && npm run generate-coverage-page && node scripts/verify-deploy-dist.mjs"
   publish = "dist"
 
 [build.environment]

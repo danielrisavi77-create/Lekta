@@ -16,6 +16,7 @@
     "dossier": "node scripts/verification-dossier.mjs",
     "generate-citation-tools": "node scripts/generate-citation-tools.mjs",
     "generate-legal-pages": "node scripts/generate-legal-pages.mjs",
+    "generate-coverage-page": "node scripts/generate-coverage-page.mjs",
     "extract-citation-sections": "node scripts/extract-citation-sections.mjs",
     "citation-dossiers": "node scripts/citation-spec-dossier.mjs",
     "approve-citation-spec": "node scripts/approve-citation-spec.mjs",

@@ -45,13 +45,19 @@ export function computePublishedRules(profile: ThesisProfile, sources: SourceEnt
   return { scored, advisory, effectiveScored };
 }
 
-/** Udio bodovano-verificiranih pravila medu strojno provjerljivima (za coverage matricu). */
+/**
+ * Udio bodovano-verificiranih pravila medu strojno provjerljivima (za coverage matricu).
+ * Brojnik se filtrira na `machineCheckable`, inace omjer moze preci 100% kad profil ima
+ * vise verificiranih ne-strojnih pravila (npr. citation-style) nego strojno provjerljivih -
+ * vidi computeCoverageCell u coverage-report.ts (isti obrazac, tamo se stvarno koristi).
+ */
 export function scoredCoverage(profile: ThesisProfile, sources: SourceEntry[]): {
   scored: number;
   machineCheckable: number;
   ratio: number;
 } {
   const { scored } = computePublishedRules(profile, sources);
+  const scoredMachineCheckable = scored.filter((e) => e.machineCheckable).length;
   const machineCheckable = (profile.ruleEntries ?? []).filter((e) => e.machineCheckable).length;
-  return { scored: scored.length, machineCheckable, ratio: machineCheckable ? scored.length / machineCheckable : 0 };
+  return { scored: scoredMachineCheckable, machineCheckable, ratio: machineCheckable ? scoredMachineCheckable / machineCheckable : 0 };
 }
