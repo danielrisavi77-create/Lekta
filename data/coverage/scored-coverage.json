@@ -9,6 +9,14 @@
       "lastVerified": "2026-07-27"
     },
     {
+      "profileId": "adu-produkcija-diplomski",
+      "scored": 1,
+      "machineCheckable": 1,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-30"
+    },
+    {
       "profileId": "agr-diplomski",
       "scored": 2,
       "machineCheckable": 7,
@@ -81,12 +89,36 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "alu-grafika-diplomski",
+      "scored": 1,
+      "machineCheckable": 1,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-30"
+    },
+    {
+      "profileId": "alu-kiparstvo-diplomski",
+      "scored": 3,
+      "machineCheckable": 3,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-30"
+    },
+    {
       "profileId": "alu-konzerviranje-diplomski",
       "scored": 8,
       "machineCheckable": 8,
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "alu-slikarstvo-diplomski",
+      "scored": 2,
+      "machineCheckable": 2,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-30"
     },
     {
       "profileId": "apuri-diplomski",
@@ -455,6 +487,22 @@
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "fesb-diplomski",
+      "scored": 2,
+      "machineCheckable": 7,
+      "advisory": 5,
+      "ratio": 0.2857142857142857,
+      "lastVerified": "2026-07-30"
+    },
+    {
+      "profileId": "fesb-zavrsni",
+      "scored": 2,
+      "machineCheckable": 7,
+      "advisory": 5,
+      "ratio": 0.2857142857142857,
+      "lastVerified": "2026-07-30"
     },
     {
       "profileId": "fetpu-diplomski",
@@ -1665,6 +1713,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "pmf-geofizika-graduate",
+      "scored": 0,
+      "machineCheckable": 6,
+      "advisory": 6,
+      "ratio": 0,
+      "lastVerified": null
+    },
+    {
       "profileId": "pmf-geografija-diplomski",
       "scored": 8,
       "machineCheckable": 8,
@@ -2119,6 +2175,14 @@
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "unidu-elektro-diplomski",
+      "scored": 1,
+      "machineCheckable": 1,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-30"
     },
     {
       "profileId": "unidu-komunikologija-diplomski",
@@ -2905,5 +2969,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 2067
+  "totalScored": 2079
 }

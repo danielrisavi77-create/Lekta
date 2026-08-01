@@ -447,6 +447,24 @@
       "value": "A4"
     }
   ],
+  "alu-kiparstvo-diplomski": [
+    {
+      "ruleId": "alu-kiparstvo-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "alu-kiparstvo-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4 (polozeni/landscape - provjera je orijentacijski neutralna)",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
   "alu-konzerviranje-diplomski": [
     {
       "ruleId": "alu-konzerviranje-diplomski--font",
@@ -494,6 +512,16 @@
       "label": "Poravnanje",
       "status": "verified",
       "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "alu-slikarstvo-diplomski": [
+    {
+      "ruleId": "alu-slikarstvo-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
       "autoFixable": true
     }
   ],
@@ -2458,6 +2486,118 @@
       "status": "verified",
       "fixerId": "margins-fixer",
       "autoFixable": true
+    }
+  ],
+  "fesb-diplomski": [
+    {
+      "ruleId": "fesb-diplomski--font",
+      "checkId": "font",
+      "label": "Font (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Times New Roman"
+      ]
+    },
+    {
+      "ruleId": "fesb-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "fesb-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 1.5
+    },
+    {
+      "ruleId": "fesb-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine (preporuka)",
+      "status": "advisory",
+      "fixerId": "margins-fixer",
+      "recommended": true,
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    {
+      "ruleId": "fesb-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje (preporuka)",
+      "status": "advisory",
+      "fixerId": "alignment-fixer",
+      "recommended": true,
+      "value": true
+    }
+  ],
+  "fesb-zavrsni": [
+    {
+      "ruleId": "fesb-zavrsni--font",
+      "checkId": "font",
+      "label": "Font (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Times New Roman"
+      ]
+    },
+    {
+      "ruleId": "fesb-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "fesb-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 1.5
+    },
+    {
+      "ruleId": "fesb-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine (preporuka)",
+      "status": "advisory",
+      "fixerId": "margins-fixer",
+      "recommended": true,
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    {
+      "ruleId": "fesb-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje (preporuka)",
+      "status": "advisory",
+      "fixerId": "alignment-fixer",
+      "recommended": true,
+      "value": true
     }
   ],
   "fetpu-diplomski": [
@@ -8356,6 +8496,71 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    }
+  ],
+  "pmf-geofizika-graduate": [
+    {
+      "ruleId": "pmf-geofizika-graduate--font",
+      "checkId": "font",
+      "label": "Font (predlozak, preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Cambria"
+      ]
+    },
+    {
+      "ruleId": "pmf-geofizika-graduate--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (predlozak, preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "pmf-geofizika-graduate--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (predlozak, preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 1.5
+    },
+    {
+      "ruleId": "pmf-geofizika-graduate--margins",
+      "checkId": "margins",
+      "label": "Margine (lijeva 3cm za uvez) (predlozak, preporuka)",
+      "status": "advisory",
+      "fixerId": "margins-fixer",
+      "recommended": true,
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      }
+    },
+    {
+      "ruleId": "pmf-geofizika-graduate--justify",
+      "checkId": "justify",
+      "label": "Poravnanje (predlozak, preporuka)",
+      "status": "advisory",
+      "fixerId": "alignment-fixer",
+      "recommended": true,
+      "value": true
+    },
+    {
+      "ruleId": "pmf-geofizika-graduate--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4 (predlozak, preporuka)",
+      "status": "advisory",
+      "fixerId": "paper-size-fixer",
+      "recommended": true,
+      "value": true
     }
   ],
   "pmf-geografija-diplomski": [

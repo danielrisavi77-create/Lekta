@@ -23,9 +23,9 @@ pravilo nije vezano uz potvrdjen izvor - ne nagadja se.
 ## Opseg
 
 - profila: **395**
-- s popravkom po UPUTI FAKULTETA: **353**
-- samo univerzalna higijena (prazni odlomci), bez potvrdjenih tehnickih pravila: **42**
-- ukupno stavki recepta: **2157**
+- s popravkom po UPUTI FAKULTETA: **356**
+- samo univerzalna higijena (prazni odlomci), bez potvrdjenih tehnickih pravila: **39**
+- ukupno stavki recepta: **2173**
 
 Sto se NE popravlja automatski: sadrzaj, argument, citati i literatura (osim provjere
 postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
@@ -828,6 +828,34 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 | Vrsta slova | `font-fixer` | Times New Roman | [Upute za izradu zavrsnog rada (FERIT)](https://www.ferit.unios.hr/preuzmi/1350/upute_za_izradu_zavr%C5%A1nog_rada_26-01-2010.pdf) | t. 2.4 |
 | Velicina slova | `font-fixer` | 12 pt | [Upute za izradu zavrsnog rada (FERIT)](https://www.ferit.unios.hr/preuzmi/1350/upute_za_izradu_zavr%C5%A1nog_rada_26-01-2010.pdf) | t. 2.4 |
 | Margine | `margins-fixer` | 2,5 / 2 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Upute za izradu zavrsnog rada (FERIT)](https://www.ferit.unios.hr/preuzmi/1350/upute_za_izradu_zavr%C5%A1nog_rada_26-01-2010.pdf) | t. 2.4 |
+| Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
+
+### fesb
+
+#### FESB, diplomski rad
+
+`fesb-diplomski` · status: partial · vrste rada: graduate
+
+| Pravilo | Fixer | Ciljana vrijednost | Izvor | Str. |
+|---|---|---|---|---|
+| Font (preporuka) | `font-fixer` | Times New Roman | [Upute za pisanje diplomskog rada (FESB, u sklopu Dokumentacije za izradu diplomskih radova)](https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_diplomskih_radova.zip (Upute za pisanje diplomskog rada.doc)) | Tehnicke upute za izradu pisanog dijela rada |
+| Velicina slova (preporuka) | `font-fixer` | 12 pt | [Upute za pisanje diplomskog rada (FESB, u sklopu Dokumentacije za izradu diplomskih radova)](https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_diplomskih_radova.zip (Upute za pisanje diplomskog rada.doc)) | Tehnicke upute za izradu pisanog dijela rada |
+| Prored (preporuka) | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje diplomskog rada (FESB, u sklopu Dokumentacije za izradu diplomskih radova)](https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_diplomskih_radova.zip (Upute za pisanje diplomskog rada.doc)) | Tehnicke upute za izradu pisanog dijela rada |
+| Margine (preporuka) | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Upute za pisanje diplomskog rada (FESB, u sklopu Dokumentacije za izradu diplomskih radova)](https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_diplomskih_radova.zip (Upute za pisanje diplomskog rada.doc)) | Tehnicke upute za izradu pisanog dijela rada |
+| Poravnanje (preporuka) | `alignment-fixer` | obostrano | [Upute za pisanje diplomskog rada (FESB, u sklopu Dokumentacije za izradu diplomskih radova)](https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_diplomskih_radova.zip (Upute za pisanje diplomskog rada.doc)) | Tehnicke upute za izradu pisanog dijela rada |
+| Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
+
+#### FESB, završni rad
+
+`fesb-zavrsni` · status: partial · vrste rada: final
+
+| Pravilo | Fixer | Ciljana vrijednost | Izvor | Str. |
+|---|---|---|---|---|
+| Font (preporuka) | `font-fixer` | Times New Roman | [Upute za pisanje zavrsnog rada (FESB, u sklopu Dokumentacije za izradu zavrsnih radova)](https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_zavrsnih_radova.zip (Upute za pisanje zavrsnog rada.doc)) | Tehnicke upute za izradu pisanog dijela rada |
+| Velicina slova (preporuka) | `font-fixer` | 12 pt | [Upute za pisanje zavrsnog rada (FESB, u sklopu Dokumentacije za izradu zavrsnih radova)](https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_zavrsnih_radova.zip (Upute za pisanje zavrsnog rada.doc)) | Tehnicke upute za izradu pisanog dijela rada |
+| Prored (preporuka) | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje zavrsnog rada (FESB, u sklopu Dokumentacije za izradu zavrsnih radova)](https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_zavrsnih_radova.zip (Upute za pisanje zavrsnog rada.doc)) | Tehnicke upute za izradu pisanog dijela rada |
+| Margine (preporuka) | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Upute za pisanje zavrsnog rada (FESB, u sklopu Dokumentacije za izradu zavrsnih radova)](https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_zavrsnih_radova.zip (Upute za pisanje zavrsnog rada.doc)) | Tehnicke upute za izradu pisanog dijela rada |
+| Poravnanje (preporuka) | `alignment-fixer` | obostrano | [Upute za pisanje zavrsnog rada (FESB, u sklopu Dokumentacije za izradu zavrsnih radova)](https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_zavrsnih_radova.zip (Upute za pisanje zavrsnog rada.doc)) | Tehnicke upute za izradu pisanog dijela rada |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 
 ### fetpu
@@ -2876,6 +2904,20 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 | Poravnanje teksta (obostrano) | `alignment-fixer` | obostrano | [Upute za pisanje diplomskog rada (Prirodoslovno-matematicki fakultet, Fizicki odsjek)](https://www.pmf.unizg.hr/images/50005072/Fizicki%20odsjek-upute%20za%20pisanje%20diplomskog%20rada.doc) | odjeljak Formatiranje teksta |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 
+#### Prirodoslovno-matematički fakultet, Geofizički odsjek, diplomski rad
+
+`pmf-geofizika-graduate` · status: partial · vrste rada: graduate
+
+| Pravilo | Fixer | Ciljana vrijednost | Izvor | Str. |
+|---|---|---|---|---|
+| Font (predlozak, preporuka) | `font-fixer` | Cambria | [Diplomski_template_Word_2020 (Geofizicki odsjek, PMF Zagreb)](https://www.pmf.unizg.hr/_download/repository/Diplomski_template_Word_2020%5B1%5D.docx) |  |
+| Velicina slova (predlozak, preporuka) | `font-fixer` | 12 pt | [Diplomski_template_Word_2020 (Geofizicki odsjek, PMF Zagreb)](https://www.pmf.unizg.hr/_download/repository/Diplomski_template_Word_2020%5B1%5D.docx) |  |
+| Prored (predlozak, preporuka) | `line-spacing-fixer` | prored 1,5 | [Diplomski_template_Word_2020 (Geofizicki odsjek, PMF Zagreb)](https://www.pmf.unizg.hr/_download/repository/Diplomski_template_Word_2020%5B1%5D.docx) |  |
+| Margine (lijeva 3cm za uvez) (predlozak, preporuka) | `margins-fixer` | 2,5 / 2,5 / 2,5 / 3 cm (gore/desno/dolje/lijevo) | [Diplomski_template_Word_2020 (Geofizicki odsjek, PMF Zagreb)](https://www.pmf.unizg.hr/_download/repository/Diplomski_template_Word_2020%5B1%5D.docx) |  |
+| Poravnanje (predlozak, preporuka) | `alignment-fixer` | obostrano | [Diplomski_template_Word_2020 (Geofizicki odsjek, PMF Zagreb)](https://www.pmf.unizg.hr/_download/repository/Diplomski_template_Word_2020%5B1%5D.docx) |  |
+| Format papira A4 (predlozak, preporuka) | `paper-size-fixer` | 21 x 29,7 cm | [Diplomski_template_Word_2020 (Geofizicki odsjek, PMF Zagreb)](https://www.pmf.unizg.hr/_download/repository/Diplomski_template_Word_2020%5B1%5D.docx) |  |
+| Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
+
 #### Prirodoslovno-matematicki fakultet (Geografski odsjek), diplomski rad
 
 `pmf-geografija-diplomski` · status: partial · vrste rada: graduate
@@ -4890,8 +4932,6 @@ nametali vrijednost koju fakultet nije propisao.
 - `alu-novi-mediji-diplomski` (Akademija likovnih umjetnosti, Odsjek za animirani film i nove medije, diplomski rad)
 - `alu-slikarstvo-diplomski` (Akademija likovnih umjetnosti, Slikarski odsjek, diplomski rad)
 - `dizajn-diplomski` (Studij dizajna (Arhitektonski fakultet), diplomski rad)
-- `fesb-diplomski` (FESB, diplomski rad)
-- `fesb-zavrsni` (FESB, završni rad)
 - `ffos-povijest-diplomski` (FFOS Povijest, diplomski rad)
 - `ffos-povijest-zavrsni` (FFOS Povijest, završni rad)
 - `fpzg-novinarstvo-zavrsni-av` (FPZG · prijediplomsko Novinarstvo · završni rad · audiovizualni)
@@ -4900,7 +4940,6 @@ nametali vrijednost koju fakultet nije propisao.
 - `gradri-zavrsni` (Rijeka - Građevinski fakultet, završni rad)
 - `par-diplomski` (Veleučilište PAR, diplomski rad)
 - `par-zavrsni` (Veleučilište PAR, završni rad)
-- `pmf-geofizika-graduate` (Prirodoslovno-matematički fakultet, Geofizički odsjek, diplomski rad)
 - `pravst-diplomski` (Pravni Split, diplomski rad)
 - `pravst-zavrsni` (Pravni Split, završni rad)
 - `umas-diplomski` (Umjetnicka akademija u Splitu, diplomski rad)

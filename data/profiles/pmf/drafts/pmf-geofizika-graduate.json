@@ -1,0 +1,116 @@
+{
+  "profileId": "pmf-geofizika-graduate",
+  "entries": [
+    {
+      "ruleId": "pmf-geofizika-graduate--font",
+      "checkId": "font",
+      "value": [
+        "Cambria"
+      ],
+      "category": "format",
+      "label": "Font (predlozak, preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "pmf-geofizika-template-2020",
+      "sourcePage": null,
+      "quote": "Predlozak (docx) sadrzi: w:pgMar top/right/bottom=1418 twips (2,5cm), left=1701 twips (3,0cm); Normal stil rFonts=Cambria, sz=24 (12pt); w:spacing line=360 auto (prored 1,5); w:jc=both. Stranica (predlozak) potvrdjuje se PERMISIVNIM jezikom na stranici odsjeka (\"Mozete preuzeti i predlozak...\"), nema imperativa u tekstu pravilnika.",
+      "status": "advisory",
+      "lastVerified": "2026-07-30",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
+    },
+    {
+      "ruleId": "pmf-geofizika-graduate--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova (predlozak, preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "pmf-geofizika-template-2020",
+      "sourcePage": null,
+      "quote": "Predlozak (docx) sadrzi: w:pgMar top/right/bottom=1418 twips (2,5cm), left=1701 twips (3,0cm); Normal stil rFonts=Cambria, sz=24 (12pt); w:spacing line=360 auto (prored 1,5); w:jc=both. Stranica (predlozak) potvrdjuje se PERMISIVNIM jezikom na stranici odsjeka (\"Mozete preuzeti i predlozak...\"), nema imperativa u tekstu pravilnika.",
+      "status": "advisory",
+      "lastVerified": "2026-07-30",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
+    },
+    {
+      "ruleId": "pmf-geofizika-graduate--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored (predlozak, preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "pmf-geofizika-template-2020",
+      "sourcePage": null,
+      "quote": "Predlozak (docx) sadrzi: w:pgMar top/right/bottom=1418 twips (2,5cm), left=1701 twips (3,0cm); Normal stil rFonts=Cambria, sz=24 (12pt); w:spacing line=360 auto (prored 1,5); w:jc=both. Stranica (predlozak) potvrdjuje se PERMISIVNIM jezikom na stranici odsjeka (\"Mozete preuzeti i predlozak...\"), nema imperativa u tekstu pravilnika.",
+      "status": "advisory",
+      "lastVerified": "2026-07-30",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "line-spacing-fixer"
+    },
+    {
+      "ruleId": "pmf-geofizika-graduate--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "category": "format",
+      "label": "Margine (lijeva 3cm za uvez) (predlozak, preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "pmf-geofizika-template-2020",
+      "sourcePage": null,
+      "quote": "Predlozak (docx) sadrzi: w:pgMar top/right/bottom=1418 twips (2,5cm), left=1701 twips (3,0cm); Normal stil rFonts=Cambria, sz=24 (12pt); w:spacing line=360 auto (prored 1,5); w:jc=both. Stranica (predlozak) potvrdjuje se PERMISIVNIM jezikom na stranici odsjeka (\"Mozete preuzeti i predlozak...\"), nema imperativa u tekstu pravilnika.",
+      "status": "advisory",
+      "lastVerified": "2026-07-30",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "margins-fixer"
+    },
+    {
+      "ruleId": "pmf-geofizika-graduate--justify",
+      "checkId": "justify",
+      "value": true,
+      "category": "format",
+      "label": "Poravnanje (predlozak, preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "pmf-geofizika-template-2020",
+      "sourcePage": null,
+      "quote": "Predlozak (docx) sadrzi: w:pgMar top/right/bottom=1418 twips (2,5cm), left=1701 twips (3,0cm); Normal stil rFonts=Cambria, sz=24 (12pt); w:spacing line=360 auto (prored 1,5); w:jc=both. Stranica (predlozak) potvrdjuje se PERMISIVNIM jezikom na stranici odsjeka (\"Mozete preuzeti i predlozak...\"), nema imperativa u tekstu pravilnika.",
+      "status": "advisory",
+      "lastVerified": "2026-07-30",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "alignment-fixer"
+    },
+    {
+      "ruleId": "pmf-geofizika-graduate--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira A4 (predlozak, preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "pmf-geofizika-template-2020",
+      "sourcePage": null,
+      "quote": "Predlozak (docx) sadrzi: w:pgMar top/right/bottom=1418 twips (2,5cm), left=1701 twips (3,0cm); Normal stil rFonts=Cambria, sz=24 (12pt); w:spacing line=360 auto (prored 1,5); w:jc=both. Stranica (predlozak) potvrdjuje se PERMISIVNIM jezikom na stranici odsjeka (\"Mozete preuzeti i predlozak...\"), nema imperativa u tekstu pravilnika.",
+      "status": "advisory",
+      "lastVerified": "2026-07-30",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "paper-size-fixer"
+    }
+  ]
+}

@@ -3,6 +3,16 @@
     "justify",
     "toc"
   ],
+  "adu-produkcija-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
   "agr-diplomski": [
     "font",
     "font-size",
@@ -83,7 +93,34 @@
     "toc",
     "page-numbers"
   ],
+  "alu-grafika-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "alu-kiparstvo-diplomski": [
+    "font",
+    "line-spacing",
+    "margins",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
   "alu-konzerviranje-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "alu-slikarstvo-diplomski": [
+    "font",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
     "toc",
     "page-numbers"
   ],
@@ -307,6 +344,24 @@
     "justify",
     "toc",
     "page-numbers"
+  ],
+  "fesb-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc"
+  ],
+  "fesb-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc"
   ],
   "fetpu-diplomski": [
     "justify",
@@ -1076,6 +1131,16 @@
     "paper-size",
     "toc"
   ],
+  "pmf-geofizika-graduate": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
   "pmf-geografija-diplomski": [
     "justify",
     "toc"
@@ -1356,6 +1421,16 @@
   ],
   "unidu-ekonomija-zavrsni": [
     "line-spacing",
+    "toc",
+    "page-numbers"
+  ],
+  "unidu-elektro-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
     "toc",
     "page-numbers"
   ],

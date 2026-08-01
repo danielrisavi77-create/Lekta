@@ -1,0 +1,27 @@
+{
+  "profileId": "alu-grafika-diplomski",
+  "entries": [
+    {
+      "ruleId": "alu-grafika-diplomski--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 15,
+        "max": 25
+      },
+      "category": "scope",
+      "label": "Opseg pisanog obrazlozenja (15-25 kartica)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "alu-pravilnik-diplomski-2014",
+      "sourcePage": "Clanak 49 (Graficki odsjek)",
+      "quote": "Pisano obrazlozenje sastoji se od najmanje 15 a najvise 25 kartica teksta uz slikovni materijal koji ukljucuje i reprodukcije rada. Pisano obrazlozenje treba biti ispisano u maksimalnoj velicini formata A4 i tvrdo uvezano.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-30",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "add03721e40b03cc2d3b688a5dd7fb4f7b714a0eff47d786396bd891a550892b"
+    }
+  ]
+}

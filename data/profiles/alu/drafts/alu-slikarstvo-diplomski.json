@@ -1,0 +1,50 @@
+{
+  "profileId": "alu-slikarstvo-diplomski",
+  "entries": [
+    {
+      "ruleId": "alu-slikarstvo-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "alu-pravilnik-diplomski-2014",
+      "sourcePage": "Clanak 32 (Slikarski odsjek)",
+      "quote": "Pisano obrazlozenje sadrzi: najmanje 5 a najvise 15 kartica pisanog teksta pisanih velicinom slova od 12 tocaka, klasicnim proredom i ilustrativnim pregledom radova.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-30",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "add03721e40b03cc2d3b688a5dd7fb4f7b714a0eff47d786396bd891a550892b",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
+    },
+    {
+      "ruleId": "alu-slikarstvo-diplomski--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 5,
+        "max": 15
+      },
+      "category": "scope",
+      "label": "Opseg pisanog obrazlozenja (5-15 kartica)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "alu-pravilnik-diplomski-2014",
+      "sourcePage": "Clanak 32 (Slikarski odsjek)",
+      "quote": "Pisano obrazlozenje sadrzi: najmanje 5 a najvise 15 kartica pisanog teksta pisanih velicinom slova od 12 tocaka, klasicnim proredom i ilustrativnim pregledom radova.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-30",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "add03721e40b03cc2d3b688a5dd7fb4f7b714a0eff47d786396bd891a550892b"
+    }
+  ]
+}

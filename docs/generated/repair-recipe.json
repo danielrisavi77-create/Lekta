@@ -6614,6 +6614,104 @@
     ],
     "items": [
       {
+        "ruleId": "fesb-diplomski--font",
+        "fixerId": "font-fixer",
+        "label": "Font (preporuka)",
+        "scope": "profil",
+        "target": "Times New Roman",
+        "params": {
+          "fontName": "Times New Roman"
+        },
+        "recommended": true,
+        "source": {
+          "id": "fesb-upute-diplomski-2017",
+          "title": "Upute za pisanje diplomskog rada (FESB, u sklopu Dokumentacije za izradu diplomskih radova)",
+          "url": "https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_diplomskih_radova.zip (Upute za pisanje diplomskog rada.doc)"
+        },
+        "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+        "authority": "program-page",
+        "lastVerified": "2026-07-30"
+      },
+      {
+        "ruleId": "fesb-diplomski--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova (preporuka)",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "recommended": true,
+        "source": {
+          "id": "fesb-upute-diplomski-2017",
+          "title": "Upute za pisanje diplomskog rada (FESB, u sklopu Dokumentacije za izradu diplomskih radova)",
+          "url": "https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_diplomskih_radova.zip (Upute za pisanje diplomskog rada.doc)"
+        },
+        "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+        "authority": "program-page",
+        "lastVerified": "2026-07-30"
+      },
+      {
+        "ruleId": "fesb-diplomski--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored (preporuka)",
+        "scope": "profil",
+        "target": "prored 1,5",
+        "params": {
+          "multiplier": 1.5
+        },
+        "recommended": true,
+        "source": {
+          "id": "fesb-upute-diplomski-2017",
+          "title": "Upute za pisanje diplomskog rada (FESB, u sklopu Dokumentacije za izradu diplomskih radova)",
+          "url": "https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_diplomskih_radova.zip (Upute za pisanje diplomskog rada.doc)"
+        },
+        "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+        "authority": "program-page",
+        "lastVerified": "2026-07-30"
+      },
+      {
+        "ruleId": "fesb-diplomski--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine (preporuka)",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "recommended": true,
+        "source": {
+          "id": "fesb-upute-diplomski-2017",
+          "title": "Upute za pisanje diplomskog rada (FESB, u sklopu Dokumentacije za izradu diplomskih radova)",
+          "url": "https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_diplomskih_radova.zip (Upute za pisanje diplomskog rada.doc)"
+        },
+        "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+        "authority": "program-page",
+        "lastVerified": "2026-07-30"
+      },
+      {
+        "ruleId": "fesb-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje (preporuka)",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "recommended": true,
+        "source": {
+          "id": "fesb-upute-diplomski-2017",
+          "title": "Upute za pisanje diplomskog rada (FESB, u sklopu Dokumentacije za izradu diplomskih radova)",
+          "url": "https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_diplomskih_radova.zip (Upute za pisanje diplomskog rada.doc)"
+        },
+        "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+        "authority": "program-page",
+        "lastVerified": "2026-07-30"
+      },
+      {
         "ruleId": "empty-paragraphs-universal",
         "fixerId": "empty-paragraph-fixer",
         "label": "Prazni odlomci",
@@ -6633,6 +6731,104 @@
       "final"
     ],
     "items": [
+      {
+        "ruleId": "fesb-zavrsni--font",
+        "fixerId": "font-fixer",
+        "label": "Font (preporuka)",
+        "scope": "profil",
+        "target": "Times New Roman",
+        "params": {
+          "fontName": "Times New Roman"
+        },
+        "recommended": true,
+        "source": {
+          "id": "fesb-upute-zavrsni-2017",
+          "title": "Upute za pisanje zavrsnog rada (FESB, u sklopu Dokumentacije za izradu zavrsnih radova)",
+          "url": "https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_zavrsnih_radova.zip (Upute za pisanje zavrsnog rada.doc)"
+        },
+        "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+        "authority": "program-page",
+        "lastVerified": "2026-07-30"
+      },
+      {
+        "ruleId": "fesb-zavrsni--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova (preporuka)",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "recommended": true,
+        "source": {
+          "id": "fesb-upute-zavrsni-2017",
+          "title": "Upute za pisanje zavrsnog rada (FESB, u sklopu Dokumentacije za izradu zavrsnih radova)",
+          "url": "https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_zavrsnih_radova.zip (Upute za pisanje zavrsnog rada.doc)"
+        },
+        "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+        "authority": "program-page",
+        "lastVerified": "2026-07-30"
+      },
+      {
+        "ruleId": "fesb-zavrsni--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored (preporuka)",
+        "scope": "profil",
+        "target": "prored 1,5",
+        "params": {
+          "multiplier": 1.5
+        },
+        "recommended": true,
+        "source": {
+          "id": "fesb-upute-zavrsni-2017",
+          "title": "Upute za pisanje zavrsnog rada (FESB, u sklopu Dokumentacije za izradu zavrsnih radova)",
+          "url": "https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_zavrsnih_radova.zip (Upute za pisanje zavrsnog rada.doc)"
+        },
+        "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+        "authority": "program-page",
+        "lastVerified": "2026-07-30"
+      },
+      {
+        "ruleId": "fesb-zavrsni--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine (preporuka)",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "recommended": true,
+        "source": {
+          "id": "fesb-upute-zavrsni-2017",
+          "title": "Upute za pisanje zavrsnog rada (FESB, u sklopu Dokumentacije za izradu zavrsnih radova)",
+          "url": "https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_zavrsnih_radova.zip (Upute za pisanje zavrsnog rada.doc)"
+        },
+        "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+        "authority": "program-page",
+        "lastVerified": "2026-07-30"
+      },
+      {
+        "ruleId": "fesb-zavrsni--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje (preporuka)",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "recommended": true,
+        "source": {
+          "id": "fesb-upute-zavrsni-2017",
+          "title": "Upute za pisanje zavrsnog rada (FESB, u sklopu Dokumentacije za izradu zavrsnih radova)",
+          "url": "https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_zavrsnih_radova.zip (Upute za pisanje zavrsnog rada.doc)"
+        },
+        "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
+        "authority": "program-page",
+        "lastVerified": "2026-07-30"
+      },
       {
         "ruleId": "empty-paragraphs-universal",
         "fixerId": "empty-paragraph-fixer",
@@ -22647,6 +22843,124 @@
       "graduate"
     ],
     "items": [
+      {
+        "ruleId": "pmf-geofizika-graduate--font",
+        "fixerId": "font-fixer",
+        "label": "Font (predlozak, preporuka)",
+        "scope": "profil",
+        "target": "Cambria",
+        "params": {
+          "fontName": "Cambria"
+        },
+        "recommended": true,
+        "source": {
+          "id": "pmf-geofizika-template-2020",
+          "title": "Diplomski_template_Word_2020 (Geofizicki odsjek, PMF Zagreb)",
+          "url": "https://www.pmf.unizg.hr/_download/repository/Diplomski_template_Word_2020%5B1%5D.docx"
+        },
+        "sourcePage": null,
+        "authority": "program-page",
+        "lastVerified": "2026-07-30"
+      },
+      {
+        "ruleId": "pmf-geofizika-graduate--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova (predlozak, preporuka)",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "recommended": true,
+        "source": {
+          "id": "pmf-geofizika-template-2020",
+          "title": "Diplomski_template_Word_2020 (Geofizicki odsjek, PMF Zagreb)",
+          "url": "https://www.pmf.unizg.hr/_download/repository/Diplomski_template_Word_2020%5B1%5D.docx"
+        },
+        "sourcePage": null,
+        "authority": "program-page",
+        "lastVerified": "2026-07-30"
+      },
+      {
+        "ruleId": "pmf-geofizika-graduate--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored (predlozak, preporuka)",
+        "scope": "profil",
+        "target": "prored 1,5",
+        "params": {
+          "multiplier": 1.5
+        },
+        "recommended": true,
+        "source": {
+          "id": "pmf-geofizika-template-2020",
+          "title": "Diplomski_template_Word_2020 (Geofizicki odsjek, PMF Zagreb)",
+          "url": "https://www.pmf.unizg.hr/_download/repository/Diplomski_template_Word_2020%5B1%5D.docx"
+        },
+        "sourcePage": null,
+        "authority": "program-page",
+        "lastVerified": "2026-07-30"
+      },
+      {
+        "ruleId": "pmf-geofizika-graduate--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine (lijeva 3cm za uvez) (predlozak, preporuka)",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 3 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3
+        },
+        "recommended": true,
+        "source": {
+          "id": "pmf-geofizika-template-2020",
+          "title": "Diplomski_template_Word_2020 (Geofizicki odsjek, PMF Zagreb)",
+          "url": "https://www.pmf.unizg.hr/_download/repository/Diplomski_template_Word_2020%5B1%5D.docx"
+        },
+        "sourcePage": null,
+        "authority": "program-page",
+        "lastVerified": "2026-07-30"
+      },
+      {
+        "ruleId": "pmf-geofizika-graduate--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje (predlozak, preporuka)",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "recommended": true,
+        "source": {
+          "id": "pmf-geofizika-template-2020",
+          "title": "Diplomski_template_Word_2020 (Geofizicki odsjek, PMF Zagreb)",
+          "url": "https://www.pmf.unizg.hr/_download/repository/Diplomski_template_Word_2020%5B1%5D.docx"
+        },
+        "sourcePage": null,
+        "authority": "program-page",
+        "lastVerified": "2026-07-30"
+      },
+      {
+        "ruleId": "pmf-geofizika-graduate--paper-size",
+        "fixerId": "paper-size-fixer",
+        "label": "Format papira A4 (predlozak, preporuka)",
+        "scope": "profil",
+        "target": "21 x 29,7 cm",
+        "params": {
+          "w": 21,
+          "h": 29.7
+        },
+        "recommended": true,
+        "source": {
+          "id": "pmf-geofizika-template-2020",
+          "title": "Diplomski_template_Word_2020 (Geofizicki odsjek, PMF Zagreb)",
+          "url": "https://www.pmf.unizg.hr/_download/repository/Diplomski_template_Word_2020%5B1%5D.docx"
+        },
+        "sourcePage": null,
+        "authority": "program-page",
+        "lastVerified": "2026-07-30"
+      },
       {
         "ruleId": "empty-paragraphs-universal",
         "fixerId": "empty-paragraph-fixer",

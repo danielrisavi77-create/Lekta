@@ -1,0 +1,27 @@
+{
+  "profileId": "adu-produkcija-diplomski",
+  "entries": [
+    {
+      "ruleId": "adu-produkcija-diplomski--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 40,
+        "max": 50
+      },
+      "category": "scope",
+      "label": "Opseg teorijskog diplomskog rada (40-50 kartica)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "adu-produkcija-pravilnik-2017",
+      "sourcePage": "Odjeljak 6.3 Diplomski rad",
+      "quote": "Svaki student MA studija Odsjeka produkcije duzan je u 4. semestru napisati teorijski diplomski rad opsega 40-50 kartica, napisan u skladu sa sveucilisnim pravilima pisanja diplomskih radova.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-30",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "68ca344db6c1e2cb05ce299d114639c544b0f6de48f5ebb7314b82d8a213e53b"
+    }
+  ]
+}

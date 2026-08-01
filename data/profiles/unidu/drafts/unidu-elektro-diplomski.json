@@ -1,0 +1,26 @@
+{
+  "profileId": "unidu-elektro-diplomski",
+  "entries": [
+    {
+      "ruleId": "unidu-elektro-diplomski--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 50
+      },
+      "category": "scope",
+      "label": "Najmanji opseg (50 stranica)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unidu-elektro-upute-diplomski-eir",
+      "sourcePage": "Tocka o opsegu rada",
+      "quote": "Opsega je od najmanje 50 stranica i formata sukladno uobicajenim standardima publikacija.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-30",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "91854cfd56fbb7c5e27ef1f8ce828c7682b4317eaaeadba2012d71b01ec2f70c"
+    }
+  ]
+}

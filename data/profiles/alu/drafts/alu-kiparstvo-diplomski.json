@@ -1,0 +1,71 @@
+{
+  "profileId": "alu-kiparstvo-diplomski",
+  "entries": [
+    {
+      "ruleId": "alu-kiparstvo-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "alu-pravilnik-diplomski-2014",
+      "sourcePage": "Clanak 39, 48 (Kiparski odsjek)",
+      "quote": "Pisano obrazlozenje... najmanje 10 a najvise 20 kartica pisanog teksta sa obrazlozenjem rada pisano velicinom slova od 12 tocaka i klasicnim proredom... Pisano obrazlozenje ispisuje se u polozenom formatu A4, tvrdi uvez. (Cl. 48: pohranjuju se u obliku tvrdog uveza u polozenom formatu A4...)",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-30",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "add03721e40b03cc2d3b688a5dd7fb4f7b714a0eff47d786396bd891a550892b",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
+    },
+    {
+      "ruleId": "alu-kiparstvo-diplomski--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira A4 (polozeni/landscape - provjera je orijentacijski neutralna)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "alu-pravilnik-diplomski-2014",
+      "sourcePage": "Clanak 39, 48 (Kiparski odsjek)",
+      "quote": "Pisano obrazlozenje... najmanje 10 a najvise 20 kartica pisanog teksta sa obrazlozenjem rada pisano velicinom slova od 12 tocaka i klasicnim proredom... Pisano obrazlozenje ispisuje se u polozenom formatu A4, tvrdi uvez. (Cl. 48: pohranjuju se u obliku tvrdog uveza u polozenom formatu A4...)",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-30",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "add03721e40b03cc2d3b688a5dd7fb4f7b714a0eff47d786396bd891a550892b",
+      "autoFixable": true,
+      "fixerId": "paper-size-fixer"
+    },
+    {
+      "ruleId": "alu-kiparstvo-diplomski--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 10,
+        "max": 20
+      },
+      "category": "scope",
+      "label": "Opseg pisanog obrazlozenja (10-20 kartica)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "alu-pravilnik-diplomski-2014",
+      "sourcePage": "Clanak 39, 48 (Kiparski odsjek)",
+      "quote": "Pisano obrazlozenje... najmanje 10 a najvise 20 kartica pisanog teksta sa obrazlozenjem rada pisano velicinom slova od 12 tocaka i klasicnim proredom... Pisano obrazlozenje ispisuje se u polozenom formatu A4, tvrdi uvez. (Cl. 48: pohranjuju se u obliku tvrdog uveza u polozenom formatu A4...)",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-30",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "add03721e40b03cc2d3b688a5dd7fb4f7b714a0eff47d786396bd891a550892b"
+    }
+  ]
+}

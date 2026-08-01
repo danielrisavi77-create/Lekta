@@ -3595,5 +3595,70 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-28",
     "note": "Diplomski primjerak (odvojen PDF od zavrsnog)."
+  },
+  {
+    "id": "fesb-upute-diplomski-2017",
+    "kind": "guidelines",
+    "title": "Upute za pisanje diplomskog rada (FESB, u sklopu Dokumentacije za izradu diplomskih radova)",
+    "url": "https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_diplomskih_radova.zip (Upute za pisanje diplomskog rada.doc)",
+    "publisher": "Fakultet elektrotehnike, strojarstva i brodogradnje, Sveuciliste u Splitu",
+    "fetchedAt": "2026-07-30",
+    "snapshotPath": "data/sources/fesb/fesb-upute-diplomski-2017.doc",
+    "snapshotHash": "643ce92660cc024a58671ee7c52a9d6a2945d5fe8b92f5efa91c27b33d643b92",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-30",
+    "note": "Inkorporirano preko Pravilnika 2013 Cl.17 (upute kao \"obrazac\", nazivom podudaran, ali formalna veza inferirana - dokument je \"Upute\" a Pravilnik ga zove \"obrazac\"). Font/velicina/prored/margine/poravnanje SVI pod \"preporucuje se sljedece\" -> ADVISORY. Numeracija stranica (\"moraju biti numerirane\", donji desni kut, od Uvoda) BINDING. Vlastiti, neimenovan brojcani sustav citiranja (nalik IEEE ali nikad tako nazvan) potpuno definiran u dokumentu -> citation-style:custom, BINDING. SI jedinice obavezne (izvan naseg checkId skupa). Naslovnica (Prilog 1) koristi Arial (razlicito od preporucenog Times New Roman za tijelo) - NIJE draftano jer nas checkId skup ne razdvaja naslovnicu od tijela."
+  },
+  {
+    "id": "fesb-upute-zavrsni-2017",
+    "kind": "guidelines",
+    "title": "Upute za pisanje zavrsnog rada (FESB, u sklopu Dokumentacije za izradu zavrsnih radova)",
+    "url": "https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_zavrsnih_radova.zip (Upute za pisanje zavrsnog rada.doc)",
+    "publisher": "Fakultet elektrotehnike, strojarstva i brodogradnje, Sveuciliste u Splitu",
+    "fetchedAt": "2026-07-30",
+    "snapshotPath": "data/sources/fesb/fesb-upute-zavrsni-2017.doc",
+    "snapshotHash": "cfef01ffbe0f720267f27717b54cd67f7f81d8d61b71cc9b2071d286369c42f6",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-30",
+    "note": "Inkorporirano preko Pravilnika 2019 Cl.16(2) (izricito: \"upute za izradu zavrsnog rada Fakultet ce objaviti na svojim mreznim stranicama\" - direktna, tekstualna veza). Sadrzajno gotovo identicno diplomskoj inacici. Isti obrazac: font/velicina/prored/margine/poravnanje \"preporucuje se\" -> ADVISORY; numeracija stranica BINDING; citation-style:custom BINDING."
+  },
+  {
+    "id": "unidu-elektro-upute-diplomski-eir",
+    "kind": "guidelines",
+    "title": "Upute za izradbu diplomskoga rada na studijima Odjela za elektrotehniku i racunarstvo",
+    "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=2307",
+    "publisher": "Sveuciliste u Dubrovniku, Fakultet elektrotehnike i primijenjenog racunarstva",
+    "fetchedAt": "2026-07-30",
+    "snapshotPath": "data/sources/unidu/unidu-elektro-upute-diplomski-eir.pdf",
+    "snapshotHash": "91854cfd56fbb7c5e27ef1f8ce828c7682b4317eaaeadba2012d71b01ec2f70c",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-30",
+    "note": "Vrijedi SAMO za diplomski (nema zavrsni parnjak, iscrpno provjereno preko Wayback CDX cijele domene). Jedina nova strojno-provjerljiva cinjenica: \"Opsega je od najmanje 50 stranica...\" (Rad treba... - binding). Format papira \"sukladno uobicajenim standardima publikacija\" je PREVISE nejasno da bi se bodovalo kao A4 (iako je fizicki A4 u predlosku, nikad tekstualno receno). Font/velicina/prored/margine i dalje NEMAJU proznu odredbu (postojeci profil vec ispravno ostaje advisory-only za te stavke)."
+  },
+  {
+    "id": "adu-produkcija-pravilnik-2017",
+    "kind": "regulation",
+    "title": "Prociscen tekst Pravilnika o izvodjenju nastave i ispitima na Odsjeku produkcije (2017)",
+    "url": "https://masterwww.adu.hr/wp-content/uploads/2017/04/PRO%C4%8CI%C5%A0%C4%86ENI-TEKST-PRAVILNIKA-ODSJEKA-PRODUKCIJE-2017.doc",
+    "publisher": "Akademija dramske umjetnosti Sveucilista u Zagrebu, Odsjek produkcije",
+    "fetchedAt": "2026-07-30",
+    "snapshotPath": "data/sources/adu/adu-produkcija-pravilnik-2017.doc",
+    "snapshotHash": "68ca344db6c1e2cb05ce299d114639c544b0f6de48f5ebb7314b82d8a213e53b",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-30",
+    "note": "Odjeljak 6.3 Diplomski rad: BINDING opseg 40-50 kartica (\"duzan je napisati\"). Oblikovanje (font/margina/prored) delegirano na neimenovana \"sveucilisna pravila\" - lanac delegacije prosljedjen do sveucilisnog Pravilnika o studiranju (2008) Cl.53(3), koji PAK delegira \"opremanje\" natrag na akt sastavnice (ADU) - ADU-in krovni pravilnik je prazan, lanac se prekida bez brojki. Ostalih 6 ADU odsjeka (gluma/dramaturgija/snimanje/ftv-rezija/kazalisna-rezija/opci) NEMAJU pisani diplomski rad s propisanim oblikovanjem uopce (diplomski ispit je umjetnicki nastup/projekt) ili jedine nadjene brojke vrijede za PRIJAMNI ispit, ne diplomski rad (kazalisna-rezija TNR12/2,5cm/1,5, dramaturgija 15 kartica) - namjerno NISU preneseni na diplomski profil."
+  },
+  {
+    "id": "pmf-geofizika-template-2020",
+    "kind": "template",
+    "title": "Diplomski_template_Word_2020 (Geofizicki odsjek, PMF Zagreb)",
+    "url": "https://www.pmf.unizg.hr/_download/repository/Diplomski_template_Word_2020%5B1%5D.docx",
+    "publisher": "Prirodoslovno-matematicki fakultet Sveucilista u Zagrebu, Geofizicki odsjek",
+    "fetchedAt": "2026-07-30",
+    "snapshotPath": "data/sources/pmf/pmf-geofizika-template-2020.docx",
+    "snapshotHash": "0ee2f1625aaf2eb8f65c1c28b439d06fc0cb011d048cdbbeaf628877759431e2",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-30",
+    "note": "Odsjecki Pravilnik (obje generacije, 2021 I 2026) NEMA nijednu odredbu o oblikovanju - opci PMF Pravilnik o studiranju Cl.56(6) izricito delegira \"opremanje\" na odsjecki akt, koji tu prazninu nikad nije popunio. Predlozak je ponudjen PERMISIVNIM jezikom (\"Mozete preuzeti i predlozak...\"), ne imperativom - ADVISORY, sourcePage:null (nema clanka/stavka, samo predlozak). Vrijednosti neovisno provjerene raspakiravanjem docx-a: w:pgMar top/right/bottom=1418 twips (2,5cm), left=1701 twips (3,0cm, prostor za uvez); Normal stil w:rFonts=Cambria, w:sz=24 (12pt), w:spacing w:line=360 auto (prored 1,5), w:jc=both (obostrano). Font je Cambria, NE Times New Roman - neuobicajeno, provjereno dva puta."
   }
 ]
