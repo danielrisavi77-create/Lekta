@@ -1940,8 +1940,8 @@
     "snapshotPath": "data/sources/fzsri/fzsri.pdf",
     "snapshotHash": "2bd0bf7a29cecd9496e461f0b8f4fcd08190d82fae90bdbc787bf8cfc9a20f1d",
     "validityClass": "stable",
-    "lastChecked": "2026-07-03",
-    "note": "Tekstualni PDF. Opseg \"Preporuceni\"->advisory. Citiranje delegirano na Pravila citiranja->advisory."
+    "lastChecked": "2026-08-01",
+    "note": "Tekstualni PDF. Opseg \"Preporuceni\"->advisory. Citiranje delegirano na Pravila citiranja->advisory. Fakultet od 11/2025 na svojoj stranici linka novije izdanje (https://fzsri.uniri.hr/wp-content/uploads/2025/11/Upute-za-izradu-zavrsnog-ili-diplomskog-rada.pdf, sha256 367f9eccbf751069eacf034ead990e1f20f9a9c57a8153d11a6687c594950ac6): terminoloska osvjezenja (preddiplomski->prijediplomski, nova suglasnost mentora) i kozmeticki preslog, ali odjeljak 3.1 Format teksta i oznacavanje unutar teksta (font/velicina/prored/margine/poravnanje) je bajt-identican citiranom tekstu, provjereno 2026-08-01. Snapshot namjerno ostaje na 2022 izdanju jer sadrzajno pravilo nije promijenjeno."
   },
   {
     "id": "biotech-upute-radovi",
