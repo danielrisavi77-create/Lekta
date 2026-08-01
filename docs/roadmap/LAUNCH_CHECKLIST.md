@@ -3,7 +3,7 @@
 Zavrsni pregled co-pilot luka i sto treba za launch. Odvaja ono sto je CODE-DONE (izgradjeno,
 testirano, committano, gate zelen) od onoga sto je OWNER-GATED (tvoje odluke, tajne, pravno,
 poslovno). Za siri produkcijski gate (P0-01..07, kartice, sigurnost) vidi
-[docs/audit/LAUNCH_BLOCKERS.md](../audit/LAUNCH_BLOCKERS.md) i
+[docs/AUDIT_MASTER.md](../AUDIT_MASTER.md) i
 [docs/roadmap/PRODUCTION_BACKLOG.md](PRODUCTION_BACKLOG.md); ovaj dokument pokriva co-pilot dodatke.
 
 Strategija i odluke: [CO_PILOT_STRATEGY.md](CO_PILOT_STRATEGY.md). Pravilo pisanja: hrvatski, bez

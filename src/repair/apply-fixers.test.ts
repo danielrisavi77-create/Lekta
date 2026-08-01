@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readZip, writeZip } from './zip-codec';
 import { applyFixers } from './apply-fixers';
+import { legalFootnoteAnchorFingerprint, legalMarkerAnchorFingerprint } from '../analysis/legal-footnote-structure';
 
 // Ovo je GOLDEN test za writer, isto nacelo kao GOLDEN.md za citac:
 // dokazuje da fixer mijenja SAMO ciljanu vrijednost i da SVE ostalo
@@ -46,6 +47,57 @@ function buildSyntheticDocx() {
 }
 
 describe('applyFixers golden round-trip', () => {
+  it('legal-footnote-repair-fixer kroz zip mijenja document.xml i footnotes.xml', async () => {
+    const enc = new TextEncoder();
+    const documentXml = '<w:document><w:body><w:p><w:r><w:t>Tekst </w:t></w:r><w:r><w:rPr><w:vertAlign w:val="superscript"/></w:rPr><w:t>1</w:t></w:r><w:r><w:t>.</w:t></w:r></w:p></w:body></w:document>';
+    const footnotesXml = '<w:footnotes><w:footnote w:id="1"><w:p><w:r><w:t>ibid.</w:t></w:r></w:p></w:footnote></w:footnotes>';
+    const original = await writeZip([
+      { name: 'word/document.xml', data: enc.encode(documentXml) },
+      { name: 'word/footnotes.xml', data: enc.encode(footnotesXml) },
+    ]);
+    const result = await applyFixers(original, [{
+      ruleId: 'legal', fixerId: 'legal-footnote-repair-fixer', params: {
+        version: 1,
+        markers: [{ paragraphIndex: 1, start: 6, end: 7, footnoteId: 1, anchorFingerprint: legalMarkerAnchorFingerprint(1, 6, 7, 'Tekst 1.'), confirmed: true }],
+        operations: [{ id: 'legal-op', footnoteId: 1, kind: 'fix-ibid', anchorFingerprint: legalFootnoteAnchorFingerprint(1, 'ibid.'), start: 0, end: 5, replacementText: 'Ibid.', confirmed: true, reason: 'profil' }],
+        bibliographyLinks: [],
+      },
+    }]);
+    const entries = await readZip(result.docxBytes);
+    const get = (name: string) => new TextDecoder().decode(entries.find((entry) => entry.name === name)!.data);
+    expect(result.changelog).toHaveLength(1);
+    expect(get('word/document.xml')).toContain('w:footnoteReference w:id="1"');
+    expect(get('word/footnotes.xml')).toContain('Ibid.');
+  });
+
+  it('heading-style-fixer kreira nedostajući numbering.xml part i relaciju', async () => {
+    const enc = new TextEncoder();
+    const documentXml = '<w:document><w:body><w:p><w:r><w:t>1. Uvod</w:t></w:r></w:p></w:body></w:document>';
+    const stylesXml = '<w:styles><w:style w:type="paragraph" w:styleId="Normal"><w:name w:val="Normal"/></w:style></w:styles>';
+    const contentTypesXml = '<Types></Types>';
+    const relsXml = '<Relationships></Relationships>';
+    const original = await writeZip([
+      { name: '[Content_Types].xml', data: enc.encode(contentTypesXml) },
+      { name: 'word/_rels/document.xml.rels', data: enc.encode(relsXml) },
+      { name: 'word/document.xml', data: enc.encode(documentXml) },
+      { name: 'word/styles.xml', data: enc.encode(stylesXml) },
+    ]);
+    const result = await applyFixers(original, [{
+      ruleId: 'heading-numbering',
+      fixerId: 'heading-style-fixer',
+      params: {
+        targets: [{ paragraphIndex: 1, level: 1, numbered: true, removeManualNumbering: true }],
+        options: { numbering: { maxLevel: 3, format: 'decimal', trailingDot: true } },
+      },
+    }]);
+    const entries = await readZip(result.docxBytes);
+    const dec = new TextDecoder();
+    expect(entries.some((entry) => entry.name === 'word/numbering.xml')).toBe(true);
+    expect(dec.decode(entries.find((entry) => entry.name === 'word/numbering.xml')!.data)).toContain('Lekta Heading Numbering');
+    expect(dec.decode(entries.find((entry) => entry.name === '[Content_Types].xml')!.data)).toContain('/word/numbering.xml');
+    expect(dec.decode(entries.find((entry) => entry.name === 'word/_rels/document.xml.rels')!.data)).toContain('relationships/numbering');
+  });
+
   it('mijenja samo ciljane vrijednosti, sve ostalo bit-identicno', async () => {
     const fixture = buildSyntheticDocx();
     const originalDocx = await writeZip(fixture.entries);

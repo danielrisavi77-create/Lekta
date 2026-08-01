@@ -4,8 +4,8 @@
   margin-top: 1rem;
   padding: 1rem;
   border-radius: 0.75rem;
-  background: var(--lekta-surface-muted, #f4f4f5);
-  border: 1px solid var(--lekta-border-muted, #e4e4e7);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
 }
 
 .lekta-repair-panel__list {
@@ -31,13 +31,90 @@
   gap: 0.5rem;
 }
 
+.lekta-repair-panel__heading-tree {
+  flex: 1 1 100%;
+  list-style: none;
+  margin: 0.5rem 0 0 1.75rem;
+  padding: 0;
+  border-left: 2px solid var(--line);
+}
+.lekta-repair-panel__heading-node {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.25rem 0.5rem;
+  padding: 0.3rem 0.5rem;
+}
+.lekta-repair-panel__heading-node label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.lekta-repair-panel__heading-node small {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  padding-left: 1.5rem;
+}
+.lekta-repair-panel__heading-warning {
+  padding: 0.4rem 0.5rem;
+  color: var(--warn-strong);
+  background: var(--warn-soft);
+  border-radius: 0.35rem;
+}
+
+.lekta-repair-panel__numbering-plan {
+  flex: 1 1 100%;
+  margin: 8px 0 0 28px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.lekta-repair-panel__numbering-summary {
+  margin: 0 0 6px;
+  font-size: .88rem;
+}
+
+.lekta-repair-panel__heading-numbering-list {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lekta-repair-panel__heading-numbering-node {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.lekta-repair-panel__heading-numbering-node > span {
+  flex: 1 1 220px;
+}
+
+/* RESULT-03: klik na "Otvori mogucnost popravka" na kartici konkretnog nalaza istice bas onu
+   stavku panela koja ga popravlja (isti li/row nosi ovu klasu, radi za glavni popis i za
+   zahvate u tekst). Jednokratan bljesak, isti jezik kao #repairPanelMount.repair-flash. */
+.lekta-repair-panel__item--target {
+  animation: lektaRepairItemTarget 1.6s ease-out;
+  border-radius: 6px;
+}
+@keyframes lektaRepairItemTarget {
+  0% { box-shadow: 0 0 0 0 rgba(26, 122, 84, 0); background-color: rgba(26, 122, 84, 0); }
+  20% { box-shadow: 0 0 0 3px rgba(26, 122, 84, 0.42); background-color: rgba(26, 122, 84, 0.12); }
+  100% { box-shadow: 0 0 0 0 rgba(26, 122, 84, 0); background-color: rgba(26, 122, 84, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lekta-repair-panel__item--target { animation: none; background-color: rgba(26, 122, 84, 0.12); }
+}
+
 .lekta-repair-panel__badge {
   font-size: 0.75rem;
-  color: var(--lekta-accent, #18181b);
-  background: white;
+  color: var(--brand);
+  background: var(--panel);
   padding: 0.125rem 0.5rem;
   border-radius: 999px;
-  border: 1px solid var(--lekta-border, #d4d4d8);
+  border: 1px solid var(--line);
   white-space: nowrap;
 }
 
@@ -45,7 +122,7 @@
   margin-top: 0.375rem;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--lekta-muted, #52525b);
+  color: var(--muted);
 }
 
 .lekta-repair-panel__deep {
@@ -54,7 +131,7 @@
   gap: 0.5rem;
   margin: 0 0 0.875rem;
   font-size: 0.8125rem;
-  color: var(--lekta-muted, #52525b);
+  color: var(--muted);
 }
 
 .lekta-repair-panel__deep input {
@@ -65,7 +142,7 @@
   padding: 0.625rem 1rem;
   border-radius: 0.5rem;
   border: none;
-  background: var(--lekta-accent, #18181b);
+  background: var(--brand);
   color: white;
   font-weight: 600;
   cursor: pointer;
@@ -91,11 +168,25 @@
   margin-top: 0.875rem;
   padding: 0.75rem 0.875rem;
   border-radius: 0.5rem;
-  background: white;
-  border: 1px solid var(--lekta-border, #d4d4d8);
+  background: var(--panel);
+  border: 1px solid var(--line);
   font-size: 0.8125rem;
-  color: var(--lekta-muted, #52525b);
+  color: var(--muted);
 }
+
+.lekta-repair-panel__title-page-form {
+  margin: 0.75rem 0 0.25rem 1.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--panel);
+}
+.lekta-repair-panel__title-page-form > p { margin: 0 0 0.65rem; font-size: 0.875rem; }
+.lekta-repair-panel__title-page-fields { display: grid; gap: 0.5rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+.lekta-repair-panel__title-page-fields label { display: grid; gap: 0.2rem; font-size: 0.8rem; color: var(--muted); }
+.lekta-repair-panel__title-page-fields input { width: 100%; box-sizing: border-box; padding: 0.4rem 0.5rem; border: 1px solid var(--line); border-radius: 0.35rem; color: inherit; background: var(--panel); }
+.lekta-repair-panel__title-page-warnings { margin-top: 0.65rem; color: #92400e; font-size: 0.8rem; }
+.lekta-repair-panel__title-page-warnings p { margin: 0.25rem 0; }
 
 .lekta-repair-panel__confirm-box p {
   margin: 0 0 0.5rem;
@@ -106,7 +197,7 @@
   margin-right: 0.5rem;
   border-radius: 0.5rem;
   border: none;
-  background: var(--lekta-accent, #18181b);
+  background: var(--brand);
   color: white;
   font-weight: 600;
   cursor: pointer;
@@ -115,9 +206,165 @@
 .lekta-repair-panel__cancel {
   padding: 0.5rem 0.875rem;
   border-radius: 0.5rem;
-  border: 1px solid var(--lekta-border, #d4d4d8);
-  background: white;
-  color: var(--lekta-muted, #52525b);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+/* "Koliko platis, toliko popravaka": slider iznad checkbox popisa (repair-price-slider.ts). */
+.lekta-repair-price-slider {
+  margin: 0 0 0.875rem;
+}
+
+.lekta-repair-price-slider__row {
+  display: flex;
+  align-items: center;
+}
+
+.lekta-repair-price-slider__range {
+  flex: 1 1 auto;
+  width: 100%;
+  accent-color: var(--brand);
+}
+
+.lekta-repair-price-slider__label {
+  margin-top: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* ---------- Ledger + modal ("koliko platis, toliko popravaka", suzeni opseg: SAMO
+   jednostavne stavke bez prikljucene napredne forme; vidi repair-price-slider.ts) ---------- */
+.lekta-repair-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.875rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 0.875rem;
+  margin: 0 0 0.875rem;
+  background: var(--panel-2);
+  border-radius: 0.75rem;
+}
+.lekta-repair-trigger__info {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.lekta-repair-trigger__price {
+  font-weight: 700;
+  color: var(--text);
+}
+.lekta-repair-trigger__btn {
+  border: 0;
+  background: var(--brand);
+  color: var(--on-brand);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.lekta-repair-trigger__btn:hover {
+  opacity: 0.9;
+}
+
+.lekta-repair-ledger-list {
+  list-style: none;
+  margin: 0 0 0.5rem;
+  padding: 0;
+}
+.lekta-repair-ledger-row {
+  display: flex;
+  width: 100%;
+  align-items: baseline;
+  gap: 0.625rem;
+  padding: 0.5625rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition: color 0.15s;
+}
+.lekta-repair-ledger-row:hover {
+  color: var(--text);
+}
+.lekta-repair-ledger-row.on {
+  color: var(--text);
+}
+.lekta-repair-ledger-mark {
+  width: 0.5625rem;
+  flex: none;
+  color: transparent;
+}
+.lekta-repair-ledger-row.on .lekta-repair-ledger-mark {
+  color: var(--brand);
+}
+.lekta-repair-ledger-fill {
+  flex: 1 1 auto;
+  min-width: 0.75rem;
+  border-bottom: 1px dotted currentColor;
+  opacity: 0.4;
+  transform: translateY(-0.25rem);
+}
+.lekta-repair-ledger-price {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.lekta-repair-ledger-row.on .lekta-repair-ledger-price {
+  font-weight: 700;
+}
+.lekta-repair-ledger-range {
+  width: 100%;
+  accent-color: var(--brand);
+  margin: 0.75rem 0 0.25rem;
+}
+.lekta-repair-ledger-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.875rem;
+  margin-top: 0.875rem;
+  padding-top: 0.875rem;
+  border-top: 1.5px solid var(--text);
+}
+.lekta-repair-ledger-total-label {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.lekta-repair-ledger-total b {
+  font-size: 1.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.lekta-repair-ledger-total small {
+  font-size: 0.6875rem;
+  color: var(--muted);
+  margin-left: 0.375rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.lekta-repair-ledger-note {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-style: italic;
+  margin: 0.625rem 0 0;
+}
+.lekta-repair-ledger-done {
+  margin-top: 1rem;
+  width: 100%;
+  background: var(--text);
+  color: var(--panel);
+  border: 0;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-weight: 700;
   cursor: pointer;
 }
 
@@ -126,7 +373,7 @@
 .lekta-repair-text {
   margin-top: 0.875rem;
   padding: 0.75rem 0.875rem;
-  border: 1px dashed var(--lekta-border, #d4d4d8);
+  border: 1px dashed var(--line);
   border-radius: 0.625rem;
 }
 .lekta-repair-text > p { margin: 0 0 0.5rem; }
@@ -151,3 +398,57 @@
 }
 .lekta-repair-text__preview ul { margin: 0.25rem 0 0; padding-left: 1.1rem; }
 .lekta-repair-text__preview li { margin: 0.125rem 0; }
+
+.lekta-repair-panel__element-captions {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.625rem;
+}
+.lekta-repair-panel__element-caption-list { display: grid; gap: 0.5rem; }
+.lekta-repair-panel__element-caption-row {
+  display: grid;
+  grid-template-columns: auto minmax(7rem, auto) minmax(12rem, 1fr) minmax(10rem, 1fr) auto auto;
+  gap: 0.45rem;
+  align-items: center;
+}
+.lekta-repair-panel__element-caption-row input[type="text"],
+.lekta-repair-panel__element-caption-row select { min-width: 0; padding: 0.3rem; }
+.lekta-repair-panel__element-caption-row small { grid-column: 2 / -1; color: var(--muted); }
+
+.lekta-repair-panel__bibliography { margin-top: 0.7rem; display: grid; gap: 0.5rem; }
+.lekta-repair-panel__bibliography-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.45rem; align-items: start; padding: 0.45rem; border: 1px solid var(--line); border-radius: 0.35rem; }
+.lekta-repair-panel__bibliography-row textarea { width: 100%; box-sizing: border-box; resize: vertical; padding: 0.35rem; border: 1px solid var(--line); border-radius: 0.25rem; font: inherit; }
+.lekta-repair-panel__bibliography-row small { grid-column: 2 / -1; color: var(--muted); }
+.lekta-repair-panel__bibliography-enrichment { padding: 0.35rem; background: var(--panel-2); border-radius: 0.25rem; }
+.lekta-repair-panel__citation-sync .lekta-repair-panel__bibliography-row { grid-template-columns: auto minmax(0, 1fr); }
+.lekta-repair-panel__citation-sync input[type="text"] { min-width: 0; width: 100%; box-sizing: border-box; padding: 0.35rem; border: 1px solid var(--line); border-radius: 0.25rem; font: inherit; }
+.lekta-repair-panel__legal-footnote textarea { min-height: 4rem; resize: vertical; }
+.lekta-repair-panel__final-inspector {
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.625rem;
+}
+.lekta-repair-panel__final-inspector-row {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.lekta-repair-panel__final-inspector-row small { color: var(--muted); }
+.lekta-repair-panel__final-inspector-row select { width: fit-content; padding: 0.25rem; }
+.lekta-repair-panel__legal-footnote > p { margin: 0.55rem 0; }
+@media (max-width: 760px) {
+  .lekta-repair-panel__element-caption-row { grid-template-columns: auto 1fr; }
+  .lekta-repair-panel__element-caption-row input[type="text"],
+  .lekta-repair-panel__element-caption-row select,
+  .lekta-repair-panel__element-caption-row small { grid-column: 2; }
+}
+.lekta-repair-panel__table-figure-rescue{margin-top:.6rem;padding:.6rem;border-top:1px solid var(--line)}
+.lekta-repair-panel__rescue-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(10rem,16rem);gap:.35rem .65rem;align-items:center;margin:.45rem 0}
+.lekta-repair-panel__rescue-row small{grid-column:1/-1;color:var(--muted)}
+.lekta-repair-panel__rescue-row input[type=text]{min-width:0;padding:.25rem .4rem}
+.lekta-repair-panel__field-integrity{margin-top:.7rem;padding:.7rem;border:1px solid var(--line);border-radius:.625rem;display:grid;gap:.45rem}
+.lekta-repair-panel__field-integrity label{display:flex;gap:.45rem;align-items:flex-start;padding:.25rem 0}
+.lekta-repair-panel__field-list{display:grid;gap:.2rem;max-height:16rem;overflow:auto}
+.lekta-repair-panel__field-integrity small{color:var(--muted);margin-left:.25rem}

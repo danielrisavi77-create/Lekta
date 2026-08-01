@@ -30,23 +30,63 @@ import {
   documentHasTocField,
   findParagraphEndAfterMatch,
   patchHeadingFormat,
+  patchHeadingParagraphs,
+  ensureHeadingStyles,
+  markTocFieldsDirty,
   patchFootnoteTypography,
   type HeadingFormatSpec,
+  type HeadingParagraphTarget,
+  ensureHeadingNumbering,
+  type HeadingNumberingOptions,
+  patchParagraphStyles,
+  patchParagraphTargets,
+  type ParagraphStyleFormattingRule,
+  type ParagraphFormattingTarget,
 } from './xml-patch.ts';
 import { upperCaseHeadings } from './heading-case.ts';
 import { stripDirectFormatting, type RunLevelResult } from './run-level.ts';
 import { stripOrphanedEmptyParagraphs } from './paragraph-cleanup.ts';
 import { sectionName } from '../utils/helpers.ts';
+import { elementCaptionFixer, type ElementCaptionFixParams } from './element-caption-fixer';
+import { bibliographyRepairFixer, type BibliographyRepairParams } from './bibliography-repair-fixer';
+import { citationBibliographySyncFixer, type CitationBibliographySyncParams } from './citation-bibliography-sync-fixer';
+import { legalFootnoteRepairFixer, type LegalFootnoteRepairParams } from './legal-footnote-repair-fixer';
+import { finalDocumentInspectorFixer, type FinalDocumentInspectorParams } from './final-document-inspector-fixer';
+import { tableFigureRescueFixer, type TableFigureRescueParams } from './table-figure-rescue-fixer';
+import { sectionSurgeryFixer, type SectionSurgeryParams } from './section-surgery-fixer';
+import { fieldIntegrityFixer, type FieldIntegrityParams } from './field-integrity-fixer';
+import { croatianTypographyFixer, type CroatianTypographyParams } from './croatian-typography-fixer';
+import { consistencyFixer, type ConsistencyFixParams } from './consistency-fixer';
+import { requiredSectionFixer, type RequiredSectionFixParams } from './required-section-fixer';
+import { linkDoiFixer, type LinkDoiFixParams } from './link-doi-fixer';
+import { submissionMetadataFixer, type SubmissionMetadataFixParams } from './submission-metadata-fixer';
+
+export { elementCaptionFixer } from './element-caption-fixer';
+export { bibliographyRepairFixer } from './bibliography-repair-fixer';
+export { citationBibliographySyncFixer } from './citation-bibliography-sync-fixer';
+export { legalFootnoteRepairFixer } from './legal-footnote-repair-fixer';
+export { finalDocumentInspectorFixer } from './final-document-inspector-fixer';
+export { tableFigureRescueFixer } from './table-figure-rescue-fixer';
+export { sectionSurgeryFixer } from './section-surgery-fixer';
+export { fieldIntegrityFixer } from './field-integrity-fixer';
+export { croatianTypographyFixer } from './croatian-typography-fixer';
+export { consistencyFixer } from './consistency-fixer';
+export { requiredSectionFixer } from './required-section-fixer';
+export { linkDoiFixer } from './link-doi-fixer';
+export { submissionMetadataFixer } from './submission-metadata-fixer';
 
 export interface DocxXmlParts {
   documentXml: string;
   stylesXml: string;
+  numberingXml?: string;
   /** [Content_Types].xml (K5 footer part flow). Opcionalno: stariji pozivi daju samo doc+styles. */
   contentTypesXml?: string;
   /** word/_rels/document.xml.rels (K5). */
   documentRelsXml?: string;
   /** Novi partovi za dodati u zip (npr. word/footer1.xml). apply-fixers ih pise iz allow-liste. */
   addedParts?: { name: string; content: string }[];
+  /** Novi opći XML partovi, primjerice word/comments.xml, kroz strogu allow-listu apply-fixers. */
+  addedPackageParts?: { name: string; content: string }[];
   /** SVA imena zip entryja ulaznog docx-a (apply-fixers ih puni). Nuzno da imenovanje novog
    *  footer parta ne kolidira s orphan partom koji postoji u zipu ali NIJE u content-typesu. */
   existingParts?: string[];
@@ -61,12 +101,30 @@ export interface DocxXmlParts {
    *  detekcija u analyze-docx.ts). Za razliku od footer-page-fixer (K5) koji DODAJE
    *  nove partove, ovo su POSTOJECI partovi koje fixer smije UREDITI. */
   footerHeaderParts?: Record<string, string>;
+  /** Svi tekstualni XML i .rels dijelovi paketa. Binarni dijelovi se ne dekodiraju. */
+  packageXmlParts?: Record<string, string>;
+  /** Dijelovi paketa koje fixer treba ukloniti iz ZIP-a. */
+  removedPackageParts?: string[];
 }
 
 // RE-36/41: zasto fixer NIJE primijenjen, da UI moze razlikovati "vec je na cilju" (nema se sto
 // popraviti) od "nije bilo moguce" (ciljana struktura/stil ne postoji). Bez ovoga skipped[] izgleda
 // isto za uredan rad i za rad koji stvarno treba rucnu izmjenu.
-export type FixerNoOpReason = 'already-ok' | 'no-target' | 'invalid-params' | 'unsupported-structure';
+export type FixerNoOpReason = 'already-ok' | 'no-target' | 'invalid-params' | 'unsupported-structure' | 'stale-anchor';
+
+export type { ElementCaptionFixParams };
+export type { BibliographyRepairParams };
+export type { CitationBibliographySyncParams };
+export type { LegalFootnoteRepairParams };
+export type { FinalDocumentInspectorParams };
+export type { TableFigureRescueParams };
+export type { SectionSurgeryParams };
+export type { FieldIntegrityParams };
+export type { SubmissionMetadataFixParams };
+export type { CroatianTypographyParams };
+export type { ConsistencyFixParams };
+export type { RequiredSectionFixParams };
+export type { LinkDoiFixParams };
 
 export interface FixerOutput {
   parts: DocxXmlParts;
@@ -351,24 +409,34 @@ export function alignmentFixer(
   return combineDeep(base, parts, deepResult);
 }
 
-export function paragraphSpacingFixer(parts: DocxXmlParts, deep = false): FixerOutput {
+export interface ParagraphRepairOptions {
+  deep?: boolean;
+  styleRules?: ParagraphStyleFormattingRule[];
+  targets?: ParagraphFormattingTarget[];
+}
+
+export function paragraphSpacingFixer(parts: DocxXmlParts, deepOrOptions: boolean | ParagraphRepairOptions = false): FixerOutput {
+  const options: ParagraphRepairOptions = typeof deepOrOptions === 'boolean' ? { deep: deepOrOptions } : deepOrOptions;
   const result = patchDefaultParagraphSpacing(parts.stylesXml, 0, 0);
-  const base: FixerOutput = !result.applied
+  const styleResult = options.styleRules?.length ? patchParagraphStyles(result.xml, options.styleRules) : { xml: result.xml, applied: false };
+  const targetResult = options.targets?.length ? patchParagraphTargets(parts.documentXml, options.targets) : { xml: parts.documentXml, applied: false };
+  const stylesApplied = result.applied || styleResult.applied;
+  const base: FixerOutput = !stylesApplied && !targetResult.applied
     ? NO_OP(parts, reasonFromPatch(result))
     : {
-        parts: { ...parts, stylesXml: result.xml },
+        parts: { ...parts, stylesXml: styleResult.applied ? styleResult.xml : result.xml, documentXml: targetResult.applied ? targetResult.xml : parts.documentXml },
         applied: true,
-        beforeLabel: `Razmak prije/poslije: ${twentiethsToPtLabel(result.before['w:before'] ?? '0')} / ${twentiethsToPtLabel(result.before['w:after'] ?? '0')}`,
-        afterLabel: `Razmak prije/poslije: ${twentiethsToPtLabel(result.after['w:before'] ?? '0')} / ${twentiethsToPtLabel(result.after['w:after'] ?? '0')}`,
+        beforeLabel: result.applied ? `Razmak prije/poslije: ${twentiethsToPtLabel(result.before['w:before'] ?? '0')} / ${twentiethsToPtLabel(result.before['w:after'] ?? '0')}` : 'Postavke odlomaka',
+        afterLabel: options.styleRules?.length || options.targets?.length ? 'Uvlake i kontrola prijeloma stranice usklađeni' : `Razmak prije/poslije: ${twentiethsToPtLabel(result.after['w:before'] ?? '0')} / ${twentiethsToPtLabel(result.after['w:after'] ?? '0')}`,
       };
 
   // Backstop uvjet: Normal stil ima w:spacing s w:before I w:after (result.found),
   // inace bi skidanje direct razmaka vratilo dokument na Word default, ne na cilj.
   const deepResult =
-    deep && result.found['w:before'] === true && result.found['w:after'] === true
-      ? stripDirectFormatting(parts.documentXml, { stripParagraphSpacing: true })
+    options.deep && result.found['w:before'] === true && result.found['w:after'] === true
+      ? stripDirectFormatting(base.parts.documentXml, { stripParagraphSpacing: true })
       : null;
-  return combineDeep(base, parts, deepResult);
+  return combineDeep(base, base.parts, deepResult);
 }
 
 /**
@@ -431,6 +499,190 @@ export function headingFormatFixer(parts: DocxXmlParts, targets: HeadingLevelTar
     applied: true,
     beforeLabel: `Naslovi (${beforeBits.join('; ')})`,
     afterLabel: `Naslovi (${afterBits.join('; ')})`,
+  };
+}
+
+export interface HeadingStyleRepairTarget extends HeadingParagraphTarget {
+  pageBreakLevel?: boolean;
+}
+
+/** Promovira odabrane ručno oblikovane odlomke u ugrađene Heading stilove. */
+export function headingStyleFixer(
+  parts: DocxXmlParts,
+  targets: HeadingStyleRepairTarget[],
+  options: { pageBreakLevels?: number[]; numbering?: HeadingNumberingOptions } = {},
+): FixerOutput {
+  const valid = targets.filter((target) =>
+    Number.isInteger(target.paragraphIndex) && target.paragraphIndex >= 1 &&
+    Number.isInteger(target.level) && target.level >= 1 && target.level <= 9,
+  );
+  const paragraphCount = (parts.documentXml.match(/<w:p\b[^>]*>/g) || []).length;
+  const unique = [...new Map(valid.map((target) => [target.paragraphIndex, target])).values()];
+  const hasDuplicateIndex = unique.length !== valid.length;
+  const hasOutOfBoundsIndex = valid.some((target) => target.paragraphIndex > paragraphCount);
+  if (!unique.length || !parts.stylesXml || hasDuplicateIndex || hasOutOfBoundsIndex) return NO_OP(parts, 'invalid-params');
+  const levels = unique.map((target) => target.level);
+  const styles = ensureHeadingStyles(parts.stylesXml, levels, options);
+  const numberingEnabled = options.numbering != null;
+  const numbering = numberingEnabled && unique.some((target) => target.numbered === true)
+    ? ensureHeadingNumbering(parts.numberingXml, options.numbering as HeadingNumberingOptions)
+    : { xml: parts.numberingXml, applied: false, numId: null };
+  let numberedTargets: HeadingStyleRepairTarget[] = unique;
+  if (numberingEnabled) {
+    const numId = numbering.numId;
+    numberedTargets = unique.map((target) => ({
+      ...target,
+      numberingManaged: true,
+      numberingNumId: numId ?? undefined,
+    }));
+  }
+  const paragraphs = patchHeadingParagraphs(parts.documentXml, numberedTargets);
+  if (!paragraphs.applied && !styles.applied && !numbering.applied) return NO_OP(parts, 'already-ok');
+  const dirty = paragraphs.applied ? markTocFieldsDirty(paragraphs.xml) : { xml: paragraphs.xml, applied: false };
+  const changedTargets = paragraphs.changed;
+  const removedPrefixes = unique.filter((target) => target.removeManualNumbering).length;
+  return {
+    parts: {
+      ...parts,
+      stylesXml: styles.xml,
+      documentXml: dirty.xml,
+      numberingXml: numbering.xml,
+    },
+    applied: true,
+    beforeLabel: 'Ručno oblikovani odlomci bez Heading stila',
+    afterLabel: `${changedTargets} odlomaka pretvoreno u Heading stilove${numbering.applied ? ', dodano višerazinsko numeriranje' : ''}${removedPrefixes ? `, uklonjeno ${removedPrefixes} ručnih brojeva` : ''}${dirty.applied ? ', TOC označen za osvježavanje' : ''}`,
+  };
+}
+
+export interface TitlePageRepairLine {
+  role?: string;
+  text: string;
+  group?: number;
+  style?: {
+    font?: string;
+    sizePt?: number;
+    bold?: boolean;
+    italic?: boolean;
+    uppercase?: boolean;
+    align?: 'left' | 'center' | 'right';
+  };
+}
+
+export interface TitlePageRepairTarget {
+  paragraphCount: number;
+  lines: TitlePageRepairLine[];
+  ensureTitlePageNoNumber?: boolean;
+  marginsCm?: { top?: number; right?: number; bottom?: number; left?: number };
+}
+
+function titlePageEscape(value: string): string {
+  return value
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function titlePageParagraphRanges(documentXml: string): Array<{ start: number; end: number }> {
+  const masked = documentXml.replace(/<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|<\?[\s\S]*?\?>/g, (match) => ' '.repeat(match.length));
+  const tokenRe = /<w:p(?=[\s/>])[^>]*\/?>|<\/w:p\s*>/g;
+  const stack: number[] = [];
+  const ranges: Array<{ start: number; end: number }> = [];
+  let token: RegExpExecArray | null;
+  while ((token = tokenRe.exec(masked))) {
+    if (/^<\/w:p/.test(token[0])) {
+      const start = stack.pop();
+      if (start !== undefined) ranges.push({ start, end: token.index + token[0].length });
+    } else if (/\/\s*>$/.test(token[0])) {
+      ranges.push({ start: token.index, end: token.index + token[0].length });
+    } else {
+      stack.push(token.index);
+    }
+  }
+  const bodyLevel = (start: number): boolean => {
+    const before = masked.slice(0, start);
+    const balance = (open: RegExp, close: RegExp) => (before.match(open)?.length ?? 0) - (before.match(close)?.length ?? 0);
+    return balance(/<w:tbl\b/g, /<\/w:tbl>/g) <= 0 && balance(/<w:txbxContent\b/g, /<\/w:txbxContent>/g) <= 0 && balance(/<w:sdtContent\b/g, /<\/w:sdtContent>/g) <= 0;
+  };
+  return ranges.filter((range) => bodyLevel(range.start)).sort((a, b) => a.start - b.start);
+}
+
+function titlePageParagraphXml(line: TitlePageRepairLine, previousGroup: number | undefined): string {
+  const style = line.style ?? {};
+  const rPr: string[] = [];
+  if (style.font) rPr.push(`<w:rFonts w:ascii="${titlePageEscape(style.font)}" w:hAnsi="${titlePageEscape(style.font)}"/>`);
+  if (style.bold) rPr.push('<w:b/>');
+  if (style.italic) rPr.push('<w:i/>');
+  if (style.uppercase) rPr.push('<w:caps/>');
+  if (typeof style.sizePt === 'number') rPr.push(`<w:sz w:val="${Math.round(style.sizePt * 2)}"/>`);
+  const pPr: string[] = [];
+  if (line.group !== undefined && previousGroup !== undefined && line.group !== previousGroup) pPr.push('<w:spacing w:before="120"/>');
+  if (style.align) pPr.push(`<w:jc w:val="${style.align}"/>`);
+  return `<w:p>${pPr.length ? `<w:pPr>${pPr.join('')}</w:pPr>` : ''}<w:r>${rPr.length ? `<w:rPr>${rPr.join('')}</w:rPr>` : ''}<w:t xml:space="preserve">${titlePageEscape(line.text)}</w:t></w:r></w:p>`;
+}
+
+function patchTitlePageSection(section: string, margins?: TitlePageRepairTarget['marginsCm'], addTitlePg = true): string {
+  let out = section;
+  if (margins) {
+    const safe = (key: 'top' | 'right' | 'bottom' | 'left') => {
+      const value = margins[key];
+      return typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 10 ? Math.round(value * 567) : undefined;
+    };
+    const current = out.match(/<w:pgMar\b[^>]*\/?>/)?.[0];
+    if (current) {
+      const attrs = current.replace(/\s+w:(?:top|right|bottom|left)="[^"]*"/g, '').replace(/\s*\/?>(?:\s*)$/, '');
+      const values = (['top', 'right', 'bottom', 'left'] as const).flatMap((key) => {
+        const value = safe(key);
+        return value === undefined ? [] : [` w:${key}="${value}"`];
+      });
+      out = out.replace(current, `${attrs}${values.join('')}/>`);
+    }
+  }
+  if (!addTitlePg || /<w:titlePg\b/.test(out)) return out;
+  const marker = '<w:titlePg/>';
+  const close = out.lastIndexOf('</w:sectPr>');
+  if (close >= 0) return `${out.slice(0, close)}${marker}${out.slice(close)}`;
+  return out.replace(/\/>$/, `>${marker}</w:sectPr>`);
+}
+
+/** Kontrolirano regenerira samo prvu stranicu po strukturiranom profilu. */
+export function titlePageFixer(parts: DocxXmlParts, target: TitlePageRepairTarget): FixerOutput {
+  if (!parts.documentXml || !Number.isInteger(target?.paragraphCount) || target.paragraphCount < 1 || target.paragraphCount > 80) return NO_OP(parts, 'invalid-params');
+  if (!Array.isArray(target.lines) || target.lines.length < 1 || target.lines.length > 40) return NO_OP(parts, 'invalid-params');
+  const lines = target.lines.filter((line) => line && typeof line.text === 'string' && line.text.trim());
+  if (lines.length !== target.lines.length || lines.some((line) => line.text.length > 1000 || (line.group !== undefined && (!Number.isInteger(line.group) || line.group < 0 || line.group > 100)))) return NO_OP(parts, 'invalid-params');
+  const ranges = titlePageParagraphRanges(parts.documentXml);
+  if (ranges.length < target.paragraphCount) return NO_OP(parts, 'invalid-params');
+  const selected = ranges.slice(0, target.paragraphCount);
+  const selectedXml = selected.map((range) => parts.documentXml.slice(range.start, range.end));
+  if (selectedXml.some((xml, index) => /<w:(?:drawing|pict|object|fldSimple|instrText|sdt|ins|del)\b/.test(xml) || (index < selectedXml.length - 1 && /<w:sectPr\b/.test(xml)))) return NO_OP(parts, 'unsupported-structure');
+  if (selectedXml.some((xml) => /<w:tbl\b|<w:txbxContent\b/.test(xml))) return NO_OP(parts, 'unsupported-structure');
+
+  const generated: string[] = [];
+  let previousGroup: number | undefined;
+  for (const line of lines) {
+    generated.push(titlePageParagraphXml(line, previousGroup));
+    previousGroup = line.group;
+  }
+  const lastSectPr = selectedXml.at(-1)?.match(/<w:sectPr\b[^>]*?(?:\/>|>[\s\S]*?<\/w:sectPr>)/)?.[0];
+  if (lastSectPr) generated[generated.length - 1] = generated[generated.length - 1].replace('</w:p>', `${lastSectPr}</w:p>`);
+  let xml = parts.documentXml;
+  for (let i = selected.length - 1; i >= 0; i -= 1) xml = `${xml.slice(0, selected[i].start)}${i < generated.length ? generated[i] : ''}${xml.slice(selected[i].end)}`;
+  if (target.ensureTitlePageNoNumber !== false || target.marginsCm) {
+    let seen = false;
+    xml = xml.replace(/<w:sectPr\b[^>]*?(?:\/>|>[\s\S]*?<\/w:sectPr>)/g, (section) => {
+      if (seen) return section;
+      seen = true;
+      return patchTitlePageSection(section, target.marginsCm, target.ensureTitlePageNoNumber !== false);
+    });
+  }
+  if (xml === parts.documentXml) return NO_OP(parts, 'already-ok');
+  return {
+    parts: { ...parts, documentXml: xml },
+    applied: true,
+    beforeLabel: 'Postojeći sadržaj naslovnice',
+    afterLabel: `${lines.length} elemenata naslovnice složeno prema službenom profilu, naslovnica bez broja stranice`,
   };
 }
 

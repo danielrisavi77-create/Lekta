@@ -44,6 +44,17 @@ export const COMPILED_CHECK_IDS = [
   'footnote-size',
   'footnote-spacing',
   'heading-rules',
+  'element-caption-rules',
+  'bibliography-rules',
+  'citation-sync-rules',
+  'legal-footnote-repair-rules',
+  'table-figure-rescue-rules',
+  'section-surgery-rules',
+  'croatian-typography-rules',
+  'consistency-rules',
+  'required-section-rules',
+  'link-rules',
+  'cross-file-submission-rules',
 ] as const;
 
 function boolOf(value: unknown): boolean {
@@ -96,6 +107,17 @@ function applyEntry(eff: EffectiveRules, entry: RuleEntry): boolean {
     case 'footnote-size': eff.footnoteSize = value; return true;
     case 'footnote-spacing': eff.footnoteSpacing = value; return true;
     case 'heading-rules': eff.headingRules = value; return true;
+    case 'element-caption-rules': eff.elementCaptionRules = value; return true;
+    case 'bibliography-rules': eff.bibliographyRules = value; return true;
+    case 'citation-sync-rules': eff.citationSyncRules = value; return true;
+    case 'legal-footnote-repair-rules': eff.legalFootnoteRepairRules = value; return true;
+    case 'table-figure-rescue-rules': eff.tableFigureRescueRules = value; return true;
+    case 'section-surgery-rules': eff.sectionSurgeryRules = value; return true;
+    case 'croatian-typography-rules': eff.croatianTypographyRules = value; return true;
+    case 'consistency-rules': eff.consistencyRules = value; return true;
+    case 'required-section-rules': eff.requiredSectionRules = value; return true;
+    case 'link-rules': eff.linkRules = value; return true;
+    case 'cross-file-submission-rules': eff.crossFileSubmissionRules = value; return true;
     default: return false;
   }
 }

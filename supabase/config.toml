@@ -452,6 +452,11 @@ verify_jwt = true
 [functions.source-check]
 verify_jwt = true
 
+# Završno osvježavanje Word polja ide kroz autentificirani Edge proxy prema
+# zasebnom, privatnom LibreOffice workeru. Worker URL i token su secrets.
+[functions.field-render]
+verify_jwt = true
+
 # Orphan-BLOB sweep (WS-7): cron-okidano, stiti se dediciranom REPAIR_CLEANUP_CRON_SECRET tajnom u funkciji.
 [functions.cleanup-orphan-repairs]
 verify_jwt = false

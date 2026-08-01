@@ -2,6 +2,7 @@ import type { Check, Issue } from '../scoring/checks';
 import type { Fixability, TriageFinding, TriageModel } from '../analysis/triage';
 import { collectFootnoteAnchors, collectIssueAnchors } from '../preview/preview-anchors';
 import { safeHref } from '../utils/helpers';
+import { suggestTool, type ToolSuggestion } from './tool-suggestions';
 
 export type FindingSeverity = 'error' | 'warning' | 'info';
 export type FindingStatus = 'open' | 'confirmed' | 'ignored';
@@ -40,6 +41,12 @@ export interface FindingViewModel {
   scope: FindingScope;
   fixability: Fixability;
   autoRepairable: boolean;
+  /** Naslov(i) (issue.title i uparen check.title) po kojima se ovaj nalaz korelira s TOCNO onom
+   * stavkom u repair panelu koja popravlja bas njega (RESULT-03), vidi repair-items.pickTargetItem. */
+  matchKeys: string[];
+  /** Konkretan besplatni Lekta alat koji rjesava bas ovaj nalaz (naslovnica/izjava/literatura/
+   * kartice/citat), kad prepoznat iz naslova/detalja/kategorije. Vidi tool-suggestions.ts. */
+  tool?: ToolSuggestion;
   status: FindingStatus;
   ignoredReason?: string;
   priorityRank: number;
@@ -71,6 +78,10 @@ export interface FindingResultInput {
     documentDate?: string;
     verifiedAt?: string;
   };
+  /** Kontekst selekcije (currentProfile) za suggestTool: naslovnica alat konzumira ?fakultet/
+   * razina/smjer umjesto praznog generickog obrasca. Oboje opcionalni, golden/testovi ih izostave. */
+  settings?: { selectionIds?: { unit?: string }; workType?: string };
+  selection?: { program?: string; workType?: string };
 }
 
 function slug(value: string): string {
@@ -154,6 +165,11 @@ export function buildFindingViewModels(
       }
     : undefined;
   const used = new Map<string, number>();
+  const sctx = {
+    unitId: result.settings?.selectionIds?.unit,
+    workType: result.settings?.workType || result.selection?.workType,
+    program: result.selection?.program,
+  };
 
   return issues.map((issue, originalIndex) => {
     const check = matchingCheck(issue, checks);
@@ -164,6 +180,7 @@ export function buildFindingViewModels(
     used.set(base, duplicate + 1);
     const id = duplicate ? `${base}:${duplicate + 1}` : base;
     const state = states.get(id) || { status: 'open' as const };
+    const tool = suggestTool(issue, sctx);
     return {
       id,
       originalIndex,
@@ -177,6 +194,8 @@ export function buildFindingViewModels(
       scope: scopeFor(issue, triage),
       fixability,
       autoRepairable: !!triage?.fixId,
+      matchKeys: [...new Set([issue.title, check?.title].filter((v): v is string => !!v))],
+      ...(tool ? { tool } : {}),
       status: state.status,
       ...(state.ignoredReason ? { ignoredReason: state.ignoredReason } : {}),
       priorityRank: priorityRank(issue, fixability),
@@ -225,6 +244,14 @@ export function findingCardHtml(finding: FindingViewModel, repairAvailable: bool
   const reason = finding.ignoredReason ? `<p class="finding-ignored-reason">Razlog: ${esc(finding.ignoredReason)}</p>` : '';
   const confirmation = finding.status === 'confirmed'
     ? '<p class="finding-status-note">Ručna potvrda ne mijenja automatsku ocjenu. Ponovno analiziraj dokument nakon izmjene.</p>'
+    : finding.status === 'ignored'
+      ? '<p class="finding-status-note">Zanemarivanje ne mijenja automatsku ocjenu, ali uklanja nalaz iz tri najvažnija koraka. Vrati ga u otvorene nalaze ako se predomisliš.</p>'
+      : '';
+  // (1) NOVI TAB: klik ne smije ugasiti upravo dovrsenu analizu (currentResult zivi samo u
+  // memoriji, izgubljen na navigaciju). (2) suggestTool dobiva kontekst selekcije iz sctx u
+  // buildFindingViewModels, isti ugovor kao stara (uklonjena) renderActionPlan.
+  const tool = finding.tool
+    ? `<a class="action-tool" href="${esc(safeHref(finding.tool.href))}" target="_blank" rel="noopener"><i data-lucide="wrench"></i> ${esc(finding.tool.label)} →</a>`
     : '';
-  return `<article class="finding-card finding-card--${finding.severity} finding-card--${finding.status}" data-finding-id="${esc(finding.id)}"><header><span class="finding-priority">${finding.severity === 'error' ? 'Kritično' : finding.severity === 'warning' ? 'Važno' : 'Provjeri'}</span><span class="finding-status">${statusLabel}</span></header><h4>${esc(finding.title)}</h4><p>${esc(finding.explanation)}</p>${measured}<div class="finding-location">${scopeHtml(finding.scope)}</div>${source}${reason}${confirmation}<div class="finding-actions">${auto}${decision}</div><div class="finding-ignore-form hidden"><label>Zašto zanemaruješ ovaj nalaz?<input type="text" maxlength="240" data-finding-ignore-reason><small>Zanemareni nalaz možeš kasnije vratiti u otvorene nalaze.</small></label><div class="finding-ignore-buttons"><button type="button" class="btn btn-secondary btn-sm" data-finding-ignore-save>Spremi razlog</button><button type="button" class="btn btn-ghost btn-sm" data-finding-ignore-cancel>Odustani</button></div></div></article>`;
+  return `<article class="finding-card finding-card--${finding.severity} finding-card--${finding.status}" data-finding-id="${esc(finding.id)}"><header><span class="finding-priority">${finding.severity === 'error' ? 'Kritično' : finding.severity === 'warning' ? 'Važno' : 'Provjeri'}</span><span class="finding-status">${statusLabel}</span></header><h4>${esc(finding.title)}</h4><p>${esc(finding.explanation)}</p>${measured}<div class="finding-location">${scopeHtml(finding.scope)}</div>${source}${reason}${confirmation}<div class="finding-actions">${auto}${decision}${tool}</div><div class="finding-ignore-form hidden"><label>Zašto zanemaruješ ovaj nalaz?<input type="text" maxlength="240" data-finding-ignore-reason><small>Zanemareni nalaz možeš kasnije vratiti u otvorene nalaze.</small></label><div class="finding-ignore-buttons"><button type="button" class="btn btn-secondary btn-sm" data-finding-ignore-save>Spremi razlog</button><button type="button" class="btn btn-ghost btn-sm" data-finding-ignore-cancel>Odustani</button></div></div></article>`;
 }

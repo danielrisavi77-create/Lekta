@@ -68,6 +68,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "bibliography-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "citation-bibliography-sync-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "consistency-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "croatian-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "element-caption-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "empty-paragraph-fixer": {
       "applied": true,
       "changelog": [
@@ -117,6 +132,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "noOpBitIdentican": false,
       "params": {},
       "skipped": [],
+    },
+    "field-integrity-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "final-document-inspector-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "font-fixer": {
       "applied": false,
@@ -200,6 +221,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "heading-style-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "legal-footnote-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": false,
       "changelog": [],
@@ -224,6 +251,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "line-spacing-fixer-rule",
       ],
+    },
+    "link-doi-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "margins-fixer": {
       "applied": true,
@@ -342,7 +372,22 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "paragraph-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "required-section-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-surgery-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "submission-metadata-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "table-figure-rescue-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "title-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "toc-field-fixer": {
@@ -412,6 +457,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "bibliography-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "citation-bibliography-sync-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "consistency-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "croatian-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "element-caption-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "empty-paragraph-fixer": {
       "applied": false,
       "changelog": [],
@@ -421,6 +481,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "empty-paragraph-fixer-rule",
       ],
+    },
+    "field-integrity-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "final-document-inspector-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "font-fixer": {
       "applied": false,
@@ -504,6 +570,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "heading-style-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "legal-footnote-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": false,
       "changelog": [],
@@ -528,6 +600,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "line-spacing-fixer-rule",
       ],
+    },
+    "link-doi-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "margins-fixer": {
       "applied": true,
@@ -646,7 +721,22 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "paragraph-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "required-section-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-surgery-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "submission-metadata-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "table-figure-rescue-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "title-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "toc-field-fixer": {
@@ -712,6 +802,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "bibliography-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "citation-bibliography-sync-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "consistency-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "croatian-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "element-caption-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "empty-paragraph-fixer": {
       "applied": false,
       "changelog": [],
@@ -721,6 +826,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "empty-paragraph-fixer-rule",
       ],
+    },
+    "field-integrity-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "final-document-inspector-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "font-fixer": {
       "applied": false,
@@ -804,6 +915,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "heading-style-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "legal-footnote-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": false,
       "changelog": [],
@@ -828,6 +945,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "line-spacing-fixer-rule",
       ],
+    },
+    "link-doi-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "margins-fixer": {
       "applied": true,
@@ -896,7 +1016,22 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "paragraph-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "required-section-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-surgery-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "submission-metadata-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "table-figure-rescue-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "title-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "toc-field-fixer": {
@@ -966,6 +1101,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "bibliography-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "citation-bibliography-sync-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "consistency-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "croatian-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "element-caption-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "empty-paragraph-fixer": {
       "applied": false,
       "changelog": [],
@@ -975,6 +1125,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "empty-paragraph-fixer-rule",
       ],
+    },
+    "field-integrity-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "final-document-inspector-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "font-fixer": {
       "applied": false,
@@ -1058,6 +1214,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "heading-style-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "legal-footnote-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": false,
       "changelog": [],
@@ -1082,6 +1244,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "line-spacing-fixer-rule",
       ],
+    },
+    "link-doi-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "margins-fixer": {
       "applied": true,
@@ -1200,7 +1365,22 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "paragraph-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "required-section-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-surgery-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "submission-metadata-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "table-figure-rescue-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "title-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "toc-field-fixer": {
@@ -1261,6 +1441,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "bibliography-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "citation-bibliography-sync-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "consistency-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "croatian-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "element-caption-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "empty-paragraph-fixer": {
       "applied": false,
       "changelog": [],
@@ -1270,6 +1465,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "empty-paragraph-fixer-rule",
       ],
+    },
+    "field-integrity-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "final-document-inspector-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "font-fixer": {
       "params": "nema-cilja-u-profilu",
@@ -1289,7 +1490,16 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "heading-style-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "legal-footnote-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "link-doi-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "margins-fixer": {
@@ -1357,7 +1567,22 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "paragraph-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "required-section-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-surgery-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "submission-metadata-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "table-figure-rescue-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "title-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "toc-field-fixer": {
@@ -1422,6 +1647,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "bibliography-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "citation-bibliography-sync-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "consistency-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "croatian-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "element-caption-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "empty-paragraph-fixer": {
       "applied": false,
       "changelog": [],
@@ -1431,6 +1671,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "empty-paragraph-fixer-rule",
       ],
+    },
+    "field-integrity-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "final-document-inspector-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "font-fixer": {
       "applied": false,
@@ -1512,7 +1758,16 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "heading-style-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "legal-footnote-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "link-doi-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "margins-fixer": {
@@ -1580,7 +1835,22 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "paragraph-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "required-section-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-surgery-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "submission-metadata-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "table-figure-rescue-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "title-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "toc-field-fixer": {
@@ -1645,6 +1915,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "bibliography-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "citation-bibliography-sync-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "consistency-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "croatian-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "element-caption-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "empty-paragraph-fixer": {
       "applied": false,
       "changelog": [],
@@ -1654,6 +1939,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "empty-paragraph-fixer-rule",
       ],
+    },
+    "field-integrity-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "final-document-inspector-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "font-fixer": {
       "applied": false,
@@ -1735,7 +2026,16 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "heading-style-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "legal-footnote-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "link-doi-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "margins-fixer": {
@@ -1803,7 +2103,22 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "paragraph-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "required-section-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-surgery-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "submission-metadata-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "table-figure-rescue-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "title-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "toc-field-fixer": {
@@ -1867,6 +2182,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "bibliography-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "citation-bibliography-sync-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "consistency-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "croatian-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "element-caption-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "empty-paragraph-fixer": {
       "applied": false,
       "changelog": [],
@@ -1876,6 +2206,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "empty-paragraph-fixer-rule",
       ],
+    },
+    "field-integrity-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "final-document-inspector-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "font-fixer": {
       "applied": false,
@@ -1917,6 +2253,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "heading-format-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-style-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "legal-footnote-repair-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "line-spacing-fixer": {
@@ -2024,6 +2366,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "link-doi-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "margins-fixer": {
       "applied": false,
       "changelog": [],
@@ -2061,7 +2406,22 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "paragraph-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "required-section-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-surgery-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "submission-metadata-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "table-figure-rescue-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "title-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "toc-field-fixer": {
@@ -2158,6 +2518,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "alignment-fixer-rule",
       ],
     },
+    "bibliography-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "citation-bibliography-sync-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "consistency-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "croatian-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "element-caption-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "empty-paragraph-fixer": {
       "applied": false,
       "changelog": [],
@@ -2167,6 +2542,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "empty-paragraph-fixer-rule",
       ],
+    },
+    "field-integrity-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "final-document-inspector-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "font-fixer": {
       "applied": false,
@@ -2359,6 +2740,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "heading-style-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "legal-footnote-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": false,
       "changelog": [],
@@ -2383,6 +2770,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "line-spacing-fixer-rule",
       ],
+    },
+    "link-doi-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "margins-fixer": {
       "applied": false,
@@ -2510,7 +2900,22 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "required-section-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-surgery-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "submission-metadata-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "table-figure-rescue-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "title-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "toc-field-fixer": {
@@ -2683,6 +3088,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "bibliography-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "citation-bibliography-sync-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "consistency-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "croatian-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "element-caption-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "empty-paragraph-fixer": {
       "applied": false,
       "changelog": [],
@@ -2692,6 +3112,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "empty-paragraph-fixer-rule",
       ],
+    },
+    "field-integrity-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "final-document-inspector-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "font-fixer": {
       "applied": true,
@@ -2815,6 +3241,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "heading-style-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "legal-footnote-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": true,
       "changelog": [
@@ -2920,6 +3352,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "link-doi-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "margins-fixer": {
       "applied": false,
       "changelog": [],
@@ -2957,7 +3392,22 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "paragraph-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "required-section-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-surgery-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "submission-metadata-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "table-figure-rescue-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "title-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "toc-field-fixer": {
@@ -2966,7 +3416,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "synthetic-multi-section": {
     "__kombinirano": {
-      "applied": 8,
+      "applied": 9,
       "changelog": [
         {
           "after": "Margine: gornja 3,00 cm, desna 3,00 cm, donja 3,00 cm, lijeva 3,00 cm",
@@ -2995,6 +3445,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Umetnuto podnozje s automatskim brojem stranice (desno)",
           "before": "Podnozje s brojem stranice: nije postavljeno",
+        },
+        {
+          "after": "1 odlomaka pretvoreno u Heading stilove",
+          "before": "Ručno oblikovani odlomci bez Heading stila",
         },
         {
           "after": "Naslovi: velikim slovima (1 naslov)",
@@ -3208,6 +3662,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "bibliography-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "citation-bibliography-sync-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "consistency-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "croatian-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "element-caption-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "empty-paragraph-fixer": {
       "applied": false,
       "changelog": [],
@@ -3217,6 +3686,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "empty-paragraph-fixer-rule",
       ],
+    },
+    "field-integrity-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "final-document-inspector-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "font-fixer": {
       "applied": true,
@@ -3548,6 +4023,80 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "heading-format-fixer-rule",
       ],
     },
+    "heading-style-fixer": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "1 odlomaka pretvoreno u Heading stilove",
+          "before": "Ručno oblikovani odlomci bez Heading stila",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 1,
+          "directLine": 1,
+          "runFonts": 1,
+          "runSz": 1,
+        },
+        "docDefaults": {
+          "ascii": "Calibri",
+          "hAnsi": "Calibri",
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": "left",
+          "line": "259",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1134",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "targets": [
+          {
+            "level": 1,
+            "paragraphIndex": 1,
+          },
+        ],
+      },
+      "skipped": [],
+    },
+    "legal-footnote-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": true,
       "changelog": [
@@ -3680,6 +4229,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "multiplier": 1.5,
       },
       "skipped": [],
+    },
+    "link-doi-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "margins-fixer": {
       "applied": true,
@@ -3986,6 +4538,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "required-section-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "section-insert-fixer": {
       "applied": false,
       "changelog": [],
@@ -4000,6 +4555,18 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "section-insert-fixer-rule",
       ],
+    },
+    "section-surgery-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "submission-metadata-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "table-figure-rescue-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "title-page-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "toc-field-fixer": {
       "applied": false,
@@ -4018,7 +4585,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "synthetic-single-section": {
     "__kombinirano": {
-      "applied": 7,
+      "applied": 8,
       "changelog": [
         {
           "after": "Margine: gornja 3,00 cm, desna 3,00 cm, donja 3,00 cm, lijeva 3,00 cm",
@@ -4043,6 +4610,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Umetnuto podnozje s automatskim brojem stranice (desno)",
           "before": "Podnozje s brojem stranice: nije postavljeno",
+        },
+        {
+          "after": "1 odlomaka pretvoreno u Heading stilove",
+          "before": "Ručno oblikovani odlomci bez Heading stila",
         },
         {
           "after": "Naslovi: velikim slovima (1 naslov)",
@@ -4209,6 +4780,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "bibliography-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "citation-bibliography-sync-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "consistency-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "croatian-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "element-caption-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "empty-paragraph-fixer": {
       "applied": false,
       "changelog": [],
@@ -4218,6 +4804,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "empty-paragraph-fixer-rule",
       ],
+    },
+    "field-integrity-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "final-document-inspector-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "font-fixer": {
       "applied": true,
@@ -4493,6 +5085,66 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "heading-format-fixer-rule",
       ],
     },
+    "heading-style-fixer": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "1 odlomaka pretvoreno u Heading stilove",
+          "before": "Ručno oblikovani odlomci bez Heading stila",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 1,
+          "directLine": 1,
+          "runFonts": 1,
+          "runSz": 1,
+        },
+        "docDefaults": {
+          "ascii": "Calibri",
+          "hAnsi": "Calibri",
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": "left",
+          "line": "259",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "targets": [
+          {
+            "level": 1,
+            "paragraphIndex": 1,
+          },
+        ],
+      },
+      "skipped": [],
+    },
+    "legal-footnote-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": true,
       "changelog": [
@@ -4597,6 +5249,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "multiplier": 1.5,
       },
       "skipped": [],
+    },
+    "link-doi-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "margins-fixer": {
       "applied": true,
@@ -4790,6 +5445,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "required-section-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "section-insert-fixer": {
       "applied": true,
       "changelog": [
@@ -4870,6 +5528,18 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "section-surgery-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "submission-metadata-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "table-figure-rescue-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "title-page-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "toc-field-fixer": {
       "applied": false,
       "changelog": [],
@@ -4944,6 +5614,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "bibliography-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "citation-bibliography-sync-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "consistency-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "croatian-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "element-caption-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "empty-paragraph-fixer": {
       "applied": false,
       "changelog": [],
@@ -4953,6 +5638,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "empty-paragraph-fixer-rule",
       ],
+    },
+    "field-integrity-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "final-document-inspector-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "font-fixer": {
       "applied": true,
@@ -5076,6 +5767,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "heading-style-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "legal-footnote-repair-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": false,
       "changelog": [],
@@ -5100,6 +5797,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "line-spacing-fixer-rule",
       ],
+    },
+    "link-doi-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "margins-fixer": {
       "applied": true,
@@ -5168,7 +5868,22 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "paragraph-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "required-section-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-surgery-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "submission-metadata-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "table-figure-rescue-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "title-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "toc-field-fixer": {

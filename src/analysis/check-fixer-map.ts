@@ -32,6 +32,7 @@ export const CHECK_TITLES: Record<string, string> = {
   // stilove (HeadingN, FootnoteText), pa ih analiza vidi jer razrjesava nasljedjivanje stila.
   'heading-format': 'Oblikovanje naslova po razinama',
   'footnote-typography': 'Oblikovanje fusnota',
+  'croatian-typography': 'Tehničko-tipografska dosljednost',
 };
 
 /** Prefiks naslova provjere formata papira (dinamican sufiks: 'A4' / '(A4/A3)'). */

@@ -209,7 +209,7 @@ const CT_STYLE_ORDER = [
 function maskElement(xml: string, tag: string): string {
   const escaped = escapeRegex(tag);
   const re = new RegExp(`<${escaped}\\b[^>]*/>|<${escaped}\\b[^>]*>[\\s\\S]*?</${escaped}>`, 'g');
-  return xml.replace(re, (m) => ' '.repeat(m.length));
+  return xml.replace(re, (m) => '\0'.repeat(m.length));
 }
 
 function maskAll(xml: string, tags: string[]): string {
@@ -614,6 +614,196 @@ export function patchDefaultParagraphSpacing(
   }, DEFAULT_PARAGRAPH_NAME_RE);
 }
 
+export interface ParagraphStyleFormattingRule {
+  styleId: string;
+  beforeTwentieths?: number;
+  afterTwentieths?: number;
+  firstLineTwips?: number;
+  hangingTwips?: number;
+  keepLines?: boolean;
+  keepNext?: boolean;
+  widowControl?: boolean;
+}
+
+export interface ParagraphFormattingTarget {
+  paragraphIndex: number;
+  firstLineTwips?: number;
+  hangingTwips?: number;
+  keepLines?: boolean;
+  keepNext?: boolean;
+  widowControl?: boolean;
+  removeFakeIndent?: boolean;
+  clearDirectIndent?: boolean;
+}
+
+function upsertParagraphFlag(inner: string, name: string, enabled: boolean): UpsertResult {
+  const existing = findDirectChild(inner, name, ['w:rPr']);
+  if (enabled) {
+    if (!existing) {
+      const at = schemaInsertIndex(inner, name, CT_PPR_ORDER, ['w:rPr']);
+      return { inner: inner.slice(0, at) + `<${name}/>` + inner.slice(at), changed: true, before: { [name]: '' }, after: { [name]: 'ukljuceno' } };
+    }
+    if (!/w:val="(?:0|false|off)"/.test(existing.tag)) return { inner, changed: false, before: {}, after: {} };
+    const tag = removeAttributes(existing.tag, ['w:val']);
+    return { inner: inner.slice(0, existing.start) + tag + inner.slice(existing.end), changed: true, before: { [name]: 'iskljuceno' }, after: { [name]: 'ukljuceno' } };
+  }
+  if (!existing) return { inner, changed: false, before: {}, after: {} };
+  return { inner: inner.slice(0, existing.start) + '', changed: true, before: { [name]: 'ukljuceno' }, after: { [name]: 'iskljuceno' } };
+}
+
+function upsertParagraphIndent(
+  inner: string,
+  firstLineTwips?: number,
+  hangingTwips?: number,
+): UpsertResult {
+  if (firstLineTwips === undefined && hangingTwips === undefined) return { inner, changed: false, before: {}, after: {} };
+  const existing = findDirectChild(inner, 'w:ind', ['w:rPr']);
+  const attrs: Record<string, string> = {};
+  if (firstLineTwips !== undefined) attrs['w:firstLine'] = String(Math.trunc(firstLineTwips));
+  if (hangingTwips !== undefined) attrs['w:hanging'] = String(Math.trunc(hangingTwips));
+  let tag = existing?.tag ?? '';
+  if (!existing) {
+    const at = schemaInsertIndex(inner, 'w:ind', CT_PPR_ORDER, ['w:rPr']);
+    return { inner: inner.slice(0, at) + buildSelfClosingTag('w:ind', attrs) + inner.slice(at), changed: true, before: {}, after: attrs };
+  }
+  // Prvi redak i viseća uvlaka su međusobno isključive. Ciljano uklanjamo samo suprotni atribut.
+  const drop = firstLineTwips !== undefined ? ['w:hanging'] : ['w:firstLine'];
+  const dropped = removeAttributes(tag, drop);
+  if (dropped !== tag) tag = dropped;
+  let changed = dropped !== existing.tag;
+  const before: Record<string, string> = {};
+  const after: Record<string, string> = {};
+  for (const [key, value] of Object.entries(attrs)) {
+    const re = new RegExp(`(${escapeRegex(key)}=")([^"]*)(")`);
+    const match = tag.match(re);
+    if (match) {
+      if (match[2] === value) continue;
+      before[key] = match[2];
+      after[key] = value;
+      tag = tag.replace(re, (_m, p1: string, _old: string, p3: string) => p1 + value + p3);
+      changed = true;
+    } else {
+      after[key] = value;
+      tag = tag.replace(/^<w:ind\b[^>]*>/, (openTag) => openTag.replace(/\s*\/?>$/, (end) => ` ${key}="${value}"${end.trimStart()}`));
+      changed = true;
+    }
+  }
+  return changed
+    ? { inner: inner.slice(0, existing.start) + tag + inner.slice(existing.end), changed: true, before, after }
+    : { inner, changed: false, before: {}, after: {} };
+}
+
+function paragraphRulePatch(block: string, rule: Omit<ParagraphStyleFormattingRule, 'styleId'> | ParagraphFormattingTarget): UpsertResult {
+  return withContainer(block, 'w:pPr', CT_STYLE_ORDER, ['w:pPr', 'w:rPr'], (inner) => {
+    const indent = upsertParagraphIndent(inner, rule.firstLineTwips, rule.hangingTwips);
+    let result = indent;
+    if ('beforeTwentieths' in rule || 'afterTwentieths' in rule) {
+      const spacing = upsertChild(result.inner, 'w:spacing', {
+        ...('beforeTwentieths' in rule && rule.beforeTwentieths !== undefined ? { 'w:before': String(Math.trunc(rule.beforeTwentieths)) } : {}),
+        ...('afterTwentieths' in rule && rule.afterTwentieths !== undefined ? { 'w:after': String(Math.trunc(rule.afterTwentieths)) } : {}),
+      }, CT_PPR_ORDER, ['w:rPr']);
+      result = { inner: spacing.inner, changed: result.changed || spacing.changed, before: { ...result.before, ...spacing.before }, after: { ...result.after, ...spacing.after } };
+    }
+    for (const [name, enabled] of [['w:keepLines', rule.keepLines], ['w:keepNext', rule.keepNext], ['w:widowControl', rule.widowControl] ] as const) {
+      if (enabled === undefined) continue;
+      const next = upsertParagraphFlag(result.inner, name, enabled);
+      result = { inner: next.inner, changed: result.changed || next.changed, before: { ...result.before, ...next.before }, after: { ...result.after, ...next.after } };
+    }
+    return result;
+  });
+}
+
+export function patchParagraphStyles(
+  stylesXml: string,
+  rules: ParagraphStyleFormattingRule[],
+): PatchResult {
+  let xml = stylesXml;
+  let applied = false;
+  const before: Record<string, string> = {};
+  const after: Record<string, string> = {};
+  const found: Record<string, boolean> = {};
+  for (const rule of rules) {
+    if (!rule.styleId) continue;
+    const namePattern = rule.styleId === 'Normal'
+      ? DEFAULT_PARAGRAPH_NAME_RE
+      : new RegExp(`^\\s*${escapeRegex(rule.styleId)}\\s*$`, 'i');
+    const foundStyle = findStyleByIdOrName(xml, rule.styleId, namePattern);
+    if (!foundStyle) continue;
+    found[rule.styleId] = true;
+    const result = paragraphRulePatch(foundStyle.block, rule);
+    if (!result.changed) continue;
+    xml = xml.slice(0, foundStyle.start) + result.inner + xml.slice(foundStyle.end);
+    applied = true;
+    Object.assign(before, result.before);
+    Object.assign(after, result.after);
+  }
+  return applied ? { xml, applied: true, before, after, found } : { ...NO_OP, xml: stylesXml, found };
+}
+
+function decodeLeadingXmlWhitespace(raw: string): string {
+  return raw.replace(/&#x20;|&#32;|&nbsp;/gi, ' ');
+}
+
+function stripLeadingFakeIndent(paragraphXml: string): { xml: string; applied: boolean } {
+  if (/<w:numPr\b|<w:ins\b|<w:del\b|<w:moveFrom\b|<w:moveTo\b/.test(paragraphXml)) return { xml: paragraphXml, applied: false };
+  const visible = [...paragraphXml.matchAll(/<w:tab\b[^>]*\/?>|<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)]
+    .map((m) => m[0].startsWith('<w:tab') ? '\t' : decodeLeadingXmlWhitespace(m[1] ?? '')).join('');
+  const prefix = visible.match(/^[ \t]+/);
+  if (!prefix) return { xml: paragraphXml, applied: false };
+  let remaining = prefix[0].length;
+  let applied = false;
+  const xml = paragraphXml.replace(/<w:tab\b[^>]*\/?>|<w:t\b([^>]*)>([\s\S]*?)<\/w:t>/g, (node, attrs: string, raw: string) => {
+    if (remaining <= 0) return node;
+    if (node.startsWith('<w:tab')) { remaining--; applied = true; return ''; }
+    const leading = raw.match(/^(?:[ \t]|&#x20;|&#32;|&nbsp;)+/i)?.[0] ?? '';
+    if (!leading) return node;
+    const remove = Math.min(remaining, decodeLeadingXmlWhitespace(leading).length);
+    remaining -= remove;
+    applied = remove > 0 || applied;
+    return `<w:t${attrs}>${leading.slice(leading.length - Math.max(0, leading.length - remove))}${raw.slice(leading.length)}</w:t>`;
+  });
+  return { xml, applied };
+}
+
+export function detectManualLineBreakParagraphs(documentXml: string): number[] {
+  const out: number[] = [];
+  const paragraphs = paragraphRanges(documentXml);
+  for (let i = 0; i < paragraphs.length; i++) {
+    const xml = documentXml.slice(paragraphs[i].start, paragraphs[i].end);
+    if (/<w:br\b[^>]*>|<w:cr\b[^>]*\/?\s*>/.test(xml)) out.push(i);
+  }
+  return out;
+}
+
+export function patchParagraphTargets(
+  documentXml: string,
+  targets: ParagraphFormattingTarget[],
+): PatchResult {
+  const wanted = new Map(targets.filter((target) => Number.isInteger(target.paragraphIndex)).map((target) => [target.paragraphIndex, target]));
+  if (!wanted.size) return { ...NO_OP, xml: documentXml };
+  let index = 0;
+  let changed = false;
+  const xml = documentXml.replace(/<w:p(?:\s[^>]*[^/>])?>[\s\S]*?<\/w:p>/g, (paragraph) => {
+    const target = wanted.get(index++);
+    if (!target) return paragraph;
+    const p = paragraphRulePatch(paragraph, target);
+    let next = p.inner;
+    if (target.removeFakeIndent) next = stripLeadingFakeIndent(next).xml;
+    if (target.clearDirectIndent) {
+      next = next.replace(/<w:ind\b([^>]*)\/>/g, (node, attrs: string) => {
+        const cleaned = attrs.replace(/\s+w:(?:firstLine|hanging)="[^"]*"/g, '');
+        return cleaned.trim() ? `<w:ind${cleaned}/>` : '';
+      }).replace(/<w:ind\b([^>]*)>([\s\S]*?)<\/w:ind>/g, (node, attrs: string, inner: string) => {
+        const cleaned = attrs.replace(/\s+w:(?:firstLine|hanging)="[^"]*"/g, '');
+        return cleaned.trim() ? `<w:ind${cleaned}>${inner}</w:ind>` : inner;
+      });
+    }
+    if (next !== paragraph) changed = true;
+    return next;
+  });
+  return changed ? { xml, applied: true, before: {}, after: {}, found: {} } : { ...NO_OP, xml: documentXml };
+}
+
 // Word ugradjeni stil za tekst fusnota ima stabilan (locale-neovisan) styleId
 // "FootnoteText" (za razliku od w:name koji je lokaliziran, npr. "Fusnota").
 // Isti patch-only obrazac kao patchDefaultParagraphSpacing: ako dokument ne
@@ -685,6 +875,290 @@ export interface HeadingFormatSpec {
   bold?: boolean;
   italic?: boolean;
   alignLeft?: boolean;
+}
+
+export interface HeadingParagraphTarget {
+  paragraphIndex: number;
+  level: number;
+  numbered?: boolean;
+  numberingNumId?: number;
+  numberingManaged?: boolean;
+  removeManualNumbering?: boolean;
+  clearDirectFont?: boolean;
+  clearDirectSize?: boolean;
+  clearDirectAlignment?: boolean;
+}
+
+export interface HeadingStyleOptions {
+  keepNext?: boolean;
+  pageBreakLevels?: number[];
+}
+
+function paragraphRanges(documentXml: string): Array<{ start: number; end: number }> {
+  const masked = documentXml.replace(
+    /<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|<\?[\s\S]*?\?>/g,
+    (m) => ' '.repeat(m.length),
+  );
+  const tokenRe = /<w:p(?=[\s/>])[^>]*\/?>|<\/w:p\s*>/g;
+  const stack: number[] = [];
+  const ranges: Array<{ start: number; end: number }> = [];
+  let token: RegExpExecArray | null;
+  while ((token = tokenRe.exec(masked))) {
+    if (/^<\/w:p/.test(token[0])) {
+      const start = stack.pop();
+      if (start !== undefined) ranges.push({ start, end: token.index + token[0].length });
+      continue;
+    }
+    if (/\/\s*>$/.test(token[0])) {
+      ranges.push({ start: token.index, end: token.index + token[0].length });
+    } else {
+      stack.push(token.index);
+    }
+  }
+  return ranges.sort((a, b) => a.start - b.start);
+}
+
+function removeDirectRunProperties(
+  paragraphXml: string,
+  options: Pick<HeadingParagraphTarget, 'clearDirectFont' | 'clearDirectSize'>,
+): string {
+  if (!options.clearDirectFont && !options.clearDirectSize) return paragraphXml;
+  return paragraphXml.replace(/<w:r\b[^>]*>[\s\S]*?<\/w:r>/g, (run) =>
+    run.replace(/<w:rPr\b[^>]*>[\s\S]*?<\/w:rPr>/g, (rPr) => {
+      let out = rPr;
+      if (options.clearDirectFont) out = out.replace(/<w:rFonts\b[^>]*\/?>(?:<\/w:rFonts>)?/g, '');
+      if (options.clearDirectSize) out = out.replace(/<w:sz(?:Cs)?\b[^>]*\/?>(?:<\/w:sz(?:Cs)>)?/g, '');
+      return out;
+    }),
+  );
+}
+
+function removeDirectParagraphProperties(paragraphXml: string, clearAlignment?: boolean): string {
+  if (!clearAlignment) return paragraphXml;
+  return paragraphXml.replace(/<w:pPr\b[^>]*>[\s\S]*?<\/w:pPr>/g, (pPr) =>
+    pPr.replace(/<w:jc\b[^>]*\/?>(?:<\/w:jc>)?/g, ''),
+  );
+}
+
+function decodeXmlText(value: string): string {
+  return value
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&amp;/g, '&')
+    .replace(/&#(\d+);/g, (_match, code: string) => String.fromCodePoint(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_match, code: string) => String.fromCodePoint(Number.parseInt(code, 16)));
+}
+
+function removeDecodedPrefix(raw: string, count: number): string {
+  let remaining = count;
+  let offset = 0;
+  const tokens = raw.match(/&(?:#\d+|#x[0-9a-f]+|[a-z]+);|[\s\S]/gi) ?? [];
+  for (const token of tokens) {
+    if (remaining <= 0) break;
+    remaining -= Array.from(decodeXmlText(token)).length;
+    offset += token.length;
+  }
+  return raw.slice(offset);
+}
+
+function stripManualHeadingNumbering(paragraphXml: string): { xml: string; applied: boolean } {
+  const textNodes = [...paragraphXml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)];
+  if (!textNodes.length) return { xml: paragraphXml, applied: false };
+  const visible = textNodes.map((match) => decodeXmlText(match[1])).join('');
+  const prefix = visible.match(/^\s*((?:(?:\d+\.){1,8}\d*|[IVXLCDM]+)(?:[.)])?)\s+/i);
+  if (!prefix) return { xml: paragraphXml, applied: false };
+  let remaining = prefix[0].length;
+  let applied = false;
+  const xml = paragraphXml.replace(/<w:t\b([^>]*)>([\s\S]*?)<\/w:t>/g, (node, attributes: string, raw: string) => {
+    if (remaining <= 0) return node;
+    const decodedLength = Array.from(decodeXmlText(raw)).length;
+    const remove = Math.min(remaining, decodedLength);
+    remaining -= remove;
+    if (remove <= 0) return node;
+    applied = true;
+    const next = removeDecodedPrefix(raw, remove);
+    return `<w:t${attributes}>${next}</w:t>`;
+  });
+  return { xml, applied };
+}
+
+function patchHeadingParagraph(
+  paragraphXml: string,
+  target: HeadingParagraphTarget,
+): { xml: string; applied: boolean } {
+  const level = Math.max(1, Math.min(9, Math.trunc(target.level)));
+  const pStyle = `Heading${level}`;
+  const pPr = withContainer(
+    paragraphXml,
+    'w:pPr',
+    CT_PPR_ORDER,
+    ['w:rPr'],
+    (inner) => upsertChild(inner, 'w:pStyle', { 'w:val': pStyle }, CT_PPR_ORDER, ['w:rPr']),
+  );
+  let cleaned = removeDirectParagraphProperties(
+    removeDirectRunProperties(pPr.inner, target),
+    target.clearDirectAlignment,
+  );
+  if (target.removeManualNumbering) {
+    cleaned = stripManualHeadingNumbering(cleaned).xml;
+  }
+  if (!pPr.changed && cleaned === paragraphXml) return { xml: paragraphXml, applied: false };
+  return {
+    xml: cleaned,
+    applied: true,
+  };
+}
+
+function addHeadingNumbering(paragraphXml: string, target: HeadingParagraphTarget): { xml: string; applied: boolean } {
+  if (!target.numberingManaged) return { xml: paragraphXml, applied: false };
+  const pPrMatch = paragraphXml.match(/<w:pPr\b[^>]*>[\s\S]*?<\/w:pPr>/);
+  if (!pPrMatch || pPrMatch.index === undefined) return { xml: paragraphXml, applied: false };
+  const pPr = pPrMatch[0];
+  const open = pPr.match(/^<w:pPr\b[^>]*>/)?.[0];
+  if (!open) return { xml: paragraphXml, applied: false };
+  const inner = pPr.slice(open.length, -'</w:pPr>'.length);
+  const withoutNumPr = inner
+    .replace(/<w:numPr\b[^>]*>[\s\S]*?<\/w:numPr>/g, '')
+    .replace(/<w:numPr\b[^>]*\/>/g, '');
+  if (target.numbered !== true || target.numberingNumId == null) {
+    if (withoutNumPr === inner) return { xml: paragraphXml, applied: false };
+    const next = open + withoutNumPr + '</w:pPr>';
+    return {
+      xml: paragraphXml.slice(0, pPrMatch.index) + next + paragraphXml.slice(pPrMatch.index + pPr.length),
+      applied: true,
+    };
+  }
+  const numPr = `<w:numPr><w:ilvl w:val="${Math.max(0, target.level - 1)}"/><w:numId w:val="${target.numberingNumId}"/></w:numPr>`;
+  const at = schemaInsertIndex(withoutNumPr, 'w:numPr', CT_PPR_ORDER, ['w:rPr']);
+  const next = open + withoutNumPr.slice(0, at) + numPr + withoutNumPr.slice(at) + '</w:pPr>';
+  if (next === pPr) return { xml: paragraphXml, applied: false };
+  return {
+    xml: paragraphXml.slice(0, pPrMatch.index) + next + paragraphXml.slice(pPrMatch.index + pPr.length),
+    applied: true,
+  };
+}
+
+function headingStyleBlock(level: number): string {
+  return `<w:style w:type="paragraph" w:styleId="Heading${level}"><w:name w:val="heading ${level}"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:uiPriority w:val="${9 + level}"/><w:qFormat/><w:pPr><w:keepNext/><w:outlineLvl w:val="${level - 1}"/></w:pPr></w:style>`;
+}
+
+export function ensureHeadingStyles(
+  stylesXml: string,
+  levels: number[],
+  options: HeadingStyleOptions = {},
+): { xml: string; applied: boolean } {
+  if (!stylesXml || !/<w:styles\b/i.test(stylesXml)) return { xml: stylesXml, applied: false };
+  const wanted = [...new Set(levels.map((level) => Math.trunc(level)).filter((level) => level >= 1 && level <= 9))];
+  if (!wanted.length) return { xml: stylesXml, applied: false };
+  let xml = stylesXml;
+  let applied = false;
+  for (const level of wanted) {
+    const found = findStyleByIdOrName(xml, `Heading${level}`, new RegExp(`^\\s*(?:heading|naslov)\\s*${level}\\s*$`, 'i'));
+    if (!found) {
+      const close = xml.lastIndexOf('</w:styles>');
+      if (close < 0) continue;
+      xml = xml.slice(0, close) + headingStyleBlock(level) + xml.slice(close);
+      applied = true;
+      continue;
+    }
+    const pPr = withContainer(found.block, 'w:pPr', CT_STYLE_ORDER, ['w:pPr', 'w:rPr'], (inner) => {
+      let result = upsertChild(inner, 'w:keepNext', {}, CT_PPR_ORDER, ['w:rPr']);
+      const outline = upsertChild(result.inner, 'w:outlineLvl', { 'w:val': String(level - 1) }, CT_PPR_ORDER, ['w:rPr']);
+      return { ...outline, before: { ...result.before, ...outline.before }, after: { ...result.after, ...outline.after } };
+    });
+    if (pPr.changed) {
+      xml = xml.slice(0, found.start) + pPr.inner + xml.slice(found.end);
+      applied = true;
+    }
+  }
+  const pageBreakLevels = new Set((options.pageBreakLevels ?? []).filter((level) => level >= 1 && level <= 9));
+  for (const level of pageBreakLevels) {
+    const found = findStyleByIdOrName(xml, `Heading${level}`, new RegExp(`^\\s*(?:heading|naslov)\\s*${level}\\s*$`, 'i'));
+    if (!found) continue;
+    const pPr = withContainer(found.block, 'w:pPr', CT_STYLE_ORDER, ['w:pPr', 'w:rPr'], (inner) =>
+      upsertChild(inner, 'w:pageBreakBefore', {}, CT_PPR_ORDER, ['w:rPr']),
+    );
+    if (pPr.changed) {
+      xml = xml.slice(0, found.start) + pPr.inner + xml.slice(found.end);
+      applied = true;
+    }
+  }
+  return { xml, applied };
+}
+
+export interface HeadingNumberingOptions {
+  maxLevel: number;
+  format?: 'decimal' | 'upperRoman' | 'lowerRoman';
+  trailingDot?: boolean;
+}
+
+export function ensureHeadingNumbering(
+  numberingXml: string | undefined,
+  options: HeadingNumberingOptions,
+): { xml: string; applied: boolean; numId: number | null } {
+  let xml = numberingXml?.trim() || '<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"></w:numbering>';
+  if (!/<w:numbering\b/i.test(xml)) return { xml: numberingXml ?? '', applied: false, numId: null };
+  const maxLevel = Math.max(1, Math.min(9, Math.trunc(options.maxLevel)));
+  const format = options.format ?? 'decimal';
+  const suffix = options.trailingDot === false ? '' : '.';
+  const levelText = (index: number): string => `${Array.from({ length: index + 1 }, (_, part) => `%${part + 1}`).join('.')}${suffix}`;
+  const marker = /<w:abstractNum\b[^>]*w:abstractNumId="(\d+)"[^>]*>[\s\S]*?<w:name\b[^>]*w:val="Lekta Heading Numbering"[\s\S]*?<\/w:abstractNum>/g;
+  let existing = marker.exec(xml);
+  while (existing) {
+    const block = existing[0];
+    const levelMatches = [...block.matchAll(/<w:lvl\b[^>]*w:ilvl="(\d+)"[\s\S]*?<w:numFmt\b[^>]*w:val="([^"]+)"[\s\S]*?<w:lvlText\b[^>]*w:val="([^"]*)"/g)];
+    const compatible = levelMatches.length === maxLevel && levelMatches.every((level, index) =>
+      Number(level[1]) === index && level[2] === format && level[3] === levelText(index),
+    );
+    if (compatible) {
+      const abstractNumId = Number(existing[1]);
+      const num = [...xml.matchAll(new RegExp(`<w:num\\b[^>]*w:numId="(\\d+)"[\\s\\S]*?<w:abstractNumId\\b[^>]*w:val="${abstractNumId}"[\\s\\S]*?<\\/w:num>`, 'g'))][0];
+      if (num) return { xml: numberingXml ?? xml, applied: false, numId: Number(num[1]) };
+    }
+    existing = marker.exec(xml);
+  }
+  const abstractIds = [...xml.matchAll(/<w:abstractNum\b[^>]*w:abstractNumId="(\d+)"/g)].map((match) => Number(match[1]));
+  const numIds = [...xml.matchAll(/<w:num\b[^>]*w:numId="(\d+)"/g)].map((match) => Number(match[1]));
+  const abstractNumId = (abstractIds.length ? Math.max(...abstractIds) : 0) + 1;
+  const numId = (numIds.length ? Math.max(...numIds) : 0) + 1;
+  const levels = Array.from({ length: maxLevel }, (_, index) =>
+    `<w:lvl w:ilvl="${index}"><w:start w:val="1"/><w:numFmt w:val="${format}"/>${index > 0 ? `<w:lvlRestart w:val="${index}"/>` : ''}<w:pStyle w:val="Heading${index + 1}"/><w:lvlText w:val="${levelText(index)}"/><w:lvlJc w:val="left"/><w:pPr><w:tabs><w:tab w:val="num" w:pos="${720 + index * 360}"/></w:tabs><w:ind w:left="${720 + index * 360}" w:hanging="360"/></w:pPr></w:lvl>`,
+  ).join('');
+  const abstract = `<w:abstractNum w:abstractNumId="${abstractNumId}"><w:multiLevelType w:val="multilevel"/><w:name w:val="Lekta Heading Numbering"/>${levels}</w:abstractNum>`;
+  const num = `<w:num w:numId="${numId}"><w:abstractNumId w:val="${abstractNumId}"/></w:num>`;
+  const close = xml.lastIndexOf('</w:numbering>');
+  if (close < 0) return { xml: numberingXml ?? '', applied: false, numId: null };
+  return { xml: xml.slice(0, close) + abstract + num + xml.slice(close), applied: true, numId };
+}
+
+export function patchHeadingParagraphs(
+  documentXml: string,
+  targets: HeadingParagraphTarget[],
+): { xml: string; applied: boolean; changed: number } {
+  if (!targets.length) return { xml: documentXml, applied: false, changed: 0 };
+  const ranges = paragraphRanges(documentXml);
+  let xml = documentXml;
+  let changed = 0;
+  // Apply from the end so earlier offsets remain valid.
+  for (const target of [...targets].sort((a, b) => b.paragraphIndex - a.paragraphIndex)) {
+    if (!Number.isInteger(target.paragraphIndex) || target.paragraphIndex < 1) continue;
+    const range = ranges[target.paragraphIndex - 1];
+    if (!range) continue;
+    const block = documentXml.slice(range.start, range.end);
+    const result = patchHeadingParagraph(block, target);
+    const numbered = addHeadingNumbering(result.xml, target);
+    if (!result.applied && !numbered.applied) continue;
+    const nextXml = numbered.xml;
+    const delta = nextXml.length - block.length;
+    xml = xml.slice(0, range.start) + nextXml + xml.slice(range.end);
+    if (delta !== 0) {
+      // Ranges are based on the original XML and are processed backwards, so no offset update is needed.
+    }
+    changed += 1;
+  }
+  return { xml, applied: changed > 0, changed };
 }
 
 /**
@@ -1183,6 +1657,42 @@ export function documentHasTocField(documentXml: string): boolean {
     }
   }
   return false;
+}
+
+/** Označi postojeće TOC polje za osvježavanje nakon promjene Heading stilova. */
+export function markTocFieldsDirty(documentXml: string): { xml: string; applied: boolean } {
+  const regions = documentXml.match(
+    /<w:fldChar\b[^>]*w:fldCharType="begin"[\s\S]*?<w:fldChar\b[^>]*w:fldCharType="(?:separate|end)"/gi,
+  );
+  if (
+    !regions &&
+    !/<w:fldSimple\b[^>]*\bw:instr="[^\"]*\bTOC\b/i.test(documentXml) &&
+    !/<w:docPartGallery\b[^>]*w:val="Table of Contents"/i.test(documentXml)
+  ) {
+    return { xml: documentXml, applied: false };
+  }
+  let applied = false;
+  let xml = documentXml.replace(
+    /<w:fldSimple\b[^>]*>/gi,
+    (opening) => {
+      const instruction = opening.match(/\bw:instr="([^"]*)"/i)?.[1] || '';
+      if (!/\bTOC\b/i.test(instruction) || /\bw:dirty="true"/i.test(opening)) return opening;
+      applied = true;
+      return opening.replace(/>$/, ' w:dirty="true">');
+    },
+  );
+  xml = xml.replace(
+    /<w:fldChar\b[^>]*w:fldCharType="begin"[\s\S]*?<w:fldChar\b[^>]*w:fldCharType="(?:separate|end)"/gi,
+    (region) => {
+      const instruction = region.replace(/<[^>]+>/g, ' ').replace(/&[a-zA-Z]+;/g, ' ').trim();
+      if (!/^TOC\b/i.test(instruction)) return region;
+      const begin = region.match(/<w:fldChar\b[^>]*w:fldCharType="begin"[^>]*>/i)?.[0];
+      if (!begin || /\bw:dirty="true"/.test(begin)) return region;
+      applied = true;
+      return region.replace(begin, begin.replace(/>$/, ' w:dirty="true">'));
+    },
+  );
+  return { xml, applied };
 }
 
 // Novo TOC polje OMOTANO u SDT sadrzaj-kontrolu (docPartGallery "Table of Contents") - tocno kako

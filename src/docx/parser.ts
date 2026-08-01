@@ -193,13 +193,17 @@ export function readRPr(rPr: any): any {
   // Znakovni stilovi za vjeran prikaz (faksimil): podcrtavanje, verzal (w:caps), kapitalke,
   // precrtano, boja. Toggle svojstva slijede istu logiku kao b/i (prisutnost = ukljuceno, val 0/off
   // = iskljuceno). Aditivno: analiza (font/velicina/prored) ih ne cita, samo preview ih propusta.
-  const u = direct(rPr, 'w:u'), caps = direct(rPr, 'w:caps'), smallCaps = direct(rPr, 'w:smallCaps'), strike = direct(rPr, 'w:strike'), color = direct(rPr, 'w:color');
+  const u = direct(rPr, 'w:u'), caps = direct(rPr, 'w:caps'), smallCaps = direct(rPr, 'w:smallCaps'), strike = direct(rPr, 'w:strike'), color = direct(rPr, 'w:color'), vertAlign = direct(rPr, 'w:vertAlign');
   const toggle = (el: any) => !['0', 'false', 'off'].includes(String(attr(el, 'w:val') || '1').toLowerCase());
   if (u && String(attr(u, 'w:val') || 'single').toLowerCase() !== 'none') out.underline = true;
   if (caps) out.caps = toggle(caps);
   if (smallCaps) out.smallCaps = toggle(smallCaps);
   if (strike) out.strike = toggle(strike);
   if (color) { const cv = attr(color, 'w:val'); if (cv && String(cv).toLowerCase() !== 'auto') out.color = '#' + cv; }
+  if (vertAlign) {
+    const value = String(attr(vertAlign, 'w:val') || '').toLowerCase();
+    if (value === 'superscript' || value === 'subscript') out.vertAlign = value;
+  }
   return out;
 }
 

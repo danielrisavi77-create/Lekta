@@ -4,7 +4,7 @@
  * Koristi pravi normalize (isti kao runtime), pa tekst sadrzi nazive doslovno da se poklope.
  */
 import { describe, it, expect } from 'vitest';
-import { detectContextFromText, needsProfileConfirmation, type DetectUnit } from '../src/ui/profile-detect';
+import { detectContextFromText, needsProfileConfirmation, isConfidentDetection, type DetectUnit } from '../src/ui/profile-detect';
 
 const UNITS: DetectUnit[] = [
   { id: 'fpzg', name: 'Fakultet političkih znanosti', institutionId: 'unizg', institutionName: 'Sveučilište u Zagrebu', programs: ['Politologija', 'Novinarstvo', 'Opći profil'] },
@@ -65,5 +65,24 @@ describe('needsProfileConfirmation', () => {
     expect(needsProfileConfirmation('verified', true)).toBe(false);
     expect(needsProfileConfirmation('generic', false)).toBe(false);
     expect(needsProfileConfirmation('partial', false)).toBe(false);
+  });
+});
+
+describe('isConfidentDetection', () => {
+  it('vraca true samo kad je program stvarno prepoznat', () => {
+    const ctx = detectContextFromText(UNITS, 'Sveučilište u Zagrebu Fakultet političkih znanosti Politologija diplomski rad');
+    expect(ctx!.program).toBe('Politologija');
+    expect(isConfidentDetection(ctx)).toBe(true);
+  });
+
+  it('vraca false kad je ustanova/fakultet prepoznat ali program NIJE (regresija: tiha potvrda profila)', () => {
+    const ctx = detectContextFromText(UNITS, 'Filozofski fakultet u Rijeci seminarski rad');
+    expect(ctx!.unitId).toBe('ffri');
+    expect(ctx!.program).toBeNull();
+    expect(isConfidentDetection(ctx)).toBe(false);
+  });
+
+  it('vraca false za null kontekst (nista prepoznato)', () => {
+    expect(isConfidentDetection(null)).toBe(false);
   });
 });

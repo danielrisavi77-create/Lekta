@@ -34,6 +34,7 @@ export const CHECK_ID_BY_TITLE: Record<string, string> = {
   'Prored osnovnog teksta': 'format.spacing.body',
   'Razmak prije i poslije odlomka': 'format.spacing.paragraph',
   'Poravnanje osnovnog teksta': 'format.justify.body',
+  'Tehničko-tipografska dosljednost': 'format.typography.consistency',
   'Margine dokumenta': 'page.margins',
   'Format stranice A4': 'page.size.a4',
   'Format stranice (A3/A0)': 'page.size.project',

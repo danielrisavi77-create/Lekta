@@ -1,9 +1,8 @@
 // src/repair/apply-fixers.ts
 //
 // Spaja zip-codec.ts (citanje/pisanje docx zipa) i fixers.ts (ciljani XML
-// patch) u jedan tijek: ucitaj docx, primijeni odabrane popravke SAMO na
-// word/document.xml i word/styles.xml, vrati novi docx gdje su SVI ostali
-// zip entryji (slike, headeri, footeri, _rels, theme) neizmijenjeni.
+// patch) u jedan tijek: ucitaj docx, primijeni odabrane popravke na ciljane XML partove,
+// vrati novi docx gdje su svi ostali zip entryji (slike, headeri, footeri, theme) neizmijenjeni.
 
 import { readZip, writeZip, type ZipEntry } from './zip-codec.ts';
 import {
@@ -21,16 +20,43 @@ import {
   pageNumberAlignmentFixer,
   tocFieldFixer,
   headingFormatFixer,
+  headingStyleFixer,
+  titlePageFixer,
   footnoteTypographyFixer,
   headingCaseFixer,
+  elementCaptionFixer,
+  bibliographyRepairFixer,
+  citationBibliographySyncFixer,
+  legalFootnoteRepairFixer,
+  finalDocumentInspectorFixer,
+  tableFigureRescueFixer,
+  sectionSurgeryFixer,
+  fieldIntegrityFixer,
+  croatianTypographyFixer,
+  consistencyFixer,
+  requiredSectionFixer,
   type HeadingLevelTarget,
   type DocxXmlParts,
   type FooterPageTarget,
   type SectionInsertTarget,
   type TocFieldTarget,
   type FixerNoOpReason,
+  type ElementCaptionFixParams,
+  type BibliographyRepairParams,
+  type CitationBibliographySyncParams,
+  type LegalFootnoteRepairParams,
+  type FinalDocumentInspectorParams,
+  type TableFigureRescueParams,
+  type SectionSurgeryParams,
+  type FieldIntegrityParams,
+  type CroatianTypographyParams,
+  type ConsistencyFixParams,
+  type RequiredSectionFixParams,
+  linkDoiFixer,
+  type LinkDoiFixParams,
 } from './fixers.ts';
-import type { SectionNumberingTarget } from './xml-patch.ts';
+import { submissionMetadataFixer, type SubmissionMetadataFixParams } from './submission-metadata-fixer';
+import type { SectionNumberingTarget, ParagraphStyleFormattingRule, ParagraphFormattingTarget } from './xml-patch.ts';
 
 /** Poznati fixeri kao runtime konstanta: profile-validator provjerava clanstvo
  * fixerId-a iz podataka u ovom popisu (tipfeler u draftu = strukturna greska,
@@ -50,8 +76,23 @@ export const FIXER_IDS = [
   'page-number-alignment-fixer',
   'toc-field-fixer',
   'heading-format-fixer',
+  'heading-style-fixer',
+  'title-page-fixer',
   'footnote-typography-fixer',
   'heading-case-fixer',
+  'element-caption-fixer',
+  'bibliography-repair-fixer',
+  'citation-bibliography-sync-fixer',
+  'legal-footnote-repair-fixer',
+  'final-document-inspector-fixer',
+  'table-figure-rescue-fixer',
+  'section-surgery-fixer',
+  'field-integrity-fixer',
+  'croatian-typography-fixer',
+  'consistency-fixer',
+  'required-section-fixer',
+  'link-doi-fixer',
+  'submission-metadata-fixer',
 ] as const;
 
 export type FixerId = (typeof FIXER_IDS)[number];
@@ -81,12 +122,32 @@ export interface ApplyFixersResult {
 
 const DOCUMENT_XML_PATH = 'word/document.xml';
 const STYLES_XML_PATH = 'word/styles.xml';
+const NUMBERING_XML_PATH = 'word/numbering.xml';
 const CONTENT_TYPES_PATH = '[Content_Types].xml';
 const DOCUMENT_RELS_PATH = 'word/_rels/document.xml.rels';
-// Engine POLITIKA (K5): jedini novi partovi koje engine smije DODATI su word/footerN.xml.
-// Backstop protiv fixera koji bi (greskom) pokusao ubaciti bilo sto izvan te maske.
-const ENGINE_ADDABLE_PART = /^word\/footer\d+\.xml$/;
+// Engine POLITIKA: novi footer partovi prolaze kroz ovu allow-listu, a heading fixer ima
+// zasebno strogo kontrolirano dodavanje word/numbering.xml uz relaciju i content type.
+const ENGINE_ADDABLE_PART = /^word\/(?:footer|header)\d+\.xml$/;
+const ENGINE_ADDABLE_PACKAGE_PART = /^word\/comments\.xml$/;
 const FOOTNOTES_XML_PATH = 'word/footnotes.xml';
+
+const NUMBERING_REL_TYPE = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering';
+
+function ensureNumberingContentType(xml: string): string {
+  if (!xml || /PartName="\/word\/numbering\.xml"/i.test(xml)) return xml;
+  const close = xml.lastIndexOf('</Types>');
+  if (close < 0) return xml;
+  return `${xml.slice(0, close)}<Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/>${xml.slice(close)}`;
+}
+
+function ensureNumberingRelationship(xml: string): string {
+  if (!xml || new RegExp(`Type="${NUMBERING_REL_TYPE}"`, 'i').test(xml)) return xml;
+  const close = xml.lastIndexOf('</Relationships>');
+  if (close < 0) return xml;
+  const ids = [...xml.matchAll(/Id="rId(\d+)"/g)].map((match) => Number(match[1]));
+  const nextId = (ids.length ? Math.max(...ids) : 0) + 1;
+  return `${xml.slice(0, close)}<Relationship Id="rId${nextId}" Type="${NUMBERING_REL_TYPE}" Target="numbering.xml"/>${xml.slice(close)}`;
+}
 // Isti regex kao PAGE-part enumeracija u analyze-docx.ts (linija ~47): svi POSTOJECI
 // footer/header partovi, ne samo footeri koje K5 smije dodati (ENGINE_ADDABLE_PART).
 const FOOTER_HEADER_PART_RE = /^word\/(footer|header)\d+\.xml$/i;
@@ -143,8 +204,41 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
         : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
     }
     case 'paragraph-spacing-fixer': {
-      const p = params as { deep?: boolean };
-      return paragraphSpacingFixer(parts, p.deep === true);
+      const p = params as { deep?: unknown; styleRules?: unknown; targets?: unknown };
+      const safeTwips = (value: unknown): number | undefined =>
+        isFiniteNumber(value) && Number.isInteger(value) && value >= -14400 && value <= 14400 ? value : undefined;
+      const styleRules: ParagraphStyleFormattingRule[] | undefined = Array.isArray(p.styleRules) ? p.styleRules.flatMap((raw): ParagraphStyleFormattingRule[] => {
+        if (!raw || typeof raw !== 'object') return [];
+        const r = raw as Record<string, unknown>;
+        if (typeof r.styleId !== 'string' || !r.styleId.trim()) return [];
+        return [{
+          styleId: r.styleId.trim(),
+          beforeTwentieths: safeTwips(r.beforeTwentieths),
+          afterTwentieths: safeTwips(r.afterTwentieths),
+          firstLineTwips: safeTwips(r.firstLineTwips),
+          hangingTwips: safeTwips(r.hangingTwips),
+          keepLines: r.keepLines === true ? true : undefined,
+          keepNext: r.keepNext === true ? true : undefined,
+          widowControl: r.widowControl === true ? true : undefined,
+        }];
+      }) : undefined;
+      const targets: ParagraphFormattingTarget[] | undefined = Array.isArray(p.targets) ? p.targets.flatMap((raw): ParagraphFormattingTarget[] => {
+        if (!raw || typeof raw !== 'object') return [];
+        const r = raw as Record<string, unknown>;
+        const paragraphIndex = r.paragraphIndex;
+        if (!isFiniteNumber(paragraphIndex) || !Number.isInteger(paragraphIndex) || paragraphIndex < 0 || paragraphIndex > 2_000_000) return [];
+        return [{
+          paragraphIndex,
+          firstLineTwips: safeTwips(r.firstLineTwips),
+          hangingTwips: safeTwips(r.hangingTwips),
+          keepLines: r.keepLines === true ? true : undefined,
+          keepNext: r.keepNext === true ? true : undefined,
+          widowControl: r.widowControl === true ? true : undefined,
+          removeFakeIndent: r.removeFakeIndent === true,
+          clearDirectIndent: r.clearDirectIndent === true,
+        }];
+      }) : undefined;
+      return paragraphSpacingFixer(parts, { deep: p.deep === true, styleRules, targets });
     }
     case 'page-numbering-fixer': {
       const p = params as { targets?: SectionNumberingTarget[] };
@@ -186,6 +280,82 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
         ? headingFormatFixer(parts, p.targets)
         : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
     }
+    case 'heading-style-fixer': {
+      const p = params as {
+        targets?: Array<{
+          paragraphIndex?: unknown;
+          level?: unknown;
+          numbered?: unknown;
+          removeManualNumbering?: unknown;
+          clearDirectFont?: unknown;
+          clearDirectSize?: unknown;
+          clearDirectAlignment?: unknown;
+        }>;
+        options?: {
+          pageBreakLevels?: unknown;
+          numbering?: { maxLevel?: unknown; format?: unknown; trailingDot?: unknown };
+        };
+      };
+      const targets = Array.isArray(p.targets)
+        ? p.targets.flatMap((target) => {
+            const paragraphIndex = Number(target.paragraphIndex);
+            const level = Number(target.level);
+            if (!Number.isInteger(paragraphIndex) || paragraphIndex < 1 || !Number.isInteger(level) || level < 1 || level > 9) return [];
+            return [{
+              paragraphIndex,
+              level,
+              numbered: target.numbered === true,
+              removeManualNumbering: target.removeManualNumbering === true,
+              clearDirectFont: target.clearDirectFont === true,
+              clearDirectSize: target.clearDirectSize === true,
+              clearDirectAlignment: target.clearDirectAlignment === true,
+            }];
+          })
+        : [];
+      const rawLevels = p.options?.pageBreakLevels;
+      const pageBreakLevels = Array.isArray(rawLevels)
+        ? rawLevels.map(Number).filter((level) => Number.isInteger(level) && level >= 1 && level <= 9)
+        : [];
+      const rawNumbering = p.options?.numbering;
+      const numbering = rawNumbering && Number.isInteger(Number(rawNumbering.maxLevel))
+        ? {
+            maxLevel: Math.max(1, Math.min(9, Number(rawNumbering.maxLevel))),
+            format: (rawNumbering.format === 'upperRoman' || rawNumbering.format === 'lowerRoman' ? rawNumbering.format : 'decimal') as 'decimal' | 'upperRoman' | 'lowerRoman',
+            trailingDot: rawNumbering.trailingDot !== false,
+          }
+        : undefined;
+      return targets.length
+        ? headingStyleFixer(parts, targets, { pageBreakLevels, numbering })
+        : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+    }
+    case 'title-page-fixer': {
+      const p = params as { paragraphCount?: unknown; lines?: unknown; ensureTitlePageNoNumber?: unknown; marginsCm?: unknown };
+      const paragraphCount = Number(p.paragraphCount);
+      const lines = Array.isArray(p.lines) ? p.lines.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const line = raw as Record<string, unknown>;
+        if (typeof line.text !== 'string' || !line.text.trim() || line.text.length > 1000) return [];
+        const styleRaw = line.style && typeof line.style === 'object' ? line.style as Record<string, unknown> : undefined;
+        const style = styleRaw ? {
+          ...(typeof styleRaw.font === 'string' && styleRaw.font.trim() ? { font: styleRaw.font.trim().slice(0, 100) } : {}),
+          ...(isFiniteNumber(styleRaw.sizePt) && styleRaw.sizePt >= 6 && styleRaw.sizePt <= 72 ? { sizePt: styleRaw.sizePt } : {}),
+          ...(styleRaw.bold === true ? { bold: true } : {}),
+          ...(styleRaw.italic === true ? { italic: true } : {}),
+          ...(styleRaw.uppercase === true ? { uppercase: true } : {}),
+          ...(['left', 'center', 'right'].includes(String(styleRaw.align)) ? { align: String(styleRaw.align) as 'left' | 'center' | 'right' } : {}),
+        } : undefined;
+        const group = Number(line.group);
+        return [{ text: line.text, ...(Number.isInteger(group) && group >= 0 && group <= 100 ? { group } : {}), ...(style && Object.keys(style).length ? { style } : {}) }];
+      }) : [];
+      const marginsRaw = p.marginsCm && typeof p.marginsCm === 'object' ? p.marginsCm as Record<string, unknown> : undefined;
+      const margins = marginsRaw ? (['top', 'right', 'bottom', 'left'] as const).reduce<Record<string, number>>((out, key) => {
+        if (isFiniteNumber(marginsRaw[key]) && marginsRaw[key] >= 0 && marginsRaw[key] <= 10) out[key] = marginsRaw[key] as number;
+        return out;
+      }, {}) : undefined;
+      return Number.isInteger(paragraphCount) && paragraphCount >= 1 && paragraphCount <= 80 && lines.length > 0 && lines.length <= 40
+        ? titlePageFixer(parts, { paragraphCount, lines, ensureTitlePageNoNumber: p.ensureTitlePageNoNumber !== false, ...(margins && Object.keys(margins).length ? { marginsCm: margins } : {}) })
+        : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+    }
     case 'footnote-typography-fixer': {
       const p = params as { fontName?: unknown; fontSizePt?: unknown };
       const fontName = typeof p.fontName === 'string' && p.fontName.trim() !== '' ? p.fontName : undefined;
@@ -200,6 +370,313 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
       return levels.length
         ? headingCaseFixer(parts, levels)
         : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+    }
+    case 'element-caption-fixer': {
+      const p = params as Partial<ElementCaptionFixParams>;
+      if (p.version !== 1 || !Array.isArray(p.elements)) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      return elementCaptionFixer(parts, p as ElementCaptionFixParams);
+    }
+    case 'bibliography-repair-fixer': {
+      const p = params as Partial<BibliographyRepairParams>;
+      if (p.version !== 1 || !Array.isArray(p.entries)) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      const entries = p.entries.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const entry = raw as unknown as Record<string, unknown>;
+        const indices = Array.isArray(entry.paragraphIndices) ? entry.paragraphIndices.map(Number) : [];
+        if (typeof entry.id !== 'string' || !entry.id.trim() || indices.length !== 1 || !Number.isInteger(indices[0]) || indices[0] < 1 || indices[0] > 2_000_000) return [];
+        if (typeof entry.anchorFingerprint !== 'string' || entry.anchorFingerprint.length > 100) return [];
+        const replacementText = typeof entry.replacementText === 'string' && entry.replacementText.length <= 20_000 ? entry.replacementText : undefined;
+        const hyperlink = entry.hyperlink === 'doi' || entry.hyperlink === 'url' ? entry.hyperlink : undefined;
+        return [{
+          id: entry.id.trim().slice(0, 200),
+          paragraphIndices: [indices[0]],
+          anchorFingerprint: entry.anchorFingerprint,
+          ...(entry.remove === true ? { remove: true } : {}),
+          ...(replacementText !== undefined ? { replacementText } : {}),
+          ...(entry.normalizeText === true ? { normalizeText: true } : {}),
+          ...(hyperlink ? { hyperlink: hyperlink as 'doi' | 'url' } : {}),
+        }];
+      });
+      const optionsRaw = p.options && typeof p.options === 'object' ? p.options as Record<string, unknown> : {};
+      const safeTwips = (value: unknown) => isFiniteNumber(value) && Number.isInteger(value) && value >= -14400 && value <= 14400 ? value : undefined;
+      const options = {
+        ...(safeTwips(optionsRaw.hangingIndentTwips) !== undefined ? { hangingIndentTwips: safeTwips(optionsRaw.hangingIndentTwips) } : {}),
+        ...(safeTwips(optionsRaw.beforeTwentieths) !== undefined ? { beforeTwentieths: safeTwips(optionsRaw.beforeTwentieths) } : {}),
+        ...(safeTwips(optionsRaw.afterTwentieths) !== undefined ? { afterTwentieths: safeTwips(optionsRaw.afterTwentieths) } : {}),
+        ...(optionsRaw.stripUrlTerminalPunctuation === true ? { stripUrlTerminalPunctuation: true } : {}),
+      };
+      const order = Array.isArray(p.order) ? p.order.filter((id): id is string => typeof id === 'string').slice(0, 500) : undefined;
+      const suffixes = Array.isArray(p.suffixes) ? p.suffixes.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const suffix = raw as unknown as Record<string, unknown>;
+        return typeof suffix.entryId === 'string' && typeof suffix.suffix === 'string' && /^[a-z]$/i.test(suffix.suffix)
+          ? [{ entryId: suffix.entryId.slice(0, 200), suffix: suffix.suffix.toLowerCase() }]
+          : [];
+      }).slice(0, 500) : undefined;
+      return entries.length
+        ? bibliographyRepairFixer(parts, { version: 1, entries, ...(p.profileFingerprint && typeof p.profileFingerprint === 'string' ? { profileFingerprint: p.profileFingerprint.slice(0, 200) } : {}), ...(order?.length ? { order } : {}), ...(suffixes?.length ? { suffixes } : {}), ...(Object.keys(options).length ? { options } : {}) })
+        : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+    }
+    case 'citation-bibliography-sync-fixer': {
+      const p = params as Partial<CitationBibliographySyncParams>;
+      if (p.version !== 1 || !Array.isArray(p.citations) || !Array.isArray(p.entries) || !Array.isArray(p.mappings)) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      const citations = p.citations.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const citation = raw as unknown as Record<string, unknown>;
+        return typeof citation.id === 'string' && Number.isInteger(citation.paragraphIndex) && Number.isInteger(citation.start) && Number.isInteger(citation.end) && typeof citation.anchorFingerprint === 'string' && typeof citation.replacementText === 'string' && typeof citation.reason === 'string'
+          ? [{ id: citation.id.trim().slice(0, 200), paragraphIndex: Number(citation.paragraphIndex), start: Number(citation.start), end: Number(citation.end), anchorFingerprint: citation.anchorFingerprint.slice(0, 100), replacementText: citation.replacementText.slice(0, 1000), reason: citation.reason.slice(0, 500) }]
+          : [];
+      });
+      const entries = p.entries.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const entry = raw as unknown as Record<string, unknown>;
+        const indices = Array.isArray(entry.paragraphIndices) ? entry.paragraphIndices.map(Number) : [];
+        const action = entry.action === 'add' || entry.action === 'replace' || entry.action === 'remove' ? entry.action : null;
+        const anchor = entry.insertionAnchor && typeof entry.insertionAnchor === 'object' ? entry.insertionAnchor as Record<string, unknown> : null;
+        if (typeof entry.id !== 'string' || !entry.id.trim() || !action || !indices.every((index) => Number.isInteger(index) && index >= 1) || typeof entry.anchorFingerprint !== 'string') return [];
+        if (action === 'add' && (!anchor || !Number.isInteger(anchor.paragraphIndex) || typeof anchor.anchorFingerprint !== 'string')) return [];
+        return [{ id: entry.id.trim().slice(0, 200), paragraphIndices: indices, anchorFingerprint: entry.anchorFingerprint.slice(0, 100), action: action as 'add' | 'replace' | 'remove', ...(typeof entry.replacementText === 'string' ? { replacementText: entry.replacementText.slice(0, 20_000) } : {}), ...(anchor ? { insertionAnchor: { paragraphIndex: Number(anchor.paragraphIndex), anchorFingerprint: String(anchor.anchorFingerprint).slice(0, 100) } } : {}) }];
+      });
+      const mappings = p.mappings.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const mapping = raw as unknown as Record<string, unknown>;
+        return typeof mapping.citationId === 'string' && typeof mapping.bibliographyEntryId === 'string' && mapping.confirmed === true
+          ? [{ citationId: mapping.citationId.slice(0, 200), bibliographyEntryId: mapping.bibliographyEntryId.slice(0, 200), confirmed: true as const }]
+          : [];
+      });
+      if (citations.length !== p.citations.length || entries.length !== p.entries.length || mappings.length !== p.mappings.length) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      return citationBibliographySyncFixer(parts, { version: 1, citations, entries, mappings, ...(typeof p.profileFingerprint === 'string' ? { profileFingerprint: p.profileFingerprint.slice(0, 200) } : {}) });
+    }
+    case 'legal-footnote-repair-fixer': {
+      const p = params as Partial<LegalFootnoteRepairParams>;
+      if (p.version !== 1 || !Array.isArray(p.markers) || !Array.isArray(p.operations) || !Array.isArray(p.bibliographyLinks)) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      const markers = p.markers.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const marker = raw as unknown as Record<string, unknown>;
+        return marker.confirmed === true && Number.isInteger(marker.paragraphIndex) && Number.isInteger(marker.start) && Number.isInteger(marker.end) && Number.isInteger(marker.footnoteId) && typeof marker.anchorFingerprint === 'string'
+          ? [{ paragraphIndex: Number(marker.paragraphIndex), start: Number(marker.start), end: Number(marker.end), footnoteId: Number(marker.footnoteId), anchorFingerprint: marker.anchorFingerprint.slice(0, 120), confirmed: true as const }]
+          : [];
+      });
+      const kinds = new Set(['move-marker', 'replace-text', 'fix-ibid', 'replace-op-cit', 'normalize-law', 'add-gazette', 'split-sources', 'link-bibliography', 'introduce-abbreviation']);
+      const operations = p.operations.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const operation = raw as unknown as Record<string, unknown>;
+        return operation.confirmed === true && typeof operation.id === 'string' && Number.isInteger(operation.footnoteId) && typeof operation.kind === 'string' && kinds.has(operation.kind) && typeof operation.anchorFingerprint === 'string' && typeof operation.reason === 'string'
+          ? [{ id: operation.id.trim().slice(0, 200), footnoteId: Number(operation.footnoteId), kind: operation.kind as LegalFootnoteRepairParams['operations'][number]['kind'], anchorFingerprint: operation.anchorFingerprint.slice(0, 120), ...(Number.isInteger(operation.start) ? { start: Number(operation.start) } : {}), ...(Number.isInteger(operation.end) ? { end: Number(operation.end) } : {}), ...(Number.isInteger(operation.paragraphIndex) ? { paragraphIndex: Number(operation.paragraphIndex) } : {}), ...(operation.markerPosition === 'before-punctuation' || operation.markerPosition === 'after-punctuation' ? { markerPosition: operation.markerPosition as 'before-punctuation' | 'after-punctuation' } : {}), ...(typeof operation.replacementText === 'string' ? { replacementText: operation.replacementText.slice(0, 20_000) } : {}), confirmed: true as const, reason: operation.reason.slice(0, 500) }]
+          : [];
+      });
+      const bibliographyLinks = p.bibliographyLinks.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const link = raw as unknown as Record<string, unknown>;
+        return link.confirmed === true && Number.isInteger(link.footnoteId) && typeof link.bibliographyEntryId === 'string'
+          ? [{ footnoteId: Number(link.footnoteId), bibliographyEntryId: link.bibliographyEntryId.trim().slice(0, 200), confirmed: true as const }]
+          : [];
+      });
+      if (markers.length !== p.markers.length || operations.length !== p.operations.length || bibliographyLinks.length !== p.bibliographyLinks.length) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      return legalFootnoteRepairFixer(parts, { version: 1, markers, operations, bibliographyLinks, ...(typeof p.profileFingerprint === 'string' ? { profileFingerprint: p.profileFingerprint.slice(0, 200) } : {}) });
+    }
+    case 'final-document-inspector-fixer': {
+      const p = params as Partial<FinalDocumentInspectorParams>;
+      if (p.version !== 1 || !Array.isArray(p.revisions) || !Array.isArray(p.comments) || !Array.isArray(p.metadata) || !Array.isArray(p.hiddenText)) {
+        return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      }
+      return finalDocumentInspectorFixer(parts, p as FinalDocumentInspectorParams);
+    }
+    case 'table-figure-rescue-fixer': {
+      const p = params as Partial<TableFigureRescueParams>;
+      if (p.version !== 1 || !Array.isArray(p.tables) || !Array.isArray(p.figures)) {
+        return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      }
+      const tables = p.tables.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const value = raw as unknown as Record<string, unknown>;
+        const actions = value.actions && typeof value.actions === 'object' ? value.actions as Record<string, unknown> : {};
+        if (typeof value.id !== 'string' || typeof value.anchorFingerprint !== 'string' || !Number.isInteger(value.bodyChildIndex)) return [];
+        const allowed = ['fitToTextWidth', 'equalColumns', 'repeatHeader', 'preventRowSplit', 'center', 'applyProfileTypography', 'separateSource'] as const;
+        const safeActions = Object.fromEntries(allowed.filter((key) => actions[key] === true).map((key) => [key, true])) as Record<string, true>;
+        const textWidthEmu = isFiniteNumber(value.textWidthEmu) && value.textWidthEmu > 0 && value.textWidthEmu <= 100_000_000 ? value.textWidthEmu : undefined;
+        const typographyRaw = value.typography && typeof value.typography === 'object' ? value.typography as Record<string, unknown> : undefined;
+        const typography = typographyRaw ? {
+          ...(typeof typographyRaw.font === 'string' && typographyRaw.font.trim().length <= 100 ? { font: typographyRaw.font.trim() } : {}),
+          ...(isFiniteNumber(typographyRaw.sizePt) && typographyRaw.sizePt >= 1 && typographyRaw.sizePt <= 72 ? { sizePt: typographyRaw.sizePt } : {}),
+          ...(isFiniteNumber(typographyRaw.beforePt) && typographyRaw.beforePt >= 0 && typographyRaw.beforePt <= 720 ? { beforePt: typographyRaw.beforePt } : {}),
+          ...(isFiniteNumber(typographyRaw.afterPt) && typographyRaw.afterPt >= 0 && typographyRaw.afterPt <= 720 ? { afterPt: typographyRaw.afterPt } : {}),
+        } : undefined;
+        const sourceRaw = value.source && typeof value.source === 'object' ? value.source as Record<string, unknown> : undefined;
+        const source = sourceRaw && Number.isInteger(sourceRaw.paragraphIndex) && typeof sourceRaw.anchorFingerprint === 'string' ? { paragraphIndex: Number(sourceRaw.paragraphIndex), anchorFingerprint: sourceRaw.anchorFingerprint.slice(0, 120) } : undefined;
+        const landscapeRaw = value.landscape && typeof value.landscape === 'object' ? value.landscape as Record<string, unknown> : undefined;
+        const landscape = landscapeRaw?.enabled === true && landscapeRaw.confirmed === true && typeof landscapeRaw.beforeFingerprint === 'string' && typeof landscapeRaw.afterFingerprint === 'string'
+          ? { enabled: true as const, confirmed: true as const, beforeFingerprint: landscapeRaw.beforeFingerprint.slice(0, 120), afterFingerprint: landscapeRaw.afterFingerprint.slice(0, 120) }
+          : undefined;
+        return [{ id: value.id.slice(0, 200), bodyChildIndex: Number(value.bodyChildIndex), anchorFingerprint: value.anchorFingerprint.slice(0, 120), ...(textWidthEmu !== undefined ? { textWidthEmu } : {}), ...(typography && Object.keys(typography).length ? { typography } : {}), ...(source ? { source } : {}), actions: safeActions, ...(landscape ? { landscape } : {}) }];
+      });
+      const figures = p.figures.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const value = raw as unknown as Record<string, unknown>;
+        const actions = value.actions && typeof value.actions === 'object' ? value.actions as Record<string, unknown> : {};
+        if (typeof value.id !== 'string' || typeof value.anchorFingerprint !== 'string' || !Number.isInteger(value.paragraphIndex) || !Number.isInteger(value.drawingIndex)) return [];
+        const allowed = ['constrainToTextWidth', 'preserveAspectRatio', 'center', 'removeWrapping', 'keepWithCaption'] as const;
+        const safeActions = Object.fromEntries(allowed.filter((key) => actions[key] === true).map((key) => [key, true])) as Record<string, true>;
+        const maxWidthEmu = isFiniteNumber(value.maxWidthEmu) && value.maxWidthEmu > 0 && value.maxWidthEmu <= 100_000_000 ? value.maxWidthEmu : undefined;
+        const altText = typeof value.altText === 'string' && value.altText.length <= 500 ? value.altText : undefined;
+        return [{ id: value.id.slice(0, 200), paragraphIndex: Number(value.paragraphIndex), drawingIndex: Number(value.drawingIndex), anchorFingerprint: value.anchorFingerprint.slice(0, 120), ...(maxWidthEmu !== undefined ? { maxWidthEmu } : {}), actions: safeActions, ...(altText !== undefined ? { altText } : {}) }];
+      });
+      if (tables.length !== p.tables.length || figures.length !== p.figures.length) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      return tableFigureRescueFixer(parts, { version: 1, tables, figures, ...(typeof p.profileFingerprint === 'string' ? { profileFingerprint: p.profileFingerprint.slice(0, 200) } : {}) });
+    }
+    case 'section-surgery-fixer': {
+      const p = params as Partial<SectionSurgeryParams>;
+      if (p.version !== 1 || !Array.isArray(p.operations)) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      const kinds = new Set(['set-geometry', 'set-numbering', 'set-title-page', 'set-odd-even', 'unlink-header', 'unlink-footer', 'insert-section']);
+      const operations = p.operations.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const value = raw as unknown as Record<string, unknown>;
+        if (value.confirmed !== true || typeof value.id !== 'string' || typeof value.kind !== 'string' || !kinds.has(value.kind) || !Number.isInteger(value.sectionOrdinal) || Number(value.sectionOrdinal) < 0 || typeof value.anchorFingerprint !== 'string') return [];
+        const operation: Record<string, unknown> = {
+          id: value.id.trim().slice(0, 200),
+          kind: value.kind,
+          sectionOrdinal: Number(value.sectionOrdinal),
+          anchorFingerprint: value.anchorFingerprint.slice(0, 120),
+          confirmed: true,
+        };
+        if (value.orientation === 'portrait' || value.orientation === 'landscape') operation.orientation = value.orientation;
+        if (value.headerType === 'default' || value.headerType === 'first' || value.headerType === 'even') operation.headerType = value.headerType;
+        if (value.footerType === 'default' || value.footerType === 'first' || value.footerType === 'even') operation.footerType = value.footerType;
+        for (const key of ['pageWidthTwips', 'pageHeightTwips'] as const) if (isFiniteNumber(value[key]) && value[key] > 0 && value[key] <= 1000000) operation[key] = value[key];
+        if (Number.isInteger(value.insertAfterBodyChildIndex) && Number(value.insertAfterBodyChildIndex) >= 0 && Number(value.insertAfterBodyChildIndex) <= 2000000) operation.insertAfterBodyChildIndex = Number(value.insertAfterBodyChildIndex);
+        if (typeof value.enabled === 'boolean') operation.enabled = value.enabled;
+        if (value.numbering && typeof value.numbering === 'object') {
+          const numbering = value.numbering as Record<string, unknown>;
+          const formats = new Set(['decimal', 'lowerRoman', 'upperRoman', 'lowerLetter', 'upperLetter']);
+          if (typeof numbering.format === 'string' && formats.has(numbering.format)) operation.numbering = { format: numbering.format, ...(isFiniteNumber(numbering.start) && numbering.start > 0 ? { start: Number(numbering.start) } : {}) };
+        }
+        if (value.marginsTwips && typeof value.marginsTwips === 'object') {
+          const margins: Record<string, number> = {};
+          for (const key of ['top', 'right', 'bottom', 'left']) { const margin = (value.marginsTwips as Record<string, unknown>)[key]; if (isFiniteNumber(margin) && margin >= 0 && margin <= 100000) margins[key] = margin; }
+          if (Object.keys(margins).length) operation.marginsTwips = margins;
+        }
+        return [operation as unknown as SectionSurgeryParams['operations'][number]];
+      });
+      if (operations.length !== p.operations.length) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      return sectionSurgeryFixer(parts, { version: 1, operations, ...(typeof p.profileFingerprint === 'string' ? { profileFingerprint: p.profileFingerprint.slice(0, 200) } : {}) });
+    }
+    case 'field-integrity-fixer': {
+      const p = params as Partial<FieldIntegrityParams>;
+      if (p.version !== 1 || !Array.isArray(p.fields)) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      const fields = p.fields.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const value = raw as Record<string, unknown>;
+        return value.confirmed === true && value.action === 'mark-dirty' && typeof value.id === 'string' && typeof value.part === 'string' && typeof value.anchorFingerprint === 'string'
+          ? [{ id: value.id.slice(0, 300), part: value.part.slice(0, 200), anchorFingerprint: value.anchorFingerprint.slice(0, 120), action: 'mark-dirty' as const, confirmed: true as const }]
+          : [];
+      });
+      const manualToc = Array.isArray(p.manualToc) ? p.manualToc.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const value = raw as Record<string, unknown>;
+        return value.confirmed === true && value.action === 'replace-with-live-toc' && Number.isInteger(value.startParagraphIndex) && Number.isInteger(value.endParagraphIndex) && typeof value.anchorFingerprint === 'string'
+          ? [{ startParagraphIndex: Number(value.startParagraphIndex), endParagraphIndex: Number(value.endParagraphIndex), anchorFingerprint: value.anchorFingerprint.slice(0, 120), action: 'replace-with-live-toc' as const, confirmed: true as const }]
+          : [];
+      }) : undefined;
+      const bookmarks = Array.isArray(p.bookmarks) ? p.bookmarks.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const value = raw as Record<string, unknown>;
+        return value.confirmed === true && value.action === 'repair-known-target' && typeof value.part === 'string' && typeof value.bookmarkName === 'string' && typeof value.targetFingerprint === 'string'
+          ? [{ part: value.part.slice(0, 200), bookmarkName: value.bookmarkName.slice(0, 80), targetFingerprint: value.targetFingerprint.slice(0, 120), action: 'repair-known-target' as const, confirmed: true as const }]
+          : [];
+      }) : undefined;
+      if (fields.length !== p.fields.length || (manualToc && manualToc.length !== p.manualToc?.length) || (bookmarks && bookmarks.length !== p.bookmarks?.length)) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      const settings = p.settings?.updateFieldsOnOpen === true ? { updateFieldsOnOpen: true as const } : undefined;
+      return fieldIntegrityFixer(parts, { version: 1, fields, ...(settings ? { settings } : {}), ...(manualToc?.length ? { manualToc } : {}), ...(bookmarks?.length ? { bookmarks } : {}) });
+    }
+    case 'croatian-typography-fixer': {
+      const p = params as Partial<CroatianTypographyParams>;
+      const allowed = new Set(['multiple-spaces', 'punctuation-spacing', 'missing-space-after-punctuation', 'quotation-marks', 'dash-consistency', 'ellipsis', 'nonbreaking-spaces', 'decimal-comma', 'percent-format', 'date-format', 'nested-quotes', 'ordinal-numbers', 'number-unit-spacing', 'abbreviation-consistency', 'repeated-punctuation', 'text-tabs', 'manual-line-breaks']);
+      if (p.version !== 1 || !Array.isArray(p.categories) || !Array.isArray(p.operations)) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      const categories = p.categories.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const value = raw as Record<string, unknown>;
+        return value.consent === true && typeof value.category === 'string' && allowed.has(value.category) ? [{ category: value.category as CroatianTypographyParams['categories'][number]['category'], consent: true as const }] : [];
+      });
+      const operations = p.operations.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const value = raw as Record<string, unknown>;
+        if (value.confirmed !== true || typeof value.id !== 'string' || typeof value.category !== 'string' || !allowed.has(value.category) || typeof value.paragraphIndex !== 'number' || !Number.isInteger(value.paragraphIndex) || typeof value.textNodeIndex !== 'number' || !Number.isInteger(value.textNodeIndex) || typeof value.nodeKind !== 'string' || !['text', 'tab', 'line-break'].includes(value.nodeKind) || typeof value.before !== 'string' || typeof value.replacementText !== 'string' || typeof value.anchorFingerprint !== 'string') return [];
+        const start = value.start;
+        const end = value.end;
+        if (value.nodeKind === 'text' && (!isFiniteNumber(start) || !isFiniteNumber(end) || !Number.isInteger(start) || !Number.isInteger(end))) return [];
+        return [{ id: value.id.slice(0, 300), category: value.category as CroatianTypographyParams['operations'][number]['category'], paragraphIndex: value.paragraphIndex, textNodeIndex: value.textNodeIndex, nodeKind: value.nodeKind as CroatianTypographyParams['operations'][number]['nodeKind'], ...(value.nodeKind === 'text' ? { start: Number(start), end: Number(end) } : {}), before: value.before.slice(0, 1000), replacementText: value.replacementText.slice(0, 1000), anchorFingerprint: value.anchorFingerprint.slice(0, 120), confirmed: true as const }];
+      });
+      if (categories.length !== p.categories.length || operations.length !== p.operations.length) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      return croatianTypographyFixer(parts, { version: 1, categories, operations, ...(typeof p.profileFingerprint === 'string' ? { profileFingerprint: p.profileFingerprint.slice(0, 200) } : {}) });
+    }
+    case 'link-doi-fixer': {
+      const p = params as Partial<LinkDoiFixParams>;
+      const allowed = new Set(['make-hyperlink', 'normalize-doi', 'repair-spacing', 'remove-tracking', 'replace-canonical-url', 'remove-link-styling']);
+      if (p.version !== 1 || !Array.isArray(p.operations)) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      const operations = p.operations.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const value = raw as Record<string, unknown>;
+        if (value.confirmed !== true || typeof value.id !== 'string' || value.part !== 'word/document.xml' || !Number.isInteger(value.paragraphIndex) || !Number.isInteger(value.start) || !Number.isInteger(value.end) || typeof value.anchorFingerprint !== 'string' || typeof value.before !== 'string' || typeof value.action !== 'string' || !allowed.has(value.action)) return [];
+        if (value.targetUrl !== undefined && (typeof value.targetUrl !== 'string' || !/^https?:\/\//i.test(value.targetUrl) || value.targetUrl.length > 4000)) return [];
+        if (value.replacementText !== undefined && (typeof value.replacementText !== 'string' || value.replacementText.length > 4000)) return [];
+        return [{ id: value.id.slice(0, 300), part: 'word/document.xml' as const, paragraphIndex: Number(value.paragraphIndex), start: Number(value.start), end: Number(value.end), anchorFingerprint: value.anchorFingerprint.slice(0, 120), before: value.before.slice(0, 4000), ...(typeof value.replacementText === 'string' ? { replacementText: value.replacementText } : {}), ...(typeof value.targetUrl === 'string' ? { targetUrl: value.targetUrl } : {}), action: value.action as LinkDoiFixParams['operations'][number]['action'], confirmed: true as const }];
+      });
+      if (operations.length !== p.operations.length) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      return linkDoiFixer(parts, { version: 1, operations });
+    }
+    case 'submission-metadata-fixer': {
+      const p = params as Partial<SubmissionMetadataFixParams>;
+      if (p.version !== 1 || !Array.isArray(p.fields)) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      const fields = p.fields.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const value = raw as Record<string, unknown>;
+        if (value.confirmed !== true || value.part !== 'docProps/core.xml' || (value.field !== 'title' && value.field !== 'author') || typeof value.before !== 'string' || typeof value.replacementText !== 'string' || typeof value.fingerprint !== 'string') return [];
+        return [{ field: value.field as 'title' | 'author', part: 'docProps/core.xml' as const, before: value.before.slice(0, 500), replacementText: value.replacementText.slice(0, 500), fingerprint: value.fingerprint.slice(0, 120), confirmed: true as const }];
+      });
+      if (fields.length !== p.fields.length) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      return submissionMetadataFixer(parts, { version: 1, fields, ...(typeof p.fileFingerprint === 'string' ? { fileFingerprint: p.fileFingerprint.slice(0, 120) } : {}) });
+    }
+    case 'required-section-fixer': {
+      const p = params as Partial<RequiredSectionFixParams>;
+      if (p.version !== 1 || !Array.isArray(p.sections)) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      const kinds = new Set(['summary-hr', 'abstract', 'keywords-hr', 'keywords-en', 'originality-statement', 'abbreviation-list', 'figure-list', 'table-list', 'appendices']);
+      const sections = p.sections.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const value = raw as Record<string, unknown>;
+        const anchor = value.insertionAnchor as Record<string, unknown> | undefined;
+        if (value.confirmed !== true || typeof value.id !== 'string' || typeof value.kind !== 'string' || !kinds.has(value.kind) || typeof value.label !== 'string' || !anchor || !Number.isInteger(anchor.paragraphIndex) || typeof anchor.anchorFingerprint !== 'string' || !['before', 'after'].includes(String(anchor.position)) || !Number.isInteger(value.headingLevel) || Number(value.headingLevel) < 1 || Number(value.headingLevel) > 9 || typeof value.numbered !== 'boolean') return [];
+        const out: RequiredSectionFixParams['sections'][number] = { id: value.id.slice(0, 300), kind: value.kind as RequiredSectionFixParams['sections'][number]['kind'], label: value.label.slice(0, 200), insertionAnchor: { paragraphIndex: Number(anchor.paragraphIndex), anchorFingerprint: String(anchor.anchorFingerprint).slice(0, 120), position: anchor.position as 'before' | 'after' }, headingLevel: Number(value.headingLevel), numbered: value.numbered, confirmed: true };
+        if (typeof value.styleId === 'string') out.styleId = value.styleId.slice(0, 100);
+        for (const key of ['placeholderText', 'commentText', 'statementText'] as const) if (typeof value[key] === 'string') out[key] = value[key].slice(0, 20000);
+        return [out];
+      });
+      if (sections.length !== p.sections.length) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      const numbering = p.numbering && typeof p.numbering === 'object' ? { maxLevel: Number(p.numbering.maxLevel), ...(p.numbering.format === 'decimal' || p.numbering.format === 'upperRoman' || p.numbering.format === 'lowerRoman' ? { format: p.numbering.format } : {}), ...(typeof p.numbering.trailingDot === 'boolean' ? { trailingDot: p.numbering.trailingDot } : {}) } : undefined;
+      if (numbering && (!Number.isInteger(numbering.maxLevel) || numbering.maxLevel < 1 || numbering.maxLevel > 9)) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      return requiredSectionFixer(parts, { version: 1, sections, ...(numbering ? { numbering } : {}) });
+    }
+    case 'consistency-fixer': {
+      const p = params as Partial<ConsistencyFixParams>;
+      if (p.version !== 1 || !Array.isArray(p.groups) || !Array.isArray(p.replacements)) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      const allowed = new Set(['terminology', 'person', 'institution', 'citation', 'bibliography', 'document-metadata', 'element-label', 'heading-language']);
+      const groups = p.groups.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const value = raw as Record<string, unknown>;
+        return value.confirmed === true && typeof value.id === 'string' && typeof value.zone === 'string' && allowed.has(value.zone) && typeof value.canonicalText === 'string' && value.canonicalText.length <= 500
+          ? [{ id: value.id.slice(0, 300), zone: value.zone as ConsistencyFixParams['groups'][number]['zone'], canonicalText: value.canonicalText.slice(0, 500), confirmed: true as const }]
+          : [];
+      });
+      const replacements = p.replacements.flatMap((raw) => {
+        if (!raw || typeof raw !== 'object') return [];
+        const value = raw as Record<string, unknown>;
+        const metadataField = ['dc:title', 'dc:creator', 'cp:lastModifiedBy', 'cp:revision'].includes(String(value.metadataField)) ? String(value.metadataField) as ConsistencyFixParams['replacements'][number]['metadataField'] : undefined;
+        if (value.confirmed !== true || typeof value.id !== 'string' || typeof value.groupId !== 'string' || typeof value.part !== 'string' || typeof value.before !== 'string' || typeof value.replacementText !== 'string' || typeof value.anchorFingerprint !== 'string') return [];
+        if (value.part === 'word/document.xml' && (!Number.isInteger(value.paragraphIndex) || !Number.isInteger(value.start) || !Number.isInteger(value.end))) return [];
+        if (value.part !== 'word/document.xml' && value.part !== 'docProps/core.xml') return [];
+        return [{ id: value.id.slice(0, 300), groupId: value.groupId.slice(0, 300), part: value.part.slice(0, 200), ...(value.paragraphIndex !== undefined ? { paragraphIndex: Number(value.paragraphIndex) } : {}), ...(value.start !== undefined ? { start: Number(value.start) } : {}), ...(value.end !== undefined ? { end: Number(value.end) } : {}), before: value.before.slice(0, 500), replacementText: value.replacementText.slice(0, 500), anchorFingerprint: value.anchorFingerprint.slice(0, 120), ...(metadataField ? { metadataField } : {}), confirmed: true as const }];
+      });
+      if (groups.length !== p.groups.length || replacements.length !== p.replacements.length) return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      return consistencyFixer(parts, { version: 1, groups, replacements });
     }
     default:
       return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
@@ -216,6 +693,7 @@ export async function applyFixers(
 
   const documentEntry = entries.find((e) => e.name === DOCUMENT_XML_PATH);
   const stylesEntry = entries.find((e) => e.name === STYLES_XML_PATH);
+  const numberingEntry = entries.find((e) => e.name === NUMBERING_XML_PATH);
   const contentTypesEntry = entries.find((e) => e.name === CONTENT_TYPES_PATH);
   const documentRelsEntry = entries.find((e) => e.name === DOCUMENT_RELS_PATH);
   const footnotesEntry = entries.find((e) => e.name === FOOTNOTES_XML_PATH);
@@ -228,9 +706,11 @@ export async function applyFixers(
   let parts: DocxXmlParts = {
     documentXml: decoder.decode(documentEntry.data),
     stylesXml: stylesEntry ? decoder.decode(stylesEntry.data) : '',
+    numberingXml: numberingEntry ? decoder.decode(numberingEntry.data) : undefined,
     contentTypesXml: contentTypesEntry ? decoder.decode(contentTypesEntry.data) : '',
     documentRelsXml: documentRelsEntry ? decoder.decode(documentRelsEntry.data) : '',
     addedParts: [],
+    addedPackageParts: [],
     // Sva postojeca imena partova: footer imenovanje ih mora vidjeti da ne kolidira s
     // orphan word/footerN.xml koji je u zipu ali ne u content-typesu (adversarial K5 nalaz).
     existingParts: entries.map((e) => e.name),
@@ -238,16 +718,24 @@ export async function applyFixers(
     footerHeaderParts: Object.fromEntries(
       footerHeaderEntries.map((e) => [e.name, decoder.decode(e.data)]),
     ),
+    packageXmlParts: Object.fromEntries(
+      entries
+        .filter((entry) => entry.name === CONTENT_TYPES_PATH || /\.xml$/i.test(entry.name) || /\.rels$/i.test(entry.name))
+        .map((entry) => [entry.name, decoder.decode(entry.data)]),
+    ),
+    removedPackageParts: [],
   };
   // Zapamti pocetne stringove: dio se re-enkodira SAMO ako ga je neki fixer
   // stvarno promijenio. TextDecoder je non-fatal (nevaljani UTF-8 -> U+FFFD),
   // pa bi bezuvjetni decode+encode tiho prepisao bajtove i netaknutog dijela.
   const originalDocumentXml = parts.documentXml;
   const originalStylesXml = parts.stylesXml;
+  const originalNumberingXml = parts.numberingXml;
   const originalContentTypes = parts.contentTypesXml;
   const originalDocumentRels = parts.documentRelsXml;
   const originalFootnotesXml = parts.footnotesXml;
   const originalFooterHeaderParts = { ...parts.footerHeaderParts };
+  const originalPackageXmlParts = { ...(parts.packageXmlParts ?? {}) };
 
   const changelog: ChangelogEntry[] = [];
   const skipped: string[] = [];
@@ -256,7 +744,8 @@ export async function applyFixers(
   for (const request of requests) {
     let result: ReturnType<typeof runFixer>;
     try {
-      result = runFixer(request.fixerId, parts, request.params);
+      const packageXmlParts = { ...(parts.packageXmlParts ?? {}) };
+      result = runFixer(request.fixerId, { ...parts, packageXmlParts, addedPackageParts: [...(parts.addedPackageParts ?? [])] }, request.params);
     } catch {
       // RE-26: fixer koji BACI (neocekivana/rubna kombinacija ulaza) ne smije oboriti CIJELU
       // bateriju, ukljucivo popravke VEC uspjesno primijenjene prije njega u istom pozivu. Server
@@ -275,13 +764,35 @@ export async function applyFixers(
       if (result.reason) skippedReasons[request.ruleId] = result.reason;
       continue;
     }
+    const beforePackageXmlParts = { ...(parts.packageXmlParts ?? {}) };
     parts = result.parts;
+      if (parts.packageXmlParts) {
+      const synchronized = { ...parts.packageXmlParts };
+      if (synchronized[DOCUMENT_XML_PATH] === beforePackageXmlParts[DOCUMENT_XML_PATH]) synchronized[DOCUMENT_XML_PATH] = parts.documentXml;
+      if (synchronized[STYLES_XML_PATH] === beforePackageXmlParts[STYLES_XML_PATH]) synchronized[STYLES_XML_PATH] = parts.stylesXml;
+      if (synchronized[NUMBERING_XML_PATH] === beforePackageXmlParts[NUMBERING_XML_PATH] && parts.numberingXml !== undefined) synchronized[NUMBERING_XML_PATH] = parts.numberingXml;
+      if (synchronized[CONTENT_TYPES_PATH] === beforePackageXmlParts[CONTENT_TYPES_PATH]) synchronized[CONTENT_TYPES_PATH] = parts.contentTypesXml ?? '';
+      if (synchronized[DOCUMENT_RELS_PATH] === beforePackageXmlParts[DOCUMENT_RELS_PATH]) synchronized[DOCUMENT_RELS_PATH] = parts.documentRelsXml ?? '';
+      if (synchronized[FOOTNOTES_XML_PATH] === beforePackageXmlParts[FOOTNOTES_XML_PATH] && parts.footnotesXml !== undefined) synchronized[FOOTNOTES_XML_PATH] = parts.footnotesXml;
+      for (const [name, value] of Object.entries(parts.footerHeaderParts ?? {})) if (synchronized[name] === beforePackageXmlParts[name]) synchronized[name] = value;
+      parts = { ...parts, packageXmlParts: synchronized };
+      }
+    if (parts.addedPackageParts) parts = { ...parts, addedPackageParts: [...parts.addedPackageParts] };
     changelog.push({
       ruleId: request.ruleId,
       fixerId: request.fixerId,
       beforeLabel: result.beforeLabel,
       afterLabel: result.afterLabel,
     });
+  }
+
+  const numberingWasAdded = !numberingEntry && !!parts.numberingXml && parts.numberingXml !== originalNumberingXml;
+  if (numberingWasAdded) {
+    parts = {
+      ...parts,
+      contentTypesXml: ensureNumberingContentType(parts.contentTypesXml ?? ''),
+      documentRelsXml: ensureNumberingRelationship(parts.documentRelsXml ?? ''),
+    };
   }
 
   // Nijedan popravak nije primijenjen: vrati ULAZNE bajtove bit-identicne
@@ -295,11 +806,18 @@ export async function applyFixers(
   // styles.xml) dobiva novi sadrzaj, svi ostali entryji prolaze bez ikakve
   // izmjene (isti Uint8Array objekt).
   const newEntries: ZipEntry[] = entries.map((entry) => {
+    if (parts.removedPackageParts?.includes(entry.name)) return null;
+    if (parts.packageXmlParts?.[entry.name] !== undefined && parts.packageXmlParts[entry.name] !== originalPackageXmlParts[entry.name]) {
+      return { name: entry.name, data: encoder.encode(parts.packageXmlParts[entry.name]) };
+    }
     if (entry.name === DOCUMENT_XML_PATH && parts.documentXml !== originalDocumentXml) {
       return { name: entry.name, data: encoder.encode(parts.documentXml) };
     }
     if (entry.name === STYLES_XML_PATH && stylesEntry && parts.stylesXml !== originalStylesXml) {
       return { name: entry.name, data: encoder.encode(parts.stylesXml) };
+    }
+    if (entry.name === NUMBERING_XML_PATH && numberingEntry && parts.numberingXml !== originalNumberingXml) {
+      return { name: entry.name, data: encoder.encode(parts.numberingXml ?? '') };
     }
     if (entry.name === CONTENT_TYPES_PATH && contentTypesEntry && (parts.contentTypesXml ?? '') !== originalContentTypes) {
       return { name: entry.name, data: encoder.encode(parts.contentTypesXml ?? '') };
@@ -318,7 +836,10 @@ export async function applyFixers(
       return { name: entry.name, data: encoder.encode(parts.footerHeaderParts[entry.name]) };
     }
     return entry; // netaknuto, isti podatak
-  });
+  }).filter((entry): entry is ZipEntry => entry !== null);
+  if (numberingWasAdded && parts.numberingXml) {
+    newEntries.push({ name: NUMBERING_XML_PATH, data: encoder.encode(parts.numberingXml) });
+  }
 
   // Novi partovi (K5 footer flow): SAMO iz allow-liste (word/footerN.xml) i SAMO imena koja
   // jos ne postoje u zipu (ne prepisujemo postojeci part). Ostalo se tiho odbacuje (backstop
@@ -326,6 +847,11 @@ export async function applyFixers(
   const existingNames = new Set(entries.map((e) => e.name));
   for (const p of parts.addedParts ?? []) {
     if (!ENGINE_ADDABLE_PART.test(p.name) || existingNames.has(p.name)) continue;
+    existingNames.add(p.name);
+    newEntries.push({ name: p.name, data: encoder.encode(p.content) });
+  }
+  for (const p of parts.addedPackageParts ?? []) {
+    if (!ENGINE_ADDABLE_PACKAGE_PART.test(p.name) || existingNames.has(p.name)) continue;
     existingNames.add(p.name);
     newEntries.push({ name: p.name, data: encoder.encode(p.content) });
   }

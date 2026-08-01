@@ -48,7 +48,7 @@ describe('Lekta Error Corpus - inventar provjera (faza 1)', () => {
 
   it('pokriva sve COMPILED_CHECK_IDS i konformansne dimenzije', () => {
     expect([...inv.compiledCheckIds].sort()).toEqual([...COMPILED_CHECK_IDS].sort());
-    expect(inv.compiledCheckIds.length).toBe(17);
+    expect(inv.compiledCheckIds.length).toBe(COMPILED_CHECK_IDS.length);
     for (const d of ['font', 'size', 'spacing', 'margins', 'paper', 'justify', 'toc', 'pagenums', 'sections', 'words', 'struktura', 'fusnote']) {
       expect(inv.scoredDimensions).toContain(d);
     }

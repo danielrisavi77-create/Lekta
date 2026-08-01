@@ -11,6 +11,7 @@ import { VERIFIED_PROFILE_REGISTRY, PROFILE_STATUS } from '../profiles/profile-r
 import { normalizeCheckFlags } from '../profiles/profile-baseline';
 import { citationMeta } from '../citations/citation-meta';
 import heavyProfiles from '../../data/profiles/verified-profiles-heavy.json';
+import { attachHeadingStructure } from './heading-structure';
 
 // Golden/sinteticki harness NIJE u app bundleu: teska profilna pravila su u zivom app-u lazy
 // (profile-registry.ensureProfileRules), ali resolveProfile mora raditi SINKRONO. Ovdje ih spajamo
@@ -68,5 +69,6 @@ export async function analyzeFixture(file: File, opts: { profileId?: string; set
     selectionIds: {},
     ...(opts.settings || {}),
   };
-  return analyzeDocx(file, profile, settings, () => {});
+  const result = await analyzeDocx(file, profile, settings, () => {});
+  return attachHeadingStructure(result, profile.headingRules || {});
 }

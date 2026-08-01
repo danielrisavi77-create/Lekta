@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { renderRepairPanel, type RepairableItem } from './repair-panel';
+import { renderRepairPanel, type LegalFootnoteRepairFormDefinition, type FinalDocumentInspectorFormDefinition, type RepairableItem } from './repair-panel';
 import { singleSectionDocx } from '../../tests/helpers/synthetic-docx';
 
 /** Cekaj dok uvjet ne postane istinit (async DOM nakon klika: dinamicki import + applyFixers + reanalyze). */
@@ -39,6 +39,51 @@ beforeEach(() => {
 });
 
 describe('renderRepairPanel: grupiranje i checkboxi', () => {
+  it('pravne fusnote prikazuju pojedinačnu potvrdu i tehnički marker', () => {
+    const mountEl = mount();
+    const form: LegalFootnoteRepairFormDefinition = {
+      candidates: [{ footnoteId: 2, rawText: 'op. cit.', type: 'op-cit', confidence: 'medium', evidence: ['cilj pronađen'], operations: [{ id: 'op', kind: 'replace-op-cit', before: 'op. cit.', after: 'Horvat, Pravo.', replacementText: 'Horvat, Pravo.', reason: 'jasniji kratki navod', confidence: 'medium', selected: false }] }],
+      markers: [{ id: 'm', paragraphIndex: 3, footnoteId: 2, rawText: '2', confidence: 'high', selected: true }],
+      links: [], warnings: [], summary: '1 fusnota', buildParams: (current) => ({ selected: current.candidates.flatMap((candidate) => candidate.operations.filter((operation) => operation.selected).map((operation) => operation.id)) }),
+    };
+    const legalItem = item({ fixerId: 'legal-footnote-repair-fixer', legalFootnoteRepairForm: form });
+    renderRepairPanel({ ...ctxBase, mountEl, items: [legalItem] });
+    expect(mountEl.textContent).toContain('Prije:');
+    expect(mountEl.textContent).toContain('op. cit.');
+    expect(mountEl.querySelectorAll('.lekta-repair-panel__legal-footnote input[type="checkbox"]')).toHaveLength(2);
+    const boxes = mountEl.querySelectorAll<HTMLInputElement>('.lekta-repair-panel__legal-footnote input[type="checkbox"]');
+    expect(boxes[0].checked).toBe(true);
+    boxes[1].click();
+    expect(form.candidates[0].operations[0].selected).toBe(true);
+  });
+
+  it('finalni inspektor odvaja prihvat i odbacivanje revizija', () => {
+    const mountEl = mount();
+    const form: FinalDocumentInspectorFormDefinition = {
+      summary: '1 revizija i 1 metapodatak',
+      findings: [{
+        id: 'revisions', category: 'revisions', summary: 'Neprihvaćene izmjene', count: 1, severity: 'warning',
+        supported: true, destructive: true, selected: false, action: 'review-revisions',
+        evidence: [{ part: 'word/document.xml', location: 'ins:1', fingerprint: 'fp', revisionId: '4', selected: true }],
+      }, {
+        id: 'diagnostic', category: 'watermark', summary: 'Vodeni žig', count: 1, severity: 'warning',
+        supported: false, destructive: true, selected: false, action: 'review-only', evidence: [],
+      }],
+      buildParams: () => ({}),
+    };
+    const inspectorItem = item({ fixerId: 'final-document-inspector-fixer', finalDocumentInspectorForm: form });
+    renderRepairPanel({ ...ctxBase, mountEl, items: [inspectorItem] });
+    expect(mountEl.querySelector('.lekta-repair-panel__final-inspector')).not.toBeNull();
+    expect(mountEl.textContent).toContain('nova čista kopija');
+    const select = mountEl.querySelector<HTMLSelectElement>('.lekta-repair-panel__final-inspector select')!;
+    expect(select.value).toBe('accept');
+    select.value = 'reject';
+    select.dispatchEvent(new Event('change'));
+    expect(form.findings[0].evidence[0].revisionAction).toBe('reject');
+    const disabled = mountEl.querySelectorAll<HTMLInputElement>('.lekta-repair-panel__final-inspector input[disabled]');
+    expect(disabled).toHaveLength(1);
+  });
+
   it('prekrsene su predodabrane, neprekrsene odznacene i iza podnaslova', () => {
     const mountEl = mount();
     renderRepairPanel({
@@ -57,6 +102,40 @@ describe('renderRepairPanel: grupiranje i checkboxi', () => {
     expect(byLabel('Prekrseno').querySelector('input')!.checked).toBe(true);
     expect(byLabel('Uredno').querySelector('input')!.checked).toBe(false);
     expect(mountEl.querySelector('.lekta-repair-panel__subtitle')?.textContent).toContain('Uskladi i ostalo');
+  });
+
+  it('assisted plan prikazuje mapiranje razine, broj i uklanjanje ručnog prefiksa', () => {
+    const mountEl = mount();
+    const numberingItem = item({
+      fixerId: 'heading-style-fixer',
+      params: { targets: [{ paragraphIndex: 2, level: 1, numbered: true, removeManualNumbering: true }] },
+      headingNumberingPlan: {
+        rules: { maxLevel: 3, format: 'decimal', trailingDot: true },
+        mappings: [{
+          paragraphIndex: 2,
+          text: '1. Uvod',
+          level: 1,
+          numbered: true,
+          removeManualNumbering: true,
+          manualPrefix: '1.',
+          confidence: 'high',
+          existingHeading: false,
+          selectedByDefault: true,
+          evidence: ['numerirani prefiks'],
+        }],
+        warnings: [],
+        summary: { total: 1, numbered: 1, unnumbered: 0, removeManualPrefixes: 1, needsConfirmation: 1 },
+        tocComparison: { hasTocField: false, tocEntryCount: 0, expectedHeadingCount: 1, status: 'not-present' },
+      },
+    });
+    renderRepairPanel({ ...ctxBase, mountEl, items: [numberingItem] });
+    const row = mountEl.querySelector('.lekta-repair-panel__heading-numbering-node')!;
+    expect(row.querySelector('select')?.querySelectorAll('option')).toHaveLength(3);
+    expect(row.querySelectorAll('input[type="checkbox"]')).toHaveLength(3);
+    expect(mountEl.textContent).toContain('1 ručnih prefiksa');
+    const autoNumber = row.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')[1];
+    autoNumber.click();
+    expect((numberingItem.params.targets as Array<Record<string, unknown>>)[0].numbered).toBe(false);
   });
 
   it('kad NISTA nije prekrseno, podnaslov je pozitivan (ne "i ostalo")', () => {
@@ -299,5 +378,90 @@ describe('renderRepairPanel: potvrda lokacije (K6 umetanje sekcije)', () => {
       (mountEl.querySelector('.lekta-repair-panel__summary')?.textContent || '').includes('Primijenjeno'),
     );
     expect(mountEl.querySelector<HTMLElement>('.lekta-repair-panel__confirm-box')!.hidden).toBe(true);
+  });
+});
+
+// Uzi opseg "koliko platis, toliko popravaka" (2026-08-01): ledger+modal prezentacija SAMO kad
+// NIJEDNA stavka nema prikljucenu naprednu formu (title page, bibliografija i sl. iz sireg repair
+// engine rada). Mjesoviti/napredni slucaj MORA ostati bit-identican postojecem inline prikazu -
+// to je jedina sigurnosna ograda protiv slamanja koda koji ne kontroliramo iz ovog modula.
+describe('renderRepairPanel: ledger+modal (samo jednostavne stavke)', () => {
+  it('sve stavke jednostavne: prikazuje kompaktan trigger, stara lista je skrivena', () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      items: [
+        item({ ruleId: 'font', fixerId: 'font-fixer', label: 'Font', violated: true }),
+        item({ ruleId: 'margins', fixerId: 'margins-fixer', label: 'Margine', violated: true }),
+        item({ ruleId: 'spacing', fixerId: 'line-spacing-fixer', label: 'Prored', violated: false }),
+      ],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+      ceilingPriceEur: 9.99,
+    });
+    expect(mountEl.querySelector('.lekta-repair-trigger')).toBeTruthy();
+    expect(mountEl.querySelector<HTMLElement>('.lekta-repair-panel__list')!.hidden).toBe(true);
+    expect(mountEl.querySelector('.lekta-repair-trigger__price')?.textContent).toMatch(/€/);
+  });
+
+  it('bar jedna stavka ima naprednu formu: OSTAJE postojeci inline prikaz, bez triggera', () => {
+    const mountEl = mount();
+    const finalForm: FinalDocumentInspectorFormDefinition = {
+      findings: [],
+      summary: 'sazetak',
+      buildParams: () => ({}),
+    };
+    renderRepairPanel({
+      items: [
+        item({ ruleId: 'font', fixerId: 'font-fixer', label: 'Font', violated: true }),
+        item({ ruleId: 'inspect', fixerId: 'final-document-inspector-fixer', label: 'Inspekcija', violated: true, finalDocumentInspectorForm: finalForm }),
+      ],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+      ceilingPriceEur: 9.99,
+    });
+    expect(mountEl.querySelector('.lekta-repair-trigger')).toBeFalsy();
+    expect(mountEl.querySelector<HTMLElement>('.lekta-repair-panel__list')!.hidden).toBe(false);
+    expect(mountEl.querySelectorAll('.lekta-repair-panel__item').length).toBe(2);
+  });
+
+  it('klik na "Prilagodi popravke" otvara modal s redom po stavci, redoslijed po tezini', () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      items: [
+        item({ ruleId: 'spacing', fixerId: 'line-spacing-fixer', label: 'Prored', violated: true }),
+        item({ ruleId: 'section', fixerId: 'section-insert-fixer', label: 'Prijelom sekcije', violated: true }),
+        item({ ruleId: 'font', fixerId: 'font-fixer', label: 'Font', violated: false }),
+      ],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+      ceilingPriceEur: 9.99,
+    });
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-trigger__btn')!.click();
+    const backdrop = document.querySelector<HTMLElement>('.modal-backdrop[data-lekta-repair-ledger-modal]')!;
+    expect(backdrop.classList.contains('hidden')).toBe(false);
+    const rows = Array.from(backdrop.querySelectorAll<HTMLButtonElement>('.lekta-repair-ledger-row'));
+    // Poredano po tezini (repair-pricing.ts): section-insert-fixer=8, font-fixer=5, line-spacing-fixer=4.
+    expect(rows.map((r) => r.querySelector('.lekta-repair-ledger-fill-label')?.textContent)).toEqual([
+      'Prijelom sekcije',
+      'Font',
+      'Prored',
+    ]);
+    // Pocetno stanje odrazava opt-out default (prored i prijelom sekcije prekrseni -> "on").
+    expect(rows[0].classList.contains('on')).toBe(true); // Prijelom sekcije, violated:true
+    expect(rows[1].classList.contains('on')).toBe(false); // Font, violated:false
+    expect(rows[2].classList.contains('on')).toBe(true); // Prored, violated:true
+
+    // Klik na "Font" red ga ukljuci i azurira checkbox u (skrivenoj) originalnoj listi.
+    rows[1].click();
+    expect(rows[1].classList.contains('on')).toBe(true);
+    const checkedCount = mountEl.querySelectorAll<HTMLInputElement>('input[type="checkbox"][data-idx]:checked').length;
+    expect(checkedCount).toBe(3);
+
+    // "Gotovo" zatvara modal.
+    backdrop.querySelector<HTMLButtonElement>('.lekta-repair-ledger-done')!.click();
+    expect(backdrop.classList.contains('hidden')).toBe(true);
   });
 });

@@ -95,6 +95,7 @@ const SYNTHETIC_PARAMS: Record<FixerId, Record<string, unknown>> = {
   // stil). Sinteticki STYLES_XML ne definira Heading1 pa je ovdje bit-identican no-op; stvarna
   // primjena je jedinicno pokrivena u src/repair/xml-patch.test.ts (patchHeadingFormat).
   'heading-format-fixer': { targets: [{ level: 1, sizeHalfPoints: 32, bold: true }] },
+  'heading-style-fixer': { targets: [{ paragraphIndex: 1, level: 1 }] },
   // footnoteTypographyFixer trazi word/footnotes.xml (isti gard kao footnote-spacing-fixer) i stil
   // FootnoteText; sinteticki dokumenti nemaju fusnote pa je ovdje uvijek bit-identican no-op.
   'footnote-typography-fixer': { fontName: 'Times New Roman', fontSizePt: 10 },

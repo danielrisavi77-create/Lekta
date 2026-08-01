@@ -1,3 +1,9 @@
+import type { CroatianTypographyRules } from '../analysis/typography-structure';
+import type { ConsistencyRules } from '../analysis/consistency-structure';
+import type { RequiredSectionRules, RequiredSectionProfileEntry } from '../analysis/required-sections-structure';
+import type { LinkRules } from '../analysis/link-doi-structure';
+import type { CrossFileSubmissionRules } from '../analysis/cross-file-submission-consistency';
+
 /**
  * Tipovi profila i pravila (Option A).
  *
@@ -194,6 +200,169 @@ export interface ThesisProfile {
   id: string;
   rules?: Record<string, unknown>;
   ruleEntries?: RuleEntry[];
+  paragraphRules?: ParagraphRules;
+  elementCaptionRules?: ElementCaptionRules;
+  bibliographyRules?: BibliographyRules;
+  citationSyncRules?: CitationSyncRules;
+  legalFootnoteRepairRules?: LegalFootnoteRepairRules;
+  tableFigureRescueRules?: TableFigureRescueRules;
+  sectionSurgeryRules?: SectionSurgeryRules;
+  croatianTypographyRules?: CroatianTypographyRules;
+  consistencyRules?: ConsistencyRules;
+  requiredSections?: RequiredSectionProfileEntry[];
+  requiredSectionRules?: RequiredSectionRules;
+  linkRules?: LinkRules;
+  crossFileSubmissionRules?: CrossFileSubmissionRules;
+}
+
+/** Verificirana pravila za asistirani popravak bibliografije. */
+export interface BibliographyRules {
+  sort?: 'alphabetical' | 'appearance';
+  hangingIndentCm?: number;
+  beforePt?: number;
+  afterPt?: number;
+  accessDateFormat?: string;
+  doi?: 'preserve' | 'normalize' | 'normalize-and-hyperlink';
+  url?: 'preserve' | 'normalize' | 'normalize-and-hyperlink';
+  stripUrlTerminalPunctuation?: boolean;
+  italicize?: 'none' | 'container' | 'book-title' | 'journal-title';
+  authorYearSuffixes?: boolean;
+  supportedTypes?: Array<'knjiga' | 'poglavlje' | 'clanak' | 'mrezni' | 'zavrsni' | 'propis'>;
+  authorOrder?: 'preserve' | 'verified-source-only';
+  styleToken?: string;
+}
+
+/** Verificirana pravila za mapiranje autor-godina citata i literature. */
+export interface CitationSyncRules {
+  mode: 'author-year';
+  requirePageForDirectQuotes?: boolean;
+  pageLabel?: string;
+  allowSuffixes?: boolean;
+  allowMissingEntryInsertion?: boolean;
+  allowDuplicateMerge?: boolean;
+}
+
+/** Verificirana pravila za asistirani popravak pravnih fusnota. */
+export interface LegalFootnoteRepairRules {
+  mode: 'legal-notes';
+  marker?: {
+    convertManualNumbers?: boolean;
+    position?: 'before-punctuation' | 'after-punctuation';
+    superscript?: boolean;
+  };
+  firstCitation?: {
+    requireFullCitation?: boolean;
+    standardize?: boolean;
+  };
+  repeatedCitation?: {
+    ibidPolicy?: 'immediate-previous';
+    opCitPolicy?: 'replace-with-short-citation';
+    introduceAbbreviations?: boolean;
+  };
+  legalSources?: {
+    normalizeLawNames?: boolean;
+    requireGazetteNumber?: boolean;
+    gazetteName?: string;
+    splitMultipleSources?: boolean;
+  };
+  bibliography?: {
+    linkLegalSources?: boolean;
+  };
+}
+
+/** Verificirana pravila za geometrijski i pristupacni popravak tablica i slika. */
+export interface TableFigureRescueRules {
+  table?: {
+    fitToTextWidth?: boolean;
+    equalColumns?: boolean;
+    repeatHeader?: boolean;
+    preventRowSplit?: boolean;
+    align?: 'left' | 'center' | 'right';
+    font?: string;
+    sizePt?: number;
+    beforePt?: number;
+    afterPt?: number;
+    landscape?: { enabled?: boolean; threshold?: number };
+  };
+  figure?: {
+    maxWidth?: 'text-width' | number;
+    removeWrapping?: boolean;
+    align?: 'left' | 'center' | 'right';
+    keepWithCaption?: boolean;
+    requireAltText?: boolean;
+    minDpi?: number;
+  };
+}
+
+/** Verificirana pravila za popravak višestrukih Word sekcija. */
+export interface SectionSurgeryRules {
+  allowMultipleSections?: boolean;
+  frontMatter?: {
+    numbering?: 'roman' | 'decimal' | 'none';
+    removePageNumberFromTitlePage?: boolean;
+    differentFirstPage?: boolean;
+    separateHeaders?: boolean;
+  };
+  mainMatter?: {
+    numbering?: 'decimal';
+    startAt?: number;
+    margins?: Partial<Record<'top' | 'right' | 'bottom' | 'left', number>>;
+  };
+  appendices?: {
+    enabled?: boolean;
+    numbering?: 'decimal' | 'letters' | 'roman';
+    restartAt?: number;
+    separateSection?: boolean;
+  };
+  headersFooters?: {
+    differentFirstPage?: boolean;
+    differentOddEvenPages?: boolean;
+    unlinkFromPrevious?: boolean;
+  };
+  landscape?: {
+    allowed?: boolean;
+    restorePortraitAfter?: boolean;
+    widthThresholdTwips?: number;
+  };
+}
+
+/**
+ * Neobvezna, verificirana pravila odlomaka. Bez ovog objekta repair engine ne izmišlja
+ * uvlačenje, pagination ni čišćenje autorovog lažnog početnog razmaka.
+ */
+export interface ParagraphRules {
+  styles?: Record<string, {
+    firstLineCm?: number;
+    hangingCm?: number;
+    beforePt?: number;
+    afterPt?: number;
+    keepLines?: boolean;
+    keepNext?: boolean;
+    widowControl?: boolean;
+  }>;
+  firstParagraphAfterHeading?: { firstLineCm?: number };
+  keepLinesShortBlocks?: boolean;
+  removeFakeIndent?: boolean;
+  clearDirectIndent?: boolean;
+}
+
+/** Verificirana pravila za natpise i popise grafickih elemenata. */
+export interface ElementCaptionRules {
+  labels: { table: string; figure: string; chart: string };
+  captionPosition: { table: 'above' | 'below'; figure: 'above' | 'below'; chart: 'above' | 'below' };
+  sourceRequired?: boolean;
+  sourcePosition?: 'below-caption' | 'below-element';
+  lists: { table: boolean; figure: boolean; chart: boolean };
+  listPlacement?: 'after-toc' | 'before-intro';
+  numbering?: 'document' | 'chapter';
+  captionStyle?: {
+    font?: string;
+    sizePt?: number;
+    bold?: boolean;
+    italic?: boolean;
+    align?: 'left' | 'center' | 'right';
+  };
+  listHeadingStyle?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -244,6 +413,18 @@ export interface VerifiedProfile {
   verifiedAt?: string;
   documentDate?: string;
   rules: Record<string, unknown>;
+  paragraphRules?: ParagraphRules;
+  bibliographyRules?: BibliographyRules;
+  citationSyncRules?: CitationSyncRules;
+  legalFootnoteRepairRules?: LegalFootnoteRepairRules;
+  tableFigureRescueRules?: TableFigureRescueRules;
+  sectionSurgeryRules?: SectionSurgeryRules;
+  croatianTypographyRules?: CroatianTypographyRules;
+  consistencyRules?: ConsistencyRules;
+  requiredSections?: RequiredSectionProfileEntry[];
+  requiredSectionRules?: RequiredSectionRules;
+  linkRules?: LinkRules;
+  crossFileSubmissionRules?: CrossFileSubmissionRules;
   ruleEntries?: RuleEntry[];
   facts?: string[];
   note?: string;

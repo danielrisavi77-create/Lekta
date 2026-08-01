@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { buildRepairableItems, type AnalyzedCheck } from '../src/ui/repair-items';
+import { buildRepairableItems, pageNumberingRepairableItem, pickTargetItem, type AnalyzedCheck } from '../src/ui/repair-items';
 import type { RuleEntry } from '../src/profiles/profile-schema';
+import type { RepairableItem } from '../src/ui/repair-panel';
 
 // Regresijska mreza za buildRepairableItems: PRVO dokazuje postojece ponasanje za obavezne
 // (autoFixable+verified) stavke, PA tek onda pokriva novi "preporuceno" (advisory+recommended)
@@ -111,5 +112,60 @@ describe('buildRepairableItems: preporucene (advisory+recommended) stavke, novo 
     expect(required?.recommended).toBeUndefined();
     expect(recommended?.recommended).toBe(true);
     expect(recommended?.violated).toBe(false);
+  });
+
+  it('svaka stavka nosi matchKeys izveden iz naslova checka (RESULT-03 korelacija)', () => {
+    const checks: AnalyzedCheck[] = [{ title: 'Dominantni font', status: 'fail', max: 8 }];
+    const items = buildRepairableItems(checks, profile, [requiredEntry()]);
+    expect(items[0].matchKeys).toEqual(['Dominantni font']);
+  });
+});
+
+// RESULT-03 (audit 23.7., live-testirano 28.7. protiv fer-diplomski-prazni-odlomci.docx): klik na
+// "Otvori mogucnost popravka" na kartici konkretnog nalaza otvarao je opceniti "Popravi sve"
+// panel bez IKAKVE veze s kliknutim nalazom (stavka bez veze bila jedina oznacena). pickTargetItem
+// je jezgra popravka: nalaz -> matchKeys -> tocno ona repair-items stavka koja ga popravlja.
+describe('pickTargetItem (RESULT-03)', () => {
+  const fakeItem = (over: Partial<RepairableItem> = {}): RepairableItem => ({
+    ruleId: 'x', fixerId: 'font-fixer', label: 'X', params: {}, ...over,
+  });
+
+  it('nalazi stavku ciji matchKeys sadrzi bar jedan trazeni kljuc', () => {
+    const items = [
+      fakeItem({ ruleId: 'margins-universal', matchKeys: ['Margine dokumenta'] }),
+      fakeItem({ ruleId: 'page-numbering-universal', matchKeys: ['Numeriranje od prve stranice Uvoda', 'Shema numeriranja stranica'] }),
+    ];
+    const target = pickTargetItem(['Provjeri rimsku i arapsku numeraciju', 'Shema numeriranja stranica'], items);
+    expect(target?.ruleId).toBe('page-numbering-universal');
+  });
+
+  it('vraca undefined kad nijedna stavka ne odgovara (dokument nema upotrebljiv split)', () => {
+    const items = [fakeItem({ ruleId: 'margins-universal', matchKeys: ['Margine dokumenta'] })];
+    expect(pickTargetItem(['Shema numeriranja stranica'], items)).toBeUndefined();
+  });
+
+  it('vraca undefined kad nalaz nema matchKeys (prazno ili izostavljeno)', () => {
+    const items = [fakeItem({ ruleId: 'margins-universal', matchKeys: ['Margine dokumenta'] })];
+    expect(pickTargetItem([], items)).toBeUndefined();
+    expect(pickTargetItem(undefined, items)).toBeUndefined();
+  });
+
+  it('ne pogadja stavku bez matchKeys (npr. tocFieldItem, ponudjena neovisno o pojedinacnom nalazu)', () => {
+    const items = [fakeItem({ ruleId: 'toc-field-universal' })]; // bez matchKeys, namjerno
+    expect(pickTargetItem(['Sadržaj dokumenta'], items)).toBeUndefined();
+  });
+
+  it('integracija: pageNumberingRepairableItem stvarno proizvodi stavku koju pickTargetItem nalazi za nalaz "Provjeri rimsku i arapsku numeraciju"', () => {
+    const result = {
+      details: { sections: [{ paragraphIndex: 9 }, { paragraphIndex: 10 }], introParagraphIndex: 10 },
+      checks: [],
+    };
+    const items = pageNumberingRepairableItem(result, { checkPageNumberStartAtIntro: true });
+    expect(items).toHaveLength(1);
+    // finding.matchKeys u stvarnom toku (finding-view-model.ts) je [issue.title, check.title]:
+    // issue.title ("Provjeri rimsku i arapsku numeraciju") nikad nije sam po sebi checkov
+    // naslov, poklapanje ide preko uparenog checka ("Shema numeriranja stranica").
+    const target = pickTargetItem(['Provjeri rimsku i arapsku numeraciju', 'Shema numeriranja stranica'], items);
+    expect(target?.ruleId).toBe('page-numbering-universal');
   });
 });

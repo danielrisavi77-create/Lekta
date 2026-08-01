@@ -1,12 +1,12 @@
 # LEKTA_PRODUCT_ROADMAP.md
 
 Razvojni plan proizvoda na temelju audita stvarnog stanja
-([LEKTA_CURRENT_STATE_AUDIT.md](LEKTA_CURRENT_STATE_AUDIT.md)) i konkurentske provjere
+([AUDIT_MASTER.md](AUDIT_MASTER.md)) i konkurentske provjere
 ([LEKTA_COMPETITIVE_POSITIONING.md](LEKTA_COMPETITIVE_POSITIONING.md)).
 
 Datum: 2026-07-13. Uskladjeno s fiksiranim odlukama A/B/C iz
 [roadmap/CO_PILOT_STRATEGY.md](roadmap/CO_PILOT_STRATEGY.md) i launch gateom iz
-[audit/LAUNCH_BLOCKERS.md](audit/LAUNCH_BLOCKERS.md). Definicija gotovog svake stavke:
+[AUDIT_MASTER.md](AUDIT_MASTER.md). Definicija gotovog svake stavke:
 `npm run check` zelen; za parser/repair izmjene dodatno golden testovi.
 
 Kljucna korekcija specifikacije: `LEKTA_STRATESKI_AUDIT_I_PLAN.md` predlaze "Faza 1 = stvarni
@@ -92,7 +92,7 @@ Funkcionalnosti:
   kao besplatna provjera kompatibilnosti (PaperCheck uzorak); Thesis Pass kao flagship
   (odluka C).
 
-Ovisnosti: LAUNCH_BLOCKERS launch gate (svi code-doable P0/P1 zatvoreni; ostali su vlasnicki:
+Ovisnosti: AUDIT_MASTER.md launch gate (svi code-doable P0/P1 zatvoreni; ostali su vlasnicki:
 pravni subjekt, MoR, DPA, PITR). Faza NE ovisi o Fazi 1, ali konverzija je bitno jaca ako se
 pali nakon F1.1 (score prije/poslije kao prodajni argument). Rizik: srednji (prvi novac,
 reputacija); ublazen garancijom vezanom na tocnost pravila i re-check besplatno unutar slota.

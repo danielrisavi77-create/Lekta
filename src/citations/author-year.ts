@@ -65,4 +65,109 @@ function extractReferences(paragraphs: any,lang: any){
  return{start,entries}
 }
 
+export interface CitationOccurrenceDetail {
+  paragraphIndex: number;
+  start: number;
+  end: number;
+  rawText: string;
+  author: string;
+  year: string;
+  suffix?: string;
+  locator?: { label: string; value: string };
+  form: 'parenthetical' | 'narrative';
+  directQuote: boolean;
+}
+
+function citationLocator(raw: string, yearEnd: number): { label: string; value: string } | undefined {
+  const tail = raw.slice(yearEnd);
+  const match = tail.match(/\b(str\.?|pp?\.?|pages?)\s*([0-9]+(?:\s*[-–]\s*[0-9]+)?)/i);
+  return match ? { label: match[1].replace(/\.$/, ''), value: match[2].replace(/\s+/g, '') } : undefined;
+}
+
+function quoteBefore(text: string, start: number): boolean {
+  const before = text.slice(Math.max(0, start - 300), start);
+  return /[„“"](?:[^„“"]{8,300})[”"“]\s*[,;:]?\s*[([{]?\s*$/u.test(before);
+}
+
+function detailedCitationAuthor(prefix: string): string {
+  return prefix
+    .replace(/^\s*(?:vidi|usp\.?|prema|navedeno\s+u)\s+/i, '')
+    .replace(/[\s,;:]+$/g, '')
+    .trim();
+}
+
+/** Detaljna, kompatibilna varijanta extractCitations s rasponima za asistirani repair. */
+export function extractCitationOccurrences(paragraphs: Array<{ index?: number; text: string; cell?: unknown }>): CitationOccurrenceDetail[] {
+  const found: CitationOccurrenceDetail[] = [];
+  const parenthetical = /\(((?:[^()]|\([^()]*\)){0,360}\b(?:18|19|20)\d{2}[a-z]?(?:[^()]|\([^()]*\)){0,220})\)/giu;
+  const yearRe = /\b((?:18|19|20)\d{2})([a-z]?)\b/giu;
+  for (const [fallbackIndex, paragraph] of paragraphs.entries()) {
+    if (!paragraph || paragraph.cell || !paragraph.text) continue;
+    const text = paragraph.text;
+    const paragraphIndex = Number(paragraph.index) || fallbackIndex + 1;
+    let match: RegExpExecArray | null;
+    while ((match = parenthetical.exec(text))) {
+      const inner = match[1];
+      let offset = 0;
+      for (const part of inner.split(';')) {
+        const trimmed = part.trim();
+        if (!trimmed) { offset += part.length + 1; continue; }
+        const leading = part.indexOf(trimmed);
+        const years = [...trimmed.matchAll(yearRe)];
+        for (const yearMatch of years) {
+          const yearOffset = yearMatch.index ?? 0;
+          const prefix = trimmed.slice(0, yearOffset);
+          const author = citationAuthor(detailedCitationAuthor(prefix));
+          if (!author) continue;
+          const rawText = trimmed;
+          const start = match.index + 1 + offset + leading;
+          const yearEnd = yearOffset + yearMatch[0].length;
+          const locator = citationLocator(rawText, yearEnd);
+          const suffix = yearMatch[2]?.toLowerCase() || undefined;
+          found.push({
+            paragraphIndex,
+            start,
+            end: start + rawText.length,
+            rawText,
+            author,
+            year: `${yearMatch[1]}${suffix || ''}`.toLowerCase(),
+            ...(suffix ? { suffix } : {}),
+            ...(locator ? { locator } : {}),
+            form: 'parenthetical',
+            directQuote: quoteBefore(text, start),
+          });
+          break;
+        }
+        offset += part.length + 1;
+      }
+    }
+
+    const narrative = /(?<![\p{L}\p{N}])([\p{Lu}][\p{L}'’\-]{2,}(?:\s+(?:i|and|&)\s+[\p{Lu}][\p{L}'’\-]{2,})?)\s*\(((?:18|19|20)\d{2})([a-z]?)\)/gu;
+    while ((match = narrative.exec(text))) {
+      const author = citationAuthor(detailedCitationAuthor(match[1]));
+      if (!author) continue;
+      const suffix = match[3]?.toLowerCase() || undefined;
+      const rawText = match[0];
+      found.push({
+        paragraphIndex,
+        start: match.index,
+        end: match.index + rawText.length,
+        rawText,
+        author,
+        year: `${match[2]}${suffix || ''}`.toLowerCase(),
+        ...(suffix ? { suffix } : {}),
+        form: 'narrative',
+        directQuote: quoteBefore(text, match.index),
+      });
+    }
+  }
+  const seen = new Set<string>();
+  return found.filter((citation) => {
+    const key = `${citation.paragraphIndex}|${citation.start}|${citation.end}|${citation.rawText}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).sort((a, b) => a.paragraphIndex - b.paragraphIndex || a.start - b.start || a.end - b.end);
+}
+
 export { extractCitations, extractReferences };

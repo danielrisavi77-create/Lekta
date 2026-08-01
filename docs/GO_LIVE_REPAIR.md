@@ -99,6 +99,12 @@ Nove za repair:
 - [ ] `REPAIR_CLEANUP_CRON_SECRET` = nasumična tajna (`openssl rand -hex 32`). Koristi je
   i pg_cron u koraku C. Bez nje `cleanup-orphan-repairs` fail-closed vraća 401.
 - [ ] (opcijski) `REPAIR_MAX_DOCX_BYTES` (default 20MB), `REPAIR_CLEANUP_GRACE_MINUTES` (default 60).
+- [ ] (opcijski, AUDIT_MASTER.md poglavlje 9) `REPAIR_DISABLED=true` = kill switch (503 na sve
+  zahtjeve, isti obrazac kao `PREFLIGHT_DISABLED`). `REPAIR_MAX_CONCURRENT` (default 4) = best-effort
+  concurrency limit PO IZOLATU (nije globalno atomican, vidi `src/report/repair-limits.ts`); 503
+  `{error:'busy'}` kad je premasen. `REPAIR_STORAGE_DAILY_CAP` (default 500) = globalni dnevni strop
+  broja NOVIH `repair_jobs` redaka prije nego se pohrana preskoci (popravak i dalje uspijeva, samo
+  bez "Moji popravci" za taj zahtjev); 0 ili negativno iskljucuje ogranicenje.
 
 Provjera izvora u korpusu (sve **opcijske**, defaulti su već razumni; postavi samo ako mijenjaš).
 Iste vrijednosti čita i `repair-docx` (naslijeđeni put) i `source-check` (usporedni put), jer dijele

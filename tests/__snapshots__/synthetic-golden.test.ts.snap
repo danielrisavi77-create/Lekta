@@ -173,6 +173,14 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
+      "detail": "FPZG autor-godina: ručna završna provjera potrebna",
+      "earned": 3,
+      "max": 3,
+      "status": "warn",
+      "title": "Automatizacija citatnog stila",
+    },
+    {
+      "category": "citations",
       "detail": "Nisu pronađeni očito nepotpuni zapisi",
       "earned": 5,
       "max": 5,
@@ -259,6 +267,14 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "status": "pass",
       "title": "Prazni odlomci",
     },
+    {
+      "category": "typography",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
+      "earned": 0,
+      "max": 0,
+      "status": "pass",
+      "title": "Tehničko-tipografska dosljednost",
+    },
   ],
   "issues": [
     {
@@ -267,6 +283,13 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "severity": "info",
       "title": "Ručna završna provjera verificiranog profila",
       "where": "Službene upute",
+    },
+    {
+      "category": "citations",
+      "detail": "Za stil FPZG autor-godina citatnice i literaturu treba dodatno ručno pregledati.",
+      "severity": "info",
+      "title": "Odabrani citatni stil nije u potpunosti automatiziran",
+      "where": "Citatni profil",
     },
     {
       "category": "structure",
@@ -489,6 +512,14 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
+      "detail": "FPZG autor-godina: ručna završna provjera potrebna",
+      "earned": 3,
+      "max": 3,
+      "status": "warn",
+      "title": "Automatizacija citatnog stila",
+    },
+    {
+      "category": "citations",
       "detail": "Nisu pronađeni očito nepotpuni zapisi",
       "earned": 5,
       "max": 5,
@@ -559,6 +590,14 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "status": "pass",
       "title": "Prazni odlomci",
     },
+    {
+      "category": "typography",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
+      "earned": 0,
+      "max": 0,
+      "status": "pass",
+      "title": "Tehničko-tipografska dosljednost",
+    },
   ],
   "issues": [
     {
@@ -567,6 +606,13 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "severity": "info",
       "title": "Ručna završna provjera verificiranog profila",
       "where": "Službene upute",
+    },
+    {
+      "category": "citations",
+      "detail": "Za stil FPZG autor-godina citatnice i literaturu treba dodatno ručno pregledati.",
+      "severity": "info",
+      "title": "Odabrani citatni stil nije u potpunosti automatiziran",
+      "where": "Citatni profil",
     },
     {
       "category": "structure",
@@ -794,6 +840,14 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
+      "detail": "FPZG autor-godina: ručna završna provjera potrebna",
+      "earned": 3,
+      "max": 3,
+      "status": "warn",
+      "title": "Automatizacija citatnog stila",
+    },
+    {
+      "category": "citations",
       "detail": "Nisu pronađeni očito nepotpuni zapisi",
       "earned": 5,
       "max": 5,
@@ -872,6 +926,14 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "status": "pass",
       "title": "Prazni odlomci",
     },
+    {
+      "category": "typography",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
+      "earned": 0,
+      "max": 0,
+      "status": "pass",
+      "title": "Tehničko-tipografska dosljednost",
+    },
   ],
   "issues": [
     {
@@ -880,6 +942,13 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "severity": "info",
       "title": "Ručna završna provjera verificiranog profila",
       "where": "Službene upute",
+    },
+    {
+      "category": "citations",
+      "detail": "Za stil FPZG autor-godina citatnice i literaturu treba dodatno ručno pregledati.",
+      "severity": "info",
+      "title": "Odabrani citatni stil nije u potpunosti automatiziran",
+      "where": "Citatni profil",
     },
     {
       "category": "formatting",
@@ -969,7 +1038,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
   "profile": "FPZG · prijediplomska Politologija · završni rad",
   "profileFingerprint": null,
   "profileStatus": "verified",
-  "score": 67,
+  "score": 68,
   "stats": {
     "characters": 292,
     "citations": 0,
@@ -1170,6 +1239,14 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
+      "detail": "FPZG autor-godina: ručna završna provjera potrebna",
+      "earned": 3,
+      "max": 3,
+      "status": "warn",
+      "title": "Automatizacija citatnog stila",
+    },
+    {
+      "category": "citations",
       "detail": "Nisu pronađeni očito nepotpuni zapisi",
       "earned": 5,
       "max": 5,
@@ -1248,6 +1325,14 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "status": "pass",
       "title": "Prazni odlomci",
     },
+    {
+      "category": "typography",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
+      "earned": 0,
+      "max": 0,
+      "status": "pass",
+      "title": "Tehničko-tipografska dosljednost",
+    },
   ],
   "issues": [
     {
@@ -1256,6 +1341,13 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "severity": "info",
       "title": "Ručna završna provjera verificiranog profila",
       "where": "Službene upute",
+    },
+    {
+      "category": "citations",
+      "detail": "Za stil FPZG autor-godina citatnice i literaturu treba dodatno ručno pregledati.",
+      "severity": "info",
+      "title": "Odabrani citatni stil nije u potpunosti automatiziran",
+      "where": "Citatni profil",
     },
     {
       "category": "structure",
@@ -1662,6 +1754,14 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "status": "pass",
       "title": "Prazni odlomci",
     },
+    {
+      "category": "typography",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
+      "earned": 0,
+      "max": 0,
+      "status": "pass",
+      "title": "Tehničko-tipografska dosljednost",
+    },
   ],
   "issues": [
     {
@@ -2061,6 +2161,14 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "max": 0,
       "status": "pass",
       "title": "Prazni odlomci",
+    },
+    {
+      "category": "typography",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
+      "earned": 0,
+      "max": 0,
+      "status": "pass",
+      "title": "Tehničko-tipografska dosljednost",
     },
   ],
   "issues": [

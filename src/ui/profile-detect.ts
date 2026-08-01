@@ -84,3 +84,14 @@ export function detectContextFromText(units: DetectUnit[], rawText: string): Det
 export function needsProfileConfirmation(statusKey: string, confirmed: boolean): boolean {
   return statusKey === 'verified' && !confirmed;
 }
+
+/**
+ * Je li automatska detekcija dovoljno pouzdana da se profil smatra korisnicki potvrdjenim BEZ
+ * eksplicitne radnje. Samo kad je studij (program) stvarno prepoznat iz teksta dokumenta: kad
+ * detekcija pogodi ustanovu/fakultet ali ne i program, izbornik studija ostaje na proizvoljnom
+ * (alfabetski prvom) fallbacku iz populatePrograms, pa taj slucaj NE smije tiho ugasiti
+ * needsProfileConfirmation gate za verificirane profile (AUDIT_MASTER.md, poglavlje 7).
+ */
+export function isConfidentDetection(ctx: DetectedContext | null): boolean {
+  return !!ctx?.program;
+}

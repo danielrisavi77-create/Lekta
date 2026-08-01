@@ -27,6 +27,8 @@ class AnalysisCancelledError extends Error {
   }
 }
 
+import { attachHeadingStructure } from './heading-structure';
+
 /** Je li greska posljedica korisnickog prekida (pa je pozivatelj tiho proguta, bez toast greske). */
 export function isAnalysisCancelled(e: unknown): boolean {
   return e instanceof AnalysisCancelledError || (e as { name?: string } | null)?.name === 'AnalysisCancelledError';
@@ -129,7 +131,8 @@ export interface AnalyzeOptions { skipFinalDelay?: boolean }
 export async function analyzeDocxOffThread(file: File, profile: any, settings: any, onProgress: any, options?: AnalyzeOptions): Promise<any> {
   if (canUseWorker()) {
     try {
-      return await analyzeInWorker(file, profile, settings, onProgress, options);
+      const result = await analyzeInWorker(file, profile, settings, onProgress, options);
+      return attachHeadingStructure(result, profile?.headingRules || {});
     } catch (e) {
       if (!(e instanceof WorkerInfraError)) throw e;
       workerBroken = true;
@@ -142,5 +145,6 @@ export async function analyzeDocxOffThread(file: File, profile: any, settings: a
   // korpus koriste @xmldom/xmldom. Ovo je rijedak fallback (nema/slomljen worker), pa se svjesno
   // prihvaca moguca sitna razlika u parsiranju umjesto globalnog override-a DOMParsera na glavnoj niti.
   const { analyzeDocx } = await import('./analyze-docx');
-  return analyzeDocx(file, profile, settings, onProgress, options);
+  const result = await analyzeDocx(file, profile, settings, onProgress, options);
+  return attachHeadingStructure(result, profile?.headingRules || {});
 }

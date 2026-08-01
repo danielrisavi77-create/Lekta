@@ -69,7 +69,14 @@ supabase db push                              # migracije
 supabase functions deploy generate-report
 supabase functions deploy webhook-mor
 supabase functions deploy faculty-request --no-verify-jwt   # anoniman waitlist upis
+supabase functions deploy field-render
 ```
+
+Završno osvježavanje Word polja (`field-render`) je samo autentificirani Edge
+proxy. LibreOffice se ne pokreće u Edge runtimeu, nego u zasebnom privatnom
+workeru iz `workers/field-renderer/`. Prije deploya postavi `FIELD_RENDER_WORKER_URL`
+i `FIELD_RENDER_WORKER_TOKEN` secrets. Produkcijski Docker primjer i Cloud Run
+upute su u `workers/field-renderer/README.md`.
 
 Za `faculty-request` klijentu treba `waitlistEndpoint` (ili `supabaseUrl` + anon kljuc); endpoint je
 `<supabaseUrl>/functions/v1/faculty-request`. `--no-verify-jwt` je nuzan jer je anoniman upis

@@ -77,6 +77,13 @@ export interface TitlePageTemplate {
   /** Meta derivacije iz evidence uzoraka (samo derivirani unosi). */
   derivation?: { samples: number; conflicts: string[] };
   notes?: string;
+  /** Izričito verificirana oznaka da ustanova traži logo; ne zaključuje se iz bilješki. */
+  logoRequired?: boolean;
+  /** Ostavlja prostor za budući verificirani medijski asset; v1 ga namjerno ne umeće. */
+  logoAvailable?: boolean;
+  /** Profil može označiti da je predložak zamijenjen novijom verzijom. */
+  outdated?: boolean;
+  supersededBy?: string;
 }
 
 /** Redigirani dokaz iz prve stranice jednog javnog rada (evidence/<unitId>.json). */

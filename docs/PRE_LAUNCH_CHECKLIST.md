@@ -9,11 +9,11 @@ Lista za provjeru prije launcha, po prioritetu. Svaka stavka ima acceptance krit
 Pravila rada vrijede iz CLAUDE.md (build gate, mali commitovi). Kontekst proizvoda iz VISION.md. Naplata i zaštita iz MONETIZATION_AND_ANTI_ABUSE.md.
 
 > Odnos prema drugim launch dokumentima (jedan izvor istine): ovo je tematska pred-launch lista
-> spremnosti (po podrucjima 1 do 10, s vlastitim P0 po sekcijama). Konsolidirani, iz audita izvedeni
-> popis blokatora (paketi P0-01 do P0-07) je mjerodavan i zivi u
-> [docs/audit/LAUNCH_BLOCKERS.md](audit/LAUNCH_BLOCKERS.md); co-pilot luk pokriva
+> spremnosti (po podrucjima 1 do 10, s vlastitim P0 po sekcijama). Konsolidirani audit i status
+> (svi nalazi, sve auditne runde, tekuci status) je mjerodavan i zivi u
+> [docs/AUDIT_MASTER.md](AUDIT_MASTER.md); co-pilot luk pokriva
 > [docs/roadmap/LAUNCH_CHECKLIST.md](roadmap/LAUNCH_CHECKLIST.md). P0 oznake ovdje (po sekciji) i
-> P0-0x u LAUNCH_BLOCKERS.md su zasebne sheme i ne preslikavaju se 1:1.
+> P0-0x sheme u AUDIT_MASTER.md su zasebne i ne preslikavaju se 1:1.
 
 ## Launch gate (sve mora biti zeleno)
 

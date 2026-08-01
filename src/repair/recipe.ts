@@ -73,6 +73,18 @@ const DOCUMENT_CONDITIONAL: Array<{
   item: (p: any) => Omit<RecipeItem, 'source' | 'sourcePage' | 'authority' | 'lastVerified'>;
 }> = [
   {
+    gate: () => true,
+    item: () => ({
+      ruleId: 'cross-file-submission-consistency-assisted',
+      fixerId: 'submission-metadata-fixer',
+      label: 'Usklađivanje predajnog paketa',
+      scope: 'opce',
+      target: 'potvrđene DOCX metapodatke između Worda, PDF-a i obrasca',
+      params: { version: 1, fields: [] },
+      condition: 'Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.',
+    }),
+  },
+  {
     gate: (p) => p?.checkPageNumberStartAtIntro === true,
     item: (p) => ({
       ruleId: 'page-numbering-universal / section-insert-intro',

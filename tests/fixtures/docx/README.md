@@ -28,7 +28,7 @@ alat, ali fixture postaju dio povijesti gita.
 
 Fixture s prefiksom `synthetic-` NISU pravi radovi: rucno su sastavljeni (isti
 zipStore pristup kao `tests/helpers/docx-builder.ts`) da vjerno reproduciraju
-TOCNO ODREDJEN strukturni kvirk (RE-ID iz `docs/AUDIT_REPAIR_ENGINE_2026-07-25.md`)
+TOCNO ODREDJEN strukturni kvirk (RE-ID iz `docs/AUDIT_MASTER.md`, poglavlje 5)
 koji su prave anonimizirane fixture jos ne pokrivaju: LibreOffice/Google Docs
 default paragraph stil "Standard" umjesto "Normal", hrvatski Word/LibreOffice
 naslov stilom "Naslov1" umjesto "Heading1", i rad s OMML formulom (`m:oMath`) uz

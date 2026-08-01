@@ -42,6 +42,42 @@ describe('FindingViewModel', () => {
     expect(result.issues[1].title).toBe('Naslov');
   });
 
+  it('matchKeys sadrzi issue.title, deduplicirano kad je check.title isti (RESULT-03)', () => {
+    const findings = buildFindingViewModels(result);
+    expect(findings[0].matchKeys).toEqual(['Margine']); // check.title==='Margine', bez duplikata
+    expect(findings[1].matchKeys).toEqual(['Naslov']); // nema uparen check -> samo issue.title
+  });
+
+  it('matchKeys sadrzi I issue.title I check.title kad se razlikuju (npr. numeracija)', () => {
+    const issue = { severity: 'warning', category: 'structure', title: 'Provjeri rimsku i arapsku numeraciju', detail: '', where: 'Sekcije dokumenta' };
+    const numberingResult = {
+      checks: [{ category: 'structure', title: 'Shema numeriranja stranica', status: 'warn', earned: 2, max: 4, detail: '', scored: true, issue }],
+      issues: [issue],
+    };
+    const finding = buildFindingViewModels(numberingResult)[0];
+    expect(finding.matchKeys).toEqual(['Provjeri rimsku i arapsku numeraciju', 'Shema numeriranja stranica']);
+  });
+
+  it('tool: prepoznat problem dobiva suggestTool CTA, kontekst selekcije ide u href (nekad renderActionPlan)', () => {
+    const naslovnicaResult = {
+      issues: [{ severity: 'error', category: 'elements', title: 'Nedostaje naslovnica', detail: '', where: '' }],
+      settings: { selectionIds: { unit: 'fpzg' }, workType: 'graduate' },
+      selection: { program: 'Politologija' },
+    };
+    const finding = buildFindingViewModels(naslovnicaResult)[0];
+    expect(finding.tool).toEqual({ href: 'naslovnica.html?fakultet=fpzg&razina=diplomski&smjer=Politologija', label: 'Složi naslovnicu' });
+    const html = findingCardHtml(finding, false);
+    expect(html).toContain('class="action-tool"');
+    expect(html).toContain('target="_blank" rel="noopener"');
+    expect(html).toContain('Složi naslovnicu');
+  });
+
+  it('tool: nepovezan problem (npr. font) ostaje bez CTA (nema lazne ponude)', () => {
+    const finding = buildFindingViewModels(result)[0]; // "Margine", formatting, ne odgovara nijednom obrascu
+    expect(finding.tool).toBeUndefined();
+    expect(findingCardHtml(finding, false)).not.toContain('action-tool');
+  });
+
   it('rucna potvrda ne skriva nalaz iz prioriteta, a zanemareni se skriva', () => {
     const confirmed = new Map<string, FindingSessionState>([['finding:submission:paket', { status: 'confirmed' }]]);
     expect(topFindings(buildFindingViewModels(result, confirmed)).map((finding) => finding.title)).toContain('Paket');
@@ -66,6 +102,14 @@ describe('FindingViewModel', () => {
     const html = findingCardHtml(buildFindingViewModels(result, states)[1], false);
     expect(html).toContain('Ručna potvrda ne mijenja automatsku ocjenu');
     expect(html).toContain('Poništi ručnu potvrdu');
+  });
+
+  it('zanemaren nalaz objasnjava utjecaj na prioritete i ocjenu, uz mogucnost vracanja', () => {
+    const states = new Map<string, FindingSessionState>([['finding:structure:naslov', { status: 'ignored', ignoredReason: 'Mentor je potvrdio iznimku' }]]);
+    const html = findingCardHtml(buildFindingViewModels(result, states)[1], false);
+    expect(html).toContain('uklanja nalaz iz tri najvažnija koraka');
+    expect(html).toContain('Vrati u otvorene nalaze');
+    expect(html).toContain('Razlog: Mentor je potvrdio iznimku');
   });
   it('ogranicenje analize odvaja od problema ucitanog dokumenta', () => {
     const findings = buildFindingViewModels({

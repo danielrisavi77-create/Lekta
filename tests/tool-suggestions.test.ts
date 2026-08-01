@@ -47,21 +47,30 @@ describe('suggestTool s kontekstom selekcije: naslovnica nosi ?fakultet/razina/s
   });
 });
 
-describe('renderActionPlan wiring u app.ts (source tripwire)', () => {
-  // app.ts je monolit bez izvoza za ove interne funkcije; izvorni tripwire cuva dva ugovora:
-  // (1) .action-tool otvara u NOVOM tabu (klik ne smije ugasiti upravo dovrsenu analizu,
-  // currentResult zivi samo u memoriji), (2) suggestTool dobiva kontekst selekcije.
-  const appSrc = readFileSync(
-    join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'ui', 'app.ts'), 'utf8',
+describe('findingCardHtml wiring u finding-view-model.ts (source tripwire)', () => {
+  // Nekad zivjelo u app.ts (renderActionPlan), koja je uklonjena kao mrtav kod: pisala je u
+  // #actionPlan unutar #tab-action, taba koji renderPhaseTwoResultViews trajno skriva, pa je
+  // suggestTool CTA bio nedohvatljiv i prije uklanjanja. Sad je dio findingCardHtml (jedini
+  // zivi prikaz nalaza), izvorni tripwire i dalje cuva ista dva ugovora: (1) .action-tool
+  // otvara u NOVOM tabu (klik ne smije ugasiti upravo dovrsenu analizu, currentResult zivi
+  // samo u memoriji), (2) suggestTool dobiva kontekst selekcije.
+  const fvmSrc = readFileSync(
+    join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'ui', 'finding-view-model.ts'), 'utf8',
   );
 
   it('.action-tool link ima target="_blank" rel="noopener"', () => {
-    expect(appSrc).toMatch(/class="action-tool"[^>]*target="_blank" rel="noopener"/);
+    expect(fvmSrc).toMatch(/class="action-tool"[^>]*target="_blank" rel="noopener"/);
   });
 
   it('suggestTool se poziva s kontekstom selekcije', () => {
-    expect(appSrc).toMatch(/suggestTool\(x,\s*_sctx\)/);
+    expect(fvmSrc).toMatch(/suggestTool\(issue,\s*sctx\)/);
   });
+});
+
+describe('applyUnitFromUrl wiring u app.ts (source tripwire, nevezano uz renderActionPlan)', () => {
+  const appSrc = readFileSync(
+    join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'ui', 'app.ts'), 'utf8',
+  );
 
   it('?unit= boot param postoji i poziva applySelectionIds putanju', () => {
     expect(appSrc).toMatch(/function applyUnitFromUrl\(\)/);

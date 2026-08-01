@@ -35,6 +35,7 @@ import { unambiguousMismatch, estimateWorkType } from '../../../src/report/work-
 import { applyFixers, FIXER_IDS, type FixerRequest } from '../../../src/repair/apply-fixers.ts';
 import { TERMS_VERSION } from '../../../src/legal/terms-version.ts';
 import { runCorpusCheck, corpusConfigFromEnv } from '../_shared/corpus-check.ts';
+import { ConcurrencyGate, storageQuotaExceeded } from '../../../src/report/repair-limits.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -42,6 +43,20 @@ const DAILY_CAP = Number(Deno.env.get('DAILY_CAP') ?? '30');
 const IP_HASH_SALT = Deno.env.get('IP_HASH_SALT') ?? '';
 const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netlify.app')
   .split(',').map((s) => s.trim()).filter(Boolean);
+
+// Kill switch (isti obrazac kao preflight-start PREFLIGHT_DISABLED): iskljuci bez deploya.
+const REPAIR_DISABLED = (Deno.env.get('REPAIR_DISABLED') ?? '') === 'true';
+
+// Concurrency (AUDIT_MASTER.md poglavlje 9): repair-docx je imao file-size + dnevni cap po
+// korisniku/IP-u, ali nikakvu branu na PARALELNE teske zahtjeve unutar iste tople instance.
+// Best-effort po izolatu (ConcurrencyGate dokumentira zasto nije globalno atomican).
+const REPAIR_GATE = new ConcurrencyGate(Number(Deno.env.get('REPAIR_MAX_CONCURRENT') ?? '4'));
+
+// Storage-kvota (AUDIT_MASTER.md poglavlje 9): globalni dnevni strop broja NOVIH repair_jobs
+// redaka. Pri dosegnutoj kvoti popravak i dalje radi (korisnik dobiva docx), samo se
+// preskace pohrana u "Moji popravci" (isto fail-open ponasanje kao vec postojeci null-storage
+// slucajevi), da neograničen upis u Storage ne postane trosak/DoS povrsina.
+const REPAIR_STORAGE_DAILY_CAP = Number(Deno.env.get('REPAIR_STORAGE_DAILY_CAP') ?? '500');
 
 // Gornja granica uploada (sirovi docx). Base64 odgovor ~+33%; Edge memorija 256MB. Velik docx s
 // puno medija drzi na oku (WS-3 rizik). Uskladi s klijentskim uploadMaxBytes.
@@ -150,9 +165,13 @@ Deno.serve(async (req: Request) => {
   // jednim retkom na kraju uspjesnog puta (koraci koji izadju ranije ionako nisu spori).
   const t0 = performance.now();
   const ms = (from: number) => Math.round(performance.now() - from);
+  // Postavlja se true tek nakon uspjesnog REPAIR_GATE.tryAcquire(); finally ispod smije zvati
+  // release() SAMO tada (ranije 401/disabled/OPTIONS izlazi nikad nisu uzeli slot).
+  let gateAcquired = false;
   try {
     if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
     if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
+    if (REPAIR_DISABLED) return json({ error: 'disabled' }, 503);
 
     // 1. auth
     const authHeader = req.headers.get('Authorization') ?? '';
@@ -160,6 +179,12 @@ Deno.serve(async (req: Request) => {
     const { data: userData } = await admin.auth.getUser(authHeader.replace(/^Bearer\s+/i, ''));
     const user = userData?.user;
     if (!user) return json({ error: 'unauthorized' }, 401);
+
+    // Concurrency gate: NAKON autha (necemo brojati neautorizirani sum), PRIJE ijednog teskog
+    // koraka (multipart parsing, zip citanje, applyFixers). release() u finally ispod jamci
+    // oslobadjanje na SVAKOM izlazu (rani return, uspjeh ili baceni izuzetak).
+    if (!REPAIR_GATE.tryAcquire()) return json({ error: 'busy' }, 503);
+    gateAcquired = true;
 
     // 2. multipart: 'file' (.docx binarno) + 'meta' (JSON: workType, parsedStructure, signals, requests,
     //    profileStatus, profileRef, confirmedMismatch, references).
@@ -363,6 +388,19 @@ Deno.serve(async (req: Request) => {
 
     // 8. WS-6: pohrana originala + rezultata (retencija do brisanja).
     //
+    // Storage-kvota (poglavlje 9): globalni dnevni strop broja NOVIH poslova, provjeren PRIJE
+    // ijednog Storage uploada. Prekoracenje NIKAD ne kvari sam popravak (docx se svejedno
+    // vraca korisniku), samo se preskace pohrana - isto fail-open ponasanje kao vec postojeci
+    // slucajevi gdje storeRepairJob vrati null (Storage/DB pad).
+    const { count: recentJobCount } = await admin
+      .from('repair_jobs')
+      .select('id', { count: 'exact', head: true })
+      .gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString());
+    const storageAllowed = !storageQuotaExceeded(recentJobCount ?? 0, REPAIR_STORAGE_DAILY_CAP);
+    if (!storageAllowed) {
+      console.warn(`[repair-docx] storage-kvota dosegnuta (${recentJobCount ?? 0}/${REPAIR_STORAGE_DAILY_CAP}), preskacem pohranu`);
+    }
+
     // POZADINSKI ZADATAK: dva Storage uploada (do 2 x 20 MB) su drzala odgovor iako korisnik na njih
     // ne ceka nista - popravljeni dokument je vec u memoriji i mogao je krenuti prema njemu.
     // EdgeRuntime.waitUntil drzi izolat zivim dok zadatak ne zavrsi, pa se pohrana dovrsi nakon
@@ -370,11 +408,11 @@ Deno.serve(async (req: Request) => {
     //
     // FALLBACK je namjeran: ako runtime nema waitUntil (lokalni serve, starija verzija), pohrana se
     // ceka kao dosad. Radije sporije nego izgubljen dokument.
-    const jobId = crypto.randomUUID();
+    const jobId = storageAllowed ? crypto.randomUUID() : null;
     const tStore = performance.now();
     // Gate iznad je zajamcio meta.consentVersion === TERMS_VERSION, pa biljezimo AUTORITATIVNU serversku
     // verziju (nikad null, nikad klijentov proizvoljni string). consent_version je NOT NULL u 0026.
-    const storeTask = (async () => {
+    const storeTask = jobId ? (async () => {
       try {
         const stored = await storeRepairJob(admin, user.id, jobId, { workType, fingerprint, slotId, originalBytes: docxBytes, resultBytes: result.docxBytes, changesCount: result.changelog.length, consentVersion: TERMS_VERSION, anonymous: user.is_anonymous === true });
         console.log(`[repair-docx] store job=${jobId} ok=${stored ? 1 : 0} ms=${ms(tStore)}`);
@@ -383,14 +421,16 @@ Deno.serve(async (req: Request) => {
         // U pozadinskom zadatku je ovaj log JEDINI trag: korisnik je odgovor vec dobio.
         console.error('[repair-docx] storeRepairJob threw', e instanceof Error ? e.message : e);
       }
-    })();
+    })() : null;
     const bg = (globalThis as any).EdgeRuntime?.waitUntil;
     let msStore = 0;
-    if (typeof bg === 'function') {
-      bg.call((globalThis as any).EdgeRuntime, storeTask);
-    } else {
-      await storeTask;
-      msStore = ms(tStore);
+    if (storeTask) {
+      if (typeof bg === 'function') {
+        bg.call((globalThis as any).EdgeRuntime, storeTask);
+      } else {
+        await storeTask;
+        msStore = ms(tStore);
+      }
     }
 
     // 9. Provjera izvora (naslijedjeni put) tek se sada preuzima. Za novog klijenta je ovo vec
@@ -406,11 +446,14 @@ Deno.serve(async (req: Request) => {
       changelog: result.changelog,
       skipped: result.skipped,
       // storagePending: pohrana jos traje u pozadini, pa jobId JEST rezerviran ali posao mozda jos
-      // nije vidljiv u "Moji popravci". Klijent zato ne smije tvrditi da je spremljeno.
-      slotId, jobId, storagePending: typeof bg === 'function', traceToken, fingerprint, sourceCheck,
+      // nije vidljiv u "Moji popravci". Klijent zato ne smije tvrditi da je spremljeno. Kad je
+      // jobId null (storage-kvota dosegnuta), pending je uvijek false: pohrana nije ni pokusana.
+      slotId, jobId, storagePending: !!jobId && typeof bg === 'function', traceToken, fingerprint, sourceCheck,
     }, 200);
   } catch (e) {
     console.error('[repair-docx]', e);
     return json({ error: 'internal' }, 500);
+  } finally {
+    if (gateAcquired) REPAIR_GATE.release();
   }
 });

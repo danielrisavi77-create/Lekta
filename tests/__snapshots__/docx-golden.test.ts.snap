@@ -148,6 +148,14 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "status": "pass",
         "title": "Prazni odlomci",
       },
+      {
+        "category": "typography",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
+        "earned": 0,
+        "max": 0,
+        "status": "pass",
+        "title": "Tehničko-tipografska dosljednost",
+      },
     ],
     "issues": [
       {
@@ -360,6 +368,14 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "max": 0,
         "status": "pass",
         "title": "Prazni odlomci",
+      },
+      {
+        "category": "typography",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
+        "earned": 0,
+        "max": 0,
+        "status": "pass",
+        "title": "Tehničko-tipografska dosljednost",
       },
     ],
     "issues": [
@@ -574,6 +590,14 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "status": "pass",
         "title": "Prazni odlomci",
       },
+      {
+        "category": "typography",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
+        "earned": 0,
+        "max": 0,
+        "status": "pass",
+        "title": "Tehničko-tipografska dosljednost",
+      },
     ],
     "issues": [
       {
@@ -779,6 +803,14 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "max": 0,
         "status": "pass",
         "title": "Prazni odlomci",
+      },
+      {
+        "category": "typography",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
+        "earned": 0,
+        "max": 0,
+        "status": "pass",
+        "title": "Tehničko-tipografska dosljednost",
       },
     ],
     "issues": [
@@ -1021,6 +1053,14 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "status": "pass",
         "title": "Prazni odlomci",
       },
+      {
+        "category": "typography",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
+        "earned": 0,
+        "max": 0,
+        "status": "pass",
+        "title": "Tehničko-tipografska dosljednost",
+      },
     ],
     "issues": [
       {
@@ -1220,6 +1260,14 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "status": "pass",
         "title": "Prazni odlomci",
       },
+      {
+        "category": "typography",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
+        "earned": 0,
+        "max": 0,
+        "status": "pass",
+        "title": "Tehničko-tipografska dosljednost",
+      },
     ],
     "issues": [
       {
@@ -1412,6 +1460,14 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "status": "pass",
         "title": "Prazni odlomci",
       },
+      {
+        "category": "typography",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
+        "earned": 0,
+        "max": 0,
+        "status": "pass",
+        "title": "Tehničko-tipografska dosljednost",
+      },
     ],
     "issues": [
       {
@@ -1603,6 +1659,14 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "max": 0,
         "status": "pass",
         "title": "Prazni odlomci",
+      },
+      {
+        "category": "typography",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
+        "earned": 0,
+        "max": 0,
+        "status": "pass",
+        "title": "Tehničko-tipografska dosljednost",
       },
     ],
     "issues": [
@@ -1993,6 +2057,14 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "status": "pass",
         "title": "Prazni odlomci",
       },
+      {
+        "category": "typography",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 1 nalaza, 1 sigurnih, 0 traže potvrdu",
+        "earned": 0,
+        "max": 0,
+        "status": "pass",
+        "title": "Tehničko-tipografska dosljednost",
+      },
     ],
     "issues": [
       {
@@ -2071,6 +2143,13 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "severity": "warning",
         "title": "Mnogo fusnota nije klasificirano",
         "where": "Legal Citation Engine",
+      },
+      {
+        "category": "typography",
+        "detail": "Odaberi kategorije koje želiš popraviti. Akademski sadržaj se ne mijenja.",
+        "severity": "info",
+        "title": "Informativno: Pronađene su tehničko-tipografske nedosljednosti",
+        "where": "Tehničko-tipografska dosljednost",
       },
     ],
     "profile": "Pravni fakultet · integrirani studij Pravo · diplomski rad",
@@ -2274,6 +2353,14 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
+        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 3,
+        "max": 3,
+        "status": "warn",
+        "title": "Automatizacija citatnog stila",
+      },
+      {
+        "category": "citations",
         "detail": "Nisu pronađeni očito nepotpuni zapisi",
         "earned": 5,
         "max": 5,
@@ -2352,6 +2439,14 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "status": "pass",
         "title": "Prazni odlomci",
       },
+      {
+        "category": "typography",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
+        "earned": 0,
+        "max": 0,
+        "status": "pass",
+        "title": "Tehničko-tipografska dosljednost",
+      },
     ],
     "issues": [
       {
@@ -2360,6 +2455,13 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "severity": "info",
         "title": "Ručna završna provjera verificiranog profila",
         "where": "Službene upute",
+      },
+      {
+        "category": "citations",
+        "detail": "Za stil FPZG autor-godina citatnice i literaturu treba dodatno ručno pregledati.",
+        "severity": "info",
+        "title": "Odabrani citatni stil nije u potpunosti automatiziran",
+        "where": "Citatni profil",
       },
       {
         "category": "formatting",
@@ -2456,7 +2558,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "FPZG · prijediplomska Politologija · završni rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 65,
+    "score": 66,
     "stats": {
       "characters": 255,
       "citations": 0,
@@ -2627,6 +2729,14 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "max": 0,
         "status": "pass",
         "title": "Prazni odlomci",
+      },
+      {
+        "category": "typography",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
+        "earned": 0,
+        "max": 0,
+        "status": "pass",
+        "title": "Tehničko-tipografska dosljednost",
       },
     ],
     "issues": [
