@@ -19068,7 +19068,7 @@
     "id": "fizri-zavrsni",
     "unitId": "fizri",
     "programs": [
-      "Sveučilišni prijediplomski studiji fizike (završni rad, Rijeka)"
+      "Prijediplomski studij Fizika"
     ],
     "workTypes": [
       "final"
@@ -19113,7 +19113,11 @@
     "id": "fizri-diplomski",
     "unitId": "fizri",
     "programs": [
-      "Sveučilišni diplomski studiji fizike (Rijeka)"
+      "Diplomski studij Fizika",
+      "Diplomski studij Fizika i matematika",
+      "Diplomski studij Fizika i informatika",
+      "Diplomski studij Fizika i filozofija",
+      "Diplomski studij Inženjerstvo i fizika materijala"
     ],
     "workTypes": [
       "graduate"
