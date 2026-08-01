@@ -10,6 +10,8 @@ import type { HeadingNumberingPlan } from '../analysis/heading-numbering';
 import type { BibliographyEnrichmentCandidate, BibliographyEnrichmentInput } from '../citations/bibliography-enrichment';
 import { enrichWithCrossref } from '../citations/bibliography-enrichment';
 import { renderRepairPriceSlider, renderRepairLedgerModal } from './repair-price-slider';
+import type { Check } from '../scoring/checks';
+import { repairCeiling } from './result-readiness';
 
 export interface TitlePageFormField {
   key: string;
@@ -279,6 +281,9 @@ const DEEP_CAPABLE: ReadonlySet<FixerId> = new Set([
 export interface RepairScoreSnapshot {
   score: number | null;
   categories: Record<string, { earned: number; max: number }>;
+  /** Provjere iz analize (za repairCeiling - "koliko je automatski popravak realno u stanju
+   *  jamciti"). Opcionalno: bez njega se strop jednostavno ne prikazuje (stariji pozivatelji). */
+  checks?: Check[];
 }
 
 export interface RepairPanelContext {
@@ -1520,6 +1525,33 @@ async function renderRecheck(el: HTMLElement, bytes: Uint8Array, ctx: RepairPane
   el.appendChild(buildBeforeAfter(before, after));
 }
 
+/**
+ * Kad popravljeni dokument NE dosegne 100 SAMO zato sto preostale bodovane provjere trazes
+ * sadrzajnu (rucnu) prosudbu koju alat namjerno ne smije automatski mijenjati (repairCeiling),
+ * jasno reci da je to maksimum koji automatski popravak moze jamciti - a ne nedovrsen popravak.
+ * Ako jos ima auto/assisted-popravljivih stavki (after.score < strop), NE prikazuje se ova
+ * poruka jer bi tvrdnja "ovo je maksimum" bila netocna.
+ */
+function buildRepairCeilingNote(after: RepairScoreSnapshot): HTMLElement | null {
+  if (after.score == null || after.score >= 100 || !after.checks) return null;
+  const ceiling = repairCeiling(after.checks);
+  if (!ceiling.hasManualGap || after.score !== ceiling.maxScore) return null;
+
+  const box = document.createElement('div');
+  box.className = 'lekta-repair-panel__ceiling';
+  const p = document.createElement('p');
+  p.innerHTML = `<strong>${after.score}/100 je maksimalna ocjena koju automatski popravak može jamčiti</strong> za ovaj profil. Preostale stavke traže tvoju sadržajnu provjeru - alat ih namjerno ne smije mijenjati bez tebe:`;
+  box.appendChild(p);
+  const ul = document.createElement('ul');
+  for (const item of ceiling.items) {
+    const li = document.createElement('li');
+    li.textContent = `${item.title} (−${item.lostPoints})`;
+    ul.appendChild(li);
+  }
+  box.appendChild(ul);
+  return box;
+}
+
 function buildBeforeAfter(before: RepairScoreSnapshot, after: RepairScoreSnapshot): HTMLElement {
   const wrap = document.createElement('div');
   wrap.className = 'lekta-repair-panel__recheck';
@@ -1536,6 +1568,9 @@ function buildBeforeAfter(before: RepairScoreSnapshot, after: RepairScoreSnapsho
   const head = document.createElement('p');
   head.innerHTML = `<strong>Spremnost: ${before.score} &rarr; ${after.score}${escapeHtml(deltaTxt)}</strong>`;
   wrap.appendChild(head);
+
+  const ceilingNote = buildRepairCeilingNote(after);
+  if (ceilingNote) wrap.appendChild(ceilingNote);
 
   const keys = Object.keys(CATEGORY_LABELS).filter(
     (k) => categoryPct(before.categories?.[k]) != null || categoryPct(after.categories?.[k]) != null,

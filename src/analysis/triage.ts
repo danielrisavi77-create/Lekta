@@ -16,7 +16,7 @@
  */
 import type { Check, Issue } from '../scoring/checks';
 import type { FixerId } from '../repair/apply-fixers';
-import { autoFixerForCheckTitle } from './check-fixer-map';
+import { classifyFixability, type Fixability } from './check-fixer-map';
 import {
   collectPreviewFlags,
   collectIssueAnchors,
@@ -25,7 +25,7 @@ import {
   type PreviewFlagSource,
 } from '../preview/preview-anchors';
 
-export type Fixability = 'auto' | 'assisted' | 'manual';
+export type { Fixability };
 
 /** Lokacija nalaza u dokumentu; anchorId je sidro za skok u pregledu (Faza 2). */
 export interface TriageLocation {
@@ -66,26 +66,6 @@ export interface TriageModel {
   counts: TriageCounts;
 }
 
-/** Strukturna (assisted) klasifikacija po tocnom naslovu provjere: mijenja strukturu, traži potvrdu. */
-interface StructuralRule {
-  match: (title: string) => boolean;
-  groupKey: string;
-  fixId?: FixerId;
-}
-const STRUCTURAL_RULES: StructuralRule[] = [
-  {
-    match: (t) => t === 'Numeriranje od prve stranice Uvoda' || t === 'Shema numeriranja stranica',
-    groupKey: 'page.numbering',
-    fixId: 'page-numbering-fixer',
-  },
-  { match: (t) => t === 'Uporaba Word stilova naslova', groupKey: 'heading.style' },
-  { match: (t) => /razina naslova/i.test(t), groupKey: 'heading.level' },
-  { match: (t) => t === 'Naslovi tablica', groupKey: 'caption.table' },
-  { match: (t) => t === 'Naslovi slika i grafikona', groupKey: 'caption.figure' },
-  { match: (t) => t === 'Abecedni poredak literature', groupKey: 'reference.sort' },
-  { match: (t) => t === 'Popisi slika i tablica', groupKey: 'list.illustrations' },
-];
-
 /** Naslov provjere -> izvor strukturiranih preview flagova (za precizne lokacije). */
 const REF_SOURCE_BY_CHECK: Record<string, PreviewFlagSource> = {
   'Citirano → literatura': 'reference-missing',
@@ -113,16 +93,6 @@ function flagToLocation(flag: PreviewFlag): TriageLocation {
     anchorId: anchorIdFor(flag),
     excerpt: flag.excerpt || '',
   };
-}
-
-/** Odredi razinu popravljivosti + fixId/groupKey iz naslova (i kategorije) provjere. */
-function classify(title: string): { fixability: Fixability; fixId?: FixerId; groupKey?: string } {
-  const auto = autoFixerForCheckTitle(title);
-  if (auto) return { fixability: 'auto', fixId: auto.fixerId };
-  for (const r of STRUCTURAL_RULES) {
-    if (r.match(title)) return { fixability: 'assisted', groupKey: r.groupKey, ...(r.fixId ? { fixId: r.fixId } : {}) };
-  }
-  return { fixability: 'manual' };
 }
 
 function severityOf(check: Check): 'error' | 'warning' | 'info' {
@@ -178,7 +148,7 @@ export function buildTriage(result: TriageInput): TriageModel {
 
   for (const check of checks) {
     if (!isFinding(check)) continue;
-    const { fixability, fixId, groupKey } = classify(check.title);
+    const { fixability, fixId, groupKey } = classifyFixability(check.title);
     let id = `chk:${slug(check.category)}:${slug(check.title)}`;
     while (seenIds.has(id)) id += '-2';
     seenIds.add(id);

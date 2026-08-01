@@ -67,3 +67,40 @@ export function autoFixerForCheckTitle(title: string): { checkId: string; fixerI
   }
   return null;
 }
+
+export type Fixability = 'auto' | 'assisted' | 'manual';
+
+/** Strukturna (assisted) klasifikacija po tocnom naslovu provjere: mijenja strukturu, traži potvrdu. */
+interface StructuralCheckRule {
+  match: (title: string) => boolean;
+  groupKey: string;
+  fixId?: FixerId;
+}
+const STRUCTURAL_CHECK_RULES: StructuralCheckRule[] = [
+  {
+    match: (t) => t === 'Numeriranje od prve stranice Uvoda' || t === 'Shema numeriranja stranica',
+    groupKey: 'page.numbering',
+    fixId: 'page-numbering-fixer',
+  },
+  { match: (t) => t === 'Uporaba Word stilova naslova', groupKey: 'heading.style' },
+  { match: (t) => /razina naslova/i.test(t), groupKey: 'heading.level' },
+  { match: (t) => t === 'Naslovi tablica', groupKey: 'caption.table' },
+  { match: (t) => t === 'Naslovi slika i grafikona', groupKey: 'caption.figure' },
+  { match: (t) => t === 'Abecedni poredak literature', groupKey: 'reference.sort' },
+  { match: (t) => t === 'Popisi slika i tablica', groupKey: 'list.illustrations' },
+];
+
+/**
+ * Razina popravljivosti nalaza po naslovu provjere: 'auto' (zivi fixer bez potvrde), 'assisted'
+ * (mijenja strukturu, nudi se uz potvrdu) ili 'manual' (sadrzajna prosudba, alat je ne smije
+ * dirati). Jedini izvor istine za triage.ts (razina nalaza) i result-readiness.ts (koliko je
+ * automatski popravak realno u stanju jamciti).
+ */
+export function classifyFixability(title: string): { fixability: Fixability; fixId?: FixerId; groupKey?: string } {
+  const auto = autoFixerForCheckTitle(title);
+  if (auto) return { fixability: 'auto', fixId: auto.fixerId };
+  for (const r of STRUCTURAL_CHECK_RULES) {
+    if (r.match(title)) return { fixability: 'assisted', groupKey: r.groupKey, ...(r.fixId ? { fixId: r.fixId } : {}) };
+  }
+  return { fixability: 'manual' };
+}

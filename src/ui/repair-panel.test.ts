@@ -1,6 +1,11 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { renderRepairPanel, type LegalFootnoteRepairFormDefinition, type FinalDocumentInspectorFormDefinition, type RepairableItem } from './repair-panel';
 import { singleSectionDocx } from '../../tests/helpers/synthetic-docx';
+import type { Check } from '../scoring/checks';
+
+function chk(title: string, status: string, earned: number, max: number): Check {
+  return { category: 'formatting', title, status, earned, max, detail: '', issue: null, scored: max > 0 };
+}
 
 /** Cekaj dok uvjet ne postane istinit (async DOM nakon klika: dinamicki import + applyFixers + reanalyze). */
 async function waitFor(fn: () => boolean, timeout = 4000): Promise<void> {
@@ -307,6 +312,70 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
     );
     expect(mountEl.querySelector('.lekta-repair-panel__recheck')).toBeNull();
     expect(mountEl.querySelector('.lekta-repair-panel__recheck-pending')).toBeNull();
+  });
+
+  it('kad popravljeni dokument dosegne strop (samo manualne stavke ostale), jasno kaze da je to maksimum', async () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      items: [marginItem()],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+      beforeScore: { score: 68, categories: {} },
+      reanalyze: async () => ({
+        score: 98,
+        categories: { citations: { earned: 8, max: 10 }, formatting: { earned: 90, max: 90 } },
+        checks: [chk('Citirano → literatura', 'fail', 8, 10), chk('Dominantni font', 'pass', 90, 90)],
+      }),
+    });
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    await waitFor(() => !!mountEl.querySelector('.lekta-repair-panel__recheck'));
+
+    const recheck = mountEl.querySelector('.lekta-repair-panel__recheck')!;
+    expect(recheck.textContent).toContain('98/100 je maksimalna ocjena');
+    expect(recheck.textContent).toContain('Citirano → literatura');
+    expect(mountEl.querySelector('.lekta-repair-panel__ceiling')).not.toBeNull();
+  });
+
+  it('kad jos ima auto-popravljivog jaza (score ispod stropa), NE tvrdi da je doseg maksimum', async () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      items: [marginItem()],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+      beforeScore: { score: 40, categories: {} },
+      reanalyze: async () => ({
+        score: 80,
+        categories: {},
+        // Dominantni font i dalje pada (max=20), a ima zivi auto-fixer -> NIJE manualni jaz.
+        checks: [chk('Dominantni font', 'fail', 0, 20), chk('Margine dokumenta', 'pass', 80, 80)],
+      }),
+    });
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    await waitFor(() => !!mountEl.querySelector('.lekta-repair-panel__recheck'));
+
+    expect(mountEl.querySelector('.lekta-repair-panel__ceiling')).toBeNull();
+  });
+
+  it('kad je popravak stigao do 100/100, nema poruke o stropu', async () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      items: [marginItem()],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+      beforeScore: { score: 68, categories: {} },
+      reanalyze: async () => ({
+        score: 100,
+        categories: {},
+        checks: [chk('Dominantni font', 'pass', 20, 20)],
+      }),
+    });
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    await waitFor(() => !!mountEl.querySelector('.lekta-repair-panel__recheck'));
+
+    expect(mountEl.querySelector('.lekta-repair-panel__ceiling')).toBeNull();
   });
 });
 

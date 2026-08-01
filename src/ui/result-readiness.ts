@@ -1,4 +1,5 @@
-import type { Issue } from '../scoring/checks';
+import type { Check, Issue } from '../scoring/checks';
+import { classifyFixability } from '../analysis/check-fixer-map';
 
 export type ResultReadinessKind = 'blocked' | 'needs-work' | 'manual-review' | 'clear';
 
@@ -65,5 +66,41 @@ export function resultReadiness(issues: readonly Issue[] = []): ResultReadiness 
     blockers,
     improvements,
     manualReviews,
+  };
+}
+
+/** Jedna bodovana provjera koju automatski popravak strukturno ne smije dirati (sadrzajna prosudba). */
+export interface RepairCeilingItem {
+  title: string;
+  lostPoints: number;
+}
+
+export interface RepairCeiling {
+  /** Ima li provjera koje ostaju otvorene JER zahtijevaju rucnu (sadrzajnu) provjeru. */
+  hasManualGap: boolean;
+  /** Maksimalna ocjena koju automatski popravak realno moze jamciti za ovaj dokument
+   *  (100 kad nema manualnog jaza; inace manje, srazmjerno bodovima izgubljenim na manualnim
+   *  provjerama). Nije profilno svojstvo - racuna se iz TRENUTNOG stanja provjera. */
+  maxScore: number;
+  items: RepairCeilingItem[];
+}
+
+/**
+ * Zasto ocjena nakon popravka ne mora biti 100: neke bodovane provjere (npr. tocnost citata,
+ * potpunost popisa literature, sadrzaj naslova tablica) zahtijevaju sadrzajnu prosudbu koju
+ * alat namjerno ne smije automatski mijenjati (vidi classifyFixability - 'manual'). Ova
+ * projekcija racuna koliko je to realno najvise sto automatski popravak moze jamciti, da se
+ * to jasno komunicira korisniku umjesto da "97" izgleda kao nedovrsen posao.
+ */
+export function repairCeiling(checks: readonly Check[] = []): RepairCeiling {
+  const scored = checks.filter((c) => c.scored && c.max > 0);
+  const totalMax = scored.reduce((sum, c) => sum + c.max, 0);
+  const manual = scored.filter((c) => c.status !== 'pass' && classifyFixability(c.title).fixability === 'manual');
+  const lostPoints = manual.reduce((sum, c) => sum + (c.max - c.earned), 0);
+  const maxScore = totalMax > 0 ? Math.round(((totalMax - lostPoints) / totalMax) * 100) : 100;
+  return {
+    hasManualGap: manual.length > 0,
+    maxScore,
+    items: manual.map((c) => ({ title: c.title, lostPoints: c.max - c.earned })),
   };
 }
