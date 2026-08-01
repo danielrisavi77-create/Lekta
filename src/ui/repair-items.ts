@@ -161,8 +161,11 @@ export function buildRepairableItems(
       });
       continue;
     }
-    const params = paramsForCheck(e.checkId, profile);
-    if (!params) continue; // profil nema ciljanu vrijednost -> ne nudi popravak
+    // Prvo pokusaj vlastitu (verificiranu) vrijednost pravila - Option A izvor istine; legacy
+    // profile.rules mirror je fallback SAMO za checkId-jeve koje paramsFromValue ne pokriva.
+    // Prije ovoga bi neodrzan mirror tiho preskocio vec verificirano, autoFixable pravilo.
+    const params = paramsFromValue(e.checkId, e.value) ?? paramsForCheck(e.checkId, profile);
+    if (!params) continue; // ni pravilo ni profil nemaju ciljanu vrijednost -> ne nudi popravak
     const violated = isViolated(e.checkId, checks);
     if (!violated && !opts?.includeNonViolated) continue; // A: samo prekrseno
     out.push({
