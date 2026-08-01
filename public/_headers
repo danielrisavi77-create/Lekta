@@ -45,7 +45,7 @@
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
 
-# performance-06 (audit PERFORMANCE_AUDIT.md): content-hashirani asseti (Vite fingerprint u imenu,
+# performance-06 (docs/AUDIT_MASTER.md, poglavlje 7): content-hashirani asseti (Vite fingerprint u imenu,
 # npr. index-CzOlIHYC.js, *.woff2) su nepromjenjivi po imenu, pa se smiju kesirati godinu dana bez
 # revalidacije. Promjena sadrzaja mijenja hash u imenu, dakle URL, pa je dugi cache siguran i povratni
 # posjet posluzuje glavni chunk i fontove iz predmemorije bez mreznog kruga.

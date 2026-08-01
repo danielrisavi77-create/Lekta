@@ -11,6 +11,7 @@
         "npm:@fontsource-variable/source-serif-4@^5.2.9",
         "npm:@fontsource/caveat@^5.2.8",
         "npm:@fontsource/ibm-plex-mono@^5.2.7",
+        "npm:@playwright/test@^1.61.1",
         "npm:@xmldom/xmldom@~0.9.10",
         "npm:canvas-confetti@^1.9.4",
         "npm:dictionary-hr@2",

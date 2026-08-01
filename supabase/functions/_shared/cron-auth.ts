@@ -7,7 +7,7 @@
 // Dizajn:
 //   - fail-closed: ako tajna nije postavljena (prazna), NIJEDAN zahtjev nije
 //     autoriziran. Funkcija tako radije stane (podsjetnici se ne salju) nego da
-//     ostane javno okidljiva. Vidi docs/audit/SECURITY_AUDIT.md (security-01).
+//     ostane javno okidljiva. Vidi docs/AUDIT_MASTER.md, poglavlje 8 (LEKTA-SEC-01/security-01).
 //   - konstantno-vremenska usporedba tokena da se izbjegne timing napad.
 //
 // Modul je izomorfan (samo Web standard: TextEncoder, Headers) pa se moze
