@@ -47,6 +47,8 @@ export interface FooterSpec {
 
 export interface DocSpec {
   paragraphs: ParaSpec[];
+  /** Opcionalni stilovi za testove koji moraju imati Normal backstop. */
+  stylesXml?: string;
   pageCm?: { w: number; h: number }; // default A4 21 x 29,7
   marginsCm?: { top: number; right: number; bottom: number; left: number };
   footnotes?: (string | FootnoteSpec)[]; // fusnote (string = goli tekst, ili FootnoteSpec s oblikom); word/footnotes.xml (id 1..N)
@@ -294,7 +296,7 @@ export function buildDocx(spec: DocSpec, extraFiles: ZipFileSpec[] = []): Uint8A
     { name: '[Content_Types].xml', data: enc.encode(contentTypesXml(hasFootnotes, hasFooter)) },
     { name: '_rels/.rels', data: enc.encode(RELS) },
     { name: 'word/document.xml', data: enc.encode(documentXml(spec)) },
-    { name: 'word/styles.xml', data: enc.encode(STYLES_XML) },
+    { name: 'word/styles.xml', data: enc.encode(spec.stylesXml ?? STYLES_XML) },
   ];
   if (hasFootnotes) files.push({ name: 'word/footnotes.xml', data: enc.encode(footnotesXml(spec.footnotes!)) });
   if (hasFooter) {

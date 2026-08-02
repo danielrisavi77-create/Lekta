@@ -1,0 +1,348 @@
+{
+  "schemaVersion": 1,
+  "scope": {
+    "root": "tests/fixtures/docx",
+    "excludesSynthetic": true,
+    "contentStored": false
+  },
+  "manifest": [
+    {
+      "documentId": "fer-diplomski-prazni-odlomci",
+      "fileName": "fer-diplomski-prazni-odlomci.docx",
+      "profileId": "fer-diplomski"
+    },
+    {
+      "documentId": "fer-diplomski-uskladjen",
+      "fileName": "fer-diplomski-uskladjen.docx",
+      "profileId": "fer-diplomski"
+    },
+    {
+      "documentId": "ffzg-filozofija-diplomski",
+      "fileName": "ffzg-filozofija-diplomski.docx",
+      "profileId": "ffzg-filozofija-diplomski"
+    },
+    {
+      "documentId": "grf-diplomski-neuskladjen",
+      "fileName": "grf-diplomski-neuskladjen.docx",
+      "profileId": "grf-diplomski"
+    },
+    {
+      "documentId": "mef-doktorski-disertacija",
+      "fileName": "mef-doktorski-disertacija.docx",
+      "profileId": "mef-doktorski"
+    },
+    {
+      "documentId": "pmf-matematika-uskladjen",
+      "fileName": "pmf-matematika-uskladjen.docx",
+      "profileId": "pmf-matematika-graduate"
+    },
+    {
+      "documentId": "pmf-matematika-zasticeni-odlomci",
+      "fileName": "pmf-matematika-zasticeni-odlomci.docx",
+      "profileId": "pmf-matematika-graduate"
+    },
+    {
+      "documentId": "ttf-diplomski-arial",
+      "fileName": "ttf-diplomski-arial.docx",
+      "profileId": "ttf-diplomski"
+    }
+  ],
+  "results": [
+    {
+      "documentId": "fer-diplomski-prazni-odlomci",
+      "fileName": "fer-diplomski-prazni-odlomci.docx",
+      "profileId": "fer-diplomski",
+      "outcome": "review",
+      "before": {
+        "checkCount": 19,
+        "passCount": 16,
+        "score": 87
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 17,
+        "score": 89
+      },
+      "beforeEntryCount": 4,
+      "afterEntryCount": 4,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "paper-size-fixer",
+        "font-fixer",
+        "line-spacing-fixer",
+        "margins-fixer"
+      ],
+      "changedFixerIds": [
+        "paper-size-fixer",
+        "margins-fixer"
+      ],
+      "targetedCheckCount": 4,
+      "targetedResolvedCount": 3,
+      "targetedUnresolvedCount": 1,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "secondPassNoOp": true,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen"
+      ],
+      "error": null
+    },
+    {
+      "documentId": "fer-diplomski-uskladjen",
+      "fileName": "fer-diplomski-uskladjen.docx",
+      "profileId": "fer-diplomski",
+      "outcome": "review",
+      "before": {
+        "checkCount": 19,
+        "passCount": 16,
+        "score": 87
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 17,
+        "score": 89
+      },
+      "beforeEntryCount": 4,
+      "afterEntryCount": 4,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "paper-size-fixer",
+        "font-fixer",
+        "line-spacing-fixer",
+        "margins-fixer"
+      ],
+      "changedFixerIds": [
+        "paper-size-fixer",
+        "margins-fixer"
+      ],
+      "targetedCheckCount": 4,
+      "targetedResolvedCount": 3,
+      "targetedUnresolvedCount": 1,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "secondPassNoOp": true,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen"
+      ],
+      "error": null
+    },
+    {
+      "documentId": "ffzg-filozofija-diplomski",
+      "fileName": "ffzg-filozofija-diplomski.docx",
+      "profileId": "ffzg-filozofija-diplomski",
+      "outcome": "no-op",
+      "before": {
+        "checkCount": 19,
+        "passCount": 17,
+        "score": 94
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 17,
+        "score": 94
+      },
+      "beforeEntryCount": 4,
+      "afterEntryCount": 4,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [],
+      "changedFixerIds": [],
+      "targetedCheckCount": 0,
+      "targetedResolvedCount": 0,
+      "targetedUnresolvedCount": 0,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "secondPassNoOp": true,
+      "manualReviewRequired": false,
+      "manualReviewReasons": [],
+      "error": null
+    },
+    {
+      "documentId": "grf-diplomski-neuskladjen",
+      "fileName": "grf-diplomski-neuskladjen.docx",
+      "profileId": "grf-diplomski",
+      "outcome": "review",
+      "before": {
+        "checkCount": 19,
+        "passCount": 13,
+        "score": 60
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 15,
+        "score": 69
+      },
+      "beforeEntryCount": 4,
+      "afterEntryCount": 4,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "font-fixer",
+        "margins-fixer",
+        "paper-size-fixer"
+      ],
+      "changedFixerIds": [
+        "margins-fixer",
+        "paper-size-fixer"
+      ],
+      "targetedCheckCount": 3,
+      "targetedResolvedCount": 1,
+      "targetedUnresolvedCount": 2,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "secondPassNoOp": true,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen"
+      ],
+      "error": null
+    },
+    {
+      "documentId": "mef-doktorski-disertacija",
+      "fileName": "mef-doktorski-disertacija.docx",
+      "profileId": "mef-doktorski",
+      "outcome": "no-op",
+      "before": {
+        "checkCount": 19,
+        "passCount": 18,
+        "score": 93
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 18,
+        "score": 93
+      },
+      "beforeEntryCount": 4,
+      "afterEntryCount": 4,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [],
+      "changedFixerIds": [],
+      "targetedCheckCount": 0,
+      "targetedResolvedCount": 0,
+      "targetedUnresolvedCount": 0,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "secondPassNoOp": true,
+      "manualReviewRequired": false,
+      "manualReviewReasons": [],
+      "error": null
+    },
+    {
+      "documentId": "pmf-matematika-uskladjen",
+      "fileName": "pmf-matematika-uskladjen.docx",
+      "profileId": "pmf-matematika-graduate",
+      "outcome": "review",
+      "before": {
+        "checkCount": 19,
+        "passCount": 18,
+        "score": 100
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 18,
+        "score": 100
+      },
+      "beforeEntryCount": 4,
+      "afterEntryCount": 4,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "line-spacing-fixer",
+        "margins-fixer"
+      ],
+      "changedFixerIds": [
+        "margins-fixer"
+      ],
+      "targetedCheckCount": 2,
+      "targetedResolvedCount": 2,
+      "targetedUnresolvedCount": 0,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "secondPassNoOp": true,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu"
+      ],
+      "error": null
+    },
+    {
+      "documentId": "pmf-matematika-zasticeni-odlomci",
+      "fileName": "pmf-matematika-zasticeni-odlomci.docx",
+      "profileId": "pmf-matematika-graduate",
+      "outcome": "review",
+      "before": {
+        "checkCount": 19,
+        "passCount": 18,
+        "score": 100
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 18,
+        "score": 100
+      },
+      "beforeEntryCount": 4,
+      "afterEntryCount": 4,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "line-spacing-fixer",
+        "margins-fixer"
+      ],
+      "changedFixerIds": [
+        "margins-fixer"
+      ],
+      "targetedCheckCount": 2,
+      "targetedResolvedCount": 2,
+      "targetedUnresolvedCount": 0,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "secondPassNoOp": true,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu"
+      ],
+      "error": null
+    },
+    {
+      "documentId": "ttf-diplomski-arial",
+      "fileName": "ttf-diplomski-arial.docx",
+      "profileId": "ttf-diplomski",
+      "outcome": "no-op",
+      "before": {
+        "checkCount": 19,
+        "passCount": 18,
+        "score": 95
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 18,
+        "score": 95
+      },
+      "beforeEntryCount": 4,
+      "afterEntryCount": 4,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [],
+      "changedFixerIds": [],
+      "targetedCheckCount": 0,
+      "targetedResolvedCount": 0,
+      "targetedUnresolvedCount": 0,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "secondPassNoOp": true,
+      "manualReviewRequired": false,
+      "manualReviewReasons": [],
+      "error": null
+    }
+  ],
+  "summary": {
+    "documentCount": 8,
+    "passCount": 0,
+    "reviewCount": 5,
+    "failCount": 0,
+    "noOpCount": 3,
+    "changedDocumentCount": 5,
+    "manualReviewCount": 5,
+    "passRegressionCount": 0
+  }
+}
