@@ -28,6 +28,8 @@ export interface ReferralShareContext {
   facultyId?: string | null;
   workType?: string | null;
   deadlineRegistry?: AcademicDeadlineEntry[];
+  /** Poziva se nakon uspjesnog kopiranja linka (npr. trackEvent('referral_shared')); injektirano da modul ostane bez ovisnosti o app.ts. */
+  onShare?: () => void;
 }
 
 function esc(s: string): string {
@@ -105,6 +107,7 @@ export async function renderReferralShareSection(ctx: ReferralShareContext): Pro
       setTimeout(() => {
         copyBtn.textContent = original;
       }, 2000);
+      ctx.onShare?.();
     } catch {
       input.select();
     }
