@@ -5,9 +5,14 @@
 // /fpzg/diplomski-rad/. Pokreni: node scripts/generate-faculty-pages.mjs (nakon `vite build`,
 // isti obrazac kao generate-citation-tools.mjs).
 //
-// PILOT (namjerno ogranicen opseg): PILOT_UNITS i PILOT_WORK_TYPES nize su tvrdi allowlist.
-// Cilj je pregledati kvalitetu i posten ton sadrzaja na jednom fakultetu prije sirenja na
-// svih ~131 jedinica iz kataloga. Prosiri allowlist tek nakon pregleda.
+// Opseg: SVE jedinice iz kataloga (data/catalog/zagreb-catalog.json) koje imaju barem jedan
+// profil za TARGET_WORK_TYPES nize. Pilot (fpzg/pravo/efzg/fer/ffzg/kif, 20 stranica) je
+// pregledan rucno - honesty/koherentnost gateovi ispod (status==='verified' gate za fact-grid,
+// MAX_GROUP_SIZE split, prazan-sadrzaj skip) su upravo ono sto cini siguran prelaz na sve
+// jedinice bez rucnog pregleda svake pojedinacne stranice.
+// TARGET_WORK_TYPES je namjerno jos uvijek suzen na final+graduate (najvisi search-intent
+// prema marketinskoj analizi: student zadnje godine, diplomski/zavrsni rad); seminar/
+// specialist/doctoral su odvojena buduca odluka.
 //
 // SADRZAJ JE ISKLJUCIVO IZVEDEN iz data/profiles/verified-profiles-heavy.json (rules, facts,
 // manualChecks, submissionFacts, sources, fieldValidation.observedDeviations, verifiedAt) -
@@ -32,13 +37,7 @@ const PROFILES_HEAVY_PATH = path.join(ROOT, 'data/profiles/verified-profiles-hea
 const STATUS_META_PATH = path.join(ROOT, 'data/profiles/profile-status.json');
 const OUT_DIR = path.join(ROOT, 'dist');
 
-// --- PILOT allowlist (namjerno malen opseg, vidi komentar na vrhu) ---
-// Prosiren na 2. krug pilota: raznolik uzorak arhitektura profila prije punog sirenja -
-// pravo (pravne fusnote, drugaciji citatni mode), efzg/fer (harvard/ieee, STEM), ffzg
-// (mnogo razlicitih humanistickih programa pod istim unitId - stres-test grupiranja), kif
-// (STEM advisory obrazac, vidi memoriju batch4-stem-advisory-pattern).
-const PILOT_UNITS = ['fpzg', 'pravo', 'efzg', 'fer', 'ffzg', 'kif'];
-const PILOT_WORK_TYPES = ['final', 'graduate'];
+const TARGET_WORK_TYPES = ['final', 'graduate'];
 
 const WORK_TYPE_META = {
   seminar: { slug: 'seminarski-rad', label: 'seminarski rad', labelCap: 'Seminarski rad' },
@@ -119,8 +118,19 @@ function dedupeSources(group) {
   return [...seen.values()];
 }
 
+// Male/privatne ustanove (npr. Algebra) su registrirane s institucijom == jedinom jedinicom,
+// pa bi "Ustanova · Ustanova" bilo besmisleno ponavljanje.
+function kickerText(meta) {
+  return meta.instName === meta.name ? meta.name : `${meta.instName} · ${meta.name}`;
+}
+
+// Neki unizd programi vec u programs[0] nose "(diplomski rad, Zadar)" ugradjeno u ime
+// (umjesto cistog naziva odjela), sto duplicira vrstu rada koja je vec u naslovu/URL-u
+// stranice. Zamjena "(vrsta rada, Grad)" -> "(Grad)" cisti to bez diranja PRAVIH varijanti
+// (npr. FPZG "(Tekstualni završni rad)" nema zarez unutar zagrade pa ostaje netaknuto).
 function programLabel(p) {
-  return p.variantLabel ? `${p.programs?.[0] || p.profileLabel} (${p.variantLabel})` : (p.programs?.[0] || p.profileLabel || p.id);
+  const base = p.variantLabel ? `${p.programs?.[0] || p.profileLabel} (${p.variantLabel})` : (p.programs?.[0] || p.profileLabel || p.id);
+  return base.replace(/\((?:diplomski|završni|zavrsni|preddiplomski|prijediplomski)\s+rad,\s*([^()]+)\)/i, '($1)');
 }
 
 function slugify(input) {
@@ -150,12 +160,16 @@ function programSlug(program) {
 // imaju npr. checkFont:false - vrijednost je TU, ali NIJE bodovana/obvezna, samo informativna.
 // Bez ovog gate-a bismo takvu vrijednost prikazali kao tvrdu cinjenicu, sto nije posteno.
 const FIELD_SPECS = [
-  { key: 'font', label: 'Font', checkKey: 'checkFont', format: (v) => (Array.isArray(v) ? v.join(' ili ') : String(v ?? '')) },
-  { key: 'size', label: 'Veličina', checkKey: 'checkSize', format: (v) => `${Array.isArray(v) ? v.join('/') : v} pt` },
-  { key: 'spacing', label: 'Prored', checkKey: 'checkSpacing', format: (v) => String(v).replace('.', ',') },
+  // Svaka format() funkcija MORA vratiti null (ne stringificirani "undefined") kad polje
+  // stvarno ne postoji u profilu (npr. Algebra profili nemaju font/size/spacing/margins u
+  // rules uopce) - inace se null-provjera "values.every(v => v == null)" nikad ne okine i
+  // stranica ispise doslovno "undefined pt".
+  { key: 'font', label: 'Font', checkKey: 'checkFont', format: (v) => (v == null ? null : Array.isArray(v) ? v.join(' ili ') : String(v)) },
+  { key: 'size', label: 'Veličina', checkKey: 'checkSize', format: (v) => (v == null ? null : `${Array.isArray(v) ? v.join('/') : v} pt`) },
+  { key: 'spacing', label: 'Prored', checkKey: 'checkSpacing', format: (v) => (v == null ? null : String(v).replace('.', ',')) },
   {
     key: 'margins', label: 'Margine', checkKey: 'checkMargins',
-    format: (v) => (v ? `${fmtCm(v.top)} / ${fmtCm(v.right)} / ${fmtCm(v.bottom)} / ${fmtCm(v.left)} cm (gore/desno/dolje/lijevo)` : '—'),
+    format: (v) => (v ? `${fmtCm(v.top)} / ${fmtCm(v.right)} / ${fmtCm(v.bottom)} / ${fmtCm(v.left)} cm (gore/desno/dolje/lijevo)` : null),
   },
   { key: 'justify', label: 'Poravnanje', checkKey: 'checkJustify', format: (v) => (v ? 'obostrano' : null) },
   { key: 'requireA4', label: 'Format papira', format: (v) => (v ? 'A4' : 'nije posebno propisano') },
@@ -399,7 +413,7 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
     : '';
 
   const body = `
-<div class="lekta-kicker">${escapeHtml(meta.instName)} · ${escapeHtml(meta.name)}${programQualifier ? ` · ${escapeHtml(programQualifier)}` : ''}</div>
+<div class="lekta-kicker">${escapeHtml(kickerText(meta))}${programQualifier ? ` · ${escapeHtml(programQualifier)}` : ''}</div>
 <h1>${escapeHtml(facultyTitlePart)}: ${escapeHtml(wt.label)}</h1>
 <p class="lekta-lead">Tehnička pravila prije predaje, prema službenim izvorima fakulteta.</p>
 <div class="status-badge">${escapeHtml(statusInfo.label)}</div>
@@ -459,7 +473,7 @@ function buildHubIndexPage(unitId, workType, subPages, unitMeta) {
     isPartOf: { '@type': 'WebSite', name: 'Lekta', url: SITE_ORIGIN },
   };
   const body = `
-<div class="lekta-kicker">${escapeHtml(meta.instName)} · ${escapeHtml(meta.name)}</div>
+<div class="lekta-kicker">${escapeHtml(kickerText(meta))}</div>
 <h1>${escapeHtml(meta.name)}: ${escapeHtml(wt.label)} po studijskom programu</h1>
 <p class="lekta-lead">${escapeHtml(meta.name)} ima više studijskih programa s različitim tehničkim pravilima za ${escapeHtml(wt.label)}. Odaberi svoj program:</p>
 <ul class="check-list">
@@ -498,9 +512,8 @@ function main() {
   const profiles = Object.values(heavy);
   const groups = new Map();
   for (const p of profiles) {
-    if (!PILOT_UNITS.includes(p.unitId)) continue;
     for (const wt of p.workTypes || []) {
-      if (!PILOT_WORK_TYPES.includes(wt)) continue;
+      if (!TARGET_WORK_TYPES.includes(wt)) continue;
       const key = `${p.unitId}::${wt}`;
       if (!groups.has(key)) groups.set(key, []);
       groups.get(key).push(p);
