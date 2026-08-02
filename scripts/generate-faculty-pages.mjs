@@ -35,6 +35,7 @@ const ROOT = path.resolve(__dirname, '..');
 const CATALOG_PATH = path.join(ROOT, 'data/catalog/zagreb-catalog.json');
 const PROFILES_HEAVY_PATH = path.join(ROOT, 'data/profiles/verified-profiles-heavy.json');
 const STATUS_META_PATH = path.join(ROOT, 'data/profiles/profile-status.json');
+const DEADLINES_PATH = path.join(ROOT, 'data/submission/academic-deadlines.json');
 const OUT_DIR = path.join(ROOT, 'dist');
 
 const TARGET_WORK_TYPES = ['final', 'graduate', 'seminar'];
@@ -261,6 +262,30 @@ function weakestStatus(group) {
   return group.reduce((worst, p) => (order.indexOf(p.status) < order.indexOf(worst) ? p.status : worst), 'verified');
 }
 
+// Mapiranje generatorovog internog workType tokena (seminar/final/graduate) na vokabular koji
+// koristi data/submission/academic-deadlines.json (seminarski/zavrsni/diplomski/doktorski, BEZ
+// dijakritike - isti kanonski token kao toReportWorkType() u src/report/report-work-type.ts,
+// koji vec koristi deadline-reminder-toggle.ts za identicnu vrstu pretrage).
+const DEADLINE_WORKTYPE_MAP = { seminar: 'seminarski', final: 'zavrsni', graduate: 'diplomski' };
+
+function isDeadlineTrusted(entry) {
+  return entry.confirmed === true || entry?.verification?.autoVerified === true;
+}
+
+// Najskoriji POZNATI buduci rok predaje za (unitId, workType), preko svih programa/rokova te
+// jedinice - namjerno BEZ programId filtera i BEZ tvrdnje da vrijedi za svaki program. Copy koji
+// ovo koristi mora reci "najbliži poznati rok" (istinito bez obzira razlikuje li se po programu),
+// nikad "rok za tvoj program" (to bismo mogli tvrditi samo uz stvaran programId match).
+function nearestDeadlineIso(unitId, workType, registry, todayIso) {
+  const mapped = DEADLINE_WORKTYPE_MAP[workType];
+  if (!mapped) return null;
+  const matches = registry.filter(
+    (e) => isDeadlineTrusted(e) && e.facultyId === unitId && e.workType === mapped && e.deadlineDate >= todayIso,
+  );
+  if (!matches.length) return null;
+  return matches.reduce((min, e) => (e.deadlineDate < min ? e.deadlineDate : min), matches[0].deadlineDate);
+}
+
 const OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
 const DEMO_IMAGE = `${SITE_ORIGIN}/assets/demo-poster.jpg`;
 
@@ -299,10 +324,13 @@ const PAGE_STYLE = `
   h2 { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 600; margin: 1.9rem 0 0.6rem; color: var(--paper-ink); border-bottom: 1px solid var(--paper-line); padding-bottom: 0.35rem; }
   .lekta-lead { font-size: 1rem; color: var(--paper-ink); margin: 0 0 1.1rem; }
   .status-badge { display: inline-block; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.02em; padding: 0.2rem 0.55rem; border-radius: 2px; background: var(--paper-2); border: 1px solid var(--paper-line); color: var(--paper-muted); margin-bottom: 0.8rem; }
+  .verified-badge { display: inline-block; font-family: var(--font-mono); font-size: 0.72rem; color: var(--paper-muted); margin-left: 0.5rem; }
   .fact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.6rem; margin: 0.8rem 0; }
   .fact-card { background: var(--paper-2); border: 1px solid var(--paper-line); border-left: 3px solid var(--red-deep); border-radius: 0 2px 2px 0; padding: 0.5rem 0.7rem; }
   .fact-card span { display: block; font-family: var(--font-mono); font-size: 0.68rem; color: var(--paper-muted); text-transform: uppercase; letter-spacing: 0.03em; }
   .fact-card b { font-family: var(--font-serif); font-size: 0.98rem; font-weight: 600; }
+  .fact-card i.fc-check { display: block; font-style: normal; font-size: 0.68rem; font-weight: 600; color: var(--red-deep); margin-top: 0.3rem; }
+  .deadline-note { font-size: 0.88rem; background: var(--red-soft); border: 1px solid var(--paper-line); border-left: 3px solid var(--red-deep); border-radius: 0 2px 2px 0; padding: 0.55rem 0.75rem; margin: 0.9rem 0; }
   table.by-program { width: 100%; border-collapse: collapse; margin: 0.6rem 0 1rem; font-size: 0.9rem; }
   table.by-program th, table.by-program td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--paper-line); }
   table.by-program th { font-family: var(--font-mono); font-size: 0.7rem; color: var(--paper-muted); text-transform: uppercase; letter-spacing: 0.02em; }
@@ -376,7 +404,7 @@ ${bodyHtml}
 function buildFactGrid(rows) {
   const direct = rows.filter((r) => r.uniform);
   if (!direct.length) return '';
-  return `<div class="fact-grid">${direct.map((r) => `<div class="fact-card"><span>${escapeHtml(r.label)}</span><b>${escapeHtml(r.value)}</b></div>`).join('')}</div>`;
+  return `<div class="fact-grid">${direct.map((r) => `<div class="fact-card"><span>${escapeHtml(r.label)}</span><b>${escapeHtml(r.value)}</b><i class="fc-check">✓ provjerava Lekta</i></div>`).join('')}</div>`;
 }
 
 function buildDivergenceTables(rows) {
@@ -401,7 +429,7 @@ function worktypeNavHtml(workType, siblings) {
 // ponovno ovdje, da se main()-ova disambiguacija i stvarna putanja fajla ne mogu razici.
 // siblings: [{url,label}] za DRUGE vrste rada na istom fakultetu koje stvarno postoje (main()
 // ovo racuna u prolazu 1 prije nego se ijedna stranica konacno renderira - vidi main()).
-function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, programQualifier, slugOverride, siblings) {
+function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, programQualifier, slugOverride, siblings, deadlines, todayIso) {
   const meta = unitMeta[unitId];
   if (!meta) {
     console.error(`[generate-faculty-pages] FAIL: unitId "${unitId}" nije u zagreb-catalog.json`);
@@ -427,6 +455,7 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
   const verifiedDates = [...new Set(group.map((p) => p.verifiedAt).filter(Boolean))].sort();
   const verifiedAt = verifiedDates[verifiedDates.length - 1] || null;
   const multiProgram = group.length > 1;
+  const deadlineIso = nearestDeadlineIso(unitId, workType, deadlines, todayIso);
   // Flat facts[] popis je siguran SAMO kod jednog profila: kod vise programa bi neoznaceno
   // miksanje brojki koje se razlikuju po programu ("10.000-12.000" i "12.000-15.000" u istoj
   // listi bez konteksta) djelovalo proturjecno. factRows (fact-grid + tablica po programu) gore
@@ -484,18 +513,32 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
     ? `<h2>Ključne činjenice</h2><ul class="check-list">${facts.map((f) => `<li>${escapeHtml(f)}</li>`).join('')}</ul>`
     : '';
 
+  const factGridHtml = buildFactGrid(factRows);
+  const divergenceHtml = buildDivergenceTables(factRows);
+  // Uokviri fact-grid/divergencijske tablice kao eksplicitan popis "ovo provjeravamo", umjesto
+  // da citatelj mora sam zakljuciti da su ovo strojno provjerljive stavke - isti sadrzaj, samo
+  // s naslovom koji imenuje da je Lekta ta koja provjerava.
+  const checksHeading = (factGridHtml || divergenceHtml)
+    ? `<h2>Što Lekta provjerava</h2><p class="lekta-lead">Svako od ovih pravila Lekta provjerava automatski kad učitaš svoj rad.</p>`
+    : '';
+
+  const deadlineHtml = deadlineIso
+    ? `<p class="deadline-note">Najbliži poznati rok predaje (${escapeHtml(wt.label)}, ${escapeHtml(meta.name)}): <strong>${fmtDateHr(deadlineIso)}</strong>. Rok se može razlikovati po studijskom programu ili godini; provjeri aktualnu odluku svog fakulteta.</p>`
+    : '';
+
   const body = `
 ${breadcrumbHtml(crumbs)}
 <h1>${escapeHtml(facultyTitlePart)}: ${escapeHtml(wt.label)}</h1>
 ${worktypeNavHtml(workType, siblings)}
 <p class="lekta-lead">Tehnička pravila prije predaje, prema službenim izvorima fakulteta.</p>
-<div class="status-badge">${escapeHtml(statusInfo.label)}</div>
+<div class="status-badge">${escapeHtml(statusInfo.label)}</div>${verifiedAt ? `<span class="verified-badge">Ažurirano ${fmtDateHr(verifiedAt)}</span>` : ''}
 <p class="lekta-lead">${escapeHtml(statusInfo.note)}</p>
 ${programNote}
 
 ${factsSection}
-${buildFactGrid(factRows)}
-${buildDivergenceTables(factRows)}
+${checksHeading}
+${factGridHtml}
+${divergenceHtml}
 
 ${manualChecks.length ? `<h2>Na što paziti</h2><ul class="check-list">${manualChecks.map((m) => `<li>${escapeHtml(m)}</li>`).join('')}</ul>` : ''}
 
@@ -506,6 +549,7 @@ ${submissionFacts.length ? `<h2>Predaja</h2><ul class="check-list">${submissionF
   <figcaption>Lekta pregleda rad, označi probleme i vodi dokument do ocjene 100 od 100.</figcaption>
 </figure>
 
+${deadlineHtml}
 <div class="lekta-cta-box">
   <strong>Provjeri svoj rad prema ovim pravilima</strong>
   <p>Učitaj Word dokument; Lekta odmah provjerava oblikovanje, opseg, citiranje i strukturu prema profilu: ${escapeHtml(meta.name)}.</p>
@@ -588,7 +632,7 @@ function siblingsFor(existence, unitId, excludeWorkType) {
 // stranica moze linkati na sestrinske vrste rada PRIJE nego se ijedna stvarno renderira -
 // main() ne zna unaprijed hoce li npr. "kif::seminar" proci honesty gate). write=true (prolaz 2):
 // isti obilazak, sad s `existence` iz prolaza 1 dostupnim za sibling navigaciju, stvarno pise.
-function runGenerationPass(groups, splitKeys, slugOverrides, unitMeta, statusMeta, existenceForSiblings, write) {
+function runGenerationPass(groups, splitKeys, slugOverrides, unitMeta, statusMeta, existenceForSiblings, write, deadlines, todayIso) {
   const sitemapUrls = [];
   const hubSubPages = new Map();
   const existence = new Map();
@@ -610,6 +654,7 @@ function runGenerationPass(groups, splitKeys, slugOverrides, unitMeta, statusMet
       splitKey ? programLabel(group[0]) : undefined,
       splitKey ? slugOverrides.get(key) : undefined,
       siblings,
+      deadlines, todayIso,
     );
     if (!page) {
       if (write) console.log(`[generate-faculty-pages] preskačem ${key}: nedovoljno sadržaja za pošten prikaz`);
@@ -708,6 +753,8 @@ function main() {
   const catalog = loadJson(CATALOG_PATH);
   const heavy = loadJson(PROFILES_HEAVY_PATH);
   const statusMeta = loadJson(STATUS_META_PATH);
+  const deadlines = fs.existsSync(DEADLINES_PATH) ? loadJson(DEADLINES_PATH) : [];
+  const todayIso = new Date().toISOString().slice(0, 10);
 
   const unitMeta = {};
   for (const inst of catalog) {
@@ -753,11 +800,11 @@ function main() {
   // Prolaz 1 (tih, ne pise): sazna KOJE (fakultet x vrsta rada) stranice ce uopce postojati i
   // na kojem URL-u, da prolaz 2 moze svakoj stranici dati poveznice na njene sestrinske vrste
   // rada PRIJE nego ijedna stranica bude konacno renderirana.
-  const dryRun = runGenerationPass(groups, splitKeys, slugOverrides, unitMeta, statusMeta, null, false);
+  const dryRun = runGenerationPass(groups, splitKeys, slugOverrides, unitMeta, statusMeta, null, false, deadlines, todayIso);
 
   // Prolaz 2 (stvaran): isti obilazak, sad sa sibling navigacijom iz prolaza 1, stvarno pise fajlove.
   const { sitemapUrls, written, skipped, existence } = runGenerationPass(
-    groups, splitKeys, slugOverrides, unitMeta, statusMeta, dryRun.existence, true,
+    groups, splitKeys, slugOverrides, unitMeta, statusMeta, dryRun.existence, true, deadlines, todayIso,
   );
 
   const masterIndex = buildMasterIndexPage(catalog, existence);
