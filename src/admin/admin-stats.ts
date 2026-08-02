@@ -23,7 +23,10 @@ export interface BetaStats {
   byWorkType?: Record<string, number>;
   users?: { total?: number; last7d?: number };
   storage?: { objects?: number; bytes?: number };
-  analytics?: { last24h?: number; last7d?: number; byEvent7d?: Record<string, number> };
+  analytics?: {
+    last24h?: number; last7d?: number; byEvent7d?: Record<string, number>;
+    conversion7d?: { analysisCompleted?: number; purchaseCompleted?: number; ratePct?: number | null };
+  };
 }
 
 export type AdminStatsResult =
@@ -91,6 +94,11 @@ export function toStatTiles(stats: BetaStats): StatTile[] {
     { label: 'Odbijeno zbog limita (24 h)', value: String(rateLimited) },
     { label: 'Pohrana', value: formatBytes(s.bytes), hint: `${num(s.objects)} datoteka` },
     { label: 'Analytics eventi (24 h)', value: String(num(stats.analytics?.last24h)), hint: `${num(stats.analytics?.last7d)} u 7 dana` },
+    {
+      label: 'Konverzija (7 dana)',
+      value: stats.analytics?.conversion7d?.ratePct != null ? `${String(stats.analytics.conversion7d.ratePct).replace('.', ',')}%` : '—',
+      hint: `${num(stats.analytics?.conversion7d?.purchaseCompleted)} kupnji / ${num(stats.analytics?.conversion7d?.analysisCompleted)} analiza`,
+    },
   ];
 }
 

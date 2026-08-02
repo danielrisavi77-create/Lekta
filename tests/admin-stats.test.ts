@@ -73,6 +73,24 @@ describe('toStatTiles', () => {
     const tile = toStatTiles({}).find((t) => t.label === 'Analytics eventi (24 h)');
     expect(tile?.value).toBe('0');
   });
+
+  it('konverzija prikazuje ratePct s hrvatskim zarezom i sirove brojeve u hintu', () => {
+    const tiles = toStatTiles({ analytics: { conversion7d: { analysisCompleted: 200, purchaseCompleted: 17, ratePct: 8.5 } } });
+    const tile = tiles.find((t) => t.label === 'Konverzija (7 dana)');
+    expect(tile?.value).toBe('8,5%');
+    expect(tile?.hint).toBe('17 kupnji / 200 analiza');
+  });
+
+  it('konverzija bez analiza prikazuje crticu, ne 0%', () => {
+    const tile = toStatTiles({ analytics: { conversion7d: { analysisCompleted: 0, purchaseCompleted: 0, ratePct: null } } }).find((t) => t.label === 'Konverzija (7 dana)');
+    expect(tile?.value).toBe('—');
+  });
+
+  it('konverzija tile ne rusi prazno stanje', () => {
+    const tile = toStatTiles({}).find((t) => t.label === 'Konverzija (7 dana)');
+    expect(tile?.value).toBe('—');
+    expect(tile?.hint).toBe('0 kupnji / 0 analiza');
+  });
 });
 
 describe('toAnalyticsRows', () => {
