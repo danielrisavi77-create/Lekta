@@ -45,9 +45,18 @@ describe('buildRepairableItems: obavezne (autoFixable+verified) stavke, postojec
     expect(items[0].violated).toBe(false);
   });
 
-  it('bez ciljane vrijednosti u profilu (paramsForCheck vraca null) stavka se ne nudi', () => {
+  it('bez ciljane vrijednosti u profilu, ali s vrijednoscu u samom pravilu, stavka SE NUDI (paramsFromValue fallback)', () => {
+    // Legacy profile.rules mirror nije odrzan (nema profile.font), ali ruleEntry.value JEST
+    // verificirana vrijednost - popravak ju mora koristiti, ne tiho preskociti pravilo.
     const checks: AnalyzedCheck[] = [{ title: 'Dominantni font', status: 'fail', max: 8 }];
     const items = buildRepairableItems(checks, { size: [12] }, [requiredEntry()]);
+    expect(items).toHaveLength(1);
+    expect(items[0].params).toEqual({ fontName: 'Times New Roman' });
+  });
+
+  it('bez ciljane vrijednosti ni u profilu ni u samom pravilu (checkId koji paramsFromValue ne pokriva) stavka se ne nudi', () => {
+    const checks: AnalyzedCheck[] = [{ title: 'Dominantni font', status: 'fail', max: 8 }];
+    const items = buildRepairableItems(checks, { size: [12] }, [requiredEntry({ checkId: 'toc', value: null })]);
     expect(items).toHaveLength(0);
   });
 

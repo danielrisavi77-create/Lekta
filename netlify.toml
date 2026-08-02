@@ -16,7 +16,9 @@
   # generate-coverage-page: javna coverage matrica (VERIFICATION_PIPELINE.md sekcija 9),
   # cita samo vec-preracunate JSON podatke (scored-coverage.json), pa ne treba nikakav poredak
   # naspram ostalih generatora, samo da bude poslije `vite build`.
-  command = "npm run build && npm run generate-citation-tools && npm run generate-legal-pages && npm run generate-coverage-page && node scripts/verify-deploy-dist.mjs"
+  # generate-faculty-pages: SEO landing stranice po (fakultet x vrsta rada), npr. /fpzg/diplomski-rad/.
+  # Pilot opseg (PILOT_UNITS na vrhu skripte) - siri se rucno nakon pregleda kvalitete izlaza.
+  command = "npm run build && npm run generate-citation-tools && npm run generate-legal-pages && npm run generate-coverage-page && npm run generate-faculty-pages && node scripts/verify-deploy-dist.mjs"
   publish = "dist"
 
 [build.environment]

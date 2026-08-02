@@ -14,6 +14,7 @@ import { parseXml, readPPr, readRPr, parseThemeFonts, headingLevel } from '../sr
 import { extractCitations } from '../src/citations/author-year';
 import { parseReference } from '../src/citations/parse-reference';
 import { buildLegalCitationEngine } from '../src/citations/legal-citation';
+import { normalize } from '../src/utils/helpers';
 
 const W = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
 const A = 'xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"';
@@ -114,5 +115,39 @@ describe('AUD-11: legal engine ne oznacava rimske brojeve i ceste akronime', () 
   it('stvarna neuvedena kratica (ZOO) i dalje se oznacava', () => {
     const engine = buildLegalCitationEngine([{ id: 1, text: 'Prema čl. 5. ZOO, str. 12.' }], [], []);
     expect(engine.problems.some((p: any) => p.kind === 'lawAcronym' && /ZOO/.test(p.message))).toBe(true);
+  });
+});
+
+describe('AUD-12: normalize() dosljedno presloži đ/Đ na d/D (ne briše ga)', () => {
+  it('normalize("Đurić") daje "duric", ne "uric" (đ nema NFD dekompoziciju pa je prije nestajao)', () => {
+    expect(normalize('Đurić')).toBe('duric');
+  });
+  it('"Đurić" i "Jurić" se vise ne poklapaju nakon normalizacije', () => {
+    expect(normalize('Đurić')).not.toBe(normalize('Jurić'));
+  });
+});
+
+describe('AUD-13: narativna citatnica s "i sur."/"et al." se prepoznaje', () => {
+  const cite = (text: string) => extractCitations([{ text }]);
+  it('"Petrović i sur. (2020)" prepoznaje Petrović 2020', () => {
+    const found = cite('Prema istraživanju, Petrović i sur. (2020) navode drugačije rezultate.');
+    expect(found.some((c: any) => c.kind === 'narrative' && c.year === '2020' && /Petrović/.test(c.author))).toBe(true);
+  });
+  it('"Petrović et al. (2020)" prepoznaje Petrović 2020', () => {
+    const found = cite('Prema istraživanju, Petrović et al. (2020) navode drugačije rezultate.');
+    expect(found.some((c: any) => c.kind === 'narrative' && c.year === '2020' && /Petrović/.test(c.author))).toBe(true);
+  });
+});
+
+describe('AUD-14: veliko-pisan pocetak recenice ne guta susjednu narativnu citatnicu', () => {
+  const cite = (text: string) => extractCitations([{ text }]);
+  it('"Prema Horvat (2020)..." prepoznaje Horvat 2020 (prije se gubilo jer "Prema" izgleda kao ime)', () => {
+    const found = cite('Prema Horvat (2020), rezultati se razlikuju od očekivanih.');
+    expect(found.some((c: any) => c.kind === 'narrative' && c.year === '2020' && /Horvat/.test(c.author))).toBe(true);
+  });
+  it('kontrola: sredin-recenicno "prema Ivan Horvat (2020)" i dalje se ne dvostruko parsira', () => {
+    const found = cite('Kako navodi, prema Ivan Horvat (2020), rezultati se razlikuju.');
+    const narrative = found.filter((c: any) => c.kind === 'narrative' && c.year === '2020');
+    expect(narrative.length).toBe(0);
   });
 });

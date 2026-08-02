@@ -83,13 +83,42 @@ describe('typoLint: em i en crtica', () => {
     expect(f[0].suggestion).not.toContain('\u2014');
     expect(f[0].suggestion).not.toContain('\u2013');
   });
-  it('prijavljuje en crticu u rasponu godina', () => {
-    const f = byKind(['raspon 2010\u20132015 godina'], KIND_EM_EN_CRTICA);
+  it('NE prijavljuje en crticu u brojcanom rasponu (ispravna konvencija, ne pogreska)', () => {
+    expect(byKind(['raspon 2010\u20132015 godina'], KIND_EM_EN_CRTICA)).toHaveLength(0);
+  });
+  it('NE prijavljuje hrvatsku konvenciju godina s tockom ("1945.\u20131990.")', () => {
+    expect(byKind(['Razdoblje 1945.\u20131990. obiljezeno je promjenama.'], KIND_EM_EN_CRTICA)).toHaveLength(0);
+  });
+  it('NE prijavljuje raspon stranica u citatnom lokatoru ("str. 45\u201347")', () => {
+    expect(byKind(['Vidi str. 45\u201347 za detalje.'], KIND_EM_EN_CRTICA)).toHaveLength(0);
+  });
+  it('i dalje prijavljuje crticu koja razdvaja rijeci/recenice, ne brojke', () => {
+    const f = byKind(['Cijena je bila previsoka \u2013 barem za studentski budzet.'], KIND_EM_EN_CRTICA);
     expect(f).toHaveLength(1);
     expect(f[0].suggestion).toContain('en crticu');
   });
   it('ne prijavljuje obicnu spojnicu', () => {
     expect(byKind(['dvadeset-prvi rok'], KIND_EM_EN_CRTICA)).toHaveLength(0);
+  });
+});
+
+describe('typoLint: crtica se izuzima unutar popisa literature (bibliographyStart)', () => {
+  const paras = [
+    'Autor tvrdi da je stanje bilo lose – barem prema izvorima.', // tijelo rada (indeks 0)
+    'Kovac, I. (2020). Politika – uvod u temeljne pojmove. Zagreb: Naklada.', // literatura (indeks 1)
+  ];
+  it('bez bibliographyStart prijavljuje crticu i u naslovu knjige (zatecen bug)', () => {
+    expect(typoLint(paras).filter((f) => f.kind === KIND_EM_EN_CRTICA)).toHaveLength(2);
+  });
+  it('s bibliographyStart=1 crtica u naslovu knjige (odlomak 1) se vise NE prijavljuje', () => {
+    const found = typoLint(paras, 1).filter((f) => f.kind === KIND_EM_EN_CRTICA);
+    expect(found).toHaveLength(1);
+    expect(found[0].paragraphIndex).toBe(0);
+  });
+  it('ostale provjere (dvostruki razmak) i dalje vrijede unutar literature', () => {
+    const withTypo = [paras[0], 'Kovac, I.  (2020). Politika, uvod. Zagreb: Naklada.'];
+    const found = typoLint(withTypo, 1).filter((f) => f.kind === KIND_DVOSTRUKI_RAZMAK);
+    expect(found.some((f) => f.paragraphIndex === 1)).toBe(true);
   });
 });
 

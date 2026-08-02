@@ -82,8 +82,10 @@ describe('generate-citation-tools.mjs: CSP script-src (bez unsafe-inline)', () =
   });
 
   it('public/_headers: /alati/*.js i /alati/*.css imaju dulji Cache-Control od genericnog /*.html (ne max-age=0)', () => {
-    const alatiJsRule = headers.match(/\/alati\/\*\.js\n\s*Cache-Control: ([^\n]+)/);
-    const alatiCssRule = headers.match(/\/alati\/\*\.css\n\s*Cache-Control: ([^\n]+)/);
+    // \r?\n: public/_headers moze imati CRLF zavrsetke retka (Windows checkout, autocrlf), pa
+    // strogi \n ne bi upario iza \r-a.
+    const alatiJsRule = headers.match(/\/alati\/\*\.js\r?\n\s*Cache-Control: ([^\r\n]+)/);
+    const alatiCssRule = headers.match(/\/alati\/\*\.css\r?\n\s*Cache-Control: ([^\r\n]+)/);
     expect(alatiJsRule, '/alati/*.js pravilo nedostaje u _headers').toBeTruthy();
     expect(alatiCssRule, '/alati/*.css pravilo nedostaje u _headers').toBeTruthy();
     expect(alatiJsRule![1]).not.toContain('max-age=0');
