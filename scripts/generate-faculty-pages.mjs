@@ -47,6 +47,10 @@ const WORK_TYPE_META = {
   doctoral: { slug: 'doktorski-rad', label: 'doktorski rad', labelCap: 'Doktorski rad' },
 };
 
+// Prikazni redoslijed nezavisan o TARGET_WORK_TYPES (procesni redoslijed): akademska
+// progresija (seminarski se pise tijekom studija, zavrsni/diplomski su zavrsni koraci).
+const WORK_TYPE_DISPLAY_ORDER = ['seminar', 'final', 'graduate'];
+
 // Lagana, proza-samo kopija tokena iz src/citations/citation-meta.ts (izbjegava esbuild
 // bundling punog citatnog enginea za stranice koje nemaju interaktivan alat).
 const CITATION_LABELS = {
@@ -118,10 +122,44 @@ function dedupeSources(group) {
   return [...seen.values()];
 }
 
-// Male/privatne ustanove (npr. Algebra) su registrirane s institucijom == jedinom jedinicom,
-// pa bi "Ustanova · Ustanova" bilo besmisleno ponavljanje.
-function kickerText(meta) {
-  return meta.instName === meta.name ? meta.name : `${meta.instName} · ${meta.name}`;
+// Rjesava "kako se vratim na /fakulteti/ kad otvorim drugi fakultet": stari kicker redak
+// (institucija · jedinica, obican tekst) postaje funkcionalan breadcrumb: Svi fakulteti >
+// Institucija > Jedinica[ > Program]. Institucija linka na sidro unutar /fakulteti/
+// (buildMasterIndexPage stavlja id=inst.id na svaki <h2>), pa povratak ne baci korisnika na
+// vrh liste od ~50 ustanova nego ravno na njegovu - ujedno i put do SVIH jedinica iste
+// institucije (npr. svih rijeckih sastavnica), ne samo generalni "natrag". Male/privatne
+// ustanove (npr. Algebra) su registrirane s institucijom == jedinom jedinicom, pa se
+// institucijski clan izostavlja da se isto ime ne ponovi dvaput.
+function breadcrumbCrumbs(meta, unitHref, currentLabel) {
+  const crumbs = [{ label: 'Svi fakulteti', href: '/fakulteti/' }];
+  if (meta.instName !== meta.name) crumbs.push({ label: meta.instName, href: `/fakulteti/#${meta.instId}` });
+  crumbs.push({ label: meta.name, href: currentLabel ? unitHref : undefined });
+  if (currentLabel) crumbs.push({ label: currentLabel, href: undefined });
+  return crumbs;
+}
+
+function breadcrumbHtml(crumbs) {
+  const inner = crumbs
+    .map((c) => (c.href
+      ? `<a href="${escapeHtml(c.href)}">${escapeHtml(c.label)}</a>`
+      : `<span aria-current="page">${escapeHtml(c.label)}</span>`))
+    .join('<span class="sep">›</span>');
+  return `<nav class="lekta-kicker" aria-label="Navigacija">${inner}</nav>`;
+}
+
+// BreadcrumbList: Google prikaze ovo umjesto sirovog URL-a u rezultatima pretrage - isti
+// podatak kao vizualni breadcrumb gore, samo strojno citljiv.
+function breadcrumbJsonLd(crumbs) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.label,
+      ...(c.href ? { item: `${SITE_ORIGIN}${c.href}` } : {}),
+    })),
+  };
 }
 
 // Neki unizd programi vec u programs[0] nose "(diplomski rad, Zadar)" ugradjeno u ime
@@ -284,6 +322,14 @@ const PAGE_STYLE = `
   .lekta-disclaimer { font-size: 0.8rem; color: var(--paper-muted); margin-top: 1.6rem; padding-top: 0.9rem; border-top: 1px solid var(--paper-line); }
   .lekta-links { margin-top: 1.2rem; font-size: 0.85rem; }
   .lekta-links a { color: var(--red-deep); margin-right: 1rem; }
+  .worktype-nav { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.9rem 0 0.3rem; }
+  .worktype-nav .worktype-current, .worktype-nav a { font-family: var(--font-mono); font-size: 0.78rem; padding: 0.3rem 0.65rem; border-radius: 2px; border: 1px solid var(--paper-line); text-decoration: none; }
+  .worktype-nav .worktype-current { background: var(--red-deep); color: var(--on-red); border-color: transparent; font-weight: 700; }
+  .worktype-nav a { color: var(--paper-ink); background: var(--paper-2); }
+  .worktype-nav a:hover { background: var(--paper-line); }
+  .lekta-kicker a { color: var(--paper-muted); text-decoration: none; }
+  .lekta-kicker a:hover { color: var(--paper-ink); text-decoration: underline; }
+  .lekta-kicker .sep { margin: 0 0.35em; color: var(--paper-line-strong); }
   a { color: var(--red-deep); }
   @media (max-width: 700px) { body { margin: 0; max-width: none; border-radius: 0; border-left-width: 0; border-right-width: 0; box-shadow: none; } }
 `;
@@ -320,7 +366,7 @@ ${robots ? `<meta name="robots" content="${robots}">` : ''}
 <style>${PAGE_STYLE}</style>
 </head>
 <body>
-<div class="lekta-brand"><a href="${SITE_ORIGIN}">Lekta</a><span>Besplatna tehnička provjera</span></div>
+<div class="lekta-brand"><a href="/">Lekta</a><span>Besplatna tehnička provjera</span></div>
 ${bodyHtml}
 </body>
 </html>
@@ -343,12 +389,19 @@ ${r.byProgram.map((x) => `<tr><td>${escapeHtml(x.program)}</td><td>${escapeHtml(
 </tbody></table>`).join('');
 }
 
+function worktypeNavHtml(workType, siblings) {
+  if (!siblings || !siblings.length) return '';
+  return `<div class="worktype-nav"><span class="worktype-current" aria-current="page">${escapeHtml(WORK_TYPE_META[workType].labelCap)}</span>${siblings.map((s) => `<a href="${escapeHtml(s.path)}">${escapeHtml(s.label)}</a>`).join('')}</div>`;
+}
+
 // programQualifier + slugOverride: postavlja main() KAD je grupa prevelika/neuniformna za jednu
 // fakultetsku stranicu - tada je "group" JEDAN profil. programQualifier ("Psihologija") ide u
 // naslov/tekst da stranica ne tvrdi da vrijedi za cijeli fakultet; slugOverride je VEC
 // razrijesen (i po potrebi disambiguiran protiv kolizije u main()) segment URL-a - ne racuna se
 // ponovno ovdje, da se main()-ova disambiguacija i stvarna putanja fajla ne mogu razici.
-function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, programQualifier, slugOverride) {
+// siblings: [{url,label}] za DRUGE vrste rada na istom fakultetu koje stvarno postoje (main()
+// ovo racuna u prolazu 1 prije nego se ijedna stranica konacno renderira - vidi main()).
+function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, programQualifier, slugOverride, siblings) {
   const meta = unitMeta[unitId];
   if (!meta) {
     console.error(`[generate-faculty-pages] FAIL: unitId "${unitId}" nije u zagreb-catalog.json`);
@@ -387,7 +440,13 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
   if (!hasContent) return null;
 
   const urlSlug = slugOverride || wt.slug;
-  const canonical = `${SITE_ORIGIN}/${unitId}/${urlSlug}/`;
+  const relPath = `/${unitId}/${urlSlug}/`;
+  // canonical/og:url/JSON-LD MORAJU biti apsolutni (specifikacija); SVAKI klikabilni <a href>
+  // unutar stranice (CTA, sibling-nav, footer) MORA biti RELATIVAN (relPath, ne canonical) -
+  // inace klik na lokalnom vite preview-u (localhost) odvede na pravu produkcijsku domenu
+  // umjesto da ostane na localhost, sto izgleda kao "stranica ne postoji" iako je generator
+  // ispravan. Zove se relPath, ne path, da ne zasjeni uvezeni node:path modul.
+  const canonical = `${SITE_ORIGIN}${relPath}`;
   const facultyTitlePart = programQualifier ? `${meta.name}, ${programQualifier}` : meta.name;
   const title = `${facultyTitlePart}: ${wt.labelCap} · tehnička pravila prije predaje | Lekta`;
   // Konkretne brojke (opseg, broj izvora...) u meta descriptionu SAMO kad postoji jedan profil:
@@ -397,7 +456,7 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
     ? `${facultyTitlePart}, ${wt.label}: ${facts.slice(0, 3).join(', ')}. Izvor i datum provjere niže. Besplatna automatska provjera prema ovim pravilima.`
     : `${facultyTitlePart}, ${wt.label}: tehnička pravila oblikovanja, opsega i citiranja prema službenim izvorima. Besplatna automatska provjera.`;
 
-  const ctaHref = `${SITE_ORIGIN}/?unit=${encodeURIComponent(unitId)}&utm_source=faculty_page&utm_medium=organic&utm_campaign=${encodeURIComponent(unitId + '_' + workType)}`;
+  const ctaHref = `/?unit=${encodeURIComponent(unitId)}&utm_source=faculty_page&utm_medium=organic&utm_campaign=${encodeURIComponent(unitId + '_' + workType)}`;
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -409,12 +468,14 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
     ...(verifiedAt ? { dateModified: verifiedAt } : {}),
     isPartOf: { '@type': 'WebSite', name: 'Lekta', url: SITE_ORIGIN },
   };
+  const unitHref = programQualifier ? `/${unitId}/${wt.slug}/` : undefined;
+  const crumbs = breadcrumbCrumbs(meta, unitHref, programQualifier);
 
   // "na {Ime}" bi u hrvatskom trazio deklinaciju (dativ: "na Fakultetu", ne "na Fakultet"),
   // koju ne mozemo pouzdano izvesti za proizvoljna imena ustanova; dvotocka/zarez izbjegava
   // gramaticki problem umjesto da rizicira pogresan padez.
   const programNote = programQualifier
-    ? `<p class="lekta-lead">Vrijedi za studij: ${escapeHtml(group.map(programLabel).join(', '))}. ${escapeHtml(meta.name)} ima više studijskih programa s različitim pravilima; <a href="${SITE_ORIGIN}/${unitId}/${wt.slug}/">popis svih programa je ovdje</a>.</p>`
+    ? `<p class="lekta-lead">Vrijedi za studij: ${escapeHtml(group.map(programLabel).join(', '))}. ${escapeHtml(meta.name)} ima više studijskih programa s različitim pravilima; <a href="/${unitId}/${wt.slug}/">popis svih programa je ovdje</a>.</p>`
     : multiProgram
       ? `<p class="lekta-lead">Vrijedi za ${group.length} studijska programa: ${escapeHtml(group.map(programLabel).join(', '))}.</p>`
       : '';
@@ -424,8 +485,9 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
     : '';
 
   const body = `
-<div class="lekta-kicker">${escapeHtml(kickerText(meta))}${programQualifier ? ` · ${escapeHtml(programQualifier)}` : ''}</div>
+${breadcrumbHtml(crumbs)}
 <h1>${escapeHtml(facultyTitlePart)}: ${escapeHtml(wt.label)}</h1>
+${worktypeNavHtml(workType, siblings)}
 <p class="lekta-lead">Tehnička pravila prije predaje, prema službenim izvorima fakulteta.</p>
 <div class="status-badge">${escapeHtml(statusInfo.label)}</div>
 <p class="lekta-lead">${escapeHtml(statusInfo.note)}</p>
@@ -457,21 +519,23 @@ ${sources.length ? `<h2>Izvori i datum provjere</h2><p>${verifiedAt ? `Zadnja pr
   Ova stranica je pomoćni sažetak, ne službena obavijest fakulteta. Uvijek vrijede aktualne službene upute fakulteta, studija, kolegija i mentora. Nije provjera plagijata ni sličnosti teksta (nije Turnitin) i ne jamči prihvaćanje rada, ocjenu ni odluku mentora ili povjerenstva.
 </div>
 <div class="lekta-links">
-  <a href="${SITE_ORIGIN}/">Naslovna</a>
-  <a href="${SITE_ORIGIN}/pokrivenost.html">Pokrivenost profila</a>
-  <a href="${SITE_ORIGIN}/alati/citati/${encodeURIComponent(unitId)}.html">Generator citata za ${escapeHtml(meta.name)}</a>
+  <a href="/">Naslovna</a>
+  <a href="/fakulteti/#${escapeHtml(meta.instId)}">Svi fakulteti</a>
+  <a href="/pokrivenost.html">Pokrivenost profila</a>
+  <a href="/alati/citati/${encodeURIComponent(unitId)}.html">Generator citata za ${escapeHtml(meta.name)}</a>
 </div>`;
 
-  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd }), verifiedAt, canonical, urlSlug };
+  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd: [jsonLd, breadcrumbJsonLd(crumbs)] }), verifiedAt, canonical, path: relPath, urlSlug };
 }
 
 // Lagana "direktorij" stranica kad je fakultetska grupa prevelika/neuniformna za jednu stranicu
 // (splitOversizedGroups): popisuje linkove prema pojedinacnim programskim stranicama umjesto da
 // tvrdi jedno pravilo za cijeli fakultet. Bez fact-grida/divergencijskih tablica - samo popis.
-function buildHubIndexPage(unitId, workType, subPages, unitMeta) {
+function buildHubIndexPage(unitId, workType, subPages, unitMeta, siblings) {
   const meta = unitMeta[unitId];
   const wt = WORK_TYPE_META[workType];
-  const canonical = `${SITE_ORIGIN}/${unitId}/${wt.slug}/`;
+  const relPath = `/${unitId}/${wt.slug}/`;
+  const canonical = `${SITE_ORIGIN}${relPath}`;
   const title = `${meta.name}: ${wt.labelCap} po studijskom programu | Lekta`;
   const description = `${meta.name} ima više studijskih programa s različitim pravilima za ${wt.label}. Odaberi svoj program za konkretna pravila, izvore i besplatnu provjeru.`;
   const jsonLd = {
@@ -483,21 +547,24 @@ function buildHubIndexPage(unitId, workType, subPages, unitMeta) {
     inLanguage: 'hr',
     isPartOf: { '@type': 'WebSite', name: 'Lekta', url: SITE_ORIGIN },
   };
+  const crumbs = breadcrumbCrumbs(meta, undefined, undefined);
   const body = `
-<div class="lekta-kicker">${escapeHtml(kickerText(meta))}</div>
+${breadcrumbHtml(crumbs)}
 <h1>${escapeHtml(meta.name)}: ${escapeHtml(wt.label)} po studijskom programu</h1>
+${worktypeNavHtml(workType, siblings)}
 <p class="lekta-lead">${escapeHtml(meta.name)} ima više studijskih programa s različitim tehničkim pravilima za ${escapeHtml(wt.label)}. Odaberi svoj program:</p>
 <ul class="check-list">
-${subPages.map((sp) => `<li><a href="${sp.canonical}">${escapeHtml(sp.programLabel)}</a></li>`).join('')}
+${subPages.map((sp) => `<li><a href="${sp.path}">${escapeHtml(sp.programLabel)}</a></li>`).join('')}
 </ul>
 <div class="lekta-disclaimer">
   Ova stranica je pomoćni sažetak, ne službena obavijest fakulteta. Uvijek vrijede aktualne službene upute fakulteta, studija, kolegija i mentora.
 </div>
 <div class="lekta-links">
-  <a href="${SITE_ORIGIN}/">Naslovna</a>
-  <a href="${SITE_ORIGIN}/pokrivenost.html">Pokrivenost profila</a>
+  <a href="/">Naslovna</a>
+  <a href="/fakulteti/#${escapeHtml(meta.instId)}">Svi fakulteti</a>
+  <a href="/pokrivenost.html">Pokrivenost profila</a>
 </div>`;
-  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd }), canonical };
+  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd: [jsonLd, breadcrumbJsonLd(crumbs)] }), canonical, path: relPath };
 }
 
 function buildSitemap(urls) {
@@ -508,6 +575,133 @@ function buildSitemap(urls) {
     })
     .join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries}\n</urlset>\n`;
+}
+
+function siblingsFor(existence, unitId, excludeWorkType) {
+  const unitMap = existence.get(unitId);
+  if (!unitMap) return [];
+  return WORK_TYPE_DISPLAY_ORDER.filter((wt) => wt !== excludeWorkType && unitMap.has(wt)).map((wt) => unitMap.get(wt));
+}
+
+// Jedan prolaz kroz sve (fakultet x vrsta rada) grupe. write=false (prolaz 1): ne pise fajlove
+// ni logove, samo racuna KOJE stranice ce postojati i na kojem URL-u (postrebno da svaka
+// stranica moze linkati na sestrinske vrste rada PRIJE nego se ijedna stvarno renderira -
+// main() ne zna unaprijed hoce li npr. "kif::seminar" proci honesty gate). write=true (prolaz 2):
+// isti obilazak, sad s `existence` iz prolaza 1 dostupnim za sibling navigaciju, stvarno pise.
+function runGenerationPass(groups, splitKeys, slugOverrides, unitMeta, statusMeta, existenceForSiblings, write) {
+  const sitemapUrls = [];
+  const hubSubPages = new Map();
+  const existence = new Map();
+  let written = 0;
+  let skipped = 0;
+
+  const recordExistence = (unitId, workType, relPath) => {
+    if (!existence.has(unitId)) existence.set(unitId, new Map());
+    existence.get(unitId).set(workType, { path: relPath, label: WORK_TYPE_META[workType].labelCap });
+  };
+
+  for (const [key, group] of groups) {
+    const parts = key.split('::');
+    const [unitId, workType] = parts;
+    const splitKey = parts.length > 2 ? `${unitId}::${workType}` : null;
+    const siblings = existenceForSiblings ? siblingsFor(existenceForSiblings, unitId, workType) : [];
+    const page = buildFacultyPage(
+      unitId, workType, group, unitMeta, statusMeta,
+      splitKey ? programLabel(group[0]) : undefined,
+      splitKey ? slugOverrides.get(key) : undefined,
+      siblings,
+    );
+    if (!page) {
+      if (write) console.log(`[generate-faculty-pages] preskačem ${key}: nedovoljno sadržaja za pošten prikaz`);
+      skipped++;
+      continue;
+    }
+    if (write) {
+      const outDir = path.join(OUT_DIR, unitId, page.urlSlug);
+      fs.mkdirSync(outDir, { recursive: true });
+      fs.writeFileSync(path.join(outDir, 'index.html'), page.html, 'utf-8');
+    }
+    sitemapUrls.push({ loc: page.canonical, lastmod: page.verifiedAt ?? undefined });
+    written++;
+    if (splitKey) {
+      if (!hubSubPages.has(splitKey)) hubSubPages.set(splitKey, []);
+      hubSubPages.get(splitKey).push({ path: page.path, programLabel: programLabel(group[0]) });
+    } else {
+      recordExistence(unitId, workType, page.path);
+    }
+  }
+
+  for (const splitKey of splitKeys) {
+    const subPages = hubSubPages.get(splitKey);
+    if (!subPages || !subPages.length) continue; // sve podstranice preskocene (nema sadrzaja) - nema sto popisati
+    const [unitId, workType] = splitKey.split('::');
+    const siblings = existenceForSiblings ? siblingsFor(existenceForSiblings, unitId, workType) : [];
+    const hub = buildHubIndexPage(unitId, workType, subPages, unitMeta, siblings);
+    if (write) {
+      const outDir = path.join(OUT_DIR, unitId, WORK_TYPE_META[workType].slug);
+      fs.mkdirSync(outDir, { recursive: true });
+      fs.writeFileSync(path.join(outDir, 'index.html'), hub.html, 'utf-8');
+      console.log(`[generate-faculty-pages] ${splitKey}: razdvojeno na ${subPages.length} programskih stranica + hub`);
+    }
+    sitemapUrls.push({ loc: hub.canonical });
+    written++;
+    recordExistence(unitId, workType, hub.path);
+  }
+
+  return { sitemapUrls, written, skipped, existence };
+}
+
+// Grupirana pregledna stranica ("sve stranice na jednom mjestu"): rjesava orphan-page problem
+// (dosad nijedna od 343 stranice nije bila dohvatljiva klikom ni s glavne stranice ni jedna od
+// druge - jedina poveznica je bio sitemap-fakulteti.xml, koji citaju tegljaci, ne ljudi).
+// Grupirano po instituciji istim redoslijedom kataloga kao generate-citation-tools.mjs.
+function buildMasterIndexPage(catalog, existence) {
+  const relPath = '/fakulteti/';
+  const canonical = `${SITE_ORIGIN}${relPath}`;
+  const title = 'Provjera rada po fakultetu: pregled svih ustanova | Lekta';
+  const description = 'Tehnička pravila prije predaje po fakultetu i vrsti rada (diplomski, završni, seminarski rad): oblikovanje, opseg, citiranje i izvori. Odaberi svoju ustanovu.';
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: title.replace(/ \| Lekta$/, ''),
+    description,
+    url: canonical,
+    inLanguage: 'hr',
+    isPartOf: { '@type': 'WebSite', name: 'Lekta', url: SITE_ORIGIN },
+  };
+  // id=inst.id na svaki <h2> je sidro na koje ciljaju breadcrumb i footer "Svi fakulteti"
+  // linkovi sa svake fakultetske stranice ("/fakulteti/#unizg") - bez toga bi povratak uvijek
+  // sletio na vrh liste od ~50 ustanova, ne na onu koju je korisnik upravo gledao.
+  const groupsHtml = catalog
+    .map((inst) => {
+      const units = (inst.units || []).filter((u) => existence.has(u.id));
+      if (!units.length) return '';
+      const items = units
+        .map((u) => {
+          const wtMap = existence.get(u.id);
+          const links = WORK_TYPE_DISPLAY_ORDER.filter((wt) => wtMap.has(wt))
+            .map((wt) => `<a href="${escapeHtml(wtMap.get(wt).path)}">${escapeHtml(wtMap.get(wt).label)}</a>`)
+            .join(' · ');
+          return `<li>${escapeHtml(u.name)}: ${links}</li>`;
+        })
+        .join('');
+      return `<h2 id="${escapeHtml(inst.id)}">${escapeHtml(inst.name)}</h2><ul class="check-list">${items}</ul>`;
+    })
+    .filter(Boolean)
+    .join('');
+  const body = `
+<div class="lekta-kicker">Lekta</div>
+<h1>Provjera rada po fakultetu</h1>
+<p class="lekta-lead">Tehnička pravila prije predaje (diplomski, završni i seminarski rad) po ustanovi: oblikovanje, opseg, citiranje i izvori, iz službenih izvora fakulteta. Odaberi svoju ustanovu i vrstu rada.</p>
+${groupsHtml}
+<div class="lekta-disclaimer">
+  Popis pokriva ustanove za koje postoji barem jedan strojno provjerljiv profil. Odsutnost ustanove ne znači da Lekta ne radi za nju - opća tehnička provjera i dalje vrijedi za sve fakultete iz kataloga.
+</div>
+<div class="lekta-links">
+  <a href="/">Naslovna</a>
+  <a href="/pokrivenost.html">Pokrivenost profila</a>
+</div>`;
+  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd }), canonical, path: relPath };
 }
 
 function main() {
@@ -556,51 +750,24 @@ function main() {
     }
   }
 
-  const sitemapUrls = [];
-  const hubSubPages = new Map(); // splitKey -> [{canonical, programLabel}]
-  let written = 0;
-  let skipped = 0;
-  for (const [key, group] of groups) {
-    const parts = key.split('::');
-    const [unitId, workType] = parts;
-    const splitKey = parts.length > 2 ? `${unitId}::${workType}` : null;
-    const page = buildFacultyPage(
-      unitId, workType, group, unitMeta, statusMeta,
-      splitKey ? programLabel(group[0]) : undefined,
-      splitKey ? slugOverrides.get(key) : undefined,
-    );
-    if (!page) {
-      console.log(`[generate-faculty-pages] preskačem ${key}: nedovoljno sadržaja za pošten prikaz`);
-      skipped++;
-      continue;
-    }
-    const outSlug = page.urlSlug;
-    const outDir = path.join(OUT_DIR, unitId, outSlug);
-    fs.mkdirSync(outDir, { recursive: true });
-    fs.writeFileSync(path.join(outDir, 'index.html'), page.html, 'utf-8');
-    sitemapUrls.push({ loc: page.canonical, lastmod: page.verifiedAt ?? undefined });
-    written++;
-    if (splitKey) {
-      if (!hubSubPages.has(splitKey)) hubSubPages.set(splitKey, []);
-      hubSubPages.get(splitKey).push({ canonical: page.canonical, programLabel: programLabel(group[0]) });
-    }
-  }
+  // Prolaz 1 (tih, ne pise): sazna KOJE (fakultet x vrsta rada) stranice ce uopce postojati i
+  // na kojem URL-u, da prolaz 2 moze svakoj stranici dati poveznice na njene sestrinske vrste
+  // rada PRIJE nego ijedna stranica bude konacno renderirana.
+  const dryRun = runGenerationPass(groups, splitKeys, slugOverrides, unitMeta, statusMeta, null, false);
 
-  for (const splitKey of splitKeys) {
-    const subPages = hubSubPages.get(splitKey);
-    if (!subPages || !subPages.length) continue; // sve podstranice preskocene (nema sadrzaja) - nema sto popisati
-    const [unitId, workType] = splitKey.split('::');
-    const hub = buildHubIndexPage(unitId, workType, subPages, unitMeta);
-    const outDir = path.join(OUT_DIR, unitId, WORK_TYPE_META[workType].slug);
-    fs.mkdirSync(outDir, { recursive: true });
-    fs.writeFileSync(path.join(outDir, 'index.html'), hub.html, 'utf-8');
-    sitemapUrls.push({ loc: hub.canonical });
-    written++;
-    console.log(`[generate-faculty-pages] ${splitKey}: razdvojeno na ${subPages.length} programskih stranica + hub`);
-  }
+  // Prolaz 2 (stvaran): isti obilazak, sad sa sibling navigacijom iz prolaza 1, stvarno pise fajlove.
+  const { sitemapUrls, written, skipped, existence } = runGenerationPass(
+    groups, splitKeys, slugOverrides, unitMeta, statusMeta, dryRun.existence, true,
+  );
+
+  const masterIndex = buildMasterIndexPage(catalog, existence);
+  const masterDir = path.join(OUT_DIR, 'fakulteti');
+  fs.mkdirSync(masterDir, { recursive: true });
+  fs.writeFileSync(path.join(masterDir, 'index.html'), masterIndex.html, 'utf-8');
+  sitemapUrls.push({ loc: masterIndex.canonical });
 
   fs.writeFileSync(path.join(OUT_DIR, 'sitemap-fakulteti.xml'), buildSitemap(sitemapUrls), 'utf-8');
-  console.log(`[generate-faculty-pages] gotovo. ${written} stranica napisano, ${skipped} preskočeno (bez sadržaja), sitemap-fakulteti.xml napisan.`);
+  console.log(`[generate-faculty-pages] gotovo. ${written} stranica napisano (+ /fakulteti/ pregled), ${skipped} preskočeno (bez sadržaja), sitemap-fakulteti.xml napisan.`);
 }
 
 main();
