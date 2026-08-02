@@ -122,10 +122,44 @@ function dedupeSources(group) {
   return [...seen.values()];
 }
 
-// Male/privatne ustanove (npr. Algebra) su registrirane s institucijom == jedinom jedinicom,
-// pa bi "Ustanova · Ustanova" bilo besmisleno ponavljanje.
-function kickerText(meta) {
-  return meta.instName === meta.name ? meta.name : `${meta.instName} · ${meta.name}`;
+// Rjesava "kako se vratim na /fakulteti/ kad otvorim drugi fakultet": stari kicker redak
+// (institucija · jedinica, obican tekst) postaje funkcionalan breadcrumb: Svi fakulteti >
+// Institucija > Jedinica[ > Program]. Institucija linka na sidro unutar /fakulteti/
+// (buildMasterIndexPage stavlja id=inst.id na svaki <h2>), pa povratak ne baci korisnika na
+// vrh liste od ~50 ustanova nego ravno na njegovu - ujedno i put do SVIH jedinica iste
+// institucije (npr. svih rijeckih sastavnica), ne samo generalni "natrag". Male/privatne
+// ustanove (npr. Algebra) su registrirane s institucijom == jedinom jedinicom, pa se
+// institucijski clan izostavlja da se isto ime ne ponovi dvaput.
+function breadcrumbCrumbs(meta, unitHref, currentLabel) {
+  const crumbs = [{ label: 'Svi fakulteti', href: '/fakulteti/' }];
+  if (meta.instName !== meta.name) crumbs.push({ label: meta.instName, href: `/fakulteti/#${meta.instId}` });
+  crumbs.push({ label: meta.name, href: currentLabel ? unitHref : undefined });
+  if (currentLabel) crumbs.push({ label: currentLabel, href: undefined });
+  return crumbs;
+}
+
+function breadcrumbHtml(crumbs) {
+  const inner = crumbs
+    .map((c) => (c.href
+      ? `<a href="${escapeHtml(c.href)}">${escapeHtml(c.label)}</a>`
+      : `<span aria-current="page">${escapeHtml(c.label)}</span>`))
+    .join('<span class="sep">›</span>');
+  return `<nav class="lekta-kicker" aria-label="Navigacija">${inner}</nav>`;
+}
+
+// BreadcrumbList: Google prikaze ovo umjesto sirovog URL-a u rezultatima pretrage - isti
+// podatak kao vizualni breadcrumb gore, samo strojno citljiv.
+function breadcrumbJsonLd(crumbs) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.label,
+      ...(c.href ? { item: `${SITE_ORIGIN}${c.href}` } : {}),
+    })),
+  };
 }
 
 // Neki unizd programi vec u programs[0] nose "(diplomski rad, Zadar)" ugradjeno u ime
@@ -293,6 +327,9 @@ const PAGE_STYLE = `
   .worktype-nav .worktype-current { background: var(--red-deep); color: var(--on-red); border-color: transparent; font-weight: 700; }
   .worktype-nav a { color: var(--paper-ink); background: var(--paper-2); }
   .worktype-nav a:hover { background: var(--paper-line); }
+  .lekta-kicker a { color: var(--paper-muted); text-decoration: none; }
+  .lekta-kicker a:hover { color: var(--paper-ink); text-decoration: underline; }
+  .lekta-kicker .sep { margin: 0 0.35em; color: var(--paper-line-strong); }
   a { color: var(--red-deep); }
   @media (max-width: 700px) { body { margin: 0; max-width: none; border-radius: 0; border-left-width: 0; border-right-width: 0; box-shadow: none; } }
 `;
@@ -354,7 +391,7 @@ ${r.byProgram.map((x) => `<tr><td>${escapeHtml(x.program)}</td><td>${escapeHtml(
 
 function worktypeNavHtml(workType, siblings) {
   if (!siblings || !siblings.length) return '';
-  return `<div class="worktype-nav"><span class="worktype-current">${escapeHtml(WORK_TYPE_META[workType].labelCap)}</span>${siblings.map((s) => `<a href="${escapeHtml(s.path)}">${escapeHtml(s.label)}</a>`).join('')}</div>`;
+  return `<div class="worktype-nav"><span class="worktype-current" aria-current="page">${escapeHtml(WORK_TYPE_META[workType].labelCap)}</span>${siblings.map((s) => `<a href="${escapeHtml(s.path)}">${escapeHtml(s.label)}</a>`).join('')}</div>`;
 }
 
 // programQualifier + slugOverride: postavlja main() KAD je grupa prevelika/neuniformna za jednu
@@ -431,6 +468,8 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
     ...(verifiedAt ? { dateModified: verifiedAt } : {}),
     isPartOf: { '@type': 'WebSite', name: 'Lekta', url: SITE_ORIGIN },
   };
+  const unitHref = programQualifier ? `/${unitId}/${wt.slug}/` : undefined;
+  const crumbs = breadcrumbCrumbs(meta, unitHref, programQualifier);
 
   // "na {Ime}" bi u hrvatskom trazio deklinaciju (dativ: "na Fakultetu", ne "na Fakultet"),
   // koju ne mozemo pouzdano izvesti za proizvoljna imena ustanova; dvotocka/zarez izbjegava
@@ -446,7 +485,7 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
     : '';
 
   const body = `
-<div class="lekta-kicker">${escapeHtml(kickerText(meta))}${programQualifier ? ` · ${escapeHtml(programQualifier)}` : ''}</div>
+${breadcrumbHtml(crumbs)}
 <h1>${escapeHtml(facultyTitlePart)}: ${escapeHtml(wt.label)}</h1>
 ${worktypeNavHtml(workType, siblings)}
 <p class="lekta-lead">Tehnička pravila prije predaje, prema službenim izvorima fakulteta.</p>
@@ -481,11 +520,12 @@ ${sources.length ? `<h2>Izvori i datum provjere</h2><p>${verifiedAt ? `Zadnja pr
 </div>
 <div class="lekta-links">
   <a href="/">Naslovna</a>
+  <a href="/fakulteti/#${escapeHtml(meta.instId)}">Svi fakulteti</a>
   <a href="/pokrivenost.html">Pokrivenost profila</a>
   <a href="/alati/citati/${encodeURIComponent(unitId)}.html">Generator citata za ${escapeHtml(meta.name)}</a>
 </div>`;
 
-  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd }), verifiedAt, canonical, path: relPath, urlSlug };
+  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd: [jsonLd, breadcrumbJsonLd(crumbs)] }), verifiedAt, canonical, path: relPath, urlSlug };
 }
 
 // Lagana "direktorij" stranica kad je fakultetska grupa prevelika/neuniformna za jednu stranicu
@@ -507,8 +547,9 @@ function buildHubIndexPage(unitId, workType, subPages, unitMeta, siblings) {
     inLanguage: 'hr',
     isPartOf: { '@type': 'WebSite', name: 'Lekta', url: SITE_ORIGIN },
   };
+  const crumbs = breadcrumbCrumbs(meta, undefined, undefined);
   const body = `
-<div class="lekta-kicker">${escapeHtml(kickerText(meta))}</div>
+${breadcrumbHtml(crumbs)}
 <h1>${escapeHtml(meta.name)}: ${escapeHtml(wt.label)} po studijskom programu</h1>
 ${worktypeNavHtml(workType, siblings)}
 <p class="lekta-lead">${escapeHtml(meta.name)} ima više studijskih programa s različitim tehničkim pravilima za ${escapeHtml(wt.label)}. Odaberi svoj program:</p>
@@ -520,9 +561,10 @@ ${subPages.map((sp) => `<li><a href="${sp.path}">${escapeHtml(sp.programLabel)}<
 </div>
 <div class="lekta-links">
   <a href="/">Naslovna</a>
+  <a href="/fakulteti/#${escapeHtml(meta.instId)}">Svi fakulteti</a>
   <a href="/pokrivenost.html">Pokrivenost profila</a>
 </div>`;
-  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd }), canonical, path: relPath };
+  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd: [jsonLd, breadcrumbJsonLd(crumbs)] }), canonical, path: relPath };
 }
 
 function buildSitemap(urls) {
@@ -627,6 +669,9 @@ function buildMasterIndexPage(catalog, existence) {
     inLanguage: 'hr',
     isPartOf: { '@type': 'WebSite', name: 'Lekta', url: SITE_ORIGIN },
   };
+  // id=inst.id na svaki <h2> je sidro na koje ciljaju breadcrumb i footer "Svi fakulteti"
+  // linkovi sa svake fakultetske stranice ("/fakulteti/#unizg") - bez toga bi povratak uvijek
+  // sletio na vrh liste od ~50 ustanova, ne na onu koju je korisnik upravo gledao.
   const groupsHtml = catalog
     .map((inst) => {
       const units = (inst.units || []).filter((u) => existence.has(u.id));
@@ -640,7 +685,7 @@ function buildMasterIndexPage(catalog, existence) {
           return `<li>${escapeHtml(u.name)}: ${links}</li>`;
         })
         .join('');
-      return `<h2>${escapeHtml(inst.name)}</h2><ul class="check-list">${items}</ul>`;
+      return `<h2 id="${escapeHtml(inst.id)}">${escapeHtml(inst.name)}</h2><ul class="check-list">${items}</ul>`;
     })
     .filter(Boolean)
     .join('');
