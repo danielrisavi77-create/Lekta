@@ -14,6 +14,19 @@
   margin-bottom: 0.625rem;
 }
 
+.lekta-referral-share__reward {
+  margin: 0 0 0.75rem;
+  color: var(--lekta-text-secondary, #52525b);
+}
+
+.lekta-referral-share__deadline {
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--lekta-accent-soft, #fef3ec);
+  color: var(--lekta-text-secondary, #52525b);
+}
+
 .lekta-referral-share__link-row {
   display: flex;
   gap: 0.5rem;
