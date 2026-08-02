@@ -2,6 +2,9 @@ import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
 import { isAcademicWorkType, type AcademicWorkType } from './academic-suite-contracts';
 
 const PROJECT_SESSION_SLOT = 'lekta.katedra-project.v0.1';
+// Keep aligned with katedra-capture.ts. Duplicated here deliberately to avoid a
+// circular dependency (capture imports currentKatedraProjectId from this module).
+const HANDOFF_RESULT_SESSION_SLOT = 'lekta.katedra-handoff-result.v0.1';
 
 export interface KatedraEntryContext {
   projectId?: string;
@@ -43,14 +46,26 @@ export function parseKatedraEntryContext(search: string): KatedraEntryContext {
   };
 }
 
+function clearCapturedHandoffResult(): void {
+  if (typeof sessionStorage === 'undefined') return;
+  try { sessionStorage.removeItem(HANDOFF_RESULT_SESSION_SLOT); } catch {}
+}
+
 export function rememberKatedraProjectId(projectId?: string): void {
   if (!projectId || typeof sessionStorage === 'undefined') return;
-  try { sessionStorage.setItem(PROJECT_SESSION_SLOT, projectId); } catch {}
+  try {
+    const previous = cleanId(sessionStorage.getItem(PROJECT_SESSION_SLOT));
+    if (previous && previous !== projectId) clearCapturedHandoffResult();
+    sessionStorage.setItem(PROJECT_SESSION_SLOT, projectId);
+  } catch {}
 }
 
 export function clearKatedraProjectId(): void {
   if (typeof sessionStorage === 'undefined') return;
-  try { sessionStorage.removeItem(PROJECT_SESSION_SLOT); } catch {}
+  try {
+    sessionStorage.removeItem(PROJECT_SESSION_SLOT);
+    sessionStorage.removeItem(HANDOFF_RESULT_SESSION_SLOT);
+  } catch {}
 }
 
 export function currentKatedraProjectId(): string | undefined {
@@ -126,8 +141,8 @@ export function bootstrapKatedraEntryContext(): void {
   const hasEntryContext = Boolean(context.projectId || context.unitId || context.programId || context.workType);
 
   // A direct Lekta visit in the same browser tab must not inherit an earlier
-  // Katedra project. The query string is the authority for whether this page
-  // load belongs to a Katedra-origin workflow.
+  // Katedra project/result. The query string is the authority for whether this
+  // page load belongs to a Katedra-origin workflow.
   if (!hasEntryContext) {
     clearKatedraProjectId();
     return;
