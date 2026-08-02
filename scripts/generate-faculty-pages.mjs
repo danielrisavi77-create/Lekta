@@ -329,7 +329,7 @@ ${robots ? `<meta name="robots" content="${robots}">` : ''}
 <style>${PAGE_STYLE}</style>
 </head>
 <body>
-<div class="lekta-brand"><a href="${SITE_ORIGIN}">Lekta</a><span>Besplatna tehnička provjera</span></div>
+<div class="lekta-brand"><a href="/">Lekta</a><span>Besplatna tehnička provjera</span></div>
 ${bodyHtml}
 </body>
 </html>
@@ -354,7 +354,7 @@ ${r.byProgram.map((x) => `<tr><td>${escapeHtml(x.program)}</td><td>${escapeHtml(
 
 function worktypeNavHtml(workType, siblings) {
   if (!siblings || !siblings.length) return '';
-  return `<div class="worktype-nav"><span class="worktype-current">${escapeHtml(WORK_TYPE_META[workType].labelCap)}</span>${siblings.map((s) => `<a href="${escapeHtml(s.url)}">${escapeHtml(s.label)}</a>`).join('')}</div>`;
+  return `<div class="worktype-nav"><span class="worktype-current">${escapeHtml(WORK_TYPE_META[workType].labelCap)}</span>${siblings.map((s) => `<a href="${escapeHtml(s.path)}">${escapeHtml(s.label)}</a>`).join('')}</div>`;
 }
 
 // programQualifier + slugOverride: postavlja main() KAD je grupa prevelika/neuniformna za jednu
@@ -403,7 +403,13 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
   if (!hasContent) return null;
 
   const urlSlug = slugOverride || wt.slug;
-  const canonical = `${SITE_ORIGIN}/${unitId}/${urlSlug}/`;
+  const relPath = `/${unitId}/${urlSlug}/`;
+  // canonical/og:url/JSON-LD MORAJU biti apsolutni (specifikacija); SVAKI klikabilni <a href>
+  // unutar stranice (CTA, sibling-nav, footer) MORA biti RELATIVAN (relPath, ne canonical) -
+  // inace klik na lokalnom vite preview-u (localhost) odvede na pravu produkcijsku domenu
+  // umjesto da ostane na localhost, sto izgleda kao "stranica ne postoji" iako je generator
+  // ispravan. Zove se relPath, ne path, da ne zasjeni uvezeni node:path modul.
+  const canonical = `${SITE_ORIGIN}${relPath}`;
   const facultyTitlePart = programQualifier ? `${meta.name}, ${programQualifier}` : meta.name;
   const title = `${facultyTitlePart}: ${wt.labelCap} · tehnička pravila prije predaje | Lekta`;
   // Konkretne brojke (opseg, broj izvora...) u meta descriptionu SAMO kad postoji jedan profil:
@@ -413,7 +419,7 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
     ? `${facultyTitlePart}, ${wt.label}: ${facts.slice(0, 3).join(', ')}. Izvor i datum provjere niže. Besplatna automatska provjera prema ovim pravilima.`
     : `${facultyTitlePart}, ${wt.label}: tehnička pravila oblikovanja, opsega i citiranja prema službenim izvorima. Besplatna automatska provjera.`;
 
-  const ctaHref = `${SITE_ORIGIN}/?unit=${encodeURIComponent(unitId)}&utm_source=faculty_page&utm_medium=organic&utm_campaign=${encodeURIComponent(unitId + '_' + workType)}`;
+  const ctaHref = `/?unit=${encodeURIComponent(unitId)}&utm_source=faculty_page&utm_medium=organic&utm_campaign=${encodeURIComponent(unitId + '_' + workType)}`;
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -430,7 +436,7 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
   // koju ne mozemo pouzdano izvesti za proizvoljna imena ustanova; dvotocka/zarez izbjegava
   // gramaticki problem umjesto da rizicira pogresan padez.
   const programNote = programQualifier
-    ? `<p class="lekta-lead">Vrijedi za studij: ${escapeHtml(group.map(programLabel).join(', '))}. ${escapeHtml(meta.name)} ima više studijskih programa s različitim pravilima; <a href="${SITE_ORIGIN}/${unitId}/${wt.slug}/">popis svih programa je ovdje</a>.</p>`
+    ? `<p class="lekta-lead">Vrijedi za studij: ${escapeHtml(group.map(programLabel).join(', '))}. ${escapeHtml(meta.name)} ima više studijskih programa s različitim pravilima; <a href="/${unitId}/${wt.slug}/">popis svih programa je ovdje</a>.</p>`
     : multiProgram
       ? `<p class="lekta-lead">Vrijedi za ${group.length} studijska programa: ${escapeHtml(group.map(programLabel).join(', '))}.</p>`
       : '';
@@ -474,12 +480,12 @@ ${sources.length ? `<h2>Izvori i datum provjere</h2><p>${verifiedAt ? `Zadnja pr
   Ova stranica je pomoćni sažetak, ne službena obavijest fakulteta. Uvijek vrijede aktualne službene upute fakulteta, studija, kolegija i mentora. Nije provjera plagijata ni sličnosti teksta (nije Turnitin) i ne jamči prihvaćanje rada, ocjenu ni odluku mentora ili povjerenstva.
 </div>
 <div class="lekta-links">
-  <a href="${SITE_ORIGIN}/">Naslovna</a>
-  <a href="${SITE_ORIGIN}/pokrivenost.html">Pokrivenost profila</a>
-  <a href="${SITE_ORIGIN}/alati/citati/${encodeURIComponent(unitId)}.html">Generator citata za ${escapeHtml(meta.name)}</a>
+  <a href="/">Naslovna</a>
+  <a href="/pokrivenost.html">Pokrivenost profila</a>
+  <a href="/alati/citati/${encodeURIComponent(unitId)}.html">Generator citata za ${escapeHtml(meta.name)}</a>
 </div>`;
 
-  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd }), verifiedAt, canonical, urlSlug };
+  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd }), verifiedAt, canonical, path: relPath, urlSlug };
 }
 
 // Lagana "direktorij" stranica kad je fakultetska grupa prevelika/neuniformna za jednu stranicu
@@ -488,7 +494,8 @@ ${sources.length ? `<h2>Izvori i datum provjere</h2><p>${verifiedAt ? `Zadnja pr
 function buildHubIndexPage(unitId, workType, subPages, unitMeta, siblings) {
   const meta = unitMeta[unitId];
   const wt = WORK_TYPE_META[workType];
-  const canonical = `${SITE_ORIGIN}/${unitId}/${wt.slug}/`;
+  const relPath = `/${unitId}/${wt.slug}/`;
+  const canonical = `${SITE_ORIGIN}${relPath}`;
   const title = `${meta.name}: ${wt.labelCap} po studijskom programu | Lekta`;
   const description = `${meta.name} ima više studijskih programa s različitim pravilima za ${wt.label}. Odaberi svoj program za konkretna pravila, izvore i besplatnu provjeru.`;
   const jsonLd = {
@@ -506,16 +513,16 @@ function buildHubIndexPage(unitId, workType, subPages, unitMeta, siblings) {
 ${worktypeNavHtml(workType, siblings)}
 <p class="lekta-lead">${escapeHtml(meta.name)} ima više studijskih programa s različitim tehničkim pravilima za ${escapeHtml(wt.label)}. Odaberi svoj program:</p>
 <ul class="check-list">
-${subPages.map((sp) => `<li><a href="${sp.canonical}">${escapeHtml(sp.programLabel)}</a></li>`).join('')}
+${subPages.map((sp) => `<li><a href="${sp.path}">${escapeHtml(sp.programLabel)}</a></li>`).join('')}
 </ul>
 <div class="lekta-disclaimer">
   Ova stranica je pomoćni sažetak, ne službena obavijest fakulteta. Uvijek vrijede aktualne službene upute fakulteta, studija, kolegija i mentora.
 </div>
 <div class="lekta-links">
-  <a href="${SITE_ORIGIN}/">Naslovna</a>
-  <a href="${SITE_ORIGIN}/pokrivenost.html">Pokrivenost profila</a>
+  <a href="/">Naslovna</a>
+  <a href="/pokrivenost.html">Pokrivenost profila</a>
 </div>`;
-  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd }), canonical };
+  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd }), canonical, path: relPath };
 }
 
 function buildSitemap(urls) {
@@ -546,9 +553,9 @@ function runGenerationPass(groups, splitKeys, slugOverrides, unitMeta, statusMet
   let written = 0;
   let skipped = 0;
 
-  const recordExistence = (unitId, workType, url) => {
+  const recordExistence = (unitId, workType, relPath) => {
     if (!existence.has(unitId)) existence.set(unitId, new Map());
-    existence.get(unitId).set(workType, { url, label: WORK_TYPE_META[workType].labelCap });
+    existence.get(unitId).set(workType, { path: relPath, label: WORK_TYPE_META[workType].labelCap });
   };
 
   for (const [key, group] of groups) {
@@ -576,9 +583,9 @@ function runGenerationPass(groups, splitKeys, slugOverrides, unitMeta, statusMet
     written++;
     if (splitKey) {
       if (!hubSubPages.has(splitKey)) hubSubPages.set(splitKey, []);
-      hubSubPages.get(splitKey).push({ canonical: page.canonical, programLabel: programLabel(group[0]) });
+      hubSubPages.get(splitKey).push({ path: page.path, programLabel: programLabel(group[0]) });
     } else {
-      recordExistence(unitId, workType, page.canonical);
+      recordExistence(unitId, workType, page.path);
     }
   }
 
@@ -596,7 +603,7 @@ function runGenerationPass(groups, splitKeys, slugOverrides, unitMeta, statusMet
     }
     sitemapUrls.push({ loc: hub.canonical });
     written++;
-    recordExistence(unitId, workType, hub.canonical);
+    recordExistence(unitId, workType, hub.path);
   }
 
   return { sitemapUrls, written, skipped, existence };
@@ -607,7 +614,8 @@ function runGenerationPass(groups, splitKeys, slugOverrides, unitMeta, statusMet
 // druge - jedina poveznica je bio sitemap-fakulteti.xml, koji citaju tegljaci, ne ljudi).
 // Grupirano po instituciji istim redoslijedom kataloga kao generate-citation-tools.mjs.
 function buildMasterIndexPage(catalog, existence) {
-  const canonical = `${SITE_ORIGIN}/fakulteti/`;
+  const relPath = '/fakulteti/';
+  const canonical = `${SITE_ORIGIN}${relPath}`;
   const title = 'Provjera rada po fakultetu: pregled svih ustanova | Lekta';
   const description = 'Tehnička pravila prije predaje po fakultetu i vrsti rada (diplomski, završni, seminarski rad): oblikovanje, opseg, citiranje i izvori. Odaberi svoju ustanovu.';
   const jsonLd = {
@@ -627,7 +635,7 @@ function buildMasterIndexPage(catalog, existence) {
         .map((u) => {
           const wtMap = existence.get(u.id);
           const links = WORK_TYPE_DISPLAY_ORDER.filter((wt) => wtMap.has(wt))
-            .map((wt) => `<a href="${escapeHtml(wtMap.get(wt).url)}">${escapeHtml(wtMap.get(wt).label)}</a>`)
+            .map((wt) => `<a href="${escapeHtml(wtMap.get(wt).path)}">${escapeHtml(wtMap.get(wt).label)}</a>`)
             .join(' · ');
           return `<li>${escapeHtml(u.name)}: ${links}</li>`;
         })
@@ -645,10 +653,10 @@ ${groupsHtml}
   Popis pokriva ustanove za koje postoji barem jedan strojno provjerljiv profil. Odsutnost ustanove ne znači da Lekta ne radi za nju - opća tehnička provjera i dalje vrijedi za sve fakultete iz kataloga.
 </div>
 <div class="lekta-links">
-  <a href="${SITE_ORIGIN}/">Naslovna</a>
-  <a href="${SITE_ORIGIN}/pokrivenost.html">Pokrivenost profila</a>
+  <a href="/">Naslovna</a>
+  <a href="/pokrivenost.html">Pokrivenost profila</a>
 </div>`;
-  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd }), canonical };
+  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd }), canonical, path: relPath };
 }
 
 function main() {
