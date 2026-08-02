@@ -10,9 +10,9 @@
 // pregledan rucno - honesty/koherentnost gateovi ispod (status==='verified' gate za fact-grid,
 // MAX_GROUP_SIZE split, prazan-sadrzaj skip) su upravo ono sto cini siguran prelaz na sve
 // jedinice bez rucnog pregleda svake pojedinacne stranice.
-// TARGET_WORK_TYPES je namjerno jos uvijek suzen na final+graduate (najvisi search-intent
-// prema marketinskoj analizi: student zadnje godine, diplomski/zavrsni rad); seminar/
-// specialist/doctoral su odvojena buduca odluka.
+// TARGET_WORK_TYPES pokriva final/graduate/seminar (marketinska odluka 2026-08-02: doktorski
+// namjerno izostavljen - nizak volumen i poznato tanka/osjetljiva provenijencija izvora, vidi
+// memoriju o dr.nsk.hr; specialist ostaje otvoreno buduce pitanje).
 //
 // SADRZAJ JE ISKLJUCIVO IZVEDEN iz data/profiles/verified-profiles-heavy.json (rules, facts,
 // manualChecks, submissionFacts, sources, fieldValidation.observedDeviations, verifiedAt) -
@@ -37,7 +37,7 @@ const PROFILES_HEAVY_PATH = path.join(ROOT, 'data/profiles/verified-profiles-hea
 const STATUS_META_PATH = path.join(ROOT, 'data/profiles/profile-status.json');
 const OUT_DIR = path.join(ROOT, 'dist');
 
-const TARGET_WORK_TYPES = ['final', 'graduate'];
+const TARGET_WORK_TYPES = ['final', 'graduate', 'seminar'];
 
 const WORK_TYPE_META = {
   seminar: { slug: 'seminarski-rad', label: 'seminarski rad', labelCap: 'Seminarski rad' },
@@ -188,7 +188,19 @@ function computeFactRows(group) {
     if (skip.has(spec.key)) continue;
     if (spec.pairWith) skip.add(spec.pairWith);
     const values = group.map((p) => {
-      if (spec.checkKey && p.rules?.[spec.checkKey] === false) return null; // informativno, ne bodovano - ne tvrdimo kao cinjenicu
+      if (spec.checkKey) {
+        const explicit = p.rules?.[spec.checkKey];
+        // explicit===false: profil sam kaze "ovo je informativno, ne bodovano" - ne tvrdi.
+        // explicit===true: profil sam kaze "ovo JEST bodovano" - vjeruj tome BEZ obzira na
+        // opci status profila (npr. seminarski "opci akademski rad" profili su status
+        // 'partial' jer opseg/struktura nisu pokriveni, ali font/velicina/prored IMAJU
+        // eksplicitni checkFont:true - to je stvarno bodovano, ne smije se sakriti).
+        // explicit===undefined: nema eksplicitne potvrde ni u jednu stranu (npr. FER, gdje
+        // profil.facts[] sam tekstom kaze "advisory" bez checkFont uopce) - u tom slucaju
+        // vjeruj SAMO ako je citav profil status 'verified' (najjaca razina potvrde).
+        if (explicit === false) return null;
+        if (explicit !== true && p.status !== 'verified') return null;
+      }
       return spec.format(p.rules?.[spec.key], p.rules);
     });
     if (values.every((v) => v == null)) continue;
@@ -345,13 +357,12 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
   const wt = WORK_TYPE_META[workType];
   const status = weakestStatus(group);
   const statusInfo = statusMeta[status] || statusMeta.generic;
-  // Strukturirani fact-grid/divergencijske tablice SAMO za 'verified' status: rules.checkX
-  // flagovi ne hvataju sve nijanse (npr. fer-diplomski nema checkFont:false, ali njegov VLASTITI
-  // facts/note tekst kaze da su font/prored/margine "preporuke (advisory)", authority general -
-  // ZEMRIS osobna stranica, ne fakultetski pravilnik). Kod partial/generic/research profila
-  // pouzdaniji izvor je vec postojeci, ljudski napisan facts[] (koji tu nijansu vec ispravno nosi
-  // u prozi, vidi FER primjer), pa se on prikazuje umjesto mehanicki izvucenih "tvrdih" brojki.
-  const factRows = status === 'verified' ? computeFactRows(group) : [];
+  // Zastita protiv "tvrde brojke bez pokrica" je sad NA RAZINI POLJA (vidi computeFactRows/
+  // FIELD_SPECS gore): eksplicitni checkX:true se prikazuje bez obzira na status profila (npr.
+  // seminarski "opci akademski rad" profili su status 'partial' jer opseg/struktura nisu
+  // pokriveni, ali imaju eksplicitni checkFont:true za tehnicko oblikovanje), a polja bez
+  // eksplicitne potvrde se prikazuju samo kod potpuno 'verified' profila (fer-diplomski slucaj).
+  const factRows = computeFactRows(group);
   const facts = dedupeStrings(group.map((p) => p.facts));
   const manualChecks = dedupeStrings(group.map((p) => p.rules?.manualChecks));
   const submissionFacts = dedupeStrings(group.map((p) => p.submissionFacts));
@@ -363,9 +374,16 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
   const verifiedDates = [...new Set(group.map((p) => p.verifiedAt).filter(Boolean))].sort();
   const verifiedAt = verifiedDates[verifiedDates.length - 1] || null;
   const multiProgram = group.length > 1;
+  // Flat facts[] popis je siguran SAMO kod jednog profila: kod vise programa bi neoznaceno
+  // miksanje brojki koje se razlikuju po programu ("10.000-12.000" i "12.000-15.000" u istoj
+  // listi bez konteksta) djelovalo proturjecno. factRows (fact-grid + tablica po programu) gore
+  // vec posteno pokriva taj slucaj s atribucijom, pa se za multiProgram grupe ne treba i ne
+  // smije oslanjati na facts[].
+  const showFacts = facts.length > 0 && !multiProgram;
 
-  // Honesty gate: bez stvarnog sadrzaja se ne objavljuje prazna/tanka stranica.
-  const hasContent = factRows.length > 0 || facts.length > 0 || manualChecks.length > 0 || sources.length > 0;
+  // Honesty gate: bez stvarnog sadrzaja se ne objavljuje prazna/tanka stranica. Koristi
+  // showFacts (ne sirovi facts.length) da se ne "prevari" gate necim sto se ionako nece prikazati.
+  const hasContent = factRows.length > 0 || showFacts || manualChecks.length > 0 || sources.length > 0;
   if (!hasContent) return null;
 
   const urlSlug = slugOverride || wt.slug;
@@ -401,13 +419,6 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
       ? `<p class="lekta-lead">Vrijedi za ${group.length} studijska programa: ${escapeHtml(group.map(programLabel).join(', '))}.</p>`
       : '';
 
-  // Flat facts[] popis: siguran kad je JEDAN profil (nema dvosmislenosti), ILI kad status
-  // NIJE 'verified' (factRows je gore prazan pa je facts[] jedini pouzdan, vec ljudski
-  // niansiran izvor - vidi FER primjer koji u prozi vec ispravno kaze "(advisory)"/"(scored)").
-  // Kod vise programa I 'verified' statusa facts[] bi bez oznake miksao brojke koje se razlikuju
-  // po programu ("10.000-12.000" i "12.000-15.000" u istoj listi) - tu factRows (fact-grid +
-  // tablica po programu) nize vec posteno pokriva slucaj.
-  const showFacts = facts.length && (!multiProgram || status !== 'verified');
   const factsSection = showFacts
     ? `<h2>Ključne činjenice</h2><ul class="check-list">${facts.map((f) => `<li>${escapeHtml(f)}</li>`).join('')}</ul>`
     : '';
