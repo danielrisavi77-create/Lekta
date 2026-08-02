@@ -77,6 +77,9 @@ export interface FindingResultInput {
     sources?: Array<{ title?: string; url?: string }>;
     documentDate?: string;
     verifiedAt?: string;
+    /** Hash pravila stvarno primijenjenih pri analizi (app.ts profileFingerprint); koristi ga
+     * LektaResult v1 (src/integrations/lekta-result.ts) kao rulesetVersion. */
+    profileFingerprint?: string;
   };
   /** Kontekst selekcije (currentProfile) za suggestTool: naslovnica alat konzumira ?fakultet/
    * razina/smjer umjesto praznog generickog obrasca. Oboje opcionalni, golden/testovi ih izostave. */

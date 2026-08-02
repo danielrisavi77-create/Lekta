@@ -41,6 +41,10 @@ import { resultReadiness } from './result-readiness';
 import { startNetworkProbe, networkProofMessage, type NetworkProbe } from './network-proof';
 import { buildRepairableItems, universalRepairableItems, paragraphSpacingRepairableItem, pageNumberingRepairableItem, footnoteSpacingRepairableItem, pageNumberAlignmentRepairableItem, introSectionRepairableItem, tocFieldRepairableItem, headingFormatRepairableItem, headingStructureRepairableItem, footnoteTypographyRepairableItem, headingCaseRepairableItem, titlePageRepairableItem, elementCaptionRepairableItem, bibliographyRepairableItem, citationBibliographySyncRepairableItem, legalFootnoteRepairableItem, finalDocumentInspectorRepairableItem, fieldIntegrityRepairableItem, tableFigureRescueRepairableItem, sectionSurgeryRepairableItem, pickTargetItem, requiredSectionsRepairableItem, linkDoiRepairableItem, crossFileSubmissionRepairableItem } from './repair-items';
 import { ensureTemplatesHeavy, selectTemplate } from '../title-pages/template-loader';
+// Direktan import (ne preko template-loader): level-slugs.ts je namjerno odvojen da ovaj
+// (glavni bundle) modul ne povuce ~0,5 MB templates.json samo za slug<->WorkType mapiranje.
+import { workTypeFromSlug } from '../title-pages/level-slugs';
+import { buildLektaResult } from '../integrations/lekta-result';
 import { croatianTypographyRepairableItem, consistencyRepairableItem } from './repair-items';
 import { headingCaseSuggestions } from '../repair/heading-case';
 import './repair-panel.css';
@@ -426,11 +430,44 @@ async function handleRepairHistoryAction(e: any){const dl=e.target.closest('[dat
   const win=window.open('','_blank');
   try{let url=await signRepairDownload(repairHistoryConfig(),token||'',path);url+=(url.includes('?')?'&':'?')+'download='+encodeURIComponent(dl.dataset.name||'popravljeno.docx');if(win){win.location.href=url}else{const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.click()}}catch(err: any){if(win)win.close();toast('Preuzimanje trenutačno nije moguće.')}finally{dl.disabled=false;dl.textContent=orig}return}if(del){const id=del.dataset.repairDel;if(!confirm('Trajno obrisati ovaj popravak? Original i popravljena datoteka bit će uklonjeni sa servera.'))return;del.disabled=true;const out=await deleteRepairJob(repairHistoryConfig(),token||'',id);if(out.ok){toast('Popravak je obrisan.');void renderRepairHistoryList()}else{del.disabled=false;toast('Brisanje trenutačno nije moguće.')}return}}
 function applySelectionIds(p: any={}){setOptionIfExists($('#institutionSelect'),p.institution);populateUnits();setOptionIfExists($('#unitSelect'),p.unit);populatePrograms();setOptionIfExists($('#programSelect'),p.program);setOptionIfExists($('#workType'),p.workType);populateVariants();setOptionIfExists($('#workVariant'),p.variant);populateDepartments();setOptionIfExists($('#departmentSelect'),p.department);populateMethodology();setOptionIfExists($('#methodologySelect'),p.methodology);setOptionIfExists($('#citationStyle'),p.citation);syncProfileContext()}
-/* ?unit=<unitId> s alat-stranica (SEO citatne stranice i sl.): posjetitelj koji dolazi sa
-   stranice SVOG fakulteta ne mora ga ponovno traziti u izborniku. Namjerno POSLIJE
-   restorePreferences (eksplicitni link ima prednost pred zapamcenim odabirom); nepoznat id
-   je tihi no-op. Koristi istu applySelectionIds putanju kao povijest analiza. */
-function applyUnitFromUrl(){try{const uid=(params.get('unit')||'').trim();if(!uid)return;const u: any=allUnits().find((x: any)=>x.id===uid);if(!u)return;applySelectionIds({institution:u.institutionId,unit:u.id})}catch(e: any){}}
+/* ?unit=<unitId>[&work=<slug>][&project=<id>] s alat-stranica (SEO citatne stranice i sl.,
+   ili Katedra handoff): posjetitelj koji dolazi sa stranice SVOG fakulteta ne mora ga
+   ponovno traziti u izborniku. Namjerno POSLIJE restorePreferences (eksplicitni link ima
+   prednost pred zapamcenim odabirom); nepoznat unit ILI nepoznat work slug je tihi no-op
+   (svaki neovisno o drugom). Koristi istu applySelectionIds putanju kao povijest analiza.
+   project je nepromijenjen, netipiziran Katedra Project Manifest ID (Faza C): Lekta ga
+   samo prenosi natrag u rezultat (buildAnalysisSettings), nikad ga ne tumaci ni validira. */
+let currentProjectId: string|null=null;
+function applyUnitFromUrl(){try{
+ const uid=(params.get('unit')||'').trim();
+ const workType=workTypeFromSlug((params.get('work')||'').trim());
+ const project=(params.get('project')||'').trim();
+ if(project)currentProjectId=project;
+ const sel: any={};
+ if(uid){const u: any=allUnits().find((x: any)=>x.id===uid);if(u){sel.institution=u.institutionId;sel.unit=u.id}}
+ if(workType)sel.workType=workType;
+ if(Object.keys(sel).length)applySelectionIds(sel);
+}catch(e: any){}}
+/* Katedra (sestrinski proizvod, AI coach za pisanje) integracija, Milestone 1 Task 3
+   (MASTER-PLAN.md): prazan URL = znacajka skrivena (jos nema javne Katedra adrese), popuni
+   KATEDRA_URL kad postoji. Payload je LektaResult v1 (src/integrations/lekta-result.ts):
+   NIKAD tekst/dokument rada (PRODUCT_CONSTITUTION.md #6), samo profileId/projectId/score/
+   rulesetVersion + po nalazu issueId/severity/category/fixable/label, isti privacy-okvir
+   kao shareScore. */
+const KATEDRA_URL='';
+function katedraIntegrationEnabled(){return!!KATEDRA_URL.trim()}
+function katedraHandoffUrl(r: any){
+ if(!katedraIntegrationEnabled())return'';
+ const profileId=resultDefinitionId(r);
+ if(!profileId)return'';
+ const result=buildLektaResult(r,{projectId:currentProjectId,profileId},findingStates);
+ try{
+  const u=new URL(KATEDRA_URL);
+  const payload=btoa(unescape(encodeURIComponent(JSON.stringify(result))));
+  u.hash='lekta='+encodeURIComponent(payload);
+  return u.toString();
+ }catch(e: any){return''}
+}
 function clearAnalysisHistory(){safeStorageSet(STORAGE_KEYS.history,[]);renderHistory();updateHistoryBadge();toast('Lokalna povijest je obrisana.')}
 function allUnits(){return ZAGREB_CATALOG.flatMap(g=>g.units.map(u=>({...u,institutionId:g.id,institutionName:g.name})))}
 // Abecedni poredak s hrvatskom kolacijom (Č/Ć/Š/Ž iza C/S/Z, ne po ASCII kodu). Sortira se
@@ -667,7 +704,7 @@ function downloadSubmissionReport(){if(!currentResult)return;const a=submissionA
 function browserSupportsDocxAnalysis(file: any){try{if(typeof DOMParser==='undefined')return false;if(file&&typeof file.arrayBuffer!=='function')return false;return true}catch(e: any){return false}}
 // Snapshot SVIH ulaza koji utjecu na rezultat analize; dijele ga stvarni run (runAnalysis) i
 // pozadinska spekulativna analiza, pa je usporedivost kljuceva garantirana istom funkcijom.
-function buildAnalysisSettings(id: any,p: any){return{profileId:id,profileDefinitionId:p.definitionId||null,selection:p.selection,profileStatus:p.statusKey,workType:$('#workType').value,citationStyle:$('#citationStyle').value,language:$('#docLanguage').value,strictness:$('#strictness').value,submissionPhase:currentSubmissionPhase(),fpzgCohort:currentFpzgCohort(),fpzgDeadline:currentFpzgDeadlineId(),mentorOverride:$('#mentorOverride').checked,mentorNotes:$('#mentorNotes').value.trim(),methodology:selectedMethodology(),maxDecompressedBytes:decompressionBudgetBytes({deviceMemory:deviceMemoryGb(),coarsePointer:coarsePointer()}),selectionIds:{institution:$('#institutionSelect').value,unit:$('#unitSelect').value,program:$('#programSelect').value,workType:$('#workType').value,variant:$('#workVariant').value,department:$('#departmentSelect')?.value||'general',methodology:$('#methodologySelect')?.value||'auto',citation:$('#citationStyle').value}}}
+function buildAnalysisSettings(id: any,p: any){return{profileId:id,profileDefinitionId:p.definitionId||null,selection:p.selection,profileStatus:p.statusKey,workType:$('#workType').value,citationStyle:$('#citationStyle').value,language:$('#docLanguage').value,strictness:$('#strictness').value,submissionPhase:currentSubmissionPhase(),fpzgCohort:currentFpzgCohort(),fpzgDeadline:currentFpzgDeadlineId(),mentorOverride:$('#mentorOverride').checked,mentorNotes:$('#mentorNotes').value.trim(),methodology:selectedMethodology(),maxDecompressedBytes:decompressionBudgetBytes({deviceMemory:deviceMemoryGb(),coarsePointer:coarsePointer()}),project:currentProjectId,selectionIds:{institution:$('#institutionSelect').value,unit:$('#unitSelect').value,program:$('#programSelect').value,workType:$('#workType').value,variant:$('#workVariant').value,department:$('#departmentSelect')?.value||'general',methodology:$('#methodologySelect')?.value||'auto',citation:$('#citationStyle').value}}}
 // Pozadinska (spekulativna) analiza: krece odmah nakon uploada/detekcije dok korisnik jos bira
 // profil, pa klik na Analiziraj cesto samo POSVOJI vec gotov rezultat. Ispravnost jamci usporedba
 // kljuca (isti File + identican settings snapshot) u trenutku klika; invalidacija na change je
@@ -851,12 +888,14 @@ function renderPhaseTwoResultViews(r: any){
     // bloka u istom renderResult() prolazu; ovaj blok je oduvijek pisao u ISTI element POSLIJE, pa
     // je tiho brisao oboje bez ijedne vidljive greske. Sad su ovdje, jedini pisac #resultGuide-a.
     const shareCta=(r.score!=null)?`<button class="btn btn-ghost guide-share" id="guideShareScore" type="button"><i data-lucide="share-2"></i> Podijeli ocjenu</button>`:'';
+    const katedraCta=katedraIntegrationEnabled()?`<button class="btn btn-ghost guide-katedra" id="guideKatedraCta" type="button"><i data-lucide="external-link"></i> Riješi u Katedri</button>`:'';
     guide.innerHTML=first
-      ?`<h3 class="guide-h">Što prvo napraviti</h3><p class="guide-summary">${escapeHtml(summary)}. Počni s: <strong>${escapeHtml(first.title)}</strong>.</p>${scoreBreakdownHtml(r)}<div class="guide-cta">${primary}${shareCta}<button class="tab-toggle guide-more" id="resultDetailsToggle" type="button" aria-expanded="false" aria-controls="resultDetails">Prikaži sve nalaze i provjere</button></div>`
-      :`<div class="guide-clean">Nema otvorenih problema dokumenta. Prije predaje pregledaj ograničenja analize i posebne upute profila.</div>${scoreBreakdownHtml(r)}<div class="guide-cta">${shareCta}</div>`;
+      ?`<h3 class="guide-h">Što prvo napraviti</h3><p class="guide-summary">${escapeHtml(summary)}. Počni s: <strong>${escapeHtml(first.title)}</strong>.</p>${scoreBreakdownHtml(r)}<div class="guide-cta">${primary}${shareCta}${katedraCta}<button class="tab-toggle guide-more" id="resultDetailsToggle" type="button" aria-expanded="false" aria-controls="resultDetails">Prikaži sve nalaze i provjere</button></div>`
+      :`<div class="guide-clean">Nema otvorenih problema dokumenta. Prije predaje pregledaj ograničenja analize i posebne upute profila.</div>${scoreBreakdownHtml(r)}<div class="guide-cta">${shareCta}${katedraCta}</div>`;
     $('#guideOpenPreview')?.addEventListener('click',()=>{if(anchored?.scope.kind==='anchor')void openPreviewAt(anchored.scope.paragraphIndex,anchored.scope.footnoteId)});
     $('#guideOpenPriority')?.addEventListener('click',()=>{$('#triagePanel')?.scrollIntoView({behavior:'smooth',block:'start'})});
     $('#guideShareScore')?.addEventListener('click',()=>{void shareScore(r)});
+    $('#guideKatedraCta')?.addEventListener('click',()=>{const url=katedraHandoffUrl(r);if(url)window.open(url,'_blank','noopener')});
     $('#resultDetailsToggle')?.addEventListener('click',toggleResultDetails);
   }
 
