@@ -1,0 +1,2413 @@
+{
+  "generatedFrom": "docs/generated/faculty-matrix.json",
+  "totalProfiles": 407,
+  "profilesWithoutSample": 401,
+  "entries": [
+    {
+      "profileId": "algebra-diplomski",
+      "unitId": "algebra",
+      "facultyLabel": "Sveučilište Algebra Bernays",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "algebra-diplomski-odnosi-s-javnoscu",
+      "unitId": "algebra",
+      "facultyLabel": "Sveučilište Algebra Bernays",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "algebra-specijalisticki",
+      "unitId": "algebra",
+      "facultyLabel": "Sveučilište Algebra Bernays",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "algebra-zavrsni",
+      "unitId": "algebra",
+      "facultyLabel": "Sveučilište Algebra Bernays",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "alu-konzerviranje-diplomski",
+      "unitId": "alu",
+      "facultyLabel": "Akademija likovnih umjetnosti",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "apuri-zavrsni",
+      "unitId": "apuri",
+      "facultyLabel": "Akademija primijenjenih umjetnosti u Rijeci",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "bak-diplomski",
+      "unitId": "bak",
+      "facultyLabel": "Veleučilište Baltazar Zaprešić",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "bak-zavrsni",
+      "unitId": "bak",
+      "facultyLabel": "Veleučilište Baltazar Zaprešić",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "effectus-diplomski",
+      "unitId": "effectus",
+      "facultyLabel": "EFFECTUS veleučilište",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "effectus-seminarski",
+      "unitId": "effectus",
+      "facultyLabel": "EFFECTUS veleučilište",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "effectus-zavrsni",
+      "unitId": "effectus",
+      "facultyLabel": "EFFECTUS veleučilište",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "efri-diplomski",
+      "unitId": "efri",
+      "facultyLabel": "Ekonomski fakultet u Rijeci",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "efri-zavrsni",
+      "unitId": "efri",
+      "facultyLabel": "Ekonomski fakultet u Rijeci",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "efzg-diplomski",
+      "unitId": "efzg",
+      "facultyLabel": "Ekonomski fakultet",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "efzg-specijalisticki",
+      "unitId": "efzg",
+      "facultyLabel": "Ekonomski fakultet",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "efzg-strucni-racunovodstvo",
+      "unitId": "efzg",
+      "facultyLabel": "Ekonomski fakultet",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "efzg-zavrsni",
+      "unitId": "efzg",
+      "facultyLabel": "Ekonomski fakultet",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "fazos-diplomski",
+      "unitId": "fazos",
+      "facultyLabel": "Fakultet agrobiotehničkih znanosti Osijek",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "fazos-zavrsni",
+      "unitId": "fazos",
+      "facultyLabel": "Fakultet agrobiotehničkih znanosti Osijek",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "fdmz-diplomski",
+      "unitId": "fdmz",
+      "facultyLabel": "Fakultet za dentalnu medicinu i zdravstvo Osijek",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "ffos-psihologija-diplomski",
+      "unitId": "ffos",
+      "facultyLabel": "Filozofski fakultet Osijek",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "ffri-diplomski",
+      "unitId": "ffri",
+      "facultyLabel": "Filozofski fakultet u Rijeci",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "ffri-germanistika-diplomski",
+      "unitId": "ffri",
+      "facultyLabel": "Filozofski fakultet u Rijeci",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "ffri-germanistika-zavrsni",
+      "unitId": "ffri",
+      "facultyLabel": "Filozofski fakultet u Rijeci",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "ffri-kroatistika-zavrsni",
+      "unitId": "ffri",
+      "facultyLabel": "Filozofski fakultet u Rijeci",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "ffri-kulturalni-diplomski",
+      "unitId": "ffri",
+      "facultyLabel": "Filozofski fakultet u Rijeci",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "ffri-zavrsni",
+      "unitId": "ffri",
+      "facultyLabel": "Filozofski fakultet u Rijeci",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "ffst-diplomski",
+      "unitId": "ffst",
+      "facultyLabel": "Filozofski fakultet u Splitu",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "ffst-zavrsni",
+      "unitId": "ffst",
+      "facultyLabel": "Filozofski fakultet u Splitu",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "unitId": "ffzg",
+      "facultyLabel": "Filozofski fakultet",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "fmtu-diplomski",
+      "unitId": "fmtu",
+      "facultyLabel": "Fakultet za menadžment u turizmu i ugostiteljstvu, Opatija",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "fmtu-zavrsni",
+      "unitId": "fmtu",
+      "facultyLabel": "Fakultet za menadžment u turizmu i ugostiteljstvu, Opatija",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "fzsri-diplomski",
+      "unitId": "fzsri",
+      "facultyLabel": "Fakultet zdravstvenih studija u Rijeci",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "fzsri-zavrsni",
+      "unitId": "fzsri",
+      "facultyLabel": "Fakultet zdravstvenih studija u Rijeci",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "grafos-diplomski",
+      "unitId": "grafos",
+      "facultyLabel": "Gradevinski i arhitektonski fakultet Osijek",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "grafos-zavrsni",
+      "unitId": "grafos",
+      "facultyLabel": "Gradevinski i arhitektonski fakultet Osijek",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "grf-zavrsni",
+      "unitId": "grf",
+      "facultyLabel": "Grafički fakultet",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "hks-diplomski",
+      "unitId": "hks",
+      "facultyLabel": "Hrvatsko katoličko sveučilište",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "ktfst-diplomski",
+      "unitId": "ktfst",
+      "facultyLabel": "Kemijsko-tehnološki fakultet u Splitu",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "ktfst-zavrsni",
+      "unitId": "ktfst",
+      "facultyLabel": "Kemijsko-tehnološki fakultet u Splitu",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "mefos-diplomski",
+      "unitId": "mefos",
+      "facultyLabel": "Medicinski fakultet Osijek",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "mefos-zavrsni",
+      "unitId": "mefos",
+      "facultyLabel": "Medicinski fakultet Osijek",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "mefst-diplomski",
+      "unitId": "mefst",
+      "facultyLabel": "Medicinski fakultet u Splitu",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "mev-diplomski",
+      "unitId": "mev",
+      "facultyLabel": "Međimursko veleučilište u Čakovcu",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "mev-zavrsni-drustveni",
+      "unitId": "mev",
+      "facultyLabel": "Međimursko veleučilište u Čakovcu",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "pmf-geofizika-graduate",
+      "unitId": "pmf",
+      "facultyLabel": "Prirodoslovno-matematički fakultet",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "pravo-socijalna-politika-diplomski",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "pravo-socijalni-rad-diplomski",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "ptfos-diplomski",
+      "unitId": "ptfos",
+      "facultyLabel": "Prehrambeno-tehnološki fakultet Osijek",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "pvzg-specijalisticki",
+      "unitId": "pvzg",
+      "facultyLabel": "Poslovno veleučilište Zagreb",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "pvzg-zavrsni",
+      "unitId": "pvzg",
+      "facultyLabel": "Poslovno veleučilište Zagreb",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "rrif-zavrsni",
+      "unitId": "rrif",
+      "facultyLabel": "Veleučilište RRiF",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "sois-ft-vojno-inzenjerstvo-diplomski",
+      "unitId": "sois-ft",
+      "facultyLabel": "Sveuciliste obrane i sigurnosti \"Dr. Franjo Tudjman\"",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "sois-ft-vojno-inzenjerstvo-zavrsni",
+      "unitId": "sois-ft",
+      "facultyLabel": "Sveuciliste obrane i sigurnosti \"Dr. Franjo Tudjman\"",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "sois-ft-vojno-pomorstvo-diplomski",
+      "unitId": "sois-ft",
+      "facultyLabel": "Sveuciliste obrane i sigurnosti \"Dr. Franjo Tudjman\"",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "sois-ft-vojno-vodjenje-diplomski",
+      "unitId": "sois-ft",
+      "facultyLabel": "Sveuciliste obrane i sigurnosti \"Dr. Franjo Tudjman\"",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "sois-ft-vojno-vodjenje-zavrsni",
+      "unitId": "sois-ft",
+      "facultyLabel": "Sveuciliste obrane i sigurnosti \"Dr. Franjo Tudjman\"",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "sumfak-diplomski",
+      "unitId": "sumfak",
+      "facultyLabel": "Fakultet šumarstva i drvne tehnologije",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "ufzg-diplomski",
+      "unitId": "ufzg",
+      "facultyLabel": "Učiteljski fakultet",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "ufzg-zavrsni",
+      "unitId": "ufzg",
+      "facultyLabel": "Učiteljski fakultet",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "unidu-komunikologija-diplomski",
+      "unitId": "unidu",
+      "facultyLabel": "Sveučilište u Dubrovniku",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "unidu-komunikologija-zavrsni",
+      "unitId": "unidu",
+      "facultyLabel": "Sveučilište u Dubrovniku",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "unidu-umjetnost-diplomski",
+      "unitId": "unidu",
+      "facultyLabel": "Sveučilište u Dubrovniku",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "unidu-umjetnost-zavrsni",
+      "unitId": "unidu",
+      "facultyLabel": "Sveučilište u Dubrovniku",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "unizd-arheologija-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "unizd-arheologija-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "unizd-etnologija-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "unizd-povijest-umj-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "unizd-povijest-umj-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "unizd-sociologija-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "unizd-turizam-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "unizd-turizam-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "unizd-ucitelji-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "veleknin-zavrsni",
+      "unitId": "veleknin",
+      "facultyLabel": "Veleučilište Marko Marulić u Kninu",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "veleri-diplomski",
+      "unitId": "veleri",
+      "facultyLabel": "Veleučilište u Rijeci",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "veleri-zavrsni",
+      "unitId": "veleri",
+      "facultyLabel": "Veleučilište u Rijeci",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "vevu-diplomski",
+      "unitId": "vevu",
+      "facultyLabel": "Veleučilište Lavoslav Ružička u Vukovaru",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "vevu-zavrsni",
+      "unitId": "vevu",
+      "facultyLabel": "Veleučilište Lavoslav Ružička u Vukovaru",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "vkjs-diplomski",
+      "unitId": "vkjs",
+      "facultyLabel": "Veleučilište kriminalistike i javne sigurnosti",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "vkjs-zavrsni",
+      "unitId": "vkjs",
+      "facultyLabel": "Veleučilište kriminalistike i javne sigurnosti",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "vss-diplomski",
+      "unitId": "vss",
+      "facultyLabel": "Veleučilište studija sigurnosti",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "vss-zavrsni",
+      "unitId": "vss",
+      "facultyLabel": "Veleučilište studija sigurnosti",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "vub-diplomski",
+      "unitId": "vub",
+      "facultyLabel": "Veleučilište u Bjelovaru",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "vub-zavrsni-sestrinstvo",
+      "unitId": "vub",
+      "facultyLabel": "Veleučilište u Bjelovaru",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "vub-zavrsni-tehnicki",
+      "unitId": "vub",
+      "facultyLabel": "Veleučilište u Bjelovaru",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "vuv-diplomski",
+      "unitId": "vuv",
+      "facultyLabel": "Veleučilište u Virovitici",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "vuv-zavrsni",
+      "unitId": "vuv",
+      "facultyLabel": "Veleučilište u Virovitici",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "adu-montaza-diplomski",
+      "unitId": "adu",
+      "facultyLabel": "Akademija dramske umjetnosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "arh-doktorski",
+      "unitId": "arh",
+      "facultyLabel": "Arhitektonski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "aspira-diplomski",
+      "unitId": "aspira",
+      "facultyLabel": "Veleučilište Aspira",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "aspira-diplomski-en",
+      "unitId": "aspira",
+      "facultyLabel": "Veleučilište Aspira",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "aspira-zavrsni",
+      "unitId": "aspira",
+      "facultyLabel": "Veleučilište Aspira",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "aspira-zavrsni-en",
+      "unitId": "aspira",
+      "facultyLabel": "Veleučilište Aspira",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "biolos-diplomski",
+      "unitId": "biolos",
+      "facultyLabel": "Odjel za biologiju, Sveučilište u Osijeku",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "biolos-zavrsni",
+      "unitId": "biolos",
+      "facultyLabel": "Odjel za biologiju, Sveučilište u Osijeku",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "efos-diplomski",
+      "unitId": "efos",
+      "facultyLabel": "Ekonomski fakultet u Osijeku",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "efos-doktorski",
+      "unitId": "efos",
+      "facultyLabel": "Ekonomski fakultet u Osijeku",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "efos-opci-akademski-rad",
+      "unitId": "efos",
+      "facultyLabel": "Ekonomski fakultet u Osijeku",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "efos-specijalisticki",
+      "unitId": "efos",
+      "facultyLabel": "Ekonomski fakultet u Osijeku",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "efos-zavrsni",
+      "unitId": "efos",
+      "facultyLabel": "Ekonomski fakultet u Osijeku",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "efst-diplomski",
+      "unitId": "efst",
+      "facultyLabel": "Ekonomski fakultet u Splitu",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "efst-opci-akademski-rad",
+      "unitId": "efst",
+      "facultyLabel": "Ekonomski fakultet u Splitu",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "efst-zavrsni",
+      "unitId": "efst",
+      "facultyLabel": "Ekonomski fakultet u Splitu",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "efzg-doktorski",
+      "unitId": "efzg",
+      "facultyLabel": "Ekonomski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "erf-doktorski",
+      "unitId": "erf",
+      "facultyLabel": "Edukacijsko-rehabilitacijski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "evtos-diplomski",
+      "unitId": "evtos",
+      "facultyLabel": "Evanđeosko teološko veleučilište (Osijek)",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "evtos-zavrsni",
+      "unitId": "evtos",
+      "facultyLabel": "Evanđeosko teološko veleučilište (Osijek)",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fbf-doktorski",
+      "unitId": "fbf",
+      "facultyLabel": "Farmaceutsko-biokemijski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fdmri-diplomski",
+      "unitId": "fdmri",
+      "facultyLabel": "Fakultet dentalne medicine Rijeka",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fdmri-zavrsni",
+      "unitId": "fdmri",
+      "facultyLabel": "Fakultet dentalne medicine Rijeka",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fer-doktorski",
+      "unitId": "fer",
+      "facultyLabel": "Fakultet elektrotehnike i računarstva",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fer-zavrsni",
+      "unitId": "fer",
+      "facultyLabel": "Fakultet elektrotehnike i računarstva",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ferit-diplomski",
+      "unitId": "ferit",
+      "facultyLabel": "Fakultet elektrotehnike, računarstva i informacijskih tehnologija Osijek",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ferit-zavrsni",
+      "unitId": "ferit",
+      "facultyLabel": "Fakultet elektrotehnike, računarstva i informacijskih tehnologija Osijek",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fesb-diplomski",
+      "unitId": "fesb",
+      "facultyLabel": "Fakultet elektrotehnike, strojarstva i brodogradnje (FESB)",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fesb-zavrsni",
+      "unitId": "fesb",
+      "facultyLabel": "Fakultet elektrotehnike, strojarstva i brodogradnje (FESB)",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fetpu-diplomski",
+      "unitId": "fetpu",
+      "facultyLabel": "Fakultet ekonomije i turizma Dr. Mijo Mirković, Pula",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fetpu-zavrsni",
+      "unitId": "fetpu",
+      "facultyLabel": "Fakultet ekonomije i turizma Dr. Mijo Mirković, Pula",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffos-diplomski",
+      "unitId": "ffos",
+      "facultyLabel": "Filozofski fakultet Osijek",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffos-psihologija-zavrsni",
+      "unitId": "ffos",
+      "facultyLabel": "Filozofski fakultet Osijek",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffos-zavrsni",
+      "unitId": "ffos",
+      "facultyLabel": "Filozofski fakultet Osijek",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffpu-diplomski",
+      "unitId": "ffpu",
+      "facultyLabel": "Filozofski fakultet u Puli",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffpu-zavrsni",
+      "unitId": "ffpu",
+      "facultyLabel": "Filozofski fakultet u Puli",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffri-povum-diplomski",
+      "unitId": "ffri",
+      "facultyLabel": "Filozofski fakultet u Rijeci",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffri-povum-zavrsni",
+      "unitId": "ffri",
+      "facultyLabel": "Filozofski fakultet u Rijeci",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffri-psihologija-diplomski",
+      "unitId": "ffri",
+      "facultyLabel": "Filozofski fakultet u Rijeci",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffrz-bakalaureatski",
+      "unitId": "ffrz",
+      "facultyLabel": "Fakultet filozofije i religijskih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffrz-diplomski",
+      "unitId": "ffrz",
+      "facultyLabel": "Fakultet filozofije i religijskih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffrz-doktorski",
+      "unitId": "ffrz",
+      "facultyLabel": "Fakultet filozofije i religijskih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffzg-etnologija-graduate",
+      "unitId": "ffzg",
+      "facultyLabel": "Filozofski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffzg-kroatistika-graduate",
+      "unitId": "ffzg",
+      "facultyLabel": "Filozofski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "unitId": "ffzg",
+      "facultyLabel": "Filozofski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffzg-pedagogija-graduate",
+      "unitId": "ffzg",
+      "facultyLabel": "Filozofski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffzg-psihologija-diplomski",
+      "unitId": "ffzg",
+      "facultyLabel": "Filozofski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffzg-sociologija-diplomski",
+      "unitId": "ffzg",
+      "facultyLabel": "Filozofski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fhs-diplomski",
+      "unitId": "fhs",
+      "facultyLabel": "Fakultet hrvatskih studija",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fhs-doktorski",
+      "unitId": "fhs",
+      "facultyLabel": "Fakultet hrvatskih studija",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fhs-zavrsni",
+      "unitId": "fhs",
+      "facultyLabel": "Fakultet hrvatskih studija",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fipu-diplomski",
+      "unitId": "fipu",
+      "facultyLabel": "Fakultet informatike u Puli",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fipu-zavrsni",
+      "unitId": "fipu",
+      "facultyLabel": "Fakultet informatike u Puli",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fizos-diplomski",
+      "unitId": "fizos",
+      "facultyLabel": "Odjel za fiziku, Sveučilište u Osijeku",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fkit-doktorski",
+      "unitId": "fkit",
+      "facultyLabel": "Fakultet kemijskog inženjerstva i tehnologije",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "foozpu-diplomski",
+      "unitId": "foozpu",
+      "facultyLabel": "Fakultet za odgojne i obrazovne znanosti, Pula",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "foozpu-zavrsni",
+      "unitId": "foozpu",
+      "facultyLabel": "Fakultet za odgojne i obrazovne znanosti, Pula",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "forenzika-diplomski",
+      "unitId": "forenzika",
+      "facultyLabel": "Fakultet za forenzicke znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fpzg-doktorski-politologija",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fpzg-nacionalna-sigurnost-diplomski",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fpzg-politologija-diplomski",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fpzg-politologija-zavrsni",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fpzg-specijalisticki-prilagodba-eu",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fpzpu-diplomski",
+      "unitId": "fpzpu",
+      "facultyLabel": "Fakultet prirodnih znanosti u Puli",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fpzpu-zavrsni",
+      "unitId": "fpzpu",
+      "facultyLabel": "Fakultet prirodnih znanosti u Puli",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fsb-doktorski",
+      "unitId": "fsb",
+      "facultyLabel": "Fakultet strojarstva i brodogradnje",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fsb-opci-akademski-rad",
+      "unitId": "fsb",
+      "facultyLabel": "Fakultet strojarstva i brodogradnje",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ftrr-diplomski",
+      "unitId": "ftrr",
+      "facultyLabel": "Fakultet turizma i ruralnog razvoja u Pozegi",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ftrr-zavrsni",
+      "unitId": "ftrr",
+      "facultyLabel": "Fakultet turizma i ruralnog razvoja u Pozegi",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "grad-diplomski",
+      "unitId": "grad",
+      "facultyLabel": "Građevinski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "grad-doktorski",
+      "unitId": "grad",
+      "facultyLabel": "Građevinski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "grad-zavrsni",
+      "unitId": "grad",
+      "facultyLabel": "Građevinski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "grf-doktorski",
+      "unitId": "grf",
+      "facultyLabel": "Grafički fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "iv-diplomski",
+      "unitId": "iv",
+      "facultyLabel": "Istarsko veleučilište (Universita Istriana), Pula",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "iv-zavrsni",
+      "unitId": "iv",
+      "facultyLabel": "Istarsko veleučilište (Universita Istriana), Pula",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "kbf-diplomski",
+      "unitId": "kbf",
+      "facultyLabel": "Katolički bogoslovni fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "kbf-doktorski",
+      "unitId": "kbf",
+      "facultyLabel": "Katolički bogoslovni fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "kbf-zavrsni",
+      "unitId": "kbf",
+      "facultyLabel": "Katolički bogoslovni fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "kbfdj-diplomski",
+      "unitId": "kbfdj",
+      "facultyLabel": "Katolicki bogoslovni fakultet u Djakovu",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "kemos-diplomski",
+      "unitId": "kemos",
+      "facultyLabel": "Odjel za kemiju, Sveučilište u Osijeku",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "kemos-zavrsni",
+      "unitId": "kemos",
+      "facultyLabel": "Odjel za kemiju, Sveučilište u Osijeku",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "kif-diplomski",
+      "unitId": "kif",
+      "facultyLabel": "Kineziološki fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "kif-doktorski",
+      "unitId": "kif",
+      "facultyLabel": "Kineziološki fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "kif-specijalisticki",
+      "unitId": "kif",
+      "facultyLabel": "Kineziološki fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "kifos-diplomski",
+      "unitId": "kifos",
+      "facultyLabel": "Kinezioloski fakultet Osijek",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "kifos-zavrsni",
+      "unitId": "kifos",
+      "facultyLabel": "Kinezioloski fakultet Osijek",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "kifst-diplomski",
+      "unitId": "kifst",
+      "facultyLabel": "Kineziološki fakultet u Splitu",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "libertas-diplomski",
+      "unitId": "libertas",
+      "facultyLabel": "Sveučilište Libertas",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "libertas-diplomski-en",
+      "unitId": "libertas",
+      "facultyLabel": "Sveučilište Libertas",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "logri-diplomski",
+      "unitId": "logri",
+      "facultyLabel": "Fakultet za logopediju Rijeka",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "mapu-glazbena-pedagogija-diplomski",
+      "unitId": "mapu",
+      "facultyLabel": "Muzička akademija u Puli",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "mapu-glazbena-pedagogija-zavrsni",
+      "unitId": "mapu",
+      "facultyLabel": "Muzička akademija u Puli",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "mef-diplomski",
+      "unitId": "mef",
+      "facultyLabel": "Medicinski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "mev-zavrsni",
+      "unitId": "mev",
+      "facultyLabel": "Međimursko veleučilište u Čakovcu",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "mfpu-diplomski",
+      "unitId": "mfpu",
+      "facultyLabel": "Medicinski fakultet u Puli",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "more-diplomski",
+      "unitId": "more",
+      "facultyLabel": "Fakultet znanosti o moru",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "more-zavrsni",
+      "unitId": "more",
+      "facultyLabel": "Fakultet znanosti o moru",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "muza-doktorski",
+      "unitId": "muza",
+      "facultyLabel": "Muzička akademija",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "oss-diplomski",
+      "unitId": "oss",
+      "facultyLabel": "Sveucilisni odjel za strucne studije (Split)",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "oss-zavrsni",
+      "unitId": "oss",
+      "facultyLabel": "Sveucilisni odjel za strucne studije (Split)",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pbf-doktorski",
+      "unitId": "pbf",
+      "facultyLabel": "Prehrambeno-biotehnološki fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pfri-diplomski",
+      "unitId": "pfri",
+      "facultyLabel": "Pomorski fakultet u Rijeci",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pfri-zavrsni",
+      "unitId": "pfri",
+      "facultyLabel": "Pomorski fakultet u Rijeci",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pmf-fizika-graduate",
+      "unitId": "pmf",
+      "facultyLabel": "Prirodoslovno-matematički fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pmf-geografija-diplomski",
+      "unitId": "pmf",
+      "facultyLabel": "Prirodoslovno-matematički fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pmfst-diplomski",
+      "unitId": "pmfst",
+      "facultyLabel": "Prirodoslovno-matematicki fakultet u Splitu",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pmfst-zavrsni",
+      "unitId": "pmfst",
+      "facultyLabel": "Prirodoslovno-matematicki fakultet u Splitu",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pravo-doktorski-pravne-znanosti",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pravo-integrirani-diplomski",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pravo-javna-uprava-diplomski",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pravo-javna-uprava-prijediplomski",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pravo-opci-pravni-akademski-rad",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pravo-porezni-prijediplomski",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pravo-socijalni-opci-akademski-rad",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pravo-socijalni-rad-zavrsni",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pravo-specijalisticki-pravni-opci",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pravos-diplomski",
+      "unitId": "pravos",
+      "facultyLabel": "Pravni fakultet Osijek",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pravos-zavrsni",
+      "unitId": "pravos",
+      "facultyLabel": "Pravni fakultet Osijek",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pravri-diplomski",
+      "unitId": "pravri",
+      "facultyLabel": "Pravni fakultet u Rijeci",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pravri-opci-akademski-rad",
+      "unitId": "pravri",
+      "facultyLabel": "Pravni fakultet u Rijeci",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pravri-specijalisticki",
+      "unitId": "pravri",
+      "facultyLabel": "Pravni fakultet u Rijeci",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pravri-zavrsni",
+      "unitId": "pravri",
+      "facultyLabel": "Pravni fakultet u Rijeci",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "riteh-diplomski",
+      "unitId": "riteh",
+      "facultyLabel": "Tehnički fakultet u Rijeci",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "riteh-zavrsni",
+      "unitId": "riteh",
+      "facultyLabel": "Tehnički fakultet u Rijeci",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "sfzg-diplomski",
+      "unitId": "sfzg",
+      "facultyLabel": "Stomatološki fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "sfzg-doktorski",
+      "unitId": "sfzg",
+      "facultyLabel": "Stomatološki fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "sumfak-zavrsni",
+      "unitId": "sumfak",
+      "facultyLabel": "Fakultet šumarstva i drvne tehnologije",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "tfpu-diplomski",
+      "unitId": "tfpu",
+      "facultyLabel": "Tehnicki fakultet u Puli",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "tfpu-zavrsni",
+      "unitId": "tfpu",
+      "facultyLabel": "Tehnicki fakultet u Puli",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ttf-dizajn-diplomski",
+      "unitId": "ttf",
+      "facultyLabel": "Tekstilno-tehnološki fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ttf-dizajn-zavrsni",
+      "unitId": "ttf",
+      "facultyLabel": "Tekstilno-tehnološki fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ttf-doktorski",
+      "unitId": "ttf",
+      "facultyLabel": "Tekstilno-tehnološki fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ttf-zavrsni",
+      "unitId": "ttf",
+      "facultyLabel": "Tekstilno-tehnološki fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "uaos-diplomski",
+      "unitId": "uaos",
+      "facultyLabel": "Akademija za umjetnost i kulturu u Osijeku",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "uaos-zavrsni",
+      "unitId": "uaos",
+      "facultyLabel": "Akademija za umjetnost i kulturu u Osijeku",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ufri-diplomski",
+      "unitId": "ufri",
+      "facultyLabel": "Učiteljski fakultet u Rijeci",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ufzg-doktorski",
+      "unitId": "ufzg",
+      "facultyLabel": "Učiteljski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unidu-ekonomija-diplomski",
+      "unitId": "unidu",
+      "facultyLabel": "Sveučilište u Dubrovniku",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unidu-ekonomija-zavrsni",
+      "unitId": "unidu",
+      "facultyLabel": "Sveučilište u Dubrovniku",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unidu-povijest-zavrsni",
+      "unitId": "unidu",
+      "facultyLabel": "Sveučilište u Dubrovniku",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unidu-sestrinstvo-zavrsni",
+      "unitId": "unidu",
+      "facultyLabel": "Sveučilište u Dubrovniku",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unin-biomedicina-diplomski",
+      "unitId": "unin",
+      "facultyLabel": "Sveučilište Sjever",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unin-biomedicina-zavrsni",
+      "unitId": "unin",
+      "facultyLabel": "Sveučilište Sjever",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unin-drustveni-diplomski",
+      "unitId": "unin",
+      "facultyLabel": "Sveučilište Sjever",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unin-drustveni-zavrsni",
+      "unitId": "unin",
+      "facultyLabel": "Sveučilište Sjever",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unin-tehnicki-diplomski",
+      "unitId": "unin",
+      "facultyLabel": "Sveučilište Sjever",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unin-tehnicki-zavrsni",
+      "unitId": "unin",
+      "facultyLabel": "Sveučilište Sjever",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unisb-btho-diplomski",
+      "unitId": "btho",
+      "facultyLabel": "Biotehnicki odjel (UNISB)",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unisb-btho-zavrsni",
+      "unitId": "btho",
+      "facultyLabel": "Biotehnicki odjel (UNISB)",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unisb-odhz-diplomski",
+      "unitId": "odhz",
+      "facultyLabel": "Odjel društveno-humanističkih znanosti (UNISB)",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unisb-odhz-zavrsni",
+      "unitId": "odhz",
+      "facultyLabel": "Odjel društveno-humanističkih znanosti (UNISB)",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unisb-sfsb-diplomski",
+      "unitId": "sfsb",
+      "facultyLabel": "Strojarski fakultet u Slavonskom Brodu",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unisb-sfsb-zavrsni",
+      "unitId": "sfsb",
+      "facultyLabel": "Strojarski fakultet u Slavonskom Brodu",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unisb-teho-diplomski",
+      "unitId": "teho",
+      "facultyLabel": "Tehnicki odjel (UNISB)",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unisb-teho-zavrsni",
+      "unitId": "teho",
+      "facultyLabel": "Tehnicki odjel (UNISB)",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unizd-ekologija-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unizd-ekologija-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unizd-germanistika-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unizd-germanistika-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unizd-hispanistika-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unizd-klasicna-filologija-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unizd-klasicna-filologija-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unizd-pedagogija-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unizd-pomorski-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unizd-pomorski-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unizd-psihologija-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unizd-psihologija-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "unizd-tko-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "vef-diplomski",
+      "unitId": "vef",
+      "facultyLabel": "Veterinarski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "vef-doktorski",
+      "unitId": "vef",
+      "facultyLabel": "Veterinarski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "veleknin-diplomski",
+      "unitId": "veleknin",
+      "facultyLabel": "Veleučilište Marko Marulić u Kninu",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "vguk-diplomski",
+      "unitId": "vguk",
+      "facultyLabel": "Veleučilište u Križevcima",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "vguk-zavrsni",
+      "unitId": "vguk",
+      "facultyLabel": "Veleučilište u Križevcima",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "vnt-diplomski",
+      "unitId": "vnt",
+      "facultyLabel": "Veleučilište Nikola Tesla u Gospiću",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "vnt-zavrsni",
+      "unitId": "vnt",
+      "facultyLabel": "Veleučilište Nikola Tesla u Gospiću",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "zsem-zavrsni",
+      "unitId": "zsem",
+      "facultyLabel": "Zagrebačka škola ekonomije i managementa",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "zsem-zavrsni-en",
+      "unitId": "zsem",
+      "facultyLabel": "Zagrebačka škola ekonomije i managementa",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "agr-diplomski",
+      "unitId": "agr",
+      "facultyLabel": "Agronomski fakultet",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "agr-doktorski",
+      "unitId": "agr",
+      "facultyLabel": "Agronomski fakultet",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "agr-zavrsni",
+      "unitId": "agr",
+      "facultyLabel": "Agronomski fakultet",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "apuri-diplomski",
+      "unitId": "apuri",
+      "facultyLabel": "Akademija primijenjenih umjetnosti u Rijeci",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "fbf-specijalisticki",
+      "unitId": "fbf",
+      "facultyLabel": "Farmaceutsko-biokemijski fakultet",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "ffos-germanistika-diplomski",
+      "unitId": "ffos",
+      "facultyLabel": "Filozofski fakultet Osijek",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "ffos-germanistika-zavrsni",
+      "unitId": "ffos",
+      "facultyLabel": "Filozofski fakultet Osijek",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "ffos-informatologija-diplomski",
+      "unitId": "ffos",
+      "facultyLabel": "Filozofski fakultet Osijek",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "ffos-informatologija-zavrsni",
+      "unitId": "ffos",
+      "facultyLabel": "Filozofski fakultet Osijek",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "ffzg-arheologija-graduate",
+      "unitId": "ffzg",
+      "facultyLabel": "Filozofski fakultet",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "fgag-diplomski",
+      "unitId": "fgag",
+      "facultyLabel": "Fakultet gradevinarstva, arhitekture i geodezije u Splitu",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "fgag-zavrsni",
+      "unitId": "fgag",
+      "facultyLabel": "Fakultet gradevinarstva, arhitekture i geodezije u Splitu",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "foi-diplomski",
+      "unitId": "foi",
+      "facultyLabel": "Fakultet organizacije i informatike",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "foi-zavrsni",
+      "unitId": "foi",
+      "facultyLabel": "Fakultet organizacije i informatike",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "foozos-diplomski",
+      "unitId": "foozos",
+      "facultyLabel": "Fakultet za odgojne i obrazovne znanosti Osijek",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "fpzg-opci-akademski-rad",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "fsb-diplomski",
+      "unitId": "fsb",
+      "facultyLabel": "Fakultet strojarstva i brodogradnje",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "fsb-zavrsni",
+      "unitId": "fsb",
+      "facultyLabel": "Fakultet strojarstva i brodogradnje",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "libertas-zavrsni",
+      "unitId": "libertas",
+      "facultyLabel": "Sveučilište Libertas",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "libertas-zavrsni-en",
+      "unitId": "libertas",
+      "facultyLabel": "Sveučilište Libertas",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "medri-farmacija-diplomski",
+      "unitId": "medri",
+      "facultyLabel": "Medicinski fakultet u Rijeci",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "medri-medicina-diplomski",
+      "unitId": "medri",
+      "facultyLabel": "Medicinski fakultet u Rijeci",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "ozs-diplomski",
+      "unitId": "ozs",
+      "facultyLabel": "Fakultet zdravstvenih znanosti (Split)",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "ozs-zavrsni",
+      "unitId": "ozs",
+      "facultyLabel": "Fakultet zdravstvenih znanosti (Split)",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "pbf-diplomski",
+      "unitId": "pbf",
+      "facultyLabel": "Prehrambeno-biotehnološki fakultet",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "pfst-diplomski",
+      "unitId": "pfst",
+      "facultyLabel": "Pomorski fakultet u Splitu",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "pfst-zavrsni",
+      "unitId": "pfst",
+      "facultyLabel": "Pomorski fakultet u Splitu",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "pmf-biologija-graduate",
+      "unitId": "pmf",
+      "facultyLabel": "Prirodoslovno-matematički fakultet",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "pravo-socijalne-djelatnosti-doktorski",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "pravo-socijalne-djelatnosti-specijalisticki",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "rgnf-diplomski",
+      "unitId": "rgnf",
+      "facultyLabel": "Rudarsko-geološko-naftni fakultet",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "rgnf-zavrsni",
+      "unitId": "rgnf",
+      "facultyLabel": "Rudarsko-geološko-naftni fakultet",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "securus-zavrsni",
+      "unitId": "securus",
+      "facultyLabel": "Veleučilište menadžmenta i sigurnosti Securus (Pula)",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "simet-zavrsni",
+      "unitId": "simet",
+      "facultyLabel": "Metalurski fakultet",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "unidu-marikultura-diplomski",
+      "unitId": "unidu",
+      "facultyLabel": "Sveučilište u Dubrovniku",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "unizd-geografija-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "unizd-informacijske-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "unizd-informacijske-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "unizd-povijest-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "unizd-povijest-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "vhzk-zavrsni",
+      "unitId": "vhzk",
+      "facultyLabel": "Veleučilište Hrvatsko zagorje Krapina",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "vsig-diplomski",
+      "unitId": "vsig",
+      "facultyLabel": "Veleučilište Ivanić-Grad",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "vsig-zavrsni",
+      "unitId": "vsig",
+      "facultyLabel": "Veleučilište Ivanić-Grad",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "vus-diplomski",
+      "unitId": "vus",
+      "facultyLabel": "Veleučilište u Šibeniku",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "vus-zavrsni",
+      "unitId": "vus",
+      "facultyLabel": "Veleučilište u Šibeniku",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "zsem-diplomski",
+      "unitId": "zsem",
+      "facultyLabel": "Zagrebačka škola ekonomije i managementa",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "zvu-specijalisticki",
+      "unitId": "zvu",
+      "facultyLabel": "Zdravstveno veleučilište",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "zvu-zavrsni",
+      "unitId": "zvu",
+      "facultyLabel": "Zdravstveno veleučilište",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "biotech-diplomski",
+      "unitId": "biotech",
+      "facultyLabel": "Fakultet biotehnologije i razvoja lijekova, Rijeka",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "biotech-zavrsni",
+      "unitId": "biotech",
+      "facultyLabel": "Fakultet biotehnologije i razvoja lijekova, Rijeka",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "erf-diplomski",
+      "unitId": "erf",
+      "facultyLabel": "Edukacijsko-rehabilitacijski fakultet",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "fizri-diplomski",
+      "unitId": "fizri",
+      "facultyLabel": "Fakultet za fiziku u Rijeci",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "fizri-zavrsni",
+      "unitId": "fizri",
+      "facultyLabel": "Fakultet za fiziku u Rijeci",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "fkit-diplomski",
+      "unitId": "fkit",
+      "facultyLabel": "Fakultet kemijskog inženjerstva i tehnologije",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "fkit-zavrsni",
+      "unitId": "fkit",
+      "facultyLabel": "Fakultet kemijskog inženjerstva i tehnologije",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "fpz-diplomski",
+      "unitId": "fpz",
+      "facultyLabel": "Fakultet prometnih znanosti",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "fpz-zavrsni",
+      "unitId": "fpz",
+      "facultyLabel": "Fakultet prometnih znanosti",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "kbfst-diplomski",
+      "unitId": "kbfst",
+      "facultyLabel": "Katolički bogoslovni fakultet u Splitu",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "mathos-diplomski",
+      "unitId": "mathos",
+      "facultyLabel": "Fakultet primijenjene matematike i informatike (Osijek)",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "mathos-zavrsni",
+      "unitId": "mathos",
+      "facultyLabel": "Fakultet primijenjene matematike i informatike (Osijek)",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "pmf-geologija-graduate",
+      "unitId": "pmf",
+      "facultyLabel": "Prirodoslovno-matematički fakultet",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "unizd-filozofija-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "unizd-filozofija-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "unizd-francuski-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "unizd-talijanistika-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "unizd-zdravstvo-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "unizd-zdravstvo-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "vuka-lovstvo-zavrsni",
+      "unitId": "vuka",
+      "facultyLabel": "Veleučilište u Karlovcu",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "vuka-prehrambena-zavrsni",
+      "unitId": "vuka",
+      "facultyLabel": "Veleučilište u Karlovcu",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "vuka-sigurnost-diplomski",
+      "unitId": "vuka",
+      "facultyLabel": "Veleučilište u Karlovcu",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "vuka-sigurnost-zavrsni",
+      "unitId": "vuka",
+      "facultyLabel": "Veleučilište u Karlovcu",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "alu-diplomski",
+      "unitId": "alu",
+      "facultyLabel": "Akademija likovnih umjetnosti",
+      "offeredOptionCount": 2
+    },
+    {
+      "profileId": "alu-kiparstvo-diplomski",
+      "unitId": "alu",
+      "facultyLabel": "Akademija likovnih umjetnosti",
+      "offeredOptionCount": 2
+    },
+    {
+      "profileId": "arca-zavrsni",
+      "unitId": "arca",
+      "facultyLabel": "Veleučilište Arca (Split)",
+      "offeredOptionCount": 2
+    },
+    {
+      "profileId": "efzg-seminarski",
+      "unitId": "efzg",
+      "facultyLabel": "Ekonomski fakultet",
+      "offeredOptionCount": 2
+    },
+    {
+      "profileId": "vuka-poslovni-diplomski",
+      "unitId": "vuka",
+      "facultyLabel": "Veleučilište u Karlovcu",
+      "offeredOptionCount": 2
+    },
+    {
+      "profileId": "vuka-poslovni-opci-akademski-rad",
+      "unitId": "vuka",
+      "facultyLabel": "Veleučilište u Karlovcu",
+      "offeredOptionCount": 2
+    },
+    {
+      "profileId": "vuka-poslovni-zavrsni",
+      "unitId": "vuka",
+      "facultyLabel": "Veleučilište u Karlovcu",
+      "offeredOptionCount": 2
+    },
+    {
+      "profileId": "vvg-diplomski",
+      "unitId": "vvg",
+      "facultyLabel": "Veleučilište Velika Gorica",
+      "offeredOptionCount": 2
+    },
+    {
+      "profileId": "vvg-zavrsni",
+      "unitId": "vvg",
+      "facultyLabel": "Veleučilište Velika Gorica",
+      "offeredOptionCount": 2
+    },
+    {
+      "profileId": "alu-slikarstvo-diplomski",
+      "unitId": "alu",
+      "facultyLabel": "Akademija likovnih umjetnosti",
+      "offeredOptionCount": 1
+    },
+    {
+      "profileId": "arh-diplomski",
+      "unitId": "arh",
+      "facultyLabel": "Arhitektonski fakultet",
+      "offeredOptionCount": 1
+    },
+    {
+      "profileId": "ffzg-informacijske-zavrsni",
+      "unitId": "ffzg",
+      "facultyLabel": "Filozofski fakultet",
+      "offeredOptionCount": 1
+    },
+    {
+      "profileId": "inf-diplomski",
+      "unitId": "inf",
+      "facultyLabel": "Fakultet informatike i digitalnih tehnologija, Rijeka",
+      "offeredOptionCount": 1
+    },
+    {
+      "profileId": "inf-zavrsni",
+      "unitId": "inf",
+      "facultyLabel": "Fakultet informatike i digitalnih tehnologija, Rijeka",
+      "offeredOptionCount": 1
+    },
+    {
+      "profileId": "math-uniri-diplomski",
+      "unitId": "matematika",
+      "facultyLabel": "Fakultet za matematiku u Rijeci",
+      "offeredOptionCount": 1
+    },
+    {
+      "profileId": "math-uniri-diplomski-en",
+      "unitId": "matematika",
+      "facultyLabel": "Fakultet za matematiku u Rijeci",
+      "offeredOptionCount": 1
+    },
+    {
+      "profileId": "math-uniri-zavrsni",
+      "unitId": "matematika",
+      "facultyLabel": "Fakultet za matematiku u Rijeci",
+      "offeredOptionCount": 1
+    },
+    {
+      "profileId": "muza-diplomski",
+      "unitId": "muza",
+      "facultyLabel": "Muzička akademija",
+      "offeredOptionCount": 1
+    },
+    {
+      "profileId": "vuka-strojarski-diplomski",
+      "unitId": "vuka",
+      "facultyLabel": "Veleučilište u Karlovcu",
+      "offeredOptionCount": 1
+    },
+    {
+      "profileId": "vuka-strojarski-zavrsni",
+      "unitId": "vuka",
+      "facultyLabel": "Veleučilište u Karlovcu",
+      "offeredOptionCount": 1
+    },
+    {
+      "profileId": "adu-dramaturgija-diplomski",
+      "unitId": "adu",
+      "facultyLabel": "Akademija dramske umjetnosti",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "adu-ftv-rezija-diplomski",
+      "unitId": "adu",
+      "facultyLabel": "Akademija dramske umjetnosti",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "adu-gluma-diplomski",
+      "unitId": "adu",
+      "facultyLabel": "Akademija dramske umjetnosti",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "adu-kazalisna-rezija-diplomski",
+      "unitId": "adu",
+      "facultyLabel": "Akademija dramske umjetnosti",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "adu-opci-diplomski",
+      "unitId": "adu",
+      "facultyLabel": "Akademija dramske umjetnosti",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "adu-produkcija-diplomski",
+      "unitId": "adu",
+      "facultyLabel": "Akademija dramske umjetnosti",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "adu-snimanje-diplomski",
+      "unitId": "adu",
+      "facultyLabel": "Akademija dramske umjetnosti",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "alu-doktorski",
+      "unitId": "alu",
+      "facultyLabel": "Akademija likovnih umjetnosti",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "alu-grafika-diplomski",
+      "unitId": "alu",
+      "facultyLabel": "Akademija likovnih umjetnosti",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "alu-nastavnicki-diplomski",
+      "unitId": "alu",
+      "facultyLabel": "Akademija likovnih umjetnosti",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "alu-novi-mediji-diplomski",
+      "unitId": "alu",
+      "facultyLabel": "Akademija likovnih umjetnosti",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "dizajn-diplomski",
+      "unitId": "arh",
+      "facultyLabel": "Arhitektonski fakultet",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "ffos-povijest-diplomski",
+      "unitId": "ffos",
+      "facultyLabel": "Filozofski fakultet Osijek",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "ffos-povijest-zavrsni",
+      "unitId": "ffos",
+      "facultyLabel": "Filozofski fakultet Osijek",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-av",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "geof-diplomski",
+      "unitId": "geof",
+      "facultyLabel": "Geodetski fakultet",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "geof-doktorski",
+      "unitId": "geof",
+      "facultyLabel": "Geodetski fakultet",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "geof-opci-akademski-rad",
+      "unitId": "geof",
+      "facultyLabel": "Geodetski fakultet",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "gradri-diplomski",
+      "unitId": "gradri",
+      "facultyLabel": "Građevinski fakultet u Rijeci",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "gradri-zavrsni",
+      "unitId": "gradri",
+      "facultyLabel": "Građevinski fakultet u Rijeci",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "par-diplomski",
+      "unitId": "par",
+      "facultyLabel": "Veleučilište PAR",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "par-zavrsni",
+      "unitId": "par",
+      "facultyLabel": "Veleučilište PAR",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "pravst-diplomski",
+      "unitId": "pravst",
+      "facultyLabel": "Pravni fakultet u Splitu",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "pravst-zavrsni",
+      "unitId": "pravst",
+      "facultyLabel": "Pravni fakultet u Splitu",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "umas-diplomski",
+      "unitId": "umas",
+      "facultyLabel": "Umjetnicka akademija u Splitu",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "umas-zavrsni",
+      "unitId": "umas",
+      "facultyLabel": "Umjetnicka akademija u Splitu",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "unidu-elektro-diplomski",
+      "unitId": "unidu",
+      "facultyLabel": "Sveučilište u Dubrovniku",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "unidu-elektro-zavrsni",
+      "unitId": "unidu",
+      "facultyLabel": "Sveučilište u Dubrovniku",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "unizd-anglistika-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "unizd-anglistika-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "unizd-ekonomija-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "unizd-ekonomija-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "unizd-kroatistika-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "unizd-kroatistika-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "unizd-lingvistika-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "unizd-lingvistika-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "unizd-rusistika-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "unizd-sociologija-zavrsni",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "vsite-diplomski",
+      "unitId": "vsite",
+      "facultyLabel": "Veleučilište suvremenih informacijskih tehnologija",
+      "offeredOptionCount": 0
+    },
+    {
+      "profileId": "vsite-zavrsni",
+      "unitId": "vsite",
+      "facultyLabel": "Veleučilište suvremenih informacijskih tehnologija",
+      "offeredOptionCount": 0
+    }
+  ]
+}
