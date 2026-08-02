@@ -152,7 +152,7 @@ export function anchorFingerprintForElement(kind: ElementKind, node: Element): s
 /** Isti fingerprint koristi analizator i fixer. Ne ukljucuje susjedne natpise. */
 export function anchorFingerprintForXml(kind: ElementKind, anchorXml: string): string {
   try {
-    const doc = parseXml(`<root xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">${anchorXml}</root>`, 'element anchor');
+    const doc = parseXml(`<root xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture" xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">${anchorXml}</root>`, 'element anchor');
     const node = childElements(doc.documentElement)[0];
     return node ? anchorFingerprintForElement(kind, node) : hash(`${kind}|${anchorXml}`);
   } catch {

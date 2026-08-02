@@ -10,6 +10,10 @@ import { writeZip, type ZipEntry } from '../../src/repair/zip-codec';
 const WORD_NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
 const REL_NS = 'xmlns="http://schemas.openxmlformats.org/package/2006/relationships"';
 const CT_NS = 'xmlns="http://schemas.openxmlformats.org/package/2006/content-types"';
+// Dodatni namespaceovi za crtez/sliku (wp/a/pic/r), isti URI-jevi kao src/analysis/table-figure-rescue.test.ts.
+// Deklarirani na <w:document> korijenu (documentXml) da pokriju SVAKI predlozak, ne samo tables-images -
+// nekoriscen namespace na korijenu je bezopasan, a izbjegava "prefix is non-null and namespace is null".
+const DOCUMENT_NS = `${WORD_NS} xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"`;
 const enc = new TextEncoder();
 
 export type RepairTemplateId =
@@ -35,47 +39,52 @@ interface PackageOptions {
   stylesXml?: string;
   numberingXml?: string;
   footnotesXml?: string;
+  commentsXml?: string;
   settingsXml?: string;
   footerXml?: string;
+  docPropsCoreXml?: string;
   image?: Uint8Array;
   documentRelsXml?: string;
   packageXmlParts?: Readonly<Record<string, string>>;
 }
 
-function paragraph(text: string, style?: string): string {
+export function paragraph(text: string, style?: string): string {
   const pPr = style ? `<w:pPr><w:pStyle w:val="${style}"/></w:pPr>` : '';
   return `<w:p>${pPr}<w:r><w:t>${text}</w:t></w:r></w:p>`;
 }
 
-function documentXml(body: string, finalSection = true): string {
+export function documentXml(body: string, finalSection = true): string {
   const sectPr = finalSection ? '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1417" w:right="1417" w:bottom="1417" w:left="1417"/></w:sectPr>' : '';
-  return `<w:document ${WORD_NS}><w:body>${body}${sectPr}</w:body></w:document>`;
+  return `<w:document ${DOCUMENT_NS}><w:body>${body}${sectPr}</w:body></w:document>`;
 }
 
 function contentTypes(options: PackageOptions): string {
-  return `<Types ${CT_NS}><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>${options.image ? '<Default Extension="png" ContentType="image/png"/>' : ''}<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>${options.numberingXml ? '<Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/>' : ''}${options.footnotesXml ? '<Override PartName="/word/footnotes.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml"/>' : ''}${options.footerXml ? '<Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>' : ''}</Types>`;
+  return `<Types ${CT_NS}><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>${options.image ? '<Default Extension="png" ContentType="image/png"/>' : ''}<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>${options.numberingXml ? '<Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/>' : ''}${options.footnotesXml ? '<Override PartName="/word/footnotes.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml"/>' : ''}${options.commentsXml ? '<Override PartName="/word/comments.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml"/>' : ''}${options.footerXml ? '<Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>' : ''}${options.docPropsCoreXml ? '<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>' : ''}</Types>`;
 }
 
 function defaultDocumentRels(options: PackageOptions): string {
   const extras = [
     options.footerXml ? '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/>' : '',
     options.image ? '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/image1.png"/>' : '',
+    options.commentsXml ? '<Relationship Id="rId5" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments" Target="comments.xml"/>' : '',
   ].join('');
   return `<Relationships ${REL_NS}><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>${extras}</Relationships>`;
 }
 
-async function packageDoc(options: PackageOptions): Promise<Uint8Array> {
+export async function packageDoc(options: PackageOptions): Promise<Uint8Array> {
   const entries: ZipEntry[] = [
     { name: '[Content_Types].xml', data: enc.encode(contentTypes(options)) },
-    { name: '_rels/.rels', data: enc.encode(`<Relationships ${REL_NS}><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`) },
+    { name: '_rels/.rels', data: enc.encode(`<Relationships ${REL_NS}><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>${options.docPropsCoreXml ? '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>' : ''}</Relationships>`) },
     { name: 'word/_rels/document.xml.rels', data: enc.encode(options.documentRelsXml ?? defaultDocumentRels(options)) },
     { name: 'word/document.xml', data: enc.encode(options.documentXml) },
     { name: 'word/styles.xml', data: enc.encode(options.stylesXml ?? `<w:styles ${WORD_NS}><w:style w:type="paragraph" w:styleId="Normal"><w:name w:val="Normal"/></w:style></w:styles>`) },
   ];
   if (options.numberingXml) entries.push({ name: 'word/numbering.xml', data: enc.encode(options.numberingXml) });
   if (options.footnotesXml) entries.push({ name: 'word/footnotes.xml', data: enc.encode(options.footnotesXml) });
+  if (options.commentsXml) entries.push({ name: 'word/comments.xml', data: enc.encode(options.commentsXml) });
   if (options.settingsXml) entries.push({ name: 'word/settings.xml', data: enc.encode(options.settingsXml) });
   if (options.footerXml) entries.push({ name: 'word/footer1.xml', data: enc.encode(options.footerXml) });
+  if (options.docPropsCoreXml) entries.push({ name: 'docProps/core.xml', data: enc.encode(options.docPropsCoreXml) });
   if (options.image) entries.push({ name: 'word/media/image1.png', data: options.image });
   for (const [name, xml] of Object.entries(options.packageXmlParts ?? {})) entries.push({ name, data: enc.encode(xml) });
   return writeZip(entries);

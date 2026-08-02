@@ -5277,6 +5277,67 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-mes-master-thesis--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 18, odjeljak 'Popis literature'",
+      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
+    },
+    {
+      "ruleId": "fpzg-mes-master-thesis--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 21, odjeljak 'Citatnice'",
+      "quote": "Pri izradi diplomskog i zavrsnog specijalistickog rada na Fakultetu politickih znanosti studenti/ce trebaju koristiti citatni stil s citatnicama u obliku unutartekstnih biljezaka (tekstnote), te bibliografskim jedinicama u obliku autor - godina.",
+      "value": {
+        "mode": "author-year"
+      }
+    },
+    {
+      "ruleId": "fpzg-mes-master-thesis--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 15, odjeljak 'Format rada'",
+      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "value": {
+        "frontMatter": {
+          "numbering": "roman",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
+    },
+    {
+      "ruleId": "fpzg-mes-master-thesis--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "keywords-hr"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu",
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi"
+        }
+      }
     }
   ],
   "fpzg-nacionalna-sigurnost-diplomski": [
@@ -5319,6 +5380,67 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 18, odjeljak 'Popis literature'",
+      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 21, odjeljak 'Citatnice'",
+      "quote": "Pri izradi diplomskog i zavrsnog specijalistickog rada na Fakultetu politickih znanosti studenti/ce trebaju koristiti citatni stil s citatnicama u obliku unutartekstnih biljezaka (tekstnote), te bibliografskim jedinicama u obliku autor - godina.",
+      "value": {
+        "mode": "author-year"
+      }
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 15, odjeljak 'Format rada'",
+      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "value": {
+        "frontMatter": {
+          "numbering": "roman",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "keywords-hr"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu",
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi"
+        }
+      }
     }
   ],
   "fpzg-novinarstvo-diplomski": [
@@ -5361,6 +5483,67 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 18, odjeljak 'Popis literature'",
+      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 21, odjeljak 'Citatnice'",
+      "quote": "Pri izradi diplomskog i zavrsnog specijalistickog rada na Fakultetu politickih znanosti studenti/ce trebaju koristiti citatni stil s citatnicama u obliku unutartekstnih biljezaka (tekstnote), te bibliografskim jedinicama u obliku autor - godina.",
+      "value": {
+        "mode": "author-year"
+      }
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 15, odjeljak 'Format rada'",
+      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "value": {
+        "frontMatter": {
+          "numbering": "roman",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "keywords-hr"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu",
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi"
+        }
+      }
     }
   ],
   "fpzg-novinarstvo-zavrsni-tekst": [
@@ -5403,6 +5586,67 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 18 (Popis literature)",
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 21 (Citatnice)",
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Pri izradi diplomskog i zavrsnog specijalistickog rada na Fakultetu politickih znanosti studenti/ce trebaju koristiti citatni stil s citatnicama u obliku unutartekstnih biljezaka (tekstnote), te bibliografskim jedinicama u obliku autor - godina.",
+      "value": {
+        "mode": "author-year"
+      }
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 15 (Format rada)",
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "value": {
+        "frontMatter": {
+          "numbering": "roman",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "keywords-hr"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu",
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi"
+        }
+      }
     }
   ],
   "fpzg-opci-akademski-rad": [
@@ -5437,6 +5681,67 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-opci-akademski-rad--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 18 (Popis literature)",
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
+    },
+    {
+      "ruleId": "fpzg-opci-akademski-rad--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 21 (Citatnice)",
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Pri izradi diplomskog i zavrsnog specijalistickog rada na Fakultetu politickih znanosti studenti/ce trebaju koristiti citatni stil s citatnicama u obliku unutartekstnih biljezaka (tekstnote), te bibliografskim jedinicama u obliku autor - godina.",
+      "value": {
+        "mode": "author-year"
+      }
+    },
+    {
+      "ruleId": "fpzg-opci-akademski-rad--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 15 (Format rada)",
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "value": {
+        "frontMatter": {
+          "numbering": "roman",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
+    },
+    {
+      "ruleId": "fpzg-opci-akademski-rad--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "keywords-hr"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu",
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi"
+        }
+      }
     }
   ],
   "fpzg-politologija-diplomski": [
@@ -5479,6 +5784,67 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 18, odjeljak 'Popis literature'",
+      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 21, odjeljak 'Citatnice'",
+      "quote": "Pri izradi diplomskog i zavrsnog specijalistickog rada na Fakultetu politickih znanosti studenti/ce trebaju koristiti citatni stil s citatnicama u obliku unutartekstnih biljezaka (tekstnote), te bibliografskim jedinicama u obliku autor - godina.",
+      "value": {
+        "mode": "author-year"
+      }
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 15, odjeljak 'Format rada'",
+      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "value": {
+        "frontMatter": {
+          "numbering": "roman",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "keywords-hr"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu",
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi"
+        }
+      }
     }
   ],
   "fpzg-politologija-zavrsni": [
@@ -5521,6 +5887,67 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 18 (Popis literature)",
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 21 (Citatnice)",
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Pri izradi diplomskog i zavrsnog specijalistickog rada na Fakultetu politickih znanosti studenti/ce trebaju koristiti citatni stil s citatnicama u obliku unutartekstnih biljezaka (tekstnote), te bibliografskim jedinicama u obliku autor - godina.",
+      "value": {
+        "mode": "author-year"
+      }
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 15 (Format rada)",
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "value": {
+        "frontMatter": {
+          "numbering": "roman",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "keywords-hr"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu",
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi"
+        }
+      }
     }
   ],
   "fpzg-specijalisticki-odnosi-s-javnoscu": [
@@ -5563,6 +5990,67 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 18, odjeljak 'Popis literature'",
+      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 21, odjeljak 'Citatnice'",
+      "quote": "Pri izradi diplomskog i zavrsnog specijalistickog rada na Fakultetu politickih znanosti studenti/ce trebaju koristiti citatni stil s citatnicama u obliku unutartekstnih biljezaka (tekstnote), te bibliografskim jedinicama u obliku autor - godina.",
+      "value": {
+        "mode": "author-year"
+      }
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 15, odjeljak 'Format rada'",
+      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "value": {
+        "frontMatter": {
+          "numbering": "roman",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "keywords-hr"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu",
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi"
+        }
+      }
     }
   ],
   "fpzg-specijalisticki-prilagodba-eu": [
@@ -5605,6 +6093,67 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 18, odjeljak 'Popis literature'",
+      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 21, odjeljak 'Citatnice'",
+      "quote": "Pri izradi diplomskog i zavrsnog specijalistickog rada na Fakultetu politickih znanosti studenti/ce trebaju koristiti citatni stil s citatnicama u obliku unutartekstnih biljezaka (tekstnote), te bibliografskim jedinicama u obliku autor - godina.",
+      "value": {
+        "mode": "author-year"
+      }
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 15, odjeljak 'Format rada'",
+      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "value": {
+        "frontMatter": {
+          "numbering": "roman",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "keywords-hr"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu",
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi"
+        }
+      }
     }
   ],
   "fpzg-specijalisticki-sigurnosna-politika-rh": [
@@ -5647,6 +6196,67 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 18, odjeljak 'Popis literature'",
+      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 21, odjeljak 'Citatnice'",
+      "quote": "Pri izradi diplomskog i zavrsnog specijalistickog rada na Fakultetu politickih znanosti studenti/ce trebaju koristiti citatni stil s citatnicama u obliku unutartekstnih biljezaka (tekstnote), te bibliografskim jedinicama u obliku autor - godina.",
+      "value": {
+        "mode": "author-year"
+      }
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 15, odjeljak 'Format rada'",
+      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "value": {
+        "frontMatter": {
+          "numbering": "roman",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "keywords-hr"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu",
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi"
+        }
+      }
     }
   ],
   "fpzg-specijalisticki-vanjska-politika-diplomacija": [
@@ -5689,6 +6299,67 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 18, odjeljak 'Popis literature'",
+      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 21, odjeljak 'Citatnice'",
+      "quote": "Pri izradi diplomskog i zavrsnog specijalistickog rada na Fakultetu politickih znanosti studenti/ce trebaju koristiti citatni stil s citatnicama u obliku unutartekstnih biljezaka (tekstnote), te bibliografskim jedinicama u obliku autor - godina.",
+      "value": {
+        "mode": "author-year"
+      }
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 15, odjeljak 'Format rada'",
+      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "value": {
+        "frontMatter": {
+          "numbering": "roman",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "verified",
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "sourcePage": "str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "keywords-hr"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu",
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi"
+        }
+      }
     }
   ],
   "fpzpu-diplomski": [

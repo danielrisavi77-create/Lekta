@@ -5,8 +5,18 @@
  * male mape koje ZIVI app.ts cita umjesto da u glavni entry chunk povuce ~1,3 MB draftova + 152 KB
  * source-registryja (koji su tamo sluzili samo determinstickom izracunu):
  *   - data/profiles/advisory-map.json : profileId -> demotirani checkId-jevi (scored/advisory demotion)
- *   - data/profiles/repair-map.json   : profileId -> autoFixable+verified ruleEntries (slim: samo polja
- *                                       koja buildRepairableItems cita)
+ *   - data/profiles/repair-map.json   : profileId -> repair-relevantne ruleEntries (slim: samo polja
+ *                                       koja buildRepairableItems / *RepairableItem funkcije citaju)
+ *
+ * repair-map.json nosi TRI disjunktne vrste zapisa:
+ *   1. autoFixable+verified   -> buildRepairableItems (generickih 6 checkIda: margins/font/...)
+ *   2. advisory+recommendedFixerId -> isto, kao neobavezna preporuka
+ *   3. "ui-assisted" checkIdovi (ASSISTED_RULE_ENTRY_CHECK_IDS ispod) -> custom *RepairableItem
+ *      funkcije u src/ui/repair-items.ts (npr. bibliographyRepairableItem) koje profil.ruleEntries
+ *      citaju IZRAVNO (checkId/status/sourceId/sourcePage/quote kao gate, .value kao konfiguracija).
+ *      Bez ove treće vrste analyzedProfile.ruleEntries u zivom app.ts nikad ne bi imao ove zapise
+ *      (drafts-runtime.ts se NE uvozi u javni bundle), pa ovih 7 fixera NIKAD ne bi aktiviralo
+ *      bez obzira na verifikacijski status - poznat jaz iz strateskog audita 2026-07-13.
  *
  * Pokreni:  npx vite-node scripts/gen-profile-runtime-maps.mts
  * (vite-node jer draftovi dolaze preko import.meta.glob; obican Node to ne razrjesava.)
@@ -22,6 +32,17 @@ import type { SourceEntry } from '../src/profiles/profile-schema';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+
+/** checkId-jevi cije *RepairableItem funkcije citaju profil.ruleEntries izravno (vidi napomenu iznad). */
+const ASSISTED_RULE_ENTRY_CHECK_IDS = new Set([
+  'bibliography-rules',
+  'citation-sync-rules',
+  'legal-footnote-repair-rules',
+  'section-surgery-rules',
+  'required-section-rules',
+  'element-caption-rules',
+  'table-figure-rescue-rules',
+]);
 
 const advisoryMap: Record<string, string[]> = {};
 const repairMap: Record<string, unknown[]> = {};
@@ -67,7 +88,28 @@ for (const id of [...DRAFT_PROFILE_IDS].sort()) {
             value: e.value,
           },
     );
-  if (repairEntries.length > 0) repairMap[id] = repairEntries;
+  // (3) ui-assisted: gate polja + value, bit-identicno onome sto svaka *RepairableItem funkcija cita.
+  const assistedEntries = entries
+    .filter(
+      (e) =>
+        e.checkId != null &&
+        ASSISTED_RULE_ENTRY_CHECK_IDS.has(e.checkId) &&
+        e.status === 'verified' &&
+        e.sourceId != null &&
+        e.sourcePage != null &&
+        e.quote != null,
+    )
+    .map((e) => ({
+      ruleId: e.ruleId,
+      checkId: e.checkId,
+      status: e.status,
+      sourceId: e.sourceId,
+      sourcePage: e.sourcePage,
+      quote: e.quote,
+      value: e.value,
+    }));
+  const allRepairEntries = [...repairEntries, ...assistedEntries];
+  if (allRepairEntries.length > 0) repairMap[id] = allRepairEntries;
 }
 
 writeFileSync(join(root, 'data/profiles/advisory-map.json'), JSON.stringify(advisoryMap, null, 2) + '\n');

@@ -1026,27 +1026,27 @@
     },
     {
       "profileId": "fpzg-mes-master-thesis",
-      "scored": 9,
-      "machineCheckable": 9,
+      "scored": 13,
+      "machineCheckable": 13,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-27"
+      "lastVerified": "2026-08-02"
     },
     {
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
-      "scored": 10,
-      "machineCheckable": 10,
+      "scored": 14,
+      "machineCheckable": 14,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-27"
+      "lastVerified": "2026-08-02"
     },
     {
       "profileId": "fpzg-novinarstvo-diplomski",
-      "scored": 10,
-      "machineCheckable": 10,
+      "scored": 14,
+      "machineCheckable": 14,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-27"
+      "lastVerified": "2026-08-02"
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-av",
@@ -1058,67 +1058,67 @@
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
-      "scored": 10,
-      "machineCheckable": 10,
+      "scored": 14,
+      "machineCheckable": 14,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-27"
+      "lastVerified": "2026-08-02"
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
-      "scored": 6,
-      "machineCheckable": 6,
+      "scored": 10,
+      "machineCheckable": 10,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-27"
+      "lastVerified": "2026-08-02"
     },
     {
       "profileId": "fpzg-politologija-diplomski",
-      "scored": 10,
-      "machineCheckable": 10,
+      "scored": 14,
+      "machineCheckable": 14,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-27"
+      "lastVerified": "2026-08-02"
     },
     {
       "profileId": "fpzg-politologija-zavrsni",
-      "scored": 10,
-      "machineCheckable": 10,
+      "scored": 14,
+      "machineCheckable": 14,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-27"
+      "lastVerified": "2026-08-02"
     },
     {
       "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
-      "scored": 10,
-      "machineCheckable": 10,
+      "scored": 14,
+      "machineCheckable": 14,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-27"
+      "lastVerified": "2026-08-02"
     },
     {
       "profileId": "fpzg-specijalisticki-prilagodba-eu",
-      "scored": 10,
-      "machineCheckable": 10,
+      "scored": 14,
+      "machineCheckable": 14,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-27"
+      "lastVerified": "2026-08-02"
     },
     {
       "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
-      "scored": 10,
-      "machineCheckable": 10,
+      "scored": 14,
+      "machineCheckable": 14,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-27"
+      "lastVerified": "2026-08-02"
     },
     {
       "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
-      "scored": 10,
-      "machineCheckable": 10,
+      "scored": 14,
+      "machineCheckable": 14,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-27"
+      "lastVerified": "2026-08-02"
     },
     {
       "profileId": "fpzpu-diplomski",
@@ -3089,5 +3089,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 2091
+  "totalScored": 2135
 }

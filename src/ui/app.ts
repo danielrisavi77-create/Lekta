@@ -1339,6 +1339,13 @@ async function renderRepairSection(r: any){
  if(r!==currentResult||!analyzedProfile) return; // demo, zastarjeli rezultat ili nema snapshota
  await ensureTemplatesHeavy();
  if(r!==currentResult||!analyzedProfile) return;
+ // BAKANI ruleEntries (repair-map.json preko repairEntriesFor) MORAJU biti na analyzedProfile
+ // PRIJE poziva *RepairableItem funkcija ispod: element-caption/bibliography/citation-sync/
+ // legal-footnote/table-figure-rescue/section-surgery/required-sections citaju profile.ruleEntries
+ // izravno (gen-profile-runtime-maps.mts, ASSISTED_RULE_ENTRY_CHECK_IDS). Bez ovoga je to polje
+ // uvijek prazno u zivom appu pa ovih 7 fixera nikad ne bi aktiviralo, ma koliko podataka postojalo.
+ const entries=repairEntriesFor(defId);
+ analyzedProfile.ruleEntries=entries;
  if(!r.details?.crossFileSubmissionConsistency) r.details.crossFileSubmissionConsistency=buildCrossFileSubmissionConsistency(r,analyzedProfile,r.details?.docxCore,r.details?.pdfPreflight,currentResult?.file,selectedPdf);
  const templateSelection=selectTemplate(r.settings?.selectionIds?.unit||r.selection?.unit, r.settings?.workType||r.selection?.workType||'final');
   const titleItems=titlePageRepairableItem(r,analyzedProfile,templateSelection.template);
@@ -1355,7 +1362,6 @@ async function renderRepairSection(r: any){
   const requiredSectionsItems=requiredSectionsRepairableItem(r,analyzedProfile);
   const linkDoiItems=linkDoiRepairableItem(r,analyzedProfile);
   const crossFileSubmissionItems=crossFileSubmissionRepairableItem(r,analyzedProfile);
- const entries=repairEntriesFor(defId);
  if(paywallGateActive()){
   // Teaser: samo prekrseno (Opcija A); "uskladi sve" + dubinsko ciscenje je placeni dio (Feature B).
   const items=[...buildRepairableItems(r.checks||[],analyzedProfile,entries),...universalRepairableItems(r.issues||[]).filter((i: any)=>i.violated),...paragraphSpacingRepairableItem(r.checks||[],analyzedProfile,r).filter((i: any)=>i.violated),...pageNumberingRepairableItem(r,analyzedProfile).filter((i: any)=>i.violated),...footnoteSpacingRepairableItem(r.checks||[],analyzedProfile).filter((i: any)=>i.violated),...pageNumberAlignmentRepairableItem(r.checks||[],analyzedProfile).filter((i: any)=>i.violated),...introSectionRepairableItem(r,analyzedProfile).filter((i: any)=>i.violated),...tocFieldRepairableItem(r,analyzedProfile).filter((i: any)=>i.violated),...headingFormatRepairableItem(r.checks||[],analyzedProfile).filter((i: any)=>i.violated),...footnoteTypographyRepairableItem(r.checks||[],analyzedProfile).filter((i: any)=>i.violated),...titleItems];

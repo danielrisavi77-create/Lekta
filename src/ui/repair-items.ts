@@ -1172,12 +1172,14 @@ export function introSectionItem(result: any, profile: any): RepairableItem[] {
 
 export function requiredSectionsRepairableItem(result: any, profile: any): RepairableItem[] {
   const entries = Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : [];
-  const verified = entries.some((entry: RuleEntry) => entry?.checkId === 'required-section-rules' && entry?.status === 'verified' && entry?.sourceId && entry?.sourcePage && entry?.quote);
-  if (!verified) return [];
+  const ruleEntry = entries.find((entry: RuleEntry) => entry?.checkId === 'required-section-rules' && entry?.status === 'verified' && entry?.sourceId && entry?.sourcePage && entry?.quote);
+  if (!ruleEntry) return [];
   const structure = result?.details?.requiredSectionsStructure;
   const candidates = Array.isArray(structure?.candidates) ? structure.candidates.filter((candidate: any) => !candidate.present) : [];
   if (!candidates.length) return [];
-  const rules = profile?.effectiveRules?.requiredSectionRules || profile?.requiredSectionRules || {};
+  // effectiveRules/profile.requiredSectionRules nikad nisu wirani u zivom appu (poznat jaz); ruleEntry.value
+  // je stvaran izvor konfiguracije, isti obrazac kao ostalih 6 ui-assisted fixera iznad.
+  const rules = profile?.effectiveRules?.requiredSectionRules || profile?.requiredSectionRules || ruleEntry.value || {};
   const form: RequiredSectionsFormDefinition = {
     summary: structure.summary?.text || `Nedostaje ${candidates.length} obveznih dijelova.`,
     candidates: candidates.map((candidate: any) => ({ id: String(candidate.id), kind: String(candidate.kind), label: String(candidate.label), confidence: String(candidate.confidence), headingLevel: Number(candidate.headingLevel) || 1, ...(candidate.styleId ? { styleId: String(candidate.styleId) } : {}), numbered: candidate.numbered === true, contentPolicy: String(candidate.contentPolicy || 'none'), verifiedStatement: typeof candidate.verifiedStatement === 'string' ? candidate.verifiedStatement : undefined, placeholderText: rules.placeholderText?.[candidate.kind] || '[OVDJE UNESI SADRŽAJ]', commentText: 'Ovdje unesi sadržaj', selected: candidate.confidence === 'high' && !!candidate.insertionAnchor, contentMode: candidate.verifiedStatement ? 'statement' : rules.addComment ? 'comment' : 'none', insertionAnchor: candidate.insertionAnchor, evidence: Array.isArray(candidate.evidence) ? candidate.evidence : [], warnings: Array.isArray(candidate.warnings) ? candidate.warnings : [] })),

@@ -20,6 +20,17 @@ import type { SourceEntry } from '../src/profiles/profile-schema';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 
+/** checkId-jevi cije *RepairableItem funkcije citaju profil.ruleEntries izravno (vidi gen-profile-runtime-maps.mts). */
+const ASSISTED_RULE_ENTRY_CHECK_IDS = new Set([
+  'bibliography-rules',
+  'citation-sync-rules',
+  'legal-footnote-repair-rules',
+  'section-surgery-rules',
+  'required-section-rules',
+  'element-caption-rules',
+  'table-figure-rescue-rules',
+]);
+
 /** Ista logika kao scripts/gen-profile-runtime-maps.mts (izvor istine za pecenje). */
 function expectedMaps() {
   const advisory: Record<string, string[]> = {};
@@ -54,7 +65,27 @@ function expectedMaps() {
               value: e.value,
             },
       );
-    if (r.length > 0) repair[id] = r;
+    const assisted = entries
+      .filter(
+        (e) =>
+          e.checkId != null &&
+          ASSISTED_RULE_ENTRY_CHECK_IDS.has(e.checkId) &&
+          e.status === 'verified' &&
+          e.sourceId != null &&
+          e.sourcePage != null &&
+          e.quote != null,
+      )
+      .map((e) => ({
+        ruleId: e.ruleId,
+        checkId: e.checkId,
+        status: e.status,
+        sourceId: e.sourceId,
+        sourcePage: e.sourcePage,
+        quote: e.quote,
+        value: e.value,
+      }));
+    const all = [...r, ...assisted];
+    if (all.length > 0) repair[id] = all;
   }
   return { advisory, repair };
 }
