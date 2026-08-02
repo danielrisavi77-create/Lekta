@@ -13,6 +13,7 @@ export interface LektaResultContext {
   analyzedAt: string;
   projectId?: string;
   userId?: string;
+  profileId?: string;
   documentFingerprint?: string;
   coverageTier?: number;
 }
@@ -75,7 +76,7 @@ export function toSharedLektaResult(
     projectId: context.projectId,
     userId: context.userId,
     rulesetId: context.rulesetId,
-    profileId: result.profile,
+    profileId: context.profileId || result.details?.profileDefinitionId || result.profile,
     score: result.score,
     scoreLabel: scoreMeta(result.score).label,
     profileStatus: result.profileStatus,
