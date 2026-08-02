@@ -38,7 +38,8 @@
     "repair-coverage": "vite-node scripts/generate-repair-coverage.mts",
     "repair-real-corpus": "vite-node scripts/repair-real-corpus.mts",
     "repair-real-corpus:review": "vite-node scripts/repair-real-corpus.mts --out .artifacts/lekta-real-corpus-review",
-    "repair-faculty-matrix": "vite-node scripts/generate-faculty-matrix.mts"
+    "repair-faculty-matrix": "vite-node scripts/generate-faculty-matrix.mts",
+    "pack:katedra": "vite-node scripts/generate-katedra-pack.mts"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.1",
