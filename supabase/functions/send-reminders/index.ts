@@ -1,8 +1,9 @@
 // supabase/functions/send-reminders/index.ts
 //
 // Pokrece se dnevno preko pg_cron (vidi napomenu u migraciji 0012). Salje dvije
-// vrste podsjetnika: (1) akademski rok, 7 i 1 dan prije, opt-in; (2) istek slota,
-// 2 dana prije, opt-out. Vidi docs/ROKOVI_PODSJETNICI.md.
+// vrste podsjetnika: (1) akademski rok, opt-in, 5 razina (30d/14d/7d/72h/dan predaje,
+// vidi 0036_deadline_reminder_tiers.sql); (2) istek slota, 2 dana prije, opt-out.
+// Vidi docs/ROKOVI_PODSJETNICI.md.
 //
 // Env varijable (Supabase -> Edge Functions -> Secrets):
 //   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, RESEND_API_KEY,
@@ -49,17 +50,23 @@ function daysBetween(a: Date, b: Date): number {
   return Math.floor(ms / (1000 * 60 * 60 * 24));
 }
 
-async function processDeadlineReminders(): Promise<{ sent7d: number; sent1d: number }> {
+// 5 razina (marketinski plan, tocka 24/25), ne-preklapajuci dnevni prozori. reminder_1d_sent_at
+// je zadrzano ime kolone iz 0012, ali sad znaci "dan predaje" (daysLeft<=0) - vidi komentar
+// na koloni u 0036_deadline_reminder_tiers.sql.
+async function processDeadlineReminders(): Promise<{ sent30d: number; sent14d: number; sent7d: number; sent72h: number; sent1d: number }> {
   const { data: subs, error } = await supabase
     .from('deadline_subscriptions')
     .select('*')
     .is('unsubscribed_at', null)
-    .or('reminder_7d_sent_at.is.null,reminder_1d_sent_at.is.null');
+    .or('reminder_30d_sent_at.is.null,reminder_14d_sent_at.is.null,reminder_7d_sent_at.is.null,reminder_72h_sent_at.is.null,reminder_1d_sent_at.is.null');
 
-  if (error || !subs) return { sent7d: 0, sent1d: 0 };
+  if (error || !subs) return { sent30d: 0, sent14d: 0, sent7d: 0, sent72h: 0, sent1d: 0 };
 
   const now = new Date();
+  let sent30d = 0;
+  let sent14d = 0;
   let sent7d = 0;
+  let sent72h = 0;
   let sent1d = 0;
 
   for (const sub of subs) {
@@ -70,52 +77,88 @@ async function processDeadlineReminders(): Promise<{ sent7d: number; sent1d: num
     const email = userData?.user?.email;
     if (!email) continue;
 
-    if (daysLeft <= 7 && daysLeft > 1 && !sub.reminder_7d_sent_at) {
-      const token = await signUnsubscribeToken(
-        { type: 'deadline_subscription', subscriptionId: sub.id as string },
-        UNSUB_SECRET,
+    const unsubToken = () => signUnsubscribeToken(
+      { type: 'deadline_subscription', subscriptionId: sub.id as string },
+      UNSUB_SECRET,
+    );
+
+    if (daysLeft <= 30 && daysLeft > 14 && !sub.reminder_30d_sent_at) {
+      const unsubUrl = `${APP_BASE_URL}/odjava-podsjetnika?token=${encodeURIComponent(await unsubToken())}`;
+      const ok = await sendEmail(
+        email,
+        `30 dana do roka predaje (${sub.work_type}, ${sub.faculty_id})`,
+        `<p>Rok za predaju (${sub.work_type}, ${sub.faculty_id}) je ${sub.deadline_date}, za 30-ak dana.</p>
+         <p>Dobar trenutak za prvu tehničku provjeru rada, dok ima vremena za ispravke: <a href="${APP_BASE_URL}">${APP_BASE_URL}</a></p>
+         <p><a href="${unsubUrl}">Odjavi ove podsjetnike</a></p>`,
       );
-      const unsubUrl = `${APP_BASE_URL}/odjava-podsjetnika?token=${encodeURIComponent(token)}`;
+      if (ok) {
+        await supabase.from('deadline_subscriptions').update({ reminder_30d_sent_at: now.toISOString() }).eq('id', sub.id);
+        sent30d++;
+      }
+    }
+
+    if (daysLeft <= 14 && daysLeft > 7 && !sub.reminder_14d_sent_at) {
+      const unsubUrl = `${APP_BASE_URL}/odjava-podsjetnika?token=${encodeURIComponent(await unsubToken())}`;
+      const ok = await sendEmail(
+        email,
+        `14 dana do roka: vrijeme za prvi full check`,
+        `<p>Rok za predaju (${sub.work_type}, ${sub.faculty_id}) je ${sub.deadline_date}.</p>
+         <p>Vrijeme za prvi full check: provjeri je li rad tehnički ispravan prije nego ga pošalješ mentoru na komentare: <a href="${APP_BASE_URL}">${APP_BASE_URL}</a></p>
+         <p><a href="${unsubUrl}">Odjavi ove podsjetnike</a></p>`,
+      );
+      if (ok) {
+        await supabase.from('deadline_subscriptions').update({ reminder_14d_sent_at: now.toISOString() }).eq('id', sub.id);
+        sent14d++;
+      }
+    }
+
+    if (daysLeft <= 7 && daysLeft > 3 && !sub.reminder_7d_sent_at) {
+      const unsubUrl = `${APP_BASE_URL}/odjava-podsjetnika?token=${encodeURIComponent(await unsubToken())}`;
       const ok = await sendEmail(
         email,
         `Rok za predaju za ${daysLeft} dana`,
         `<p>Tvoj rok za predaju (${sub.work_type}, ${sub.faculty_id}) je ${sub.deadline_date}.</p>
-         <p>Provjeri je li rad spreman: <a href="${APP_BASE_URL}">${APP_BASE_URL}</a></p>
+         <p>Ponovno provjeri rad, pogotovo ako si u međuvremenu unio mentorove komentare: <a href="${APP_BASE_URL}">${APP_BASE_URL}</a></p>
          <p><a href="${unsubUrl}">Odjavi ove podsjetnike</a></p>`,
       );
       if (ok) {
-        await supabase
-          .from('deadline_subscriptions')
-          .update({ reminder_7d_sent_at: now.toISOString() })
-          .eq('id', sub.id);
+        await supabase.from('deadline_subscriptions').update({ reminder_7d_sent_at: now.toISOString() }).eq('id', sub.id);
         sent7d++;
       }
     }
 
-    if (daysLeft <= 1 && daysLeft >= 0 && !sub.reminder_1d_sent_at) {
-      const token = await signUnsubscribeToken(
-        { type: 'deadline_subscription', subscriptionId: sub.id as string },
-        UNSUB_SECRET,
-      );
-      const unsubUrl = `${APP_BASE_URL}/odjava-podsjetnika?token=${encodeURIComponent(token)}`;
+    if (daysLeft <= 3 && daysLeft > 0 && !sub.reminder_72h_sent_at) {
+      const unsubUrl = `${APP_BASE_URL}/odjava-podsjetnika?token=${encodeURIComponent(await unsubToken())}`;
       const ok = await sendEmail(
         email,
-        `Rok za predaju je sutra ili danas`,
+        `Final check: rok za predaju za ${daysLeft} dana`,
         `<p>Tvoj rok za predaju (${sub.work_type}, ${sub.faculty_id}) je ${sub.deadline_date}.</p>
-         <p>Zadnja provjera prije predaje: <a href="${APP_BASE_URL}">${APP_BASE_URL}</a></p>
+         <p>Zadnja prilika za temeljitu provjeru prije predaje: <a href="${APP_BASE_URL}">${APP_BASE_URL}</a></p>
          <p><a href="${unsubUrl}">Odjavi ove podsjetnike</a></p>`,
       );
       if (ok) {
-        await supabase
-          .from('deadline_subscriptions')
-          .update({ reminder_1d_sent_at: now.toISOString() })
-          .eq('id', sub.id);
+        await supabase.from('deadline_subscriptions').update({ reminder_72h_sent_at: now.toISOString() }).eq('id', sub.id);
+        sent72h++;
+      }
+    }
+
+    if (daysLeft <= 0 && !sub.reminder_1d_sent_at) {
+      const unsubUrl = `${APP_BASE_URL}/odjava-podsjetnika?token=${encodeURIComponent(await unsubToken())}`;
+      const ok = await sendEmail(
+        email,
+        `Rok za predaju je danas`,
+        `<p>Tvoj rok za predaju (${sub.work_type}, ${sub.faculty_id}) je ${sub.deadline_date}.</p>
+         <p>Ne šalji .docx prije nego provjeriš ovo posljednji put: <a href="${APP_BASE_URL}">${APP_BASE_URL}</a></p>
+         <p><a href="${unsubUrl}">Odjavi ove podsjetnike</a></p>`,
+      );
+      if (ok) {
+        await supabase.from('deadline_subscriptions').update({ reminder_1d_sent_at: now.toISOString() }).eq('id', sub.id);
         sent1d++;
       }
     }
   }
 
-  return { sent7d, sent1d };
+  return { sent30d, sent14d, sent7d, sent72h, sent1d };
 }
 
 async function processSlotExpiryReminders(): Promise<{ sent: number }> {
