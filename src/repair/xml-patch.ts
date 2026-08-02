@@ -1104,18 +1104,35 @@ export function ensureHeadingNumbering(
   const format = options.format ?? 'decimal';
   const suffix = options.trailingDot === false ? '' : '.';
   const levelText = (index: number): string => `${Array.from({ length: index + 1 }, (_, part) => `%${part + 1}`).join('.')}${suffix}`;
-  const marker = /<w:abstractNum\b[^>]*w:abstractNumId="(\d+)"[^>]*>[\s\S]*?<w:name\b[^>]*w:val="Lekta Heading Numbering"[\s\S]*?<\/w:abstractNum>/g;
+  const marker = /<w:abstractNum\b[^>]*>[\s\S]*?<\/w:abstractNum>/g;
   let existing = marker.exec(xml);
   while (existing) {
     const block = existing[0];
-    const levelMatches = [...block.matchAll(/<w:lvl\b[^>]*w:ilvl="(\d+)"[\s\S]*?<w:numFmt\b[^>]*w:val="([^"]+)"[\s\S]*?<w:lvlText\b[^>]*w:val="([^"]*)"/g)];
+    const abstractNumId = Number(block.match(/\bw:abstractNumId="(\d+)"/)?.[1]);
+    if (!Number.isInteger(abstractNumId) || !/<w:name\b[^>]*w:val="Lekta Heading Numbering"/.test(block)) {
+      existing = marker.exec(xml);
+      continue;
+    }
+    // Provjeri svaku razinu kao zaseban XML blok. Prethodni regex je razine hvatao kroz
+    // cijeli abstractNum, pa je nakon kombiniranog popravka ponekad zaključio da postojeća
+    // shema nije kompatibilna i svaki bi drugi prolaz dodao novi numId.
+    const levelMatches = [...block.matchAll(/<w:lvl\b[^>]*>[\s\S]*?<\/w:lvl>/g)].map((match) => {
+      const level = match[0];
+      return {
+        index: Number(level.match(/\bw:ilvl="(\d+)"/)?.[1]),
+        format: level.match(/<w:numFmt\b[^>]*\bw:val="([^"]+)"/)?.[1],
+        text: level.match(/<w:lvlText\b[^>]*\bw:val="([^"]+)"/)?.[1],
+      };
+    });
     const compatible = levelMatches.length === maxLevel && levelMatches.every((level, index) =>
-      Number(level[1]) === index && level[2] === format && level[3] === levelText(index),
+      level.index === index && level.format === format && level.text === levelText(index),
     );
     if (compatible) {
-      const abstractNumId = Number(existing[1]);
-      const num = [...xml.matchAll(new RegExp(`<w:num\\b[^>]*w:numId="(\\d+)"[\\s\\S]*?<w:abstractNumId\\b[^>]*w:val="${abstractNumId}"[\\s\\S]*?<\\/w:num>`, 'g'))][0];
-      if (num) return { xml: numberingXml ?? xml, applied: false, numId: Number(num[1]) };
+      const num = [...xml.matchAll(/<w:num\b[^>]*>[\s\S]*?<\/w:num>/g)]
+        .map((match) => match[0])
+        .find((candidate) => candidate.includes(`w:val="${abstractNumId}"`));
+      const existingNumId = num?.match(/w:numId="(\d+)"/)?.[1];
+      if (existingNumId) return { xml: numberingXml ?? xml, applied: false, numId: Number(existingNumId) };
     }
     existing = marker.exec(xml);
   }
