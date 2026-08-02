@@ -286,6 +286,21 @@ function nearestDeadlineIso(unitId, workType, registry, todayIso) {
   return matches.reduce((min, e) => (e.deadlineDate < min ? e.deadlineDate : min), matches[0].deadlineDate);
 }
 
+function daysUntilIso(iso, todayIso) {
+  return Math.round((Date.parse(iso) - Date.parse(todayIso)) / 86400000);
+}
+
+// Ton prati fazu ciklusa do roka (isti prag-sustav 30/14/7/3/0 dana kao 5 razina u
+// send-reminders/index.ts) - dalek rok je informativan, blizak rok izravniji poziv na akciju.
+// NAMJERNO bez nove CSS klase: i dalje isti .deadline-note okvir, mijenja se samo tekst.
+function deadlineUrgencyLead(days) {
+  if (days > 14) return 'Za planiranje';
+  if (days > 7) return 'Vrijeme za prvu tehničku provjeru';
+  if (days > 3) return 'Rok se približava';
+  if (days > 0) return 'Zadnji dani prije roka';
+  return 'Rok je danas';
+}
+
 const OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
 const DEMO_IMAGE = `${SITE_ORIGIN}/assets/demo-poster.jpg`;
 
@@ -523,7 +538,7 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
     : '';
 
   const deadlineHtml = deadlineIso
-    ? `<p class="deadline-note">Najbliži poznati rok predaje (${escapeHtml(wt.label)}, ${escapeHtml(meta.name)}): <strong>${fmtDateHr(deadlineIso)}</strong>. Rok se može razlikovati po studijskom programu ili godini; provjeri aktualnu odluku svog fakulteta.</p>`
+    ? `<p class="deadline-note"><strong>${escapeHtml(deadlineUrgencyLead(daysUntilIso(deadlineIso, todayIso)))}:</strong> najbliži poznati rok predaje (${escapeHtml(wt.label)}, ${escapeHtml(meta.name)}) je <strong>${fmtDateHr(deadlineIso)}</strong>. Rok se može razlikovati po studijskom programu ili godini; provjeri aktualnu odluku svog fakulteta.</p>`
     : '';
 
   const body = `
