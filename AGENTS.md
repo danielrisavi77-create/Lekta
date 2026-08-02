@@ -45,6 +45,18 @@ NE izvodi, nego provjeri je li fixer poznat i ziv, sanira parametre i izvrsi.
 - Postenje: dok pohrana traje (storagePending), sucelje NE smije tvrditi da je
   spremljeno; promasaj u korpusu NIKAD nije dokaz da izvor ne postoji.
 
+## Lekta nikad ne generira niti ne prepravlja sadrzaj rada
+
+Lekta mjeri, provjerava i deterministicki popravlja FORMU. Nikad ne pise, ne
+prepravlja i ne ocjenjuje recenice, argumentaciju ni sadrzaj rada, ni preko AI
+modela ni na drugi nacin (vec arhitektonska cinjenica: popravak nema model ni
+prompt, gramatika/pravopis su lokalni lintovi, provjera citata je provjera
+postojanja). Razlog je poslovni: institucionalna prodaja fakultetima i AI
+generiranje sadrzaja rada se iskljucuju. AI asistirano pisanje/coaching (npr.
+sestrinski proizvod Katedra) ide u odvojen repozitorij; podaci smiju teci samo iz
+Lekte prema njemu (src/integrations/), nikad obrnuto, i taj drugi proizvod nikad
+ne smije tvrditi formalnu mjerodavnost, to ostaje iskljucivo Lektin posao.
+
 ## Pravila profila (Option A)
 
 - ruleEntries u data/** su autorski izvor istine; rules je naslijedeni agregat

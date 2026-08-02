@@ -18,6 +18,34 @@ waitlist i rokovi/podsjetnici idu na živi Supabase backend (`supabase/migration
 u cjelini.
 Ovo NIJE Next.js projekt i nema veze s maturiraj.hr; ne miješaj konvencije.
 
+## Tvrdo pravilo: Lekta nikad ne generira niti ne prepravlja sadržaj rada
+
+Lekta smije mjeriti, provjeravati, uspoređivati s pravilima i determinističkim putem
+popravljati FORMU (font, prored, margine, numeracija, format citata i slično). Lekta
+nikad ne piše, ne prepravlja i ne ocjenjuje rečenice, argumentaciju ili sadržaj rada,
+ni preko AI modela ni na bilo koji drugi način. Ovo nije samo namjera nego već
+arhitektonska činjenica: popravak nema model ni prompt (vidi "Popravak" niže),
+gramatika i pravopis su lokalni lintovi, savjetodavni, provjera citata je provjera
+postojanja preko CrossRefa, nikad generiranje teksta. Svaka nova značajka mora ostati
+unutar te granice.
+
+Razlog je poslovni, ne samo etički: institucionalna prodaja fakultetima (B2B, po
+ustanovi) i AI generiranje sadržaja studentskog rada se međusobno isključuju. Alat koji
+samo mjeri formu prema fakultetovim vlastitim, već objavljenim pravilima, fakultet može
+odobriti brzo, analogno alatu za provjeru izvornosti. Alat koji piše ili prepravlja
+argumentaciju je pitanje akademskog poštenja: ide na etičko povjerenstvo, sporo se
+odobrava ili se odbija. Ta granica čuva mogućnost prodaje instituciji, ne samo
+pojedinačnom studentu, i vrijedi i za copy i marketing (ne obećavaj "AI piše umjesto
+tebe").
+
+Ako proizvod ikad zatreba AI asistirano pisanje ili coaching (primjer: sestrinski
+proizvod Katedra, zaseban proizvod istog vlasnika), to ide u odvojen proizvod i
+repozitorij, nikad u Lektu. Podaci smiju teći iz Lekte prema drugom proizvodu
+(izvezena, informativna, neautoritativna projekcija Lektinih verificiranih pravila),
+nikad obrnuto, i taj drugi proizvod nikad ne smije tvrditi da je njegova provjera
+formalno mjerodavna: to ostaje isključivo Lektin posao. Vidi `src/integrations/`
+za konkretan, jednosmjeran izvoz podataka prema Katedri (`katedra-pack`).
+
 ## Tvrdo pravilo: build gate
 
 Svaka promjena mora proći prije commita:
