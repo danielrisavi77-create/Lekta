@@ -1,319 +1,167 @@
 # Shared Domain Contracts v0.1
 
-Status: architecture contract for Lekta and Katedra.
+Status: accepted foundation contract for Lekta and Katedra.
 
-This document defines product-neutral identifiers and payloads. It is intentionally implementation-agnostic: Supabase, REST, localStorage, or another transport may carry these objects, but their semantics remain stable.
+## Canonical source
+
+The executable TypeScript contract is the source of truth:
+
+`src/integration/academic-suite-contracts.ts`
+
+Katedra currently mirrors that contract at:
+
+`lib/academic-suite/contracts.ts`
+
+while the two products remain separate repositories. Breaking semantic changes require a `schemaVersion` bump and a synchronized mirror update.
+
+This document explains the decisions behind the types; it intentionally does not duplicate every interface field so documentation cannot silently drift away from the executable contract.
 
 ## 1. Canonical identifiers
 
-All shared identifiers are opaque strings. Clients must not infer semantics from ID formatting.
+Shared identifiers are opaque strings. Consumers must not infer meaning from formatting.
 
 - `userId`: one account identity across Lekta and Katedra.
 - `projectId`: one academic work across the ecosystem.
-- `rulesetId`: exact rule/profile version used for a decision.
+- `rulesetId`: exact academic-rule projection/version selected for a decision.
 - `analysisId`: one Lekta analysis run.
-- `entitlementId`: server-authoritative access grant.
-- `issueInstanceId`: one finding in one analysis.
+- `entitlementId`: one server-authoritative access grant.
+- `issueKey`: logical finding identity used for re-check reconciliation.
+- `issueInstanceId`: optional identity of one occurrence inside one analysis.
 - `ruleId`: stable normative/advisory rule identity.
-- `checkId`: stable machine check identity.
+- `checkId`: stable machine-check identity.
 
-## 2. UserRef
+## 2. Guest-first project identity
 
-```ts
-export interface UserRef {
-  userId: string;
-  email?: string;
-}
-```
+Katedra supports project work before registration. Therefore `ProjectManifest.ownerUserId` is optional.
 
-Rules:
+The canonical `projectId` must exist from project creation and must survive sign-in unchanged. New projects should use a UUID generated at creation (for example `crypto.randomUUID()`), including guests.
 
-- `userId` is canonical; email is mutable metadata, never the primary cross-product key.
-- Both products must accept the same canonical user identity.
+Katedra's existing `k...` client project IDs are legacy-compatible aliases and may remain temporarily as `legacyClientProjectId`. The Supabase row primary key is a storage identity, not automatically the ecosystem project identity.
 
-## 3. ProjectManifest
+Rule:
 
-```ts
-export type WorkType =
-  | 'seminar'
-  | 'final'
-  | 'graduate'
-  | 'specialist'
-  | 'doctoral'
-  | 'article'
-  | 'project';
+> Login attaches ownership to a project; it does not replace the project's identity.
 
-export type ProjectStage =
-  | 'topic'
-  | 'research'
-  | 'plan'
-  | 'writing'
-  | 'mentor-review'
-  | 'katedra-review'
-  | 'lekta-preflight'
-  | 'revision'
-  | 'submission'
-  | 'defense'
-  | 'completed';
+## 3. Canonical academic work vocabulary
 
-export interface ProjectManifest {
-  schemaVersion: '0.1';
-  projectId: string;
-  ownerUserId: string;
-  title?: string;
-  topic?: string;
-  institutionId: string;
-  unitId?: string;
-  programId?: string;
-  workType: WorkType;
-  academicYear?: string;
-  mentorName?: string;
-  deadline?: string; // ISO date
-  stage: ProjectStage;
-  rulesetId?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-```
-
-Rules:
-
-- One real academic work = one `projectId`.
-- Project metadata may sync without syncing the raw document.
-- `rulesetId` records the rule version currently selected for this project; every analysis also records the exact ruleset it actually used.
-
-## 4. AcademicRuleSetRef
-
-Lekta already owns rich `RuleEntry`, source, verification, and profile structures. The shared contract does not duplicate them. It exposes a stable cross-product reference and a consumable subset.
-
-```ts
-export interface AcademicRuleSetRef {
-  schemaVersion: '0.1';
-  rulesetId: string;
-  profileId: string;
-  institutionId: string;
-  unitId?: string;
-  programId?: string;
-  workType: WorkType;
-  academicYear?: string;
-  profileStatus: 'verified' | 'partial' | 'research' | 'generic';
-  verifiedAt?: string;
-  ruleAuthority?: string;
-}
-```
-
-For Katedra consumption, each exported rule should minimally expose:
-
-```ts
-export interface SharedAcademicRule {
-  ruleId: string;
-  checkId?: string | null;
-  category?: string;
-  label?: string;
-  value: unknown;
-  authority?: string;
-  sourceId?: string | null;
-  sourcePage?: string | null;
-  status?: string;
-  lastVerified?: string | null;
-  academicYear?: string | null;
-  machineCheckable?: boolean;
-  autoFixable?: boolean;
-  fixerId?: string | null;
-}
-```
-
-Rules:
-
-- The canonical authoring source remains Lekta's verified rule/profile data.
-- Katedra consumes exported rule data; it does not create competing normative rules.
-- Katedra may add project-specific mentor preferences, but these must be marked as project instructions, not official faculty rules.
-
-## 5. MentorInstruction
-
-```ts
-export interface MentorInstruction {
-  instructionId: string;
-  projectId: string;
-  text: string;
-  source: 'user-entered' | 'mentor-comment' | 'course-instruction';
-  createdAt: string;
-}
-```
-
-Mentor instructions have priority in the user's workflow where appropriate, but must never be mislabeled as institution-wide normative rules.
-
-## 6. LektaResult
-
-```ts
-export type LektaSeverity = 'error' | 'warning' | 'info';
-export type IssueResolutionStatus =
-  | 'OPEN'
-  | 'USER_CHANGED'
-  | 'RECHECK_REQUIRED'
-  | 'VERIFIED_FIXED';
-
-export interface LektaIssueResult {
-  issueInstanceId: string;
-  issueKey: string; // stable logical issue family when possible
-  checkId?: string | null;
-  ruleId?: string | null;
-  category: string;
-  severity: LektaSeverity;
-  summary: string;
-  detail?: string;
-  location?: {
-    section?: string;
-    paragraphIndex?: number;
-    pageHint?: string;
-    elementId?: string;
-  };
-  fixable: boolean;
-  fixerId?: string | null;
-  status: IssueResolutionStatus;
-}
-
-export interface LektaResult {
-  schemaVersion: '0.1';
-  analysisId: string;
-  projectId?: string;
-  userId?: string;
-  rulesetId: string;
-  profileId?: string;
-  score: number;
-  scoreLabel?: string;
-  profileStatus?: string;
-  categoryScores: Array<{
-    category: string;
-    earned: number;
-    max: number;
-  }>;
-  issues: LektaIssueResult[];
-  analyzedAt: string;
-  documentFingerprint?: string;
-  coverageTier?: number;
-}
-```
-
-Rules:
-
-- Cross-product handoff does not require raw document text.
-- Katedra consumes issues to build a resolution plan.
-- Katedra cannot authoritatively set `VERIFIED_FIXED`.
-- A subsequent Lekta analysis determines whether the problem no longer exists.
-
-## 7. Cross-product issue state
-
-State flow:
+Cross-product payloads use semantic values:
 
 ```text
-OPEN
-  -> USER_CHANGED
-  -> RECHECK_REQUIRED
-  -> VERIFIED_FIXED
+seminar
+final
+graduate
+specialist
+doctoral
+article
+project
 ```
 
-Allowed writers:
+Katedra may temporarily keep its legacy `s/z/d` vocabulary inside the old UI/state layer, but adapters must translate at the product boundary.
 
-- Lekta analysis: creates `OPEN`, may establish `VERIFIED_FIXED` on a re-check.
-- Katedra/user workflow: may mark `USER_CHANGED` and `RECHECK_REQUIRED`.
-- Backend orchestration may reconcile old/new analyses, but must use Lekta evidence for `VERIFIED_FIXED`.
+The shared contract contains both translation functions and tests.
 
-## 8. Entitlement
+## 4. Academic Core ownership
 
-```ts
-export type ProductScope =
-  | 'lekta-check'
-  | 'lekta-fix'
-  | 'katedra-pro'
-  | 'project-pass';
+Lekta remains the authoring/source-of-truth system for institution-specific academic rules.
 
-export interface Entitlement {
-  schemaVersion: '0.1';
-  entitlementId: string;
-  userId: string;
-  projectId?: string;
-  scope: ProductScope;
-  capabilities: string[];
-  validFrom: string;
-  validUntil?: string;
-  usageLimit?: number;
-  usageCount?: number;
-  status: 'active' | 'consumed' | 'expired' | 'revoked';
-  sourceProductId: string;
-}
-```
+The cross-product contract exposes:
 
-Example project-pass capabilities:
+- `AcademicRuleSetRef` — stable project/ruleset reference;
+- `SharedAcademicRule` — read-only Katedra coach projection;
+- `AcademicRuleSetExport` — versioned export envelope with source provenance.
+
+Katedra may maintain mentor/project instructions, but those are never represented as institution-wide normative rules.
+
+## 5. Lekta severity vs Katedra presentation severity
+
+Canonical transport severity is:
 
 ```text
-katedra.review.full
-katedra.ai-ledger
-lekta.report.full
-lekta.recheck
-lekta.final-preflight
+error | warning | info
 ```
 
-AutoFix should remain an explicit capability, e.g. `lekta.fix`, so pricing can evolve independently.
+Katedra may display `error` as `critical` in its coaching UI. That translation happens only at presentation/workflow boundaries; transport semantics do not change.
 
-## 9. KatedraProjectState
+## 6. Issue identity and re-check lifecycle
 
-Katedra-specific state remains Katedra-owned but references the canonical project.
+Canonical cross-product finding shape is `LektaIssueRef`.
 
-```ts
-export interface KatedraProjectState {
-  schemaVersion: '0.1';
-  projectId: string;
-  progressPercent: number;
-  completedMilestones: string[];
-  activeMilestone?: string;
-  lastReviewAt?: string;
-  latestLektaAnalysisId?: string;
-  updatedAt: string;
-}
+The important distinction is:
+
+- `issueKey` = logical reconciliation key across analyses;
+- `issueInstanceId` = optional one-analysis occurrence identity;
+- `checkId` / `ruleId` = explicit engine/rule identity when Lekta can provide it.
+
+Current legacy Lekta presentation issues do not yet expose enough stable IDs. The v0.1 adapter therefore derives a conservative legacy `issueKey` and leaves unknown `checkId`, `ruleId`, and fixability unset/null rather than inventing verification metadata.
+
+Verification lifecycle:
+
+```text
+OPEN -> USER_CHANGED -> RECHECK_REQUIRED -> VERIFIED_FIXED
 ```
 
-This prevents Katedra process progress from being confused with Lekta compliance score.
+Katedra may additionally use `SKIPPED` as a local workflow state. `SKIPPED` never means resolved.
 
-## 10. AIUsageLedgerEntry
+Only a new Lekta analysis may establish `VERIFIED_FIXED`.
 
-```ts
-export interface AIUsageLedgerEntry {
-  entryId: string;
-  projectId: string;
-  userId: string;
-  occurredAt: string;
-  stage: ProjectStage;
-  tool?: string;
-  model?: string;
-  purpose: string;
-  aiContribution: string;
-  userContribution?: string;
-  userReviewed: boolean;
-  userApproved?: boolean;
-}
+## 7. Privacy boundary
+
+Cross-product handoff does not require the raw `.docx`.
+
+The initial `LektaResult` adapter intentionally omits legacy `Issue.detail` and `Issue.where` because those presentation fields may contain document-derived context. Richer location metadata can be added only when it is structured and explicitly classified as safe for cross-product transport.
+
+The shared payload may contain:
+
+- project/ruleset identifiers;
+- score/category scores;
+- issue identity/category/severity/summary;
+- explicit fixability metadata when supported;
+- timestamps and non-sensitive provenance.
+
+It does not automatically contain:
+
+- raw document text;
+- full paragraphs;
+- mentor comments;
+- AI transcripts;
+- email addresses;
+- secrets.
+
+## 8. Entitlements are not Katedra wallet credits
+
+The shared `Entitlement` contract represents purchased ecosystem capabilities.
+
+Katedra's current token-credit wallet remains a separate variable-cost accounting mechanism for AI usage.
+
+Examples of shared entitlement scopes:
+
+```text
+lekta-check
+lekta-fix
+katedra-pro
+academic-pass
+academic-pass-plus
 ```
 
-Rules:
+Capabilities, rather than UI labels, determine access. For example AutoFix is an explicit `lekta.fix` capability.
 
-- Ledger is transparency metadata, not proof of academic honesty by itself.
-- Institution-specific disclosure output must be generated from the actual ledger plus verified Academic Core policy, not from hard-coded assumptions.
+## 9. Process progress and compliance score stay separate
 
-## 11. Shared analytics envelope
+`KatedraProjectState.progressPercent` represents workflow completion.
 
-```ts
-export interface SharedAnalyticsEvent<T = Record<string, unknown>> {
-  eventName: string;
-  occurredAt: string;
-  anonymousId?: string;
-  userId?: string;
-  projectId?: string;
-  app: 'lekta' | 'katedra';
-  properties: T;
-}
-```
+`LektaResult.score` represents technical/compliance analysis within Lekta's declared coverage.
 
-Canonical initial events:
+They are never combined into one synthetic readiness score.
+
+## 10. AI usage ledger
+
+`AIUsageLedgerEntry` is process-transparency metadata. It is not itself proof of academic honesty or faculty certification.
+
+Institution-specific disclosure guidance must combine actual recorded workflow with verified Academic Core AI-policy data.
+
+## 11. Shared analytics vocabulary
+
+Both products should use the same cross-product event meanings, including:
 
 ```text
 project_created
@@ -330,37 +178,42 @@ defense_stage_started
 purchase_completed
 ```
 
-## 12. Deep-link v0.1
+The analytics vendor may change; event semantics do not.
 
-The first integration does not require shared persistence.
+## 12. Deep-link rule
 
-Katedra -> Lekta may send only non-sensitive routing metadata:
+Early integration may use URLs for non-sensitive routing metadata only.
+
+Allowed examples:
 
 ```text
-/check?project=<projectId>&institution=<institutionId>&unit=<unitId>&program=<programId>&workType=<workType>&ruleset=<rulesetId>
+projectId
+unitId
+programId
+profileId
+workType
+rulesetId
 ```
 
-Rules:
-
-- Never put raw document text, mentor comments, AI transcripts, email addresses, or secrets in query parameters.
-- Lekta must validate all incoming IDs against its own catalog/profile registry.
-- Unknown IDs degrade safely to an explicit selection step; never silently map to another faculty.
+Incoming identifiers must always be validated by the receiving product. Unknown identifiers fall back to explicit selection; they never silently map to a different faculty/profile.
 
 ## 13. Contract evolution
 
-- All shared payloads carry `schemaVersion`.
-- Breaking changes increment the version.
-- Additive optional fields do not require a breaking version.
-- Neither app may rely on undocumented fields from the other app.
+- Every shared payload carries `schemaVersion`.
+- Breaking semantic changes increment the version.
+- Additive optional fields may remain on the same version when backward compatible.
+- Neither application may depend on undocumented fields from the other application.
+- The two repositories must not evolve separate meanings for the same field name.
 
-## 14. First implementation acceptance criteria
+## 14. v0.1 acceptance criteria
 
-The architecture is ready for the first integrated MVP when:
+Foundation contracts are ready when:
 
-1. Katedra can construct a valid `ProjectManifest`.
-2. Katedra can select a Lekta `AcademicRuleSetRef` without hard-coding normative rules.
-3. Katedra can deep-link to Lekta with project/profile context.
-4. Lekta can run a normal local analysis and emit a valid `LektaResult`.
-5. Lekta can hand a structured issue set back to Katedra without the raw document.
-6. Katedra can create a resolution plan from those issues.
-7. Only a new Lekta analysis can mark an issue `VERIFIED_FIXED`.
+1. both repositories compile against the same contract semantics;
+2. legacy Katedra `s/z/d` maps deterministically to the canonical work types;
+3. Lekta emits a privacy-safe `LektaResult` adapter;
+4. issue identity does not rely on array position for new payloads;
+5. guest projects can keep one identity through login;
+6. Katedra consumes Lekta-owned academic rules rather than owning a competing normative database;
+7. shared entitlements are modeled separately from AI token accounting;
+8. only Lekta re-check evidence can establish `VERIFIED_FIXED`.
