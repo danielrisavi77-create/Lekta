@@ -86,8 +86,18 @@ const STRUCTURAL_CHECK_RULES: StructuralCheckRule[] = [
   { match: (t) => /razina naslova/i.test(t), groupKey: 'heading.level' },
   { match: (t) => t === 'Naslovi tablica', groupKey: 'caption.table' },
   { match: (t) => t === 'Naslovi slika i grafikona', groupKey: 'caption.figure' },
-  { match: (t) => t === 'Abecedni poredak literature', groupKey: 'reference.sort' },
+  { match: (t) => t === 'Abecedni poredak literature', groupKey: 'reference.sort', fixId: 'bibliography-repair-fixer' },
   { match: (t) => t === 'Popisi slika i tablica', groupKey: 'list.illustrations' },
+  // Ove cetiri postoje otkad su bibliography-rules/citation-sync-rules/section-surgery-rules/
+  // required-section-rules dobili STVARNO ozicenje (repair-map.json, gen-profile-runtime-maps.mts,
+  // 2026-08-02) - prije toga fixer iza njih nikad nije mogao aktivirati pa bi ih svrstavanje ovdje
+  // bilo pogresno obecanje. Bez ovoga repairCeiling ove nalaze i dalje tretira kao 'manual' iako
+  // sada postoji zivi popravak, pa strop lazno ostaje ispod 100 za dokumente kojima je bas ovo
+  // jedini preostali problem.
+  { match: (t) => t === 'Citirano → literatura' || t === 'Literatura → citirano', groupKey: 'citation.sync', fixId: 'citation-bibliography-sync-fixer' },
+  { match: (t) => t === 'Isti autor i godina (a/b/c)', groupKey: 'reference.sort', fixId: 'bibliography-repair-fixer' },
+  { match: (t) => t === 'Numeriranje stranica' || t === 'Sekcije', groupKey: 'section.surgery', fixId: 'section-surgery-fixer' },
+  { match: (t) => t === 'Dijelovi verificiranog profila', groupKey: 'required.sections', fixId: 'required-section-fixer' },
 ];
 
 /**

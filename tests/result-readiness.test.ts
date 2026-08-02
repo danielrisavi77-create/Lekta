@@ -36,12 +36,17 @@ describe('repairCeiling: maksimalna ocjena koju automatski popravak realno moze 
   });
 
   it('otvorena sadrzajna (manual) provjera smanjuje strop i navodi je poimenice', () => {
+    // "Potpunost bibliografskih zapisa" ostaje namjerno manual: otkriva MOGUCE nepotpune zapise
+    // (nedostaje izdavac/godina/stranice), a bibliography-repair-fixer dira samo poredak, uvlaku i
+    // a/b/c sufikse - nikad ne izmislja podatke koji fale. ("Citirano -> literatura" ovdje vise NIJE
+    // dobar primjer: od 2026-08-02 ima zivi citation-bibliography-sync-fixer iza sebe, vidi
+    // check-fixer-map.ts STRUCTURAL_CHECK_RULES.)
     const ceiling = repairCeiling([
-      chk('Citirano → literatura', 'fail', 3, 10),
+      chk('Potpunost bibliografskih zapisa', 'fail', 3, 10),
       chk('Dominantni font', 'pass', 8, 8),
     ]);
     expect(ceiling.hasManualGap).toBe(true);
-    expect(ceiling.items).toEqual([{ title: 'Citirano → literatura', lostPoints: 7 }]);
+    expect(ceiling.items).toEqual([{ title: 'Potpunost bibliografskih zapisa', lostPoints: 7 }]);
     // (8 + 10 - 7) / 18 * 100 = 61.11... -> 61
     expect(ceiling.maxScore).toBe(61);
   });
@@ -53,5 +58,17 @@ describe('repairCeiling: maksimalna ocjena koju automatski popravak realno moze 
     ]);
     expect(ceiling.maxScore).toBe(100);
     expect(ceiling.hasManualGap).toBe(false);
+  });
+
+  // Ove cetiri naslova dobile su zivi fixer 2026-08-02 (bibliography-rules/citation-sync-rules/
+  // section-surgery-rules/required-section-rules, prvi put stvarni podaci - FPZG). Strop MORA
+  // ostati 100 kad je otvoreni nalaz bas jedan od njih, jer alat sada stvarno zna to popraviti;
+  // da su i dalje 'manual', korisnika bismo lazno uvjeravali da mora rucno intervenirati.
+  it('otvorena provjera s zivim asistiranim fixerom (bibliografija/citati/sekcije/dijelovi) NE ulazi u manualni jaz', () => {
+    for (const title of ['Citirano → literatura', 'Literatura → citirano', 'Isti autor i godina (a/b/c)', 'Numeriranje stranica', 'Sekcije', 'Dijelovi verificiranog profila']) {
+      const ceiling = repairCeiling([chk(title, 'fail', 0, 10), chk('Dominantni font', 'pass', 8, 8)]);
+      expect(ceiling.hasManualGap, title).toBe(false);
+      expect(ceiling.maxScore, title).toBe(100);
+    }
   });
 });
