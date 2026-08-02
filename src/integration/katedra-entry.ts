@@ -1,7 +1,7 @@
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
 import { isAcademicWorkType, type AcademicWorkType } from './academic-suite-contracts';
 
-const PROJECT_SESSION_KEY = 'lekta.katedra-project.v0.1';
+const PROJECT_SESSION_SLOT = 'lekta.katedra-project.v0.1';
 
 export interface KatedraEntryContext {
   projectId?: string;
@@ -45,12 +45,17 @@ export function parseKatedraEntryContext(search: string): KatedraEntryContext {
 
 export function rememberKatedraProjectId(projectId?: string): void {
   if (!projectId || typeof sessionStorage === 'undefined') return;
-  try { sessionStorage.setItem(PROJECT_SESSION_KEY, projectId); } catch {}
+  try { sessionStorage.setItem(PROJECT_SESSION_SLOT, projectId); } catch {}
+}
+
+export function clearKatedraProjectId(): void {
+  if (typeof sessionStorage === 'undefined') return;
+  try { sessionStorage.removeItem(PROJECT_SESSION_SLOT); } catch {}
 }
 
 export function currentKatedraProjectId(): string | undefined {
   if (typeof sessionStorage === 'undefined') return undefined;
-  try { return cleanId(sessionStorage.getItem(PROJECT_SESSION_KEY)); } catch { return undefined; }
+  try { return cleanId(sessionStorage.getItem(PROJECT_SESSION_SLOT)); } catch { return undefined; }
 }
 
 function dispatchChange(el: HTMLSelectElement): void {
@@ -118,7 +123,15 @@ export function applyKatedraEntryContext(context: KatedraEntryContext): boolean 
 export function bootstrapKatedraEntryContext(): void {
   if (typeof window === 'undefined') return;
   const context = parseKatedraEntryContext(window.location.search);
-  if (!context.projectId && !context.unitId && !context.programId && !context.workType) return;
+  const hasEntryContext = Boolean(context.projectId || context.unitId || context.programId || context.workType);
+
+  // A direct Lekta visit in the same browser tab must not inherit an earlier
+  // Katedra project. The query string is the authority for whether this page
+  // load belongs to a Katedra-origin workflow.
+  if (!hasEntryContext) {
+    clearKatedraProjectId();
+    return;
+  }
 
   // App init is synchronous today; one macrotask also makes this tolerant of a
   // future async catalog render without coupling to ui/app internals.
