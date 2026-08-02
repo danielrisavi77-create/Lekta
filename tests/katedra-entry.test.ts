@@ -1,5 +1,14 @@
-import { describe, expect, it } from 'vitest';
-import { parseKatedraEntryContext } from '../src/integration/katedra-entry';
+import { beforeEach, describe, expect, it } from 'vitest';
+import {
+  clearKatedraProjectId,
+  currentKatedraProjectId,
+  parseKatedraEntryContext,
+  rememberKatedraProjectId,
+} from '../src/integration/katedra-entry';
+
+beforeEach(() => {
+  sessionStorage.clear();
+});
 
 describe('Katedra -> Lekta entry context', () => {
   it('maps current Katedra Croatian work slugs to canonical work types', () => {
@@ -23,5 +32,25 @@ describe('Katedra -> Lekta entry context', () => {
 
   it('does not invent an unknown work type', () => {
     expect(parseKatedraEntryContext('?unit=fpzg&work=magical').workType).toBeUndefined();
+  });
+
+  it('clears both project and previous handoff result on direct-session reset', () => {
+    rememberKatedraProjectId('project-a');
+    sessionStorage.setItem('lekta.katedra-handoff-result.v0.1', '{"analysisId":"old"}');
+
+    clearKatedraProjectId();
+
+    expect(currentKatedraProjectId()).toBeUndefined();
+    expect(sessionStorage.getItem('lekta.katedra-handoff-result.v0.1')).toBeNull();
+  });
+
+  it('drops a captured result when switching to a different Katedra project', () => {
+    rememberKatedraProjectId('project-a');
+    sessionStorage.setItem('lekta.katedra-handoff-result.v0.1', '{"analysisId":"old"}');
+
+    rememberKatedraProjectId('project-b');
+
+    expect(currentKatedraProjectId()).toBe('project-b');
+    expect(sessionStorage.getItem('lekta.katedra-handoff-result.v0.1')).toBeNull();
   });
 });
