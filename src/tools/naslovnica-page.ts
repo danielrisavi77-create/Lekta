@@ -13,6 +13,7 @@ import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
 import { selectTemplate, TITLE_PAGE_TEMPLATES, ensureTemplatesHeavy, templatesHeavyLoaded, type TemplateSelection } from '../title-pages/template-loader';
 import { workTypeLabel } from '../config/config-loader';
 import { parseTitlePageParams, serializeTitlePageParams } from '../title-pages/title-page-params';
+import { readFacultyContext, saveFacultyContext } from './faculty-context';
 import { defaultWorkTypeForProgram } from '../ui/work-selection';
 import type { WorkType } from '../profiles/profile-schema';
 import type { TitleLineStyle } from './title-page';
@@ -305,6 +306,18 @@ function syncUrl() {
   history.replaceState(null, '', qs ? `${location.pathname}?${qs}` : location.pathname);
 }
 
+// Dijeljeni fakultetski kontekst (faculty-context.ts): isti unitId/program/level koje citat
+// generator vec cita/pise. Prazan unitId je eksplicitni reset (vidi saveFacultyContext).
+function persistFacultyContext(): void {
+  const unitId = $('#tp-unit')?.value || '';
+  if (!unitId) { saveFacultyContext({ unitId: '' }); return; }
+  saveFacultyContext({
+    unitId,
+    program: $('#tp-program')?.value || undefined,
+    level: (currentLevel() || undefined) as WorkType | undefined,
+  });
+}
+
 function onInstitutionChange() {
   const instId = $('#tp-institution')?.value || '';
   populateUnits(instId);
@@ -324,6 +337,7 @@ function onInstitutionChange() {
   if (facultyAuto) { $(FIELDS.faculty).value = ''; facultyAuto = false; }
   if (studyAuto) { $(FIELDS.study).value = ''; studyAuto = false; }
   syncUrl();
+  persistFacultyContext();
   render();
 }
 
@@ -347,6 +361,7 @@ function onUnitChange() {
   // tekstualno polje mora pratiti AKO ga je popunila kaskada (rucni unos ostaje netaknut).
   if (studyAuto) { $(FIELDS.study).value = ''; studyAuto = false; }
   syncUrl();
+  persistFacultyContext();
   render();
 }
 
@@ -371,6 +386,7 @@ function onProgramChange() {
     studyAuto = false;
   }
   syncUrl();
+  persistFacultyContext();
   render();
 }
 
@@ -397,6 +413,34 @@ function applyUrlParams() {
     $('#tp-program').value = params.program;
     $(FIELDS.study).value = studyTextForProgram(params.program);
     studyAuto = true;
+  }
+}
+
+/** Prefill kaskade iz dijeljenog fakultetskog konteksta (samo ako ?fakultet= nije vec nesto
+ *  postavio preko applyUrlParams - eksplicitni link uvijek ima prednost). */
+function applyFacultyContext(): void {
+  if ($('#tp-unit')?.value) return;
+  const ctx = readFacultyContext();
+  if (!ctx.unitId) return;
+  const inst = ZAGREB_CATALOG.find((i) => i.units.some((u) => u.id === ctx.unitId));
+  if (!inst) return;
+  $('#tp-institution').value = inst.id;
+  populateUnits(inst.id);
+  $('#tp-unit').value = ctx.unitId;
+  populatePrograms(ctx.unitId);
+  const unit = inst.units.find((u) => u.id === ctx.unitId)!;
+  $(FIELDS.university).value = inst.name;
+  universityAuto = true;
+  $(FIELDS.faculty).value = unit.name === inst.name ? '' : unit.name;
+  facultyAuto = true;
+  if (ctx.program && unit.programs.includes(ctx.program)) {
+    $('#tp-program').value = ctx.program;
+    $(FIELDS.study).value = studyTextForProgram(ctx.program);
+    studyAuto = true;
+  }
+  if (ctx.level) {
+    const wtSel = $('#tp-worktype');
+    if (wtSel && [...wtSel.options].some((o: any) => o.value === ctx.level)) wtSel.value = ctx.level;
   }
 }
 
@@ -440,6 +484,7 @@ function init() {
   populateUnits('');
   populatePrograms('');
   applyUrlParams();
+  applyFacultyContext();
   applySharedDraft();
 
   for (const sel of Object.values(FIELDS)) {
@@ -447,6 +492,7 @@ function init() {
     if (el) el.addEventListener('input', () => { render(); persistSharedDraft(); });
   }
   $('#tp-worktype')?.addEventListener('change', persistSharedDraft);
+  $('#tp-worktype')?.addEventListener('change', persistFacultyContext);
   // Rucni unos (stvarni input event, ne programsko postavljanje .value iz kaskade) gasi
   // odgovarajucu "auto" zastavicu: kaskada vise ne smije tiho prepisati/isprazniti dok
   // korisnik sam uredjuje polje.

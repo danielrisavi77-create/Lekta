@@ -154,3 +154,54 @@ describe('naslovnica-page: template.notes prikaz + JMBAG/kolegij polja (DOM)', (
     expect($('#tp-studentid').value).toBe('');
   });
 });
+
+describe('naslovnica-page: dijeljeni fakultetski kontekst (B2)', () => {
+  const CTX_KEY = 'lekta.faculty-context';
+
+  it('odabir kaskade pise {unitId, program, level} u faculty-context (dijeljeno s citat generatorom)', () => {
+    // Nastavak istog vec-uvezenog modula (gornji describe): kaskada je aktivna otkad
+    // je ovaj beforeAll uvezao naslovnica-page.
+    fireChange('#tp-institution', 'unizg');
+    fireChange('#tp-unit', 'adu');
+    fireChange('#tp-program', 'Gluma');
+    fireChange('#tp-worktype', 'graduate');
+
+    expect(JSON.parse(localStorage.getItem(CTX_KEY)!)).toEqual({ unitId: 'adu', program: 'Gluma', level: 'graduate' });
+  });
+
+  it('povratak fakulteta na placeholder resetira faculty-context', () => {
+    fireChange('#tp-unit', '');
+    expect(localStorage.getItem(CTX_KEY)).toBeNull();
+  });
+
+  it('svjez ucitan modul BEZ URL parametara prefilla kaskadu iz spremljenog konteksta', async () => {
+    localStorage.clear();
+    sessionStorage.clear(); // draft-share.ts (workTypeLabel) inace nadjaca #tp-worktype nakon ove funkcije
+    localStorage.setItem(CTX_KEY, JSON.stringify({ unitId: 'agr', program: 'Diplomski studiji Agronomskog fakulteta', level: 'final' }));
+    vi.resetModules();
+    buildDom();
+
+    await import('../src/tools/naslovnica-page');
+    await ensureTemplatesHeavy();
+
+    expect($('#tp-unit').value).toBe('agr');
+    expect($('#tp-faculty').value).toBe('Agronomski fakultet');
+    expect($('#tp-program').value).toBe('Diplomski studiji Agronomskog fakulteta');
+    expect($('#tp-worktype').value).toBe('final');
+  });
+
+  it('?fakultet= u URL-u ima prednost nad spremljenim faculty-context', async () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    localStorage.setItem(CTX_KEY, JSON.stringify({ unitId: 'agr' }));
+    vi.resetModules();
+    buildDom();
+    window.history.replaceState(null, '', '?fakultet=adu');
+
+    await import('../src/tools/naslovnica-page');
+    await ensureTemplatesHeavy();
+
+    expect($('#tp-unit').value).toBe('adu');
+    window.history.replaceState(null, '', location.pathname);
+  });
+});
