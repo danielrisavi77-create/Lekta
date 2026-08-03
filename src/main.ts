@@ -6,5 +6,7 @@ import '@fontsource/caveat/600.css';
 import '@fontsource/caveat/700.css';
 import './shared/ui-boot';
 import './ui/app';
+import './integration/katedra-entry';
+import './integration/katedra-result-cta';
 import './ui/hero-demo';
 import './ui/korektorski';

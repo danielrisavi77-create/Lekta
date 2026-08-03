@@ -1,0 +1,52 @@
+name: Academic Suite DB
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  postgres-smoke:
+    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'architecture/lekta-katedra-foundation-v0.1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      PGHOST: 127.0.0.1
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: postgres
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PostgreSQL version
+        run: psql --version
+
+      - name: Apply existing Lekta commerce + Academic Suite foundation smoke
+        run: psql -v ON_ERROR_STOP=1 -f scripts/academic-suite-db-smoke.sql
+
+      - name: Apply Academic Suite RLS hardening smoke
+        run: psql -v ON_ERROR_STOP=1 -f scripts/academic-suite-rls-smoke.sql
+
+      - name: Apply Academic Suite Data API grants smoke
+        run: psql -v ON_ERROR_STOP=1 -f scripts/academic-suite-grants-smoke.sql
+
+      - name: Apply Academic Suite performance hardening smoke
+        run: psql -v ON_ERROR_STOP=1 -f scripts/academic-suite-performance-smoke.sql
