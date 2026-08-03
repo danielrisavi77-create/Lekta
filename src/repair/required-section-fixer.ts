@@ -1,11 +1,11 @@
-import { extractBodyParagraphs, paragraphFingerprint, xmlEncode } from '../analysis/typography-structure';
-import type { RequiredSectionKind } from '../analysis/required-sections-structure';
+import { extractBodyParagraphs, paragraphFingerprint, xmlEncode } from '../analysis/typography-structure.ts';
+import type { RequiredSectionKind } from '../analysis/required-sections-structure.ts';
 import {
   ensureHeadingNumbering,
   ensureHeadingStyles,
   markTocFieldsDirty,
-} from './xml-patch';
-import type { DocxXmlParts, FixerOutput } from './fixers';
+} from './xml-patch.ts';
+import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
 export interface RequiredSectionFixParams {
   version: 1;

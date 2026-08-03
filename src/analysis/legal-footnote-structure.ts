@@ -5,9 +5,9 @@ import {
   legalCitationFingerprint,
   legalFirstAuthor,
   legalOpCitData,
-} from '../citations/legal-citation';
-import type { LegalFootnoteRepairRules } from '../profiles/profile-schema';
-import { normalize } from '../utils/helpers';
+} from '../citations/legal-citation.ts';
+import type { LegalFootnoteRepairRules } from '../profiles/profile-schema.ts';
+import { normalize } from '../utils/helpers.ts';
 
 export type LegalFootnoteConfidence = 'high' | 'medium' | 'low';
 

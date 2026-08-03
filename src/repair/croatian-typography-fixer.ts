@@ -4,8 +4,8 @@ import {
   paragraphFingerprint,
   xmlEncode,
   type TypographyCategory,
-} from '../analysis/typography-structure';
-import type { DocxXmlParts, FixerOutput } from './fixers';
+} from '../analysis/typography-structure.ts';
+import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
 export interface CroatianTypographyParams {
   version: 1;

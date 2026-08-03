@@ -1,5 +1,5 @@
-import { els, first, textOf } from '../utils/helpers';
-import { parseXml } from '../docx/parser';
+import { els, first, textOf } from '../utils/helpers.ts';
+import { parseXml } from '../docx/parser.ts';
 
 export type ElementKind = 'table' | 'figure' | 'chart';
 export type ElementConfidence = 'high' | 'medium' | 'low';

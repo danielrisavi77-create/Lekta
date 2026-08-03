@@ -55,7 +55,7 @@ import {
   linkDoiFixer,
   type LinkDoiFixParams,
 } from './fixers.ts';
-import { submissionMetadataFixer, type SubmissionMetadataFixParams } from './submission-metadata-fixer';
+import { submissionMetadataFixer, type SubmissionMetadataFixParams } from './submission-metadata-fixer.ts';
 import type { SectionNumberingTarget, ParagraphStyleFormattingRule, ParagraphFormattingTarget } from './xml-patch.ts';
 
 /** Poznati fixeri kao runtime konstanta: profile-validator provjerava clanstvo

@@ -1,8 +1,8 @@
-import type { CroatianTypographyRules } from '../analysis/typography-structure';
-import type { ConsistencyRules } from '../analysis/consistency-structure';
-import type { RequiredSectionRules, RequiredSectionProfileEntry } from '../analysis/required-sections-structure';
-import type { LinkRules } from '../analysis/link-doi-structure';
-import type { CrossFileSubmissionRules } from '../analysis/cross-file-submission-consistency';
+import type { CroatianTypographyRules } from '../analysis/typography-structure.ts';
+import type { ConsistencyRules } from '../analysis/consistency-structure.ts';
+import type { RequiredSectionRules, RequiredSectionProfileEntry } from '../analysis/required-sections-structure.ts';
+import type { LinkRules } from '../analysis/link-doi-structure.ts';
+import type { CrossFileSubmissionRules } from '../analysis/cross-file-submission-consistency.ts';
 
 /**
  * Tipovi profila i pravila (Option A).

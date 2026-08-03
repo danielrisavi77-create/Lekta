@@ -1,5 +1,5 @@
-import { legalFootnoteAnchorFingerprint, legalMarkerAnchorFingerprint, type LegalFootnoteOperationKind } from '../analysis/legal-footnote-structure';
-import type { DocxXmlParts, FixerOutput } from './fixers';
+import { legalFootnoteAnchorFingerprint, legalMarkerAnchorFingerprint, type LegalFootnoteOperationKind } from '../analysis/legal-footnote-structure.ts';
+import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
 export interface LegalFootnoteRepairParams {
   version: 1;

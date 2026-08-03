@@ -1,7 +1,7 @@
-import { extractCitationOccurrences, type CitationOccurrenceDetail } from '../citations/author-year';
-import type { CitationSyncRules } from '../profiles/profile-schema';
-import { normalize } from '../utils/helpers';
-import type { BibliographyEntry, BibliographyStructure } from './bibliography-structure';
+import { extractCitationOccurrences, type CitationOccurrenceDetail } from '../citations/author-year.ts';
+import type { CitationSyncRules } from '../profiles/profile-schema.ts';
+import { normalize } from '../utils/helpers.ts';
+import type { BibliographyEntry, BibliographyStructure } from './bibliography-structure.ts';
 
 export type SyncConfidence = 'high' | 'medium' | 'low';
 

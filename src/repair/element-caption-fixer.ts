@@ -1,6 +1,6 @@
-import { parseXml } from '../docx/parser';
-import { anchorFingerprintForXml, type ElementKind } from '../analysis/element-structure';
-import type { DocxXmlParts, FixerOutput } from './fixers';
+import { parseXml } from '../docx/parser.ts';
+import { anchorFingerprintForXml, type ElementKind } from '../analysis/element-structure.ts';
+import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
 export interface ElementCaptionFixElement {
   id: string;

@@ -1,5 +1,5 @@
-import { inspectorFingerprint } from '../analysis/final-document-inspector';
-import type { DocxXmlParts, FixerOutput } from './fixers';
+import { inspectorFingerprint } from '../analysis/final-document-inspector.ts';
+import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
 export interface FinalDocumentInspectorParams {
   version: 1;

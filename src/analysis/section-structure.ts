@@ -1,4 +1,4 @@
-import { attr } from '../utils/helpers';
+import { attr } from '../utils/helpers.ts';
 
 export type SectionOrientation = 'portrait' | 'landscape' | 'unknown';
 export type SectionNumberFormat = 'decimal' | 'lowerRoman' | 'upperRoman' | 'lowerLetter' | 'upperLetter' | string;

@@ -1,5 +1,5 @@
-import { extractBodyParagraphs, xmlDecode, xmlEncode } from '../analysis/typography-structure';
-import type { DocxXmlParts, FixerOutput } from './fixers';
+import { extractBodyParagraphs, xmlDecode, xmlEncode } from '../analysis/typography-structure.ts';
+import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
 export type LinkDoiAction = 'make-hyperlink' | 'normalize-doi' | 'repair-spacing' | 'remove-tracking' | 'replace-canonical-url' | 'remove-link-styling';
 

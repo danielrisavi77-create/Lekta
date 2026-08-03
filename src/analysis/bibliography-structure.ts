@@ -1,7 +1,7 @@
-import { extractCitations, extractReferences } from '../citations/author-year';
-import { parseReference } from '../citations/parse-reference';
-import type { CitationInput } from '../tools/citation';
-import { normalize } from '../utils/helpers';
+import { extractCitations, extractReferences } from '../citations/author-year.ts';
+import { parseReference } from '../citations/parse-reference.ts';
+import type { CitationInput } from '../tools/citation.ts';
+import { normalize } from '../utils/helpers.ts';
 
 export type BibliographyConfidence = 'high' | 'medium' | 'low';
 

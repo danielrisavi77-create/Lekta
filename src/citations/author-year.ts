@@ -7,7 +7,7 @@
  * Tipizirano na granici (`: any` za dinamicne citatne strukture i inline callbacke),
  * bez promjene ponasanja; golden snapshoti ostaju nepromijenjeni.
  */
-import { normalize, sectionName } from '../utils/helpers';
+import { normalize, sectionName } from '../utils/helpers.ts';
 
 function citationAuthor(raw: any){
  let a=String(raw||'').replace(/^[\s,;:]+|[\s,;:]+$/g,'').replace(/^(?:vidi|usp\.?|prema|navedeno\s+u)\s+/i,'').trim();

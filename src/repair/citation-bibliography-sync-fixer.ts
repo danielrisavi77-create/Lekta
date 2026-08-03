@@ -1,6 +1,6 @@
-import { citationAnchorFingerprint } from '../analysis/citation-bibliography-sync';
-import { bibliographyAnchorFingerprint } from '../analysis/bibliography-structure';
-import type { DocxXmlParts, FixerOutput } from './fixers';
+import { citationAnchorFingerprint } from '../analysis/citation-bibliography-sync.ts';
+import { bibliographyAnchorFingerprint } from '../analysis/bibliography-structure.ts';
+import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
 export interface CitationBibliographySyncParams {
   version: 1;

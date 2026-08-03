@@ -11,7 +11,7 @@
  * s veznikom "i"/"te", poglavlje u zborniku ("U: urednici (ur.), Knjiga (str. X-Y). Mjesto:
  * Izdavac") i propis ("Naziv. Narodne novine, 42/18"). Sto je izvan toga -> lowConfidence.
  */
-import type { CitationInput, SourceType } from '../tools/citation';
+import type { CitationInput, SourceType } from '../tools/citation.ts';
 
 export interface ParsedReference {
   type: SourceType;

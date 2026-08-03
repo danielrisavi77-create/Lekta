@@ -1,6 +1,6 @@
 import { buildTocFieldXml, documentHasTocField } from './xml-patch.ts';
-import { analyzeFieldIntegrity, fieldAnchorFingerprint, manualTocAnchorFingerprint, paragraphAnchorFingerprint, type FieldIntegrity } from '../analysis/field-integrity';
-import type { DocxXmlParts, FixerOutput } from './fixers';
+import { analyzeFieldIntegrity, fieldAnchorFingerprint, manualTocAnchorFingerprint, paragraphAnchorFingerprint, type FieldIntegrity } from '../analysis/field-integrity.ts';
+import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
 type ManualTocOperation = NonNullable<FieldIntegrityParams['manualToc']>[number];
 

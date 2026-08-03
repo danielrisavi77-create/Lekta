@@ -1,5 +1,5 @@
-import { bibliographyAnchorFingerprint } from '../analysis/bibliography-structure';
-import type { DocxXmlParts, FixerOutput } from './fixers';
+import { bibliographyAnchorFingerprint } from '../analysis/bibliography-structure.ts';
+import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
 export interface BibliographyRepairEntryTarget {
   id: string;

@@ -1,5 +1,5 @@
-import { sectionAnchorFingerprint } from '../analysis/section-structure';
-import type { DocxXmlParts, FixerOutput } from './fixers';
+import { sectionAnchorFingerprint } from '../analysis/section-structure.ts';
+import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
 export type SectionSurgeryOperationKind =
   | 'set-geometry'

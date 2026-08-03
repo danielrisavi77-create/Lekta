@@ -1,5 +1,5 @@
-import { normalize } from '../utils/helpers';
-import { analyzeFieldIntegrity } from './field-integrity';
+import { normalize } from '../utils/helpers.ts';
+import { analyzeFieldIntegrity } from './field-integrity.ts';
 
 export type FinalDocumentInspectorCategory =
   | 'tracking'

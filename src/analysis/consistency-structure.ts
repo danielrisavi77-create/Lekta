@@ -1,4 +1,4 @@
-import { editableNodes, extractBodyParagraphs, paragraphFingerprint, xmlDecode } from './typography-structure';
+import { editableNodes, extractBodyParagraphs, paragraphFingerprint, xmlDecode } from './typography-structure.ts';
 
 export type ConsistencyZone =
   | 'terminology'

@@ -1,6 +1,6 @@
-import { editableNodes, extractBodyParagraphs, paragraphFingerprint, xmlDecode, xmlEncode } from '../analysis/typography-structure';
-import type { ConsistencyZone } from '../analysis/consistency-structure';
-import type { DocxXmlParts, FixerOutput } from './fixers';
+import { editableNodes, extractBodyParagraphs, paragraphFingerprint, xmlDecode, xmlEncode } from '../analysis/typography-structure.ts';
+import type { ConsistencyZone } from '../analysis/consistency-structure.ts';
+import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
 export interface ConsistencyFixParams {
   version: 1;

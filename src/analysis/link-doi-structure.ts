@@ -1,4 +1,4 @@
-import { extractBodyParagraphs, paragraphFingerprint, xmlDecode } from './typography-structure';
+import { extractBodyParagraphs, paragraphFingerprint, xmlDecode } from './typography-structure.ts';
 
 export type LinkKind = 'url' | 'doi' | 'email' | 'unknown';
 export type LinkStatus = 'plain-text' | 'hyperlink-ok' | 'broken-spacing' | 'invalid-format' | 'redirects' | 'unreachable' | 'display-target-mismatch' | 'tracking-parameters' | 'canonical-candidate' | 'unsupported';

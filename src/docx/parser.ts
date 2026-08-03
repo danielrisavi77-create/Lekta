@@ -11,7 +11,7 @@
  * cita pohranjene (method 0) zapise izravno; parseXml koristi globalni DOMParser
  * (u testu podmetnut @xmldom/xmldom, vidi tests/setup/xml-dom.ts).
  */
-import { attr, els, first, direct } from '../utils/helpers';
+import { attr, els, first, direct } from '../utils/helpers.ts';
 
 interface ZipEntry {
   name: string;

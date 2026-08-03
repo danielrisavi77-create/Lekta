@@ -1,5 +1,5 @@
-import { anchorFingerprintForXml, type ElementKind } from '../analysis/element-structure';
-import type { DocxXmlParts, FixerOutput } from './fixers';
+import { anchorFingerprintForXml, type ElementKind } from '../analysis/element-structure.ts';
+import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
 export interface TableFigureRescueTable {
   id: string;

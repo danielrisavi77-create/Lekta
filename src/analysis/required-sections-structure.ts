@@ -1,4 +1,4 @@
-import { extractBodyParagraphs, paragraphFingerprint, xmlDecode } from './typography-structure';
+import { extractBodyParagraphs, paragraphFingerprint, xmlDecode } from './typography-structure.ts';
 
 export type RequiredSectionKind =
   | 'summary-hr'

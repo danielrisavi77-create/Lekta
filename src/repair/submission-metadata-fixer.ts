@@ -1,5 +1,5 @@
-import { submissionMetadataFingerprint } from '../analysis/cross-file-submission-consistency';
-import type { DocxXmlParts, FixerOutput } from './fixers';
+import { submissionMetadataFingerprint } from '../analysis/cross-file-submission-consistency.ts';
+import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
 export interface SubmissionMetadataFixParams {
   version: 1;

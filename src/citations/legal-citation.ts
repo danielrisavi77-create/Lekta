@@ -8,8 +8,8 @@
  * Tipizirano na granici (`: any` za dinamicne citatne strukture i inline callbacke),
  * bez promjene ponasanja; golden snapshoti ostaju nepromijenjeni.
  */
-import { normalize, clamp } from '../utils/helpers';
-import { makeCheck, issue } from '../scoring/checks';
+import { normalize, clamp } from '../utils/helpers.ts';
+import { makeCheck, issue } from '../scoring/checks.ts';
 
 export function legalYears(text: any){return[...String(text||'').matchAll(/\b(?:18|19|20)\d{2}\b/g)].map(m=>m[0])}
 export function legalFirstAuthor(text: any){const clean=String(text||'').replace(/^(?:Usp\.?|Vidi:?|Cf\.?|Opširnije:?|Amplius\.?)\s*/i,'').trim();const m=clean.match(/^([\p{Lu}][\p{L}'’\-]+)(?:\s+[\p{Lu}][\p{L}'’\-]+)?\s*,/u);if(m)return m[1];const org=clean.match(/^((?:European|Europska|Vijeće|Komisija|OECD|UN|Ujedinjeni|Republika|Ministarstvo|Hrvatska)[^,]{0,80}),/i);return org?org[1].trim():''}
