@@ -19,6 +19,14 @@ const SUPPLEMENTAL_CHECK_ID_ALIASES: Array<{ id: string; patterns: RegExp[] }> =
   { id: 'footnote-size', patterns: [/veličina fusnota/i, /velicina fusnota/i] },
 ];
 
+/** Detailed runtime checks that are deterministic children of one authored rule. */
+const AUTHORED_RULE_EQUIVALENTS: Record<string, string[]> = {
+  'heading-format': ['heading-rules'],
+  'page-number-start': ['page-numbers'],
+  'page-number-scheme': ['page-numbers'],
+  'page-number-alignment': ['page-numbers'],
+};
+
 function slug(value: string): string {
   return String(value || '')
     .replace(/[Đđ]/g, 'd')
@@ -68,11 +76,14 @@ function checkIdForIssue(issue: Issue, checks: Check[]): string {
 }
 
 function preferredRuleEntry(checkId: string, entries: RuleEntry[]): RuleEntry | undefined {
-  const candidates = entries.filter(entry => entry.checkId === checkId);
+  const authoredIds = [checkId, ...(AUTHORED_RULE_EQUIVALENTS[checkId] || [])];
+  const candidates = entries.filter(entry => entry.checkId && authoredIds.includes(entry.checkId));
   if (!candidates.length) return undefined;
   return [...candidates].sort((a, b) => {
+    const exactA = a.checkId === checkId ? 0 : 1;
+    const exactB = b.checkId === checkId ? 0 : 1;
     const rank = (entry: RuleEntry) => entry.status === 'verified' ? 0 : entry.status === 'advisory' ? 1 : 2;
-    return rank(a) - rank(b) || String(a.ruleId).localeCompare(String(b.ruleId));
+    return exactA - exactB || rank(a) - rank(b) || String(a.ruleId).localeCompare(String(b.ruleId));
   })[0];
 }
 
