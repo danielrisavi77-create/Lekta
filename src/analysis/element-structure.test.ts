@@ -42,3 +42,35 @@ describe('element-structure', () => {
     expect(result.candidates[0].kind).toBe('table');
   });
 });
+
+describe('element-structure: jedinstvenost identiteta', () => {
+  /**
+   * RE-56. Identitet elementa se gradio kao `element-<vrsta>-<otisak sadrzaja>`, pa su DVIJE
+   * bajt-identicne tablice dobivale ISTI id. element-caption-fixer takav recept odbija
+   * (`ids.has(element.id)`) i vraca 'invalid-params' za CIJELI popravak, dakle rad ostane bez
+   * ijednog natpisa zbog dva ponovljena predloska tablice.
+   *
+   * Otisak sadrzaja i dalje sluzi provjeri sidra; za IDENTITET mora se dodati redni broj, koji
+   * je jedinstven po vrsti i deterministican jer se broji redom kroz tijelo dokumenta.
+   */
+  it('dvije bajt-identicne tablice dobivaju razlicite id-eve', () => {
+    const table = '<w:tbl><w:tr><w:tc><w:p><w:r><w:t>ista celija</w:t></w:r></w:p></w:tc></w:tr></w:tbl>';
+    const doc = parseXml(
+      '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>' +
+        '<w:p><w:r><w:t>Tablica 1. Prvi predlozak</w:t></w:r></w:p>' + table +
+        '<w:p><w:r><w:t>Tablica 2. Drugi predlozak</w:t></w:r></w:p>' + table +
+        '</w:body></w:document>',
+      'test',
+    );
+    const result = analyzeElementStructure(doc, [
+      { index: 1, text: 'Tablica 1. Prvi predlozak' },
+      { index: 2, text: 'ista celija' },
+      { index: 3, text: 'Tablica 2. Drugi predlozak' },
+      { index: 4, text: 'ista celija' },
+    ] as never);
+
+    const ids = result.candidates.map((candidate) => candidate.id);
+    expect(ids.length, 'obje tablice moraju biti prepoznate').toBe(2);
+    expect(new Set(ids).size, `id-evi moraju biti jedinstveni, dobiveno: ${ids.join(', ')}`).toBe(2);
+  });
+});

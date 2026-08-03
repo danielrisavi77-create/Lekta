@@ -54,3 +54,30 @@ describe('element-caption-fixer', () => {
     expect(rejected.skippedReasons.caption).toBe('no-target');
   });
 });
+
+describe('element-caption-fixer: vidljivi tekst natpisa', () => {
+  /**
+   * RE-57. Oznaka i broj bili su odvojeni razmakom u `<w:t>` BEZ xml:space="preserve", pa ga XML
+   * normalizacija odbaci kao rubni razmak. Word je natpis prikazivao kao "Tablica1." umjesto
+   * "Tablica 1.". Nadjeno otvaranjem izlaza fixera pravim Wordom uz osvjezavanje polja; u samom
+   * XML-u se ne vidi, jer je razmak fizicki zapisan.
+   *
+   * Test cita SPOJENI tekst odlomka, dakle ono sto korisnik vidi, a ne sirovi XML.
+   */
+  it('natpis zadrzava razmak izmedju oznake i broja', async () => {
+    const result = await applyFixers(await docx(), [{
+      fixerId: 'element-caption-fixer', ruleId: 'caption',
+      params: { version: 1, elements: [target()], labels: { table: 'Tablica', figure: 'Slika', chart: 'Grafikon' } },
+    }]);
+    expect(result.changelog).toHaveLength(1);
+    const entries = await readZip(result.docxBytes);
+    const xml = new TextDecoder().decode(entries.find((entry) => entry.name === 'word/document.xml')!.data);
+
+    const caption = xml.match(/<w:p>(?:(?!<\/w:p>)[\s\S])*?SEQ Tablica[\s\S]*?<\/w:p>/)?.[0] ?? '';
+    expect(caption, 'natpis mora postojati').not.toBe('');
+    const visible = [...caption.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)].map((match) => match[1]).join('');
+    expect(visible).toBe('Tablica 1. Rezultati ankete');
+    // Razmak prezivi samo uz izricito ocuvanje; bez njega Word prikaze "Tablica1.".
+    expect(caption).toContain('<w:t xml:space="preserve">Tablica </w:t>');
+  });
+});

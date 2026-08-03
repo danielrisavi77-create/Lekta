@@ -220,7 +220,12 @@ export function analyzeElementStructure(doc: Document, paragraphs: readonly Para
     }
     const fingerprint = anchorFingerprintForElement(kind, node);
     const ordinal = ++counters[kind];
-    const id = `element-${kind}-${fingerprint}`;
+    // RE-56: redni broj MORA biti dio identiteta. Otisak se racuna iz sadrzaja, pa su dvije
+    // bajt-identicne tablice (npr. dvaput ponovljen prazan predlozak) dobivale isti id, a
+    // element-caption-fixer takav recept odbija u cijelosti ('invalid-params') pa rad ostane bez
+    // ijednog natpisa. Otisak i dalje sluzi provjeri sidra; ordinal daje identitet i
+    // deterministican je jer se broji redom kroz tijelo dokumenta.
+    const id = `element-${kind}-${ordinal}-${fingerprint}`;
     const aboveNode = bodyChildIndex > 0 ? children[bodyChildIndex - 1] : null;
     const belowNode = bodyChildIndex + 1 < children.length ? children[bodyChildIndex + 1] : null;
     const captionCandidates: Array<{ node: Element; position: 'above' | 'below' }> = [];

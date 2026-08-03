@@ -120,8 +120,11 @@ function fieldXml(label: string, ordinal: number, bookmark: string, description:
   const suffix = description.trim() ? ` ${escapeXml(description.trim())}` : '';
   const pPr = `<w:pPr><w:pStyle w:val="Caption"/>${style?.align ? `<w:jc w:val="${style.align}"/>` : ''}</w:pPr>`;
   const rPr = `${style?.font ? `<w:rFonts w:ascii="${escapeXml(style.font)}" w:hAnsi="${escapeXml(style.font)}"/>` : ''}${style?.sizePt != null ? `<w:sz w:val="${Math.round(style.sizePt * 2)}"/>` : ''}${style?.bold === false ? '' : '<w:b/>'}${style?.italic === true ? '<w:i/>' : ''}`;
+  // RE-57: razmak izmedju oznake i broja MORA biti u <w:t xml:space="preserve">. Bez njega ga XML
+  // normalizacija odbaci kao rubni razmak, pa Word prikaze "Tablica1." umjesto "Tablica 1."
+  // (izmjereno otvaranjem izlaza fixera pravim Wordom; opis iza tocke to je vec imao).
   const switchText = numbering === 'chapter' ? ' \\s 1 \\* ARABIC' : ' \\* ARABIC';
-  return `<w:p>${pPr}<w:bookmarkStart w:id="BOOKMARK_ID" w:name="${safeBookmark}"/><w:r><w:rPr>${rPr}</w:rPr><w:t>${safeLabel} </w:t></w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> SEQ ${safeLabel}${switchText} </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>${ordinal}</w:t></w:r><w:r><w:fldChar w:fldCharType="end"/></w:r><w:r><w:t>.</w:t></w:r><w:r><w:t xml:space="preserve">${suffix}</w:t></w:r><w:bookmarkEnd w:id="BOOKMARK_ID"/></w:p>`;
+  return `<w:p>${pPr}<w:bookmarkStart w:id="BOOKMARK_ID" w:name="${safeBookmark}"/><w:r><w:rPr>${rPr}</w:rPr><w:t xml:space="preserve">${safeLabel} </w:t></w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> SEQ ${safeLabel}${switchText} </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>${ordinal}</w:t></w:r><w:r><w:fldChar w:fldCharType="end"/></w:r><w:r><w:t>.</w:t></w:r><w:r><w:t xml:space="preserve">${suffix}</w:t></w:r><w:bookmarkEnd w:id="BOOKMARK_ID"/></w:p>`;
 }
 
 function sourceXml(source: string): string {
