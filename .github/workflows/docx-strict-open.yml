@@ -1,0 +1,56 @@
+# Tier 1: otvara li se svaki .docx pod NEOVISNOM implementacijom (python-docx + lxml).
+#
+# Zaseban od check.yml namjerno: python ovisnost ne smije uci u tvrdi build gate (`npm run check`
+# ostaje cisti Node lanac). Ovdje se ne mjeri oblikovanje, samo je li paket valjan; oblikovanje
+# provjerava Tier 2 (scripts/word-verify/check.ps1), koji trazi Word i vrti se rucno na Windowsu.
+#
+# Provjeravaju se OBA kraja: ulazni fixturi i ono sto Repair Engine iz njih ISPUSTI. Drugo je
+# vaznije, jer je bas izlaz ono sto ide kupcu (vidi RE-47).
+name: docx-strict-open
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  strict-open:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Node 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Python 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Instaliraj ovisnosti
+        run: |
+          npm ci
+          pip install python-docx lxml
+
+      - name: Ulazni fixturi se otvaraju
+        run: npm run verify:strict-open
+
+      - name: Popravi korpus i provjeri IZLAZ
+        run: |
+          npm run repair-real-corpus:review
+          python scripts/verify-docx/strict-open.py .artifacts/lekta-real-corpus-review
+
+      - name: Upload popravljene pakete kad nesto padne
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: strict-open-failures
+          path: .artifacts/lekta-real-corpus-review
+          if-no-files-found: warn

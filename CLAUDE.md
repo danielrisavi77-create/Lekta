@@ -134,6 +134,13 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
   pa odgovor nosi samo popravljeni docx.
 - Postenje: dok pohrana traje (`storagePending`), sucelje NE smije tvrditi da je spremljeno;
   promasaj u korpusu NIKAD nije dokaz da izvor ne postoji.
+- Popravljeni paket se dokazuje u CETIRI razine (`docs/REAL_CORPUS_TESTING.md`, Tier model).
+  `npm run check` je samo Tier 0 (vlastiti strogi skener `src/repair/package-integrity.ts`) i NE
+  otvara dokument nijednim stvarnim uredivacem. Prije deploya repair motora rucno pokreni i
+  `npm run verify:strict-open` (python-docx) te `npm run verify:word` / `verify:word:worst`
+  (Word COM, `OpenAndRepair=false`, Windows). Oracle POSTOJI u `scripts/word-verify/`, ne gradi ga
+  ispocetka. KLJUC: `@xmldom/xmldom` ne baca i ne stvara `parsererror` na neispravnom XML-u, pa
+  provjera oslonjena na `parseXml` daje lazno zeleno (dokaz: `tests/repair-package-integrity.test.ts`).
 
 ## Mapa datoteka
 

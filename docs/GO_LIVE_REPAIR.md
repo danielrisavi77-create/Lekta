@@ -52,6 +52,23 @@ Ostaje niže.
 
 ---
 
+## A0. Ručni gate prije svakog deploya repair motora
+
+`npm run check` (Tier 0) dokazuje da je izlazni paket valjan XML i da nijedan dio nije nestao,
+ali **ne otvara dokument nijednim stvarnim uredivačem**. Prije nego što izmjena Repair Enginea ode
+na produkciju, na Windows stroju s Wordom pokreni i:
+
+```bash
+npm run verify:strict-open   # Tier 1: python-docx + lxml nad ulaznim fixturima
+npm run verify:word          # Tier 2: Word otvara s OpenAndRepair=false i mjeri stvarne vrijednosti
+npm run verify:word:worst    # Tier 2: dokument najgoreg slučaja (naslovnica, tablica, slika, fusnote)
+```
+
+Sva tri moraju vratiti izlazni kod 0. Puni Tier model i razlog zašto Tier 0 sam po sebi nije
+dovoljan su u `docs/REAL_CORPUS_TESTING.md`.
+
+---
+
 ## A. Deploy Edge funkcija (`source-check` PA `repair-docx`)
 
 Bundle je prevelik za MCP inline, pa preko Supabase CLI-ja (bundla iz izvora sam):

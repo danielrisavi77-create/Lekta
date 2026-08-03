@@ -30,7 +30,17 @@ $ciljPoravnanje = 3     # wdAlignParagraphJustify
 $ciljMarginaL = 3.0
 $ciljMarginaT = 2.5
 
-$docs = Get-ChildItem $OutDir -Filter '*.docx' | Where-Object { $_.Name -notlike '*-popravljen.docx' }
+# RE-52: ova skripta mjeri DRUGI odlomak kao tijelo teksta (vidi komentar nize), sto vrijedi samo
+# za a/b/c iz make-fixtures.ps1 (naslov + tijelo). Dokument najgoreg slucaja pocinje NASLOVNICOM
+# ciji je drugi odlomak namjerno centriran, pa ga je ova skripta prijavljivala kao "poravnanje NE (1)"
+# iako je centrirana naslovnica ISPRAVAN ishod. Za njega postoji vlastiti verifikator
+# (check-worst-case.ps1), pa se ovdje izricito preskace umjesto da daje lazan pad.
+$docs = Get-ChildItem $OutDir -Filter '*.docx' |
+  Where-Object { $_.Name -notlike '*-popravljen.docx' -and $_.BaseName -ne 'z-najgori-slucaj' }
+$preskoceni = Get-ChildItem $OutDir -Filter '*.docx' | Where-Object { $_.BaseName -eq 'z-najgori-slucaj' }
+foreach ($p in $preskoceni) {
+  Write-Output "PRESKACEM $($p.BaseName): ima naslovnicu, provjerava ga check-worst-case.ps1."
+}
 $rows = @()
 foreach ($d in $docs) {
   $out = Join-Path $OutDir ($d.BaseName + '-popravljen.docx')
