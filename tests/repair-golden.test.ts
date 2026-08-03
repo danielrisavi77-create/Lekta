@@ -33,13 +33,33 @@ import {
   headingFormatRepairableItem,
   headingCaseRepairableItem,
   footnoteTypographyRepairableItem,
+  bibliographyRepairableItem,
+  citationBibliographySyncRepairableItem,
+  consistencyRepairableItem,
+  croatianTypographyRepairableItem,
+  elementCaptionRepairableItem,
+  fieldIntegrityRepairableItem,
+  finalDocumentInspectorRepairableItem,
+  headingStructureRepairableItem,
+  introSectionRepairableItem,
+  legalFootnoteRepairableItem,
+  linkDoiRepairableItem,
+  pageNumberingRepairableItem,
+  requiredSectionsRepairableItem,
+  sectionSurgeryRepairableItem,
+  tableFigureRescueRepairableItem,
+  titlePageRepairableItem,
+  tocFieldRepairableItem,
 } from '../src/ui/repair-items';
-import { resolveProfile } from '../src/analysis/golden-entry';
+import { repairEntriesFor } from '../src/profiles/profile-runtime-maps';
+import { selectTemplate } from '../src/title-pages/template-loader';
+import { analyzeFixture, resolveProfile } from '../src/analysis/golden-entry';
 import { assertPackageIntact } from './helpers/docx-package-assert';
 import { singleSectionDocx, multiSectionDocx } from './helpers/synthetic-docx';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const FIXTURE_DIR = join(here, 'fixtures', 'docx');
+const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
 const DEEP_CAPABLE: ReadonlySet<FixerId> = new Set<FixerId>([
   'font-fixer',
@@ -277,10 +297,57 @@ function fixtureProfileId(fileName: string): string | undefined {
   }
 }
 
+/**
+ * B0: params za ASISTIRANE fixere izvedeni IZ ANALIZE dokumenta, ne iz profila.
+ *
+ * Zasto je ovo trebalo: paramsForFixer iznad ima `default: return null`, a SYNTHETIC_PARAMS ne
+ * sadrzi ovih 18 fixera, pa je snapshot za njih zapisivao "nema-cilja-u-profilu" nad SVAKIM
+ * dokumentom. Poruka je bila zavaravajuca: profil s tim nema veze, harness ih jednostavno nije
+ * znao izgraditi. Mjereno na baselineu: 18 od 31 fixera nije imalo NIJEDNU stvarnu primjenu,
+ * a 14 ih nije bilo ni ponudjeno.
+ *
+ * Njihovi params ovise o dokumentu (fingerprinti odlomaka, ID-jevi polja, indeksi sekcija), pa
+ * ih fiksni map principijelno ne moze pokriti. Isti put koji koristi zivi panel (src/ui/app.ts)
+ * i closed-loop harness: analiziraj dokument pa iz rezultata izvuci RepairableItem.
+ */
+const ASSISTED_BUILDERS: Partial<Record<FixerId, (result: any, profile: any) => Array<{ params: unknown }>>> = {
+  'bibliography-repair-fixer': (r, p) => bibliographyRepairableItem(r, p),
+  'citation-bibliography-sync-fixer': (r, p) => citationBibliographySyncRepairableItem(r, p),
+  'consistency-fixer': (r) => consistencyRepairableItem(r),
+  'croatian-typography-fixer': (r) => croatianTypographyRepairableItem(r),
+  'element-caption-fixer': (r, p) => elementCaptionRepairableItem(r, p),
+  'field-integrity-fixer': (r) => fieldIntegrityRepairableItem(r),
+  'final-document-inspector-fixer': (r) => finalDocumentInspectorRepairableItem(r),
+  'heading-style-fixer': (r, p) => headingStructureRepairableItem(r, p),
+  'legal-footnote-repair-fixer': (r, p) => legalFootnoteRepairableItem(r, p),
+  'link-doi-fixer': (r, p) => linkDoiRepairableItem(r, p),
+  'page-numbering-fixer': (r, p) => pageNumberingRepairableItem(r, p),
+  'required-section-fixer': (r, p) => requiredSectionsRepairableItem(r, p),
+  'section-insert-fixer': (r, p) => introSectionRepairableItem(r, p),
+  'section-surgery-fixer': (r, p) => sectionSurgeryRepairableItem(r, p),
+  'table-figure-rescue-fixer': (r, p) => tableFigureRescueRepairableItem(r, p),
+  'title-page-fixer': (r, p) =>
+    titlePageRepairableItem(r, p, selectTemplate(r?.settings?.selectionIds?.unit || r?.selection?.unit, r?.settings?.workType || r?.selection?.workType || 'final').template),
+  'toc-field-fixer': (r, p) => tocFieldRepairableItem(r, p),
+  // submission-metadata-fixer namjerno IZOSTAVLJEN: crossFileSubmissionRepairableItem trazi
+  // result.details.crossFileSubmissionConsistency, koje gradi privatna funkcija u src/ui/app.ts
+  // iz PDF-a predaje (drugi dokument). Golden ima samo .docx, pa bi grana uvijek bila prazna;
+  // laznu granu koja nista ne moze naci ne treba dodavati. Pokriven je jedinicno.
+};
+
+function assistedParams(fixerId: FixerId, result: unknown, profile: unknown): Record<string, unknown> | null {
+  const build = ASSISTED_BUILDERS[fixerId];
+  if (!build) return null;
+  const items = build(result, profile);
+  return items.length > 0 ? (items[0].params as Record<string, unknown>) : null;
+}
+
 interface Case {
   name: string;
   bytes: Uint8Array;
   paramsFor: (fixerId: FixerId) => Record<string, unknown> | null;
+  /** Razlikuje "profil nema cilj" od "dokument nema sto popraviti" (samo za citljivost snapshota). */
+  hasAnalysis?: boolean;
 }
 
 async function buildCases(): Promise<Case[]> {
@@ -288,9 +355,20 @@ async function buildCases(): Promise<Case[]> {
   for (const fileName of discoverRealFixtures()) {
     const profileId = fixtureProfileId(fileName);
     if (!profileId) continue;
-    const profile = resolveProfile(profileId);
+    const profile = resolveProfile(profileId) as Record<string, unknown>;
     const bytes = new Uint8Array(readFileSync(join(FIXTURE_DIR, fileName)));
-    cases.push({ name: fileName, bytes, paramsFor: (id) => paramsForFixer(id, profile) });
+    // BAKANI ruleEntries MORAJU biti na profilu PRIJE poziva asistiranih buildera: sedam ih
+    // (element-caption, bibliography, citation-sync, legal-footnote, table-figure-rescue,
+    // section-surgery, required-sections) cita profile.ruleEntries izravno. Bez ovoga bi grana
+    // uvijek bila prazna, ma koliko podataka dokument imao. Isti wiring kao src/ui/app.ts.
+    profile.ruleEntries = repairEntriesFor(profileId);
+    const analyzed = await analyzeFixture(new File([bytes], fileName, { type: DOCX_MIME }), { profileId });
+    cases.push({
+      name: fileName,
+      bytes,
+      hasAnalysis: true,
+      paramsFor: (id) => paramsForFixer(id, profile) ?? assistedParams(id, analyzed, profile),
+    });
   }
   // Multi-section: naslovnica (sekcija 0) -> rimski start=1, tijelo od Uvoda (sekcija 1) ->
   // arapski start=1. Isti targeti koje bi sectionNumberingTargets izracunao iz granice Uvoda.
@@ -347,7 +425,12 @@ describe('Repair golden harness', () => {
       for (const fixerId of FIXER_IDS) {
         const params = c.paramsFor(fixerId);
         if (!params) {
-          perFixture[fixerId] = { params: 'nema-cilja-u-profilu' };
+          // Za analizirane dokumente razlog vise nije nuzno profil: asistirani fixer moze biti
+          // ponudjen a ne naci cilj U DOKUMENTU. Snapshot to razlikuje da se ne cita krivo.
+          perFixture[fixerId] =
+            c.hasAnalysis && ASSISTED_BUILDERS[fixerId]
+              ? { params: 'nema-stavke-za-ovaj-dokument' }
+              : { params: 'nema-cilja-u-profilu' };
           continue;
         }
         // Shallow
