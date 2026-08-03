@@ -11,6 +11,15 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { applyFixers, type FixerRequest } from '../../src/repair/apply-fixers.ts';
 import { readZip } from '../../src/repair/zip-codec.ts';
+import { installXmlDomParser } from '../../src/docx/xml-dom-install.ts';
+import { analyzeFixture } from '../../src/analysis/golden-entry.ts';
+import {
+  croatianTypographyRepairableItem,
+  fieldIntegrityRepairableItem,
+  finalDocumentInspectorRepairableItem,
+} from '../../src/ui/repair-items.ts';
+
+installXmlDomParser(true);
 
 // Tipican profil: Times New Roman 12, prored 1,5, obostrano, margine 3/2,5 cm, A4.
 // POZOR na jedinice: margins/paper-size primaju CENTIMETRE, font prima PT, prored MNOZITELJ.
@@ -48,7 +57,40 @@ if (!inPath || !outPath) {
 
 const bytes = new Uint8Array(readFileSync(inPath));
 const before = await readZip(bytes);
-const result = await applyFixers(bytes, REQUESTS);
+
+/**
+ * Asistirani fixeri koji NE trebaju profilno pravilo nego samo analizu dokumenta. Bez njih je
+ * Word oracle mjerio samo 11 fiksnih pravila, dakle uzi skup nego sto korisnik stvarno dobije.
+ *
+ * Namjerno se uzimaju ZADANI params iz obrasca, bez simulirane potvrde: ovo mjeri ono sto se
+ * dogodi kad korisnik ne dira nijednu kvacicu, a to je i najcesci stvarni scenarij. Potvrdjenu
+ * granu mjeri golden matrica (kljuc `<fixerId>(potvrdjeno)`).
+ */
+async function assistedRequests(): Promise<FixerRequest[]> {
+  try {
+    const file = new File([bytes], inPath, {
+      type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    });
+    const result = await analyzeFixture(file);
+    const items = [
+      ...croatianTypographyRepairableItem(result),
+      ...fieldIntegrityRepairableItem(result),
+      ...finalDocumentInspectorRepairableItem(result),
+    ];
+    return items.map((item) => ({
+      ruleId: item.ruleId,
+      fixerId: item.fixerId,
+      params: item.params as Record<string, unknown>,
+    })) as FixerRequest[];
+  } catch (error) {
+    // Analiza ne smije srusiti oracle; bez nje se i dalje mjeri fiksni skup pravila.
+    console.error(`upozorenje: analiza nije uspjela, asistirani fixeri se preskacu (${String(error)})`);
+    return [];
+  }
+}
+
+const assisted = await assistedRequests();
+const result = await applyFixers(bytes, [...REQUESTS, ...assisted]);
 writeFileSync(outPath, result.docxBytes);
 const after = await readZip(result.docxBytes);
 
@@ -60,6 +102,14 @@ const same = (a?: Uint8Array, b?: Uint8Array): boolean => {
   return true;
 };
 
+/** dc:title i dc:creator iz docProps/core.xml; '-' kad dijela nema. */
+function coreProps(data?: Uint8Array): { naslov: string; autor: string } {
+  if (!data) return { naslov: '-', autor: '-' };
+  const xml = new TextDecoder().decode(data);
+  const pick = (tag: string) => new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`).exec(xml)?.[1]?.trim() ?? '';
+  return { naslov: pick('dc:title') || '-', autor: pick('dc:creator') || '-' };
+}
+
 const lost = [...beforeMap.keys()].filter((n) => !afterMap.has(n));
 const added = [...afterMap.keys()].filter((n) => !beforeMap.has(n));
 const changed = [...beforeMap.keys()].filter((n) => afterMap.has(n) && !same(beforeMap.get(n), afterMap.get(n)));
@@ -68,8 +118,16 @@ console.log(JSON.stringify({
   ulaz: inPath,
   dijelovaPrije: before.length,
   dijelovaPoslije: after.length,
+  asistiraniZahtjevi: assisted.map((request) => request.fixerId),
+  // Autor i naslov iz docProps/core.xml, cita se IZ PAKETA a ne preko Worda: COM
+  // BuiltInDocumentProperties je u ovom okruzenju null, pa bi provjera bila vakuozna.
+  docPropsPrije: coreProps(beforeMap.get('docProps/core.xml')),
+  docPropsPoslije: coreProps(afterMap.get('docProps/core.xml')),
   primijenjeno: result.changelog.map((c) => c.ruleId),
   preskoceno: result.skipped,
+  // Zasto je nesto preskoceno: bez ovoga se 'no-target' i 'stale-anchor' ne razlikuju,
+  // a to je upravo razlika izmedju "nema sto raditi" i "promasio je metu" (RE-46, RE-55).
+  razlozi: result.skippedReasons,
   izgubljeniDijelovi: lost,
   dodaniDijelovi: added,
   promijenjeniDijelovi: changed,

@@ -60,6 +60,17 @@ function Measure-Doc {
     # Naslov 1. razine ("Uvod"): tekst mora postati velikim slovima, a tijelo NE.
     NaslovTekst  = [string]$(($doc.Paragraphs | Where-Object { $_.Range.Text -match '^Uvod|^UVOD' } | Select-Object -First 1).Range.Text).Trim()
     TijeloTekst  = [string]$doc.Paragraphs.Item($bodyIdx).Range.Text.Trim()
+    # Dodano uz fazu B: strukture koje popravak NIKAD ne smije izgubiti, a koje se ne vide
+    # ni u tekstu ni u oblikovanju. Broj polja pada tiho ako fixer razbije fldChar par;
+    # zaglavlja i podnozja nestanu kad se sekcija prepise; bookmarkovi nose ciljeve
+    # unakrsnih uputa i sadrzaja, pa njihov gubitak pokvari TOC bez ijedne vidljive promjene.
+    Polja        = [int]$doc.Fields.Count
+    Bookmarkova  = [int]$doc.Bookmarks.Count
+    Zaglavlja    = [int]$(($doc.Sections | ForEach-Object { $_.Headers } | Where-Object { $_.Exists }).Count)
+    Podnozja     = [int]$(($doc.Sections | ForEach-Object { $_.Footers } | Where-Object { $_.Exists }).Count)
+    # docProps se NE cita ovdje: BuiltInDocumentProperties je u ovom Word/PowerShell okruzenju
+    # null (provjereno), pa bi usporedba bila vakuozno zelena. Autora javlja repair.mts izravno
+    # iz paketa (polje docPropsAutor), sto je i pouzdanije i radi izvan Windowsa.
   }
   $doc.Close([int]0)
   return $m
@@ -123,6 +134,22 @@ Check 'Dijakritika'       $prije.Dijakritika  $poslije.Dijakritika  $null -Prese
 Check 'Naslovnica redak'  $prije.Naslovnica   $poslije.Naslovnica   $null -Preserve
 # Zahvat u tekst smije dirati SAMO naslove: tijelo rada mora ostati slovo u slovo isto.
 Check 'Tekst tijela'      $prije.TijeloTekst  $poslije.TijeloTekst  $null -Preserve
+# Strukture koje nestaju TIHO (ne vide se ni u tekstu ni u oblikovanju).
+Check 'Broj polja'        $prije.Polja        $poslije.Polja        $null -Preserve
+Check 'Bookmarkova'       $prije.Bookmarkova  $poslije.Bookmarkova  $null -Preserve
+Check 'Zaglavlja'         $prije.Zaglavlja    $poslije.Zaglavlja    $null -Preserve
+Check 'Podnozja'          $prije.Podnozja     $poslije.Podnozja     $null -Preserve
+# docProps iz PAKETA (repair.mts), jer COM BuiltInDocumentProperties ovdje ne radi.
+# Autor SMIJE nestati samo ako je primijenjen final-document-inspector, koji po zadanom cisti
+# privatne metapodatke; bez njega je gubitak autorstva regresija. Ova je razlika i otkrivena
+# prvim pokretanjem: autor je pao s 'PC' na prazno, i to je bilo ISPRAVNO ponasanje.
+$ciscenjeMeta = $res.primijenjeno -contains 'final-document-inspector-assisted'
+if ($ciscenjeMeta) {
+  Check 'docProps autor ocisc.' $res.docPropsPrije.autor $res.docPropsPoslije.autor '-'
+} else {
+  Check 'docProps autor'    $res.docPropsPrije.autor  $res.docPropsPoslije.autor  $null -Preserve
+}
+Check 'docProps naslov'   $res.docPropsPrije.naslov $res.docPropsPoslije.naslov $null -Preserve
 
 Write-Output ''
 Write-Output "Odlomaka: $($prije.Odlomaka) -> $($poslije.Odlomaka) (visak praznih u TIJELU se smije saziti)"
