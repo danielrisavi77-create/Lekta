@@ -3871,7 +3871,7 @@
         "margins-fixer",
         "paper-size-fixer"
       ],
-      "realDocxSampleCount": 2,
+      "realDocxSampleCount": 3,
       "profilesWithoutRealDocx": [
         "fer-zavrsni",
         "fer-doktorski"
@@ -3880,7 +3880,7 @@
         "profileCoveragePassCount": 3,
         "profileCoverageFailCount": 0,
         "realCorpusPassCount": 0,
-        "realCorpusReviewCount": 2,
+        "realCorpusReviewCount": 3,
         "realCorpusNoOpCount": 0,
         "realCorpusFailCount": 0,
         "syntheticClosedLoopNotRunCount": 3
@@ -3918,14 +3918,14 @@
           "templateIds": [
             "basic-text-styles"
           ],
-          "realDocxSampleCount": 2,
+          "realDocxSampleCount": 3,
           "automaticTests": {
             "profileCoverage": "pass",
             "realCorpus": "review",
             "syntheticClosedLoop": "not-run"
           },
           "realCorpusOutcomes": {
-            "review": 2
+            "review": 3
           },
           "manualReviewReasons": [
             "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
@@ -22310,13 +22310,13 @@
     "profileCount": 407,
     "offeredOptionCount": 1752,
     "mappedOptionCount": 1752,
-    "realDocxSampleCount": 8,
+    "realDocxSampleCount": 9,
     "facultiesWithRealDocx": 6,
     "facultiesWithoutRealDocx": 125,
     "profilesWithoutRealDocx": 401,
     "profileCoverageFailCount": 0,
     "realCorpusPassCount": 0,
-    "realCorpusReviewCount": 5,
+    "realCorpusReviewCount": 6,
     "realCorpusNoOpCount": 3,
     "realCorpusFailCount": 0,
     "syntheticClosedLoopNotRunCount": 407

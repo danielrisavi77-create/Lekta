@@ -12,6 +12,11 @@
       "profileId": "fer-diplomski"
     },
     {
+      "documentId": "fer-diplomski-puna-struktura",
+      "fileName": "fer-diplomski-puna-struktura.docx",
+      "profileId": "fer-diplomski"
+    },
+    {
       "documentId": "fer-diplomski-uskladjen",
       "fileName": "fer-diplomski-uskladjen.docx",
       "profileId": "fer-diplomski"
@@ -75,6 +80,49 @@
       "changedFixerIds": [
         "paper-size-fixer",
         "margins-fixer"
+      ],
+      "targetedCheckCount": 4,
+      "targetedResolvedCount": 3,
+      "targetedUnresolvedCount": 1,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen"
+      ],
+      "error": null
+    },
+    {
+      "documentId": "fer-diplomski-puna-struktura",
+      "fileName": "fer-diplomski-puna-struktura.docx",
+      "profileId": "fer-diplomski",
+      "outcome": "review",
+      "before": {
+        "checkCount": 19,
+        "passCount": 15,
+        "score": 78
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 17,
+        "score": 94
+      },
+      "beforeEntryCount": 14,
+      "afterEntryCount": 14,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "paper-size-fixer",
+        "font-fixer",
+        "line-spacing-fixer",
+        "margins-fixer"
+      ],
+      "changedFixerIds": [
+        "font-fixer",
+        "line-spacing-fixer"
       ],
       "targetedCheckCount": 4,
       "targetedResolvedCount": 3,
@@ -352,13 +400,13 @@
     }
   ],
   "summary": {
-    "documentCount": 8,
+    "documentCount": 9,
     "passCount": 0,
-    "reviewCount": 5,
+    "reviewCount": 6,
     "failCount": 0,
     "noOpCount": 3,
-    "changedDocumentCount": 5,
-    "manualReviewCount": 5,
+    "changedDocumentCount": 6,
+    "manualReviewCount": 6,
     "passRegressionCount": 0
   }
 }

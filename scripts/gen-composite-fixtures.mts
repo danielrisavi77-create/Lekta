@@ -30,10 +30,8 @@ const FIXTURES: CompositeFixture[] = [
     build: fullStructureDocx,
     sidecar: {
       profileId: 'fer-diplomski',
-      // Korak N+1: dok je true, dokument je izvan real-corpus kaskade (discoverRealCorpus ga
-      // preskace) ali JE u golden matrici, pa se snapshot diff moze procitati izolirano.
-      // Korak N+2 ga uklanja i tek tada dokument ulazi u repair-real-corpus i faculty-matrix.
-      synthetic: true,
+      // Korak N+2: synthetic zastavica uklonjena, pa dokument od sada ulazi i u
+      // repair-real-corpus, faculty-matrix i backlog, ne samo u golden matricu.
       note: 'generirano, anonimno, nije studentski rad; kompozitna struktura za pokrivenost fixera',
     },
   },
