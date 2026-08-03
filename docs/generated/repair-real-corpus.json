@@ -52,6 +52,16 @@
       "profileId": "pmf-matematika-graduate"
     },
     {
+      "documentId": "pravo-integrirani-fusnote",
+      "fileName": "pravo-integrirani-fusnote.docx",
+      "profileId": "pravo-integrirani-diplomski"
+    },
+    {
+      "documentId": "pravo-socijalni-rad-fusnote",
+      "fileName": "pravo-socijalni-rad-fusnote.docx",
+      "profileId": "pravo-socijalni-rad-diplomski"
+    },
+    {
       "documentId": "ttf-diplomski-arial",
       "fileName": "ttf-diplomski-arial.docx",
       "profileId": "ttf-diplomski"
@@ -413,6 +423,90 @@
       "error": null
     },
     {
+      "documentId": "pravo-integrirani-fusnote",
+      "fileName": "pravo-integrirani-fusnote.docx",
+      "profileId": "pravo-integrirani-diplomski",
+      "outcome": "review",
+      "before": {
+        "checkCount": 42,
+        "passCount": 32,
+        "score": 81
+      },
+      "after": {
+        "checkCount": 42,
+        "passCount": 34,
+        "score": 89
+      },
+      "beforeEntryCount": 9,
+      "afterEntryCount": 9,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "font-fixer",
+        "margins-fixer",
+        "alignment-fixer"
+      ],
+      "changedFixerIds": [
+        "font-fixer",
+        "margins-fixer",
+        "alignment-fixer"
+      ],
+      "targetedCheckCount": 4,
+      "targetedResolvedCount": 3,
+      "targetedUnresolvedCount": 1,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen"
+      ],
+      "error": null
+    },
+    {
+      "documentId": "pravo-socijalni-rad-fusnote",
+      "fileName": "pravo-socijalni-rad-fusnote.docx",
+      "profileId": "pravo-socijalni-rad-diplomski",
+      "outcome": "review",
+      "before": {
+        "checkCount": 38,
+        "passCount": 26,
+        "score": 73
+      },
+      "after": {
+        "checkCount": 38,
+        "passCount": 29,
+        "score": 85
+      },
+      "beforeEntryCount": 9,
+      "afterEntryCount": 9,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "font-fixer",
+        "margins-fixer",
+        "paper-size-fixer"
+      ],
+      "changedFixerIds": [
+        "font-fixer",
+        "margins-fixer"
+      ],
+      "targetedCheckCount": 3,
+      "targetedResolvedCount": 3,
+      "targetedUnresolvedCount": 0,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu"
+      ],
+      "error": null
+    },
+    {
       "documentId": "ttf-diplomski-arial",
       "fileName": "ttf-diplomski-arial.docx",
       "profileId": "ttf-diplomski",
@@ -446,13 +540,13 @@
     }
   ],
   "summary": {
-    "documentCount": 10,
+    "documentCount": 12,
     "passCount": 0,
-    "reviewCount": 7,
+    "reviewCount": 9,
     "failCount": 0,
     "noOpCount": 3,
-    "changedDocumentCount": 7,
-    "manualReviewCount": 7,
+    "changedDocumentCount": 9,
+    "manualReviewCount": 9,
     "passRegressionCount": 0
   }
 }

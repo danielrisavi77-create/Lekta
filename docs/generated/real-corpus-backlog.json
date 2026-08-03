@@ -1,7 +1,7 @@
 {
   "generatedFrom": "docs/generated/faculty-matrix.json",
   "totalProfiles": 407,
-  "profilesWithoutSample": 400,
+  "profilesWithoutSample": 398,
   "entries": [
     {
       "profileId": "algebra-diplomski",
@@ -281,12 +281,6 @@
     },
     {
       "profileId": "pravo-socijalna-politika-diplomski",
-      "unitId": "pravo",
-      "facultyLabel": "Pravni fakultet",
-      "offeredOptionCount": 6
-    },
-    {
-      "profileId": "pravo-socijalni-rad-diplomski",
       "unitId": "pravo",
       "facultyLabel": "Pravni fakultet",
       "offeredOptionCount": 6
@@ -1199,12 +1193,6 @@
     },
     {
       "profileId": "pravo-doktorski-pravne-znanosti",
-      "unitId": "pravo",
-      "facultyLabel": "Pravni fakultet",
-      "offeredOptionCount": 5
-    },
-    {
-      "profileId": "pravo-integrirani-diplomski",
       "unitId": "pravo",
       "facultyLabel": "Pravni fakultet",
       "offeredOptionCount": 5

@@ -2,7 +2,7 @@
 
 > Profili bez ijednog stvarnog DOCX uzorka za real-corpus testiranje, rangirani silazno po broju ponudjenih repair opcija (offeredOptionCount) - gdje bi sljedeci stvarni uzorak najvise vrijedio. Izvor: docs/generated/faculty-matrix.json (`npm run repair-faculty-matrix`).
 
-Ukupno profila bez uzorka: **400/407**.
+Ukupno profila bez uzorka: **398/407**.
 
 ## Sveučilište Algebra Bernays (algebra)
 
@@ -158,9 +158,7 @@ Ukupno profila bez uzorka: **400/407**.
 ## Pravni fakultet (pravo)
 
 - **pravo-socijalna-politika-diplomski** — 6 ponudjenih opcija
-- **pravo-socijalni-rad-diplomski** — 6 ponudjenih opcija
 - **pravo-doktorski-pravne-znanosti** — 5 ponudjenih opcija
-- **pravo-integrirani-diplomski** — 5 ponudjenih opcija
 - **pravo-javna-uprava-diplomski** — 5 ponudjenih opcija
 - **pravo-javna-uprava-prijediplomski** — 5 ponudjenih opcija
 - **pravo-opci-pravni-akademski-rad** — 5 ponudjenih opcija

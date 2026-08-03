@@ -13852,14 +13852,12 @@
         "margins-fixer",
         "paper-size-fixer"
       ],
-      "realDocxSampleCount": 0,
+      "realDocxSampleCount": 2,
       "profilesWithoutRealDocx": [
-        "pravo-integrirani-diplomski",
         "pravo-javna-uprava-prijediplomski",
         "pravo-javna-uprava-diplomski",
         "pravo-porezni-prijediplomski",
         "pravo-socijalni-rad-zavrsni",
-        "pravo-socijalni-rad-diplomski",
         "pravo-socijalna-politika-diplomski",
         "pravo-opci-pravni-akademski-rad",
         "pravo-socijalni-opci-akademski-rad",
@@ -13872,13 +13870,15 @@
         "profileCoveragePassCount": 13,
         "profileCoverageFailCount": 0,
         "realCorpusPassCount": 0,
-        "realCorpusReviewCount": 0,
+        "realCorpusReviewCount": 2,
         "realCorpusNoOpCount": 0,
         "realCorpusFailCount": 0,
         "syntheticClosedLoopNotRunCount": 13
       },
       "manualReviewReasons": [
-        "nema-stvarnog-docx-uzorka"
+        "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
+        "nema-stvarnog-docx-uzorka",
+        "stvarni-docx-trazi-rucni-pregled"
       ],
       "profiles": [
         {
@@ -13908,15 +13908,18 @@
           "templateIds": [
             "basic-text-styles"
           ],
-          "realDocxSampleCount": 0,
+          "realDocxSampleCount": 1,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "not-run",
+            "realCorpus": "review",
             "syntheticClosedLoop": "not-run"
           },
-          "realCorpusOutcomes": {},
+          "realCorpusOutcomes": {
+            "review": 1
+          },
           "manualReviewReasons": [
-            "nema-stvarnog-docx-uzorka"
+            "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
+            "stvarni-docx-trazi-rucni-pregled"
           ]
         },
         {
@@ -14100,15 +14103,17 @@
           "templateIds": [
             "basic-text-styles"
           ],
-          "realDocxSampleCount": 0,
+          "realDocxSampleCount": 1,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "not-run",
+            "realCorpus": "review",
             "syntheticClosedLoop": "not-run"
           },
-          "realCorpusOutcomes": {},
+          "realCorpusOutcomes": {
+            "review": 1
+          },
           "manualReviewReasons": [
-            "nema-stvarnog-docx-uzorka"
+            "stvarni-docx-trazi-rucni-pregled"
           ]
         },
         {
@@ -22314,13 +22319,13 @@
     "profileCount": 407,
     "offeredOptionCount": 1752,
     "mappedOptionCount": 1752,
-    "realDocxSampleCount": 10,
-    "facultiesWithRealDocx": 7,
-    "facultiesWithoutRealDocx": 124,
-    "profilesWithoutRealDocx": 400,
+    "realDocxSampleCount": 12,
+    "facultiesWithRealDocx": 8,
+    "facultiesWithoutRealDocx": 123,
+    "profilesWithoutRealDocx": 398,
     "profileCoverageFailCount": 0,
     "realCorpusPassCount": 0,
-    "realCorpusReviewCount": 7,
+    "realCorpusReviewCount": 9,
     "realCorpusNoOpCount": 3,
     "realCorpusFailCount": 0,
     "syntheticClosedLoopNotRunCount": 407

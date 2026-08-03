@@ -52,7 +52,6 @@ const FIXTURES: CompositeFixture[] = [
     build: () => pravoFootnotesDocx(),
     sidecar: {
       profileId: 'pravo-socijalni-rad-diplomski',
-      synthetic: true,
       note: 'generirano, anonimno, nije studentski rad; fusnote i broj stranice namjerno neispravni',
     },
   },
@@ -61,7 +60,6 @@ const FIXTURES: CompositeFixture[] = [
     build: () => pravoFootnotesDocx('Integrirani preddiplomski i diplomski studij prava'),
     sidecar: {
       profileId: 'pravo-integrirani-diplomski',
-      synthetic: true,
       note: 'generirano, anonimno, nije studentski rad; razmaci u fusnotama namjerno neispravni',
     },
   },

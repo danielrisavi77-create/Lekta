@@ -65,6 +65,46 @@ npm run repair-real-corpus:review
 python scripts/verify-docx/strict-open.py .artifacts/lekta-real-corpus-review
 ```
 
+## Koliko fixera je stvarno dokazano
+
+Mjeri se agregacijom `tests/__snapshots__/repair-golden.test.ts.snap`: koliko od 31 registriranog
+fixera nikad nije bilo `applied: true` ni na jednom dokumentu, gledajući sve grane (zadanu, `deep`
+i `(potvrdjeno)`).
+
+Polazište je bilo **18 od 31 bez ijedne primjene**. Danas ih je **6**. Ostatak se ne može riješiti
+novim fixturom, i to je važno znati prije nego netko pokuša:
+
+| skupina | fixeri | zašto fixture ne pomaže |
+| --- | --- | --- |
+| nema pravila ni u jednom od 368 profila | `element-caption`, `legal-footnote-repair`, `table-figure-rescue` | builder gate-a na `profile.ruleEntries`; `element-caption-rules`, `legal-footnote-repair-rules` i `table-figure-rescue-rules` nema nijedan profil u `data/profiles/repair-map.json`. Rupa je u podacima, ne u testovima. |
+| traži drugi dokument | `submission-metadata` | neslaganje se računa između `.docx` i PDF-a predaje; jednodokumentno je `dc:title` uspoređen sam sa sobom, dakle uvijek `consistent`. |
+| no-op i uz potvrdu | `citation-bibliography-sync`, `consistency` | obrazac popunjava zamjenski tekst jednak izvornom, pa nema što zamijeniti dok korisnik ne odabere drugu vrijednost. Stvarne grane pokrivaju `tests/repair-closed-loop-citations.test.ts` i `-typography.test.ts`. |
+
+Tri stvari koje su podizale broj nisu bile u dokumentima nego u samom harnessu, pa ih vrijedi
+zapamtiti kao obrazac: golden nije gradio parametre asistiranih fixera iz analize, nije slao
+`unitId` (pa naslovnica nikad nije provjeravana) i imao je ručne kopije gateova koje su se
+razišle sa živim panelom. Kad god golden i panel računaju isto na dva mjesta, jedno od njih tiho
+zastari.
+
+## Kompozitni fixturi
+
+Izolirani predlošci u `tests/helpers/repair-templates.ts` pokrivaju po jednu sposobnost i imaju
+točno 4 zip dijela. Takav dokument ne može proizvesti lančanu klasu buga, gdje jedan fixer obori
+sve kasnije u istom prolazu (RE-47, RE-55). Zato postoje kompozitni dokumenti u
+`tests/helpers/composite-docx.ts`, generirani u `tests/fixtures/docx/` skriptom
+`npx vite-node scripts/gen-composite-fixtures.mts`.
+
+Novi kompozitni fixture ide u tri commita, nikad u jednom:
+
+1. **N**: generator + test koji gradi bajtove u memoriji i tvrdi Tier 0. Nula generiranih datoteka.
+2. **N+1**: `.docx` + sidecar sa `"synthetic": true`, pa `npm test -- -u`. Mijenjaju se točno dva
+   snapshota; **ovdje se čita diff**, jer se tek tu vidi što svaki fixer radi s novim strukturama.
+3. **N+2**: makni `synthetic`, pa REDOM `npm run repair-real-corpus` →
+   `npm run repair-faculty-matrix` → `npx vite-node scripts/generate-real-corpus-backlog.mts`.
+
+Nikad ne mijenjaj semantiku harnessa i ne dodavaj fixture u istom commitu. Ako novi fixture otkrije
+bug, bug dobiva vlastiti commit **prije** registracije; asercija se ne relaksira.
+
 ## Tier 2: Word kao orákul (`scripts/word-verify/`)
 
 Jedina provjera koja odgovara na pitanje "hoće li se dokument otvoriti kod korisnika bez poruke
