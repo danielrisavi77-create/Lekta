@@ -66,8 +66,10 @@ test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', asyn
   await firstFinding.getByRole('button', { name: 'Poništi ručnu potvrdu' }).click();
   await expect(page.locator('#triagePanel .finding-card').first()).toContainText('Otvoreno');
   await expect(page.locator('#triagePanel')).not.toContainText('Kontekst profila');
-  await expect(page.locator('#repairEntry')).toContainText('Automatski popravci na ovom uređaju');
-  await expect(page.locator('#repairEntry')).toContainText('Dokument se pri tome ne šalje na poslužitelj');
+  // repairEndpoint je LIVE po defaultu (DEFAULT_PRODUCTION_CONFIG u app.ts), pa je copy server-side
+  // varijanta (RE-34: gejtano na repairServerConfigured()), ne stari lokalni-only tekst.
+  await expect(page.locator('#repairEntry')).toContainText('Automatski popravak');
+  await expect(page.locator('#repairEntry')).toContainText('Dokument se pritom šalje na server radi popravka');
   await expect(page.locator('#orderFromResult')).toContainText('Ručna obrada uz privolu');
 
   await page.locator('#resultDetailsToggle').click();

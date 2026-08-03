@@ -13,10 +13,31 @@
 
 import type { FixerId } from '../repair/apply-fixers';
 import { priceRepairItems, priorityOrder, itemsForBudgetFraction, fractionForItems } from '../repair/repair-pricing';
+import { trapModal, releaseModal } from './modal-utils';
 
 export interface PriceSliderItem {
   fixerId: FixerId;
   label?: string;
+  /** Za scrollToRepairPanel (skok s kartice nalaza) i za oznaku retka u ledgeru. */
+  ruleId?: string;
+  /** Institucijska preporuka (nije bodovano, uvijek opt-in) - ledger redak dobiva bedz. */
+  recommended?: boolean;
+}
+
+/**
+ * Za stavke koje nose naprednu formu (literatura, citati, fusnote...) - kako ledger redak
+ * ponudi uvid/uredjivanje bez da unaprijed odmota sve retke te forme u glavni popis.
+ * `render*Controls` funkcije u repair-panel.ts ostaju izvor markupa; ovaj deskriptor samo kaze
+ * GDJE (Tier A: poseban modal, Tier B: inline <details>) i KAKO (render callback) se pozivaju.
+ */
+export interface AdvancedFormDescriptor {
+  tier: 'A' | 'B';
+  /** Naziv sekcije za gumb/summary, npr. "Literatura". */
+  label: string;
+  /** Broj zapisa/redaka, za "Uredi {label} ({count}) →". */
+  count: number;
+  /** Gradi postojeci markup forme (poziva odgovarajuci render*Controls) unutar dane posude. */
+  render: (container: HTMLElement) => void;
 }
 
 export interface PriceSliderOptions<T extends PriceSliderItem> {
@@ -28,6 +49,9 @@ export interface PriceSliderOptions<T extends PriceSliderItem> {
   /** Roditelj koji sadrzi `<input type="checkbox" data-idx="N">` po stavci, isti poredak indeksa
    *  kao `items` (isti obrazac kao getCheckedItems u repair-panel.ts / app.ts). */
   listEl: HTMLElement;
+  /** Samo za renderRepairLedgerModal: opisuje naprednu formu stavke, ako postoji. Izostavljeno
+   *  (ili null povrat) znaci "obican checkbox redak", isto ponasanje kao danas. */
+  advancedFormFor?: (item: T) => AdvancedFormDescriptor | null;
 }
 
 const STEPS = 1000;
@@ -44,90 +68,6 @@ function eur(v: number): string {
   return `${v.toFixed(2).replace('.', ',')} €`;
 }
 
-/** Vraca prazan div (bez sadrzaja) kad nema stavki za odabir - pozivatelj ga slobodno mountira
- *  bezuvjetno, isti obrazac kao renderRepairPanel koji rano izlazi kad items.length===0. */
-export function renderRepairPriceSlider<T extends PriceSliderItem>(opts: PriceSliderOptions<T>): HTMLElement {
-  const { items, ceilingPriceEur, listEl } = opts;
-  const wrap = document.createElement('div');
-  wrap.className = 'lekta-repair-price-slider';
-  if (items.length === 0) return wrap;
-
-  const row = document.createElement('div');
-  row.className = 'lekta-repair-price-slider__row';
-  const range = document.createElement('input');
-  range.type = 'range';
-  range.min = '0';
-  range.max = String(STEPS);
-  range.className = 'lekta-repair-price-slider__range';
-  range.setAttribute('aria-label', 'Koliko popravaka uključiti');
-  row.appendChild(range);
-  wrap.appendChild(row);
-
-  const label = document.createElement('div');
-  label.className = 'lekta-repair-price-slider__label';
-  wrap.appendChild(label);
-
-  function checkboxes(): HTMLInputElement[] {
-    // Heading plan ima vlastite checkboxe za svako mapiranje. Slider smije upravljati samo
-    // glavnim checkboxom stavke, koji jedini nosi data-idx prema ctx.items.
-    return Array.from(listEl.querySelectorAll<HTMLInputElement>('input[type="checkbox"][data-idx]'));
-  }
-
-  function selectedItems(): T[] {
-    const sel: T[] = [];
-    checkboxes().forEach((cb) => {
-      if (cb.checked) sel.push(items[Number(cb.dataset.idx)]);
-    });
-    return sel;
-  }
-
-  // Cijena se raspodjeljuje nad SVIM ponudjenim stavkama (puni strop), ne samo nad odabranima:
-  // priceRepairItems(selected, ceiling) bi ponovno normalizirao cijeli strop na uzi skup, pa bi
-  // svaki odabir (i od jedne stavke) ispao pun iznos. Ovdje se svaka stavka cijeni JEDNOM nad
-  // punim popisom, a prikaz samo zbraja cijene onih koje su trenutno oznacene.
-  const allPriced = priceRepairItems(items, ceilingPriceEur ?? 0);
-  function updateLabel(selected: T[]): void {
-    const selectedSet = new Set(selected);
-    const sum = allPriced.reduce((s, p) => s + (selectedSet.has(p.item) ? p.priceEur : 0), 0);
-    const countTxt = `${selected.length} od ${items.length} ${pluralPopravaka(items.length)} uključeno`;
-    label.textContent = ceilingPriceEur != null ? `${countTxt} · procjena ${eur(sum)}` : countTxt;
-  }
-
-  function applyFraction(fraction: number): void {
-    const picked = new Set(itemsForBudgetFraction(items, fraction).map((i) => items.indexOf(i)));
-    checkboxes().forEach((cb) => {
-      cb.checked = picked.has(Number(cb.dataset.idx));
-    });
-    updateLabel(selectedItems());
-  }
-
-  range.addEventListener('input', () => {
-    applyFraction(Number(range.value) / STEPS);
-  });
-
-  // Delegiran listener na cijeli popis: hvata i rucne (de)oznake checkboxova unutar liste bez
-  // dodavanja zasebnog listenera po stavci (pozivatelj vec ima vlastite listenere na istoj listi;
-  // 'change' burblja pa oba mirno supostoje).
-  listEl.addEventListener('change', (e) => {
-    const target = e.target;
-    if (!(target instanceof HTMLInputElement) || target.type !== 'checkbox') return;
-    const fraction = fractionForItems(items, selectedItems());
-    range.value = String(Math.round(fraction * STEPS));
-    updateLabel(selectedItems());
-  });
-
-  // Pocetno stanje = ono sto je vec oznaceno (danasnji default: prekrseno predodabrano), ne
-  // prisilno "sve" - slider se pojavljuje vec usklađen s postojecim opt-out ponasanjem.
-  applyFractionFromCurrentSelection();
-  function applyFractionFromCurrentSelection(): void {
-    const fraction = fractionForItems(items, selectedItems());
-    range.value = String(Math.round(fraction * STEPS));
-    updateLabel(selectedItems());
-  }
-
-  return wrap;
-}
-
 /** Oznaka na modalu ovog panela, da re-render (nova analiza) ukloni STARI modal iz <body>
  *  prije nego doda novi - inace bi se modali gomilali izvan mountEl-a koji se prazni drugdje. */
 const LEDGER_MODAL_ATTR = 'data-lekta-repair-ledger-modal';
@@ -136,15 +76,16 @@ const LEDGER_MODAL_ATTR = 'data-lekta-repair-ledger-modal';
  * Puna "koliko platis, toliko popravaka" prezentacija: kompaktan sazetak (cijena + broj) UMJESTO
  * checkbox popisa, s gumbom koji otvara modal s ledger-stilom (redak po stavci, tockasta linija do
  * cijene, klik pali/gasi). Isti checkboxovi u `listEl` ostaju jedini izvor istine (getCheckedItems
- * u pozivatelju ih i dalje cita neovisno o ovome); ova funkcija ih samo VODI, kao i
- * `renderRepairPriceSlider`, ali s bogatijom prezentacijom.
+ * u pozivatelju ih i dalje cita neovisno o ovome); ova funkcija ih samo VODI.
  *
- * NAMJERNO se koristi samo kad SVE stavke u panelu nemaju prikljucenu naprednu formu (title page,
- * bibliografija i sl.) - pozivatelj (repair-panel.ts / app.ts) odlucuje kad je taj uvjet ispunjen.
- * Ne mijenja default odabir (i dalje "prekrseno je predodabrano"), samo prezentaciju.
+ * Stavke s naprednom formom (literatura, citati, fusnote...) dobivaju dodatnu "Uredi... →" akciju
+ * (Tier A: poseban modal) ili inline <details> (Tier B), preko `opts.advancedFormFor` - vidi
+ * AdvancedFormDescriptor. Bez tog callbacka (ili null povrat po stavci) redak ostaje obican
+ * checkbox, isto ponasanje kao danas. Ne mijenja default odabir (i dalje "prekrseno je
+ * predodabrano"), samo prezentaciju.
  */
 export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSliderOptions<T>): HTMLElement {
-  const { items, ceilingPriceEur, listEl } = opts;
+  const { items, ceilingPriceEur, listEl, advancedFormFor } = opts;
   const trigger = document.createElement('div');
   trigger.className = 'lekta-repair-trigger';
   if (items.length === 0) return trigger;
@@ -243,9 +184,11 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
     row.type = 'button';
     row.className = 'lekta-repair-ledger-row';
     row.setAttribute('role', 'checkbox');
+    if (item.ruleId) row.dataset.ruleId = item.ruleId;
     row.innerHTML =
       '<span class="lekta-repair-ledger-mark" aria-hidden="true">—</span>' +
       '<span class="lekta-repair-ledger-fill-label"></span>' +
+      (item.recommended ? '<span class="lekta-repair-ledger-badge">Preporučeno</span>' : '') +
       '<span class="lekta-repair-ledger-fill"></span>' +
       '<span class="lekta-repair-ledger-price"></span>';
     (row.querySelector('.lekta-repair-ledger-fill-label') as HTMLElement).textContent = item.label ?? '';
@@ -255,8 +198,84 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
       renderAll();
     });
     li.appendChild(row);
+
+    // Napredna forma (literatura, citati, fusnote...): Tier A = zaseban modal ("Uredi... →"),
+    // Tier B = inline <details> tu u retku. Bez descriptora ostaje obican checkbox redak.
+    const descriptor = advancedFormFor?.(item) ?? null;
+    if (descriptor?.tier === 'A') {
+      const editBtn = document.createElement('button');
+      editBtn.type = 'button';
+      editBtn.className = 'lekta-repair-ledger-row-edit';
+      editBtn.textContent = `${descriptor.label} (${descriptor.count}) →`;
+      editBtn.addEventListener('click', () => {
+        closeLedger();
+        openItemModal(descriptor, () => openLedger());
+      });
+      li.appendChild(editBtn);
+    } else if (descriptor?.tier === 'B') {
+      const details = document.createElement('details');
+      details.className = 'lekta-repair-panel__more';
+      const summary = document.createElement('summary');
+      summary.textContent = `${descriptor.label} (${descriptor.count})`;
+      details.appendChild(summary);
+      let built = false;
+      details.addEventListener('toggle', () => {
+        if (details.open && !built) {
+          built = true;
+          descriptor.render(details);
+        }
+      });
+      li.appendChild(details);
+    }
+
     listOl.appendChild(li);
     rowByItem.set(item, row);
+  }
+
+  /** Tier A: zaseban, fokusirani modal SAMO za jednu naprednu formu (npr. 23 zapisa literature).
+   *  Gradi se LIJENO na klik (ne unaprijed), i uvijek ZAMIJENI ledger (ne slaze se preko njega) -
+   *  "‹ Natrag" zatvara ovaj modal i ponovno otvara ledger. */
+  function openItemModal(descriptor: AdvancedFormDescriptor, onBack: () => void): void {
+    const itemBackdrop = document.createElement('div');
+    itemBackdrop.className = 'modal-backdrop';
+    const itemModal = document.createElement('div');
+    itemModal.className = 'modal';
+    itemModal.setAttribute('role', 'dialog');
+    itemModal.setAttribute('aria-modal', 'true');
+    const itemHead = document.createElement('div');
+    itemHead.className = 'modal-head';
+    const backBtn = document.createElement('button');
+    backBtn.type = 'button';
+    backBtn.className = 'lekta-repair-ledger-back';
+    backBtn.textContent = '‹ Natrag';
+    const itemTitle = document.createElement('h3');
+    itemTitle.textContent = descriptor.label;
+    const itemClose = document.createElement('button');
+    itemClose.type = 'button';
+    itemClose.className = 'modal-close';
+    itemClose.setAttribute('aria-label', 'Zatvori');
+    itemClose.textContent = '×';
+    itemHead.append(backBtn, itemTitle, itemClose);
+    const itemBody = document.createElement('div');
+    itemBody.className = 'modal-body';
+    descriptor.render(itemBody);
+    itemModal.append(itemHead, itemBody);
+    itemBackdrop.appendChild(itemModal);
+    document.body.appendChild(itemBackdrop);
+    trapModal(itemBackdrop);
+    function closeItem(goBack: boolean): void {
+      releaseModal(itemBackdrop);
+      itemBackdrop.remove();
+      if (goBack) onBack();
+    }
+    backBtn.addEventListener('click', () => closeItem(true));
+    itemClose.addEventListener('click', () => closeItem(false));
+    itemBackdrop.addEventListener('click', (e) => {
+      if (e.target === itemBackdrop) closeItem(false);
+    });
+    itemBackdrop.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeItem(false);
+    });
   }
 
   function renderAll(): void {
@@ -294,26 +313,24 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
   // Pocetno stanje = ono sto je vec oznaceno (danasnji opt-out default: prekrseno predodabrano).
   renderAll();
 
-  let lastFocused: HTMLElement | null = null;
-  function openModal(): void {
-    lastFocused = document.activeElement as HTMLElement | null;
+  // trapModal/releaseModal (modal-utils.ts) daju pravi focus-trap + inertnu pozadinu, isti obrazac
+  // kao svaki drugi modal u appu (prije je ovo bio bespoke openModal/closeModal bez toga).
+  function openLedger(): void {
     backdrop.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-    closeBtn.focus();
+    trapModal(backdrop);
   }
-  function closeModal(): void {
+  function closeLedger(): void {
+    releaseModal(backdrop);
     backdrop.classList.add('hidden');
-    document.body.style.overflow = '';
-    lastFocused?.focus?.();
   }
-  openBtn.addEventListener('click', openModal);
-  closeBtn.addEventListener('click', closeModal);
-  doneBtn.addEventListener('click', closeModal);
+  openBtn.addEventListener('click', openLedger);
+  closeBtn.addEventListener('click', closeLedger);
+  doneBtn.addEventListener('click', closeLedger);
   backdrop.addEventListener('click', (e) => {
-    if (e.target === backdrop) closeModal();
+    if (e.target === backdrop) closeLedger();
   });
   backdrop.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Escape') closeLedger();
   });
 
   return trigger;

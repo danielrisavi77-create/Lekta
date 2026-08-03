@@ -9,7 +9,7 @@ import type { HeadingCandidate, HeadingStructureWarning } from '../analysis/head
 import type { HeadingNumberingPlan } from '../analysis/heading-numbering';
 import type { BibliographyEnrichmentCandidate, BibliographyEnrichmentInput } from '../citations/bibliography-enrichment';
 import { enrichWithCrossref } from '../citations/bibliography-enrichment';
-import { renderRepairPriceSlider, renderRepairLedgerModal } from './repair-price-slider';
+import { renderRepairLedgerModal, type AdvancedFormDescriptor } from './repair-price-slider';
 import type { Check } from '../scoring/checks';
 import { repairCeiling } from './result-readiness';
 
@@ -336,6 +336,65 @@ export function isSimpleItem(item: RepairableItem): boolean {
   });
 }
 
+/**
+ * Ledger redak za stavku s naprednom formom: GDJE (Tier A poseban modal, Tier B inline <details>)
+ * i KAKO (render callback koji poziva postojeci render*Controls). Tier A = neograniceno, sadrzajno
+ * vodjeno (literatura, citati, fusnote, natpisi...) - moglo bi biti desetci-stotinjak redaka pa
+ * dobiva vlastiti fokusirani prozor. Tier B = ograniceno strukturom dokumenta (par sekcija/kategorija
+ * nalaza) - ostaje na dohvat ruke kao <details> u ledgeru. Izvezeno da ga app.ts dijeli za
+ * renderServerRepairPanel (isti raspored, ne duplicirati odluku po tier-u na dva mjesta).
+ */
+export function advancedFormFor(item: RepairableItem): AdvancedFormDescriptor | null {
+  if (item.headingCandidates?.length || item.headingNumberingPlan?.mappings?.length) {
+    const count = item.headingCandidates?.length || item.headingNumberingPlan?.mappings?.length || 0;
+    return { tier: 'A', label: 'Naslovi', count, render: (c) => renderHeadingCandidateControls(c, item) };
+  }
+  if (item.titlePageForm) {
+    return { tier: 'B', label: 'Naslovnica', count: item.titlePageForm.fields.length, render: (c) => renderTitlePageControls(c, item) };
+  }
+  if (item.elementCaptionForm) {
+    return { tier: 'A', label: 'Natpisi tablica i slika', count: item.elementCaptionForm.candidates.length, render: (c) => renderElementCaptionControls(c, item) };
+  }
+  if (item.bibliographyForm) {
+    return { tier: 'A', label: 'Literatura', count: item.bibliographyForm.entries.length, render: (c) => renderBibliographyControls(c, item) };
+  }
+  if (item.citationBibliographySyncForm) {
+    return { tier: 'A', label: 'Citati', count: item.citationBibliographySyncForm.citations.length, render: (c) => renderCitationBibliographySyncControls(c, item) };
+  }
+  if (item.legalFootnoteRepairForm) {
+    return { tier: 'A', label: 'Fusnote', count: item.legalFootnoteRepairForm.candidates.length, render: (c) => renderLegalFootnoteRepairControls(c, item) };
+  }
+  if (item.finalDocumentInspectorForm) {
+    return { tier: 'B', label: 'Metapodaci i tragovi izrade', count: item.finalDocumentInspectorForm.findings.length, render: (c) => renderFinalDocumentInspectorControls(c, item) };
+  }
+  if (item.tableFigureRescueForm) {
+    const count = item.tableFigureRescueForm.tables.length + item.tableFigureRescueForm.figures.length;
+    return { tier: 'A', label: 'Tablice i slike', count, render: (c) => renderTableFigureRescueControls(c, item) };
+  }
+  if (item.sectionSurgeryForm) {
+    return { tier: 'B', label: 'Sekcije', count: item.sectionSurgeryForm.sections.length, render: (c) => renderSectionSurgeryControls(c, item) };
+  }
+  if (item.fieldIntegrityForm) {
+    return { tier: 'B', label: 'Polja dokumenta', count: item.fieldIntegrityForm.fields.length, render: (c) => renderFieldIntegrityControls(c, item) };
+  }
+  if (item.croatianTypographyForm) {
+    return { tier: 'A', label: 'Hrvatska tipografija', count: item.croatianTypographyForm.occurrences.length, render: (c) => renderCroatianTypographyControls(c, item) };
+  }
+  if (item.consistencyForm) {
+    return { tier: 'B', label: 'Dosljednost pojmova', count: item.consistencyForm.groups.length, render: (c) => renderConsistencyControls(c, item) };
+  }
+  if (item.requiredSectionsForm) {
+    return { tier: 'B', label: 'Obvezni dijelovi', count: item.requiredSectionsForm.candidates.length, render: (c) => renderRequiredSectionsControls(c, item) };
+  }
+  if (item.linkDoiForm) {
+    return { tier: 'A', label: 'Poveznice i DOI', count: item.linkDoiForm.occurrences.length, render: (c) => renderLinkDoiControls(c, item) };
+  }
+  if (item.crossFileSubmissionForm) {
+    return { tier: 'B', label: 'Usklađenost datoteka', count: item.crossFileSubmissionForm.issues.length, render: (c) => renderCrossFileSubmissionControls(c, item) };
+  }
+  return null;
+}
+
 export function renderRepairPanel(ctx: RepairPanelContext): void {
   if (ctx.items.length === 0) return; // nema autoFixable stavki za ovaj rad
 
@@ -388,21 +447,11 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
       <span class="lekta-repair-panel__badge">${badgeText}</span>
     `;
     list.appendChild(li);
-    if (item.headingCandidates?.length || item.headingNumberingPlan?.mappings?.length) renderHeadingCandidateControls(li, item);
-    if (item.titlePageForm) renderTitlePageControls(li, item);
-    if (item.elementCaptionForm) renderElementCaptionControls(li, item);
-    if (item.bibliographyForm) renderBibliographyControls(li, item);
-    if (item.citationBibliographySyncForm) renderCitationBibliographySyncControls(li, item);
-    if (item.legalFootnoteRepairForm) renderLegalFootnoteRepairControls(li, item);
-    if (item.finalDocumentInspectorForm) renderFinalDocumentInspectorControls(li, item);
-    if (item.tableFigureRescueForm) renderTableFigureRescueControls(li, item);
-    if (item.sectionSurgeryForm) renderSectionSurgeryControls(li, item);
-    if (item.fieldIntegrityForm) renderFieldIntegrityControls(li, item);
-    if (item.croatianTypographyForm) renderCroatianTypographyControls(li, item);
-    if (item.consistencyForm) renderConsistencyControls(li, item);
-    if (item.requiredSectionsForm) renderRequiredSectionsControls(li, item);
-    if (item.linkDoiForm) renderLinkDoiControls(li, item);
-    if (item.crossFileSubmissionForm) renderCrossFileSubmissionControls(li, item);
+    // Napredna forma (literatura, citati, fusnote, naslovnica...) se VISE ne gradi ovdje inline:
+    // list je uvijek skriven (ledger je jedini vidljivi prikaz, vidi nize), pa bi izgradnja ovdje
+    // bila uzaludan posao za svaku stavku sinkrono pri svakom renderu. advancedFormFor (gore) je
+    // sad jedino mjesto koje zna koji render*Controls ide uz koju formu; renderRepairLedgerModal
+    // ga zove LIJENO, tek na klik na "Uredi..."/otvaranje <details> retka.
   });
 
   // v2 dubinsko ciscenje: uklanja izravno formatiranje u tekstu (font, prored,
@@ -550,15 +599,12 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
   }
 
   container.appendChild(list);
-  // Uzi opseg: ledger+modal SAMO kad NIJEDNA stavka nema prikljucenu naprednu formu (title
-  // page, bibliografija i sl.) - te forme jos nisu istrazene dovoljno da se sigurno prekroje u
-  // kompaktan prikaz. Mjesoviti/napredni slucaj ostaje TOCNO kao danas (vidljiva inline lista).
-  if (ctx.items.every(isSimpleItem)) {
-    list.hidden = true;
-    container.appendChild(renderRepairLedgerModal({ items: ctx.items, ceilingPriceEur: ctx.ceilingPriceEur ?? null, listEl: list }));
-  } else {
-    container.appendChild(renderRepairPriceSlider({ items: ctx.items, ceilingPriceEur: ctx.ceilingPriceEur ?? null, listEl: list }));
-  }
+  // Ledger+modal je SADA uvijek jedini vidljivi prikaz (list ostaje checkbox izvor istine za
+  // getCheckedItems, ali skriven): stavke s naprednom formom dobivaju "Uredi... ->"/<details>
+  // akciju na svom retku (advancedFormFor), umjesto da cijeli panel padne natrag na dugu,
+  // neogranicenu listu cim ijedna stavka nosi npr. literaturu.
+  list.hidden = true;
+  container.appendChild(renderRepairLedgerModal({ items: ctx.items, ceilingPriceEur: ctx.ceilingPriceEur ?? null, listEl: list, advancedFormFor }));
   if (deepToggle) container.appendChild(deepRow);
   container.appendChild(downloadBtn);
   container.appendChild(renderFieldButton);
@@ -608,7 +654,7 @@ export function renderTitlePageControls(li: HTMLElement, item: RepairableItem): 
   li.appendChild(section);
 }
 
-export function renderElementCaptionControls(li: HTMLLIElement, item: RepairableItem): void {
+export function renderElementCaptionControls(li: HTMLElement, item: RepairableItem): void {
   const definition = item.elementCaptionForm;
   if (!definition) return;
   const section = document.createElement('section');
@@ -694,7 +740,7 @@ export function renderElementCaptionControls(li: HTMLLIElement, item: Repairable
   li.appendChild(section);
 }
 
-export function renderBibliographyControls(li: HTMLLIElement, item: RepairableItem): void {
+export function renderBibliographyControls(li: HTMLElement, item: RepairableItem): void {
   const definition = item.bibliographyForm;
   if (!definition) return;
   const section = document.createElement('section');
@@ -773,7 +819,7 @@ export function renderBibliographyControls(li: HTMLLIElement, item: RepairableIt
   li.appendChild(section);
 }
 
-export function renderCitationBibliographySyncControls(li: HTMLLIElement, item: RepairableItem): void {
+export function renderCitationBibliographySyncControls(li: HTMLElement, item: RepairableItem): void {
   const definition = item.citationBibliographySyncForm;
   if (!definition) return;
   const section = document.createElement('section');
@@ -839,7 +885,7 @@ export function renderCitationBibliographySyncControls(li: HTMLLIElement, item: 
   li.appendChild(section);
 }
 
-export function renderLegalFootnoteRepairControls(li: HTMLLIElement, item: RepairableItem): void {
+export function renderLegalFootnoteRepairControls(li: HTMLElement, item: RepairableItem): void {
   const definition = item.legalFootnoteRepairForm;
   if (!definition) return;
   const section = document.createElement('section');
@@ -912,7 +958,7 @@ export function renderLegalFootnoteRepairControls(li: HTMLLIElement, item: Repai
   li.appendChild(section);
 }
 
-export function renderFinalDocumentInspectorControls(li: HTMLLIElement, item: RepairableItem): void {
+export function renderFinalDocumentInspectorControls(li: HTMLElement, item: RepairableItem): void {
   const definition = item.finalDocumentInspectorForm;
   if (!definition) return;
   const section = document.createElement('section');
@@ -964,7 +1010,7 @@ export function renderFinalDocumentInspectorControls(li: HTMLLIElement, item: Re
   li.appendChild(section);
 }
 
-export function renderTableFigureRescueControls(li: HTMLLIElement, item: RepairableItem): void {
+export function renderTableFigureRescueControls(li: HTMLElement, item: RepairableItem): void {
   const definition = item.tableFigureRescueForm;
   if (!definition) return;
   const section = document.createElement('section');
@@ -1019,7 +1065,7 @@ export function renderTableFigureRescueControls(li: HTMLLIElement, item: Repaira
   li.appendChild(section);
 }
 
-export function renderSectionSurgeryControls(li: HTMLLIElement, item: RepairableItem): void {
+export function renderSectionSurgeryControls(li: HTMLElement, item: RepairableItem): void {
   const definition = item.sectionSurgeryForm;
   if (!definition) return;
   const section = document.createElement('section');
@@ -1060,7 +1106,7 @@ export function renderSectionSurgeryControls(li: HTMLLIElement, item: Repairable
   li.appendChild(section);
 }
 
-export function renderFieldIntegrityControls(li: HTMLLIElement, item: RepairableItem): void {
+export function renderFieldIntegrityControls(li: HTMLElement, item: RepairableItem): void {
   const definition = item.fieldIntegrityForm;
   if (!definition) return;
   const section = document.createElement('section');
@@ -1101,7 +1147,7 @@ export function renderFieldIntegrityControls(li: HTMLLIElement, item: Repairable
   li.appendChild(section);
 }
 
-export function renderCroatianTypographyControls(li: HTMLLIElement, item: RepairableItem): void {
+export function renderCroatianTypographyControls(li: HTMLElement, item: RepairableItem): void {
   const definition = item.croatianTypographyForm;
   if (!definition) return;
   const section = document.createElement('section');
@@ -1133,7 +1179,7 @@ export function renderCroatianTypographyControls(li: HTMLLIElement, item: Repair
   render(); li.appendChild(section);
 }
 
-export function renderConsistencyControls(li: HTMLLIElement, item: RepairableItem): void {
+export function renderConsistencyControls(li: HTMLElement, item: RepairableItem): void {
   const definition = item.consistencyForm;
   if (!definition) return;
   const section = document.createElement('section');
@@ -1159,7 +1205,7 @@ export function renderConsistencyControls(li: HTMLLIElement, item: RepairableIte
   li.appendChild(section);
 }
 
-function renderRequiredSectionsControls(li: HTMLLIElement, item: RepairableItem): void {
+export function renderRequiredSectionsControls(li: HTMLElement, item: RepairableItem): void {
   const definition = item.requiredSectionsForm;
   if (!definition) return;
   const section = document.createElement('section');
@@ -1186,7 +1232,7 @@ function renderRequiredSectionsControls(li: HTMLLIElement, item: RepairableItem)
   sync(); li.appendChild(section);
 }
 
-function renderLinkDoiControls(li: HTMLLIElement, item: RepairableItem): void {
+export function renderLinkDoiControls(li: HTMLElement, item: RepairableItem): void {
   const definition = item.linkDoiForm;
   if (!definition) return;
   const section = document.createElement('section');
@@ -1209,7 +1255,7 @@ function renderLinkDoiControls(li: HTMLLIElement, item: RepairableItem): void {
   sync(); li.appendChild(section);
 }
 
-function renderCrossFileSubmissionControls(li: HTMLLIElement, item: RepairableItem): void {
+export function renderCrossFileSubmissionControls(li: HTMLElement, item: RepairableItem): void {
   const definition = item.crossFileSubmissionForm;
   if (!definition) return;
   const section = document.createElement('section');
@@ -1264,7 +1310,7 @@ function renderCrossFileSubmissionControls(li: HTMLLIElement, item: RepairableIt
   li.appendChild(section);
 }
 
-function renderHeadingCandidateControls(li: HTMLLIElement, item: RepairableItem): void {
+export function renderHeadingCandidateControls(li: HTMLElement, item: RepairableItem): void {
   if (item.headingNumberingPlan?.mappings?.length) {
     renderHeadingNumberingPlan(li, item);
     return;
@@ -1334,7 +1380,7 @@ function renderHeadingCandidateControls(li: HTMLLIElement, item: RepairableItem)
   li.appendChild(tree);
 }
 
-function renderHeadingNumberingPlan(li: HTMLLIElement, item: RepairableItem): void {
+function renderHeadingNumberingPlan(li: HTMLElement, item: RepairableItem): void {
   const plan = item.headingNumberingPlan;
   if (!plan) return;
   const section = document.createElement('section');

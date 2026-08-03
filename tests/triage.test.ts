@@ -98,14 +98,17 @@ describe('buildTriage — klasifikacija', () => {
     expect(t.findings[0].fixId).toBe('page-numbering-fixer');
   });
 
-  it('citat bez podudaranja u literaturi -> MANUAL, lokacija iz details.missingReferences', () => {
+  it('citat bez podudaranja u literaturi -> ASSISTED citation-bibliography-sync-fixer, lokacija iz details.missingReferences', () => {
+    // Od 5961bdd (2026-08-02) "Citirano -> literatura" ima zivi citation-bibliography-sync-fixer
+    // (check-fixer-map.ts STRUCTURAL_CHECK_RULES), pa vise NIJE manual primjer - i dalje je dobar
+    // primjer za lokacije izvedene iz details.missingReferences (REF_SOURCE_BY_CHECK nepromijenjen).
     const t = buildTriage({
       checks: [chk({ title: 'Citirano → literatura', category: 'citations', status: 'fail' })],
       details: { missingReferences: [{ p: 12, raw: 'Novak 2022', author: 'Novak', year: '2022' }] },
     });
     const f = t.findings[0];
-    expect(f.fixability).toBe('manual');
-    expect(f.fixId).toBeUndefined();
+    expect(f.fixability).toBe('assisted');
+    expect(f.fixId).toBe('citation-bibliography-sync-fixer');
     expect(f.locations).toHaveLength(1);
     expect(f.locations[0].anchorId).toBe('loc-p12');
     expect(f.locations[0].excerpt).toContain('Novak');
@@ -145,7 +148,7 @@ describe('buildTriage — klasifikacija', () => {
       checks: [
         chk({ title: 'Margine dokumenta', status: 'fail' }), // auto
         chk({ title: 'Naslovi tablica', category: 'elements', status: 'warn' }), // assisted
-        chk({ title: 'Citirano → literatura', category: 'citations', status: 'fail' }), // manual
+        chk({ title: 'Potpunost bibliografskih zapisa', category: 'citations', status: 'fail' }), // manual (sadrzajno pitanje, fixer ga ne dira)
       ],
     });
     expect(t.counts).toEqual({ auto: 1, assisted: 1, manual: 1, total: 3 });

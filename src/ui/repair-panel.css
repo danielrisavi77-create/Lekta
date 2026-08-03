@@ -16,6 +16,12 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+/* list.hidden=true (JS) postavlja [hidden] atribut; bez ovoga bi ga nase vlastito `display:flex`
+   pravilo iznad nadjacalo (autorski CSS uvijek pobjedjuje UA [hidden]{display:none} default,
+   bez obzira na specificnost) i "skrivena" lista bi ostala vidljiva ISPOD ledgera. */
+.lekta-repair-panel__list[hidden] {
+  display: none;
+}
 
 .lekta-repair-panel__item {
   display: flex;
@@ -138,6 +144,18 @@
   margin-top: 0.2rem;
 }
 
+.lekta-repair-panel__deep--alert {
+  color: #b3261e;
+  font-weight: 600;
+}
+
+.lekta-repair-panel__consent-hint {
+  margin: -0.5rem 0 0.875rem;
+  color: #b3261e;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
 .lekta-repair-panel__download {
   padding: 0.625rem 1rem;
   border-radius: 0.5rem;
@@ -235,8 +253,10 @@
   color: var(--muted);
 }
 
-/* ---------- Ledger + modal ("koliko platis, toliko popravaka", suzeni opseg: SAMO
-   jednostavne stavke bez prikljucene napredne forme; vidi repair-price-slider.ts) ---------- */
+/* ---------- Ledger + modal ("koliko platis, toliko popravaka") - UVIJEK jedini vidljivi prikaz
+   (repair-price-slider.ts). Stavke s naprednom formom (literatura, citati, fusnote...) dobivaju
+   "Uredi... ->" (Tier A: .lekta-repair-ledger-row-edit, otvara zaseban modal) ili inline <details>
+   (Tier B: .lekta-repair-panel__more) na svom retku - vidi advancedFormFor u repair-panel.ts. ---------- */
 .lekta-repair-trigger {
   display: flex;
   align-items: center;
@@ -452,3 +472,89 @@
 .lekta-repair-panel__field-integrity label{display:flex;gap:.45rem;align-items:flex-start;padding:.25rem 0}
 .lekta-repair-panel__field-list{display:grid;gap:.2rem;max-height:16rem;overflow:auto}
 .lekta-repair-panel__field-integrity small{color:var(--muted);margin-left:.25rem}
+
+/* Tier A: "Uredi {label} (N) ->" sibling gumb ispod ledger retka, otvara zaseban modal
+   (openItemModal u repair-price-slider.ts). Sadrzaj forme koristi POSTOJECE klase iznad
+   (.lekta-repair-panel__bibliography-row i sl.) unutar tog modala - modal sam vec ima
+   max-height/overflow (.modal u index.html), pa nema posebnog scroll-omota ovdje. */
+.lekta-repair-ledger-row-edit {
+  display: block;
+  width: 100%;
+  margin: -0.25rem 0 0.5625rem;
+  padding: 0.25rem 0 0.5625rem;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  color: var(--brand);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-align: right;
+  cursor: pointer;
+}
+.lekta-repair-ledger-row-edit:hover {
+  text-decoration: underline;
+}
+
+/* Institucijska preporuka (item.recommended) na ledger retku - bez ovoga se opt-in preporuka
+   vizualno ne razlikuje od obavezne stavke (priorityOrder ne zna za tu razliku). */
+.lekta-repair-ledger-badge {
+  flex: none;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--brand);
+  background: var(--panel);
+  padding: 0.0625rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+/* Tier B: inline <details> na ledger retku (forma ostaje na dohvat ruke, ne napusta ledger).
+   Laksa varijanta od .sec-acc (landing accordion) - bez chevrona, samo desno poravnat naslov. */
+.lekta-repair-panel__more {
+  margin: -0.25rem 0 0.5625rem;
+  padding-bottom: 0.5625rem;
+  border-bottom: 1px solid var(--line);
+}
+.lekta-repair-panel__more > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--brand);
+  text-align: right;
+}
+.lekta-repair-panel__more > summary::-webkit-details-marker {
+  display: none;
+}
+.lekta-repair-panel__more[open] > summary {
+  margin-bottom: 0.375rem;
+  text-align: left;
+}
+
+/* "‹ Natrag" u Tier A item-modalu (openItemModal), vraca na ledger umjesto potpunog zatvaranja. */
+.lekta-repair-ledger-back {
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+}
+.lekta-repair-ledger-back:hover {
+  color: var(--text);
+}
+
+/* scrollToRepairPanel (RESULT-03) istice BAS onaj ledger redak koji popravlja kliknuti nalaz -
+   isti jezik/animacija kao .lekta-repair-panel__item--target, samo primijenjeno na redak. */
+.lekta-repair-ledger-row--target {
+  animation: lektaRepairItemTarget 1.6s ease-out;
+  border-radius: 6px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lekta-repair-ledger-row--target { animation: none; background-color: rgba(26, 122, 84, 0.12); }
+}

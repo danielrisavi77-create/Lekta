@@ -30,6 +30,32 @@ function mount(): HTMLElement {
   return el;
 }
 
+/** Ledger je od ovog vala UVIJEK jedini vidljivi prikaz (list ostaje skriveni izvor istine za
+ *  checkboxove) - otvori ga kao korisnik: klik na "Prilagodi popravke ->". */
+function openLedger(mountEl: HTMLElement): HTMLElement {
+  mountEl.querySelector<HTMLButtonElement>('.lekta-repair-trigger__btn')!.click();
+  return document.querySelector<HTMLElement>('.modal-backdrop[data-lekta-repair-ledger-modal]')!;
+}
+
+/** Tier A: klikni "{label} (N) ->" na ledger retku ciji tekst pocinje danim prefiksom, vrati
+ *  novootvoreni, zaseban item-modal (drugi modal-backdrop, BEZ ledger oznake). */
+function openTierAItem(ledger: HTMLElement, labelPrefix: string): HTMLElement {
+  const btn = Array.from(ledger.querySelectorAll<HTMLButtonElement>('.lekta-repair-ledger-row-edit')).find((b) =>
+    b.textContent?.startsWith(labelPrefix),
+  )!;
+  btn.click();
+  return document.querySelector<HTMLElement>('.modal-backdrop:not([data-lekta-repair-ledger-modal])')!;
+}
+
+/** Tier B: otvori inline <details> na ledger retku (dispatchamo 'toggle' rucno - ne oslanjamo se
+ *  na to hoce li happy-dom sam ispaliti event pri programatskom otvaranju). */
+function openTierBDetails(ledger: HTMLElement): HTMLDetailsElement {
+  const details = ledger.querySelector<HTMLDetailsElement>('details.lekta-repair-panel__more')!;
+  details.open = true;
+  details.dispatchEvent(new Event('toggle'));
+  return details;
+}
+
 const ctxBase = {
   getDocxBytes: async () => new Uint8Array(0),
   originalFileName: 'rad.docx',
@@ -53,10 +79,12 @@ describe('renderRepairPanel: grupiranje i checkboxi', () => {
     };
     const legalItem = item({ fixerId: 'legal-footnote-repair-fixer', legalFootnoteRepairForm: form });
     renderRepairPanel({ ...ctxBase, mountEl, items: [legalItem] });
-    expect(mountEl.textContent).toContain('Prije:');
-    expect(mountEl.textContent).toContain('op. cit.');
-    expect(mountEl.querySelectorAll('.lekta-repair-panel__legal-footnote input[type="checkbox"]')).toHaveLength(2);
-    const boxes = mountEl.querySelectorAll<HTMLInputElement>('.lekta-repair-panel__legal-footnote input[type="checkbox"]');
+    const ledger = openLedger(mountEl);
+    const itemModal = openTierAItem(ledger, 'Fusnote');
+    expect(itemModal.textContent).toContain('Prije:');
+    expect(itemModal.textContent).toContain('op. cit.');
+    expect(itemModal.querySelectorAll('.lekta-repair-panel__legal-footnote input[type="checkbox"]')).toHaveLength(2);
+    const boxes = itemModal.querySelectorAll<HTMLInputElement>('.lekta-repair-panel__legal-footnote input[type="checkbox"]');
     expect(boxes[0].checked).toBe(true);
     boxes[1].click();
     expect(form.candidates[0].operations[0].selected).toBe(true);
@@ -78,14 +106,16 @@ describe('renderRepairPanel: grupiranje i checkboxi', () => {
     };
     const inspectorItem = item({ fixerId: 'final-document-inspector-fixer', finalDocumentInspectorForm: form });
     renderRepairPanel({ ...ctxBase, mountEl, items: [inspectorItem] });
-    expect(mountEl.querySelector('.lekta-repair-panel__final-inspector')).not.toBeNull();
-    expect(mountEl.textContent).toContain('nova čista kopija');
-    const select = mountEl.querySelector<HTMLSelectElement>('.lekta-repair-panel__final-inspector select')!;
+    const ledger = openLedger(mountEl);
+    const details = openTierBDetails(ledger);
+    expect(details.querySelector('.lekta-repair-panel__final-inspector')).not.toBeNull();
+    expect(details.textContent).toContain('nova čista kopija');
+    const select = details.querySelector<HTMLSelectElement>('.lekta-repair-panel__final-inspector select')!;
     expect(select.value).toBe('accept');
     select.value = 'reject';
     select.dispatchEvent(new Event('change'));
     expect(form.findings[0].evidence[0].revisionAction).toBe('reject');
-    const disabled = mountEl.querySelectorAll<HTMLInputElement>('.lekta-repair-panel__final-inspector input[disabled]');
+    const disabled = details.querySelectorAll<HTMLInputElement>('.lekta-repair-panel__final-inspector input[disabled]');
     expect(disabled).toHaveLength(1);
   });
 
@@ -134,10 +164,12 @@ describe('renderRepairPanel: grupiranje i checkboxi', () => {
       },
     });
     renderRepairPanel({ ...ctxBase, mountEl, items: [numberingItem] });
-    const row = mountEl.querySelector('.lekta-repair-panel__heading-numbering-node')!;
+    const ledger = openLedger(mountEl);
+    const itemModal = openTierAItem(ledger, 'Naslovi');
+    const row = itemModal.querySelector('.lekta-repair-panel__heading-numbering-node')!;
     expect(row.querySelector('select')?.querySelectorAll('option')).toHaveLength(3);
     expect(row.querySelectorAll('input[type="checkbox"]')).toHaveLength(3);
-    expect(mountEl.textContent).toContain('1 ručnih prefiksa');
+    expect(itemModal.textContent).toContain('1 ručnih prefiksa');
     const autoNumber = row.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')[1];
     autoNumber.click();
     expect((numberingItem.params.targets as Array<Record<string, unknown>>)[0].numbered).toBe(false);
@@ -325,7 +357,9 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
       reanalyze: async () => ({
         score: 98,
         categories: { citations: { earned: 8, max: 10 }, formatting: { earned: 90, max: 90 } },
-        checks: [chk('Citirano → literatura', 'fail', 8, 10), chk('Dominantni font', 'pass', 90, 90)],
+        // "Citirano -> literatura" vise NIJE dobar manual primjer (5961bdd: zivi citation-bibliography-
+        // sync-fixer), pa strop test koristi "Potpunost bibliografskih zapisa" (ostaje namjerno manual).
+        checks: [chk('Potpunost bibliografskih zapisa', 'fail', 8, 10), chk('Dominantni font', 'pass', 90, 90)],
       }),
     });
     mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
@@ -333,7 +367,7 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
 
     const recheck = mountEl.querySelector('.lekta-repair-panel__recheck')!;
     expect(recheck.textContent).toContain('98/100 je maksimalna ocjena');
-    expect(recheck.textContent).toContain('Citirano → literatura');
+    expect(recheck.textContent).toContain('Potpunost bibliografskih zapisa');
     expect(mountEl.querySelector('.lekta-repair-panel__ceiling')).not.toBeNull();
   });
 
@@ -450,11 +484,11 @@ describe('renderRepairPanel: potvrda lokacije (K6 umetanje sekcije)', () => {
   });
 });
 
-// Uzi opseg "koliko platis, toliko popravaka" (2026-08-01): ledger+modal prezentacija SAMO kad
-// NIJEDNA stavka nema prikljucenu naprednu formu (title page, bibliografija i sl. iz sireg repair
-// engine rada). Mjesoviti/napredni slucaj MORA ostati bit-identican postojecem inline prikazu -
-// to je jedina sigurnosna ograda protiv slamanja koda koji ne kontroliramo iz ovog modula.
-describe('renderRepairPanel: ledger+modal (samo jednostavne stavke)', () => {
+// "Koliko platis, toliko popravaka" (2026-08-01) + redizajn "Uredi.../<details>" (2026-08-03):
+// ledger+modal je SADA UVIJEK jedini vidljivi prikaz, bez obzira na mix stavki. Stavke s
+// naprednom formom dobivaju "Uredi... ->" (Tier A: zaseban modal) ili inline <details>
+// (Tier B) na svom retku umjesto da cijeli panel padne natrag na dugu, neogranicenu listu.
+describe('renderRepairPanel: ledger+modal (uvijek, bez obzira na mix stavki)', () => {
   it('sve stavke jednostavne: prikazuje kompaktan trigger, stara lista je skrivena', () => {
     const mountEl = mount();
     renderRepairPanel({
@@ -473,7 +507,7 @@ describe('renderRepairPanel: ledger+modal (samo jednostavne stavke)', () => {
     expect(mountEl.querySelector('.lekta-repair-trigger__price')?.textContent).toMatch(/€/);
   });
 
-  it('bar jedna stavka ima naprednu formu: OSTAJE postojeci inline prikaz, bez triggera', () => {
+  it('stavka s naprednom formom (Tier B): ledger i dalje kompaktan, forma je inline <details> na retku', () => {
     const mountEl = mount();
     const finalForm: FinalDocumentInspectorFormDefinition = {
       findings: [],
@@ -490,9 +524,47 @@ describe('renderRepairPanel: ledger+modal (samo jednostavne stavke)', () => {
       mountEl,
       ceilingPriceEur: 9.99,
     });
-    expect(mountEl.querySelector('.lekta-repair-trigger')).toBeFalsy();
-    expect(mountEl.querySelector<HTMLElement>('.lekta-repair-panel__list')!.hidden).toBe(false);
-    expect(mountEl.querySelectorAll('.lekta-repair-panel__item').length).toBe(2);
+    expect(mountEl.querySelector('.lekta-repair-trigger')).toBeTruthy();
+    expect(mountEl.querySelector<HTMLElement>('.lekta-repair-panel__list')!.hidden).toBe(true);
+    const ledger = openLedger(mountEl);
+    const rows = ledger.querySelectorAll('.lekta-repair-ledger-list > li');
+    expect(rows).toHaveLength(2);
+    const details = ledger.querySelector<HTMLDetailsElement>('details.lekta-repair-panel__more')!;
+    expect(details.querySelector('summary')?.textContent).toBe('Metapodaci i tragovi izrade (0)');
+    // Font (obicna stavka) nema ni Tier A gumb ni Tier B <details> na svom retku.
+    expect(ledger.querySelectorAll('.lekta-repair-ledger-row-edit')).toHaveLength(0);
+    expect(ledger.querySelectorAll('details.lekta-repair-panel__more')).toHaveLength(1);
+  });
+
+  it('stavka s naprednom formom (Tier A): ledger nudi "Uredi..." gumb koji otvara zaseban modal', () => {
+    const mountEl = mount();
+    const bibForm = {
+      entries: [
+        { id: 'e1', rawText: 'Novak, I. (2022). Naslov.', confidence: 'high' as const, selected: true, evidence: [] },
+        { id: 'e2', rawText: 'Horvat, M. (2021). Drugi naslov.', confidence: 'high' as const, selected: true, evidence: [] },
+      ],
+      summary: '2 zapisa',
+      buildParams: () => ({}),
+    };
+    renderRepairPanel({
+      items: [
+        item({ ruleId: 'font', fixerId: 'font-fixer', label: 'Font', violated: true }),
+        item({ ruleId: 'bib', fixerId: 'bibliography-repair-fixer', label: 'Literatura', violated: true, bibliographyForm: bibForm }),
+      ],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+      ceilingPriceEur: 9.99,
+    });
+    const ledger = openLedger(mountEl);
+    const itemModal = openTierAItem(ledger, 'Literatura');
+    expect(itemModal.querySelectorAll('.lekta-repair-panel__bibliography-row')).toHaveLength(2);
+    // Ledger je zatvoren (zamijeni, ne slazi se), samo JEDAN otvoreni modal-backdrop odjednom.
+    expect(document.querySelectorAll('.modal-backdrop:not(.hidden)')).toHaveLength(1);
+    // "Natrag" vraca na ledger i uklanja item-modal.
+    itemModal.querySelector<HTMLButtonElement>('.lekta-repair-ledger-back')!.click();
+    expect(document.body.contains(itemModal)).toBe(false);
+    expect(ledger.classList.contains('hidden')).toBe(false);
   });
 
   it('klik na "Prilagodi popravke" otvara modal s redom po stavci, redoslijed po tezini', () => {

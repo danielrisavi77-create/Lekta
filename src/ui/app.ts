@@ -34,8 +34,9 @@ import { INSTITUTIONAL_COVERAGE_MATRIX, COVERAGE_STATUS_META, CORPUS_STATS } fro
 import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../submission/submission-loader';
 import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-toggle';
 import { findUpcomingDeadline } from '../submission/deadline-registry';
-import { renderRepairPanel, renderConfirmation, renderTitlePageControls, renderElementCaptionControls, renderBibliographyControls, renderCitationBibliographySyncControls, renderLegalFootnoteRepairControls, renderFinalDocumentInspectorControls, isSimpleItem } from './repair-panel';
-import { renderRepairPriceSlider, renderRepairLedgerModal } from './repair-price-slider';
+import { renderRepairPanel, renderConfirmation, advancedFormFor } from './repair-panel';
+import { renderRepairLedgerModal } from './repair-price-slider';
+import { trapModal, releaseModal } from './modal-utils';
 import { buildFindingViewModels, findingCardHtml, topFindings, type FindingSessionState, type FindingViewModel } from './finding-view-model';
 import { collectAllPreviewFlags } from '../preview/preview-anchors';
 import { resultReadiness } from './result-readiness';
@@ -363,10 +364,7 @@ function openPrivacySettings(){if(productionConfig?.analyticsEndpoint){renderCon
    import jer se biljezi uz privole i narudzbe, a puni tekst ostaje izvan prvog bundlea. */
 let _legalOpenToken=0;
 // Fokus u modalima (a11y): zarobi Tab unutar modala i vrati fokus na okidac pri zatvaranju.
-let _modalReturnFocus: any=null;
-function modalFocusables(el: any){return[...el.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(x=>x.offsetWidth||x.offsetHeight||x.getClientRects().length)}
-let _modalDepth=0;function setBackgroundInert(on: any){['header.topbar','main','footer'].forEach((sel: any)=>{const el=document.querySelector(sel);if(!el)return;if(on){el.setAttribute('inert','');el.setAttribute('aria-hidden','true')}else{el.removeAttribute('inert');el.removeAttribute('aria-hidden')}})}function trapModal(el: any){if(!el)return;_modalReturnFocus=document.activeElement;if(++_modalDepth===1)setBackgroundInert(true);el._trap=(e: any)=>{if(e.key!=='Tab')return;const f=modalFocusables(el);if(!f.length)return;const first=f[0],last=f[f.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};el.addEventListener('keydown',el._trap);setTimeout(()=>{(el.querySelector('.modal-close')||modalFocusables(el)[0])?.focus()},30)}
-function releaseModal(el: any){if(el&&el._trap){el.removeEventListener('keydown',el._trap);el._trap=null;if(--_modalDepth<=0){_modalDepth=0;setBackgroundInert(false)}}if(_modalReturnFocus){try{_modalReturnFocus.focus()}catch(e: any){}_modalReturnFocus=null}}
+// Izdvojeno u modal-utils.ts da ga repair-panel.ts/repair-price-slider.ts mogu dijeliti.
 async function openLegal(kind='privacy'){const modal=$('#legalModal'),title=$('#legalTitle'),content=$('#legalContent');if(!modal||!title||!content)return;const token=++_legalOpenToken;title.textContent='Učitavam pravne informacije';content.innerHTML='<p>Pripremam aktualni tekst.</p>';modal.classList.remove('hidden');trapModal(modal);try{const {legalDocuments}=await import('../legal/legal-content');if(token!==_legalOpenToken)return;const docs=legalDocuments({org:productionConfig.businessName,contact:productionConfig.contactEmail,controller:productionConfig.privacyController,days:productionConfig.retentionDays}),doc=(docs as any)[kind]||docs.privacy;title.textContent=doc.title;content.innerHTML=doc.html}catch(e: any){if(token!==_legalOpenToken)return;title.textContent='Pravne informacije';content.innerHTML='<p>Tekst trenutačno nije moguće učitati. Pokušaj ponovno.</p>'}}
 function closeLegal(){_legalOpenToken++;$('#legalModal')?.classList.add('hidden');releaseModal($('#legalModal'))}
 // Pregled dokumenta ima DVIJE verzije: "citljivo" (MVP tijek teksta, render-preview) i "faksimil"
@@ -998,17 +996,36 @@ function scrollToRepairPanel(r: any,finding?: any){
     m.classList.remove('repair-flash');void (m as any).offsetWidth;m.classList.add('repair-flash');
     if(finding){
       const target=pickTargetItem(finding.matchKeys,repairPanelItems)||pickTargetItem(finding.matchKeys,repairPanelTextItems);
-      const targetEl: any=target?m.querySelector(`[data-rule-id="${target.ruleId}"]`):null;
-      if(targetEl&&target){
-        targetEl.scrollIntoView({behavior:motionReduced()?'auto':'smooth',block:'center'});
-        targetEl.classList.remove('lekta-repair-panel__item--target');void targetEl.offsetWidth;targetEl.classList.add('lekta-repair-panel__item--target');
-        const cb: any=targetEl.querySelector('input[type="checkbox"]');
-        // Prisilno oznaci SAMO glavne stavke (data-idx): korisnik je izricito trazio bas ovaj popravak.
-        // Tekstualne stavke (data-text-apply, mijenjaju autorov tekst) OSTAJU opt-in, samo se istaknu.
-        if(cb&&!cb.checked&&cb.hasAttribute('data-idx')){cb.checked=true;cb.dispatchEvent(new Event('change',{bubbles:true}))}
-        act=cb||targetEl.querySelector('button,a[href]')||targetEl;
-        toast(`Otvoren je popravak za: ${target.label}.`);
-      }else if(!target){
+      if(target){
+        // Glavne stavke (data-idx) sad zive SAMO kao ledger redak (list je trajno skriven, vidi
+        // renderRepairSection): otvori ledger PRIJE trazenja retka, inace redak jos ne postoji u
+        // DOM-u. Tekstualne stavke (renderTextItemsSection, data-text-apply) ostaju izvan ledgera,
+        // uvijek vidljive - za njih vrijedi stari put preko #repairPanelMount.
+        const triggerBtn: any=m.querySelector('.lekta-repair-trigger__btn');
+        triggerBtn?.click();
+        const ledgerRow: any=document.querySelector(`.lekta-repair-ledger-row[data-rule-id="${target.ruleId}"]`);
+        const targetEl: any=ledgerRow||m.querySelector(`[data-rule-id="${target.ruleId}"]`);
+        if(targetEl){
+          targetEl.scrollIntoView({behavior:motionReduced()?'auto':'smooth',block:'center'});
+          const flashClass=ledgerRow?'lekta-repair-ledger-row--target':'lekta-repair-panel__item--target';
+          targetEl.classList.remove(flashClass);void targetEl.offsetWidth;targetEl.classList.add(flashClass);
+          if(ledgerRow){
+            // Redak je <button role="checkbox">: klik njime pogoni I stvarni (skriveni) checkbox I
+            // ledgerov vizualni "on" prikaz ISTOVREMENO (renderAll() unutra) - izravno postavljanje
+            // checkboxa bi checkbox oznacilo, ali redak bi vizualno ostao neoznacen (renderRepairLedgerModal
+            // ne slusa promjene na skrivenoj listi izvana, samo klik na vlastiti redak).
+            if(ledgerRow.getAttribute('aria-checked')!=='true')ledgerRow.click();
+            act=ledgerRow;
+          }else{
+            const cb: any=targetEl.querySelector('input[type="checkbox"]');
+            // Prisilno oznaci SAMO glavne stavke (data-idx): korisnik je izricito trazio bas ovaj popravak.
+            // Tekstualne stavke (data-text-apply, mijenjaju autorov tekst) OSTAJU opt-in, samo se istaknu.
+            if(cb&&!cb.checked&&cb.hasAttribute('data-idx')){cb.checked=true;cb.dispatchEvent(new Event('change',{bubbles:true}))}
+            act=cb||targetEl.querySelector('button,a[href]')||targetEl;
+          }
+          toast(`Otvoren je popravak za: ${target.label}.`);
+        }
+      }else{
         toast('Ovaj popravak trenutno nije ponuđen kao automatska stavka za ovaj dokument. Pogledaj cijeli popis ispod.');
       }
     }
@@ -1342,6 +1359,7 @@ async function renderRepairSection(r: any){
  const mount=$('#repairPanelMount'); if(!mount) return; mount.innerHTML='';
  repairPanelNode=null; repairPanelForResult=null; // dok se ne renderira stateful panel, nema sto cuvati
  repairPanelItems=[]; repairPanelTextItems=[];
+ try{
  const defId=r.details?.profileDefinitionId; if(!defId) return;
  if(r!==currentResult||!analyzedProfile) return; // demo, zastarjeli rezultat ili nema snapshota
  await ensureTemplatesHeavy();
@@ -1421,6 +1439,13 @@ async function renderRepairSection(r: any){
  renderRepairPanel({items,getDocxBytes:async()=>new Uint8Array(await file.arrayBuffer()),originalFileName:r.file?.name||'rad.docx',mountEl:mount,beforeScore:{score:r.score,categories:r.categories,checks:r.checks},ceilingPriceEur:ceilingPriceEurFor(r),fieldRenderEndpoint:String(productionConfig?.fieldRenderEndpoint||'').trim(),getAccessToken:async()=>String(await resolveAccessToken()||''),reanalyze:async(bytes: Uint8Array)=>{const f=new File([bytes as Uint8Array<ArrayBuffer>],r.file?.name||'rad.docx',{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});return res?{score:res.score,categories:res.categories,checks:res.checks}:null}});
  // Zapamti stvarni cvor placenog panela za ocuvanje kroz re-render checkliste.
  repairPanelNode=mount.firstElementChild; repairPanelForResult=r;
+ } finally {
+  // RE-34 nastavak: mount se puni ASINKRONO (ensureTemplatesHeavy + fixer builderi), a renderRepairCta
+  // se prvi put zove SINKRONO odmah nakon poziva ove funkcije (renderResult), dok je mount jos prazan
+  // -> #repairEntry ostajao trajno skriven i kad panel ispod stvarno ima sadrzaj. try/finally hvata
+  // SVAKI izlaz iz ove funkcije (i rane return-ove kad nema stavki, gdje ponovni izracun ostaje no-op).
+  if(r===currentResult) renderRepairCta(r);
+ }
 }
 
 // WS-3 SERVER-SIDE repair panel: jedan gumb "Popravi sve jednim klikom" -> privola (upload+pohrana)
@@ -1507,23 +1532,18 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
   const badgeText=item.recommended?'Preporučeno':(isViolated?'Možemo ovo popraviti umjesto tebe':'Uskladi s profilom');
   li.innerHTML=`<label><input type="checkbox" ${isViolated?'checked':''} data-idx="${idx}" /><span>${escapeHtml(item.label)}</span></label><span class="lekta-repair-panel__badge">${badgeText}</span>`;
   list.appendChild(li);
-  if(item.titlePageForm)renderTitlePageControls(li,item);
-  if(item.elementCaptionForm)renderElementCaptionControls(li,item);
-  if(item.bibliographyForm)renderBibliographyControls(li,item);
-  if(item.citationBibliographySyncForm)renderCitationBibliographySyncControls(li,item);
-  if(item.legalFootnoteRepairForm)renderLegalFootnoteRepairControls(li,item);
-  if(item.finalDocumentInspectorForm)renderFinalDocumentInspectorControls(li,item);
+  // Napredna forma (literatura, citati, fusnote, naslovnica...) se VISE ne gradi ovdje inline:
+  // list je uvijek skriven (ledger je jedini vidljivi prikaz, vidi nize). advancedFormFor
+  // (repair-panel.ts, dijeljeno s lokalnim panelom) je jedino mjesto koje zna koji render*Controls
+  // ide uz koju formu; renderRepairLedgerModal ga zove LIJENO, tek na klik/otvaranje retka. Ovime
+  // server panel dobiva i svih 15 vrsta naprednih formi (prije je imao samo 6 od 15 - Section
+  // Surgery/Consistency Engine/Field Integrity i dr. su bili goli checkboxi bez uvida).
  });
  wrap.appendChild(list);
- // Uzi opseg: ledger+modal SAMO kad NIJEDNA stavka nema prikljucenu naprednu formu (isti kriterij
- // kao lokalni panel, vidi isSimpleItem u repair-panel.ts). Mjesoviti/napredni slucaj ostaje TOCNO
- // kao danas (vidljiva inline lista + tanki slider).
- if(items.every(isSimpleItem)){
-  list.hidden=true;
-  wrap.appendChild(renderRepairLedgerModal({items,ceilingPriceEur:ceilingPriceEurFor(r),listEl:list}));
- }else{
-  wrap.appendChild(renderRepairPriceSlider({items,ceilingPriceEur:ceilingPriceEurFor(r),listEl:list}));
- }
+ // Ledger+modal je SADA uvijek jedini vidljivi prikaz (list ostaje checkbox izvor istine za
+ // getCheckedItems, ali skriven) - isti mehanizam kao lokalni panel (repair-panel.ts).
+ list.hidden=true;
+ wrap.appendChild(renderRepairLedgerModal({items,ceilingPriceEur:ceilingPriceEurFor(r),listEl:list,advancedFormFor}));
  // Isti v2 dubinski preklopnik i disclosure recenica kao lokalni panel (RE-35: prije je serverski
  // put PRISILNO ukljucivao deep bez ijedne rijeci u copyju).
  const deepAvailable=items.some((i: any)=>_SERVER_DEEP_FIXERS.has(i.fixerId));
@@ -1537,7 +1557,12 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  const consentRow=document.createElement('label');consentRow.className='lekta-repair-panel__deep';
  consentRow.innerHTML='<input type="checkbox" data-repair-consent><span>Pristajem da se dokument pošalje na server i pohrani do brisanja. Besplatna analiza ostaje na uređaju.</span>';
  wrap.appendChild(consentRow);
- const btn=document.createElement('button');btn.type='button';btn.className='lekta-repair-panel__download';btn.disabled=true;btn.textContent='Popravi sve jednim klikom';
+ // Namjerno bez native disabled dok privola nije oznacena: disabled gumb ne ispaljuje click uopce,
+ // pa je klik izgledao kao da gumb "ne radi" (nijedna povratna informacija zasto). Umjesto toga
+ // btn.onclick nize provjerava privolu i jasno upozori + fokusira kucicu.
+ const consentHint=document.createElement('p');consentHint.className='lekta-repair-panel__consent-hint';consentHint.hidden=true;consentHint.textContent='Prvo označi privolu iznad, pa klikni ponovno.';
+ wrap.appendChild(consentHint);
+ const btn=document.createElement('button');btn.type='button';btn.className='lekta-repair-panel__download';btn.textContent='Popravi sve jednim klikom';
  wrap.appendChild(btn);
  // RE-19: potvrdni korak za stavke koje traze potvrdu lokacije (K6 section-insert), isti obrazac
  // i CSS klase kao lokalni panel (renderConfirmation, dijeljen iz repair-panel.ts).
@@ -1549,7 +1574,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  renderTextItemsSection(wrap,r,textItems);
  const consent: any=consentRow.querySelector('input');
  const setSummary=(html: string)=>{summary.hidden=false;summary.innerHTML=html};
- consent.addEventListener('change',()=>{btn.disabled=!consent.checked});
+ consent.addEventListener('change',()=>{if(consent.checked){consentHint.hidden=true;consentRow.classList.remove('lekta-repair-panel__deep--alert')}});
  function getCheckedItems(): any[]{
   const checked: any[]=[];
   list.querySelectorAll('input[type="checkbox"]').forEach((input: any)=>{if(input.checked)checked.push(items[Number(input.dataset.idx)])});
@@ -1723,6 +1748,13 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  // lokalni panel). "Nastavi svejedno" (data-repair-confirm, tier_mismatch) zove go(true) izravno:
  // do te tocke je lokacija vec jednom potvrdjena u prvom pokusaju iste serije odabira.
  btn.onclick=()=>{
+  if(!consent.checked){
+   consentHint.hidden=false;
+   consentRow.classList.add('lekta-repair-panel__deep--alert');
+   consent.focus();
+   consentRow.scrollIntoView({behavior:'smooth',block:'center'});
+   return;
+  }
   const needsConfirm=getCheckedItems().filter((it: any)=>it.requiresConfirmation);
   if(needsConfirm.length){
    renderConfirmation(confirmBox,needsConfirm,()=>{confirmBox.hidden=true;confirmBox.innerHTML='';void go(false)});
