@@ -28,6 +28,7 @@ const CHECK_ID_ALIASES: Array<{ id: string; patterns: RegExp[] }> = [
 
 function slug(value: string): string {
   return String(value || '')
+    .replace(/[Đđ]/g, 'd')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
