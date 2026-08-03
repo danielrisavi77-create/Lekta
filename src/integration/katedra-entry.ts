@@ -2,9 +2,11 @@ import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
 import { isAcademicWorkType, type AcademicWorkType } from './academic-suite-contracts';
 
 const PROJECT_SESSION_SLOT = 'lekta.katedra-project.v0.1';
+const COMPLETION_HANDOFF_SESSION_SLOT = 'lekta.completion-handoff.v0.1';
 // Keep aligned with katedra-capture.ts. Duplicated here deliberately to avoid a
 // circular dependency (capture imports currentKatedraProjectId from this module).
 const HANDOFF_RESULT_SESSION_SLOT = 'lekta.katedra-handoff-result.v0.1';
+const HANDOFF_TOKEN_RE = /^[A-Za-z0-9_-]{43,128}$/;
 
 export interface KatedraEntryContext {
   projectId?: string;
@@ -13,6 +15,7 @@ export interface KatedraEntryContext {
   profileId?: string;
   rulesetId?: string;
   workType?: AcademicWorkType;
+  handoffToken?: string;
 }
 
 const LEGACY_WORK_SLUGS: Record<string, AcademicWorkType> = {
@@ -31,7 +34,22 @@ function cleanId(value: string | null): string | undefined {
   return out;
 }
 
-export function parseKatedraEntryContext(search: string): KatedraEntryContext {
+function cleanHandoffToken(value: string | null): string | undefined {
+  const out = String(value || '').trim();
+  return HANDOFF_TOKEN_RE.test(out) ? out : undefined;
+}
+
+function handoffTokenFromHash(hash: string): string | undefined {
+  const raw = hash.startsWith('#') ? hash.slice(1) : hash;
+  if (!raw) return undefined;
+  try {
+    return cleanHandoffToken(new URLSearchParams(raw).get('handoff'));
+  } catch {
+    return undefined;
+  }
+}
+
+export function parseKatedraEntryContext(search: string, hash = ''): KatedraEntryContext {
   const params = new URLSearchParams(search.startsWith('?') ? search : `?${search}`);
   const rawWork = String(params.get('workType') || params.get('work') || '').trim().toLowerCase();
   const workType = isAcademicWorkType(rawWork) ? rawWork : LEGACY_WORK_SLUGS[rawWork];
@@ -43,6 +61,7 @@ export function parseKatedraEntryContext(search: string): KatedraEntryContext {
     profileId: cleanId(params.get('profile')),
     rulesetId: cleanId(params.get('ruleset')),
     workType,
+    handoffToken: handoffTokenFromHash(hash),
   };
 }
 
@@ -51,11 +70,41 @@ function clearCapturedHandoffResult(): void {
   try { sessionStorage.removeItem(HANDOFF_RESULT_SESSION_SLOT); } catch {}
 }
 
+function clearCompletionHandoffToken(): void {
+  if (typeof sessionStorage === 'undefined') return;
+  try { sessionStorage.removeItem(COMPLETION_HANDOFF_SESSION_SLOT); } catch {}
+}
+
+function rememberCompletionHandoffToken(projectId?: string, token?: string): void {
+  if (!projectId || !token || typeof sessionStorage === 'undefined') return;
+  try {
+    sessionStorage.setItem(COMPLETION_HANDOFF_SESSION_SLOT, JSON.stringify({ projectId, token }));
+  } catch {}
+}
+
+function stripHandoffFragment(): void {
+  if (typeof window === 'undefined' || !window.location.hash) return;
+  try {
+    const params = new URLSearchParams(window.location.hash.slice(1));
+    if (!params.has('handoff')) return;
+    params.delete('handoff');
+    const remaining = params.toString();
+    window.history.replaceState(
+      window.history.state,
+      '',
+      `${window.location.pathname}${window.location.search}${remaining ? `#${remaining}` : ''}`,
+    );
+  } catch {}
+}
+
 export function rememberKatedraProjectId(projectId?: string): void {
   if (!projectId || typeof sessionStorage === 'undefined') return;
   try {
     const previous = cleanId(sessionStorage.getItem(PROJECT_SESSION_SLOT));
-    if (previous && previous !== projectId) clearCapturedHandoffResult();
+    if (previous && previous !== projectId) {
+      clearCapturedHandoffResult();
+      clearCompletionHandoffToken();
+    }
     sessionStorage.setItem(PROJECT_SESSION_SLOT, projectId);
   } catch {}
 }
@@ -65,12 +114,28 @@ export function clearKatedraProjectId(): void {
   try {
     sessionStorage.removeItem(PROJECT_SESSION_SLOT);
     sessionStorage.removeItem(HANDOFF_RESULT_SESSION_SLOT);
+    sessionStorage.removeItem(COMPLETION_HANDOFF_SESSION_SLOT);
   } catch {}
 }
 
 export function currentKatedraProjectId(): string | undefined {
   if (typeof sessionStorage === 'undefined') return undefined;
   try { return cleanId(sessionStorage.getItem(PROJECT_SESSION_SLOT)); } catch { return undefined; }
+}
+
+export function currentCompletionHandoffToken(): string | undefined {
+  if (typeof sessionStorage === 'undefined') return undefined;
+  try {
+    const raw = sessionStorage.getItem(COMPLETION_HANDOFF_SESSION_SLOT);
+    if (!raw) return undefined;
+    const parsed = JSON.parse(raw) as { projectId?: unknown; token?: unknown };
+    const projectId = typeof parsed.projectId === 'string' ? cleanId(parsed.projectId) : undefined;
+    const token = typeof parsed.token === 'string' ? cleanHandoffToken(parsed.token) : undefined;
+    if (!projectId || !token || projectId !== currentKatedraProjectId()) return undefined;
+    return token;
+  } catch {
+    return undefined;
+  }
 }
 
 function dispatchChange(el: HTMLSelectElement): void {
@@ -84,6 +149,8 @@ function dispatchChange(el: HTMLSelectElement): void {
 export function applyKatedraEntryContext(context: KatedraEntryContext): boolean {
   if (typeof document === 'undefined') return false;
   rememberKatedraProjectId(context.projectId);
+  rememberCompletionHandoffToken(context.projectId, context.handoffToken);
+  if (context.handoffToken) stripHandoffFragment();
 
   let changed = false;
   const unitId = context.unitId;
@@ -137,12 +204,14 @@ export function applyKatedraEntryContext(context: KatedraEntryContext): boolean 
 /** Runs after Lekta's main UI bootstrap, which populates the selects. */
 export function bootstrapKatedraEntryContext(): void {
   if (typeof window === 'undefined') return;
-  const context = parseKatedraEntryContext(window.location.search);
-  const hasEntryContext = Boolean(context.projectId || context.unitId || context.programId || context.workType);
+  const context = parseKatedraEntryContext(window.location.search, window.location.hash);
+  const hasEntryContext = Boolean(
+    context.projectId || context.unitId || context.programId || context.workType || context.handoffToken,
+  );
 
   // A direct Lekta visit in the same browser tab must not inherit an earlier
-  // Katedra project/result. The query string is the authority for whether this
-  // page load belongs to a Katedra-origin workflow.
+  // Katedra/Completion project or result. Query/hash metadata is the authority
+  // for whether this page load belongs to a cross-product workflow.
   if (!hasEntryContext) {
     clearKatedraProjectId();
     return;
