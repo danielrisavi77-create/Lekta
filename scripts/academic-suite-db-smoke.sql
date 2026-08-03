@@ -30,7 +30,7 @@ $$;
 
 insert into auth.users(id, email) values
   ('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'one@example.test'),
-  ('bbbbbbbb-bbbb4bbb-8bbb-bbbbbbbbbbbb', 'two@example.test');
+  ('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', 'two@example.test');
 
 -- UUID-first Katedra project keeps the exact same ecosystem project ID.
 insert into public.katedra_projects (
