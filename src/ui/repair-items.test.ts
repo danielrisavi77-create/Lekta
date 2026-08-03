@@ -9,6 +9,7 @@ import {
   introSectionItem,
   crossFileSubmissionRepairableItem,
   elementCaptionRepairableItem,
+  tableFigureRescueRepairableItem,
   type AnalyzedCheck,
 } from './repair-items';
 import type { RuleEntry } from '../profiles/profile-schema';
@@ -411,6 +412,40 @@ describe('elementCaptionRepairableItem: preporuka bez profilnog pravila (RE-59)'
     }];
     const items = elementCaptionRepairableItem({ details: { elementStructure: structure } }, { ruleEntries });
     expect(items).toHaveLength(1);
+    expect(items[0].violated).toBe(true);
+    expect(items[0].recommended).toBeUndefined();
+    expect(items[0].matchKeys?.length).toBeGreaterThan(0);
+  });
+});
+
+describe('tableFigureRescueRepairableItem: preporuka bez profilnog pravila (RE-61)', () => {
+  /**
+   * Isti obrazac kao RE-59, i prolazi isti test vidljivog teksta: svi zahvati su geometrijski
+   * (sirina, zaglavlje, centriranje, orijentacija), nijedan ne dira autorov tekst. Alt tekst se
+   * ne izmislja: polje je prazno i u params ide samo ako ga korisnik upise.
+   */
+  const structure = {
+    tables: [{ id: 't1', bodyChildIndex: 3, anchorFingerprint: 'aaaa1111', rowCount: 4, columnCount: 5, wide: true, confidence: 'high', rowsWithCantSplit: 0, hasHeader: false, evidence: [] }],
+    figures: [{ id: 'f1', paragraphIndex: 7, drawingIndex: 0, anchorFingerprint: 'bbbb2222', widthEmu: 5400000, dpiX: 120, confidence: 'high', wrapsText: false, evidence: [] }],
+  };
+
+  it('nudi se bez pravila, izvan bodovanja, i ne izmislja alt tekst', () => {
+    const items = tableFigureRescueRepairableItem({ details: { tableFigureRescue: structure } }, { ruleEntries: [] });
+    expect(items).toHaveLength(1);
+    expect(items[0].violated).toBe(false);
+    expect(items[0].recommended).toBe(true);
+    expect(items[0].matchKeys, 'ne smije se vezati na bodovan check').toBeUndefined();
+    expect(String(items[0].confirmationText)).toContain('Ocjena se ne mijenja');
+    const params = items[0].params as { figures?: Array<Record<string, unknown>> };
+    expect(params.figures?.every((figure) => figure.altText === undefined), 'alt tekst se ne smije slati').toBe(true);
+  });
+
+  it('s verificiranim pravilom ostaje prekrsaj', () => {
+    const ruleEntries = [{
+      checkId: 'table-figure-rescue-rules', status: 'verified', sourceId: 'izvor', sourcePage: 'str. 7', quote: 'citat',
+      value: { figure: { minDpi: 150 } },
+    }];
+    const items = tableFigureRescueRepairableItem({ details: { tableFigureRescue: structure } }, { ruleEntries });
     expect(items[0].violated).toBe(true);
     expect(items[0].recommended).toBeUndefined();
     expect(items[0].matchKeys?.length).toBeGreaterThan(0);

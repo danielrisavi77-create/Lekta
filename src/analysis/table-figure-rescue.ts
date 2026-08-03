@@ -97,13 +97,18 @@ function directChildren(node: Element, name: string): Element[] {
   return children(node).filter((child) => localName(child) === name);
 }
 
+/**
+ * RE-60 (treci potrosac istog indeksa): mora vratiti SVU djecu tijela, jer se indeksira
+ * `children[candidate.anchor.bodyChildIndex]`, a taj indeks element-structure racuna nad punim
+ * popisom. Prije se ovdje uzimalo samo p i tbl, pa je svaki `w:sdt` (automatski sadrzaj) pomicao
+ * indekse i `localName(node)` vise nije bio 'tbl' ni 'p'. Kandidat bi se tiho preskocio i
+ * struktura bi ostala prazna, pa popravak prelamanja nije imao sto ponuditi ni na dokumentu s
+ * tablicama i slikama.
+ */
 function bodyChildren(document: Document): Element[] {
   const body = [...document.getElementsByTagName('*')].find((node) => localName(node) === 'body') as Element | undefined;
-  return body ? directChildren(body, 'p').concat(directChildren(body, 'tbl')).sort((a, b) => {
-    const ai = [...(a.parentNode?.childNodes ?? [])].indexOf(a);
-    const bi = [...(b.parentNode?.childNodes ?? [])].indexOf(b);
-    return ai - bi;
-  }) : [];
+  if (!body) return [];
+  return [...body.childNodes].filter((node): node is Element => node.nodeType === 1);
 }
 
 function numberAttribute(node: Element | null, name: string): number | null {

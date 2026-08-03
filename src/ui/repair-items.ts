@@ -885,8 +885,22 @@ export function fieldIntegrityRepairableItem(result: any): RepairableItem[] {
 export function tableFigureRescueRepairableItem(result: any, profile: any): RepairableItem[] {
   const ruleEntry = (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'table-figure-rescue-rules' && entry?.status === 'verified' && entry?.sourceId && entry?.sourcePage && entry?.quote);
   const structure = result?.details?.tableFigureRescue;
-  if (!ruleEntry || !structure || (!structure.tables?.length && !structure.figures?.length)) return [];
-  const rules = ruleEntry.value || {};
+  if (!structure || (!structure.tables?.length && !structure.figures?.length)) return [];
+  /**
+   * RE-61: isti obrazac kao RE-59. `table-figure-rescue-rules` nema NIJEDAN od 368 profila, pa je
+   * popravak bio mrtav; bez pravila se sada nudi kao PREPORUKA (violated:false, recommended:true,
+   * bez matchKeys), dakle izvan bodovanja.
+   *
+   * Prolazi test vidljivog teksta iz CLAUDE.md: svi zahvati su geometrijski (sirina tablice,
+   * ponavljanje zaglavlja, centriranje, orijentacija priloga, ogranicenje sirine slike, omatanje
+   * teksta) i ne diraju nijedan znak autorova teksta. Alt tekst se i inace NE izmislja: polje je
+   * prazno i u params ide samo ako ga korisnik sam upise.
+   *
+   * Bez pravila izostaje samo profilna tipografija tablice i keepWithCaption, jer su to
+   * fakultetske vrijednosti koje se ne smiju pogadjati (rules ostaje prazan objekt).
+   */
+  const universal = !ruleEntry;
+  const rules = ruleEntry?.value || {};
   const tables: TableFigureRescueFormDefinition['tables'] = (structure.tables || []).map((table: any) => ({
     id: String(table.id), bodyChildIndex: Number(table.bodyChildIndex), anchorFingerprint: String(table.anchorFingerprint),
     summary: `${table.rowCount || 0} redaka × ${table.columnCount || 0} stupaca${table.wide ? ', široka tablica' : ''}`,
@@ -905,7 +919,20 @@ export function tableFigureRescueRepairableItem(result: any, profile: any): Repa
   }));
   const form: TableFigureRescueFormDefinition = { tables, figures, summary: `Pronađeno je ${tables.length} tablica i ${figures.length} slika/grafikona. Sigurni geometrijski zahvati su predodabrani, a niska rezolucija ostaje upozorenje.`, buildParams: () => ({}) };
   form.buildParams = (current) => ({ version: 1, tables: current.tables.filter((table) => table.selected).map((table) => ({ id: table.id, bodyChildIndex: table.bodyChildIndex, anchorFingerprint: table.anchorFingerprint, actions: table.actions, ...(table.typography ? { typography: table.typography } : {}), ...(table.source?.selected ? { source: { paragraphIndex: table.source.paragraphIndex, anchorFingerprint: table.source.anchorFingerprint } } : {}), ...(table.landscape?.selected ? { landscape: { enabled: true as const, beforeFingerprint: table.landscape.beforeFingerprint, afterFingerprint: table.landscape.afterFingerprint, confirmed: true as const } } : {}) })), figures: current.figures.filter((figure) => figure.selected).map((figure) => ({ id: figure.id, paragraphIndex: figure.paragraphIndex, drawingIndex: figure.drawingIndex, anchorFingerprint: figure.anchorFingerprint, ...(figure.maxWidthEmu ? { maxWidthEmu: figure.maxWidthEmu } : {}), actions: figure.actions, ...(figure.altText.trim() ? { altText: figure.altText.trim() } : {}) })) });
-  return [{ ruleId: 'table-figure-rescue-assisted', fixerId: 'table-figure-rescue-fixer', label: 'Table and Figure Rescue', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi geometrijske zahvate i izradu nove popravljene kopije. Preniska rezolucija se ne povećava, alt tekst se ne izmišlja, a original ostaje nepromijenjen.', tableFigureRescueForm: form, matchKeys: ['Popisi slika i tablica', 'Oblik poveznica'] }];
+  return [{
+    ruleId: 'table-figure-rescue-assisted',
+    fixerId: 'table-figure-rescue-fixer',
+    label: 'Prelamanje tablica i slika',
+    params: form.buildParams(form),
+    violated: !universal,
+    ...(universal ? { recommended: true as const } : {}),
+    requiresConfirmation: true,
+    confirmationText: universal
+      ? 'Ovo nije zahtjev fakulteta nego prelamanje dokumenta: široka tablica se skuplja na širinu teksta, zaglavlje se ponavlja kroz stranice, slika se ograničava na širinu teksta. Tekst se ne dira, alt tekst se ne izmišlja, preniska rezolucija se ne povećava. Ocjena se ne mijenja.'
+      : 'Potvrdi geometrijske zahvate i izradu nove popravljene kopije. Preniska rezolucija se ne povećava, alt tekst se ne izmišlja, a original ostaje nepromijenjen.',
+    tableFigureRescueForm: form,
+    ...(universal ? {} : { matchKeys: ['Popisi slika i tablica', 'Oblik poveznica'] }),
+  }];
 }
 
 function sectionSurgeryRuleEntry(profile: any): any | undefined {

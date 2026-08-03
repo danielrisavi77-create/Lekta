@@ -251,10 +251,14 @@ export function tableFigureRescueFixer(parts: DocxXmlParts, params: TableFigureR
   const layout = bodyChildren(parts.documentXml);
   if (!layout) return noOp(parts, 'unsupported-structure');
   const operations = [...params.tables, ...params.figures];
+  // RE-56 (isti obrazac, drugi fixer): jedinstvenost se provjerava po IDENTITETU, ne po otisku
+  // sadrzaja. Otisak se racuna iz XML-a elementa, pa dvije bajt-identicne tablice (dvaput ubacen
+  // isti prazan predlozak) imaju isti otisak i cijeli popravak je odustajao s 'invalid-params'.
+  // Otisak i dalje sluzi provjeri sidra nize; ovdje je kljuc id, koji nosi i redni broj.
   const keys = new Set<string>();
   for (const target of operations) {
-    if (!target || typeof target.id !== 'string' || !target.anchorFingerprint || keys.has(target.anchorFingerprint)) return noOp(parts, 'invalid-params');
-    keys.add(target.anchorFingerprint);
+    if (!target || typeof target.id !== 'string' || !target.anchorFingerprint || keys.has(target.id)) return noOp(parts, 'invalid-params');
+    keys.add(target.id);
   }
   const replacements = new Map<number, string>();
   const insertBefore = new Map<number, string>();

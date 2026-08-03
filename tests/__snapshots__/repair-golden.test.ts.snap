@@ -569,6 +569,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "margins-fixer-rule",
         "paper-size-fixer-rule",
+        "table-figure-rescue-fixer-rule",
         "consistency-fixer-rule",
         "empty-paragraph-fixer-rule",
       ],
@@ -1814,7 +1815,126 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "table-figure-rescue-fixer": {
-      "params": "nema-stavke-za-ovaj-dokument",
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "figures": [
+          {
+            "actions": {
+              "center": true,
+              "constrainToTextWidth": true,
+              "keepWithCaption": false,
+              "preserveAspectRatio": true,
+              "removeWrapping": false,
+            },
+            "anchorFingerprint": "2b2c3c07",
+            "drawingIndex": 0,
+            "id": "element-figure-1-2b2c3c07",
+            "maxWidthEmu": 5579682.539682539,
+            "paragraphIndex": 37,
+          },
+        ],
+        "tables": [
+          {
+            "actions": {
+              "applyProfileTypography": false,
+              "center": true,
+              "equalColumns": true,
+              "fitToTextWidth": true,
+              "preventRowSplit": true,
+              "repeatHeader": true,
+              "separateSource": false,
+            },
+            "anchorFingerprint": "e9d2409a",
+            "bodyChildIndex": 17,
+            "id": "element-table-1-e9d2409a",
+          },
+          {
+            "actions": {
+              "applyProfileTypography": false,
+              "center": true,
+              "equalColumns": true,
+              "fitToTextWidth": true,
+              "preventRowSplit": true,
+              "repeatHeader": true,
+              "separateSource": false,
+            },
+            "anchorFingerprint": "e9d2409a",
+            "bodyChildIndex": 29,
+            "id": "element-table-2-e9d2409a",
+          },
+        ],
+        "version": 1,
+      },
+      "skipped": [
+        "table-figure-rescue-fixer-rule",
+      ],
+    },
+    "table-figure-rescue-fixer(potvrdjeno)": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "figures": [
+          {
+            "actions": {
+              "center": true,
+              "constrainToTextWidth": true,
+              "keepWithCaption": false,
+              "preserveAspectRatio": true,
+              "removeWrapping": false,
+            },
+            "anchorFingerprint": "2b2c3c07",
+            "drawingIndex": 0,
+            "id": "element-figure-1-2b2c3c07",
+            "maxWidthEmu": 5579682.539682539,
+            "paragraphIndex": 37,
+          },
+        ],
+        "tables": [
+          {
+            "actions": {
+              "applyProfileTypography": false,
+              "center": true,
+              "equalColumns": true,
+              "fitToTextWidth": true,
+              "preventRowSplit": true,
+              "repeatHeader": true,
+              "separateSource": false,
+            },
+            "anchorFingerprint": "e9d2409a",
+            "bodyChildIndex": 17,
+            "id": "element-table-1-e9d2409a",
+            "landscape": {
+              "afterFingerprint": "2ea2072f",
+              "beforeFingerprint": "2ea2072f",
+              "confirmed": true,
+              "enabled": true,
+            },
+          },
+          {
+            "actions": {
+              "applyProfileTypography": false,
+              "center": true,
+              "equalColumns": true,
+              "fitToTextWidth": true,
+              "preventRowSplit": true,
+              "repeatHeader": true,
+              "separateSource": false,
+            },
+            "anchorFingerprint": "e9d2409a",
+            "bodyChildIndex": 29,
+            "id": "element-table-2-e9d2409a",
+          },
+        ],
+        "version": 1,
+      },
+      "skipped": [
+        "table-figure-rescue-fixer-rule",
+      ],
     },
     "title-page-fixer": {
       "params": "nema-stavke-za-ovaj-dokument",
