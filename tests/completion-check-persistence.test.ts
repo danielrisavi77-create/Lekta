@@ -14,6 +14,7 @@ function result(): LektaResult {
     schemaVersion: '0.1',
     analysisId: 'analysis-1',
     projectId: 'project-1',
+    userId: 'user-should-not-cross-network',
     rulesetId: 'ruleset-fingerprint-1',
     profileId: 'fpzg-politologija-diplomski',
     score: 78,
@@ -41,9 +42,11 @@ function result(): LektaResult {
 }
 
 describe('Completion check persistence boundary', () => {
-  it('sends only the explicit sanitized LektaResult projection', async () => {
+  it('sends only the explicit minimized LektaResult projection', async () => {
     const fetchMock = vi.fn(async (_url: RequestInfo | URL, init?: RequestInit) => {
       const body = JSON.parse(String(init?.body || '{}'));
+      expect(body.projectId).toBeUndefined();
+      expect(body.userId).toBeUndefined();
       expect(body.issues[0]).toEqual({
         issueKey: 'check:page-numbers',
         issueInstanceId: 'analysis-1:1',
@@ -58,6 +61,7 @@ describe('Completion check persistence boundary', () => {
       });
       expect(JSON.stringify(body)).not.toContain('PRIVATE DETAIL');
       expect(JSON.stringify(body)).not.toContain('pageHint');
+      expect(JSON.stringify(body)).not.toContain('user-should-not-cross-network');
       expect(init?.headers).toMatchObject({
         'content-type': 'application/json',
         'x-completion-handoff': 't'.repeat(43),
