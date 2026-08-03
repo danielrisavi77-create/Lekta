@@ -2422,8 +2422,8 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "before": "Wordova polja i spremljeni rezultati",
         },
         {
-          "after": "poveznice i DOI-ji normalizirani",
-          "before": "1 poveznica",
+          "after": "bibliografija usklađena prema potvrđenom planu",
+          "before": "5 bibliografskih zapisa",
         },
         {
           "after": "7 elemenata naslovnice složeno prema službenom profilu, naslovnica bez broja stranice",
@@ -2479,7 +2479,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "paper-size-fixer-rule",
         "consistency-fixer-rule",
-        "bibliography-repair-fixer-rule",
+        "link-doi-fixer-rule",
         "citation-bibliography-sync-fixer-rule",
         "required-section-fixer-rule",
         "empty-paragraph-fixer-rule",

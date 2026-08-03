@@ -168,6 +168,55 @@ const INDEX_SHIFTING_ORDER: ReadonlyMap<string, number> = new Map<string, number
   ['title-page-fixer', 6], // sam pocetak dokumenta: zadnji
 ]);
 
+/**
+ * RE-55: dva popravka koja mijenjaju TEKST istog odlomka.
+ *
+ * Dvofazni model iznad rjesava "fixer pomakne INDEKSE drugima", ali ne i "fixer promijeni SADRZAJ
+ * odlomka koji je necije sidro". Konkretan slucaj: DOI u popisu literature. link-doi-fixer nije
+ * strukturan pa ide u prvu fazu i pretvori `doi:10.x` u `https://doi.org/10.x`; time se promijeni
+ * tekst odlomka, pa bibliography-repair-fixer u drugoj fazi vise ne prepozna svoj otisak i odustane
+ * od CIJELOG popravka literature. Obrnut poredak ne pomaze: tada link-doi dobije 'stale-anchor'.
+ * Nijedan redoslijed ne rjesava sudar (izmjereno, tests/repair-anchor-collision.test.ts).
+ *
+ * Rjesenje je vlasnistvo nad odlomkom, ne redoslijed: bibliografija je vlasnik svojih zapisa jer
+ * nad njima radi vise (poredak, sufiksi, duplikati). Izmjereno je da pritom NE GUBIMO nista, jer
+ * bibliography-repair-fixer nad tim istim odlomkom vec radi oboje sto bi link-doi napravio:
+ * `normalizePlainText` kanonizira `doi:` u `https://doi.org/`, a grana `hyperlink: 'doi'` doda
+ * vanjsku relaciju. Zato se preklapajuce link-doi operacije izbacuju iz recepta.
+ *
+ * Sanacija parametara, ne izvodjenje pravila: server i dalje ne odlucuje STO treba popraviti, nego
+ * samo odbija dvije izmjene istog odlomka u istom prolazu.
+ */
+function withoutOverlappingLinkDoiOperations(requests: readonly FixerRequest[]): FixerRequest[] {
+  const bibliography = requests.filter((request) => request.fixerId === 'bibliography-repair-fixer');
+  const linkDoi = requests.filter((request) => request.fixerId === 'link-doi-fixer');
+  if (!bibliography.length || !linkDoi.length) return [...requests];
+
+  const ownedParagraphs = new Set<number>();
+  for (const request of bibliography) {
+    const entries = (request.params as { entries?: unknown } | undefined)?.entries;
+    if (!Array.isArray(entries)) continue;
+    for (const entry of entries) {
+      const indices = (entry as { paragraphIndices?: unknown })?.paragraphIndices;
+      if (!Array.isArray(indices)) continue;
+      for (const index of indices) if (Number.isInteger(index)) ownedParagraphs.add(Number(index));
+    }
+  }
+  if (!ownedParagraphs.size) return [...requests];
+
+  return requests.map((request) => {
+    if (request.fixerId !== 'link-doi-fixer') return request;
+    const operations = (request.params as { operations?: unknown } | undefined)?.operations;
+    if (!Array.isArray(operations)) return request;
+    const kept = operations.filter((operation) => {
+      const index = (operation as { paragraphIndex?: unknown })?.paragraphIndex;
+      return !(Number.isInteger(index) && ownedParagraphs.has(Number(index)));
+    });
+    if (kept.length === operations.length) return request;
+    return { ...request, params: { ...(request.params as Record<string, unknown>), operations: kept } };
+  });
+}
+
 const DOCUMENT_XML_PATH = 'word/document.xml';
 const STYLES_XML_PATH = 'word/styles.xml';
 const NUMBERING_XML_PATH = 'word/numbering.xml';
@@ -795,7 +844,7 @@ export async function applyFixers(
   // redoslijed (Array.prototype.sort je stabilan), pa ovo ne mijenja nista osim relativnog
   // polozaja strukturnih fixera. Bez ovoga jedan strukturni popravak tiho obori sve kasnije
   // anchor-osjetljive (vidi komentar uz INDEX_SHIFTING_FIXERS).
-  const orderedRequests = requests
+  const orderedRequests = withoutOverlappingLinkDoiOperations(requests)
     .map((request, index) => ({ request, index }))
     .sort((a, b) => {
       const phase = Number(INDEX_SHIFTING_FIXERS.has(a.request.fixerId)) - Number(INDEX_SHIFTING_FIXERS.has(b.request.fixerId));

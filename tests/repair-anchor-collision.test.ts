@@ -10,11 +10,14 @@
  * bibliography-repair-fixer u drugoj fazi vise ne prepozna svoj bibliographyAnchorFingerprint i
  * odustane od CIJELOG popravka s 'invalid-params'.
  *
- * Posljedica na pravom radu: student koji u popisu literature ima barem jedan DOI klikne
- * "Popravi sve" i bibliografija se TIHO ne popravi (redoslijed, sufiksi, duplikati ostaju),
- * dok popravak izvijesti o uspjehu jer je link-doi prosao.
+ * Posljedica je bila: student koji u popisu literature ima barem jedan DOI klikne "Popravi sve" i
+ * bibliografija se TIHO ne popravi (redoslijed, sufiksi, duplikati ostaju), dok popravak izvijesti
+ * o uspjehu jer je link-doi prosao.
  *
- * Ulazni redoslijed zahtjeva to NE moze rijesiti: sortiranje po fazama ga nadjacava (izmjereno).
+ * Redoslijed to NE moze rijesiti: obrnuto poredani, link-doi dobije 'stale-anchor'. Popravak je
+ * zato vlasnistvo nad odlomkom: withoutOverlappingLinkDoiOperations u src/repair/apply-fixers.ts
+ * izbacuje preklapajuce link-doi operacije, jer bibliography-repair-fixer nad tim istim odlomkom
+ * vec radi oboje sto bi link-doi napravio (kanonizacija `doi:` i vanjska poveznica).
  */
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -24,6 +27,7 @@ import { analyzeFixture, resolveProfile } from '../src/analysis/golden-entry';
 import { repairEntriesFor } from '../src/profiles/profile-runtime-maps';
 import { bibliographyRepairableItem, linkDoiRepairableItem } from '../src/ui/repair-items';
 import { applyFixers, type FixerRequest } from '../src/repair/apply-fixers';
+import { readZip } from '../src/repair/zip-codec';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const FIXTURE = join(here, 'fixtures', 'docx', 'fpzg-novinarstvo-bibliografija.docx');
@@ -58,37 +62,37 @@ describe('RE-55: link-doi i bibliografija pisu po istom odlomku', () => {
   }, 30000);
 
   /**
-   * ZATECENO STANJE, ne zeljeno. Test postoji da se sudar vidi i da se ne moze tiho pogorsati;
-   * kad popravak stigne, ovaj test se obrce u "oba moraju proci".
+   * Popravak: preklapajuca link-doi operacija se izbacuje iz recepta, jer je bibliografija
+   * vlasnik svojih zapisa (radi nad njima vise: poredak, sufiksi, duplikati).
    *
-   * Izmjereno je da problem NIJE redoslijed, nego to sto oba fixera pisu po ISTOM odlomku:
-   *   - link-doi pa bibliografija -> bibliografija 'invalid-params',
-   *   - bibliografija pa link-doi -> link-doi 'stale-anchor'.
-   * Vrijedi i kad se pozovu u dva odvojena applyFixers poziva, dakle nijedan poredak ne pomaze.
-   *
-   * Popravak nije jednoredan i zato ne ide uz ovaj commit: bibliography-repair-fixer bi morao
-   * preskociti POJEDINACAN zapis kojem sidro vise ne odgovara (danas obara cijeli popravak), a
-   * to povlaci i preslagivanje `params.order` s rupama. Alternativa je da klijent u
-   * linkDoiRepairableItem izostavi pojave unutar bibliografskih zapisa kad profil ima
-   * bibliography-rules, jer bibliography-repair-fixer za takve zapise DOI hyperlink ionako radi
-   * sam (grana `hyperlink: 'doi'` u buildParams).
+   * Nista se time ne gubi, i to je bila odlucujuca mjera prije izmjene:
+   * bibliography-repair-fixer nad tim istim odlomkom vec radi OBOJE sto bi link-doi napravio,
+   * sto dokazuje treci test nize.
    */
-  it('zatecen sudar: jedan od dva popravka uvijek tiho odustane (RE-55)', async () => {
+  it('zajedno prolazi bibliografija, bez obzira na ulazni redoslijed (RE-55)', async () => {
     const { bytes, bibliography, linkDoi } = await itemsFor();
+    for (const [label, requests] of [
+      ['link-doi pa bibliografija', [linkDoi, bibliography]],
+      ['bibliografija pa link-doi', [bibliography, linkDoi]],
+    ] as const) {
+      const applied = await applyFixers(bytes, requests as FixerRequest[]);
+      expect(
+        applied.skippedReasons['bibliography-repair-fixer-rule'],
+        `${label}: bibliografija vise ne smije tiho odustati`,
+      ).toBeUndefined();
+      expect(applied.changelog.some((entry) => entry.ruleId === 'bibliography-repair-fixer-rule'), label).toBe(true);
+    }
+  }, 30000);
 
-    const doiFirst = await applyFixers(bytes, [linkDoi, bibliography]);
-    expect(doiFirst.skippedReasons['bibliography-repair-fixer-rule']).toBe('invalid-params');
-    expect(doiFirst.changelog.length).toBe(1);
-
-    // Obrnut ULAZNI redoslijed ne mijenja nista: applyFixers svejedno sortira po fazama
-    // (link-doi nije index-shifting pa ide prvi), sto je i poanta nalaza.
-    const bibFirst = await applyFixers(bytes, [bibliography, linkDoi]);
-    expect(bibFirst.skippedReasons['bibliography-repair-fixer-rule']).toBe('invalid-params');
-
-    // A kad se bibliografija stvarno izvede prva, u zasebnom prolazu, padne link-doi.
-    const step1 = await applyFixers(bytes, [bibliography]);
-    expect(step1.changelog.length).toBe(1);
-    const step2 = await applyFixers(step1.docxBytes, [linkDoi]);
-    expect(step2.skippedReasons['link-doi-fixer-rule']).toBe('stale-anchor');
+  it('DOI iz popisa literature svejedno bude kanoniziran i povezan', async () => {
+    const { bytes, bibliography, linkDoi } = await itemsFor();
+    const applied = await applyFixers(bytes, [linkDoi, bibliography]);
+    const documentXml = new TextDecoder().decode(
+      (await readZip(applied.docxBytes)).find((entry) => entry.name === 'word/document.xml')!.data,
+    );
+    // Kratki oblik nestaje, kanonski ostaje, i zapis dobiva vanjsku poveznicu.
+    expect(documentXml).not.toContain('doi:10.1234/abcd.2018');
+    expect(documentXml).toContain('https://doi.org/10.1234/abcd.2018');
+    expect(documentXml).toContain('<w:hyperlink');
   }, 30000);
 });
