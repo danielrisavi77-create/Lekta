@@ -466,7 +466,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "fer-diplomski-puna-struktura.docx": {
     "__kombinirano": {
-      "applied": 4,
+      "applied": 5,
       "changelog": [
         {
           "after": "Font: Times New Roman, Veličina: 12 pt",
@@ -475,6 +475,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Prored: 1,20x prored",
           "before": "Prored: 1,08x prored",
+        },
+        {
+          "after": "Word natpisi, izvori i potvrđeni popisi",
+          "before": "postojeći natpisi ili sidra",
         },
         {
           "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
@@ -565,7 +569,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "margins-fixer-rule",
         "paper-size-fixer-rule",
-        "element-caption-fixer-rule",
         "consistency-fixer-rule",
         "empty-paragraph-fixer-rule",
       ],
@@ -683,15 +686,96 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-stavke-za-ovaj-dokument",
     },
     "element-caption-fixer": {
-      "applied": false,
-      "changelog": [],
-      "markers": null,
-      "noOpBitIdentican": true,
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Word natpisi, izvori i potvrđeni popisi",
+          "before": "postojeći natpisi ili sidra",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Calibri",
+          "hAnsi": "Calibri",
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 1,
+          "parts": [
+            {
+              "hasPage": true,
+              "name": "word/footer1.xml",
+            },
+          ],
+        },
+        "normal": {
+          "jc": "left",
+          "line": "259",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1701",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": {
+              "fmt": "lowerRoman",
+              "start": "1",
+            },
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": true,
+          },
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1701",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": {
+              "fmt": "decimal",
+              "start": "1",
+            },
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1701",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "11906",
+              "w": "16838",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
       "params": {
         "elements": [
           {
             "anchor": {
-              "bodyChildIndex": 16,
+              "bodyChildIndex": 17,
               "tableIndex": 0,
             },
             "anchorFingerprint": "e9d2409a",
@@ -704,7 +788,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchor": {
-              "bodyChildIndex": 18,
+              "bodyChildIndex": 19,
               "drawingIndex": 0,
               "paragraphIndex": 37,
             },
@@ -718,7 +802,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchor": {
-              "bodyChildIndex": 28,
+              "bodyChildIndex": 29,
               "tableIndex": 1,
             },
             "anchorFingerprint": "e9d2409a",
@@ -740,20 +824,99 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "references": [],
         "version": 1,
       },
-      "skipped": [
-        "element-caption-fixer-rule",
-      ],
+      "skipped": [],
     },
     "element-caption-fixer(potvrdjeno)": {
-      "applied": false,
-      "changelog": [],
-      "markers": null,
-      "noOpBitIdentican": true,
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Word natpisi, izvori i potvrđeni popisi",
+          "before": "postojeći natpisi ili sidra",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Calibri",
+          "hAnsi": "Calibri",
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 1,
+          "parts": [
+            {
+              "hasPage": true,
+              "name": "word/footer1.xml",
+            },
+          ],
+        },
+        "normal": {
+          "jc": "left",
+          "line": "259",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1701",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": {
+              "fmt": "lowerRoman",
+              "start": "1",
+            },
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": true,
+          },
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1701",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": {
+              "fmt": "decimal",
+              "start": "1",
+            },
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1701",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "11906",
+              "w": "16838",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
       "params": {
         "elements": [
           {
             "anchor": {
-              "bodyChildIndex": 16,
+              "bodyChildIndex": 17,
               "tableIndex": 0,
             },
             "anchorFingerprint": "e9d2409a",
@@ -766,7 +929,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchor": {
-              "bodyChildIndex": 18,
+              "bodyChildIndex": 19,
               "drawingIndex": 0,
               "paragraphIndex": 37,
             },
@@ -780,7 +943,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchor": {
-              "bodyChildIndex": 28,
+              "bodyChildIndex": 29,
               "tableIndex": 1,
             },
             "anchorFingerprint": "e9d2409a",
@@ -815,9 +978,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         ],
         "version": 1,
       },
-      "skipped": [
-        "element-caption-fixer-rule",
-      ],
+      "skipped": [],
     },
     "empty-paragraph-fixer": {
       "applied": false,

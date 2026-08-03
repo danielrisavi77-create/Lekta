@@ -48,7 +48,11 @@ function bodyChildren(documentXml: string): { before: string; children: BodyChil
   if (!body || close < body.index! || body.index == null) return null;
   const start = body.index + body[0].length;
   const inner = documentXml.slice(start, close);
-  const tokens = /<\/?w:(p|tbl|sectPr)(?=[\s/>])[^>]*>/gi;
+  // RE-60: `sdt` MORA biti u popisu. Wordov automatski sadrzaj je <w:sdt> koji u sebi nosi vise
+  // odlomaka; bez njega stog ne zna da je u sadrzaju, pa te unutarnje odlomke broji kao djecu
+  // tijela i svi indeksi iza sadrzaja se razidju s onima iz analize. Sada je sdt jedno dijete,
+  // jednako kao u DOM pogledu koji analiza koristi.
+  const tokens = /<\/?w:(p|tbl|sectPr|sdt)(?=[\s/>])[^>]*>/gi;
   const stack: Array<{ tag: string; start: number }> = [];
   const children: BodyChild[] = [];
   for (let match = tokens.exec(inner); match; match = tokens.exec(inner)) {

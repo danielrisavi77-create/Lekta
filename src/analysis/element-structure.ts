@@ -202,6 +202,13 @@ function listFound(paragraphs: ParagraphLike[], kind: ElementKind): boolean {
  */
 export function analyzeElementStructure(doc: Document, paragraphs: readonly ParagraphLike[]): ElementStructure {
   const body = first(doc, 'w:body');
+  // RE-60: `children` sluzi logici (susjedni natpis iznad ili ispod elementa) i zato je filtriran
+  // na p/tbl/sectPr. Ali `bodyChildIndex` u receptu MORA brojati SVU djecu tijela, jer je to ono
+  // sto popravak vidi kad trazi sidro. Prije se indeks racunao nad filtriranim popisom, pa je
+  // svaki `w:sdt` (Wordov automatski sadrzaj, ima ga gotovo svaki rad) pomaknuo sve indekse iza
+  // sebe i sidro po indeksu nikad nije pogodilo.
+  const allChildren = body ? childElements(body) : [];
+  const indexInBody = new Map<Element, number>(allChildren.map((node, index) => [node, index]));
   const children = body ? bodyChildren(body) : [];
   const allParagraphNodes = els(doc, 'w:p');
   const paragraphByNode = new Map<Element, ParagraphLike>();
@@ -214,8 +221,10 @@ export function analyzeElementStructure(doc: Document, paragraphs: readonly Para
   let drawingIndex = 0;
   let tableIndex = 0;
 
-  for (let bodyChildIndex = 0; bodyChildIndex < children.length; bodyChildIndex += 1) {
-    const node = children[bodyChildIndex];
+  for (let childIndex = 0; childIndex < children.length; childIndex += 1) {
+    const node = children[childIndex];
+    // Indeks u RECEPTU je pozicija medju SVOM djecom tijela (RE-60), ne medju filtriranima.
+    const bodyChildIndex = indexInBody.get(node) ?? childIndex;
     const name = localName(node);
     let kind: ElementKind | null = null;
     let paragraph: ParagraphLike | undefined;
@@ -246,8 +255,10 @@ export function analyzeElementStructure(doc: Document, paragraphs: readonly Para
     // ijednog natpisa. Otisak i dalje sluzi provjeri sidra; ordinal daje identitet i
     // deterministican je jer se broji redom kroz tijelo dokumenta.
     const id = `element-${kind}-${ordinal}-${fingerprint}`;
-    const aboveNode = bodyChildIndex > 0 ? children[bodyChildIndex - 1] : null;
-    const belowNode = bodyChildIndex + 1 < children.length ? children[bodyChildIndex + 1] : null;
+    // Susjedi se traze u FILTRIRANOM popisu (childIndex), jer natpis je uvijek odlomak; sidro se
+    // broji u punom (bodyChildIndex). Mijesanje to dvoje bi natpis trazilo na krivom mjestu.
+    const aboveNode = childIndex > 0 ? children[childIndex - 1] : null;
+    const belowNode = childIndex + 1 < children.length ? children[childIndex + 1] : null;
     const captionCandidates: Array<{ node: Element; position: 'above' | 'below' }> = [];
     if (aboveNode && localName(aboveNode) === 'p' && !isTextbox(aboveNode)) captionCandidates.push({ node: aboveNode, position: 'above' });
     if (belowNode && localName(belowNode) === 'p' && !isTextbox(belowNode)) captionCandidates.push({ node: belowNode, position: 'below' });
