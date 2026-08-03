@@ -51,7 +51,7 @@ begin
   end if;
 end $$;
 
-set local request.jwt.claims = '{"is_anonymous":true}';
+set request.jwt.claims = '{"is_anonymous":true}';
 do $$
 begin
   if public.academic_suite_is_permanent_user() then
@@ -59,12 +59,14 @@ begin
   end if;
 end $$;
 
-set local request.jwt.claims = '{"is_anonymous":false}';
+set request.jwt.claims = '{"is_anonymous":false}';
 do $$
 begin
   if not public.academic_suite_is_permanent_user() then
     raise exception 'permanent JWT incorrectly rejected';
   end if;
 end $$;
+
+reset request.jwt.claims;
 
 select 'ACADEMIC_SUITE_PERMANENT_ACCOUNT_RLS_SMOKE_PASS' as result;
