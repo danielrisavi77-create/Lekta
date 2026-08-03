@@ -48,6 +48,25 @@ describe('stable Lekta finding identity', () => {
     expect(out[0].issueKey).toBe('rule:fpzg.heading-rules.001');
   });
 
+  it('uses stable child check ids when one authored rule has sibling runtime checks', () => {
+    const startIssue = issue('warning', 'structure', 'Numeriranje počinje prerano', 'x', 'Stranice');
+    const schemeIssue = issue('warning', 'structure', 'Shema numeriranja odstupa', 'y', 'Stranice');
+    const startCheck = makeCheck('structure', 'Numeriranje od prve stranice Uvoda', 'warn', 1, 3, 'x', startIssue);
+    const schemeCheck = makeCheck('structure', 'Shema numeriranja stranica', 'warn', 1, 3, 'y', schemeIssue);
+    const pageRule: RuleEntry = {
+      ruleId: 'fpzg.page-numbers.001',
+      checkId: 'page-numbers',
+      value: { required: true },
+      status: 'verified',
+    };
+    const out = identifyFindings([startCheck, schemeCheck], [startIssue, schemeIssue], [pageRule]);
+
+    expect(out.map(item => item.issueKey)).toEqual([
+      'rule:fpzg.page-numbers.001:check:page-number-start',
+      'rule:fpzg.page-numbers.001:check:page-number-scheme',
+    ]);
+  });
+
   it('does not churn a singleton rule-backed key when explanatory text changes', () => {
     const a = issue('warning', 'formatting', 'Margine odstupaju od profila', 'Prvi detalj', 'Postavke stranice');
     const b = issue('warning', 'formatting', 'Drukčije formuliran nalaz', 'Drugi detalj', 'Postavke stranice');
