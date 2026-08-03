@@ -8,20 +8,21 @@ export type CompletionCheckPersistenceResult =
   | { ok: true; checkId: string | null }
   | { ok: false; reason: string };
 
+type CompletionCheckNetworkPayload = Omit<LektaResult, 'projectId' | 'userId'>;
+
 function endpoint(): string {
   const configured = String(import.meta.env.VITE_COMPLETION_CHECK_ENDPOINT || '').trim();
   return configured || DEFAULT_ENDPOINT;
 }
 
-function safeResult(result: LektaResult): LektaResult {
-  // Re-project even though the upstream adapter is already sanitized. This
-  // prevents a future accidental extension of LektaResult from silently sending
-  // document-derived detail/location fields across the network.
+function safeResult(result: LektaResult): CompletionCheckNetworkPayload {
+  // Re-project even though the upstream adapter is already sanitized. Project
+  // identity is deliberately omitted: the opaque capability already resolves
+  // the exact user/project server-side, so sending projectId/userId again would
+  // add an unnecessary identifier and a spoofable duplicate authority signal.
   return {
     schemaVersion: result.schemaVersion,
     analysisId: result.analysisId,
-    projectId: result.projectId,
-    userId: result.userId,
     rulesetId: result.rulesetId,
     profileId: result.profileId,
     score: result.score,
