@@ -233,4 +233,127 @@ if (fs.existsSync(citatiDir)) {
   }
 }
 
-console.log(`[verify-deploy-dist] OK: bez dev alata u HTML/JS, pravne stranice prisutne, konzola iskljucena, origin unutar ${SITE_ORIGIN}, svi inline <script> pokriveni CSP whitelistom, citatne SEO stranice imaju OG/Twitter/favicon i noindex/sitemap su konzistentni.`);
+// 9. /fakulteti hub (generate-faculty-pages.mjs): master indeks mora spomenuti SVAKU jedinicu
+//    iz kataloga (pokrivenu ILI nepokrivenu - "nijedna jedinica ne smije ostati nevidljiva"),
+//    pretraga i analitika assets moraju postojati i biti referencirani, i citatni cross-link
+//    (Korak 5 popravak) ne smije nikad voditi na fajl koji stvarno ne postoji u distu.
+{
+  const fakultetiDir = path.join(DIST, 'fakulteti');
+  const masterIndexPath = path.join(fakultetiDir, 'index.html');
+  if (!fs.existsSync(masterIndexPath)) fail('dist/fakulteti/index.html ne postoji (generate-faculty-pages nije prosao?)');
+  const masterHtml = fs.readFileSync(masterIndexPath, 'utf8');
+
+  // 9a. svaka jedinica iz kataloga se pojavljuje NEGDJE na master indeksu (pokrivena ili
+  // nepokrivena) - jeftina "nijedna jedinica ne smije ostati nevidljiva" invarijanta.
+  const catalog = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/catalog/zagreb-catalog.json'), 'utf8'));
+  // Generator HTML-escapea imena (escapeHtml: & < > "), pa se provjera mora raditi protiv
+  // ISTOG escapeanog oblika - inace jedinice s navodnicima u imenu (npr. Sveuciliste obrane i
+  // sigurnosti "Dr. Franjo Tudjman") laznо padaju jer se rucni "&quot;" nikad ne podudari sa
+  // sirovim ".
+  const htmlEscape = (v) => v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const missingUnits = [];
+  for (const inst of catalog) {
+    for (const u of inst.units || []) {
+      const escapedName = htmlEscape(u.name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      if (!new RegExp(`>${escapedName}[:<]`).test(masterHtml)) missingUnits.push(`${inst.name} / ${u.name}`);
+    }
+  }
+  if (missingUnits.length) {
+    fail(`dist/fakulteti/index.html ne spominje ${missingUnits.length} katalog jedinica (npr. ${missingUnits.slice(0, 3).join('; ')})`);
+  }
+
+  // 9b. pretraga (Korak 3): asset postoji, master indeks ga referencira i ima trazilicu.
+  if (!fs.existsSync(path.join(DIST, 'fakulteti-search.js'))) fail('dist/fakulteti-search.js ne postoji');
+  if (!masterHtml.includes('src="/fakulteti-search.js"')) fail('dist/fakulteti/index.html ne referencira /fakulteti-search.js');
+  if (!masterHtml.includes('id="fk-q"')) fail('dist/fakulteti/index.html nema #fk-q trazilicu');
+
+  // 9c. analitika (Korak 6): asset postoji i SVAKA generirana fakultetska stranica (iz
+  // sitemap-fakulteti.xml) ga referencira.
+  if (!fs.existsSync(path.join(DIST, 'fakulteti-analytics.js'))) fail('dist/fakulteti-analytics.js ne postoji');
+  const sitemapFakultetiPath = path.join(DIST, 'sitemap-fakulteti.xml');
+  if (!fs.existsSync(sitemapFakultetiPath)) fail('dist/sitemap-fakulteti.xml ne postoji');
+  const sitemapFakulteti = fs.readFileSync(sitemapFakultetiPath, 'utf8');
+  const fakultetiLocs = [...sitemapFakulteti.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  if (!fakultetiLocs.length) fail('dist/sitemap-fakulteti.xml nema <loc> unosa');
+
+  const locToDistFile = (loc) => {
+    const relUrl = loc.startsWith(SITE_ORIGIN) ? loc.slice(SITE_ORIGIN.length) : loc;
+    const rel = relUrl.replace(/^\/+/, '').replace(/\/+$/, '');
+    return path.join(DIST, rel, 'index.html');
+  };
+
+  for (const loc of fakultetiLocs) {
+    const filePath = locToDistFile(loc);
+    if (!fs.existsSync(filePath)) fail(`sitemap-fakulteti.xml navodi ${loc}, ali ${path.relative(DIST, filePath)} ne postoji`);
+    const html = fs.readFileSync(filePath, 'utf8');
+    if (!html.includes('src="/fakulteti-analytics.js"')) {
+      fail(`dist/${path.relative(DIST, filePath)} ne referencira /fakulteti-analytics.js`);
+    }
+  }
+
+  // 9d. citatni cross-link (Korak 5 popravak vec-postojece rupe): svaki /alati/citati/... link
+  // nadjen na generiranoj fakultetskoj stranici MORA razrijesiti na stvaran fajl u dist/ -
+  // bez pogadjanja generate-citation-tools.mjs's slugFor() logike, samo tvrd build-fail ako
+  // se ipak pojavi mrtav link (postojeca rupa PRIJE ovog gate-a: ~52/130 jedinica).
+  const CITATI_LINK_RE = /href="(\/alati\/citati\/[^"?#]+)"/g;
+  for (const loc of fakultetiLocs) {
+    const filePath = locToDistFile(loc);
+    if (!fs.existsSync(filePath)) continue; // vec prijavljeno gore
+    const html = fs.readFileSync(filePath, 'utf8');
+    let m;
+    CITATI_LINK_RE.lastIndex = 0;
+    while ((m = CITATI_LINK_RE.exec(html))) {
+      const target = path.join(DIST, m[1].replace(/^\/+/, ''));
+      if (!fs.existsSync(target)) {
+        fail(`dist/${path.relative(DIST, filePath)} linka na ${m[1]}, koji ne postoji u dist/ (mrtav citatni link)`);
+      }
+    }
+  }
+}
+
+// 10. generirane naslovnica SEO stranice (dist/alati/naslovnica/*.html, generate-title-page-tools.mjs)
+//     moraju imati puni OG/Twitter/favicon/JSON-LD blok (isti gate kao #8 za citate), svaki URL
+//     iz sitemap-naslovnica.xml mora stvarno postojati u distu, i dijakritika ne smije faliti
+//     (ista klasa buga kao #8 - genericki/ASCII-fallback tekst preko desetaka stranica).
+const naslovnicaDir = path.join(DIST, 'alati/naslovnica');
+if (fs.existsSync(naslovnicaDir)) {
+  const naslovnicaPages = fs
+    .readdirSync(naslovnicaDir)
+    .filter((f) => f.endsWith('.html') && f !== 'index.html')
+    .map((f) => path.join(naslovnicaDir, f));
+  if (!naslovnicaPages.length) fail('dist/alati/naslovnica nema pojedinacnih stranica (samo index?)');
+  for (const p of naslovnicaPages) {
+    const html = fs.readFileSync(p, 'utf8');
+    const rel = path.relative(DIST, p);
+    for (const needle of ['property="og:title"', 'property="og:image"', 'name="twitter:card" content="summary_large_image"', 'rel="icon"', 'application/ld+json']) {
+      if (!html.includes(needle)) fail(`dist/${rel} nema "${needle}" (SEO/social meta regresija u generate-title-page-tools.mjs)`);
+    }
+    // Honesty-gate invarijanta: SAMO official predlosci generiraju stranicu (vidi
+    // selectOfficialPages), pa nijedna od ovih stranica ne smije nikad nositi noindex.
+    if (/name="robots" content="noindex/.test(html)) fail(`dist/${rel} je neocekivano noindex (honesty-gate bi trebao propustiti samo official predloske)`);
+  }
+  const sitemapNaslovnicaPath = path.join(DIST, 'alati/sitemap-naslovnica.xml');
+  if (!fs.existsSync(sitemapNaslovnicaPath)) fail('dist/alati/sitemap-naslovnica.xml ne postoji');
+  const sitemapNaslovnica = fs.readFileSync(sitemapNaslovnicaPath, 'utf8');
+  const naslovnicaLocs = [...sitemapNaslovnica.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  if (!naslovnicaLocs.length) fail('dist/alati/sitemap-naslovnica.xml nema <loc> unosa');
+  for (const loc of naslovnicaLocs) {
+    const relUrl = loc.startsWith(SITE_ORIGIN) ? loc.slice(SITE_ORIGIN.length) : loc;
+    const filePath = path.join(DIST, relUrl.replace(/^\/+/, ''));
+    if (!fs.existsSync(filePath)) fail(`sitemap-naslovnica.xml navodi ${loc}, ali ${path.relative(DIST, filePath)} ne postoji`);
+  }
+  const BANNED_ASCII_NASLOVNICA = ['sluzbeni', 'genericki', 'razlicit', 'potvrdjen'];
+  for (const p of naslovnicaPages) {
+    const html = fs.readFileSync(p, 'utf8');
+    const rel = path.relative(DIST, p);
+    for (const needle of BANNED_ASCII_NASLOVNICA) {
+      if (html.includes(needle)) fail(`dist/${rel} sadrzi ASCII-fallback (bez dijakritike) tekst "${needle}"`);
+    }
+  }
+  const allNaslovnicaHtml = naslovnicaPages.map((p) => fs.readFileSync(p, 'utf8')).join('\n');
+  for (const expected of ['službeni', 'različit']) {
+    if (!allNaslovnicaHtml.includes(expected)) fail(`nijedna generirana naslovnica stranica ne sadrzi ocekivanu dijakriticku rijec "${expected}" (dijakriticka regresija?)`);
+  }
+}
+
+console.log(`[verify-deploy-dist] OK: bez dev alata u HTML/JS, pravne stranice prisutne, konzola iskljucena, origin unutar ${SITE_ORIGIN}, svi inline <script> pokriveni CSP whitelistom, citatne SEO stranice imaju OG/Twitter/favicon i noindex/sitemap su konzistentni, /fakulteti hub pokriva sve jedinice s ispravnim pretraga/analitika/citatni linkovima, naslovnica SEO stranice imaju OG/Twitter/favicon i sitemap je konzistentan.`);

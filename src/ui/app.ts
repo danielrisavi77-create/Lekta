@@ -33,6 +33,7 @@ import { workTypesForSelection, defaultWorkTypeForProgram, citationForDefinition
 import { INSTITUTIONAL_COVERAGE_MATRIX, COVERAGE_STATUS_META, CORPUS_STATS } from '../coverage/coverage-loader';
 import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../submission/submission-loader';
 import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-toggle';
+import { readFacultyContext } from '../tools/faculty-context';
 import { findUpcomingDeadline } from '../submission/deadline-registry';
 import { renderRepairPanel, renderConfirmation, advancedFormFor } from './repair-panel';
 import { renderRepairLedgerModal } from './repair-price-slider';
@@ -189,7 +190,7 @@ function coverageSnapshot(){const rows=INSTITUTIONAL_COVERAGE_MATRIX.programs.ma
 function toast(msg: any){const n=document.createElement('div');n.className='toast';n.textContent=msg;$('#toastWrap').append(n);setTimeout(()=>n.remove(),3500)}
 function init(){
  $('#checkGrid').innerHTML=CHECK_ITEMS.map(([i,t,d])=>`<article class="check-card" data-reveal><span class="check-icon">${i}</span><h3>${t}</h3><p>${d}</p></article>`).join('');window.__lektaReveal?.();
- productionConfig=loadProductionConfig();captureReferralCode();installErrorTracking();initCatalog();void ensureRetailCatalog();restorePreferences();syncProfileContext();applyUnitFromUrl();updateRepairHistoryButton();if(adminMode)void openAdminStats();
+ productionConfig=loadProductionConfig();captureReferralCode();installErrorTracking();initCatalog();void ensureRetailCatalog();restorePreferences();applyFacultyContext();syncProfileContext();applyUnitFromUrl();updateRepairHistoryButton();if(adminMode)void openAdminStats();
  $('#pricingGrid').innerHTML=PRICING_TIERS.map(p=>{const soon=p.id!=='free'&&!paidOffersLive();const badge=soon?'<span class="popular soon">USKORO</span>':(p.featured?'<span class="popular">PREPORUČENO</span>':'');const cta=soon?`<button class="btn btn-secondary" type="button" disabled aria-disabled="true">Uskoro</button>`:(p.cta.order?`<button class="btn btn-secondary order-btn" data-package="${p.cta.order}">${p.cta.label}</button>`:`<a class="btn ${p.featured?'btn-primary':'btn-secondary'}" href="${p.cta.href}">${p.cta.label}</a>`);return`<article class="price-card ${p.featured?'featured':''}${soon?' soon':''}">${badge}<h3>${p.name}</h3><div class="price">${p.price}</div><p>${p.desc}</p><ul class="features">${p.features.map(x=>`<li>${x}</li>`).join('')}</ul>${cta}</article>`}).join('');
  $('#packagePicks').innerHTML=PACKAGES.map(p=>`<label class="package-pick"><span><input type="radio" name="package" value="${p.id}" ${p.id==='format'?'checked':''}><strong>${p.name} · ${p.price} €</strong><small>${p.desc}</small></span></label>`).join('');
  bind();updateProfile();updateHistoryBadge();updatePackageUi();if(__DEV_TOOLS__)$('#qaBtn').classList.toggle('hidden',!qaMode);renderConsentBanner();renderHeroCoverage();wireNoFaculty();if(!paidOffersLive())$('#orderFromResult')?.classList.add('hidden');renderAuthEntry();
@@ -430,6 +431,24 @@ async function handleRepairHistoryAction(e: any){const dl=e.target.closest('[dat
   const win=window.open('','_blank');
   try{let url=await signRepairDownload(repairHistoryConfig(),token||'',path);url+=(url.includes('?')?'&':'?')+'download='+encodeURIComponent(dl.dataset.name||'popravljeno.docx');if(win){win.location.href=url}else{const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.click()}}catch(err: any){if(win)win.close();toast('Preuzimanje trenutačno nije moguće.')}finally{dl.disabled=false;dl.textContent=orig}return}if(del){const id=del.dataset.repairDel;if(!confirm('Trajno obrisati ovaj popravak? Original i popravljena datoteka bit će uklonjeni sa servera.'))return;del.disabled=true;const out=await deleteRepairJob(repairHistoryConfig(),token||'',id);if(out.ok){toast('Popravak je obrisan.');void renderRepairHistoryList()}else{del.disabled=false;toast('Brisanje trenutačno nije moguće.')}return}}
 function applySelectionIds(p: any={}){setOptionIfExists($('#institutionSelect'),p.institution);populateUnits();setOptionIfExists($('#unitSelect'),p.unit);populatePrograms();setOptionIfExists($('#programSelect'),p.program);setOptionIfExists($('#workType'),p.workType);populateVariants();setOptionIfExists($('#workVariant'),p.variant);populateDepartments();setOptionIfExists($('#departmentSelect'),p.department);populateMethodology();setOptionIfExists($('#methodologySelect'),p.methodology);setOptionIfExists($('#citationStyle'),p.citation);syncProfileContext()}
+/* lekta.faculty-context (src/tools/faculty-context.ts): isti fakultet koji korisnik vec
+   odabere na citat/naslovnica alatima. Primjenjuje se SAMO ako restorePreferences() nije
+   vec postavila bogatiju analizatorsku memoriju (p.unit) - faculty-context je namjerno
+   tanji, medju-alatni "popuni prazno" signal, ne smije prepisati postojecu analizatorsku
+   povijest. ?unit= URL parametar (applyUnitFromUrl, poziva se POSLIJE ove funkcije) i dalje
+   ima krajnji prioritet. */
+function applyFacultyContext(){try{
+ const p=safeStorageGet(STORAGE_KEYS.preferences);
+ if(p&&p.unit)return;
+ const ctx=readFacultyContext();
+ if(!ctx.unitId)return;
+ const u: any=allUnits().find((x: any)=>x.id===ctx.unitId);
+ if(!u)return;
+ const sel: any={institution:u.institutionId,unit:u.id};
+ if(ctx.program)sel.program=ctx.program;
+ if(ctx.level)sel.workType=ctx.level;
+ applySelectionIds(sel);
+}catch(e: any){}}
 /* ?unit=<unitId>[&work=<slug>][&project=<id>] s alat-stranica (SEO citatne stranice i sl.,
    ili Katedra handoff): posjetitelj koji dolazi sa stranice SVOG fakulteta ne mora ga
    ponovno traziti u izborniku. Namjerno POSLIJE restorePreferences (eksplicitni link ima

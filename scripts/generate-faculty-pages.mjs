@@ -26,7 +26,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { SITE_ORIGIN } from './site-origin.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -36,6 +36,8 @@ const CATALOG_PATH = path.join(ROOT, 'data/catalog/zagreb-catalog.json');
 const PROFILES_HEAVY_PATH = path.join(ROOT, 'data/profiles/verified-profiles-heavy.json');
 const STATUS_META_PATH = path.join(ROOT, 'data/profiles/profile-status.json');
 const DEADLINES_PATH = path.join(ROOT, 'data/submission/academic-deadlines.json');
+const CITATION_SPECS_INDEX_PATH = path.join(ROOT, 'data/tools/citation-specs/verified-index.json');
+const TEMPLATES_INDEX_PATH = path.join(ROOT, 'data/title-pages/templates-index.json');
 const OUT_DIR = path.join(ROOT, 'dist');
 
 const TARGET_WORK_TYPES = ['final', 'graduate', 'seminar'];
@@ -54,6 +56,20 @@ const WORK_TYPE_DISPLAY_ORDER = ['seminar', 'final', 'graduate'];
 
 // Lagana, proza-samo kopija tokena iz src/citations/citation-meta.ts (izbjegava esbuild
 // bundling punog citatnog enginea za stranice koje nemaju interaktivan alat).
+// Duplikat src/title-pages/level-slugs.ts's LEVEL_SLUGS (?razina= param koji naslovnica.html
+// vec cita preko parseTitlePageParams). Namjerna duplikacija (isti obrazac kao CITATION_LABELS
+// nize) - .mjs build skripte su odvojene od src/ TS-a, nema bundlera ovdje. export radi
+// drift-testa (tests/faculty-page-razina-slug-drift.test.ts usporedjuje protiv pravog LEVEL_SLUGS).
+export const RAZINA_PARAM_SLUGS = {
+  seminar: 'seminarski',
+  final: 'zavrsni',
+  graduate: 'diplomski',
+  specialist: 'specijalisticki',
+  doctoral: 'doktorski',
+  article: 'clanak',
+  project: 'projektni',
+};
+
 const CITATION_LABELS = {
   fpzg: 'FPZG autor-godina',
   'pravo-fusnote': 'Pravni fakultet: pravne fusnote',
@@ -121,6 +137,19 @@ function dedupeSources(group) {
   const seen = new Map();
   for (const p of group) for (const s of p.sources || []) if (s?.url && !seen.has(s.url)) seen.set(s.url, s);
   return [...seen.values()];
+}
+
+// Pretraga na /fakulteti master indeksu (buildMasterIndexPage): namjeran duplikat pravila iz
+// src/ui/select-search.ts (.mjs build skripte su odvojene od src/ TS-a, ista konvencija kao
+// CITATION_LABELS/RAZINA_PARAM_SLUGS nize) - dijakritika-neosjetljivo, tokenizirani AND-match.
+// export radi testabilnosti (tests/generate-faculty-pages.test.ts); klijentska verzija u
+// FAKULTETI_SEARCH_JS je namjerni string-duplikat iste logike, ne import (nema bundlera ovdje).
+export function normalizeSearch(s) {
+  return String(s ?? '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd');
+}
+
+export function matchesQuery(query, normalizedHaystack) {
+  return normalizeSearch(query).split(/\s+/).filter(Boolean).every((t) => normalizedHaystack.includes(t));
 }
 
 // Rjesava "kako se vratim na /fakulteti/ kad otvorim drugi fakultet": stari kicker redak
@@ -262,6 +291,46 @@ function weakestStatus(group) {
   return group.reduce((worst, p) => (order.indexOf(p.status) < order.indexOf(worst) ? p.status : worst), 'verified');
 }
 
+// Coverage Card ("Sto Lekta pokriva"): 3 razine (full/partial/none) po dimenziji. export radi
+// testabilnosti (tests/generate-faculty-pages.test.ts).
+
+// Uzak allowlist iz FIELD_SPECS koji broji kao "Oblikovanje" - factRows inace MIJESA
+// formatiranje s opsegom/min.izvora/citatnim stilom u JEDAN niz; bez ovog allowlista bi
+// "Oblikovanje" i "Citiranje" tier dvostruko brojali isti "Citatni stil" redak.
+const FORMAT_LABELS = new Set(['Font', 'Veličina', 'Prored', 'Margine', 'Poravnanje', 'Format papira']);
+
+export function formattingCoverage(factRows, status) {
+  const rows = factRows.filter((r) => FORMAT_LABELS.has(r.label));
+  if (!rows.length) return 'none';
+  return status === 'verified' ? 'full' : 'partial';
+}
+
+export function citationCoverage(unitId, factRows, citationIndex) {
+  if (citationIndex.some((s) => s.facultyId === unitId)) return 'full';
+  // "Citatni stil" redak (FIELD_SPECS 'recommendedCitation') znaci obiteljski stil BEZ
+  // vlastitog verificiranog speca - posteno "djelomicno", ne "puno".
+  return factRows.some((r) => r.label === 'Citatni stil') ? 'partial' : 'none';
+}
+
+export function titlePageCoverage(unitId, workType, templatesIndex) {
+  const candidates = templatesIndex.filter((t) => t.unitId === unitId);
+  if (!candidates.length) return 'none';
+  // Replicira prioritet iz resolveTemplate() (src/title-pages/template-loader.ts): tocna
+  // razina ILI level=null (genericki fakultetski predlozak) = puno povjerenje.
+  if (candidates.some((t) => t.level === workType || t.level === null)) return 'full';
+  // Predlozak postoji, ali SAMO za drugu vrstu rada (REUSE_ORDER grana) - djelomicno.
+  return 'partial';
+}
+
+const COVERAGE_TIER_GLYPH = { full: '✓', partial: '△', none: '○' };
+
+function buildCoverageCardHtml(items) {
+  const rows = items
+    .map((it) => `<li class="cov-${it.tier}"><span class="cov-glyph">${COVERAGE_TIER_GLYPH[it.tier]}</span> ${escapeHtml(it.label)}</li>`)
+    .join('');
+  return `<h2>Što Lekta pokriva</h2><ul class="coverage-list">${rows}</ul><p class="coverage-unknown">△ i ○ ne znače grešku: Lekta ne pretpostavlja pravila koja nisu javno potvrđena. Zahtjeve mentora ili pojedinog kolegija Lekta ne poznaje - ako postoji pisana uputa, unesi je ručno prije predaje.</p>`;
+}
+
 // Mapiranje generatorovog internog workType tokena (seminar/final/graduate) na vokabular koji
 // koristi data/submission/academic-deadlines.json (seminarski/zavrsni/diplomski/doktorski, BEZ
 // dijakritike - isti kanonski token kao toReportWorkType() u src/report/report-work-type.ts,
@@ -373,11 +442,34 @@ const PAGE_STYLE = `
   .lekta-kicker a { color: var(--paper-muted); text-decoration: none; }
   .lekta-kicker a:hover { color: var(--paper-ink); text-decoration: underline; }
   .lekta-kicker .sep { margin: 0 0.35em; color: var(--paper-line-strong); }
+  .fk-search { margin: 1rem 0 1.4rem; padding: 0.9rem 1rem; background: var(--paper-2); border: 1px solid var(--paper-line); border-radius: 2px; }
+  .fk-search label { display: block; font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--paper-muted); margin-bottom: 0.4rem; }
+  .fk-search input[type="search"] { width: 100%; padding: 0.55rem 0.7rem; font-size: 0.95rem; border: 1px solid var(--paper-line-strong); border-radius: 2px; background: var(--sheet); color: var(--paper-ink); }
+  .fk-search input[type="search"]:focus { outline: 2px solid var(--red-deep); outline-offset: 1px; }
+  .fk-search-count { margin: 0.4rem 0 0; font-size: 0.78rem; color: var(--paper-muted); }
+  .fk-search-empty { font-size: 0.9rem; color: var(--paper-muted); }
+  .coverage-pending-label { font-size: 0.82rem; color: var(--paper-muted); margin: 0.7rem 0 0.2rem; }
+  ul.coverage-pending { opacity: 0.85; }
+  ul.coverage-pending li { font-size: 0.92rem; }
+  ul.coverage-list { list-style: none; margin: 0.6rem 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.4rem; }
+  ul.coverage-list li { padding: 0.35rem 0.6rem; border: 1px solid var(--paper-line); border-radius: 2px; background: var(--paper-2); font-size: 0.88rem; }
+  ul.coverage-list li.cov-full { border-left: 3px solid var(--red-deep); }
+  ul.coverage-list li.cov-partial,ul.coverage-list li.cov-none { color: var(--paper-muted); }
+  ul.coverage-list .cov-glyph { font-weight: 700; margin-right: 0.3rem; }
+  .coverage-unknown { font-size: 0.82rem; color: var(--paper-muted); }
+  .lekta-consent-banner { display: none; position: fixed; left: 18px; right: 18px; bottom: 18px; z-index: 240; margin: auto; max-width: 760px; padding: 1rem 1.1rem; border: 1px solid var(--paper-line); border-radius: 2px; background: var(--paper); color: var(--paper-ink); box-shadow: var(--paper-sh); align-items: center; justify-content: space-between; gap: 1rem; }
+  .lekta-consent-banner.is-visible { display: flex; }
+  .lekta-consent-banner p { margin: 0; font-size: 0.78rem; color: var(--paper-muted); max-width: 480px; }
+  .lekta-consent-actions { display: flex; gap: 0.5rem; flex: 0 0 auto; }
+  .lekta-consent-actions button { border: 0; border-radius: 2px; padding: 0.55rem 0.8rem; font: 600 0.78rem system-ui, sans-serif; cursor: pointer; white-space: nowrap; }
+  .lekta-consent-actions button[data-consent="grant"] { background: var(--red-deep); color: var(--on-red); }
+  .lekta-consent-actions button[data-consent="deny"] { background: transparent; border: 1px solid var(--paper-line); color: var(--paper-ink); }
+  @media (max-width: 700px) { .lekta-consent-banner { align-items: stretch; flex-direction: column; } .lekta-consent-actions { width: 100%; } .lekta-consent-actions button { flex: 1; } }
   a { color: var(--red-deep); }
   @media (max-width: 700px) { body { margin: 0; max-width: none; border-radius: 0; border-left-width: 0; border-right-width: 0; box-shadow: none; } }
 `;
 
-function pageShell({ title, description, canonical, bodyHtml, robots, jsonLd }) {
+function pageShell({ title, description, canonical, bodyHtml, robots, jsonLd, extraScripts }) {
   const ogName = title.replace(/ \| Lekta$/, '');
   return `<!doctype html>
 <html lang="hr">
@@ -411,6 +503,7 @@ ${robots ? `<meta name="robots" content="${robots}">` : ''}
 <body>
 <div class="lekta-brand"><a href="/">Lekta</a><span>Besplatna tehnička provjera</span></div>
 ${bodyHtml}
+${(extraScripts || []).map((src) => `<script src="${escapeHtml(src)}"></script>`).join('')}
 </body>
 </html>
 `;
@@ -444,7 +537,7 @@ function worktypeNavHtml(workType, siblings) {
 // ponovno ovdje, da se main()-ova disambiguacija i stvarna putanja fajla ne mogu razici.
 // siblings: [{url,label}] za DRUGE vrste rada na istom fakultetu koje stvarno postoje (main()
 // ovo racuna u prolazu 1 prije nego se ijedna stranica konacno renderira - vidi main()).
-function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, programQualifier, slugOverride, siblings, deadlines, todayIso) {
+function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, programQualifier, slugOverride, siblings, deadlines, todayIso, citationIndex, templatesIndex) {
   const meta = unitMeta[unitId];
   if (!meta) {
     console.error(`[generate-faculty-pages] FAIL: unitId "${unitId}" nije u zagreb-catalog.json`);
@@ -477,6 +570,42 @@ function buildFacultyPage(unitId, workType, group, unitMeta, statusMeta, program
   // vec posteno pokriva taj slucaj s atribucijom, pa se za multiProgram grupe ne treba i ne
   // smije oslanjati na facts[].
   const showFacts = facts.length > 0 && !multiProgram;
+
+  // Coverage Card ("Sto Lekta pokriva") + footer cross-linkovi (Korak 5) dijele ISTE tierove -
+  // racunaju se OVDJE, unutar buildFacultyPage, koristeci NJEGOVE lokalne varijable
+  // (factRows/status/submissionFacts/deadlineIso) - kod MAX_GROUP_SIZE splita (npr. FFZG
+  // diplomski) buildFacultyPage se vec poziva JEDNOM PO PODSTRANICI, pa su automatski tocni
+  // po-podstranici bez ikakve posebne logike.
+  const citationTier = citationCoverage(unitId, factRows, citationIndex);
+  const titlePageTier = titlePageCoverage(unitId, workType, templatesIndex);
+  const coverageCardHtml = buildCoverageCardHtml([
+    { label: 'Oblikovanje', tier: formattingCoverage(factRows, status) },
+    { label: 'Citiranje', tier: citationTier },
+    { label: 'Naslovnica', tier: titlePageTier },
+    { label: 'Predaja', tier: submissionFacts.length > 0 ? 'full' : 'none' },
+    { label: 'Rokovi', tier: deadlineIso ? 'full' : 'none' },
+  ]);
+
+  // Footer cross-linkovi (Korak 5): citatni link je popravak postojece rupe - bezuvjetni
+  // /alati/citati/<unitId>.html je bio MRTAV link za oko 40% jedinica (generate-citation-tools.mjs
+  // generira po-jedinici stranicu SAMO kad postoji token/spec) I za jedinice s VISE renderable
+  // stilova (npr. "pravo" ima 2 verificirana citatna stila) slugFor() ondje NE koristi goli
+  // <unitId>.html nego <unitId>-<stil>.html - citationTier ne moze pouzdano predvidjeti TOCAN
+  // slug bez repliciranja te logike (namjerno izbjegnuto, krsi ne-coupling konvenciju izmedju
+  // generatora). Umjesto pogadjanja: provjeri STVARNO postoji li /alati/citati/<unitId>.html na
+  // disku (generate-citation-tools.mjs se VEC pokrece PRIJE ovog generatora u netlify.toml
+  // lancu) - ako ne postoji (bilo zato sto fakultet nema stil, bilo zato sto ima vise stilova
+  // pa je slug drugaciji), siguran fallback je /alati/citati/index.html, koji taj generator
+  // UVIJEK pise bezuvjetno.
+  const citatiFileExists = fs.existsSync(path.join(OUT_DIR, 'alati/citati', `${unitId}.html`));
+  const citationLinkHref = citatiFileExists ? `/alati/citati/${encodeURIComponent(unitId)}.html` : '/alati/citati/index.html';
+  const citationLinkLabel = citatiFileExists ? `Generator citata za ${meta.name}` : 'Generator citata (svi stilovi)';
+  // Naslovnica: ?fakultet=&razina= je VEC POSTOJECI ugovor koji naslovnica.html cita
+  // (parseTitlePageParams, src/title-pages/title-page-params.ts). titlePageTier==='full' znaci
+  // stvaran predlozak za TOCNU vrstu rada (ili genericki fakultetski, level=null) - imenuj ga
+  // konkretno; 'partial'/'none' NE tvrde specifican predlozak (levelReused ili nema nikakvog).
+  const naslovnicaHref = `/naslovnica.html?fakultet=${encodeURIComponent(unitId)}&razina=${encodeURIComponent(RAZINA_PARAM_SLUGS[workType])}`;
+  const naslovnicaLabel = titlePageTier === 'full' ? `Naslovnica za ${meta.name}` : 'Naslovnica (generički raspored)';
 
   // Honesty gate: bez stvarnog sadrzaja se ne objavljuje prazna/tanka stranica. Koristi
   // showFacts (ne sirovi facts.length) da se ne "prevari" gate necim sto se ionako nece prikazati.
@@ -550,6 +679,8 @@ ${worktypeNavHtml(workType, siblings)}
 <p class="lekta-lead">${escapeHtml(statusInfo.note)}</p>
 ${programNote}
 
+${coverageCardHtml}
+
 ${factsSection}
 ${checksHeading}
 ${factGridHtml}
@@ -581,10 +712,12 @@ ${sources.length ? `<h2>Izvori i datum provjere</h2><p>${verifiedAt ? `Zadnja pr
   <a href="/">Naslovna</a>
   <a href="/fakulteti/#${escapeHtml(meta.instId)}">Svi fakulteti</a>
   <a href="/pokrivenost.html">Pokrivenost profila</a>
-  <a href="/alati/citati/${encodeURIComponent(unitId)}.html">Generator citata za ${escapeHtml(meta.name)}</a>
+  <a href="${escapeHtml(citationLinkHref)}" data-fk-tool="citati">${escapeHtml(citationLinkLabel)}</a>
+  <a href="${escapeHtml(naslovnicaHref)}" data-fk-tool="naslovnica">${escapeHtml(naslovnicaLabel)}</a>
+  <a href="/alati.html" data-fk-tool="alati">Ostali besplatni alati (literatura, izjava)</a>
 </div>`;
 
-  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd: [jsonLd, breadcrumbJsonLd(crumbs)] }), verifiedAt, canonical, path: relPath, urlSlug };
+  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd: [jsonLd, breadcrumbJsonLd(crumbs)], extraScripts: ['/fakulteti-analytics.js'] }), verifiedAt, canonical, path: relPath, urlSlug };
 }
 
 // Lagana "direktorij" stranica kad je fakultetska grupa prevelika/neuniformna za jednu stranicu
@@ -622,9 +755,88 @@ ${subPages.map((sp) => `<li><a href="${sp.path}">${escapeHtml(sp.programLabel)}<
   <a href="/">Naslovna</a>
   <a href="/fakulteti/#${escapeHtml(meta.instId)}">Svi fakulteti</a>
   <a href="/pokrivenost.html">Pokrivenost profila</a>
+  <a href="/alati.html" data-fk-tool="alati">Besplatni alati (citat, naslovnica, literatura, izjava)</a>
 </div>`;
-  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd: [jsonLd, breadcrumbJsonLd(crumbs)] }), canonical, path: relPath };
+  return {
+    html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd: [jsonLd, breadcrumbJsonLd(crumbs)], extraScripts: ['/fakulteti-analytics.js'] }),
+    canonical,
+    path: relPath,
+  };
 }
+
+// Progresivno poboljsanje /fakulteti/ master indeksa (buildMasterIndexPage): puni popis je
+// UVIJEK u HTML-u (SEO, no-JS), ova skripta samo sakriva/pokazuje po upitu. normalizeSearch/
+// matchesQuery su namjeran string-duplikat istoimenih .mjs funkcija gore (nema bundlera za
+// ovu staticku stranicu) - dokazane jednom kao ciste funkcije u tests/generate-faculty-pages.test.ts,
+// ovdje se duplikatu vjeruje.
+const FAKULTETI_SEARCH_JS = `
+function normalizeSearch(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d');}
+function matchesQuery(q,hay){return normalizeSearch(q).split(/\\s+/).filter(Boolean).every(function(t){return hay.indexOf(t)!==-1;});}
+(function(){
+  var input=document.getElementById('fk-q');
+  var groups=document.getElementById('fk-groups');
+  var count=document.getElementById('fk-q-count');
+  var empty=document.getElementById('fk-empty');
+  if(!input||!groups)return;
+  var sections=Array.prototype.slice.call(groups.querySelectorAll('[data-search-group]'));
+  var total=groups.querySelectorAll('[data-search]').length;
+  function apply(){
+    var q=input.value.trim();
+    var visible=0;
+    sections.forEach(function(sec){
+      var items=Array.prototype.slice.call(sec.querySelectorAll('[data-search]'));
+      var any=false;
+      items.forEach(function(li){
+        var show=!q||matchesQuery(q,li.getAttribute('data-search')||'');
+        li.hidden=!show;
+        if(show){any=true;visible++;}
+      });
+      sec.hidden=!any;
+    });
+    if(count)count.textContent=q?(visible+' od '+total+' fakulteta prikazano'):'';
+    if(empty)empty.hidden=!(q&&visible===0);
+  }
+  input.addEventListener('input',apply);
+})();
+`;
+
+// Consent-respecting analitika na SVE generirane fakultetske stranice (master indeks, hub-indeksi,
+// pojedinacne stranice). Namjeran string-duplikat src/tools/tool-analytics.ts's logike (dijeli
+// TOCAN isti localStorage consent kljuc i Supabase endpoint - privola je zajednicka za cijeli
+// sajt), s vlastitim consent bannerom (bez njega bi fail-closed logika znacila da se od svjezeg
+// organskog SEO prometa - upravo publika koju ova stavka treba mjeriti - gotovo nista ne biljezi).
+const FAKULTETI_ANALYTICS_JS = `
+var CONSENT_KEY='lekta.analytics-consent.v1';
+var PRODUCTION_KEY='lekta.production.v2.1';
+var DEFAULT_ENDPOINT='https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1/analytics-event';
+var BANNER_ID='lekta-fk-consent-banner';
+function readJson(k){try{var r=localStorage.getItem(k);return r===null?null:JSON.parse(r);}catch(e){return null;}}
+function writeJson(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function analyticsEndpoint(){var o=readJson(PRODUCTION_KEY);if(o&&typeof o==='object'&&'analyticsEndpoint' in o){return typeof o.analyticsEndpoint==='string'?o.analyticsEndpoint.trim():'';}return DEFAULT_ENDPOINT;}
+function consentGranted(){return readJson(CONSENT_KEY)==='granted';}
+function trackFacultyEvent(event){var ep=analyticsEndpoint();if(!ep||!consentGranted())return;try{fetch(ep,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:event,path:location.pathname||'/',timestamp:new Date().toISOString()}),keepalive:true});}catch(e){}}
+function setConsent(v){writeJson(CONSENT_KEY,v);var b=document.getElementById(BANNER_ID);if(b)b.classList.remove('is-visible');}
+function ensureBanner(){if(!document.body)return null;var existing=document.getElementById(BANNER_ID);if(existing)return existing;var el=document.createElement('div');el.id=BANNER_ID;el.className='lekta-consent-banner';el.setAttribute('role','region');el.setAttribute('aria-label','Postavke privole za analitiku');el.innerHTML='<p><strong>Dobrovoljna anonimna analitika.</strong> Stranica radi jednako i bez nje.</p><div class="lekta-consent-actions"><button type="button" data-consent="deny">Samo nužno</button><button type="button" data-consent="grant">Dopusti analitiku</button></div>';document.body.appendChild(el);var deny=el.querySelector('[data-consent="deny"]');var grant=el.querySelector('[data-consent="grant"]');if(deny)deny.addEventListener('click',function(){setConsent('denied');});if(grant)grant.addEventListener('click',function(){setConsent('granted');});return el;}
+function renderBanner(){if(!analyticsEndpoint())return;if(readJson(CONSENT_KEY))return;var b=ensureBanner();if(b)b.classList.add('is-visible');}
+var searchTracked=false;
+function boot(){
+  renderBanner();
+  trackFacultyEvent('faculty_page_view');
+  document.addEventListener('click',function(e){
+    var a=e.target&&e.target.closest&&e.target.closest('a[href*="#analyzer"]');
+    if(a){trackFacultyEvent('faculty_to_analyzer_click');return;}
+    var t=e.target&&e.target.closest&&e.target.closest('a[data-fk-tool]');
+    if(t)trackFacultyEvent('faculty_tool_click:'+t.getAttribute('data-fk-tool'));
+  });
+  document.addEventListener('input',function(e){
+    if(!searchTracked&&e.target&&e.target.id==='fk-q'&&e.target.value&&e.target.value.trim()){
+      searchTracked=true;
+      trackFacultyEvent('faculty_search_used');
+    }
+  });
+}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',boot);}else{boot();}
+`;
 
 function buildSitemap(urls) {
   const entries = urls
@@ -647,7 +859,7 @@ function siblingsFor(existence, unitId, excludeWorkType) {
 // stranica moze linkati na sestrinske vrste rada PRIJE nego se ijedna stvarno renderira -
 // main() ne zna unaprijed hoce li npr. "kif::seminar" proci honesty gate). write=true (prolaz 2):
 // isti obilazak, sad s `existence` iz prolaza 1 dostupnim za sibling navigaciju, stvarno pise.
-function runGenerationPass(groups, splitKeys, slugOverrides, unitMeta, statusMeta, existenceForSiblings, write, deadlines, todayIso) {
+function runGenerationPass(groups, splitKeys, slugOverrides, unitMeta, statusMeta, existenceForSiblings, write, deadlines, todayIso, citationIndex, templatesIndex) {
   const sitemapUrls = [];
   const hubSubPages = new Map();
   const existence = new Map();
@@ -670,6 +882,7 @@ function runGenerationPass(groups, splitKeys, slugOverrides, unitMeta, statusMet
       splitKey ? slugOverrides.get(key) : undefined,
       siblings,
       deadlines, todayIso,
+      citationIndex, templatesIndex,
     );
     if (!page) {
       if (write) console.log(`[generate-faculty-pages] preskačem ${key}: nedovoljno sadržaja za pošten prikaz`);
@@ -729,39 +942,74 @@ function buildMasterIndexPage(catalog, existence) {
     inLanguage: 'hr',
     isPartOf: { '@type': 'WebSite', name: 'Lekta', url: SITE_ORIGIN },
   };
-  // id=inst.id na svaki <h2> je sidro na koje ciljaju breadcrumb i footer "Svi fakulteti"
-  // linkovi sa svake fakultetske stranice ("/fakulteti/#unizg") - bez toga bi povratak uvijek
-  // sletio na vrh liste od ~50 ustanova, ne na onu koju je korisnik upravo gledao.
+  // id=inst.id na <h2> je sidro na koje ciljaju breadcrumb i footer "Svi fakulteti" linkovi
+  // sa svake fakultetske stranice ("/fakulteti/#unizg") - bez toga bi povratak uvijek sletio
+  // na vrh liste od ~50 ustanova, ne na onu koju je korisnik upravo gledao. <section
+  // data-search-group> omata CIJELU instituciju (h2 + oba popisa) da fakulteti-search.js moze
+  // sakriti/pokazati cijelu grupu jednim atributom umjesto hodanja po susjednim elementima.
+  // data-search na svakoj <li> nosi VEC normaliziranu instituciju+jedinicu (racuna se ovdje,
+  // ne po svakom tipkanju na klijentu - jeftinije i jednostavnije za testiranje).
   const groupsHtml = catalog
     .map((inst) => {
-      const units = (inst.units || []).filter((u) => existence.has(u.id));
-      if (!units.length) return '';
-      const items = units
-        .map((u) => {
-          const wtMap = existence.get(u.id);
-          const links = WORK_TYPE_DISPLAY_ORDER.filter((wt) => wtMap.has(wt))
-            .map((wt) => `<a href="${escapeHtml(wtMap.get(wt).path)}">${escapeHtml(wtMap.get(wt).label)}</a>`)
-            .join(' · ');
-          return `<li>${escapeHtml(u.name)}: ${links}</li>`;
-        })
-        .join('');
-      return `<h2 id="${escapeHtml(inst.id)}">${escapeHtml(inst.name)}</h2><ul class="check-list">${items}</ul>`;
+      const units = inst.units || [];
+      const covered = units.filter((u) => existence.has(u.id));
+      const uncovered = units.filter((u) => !existence.has(u.id));
+      if (!covered.length && !uncovered.length) return ''; // institucija bez ijedne jedinice u katalogu
+
+      const coveredHtml = covered.length
+        ? `<ul class="check-list">${covered
+            .map((u) => {
+              const wtMap = existence.get(u.id);
+              const links = WORK_TYPE_DISPLAY_ORDER.filter((wt) => wtMap.has(wt))
+                .map((wt) => `<a href="${escapeHtml(wtMap.get(wt).path)}">${escapeHtml(wtMap.get(wt).label)}</a>`)
+                .join(' · ');
+              const searchKey = escapeHtml(normalizeSearch(`${inst.name} ${u.name}`));
+              return `<li data-search="${searchKey}">${escapeHtml(u.name)}: ${links}</li>`;
+            })
+            .join('')}</ul>`
+        : '';
+
+      // Nepokrivene jedinice (ukljucivo cijele institucije s nula pokrivenih jedinica, npr.
+      // Sveuciliste VERN'): PRVI PUT postoje na hubu, u tonu profile-status.json's
+      // research/generic unosa ("jos prikupljamo"), ne kao poruka o neuspjehu. Link na
+      // /?unit=<id>#analyzer je POSTOJECI ulaz gdje renderWaitlistBar() vec preuzima kad
+      // student stigne do rezultata za tu jedinicu - nema nove forme na statickoj stranici.
+      const uncoveredHtml = uncovered.length
+        ? `<p class="coverage-pending-label">Još prikupljamo posebna pravila za:</p><ul class="check-list coverage-pending">${uncovered
+            .map((u) => {
+              const searchKey = escapeHtml(normalizeSearch(`${inst.name} ${u.name}`));
+              return `<li data-search="${searchKey}"><a href="/?unit=${encodeURIComponent(u.id)}#analyzer">${escapeHtml(u.name)}</a>: opća tehnička provjera već radi, posebna pravila još čekamo</li>`;
+            })
+            .join('')}</ul>`
+        : '';
+
+      return `<section class="fk-inst" data-search-group><h2 id="${escapeHtml(inst.id)}">${escapeHtml(inst.name)}</h2>${coveredHtml}${uncoveredHtml}</section>`;
     })
     .filter(Boolean)
     .join('');
   const body = `
 <div class="lekta-kicker">Lekta</div>
 <h1>Provjera rada po fakultetu</h1>
-<p class="lekta-lead">Tehnička pravila prije predaje (diplomski, završni i seminarski rad) po ustanovi: oblikovanje, opseg, citiranje i izvori, iz službenih izvora fakulteta. Odaberi svoju ustanovu i vrstu rada.</p>
-${groupsHtml}
+<p class="lekta-lead">Tehnička pravila prije predaje (diplomski, završni i seminarski rad) po ustanovi: oblikovanje, opseg, citiranje i izvori, iz službenih izvora fakulteta. Pronađi svoju ustanovu.</p>
+<div class="fk-search">
+  <label for="fk-q">Pronađi svoj fakultet</label>
+  <input type="search" id="fk-q" autocomplete="off" placeholder="Upiši naziv fakulteta ili sveučilišta...">
+  <p id="fk-q-count" class="fk-search-count" aria-live="polite"></p>
+</div>
+<div id="fk-groups">${groupsHtml}</div>
+<p id="fk-empty" class="fk-search-empty" hidden>Nema rezultata. Provjeri je li tvoj fakultet upisan pod drugim imenom, ili pogledaj <a href="/pokrivenost.html">cijeli popis pokrivenosti</a>.</p>
 <div class="lekta-disclaimer">
-  Popis pokriva ustanove za koje postoji barem jedan strojno provjerljiv profil. Odsutnost ustanove ne znači da Lekta ne radi za nju - opća tehnička provjera i dalje vrijedi za sve fakultete iz kataloga.
+  Popis pokriva sve ustanove iz Lektinog kataloga. Ustanove sa strojno provjerljivim profilom imaju vlastitu stranicu s pravilima; ostale imaju opću tehničku provjeru dok posebna pravila ne budu potvrđena.
 </div>
 <div class="lekta-links">
   <a href="/">Naslovna</a>
   <a href="/pokrivenost.html">Pokrivenost profila</a>
 </div>`;
-  return { html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd }), canonical, path: relPath };
+  return {
+    html: pageShell({ title, description, canonical, bodyHtml: body, jsonLd, extraScripts: ['/fakulteti-search.js', '/fakulteti-analytics.js'] }),
+    canonical,
+    path: relPath,
+  };
 }
 
 function main() {
@@ -769,6 +1017,11 @@ function main() {
   const heavy = loadJson(PROFILES_HEAVY_PATH);
   const statusMeta = loadJson(STATUS_META_PATH);
   const deadlines = fs.existsSync(DEADLINES_PATH) ? loadJson(DEADLINES_PATH) : [];
+  // Coverage Card (Sto Lekta pokriva): isti loadJson() + fs.existsSync oprez kao deadlines gore.
+  // Nizovi su mali (71/198 unosa) pa se namjerno NE pred-indeksiraju - filtriranje po pozivu unutar
+  // citationCoverage/titlePageCoverage drzi kod dosljednim postojecem stilu ovog generatora.
+  const citationIndex = fs.existsSync(CITATION_SPECS_INDEX_PATH) ? loadJson(CITATION_SPECS_INDEX_PATH) : [];
+  const templatesIndex = fs.existsSync(TEMPLATES_INDEX_PATH) ? loadJson(TEMPLATES_INDEX_PATH) : [];
   const todayIso = new Date().toISOString().slice(0, 10);
 
   const unitMeta = {};
@@ -815,11 +1068,11 @@ function main() {
   // Prolaz 1 (tih, ne pise): sazna KOJE (fakultet x vrsta rada) stranice ce uopce postojati i
   // na kojem URL-u, da prolaz 2 moze svakoj stranici dati poveznice na njene sestrinske vrste
   // rada PRIJE nego ijedna stranica bude konacno renderirana.
-  const dryRun = runGenerationPass(groups, splitKeys, slugOverrides, unitMeta, statusMeta, null, false, deadlines, todayIso);
+  const dryRun = runGenerationPass(groups, splitKeys, slugOverrides, unitMeta, statusMeta, null, false, deadlines, todayIso, citationIndex, templatesIndex);
 
   // Prolaz 2 (stvaran): isti obilazak, sad sa sibling navigacijom iz prolaza 1, stvarno pise fajlove.
   const { sitemapUrls, written, skipped, existence } = runGenerationPass(
-    groups, splitKeys, slugOverrides, unitMeta, statusMeta, dryRun.existence, true, deadlines, todayIso,
+    groups, splitKeys, slugOverrides, unitMeta, statusMeta, dryRun.existence, true, deadlines, todayIso, citationIndex, templatesIndex,
   );
 
   const masterIndex = buildMasterIndexPage(catalog, existence);
@@ -828,8 +1081,15 @@ function main() {
   fs.writeFileSync(path.join(masterDir, 'index.html'), masterIndex.html, 'utf-8');
   sitemapUrls.push({ loc: masterIndex.canonical });
 
+  fs.writeFileSync(path.join(OUT_DIR, 'fakulteti-search.js'), FAKULTETI_SEARCH_JS, 'utf-8');
+  fs.writeFileSync(path.join(OUT_DIR, 'fakulteti-analytics.js'), FAKULTETI_ANALYTICS_JS, 'utf-8');
   fs.writeFileSync(path.join(OUT_DIR, 'sitemap-fakulteti.xml'), buildSitemap(sitemapUrls), 'utf-8');
   console.log(`[generate-faculty-pages] gotovo. ${written} stranica napisano (+ /fakulteti/ pregled), ${skipped} preskočeno (bez sadržaja), sitemap-fakulteti.xml napisan.`);
 }
 
-main();
+// Entry-guard (a ne bezuvjetni main() poziv): omogucuje da vitest UVEZE imenovane exporte
+// (normalizeSearch/matchesQuery i dalje niz Koraka) bez da main() usput pise u dist/ kao
+// sporedni efekt importa. Nula promjene ponasanja za `node scripts/generate-faculty-pages.mjs`.
+// process.argv[1] moze biti undefined u nekim runnerima (npr. `node -e`, worker threadovi) -
+// pathToFileURL(undefined) bi bacio TypeError PRIJE nego usporedba uopce dodje na red.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();
