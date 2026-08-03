@@ -2,6 +2,8 @@
 // potvrdom i fallbackom. Uklanjaju 4-5x dupliciran objectURL/copy obrazac po glue-u
 // i rjesavaju dvije UX greske (dvoklik zaglavi gumb; kopiranje tiho zakaze bez Clipboard API-ja).
 
+import { trackToolEvent } from './tool-analytics';
+
 /** Stvarno pocetno stanje <select> elementa (iz HTML 'selected' atributa), ne uvijek prva
  *  opcija: npr. "Vrsta rada" ima 'Diplomski rad' selected (treca opcija), pa bi selectedIndex=0
  *  u 'Ocisti' vratio pogresan default. hasAttribute('selected') cita izravno HTML atribut
@@ -77,6 +79,7 @@ export function bindDownloadButton(
       const blob = buildBlob();
       if (!blob) return;
       downloadBlob(blob, filename);
+      void trackToolEvent('tool_download');
     } catch {
       if (timer) clearTimeout(timer);
       btn.textContent = failLabel;
@@ -144,6 +147,7 @@ export function bindCopyButton(
     btn.textContent = ok ? okLabel : failLabel;
     // Vizualna potvrda je na gumbu; citac ekrana je dobiva preko aria-live statusa kad je predan.
     if (opts.statusEl) opts.statusEl.textContent = ok ? okStatus : failStatus;
+    if (ok) void trackToolEvent('tool_copy');
     timer = window.setTimeout(() => {
       btn.textContent = original;
       timer = 0;

@@ -170,3 +170,16 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);over
 @media(max-width:720px){.nav{gap:12px}.nav>.btn-primary{display:none}.lampa-txt{display:none}.lampa-btn{padding:8px 10px}}
 /* KS: print na bijelom (tamni stol se ne printa) */
 @media print{body{background:#fff;color:#111}}
+/* Analitika (tool-analytics.ts): banner koristi SAMO sirove KS primitive (--paper/--paper-ink/
+   --paper-muted/--paper-line), ne --panel/--text/--muted alias sloj gore, jer taj alias
+   ovisi o "papir na stolu" ugnijezdjenju (vidi .card,.cta remap po stranicama) koje ovaj
+   modul (dijeljen, injectan JS-om, bez pristupa page-specific remapu) ne moze pretpostaviti.
+   Gumbi namjerno NISU .btn/.btn-primary (ista ovisnost), stil je lokalan i samodostatan. */
+.lekta-consent-banner{display:none;position:fixed;left:18px;right:18px;bottom:18px;z-index:240;margin:auto;max-width:760px;padding:16px 18px;border:1px solid var(--paper-line);border-radius:2px;background:var(--paper);color:var(--paper-ink);box-shadow:var(--paper-sh-sm);align-items:center;justify-content:space-between;gap:16px}
+.lekta-consent-banner.is-visible{display:flex}
+.lekta-consent-banner p{margin:0;font-size:12.5px;color:var(--paper-muted);max-width:480px}
+.lekta-consent-actions{display:flex;gap:8px;flex:0 0 auto}
+.lekta-consent-actions button{border:0;border-radius:2px;padding:9px 13px;font:600 12.5px var(--sans);cursor:pointer;white-space:nowrap}
+.lekta-consent-actions button[data-consent="grant"]{background:var(--red);color:#fff}
+.lekta-consent-actions button[data-consent="deny"]{background:transparent;border:1px solid var(--paper-line);color:var(--paper-ink)}
+@media(max-width:720px){.lekta-consent-banner{align-items:stretch;flex-direction:column}.lekta-consent-actions{width:100%}.lekta-consent-actions button{flex:1}}

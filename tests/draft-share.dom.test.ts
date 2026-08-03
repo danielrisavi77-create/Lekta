@@ -8,6 +8,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { saveToolDraft, readToolDraft } from '../src/tools/draft-share';
 
 vi.mock('../src/shared/ui-boot', () => ({}));
+vi.mock('../src/tools/tool-analytics', () => ({ trackToolEvent: async () => false }));
 
 const $ = (s: string): any => document.querySelector(s);
 function setVal(id: string, v: string) { const el = $(id); el.value = v; el.dispatchEvent(new Event('input', { bubbles: true })); }

@@ -1,6 +1,7 @@
 // DOM glue za besplatno sredjivanje literature (literatura.html). Logika je u
 // bibliography.ts (tipizirano, testabilno); ovdje samo vezanje forme i ispis. Bez mreze.
 import '../shared/ui-boot';
+import './tool-analytics';
 import { organizeBibliography, bibliographyText, type BibSortMode, type BibResult } from './bibliography';
 import { bibliographyDoc, docxBlob } from '../docx/docx-writer';
 import { escapeHtml } from '../utils/helpers';

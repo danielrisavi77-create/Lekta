@@ -2,6 +2,7 @@
 // (opci stilovi), citations/faculty-styles.ts (vjeran po fakultetu) i citations/parse-reference.ts
 // (prepoznavanje zalijepljene literature); ovdje samo vezanje na formu i ispis. Bez mreze.
 import '../shared/ui-boot';
+import './tool-analytics';
 import { formatCitation, parseAuthors } from './citation';
 import { bindCopyButton } from './tool-ui';
 import { buildFacultyOptions, formatForFaculty, ensureFacultySpecsLoaded, type FacultyStyle } from '../citations/faculty-styles';

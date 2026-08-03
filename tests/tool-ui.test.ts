@@ -5,6 +5,9 @@
  */
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { bindCopyButton, bindDownloadButton } from '../src/tools/tool-ui';
+import { trackToolEvent } from '../src/tools/tool-analytics';
+
+vi.mock('../src/tools/tool-analytics', () => ({ trackToolEvent: vi.fn().mockResolvedValue(true) }));
 
 function makeBtn(label = 'Kopiraj'): any {
   const b = document.createElement('button');
@@ -15,6 +18,7 @@ function makeBtn(label = 'Kopiraj'): any {
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.mocked(trackToolEvent).mockClear();
   document.body.innerHTML = '';
 });
 
@@ -120,6 +124,27 @@ describe('bindCopyButton', () => {
     btn.click();
     await vi.waitFor(() => expect(status.textContent).toBe('Sažetak kopiran u međuspremnik.'));
   });
+
+  it('uspjesna kopija salje tool_copy analytics dogadjaj', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal('navigator', { clipboard: { writeText } });
+    const btn = makeBtn();
+    bindCopyButton(btn, () => 'tekst', { holdMs: 500 });
+
+    btn.click();
+    await vi.waitFor(() => expect(trackToolEvent).toHaveBeenCalledWith('tool_copy'));
+  });
+
+  it('neuspjela kopija (bez Clipboard API-ja i bez fallbacka) NE salje tool_copy', async () => {
+    vi.stubGlobal('navigator', {});
+    vi.stubGlobal('document', Object.assign(document, { execCommand: () => false }));
+    const btn = makeBtn();
+    bindCopyButton(btn, () => 'tekst', { holdMs: 500 });
+
+    btn.click();
+    await vi.waitFor(() => expect(btn.textContent).not.toBe('Kopiraj'));
+    expect(trackToolEvent).not.toHaveBeenCalled();
+  });
 });
 
 describe('bindDownloadButton', () => {
@@ -174,5 +199,30 @@ describe('bindDownloadButton', () => {
     expect(btn.textContent).toBe('Preuzimanje nije uspjelo');
     btn.click();
     await vi.waitFor(() => expect(btn.textContent).toBe('Preuzmi .docx'));
+  });
+
+  it('uspjesno preuzimanje salje tool_download analytics dogadjaj', () => {
+    const btn = makeBtn('Preuzmi .docx');
+    const blob = new Blob(['test'], { type: 'text/plain' });
+    bindDownloadButton(btn, () => blob, 'test.docx', { holdMs: 300 });
+
+    btn.click();
+    expect(trackToolEvent).toHaveBeenCalledWith('tool_download');
+  });
+
+  it('buildBlob koji vrati null NE salje tool_download', () => {
+    const btn = makeBtn('Preuzmi .docx');
+    bindDownloadButton(btn, () => null, 'test.docx');
+
+    btn.click();
+    expect(trackToolEvent).not.toHaveBeenCalled();
+  });
+
+  it('buildBlob koji baci NE salje tool_download', () => {
+    const btn = makeBtn('Preuzmi .docx');
+    bindDownloadButton(btn, () => { throw new Error('x'); }, 'test.docx', { holdMs: 300 });
+
+    btn.click();
+    expect(trackToolEvent).not.toHaveBeenCalled();
   });
 });

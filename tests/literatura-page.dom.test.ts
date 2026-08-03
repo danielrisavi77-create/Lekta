@@ -3,6 +3,7 @@ import { describe, it, expect, beforeAll, vi } from 'vitest';
 
 // ui-boot uvlaci fontove/ikone/motion (nebitno za logiku) - mockaj da test ostane cist.
 vi.mock('../src/shared/ui-boot', () => ({}));
+vi.mock('../src/tools/tool-analytics', () => ({ trackToolEvent: async () => false }));
 
 function buildDom(): void {
   document.body.innerHTML = `

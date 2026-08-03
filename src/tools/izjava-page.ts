@@ -1,6 +1,7 @@
 // DOM glue za besplatni generator Izjave o izvornosti (izjava.html). Logika je u
 // statement.ts (tipizirano, testabilno); ovdje samo vezanje forme, pregled i ispis. Bez mreze.
 import '../shared/ui-boot';
+import './tool-analytics';
 import { buildStatement, statementText } from './statement';
 import { statementDoc, docxBlob } from '../docx/docx-writer';
 import { escapeHtml } from '../utils/helpers';

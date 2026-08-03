@@ -2,6 +2,7 @@
 // (tipizirano, testabilno); ovdje samo vezanje textarea -> ispis. Bez mreze:
 // i .docx uvoz se raspakirava i cita LOKALNO (ZipReader + docx-text), nista se ne salje.
 import '../shared/ui-boot';
+import './tool-analytics';
 import { countText, karticeFrom, ZNAKOVA_PO_KARTICI, ZNAKOVA_PO_KARTICI_BEZ_RAZMAKA, type TextMetrics } from './counter';
 import { extractDocxText } from './docx-text';
 import { bindCopyButton } from './tool-ui';

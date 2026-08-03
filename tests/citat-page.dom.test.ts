@@ -4,6 +4,7 @@ import { ensureFacultySpecsLoaded } from '../src/citations/faculty-styles';
 
 // ui-boot uvlaci fontove/ikone/motion (nebitno za logiku) - mockaj da test ostane cist.
 vi.mock('../src/shared/ui-boot', () => ({}));
+vi.mock('../src/tools/tool-analytics', () => ({ trackToolEvent: async () => false }));
 
 const TYPES = ['knjiga', 'poglavlje', 'clanak', 'mrezni', 'zavrsni', 'propis'];
 const FIELDS = ['authors', 'title', 'container', 'editor', 'year', 'publisher', 'place', 'volume', 'issue', 'pages', 'url', 'doi', 'accessed', 'institution'];
