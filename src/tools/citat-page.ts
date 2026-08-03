@@ -3,6 +3,7 @@
 // (prepoznavanje zalijepljene literature); ovdje samo vezanje na formu i ispis. Bez mreze.
 import '../shared/ui-boot';
 import './tool-analytics';
+import { readFacultyContext, saveFacultyContext } from './faculty-context';
 import { formatCitation, parseAuthors } from './citation';
 import { bindCopyButton } from './tool-ui';
 import { buildFacultyOptions, formatForFaculty, ensureFacultySpecsLoaded, type FacultyStyle } from '../citations/faculty-styles';
@@ -30,20 +31,6 @@ const TEXT_FIELDS = ['authors', 'title', 'container', 'editor', 'year', 'publish
 // Genericki izbor stila (kad fakultet nije odabran). Cuva se da se moze vratiti iz faculty-modea.
 const GENERIC_STYLE_HTML = `<option value="autor-godina">Autor-godina (društvene znanosti)</option>
 <option value="fusnota">Fusnota / bibliografija (pravno, humanističko)</option>`;
-
-// Pamcenje odabranog fakulteta preko semestra: localStorage (ne sessionStorage kao draft-share.ts,
-// namjerno - fakultet nije osobni podatak kao ime, i vrijednost treba prezivjeti zatvaranje taba).
-// Isti try/catch obrazac kao ostali storage pristupi u kodu (privatni nacin/blokiran storage ne rusi alat).
-const FACULTY_STORAGE_KEY = 'lekta.citat-faculty';
-function saveFacultyChoice(id: string): void {
-  try {
-    if (id) localStorage.setItem(FACULTY_STORAGE_KEY, id);
-    else localStorage.removeItem(FACULTY_STORAGE_KEY);
-  } catch { /* bez storage-a: alat radi bez pamcenja */ }
-}
-function readFacultyChoice(): string {
-  try { return localStorage.getItem(FACULTY_STORAGE_KEY) || ''; } catch { return ''; }
-}
 
 // Kad je fakultet odabran, #f-style nosi njegove stilove (value = indeks); inace je null (genericki mod).
 let facultyStyles: FacultyStyle[] | null = null;
@@ -187,7 +174,7 @@ function onFacultyChange() {
     facultyStyles = opt.styles;
     styleSel.innerHTML = opt.styles.map((s, i) => `<option value="${i}">${esc(s.label)}</option>`).join('');
   }
-  saveFacultyChoice(facSel.value);
+  saveFacultyContext({ unitId: facSel.value });
   syncCtaAnalyzerLink();
   updateStyleInfo();
   render();
@@ -521,7 +508,7 @@ function init() {
   populateFaculties();
   // Prisjeti se fakulteta odabranog na prethodnom posjetu (semestar zna trajati mjesecima):
   // samo kad opcija stvarno postoji u izborniku (spisak fakulteta zna narasti/skratiti se).
-  const savedFaculty = readFacultyChoice();
+  const savedFaculty = readFacultyContext().unitId || '';
   const facSel = $('#f-faculty');
   if (savedFaculty && facSel && [...facSel.options].some((o: any) => o.value === savedFaculty)) {
     facSel.value = savedFaculty;

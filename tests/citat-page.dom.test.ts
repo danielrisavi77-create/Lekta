@@ -183,3 +183,22 @@ describe('citat-page: izbornik fakulteta + bulk (DOM)', () => {
     expect($('#c-add-to-bulk').disabled).toBe(true);
   });
 });
+
+describe('citat-page: migracija lekta.citat-faculty -> lekta.faculty-context (B2)', () => {
+  // Odvojen describe (zadnji u datoteci): treba SVJEZ modul (vi.resetModules) uz
+  // pred-postavljen stari kljuc PRIJE importa, isti razlog zasto kartice-page-guard.dom.test.ts
+  // ne dijeli beforeAll s ostatkom - init() cita storage samo jednom, pri ucitavanju.
+  it('stari kljuc pred-popuni #f-faculty na init() i migrira se na novi kljuc', async () => {
+    localStorage.clear();
+    localStorage.setItem('lekta.citat-faculty', 'efos');
+    vi.resetModules();
+    buildDom();
+
+    await import('../src/tools/citat-page');
+    await ensureFacultySpecsLoaded();
+
+    expect($('#f-faculty').value).toBe('efos');
+    expect(localStorage.getItem('lekta.citat-faculty')).toBeNull();
+    expect(JSON.parse(localStorage.getItem('lekta.faculty-context')!)).toEqual({ unitId: 'efos' });
+  });
+});
