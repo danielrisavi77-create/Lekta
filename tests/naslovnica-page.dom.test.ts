@@ -43,7 +43,9 @@ function buildDom(): void {
     <button id="tp-print" type="button" disabled></button>
     <button id="tp-docx" type="button" disabled></button>
     <button id="tp-copy" type="button" disabled></button>
-    <p id="tp-hint"></p>`;
+    <p id="tp-hint"></p>
+    <p id="tp-success-cta"></p>
+    <a id="tp-success-cta-link" href="index.html#analyzer"></a>`;
 }
 
 const $ = (s: string): any => document.querySelector(s);
@@ -70,6 +72,11 @@ describe('naslovnica-page: kaskada ustanova/fakultet/studij ne ostavlja zastarje
     expect($('#tp-university').value).toBe('Sveučilište u Zagrebu');
     expect($('#tp-faculty').value).toBe('Akademija dramske umjetnosti');
     expect($('#tp-study').value).toBe('Gluma');
+  });
+
+  it('B4: success-cta se pokaze uz gotovu naslovnicu i nosi ?unit= odabranog fakulteta', () => {
+    expect($('#tp-success-cta').classList.contains('is-visible')).toBe(true);
+    expect($('#tp-success-cta-link').getAttribute('href')).toBe('index.html?unit=adu#analyzer');
   });
 
   it('BUG: promjena fakulteta na drugi (bez odabira studija) vise NE ostavlja studij s prethodnog fakulteta', () => {

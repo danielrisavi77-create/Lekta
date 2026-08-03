@@ -88,6 +88,7 @@ function render() {
 
   const copy = $('#lit-copy');
   if (copy) copy.disabled = r.entries.length === 0;
+  $('#lit-success-cta')?.classList.toggle('is-visible', r.entries.length > 0);
   const docx = $('#lit-docx');
   if (docx) docx.disabled = r.entries.length === 0;
 }

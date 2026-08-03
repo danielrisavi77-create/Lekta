@@ -119,6 +119,7 @@ function render() {
     hint.textContent = '';
     $('#copyBtn').disabled = true;
     if (addBtn) addBtn.disabled = true;
+    $('#c-success-cta')?.classList.remove('is-visible');
     renderInText('');
     return;
   }
@@ -126,6 +127,7 @@ function render() {
   out.classList.remove('empty');
   $('#copyBtn').disabled = false;
   if (addBtn) addBtn.disabled = false;
+  $('#c-success-cta')?.classList.add('is-visible');
   renderInText(inText);
   hint.textContent = missing.length ? 'Preporučeno dodati: ' + missing.join(', ') + '.' : 'Sva preporučena polja su ispunjena.';
   hint.className = missing.length ? 'out-hint warn' : 'out-hint ok';
@@ -156,10 +158,10 @@ function populateFaculties() {
 // ZAGREB_CATALOG); index.html#analyzer to cita preko applyUnitFromUrl (src/ui/app.ts) i
 // unaprijed postavi isti fakultet, umjesto da korisnik ponovno trazi ustanovu od nule.
 function syncCtaAnalyzerLink() {
-  const cta = $('#cta-analyzer');
-  if (!cta) return;
   const unitId = ($('#f-faculty')?.value || '').trim();
-  cta.setAttribute('href', unitId ? `index.html?unit=${encodeURIComponent(unitId)}#analyzer` : 'index.html#analyzer');
+  const href = unitId ? `index.html?unit=${encodeURIComponent(unitId)}#analyzer` : 'index.html#analyzer';
+  $('#cta-analyzer')?.setAttribute('href', href);
+  $('#c-success-cta-link')?.setAttribute('href', href);
 }
 
 // Odabir fakulteta -> #f-style nosi njegove stilove; prazan -> vrati genericki izbor.

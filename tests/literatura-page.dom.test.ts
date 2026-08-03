@@ -21,7 +21,8 @@ function buildDom(): void {
     <b id="lit-issues">0</b>
     <ul id="lit-list"></ul>
     <button id="lit-copy" type="button" disabled></button>
-    <button id="lit-docx" type="button" disabled></button>`;
+    <button id="lit-docx" type="button" disabled></button>
+    <p id="lit-success-cta"></p>`;
 }
 
 const $ = (s: string): any => document.querySelector(s);
@@ -43,6 +44,14 @@ describe('literatura-page: IEEE/Vancouver "zadrzi izvorni redoslijed" prekidac (
     expect(items[1]).toContain('Marić');
     expect(items[2]).toContain('Zorić');
     expect($('#lit-order-note').textContent).toMatch(/abecedno/i);
+  });
+
+  it('B4: success-cta se pokaze cim ima barem jedan sredjen zapis, sakrije se kad se popis isprazni', () => {
+    expect($('#lit-success-cta').classList.contains('is-visible')).toBe(true);
+    setVal('#lit-input', '');
+    expect($('#lit-success-cta').classList.contains('is-visible')).toBe(false);
+    setVal('#lit-input', RAW);
+    expect($('#lit-success-cta').classList.contains('is-visible')).toBe(true);
   });
 
   it('BUG: prebacivanje na "Zadrži izvorni redoslijed" vise ne razbija numericki popis', () => {

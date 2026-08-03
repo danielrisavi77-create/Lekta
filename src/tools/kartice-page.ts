@@ -118,6 +118,7 @@ function render(text: any) {
 
   const copyBtn = $('#kt-copy');
   if (copyBtn) copyBtn.disabled = m.charsWithSpaces === 0;
+  $('#kt-success-cta')?.classList.toggle('is-visible', m.charsWithSpaces > 0);
   scheduleSrSummary(m);
   return m;
 }

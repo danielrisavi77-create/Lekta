@@ -23,6 +23,8 @@ function buildDom(): void {
       <div id="out" class="empty"></div>
       <div id="out-hint"></div>
       <button id="copyBtn"></button>
+      <p id="c-success-cta"></p>
+      <a id="c-success-cta-link" href="index.html#analyzer"></a>
       <div id="out-intext" hidden><span id="intextValue"></span></div>
       <button id="copyIntextBtn"></button>
       <button id="c-add-to-bulk" disabled></button>
@@ -77,6 +79,25 @@ describe('citat-page: izbornik fakulteta + bulk (DOM)', () => {
     setVal('#f-publisher', 'Naklada Slap');
     expect($('#out').textContent).toContain('Milas, G. (2009)');
     expect($('#out').textContent).toContain('Naklada Slap');
+  });
+
+  it('B4: success-cta se pokaze uz gotov citat i nosi ?unit= odabranog fakulteta', () => {
+    expect($('#c-success-cta').classList.contains('is-visible')).toBe(true);
+    // Fakultet je 'efos' iz prethodnog testa ("odabir fakulteta ucita njegov stil").
+    expect($('#c-success-cta-link').getAttribute('href')).toBe('index.html?unit=efos#analyzer');
+  });
+
+  it('B4: prazan unos sakrije success-cta', () => {
+    // EFOS-format (aktivan od prethodnog testa) na SAM prazan tekst zna ispisati fiksnu
+    // interpunkciju umjesto praznog stringa; vrati na genericki mod (isto sto "Bez fakulteta"
+    // test dalje dolje ionako radi) da prazna polja stvarno daju prazan citat.
+    fireChange('#f-faculty', '');
+    setVal('#f-authors', '');
+    setVal('#f-title', '');
+    setVal('#f-year', '');
+    setVal('#f-place', '');
+    setVal('#f-publisher', '');
+    expect($('#c-success-cta').classList.contains('is-visible')).toBe(false);
   });
 
   it('BUG: "Mrezni izvor" prikazuje polje za godinu (SOURCE_TYPE_FIELDS.mrezni ukljucuje year)', () => {

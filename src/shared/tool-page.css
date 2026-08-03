@@ -183,3 +183,13 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);over
 .lekta-consent-actions button[data-consent="grant"]{background:var(--red);color:#fff}
 .lekta-consent-actions button[data-consent="deny"]{background:transparent;border:1px solid var(--paper-line);color:var(--paper-ink)}
 @media(max-width:720px){.lekta-consent-banner{align-items:stretch;flex-direction:column}.lekta-consent-actions{width:100%}.lekta-consent-actions button{flex:1}}
+/* Success CTA: uvijek unutar rezultat-kartice (.card), pa --ok/--ok-soft/--text NASLJEDJUJU
+   page-specific "papir scope" remap (svaka stranica ima svoj .card,.cta{--ok:...} redak) -
+   nova klasa, bez sukoba, poredak ucitavanja nebitan. Skriveno dok alat nema rezultat
+   (isti signal koji vec omogucuje/onemogucuje copy/download gumb), da CTA ne obeca "gotovo"
+   prije nego korisnik stvarno ima sto provjeriti. */
+.success-cta{display:none;align-items:center;gap:8px;margin-top:14px;padding:11px 14px;border-radius:10px;background:var(--ok-soft);color:var(--ok);font-size:13px;font-weight:650;line-height:1.4}
+.success-cta.is-visible{display:flex}
+.success-cta a{color:inherit;text-decoration:underline;text-underline-offset:2px;font-weight:800;white-space:nowrap}
+@media(max-width:480px){.success-cta{flex-direction:column;align-items:flex-start}}
+@media print{.success-cta{display:none!important}}
