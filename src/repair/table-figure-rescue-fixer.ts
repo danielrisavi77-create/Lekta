@@ -43,7 +43,7 @@ export interface TableFigureRescueParams {
   figures: TableFigureRescueFigure[];
 }
 
-interface BodyChild { tag: 'p' | 'tbl' | 'sectPr'; start: number; end: number; xml: string; }
+interface BodyChild { tag: 'p' | 'tbl' | 'sectPr' | 'sdt'; start: number; end: number; xml: string; }
 
 const W_NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
 
@@ -61,7 +61,11 @@ function bodyChildren(documentXml: string): { innerStart: number; innerEnd: numb
   if (!body || body.index == null || close < body.index) return null;
   const innerStart = body.index + body[0].length;
   const inner = documentXml.slice(innerStart, close);
-  const tokens = /<\/?w:(p|tbl|sectPr)(?=[\s/>])[^>]*>/gi;
+  // RE-60 (sesti potrosac istog indeksa): `sdt` MORA biti u popisu. Wordov automatski sadrzaj
+  // je <w:sdt> s vise odlomaka u sebi; bez njega stog ne zna da je unutar sadrzaja pa te
+  // odlomke broji kao djecu tijela, i `children[bodyChildIndex]` promasi element. Analiza
+  // indeks racuna nad SVOM djecom tijela, pa i ovdje sdt mora biti jedno dijete.
+  const tokens = /<\/?w:(p|tbl|sectPr|sdt)(?=[\s/>])[^>]*>/gi;
   const stack: Array<{ tag: BodyChild['tag']; start: number }> = [];
   const children: BodyChild[] = [];
   for (let match = tokens.exec(inner); match; match = tokens.exec(inner)) {

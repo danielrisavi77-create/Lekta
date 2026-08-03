@@ -466,7 +466,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "fer-diplomski-puna-struktura.docx": {
     "__kombinirano": {
-      "applied": 5,
+      "applied": 6,
       "changelog": [
         {
           "after": "Font: Times New Roman, Veličina: 12 pt",
@@ -483,6 +483,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
           "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
+        },
+        {
+          "after": "spašene tablice i slike",
+          "before": "tablice i slike",
         },
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
@@ -569,7 +573,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "margins-fixer-rule",
         "paper-size-fixer-rule",
-        "table-figure-rescue-fixer-rule",
         "consistency-fixer-rule",
         "empty-paragraph-fixer-rule",
       ],
@@ -1815,10 +1818,91 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "table-figure-rescue-fixer": {
-      "applied": false,
-      "changelog": [],
-      "markers": null,
-      "noOpBitIdentican": true,
+      "applied": true,
+      "changelog": [
+        {
+          "after": "spašene tablice i slike",
+          "before": "tablice i slike",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Calibri",
+          "hAnsi": "Calibri",
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 1,
+          "parts": [
+            {
+              "hasPage": true,
+              "name": "word/footer1.xml",
+            },
+          ],
+        },
+        "normal": {
+          "jc": "left",
+          "line": "259",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1701",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": {
+              "fmt": "lowerRoman",
+              "start": "1",
+            },
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": true,
+          },
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1701",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": {
+              "fmt": "decimal",
+              "start": "1",
+            },
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1701",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "11906",
+              "w": "16838",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
       "params": {
         "figures": [
           {
@@ -1868,9 +1952,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         ],
         "version": 1,
       },
-      "skipped": [
-        "table-figure-rescue-fixer-rule",
-      ],
+      "skipped": [],
     },
     "table-figure-rescue-fixer(potvrdjeno)": {
       "applied": false,
