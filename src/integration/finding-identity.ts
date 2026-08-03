@@ -1,16 +1,12 @@
 import type { Check, Issue } from '../scoring/checks';
 import type { RuleEntry } from '../profiles/profile-schema';
+import { CHECK_TITLES, PAPER_SIZE_TITLE_PREFIX } from '../analysis/check-fixer-map';
 
 /**
- * Stable transport identity is deliberately separated from human-facing Croatian
- * labels. Known profile-backed checks map to the authored checkId vocabulary;
- * everything else receives a deterministic `engine:*` id.
+ * Supplemental aliases for profile-backed checks that are not represented in
+ * check-fixer-map (that module intentionally focuses on repairable dimensions).
  */
-const CHECK_ID_ALIASES: Array<{ id: string; patterns: RegExp[] }> = [
-  { id: 'font', patterns: [/^dominantni font$/i, /font (?:osnovnog|glavnog) teksta/i] },
-  { id: 'font-size', patterns: [/veličina osnovnog teksta/i, /velicina osnovnog teksta/i, /veličina fonta/i] },
-  { id: 'line-spacing', patterns: [/prored osnovnog teksta/i, /prored glavnog teksta/i] },
-  { id: 'margins', patterns: [/^margine dokumenta$/i, /^margine$/i] },
+const SUPPLEMENTAL_CHECK_ID_ALIASES: Array<{ id: string; patterns: RegExp[] }> = [
   { id: 'citation-style', patterns: [/citatni stil/i, /stil citiranja/i] },
   { id: 'required-sections', patterns: [/osnovni dijelovi rada/i, /obvezni dijelovi rada/i, /obavezni dijelovi rada/i] },
   { id: 'reference-count', patterns: [/broj izvora/i, /minimalni broj izvora/i] },
@@ -18,12 +14,9 @@ const CHECK_ID_ALIASES: Array<{ id: string; patterns: RegExp[] }> = [
   { id: 'page-count', patterns: [/^broj stranica$/i, /opseg.*stranic/i] },
   { id: 'toc', patterns: [/^sadržaj dokumenta$/i, /^sadrzaj dokumenta$/i, /^automatski sadržaj$/i] },
   { id: 'page-numbers', patterns: [/^brojevi stranica$/i, /^numeriranje stranica$/i] },
-  { id: 'paper-size', patterns: [/format papira/i, /veličina papira/i, /velicina papira/i] },
-  { id: 'justify', patterns: [/poravnanje osnovnog teksta/i, /obostrano poravnanje/i] },
+  { id: 'heading-rules', patterns: [/hijerarhija naslova/i, /pravila naslova/i] },
   { id: 'footnote-font', patterns: [/font fusnota/i] },
   { id: 'footnote-size', patterns: [/veličina fusnota/i, /velicina fusnota/i] },
-  { id: 'footnote-spacing', patterns: [/prored fusnota/i] },
-  { id: 'heading-rules', patterns: [/hijerarhija naslova/i, /pravila naslova/i, /oblikovanje naslova/i] },
 ];
 
 function slug(value: string): string {
@@ -48,8 +41,19 @@ function hash(value: string): string {
 
 export function stableCheckId(category: string, title: string): string {
   const text = String(title || '').trim();
-  const known = CHECK_ID_ALIASES.find(entry => entry.patterns.some(pattern => pattern.test(text)));
-  if (known) return known.id;
+
+  // Existing Repair/Triage source of truth wins. This keeps cross-product
+  // identity aligned with the check IDs already used inside Lekta itself.
+  if (text.startsWith(PAPER_SIZE_TITLE_PREFIX)) return 'paper-size';
+  for (const [checkId, exactTitle] of Object.entries(CHECK_TITLES)) {
+    if (text === exactTitle) return checkId;
+  }
+
+  const supplemental = SUPPLEMENTAL_CHECK_ID_ALIASES.find(entry =>
+    entry.patterns.some(pattern => pattern.test(text)),
+  );
+  if (supplemental) return supplemental.id;
+
   return `engine:${slug(category || 'other')}:${slug(text)}`;
 }
 
