@@ -6,8 +6,9 @@
 // is bound server-side to one owned academic project. CORS is defense in depth;
 // the capability + DB RPC are the actual authorization boundary.
 //
-// Privacy: raw DOCX bytes/text, Issue.detail, Issue.location, mentor text and
-// source passages are rejected/not represented in the canonical payload below.
+// Privacy: raw DOCX bytes/text, project/user identifiers, Issue.detail,
+// Issue.location, mentor text and source passages are rejected/not represented
+// in the canonical network payload below.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { corsHeadersFor } from '../_shared/cors.ts';
@@ -23,7 +24,7 @@ const MAX_CATEGORY_SCORES = 80;
 const TOKEN_RE = /^[A-Za-z0-9_-]{43,128}$/;
 const ISSUE_KEY_RE = /^(rule:|check:)[A-Za-z0-9:_-]{1,313}$/;
 const ALLOWED_TOP_LEVEL = new Set([
-  'schemaVersion', 'analysisId', 'projectId', 'userId', 'rulesetId', 'profileId',
+  'schemaVersion', 'analysisId', 'rulesetId', 'profileId',
   'score', 'scoreLabel', 'profileStatus', 'categoryScores', 'issues', 'analyzedAt',
   'documentFingerprint', 'coverageTier',
 ]);
@@ -178,8 +179,6 @@ Deno.serve(async (req: Request) => {
     return json({ ok: false, reason: code.toLowerCase() }, 400);
   }
 
-  // Bound actual serialized canonical payload as a second line of defense when
-  // Content-Length is absent/chunked.
   if (new TextEncoder().encode(JSON.stringify(payload)).byteLength > MAX_BODY_BYTES) {
     return json({ ok: false, reason: 'payload-too-large' }, 413);
   }
@@ -200,7 +199,6 @@ Deno.serve(async (req: Request) => {
     p_issues: payload.issues,
     p_document_fingerprint: payload.documentFingerprint,
     p_coverage_tier: payload.coverageTier,
-    // Authority timestamp comes from the server boundary, not browser clock.
     p_checked_at: new Date().toISOString(),
   });
 
@@ -214,7 +212,6 @@ Deno.serve(async (req: Request) => {
     }
     console.error('record-completion-check failed', {
       code: error.code,
-      // No payload/body/result logging here.
       message: message.slice(0, 160),
     });
     return json({ ok: false, reason: 'persistence-failed' }, 500);
