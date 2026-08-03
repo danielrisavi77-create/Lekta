@@ -21,8 +21,8 @@ describe('usporedna tablica a11y', () => {
     expect(count(/scope="col"/g)).toBe(5);
   });
 
-  it('svaki od 7 redaka ima th scope="row" (dimenzijski stupac)', () => {
-    expect(count(/<th scope="row" class="dim">/g)).toBe(7);
+  it('svaki od 9 redaka ima th scope="row" (dimenzijski stupac)', () => {
+    expect(count(/<th scope="row" class="dim">/g)).toBe(9);
     expect(html).not.toMatch(/<td class="dim">/); // nijedan dim vise nije <td>
   });
 

@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Kako se Lekta razlikuje od AI savjeta, alata gdje uploadaš svoje upute i ljudskog lektoriranja: verificirana pravila po instituciji, mjerenje stvarnog dokumenta, hrvatski i admin sloj.">
+<meta name="description" content="AI chat, alati &quot;uploadaj svoje upute&quot;, ljudsko lektoriranje i Lekta rješavaju različite probleme. Usporedba za što je koji dobar, s izvorima i datumima provjere.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Lekta">
 <meta property="og:locale" content="hr_HR">
-<meta property="og:title" content="Lekta: usporedba pristupa provjeri akademskog rada">
-<meta property="og:description" content="Kako se Lekta razlikuje od AI savjeta, alata gdje uploadaš svoje upute i ljudskog lektoriranja: verificirana pravila po instituciji, mjerenje stvarnog dokumenta, hrvatski i admin sloj.">
+<meta property="og:title" content="AI, lektor ili alat za provjeru rada? Usporedba pristupa | Lekta">
+<meta property="og:description" content="AI chat, alati &quot;uploadaj svoje upute&quot;, ljudsko lektoriranje i Lekta rješavaju različite probleme. Usporedba za što je koji dobar, s izvorima i datumima provjere.">
 <link rel="canonical" href="https://lektahr.netlify.app/landing_usporedba.html">
 <meta property="og:url" content="https://lektahr.netlify.app/landing_usporedba.html">
 <meta property="og:image" content="https://lektahr.netlify.app/og-image.png">
@@ -16,14 +16,14 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Lekta: provjeri rad prije nego što ga predaš.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Lekta: usporedba pristupa provjeri akademskog rada">
-<meta name="twitter:description" content="Kako se Lekta razlikuje od AI savjeta, alata gdje uploadaš svoje upute i ljudskog lektoriranja: verificirana pravila po instituciji, mjerenje stvarnog dokumenta, hrvatski i admin sloj.">
+<meta name="twitter:title" content="AI, lektor ili alat za provjeru rada? Usporedba pristupa | Lekta">
+<meta name="twitter:description" content="AI chat, alati &quot;uploadaj svoje upute&quot;, ljudsko lektoriranje i Lekta rješavaju različite probleme. Usporedba za što je koji dobar, s izvorima i datumima provjere.">
 <meta name="twitter:image" content="https://lektahr.netlify.app/og-image.png">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="color-scheme" content="light dark">
-<title>Lekta: usporedba pristupa provjeri akademskog rada</title>
+<title>AI, lektor ili alat za provjeru rada? Usporedba pristupa | Lekta</title>
 <script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
 <style>
 *{box-sizing:border-box}
@@ -71,11 +71,15 @@ table.cmp tbody tr:hover td.lekta{background:color-mix(in srgb,var(--brand-soft)
 .yes{color:var(--ok);font-weight:850}.no{color:var(--danger);font-weight:850}.mid{color:var(--warn);font-weight:850}
 
 /* stupovi kao paragrafi rada */
-.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pillars{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .pillar{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--brand);border-radius:12px;padding:22px;box-shadow:var(--shadow-sm)}
 .pillar .sec{font-family:var(--ink-serif);color:var(--brand);font-weight:700;font-size:15px}
 .pillar h3{font-family:var(--ink-serif);margin:8px 0 8px;font-size:18px;font-weight:800}
-.pillar p{margin:0;color:var(--muted);font-size:13.5px}
+.pillar p{margin:0 0 8px;color:var(--muted);font-size:13.5px}
+.pillar p:last-child{margin-bottom:0}
+.pillar p b{color:var(--text);font-weight:700}
+.pillar .schema{font-family:var(--mono);font-size:11.5px;color:var(--muted);background:var(--panel-2);border-radius:8px;padding:8px 10px;margin:8px 0}
+.pillar .caption{display:block;font-size:11px;color:var(--muted);font-style:italic;margin-top:6px}
 
 /* citati kao marginalije */
 .quotes{display:grid;gap:12px;max-width:800px;margin:0 auto}
@@ -89,6 +93,13 @@ table.cmp tbody tr:hover td.lekta{background:color-mix(in srgb,var(--brand-soft)
 .fee-row .label{font-weight:700}.fee-row .dots{flex:1;border-bottom:1px dotted var(--line-strong);transform:translateY(-2px)}
 .fee-row .amount{font-family:var(--mono);font-size:19px;font-weight:800}
 .bench{margin:16px auto 0;max-width:640px;text-align:center;color:var(--muted);font-size:13px;background:var(--warn-soft);border-radius:12px;padding:11px 14px}
+
+/* detaljna usporedba: link-out kartice prema competitor podstranicama */
+.linkout{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.linkout a{display:block;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;text-decoration:none;color:var(--text);font-weight:700;font-size:13.5px;transition:.18s transform,.18s box-shadow}
+.linkout a:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.linkout a span{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:4px}
+@media(max-width:720px){.linkout{grid-template-columns:1fr 1fr}}
 
 .cta{background:linear-gradient(140deg,#191d31,#2a2d63);color:#fff;border-radius:22px;padding:40px;text-align:center;margin:8px 0 34px}
 .cta h2{font-family:var(--ink-serif);font-size:29px;letter-spacing:-.02em;margin:0 0 8px;font-weight:800}
@@ -149,7 +160,7 @@ footer .ks-tick{width:11px;height:11px}
 .lampa-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--desk-line);background:transparent;padding:8px 13px;border-radius:2px;color:var(--desk-muted);font:600 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
 
 /* KS: papir scope ove stranice (hero list, tablica-karta, stupovi, cjenik, CTA) */
-.paper,.card,.pillar,.cta{--text:var(--paper-ink);--muted:var(--paper-muted);--muted-2:var(--paper-muted);--line:var(--paper-line);--line-strong:var(--paper-line);--panel:#fff;--panel-2:var(--paper-2);--bg:var(--paper);--brand:var(--red-deep);--brand-2:var(--paper-ink);--brand-soft:var(--red-soft);--on-brand:#F7F3E8;--info-soft:rgba(74,108,240,.08);--pass:#1E7F4F;--ok:#1E7F4F;--ok-soft:rgba(30,127,79,.12);--warn:#8A570E;--warn-strong:#8A570E;--danger:var(--red-deep);background:var(--paper);color:var(--paper-ink);border:0;border-radius:0;box-shadow:var(--paper-sh-sm)}
+.paper,.card,.pillar,.cta,.linkout a{--text:var(--paper-ink);--muted:var(--paper-muted);--muted-2:var(--paper-muted);--line:var(--paper-line);--line-strong:var(--paper-line);--panel:#fff;--panel-2:var(--paper-2);--bg:var(--paper);--brand:var(--red-deep);--brand-2:var(--paper-ink);--brand-soft:var(--red-soft);--on-brand:#F7F3E8;--info-soft:rgba(74,108,240,.08);--pass:#1E7F4F;--ok:#1E7F4F;--ok-soft:rgba(30,127,79,.12);--warn:#8A570E;--warn-strong:#8A570E;--danger:var(--red-deep);background:var(--paper);color:var(--paper-ink);border:0;border-radius:0;box-shadow:var(--paper-sh-sm)}
 
 /* KS: unutar papir scopea */
 .paper h2,.paper h3,.card h2,.card h3,.pillar h3,.cta h2,.cta h3{font-family:var(--display-serif);font-weight:500}
@@ -158,10 +169,13 @@ footer .ks-tick{width:11px;height:11px}
 .paper .btn-primary,.card .btn-primary,.cta .btn{background:var(--paper-ink);color:var(--paper);box-shadow:3px 3px 0 var(--red-deep)}
 .paper .btn-primary:hover,.card .btn-primary:hover,.cta .btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--red-deep);background:var(--paper-ink);color:var(--paper)}
 
-/* KS: hero list papira (tekst na papiru, ne na stolu) */
-.paper h1{color:var(--paper-ink)}
-.paper h1 .ink{color:var(--red-deep)}
-.paper p.lead{color:var(--paper-muted)}
+/* KS: hero list papira (tekst na papiru, ne na stolu). Specificnost namjerno visa nego
+   tool-page.css .hero h1/.hero h1 .ink/.hero p.lead (isti (0,1,1)/(0,2,1) par): bundle CSS
+   iz ui-boot.ts ucitava se NAKON ovog inline bloka (dev i build), pa jednaka specificnost
+   znaci da tool-page.css pobjedjuje kaskadom bez obzira na redoslijed selektora ovdje. */
+.hero .paper h1{color:var(--paper-ink)}
+.hero .paper h1 .ink{color:var(--red-deep)}
+.hero .paper p.lead{color:var(--paper-muted)}
 .paper .eyebrow{color:var(--red-deep)}
 
 /* KS: CTA kao list na stolu */
@@ -197,6 +211,7 @@ table.cmp thead th.lekta{color:var(--red-deep)}
     <div class="nav-links">
       <a href="index.html#how">Kako radi</a>
       <a href="landing_usporedba.html" class="active" aria-current="page">Usporedba</a>
+      <a href="landing_benchmark.html">Benchmark</a>
       <div class="nav-tools">
         <button class="nav-tools-btn" type="button" aria-expanded="false">Alati <span class="caret" aria-hidden="true">▾</span></button>
         <div class="nav-tools-menu">
@@ -217,6 +232,7 @@ table.cmp thead th.lekta{color:var(--red-deep)}
   <div class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobilna navigacija">
     <a href="index.html#how">Kako radi</a>
     <a class="active" aria-current="page" href="landing_usporedba.html">Usporedba</a>
+    <a href="landing_benchmark.html">Benchmark</a>
     <a href="alati.html">Svi alati</a>
     <a href="citat.html">Citat generator</a>
     <a href="kartice.html">Brojač kartica</a>
@@ -235,8 +251,8 @@ table.cmp thead th.lekta{color:var(--red-deep)}
       <span class="folio serif">Lekta &middot; usporedba pristupa</span>
       <a class="backlink" href="index.html#top">&larr; Natrag na Lektu</a>
       <span class="eyebrow">Pristupi provjeri rada</span>
-      <h1>Drugi ti kažu kako bi rad trebao izgledati. <span class="ink">Lekta izmjeri kako stvarno izgleda.</span></h1>
-      <p class="lead">AI savjet i alati u koje uploadaš svoje upute oslanjaju se na to da će netko dobro pročitati pravila tvog fakulteta. Lekta ih već zna: verificirana, s izvorom, stranicom i datumom.</p>
+      <h1>Isti cilj, drugi alati. <span class="ink">Evo za što je koji dobar (i za što nije).</span></h1>
+      <p class="lead">AI chat je brz za savjet i ideje, alati "uploadaj svoje upute" su fleksibilni za bilo koji format, lektor čita tvoju rečenicu. Lekta radi jedno: mjeri oblik tvog rada prema stvarnim, provjerenim pravilima tvog hrvatskog fakulteta, i nikad ne piše niti mijenja tvoj tekst ili argumentaciju.</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="index.html#analyzer">Provjeri svoj rad &rarr;</a>
         <a class="btn btn-ghost" href="citat.html">Isprobaj citat generator</a>
@@ -248,7 +264,7 @@ table.cmp thead th.lekta{color:var(--red-deep)}
 <section class="section">
   <div class="shell card tbl-wrap">
     <table class="cmp">
-      <caption style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Usporedba pristupa provjeri akademskog rada: AI chat i savjet, alati za upute, ljudsko lektoriranje i Lekta.</caption>
+      <caption style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Usporedba pristupa provjeri akademskog rada: AI chat i savjet, alati za upute, ljudsko lektoriranje i Lekta, uključujući kriterije gdje Lekta nije najbolji izbor.</caption>
       <thead>
         <tr>
           <th scope="col">Što zapravo dobivaš</th>
@@ -260,6 +276,13 @@ table.cmp thead th.lekta{color:var(--red-deep)}
       </thead>
       <tbody>
         <tr>
+          <th scope="row" class="dim">Najbolje za</th>
+          <td>brz opći dojam i ideje za doradu</td>
+          <td>provjeru prema pravilima koje sam uploadaš (npr. časopis)</td>
+          <td>jezičnu i stilsku lekturu teksta</td>
+          <td class="lekta">mjerenje forme rada prema pravilima tvog fakulteta</td>
+        </tr>
+        <tr>
           <th scope="row" class="dim">Verificirana pravila po instituciji (izvor, stranica, datum i akademska godina verifikacije)</th>
           <td><span class="no">Ne</span></td>
           <td><span class="no">Ne</span> (pravila nosi student pri svakom uploadu)</td>
@@ -267,8 +290,8 @@ table.cmp thead th.lekta{color:var(--red-deep)}
           <td class="lekta"><span class="yes">Da</span>, kurirana i verzionirana baza</td>
         </tr>
         <tr>
-          <th scope="row" class="dim">Mjeri stvarni dokument (margine, stilovi, numeracija) umjesto savjeta</th>
-          <td><span class="no">Ne</span>, samo tekstualni savjet</td>
+          <th scope="row" class="dim">Čita/mjeri stvarni dokument (font, margine, prored, numeracija)</th>
+          <td><span class="mid">Djelomično</span>, ovisi o modelu<sup>1</sup></td>
           <td><span class="mid">Djelomično</span>, ovisi o AI ekstrakciji</td>
           <td><span class="yes">Da</span>, ručno</td>
           <td class="lekta"><span class="yes">Da</span>, deterministički DOCX sloj</td>
@@ -281,59 +304,92 @@ table.cmp thead th.lekta{color:var(--red-deep)}
           <td class="lekta"><span class="yes">Da</span>, FPZG fusnote, pravno citiranje, rokovi</td>
         </tr>
         <tr>
+          <th scope="row" class="dim">Piše ili mijenja tvoj tekst/argumentaciju</th>
+          <td>Da, može generirati ili prepisivati tekst</td>
+          <td><span class="mid">Ovisi</span> o alatu</td>
+          <td>Da, lektor smije predložiti jezične izmjene</td>
+          <td class="lekta"><span class="yes">Ne</span>, Lekta nikad ne piše niti mijenja tvoj tekst</td>
+        </tr>
+        <tr>
           <th scope="row" class="dim">Brzina</th>
-          <td>Sekunde (ali nepouzdano)</td>
+          <td>Sekunde</td>
           <td>Minute</td>
-          <td>12 h do nekoliko dana</td>
+          <td>Sati do 7 dana, ovisno o ponuditelju<sup>2</sup></td>
           <td class="lekta"><span class="yes">Sekunde</span>, lokalno</td>
         </tr>
         <tr>
           <th scope="row" class="dim">Cijena provjere</th>
-          <td>Besplatno / pretplata</td>
-          <td>Plaćeno po radu</td>
-          <td>100+ EUR po radu</td>
-          <td class="lekta">Od 3,99 EUR po radu <span class="mid">(uskoro)</span></td>
+          <td>Besplatno ili pretplata (opća namjena, ne samo za ovo)</td>
+          <td>Plaćeno po dokumentu ili paketu<sup>3</sup></td>
+          <td>Otprilike 1,5-2 EUR po kartici<sup>4</sup> (prosječan diplomski otprilike 70-110 EUR)</td>
+          <td class="lekta">Besplatno tijekom bete; najava 3,99-24,99 EUR po vrsti rada poslije</td>
         </tr>
         <tr>
-          <th scope="row" class="dim">Garancija vezana na točnost pravila</th>
-          <td><span class="no">Ne</span></td>
-          <td><span class="mid">Povrat bez mjerljivog kriterija</span></td>
-          <td><span class="mid">Happiness garancija</span></td>
-          <td class="lekta"><span class="yes">Da</span>, na profilima s potvrđenim službenim izvorom <span class="mid">(uskoro)</span></td>
+          <th scope="row" class="dim">Garancija ili povrat</th>
+          <td><span class="no">Nema</span></td>
+          <td><span class="mid">Ovisi</span> o pružatelju (npr. 14 dana na prvi upload)<sup>3</sup></td>
+          <td><span class="mid">Ovisi</span> o pružatelju (npr. garancija zadovoljstva)<sup>2</sup></td>
+          <td class="lekta"><span class="yes">Planirano</span> za verificirane (T2/T3) profile, kad naplata krene</td>
         </tr>
         <tr>
-          <th scope="row" class="dim">Podatak ostaje na tvom uređaju</th>
-          <td><span class="no">Ne</span></td>
-          <td><span class="mid">Upload na server</span></td>
-          <td><span class="mid">Upload na server</span></td>
-          <td class="lekta"><span class="yes">Da</span>, analiza je lokalna</td>
+          <th scope="row" class="dim">Gdje ostaju tvoji podaci</th>
+          <td><span class="mid">Šalje se</span> vanjskom pružatelju</td>
+          <td><span class="mid">Upload</span> na server</td>
+          <td><span class="mid">Šalješ</span> datoteku lektoru/agenciji</td>
+          <td class="lekta"><span class="yes">Besplatna provjera ostaje u pregledniku</span>; puna provjera i popravak traže tvoju izričitu privolu za upload</td>
         </tr>
       </tbody>
     </table>
+    <p class="note" style="padding:14px 16px 18px;margin:0;font-size:12px;color:var(--muted);border-top:1px solid var(--line)">Izvori (provjereno 3. 8. 2026.): <sup>1</sup> Claude iz DOCX-a i sličnih ne-PDF formata uglavnom izvlači samo tekst, ne strukturirana svojstva (<a href="https://platform.claude.com/docs/en/build-with-claude/files">platform.claude.com/docs/en/build-with-claude/files</a>). <sup>2</sup> Scribbr, rok 3 sata do 7 dana i "100% happiness guarantee" (<a href="https://www.scribbr.com/proofreading-editing/">scribbr.com/proofreading-editing</a>). <sup>3</sup> PaperCheck, 14-dnevni povrat na prvi upload za jednokratne pakete, uvjeti vrijede za veće korištenje (<a href="https://papercheck.ai/en/faq">papercheck.ai/en/faq</a>). <sup>4</sup> Hrvatska lektura, raspon prema više dostupnih cjenika (Lekto-fon, KROkultura, lektoriranje.org), ne ime jedne firme.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="shell">
-    <div class="section-head"><span class="kicker">Tri stupa</span><h2>Zašto je to obrana, a ne marketing</h2></div>
+    <div class="section-head"><span class="kicker">Dokaz, ne tvrdnja</span><h2>Kako Lekta zna što provjerava</h2></div>
     <div class="pillars">
-      <article class="pillar"><div class="sec">&sect; 1</div><h3>Verificirana baza</h3><p>Svako bodovano pravilo ima izvor, stranicu te datum i akademsku godinu verifikacije. Kad pravilo nije javno objavljeno, aplikacija to izričito kaže umjesto da nagađa.</p></article>
-      <article class="pillar"><div class="sec">&sect; 2</div><h3>Deterministički DOCX sloj</h3><p>Mjerimo stvarni dokument, ne dajemo savjet o njemu: font, veličina, prored, margine, stilovi naslova, numeracija, sadržaj, citatnice i literatura.</p></article>
-      <article class="pillar"><div class="sec">&sect; 3</div><h3>Hrvatski + admin sloj</h3><p>FPZG fusnote, pravno citiranje, rokovi, obrasci i koraci predaje. Pokriva hrvatske fakultetske specifičnosti koje globalni alati ne poznaju.</p></article>
+      <article class="pillar">
+        <div class="sec">&sect; 1</div>
+        <h3>Konkretan primjer</h3>
+        <p><b>Izvor:</b> Upute za pisanje akademskih radova na Fakultetu političkih znanosti, str. 14, odjeljak "Format i oprema rada". Provjereno 2. 7. 2026.</p>
+        <p><b>Pravilo (citat):</b> "Diplomski i završni specijalistički rad trebaju biti napisani fontom/pismom Times New Roman, veličinom slova 12 s proredom 1,5, te obostrano poravnati (Justify)."</p>
+        <p><b>Ilustrativan primjer</b> (nije stvaran tuđi rad): Calibri, 11 pt, prored 1,15, poravnanje lijevo.</p>
+        <p><b>Rezultat:</b> Ne zadovoljava (4/4): font, veličina, prored, poravnanje. Sve 4 stavke su automatski popravljive uz tvoju privolu (font i veličina preko font-fixera, prored preko line-spacing-fixera, poravnanje preko alignment-fixera).</p>
+      </article>
+      <article class="pillar">
+        <div class="sec">&sect; 2</div>
+        <h3>Nepotvrđeno se ne boduje</h3>
+        <p>Puni izvještaj razdvaja pravila po pouzdanosti: bodovano (visoka, srednja, niska) i nepotvrđeno. Kad izvor nije dovoljno siguran ili ažuran, pravilo se prikazuje informativno i ne ulazi u ocjenu, umjesto da nagađa.</p>
+        <p class="schema">Bodovano: 18 (visoka 12, srednja 4, niska 2) &middot; Nepotvrđeno: 3</p>
+        <span class="caption">Ilustrativan prikaz mehanizma, ne stvaran tuđi izvještaj.</span>
+      </article>
     </div>
   </div>
 </section>
 
 <section class="section">
   <div class="shell">
-    <div class="section-head"><span class="kicker">Cjenik &middot; uskoro</span><h2>Red veličine jeftinije od ljudskog formatiranja</h2></div>
+    <div class="section-head"><span class="kicker">Cijena &middot; besplatna beta</span><h2>Tijekom bete je sve besplatno</h2></div>
     <div class="fees card" style="padding:24px 26px">
-      <div class="fee-row"><span class="label">Seminarski rad</span><span class="dots"></span><span class="amount">3,99 EUR</span></div>
-      <div class="fee-row"><span class="label">Završni rad</span><span class="dots"></span><span class="amount">5,99 EUR</span></div>
-      <div class="fee-row"><span class="label">Diplomski rad</span><span class="dots"></span><span class="amount">9,99 EUR</span></div>
-      <div class="fee-row"><span class="label">Doktorski rad</span><span class="dots"></span><span class="amount">24,99 EUR</span></div>
+      <div class="fee-row"><span class="label">Besplatna automatska provjera</span><span class="dots"></span><span class="amount yes">Besplatno</span></div>
+      <div class="fee-row"><span class="label">Puni izvještaj</span><span class="dots"></span><span class="amount yes">Besplatno</span></div>
+      <div class="fee-row"><span class="label">Provjera prije predaje</span><span class="dots"></span><span class="amount yes">Besplatno</span></div>
+      <div class="fee-row"><span class="label">Automatski popravak</span><span class="dots"></span><span class="amount yes">Besplatno</span></div>
     </div>
-    <p class="bench"><strong>Naplata još nije aktivna: dok je Lekta u soft-launchu sve su provjere besplatne, a cijene ispod su najava.</strong> Za usporedbu: ljudsko formatiranje i lektura obično koštaju 100+ EUR po radu i traju danima. Cijene provjere su okvirne i sinkroniziraju se s aktualnim katalogom.</p>
+    <p class="bench"><strong>Tijekom besplatne bete ništa se ne naplaćuje.</strong> To će se promijeniti kad naplata krene.</p>
+    <p class="note" style="text-align:center;max-width:640px;margin:14px auto 0;color:var(--muted);font-size:12.5px">Najavljene cijene nakon bete (<!-- KEEP IN SYNC WITH src/report/pricing.ts WORK_TYPE_TIERS -->po vrsti rada): seminarski 3,99 EUR, završni 5,99 EUR, diplomski 9,99 EUR, doktorski 24,99 EUR.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell">
+    <div class="section-head"><span class="kicker">Detaljna usporedba</span><h2>Po pojedinom pristupu</h2></div>
+    <div class="linkout">
+      <a href="/usporedba/chatgpt/">AI chat<span>ChatGPT i slični asistenti</span></a>
+      <a href="/usporedba/papercheck/">Upload-alati<span>npr. PaperCheck</span></a>
+      <a href="/usporedba/scribbr/">Ljudsko lektoriranje<span>npr. Scribbr</span></a>
+      <a href="/usporedba/lektor/">Hrvatski lektori<span>lokalna kategorija</span></a>
+    </div>
   </div>
 </section>
 
@@ -341,7 +397,7 @@ table.cmp thead th.lekta{color:var(--red-deep)}
   <div class="shell">
     <div class="cta">
       <h2>Provjeri prije nego rad ode mentoru.</h2>
-      <p>Besplatan teaser, bez registracije, dokument ostaje na tvom uređaju.</p>
+      <p>Besplatna automatska provjera, bez registracije: dokument ostaje na tvom uređaju.</p>
       <a class="btn" href="index.html#analyzer">Besplatno provjeri rad &rarr;</a>
     </div>
     <p class="disclaimer">Lekta radi pomoćnu tehničku provjeru prema odabranom profilu i ne zamjenjuje službene upute ustanove, studija, kolegija ni mentora. Tvrdnje o drugim pristupima su opisi kategorija, ne imenovanje pojedinih proizvoda.</p>
@@ -351,16 +407,16 @@ table.cmp thead th.lekta{color:var(--red-deep)}
   <div class="shell">
     <h2>Česta pitanja</h2>
     <div class="faq">
-      <details><summary>Šalje li Lekta moj rad na internet?</summary><p>Ne za besplatnu provjeru. Analiza se odvija u tvom pregledniku i dokument ostaje na uređaju. Automatski popravak dokumenta je zaseban, plaćeni i izričito označen korak koji dokument šalje tek uz tvoju privolu.</p></details>
+      <details><summary>Šalje li Lekta moj rad na internet?</summary><p>Ne za besplatnu provjeru. Analiza se odvija u tvom pregledniku i dokument ostaje na uređaju. Automatski popravak dokumenta je zaseban, izričito označen korak koji dokument šalje tek uz tvoju privolu. Tijekom besplatne bete popravak se ne naplaćuje.</p></details>
       <details><summary>Po čemu se Lekta razlikuje od alata za znanstvene časopise?</summary><p>Ti alati provjeravaju prema pravilima časopisa i ne poznaju hrvatske fakultetske profile, faze predaje ni predajni paket. Lekta koristi verificirana pravila iz službenih odluka ustanova i mjeri tvoj stvarni dokument.</p></details>
       <details><summary>Provjerava li Lekta je li rad plagijat?</summary><p>Ne. Lekta provjerava oblikovanje, strukturu, opseg i dosljednost citata prema profilu; ne uspoređuje tekst s vanjskim izvorima i nije alat za otkrivanje plagijata.</p></details>
-      <details><summary>Može li Lekta i popraviti greške, ne samo ih naći?</summary><p>Da. Besplatna provjera pokazuje sve nalaze i gdje su; automatski popravak oblikovanja je plaćena usluga s cijenom po vrsti rada, nakon koje odmah vidiš novu ocjenu.</p></details>
-      <details><summary>Trebam li instalirati nešto ili se registrirati za provjeru?</summary><p>Ne. Otvoriš stranicu, učitaš .docx i dobiješ nalaz. Registracija i plaćanje potrebni su samo za plaćeni popravak dokumenta.</p></details>
+      <details><summary>Može li Lekta i popraviti greške, ne samo ih naći?</summary><p>Da. Besplatna provjera pokazuje ocjenu, broj problema po kategoriji i dva konkretna primjera nalaza; puni popis i točna mjesta grešaka otključava puni izvještaj. Automatski popravak oblikovanja je zaseban korak (tijekom besplatne bete besplatan, poslije naplaćen po vrsti rada), nakon kojeg odmah vidiš novu ocjenu.</p></details>
+      <details><summary>Trebam li instalirati nešto ili se registrirati za provjeru?</summary><p>Ne. Otvoriš stranicu, učitaš .docx i dobiješ nalaz. Registracija je potrebna samo za puni izvještaj i automatski popravak; oboje je tijekom besplatne bete besplatno, plaćanje dolazi kad naplata krene.</p></details>
     </div>
   </div>
 </section>
 </main>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Šalje li Lekta moj rad na internet?","acceptedAnswer":{"@type":"Answer","text":"Ne za besplatnu provjeru. Analiza se odvija u tvom pregledniku i dokument ostaje na uređaju. Automatski popravak dokumenta je zaseban, plaćeni i izričito označen korak koji dokument šalje tek uz tvoju privolu."}},{"@type":"Question","name":"Po čemu se Lekta razlikuje od alata za znanstvene časopise?","acceptedAnswer":{"@type":"Answer","text":"Ti alati provjeravaju prema pravilima časopisa i ne poznaju hrvatske fakultetske profile, faze predaje ni predajni paket. Lekta koristi verificirana pravila iz službenih odluka ustanova i mjeri tvoj stvarni dokument."}},{"@type":"Question","name":"Provjerava li Lekta je li rad plagijat?","acceptedAnswer":{"@type":"Answer","text":"Ne. Lekta provjerava oblikovanje, strukturu, opseg i dosljednost citata prema profilu; ne uspoređuje tekst s vanjskim izvorima i nije alat za otkrivanje plagijata."}},{"@type":"Question","name":"Može li Lekta i popraviti greške, ne samo ih naći?","acceptedAnswer":{"@type":"Answer","text":"Da. Besplatna provjera pokazuje sve nalaze i gdje su; automatski popravak oblikovanja je plaćena usluga s cijenom po vrsti rada, nakon koje odmah vidiš novu ocjenu."}},{"@type":"Question","name":"Trebam li instalirati nešto ili se registrirati za provjeru?","acceptedAnswer":{"@type":"Answer","text":"Ne. Otvoriš stranicu, učitaš .docx i dobiješ nalaz. Registracija i plaćanje potrebni su samo za plaćeni popravak dokumenta."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Šalje li Lekta moj rad na internet?","acceptedAnswer":{"@type":"Answer","text":"Ne za besplatnu provjeru. Analiza se odvija u tvom pregledniku i dokument ostaje na uređaju. Automatski popravak dokumenta je zaseban, izričito označen korak koji dokument šalje tek uz tvoju privolu. Tijekom besplatne bete popravak se ne naplaćuje."}},{"@type":"Question","name":"Po čemu se Lekta razlikuje od alata za znanstvene časopise?","acceptedAnswer":{"@type":"Answer","text":"Ti alati provjeravaju prema pravilima časopisa i ne poznaju hrvatske fakultetske profile, faze predaje ni predajni paket. Lekta koristi verificirana pravila iz službenih odluka ustanova i mjeri tvoj stvarni dokument."}},{"@type":"Question","name":"Provjerava li Lekta je li rad plagijat?","acceptedAnswer":{"@type":"Answer","text":"Ne. Lekta provjerava oblikovanje, strukturu, opseg i dosljednost citata prema profilu; ne uspoređuje tekst s vanjskim izvorima i nije alat za otkrivanje plagijata."}},{"@type":"Question","name":"Može li Lekta i popraviti greške, ne samo ih naći?","acceptedAnswer":{"@type":"Answer","text":"Da. Besplatna provjera pokazuje ocjenu, broj problema po kategoriji i dva konkretna primjera nalaza; puni popis i točna mjesta grešaka otključava puni izvještaj. Automatski popravak oblikovanja je zaseban korak (tijekom besplatne bete besplatan, poslije naplaćen po vrsti rada), nakon kojeg odmah vidiš novu ocjenu."}},{"@type":"Question","name":"Trebam li instalirati nešto ili se registrirati za provjeru?","acceptedAnswer":{"@type":"Answer","text":"Ne. Otvoriš stranicu, učitaš .docx i dobiješ nalaz. Registracija je potrebna samo za puni izvještaj i automatski popravak; oboje je tijekom besplatne bete besplatno, plaćanje dolazi kad naplata krene."}}]}</script>
 
 <footer><div class="shell footer-inner">
   <a class="logo" href="index.html#top" style="font-size:16px"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
