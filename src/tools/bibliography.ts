@@ -78,7 +78,7 @@ export function detectIssues(text: string): string[] {
   // trazi bilo gdje u zapisu, pa naslov koji sadrzi "pristup" moze ugasiti upozorenje.
   const hasAccess = /(pristup|preuzeto|posjeć|posjec|accessed|retrieved|citirano|cited)/i.test(text);
   if (hasUrl && !hasAccess) {
-    issues.push('mrežni izvor bez datuma pristupa');
+    issues.push('provjeri treba li tvoj citatni stil datum pristupa');
   }
   if (text.replace(/\s/g, '').length < 12) {
     issues.push('vrlo kratak zapis, možda nepotpun');

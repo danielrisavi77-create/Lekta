@@ -157,20 +157,20 @@ describe('detectIssues', () => {
   });
 
   it('označava mrežni izvor bez datuma pristupa', () => {
-    expect(detectIssues('Portal (2021). https://primjer.hr/clanak')).toContain('mrežni izvor bez datuma pristupa');
-    expect(detectIssues('Portal (2021). https://primjer.hr (pristup 2.7.2026.)')).not.toContain('mrežni izvor bez datuma pristupa');
+    expect(detectIssues('Portal (2021). https://primjer.hr/clanak')).toContain('provjeri treba li tvoj citatni stil datum pristupa');
+    expect(detectIssues('Portal (2021). https://primjer.hr (pristup 2.7.2026.)')).not.toContain('provjeri treba li tvoj citatni stil datum pristupa');
   });
 
   it('prihvaća "citirano" kao marker datuma pristupa (hrvatski Vancouver/IEEE)', () => {
     expect(detectIssues('SZO. (2020). Izvještaj. https://who.int [citirano: 2.7.2026.]'))
-      .not.toContain('mrežni izvor bez datuma pristupa');
+      .not.toContain('provjeri treba li tvoj citatni stil datum pristupa');
   });
 
   it('goli datum objave nije datum pristupa; hvata i bare www URL', () => {
     // Datum je datum objave, nema kljucne rijeci pristupa -> i dalje se oznacava.
-    expect(detectIssues('Novosti (12.3.2021). https://x.hr/a')).toContain('mrežni izvor bez datuma pristupa');
+    expect(detectIssues('Novosti (12.3.2021). https://x.hr/a')).toContain('provjeri treba li tvoj citatni stil datum pristupa');
     // Bare www URL bez sheme se sada prepoznaje kao mrežni izvor.
-    expect(detectIssues('Zavod (2021). Podaci. www.primjer.hr/podaci')).toContain('mrežni izvor bez datuma pristupa');
+    expect(detectIssues('Zavod (2021). Podaci. www.primjer.hr/podaci')).toContain('provjeri treba li tvoj citatni stil datum pristupa');
   });
 
   it('označava prekratak zapis', () => {
