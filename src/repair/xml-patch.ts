@@ -1676,6 +1676,24 @@ export function documentHasTocField(documentXml: string): boolean {
   return false;
 }
 
+/**
+ * RE-47: dodaj atribut u OTVARAJUCI tag, ispravno i za samozatvarajuci oblik.
+ *
+ * Naivni `tag.replace(/>$/, ' w:dirty="true">')` na `<w:fldChar .../>` proizvede
+ * `<w:fldChar ... / w:dirty="true">`: atribut zavrsi IZA kose crte, tag prestane biti
+ * samozatvarajuci i XML vise nije valjan. Word to tolerira, ali nas vlastiti regex parser
+ * (extractBodyParagraphs) od te tocke krivo broji odlomke, pa svi anchor-osjetljivi fixeri
+ * poslije toga tiho vrate 'no-target' (dokazano na stvarnom radu: 392 -> 71 odlomaka).
+ *
+ * Izvezeno da isti popravak dijele xml-patch.ts i field-integrity-fixer.ts (obje su
+ * pisale isti pogresan replace).
+ */
+export function withAddedAttribute(openingTag: string, attribute: string): string {
+  return /\/>$/.test(openingTag)
+    ? openingTag.replace(/\s*\/>$/, ` ${attribute}/>`)
+    : openingTag.replace(/>$/, ` ${attribute}>`);
+}
+
 /** Označi postojeće TOC polje za osvježavanje nakon promjene Heading stilova. */
 export function markTocFieldsDirty(documentXml: string): { xml: string; applied: boolean } {
   const regions = documentXml.match(
@@ -1695,7 +1713,7 @@ export function markTocFieldsDirty(documentXml: string): { xml: string; applied:
       const instruction = opening.match(/\bw:instr="([^"]*)"/i)?.[1] || '';
       if (!/\bTOC\b/i.test(instruction) || /\bw:dirty="true"/i.test(opening)) return opening;
       applied = true;
-      return opening.replace(/>$/, ' w:dirty="true">');
+      return withAddedAttribute(opening, 'w:dirty="true"');
     },
   );
   xml = xml.replace(
@@ -1706,7 +1724,7 @@ export function markTocFieldsDirty(documentXml: string): { xml: string; applied:
       const begin = region.match(/<w:fldChar\b[^>]*w:fldCharType="begin"[^>]*>/i)?.[0];
       if (!begin || /\bw:dirty="true"/.test(begin)) return region;
       applied = true;
-      return region.replace(begin, begin.replace(/>$/, ' w:dirty="true">'));
+      return region.replace(begin, withAddedAttribute(begin, 'w:dirty="true"'));
     },
   );
   return { xml, applied };

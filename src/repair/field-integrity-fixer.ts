@@ -1,4 +1,4 @@
-import { buildTocFieldXml, documentHasTocField } from './xml-patch.ts';
+import { buildTocFieldXml, documentHasTocField, withAddedAttribute } from './xml-patch.ts';
 import { analyzeFieldIntegrity, fieldAnchorFingerprint, manualTocAnchorFingerprint, paragraphAnchorFingerprint, type FieldIntegrity } from '../analysis/field-integrity.ts';
 import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
@@ -37,7 +37,9 @@ function addDirty(xml: string, offset: number, raw: string): { xml: string; chan
   if (openingEnd < 0) return { xml, changed: false };
   const opening = raw.slice(0, openingEnd + 1);
   if (/\bw:dirty\s*=\s*["'](?:true|1)["']/i.test(opening)) return { xml, changed: false };
-  const replacement = opening.replace(/>$/, ' w:dirty="true">');
+  // RE-47: samozatvarajuci tag (<w:fldChar .../>) mora dobiti atribut PRIJE kose crte, inace
+  // nastane nevaljan XML koji obori vlastito brojanje odlomaka (vidi withAddedAttribute).
+  const replacement = withAddedAttribute(opening, 'w:dirty="true"');
   return { xml: xml.slice(0, offset) + replacement + xml.slice(offset + opening.length), changed: true };
 }
 

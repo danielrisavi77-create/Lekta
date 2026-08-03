@@ -120,6 +120,34 @@ export interface ApplyFixersResult {
   skippedReasons: Record<string, FixerNoOpReason>;
 }
 
+/**
+ * RE-46: fixeri koji MIJENJAJU BROJ ODLOMAKA u word/document.xml (umecu ili uklanjaju <w:p>).
+ *
+ * Zasto postoji: applyFixers primjenjuje zahtjeve SEKVENCIJALNO nad istim documentXml-om, a
+ * anchor-osjetljivi fixeri (croatian-typography, link-doi, consistency, field-integrity...)
+ * u params nose `paragraphIndex` + `anchorFingerprint` IZRACUNATE NAD IZVORNIM dokumentom
+ * (klijentska analiza). Cim jedan od dolje navedenih ukloni ili umetne odlomak, svi kasniji
+ * indeksi se pomaknu i te mete gadjaju krivi odlomak -> tihi 'no-target'.
+ *
+ * Otkriveno na stvarnom diplomskom radu (FPZG novinarstvo): empty-paragraph-fixer je uklonio
+ * odlomke, nakon cega su croatian-typography-fixer i link-doi-fixer preskoceni iako su ISTI
+ * params primijenjeni SAMI uredno prolazili. Zakljucano u tests/repair-apply-order.test.ts.
+ *
+ * Rjesenje je redoslijed, ne re-anchoring: ovi idu ZADNJI (stabilno, unutar skupine se cuva
+ * ulazni redoslijed), pa svi anchor-osjetljivi rade nad JOS NEPOMAKNUTIM indeksima.
+ * Kombinacija dvaju fixera IZ OVE skupine i dalje moze pomaknuti indekse jedan drugome; to je
+ * poznata, uza granica (oni se u praksi rijetko preklapaju nad istim odlomcima).
+ */
+const INDEX_SHIFTING_FIXERS: ReadonlySet<string> = new Set<string>([
+  'empty-paragraph-fixer', // uklanja osirotjele prazne odlomke
+  'required-section-fixer', // umece nedostajuce obvezne dijelove
+  'toc-field-fixer', // umece zivo TOC polje
+  'section-insert-fixer', // umece prijelom sekcije
+  'title-page-fixer', // zamjenjuje omedjenu prvu stranicu (drugaciji broj odlomaka)
+  'bibliography-repair-fixer', // moze ukloniti duplicirane zapise
+  'citation-bibliography-sync-fixer', // moze dodati nedostajuce zapise
+]);
+
 const DOCUMENT_XML_PATH = 'word/document.xml';
 const STYLES_XML_PATH = 'word/styles.xml';
 const NUMBERING_XML_PATH = 'word/numbering.xml';
@@ -742,7 +770,20 @@ export async function applyFixers(
   const skipped: string[] = [];
   const skippedReasons: Record<string, FixerNoOpReason> = {};
 
-  for (const request of requests) {
+  // RE-46: stabilno rasporedi zahtjeve u dvije faze - prvo oni koji NE mijenjaju broj odlomaka
+  // (anchor-osjetljivi), pa tek onda INDEX_SHIFTING_FIXERS. Unutar svake faze cuva se ULAZNI
+  // redoslijed (Array.prototype.sort je stabilan), pa ovo ne mijenja nista osim relativnog
+  // polozaja strukturnih fixera. Bez ovoga jedan strukturni popravak tiho obori sve kasnije
+  // anchor-osjetljive (vidi komentar uz INDEX_SHIFTING_FIXERS).
+  const orderedRequests = requests
+    .map((request, index) => ({ request, index }))
+    .sort((a, b) => {
+      const phase = Number(INDEX_SHIFTING_FIXERS.has(a.request.fixerId)) - Number(INDEX_SHIFTING_FIXERS.has(b.request.fixerId));
+      return phase !== 0 ? phase : a.index - b.index;
+    })
+    .map((entry) => entry.request);
+
+  for (const request of orderedRequests) {
     let result: ReturnType<typeof runFixer>;
     try {
       const packageXmlParts = { ...(parts.packageXmlParts ?? {}) };
