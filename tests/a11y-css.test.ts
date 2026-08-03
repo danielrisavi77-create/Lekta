@@ -11,7 +11,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (f: string) => readFileSync(join(root, f), 'utf8');
 const PAGES = [
   'index.html', 'citat.html', 'kartice.html', 'naslovnica.html',
-  'literatura.html', 'izjava.html', 'alati.html', 'landing_usporedba.html',
+  'literatura.html', 'izjava.html', 'alati.html', 'landing_usporedba.html', 'landing_benchmark.html',
 ];
 
 describe('fokus prsten kontrast (BL-P3-05)', () => {

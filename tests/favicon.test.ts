@@ -18,6 +18,7 @@ const PAGES = [
   'izjava.html',
   'alati.html',
   'landing_usporedba.html',
+  'landing_benchmark.html',
 ];
 
 describe.each(PAGES)('favicon: %s', (page) => {

@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "profileId": "fpzg-politologija-diplomski",
+  "generatedNote": "Kodom generiran, deterministicki, reproducibilan (scripts/generate-benchmark-fixture.mts).",
+  "found": 7,
+  "total": 7,
+  "items": [
+    {
+      "id": "font",
+      "checkId": "font",
+      "titleMatch": "Dominantni font",
+      "category": "format",
+      "description": "Cijeli rad je pisan fontom Calibri umjesto Times New Roman.",
+      "ruleSource": "fpzg-politologija-diplomski--font",
+      "expectedVerdict": "fail"
+    },
+    {
+      "id": "font-size",
+      "checkId": "font-size",
+      "titleMatch": "Veličina osnovnog teksta",
+      "category": "format",
+      "description": "Veličina slova je 11 pt umjesto propisanih 12 pt.",
+      "ruleSource": "fpzg-politologija-diplomski--font-size",
+      "expectedVerdict": "fail"
+    },
+    {
+      "id": "line-spacing",
+      "checkId": "line-spacing",
+      "titleMatch": "Prored osnovnog teksta",
+      "category": "format",
+      "description": "Prored je jednostruk (1,0) umjesto propisanog 1,5.",
+      "ruleSource": "fpzg-politologija-diplomski--line-spacing",
+      "expectedVerdict": "fail"
+    },
+    {
+      "id": "justify",
+      "checkId": "justify",
+      "titleMatch": "Poravnanje osnovnog teksta",
+      "category": "format",
+      "description": "Tekst je poravnat lijevo umjesto obostrano (Justify).",
+      "ruleSource": "fpzg-politologija-diplomski--justify",
+      "expectedVerdict": "fail"
+    },
+    {
+      "id": "paper-size",
+      "checkId": "paper-size",
+      "titleMatch": "Format stranice",
+      "category": "format",
+      "description": "Format papira je US Letter (21,59×27,94 cm) umjesto propisanog A4 (21×29,7 cm).",
+      "ruleSource": "fpzg-politologija-diplomski--paper-size",
+      "expectedVerdict": "fail"
+    },
+    {
+      "id": "page-numbers",
+      "checkId": "page-numbers",
+      "titleMatch": "Brojevi stranica",
+      "category": "format",
+      "description": "Rad nema brojeve stranica.",
+      "ruleSource": "fpzg-politologija-diplomski--page-numbers",
+      "expectedVerdict": "fail"
+    },
+    {
+      "id": "word-count",
+      "checkId": "word-count",
+      "titleMatch": "Profilni opseg riječi",
+      "category": "scope",
+      "description": "Rad ima otprilike 1.100 riječi, profil traži 10.000-12.000.",
+      "ruleSource": "fpzg-politologija-diplomski--word-count",
+      "expectedVerdict": "fail"
+    }
+  ],
+  "detected": {
+    "font": true,
+    "font-size": true,
+    "line-spacing": true,
+    "justify": true,
+    "paper-size": true,
+    "page-numbers": true,
+    "word-count": true
+  }
+}

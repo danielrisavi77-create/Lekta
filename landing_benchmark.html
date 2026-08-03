@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Javni testni Word dokument sa 7 namjerno ubačenih, poznatih grešaka protiv verificiranog FPZG profila. Metodologija, katalog grešaka i preuzimanje dokumenta su objavljeni.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Lekta">
+<meta property="og:locale" content="hr_HR">
+<meta property="og:title" content="Lekta javni benchmark: 7/7 poznatih grešaka pronađeno | Lekta">
+<meta property="og:description" content="Javni testni Word dokument sa 7 namjerno ubačenih, poznatih grešaka protiv verificiranog FPZG profila. Metodologija, katalog grešaka i preuzimanje dokumenta su objavljeni.">
+<link rel="canonical" href="https://lektahr.netlify.app/landing_benchmark.html">
+<meta property="og:url" content="https://lektahr.netlify.app/landing_benchmark.html">
+<meta property="og:image" content="https://lektahr.netlify.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Lekta: provjeri rad prije nego što ga predaš.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Lekta javni benchmark: 7/7 poznatih grešaka pronađeno | Lekta">
+<meta name="twitter:description" content="Javni testni Word dokument sa 7 namjerno ubačenih, poznatih grešaka protiv verificiranog FPZG profila. Metodologija, katalog grešaka i preuzimanje dokumenta su objavljeni.">
+<meta name="twitter:image" content="https://lektahr.netlify.app/og-image.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="color-scheme" content="light dark">
+<title>Lekta javni benchmark: 7/7 poznatih grešaka pronađeno | Lekta</title>
+<script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
+<style>
+*{box-sizing:border-box}
+a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radius:6px}
+.serif{font-family:var(--ink-serif)}
+.shell{width:min(var(--max),calc(100% - 40px));margin:auto}
+.logo-tick{width:15px;height:13px;flex:0 0 auto;color:var(--brand);transform:translateY(1px)}
+.mobile-menu{display:none}.mobile-nav{display:none}
+.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:750;display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;transition:.18s transform}
+.btn:hover{transform:translateY(-1px)}
+.backlink{display:inline-flex;align-items:center;gap:7px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:650;margin-bottom:14px}
+
+.hero{padding:48px 0 20px}
+.paper{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:40px 44px 40px 60px;overflow:hidden}
+.paper:before{content:"";position:absolute;left:34px;top:26px;bottom:26px;width:1.5px;background:color-mix(in srgb,var(--brand) 55%,transparent);opacity:.5}
+.eyebrow{display:inline-block;font-family:var(--mono);font-weight:600;letter-spacing:.1em;font-size:11px;text-transform:uppercase;color:var(--brand)}
+.hero h1{font-family:var(--display-serif);font-size:clamp(28px,4.2vw,46px);line-height:1.1;letter-spacing:-.015em;margin:14px 0 14px;max-width:760px;font-weight:800}
+.hero h1 .ink{font-style:italic;font-weight:480;color:var(--brand)}
+.hero p.lead{font-size:18px;color:var(--muted);max-width:640px;margin:0 0 22px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+
+.section{padding:34px 0}
+.section-head{max-width:720px;margin:0 auto 22px;text-align:center}
+.section-head .kicker{font-size:11px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--brand);position:relative;padding-left:16px}
+.section-head .kicker::before{content:"";position:absolute;left:0;top:50%;width:9px;height:1.5px;background:var(--brand);transform:translateY(-50%)}
+.section-head h2{font-family:var(--display-serif);font-size:clamp(24px,3.4vw,36px);letter-spacing:-.02em;margin:9px 0 8px;font-weight:800}
+.section-head p{color:var(--muted);margin:0}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.scoreband{display:flex;align-items:center;gap:24px;padding:26px 30px;flex-wrap:wrap}
+.scoreband .big{font-family:var(--mono);font-size:48px;font-weight:800;color:var(--ok)}
+.scoreband .txt{color:var(--muted);font-size:14px;max-width:480px}
+.scoreband .txt b{color:var(--text)}
+
+.tbl-wrap{overflow:auto}
+table.bench{width:100%;border-collapse:collapse;min-width:640px}
+table.bench th,table.bench td{padding:13px 16px;border-top:1px solid var(--line);text-align:left;vertical-align:top;font-size:14px}
+table.bench thead th{background:var(--panel-2);border-top:0;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800}
+.yes{color:var(--ok);font-weight:850}.no{color:var(--danger);font-weight:850}.mid{color:var(--warn);font-weight:850}
+
+table.pending{width:100%;border-collapse:collapse;min-width:640px}
+table.pending th,table.pending td{padding:13px 16px;border-top:1px solid var(--line);text-align:left;vertical-align:top;font-size:14px}
+table.pending thead th{background:var(--panel-2);border-top:0;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800}
+table.pending td.lekta{background:color-mix(in srgb,var(--brand-soft) 55%,var(--panel));font-weight:650}
+
+.method{max-width:760px;margin:0 auto;color:var(--muted);font-size:14.5px;line-height:1.7}
+.method p{margin:0 0 12px}
+.method b{color:var(--text)}
+
+.cta{background:linear-gradient(140deg,#191d31,#2a2d63);color:#fff;border-radius:22px;padding:40px;text-align:center;margin:8px 0 34px}
+.cta h2{font-family:var(--display-serif);font-size:29px;letter-spacing:-.02em;margin:0 0 8px;font-weight:800}
+.cta p{color:#cdd0e0;margin:0 0 18px}.cta .btn{background:#fff;color:#191d31}
+
+@media(max-width:860px){.nav-links{display:none}.paper{padding:32px 24px 30px 40px}.paper:before{left:22px}}
+@media(max-width:720px){
+  table.bench{min-width:0}
+  table.bench thead{display:none}
+  table.bench,table.bench tbody,table.bench tr,table.bench td,table.bench th{display:block;width:100%}
+  table.bench tr{border-top:1px solid var(--line);padding:14px 2px}
+  table.bench td:first-child{width:auto;font-size:15px;font-weight:800;padding:0 0 8px}
+  table.bench td:not(:first-child){display:flex;justify-content:space-between;gap:14px;border:0;padding:6px 0;font-size:13px}
+}
+
+/* ===== KS: Korektorski stol sloj ===== */
+::selection{background:var(--red);color:#fff}
+h1,h2,h3,h4{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:400}
+.ks-mark{position:relative;width:30px;height:30px;flex:none;background:var(--desk-ink);color:var(--desk);display:grid;place-items:center;font-family:var(--display-serif);font-weight:600;font-size:19px;line-height:1}
+.ks-tick{position:absolute;right:-4px;bottom:-4px;width:13px;height:13px;background:var(--red);color:#F7F3E8;display:grid;place-items:center}
+.ks-tick svg{width:9px;height:9px;display:block}
+.logo-word{font-family:var(--display-serif);font-style:italic;font-weight:500;font-size:26px;letter-spacing:-.01em;color:var(--desk-ink)}
+footer .logo-word{font-size:21px}
+footer .ks-mark{width:24px;height:24px;font-size:15px}
+footer .ks-tick{width:11px;height:11px}
+.lampa-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--desk-line);background:transparent;padding:8px 13px;border-radius:2px;color:var(--desk-muted);font:600 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.paper,.card,.cta{--text:var(--paper-ink);--muted:var(--paper-muted);--muted-2:var(--paper-muted);--line:var(--paper-line);--line-strong:var(--paper-line);--panel:#fff;--panel-2:var(--paper-2);--bg:var(--paper);--brand:var(--red-deep);--brand-2:var(--paper-ink);--brand-soft:var(--red-soft);--on-brand:#F7F3E8;--pass:#1E7F4F;--ok:#1E7F4F;--warn:#8A570E;--danger:var(--red-deep);background:var(--paper);color:var(--paper-ink);border:0;border-radius:0;box-shadow:var(--paper-sh-sm)}
+/* Specificnost namjerno visa nego tool-page.css .hero h1/.hero h1 .ink/.hero p.lead (isti
+   (0,1,1)/(0,2,1) par): bundle CSS iz ui-boot.ts ucitava se NAKON ovog inline bloka (dev i
+   build), pa jednaka specificnost znaci da tool-page.css pobjedjuje kaskadom. */
+.hero .paper h1{color:var(--paper-ink)}
+.hero .paper h1 .ink{color:var(--red-deep)}
+.hero .paper p.lead{color:var(--paper-muted)}
+.paper .eyebrow{color:var(--red-deep)}
+.cta{background:var(--paper)}
+.cta p{color:var(--paper-muted)}
+table.bench .yes{color:var(--pass)}
+table.bench .no{color:var(--red-deep)}
+table.bench .mid{color:#8A570E}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <nav class="shell nav" aria-label="Glavna navigacija">
+    <a class="logo" href="index.html#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
+    <div class="nav-links">
+      <a href="index.html#how">Kako radi</a>
+      <a href="landing_usporedba.html">Usporedba</a>
+      <a href="landing_benchmark.html" class="active" aria-current="page">Benchmark</a>
+      <div class="nav-tools">
+        <button class="nav-tools-btn" type="button" aria-expanded="false">Alati <span class="caret" aria-hidden="true">▾</span></button>
+        <div class="nav-tools-menu">
+          <a href="alati.html">Svi alati</a>
+          <a href="citat.html">Citat generator</a>
+          <a href="kartice.html">Brojač kartica</a>
+          <a href="naslovnica.html">Naslovnica</a>
+          <a href="literatura.html">Sređivanje literature</a>
+          <a href="izjava.html">Izjava o izvornosti</a>
+        </div>
+      </div>
+      <a href="index.html#pricing">Paketi</a>
+    </div>
+    <button class="icon-btn mobile-menu" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
+    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 2h8l-5 7h4L7 22l3-9H6l3-11Z"/></svg><span class="lampa-txt">Lampa</span></button>
+    <a class="btn btn-primary btn-sm" href="index.html#analyzer">Provjeri rad</a>
+  </nav>
+  <div class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobilna navigacija">
+    <a href="index.html#how">Kako radi</a>
+    <a href="landing_usporedba.html">Usporedba</a>
+    <a class="active" aria-current="page" href="landing_benchmark.html">Benchmark</a>
+    <a href="alati.html">Svi alati</a>
+    <a href="citat.html">Citat generator</a>
+    <a href="kartice.html">Brojač kartica</a>
+    <a href="naslovnica.html">Naslovnica</a>
+    <a href="literatura.html">Sređivanje literature</a>
+    <a href="izjava.html">Izjava o izvornosti</a>
+    <a href="index.html#pricing">Paketi</a>
+    <a class="btn btn-primary" href="index.html#analyzer">Provjeri rad</a>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="shell">
+    <div class="paper">
+      <a class="backlink" href="landing_usporedba.html">&larr; Natrag na usporedbu</a>
+      <span class="eyebrow">Javni benchmark &middot; v1</span>
+      <h1>Koliko toga Lekta stvarno pronađe? <span class="ink">Provjerili smo je javno.</span></h1>
+      <p class="lead">Sastavili smo testni Word dokument sa 7 namjerno ubačenih, poznatih grešaka prema stvarnim, izvorenim pravilima FPZG profila. Ispod je stvaran rezultat pokretanja Lektinog analizatora, preuzimljiv dokument i puna metodologija.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="index.html#analyzer">Provjeri svoj rad &rarr;</a>
+        <a class="btn btn-ghost" href="/benchmark/lekta-benchmark-v1.docx">Preuzmi testni dokument</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell card scoreband">
+    <div class="big">7/7</div>
+    <div class="txt"><b>Lekta je pronašla svih 7 namjerno ubačenih grešaka</b> na testnom dokumentu, protiv verificiranog profila fpzg-politologija-diplomski. Rezultat dolazi izravno iz pokretanja analizatora (scripts/generate-benchmark-fixture.mts), nije procijenjen ni zaokružen.</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell">
+    <div class="section-head"><span class="kicker">Katalog grešaka</span><h2>Sedam namjerno ubačenih grešaka</h2></div>
+    <div class="card tbl-wrap">
+      <table class="bench">
+        <caption style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Katalog namjerno ubačenih grešaka u benchmark dokumentu, s izvorom pravila i rezultatom.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Greška</th>
+            <th scope="col">Izvor pravila</th>
+            <th scope="col">Rezultat</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Font: Calibri umjesto Times New Roman</th><td>fpzg-politologija-diplomski--font</td><td><span class="yes">Pronađeno</span></td></tr>
+          <tr><th scope="row">Veličina slova: 11 pt umjesto 12 pt</th><td>fpzg-politologija-diplomski--font-size</td><td><span class="yes">Pronađeno</span></td></tr>
+          <tr><th scope="row">Prored: jednostruk (1,0) umjesto 1,5</th><td>fpzg-politologija-diplomski--line-spacing</td><td><span class="yes">Pronađeno</span></td></tr>
+          <tr><th scope="row">Poravnanje: lijevo umjesto obostrano</th><td>fpzg-politologija-diplomski--justify</td><td><span class="yes">Pronađeno</span></td></tr>
+          <tr><th scope="row">Format papira: US Letter umjesto A4</th><td>fpzg-politologija-diplomski--paper-size</td><td><span class="yes">Pronađeno</span></td></tr>
+          <tr><th scope="row">Nema brojeva stranica</th><td>fpzg-politologija-diplomski--page-numbers</td><td><span class="yes">Pronađeno</span></td></tr>
+          <tr><th scope="row">Opseg: otprilike 1.100 riječi umjesto 10.000-12.000</th><td>fpzg-politologija-diplomski--word-count</td><td><span class="yes">Pronađeno</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="method" style="margin-top:14px">Dokument je namjerno minimalan (kratka literatura, bez stvarnih citatnica), pa Lektin puni izvještaj prijavljuje i dodatne nalaze izvan ovog popisa od 7. Ti dodatni nalazi nisu dio ovog benchmarka jer nisu namjerno, kontrolirano ubačeni, pa se njihov broj ne tvrdi kao "poznat".</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell">
+    <div class="section-head"><span class="kicker">Isti dokument, druge metode</span><h2>Konkurencija: još nije testirano</h2></div>
+    <div class="card tbl-wrap">
+      <table class="pending">
+        <thead>
+          <tr>
+            <th scope="col">Pristup</th>
+            <th scope="col">Rezultat na ovom dokumentu</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">AI chat i savjet</th><td>Nije još testirano. Zadnja provjera: 3. 8. 2026. Testiramo i objavljujemo čim imamo rezultat.</td></tr>
+          <tr><th scope="row">Alati "uploadaj svoje upute"</th><td>Nije još testirano. Zadnja provjera: 3. 8. 2026. Testiramo i objavljujemo čim imamo rezultat.</td></tr>
+          <tr><th scope="row">Ljudsko lektoriranje</th><td>Nije još testirano. Zadnja provjera: 3. 8. 2026. Testiramo i objavljujemo čim imamo rezultat.</td></tr>
+          <tr><th scope="row" class="lekta">Lekta</th><td class="lekta"><span class="yes">7/7</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="method" style="margin-top:14px">Testiranje konkurencije zahtijeva čovjeka koji ručno koristi tuđi proizvod i unosi stvaran izlaz; to nije automatizirano. Nećemo tvrditi rezultat konkurenta koji sami nismo promatrali, pa dok testiranje ne bude odrađeno, ćelija ostaje otvoreno označena kao netestirana.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell">
+    <div class="section-head"><span class="kicker">Metodologija</span><h2>Kako je benchmark napravljen</h2></div>
+    <div class="method">
+      <p><b>Profil:</b> fpzg-politologija-diplomski (verificiran, izvor: Upute za pisanje akademskih radova na Fakultetu političkih znanosti, provjereno 2. 7. 2026.).</p>
+      <p><b>Generiranje:</b> dokument je sastavljen kodom (scripts/generate-benchmark-fixture.mts), deterministički i reproducibilno; nije ručno uređivan u Wordu. Isti kod ispisuje stvaran rezultat pokretanja analizatora, koji se ovdje prikazuje bez izmjene.</p>
+      <p><b>Verzija:</b> v1, generirano 3. 8. 2026.</p>
+      <p><b>Ograničenje mjeri se namjerno usko:</b> Lekta provjerava formu (font, margine, prored, numeracija, format citata i slično) prema pravilima fakulteta. Lekta nikad ne piše, ne prepravlja i ne ocjenjuje rečenice, argumentaciju ni sadržaj rada. Ovaj benchmark testira isključivo tehničke, formalne provjere, ne kvalitetu pisanja.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell">
+    <div class="cta">
+      <h2>Isprobaj na vlastitom radu.</h2>
+      <p>Besplatna automatska provjera, bez registracije: dokument ostaje na tvom uređaju.</p>
+      <a class="btn" href="index.html#analyzer">Besplatno provjeri rad &rarr;</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="shell footer-inner">
+  <a class="logo" href="index.html#top" style="font-size:16px"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
+  <span>&copy; 2026 &middot; Zagreb</span>
+  <div class="footer-links">
+    <a href="index.html#analyzer">Provjera</a>
+    <a href="landing_usporedba.html">Usporedba</a>
+    <a href="alati.html">Svi alati</a>
+    <a href="citat.html">Citat generator</a>
+    <a href="kartice.html">Brojač kartica</a>
+    <a href="naslovnica.html">Naslovnica</a>
+    <a href="literatura.html">Sređivanje literature</a>
+    <a href="izjava.html">Izjava o izvornosti</a>
+    <a href="index.html#pricing">Paketi</a>
+    <a href="/privatnost.html">Privatnost</a>
+    <a href="/uvjeti-koristenja.html">Uvjeti</a>
+    <a href="/odricanje-od-odgovornosti.html">Odricanje</a>
+    <a href="/obrada-dokumenata.html">Obrada dokumenata</a>
+    <a href="/kolacici.html">Kolačići</a>
+    <a href="/pravila-povrata.html">Pravila kupnje i povrata</a>
+    <a href="/garancija.html">Garancija</a>
+    <a href="index.html#top">Natrag na glavnu</a>
+  </div>
+</div></footer>
+
+<script type="module" src="/src/shared/ui-boot.ts"></script>
+</body>
+</html>

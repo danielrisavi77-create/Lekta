@@ -1,0 +1,76 @@
+{
+  "chatgpt": {
+    "slug": "chatgpt",
+    "label": "AI chat i savjet",
+    "productName": "ChatGPT i slični AI asistenti",
+    "categoryNote": "Opći AI chat asistent, ne specijaliziran alat za akademsko oblikovanje.",
+    "facts": [
+      {
+        "claim": "ChatGPT (Plus, Team, Enterprise) podržava upload i analizu .docx datoteka; besplatna razina ima ograničenu, manju dnevnu kvotu za analizu datoteka.",
+        "sourceTitle": "OpenAI Help Center: What types of files are supported?",
+        "sourceUrl": "https://help.openai.com/en/articles/8983675-what-types-of-files-are-supported",
+        "checkedDate": "2026-08-03"
+      }
+    ]
+  },
+  "papercheck": {
+    "slug": "papercheck",
+    "label": "Alati \"uploadaj svoje upute\"",
+    "productName": "PaperCheck",
+    "categoryNote": "Predstavnik kategorije alata kojima student sam uploada upute institucije ili časopisa.",
+    "facts": [
+      {
+        "claim": "PaperCheck omogućuje upload fakultetskih ili časopisnih uputa, iz kojih automatski generira zahtjeve za provjeru.",
+        "sourceTitle": "PaperCheck FAQ",
+        "sourceUrl": "https://papercheck.ai/en/faq",
+        "checkedDate": "2026-08-03"
+      },
+      {
+        "claim": "Puni povrat novca dostupan je u roku 14 dana od prvog uploada za jednokratne pakete; uvjeti povrata su stroži za veće korištenje (npr. više uploada, korištenje dodatnih značajki).",
+        "sourceTitle": "PaperCheck Terms and Conditions",
+        "sourceUrl": "https://papercheck.ai/en/terms",
+        "checkedDate": "2026-08-03"
+      }
+    ]
+  },
+  "scribbr": {
+    "slug": "scribbr",
+    "label": "Ljudsko lektoriranje",
+    "productName": "Scribbr",
+    "categoryNote": "Predstavnik kategorije profesionalnog ljudskog lektoriranja/uređivanja akademskih radova.",
+    "facts": [
+      {
+        "claim": "Rok isporuke kreće se od otprilike 3 sata (najbrža opcija) do 7 dana, ovisno o duljini rada i odabranom roku.",
+        "sourceTitle": "Scribbr: Proofreading & Editing",
+        "sourceUrl": "https://www.scribbr.com/proofreading-editing/",
+        "checkedDate": "2026-08-03"
+      },
+      {
+        "claim": "Scribbr oglašava \"100% happiness guarantee\" za svoje usluge lektoriranja.",
+        "sourceTitle": "Scribbr: How it works",
+        "sourceUrl": "https://www.scribbr.com/proofreading-editing/how-it-works/",
+        "checkedDate": "2026-08-03"
+      }
+    ]
+  },
+  "lektor": {
+    "slug": "lektor",
+    "label": "Hrvatski lektori",
+    "productName": "Hrvatska kategorija lokalnog lektoriranja",
+    "categoryNote": "Generalizirana kategorija, ne ime pojedine firme ili freelancera.",
+    "facts": [
+      {
+        "claim": "Cijena lektoriranja diplomskih/završnih radova u Hrvatskoj kreće se, prema više dostupnih cjenika, otprilike od 1,5 do 2 EUR po kartici teksta (1.500 znakova s razmacima).",
+        "sourceTitle": "Lekto-fon: cjenik usluga",
+        "sourceUrl": "https://lekto-fon.hr/cjenik-usluga/",
+        "checkedDate": "2026-08-03"
+      },
+      {
+        "claim": "Cijena lektoriranja diplomskih radova od otprilike 1,5 EUR po kartici teksta.",
+        "sourceTitle": "Lektoriranje diplomskih radova",
+        "sourceUrl": "https://lektoriranjediplomskih.hr/",
+        "checkedDate": "2026-08-03"
+      }
+    ]
+  }
+}

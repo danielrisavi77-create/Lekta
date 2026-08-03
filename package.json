@@ -18,6 +18,7 @@
     "generate-legal-pages": "node scripts/generate-legal-pages.mjs",
     "generate-coverage-page": "node scripts/generate-coverage-page.mjs",
     "generate-faculty-pages": "node scripts/generate-faculty-pages.mjs",
+    "generate-competitor-pages": "node scripts/generate-competitor-pages.mjs",
     "extract-citation-sections": "node scripts/extract-citation-sections.mjs",
     "citation-dossiers": "node scripts/citation-spec-dossier.mjs",
     "approve-citation-spec": "node scripts/approve-citation-spec.mjs",
@@ -39,7 +40,8 @@
     "repair-real-corpus": "vite-node scripts/repair-real-corpus.mts",
     "repair-real-corpus:review": "vite-node scripts/repair-real-corpus.mts --out .artifacts/lekta-real-corpus-review",
     "repair-faculty-matrix": "vite-node scripts/generate-faculty-matrix.mts",
-    "pack:katedra": "vite-node scripts/generate-katedra-pack.mts"
+    "pack:katedra": "vite-node scripts/generate-katedra-pack.mts",
+    "generate-benchmark-fixture": "vite-node scripts/generate-benchmark-fixture.mts"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.1",

@@ -268,6 +268,7 @@ export default defineConfig(({ command }) => {
   const input: Record<string, string> = {
     index: resolve(__dirname, 'index.html'),
     usporedba: resolve(__dirname, 'landing_usporedba.html'),
+    benchmark: resolve(__dirname, 'landing_benchmark.html'),
     citatiLiteratura: resolve(__dirname, 'citati-i-literatura.html'),
     alati: resolve(__dirname, 'alati.html'),
     citat: resolve(__dirname, 'citat.html'),

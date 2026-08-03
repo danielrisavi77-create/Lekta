@@ -27,6 +27,7 @@ const PAGES = [
   'literatura.html',
   'alati.html',
   'landing_usporedba.html',
+  'landing_benchmark.html',
 ];
 
 /** Svi <script> blokovi osim application/ld+json (strukturirani podaci, ne izvrsni kod). */

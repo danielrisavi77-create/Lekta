@@ -61,6 +61,27 @@ for (const [file, marker] of legalChecks) {
   if (!html.includes('details class="unit"')) fail('dist/pokrivenost.html nema nijednu ustrojbenu jedinicu (prazan podatak?)');
 }
 
+// 3c. javni benchmark postoji, objavljuje stvaran rezultat, i testni docx je preuzimljiv
+{
+  const p = path.join(DIST, 'landing_benchmark.html');
+  if (!fs.existsSync(p)) fail('dist/landing_benchmark.html ne postoji (vite.config.ts input mapa?)');
+  const html = fs.readFileSync(p, 'utf8');
+  if (!/\d+\/\d+/.test(html)) fail('dist/landing_benchmark.html ne sadrzi "X/N" rezultat');
+  const docx = path.join(DIST, 'benchmark', 'lekta-benchmark-v1.docx');
+  if (!fs.existsSync(docx)) fail('dist/benchmark/lekta-benchmark-v1.docx ne postoji (public/benchmark kopiran?)');
+}
+
+// 3d. named-competitor podstranice postoje i nose datiran izvor (generate-competitor-pages.mjs)
+{
+  const facts = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/competitors/competitor-facts.json'), 'utf8'));
+  for (const slug of Object.keys(facts)) {
+    const p = path.join(DIST, 'usporedba', slug, 'index.html');
+    if (!fs.existsSync(p)) fail(`dist/usporedba/${slug}/index.html ne postoji (generate-competitor-pages nije prosao?)`);
+    if (!fs.readFileSync(p, 'utf8').includes('zadnja provjera')) fail(`dist/usporedba/${slug}/index.html nema datiran izvor ("zadnja provjera")`);
+  }
+  if (!fs.existsSync(path.join(DIST, 'sitemap-usporedba.xml'))) fail('dist/sitemap-usporedba.xml ne postoji');
+}
+
 // 4. interna verifikacijska konzola ne smije u javni build (postojeca DEPLOY invarijanta)
 if (fs.existsSync(path.join(DIST, 'verification.html'))) fail('dist/verification.html postoji u DEPLOY buildu');
 

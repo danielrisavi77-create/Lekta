@@ -13,7 +13,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (f: string) => readFileSync(join(root, f), 'utf8');
 const PAGES = [
   'index.html', 'alati.html', 'citat.html', 'kartice.html', 'naslovnica.html',
-  'literatura.html', 'izjava.html', 'landing_usporedba.html',
+  'literatura.html', 'izjava.html', 'landing_usporedba.html', 'landing_benchmark.html',
 ];
 
 // --- WCAG 2.x kontrast: relativna luminancija + alpha blend nad poznatom pozadinom -----------
