@@ -350,8 +350,11 @@ if (fs.existsSync(naslovnicaDir)) {
       if (html.includes(needle)) fail(`dist/${rel} sadrzi ASCII-fallback (bez dijakritike) tekst "${needle}"`);
     }
   }
+  // "Službeni"/"pomoćni" dolaze iz FIKSNIH predlozaka (badge, disclaimer) na SVAKOJ pojedinacnoj
+  // stranici - za razliku od "službeni"/"različit" (malim slovom), koji se pojavljuju SAMO
+  // slucajno kroz varijabilni sourceNote tekst pojedinih predlozaka, pa nisu pouzdan test.
   const allNaslovnicaHtml = naslovnicaPages.map((p) => fs.readFileSync(p, 'utf8')).join('\n');
-  for (const expected of ['službeni', 'različit']) {
+  for (const expected of ['Službeni', 'pomoćni']) {
     if (!allNaslovnicaHtml.includes(expected)) fail(`nijedna generirana naslovnica stranica ne sadrzi ocekivanu dijakriticku rijec "${expected}" (dijakriticka regresija?)`);
   }
 }

@@ -18,6 +18,7 @@
     "generate-legal-pages": "node scripts/generate-legal-pages.mjs",
     "generate-coverage-page": "node scripts/generate-coverage-page.mjs",
     "generate-faculty-pages": "node scripts/generate-faculty-pages.mjs",
+    "generate-title-page-tools": "node scripts/generate-title-page-tools.mjs",
     "generate-competitor-pages": "node scripts/generate-competitor-pages.mjs",
     "extract-citation-sections": "node scripts/extract-citation-sections.mjs",
     "citation-dossiers": "node scripts/citation-spec-dossier.mjs",

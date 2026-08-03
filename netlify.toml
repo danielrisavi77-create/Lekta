@@ -11,17 +11,18 @@
 [build]
   # generate-citation-tools MORA ici POSLIJE `vite build` (vite prazni dist/ pri buildu), pa
   # potom doda staticke SEO stranice u dist/alati/** koje se objave iz istog artefakta.
-  # Naslovnica NEMA zasebne per-fakultet stranice: sve opcije su na jednom alatu naslovnica.html
-  # (kaskada fakultet/razina/smjer), pa se generate-title-page-tools NE poziva.
   # generate-coverage-page: javna coverage matrica (VERIFICATION_PIPELINE.md sekcija 9),
   # cita samo vec-preracunate JSON podatke (scored-coverage.json), pa ne treba nikakav poredak
   # naspram ostalih generatora, samo da bude poslije `vite build`.
   # generate-faculty-pages: SEO landing stranice po (fakultet x vrsta rada), npr. /fpzg/diplomski-rad/.
   # Pilot opseg (PILOT_UNITS na vrhu skripte) - siri se rucno nakon pregleda kvalitete izlaza.
+  # generate-title-page-tools (B5): SEO landing stranice po fakultetu za naslovnicu
+  # (dist/alati/naslovnica/<unit>[-<razina>].html), SAMO za fakultete sa provenance.status
+  # 'official' (doslovan citat pravilnika) - honesty-gate u samoj skripti, ne noindex grana.
   # generate-competitor-pages: /usporedba/<slug>/ podstranice (P2b), svaka tvrdnja izvorena
   # preko data/competitors/competitor-facts.json; poredak prema drugim generatorima nebitan,
   # samo mora biti poslije `vite build` i prije zavrsnog verify gatea.
-  command = "npm run build && npm run generate-citation-tools && npm run generate-legal-pages && npm run generate-coverage-page && npm run generate-faculty-pages && npm run generate-competitor-pages && node scripts/verify-deploy-dist.mjs"
+  command = "npm run build && npm run generate-citation-tools && npm run generate-legal-pages && npm run generate-coverage-page && npm run generate-faculty-pages && npm run generate-title-page-tools && npm run generate-competitor-pages && node scripts/verify-deploy-dist.mjs"
   publish = "dist"
 
 [build.environment]
