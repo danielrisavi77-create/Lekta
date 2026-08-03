@@ -74,3 +74,50 @@ describe('element-structure: jedinstvenost identiteta', () => {
     expect(new Set(ids).size, `id-evi moraju biti jedinstveni, dobiveno: ${ids.join(', ')}`).toBe(2);
   });
 });
+
+describe('element-structure: hrvatski padezi u upucivanju', () => {
+  /**
+   * RE-58. Prijasnji izraz je trazio samo nominativ ("Tablica 1"), pa je na stvarnom tekstu nalazio
+   * NULA upucivanja: u hrvatskom se na element gotovo uvijek upucuje kosim padezom. Izmjereno na
+   * cistom lancu analiza -> fixer nad recenicom "Rezultati su prikazani u Tablici 1".
+   *
+   * Uz padeze, raspon sada pokriva SAMO BROJ, jer popravak ne smije dirati sklonjenu oznaku:
+   * Word je ne zna sklanjati, pa bi je unakrsna uputa vratila u nominativ i pokvarila recenicu.
+   */
+  const sentence = (text: string) =>
+    parseXml(
+      '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>' +
+        `<w:p><w:r><w:t>${text}</w:t></w:r></w:p>` +
+        '<w:p><w:r><w:t>Tablica 1. Pregled</w:t></w:r></w:p>' +
+        '<w:tbl><w:tr><w:tc><w:p><w:r><w:t>celija</w:t></w:r></w:p></w:tc></w:tr></w:tbl>' +
+        '</w:body></w:document>',
+      'test',
+    );
+
+  const analyse = (text: string) =>
+    analyzeElementStructure(sentence(text), [
+      { index: 1, text },
+      { index: 2, text: 'Tablica 1. Pregled' },
+      { index: 3, text: 'celija' },
+    ] as never);
+
+  it.each([
+    ['lokativ', 'Prikazano je u Tablici 1 na kraju.'],
+    ['akuzativ', 'Pogledaj Tablicu 1 za detalje.'],
+    ['instrumental', 'Usporedbom s Tablicom 1 vidi se razlika.'],
+    ['genitiv', 'Podaci iz Tablice 1 su noviji.'],
+    ['nominativ', 'Tablica 1 prikazuje rezultate.'],
+  ])('prepoznaje %s', (_padez, text) => {
+    const references = analyse(text).references;
+    expect(references, `nije prepoznato u: ${text}`).toHaveLength(1);
+    // Raspon smije pokrivati SAMO broj, ne i sklonjenu oznaku.
+    expect(text.slice(references[0].start, references[0].end)).toBe('1');
+    expect(references[0].rawText).toBe('1');
+    expect(references[0].contextText).toMatch(/^Tablic/i);
+  });
+
+  it('ne hvata broj koji ne pripada oznaci', () => {
+    // "1. Uvod" ima broj, ali bez oznake elementa; ne smije postati unakrsna uputa.
+    expect(analyse('1. Uvod donosi pregled podrucja.').references).toHaveLength(0);
+  });
+});

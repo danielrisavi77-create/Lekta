@@ -123,8 +123,22 @@ function fieldXml(label: string, ordinal: number, bookmark: string, description:
   // RE-57: razmak izmedju oznake i broja MORA biti u <w:t xml:space="preserve">. Bez njega ga XML
   // normalizacija odbaci kao rubni razmak, pa Word prikaze "Tablica1." umjesto "Tablica 1."
   // (izmjereno otvaranjem izlaza fixera pravim Wordom; opis iza tocke to je vec imao).
-  const switchText = numbering === 'chapter' ? ' \\s 1 \\* ARABIC' : ' \\* ARABIC';
-  return `<w:p>${pPr}<w:bookmarkStart w:id="BOOKMARK_ID" w:name="${safeBookmark}"/><w:r><w:rPr>${rPr}</w:rPr><w:t xml:space="preserve">${safeLabel} </w:t></w:r><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> SEQ ${safeLabel}${switchText} </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>${ordinal}</w:t></w:r><w:r><w:fldChar w:fldCharType="end"/></w:r><w:r><w:t>.</w:t></w:r><w:r><w:t xml:space="preserve">${suffix}</w:t></w:r><w:bookmarkEnd w:id="BOOKMARK_ID"/></w:p>`;
+  // RE-58: sidro obuhvaca SAMO BROJ, i broj je OBICAN TEKST, ne rezultat SEQ polja.
+  //
+  // Oboje je izmjereno pravim Wordom uz Fields.Update(), na tri varijante sidrenja:
+  //   - sidro oko cijelog natpisa (prijasnje): REF u recenicu umetne CIJELI natpis, pa
+  //     "u Tablici 1" postane "u Tablica 1. Opis". Kvari recenicu, dakle neprihvatljivo.
+  //   - sidro oko SEQ polja ili oko njegovog rezultata: Word ga pri osvjezavanju obrise, pa i
+  //     natpis i uputa zavrse kao "Error! Bookmark not defined.".
+  //   - sidro oko broja kao obicnog teksta: JEDINA varijanta u kojoj i natpis i uputa ostanu
+  //     ispravni nakon osvjezavanja.
+  //
+  // Cijena je svjesna i odabrana: bez SEQ polja Word ne prenumerira sam kad korisnik ubaci novu
+  // tablicu. Numeraciju racuna Lekta pri svakom prolazu, deterministicki. Zauzvrat uputa u tekstu
+  // stvarno radi (skok na element) i sklonjena oznaka ostaje autorov tekst, jer se mijenja samo
+  // broj, sto je u hrvatskom jedini nacin da "u Tablici 1" ostane gramaticno.
+  void numbering;
+  return `<w:p>${pPr}<w:r><w:rPr>${rPr}</w:rPr><w:t xml:space="preserve">${safeLabel} </w:t></w:r><w:bookmarkStart w:id="BOOKMARK_ID" w:name="${safeBookmark}"/><w:r><w:rPr>${rPr}</w:rPr><w:t>${ordinal}</w:t></w:r><w:bookmarkEnd w:id="BOOKMARK_ID"/><w:r><w:rPr>${rPr}</w:rPr><w:t>.</w:t></w:r><w:r><w:rPr>${rPr}</w:rPr><w:t xml:space="preserve">${suffix}</w:t></w:r></w:p>`;
 }
 
 function sourceXml(source: string): string {
@@ -178,13 +192,30 @@ function replaceReferences(documentXml: string, references: ElementCaptionFixPar
       const bookmark = byId.get(reference.elementId);
       const raw = text.slice(reference.start, reference.end);
       if (!bookmark || !raw || raw.length !== reference.end - reference.start) continue;
-      const run = result.match(/<w:r\b[^>]*>\s*(?:<w:rPr>[\s\S]*?<\/w:rPr>)?\s*<w:t\b[^>]*>([\s\S]*?)<\/w:t>\s*<\/w:r>/i);
-      if (!run || !decodeXml(run[1]).includes(raw)) continue;
+      // RE-58: raspon je sada SAMO BROJ, pa se ciljani run vise ne smije traziti prvim `indexOf`
+      // nad tekstom runa: broj "1" se u odlomku ("1. Uvod ... u Tablici 1") lako pojavi ranije i
+      // polje bi zavrsilo na krivom mjestu. Trazi se run koji STVARNO pokriva offset iz analize.
+      const runMatches = [...result.matchAll(/<w:r\b[^>]*>\s*(?:<w:rPr>[\s\S]*?<\/w:rPr>)?\s*<w:t\b[^>]*>([\s\S]*?)<\/w:t>\s*<\/w:r>/gi)];
+      let consumed = 0;
+      let run: RegExpMatchArray | undefined;
+      let at = -1;
+      for (const candidate of runMatches) {
+        const runText = decodeXml(candidate[1]);
+        if (reference.start >= consumed && reference.end <= consumed + runText.length) {
+          run = candidate;
+          at = reference.start - consumed;
+          break;
+        }
+        consumed += runText.length;
+      }
+      if (!run || at < 0) continue;
       const original = decodeXml(run[1]);
-      const at = original.indexOf(raw);
-      if (at < 0) continue;
+      if (original.slice(at, at + raw.length) !== raw) continue;
       const rPr = run[0].match(/<w:rPr\b[\s\S]*?<\/w:rPr>/i)?.[0] || '';
-      const plainRun = (text: string) => text ? `<w:r>${rPr}<w:t>${escapeXml(text)}</w:t></w:r>` : '';
+      // RE-57 (isti uzrok, drugo mjesto): kad se broj izdvoji u polje, ostatak runa je "…u Tablici "
+      // s KRAJNJIM razmakom. Bez xml:space="preserve" ga XML normalizacija odbaci, pa Word prikaze
+      // "u Tablici1". Izmjereno Wordom nakon osvjezavanja polja.
+      const plainRun = (text: string) => text ? `<w:r>${rPr}<w:t xml:space="preserve">${escapeXml(text)}</w:t></w:r>` : '';
       const field = `<w:hyperlink w:anchor="${escapeXml(bookmark)}"><w:r>${rPr}<w:fldChar w:fldCharType="begin"/></w:r><w:r>${rPr}<w:instrText xml:space="preserve"> REF ${escapeXml(bookmark)} \\h </w:instrText></w:r><w:r>${rPr}<w:fldChar w:fldCharType="separate"/></w:r><w:r>${rPr}<w:t>${escapeXml(raw)}</w:t></w:r><w:r>${rPr}<w:fldChar w:fldCharType="end"/></w:r></w:hyperlink>`;
       result = result.replace(run[0], `${plainRun(original.slice(0, at))}${field}${plainRun(original.slice(at + raw.length))}`);
       changed = true;

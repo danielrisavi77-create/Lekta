@@ -30,12 +30,14 @@ async function docx() {
 
 describe('element-caption-fixer', () => {
   it('umece SEQ natpis, Caption stil i cuva tablicu', async () => {
-    const result = await applyFixers(await docx(), [{ fixerId: 'element-caption-fixer', ruleId: 'caption', params: { version: 1, elements: [target()], labels: { table: 'Tablica', figure: 'Slika', chart: 'Grafikon' }, lists: [{ kind: 'table', title: 'Popis tablica', placement: 'before-intro' }], references: [{ paragraphIndex: 1, start: 7, end: 16, elementId: 'element-table-test' }] } }]);
+    const result = await applyFixers(await docx(), [{ fixerId: 'element-caption-fixer', ruleId: 'caption', params: { version: 1, elements: [target()], labels: { table: 'Tablica', figure: 'Slika', chart: 'Grafikon' }, lists: [{ kind: 'table', title: 'Popis tablica', placement: 'before-intro' }], references: [{ paragraphIndex: 1, start: 15, end: 16, elementId: 'element-table-test' }] } }]);
     expect(result.changelog).toHaveLength(1);
     const entries = await readZip(result.docxBytes);
     const xml = new TextDecoder().decode(entries.find((entry) => entry.name === 'word/document.xml')!.data);
     const styles = new TextDecoder().decode(entries.find((entry) => entry.name === 'word/styles.xml')!.data);
-    expect(xml).toContain('SEQ Tablica \\* ARABIC');
+    // RE-58: broj vise NIJE SEQ polje nego obican tekst u sidru (vidi komentar uz fieldXml).
+    expect(xml).not.toContain('SEQ Tablica');
+    expect(xml).toContain('w:name="LektaCaption_element_table_test"');
     expect(xml).toContain('TOC \\h \\z \\c "Tablica"');
     expect(xml).toContain('REF LektaCaption_element_table_test');
     expect(xml).toContain('Rezultati ankete</w:t>');
@@ -73,11 +75,65 @@ describe('element-caption-fixer: vidljivi tekst natpisa', () => {
     const entries = await readZip(result.docxBytes);
     const xml = new TextDecoder().decode(entries.find((entry) => entry.name === 'word/document.xml')!.data);
 
-    const caption = xml.match(/<w:p>(?:(?!<\/w:p>)[\s\S])*?SEQ Tablica[\s\S]*?<\/w:p>/)?.[0] ?? '';
+    const caption = xml.match(/<w:p>(?:(?!<\/w:p>)[\s\S])*?LektaCaption_[\s\S]*?<\/w:p>/)?.[0] ?? '';
     expect(caption, 'natpis mora postojati').not.toBe('');
     const visible = [...caption.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)].map((match) => match[1]).join('');
     expect(visible).toBe('Tablica 1. Rezultati ankete');
     // Razmak prezivi samo uz izricito ocuvanje; bez njega Word prikaze "Tablica1.".
     expect(caption).toContain('<w:t xml:space="preserve">Tablica </w:t>');
+  });
+});
+
+describe('element-caption-fixer: unakrsna uputa u recenici', () => {
+  /**
+   * RE-58. Sidro je oko BROJA, i broj je obican tekst, pa REF u recenicu vrati samo broj i
+   * sklonjena oznaka ostaje autorova. Dokazano pravim Wordom uz Fields.Update(): recenica je
+   * prije i poslije osvjezavanja ZNAK PO ZNAK ista, a broj je postao ziva uputa sa skokom.
+   *
+   * RE-57 na drugom mjestu: ostatak runa oko polja ("...u Tablici ") zavrsava razmakom, pa i on
+   * mora ici u <w:t xml:space="preserve">; bez toga Word prikaze "u Tablici1".
+   */
+  const documentWithSentence = '<w:document><w:body>' +
+    '<w:p><w:r><w:t>Rezultati su prikazani u Tablici 1, a metoda slijedi.</w:t></w:r></w:p>' +
+    '<w:tbl><w:tr><w:tc><w:p><w:r><w:t>Podatak</w:t></w:r></w:p></w:tc></w:tr></w:tbl>' +
+    '<w:sectPr/></w:body></w:document>';
+
+  it('polje zamjenjuje SAMO broj i cuva razmake oko sebe', async () => {
+    const enc = new TextEncoder();
+    const bytes = await writeZip([
+      { name: 'word/document.xml', data: enc.encode(documentWithSentence) },
+      { name: 'word/styles.xml', data: enc.encode('<w:styles><w:style w:styleId="Normal"/></w:styles>') },
+    ]);
+    const anchor = '<w:tbl><w:tr><w:tc><w:p><w:r><w:t>Podatak</w:t></w:r></w:p></w:tc></w:tr></w:tbl>';
+    const start = 'Rezultati su prikazani u Tablici '.length;
+    const result = await applyFixers(bytes, [{
+      fixerId: 'element-caption-fixer', ruleId: 'caption',
+      params: {
+        version: 1,
+        elements: [{
+          id: 'element-table-test', kind: 'table' as const,
+          anchor: { bodyChildIndex: 1, tableIndex: 0 },
+          anchorFingerprint: anchorFingerprintForXml('table', anchor),
+          description: 'Pregled', position: 'above' as const, replaceManualCaption: true, label: 'Tablica',
+        }],
+        labels: { table: 'Tablica', figure: 'Slika', chart: 'Grafikon' },
+        references: [{ paragraphIndex: 1, start, end: start + 1, elementId: 'element-table-test' }],
+      },
+    }]);
+    expect(result.changelog).toHaveLength(1);
+    const xml = new TextDecoder().decode(
+      (await readZip(result.docxBytes)).find((entry) => entry.name === 'word/document.xml')!.data,
+    );
+
+    const sentence = xml.match(/<w:p>(?:(?!<\/w:p>)[\s\S])*?Rezultati[\s\S]*?<\/w:p>/)?.[0] ?? '';
+    expect(sentence, 'recenica mora postojati').not.toBe('');
+    // Vidljivi tekst mora ostati IDENTICAN izvorniku: mijenja se samo mehanika ispod.
+    const visible = [...sentence.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)].map((match) => match[1]).join('');
+    expect(visible).toBe('Rezultati su prikazani u Tablici 1, a metoda slijedi.');
+    // Sklonjena oznaka ostaje IZVAN polja, u obicnom tekstu.
+    expect(sentence).toContain('<w:t xml:space="preserve">Rezultati su prikazani u Tablici </w:t>');
+    expect(sentence).toContain('REF LektaCaption_element_table_test');
+    // Unutar polja je samo broj.
+    expect(sentence).toMatch(/fldCharType="separate"\/><\/w:r><w:r><w:t>1<\/w:t>/);
   });
 });

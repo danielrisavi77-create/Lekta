@@ -27,9 +27,13 @@ export interface ElementSource {
 
 export interface ElementReferenceSuggestion {
   paragraphIndex: number;
+  /** Raspon SAMO BROJA u tekstu odlomka; sklonjena oznaka ostaje autorov tekst (RE-58). */
   start: number;
   end: number;
+  /** Doslovan broj kako stoji u tekstu (ono sto se zamjenjuje poljem). */
   rawText: string;
+  /** Cijeli prepoznati izraz ("u Tablici 1"), za prikaz korisniku u panelu. */
+  contextText: string;
   elementId: string;
   confidence: ElementConfidence;
   evidence: string[];
@@ -160,9 +164,25 @@ export function anchorFingerprintForXml(kind: ElementKind, anchorXml: string): s
   }
 }
 
+/**
+ * RE-58: upucivanje na element u hrvatskom je gotovo uvijek u KOSOM PADEZU ("u Tablici 1",
+ * "na Slici 2", "prema Grafikonu 3"). Prijasnji izraz je trazio samo nominativ, pa je na stvarnom
+ * tekstu nalazio NULA upucivanja i unakrsne upute nisu imale sto povezati (izmjereno na cistom
+ * dokumentu kroz lanac analiza -> fixer).
+ *
+ * Umjesto nabrajanja svih oblika, korijen plus dopusteni nastavci. Broj je u zasebnoj skupini jer
+ * popravak mijenja SAMO broj: oznaku Word ne zna sklanjati, pa ostaje autorov tekst.
+ */
+const REFERENCE_STEMS: Record<ElementKind, string[]> = {
+  table: ['tablic(?:a|e|i|u|om|ama)', 'tabel(?:a|e|i|u|om|ama)', 'tables?'],
+  figure: ['slik(?:a|e|i|u|om|ama)', 'figures?'],
+  chart: ['grafikon(?:a|u|e|om|ima)?', 'charts?'],
+};
+
 function referenceRegex(kind: ElementKind): RegExp {
-  const labels = KIND_LABELS[kind].join('|');
-  return new RegExp(`\\b(?:${labels})\\s+(?:broj\\s+)?\\d+(?:\\.\\d+)*\\b`, 'giu');
+  const labels = REFERENCE_STEMS[kind].join('|');
+  // `d` daje tocne indekse skupina, pa se raspon BROJA ne mora pogadjati pretragom po tekstu.
+  return new RegExp(`\\b(?:${labels})\\s+(?:broj\\s+)?(\\d+(?:\\.\\d+)*)\\b`, 'gdiu');
 }
 
 function listFound(paragraphs: ParagraphLike[], kind: ElementKind): boolean {
@@ -267,16 +287,22 @@ export function analyzeElementStructure(doc: Document, paragraphs: readonly Para
       if (candidate.existingCaption?.paragraphIndex === paragraph.index || candidate.source?.paragraphIndex === paragraph.index) continue;
       const matcher = referenceRegex(candidate.kind);
       for (const match of paragraph.text.matchAll(matcher)) {
-        const rawText = match[0];
-        const number = rawText.match(/(\d+(?:\.\d+)*)\s*$/)?.[1];
+        const contextText = match[0];
+        const number = match[1];
         if (!number || Number(number.split('.')[0]) !== candidate.ordinal && number !== candidate.existingCaption?.manualNumber) continue;
-        const label = rawText.split(/\s+/u)[0].toLocaleLowerCase('hr');
-        if (!labels.has(label)) continue;
+        // Sklonjeni oblik mora pripadati OVOJ vrsti: usporedjuje se pocetak rijeci, jer je rijec u
+        // tekstu sklonjena ("Tablici") a oznaka u KIND_LABELS nije ("tablica").
+        const word = contextText.split(/\s+/u)[0].toLocaleLowerCase('hr');
+        if (![...labels].some((label) => word.startsWith(label.slice(0, 5)))) continue;
+        // Raspon pokriva SAMO broj: popravak ne smije dirati sklonjenu oznaku (RE-58).
+        const numberRange = match.indices?.[1];
+        if (!numberRange) continue;
         const suggestion: ElementReferenceSuggestion = {
           paragraphIndex: paragraph.index,
-          start: match.index ?? 0,
-          end: (match.index ?? 0) + rawText.length,
-          rawText,
+          start: numberRange[0],
+          end: numberRange[1],
+          rawText: number,
+          contextText,
           elementId: candidate.id,
           confidence: candidate.existingCaption ? 'high' : 'medium',
           evidence: ['oznaka i broj podudaraju se s elementom'],
