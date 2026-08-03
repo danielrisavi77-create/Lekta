@@ -1,4 +1,5 @@
 import { APP_VERSION } from '../config/app-version';
+import { findVerifiedProfile } from '../profiles/profile-registry';
 import { isAcademicWorkType } from './academic-suite-contracts';
 import { currentKatedraProjectId } from './katedra-entry';
 import { toKatedraSharedResult } from './katedra-handoff';
@@ -37,6 +38,11 @@ export function captureKatedraHandoffCandidate(result: any, profile: any, settin
 
   if (!profileId) return false;
 
+  // Analysis is started only after ensureProfileRules(), so a verified profile
+  // found here already carries its authored ruleEntries. Missing entries are a
+  // valid fallback: stable checkId still works and ruleId remains null.
+  const ruleEntries = findVerifiedProfile(profileId)?.ruleEntries || [];
+
   // `profile.fingerprint` is already derived from the exact runtime rule values,
   // selected profile, citation setup, sources and app version. Treat it as an
   // opaque ruleset identity; consumers must not parse it.
@@ -47,6 +53,7 @@ export function captureKatedraHandoffCandidate(result: any, profile: any, settin
     analyzedAt: new Date().toISOString(),
     projectId,
     profileId,
+    ruleEntries,
   });
 
   try {
