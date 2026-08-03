@@ -33,6 +33,7 @@ import {
   headingFormatRepairableItem,
   headingCaseRepairableItem,
   footnoteTypographyRepairableItem,
+  pageNumberAlignmentRepairableItem,
   bibliographyRepairableItem,
   citationBibliographySyncRepairableItem,
   consistencyRepairableItem,
@@ -158,12 +159,15 @@ function paramsForFixer(fixerId: FixerId, profile: unknown): Record<string, unkn
         ?.checkFootnoteParagraphSpacingZero === true
         ? {}
         : null;
-    case 'page-number-alignment-fixer':
-      // Isto gate kao pageNumberAlignmentRepairableItem u src/ui/repair-items.ts: zastavica,
-      // ne ciljana profilna vrijednost (cilj je uvijek fiksno desno poravnanje).
-      return (profile as { pageNumberAlignment?: boolean } | null)?.pageNumberAlignment === true
-        ? {}
-        : null;
+    case 'page-number-alignment-fixer': {
+      // Prije je ovdje stajala rucna kopija gatea `pageNumberAlignment === true`, koja se u
+      // medjuvremenu razisla sa zivim panelom: RE-05 je gate prebacio na truthy, a STRING
+      // vrijednost ('right') od tada ide u params.align. Profili koji to pravilo imaju nose
+      // upravo string, pa je golden za njih vracao null i fixer nikad nije dobio cilj.
+      // Otad se cita isti builder koji koristi panel, kao i za heading-format/heading-case.
+      const item = pageNumberAlignmentRepairableItem([], profile)[0];
+      return item ? (item.params as Record<string, unknown>) : null;
+    }
     case 'empty-paragraph-fixer':
       // Univerzalna higijena (universalRepairableItems): nije vezana za profil, params je uvijek {}.
       return {};
@@ -343,7 +347,7 @@ const ASSISTED_BUILDERS: Partial<Record<FixerId, (result: any, profile: any) => 
       r,
       p,
       selectTemplate(
-        r?.settings?.selectionIds?.unit || r?.selection?.unit || unitIdForProfile(String((p as { id?: unknown })?.id ?? '')),
+        r?.settings?.selectionIds?.unit || r?.selection?.unit || unitIdForProfile(String((p as { definitionId?: unknown })?.definitionId ?? '')),
         r?.settings?.workType || r?.selection?.workType || 'final',
       ).template,
     ),
@@ -401,10 +405,6 @@ async function buildCases(): Promise<Case[]> {
     // section-surgery, required-sections) cita profile.ruleEntries izravno. Bez ovoga bi grana
     // uvijek bila prazna, ma koliko podataka dokument imao. Isti wiring kao src/ui/app.ts.
     profile.ruleEntries = repairEntriesFor(profileId);
-    // resolveProfile vraca samo PRAVILA, bez identiteta (id je undefined, provjereno), pa bi
-    // unitIdForProfile inace uvijek promasio i naslovnica bi ostala neprovjerena. Zivi app unit
-    // dobiva iz odabira u sucelju; ovdje ga vezemo uz profil kojim je dokument analiziran.
-    profile.id = profileId;
     const analyzed = await analyzeFixture(new File([bytes], fileName, { type: DOCX_MIME }), { profileId });
     cases.push({
       name: fileName,

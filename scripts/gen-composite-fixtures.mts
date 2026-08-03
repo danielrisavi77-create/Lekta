@@ -13,7 +13,7 @@
 import { writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { fullStructureDocx, fpzgBibliographyDocx } from '../tests/helpers/composite-docx';
+import { fullStructureDocx, fpzgBibliographyDocx, pravoFootnotesDocx } from '../tests/helpers/composite-docx';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const OUT = join(here, '..', 'tests', 'fixtures', 'docx');
@@ -43,6 +43,26 @@ const FIXTURES: CompositeFixture[] = [
       // section-surgery-rules i required-section-rules postoje tocno na 11 FPZG profila.
       profileId: 'fpzg-novinarstvo-diplomski',
       note: 'generirano, anonimno, nije studentski rad; popis literature i citati namjerno neispravni',
+    },
+  },
+  // Ista gradja pod DVA profila: nijedan profil ne gate-a sva tri ciljana fixera
+  // (checkFootnoteParagraphSpacingZero, footnoteFont/Size, pageNumberAlignment).
+  {
+    file: 'pravo-socijalni-rad-fusnote.docx',
+    build: () => pravoFootnotesDocx(),
+    sidecar: {
+      profileId: 'pravo-socijalni-rad-diplomski',
+      synthetic: true,
+      note: 'generirano, anonimno, nije studentski rad; fusnote i broj stranice namjerno neispravni',
+    },
+  },
+  {
+    file: 'pravo-integrirani-fusnote.docx',
+    build: () => pravoFootnotesDocx('Integrirani preddiplomski i diplomski studij prava'),
+    sidecar: {
+      profileId: 'pravo-integrirani-diplomski',
+      synthetic: true,
+      note: 'generirano, anonimno, nije studentski rad; razmaci u fusnotama namjerno neispravni',
     },
   },
 ];
