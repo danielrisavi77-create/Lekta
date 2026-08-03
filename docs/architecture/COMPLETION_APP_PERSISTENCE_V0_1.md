@@ -31,6 +31,10 @@ Hardens:
 - server-owned writes;
 - RLS ownership through the real shared-core key `academic_projects.user_id`.
 
+### `0043_completion_app_permanent_account_gate.sql`
+
+Reuses `academic_suite_is_permanent_user()` so Supabase anonymous-auth sessions cannot access Completion project/state data even though anonymous users carry the `authenticated` Postgres role.
+
 The Completion migrations intentionally start after the existing Academic Suite `0040` migration. They must not reuse `0037`–`0039`, which already belong to the shared foundation.
 
 ## Data boundary
@@ -102,13 +106,13 @@ There is intentionally no `payload jsonb`, `prompt`, `response` or content excer
 
 ## RLS / write authority
 
-Authenticated users may `SELECT` completion rows only when the parent `academic_projects.user_id = auth.uid()`.
+Permanent authenticated users may `SELECT` completion rows only when the parent `academic_projects.user_id = auth.uid()`.
 
-Authenticated direct writes are intentionally not exposed.
+Authenticated direct writes are intentionally not exposed. Anonymous-auth sessions are blocked by a restrictive permanent-account policy.
 
 All completion mutations must be performed by trusted server code that:
 
-1. authenticates the user;
+1. authenticates a permanent user;
 2. validates ownership of `academic_projects.id` through `academic_projects.user_id`;
 3. validates typed input;
 4. performs the mutation with server credentials;
