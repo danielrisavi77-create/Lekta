@@ -158,10 +158,13 @@ footer .ks-tick{width:11px;height:11px}
 .paper .btn-primary,.card .btn-primary,.cta .btn{background:var(--paper-ink);color:var(--paper);box-shadow:3px 3px 0 var(--red-deep)}
 .paper .btn-primary:hover,.card .btn-primary:hover,.cta .btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--red-deep);background:var(--paper-ink);color:var(--paper)}
 
-/* KS: hero list papira (tekst na papiru, ne na stolu) */
-.paper h1{color:var(--paper-ink)}
-.paper h1 .ink{color:var(--red-deep)}
-.paper p.lead{color:var(--paper-muted)}
+/* KS: hero list papira (tekst na papiru, ne na stolu). Specificnost namjerno visa nego
+   tool-page.css .hero h1/.hero h1 .ink/.hero p.lead (isti (0,1,1)/(0,2,1) par): bundle CSS
+   iz ui-boot.ts ucitava se NAKON ovog inline bloka (dev i build), pa jednaka specificnost
+   znaci da tool-page.css pobjedjuje kaskadom bez obzira na redoslijed selektora ovdje. */
+.hero .paper h1{color:var(--paper-ink)}
+.hero .paper h1 .ink{color:var(--red-deep)}
+.hero .paper p.lead{color:var(--paper-muted)}
 .paper .eyebrow{color:var(--red-deep)}
 
 /* KS: CTA kao list na stolu */
