@@ -206,7 +206,7 @@ table.bench .mid{color:#8A570E}
 
 <section class="section">
   <div class="shell">
-    <div class="section-head"><span class="kicker">Isti dokument, druge metode</span><h2>Konkurencija: još nije testirano</h2></div>
+    <div class="section-head"><span class="kicker">Isti dokument, druge metode</span><h2>Konkurencija: djelomično testirano</h2></div>
     <div class="card tbl-wrap">
       <table class="pending">
         <thead>
@@ -216,14 +216,23 @@ table.bench .mid{color:#8A570E}
           </tr>
         </thead>
         <tbody>
-          <tr><th scope="row">AI chat i savjet</th><td>Nije još testirano. Zadnja provjera: 3. 8. 2026. Testiramo i objavljujemo čim imamo rezultat.</td></tr>
+          <tr><th scope="row">AI chat i savjet</th><td>0/7 formalnih pravila (testirano s Claude, 3. 8. 2026.; ne ChatGPT, vidi objašnjenje ispod)</td></tr>
           <tr><th scope="row">Alati "uploadaj svoje upute"</th><td>Nije još testirano. Zadnja provjera: 3. 8. 2026. Testiramo i objavljujemo čim imamo rezultat.</td></tr>
           <tr><th scope="row">Ljudsko lektoriranje</th><td>Nije još testirano. Zadnja provjera: 3. 8. 2026. Testiramo i objavljujemo čim imamo rezultat.</td></tr>
           <tr><th scope="row" class="lekta">Lekta</th><td class="lekta"><span class="yes">7/7</span></td></tr>
         </tbody>
       </table>
     </div>
-    <p class="method" style="margin-top:14px">Testiranje konkurencije zahtijeva čovjeka koji ručno koristi tuđi proizvod i unosi stvaran izlaz; to nije automatizirano. Nećemo tvrditi rezultat konkurenta koji sami nismo promatrali, pa dok testiranje ne bude odrađeno, ćelija ostaje otvoreno označena kao netestirana.</p>
+    <p class="method" style="margin-top:14px">PaperCheck i ljudsko lektoriranje zahtijevaju čovjeka koji ručno koristi tuđi plaćeni proizvod i unosi stvaran izlaz; to nije automatizirano, pa te ćelije ostaju otvoreno označene kao netestirane dok se stvarno ne odrade. Nećemo tvrditi rezultat koji sami nismo promatrali.</p>
+
+    <div class="section-head" style="margin-top:30px"><span class="kicker">AI chat test, detaljno</span><h2>Zašto 0/7, i što je Claude umjesto toga rekao</h2></div>
+    <div class="method">
+      <p><b>Metoda:</b> tekst benchmark dokumenta izvučen je kao obični tekst (isto što se dogodi kad se ne-PDF dokument uploada u AI chat<sup>1</sup>) i zalijepljen uz generičan, realističan upit: "pregledaj moj nacrt diplomskog rada prije predaje". Model NIJE dobio popis od 7 namjerno ubačenih grešaka ni profil pravila (slijepo testiranje).</p>
+      <p><b>Model:</b> Claude (Sonnet 5), ne ChatGPT: nemamo ChatGPT račun za ovaj test. Claude je isto AI chat asistent, pa je ovo stvaran, ne izmišljen rezultat za tu kategoriju, samo za drugi konkretan proizvod.</p>
+      <p><b>Rezultat:</b> 0 od 7 formalnih, strojno provjerljivih pravila koje Lekta provjerava. Model je ispravno i eksplicitno naveo da ne može provjeriti font, veličinu, prored, margine ni numeraciju iz zalijepljenog teksta, i uputio na ručnu provjeru prema uputama fakulteta. Umjesto toga dao je opsežnu sadržajnu i strukturnu povratnu informaciju izvan opsega ovih 7 pravila: nedostaje naslovnica, nedostaje izjava o samostalnosti, sažetak je nepotpun, nema in-text citata unatoč popisu literature, premalo izvora, zaključak ne sintetizira nalaze.</p>
+      <p style="background:var(--panel-2);border-left:3px solid var(--ok);border-radius:0 8px 8px 0;padding:10px 14px;margin:10px 0;font-size:14.5px;color:var(--muted)">Ovo je pošten, očekivan ishod, ne poraz jedne ili druge strane: AI chat i Lekta rješavaju različite probleme. AI chat daje sadržajnu prosudbu koju Lekta namjerno ne daje (Lekta nikad ne piše, ne prepravlja i ne ocjenjuje rečenice, argumentaciju ni sadržaj rada). Lekta provjerava formu koju AI chat strukturno ne može vidjeti iz zalijepljenog teksta.</p>
+      <p style="font-size:12px;color:var(--muted)">1. Claude Platform Docs, <a href="https://platform.claude.com/docs/en/build-with-claude/files">platform.claude.com/docs/en/build-with-claude/files</a> (provjereno 3. 8. 2026.). Puni zapis testa (upit, odgovor, bodovanje): <a href="/benchmark/ai-chat-test-2026-08-03.json">ai-chat-test-2026-08-03.json</a>.</p>
+    </div>
   </div>
 </section>
 
