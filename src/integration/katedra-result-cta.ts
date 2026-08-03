@@ -26,6 +26,19 @@ function validCapturedResult(value: any): value is LektaResult {
   );
 }
 
+/**
+ * The handoff is a primary cross-product continuation action, so it must be
+ * mounted inside the initially visible result overview. The previous anchor
+ * (`#actionPlan`) lives in a non-active tab and made a valid CTA invisible
+ * until the user manually opened “Plan ispravaka”.
+ */
+function handoffAnchor(): HTMLElement | null {
+  return (
+    document.querySelector<HTMLElement>('#summaryNote') ??
+    document.querySelector<HTMLElement>('#actionPlan')
+  );
+}
+
 export function renderKatedraResultCta(): void {
   const resultView = document.querySelector<HTMLElement>('#resultView');
   if (!resultView || resultView.classList.contains('hidden')) {
@@ -39,8 +52,8 @@ export function renderKatedraResultCta(): void {
     return;
   }
 
-  const actionPlan = document.querySelector<HTMLElement>('#actionPlan');
-  if (!actionPlan) return;
+  const anchor = handoffAnchor();
+  if (!anchor) return;
 
   const href = buildKatedraHandoffUrl(katedraBaseUrl(), captured);
   let strip = document.getElementById(CTA_ID);
@@ -48,7 +61,11 @@ export function renderKatedraResultCta(): void {
     strip = document.createElement('div');
     strip.id = CTA_ID;
     strip.className = 'handoff-strip';
-    actionPlan.insertAdjacentElement('afterend', strip);
+    anchor.insertAdjacentElement('afterend', strip);
+  } else if (strip.previousElementSibling !== anchor) {
+    // Keep an existing strip in the visible overview even if an earlier render
+    // mounted it against a fallback anchor while the result UI was settling.
+    anchor.insertAdjacentElement('afterend', strip);
   }
 
   const count = captured.issues.length;
