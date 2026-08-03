@@ -1,6 +1,7 @@
 import type { LektaResult } from './academic-suite-contracts';
 import { buildKatedraHandoffUrl } from './katedra-handoff';
 import { readCapturedKatedraHandoff } from './katedra-capture';
+import { wasCompletionCheckPersisted } from './completion-check-persistence';
 
 const CTA_ID = 'katedraHandoffStrip';
 const KATEDRA_PRODUCTION_URL = 'https://katedra.netlify.app';
@@ -30,14 +31,7 @@ function validCapturedResult(value: any): value is LektaResult {
   );
 }
 
-/**
- * Katedra is the continuation action for a result, including the free/teaser
- * result. `#resultDetails` can intentionally remain hidden until the detailed
- * report is revealed, so mounting the bridge anywhere inside that subtree
- * makes a valid cross-product action invisible. Mount immediately BEFORE the
- * locked details block instead; that keeps the bridge in the visible result
- * shell while preserving the report paywall/teaser boundary.
- */
+/** Keep continuation outside the paid/details subtree so free checks can return to the project. */
 function mountKatedraStrip(strip: HTMLElement): boolean {
   const details = document.querySelector<HTMLElement>('#resultDetails');
   if (details?.parentElement) {
@@ -45,7 +39,6 @@ function mountKatedraStrip(strip: HTMLElement): boolean {
     return true;
   }
 
-  // Defensive fallback for alternate/minimal result DOMs.
   const anchor =
     document.querySelector<HTMLElement>('#nextSteps') ??
     document.querySelector<HTMLElement>('#fullReportBanner') ??
@@ -68,7 +61,6 @@ export function renderKatedraResultCta(): void {
     return;
   }
 
-  const href = buildKatedraHandoffUrl(katedraBaseUrl(), captured);
   let strip = document.getElementById(CTA_ID);
   if (!strip) {
     strip = document.createElement('div');
@@ -78,6 +70,23 @@ export function renderKatedraResultCta(): void {
   if (!mountKatedraStrip(strip)) return;
 
   const count = captured.issues.length;
+  if (wasCompletionCheckPersisted(captured) && window.history.length > 1) {
+    strip.innerHTML = `
+      <div>
+        <strong>Provjera je spremljena u tvoj projekt</strong>
+        <p>${count} ${count === 1 ? 'nalaz je spremljen' : count < 5 ? 'nalaza su spremljena' : 'nalaza je spremljeno'} kao sanitizirani workflow signal. DOCX i tekst rada nisu poslani u Completion.</p>
+      </div>
+      <button class="btn btn-secondary btn-sm" data-completion-project-back type="button">Natrag u moj projekt →</button>
+    `;
+    strip.querySelector<HTMLButtonElement>('[data-completion-project-back]')?.addEventListener('click', () => {
+      window.history.back();
+    });
+    return;
+  }
+
+  // Legacy/session-only fallback remains available when server persistence was
+  // not confirmed (for example direct Lekta use or temporary network failure).
+  const href = buildKatedraHandoffUrl(katedraBaseUrl(), captured);
   strip.innerHTML = `
     <div>
       <strong>Riješi nalaze u Katedri</strong>
@@ -93,6 +102,8 @@ function scheduleRender(): void {
 
 if (typeof window !== 'undefined') {
   window.addEventListener('lekta:katedra-handoff-ready', scheduleRender);
+  window.addEventListener('lekta:completion-check-persisted', scheduleRender);
+  window.addEventListener('lekta:completion-check-persistence-failed', scheduleRender);
   window.addEventListener('hashchange', scheduleRender);
 
   const mountObserver = () => {
