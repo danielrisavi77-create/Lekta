@@ -4,6 +4,7 @@ import { VERIFIED_PROFILE_REGISTRY } from '../src/profiles/profile-registry';
 import { applyFixers, type FixerRequest } from '../src/repair/apply-fixers';
 import { sectionAnchorFingerprint } from '../src/analysis/section-structure';
 import { buildRepairTemplate } from './helpers/repair-templates';
+import { assertPackageIntact } from './helpers/docx-package-assert';
 import { readZip } from '../src/repair/zip-codec';
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
@@ -28,6 +29,9 @@ async function assertCombinedScenario(
   expect(first.changelog.length, `${templateId}: kombinacija mora imati barem jednu promjenu`).toBeGreaterThan(0);
   expect(new Set(first.changelog.map((entry) => entry.fixerId)).size).toBeGreaterThan(1);
   expect(await documentText(first.docxBytes)).toBe(beforeText);
+  // Faza A (RE-47): kombinacija vise fixera je najizlozenija tocka - svaki pise nad izlazom
+  // prethodnog, pa neispravan XML nastaje bas ovdje. Prije se provjeravao samo tekst.
+  await assertPackageIntact(input, first.docxBytes, `${templateId}: kombinirani prolaz`);
 
   const profileId = VERIFIED_PROFILE_REGISTRY[0]?.id;
   expect(profileId).toBeTruthy();

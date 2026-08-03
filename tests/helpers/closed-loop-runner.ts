@@ -10,6 +10,7 @@ import { expect } from 'vitest';
 import { analyzeFixture, resolveProfile } from '../../src/analysis/golden-entry';
 import { applyFixers, type FixerRequest } from '../../src/repair/apply-fixers';
 import { readZip } from '../../src/repair/zip-codec';
+import { assertPackageIntact } from './docx-package-assert';
 import type { RepairableItem } from '../../src/ui/repair-panel';
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
@@ -67,10 +68,16 @@ export interface ClosedLoopCase {
    * 'pass' (nedetektabilno) u posteni 'warn' (detektabilno, ali nepotvrdjeno) i nakon ispravnog popravka.
    */
   exemptFromRegression?: string[];
+  /**
+   * Dijelovi paketa koje ovaj popravak SMIJE ukloniti. Jedini danasnji slucaj je
+   * final-document-inspector-fixer, koji radi "cistu kopiju" pa namjerno mice word/comments.xml.
+   * Sve ostalo sto nestane iz paketa je bug (vidi assertPackageIntact).
+   */
+  allowDroppedParts?: string[];
 }
 
 export async function runClosedLoopCase(testCase: ClosedLoopCase): Promise<void> {
-  const { label, profileId, buildBrokenDocx, buildItems, targetTitles = [], isResolved, allowTextChange = false, exemptFromRegression = [] } = testCase;
+  const { label, profileId, buildBrokenDocx, buildItems, targetTitles = [], isResolved, allowTextChange = false, exemptFromRegression = [], allowDroppedParts = [] } = testCase;
   const profile = resolveProfile(profileId) as Record<string, unknown>;
   const inputBytes = await buildBrokenDocx();
   const inputFile = new File([inputBytes], `${label}-closed-loop.docx`, { type: DOCX_MIME });
@@ -83,6 +90,10 @@ export async function runClosedLoopCase(testCase: ClosedLoopCase): Promise<void>
   const beforeText = await documentText(inputBytes);
   const applied = await applyFixers(inputBytes, requests);
   expect(applied.changelog.length, `${label}: barem jedna stavka mora stvarno promijeniti dokument`).toBeGreaterThan(0);
+  // Faza A (RE-47): popravljen paket mora ostati valjan XML u SVAKOM dijelu i ne smije izgubiti
+  // nijedan dio. Prije se provjeravao samo tekst i ishod checkova, pa je neispravan XML (npr.
+  // atribut iza kose crte samozatvarajuceg taga) prolazio sve testove.
+  await assertPackageIntact(inputBytes, applied.docxBytes, `${label}: prvi prolaz`, { allowDropped: allowDroppedParts });
 
   const outputFile = new File([applied.docxBytes], `${label}-closed-loop-fixed.docx`, { type: DOCX_MIME });
   const after = await analyzeFixture(outputFile, { profileId });

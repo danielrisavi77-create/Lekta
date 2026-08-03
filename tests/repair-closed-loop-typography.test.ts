@@ -121,6 +121,10 @@ describe('Repair Engine closed-loop: final-document-inspector-fixer', () => {
       // Prihvacanje revizije/skrivenog teksta MIJENJA sadrzaj (w:ins prihvacen kao stalan tekst;
       // skriveni run uklonjen) - ocekivana promjena, ne slucajna regresija.
       allowTextChange: true,
+      // Kad su svi komentari uklonjeni, ovaj fixer namjerno mice i sam word/comments.xml
+      // (`removedPackageParts` u apply-fixers.ts) jer prazan dio nema svrhu. To je JEDINI
+      // dio koji ovdje smije nestati; gate faze A sve ostalo tretira kao bug.
+      allowDroppedParts: ['word/comments.xml'],
       isResolved: (after) => {
         const findings = after?.details?.finalDocumentInspector?.findings ?? [];
         return findings.every((finding: any) => finding.count === 0 || !finding.supported);

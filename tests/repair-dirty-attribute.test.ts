@@ -18,11 +18,9 @@
 import { describe, it, expect } from 'vitest';
 import { markTocFieldsDirty } from '../src/repair/xml-patch';
 import { extractBodyParagraphs } from '../src/analysis/typography-structure';
-
-/** Grubi, ali dovoljan detektor: atribut nikad ne smije doci iza kose crte samozatvarajuceg taga. */
-function hasAttributeAfterSlash(xml: string): boolean {
-  return /\/\s+[a-zA-Z:_-]+\s*=/.test(xml);
-}
+// Faza A: guard vise ne zivi kao lokalna kopija po testovima nego u src/repair/package-integrity.ts,
+// odakle ga koristi i sam motor (ukljucujuci Deno Edge Function).
+import { hasAttributeAfterSlash } from '../src/repair/package-integrity';
 
 const HEADER =
   '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +

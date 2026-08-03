@@ -35,6 +35,7 @@ import {
   footnoteTypographyRepairableItem,
 } from '../src/ui/repair-items';
 import { resolveProfile } from '../src/analysis/golden-entry';
+import { assertPackageIntact } from './helpers/docx-package-assert';
 import { singleSectionDocx, multiSectionDocx } from './helpers/synthetic-docx';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -367,6 +368,11 @@ describe('Repair golden harness', () => {
         return params ? { ruleId: `${fixerId}-rule`, fixerId, params: withDeep(fixerId, params, true) } : null;
       }).filter((r): r is FixerRequest => r !== null);
       const combined = await applyFixers(c.bytes, combinedRequests);
+      // Faza A (RE-47): gate ide kao ZASEBNA asercija, NIKAD kao polje u `perFixture`. Da ude u
+      // snapshot, promijenio bi 5940 redaka i zauvijek zamaglio svaki buduci diff.
+      if (combined.changelog.length > 0) {
+        await assertPackageIntact(c.bytes, combined.docxBytes, `${c.name}: kombinirani prolaz`);
+      }
       perFixture['__kombinirano'] = {
         applied: combined.changelog.length,
         changelog: combined.changelog.map((c2) => ({ before: c2.beforeLabel, after: c2.afterLabel })),

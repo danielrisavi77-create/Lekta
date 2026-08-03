@@ -13,6 +13,7 @@
 import { describe, it, expect } from 'vitest';
 import { fieldIntegrityFixer } from '../src/repair/field-integrity-fixer';
 import { analyzeFieldIntegrity } from '../src/analysis/field-integrity';
+import { hasAttributeAfterSlash, scanXmlWellFormed } from '../src/repair/package-integrity';
 import type { DocxXmlParts } from '../src/repair/fixers';
 
 const HEADER =
@@ -74,7 +75,9 @@ describe('fieldIntegrityFixer: vise polja u istom dijelu', () => {
     // SVAKO polje mora biti oznaceno, ne samo prvo.
     const dirtyCount = (out.parts.documentXml.match(/w:dirty="true"/g) || []).length;
     expect(dirtyCount).toBe(fields.length);
-    // I dalje valjan XML (RE-47): nikad atribut iza kose crte.
-    expect(/\/\s+[a-zA-Z:_-]+\s*=/.test(out.parts.documentXml)).toBe(false);
+    // I dalje valjan XML (RE-47): nikad atribut iza kose crte. Guard dolazi iz dijeljenog
+    // src/repair/package-integrity.ts (faza A), ne iz lokalne kopije regexa.
+    expect(hasAttributeAfterSlash(out.parts.documentXml)).toBe(false);
+    expect(scanXmlWellFormed(out.parts.documentXml).problem).toBeUndefined();
   });
 });
