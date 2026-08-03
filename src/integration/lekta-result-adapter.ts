@@ -1,5 +1,7 @@
 import { scoreMeta, type Issue } from '../scoring/checks';
 import { categoryScores, type AnalysisResultLike } from '../report/report';
+import type { RuleEntry } from '../profiles/profile-schema';
+import { identifyFindings } from './finding-identity';
 import {
   ACADEMIC_SUITE_CONTRACT_VERSION,
   normalizeLektaIssueSeverity,
@@ -14,20 +16,12 @@ export interface LektaResultContext {
   projectId?: string;
   userId?: string;
   profileId?: string;
+  ruleEntries?: RuleEntry[];
   documentFingerprint?: string;
   coverageTier?: number;
 }
 
-/**
- * Stable-enough v0.1 reconciliation key for today's legacy Issue shape.
- *
- * IMPORTANT:
- * - It intentionally excludes `detail` so changing explanatory prose or quoted
- *   document content does not churn the key.
- * - `where` is included because the same check may fail in multiple locations.
- * - This is a migration bridge. Long term, checks should emit an explicit
- *   stable checkId/ruleId/location identity from the engine itself.
- */
+/** Legacy migration key retained for backwards compatibility/tests only. */
 export function legacyIssueKey(issue: Pick<Issue, 'category' | 'title' | 'where'>): string {
   const raw = `${issue.category}\u001f${issue.title}\u001f${issue.where || ''}`;
   let hash = 0x811c9dc5;
@@ -38,15 +32,7 @@ export function legacyIssueKey(issue: Pick<Issue, 'category' | 'title' | 'where'
   return `legacy:${(hash >>> 0).toString(36)}`;
 }
 
-/**
- * Privacy-safe issue projection for Katedra handoff.
- *
- * Today's Lekta `Issue.detail` and `Issue.where` are presentation fields and can
- * contain document-derived context. v0.1 therefore does NOT copy them into the
- * cross-product payload. Katedra receives the finding identity/category/summary
- * only. Richer location data must be added later from structured, explicitly
- * classified non-sensitive metadata.
- */
+/** Legacy privacy-safe projection retained for old callers. New shared results use identifyFindings(). */
 export function projectLegacyIssueForHandoff(issue: Issue): LektaIssueRef {
   return {
     issueKey: legacyIssueKey(issue),
@@ -63,13 +49,34 @@ export function projectLegacyIssueForHandoff(issue: Issue): LektaIssueRef {
 
 /**
  * Adapter from the current Lekta analysis result to the shared v0.1 transport.
- * It adds no new verification claims: missing stable IDs/fixability stay null/
- * false until the underlying engine can supply them from verified rule data.
+ *
+ * Identity is now stable across re-checks:
+ * - known engine checks use canonical checkId values;
+ * - verified profile ruleEntries contribute their authored ruleId;
+ * - issueKey is rule/check based, with a private location hash only when one
+ *   logical check emits multiple simultaneous occurrences.
+ *
+ * Privacy boundary is unchanged: Issue.detail/where and raw document content do
+ * not cross into the Katedra payload.
  */
 export function toSharedLektaResult(
   result: AnalysisResultLike,
   context: LektaResultContext,
 ): LektaResult {
+  const identified = identifyFindings(result.checks ?? [], result.issues ?? [], context.ruleEntries ?? []);
+  const issues: LektaIssueRef[] = identified.map((item, index) => ({
+    issueKey: item.issueKey,
+    issueInstanceId: `${context.analysisId}:${index + 1}`,
+    checkId: item.checkId,
+    ruleId: item.ruleId,
+    category: item.issue.category || 'other',
+    severity: normalizeLektaIssueSeverity(item.issue.severity),
+    summary: item.issue.title || 'Nalaz',
+    fixable: item.fixable,
+    fixerId: item.fixerId,
+    status: 'OPEN',
+  }));
+
   return {
     schemaVersion: ACADEMIC_SUITE_CONTRACT_VERSION,
     analysisId: context.analysisId,
@@ -81,7 +88,7 @@ export function toSharedLektaResult(
     scoreLabel: scoreMeta(result.score).label,
     profileStatus: result.profileStatus,
     categoryScores: categoryScores(result.checks),
-    issues: (result.issues ?? []).map(projectLegacyIssueForHandoff),
+    issues,
     analyzedAt: context.analyzedAt,
     documentFingerprint: context.documentFingerprint,
     coverageTier: context.coverageTier,
