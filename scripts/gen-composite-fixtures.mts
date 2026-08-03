@@ -42,7 +42,6 @@ const FIXTURES: CompositeFixture[] = [
       // Profil je izabran po podacima: bibliography-rules, citation-sync-rules,
       // section-surgery-rules i required-section-rules postoje tocno na 11 FPZG profila.
       profileId: 'fpzg-novinarstvo-diplomski',
-      synthetic: true,
       note: 'generirano, anonimno, nije studentski rad; popis literature i citati namjerno neispravni',
     },
   },

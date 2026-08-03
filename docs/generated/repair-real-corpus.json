@@ -27,6 +27,11 @@
       "profileId": "ffzg-filozofija-diplomski"
     },
     {
+      "documentId": "fpzg-novinarstvo-bibliografija",
+      "fileName": "fpzg-novinarstvo-bibliografija.docx",
+      "profileId": "fpzg-novinarstvo-diplomski"
+    },
+    {
       "documentId": "grf-diplomski-neuskladjen",
       "fileName": "grf-diplomski-neuskladjen.docx",
       "profileId": "grf-diplomski"
@@ -215,6 +220,47 @@
       "error": null
     },
     {
+      "documentId": "fpzg-novinarstvo-bibliografija",
+      "fileName": "fpzg-novinarstvo-bibliografija.docx",
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "outcome": "review",
+      "before": {
+        "checkCount": 35,
+        "passCount": 23,
+        "score": 75
+      },
+      "after": {
+        "checkCount": 35,
+        "passCount": 25,
+        "score": 84
+      },
+      "beforeEntryCount": 8,
+      "afterEntryCount": 8,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "font-fixer",
+        "alignment-fixer"
+      ],
+      "changedFixerIds": [
+        "font-fixer",
+        "alignment-fixer"
+      ],
+      "targetedCheckCount": 3,
+      "targetedResolvedCount": 2,
+      "targetedUnresolvedCount": 1,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen"
+      ],
+      "error": null
+    },
+    {
       "documentId": "grf-diplomski-neuskladjen",
       "fileName": "grf-diplomski-neuskladjen.docx",
       "profileId": "grf-diplomski",
@@ -400,13 +446,13 @@
     }
   ],
   "summary": {
-    "documentCount": 9,
+    "documentCount": 10,
     "passCount": 0,
-    "reviewCount": 6,
+    "reviewCount": 7,
     "failCount": 0,
     "noOpCount": 3,
-    "changedDocumentCount": 6,
-    "manualReviewCount": 6,
+    "changedDocumentCount": 7,
+    "manualReviewCount": 7,
     "passRegressionCount": 0
   }
 }
