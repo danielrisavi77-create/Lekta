@@ -13,7 +13,7 @@
 import { writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { fullStructureDocx } from '../tests/helpers/composite-docx';
+import { fullStructureDocx, fpzgBibliographyDocx } from '../tests/helpers/composite-docx';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const OUT = join(here, '..', 'tests', 'fixtures', 'docx');
@@ -33,6 +33,17 @@ const FIXTURES: CompositeFixture[] = [
       // Korak N+2: synthetic zastavica uklonjena, pa dokument od sada ulazi i u
       // repair-real-corpus, faculty-matrix i backlog, ne samo u golden matricu.
       note: 'generirano, anonimno, nije studentski rad; kompozitna struktura za pokrivenost fixera',
+    },
+  },
+  {
+    file: 'fpzg-novinarstvo-bibliografija.docx',
+    build: fpzgBibliographyDocx,
+    sidecar: {
+      // Profil je izabran po podacima: bibliography-rules, citation-sync-rules,
+      // section-surgery-rules i required-section-rules postoje tocno na 11 FPZG profila.
+      profileId: 'fpzg-novinarstvo-diplomski',
+      synthetic: true,
+      note: 'generirano, anonimno, nije studentski rad; popis literature i citati namjerno neispravni',
     },
   },
 ];

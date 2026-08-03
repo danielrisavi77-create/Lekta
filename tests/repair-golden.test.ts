@@ -401,6 +401,10 @@ async function buildCases(): Promise<Case[]> {
     // section-surgery, required-sections) cita profile.ruleEntries izravno. Bez ovoga bi grana
     // uvijek bila prazna, ma koliko podataka dokument imao. Isti wiring kao src/ui/app.ts.
     profile.ruleEntries = repairEntriesFor(profileId);
+    // resolveProfile vraca samo PRAVILA, bez identiteta (id je undefined, provjereno), pa bi
+    // unitIdForProfile inace uvijek promasio i naslovnica bi ostala neprovjerena. Zivi app unit
+    // dobiva iz odabira u sucelju; ovdje ga vezemo uz profil kojim je dokument analiziran.
+    profile.id = profileId;
     const analyzed = await analyzeFixture(new File([bytes], fileName, { type: DOCX_MIME }), { profileId });
     cases.push({
       name: fileName,
