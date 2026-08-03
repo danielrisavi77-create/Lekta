@@ -13,21 +13,25 @@ It does **not** create a second Supabase project, a second account table or a se
 
 ## Migrations
 
-### `0037_completion_app_foundation.sql`
+### `0041_completion_app_foundation.sql`
 
 Adds:
 
 - `completion_project_state`
 - `completion_tasks`
 - `completion_events`
+- a narrow `set_completion_updated_at()` trigger helper.
 
-### `0038_completion_app_write_hardening.sql`
+### `0042_completion_app_access_hardening.sql`
 
 Hardens:
 
 - authenticated access to read-only owned completion state;
+- explicit least-privilege table grants;
 - server-owned writes;
-- task/event project consistency.
+- RLS ownership through the real shared-core key `academic_projects.user_id`.
+
+The Completion migrations intentionally start after the existing Academic Suite `0040` migration. They must not reuse `0037`–`0039`, which already belong to the shared foundation.
 
 ## Data boundary
 
@@ -98,14 +102,14 @@ There is intentionally no `payload jsonb`, `prompt`, `response` or content excer
 
 ## RLS / write authority
 
-Authenticated users may `SELECT` completion rows only when the parent `academic_projects.owner_user_id = auth.uid()`.
+Authenticated users may `SELECT` completion rows only when the parent `academic_projects.user_id = auth.uid()`.
 
 Authenticated direct writes are intentionally not exposed.
 
 All completion mutations must be performed by trusted server code that:
 
 1. authenticates the user;
-2. validates ownership of `academic_projects.id`;
+2. validates ownership of `academic_projects.id` through `academic_projects.user_id`;
 3. validates typed input;
 4. performs the mutation with server credentials;
 5. writes only content-free audit metadata.
@@ -114,9 +118,11 @@ This prevents a browser client from fabricating authority such as `OFFICIAL_RULE
 
 ## Cross-project integrity
 
-`completion_events(task_id, academic_project_id)` must reference the same project pair in `completion_tasks`.
+`completion_events(task_id, academic_project_id)` references the same project pair in `completion_tasks` through a deferrable composite foreign key.
 
 A user who owns multiple projects cannot create an event under project A that points to a task in project B.
+
+Individual task deletion is intentionally blocked while an event references the task; workflow code should cancel/archive tasks instead of erasing audit history. Deleting the parent academic project removes completion data through the project-level cascade.
 
 ## Product ownership boundaries
 
