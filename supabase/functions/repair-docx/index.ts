@@ -375,7 +375,7 @@ Deno.serve(async (req: Request) => {
       return json({
         docxBase64: toBase64(result.docxBytes),
         fileName: (meta.fileName ? String(meta.fileName).replace(/\.docx$/i, '') : 'rad') + '-popravljeno.docx',
-        changelog: [], skipped: result.skipped,
+        changelog: [], skipped: result.skipped, skippedReasons: result.skippedReasons,
         slotId: null, jobId: null, fingerprint, sourceCheck,
       }, 200);
     }
@@ -445,6 +445,7 @@ Deno.serve(async (req: Request) => {
       fileName: (meta.fileName ? String(meta.fileName).replace(/\.docx$/i, '') : 'rad') + '-popravljeno.docx',
       changelog: result.changelog,
       skipped: result.skipped,
+      skippedReasons: result.skippedReasons,
       // storagePending: pohrana jos traje u pozadini, pa jobId JEST rezerviran ali posao mozda jos
       // nije vidljiv u "Moji popravci". Klijent zato ne smije tvrditi da je spremljeno. Kad je
       // jobId null (storage-kvota dosegnuta), pending je uvijek false: pohrana nije ni pokusana.
