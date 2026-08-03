@@ -148,6 +148,26 @@ const INDEX_SHIFTING_FIXERS: ReadonlySet<string> = new Set<string>([
   'citation-bibliography-sync-fixer', // moze dodati nedostajuce zapise
 ]);
 
+/**
+ * RE-51: redoslijed UNUTAR gornje skupine, od dijela dokumenta koji je NAJDALJE od pocetka prema
+ * onome na samom pocetku. Fixer koji skrati ili produzi rani dio dokumenta pomakne mete svima koji
+ * rade dalje u tekstu, pa oni moraju biti gotovi PRIJE njega (isti princip kao obrada Word polja
+ * silazno po offsetu u field-integrity-fixer.ts).
+ *
+ * Konkretan slucaj: title-page-fixer zamijeni naslovnicu (drugaciji broj odlomaka), nakon cega je
+ * bibliography-repair-fixer s metama na indeksima 529+ vracao 'invalid-params' iako je SAM prolazio.
+ * Manji broj = ranije se izvodi. Fixer koji nije naveden dobiva 0 (izvodi se medju prvima).
+ */
+const INDEX_SHIFTING_ORDER: ReadonlyMap<string, number> = new Map<string, number>([
+  ['bibliography-repair-fixer', 0], // popis literature: kraj dokumenta
+  ['citation-bibliography-sync-fixer', 1], // zapisi uz literaturu
+  ['required-section-fixer', 2], // umetanje obveznih dijelova (moze biti bilo gdje)
+  ['section-insert-fixer', 3],
+  ['toc-field-fixer', 4], // sadrzaj: pocetak-sredina
+  ['empty-paragraph-fixer', 5], // globalno, ali front matter je zasticen
+  ['title-page-fixer', 6], // sam pocetak dokumenta: zadnji
+]);
+
 const DOCUMENT_XML_PATH = 'word/document.xml';
 const STYLES_XML_PATH = 'word/styles.xml';
 const NUMBERING_XML_PATH = 'word/numbering.xml';
@@ -779,7 +799,10 @@ export async function applyFixers(
     .map((request, index) => ({ request, index }))
     .sort((a, b) => {
       const phase = Number(INDEX_SHIFTING_FIXERS.has(a.request.fixerId)) - Number(INDEX_SHIFTING_FIXERS.has(b.request.fixerId));
-      return phase !== 0 ? phase : a.index - b.index;
+      if (phase !== 0) return phase;
+      // RE-51: unutar strukturne faze idi od kraja dokumenta prema pocetku (vidi INDEX_SHIFTING_ORDER).
+      const within = (INDEX_SHIFTING_ORDER.get(a.request.fixerId) ?? 0) - (INDEX_SHIFTING_ORDER.get(b.request.fixerId) ?? 0);
+      return within !== 0 ? within : a.index - b.index;
     })
     .map((entry) => entry.request);
 

@@ -137,4 +137,43 @@ describe('applyFixers: raniji fixer ne smije invalidirati anchore kasnijih', () 
     expect(applied).toContain('empty-paragraph-fixer');
     expect(applied).toContain('croatian-typography-fixer');
   });
+
+  /**
+   * RE-51: i UNUTAR skupine koja mijenja broj odlomaka redoslijed je bitan. Fixer koji djeluje
+   * na POCETAK dokumenta (naslovnica, uklanjanje praznih odlomaka) pomakne mete onima koji rade
+   * na KRAJU (popis literature je na indeksima 500+). Zato se unutar te faze ide od kraja
+   * dokumenta prema pocetku.
+   *
+   * Na stvarnom radu: title-page-fixer je skratio naslovnicu pa je bibliography-repair-fixer
+   * (paragraphIndices 529+) vracao 'invalid-params' iako je SAM uredno prolazio.
+   */
+  it('bibliografija na kraju prezivi fixer koji skracuje pocetak dokumenta', async () => {
+    const { bibliographyAnchorFingerprint } = await import('../src/analysis/bibliography-structure');
+    const docx = await buildDocx();
+
+    // Odlomak 4 (zadnji) je bibliografski zapis; odlomci 2-3 su prazni i bit ce kolabirani.
+    const entryText = 'Prva recenica,druga recenica bez razmaka iza zareza.';
+    const bibliographyRequest = {
+      fixerId: 'bibliography-repair-fixer' as const,
+      ruleId: 'bibliography-repair-assisted',
+      params: {
+        version: 1,
+        entries: [{
+          id: 'e1', paragraphIndices: [4],
+          anchorFingerprint: bibliographyAnchorFingerprint([4], entryText),
+          normalizeText: true,
+        }],
+        options: { hangingIndentTwips: 709 },
+      },
+    };
+
+    // Sam mora proci (kontrola).
+    const solo = await applyFixers(docx, [bibliographyRequest]);
+    expect(solo.skippedReasons['bibliography-repair-assisted'], 'kontrola: sam mora proci').toBeUndefined();
+
+    // I u paru s fixerom koji uklanja raniji odlomak.
+    const pair = await applyFixers(docx, [emptyParagraphRequest, bibliographyRequest]);
+    expect(pair.skippedReasons['bibliography-repair-assisted'], `preskoceno: ${JSON.stringify(pair.skippedReasons)}`).toBeUndefined();
+    expect(pair.changelog.map((c) => c.fixerId)).toContain('bibliography-repair-fixer');
+  });
 });

@@ -3548,8 +3548,8 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "heading-format-fixer-rule",
         "footnote-typography-fixer-rule",
         "section-insert-fixer-rule",
-        "empty-paragraph-fixer-rule",
         "toc-field-fixer-rule",
+        "empty-paragraph-fixer-rule",
       ],
     },
     "alignment-fixer": {
@@ -4694,8 +4694,8 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "heading-format-fixer-rule",
         "footnote-typography-fixer-rule",
         "section-insert-fixer-rule",
-        "empty-paragraph-fixer-rule",
         "toc-field-fixer-rule",
+        "empty-paragraph-fixer-rule",
       ],
     },
     "alignment-fixer": {
