@@ -41,3 +41,6 @@ jobs:
 
       - name: Apply existing Lekta commerce + Academic Suite foundation smoke
         run: psql -v ON_ERROR_STOP=1 -f scripts/academic-suite-db-smoke.sql
+
+      - name: Apply Academic Suite RLS hardening smoke
+        run: psql -v ON_ERROR_STOP=1 -f scripts/academic-suite-rls-smoke.sql
