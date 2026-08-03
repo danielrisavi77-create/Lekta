@@ -98,9 +98,14 @@ export interface StableFindingIdentity {
 
 /**
  * Resolves stable logical identities for a complete analysis in one pass.
- * A rule-backed finding is keyed by `ruleId`; an engine-only finding by stable
- * `checkId`. Only when the same logical check emits multiple simultaneous
- * occurrences do we add a deterministic private location suffix.
+ *
+ * - A rule-backed finding starts with `rule:<ruleId>`.
+ * - If one authored rule has multiple distinct runtime child checks in the same
+ *   result, `:check:<checkId>` distinguishes those siblings without relying on
+ *   human-facing issue text.
+ * - If the exact same logical rule/check still emits multiple occurrences, only
+ *   then is a private location hash added.
+ * - Engine-only findings are keyed by stable `checkId`.
  */
 export function identifyFindings(
   checks: Check[] = [],
@@ -111,16 +116,32 @@ export function identifyFindings(
     const checkId = checkIdForIssue(issue, checks);
     const rule = preferredRuleEntry(checkId, ruleEntries);
     const ruleId = rule?.ruleId || null;
-    const base = ruleId ? `rule:${ruleId}` : `check:${checkId}`;
-    return { issue, checkId, rule, ruleId, base };
+    return { issue, checkId, rule, ruleId };
+  });
+
+  const ruleCheckIds = new Map<string, Set<string>>();
+  for (const item of provisional) {
+    if (!item.ruleId) continue;
+    const set = ruleCheckIds.get(item.ruleId) || new Set<string>();
+    set.add(item.checkId);
+    ruleCheckIds.set(item.ruleId, set);
+  }
+
+  const withBase = provisional.map(item => {
+    if (!item.ruleId) return { ...item, base: `check:${item.checkId}` };
+    const hasSiblingChecks = (ruleCheckIds.get(item.ruleId)?.size || 0) > 1;
+    const base = hasSiblingChecks
+      ? `rule:${item.ruleId}:check:${item.checkId}`
+      : `rule:${item.ruleId}`;
+    return { ...item, base };
   });
 
   const counts = new Map<string, number>();
-  for (const item of provisional) counts.set(item.base, (counts.get(item.base) || 0) + 1);
+  for (const item of withBase) counts.set(item.base, (counts.get(item.base) || 0) + 1);
 
-  return provisional.map(item => {
-    const duplicate = (counts.get(item.base) || 0) > 1;
-    const locationSuffix = duplicate
+  return withBase.map(item => {
+    const duplicateOccurrence = (counts.get(item.base) || 0) > 1;
+    const locationSuffix = duplicateOccurrence
       ? `:loc:${hash(`${item.issue.where || ''}\u001f${item.issue.title || ''}`)}`
       : '';
     return {
