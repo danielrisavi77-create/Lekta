@@ -9,7 +9,7 @@
  * Ovaj test NE pise nista na disk i ne dira nijedan generirani artefakt.
  */
 import { describe, it, expect } from 'vitest';
-import { fullStructureDocx, fpzgBibliographyDocx } from './helpers/composite-docx';
+import { fullStructureDocx, fpzgBibliographyDocx, pravoFootnotesDocx } from './helpers/composite-docx';
 import { readZip } from '../src/repair/zip-codec';
 import { assertPartsWellFormed } from './helpers/docx-package-assert';
 import { applyFixers, type FixerRequest } from '../src/repair/apply-fixers';
@@ -133,5 +133,58 @@ describe('kompozitni fixture: FPZG bibliografija i citati', () => {
     // Prazan popis stavki mora biti cist no-op, ne tiha izmjena.
     expect(applied.changelog).toEqual([]);
     expect(applied.docxBytes).toBe(bytes);
+  });
+});
+
+describe('kompozitni fixture: pravne fusnote i broj stranice', () => {
+  it('fusnote su u pogresnom fontu i velicini, s razmacima, a broj stranice je centriran', async () => {
+    const bytes = await pravoFootnotesDocx();
+    await assertPartsWellFormed(bytes, 'pravni fixture');
+
+    const entries = await readZip(bytes);
+    const decoder = new TextDecoder();
+    const footnotesXml = decoder.decode(entries.find((entry) => entry.name === 'word/footnotes.xml')!.data);
+    const stylesXml = decoder.decode(entries.find((entry) => entry.name === 'word/styles.xml')!.data);
+    const footerXml = decoder.decode(entries.find((entry) => entry.name === 'word/footer1.xml')!.data);
+
+    // Tri prave fusnote uz dva Wordova separatora.
+    expect((footnotesXml.match(/<w:footnote w:id="[1-9]/g) ?? []).length).toBe(3);
+    // Pravni oblici koje citation engine stvarno susrece.
+    expect(footnotesXml).toContain('Narodne novine br. 18/22');
+    expect(footnotesXml).toContain('Ibid.');
+    expect(footnotesXml).toContain('op. cit.');
+    // Ciljevi popravka: font i velicina odudaraju, a FootnoteText ima razmake prije i poslije.
+    expect(footnotesXml).toContain('w:ascii="Calibri"');
+    expect(footnotesXml).toContain('w:sz w:val="18"');
+    expect(stylesXml).toMatch(/FootnoteText[\s\S]*?w:before="120"/);
+    expect(stylesXml).toMatch(/FootnoteText[\s\S]*?w:after="180"/);
+    // Broj stranice je centriran; pravni profil trazi desno poravnanje.
+    expect(footerXml).toContain('<w:jc w:val="center"/>');
+    expect(footerXml).toContain(' PAGE ');
+  });
+
+  it('dvije varijante nose isti oblik ali razlicite bajtove (dva profila, jedan sadrzaj)', async () => {
+    const a = await pravoFootnotesDocx();
+    const b = await pravoFootnotesDocx('Integrirani preddiplomski i diplomski studij prava');
+    expect(a).not.toEqual(b);
+    await assertPartsWellFormed(b, 'pravni fixture (druga varijanta)');
+  });
+
+  it('prezivi popravak fusnota i podnozja', async () => {
+    const bytes = await pravoFootnotesDocx();
+    const applied = await applyFixers(bytes, [
+      { ruleId: 'footnote-typography-rule', fixerId: 'footnote-typography-fixer', params: { fontName: 'Times New Roman', fontSizePt: 10 } },
+      { ruleId: 'footnote-spacing-rule', fixerId: 'footnote-spacing-fixer', params: {} },
+      { ruleId: 'page-number-alignment-rule', fixerId: 'page-number-alignment-fixer', params: { align: 'right' } },
+    ]);
+    expect(applied.changelog.length, 'pravni dokument mora imati sto popraviti').toBeGreaterThan(0);
+    await assertPackageIntact(bytes, applied.docxBytes, 'pravni fixture nakon popravka');
+
+    // Broj stranice mora zavrsiti desno, a PAGE polje ostati zivo.
+    const footer = new TextDecoder().decode(
+      (await readZip(applied.docxBytes)).find((entry) => entry.name === 'word/footer1.xml')!.data,
+    );
+    expect(footer).toContain('<w:jc w:val="right"/>');
+    expect(footer).toContain(' PAGE ');
   });
 });

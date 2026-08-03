@@ -200,6 +200,83 @@ const FULL_PACKAGE_RELS = `${XML_DECL}<Relationships ${REL_NS}><Relationship Id=
 
 const FULL_DOCUMENT_RELS = `${XML_DECL}<Relationships ${REL_NS}><Relationship Id="rId1" Type="${R}/styles" Target="styles.xml"/><Relationship Id="rId2" Type="${R}/numbering" Target="numbering.xml"/><Relationship Id="rId3" Type="${R}/footnotes" Target="footnotes.xml"/><Relationship Id="rId4" Type="${R}/settings" Target="settings.xml"/><Relationship Id="rId5" Type="${R}/header" Target="header1.xml"/><Relationship Id="rId6" Type="${R}/footer" Target="footer1.xml"/><Relationship Id="rId7" Type="${R}/image" Target="media/image1.png"/><Relationship Id="rId8" Type="${R}/fontTable" Target="fontTable.xml"/></Relationships>`;
 
+// === Pravni profil: fusnote i broj stranice (B3) ===
+
+/**
+ * Zasto pravni profil i zasto bas ove tri dimenzije: izmjereno je da preostale fixere koji su
+ * "ponudjeni ali uvijek no-op" gate-aju iskljucivo pravni profili.
+ * checkFootnoteParagraphSpacingZero ima 4 profila (svi pravo), pageNumberAlignment 3 (svi
+ * pravo-socijalni-rad / socijalna-politika), a footnoteFont ili footnoteSize njih 46. Nijedan
+ * profil nema sva tri, pa ovaj dokument cilja par koji dijeli pravo-socijalni-rad-diplomski:
+ * tipografiju fusnota i poravnanje broja stranice.
+ *
+ * Dokument je namjerno lose oblikovan bas u tome: fusnote su u pogresnom fontu i velicini, s
+ * razmacima prije i poslije, a broj stranice je centriran umjesto desno poravnat.
+ */
+function pravoFootnotesDocumentXml(study: string): string {
+  const titlePage =
+    para('SVEUCILISTE U ZAGREBU', { jc: 'center' }) +
+    para('PRAVNI FAKULTET', { jc: 'center' }) +
+    para(study, { jc: 'center' }) +
+    para('Ime Prezime', { jc: 'center' }) +
+    para('NASLOV DIPLOMSKOGA RADA', { jc: 'center' }) +
+    para('DIPLOMSKI RAD', { jc: 'center' }) +
+    para('Mentor: prof. dr. sc. Ime Mentora', { jc: 'center' }) +
+    para('Zagreb, 2026.', { jc: 'center' }) +
+    '<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
+
+  // Fusnote nose pravne oblike koje citation engine stvarno susrece (NN broj, ibid., op. cit.).
+  const body =
+    para('1. Uvod', { style: 'Heading1' }) +
+    paraWithFootnote('Uvodni odlomak upucuje na propis i na raniji rad.', 1) +
+    para('2. Razrada', { style: 'Heading1' }) +
+    paraWithFootnote('Razrada se poziva na isti izvor na kratki nacin.', 2) +
+    paraWithFootnote('Trece upucivanje koristi drugi kratki oblik.', 3) +
+    para('3. Zakljucak', { style: 'Heading1' }) +
+    para('Zavrsni odlomak bez fusnota.', { jc: 'both' }) +
+    para('Literatura', { style: 'Heading1' }) +
+    para('Antic, I. (2021). Pravo i drustvo. Zagreb: Naklada Prvi.');
+
+  const sectPr = `<w:sectPr>${A4_PORTRAIT}<w:footerReference w:type="default" r:id="rId6"/></w:sectPr>`;
+  return `${XML_DECL}<w:document ${DOC_NS}><w:body>${titlePage}${body}${sectPr}</w:body></w:document>`;
+}
+
+/** FootnoteText s razmacima prije i poslije, u Calibriju 9 pt: sve tri stvari profil trazi drukcije. */
+const PRAVO_STYLES = `${XML_DECL}<w:styles xmlns:w="${W}"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="22"/></w:rPr></w:rPrDefault></w:docDefaults><w:style w:type="paragraph" w:styleId="Normal"><w:name w:val="Normal"/><w:pPr><w:spacing w:after="160" w:line="259" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr></w:style><w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:pPr><w:outlineLvl w:val="0"/></w:pPr><w:rPr><w:rFonts w:ascii="Cambria" w:hAnsi="Cambria"/><w:b/><w:sz w:val="28"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="FootnoteText"><w:name w:val="Footnote Text"/><w:pPr><w:spacing w:before="120" w:after="180" w:line="276" w:lineRule="auto"/></w:pPr><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="18"/></w:rPr></w:style><w:style w:type="character" w:styleId="FootnoteReference"><w:name w:val="footnote reference"/><w:rPr><w:vertAlign w:val="superscript"/></w:rPr></w:style></w:styles>`;
+
+const PRAVO_FOOTNOTES = `${XML_DECL}<w:footnotes xmlns:w="${W}"><w:footnote w:type="separator" w:id="-1"><w:p><w:r><w:separator/></w:r></w:p></w:footnote><w:footnote w:type="continuationSeparator" w:id="0"><w:p><w:r><w:continuationSeparator/></w:r></w:p></w:footnote><w:footnote w:id="1"><w:p><w:pPr><w:pStyle w:val="FootnoteText"/></w:pPr><w:r><w:rPr><w:rStyle w:val="FootnoteReference"/></w:rPr><w:footnoteRef/></w:r><w:r><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve"> Zakon o socijalnoj skrbi, Narodne novine br. 18/22, cl. 4.</w:t></w:r></w:p></w:footnote><w:footnote w:id="2"><w:p><w:pPr><w:pStyle w:val="FootnoteText"/></w:pPr><w:r><w:rPr><w:rStyle w:val="FootnoteReference"/></w:rPr><w:footnoteRef/></w:r><w:r><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve"> Ibid., cl. 5.</w:t></w:r></w:p></w:footnote><w:footnote w:id="3"><w:p><w:pPr><w:pStyle w:val="FootnoteText"/></w:pPr><w:r><w:rPr><w:rStyle w:val="FootnoteReference"/></w:rPr><w:footnoteRef/></w:r><w:r><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve"> Antic, op. cit. (bilj. 1), str. 42.</w:t></w:r></w:p></w:footnote></w:footnotes>`;
+
+/** Broj stranice je CENTRIRAN; profil pravo-socijalni-rad trazi desno poravnanje. */
+const PRAVO_FOOTER = `${XML_DECL}<w:ftr xmlns:w="${W}"><w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGE </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>1</w:t></w:r><w:r><w:fldChar w:fldCharType="end"/></w:r></w:p></w:ftr>`;
+
+const PRAVO_CONTENT_TYPES = `${XML_DECL}<Types ${CT_NS}><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/word/footnotes.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml"/><Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/><Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>`;
+
+const PRAVO_DOCUMENT_RELS = `${XML_DECL}<Relationships ${REL_NS}><Relationship Id="rId1" Type="${R}/styles" Target="styles.xml"/><Relationship Id="rId3" Type="${R}/footnotes" Target="footnotes.xml"/><Relationship Id="rId4" Type="${R}/settings" Target="settings.xml"/><Relationship Id="rId6" Type="${R}/footer" Target="footer1.xml"/></Relationships>`;
+
+/**
+ * Tri fusnote s pravnim oblicima (NN, ibid., op. cit.) u pogresnom fontu i velicini i s
+ * razmacima prije i poslije, te centriran broj stranice u podnozju umjesto desno poravnatog.
+ *
+ * `study` postoji jer se ista gradja registrira pod DVA pravna profila: nijedan profil ne gate-a
+ * sva tri ciljana fixera. pravo-socijalni-rad-diplomski daje tipografiju fusnota i poravnanje
+ * broja stranice, pravo-integrirani-diplomski razmake u fusnotama. Redak studija razlikuje
+ * dokumente i sadrzajno (razlicit studij) i po bajtovima, pa nisu duplikat.
+ */
+export function pravoFootnotesDocx(study = 'Studijski centar socijalnog rada'): Promise<Uint8Array> {
+  const entries: ZipEntry[] = [
+    { name: '[Content_Types].xml', data: enc.encode(PRAVO_CONTENT_TYPES) },
+    { name: '_rels/.rels', data: enc.encode(FPZG_PACKAGE_RELS) },
+    { name: 'word/_rels/document.xml.rels', data: enc.encode(PRAVO_DOCUMENT_RELS) },
+    { name: 'word/document.xml', data: enc.encode(pravoFootnotesDocumentXml(study)) },
+    { name: 'word/styles.xml', data: enc.encode(PRAVO_STYLES) },
+    { name: 'word/footnotes.xml', data: enc.encode(PRAVO_FOOTNOTES) },
+    { name: 'word/settings.xml', data: enc.encode(FULL_SETTINGS) },
+    { name: 'word/footer1.xml', data: enc.encode(PRAVO_FOOTER) },
+    { name: 'docProps/core.xml', data: enc.encode(FPZG_CORE) },
+  ];
+  return writeZip(entries);
+}
+
 // === FPZG: bibliografija, citati i obvezni dijelovi (B2) ===
 
 /**
