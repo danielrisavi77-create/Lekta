@@ -1,8 +1,9 @@
 import { APP_VERSION } from '../config/app-version';
 import { findVerifiedProfile } from '../profiles/profile-registry';
 import { isAcademicWorkType } from './academic-suite-contracts';
-import { currentKatedraProjectId } from './katedra-entry';
+import { currentCompletionHandoffToken, currentKatedraProjectId } from './katedra-entry';
 import { toKatedraSharedResult } from './katedra-handoff';
+import { persistCompletionCheck } from './completion-check-persistence';
 
 // Browser sessionStorage slot name, not a credential or API key. Avoid `*_KEY`
 // naming because generic secret scanners intentionally treat that pattern as
@@ -14,12 +15,31 @@ function analysisId(): string {
   return `analysis-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
+function persistForCompletion(shared: ReturnType<typeof toKatedraSharedResult>): void {
+  const token = currentCompletionHandoffToken();
+  if (!token) return;
+
+  // Persistence is intentionally non-blocking: local DOCX analysis/result stays
+  // available even if the cross-product network handoff is temporarily down.
+  void persistCompletionCheck(shared, token).then((outcome) => {
+    window.dispatchEvent(new CustomEvent(
+      outcome.ok ? 'lekta:completion-check-persisted' : 'lekta:completion-check-persistence-failed',
+      {
+        detail: outcome.ok
+          ? { projectId: shared.projectId, analysisId: shared.analysisId, checkId: outcome.checkId }
+          : { projectId: shared.projectId, analysisId: shared.analysisId, reason: outcome.reason },
+      },
+    ));
+  });
+}
+
 /**
  * Captures ONLY the sanitized shared result when this analysis belongs to a
- * project that entered Lekta from Katedra.
+ * project that entered Lekta from Katedra/Academic Completion.
  *
  * The adapter deliberately drops Issue.detail/where, raw document text, file
- * bytes, mentor notes, source text, and preview data.
+ * bytes, mentor notes, source text, and preview data. If a Completion handoff
+ * capability is present, the same sanitized projection is persisted server-side.
  */
 export function captureKatedraHandoffCandidate(result: any, profile: any, settings: any): boolean {
   const projectId = currentKatedraProjectId();
@@ -61,6 +81,7 @@ export function captureKatedraHandoffCandidate(result: any, profile: any, settin
     window.dispatchEvent(new CustomEvent('lekta:katedra-handoff-ready', {
       detail: { analysisId: shared.analysisId, projectId: shared.projectId },
     }));
+    persistForCompletion(shared);
     return true;
   } catch {
     return false;
