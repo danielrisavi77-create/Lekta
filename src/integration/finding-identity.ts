@@ -99,41 +99,32 @@ export interface StableFindingIdentity {
 /**
  * Resolves stable logical identities for a complete analysis in one pass.
  *
- * - A rule-backed finding starts with `rule:<ruleId>`.
- * - If one authored rule has multiple distinct runtime child checks in the same
- *   result, `:check:<checkId>` distinguishes those siblings without relying on
- *   human-facing issue text.
- * - If the exact same logical rule/check still emits multiple occurrences, only
- *   then is a private location hash added.
- * - Engine-only findings are keyed by stable `checkId`.
+ * Direct authored check:
+ *   rule:<ruleId>
+ * Authored parent rule + more specific runtime child check:
+ *   rule:<ruleId>:check:<checkId>
+ * Engine-only check:
+ *   check:<checkId>
+ *
+ * The child suffix depends only on schema identity, never on what sibling
+ * findings happen to be present in a particular analysis. If the exact same
+ * logical rule/check emits multiple occurrences, only then is a private location
+ * hash appended.
  */
 export function identifyFindings(
   checks: Check[] = [],
   issues: Issue[] = [],
   ruleEntries: RuleEntry[] = [],
 ): StableFindingIdentity[] {
-  const provisional = issues.map(issue => {
+  const withBase = issues.map(issue => {
     const checkId = checkIdForIssue(issue, checks);
     const rule = preferredRuleEntry(checkId, ruleEntries);
     const ruleId = rule?.ruleId || null;
-    return { issue, checkId, rule, ruleId };
-  });
-
-  const ruleCheckIds = new Map<string, Set<string>>();
-  for (const item of provisional) {
-    if (!item.ruleId) continue;
-    const set = ruleCheckIds.get(item.ruleId) || new Set<string>();
-    set.add(item.checkId);
-    ruleCheckIds.set(item.ruleId, set);
-  }
-
-  const withBase = provisional.map(item => {
-    if (!item.ruleId) return { ...item, base: `check:${item.checkId}` };
-    const hasSiblingChecks = (ruleCheckIds.get(item.ruleId)?.size || 0) > 1;
-    const base = hasSiblingChecks
-      ? `rule:${item.ruleId}:check:${item.checkId}`
-      : `rule:${item.ruleId}`;
-    return { ...item, base };
+    const isRuntimeChild = Boolean(rule?.checkId && rule.checkId !== checkId);
+    const base = ruleId
+      ? (isRuntimeChild ? `rule:${ruleId}:check:${checkId}` : `rule:${ruleId}`)
+      : `check:${checkId}`;
+    return { issue, checkId, rule, ruleId, base };
   });
 
   const counts = new Map<string, number>();
