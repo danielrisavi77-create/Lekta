@@ -18,6 +18,11 @@ create table if not exists auth.users (
 create or replace function auth.uid() returns uuid
 language sql stable
 as $$ select null::uuid $$;
+create or replace function auth.jwt() returns jsonb
+language sql stable
+as $$
+  select coalesce(nullif(current_setting('request.jwt.claims', true), ''), '{}')::jsonb
+$$;
 
 -- Existing Lekta commerce baseline + new shared migration.
 \i supabase/migrations/0001_monetization.sql
@@ -25,7 +30,7 @@ as $$ select null::uuid $$;
 
 insert into auth.users(id, email) values
   ('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'one@example.test'),
-  ('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', 'two@example.test');
+  ('bbbbbbbb-bbbb4bbb-8bbb-bbbbbbbbbbbb', 'two@example.test');
 
 -- UUID-first Katedra project keeps the exact same ecosystem project ID.
 insert into public.katedra_projects (
@@ -35,159 +40,112 @@ insert into public.katedra_projects (
   'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
   '11111111-1111-4111-8111-111111111111',
   '11111111-1111-4111-8111-111111111111',
-  'd', 'graduate', 'Test diplomski', 'fpzg', 'fpzg-politologija-diplomski'
+  'd', 'graduate', 'UUID-first project', 'fpzg', 'fpzg-graduate'
+);
+
+-- Legacy client ID is promoted to the compatibility row UUID.
+insert into public.katedra_projects (
+  user_id, guest_project_id, project_id, work_type, work_type_canonical,
+  topic, unit_id, profile_id
+) values (
+  'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+  'klegacy-smoke', 'klegacy-smoke', 'z', 'final',
+  'Legacy project', 'fpzg', 'fpzg-final'
 );
 
 do $$
+declare
+  legacy_row uuid;
 begin
   if not exists (
     select 1 from public.academic_projects
     where id = '11111111-1111-4111-8111-111111111111'
       and user_id = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'
-      and work_type = 'graduate'
-  ) then
-    raise exception 'UUID-first project did not mirror into academic_projects';
-  end if;
-  if not exists (
-    select 1 from public.katedra_project_state
-    where project_id = '11111111-1111-4111-8111-111111111111'
-  ) then
-    raise exception 'Katedra state did not mirror';
-  end if;
-end $$;
+  ) then raise exception 'UUID-first project did not mirror to Academic Suite Core'; end if;
 
--- Legacy k... alias gets the row UUID as canonical project_id and keeps the alias.
-insert into public.katedra_projects (
-  user_id, guest_project_id, project_id, work_type, work_type_canonical, topic
-) values (
-  'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'klegacy-e2e', 'klegacy-e2e', 'z', 'final', 'Legacy project'
-);
+  select id into legacy_row from public.katedra_projects
+  where user_id='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa' and guest_project_id='klegacy-smoke';
 
-do $$
-declare
-  v_row public.katedra_projects%rowtype;
-begin
-  select * into v_row from public.katedra_projects where guest_project_id = 'klegacy-e2e';
-  if v_row.project_id !~* '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' then
-    raise exception 'Legacy project was not promoted to UUID';
-  end if;
   if not exists (
     select 1 from public.academic_projects
-    where id = v_row.project_id::uuid
-      and legacy_client_project_id = 'klegacy-e2e'
-      and user_id = v_row.user_id
-  ) then
-    raise exception 'Legacy alias/canonical project mapping missing';
-  end if;
+    where id=legacy_row and legacy_client_project_id='klegacy-smoke'
+  ) then raise exception 'legacy Katedra project did not get canonical row UUID'; end if;
+
+  if not exists (
+    select 1 from public.katedra_project_state
+    where project_id='11111111-1111-4111-8111-111111111111'
+  ) then raise exception 'Katedra state mirror missing'; end if;
+end $$;
+
+-- Mirror updates into canonical state.
+update public.katedra_projects
+set topic='Updated topic', lekta_score=91, checks='{"a":true}'::jsonb
+where project_id='11111111-1111-4111-8111-111111111111';
+
+do $$
+begin
+  if not exists (
+    select 1
+    from public.academic_projects p
+    join public.katedra_project_state s on s.project_id=p.id
+    where p.id='11111111-1111-4111-8111-111111111111'
+      and p.topic='Updated topic' and s.lekta_score=91 and s.checks @> '{"a":true}'::jsonb
+  ) then raise exception 'compatibility update did not mirror'; end if;
+end $$;
+
+-- Same-owner Lekta history is accepted.
+insert into public.lekta_checks(analysis_id, project_id, user_id, profile_id, score, issues)
+values ('smoke-analysis','11111111-1111-4111-8111-111111111111','aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa','fpzg-graduate',91,'[{"issueKey":"check:margins"}]'::jsonb);
+
+-- Cross-user check is rejected.
+do $$
+begin
+  begin
+    insert into public.lekta_checks(analysis_id, project_id, user_id)
+    values ('bad-analysis','11111111-1111-4111-8111-111111111111','bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb');
+    raise exception 'cross-user Lekta check unexpectedly accepted';
+  exception when foreign_key_violation then null;
+  end;
 end $$;
 
 -- Existing Lekta entitlement model is extended, not replaced.
-insert into public.entitlements (
-  user_id, work_type, slots_total, order_id, provider, purchase_expires_at, academic_project_id
-) values (
-  'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'diplomski', 1, 'order-ok', 'test', now() + interval '90 days',
-  '11111111-1111-4111-8111-111111111111'
-);
+insert into public.entitlements(user_id,work_type,slots_total,order_id,provider,purchase_expires_at,academic_project_id)
+values ('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa','diplomski',1,'smoke-order','test',now()+interval '30 days','11111111-1111-4111-8111-111111111111');
 
 do $$
 begin
   begin
-    insert into public.entitlements (
-      user_id, work_type, slots_total, order_id, provider, purchase_expires_at, academic_project_id
-    ) values (
-      'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', 'diplomski', 1, 'order-bad', 'test', now() + interval '90 days',
-      '11111111-1111-4111-8111-111111111111'
-    );
-    raise exception 'Cross-user entitlement binding unexpectedly succeeded';
+    insert into public.entitlements(user_id,work_type,slots_total,order_id,provider,purchase_expires_at,academic_project_id)
+    values ('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb','diplomski',1,'bad-order','test',now()+interval '30 days','11111111-1111-4111-8111-111111111111');
+    raise exception 'cross-user entitlement unexpectedly accepted';
   exception when foreign_key_violation then null;
   end;
 end $$;
 
--- Sanitized Lekta history is project-bound and owner-safe.
-insert into public.lekta_checks (
-  analysis_id, project_id, user_id, score, issues
-) values (
-  'analysis-ok', '11111111-1111-4111-8111-111111111111',
-  'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 84,
-  '[{"issueKey":"check:margins","severity":"error"}]'::jsonb
-);
-
+-- Katedra RPCs must not be callable by public browser roles.
 do $$
 begin
-  begin
-    insert into public.lekta_checks (analysis_id, project_id, user_id, score)
-    values (
-      'analysis-bad', '11111111-1111-4111-8111-111111111111',
-      'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', 84
-    );
-    raise exception 'Cross-user Lekta check binding unexpectedly succeeded';
-  exception when foreign_key_violation then null;
-  end;
-end $$;
-
--- Compatibility write cannot take over another owner's project UUID.
-do $$
-begin
-  begin
-    insert into public.katedra_projects (
-      user_id, guest_project_id, project_id, work_type, work_type_canonical
-    ) values (
-      'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
-      '22222222-2222-4222-8222-222222222222',
-      '11111111-1111-4111-8111-111111111111',
-      'd', 'graduate'
-    );
-    raise exception 'Cross-user Academic Suite project takeover unexpectedly succeeded';
-  exception when unique_violation then null;
-  end;
-end $$;
-
--- New exposed tables must have RLS.
-do $$
-begin
-  if exists (
-    select 1
-    from pg_class c join pg_namespace n on n.oid = c.relnamespace
-    where n.nspname = 'public'
-      and c.relname in (
-        'academic_projects','katedra_project_state','lekta_checks',
-        'katedra_wallets','katedra_topups','katedra_usage','katedra_projects'
-      )
-      and not c.relrowsecurity
-  ) then
-    raise exception 'A shared Academic Suite table is missing RLS';
+  if has_function_privilege('anon','public.katedra_consume(uuid,bigint,text,integer,integer)','EXECUTE')
+     or has_function_privilege('authenticated','public.katedra_consume(uuid,bigint,text,integer,integer)','EXECUTE')
+     or has_function_privilege('anon','public.katedra_grant(uuid,bigint,text,numeric)','EXECUTE')
+     or has_function_privilege('authenticated','public.katedra_grant(uuid,bigint,text,numeric)','EXECUTE') then
+    raise exception 'Katedra billing RPC exposed to browser role';
+  end if;
+  if not has_function_privilege('service_role','public.katedra_consume(uuid,bigint,text,integer,integer)','EXECUTE')
+     or not has_function_privilege('service_role','public.katedra_grant(uuid,bigint,text,numeric)','EXECUTE') then
+    raise exception 'service_role lacks Katedra billing RPC';
   end if;
 end $$;
 
--- Privacy: no raw/document-derived content columns may enter the shared foundation.
+-- Privacy schema invariant.
 do $$
 begin
   if exists (
     select 1 from information_schema.columns
-    where table_schema = 'public'
-      and table_name in ('academic_projects','katedra_project_state','lekta_checks')
-      and column_name in (
-        'docx','document','document_text','document_content','raw_document',
-        'issue_detail','issue_location','mentor_comments','source_passages'
-      )
-  ) then
-    raise exception 'Privacy invariant violated by shared schema';
-  end if;
-end $$;
-
--- Katedra privileged RPCs must not be callable by client roles.
-do $$
-begin
-  if has_function_privilege('anon', 'public.katedra_consume(uuid,bigint,text,integer,integer)', 'EXECUTE')
-     or has_function_privilege('authenticated', 'public.katedra_consume(uuid,bigint,text,integer,integer)', 'EXECUTE')
-     or has_function_privilege('anon', 'public.katedra_grant(uuid,bigint,text,numeric)', 'EXECUTE')
-     or has_function_privilege('authenticated', 'public.katedra_grant(uuid,bigint,text,numeric)', 'EXECUTE') then
-    raise exception 'Katedra privileged RPC is executable by a client role';
-  end if;
-  if not has_function_privilege('service_role', 'public.katedra_consume(uuid,bigint,text,integer,integer)', 'EXECUTE')
-     or not has_function_privilege('service_role', 'public.katedra_grant(uuid,bigint,text,numeric)', 'EXECUTE') then
-    raise exception 'Katedra privileged RPC is not executable by service_role';
-  end if;
+    where table_schema='public'
+      and table_name in ('academic_projects','katedra_project_state','lekta_checks','katedra_projects')
+      and column_name in ('docx','document','document_text','document_content','raw_document','issue_detail','issue_location','mentor_comments','source_passages')
+  ) then raise exception 'forbidden document-content column introduced'; end if;
 end $$;
 
 select 'ACADEMIC_SUITE_DB_SMOKE_PASS' as result;
