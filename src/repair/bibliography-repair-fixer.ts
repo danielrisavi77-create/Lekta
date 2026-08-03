@@ -191,11 +191,21 @@ export function bibliographyRepairFixer(parts: DocxXmlParts, params: Bibliograph
   const transformed = new Map<string, string>();
   let rels = parts.documentRelsXml;
   const suffixes = new Map((params.suffixes || []).map((suffix) => [suffix.entryId, suffix.suffix]));
+  // RE-48: zapis koji se ne da SIGURNO preoblikovati preskace se pojedinacno i ostaje netaknut;
+  // prije se radio `return NO_OP(...)` pa je jedan takav zapis obarao cijeli popravak literature
+  // (na stvarnom radu: 31 zapis, nijedan obradjen zbog jednog naslova u kurzivu). Sadrzaj se
+  // NIKAD ne pogadja - neobradiv zapis se samo ne mijenja.
+  let skippedEntries = 0;
   for (const [id, item] of byId) {
     if (item.target.remove) continue;
     const result = transformBlock(item.block, item.target, params.options);
     const expectedText = withSuffix(item.target.replacementText ?? '', suffixes.get(id));
-    if (!result.changed && item.target.replacementText !== undefined && paragraphText(item.block) !== expectedText) return NO_OP(parts, 'unsupported-structure');
+    if (!result.changed && item.target.replacementText !== undefined && paragraphText(item.block) !== expectedText) {
+      // Trazena zamjena teksta se ne moze primijeniti na ovaj blok: ostavi ga kakav jest.
+      transformed.set(id, item.block);
+      skippedEntries++;
+      continue;
+    }
     let block = result.block;
     const suffix = suffixes.get(id);
     if (suffix && /^[a-z]$/i.test(suffix)) {
@@ -203,8 +213,10 @@ export function bibliographyRepairFixer(parts: DocxXmlParts, params: Bibliograph
       const suffixedText = withSuffix(text, suffix);
       if (suffixedText !== text) {
         const replaced = replaceSingleTextNode(block, suffixedText);
-        if (replaced === null) return NO_OP(parts, 'unsupported-structure');
-        block = replaced;
+        // Blok ima vise <w:t> cvorova (npr. naslov u kurzivu): ne zna se koji nosi godinu, pa
+        // se sufiks NE dodaje. Ostale (higijenske) izmjene tog zapisa svejedno ostaju.
+        if (replaced === null) skippedEntries++;
+        else block = replaced;
       }
     }
     if (item.target.hyperlink && rels) {
@@ -243,6 +255,10 @@ export function bibliographyRepairFixer(parts: DocxXmlParts, params: Bibliograph
     parts: { ...parts, documentXml: xml, ...(rels !== parts.documentRelsXml ? { documentRelsXml: rels } : {}) },
     applied: true,
     beforeLabel: `${byId.size} bibliografskih zapisa`,
-    afterLabel: 'bibliografija usklađena prema potvrđenom planu',
+    // Posteno: kad neki zapis nije bilo moguce sigurno preoblikovati (vise <w:t> cvorova, npr.
+    // naslov u kurzivu), to se KAZE umjesto da "uskladjeno" pokrije i njega.
+    afterLabel: skippedEntries
+      ? `bibliografija usklađena prema potvrđenom planu; ${skippedEntries} ${skippedEntries === 1 ? 'zapis ostao' : 'zapisa ostalo'} netaknuto (složeno oblikovanje)`
+      : 'bibliografija usklađena prema potvrđenom planu',
   };
 }

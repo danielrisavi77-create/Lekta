@@ -103,18 +103,37 @@ export function fieldIntegrityFixer(parts: DocxXmlParts, params: FieldIntegrityP
   const byId = new Map(integrity.fields.map((field) => [field.id, field]));
   const working = { ...packageParts };
   let changed = false;
-  for (const target of params.fields) {
+  // RE-49: obradjuj od NAJVECEG offseta prema najmanjem. addDirty umece atribut i time produzi
+  // XML, pa bi obrada uzlazno pomaknula offsete svih jos neobradjenih polja (koji su izracunati
+  // nad IZVORNIM XML-om) i svako sljedece polje bi promasilo -> 'stale-anchor' za cijeli zahtjev.
+  // Silazno je sigurno: izmjena je uvijek IZA jos neobradjenih polja. Isti obrazac koji
+  // bibliography-repair-fixer vec koristi pri zamjeni raspona odlomaka.
+  const offsetOf = (id: string) => Number(id.slice(id.lastIndexOf(':') + 1));
+  const orderedFields = [...params.fields].sort((a, b) => offsetOf(b.id) - offsetOf(a.id));
+  // RE-49: jedno neuskladivo polje ne smije oboriti ostalih 78. Semantika "zastarjelo sidro =
+  // ne diraj dokument" OSTAJE, ali se sada primjenjuje na CIJELI zahtjev, a ne na prvo polje:
+  // ako se NIJEDNO polje ne poklopi, dokument ostaje netaknut i vraca se izvorni razlog.
+  // Djelomicna primjena je ovdje sigurna jer je jedina izmjena `w:dirty="true"` (uputa Wordu da
+  // osvjezi polje); preskoceno polje se naprosto ne osvjezi, bez rizika za sadrzaj.
+  let matchedFields = 0;
+  let firstFailure: 'no-target' | 'stale-anchor' | 'unsupported-structure' | null = null;
+  const noteFailure = (reason: 'no-target' | 'stale-anchor' | 'unsupported-structure') => {
+    if (firstFailure === null) firstFailure = reason;
+  };
+  for (const target of orderedFields) {
     const field = byId.get(target.id);
-    if (!field || field.part !== target.part || field.anchorFingerprint !== target.anchorFingerprint) return NO_OP(parts, 'no-target');
+    if (!field || field.part !== target.part || field.anchorFingerprint !== target.anchorFingerprint) { noteFailure('no-target'); continue; }
     const xml = working[field.part];
-    if (xml == null) return NO_OP(parts, 'unsupported-structure');
-    const rawOffset = field.id.lastIndexOf(':');
-    const offset = Number(field.id.slice(rawOffset + 1));
+    if (xml == null) { noteFailure('unsupported-structure'); continue; }
+    const offset = offsetOf(field.id);
     const raw = xml.slice(offset).match(/^(?:<w:fldSimple\b[\s\S]*?<\/w:fldSimple>|<w:fldChar\b[\s\S]*?<w:fldChar\b[^>]*w:fldCharType=["']end["'][^>]*\/?>(?:<\/w:fldChar>)?)/i)?.[0];
-    if (!raw || fieldAnchorFingerprint(field.part, raw, offset) !== target.anchorFingerprint) return NO_OP(parts, 'stale-anchor');
+    if (!raw || fieldAnchorFingerprint(field.part, raw, offset) !== target.anchorFingerprint) { noteFailure('stale-anchor'); continue; }
+    matchedFields += 1;
     const result = addDirty(xml, offset, raw);
     if (result.changed) { working[field.part] = result.xml; changed = true; }
   }
+  // Nijedno trazeno polje nije prepoznato: ponasaj se tocno kao prije (netaknut dokument).
+  if (params.fields.length > 0 && matchedFields === 0 && firstFailure !== null) return NO_OP(parts, firstFailure);
   for (const toc of params.manualToc || []) {
     const result = replaceManualToc(working['word/document.xml'], toc);
     if (!result.changed) {

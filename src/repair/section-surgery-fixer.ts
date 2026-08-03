@@ -72,6 +72,22 @@ function matchingTag(xml: string, start: number): number {
   return -1;
 }
 
+/**
+ * RE-50: SVA direktna djeca <w:body>, s indeksom koji se poklapa s klijentskom analizom.
+ *
+ * Otisak sekcije je `sectionAnchorFingerprint(text, bodyChildIndex)`, pa se ovo brojanje MORA
+ * slagati s `bodyChildren()` u src/analysis/section-structure.ts (DOM: `elementChildren(body)`,
+ * dakle SVA djeca, ukljucujuci <w:sdt>, <w:bookmarkStart> i sl.). Prije su postojale dvije
+ * greske koje su otiske razilazile:
+ *   1. filtriranje na p/tbl/sectPr je mijenjalo indeks (klijent broji i ostalu djecu),
+ *   2. `continue` kod preskocenog elementa NIJE pomicao lastIndex preko njegovog sadrzaja, pa
+ *      je citac ulazio u <w:sdt>/<w:tbl> i ugnijezdjene odlomke brojao kao direktnu djecu.
+ * Na stvarnom radu (Sadrzaj u <w:sdt>) klijent je za istu sekciju imao indeks 73, a fixer 122,
+ * pa su SVE operacije sekcija vracale 'unsupported-structure'. Zakljucano paritetnim testom
+ * tests/repair-section-anchor-parity.test.ts.
+ *
+ * Filtriranje na p/tbl/sectPr sada radi POZIVATELJ (sectionLocations), nad ispravnim indeksom.
+ */
 function directBodyChildren(xml: string): Array<{ name: string; start: number; end: number; xml: string }> {
   const bodyStart = xml.search(/<w:body\b[^>]*>/i);
   const bodyEnd = bodyStart < 0 ? -1 : xml.indexOf('</w:body>', bodyStart);
@@ -85,10 +101,17 @@ function directBodyChildren(xml: string): Array<{ name: string; start: number; e
     const start = match.index;
     const token = match[0];
     const name = localTagName(token);
-    if (!['p', 'tbl', 'sectPr'].includes(name)) continue;
+    // Samozatvarajuci element (npr. <w:bookmarkStart .../>) je dijete bez sadrzaja.
+    if (/\/>$/.test(token)) {
+      result.push({ name, start, end: start + token.length, xml: token });
+      tokenRe.lastIndex = start + token.length;
+      continue;
+    }
     const end = matchingTag(xml, start);
     if (end < 0 || end > bodyEnd) return [];
     result.push({ name, start, end, xml: xml.slice(start, end) });
+    // KLJUCNO: preskoci cijeli element, i kad nas njegovo ime ne zanima, da se ne ulazi u
+    // njegovu djecu (inace <w:sdt> "podigne" ugnijezdjene odlomke u direktnu djecu).
     tokenRe.lastIndex = end;
   }
   return result;

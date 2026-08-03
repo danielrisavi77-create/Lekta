@@ -7,8 +7,11 @@ function chk(title: string, status: string, earned: number, max: number): Check 
   return { category: 'formatting', title, status, earned, max, detail: '', issue: null, scored: max > 0 };
 }
 
-/** Cekaj dok uvjet ne postane istinit (async DOM nakon klika: dinamicki import + applyFixers + reanalyze). */
-async function waitFor(fn: () => boolean, timeout = 4000): Promise<void> {
+/** Cekaj dok uvjet ne postane istinit (async DOM nakon klika: dinamicki import + applyFixers + reanalyze).
+ *  Timeout je namjerno velikodusan: taj lanac izolirano traje ~1-4 s, ali u punom `npm run check`
+ *  (268 test datoteka paralelno) zna prijeci 4 s i tada je test padao kao flake, bez ikakve veze sa
+ *  stvarnim ponasanjem. Granica sluzi samo da se test ne vrti zauvijek. */
+async function waitFor(fn: () => boolean, timeout = 30_000): Promise<void> {
   const start = Date.now();
   while (!fn()) {
     if (Date.now() - start > timeout) throw new Error('waitFor timeout');
