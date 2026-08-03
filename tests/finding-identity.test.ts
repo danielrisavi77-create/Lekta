@@ -45,7 +45,7 @@ describe('stable Lekta finding identity', () => {
 
     expect(out[0].checkId).toBe('heading-format');
     expect(out[0].ruleId).toBe('fpzg.heading-rules.001');
-    expect(out[0].issueKey).toBe('rule:fpzg.heading-rules.001');
+    expect(out[0].issueKey).toBe('rule:fpzg.heading-rules.001:check:heading-format');
   });
 
   it('uses stable child check ids when one authored rule has sibling runtime checks', () => {
@@ -65,6 +65,21 @@ describe('stable Lekta finding identity', () => {
       'rule:fpzg.page-numbers.001:check:page-number-start',
       'rule:fpzg.page-numbers.001:check:page-number-scheme',
     ]);
+  });
+
+  it('keeps a child key identical whether or not sibling checks are present', () => {
+    const startIssue = issue('warning', 'structure', 'Numeriranje počinje prerano', 'x', 'Stranice');
+    const schemeIssue = issue('warning', 'structure', 'Shema numeriranja odstupa', 'y', 'Stranice');
+    const startCheck = makeCheck('structure', 'Numeriranje od prve stranice Uvoda', 'warn', 1, 3, 'x', startIssue);
+    const schemeCheck = makeCheck('structure', 'Shema numeriranja stranica', 'warn', 1, 3, 'y', schemeIssue);
+    const pageRule: RuleEntry = {
+      ruleId: 'fpzg.page-numbers.001', checkId: 'page-numbers', value: { required: true }, status: 'verified',
+    };
+
+    const alone = identifyFindings([startCheck], [startIssue], [pageRule])[0].issueKey;
+    const withSibling = identifyFindings([startCheck, schemeCheck], [startIssue, schemeIssue], [pageRule])[0].issueKey;
+    expect(alone).toBe('rule:fpzg.page-numbers.001:check:page-number-start');
+    expect(withSibling).toBe(alone);
   });
 
   it('does not churn a singleton rule-backed key when explanatory text changes', () => {
