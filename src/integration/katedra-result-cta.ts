@@ -3,12 +3,16 @@ import { buildKatedraHandoffUrl } from './katedra-handoff';
 import { readCapturedKatedraHandoff } from './katedra-capture';
 
 const CTA_ID = 'katedraHandoffStrip';
+const KATEDRA_PRODUCTION_URL = 'https://katedra.netlify.app';
+const KATEDRA_PAIRED_PREVIEW_URL = 'https://deploy-preview-1--katedra.netlify.app';
+const LEKTA_PAIRED_PREVIEW_HOST = 'deploy-preview-25--lektahr.netlify.app';
 
 function katedraBaseUrl(): string {
   const configured = String(import.meta.env.VITE_KATEDRA_URL || '').trim();
   if (configured) return configured;
   if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return 'http://localhost:3000';
-  return 'https://katedra.hr';
+  if (location.hostname === LEKTA_PAIRED_PREVIEW_HOST) return KATEDRA_PAIRED_PREVIEW_URL;
+  return KATEDRA_PRODUCTION_URL;
 }
 
 function removeCta(): void {
