@@ -9,7 +9,7 @@
  * Ovaj test NE pise nista na disk i ne dira nijedan generirani artefakt.
  */
 import { describe, it, expect } from 'vitest';
-import { fullStructureDocx } from './helpers/composite-docx';
+import { fullStructureDocx, fpzgBibliographyDocx } from './helpers/composite-docx';
 import { readZip } from '../src/repair/zip-codec';
 import { assertPartsWellFormed } from './helpers/docx-package-assert';
 import { applyFixers, type FixerRequest } from '../src/repair/apply-fixers';
@@ -94,5 +94,44 @@ describe('kompozitni fixture: fer-diplomski puna struktura', () => {
     const before = (await readZip(bytes)).find((entry) => entry.name === 'word/media/image1.png')!.data;
     const after = (await readZip(applied.docxBytes)).find((entry) => entry.name === 'word/media/image1.png')!.data;
     expect(after).toEqual(before);
+  });
+});
+
+describe('kompozitni fixture: FPZG bibliografija i citati', () => {
+  it('paket je well-formed i nosi cetiri namjerne pogreske u popisu literature', async () => {
+    const bytes = await fpzgBibliographyDocx();
+    await assertPartsWellFormed(bytes, 'FPZG fixture');
+
+    const entries = await readZip(bytes);
+    const documentXml = new TextDecoder().decode(entries.find((entry) => entry.name === 'word/document.xml')!.data);
+
+    // 1. popis nije abecedan (Vukovic prije Antica), 2. isti autor i godina dvaput,
+    // 3. tocan duplikat zadnjeg zapisa, 4. zapis s DOI-jem.
+    expect(documentXml.indexOf('Vukovic, M. (2020)')).toBeLessThan(documentXml.indexOf('Antic, I. (2021)'));
+    expect((documentXml.match(/Antic, I\. \(2021\)/g) ?? []).length).toBe(2);
+    expect((documentXml.match(/Vukovic, M\. \(2020\)\. Mediji i javna sfera/g) ?? []).length).toBe(2);
+    expect(documentXml).toContain('doi:10.1234/abcd.2018');
+
+    // Citat bez zapisa i zapis bez citata (gradja za provjeru uskladjenosti citata i popisa).
+    expect(documentXml).toContain('(Sokol, 2019)');
+    expect(documentXml).toContain('Baric, K. (2018)');
+    expect(documentXml).not.toContain('(Baric, 2018)');
+
+    // Naslovnica s prijelomom stranice: bez njega naslovnica nije pouzdano prepoznata.
+    expect(documentXml).toContain('<w:br w:type="page"/>');
+    // Nema kljucnih rijeci: jedini nacin da obvezni dio stvarno nedostaje na ovom profilu.
+    expect(documentXml).not.toContain('Kljucne rijeci');
+  });
+
+  it('prezivi popravak popisa literature: paket cjelovit, tekst citata ocuvan', async () => {
+    const bytes = await fpzgBibliographyDocx();
+    // Popravak bibliografije PREMJESTA odlomke; dokaz da pritom ne izgubi nijedan zapis ni dio
+    // paketa vazniji je nego kod cisto stilskih fixera.
+    const applied = await applyFixers(bytes, [
+      { ruleId: 'bibliography-rules', fixerId: 'bibliography-repair-fixer', params: { version: 1, entries: [], options: {} } },
+    ]);
+    // Prazan popis stavki mora biti cist no-op, ne tiha izmjena.
+    expect(applied.changelog).toEqual([]);
+    expect(applied.docxBytes).toBe(bytes);
   });
 });

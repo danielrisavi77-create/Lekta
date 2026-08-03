@@ -200,6 +200,102 @@ const FULL_PACKAGE_RELS = `${XML_DECL}<Relationships ${REL_NS}><Relationship Id=
 
 const FULL_DOCUMENT_RELS = `${XML_DECL}<Relationships ${REL_NS}><Relationship Id="rId1" Type="${R}/styles" Target="styles.xml"/><Relationship Id="rId2" Type="${R}/numbering" Target="numbering.xml"/><Relationship Id="rId3" Type="${R}/footnotes" Target="footnotes.xml"/><Relationship Id="rId4" Type="${R}/settings" Target="settings.xml"/><Relationship Id="rId5" Type="${R}/header" Target="header1.xml"/><Relationship Id="rId6" Type="${R}/footer" Target="footer1.xml"/><Relationship Id="rId7" Type="${R}/image" Target="media/image1.png"/><Relationship Id="rId8" Type="${R}/fontTable" Target="fontTable.xml"/></Relationships>`;
 
+// === FPZG: bibliografija, citati i obvezni dijelovi (B2) ===
+
+/**
+ * Zasto bas FPZG: izmjereno je da od 368 profila u data/profiles/repair-map.json samo 11 (svi FPZG)
+ * nosi asistirana pravila bibliography-rules, citation-sync-rules, section-surgery-rules i
+ * required-section-rules, sva cetiri sa statusom "verified" i punom provenijencijom. Bez profila
+ * koji ta pravila ima, pripadni fixeri ne aktiviraju ni na najbogatijem dokumentu, jer builderi u
+ * src/ui/repair-items.ts citaju profile.ruleEntries kao gate.
+ *
+ * Dokument je namjerno neispravan bas u tim dimenzijama, i to na nacin na koji studentski rad
+ * stvarno grijesi, ne umjetno.
+ */
+function fpzgBibliographyDocumentXml(): string {
+  const titlePage =
+    para('SVEUCILISTE U ZAGREBU', { jc: 'center' }) +
+    para('FAKULTET POLITICKIH ZNANOSTI', { jc: 'center' }) +
+    para('Diplomski studij novinarstva', { jc: 'center' }) +
+    para('Ime Prezime', { jc: 'center' }) +
+    para('NASLOV DIPLOMSKOGA RADA', { jc: 'center' }) +
+    para('DIPLOMSKI RAD', { jc: 'center' }) +
+    para('Mentor: doc. dr. sc. Ime Mentora', { jc: 'center' }) +
+    para('Zagreb, 2026.', { jc: 'center' }) +
+    // Prijelom stranice je uvjet da firstPageParagraphs naslovnicu oznaci kao pouzdano
+    // prepoznatu (src/audits/structure.ts); bez njega title-page-fixer nema plan, ma koliko
+    // naslovnica bila uredna. Pravi Word dokument ga ovdje uvijek ima.
+    '<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
+
+  // Prednji dio ima sazetak ali NEMA kljucne rijeci. Izmjereno: analyzeRequiredSectionsStructure
+  // od profilnog popisa stvarno provjerava samo "abstract" i "keywords-en", pa je izostanak
+  // kljucnih rijeci jedini nacin da required-section-fixer dobije cilj na ovom profilu. To je i
+  // realan propust studentskog rada. Fixer umece SAMO naslov i oznaku za unos, nikad sadrzaj
+  // (tvrdo pravilo iz CLAUDE.md).
+  const front =
+    para('Sazetak', { style: 'Heading1' }) +
+    para('Sazetak je bezlicna ispuna koja postoji da dokument ima ocekivan prednji dio.', { jc: 'both' });
+
+  // In-text citati u obliku autor-godina (citation-sync-rules ima mode "author-year").
+  // Namjerno: Sokol 2019 je citiran a NEMA ga u literaturi; Baric 2018 je u literaturi a NIJE citiran.
+  const body =
+    para('1. Uvod', { style: 'Heading1' }) +
+    para('Uvodni odlomak upucuje na raniji rad (Antic, 2021) i na drugi izvor (Vukovic, 2020).', { jc: 'both' }) +
+    para('2. Razrada', { style: 'Heading1' }) +
+    para('Razrada se oslanja na isti izvor (Antic, 2021) i na jedan koji u popisu ne postoji (Sokol, 2019).', { jc: 'both' }) +
+    para('3. Zakljucak', { style: 'Heading1' }) +
+    para('Zakljucni odlomak bez novih izvora.', { jc: 'both' });
+
+  // Literatura je namjerno pokvarena na cetiri nacina odjednom:
+  //   1. nije abecedno slozena (Vukovic prije Antica prije Barica),
+  //   2. dva zapisa istog autora i godine bez a/b sufiksa (authorYearSuffixes: true),
+  //   3. jedan zapis je tocan duplikat prethodnog,
+  //   4. jedan zapis nosi DOI (hyperlink grana u buildParams).
+  const references =
+    para('Literatura', { style: 'Heading1' }) +
+    para('Vukovic, M. (2020). Mediji i javna sfera. Zagreb: Naklada Prvi.') +
+    para('Antic, I. (2021). Digitalno novinarstvo. Zagreb: Naklada Drugi.') +
+    para('Antic, I. (2021). Mrezni mediji i publika. Split: Naklada Treci.') +
+    para('Baric, K. (2018). Metodologija drustvenih istrazivanja. Rijeka: Naklada Cetvrti. doi:10.1234/abcd.2018') +
+    para('Vukovic, M. (2020). Mediji i javna sfera. Zagreb: Naklada Prvi.');
+
+  // JEDNA sekcija s arapskom numeracijom od pocetka, dakle i na naslovnici. section-surgery-rules
+  // trazi rimsku numeraciju u prednjem dijelu i uklonjen broj s naslovnice, pa fixer ima cilj.
+  const sectPr = `<w:sectPr><w:pgNumType w:fmt="decimal" w:start="1"/>${A4_PORTRAIT}<w:footerReference w:type="default" r:id="rId6"/></w:sectPr>`;
+
+  return `${XML_DECL}<w:document ${DOC_NS}><w:body>${titlePage}${front}${body}${references}${sectPr}</w:body></w:document>`;
+}
+
+const FPZG_CONTENT_TYPES = `${XML_DECL}<Types ${CT_NS}><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/><Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>`;
+
+const FPZG_PACKAGE_RELS = `${XML_DECL}<Relationships ${REL_NS}><Relationship Id="rId1" Type="${R}/officeDocument" Target="word/document.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>`;
+
+const FPZG_DOCUMENT_RELS = `${XML_DECL}<Relationships ${REL_NS}><Relationship Id="rId1" Type="${R}/styles" Target="styles.xml"/><Relationship Id="rId4" Type="${R}/settings" Target="settings.xml"/><Relationship Id="rId6" Type="${R}/footer" Target="footer1.xml"/></Relationships>`;
+
+const FPZG_STYLES = `${XML_DECL}<w:styles xmlns:w="${W}"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="22"/></w:rPr></w:rPrDefault></w:docDefaults><w:style w:type="paragraph" w:styleId="Normal"><w:name w:val="Normal"/><w:pPr><w:spacing w:after="160" w:line="259" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr></w:style><w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:pPr><w:outlineLvl w:val="0"/></w:pPr><w:rPr><w:rFonts w:ascii="Cambria" w:hAnsi="Cambria"/><w:b/><w:sz w:val="28"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:pPr><w:outlineLvl w:val="1"/></w:pPr><w:rPr><w:rFonts w:ascii="Cambria" w:hAnsi="Cambria"/><w:b/><w:sz w:val="26"/></w:rPr></w:style></w:styles>`;
+
+const FPZG_CORE = `${XML_DECL}<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:title>Radni naslov iz predloska</dc:title><dc:creator>Ime Prezime</dc:creator></cp:coreProperties>`;
+
+/**
+ * fpzg-novinarstvo-diplomski: popis literature pokvaren na cetiri nacina (redoslijed, isti
+ * autor i godina bez sufiksa, tocan duplikat, DOI zapis), in-text citati autor-godina od kojih
+ * jedan nema zapis a jedan zapis nije citiran, nedostajuca "Izjava o autorstvu" i jedna sekcija
+ * s arapskom numeracijom vec od naslovnice.
+ */
+export function fpzgBibliographyDocx(): Promise<Uint8Array> {
+  const entries: ZipEntry[] = [
+    { name: '[Content_Types].xml', data: enc.encode(FPZG_CONTENT_TYPES) },
+    { name: '_rels/.rels', data: enc.encode(FPZG_PACKAGE_RELS) },
+    { name: 'word/_rels/document.xml.rels', data: enc.encode(FPZG_DOCUMENT_RELS) },
+    { name: 'word/document.xml', data: enc.encode(fpzgBibliographyDocumentXml()) },
+    { name: 'word/styles.xml', data: enc.encode(FPZG_STYLES) },
+    { name: 'word/settings.xml', data: enc.encode(FULL_SETTINGS) },
+    { name: 'word/footer1.xml', data: enc.encode(FULL_FOOTER) },
+    { name: 'docProps/core.xml', data: enc.encode(FPZG_CORE) },
+  ];
+  return writeZip(entries);
+}
+
 /**
  * fer-diplomski-puna-struktura: naslovnica kao vlastita sekcija (rimska numeracija, titlePg),
  * SDT TOC, viserazinsko numeriranje, Heading1/2/3, tablica 3x4 s natpisom, stvaran PNG u punom

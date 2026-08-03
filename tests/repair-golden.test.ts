@@ -54,7 +54,8 @@ import {
 import type { RepairableItem } from '../src/ui/repair-panel';
 import { confirmedParamsFor } from './helpers/confirm-repair-form';
 import { repairEntriesFor } from '../src/profiles/profile-runtime-maps';
-import { selectTemplate } from '../src/title-pages/template-loader';
+import { ensureTemplatesHeavy, selectTemplate } from '../src/title-pages/template-loader';
+import { VERIFIED_PROFILE_REGISTRY } from '../src/profiles/profile-registry';
 import { analyzeFixture, resolveProfile } from '../src/analysis/golden-entry';
 import { assertPackageIntact } from './helpers/docx-package-assert';
 import { singleSectionDocx, multiSectionDocx } from './helpers/synthetic-docx';
@@ -312,6 +313,11 @@ function fixtureProfileId(fileName: string): string | undefined {
  * ih fiksni map principijelno ne moze pokriti. Isti put koji koristi zivi panel (src/ui/app.ts)
  * i closed-loop harness: analiziraj dokument pa iz rezultata izvuci RepairableItem.
  */
+function unitIdForProfile(profileId: string): string | undefined {
+  const entry = (VERIFIED_PROFILE_REGISTRY as Array<{ id?: string; unitId?: string }>).find((item) => item.id === profileId);
+  return entry?.unitId;
+}
+
 const ASSISTED_BUILDERS: Partial<Record<FixerId, (result: any, profile: any) => Array<{ params: unknown }>>> = {
   'bibliography-repair-fixer': (r, p) => bibliographyRepairableItem(r, p),
   'citation-bibliography-sync-fixer': (r, p) => citationBibliographySyncRepairableItem(r, p),
@@ -328,8 +334,19 @@ const ASSISTED_BUILDERS: Partial<Record<FixerId, (result: any, profile: any) => 
   'section-insert-fixer': (r, p) => introSectionRepairableItem(r, p),
   'section-surgery-fixer': (r, p) => sectionSurgeryRepairableItem(r, p),
   'table-figure-rescue-fixer': (r, p) => tableFigureRescueRepairableItem(r, p),
+  // unitId dolazi iz registra profila, ne iz rezultata analize: analyzeFixture salje
+  // selectionIds: {} pa bi selectTemplate(undefined) uvijek vratio null i naslovnica bi ostala
+  // neprovjerena na SVIM dokumentima. Zivi app unit dobiva iz odabira u sucelju; ovdje je
+  // ekvivalent citanje iz VERIFIED_PROFILE_REGISTRY, gdje polje ionako postoji.
   'title-page-fixer': (r, p) =>
-    titlePageRepairableItem(r, p, selectTemplate(r?.settings?.selectionIds?.unit || r?.selection?.unit, r?.settings?.workType || r?.selection?.workType || 'final').template),
+    titlePageRepairableItem(
+      r,
+      p,
+      selectTemplate(
+        r?.settings?.selectionIds?.unit || r?.selection?.unit || unitIdForProfile(String((p as { id?: unknown })?.id ?? '')),
+        r?.settings?.workType || r?.selection?.workType || 'final',
+      ).template,
+    ),
   'toc-field-fixer': (r, p) => tocFieldRepairableItem(r, p),
   // submission-metadata-fixer namjerno IZOSTAVLJEN: crossFileSubmissionRepairableItem trazi
   // result.details.crossFileSubmissionConsistency, koje gradi privatna funkcija u src/ui/app.ts
@@ -370,6 +387,9 @@ interface Case {
 }
 
 async function buildCases(): Promise<Case[]> {
+  // Predlosci naslovnice zive u LAZY heavy dijelu (template.elements je bez njega undefined).
+  // Zivi app to radi u src/ui/app.ts prije poziva builderima; bez toga buildTitlePage baca.
+  await ensureTemplatesHeavy();
   const cases: Case[] = [];
   for (const fileName of discoverRealFixtures()) {
     const profileId = fixtureProfileId(fileName);
