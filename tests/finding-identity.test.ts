@@ -32,6 +32,22 @@ describe('stable Lekta finding identity', () => {
     expect(out[0].fixerId).toBe('margins-fixer');
   });
 
+  it('links a detailed runtime check to its broader authored parent rule', () => {
+    const finding = issue('warning', 'structure', 'Naslovi odstupaju', 'Detalj', 'Naslovi');
+    const check = makeCheck('structure', 'Oblikovanje naslova po razinama', 'warn', 2, 4, 'x', finding);
+    const headingRule: RuleEntry = {
+      ruleId: 'fpzg.heading-rules.001',
+      checkId: 'heading-rules',
+      value: { levels: {} },
+      status: 'verified',
+    };
+    const out = identifyFindings([check], [finding], [headingRule]);
+
+    expect(out[0].checkId).toBe('heading-format');
+    expect(out[0].ruleId).toBe('fpzg.heading-rules.001');
+    expect(out[0].issueKey).toBe('rule:fpzg.heading-rules.001');
+  });
+
   it('does not churn a singleton rule-backed key when explanatory text changes', () => {
     const a = issue('warning', 'formatting', 'Margine odstupaju od profila', 'Prvi detalj', 'Postavke stranice');
     const b = issue('warning', 'formatting', 'Drukčije formuliran nalaz', 'Drugi detalj', 'Postavke stranice');
