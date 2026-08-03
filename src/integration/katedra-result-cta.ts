@@ -27,16 +27,28 @@ function validCapturedResult(value: any): value is LektaResult {
 }
 
 /**
- * The handoff is a primary cross-product continuation action, so it must be
- * mounted inside the initially visible result overview. The previous anchor
- * (`#actionPlan`) lives in a non-active tab and made a valid CTA invisible
- * until the user manually opened “Plan ispravaka”.
+ * Katedra is the continuation action for a result, including the free/teaser
+ * result. `#resultDetails` can intentionally remain hidden until the detailed
+ * report is revealed, so mounting the bridge anywhere inside that subtree
+ * makes a valid cross-product action invisible. Mount immediately BEFORE the
+ * locked details block instead; that keeps the bridge in the visible result
+ * shell while preserving the report paywall/teaser boundary.
  */
-function handoffAnchor(): HTMLElement | null {
-  return (
-    document.querySelector<HTMLElement>('#summaryNote') ??
-    document.querySelector<HTMLElement>('#actionPlan')
-  );
+function mountKatedraStrip(strip: HTMLElement): boolean {
+  const details = document.querySelector<HTMLElement>('#resultDetails');
+  if (details?.parentElement) {
+    if (strip.nextElementSibling !== details) details.insertAdjacentElement('beforebegin', strip);
+    return true;
+  }
+
+  // Defensive fallback for alternate/minimal result DOMs.
+  const anchor =
+    document.querySelector<HTMLElement>('#nextSteps') ??
+    document.querySelector<HTMLElement>('#fullReportBanner') ??
+    document.querySelector<HTMLElement>('#actionPlan');
+  if (!anchor) return false;
+  if (strip.previousElementSibling !== anchor) anchor.insertAdjacentElement('afterend', strip);
+  return true;
 }
 
 export function renderKatedraResultCta(): void {
@@ -52,21 +64,14 @@ export function renderKatedraResultCta(): void {
     return;
   }
 
-  const anchor = handoffAnchor();
-  if (!anchor) return;
-
   const href = buildKatedraHandoffUrl(katedraBaseUrl(), captured);
   let strip = document.getElementById(CTA_ID);
   if (!strip) {
     strip = document.createElement('div');
     strip.id = CTA_ID;
     strip.className = 'handoff-strip';
-    anchor.insertAdjacentElement('afterend', strip);
-  } else if (strip.previousElementSibling !== anchor) {
-    // Keep an existing strip in the visible overview even if an earlier render
-    // mounted it against a fallback anchor while the result UI was settling.
-    anchor.insertAdjacentElement('afterend', strip);
   }
+  if (!mountKatedraStrip(strip)) return;
 
   const count = captured.issues.length;
   strip.innerHTML = `
