@@ -98,5 +98,10 @@
     "name": "TITLE_PAGE_TEMPLATES",
     "file": "data/title-pages/templates.json",
     "entries": 198
+  },
+  {
+    "name": "DECLARATION_TEMPLATES",
+    "file": "data/declarations/declarations.json",
+    "entries": 0
   }
 ]

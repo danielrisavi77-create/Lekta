@@ -8,6 +8,9 @@ import { escapeHtml } from '../utils/helpers';
 import { bindCopyButton, bindDownloadButton, defaultSelectedIndex } from './tool-ui';
 import { formatCroatianDate } from './hr-date';
 import { readToolDraft, saveToolDraft } from './draft-share';
+import { readFacultyContext } from './faculty-context';
+import { selectDeclaration } from '../declarations/declaration-loader';
+import type { WorkType } from '../profiles/profile-schema';
 
 const $ = (s: string): any => document.querySelector(s);
 
@@ -15,6 +18,19 @@ const FIELDS = {
   heading: '#st-heading', author: '#st-author', workType: '#st-worktype',
   title: '#st-title', place: '#st-place', date: '#st-date',
   jmbag: '#st-jmbag', oib: '#st-oib',
+};
+
+// #st-worktype opcije nemaju value atribut (value = textContent), pa .value vec JEST label;
+// mapa NAMJERNO ne koristi WORK_TYPE_LABELS (config-loader.ts) - "Projektni rad" ovdje se
+// razlikuje od config-loader labela "Projektni / istrazivacki rad", a "article" tamo uopce
+// nema opciju ovdje. Mapa prati STVARNE opcije forme, ne konfiguraciju.
+const LABEL_TO_WORK_TYPE: Record<string, WorkType> = {
+  'Seminarski rad': 'seminar',
+  'Završni rad': 'final',
+  'Diplomski rad': 'graduate',
+  'Specijalistički rad': 'specialist',
+  'Doktorski rad': 'doctoral',
+  'Projektni rad': 'project',
 };
 
 const SAMPLE: any = {
@@ -67,6 +83,43 @@ function render(): void {
   }
 
   scheduleHint(model.missing, locked);
+  renderDeclarationBadge();
+}
+
+// Napomena o statusu ide u VIDLJIVI #st-badge-note, ne (samo) u title tooltip - isti razlog
+// kao setBadgeNote u naslovnica-page.ts (title nije dostupan na dodir/tipkovnicu/citac ekrana).
+function setBadgeNote(text: string): void {
+  const el = $('#st-badge-note');
+  if (!el) return;
+  el.textContent = text;
+  el.hidden = !text;
+}
+
+// Cita dijeljeni fakultetski kontekst (faculty-context.ts, B2) i prikazuje POSTEN status:
+// dok je DECLARATION_TEMPLATES prazan niz (nema jos prikupljenih stvarnih obrazaca),
+// selectDeclaration UVIJEK vraca 'generic' - to je istinito stanje danas, ne izmisljena tvrdnja.
+function renderDeclarationBadge(): void {
+  const badge = $('#st-badge');
+  if (!badge) return;
+  const unitId = readFacultyContext().unitId || '';
+  const level = LABEL_TO_WORK_TYPE[$('#st-worktype')?.value || ''] || '';
+  const sel = selectDeclaration(unitId, level);
+  if (sel.provenance === 'guidance') {
+    badge.className = 'tp-badge guidance';
+    badge.textContent = 'Tvoj fakultet propisuje vlastitu formulaciju';
+    const note = sel.template!.provenance.sourceNote || 'Prema službenim izvorima';
+    setBadgeNote(`${note}, provjeri obrazac na fakultetu prije predaje; ovdje ostaje opći tekst.`);
+    return;
+  }
+  if (sel.provenance === 'official') {
+    badge.className = 'tp-badge official';
+    badge.textContent = 'Službena formulacija tvog fakulteta';
+    setBadgeNote(sel.template!.provenance.sourceNote || '');
+    return;
+  }
+  badge.className = 'tp-badge generic';
+  badge.textContent = 'Generički tekst';
+  setBadgeNote('');
 }
 
 // #st-hint je aria-live=polite: pisanje na svaki keystroke tjera citac ekrana da istu poruku
