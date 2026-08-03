@@ -12,6 +12,9 @@ describe('Repair Engine real DOCX corpus', () => {
     expect(report).toEqual(generatedReport);
     expect(report.summary.failCount).toBe(0);
     expect(report.results.every((result) => result.outputReadable && result.secondPassNoOp)).toBe(true);
+    // Faza A2: `outputReadable` gleda samo word/document.xml, pa neispravan settings.xml ili
+    // footer1.xml prolazi. Poruka nabraja bas pale dijelove umjesto golog "false".
+    expect(report.results.flatMap((result) => result.malformedParts)).toEqual([]);
     expect(report.results.every((result) => result.droppedEntryCount === 0)).toBe(true);
     expect(report.results.every((result) => result.passRegressionCount === 0)).toBe(true);
     expect(report.results.every((result) => result.error === null)).toBe(true);

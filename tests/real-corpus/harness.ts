@@ -6,6 +6,7 @@ import { analyzeFixture, resolveProfile } from '../../src/analysis/golden-entry'
 import { installXmlDomParser } from '../../src/docx/xml-dom-install';
 import { repairEntriesFor } from '../../src/profiles/profile-runtime-maps';
 import { applyFixers, type FixerRequest } from '../../src/repair/apply-fixers';
+import { inspectDocxParts } from '../../src/repair/package-integrity';
 import { readZip } from '../../src/repair/zip-codec';
 import { buildRepairableItems, universalRepairableItems } from '../../src/ui/repair-items';
 
@@ -37,6 +38,14 @@ export interface RealCorpusResult {
   targetedUnresolvedCount: number;
   passRegressionCount: number;
   outputReadable: boolean;
+  /**
+   * Faza A2 (RE-47 klasa): je li SVAKI XML/rels dio popravljenog paketa well-formed.
+   * `outputReadable` iznad provjerava samo da word/document.xml postoji i nije prazan, pa je
+   * neispravan settings.xml/footer1.xml/numbering.xml dosad prolazio neprimijeceno.
+   */
+  packageWellFormed: boolean;
+  /** Dijelovi koji su pali strogi skener, s razlogom i offsetom (prazno kad je paket cist). */
+  malformedParts: string[];
   secondPassNoOp: boolean;
   manualReviewRequired: boolean;
   manualReviewReasons: string[];
@@ -127,6 +136,8 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     targetedUnresolvedCount: 0,
     passRegressionCount: 0,
     outputReadable: false,
+    packageWellFormed: false,
+    malformedParts: [] as string[],
     secondPassNoOp: false,
     manualReviewRequired: false,
     manualReviewReasons: [] as string[],
@@ -150,6 +161,9 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     const afterNames = new Set(afterEntries.map((item) => item.name));
     const droppedEntryCount = beforeEntries.filter((item) => !afterNames.has(item.name)).length;
     const outputReadable = afterEntries.some((item) => item.name === 'word/document.xml' && item.data.length > 0);
+    const malformedParts = inspectDocxParts(afterEntries)
+      .filter((part) => !part.ok)
+      .map((part) => `${part.part}: ${part.problem} (offset ${part.offset})`);
     const afterFile = new File([applied.docxBytes], `${entry.documentId}-repaired.docx`, { type: DOCX_MIME });
     const after = await analyzeFixture(afterFile, { profileId: entry.profileId });
     const afterText = textFingerprint(afterEntries);
@@ -167,7 +181,7 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     ];
     const finalResult: RealCorpusResult = {
       ...base,
-      outcome: regressions || !outputReadable || droppedEntryCount > 0 || !secondPassNoOp || beforeText !== afterText ? 'fail' : unresolved ? 'review' : changed ? 'review' : 'no-op',
+      outcome: regressions || !outputReadable || malformedParts.length > 0 || droppedEntryCount > 0 || !secondPassNoOp || beforeText !== afterText ? 'fail' : unresolved ? 'review' : changed ? 'review' : 'no-op',
       before: { checkCount: before.checks?.length ?? 0, passCount: checkPassCount(before.checks ?? []), score: scoreOf(before) },
       after: { checkCount: after.checks?.length ?? 0, passCount: checkPassCount(after.checks ?? []), score: scoreOf(after) },
       beforeEntryCount: beforeEntries.length,
@@ -180,6 +194,8 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
       targetedUnresolvedCount: unresolved,
       passRegressionCount: regressions,
       outputReadable,
+      packageWellFormed: malformedParts.length === 0,
+      malformedParts,
       secondPassNoOp,
       manualReviewRequired: manualReviewReasons.length > 0,
       manualReviewReasons,
