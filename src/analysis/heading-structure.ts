@@ -121,14 +121,25 @@ function runStats(paragraph: HeadingStructureParagraph): { boldShare: number; ma
   };
 }
 
+/**
+ * RE-53: unos sadrzaja mora se prepoznati i BEZ stila. Na zivoj putanji
+ * (attachHeadingStructure nad result.preview.paragraphs) odlomci nemaju ni styleId ni styleName,
+ * pa je provjera po stilu ondje uvijek prazna; jedini preostali signal je tabulator pa broj
+ * stranice, a njega normalizedText() unisti jer skuplja svaki razmak u obican razmak.
+ * Zato se ovaj uzorak testira nad SIROVIM tekstom, prije normalizacije.
+ * paragraphText pretvara <w:tab/> u \t, pa isto vrijedi i za prave Wordove sadrzaje.
+ */
+const TOC_ENTRY_TAIL = /\t[.\s…]*\d+\s*$/;
+
 function isExcluded(paragraph: HeadingStructureParagraph): boolean {
-  const text = normalizedText(paragraph.text);
+  const raw = String(paragraph.text ?? '');
+  const text = normalizedText(raw);
   if (!text || text.length < MIN_TEXT_LENGTH || text.length > MAX_TEXT_LENGTH) return true;
   if (paragraph.cell) return true;
-  if (TOC_STYLE.test(String(paragraph.styleName ?? ''))) return true;
+  if (TOC_STYLE.test(String(paragraph.styleName ?? paragraph.styleId ?? ''))) return true;
   if (CAPTION_PREFIX.test(text) || LIST_PREFIX.test(text)) return true;
   if (REF_SECTION.test(text)) return true;
-  if (/\t\s*\d+\s*$/.test(text)) return true;
+  if (TOC_ENTRY_TAIL.test(raw)) return true;
   return false;
 }
 

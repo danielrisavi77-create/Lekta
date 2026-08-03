@@ -32,6 +32,29 @@ describe('detectHeadingStructure', () => {
     expect(result.candidates).toEqual([]);
   });
 
+  /**
+   * RE-53. Test iznad izostavlja sadrzaj preko `styleName: 'TOC 1'`, ali na ZIVOJ putanji taj
+   * put ne postoji: attachHeadingStructure gradi odlomke iz result.preview.paragraphs, a ti
+   * objekti nemaju ni styleId ni styleName. Ostaje samo tekst, u kojem Word unos sadrzaja ima
+   * tabulator pa broj stranice (paragraphText pretvara <w:tab/> u \t).
+   *
+   * Prije popravka su sva cetiri unosa prolazila kao naslovi s confidence=high i
+   * selectedByDefault=true, pa bi ih "Popravi sve" pretvorio u stvarne naslove: pojavili bi se u
+   * samom sadrzaju pri sljedecem osvjezavanju i pomaknuli numeraciju.
+   */
+  it('izostavlja unose sadrzaja i kad stil nije dostupan (tabulator pa broj stranice)', () => {
+    const result = detectHeadingStructure([
+      { index: 1, ...run('1. Uvod\t1', { bold: true, size: 14 }) },
+      { index: 2, ...run('2. Razrada\t3', { bold: true, size: 14 }) },
+      { index: 3, ...run('2.1. Metoda\t4', { bold: true, size: 14 }) },
+      { index: 4, ...run('3. Zaključak\t9', { bold: true, size: 14 }) },
+      // Kontrola: pravi naslov u istom dokumentu mora i dalje biti prepoznat.
+      { index: 5, ...run('1. Uvod', { bold: true, size: 14 }) },
+    ], { maxLevel: 3 });
+
+    expect(result.candidates.map((candidate) => candidate.paragraphIndex)).toEqual([5]);
+  });
+
   it('prijavljuje preskok razine', () => {
     const result = detectHeadingStructure([
       { index: 1, text: '1. Glavno poglavlje', runs: [{ text: '1. Glavno poglavlje', bold: true, size: 14 }] },
