@@ -51,6 +51,8 @@ import {
   titlePageRepairableItem,
   tocFieldRepairableItem,
 } from '../src/ui/repair-items';
+import type { RepairableItem } from '../src/ui/repair-panel';
+import { confirmedParamsFor } from './helpers/confirm-repair-form';
 import { repairEntriesFor } from '../src/profiles/profile-runtime-maps';
 import { selectTemplate } from '../src/title-pages/template-loader';
 import { analyzeFixture, resolveProfile } from '../src/analysis/golden-entry';
@@ -342,12 +344,29 @@ function assistedParams(fixerId: FixerId, result: unknown, profile: unknown): Re
   return items.length > 0 ? (items[0].params as Record<string, unknown>) : null;
 }
 
+/**
+ * Params kakve bi fixer dobio da je korisnik potvrdio sve ponudjeno u obrascu.
+ *
+ * Vecina asistiranih fixera dolazi s NEOZNACENIM stavkama, jer sucelje trazi potvrdu po stavci
+ * prije nego dira dokument. Golden je zato za njih biljezio applied=false i nikad nije izvrtio
+ * njihovu stvarnu granu. Ovdje se ta grana snima pod zasebnim kljucem `<fixerId>(potvrdjeno)`,
+ * pa snapshot pokazuje OBOJE: sto proizvod radi bez potvrde i sto radi s njom.
+ */
+function confirmedAssistedParams(fixerId: FixerId, result: unknown, profile: unknown): Record<string, unknown> | null {
+  const build = ASSISTED_BUILDERS[fixerId];
+  if (!build) return null;
+  const items = build(result, profile);
+  return items.length > 0 ? confirmedParamsFor(items[0] as unknown as RepairableItem) : null;
+}
+
 interface Case {
   name: string;
   bytes: Uint8Array;
   paramsFor: (fixerId: FixerId) => Record<string, unknown> | null;
   /** Razlikuje "profil nema cilj" od "dokument nema sto popraviti" (samo za citljivost snapshota). */
   hasAnalysis?: boolean;
+  /** Params uz simuliranu potvrdu svih stavki obrasca; null kad fixer nema obrazac. */
+  confirmedParamsFor?: (fixerId: FixerId) => Record<string, unknown> | null;
 }
 
 async function buildCases(): Promise<Case[]> {
@@ -368,6 +387,7 @@ async function buildCases(): Promise<Case[]> {
       bytes,
       hasAnalysis: true,
       paramsFor: (id) => paramsForFixer(id, profile) ?? assistedParams(id, analyzed, profile),
+      confirmedParamsFor: (id) => confirmedAssistedParams(id, analyzed, profile),
     });
   }
   // Multi-section: naslovnica (sekcija 0) -> rimski start=1, tijelo od Uvoda (sekcija 1) ->
@@ -441,6 +461,23 @@ describe('Repair golden harness', () => {
         if (DEEP_CAPABLE.has(fixerId)) {
           const deep = await runOne(c.bytes, { ruleId: `${fixerId}-rule`, fixerId, params: withDeep(fixerId, params, true) });
           perFixture[`${fixerId}(deep)`] = { params: withDeep(fixerId, params, true), ...deep.snapshot };
+        }
+
+        // Potvrdjena grana: ono sto motor stvarno izvrsi kad korisnik u sucelju sve odobri.
+        // Snima se samo kad se od zadanih params RAZLIKUJE, da snapshot ne raste bez potrebe.
+        const confirmed = c.confirmedParamsFor?.(fixerId) ?? null;
+        if (confirmed && JSON.stringify(confirmed) !== JSON.stringify(params)) {
+          const run = await runOne(c.bytes, { ruleId: `${fixerId}-rule`, fixerId, params: confirmed });
+          perFixture[`${fixerId}(potvrdjeno)`] = { params: confirmed, ...run.snapshot };
+          // Potvrdjena grana izvodi i destruktivne operacije (brisanje komentara, prihvacanje
+          // revizija, uklanjanje duplikata), pa bas nju treba drzati pod Tier 0 gateom. Ide kao
+          // zasebna asercija, NIKAD kao polje u snapshotu.
+          if (run.snapshot.applied) {
+            await assertPackageIntact(c.bytes, run.result.docxBytes, `${c.name}: ${fixerId} (potvrdjeno)`, {
+              // Isti legitiman slucaj kao u closed-loopu: cista kopija bez komentara mice i sam dio.
+              allowDropped: ['word/comments.xml'],
+            });
+          }
         }
       }
 
