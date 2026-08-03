@@ -38,6 +38,43 @@ odobrava ili se odbija. Ta granica čuva mogućnost prodaje instituciji, ne samo
 pojedinačnom studentu, i vrijedi i za copy i marketing (ne obećavaj "AI piše umjesto
 tebe").
 
+### Gdje je granica: test vidljivog teksta
+
+Pravilo iznad ne zabranjuje sve što dira dokument, nego ono što mijenja SADRŽAJ. Razlika
+je mjerljiva, pa se ne rješava procjenom:
+
+> Zahvat je dopušten ako tekst koji korisnik vidi na ekranu i u ispisu ostane isti,
+> **i prije i poslije osvježavanja polja u Wordu**. Mehanika ispod smije se mijenjati:
+> polja, sidra (bookmarkovi), stilovi, numeracija, relacije, dijelovi paketa.
+
+Provjera je doslovna, ne teorijska: otvori dokument Wordom, pozovi `Fields.Update()`,
+usporedi tekst prije i poslije (`scripts/word-verify/`, Tier 2 u
+`docs/REAL_CORPUS_TESTING.md`). Testovi zato čitaju SPOJENI tekst odlomka, ne sirovi XML,
+jer se dio ovih kvarova u XML-u uopće ne vidi (RE-57, RE-58).
+
+Tri postojeća popravka SMIJU mijenjati vidljivi tekst i to je namjerno, jer je svaki od
+njih format, ne argumentacija: velika slova naslova (`heading-case-fixer`), hrvatska
+tehnička tipografija (`croatian-typography-fixer`) i kanonizacija DOI-ja
+(`bibliography-repair-fixer`, `link-doi-fixer`). Svaki traži izričitu potvrdu i nijedan ne
+dira rečenice tijela rada.
+
+### Dopušteno bez fakultetskog pravila (preporuke)
+
+Popravak se smije nuditi i kad ga nijedan profil ne propisuje, ali samo kao PREPORUKA:
+`violated: false`, `recommended: true`, BEZ `matchKeys`. Time se ne veže ni na jedan bodovan
+check i ne može pomaknuti ocjenu. Izmišljeno pravilo je ono koje OCJENJUJE; preporuka koju
+korisnik bira nije, i ne ruši argument za institucionalnu prodaju.
+
+Uvjeti su kumulativni: prolazi test vidljivog teksta, traži potvrdu, ne umeće nov tekst
+(bez profila se ne izmišljaju natpisi ni sekcije, nego se popravlja ono što već postoji), i
+jasno kaže korisniku da nije zahtjev fakulteta. Presedan su `empty-paragraph-fixer` i
+`croatian-typography-fixer`; noviji primjer su unakrsne upute na tablice i slike
+(`element-caption-fixer`, RE-59).
+
+Što OSTAJE zabranjeno bez obzira na sve gore: pisanje ili prepravljanje rečenica i
+argumentacije, generiranje sadržaja bilo kojim modelom, i bodovanje po pravilu koje nema
+službeni izvor.
+
 Ako proizvod ikad zatreba AI asistirano pisanje ili coaching (primjer: sestrinski
 proizvod Katedra, zaseban proizvod istog vlasnika), to ide u odvojen proizvod i
 repozitorij, nikad u Lektu. Podaci smiju teći iz Lekte prema drugom proizvodu

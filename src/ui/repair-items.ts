@@ -647,10 +647,28 @@ export function titlePageRepairableItem(result: any, profile: any, template: Tit
 /** Asistirani popravak natpisa. Pravila se nude samo kad profil ima strukturirano pravilo. */
 export function elementCaptionRepairableItem(result: any, profile: any): RepairableItem[] {
   const ruleEntry = (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'element-caption-rules' && entry?.status === 'verified' && entry?.sourceId && entry?.sourcePage && entry?.quote);
-  const rules = ruleEntry?.value;
   const structure = result?.details?.elementStructure;
   const candidates = Array.isArray(structure?.candidates) ? structure.candidates : [];
-  if (!rules?.labels || !rules?.captionPosition || !Array.isArray(candidates) || candidates.length === 0) return [];
+  if (!Array.isArray(candidates) || candidates.length === 0) return [];
+  /**
+   * RE-59: bez profilnog pravila popravak se i dalje NUDI, ali kao preporuka, ne kao prekrsaj.
+   *
+   * Danas `element-caption-rules` nema NIJEDAN od 368 profila, pa je ovaj popravak bio mrtav bez
+   * obzira na dokument. Unakrsne upute su ipak tehnicka ispravnost Word dokumenta, ne pitanje
+   * fakultetskog pravila: broj se veze na element umjesto da bude prepisan rukom.
+   *
+   * Granica prema tvrdom pravilu iz CLAUDE.md drzi se na dva nacina:
+   *  - BODOVANJE: univerzalna varijanta ide bez matchKeys i s violated:false, pa se ne vezuje ni
+   *    na jedan bodovan check i ne moze pomaknuti ocjenu. Izmisljeno pravilo bi bilo ono koje
+   *    ocjenjuje; preporuka koju korisnik bira nije.
+   *  - SADRZAJ: bez profila se NE umecu novi natpisi (to bi bio nov tekst), nego se predodabiru
+   *    samo elementi koji natpis s opisom vec imaju. Isti konzervativni obrazac koji
+   *    croatianTypographyRepairableItem koristi kad profil nema pravila.
+   */
+  const universal = !ruleEntry?.value?.labels || !ruleEntry?.value?.captionPosition;
+  const rules = universal
+    ? { labels: { table: 'Tablica', figure: 'Slika', chart: 'Grafikon' }, captionPosition: { table: 'above', figure: 'below', chart: 'below' } }
+    : ruleEntry.value;
   const labels = { table: String(rules.labels.table || 'Tablica'), figure: String(rules.labels.figure || 'Slika'), chart: String(rules.labels.chart || 'Grafikon') };
   const form: ElementCaptionFormDefinition = {
     candidates: candidates.map((candidate: any) => ({
@@ -698,11 +716,17 @@ export function elementCaptionRepairableItem(result: any, profile: any): Repaira
     fixerId: 'element-caption-fixer',
     label: 'Natpisi slika, tablica i grafikona',
     params: form.buildParams(form),
-    violated: true,
+    // Bez profilnog pravila ovo je PREPORUKA (uvijek opt-in, izvan bodovanja), ne prekrsaj:
+    // violated:false + recommended:true svrstava stavku u trecu skupinu panela, a izostanak
+    // matchKeys znaci da se ne vezuje ni na jedan bodovan check.
+    violated: !universal,
+    ...(universal ? { recommended: true as const } : {}),
     requiresConfirmation: true,
-    confirmationText: `Pronađeno je ${candidates.length} elemenata. Potvrdi opise i izvore prije umetanja Word SEQ natpisa; popisi i cross-reference polja ostaju zasebni izbor.`,
+    confirmationText: universal
+      ? `Pronađeno je ${candidates.length} elemenata. Ovo nije zahtjev fakulteta nego tehnička ispravnost dokumenta: broj u tekstu veže se na tablicu ili sliku umjesto da je prepisan rukom. Ocjena se ne mijenja.`
+      : `Pronađeno je ${candidates.length} elemenata. Potvrdi opise i izvore prije umetanja natpisa; popisi i unakrsne upute ostaju zasebni izbor.`,
     elementCaptionForm: form,
-    matchKeys: ['Naslovi tablica', 'Naslovi slika i grafikona', 'Izvori ispod slika i tablica', 'Popisi slika i tablica'],
+    ...(universal ? {} : { matchKeys: ['Naslovi tablica', 'Naslovi slika i grafikona', 'Izvori ispod slika i tablica', 'Popisi slika i tablica'] }),
   }];
 }
 

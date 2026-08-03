@@ -64,6 +64,21 @@ sestrinski proizvod Katedra) ide u odvojen repozitorij; podaci smiju teci samo i
 Lekte prema njemu (src/integrations/), nikad obrnuto, i taj drugi proizvod nikad
 ne smije tvrditi formalnu mjerodavnost, to ostaje iskljucivo Lektin posao.
 
+GRANICA JE MJERLJIVA, ne stvar procjene: zahvat je dopusten ako VIDLJIVI TEKST
+ostane isti i prije i poslije osvjezavanja polja u Wordu (Fields.Update()).
+Mehanika ispod smije se mijenjati: polja, sidra, stilovi, numeracija, relacije.
+Testovi zato citaju SPOJENI tekst odlomka, ne sirovi XML; dio kvarova se u XML-u
+uopce ne vidi (RE-57, RE-58). Iznimke koje smiju dirati vidljivi tekst i to je
+namjerno: heading-case-fixer, croatian-typography-fixer, kanonizacija DOI-ja.
+
+Popravak se smije nuditi i BEZ fakultetskog pravila, ali samo kao PREPORUKA:
+violated:false, recommended:true, BEZ matchKeys (ne vezuje se na bodovan check,
+ne moze pomaknuti ocjenu). Uz to: prolazi test vidljivog teksta, trazi potvrdu,
+ne umece nov tekst, i kaze korisniku da nije zahtjev fakulteta. Presedan:
+empty-paragraph-fixer, croatian-typography-fixer, element-caption-fixer (RE-59).
+Zabranjeno ostaje: pisanje/prepravljanje recenica, generiranje sadrzaja modelom,
+i BODOVANJE po pravilu bez sluzbenog izvora.
+
 ## Pravila profila (Option A)
 
 - ruleEntries u data/** su autorski izvor istine; rules je naslijedeni agregat

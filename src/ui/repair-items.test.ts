@@ -8,6 +8,7 @@ import {
   pageNumberAlignmentRepairableItem,
   introSectionItem,
   crossFileSubmissionRepairableItem,
+  elementCaptionRepairableItem,
   type AnalyzedCheck,
 } from './repair-items';
 import type { RuleEntry } from '../profiles/profile-schema';
@@ -367,5 +368,51 @@ describe('crossFileSubmissionRepairableItem (usporedba predajnog paketa)', () =>
         confirmed: true,
       }],
     });
+  });
+});
+
+describe('elementCaptionRepairableItem: preporuka bez profilnog pravila (RE-59)', () => {
+  /**
+   * `element-caption-rules` danas nema NIJEDAN od 368 profila, pa je popravak bio mrtav bez obzira
+   * na dokument. Unakrsne upute su tehnicka ispravnost Word dokumenta, ne fakultetsko pravilo, pa
+   * se nude i bez pravila, ali kao PREPORUKA.
+   *
+   * Granica prema tvrdom pravilu (CLAUDE.md): izmisljeno pravilo bilo bi ono koje OCJENJUJE.
+   * Ova stavka se ne vezuje ni na jedan bodovan check (nema matchKeys) i nije prekrsaj
+   * (violated:false), pa ne moze pomaknuti ocjenu. Test to drzi zakljucanim.
+   */
+  const structure = {
+    candidates: [{
+      id: 'element-table-1-abcd1234', kind: 'table', ordinal: 1,
+      anchor: { bodyChildIndex: 1, tableIndex: 0 }, anchorFingerprint: 'abcd1234',
+      existingCaption: { paragraphIndex: 1, position: 'above', rawText: 'Tablica 1. Pregled', label: 'Tablica', description: 'Pregled' },
+      confidence: 'high', evidence: [],
+    }],
+    references: [{ paragraphIndex: 2, start: 10, end: 11, rawText: '1', contextText: 'Tablici 1', elementId: 'element-table-1-abcd1234', confidence: 'high', evidence: [] }],
+    lists: {},
+  };
+
+  it('nudi se bez pravila, ali izvan bodovanja', () => {
+    const items = elementCaptionRepairableItem({ details: { elementStructure: structure } }, { ruleEntries: [] });
+    expect(items).toHaveLength(1);
+    expect(items[0].violated, 'preporuka nije prekrsaj').toBe(false);
+    expect(items[0].recommended, 'mora ici u skupinu preporuka (opt-in)').toBe(true);
+    expect(items[0].matchKeys, 'ne smije se vezati na bodovan check').toBeUndefined();
+    expect(items[0].requiresConfirmation).toBe(true);
+    expect(String(items[0].confirmationText)).toContain('Ocjena se ne mijenja');
+    // Bez profila se ne nude popisi tablica ni slika: to je profilna odluka, ne tehnicka.
+    expect(items[0].elementCaptionForm?.lists).toEqual([]);
+  });
+
+  it('s verificiranim pravilom ostaje prekrsaj i vezan na bodovane checkove', () => {
+    const ruleEntries = [{
+      checkId: 'element-caption-rules', status: 'verified', sourceId: 'izvor', sourcePage: 'str. 4', quote: 'citat',
+      value: { labels: { table: 'Tablica', figure: 'Slika', chart: 'Grafikon' }, captionPosition: { table: 'above', figure: 'below', chart: 'below' } },
+    }];
+    const items = elementCaptionRepairableItem({ details: { elementStructure: structure } }, { ruleEntries });
+    expect(items).toHaveLength(1);
+    expect(items[0].violated).toBe(true);
+    expect(items[0].recommended).toBeUndefined();
+    expect(items[0].matchKeys?.length).toBeGreaterThan(0);
   });
 });
