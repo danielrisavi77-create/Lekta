@@ -190,7 +190,7 @@ function coverageSnapshot(){const rows=INSTITUTIONAL_COVERAGE_MATRIX.programs.ma
 function toast(msg: any){const n=document.createElement('div');n.className='toast';n.textContent=msg;$('#toastWrap').append(n);setTimeout(()=>n.remove(),3500)}
 function init(){
  $('#checkGrid').innerHTML=CHECK_ITEMS.map(([i,t,d])=>`<article class="check-card" data-reveal><span class="check-icon">${i}</span><h3>${t}</h3><p>${d}</p></article>`).join('');window.__lektaReveal?.();
- productionConfig=loadProductionConfig();captureReferralCode();installErrorTracking();initCatalog();void ensureRetailCatalog();restorePreferences();applyFacultyContext();syncProfileContext();applyUnitFromUrl();updateRepairHistoryButton();if(adminMode)void openAdminStats();
+ productionConfig=loadProductionConfig();captureReferralCode();installErrorTracking();initCatalog();void ensureRetailCatalog();restorePreferences();applyFacultyContext();syncProfileContext();applyUnitFromUrl();updateRepairHistoryButton();if(adminMode){location.replace('/admin.html');return}
  $('#pricingGrid').innerHTML=PRICING_TIERS.map(p=>{const soon=p.id!=='free'&&!paidOffersLive();const badge=soon?'<span class="popular soon">USKORO</span>':(p.featured?'<span class="popular">PREPORUČENO</span>':'');const cta=soon?`<button class="btn btn-secondary" type="button" disabled aria-disabled="true">Uskoro</button>`:(p.cta.order?`<button class="btn btn-secondary order-btn" data-package="${p.cta.order}">${p.cta.label}</button>`:`<a class="btn ${p.featured?'btn-primary':'btn-secondary'}" href="${p.cta.href}">${p.cta.label}</a>`);return`<article class="price-card ${p.featured?'featured':''}${soon?' soon':''}">${badge}<h3>${p.name}</h3><div class="price">${p.price}</div><p>${p.desc}</p><ul class="features">${p.features.map(x=>`<li>${x}</li>`).join('')}</ul>${cta}</article>`}).join('');
  $('#packagePicks').innerHTML=PACKAGES.map(p=>`<label class="package-pick"><span><input type="radio" name="package" value="${p.id}" ${p.id==='format'?'checked':''}><strong>${p.name} · ${p.price} €</strong><small>${p.desc}</small></span></label>`).join('');
  bind();updateProfile();updateHistoryBadge();updatePackageUi();if(__DEV_TOOLS__)$('#qaBtn').classList.toggle('hidden',!qaMode);renderConsentBanner();renderHeroCoverage();wireNoFaculty();if(!paidOffersLive())$('#orderFromResult')?.classList.add('hidden');renderAuthEntry();
@@ -985,13 +985,21 @@ function renderPhaseThreeRepairEntry(r: any){
   if(order){order.textContent='Ručna obrada uz privolu';order.title='Dokument se za ručnu obradu prilaže tek nakon tvoje izričite privole.'}
   if(!entry||entry.classList.contains('hidden'))return;
   const auto=Number(r?.details?.triage?.counts?.auto)||0;
+  // Preporuke fakulteta se broje ODVOJENO od bodovanih stavki i namjerno ne diraju ocjenu:
+  // vecina hrvatskih uputa su preporuke, pa bi bodovanje dalo lazan nalaz studentu koji je
+  // postupio po mentorovoj uputi. Broj se ipak pokazuje, jer je to stvarna vrijednost koju
+  // korisnik dobiva, a bez njega preporuke prolaze nezapazeno.
+  const recommendedCount=repairPanelItems.filter((i: any)=>i&&i.violated===false&&i.recommended===true).length;
   const serverSide=repairServerConfigured();
   const heading=serverSide?'Automatski popravak':'Automatski popravci na ovom uređaju';
   const action=auto
     ?`${serverSide?'Možeš poslati na popravak':'Možeš lokalno primijeniti'} ${auto} ${auto===1?'podržanu stavku':'podržane stavke'} i preuzeti novi Word dokument.`
     :`Pregledaj podržane ${serverSide?'':'lokalne '}popravke i preuzmi novi Word dokument.`;
   const disclosure=serverSide?' Dokument se pritom šalje na server radi popravka i pohranjuje dok ga ne obrišeš.':' Dokument se pri tome ne šalje na poslužitelj.';
-  entry.innerHTML=`<h3>${escapeHtml(heading)}</h3><p>${action}${disclosure}</p><button type="button" class="triage-repair-cta" data-repair-entry><i data-lucide="wand-2"></i>${serverSide?'Pošalji na popravak':'Odaberi lokalne popravke'} <span aria-hidden="true">→</span></button>`;
+  const recommendedNote=recommendedCount
+    ?`<p class="repair-entry-recommended">Uz to, tvoj fakultet <strong>preporučuje</strong> još ${recommendedCount} ${recommendedCount===1?'uskladbu':'uskladbi'}. Ne ulaze u ocjenu, ali ih možemo popraviti u istom prolazu.</p>`
+    :'';
+  entry.innerHTML=`<h3>${escapeHtml(heading)}</h3><p>${action}${disclosure}</p>${recommendedNote}<button type="button" class="triage-repair-cta" data-repair-entry><i data-lucide="wand-2"></i>${serverSide?'Pošalji na popravak':'Odaberi lokalne popravke'} <span aria-hidden="true">→</span></button>`;
   (entry.querySelector('[data-repair-entry]') as any).onclick=()=>scrollToRepairPanel(r);
 }
 // Most iz besplatne dijagnoze u placeni popravak: prebaci na karticu "Spremnost za predaju" gdje

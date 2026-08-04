@@ -1,0 +1,129 @@
+{
+  "profileId": "unizd-ekologija-zavrsni",
+  "note": "Nacrt (draft) dodatnih pravila iz istog izvora kao postojeci unizd-ekologija-zavrsni.json (format). AI nacrt, ceka ljudsku verifikaciju.",
+  "entries": [
+    {
+      "ruleId": "unizd-ekologija-zavrsni--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical"
+      },
+      "category": "citation",
+      "label": "Popis literature (modificirani Harvardski stil)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-ekologija-upute",
+      "sourcePage": "str. 3 (odjeljak Izgled zavrsnog rada) i str. 6 (odjeljak Popis literature)",
+      "quote": "Literatura se navodi sažeto abecedno (modificirani harvardski stil) ... U poglavlju Popis literature abecednim redom se navodi sva korištena literatura (znanstveni i stručni članci, knjige, udžbenici, internetski izvori i ostalo).",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-ekologija-zavrsni--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year"
+      },
+      "category": "citation",
+      "label": "Citiranje autor-godina",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-ekologija-upute",
+      "sourcePage": "str. 7 (odjeljak Citiranje i referiranje literature)",
+      "quote": "Kada se u tekstu referencira na rad nekog autora (ili više autora) navodi se prezime autora i u zagradi godina objave rada: U svom radu Joys (2010.) navodi kako...",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-ekologija-zavrsni--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["originality-statement", "summary-hr", "abstract"],
+        "labels": {
+          "originality-statement": "Izjava o akademskoj čestitosti",
+          "summary-hr": "Sažetak na hrvatskom jeziku",
+          "abstract": "Sažetak na engleskom jeziku"
+        }
+      },
+      "category": "structure",
+      "label": "Obvezni dijelovi zavrsnog rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-ekologija-upute",
+      "sourcePage": "str. 3 (Okvirna struktura zavrsnog rada) i str. 3 (Izgled zavrsnog rada)",
+      "quote": "U rad mora biti umetnuta Izjava o akademskoj čestitosti. ... Okvirna struktura završnog rada: ... 3. Sažeci na hrvatskom i engleskom jeziku 4. Uvod ...",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-ekologija-zavrsni--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      },
+      "category": "format",
+      "label": "Numeracija stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-ekologija-upute",
+      "sourcePage": "str. 3 (odjeljak Izgled zavrsnog rada)",
+      "quote": "Stranice rada je potrebno numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovna stranica, sadržaj i sažetci se ne numeriraju. Numeracija počinje od Uvoda i počinje od broja 1.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-ekologija-zavrsni--element-caption-rules",
+      "checkId": "element-caption-rules",
+      "value": {
+        "labels": {
+          "table": "Tablica",
+          "figure": "Slika",
+          "chart": "Grafikon"
+        },
+        "captionPosition": {
+          "table": "above",
+          "figure": "below",
+          "chart": "below"
+        },
+        "sourceRequired": true
+      },
+      "category": "format",
+      "label": "Pozicija natpisa tablica, slika i grafikona",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-ekologija-upute",
+      "sourcePage": "str. 9 (odjeljak Tablice, crtezi, slike i grafikoni)",
+      "quote": "Svaku tablicu, crtež, sliku i grafikon valja označiti odgovarajućim rednim brojem. Njihov naslov mora ukratko sadržavati odgovor na pitanja što se njima želi pokazati te se uz njih, mora naznačiti i izvor iz kojeg su preuzeti. ... Naslov tablice se piše iznad tablice, a slike i grafikona i dr. ispod u veličini pisma 12.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    }
+  ],
+  "omittedChecks": [
+    {
+      "checkId": "table-figure-rescue-rules",
+      "reason": "Nema DPI ni keepWithCaption podataka."
+    }
+  ],
+  "generatedAt": "2026-08-04"
+}

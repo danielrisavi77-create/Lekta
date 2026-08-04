@@ -1,0 +1,110 @@
+{
+  "profileId": "ffzg-sociologija-diplomski",
+  "entries": [
+    {
+      "ruleId": "ffzg-sociologija-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true,
+        "italicize": "container"
+      },
+      "category": "citation",
+      "label": "Popis literature, abecedni red, noviji radovi prvo",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "str. 6, odjeljak POPIS LITERATURE",
+      "quote": "Piše se abecednim redom bez rednih brojeva. Ako se spominje više djela istog autora, prvo se navode ona novijeg datuma. Ako se koristi više djela istog autora objavljenih iste godine, uz godinu se pridodaje slovo abecede, kako bi se djela razlikovala prilikom navođenja u tekstu.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "visoka",
+      "draftNote": "Napomena za ljudsku provjeru: ovaj izvor trazi NOVIJE radove istog autora prvo (suprotno konvenciji arheologije/filozofije/etnologije koje traze starije prvo); to je legitimna razlika po odsjeku, ne proturjecje unutar iste cjeline."
+    },
+    {
+      "ruleId": "ffzg-sociologija-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["appendices", "summary-hr"],
+        "labels": {
+          "appendices": "Prilozi",
+          "summary-hr": "Sažetak"
+        }
+      },
+      "category": "structure",
+      "label": "Prilozi prije sažetaka (poželjna struktura)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "str. 4, odjeljak STRUKTURA RADA",
+      "quote": "Teorijsko–empirijski radovi: (naslovna stranica), uvod, ciljevi i svrha, teorijski koncept rada, hipoteze, metodologija, rezultati, rasprava, zaključak, prilozi, literatura, sažeci.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "niska",
+      "draftNote": "OBVEZNOST: izvor doslovno kaze 'Nacelno i radi orijentacije, pozeljna struktura diplomskog rada moze se - ovisno o vrsti rada - sazeti na sljedeci nacin' te 'Stvarna struktura diplomskog rada moze donekle odstupati od gore navedene, ako je to opravdano zbog specificne naravi odredjene teme.' Ovo NIJE imperativ nego preporuka; ne smije se bodovati bez izricite ljudske odluke o autoritetu (postojeci required-sections unos za ovaj profil vec je oznacen kao advisory iz istog razloga)."
+    },
+    {
+      "ruleId": "ffzg-sociologija-diplomski--element-caption-rules",
+      "checkId": "element-caption-rules",
+      "value": {
+        "labels": {
+          "table": "Tablica",
+          "figure": "Slika",
+          "chart": "Slika"
+        },
+        "captionPosition": {
+          "table": "above",
+          "figure": "below",
+          "chart": "below"
+        }
+      },
+      "category": "structure",
+      "label": "Natpis tablice iznad, grafickog prikaza ispod",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "str. 7-8, odjeljak UPUTE ZA IZRADU TABLIČNIH I GRAFIČKIH PRIKAZA",
+      "quote": "Svaka tablica mora imati redni broj i naslov. Naslov tablice nalazi se iznad tablice... Redni broj i naslov grafičkog prikaza (slike) nalazi se ispod grafičkog prikaza... Naziv grafičkog prikaza je \"slika\".",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "visoka",
+      "draftNote": "Izvor izricito izjednacava 'graficki prikaz' (chart) s nazivom 'slika', pa je chart label postavljen jednako kao figure. Polje 'lists' nije spomenuto pa je izostavljeno."
+    },
+    {
+      "ruleId": "ffzg-sociologija-diplomski--table-figure-rescue-rules",
+      "checkId": "table-figure-rescue-rules",
+      "value": {
+        "table": {
+          "align": "center"
+        },
+        "figure": {
+          "align": "center"
+        }
+      },
+      "category": "format",
+      "label": "Horizontalno centriranje tablica i grafickih prikaza",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "str. 7-8, odjeljak UPUTE ZA IZRADU TABLIČNIH I GRAFIČKIH PRIKAZA",
+      "quote": "Tablica i njezin naslov trebaju biti horizontalno centrirani na stranici... Grafički prikaz i naslov trebaju biti horizontalno centrirani na stranici.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "visoka"
+    }
+  ],
+  "generatedAt": "2026-08-04",
+  "source": "Pilot mjerenje prinosa iz vec snapshotiranog izvora ffzg-socio-diplomski-2014. Sve stavke su DRAFT, scored:false, cekaju ljudsku verifikaciju. citation-sync-rules izostavljen jer izvor ne daje eksplicitan primjer unutartekstnog navoda (zagrada s autor-godina-stranica); postoji samo format popisa literature i opca etika citiranja. section-surgery-rules izostavljen jer izvor ne razlikuje numeraciju prednjeg i glavnog dijela rada, niti gdje numeracija pocinje."
+}

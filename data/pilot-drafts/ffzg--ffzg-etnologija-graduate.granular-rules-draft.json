@@ -1,0 +1,99 @@
+{
+  "profileId": "ffzg-etnologija-graduate",
+  "entries": [
+    {
+      "ruleId": "ffzg-etnologija-graduate--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical"
+      },
+      "category": "citation",
+      "label": "Popis literature, abecedni red",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-etnologija-diplomski-2019",
+      "sourcePage": "str. 5, odjeljak Pravila o oblikovanju popisa literature i popisa izvora",
+      "quote": "Popis literature navesti abecednim redom autora (više djela istoga autora navesti kronološki) s potpunim podacima prema sljedećim pravilima:",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "visoka",
+      "draftNote": "authorYearSuffixes nije eksplicitno spomenut (nema primjer a/b/c oznaka za istu godinu istog autora)."
+    },
+    {
+      "ruleId": "ffzg-etnologija-graduate--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      },
+      "category": "citation",
+      "label": "Autor-godina-stranica citati usklađeni s popisom literature",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-etnologija-diplomski-2019",
+      "sourcePage": "str. 4, odjeljak Citiranje",
+      "quote": "Citiranje ideja, koncepata, dijelova teksta ili rečenica i slijeđenje strukture nekog rada drugog autora potrebno je dokumentirati podacima o autoru, godinom nastanka djela iz kojeg se preuzima citat i stranicom.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "visoka"
+    },
+    {
+      "ruleId": "ffzg-etnologija-graduate--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["originality-statement", "appendices", "summary-hr", "keywords-hr"],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu",
+          "appendices": "Popis priloga",
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi"
+        }
+      },
+      "category": "structure",
+      "label": "Redoslijed elemenata diplomskog rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-etnologija-diplomski-2019",
+      "sourcePage": "str. 3, odjeljak Elementi diplomskog rada",
+      "quote": "1. Naslovnica 2. Stranica s Izjavom o autorstvu 3. Sadržaj 4. Uvod 5. Razrada teme 6. Zaključak 7. Popis priloga 8. Popis literature 9. Naslov, sažetak rada (100 – 150 riječi) i ključne riječi (3 – 5) na hrvatskom i engleskom jeziku.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "srednja",
+      "draftNote": "Izvor koristi izraz 'izjava o autorstvu', koji nije u ugradjenim aliasima za originality-statement pa je ovdje eksplicitno naveden kao label. Abstract/keywords-en nisu ukljuceni jer izvor samo kaze 'na hrvatskom i engleskom jeziku' bez zasebno naslovljenih dijelova."
+    },
+    {
+      "ruleId": "ffzg-etnologija-graduate--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        }
+      },
+      "category": "format",
+      "label": "Naslovna stranica bez broja stranice",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-etnologija-diplomski-2019",
+      "sourcePage": "str. 2, odjeljak Grafičko oblikovanje teksta",
+      "quote": "tekst rada treba biti u fontu Times New Roman, veličine 12 točaka, s proredom 1,5 linija, obostrano poravnatim tekstualnim blokom te paginiranim stranicama (naslovna stranica se ne paginira).",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "niska",
+      "draftNote": "Samo je naslovna stranica eksplicitno izuzeta iz paginacije; izvor ne kaze je li numeracija rimska ili arapska za ostatak prednjeg dijela niti gdje pocinje glavni dio, pa su frontMatter.numbering i mainMatter izostavljeni."
+    }
+  ],
+  "generatedAt": "2026-08-04",
+  "source": "Pilot mjerenje prinosa iz vec snapshotiranog izvora ffzg-etnologija-diplomski-2019. Sve stavke su DRAFT, scored:false, cekaju ljudsku verifikaciju. element-caption-rules izostavljen jer izvor opisuje samo generican 'prilog' (potpis s naslovom, vremenom, mjestom, autorom), bez pozicije natpisa iznad/ispod ni razlike tablica/slika/grafikon. table-figure-rescue-rules izostavljen jer nema podataka o geometriji."
+}

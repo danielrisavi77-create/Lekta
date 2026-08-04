@@ -1,0 +1,79 @@
+{
+  "profileId": "ffzg-arheologija-graduate",
+  "entries": [
+    {
+      "ruleId": "ffzg-arheologija-graduate--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      },
+      "category": "citation",
+      "label": "Popis literature, abecedni red i oznake a/b/c",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-arheologija-pisani-radovi-2014",
+      "sourcePage": "str. 10, odjeljak 8. Popis literature",
+      "quote": "Popis literature sastavlja se abecednim redoslijedom prezimena autora. Ako je isti autor zastupljen s više različitih radova, popis literature sastavlja se prema kronološkom redoslijedu objave tih radova... Ako je isti autor u istoj godini objavio dva ili više radova, onda se uz godinu izdanja za svaki pojedini rad dodaju mala abecedna slova a, b, c (npr. Sanader 2001, Sanader 2001a, Sanader 2001b), a radovi se poslože abecedno, prema prvome slovu naslova.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "visoka"
+    },
+    {
+      "ruleId": "ffzg-arheologija-graduate--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      },
+      "category": "citation",
+      "label": "Uskladjivanje biljezaka autor-godina-stranica s popisom literature",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-arheologija-pisani-radovi-2014",
+      "sourcePage": "str. 2 (a. Izravno navođenje) i str. 8 (4. Bilješke, f. Uzastopno citiranje istoga teksta)",
+      "quote": "Doslovno preneseni tekst uvijek morate odvojiti navodnim znakovima te načiniti bilješku / fusnotu u kojoj citirate autora, njegovo djelo, mjesto i godinu izdanja te stranicu s koje ste preuzeli taj tekst. ... Skraćenica se sastoji od prezimena autora, godine izdanja teksta i stranice koju citirate.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "srednja",
+      "draftNote": "Citat spaja dva mjesta istog izvora (prvo navodjenje pravilo za izravne navode, i skracenica za ponovljeno citiranje); oba doslovno potvrdjuju autor-godina-stranica obrazac u fusnotama."
+    },
+    {
+      "ruleId": "ffzg-arheologija-graduate--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["figure-list", "abbreviation-list", "summary-hr", "keywords-hr", "abstract", "keywords-en"],
+        "labels": {
+          "figure-list": "Popis slika",
+          "abbreviation-list": "Popis kratica",
+          "summary-hr": "Sažetak",
+          "keywords-hr": "ključne riječi",
+          "abstract": "Abstract",
+          "keywords-en": "key words"
+        }
+      },
+      "category": "structure",
+      "label": "Redoslijed obaveznih dijelova pisanog rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-arheologija-pisani-radovi-2014",
+      "sourcePage": "str. 4, odjeljak 1. Obavezni dijelovi svakog pisanog rada",
+      "quote": "Naslovna stranica Sadržaj Uvod Naslovi i podnaslovi odnosno poglavlja vezana uz temu rada Zaključak Popis slika Popis kratica (ako ste koristili kratice u tekstu rada) Popis izvora (ako ste koristili antičke izvore) Popis literature Sažetak i ključne riječi Abstract, key words (sažetak i ključne riječi prevedene na engleski jezik)",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "srednja",
+      "draftNote": "Popis kratica i popis izvora su uvjetni (samo ako su koristene kratice/anticki izvori); nema izjave o akademskoj cestitosti ni popisa tablica u ovom izvoru."
+    }
+  ],
+  "generatedAt": "2026-08-04",
+  "source": "Pilot mjerenje prinosa iz vec snapshotiranog izvora ffzg-arheologija-pisani-radovi-2014. Sve stavke su DRAFT, scored:false, cekaju ljudsku verifikaciju. section-surgery-rules izostavljen jer izvor uopce ne spominje numeraciju stranica (postojeci draft profila potvrdjuje da nema page-numbers checkId iz ovog izvora). element-caption-rules izostavljen jer izvor ne spominje 'tablicu' ni 'grafikon' kao pojmove, ne daje poziciju natpisa (iznad/ispod) za slike, samo brojcanu oznaku i opis u popisu slika. table-figure-rescue-rules izostavljen jer nema podataka o geometriji."
+}

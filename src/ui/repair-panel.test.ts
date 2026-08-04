@@ -231,10 +231,22 @@ describe('renderRepairPanel: preporucene (advisory) stavke', () => {
     expect(recLi.querySelector('input')!.checked).toBe(false);
     expect(recLi.querySelector('.lekta-repair-panel__badge')?.textContent).toBe('Preporučeno');
     const subtitles = Array.from(mountEl.querySelectorAll('.lekta-repair-panel__subtitle')).map((s) => s.textContent);
-    expect(subtitles.some((t) => t?.includes('Preporučeno, nije obavezno'))).toBe(true);
+    // Naslov imenuje IZVOR preporuke i broji ih; to joj daje tezinu kod korisnika, a
+    // istovremeno posteno kaze da ne ulazi u ocjenu.
+    expect(subtitles.some((t) => t?.includes('Vaš fakultet ovo preporučuje'))).toBe(true);
+    expect(subtitles.some((t) => t?.includes('ne ulazi u ocjenu'))).toBe(true);
   });
 
-  it('preporucena stavka ide IZA neprekrsene-ali-bodovane skupine (Feature B)', () => {
+  /**
+   * Redoslijed je 2026-08-04 SVJESNO obrnut: preporuke idu IZNAD neprekrsenih bodovanih stavki.
+   *
+   * Razlog je mjerenje, ne estetika: vecina hrvatskih fakultetskih uputa su preporuke, ne obveze
+   * (svih pet ustanova iz pilota ima izricitu ogradu tipa "preporucuje se" ili "u dogovoru s
+   * mentorom"). Bodovati ih znacilo bi lazan nalaz studentu koji je postupio po mentorovoj uputi,
+   * pa ostaju izvan ocjene. Zauzvrat dobivaju mjesto koje odgovara njihovoj stvarnoj vrijednosti
+   * za korisnika, umjesto zadnjeg mjesta na popisu.
+   */
+  it('preporucena stavka ide ISPRED neprekrsene-ali-bodovane skupine', () => {
     const mountEl = mount();
     renderRepairPanel({
       ...ctxBase,
@@ -245,7 +257,7 @@ describe('renderRepairPanel: preporucene (advisory) stavke', () => {
       ],
     });
     const labels = Array.from(mountEl.querySelectorAll('.lekta-repair-panel__item span')).map((s) => s.textContent);
-    expect(labels.indexOf('Uredno bodovano')).toBeLessThan(labels.indexOf('Preporuka'));
+    expect(labels.indexOf('Preporuka')).toBeLessThan(labels.indexOf('Uredno bodovano'));
   });
 
   it('samo preporucene stavke (institucija bez ijednog bodovanog pravila): jedna skupina, sve odznacene', () => {

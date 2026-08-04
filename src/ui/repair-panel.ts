@@ -404,12 +404,19 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
   const list = document.createElement('ul');
   list.className = 'lekta-repair-panel__list';
 
-  // Tri skupine, tim redom: prekrseno (predodabrano) > neprekrseno-ali-bodovano, opt-in
-  // "uskladi cijeli dokument" (Feature B) > institucijska preporuka (advisory), uvijek opt-in.
-  const rank = (i: RepairableItem) => (i.violated !== false ? 0 : i.recommended ? 2 : 1);
+  // Tri skupine, tim redom: prekrseno (predodabrano) > PREPORUKA fakulteta > neprekrseno-ali-
+  // bodovano ("uskladi cijeli dokument", Feature B). Obje zadnje su uvijek opt-in.
+  //
+  // Preporuke su podignute IZNAD neprekrsenih bodovanih stavki namjerno. Vecina hrvatskih
+  // fakultetskih uputa su preporuke, ne obveze (izmjereno na snapshotiranom korpusu: svih pet
+  // ustanova iz pilota ima izricitu ogradu tipa "preporucuje se" ili "u dogovoru s mentorom").
+  // Bodovati ih kao obveze znacilo bi lazan nalaz: student bi gubio bodove za rad koji je tocan
+  // po mentorovoj uputi. Zato ostaju izvan ocjene, ali dobivaju mjesto koje odgovara njihovoj
+  // stvarnoj vrijednosti za korisnika, umjesto zadnjeg mjesta na popisu.
+  const rank = (i: RepairableItem) => (i.violated !== false ? 0 : i.recommended ? 1 : 2);
   const ordered = [...ctx.items].sort((a, b) => rank(a) - rank(b));
-  const firstExtraIdx = ordered.findIndex((i) => rank(i) === 1);
-  const firstRecommendedIdx = ordered.findIndex((i) => rank(i) === 2);
+  const firstRecommendedIdx = ordered.findIndex((i) => rank(i) === 1);
+  const firstExtraIdx = ordered.findIndex((i) => rank(i) === 2);
 
   ordered.forEach((item, orderIdx) => {
     const idx = ctx.items.indexOf(item);
@@ -428,7 +435,10 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
     if (orderIdx === firstRecommendedIdx && firstRecommendedIdx !== -1) {
       const sub = document.createElement('li');
       sub.className = 'lekta-repair-panel__subtitle';
-      sub.textContent = 'Preporučeno, nije obavezno (institucija to ne propisuje):';
+      // Naslov imenuje IZVOR preporuke: to je ono sto joj daje tezinu kod korisnika, a
+      // istovremeno posteno kaze da ne ulazi u ocjenu.
+      const count = ordered.filter((i) => rank(i) === 1).length;
+      sub.textContent = `Vaš fakultet ovo preporučuje (${count}); ne ulazi u ocjenu:`;
       list.appendChild(sub);
     }
     const li = document.createElement('li');

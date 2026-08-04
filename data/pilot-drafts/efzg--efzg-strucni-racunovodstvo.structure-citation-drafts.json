@@ -1,0 +1,87 @@
+{
+  "profileId": "efzg-strucni-racunovodstvo",
+  "note": "Nacrt (draft) granularnih pravila iz izvora vec koristenog za postojeci efzg.json (efzg-upute-strucni-diplomski-racunovodstvo), fokusiran na bibliography-rules/citation-sync-rules/required-section-rules/section-surgery-rules/element-caption-rules/table-figure-rescue-rules. AI nacrt, ceka ljudsku verifikaciju. Ne dira postojecu datoteku efzg.json. Dokument nema vidljivu tiskanu paginaciju; sourcePage navodi PDF stranicu iz snapshota.",
+  "entries": [
+    {
+      "ruleId": "efzg-strucni-racunovodstvo--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["summary-hr", "originality-statement", "figure-list", "table-list", "appendices"],
+        "labels": {
+          "summary-hr": "Sazetak i kljucne rijeci na hrvatskom i engleskom jeziku",
+          "originality-statement": "Izjava o akademskoj cestitosti (na hrvatskom i engleskom jeziku)",
+          "figure-list": "Popis slika",
+          "table-list": "Popis tablica",
+          "appendices": "Prilozi"
+        }
+      },
+      "category": "structure",
+      "label": "Redoslijed sazetka, izjave, popisa slika, tablica i priloga",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-upute-strucni-diplomski-racunovodstvo",
+      "sourcePage": "str. 2 do 3 PDF-a (odjeljak Diplomski rad se sastoji od sljedecih dijelova), dokument nema vidljivu tiskanu paginaciju",
+      "quote": "Diplomski rad se sastoji od sljedecih dijelova: 1) Korice... 3) Sazetak i kljucne rijeci na hrvatskom i engleskom jeziku... 4) Izjava o akademskoj cestitosti (na hrvatskom i engleskom jeziku) koja dolazi nakon naslovne stranice rada, a prije sadrzaja rada... 10) Popis slika obuhvaca sve slike koje se nalaze u diplomskom radu... 11) Popis tablica obuhvaca sve tablice koje se nalaze u diplomskom radu... 13) Prilozi se nalaze na kraju diplomskog rada, nakon zivotopisa.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "efzg-strucni-racunovodstvo--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical"
+      },
+      "category": "citation",
+      "label": "Popis literature abecednim redom",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-upute-strucni-diplomski-racunovodstvo",
+      "sourcePage": "str. 3 PDF-a, dokument nema vidljivu tiskanu paginaciju",
+      "quote": "Popis literature sluzi kako bi se u njemu naveli svi izvori korišteni u radu. Izvori se navode abecednim redom prema prezimenu prvog autora rada koristeci APA ili Harvardski stil.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "efzg-strucni-racunovodstvo--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year"
+      },
+      "category": "citation",
+      "label": "Sustav citiranja autor godina",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-upute-strucni-diplomski-racunovodstvo",
+      "sourcePage": "str. 3 PDF-a, dokument nema vidljivu tiskanu paginaciju",
+      "quote": "U pisanju teksta diplomskog rada student se treba pozivati na relevantna istrazivanja drugih autora te taj dio teksta pravilno oznaciti u radu koristenjem formata autor (godina) primjenom APA ili Harvardskog stila citiranja.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "note": "Formulirano imperativno (student se TREBA pozivati), ne kao 'preporucuje se'."
+    }
+  ],
+  "omittedChecks": [
+    {
+      "checkId": "section-surgery-rules",
+      "reason": "Dokument uopce ne govori o numeraciji stranica (rimska/arapska, izuzece naslovnice), nije draftano."
+    },
+    {
+      "checkId": "element-caption-rules",
+      "reason": "'Svaka slika i tablica koja se nalazi u tekstu diplomskog rada mora imati svoj redni broj, naslov i izvor' ali NE kaze je li naslov iznad ili ispod elementa (captionPosition), obavezno polje sheme."
+    },
+    {
+      "checkId": "table-figure-rescue-rules",
+      "reason": "Nije obradjeno (nema DPI, keepWithCaption, landscape ni sirinu tablice/slike)."
+    }
+  ],
+  "conflicts": [],
+  "generatedAt": "2026-08-04"
+}

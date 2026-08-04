@@ -1,0 +1,100 @@
+{
+  "profileId": "efzg-diplomski",
+  "note": "Nacrt (draft) granularnih pravila iz izvora vec koristenog za postojeci efzg.json (efzg-pravilnik-diplomski-2012), fokusiran na bibliography-rules/citation-sync-rules/required-section-rules/section-surgery-rules/element-caption-rules/table-figure-rescue-rules. AI nacrt, ceka ljudsku verifikaciju. Ne dira postojecu datoteku efzg.json. Skenirani PDF izvor, ali PyMuPDF/vizualno citanje dalo je citljiv tekstualni sloj pa su citati doslovni.",
+  "entries": [
+    {
+      "ruleId": "efzg-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["summary-hr", "figure-list", "table-list", "appendices"],
+        "labels": {
+          "summary-hr": "Sazetak i kljucne rijeci (na hrvatskom i jednom svjetskom jeziku)",
+          "figure-list": "Popis slika",
+          "table-list": "Popis tablica",
+          "appendices": "Prilozi"
+        }
+      },
+      "category": "structure",
+      "label": "Redoslijed sazetka, popisa slika, tablica i priloga",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-pravilnik-diplomski-2012",
+      "sourcePage": "str. 3 do 4 (odjeljak 1.2. Struktura diplomskog rada)",
+      "quote": "Diplomski rad, u obliku u kojem se predaje povjerenstvu na ocjenu, treba imati sljedece dijelove: Korice, Naslovnica, Naslov, Sazetak i kljucne rijeci (na hrvatskom i jednom svjetskom jeziku), Sadrzaj, Uvod, Poglavlja sredisnjeg dijela, Zakljucak, Popis literature, Popis slika, Popis tablica, Prilozi, Zivotopis studenta.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "note": "PROTURJECJE: redoslijed Popis slika prije Popis tablica prema ovom Pravilniku (2012, vaziji, visi autoritet). Starije opce Upute iz 2003 (efzg-upute-diplomski-seminarski, odjeljci 5.6/5.7 i Primjer 4) daju OBRNUT redoslijed za isti diplomski rad (Popis tablica prije Popis ilustracija). Ne odlucujem sam, vidi 'conflicts' nize."
+    },
+    {
+      "ruleId": "efzg-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical"
+      },
+      "category": "citation",
+      "label": "Popis literature abecednim redom",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-pravilnik-diplomski-2012",
+      "sourcePage": "str. 5 (odjeljak 1.2. Struktura diplomskog rada, Popis literature)",
+      "quote": "Popis literature. U popisu se abecednim redom navode svi izvori koji su u radu koristeni. Ne navode se radovi koji se u radu ne citiraju niti oni na koje se u radu ne upucuje.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "efzg-diplomski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year"
+      },
+      "category": "citation",
+      "label": "Sustav citiranja autor godina",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-pravilnik-diplomski-2012",
+      "sourcePage": "str. 9 (odjeljak 4. Osnovne tehnicke upute za pisanje radova)",
+      "quote": "Preporucuje se na tudje radove upucivati prema sustavu autor-godina, harvardskim ili APA stilom.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "note": "Izvor ovo formulira kao preporuku (Preporucuje se), ne kao obvezu. AUTHORITY CAVEAT. PROTURJECJE: starije opce Upute iz 2003 (efzg-upute-diplomski-seminarski, odjeljak 6.1) za isti diplomski rad opisuju posve drugaciji, fusnotni (footnote/endnote) sustav citiranja i uopce ne spominju autor-godina format; taj sustav se ne moze izraziti u trenutnoj citation-sync-rules shemi (mode je fiksno 'author-year'). Ne odlucujem sam, vidi 'conflicts' nize."
+    }
+  ],
+  "omittedChecks": [
+    {
+      "checkId": "section-surgery-rules",
+      "reason": "Pravilnik (odjeljak 4) kaze samo 'Stranice radova trebaju biti numerirane... Svako poglavlje rada treba zapoceti na novoj stranici', bez izuzeca naslovnice od numeracije i bez navoda rimska/arapska. Nedovoljno precizno za section-surgery-rules, nije draftano."
+    },
+    {
+      "checkId": "element-caption-rules",
+      "reason": "Popis slika/popis tablica opisan je samo kao popis (sadrzi broj, naziv ilustracije i broj stranice), ne kao pozicija naslova unutar teksta (captionPosition), obavezno polje sheme."
+    },
+    {
+      "checkId": "table-figure-rescue-rules",
+      "reason": "Nije obradjeno (nema DPI, keepWithCaption, landscape ni sirinu tablice/slike)."
+    }
+  ],
+  "conflicts": [
+    {
+      "topic": "Redoslijed Popis slika / Popis tablica u diplomskom radu",
+      "quoteA": "efzg-pravilnik-diplomski-2012 (str. 3 do 4): 'Popis literature, Popis slika, Popis tablica, Prilozi, Zivotopis studenta.'",
+      "quoteB": "efzg-upute-diplomski-seminarski (str. 11, Primjer 4, sadrzaj primjera): 'LITERATURA ... 46, POPIS TABLICA ... 48, POPIS ILUSTRACIJA ... 49, PRILOZI ... 50' (Popis tablica prije Popis ilustracija/slika)",
+      "note": "Nije odluceno koji izvor vazi za redoslijed. Pravilnik je noviji (2012) i formalno visi autoritet (Pravilnik nasuprot opcim Uputama), ali ne odlucujem sam; ceka ljudsku odluku."
+    },
+    {
+      "topic": "Sustav citiranja u diplomskom radu (autor-godina naspram fusnota)",
+      "quoteA": "efzg-pravilnik-diplomski-2012 (str. 9): 'Preporucuje se na tudje radove upucivati prema sustavu autor-godina, harvardskim ili APA stilom.'",
+      "quoteB": "efzg-upute-diplomski-seminarski (str. 19, odjeljak 6.1): 'Oznake izvora podataka (biljeske), preporucljivo je pisati na jedan od sljedecih nacina, kao: a) fusnote - biljeske na donjem rubu stranice... b) endnote - biljeske na posebnoj stranici...' (nema spomena autor-godina sustava u cijelom dokumentu)",
+      "note": "Dva razlicita sustava citiranja za isti rad iz dva sluzbena EFZG izvora razlicite starosti. Genuine proturjecje; strukturno ni ne staje u trenutnu citation-sync-rules shemu (mode: 'author-year' je jedina dopustena vrijednost, footnote sustav nema mapiranje). Ceka ljudsku odluku, moguce treba nova shema za fusnotni citat prije nego se ista boduje za ovaj profil."
+    }
+  ],
+  "generatedAt": "2026-08-04"
+}

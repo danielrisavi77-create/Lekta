@@ -1,0 +1,92 @@
+{
+  "profileId": "unizd-zdravstvo-zavrsni",
+  "note": "Nacrt (draft) dodatnih pravila iz istog izvora kao postojeci unizd-zdravstvo-zavrsni.json (format). Izvor je PRAVILNIK (KLASA 012-01/22-02/07, potpisala procelnica), stoga authority=binding. AI nacrt, ceka ljudsku verifikaciju.",
+  "entries": [
+    {
+      "ruleId": "unizd-zdravstvo-zavrsni--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "appearance"
+      },
+      "category": "citation",
+      "label": "Popis literature (Vancouver, brojcano po redoslijedu navodjenja)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-zdravstvo-pravilnik-2022",
+      "sourcePage": "str. 13 (Prilog 4, odjeljak Popis literature)",
+      "quote": "Popis literature - sadržava jedino radove koji su navedeni u tekstu. Popis literature pisati s rednim brojem pod kojim se nalaze u tekstu. Naslove na engleskom jeziku, osim prve riječi, pisati malim početnim slovom.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-zdravstvo-zavrsni--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["originality-statement", "abbreviation-list", "summary-hr", "appendices"],
+        "labels": {
+          "originality-statement": "Izjava o akademskoj čestitosti",
+          "abbreviation-list": "Popis kratica i simbola",
+          "summary-hr": "Sažetak / Summary",
+          "appendices": "Prilozi"
+        }
+      },
+      "category": "structure",
+      "label": "Struktura zavrsnog rada (Prilog 4)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-zdravstvo-pravilnik-2022",
+      "sourcePage": "str. 13 (Prilog 4. Kako bi rad trebao tehnicki izgledati)",
+      "quote": "Naslovna stranica ( prva i druga) ... Izjava o akademskoj čestitosti ... Zahvala ... Popis kratica i simbola ... Sažetak / Summary na hrvatskom i na engleskom jeziku s naslovom i ključnim riječima ... Sadržaj ... Prilozi ... Kratki životopis studenta.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-zdravstvo-zavrsni--element-caption-rules",
+      "checkId": "element-caption-rules",
+      "value": {
+        "labels": {
+          "table": "Tablica",
+          "figure": "Slika"
+        },
+        "captionPosition": {
+          "table": "above",
+          "figure": "below"
+        },
+        "sourceRequired": true
+      },
+      "category": "format",
+      "label": "Pozicija natpisa tablica i slika",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-zdravstvo-pravilnik-2022",
+      "sourcePage": "str. 13 (Prilog 4. Kako bi rad trebao tehnicki izgledati)",
+      "quote": "Tablice- izraditi s rednim brojem i naslovom iznad tablice. Riječi u tablicama ne smiju se kratiti. ... Slike i crteže- izraditi s rednim brojem i naslovom te opisom ispod slike. Za reprodukcije slika i tablica iz drugih izvora naznačiti njihove autore.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    }
+  ],
+  "omittedChecks": [
+    {
+      "checkId": "citation-sync-rules",
+      "reason": "Citiranje je Vancouver brojcani sustav (numerirane reference u uglatoj/oblicnoj notaciji, ne autor-godina), a citation-sync-rules shema podrzava iskljucivo mode:'author-year'. Izvan dosega ovog checkId-a."
+    },
+    {
+      "checkId": "section-surgery-rules",
+      "reason": "Procitani odjeljci Pravilnika (Cl.1-22 + Prilog 4 tehnicke upute) ne navode shemu numeracije stranica (rimski/arapski, pocetak numeracije) niti da naslovnica ostaje nenumerirana."
+    },
+    {
+      "checkId": "table-figure-rescue-rules",
+      "reason": "Nema DPI ni keepWithCaption podataka."
+    }
+  ],
+  "generatedAt": "2026-08-04"
+}

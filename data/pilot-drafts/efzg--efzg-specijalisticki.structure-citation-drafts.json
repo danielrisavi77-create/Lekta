@@ -1,0 +1,141 @@
+{
+  "profileId": "efzg-specijalisticki",
+  "note": "Nacrt (draft) granularnih pravila iz izvora vec koristenog za postojeci efzg.json (efzg-upute-specijalisticki-2021), fokusiran na bibliography-rules/citation-sync-rules/required-section-rules/section-surgery-rules/element-caption-rules/table-figure-rescue-rules. AI nacrt, ceka ljudsku verifikaciju. Ne dira postojecu datoteku efzg.json.",
+  "entries": [
+    {
+      "ruleId": "efzg-specijalisticki--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["summary-hr", "originality-statement", "figure-list", "table-list", "appendices"],
+        "labels": {
+          "summary-hr": "Sazetak i kljucne rijeci na hrvatskom i engleskom jeziku",
+          "originality-statement": "Izjava o akademskoj cestitosti",
+          "figure-list": "Popis slika/grafikona",
+          "table-list": "Popis tablica",
+          "appendices": "Prilozi"
+        }
+      },
+      "category": "structure",
+      "label": "Redoslijed sazetka, izjave, popisa slika, tablica i priloga",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-upute-specijalisticki-2021",
+      "sourcePage": "str. 4 do 5 (odjeljak 1.2. Izrada i struktura sveucilisnog specijalistickog rada)",
+      "quote": "Sveucilisni specijalisticki rad se sastoji od sljedecih dijelova: a) Korice... b) Naslovna stranica... c) Sazetak i kljucne rijeci na hrvatskom i engleskom jeziku... d) Izjava o akademskoj cestitosti (na hrvatskom i engleskom jeziku) dolazi nakon sazetka, a prije sadrzaja... j) Popis slika/grafikona... k) Popis tablica... m) Prilozi se nalaze na kraju sveucilisnog specijalistickog rada, poslije zivotopisa.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "efzg-specijalisticki--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical"
+      },
+      "category": "citation",
+      "label": "Popis literature abecednim redom",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-upute-specijalisticki-2021",
+      "sourcePage": "str. 5 (odjeljak 1.2., stavka i, Popis literature)",
+      "quote": "Popis literature sluzi kako bi se u njemu naveli svi izvori koji su koristeni u radu. Izvori se navode abecednim redom prema prezimenu prvog autora rada koristeci APA ili Harvardski stil.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "efzg-specijalisticki--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year"
+      },
+      "category": "citation",
+      "label": "Sustav citiranja autor godina",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-upute-specijalisticki-2021",
+      "sourcePage": "str. 5 (odjeljak 1.2., zadnji odlomak)",
+      "quote": "U pisanju teksta student se treba pozivati na istrazivanja drugih autora te taj dio teksta treba pravilno oznaciti u radu koristenjem formata autor (godina) primjenom APA ili Harvardskog stila citiranja.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "note": "Formulirano imperativno (student se TREBA pozivati), ne kao 'preporucuje se'; ipak i dalje samo draft do ljudske provjere."
+    },
+    {
+      "ruleId": "efzg-specijalisticki--element-caption-rules",
+      "checkId": "element-caption-rules",
+      "value": {
+        "labels": {
+          "table": "Tablica",
+          "figure": "Slika/grafikon",
+          "chart": "Slika/grafikon"
+        },
+        "captionPosition": {
+          "table": "above",
+          "figure": "above",
+          "chart": "above"
+        },
+        "sourceRequired": true,
+        "sourcePosition": "below-element",
+        "lists": {
+          "table": true,
+          "figure": true,
+          "chart": true
+        }
+      },
+      "category": "format",
+      "label": "Naslov iznad, izvor ispod tablice/slike/grafikona",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-upute-specijalisticki-2021",
+      "sourcePage": "str. 5 (odjeljak 1.2., zadnji odlomak)",
+      "quote": "Ukoliko se u tekstu nalaze slike/grafikoni i/ili tablice, svaka slika/grafikon i/ili tablica treba imati redni broj i naslov (navode se iznad slike/grafikona/tablice) te izvor (navodi se ispod slike/grafikona/tablice). Na svaku sliku/grafikon i/ili tablicu se treba pozvati u tekstu.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "note": "Izvor ne razlikuje 'slika' od 'grafikon' (uvijek spojeno kao 'slika/grafikon'), pa su figure i chart oznaceni istom oznakom iz izvora. Ovo je JEDINI od 5 efzg izvora koji eksplicitno navodi poziciju naslova (iznad/ispod)."
+    },
+    {
+      "ruleId": "efzg-specijalisticki--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "numbering": "roman"
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      },
+      "category": "format",
+      "label": "Rimska numeracija prije uvoda, arapska od uvoda",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-upute-specijalisticki-2021",
+      "sourcePage": "str. 12 (odjeljak 3. Pravila i upute za pisanje radova)",
+      "quote": "Stranice radova trebaju biti numerirane. Stranice prije uvoda se numeriraju rimskim brojevima pocevsi s brojem jedan. Prva stranica uvoda se numerira s arapskim brojem jedan i tako u kontinuitetu do posljednje stranice rada.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "note": "Odjeljak 3. je opci i pokriva i sveucilisni specijalisticki rad i seminarski rad UNUTAR ISTOG specijalistickog studija (odjeljak 2 ovog dokumenta). Ne primjenjuje se na profil efzg-seminarski (koji pokriva drugi, prijediplomski/diplomski seminarski rad iz drugog izvora)."
+    }
+  ],
+  "omittedChecks": [
+    {
+      "checkId": "table-figure-rescue-rules",
+      "reason": "Nije obradjeno (nema DPI, keepWithCaption, landscape ni sirinu tablice/slike)."
+    }
+  ],
+  "conflicts": [],
+  "generatedAt": "2026-08-04"
+}

@@ -1,0 +1,62 @@
+{
+  "profileId": "ffzg-pedagogija-graduate",
+  "entries": [
+    {
+      "ruleId": "ffzg-pedagogija-graduate--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["summary-hr", "keywords-hr", "abstract", "keywords-en", "originality-statement"],
+        "labels": {
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi",
+          "abstract": "Abstract",
+          "keywords-en": "Key words",
+          "originality-statement": "Izjava o akademskoj čestitosti"
+        }
+      },
+      "category": "structure",
+      "label": "Redoslijed prve cetiri stranice (sazetak prije izjave)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-pedagogija-diplomski-2024",
+      "sourcePage": "str. 1 (redoslijed stranica) i Prilozi, Izgled 3. stranice diplomskoga rada",
+      "quote": "Naslovna stranica nema oznaku broja stranice. Druga stranica donosi sadržaj rada, također bez oznake broja stranice. Treća stranica sadržava naslov rada, sažetak i ključne riječi na hrvatskome i engleskome jeziku, također bez oznake broja stranice. Četvrta stranica sadržava Izjavu o akademskoj čestitosti, također bez oznake broja stranice.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "visoka",
+      "draftNote": "Prilog (Izgled 3. stranice diplomskoga rada) doslovno potvrdjuje redoslijed unutar trece stranice: Sazetak (hr) - Kljucne rijeci (hr) - Naslov na engleskom - Abstract - Key words. Neuobicajeno u odnosu na druge FFZG odsjeke: Izjava o akademskoj cestitosti ovdje dolazi NAKON sazetka (4. stranica), ne prije."
+    },
+    {
+      "ruleId": "ffzg-pedagogija-graduate--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "numbering": "none",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal"
+        }
+      },
+      "category": "format",
+      "label": "Prve cetiri stranice bez broja stranice",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-pedagogija-diplomski-2024",
+      "sourcePage": "str. 1, odjeljak o izgledu prvih stranica",
+      "quote": "Naslovna stranica nema oznaku broja stranice. Druga stranica donosi sadržaj rada, također bez oznake broja stranice. Treća stranica sadržava naslov rada, sažetak i ključne riječi na hrvatskome i engleskome jeziku, također bez oznake broja stranice. Četvrta stranica sadržava Izjavu o akademskoj čestitosti, također bez oznake broja stranice.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "srednja",
+      "draftNote": "mainMatter.startAt izostavljen jer izvor ne navodi eksplicitan broj od kojeg numeracija pocinje (samo da su prve cetiri stranice nenumerirane; postojeci page-numbers unos profila kaze samo 'stranice numerirane, na dnu centrirano')."
+    }
+  ],
+  "generatedAt": "2026-08-04",
+  "source": "Pilot mjerenje prinosa iz vec snapshotiranog izvora ffzg-pedagogija-diplomski-2024. Sve stavke su DRAFT, scored:false, cekaju ljudsku verifikaciju. bibliography-rules i citation-sync-rules izostavljeni jer izvor samo upucuje na vanjski standard ('Navodjenje literature i oblikovanje tablicnoga i grafickoga prikazivanja potrebno je uskladiti s posljednjom verzijom APA stila') bez doslovnog navodjenja same abecedne/autor-godina pravila u ovom dokumentu. element-caption-rules i table-figure-rescue-rules izostavljeni iz istog razloga (oblikovanje tablica/grafikona je prepusteno vanjskom APA standardu, ne opisano ovdje)."
+}

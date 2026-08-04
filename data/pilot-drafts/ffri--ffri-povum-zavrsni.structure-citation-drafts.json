@@ -1,0 +1,56 @@
+{
+  "profileId": "ffri-povum-zavrsni",
+  "note": "Nacrt iz ffri-povum-upute-zavrsni (Upute Odsjeka za povijest umjetnosti, koje IZRAVNO CITIRAJU Clanak 9 opceg Pravilnika o zavrsnom radu FF, oznaceno navodnicima u izvoru). Napomena: citirani 'Clanak 9' u ovom odsjeckom dokumentu ne odgovara clanku brojevima u trenutnom procisceni tekstu opceg Pravilnika (koji ovu materiju ima u Clanku 8/10) - vjerojatno odsjecki dokument citira raniju verziju numeracije Pravilnika. Ne razrjesujem ovo sam, oznaceno za rucnu provjeru. Postojeca datoteka ffri-povum-zavrsni.json (format) NIJE dirana. Citat Clanka 9 NE spominje izjavu o autorstvu kao dio strukture pa je required-section-rules namjerno uzi od opceg profila.",
+  "entries": [
+    {
+      "ruleId": "ffri-povum-zavrsni--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["summary-hr", "appendices"],
+        "labels": {
+          "summary-hr": "Sažetak i ključne riječi",
+          "appendices": "Popis priloga (slikovnih, grafičkih, zvučnih zapisa i sl.)"
+        }
+      },
+      "category": "structure",
+      "label": "Obvezni dijelovi zavrsnog rada (citat Clanka 9 Pravilnika)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-povum-upute-zavrsni",
+      "sourcePage": "str. 12 (Izgled zavrsnog rada, citat Clanka 9 Pravilnika)",
+      "quote": "Završni rad otisnut je računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 20, a najviše 40 stranica teksta. Jedna stranica sadrži 30 redova x 60 otisnutih znakova, a sastoji se od: 1. prozirne folije (meki uvez); korica (tvrdi uvez), 2. naslovnice sljedećeg sadržaja... 3. sažetka i ključnih riječi, 4. uvoda, razrade teme i zaključka, 5. popisa literature, 6. popisa izvora, 7. popisa priloga (slikovnih, grafičkih, zvučnih zapisa i sl.), 8. sadržaja (na početku ili na kraju rada).",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffri-povum-zavrsni--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": { "numbering": "none", "removePageNumberFromTitlePage": true },
+        "mainMatter": { "numbering": "decimal", "startAt": 1 }
+      },
+      "category": "format",
+      "label": "Numeracija stranica (bez broja do Uvoda, arapski od Uvoda)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-povum-upute-zavrsni",
+      "sourcePage": "str. 12 (odsjecki dodatak uz Clanak 9)",
+      "quote": "Numeracija stranica stavlja se u donji desni kut, stranice se numeriraju od uvoda do kraja rada;",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    }
+  ],
+  "omittedChecks": [
+    { "checkId": "bibliography-rules", "reason": "Izvor navodi da rad sadrzi 'popis literature' i zaseban 'popis izvora' kao dijelove strukture, ali ne opisuje nacin sortiranja popisa." },
+    { "checkId": "citation-sync-rules", "reason": "Citatni stil je fusnote ('footnotes', tzv. podrubne biljeske), ne autor-godina; shema citation-sync-rules u ovom repozitoriju pokriva iskljucivo mode:'author-year' pa ovaj checkId strukturno ne odgovara fusnotnom stilu koji izvor propisuje." },
+    { "checkId": "element-caption-rules", "reason": "Izvor ne navodi poziciju natpisa tablica/slika niti njihove oznake." },
+    { "checkId": "table-figure-rescue-rules", "reason": "Izvor ne sadrzi tehnicke podatke o DPI-ju, sirini ili prijelomu tablica/slika." }
+  ],
+  "generatedAt": "2026-08-04"
+}

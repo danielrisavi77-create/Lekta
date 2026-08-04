@@ -1,0 +1,82 @@
+{
+  "profileId": "ffzg-filozofija-diplomski",
+  "entries": [
+    {
+      "ruleId": "ffzg-filozofija-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical"
+      },
+      "category": "citation",
+      "label": "Popis literature, abecedni red",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-filoz-diplomski-2019",
+      "sourcePage": "str. 5, odjeljak Popis literature",
+      "quote": "Popis literature piše se abecednim redom prema prezimenu (prvog) autora bez rednih brojeva.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "visoka",
+      "draftNote": "authorYearSuffixes nije primjenjivo jer se citira u fusnotama punim bibliografskim opisom, ne autor-godina kraticom."
+    },
+    {
+      "ruleId": "ffzg-filozofija-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["summary-hr", "keywords-hr", "abstract", "keywords-en"],
+        "labels": {
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi",
+          "abstract": "Abstract / Zusammenfassung / Résumé",
+          "keywords-en": "Key words / Schlüsselwörter / Mots-clés"
+        }
+      },
+      "category": "structure",
+      "label": "Redoslijed sažetka i ključnih riječi (3. stranica)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-filoz-diplomski-2019",
+      "sourcePage": "str. 3, Prilog Prve tri stranice rada (3. stranica)",
+      "quote": "Sažetak (na hrvatskom, do 250 riječi, obostrano poravnanje, jednostruki prored) Ključne riječi: (na hrvatskom, 5–10 riječi, obostrano poravnanje) Naslov rada na engleskom, njemačkom ili francuskom jeziku (centrirano, podebljano) Abstract / Zusammenfassung / Résumé (na engleskom, njemačkom ili francuskom...) Key words / Schlüsselwörter / Mots-clés: (na engleskom, njemačkom ili francuskom...)",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "visoka",
+      "draftNote": "Nema izjave o akademskoj cestitosti/izvornosti u ovom izvoru (Odsjek za filozofiju je ne trazi kao zaseban dio), pa originality-statement nije ukljucen."
+    },
+    {
+      "ruleId": "ffzg-filozofija-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "numbering": "none",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal"
+        }
+      },
+      "category": "format",
+      "label": "Numeracija stranica po dijelovima rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-filoz-diplomski-2019",
+      "sourcePage": "str. 1, odjeljak Tekst treba oblikovati na sljedeći način",
+      "quote": "naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati; ... stranice numerirati arapskim brojkama u donjem desnom kutu;",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "srednja",
+      "draftNote": "mainMatter.startAt izostavljen jer izvor ne navodi eksplicitan broj od kojeg pocinje numeracija (samo da je naslovnica+sadrzaj+sazeci nenumerirani, a ostatak arapski)."
+    }
+  ],
+  "generatedAt": "2026-08-04",
+  "source": "Pilot mjerenje prinosa iz vec snapshotiranog izvora ffzg-filoz-diplomski-2019. Sve stavke su DRAFT, scored:false, cekaju ljudsku verifikaciju. citation-sync-rules izostavljen jer se citira u fusnotama punim bibliografskim opisom (prvo pojavljivanje) i skracenom formom prezime+naslov+stranica (ponovljeno), ne autor-godina obrascem koji shema podrzava. element-caption-rules i table-figure-rescue-rules izostavljeni jer izvor uopce ne spominje tablice, slike ni grafikone."
+}

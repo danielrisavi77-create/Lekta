@@ -1,0 +1,87 @@
+{
+  "profileId": "efzg-zavrsni",
+  "note": "Nacrt (draft) granularnih pravila iz izvora vec koristenog za postojeci efzg.json (efzg-postupak-zavrsni), fokusiran na bibliography-rules/citation-sync-rules/required-section-rules/section-surgery-rules/element-caption-rules/table-figure-rescue-rules. AI nacrt, ceka ljudsku verifikaciju. Ne dira postojecu datoteku efzg.json.",
+  "entries": [
+    {
+      "ruleId": "efzg-zavrsni--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["figure-list", "table-list", "appendices"],
+        "labels": {
+          "figure-list": "Popis slika",
+          "table-list": "Popis tablica",
+          "appendices": "Prilozi"
+        }
+      },
+      "category": "structure",
+      "label": "Redoslijed popisa slika, tablica i priloga",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-postupak-zavrsni",
+      "sourcePage": "odjeljak POSTUPAK IZRADE ZAVRSNOG RADA (dokument nema tiskanu paginaciju)",
+      "quote": "Zavrsni rad se sastoji od sljedecih dijelova: naslovnica, sadrzaj, uvod, sredisnji dio rada, zakljucak, popis literature, popis slika, popis tablica, prilozi.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "efzg-zavrsni--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year"
+      },
+      "category": "citation",
+      "label": "Sustav citiranja autor godina",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-postupak-zavrsni",
+      "sourcePage": "odjeljak POSTUPAK IZRADE ZAVRSNOG RADA (dokument nema tiskanu paginaciju)",
+      "quote": "Preporucuje se na tudje radove upucivati harvardskim stilom navodjenja literature. Prema harvardskom stilu navodjenja literature izvor se oznacava u samom tekstu nakon preuzete definicije, misli ili spoznaje tako da se u zagradu pise prezime autora i godina izdavanja djela koje se citira, npr. (Lazibat, Brizar i Bakovic, 2007.).",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "note": "Izvor ovo formulira kao preporuku (Preporucuje se), ne kao obvezu. AUTHORITY CAVEAT: ne boduj dok covjek ne odluci treba li ostati advisory."
+    },
+    {
+      "ruleId": "efzg-zavrsni--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        }
+      },
+      "category": "format",
+      "label": "Naslovna stranica bez broja",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-postupak-zavrsni",
+      "sourcePage": "odjeljak POSTUPAK IZRADE ZAVRSNOG RADA (dokument nema tiskanu paginaciju)",
+      "quote": "Numerirati stranice rada. Naslovna stranica se ne numerira.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    }
+  ],
+  "omittedChecks": [
+    {
+      "checkId": "bibliography-rules",
+      "reason": "Izvor spominje Popis literature i da navodjenje prema harvardskom stilu ovisi o vrsti izvora, ali NIGDJE ne kaze da popis mora biti abecedno poredan. Sort ostaje nepotvrdjen, nije draftano."
+    },
+    {
+      "checkId": "element-caption-rules",
+      "reason": "Izvor trazi broj, naziv i izvor za svaku tablicu, sliku i graf ('moraju imati svoj broj, naziv i izvor'), ali NIGDJE eksplicitno ne kaze je li naslov iznad ili ispod elementa (captionPosition), obavezno polje sheme."
+    },
+    {
+      "checkId": "table-figure-rescue-rules",
+      "reason": "Izvor ne spominje DPI, keepWithCaption ni druga geometrijska pravila tablica ili slika."
+    }
+  ],
+  "conflicts": [],
+  "generatedAt": "2026-08-04"
+}

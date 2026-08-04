@@ -1,0 +1,121 @@
+{
+  "profileId": "ffzg-informacijske-zavrsni",
+  "entries": [
+    {
+      "ruleId": "ffzg-informacijske-zavrsni--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical"
+      },
+      "category": "citation",
+      "label": "Popis literature, abecedni red",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-inf-diplomski-2024",
+      "sourcePage": "str. 7, odjeljak 3.6. Literatura",
+      "quote": "Svi bibliografski izvori (knjiga, časopis, internetska stranica itd.) moraju abecednim redom biti navedeni u popisu literature.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "visoka",
+      "draftNote": "Izvor ne govori o urednim razmacima, viseslovnim autorima iste godine ni uvlacenju retka, pa su ta polja izostavljena."
+    },
+    {
+      "ruleId": "ffzg-informacijske-zavrsni--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["originality-statement", "abbreviation-list", "figure-list", "table-list", "appendices", "summary-hr", "abstract"],
+        "labels": {
+          "originality-statement": "Izjava o akademskoj čestitosti",
+          "abbreviation-list": "Popis oznaka i kratica",
+          "figure-list": "Popis slika",
+          "table-list": "Popis tablica",
+          "appendices": "Prilozi",
+          "summary-hr": "Sažetak",
+          "abstract": "Summary"
+        }
+      },
+      "category": "structure",
+      "label": "Redoslijed dijelova rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-inf-diplomski-2024",
+      "sourcePage": "str. 6, odjeljak 3.1. Struktura rada",
+      "quote": "Rad se sastoji od sljedećih cjelina: Naslovnica, Izjava o akademskoj čestitosti, Sadržaj, Uvod, Glavni dio, Zaključak, Literatura, te Sažetak i Summary s ključnim riječima. Cjeline se u radu moraju pisati prema navedenom redoslijedu. Ispred sadržaja može doći Zahvala. Iza Literature može doći Popis oznaka i kratica, Popis slika, Popis tablica i Popis grafikona. Iza popisa može doći poglavlje Prilozi. Na samom kraju rada stavlja se Sažetak i Summary.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "srednja",
+      "draftNote": "Popis oznaka i kratica, popis slika, popis tablica, popis grafikona i prilozi su izricito opcionalni (moze doci); redoslijed vrijedi samo ako su prisutni. Popis grafikona nema odgovarajucu RequiredSectionKind vrijednost pa je izostavljen."
+    },
+    {
+      "ruleId": "ffzg-informacijske-zavrsni--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "numbering": "none",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      },
+      "category": "format",
+      "label": "Numeracija stranica po dijelovima rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-inf-diplomski-2024",
+      "sourcePage": "str. 6, odjeljak 3.1. Struktura rada",
+      "quote": "Uvod je poglavlje od kojeg počinje numeracija poglavlja i numeracija stranica.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "srednja",
+      "draftNote": "frontMatter.numbering='none' i removePageNumberFromTitlePage su izvedeni iz cinjenice da numeracija POCINJE od Uvoda; izvor to ne kaze doslovno za svaku prednju stranicu pojedinacno."
+    },
+    {
+      "ruleId": "ffzg-informacijske-zavrsni--element-caption-rules",
+      "checkId": "element-caption-rules",
+      "value": {
+        "labels": {
+          "table": "Tablica",
+          "figure": "Slika",
+          "chart": "Grafikon"
+        },
+        "captionPosition": {
+          "table": "above",
+          "figure": "below",
+          "chart": "below"
+        },
+        "lists": {
+          "table": false,
+          "figure": false,
+          "chart": false
+        }
+      },
+      "category": "structure",
+      "label": "Natpisi tablica, slika i grafikona",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-inf-diplomski-2024",
+      "sourcePage": "str. 7, odjeljak 3.5. Slike i tablice",
+      "quote": "Svaka slika, tablica i grafikon trebaju biti opisani rednim brojem i kratkim naslovom koji sažima njihov sadržaj... Na primjer, \"Slika 1. Model baze podataka\" ili \"Tablica 4. Prosjek prema godini studiranja\". Redni broj i naslov stavljaju se iznad tablica, ali uvijek ispod slika i grafikona.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "srednja",
+      "draftNote": "labels i captionPosition su izricito potvrdjeni citatom. lists=false je izvedeno iz cinjenice da su popisi slika/tablica/grafikona opcionalni (odjeljak 3.1, 'moze doci'), nije doslovno receno u ovom odjeljku."
+    }
+  ],
+  "generatedAt": "2026-08-04",
+  "source": "Pilot mjerenje prinosa (checkIdovi bibliography-rules, citation-sync-rules, required-section-rules, section-surgery-rules, element-caption-rules, table-figure-rescue-rules) iz vec snapshotiranog izvora ffzg-inf-diplomski-2024. Sve stavke su DRAFT, scored:false, cekaju ljudsku verifikaciju. citation-sync-rules i table-figure-rescue-rules su izostavljeni jer izvor ne pokriva jednoznacan autor-godina nacin citiranja (odreduje mentor: 'U radu je potrebno koristiti Harvardski, APA ili neki drugi stil citiranja, a odreduje ga mentor.') odnosno geometriju tablica/slika."
+}

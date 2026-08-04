@@ -1,0 +1,118 @@
+{
+  "profileId": "efzg-seminarski",
+  "note": "Nacrt (draft) granularnih pravila iz DVA izvora (efzg-pravilnik-diplomski-2012 odjeljak 2 'IZRADA SEMINARSKIH RADOVA', i efzg-upute-diplomski-seminarski iz 2003), fokusiran na bibliography-rules/citation-sync-rules/required-section-rules/section-surgery-rules/element-caption-rules/table-figure-rescue-rules. AI nacrt, ceka ljudsku verifikaciju. Ne dira postojecu datoteku efzg-seminarski.json (koja pokriva font-size/line-spacing/margins/footnote-size/page-count, sve advisory iz Uputa 2003). Ova celija (efzg-seminarski, programi: Prijediplomski i Diplomski studiji) NIJE isto sto i 'seminarski rad' iz efzg-upute-specijalisticki-2021 (odjeljak 2), koji pripada odvojenom poslijediplomskom specijalistickom studiju i NIJE koristen ovdje.",
+  "entries": [
+    {
+      "ruleId": "efzg-seminarski--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["figure-list", "table-list", "appendices"],
+        "labels": {
+          "figure-list": "Popis slika",
+          "table-list": "Popis tablica",
+          "appendices": "Prilozi"
+        }
+      },
+      "category": "structure",
+      "label": "Redoslijed popisa slika, tablica i priloga",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-pravilnik-diplomski-2012",
+      "sourcePage": "str. 6 (odjeljak 2.2. Struktura seminarskog rada)",
+      "quote": "Seminarski rad, u obliku u kojem se predaje mentoru na ocjenu, treba imati sljedece dijelove: Naslovnica, Naslov, Sadrzaj, Uvod, Poglavlja sredisnjeg dijela, Zakljucak, Popis literature, Popis slika, Popis tablica, Prilozi.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "note": "PROTURJECJE: redoslijed Popis slika prije Popis tablica prema ovom Pravilniku (2012, noviji, formalno visi autoritet). Starije opce Upute iz 2003 (efzg-upute-diplomski-seminarski, odjeljci 5.6/5.7) daju OBRNUT redoslijed za isti seminarski rad (Popis tablica prije Popis ilustracija). Ne odlucujem sam, vidi 'conflicts' nize."
+    },
+    {
+      "ruleId": "efzg-seminarski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical"
+      },
+      "category": "citation",
+      "label": "Popis literature abecednim redom",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-pravilnik-diplomski-2012",
+      "sourcePage": "str. 7 (odjeljak 2.2. Struktura seminarskog rada, Popis literature)",
+      "quote": "Popis literature. U popisu se abecednim redom navode svi izvori koji su u radu koristeni. Ne navode se radovi koji se u radu ne citiraju niti oni na koje se u radu ne upucuje.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "note": "Korobirano drugim izvorom bez sukoba: efzg-upute-diplomski-seminarski (str. 14, odjeljak 5.5. Literatura) kaze isto, 'Unutar svake skupine izvori se nizu abecednim redom (prema prezimenu autora, a ne postoji li autor ili urednik, prema prvoj rijeci naslova).'"
+    },
+    {
+      "ruleId": "efzg-seminarski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year"
+      },
+      "category": "citation",
+      "label": "Sustav citiranja autor godina",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "efzg-pravilnik-diplomski-2012",
+      "sourcePage": "str. 9 (odjeljak 4. Osnovne tehnicke upute za pisanje radova)",
+      "quote": "Preporucuje se na tudje radove upucivati prema sustavu autor-godina, harvardskim ili APA stilom.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "note": "Izvor ovo formulira kao preporuku (Preporucuje se), ne kao obvezu. AUTHORITY CAVEAT. PROTURJECJE: starije opce Upute iz 2003 (efzg-upute-diplomski-seminarski, odjeljak 6.1) za isti seminarski rad opisuju posve drugaciji, fusnotni (footnote/endnote) sustav citiranja i uopce ne spominju autor-godina format; taj sustav se ne moze izraziti u trenutnoj citation-sync-rules shemi (mode je fiksno 'author-year'). Ne odlucujem sam, vidi 'conflicts' nize."
+    },
+    {
+      "ruleId": "efzg-seminarski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        }
+      },
+      "category": "format",
+      "label": "Naslovna stranica bez broja",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "efzg-upute-diplomski-seminarski",
+      "sourcePage": "str. 5 (odjeljak 5.1. Naslovna stranica)",
+      "quote": "Naslovna je stranica prva stranica rada i nikada se ne oznacava rednim brojem.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "note": "Ova recenica je formulirana kao cinjenica/pravilo (nikada se), ne kao preporuka, za razliku od odjeljka 7.1 (Izgled rada) istog dokumenta koji koristi 'preporucuje se'. efzg-pravilnik-diplomski-2012 ne daje dovoljno precizno pravilo o naslovnici pa nije koristen ovdje (vidi omittedChecks u diplomski/zavrsni draftovima za usporedbu)."
+    }
+  ],
+  "omittedChecks": [
+    {
+      "checkId": "element-caption-rules",
+      "reason": "Nijedan od dva izvora eksplicitno ne navodi je li naslov tablice/slike iznad ili ispod elementa. efzg-upute-diplomski-seminarski (odjeljak 6.2) trazi redni broj, naslov (velikim slovima) i izvor za svaku tablicu/grafikon/crtez/sliku, ali ne pozicioniranje; efzg-pravilnik-diplomski-2012 ne spominje pozicioniranje uopce za seminarski rad."
+    },
+    {
+      "checkId": "table-figure-rescue-rules",
+      "reason": "Nije obradjeno ni u jednom od dva izvora (nema DPI, keepWithCaption, landscape ni sirinu tablice/slike)."
+    }
+  ],
+  "conflicts": [
+    {
+      "topic": "Redoslijed Popis slika / Popis tablica u seminarskom radu",
+      "quoteA": "efzg-pravilnik-diplomski-2012 (str. 6 do 7): 'Popis literature, Popis slika, Popis tablica, Prilozi.'",
+      "quoteB": "efzg-upute-diplomski-seminarski (str. 11, Primjer 4, sadrzaj primjera koji vrijedi za seminarski i diplomski rad): 'LITERATURA ... 46, POPIS TABLICA ... 48, POPIS ILUSTRACIJA ... 49, PRILOZI ... 50' (Popis tablica prije Popis ilustracija/slika)",
+      "note": "Nije odluceno koji izvor vazi za redoslijed. Pravilnik je noviji (2012) i formalno visi autoritet (Pravilnik nasuprot opcim Uputama), ali ne odlucujem sam; ceka ljudsku odluku."
+    },
+    {
+      "topic": "Sustav citiranja u seminarskom radu (autor-godina naspram fusnota)",
+      "quoteA": "efzg-pravilnik-diplomski-2012 (str. 9): 'Preporucuje se na tudje radove upucivati prema sustavu autor-godina, harvardskim ili APA stilom.'",
+      "quoteB": "efzg-upute-diplomski-seminarski (str. 19, odjeljak 6.1): 'Oznake izvora podataka (biljeske), preporucljivo je pisati na jedan od sljedecih nacina, kao: a) fusnote - biljeske na donjem rubu stranice... b) endnote - biljeske na posebnoj stranici...' (nema spomena autor-godina sustava u cijelom dokumentu)",
+      "note": "Dva razlicita sustava citiranja za isti rad iz dva sluzbena EFZG izvora razlicite starosti. Genuine proturjecje; strukturno ni ne staje u trenutnu citation-sync-rules shemu (mode: 'author-year' je jedina dopustena vrijednost, footnote sustav nema mapiranje). Ceka ljudsku odluku."
+    }
+  ],
+  "generatedAt": "2026-08-04"
+}

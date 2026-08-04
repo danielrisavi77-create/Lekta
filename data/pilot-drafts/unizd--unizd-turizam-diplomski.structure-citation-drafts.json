@@ -1,0 +1,90 @@
+{
+  "profileId": "unizd-turizam-diplomski",
+  "note": "Nacrt (draft) dodatnih pravila iz istog izvora kao postojeci unizd-turizam-diplomski.json (format). AI nacrt, ceka ljudsku verifikaciju.",
+  "entries": [
+    {
+      "ruleId": "unizd-turizam-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical"
+      },
+      "category": "citation",
+      "label": "Popis literature",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "str. 19 (odjeljak 2.2.6. Literatura)",
+      "quote": "Na kraju je završnoga rada potrebno navesti popis korištene literature naveden abecednim slijedom (prema prezimenu autora, a ako ne postoji autor ili urednik, prema prvoj riječi naslova, označena arapskim brojkama).",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-turizam-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["summary-hr", "abstract", "table-list", "figure-list", "appendices"],
+        "labels": {
+          "summary-hr": "Sažetak",
+          "abstract": "Sažetak na stranom jeziku (engleski, njemački, talijanski ili francuski)",
+          "table-list": "Popis tablica (ukoliko ih ima)",
+          "figure-list": "Popis ilustracija (ukoliko ih ima)",
+          "appendices": "Prilozi (ako ih ima)"
+        }
+      },
+      "category": "structure",
+      "label": "Obvezne cjeline diplomskog rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "str. 16-17 (odjeljak 2.2. Osnovne cjeline diplomskog rada)",
+      "quote": "Diplomski rad treba sadržavati sljedeće cjeline: Sadržaj, Uvod, Razradu teme, Zaključak, Sažetak, Sažetak na stranom jeziku (engleski, njemački, talijanski ili francuski), Literaturu, Popis tablica (ukoliko ih ima), Popis ilustracija (ukoliko ih ima), Priloge (ako ih ima), Životopis.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-turizam-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal"
+        }
+      },
+      "category": "format",
+      "label": "Numeracija stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "str. 13 (odjeljak 2.1. Izgled diplomskog rada)",
+      "quote": "Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovnica se ne numerira.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    }
+  ],
+  "omittedChecks": [
+    {
+      "checkId": "citation-sync-rules",
+      "reason": "Isti dokument kao zavrsni: nudi izbor izmedju Harvardskog i europskog fusnotnog sustava citiranja, bez propisanog jedinstvenog moda."
+    },
+    {
+      "checkId": "element-caption-rules",
+      "reason": "Naslov i izvor su obvezni za tablicu/grafikon/sliku/crtez, ali pozicija naslova (iznad/ispod) nije nigdje receno."
+    },
+    {
+      "checkId": "table-figure-rescue-rules",
+      "reason": "Nema podataka o DPI-ju ni o keepWithCaption."
+    }
+  ],
+  "generatedAt": "2026-08-04"
+}

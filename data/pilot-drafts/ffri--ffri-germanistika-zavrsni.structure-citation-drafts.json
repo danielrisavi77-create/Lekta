@@ -1,0 +1,75 @@
+{
+  "profileId": "ffri-germanistika-zavrsni",
+  "note": "Nacrt dodatnih pravila iz ffri-germanistika-leitfaden-2018. Uvod dokumenta (str. 5) izricito kaze da je Leitfaden 'verbindliches Dokument' (obvezujuci) za sve studente i nastavnike, sto vec koristi postojeca datoteka ffri-germanistika-zavrsni.json (authority: binding) za format; ista osnova koristi se i ovdje. Postojeca datoteka NIJE dirana. Poglavlje 3.7/3.8 razlikuje Bachelor/Master od seminarskih radova samo po opsegu i bodovanju, ne po formatu/strukturi, pa isti Leitfaden vrijedi i za zavrsni (Bachelor) i za diplomski (Master).",
+  "entries": [
+    {
+      "ruleId": "ffri-germanistika-zavrsni--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      },
+      "category": "citation",
+      "label": "Popis literature (abecedno, sufiksi za isti autor/godinu)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-germanistika-leitfaden-2018",
+      "sourcePage": "str. 12 (odjeljak 2.6 Bibliographie, Allgemeine Hinweise)",
+      "quote": "In der Bibliographie wird alphabetisch sortiert, nach den Familiennamen der Autoren. Verwenden Sie mehrere Artikel eines Autors, sind diese chronologisch nach dem Erscheinungsjahr zu ordnen (beginnend mit der neusten Veröffentlichung).",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffri-germanistika-zavrsni--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      },
+      "category": "citation",
+      "label": "Citiranje autor-godina u tekstu, uvijek sa stranicom",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-germanistika-leitfaden-2018",
+      "sourcePage": "str. 9 (odjeljak 2.4 Quellenangaben im Text, tocke 1 i 2)",
+      "quote": "Quellen für wörtliche und inhaltliche Zitate werden im Text (und nicht in Fußnoten) angegeben: (Familienname Jahr: Seite). ... Bei Literaturquellen im Text müssen Seitenzahlen immer angegeben werden (im Unterschied zu Quellenangaben im Literaturverzeichnis, hier nur in speziellen Fällen wie z. B. bei Zeitschriftenartikeln).",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffri-germanistika-zavrsni--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["originality-statement", "appendices"],
+        "labels": {
+          "originality-statement": "Eidesstattliche Erklärung (bei Abschlussarbeiten)",
+          "appendices": "Anhang"
+        }
+      },
+      "category": "structure",
+      "label": "Okvirna struktura pisanog rada",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-germanistika-leitfaden-2018",
+      "sourcePage": "str. 16 (odjeljak 3.2 Aufbau und Gliederung der schriftlichen Arbeit)",
+      "quote": "Eine schriftliche Arbeit sollte i. d. R. folgende Bestandteile enthalten: Titelseite (s. Anhang) Inhaltsverzeichnis (s. Anhang) eidesstattliche Erklärung bei Abschlussarbeiten (s. Anhang) ggf. Vorwort Einleitung... Hauptteil... Schluss... Quellenverzeichnis inkl. Literaturverzeichnis Anhang: Tabellen-, Abbildungs- und andere Verzeichnisse; Dokumentation, z. B. Umfrage-Fragebögen oder Interview-Transkriptionen; Kopie von Primärtexten",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    }
+  ],
+  "omittedChecks": [
+    { "checkId": "section-surgery-rules", "reason": "Izvor (str. 21) opisuje da naslovnica i sadrzaj ne prikazuju broj stranice iako se broje ('Seitenzahlung beginnt mit der zweiten Seitenzahl'), ali ne kaze eksplicitno od koje stranice numeracija postaje VIDLJIVA niti razlikuje front/main matter u obliku sheme frontMatter/mainMatter; nejasno je pa je izostavljeno umjesto nagadanja." },
+    { "checkId": "element-caption-rules", "reason": "Izvor spominje da se Tabellen-/Abbildungsverzeichnisse stavljaju u Anhang, ali ne navodi poziciju natpisa (iznad/ispod) niti oznake (npr. 'Tabelle'/'Abbildung')." },
+    { "checkId": "table-figure-rescue-rules", "reason": "Izvor ne sadrzi tehnicke podatke o DPI-ju, sirini ili prijelomu tablica/slika." }
+  ],
+  "generatedAt": "2026-08-04"
+}

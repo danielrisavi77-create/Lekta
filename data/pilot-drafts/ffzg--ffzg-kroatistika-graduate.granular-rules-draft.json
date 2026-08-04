@@ -1,0 +1,103 @@
+{
+  "profileId": "ffzg-kroatistika-graduate",
+  "entries": [
+    {
+      "ruleId": "ffzg-kroatistika-graduate--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true,
+        "italicize": "container"
+      },
+      "category": "citation",
+      "label": "Popis literature, abecedni red, kronoloski za isti autor",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-kroatistika-diplomski-2026",
+      "sourcePage": "odjeljak 5. Oblikovanje popisa literature (HTML stranica, bez tiskane paginacije)",
+      "quote": "Bibliografske jedinice pišu se abecedno, prema prezimenu autora ili urednika, odnosno prema naslovu djela ako je tako prikladnije... Više jedinica istog autora niže se kronološki; ako ih je unutar jedne godine više, označavaju se slovima a, b, c…",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "visoka",
+      "draftNote": "italicize='container' izveden je iz primjera (naslovi knjiga i casopisa dosljedno u kurzivu, naslovi clanaka/poglavlja ne)."
+    },
+    {
+      "ruleId": "ffzg-kroatistika-graduate--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      },
+      "category": "citation",
+      "label": "Unutartekstni citat prezime godina: stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-kroatistika-diplomski-2026",
+      "sourcePage": "odjeljak 4. Služenje literaturom i njezino navođenje (HTML stranica, bez tiskane paginacije)",
+      "quote": "Citat se donosi u navodnicima, a podatak o izvoru u zagradi koja neposredno slijedi citat. Podatak o izvoru ima oblik Prezime godina: stranica",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "visoka"
+    },
+    {
+      "ruleId": "ffzg-kroatistika-graduate--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["summary-hr", "keywords-hr"],
+        "labels": {
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi"
+        }
+      },
+      "category": "structure",
+      "label": "Sažetak i ključne riječi kao obvezni dio rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-kroatistika-diplomski-2026",
+      "sourcePage": "odjeljak 2. Metodologija i kompozicija (HTML stranica, bez tiskane paginacije)",
+      "quote": "Obavezni dijelovi rada jesu Naslovnica (v. uzorak u Prilogu), Sadržaj (kazalo poglavljâ, stavlja se na početak rada), Literatura (v. odjeljak 5) te Sažetak i Ključne riječi na hrvatskome i engleskome (ili drugom stranom jeziku).",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "niska",
+      "draftNote": "Izvor ne razdvaja hrvatsku i englesku verziju kao zasebno naslovljene dijelove ('na hrvatskome i engleskome' je jedna fraza), pa abstract/keywords-en nisu ukljuceni u redoslijed. Prilozi su opcionalni ('ovisno o temi rada... dodaju se Prilozi') i njihova pozicija nije receno pa nisu ukljuceni."
+    },
+    {
+      "ruleId": "ffzg-kroatistika-graduate--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "numbering": "none"
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      },
+      "category": "format",
+      "label": "Numeracija stranica pocevsi od Uvoda",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-kroatistika-diplomski-2026",
+      "sourcePage": "odjeljak 6. Oblikovanje teksta (HTML stranica, bez tiskane paginacije)",
+      "quote": "Stranice se numeriraju arapskim brojkama počevši od Uvoda.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "srednja",
+      "draftNote": "frontMatter.numbering='none' i removePageNumberFromTitlePage su izvedeni iz cinjenice da numeracija POCINJE od Uvoda; nije doslovno receno da je svaka prednja stranica nenumerirana."
+    }
+  ],
+  "generatedAt": "2026-08-04",
+  "source": "Pilot mjerenje prinosa iz vec snapshotiranog izvora ffzg-kroatistika-diplomski-2026 (HTML, volatile). Sve stavke su DRAFT, scored:false, cekaju ljudsku verifikaciju. Izvor je oznacen kao 'volatile' u source-registryu pa svaka buduca reprovjera treba ponovno dohvatiti stranicu. element-caption-rules i table-figure-rescue-rules izostavljeni jer izvor uopce ne spominje tablice, slike ni grafikone."
+}

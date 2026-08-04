@@ -1,0 +1,82 @@
+{
+  "profileId": "ffzg-lingvistika-diplomski",
+  "entries": [
+    {
+      "ruleId": "ffzg-lingvistika-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true,
+        "italicize": "container"
+      },
+      "category": "citation",
+      "label": "Popis literature, abecedni red, oznake a/b/c",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-lingvistika-diplomski-2024",
+      "sourcePage": "str. 3, odjeljak Navođenje izvora u tekstu, točka 2",
+      "quote": "Radovi se navode abecednim redom prema prezimenima autora i kronološkim redom za radove istog autora. Ako se navodi više radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd.) iza godine izdanja.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "visoka",
+      "draftNote": "Izvor su 'Smjernice casopisa Suvremena lingvistika' preporucene za diplomski rad (preporuceno oblikovanje, uz mogucnost dogovora s mentorom o drugom stilu); to treba zabiljeziti kod verifikacije autoriteta."
+    },
+    {
+      "ruleId": "ffzg-lingvistika-diplomski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      },
+      "category": "citation",
+      "label": "Autor-godina citat, stranica za izdvojene navode",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-lingvistika-diplomski-2024",
+      "sourcePage": "str. 2-3, odjeljci Oblikovanje teksta (točka 7) i Navođenje izvora u tekstu (točka 1)",
+      "quote": "Navodi izvora u tekstu sastoje se od prezimena autora i godine objavljivanja rada te, ako je relevantno, broja stranice nakon dvotočke (sve u zagradama)... Na kraju citata iza interpunkcijskog znaka navodi se izvor citata, npr. (Labov 1973: 30).",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "srednja",
+      "draftNote": "Za obicne navode stranica je 'ako je relevantno' (opcionalna), ali primjer izdvojenog/duljeg citata eksplicitno ukljucuje stranicu; requirePageForDirectQuotes je postavljen na temelju tog primjera."
+    },
+    {
+      "ruleId": "ffzg-lingvistika-diplomski--element-caption-rules",
+      "checkId": "element-caption-rules",
+      "value": {
+        "labels": {
+          "table": "Tablica",
+          "figure": "Slika",
+          "chart": "Slika"
+        },
+        "captionPosition": {
+          "table": "below",
+          "figure": "below",
+          "chart": "below"
+        }
+      },
+      "category": "structure",
+      "label": "Natpisi tablica i slika ispod elementa",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-lingvistika-diplomski-2024",
+      "sourcePage": "str. 3, odjeljak Oblikovanje teksta, točka 9",
+      "quote": "Tablice i slike u radu trebaju biti označene riječju Tablica ili Slika te brojem, veličina fonta 11, te smještene ispod tablice ili slike, npr. Slika 2. Procjena kompetencije govornika",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null,
+      "confidence": "srednja",
+      "draftNote": "Izvor ne razlikuje 'grafikon' kao zaseban pojam od slike, pa je chart izjednacen s figure. Polje 'lists' (popis tablica/slika) nije spomenuto pa je izostavljeno."
+    }
+  ],
+  "generatedAt": "2026-08-04",
+  "source": "Pilot mjerenje prinosa iz vec snapshotiranog izvora ffzg-lingvistika-diplomski-2024 (Smjernice za izradu i obranu diplomskog rada + prilozene Smjernice casopisa Suvremena lingvistika). Sve stavke su DRAFT, scored:false, cekaju ljudsku verifikaciju. required-section-rules izostavljen jer izvor navodi sto ULAZI u opseg stranica (naslovnica, sazetak, kljucne rijeci, prilozi, popis literature) ali ne daje eksplicitan obvezan redoslijed tih dijelova. section-surgery-rules izostavljen jer izvor kaze samo 'Sve stranice trebaju biti numerirane pri dnu stranice desno' bez razlike prednjeg i glavnog dijela rada (moguce da nema roman/decimal podjelu). table-figure-rescue-rules izostavljen jer nema podataka o geometriji (DPI, poravnanje)."
+}

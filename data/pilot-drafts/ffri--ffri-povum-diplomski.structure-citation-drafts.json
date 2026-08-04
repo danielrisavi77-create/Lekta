@@ -1,0 +1,56 @@
+{
+  "profileId": "ffri-povum-diplomski",
+  "note": "Nacrt iz ffri-povum-upute-diplomski (Upute Odsjeka za povijest umjetnosti, koje IZRAVNO CITIRAJU Clanak 9 opceg Pravilnika o diplomskom radu FF). Ista napomena o numeraciji clanka kao kod ffri-povum-zavrsni: citirani 'Clanak 9' ne odgovara clanku brojevima trenutnog opceg Pravilnika (koji ovu materiju ima u Clanku 11/13); vjerojatno starija verzija numeracije. Oznaceno za rucnu provjeru, ne razrjesujem sam. Postojeca datoteka ffri-povum-diplomski.json (format) NIJE dirana.",
+  "entries": [
+    {
+      "ruleId": "ffri-povum-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["summary-hr", "appendices"],
+        "labels": {
+          "summary-hr": "Sažetak i ključne riječi",
+          "appendices": "Popis priloga (slikovnih, grafičkih, zvučnih zapisa i sl.)"
+        }
+      },
+      "category": "structure",
+      "label": "Obvezni dijelovi diplomskog rada (citat Clanka 9 Pravilnika)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-povum-upute-diplomski",
+      "sourcePage": "str. 14 (Izgled diplomskog rada, citat Clanka 9 Pravilnika)",
+      "quote": "Diplomski rad je otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm). Opseg i duljinu diplomskoga rada utvrđuje odsjek u uputama o diplomskom radu. Jedna stranica sadrži 30 redova x 60 otisnutih znakova, a sastoji se od sljedećega: 1. prozime folije (meki uvez); 2. naslovnice sljedećega sadržaja... 3. sažetka i ključnih riječi; 4. uvoda, razrade teme i zaključka; 5. popisa literature; 6. popisa izvora; 7. popisa priloga (slikovnih, grafičkih, zvučnih zapisa i sl.); 8. sadržaja (na početku ili na kraju rada).",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffri-povum-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": { "numbering": "none", "removePageNumberFromTitlePage": true },
+        "mainMatter": { "numbering": "decimal", "startAt": 1 }
+      },
+      "category": "format",
+      "label": "Numeracija stranica (bez broja do Uvoda, arapski od Uvoda)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-povum-upute-diplomski",
+      "sourcePage": "str. 14 (odsjecki dodatak uz Clanak 9)",
+      "quote": "Numeracija stranica stavlja se u donji desni kut, stranice se numeriraju od uvoda do kraja rada;",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    }
+  ],
+  "omittedChecks": [
+    { "checkId": "bibliography-rules", "reason": "Izvor navodi da rad sadrzi 'popis literature' i zaseban 'popis izvora' kao dijelove strukture, ali ne opisuje nacin sortiranja popisa." },
+    { "checkId": "citation-sync-rules", "reason": "Citatni stil je fusnote ('footnotes', tzv. podrubne biljeske), ne autor-godina; shema citation-sync-rules u ovom repozitoriju pokriva iskljucivo mode:'author-year' pa ovaj checkId strukturno ne odgovara fusnotnom stilu koji izvor propisuje." },
+    { "checkId": "element-caption-rules", "reason": "Izvor ne navodi poziciju natpisa tablica/slika niti njihove oznake." },
+    { "checkId": "table-figure-rescue-rules", "reason": "Izvor ne sadrzi tehnicke podatke o DPI-ju, sirini ili prijelomu tablica/slika." }
+  ],
+  "generatedAt": "2026-08-04"
+}

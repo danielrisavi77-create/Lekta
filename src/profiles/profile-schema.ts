@@ -347,12 +347,23 @@ export interface ParagraphRules {
 }
 
 /** Verificirana pravila za natpise i popise grafickih elemenata. */
+/**
+ * PAZI na obveznost polja: prije su `labels`, `captionPosition` i `lists` trazili SVA TRI elementa
+ * (tablica, slika, grafikon). Vecina hrvatskih uputa govori samo o tablicama i slikama, a o
+ * grafikonima i o popisima ne govori nista. Izmjereno na snapshotiranom korpusu: od 73 ustanove
+ * sa signalom za natpise, samo 30 spominje i grafikon, a 21 i popise. Tih 43 ustanove nije
+ * blokirao IZVOR nego nasa shema, koja je trazila podatak koji upute nemaju.
+ *
+ * Zato su `chart` i `lists` sada opcionalni. Potrosaci vec imaju sigurne zamjene
+ * (src/ui/repair-items.ts: `rules.labels.chart || 'Grafikon'`, `rules.lists?.[kind]`), pa
+ * izostanak znaci "izvor o tome ne govori", a ne "grafikoni se ne oznacavaju".
+ */
 export interface ElementCaptionRules {
-  labels: { table: string; figure: string; chart: string };
-  captionPosition: { table: 'above' | 'below'; figure: 'above' | 'below'; chart: 'above' | 'below' };
+  labels: { table: string; figure: string; chart?: string };
+  captionPosition: { table: 'above' | 'below'; figure: 'above' | 'below'; chart?: 'above' | 'below' };
   sourceRequired?: boolean;
   sourcePosition?: 'below-caption' | 'below-element';
-  lists: { table: boolean; figure: boolean; chart: boolean };
+  lists?: { table: boolean; figure: boolean; chart?: boolean };
   listPlacement?: 'after-toc' | 'before-intro';
   numbering?: 'document' | 'chapter';
   captionStyle?: {

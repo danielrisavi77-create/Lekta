@@ -1,0 +1,76 @@
+{
+  "profileId": "ffri-psihologija-diplomski",
+  "note": "Nacrt dodatnih pravila iz ffri-psihologija-brosura-2022. Brosura se SAMA opisuje kao 'podsjetnik i priručni savjetnik' (str. 2), sto je blaza formulacija od 'obvezujuce', ALI eksplicitno navodi da je odjeljak 6 'Kako mora izgledati diplomski rad' (format, dijelovi rada, numeriranje) napisan sukladno Clanku 11. obvezujuceg Pravilnika ('Tehnicku opremu... potrebno je izvesti sukladno Clanku 11. Pravilnika'). Zbog toga postojeca datoteka ffri-psihologija-diplomski.json vec koristi authority: binding za format iz istog odjeljka 6; ista logika primijenjena je i ovdje. Vidi authorityCaveat u sazetku zadatka. Postojeca datoteka NIJE dirana.",
+  "entries": [
+    {
+      "ruleId": "ffri-psihologija-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["originality-statement", "summary-hr", "appendices"],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu, vlastoručno potpisana",
+          "summary-hr": "Sažetak s ključnim riječima",
+          "appendices": "Prilozi"
+        }
+      },
+      "category": "structure",
+      "label": "Obvezni dijelovi diplomskog rada (odjeljak 6.3)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-psihologija-brosura-2022",
+      "sourcePage": "str. 10 (odjeljak 6.3 Dijelovi rada)",
+      "quote": "6.3. Dijelovi rada su ovim redom: Izjava o autorstvu, vlastoručno potpisana (Prilog 3.) Sadržaj Sažetak s ključnim riječima na hrvatskome jeziku te naslov diplomskog rada i sažetak s ključnim riječima na engleskome jeziku, Predgovor (ako postoji) Tekst rada (uvod, glavni dio, zaključak) Literatura Prilozi (ako ih ima)",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": { "numbering": "none", "removePageNumberFromTitlePage": true },
+        "mainMatter": { "numbering": "decimal", "startAt": 1 }
+      },
+      "category": "format",
+      "label": "Numeracija stranica (bez broja do Uvoda, arapski od Uvoda)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-psihologija-brosura-2022",
+      "sourcePage": "str. 11 (odjeljak 6.4 Numeriranje stranica)",
+      "quote": "6.4. Numeriranje stranica ide od prve stranice UVODA do zadnje stranice teksta diplomskog rada. Brojevi stranica pišu se arapskim brojkama, u desnom podnožju stranice. Prilozi dobivaju svoju numeraciju.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      },
+      "category": "citation",
+      "label": "Citiranje prema APA standardu, biljeske uz obveznu stranicu",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-psihologija-brosura-2022",
+      "sourcePage": "str. 10 (odjeljak 6.3.5 Literatura)",
+      "quote": "6.3.5. Literatura korištena u radu stavlja se na kraju i popisuje u skladu sa standardom navođenja literature u znanstvenim radovima (vidi APA priručnik i časopis Psihologijske teme). Na isti način pišu se i bilješke ispod teksta. Bilješke obavezno moraju imati naznačenu stranicu na koju se autor u tekstu poziva.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    }
+  ],
+  "omittedChecks": [
+    { "checkId": "bibliography-rules", "reason": "Izvor upucuje na vanjski 'APA prirucnik' za nacin navodenja literature, ali sam eksplicitno ne navodi abecedno sortiranje niti sufikse za isti autor/godinu unutar vlastitog teksta; nagadanje iz opceg znanja o APA stilu nije dopusteno." },
+    { "checkId": "element-caption-rules", "reason": "Izvor (6.3.6 Prilozi) kaze samo da ilustracije i tabele mogu stajati uz tekst ili na kraju, ne navodi poziciju natpisa (iznad/ispod) niti oznake." },
+    { "checkId": "table-figure-rescue-rules", "reason": "Izvor ne sadrzi tehnicke podatke o DPI-ju, sirini ili prijelomu tablica/slika." }
+  ],
+  "generatedAt": "2026-08-04"
+}

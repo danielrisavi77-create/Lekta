@@ -1,0 +1,66 @@
+{
+  "profileId": "ffri-zavrsni",
+  "note": "Nacrt dodatnih pravila (required-section-rules, section-surgery-rules) izveden iz vec snapshotiranih izvora. AI nacrt, ceka ljudsku verifikaciju. Postojeca datoteka ffri-zavrsni.json (paper-size, margins, font, font-size, line-spacing, justify, page-numbers) NIJE dirana; ovo je zaseban gap-fill fajl za isti profileId. Pravilnik ne propisuje nacin citiranja niti sortiranje popisa literature, pa citation-sync-rules i bibliography-rules nisu draftani na ovoj razini (svaki program pod ovim profilom moze imati drugaciji stil).",
+  "conflicts": [
+    {
+      "description": "Registry biljeska za ffri-pravilnik-zavrsni-2026 tvrdi da je recenica 'Obrojcavanje stranica: u podnozju, desno, pocevsi od Uvoda' NOVA u izmjeni 2026 i da 'ranije nije bilo eksplicitno u tekstu'. Medjutim izravno citanje data/sources/ffri/ffri-pravilnik-zavrsni-2023-ocr.txt pokazuje identicnu recenicu vec prisutnu u Clanku 8. stavak 2. procisceni teksta na snazi od studenoga 2023 (dakle prije izmjene 2026). Moguce objasnjenje: izvorni OCR prolaz na kojem je pisana registry biljeska imao 'glyph glitch na brojkama' (sto sama biljeska priznaje) pa je redak propusten, a kasniji re-OCR ga je otkrio. Ne odlucujem koji je opis toCan; oznaceno za rucnu provjeru uz oba citata.",
+      "sourceA": "ffri-pravilnik-zavrsni-2026",
+      "quoteA": "NOVO u ovoj izmjeni: 'Obrojcavanje stranica: u podnozju, desno, pocevsi od Uvoda' - ranije nije bilo eksplicitno u tekstu, sad je binding i strojno-provjerljivo (izvor: registry biljeska, ne sam Pravilnik)",
+      "sourceB": "ffri-pravilnik-zavrsni-2023",
+      "quoteB": "Clanak 8. (2) Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Velicina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano; Obrojcavanje stranica: u podnozju, desno, pocevsi od Uvoda."
+    }
+  ],
+  "entries": [
+    {
+      "ruleId": "ffri-zavrsni--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["originality-statement", "summary-hr", "appendices"],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu (vlastoručno potpisana)",
+          "summary-hr": "Sažetak i ključne riječi na jeziku pisanja rada",
+          "appendices": "Prilozi (npr. slikovni grafički, zvučni zapisi i sl.)"
+        }
+      },
+      "category": "structure",
+      "label": "Obvezni dijelovi zavrsnog rada (Clanak 10)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffri-pravilnik-zavrsni-2026",
+      "sourcePage": "str. 3 do 4 (Clanak 10. stavak 1.)",
+      "quote": "Završni rad treba sadržavati sljedeće formalne elemente i sadržajne cjeline: 1. Prozirne folije i meke stražnje korice (meki spiralni uvez) 2. Naslovna stranica sadrži... 3. Unutarnja naslovna stranica sadrži... 4. Izjava o autorstvu (vlastoručno potpisana) 5. Sadržaj 6. Uvod 7. Glavni dio – razrada teme 8. Zaključak 9. Popis literature 10. Sažetak i ključne riječi na jeziku pisanja rada 11. Naslov, sažetak i ključne riječi na engleskom odnosno hrvatskom jeziku (ako je rad pisan na drugom jeziku) 12. Prilozi (npr. slikovni grafički, zvučni zapisi i sl.).",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffri-zavrsni--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": { "numbering": "none", "removePageNumberFromTitlePage": true },
+        "mainMatter": { "numbering": "decimal", "startAt": 1 }
+      },
+      "category": "format",
+      "label": "Numeracija stranica (bez broja do Uvoda, arapski od Uvoda)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffri-pravilnik-zavrsni-2026",
+      "sourcePage": "str. 3 (Clanak 8. stavak 2.)",
+      "quote": "Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano; Obrojčavanje stranica: u podnožju, desno, počevši od Uvoda.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    }
+  ],
+  "omittedChecks": [
+    { "checkId": "bibliography-rules", "reason": "Pravilnik propisuje samo postojanje Popisa literature kao dijela strukture, ne i nacin sortiranja niti oblikovanje popisa; to prepusta odsjecima." },
+    { "checkId": "citation-sync-rules", "reason": "Pravilnik ne propisuje nacin citiranja (autor-godina naspram fusnota); ovaj profil objedinjuje vise programa s razlicitim citatnim stilovima (vidi zasebne odsjecke izvore za germanistiku, povijest umjetnosti, kulturalne studije)." },
+    { "checkId": "element-caption-rules", "reason": "Izvor ne spominje poziciju natpisa tablica/slika niti popis tablica/slika kao zaseban obvezni dio." },
+    { "checkId": "table-figure-rescue-rules", "reason": "Izvor ne sadrzi tehnicke podatke o DPI-ju, sirini ili prijelomu tablica/slika." }
+  ],
+  "generatedAt": "2026-08-04"
+}

@@ -1,0 +1,34 @@
+{
+  "profileId": "ffri-kroatistika-zavrsni",
+  "note": "Izvor ffri-hjk-upute-zavrsni.doc je binarna .doc datoteka koju alati dostupni u ovoj sesiji ne mogu procitati izravno (Read tool odbija binarne .doc formate). Jedini tekst iz ovog izvora dostupan za daljnje draftanje je citat vec upisan u postojecoj, ljudski/AI verificiranoj datoteci ffri-kroatistika-zavrsni.json (checkId page-numbers), koji dokazuje da izvor pokriva numeraciju stranica. Taj isti, vec potvrdjeni citat ovdje se ponovno koristi za NOVI checkId (section-surgery-rules) jer je strukturno bogatiji (razlikuje frontMatter/mainMatter) nego jednostavni boolean 'page-numbers'. Za required-section-rules, bibliography-rules, citation-sync-rules, element-caption-rules i table-figure-rescue-rules NEMA dostupnog citata u repozitoriju pa su izostavljeni, ne izmisljeni. Postojeca datoteka ffri-kroatistika-zavrsni.json NIJE dirana.",
+  "entries": [
+    {
+      "ruleId": "ffri-kroatistika-zavrsni--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": { "numbering": "none", "removePageNumberFromTitlePage": true },
+        "mainMatter": { "numbering": "decimal", "startAt": 1 }
+      },
+      "category": "format",
+      "label": "Numeracija stranica (bez broja do Uvoda, arapski od Uvoda)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffri-hjk-upute-zavrsni",
+      "sourcePage": "Postava stranice",
+      "quote": "Postava stranice: sve margine 2,5 cm. Font za tijelo teksta: Times New Roman 14 pt (po potrebi i u dogovoru s mentorom moguca je uporaba i drugih fontova). Font za biljeske (fusnote): Times New Roman 10 pt. Prored: 1,5 i u tijelu teksta i u biljeskama. Poravnanje: obostrano. Obrojcavanje stranica: u podnozju stranice, desno (obrojcavanje stranica pocinje od prve stranice poglavlja Uvoda).",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    }
+  ],
+  "omittedChecks": [
+    { "checkId": "required-section-rules", "reason": "Izvor je binarna .doc datoteka nedostupna alatima ove sesije izvan vec citiranog odlomka o postavi stranice; nema dostupnog citata o obveznim dijelovima rada." },
+    { "checkId": "bibliography-rules", "reason": "Isto, nema dostupnog citata o sortiranju popisa literature." },
+    { "checkId": "citation-sync-rules", "reason": "Isto, nema dostupnog citata o nacinu citiranja u tekstu." },
+    { "checkId": "element-caption-rules", "reason": "Isto, nema dostupnog citata o natpisima tablica/slika." },
+    { "checkId": "table-figure-rescue-rules", "reason": "Isto, nema dostupnog citata o tehnickim parametrima tablica/slika." }
+  ],
+  "generatedAt": "2026-08-04"
+}

@@ -1,0 +1,93 @@
+{
+  "profileId": "unizd-povijest-umj-diplomski",
+  "note": "Nacrt (draft) dodatnih pravila iz istog izvora kao postojeci unizd-povijest-umj-diplomski.json (format). Izvor je formalni akt (KLASA 602-04/19-08/03, potpisao procelnik), authority=binding dosljedno s ranijom klasifikacijom formata istog izvora. AI nacrt, ceka ljudsku verifikaciju.",
+  "entries": [
+    {
+      "ruleId": "unizd-povijest-umj-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      },
+      "category": "citation",
+      "label": "Popis literature i izvora (Harvardski stil)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-povijest-umj-upute-diplomski-2019",
+      "sourcePage": "str. 7 (odjeljak Naputci o navodjenju literature i citiranju)",
+      "quote": "Popis svih korištenih izvora i literature navodi se na kraju rada, organiziran abecednim redom prezimena autora, bez rednih brojeva. Ako se navodi više radova istog autora, treba ih nizati kronološkim redom. Ako se pak koristi više radova istog autora objavljenih iste godine, uz godinu se pridodaje slovo abecede (npr. 1985a., 1985b., 1985c., itd.).",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-povijest-umj-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["originality-statement", "summary-hr", "keywords-hr", "abstract", "keywords-en", "appendices"],
+        "labels": {
+          "originality-statement": "Izjava o akademskoj čestitosti",
+          "summary-hr": "Sažetak na hrvatskom jeziku",
+          "keywords-hr": "Ključne riječi na hrvatskom",
+          "abstract": "Abstract",
+          "keywords-en": "Keywords",
+          "appendices": "Prilozi"
+        }
+      },
+      "category": "structure",
+      "label": "Orijentacijska struktura diplomskog rada",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-povijest-umj-upute-diplomski-2019",
+      "sourcePage": "str. 4-6 (odjeljak 6. Upute za pisanje diplomskoga rada)",
+      "quote": "Orijentacijska struktura završnog rada: Korice, Naslovna stranica, Izjava o akademskoj čestitosti, Sadržaj, Naslov rada i sažetak na hrvatskom jeziku, ključne riječi, 1. Uvod ... 6. Literatura, Naslov rada i sažetak na engleskom jeziku, ključne riječi, Prilozi.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-povijest-umj-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      },
+      "category": "format",
+      "label": "Numeracija stranica",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-povijest-umj-upute-diplomski-2019",
+      "sourcePage": "str. 4-5 (odjeljak 6. Upute za pisanje diplomskoga rada, Propisana struktura rada)",
+      "quote": "stranice numerirati arapskim brojkama u donjem desnom kutu - naslovnu stranicu te stranice sa sadržajem i sažecima ne numerirati ... Tekst (započeti numeraciju stranica) 1. Uvod: objašnjenje teme i prezentacija njene građe.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    }
+  ],
+  "omittedChecks": [
+    {
+      "checkId": "citation-sync-rules",
+      "reason": "Isti obrazac kao zavrsni izvor: Harvardski stil popisa literature ALI s podnoznim fusnotama za citiranje u tekstu, ne unutartekstni (autor, godina) zapis; ne odgovara mode:'author-year' shemi."
+    },
+    {
+      "checkId": "element-caption-rules",
+      "reason": "Samo pozicija naslova tablice je eksplicitna (iznad); pozicija za likovne priloge/slike nije receno, pa je objekt nepotpun i izostavljen."
+    },
+    {
+      "checkId": "table-figure-rescue-rules",
+      "reason": "Nema DPI ni keepWithCaption podataka."
+    }
+  ],
+  "generatedAt": "2026-08-04"
+}

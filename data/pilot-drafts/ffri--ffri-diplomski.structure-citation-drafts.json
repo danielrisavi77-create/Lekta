@@ -1,0 +1,57 @@
+{
+  "profileId": "ffri-diplomski",
+  "note": "Nacrt dodatnih pravila (required-section-rules, section-surgery-rules) izveden iz vec snapshotiranog izvora ffri-pravilnik-diplomski-2023 (OCR tekst je cist, bez glyph artefakata za ovaj clanak). Postojeca datoteka ffri-diplomski.json (paper-size, margins, font, font-size, line-spacing, justify) NIJE dirana. Za ovaj profil nema snimljene izmjene iz 2026 (postoji samo za zavrsni rad).",
+  "entries": [
+    {
+      "ruleId": "ffri-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": ["originality-statement", "summary-hr", "appendices"],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu (vlastoručno potpisana)",
+          "summary-hr": "Sažetak i ključne riječi",
+          "appendices": "Prilozi (npr. slikovni grafički, zvučni zapisi i sl.)"
+        }
+      },
+      "category": "structure",
+      "label": "Obvezni dijelovi diplomskog rada (Clanak 13)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffri-pravilnik-diplomski-2023",
+      "sourcePage": "Clanak 13. stavak 1.",
+      "quote": "Diplomski rad treba sadržavati sljedeće formalne elemente i sadržajne cjeline: 1. Prozirne folije i meke stražnje korice (meki spiralni uvez) 2. Naslovna stranica sadrži... 3. Unutarnja naslovna stranica sadrži... 4. Izjava o autorstvu (vlastoručno potpisana) 5. Sadržaj 6. Sažetak i ključne riječi i (na hrvatskom jeziku odnosno na jeziku na kojem se diplomski rad piše te na engleskom jeziku) 7. Uvod 8. Glavni dio 9. Zaključak 10. Popis literature 11. Prilozi (npr. slikovni grafički, zvučni zapisi i sl.)",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffri-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": { "numbering": "none", "removePageNumberFromTitlePage": true },
+        "mainMatter": { "numbering": "decimal", "startAt": 1 }
+      },
+      "category": "format",
+      "label": "Numeracija stranica (bez broja do Uvoda, arapski od Uvoda)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffri-pravilnik-diplomski-2023",
+      "sourcePage": "Clanak 11. stavak 2.",
+      "quote": "Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano; Obrojčavanje stranica: u podnožju, desno, počevši od Uvoda.",
+      "status": "draft",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    }
+  ],
+  "omittedChecks": [
+    { "checkId": "bibliography-rules", "reason": "Pravilnik propisuje samo postojanje Popisa literature kao dijela strukture, ne i nacin sortiranja niti oblikovanje popisa; to prepusta odsjecima." },
+    { "checkId": "citation-sync-rules", "reason": "Pravilnik ne propisuje nacin citiranja (autor-godina naspram fusnota); ovaj profil objedinjuje vise programa s razlicitim citatnim stilovima." },
+    { "checkId": "element-caption-rules", "reason": "Izvor ne spominje poziciju natpisa tablica/slika niti popis tablica/slika kao zaseban obvezni dio." },
+    { "checkId": "table-figure-rescue-rules", "reason": "Izvor ne sadrzi tehnicke podatke o DPI-ju, sirini ili prijelomu tablica/slika." }
+  ],
+  "generatedAt": "2026-08-04"
+}
