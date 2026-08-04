@@ -276,8 +276,15 @@ export default defineConfig(({ command }) => {
     naslovnica: resolve(__dirname, 'naslovnica.html'),
     literatura: resolve(__dirname, 'literatura.html'),
     izjava: resolve(__dirname, 'izjava.html'),
+    admin: resolve(__dirname, 'admin.html'),
   };
   // Interna verifikacijska konzola ulazi u build SAMO kad su dev alati ukljuceni (QA opt-in).
+  // admin.html (Lekta Control Center) NIJE u ovoj grani: za razliku od verification.html (razvojni
+  // QA alat protiv lokalnih izvornih PDF-ova), Control Center mora citati zivu produkcijsku
+  // Supabase bazu da bi uopce imao smisla, pa ide bezuvjetno uz ostalih 10 stranica. Prava
+  // sigurnosna granica je posve poslužiteljska (JWT + admin_users, admin-stats/index.ts) - skrivanje
+  // iza devTools flaga ovdje ne bi bilo prava sigurnost, samo nezgoda. noindex meta u admin.html
+  // sprjecava indeksiranje/sitemap unatoc tome sto je stranica u buildu.
   if (devTools) input.verification = resolve(__dirname, 'verification.html');
   return {
     plugins: [htmlCharsetUtf8(), citationTools(), fixHunspellNanoid(), stripRuntimeDeadProvenance(devTools), stripDevOnlyHtml(devTools), fontPreload(), assertSafeBuild(devTools)],

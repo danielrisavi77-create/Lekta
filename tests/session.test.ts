@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import {
   parseTokenResponse, isExpired, requestEmailOtp, verifyEmailOtp,
-  refreshSession, getValidAccessToken, signInAnonymously, type Session, type SessionStore,
+  refreshSession, getValidAccessToken, signInAnonymously, signInWithPassword, setPassword,
+  type Session, type SessionStore,
 } from '../src/auth/session';
 
 const CFG = { supabaseUrl: 'https://proj.supabase.co', anonKey: 'anon-key' };
@@ -53,6 +54,16 @@ describe('requestEmailOtp', () => {
     expect(url).toBe('https://proj.supabase.co/auth/v1/otp');
     expect(body).toEqual({ email: 'a@b.hr', create_user: true });
   });
+  it('bez redirectTo ne salje redirect_to kljuc (postojeci pozivatelji nepromijenjeni)', async () => {
+    let body: any = {};
+    await requestEmailOtp(CFG, 'a@b.hr', fetchOnce(res(200), (_u, i) => { body = JSON.parse(i.body as string); }));
+    expect(body).not.toHaveProperty('redirect_to');
+  });
+  it('s redirectTo dodaje redirect_to u tijelo (magic-link vraca se tamo)', async () => {
+    let body: any = {};
+    await requestEmailOtp(CFG, 'a@b.hr', fetchOnce(res(200), (_u, i) => { body = JSON.parse(i.body as string); }), 'http://localhost:5199/admin.html');
+    expect(body).toEqual({ email: 'a@b.hr', create_user: true, redirect_to: 'http://localhost:5199/admin.html' });
+  });
   it('429 daje jasnu poruku', async () => {
     const r = await requestEmailOtp(CFG, 'a@b.hr', fetchOnce(res(429)));
     expect(r).toEqual({ ok: false, message: 'previše pokušaja, pričekaj minutu' });
@@ -71,6 +82,61 @@ describe('verifyEmailOtp', () => {
   it('krivi kod -> jasna poruka', async () => {
     const r = await verifyEmailOtp(CFG, 'a@b.hr', '000000', fetchOnce(res(401)));
     expect(r).toEqual({ ok: false, message: 'kod nije točan ili je istekao' });
+  });
+});
+
+describe('signInWithPassword', () => {
+  it('salje na /auth/v1/token?grant_type=password s email+password', async () => {
+    let url = '', body: any = {};
+    const r = await signInWithPassword(CFG, ' a@b.hr ', 'tajna123', fetchOnce(res(200, tokenBody), (u, i) => { url = u; body = JSON.parse(i.body as string); }));
+    expect(url).toBe('https://proj.supabase.co/auth/v1/token?grant_type=password');
+    expect(body).toEqual({ email: 'a@b.hr', password: 'tajna123' });
+    expect(r.ok && r.session.accessToken).toBe('jwt-abc');
+  });
+  it('400/401 daje jedinstvenu poruku (ne otkriva je li e-mail ili lozinka kriva)', async () => {
+    expect(await signInWithPassword(CFG, 'a@b.hr', 'x', fetchOnce(res(400)))).toEqual({ ok: false, message: 'e-mail ili lozinka nisu točni' });
+    expect(await signInWithPassword(CFG, 'a@b.hr', 'x', fetchOnce(res(401)))).toEqual({ ok: false, message: 'e-mail ili lozinka nisu točni' });
+  });
+  it('bez lozinke ili e-maila ne zove mrezu', async () => {
+    let called = false;
+    const spy = (async () => { called = true; return res(200); }) as unknown as typeof fetch;
+    await signInWithPassword(CFG, 'a@b.hr', '', spy);
+    await signInWithPassword(CFG, '', 'x', spy);
+    expect(called).toBe(false);
+  });
+  it('nekonfiguriran auth ne zove mrezu', async () => {
+    const r = await signInWithPassword({ supabaseUrl: '', anonKey: '' }, 'a@b.hr', 'x', fetchOnce(res(200)));
+    expect(r.ok).toBe(false);
+  });
+});
+
+describe('setPassword', () => {
+  it('salje PUT /auth/v1/user s Authorization: Bearer <accessToken> (ne anon kljuc)', async () => {
+    let url = '', init: any = null;
+    const r = await setPassword(CFG, 'user-access-token', 'nova-lozinka-1', fetchOnce(res(200, { id: 'u1' }), (u, i) => { url = u; init = i; }));
+    expect(url).toBe('https://proj.supabase.co/auth/v1/user');
+    expect(init.method).toBe('PUT');
+    expect(init.headers.Authorization).toBe('Bearer user-access-token');
+    expect(JSON.parse(init.body)).toEqual({ password: 'nova-lozinka-1' });
+    expect(r.ok).toBe(true);
+  });
+  it('kraca lozinka od 8 znakova ne zove mrezu', async () => {
+    let called = false;
+    const spy = (async () => { called = true; return res(200); }) as unknown as typeof fetch;
+    const r = await setPassword(CFG, 'token', 'kratka', spy);
+    expect(r.ok).toBe(false);
+    expect(called).toBe(false);
+  });
+  it('bez access tokena ne zove mrezu', async () => {
+    let called = false;
+    const spy = (async () => { called = true; return res(200); }) as unknown as typeof fetch;
+    const r = await setPassword(CFG, '', 'dovoljno-duga-lozinka', spy);
+    expect(r.ok).toBe(false);
+    expect(called).toBe(false);
+  });
+  it('401 znaci istekla sesija, ne kriva lozinka', async () => {
+    const r = await setPassword(CFG, 'stale-token', 'dovoljno-duga-lozinka', fetchOnce(res(401)));
+    expect(r).toEqual({ ok: false, message: 'sesija je istekla, prijavi se ponovno' });
   });
 });
 

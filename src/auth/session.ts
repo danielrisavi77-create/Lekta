@@ -78,11 +78,19 @@ export function isExpired(session: Session | null, now: number, skewMs = 60_000)
   return now >= session.expiresAt - skewMs;
 }
 
-/** Posalji e-mail OTP / magic link. `create_user:true` dopusta prvu prijavu bez ranije registracije. */
+/**
+ * Posalji e-mail OTP / magic link. `create_user:true` dopusta prvu prijavu bez ranije registracije.
+ *
+ * `redirectTo` je OPCIJSKI i ADITIVAN (postojeci pozivatelji bez njega rade nepromijenjeno):
+ * kad je zadan, GoTrue klik na link u e-mailu preusmjerava TAMO umjesto na defaultni Site URL,
+ * s access_token/refresh_token u URL fragmentu (implicit flow, GET /verify - vidi GoTrue izvor).
+ * Nuzno kad predlozak e-maila ne prikazuje odvojeni kod za rucni upis, samo klikabilnu poveznicu.
+ */
 export async function requestEmailOtp(
   cfg: AuthConfig,
   email: string,
   fetchImpl: typeof fetch = fetch,
+  redirectTo?: string,
 ): Promise<OtpResult> {
   if (!cfg.supabaseUrl || !cfg.anonKey) return { ok: false, message: 'auth nije konfiguriran' };
   const clean = email.trim();
@@ -91,7 +99,7 @@ export async function requestEmailOtp(
     const res = await fetchImpl(`${trimUrl(cfg.supabaseUrl)}/auth/v1/otp`, {
       method: 'POST',
       headers: authHeaders(cfg),
-      body: JSON.stringify({ email: clean, create_user: true }),
+      body: JSON.stringify({ email: clean, create_user: true, ...(redirectTo ? { redirect_to: redirectTo } : {}) }),
     });
     if (res.ok) return { ok: true };
     if (res.status === 429) return { ok: false, message: 'previše pokušaja, pričekaj minutu' };
@@ -161,6 +169,70 @@ export async function signInAnonymously(
     const session = parseTokenResponse(await res.json().catch(() => ({})), now);
     if (!session) return { ok: false, message: 'nevaljan odgovor poslužitelja' };
     return { ok: true, session };
+  } catch (e) {
+    return { ok: false, message: e instanceof Error ? e.message : 'mrežna greška' };
+  }
+}
+
+/**
+ * Prijava e-mailom i lozinkom - brza alternativa OTP-u/magic-linku, SAMO za racune koji su
+ * prethodno postavili lozinku (vidi setPassword). I dalje dokazuje identitet (nesto sto
+ * korisnik ZNA), za razliku od golog e-maila bez ikakve provjere - namjerno se ne gradi
+ * "prijava bez provjere" opcija, to bi ponistilo admin_users gate nizvodno.
+ */
+export async function signInWithPassword(
+  cfg: AuthConfig,
+  email: string,
+  password: string,
+  fetchImpl: typeof fetch = fetch,
+  now: number = Date.now(),
+): Promise<SessionResult> {
+  if (!cfg.supabaseUrl || !cfg.anonKey) return { ok: false, message: 'auth nije konfiguriran' };
+  const clean = email.trim();
+  if (!clean || !password) return { ok: false, message: 'unesi e-mail i lozinku' };
+  try {
+    const res = await fetchImpl(`${trimUrl(cfg.supabaseUrl)}/auth/v1/token?grant_type=password`, {
+      method: 'POST',
+      headers: authHeaders(cfg),
+      body: JSON.stringify({ email: clean, password }),
+    });
+    if (!res.ok) {
+      if (res.status === 400 || res.status === 401) return { ok: false, message: 'e-mail ili lozinka nisu točni' };
+      return { ok: false, message: `prijava nije uspjela (${res.status})` };
+    }
+    const session = parseTokenResponse(await res.json().catch(() => ({})), now);
+    if (!session) return { ok: false, message: 'nevaljan odgovor poslužitelja' };
+    return { ok: true, session };
+  } catch (e) {
+    return { ok: false, message: e instanceof Error ? e.message : 'mrežna greška' };
+  }
+}
+
+/**
+ * Postavi/promijeni lozinku za VEC prijavljenog korisnika. Dokaz identiteta je valjan access
+ * token (korisnik je upravo prosao OTP/magic-link), ne lozinka sama - ovo je "postavi lozinku
+ * za sljedeci put", ne nacin zaobilaska prijave.
+ */
+export async function setPassword(
+  cfg: AuthConfig,
+  accessToken: string,
+  password: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<OtpResult> {
+  if (!cfg.supabaseUrl || !cfg.anonKey) return { ok: false, message: 'auth nije konfiguriran' };
+  if (!accessToken) return { ok: false, message: 'nedostaje prijava' };
+  if (!password || password.length < 8) return { ok: false, message: 'lozinka mora imati barem 8 znakova' };
+  try {
+    const res = await fetchImpl(`${trimUrl(cfg.supabaseUrl)}/auth/v1/user`, {
+      method: 'PUT',
+      headers: { ...authHeaders(cfg), Authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({ password }),
+    });
+    if (!res.ok) {
+      if (res.status === 401 || res.status === 403) return { ok: false, message: 'sesija je istekla, prijavi se ponovno' };
+      return { ok: false, message: `postavljanje lozinke nije uspjelo (${res.status})` };
+    }
+    return { ok: true };
   } catch (e) {
     return { ok: false, message: e instanceof Error ? e.message : 'mrežna greška' };
   }

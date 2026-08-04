@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light dark">
+<script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
+<title>Lekta · Control Center</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <span class="brand-dot">L</span>
+      <span>Lekta<br><small>CONTROL CENTER</small></span>
+    </div>
+    <div class="filters" id="rangePicker" role="group" aria-label="Razdoblje">
+      <button type="button" class="seg" aria-pressed="false" data-range="today">Danas</button>
+      <button type="button" class="seg" aria-pressed="true" data-range="7d">7 dana</button>
+      <button type="button" class="seg" aria-pressed="false" data-range="30d">30 dana</button>
+      <button type="button" class="seg" aria-pressed="false" data-range="custom">Prilagođeno</button>
+      <span class="range-custom hidden" id="rangeCustom">
+        <input type="date" id="rangeFrom" aria-label="Od datuma">
+        <input type="date" id="rangeTo" aria-label="Do datuma">
+        <button type="button" class="btn btn-secondary btn-sm" id="rangeApply">Primijeni</button>
+      </span>
+    </div>
+    <select class="range-select hidden" id="rangeSelect" aria-label="Razdoblje">
+      <option value="today">Danas</option>
+      <option value="7d" selected>7 dana</option>
+      <option value="30d">30 dana</option>
+      <option value="custom">Prilagođeno</option>
+    </select>
+    <div class="tb-right">
+      <button type="button" class="iconbtn" id="refreshBtn" aria-label="Osvježi podatke" title="Osvježi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg>
+      </button>
+      <button type="button" class="iconbtn" id="themeBtn" aria-label="Promijeni temu" title="Svijetlo / tamno">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>
+      </button>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Odjeljci" id="tabs">
+    <button type="button" class="tab" role="tab" aria-selected="true" data-section="overview">Pregled</button>
+    <button type="button" class="tab" role="tab" aria-selected="false" data-section="funnel">Lijevak</button>
+    <button type="button" class="tab" role="tab" aria-selected="false" data-section="revenue">Prihod</button>
+    <button type="button" class="tab" role="tab" aria-selected="false" data-section="operations">Sustav</button>
+    <button type="button" class="tab" role="tab" aria-selected="false" data-section="usage">Korištenje</button>
+    <button type="button" class="tab" role="tab" aria-selected="false" data-section="coverage">Pokrivenost</button>
+  </nav>
+  <select class="tabs-select hidden" id="sectionSelect" aria-label="Odjeljak">
+    <option value="overview">Pregled</option>
+    <option value="funnel">Lijevak</option>
+    <option value="revenue">Prihod</option>
+    <option value="operations">Sustav</option>
+    <option value="usage">Korištenje</option>
+    <option value="coverage">Pokrivenost</option>
+  </select>
+</header>
+
+<div class="palbar">
+  <div class="palbar-in">
+    <span class="palbar-lab">Paleta</span>
+    <div class="palscroll" id="palbar" role="group" aria-label="Odaberi paletu boja"></div>
+    <button type="button" class="pal-more" id="openGal">Sve palete <span id="galCount"></span></button>
+  </div>
+</div>
+
+<div class="gal-back" id="galBack"></div>
+<div class="gal" id="gal" role="dialog" aria-modal="true" aria-labelledby="galTitle">
+  <div class="gal-head">
+    <div>
+      <div class="gal-title" id="galTitle">Sve palete</div>
+      <div class="gal-sub">Izbor se pamti u ovom pregledniku. Svaka je najtamnija varijanta koja još prolazi provjeru razlučivosti (uključujući simulaciju daltonizma) u svijetloj i tamnoj temi.</div>
+    </div>
+    <button type="button" class="gal-close" id="galClose" aria-label="Zatvori">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="gal-filters" id="galFilters"></div>
+  <div class="gal-grid" id="galGrid"></div>
+</div>
+
+<main id="adminContent" tabindex="-1">
+  <section data-section="overview" role="tabpanel" class="panel"></section>
+  <section data-section="funnel" role="tabpanel" class="panel hidden"></section>
+  <section data-section="revenue" role="tabpanel" class="panel hidden"></section>
+  <section data-section="operations" role="tabpanel" class="panel hidden"></section>
+  <section data-section="usage" role="tabpanel" class="panel hidden"></section>
+  <section data-section="coverage" role="tabpanel" class="panel hidden"></section>
+</main>
+
+<script type="module" src="/src/admin/admin-dashboard.ts"></script>
+</body>
+</html>

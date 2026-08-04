@@ -1,18 +1,23 @@
 // supabase/functions/admin-stats/index.ts
 //
-// Read-only agregati bete za vlasnicki pregled ("mini stats"). Vraca ISKLJUCIVO brojeve:
-// nikad naslov rada, otisak, putanju, e-mail ni bilo sto vezano uz pojedini dokument.
+// Read-only agregati za vlasnicki pregled: stari "mini stats" put (admin-panel.ts, prazno
+// tijelo) I novi Lekta Control Center (admin.html, {view,range,...}). Vraca ISKLJUCIVO
+// brojeve: nikad naslov rada, otisak, putanju, e-mail ni bilo sto vezano uz pojedini dokument.
 //
-// Autorizacija je DVOSTRUKA i obje su serverske:
+// Autorizacija je DVOSTRUKA i obje su serverske, ISTA za oba puta:
 //   1. valjan JWT (verify_jwt=true + admin.auth.getUser),
 //   2. redak u `admin_users` (0031). Bez njega -> 403, bez obzira na valjanu prijavu.
 // Klijentska zastavica `localStorage.lekta.admin` otvara samo UI i ovdje ne znaci nista.
 //
-// Agregate racuna RPC `admin_beta_stats()` (security definer, grant samo service_role), pa
-// nijedan redak ne napusta bazu i odgovor je konstantne velicine.
+// Jedan dispatcher umjesto sedam Edge funkcija: gate se pise i pregledava JEDNOM (svaka kopija
+// je prilika da fail-closed ponasanje regresira), postojeci productionConfig.adminStatsEndpoint
+// i CORS allowlist ostaju netaknuti. buildAdminRpcCall (src/admin/admin-dispatch.ts) odlucuje
+// KOJU rpc pozvati - sve su security definer, grant samo service_role (0031/0038), pa nijedan
+// redak ne napusta bazu i odgovor je uvijek {generatedAt, current, previous, retention}.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { corsHeadersFor } from '../_shared/cors.ts';
+import { buildAdminRpcCall } from '../../../src/admin/admin-dispatch.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -45,13 +50,21 @@ Deno.serve(async (req) => {
       .maybeSingle();
     if (adminErr || !adminRow) return json({ error: 'forbidden' }, 403);
 
-    const { data: stats, error: statsErr } = await admin.rpc('admin_beta_stats');
+    // Prazno/neparsirljivo tijelo -> {} -> buildAdminRpcCall ga tretira kao legacy put, isto
+    // kao dosad (klijent je oduvijek slao '{}', a server ga dosad uopce nije citao).
+    const body = await req.json().catch(() => ({}));
+    const call = buildAdminRpcCall(body);
+    if ('error' in call) return json({ error: call.error }, 400);
+
+    const { data: stats, error: statsErr } = await admin.rpc(call.rpcName, call.rpcParams);
     if (statsErr || !stats) {
-      console.error('[admin-stats] rpc', statsErr);
+      console.error('[admin-stats] rpc', call.rpcName, statsErr);
       return json({ error: 'stats_failed' }, 500);
     }
 
-    return json({ ok: true, stats }, 200);
+    // Legacy put (call.view undefined): oblik ostaje BAJT-IDENTICAN dosadasnjem {ok,stats} da
+    // admin-panel.ts radi nepromijenjeno. Novi putevi dodaju `view` da klijent zna sto je dobio.
+    return json(call.view ? { ok: true, view: call.view, stats } : { ok: true, stats }, 200);
   } catch (e) {
     console.error('[admin-stats]', e);
     return json({ error: 'internal' }, 500);
