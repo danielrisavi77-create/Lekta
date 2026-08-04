@@ -343,6 +343,34 @@
         "confirmedVia": "ai-1pass-batch",
         "autoFixable": true,
         "fixerId": "alignment-fixer"
+      },
+      {
+        "ruleId": "pravo-integrirani-diplomski--legal-footnote-repair-rules",
+        "checkId": "legal-footnote-repair-rules",
+        "value": {
+          "mode": "legal-notes",
+          "marker": {
+            "convertManualNumbers": true
+          },
+          "firstCitation": {
+            "requireFullCitation": true,
+            "standardize": true
+          },
+          "repeatedCitation": {
+            "ibidPolicy": "immediate-previous"
+          }
+        },
+        "category": "citation",
+        "label": "Oblik pravnih fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "str. 5 (odjeljak 5. Navodenje bibliografskih podataka), str. 10-11 (6.1. i 6.2.)",
+        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
+        "status": "ai-confirmed",
+        "confirmedVia": "ai-source-read",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "fixerId": "legal-footnote-repair-fixer"
       }
     ],
     "pravo-javna-uprava-prijediplomski": [
@@ -671,6 +699,34 @@
         "confirmedVia": "ai-1pass-batch",
         "autoFixable": true,
         "fixerId": "alignment-fixer"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-prijediplomski--legal-footnote-repair-rules",
+        "checkId": "legal-footnote-repair-rules",
+        "value": {
+          "mode": "legal-notes",
+          "marker": {
+            "convertManualNumbers": true
+          },
+          "firstCitation": {
+            "requireFullCitation": true,
+            "standardize": true
+          },
+          "repeatedCitation": {
+            "ibidPolicy": "immediate-previous"
+          }
+        },
+        "category": "citation",
+        "label": "Oblik pravnih fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "str. 5 (odjeljak 5. Navodenje bibliografskih podataka), str. 10-11 (6.1. i 6.2.)",
+        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
+        "status": "ai-confirmed",
+        "confirmedVia": "ai-source-read",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "fixerId": "legal-footnote-repair-fixer"
       }
     ],
     "pravo-javna-uprava-diplomski": [
@@ -999,6 +1055,34 @@
         "confirmedVia": "ai-1pass-batch",
         "autoFixable": true,
         "fixerId": "alignment-fixer"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-diplomski--legal-footnote-repair-rules",
+        "checkId": "legal-footnote-repair-rules",
+        "value": {
+          "mode": "legal-notes",
+          "marker": {
+            "convertManualNumbers": true
+          },
+          "firstCitation": {
+            "requireFullCitation": true,
+            "standardize": true
+          },
+          "repeatedCitation": {
+            "ibidPolicy": "immediate-previous"
+          }
+        },
+        "category": "citation",
+        "label": "Oblik pravnih fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "str. 5 (odjeljak 5. Navodenje bibliografskih podataka), str. 10-11 (6.1. i 6.2.)",
+        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
+        "status": "ai-confirmed",
+        "confirmedVia": "ai-source-read",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "fixerId": "legal-footnote-repair-fixer"
       }
     ],
     "pravo-porezni-prijediplomski": [
@@ -1327,6 +1411,34 @@
         "confirmedVia": "ai-1pass-batch",
         "autoFixable": true,
         "fixerId": "alignment-fixer"
+      },
+      {
+        "ruleId": "pravo-porezni-prijediplomski--legal-footnote-repair-rules",
+        "checkId": "legal-footnote-repair-rules",
+        "value": {
+          "mode": "legal-notes",
+          "marker": {
+            "convertManualNumbers": true
+          },
+          "firstCitation": {
+            "requireFullCitation": true,
+            "standardize": true
+          },
+          "repeatedCitation": {
+            "ibidPolicy": "immediate-previous"
+          }
+        },
+        "category": "citation",
+        "label": "Oblik pravnih fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "str. 5 (odjeljak 5. Navodenje bibliografskih podataka), str. 10-11 (6.1. i 6.2.)",
+        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
+        "status": "ai-confirmed",
+        "confirmedVia": "ai-source-read",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "fixerId": "legal-footnote-repair-fixer"
       }
     ],
     "pravo-socijalni-rad-zavrsni": [
@@ -2504,6 +2616,34 @@
         "reviewedBy": "Daniel Risavi",
         "lastVerified": "2026-07-27",
         "confirmedVia": "ai-1pass-batch"
+      },
+      {
+        "ruleId": "pravo-opci-pravni-akademski-rad--legal-footnote-repair-rules",
+        "checkId": "legal-footnote-repair-rules",
+        "value": {
+          "mode": "legal-notes",
+          "marker": {
+            "convertManualNumbers": true
+          },
+          "firstCitation": {
+            "requireFullCitation": true,
+            "standardize": true
+          },
+          "repeatedCitation": {
+            "ibidPolicy": "immediate-previous"
+          }
+        },
+        "category": "citation",
+        "label": "Oblik pravnih fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "str. 5 (odjeljak 5. Navodenje bibliografskih podataka), str. 10-11 (6.1. i 6.2.)",
+        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
+        "status": "ai-confirmed",
+        "confirmedVia": "ai-source-read",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "fixerId": "legal-footnote-repair-fixer"
       }
     ],
     "pravo-socijalni-opci-akademski-rad": [
@@ -2861,6 +3001,34 @@
         "reviewedBy": "Daniel Risavi",
         "lastVerified": "2026-07-27",
         "confirmedVia": "ai-1pass-batch"
+      },
+      {
+        "ruleId": "pravo-specijalisticki-pravni-opci--legal-footnote-repair-rules",
+        "checkId": "legal-footnote-repair-rules",
+        "value": {
+          "mode": "legal-notes",
+          "marker": {
+            "convertManualNumbers": true
+          },
+          "firstCitation": {
+            "requireFullCitation": true,
+            "standardize": true
+          },
+          "repeatedCitation": {
+            "ibidPolicy": "immediate-previous"
+          }
+        },
+        "category": "citation",
+        "label": "Oblik pravnih fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "str. 5 (odjeljak 5. Navodenje bibliografskih podataka), str. 10-11 (6.1. i 6.2.)",
+        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
+        "status": "ai-confirmed",
+        "confirmedVia": "ai-source-read",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "fixerId": "legal-footnote-repair-fixer"
       }
     ],
     "pravo-doktorski-pravne-znanosti": [
@@ -3078,6 +3246,34 @@
         "reviewedBy": "Daniel Risavi",
         "lastVerified": "2026-07-27",
         "confirmedVia": "ai-1pass-batch"
+      },
+      {
+        "ruleId": "pravo-doktorski-pravne-znanosti--legal-footnote-repair-rules",
+        "checkId": "legal-footnote-repair-rules",
+        "value": {
+          "mode": "legal-notes",
+          "marker": {
+            "convertManualNumbers": true
+          },
+          "firstCitation": {
+            "requireFullCitation": true,
+            "standardize": true
+          },
+          "repeatedCitation": {
+            "ibidPolicy": "immediate-previous"
+          }
+        },
+        "category": "citation",
+        "label": "Oblik pravnih fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "str. 5 (odjeljak 5. Navodenje bibliografskih podataka), str. 10-11 (6.1. i 6.2.)",
+        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
+        "status": "ai-confirmed",
+        "confirmedVia": "ai-source-read",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "fixerId": "legal-footnote-repair-fixer"
       }
     ],
     "pravo-socijalne-djelatnosti-specijalisticki": [

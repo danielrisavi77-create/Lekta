@@ -1835,13 +1835,21 @@
     {
       "profileId": "pravo-doktorski-pravne-znanosti",
       "scored": 10,
-      "machineCheckable": 11,
-      "advisory": 1,
-      "ratio": 0.9090909090909091,
+      "machineCheckable": 12,
+      "advisory": 2,
+      "ratio": 0.8333333333333334,
       "lastVerified": "2026-07-27"
     },
     {
       "profileId": "pravo-integrirani-diplomski",
+      "scored": 12,
+      "machineCheckable": 15,
+      "advisory": 3,
+      "ratio": 0.8,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "pravo-javna-uprava-diplomski",
       "scored": 12,
       "machineCheckable": 14,
       "advisory": 2,
@@ -1849,35 +1857,27 @@
       "lastVerified": "2026-07-27"
     },
     {
-      "profileId": "pravo-javna-uprava-diplomski",
-      "scored": 12,
-      "machineCheckable": 13,
-      "advisory": 1,
-      "ratio": 0.9230769230769231,
-      "lastVerified": "2026-07-27"
-    },
-    {
       "profileId": "pravo-javna-uprava-prijediplomski",
       "scored": 12,
-      "machineCheckable": 13,
-      "advisory": 1,
-      "ratio": 0.9230769230769231,
+      "machineCheckable": 14,
+      "advisory": 2,
+      "ratio": 0.8571428571428571,
       "lastVerified": "2026-07-27"
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
       "scored": 10,
-      "machineCheckable": 11,
-      "advisory": 1,
-      "ratio": 0.9090909090909091,
+      "machineCheckable": 12,
+      "advisory": 2,
+      "ratio": 0.8333333333333334,
       "lastVerified": "2026-07-27"
     },
     {
       "profileId": "pravo-porezni-prijediplomski",
       "scored": 12,
-      "machineCheckable": 13,
-      "advisory": 1,
-      "ratio": 0.9230769230769231,
+      "machineCheckable": 14,
+      "advisory": 2,
+      "ratio": 0.8571428571428571,
       "lastVerified": "2026-07-27"
     },
     {
@@ -1931,9 +1931,9 @@
     {
       "profileId": "pravo-specijalisticki-pravni-opci",
       "scored": 10,
-      "machineCheckable": 11,
-      "advisory": 1,
-      "ratio": 0.9090909090909091,
+      "machineCheckable": 12,
+      "advisory": 2,
+      "ratio": 0.8333333333333334,
       "lastVerified": "2026-07-27"
     },
     {

@@ -71,6 +71,13 @@ function clone<T>(value: T): T {
 }
 
 /** Folds a single ruleEntry into the mutable effective-rules object. Returns false if the checkId is unknown. */
+/**
+ * Statusi koji znace "jos nije proslo ljudski pass". Takav ruleEntry se cuva u podacima (izvor,
+ * stranica, doslovan citat), ali NE ulazi u effectiveRules, pa ne mijenja ni analizu ni ocjenu.
+ * 'advisory' i unosi bez statusa namjerno NISU ovdje: oni su postojece, vec uhodano ponasanje.
+ */
+const PENDING_HUMAN_PASS: ReadonlySet<string> = new Set(['draft', 'ai-confirmed', 'needs-recheck', 'retired']);
+
 function applyEntry(eff: EffectiveRules, entry: RuleEntry): boolean {
   const value = entry.value as any;
   switch (entry.checkId) {
@@ -129,7 +136,14 @@ export function compileEffectiveRules(
 ): EffectiveRules {
   const eff: EffectiveRules = clone((profile.rules ?? {}) as EffectiveRules);
   for (const entry of profile.ruleEntries ?? []) {
-    const recognised = applyEntry(eff, entry);
+    // Pravilo koje jos CEKA ljudsku potvrdu ne smije mijenjati ponasanje analize. Zapisano je u
+    // podacima s punom provenijencijom, ali do passa ostaje inertno: isti prag koji
+    // gen-profile-runtime-maps.mts vec primjenjuje na repair-map (status === 'verified').
+    // Bez ovoga bi 'ai-confirmed' unos utjecao na mjerenje prije nego ga je itko potvrdio.
+    // Primjenjuje se na PRIVREMENI objekt kad se ceka pass: vrijednost se odbaci, ali se i dalje
+    // vidi je li checkId uopce prepoznat, pa dijagnostika za nemapiran checkId ostaje ziva.
+    const pending = !!entry.status && PENDING_HUMAN_PASS.has(entry.status);
+    const recognised = applyEntry(pending ? ({} as EffectiveRules) : eff, entry);
     if (!recognised && diagnostics) {
       diagnostics.push({
         profileId: profile.id,
