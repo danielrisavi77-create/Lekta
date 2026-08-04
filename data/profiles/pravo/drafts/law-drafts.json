@@ -365,12 +365,13 @@
         "machineCheckable": true,
         "authority": "general",
         "sourceId": "pravo-upute-oblikovanje-2024",
-        "sourcePage": "str. 5 (odjeljak 5. Navodenje bibliografskih podataka), str. 10-11 (6.1. i 6.2.)",
-        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
+        "sourcePage": "str. 1 (uvod: upute su preporuka, mentor ima prvenstvo), str. 5 (odjeljak 5. i 6.1.), str. 10-11 (6.2. op. cit. i ibid.)",
+        "quote": "Ako student/ica nije dobio/la drugacije upute od mentora, ove upute se preporucuju koristiti za oblikovanje i uredjenje teksta i navodjenje izvora. (...) Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
         "status": "ai-confirmed",
         "confirmedVia": "ai-source-read",
         "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
-        "fixerId": "legal-footnote-repair-fixer"
+        "fixerId": "legal-footnote-repair-fixer",
+        "scored": false
       }
     ],
     "pravo-javna-uprava-prijediplomski": [
@@ -721,12 +722,13 @@
         "machineCheckable": true,
         "authority": "general",
         "sourceId": "pravo-upute-oblikovanje-2024",
-        "sourcePage": "str. 5 (odjeljak 5. Navodenje bibliografskih podataka), str. 10-11 (6.1. i 6.2.)",
-        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
+        "sourcePage": "str. 1 (uvod: upute su preporuka, mentor ima prvenstvo), str. 5 (odjeljak 5. i 6.1.), str. 10-11 (6.2. op. cit. i ibid.)",
+        "quote": "Ako student/ica nije dobio/la drugacije upute od mentora, ove upute se preporucuju koristiti za oblikovanje i uredjenje teksta i navodjenje izvora. (...) Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
         "status": "ai-confirmed",
         "confirmedVia": "ai-source-read",
         "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
-        "fixerId": "legal-footnote-repair-fixer"
+        "fixerId": "legal-footnote-repair-fixer",
+        "scored": false
       }
     ],
     "pravo-javna-uprava-diplomski": [
@@ -1077,12 +1079,13 @@
         "machineCheckable": true,
         "authority": "general",
         "sourceId": "pravo-upute-oblikovanje-2024",
-        "sourcePage": "str. 5 (odjeljak 5. Navodenje bibliografskih podataka), str. 10-11 (6.1. i 6.2.)",
-        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
+        "sourcePage": "str. 1 (uvod: upute su preporuka, mentor ima prvenstvo), str. 5 (odjeljak 5. i 6.1.), str. 10-11 (6.2. op. cit. i ibid.)",
+        "quote": "Ako student/ica nije dobio/la drugacije upute od mentora, ove upute se preporucuju koristiti za oblikovanje i uredjenje teksta i navodjenje izvora. (...) Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
         "status": "ai-confirmed",
         "confirmedVia": "ai-source-read",
         "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
-        "fixerId": "legal-footnote-repair-fixer"
+        "fixerId": "legal-footnote-repair-fixer",
+        "scored": false
       }
     ],
     "pravo-porezni-prijediplomski": [
@@ -1433,12 +1436,13 @@
         "machineCheckable": true,
         "authority": "general",
         "sourceId": "pravo-upute-oblikovanje-2024",
-        "sourcePage": "str. 5 (odjeljak 5. Navodenje bibliografskih podataka), str. 10-11 (6.1. i 6.2.)",
-        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
+        "sourcePage": "str. 1 (uvod: upute su preporuka, mentor ima prvenstvo), str. 5 (odjeljak 5. i 6.1.), str. 10-11 (6.2. op. cit. i ibid.)",
+        "quote": "Ako student/ica nije dobio/la drugacije upute od mentora, ove upute se preporucuju koristiti za oblikovanje i uredjenje teksta i navodjenje izvora. (...) Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
         "status": "ai-confirmed",
         "confirmedVia": "ai-source-read",
         "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
-        "fixerId": "legal-footnote-repair-fixer"
+        "fixerId": "legal-footnote-repair-fixer",
+        "scored": false
       }
     ],
     "pravo-socijalni-rad-zavrsni": [
@@ -2638,12 +2642,13 @@
         "machineCheckable": true,
         "authority": "general",
         "sourceId": "pravo-upute-oblikovanje-2024",
-        "sourcePage": "str. 5 (odjeljak 5. Navodenje bibliografskih podataka), str. 10-11 (6.1. i 6.2.)",
-        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
+        "sourcePage": "str. 1 (uvod: upute su preporuka, mentor ima prvenstvo), str. 5 (odjeljak 5. i 6.1.), str. 10-11 (6.2. op. cit. i ibid.)",
+        "quote": "Ako student/ica nije dobio/la drugacije upute od mentora, ove upute se preporucuju koristiti za oblikovanje i uredjenje teksta i navodjenje izvora. (...) Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
         "status": "ai-confirmed",
         "confirmedVia": "ai-source-read",
         "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
-        "fixerId": "legal-footnote-repair-fixer"
+        "fixerId": "legal-footnote-repair-fixer",
+        "scored": false
       }
     ],
     "pravo-socijalni-opci-akademski-rad": [
@@ -3023,12 +3028,13 @@
         "machineCheckable": true,
         "authority": "general",
         "sourceId": "pravo-upute-oblikovanje-2024",
-        "sourcePage": "str. 5 (odjeljak 5. Navodenje bibliografskih podataka), str. 10-11 (6.1. i 6.2.)",
-        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
+        "sourcePage": "str. 1 (uvod: upute su preporuka, mentor ima prvenstvo), str. 5 (odjeljak 5. i 6.1.), str. 10-11 (6.2. op. cit. i ibid.)",
+        "quote": "Ako student/ica nije dobio/la drugacije upute od mentora, ove upute se preporucuju koristiti za oblikovanje i uredjenje teksta i navodjenje izvora. (...) Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
         "status": "ai-confirmed",
         "confirmedVia": "ai-source-read",
         "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
-        "fixerId": "legal-footnote-repair-fixer"
+        "fixerId": "legal-footnote-repair-fixer",
+        "scored": false
       }
     ],
     "pravo-doktorski-pravne-znanosti": [
@@ -3268,12 +3274,13 @@
         "machineCheckable": true,
         "authority": "general",
         "sourceId": "pravo-upute-oblikovanje-2024",
-        "sourcePage": "str. 5 (odjeljak 5. Navodenje bibliografskih podataka), str. 10-11 (6.1. i 6.2.)",
-        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
+        "sourcePage": "str. 1 (uvod: upute su preporuka, mentor ima prvenstvo), str. 5 (odjeljak 5. i 6.1.), str. 10-11 (6.2. op. cit. i ibid.)",
+        "quote": "Ako student/ica nije dobio/la drugacije upute od mentora, ove upute se preporucuju koristiti za oblikovanje i uredjenje teksta i navodjenje izvora. (...) Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije Umetni fusnotu (Insert footnote). (...) Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid.",
         "status": "ai-confirmed",
         "confirmedVia": "ai-source-read",
         "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
-        "fixerId": "legal-footnote-repair-fixer"
+        "fixerId": "legal-footnote-repair-fixer",
+        "scored": false
       }
     ],
     "pravo-socijalne-djelatnosti-specijalisticki": [
