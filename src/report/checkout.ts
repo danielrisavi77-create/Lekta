@@ -8,9 +8,9 @@
  * i injektiranim Supabase JWT-om (isti uzorak kao report-client).
  */
 
-import type { Product } from '../catalog/products-catalog';
-import { isReportWorkType, type ReportWorkType } from './pricing';
-import { estimateWorkType, unambiguousMismatch, type WorkTypeSignals } from './work-type-estimate';
+import type { Product } from '../catalog/products-catalog.ts';
+import { isReportWorkType, type ReportWorkType } from './pricing.ts';
+import { estimateWorkType, unambiguousMismatch, type WorkTypeSignals } from './work-type-estimate.ts';
 
 /** Ishod serverske provjere prava na checkout za dani proizvod i kontekst korisnika. */
 export type CheckoutResolution =

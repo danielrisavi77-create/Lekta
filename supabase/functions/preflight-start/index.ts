@@ -34,7 +34,10 @@ const MAX_REFS = Number(Deno.env.get('PREFLIGHT_MAX_REFS') ?? '50');
 const TOKEN_TTL_S = 15 * 60;
 const MAX_BODY = 32 * 1024; // JSON meta + privola, bez datoteke
 
-const ALLOWED_ORIGINS = ['https://lektahr.netlify.app'];
+const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netlify.app')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 function json(body: unknown, status: number, origin: string | null): Response {
   return new Response(JSON.stringify(body), {

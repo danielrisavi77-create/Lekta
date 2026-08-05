@@ -22,7 +22,10 @@ const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const REQUIRE_ENTITLEMENT =
   (Deno.env.get('PREFLIGHT_REQUIRE_ENTITLEMENT') ?? '') === 'true';
 
-const ALLOWED_ORIGINS = ['https://lektahr.netlify.app'];
+const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netlify.app')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 function json(body: unknown, status: number, origin: string | null): Response {
   return new Response(JSON.stringify(body), {

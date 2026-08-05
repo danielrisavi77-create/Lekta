@@ -304,6 +304,25 @@ shema `security-*`). Oba su obrisana, status ovdje.
 | security-06 (stariji) | Purge RPC-ovi (`purge_old_report_generations`, `purge_faculty_request_ip`) nisu revocani od public/anon | P3 | OTVORENO (posljedica danas bezopasna, RLS odbija promjenu) |
 | P0-02b (dependencies-01, `LAUNCH_BLOCKERS.md`) | 8 Edge funkcija uvozi `@supabase/supabase-js` s `esm.sh` bez pina/`deno.lock` | P1 | Status nepoznat u ovom prolazu, treba provjeru `supabase/functions/*/index.ts` importa i postoji li `deno.lock`; ovo je jedini P0-02 podnalaz koji nijedan naknadni dokument ne potvrđuje kao zatvoren |
 
+### 8.1 Novi production audit, 4.8.2026.
+
+Ovo su nalazi izravno provjereni na produkcijskom projektu
+`zrrjttizjyfcxmcpgzml`, ne samo iz lokalnog koda.
+
+| ID | Opis | Prioritet | Status i dokaz |
+|---|---|---|---|
+| PROD-01 | Klijent iz `repairEndpoint` izvodi `/source-check`, ali funkcija nije deployana | P1 | **RIJEŠENO**: `source-check` je deployan kao production Function, `verify_jwt=true`, a `OPTIONS https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1/source-check` sada vraća 200. |
+| PROD-02 | Produkcijski `send-reminders` je stari, javno okidljiv deploy | P1 | **RIJEŠENO**: deployana je lokalna verzija s `isCronAuthorized` i `REMINDER_CRON_SECRET`; neautorizirani POST sada vraća 401. Generirana je nova cron tajna, spremljena samo u Supabase secrets, a postojeći cron poziv je ažuriran da je šalje. |
+| PROD-03 | Produkcijski `send-reminders` ne podržava novih pet razina podsjetnika | P1 | **RIJEŠENO**: produkcijska shema sada ima svih pet markera (`30d`, `14d`, `7d`, `72h`, `1d`), insert policy provjerava da su svi prazni, a `send-reminders` je deployan u verziji 8. |
+| PROD-04 | Produkcijski `create-checkout` zaostaje za lokalnim server-side tier gateom | P1 prije naplate | **RIJEŠENO**: deployana je lokalna verzija s `checkoutMismatch`/`tier_mismatch`; bundling je dodatno popravljen eksplicitnim `.ts` importima. Endpoint bez JWT-a vraća 401. |
+| PROD-05 | Produkcijska baza i repo nisu jedan reproducibilan migration source of truth | P1 operativno | **POTVRĐENO, OTVORENO**: produkcija ima 56 zapisa u `supabase_migrations.schema_migrations`, repo ima 38 lokalnih migracija; produkcija dodatno sadrži `academic_suite`, `completion_app`, `jobs` i `record-completion-check` objekte koji nisu u ovom repozitoriju. Treba odlučiti je li Supabase projekt namjerno dijeljen i dokumentirati granicu ili ga razdvojiti. |
+| PROD-06 | Supabase Security Advisor i dalje vidi higijenske rizike | P2 | **POTVRĐENO, neujednačene težine**: `generate_referral_code` i `purge_old_report_generations` imaju mutable `search_path`; `pg_net` je u `public`; Auth zaštita od procurjelih lozinki je isključena. `increment_job_view` je javno izvršiva SECURITY DEFINER funkcija, ali pripada tablici `jobs` iz drugog sustava i nije dio Lekta koda. |
+| PROD-07 | Staging preflight funkcije imaju hardkodirani production origin | P2 staging | **LOKALNO RIJEŠENO, DEPLOY ODGOĐEN**: `preflight-start` i `preflight-result` sada čitaju `ALLOWED_ORIGIN` kao zarezom odvojenu listu, uz production fallback. Staging backend je pauziran, pa se deploy radi pri ponovnom uključivanju staginga. |
+
+Status nakon sanacije 4.8.2026.: PROD-01 do PROD-04 su riješeni i potvrđeni production smoke testom. PROD-05 ostaje otvoren kao širi migration drift. PROD-06 je djelomično riješen: production funkcijama `generate_referral_code` i `purge_old_report_generations` postavljen je `search_path = public`, a purge RPC-u opozvan je public EXECUTE; preostaju `pg_net`, leaked-password zaštita i javna funkcija iz drugog sustava. Leaked-password zaštita je provjerena, ali Supabase je odbija na trenutnom planu, dostupna je na Pro planu i višem. PROD-07 je lokalno riješen, a deploy čeka ponovno uključivanje staginga.
+
+Production end-to-end test 4.8.2026.: anonimna sesija 200, `source-check` 200, `repair-docx` 200 sa stvarnom promjenom (`changelogCount=1`), zapis `storagePending` postao vidljiv u povijesti nakon čekanja, brisanje je vratilo 200, a naknadna provjera potvrdila je nula redaka i nula Storage objekata. Vraćeni DOCX prošao je `strict-open` i otvorio se Microsoft Wordom s `OpenAndRepair=false`.
+
 `npm audit`: 20 ranjivosti (1 critical, 1 high, 14 moderate, 4 low), SVE u
 dev-only lancima (`vitest`/`vite`/`esbuild` i `netlify-cli`). Produkcijski
 `npm audit --omit=dev --audit-level=high` = 0. **Odluka (14.7., potvrđena
@@ -321,6 +340,8 @@ ili ako se počne koristiti `vitest --ui`.
 | `analyticsEndpoint`, `errorEndpoint`, `reportEndpoint`, `checkoutEndpoint` | Prazni u `DEFAULT_PRODUCTION_CONFIG` (`src/ui/app.ts`) | Potvrđeno 28.7.; poznato i praćeno (`docs/PRE_LAUNCH.md` D, `docs/PRE_LAUNCH_CHECKLIST.md` sekcija 8) |
 | `paymentProvider` u istom configu | **RIJEŠENO (28.7.)**: default promijenjen sa zastarjelog `'stripe'` na `'lemonsqueezy'` (uskladjeno s podatkom da je Lemon Squeezy stvarni MoR), na sva 3 mjesta gdje se defaultira (`DEFAULT_PRODUCTION_CONFIG`, `productionStatus()`, `openSetup()`). Napomena: `paymentProvider` nije bio mrtav kod kako je izvorno opisano, aktivno grana `buildPaymentUrl()` (Stripe vs Lemon Squeezy vs generic query params) za legacy `PACKAGES` rucni narudzbeni tok; taj tok ostaje izvan opsega ove izmjene (vidi BL-12/BL-13 za konsolidaciju/uklanjanje) | `src/ui/app.ts` |
 | `repairEndpoint` | Aktivan (živi Supabase URL) | `src/ui/app.ts` |
+| Production Edge deploy | **RIJEŠENO za obuhvaćene funkcije**: `source-check` v1, `send-reminders` v8 i `create-checkout` v8; smoke testovi: 200/401/401 | Production audit 4.8., PROD-01 do PROD-04 |
+| Production migration schema | **DJELOMIČNO RIJEŠENO**: reminder schema je primijenjena kroz Supabase managed migration endpoint i potvrđena s pet markera; širi drift produkcijske baze i repozitorija ostaje PROD-05 | Production audit 4.8., PROD-03, PROD-05 |
 | Rate limit na `repair-docx` | **RIJEŠENO (28.7.)**: file-size limit i dvostruki dnevni cap i dalje postoje, plus tri nova sloja: (1) kill switch `REPAIR_DISABLED` (isti obrazac kao `preflight-start`), (2) `ConcurrencyGate` best-effort limit paralelnih teskih zahtjeva PO IZOLATU (`REPAIR_MAX_CONCURRENT`, default 4, 503 `{error:'busy'}`; honestno dokumentirano da NIJE globalno atomican, isto ogranicenje kao vec postojeci per-user TOCTOU), (3) globalna dnevna storage-kvota (`REPAIR_STORAGE_DAILY_CAP`, default 500 `repair_jobs` redaka/24h) koja preskace pohranu (ne sam popravak) kad je dosegnuta, fail-open isto kao postojeci null-storage slucajevi. Odluke izdvojene u `src/report/repair-limits.ts` (ciste, jedinicno testirane: `tests/repair-limits.test.ts`), DB/env glue u `index.ts`. Provjereno `deno check` (0 novih gresaka naspram baselinea, 12 pred-postojecih DOM-tip gresaka iz `helpers.ts` nepromijenjeno) jer Supabase MCP i `tsc` scope ne pokrivaju ovaj direktorij | `supabase/functions/repair-docx/index.ts`, `src/report/repair-limits.ts` |
 | `REPAIR_FREE_MODE` | Postoji kao flag, gate preskače naplatu ali čuva auth/consent/rate-limit; trenutni operativni mod (besplatna beta strategija) | `supabase/functions/repair-docx/index.ts`, `supabase/migrations/0029_repair_gen_status_free.sql`; stvarna vrijednost na živom Supabase projektu nije provjeriva iz repozitorija (dashboard postavka) |
 | CI | 5 aktivnih workflowa: `check.yml` (gate na svaki push/PR + Playwright), `conformance.yml`, `docx-smoke.yml`, `security-audit.yml` (npm audit + gitleaks, i tjedni cron), `training-pipeline.yml` (manual) | `.github/workflows/*`; vanjski audit od 27.7. koji tvrdi da CI ne postoji je ZASTARIO (ili je testirao stariju živu deploy verziju) |
@@ -478,6 +499,17 @@ dokazano nepostojeće.
 ## 14. Preporučeni sljedeći koraci
 
 Redoslijed usklađen s postojećim `LEKTA_90_DAY_PLAN.md`, ne zamjenjuje ga.
+
+**Novi production audit, prije šire beta upotrebe:**
+- Deployati `source-check`, zatim redeployati `send-reminders` s cron tajnom i
+   primijeniti migraciju 0036. Prije uključivanja naplate redeployati
+   `create-checkout` i provjeriti serverski `tier_mismatch`.
+- Uvesti deployment gate koji uspoređuje live Edge funkcije i migration history
+   s repo verzijom. Trenutni `npm run check` ne može otkriti da je live funkcija
+   starija ili da je live baza bez lokalne migracije.
+- Odlučiti je li produkcijski Supabase namjerno dijeljen s drugim sustavom.
+   Ako jest, dokumentirati vlasništvo i security boundary; ako nije, razdvojiti
+   projekte prije naplate.
 
 **Odmah, prije bilo kakvog šireg besplatnog puštanja:**
 1. ~~Popraviti "Potvrda profila" nalaz~~ RIJEŠENO 28.7., vidi poglavlje 7.
