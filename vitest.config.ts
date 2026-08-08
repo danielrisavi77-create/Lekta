@@ -16,5 +16,14 @@ export default defineConfig({
     // tests/conformance/** je PUNA matrica (~744 analize, minute) i vrti se ZASEBNO preko
     // `npm run conformance` (vitest.conformance.config.ts); u checku je tripwire uzorak.
     exclude: ['**/node_modules/**', '**/dist/**', '**/.claude/**', '**/tests/conformance/**', '**/tests/ux/**'],
+    // Vitestov default je 5000 ms, sto je mjera za obican jedinicni test. Velik dio ovog
+    // paketa gradi, raspakirava i parsira STVARNE .docx pakete (zip + OOXML + puna analiza),
+    // pa takav test redovno traje 3-5 s i sam po sebi je zdrav. Uz 5000 ms nekoliko ih je
+    // sjedilo tik ispod granice i padalo je samo pod punim opterecenjem, dok su izolirano
+    // prolazili: lazno crveno koje ne pokazuje nijedan stvarni kvar.
+    // 15000 ms ne skriva zaglavljen test (i dalje pada, samo kasnije), a mice tu klasu flakea.
+    // Datoteke kojima treba jos vise (korpusni testovi, golden harness) i dalje deklariraju
+    // vlastiti timeout po testu, npr. `}, 30000);` - taj obrazac ostaje mjerodavan.
+    testTimeout: 15000,
   },
 });
