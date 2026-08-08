@@ -1,0 +1,12 @@
+# Staging frontend konfiguracija. Site-specific Supabase varijable postavljaju se u
+# Netlify UI ili CLI secrets, nikad u ovaj repozitorij.
+
+[build]
+  command = "npm run build && npm run generate-citation-tools && npm run generate-legal-pages && npm run generate-coverage-page && npm run generate-faculty-pages && npm run generate-title-page-tools && npm run generate-competitor-pages && node scripts/verify-deploy-dist.mjs"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  DEPLOY = "1"
+  VITE_LEKTA_ENV = "staging"
+  LEKTA_SITE_ORIGIN = "https://lekta-staging.netlify.app"

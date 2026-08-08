@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { existsSync, statSync, createReadStream } from 'node:fs';
+import { existsSync, statSync, createReadStream, readFileSync, writeFileSync } from 'node:fs';
 import { stripDevOnly } from './scripts/strip-dev-only.mjs';
 import { resolveDevTools } from './scripts/dev-console.mjs';
 
@@ -27,6 +27,40 @@ function htmlCharsetUtf8() {
     apply: 'serve',
     configureServer: patch,
     configurePreviewServer: patch,
+  };
+}
+
+// Staging site ima vlastiti javni origin. Početne MPA stranice nose SEO meta-podatke
+// iz izvornog HTML-a, pa ih build mora uskladiti s generatorima koji već čitaju
+// LEKTA_SITE_ORIGIN. U produkciji je zamjena no-op.
+function siteOriginHtml(siteOrigin: string) {
+  const productionOrigin = 'https://lektahr.netlify.app';
+  return {
+    name: 'lekta-site-origin-html',
+    apply: 'build' as const,
+    transformIndexHtml: {
+      order: 'pre' as const,
+      handler: (html: string) => html.replaceAll(productionOrigin, siteOrigin),
+    },
+    generateBundle(_options: unknown, bundle: Record<string, { type: string; source?: string | Uint8Array }>) {
+      for (const asset of Object.values(bundle)) {
+        if (asset.type !== 'asset' || asset.source == null) continue;
+        const source = typeof asset.source === 'string' ? asset.source : new TextDecoder().decode(asset.source);
+        const replaced = source.replaceAll(productionOrigin, siteOrigin);
+        if (replaced !== source) asset.source = replaced;
+      }
+    },
+    writeBundle() {
+      // Vite kopira public/ nakon bundlanja, pa sitemap i robots.txt ne prolaze kroz
+      // generateBundle. Obradi ih ovdje da staging nema javne URL-ove produkcije.
+      for (const name of ['sitemap.xml', 'robots.txt']) {
+        const file = resolve(__dirname, 'dist', name);
+        if (!existsSync(file)) continue;
+        const source = readFileSync(file, 'utf8');
+        const replaced = source.replaceAll(productionOrigin, siteOrigin);
+        if (replaced !== source) writeFileSync(file, replaced, 'utf8');
+      }
+    },
   };
 }
 
@@ -265,6 +299,7 @@ function fixHunspellNanoid() {
 
 export default defineConfig(({ command }) => {
   const devTools = resolveDevTools(command, process.env);
+  const siteOrigin = (process.env.LEKTA_SITE_ORIGIN || 'https://lektahr.netlify.app').replace(/\/+$/, '');
   const input: Record<string, string> = {
     index: resolve(__dirname, 'index.html'),
     usporedba: resolve(__dirname, 'landing_usporedba.html'),
@@ -287,7 +322,7 @@ export default defineConfig(({ command }) => {
   // sprjecava indeksiranje/sitemap unatoc tome sto je stranica u buildu.
   if (devTools) input.verification = resolve(__dirname, 'verification.html');
   return {
-    plugins: [htmlCharsetUtf8(), citationTools(), fixHunspellNanoid(), stripRuntimeDeadProvenance(devTools), stripDevOnlyHtml(devTools), fontPreload(), assertSafeBuild(devTools)],
+    plugins: [htmlCharsetUtf8(), siteOriginHtml(siteOrigin), citationTools(), fixHunspellNanoid(), stripRuntimeDeadProvenance(devTools), stripDevOnlyHtml(devTools), fontPreload(), assertSafeBuild(devTools)],
     define: { __DEV_TOOLS__: JSON.stringify(devTools) },
     // hunspell-asm se ne pre-bundla u dev-u da fixHunspellNanoid transform (Vite plugin) stigne do
     // njega; inace bi ga esbuild optimizer pre-bundlao mimo plugina i nanoid poziv bi pao u dev-u.
