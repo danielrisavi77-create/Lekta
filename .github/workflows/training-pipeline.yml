@@ -85,7 +85,7 @@ jobs:
           cat "$RUNNER_TEMP/lekta-summary.md" >> "$GITHUB_STEP_SUMMARY"
       - name: Upload sanitized artifact
         if: ${{ inputs.upload_sanitized_artifact }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lekta-${{ inputs.mode }}-${{ github.run_id }}
           path: ${{ runner.temp }}/lekta-output/sanitized/
