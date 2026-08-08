@@ -169,7 +169,7 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
   </div>
 </header>
 
-<main>
+<main data-premium-surface="counter-tool">
 <section class="hero">
   <div class="shell">
     <div class="hero-back"><a class="backlink" href="index.html#top">&larr; Natrag na Lektu</a></div>
@@ -182,7 +182,7 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
 </section>
 
 <section class="section">
-  <div class="shell grid">
+  <div class="shell grid tool-workspace">
     <div class="card">
       <h2>Tvoj tekst</h2>
       <p class="sub">Zalijepi uvod, poglavlje ili cijeli rad. Broji se dok tipkaš.</p>
@@ -199,13 +199,18 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
     </div>
 
     <div class="out-panel">
-      <div class="card">
+      <div class="card" data-premium-tilt>
         <h2>Rezultat</h2>
         <p class="sub">Ažurira se dok tipkaš.</p>
         <div class="kpi">
           <span class="kpi-num" id="m-kartice">0</span>
           <span class="kpi-unit">kartica</span>
           <span class="kpi-hint" id="kt-measure-hint">1800 znakova s razmacima</span>
+        </div>
+        <div class="premium-data-grid" id="kt-premium-metrics" aria-label="Brzi pregled mjera">
+          <div><b id="kt-premium-words">0</b><span>riječi</span></div>
+          <div><b id="kt-premium-pages">0</b><span>A4 stranica</span></div>
+          <div><b id="kt-premium-reading">0</b><span>min čitanja</span></div>
         </div>
         <div class="field">
           <label for="kt-measure">Mjera kartice</label>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="hr" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#191512" />
+    <title>Korektorski stol+ | Analyzer workspace demo</title>
+    <link rel="stylesheet" href="/src/shared/design-system.css" />
+    <link rel="stylesheet" href="/src/shared/premium.css" />
+    <link rel="stylesheet" href="/prototype/analyzer-workspace-demo.css" />
+  </head>
+  <body>
+    <header class="workspace-nav" aria-label="Demo navigacija">
+      <a class="workspace-logo" href="#workspaceTitle">
+        <span class="workspace-logo-mark" aria-hidden="true">L</span>
+        <span>Korektorski stol<span>+</span></span>
+      </a>
+      <div class="workspace-nav-meta"><span class="workspace-live-dot" aria-hidden="true"></span> Lokalna analiza <b>DEMO</b></div>
+    </header>
+
+    <main data-demo-surface="analyzer-workspace" data-demo-only="true" data-demo-state="upload" data-demo-variant="editorial">
+      <section class="workspace-intro" aria-labelledby="workspaceTitle">
+        <div>
+          <p class="workspace-kicker">ANALYZATOR / RADNI STOL</p>
+          <h1 id="workspaceTitle">Od dokumenta do <em>jasnog plana.</em></h1>
+          <p class="workspace-lead">Ovdje počinje stvarna provjera. Odaberi kontekst, pripremi rad i dobij pregled koji znaš odmah pretvoriti u sljedeći korak.</p>
+        </div>
+        <div class="workspace-intro-proof" aria-label="Demo napomena">
+          <span class="workspace-proof-mark" aria-hidden="true">✳</span>
+          <div><strong>VIZUALNI ARTIFACT</strong><small>Prikaz toka proizvoda prije live integracije</small></div>
+        </div>
+      </section>
+
+      <section class="workspace-shell" aria-label="Demonstracija analyzer radnog stola">
+        <aside class="workspace-rail" aria-label="Faze analize">
+          <div class="workspace-rail-heading"><span>TIJEK RADA</span><b>01 / 03</b></div>
+          <ol>
+             <li class="workspace-rail-step is-active" data-rail-step="document">
+               <span>01</span><div><strong>Dokument</strong><small>Učitavanje rada</small></div>
+             </li>
+             <li class="workspace-rail-step" data-rail-step="context">
+               <span>02</span><div><strong>Kontekst</strong><small>Pravila rada</small></div>
+            </li>
+            <li class="workspace-rail-step" data-rail-step="result">
+              <span>03</span><div><strong>Rezultat</strong><small>Plan za završetak</small></div>
+            </li>
+          </ol>
+          <div class="workspace-rail-footer"><i aria-hidden="true"></i><span>Sadržaj ostaje lokalno</span></div>
+        </aside>
+
+        <div class="workspace-main">
+          <div class="workspace-mainbar">
+            <div><span class="workspace-mainbar-index">KOREKTORSKI STOL / 01</span><strong id="workspaceStateLabel">Učitaj dokument</strong></div>
+            <span class="workspace-demo-pill">DEMO PODACI</span>
+          </div>
+
+          <section id="workspaceStart" class="workspace-view" aria-labelledby="workspaceStartTitle">
+            <div class="workspace-section-intro">
+              <div><p class="workspace-section-kicker">01 / DOKUMENT</p><h2 id="workspaceStartTitle">Prvo učitaj svoj rad.</h2><p>Kad je dokument na stolu, zajedno biramo mjerilo i sljedeći korak.</p></div>
+              <span class="workspace-section-note">Bez slanja<br /><b>ostaje lokalno</b></span>
+            </div>
+
+            <div class="workspace-start-grid">
+              <div class="workspace-card workspace-context-card" id="workspaceContext">
+                <div class="workspace-card-top"><span class="workspace-card-label">KONTEKST RADA</span><span class="workspace-card-status">Potrebno</span></div>
+                <label class="workspace-field"><span>Fakultet ili profil</span><select id="workspaceFaculty"><option>FER / Diplomski rad</option><option>FPZG / Završni rad</option><option>Pravo / Diplomski rad</option></select></label>
+                <label class="workspace-field"><span>Vrsta rada</span><select id="workspaceType"><option>Diplomski rad</option><option>Završni rad</option><option>Seminarski rad</option></select></label>
+                <div class="workspace-context-foot"><span class="workspace-check" aria-hidden="true">✓</span><span>Pravila se primjenjuju na provjeru forme, ne na sadržaj rada.</span></div>
+              </div>
+
+              <div class="workspace-card workspace-upload-card">
+                <div class="workspace-card-top"><span class="workspace-card-label">DOKUMENT</span><span class="workspace-card-status is-quiet" id="workspaceUploadStatus">Čeka upload</span></div>
+                <div class="workspace-dropzone" id="workspaceDropzone" role="button" tabindex="0" aria-label="Demo upload dokumenta">
+                  <span class="workspace-file-orbit" aria-hidden="true"><i></i><i></i><i></i></span>
+                  <span class="workspace-upload-icon" aria-hidden="true">↑</span>
+                  <strong id="workspaceUploadTitle">Učitaj primjer rada</strong>
+                  <small id="workspaceUploadDescription">.docx / demo dokument, bez slanja sadržaja</small>
+                </div>
+                <div class="workspace-upload-meta"><span>1.8 MB</span><span>Pripremljeno za demo</span></div>
+              </div>
+            </div>
+
+            <div class="workspace-check-preview" id="workspaceCheckPreview">
+              <div class="workspace-check-preview-title"><span>ŠTO SE PROVJERAVA</span><small>Prikaz kategorija</small></div>
+              <div class="workspace-check-list">
+                <span><i class="check-dot check-dot-red"></i> Struktura i naslovi</span>
+                <span><i class="check-dot check-dot-blue"></i> Citati i izvori</span>
+                <span><i class="check-dot check-dot-green"></i> Oblikovanje stranice</span>
+                <span><i class="check-dot check-dot-yellow"></i> Opseg i elementi</span>
+              </div>
+            </div>
+            <div class="workspace-action-row" id="workspaceActionRow"><span id="workspaceActionHint">Klikni dokument da nastaviš.</span><button id="workspaceStartButton" class="workspace-primary-button" type="button">Pokreni provjeru <b aria-hidden="true">↗</b></button></div>
+          </section>
+
+          <section id="workspaceProgress" class="workspace-view workspace-progress-view" hidden aria-labelledby="workspaceProgressTitle" aria-live="polite">
+            <div class="workspace-progress-orbit" aria-hidden="true"><i></i><i></i><i></i></div>
+            <p class="workspace-section-kicker">02 / DOKUMENT</p>
+            <h2 id="workspaceProgressTitle">Papir se upravo slaže u sliku.</h2>
+            <p class="workspace-progress-lead">Lekta prolazi kroz strukturu, izvore i oblikovanje. Sadržaj rada ostaje isti.</p>
+            <div class="workspace-progress-document" aria-hidden="true"><span class="progress-doc-scan"></span><i></i><i></i><i class="short"></i><b>1. Uvod</b><i></i><i></i><i class="medium"></i></div>
+            <div class="workspace-progress-track"><span id="workspaceProgressBar"></span></div>
+            <div class="workspace-progress-meta"><span id="workspaceProgressMessage">Priprema dokumenta</span><strong id="workspaceProgressValue">0%</strong></div>
+            <div class="workspace-progress-checks"><span id="workspaceProgressCheckOne">○ Struktura</span><span id="workspaceProgressCheckTwo">○ Citiranje</span><span id="workspaceProgressCheckThree">○ Oblikovanje</span></div>
+          </section>
+
+          <section id="workspaceResult" class="workspace-view workspace-result-view" hidden aria-labelledby="workspaceResultTitle">
+            <div class="workspace-result-head"><div><p class="workspace-section-kicker">03 / REZULTAT</p><h2 id="workspaceResultTitle">Znaš što je sljedeće.</h2><p>Primjer rezultata, složen tako da prvo vidiš najvažnije.</p></div><span class="workspace-result-stamp">DEMO<br />REZULTAT</span></div>
+            <div class="workspace-result-grid">
+              <article class="workspace-card workspace-score-card"><span class="workspace-card-label">SPREMNOST ZA PREDAJU</span><div class="workspace-score-ring"><span><strong>87</strong><small>/ 100</small></span></div><strong class="workspace-score-caption">Dobar temelj</strong><small class="workspace-score-note">3 stvari imaju prioritet</small></article>
+              <article class="workspace-card workspace-category-card"><div class="workspace-card-top"><span class="workspace-card-label">KATEGORIJE PROVJERE</span><span class="workspace-card-status is-good">4 područja</span></div><div class="workspace-result-bar"><span><b>Struktura</b><small>92%</small></span><i><em style="--bar-value:92%"></em></i></div><div class="workspace-result-bar"><span><b>Citiranje</b><small>84%</small></span><i><em style="--bar-value:84%"></em></i></div><div class="workspace-result-bar"><span><b>Oblikovanje</b><small>88%</small></span><i><em style="--bar-value:88%"></em></i></div><div class="workspace-result-bar"><span><b>Elementi</b><small>76%</small></span><i><em style="--bar-value:76%"></em></i></div></article>
+              <article class="workspace-card workspace-severity-card"><div class="workspace-card-top"><span class="workspace-card-label">PRIORITETI</span><span class="workspace-card-status is-alert">3 nalaza</span></div><div class="workspace-severity-main"><strong>03</strong><span>stvari koje vrijedi riješiti prije predaje</span></div><div class="workspace-severity-list"><span><i class="severity-error"></i> 1 važan nalaz</span><span><i class="severity-warn"></i> 2 upozorenja</span><span><i class="severity-pass"></i> 24 provjere prolaze</span></div></article>
+            </div>
+            <div class="workspace-next-step"><div><span class="workspace-card-label">SLJEDEĆI KORAK</span><strong>Uredi naslov prvog poglavlja</strong><small>Najbrže podiže čitljivost strukture rada.</small></div><button id="workspaceRestart" class="workspace-secondary-button" type="button">Ponovi demo</button></div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="/prototype/analyzer-workspace-demo.ts"></script>
+  </body>
+</html>

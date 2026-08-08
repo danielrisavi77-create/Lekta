@@ -50,6 +50,7 @@
     "generate-benchmark-fixture": "vite-node scripts/generate-benchmark-fixture.mts"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
     "@playwright/test": "^1.61.1",
     "dictionary-hr": "^2.0.0",
     "esbuild": "^0.28.1",

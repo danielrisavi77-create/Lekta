@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="hr" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#191512" />
+    <title>Korektorski stol+ | Side-by-side usporedba</title>
+    <link rel="stylesheet" href="/src/shared/design-system.css" />
+    <link rel="stylesheet" href="/src/shared/premium.css" />
+    <link rel="stylesheet" href="/prototype/analyzer-workspace-comparison.css" />
+  </head>
+  <body>
+    <header class="comparison-nav">
+      <a class="comparison-logo" href="#comparisonTitle"><span aria-hidden="true">L</span> Korektorski stol<span>+</span></a>
+      <span class="comparison-badge">VIZUALNI REVIEW / SIDE BY SIDE</span>
+    </header>
+
+    <main data-demo-surface="analyzer-comparison" data-demo-only="true">
+      <section class="comparison-intro" aria-labelledby="comparisonTitle">
+        <p class="comparison-kicker">PREVIEW LAB / ANALYZATOR</p>
+        <h1 id="comparisonTitle">Live pored <em>novog radnog stola.</em></h1>
+        <p>Usporedi postojeći analyzer s novim workspace konceptom. Ova stranica je samo review alat i ne mijenja nijednu od prikazanih verzija.</p>
+        <div class="comparison-legend" aria-label="Objašnjenje usporedbe"><span><i class="legend-live"></i> Trenutna live verzija</span><span><i class="legend-demo"></i> Novi demo koncept</span><b>Obje strane koriste isti localhost</b></div>
+      </section>
+
+      <section class="comparison-grid" aria-label="Usporedba live verzije i novog demo koncepta">
+        <article class="comparison-panel comparison-panel-live">
+          <header class="comparison-panel-header"><div><span class="comparison-panel-kicker">01 / LIVE</span><h2>Trenutni analyzer</h2></div><a href="/index.html#analyzer" target="_blank" rel="noreferrer">Otvori zasebno ↗</a></header>
+          <div class="comparison-frame-wrap"><span class="comparison-frame-note">postojeći proizvod</span><iframe title="Live Lekta analyzer" src="/index.html#analyzer" loading="eager"></iframe></div>
+        </article>
+        <article class="comparison-panel comparison-panel-demo">
+          <header class="comparison-panel-header"><div><span class="comparison-panel-kicker">02 / DEMO</span><h2>Novi workspace</h2></div><a href="/prototype/analyzer-workspace-demo.html" target="_blank" rel="noreferrer">Otvori zasebno ↗</a></header>
+          <div class="comparison-frame-wrap"><span class="comparison-frame-note">izolirani koncept</span><iframe title="Novi workspace demo" src="/prototype/analyzer-workspace-demo.html" loading="eager"></iframe></div>
+        </article>
+      </section>
+
+      <footer class="comparison-footer"><span>✳</span> Review prije live integracije. Reci što želiš zadržati iz live verzije, a što preuzeti iz demoa.</footer>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="hr" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#191512" />
+    <title>Korektorski stol+ | Analyzer hero demo</title>
+    <link rel="stylesheet" href="/src/shared/design-system.css" />
+    <link rel="stylesheet" href="/src/shared/premium.css" />
+    <link rel="stylesheet" href="/prototype/analyzer-hero-demo.css" />
+  </head>
+  <body>
+    <header class="demo-nav" aria-label="Demo navigacija">
+      <a class="demo-logo" href="#demoTitle" aria-label="Korektorski stol plus demo">
+        <span class="demo-logo-mark" aria-hidden="true">L</span>
+        <span>Korektorski stol<span class="demo-logo-plus">+</span></span>
+      </a>
+      <span class="demo-badge">VIZUALNI ARTIFACT / 01</span>
+    </header>
+
+    <main data-demo-surface="analyzer-hero" data-demo-only="true">
+      <section class="demo-hero" aria-labelledby="demoTitle">
+        <div class="demo-copy">
+          <p class="demo-kicker"><span class="demo-kicker-dot" aria-hidden="true"></span> Lokalna provjera forme rada</p>
+          <h1 id="demoTitle">Mirniji zadnji sat prije <em>predaje.</em></h1>
+          <p class="demo-lead">Učitaj rad i prvo vidi ono što najčešće ostane za zadnji tren: formu, strukturu i citiranje na jednom mjestu.</p>
+
+          <div class="demo-actions">
+            <button id="demoUploadCta" class="demo-button demo-button-primary" type="button">
+              <span>Učitaj rad</span>
+              <span aria-hidden="true">↗</span>
+            </button>
+            <button id="demoReplay" class="demo-button demo-button-quiet" type="button">
+              <span class="demo-replay-icon" aria-hidden="true">↻</span>
+              <span>Ponovi demonstraciju</span>
+            </button>
+          </div>
+
+          <div class="demo-trust" aria-label="Svojstva Lekte">
+            <span><b aria-hidden="true">01</b> Lokalna analiza</span>
+            <span><b aria-hidden="true">02</b> Bez računa</span>
+            <span><b aria-hidden="true">03</b> Stvarne provjere</span>
+          </div>
+
+          <p class="demo-disclaimer">Ovo je vizualna demonstracija. Prikazani nalazi i score nisu rezultat tvog dokumenta.</p>
+        </div>
+
+        <div class="demo-stage-wrap">
+          <div class="demo-stage-label" aria-hidden="true">
+            <span>Kako radi</span>
+            <span class="demo-stage-label-line"></span>
+            <span>01 / 03</span>
+          </div>
+
+          <div id="demoStage" class="demo-stage" data-demo-state="intro" aria-label="Demonstracija analize rada">
+            <div class="demo-stage-orbit" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="demo-stage-hud" aria-hidden="true">
+              <span class="demo-hud-live"><i></i> LOCAL ENGINE</span>
+              <span class="demo-hud-code">FORM / 01</span>
+            </div>
+            <div class="demo-stage-ruler" aria-hidden="true"><i>01</i><i>02</i><i>03</i><i>04</i><i>05</i></div>
+            <div class="demo-paper-back demo-paper-back-one" aria-hidden="true"></div>
+            <div class="demo-paper-back demo-paper-back-two" aria-hidden="true"></div>
+            <div class="demo-desk-note demo-note-top" aria-hidden="true">KOREKTURA<br /><strong>FORMA</strong></div>
+            <div class="demo-desk-note demo-note-bottom" aria-hidden="true">PROVJERI<br /><strong>PRIJE PREDAJE</strong></div>
+
+            <article class="demo-document" aria-label="Primjer dokumenta u analizi">
+              <div class="demo-document-topline">
+                <span>FER / DIPLOMSKI RAD</span>
+                <span>2026</span>
+              </div>
+              <div class="demo-document-rule"></div>
+              <p class="demo-document-faculty">FAKULTET ELEKTROTEHNIKE I RAČUNARSTVA</p>
+              <h2>Utjecaj digitalnih alata na akademsko pisanje</h2>
+              <p class="demo-document-author">Ime Prezime</p>
+              <div class="demo-document-lines" aria-hidden="true">
+                <i></i><i></i><i class="short"></i>
+              </div>
+              <div class="demo-document-section">
+                <span>1. Uvod</span>
+                <span class="demo-section-number">01</span>
+              </div>
+              <div class="demo-document-lines demo-document-lines-body" aria-hidden="true">
+                <i></i><i></i><i></i><i class="medium"></i><i></i><i class="short"></i>
+              </div>
+              <div class="demo-citation-line" aria-hidden="true"><span>[1]</span><i></i><i class="short"></i></div>
+              <span class="demo-page-number" aria-hidden="true">1</span>
+              <span class="demo-ink-mark demo-ink-circle" aria-hidden="true"></span>
+              <span class="demo-ink-mark demo-ink-underline" aria-hidden="true"></span>
+              <span class="demo-scan-line" aria-hidden="true"></span>
+            </article>
+
+            <div class="demo-callout demo-callout-structure" aria-hidden="true">
+              <span class="demo-callout-mark">!</span>
+              <span><b>Struktura</b><small>Naslov provjeren</small></span>
+            </div>
+            <div class="demo-callout demo-callout-citation" aria-hidden="true">
+              <span class="demo-callout-mark demo-callout-mark-pass">✓</span>
+              <span><b>Citat</b><small>Izvor pronađen</small></span>
+            </div>
+            <div class="demo-score-card" aria-hidden="true">
+              <span class="demo-score-caption">SPREMNOST ZA PREDAJU</span>
+              <strong>87</strong><span class="demo-score-max">/ 100</span>
+              <span class="demo-score-status"><i></i> Dobar temelj</span>
+            </div>
+            <span class="demo-hand-note" aria-hidden="true">sad je<br /><em>čitljivo</em></span>
+            <span class="demo-stamp" aria-hidden="true">LOCAL<br />CHECK</span>
+          </div>
+
+          <p id="demoStatus" class="demo-status" aria-live="polite">Priprema demonstracije...</p>
+        </div>
+      </section>
+
+      <section id="demoAnalyzerPreview" class="demo-analyzer-preview" tabindex="-1" aria-labelledby="demoAnalyzerTitle">
+        <div class="demo-preview-heading">
+          <p class="demo-section-kicker">Isti tijek, stvarni rezultat</p>
+          <h2 id="demoAnalyzerTitle">Od papira do jasnog sljedećeg koraka.</h2>
+          <p>Demo scena pokazuje ritam koji stvarni analizator nastavlja nakon uploada.</p>
+        </div>
+        <div class="demo-steps" aria-label="Tri faze analize">
+          <article class="demo-step demo-step-active">
+            <span class="demo-step-number">01</span>
+            <div><h3>Kontekst</h3><p>Odaberi vrstu rada i pravila koja vrijede za tvoj kontekst.</p></div>
+          </article>
+          <article class="demo-step">
+            <span class="demo-step-number">02</span>
+            <div><h3>Provjera</h3><p>Dokument se analizira lokalno, bez slanja sadržaja na server.</p></div>
+          </article>
+          <article class="demo-step">
+            <span class="demo-step-number">03</span>
+            <div><h3>Rezultat</h3><p>Dobiješ nalaze, prioritete i mjerljiv put prema spremnosti.</p></div>
+          </article>
+        </div>
+        <p class="demo-preview-footer"><span aria-hidden="true">✳</span> Artifact prije live implementacije</p>
+      </section>
+    </main>
+
+    <script type="module" src="/prototype/analyzer-hero-demo.ts"></script>
+  </body>
+</html>

@@ -58,6 +58,9 @@ function render() {
   set('#lit-unique', nf.format(r.entries.length));
   set('#lit-dupes', nf.format(r.duplicatesRemoved));
   set('#lit-issues', nf.format(r.withIssues));
+  set('#lit-premium-unique', nf.format(r.entries.length));
+  set('#lit-premium-dupes', nf.format(r.duplicatesRemoved));
+  set('#lit-premium-issues', nf.format(r.withIssues));
   set('#lit-order-note', sort === 'appearance'
     ? 'Poredak: izvorni redoslijed pojavljivanja (IEEE/Vancouver).'
     : 'Poredak: abecedno po hrvatskom poretku (autor-godina).');

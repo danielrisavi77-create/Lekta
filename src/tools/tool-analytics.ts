@@ -11,9 +11,11 @@
 // bindDownloadButton iz tool-ui.ts, uspjeh), tool_to_analyzer_click (klik na bilo koju
 // #analyzer poveznicu, delegirano).
 
+import { DEPLOYMENT_CONFIG } from '../config/deployment';
+
 const CONSENT_KEY = 'lekta.analytics-consent.v1';
 const PRODUCTION_KEY = 'lekta.production.v2.1';
-const DEFAULT_ANALYTICS_ENDPOINT = 'https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1/analytics-event';
+const DEFAULT_ANALYTICS_ENDPOINT = DEPLOYMENT_CONFIG.functionEndpoint('analytics-event');
 const BANNER_ID = 'lekta-tool-consent-banner';
 
 function readJson(key: string): any {

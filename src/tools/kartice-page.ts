@@ -114,6 +114,9 @@ function render(text: any) {
   setStat('#m-paragraphs', nf.format(m.paragraphs));
   setStat('#m-pages', nf.format(m.pages));
   setStat('#m-reading', readingLabel(m.readingMinutes));
+  setStat('#kt-premium-words', nf.format(m.words));
+  setStat('#kt-premium-pages', nf.format(m.pages));
+  setStat('#kt-premium-reading', readingLabel(m.readingMinutes));
   renderGoalAndPrice(m);
 
   const copyBtn = $('#kt-copy');

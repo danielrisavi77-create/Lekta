@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="hr" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#191512" />
+    <title>Korektorski stol+ | Pet vizualnih varijanti</title>
+    <link rel="stylesheet" href="/src/shared/design-system.css" />
+    <link rel="stylesheet" href="/src/shared/premium.css" />
+    <link rel="stylesheet" href="/prototype/analyzer-workspace-variants.css" />
+  </head>
+  <body>
+    <header class="variants-nav" aria-label="Vizualne varijante">
+      <a class="variants-logo" href="/prototype/analyzer-workspace-comparison.html">
+        <span class="variants-mark" aria-hidden="true">L</span>
+        <span>Korektorski stol<span>+</span></span>
+      </a>
+      <span class="variants-nav-meta">VIZUALNI REVIEW / 05 SMJEROVA</span>
+    </header>
+
+    <main data-demo-gallery="analyzer-workspace-variants">
+      <section class="variants-intro" aria-labelledby="variantsTitle">
+        <p class="variants-kicker">ANALYZATOR / ART DIRECTION</p>
+        <h1 id="variantsTitle">Pet načina da dokument<br /><em>postane jasan plan.</em></h1>
+        <p>Svaki smjer koristi isti upload-first tok. Razlika je u karakteru prostora, tipografiji, dubini i korektorskom jeziku.</p>
+        <div class="variants-legend" aria-label="Legenda usporedbe">
+          <span><i class="legend-dot legend-dot-upload"></i> isti UX tok</span>
+          <span><i class="legend-dot legend-dot-visual"></i> drugi vizualni smjer</span>
+          <span><i class="legend-dot legend-dot-local"></i> lokalni demo podaci</span>
+        </div>
+      </section>
+
+      <section class="variants-grid" aria-label="Pet analyzer demo varijanti">
+        <article class="variant-card" data-variant-card="editorial">
+          <header><span class="variant-number">01</span><div><h2>Editorial instrument</h2><p>Čist papir, jaka hijerarhija, korektorska preciznost.</p></div><a href="/prototype/analyzer-workspace-demo.html?variant=editorial">Otvori ↗</a></header>
+          <iframe title="Editorial instrument demo" src="/prototype/analyzer-workspace-demo.html?variant=editorial" loading="eager"></iframe>
+        </article>
+        <article class="variant-card" data-variant-card="blueprint">
+          <header><span class="variant-number">02</span><div><h2>Blueprint lab</h2><p>Mreža, scan linije i više osjećaja mjernog instrumenta.</p></div><a href="/prototype/analyzer-workspace-demo.html?variant=blueprint">Otvori ↗</a></header>
+          <iframe title="Blueprint lab demo" src="/prototype/analyzer-workspace-demo.html?variant=blueprint" loading="lazy"></iframe>
+        </article>
+        <article class="variant-card" data-variant-card="magazine">
+          <header><span class="variant-number">03</span><div><h2>Magazine layout</h2><p>Veliki naslov, asimetrija i više art-direction karaktera.</p></div><a href="/prototype/analyzer-workspace-demo.html?variant=magazine">Otvori ↗</a></header>
+          <iframe title="Magazine layout demo" src="/prototype/analyzer-workspace-demo.html?variant=magazine" loading="lazy"></iframe>
+        </article>
+        <article class="variant-card" data-variant-card="cockpit">
+          <header><span class="variant-number">04</span><div><h2>Dark cockpit</h2><p>Tamniji premium dashboard s kontroliranim svjetlom.</p></div><a href="/prototype/analyzer-workspace-demo.html?variant=cockpit">Otvori ↗</a></header>
+          <iframe title="Dark cockpit demo" src="/prototype/analyzer-workspace-demo.html?variant=cockpit" loading="lazy"></iframe>
+        </article>
+        <article class="variant-card" data-variant-card="tactile">
+          <header><span class="variant-number">05</span><div><h2>Tactile desk</h2><p>Više papira, štambilja i fizičkog korektorskog stola.</p></div><a href="/prototype/analyzer-workspace-demo.html?variant=tactile">Otvori ↗</a></header>
+          <iframe title="Tactile desk demo" src="/prototype/analyzer-workspace-demo.html?variant=tactile" loading="lazy"></iframe>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

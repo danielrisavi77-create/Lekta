@@ -170,7 +170,7 @@ textarea#lit-input{min-height:380px;line-height:1.6}
   </div>
 </header>
 
-<main>
+<main data-premium-surface="bibliography-tool">
 <section class="hero">
   <div class="shell">
     <div class="hero-back"><a class="backlink" href="index.html#top">&larr; Natrag na Lektu</a></div>
@@ -182,7 +182,7 @@ textarea#lit-input{min-height:380px;line-height:1.6}
 </section>
 
 <section class="section">
-  <div class="shell grid">
+  <div class="shell grid tool-workspace">
     <div class="card">
       <h2>Tvoj popis</h2>
       <p class="sub">Zalijepi reference, jedan izvor po retku.</p>
@@ -204,7 +204,7 @@ textarea#lit-input{min-height:380px;line-height:1.6}
     </div>
 
     <div class="out-panel">
-      <div class="card">
+      <div class="card" data-premium-tilt>
         <h2>Sređeni popis</h2>
         <p class="sub">Ažurira se dok tipkaš.</p>
         <p class="sub" id="lit-order-note" aria-live="polite">Poredak: abecedno po hrvatskom poretku (autor-godina).</p>
@@ -215,6 +215,11 @@ textarea#lit-input{min-height:380px;line-height:1.6}
           <div class="metric"><span>Jedinstveno</span><b id="lit-unique">0</b></div>
           <div class="metric"><span>Duplikata</span><b id="lit-dupes">0</b></div>
           <div class="metric warnstat"><span>S upozorenjem</span><b id="lit-issues">0</b></div>
+        </div>
+        <div class="premium-data-grid" id="lit-premium-metrics" aria-label="Brzi pregled literature">
+          <div><b id="lit-premium-unique">0</b><span>jedinstvenih zapisa</span></div>
+          <div><b id="lit-premium-dupes">0</b><span>uklonjenih duplikata</span></div>
+          <div><b id="lit-premium-issues">0</b><span>upozorenja</span></div>
         </div>
         <div class="sr-only" id="lit-sr-summary" role="status" aria-live="polite"></div>
         <details class="lit-dupes-detail" id="lit-dupes-detail" hidden>

@@ -33,6 +33,7 @@ import { workTypesForSelection, defaultWorkTypeForProgram, citationForDefinition
 import { INSTITUTIONAL_COVERAGE_MATRIX, COVERAGE_STATUS_META, CORPUS_STATS } from '../coverage/coverage-loader';
 import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../submission/submission-loader';
 import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-toggle';
+import { DEPLOYMENT_CONFIG } from '../config/deployment';
 import { readFacultyContext } from '../tools/faculty-context';
 import { findUpcomingDeadline } from '../submission/deadline-registry';
 import { renderRepairPanel, renderConfirmation, advancedFormFor } from './repair-panel';
@@ -68,6 +69,7 @@ import { submitUnknownFaculty } from '../waitlist/waitlist-client';
 import { TERMS_VERSION } from '../legal/terms-version';
 import type { PreflightPanel } from '../preflight/preflight-panel';
 import { academicYearFromDate } from '../profiles/academic-year';
+import { setProgressValue } from '../shared/premium-visuals';
 import { computeFingerprint } from '../fingerprint/fingerprint';
 import { analyzeCrossFileSubmission, crossFileFingerprint } from '../analysis/cross-file-submission-consistency';
 import { activeDocumentProgress, describeProgress } from '../history/progress';
@@ -137,7 +139,7 @@ const setupMode=__DEV_TOOLS__&&params.get('setup')==='1'&&setupAllowed();
 const adminMode=params.get('admin')==='1'&&setupAllowed();
 async function openAdminStats(){const ep=String(productionConfig?.adminStatsEndpoint||'').trim();if(!ep){toast('Admin endpoint nije konfiguriran.');return}const token=await resolveAccessToken();if(authConfigured()&&!token){openAuth(()=>{void openAdminStats()});return}const { openAdminPanel }=await import('../admin/admin-panel');await openAdminPanel({cfg:{endpoint:ep},getToken:async()=>(await resolveAccessToken())||''})}
 const CHECKOUT_CONSENT_TEXT='Pristajem da isporuka digitalnog sadržaja (puni izvještaj) počne odmah nakon plaćanja i izričito se odričem prava na jednostrani raskid ugovora u roku od 14 dana (čl. 86. Zakona o zaštiti potrošača). Bez ovog pristanka kupnja se ne može dovršiti.';
-const DEFAULT_PRODUCTION_CONFIG={enabled:false,submissionMode:'netlify-form',orderEndpoint:'/',paymentProvider:'lemonsqueezy',paymentLinks:{format:'',panic:'',premium:''},businessName:'Lekta',contactEmail:'lekta.kontakt@gmail.com',privacyController:'',retentionDays:30,uploadMaxBytes:8*1024*1024,analyticsEndpoint:'https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1/analytics-event',serverAnalytics:'netlify-optional',reportEndpoint:'',fieldRenderEndpoint:'',repairEndpoint:'https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1/repair-docx',checkoutEndpoint:'',guaranteeEndpoint:'',supabaseUrl:'https://zrrjttizjyfcxmcpgzml.supabase.co',supabaseAnonKey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpycmp0dGl6anlmY3htY3Bnem1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1ODIzMTcsImV4cCI6MjA5OTE1ODMxN30.OOUm0_WszIhV1SE2Li3HUhE4QR-voe7CsmiMFuwAx_8',waitlistEndpoint:'https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1/faculty-request',referralEndpoint:'',errorEndpoint:'',preflightStartEndpoint:'',preflightResultEndpoint:'',preflightMaxUploadMb:30,adminStatsEndpoint:'https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1/admin-stats'};
+const DEFAULT_PRODUCTION_CONFIG={enabled:false,submissionMode:'netlify-form',orderEndpoint:'/',paymentProvider:'lemonsqueezy',paymentLinks:{format:'',panic:'',premium:''},businessName:'Lekta',contactEmail:'lekta.kontakt@gmail.com',privacyController:'',retentionDays:30,uploadMaxBytes:8*1024*1024,analyticsEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('analytics-event'),serverAnalytics:'netlify-optional',reportEndpoint:'',fieldRenderEndpoint:'',repairEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('repair-docx'),checkoutEndpoint:'',guaranteeEndpoint:'',supabaseUrl:DEPLOYMENT_CONFIG.supabaseUrl,supabaseAnonKey:DEPLOYMENT_CONFIG.supabaseAnonKey,waitlistEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('faculty-request'),referralEndpoint:'',errorEndpoint:'',preflightStartEndpoint:'',preflightResultEndpoint:'',preflightMaxUploadMb:30,adminStatsEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('admin-stats')};
 // Error tracking (P0 8-1): globalni handleri. Ako je errorEndpoint konfiguriran, salje SANITIZIRAN
 // tehnicki kontekst (poruka, skraceni stack, verzija, path) na kolektor (npr. Sentry tunnel same-
 // origin ili /functions/v1/log-error). Bez endpointa: samo console.error (Supabase/hosting logovi).
@@ -871,6 +873,7 @@ function renderReadinessHeader(r: any){
 function renderTriage(r: any){
   renderReadinessHeader(r);
   renderPhaseTwoResultViews(r);
+  syncPremiumResultVisuals(r);
   window.__lektaIcons?.();
 }
 function refreshFindingViews(r: any){renderTriage(r)}
@@ -1118,6 +1121,16 @@ function _animate(){return window.__lektaAnimate} // lijeno ucitan Motion (ui-bo
 function countUp(el: any,to: any,fmtFn?: any){if(!el)return;const target=Number(to);if(!isFinite(target)){el.textContent=to;return}const out=(v: any)=>{const n=Math.round(v);el.textContent=fmtFn?fmtFn(n):String(n)};const A=_animate();if(motionReduced()||typeof A!=='function'){out(target);return}A(0,target,{duration:.9,ease:[.22,1,.36,1],onUpdate:out})}
 function animateScore(ring: any,valueEl: any,score: any){countUp(valueEl,score==null?'?':score);if(!ring)return;const s=Number(score),A=_animate();if(!isFinite(s)||motionReduced()||typeof A!=='function'){ring.style.setProperty('--score',isFinite(s)?s:0);return}A(ring,{'--score':[0,s]},{duration:.95,ease:[.22,1,.36,1]})}
 function animateBars(){const A=_animate();document.querySelectorAll('#categoryGrid .bar > i').forEach((el: any)=>{const p=Number(el.dataset.fill)||0;if(motionReduced()||typeof A!=='function'){el.style.width=p+'%';return}A(el,{width:['0%',p+'%']},{duration:.8,ease:[.22,1,.36,1],delay:.12})})}
+function syncPremiumResultVisuals(r: any){
+  const score=Number(r?.score),ring=$('#resultPremiumRing'),ringValue=$('#resultPremiumRingValue'),ringLabel=$('#resultPremiumRingLabel');
+  if(ring){const percent=Number.isFinite(score)?setProgressValue(ring,score,100):setProgressValue(ring,0,100);ring.style.setProperty('--viz-value',String(percent));ring.style.setProperty('--ring-color',r?.score!=null?String(scoreMeta(r.score).color):'var(--paper-muted)')}
+  if(ringValue)ringValue.textContent=Number.isFinite(score)?String(Math.round(score)):'?';
+  if(ringLabel)ringLabel.textContent=Number.isFinite(score)?(score>=90?'Spremno za završni pregled':score>=70?'Dobra osnova za doradu':'Prvo riješi najvažnije nalaze'):'Informativni rezultat';
+  const names: any={formatting:'Oblikovanje',structure:'Struktura',citations:'Citatnice',elements:'Elementi'};
+  Object.entries(r?.categories||{}).forEach(([key,value]: any)=>{const card=document.querySelector<HTMLElement>(`#resultCategoryChart [data-category="${key}"]`);if(!card)return;const percent=value?.max?Math.round(Number(value.earned||0)/Number(value.max)*100):0;const label=card.querySelector('span'),number=card.querySelector('b'),bar=card.querySelector<HTMLElement>('[data-premium-progress]');if(label)label.textContent=names[key]||key;if(number)number.textContent=`${percent}%`;if(bar){bar.dataset.value=String(percent);setProgressValue(bar,percent,100)}});
+  const open=(r?.issues||[]).filter((item: any)=>item?.status!=='ignored'),counts={error:0,warning:0,info:0};open.forEach((item: any)=>{if(item?.severity in counts)counts[item.severity as keyof typeof counts]++});
+  const error=$('#resultErrorCount'),warning=$('#resultWarningCount'),info=$('#resultInfoCount');if(error)error.textContent=String(counts.error);if(warning)warning.textContent=String(counts.warning);if(info)info.textContent=String(counts.info);
+}
 // Onboarding footgun (P0 7.1) + WS-2: upozori PRIJE kupnje ako je odabrana vrsta rada vjerojatno
 // niza od stvarne (npr. diplomski placen kao seminarski). Rasponi su izvedeni iz fakultetskih uputa
 // (data/work-type-scope.json), primarni pouzdani signal je naslovnicki marker (details.titlePageWorkType).

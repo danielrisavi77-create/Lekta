@@ -14,9 +14,11 @@ import 'open-props/easings'; // samo easing krivulje (bez boja/sjena, da topla p
 import './design-system.css'; // JEDINI izvor tokena (boje/tipografija/radius/sjene/fokus) za sve stranice
 import './tool-page.css'; // dijeljeni chrome (topbar/nav/gumbi/hero/card/footer/KS tema) za alat-stranice
 import './motion.css'; // dijeljeni sloj gibanja: tokeni gibanja, tekstura papira, View Transitions, tipografija
+import './premium.css'; // Korektorski stol+: dubina, vizualizacije i lagani 3D slojevi
 import './skip-link.css'; // pristupacni "Preskoci na sadrzaj" (BL-P1-01)
 import './a11y.css'; // dijeljeni a11y sloj: forced-colors fokus fallback (BL-P2-02)
 import { setupSkipLink } from './skip-link';
+import { setupPremiumVisuals } from './premium-visuals';
 import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap, Lamp, Share2, Wand2 } from 'lucide';
 
 // Korektorski stol: "radna lampa" (tamni stol) je default na SVIM stranicama. Kad korisnik
@@ -217,7 +219,7 @@ function setupTopbarScroll() {
 }
 
 function boot() {
-  setupSkipLink(); renderIcons(); setupReveal(); animateHero(); setupTilt(); setupNavTools(); setupThemeToggle(); setupMobileNav(); setupTopbarScroll();
+  setupSkipLink(); renderIcons(); setupReveal(); animateHero(); setupTilt(); setupPremiumVisuals(); setupNavTools(); setupThemeToggle(); setupMobileNav(); setupTopbarScroll();
 }
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);
