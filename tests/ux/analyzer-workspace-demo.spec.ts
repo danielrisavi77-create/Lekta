@@ -36,7 +36,11 @@ test('workspace demo ima stvarni prijelaz progress do dashboard rezultata', asyn
 
   await page.locator('#workspaceRestart').click();
   await expect(page.locator('#workspaceStart')).toBeVisible();
-  await expect(page.locator('[data-rail-step="context"]')).toHaveClass(/is-active/);
+  // Restart vraca demo na POCETAK (resetDemo -> showView('upload'): "Ucitaj primjer rada",
+  // "Ceka upload"), pa je aktivan korak trake 'document', ne 'context'. Ranija tvrdnja je
+  // trazila 'context' i time proturjecila vlastitom resetu.
+  await expect(page.locator('[data-rail-step="document"]')).toHaveClass(/is-active/);
+  await expect(page.locator('[data-rail-step="context"]')).not.toHaveClass(/is-active/);
 });
 
 test('workspace demo reduced-motion odmah prikazuje rezultat', async ({ page }) => {

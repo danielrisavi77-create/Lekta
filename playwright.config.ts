@@ -4,6 +4,12 @@ export default defineConfig({
   testDir: './tests/ux',
   timeout: 120_000,
   fullyParallel: true,
+  // Lokalno ograniceno na 2 radnika. Uz zadani broj (pola jezgri) paralelno dizanje
+  // preglednika je na razvojnom stroju znalo pasti na "Zone Allocation failed - process
+  // out of memory" pa "browserType.launch: spawn UNKNOWN": suite je bio crven bez ijednog
+  // stvarnog kvara (isti testovi izolirano prolaze). CI ima vlastiti stroj pa tamo ostaje
+  // zadana vrijednost.
+  workers: process.env.CI ? undefined : 2,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? 'github' : 'list',
   use: {
