@@ -119,6 +119,12 @@ def main(argv: list[str]) -> int:
         print(__doc__)
         return 2
 
+    # --json: strojni izlaz (ruleId -> ishod), da port moze birati prezivjele bez ponovnog citanja
+    # PDF-ova. Ljudski izlaz ostaje zadan jer se skripta najcesce cita ocima.
+    as_json = "--json" in argv
+    argv = [a for a in argv if a != "--json"]
+    verdicts: list[dict] = []
+
     sources = source_index()
     stats = {"ok": 0, "loose": 0, "mismatch": 0, "no-source": 0, "unreadable": 0, "no-quote": 0}
     failures: list[str] = []
@@ -132,32 +138,52 @@ def main(argv: list[str]) -> int:
                         continue
                     quote, source_id = entry.get("quote"), entry.get("sourceId")
                     label = f"{file.name}:{entry.get('ruleId') or entry.get('checkId')}"
+
+                    def record(outcome: str) -> None:
+                        verdicts.append({
+                            "file": str(file).replace("\\", "/"),
+                            "ruleId": entry.get("ruleId"),
+                            "checkId": entry.get("checkId"),
+                            "sourceId": source_id,
+                            "outcome": outcome,
+                        })
+
                     if not quote:
                         stats["no-quote"] += 1
+                        record("no-quote")
                         continue
                     path = sources.get(source_id or "")
                     if path is None:
                         stats["no-source"] += 1
+                        record("no-source")
                         failures.append(f"NEMA IZVORA  {label} (sourceId={source_id})")
                         continue
                     text = source_text(path)
                     if text is None:
                         stats["unreadable"] += 1
+                        record("unreadable")
                         failures.append(f"NECITLJIV    {label} ({path.name})")
                         continue
                     # Elipsa u citatu znaci "preskocen dio": provjerava se svaki ulomak zasebno.
                     parts = [p for p in re.split(r"\(\.\.\.\)|\.\.\.|…", normalize(quote)) if len(p.strip()) > 12]
                     if parts and all(part.strip() in text for part in parts):
                         stats["ok"] += 1
+                        record("ok")
                     elif parts and all(loose(part) in loose(text) for part in parts):
                         # Sadrzaj se poklapa, razlikuje se samo interpunkcija (najcesce: natuknice
                         # izvornika prepisane zarezima). Vjerno izvoru, ali citat treba prepisati
                         # doslovno prije nego ijedno pravilo ide u podatke.
                         stats["loose"] += 1
+                        record("loose")
                         failures.append(f"INTERPUNKCIJA {label}: {normalize(quote)[:70]}")
                     else:
                         stats["mismatch"] += 1
+                        record("mismatch")
                         failures.append(f"NE STOJI     {label}: {normalize(quote)[:80]}")
+
+    if as_json:
+        print(json.dumps(verdicts, ensure_ascii=False, indent=1))
+        return 0
 
     for line in failures:
         print(line)
