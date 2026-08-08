@@ -16,6 +16,8 @@
  * poziva analyzeDocx izravno preko golden-entry.ts pa je nedirnut.
  */
 
+import { captureKatedraHandoffCandidate } from '../integration/katedra-capture';
+
 /** Pad worker infrastrukture (spawn, ucitavanje, postMessage clone); nije greska analize. */
 class WorkerInfraError extends Error {}
 
@@ -127,12 +129,22 @@ function analyzeInWorker(file: File, profile: any, settings: any, onProgress: an
 /** Postavke analize koje se prosljedjuju do analyzeDocx (i kroz worker protokol). */
 export interface AnalyzeOptions { skipFinalDelay?: boolean }
 
+function finalizeAnalysisForIntegrations(result: any, profile: any, settings: any): any {
+  // No-op for ordinary Lekta users. If this session entered from Katedra, the
+  // helper stores only the sanitized shared result needed for the return link.
+  captureKatedraHandoffCandidate(result, profile, settings);
+  return result;
+}
+
 /** Isti ugovor kao analyzeDocx; u pregledniku radi u workeru, inace na glavnoj niti. */
 export async function analyzeDocxOffThread(file: File, profile: any, settings: any, onProgress: any, options?: AnalyzeOptions): Promise<any> {
   if (canUseWorker()) {
     try {
       const result = await analyzeInWorker(file, profile, settings, onProgress, options);
-      return attachHeadingStructure(result, profile?.headingRules || {});
+      // Obje strane su omotavale isti return: grana obogacuje rezultat strukturom naslova,
+      // master ga hvata za povratak u Katedru. Redoslijed je bitan, ne proizvoljan: Katedra
+      // mora vidjeti KONACAN rezultat, pa obogacivanje ide prvo.
+      return finalizeAnalysisForIntegrations(attachHeadingStructure(result, profile?.headingRules || {}), profile, settings);
     } catch (e) {
       if (!(e instanceof WorkerInfraError)) throw e;
       workerBroken = true;
@@ -146,5 +158,5 @@ export async function analyzeDocxOffThread(file: File, profile: any, settings: a
   // prihvaca moguca sitna razlika u parsiranju umjesto globalnog override-a DOMParsera na glavnoj niti.
   const { analyzeDocx } = await import('./analyze-docx');
   const result = await analyzeDocx(file, profile, settings, onProgress, options);
-  return attachHeadingStructure(result, profile?.headingRules || {});
+  return finalizeAnalysisForIntegrations(attachHeadingStructure(result, profile?.headingRules || {}), profile, settings);
 }

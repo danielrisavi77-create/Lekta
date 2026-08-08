@@ -60,12 +60,15 @@ jobs:
           [extend]
           useDefault = true
           [allowlist]
-          description = "Javni Supabase anon kljuc (AUD-13, namjerno javan) i harvestirani provenijencijski HTML"
+          description = "Javni Supabase anon kljuc, benigni browser storage identifikator i harvestirani provenijencijski HTML"
           regexTarget = "match"
           # Tocan anon JWT iz src/ui/app.ts (role: anon, ovaj projekt). Payload segment enkodira
           # role/ref/iat/exp; service-role kljuc ima drugaciji payload pa i dalje PADA (nije allowlistan).
+          # Drugi regex je doslovni sessionStorage naziv Katedra handoffa. Nije vjerodajnica;
+          # generic-api-key ga je u jednom povijesnom commitu lazno označio zbog naziva *_KEY.
           regexes = [
           '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpycmp0dGl6anlmY3htY3Bnem1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1ODIzMTcsImV4cCI6MjA5OTE1ODMxN30\.[A-Za-z0-9_-]+''',
+          '''lekta\.katedra-handoff-result\.v0\.1''',
           ]
           # Harvestirani sluzbeni izvori (HTML snapshoti) mogu nositi benigne eyJ/base64 blobove.
           # Lockfile nosi integritetske hasheve, ne aplikacijske tajne.
