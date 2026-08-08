@@ -156,6 +156,100 @@
       "lastVerified": "2026-07-28",
       "confirmedVia": "ai-1pass-batch",
       "verifiedHash": "5497e20bc8b063fce733ab100671956ea835898eaa8dd38ca43c2f1e9a9ca4dd"
+    },
+    {
+      "ruleId": "ffri-kulturalni-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "appendices"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu, vlastoručno potpisana",
+          "summary-hr": "Sažetak i ključne riječi",
+          "appendices": "Prilozi (npr. slikovni grafički, zvučni zapisi i sl.)"
+        }
+      },
+      "category": "structure",
+      "label": "Obvezni dijelovi diplomskog rada",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-kulturalni-upute-2021",
+      "sourcePage": "str. 4 do 5",
+      "quote": "Diplomski rad treba sadržavati sljedeće formalne elemente i sadržajne cjeline: 1. Prozirne folije i meke stražnje korice (meki spiralni uvez) 2. Naslovna stranica sadrži... 3. Unutarnja naslovna stranica sadrži... 4. lzjava o autorstvu vlastoručno potpisana (privitak) 5. Sadržaj 6. Sažetak i ključne riječi i (na hrvatskom jeziku odnosno na jeziku na kojem se diplomski rad piše te na engleskom jeziku) 7. Uvod 8. Glavni dio 9. Zaključak 10. Popis literature 11. Prilozi (npr. slikovni grafički, zvučni zapisi i sl.)",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffri-kulturalni-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "numbering": "none",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      },
+      "category": "format",
+      "label": "Numeracija stranica (bez broja do Uvoda, arapski od Uvoda)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-kulturalni-upute-2021",
+      "sourcePage": "str. 4",
+      "quote": "Izgled diplomskoga rada i oblikovanje teksta definirani su Pravilnikom o diplomskom radu i diplomskom ispitu na diplomskim sveučilišnim studijima Filozofskoga fakulteta Sveučilišta u Rijeci kako slijedi: ... Obrojčavanje stranica: u podnožju, desno, počevši od Uvoda",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffri-kulturalni-diplomski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      },
+      "category": "citation",
+      "label": "Unutartekstno citiranje autor-godina, stranica obvezna kod doslovnog navoda",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-kulturalni-upute-2021",
+      "sourcePage": "str. 7 do 8 (Treci dio, odjeljak 3. Citiranje)",
+      "quote": "U diplomskome se radu koriste isključivo unutartekstne citatnice. Kada se u tekstu referencira na rad nekog autora uz autorovo ime navedeno u tekstu tada se navodi prezime autora i u zagradi godina objave rada. ... Kod doslovnog preuzimanja dijela teksta drugih autora (citiranje) vrijede sva do sada navedena pravila s tim da se dio koji se doslovno preuzima navodi unutar navodnih znakova... Za ovaj slučaj posebno je važan prošireni način označavanja referenci dodavanjem broja stranica kako bi se omogućilo što lakše praćenje upotrijebljenih izvora.",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffri-kulturalni-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      },
+      "category": "citation",
+      "label": "Popis literature (abecedno, sufiksi za isti autor/godinu)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-kulturalni-upute-2021",
+      "sourcePage": "str. 9 do 10 (Treci dio, odjeljak 4. Sastavljanje popisa literature)",
+      "quote": "4. Sastavljanje popisa literature Osnovno pravilo je da se abecednim redom navedu svi izvori navedeni u radu prema prezimenu prvog autora ili prema naslovu, ukoliko autor nije poznat. ... Ako se navodi više radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c, itd.)",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
     }
   ]
 }

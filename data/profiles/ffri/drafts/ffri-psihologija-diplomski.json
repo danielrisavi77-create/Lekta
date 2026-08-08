@@ -109,6 +109,80 @@
       "verifiedHash": "e65363cbefec01e79e410e053d952e8856b4c739559f0e7954a5037c1e2c204d",
       "autoFixable": true,
       "fixerId": "alignment-fixer"
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "appendices"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu, vlastoručno potpisana",
+          "summary-hr": "Sažetak s ključnim riječima",
+          "appendices": "Prilozi"
+        }
+      },
+      "category": "structure",
+      "label": "Obvezni dijelovi diplomskog rada (odjeljak 6.3)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-psihologija-brosura-2022",
+      "sourcePage": "str. 10 (odjeljak 6.3 Dijelovi rada)",
+      "quote": "6.3. Dijelovi rada su ovim redom: ▪ Izjava o autorstvu, vlastoručno potpisana (Prilog 3.) ▪ Sadržaj ▪ Sažetak s ključnim riječima na hrvatskome jeziku te naslov diplomskog rada i sažetak s ključnim riječima na engleskome jeziku, ▪ Predgovor (ako postoji) ▪ Tekst rada (uvod, glavni dio, zaključak) ▪ Literatura ▪ Prilozi (ako ih ima",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "numbering": "none",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      },
+      "category": "format",
+      "label": "Numeracija stranica (bez broja do Uvoda, arapski od Uvoda)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-psihologija-brosura-2022",
+      "sourcePage": "str. 11 (odjeljak 6.4 Numeriranje stranica)",
+      "quote": "6.4. Numeriranje stranica ide od prve stranice UVODA do zadnje stranice teksta diplomskog rada. Brojevi stranica pišu se arapskim brojkama, u desnom podnožju stranice. Prilozi dobivaju svoju numeraciju.",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      },
+      "category": "citation",
+      "label": "Citiranje prema APA standardu, biljeske uz obveznu stranicu",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-psihologija-brosura-2022",
+      "sourcePage": "str. 10 (odjeljak 6.3.5 Literatura)",
+      "quote": "6.3.5. Literatura korištena u radu stavlja se na kraju i popisuje u skladu sa standardom navođenja literature u znanstvenim radovima (vidi APA priručnik i časopis Psihologijske teme). Na isti način pišu se i bilješke ispod teksta. Bilješke obavezno moraju imati naznačenu stranicu na koju se autor u tekstu poziva.",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
     }
   ]
 }

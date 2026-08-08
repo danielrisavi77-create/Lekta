@@ -235,6 +235,108 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      },
+      "category": "citation",
+      "label": "Popis arhivskih izvora i literature, abecedni red, oznake a/b/c",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "str. 6 (Popis arhivskih izvora i literature) i str. 9-10 (7.3.2. Citiranje/navođenje autora, godine izdanja i stranice)",
+      "quote": "POPIS ARHIVSKIH IZVORA I LITERATURE mora biti numeriran i naveden abecednim redom prema prezimenu autora... Ukoliko postoji više publikacija istoga autora u jednoj godini, u bilješkama se koriste dodatne oznake uz godinu, npr. Tomić, 2012.a, 218, Tomić, 2012.b, 359. Iste oznake moraju biti naznačene uz pune bibliografske jedinice u cjelovitom popisu literature na kraju rada.",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": [
+          "originality-statement",
+          "appendices",
+          "figure-list",
+          "abstract",
+          "keywords-en"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autentičnosti rada",
+          "appendices": "Prilozi",
+          "figure-list": "Popis slikovnih priloga",
+          "abstract": "Summary",
+          "keywords-en": "Key words"
+        }
+      },
+      "category": "structure",
+      "label": "Redoslijed dijelova strukture diplomskog rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "str. 5-6, odjeljak 7.1. Struktura rada",
+      "quote": "IZJAVA O AUTENTIČNOSTI RADA sadrži tekst kojim student vlastoručnim potpisom potvrđuje da niti jedan dio diplomskog rada nije izravno preuzet iz literature bez navođenja korištenih izvora... PRILOZI podrazumijevaju sav materijal koji je potrebno priložiti u svrhu cjelovitosti diplomskoga rada... POPIS SLIKOVNIH PRILOGA je numerirani popis svih reprodukcija, ilustracija i shema korištenih u diplomskome radu... Na kraju rada donosi se SUMMARY (sažetak na engleskom jeziku) ispod kojega se navode KEY WORDS (ključne riječi na engleskom jeziku).",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "numbering": "none",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      },
+      "category": "format",
+      "label": "Numeracija stranica: prednji dio nenumeriran, glavni dio arapski od 1",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "str. 6, odjeljak 7.1. Struktura rada",
+      "quote": "Stranica s temeljnom dokumentacijskom karticom ostaje nenumerirana... Izjava o autentičnosti rada piše se na nenumeriranoj stranici... Stranica sa sadržajem rada ostaje nenumerirana... Numeracija rada započinje od prve stranice uvoda i navodi se arapskim brojkama (1, 2, 3 itd.).",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--table-figure-rescue-rules",
+      "checkId": "table-figure-rescue-rules",
+      "value": {
+        "table": {
+          "align": "center"
+        },
+        "figure": {
+          "align": "center"
+        }
+      },
+      "category": "format",
+      "label": "Centriranje reprodukcija, tablica i grafova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "str. 8, odjeljak 7.2. Opseg i grafičko oblikovanje",
+      "quote": "Reprodukcije, tablice, grafovi i razne nacrtne sheme umetnute u tekst diplomskog rada ili navedene iza teksta moraju biti kvalitetne rezolucije i tiska, centrirane, numerirane i s legendama (Times New Roman, veličina 10, bold, centrirane).",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
     }
   ],
   "generatedAt": "2026-07-02"

@@ -131,6 +131,132 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "unizd-pedagogija-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      },
+      "category": "citation",
+      "label": "Popis literature (Harvard)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-pedagogija-upute-2019",
+      "sourcePage": "str. 4 (odjeljak 7. Popis literature)",
+      "quote": "Popis literature sačinjava numerirani popis bibliografskih jedinica koje je potrebno navesti prema abecednom redu prezimena autora te zasebno grupirati u pisane i mrežne izvore (URL). ... Ukoliko se navodi više radova istog autora s istom godinom izdanja, koristi se podklasifikacija a, b, c itd., koja se kasnije istovjetno navodi u popisu literature.",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-pedagogija-diplomski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      },
+      "category": "citation",
+      "label": "Citiranje autor-godina (Harvard)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-pedagogija-upute-2019",
+      "sourcePage": "str. 7 (tablica Uputa/Primjer, citiranje)",
+      "quote": "Bibliografske jedinice navode se prema harvardskom sustavu referiranja... U slučaju izravnog navođenja, tj. citiranja navodi se izvor podataka u zagradama i to prezime autora, godina izdanja, dvotočka te stranica na kojoj se nalazi navedeni podatak.",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-pedagogija-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": [
+          "originality-statement",
+          "table-list",
+          "figure-list",
+          "appendices",
+          "summary-hr"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o akademskoj čestitosti (nepotpisana inačica)",
+          "table-list": "Popis tablica",
+          "figure-list": "Popis slika",
+          "appendices": "Prilozi",
+          "summary-hr": "Sažetak i Ključne riječi / Summary & Key words"
+        }
+      },
+      "category": "structure",
+      "label": "Okvirna struktura diplomskog rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-pedagogija-upute-2019",
+      "sourcePage": "str. 3 (odjeljak 1. Okvirna struktura diplomskog rada)",
+      "quote": "1. Korice i naslovnica 2. Izjava o akademskoj čestitosti (nepotpisana inačica) 3. Sadržaj 4. Uvod ... 9. Literatura 10. Popis tablica i popis slika 11. Prilozi 12. Naslov, Sažetak i Ključne riječi / Title, Summary & Key words",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-pedagogija-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      },
+      "category": "format",
+      "label": "Numeracija stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-pedagogija-upute-2019",
+      "sourcePage": "str. 3 (odjeljak 3. Sadrzaj)",
+      "quote": "Stranice diplomskog rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Na naslovnoj stranici i Sadržaju ne navode se brojevi stranica. Numeriranje stranica započinje na stranici na kojoj započinje Uvod.",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-pedagogija-diplomski--element-caption-rules",
+      "checkId": "element-caption-rules",
+      "value": {
+        "labels": {
+          "table": "Tablica",
+          "figure": "Slika",
+          "chart": "Slika"
+        },
+        "captionPosition": {
+          "table": "above",
+          "figure": "below",
+          "chart": "below"
+        },
+        "sourceRequired": true
+      },
+      "category": "format",
+      "label": "Pozicija natpisa tablica i slika",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-pedagogija-upute-2019",
+      "sourcePage": "str. 6 (odjeljak 11. Opce upute)",
+      "quote": "Tablice i slike moraju imati naznaku (Tablica, Slika i sl.), odgovarajući redni broj, naslov i izvor podataka (izuzev u slučaju originalno kreiranih grafičkih prikaza). Naslovi tablica pišu se iznad dotične tablice, a naslovi slika (fotografija, dijagrama i sl.) pišu se ispod istih uz navođenje izvora (ukoliko ih nije izradio diplomand/ica).",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
     }
   ],
   "generatedAt": "2026-07-02"

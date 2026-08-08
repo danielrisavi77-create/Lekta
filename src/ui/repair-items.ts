@@ -644,9 +644,38 @@ export function titlePageRepairableItem(result: any, profile: any, template: Tit
   }];
 }
 
+/**
+ * Statusi asistiranog pravila koje smije doci do korisnika.
+ *
+ * 'verified' je pravilo koje je proslo ljudski pass i smije obvezivati.
+ * 'advisory' je pravilo cije je uporiste u izvoru STROJNO dokazano (citat stoji u snapshotiranom
+ * izvoru, vrijednost iz tog citata slijedi), ali koje jos nije proslo ljudski pass ili ciji se izvor
+ * sam naziva preporukom ("Predstavljaju samo jednu od vise mogucnosti"). Takvo pravilo se korisniku
+ * NUDI, ali ne smije bodovati; demociranje radi `asRecommendation`.
+ */
+const ASSISTED_STATUSES: ReadonlySet<string | undefined> = new Set(['verified', 'advisory']);
+
+/**
+ * Demotira stavke izvedene iz NEobvezujuceg pravila u preporuke.
+ *
+ * Oblik je isti koji buildRepairableItems vec koristi za advisory + recommendedFixerId:
+ * `violated: false`, `recommended: true` i BEZ `matchKeys`. Bez matchKeys se stavka ne vezuje ni na
+ * jedan bodovan check, pa ne moze pomaknuti ocjenu, sto je granica iz CLAUDE.md: izmisljeno pravilo
+ * je ono koje OCJENJUJE, a preporuka koju korisnik bira nije.
+ */
+export function asRecommendation(profile: any, checkId: string, items: RepairableItem[]): RepairableItem[] {
+  const entries = Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : [];
+  const advisory = entries.some((entry: any) => entry?.checkId === checkId && entry?.status === 'advisory');
+  if (!advisory || items.length === 0) return items;
+  return items.map((item) => {
+    const { matchKeys: _scoredBinding, ...rest } = item as RepairableItem & { matchKeys?: string[] };
+    return { ...rest, violated: false, recommended: true } as RepairableItem;
+  });
+}
+
 /** Asistirani popravak natpisa. Pravila se nude samo kad profil ima strukturirano pravilo. */
 export function elementCaptionRepairableItem(result: any, profile: any): RepairableItem[] {
-  const ruleEntry = (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'element-caption-rules' && entry?.status === 'verified' && entry?.sourceId && entry?.sourcePage && entry?.quote);
+  const ruleEntry = (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'element-caption-rules' && ASSISTED_STATUSES.has(entry?.status) && entry?.sourceId && entry?.sourcePage && entry?.quote);
   const structure = result?.details?.elementStructure;
   const candidates = Array.isArray(structure?.candidates) ? structure.candidates : [];
   if (!Array.isArray(candidates) || candidates.length === 0) return [];
@@ -731,7 +760,7 @@ export function elementCaptionRepairableItem(result: any, profile: any): Repaira
 }
 
 export function citationBibliographySyncRepairableItem(result: any, profile: any): RepairableItem[] {
-  const ruleEntry = (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'citation-sync-rules' && entry?.status === 'verified' && entry?.sourceId && entry?.sourcePage && entry?.quote);
+  const ruleEntry = (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'citation-sync-rules' && ASSISTED_STATUSES.has(entry?.status) && entry?.sourceId && entry?.sourcePage && entry?.quote);
   const rules = ruleEntry?.value;
   const structure = result?.details?.bibliographyStructure;
   const sync = result?.details?.citationBibliographySync;
@@ -883,7 +912,7 @@ export function fieldIntegrityRepairableItem(result: any): RepairableItem[] {
 }
 
 export function tableFigureRescueRepairableItem(result: any, profile: any): RepairableItem[] {
-  const ruleEntry = (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'table-figure-rescue-rules' && entry?.status === 'verified' && entry?.sourceId && entry?.sourcePage && entry?.quote);
+  const ruleEntry = (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'table-figure-rescue-rules' && ASSISTED_STATUSES.has(entry?.status) && entry?.sourceId && entry?.sourcePage && entry?.quote);
   const structure = result?.details?.tableFigureRescue;
   if (!structure || (!structure.tables?.length && !structure.figures?.length)) return [];
   /**
@@ -936,7 +965,7 @@ export function tableFigureRescueRepairableItem(result: any, profile: any): Repa
 }
 
 function sectionSurgeryRuleEntry(profile: any): any | undefined {
-  return (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'section-surgery-rules' && entry?.status === 'verified' && entry?.sourceId && entry?.sourcePage && entry?.quote);
+  return (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'section-surgery-rules' && ASSISTED_STATUSES.has(entry?.status) && entry?.sourceId && entry?.sourcePage && entry?.quote);
 }
 
 export function sectionSurgeryRepairableItem(result: any, profile: any): RepairableItem[] {
@@ -974,7 +1003,7 @@ export function sectionSurgeryRepairableItem(result: any, profile: any): Repaira
 }
 
 export function legalFootnoteRepairableItem(result: any, profile: any): RepairableItem[] {
-  const ruleEntry = (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'legal-footnote-repair-rules' && entry?.status === 'verified' && entry?.sourceId && entry?.sourcePage && entry?.quote);
+  const ruleEntry = (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'legal-footnote-repair-rules' && ASSISTED_STATUSES.has(entry?.status) && entry?.sourceId && entry?.sourcePage && entry?.quote);
   const rules = ruleEntry?.value;
   const structure = result?.details?.legalFootnoteStructure;
   if (!rules || rules.mode !== 'legal-notes' || !structure?.candidates?.length) return [];
@@ -1009,7 +1038,7 @@ export function legalFootnoteRepairableItem(result: any, profile: any): Repairab
 }
 
 export function bibliographyRepairableItem(result: any, profile: any): RepairableItem[] {
-  const ruleEntry = (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'bibliography-rules' && entry?.status === 'verified' && entry?.sourceId && entry?.sourcePage && entry?.quote);
+  const ruleEntry = (Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : []).find((entry: any) => entry?.checkId === 'bibliography-rules' && ASSISTED_STATUSES.has(entry?.status) && entry?.sourceId && entry?.sourcePage && entry?.quote);
   const rules = ruleEntry?.value;
   const structure = result?.details?.bibliographyStructure;
   const entries = Array.isArray(structure?.entries) ? structure.entries : [];
@@ -1223,7 +1252,7 @@ export function introSectionItem(result: any, profile: any): RepairableItem[] {
 
 export function requiredSectionsRepairableItem(result: any, profile: any): RepairableItem[] {
   const entries = Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : [];
-  const ruleEntry = entries.find((entry: RuleEntry) => entry?.checkId === 'required-section-rules' && entry?.status === 'verified' && entry?.sourceId && entry?.sourcePage && entry?.quote);
+  const ruleEntry = entries.find((entry: RuleEntry) => entry?.checkId === 'required-section-rules' && ASSISTED_STATUSES.has(entry?.status) && entry?.sourceId && entry?.sourcePage && entry?.quote);
   if (!ruleEntry) return [];
   const structure = result?.details?.requiredSectionsStructure;
   const candidates = Array.isArray(structure?.candidates) ? structure.candidates.filter((candidate: any) => !candidate.present) : [];

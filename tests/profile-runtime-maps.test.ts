@@ -70,7 +70,9 @@ function expectedMaps() {
         (e) =>
           e.checkId != null &&
           ASSISTED_RULE_ENTRY_CHECK_IDS.has(e.checkId) &&
-          e.status === 'verified' &&
+          // Mora pratiti gen-profile-runtime-maps.mts: uz 'verified' prolazi i 'advisory'
+          // (strojno dokazano uporiste u izvoru, ali NE smije bodovati; demotira asRecommendation).
+          (e.status === 'verified' || e.status === 'advisory') &&
           e.sourceId != null &&
           e.sourcePage != null &&
           e.quote != null,

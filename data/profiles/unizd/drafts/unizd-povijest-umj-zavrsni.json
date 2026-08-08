@@ -133,6 +133,51 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "unizd-povijest-umj-zavrsni--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      },
+      "category": "citation",
+      "label": "Popis literature i izvora (Harvardski stil)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-povijest-umj-upute-2019",
+      "sourcePage": "str. 7 (odjeljak Naputci o navodjenju literature i citiranju)",
+      "quote": "Popis svih korištenih izvora i literature navodi se na kraju rada, organiziran abecednim redom prezimena autora, bez rednih brojeva. Ako se navodi više radova istog autora, treba ih nizati kronološkim redom. Ako se pak koristi više radova istog autora objavljenih iste godine, uz godinu se pridodaje slovo abecede (npr. 1985a, 1985b, 1985c itd",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-povijest-umj-zavrsni--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      },
+      "category": "format",
+      "label": "Numeracija stranica",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-povijest-umj-upute-2019",
+      "sourcePage": "str. 4-5 (odjeljak 6. Upute za pisanje zavrsnoga rada, Propisana struktura rada)",
+      "quote": "stranice numerirati arapskim brojkama u donjem desnom kutu - naslovnu stranicu te stranice sa sadržajem i sažecima ne numerirati ... Tekst (započeti numeraciju stranica) 1. Uvod: objašnjenje teme i prezentacija njene građe.",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
     }
   ],
   "generatedAt": "2026-07-02"

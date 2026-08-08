@@ -651,17 +651,17 @@
     {
       "profileId": "ffri-germanistika-diplomski",
       "scored": 7,
-      "machineCheckable": 7,
-      "advisory": 0,
-      "ratio": 1,
+      "machineCheckable": 8,
+      "advisory": 1,
+      "ratio": 0.875,
       "lastVerified": "2026-07-28"
     },
     {
       "profileId": "ffri-germanistika-zavrsni",
       "scored": 7,
-      "machineCheckable": 7,
-      "advisory": 0,
-      "ratio": 1,
+      "machineCheckable": 8,
+      "advisory": 1,
+      "ratio": 0.875,
       "lastVerified": "2026-07-28"
     },
     {
@@ -675,9 +675,9 @@
     {
       "profileId": "ffri-kulturalni-diplomski",
       "scored": 7,
-      "machineCheckable": 7,
-      "advisory": 0,
-      "ratio": 1,
+      "machineCheckable": 11,
+      "advisory": 4,
+      "ratio": 0.6363636363636364,
       "lastVerified": "2026-07-28"
     },
     {
@@ -699,9 +699,9 @@
     {
       "profileId": "ffri-psihologija-diplomski",
       "scored": 5,
-      "machineCheckable": 5,
-      "advisory": 0,
-      "ratio": 1,
+      "machineCheckable": 8,
+      "advisory": 3,
+      "ratio": 0.625,
       "lastVerified": "2026-07-28"
     },
     {
@@ -755,9 +755,9 @@
     {
       "profileId": "ffzg-arheologija-graduate",
       "scored": 5,
-      "machineCheckable": 6,
-      "advisory": 3,
-      "ratio": 0.8333333333333334,
+      "machineCheckable": 8,
+      "advisory": 5,
+      "ratio": 0.625,
       "lastVerified": "2026-07-02"
     },
     {
@@ -795,9 +795,9 @@
     {
       "profileId": "ffzg-lingvistika-diplomski",
       "scored": 6,
-      "machineCheckable": 7,
-      "advisory": 2,
-      "ratio": 0.8571428571428571,
+      "machineCheckable": 8,
+      "advisory": 3,
+      "ratio": 0.75,
       "lastVerified": "2026-07-02"
     },
     {
@@ -811,9 +811,9 @@
     {
       "profileId": "ffzg-povijest-umjetnosti-diplomski",
       "scored": 7,
-      "machineCheckable": 8,
-      "advisory": 4,
-      "ratio": 0.875,
+      "machineCheckable": 12,
+      "advisory": 8,
+      "ratio": 0.5833333333333334,
       "lastVerified": "2026-07-02"
     },
     {
@@ -827,9 +827,9 @@
     {
       "profileId": "ffzg-sociologija-diplomski",
       "scored": 6,
-      "machineCheckable": 8,
-      "advisory": 4,
-      "ratio": 0.75,
+      "machineCheckable": 10,
+      "advisory": 6,
+      "ratio": 0.6,
       "lastVerified": "2026-07-02"
     },
     {
@@ -2499,9 +2499,9 @@
     {
       "profileId": "unizd-ekologija-zavrsni",
       "scored": 5,
-      "machineCheckable": 5,
-      "advisory": 0,
-      "ratio": 1,
+      "machineCheckable": 10,
+      "advisory": 5,
+      "ratio": 0.5,
       "lastVerified": "2026-07-28"
     },
     {
@@ -2603,9 +2603,9 @@
     {
       "profileId": "unizd-pedagogija-diplomski",
       "scored": 5,
-      "machineCheckable": 5,
-      "advisory": 0,
-      "ratio": 1,
+      "machineCheckable": 10,
+      "advisory": 5,
+      "ratio": 0.5,
       "lastVerified": "2026-07-02"
     },
     {
@@ -2635,17 +2635,17 @@
     {
       "profileId": "unizd-povijest-umj-diplomski",
       "scored": 6,
-      "machineCheckable": 6,
-      "advisory": 0,
-      "ratio": 1,
+      "machineCheckable": 8,
+      "advisory": 2,
+      "ratio": 0.75,
       "lastVerified": "2026-07-28"
     },
     {
       "profileId": "unizd-povijest-umj-zavrsni",
       "scored": 6,
-      "machineCheckable": 6,
-      "advisory": 0,
-      "ratio": 1,
+      "machineCheckable": 8,
+      "advisory": 2,
+      "ratio": 0.75,
       "lastVerified": "2026-07-02"
     },
     {
@@ -2667,9 +2667,9 @@
     {
       "profileId": "unizd-psihologija-zavrsni",
       "scored": 6,
-      "machineCheckable": 6,
-      "advisory": 0,
-      "ratio": 1,
+      "machineCheckable": 9,
+      "advisory": 3,
+      "ratio": 0.6666666666666666,
       "lastVerified": "2026-07-02"
     },
     {
@@ -2691,25 +2691,25 @@
     {
       "profileId": "unizd-tko-diplomski",
       "scored": 7,
-      "machineCheckable": 8,
-      "advisory": 2,
-      "ratio": 0.875,
+      "machineCheckable": 12,
+      "advisory": 6,
+      "ratio": 0.5833333333333334,
       "lastVerified": "2026-07-17"
     },
     {
       "profileId": "unizd-turizam-diplomski",
       "scored": 7,
-      "machineCheckable": 7,
-      "advisory": 0,
-      "ratio": 1,
+      "machineCheckable": 9,
+      "advisory": 2,
+      "ratio": 0.7777777777777778,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "unizd-turizam-zavrsni",
       "scored": 6,
-      "machineCheckable": 6,
-      "advisory": 0,
-      "ratio": 1,
+      "machineCheckable": 9,
+      "advisory": 3,
+      "ratio": 0.6666666666666666,
       "lastVerified": "2026-07-02"
     },
     {
@@ -2731,9 +2731,9 @@
     {
       "profileId": "unizd-zdravstvo-zavrsni",
       "scored": 3,
-      "machineCheckable": 3,
-      "advisory": 0,
-      "ratio": 1,
+      "machineCheckable": 6,
+      "advisory": 3,
+      "ratio": 0.5,
       "lastVerified": "2026-07-28"
     },
     {

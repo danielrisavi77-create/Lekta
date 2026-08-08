@@ -3362,6 +3362,18 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-germanistika-diplomski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "advisory",
+      "sourceId": "ffri-germanistika-leitfaden-2018",
+      "sourcePage": "str. 9 (odjeljak 2.4 Quellenangaben im Text, tocke 1 i 2)",
+      "quote": "Quellen für wörtliche und inhaltliche Zitate werden im Text (und nicht in Fußnoten) angegeben: (Familienname Jahr: Seite). ... Bei Literaturquellen im Text müssen Seitenzahlen immer angegeben werden (im Unterschied zu Quellenangaben im Literaturverzeichnis, hier nur in speziellen Fällen wie z. B. bei Zeitschriftenartikeln).",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      }
     }
   ],
   "ffri-germanistika-zavrsni": [
@@ -3412,6 +3424,18 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-germanistika-zavrsni--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "advisory",
+      "sourceId": "ffri-germanistika-leitfaden-2018",
+      "sourcePage": "str. 9 (odjeljak 2.4 Quellenangaben im Text, tocke 1 i 2)",
+      "quote": "Quellen für wörtliche und inhaltliche Zitate werden im Text (und nicht in Fußnoten) angegeben: (Familienname Jahr: Seite). ... Bei Literaturquellen im Text müssen Seitenzahlen immer angegeben werden (im Unterschied zu Quellenangaben im Literaturverzeichnis, hier nur in speziellen Fällen wie z. B. bei Zeitschriftenartikeln).",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      }
     }
   ],
   "ffri-kroatistika-zavrsni": [
@@ -3512,6 +3536,68 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-kulturalni-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "advisory",
+      "sourceId": "ffri-kulturalni-upute-2021",
+      "sourcePage": "str. 4 do 5",
+      "quote": "Diplomski rad treba sadržavati sljedeće formalne elemente i sadržajne cjeline: 1. Prozirne folije i meke stražnje korice (meki spiralni uvez) 2. Naslovna stranica sadrži... 3. Unutarnja naslovna stranica sadrži... 4. lzjava o autorstvu vlastoručno potpisana (privitak) 5. Sadržaj 6. Sažetak i ključne riječi i (na hrvatskom jeziku odnosno na jeziku na kojem se diplomski rad piše te na engleskom jeziku) 7. Uvod 8. Glavni dio 9. Zaključak 10. Popis literature 11. Prilozi (npr. slikovni grafički, zvučni zapisi i sl.)",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "appendices"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu, vlastoručno potpisana",
+          "summary-hr": "Sažetak i ključne riječi",
+          "appendices": "Prilozi (npr. slikovni grafički, zvučni zapisi i sl.)"
+        }
+      }
+    },
+    {
+      "ruleId": "ffri-kulturalni-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "advisory",
+      "sourceId": "ffri-kulturalni-upute-2021",
+      "sourcePage": "str. 4",
+      "quote": "Izgled diplomskoga rada i oblikovanje teksta definirani su Pravilnikom o diplomskom radu i diplomskom ispitu na diplomskim sveučilišnim studijima Filozofskoga fakulteta Sveučilišta u Rijeci kako slijedi: ... Obrojčavanje stranica: u podnožju, desno, počevši od Uvoda",
+      "value": {
+        "frontMatter": {
+          "numbering": "none",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
+    },
+    {
+      "ruleId": "ffri-kulturalni-diplomski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "advisory",
+      "sourceId": "ffri-kulturalni-upute-2021",
+      "sourcePage": "str. 7 do 8 (Treci dio, odjeljak 3. Citiranje)",
+      "quote": "U diplomskome se radu koriste isključivo unutartekstne citatnice. Kada se u tekstu referencira na rad nekog autora uz autorovo ime navedeno u tekstu tada se navodi prezime autora i u zagradi godina objave rada. ... Kod doslovnog preuzimanja dijela teksta drugih autora (citiranje) vrijede sva do sada navedena pravila s tim da se dio koji se doslovno preuzima navodi unutar navodnih znakova... Za ovaj slučaj posebno je važan prošireni način označavanja referenci dodavanjem broja stranica kako bi se omogućilo što lakše praćenje upotrijebljenih izvora.",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      }
+    },
+    {
+      "ruleId": "ffri-kulturalni-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "advisory",
+      "sourceId": "ffri-kulturalni-upute-2021",
+      "sourcePage": "str. 9 do 10 (Treci dio, odjeljak 4. Sastavljanje popisa literature)",
+      "quote": "4. Sastavljanje popisa literature Osnovno pravilo je da se abecednim redom navedu svi izvori navedeni u radu prema prezimenu prvog autora ili prema naslovu, ukoliko autor nije poznat. ... Ako se navodi više radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c, itd.)",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
     }
   ],
   "ffri-povum-diplomski": [
@@ -3638,6 +3724,56 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "advisory",
+      "sourceId": "ffri-psihologija-brosura-2022",
+      "sourcePage": "str. 10 (odjeljak 6.3 Dijelovi rada)",
+      "quote": "6.3. Dijelovi rada su ovim redom: ▪ Izjava o autorstvu, vlastoručno potpisana (Prilog 3.) ▪ Sadržaj ▪ Sažetak s ključnim riječima na hrvatskome jeziku te naslov diplomskog rada i sažetak s ključnim riječima na engleskome jeziku, ▪ Predgovor (ako postoji) ▪ Tekst rada (uvod, glavni dio, zaključak) ▪ Literatura ▪ Prilozi (ako ih ima",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "appendices"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu, vlastoručno potpisana",
+          "summary-hr": "Sažetak s ključnim riječima",
+          "appendices": "Prilozi"
+        }
+      }
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "advisory",
+      "sourceId": "ffri-psihologija-brosura-2022",
+      "sourcePage": "str. 11 (odjeljak 6.4 Numeriranje stranica)",
+      "quote": "6.4. Numeriranje stranica ide od prve stranice UVODA do zadnje stranice teksta diplomskog rada. Brojevi stranica pišu se arapskim brojkama, u desnom podnožju stranice. Prilozi dobivaju svoju numeraciju.",
+      "value": {
+        "frontMatter": {
+          "numbering": "none",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "advisory",
+      "sourceId": "ffri-psihologija-brosura-2022",
+      "sourcePage": "str. 10 (odjeljak 6.3.5 Literatura)",
+      "quote": "6.3.5. Literatura korištena u radu stavlja se na kraju i popisuje u skladu sa standardom navođenja literature u znanstvenim radovima (vidi APA priručnik i časopis Psihologijske teme). Na isti način pišu se i bilješke ispod teksta. Bilješke obavezno moraju imati naznačenu stranicu na koju se autor u tekstu poziva.",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      }
     }
   ],
   "ffri-zavrsni": [
@@ -3948,6 +4084,44 @@
       "status": "verified",
       "fixerId": "margins-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "ffzg-arheologija-graduate--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "advisory",
+      "sourceId": "ffzg-arheologija-pisani-radovi-2014",
+      "sourcePage": "str. 2 (a. Izravno navođenje) i str. 8 (4. Bilješke, f. Uzastopno citiranje istoga teksta)",
+      "quote": "Doslovno preneseni tekst uvijek morate odvojiti navodnim znakovima te načiniti bilješku / fusnotu u kojoj citirate autora, njegovo djelo, mjesto i godinu izdanja te stranicu s koje ste preuzeli taj tekst. ... Skraćenica se sastoji od prezimena autora, godine izdanja teksta i stranice koju citirate.",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      }
+    },
+    {
+      "ruleId": "ffzg-arheologija-graduate--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "advisory",
+      "sourceId": "ffzg-arheologija-pisani-radovi-2014",
+      "sourcePage": "str. 4, odjeljak 1. Obavezni dijelovi svakog pisanog rada",
+      "quote": "Naslovna stranica Sadržaj Uvod Naslovi i podnaslovi odnosno poglavlja vezana uz temu rada Zaključak Popis slika Popis kratica (ako ste koristili kratice u tekstu rada) Popis izvora (ako ste koristili antičke izvore) Popis literature Sažetak i ključne riječi Abstract, key words (sažetak i ključne riječi prevedene na engleski jezik)",
+      "value": {
+        "order": [
+          "figure-list",
+          "abbreviation-list",
+          "summary-hr",
+          "keywords-hr",
+          "abstract",
+          "keywords-en"
+        ],
+        "labels": {
+          "figure-list": "Popis slika",
+          "abbreviation-list": "Popis kratica",
+          "summary-hr": "Sažetak",
+          "keywords-hr": "ključne riječi",
+          "abstract": "Abstract",
+          "keywords-en": "key words"
+        }
+      }
     }
   ],
   "ffzg-etnologija-graduate": [
@@ -4130,6 +4304,18 @@
       "status": "verified",
       "fixerId": "margins-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "ffzg-lingvistika-diplomski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "advisory",
+      "sourceId": "ffzg-lingvistika-diplomski-2024",
+      "sourcePage": "str. 2-3, odjeljci Oblikovanje teksta (točka 7) i Navođenje izvora u tekstu (točka 1)",
+      "quote": "Navodi izvora u tekstu sastoje se od prezimena autora i godine objavljivanja rada te, ako je relevantno, broja stranice nakon dvotočke (sve u zagradama)... Na kraju citata iza interpunkcijskog znaka navodi se izvor citata, npr. (Labov 1973: 30).",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      }
     }
   ],
   "ffzg-pedagogija-graduate": [
@@ -4222,6 +4408,76 @@
       "status": "verified",
       "fixerId": "paper-size-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "advisory",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "str. 6 (Popis arhivskih izvora i literature) i str. 9-10 (7.3.2. Citiranje/navođenje autora, godine izdanja i stranice)",
+      "quote": "POPIS ARHIVSKIH IZVORA I LITERATURE mora biti numeriran i naveden abecednim redom prema prezimenu autora... Ukoliko postoji više publikacija istoga autora u jednoj godini, u bilješkama se koriste dodatne oznake uz godinu, npr. Tomić, 2012.a, 218, Tomić, 2012.b, 359. Iste oznake moraju biti naznačene uz pune bibliografske jedinice u cjelovitom popisu literature na kraju rada.",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
+    },
+    {
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "advisory",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "str. 5-6, odjeljak 7.1. Struktura rada",
+      "quote": "IZJAVA O AUTENTIČNOSTI RADA sadrži tekst kojim student vlastoručnim potpisom potvrđuje da niti jedan dio diplomskog rada nije izravno preuzet iz literature bez navođenja korištenih izvora... PRILOZI podrazumijevaju sav materijal koji je potrebno priložiti u svrhu cjelovitosti diplomskoga rada... POPIS SLIKOVNIH PRILOGA je numerirani popis svih reprodukcija, ilustracija i shema korištenih u diplomskome radu... Na kraju rada donosi se SUMMARY (sažetak na engleskom jeziku) ispod kojega se navode KEY WORDS (ključne riječi na engleskom jeziku).",
+      "value": {
+        "order": [
+          "originality-statement",
+          "appendices",
+          "figure-list",
+          "abstract",
+          "keywords-en"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autentičnosti rada",
+          "appendices": "Prilozi",
+          "figure-list": "Popis slikovnih priloga",
+          "abstract": "Summary",
+          "keywords-en": "Key words"
+        }
+      }
+    },
+    {
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "advisory",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "str. 6, odjeljak 7.1. Struktura rada",
+      "quote": "Stranica s temeljnom dokumentacijskom karticom ostaje nenumerirana... Izjava o autentičnosti rada piše se na nenumeriranoj stranici... Stranica sa sadržajem rada ostaje nenumerirana... Numeracija rada započinje od prve stranice uvoda i navodi se arapskim brojkama (1, 2, 3 itd.).",
+      "value": {
+        "frontMatter": {
+          "numbering": "none",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
+    },
+    {
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--table-figure-rescue-rules",
+      "checkId": "table-figure-rescue-rules",
+      "status": "advisory",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "str. 8, odjeljak 7.2. Opseg i grafičko oblikovanje",
+      "quote": "Reprodukcije, tablice, grafovi i razne nacrtne sheme umetnute u tekst diplomskog rada ili navedene iza teksta moraju biti kvalitetne rezolucije i tiska, centrirane, numerirane i s legendama (Times New Roman, veličina 10, bold, centrirane).",
+      "value": {
+        "table": {
+          "align": "center"
+        },
+        "figure": {
+          "align": "center"
+        }
+      }
     }
   ],
   "ffzg-psihologija-diplomski": [
@@ -4307,6 +4563,40 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "ffzg-sociologija-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "advisory",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "str. 4, odjeljak STRUKTURA RADA",
+      "quote": "Teorijsko–empirijski radovi: (naslovna stranica), uvod, ciljevi i svrha, teorijski koncept rada, hipoteze, metodologija, rezultati, rasprava, zaključak, prilozi, literatura, sažeci.",
+      "value": {
+        "order": [
+          "appendices",
+          "summary-hr"
+        ],
+        "labels": {
+          "appendices": "Prilozi",
+          "summary-hr": "Sažetak"
+        }
+      }
+    },
+    {
+      "ruleId": "ffzg-sociologija-diplomski--table-figure-rescue-rules",
+      "checkId": "table-figure-rescue-rules",
+      "status": "advisory",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "str. 7-8, odjeljak UPUTE ZA IZRADU TABLIČNIH I GRAFIČKIH PRIKAZA",
+      "quote": "Tablica i njezin naslov trebaju biti horizontalno centrirani na stranici... Grafički prikaz i naslov trebaju biti horizontalno centrirani na stranici.",
+      "value": {
+        "table": {
+          "align": "center"
+        },
+        "figure": {
+          "align": "center"
+        }
+      }
     }
   ],
   "fgag-diplomski": [
@@ -13235,6 +13525,86 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-ekologija-zavrsni--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "advisory",
+      "sourceId": "unizd-ekologija-upute",
+      "sourcePage": "str. 3 (odjeljak Izgled zavrsnog rada) i str. 6 (odjeljak Popis literature)",
+      "quote": "Literatura se navodi sažeto abecedno (modificirani harvardski stil) ... U poglavlju Popis literature abecednim redom se navodi sva korištena literatura (znanstveni i stručni članci, knjige, udžbenici, internetski izvori i ostalo).",
+      "value": {
+        "sort": "alphabetical"
+      }
+    },
+    {
+      "ruleId": "unizd-ekologija-zavrsni--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "advisory",
+      "sourceId": "unizd-ekologija-upute",
+      "sourcePage": "str. 7 (odjeljak Citiranje i referiranje literature)",
+      "quote": "Kada se u tekstu referencira na rad nekog autora (ili više autora) navodi se prezime autora i u zagradi godina objave rada: U svom radu Joys (2010.) navodi kako...",
+      "value": {
+        "mode": "author-year"
+      }
+    },
+    {
+      "ruleId": "unizd-ekologija-zavrsni--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "advisory",
+      "sourceId": "unizd-ekologija-upute",
+      "sourcePage": "str. 3 (Okvirna struktura zavrsnog rada) i str. 3 (Izgled zavrsnog rada)",
+      "quote": "U rad mora biti umetnuta Izjava o akademskoj čestitosti. ... Okvirna struktura završnog rada: ... 3. Sažeci na hrvatskom i engleskom jeziku 4. Uvod ...",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "abstract"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o akademskoj čestitosti",
+          "summary-hr": "Sažetak na hrvatskom jeziku",
+          "abstract": "Sažetak na engleskom jeziku"
+        }
+      }
+    },
+    {
+      "ruleId": "unizd-ekologija-zavrsni--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "advisory",
+      "sourceId": "unizd-ekologija-upute",
+      "sourcePage": "str. 3 (odjeljak Izgled zavrsnog rada)",
+      "quote": "Stranice rada je potrebno numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovna stranica, sadržaj i sažetci se ne numeriraju. Numeracija počinje od Uvoda i počinje od broja 1.",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
+    },
+    {
+      "ruleId": "unizd-ekologija-zavrsni--element-caption-rules",
+      "checkId": "element-caption-rules",
+      "status": "advisory",
+      "sourceId": "unizd-ekologija-upute",
+      "sourcePage": "str. 9 (odjeljak Tablice, crtezi, slike i grafikoni)",
+      "quote": "Svaku tablicu, crtež, sliku i grafikon valja označiti odgovarajućim rednim brojem. Njihov naslov mora ukratko sadržavati odgovor na pitanja što se njima želi pokazati te se uz njih, mora naznačiti i izvor iz kojeg su preuzeti. ... Naslov tablice se piše iznad tablice, a slike i grafikona i dr. ispod u veličini pisma 12.",
+      "value": {
+        "labels": {
+          "table": "Tablica",
+          "figure": "Slika",
+          "chart": "Grafikon"
+        },
+        "captionPosition": {
+          "table": "above",
+          "figure": "below",
+          "chart": "below"
+        },
+        "sourceRequired": true
+      }
     }
   ],
   "unizd-etnologija-diplomski": [
@@ -13738,6 +14108,92 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-pedagogija-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "advisory",
+      "sourceId": "unizd-pedagogija-upute-2019",
+      "sourcePage": "str. 4 (odjeljak 7. Popis literature)",
+      "quote": "Popis literature sačinjava numerirani popis bibliografskih jedinica koje je potrebno navesti prema abecednom redu prezimena autora te zasebno grupirati u pisane i mrežne izvore (URL). ... Ukoliko se navodi više radova istog autora s istom godinom izdanja, koristi se podklasifikacija a, b, c itd., koja se kasnije istovjetno navodi u popisu literature.",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
+    },
+    {
+      "ruleId": "unizd-pedagogija-diplomski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "advisory",
+      "sourceId": "unizd-pedagogija-upute-2019",
+      "sourcePage": "str. 7 (tablica Uputa/Primjer, citiranje)",
+      "quote": "Bibliografske jedinice navode se prema harvardskom sustavu referiranja... U slučaju izravnog navođenja, tj. citiranja navodi se izvor podataka u zagradama i to prezime autora, godina izdanja, dvotočka te stranica na kojoj se nalazi navedeni podatak.",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      }
+    },
+    {
+      "ruleId": "unizd-pedagogija-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "advisory",
+      "sourceId": "unizd-pedagogija-upute-2019",
+      "sourcePage": "str. 3 (odjeljak 1. Okvirna struktura diplomskog rada)",
+      "quote": "1. Korice i naslovnica 2. Izjava o akademskoj čestitosti (nepotpisana inačica) 3. Sadržaj 4. Uvod ... 9. Literatura 10. Popis tablica i popis slika 11. Prilozi 12. Naslov, Sažetak i Ključne riječi / Title, Summary & Key words",
+      "value": {
+        "order": [
+          "originality-statement",
+          "table-list",
+          "figure-list",
+          "appendices",
+          "summary-hr"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o akademskoj čestitosti (nepotpisana inačica)",
+          "table-list": "Popis tablica",
+          "figure-list": "Popis slika",
+          "appendices": "Prilozi",
+          "summary-hr": "Sažetak i Ključne riječi / Summary & Key words"
+        }
+      }
+    },
+    {
+      "ruleId": "unizd-pedagogija-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "advisory",
+      "sourceId": "unizd-pedagogija-upute-2019",
+      "sourcePage": "str. 3 (odjeljak 3. Sadrzaj)",
+      "quote": "Stranice diplomskog rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Na naslovnoj stranici i Sadržaju ne navode se brojevi stranica. Numeriranje stranica započinje na stranici na kojoj započinje Uvod.",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
+    },
+    {
+      "ruleId": "unizd-pedagogija-diplomski--element-caption-rules",
+      "checkId": "element-caption-rules",
+      "status": "advisory",
+      "sourceId": "unizd-pedagogija-upute-2019",
+      "sourcePage": "str. 6 (odjeljak 11. Opce upute)",
+      "quote": "Tablice i slike moraju imati naznaku (Tablica, Slika i sl.), odgovarajući redni broj, naslov i izvor podataka (izuzev u slučaju originalno kreiranih grafičkih prikaza). Naslovi tablica pišu se iznad dotične tablice, a naslovi slika (fotografija, dijagrama i sl.) pišu se ispod istih uz navođenje izvora (ukoliko ih nije izradio diplomand/ica).",
+      "value": {
+        "labels": {
+          "table": "Tablica",
+          "figure": "Slika",
+          "chart": "Slika"
+        },
+        "captionPosition": {
+          "table": "above",
+          "figure": "below",
+          "chart": "below"
+        },
+        "sourceRequired": true
+      }
     }
   ],
   "unizd-pomorski-diplomski": [
@@ -13910,6 +14366,35 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-povijest-umj-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "advisory",
+      "sourceId": "unizd-povijest-umj-upute-diplomski-2019",
+      "sourcePage": "str. 7 (odjeljak Naputci o navodjenju literature i citiranju)",
+      "quote": "Popis svih korištenih izvora i literature navodi se na kraju rada, organiziran abecednim redom prezimena autora, bez rednih brojeva. Ako se navodi više radova istog autora, treba ih nizati kronološkim redom. Ako se pak koristi više radova istog autora objavljenih iste godine, uz godinu se pridodaje slovo abecede (npr. 1985a., 1985b., 1985c., itd",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
+    },
+    {
+      "ruleId": "unizd-povijest-umj-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "advisory",
+      "sourceId": "unizd-povijest-umj-upute-diplomski-2019",
+      "sourcePage": "str. 4-5 (odjeljak 6. Upute za pisanje diplomskoga rada, Propisana struktura rada)",
+      "quote": "stranice numerirati arapskim brojkama u donjem desnom kutu - naslovnu stranicu te stranice sa sadržajem i sažecima ne numerirati ... Tekst (započeti numeraciju stranica) 1. Uvod: objašnjenje teme i prezentacija njene građe.",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
     }
   ],
   "unizd-povijest-umj-zavrsni": [
@@ -13960,6 +14445,35 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-povijest-umj-zavrsni--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "advisory",
+      "sourceId": "unizd-povijest-umj-upute-2019",
+      "sourcePage": "str. 7 (odjeljak Naputci o navodjenju literature i citiranju)",
+      "quote": "Popis svih korištenih izvora i literature navodi se na kraju rada, organiziran abecednim redom prezimena autora, bez rednih brojeva. Ako se navodi više radova istog autora, treba ih nizati kronološkim redom. Ako se pak koristi više radova istog autora objavljenih iste godine, uz godinu se pridodaje slovo abecede (npr. 1985a, 1985b, 1985c itd",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
+    },
+    {
+      "ruleId": "unizd-povijest-umj-zavrsni--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "advisory",
+      "sourceId": "unizd-povijest-umj-upute-2019",
+      "sourcePage": "str. 4-5 (odjeljak 6. Upute za pisanje zavrsnoga rada, Propisana struktura rada)",
+      "quote": "stranice numerirati arapskim brojkama u donjem desnom kutu - naslovnu stranicu te stranice sa sadržajem i sažecima ne numerirati ... Tekst (započeti numeraciju stranica) 1. Uvod: objašnjenje teme i prezentacija njene građe.",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      }
     }
   ],
   "unizd-povijest-zavrsni": [
@@ -14082,6 +14596,46 @@
       "status": "verified",
       "fixerId": "line-spacing-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-psihologija-zavrsni--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "advisory",
+      "sourceId": "unizd-psihologija-upute",
+      "sourcePage": "str. 5 (odjeljak 4. Navodjenje literature, Literatura na kraju teksta)",
+      "quote": "Redoslijed referenci treba pisati abecednim redom bez rednih brojeva, prema prezimenu prvog autora. Drugi, treći itd. red reference se uvlači 1.25 cm (jedan tab, vidjeti ispod).",
+      "value": {
+        "sort": "alphabetical",
+        "hangingIndentCm": 1.25
+      }
+    },
+    {
+      "ruleId": "unizd-psihologija-zavrsni--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "advisory",
+      "sourceId": "unizd-psihologija-upute",
+      "sourcePage": "str. 4 (odjeljak 4. Navodjenje literature, Literatura u tekstu)",
+      "quote": "U tekstu, reference se navode u zagradama, primjerice: (Jones, 2000; Buss i Schmitt, 2002). ... Ukoliko se iz nekog objavljenog izvora doslovno prepisuje dio teksta (citat) onda taj citat treba staviti u navodnike i napisati na kojoj stranici izvornika se nalazi.",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      }
+    },
+    {
+      "ruleId": "unizd-psihologija-zavrsni--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "advisory",
+      "sourceId": "unizd-psihologija-upute",
+      "sourcePage": "str. 2 (odjeljak 2. Izgled zavrsnog rada)",
+      "quote": "Naslovna stranica i stranica na kojoj se nalazi sadržaj nisu numerirane. Ostale su stranice označene rednim brojem koji se nalazi u sredini na dnu stranice.",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal"
+        }
+      }
     }
   ],
   "unizd-sociologija-diplomski": [
@@ -14207,6 +14761,68 @@
       "status": "verified",
       "fixerId": "paper-size-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-tko-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "advisory",
+      "sourceId": "unizd-tko-upute-diplomski",
+      "sourcePage": "str. 6 (odjeljak 1.3.6. Literatura)",
+      "quote": "Cjeloviti popis korištene literature (Popis literature) navodi se na kraju članka prema abecednom redu prezimena autora. ... U slučaju da se navodi više izdanja iste godine i istog autora, u tekstu se uz godinu dodaje „a“, „b“ ..., a u popisu literature slova uz godinu dodaju se abecednim redom sukladno abecednom redu naslova djela.",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      }
+    },
+    {
+      "ruleId": "unizd-tko-diplomski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "status": "advisory",
+      "sourceId": "unizd-tko-upute-diplomski",
+      "sourcePage": "str. 6 (odjeljak 1.3.6. Literatura)",
+      "quote": "Pri pisanju referenci koristi se prilagođeni (autor godina, broj stranice) Chicago stil (The Chicago Manual of Style). Reference se pišu u tekstu unutar zagrada na način: autor (prezime) godina, broj stranice. Broj stranice piše se bez obzira radi li se o parafrazi ili citatu.",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      }
+    },
+    {
+      "ruleId": "unizd-tko-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "advisory",
+      "sourceId": "unizd-tko-upute-diplomski",
+      "sourcePage": "str. 4 (odjeljak 1.3. Osnovne cjeline diplomskog rada)",
+      "quote": "Završni rad treba sadržavati sljedeće cjeline: § Sadržaj § Uvod § Razradu teme § Zaključak § Sažetak § Sažetak na stranom jeziku (engleski, njemački, talijanski ili francuski) § Literaturu § Životopis § Popis tablica (ako ih ima) § Popis ilustracija (ako ih ima",
+      "value": {
+        "order": [
+          "summary-hr",
+          "abstract",
+          "table-list",
+          "figure-list"
+        ],
+        "labels": {
+          "summary-hr": "Sažetak",
+          "abstract": "Sažetak na stranom jeziku",
+          "table-list": "Popis tablica (ako ih ima)",
+          "figure-list": "Popis ilustracija (ako ih ima)"
+        }
+      }
+    },
+    {
+      "ruleId": "unizd-tko-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "advisory",
+      "sourceId": "unizd-tko-upute-diplomski",
+      "sourcePage": "str. 1 (odjeljak 1.2. Izgled diplomskog rada)",
+      "quote": "Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovnica se ne numerira.",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal"
+        }
+      }
     }
   ],
   "unizd-turizam-diplomski": [
@@ -14257,6 +14873,33 @@
       "status": "verified",
       "fixerId": "margins-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-turizam-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "advisory",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "str. 19 (odjeljak 2.2.6. Literatura)",
+      "quote": "Na kraju je završnoga rada potrebno navesti popis korištene literature naveden abecednim slijedom (prema prezimenu autora, a ako ne postoji autor ili urednik, prema prvoj riječi naslova, označena arapskim brojkama).",
+      "value": {
+        "sort": "alphabetical"
+      }
+    },
+    {
+      "ruleId": "unizd-turizam-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "advisory",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "str. 13 (odjeljak 2.1. Izgled diplomskog rada)",
+      "quote": "Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovnica se ne numerira.",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal"
+        }
+      }
     }
   ],
   "unizd-turizam-zavrsni": [
@@ -14307,6 +14950,57 @@
       "status": "verified",
       "fixerId": "margins-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-turizam-zavrsni--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "advisory",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "str. 8 (odjeljak 1.2.6. Literatura)",
+      "quote": "Na kraju završnog rada potrebno je navesti popis korištene literature koji mora biti naveden abecednim slijedom (prema prezimenu autora, a ako ne postoji autor ili urednik, prema prvoj riječi naslova, označena arapskim brojkama).",
+      "value": {
+        "sort": "alphabetical"
+      }
+    },
+    {
+      "ruleId": "unizd-turizam-zavrsni--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "advisory",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "str. 7 (odjeljak 1.1.3. Osnovne cjeline zavrsnog rada)",
+      "quote": "Završni rad treba sadržavati sljedeće cjeline: \u0001 Sadržaj \u0001 Uvod \u0001 Razradu teme \u0001 Zaključak \u0001 Sažetak \u0001 Sažetak na stranom jeziku (engleski, njemački, talijanski ili francuski) \u0001 Literaturu \u0001 Popis tablica (ukoliko ih ima) \u0001 Popis ilustracija (ukoliko ih ima) \u0001 Priloge (ako ih ima) \u0001 Životopis",
+      "value": {
+        "order": [
+          "summary-hr",
+          "abstract",
+          "table-list",
+          "figure-list",
+          "appendices"
+        ],
+        "labels": {
+          "summary-hr": "Sažetak",
+          "abstract": "Sažetak na stranom jeziku (engleski, njemački, talijanski ili francuski)",
+          "table-list": "Popis tablica (ukoliko ih ima)",
+          "figure-list": "Popis ilustracija (ukoliko ih ima)",
+          "appendices": "Prilozi (ako ih ima)"
+        }
+      }
+    },
+    {
+      "ruleId": "unizd-turizam-zavrsni--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "status": "advisory",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "str. 4 (odjeljak 1.1. Izgled zavrsnog rada)",
+      "quote": "Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovnica se ne numerira.",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal"
+        }
+      }
     }
   ],
   "unizd-ucitelji-diplomski": [
@@ -14409,6 +15103,58 @@
       "status": "verified",
       "fixerId": "paper-size-fixer",
       "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-zdravstvo-zavrsni--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "status": "advisory",
+      "sourceId": "unizd-zdravstvo-pravilnik-2022",
+      "sourcePage": "str. 13 (Prilog 4, odjeljak Popis literature)",
+      "quote": "Popis literature - sadržava jedino radove koji su navedeni u tekstu. Popis literature pisati s rednim brojem pod kojim se nalaze u tekstu. Naslove na engleskom jeziku, osim prve riječi, pisati malim početnim slovom.",
+      "value": {
+        "sort": "appearance"
+      }
+    },
+    {
+      "ruleId": "unizd-zdravstvo-zavrsni--required-section-rules",
+      "checkId": "required-section-rules",
+      "status": "advisory",
+      "sourceId": "unizd-zdravstvo-pravilnik-2022",
+      "sourcePage": "str. 13 (Prilog 4. Kako bi rad trebao tehnicki izgledati)",
+      "quote": "Naslovna stranica ( prva i druga) ... Izjava o akademskoj čestitosti ... Zahvala ... Popis kratica i simbola ... Sažetak / Summary na hrvatskom i na engleskom jeziku s naslovom i ključnim riječima ... Sadržaj ... Prilozi ... Kratki životopis studenta.",
+      "value": {
+        "order": [
+          "originality-statement",
+          "abbreviation-list",
+          "summary-hr",
+          "appendices"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o akademskoj čestitosti",
+          "abbreviation-list": "Popis kratica i simbola",
+          "summary-hr": "Sažetak / Summary",
+          "appendices": "Prilozi"
+        }
+      }
+    },
+    {
+      "ruleId": "unizd-zdravstvo-zavrsni--element-caption-rules",
+      "checkId": "element-caption-rules",
+      "status": "advisory",
+      "sourceId": "unizd-zdravstvo-pravilnik-2022",
+      "sourcePage": "str. 13 (Prilog 4. Kako bi rad trebao tehnicki izgledati)",
+      "quote": "Tablice- izraditi s rednim brojem i naslovom iznad tablice. Riječi u tablicama ne smiju se kratiti. ... Slike i crteže- izraditi s rednim brojem i naslovom te opisom ispod slike. Za reprodukcije slika i tablica iz drugih izvora naznačiti njihove autore.",
+      "value": {
+        "labels": {
+          "table": "Tablica",
+          "figure": "Slika"
+        },
+        "captionPosition": {
+          "table": "above",
+          "figure": "below"
+        },
+        "sourceRequired": true
+      }
     }
   ],
   "vef-diplomski": [

@@ -133,6 +133,81 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "unizd-turizam-zavrsni--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical"
+      },
+      "category": "citation",
+      "label": "Popis literature",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "str. 8 (odjeljak 1.2.6. Literatura)",
+      "quote": "Na kraju završnog rada potrebno je navesti popis korištene literature koji mora biti naveden abecednim slijedom (prema prezimenu autora, a ako ne postoji autor ili urednik, prema prvoj riječi naslova, označena arapskim brojkama).",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-turizam-zavrsni--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": [
+          "summary-hr",
+          "abstract",
+          "table-list",
+          "figure-list",
+          "appendices"
+        ],
+        "labels": {
+          "summary-hr": "Sažetak",
+          "abstract": "Sažetak na stranom jeziku (engleski, njemački, talijanski ili francuski)",
+          "table-list": "Popis tablica (ukoliko ih ima)",
+          "figure-list": "Popis ilustracija (ukoliko ih ima)",
+          "appendices": "Prilozi (ako ih ima)"
+        }
+      },
+      "category": "structure",
+      "label": "Obvezne cjeline zavrsnog rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "str. 7 (odjeljak 1.1.3. Osnovne cjeline zavrsnog rada)",
+      "quote": "Završni rad treba sadržavati sljedeće cjeline: \u0001 Sadržaj \u0001 Uvod \u0001 Razradu teme \u0001 Zaključak \u0001 Sažetak \u0001 Sažetak na stranom jeziku (engleski, njemački, talijanski ili francuski) \u0001 Literaturu \u0001 Popis tablica (ukoliko ih ima) \u0001 Popis ilustracija (ukoliko ih ima) \u0001 Priloge (ako ih ima) \u0001 Životopis",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-turizam-zavrsni--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal"
+        }
+      },
+      "category": "format",
+      "label": "Numeracija stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "str. 4 (odjeljak 1.1. Izgled zavrsnog rada)",
+      "quote": "Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovnica se ne numerira.",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
     }
   ],
   "generatedAt": "2026-07-02"

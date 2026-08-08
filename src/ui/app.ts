@@ -42,7 +42,7 @@ import { buildFindingViewModels, findingCardHtml, topFindings, type FindingSessi
 import { collectAllPreviewFlags } from '../preview/preview-anchors';
 import { resultReadiness } from './result-readiness';
 import { startNetworkProbe, networkProofMessage, type NetworkProbe } from './network-proof';
-import { buildRepairableItems, universalRepairableItems, paragraphSpacingRepairableItem, pageNumberingRepairableItem, footnoteSpacingRepairableItem, pageNumberAlignmentRepairableItem, introSectionRepairableItem, tocFieldRepairableItem, headingFormatRepairableItem, headingStructureRepairableItem, footnoteTypographyRepairableItem, headingCaseRepairableItem, titlePageRepairableItem, elementCaptionRepairableItem, bibliographyRepairableItem, citationBibliographySyncRepairableItem, legalFootnoteRepairableItem, finalDocumentInspectorRepairableItem, fieldIntegrityRepairableItem, tableFigureRescueRepairableItem, sectionSurgeryRepairableItem, pickTargetItem, requiredSectionsRepairableItem, linkDoiRepairableItem, crossFileSubmissionRepairableItem } from './repair-items';
+import { buildRepairableItems, asRecommendation, universalRepairableItems, paragraphSpacingRepairableItem, pageNumberingRepairableItem, footnoteSpacingRepairableItem, pageNumberAlignmentRepairableItem, introSectionRepairableItem, tocFieldRepairableItem, headingFormatRepairableItem, headingStructureRepairableItem, footnoteTypographyRepairableItem, headingCaseRepairableItem, titlePageRepairableItem, elementCaptionRepairableItem, bibliographyRepairableItem, citationBibliographySyncRepairableItem, legalFootnoteRepairableItem, finalDocumentInspectorRepairableItem, fieldIntegrityRepairableItem, tableFigureRescueRepairableItem, sectionSurgeryRepairableItem, pickTargetItem, requiredSectionsRepairableItem, linkDoiRepairableItem, crossFileSubmissionRepairableItem } from './repair-items';
 import { ensureTemplatesHeavy, selectTemplate } from '../title-pages/template-loader';
 // Direktan import (ne preko template-loader): level-slugs.ts je namjerno odvojen da ovaj
 // (glavni bundle) modul ne povuce ~0,5 MB templates.json samo za slug<->WorkType mapiranje.
@@ -1401,17 +1401,17 @@ async function renderRepairSection(r: any){
  if(!r.details?.crossFileSubmissionConsistency) r.details.crossFileSubmissionConsistency=buildCrossFileSubmissionConsistency(r,analyzedProfile,r.details?.docxCore,r.details?.pdfPreflight,currentResult?.file,selectedPdf);
  const templateSelection=selectTemplate(r.settings?.selectionIds?.unit||r.selection?.unit, r.settings?.workType||r.selection?.workType||'final');
   const titleItems=titlePageRepairableItem(r,analyzedProfile,templateSelection.template);
-  const elementItems=elementCaptionRepairableItem(r,analyzedProfile);
-  const bibliographyItems=bibliographyRepairableItem(r,analyzedProfile);
-  const citationBibliographySyncItems=citationBibliographySyncRepairableItem(r,analyzedProfile);
-  const legalFootnoteItems=legalFootnoteRepairableItem(r,analyzedProfile);
+  const elementItems=asRecommendation(analyzedProfile,'element-caption-rules',elementCaptionRepairableItem(r,analyzedProfile));
+  const bibliographyItems=asRecommendation(analyzedProfile,'bibliography-rules',bibliographyRepairableItem(r,analyzedProfile));
+  const citationBibliographySyncItems=asRecommendation(analyzedProfile,'citation-sync-rules',citationBibliographySyncRepairableItem(r,analyzedProfile));
+  const legalFootnoteItems=asRecommendation(analyzedProfile,'legal-footnote-repair-rules',legalFootnoteRepairableItem(r,analyzedProfile));
   const finalDocumentInspectorItems=finalDocumentInspectorRepairableItem(r);
   const fieldIntegrityItems=fieldIntegrityRepairableItem(r);
   const croatianTypographyItems=croatianTypographyRepairableItem(r);
   const consistencyItems=consistencyRepairableItem(r);
-  const tableFigureRescueItems=tableFigureRescueRepairableItem(r,analyzedProfile);
-  const sectionSurgeryItems=sectionSurgeryRepairableItem(r,analyzedProfile);
-  const requiredSectionsItems=requiredSectionsRepairableItem(r,analyzedProfile);
+  const tableFigureRescueItems=asRecommendation(analyzedProfile,'table-figure-rescue-rules',tableFigureRescueRepairableItem(r,analyzedProfile));
+  const sectionSurgeryItems=asRecommendation(analyzedProfile,'section-surgery-rules',sectionSurgeryRepairableItem(r,analyzedProfile));
+  const requiredSectionsItems=asRecommendation(analyzedProfile,'required-section-rules',requiredSectionsRepairableItem(r,analyzedProfile));
   const linkDoiItems=linkDoiRepairableItem(r,analyzedProfile);
   const crossFileSubmissionItems=crossFileSubmissionRepairableItem(r,analyzedProfile);
  if(paywallGateActive()){

@@ -211,6 +211,56 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "ffzg-sociologija-diplomski--required-section-rules",
+      "checkId": "required-section-rules",
+      "value": {
+        "order": [
+          "appendices",
+          "summary-hr"
+        ],
+        "labels": {
+          "appendices": "Prilozi",
+          "summary-hr": "Sažetak"
+        }
+      },
+      "category": "structure",
+      "label": "Prilozi prije sažetaka (poželjna struktura)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "str. 4, odjeljak STRUKTURA RADA",
+      "quote": "Teorijsko–empirijski radovi: (naslovna stranica), uvod, ciljevi i svrha, teorijski koncept rada, hipoteze, metodologija, rezultati, rasprava, zaključak, prilozi, literatura, sažeci.",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "ffzg-sociologija-diplomski--table-figure-rescue-rules",
+      "checkId": "table-figure-rescue-rules",
+      "value": {
+        "table": {
+          "align": "center"
+        },
+        "figure": {
+          "align": "center"
+        }
+      },
+      "category": "format",
+      "label": "Horizontalno centriranje tablica i grafickih prikaza",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "str. 7-8, odjeljak UPUTE ZA IZRADU TABLIČNIH I GRAFIČKIH PRIKAZA",
+      "quote": "Tablica i njezin naslov trebaju biti horizontalno centrirani na stranici... Grafički prikaz i naslov trebaju biti horizontalno centrirani na stranici.",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
     }
   ],
   "generatedAt": "2026-07-02"

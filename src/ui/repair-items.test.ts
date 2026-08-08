@@ -9,6 +9,7 @@ import {
   introSectionItem,
   crossFileSubmissionRepairableItem,
   elementCaptionRepairableItem,
+  asRecommendation,
   tableFigureRescueRepairableItem,
   type AnalyzedCheck,
 } from './repair-items';
@@ -415,6 +416,55 @@ describe('elementCaptionRepairableItem: preporuka bez profilnog pravila (RE-59)'
     expect(items[0].violated).toBe(true);
     expect(items[0].recommended).toBeUndefined();
     expect(items[0].matchKeys?.length).toBeGreaterThan(0);
+  });
+});
+
+describe('asRecommendation: strojno provjereno pravilo se nudi, ali ne boduje', () => {
+  /**
+   * Pilot za cetiri ustanove unio je 47 pravila cije je uporiste u izvoru STROJNO dokazano
+   * (citat stoji u snapshotiranom PDF-u, vrijednost iz njega slijedi), ali koja nisu prosla ljudski
+   * pass, a izvori se redom sami nazivaju preporukom ("Predstavljaju samo jednu od vise
+   * mogucnosti"). Takva pravila ulaze kao `status: 'advisory'` + `scored: false`.
+   *
+   * Ovaj test drzi zakljucanom granicu iz CLAUDE.md: pravilo koje nije obvezujuce smije se NUDITI,
+   * ali ne smije bodovati. Bez `matchKeys` stavka se ne vezuje ni na jedan bodovan check, pa ne
+   * moze pomaknuti ocjenu. Da se advisory jednog dana tiho pocne bodovati, ovaj test pada.
+   */
+  const structure = {
+    candidates: [{
+      id: 'element-table-1-abcd1234', kind: 'table', ordinal: 1,
+      anchor: { bodyChildIndex: 1, tableIndex: 0 }, anchorFingerprint: 'abcd1234',
+      existingCaption: { paragraphIndex: 1, position: 'above', rawText: 'Tablica 1. Pregled', label: 'Tablica', description: 'Pregled' },
+      confidence: 'high', evidence: [],
+    }],
+    references: [],
+    lists: {},
+  };
+  const value = { labels: { table: 'Tablica', figure: 'Slika', chart: 'Grafikon' }, captionPosition: { table: 'above', figure: 'below', chart: 'below' } };
+  const entry = (status: string) => [{ checkId: 'element-caption-rules', status, sourceId: 'izvor', sourcePage: 'str. 4', quote: 'citat', value }];
+
+  it('advisory pravilo daje stavku IZVAN bodovanja', () => {
+    const profile = { ruleEntries: entry('advisory') };
+    const raw = elementCaptionRepairableItem({ details: { elementStructure: structure } }, profile);
+    // Gate propusta advisory (inace bi pravilo bilo mrtvo i korisnik ga nikad ne bi vidio).
+    expect(raw, 'advisory pravilo mora doci do stavke').toHaveLength(1);
+    const items = asRecommendation(profile, 'element-caption-rules', raw);
+    expect(items[0].violated, 'preporuka nije prekrsaj').toBe(false);
+    expect(items[0].recommended).toBe(true);
+    expect(items[0].matchKeys, 'ne smije se vezati na bodovan check').toBeUndefined();
+  });
+
+  it('verified pravilo ostaje obveza i nakon prolaska kroz asRecommendation', () => {
+    const profile = { ruleEntries: entry('verified') };
+    const items = asRecommendation(profile, 'element-caption-rules', elementCaptionRepairableItem({ details: { elementStructure: structure } }, profile));
+    expect(items[0].violated).toBe(true);
+    expect(items[0].recommended).toBeUndefined();
+    expect(items[0].matchKeys?.length, 'verified pravilo se i dalje boduje').toBeGreaterThan(0);
+  });
+
+  it('ne dira stavke kad profil nema pravilo za taj checkId', () => {
+    const items = [{ ruleId: 'x', fixerId: 'y', label: 'z', params: {}, violated: true, matchKeys: ['A'] }] as any;
+    expect(asRecommendation({ ruleEntries: [] }, 'element-caption-rules', items)).toBe(items);
   });
 });
 

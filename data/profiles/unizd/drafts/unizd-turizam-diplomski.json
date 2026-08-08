@@ -154,6 +154,49 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "unizd-turizam-diplomski--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical"
+      },
+      "category": "citation",
+      "label": "Popis literature",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "str. 19 (odjeljak 2.2.6. Literatura)",
+      "quote": "Na kraju je završnoga rada potrebno navesti popis korištene literature naveden abecednim slijedom (prema prezimenu autora, a ako ne postoji autor ili urednik, prema prvoj riječi naslova, označena arapskim brojkama).",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-turizam-diplomski--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal"
+        }
+      },
+      "category": "format",
+      "label": "Numeracija stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "str. 13 (odjeljak 2.1. Izgled diplomskog rada)",
+      "quote": "Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovnica se ne numerira.",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
     }
   ],
   "generatedAt": "2026-07-02"

@@ -153,6 +153,70 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "unizd-psihologija-zavrsni--bibliography-rules",
+      "checkId": "bibliography-rules",
+      "value": {
+        "sort": "alphabetical",
+        "hangingIndentCm": 1.25
+      },
+      "category": "citation",
+      "label": "Popis literature (APA)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-psihologija-upute",
+      "sourcePage": "str. 5 (odjeljak 4. Navodjenje literature, Literatura na kraju teksta)",
+      "quote": "Redoslijed referenci treba pisati abecednim redom bez rednih brojeva, prema prezimenu prvog autora. Drugi, treći itd. red reference se uvlači 1.25 cm (jedan tab, vidjeti ispod).",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-psihologija-zavrsni--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      },
+      "category": "citation",
+      "label": "Citiranje autor-godina (APA)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-psihologija-upute",
+      "sourcePage": "str. 4 (odjeljak 4. Navodjenje literature, Literatura u tekstu)",
+      "quote": "U tekstu, reference se navode u zagradama, primjerice: (Jones, 2000; Buss i Schmitt, 2002). ... Ukoliko se iz nekog objavljenog izvora doslovno prepisuje dio teksta (citat) onda taj citat treba staviti u navodnike i napisati na kojoj stranici izvornika se nalazi.",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "unizd-psihologija-zavrsni--section-surgery-rules",
+      "checkId": "section-surgery-rules",
+      "value": {
+        "frontMatter": {
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal"
+        }
+      },
+      "category": "format",
+      "label": "Numeracija stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-psihologija-upute",
+      "sourcePage": "str. 2 (odjeljak 2. Izgled zavrsnog rada)",
+      "quote": "Naslovna stranica i stranica na kojoj se nalazi sadržaj nisu numerirane. Ostale su stranice označene rednim brojem koji se nalazi u sredini na dnu stranice.",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
     }
   ],
   "generatedAt": "2026-07-02"

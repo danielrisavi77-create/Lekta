@@ -156,6 +156,26 @@
       "lastVerified": "2026-07-28",
       "confirmedVia": "ai-1pass-batch",
       "verifiedHash": "ed6e125afc5e09361c02188e6cf923a27314db94e7c96b6b788d09ef85a8abb8"
+    },
+    {
+      "ruleId": "ffri-germanistika-diplomski--citation-sync-rules",
+      "checkId": "citation-sync-rules",
+      "value": {
+        "mode": "author-year",
+        "requirePageForDirectQuotes": true
+      },
+      "category": "citation",
+      "label": "Citiranje autor-godina u tekstu, uvijek sa stranicom",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffri-germanistika-leitfaden-2018",
+      "sourcePage": "str. 9 (odjeljak 2.4 Quellenangaben im Text, tocke 1 i 2)",
+      "quote": "Quellen für wörtliche und inhaltliche Zitate werden im Text (und nicht in Fußnoten) angegeben: (Familienname Jahr: Seite). ... Bei Literaturquellen im Text müssen Seitenzahlen immer angegeben werden (im Unterschied zu Quellenangaben im Literaturverzeichnis, hier nur in speziellen Fällen wie z. B. bei Zeitschriftenartikeln).",
+      "status": "advisory",
+      "scored": false,
+      "lastVerified": null,
+      "verifiedBy": null,
+      "reviewedBy": null
     }
   ]
 }

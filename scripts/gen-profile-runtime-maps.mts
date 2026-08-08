@@ -94,7 +94,9 @@ for (const id of [...DRAFT_PROFILE_IDS].sort()) {
       (e) =>
         e.checkId != null &&
         ASSISTED_RULE_ENTRY_CHECK_IDS.has(e.checkId) &&
-        e.status === 'verified' &&
+        // 'advisory' prolazi uz 'verified': to je pravilo cije je uporiste u izvoru strojno
+        // dokazano, ali koje ne smije bodovati. Demotira ga asRecommendation u repair-items.
+        (e.status === 'verified' || e.status === 'advisory') &&
         e.sourceId != null &&
         e.sourcePage != null &&
         e.quote != null,
