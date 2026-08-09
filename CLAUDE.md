@@ -116,27 +116,77 @@ Pravila profila postoje u dva oblika:
 - `ruleEntries` - granularna pravila s identitetom, autoritetom, izvorom,
   `sourcePage`, `machineCheckable` i datumom verifikacije. Ovo je AUTORSKI izvor istine.
 
-`src/profiles/rule-compiler.ts` na učitavanju računa `effectiveRules`:
+`src/profiles/rule-compiler.ts` zna izračunati `effectiveRules`:
 
 ```
 effectiveRules = clone(rules baseline) + svaki prepoznati ruleEntry preko njega
 ```
 
-Engine (`currentProfile` u `src/ui/app.ts`) čita `definition.effectiveRules`, uz fallback
-na `definition.rules`. Test `tests/rule-compiler.test.ts` dokazuje da je za trenutne
-podatke `effectiveRules` deep-equal `rules`, dakle uključenje kompajlera ne mijenja
-ponašanje.
+### STVARNO STANJE (izmjereno 2026-08-08, riješeno 2026-08-09)
+
+Kompajler NIKAD nije bio ožičen: `loadProfiles()` / `compileProfile()` nisu imali
+nijednog pozivatelja, `effectiveRules` se nikad nije pridružio profilu, a
+`verified-profiles.json` nosi **0 `ruleEntries` na 407 profila**, pa bi i ožičen
+kompajler vratio goli `clone(rules)`. `currentProfile()` je oduvijek klonirao
+`definition.rules`.
+
+Zato su `compileProfile()` i `src/profiles/profile-loader.ts` **obrisani**: mrtav kod
+koji izgleda kao mehanizam sinkronizacije opasniji je od nepostojanja mehanizma, jer je
+upravo on opravdavao (pogrešnu) uputu "obriši ključ iz `rules`, overlay ga proizvodi".
+
+`compileEffectiveRules` i `collectCompileDiagnostics` OSTAJU (koriste ih
+`src/verification/published-rules.ts`, QA konzola i testovi), a `COMPILED_CHECK_IDS`
+je i dalje kanonski popis prepoznatih `checkId`-jeva.
+
+Sinkronizaciju sada jamči **build-time invarijanta**, ne runtime overlay:
+`tests/repair-draft-rules-divergence.test.ts` traži da `rules` bude jednak vrijednosti
+iz izvorom potkrijepljenog drafta, uz nultu toleranciju.
+
+### Gdje `ruleEntries` STVARNO utječu na proizvod
+
+Ne kroz `effectiveRules`, nego kroz dvije PEČENE mape (`scripts/gen-profile-runtime-maps.mts`):
+
+```text
+data/profiles/**/drafts/*.json   (autorski ruleEntries, sa sourceId/sourcePage/quote)
+        |
+        +--> data/profiles/advisory-map.json --> applyBakedAdvisory()  --> demotira bodovanje
+        +--> data/profiles/repair-map.json   --> repairEntriesFor()    --> buildRepairableItems
+```
+
+Analiza mjeri prema `rules` iz `verified-profiles.json`, a popravak cilja prema
+`ruleEntry.value` iz `repair-map.json`. **Draft je mjerodavan** jer jedini nosi
+`sourceId`, `sourcePage` i doslovan `quote`; `rules` mu je zrcalo.
+
+`scripts/approve-profile.mjs` mijenja samo STATUSE draftova i nikad ne upisuje vrijednost
+u `rules`, pa se te dvije strane mogu razići. Dva mjerenja i dvije zaštite:
+
+- **Popravak koji obara ocjenu.** 368 profila / 1844 zapisa dalo je jedan slučaj
+  (`unizd-povijest-zavrsni`, prored 2 naspram bodovanih 1,5). Čuva
+  `recommendationBreaksScoredRule` (`src/ui/repair-items.ts`) uz
+  `tests/repair-recommendation-safety.test.ts`: popravak koji bi oborio bodovani check
+  koji prolazi se NE nudi.
+- **Labela iz drafta, vrijednost iz `rules`.** Pečenje je do 2026-08-09 izbacivalo `value`
+  za verificirane zapise, pa je popravak uvijek uzimao vrijednost iz `rules`: korisnik je
+  vidio "Margine (lijeva 3,5cm)", a dobivao 2,5 cm. Zatečeno na 19 pravila / 14 profila,
+  u svakom je draft doslovno odgovarao citatu, a `rules` mu proturječio. Riješeno tako što
+  je vrijednost iz drafta upisana u `rules`, a pečenje sada čuva `value`. Čuva
+  `tests/repair-draft-rules-divergence.test.ts` uz nultu toleranciju.
 
 ### Kako se od sada uređuje pravilo
 
-1. Uredi odgovarajući `ruleEntry` u JSON profilu (ne `rules`).
+1. Uredi odgovarajući `ruleEntry` u draft datoteci profila (`data/profiles/**/drafts/`).
 2. Ako `ruleEntry` za to pravilo ne postoji, dodaj ga s ispravnim `checkId`
    (popis prepoznatih `checkId`-jeva je `COMPILED_CHECK_IDS` u `rule-compiler.ts`).
-3. Migracijski cilj: jednom kad je ključ izražen kao `ruleEntry`, OBRIŠI ga iz `rules`.
-   Overlay ga i dalje proizvodi pa engine ne vidi promjenu. Time nestaje dvostruko
-   održavanje. Nakon brisanja prilagodi faithfulness test (više neće biti pune
-   jednakosti za taj ključ; tada se oslanjamo na "nula diagnostics" + golden testove).
-4. Novi `checkId` koji još nije podržan: dodaj mapiranje u `applyEntry` u `rule-compiler.ts`
+3. Ako pravilo treba BODOVATI, moraš uz draft urediti i `rules` u
+   `verified-profiles.json` na ISTU vrijednost, pa pokrenuti
+   `node scripts/gen-verified-split.mjs`. Nema overlaya koji bi to napravio umjesto tebe.
+   **NE briši ključ iz `rules` "jer ga overlay proizvodi" - ne proizvodi ga.**
+   Brisanje tiho izbacuje pravilo iz žive analize, a `npm run check` ostaje zelen.
+4. Regeneriraj pečene mape (`npx vite-node scripts/gen-profile-runtime-maps.mts`) pa
+   `npm run check`. Divergenciju hvataju `tests/repair-draft-rules-divergence.test.ts`
+   (draft vs `rules`, nulta tolerancija) i `tests/repair-recommendation-safety.test.ts`
+   (popravak ne smije oboriti bodovani check).
+5. Novi `checkId` koji još nije podržan: dodaj mapiranje u `applyEntry` u `rule-compiler.ts`
    i pokrij testom. Bez mapiranja kompajler vraća diagnostic i pravilo se NE primjenjuje.
 
 ### Hijerarhija pravila i uloga repozitorija
@@ -254,9 +304,14 @@ je neovisno drugo misljenje drugog modela.
 
 1. Golden harness s podacima: ubaci 5 do 10 realnih `.docx` fixtura i snimi baseline.
    DoD: golden suite aktivan i zelen, snapshoti commitani.
-2. (GOTOVO) Option A kompajler i `effectiveRules` wiring. Sljedeći korak unutar ovoga:
-   ukloni iz `rules` ključeve koji su već u `ruleEntries`, profil po profil, i prilagodi
-   faithfulness test. DoD: nema dvostrukog vođenja za migrirane ključeve, check zelen.
+2. (OTVORENO, ranije pogrešno označeno GOTOVO) Option A kompajler POSTOJI ali NIJE ožičen:
+   `compileProfile` nema pozivatelja, `effectiveRules` se nikad ne pridruži profilu, a
+   `verified-profiles.json` ima 0 `ruleEntries` (mjereno 2026-08-08, vidi "STVARNO STANJE"
+   iznad). Odluka koja stoji: ili ožičiti kompajler u živi put, ili obrisati mrtvi
+   `profile-loader.ts` i priznati da su pečene mape (`repair-map`, `advisory-map`) jedini
+   put kojim `ruleEntries` utječu na proizvod. **NE brisati ključeve iz `rules` dok ovo
+   stoji otvoreno** - overlay ih ne bi nadomjestio. DoD: jedan izvor istine po pravilu,
+   `tests/repair-recommendation-safety.test.ts` zelen, check zelen.
 3. (GOTOVO) Razbijanje `src/ui/app.ts`: parser i citation engine su vec u
    `src/{docx,audits,citations,scoring}`, `analyzeDocx` + auditni helperi u
    `src/analysis/analyze-docx.ts`, a `@ts-nocheck` je skinut sa samog app.ts I sa svih

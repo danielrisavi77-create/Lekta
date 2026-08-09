@@ -1067,7 +1067,7 @@
     },
     {
       "profileId": "unizd-povijest-zavrsni",
-      "offeredOptionCount": 4
+      "offeredOptionCount": 3
     },
     {
       "profileId": "unizd-povijest-diplomski",
@@ -11216,14 +11216,6 @@
       "recommended": true
     },
     {
-      "profileId": "unizd-povijest-zavrsni",
-      "ruleId": "unizd-povijest-zavrsni--line-spacing",
-      "fixerId": "line-spacing-fixer",
-      "checkId": "line-spacing",
-      "templateId": "basic-text-styles",
-      "recommended": true
-    },
-    {
       "profileId": "unizd-povijest-diplomski",
       "ruleId": "unizd-povijest-diplomski--paper-size",
       "fixerId": "paper-size-fixer",
@@ -16023,8 +16015,8 @@
   ],
   "summary": {
     "profileCount": 407,
-    "profileOptionCount": 1752,
-    "rowCount": 1752,
+    "profileOptionCount": 1751,
+    "rowCount": 1751,
     "fixerCount": 5,
     "registeredFixerCount": 31,
     "profileFixerCount": 5,

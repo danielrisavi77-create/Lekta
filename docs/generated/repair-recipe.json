@@ -523,9 +523,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "agr-upute-doktorski-2026",
@@ -5336,9 +5336,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "efzg-pravilnik-diplomski-2012",
@@ -5689,9 +5689,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "efzg-upute-specijalisticki-2021",
@@ -5843,9 +5843,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "efzg-upute-strucni-diplomski-racunovodstvo",
@@ -5988,9 +5988,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "efzg-postupak-zavrsni",
@@ -7700,9 +7700,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "fer-formalno-oblikovanje-doktorski-2012",
@@ -9366,10 +9366,10 @@
         "fixerId": "margins-fixer",
         "label": "Margine (uniformno 2,5cm)",
         "scope": "profil",
-        "target": "2,5 / 2 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2,
+          "right": 2.5,
           "bottom": 2.5,
           "left": 2.5
         },
@@ -10196,12 +10196,12 @@
         "fixerId": "margins-fixer",
         "label": "Margine (lijevo/desno 3cm, gore/dolje 2cm)",
         "scope": "profil",
-        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "target": "2 / 3 / 2 / 3 cm (gore/desno/dolje/lijevo)",
         "params": {
-          "top": 2.5,
-          "right": 2.5,
-          "bottom": 2.5,
-          "left": 2.5
+          "top": 2,
+          "right": 3,
+          "bottom": 2,
+          "left": 3
         },
         "source": {
           "id": "ffri-germanistika-leitfaden-2018",
@@ -10350,12 +10350,12 @@
         "fixerId": "margins-fixer",
         "label": "Margine (lijevo/desno 3cm, gore/dolje 2cm)",
         "scope": "profil",
-        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "target": "2 / 3 / 2 / 3 cm (gore/desno/dolje/lijevo)",
         "params": {
-          "top": 2.5,
-          "right": 2.5,
-          "bottom": 2.5,
-          "left": 2.5
+          "top": 2,
+          "right": 3,
+          "bottom": 2,
+          "left": 3
         },
         "source": {
           "id": "ffri-germanistika-leitfaden-2018",
@@ -11348,9 +11348,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "ffrz-oblikovanje-bakalaureatski-2021",
@@ -11483,9 +11483,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "ffrz-oblikovanje-diplomski-2021",
@@ -11741,12 +11741,12 @@
         "fixerId": "margins-fixer",
         "label": "Margine",
         "scope": "profil",
-        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "target": "2,54 / 2,54 / 2,54 / 2,54 cm (gore/desno/dolje/lijevo)",
         "params": {
-          "top": 2.5,
-          "right": 2.5,
-          "bottom": 2.5,
-          "left": 2.5
+          "top": 2.54,
+          "right": 2.54,
+          "bottom": 2.54,
+          "left": 2.54
         },
         "source": {
           "id": "ffst-predlozak-zavrsnoga-diplomskoga",
@@ -11885,12 +11885,12 @@
         "fixerId": "margins-fixer",
         "label": "Margine",
         "scope": "profil",
-        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "target": "2,54 / 2,54 / 2,54 / 2,54 cm (gore/desno/dolje/lijevo)",
         "params": {
-          "top": 2.5,
-          "right": 2.5,
-          "bottom": 2.5,
-          "left": 2.5
+          "top": 2.54,
+          "right": 2.54,
+          "bottom": 2.54,
+          "left": 2.54
         },
         "source": {
           "id": "ffst-predlozak-zavrsnoga-diplomskoga",
@@ -12032,9 +12032,9 @@
         "target": "3 / 3 / 3 / 3 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 3,
-          "right": 3,
           "bottom": 3,
-          "left": 3
+          "left": 3,
+          "right": 3
         },
         "source": {
           "id": "ffzg-arheologija-pisani-radovi-2014",
@@ -12148,9 +12148,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "ffzg-etnologija-diplomski-2019",
@@ -12273,9 +12273,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "ffzg-filoz-diplomski-2019",
@@ -12449,9 +12449,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "ffzg-kroatistika-diplomski-2026",
@@ -12619,9 +12619,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "ffzg-lingvistika-diplomski-2024",
@@ -12672,9 +12672,9 @@
         "target": "3 / 3 / 3 / 3 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 3,
-          "right": 3,
           "bottom": 3,
-          "left": 3
+          "left": 3,
+          "right": 3
         },
         "source": {
           "id": "ffzg-pedagogija-diplomski-2024",
@@ -12860,9 +12860,9 @@
         "target": "2,5 / 2 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2
         },
         "source": {
           "id": "ffzg-povum-diplomski-2016",
@@ -13004,9 +13004,9 @@
         "target": "2,54 / 2,54 / 2,54 / 2,54 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.54,
-          "right": 2.54,
           "bottom": 2.54,
-          "left": 2.54
+          "left": 2.54,
+          "right": 2.54
         },
         "source": {
           "id": "ffzg-psihologija-diplomski-2024",
@@ -13139,9 +13139,9 @@
         "target": "2,5 / 3,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 3.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 3.5
         },
         "source": {
           "id": "ffzg-socio-diplomski-2014",
@@ -17470,9 +17470,9 @@
         "fixerId": "font-fixer",
         "label": "Font",
         "scope": "profil",
-        "target": "Times New Roman",
+        "target": "Arial",
         "params": {
-          "fontName": "Times New Roman"
+          "fontName": "Arial"
         },
         "source": {
           "id": "fpzpu-pravilnik-zavrsni-2019-procisceni",
@@ -17524,12 +17524,12 @@
         "fixerId": "margins-fixer",
         "label": "Margine",
         "scope": "profil",
-        "target": "3,5 / 2,5 / 3 / 3 cm (gore/desno/dolje/lijevo)",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
-          "top": 3.5,
+          "top": 2.5,
           "right": 2.5,
-          "bottom": 3,
-          "left": 3
+          "bottom": 2.5,
+          "left": 2.5
         },
         "source": {
           "id": "fpzpu-pravilnik-zavrsni-2019-procisceni",
@@ -17606,9 +17606,9 @@
         "fixerId": "font-fixer",
         "label": "Font",
         "scope": "profil",
-        "target": "Times New Roman",
+        "target": "Arial",
         "params": {
-          "fontName": "Times New Roman"
+          "fontName": "Arial"
         },
         "source": {
           "id": "fpzpu-pravilnik-zavrsni-2019-procisceni",
@@ -17660,12 +17660,12 @@
         "fixerId": "margins-fixer",
         "label": "Margine",
         "scope": "profil",
-        "target": "3,5 / 2,5 / 3 / 3 cm (gore/desno/dolje/lijevo)",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
-          "top": 3.5,
+          "top": 2.5,
           "right": 2.5,
-          "bottom": 3,
-          "left": 3
+          "bottom": 2.5,
+          "left": 2.5
         },
         "source": {
           "id": "fpzpu-pravilnik-zavrsni-2019-procisceni",
@@ -21544,9 +21544,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "kif-upute-oblikovanje-diplomski",
@@ -21660,9 +21660,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "kif-drsc08-oblikovanje-doktorski-2025",
@@ -21814,9 +21814,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "kif-upute-diplomski-2023",
@@ -24857,12 +24857,12 @@
         "fixerId": "margins-fixer",
         "label": "Margine",
         "scope": "profil",
-        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "target": "3 / 3 / 3 / 3 cm (gore/desno/dolje/lijevo)",
         "params": {
-          "top": 2.5,
-          "right": 2.5,
-          "bottom": 2.5,
-          "left": 2.5
+          "top": 3,
+          "right": 3,
+          "bottom": 3,
+          "left": 3
         },
         "source": {
           "id": "mev-upute-zavrsni",
@@ -26941,9 +26941,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "pmf-biol-upute-diplomski-2026",
@@ -27066,9 +27066,9 @@
         "target": "2,5 / 2,5 / 2,5 / 3 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 3
+          "left": 3,
+          "right": 2.5
         },
         "source": {
           "id": "pmf-phy-upute-diplomski-2014",
@@ -27341,9 +27341,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "pmf-geog-upute-diplomski-2026",
@@ -29005,10 +29005,10 @@
         "scope": "profil",
         "target": "3 / 3 / 3 / 3,5 cm (gore/desno/dolje/lijevo)",
         "params": {
-          "top": 3,
+          "left": 3.5,
           "right": 3,
-          "bottom": 3,
-          "left": 3.5
+          "top": 3,
+          "bottom": 3
         },
         "source": {
           "id": "pravo-scsr-upute-diplomski-2021",
@@ -29582,10 +29582,10 @@
         "scope": "profil",
         "target": "3 / 3 / 3 / 3,5 cm (gore/desno/dolje/lijevo)",
         "params": {
-          "top": 3,
+          "left": 3.5,
           "right": 3,
-          "bottom": 3,
-          "left": 3.5
+          "top": 3,
+          "bottom": 3
         },
         "source": {
           "id": "pravo-scsr-upute-diplomski-2021",
@@ -33787,9 +33787,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "ttf-upute-zavrsni-diplomski",
@@ -34315,9 +34315,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "ttf-upute-zavrsni-diplomski",
@@ -34824,9 +34824,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "ufzg-upute-zavrsni-diplomski-2026",
@@ -35103,9 +35103,9 @@
         "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
-          "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 2.5,
+          "right": 2.5
         },
         "source": {
           "id": "ufzg-upute-zavrsni-diplomski-2026",
@@ -38355,12 +38355,12 @@
         "fixerId": "margins-fixer",
         "label": "Margine (lijeva 3cm)",
         "scope": "profil",
-        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "target": "2,5 / 2,5 / 2,5 / 3 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
           "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 3
         },
         "source": {
           "id": "unizd-arheologija-pravilnik-diplomski-2016",
@@ -39646,12 +39646,12 @@
         "fixerId": "margins-fixer",
         "label": "Margine (sve 3cm)",
         "scope": "profil",
-        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "target": "3 / 3 / 3 / 3 cm (gore/desno/dolje/lijevo)",
         "params": {
-          "top": 2.5,
-          "right": 2.5,
-          "bottom": 2.5,
-          "left": 2.5
+          "top": 3,
+          "right": 3,
+          "bottom": 3,
+          "left": 3
         },
         "source": {
           "id": "unizd-germanistika-pravilnik-zavrsni-2020",
@@ -40586,9 +40586,9 @@
         "fixerId": "font-fixer",
         "label": "Font",
         "scope": "profil",
-        "target": "Times New Roman",
+        "target": "Merriweather",
         "params": {
-          "fontName": "Times New Roman"
+          "fontName": "Merriweather"
         },
         "source": {
           "id": "unizd-pomorski-pravilnik-upute",
@@ -40604,9 +40604,9 @@
         "fixerId": "font-fixer",
         "label": "Velicina slova",
         "scope": "profil",
-        "target": "12 pt",
+        "target": "10 pt",
         "params": {
-          "fontSizePt": 12
+          "fontSizePt": 10
         },
         "source": {
           "id": "unizd-pomorski-pravilnik-upute",
@@ -40709,9 +40709,9 @@
         "fixerId": "font-fixer",
         "label": "Font",
         "scope": "profil",
-        "target": "Times New Roman",
+        "target": "Merriweather",
         "params": {
-          "fontName": "Times New Roman"
+          "fontName": "Merriweather"
         },
         "source": {
           "id": "unizd-pomorski-pravilnik-upute-zavrsni",
@@ -40727,9 +40727,9 @@
         "fixerId": "font-fixer",
         "label": "Velicina slova",
         "scope": "profil",
-        "target": "12 pt",
+        "target": "10 pt",
         "params": {
-          "fontSizePt": 12
+          "fontSizePt": 10
         },
         "source": {
           "id": "unizd-pomorski-pravilnik-upute-zavrsni",
@@ -41259,12 +41259,12 @@
         "fixerId": "margins-fixer",
         "label": "Margine (lijeva 3,5cm)",
         "scope": "profil",
-        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "target": "2,5 / 2,5 / 2,5 / 3,5 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
           "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 3.5
         },
         "source": {
           "id": "unizd-povijest-upute-2012",
@@ -41283,25 +41283,6 @@
         "target": "12 pt",
         "params": {
           "fontSizePt": 12
-        },
-        "recommended": true,
-        "source": {
-          "id": "unizd-povijest-upute-2012",
-          "title": "Upute za pisanje zavrsnog/diplomskog rada",
-          "url": "https://povijest.unizd.hr/Portals/3/Dokumenti/05_PREDDIPLOMSKI_Zavrsni%20rad_Upute_za_pisanje_2012%20(1).pdf (zavrsni) / 10_DIPLOMSKI_... (diplomski)"
-        },
-        "sourcePage": "Upute 2012",
-        "authority": "program-page",
-        "lastVerified": "2026-07-28"
-      },
-      {
-        "ruleId": "unizd-povijest-zavrsni--line-spacing",
-        "fixerId": "line-spacing-fixer",
-        "label": "Prored (dvostruki) (preporuka)",
-        "scope": "profil",
-        "target": "prored 2",
-        "params": {
-          "multiplier": 2
         },
         "recommended": true,
         "source": {
@@ -43834,10 +43815,10 @@
         "scope": "profil",
         "target": "2,5 / 2,5 / 2,5 / 3 cm (gore/desno/dolje/lijevo)",
         "params": {
-          "top": 2.5,
+          "left": 3,
           "right": 2.5,
-          "bottom": 2.5,
-          "left": 3
+          "top": 2.5,
+          "bottom": 2.5
         },
         "source": {
           "id": "vguk-smjernice-2026",
@@ -43959,10 +43940,10 @@
         "scope": "profil",
         "target": "2,5 / 2,5 / 2,5 / 3 cm (gore/desno/dolje/lijevo)",
         "params": {
-          "top": 2.5,
+          "left": 3,
           "right": 2.5,
-          "bottom": 2.5,
-          "left": 3
+          "top": 2.5,
+          "bottom": 2.5
         },
         "source": {
           "id": "vguk-smjernice-2026",
@@ -45025,12 +45006,12 @@
         "fixerId": "margins-fixer",
         "label": "Margine (lijeva 3cm zbog uveza)",
         "scope": "profil",
-        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "target": "2,5 / 2,5 / 2,5 / 3 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
           "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 3
         },
         "source": {
           "id": "vss-upute-zavrsni-2023",
@@ -45169,12 +45150,12 @@
         "fixerId": "margins-fixer",
         "label": "Margine (lijeva 3cm zbog uveza)",
         "scope": "profil",
-        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "target": "2,5 / 2,5 / 2,5 / 3 cm (gore/desno/dolje/lijevo)",
         "params": {
           "top": 2.5,
           "right": 2.5,
           "bottom": 2.5,
-          "left": 2.5
+          "left": 3
         },
         "source": {
           "id": "vss-upute-zavrsni-2023",
@@ -46250,12 +46231,12 @@
         "fixerId": "margins-fixer",
         "label": "Margine",
         "scope": "profil",
-        "target": "2 / 2 / 2 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "target": "3 / 3 / 3 / 3 cm (gore/desno/dolje/lijevo)",
         "params": {
-          "top": 2,
-          "right": 2,
-          "bottom": 2,
-          "left": 2.5
+          "top": 3,
+          "right": 3,
+          "bottom": 3,
+          "left": 3
         },
         "source": {
           "id": "vuka-strojarski-upute-2025",
@@ -46303,12 +46284,12 @@
         "fixerId": "margins-fixer",
         "label": "Margine",
         "scope": "profil",
-        "target": "2 / 2 / 2 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "target": "3 / 3 / 3 / 3 cm (gore/desno/dolje/lijevo)",
         "params": {
-          "top": 2,
-          "right": 2,
-          "bottom": 2,
-          "left": 2.5
+          "top": 3,
+          "right": 3,
+          "bottom": 3,
+          "left": 3
         },
         "source": {
           "id": "vuka-strojarski-upute-2025",

@@ -157,13 +157,25 @@ export function compileEffectiveRules(
   return eff;
 }
 
-/** Returns the profile with a compiled `effectiveRules` field attached. */
-export function compileProfile<T extends ThesisProfile>(
-  profile: T,
-  diagnostics?: RuleCompileDiagnostic[],
-): T & { effectiveRules: EffectiveRules } {
-  return { ...profile, effectiveRules: compileEffectiveRules(profile, diagnostics) };
-}
+/*
+ * OBRISANO 2026-08-09: `compileProfile()` (pridruzivao `effectiveRules` profilu) i njegov jedini
+ * omotac `src/profiles/profile-loader.ts`.
+ *
+ * Nijedno od toga nije imalo pozivatelja u `src/`, `tests/` ni `scripts/`, pa `effectiveRules`
+ * nikad nije postojao u runtimeu; `currentProfile()` je oduvijek klonirao `definition.rules`.
+ * Uz to `verified-profiles.json` nosi 0 `ruleEntries` na 407 profila, pa bi kompajler i da je bio
+ * ozicen vratio goli `clone(rules)`. Mrtav kod koji IZGLEDA kao mehanizam sinkronizacije je
+ * opasniji od nepostojanja mehanizma: upravo je on naveo CLAUDE.md da uputi autore neka brisu
+ * migrirane kljuceve iz `rules` "jer ih overlay proizvodi".
+ *
+ * Sinkronizaciju umjesto runtime overlaya sada jamci BUILD-TIME invarijanta:
+ * `tests/repair-draft-rules-divergence.test.ts` trazi da je `rules` jednak vrijednosti iz
+ * izvorom potkrijepljenog drafta, uz nultu toleranciju.
+ *
+ * `compileEffectiveRules` i `collectCompileDiagnostics` OSTAJU: koristi ih
+ * `src/verification/published-rules.ts`, QA konzola i testovi, a `COMPILED_CHECK_IDS` je
+ * kanonski popis prepoznatih checkId-jeva.
+ */
 
 /** Collects compile diagnostics across a list of profiles (used by tests and the QA console). */
 export function collectCompileDiagnostics(profiles: ThesisProfile[]): RuleCompileDiagnostic[] {

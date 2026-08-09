@@ -54,6 +54,10 @@ function expectedMaps() {
               status: e.status,
               fixerId: e.fixerId,
               autoFixable: e.autoFixable,
+              // Od 2026-08-09 i verificirani zapis nosi `value`: prije ga nije nosio, pa je
+              // popravak uvijek uzimao vrijednost iz `rules` i primjenjivao nesto drugo od
+              // onoga sto mu labela (iz drafta, sa sluzbenim citatom) obecava.
+              value: e.value,
             }
           : {
               ruleId: e.ruleId,

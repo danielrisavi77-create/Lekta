@@ -20385,10 +20385,10 @@
       "justify": true,
       "requireA4": true,
       "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
       },
       "footnoteSize": [
         10
@@ -21236,10 +21236,10 @@
       "justify": true,
       "requireA4": true,
       "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
+        "top": 2,
+        "right": 3,
+        "bottom": 2,
+        "left": 3
       },
       "recommendedCitation": "harvard",
       "footnoteSize": [
@@ -21317,10 +21317,10 @@
       "justify": true,
       "requireA4": true,
       "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
+        "top": 2,
+        "right": 3,
+        "bottom": 2,
+        "left": 3
       },
       "recommendedCitation": "harvard",
       "footnoteSize": [
@@ -21701,7 +21701,7 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman"
+        "Arial"
       ],
       "size": [
         12
@@ -21709,10 +21709,10 @@
       "checkSpacing": false,
       "requireA4": true,
       "margins": {
-        "top": 3.5,
+        "top": 2.5,
         "right": 2.5,
-        "bottom": 3,
-        "left": 3
+        "bottom": 2.5,
+        "left": 2.5
       },
       "recommendedCitation": "harvard",
       "spacing": 1.5,
@@ -21775,7 +21775,7 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman"
+        "Arial"
       ],
       "size": [
         12
@@ -21783,10 +21783,10 @@
       "checkSpacing": false,
       "requireA4": true,
       "margins": {
-        "top": 3.5,
+        "top": 2.5,
         "right": 2.5,
-        "bottom": 3,
-        "left": 3
+        "bottom": 2.5,
+        "left": 2.5
       },
       "recommendedCitation": "harvard",
       "spacing": 1.5,
@@ -21861,10 +21861,10 @@
       "requireA4": true,
       "justify": true,
       "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
+        "top": 2.54,
+        "right": 2.54,
+        "bottom": 2.54,
+        "left": 2.54
       },
       "requirePageNumbers": true
     },
@@ -21940,10 +21940,10 @@
       "requireA4": true,
       "justify": true,
       "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
+        "top": 2.54,
+        "right": 2.54,
+        "bottom": 2.54,
+        "left": 2.54
       },
       "requirePageNumbers": true
     },
@@ -22522,7 +22522,7 @@
       "requireA4": true,
       "margins": {
         "top": 2.5,
-        "right": 2,
+        "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
       },
@@ -24416,7 +24416,7 @@
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
-        "left": 2.5
+        "left": 3
       }
     },
     "facts": [],
@@ -24902,10 +24902,10 @@
       "requireA4": true,
       "justify": true,
       "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
       },
       "footnoteSize": [
         10
@@ -25189,7 +25189,7 @@
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
-        "left": 2.5
+        "left": 3.5
       },
       "footnoteSize": [
         10
@@ -25739,13 +25739,10 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
+        "Merriweather"
       ],
       "size": [
-        12,
-        11
+        10
       ],
       "spacing": 1.5,
       "requireA4": true,
@@ -25805,13 +25802,10 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
+        "Merriweather"
       ],
       "size": [
-        12,
-        11
+        10
       ],
       "spacing": 1.5,
       "requireA4": true,
@@ -27580,7 +27574,7 @@
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
-        "left": 2.5
+        "left": 3
       },
       "requirePageNumbers": true
     },
@@ -27647,7 +27641,7 @@
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
-        "left": 2.5
+        "left": 3
       },
       "requirePageNumbers": true
     },
@@ -27852,10 +27846,10 @@
       "requireA4": true,
       "justify": true,
       "margins": {
-        "top": 2,
-        "right": 2,
-        "bottom": 2,
-        "left": 2.5
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
       }
     },
     "facts": [],
@@ -27925,10 +27919,10 @@
       "requireA4": true,
       "justify": true,
       "margins": {
-        "top": 2,
-        "right": 2,
-        "bottom": 2,
-        "left": 2.5
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
       }
     },
     "facts": [],

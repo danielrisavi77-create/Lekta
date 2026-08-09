@@ -104,6 +104,67 @@ function paramsFromValue(checkId: string, value: unknown): Record<string, unknow
   }
 }
 
+/**
+ * Cuva nacelo "ponudjeni popravak ne smije oboriti ocjenu".
+ *
+ * Preporuceni (advisory) popravak nosi vrijednost IZ VLASTITOG izvora (`entry.value`, pecena iz
+ * draftova), a bodovani check mjeri prema `profile.rules`. Te dvije strane se vode ODVOJENO i
+ * nista ih ne sinkronizira: `ruleEntries` zive u `data/profiles/**\/drafts/*.json` i peku se u
+ * `repair-map.json`, dok `rules` u `verified-profiles.json` pisu ljudi. `approve-profile.mjs`
+ * mijenja samo statuse draftova, nikad `rules`.
+ *
+ * Kad se razidu, korisnik primijeni ponudjenu preporuku i bodovani check koji je PRIJE prolazio
+ * padne. Izmjereno na stvarnim podacima (sweep 368 profila / 1844 zapisa, 2026-08-08): jedan
+ * slucaj, `unizd-povijest-zavrsni` prored 2 (izvor: "odlomci imaju dvostruki prored", Upute 2012)
+ * naspram bodovanih 1.5 -> "Prored osnovnog teksta" pada iz pass u fail.
+ *
+ * Ovdje se NE odlucuje koja je strana tocna (to je posao verifikacije izvora, ne koda) - samo se
+ * takva preporuka NE nudi, jer popravak koji obara ocjenu nikad nije ispravan ishod.
+ * `tests/repair-recommendation-safety.test.ts` cuva da novih slucajeva nema.
+ */
+function recommendationBreaksScoredRule(checkId: string, value: unknown, profile: any): boolean {
+  const norm = (s: unknown) => String(s ?? '').toLowerCase().replace(/\s+/g, ' ').trim();
+  const near = (a: number, b: number, tol = 0.12) => Math.abs(a - b) <= tol;
+  switch (checkId) {
+    case 'font': {
+      if (profile?.checkFont === false || !profile?.font?.length) return false;
+      const name = Array.isArray(value) ? value[0] : value;
+      if (!name) return false;
+      return !profile.font.some((x: unknown) => norm(x) === norm(name));
+    }
+    case 'font-size': {
+      if (profile?.checkSize === false || !profile?.size?.length) return false;
+      const pt = Array.isArray(value) ? value[0] : value;
+      if (pt == null) return false;
+      return !profile.size.some((x: unknown) => Number(x) === Number(pt));
+    }
+    case 'line-spacing': {
+      if (profile?.checkSpacing === false || profile?.spacing == null || typeof value !== 'number') return false;
+      return !near(value, Number(profile.spacing));
+    }
+    case 'justify': {
+      if (profile?.checkJustify === false || profile?.justify == null || typeof value !== 'boolean') return false;
+      return value !== profile.justify;
+    }
+    case 'margins': {
+      if (profile?.checkMargins === false || !profile?.margins || !value || typeof value !== 'object') return false;
+      const want = profile.margins as Record<string, number>;
+      const got = value as Record<string, number>;
+      return (['top', 'right', 'bottom', 'left'] as const).some(
+        (k) => want[k] != null && got[k] != null && !near(got[k], want[k], 0.05),
+      );
+    }
+    case 'paper-size': {
+      const name = Array.isArray(value) ? value[0] : value === true ? 'A4' : typeof value === 'string' ? value : null;
+      if (!name) return false;
+      const allowed: string[] | null = profile?.paperSizes || (profile?.requireA4 ? ['A4'] : null);
+      return !!allowed && !allowed.includes(name);
+    }
+    default:
+      return false;
+  }
+}
+
 /** Status checka po naslovu (ili undefined ako ga nema). Za razliku od isViolated NE trazi
  *  max>0: numeriranje-checkovi su nebodovani (max=0, "Word ne sprema dovoljno podataka") na
  *  jednosekcijskom radu, ali im status ostaje 'warn' kad numeriranje od Uvoda nije potvrdjeno. */
@@ -150,6 +211,8 @@ export function buildRepairableItems(
       // effectiveRules iz ruleEntries nije zivo wiran u definition.rules (vidi paramsFromValue).
       const params = paramsFromValue(e.checkId, e.value);
       if (!params) continue;
+      // Ne nudi preporuku koja bi oborila bodovani check koji trenutno prolazi (vidi helper).
+      if (recommendationBreaksScoredRule(e.checkId, e.value, profile)) continue;
       out.push({
         ruleId: e.ruleId,
         fixerId: e.fixerId as RepairableItem['fixerId'],

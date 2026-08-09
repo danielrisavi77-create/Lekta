@@ -81,8 +81,19 @@ i BODOVANJE po pravilu bez sluzbenog izvora.
 
 ## Pravila profila (Option A)
 
-- ruleEntries u data/** su autorski izvor istine; rules je naslijedeni agregat
-  koji kompajler (src/profiles/rule-compiler.ts) overlaya u effectiveRules.
+- ruleEntries u draftovima (data/profiles/**/drafts/) su autorski izvor istine jer
+  jedini nose sourceId + sourcePage + doslovan citat; `rules` u verified-profiles.json
+  je njihovo zrcalo koje analiza boduje.
+- NEMA runtime overlaya. compileProfile i profile-loader.ts su obrisani 2026-08-09 jer
+  nisu imali pozivatelja (effectiveRules nikad nije postojao u runtimeu, a
+  verified-profiles.json ima 0 ruleEntries). compileEffectiveRules ostaje za
+  published-rules/QA/testove.
+- Zato NE brisi kljuc iz `rules` "jer ga overlay proizvodi" - ne proizvodi ga;
+  pravilo bi tiho nestalo iz zive analize uz zelen check. Mijenjas li draft vrijednost,
+  mijenjaj i `rules` na istu, pa regeneriraj split i pecene mape.
+- Dvije tvrde zastite, obje nulta tolerancija:
+  tests/repair-draft-rules-divergence.test.ts (draft vs rules) i
+  tests/repair-recommendation-safety.test.ts (popravak ne smije oboriti bodovani check).
 - Ne izmisljaj pravila: bodovana pravila smiju doci samo iz sluzbenih izvora.
 - sourcePage koji nije rucno potvrdjen ostaje null, ne nagadjaj ga.
 - Studentski radovi iz repozitorija sluze iskljucivo regresijskom testiranju

@@ -54,14 +54,18 @@ for (const id of [...DRAFT_PROFILE_IDS].sort()) {
   // makar demotiran skup bio prazan -> app tada postavlja advisoryDimensions=[]).
   advisoryMap[id] = computeDemotedAdvisory({ id }, entries, SOURCES);
   // repair: pravila koja buildRepairableItems obradjuje, slim na polja koja ta funkcija cita.
-  // Dvije vrste: (1) autoFixable+verified -> obavezan popravak (NEPROMIJENJENO: params i dalje
-  // dolaze iz profila u spoju, tj. currentProfile()/definition.rules). (2) advisory s
-  // recommendedFixerId -> NEobavezan, jasno oznacen "preporuceni" popravak (institucija to zove
-  // preporukom, ne propisom; vidi profile-schema.ts). KLJUCNA RAZLIKA: effectiveRules iz
-  // ruleEntries NIJE zivo wiran u definition.rules (poznat jaz, vidi strateski audit 2026-07-13),
-  // pa "preporuceni" zapis NOSI SVOJU vrijednost (value) da paramsFromValue moze izgraditi
-  // params BEZ oslanjanja na definition.rules (koji za advisory-only institucije nikad nije
-  // populiran tim poljima).
+  // Dvije vrste: (1) autoFixable+verified -> obavezan popravak. (2) advisory s recommendedFixerId
+  // -> NEobavezan, jasno oznacen "preporuceni" popravak (institucija to zove preporukom, ne
+  // propisom; vidi profile-schema.ts).
+  //
+  // OBJE vrste NOSE SVOJU vrijednost (`value`). Prije 2026-08-09 vrsta (1) ju NIJE nosila
+  // ("params dolaze iz profila"), pa je `paramsFromValue` za svaki verificirani zapis vracao null
+  // i buildRepairableItems je uvijek padao na `paramsForCheck(checkId, profile)`. Posljedica je
+  // bila mjerljiva: LABELA je dolazila iz drafta (sa sluzbenim citatom, npr. "Margine (lijeva
+  // 3,5cm)"), a PRIMIJENJENA vrijednost iz `rules` (lijeva 2,5cm). Zateceno na 19 pravila / 14
+  // profila. Draft je mjerodavan jer nosi sourceId + sourcePage + doslovan citat, pa popravak od
+  // sada cilja bas njegovu vrijednost. Da `rules` ne odluta od istog izvora cuva
+  // tests/repair-draft-rules-divergence.test.ts (nulta tolerancija).
   const repairEntries = entries
     .filter(
       (e) =>
@@ -77,6 +81,7 @@ for (const id of [...DRAFT_PROFILE_IDS].sort()) {
             status: e.status,
             fixerId: e.fixerId,
             autoFixable: e.autoFixable,
+            value: e.value,
           }
         : {
             ruleId: e.ruleId,

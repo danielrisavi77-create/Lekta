@@ -243,10 +243,10 @@ Ukupno profila bez uzorka: **398/407**.
 - **unizd-informacijske-diplomski** — 4 ponudjenih opcija
 - **unizd-informacijske-zavrsni** — 4 ponudjenih opcija
 - **unizd-povijest-diplomski** — 4 ponudjenih opcija
-- **unizd-povijest-zavrsni** — 4 ponudjenih opcija
 - **unizd-filozofija-diplomski** — 3 ponudjenih opcija
 - **unizd-filozofija-zavrsni** — 3 ponudjenih opcija
 - **unizd-francuski-diplomski** — 3 ponudjenih opcija
+- **unizd-povijest-zavrsni** — 3 ponudjenih opcija
 - **unizd-talijanistika-diplomski** — 3 ponudjenih opcija
 - **unizd-zdravstvo-diplomski** — 3 ponudjenih opcija
 - **unizd-zdravstvo-zavrsni** — 3 ponudjenih opcija

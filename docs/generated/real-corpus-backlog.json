@@ -1840,12 +1840,6 @@
       "offeredOptionCount": 4
     },
     {
-      "profileId": "unizd-povijest-zavrsni",
-      "unitId": "unizd",
-      "facultyLabel": "Sveučilište u Zadru",
-      "offeredOptionCount": 4
-    },
-    {
       "profileId": "vhzk-zavrsni",
       "unitId": "vhzk",
       "facultyLabel": "Veleučilište Hrvatsko zagorje Krapina",
@@ -1985,6 +1979,12 @@
     },
     {
       "profileId": "unizd-francuski-diplomski",
+      "unitId": "unizd",
+      "facultyLabel": "Sveučilište u Zadru",
+      "offeredOptionCount": 3
+    },
+    {
+      "profileId": "unizd-povijest-zavrsni",
       "unitId": "unizd",
       "facultyLabel": "Sveučilište u Zadru",
       "offeredOptionCount": 3

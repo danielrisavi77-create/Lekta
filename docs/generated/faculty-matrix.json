@@ -18066,8 +18066,8 @@
         "unizd-povijest-umj-diplomski",
         "unizd-tko-diplomski"
       ],
-      "offeredOptionCount": 157,
-      "mappedOptionCount": 157,
+      "offeredOptionCount": 156,
+      "mappedOptionCount": 156,
       "ruleIds": [
         "unizd-arheologija-diplomski--font",
         "unizd-arheologija-diplomski--font-size",
@@ -18175,7 +18175,6 @@
         "unizd-povijest-umj-zavrsni--margins",
         "unizd-povijest-umj-zavrsni--paper-size",
         "unizd-povijest-zavrsni--font-size",
-        "unizd-povijest-zavrsni--line-spacing",
         "unizd-povijest-zavrsni--margins",
         "unizd-povijest-zavrsni--paper-size",
         "unizd-psihologija-diplomski--font",
@@ -19312,17 +19311,15 @@
             "final"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 4,
-          "mappedOptionCount": 4,
+          "offeredOptionCount": 3,
+          "mappedOptionCount": 3,
           "ruleIds": [
             "unizd-povijest-zavrsni--font-size",
-            "unizd-povijest-zavrsni--line-spacing",
             "unizd-povijest-zavrsni--margins",
             "unizd-povijest-zavrsni--paper-size"
           ],
           "fixerIds": [
             "font-fixer",
-            "line-spacing-fixer",
             "margins-fixer",
             "paper-size-fixer"
           ],
@@ -22317,8 +22314,8 @@
   "summary": {
     "facultyCount": 131,
     "profileCount": 407,
-    "offeredOptionCount": 1752,
-    "mappedOptionCount": 1752,
+    "offeredOptionCount": 1751,
+    "mappedOptionCount": 1751,
     "realDocxSampleCount": 12,
     "facultiesWithRealDocx": 8,
     "facultiesWithoutRealDocx": 123,
