@@ -17,3 +17,4 @@ export * from './serialization/digest';
 export * from './reconciliation/types';
 export * from './reconciliation/fingerprint';
 export * from './reconciliation/reconcile-document-nodes';
+export * from './adapters/lekta-document-adapter';
