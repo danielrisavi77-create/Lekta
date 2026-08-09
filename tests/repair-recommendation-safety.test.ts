@@ -140,3 +140,45 @@ function pickScored(checkId: string, rules: Record<string, any>): unknown {
     default: return null;
   }
 }
+
+/**
+ * a/b/c oznake: popravak ih dodaje SAMO u literaturu i to mora reci.
+ *
+ * Kad autor ima dva rada istog autora i godine, `(Horvat, 2022)` u tekstu je bas ona
+ * dvosmislenost zbog koje oznake postoje. Lekta ne moze znati na koji se rad tvrdnja odnosi, pa
+ * ih u tijelu NE dira (vidi `suffixes` u bibliography-repair-fixer.ts). Posljedica je da
+ * literatura dobije 2022a/2022b dok citatnice ostanu bez oznake, a bodovana provjera
+ * "Isti autor i godina (a/b/c)" pritom prijedje u 'pass' jer gleda samo zapise literature.
+ * Zato potvrda mora izricito reci sto ostaje na korisniku.
+ */
+describe('a/b/c oznake ne obecavaju vise nego sto popravak radi', () => {
+  it('parametri prema fixeru NE nose nikakav trag citatnica u tijelu', async () => {
+    const src = readFileSync(path.join(ROOT, 'src/repair/bibliography-repair-fixer.ts'), 'utf8');
+    // Polje je obrisano i ne smije se vratiti: njegovo popunjavanje znacilo bi da Lekta bira
+    // kojem izvoru pripada tvrdnja u tekstu.
+    expect(src).not.toMatch(/citationParagraphIndices\s*[?:]/);
+  });
+
+  it('potvrda uz odabrane oznake kaze da citatnice u tekstu ostaju na korisniku', async () => {
+    const { bibliographyRepairableItem } = await import('../src/ui/repair-items');
+    const profile = {
+      ruleEntries: [{
+        checkId: 'bibliography-rules', status: 'verified', sourceId: 's', sourcePage: 'p', quote: 'q',
+        value: { authorYearSuffixes: true },
+      }],
+    };
+    const result = {
+      details: {
+        bibliographyStructure: {
+          entries: [{ id: 'e1', rawText: 'Horvat, I. (2022). Prvi rad.' }, { id: 'e2', rawText: 'Horvat, I. (2022). Drugi rad.' }],
+          authorYearGroups: [{ authorYearKey: 'horvat|2022', entryIds: ['e1', 'e2'], suffixes: ['a', 'b'] }],
+          summary: { total: 2 },
+        },
+      },
+    };
+    const [item] = bibliographyRepairableItem(result, profile);
+    expect(item, 'stavka se mora ponuditi').toBeTruthy();
+    expect(item.confirmationText).toContain('SAMO u popis literature');
+    expect(item.confirmationText).toContain('moraš sam dopuniti');
+  });
+});

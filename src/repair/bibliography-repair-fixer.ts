@@ -22,7 +22,21 @@ export interface BibliographyRepairParams {
     afterTwentieths?: number;
     stripUrlTerminalPunctuation?: boolean;
   };
-  suffixes?: Array<{ entryId: string; suffix: string; citationParagraphIndices?: number[] }>;
+  /**
+   * a/b/c oznake za zapise literature istog autora i godine.
+   *
+   * NAMJERNO SAMO ZA LITERATURU, nikad za citatnice u tijelu rada. Polje
+   * `citationParagraphIndices` postojalo je ovdje do 2026-08-09 kao nedovrsen posao i
+   * OBRISANO je, jer se ne smije dovrsiti: kad autor ima dva rada istog autora i godine, tekst
+   * `(Horvat, 2022)` je bas ona dvosmislenost zbog koje oznake i postoje. Lekta ne moze znati
+   * na koji se od dva rada tvrdnja odnosi, a odabrati jedan znaci pripisati tvrdnju konkretnom
+   * izvoru. To je odluka o sadrzaju i atribuciji, ne o formi, pa je izvan granice iz CLAUDE.md.
+   *
+   * Posljedica je poznata i mora se reci korisniku: literatura dobije 2022a/2022b, a citatnice
+   * u tekstu ostaju bez oznake dok ih autor sam ne razlucini. Zato `bibliographyRepairableItem`
+   * uz odabrane oznake prikazuje izricito upozorenje.
+   */
+  suffixes?: Array<{ entryId: string; suffix: string }>;
 }
 
 interface Range { start: number; end: number; index: number; }

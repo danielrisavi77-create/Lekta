@@ -1175,7 +1175,16 @@ export function bibliographyRepairableItem(result: any, profile: any): Repairabl
     params: form.buildParams(form),
     violated: true,
     requiresConfirmation: true,
-    confirmationText: 'Potvrdi sortiranje, normalizaciju i ciljano uklanjanje potpuno identičnih duplikata. Nepotpuni i slični zapisi ne mijenjaju se bez dodatne potvrde.',
+    // Kad su odabrane a/b/c oznake, potvrda MORA reci i sto popravak NE radi. Oznake se dodaju
+    // samo u literaturu; citatnice u tijelu Lekta ne dira jer ne moze znati na koji se od dva
+    // rada istog autora i godine tvrdnja odnosi (vidi komentar uz `suffixes` u
+    // bibliography-repair-fixer.ts). Bez ove recenice popravak tiho ostavi rad neuskladjen, a
+    // bodovana provjera "Isti autor i godina (a/b/c)" pritom prijedje u 'pass' jer gleda samo
+    // zapise literature - dakle nestane i jedini signal da nesto treba dovrsiti.
+    confirmationText:
+      form.suffixes?.some((suffix) => suffix.selected)
+        ? 'Potvrdi sortiranje, normalizaciju i ciljano uklanjanje potpuno identičnih duplikata. Nepotpuni i slični zapisi ne mijenjaju se bez dodatne potvrde. Oznake a/b/c dodaju se SAMO u popis literature: koja se citatnica u tekstu odnosi na koji rad zna samo ti, pa ih moraš sam dopuniti.'
+        : 'Potvrdi sortiranje, normalizaciju i ciljano uklanjanje potpuno identičnih duplikata. Nepotpuni i slični zapisi ne mijenjaju se bez dodatne potvrde.',
     bibliographyForm: form,
     matchKeys: ['Potpunost bibliografskih zapisa', 'Citirano → literatura', 'Literatura → citirano'],
   }];
