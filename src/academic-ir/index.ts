@@ -14,3 +14,6 @@ export * from './validation/validate-academic-ir';
 export * from './serialization/canonicalize';
 export * from './serialization/serialize';
 export * from './serialization/digest';
+export * from './reconciliation/types';
+export * from './reconciliation/fingerprint';
+export * from './reconciliation/reconcile-document-nodes';
