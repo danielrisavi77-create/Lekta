@@ -321,8 +321,11 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
     expect(recheck.textContent).toContain('Oblikovanje'); // kategorijska delta
   });
 
-  it('regresiju (pass -> fail) prikaze uz izlaz na izvorni dokument', async () => {
+  it('regresiju (pass -> fail) prikaze i NE preuzme popravljeni automatski, nego ponudi izbor', async () => {
     const mountEl = mount();
+    // Isporuka se broji preko createObjectURL: triggerDownload je jedini put koji ga zove.
+    let downloads = 0;
+    (globalThis.URL as any).createObjectURL = () => { downloads += 1; return 'blob:mock'; };
     renderRepairPanel({
       items: [marginItem()],
       getDocxBytes: async () => singleSectionDocx(),
@@ -347,7 +350,55 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
     const box = mountEl.querySelector('.lekta-repair-panel__regression')!;
     expect(box.textContent).toContain('Oblikovanje fusnota');
     expect(box.textContent).not.toContain('Margine dokumenta'); // popravljena, nije regresija
-    expect(box.querySelector('button')?.textContent).toContain('izvorni dokument');
+
+    // Jezgra vrata: dokument za koji je DOKAZANO da je losiji ne isporucuje se sam od sebe.
+    // Prije 2026-08-09 preuzimanje se okidalo prije ponovne analize, pa se regresija mogla
+    // samo prijaviti ("dokument je vec kod korisnika"), nikad izbjeci.
+    expect(downloads, 'popravljeni se NE smije preuzeti automatski kad je dokazana regresija').toBe(0);
+
+    const choice = mountEl.querySelector('.lekta-repair-panel__delivery-choice')!;
+    const labels = [...choice.querySelectorAll('button')].map((b) => b.textContent ?? '');
+    expect(labels.some((t) => t.includes('Ipak preuzmi popravljeni'))).toBe(true);
+    expect(labels.some((t) => t.includes('izvorni dokument'))).toBe(true);
+
+    // Korisnik ga je platio: ostaje mu na jedan klik.
+    choice.querySelector<HTMLButtonElement>('button')!.click();
+    expect(downloads).toBe(1);
+  });
+
+  it('bez regresije isporucuje automatski (ugovor: analiza ne smije sprijeciti isporuku)', async () => {
+    const mountEl = mount();
+    let downloads = 0;
+    (globalThis.URL as any).createObjectURL = () => { downloads += 1; return 'blob:mock'; };
+    renderRepairPanel({
+      items: [marginItem()],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+      beforeScore: { score: 68, categories: {}, checks: [chk('Margine dokumenta', 'fail', 0, 6)] },
+      reanalyze: async () => ({ score: 74, categories: {}, checks: [chk('Margine dokumenta', 'pass', 6, 6)] }),
+    });
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    await waitFor(() => downloads > 0);
+    expect(mountEl.querySelector('.lekta-repair-panel__delivery-choice')).toBeNull();
+  });
+
+  it('kad ponovna analiza padne, popravak se svejedno isporucuje', async () => {
+    const mountEl = mount();
+    let downloads = 0;
+    (globalThis.URL as any).createObjectURL = () => { downloads += 1; return 'blob:mock'; };
+    renderRepairPanel({
+      items: [marginItem()],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+      beforeScore: { score: 68, categories: {}, checks: [chk('Margine dokumenta', 'fail', 0, 6)] },
+      // Nesiguran ishod ne smije zadrzati dokument: bez dokaza o pogorsanju isporucujemo.
+      reanalyze: async () => { throw new Error('analiza pukla'); },
+    });
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    await waitFor(() => downloads > 0);
+    expect(mountEl.querySelector('.lekta-repair-panel__delivery-choice')).toBeNull();
   });
 
   it('bez regresije nema bloka upozorenja', async () => {

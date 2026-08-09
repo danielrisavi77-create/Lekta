@@ -221,6 +221,15 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
   pa odgovor nosi samo popravljeni docx.
 - Postenje: dok pohrana traje (`storagePending`), sucelje NE smije tvrditi da je spremljeno;
   promasaj u korpusu NIKAD nije dokaz da izvor ne postoji.
+- ISPORUKA TEK NAKON VERIFIKACIJE (lokalni panel, od 2026-08-09). Do tada se preuzimanje okidalo
+  prije ponovne analize, pa je `detectPassRegressions` mogao samo PRIJAVITI pogorsanje, nikad ga
+  izbjeci ("dokument je vec kod korisnika"). Sada `performRepair` prvo pokrene re-check, pa
+  automatski preuzima SAMO ako nema dokaza o pogorsanju; kad ga ima, nudi izricit izbor
+  (`renderDeliveryChoice`). Granica je namjerna i mora ostati: verifikacija smije ODGODITI i
+  zamijeniti automatsko preuzimanje, ali ga NIKAD ne smije sprijeciti, pa svaki nesiguran ishod
+  (analiza nedostupna, `null`, bacanje, istek `RECHECK_TIMEOUT_MS`) isporucuje odmah. Serverski
+  put (`app.ts`) ionako trazi klik na gumb, pa tamo nema automatske isporuke koju bi trebalo
+  zadrzavati.
 - Popravljeni paket se dokazuje u CETIRI razine (`docs/REAL_CORPUS_TESTING.md`, Tier model).
   `npm run check` je samo Tier 0 (vlastiti strogi skener `src/repair/package-integrity.ts`) i NE
   otvara dokument nijednim stvarnim uredivacem. Prije deploya repair motora rucno pokreni i

@@ -12,7 +12,7 @@ import { enrichWithCrossref } from '../citations/bibliography-enrichment';
 import { renderRepairLedgerModal, type AdvancedFormDescriptor } from './repair-price-slider';
 import type { Check } from '../scoring/checks';
 import { repairCeiling } from './result-readiness';
-import { detectPassRegressions } from '../analysis/repair-regression';
+import { detectPassRegressions, type PassRegression } from '../analysis/repair-regression';
 
 export interface TitlePageFormField {
   key: string;
@@ -299,7 +299,12 @@ export interface RepairPanelContext {
   beforeScore?: RepairScoreSnapshot;
   /** Ponovna analiza POPRAVLJENIH bajtova istim profilom/postavkama. Vraca null ako
    *  profil nije bodovan; smije baciti (npr. korupcija), sto hvatamo. Radi u Web Workeru
-   *  (ne blokira nit) i NIKAD ne smije sprijeciti ni ponistiti preuzimanje. */
+   *  (ne blokira nit).
+   *
+   *  Od 2026-08-09 tece PRIJE isporuke, pa smije ODGODITI automatsko preuzimanje i, kad
+   *  DOKAZE pogorsanje, zamijeniti ga izricitim izborom korisnika. I dalje ga ne smije
+   *  SPRIJECITI: svaki nesiguran ishod (bacanje, null, istek RECHECK_TIMEOUT_MS) znaci
+   *  "nemamo dokaz" i dokument se isporucuje odmah. */
   reanalyze?: (repairedBytes: Uint8Array) => Promise<RepairScoreSnapshot | null>;
   /** Stropna cijena za ovu vrstu rada (WORK_TYPE_TIERS), za "koliko platiš, toliko popravaka"
    *  slider (procjena, ne stvarna naplata - vidi repair-price-slider.ts). null/izostavljeno
@@ -596,9 +601,21 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
         return;
       }
       renderSummary(summary, result.changelog, alreadyOk, cannotFix);
-      triggerDownload(result.docxBytes, buildFixedFileName(ctx.originalFileName));
       repairedBytes = result.docxBytes;
       latestRepairedBytes = result.docxBytes;
+
+      // ISPORUKA TEK NAKON VERIFIKACIJE. Do 2026-08-09 preuzimanje se okidalo ovdje, PRIJE
+      // ponovne analize, pa je regresija mogla samo biti prijavljena ("dokument je vec kod
+      // korisnika"), nikad izbjegnuta. Dokument za koji smo upravo dokazali da je losiji ne
+      // predaje se sam od sebe.
+      //
+      // Ugovor iz RepairPanelContext.reanalyze OSTAJE na snazi: analiza ne smije SPRIJECITI
+      // isporuku. Zato zadrzavamo automatsko preuzimanje samo kad postoji DOKAZ pogorsanja;
+      // svaki nesiguran ishod (analiza nedostupna, vratila null, bacila ili istekla nakon
+      // RECHECK_TIMEOUT_MS) vraca prazan popis i dokument ide odmah, kao i prije.
+      const regressions = await renderRecheck(summary, result.docxBytes, ctx);
+      if (regressions.length > 0) renderDeliveryChoice(summary, result.docxBytes, ctx);
+      else triggerDownload(result.docxBytes, buildFixedFileName(ctx.originalFileName));
     } catch (err) {
       // Fail-safe: ne rusi ekran. Rucne upute iznad ove sekcije (postojeci
       // tekstualni popravci iz UX_PRINCIPLES.md ekrana 5) i dalje vrijede.
@@ -609,10 +626,6 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
       downloadBtn.disabled = false;
       downloadBtn.textContent = originalLabel;
     }
-
-    // Re-check (spremnost prije -> poslije): tek NAKON preuzimanja, kao dopuna. Preuzimanje
-    // se vec dogodilo pa ovo ne blokira korisnika; ako ponovna analiza padne, panel ostaje.
-    if (repairedBytes) await renderRecheck(summary, repairedBytes, ctx);
   }
 
   container.appendChild(list);
@@ -1554,62 +1567,80 @@ function categoryPct(cat: { earned: number; max: number } | undefined): number |
  * profilom i prikazuje "spremnost prije -> poslije". Read-only (ne pise u povijest).
  * Nikad ne baca: analiza koja padne daje tihu uputu; preuzimanje je vec gotovo.
  */
-async function renderRecheck(el: HTMLElement, bytes: Uint8Array, ctx: RepairPanelContext): Promise<void> {
+/**
+ * Koliko najvise cekamo ponovnu analizu prije isporuke. Analiza radi u Web Workeru nad vec
+ * popravljenim bajtovima i traje sekundu-dvije; ova granica postoji samo zato da zaglavljen
+ * worker NIKAD ne zadrzi dokument koji je korisnik platio. Istek se tretira kao "nema nalaza"
+ * i popravak se isporucuje odmah.
+ */
+const RECHECK_TIMEOUT_MS = 20000;
+
+/**
+ * Rezultat ponovne analize, s razlikom koja je bitna za poruku korisniku:
+ * `ok:true` + `value:null` znaci "profil nije bodovan" (uredno stanje), a `ok:false` znaci
+ * "analiza je pukla ili istekla" (nemamo dokaz). Bez te razlike nebodovanom profilu bismo
+ * javljali kvar kojeg nema.
+ */
+type RecheckOutcome = { ok: true; value: RepairScoreSnapshot | null } | { ok: false };
+
+function withRecheckTimeout(promise: Promise<RepairScoreSnapshot | null>): Promise<RecheckOutcome> {
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => resolve({ ok: false }), RECHECK_TIMEOUT_MS);
+    promise.then(
+      (value) => { clearTimeout(timer); resolve({ ok: true, value }); },
+      () => { clearTimeout(timer); resolve({ ok: false }); },
+    );
+  });
+}
+
+/**
+ * Ponovna analiza popravljenih bajtova + prikaz "spremnost prije -> poslije".
+ *
+ * Vraca provjere koje su PRIJE prolazile, a sada ne prolaze. Prazno polje znaci "nemamo dokaz
+ * o pogorsanju" i pokriva SVE nesigurne ishode (analiza nije dostupna, vratila je null, bacila,
+ * ili istekla), pa pozivatelj u tim slucajevima isporucuje kao i do sada.
+ */
+async function renderRecheck(el: HTMLElement, bytes: Uint8Array, ctx: RepairPanelContext): Promise<PassRegression[]> {
   const before = ctx.beforeScore;
   const reanalyze = ctx.reanalyze;
-  if (!reanalyze || !before) return; // lokalni const: narrowing prezivi await ispod
+  if (!reanalyze || !before) return []; // lokalni const: narrowing prezivi await ispod
   const pending = document.createElement('p');
   pending.className = 'lekta-repair-panel__recheck-pending';
   pending.textContent = 'Računam spremnost popravljenog dokumenta...';
   el.appendChild(pending);
 
-  let after: RepairScoreSnapshot | null = null;
-  let failed = false;
-  try {
-    after = await reanalyze(bytes);
-  } catch {
-    failed = true; // analiza popravljenog nije uspjela (rijetko); preuzimanje je vec gotovo
-  }
+  const outcome = await withRecheckTimeout(reanalyze(bytes));
   pending.remove();
 
-  if (failed) {
+  if (!outcome.ok) {
     const note = document.createElement('p');
     note.textContent =
-      'Novi rezultat nije bilo moguće izračunati. Učitaj popravljeni dokument ponovno da vidiš ažuriran score.';
+      'Novi rezultat nije bilo moguće izračunati, pa je popravak isporučen bez te provjere. Učitaj popravljeni dokument ponovno da vidiš ažuriran score.';
     el.appendChild(note);
-    return;
+    return [];
   }
+  const after = outcome.value;
   if (after === null) {
     const note = document.createElement('p');
     note.textContent = 'Ovaj profil ne daje bodovnu ocjenu, pa se popravak prikazuje samo kao popis iznad.';
     el.appendChild(note);
-    return;
+    return [];
   }
   const box = buildBeforeAfter(before, after);
-  const regression = buildRegressionWarning(before, after, ctx);
+  const regressions = before.checks && after.checks ? detectPassRegressions(before.checks, after.checks) : [];
   // Regresija ide ODMAH iza retka sa score-om: u zbroju se pad pojedine provjere ne vidi
   // (+6 na marginama i -3 na fusnotama izgleda kao cist +3), pa mora imati vlastito mjesto.
-  if (regression) box.insertBefore(regression, box.firstChild?.nextSibling ?? null);
+  if (regressions.length) box.insertBefore(buildRegressionWarning(regressions), box.firstChild?.nextSibling ?? null);
   el.appendChild(box);
+  return regressions;
 }
 
 /**
- * Provjere koje su prije popravka prolazile, a sada ne prolaze.
- *
- * Preuzimanje se NE ponistava i ne blokira (dokumentirani ugovor: ponovna analiza nikad ne smije
- * sprijeciti isporuku, vidi RepairPanelContext.reanalyze) - korisnik je popravljeni dokument vec
- * dobio. Ali mora saznati sto je palo i imati izlaz natrag na izvornik, umjesto da regresija
- * tiho nestane u ukupnoj ocjeni.
+ * Popis provjera koje su prije popravka prolazile, a sada ne prolaze. Samo tekst: odluku o
+ * isporuci (i gumbe uz nju) gradi `renderDeliveryChoice`, jer regresija se prikazuje i kad
+ * je preuzimanje zadrzano i kad nije.
  */
-function buildRegressionWarning(
-  before: RepairScoreSnapshot,
-  after: RepairScoreSnapshot,
-  ctx: RepairPanelContext,
-): HTMLElement | null {
-  if (!before.checks || !after.checks) return null; // stariji pozivatelj bez checkova: tiho bez vrata
-  const regressions = detectPassRegressions(before.checks, after.checks);
-  if (regressions.length === 0) return null;
-
+function buildRegressionWarning(regressions: PassRegression[]): HTMLElement {
   const box = document.createElement('div');
   box.className = 'lekta-repair-panel__regression';
   const head = document.createElement('p');
@@ -1622,6 +1653,35 @@ function buildRegressionWarning(
     ul.appendChild(li);
   }
   box.appendChild(ul);
+  return box;
+}
+
+/**
+ * Izbor isporuke kad je ponovna analiza DOKAZALA pogorsanje.
+ *
+ * Automatsko preuzimanje je izostalo namjerno: dokument za koji smo upravo dokazali da je losiji
+ * ne predaje se sam od sebe. Ali korisnik ga je platio, pa mu ostaje na jedan klik, uz izvornik
+ * kao ravnopravnu alternativu. Nista se ne odlucuje umjesto njega.
+ */
+function renderDeliveryChoice(
+  el: HTMLElement,
+  repairedBytes: Uint8Array,
+  ctx: RepairPanelContext,
+): void {
+  const box = document.createElement('div');
+  box.className = 'lekta-repair-panel__delivery-choice';
+
+  const note = document.createElement('p');
+  note.textContent =
+    'Popravljeni dokument zato nije preuzet automatski. Odaberi sam: možeš ga svejedno preuzeti ili zadržati izvornik.';
+  box.appendChild(note);
+
+  const keep = document.createElement('button');
+  keep.type = 'button';
+  keep.className = 'btn btn-secondary btn-sm';
+  keep.textContent = 'Ipak preuzmi popravljeni';
+  keep.onclick = () => triggerDownload(repairedBytes, buildFixedFileName(ctx.originalFileName));
+  box.appendChild(keep);
 
   const back = document.createElement('button');
   back.type = 'button';
@@ -1635,7 +1695,8 @@ function buildRegressionWarning(
     }
   };
   box.appendChild(back);
-  return box;
+
+  el.appendChild(box);
 }
 
 /**

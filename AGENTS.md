@@ -42,6 +42,11 @@ NE izvodi, nego provjeri je li fixer poznat i ziv, sanira parametre i izvrsi.
 - Dokument ide na server SAMO za popravak. Provjera izvora ide zasebnim usporednim
   pozivom (supabase/functions/source-check), a pohrana u "Moji popravci" dovrsava se
   u pozadini (EdgeRuntime.waitUntil).
+- ISPORUKA TEK NAKON VERIFIKACIJE (lokalni panel): performRepair prvo pokrene re-check,
+  pa automatski preuzima samo ako nema DOKAZA o pogorsanju; kad ga ima, nudi izricit
+  izbor (renderDeliveryChoice). Verifikacija smije odgoditi i zamijeniti automatsko
+  preuzimanje, ali ga NIKAD ne smije sprijeciti: analiza nedostupna / null / bacanje /
+  istek RECHECK_TIMEOUT_MS znaci "nemamo dokaz" i dokument ide odmah.
 - Postenje: dok pohrana traje (storagePending), sucelje NE smije tvrditi da je
   spremljeno; promasaj u korpusu NIKAD nije dokaz da izvor ne postoji.
 - Popravljeni paket ima CETIRI razine dokaza (docs/REAL_CORPUS_TESTING.md, Tier model).
