@@ -12,7 +12,7 @@ import { buildDocxFile } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 import { INFORMATIVE_VALID_CASES } from './corpus/catalog/informative-controls';
 import { findCheck, meetsExpectation } from './corpus/error-case';
-import { stableCheckId } from './corpus/ids/check-id-registry';
+import { stableCheckId } from '../src/scoring/check-ids';
 
 describe('Lekta Error Corpus - informativni valid-controli (P3)', () => {
   it('svaki ciljani checkId je registriran i konzistentan s naslovom', () => {

@@ -12,7 +12,7 @@ import { buildDocxFile } from './helpers/docx-builder';
 import { analyzeFixture, resolveProfile } from '../src/analysis/golden-entry';
 import { PROFILE_ATOMIC_CASES } from './corpus/catalog/profile-enabled';
 import { findCheck, meetsExpectation, type CorpusExpectation } from './corpus/error-case';
-import { stableCheckId } from './corpus/ids/check-id-registry';
+import { stableCheckId } from '../src/scoring/check-ids';
 
 describe('Lekta Error Corpus - profilno-uvjetovani atomski slucajevi (faza 4)', () => {
   it('svaki ciljani profil postoji u registru i nosi ocekivano pravilo', () => {

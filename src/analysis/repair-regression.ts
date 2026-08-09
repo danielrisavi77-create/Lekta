@@ -15,6 +15,9 @@
  * (src/scoring/checks.ts) da ga mogu koristiti i testni harnessi koji nose samo naslov i status.
  */
 export interface RegressionCheckLike {
+  /** Stabilan identitet (Check.id). Neobavezan: testni harnessi jos slazu objekte bez njega,
+   *  pa se tada pada natrag na naslov. Kad postoji, ima prednost. */
+  id?: string;
   title: string;
   status?: string;
   category?: string;
@@ -34,10 +37,13 @@ export interface PassRegression {
 /**
  * Provjere koje su prije bile 'pass', a poslije nisu.
  *
- * Uparivanje ide po NASLOVU jer Check nema id (vidi src/scoring/checks.ts:18): naslov je jedina
- * postojeca identifikacija i isti kljuc koriste repair-items.isViolated i check-fixer-map. To je
- * krhko (preimenovanje naslova tiho razvezuje korelaciju) i zabiljezeno je kao dug u
- * docs/COMPETITIVE_ANALYSIS.md; ovdje se svjesno preuzima da se ne otvara veliki refaktor.
+ * Uparivanje ide po STABILNOM ID-u (`Check.id`, vidi src/scoring/check-ids.ts). Do 2026-08-09
+ * islo je po hrvatskom naslovu, jer Check tada nije imao id: to je tiho razvezivalo detekciju
+ * cim se naslov preformulira, a bas ta detekcija sada odlucuje hoce li se popravak isporuciti
+ * (vidi renderDeliveryChoice u repair-panel.ts), pa krhkost vise nije bila prihvatljiva.
+ *
+ * Naslov ostaje kao REZERVA za pozivatelje koji jos slazu Check-like objekte bez id-a (testni
+ * harnessi); tada je ponasanje isto kao prije.
  *
  * Nestala provjera se RACUNA kao regresija, isto kao u postojecim testnim harnessima: uz isti
  * profil i iste postavke skup provjera mora ostati isti, pa je nestanak jednako sumnjiv kao pad.
@@ -49,7 +55,9 @@ export function detectPassRegressions(
   const out: PassRegression[] = [];
   for (const check of before) {
     if (check.status !== 'pass') continue;
-    const match = after.find((candidate) => candidate.title === check.title);
+    const match = check.id
+      ? after.find((candidate) => candidate.id === check.id)
+      : after.find((candidate) => candidate.title === check.title);
     if (match?.status === 'pass') continue;
     const beforeEarned = check.earned ?? 0;
     const afterEarned = match?.earned ?? 0;

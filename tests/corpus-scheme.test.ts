@@ -13,7 +13,7 @@ import { buildDocxFile } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 import { SCHEME_PUNCT_ATOMIC_CASES } from './corpus/catalog/scheme-punctuation';
 import { findCheck, meetsExpectation, type CorpusExpectation } from './corpus/error-case';
-import { stableCheckId } from './corpus/ids/check-id-registry';
+import { stableCheckId } from '../src/scoring/check-ids';
 
 describe('Lekta Error Corpus - shema numeriranja + interpunkcija (faza 4)', () => {
   it('svaki ciljani checkId je registriran (stabilni ID postoji)', () => {

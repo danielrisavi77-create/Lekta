@@ -1,11 +1,20 @@
 /**
- * STABILNI IDENTITETI PROVJERA (faza 2 Lekta Error Corpus).
+ * STABILNI IDENTITETI PROVJERA (kanonski registar).
  *
- * Engine povijesno nema `checkId` na check objektu; identitet nalaza je hrvatski `check.title`
- * (UI string). To je krhko za dugorocne testove (prijevod/preformulacija naslova rusi test).
- * Ovdje uvodimo STABILNI, hijerarhijski, jezicno-neovisan ID po naslovu - BEZ diranja produkcije
- * (golden ostaje bajt-identican: ne mijenjamo Check ni analyzeDocx). Korpus testovi keyaju po
- * stableCheckId(title), ne po samom naslovu.
+ * Identitet nalaza bio je hrvatski `check.title` (UI string), sto je krhko: preformulacija ili
+ * prijevod naslova tiho razvezuje svaku korelaciju izgradjenu nad njim. Ovdje je hijerarhijski,
+ * jezicno-neovisan ID po naslovu.
+ *
+ * POVIJEST: registar je nastao kao test-side pomagalo (faza 2 Lekta Error Corpus,
+ * `tests/corpus/ids/`), izricito "bez diranja produkcije". 2026-08-09 je premjesten u `src/` i
+ * `makeCheck` ga sada koristi da svaki `Check` nosi `id`. Golden je ostao bajt-identican jer
+ * `tests/helpers/golden-normalize.ts` bira polja poimence i ne snapshota `id`.
+ *
+ * ODNOS PREMA DRUGIM SHEMAMA (namjerno odvojene, ne spajati bez razloga):
+ * - `CHECK_TITLES` (`src/analysis/check-fixer-map.ts`) su POPRAVNE dimenzije (12: margins, font,
+ *   font-size...), tj. sto fixer zna promijeniti. Ovaj registar je PUNA taksonomija provjera.
+ * - `stableCheckId(category, title)` (`src/integration/finding-identity.ts`) je izvozni ugovor
+ *   prema Katedri i mapira bas na `CHECK_TITLES`; mijenjati ga znaci mijenjati vanjski ugovor.
  *
  * Kad se doda nova provjera: dodaj joj ovdje stabilni ID (tests/corpus-ids.test.ts to iznuduje -
  * svaki emitiran naslov MORA imati ID, ID-evi su jedinstveni i dobro oblikovani).
@@ -129,6 +138,38 @@ const ID_FORMAT = /^[a-z][a-z0-9]*(?:\.[a-z0-9-]+)+$/;
 /** Stabilni ID za naslov provjere, ili null ako nije registriran. */
 export function stableCheckId(title: string): string | null {
   return CHECK_ID_BY_TITLE[title] ?? null;
+}
+
+/**
+ * Slug za IZVEDENI (neregistrirani) ID. Namjerno bez NFD/dijakritickog raspona: taj raspon se u
+ * izvoru pise doslovnim kombinirajucim znakovima, sto je krhko za citanje i alate. Ovdje
+ * dijakritik jednostavno postaje separator ('sazetak' i 'sažetak' daju razlicit slug, ali svaki
+ * je STABILAN za svoj naslov, a to je jedino sto usporedba prije/poslije treba).
+ *
+ * Za kanonske ID-eve to ionako nije bitno: oni dolaze iz CHECK_ID_BY_TITLE i vec su ASCII.
+ */
+function slug(value: string): string {
+  return (
+    String(value || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 80) || 'check'
+  );
+}
+
+/**
+ * ID koji `makeCheck` upisuje u svaki `Check`. Registrirani naslov daje kanonski ID; za
+ * neregistrirani se izvodi `engine:<kategorija>:<naslov>` (isti oblik kao fallback u
+ * `src/integration/finding-identity.ts`).
+ *
+ * Izvedeni ID je stabilan IZMEDJU DVA PROLAZA nad istim dokumentom, sto je jedino sto usporedba
+ * prije/poslije popravka treba; nije otporan na preimenovanje naslova. Registrirani jest. Zato
+ * `tests/corpus-ids.test.ts` trazi da svaki emitiran naslov bude u registru: fallback je mreza
+ * za rubne, dinamicki sastavljene naslove, ne mjesto na kojem se provjere trajno zadrzavaju.
+ */
+export function checkIdFor(category: string, title: string): string {
+  return stableCheckId(title) ?? `engine:${slug(category)}:${slug(title)}`;
 }
 
 /** Provjeri je li ID dobro oblikovan (hijerarhijski, kebab, jezicno-neovisan). */

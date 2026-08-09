@@ -6,6 +6,7 @@
  * koji zasjenjuje funkciju `issue` u svom tijelu, identicno originalu.
  */
 import { clamp } from '../utils/helpers.ts';
+import { checkIdFor } from './check-ids.ts';
 
 export interface Issue {
   severity: 'error' | 'warning' | 'info' | string;
@@ -16,6 +17,16 @@ export interface Issue {
 }
 
 export interface Check {
+  /**
+   * Stabilan, jezicno-neovisan identitet provjere (`src/scoring/check-ids.ts`).
+   *
+   * Postoji jer je identitet dosad bio hrvatski `title`, pa je svaka korelacija izgradjena nad
+   * njim (triage, repair-items, regresija popravka, izvjestaji) pucala na preformulaciju naslova.
+   * `title` od sada je ISKLJUCIVO tekst za korisnika.
+   *
+   * Nije u golden snapshotima: `tests/helpers/golden-normalize.ts` bira polja poimence.
+   */
+  id: string;
   category: string;
   title: string;
   status: string;
@@ -41,7 +52,7 @@ export function makeCheck(
     detail = `Informativno: ne ulazi u službenu ocjenu. ${detail}`;
     if (issue) issue = { ...issue, severity: 'info', title: `Informativno: ${issue.title}` };
   }
-  return { category, title, status, earned: clamp(earned, 0, max), max, detail, issue, scored: max > 0 };
+  return { id: checkIdFor(category, title), category, title, status, earned: clamp(earned, 0, max), max, detail, issue, scored: max > 0 };
 }
 
 /**

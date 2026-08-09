@@ -13,7 +13,6 @@ kontrolirane ulaze. Golden snapshoti ostaju bajt-identicni.
 ```text
 tests/corpus/
   inventory/extract-check-inventory.ts   # faza 1: hibridni inventar (staticki UNIJA runtime)
-  ids/check-id-registry.ts               # faza 2: stabilni, jezicno-neovisni checkId po naslovu
   error-case.ts                          # faza 4: model ErrorCase + oracle helperi
   builder/baseline.ts                    # PROLAZNA baza (fpzg, score 93) + mutacijski helperi
   builder/legal-baseline.ts              # PROLAZNA pravna baza (fusnote, legal-notes profil)
@@ -48,7 +47,9 @@ npx vite-node tests/corpus/cli/export.ts --case atomic.format.font.dominant
 
 ## Kako dodati novu provjeru (disciplina iz prompta, sekcija 18)
 
-1. Dodaj joj **stabilni checkId** u `ids/check-id-registry.ts` (`corpus-ids` test to iznuduje).
+1. Dodaj joj **stabilni checkId** u `src/scoring/check-ids.ts` (`corpus-ids` test to iznuduje).
+   Registar je 2026-08-09 premjesten iz `tests/corpus/ids/` u `src/`: `makeCheck` ga sada
+   koristi da svaki `Check` nosi `id`, pa vise nije samo test-side pomagalo.
 2. Dodaj **valid control** (valjana varijanta ostaje `pass`).
 3. Dodaj **atomic fail** (jedna mutacija baze rusi bas tu provjeru).
 4. Ako ima brojcani prag, dodaj **boundary** (below/exact/above).

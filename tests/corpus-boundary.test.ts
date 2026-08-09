@@ -11,7 +11,7 @@ import { buildDocxFile } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 import { BOUNDARY_CASES } from './corpus/catalog/boundary';
 import { findCheck, meetsExpectation } from './corpus/error-case';
-import { stableCheckId } from './corpus/ids/check-id-registry';
+import { stableCheckId } from '../src/scoring/check-ids';
 
 describe('Lekta Error Corpus - boundary slucajevi (faza 5)', () => {
   it('svaki ciljani checkId je registriran', () => {

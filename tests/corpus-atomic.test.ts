@@ -13,7 +13,7 @@ import { analyzeFixture } from '../src/analysis/golden-entry';
 import { baselineSpec, BASELINE_PROFILE_ID } from './corpus/builder/baseline';
 import { ATOMIC_CASES } from './corpus/catalog/atomic';
 import { findCheck, meetsExpectation, type CorpusExpectation } from './corpus/error-case';
-import { stableCheckId } from './corpus/ids/check-id-registry';
+import { stableCheckId } from '../src/scoring/check-ids';
 
 const detectable = ATOMIC_CASES.filter((c) => c.detectableNow);
 

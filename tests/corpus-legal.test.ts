@@ -13,7 +13,7 @@ import { analyzeFixture } from '../src/analysis/golden-entry';
 import { legalBaselineSpec, LEGAL_PROFILE_ID } from './corpus/builder/legal-baseline';
 import { LEGAL_ATOMIC_CASES, LEGAL_VALID_CASES } from './corpus/catalog/legal';
 import { findCheck, meetsExpectation, type CorpusExpectation } from './corpus/error-case';
-import { stableCheckId } from './corpus/ids/check-id-registry';
+import { stableCheckId } from '../src/scoring/check-ids';
 
 const LEGAL_TITLES = [
   'Pravne fusnote', 'Klasifikacija pravnih izvora', 'Potpunost prvog navođenja',

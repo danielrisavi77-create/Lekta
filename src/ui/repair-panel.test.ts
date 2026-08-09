@@ -2,9 +2,12 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { renderRepairPanel, type LegalFootnoteRepairFormDefinition, type FinalDocumentInspectorFormDefinition, type RepairableItem } from './repair-panel';
 import { singleSectionDocx } from '../../tests/helpers/synthetic-docx';
 import type { Check } from '../scoring/checks';
+import { checkIdFor } from '../scoring/check-ids';
 
 function chk(title: string, status: string, earned: number, max: number): Check {
-  return { category: 'formatting', title, status, earned, max, detail: '', issue: null, scored: max > 0 };
+  // `id` ide kroz checkIdFor, isto kao u makeCheck: regresija se od 2026-08-09 uparuje po ID-u,
+  // pa rucno slozen literal s praznim ID-om ne bi testirao stvarni put.
+  return { id: checkIdFor('formatting', title), category: 'formatting', title, status, earned, max, detail: '', issue: null, scored: max > 0 };
 }
 
 /** Cekaj dok uvjet ne postane istinit (async DOM nakon klika: dinamicki import + applyFixers + reanalyze).

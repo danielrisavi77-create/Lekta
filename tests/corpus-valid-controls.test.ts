@@ -9,7 +9,7 @@ import { buildDocxFile } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 import { VALID_CONTROL_CASES } from './corpus/catalog/valid-controls';
 import { findCheck, meetsExpectation } from './corpus/error-case';
-import { stableCheckId } from './corpus/ids/check-id-registry';
+import { stableCheckId } from '../src/scoring/check-ids';
 
 const detectable = VALID_CONTROL_CASES.filter((c) => c.detectableNow);
 

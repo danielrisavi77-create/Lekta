@@ -12,7 +12,8 @@ import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildInventory, type Inventory } from './corpus/inventory/extract-check-inventory';
-import { CHECK_ID_BY_TITLE, stableCheckId, isWellFormedCheckId, allCheckIds } from './corpus/ids/check-id-registry';
+import { CHECK_ID_BY_TITLE, stableCheckId, isWellFormedCheckId, allCheckIds, checkIdFor } from '../src/scoring/check-ids';
+import { makeCheck } from '../src/scoring/checks';
 
 const artifactPath = resolve(dirname(fileURLToPath(import.meta.url)), 'corpus/generated/current-check-inventory.json');
 const artifact = JSON.parse(readFileSync(artifactPath, 'utf8')) as Inventory;
@@ -50,5 +51,22 @@ describe('Lekta Error Corpus - stabilni ID-evi provjera (faza 2)', () => {
     const known = new Set(artifactTitles);
     const dead = Object.keys(CHECK_ID_BY_TITLE).filter((t) => !known.has(t));
     expect(dead, `registar mapira nepostojeci naslov: ${dead.join(', ')}`).toEqual([]);
+  });
+
+  // Od 2026-08-09 `makeCheck` upisuje `id` u svaki Check, s izvedenim `engine:<kat>:<naslov>`
+  // kao rezervom za neregistrirane naslove. Rezerva je mreza za rubne slucajeve, NE mjesto na
+  // kojem provjere ostaju: izvedeni ID nije otporan na preimenovanje, a bas o tom ID-u sada
+  // ovisi detekcija regresije koja odlucuje hoce li se popravak isporuciti.
+  it('nijedna stvarna provjera ne zavrsava na izvedenom ID-u (svaka ima kanonski)', () => {
+    const derived = liveTitles.filter((t) => checkIdFor('formatting', t).startsWith('engine:'));
+    expect(derived, `provjera pada na izvedeni ID umjesto na registrirani: ${derived.join(', ')}`).toEqual([]);
+  });
+
+  it('makeCheck stvarno upisuje kanonski ID (a ne prazan string ili naslov)', () => {
+    const check = makeCheck('formatting', 'Dominantni font', 'pass', 8, 8, 'detalj');
+    expect(check.id).toBe('format.font.dominant');
+    // Neregistriran naslov mora dati izvedeni ID, ne prazan: usporedba prije/poslije inace
+    // uparuje sve takve provjere medjusobno.
+    expect(makeCheck('formatting', 'Izmisljena provjera', 'pass', 1, 1, '').id).toBe('engine:formatting:izmisljena-provjera');
   });
 });

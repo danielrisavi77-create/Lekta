@@ -11,7 +11,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { CHECK_ID_BY_TITLE } from '../ids/check-id-registry';
+import { CHECK_ID_BY_TITLE } from '../../../src/scoring/check-ids';
 import { ATOMIC_CASES } from '../catalog/atomic';
 import { VALID_CONTROL_CASES } from '../catalog/valid-controls';
 import { BOUNDARY_CASES } from '../catalog/boundary';

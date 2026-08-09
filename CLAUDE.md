@@ -247,6 +247,10 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
 - `src/profiles/rule-compiler.ts` - Option A: ruleEntries -> effectiveRules.
 - `src/profiles/profile-schema.ts` - tipovi profila i pravila.
 - `src/profiles/profile-validator.ts` - strukturna validacija profila.
+- `src/scoring/check-ids.ts` - KANONSKI stabilni ID po naslovu provjere; `makeCheck` ga upisuje
+  u `Check.id`. Naslov je od 2026-08-09 samo UI tekst. Ne mijesati s `CHECK_TITLES`
+  (popravne dimenzije) ni sa `stableCheckId(category,title)` u `integration/finding-identity.ts`
+  (izvozni ugovor prema Katedri).
 - `src/{catalog,submission,coverage,methodology,config}/*` - tanki loaderi.
 - `src/citations/*` - Legal Citation Engine i korpusna/CrossRef verifikacija citata.
 - `src/repair/*` - Repair Engine: XML fixeri (`fixers.ts`, `xml-patch.ts`), zip codec,
