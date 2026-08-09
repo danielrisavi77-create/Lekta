@@ -772,3 +772,62 @@ describe('renderRepairPanel: racun bodova prije popravka', () => {
     expect(mountEl.querySelector('.lekta-repair-panel__ceiling-plan')).toBeNull();
   });
 });
+
+describe('renderRepairPanel: spasavanje popravka koji je izazvao pad', () => {
+  it('izostavi zahvat koji obara provjeru i isporuci ostatak', async () => {
+    const mountEl = mount();
+    let downloads = 0;
+    (globalThis.URL as any).createObjectURL = () => { downloads += 1; return 'blob:mock'; };
+    // Prva analiza (sve primijenjeno) javlja regresiju; svaka sljedeca je cista, pa izolacija
+    // nadje krivca i isporuci ostatak. Dvije stavke su nuzne: s jednom nema sto izostaviti.
+    let call = 0;
+    renderRepairPanel({
+      items: [
+        item({ ruleId: 'a', fixerId: 'margins-fixer', label: 'Margine', violated: true }),
+        item({ ruleId: 'b', fixerId: 'font-fixer', label: 'Font', params: { fontName: 'Arial' }, violated: true }),
+      ],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+      beforeScore: {
+        score: 50,
+        categories: {},
+        checks: [chk('Margine dokumenta', 'fail', 0, 6), chk('Oblikovanje fusnota', 'pass', 3, 3)],
+      },
+      reanalyze: async () => {
+        call += 1;
+        return call === 1
+          // Ocjena RASTE, ali je fusnota pala: bas ono sto zbroj sakriva.
+          ? { score: 66, categories: {}, checks: [chk('Margine dokumenta', 'pass', 6, 6), chk('Oblikovanje fusnota', 'fail', 0, 3)] }
+          : { score: 66, categories: {}, checks: [chk('Margine dokumenta', 'pass', 6, 6), chk('Oblikovanje fusnota', 'pass', 3, 3)] };
+      },
+    });
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    await waitFor(() => downloads > 0 || !!mountEl.querySelector('.lekta-repair-panel__delivery-choice'));
+
+    expect(mountEl.textContent).toContain('Jedan popravak je izostavljen');
+    expect(downloads, 'ostatak se isporucuje automatski').toBe(1);
+    expect(mountEl.querySelector('.lekta-repair-panel__delivery-choice'), 'spas je uspio pa nema izbora').toBeNull();
+  });
+
+  it('kad spas ne uspije, odluka ostaje korisniku (ne isporucujemo losiji dokument)', async () => {
+    const mountEl = mount();
+    let downloads = 0;
+    (globalThis.URL as any).createObjectURL = () => { downloads += 1; return 'blob:mock'; };
+    renderRepairPanel({
+      items: [
+        item({ ruleId: 'a', fixerId: 'margins-fixer', label: 'Margine', violated: true }),
+        item({ ruleId: 'b', fixerId: 'font-fixer', label: 'Font', params: { fontName: 'Arial' }, violated: true }),
+      ],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+      beforeScore: { score: 50, categories: {}, checks: [chk('Oblikovanje fusnota', 'pass', 3, 3)] },
+      // Uvijek pao: nijedan podskup ne pomaze.
+      reanalyze: async () => ({ score: 50, categories: {}, checks: [chk('Oblikovanje fusnota', 'fail', 0, 3)] }),
+    });
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    await waitFor(() => !!mountEl.querySelector('.lekta-repair-panel__delivery-choice'));
+    expect(downloads, 'nista se ne isporucuje samo od sebe').toBe(0);
+  });
+});

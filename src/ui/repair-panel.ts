@@ -4,7 +4,8 @@
 // SAMO ako postoji barem jedna autoFixable stavka (scored && autoFixable &&
 // verified, REPAIR_ENGINE.md sekcija 3). Checkboxovi su PREDODABRANI (opt-out).
 
-import type { FixerId } from '../repair/apply-fixers';
+import type { FixerId, FixerRequest } from '../repair/apply-fixers';
+import { evaluateOutcome, isolateCulprit } from '../analysis/repair-plan';
 import type { HeadingCandidate, HeadingStructureWarning } from '../analysis/heading-structure';
 import type { HeadingNumberingPlan } from '../analysis/heading-numbering';
 import type { BibliographyEnrichmentCandidate, BibliographyEnrichmentInput } from '../citations/bibliography-enrichment';
@@ -688,8 +689,20 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
       // svaki nesiguran ishod (analiza nedostupna, vratila null, bacila ili istekla nakon
       // RECHECK_TIMEOUT_MS) vraca prazan popis i dokument ide odmah, kao i prije.
       const regressions = await renderRecheck(summary, result.docxBytes, ctx);
-      if (regressions.length > 0) renderDeliveryChoice(summary, result.docxBytes, ctx);
-      else triggerDownload(result.docxBytes, buildFixedFileName(ctx.originalFileName));
+      if (regressions.length === 0) {
+        triggerDownload(result.docxBytes, buildFixedFileName(ctx.originalFileName));
+      } else {
+        // Regresija je DOKAZANA. Prije nego korisniku prepustimo izbor, pokusaj je ukloniti:
+        // izostavi jedan po jedan zahvat i vidi zatvara li to pad. Trosak snosi samo ovaj,
+        // manjinski slucaj - dokument bez regresije iznad nije platio nijednu dodatnu analizu.
+        const rescued = await rescueWithoutCulprit(summary, docxBytes, requests, ctx);
+        if (rescued) {
+          latestRepairedBytes = rescued.docxBytes;
+          triggerDownload(rescued.docxBytes, buildFixedFileName(ctx.originalFileName));
+        } else {
+          renderDeliveryChoice(summary, result.docxBytes, ctx);
+        }
+      }
     } catch (err) {
       // Fail-safe: ne rusi ekran. Rucne upute iznad ove sekcije (postojeci
       // tekstualni popravci iz UX_PRINCIPLES.md ekrana 5) i dalje vrijede.
@@ -1728,6 +1741,59 @@ function buildRegressionWarning(regressions: PassRegression[]): HTMLElement {
   }
   box.appendChild(ul);
   return box;
+}
+
+/**
+ * Pokusaj spasiti popravak izostavljanjem zahvata koji kvari ishod.
+ *
+ * Zove se SAMO kad je regresija vec dokazana, pa dokument bez regresije ne placa nijednu dodatnu
+ * analizu. Za svaki kandidat izostavi njega, ponovno primijeni ostatak i ponovno analizira;
+ * prvi skup koji prodje `evaluateOutcome` je rjesenje. Najvise jedan prolaz po zahvatu.
+ *
+ * Vraca null kad spas ne uspije (jedan zahvat, ili dva koja se sukobljavaju tek zajedno) - tada
+ * pozivatelj prepusta odluku korisniku. Radije nista nego dokument za koji je dokazano da je losiji.
+ */
+async function rescueWithoutCulprit(
+  el: HTMLElement,
+  originalBytes: Uint8Array,
+  requests: readonly FixerRequest[],
+  ctx: RepairPanelContext,
+): Promise<{ docxBytes: Uint8Array } | null> {
+  const before = ctx.beforeScore;
+  const reanalyze = ctx.reanalyze;
+  if (!before || !reanalyze || requests.length < 2) return null;
+
+  const pending = document.createElement('p');
+  pending.className = 'lekta-repair-panel__recheck-pending';
+  pending.textContent = 'Tražim popravak koji je izazvao pad...';
+  el.appendChild(pending);
+
+  let rescuedBytes: Uint8Array | null = null;
+  try {
+    const { applyFixers } = await import('../repair/apply-fixers');
+    const found = await isolateCulprit(requests, async (kept) => {
+      const attempt = await applyFixers(originalBytes, [...kept]);
+      if (attempt.integrityFailure) return evaluateOutcome(before, before, { integrityFailed: true });
+      const outcome = await withRecheckTimeout(reanalyze(attempt.docxBytes));
+      // Nesiguran ishod NE smije proci kao uspjeh: bez dokaza da je bolje, ne isporucujemo.
+      if (!outcome.ok || outcome.value === null) return { accept: false, regressed: [], delta: null };
+      rescuedBytes = attempt.docxBytes;
+      return evaluateOutcome(before, outcome.value);
+    });
+    pending.remove();
+    if (!found || !rescuedBytes) return null;
+
+    const label = ctx.items.find((item) => item.ruleId === found.culprit.ruleId)?.label || found.culprit.ruleId;
+    const note = document.createElement('div');
+    note.className = 'lekta-repair-panel__regression';
+    note.innerHTML = `<p><strong>Jedan popravak je izostavljen:</strong> ${escapeHtml(label)}.</p><p>Na ovom dokumentu je obarao provjeru koja je prije prolazila, pa je isporučen rezultat bez njega. Ostali popravci su primijenjeni.</p>`;
+    el.appendChild(note);
+    return { docxBytes: rescuedBytes };
+  } catch (err) {
+    pending.remove();
+    console.error('Repair Engine: izolacija krivca nije uspjela', err);
+    return null;
+  }
 }
 
 /**
