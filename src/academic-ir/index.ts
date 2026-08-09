@@ -11,3 +11,6 @@ export * from './validation/types';
 export * from './validation/schema-validation';
 export * from './validation/graph-validation';
 export * from './validation/validate-academic-ir';
+export * from './serialization/canonicalize';
+export * from './serialization/serialize';
+export * from './serialization/digest';
