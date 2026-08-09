@@ -149,22 +149,78 @@ function sourceXml(source: string): string {
   return `<w:p><w:pPr><w:pStyle w:val="Source"/></w:pPr><w:r><w:t xml:space="preserve">Izvor: ${escapeXml(source.trim())}</w:t></w:r></w:p>`;
 }
 
-function listXml(label: string, title: string): string {
-  const safe = escapeXml(label);
-  return `<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>${escapeXml(title)}</w:t></w:r></w:p><w:p><w:r><w:fldChar w:fldCharType="begin" w:dirty="true"/></w:r><w:r><w:instrText xml:space="preserve"> TOC \\h \\z \\c "${safe}"</w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t xml:space="preserve">Popis se azurira u Wordu.</w:t></w:r><w:r><w:fldChar w:fldCharType="end"/></w:r></w:p>`;
+/** Jedan natpis, onako kako ga popis mora prikazati. Broj je isti onaj koji je zapisan u natpis. */
+export interface CaptionEntry {
+  kind: ElementKind;
+  /** Vodeci dio natpisa, npr. "Tablica 1". */
+  heading: string;
+  description: string;
+  /** Sidro oko BROJA u natpisu; PAGEREF ga koristi za broj stranice. */
+  bookmark: string;
+}
+
+/**
+ * Popis slika/tablica kao STATICNE stavke, ne kao `TOC \c` polje.
+ *
+ * Zasto ne TOC: prekidac `\c` skuplja `SEQ` polja s tim identifikatorom, a natpisi ih NAMJERNO
+ * nemaju (RE-58: sidro oko SEQ polja Word pri Fields.Update() obrise, pa i natpis i unakrsna
+ * uputa postanu "Error! Bookmark not defined."). Dvije polovice istog fixera koristile su
+ * nespojive mehanizme, pa je popis nakon osvjezavanja bio PRAZAN, dok je provjera "Popisi slika
+ * i tablica" svejedno davala bodove jer trazi samo naslov popisa.
+ *
+ * Rjesenje ide u istom smjeru u kojem fixer vec radi: numeraciju racuna Lekta deterministicki
+ * pri svakom prolazu, pa je i popis izracunat. Broj stranice ostaje Wordov posao preko
+ * `PAGEREF <sidro> \h`, sto trazi SAMO obican bookmark - tocno onakav kakav natpisi vec imaju i
+ * za koji je RE-58 dokazao da prezivi osvjezavanje.
+ */
+function listXml(title: string, entries: readonly CaptionEntry[]): string {
+  const head = `<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>${escapeXml(title)}</w:t></w:r></w:p>`;
+  const rows = entries
+    .map((entry) => {
+      const text = entry.description.trim() ? `${entry.heading}. ${entry.description.trim()}` : `${entry.heading}.`;
+      const pageref = `<w:r><w:fldChar w:fldCharType="begin" w:dirty="true"/></w:r><w:r><w:instrText xml:space="preserve"> PAGEREF ${escapeXml(entry.bookmark)} \\h </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>1</w:t></w:r><w:r><w:fldChar w:fldCharType="end"/></w:r>`;
+      return `<w:p><w:pPr><w:tabs><w:tab w:val="right" w:leader="dot" w:pos="9060"/></w:tabs></w:pPr><w:r><w:t xml:space="preserve">${escapeXml(text)}</w:t></w:r><w:r><w:tab/></w:r>${pageref}</w:p>`;
+    })
+    .join('');
+  return head + rows;
 }
 
 function replaceBookmarkIds(xml: string, id: number): string {
   return xml.replace(/BOOKMARK_ID/g, String(id));
 }
 
-function insertLists(documentXml: string, lists: ElementCaptionFixParams['lists'], labels: Record<ElementKind, string>): { xml: string; changed: boolean } {
+/** Postoji li vec odlomak ciji je cijeli tekst bas `text` (usporedba na normaliziranom tekstu,
+ *  isto kao paragraphText, pa razmaci i XML podjela runova ne utjecu). */
+function hasParagraphWithText(documentXml: string, text: string): boolean {
+  const wanted = text.replace(/\s+/g, ' ').trim().toLocaleLowerCase('hr');
+  if (!wanted) return false;
+  const body = bodyChildren(documentXml);
+  if (!body) return false;
+  return body.children.some((child) => child.tag === 'p' && paragraphText(child.xml).toLocaleLowerCase('hr') === wanted);
+}
+
+function insertLists(
+  documentXml: string,
+  lists: ElementCaptionFixParams['lists'],
+  labels: Record<ElementKind, string>,
+  captions: readonly CaptionEntry[],
+): { xml: string; changed: boolean } {
   if (!lists?.length) return { xml: documentXml, changed: false };
   let xml = documentXml;
   let changed = false;
   for (const entry of lists) {
     const label = labels[entry.kind];
+    const rows = captions.filter((c) => c.kind === entry.kind);
+    // Bez ijednog natpisa te vrste popis bi bio prazan naslov, sto je upravo kvar koji se ovime
+    // uklanja. Radije ga ne umecemo: provjera "Popisi slika i tablica" tada posteno ostane otvorena.
+    if (!rows.length) continue;
+    // Dva cuvara, jer postoje dva oblika popisa koje ne smijemo udvostruciti:
+    //   1. zatecen Wordov `TOC \c` popis (dokument koji ga vec ima, npr. rucno slozen);
+    //   2. NAS staticni popis iz ranijeg prolaza - prepoznaje se po vlastitom naslovu.
+    // Bez drugog cuvara idempotencija puca: nakon prelaska s TOC polja na staticni popis prvi
+    // cuvar vise nista ne nalazi, pa bi svaki sljedeci prolaz dodavao jos jedan popis.
     if (new RegExp(`TOC[^<]*\\\\c\\s+"${label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`, 'i').test(xml)) continue;
+    if (hasParagraphWithText(xml, entry.title)) continue;
     const body = bodyChildren(xml);
     if (!body) continue;
     const index = entry.placement === 'before-intro'
@@ -172,7 +228,7 @@ function insertLists(documentXml: string, lists: ElementCaptionFixParams['lists'
       : body.children.findIndex((child) => child.tag === 'p' && /^(?:sadrzaj|contents|table of contents)\b/i.test(paragraphText(child.xml)));
     if (index < 0) continue;
     const insertAt = entry.placement === 'before-intro' ? index : index + 1;
-    const insertion = listXml(label, entry.title);
+    const insertion = listXml(entry.title, rows);
     const offset = body.children[insertAt]?.start ?? body.children[index].end;
     const absolute = body.before.length + offset;
     xml = xml.slice(0, absolute) + insertion + xml.slice(absolute);
@@ -290,8 +346,17 @@ export function elementCaptionFixer(parts: DocxXmlParts, params: ElementCaptionF
   const before = new Map<number, string>();
   const after = new Map<number, string>();
   let bookmarkId = nextBookmarkId(parts.documentXml);
+  const captionEntries: CaptionEntry[] = [];
   for (const [ordinalIndex, locatedTarget] of located.sort((a, b) => a.index - b.index).entries()) {
     const { target, index } = locatedTarget;
+    // Prije svih `continue` grana: popis mora nositi i natpise koje NE prepisujemo (vec su
+    // ispravni). Sidro je deterministicno iz target.id, pa postoji i kad natpis ne diramo.
+    captionEntries.push({
+      kind: target.kind,
+      heading: `${target.label || labels[target.kind]} ${ordinalIndex + 1}`,
+      description: target.description,
+      bookmark: bookmarkName(target.id),
+    });
     const above = body.children[index - 1];
     const below = body.children[index + 1];
     const captionIndex = above && captionKind(paragraphText(above.xml)) === target.kind ? index - 1 : below && captionKind(paragraphText(below.xml)) === target.kind ? index + 1 : -1;
@@ -314,7 +379,7 @@ export function elementCaptionFixer(parts: DocxXmlParts, params: ElementCaptionF
   let documentXml = body.before + body.children.map((child, index) => `${remove.has(index) ? '' : `${before.get(index) ?? ''}${child.xml}${after.get(index) ?? ''}`}`).join('') + body.after;
   const refs = replaceReferences(documentXml, params.references, params.elements);
   documentXml = refs.xml;
-  const lists = insertLists(documentXml, params.lists, labels);
+  const lists = insertLists(documentXml, params.lists, labels, captionEntries);
   documentXml = lists.xml;
   const changed = documentXml !== parts.documentXml || refs.changed || lists.changed;
   if (!changed) return noOp(parts, 'already-ok');

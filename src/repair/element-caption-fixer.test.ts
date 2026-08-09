@@ -38,7 +38,15 @@ describe('element-caption-fixer', () => {
     // RE-58: broj vise NIJE SEQ polje nego obican tekst u sidru (vidi komentar uz fieldXml).
     expect(xml).not.toContain('SEQ Tablica');
     expect(xml).toContain('w:name="LektaCaption_element_table_test"');
-    expect(xml).toContain('TOC \\h \\z \\c "Tablica"');
+    // Popis vise NIJE `TOC \c` polje: taj prekidac skuplja SEQ polja, a natpisi ih namjerno nemaju
+    // (RE-58), pa je popis nakon Fields.Update() u Wordu bio PRAZAN, dok je provjera "Popisi slika
+    // i tablica" svejedno davala bodove jer trazi samo naslov popisa. Sada je stavka staticna
+    // (Lekta racuna broj, kao i u natpisu), a Word popunjava samo broj stranice preko PAGEREF na
+    // vec postojece sidro oko broja.
+    expect(xml).not.toContain('TOC \\h \\z \\c');
+    expect(xml).toContain('Popis tablica');
+    expect(xml).toContain('Tablica 1. Rezultati ankete');
+    expect(xml).toContain('PAGEREF LektaCaption_element_table_test');
     expect(xml).toContain('REF LektaCaption_element_table_test');
     expect(xml).toContain('Rezultati ankete</w:t>');
     expect(xml).toContain('<w:tbl><w:tr><w:tc><w:p><w:r><w:t>Podatak</w:t>');
@@ -135,5 +143,32 @@ describe('element-caption-fixer: unakrsna uputa u recenici', () => {
     expect(sentence).toContain('REF LektaCaption_element_table_test');
     // Unutar polja je samo broj.
     expect(sentence).toMatch(/fldCharType="separate"\/><\/w:r><w:r><w:t>1<\/w:t>/);
+  });
+});
+
+describe('element-caption-fixer: popis mora imati stavke', () => {
+  it('bez ijednog natpisa te vrste popis se NE umece (prazan naslov je bio cijeli kvar)', async () => {
+    // Trazi se popis SLIKA, a dokument ima samo tablicu: prije bi se umetnuo naslov "Popis slika"
+    // s TOC poljem koje nista ne skuplja, provjera bi ga priznala, a u Wordu bi ostao prazan.
+    const result = await applyFixers(await docx(), [{
+      fixerId: 'element-caption-fixer', ruleId: 'caption',
+      params: { version: 1, elements: [target()], labels: { table: 'Tablica', figure: 'Slika' }, lists: [{ kind: 'figure', title: 'Popis slika', placement: 'before-intro' }] },
+    }]);
+    const entries = await readZip(result.docxBytes);
+    const xml = new TextDecoder().decode(entries.find((entry) => entry.name === 'word/document.xml')!.data);
+    expect(xml).not.toContain('Popis slika');
+  });
+
+  it('svaka stavka popisa nosi sidro na svoj natpis, pa broj stranice nije izmisljen', async () => {
+    const result = await applyFixers(await docx(), [{
+      fixerId: 'element-caption-fixer', ruleId: 'caption',
+      params: { version: 1, elements: [target()], labels: { table: 'Tablica' }, lists: [{ kind: 'table', title: 'Popis tablica', placement: 'before-intro' }] },
+    }]);
+    const entries = await readZip(result.docxBytes);
+    const xml = new TextDecoder().decode(entries.find((entry) => entry.name === 'word/document.xml')!.data);
+    const bookmarks = [...xml.matchAll(/w:name="(LektaCaption_[A-Za-z0-9_]+)"/g)].map((m) => m[1]);
+    const pagerefs = [...xml.matchAll(/PAGEREF (LektaCaption_[A-Za-z0-9_]+)/g)].map((m) => m[1]);
+    expect(pagerefs.length).toBeGreaterThan(0);
+    for (const ref of pagerefs) expect(bookmarks).toContain(ref);
   });
 });
