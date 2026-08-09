@@ -187,6 +187,21 @@ export const ATOMIC_CASES: ErrorCase[] = [
     expect: { checkId: 'citation.author-year.suffix', title: 'Isti autor i godina (a/b/c)', kind: 'status', outcome: 'not-pass' },
   },
   {
+    id: 'atomic.citation.author-year.suffix-text',
+    title: 'Literatura ima a/b oznake, ali citatnica u tekstu jos nema',
+    category: 'citations', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
+    // Stanje koje je do 2026-08-09 prolazilo kao ISPRAVNO: bibliography-repair-fixer doda oznake
+    // u literaturu, provjera prijedje u 'pass', a citatnica u tekstu ostane "(Kovac, 2020)".
+    // Oznake u tekstu Lekta NE smije dodati sama (ne zna na koji se od dva rada tvrdnja odnosi),
+    // pa je jedino posteno da provjera to i dalje trazi od autora.
+    build: () => mutate((ps, spec) => {
+      const i = ps.findIndex((p) => /Kovac, A\. \(2020\)|Kovač, A\. \(2020\)/.test(p.text));
+      if (i >= 0) ps[i] = line(ps[i].text.replace('(2020)', '(2020a)'));
+      insAfter(spec, /Literatura/, line('Kovač, A. (2020b). Drugi rad o medijima. Zagreb: Naklada.'));
+    }),
+    expect: { checkId: 'citation.author-year.suffix', title: 'Isti autor i godina (a/b/c)', kind: 'status', outcome: 'not-pass' },
+  },
+  {
     id: 'atomic.reference.completeness',
     title: 'Bibliografski zapis bez godine i izdavača',
     category: 'citations', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
