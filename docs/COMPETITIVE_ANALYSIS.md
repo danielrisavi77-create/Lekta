@@ -177,5 +177,18 @@ je vec priznato u samoj analizi (provjera `Zahtjevi za rucnu zavrsnu provjeru`).
 - Tier 2 (Word COM, `verify:word`, `verify:word:worst`) ostaje rucni korak prije deploya repair
   motora, na Windowsu.
 
-Izmjena u `supabase/functions/**` je samo u repozitoriju. Deploy Edge funkcije je zasebna radnja i
-nije napravljen.
+### Stanje deploya (2026-08-09)
+
+- Tier 2 rucni gate iz `docs/GO_LIVE_REPAIR.md` (A0) odraden: `verify:word` i `verify:word:worst`
+  oba izlazni kod 0. Pravi Word otvorio je popravljene dokumente uz `OpenAndRepair=false`, sva
+  ciljana pravila su primijenjena, a tablice, slike, fusnote, sekcije, dijakritika i tekst tijela
+  su ostali netaknuti.
+- `repair-docx` deployan na produkciju: verzija 24 -> **25**, status ACTIVE. Povratna tocka je
+  verzija 24. Boot potvrden: poziv s anon JWT-om vraca `{"error":"unauthorized"}` iz SAME funkcije
+  (dakle modul se ucitao i izvrsio), a ne 401 s gatewaya.
+- `source-check` nije mijenjan pa se nije ni redeployao.
+- **Klijent jos NIJE deployan.** Dok traje to razdoblje vrijedi kombinacija "novi server, stari
+  klijent": ako vrata integriteta opale, stari klijent ne poznaje `integrity_failed` pa padne na
+  genericnu granu i ispise "nedostaje docxBase64". Nijedan pokvaren dokument se pritom ne isporucuje
+  i nista se ne naplacuje, ali je poruka korisniku besmislena. Vrijedi samo za rijedak put; uklanja
+  se prvim objavljivanjem klijenta (korak E runbooka, Netlify objava je rucna).
