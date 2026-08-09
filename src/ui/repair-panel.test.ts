@@ -722,3 +722,53 @@ describe('renderRepairPanel: ledger+modal (uvijek, bez obzira na mix stavki)', (
     expect(backdrop.classList.contains('hidden')).toBe(true);
   });
 });
+
+describe('renderRepairPanel: racun bodova prije popravka', () => {
+  it('prikazuje razine i maksimum, iz STVARNO ponudjenih stavki', () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      ...ctxBase,
+      mountEl,
+      items: [item({ fixerId: 'margins-fixer', violated: true })],
+      beforeScore: {
+        score: 57,
+        categories: {},
+        checks: [chk('Margine dokumenta', 'fail', 0, 6), chk('Dominantni font', 'pass', 8, 8)],
+      },
+    });
+    const box = mountEl.querySelector('.lekta-repair-panel__ceiling-plan')!;
+    expect(box).not.toBeNull();
+    expect(box.textContent).toContain('57/100');  // sada
+    expect(box.textContent).toContain('100/100'); // margins-fixer je bezuvjetan
+    expect(box.textContent).toContain('maksimum za ovaj dokument');
+  });
+
+  it('sadrzajnu stavku imenuje kao ono sto trazi korisnika, ne kao propust alata', () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      ...ctxBase,
+      mountEl,
+      items: [item({ fixerId: 'margins-fixer', violated: true })],
+      beforeScore: {
+        score: 0,
+        categories: {},
+        checks: [chk('Margine dokumenta', 'fail', 0, 6), chk('Profilni opseg riječi', 'fail', 0, 5)],
+      },
+    });
+    const box = mountEl.querySelector('.lekta-repair-panel__ceiling-plan')!;
+    expect(box.textContent).toContain('traži tebe');
+    expect(box.textContent).toContain('Profilni opseg riječi');
+    expect(box.textContent).toContain('5 bodova');
+  });
+
+  it('kad popravak ne moze pomaknuti nista, bloka nema (cetiri iste brojke su samo sum)', () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      ...ctxBase,
+      mountEl,
+      items: [item({ fixerId: 'margins-fixer', violated: true })],
+      beforeScore: { score: 0, categories: {}, checks: [chk('Profilni opseg riječi', 'fail', 0, 5)] },
+    });
+    expect(mountEl.querySelector('.lekta-repair-panel__ceiling-plan')).toBeNull();
+  });
+});

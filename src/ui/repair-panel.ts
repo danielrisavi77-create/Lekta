@@ -11,7 +11,7 @@ import type { BibliographyEnrichmentCandidate, BibliographyEnrichmentInput } fro
 import { enrichWithCrossref } from '../citations/bibliography-enrichment';
 import { renderRepairLedgerModal, type AdvancedFormDescriptor } from './repair-price-slider';
 import type { Check } from '../scoring/checks';
-import { repairCeiling } from './result-readiness';
+import { repairCeiling, reachableCeiling } from './result-readiness';
 import { detectPassRegressions, type PassRegression } from '../analysis/repair-regression';
 
 export interface TitlePageFormField {
@@ -401,11 +401,85 @@ export function advancedFormFor(item: RepairableItem): AdvancedFormDescriptor | 
   return null;
 }
 
+/** Hrvatska mnozina za 'bod' (panel nema pristup app.ts helperima). */
+function bodPlural(n: number): string {
+  const m100 = n % 100, m10 = n % 10;
+  if (m10 === 1 && m100 !== 11) return 'bod';
+  if (m10 >= 2 && m10 <= 4 && !(m100 >= 12 && m100 <= 14)) return 'boda';
+  return 'bodova';
+}
+
+/**
+ * "Koliko je bodova na stolu": sada / sigurno automatski / uz tvoju potvrdu / maksimum.
+ *
+ * Racuna se iz STVARNO ponudjenih stavki (ctx.items), ne iz same sposobnosti fixera, pa ne moze
+ * obecati bodove koje korisnik nece dobiti (vidi reachableCeiling).
+ *
+ * Vraca null kad nema sto reci: bez bodovne ocjene, ili kad popravak ne moze pomaknuti nista
+ * (tada su razine jednake trenutnoj ocjeni i cetiri identicne brojke bile bi samo sum).
+ */
+function buildReachableCeiling(ctx: RepairPanelContext): HTMLElement | null {
+  const checks = ctx.beforeScore?.checks;
+  if (!checks?.length) return null;
+  const ceiling = reachableCeiling(checks, ctx.items);
+  if (!ceiling || ceiling.maximum <= ceiling.current) return null;
+
+  const box = document.createElement('div');
+  box.className = 'lekta-repair-panel__ceiling-plan';
+
+  const rows: Array<[string, number]> = [
+    ['Sada', ceiling.current],
+    ['Sigurno automatski', ceiling.safeAuto],
+    ['Uz tvoju potvrdu', ceiling.confirmed],
+  ];
+  const dl = document.createElement('dl');
+  for (const [label, value] of rows) {
+    const dt = document.createElement('dt');
+    dt.textContent = label;
+    const dd = document.createElement('dd');
+    dd.textContent = `${value}/100`;
+    dl.appendChild(dt);
+    dl.appendChild(dd);
+  }
+  box.appendChild(dl);
+
+  const head = document.createElement('p');
+  head.className = 'lekta-repair-panel__ceiling-plan-max';
+  head.innerHTML = `<strong>${ceiling.maximum}/100 je maksimum za ovaj dokument.</strong>`;
+  box.appendChild(head);
+
+  if (ceiling.blockers.length) {
+    const note = document.createElement('p');
+    // Dva razloga se NE smiju stopiti: "alat to ne smije dirati" je granica proizvoda, a
+    // "popravak postoji, ali nije ponuden" je stanje ovog dokumenta. Korisnik na njih reagira
+    // razlicito, pa dobivaju razlicit tekst.
+    const author = ceiling.blockers.filter((b) => b.reason === 'author-required');
+    note.textContent = author.length
+      ? 'Do 100 nedostaje ono što traži tebe:'
+      : 'Do 100 nedostaje ono za što ovaj dokument nema ponuđen popravak:';
+    box.appendChild(note);
+
+    const ul = document.createElement('ul');
+    for (const b of ceiling.blockers.slice(0, 5)) {
+      const li = document.createElement('li');
+      li.textContent = `${b.gain} ${bodPlural(b.gain)}: ${b.title}`;
+      ul.appendChild(li);
+    }
+    box.appendChild(ul);
+  }
+  return box;
+}
+
 export function renderRepairPanel(ctx: RepairPanelContext): void {
   if (ctx.items.length === 0) return; // nema autoFixable stavki za ovaj rad
 
   const container = document.createElement('div');
   container.className = 'lekta-repair-panel';
+
+  // Racun PRIJE popravka: koliko je bodova na stolu i tko ih moze uzeti. Stoji na vrhu jer je to
+  // obrazlozenje zasto popravak uopce raditi, a ne izvjestaj o vec obavljenom poslu.
+  const ceilingBlock = buildReachableCeiling(ctx);
+  if (ceilingBlock) container.appendChild(ceilingBlock);
 
   const list = document.createElement('ul');
   list.className = 'lekta-repair-panel__list';

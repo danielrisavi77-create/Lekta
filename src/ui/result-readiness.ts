@@ -1,5 +1,7 @@
 import type { Check, Issue } from '../scoring/checks';
 import { classifyFixability } from '../analysis/check-fixer-map';
+import { FIXER_CAPABILITIES } from '../repair/repair-capabilities';
+import type { FixerId } from '../repair/apply-fixers';
 
 export type ResultReadinessKind = 'blocked' | 'needs-work' | 'manual-review' | 'clear';
 
@@ -83,6 +85,92 @@ export interface RepairCeiling {
    *  provjerama). Nije profilno svojstvo - racuna se iz TRENUTNOG stanja provjera. */
   maxScore: number;
   items: RepairCeilingItem[];
+}
+
+/** Minimalan oblik ponudjene stavke; namjerno lokalno, da se izbjegne ciklus prema repair-panel. */
+export interface OfferedRepairItem {
+  fixerId: string;
+  requiresConfirmation?: boolean;
+  recommended?: boolean;
+}
+
+/** Zasto neka provjera ostaje izvan dosega automatskog popravka. */
+export type BlockerReason = 'author-required' | 'not-offered';
+
+export interface ReachableBlocker {
+  id: string;
+  title: string;
+  /** Bodovi koji na ovoj provjeri nedostaju do maksimuma. */
+  gain: number;
+  reason: BlockerReason;
+}
+
+export interface ReachableCeiling {
+  /** Ocjena sada. */
+  current: number;
+  /** Ocjena nakon popravaka koji se primjenjuju bez pitanja. */
+  safeAuto: number;
+  /** Ocjena nakon onih koji traze izricitu potvrdu. Jednako `maximum`. */
+  confirmed: number;
+  maximum: number;
+  blockers: ReachableBlocker[];
+}
+
+/**
+ * Rastav "koliko je bodova na stolu": sada / sigurno automatski / uz potvrdu / maksimum.
+ *
+ * KLJUCNO: racuna se iz STVARNO PONUDJENIH stavki, ne iz same sposobnosti fixera.
+ * `FIXER_CAPABILITIES` kaze sto fixer ZNA popraviti, ali ne i hoce li se za OVAJ dokument
+ * ponuditi: `element-caption-fixer` trazi profilno pravilo koje ima 3 od 368 profila,
+ * `heading-style-fixer` trazi prepoznate kandidate, `toc-field-fixer` naslov "Sadrzaj" bez
+ * zivog polja. Strop racunat iz same sposobnosti obecavao bi bodove koje korisnik nikad nece
+ * dobiti - ista greska koju je registar sposobnosti upravo uklonio, samo u drugom smjeru.
+ *
+ * Zato sposobnost sluzi da se ponudjena stavka PRESLIKA na provjere koje zatvara, a odlucuje
+ * ponuda. Razina dolazi iz same stavke (`requiresConfirmation`/`recommended`), jer ona zna
+ * vise od registra: isti fixer zna biti bezuvjetan ili trazi potvrdu ovisno o pouzdanosti
+ * kandidata (vidi heading-style).
+ */
+export function reachableCeiling(
+  checks: readonly Check[] = [],
+  offered: readonly OfferedRepairItem[] = [],
+): ReachableCeiling | null {
+  const scored = checks.filter((c) => c.scored && c.max > 0);
+  const totalMax = scored.reduce((sum, c) => sum + c.max, 0);
+  if (!totalMax) return null; // profil ne daje bodovnu ocjenu, pa nema ni stropa
+
+  const earned = scored.reduce((sum, c) => sum + c.earned, 0);
+  const pct = (points: number) => Math.round((points / totalMax) * 100);
+
+  let safeGain = 0;
+  let confirmGain = 0;
+  const blockers: ReachableBlocker[] = [];
+
+  for (const check of scored) {
+    const gap = check.max - check.earned;
+    if (gap <= 0) continue;
+
+    const item = offered.find((o) => FIXER_CAPABILITIES[o.fixerId as FixerId]?.checkIds.includes(check.id));
+    if (!item) {
+      // Razlikujemo dva razloga jer korisniku znace posve razlicito: "alat to ne smije dirati"
+      // nije isto sto i "popravak postoji, ali za ovaj dokument nije ponudjen".
+      const reason: BlockerReason =
+        classifyFixability(check.id || check.title).fixability === 'manual' ? 'author-required' : 'not-offered';
+      blockers.push({ id: check.id, title: check.title, gain: gap, reason });
+      continue;
+    }
+    if (item.requiresConfirmation || item.recommended) confirmGain += gap;
+    else safeGain += gap;
+  }
+
+  const confirmed = pct(earned + safeGain + confirmGain);
+  return {
+    current: pct(earned),
+    safeAuto: pct(earned + safeGain),
+    confirmed,
+    maximum: confirmed,
+    blockers: blockers.sort((a, b) => b.gain - a.gain),
+  };
 }
 
 /**

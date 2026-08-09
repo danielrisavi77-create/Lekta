@@ -558,3 +558,50 @@
 @media (prefers-reduced-motion: reduce) {
   .lekta-repair-ledger-row--target { animation: none; background-color: rgba(26, 122, 84, 0.12); }
 }
+
+/* Racun "koliko je bodova na stolu", na vrhu panela PRIJE popravka. Namjerno mirno: ovo je
+   obrazlozenje odluke, ne nalaz, pa ne koristi crvenu (u ovom sustavu rezervirana za nalaze). */
+.lekta-repair-panel__ceiling-plan {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+  background: var(--panel);
+}
+
+.lekta-repair-panel__ceiling-plan dl {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.3rem 1rem;
+  margin: 0 0 0.7rem;
+}
+
+.lekta-repair-panel__ceiling-plan dt {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.lekta-repair-panel__ceiling-plan dd {
+  margin: 0;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.lekta-repair-panel__ceiling-plan-max {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+}
+
+.lekta-repair-panel__ceiling-plan p {
+  margin: 0 0 0.35rem;
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+
+.lekta-repair-panel__ceiling-plan ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.84rem;
+  color: var(--muted);
+}
