@@ -17,6 +17,7 @@ export type AcademicIRValidationCode =
   | 'IR_ANALYSIS_DATASET_MISSING'
   | 'IR_DOCUMENT_LINK_MISSING'
   | 'IR_SNAPSHOT_PROJECT_MISMATCH'
+  | 'IR_SNAPSHOT_CREATED_AT_INVALID'
   | 'IR_SUBMISSION_MUTABLE';
 
 export interface AcademicIRValidationFinding {
