@@ -293,9 +293,9 @@ Changing the document may invalidate the anchor without invalidating the durable
 
 ## 9. Document reconciliation
 
-Document reconciliation is a required v0.1 design capability even though the reconciliation engine is a separate implementation subproject.
+Document reconciliation is a required **minimal Core v0.1 capability** because stable node identity is foundational. Core v0.1 implements only the deterministic baseline needed for stable-ID acceptance tests; production-grade matching across complex edits remains the next dedicated DOCX Projection & Reconciliation subproject.
 
-Its purpose is to preserve durable node identity across normal document edits.
+Its purpose is to preserve durable node identity across normal document edits without guessing when the match is ambiguous.
 
 Required behavior:
 
@@ -316,10 +316,8 @@ New anchor = paragraph 49
 
 ### 9.1 Reconciliation inputs
 
-A reconciliation implementation MAY use:
+The Core v0.1 deterministic matcher MUST support exact normalized-content fingerprint matches with enough structural context to survive unrelated insertions before a node. The API is designed so the later production matcher MAY additionally use:
 
-- previous node ID;
-- old and new content fingerprint;
 - normalized text similarity;
 - surrounding-node fingerprints;
 - heading/section context;
@@ -329,7 +327,7 @@ A reconciliation implementation MAY use:
 
 ### 9.2 Reconciliation result vocabulary
 
-The eventual reconciliation engine MUST distinguish:
+The reconciliation contract MUST distinguish:
 
 ```ts
 export type ReconciliationStatus =
@@ -339,6 +337,8 @@ export type ReconciliationStatus =
   | 'new'
   | 'removed';
 ```
+
+Core v0.1 is required to emit `exact`, `ambiguous`, `new`, and `removed`. `high-confidence` is reserved for the later production matcher unless Core can establish it through an explicitly tested deterministic rule.
 
 Ambiguous matches MUST NOT silently attach provenance, mentor feedback, or claims to an arbitrary new node.
 
@@ -365,7 +365,7 @@ It is graph-shaped rather than document-tree-shaped.
 ```ts
 export interface ResearchGraph {
   nodes: ResearchNode[];
-  edges: ResearchEdge[];
+  edges: ResearchGraphEdge[];
 }
 ```
 
@@ -387,6 +387,47 @@ export type ResearchNodeType =
 ```
 
 Figures and tables remain document nodes and may be linked to research nodes through edges rather than duplicated as independent canonical research nodes.
+
+### 10.2 Research node union
+
+The canonical v0.1 union is explicit:
+
+```ts
+export interface ResearchNodeBase {
+  id: string;
+  type: ResearchNodeType;
+  persistence: PersistenceClass;
+  documentNodeIds?: string[];
+}
+
+export interface DatasetNode extends ResearchNodeBase {
+  type: 'dataset';
+  name?: string;
+  uri?: string;
+  digest?: string;
+}
+
+export interface GenericResearchNode extends ResearchNodeBase {
+  type:
+    | 'research-question'
+    | 'hypothesis'
+    | 'method'
+    | 'finding'
+    | 'limitation';
+  text?: string;
+  label?: string;
+  metadata?: Record<string, unknown>;
+}
+
+export type ResearchNode =
+  | ClaimNode
+  | SourceNode
+  | DatasetNode
+  | AnalysisNode
+  | GenericResearchNode;
+```
+
+`GenericResearchNode` is intentionally narrow: it prevents v0.1 from prematurely inventing rich schemas for research questions, hypotheses, methods, findings, and limitations while still giving each one stable identity and graph participation. Later schema versions may specialize them through explicit migrations.
 
 ## 11. ClaimNode
 
@@ -461,6 +502,7 @@ export interface SourceNode {
     verifier?: string;
   };
 
+  documentNodeIds?: string[];
   persistence: PersistenceClass;
 }
 ```
@@ -487,10 +529,8 @@ export interface EvidenceEdge {
   claimId: string;
 
   target:
-    | { type: 'source'; id: string }
-    | { type: 'analysis'; id: string }
-    | { type: 'dataset'; id: string }
-    | { type: 'document-node'; id: string };
+    | { scope: 'research'; type: 'source' | 'analysis' | 'dataset'; id: string }
+    | { scope: 'document'; type: 'document-node'; id: string };
 
   relation:
     | 'supports'
@@ -551,6 +591,7 @@ export interface AnalysisNode {
     | 'failed';
 
   executedAt?: string;
+  documentNodeIds?: string[];
   persistence: PersistenceClass;
 }
 
@@ -573,7 +614,7 @@ The first version of Academic IR does not execute analyses itself. It defines th
 
 ## 15. Research relationships
 
-`ResearchEdge` MUST support at minimum:
+The generic relationship edge is explicit:
 
 ```ts
 export type ResearchRelation =
@@ -587,6 +628,22 @@ export type ResearchRelation =
   | 'derived-from'
   | 'discussed-in'
   | 'limits';
+
+export type ResearchEndpointRef =
+  | { scope: 'research'; id: string }
+  | { scope: 'document'; id: string };
+
+export interface ResearchEdge {
+  id: string;
+  type: 'relation';
+  from: ResearchEndpointRef;
+  to: ResearchEndpointRef;
+  relation: ResearchRelation;
+  persistence: PersistenceClass;
+  metadata?: Record<string, unknown>;
+}
+
+export type ResearchGraphEdge = EvidenceEdge | ResearchEdge;
 ```
 
 Edges MUST carry stable IDs where they have durable workflow meaning.
@@ -595,24 +652,22 @@ A representative graph is:
 
 ```text
 ResearchQuestion RQ1
-       │
-     tests
-       ▼
+       ▲
+       │ addresses
 Hypothesis H1
+       ▲
+       │ tests
+Analysis A3 ── uses ──► Dataset D1
        │
-  represented by
-       ▼
-Claim C18
-   │                     │
-   │ supports            │ contradicts
-   ▼                     ▼
+       └─ generates ──► Figure F4 (document node)
+
+Claim C18 ── addresses ──► ResearchQuestion RQ1
+   ▲                     ▲
+   │ supports            │ contextualizes
 Source S7             Source S14
-   │
-   └──────── supports ───────► Analysis A3
-                                  │
-                                  ├─ uses ───────► Dataset D1
-                                  └─ generates ──► Figure F4
 ```
+
+The diagram is illustrative; every persisted relation still uses the explicit `from`, `to`, and `ResearchRelation` vocabulary above.
 
 ## 16. ProcessGraph
 
@@ -777,8 +832,10 @@ Examples:
 - every `parentId` resolves;
 - every `childId` resolves;
 - no impossible parent-child cycles occur in document tree;
-- every research edge source/target resolves;
+- every `ResearchGraphEdge` endpoint resolves in the correct scope;
 - every evidence `claimId` resolves to a claim;
+- every `AnalysisNode.datasetIds` entry resolves to a dataset node;
+- every `documentNodeId` resolves to a document node;
 - snapshot project ID equals Academic IR project ID.
 
 ### 20.3 Ownership/semantic validation
@@ -787,8 +844,8 @@ Examples:
 
 - a formal `VERIFIED_FIXED` status cannot be invented by Academic IR;
 - a submission snapshot must be immutable;
-- public/sanitized transport must not automatically include fields classified local-only;
-- an `AnalysisNode.status = 'verified'` requires recorded verification provenance, once that verification workflow is implemented.
+- a cloud/public projection must not include fields classified local-only unless an explicit sanitizer/promoter has changed the projection's persistence classification;
+- an `AnalysisNode.status = 'verified'` requires recorded verification provenance once that verification workflow is implemented.
 
 Validation MUST return structured findings rather than only throwing generic exceptions.
 
@@ -1029,7 +1086,7 @@ Academic IR Core v0.1 includes only the minimum required foundation:
 8. deterministic serialization rules;
 9. validation;
 10. initial Lekta document projection;
-11. reconciliation contract and first deterministic reconciliation behavior;
+11. baseline exact/ambiguous document reconciliation sufficient for the required stable-ID acceptance scenarios;
 12. test fixtures demonstrating round-trip serialization and stable node identity.
 
 ## 30. Explicit non-goals for v0.1
@@ -1054,7 +1111,8 @@ The following are NOT part of Academic IR Core v0.1 implementation:
 - mentor portal;
 - public source-PDF redistribution;
 - full Academic IR cloud synchronization;
-- a third Academic Suite repository/package.
+- a third Academic Suite repository/package;
+- production-grade fuzzy reconciliation across arbitrary rewrites, moves, splits, and merges.
 
 These may be later subprojects built on the v0.1 foundation.
 
@@ -1064,7 +1122,7 @@ The implementation plan MUST include tests covering at minimum the following beh
 
 ### A. Root validity
 
-A minimal Academic IR object with a valid project ID, document root, empty optional graphs, and no snapshots passes validation.
+A minimal Academic IR object with a valid project ID, document root, empty research/process/provenance arrays, and no snapshots passes validation.
 
 ### B. Broken reference rejection
 
@@ -1108,7 +1166,7 @@ and Version B inserts two unrelated paragraphs above, reconciliation preserves n
 
 ### H. Ambiguous reconciliation safety
 
-If two possible new paragraphs are equally plausible matches, the reconciliation status is `ambiguous` and the engine does not silently reattach the old durable identity to either candidate.
+If two new candidate paragraphs have the same normalized fingerprint/context required by the Core matcher, the reconciliation status is `ambiguous` and the engine does not silently reattach the old durable identity to either candidate.
 
 ### I. Privacy projection
 
@@ -1117,6 +1175,14 @@ The initial Lekta projection used for Academic IR generation does not alter the 
 ### J. Existing contract independence
 
 Academic IR schema versioning is independent of `ACADEMIC_SUITE_CONTRACT_VERSION`; introducing Academic IR does not require changing the existing shared contract version when no existing field semantics change.
+
+### K. Research endpoint integrity
+
+A generic research relation referencing a missing research/document endpoint fails validation with a structured scope-aware finding.
+
+### L. Analysis dataset integrity
+
+An `AnalysisNode.datasetIds` value that does not resolve to a `DatasetNode` fails validation.
 
 ## 32. Error handling principles
 
@@ -1163,7 +1229,7 @@ It does NOT mean Academic IR must copy every field from those standards.
 
 After Academic IR Core v0.1, the recommended program order is:
 
-1. **DOCX Projection & Reconciliation** — strengthen durable mapping from Lekta structure to Academic IR;
+1. **Production DOCX Projection & Reconciliation** — extend the baseline Core matcher to durable matching across complex edits, moves, splits, merges, figures/tables, and richer OOXML identity;
 2. **Research Graph** — production Claim/Source/Evidence/Analysis workflows;
 3. **Process & Provenance Graph** — version/AI/mentor decision history;
 4. **MyST Publishing Adapter** — citations, PDF, LaTeX, Typst and generic DOCX interoperability;
@@ -1175,7 +1241,25 @@ After Academic IR Core v0.1, the recommended program order is:
 
 Each is a separate spec/implementation-plan cycle and should produce independently testable software.
 
-## 36. Final architectural invariant
+## 36. Self-review result
+
+The design has been reviewed against the existing Lekta/Katedra foundation decisions.
+
+Confirmed invariants:
+
+- no existing Shared Academic Suite field is redefined;
+- Academic IR has an independent schema version;
+- the full IR remains local-first;
+- Lekta remains the only formal verification authority;
+- Katedra remains the process/reasoning authority;
+- submission artifacts remain immutable truth records;
+- research/document/process/provenance concerns are separated;
+- ResearchNode and ResearchGraphEdge unions are explicit;
+- reconciliation scope is unambiguous: baseline deterministic matching is Core v0.1, production-grade matching is the next subproject;
+- all required v0.1 behaviors have named acceptance scenarios;
+- there are no `TBD`, `TODO`, or intentionally undefined implementation requirements in this specification.
+
+## 37. Final architectural invariant
 
 The following sentence is the canonical design summary:
 
