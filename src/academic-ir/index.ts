@@ -7,3 +7,7 @@ export * from './schema/provenance';
 export * from './schema/snapshot';
 export * from './schema/root';
 export * from './create-academic-ir';
+export * from './validation/types';
+export * from './validation/schema-validation';
+export * from './validation/graph-validation';
+export * from './validation/validate-academic-ir';
