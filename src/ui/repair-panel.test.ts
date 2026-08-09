@@ -7,7 +7,7 @@ import { checkIdFor } from '../scoring/check-ids';
 function chk(title: string, status: string, earned: number, max: number): Check {
   // `id` ide kroz checkIdFor, isto kao u makeCheck: regresija se od 2026-08-09 uparuje po ID-u,
   // pa rucno slozen literal s praznim ID-om ne bi testirao stvarni put.
-  return { id: checkIdFor('formatting', title), category: 'formatting', title, status, earned, max, detail: '', issue: null, scored: max > 0 };
+  return { id: checkIdFor('formatting', title), evidence: max > 0 ? 'measured' : 'not-applicable', category: 'formatting', title, status, earned, max, detail: '', issue: null, scored: max > 0 };
 }
 
 /** Cekaj dok uvjet ne postane istinit (async DOM nakon klika: dinamicki import + applyFixers + reanalyze).

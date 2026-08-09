@@ -27,6 +27,18 @@ export interface Check {
    * Nije u golden snapshotima: `tests/helpers/golden-normalize.ts` bira polja poimence.
    */
   id: string;
+  /**
+   * Je li ishod DOKAZAN mjerenjem, ili je pretpostavljen jer se vrijednost nije dala ocitati.
+   *
+   * Analiza je namjerno fail-open: kad Word ne zapise font/velicinu/prored/margine, check dobiva
+   * PUNE bodove i status 'pass' (vidi analyze-docx). To je ispravno jer stiti od laznih optuzbi,
+   * ali znaci da `100/100` moze znaciti "nije bilo sto izmjeriti", a ne "dokazano ispravno".
+   * Bodovanje se zbog toga NE mijenja; ova oznaka samo omogucuje da uz ocjenu stoji i posten
+   * podatak koliko je od nje stvarno izmjereno (`verificationCoverage`).
+   *
+   * 'not-applicable' = nije bodovano (max 0), pa ni ne ulazi u pokrivenost.
+   */
+  evidence: 'measured' | 'assumed' | 'not-applicable';
   category: string;
   title: string;
   status: string;
@@ -52,7 +64,50 @@ export function makeCheck(
     detail = `Informativno: ne ulazi u službenu ocjenu. ${detail}`;
     if (issue) issue = { ...issue, severity: 'info', title: `Informativno: ${issue.title}` };
   }
-  return { id: checkIdFor(category, title), category, title, status, earned: clamp(earned, 0, max), max, detail, issue, scored: max > 0 };
+  return {
+    id: checkIdFor(category, title),
+    // Default je 'measured'; fail-open grane analyzeDocx nakon toga oznace svoje provjere kao
+    // 'assumed' (markAssumedEvidence), na jednom mjestu i po stabilnom id-u.
+    evidence: max > 0 ? 'measured' : 'not-applicable',
+    category,
+    title,
+    status,
+    earned: clamp(earned, 0, max),
+    max,
+    detail,
+    issue,
+    scored: max > 0,
+  };
+}
+
+/**
+ * Oznaci provjere cija vrijednost NIJE bila citljiva, pa su prosle fail-open granom.
+ *
+ * Zove se jednom, nakon sto je `checks` sastavljen, umjesto da se `evidence` provlaci kroz
+ * svaki `makeCheck` poziv. Kljuc je stabilan `Check.id`, pa veza ne ovisi o formulaciji naslova.
+ * `unreadable` mapira id -> je li bas u OVOM dokumentu vrijednost izostala.
+ */
+export function markAssumedEvidence(checks: Check[], unreadable: Record<string, boolean>): void {
+  for (const c of checks) {
+    if (c.max > 0 && unreadable[c.id]) c.evidence = 'assumed';
+  }
+}
+
+/**
+ * Udio BODOVANIH bodova cija je vrijednost stvarno izmjerena.
+ *
+ * Namjerno odvojeno od ocjene: `score` govori koliko je pravila zadovoljeno, `coverage` koliko
+ * je od toga dokazano. Dokument koji uopce ne zapisuje font, velicinu i prored dobiva pune bodove
+ * (fail-open), ali nisku pokrivenost - i to je istina koju korisnik treba vidjeti.
+ *
+ * Vraca `null` kad nema bodovanih provjera (tada ni ocjena ne postoji).
+ */
+export function verificationCoverage(checks: Check[] = []): { percent: number; assumed: number } | null {
+  const scored = checks.filter((c) => c.max > 0);
+  const max = scored.reduce((s, c) => s + c.max, 0);
+  if (!max) return null;
+  const measured = scored.filter((c) => c.evidence !== 'assumed').reduce((s, c) => s + c.max, 0);
+  return { percent: Math.round((measured / max) * 100), assumed: scored.filter((c) => c.evidence === 'assumed').length };
 }
 
 /**
