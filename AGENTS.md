@@ -42,6 +42,10 @@ NE izvodi, nego provjeri je li fixer poznat i ziv, sanira parametre i izvrsi.
 - Dokument ide na server SAMO za popravak. Provjera izvora ide zasebnim usporednim
   pozivom (supabase/functions/source-check), a pohrana u "Moji popravci" dovrsava se
   u pozadini (EdgeRuntime.waitUntil).
+- Koje provjere koji fixer popravlja stoji u src/repair/repair-capabilities.ts
+  (`Record<FixerId, ...>`, pa nov fixer ne moze proci bez unosa). classifyFixability i
+  repairCeiling se IZVODE iz njega. Upisuj samo ono za sto imas dokaz: precijenjen
+  strop obecava bodove koje popravak ne moze isporuciti.
 - ISPORUKA TEK NAKON VERIFIKACIJE (lokalni panel): performRepair prvo pokrene re-check,
   pa automatski preuzima samo ako nema DOKAZA o pogorsanju; kad ga ima, nudi izricit
   izbor (renderDeliveryChoice). Verifikacija smije odgoditi i zamijeniti automatsko

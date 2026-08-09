@@ -247,6 +247,11 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
 - `src/profiles/rule-compiler.ts` - Option A: ruleEntries -> effectiveRules.
 - `src/profiles/profile-schema.ts` - tipovi profila i pravila.
 - `src/profiles/profile-validator.ts` - strukturna validacija profila.
+- `src/repair/repair-capabilities.ts` - KOJE bodovane provjere koji fixer moze popraviti
+  (`Record<FixerId,...>`, pa nov fixer ne moze proci bez unosa). Iz njega se IZVODI
+  `classifyFixability`, a time i `repairCeiling`. Odvojen od `repair-surface.ts` (rollout status)
+  jer ga cita analiticki Web Worker koji ne smije povuci repair runtime. Popunjava se SAMO iz
+  dokaza; precijenjen strop obecava bodove koje popravak ne moze isporuciti.
 - `src/scoring/check-ids.ts` - KANONSKI stabilni ID po naslovu provjere; `makeCheck` ga upisuje
   u `Check.id`. Naslov je od 2026-08-09 samo UI tekst. Ne mijesati s `CHECK_TITLES`
   (popravne dimenzije) ni sa `stableCheckId(category,title)` u `integration/finding-identity.ts`

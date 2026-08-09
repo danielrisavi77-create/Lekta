@@ -148,7 +148,7 @@ export function buildTriage(result: TriageInput): TriageModel {
 
   for (const check of checks) {
     if (!isFinding(check)) continue;
-    const { fixability, fixId, groupKey } = classifyFixability(check.title);
+    const { fixability, fixId, groupKey } = classifyFixability(check.id || check.title);
     let id = `chk:${slug(check.category)}:${slug(check.title)}`;
     while (seenIds.has(id)) id += '-2';
     seenIds.add(id);

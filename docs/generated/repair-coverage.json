@@ -15645,187 +15645,324 @@
       "fixerId": "margins-fixer",
       "kind": "profile",
       "entryPoint": "buildRepairableItems",
-      "note": "Cilj dolazi iz profilnih margina."
+      "note": "Cilj dolazi iz profilnih margina.",
+      "checkIds": [
+        "page.margins"
+      ],
+      "mode": "safe-auto"
     },
     {
       "fixerId": "paper-size-fixer",
       "kind": "profile",
       "entryPoint": "buildRepairableItems",
-      "note": "Cilj dolazi iz profilne veličine papira."
+      "note": "Cilj dolazi iz profilne veličine papira.",
+      "checkIds": [
+        "page.size.a4",
+        "page.size.a4-list",
+        "page.size.project"
+      ],
+      "mode": "safe-auto"
     },
     {
       "fixerId": "font-fixer",
       "kind": "profile",
       "entryPoint": "buildRepairableItems",
-      "note": "Cilj dolazi iz profilne tipografije."
+      "note": "Cilj dolazi iz profilne tipografije.",
+      "checkIds": [
+        "format.font.dominant",
+        "format.size.body"
+      ],
+      "mode": "safe-auto"
     },
     {
       "fixerId": "line-spacing-fixer",
       "kind": "profile",
       "entryPoint": "buildRepairableItems",
-      "note": "Cilj dolazi iz profilnog proreda."
+      "note": "Cilj dolazi iz profilnog proreda.",
+      "checkIds": [
+        "format.spacing.body"
+      ],
+      "mode": "safe-auto"
     },
     {
       "fixerId": "alignment-fixer",
       "kind": "profile",
       "entryPoint": "buildRepairableItems",
-      "note": "Cilj dolazi iz profilnog poravnanja."
+      "note": "Cilj dolazi iz profilnog poravnanja.",
+      "checkIds": [
+        "format.justify.body"
+      ],
+      "mode": "safe-auto"
     },
     {
       "fixerId": "paragraph-spacing-fixer",
       "kind": "ui-assisted",
       "entryPoint": "paragraphSpacingRepairableItem",
-      "note": "Posebna UI stavka, gated profilnim checkom."
+      "note": "Posebna UI stavka, gated profilnim checkom.",
+      "checkIds": [
+        "format.spacing.paragraph"
+      ],
+      "mode": "safe-auto"
     },
     {
       "fixerId": "page-numbering-fixer",
       "kind": "ui-assisted",
       "entryPoint": "pageNumberingRepairableItem",
-      "note": "Posebna UI stavka za shemu numeriranja."
+      "note": "Posebna UI stavka za shemu numeriranja.",
+      "checkIds": [
+        "page.numbers.start",
+        "page.numbers.scheme"
+      ],
+      "mode": "safe-auto"
     },
     {
       "fixerId": "footer-page-fixer",
       "kind": "dispatch-only",
       "entryPoint": "applyFixers",
-      "note": "Pomoćni fixer; nije samostalna UI stavka."
+      "note": "Pomoćni fixer; nije samostalna UI stavka.",
+      "checkIds": [],
+      "mode": "safe-auto"
     },
     {
       "fixerId": "section-insert-fixer",
       "kind": "ui-assisted",
       "entryPoint": "introSectionRepairableItem",
-      "note": "Posebna UI stavka s potvrdom mjesta umetanja."
+      "note": "Posebna UI stavka s potvrdom mjesta umetanja.",
+      "checkIds": [
+        "page.numbers.start",
+        "page.numbers.scheme"
+      ],
+      "mode": "confirm",
+      "alternativeOf": "page-numbering-fixer"
     },
     {
       "fixerId": "empty-paragraph-fixer",
       "kind": "ui-assisted",
       "entryPoint": "universalRepairableItems",
-      "note": "Univerzalna UI higijena dokumenta."
+      "note": "Univerzalna UI higijena dokumenta.",
+      "checkIds": [
+        "element.empty-paragraphs"
+      ],
+      "mode": "safe-auto"
     },
     {
       "fixerId": "footnote-spacing-fixer",
       "kind": "ui-assisted",
       "entryPoint": "footnoteSpacingRepairableItem",
-      "note": "Posebna UI stavka gated profilnim checkom."
+      "note": "Posebna UI stavka gated profilnim checkom.",
+      "checkIds": [
+        "footnote.spacing"
+      ],
+      "mode": "safe-auto"
     },
     {
       "fixerId": "page-number-alignment-fixer",
       "kind": "ui-assisted",
       "entryPoint": "pageNumberAlignmentRepairableItem",
-      "note": "Posebna UI stavka gated profilnim zahtjevom."
+      "note": "Posebna UI stavka gated profilnim zahtjevom.",
+      "checkIds": [
+        "page.numbers.position"
+      ],
+      "mode": "safe-auto"
     },
     {
       "fixerId": "toc-field-fixer",
       "kind": "ui-assisted",
       "entryPoint": "tocFieldRepairableItem",
-      "note": "Posebna UI stavka za živo Word polje sadržaja."
+      "note": "Posebna UI stavka za živo Word polje sadržaja.",
+      "checkIds": [
+        "toc.present",
+        "toc.field"
+      ],
+      "mode": "safe-auto"
     },
     {
       "fixerId": "heading-format-fixer",
       "kind": "ui-assisted",
       "entryPoint": "headingFormatRepairableItem",
-      "note": "Posebna UI stavka iz profilnih headingRules."
+      "note": "Posebna UI stavka iz profilnih headingRules.",
+      "checkIds": [
+        "structure.heading.format"
+      ],
+      "mode": "safe-auto"
     },
     {
       "fixerId": "heading-style-fixer",
       "kind": "ui-assisted",
       "entryPoint": "headingStructureRepairableItem",
-      "note": "Posebna UI stavka za mapiranje strukture naslova."
+      "note": "Posebna UI stavka za mapiranje strukture naslova.",
+      "checkIds": [
+        "structure.heading.word-styles",
+        "structure.heading.hierarchy"
+      ],
+      "mode": "confirm"
     },
     {
       "fixerId": "title-page-fixer",
       "kind": "ui-assisted",
       "entryPoint": "titlePageRepairableItem",
-      "note": "Posebna UI stavka prema odabranom predlošku naslovnice."
+      "note": "Posebna UI stavka prema odabranom predlošku naslovnice.",
+      "checkIds": [
+        "title.elements",
+        "title.order"
+      ],
+      "mode": "confirm"
     },
     {
       "fixerId": "footnote-typography-fixer",
       "kind": "ui-assisted",
       "entryPoint": "footnoteTypographyRepairableItem",
-      "note": "Posebna UI stavka za tipografiju fusnota."
+      "note": "Posebna UI stavka za tipografiju fusnota.",
+      "checkIds": [
+        "footnote.format"
+      ],
+      "mode": "safe-auto"
     },
     {
       "fixerId": "heading-case-fixer",
       "kind": "ui-assisted",
       "entryPoint": "headingCaseRepairableItem",
-      "note": "Tekstualna UI stavka koja traži zasebnu potvrdu."
+      "note": "Tekstualna UI stavka koja traži zasebnu potvrdu.",
+      "checkIds": [
+        "structure.heading.format"
+      ],
+      "mode": "confirm"
     },
     {
       "fixerId": "element-caption-fixer",
       "kind": "ui-assisted",
       "entryPoint": "elementCaptionRepairableItem",
-      "note": "Posebna UI stavka za opise elemenata."
+      "note": "Posebna UI stavka za opise elemenata.",
+      "checkIds": [
+        "element.table.caption",
+        "element.figure.caption",
+        "element.source",
+        "element.lists"
+      ],
+      "mode": "confirm"
     },
     {
       "fixerId": "bibliography-repair-fixer",
       "kind": "ui-assisted",
       "entryPoint": "bibliographyRepairableItem",
-      "note": "Posebna UI stavka za literaturu."
+      "note": "Posebna UI stavka za literaturu.",
+      "checkIds": [
+        "reference.completeness",
+        "citation.author-year.missing-reference",
+        "reference.uncited",
+        "reference.alphabetical",
+        "citation.author-year.suffix"
+      ],
+      "mode": "confirm"
     },
     {
       "fixerId": "citation-bibliography-sync-fixer",
       "kind": "ui-assisted",
       "entryPoint": "citationBibliographySyncRepairableItem",
-      "note": "Posebna UI stavka za sinkronizaciju citata."
+      "note": "Posebna UI stavka za sinkronizaciju citata.",
+      "checkIds": [
+        "citation.author-year.missing-reference",
+        "reference.uncited",
+        "citation.direct-quote-locator",
+        "citation.author-year.suffix"
+      ],
+      "mode": "confirm"
     },
     {
       "fixerId": "legal-footnote-repair-fixer",
       "kind": "ui-assisted",
       "entryPoint": "legalFootnoteRepairableItem",
-      "note": "Posebna UI stavka za pravne fusnote."
+      "note": "Posebna UI stavka za pravne fusnote.",
+      "checkIds": [
+        "legal.footnotes-present",
+        "legal.opcit",
+        "legal.ibid",
+        "legal.act-abbrev",
+        "legal.footnote-bibliography"
+      ],
+      "mode": "confirm"
     },
     {
       "fixerId": "final-document-inspector-fixer",
       "kind": "ui-assisted",
       "entryPoint": "finalDocumentInspectorRepairableItem",
-      "note": "Posebna UI završna inspekcija."
+      "note": "Posebna UI završna inspekcija.",
+      "checkIds": [],
+      "mode": "confirm"
     },
     {
       "fixerId": "table-figure-rescue-fixer",
       "kind": "ui-assisted",
       "entryPoint": "tableFigureRescueRepairableItem",
-      "note": "Posebna UI stavka za tablice i slike."
+      "note": "Posebna UI stavka za tablice i slike.",
+      "checkIds": [
+        "element.lists"
+      ],
+      "mode": "confirm"
     },
     {
       "fixerId": "section-surgery-fixer",
       "kind": "ui-assisted",
       "entryPoint": "sectionSurgeryRepairableItem",
-      "note": "Posebna UI stavka za potvrđene zahvate sekcija."
+      "note": "Posebna UI stavka za potvrđene zahvate sekcija.",
+      "checkIds": [
+        "page.margins"
+      ],
+      "mode": "confirm"
     },
     {
       "fixerId": "field-integrity-fixer",
       "kind": "ui-assisted",
       "entryPoint": "fieldIntegrityRepairableItem",
-      "note": "Posebna UI stavka za integritet Word polja."
+      "note": "Posebna UI stavka za integritet Word polja.",
+      "checkIds": [],
+      "mode": "safe-auto"
     },
     {
       "fixerId": "croatian-typography-fixer",
       "kind": "ui-assisted",
       "entryPoint": "croatianTypographyRepairableItem",
-      "note": "Posebna UI stavka za tehničko-tipografske nalaze."
+      "note": "Posebna UI stavka za tehničko-tipografske nalaze.",
+      "checkIds": [
+        "format.typography.consistency"
+      ],
+      "mode": "confirm"
     },
     {
       "fixerId": "consistency-fixer",
       "kind": "ui-assisted",
       "entryPoint": "consistencyRepairableItem",
-      "note": "Posebna UI stavka s potvrdom kanonskih varijanti."
+      "note": "Posebna UI stavka s potvrdom kanonskih varijanti.",
+      "checkIds": [],
+      "mode": "confirm"
     },
     {
       "fixerId": "required-section-fixer",
       "kind": "ui-assisted",
       "entryPoint": "requiredSectionsRepairableItem",
-      "note": "Posebna UI stavka koja ne izmišlja akademski sadržaj."
+      "note": "Posebna UI stavka koja ne izmišlja akademski sadržaj.",
+      "checkIds": [
+        "structure.sections.profile"
+      ],
+      "mode": "confirm"
     },
     {
       "fixerId": "link-doi-fixer",
       "kind": "ui-assisted",
       "entryPoint": "linkDoiRepairableItem",
-      "note": "Posebna UI stavka za poveznice i DOI."
+      "note": "Posebna UI stavka za poveznice i DOI.",
+      "checkIds": [
+        "element.link-form"
+      ],
+      "mode": "confirm"
     },
     {
       "fixerId": "submission-metadata-fixer",
       "kind": "ui-assisted",
       "entryPoint": "crossFileSubmissionRepairableItem",
-      "note": "Posebna UI stavka za metapodatke predajnog paketa."
+      "note": "Posebna UI stavka za metapodatke predajnog paketa.",
+      "checkIds": [],
+      "mode": "confirm"
     }
   ],
   "fixerTemplateMap": {

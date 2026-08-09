@@ -11,6 +11,7 @@
  * (koji koristi Web Streams CompressionStream) u analizi/preglednickoj jezgri.
  */
 import type { FixerId } from '../repair/apply-fixers';
+import { FIXER_BY_CHECK_ID } from '../repair/repair-capabilities';
 
 /**
  * checkId -> tocan naslov koji analyzeDocx proizvodi (makeCheck title). Sluzi korelaciji
@@ -73,44 +74,69 @@ export type Fixability = 'auto' | 'assisted' | 'manual';
 /** Strukturna (assisted) klasifikacija po tocnom naslovu provjere: mijenja strukturu, traži potvrdu. */
 interface StructuralCheckRule {
   match: (title: string) => boolean;
+  /** Kanonski Check.id-evi na koje se pravilo odnosi (za grupiranje kad pozivatelj salje id). */
+  checkIds?: readonly string[];
   groupKey: string;
   fixId?: FixerId;
 }
 const STRUCTURAL_CHECK_RULES: StructuralCheckRule[] = [
   {
     match: (t) => t === 'Numeriranje od prve stranice Uvoda' || t === 'Shema numeriranja stranica',
+    checkIds: ['page.numbers.start', 'page.numbers.scheme'],
     groupKey: 'page.numbering',
     fixId: 'page-numbering-fixer',
   },
-  { match: (t) => t === 'Uporaba Word stilova naslova', groupKey: 'heading.style' },
-  { match: (t) => /razina naslova/i.test(t), groupKey: 'heading.level' },
-  { match: (t) => t === 'Naslovi tablica', groupKey: 'caption.table' },
-  { match: (t) => t === 'Naslovi slika i grafikona', groupKey: 'caption.figure' },
-  { match: (t) => t === 'Abecedni poredak literature', groupKey: 'reference.sort', fixId: 'bibliography-repair-fixer' },
-  { match: (t) => t === 'Popisi slika i tablica', groupKey: 'list.illustrations' },
+  { match: (t) => t === 'Uporaba Word stilova naslova', checkIds: ['structure.heading.word-styles'], groupKey: 'heading.style' },
+  // Pazi: ovaj regex NE matcha 'Oblikovanje naslova po razinama' (rijeci su obrnute), zbog cega je
+  // ta provjera godinama padala u 'manual' iako heading-format-fixer postoji. Popisom checkIds to
+  // vise ne ovisi o formulaciji naslova.
+  { match: (t) => /razina naslova/i.test(t), checkIds: ['structure.heading.format', 'structure.heading.hierarchy'], groupKey: 'heading.level' },
+  { match: (t) => t === 'Naslovi tablica', checkIds: ['element.table.caption'], groupKey: 'caption.table' },
+  { match: (t) => t === 'Naslovi slika i grafikona', checkIds: ['element.figure.caption'], groupKey: 'caption.figure' },
+  { match: (t) => t === 'Abecedni poredak literature', checkIds: ['reference.alphabetical'], groupKey: 'reference.sort', fixId: 'bibliography-repair-fixer' },
+  { match: (t) => t === 'Popisi slika i tablica', checkIds: ['element.lists'], groupKey: 'list.illustrations' },
   // Ove cetiri postoje otkad su bibliography-rules/citation-sync-rules/section-surgery-rules/
   // required-section-rules dobili STVARNO ozicenje (repair-map.json, gen-profile-runtime-maps.mts,
   // 2026-08-02) - prije toga fixer iza njih nikad nije mogao aktivirati pa bi ih svrstavanje ovdje
   // bilo pogresno obecanje. Bez ovoga repairCeiling ove nalaze i dalje tretira kao 'manual' iako
   // sada postoji zivi popravak, pa strop lazno ostaje ispod 100 za dokumente kojima je bas ovo
   // jedini preostali problem.
-  { match: (t) => t === 'Citirano → literatura' || t === 'Literatura → citirano', groupKey: 'citation.sync', fixId: 'citation-bibliography-sync-fixer' },
-  { match: (t) => t === 'Isti autor i godina (a/b/c)', groupKey: 'reference.sort', fixId: 'bibliography-repair-fixer' },
+  { match: (t) => t === 'Citirano → literatura' || t === 'Literatura → citirano', checkIds: ['citation.author-year.missing-reference', 'reference.uncited'], groupKey: 'citation.sync', fixId: 'citation-bibliography-sync-fixer' },
+  { match: (t) => t === 'Isti autor i godina (a/b/c)', checkIds: ['citation.author-year.suffix'], groupKey: 'reference.sort', fixId: 'bibliography-repair-fixer' },
   { match: (t) => t === 'Numeriranje stranica' || t === 'Sekcije', groupKey: 'section.surgery', fixId: 'section-surgery-fixer' },
-  { match: (t) => t === 'Dijelovi verificiranog profila', groupKey: 'required.sections', fixId: 'required-section-fixer' },
+  { match: (t) => t === 'Dijelovi verificiranog profila', checkIds: ['structure.sections.profile'], groupKey: 'required.sections', fixId: 'required-section-fixer' },
 ];
 
 /**
- * Razina popravljivosti nalaza po naslovu provjere: 'auto' (zivi fixer bez potvrde), 'assisted'
- * (mijenja strukturu, nudi se uz potvrdu) ili 'manual' (sadrzajna prosudba, alat je ne smije
- * dirati). Jedini izvor istine za triage.ts (razina nalaza) i result-readiness.ts (koliko je
- * automatski popravak realno u stanju jamciti).
+ * Razina popravljivosti nalaza: 'auto' (zivi fixer bez potvrde), 'assisted' (trazi potvrdu) ili
+ * 'manual' (sadrzajna prosudba, alat je ne smije dirati). Jedini izvor istine za triage.ts
+ * (razina nalaza) i result-readiness.ts (koliko automatski popravak realno moze jamciti).
+ *
+ * IZVODI SE IZ REGISTRA SPOSOBNOSTI (`src/repair/repair-capabilities.ts`), a ne iz rucno
+ * odrzavanog popisa naslova. Prije 2026-08-09 ovdje je bilo poznato 14 od 31 fixera, pa je
+ * `repairCeiling` bodove za koje POSTOJI zivi popravak (heading-format, footnote-typography,
+ * croatian-typography, toc-field...) proglasavao trajno izgubljenima i obecavao nizi maksimum
+ * nego sto je stvaran, i to na oba puta (besplatni panel i serverski).
+ *
+ * Prima `Check.id`; naslov ostaje kao REZERVA za pozivatelje koji jos nemaju id (stariji
+ * pozivi i testni harnessi). `groupKey` i dalje dolazi iz STRUCTURAL_CHECK_RULES jer je to
+ * UI grupiranje nalaza, a ne sposobnost popravka.
  */
-export function classifyFixability(title: string): { fixability: Fixability; fixId?: FixerId; groupKey?: string } {
-  const auto = autoFixerForCheckTitle(title);
+export function classifyFixability(titleOrId: string): { fixability: Fixability; fixId?: FixerId; groupKey?: string } {
+  const byId = FIXER_BY_CHECK_ID.get(titleOrId);
+  if (byId) {
+    const groupKey = STRUCTURAL_CHECK_RULES.find((r) => r.checkIds?.includes(titleOrId))?.groupKey;
+    return {
+      fixability: byId.mode === 'safe-auto' ? 'auto' : 'assisted',
+      fixId: byId.fixerId,
+      ...(groupKey ? { groupKey } : {}),
+    };
+  }
+  // Rezerva: pozivatelj je dao NASLOV, ne id (stari put).
+  const auto = autoFixerForCheckTitle(titleOrId);
   if (auto) return { fixability: 'auto', fixId: auto.fixerId };
   for (const r of STRUCTURAL_CHECK_RULES) {
-    if (r.match(title)) return { fixability: 'assisted', groupKey: r.groupKey, ...(r.fixId ? { fixId: r.fixId } : {}) };
+    if (r.match(titleOrId)) return { fixability: 'assisted', groupKey: r.groupKey, ...(r.fixId ? { fixId: r.fixId } : {}) };
   }
   return { fixability: 'manual' };
 }

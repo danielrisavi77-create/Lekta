@@ -470,9 +470,12 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
       reanalyze: async () => ({
         score: 98,
         categories: { citations: { earned: 8, max: 10 }, formatting: { earned: 90, max: 90 } },
-        // "Citirano -> literatura" vise NIJE dobar manual primjer (5961bdd: zivi citation-bibliography-
-        // sync-fixer), pa strop test koristi "Potpunost bibliografskih zapisa" (ostaje namjerno manual).
-        checks: [chk('Potpunost bibliografskih zapisa', 'fail', 8, 10), chk('Dominantni font', 'pass', 90, 90)],
+        // Primjer MORA biti manual PO NACELU (sadrzajna prosudba), ne tek zato sto fixer jos ne
+        // postoji. Ovaj je scenarij vec dvaput trunuo kad bi popravak stigao: prvo "Citirano ->
+        // literatura" (citation-bibliography-sync-fixer), pa "Potpunost bibliografskih zapisa"
+        // (bibliography-repair-fixer). Opseg rijeci alat NE SMIJE popraviti jer bi morao izmisliti
+        // tekst (CLAUDE.md, tvrdo pravilo), pa ostaje stabilan primjer stropa.
+        checks: [chk('Profilni opseg riječi', 'fail', 8, 10), chk('Dominantni font', 'pass', 90, 90)],
       }),
     });
     mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
@@ -480,7 +483,7 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
 
     const recheck = mountEl.querySelector('.lekta-repair-panel__recheck')!;
     expect(recheck.textContent).toContain('98/100 je maksimalna ocjena');
-    expect(recheck.textContent).toContain('Potpunost bibliografskih zapisa');
+    expect(recheck.textContent).toContain('Profilni opseg riječi');
     expect(mountEl.querySelector('.lekta-repair-panel__ceiling')).not.toBeNull();
   });
 

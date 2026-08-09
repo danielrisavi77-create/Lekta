@@ -1,4 +1,5 @@
 import { FIXER_IDS, type FixerId } from './apply-fixers';
+import { FIXER_CAPABILITIES } from './repair-capabilities';
 
 /**
  * Mjesto na kojem se fixer pojavljuje u aplikaciji.
@@ -9,6 +10,14 @@ import { FIXER_IDS, type FixerId } from './apply-fixers';
  */
 export type RepairSurfaceKind = 'profile' | 'ui-assisted' | 'dispatch-only';
 
+/**
+ * Rollout status fixera: GDJE se pojavljuje u aplikaciji.
+ *
+ * SPOSOBNOST (koje bodovane provjere popravlja, treba li potvrdu) namjerno NIJE ovdje nego u
+ * `./repair-capabilities.ts`: taj modul cita i `src/analysis/check-fixer-map.ts`, koji se vrti u
+ * analitickom Web Workeru i ne smije povuci repair runtime (ovaj modul uvozi `FIXER_IDS` kao
+ * vrijednost). Dvije datoteke, dva pitanja: gdje se nudi vs sto zna popraviti.
+ */
 export interface RepairSurfaceEntry {
   kind: RepairSurfaceKind;
   entryPoint: string;
@@ -50,7 +59,11 @@ export const REPAIR_SURFACE = {
   'submission-metadata-fixer': { kind: 'ui-assisted', entryPoint: 'crossFileSubmissionRepairableItem', note: 'Posebna UI stavka za metapodatke predajnog paketa.' },
 } satisfies Record<FixerId, RepairSurfaceEntry>;
 
-/** Vraća sortirane ulaze radi stabilnog izvještaja i lakšeg pregleda diffova. */
+/**
+ * Vraća sortirane ulaze radi stabilnog izvještaja i lakšeg pregleda diffova.
+ * Spaja rollout status (ovdje) sa sposobnoscu (`repair-capabilities.ts`), pa izvjestaj na jednom
+ * mjestu pokazuje i gdje se fixer nudi i sto zna popraviti.
+ */
 export function repairSurfaceInventory() {
-  return FIXER_IDS.map((fixerId) => ({ fixerId, ...REPAIR_SURFACE[fixerId] }));
+  return FIXER_IDS.map((fixerId) => ({ fixerId, ...REPAIR_SURFACE[fixerId], ...FIXER_CAPABILITIES[fixerId] }));
 }

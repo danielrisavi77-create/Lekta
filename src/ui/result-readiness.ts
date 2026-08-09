@@ -95,7 +95,7 @@ export interface RepairCeiling {
 export function repairCeiling(checks: readonly Check[] = []): RepairCeiling {
   const scored = checks.filter((c) => c.scored && c.max > 0);
   const totalMax = scored.reduce((sum, c) => sum + c.max, 0);
-  const manual = scored.filter((c) => c.status !== 'pass' && classifyFixability(c.title).fixability === 'manual');
+  const manual = scored.filter((c) => c.status !== 'pass' && classifyFixability(c.id || c.title).fixability === 'manual');
   const lostPoints = manual.reduce((sum, c) => sum + (c.max - c.earned), 0);
   const maxScore = totalMax > 0 ? Math.round(((totalMax - lostPoints) / totalMax) * 100) : 100;
   return {
