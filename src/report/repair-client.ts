@@ -99,6 +99,10 @@ export type RepairOutcome =
   | { kind: 'unauthorized' }
   | { kind: 'too_large' }
   | { kind: 'no_live_fixers' }
+  /** Popravak NIJE isporucen jer bi izlazni paket bio neispravan (vrata integriteta u
+   *  applyFixers). Izvorni dokument je netaknut i nista nije naplaceno. Mora se razlikovati od
+   *  'ok' s praznim changelogom ("nema se sto popraviti"), inace UI tvrdi neistinu. */
+  | { kind: 'integrity_failed'; part: string; problem: string; preexisting: boolean }
   | { kind: 'invalid_docx' }
   | { kind: 'error'; status?: number; message: string };
 
@@ -201,7 +205,12 @@ export async function uploadRepair(
     const data = (await res.json().catch(() => ({}))) as {
       docxBase64?: string; fileName?: string; changelog?: RepairChange[]; skipped?: string[]; slotId?: string; jobId?: string | null;
       storagePending?: boolean; sourceCheck?: unknown;
+      error?: string; integrityFailure?: { part?: unknown; problem?: unknown; preexisting?: unknown };
     };
+    if (data.error === 'integrity_failed') {
+      const f = data.integrityFailure;
+      return { kind: 'integrity_failed', part: String(f?.part ?? 'nepoznat dio'), problem: String(f?.problem ?? 'neispravan izlazni paket'), preexisting: f?.preexisting === true };
+    }
     if (!data.docxBase64) return { kind: 'error', status: 200, message: 'nedostaje docxBase64' };
     return {
       kind: 'ok',

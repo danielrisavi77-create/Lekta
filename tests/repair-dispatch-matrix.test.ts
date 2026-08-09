@@ -134,7 +134,7 @@ async function buildCases(): Promise<DispatchCase[]> {
     'word/comments.xml': `<w:comments ${WORD_NS}><w:comment w:id="7"><w:p><w:r><w:t>Komentar</w:t></w:r></w:p></w:comment></w:comments>`,
     'docProps/core.xml': '<cp:coreProperties><dc:creator>Autor</dc:creator></cp:coreProperties>',
   };
-  const inspectorDocument = documentXml('<w:p><w:ins w:id="3"><w:r><w:t>novo</w:t></w:r></w:ins><w:commentRangeStart w:id="7"/><w:r><w:rPr><w:vanish/></w:rPr><w:t>skriveno</w:t></w:r><w:commentRangeEnd w:id="7"/><w:r><w:commentReference w:id="7"/></w:p>');
+  const inspectorDocument = documentXml('<w:p><w:ins w:id="3"><w:r><w:t>novo</w:t></w:r></w:ins><w:commentRangeStart w:id="7"/><w:r><w:rPr><w:vanish/></w:rPr><w:t>skriveno</w:t></w:r><w:commentRangeEnd w:id="7"/><w:r><w:commentReference w:id="7"/></w:r></w:p>');
   const inspectorAnalysis = analyzeFinalDocumentInspector({ parts: { ...inspectorPackage, 'word/document.xml': inspectorDocument } });
   const revision = inspectorAnalysis.findings.find((finding) => finding.category === 'revisions')!.evidence[0];
   const comment = inspectorAnalysis.findings.find((finding) => finding.category === 'comments')!.evidence[0];

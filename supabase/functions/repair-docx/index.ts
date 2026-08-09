@@ -367,6 +367,19 @@ Deno.serve(async (req: Request) => {
     //     popravci" - dokument je vec uskladjen (ili nista od trazenog nije bilo primjenjivo), pa
     //     se vraca bit-identican dokument BEZ ikakve potrosnje. changelog:[] u odgovoru je signal
     //     klijentu da ne tvrdi "Popravljeno".
+    // 7aa. VRATA INTEGRITETA: applyFixers je odbio isporuku jer bi izlazni paket bio neispravan
+    //      (vidi detectIntegrityFailure). Ovo je NAS bug, a ne korisnikov dokument, pa se NE vraca
+    //      422 invalid_docx - to bi optuzilo njegov rad. Kao i kod nula izmjena (RE-32) ne biljezi
+    //      se nista: korisnik nije nista dobio ali ni izgubio, pa ne smije platiti ni slotom ni
+    //      besplatnom kvotom. console.error je jedini trag, namjerno glasan.
+    if (result.integrityFailure) {
+      console.error(
+        `[repair-docx] vrata integriteta odbila isporuku: ${result.integrityFailure.part}: ${result.integrityFailure.problem}` +
+        (result.integrityFailure.offset != null ? ` (offset ${result.integrityFailure.offset})` : ''),
+      );
+      return json({ error: 'integrity_failed', integrityFailure: result.integrityFailure }, 200);
+    }
+
     if (result.changelog.length === 0) {
       const msRepair = ms(tRepair);
       const tCorpus = performance.now();

@@ -321,6 +321,50 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
     expect(recheck.textContent).toContain('Oblikovanje'); // kategorijska delta
   });
 
+  it('regresiju (pass -> fail) prikaze uz izlaz na izvorni dokument', async () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      items: [marginItem()],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+      beforeScore: {
+        score: 68,
+        categories: {},
+        checks: [chk('Margine dokumenta', 'fail', 0, 6), chk('Oblikovanje fusnota', 'pass', 4, 4)],
+      },
+      reanalyze: async () => ({
+        score: 74,
+        categories: {},
+        // Ukupno je poraslo (+6), ali je jedna prethodno prolazna provjera pala. Bez vlastitog
+        // bloka taj pad nestane u zbroju i korisnik ga nikad ne vidi.
+        checks: [chk('Margine dokumenta', 'pass', 6, 6), chk('Oblikovanje fusnota', 'fail', 0, 4)],
+      }),
+    });
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    await waitFor(() => !!mountEl.querySelector('.lekta-repair-panel__regression'));
+
+    const box = mountEl.querySelector('.lekta-repair-panel__regression')!;
+    expect(box.textContent).toContain('Oblikovanje fusnota');
+    expect(box.textContent).not.toContain('Margine dokumenta'); // popravljena, nije regresija
+    expect(box.querySelector('button')?.textContent).toContain('izvorni dokument');
+  });
+
+  it('bez regresije nema bloka upozorenja', async () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      items: [marginItem()],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+      beforeScore: { score: 68, categories: {}, checks: [chk('Margine dokumenta', 'fail', 0, 6)] },
+      reanalyze: async () => ({ score: 100, categories: {}, checks: [chk('Margine dokumenta', 'pass', 6, 6)] }),
+    });
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    await waitFor(() => !!mountEl.querySelector('.lekta-repair-panel__recheck'));
+    expect(mountEl.querySelector('.lekta-repair-panel__regression')).toBeNull();
+  });
+
   it('pad reanalyze ne rusi panel; preuzimanje se svejedno dogodilo', async () => {
     const mountEl = mount();
     let downloaded = false;

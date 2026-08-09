@@ -41,7 +41,8 @@ import { renderRepairLedgerModal } from './repair-price-slider';
 import { trapModal, releaseModal } from './modal-utils';
 import { buildFindingViewModels, findingCardHtml, topFindings, type FindingSessionState, type FindingViewModel } from './finding-view-model';
 import { collectAllPreviewFlags } from '../preview/preview-anchors';
-import { resultReadiness } from './result-readiness';
+import { resultReadiness, repairCeiling } from './result-readiness';
+import { detectPassRegressions } from '../analysis/repair-regression';
 import { startNetworkProbe, networkProofMessage, type NetworkProbe } from './network-proof';
 import { buildRepairableItems, asRecommendation, universalRepairableItems, paragraphSpacingRepairableItem, pageNumberingRepairableItem, footnoteSpacingRepairableItem, pageNumberAlignmentRepairableItem, introSectionRepairableItem, tocFieldRepairableItem, headingFormatRepairableItem, headingStructureRepairableItem, footnoteTypographyRepairableItem, headingCaseRepairableItem, titlePageRepairableItem, elementCaptionRepairableItem, bibliographyRepairableItem, citationBibliographySyncRepairableItem, legalFootnoteRepairableItem, finalDocumentInspectorRepairableItem, fieldIntegrityRepairableItem, tableFigureRescueRepairableItem, sectionSurgeryRepairableItem, pickTargetItem, requiredSectionsRepairableItem, linkDoiRepairableItem, crossFileSubmissionRepairableItem } from './repair-items';
 import { ensureTemplatesHeavy, selectTemplate } from '../title-pages/template-loader';
@@ -1737,7 +1738,19 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
       // priznaje kad se ocjena NIJE poboljsala, umjesto da tihi (0)/negativan broj ostane bez rijeci.
       const scoreLine=`<p><strong>Spremnost: ${r.score} → ${res.score}${d>0?` (+${d})`:d<0?` (${d})`:''}</strong></p>`;
       const flatNote=d<=0?'<p class="muted">Bodovna ocjena se nije poboljšala. Popravljene su prepoznate stavke oblikovanja; preostale provjere traže ručnu izmjenu (upute iznad).</p>':'';
-      recheck.innerHTML=scoreLine+flatNote;
+      // Regresija: provjera koja je prije prolazila, a sada ne prolazi. U ukupnom score-u se ne
+      // vidi (+6 na marginama i -3 na fusnotama izgleda kao cist +3), pa dobiva vlastiti blok i
+      // izlaz natrag na izvornik. Preuzimanje se NE ponistava - dokument je vec kod korisnika.
+      const regressions=(r.checks&&res.checks)?detectPassRegressions(r.checks,res.checks):[];
+      const regressionHtml=regressions.length?`<div class="lekta-repair-panel__regression"><p><strong>Pozor: ${regressions.length===1?'jedna provjera koja je prije prolazila sada ne prolazi':`${regressions.length} provjere koje su prije prolazile sada ne prolaze`}.</strong></p><ul>${regressions.map((x: any)=>`<li>${escapeHtml(x.title)}${x.after?` (sada: ${escapeHtml(x.after)})`:' (provjere više nema u rezultatu)'}</li>`).join('')}</ul><button type="button" class="btn btn-secondary btn-sm" data-repair-original>Preuzmi izvorni dokument</button></div>`:'';
+      // Strop: isti izracun i isti uvjeti kao lokalni panel (buildRepairCeilingNote). Do sada je
+      // objasnjenje "zasto 97 nije nedovrsen posao" postojalo SAMO na besplatnom putu.
+      const ceiling=res.checks?repairCeiling(res.checks):null;
+      const ceilingHtml=(res.score<100&&ceiling&&ceiling.hasManualGap&&res.score===ceiling.maxScore)?`<div class="lekta-repair-panel__ceiling"><p><strong>${res.score}/100 je maksimalna ocjena koju automatski popravak može jamčiti</strong> za ovaj profil. Preostale stavke traže tvoju sadržajnu provjeru - alat ih namjerno ne smije mijenjati bez tebe:</p><ul>${ceiling.items.map((x: any)=>`<li>${escapeHtml(x.title)} (−${x.lostPoints})</li>`).join('')}</ul></div>`:'';
+      recheck.innerHTML=scoreLine+regressionHtml+ceilingHtml+flatNote;
+      // Zicanje TEK nakon zadnjeg innerHTML pisanja u ovaj element (inace se handler izgubi).
+      const origBtn=recheck.querySelector<HTMLButtonElement>('[data-repair-original]');
+      if(origBtn)origBtn.onclick=()=>downloadBlob(bytes,DOCX_MIME,r.file?.name||file.name||'rad.docx');
      }else{recheck.remove()}
      /* "Pokaži što je popravljeno": faksimil prije/poslije. Radi SAMO kad oba modela postoje;
         inace se gumb ne prikazuje umjesto da otvori prazan prozor. Wordove revizije namjerno NE
@@ -1773,6 +1786,10 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    // konfiguraciji. Spojeni su krivo optuzivali korisnikov rad za nase gasenje fixera.
    else if(out.kind==='invalid_docx'){setSummary('Automatski popravak nije uspio na ovom dokumentu. Ručne upute iznad i dalje vrijede.')}
    else if(out.kind==='no_live_fixers'){setSummary('Traženi popravci trenutačno su isključeni na serveru. Pokušaj kasnije; ručne upute iznad i dalje vrijede.')}
+   // Vrata integriteta (applyFixers.detectIntegrityFailure): popravak je zaustavljen jer izlazni
+   // paket ne bi bio ispravan. Kao i no_live_fixers, ovo je NASA greska - poruka to mora reci
+   // umjesto da posudi tekst od invalid_docx i optuzi korisnikov rad. Nista nije naplaceno.
+   else if(out.kind==='integrity_failed'){setSummary(`<strong>Popravak nije isporučen jer rezultat nije prošao provjeru ispravnosti.</strong><p>Tvoj dokument nije mijenjan i ništa nije naplaćeno.${out.preexisting?' Neispravan dio postojao je već u učitanoj datoteci, pa za rezultat popravka ne možemo jamčiti. Pokušaj dokument prvo otvoriti i ponovno spremiti u Wordu.':' Ovo je greška na našoj strani, ne u tvom radu.'}</p><p class="muted">Tehnički detalj: ${escapeHtml(out.part)} - ${escapeHtml(out.problem)}</p><p>Ručne upute iznad i dalje vrijede.</p>`)}
    // Poruke iz repair-clienta (istekli uvjeti, prekid, mrezna greska, 500) nose konkretan tekst;
    // ranije su sve zavrsavale u genericnom toastu i korisnik nije imao sto uciniti.
    else if(out.kind==='error'){setSummary(escapeHtml(out.message||'Popravak trenutačno nije dostupan.'))}

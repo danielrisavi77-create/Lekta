@@ -12,6 +12,7 @@ import { enrichWithCrossref } from '../citations/bibliography-enrichment';
 import { renderRepairLedgerModal, type AdvancedFormDescriptor } from './repair-price-slider';
 import type { Check } from '../scoring/checks';
 import { repairCeiling } from './result-readiness';
+import { detectPassRegressions } from '../analysis/repair-regression';
 
 export interface TitlePageFormField {
   key: string;
@@ -581,6 +582,12 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
       for (const ruleId of result.skipped) {
         const label = ctx.items.find((i) => i.ruleId === ruleId)?.label || ruleId;
         (reasons[ruleId] === 'already-ok' ? alreadyOk : cannotFix).push(label);
+      }
+      // Vrata integriteta su odbila isporuku: popravak bi proizveo neispravan paket. NIJE isto
+      // sto i "nema se sto popraviti" (dolje), pa mora imati vlastitu, iskrenu poruku.
+      if (result.integrityFailure) {
+        renderIntegrityFailure(summary, result.integrityFailure);
+        return;
       }
       if (result.changelog.length === 0) {
         // Nijedan popravak nije primijenjen: NE isporucuj "popravljeni" dokument,
@@ -1578,7 +1585,57 @@ async function renderRecheck(el: HTMLElement, bytes: Uint8Array, ctx: RepairPane
     el.appendChild(note);
     return;
   }
-  el.appendChild(buildBeforeAfter(before, after));
+  const box = buildBeforeAfter(before, after);
+  const regression = buildRegressionWarning(before, after, ctx);
+  // Regresija ide ODMAH iza retka sa score-om: u zbroju se pad pojedine provjere ne vidi
+  // (+6 na marginama i -3 na fusnotama izgleda kao cist +3), pa mora imati vlastito mjesto.
+  if (regression) box.insertBefore(regression, box.firstChild?.nextSibling ?? null);
+  el.appendChild(box);
+}
+
+/**
+ * Provjere koje su prije popravka prolazile, a sada ne prolaze.
+ *
+ * Preuzimanje se NE ponistava i ne blokira (dokumentirani ugovor: ponovna analiza nikad ne smije
+ * sprijeciti isporuku, vidi RepairPanelContext.reanalyze) - korisnik je popravljeni dokument vec
+ * dobio. Ali mora saznati sto je palo i imati izlaz natrag na izvornik, umjesto da regresija
+ * tiho nestane u ukupnoj ocjeni.
+ */
+function buildRegressionWarning(
+  before: RepairScoreSnapshot,
+  after: RepairScoreSnapshot,
+  ctx: RepairPanelContext,
+): HTMLElement | null {
+  if (!before.checks || !after.checks) return null; // stariji pozivatelj bez checkova: tiho bez vrata
+  const regressions = detectPassRegressions(before.checks, after.checks);
+  if (regressions.length === 0) return null;
+
+  const box = document.createElement('div');
+  box.className = 'lekta-repair-panel__regression';
+  const head = document.createElement('p');
+  head.innerHTML = `<strong>Pozor: ${regressions.length === 1 ? 'jedna provjera koja je prije prolazila sada ne prolazi' : `${regressions.length} provjere koje su prije prolazile sada ne prolaze`}.</strong>`;
+  box.appendChild(head);
+  const ul = document.createElement('ul');
+  for (const item of regressions) {
+    const li = document.createElement('li');
+    li.textContent = item.after ? `${item.title} (sada: ${item.after})` : `${item.title} (provjere više nema u rezultatu)`;
+    ul.appendChild(li);
+  }
+  box.appendChild(ul);
+
+  const back = document.createElement('button');
+  back.type = 'button';
+  back.className = 'btn btn-secondary btn-sm';
+  back.textContent = 'Preuzmi izvorni dokument';
+  back.onclick = async () => {
+    try {
+      triggerDownload(await ctx.getDocxBytes(), ctx.originalFileName);
+    } catch (err) {
+      console.error('Preuzimanje izvornog dokumenta:', err);
+    }
+  };
+  box.appendChild(back);
+  return box;
 }
 
 /**
@@ -1643,6 +1700,27 @@ function buildBeforeAfter(before: RepairScoreSnapshot, after: RepairScoreSnapsho
     wrap.appendChild(ul);
   }
   return wrap;
+}
+
+/**
+ * Popravak je zaustavljen na vratima integriteta (applyFixers.detectIntegrityFailure): izlazni
+ * paket ne bi bio ispravan pa se NE isporucuje. Poruka mora biti jasno drukcija od "vec je
+ * uskladjeno", inace alat prikriva vlastiti kvar kao uredan rad. Tehnicki detalj (dio + opis)
+ * ostaje vidljiv jer je jedina korisna stvar koju korisnik moze proslijediti u prijavi.
+ */
+function renderIntegrityFailure(
+  el: HTMLElement,
+  failure: { part: string; problem: string; preexisting?: boolean },
+): void {
+  el.hidden = false;
+  el.innerHTML = `
+    <strong>Popravak nije isporučen jer rezultat nije prošao provjeru ispravnosti.</strong>
+    <p>Tvoj dokument nije mijenjan i ništa nije naplaćeno.${failure.preexisting
+      ? ' Neispravan dio postojao je već u učitanoj datoteci, pa za rezultat popravka ne možemo jamčiti. Pokušaj dokument prvo otvoriti i ponovno spremiti u Wordu.'
+      : ' Ovo je greška na našoj strani, ne u tvom radu.'}</p>
+    <p class="muted">Tehnički detalj: ${escapeHtml(failure.part)} - ${escapeHtml(failure.problem)}</p>
+    <p>Ručne upute iznad i dalje vrijede.</p>
+  `;
 }
 
 function renderNothingApplied(el: HTMLElement, alreadyOk: string[], cannotFix: string[]): void {

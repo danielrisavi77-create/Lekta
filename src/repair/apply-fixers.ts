@@ -56,6 +56,7 @@ import {
   type LinkDoiFixParams,
 } from './fixers.ts';
 import { submissionMetadataFixer, type SubmissionMetadataFixParams } from './submission-metadata-fixer.ts';
+import { scanXmlWellFormed } from './package-integrity.ts';
 import type { SectionNumberingTarget, ParagraphStyleFormattingRule, ParagraphFormattingTarget } from './xml-patch.ts';
 
 /** Poznati fixeri kao runtime konstanta: profile-validator provjerava clanstvo
@@ -110,6 +111,19 @@ export interface ChangelogEntry {
   afterLabel: string;
 }
 
+/** Zasto popravak NIJE isporucen: izlazni paket ne bi bio ispravan. Vidi detectIntegrityFailure. */
+export interface IntegrityFailure {
+  /** Ime dijela paketa (npr. word/document.xml) na kojem je kvar prvi put vidljiv. */
+  part: string;
+  /** Citljiv opis (hrvatski) iz skenera ili iz usporedbe popisa dijelova. */
+  problem: string;
+  /** Priblizna pozicija u XML-u, kad je poznata. */
+  offset?: number;
+  /** true kad je isti dio bio neispravan VEC NA ULAZU - kvar tada nije nas, ali isporuku svejedno
+   *  zaustavljamo jer za takav paket ne mozemo jamciti nista. Razlikuje se samo poruka. */
+  preexisting?: boolean;
+}
+
 export interface ApplyFixersResult {
   docxBytes: Uint8Array;
   changelog: ChangelogEntry[];
@@ -118,6 +132,10 @@ export interface ApplyFixersResult {
    *  radi wire-kompatibilnosti sa serverskim putem); UI ga koristi da "vec uskladjeno" ne izgleda
    *  kao "nije bilo moguce". Bez zapisa za ruleId = razlog nije klasificiran (npr. fixer je bacio). */
   skippedReasons: Record<string, FixerNoOpReason>;
+  /** Postavljeno SAMO kad su vrata integriteta odbila isporuku. Tada je docxBytes ULAZNI dokument
+   *  bit-identican, changelog je prazan i nista nije primijenjeno. Pozivatelj (UI, Edge funkcija)
+   *  mora ovo razlikovati od "nema se sto popraviti", inace tvrdi neistinu. */
+  integrityFailure?: IntegrityFailure;
 }
 
 /**
@@ -781,6 +799,59 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
   }
 }
 
+/**
+ * Zadnja vrata prije isporuke: dokazi da popravak nije pokvario paket.
+ *
+ * Zasto uopce postoji: fixeri su regex-patchevi nad OOXML-om (vidi xml-patch.ts), a
+ * @xmldom/xmldom NE baca i ne stvara `parsererror` na neispravnom XML-u, pa bi provjera
+ * oslonjena na parseXml dala lazno zeleno tocno na klasi greske koju ovaj motor moze
+ * proizvesti (RE-47). Skener iz package-integrity.ts je zato rucni tokenizer bez ijedne
+ * ovisnosti i smije se vrtjeti i u Deno Edgeu, gdje je ovo jedini gate pred korisnikom.
+ *
+ * Skeniraju se SAMO dijelovi koje smo sami zamijenili ili dodali. Netaknuti entryji izlaze
+ * iz zipa s istim bajtovima s kojima su usli, pa bi njihovo skeniranje bilo placanje za tudji
+ * ulaz: dokument koji je stigao neispravan takav i odlazi, a mi ne tvrdimo nista o njemu.
+ *
+ * Izvezeno radi testova: grane koje ovdje treba dokazati (nestao dio, prazan dio, kvar koji je
+ * dosao s ulazom) nijedan zivi fixer ne proizvodi, pa se kroz javni applyFixers ne mogu izazvati.
+ */
+export function detectIntegrityFailure(
+  changedXmlParts: readonly { name: string; xml: string }[],
+  originalNames: readonly string[],
+  finalNames: readonly string[],
+  removedPackageParts: readonly string[],
+  originalXmlParts: Readonly<Record<string, string>>,
+): IntegrityFailure | null {
+  for (const part of changedXmlParts) {
+    if (part.xml.length === 0) {
+      return { part: part.name, problem: 'dio paketa je nakon popravka prazan' };
+    }
+    const scan = scanXmlWellFormed(part.xml);
+    if (!scan.ok) {
+      // Ulaz se skenira SAMO ovdje, na vec propalom izlazu: normalan tijek time ne placi nista,
+      // a poruka ne optuzuje nas za kvar koji je dosao s dokumentom (ni obrnuto).
+      const before = originalXmlParts[part.name];
+      const preexisting = before !== undefined && !scanXmlWellFormed(before).ok;
+      return {
+        part: part.name,
+        problem: scan.problem ?? 'XML nije dobro oblikovan',
+        ...(scan.offset != null ? { offset: scan.offset } : {}),
+        ...(preexisting ? { preexisting: true } : {}),
+      };
+    }
+  }
+  // Nestali dio je jednako fatalan kao neispravan XML, a skener ga po definiciji ne vidi.
+  // Jedini dopusteni gubitak je onaj koji je fixer izricito zatrazio (final-document-inspector
+  // uklanja word/comments.xml).
+  const survived = new Set(finalNames);
+  const allowed = new Set(removedPackageParts);
+  for (const name of originalNames) {
+    if (survived.has(name) || allowed.has(name)) continue;
+    return { part: name, problem: 'dio paketa je nestao iz popravljenog dokumenta' };
+  }
+  return null;
+}
+
 export async function applyFixers(
   docxBytes: Uint8Array,
   requests: FixerRequest[],
@@ -919,40 +990,47 @@ export async function applyFixers(
   // Rekonstruiraj zip: SAMO stvarno promijenjeni dio (document.xml odnosno
   // styles.xml) dobiva novi sadrzaj, svi ostali entryji prolaze bez ikakve
   // izmjene (isti Uint8Array objekt).
+  // Svaki dio koji NAPUSTA ovaj motor promijenjen prolazi kroz vrata integriteta nize.
+  const changedXmlParts: { name: string; xml: string }[] = [];
+  const replaced = (name: string, xml: string): ZipEntry => {
+    changedXmlParts.push({ name, xml });
+    return { name, data: encoder.encode(xml) };
+  };
+
   const newEntries: ZipEntry[] = entries.map((entry) => {
     if (parts.removedPackageParts?.includes(entry.name)) return null;
     if (parts.packageXmlParts?.[entry.name] !== undefined && parts.packageXmlParts[entry.name] !== originalPackageXmlParts[entry.name]) {
-      return { name: entry.name, data: encoder.encode(parts.packageXmlParts[entry.name]) };
+      return replaced(entry.name, parts.packageXmlParts[entry.name]);
     }
     if (entry.name === DOCUMENT_XML_PATH && parts.documentXml !== originalDocumentXml) {
-      return { name: entry.name, data: encoder.encode(parts.documentXml) };
+      return replaced(entry.name, parts.documentXml);
     }
     if (entry.name === STYLES_XML_PATH && stylesEntry && parts.stylesXml !== originalStylesXml) {
-      return { name: entry.name, data: encoder.encode(parts.stylesXml) };
+      return replaced(entry.name, parts.stylesXml);
     }
     if (entry.name === NUMBERING_XML_PATH && numberingEntry && parts.numberingXml !== originalNumberingXml) {
-      return { name: entry.name, data: encoder.encode(parts.numberingXml ?? '') };
+      return replaced(entry.name, parts.numberingXml ?? '');
     }
     if (entry.name === CONTENT_TYPES_PATH && contentTypesEntry && (parts.contentTypesXml ?? '') !== originalContentTypes) {
-      return { name: entry.name, data: encoder.encode(parts.contentTypesXml ?? '') };
+      return replaced(entry.name, parts.contentTypesXml ?? '');
     }
     if (entry.name === DOCUMENT_RELS_PATH && documentRelsEntry && (parts.documentRelsXml ?? '') !== originalDocumentRels) {
-      return { name: entry.name, data: encoder.encode(parts.documentRelsXml ?? '') };
+      return replaced(entry.name, parts.documentRelsXml ?? '');
     }
     if (entry.name === FOOTNOTES_XML_PATH && footnotesEntry && parts.footnotesXml !== originalFootnotesXml) {
-      return { name: entry.name, data: encoder.encode(parts.footnotesXml) };
+      return replaced(entry.name, parts.footnotesXml ?? '');
     }
     if (
       FOOTER_HEADER_PART_RE.test(entry.name) &&
       parts.footerHeaderParts?.[entry.name] !== undefined &&
       parts.footerHeaderParts[entry.name] !== originalFooterHeaderParts[entry.name]
     ) {
-      return { name: entry.name, data: encoder.encode(parts.footerHeaderParts[entry.name]) };
+      return replaced(entry.name, parts.footerHeaderParts[entry.name]);
     }
     return entry; // netaknuto, isti podatak
   }).filter((entry): entry is ZipEntry => entry !== null);
   if (numberingWasAdded && parts.numberingXml) {
-    newEntries.push({ name: NUMBERING_XML_PATH, data: encoder.encode(parts.numberingXml) });
+    newEntries.push(replaced(NUMBERING_XML_PATH, parts.numberingXml));
   }
 
   // Novi partovi (K5 footer flow): SAMO iz allow-liste (word/footerN.xml) i SAMO imena koja
@@ -962,12 +1040,27 @@ export async function applyFixers(
   for (const p of parts.addedParts ?? []) {
     if (!ENGINE_ADDABLE_PART.test(p.name) || existingNames.has(p.name)) continue;
     existingNames.add(p.name);
-    newEntries.push({ name: p.name, data: encoder.encode(p.content) });
+    newEntries.push(replaced(p.name, p.content));
   }
   for (const p of parts.addedPackageParts ?? []) {
     if (!ENGINE_ADDABLE_PACKAGE_PART.test(p.name) || existingNames.has(p.name)) continue;
     existingNames.add(p.name);
-    newEntries.push({ name: p.name, data: encoder.encode(p.content) });
+    newEntries.push(replaced(p.name, p.content));
+  }
+
+  // Vrata integriteta: popravak koji bi isporucio neispravan paket se NE isporucuje. Vracaju se
+  // ULAZNI bajtovi bit-identicni (bez rekompresije) i changelog: [], sto na serveru vec znaci
+  // "nista nije primijenjeno" pa se slot/kvota ne trosi. integrityFailure je jedino sto razlikuje
+  // ovaj ishod od "nema se sto popraviti"; pozivatelj ga MORA procitati prije te poruke.
+  const integrityFailure = detectIntegrityFailure(
+    changedXmlParts,
+    entries.map((e) => e.name),
+    newEntries.map((e) => e.name),
+    parts.removedPackageParts ?? [],
+    originalPackageXmlParts,
+  );
+  if (integrityFailure) {
+    return { docxBytes, changelog: [], skipped: requests.map((r) => r.ruleId), skippedReasons: {}, integrityFailure };
   }
 
   const newDocxBytes = await writeZip(newEntries);

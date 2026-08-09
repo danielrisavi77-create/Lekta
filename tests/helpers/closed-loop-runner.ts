@@ -9,6 +9,7 @@
 import { expect } from 'vitest';
 import { analyzeFixture, resolveProfile } from '../../src/analysis/golden-entry';
 import { applyFixers, type FixerRequest } from '../../src/repair/apply-fixers';
+import { detectPassRegressions } from '../../src/analysis/repair-regression';
 import { readZip } from '../../src/repair/zip-codec';
 import { assertPackageIntact } from './docx-package-assert';
 import type { RepairableItem } from '../../src/ui/repair-panel';
@@ -32,16 +33,21 @@ export async function documentText(bytes: Uint8Array): Promise<string> {
     .join('');
 }
 
+/**
+ * Sama usporedba vise ne zivi ovdje: detectPassRegressions (src/analysis/repair-regression.ts) je
+ * isti kod koji sada vrti i aplikacija, pa ovi testovi ujedno dokazuju da je produkcijski gate
+ * ispravan. Ovdje ostaje samo test-specificno: izuzimanje ciljanih naslova i oblik asercije.
+ */
 export function assertNoPassRegression(
   before: Array<{ title: string; status?: string }>,
   after: Array<{ title: string; status?: string }>,
   targeted: Set<string>,
 ): void {
-  for (const check of before) {
-    if (targeted.has(check.title) || check.status !== 'pass') continue;
-    const afterCheck = after.find((candidate) => candidate.title === check.title);
-    expect(afterCheck?.status, `check koji je prije prolazio ne smije pasti: ${check.title}`).toBe('pass');
-  }
+  const regressions = detectPassRegressions(before, after).filter((item) => !targeted.has(item.title));
+  expect(
+    regressions.map((item) => item.title),
+    `checkovi koji su prije prolazili ne smiju pasti: ${regressions.map((item) => `${item.title} -> ${item.after ?? 'nestao'}`).join(', ')}`,
+  ).toEqual([]);
 }
 
 export interface ClosedLoopCase {
