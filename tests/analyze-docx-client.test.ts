@@ -51,6 +51,15 @@ describe('analyzeDocxOffThread: inline fallback', () => {
     const file = buildDocxFile({ paragraphs: smallDoc() });
     const a = fixtureArgs();
     const direct = await analyzeDocx(file, resolveProfile(VERIFIED_PROFILE_REGISTRY[0].id), a.settings, () => {});
+    expect(Array.isArray(direct.findings)).toBe(true);
+    const canonicalCheckIds = direct.findings
+      .map((finding: { checkId: string | null }) => finding.checkId)
+      .filter((checkId: string | null): checkId is string => checkId !== null);
+    const checkIds = direct.checks.map((check: { id: string }) => check.id);
+    expect(canonicalCheckIds).toHaveLength(checkIds.length);
+    expect(new Set(canonicalCheckIds)).toHaveLength(canonicalCheckIds.length);
+    expect([...new Set(canonicalCheckIds)].sort()).toEqual([...checkIds].sort());
+    expect(direct.findings.some((finding: { checkId: string | null }) => finding.checkId === direct.checks[0].id)).toBe(true);
     const bridged = await analyzeDocxOffThread(file, a.profile, a.settings, () => {});
     expect(normalizeResult(bridged)).toEqual(normalizeResult(direct));
   });

@@ -250,7 +250,7 @@ export interface LektaResult {
   userId?: string;
   rulesetId: string;
   profileId?: string;
-  score: number;
+  score: number | null;
   scoreLabel?: string;
   profileStatus?: string;
   categoryScores: SharedCategoryScore[];

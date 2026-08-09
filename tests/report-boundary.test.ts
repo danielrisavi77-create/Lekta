@@ -13,7 +13,19 @@ import { WORK_TYPE_TIERS, windowDaysFor, tierFor, isReportWorkType } from '../sr
 import type { Check, Issue } from '../src/scoring/checks';
 
 function check(category: string, earned: number, max: number, title = `${category}-${max}`): Check {
-  return { category, title, status: 'pass', earned, max, detail: '', issue: null, scored: max > 0 };
+  return {
+    id: `test:${category}:${title}`,
+    category,
+    title,
+    status: 'pass',
+    earned,
+    max,
+    detail: '',
+    issue: null,
+    scored: max > 0,
+    evidence: max > 0 ? 'measured' : 'not-applicable',
+    measurementStatus: max > 0 ? 'measured' : 'not-applicable',
+  };
 }
 function iss(severity: string, title: string): Issue {
   return { severity, category: 'format', title, detail: 'detalj', where: '' };
@@ -61,6 +73,26 @@ describe('teaser (klijent, besplatan, lokalan)', () => {
   it('je cista funkcija (bez mreze, bez entitlementa)', () => {
     // dvostruki poziv daje isti rezultat, nista se ne mijenja izvana
     expect(buildTeaser(result)).toEqual(buildTeaser(result));
+  });
+
+  it('zadrzava null kad su sve bodovane provjere nedostupne', () => {
+    const unavailable = check('format', 0, 8, 'Dominantni font');
+    unavailable.status = 'unknown';
+    unavailable.evidence = 'assumed';
+    unavailable.measurementStatus = 'unavailable';
+    unavailable.scored = false;
+    const noScore: AnalysisResultLike = { score: null, checks: [unavailable], issues: [] };
+
+    expect(buildTeaser(noScore)).toMatchObject({
+      score: null,
+      scoreLabel: 'Ocjena nije dostupna',
+      categoryScores: [],
+    });
+    expect(buildFullReport(noScore)).toMatchObject({
+      score: null,
+      scoreLabel: 'Ocjena nije dostupna',
+      categoryScores: [],
+    });
   });
 });
 

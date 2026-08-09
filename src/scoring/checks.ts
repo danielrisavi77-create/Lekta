@@ -16,6 +16,8 @@ export interface Issue {
   where: string;
 }
 
+export type MeasurementStatus = 'measured' | 'unavailable' | 'ambiguous' | 'not-applicable';
+
 export interface Check {
   /**
    * Stabilan, jezicno-neovisan identitet provjere (`src/scoring/check-ids.ts`).
@@ -30,15 +32,13 @@ export interface Check {
   /**
    * Je li ishod DOKAZAN mjerenjem, ili je pretpostavljen jer se vrijednost nije dala ocitati.
    *
-   * Analiza je namjerno fail-open: kad Word ne zapise font/velicinu/prored/margine, check dobiva
-   * PUNE bodove i status 'pass' (vidi analyze-docx). To je ispravno jer stiti od laznih optuzbi,
-   * ali znaci da `100/100` moze znaciti "nije bilo sto izmjeriti", a ne "dokazano ispravno".
-   * Bodovanje se zbog toga NE mijenja; ova oznaka samo omogucuje da uz ocjenu stoji i posten
-   * podatak koliko je od nje stvarno izmjereno (`verificationCoverage`).
+   * Kad Word ne zapise font/velicinu/prored/margine, check dobiva status 'unknown' i ne ulazi u
+   * score. `verificationCoverage` i dalje pokazuje koliko je bodovanih provjera bilo mjerljivo.
    *
    * 'not-applicable' = nije bodovano (max 0), pa ni ne ulazi u pokrivenost.
    */
   evidence: 'measured' | 'assumed' | 'not-applicable';
+  measurementStatus: MeasurementStatus;
   category: string;
   title: string;
   status: string;
@@ -60,15 +60,15 @@ export function makeCheck(
   issue: any = null,
 ): Check {
   if (max === 0) {
-    status = 'pass';
+    status = 'info';
     detail = `Informativno: ne ulazi u službenu ocjenu. ${detail}`;
     if (issue) issue = { ...issue, severity: 'info', title: `Informativno: ${issue.title}` };
   }
   return {
     id: checkIdFor(category, title),
-    // Default je 'measured'; fail-open grane analyzeDocx nakon toga oznace svoje provjere kao
-    // 'assumed' (markAssumedEvidence), na jednom mjestu i po stabilnom id-u.
+    // Default je 'measured'; neocitane vrijednosti analyzeDocx nakon toga oznaci kao unknown.
     evidence: max > 0 ? 'measured' : 'not-applicable',
+    measurementStatus: max > 0 ? 'measured' : 'not-applicable',
     category,
     title,
     status,
@@ -80,8 +80,13 @@ export function makeCheck(
   };
 }
 
+/** Je li provjera dovoljno izmjerena da smije utjecati na score. */
+export function isScoreEligible(check: Check): boolean {
+  return check.scored && check.max > 0 && check.measurementStatus === 'measured';
+}
+
 /**
- * Oznaci provjere cija vrijednost NIJE bila citljiva, pa su prosle fail-open granom.
+ * Oznaci provjere cija vrijednost NIJE bila citljiva.
  *
  * Zove se jednom, nakon sto je `checks` sastavljen, umjesto da se `evidence` provlaci kroz
  * svaki `makeCheck` poziv. Kljuc je stabilan `Check.id`, pa veza ne ovisi o formulaciji naslova.
@@ -89,16 +94,29 @@ export function makeCheck(
  */
 export function markAssumedEvidence(checks: Check[], unreadable: Record<string, boolean>): void {
   for (const c of checks) {
-    if (c.max > 0 && unreadable[c.id]) c.evidence = 'assumed';
+    if (c.max > 0 && unreadable[c.id]) {
+      c.evidence = 'assumed';
+      c.measurementStatus = 'unavailable';
+      c.status = 'unknown';
+      c.earned = 0;
+      c.scored = false;
+    }
   }
+}
+
+/** Zbroj bodova samo provjera koje su stvarno izmjerene. */
+export function scoreTotals(checks: Check[] = []): { earned: number; max: number; score: number | null } {
+  const eligible = checks.filter(isScoreEligible);
+  const earned = eligible.reduce((sum, check) => sum + check.earned, 0);
+  const max = eligible.reduce((sum, check) => sum + check.max, 0);
+  return { earned, max, score: max ? Math.round((earned / max) * 100) : null };
 }
 
 /**
  * Udio BODOVANIH bodova cija je vrijednost stvarno izmjerena.
  *
- * Namjerno odvojeno od ocjene: `score` govori koliko je pravila zadovoljeno, `coverage` koliko
- * je od toga dokazano. Dokument koji uopce ne zapisuje font, velicinu i prored dobiva pune bodove
- * (fail-open), ali nisku pokrivenost - i to je istina koju korisnik treba vidjeti.
+ * Namjerno odvojeno od ocjene: `score` govori koliko je izmjerenih pravila zadovoljeno, a
+ * `coverage` koliko je svih bodovanih pravila bilo moguce izmjeriti.
  *
  * Vraca `null` kad nema bodovanih provjera (tada ni ocjena ne postoji).
  */
@@ -106,8 +124,8 @@ export function verificationCoverage(checks: Check[] = []): { percent: number; a
   const scored = checks.filter((c) => c.max > 0);
   const max = scored.reduce((s, c) => s + c.max, 0);
   if (!max) return null;
-  const measured = scored.filter((c) => c.evidence !== 'assumed').reduce((s, c) => s + c.max, 0);
-  return { percent: Math.round((measured / max) * 100), assumed: scored.filter((c) => c.evidence === 'assumed').length };
+  const measured = scored.filter((c) => c.measurementStatus === 'measured').reduce((s, c) => s + c.max, 0);
+  return { percent: Math.round((measured / max) * 100), assumed: scored.filter((c) => c.measurementStatus !== 'measured').length };
 }
 
 /**
@@ -118,7 +136,7 @@ export function verificationCoverage(checks: Check[] = []): { percent: number; a
 export function categoryTotals(checks: Check[] = []): Record<string, { earned: number; max: number }> {
   const categories: Record<string, { earned: number; max: number }> = {};
   for (const c of checks) {
-    if (!c.scored || c.max <= 0) continue;
+    if (!isScoreEligible(c)) continue;
     categories[c.category] ??= { earned: 0, max: 0 };
     categories[c.category].earned += c.earned;
     categories[c.category].max += c.max;
@@ -132,7 +150,8 @@ export function issue(severity: string, category: string, title: string, detail:
 }
 
 /** Mapiraj numericki score na oznaku, boju i tekst. */
-export function scoreMeta(s: number): { label: string; color: string; text: string } {
+export function scoreMeta(s: number | null): { label: string; color: string; text: string } {
+  if (s === null) return { label: 'Ocjena nije dostupna', color: 'var(--muted)', text: 'Nema dovoljno dostupnih mjerenja za izračun bodovne ocjene.' };
   if (s >= 90) return { label: 'Visoka usklađenost s profilom', color: 'var(--ok)', text: 'Dokument je visoko usklađen s automatski provjerljivim pravilima odabranog profila.' };
   if (s >= 75) return { label: 'Dobra usklađenost s profilom', color: 'var(--info)', text: 'Dokument je uglavnom usklađen, ali prije predaje provjeri označene stavke.' };
   if (s >= 60) return { label: 'Potrebne su dorade', color: 'var(--warn)', text: 'Pronađeno je više stavki koje bi trebalo ispraviti prije predaje.' };

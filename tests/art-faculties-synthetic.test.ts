@@ -35,9 +35,9 @@ describe('alu/arh: profili ne pucaju na stvarnom docx-u (crash-fix)', () => {
       const file = buildDocxFile({ paragraphs: doc(), marginsCm: M25 }, `${id}-ok.docx`);
       const r: any = await analyzeFixture(file, { profileId: id });
       expect(Array.isArray(r.checks)).toBe(true);
-      // format iskljucen -> informativni pass (bez kaznjavanja)
-      expect(check(r, 'Dominantni font').status).toBe('pass');
-      expect(check(r, 'Margine dokumenta').status).toBe('pass');
+      // format iskljucen -> informativni status (bez kaznjavanja)
+      expect(check(r, 'Dominantni font').status).toBe('info');
+      expect(check(r, 'Margine dokumenta').status).toBe('info');
     });
   }
   it('arh-diplomski: obvezan Sadrzaj se boduje i prolazi', async () => {

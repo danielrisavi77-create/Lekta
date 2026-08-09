@@ -1,4 +1,5 @@
 import type { Check, Issue } from '../scoring/checks';
+import type { CanonicalFinding } from '../analysis/canonical-findings';
 import { scoreMeta, categoryTotals } from '../scoring/checks.ts';
 import type { FingerprintInput } from '../fingerprint/fingerprint';
 import type { ReportWorkType } from './pricing';
@@ -20,12 +21,13 @@ import { coverageTierForStatus } from './guarantee.ts';
 
 /** Minimalan oblik rezultata analize koji granica treba (decoupling od @ts-nocheck UI-ja). */
 export interface AnalysisResultLike {
-  score: number;
+  score: number | null;
   profile?: string;
   profileStatus?: string;
   stats?: Record<string, number | undefined>;
   checks?: Check[];
   issues?: Issue[];
+  findings?: CanonicalFinding[];
   details?: {
     profileFingerprint?: string;
     ruleAuthority?: string;
@@ -49,7 +51,7 @@ export interface IssueCounts {
 
 /** Teaser payload: sve sto se smije izracunati i prikazati lokalno, besplatno. */
 export interface Teaser {
-  score: number;
+  score: number | null;
   scoreLabel: string;
   categoryScores: CategoryScore[];
   issueCounts: IssueCounts;
@@ -67,7 +69,7 @@ export type AnnotatedCheck = Check & { confidence: RuleConfidence };
 
 /** Puni izvjestaj: kompletan anotirani sadrzaj, vraca ga server uz vazeci entitlement. */
 export interface FullReport {
-  score: number;
+  score: number | null;
   scoreLabel: string;
   profile?: string;
   profileStatus?: string;
@@ -202,6 +204,35 @@ function sanitizeIssue(i: Issue): Issue {
   return { ...i, detail: redactParagraphQuotes(i.detail) ?? i.detail };
 }
 
+function sanitizeCanonicalLocation(location: { where: string }): { where: string } | null {
+  const match = /\bodlomak\s+(\d+)\b/i.exec(location.where);
+  return match ? { where: `odlomak ${match[1]}` } : null;
+}
+
+function sanitizeCanonicalFinding(finding: CanonicalFinding): CanonicalFinding {
+  return {
+    id: finding.id,
+    checkId: finding.checkId,
+    ruleId: finding.ruleId,
+    category: finding.category,
+    severity: finding.severity,
+    status: finding.status,
+    measurementStatus: finding.measurementStatus,
+    title: finding.title,
+    detail: '',
+    locations: finding.locations
+      .map(sanitizeCanonicalLocation)
+      .filter((location): location is { where: string } => location !== null),
+    evidence: [],
+    hasIssue: finding.hasIssue,
+    scored: finding.scored,
+    scoreImpact: finding.scoreImpact
+      ? { earned: finding.scoreImpact.earned, max: finding.scoreImpact.max }
+      : null,
+    blocking: finding.blocking,
+  };
+}
+
 /**
  * Sanitizira rezultat analize PRIJE slanja serveru (data-flow-03). Salje SAMO ono sto puni
  * izvjestaj (buildFullReport) treba: score, profil, statistiku, nalaze i sigurnu metapodatkovnu
@@ -220,6 +251,7 @@ export function sanitizeAnalysisResult(result: AnalysisResultLike): AnalysisResu
     stats: result.stats,
     checks: (result.checks ?? []).map(sanitizeCheck),
     issues: (result.issues ?? []).map(sanitizeIssue),
+    findings: result.findings?.map(sanitizeCanonicalFinding),
     details: d
       ? {
           profileFingerprint: d.profileFingerprint,

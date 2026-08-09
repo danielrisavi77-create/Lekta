@@ -3,7 +3,7 @@ import { escapeHtml, safeHref, clamp, fmt, normalize, sectionName, attr, els, fi
 import { focusResult } from '../shared/result-a11y'; // BL-P1-02: fokus + SR-najava rezultata
 // BL-P0-05-4: DOCX parser se koristi tek nakon odabira datoteke (metapodaci, detekcija konteksta),
 // pa se uvozi LIJENO (dinamicki import) u tim funkcijama; njegov kod ispada iz glavnog landing chunka.
-import { makeCheck, issue, scoreMeta } from '../scoring/checks';
+import { makeCheck, issue, isScoreEligible, scoreMeta } from '../scoring/checks';
 import { modeWeighted, addWeight, near, runMetrics, lettersOnly, isUppercaseText, headingNumberInfo, isFrontMatterHeading } from '../audits/metrics';
 import { auditHeadingRules, auditZeroParagraphSpacing, firstPageParagraphs, tocEntryParagraphs } from '../audits/structure';
 import { legalYears, legalFirstAuthor, legalPage, classifyLegalSource, classifyLegalBibliographyEntry, legalOpCitData, legalLawIntroductions, legalCitationFingerprint, legalFullCitationCompleteness, legalBibliographyMatch, buildLegalCitationEngine } from '../citations/legal-citation';
@@ -830,7 +830,7 @@ function toggleResultDetails(){const d=$('#resultDetails');if(!d)return;if(d.has
 // vidi ovdje, to je cijeli izracun. Prazan string kad ocjene nema ili nema bodovanih provjera.
 function scoreBreakdownHtml(r: any): string{
   if(r?.score==null||!Array.isArray(r.checks))return '';
-  const scored=r.checks.filter((c: any)=>c&&c.scored&&c.max>0);
+  const scored=r.checks.filter((c: any)=>c&&isScoreEligible(c));
   if(!scored.length)return '';
   const earned=scored.reduce((s: number,c: any)=>s+(Number(c.earned)||0),0);
   const max=scored.reduce((s: number,c: any)=>s+(Number(c.max)||0),0);
@@ -1150,7 +1150,7 @@ function ruleChangeNotice(r: any){try{const fp=r.details?.profileFingerprint;if(
 // TRENUTNU analizu u putanju (povijest se sprema TEK nakon renderResulta), pa banner odmah pokaze
 // rast score-a. Cista logika je u src/history/progress.ts; ovdje su samo tanki most i prikaz.
 function currentDocumentProgress(r: any){try{const ds=r?.documentStructure;const cur={id:'current',generatedAt:r.generatedAt,fileName:r.file?.name||'Dokument',score:r.score,docFingerprint:ds?computeFingerprint({title:ds.title??null,author:ds.author??null,headings:ds.headings||[]}):null};const p=activeDocumentProgress([cur,...getAnalysisHistory()]);return(p&&p.revisions>=2&&p.entryIds[0]==='current')?p:null}catch(e: any){return null}}
-function currentProgressBanner(r: any){const p=currentDocumentProgress(r);if(!p)return'';const c=p.trend==='up'?['#ecfdf5','#a7f3d0']:p.trend==='down'?['#fff7e6','#ecd9a8']:['#eef2ff','#c7d2fe'],arrow=p.trend==='up'?'📈':p.trend==='down'?'📉':'➖',best=p.bestScore>p.latestScore?` · najbolji dosad: ${p.bestScore}`:'';return`<div style="padding:10px 12px;background:${c[0]};border:1px solid ${c[1]};border-radius:10px;margin-bottom:10px">${arrow} <strong>Napredak ovog rada:</strong> ${escapeHtml(describeProgress(p))}${best}</div>`}
+function currentProgressBanner(r: any){const p=currentDocumentProgress(r);if(!p)return'';const c=p.trend==='up'?['#ecfdf5','#a7f3d0']:p.trend==='down'?['#fff7e6','#ecd9a8']:['#eef2ff','#c7d2fe'],arrow=p.trend==='up'?'📈':p.trend==='down'?'📉':'➖',best=p.bestScore!==null&&p.latestScore!==null&&p.bestScore>p.latestScore?` · najbolji dosad: ${p.bestScore}`:'';return`<div style="padding:10px 12px;background:${c[0]};border:1px solid ${c[1]};border-radius:10px;margin-bottom:10px">${arrow} <strong>Napredak ovog rada:</strong> ${escapeHtml(describeProgress(p))}${best}</div>`}
 // --- Waitlist nepokrivenih fakulteta (WAITLIST_NEPOKRIVENI_FAKULTETI.md) ---
 // Endpoint: eksplicitni waitlistEndpoint ili izveden iz supabaseUrl. Prazno = feature off
 // (traka se ne prikazuje; postojeca genericka napomena u kartici profila ostaje). Sav DOM glue

@@ -37,8 +37,10 @@ describe('pravo genericki ("opci") profili: scored format + no-crash', () => {
   for (const c of cases) {
     it(`${c.id} prolazi font/velicinu/prored/margine/Sadrzaj`, async () => {
       const r: any = await analyzeFixture(buildDocxFile({ paragraphs: doc(), marginsCm: c.margins }, `${c.id}.docx`), { profileId: c.id });
-      for (const t of ['Dominantni font', 'Veličina osnovnog teksta', 'Prored osnovnog teksta', 'Margine dokumenta', 'Sadržaj dokumenta'])
-        expect(check(r, t)?.status, `${c.id}: ${t}`).toBe('pass');
+      for (const t of ['Dominantni font', 'Veličina osnovnog teksta', 'Prored osnovnog teksta', 'Margine dokumenta', 'Sadržaj dokumenta']) {
+        const current = check(r, t);
+        expect(current?.status, `${c.id}: ${t}`).toBe(current?.max > 0 ? 'pass' : 'info');
+      }
       if (c.a4) expect(check(r, 'Format stranice A4')?.status).toBe('pass');
     });
   }

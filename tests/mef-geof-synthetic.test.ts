@@ -64,8 +64,8 @@ describe('geof sinteticki golden: diplomski (harvard, samo Sadrzaj scored)', () 
     const file = buildDocxFile({ paragraphs: compliantDoc(), marginsCm: M25 }, 'geof-dipl-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'geof-diplomski' });
     expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
-    // Font/velicina/prored/margine su informativni (profil ih ne propisuje) -> pass bez kaznjavanja.
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Margine dokumenta').status).toBe('pass');
+    // Font/velicina/prored/margine su informativni (profil ih ne propisuje).
+    expect(check(r, 'Dominantni font').status).toBe('info');
+    expect(check(r, 'Margine dokumenta').status).toBe('info');
   });
 });

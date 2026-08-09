@@ -14,7 +14,7 @@ function fp(titleNorm: string, authorNorm = 'ana', headings: string[] = ['uvod',
   return { titleNorm, authorNorm, headings, sectionCount: headings.length };
 }
 
-function entry(id: string, at: string, score: number, docFingerprint: DocumentFingerprint | null, fileName = 'rad.docx'): HistoryEntry {
+function entry(id: string, at: string, score: number | null, docFingerprint: DocumentFingerprint | null, fileName = 'rad.docx'): HistoryEntry {
   return { id, generatedAt: at, fileName, score, docFingerprint };
 }
 
@@ -107,6 +107,19 @@ describe('documentProgress', () => {
     expect(p.trend).toBe('flat');
     expect(p.firstScore).toBe(74);
     expect(p.latestScore).toBe(74);
+  });
+
+  it('ne pretvara nedostupnu ocjenu u nulu', () => {
+    const p = documentProgress([
+      entry('r2', '2026-01-05T10:00:00Z', null, fp('teza')),
+      entry('r1', '2026-01-01T10:00:00Z', 80, fp('teza')),
+    ]);
+    expect(p.latestScore).toBeNull();
+    expect(p.firstScore).toBe(80);
+    expect(p.bestScore).toBe(80);
+    expect(p.delta).toBeNull();
+    expect(p.trend).toBe('unknown');
+    expect(describeProgress(p)).toBe('2. provjera, ocjena nije dostupna');
   });
 });
 

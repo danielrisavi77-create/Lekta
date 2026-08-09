@@ -38,7 +38,7 @@ describe('erf-diplomski: font/velicina/prored/Sadrzaj (margine advisory)', () =>
     expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
     expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
     expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
-    expect(check(r, 'Margine dokumenta').status).toBe('pass'); // informativno (nije propisano)
+    expect(check(r, 'Margine dokumenta').status).toBe('info'); // informativno (nije propisano)
   });
 });
 
@@ -59,7 +59,8 @@ describe('doktorski profili: ne pucaju i font-provjera radi', () => {
     it(`${id} se analizira bez pucanja`, async () => {
       const r: any = await analyzeFixture(buildDocxFile({ paragraphs: doc(), marginsCm: M25 }, `${id}.docx`), { profileId: id });
       expect(Array.isArray(r.checks)).toBe(true);
-      expect(check(r, 'Dominantni font').status).toBe('pass');
+      const expected = ['geof-doktorski', 'pravo-doktorski-pravne-znanosti'].includes(id) ? 'info' : 'pass';
+      expect(check(r, 'Dominantni font').status).toBe(expected);
     });
   }
 });

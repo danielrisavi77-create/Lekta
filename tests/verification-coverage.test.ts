@@ -1,15 +1,13 @@
 /**
  * POKRIVENOST VERIFIKACIJE: koliko je od ocjene stvarno IZMJERENO.
  *
- * Analiza je namjerno fail-open: kad Word ne zapise font/velicinu/prored/margine, check dobiva
- * PUNE bodove i status 'pass' (`!dominantFont.value` i srodne grane u analyze-docx). To stiti od
- * laznih optuzbi i OSTAJE, ali znaci da `100/100` moze znaciti "nije bilo sto izmjeriti", a ne
- * "dokazano ispravno". `repairCeiling` to ne vidi jer gleda samo `status !== 'pass'`.
+ * Kad Word ne zapise font/velicinu/prored/margine, provjera ne smije tvrditi da je prosla.
+ * Takav je ishod `unknown`, bez bodova, ali uz vidljivu informacijsku pokrivenost.
  *
- * Ovi testovi cuvaju da razlika ostane vidljiva i da bodovanje pritom NIJE promijenjeno.
+ * Ovi testovi cuvaju da razlika ostane vidljiva i da se unknown ne boduje.
  */
 import { describe, it, expect } from 'vitest';
-import { makeCheck, markAssumedEvidence, verificationCoverage, type Check } from '../src/scoring/checks';
+import { makeCheck, markAssumedEvidence, scoreTotals, verificationCoverage, type Check } from '../src/scoring/checks';
 
 const scored = (title: string, earned: number, max: number): Check =>
   makeCheck('formatting', title, 'pass', earned, max, '');
@@ -20,13 +18,19 @@ describe('evidence na Check', () => {
   });
 
   it('nebodovana (max 0) je not-applicable i ne ulazi u pokrivenost', () => {
-    expect(makeCheck('formatting', 'Dominantni font', 'pass', 0, 0, '').evidence).toBe('not-applicable');
+    expect(makeCheck('formatting', 'Dominantni font', 'pass', 0, 0, '')).toMatchObject({
+      status: 'info',
+      evidence: 'not-applicable',
+      measurementStatus: 'not-applicable',
+      scored: false,
+    });
   });
 
   it('markAssumedEvidence oznacava po STABILNOM id-u, ne po naslovu', () => {
     const checks = [scored('Dominantni font', 8, 8), scored('Prored osnovnog teksta', 6, 6)];
     markAssumedEvidence(checks, { 'format.font.dominant': true, 'format.spacing.body': false });
     expect(checks[0].evidence).toBe('assumed');
+    expect(checks[0]).toMatchObject({ status: 'unknown', measurementStatus: 'unavailable', earned: 0, scored: false });
     expect(checks[1].evidence).toBe('measured');
   });
 
@@ -43,21 +47,19 @@ describe('verificationCoverage', () => {
     expect(verificationCoverage(checks)).toEqual({ percent: 100, assumed: 0 });
   });
 
-  it('nedostupna vrijednost snizava pokrivenost, ali NE ocjenu', () => {
+  it('nedostupna vrijednost snizava pokrivenost i izostaje iz ocjene', () => {
     const checks = [scored('Dominantni font', 8, 8), scored('Margine dokumenta', 6, 6)];
     markAssumedEvidence(checks, { 'format.font.dominant': true });
 
-    // Ovo je cijela poanta: bodovi ostaju puni (fail-open), pokrivenost pada.
-    const earned = checks.reduce((s, c) => s + c.earned, 0);
-    const max = checks.reduce((s, c) => s + c.max, 0);
-    expect(Math.round((earned / max) * 100)).toBe(100);
+    expect(scoreTotals(checks)).toEqual({ earned: 6, max: 6, score: 100 });
     expect(verificationCoverage(checks)).toEqual({ percent: 43, assumed: 1 });
   });
 
-  it('dokument u kojem se nista ne da ocitati: 100/100 uz 0% pokrivenosti', () => {
+  it('dokument u kojem se nista ne da ocitati nema score uz 0% pokrivenosti', () => {
     const checks = [scored('Dominantni font', 8, 8), scored('Prored osnovnog teksta', 6, 6)];
     markAssumedEvidence(checks, { 'format.font.dominant': true, 'format.spacing.body': true });
     expect(verificationCoverage(checks)).toEqual({ percent: 0, assumed: 2 });
+    expect(scoreTotals(checks)).toEqual({ earned: 0, max: 0, score: null });
   });
 
   it('bez bodovanih provjera nema ni pokrivenosti (kao ni ocjene)', () => {

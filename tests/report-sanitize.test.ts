@@ -33,6 +33,43 @@ function fullResult(): any {
       { severity: 'warning', category: 'citations', title: 'Nepotpuni', detail: `odlomak 8: ${SECRET}`, where: 'Literatura' },
       { severity: 'info', category: 'structure', title: 'Naslov', detail: `odlomak 12: ${SECRET}`, where: 'Struktura' },
     ],
+    findings: [
+      {
+        id: 'check:citations-completeness',
+        checkId: 'citations-completeness',
+        ruleId: null,
+        category: 'citations',
+        severity: 'warning',
+        status: 'warn',
+        measurementStatus: 'measured',
+        title: 'Potpunost zapisa',
+        detail: `odlomak 7: ${SECRET}`,
+        locations: [{ where: `odlomak 7: ${SECRET}` }],
+        evidence: [`odlomak 7: ${SECRET}`],
+        hasIssue: true,
+        scored: true,
+        scoreImpact: { earned: 3, max: 5 },
+        blocking: false,
+        futureField: SECRET,
+      },
+      {
+        id: 'check:unavailable-private-text',
+        checkId: 'unavailable-private-text',
+        ruleId: null,
+        category: 'formatting',
+        severity: 'info',
+        status: 'unknown',
+        measurementStatus: 'unavailable',
+        title: 'Mjerenje nije dostupno',
+        detail: `Vrijednost nije dostupna: ${SECRET}`,
+        locations: [{ where: `Tajna lokacija ${SECRET}` }],
+        evidence: [`Neobrađeni dokaz ${SECRET}`],
+        hasIssue: false,
+        scored: false,
+        scoreImpact: null,
+        blocking: false,
+      },
+    ],
     details: {
       ruleAuthority: 'official-source',
       profileDefinitionId: 'fpzg-diplomski',
@@ -104,5 +141,51 @@ describe('sanitizeAnalysisResult (data-flow-03)', () => {
     const req = buildReportRequest({ title: 'X', author: 'Y', headings: [] }, fullResult(), 'diplomski');
     expect(JSON.stringify(req.analysisResult)).not.toContain(SECRET);
     expect(req.analysisResult.score).toBe(82);
+  });
+
+  it('kanonske nalaze redaktira i propusta samo poznata polja', () => {
+    const clean = sanitizeAnalysisResult(fullResult()) as any;
+    const finding = clean.findings?.[0];
+
+    expect(JSON.stringify(clean)).not.toContain(SECRET);
+    expect(finding).toMatchObject({
+      id: 'check:citations-completeness',
+      checkId: 'citations-completeness',
+      ruleId: null,
+      category: 'citations',
+      severity: 'warning',
+      status: 'warn',
+      measurementStatus: 'measured',
+      title: 'Potpunost zapisa',
+      detail: '',
+      locations: [{ where: 'odlomak 7' }],
+      evidence: [],
+      hasIssue: true,
+      scored: true,
+      scoreImpact: { earned: 3, max: 5 },
+      blocking: false,
+    });
+    expect(finding.futureField).toBeUndefined();
+    expect(clean.findings[1]).toMatchObject({
+      id: 'check:unavailable-private-text',
+      detail: '',
+      locations: [],
+      evidence: [],
+      hasIssue: false,
+      measurementStatus: 'unavailable',
+      scoreImpact: null,
+    });
+
+    const request = buildReportRequest({ title: 'X', author: 'Y', headings: [] }, fullResult(), 'diplomski') as any;
+    expect(JSON.stringify(request.analysisResult)).not.toContain(SECRET);
+    expect(request.analysisResult.findings[0]).toMatchObject({
+      id: 'check:citations-completeness',
+      checkId: 'citations-completeness',
+      status: 'warn',
+      locations: [{ where: 'odlomak 7' }],
+      detail: '',
+      evidence: [],
+      scoreImpact: { earned: 3, max: 5 },
+    });
   });
 });

@@ -42,8 +42,8 @@ describe('fkit-diplomski/zavrsni: scored velicina/prored/A4 (bez fonta)', () => 
       expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
       // fkit-diplomski/zavrsni imaju i requireA4 i paperSizes:['A4'] (paper-size ruleEntry).
       expect(check(r, 'Format stranice (A4)').status).toBe('pass');
-      expect(check(r, 'Dominantni font').status).toBe('pass'); // informativno (nema font pravila)
-      expect(check(r, 'Margine dokumenta').status).toBe('pass'); // informativno
+      expect(check(r, 'Dominantni font').status).toBe('info'); // informativno (nema font pravila)
+      expect(check(r, 'Margine dokumenta').status).toBe('info'); // informativno
     });
   }
 });
@@ -64,8 +64,8 @@ describe('fpz-diplomski/zavrsni: scored Sadrzaj (oblikovanje advisory)', () => {
       const file = buildDocxFile({ paragraphs: doc(), marginsCm: M25 }, `${id}-ok.docx`);
       const r: any = await analyzeFixture(file, { profileId: id });
       expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
-      expect(check(r, 'Dominantni font').status).toBe('pass'); // informativno
-      expect(check(r, 'Margine dokumenta').status).toBe('pass'); // informativno
+      expect(check(r, 'Dominantni font').status).toBe('info'); // informativno
+      expect(check(r, 'Margine dokumenta').status).toBe('info'); // informativno
     });
   }
 });

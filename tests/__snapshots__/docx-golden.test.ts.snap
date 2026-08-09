@@ -65,7 +65,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Sadržaj ili TOC polje je pronađeno",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Sadržaj dokumenta",
       },
       {
@@ -145,7 +145,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 12 praznih odlomaka (7%)",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prazni odlomci",
       },
       {
@@ -153,7 +153,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Tehničko-tipografska dosljednost",
       },
     ],
@@ -286,7 +286,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Sadržaj ili TOC polje je pronađeno",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Sadržaj dokumenta",
       },
       {
@@ -366,7 +366,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 6 praznih odlomaka (10%)",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prazni odlomci",
       },
       {
@@ -374,7 +374,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Tehničko-tipografska dosljednost",
       },
     ],
@@ -507,7 +507,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Sadržaj ili TOC polje je pronađeno",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Sadržaj dokumenta",
       },
       {
@@ -587,7 +587,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prazni odlomci",
       },
       {
@@ -595,7 +595,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Tehničko-tipografska dosljednost",
       },
     ],
@@ -808,7 +808,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prazni odlomci",
       },
       {
@@ -816,7 +816,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Tehničko-tipografska dosljednost",
       },
     ],
@@ -900,9 +900,9 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       {
         "category": "formatting",
         "detail": "Prored nije eksplicitno zapisan",
-        "earned": 6,
+        "earned": 0,
         "max": 6,
-        "status": "pass",
+        "status": "unknown",
         "title": "Prored osnovnog teksta",
       },
       {
@@ -910,7 +910,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Margine dokumenta",
       },
       {
@@ -966,7 +966,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Word sadrži numeriranje, ali nije pouzdano potvrđena cijela FPZG shema",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Shema numeriranja stranica",
       },
       {
@@ -998,7 +998,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Uvod približno 34.1% · Zaključak približno 12.2% glavnog opsega",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Omjer Uvoda i Zaključka",
       },
       {
@@ -1070,7 +1070,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Nisu prepoznati izravni citati s autor-godina citatnicom",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Lokator uz izravne citate",
       },
       {
@@ -1150,7 +1150,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 1 praznih odlomaka (4%)",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prazni odlomci",
       },
       {
@@ -1158,7 +1158,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Tehničko-tipografska dosljednost",
       },
     ],
@@ -1272,7 +1272,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "FPZG · diplomsko Novinarstvo · diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 75,
+    "score": 74,
     "stats": {
       "characters": 885,
       "citations": 4,
@@ -1319,9 +1319,9 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       {
         "category": "formatting",
         "detail": "Prored nije eksplicitno zapisan",
-        "earned": 6,
+        "earned": 0,
         "max": 6,
-        "status": "pass",
+        "status": "unknown",
         "title": "Prored osnovnog teksta",
       },
       {
@@ -1441,7 +1441,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prazni odlomci",
       },
       {
@@ -1449,7 +1449,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Tehničko-tipografska dosljednost",
       },
     ],
@@ -1521,7 +1521,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Grafički fakultet, diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "partial",
-    "score": 60,
+    "score": 56,
     "stats": {
       "characters": 392,
       "citations": 0,
@@ -1554,7 +1554,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: font nije potvrđen kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Dominantni font",
       },
       {
@@ -1562,7 +1562,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: veličina nije potvrđena kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Veličina osnovnog teksta",
       },
       {
@@ -1570,7 +1570,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: prored nije potvrđen kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prored osnovnog teksta",
       },
       {
@@ -1578,7 +1578,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Margine dokumenta",
       },
       {
@@ -1690,7 +1690,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prazni odlomci",
       },
       {
@@ -1698,7 +1698,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Tehničko-tipografska dosljednost",
       },
     ],
@@ -1761,7 +1761,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: font nije potvrđen kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Dominantni font",
       },
       {
@@ -1777,7 +1777,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: prored nije potvrđen kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prored osnovnog teksta",
       },
       {
@@ -1785,7 +1785,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Margine dokumenta",
       },
       {
@@ -1825,7 +1825,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. PAGE polje nije pronađeno",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Brojevi stranica",
       },
       {
@@ -1897,7 +1897,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prazni odlomci",
       },
       {
@@ -1905,7 +1905,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Tehničko-tipografska dosljednost",
       },
     ],
@@ -1961,7 +1961,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: font nije potvrđen kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Dominantni font",
       },
       {
@@ -1977,7 +1977,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: prored nije potvrđen kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prored osnovnog teksta",
       },
       {
@@ -1985,7 +1985,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Margine dokumenta",
       },
       {
@@ -2025,7 +2025,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Pronađeno Word PAGE polje",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Brojevi stranica",
       },
       {
@@ -2097,7 +2097,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 2 praznih odlomaka (2%)",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prazni odlomci",
       },
       {
@@ -2105,7 +2105,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Tehničko-tipografska dosljednost",
       },
     ],
@@ -2175,9 +2175,9 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       {
         "category": "formatting",
         "detail": "Prored nije eksplicitno zapisan",
-        "earned": 6,
+        "earned": 0,
         "max": 6,
-        "status": "pass",
+        "status": "unknown",
         "title": "Prored osnovnog teksta",
       },
       {
@@ -2185,7 +2185,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Margine dokumenta",
       },
       {
@@ -2297,7 +2297,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Word ne sprema dovoljno podataka za automatsku potvrdu; provjeri ručno",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Naslovnica bez broja stranice",
       },
       {
@@ -2321,7 +2321,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Word nije spremio pouzdan broj stranica; profil: oko 30. Provjeri broj u otvorenom dokumentu.",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Opseg u stranicama",
       },
       {
@@ -2409,7 +2409,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Kratica id. nije korištena",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Kratica id. u istoj bilješci",
       },
       {
@@ -2425,7 +2425,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Sudska praksa nije prepoznata",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Sudska praksa",
       },
       {
@@ -2457,7 +2457,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 tablica · 0 prepoznatih naslova",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Naslovi tablica",
       },
       {
@@ -2465,7 +2465,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 grafičkih elemenata · 0 prepoznatih naslova",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Naslovi slika i grafikona",
       },
       {
@@ -2473,7 +2473,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Nisu pronađene očito neispravne poveznice",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Oblik poveznica",
       },
       {
@@ -2481,7 +2481,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 1 praznih odlomaka (6%)",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prazni odlomci",
       },
       {
@@ -2489,7 +2489,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Tehničko-tipografska dosljednost",
       },
     ],
@@ -2575,7 +2575,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Pravni fakultet · integrirani studij Pravo · diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 81,
+    "score": 80,
     "stats": {
       "characters": 460,
       "citations": 3,
@@ -2622,9 +2622,9 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       {
         "category": "formatting",
         "detail": "Prored nije eksplicitno zapisan",
-        "earned": 6,
+        "earned": 0,
         "max": 6,
-        "status": "pass",
+        "status": "unknown",
         "title": "Prored osnovnog teksta",
       },
       {
@@ -2720,7 +2720,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Word ne sprema dovoljno podataka za automatsku potvrdu; provjeri ručno",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Numeriranje od prve stranice Uvoda",
       },
       {
@@ -2744,7 +2744,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Word nije spremio pouzdan broj stranica; profil: 30-60. Provjeri broj u otvorenom dokumentu.",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Opseg u stranicama",
       },
       {
@@ -2752,7 +2752,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. HR: nije prepoznat / najviše 300 · EN: nije prepoznat / najviše 300",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Sažeci u samom radu",
       },
       {
@@ -2840,7 +2840,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Nisu prepoznati izravni citati s autor-godina citatnicom",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Lokator uz izravne citate",
       },
       {
@@ -2896,7 +2896,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 1 praznih odlomaka (6%)",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prazni odlomci",
       },
       {
@@ -2904,7 +2904,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Tehničko-tipografska dosljednost",
       },
     ],
@@ -3018,7 +3018,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Pravni fakultet · Sveučilišni diplomski studij Socijalni rad · diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 73,
+    "score": 72,
     "stats": {
       "characters": 442,
       "citations": 0,
@@ -3065,9 +3065,9 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       {
         "category": "formatting",
         "detail": "Prored nije eksplicitno zapisan",
-        "earned": 6,
+        "earned": 0,
         "max": 6,
-        "status": "pass",
+        "status": "unknown",
         "title": "Prored osnovnog teksta",
       },
       {
@@ -3107,7 +3107,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Sadržaj nije pronađen",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Sadržaj dokumenta",
       },
       {
@@ -3187,7 +3187,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 1 praznih odlomaka (20%)",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prazni odlomci",
       },
       {
@@ -3195,7 +3195,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Tehničko-tipografska dosljednost",
       },
     ],
@@ -3239,7 +3239,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Fakultet elektrotehnike i racunarstva, diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "partial",
-    "score": 89,
+    "score": 88,
     "stats": {
       "characters": 169,
       "citations": 0,
@@ -3296,7 +3296,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Margine dokumenta",
       },
       {
@@ -3424,7 +3424,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Word nije spremio pouzdan broj stranica; profil: oko 30. Provjeri broj u otvorenom dokumentu.",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Opseg u stranicama",
       },
       {
@@ -3440,7 +3440,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Nije pronađen pouzdan prijelom prve stranice; redoslijed treba provjeriti vizualno",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Redoslijed elemenata naslovnice",
       },
       {
@@ -3448,7 +3448,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Nije pronađen pouzdan prijelom prve stranice; vizualni raspored nije bodovan",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Raspored naslovne stranice",
       },
       {
@@ -3512,7 +3512,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Kratica id. nije korištena",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Kratica id. u istoj bilješci",
       },
       {
@@ -3520,7 +3520,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 pravnih akata · 0 uvedenih kratica",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Propisi i uvedene kratice",
       },
       {
@@ -3528,7 +3528,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Sudska praksa nije prepoznata",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Sudska praksa",
       },
       {
@@ -3560,7 +3560,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 tablica · 0 prepoznatih naslova",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Naslovi tablica",
       },
       {
@@ -3568,7 +3568,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 grafičkih elemenata · 0 prepoznatih naslova",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Naslovi slika i grafikona",
       },
       {
@@ -3576,7 +3576,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Nisu pronađene očito neispravne poveznice",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Oblik poveznica",
       },
       {
@@ -3584,7 +3584,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prazni odlomci",
       },
       {
@@ -3592,7 +3592,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 1 nalaza, 1 sigurnih, 0 traže potvrdu",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Tehničko-tipografska dosljednost",
       },
     ],
@@ -3742,7 +3742,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Margine dokumenta",
       },
       {
@@ -3798,7 +3798,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Format brojeva sekcija nije eksplicitno zapisan",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Shema numeriranja stranica",
       },
       {
@@ -3830,7 +3830,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Uvod približno 100.0% · Zaključak približno 0.0% glavnog opsega",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Omjer Uvoda i Zaključka",
       },
       {
@@ -3902,7 +3902,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. Nisu prepoznati izravni citati s autor-godina citatnicom",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Lokator uz izravne citate",
       },
       {
@@ -3966,7 +3966,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prazni odlomci",
       },
       {
@@ -3974,7 +3974,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Tehničko-tipografska dosljednost",
       },
     ],
@@ -4257,7 +4257,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Prazni odlomci",
       },
       {
@@ -4265,7 +4265,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Informativno: ne ulazi u službenu ocjenu. 0 nalaza, 0 sigurnih, 0 traže potvrdu",
         "earned": 0,
         "max": 0,
-        "status": "pass",
+        "status": "info",
         "title": "Tehničko-tipografska dosljednost",
       },
     ],

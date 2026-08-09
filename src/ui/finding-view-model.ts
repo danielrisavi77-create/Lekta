@@ -1,4 +1,5 @@
 import type { Check, Issue } from '../scoring/checks';
+import type { CanonicalFinding } from '../analysis/canonical-findings';
 import type { Fixability, TriageFinding, TriageModel } from '../analysis/triage';
 import { collectFootnoteAnchors, collectIssueAnchors } from '../preview/preview-anchors';
 import { safeHref } from '../utils/helpers';
@@ -70,6 +71,7 @@ function findingKind(issue: Issue): FindingKind {
 }
 
 export interface FindingResultInput {
+  findings?: CanonicalFinding[];
   issues?: Issue[];
   checks?: Check[];
   details?: {
@@ -173,6 +175,53 @@ export function buildFindingViewModels(
     workType: result.settings?.workType || result.selection?.workType,
     program: result.selection?.program,
   };
+
+  if (Array.isArray(result.findings)) {
+    return result.findings
+      .map((finding, originalIndex) => ({ finding, originalIndex }))
+      .filter(({ finding }) => finding.hasIssue || (finding.status !== 'pass' && finding.measurementStatus !== 'not-applicable'))
+      .map(({ finding, originalIndex }) => {
+        const where = finding.locations[0]?.where || '';
+        const issue: Issue = {
+          severity: finding.severity,
+          category: finding.category,
+          title: finding.title,
+          detail: finding.detail,
+          where,
+        };
+        const check = checks.find((candidate) => candidate.id === finding.checkId)
+          ?? matchingCheck(issue, checks);
+        const triage = matchingTriage(issue, check, result.details?.triage);
+        const fixability = triage?.fixability || 'manual';
+        const base = `finding:${slug(finding.category)}:${slug(finding.title)}`;
+        const duplicate = used.get(base) || 0;
+        used.set(base, duplicate + 1);
+        const id = duplicate ? `${base}:${duplicate + 1}` : base;
+        const state = states.get(id) || { status: 'open' as const };
+        const tool = suggestTool(issue, sctx);
+        return {
+          id,
+          originalIndex,
+          category: finding.category,
+          severity: finding.severity,
+          kind: finding.measurementStatus === 'unavailable' || finding.measurementStatus === 'ambiguous'
+            ? 'limitation'
+            : findingKind(issue),
+          title: finding.title,
+          explanation: finding.detail,
+          ...(check?.detail ? { measured: check.detail } : {}),
+          ...(source ? { source } : {}),
+          scope: scopeFor(issue, triage),
+          fixability,
+          autoRepairable: !!triage?.fixId,
+          matchKeys: [...new Set([finding.title, check?.title].filter((value): value is string => !!value))],
+          ...(tool ? { tool } : {}),
+          status: state.status,
+          ...(state.ignoredReason ? { ignoredReason: state.ignoredReason } : {}),
+          priorityRank: priorityRank(issue, fixability),
+        };
+      });
+  }
 
   return issues.map((issue, originalIndex) => {
     const check = matchingCheck(issue, checks);

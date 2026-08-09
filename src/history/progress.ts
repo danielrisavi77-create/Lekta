@@ -23,7 +23,7 @@ export interface HistoryEntry {
   /** ISO timestamp provjere. */
   generatedAt: string;
   fileName: string;
-  score: number;
+  score: number | null;
   issueCount?: number;
   errors?: number;
   warnings?: number;
@@ -40,14 +40,14 @@ export interface DocumentProgress {
   /** Broj provjera istog rada. */
   revisions: number;
   /** Score prve (najstarije) provjere u grupi. */
-  firstScore: number;
+  firstScore: number | null;
   /** Score najnovije provjere. */
-  latestScore: number;
+  latestScore: number | null;
   /** Najbolji score ikad u grupi. */
-  bestScore: number;
+  bestScore: number | null;
   /** latestScore - firstScore. */
-  delta: number;
-  trend: 'up' | 'down' | 'flat';
+  delta: number | null;
+  trend: 'up' | 'down' | 'flat' | 'unknown';
   firstAt: string;
   latestAt: string;
   /** Id-jevi zapisa, najnoviji prvi. */
@@ -59,9 +59,10 @@ function ts(iso: string): number {
   return Number.isFinite(t) ? t : 0;
 }
 
-function finite(score: number): number {
+function finite(score: number | null): number | null {
+  if (score === null) return null;
   const n = Number(score);
-  return Number.isFinite(n) ? n : 0;
+  return Number.isFinite(n) ? n : null;
 }
 
 /** Najnoviji zapis prvi (stabilno po generatedAt). */
@@ -101,8 +102,9 @@ export function documentProgress(group: HistoryEntry[]): DocumentProgress {
   const oldest = group[group.length - 1];
   const latestScore = finite(newest.score);
   const firstScore = finite(oldest.score);
-  const bestScore = Math.max(...group.map((g) => finite(g.score)));
-  const delta = latestScore - firstScore;
+  const numericScores = group.map((g) => finite(g.score)).filter((score): score is number => score !== null);
+  const bestScore = numericScores.length ? Math.max(...numericScores) : null;
+  const delta = latestScore !== null && firstScore !== null ? latestScore - firstScore : null;
   return {
     fileName: newest.fileName,
     profile: newest.profile,
@@ -111,7 +113,7 @@ export function documentProgress(group: HistoryEntry[]): DocumentProgress {
     latestScore,
     bestScore,
     delta,
-    trend: delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat',
+    trend: delta === null ? 'unknown' : delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat',
     firstAt: oldest.generatedAt,
     latestAt: newest.generatedAt,
     entryIds: group.map((g) => g.id),
@@ -136,7 +138,9 @@ export function activeDocumentProgress(entries: HistoryEntry[]): DocumentProgres
  */
 export function describeProgress(p: DocumentProgress): string {
   const nth = `${p.revisions}. provjera`;
+  if (p.latestScore === null) return `${nth}, ocjena nije dostupna`;
   if (p.revisions < 2) return `${nth}, ${p.latestScore}`;
+  if (p.delta === null) return `${nth}, ${p.latestScore} (napredak nije moguće izračunati bez izmjerenih ocjena)`;
   if (p.delta === 0) return `${nth}, ${p.latestScore} (bez promjene od prve provjere)`;
   const sign = p.delta > 0 ? `+${p.delta}` : `${p.delta}`;
   return `${nth}, ${p.latestScore} (${sign} od prve provjere)`;

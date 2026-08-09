@@ -41,8 +41,8 @@ const cases: Array<{ id: string; margins: any; pass: string[] }> = [
   { id: 'kbf-diplomski', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 3.5 }, pass: [F, V, P, J, M, SA] },
   { id: 'kbf-zavrsni', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 3.5 }, pass: [F, V, P, J, M, SA] },
   { id: 'kif-doktorski', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 }, pass: [F, V, P, M, A4P, SA] },
-  { id: 'mef-doktorski', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 }, pass: [F, M, A4P, SA] }, // font/margine informativno
-  { id: 'muza-diplomski', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 }, pass: [F, M] }, // ne puca; informativno
+  { id: 'mef-doktorski', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 }, pass: [A4P, SA] }, // font i margine informativni
+  { id: 'muza-diplomski', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 }, pass: [] }, // ne puca; format je informativan
   { id: 'muza-doktorski', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 }, pass: [F, V, P, A4] },
   { id: 'pbf-doktorski', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 }, pass: [F, V, P, A4] },
 ];
