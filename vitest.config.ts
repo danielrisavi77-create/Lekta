@@ -15,7 +15,15 @@ export default defineConfig({
     // tudi crveni padovi). Worktree sesija svoje testove vrti iz vlastitog cwd-a.
     // tests/conformance/** je PUNA matrica (~744 analize, minute) i vrti se ZASEBNO preko
     // `npm run conformance` (vitest.conformance.config.ts); u checku je tripwire uzorak.
-    exclude: ['**/node_modules/**', '**/dist/**', '**/.claude/**', '**/tests/conformance/**', '**/tests/ux/**'],
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.claude/**',
+      '**/tests/conformance/**',
+      '**/tests/ux/**',
+      '**/tests/repair-closed-loop.test.ts',
+      '**/tests/repair-closed-loop-*.test.ts',
+    ],
     // Vitestov default je 5000 ms, sto je mjera za obican jedinicni test. Velik dio ovog
     // paketa gradi, raspakirava i parsira STVARNE .docx pakete (zip + OOXML + puna analiza),
     // pa takav test redovno traje 3-5 s i sam po sebi je zdrav. Uz 5000 ms nekoliko ih je

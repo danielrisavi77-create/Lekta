@@ -53,9 +53,9 @@ export function findCheck(result: any, title: string): any {
   return matches[0];
 }
 
-/** Je li status "prolazan"? */
+/** Je li status "prolazan"? Informativna max-0 provjera nije lažni nalaz. */
 export function isPass(check: any): boolean {
-  return check?.status === 'pass';
+  return check?.status === 'pass' || (check?.status === 'info' && Number(check?.max) === 0);
 }
 
 /** Provjeri zadovoljava li check ocekivani ishod (za asert i za coverage). */
@@ -66,7 +66,7 @@ export function meetsExpectation(check: any, exp: CorpusExpectation): boolean {
     return exp.outcome === 'pass' ? earned === max : earned < max;
   }
   switch (exp.outcome) {
-    case 'pass': return check.status === 'pass';
+    case 'pass': return isPass(check);
     case 'fail': return check.status === 'fail';
     case 'warn': return check.status === 'warn';
     case 'not-pass': return check.status !== 'pass';

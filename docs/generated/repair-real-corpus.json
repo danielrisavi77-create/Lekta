@@ -75,12 +75,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 16,
+        "passCount": 13,
         "score": 87
       },
       "after": {
         "checkCount": 19,
-        "passCount": 17,
+        "passCount": 14,
         "score": 89
       },
       "beforeEntryCount": 4,
@@ -118,12 +118,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 15,
+        "passCount": 12,
         "score": 78
       },
       "after": {
         "checkCount": 19,
-        "passCount": 17,
+        "passCount": 14,
         "score": 94
       },
       "beforeEntryCount": 14,
@@ -161,12 +161,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 16,
+        "passCount": 13,
         "score": 87
       },
       "after": {
         "checkCount": 19,
-        "passCount": 17,
+        "passCount": 14,
         "score": 89
       },
       "beforeEntryCount": 4,
@@ -204,12 +204,12 @@
       "outcome": "no-op",
       "before": {
         "checkCount": 19,
-        "passCount": 17,
+        "passCount": 15,
         "score": 94
       },
       "after": {
         "checkCount": 19,
-        "passCount": 17,
+        "passCount": 15,
         "score": 94
       },
       "beforeEntryCount": 4,
@@ -236,28 +236,30 @@
       "outcome": "review",
       "before": {
         "checkCount": 35,
-        "passCount": 23,
-        "score": 75
+        "passCount": 16,
+        "score": 74
       },
       "after": {
         "checkCount": 35,
-        "passCount": 25,
-        "score": 84
+        "passCount": 18,
+        "score": 83
       },
       "beforeEntryCount": 8,
       "afterEntryCount": 8,
       "droppedEntryCount": 0,
       "offeredFixerIds": [
         "font-fixer",
+        "line-spacing-fixer",
         "alignment-fixer"
       ],
       "changedFixerIds": [
         "font-fixer",
+        "line-spacing-fixer",
         "alignment-fixer"
       ],
-      "targetedCheckCount": 3,
+      "targetedCheckCount": 4,
       "targetedResolvedCount": 2,
-      "targetedUnresolvedCount": 1,
+      "targetedUnresolvedCount": 2,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -277,19 +279,20 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 13,
-        "score": 60
+        "passCount": 10,
+        "score": 56
       },
       "after": {
         "checkCount": 19,
-        "passCount": 15,
-        "score": 69
+        "passCount": 12,
+        "score": 67
       },
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
       "droppedEntryCount": 0,
       "offeredFixerIds": [
         "font-fixer",
+        "line-spacing-fixer",
         "margins-fixer",
         "paper-size-fixer"
       ],
@@ -297,9 +300,9 @@
         "margins-fixer",
         "paper-size-fixer"
       ],
-      "targetedCheckCount": 3,
+      "targetedCheckCount": 4,
       "targetedResolvedCount": 1,
-      "targetedUnresolvedCount": 2,
+      "targetedUnresolvedCount": 3,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -319,12 +322,12 @@
       "outcome": "no-op",
       "before": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 12,
         "score": 93
       },
       "after": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 12,
         "score": 93
       },
       "beforeEntryCount": 4,
@@ -351,12 +354,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 12,
         "score": 100
       },
       "after": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 12,
         "score": 100
       },
       "beforeEntryCount": 4,
@@ -370,8 +373,8 @@
         "margins-fixer"
       ],
       "targetedCheckCount": 2,
-      "targetedResolvedCount": 2,
-      "targetedUnresolvedCount": 0,
+      "targetedResolvedCount": 0,
+      "targetedUnresolvedCount": 2,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -379,7 +382,8 @@
       "secondPassNoOp": true,
       "manualReviewRequired": true,
       "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu"
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen"
       ],
       "error": null
     },
@@ -390,12 +394,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 12,
         "score": 100
       },
       "after": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 12,
         "score": 100
       },
       "beforeEntryCount": 4,
@@ -409,8 +413,8 @@
         "margins-fixer"
       ],
       "targetedCheckCount": 2,
-      "targetedResolvedCount": 2,
-      "targetedUnresolvedCount": 0,
+      "targetedResolvedCount": 0,
+      "targetedUnresolvedCount": 2,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -418,7 +422,8 @@
       "secondPassNoOp": true,
       "manualReviewRequired": true,
       "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu"
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen"
       ],
       "error": null
     },
@@ -429,30 +434,32 @@
       "outcome": "review",
       "before": {
         "checkCount": 42,
-        "passCount": 32,
-        "score": 81
+        "passCount": 21,
+        "score": 80
       },
       "after": {
         "checkCount": 42,
-        "passCount": 34,
-        "score": 89
+        "passCount": 23,
+        "score": 88
       },
       "beforeEntryCount": 9,
       "afterEntryCount": 9,
       "droppedEntryCount": 0,
       "offeredFixerIds": [
         "font-fixer",
+        "line-spacing-fixer",
         "margins-fixer",
         "alignment-fixer"
       ],
       "changedFixerIds": [
         "font-fixer",
+        "line-spacing-fixer",
         "margins-fixer",
         "alignment-fixer"
       ],
-      "targetedCheckCount": 4,
-      "targetedResolvedCount": 3,
-      "targetedUnresolvedCount": 1,
+      "targetedCheckCount": 5,
+      "targetedResolvedCount": 2,
+      "targetedUnresolvedCount": 3,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -472,29 +479,31 @@
       "outcome": "review",
       "before": {
         "checkCount": 38,
-        "passCount": 26,
-        "score": 73
+        "passCount": 19,
+        "score": 72
       },
       "after": {
         "checkCount": 38,
-        "passCount": 29,
-        "score": 85
+        "passCount": 22,
+        "score": 84
       },
       "beforeEntryCount": 9,
       "afterEntryCount": 9,
       "droppedEntryCount": 0,
       "offeredFixerIds": [
         "font-fixer",
+        "line-spacing-fixer",
         "margins-fixer",
         "paper-size-fixer"
       ],
       "changedFixerIds": [
         "font-fixer",
+        "line-spacing-fixer",
         "margins-fixer"
       ],
-      "targetedCheckCount": 3,
+      "targetedCheckCount": 4,
       "targetedResolvedCount": 3,
-      "targetedUnresolvedCount": 0,
+      "targetedUnresolvedCount": 1,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -502,7 +511,8 @@
       "secondPassNoOp": true,
       "manualReviewRequired": true,
       "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu"
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen"
       ],
       "error": null
     },
@@ -513,12 +523,12 @@
       "outcome": "no-op",
       "before": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 16,
         "score": 95
       },
       "after": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 16,
         "score": 95
       },
       "beforeEntryCount": 4,

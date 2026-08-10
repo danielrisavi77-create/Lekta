@@ -13399,6 +13399,7 @@
         "syntheticClosedLoopNotRunCount": 6
       },
       "manualReviewReasons": [
+        "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
         "nema-stvarnog-docx-uzorka",
         "stvarni-docx-trazi-rucni-pregled"
       ],
@@ -13552,6 +13553,7 @@
             "review": 2
           },
           "manualReviewReasons": [
+            "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
             "stvarni-docx-trazi-rucni-pregled"
           ]
         },
@@ -14113,6 +14115,7 @@
             "review": 1
           },
           "manualReviewReasons": [
+            "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
             "stvarni-docx-trazi-rucni-pregled"
           ]
         },
