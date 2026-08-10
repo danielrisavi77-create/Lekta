@@ -131,10 +131,14 @@ describe('Repair Engine closed-loop: page-number-alignment-fixer', () => {
     const profileId = 'pravo-socijalni-rad-zavrsni';
     const stylesXml = `<w:styles ${WORD_NS}><w:style w:type="paragraph" w:styleId="Normal"><w:name w:val="Normal"/></w:style></w:styles>`;
     const footerXml = `<w:ftr ${WORD_NS}><w:p><w:pPr><w:jc w:val="left"/></w:pPr><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGE </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>1</w:t></w:r><w:r><w:fldChar w:fldCharType="end"/></w:r></w:p></w:ftr>`;
+    const documentXmlRaw = documentXml(paragraph('Tijelo teksta rada.'), false).replace(
+      '</w:body>',
+      '<w:sectPr><w:footerReference w:type="default" r:id="rId2"/><w:pgSz w:w="11906" w:h="16838"/></w:sectPr></w:body>',
+    );
     await runClosedLoopCase({
       label: `page-number-alignment/${profileId}`,
       profileId,
-      buildBrokenDocx: () => packageDoc({ documentXml: documentXml(paragraph('Tijelo teksta rada.')), stylesXml, footerXml }),
+      buildBrokenDocx: () => packageDoc({ documentXml: documentXmlRaw, stylesXml, footerXml }),
       buildItems: (before, p) => pageNumberAlignmentRepairableItem(before.checks ?? [], p),
       targetTitles: [CHECK_TITLES['page-number-alignment']],
     });
