@@ -25,6 +25,7 @@ describe('resume_agent_run entitlement contract', () => {
 
   it('keeps direct authenticated callers and service_role callers explicitly authorized', () => {
     expect(migration).toContain("coalesce(current_setting('request.jwt.claim.role', true), '') <> 'service_role'");
+    expect(migration).toMatch(/language plpgsql\s+security definer\s+set search_path = public, pg_temp/);
     expect(migration).toContain('revoke all on function public.resume_agent_run(uuid, uuid)');
     expect(migration).toContain('from public, anon;');
     expect(migration).toContain('grant execute on function public.resume_agent_run(uuid, uuid)');

@@ -8,7 +8,7 @@ create or replace function public.resume_agent_run(
 ) returns table (run_id uuid, status text)
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, pg_temp
 as $$
 begin
   if (select auth.uid()) is distinct from p_user_id
