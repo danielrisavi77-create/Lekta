@@ -12,7 +12,8 @@ import { resolve } from 'node:path';
 import { buildRealCorpusBacklog, renderRealCorpusBacklogMarkdown, type RealCorpusBacklogReport } from './helpers/real-corpus-backlog';
 
 const fresh = buildRealCorpusBacklog();
-const bakedMarkdown = readFileSync(resolve(__dirname, '../docs/generated/real-corpus-backlog.md'), 'utf8');
+const bakedMarkdown = readFileSync(resolve(__dirname, '../docs/generated/real-corpus-backlog.md'), 'utf8')
+  .replace(/\r\n/g, '\n');
 
 describe('real-corpus backlog je u koraku s fakultetskom matricom', () => {
   it('commitani JSON je bit-identican svjezem izracunu (inace: npm run repair-real-corpus-backlog)', () => {

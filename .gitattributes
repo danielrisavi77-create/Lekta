@@ -3,3 +3,8 @@
 # affix polja (.aff) i unose (.dic) pa bi Hunspell parsiranje puklo. -text = binarno.
 src/audits/hr-dict/hr_HR.aff -text
 src/audits/hr-dict/hr_HR.dic -text
+
+# Vite imports these Node ESM generator modules during tests. Keep them LF on
+# every checkout; CRLF causes import-analysis to report a misleading syntax
+# error from the importing test instead of the actual generator module.
+*.mjs text eol=lf
