@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- Razvoj ide na zasebnoj feature grani iz commita `3f36c64`; ne razvijati na `master`.
+- Razvoj ide na zasebnoj feature grani iz najnovijeg commita grane `design/wordreplica-one-time-runner` koji sadrzi odobrenu specifikaciju i ovaj plan; ne razvijati na `master`.
 - Prije izvrsavanja plana koristiti `superpowers:using-git-worktrees` i otvoriti izolirani worktree za `feature/repair-contract-v1`.
 - Ne mijenjati parser, audit, citation engine, DOCX fixture ni Golden snapshot.
 - Ne dodavati model, prompt niti generiranje ili prepravljanje akademskog sadrzaja.
@@ -61,7 +61,6 @@ Nakon sto Task 7 ovog plana stabilizira JSON fixture i javni kljuc, faza 2 u Wor
 - Create: `tests/fixtures/repair-contract-v1/valid-contract.json`, jezik-neutralni fixture za kasniji .NET ili Python runner.
 - Create: `tests/fixtures/repair-contract-v1/public-key.spki.b64url`, testni javni kljuc bez privatne tajne.
 - Create: `tests/repair-contract-fixture.test.ts`, provjera da fixture i kanonski payload nisu odlutali.
-- Create: `tests/repair-contract-docs.test.ts`, ugovorna provjera javne dokumentacije i kriptografskih oznaka.
 - Create: `docs/REPAIR_CONTRACT_V1.md`, wire ugovor i sigurnosne granice za Lektu i WordReplicu.
 - Modify: `src/report/repair-client.ts`, ukloniti lokalni duplikat request tipa i uvesti zajednicki tip.
 - Modify: `src/repair/apply-fixers.ts`, uvesti i ponovno izvesti registry bez promjene runtime ponasanja.
@@ -865,7 +864,6 @@ git commit -m "test: publish Repair Contract v1 fixture"
 
 **Files:**
 - Create: `docs/REPAIR_CONTRACT_V1.md`
-- Create: `tests/repair-contract-docs.test.ts`
 - Modify: `tests/supabase-edge-imports.test.ts`
 - Test: `tests/repair-contract-validation.test.ts`
 
@@ -873,7 +871,7 @@ git commit -m "test: publish Repair Contract v1 fixture"
 - Consumes: javni barrel `src/repair/contract/index.ts` i fixture iz Taska 7.
 - Produces: dokaz da Edge runtime moze uvesti ugovor i stabilan dokument za WordReplica implementaciju.
 
-- [ ] **Step 1: Napisati RED dokumentacijski i Deno import test**
+- [ ] **Step 1: Prosiriti Deno import test stvarnim kodnim granicama**
 
 Prosiriti postojeci staticki import test tako da potvrdi da svi moduli pod `src/repair/contract` koriste relativne importove kompatibilne s postojecim bundler pravilima, ne uvoze Node built-in module, ne citaju `process.env` i ne sadrze privatni kljuc.
 
@@ -883,13 +881,11 @@ expect(contractSource).not.toMatch(/process\.env/);
 expect(contractSource).not.toMatch(/BEGIN PRIVATE KEY|PRIVATE KEY ONLY/);
 ```
 
-Novi `tests/repair-contract-docs.test.ts` mora procitati `docs/REPAIR_CONTRACT_V1.md` i zahtijevati oznake `ES256-P1363`, `P-256`, `SHA-256`, `64-byte`, `base64url`, `contractSignature`, `footer-page-fixer` i `arbitrary code`.
-
-- [ ] **Step 2: Pokrenuti test i potvrditi RED prije izmjene testa ili modula**
+- [ ] **Step 2: Pokrenuti staticki Deno test**
 
 Run: `npx vitest run tests/supabase-edge-imports.test.ts`
 
-Expected: FAIL jer `docs/REPAIR_CONTRACT_V1.md` jos ne postoji. Deno staticki dio moze vec biti zelen ako su raniji taskovi postovali globalno pravilo o `.ts` importima.
+Expected: PASS. Ovaj korak mijenja samo verifikacijsku pokrivenost i dokumentaciju, bez produkcijske promjene koja bi zahtijevala umjetni RED test.
 
 - [ ] **Step 3: Dokumentirati tocni wire protokol**
 
@@ -907,14 +903,16 @@ Expected: FAIL jer `docs/REPAIR_CONTRACT_V1.md` jos ne postoji. Deno staticki di
 
 - [ ] **Step 4: Pokrenuti Deno/import i contract testove**
 
-Run: `npx vitest run tests/supabase-edge-imports.test.ts tests/repair-contract-docs.test.ts tests/repair-contract-fixture.test.ts tests/repair-contract-validation.test.ts`
+Run: `npx vitest run tests/supabase-edge-imports.test.ts tests/repair-contract-fixture.test.ts tests/repair-contract-validation.test.ts`
 
 Expected: PASS.
+
+Rucno potvrditi da dokument sadrzi oznake `ES256-P1363`, `P-256`, `SHA-256`, `64-byte`, `base64url`, `contractSignature`, `footer-page-fixer` i `arbitrary code`. Ne dodavati test koji samo pretrazuje ljudsku dokumentaciju jer takav test ne dokazuje runtime ponasanje.
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add docs/REPAIR_CONTRACT_V1.md tests/repair-contract-docs.test.ts tests/supabase-edge-imports.test.ts
+git add docs/REPAIR_CONTRACT_V1.md tests/supabase-edge-imports.test.ts
 git commit -m "docs: publish Repair Contract v1 protocol"
 ```
 
@@ -929,17 +927,17 @@ git commit -m "docs: publish Repair Contract v1 protocol"
 
 - [ ] **Step 1: Pregledati opseg i zabranjene promjene**
 
-Run: `git diff --name-status 3f36c64...HEAD`
+Run: `git diff --name-status design/wordreplica-one-time-runner...HEAD`
 
 Expected: samo `src/repair/contract/**`, `src/repair/fixer-registry.ts`, kompatibilni registry importi u `src/repair/apply-fixers.ts` i `src/repair/repair-surface.ts`, navedeni contract testovi i fixturei, `src/report/repair-client.ts`, `tests/supabase-edge-imports.test.ts`, `scripts/generate-repair-contract-fixture.mts`, `package.json` i `docs/REPAIR_CONTRACT_V1.md`.
 
-Run: `git diff --check 3f36c64...HEAD`
+Run: `git diff --check design/wordreplica-one-time-runner...HEAD`
 
 Expected: bez izlaza i exit 0.
 
 - [ ] **Step 2: Pokrenuti sve contract testove zajedno**
 
-Run: `npx vitest run tests/repair-contract-types.test.ts tests/repair-contract-canonical-json.test.ts tests/repair-contract-request-policy.test.ts tests/repair-contract-validation.test.ts tests/repair-contract-signature.test.ts tests/repair-contract-adapter.test.ts tests/repair-contract-fixture.test.ts tests/repair-contract-docs.test.ts tests/repair-client.test.ts tests/repair-recipe.test.ts tests/supabase-edge-imports.test.ts`
+Run: `npx vitest run tests/repair-contract-types.test.ts tests/repair-contract-canonical-json.test.ts tests/repair-contract-request-policy.test.ts tests/repair-contract-validation.test.ts tests/repair-contract-signature.test.ts tests/repair-contract-adapter.test.ts tests/repair-contract-fixture.test.ts tests/repair-client.test.ts tests/repair-recipe.test.ts tests/supabase-edge-imports.test.ts`
 
 Expected: svi testovi PASS, bez snapshot updatea.
 
