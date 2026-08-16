@@ -12,6 +12,7 @@
 import { isReportWorkType, type ReportWorkType } from './pricing';
 import type { FingerprintInput } from '../fingerprint/fingerprint';
 import { TERMS_VERSION } from '../legal/terms-version';
+import type { FixerRequest } from '../repair/fixer-registry.ts';
 import { parseSourceCheck, type RepairSourceCheck } from './source-check-parse';
 export { REPAIR_MAX_REFERENCES } from './repair-contract';
 import { REPAIR_MAX_REFERENCES } from './repair-contract';
@@ -29,12 +30,8 @@ export interface RepairSignals {
   titleMarker?: string | null;
 }
 
-/** Jedan zahtjev za popravak: koji fixer, koje pravilo, s kojim parametrima. */
-export interface RepairFixerRequest {
-  fixerId: string;
-  ruleId: string;
-  params: Record<string, unknown>;
-}
+/** Jedan zahtjev za popravak: isti registry-backed oblik koji koristi Repair Engine. */
+export type RepairFixerRequest = FixerRequest;
 
 /**
  * Bibliografski metapodatak jedne reference, za provjeru postojanja u hrvatskom korpusu (K3/K4).
