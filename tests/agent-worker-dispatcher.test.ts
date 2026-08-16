@@ -69,6 +69,20 @@ describe('agent worker dispatcher contract', () => {
     });
   });
 
+  it.each([401, 403, 404, 429, 500, 503])('treats callback HTTP %s as a failed dispatch', async (status) => {
+    const fetchImpl = vi.fn(async () => new Response('{}', { status }));
+
+    await expect(dispatchAgentRuns([{ run_id: 'run-1' }], {
+      appUrl: 'https://katedra.test',
+      workerToken: 'worker-secret',
+      timeoutMs: 180_000,
+      fetchImpl,
+    })).resolves.toMatchObject({
+      results: [{ runId: 'run-1', status }],
+      failed: 1,
+    });
+  });
+
   it('rejects invalid run identifiers and caps the batch at ten', async () => {
     const fetchImpl = vi.fn(async () => new Response('{}', { status: 200 }));
     const runs = Array.from({ length: 12 }, (_, index) => ({ run_id: `run-${index}` }));

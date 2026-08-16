@@ -56,7 +56,7 @@ export async function dispatchAgentRuns(
 
   return {
     results,
-    failed: results.filter((result) => result.status >= 500).length,
+    failed: results.filter((result) => result.status < 200 || result.status >= 300).length,
   };
 }
 
