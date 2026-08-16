@@ -133,6 +133,10 @@ export function scanXmlWellFormed(xml: string): XmlScanResult {
     const name = xml.slice(nameStart, j);
 
     let selfClosing = false;
+    // Imena atributa vidjena na OVOM elementu: duplikat je fatalna XML greska (XML 1.0
+    // sec. 3.1, WFC: Unique Att Spec) koju Word i lxml odbijaju, a regex-patcher je moze
+    // proizvesti umetanjem atributa koji vec postoji umjesto zamjene postojeceg.
+    const seenAttrs = new Set<string>();
     for (;;) {
       while (j < xml.length && WHITESPACE.has(xml[j])) j++;
       if (j >= xml.length) return fail(`nezatvoren tag <${name}>`, lt);
@@ -154,6 +158,8 @@ export function scanXmlWellFormed(xml: string): XmlScanResult {
       const attrStart = j;
       while (j < xml.length && !WHITESPACE.has(xml[j]) && xml[j] !== '=' && xml[j] !== '>' && xml[j] !== '/') j++;
       const attrName = xml.slice(attrStart, j);
+      if (seenAttrs.has(attrName)) return fail(`atribut ${attrName} ponovljen na istom elementu <${name}>`, attrStart);
+      seenAttrs.add(attrName);
       while (j < xml.length && WHITESPACE.has(xml[j])) j++;
       if (xml[j] !== '=') return fail(`atribut ${attrName} u <${name}> nema '='`, attrStart);
       j++;
