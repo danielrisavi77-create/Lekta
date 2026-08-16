@@ -6,6 +6,8 @@ import { analyzeFixture, resolveProfile } from '../../src/analysis/golden-entry'
 import { installXmlDomParser } from '../../src/docx/xml-dom-install';
 import { repairEntriesFor } from '../../src/profiles/profile-runtime-maps';
 import { applyFixers, type FixerRequest } from '../../src/repair/apply-fixers';
+import { detectPassRegressions } from '../../src/analysis/repair-regression';
+import { buildDefaultRepairRequests } from '../../src/repair/default-selection';
 import { inspectDocxParts } from '../../src/repair/package-integrity';
 import { readZip } from '../../src/repair/zip-codec';
 import { buildRepairableItems, universalRepairableItems } from '../../src/ui/repair-items';
@@ -47,6 +49,13 @@ export interface RealCorpusResult {
   /** Dijelovi koji su pali strogi skener, s razlogom i offsetom (prazno kad je paket cist). */
   malformedParts: string[];
   secondPassNoOp: boolean;
+  /**
+   * Je li vrata integriteta odbila isporuku. applyFixers tada vraca ULAZNE bajtove uz prazan
+   * changelog, pa bi bez ovog polja odbijen popravak izgledao kao uredan 'no-op': sve ostale
+   * tvrdnje (outputReadable, secondPassNoOp, droppedEntryCount, passRegressionCount) prolaze
+   * VAKUUMSKI nad neizmijenjenim originalom. Zato je integrityFailure tvrdi 'fail'.
+   */
+  integrityFailure: string | null;
   manualReviewRequired: boolean;
   manualReviewReasons: string[];
   error: string | null;
@@ -62,6 +71,8 @@ export interface RealCorpusReport {
     passCount: number;
     reviewCount: number;
     failCount: number;
+    /** Koliko je dokumenata vrata integriteta odbila (mora biti 0; vidi RealCorpusResult). */
+    integrityFailureCount: number;
     noOpCount: number;
     changedDocumentCount: number;
     manualReviewCount: number;
@@ -139,6 +150,7 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     packageWellFormed: false,
     malformedParts: [] as string[],
     secondPassNoOp: false,
+    integrityFailure: null as string | null,
     manualReviewRequired: false,
     manualReviewReasons: [] as string[],
     error: null as string | null,
@@ -153,7 +165,10 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
       ...buildRepairableItems(before.checks ?? [], profile, repairEntriesFor(entry.profileId)),
       ...universalRepairableItems(before.issues ?? []).filter((item) => item.violated),
     ];
-    const requests: FixerRequest[] = items.map((item) => ({ fixerId: item.fixerId, ruleId: item.ruleId, params: item.params }));
+    // Isti odabir kao UI checkbox (violated !== false): advisory preporuke su opt-in i NE ulaze
+    // u zadani popravak. Bez ovoga je harness primjenjivao i preporuke pa je izvjestaj opisivao
+    // tok koji nijedan korisnik ne izvodi (npr. pmf-matematika-uskladjen: 100/100 pa ipak margine).
+    const requests: FixerRequest[] = buildDefaultRepairRequests(items);
     const beforeEntries = await readZip(bytes);
     const beforeText = textFingerprint(beforeEntries);
     const applied = await applyFixers(bytes, requests);
@@ -170,7 +185,9 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     const titles = targetedTitles(items);
     const resolved = titles.filter((title) => afterCheckForTitle(after.checks ?? [], title)?.status === 'pass');
     const unresolved = titles.length - resolved.length;
-    const regressions = (before.checks ?? []).filter((check: any) => check.status === 'pass' && afterCheckForTitle(after.checks ?? [], check.title)?.status !== 'pass').length;
+    // Ista funkcija koju koristi produkcija (kljuca po stabilnom id-u, fallback naslov),
+    // umjesto vlastite kopije logike koja je znala izracunati isto na svoj nacin.
+    const regressions = detectPassRegressions(before.checks ?? [], after.checks ?? []).length;
     const second = await applyFixers(applied.docxBytes, requests);
     const secondPassNoOp = second.changelog.length === 0 && second.docxBytes === applied.docxBytes;
     const changed = applied.changelog.length > 0;
@@ -179,9 +196,12 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
       ...(unresolved ? ['ciljani-check-nije-u-potpunosti-riješen'] : []),
       ...(items.some((item) => item.requiresConfirmation) ? ['postoji-asistirana-stavka-koja-traži-potvrdu'] : []),
     ];
+    const integrityFailure = applied.integrityFailure
+      ? `${applied.integrityFailure.part}: ${applied.integrityFailure.problem}`
+      : null;
     const finalResult: RealCorpusResult = {
       ...base,
-      outcome: regressions || !outputReadable || malformedParts.length > 0 || droppedEntryCount > 0 || !secondPassNoOp || beforeText !== afterText ? 'fail' : unresolved ? 'review' : changed ? 'review' : 'no-op',
+      outcome: integrityFailure || regressions || !outputReadable || malformedParts.length > 0 || droppedEntryCount > 0 || !secondPassNoOp || beforeText !== afterText ? 'fail' : unresolved ? 'review' : changed ? 'review' : 'no-op',
       before: { checkCount: before.checks?.length ?? 0, passCount: checkPassCount(before.checks ?? []), score: scoreOf(before) },
       after: { checkCount: after.checks?.length ?? 0, passCount: checkPassCount(after.checks ?? []), score: scoreOf(after) },
       beforeEntryCount: beforeEntries.length,
@@ -197,6 +217,7 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
       packageWellFormed: malformedParts.length === 0,
       malformedParts,
       secondPassNoOp,
+      integrityFailure,
       manualReviewRequired: manualReviewReasons.length > 0,
       manualReviewReasons,
       error: null,
@@ -224,6 +245,7 @@ export async function runRealCorpus(root = REAL_CORPUS_ROOT, options: { outputDi
       passCount: results.filter((result) => result.outcome === 'pass').length,
       reviewCount: results.filter((result) => result.outcome === 'review').length,
       failCount: results.filter((result) => result.outcome === 'fail').length,
+      integrityFailureCount: results.filter((result) => result.integrityFailure !== null).length,
       noOpCount: results.filter((result) => result.outcome === 'no-op').length,
       changedDocumentCount: results.filter((result) => result.changedFixerIds.length > 0).length,
       manualReviewCount: results.filter((result) => result.manualReviewRequired).length,

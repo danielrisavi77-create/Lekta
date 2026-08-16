@@ -80,8 +80,8 @@
       },
       "after": {
         "checkCount": 19,
-        "passCount": 17,
-        "score": 89
+        "passCount": 16,
+        "score": 87
       },
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
@@ -92,21 +92,18 @@
         "line-spacing-fixer",
         "margins-fixer"
       ],
-      "changedFixerIds": [
-        "paper-size-fixer",
-        "margins-fixer"
-      ],
+      "changedFixerIds": [],
       "targetedCheckCount": 4,
-      "targetedResolvedCount": 3,
-      "targetedUnresolvedCount": 1,
+      "targetedResolvedCount": 2,
+      "targetedUnresolvedCount": 2,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
       "malformedParts": [],
       "secondPassNoOp": true,
+      "integrityFailure": null,
       "manualReviewRequired": true,
       "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
         "ciljani-check-nije-u-potpunosti-riješen"
       ],
       "error": null
@@ -123,8 +120,8 @@
       },
       "after": {
         "checkCount": 19,
-        "passCount": 17,
-        "score": 94
+        "passCount": 15,
+        "score": 78
       },
       "beforeEntryCount": 14,
       "afterEntryCount": 14,
@@ -135,21 +132,18 @@
         "line-spacing-fixer",
         "margins-fixer"
       ],
-      "changedFixerIds": [
-        "font-fixer",
-        "line-spacing-fixer"
-      ],
+      "changedFixerIds": [],
       "targetedCheckCount": 4,
-      "targetedResolvedCount": 3,
-      "targetedUnresolvedCount": 1,
+      "targetedResolvedCount": 1,
+      "targetedUnresolvedCount": 3,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
       "malformedParts": [],
       "secondPassNoOp": true,
+      "integrityFailure": null,
       "manualReviewRequired": true,
       "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
         "ciljani-check-nije-u-potpunosti-riješen"
       ],
       "error": null
@@ -166,8 +160,8 @@
       },
       "after": {
         "checkCount": 19,
-        "passCount": 17,
-        "score": 89
+        "passCount": 16,
+        "score": 87
       },
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
@@ -178,21 +172,18 @@
         "line-spacing-fixer",
         "margins-fixer"
       ],
-      "changedFixerIds": [
-        "paper-size-fixer",
-        "margins-fixer"
-      ],
+      "changedFixerIds": [],
       "targetedCheckCount": 4,
-      "targetedResolvedCount": 3,
-      "targetedUnresolvedCount": 1,
+      "targetedResolvedCount": 2,
+      "targetedUnresolvedCount": 2,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
       "malformedParts": [],
       "secondPassNoOp": true,
+      "integrityFailure": null,
       "manualReviewRequired": true,
       "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
         "ciljani-check-nije-u-potpunosti-riješen"
       ],
       "error": null
@@ -225,6 +216,7 @@
       "packageWellFormed": true,
       "malformedParts": [],
       "secondPassNoOp": true,
+      "integrityFailure": null,
       "manualReviewRequired": false,
       "manualReviewReasons": [],
       "error": null
@@ -263,6 +255,7 @@
       "packageWellFormed": true,
       "malformedParts": [],
       "secondPassNoOp": true,
+      "integrityFailure": null,
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
@@ -305,6 +298,7 @@
       "packageWellFormed": true,
       "malformedParts": [],
       "secondPassNoOp": true,
+      "integrityFailure": null,
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
@@ -340,6 +334,7 @@
       "packageWellFormed": true,
       "malformedParts": [],
       "secondPassNoOp": true,
+      "integrityFailure": null,
       "manualReviewRequired": false,
       "manualReviewReasons": [],
       "error": null
@@ -348,7 +343,7 @@
       "documentId": "pmf-matematika-uskladjen",
       "fileName": "pmf-matematika-uskladjen.docx",
       "profileId": "pmf-matematika-graduate",
-      "outcome": "review",
+      "outcome": "no-op",
       "before": {
         "checkCount": 19,
         "passCount": 18,
@@ -366,9 +361,7 @@
         "line-spacing-fixer",
         "margins-fixer"
       ],
-      "changedFixerIds": [
-        "margins-fixer"
-      ],
+      "changedFixerIds": [],
       "targetedCheckCount": 2,
       "targetedResolvedCount": 2,
       "targetedUnresolvedCount": 0,
@@ -377,17 +370,16 @@
       "packageWellFormed": true,
       "malformedParts": [],
       "secondPassNoOp": true,
-      "manualReviewRequired": true,
-      "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu"
-      ],
+      "integrityFailure": null,
+      "manualReviewRequired": false,
+      "manualReviewReasons": [],
       "error": null
     },
     {
       "documentId": "pmf-matematika-zasticeni-odlomci",
       "fileName": "pmf-matematika-zasticeni-odlomci.docx",
       "profileId": "pmf-matematika-graduate",
-      "outcome": "review",
+      "outcome": "no-op",
       "before": {
         "checkCount": 19,
         "passCount": 18,
@@ -405,9 +397,7 @@
         "line-spacing-fixer",
         "margins-fixer"
       ],
-      "changedFixerIds": [
-        "margins-fixer"
-      ],
+      "changedFixerIds": [],
       "targetedCheckCount": 2,
       "targetedResolvedCount": 2,
       "targetedUnresolvedCount": 0,
@@ -416,10 +406,9 @@
       "packageWellFormed": true,
       "malformedParts": [],
       "secondPassNoOp": true,
-      "manualReviewRequired": true,
-      "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu"
-      ],
+      "integrityFailure": null,
+      "manualReviewRequired": false,
+      "manualReviewReasons": [],
       "error": null
     },
     {
@@ -447,7 +436,6 @@
       ],
       "changedFixerIds": [
         "font-fixer",
-        "margins-fixer",
         "alignment-fixer"
       ],
       "targetedCheckCount": 4,
@@ -458,6 +446,7 @@
       "packageWellFormed": true,
       "malformedParts": [],
       "secondPassNoOp": true,
+      "integrityFailure": null,
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
@@ -500,6 +489,7 @@
       "packageWellFormed": true,
       "malformedParts": [],
       "secondPassNoOp": true,
+      "integrityFailure": null,
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu"
@@ -534,6 +524,7 @@
       "packageWellFormed": true,
       "malformedParts": [],
       "secondPassNoOp": true,
+      "integrityFailure": null,
       "manualReviewRequired": false,
       "manualReviewReasons": [],
       "error": null
@@ -542,11 +533,12 @@
   "summary": {
     "documentCount": 12,
     "passCount": 0,
-    "reviewCount": 9,
+    "reviewCount": 7,
     "failCount": 0,
-    "noOpCount": 3,
-    "changedDocumentCount": 9,
-    "manualReviewCount": 9,
+    "integrityFailureCount": 0,
+    "noOpCount": 5,
+    "changedDocumentCount": 4,
+    "manualReviewCount": 7,
     "passRegressionCount": 0
   }
 }
