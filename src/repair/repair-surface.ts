@@ -1,4 +1,4 @@
-import { FIXER_IDS, type FixerId } from './apply-fixers';
+import { FIXER_IDS, type FixerId } from './fixer-registry.ts';
 
 /**
  * Mjesto na kojem se fixer pojavljuje u aplikaciji.
