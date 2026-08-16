@@ -6,7 +6,7 @@
 ## Kako popravak radi
 
 U popravku NEMA jezicnog modela ni prompta. Popravak je deterministicki XML patch nad
-OOXML-om: 16 fixera (`src/repair/fixers.ts`) mijenja `word/document.xml`, `styles.xml`,
+OOXML-om: 31 fixera (`src/repair/apply-fixers.ts`) mijenja `word/document.xml`, `styles.xml`,
 `footnotes.xml` i podnozja, a svi ostali dijelovi dokumenta (slike, tema, veze) prolaze
 bajt-identicno (`src/repair/apply-fixers.ts`).
 

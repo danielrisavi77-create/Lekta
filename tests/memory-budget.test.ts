@@ -9,10 +9,10 @@ import { uploadCapBytes, decompressionBudgetBytes } from '../src/analysis/memory
 const MB = 1024 * 1024;
 
 describe('uploadCapBytes', () => {
-  it('desktop bez signala uredaja: 50 MB', () => {
-    expect(uploadCapBytes()).toBe(50 * MB);
-    expect(uploadCapBytes({ deviceMemory: 8 })).toBe(50 * MB);
-    expect(uploadCapBytes({ deviceMemory: null, coarsePointer: false })).toBe(50 * MB);
+  it('desktop bez signala uredaja: 20 MB (zajednicka granica s popravkom)', () => {
+    expect(uploadCapBytes()).toBe(20 * MB);
+    expect(uploadCapBytes({ deviceMemory: 8 })).toBe(20 * MB);
+    expect(uploadCapBytes({ deviceMemory: null, coarsePointer: false })).toBe(20 * MB);
   });
 
   it('mobilni (coarse pointer ili <=4 GB): 20 MB', () => {
@@ -29,8 +29,8 @@ describe('uploadCapBytes', () => {
   });
 
   it('nevaljan deviceMemory (0, negativan) tretira se kao nedostupan', () => {
-    expect(uploadCapBytes({ deviceMemory: 0 })).toBe(50 * MB);
-    expect(uploadCapBytes({ deviceMemory: -1, coarsePointer: false })).toBe(50 * MB);
+    expect(uploadCapBytes({ deviceMemory: 0 })).toBe(20 * MB);
+    expect(uploadCapBytes({ deviceMemory: -1, coarsePointer: false })).toBe(20 * MB);
   });
 });
 

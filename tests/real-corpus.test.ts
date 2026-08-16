@@ -18,5 +18,9 @@ describe('Repair Engine real DOCX corpus', () => {
     expect(report.results.every((result) => result.droppedEntryCount === 0)).toBe(true);
     expect(report.results.every((result) => result.passRegressionCount === 0)).toBe(true);
     expect(report.results.every((result) => result.error === null)).toBe(true);
+    // Vrata integriteta: odbijen popravak vraca ULAZNE bajtove, pa bi bez ove tvrdnje sve
+    // gornje provjere prosle vakuumski nad neizmijenjenim originalom ("0 fail" bez pokrica).
+    expect(report.summary.integrityFailureCount).toBe(0);
+    expect(report.results.every((result) => result.integrityFailure === null)).toBe(true);
   }, 180000);
 });

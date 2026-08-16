@@ -26,6 +26,7 @@ import { dirname, join } from 'node:path';
 import { DOMParser } from '@xmldom/xmldom';
 import { parseXml } from '../src/docx/parser';
 import { readZip } from '../src/repair/zip-codec';
+import { scanXmlWellFormed } from '../src/repair/package-integrity';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const FIXTURE_DIR = join(here, 'fixtures', 'docx');
@@ -84,5 +85,30 @@ describe('A0: baseline - svi postojeci fixturi su strogo well-formed', () => {
       }
     }
     expect(problems, `neispravni dijelovi:\n${problems.join('\n')}`).toEqual([]);
+  });
+});
+
+/**
+ * Duplikat atributa je FATALNA XML greska (XML 1.0 sec. 3.1, WFC: Unique Att Spec): Word i lxml
+ * takav paket odbijaju. Skener ju dosad nije hvatao jer je ime atributa citao samo za poruku o
+ * gresci i nikad ga nije skupljao po elementu. To je tocno oblik kvara koji regex-patcher moze
+ * proizvesti: umetne atribut koji vec postoji umjesto da zamijeni postojeci.
+ */
+describe('A0: duplikat atributa na istom elementu', () => {
+  it('odbija dva ista atributa na elementu', () => {
+    const xml = '<?xml version="1.0"?><w:p xmlns:w="urn:x" w:id="1" w:id="2"><w:t>x</w:t></w:p>';
+    const result = scanXmlWellFormed(xml);
+    expect(result.ok).toBe(false);
+    expect(result.problem).toMatch(/w:id/);
+  });
+
+  it('ne prijavljuje lazno kad su imena razlicita', () => {
+    const xml = '<?xml version="1.0"?><w:p xmlns:w="urn:x" w:id="1" w:rsid="2"><w:t>x</w:t></w:p>';
+    expect(scanXmlWellFormed(xml).ok).toBe(true);
+  });
+
+  it('isti atribut na RAZLICITIM elementima je uredan', () => {
+    const xml = '<?xml version="1.0"?><w:body xmlns:w="urn:x"><w:p w:id="1"/><w:p w:id="1"/></w:body>';
+    expect(scanXmlWellFormed(xml).ok).toBe(true);
   });
 });

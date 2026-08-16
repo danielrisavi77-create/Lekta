@@ -13393,14 +13393,13 @@
         "profileCoveragePassCount": 6,
         "profileCoverageFailCount": 0,
         "realCorpusPassCount": 0,
-        "realCorpusReviewCount": 2,
-        "realCorpusNoOpCount": 0,
+        "realCorpusReviewCount": 0,
+        "realCorpusNoOpCount": 2,
         "realCorpusFailCount": 0,
         "syntheticClosedLoopNotRunCount": 6
       },
       "manualReviewReasons": [
-        "nema-stvarnog-docx-uzorka",
-        "stvarni-docx-trazi-rucni-pregled"
+        "nema-stvarnog-docx-uzorka"
       ],
       "profiles": [
         {
@@ -13545,15 +13544,13 @@
           "realDocxSampleCount": 2,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "review",
+            "realCorpus": "pass",
             "syntheticClosedLoop": "not-run"
           },
           "realCorpusOutcomes": {
-            "review": 2
+            "no-op": 2
           },
-          "manualReviewReasons": [
-            "stvarni-docx-trazi-rucni-pregled"
-          ]
+          "manualReviewReasons": []
         },
         {
           "profileId": "pmf-geologija-graduate",
@@ -22325,8 +22322,8 @@
     "profilesWithoutRealDocx": 398,
     "profileCoverageFailCount": 0,
     "realCorpusPassCount": 0,
-    "realCorpusReviewCount": 9,
-    "realCorpusNoOpCount": 3,
+    "realCorpusReviewCount": 7,
+    "realCorpusNoOpCount": 5,
     "realCorpusFailCount": 0,
     "syntheticClosedLoopNotRunCount": 407
   }

@@ -15,6 +15,8 @@
  * (src/scoring/checks.ts) da ga mogu koristiti i testni harnessi koji nose samo naslov i status.
  */
 export interface RegressionCheckLike {
+  /** Stabilan identitet provjere; kad postoji, uparivanje ide po njemu (vidi nize). */
+  id?: string | null;
   title: string;
   status?: string;
   category?: string;
@@ -34,10 +36,10 @@ export interface PassRegression {
 /**
  * Provjere koje su prije bile 'pass', a poslije nisu.
  *
- * Uparivanje ide po NASLOVU jer Check nema id (vidi src/scoring/checks.ts:18): naslov je jedina
- * postojeca identifikacija i isti kljuc koriste repair-items.isViolated i check-fixer-map. To je
- * krhko (preimenovanje naslova tiho razvezuje korelaciju) i zabiljezeno je kao dug u
- * docs/COMPETITIVE_ANALYSIS.md; ovdje se svjesno preuzima da se ne otvara veliki refaktor.
+ * Uparivanje ide po STABILNOM `id` (src/scoring/check-id-registry.ts). Naslov ostaje samo
+ * fallback za provjere koje jos nemaju registriran identitet. Prije se kljucalo iskljucivo po
+ * hrvatskom naslovu, pa je preformulacija (ili dinamican sufiks kao kod formata stranice)
+ * razvezivala par: nestala provjera se racuna kao regresija, sto je davalo LAZAN pad.
  *
  * Nestala provjera se RACUNA kao regresija, isto kao u postojecim testnim harnessima: uz isti
  * profil i iste postavke skup provjera mora ostati isti, pa je nestanak jednako sumnjiv kao pad.
@@ -49,7 +51,11 @@ export function detectPassRegressions(
   const out: PassRegression[] = [];
   for (const check of before) {
     if (check.status !== 'pass') continue;
-    const match = after.find((candidate) => candidate.title === check.title);
+    // Kljuc: id kad ga OBJE strane imaju, inace naslov. Dvije razlicite neregistrirane
+    // provjere (obje id === null) ne smiju se upariti samo zato sto su obje bez id-a.
+    const match = check.id
+      ? after.find((candidate) => candidate.id === check.id)
+      : after.find((candidate) => !candidate.id && candidate.title === check.title);
     if (match?.status === 'pass') continue;
     const beforeEarned = check.earned ?? 0;
     const afterEarned = match?.earned ?? 0;

@@ -98,6 +98,14 @@ const STRUCTURAL_CHECK_RULES: StructuralCheckRule[] = [
   { match: (t) => t === 'Isti autor i godina (a/b/c)', groupKey: 'reference.sort', fixId: 'bibliography-repair-fixer' },
   { match: (t) => t === 'Numeriranje stranica' || t === 'Sekcije', groupKey: 'section.surgery', fixId: 'section-surgery-fixer' },
   { match: (t) => t === 'Dijelovi verificiranog profila', groupKey: 'required.sections', fixId: 'required-section-fixer' },
+  // Oblikovanje naslova i tipografija fusnota imaju ZIVI, naplacen fixer (repair-surface.ts,
+  // repair-pricing.ts) i nude se kao posebna UI stavka, ali su bile izostavljene i iz
+  // AUTO_CHECK_FIXER (namjerno: mijenjaju strukturu pa nisu 'auto') i odavde (previd). Time su
+  // padale na 'manual' fallback, pa je repairCeiling lazno ostajao ispod 100 i sucelje je
+  // tvrdilo da nalaz trazi rucni rad iako ga alat popravlja. Isti obrazac je 2026-08-02 vec
+  // popravljen za cetiri pravila iznad.
+  { match: (t) => t === CHECK_TITLES['heading-format'], groupKey: 'heading.format', fixId: 'heading-format-fixer' },
+  { match: (t) => t === CHECK_TITLES['footnote-typography'], groupKey: 'footnote.typography', fixId: 'footnote-typography-fixer' },
 ];
 
 /**

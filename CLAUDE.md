@@ -178,11 +178,22 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
   (Word COM, `OpenAndRepair=false`, Windows). Oracle POSTOJI u `scripts/word-verify/`, ne gradi ga
   ispocetka. KLJUC: `@xmldom/xmldom` ne baca i ne stvara `parsererror` na neispravnom XML-u, pa
   provjera oslonjena na `parseXml` daje lazno zeleno (dokaz: `tests/repair-package-integrity.test.ts`).
+  DRUGI oblik istog lazno zelenog: kad vrata integriteta ODBIJU isporuku, `applyFixers` vraca
+  ULAZNE bajtove uz prazan changelog, pa harness bez izricite tvrdnje `integrityFailure === null`
+  to vidi kao uredan `no-op`, a sve ostale tvrdnje prolaze vakuumski nad originalom.
 
 ## Mapa datoteka
 
 - `src/ui/app.ts` - UI orkestrator (UI, narudzbe, placanje, QA). Meta: dovrsiti split.
 - `src/analysis/analyze-docx.ts` - analyzeDocx + auditni helperi (jezgra analize).
+- `src/scoring/check-id-registry.ts` - STABILNI identiteti provjera (`page.margins` i sl.).
+  `Check` od 2026-08-16 ima `id`; korelacija prije/poslije popravka i mapiranje na fixer idu
+  po njemu, hrvatski `title` je samo fallback za jos neregistrirane provjere.
+- `src/repair/docx-budget.ts` - JEDAN izvor granica dokumenta (upload, dekompresija, broj
+  zapisa) za intake, analizu i popravak; ne uvodi nove granice mimo njega.
+- `src/repair/default-selection.ts` - `buildDefaultRepairRequests`: sto je PREDODABRANO kad
+  korisnik samo klikne Popravi (`violated !== false`, isto kao UI checkbox). Testovi koji
+  simuliraju korisnicki tok moraju ici kroz njega, inace mjere tok koji nitko ne izvodi.
 - `src/analysis/analyze-docx-client.ts` - most prema Web Workeru, inline fallback.
 - `src/profiles/profile-loader.ts` - registar profila, hidracija izvora, kompilacija.
 - `src/profiles/rule-compiler.ts` - Option A: ruleEntries -> effectiveRules.

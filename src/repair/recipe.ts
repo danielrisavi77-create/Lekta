@@ -16,6 +16,7 @@
  * verification-console. Pokrece ga scripts/generate-repair-recipe.mts (npm run repair-recipe) i test.
  */
 import { resolveProfile } from '../analysis/golden-entry';
+import { FIXER_IDS } from './apply-fixers';
 import { VERIFIED_PROFILE_REGISTRY } from '../profiles/profile-registry';
 import { repairEntriesFor } from '../profiles/profile-runtime-maps';
 import { draftRuleEntriesFor } from '../profiles/drafts-runtime';
@@ -231,7 +232,7 @@ export function renderRecipeMarkdown(recipe: RecipeProfile[]): string {
   lines.push('## Kako popravak radi');
   lines.push('');
   lines.push('U popravku NEMA jezicnog modela ni prompta. Popravak je deterministicki XML patch nad');
-  lines.push('OOXML-om: 16 fixera (`src/repair/fixers.ts`) mijenja `word/document.xml`, `styles.xml`,');
+  lines.push(`OOXML-om: ${FIXER_IDS.length} fixera (\`src/repair/apply-fixers.ts\`) mijenja \`word/document.xml\`, \`styles.xml\`,`);
   lines.push('`footnotes.xml` i podnozja, a svi ostali dijelovi dokumenta (slike, tema, veze) prolaze');
   lines.push('bajt-identicno (`src/repair/apply-fixers.ts`).');
   lines.push('');

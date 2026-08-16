@@ -14,6 +14,7 @@
 // bajtove. Golden test (fixers.test.ts) zato provjerava DEKOMPRIMIRANI
 // sadrzaj netaknutih entryja je bit-identican, ne sirovi zip byte stream.
 
+import { DOCX_MAX_TOTAL_DECOMPRESSED_BYTES, DOCX_MAX_ZIP_ENTRIES } from './docx-budget';
 export interface ZipEntry {
   name: string;
   data: Uint8Array; // uvijek DEKOMPRIMIRAN sadrzaj
@@ -39,8 +40,8 @@ const EOCD_SIG = 0x06054b50;
 // velicine dok su chunkovi jos zivi, pa je tranzijentni peak do 2x budzeta. Zato je budzet 64MB (a
 // ne blizu 256MB): peak ostaje <= ~128MB, sto s ulazom (do 20MB) i runtime baselineom stane ispod
 // Edge 256MB. Presjek (reader.cancel + throw) oslobodi memoriju odmah i da cist 422 umjesto OOM-a.
-const MAX_ZIP_ENTRIES = 4096;
-const MAX_TOTAL_DECOMPRESSED_BYTES = 64 * 1024 * 1024; // 64 MB ukupno; s 2x concat peakom <= ~128MB
+const MAX_ZIP_ENTRIES = DOCX_MAX_ZIP_ENTRIES;
+const MAX_TOTAL_DECOMPRESSED_BYTES = DOCX_MAX_TOTAL_DECOMPRESSED_BYTES; // 64 MB; s 2x concat peakom <= ~128MB
 
 function crc32Table(): Uint32Array {
   const table = new Uint32Array(256);

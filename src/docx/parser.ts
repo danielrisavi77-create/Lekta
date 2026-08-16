@@ -11,6 +11,7 @@
  * cita pohranjene (method 0) zapise izravno; parseXml koristi globalni DOMParser
  * (u testu podmetnut @xmldom/xmldom, vidi tests/setup/xml-dom.ts).
  */
+import { DOCX_MAX_ZIP_ENTRIES } from '../repair/docx-budget';
 import { attr, els, first, direct } from '../utils/helpers.ts';
 
 interface ZipEntry {
@@ -33,7 +34,7 @@ export const MAX_DECOMPRESSED_BYTES = 200 * 1024 * 1024;
  * slika 200-300 (svaka slika je zapis); 512 daje visestruki zazor, a napadacki zipovi
  * deklariraju do 65535 (EOCD count je uint16) da napusu central-directory obradu.
  */
-export const MAX_ZIP_ENTRIES = 512;
+export const MAX_ZIP_ENTRIES = DOCX_MAX_ZIP_ENTRIES;
 
 /**
  * Sigurnosna granica broja odlomaka za jeftini regex pre-scan XML dijelova PRIJE DOM

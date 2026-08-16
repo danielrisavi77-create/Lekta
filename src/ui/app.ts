@@ -1,4 +1,5 @@
 'use strict';
+import { DOCX_MAX_UPLOAD_BYTES } from '../repair/docx-budget';
 import { escapeHtml, safeHref, clamp, fmt, normalize, sectionName, attr, els, first, textOf, direct, reframeStatusNote } from '../utils/helpers';
 import { focusResult } from '../shared/result-a11y'; // BL-P1-02: fokus + SR-najava rezultata
 // BL-P0-05-4: DOCX parser se koristi tek nakon odabira datoteke (metapodaci, detekcija konteksta),
@@ -1510,7 +1511,7 @@ function repairReferencesFrom(r: any){
 // Gornja granica uploada za popravak, USKLADJENA sa serverskim REPAIR_MAX_DOCX_BYTES (20 MB).
 // Bez ovoga korisnik potvrdi privolu, otvori se sesija i cijeli se dokument prenese uzalud da bi
 // tek server vratio 413. `uploadMaxBytes` iz konfiguracije NE vrijedi ovdje (gejta samo narudzbe).
-const REPAIR_MAX_UPLOAD_BYTES=20*1024*1024;
+const REPAIR_MAX_UPLOAD_BYTES=DOCX_MAX_UPLOAD_BYTES;
 // Krajnji rok jednog popravka. Namjerno velikodusan (spor uplink + serverska obrada), ali konacan:
 // bez njega zaglavljen zahtjev ostavlja gumb zauvijek u stanju "Saljem".
 const REPAIR_TIMEOUT_MS=180000;
