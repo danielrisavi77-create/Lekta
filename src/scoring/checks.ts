@@ -6,6 +6,7 @@
  * koji zasjenjuje funkciju `issue` u svom tijelu, identicno originalu.
  */
 import { clamp } from '../utils/helpers.ts';
+import { stableCheckId } from './check-id-registry.ts';
 
 export interface Issue {
   severity: 'error' | 'warning' | 'info' | string;
@@ -16,6 +17,18 @@ export interface Issue {
 }
 
 export interface Check {
+  /**
+   * Stabilan, jezicno-neovisan identitet provjere (npr. `page.margins`).
+   *
+   * Identitet nalaza je povijesno bio hrvatski `title` (UI string), pa je svaka preformulacija
+   * naslova tiho kidala korelaciju "prije/poslije popravka" i vezu naslova na fixer. `id` je
+   * izveden iz registra (`check-id-registry.ts`) i ADITIVAN: `title` se ne mijenja, pa golden
+   * snapshoti ostaju vazeci. `null` znaci da naslov jos nije registriran.
+   *
+   * Neobavezno na TIPU (ne i u `makeCheck`, koji ga uvijek postavlja) da rucno slozeni testni
+   * i UI fixturi ne moraju izmisljati identitet koji nikad ne koriste.
+   */
+  id?: string | null;
   category: string;
   title: string;
   status: string;
@@ -41,7 +54,7 @@ export function makeCheck(
     detail = `Informativno: ne ulazi u službenu ocjenu. ${detail}`;
     if (issue) issue = { ...issue, severity: 'info', title: `Informativno: ${issue.title}` };
   }
-  return { category, title, status, earned: clamp(earned, 0, max), max, detail, issue, scored: max > 0 };
+  return { id: stableCheckId(title), category, title, status, earned: clamp(earned, 0, max), max, detail, issue, scored: max > 0 };
 }
 
 /**
