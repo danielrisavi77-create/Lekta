@@ -98,4 +98,18 @@ describe('agent worker dispatcher contract', () => {
 
     expect(fetchImpl).toHaveBeenCalledTimes(10);
   });
+
+  it('reports a malformed queue row as a failed dispatch instead of silently dropping it', async () => {
+    const fetchImpl = vi.fn(async () => new Response('{}', { status: 200 }));
+
+    await expect(dispatchAgentRuns([{ run_id: 'run with spaces' }, { run_id: 'run-1' }], {
+      appUrl: 'https://katedra.test',
+      workerToken: 'worker-secret',
+      timeoutMs: 180_000,
+      fetchImpl,
+    })).resolves.toEqual({
+      results: [{ runId: 'run-1', status: 200 }],
+      failed: 1,
+    });
+  });
 });

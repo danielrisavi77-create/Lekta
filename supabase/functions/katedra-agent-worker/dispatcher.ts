@@ -34,10 +34,14 @@ export async function dispatchAgentRuns(
   const appUrl = options.appUrl.replace(/\/$/u, '');
   const maxRuns = normalizeBatch(options.maxRuns);
   const results: DispatchResult[] = [];
+  let malformed = 0;
 
   for (const run of runs.slice(0, maxRuns)) {
     const runId = typeof run.run_id === 'string' ? run.run_id.trim() : '';
-    if (!RUN_ID_PATTERN.test(runId)) continue;
+    if (!RUN_ID_PATTERN.test(runId)) {
+      malformed += 1;
+      continue;
+    }
 
     try {
       const response = await fetchWithTimeout(fetchImpl, `${appUrl}/api/internal/agent-worker`, {
@@ -56,7 +60,7 @@ export async function dispatchAgentRuns(
 
   return {
     results,
-    failed: results.filter((result) => result.status < 200 || result.status >= 300).length,
+    failed: malformed + results.filter((result) => result.status < 200 || result.status >= 300).length,
   };
 }
 
