@@ -13,6 +13,9 @@ import { describe, it, expect } from 'vitest';
 import baked from '../docs/generated/repair-recipe.json';
 import { buildRecipe, hasProfileRules, type RecipeProfile } from '../src/repair/recipe';
 import { resolveProfile } from '../src/analysis/golden-entry';
+import { FIXER_IDS } from '../src/repair/apply-fixers';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 const fresh = buildRecipe();
 
@@ -24,6 +27,19 @@ describe('recept popravka je u koraku s profilima', () => {
   it('pokriva sve profile i nije prazan (sanity)', () => {
     expect(fresh.length).toBeGreaterThan(300);
     expect(fresh.filter(hasProfileRules).length).toBeGreaterThan(100);
+  });
+
+  /**
+   * Guard iznad usporeduje SAMO podatke (buildRecipe vs repair-recipe.json) i nikad ne cita
+   * .md, pa je proza dosad mogla driftati neogranicено: broj fixera je bio hardkodiran literal
+   * ('16 fixera') i ostajao tocan u usporedbi bez obzira na to koliko ih je registrirano.
+   * Zato se ovdje cita bas markdown i tvrdi da broj odgovara zivom registru.
+   */
+  it('markdown navodi STVARAN broj fixera iz registra (proza ne smije driftati)', () => {
+    const md = readFileSync(resolve(process.cwd(), 'docs/REPAIR_RECIPE.md'), 'utf8');
+    expect(md).toMatch(new RegExp(`${FIXER_IDS.length} fixera`));
+    // Registar zivi u apply-fixers.ts; fixers.ts je samo jedan od modula s implementacijama.
+    expect(md).toContain('src/repair/apply-fixers.ts');
   });
 });
 
