@@ -1301,7 +1301,9 @@ export function patchDefaultAlignment(stylesXml: string, val: string): PatchResu
 // blokove u dokument-poretku i primjenjujemo ciljanu vrijednost samo na trazeni indeks.
 
 export interface SectionNumberingTarget {
-  /** Redni broj sekcije u dokument-poretku (isti kao els(doc,'w:sectPr') u analyzeDocx). */
+  /** Redni broj sekcije u dokument-poretku (isti kao ZIVE sekcije u analyzeDocx: povijesne
+   *  kopije unutar w:sectPrChange se ne broje ni ondje ni ovdje, jer patch funkcije nize
+   *  rade bit-identican no-op cim dokument sadrzi sectPrChange). */
   sectionIndex: number;
   /** w:fmt: 'lowerRoman'/'upperRoman' (prednji dio) ili 'decimal' (glavni tekst od Uvoda). */
   fmt: 'lowerRoman' | 'upperRoman' | 'decimal';
