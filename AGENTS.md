@@ -51,6 +51,8 @@ NE izvodi, nego provjeri je li fixer poznat i ziv, sanira parametre i izvrsi.
   Oracle POSTOJI u scripts/word-verify/, ne gradi ga ispocetka. KLJUC: @xmldom/xmldom ne
   baca i ne stvara parsererror na neispravnom XML-u, pa provjera preko parseXml daje lazno
   zeleno (dokaz: tests/repair-package-integrity.test.ts).
+  Drugi oblik istog: kad vrata integriteta odbiju isporuku, applyFixers vraca ULAZNE bajtove uz
+  prazan changelog, pa test bez tvrdnje integrityFailure === null to vidi kao uredan no-op.
 
 ## Lekta nikad ne generira niti ne prepravlja sadrzaj rada
 

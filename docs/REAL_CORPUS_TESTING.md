@@ -51,6 +51,13 @@ Zašto Tier 0 nije omotač oko postojećeg `parseXml`: `@xmldom/xmldom` **ne bac
 serijalizira kao tekst. Kako je xmldom runtime svih testova i Web Workera, takav omotač bio bi
 lažno zeleno. Dokaz je u `tests/repair-package-integrity.test.ts`.
 
+Drugi oblik lažnog zelenog, na istoj klasi problema (2026-08-16): kad vrata integriteta ODBIJU
+isporuku, `applyFixers` vraća **ulazne bajtove** uz prazan changelog. Harness koji to ne provjeri
+vidi `changed === false` i zaključi `no-op`, a sve ostale tvrdnje (`outputReadable`,
+`secondPassNoOp`, `droppedEntryCount`, `passRegressionCount`) prolaze **vakuumski** nad
+neizmijenjenim originalom. Zato "0 fail" bez izričite tvrdnje `integrityFailure === null` nije
+dokaz da gate nije okinuo. Svaki novi harness mora tvrditi i to.
+
 Zašto Tier 1 uz Tier 0: Tier 0 je naš vlastiti kod, pa dijeli pretpostavke s onim što provjerava.
 lxml je tuđi, stroži parser, a python-docx uz to čita OPC relacijski graf. Vrti se na ubuntuu, za
 razliku od Tier 2 koji je Windows-only.
