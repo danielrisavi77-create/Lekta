@@ -172,6 +172,22 @@ const PRICING_TIERS=[
 ];
 // Rucni paketi za obrazac narudzbe (ljudska usluga). Automatizirana provjera je gore
 // u PRICING_TIERS i ne prolazi kroz ovaj obrazac.
+/**
+ * Paketi RUCNE obrade (obrazac narudzbe), NE cjenik automatskog popravka.
+ *
+ * Audit CODE-08 prijavio je "vise izvora istine za cijene". Provjera je pokazala da ih je TRI, a
+ * ne dva, i da jedan od njih nitko ne cita:
+ *   1. OVAJ popis: jedini koji korisnik stvarno vidi u obrascu rucne narudzbe;
+ *   2. `data/packages.json` (kroz `config-loader`): ima jos i paket `instant` (9 EUR) kojeg ovdje
+ *      NEMA, a iz aplikacije ga ne cita nitko osim jednog testa koji samo tvrdi da je jednak
+ *      svojoj vlastitoj JSON datoteci;
+ *   3. tablica `products` u bazi: JEDINI mjerodavan cjenik za placeni automatski popravak
+ *      (`slot_*`, `pass_*`, `bundle_*`), s posve drugim proizvodima i cijenama.
+ *
+ * Popisi 1 i 2 se ne smiju citati kao cjenik proizvoda. Cijena popravka dolazi iskljucivo iz
+ * baze (vidi `src/catalog/products-catalog.ts`), pa se mijenja kroz `set_product_price`, nikad
+ * ovdje. Prije nego dodas cijenu ovamo, provjeri govoris li o rucnoj obradi ili o popravku.
+ */
 const PACKAGES=[
  {id:'format',name:'Formatiranje rada',price:39,desc:'Tehnički uređena Word datoteka.',features:['Stilovi naslova i sadržaj','Numeriranje, tablice i slike','Konzistentan izgled dokumenta']},
  {id:'panic',name:'Predaja bez panike',price:69,featured:true,desc:'Formatiranje, citatnice i jedna revizija.',features:['Sve iz paketa formatiranja','Provjera citatnica i literature','Prioritetna obrada i revizija']},

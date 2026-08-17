@@ -458,12 +458,24 @@ Deno.serve(async (req: Request) => {
     // ijednog Storage uploada. Prekoracenje NIKAD ne kvari sam popravak (docx se svejedno
     // vraca korisniku), samo se preskace pohrana - isto fail-open ponasanje kao vec postojeci
     // slucajevi gdje storeRepairJob vrati null (Storage/DB pad).
-    const { count: recentJobCount } = await admin
+    const { count: recentJobCount, error: quotaErr } = await admin
       .from('repair_jobs')
       .select('id', { count: 'exact', head: true })
       .gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString());
-    const storageAllowed = !storageQuotaExceeded(recentJobCount ?? 0, REPAIR_STORAGE_DAILY_CAP);
-    if (!storageAllowed) {
+    // NEUSPJEH UPITA NIJE ISTO STO I "NULA POSLOVA" (audit DOCX-12). Prije se `count` samo
+    // defaultirao na 0, pa je pad upita znacio "kvota je prazna, samo naprijed": globalni dnevni
+    // strop tada nije stitio nista upravo kad je baza u problemu.
+    //
+    // Fail-closed je ovdje jeftin jer je preskakanje pohrane BEZOPASNO za korisnika: popravljeni
+    // docx se svejedno vraca u odgovoru, gubi se samo zapis u "Moji popravci", a sucelje o tome
+    // posteno izvijesti (jobId: null). Cijena pogresne procjene u drugom smjeru je neogranicen
+    // rast Storagea bez ijednog dokaza da kapacitet postoji.
+    const storageAllowed = quotaErr
+      ? false
+      : !storageQuotaExceeded(recentJobCount ?? 0, REPAIR_STORAGE_DAILY_CAP);
+    if (quotaErr) {
+      console.error('[repair-docx] storage-kvota NEPOZNATA (upit pao), preskacem pohranu', quotaErr);
+    } else if (!storageAllowed) {
       console.warn(`[repair-docx] storage-kvota dosegnuta (${recentJobCount ?? 0}/${REPAIR_STORAGE_DAILY_CAP}), preskacem pohranu`);
     }
 

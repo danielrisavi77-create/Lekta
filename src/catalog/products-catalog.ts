@@ -26,22 +26,37 @@ export interface Product {
   sort: number;
 }
 
-/** Redak iz PostgREST-a (snake_case, netipizirana granica) -> tipizirani Product. */
+/**
+ * Redak iz PostgREST-a (snake_case, netipizirana granica) -> tipizirani Product.
+ *
+ * FAIL-CLOSED NA CIJENI I IDENTITETU (audit CODE-06). Prije su svi fallbackovi isli u smjeru
+ * "pretpostavi da je u redu": `price_eur ?? 0` i `active: row.active !== false`. Redak s
+ * nedostajucom ili neispravnom cijenom time je postajao AKTIVAN proizvod od 0 EUR, dakle nesto
+ * sto se moze prodati besplatno, i to bez ijedne greske. Isto za redak bez `id`.
+ *
+ * Takav redak se sada oznacava kao NEAKTIVAN umjesto da se odbaci cijeli katalog: jedan pokvaren
+ * proizvod ne smije srusiti paywall za sve ostale, ali se ni ne smije prodavati.
+ */
 export function mapProductRow(row: Record<string, unknown>): Product {
   const audience = row.audience === 'partner' ? 'partner' : 'retail';
   const kind = row.kind as ProductKind;
+  const id = String(row.id ?? '');
+  // Number(null) je 0 i Number('') je 0, pa se nedostajuca cijena mora prepoznati PRIJE konverzije.
+  const rawPrice = row.price_eur;
+  const priceEur = rawPrice == null || rawPrice === '' ? Number.NaN : Number(rawPrice);
+  const priceUsable = Number.isFinite(priceEur) && priceEur >= 0;
   return {
-    id: String(row.id ?? ''),
+    id,
     kind,
     audience,
     workType: row.work_type == null ? null : String(row.work_type),
     slotsTotal: Number(row.slots_total ?? 1),
     slotWindowDays: Number(row.slot_window_days ?? 7),
     purchaseWindowDays: Number(row.purchase_window_days ?? 90),
-    priceEur: Number(row.price_eur ?? 0),
+    priceEur: priceUsable ? priceEur : 0,
     morProductId: row.mor_product_id == null ? null : String(row.mor_product_id),
     manualFulfillment: row.manual_fulfillment === true,
-    active: row.active !== false,
+    active: row.active !== false && priceUsable && id !== '',
     sort: Number(row.sort ?? 0),
   };
 }
@@ -70,7 +85,11 @@ export async function fetchRetailCatalog(
   });
   if (!res.ok) throw new Error(`catalog fetch ${res.status}`);
   const rows = (await res.json()) as unknown;
-  return Array.isArray(rows) ? rows.map((r) => mapProductRow(r as Record<string, unknown>)) : [];
+  // Odgovor koji NIJE niz je greska, ne prazan katalog (audit CODE-07). Prije se tiho vracao `[]`,
+  // pa je pogresna konfiguracija ili PostgREST greska izgledala identicno kao "nema proizvoda u
+  // ponudi": paywall bi prikazao prazno stanje umjesto da padne na fallback prikaz.
+  if (!Array.isArray(rows)) throw new Error('catalog fetch: odgovor nije niz proizvoda');
+  return rows.map((r) => mapProductRow(r as Record<string, unknown>));
 }
 
 /** Prikaz cijene u EUR, hrvatski zapis (zarez, dvije decimale). */
