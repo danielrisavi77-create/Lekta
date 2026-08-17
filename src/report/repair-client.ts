@@ -10,7 +10,6 @@
  */
 
 import { isReportWorkType, type ReportWorkType } from './pricing';
-import type { FingerprintInput } from '../fingerprint/fingerprint';
 import { TERMS_VERSION } from '../legal/terms-version';
 import { parseSourceCheck, type RepairSourceCheck } from './source-check-parse';
 export { REPAIR_MAX_REFERENCES } from './repair-contract';
@@ -58,10 +57,20 @@ export interface RepairReference {
  */
 export type { RepairSourceCheck } from './source-check-parse';
 
-/** Meta uz upload (JSON dio multiparta). Bez doslovnog teksta rada. */
+/**
+ * Meta uz upload (JSON dio multiparta). Bez doslovnog teksta rada.
+ *
+ * `parsedStructure` (naslov, autor, naslovi poglavlja) UKLONJEN 2026-08-17 (audit DOCX-01/02).
+ * Slao se na svaki popravak, a server ga je koristio SAMO kao presence-check: otisak dokumenta
+ * racuna se iz stvarnih bajtova uploadanog zipa (RE-18), pa polje nije imalo nikakvu funkciju.
+ * Naslovi poglavlja su doslovan tekst rada, dakle jedini dio popravka koji je nosio sadrzaj bez
+ * ijednog razloga. Uklanjanjem nestaje i privacy rizik i kontradikcija s marketinskim copyjem.
+ *
+ * Put punog izvjestaja (`generate-report`) i dalje ga salje i ondje JEST potreban: ondje se
+ * otisak racuna IZ njega (`computeFingerprint(body.parsedStructure)`), ne iz datoteke.
+ */
 export interface RepairMeta {
   workType: ReportWorkType;
-  parsedStructure: FingerprintInput;
   signals: RepairSignals;
   requests: RepairFixerRequest[];
   profileStatus?: string | null;
@@ -120,7 +129,6 @@ export function decodeBase64(b64: string): Uint8Array {
  */
 export function buildRepairMeta(input: {
   workType: string;
-  parsedStructure: FingerprintInput;
   requests: RepairFixerRequest[];
   words?: number | null;
   titleMarker?: string | null;
@@ -135,11 +143,6 @@ export function buildRepairMeta(input: {
   const workType: ReportWorkType = isReportWorkType(input.workType) ? input.workType : 'zavrsni';
   const meta: RepairMeta = {
     workType,
-    parsedStructure: {
-      title: input.parsedStructure?.title ?? null,
-      author: input.parsedStructure?.author ?? null,
-      headings: input.parsedStructure?.headings ?? [],
-    },
     signals: { words: typeof input.words === 'number' ? input.words : null, titleMarker: input.titleMarker ?? null },
     requests: input.requests,
     // Upload se u app.ts dogadja tek nakon izricite privole (consent checkbox), pa meta uvijek

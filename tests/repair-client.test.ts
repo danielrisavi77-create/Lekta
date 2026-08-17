@@ -22,7 +22,6 @@ function b64(bytes: number[]): string {
 function meta(over: Partial<RepairMeta> = {}): RepairMeta {
   return {
     workType: 'diplomski',
-    parsedStructure: { title: 'Rad', author: 'Ana', headings: [] },
     signals: { words: 12000, titleMarker: 'graduate' },
     requests: [{ fixerId: 'font-fixer', ruleId: 'font', params: { fontName: 'Times New Roman' } }],
     fileName: 'moj-rad.docx',
@@ -42,39 +41,46 @@ describe('decodeBase64', () => {
 });
 
 describe('buildRepairMeta (sanitizacija)', () => {
-  const parsedStructure = { title: 'Naslov', author: 'Autor', headings: [{ level: 1, text: 'Uvod' }] };
   const requests = [{ fixerId: 'font-fixer', ruleId: 'font', params: {} }];
 
   it('mapira nepoznatu vrstu rada u zavrsni (fallback)', () => {
-    expect(buildRepairMeta({ workType: 'nesto', parsedStructure, requests }).workType).toBe('zavrsni');
+    expect(buildRepairMeta({ workType: 'nesto', requests }).workType).toBe('zavrsni');
   });
   it('zadrzava valjanu naplatnu vrstu', () => {
-    expect(buildRepairMeta({ workType: 'doktorski', parsedStructure, requests }).workType).toBe('doktorski');
+    expect(buildRepairMeta({ workType: 'doktorski', requests }).workType).toBe('doktorski');
   });
-  it('nikad ne nosi doslovni tekst rada, samo struktura + signali', () => {
-    const m = buildRepairMeta({ workType: 'diplomski', parsedStructure, requests, words: 9000, titleMarker: 'graduate' });
-    expect(m.parsedStructure).toEqual(parsedStructure);
+
+  /**
+   * OCEKIVANJE OBRNUTO 2026-08-17 (audit DOCX-01/02). Ranija verzija ovog testa TVRDILA je da
+   * meta nosi `parsedStructure`, dakle naslov, autora i naslove poglavlja. Naslovi poglavlja su
+   * doslovan tekst rada, a server ih je koristio samo kao presence-check: otisak se racuna iz
+   * bajtova uploadanog zipa (RE-18). Polje je zato uklonjeno i ovaj test sada cuva da se NE
+   * vrati, jer bi povratak bio tihi regres u privatnosti koji nista ne bi srusilo.
+   */
+  it('ne salje naslov, autora ni naslove poglavlja', () => {
+    const m = buildRepairMeta({ workType: 'diplomski', requests, words: 9000, titleMarker: 'graduate' });
+    expect('parsedStructure' in m).toBe(false);
     expect(m.signals).toEqual({ words: 9000, titleMarker: 'graduate' });
     const flat = JSON.stringify(m);
-    expect(flat).not.toMatch(/paragraph|excerpt|fullText/i);
+    expect(flat).not.toMatch(/paragraph|excerpt|fullText|headings|title"|author/i);
   });
   it('izostavlja opcijska polja kad ih nema', () => {
-    const m = buildRepairMeta({ workType: 'zavrsni', parsedStructure, requests });
+    const m = buildRepairMeta({ workType: 'zavrsni', requests });
     expect('profileStatus' in m).toBe(false);
     expect('confirmedMismatch' in m).toBe(false);
     expect(m.signals.words).toBe(null);
   });
   it('ukljucuje confirmedMismatch samo kad je true', () => {
-    expect(buildRepairMeta({ workType: 'zavrsni', parsedStructure, requests, confirmedMismatch: true }).confirmedMismatch).toBe(true);
-    expect('confirmedMismatch' in buildRepairMeta({ workType: 'zavrsni', parsedStructure, requests, confirmedMismatch: false })).toBe(false);
+    expect(buildRepairMeta({ workType: 'zavrsni', requests, confirmedMismatch: true }).confirmedMismatch).toBe(true);
+    expect('confirmedMismatch' in buildRepairMeta({ workType: 'zavrsni', requests, confirmedMismatch: false })).toBe(false);
   });
   it('WS-6.3: uvijek zigose consentVersion tekucim TERMS_VERSION (server ga trajno biljezi)', () => {
-    const m = buildRepairMeta({ workType: 'zavrsni', parsedStructure, requests });
+    const m = buildRepairMeta({ workType: 'zavrsni', requests });
     expect(m.consentVersion).toBe(TERMS_VERSION);
   });
 
   describe('K4: reference za provjeru u korpusu', () => {
-    const base = { workType: 'zavrsni', parsedStructure, requests } as const;
+    const base = { workType: 'zavrsni', requests } as const;
 
     it('salje samo naslov i godinu (nista suvisno)', () => {
       const m = buildRepairMeta({ ...base, references: [{ title: '  Sekundarna hipertenzija  ', year: 2014 }] });

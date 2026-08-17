@@ -1674,7 +1674,6 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    const requests=chosen.map((it: any)=>({fixerId:it.fixerId,ruleId:it.ruleId,params:(deep&&_SERVER_DEEP_FIXERS.has(it.fixerId))?{...it.params,deep:true}:it.params}));
    const refsForCorpus=repairReferencesFrom(r);
    const {buildRepairMeta,uploadRepair}=await loadRepairClient();
-   const {extractParsedStructure}=await loadReportClient();
    // Provjera izvora KRECE PRIJE uploada i tece usporedno s njim: ovisi samo o naslovima literature,
    // koje vec imamo iz lokalne analize. Dok je bila dio odgovora popravka, korisnik je gledao
    // spinner i nakon sto je dokument bio gotov. Namjerno BEZ await: `checkSources` ne baca (svaki
@@ -1686,7 +1685,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
      .catch((e: any)=>({kind:'unavailable',reason:e instanceof Error?e.message:'greska'}))
     :null;
    // Kad provjeru vodi zaseban poziv, popis literature se uz dokument ne salje i server ju preskace.
-   const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),sourceCheckSeparate,workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),parsedStructure:extractParsedStructure(r),requests,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch});
+   const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),sourceCheckSeparate,workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),requests,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch});
    const bytes=new Uint8Array(await file.arrayBuffer());
    // Krajnji rok: bez njega zaglavljen zahtjev drzi gumb u "Saljem" bez izlaza. Prekid se u
    // repair-clientu prevodi u citljivu poruku, ne u "mreznu gresku".

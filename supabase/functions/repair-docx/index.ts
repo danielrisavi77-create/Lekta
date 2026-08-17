@@ -198,7 +198,7 @@ Deno.serve(async (req: Request) => {
     if (!REPAIR_GATE.tryAcquire()) return json({ error: 'busy' }, 503);
     gateAcquired = true;
 
-    // 2. multipart: 'file' (.docx binarno) + 'meta' (JSON: workType, parsedStructure, signals, requests,
+    // 2. multipart: 'file' (.docx binarno) + 'meta' (JSON: workType, signals, requests,
     //    profileStatus, profileRef, confirmedMismatch, references).
     //    Iz meta je izostavljen tekst RADA (ostaju brojevi i enumi); jedina iznimka su `references`,
     //    tj. naslovi i godine iz popisa literature, koji su nuzni za provjeru postojanja izvora
@@ -225,7 +225,14 @@ Deno.serve(async (req: Request) => {
 
     let meta: any = null;
     try { meta = JSON.parse(metaRaw); } catch { meta = null; }
-    if (!meta || !isReportWorkType(meta.workType) || !meta.parsedStructure) return json({ error: 'bad_request' }, 400);
+    // `parsedStructure` se od 2026-08-17 vise NE trazi (audit DOCX-01/02). Bio je obavezan, a
+    // koristio se iskljucivo kao presence-check: otisak se racuna iz stvarnih bajtova uploadanog
+    // zipa (vidi RE-18 nize), ne iz njega. Time je popravak na svaki poziv primao naslov, autora i
+    // naslove poglavlja, dakle doslovan tekst rada, bez ijedne funkcije.
+    //
+    // Stariji klijenti iz predmemorije ga jos salju; polje se jednostavno ignorira, pa nema
+    // prijelaznog razdoblja u kojem bi im popravak pukao.
+    if (!meta || !isReportWorkType(meta.workType)) return json({ error: 'bad_request' }, 400);
     const workType = meta.workType;
     const now = new Date().toISOString();
 
