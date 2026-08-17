@@ -150,8 +150,8 @@
         "consistency-fixer"
       ],
       "changedFixerIds": [
-        "final-document-inspector-fixer",
-        "field-integrity-fixer"
+        "field-integrity-fixer",
+        "final-document-inspector-fixer"
       ],
       "targetedCheckCount": 14,
       "targetedResolvedCount": 2,
@@ -283,9 +283,9 @@
       "changedFixerIds": [
         "font-fixer",
         "alignment-fixer",
-        "final-document-inspector-fixer",
         "field-integrity-fixer",
-        "link-doi-fixer"
+        "link-doi-fixer",
+        "final-document-inspector-fixer"
       ],
       "targetedCheckCount": 14,
       "targetedResolvedCount": 4,
@@ -515,8 +515,8 @@
         "heading-format-fixer",
         "footnote-typography-fixer",
         "heading-case-fixer",
-        "final-document-inspector-fixer",
-        "field-integrity-fixer"
+        "field-integrity-fixer",
+        "final-document-inspector-fixer"
       ],
       "targetedCheckCount": 17,
       "targetedResolvedCount": 5,

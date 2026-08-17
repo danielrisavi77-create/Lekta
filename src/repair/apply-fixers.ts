@@ -187,6 +187,20 @@ const INDEX_SHIFTING_ORDER: ReadonlyMap<string, number> = new Map<string, number
 ]);
 
 /**
+ * GLOBALNI PREPISIVACI: fixeri koji mijenjaju atribute kroz CIJELI dokument, pa time ponistavaju
+ * sidra (anchorFingerprint) koja su ostali fixeri izracunali iz IZVORNOG dokumenta.
+ *
+ * `final-document-inspector-fixer` uklanja `w:rsid*` atribute iz svakog dijela paketa. Kad se
+ * izvede rano, svaki kasniji anchor-osjetljiv fixer (field-integrity, croatian-typography,
+ * link-doi) ne prepozna svoju metu i fail-safe preskoci s 'no-target'. Izmjereno na stvarnom radu:
+ * prvi prolaz primijeni 3 od 5 popravaka, a preostala dva tek na sljedeci klik.
+ *
+ * Zato ide POSLJEDNJI unutar svoje faze: njegov zahvat je globalan i ne ovisi o tudjim
+ * indeksima, pa nikome ne smeta ako se dogodi na kraju.
+ */
+const GLOBAL_REWRITE_FIXERS: ReadonlySet<string> = new Set<string>(['final-document-inspector-fixer']);
+
+/**
  * RE-55: dva popravka koja mijenjaju TEKST istog odlomka.
  *
  * Dvofazni model iznad rjesava "fixer pomakne INDEKSE drugima", ali ne i "fixer promijeni SADRZAJ
@@ -920,6 +934,10 @@ export async function applyFixers(
     .sort((a, b) => {
       const phase = Number(INDEX_SHIFTING_FIXERS.has(a.request.fixerId)) - Number(INDEX_SHIFTING_FIXERS.has(b.request.fixerId));
       if (phase !== 0) return phase;
+      // Globalni prepisivaci idu na kraj svoje faze (vidi GLOBAL_REWRITE_FIXERS): ponistavaju tudja
+      // sidra, pa bi rano izvedeni tiho oborili sve anchor-osjetljive popravke iza sebe.
+      const global = Number(GLOBAL_REWRITE_FIXERS.has(a.request.fixerId)) - Number(GLOBAL_REWRITE_FIXERS.has(b.request.fixerId));
+      if (global !== 0) return global;
       // RE-51: unutar strukturne faze idi od kraja dokumenta prema pocetku (vidi INDEX_SHIFTING_ORDER).
       const within = (INDEX_SHIFTING_ORDER.get(a.request.fixerId) ?? 0) - (INDEX_SHIFTING_ORDER.get(b.request.fixerId) ?? 0);
       return within !== 0 ? within : a.index - b.index;
@@ -952,14 +970,56 @@ export async function applyFixers(
     const beforePackageXmlParts = { ...(parts.packageXmlParts ?? {}) };
     parts = result.parts;
       if (parts.packageXmlParts) {
+      /**
+       * DVOSMJERNA sinkronizacija dviju reprezentacija istog dijela paketa.
+       *
+       * Isti XML je dostupan i kao imenovano polje (`parts.documentXml`, `stylesXml`, ...) i kao
+       * unos u `packageXmlParts`. Sinkronizacija je do 2026-08-17 isla SAMO u jednom smjeru
+       * (polje -> mapa), pa je fixer koji pise u MAPU bio tiho ponisten:
+       *
+       *   1. final-document-inspector-fixer obrise `w:rsid` atribute u packageXmlParts['word/document.xml'],
+       *      ali `parts.documentXml` ostane stara verzija s rsidovima;
+       *   2. sljedeci fixer (heading-style, croatian-typography, ...) radi nad tim starim
+       *      `documentXml` i promijeni ga;
+       *   3. uvjet ispod tada vrijedi (taj fixer nije dirao mapu), pa se mapa PREPISE starim
+       *      dokumentom i ciscenje iz koraka 1 nestane.
+       *
+       * Izmjereno na stvarnom radu: 16031 rsid atributa prije, 15125 nakon prvog prolaza (dakle
+       * document.xml netaknut), 0 tek nakon drugog. To NIJE bila samo ne-idempotentnost nego
+       * TIHI GUBITAK POPRAVKA: uklanjanje revizijskih tragova u zadanom toku nije stvarno radilo.
+       */
       const synchronized = { ...parts.packageXmlParts };
-      if (synchronized[DOCUMENT_XML_PATH] === beforePackageXmlParts[DOCUMENT_XML_PATH]) synchronized[DOCUMENT_XML_PATH] = parts.documentXml;
-      if (synchronized[STYLES_XML_PATH] === beforePackageXmlParts[STYLES_XML_PATH]) synchronized[STYLES_XML_PATH] = parts.stylesXml;
-      if (synchronized[NUMBERING_XML_PATH] === beforePackageXmlParts[NUMBERING_XML_PATH] && parts.numberingXml !== undefined) synchronized[NUMBERING_XML_PATH] = parts.numberingXml;
-      if (synchronized[CONTENT_TYPES_PATH] === beforePackageXmlParts[CONTENT_TYPES_PATH]) synchronized[CONTENT_TYPES_PATH] = parts.contentTypesXml ?? '';
-      if (synchronized[DOCUMENT_RELS_PATH] === beforePackageXmlParts[DOCUMENT_RELS_PATH]) synchronized[DOCUMENT_RELS_PATH] = parts.documentRelsXml ?? '';
-      if (synchronized[FOOTNOTES_XML_PATH] === beforePackageXmlParts[FOOTNOTES_XML_PATH] && parts.footnotesXml !== undefined) synchronized[FOOTNOTES_XML_PATH] = parts.footnotesXml;
-      for (const [name, value] of Object.entries(parts.footerHeaderParts ?? {})) if (synchronized[name] === beforePackageXmlParts[name]) synchronized[name] = value;
+      /** Je li OVAJ fixer pisao u mapu za taj dio (tada mapa vodi, inace vodi polje). */
+      const mapWins = (path: string): boolean =>
+        synchronized[path] !== beforePackageXmlParts[path] && synchronized[path] !== undefined;
+
+      if (mapWins(DOCUMENT_XML_PATH)) parts = { ...parts, documentXml: synchronized[DOCUMENT_XML_PATH] };
+      else synchronized[DOCUMENT_XML_PATH] = parts.documentXml;
+
+      if (mapWins(STYLES_XML_PATH)) parts = { ...parts, stylesXml: synchronized[STYLES_XML_PATH] };
+      else synchronized[STYLES_XML_PATH] = parts.stylesXml;
+
+      if (mapWins(NUMBERING_XML_PATH)) parts = { ...parts, numberingXml: synchronized[NUMBERING_XML_PATH] };
+      else if (parts.numberingXml !== undefined) synchronized[NUMBERING_XML_PATH] = parts.numberingXml;
+
+      if (mapWins(CONTENT_TYPES_PATH)) parts = { ...parts, contentTypesXml: synchronized[CONTENT_TYPES_PATH] };
+      else synchronized[CONTENT_TYPES_PATH] = parts.contentTypesXml ?? '';
+
+      if (mapWins(DOCUMENT_RELS_PATH)) parts = { ...parts, documentRelsXml: synchronized[DOCUMENT_RELS_PATH] };
+      else synchronized[DOCUMENT_RELS_PATH] = parts.documentRelsXml ?? '';
+
+      if (mapWins(FOOTNOTES_XML_PATH)) parts = { ...parts, footnotesXml: synchronized[FOOTNOTES_XML_PATH] };
+      else if (parts.footnotesXml !== undefined) synchronized[FOOTNOTES_XML_PATH] = parts.footnotesXml;
+
+      const footerHeader = { ...(parts.footerHeaderParts ?? {}) };
+      let footerHeaderChanged = false;
+      for (const name of new Set([...Object.keys(footerHeader), ...Object.keys(synchronized)])) {
+        if (!/^word\/(footer|header)\d+\.xml$/i.test(name)) continue;
+        if (mapWins(name)) { footerHeader[name] = synchronized[name]; footerHeaderChanged = true; }
+        else if (footerHeader[name] !== undefined) synchronized[name] = footerHeader[name];
+      }
+      if (footerHeaderChanged) parts = { ...parts, footerHeaderParts: footerHeader };
+
       parts = { ...parts, packageXmlParts: synchronized };
       }
     if (parts.addedPackageParts) parts = { ...parts, addedPackageParts: [...parts.addedPackageParts] };
