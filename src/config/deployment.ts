@@ -20,30 +20,36 @@ if (isStaging && (!configuredUrl || !configuredAnonKey)) {
 }
 
 /**
- * LOKALNI RAZVOJ TAKODJER NE SMIJE TIHO GADJATI PRODUKCIJU (audit A26-07).
+ * LOKALNI RAZVOJ NE SMIJE GADJATI PRODUKCIJU (audit A26-07).
  *
- * `requestedMode` po zadanom je 'production', pa je `npm run dev` bez env varijabli koristio
- * produkcijski URL i anon kljuc. Istovremeno su u dev buildu upaljeni interni alati. Lokalni
- * rad je time mogao citati i pisati zivu bazu, a da nista u sucelju to ne kaze.
+ * `requestedMode` je po zadanom 'production', pa je `npm run dev` bez env varijabli koristio
+ * PRODUKCIJSKI URL i anon kljuc, uz istovremeno upaljene interne dev alate. Lokalni rad je time
+ * mogao citati i pisati zivu bazu, a nista u sucelju to nije govorilo.
  *
- * Zato dev server pada isto kao staging. Produkcijski BUILD zadrzava zadane vrijednosti, jer bi
- * inace deploy puknuo na okolini koja varijable jos nema.
+ * NE bacamo iznimku. Prvo rjesenje je bilo upravo to, ali ono rusi cijeli app na ucitavanju
+ * modula, pa i Playwright UX suite (koji dize `npm run dev` i uopce ne treba backend) i svakog
+ * tko samo hoce vidjeti sucelje. Provjera koja rusi nevine tokove brzo se iskljuci i time ne
+ * stiti nista.
  *
- * `TEST` se izuzima: vitest vrti u dev nacinu, a testovi ne diraju mrezu (endpointi se stubaju),
- * pa bi ih ovo srusilo bez ikakve dobiti.
+ * Umjesto toga dev bez konfiguracije pokazuje na LOKALNI Supabase (zadani port CLI-ja). Posljedica
+ * je da slucajan poziv pukne vidljivo na nepostojecem lokalnom hostu umjesto da tiho uspije nad
+ * produkcijom. Produkcijski BUILD zadrzava kanonske vrijednosti, jer bi inace deploy puknuo na
+ * okolini koja varijable jos nema.
  */
-if (import.meta.env.DEV && !import.meta.env.TEST && (!configuredUrl || !configuredAnonKey)) {
-  throw new Error(
-    'Lokalni dev server zahtijeva VITE_LEKTA_SUPABASE_URL i VITE_LEKTA_SUPABASE_ANON_KEY. ' +
-      'Kopiraj .env.example u .env i popuni ih. Bez toga bi se dev spajao na PRODUKCIJSKU bazu.',
+const LOCAL_SUPABASE_URL = 'http://127.0.0.1:54321';
+const devWithoutConfig = import.meta.env.DEV && !import.meta.env.TEST && (!configuredUrl || !configuredAnonKey);
+if (devWithoutConfig) {
+  console.warn(
+    '[lekta] VITE_LEKTA_SUPABASE_URL / _ANON_KEY nisu postavljeni, pa dev koristi LOKALNI Supabase ' +
+      `(${LOCAL_SUPABASE_URL}), ne produkciju. Kopiraj .env.example u .env ako trebas pravi backend.`,
   );
 }
 
-const supabaseUrl = configuredUrl || PRODUCTION_SUPABASE_URL;
+const supabaseUrl = configuredUrl || (devWithoutConfig ? LOCAL_SUPABASE_URL : PRODUCTION_SUPABASE_URL);
 
 export const DEPLOYMENT_CONFIG = {
   mode: requestedMode,
   supabaseUrl,
-  supabaseAnonKey: configuredAnonKey || PRODUCTION_SUPABASE_ANON_KEY,
+  supabaseAnonKey: configuredAnonKey || (devWithoutConfig ? 'lokalni-dev-bez-kljuca' : PRODUCTION_SUPABASE_ANON_KEY),
   functionEndpoint: (name: string) => `${supabaseUrl.replace(/\/+$/, '')}/functions/v1/${name}`,
 } as const;

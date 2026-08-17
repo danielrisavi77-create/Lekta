@@ -13,6 +13,11 @@ export default defineConfig({
   // na zadanoj vrijednosti (uz retries: 1).
   workers: process.env.CI ? undefined : 1,
   retries: process.env.CI ? 1 : 0,
+  // TEST-10: retry je do sada PRETVARAO stvaran pad u zeleno. Zadrzavamo ga (drugi pokusaj daje
+  // trace i screenshot, sto je za dijagnostiku vrijedno), ali run vise ne smije zavrsiti zeleno
+  // ako je test uspio TEK iz drugog pokusaja. Upravo je taj scenarij audit prijavio: glavni repair
+  // tok pao je prvi put, a workflow je bio zelen.
+  failOnFlakyTests: !!process.env.CI,
   reporter: process.env.CI ? 'github' : 'list',
   use: {
     baseURL: 'http://127.0.0.1:4173',

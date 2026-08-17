@@ -10,6 +10,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { SITE_ORIGIN } from './site-origin.mjs';
 
@@ -385,6 +386,85 @@ if (fs.existsSync(naslovnicaDir)) {
     if (/https:\/\/\*\./.test(value)) fail(`CSP ${name} sadrzi wildcard host: "${value.trim()}"`);
     if (!/https:\/\/[a-z0-9-]+\.supabase\.co/.test(value)) {
       fail(`CSP ${name} nema konkretan Supabase origin: "${value.trim()}"`);
+    }
+  }
+}
+
+// DOKAZ O IZVEDENIM RAZINAMA PROVJERE (audit P0-13, P0-12).
+//
+// `npm run check` je samo Tier 0: ne otvara dokument nijednim stvarnim uredivacem. Tier 1
+// (python-docx) i Tier 2 (pravi Word) postoje kao skripte, ali su se pokretali rucno i odvojeno,
+// pa se za konkretan commit nije moglo reci JESU LI uopce izvedeni. `npm run release:check` vrti
+// sve razine i ostavlja potpisan trag; ovdje se taj trag provjerava.
+//
+// Gate je vezan uz `LEKTA_REQUIRE_RELEASE_PROOF=1`, a ne ukljucen bezuvjetno, jer bi inace prvi
+// sljedeci deploy pao dok vlasnik ne odvrti visesatni lanac. Kad ga jednom odvrti, postavi
+// zastavicu i dokaz postaje obavezan.
+{
+  /**
+   * Je li dokaz zastario u odnosu na ono sto se gradi.
+   *
+   * Ne moze se samo usporediti `proof.commit !== HEAD`, jer je sam dokaz datoteka u repozitoriju:
+   * cim ga commitas, HEAD se pomakne i dokaz bi UVIJEK ispao zastario, pa bi gate bio neupotrebljiv
+   * (klasican problem koke i jajeta). Zato se gleda STO se promijenilo: dokaz vrijedi sve dok se
+   * izmedju njegovog commita i HEAD-a nije promijenilo nista osim samog dokaza.
+   *
+   * Kad se povijest ne moze procitati (plitak clone na CI-ju), radije se NE tvrdi da je zastario:
+   * ostale provjere (`complete`, `dirtyWorkingTree`) i dalje vrijede.
+   */
+  const staleAgainst = (proofCommit, headCommit) => {
+    try {
+      const changed = execSync(`git diff --name-only ${proofCommit} ${headCommit}`, {
+        cwd: ROOT,
+        encoding: 'utf8',
+      })
+        .split(/\r?\n/)
+        .map((l) => l.trim())
+        .filter(Boolean);
+      return changed.some((f) => f !== 'docs/generated/RELEASE_PROOF.json');
+    } catch {
+      return false;
+    }
+  };
+
+  const proofPath = path.join(ROOT, 'docs', 'generated', 'RELEASE_PROOF.json');
+  const required = process.env.LEKTA_REQUIRE_RELEASE_PROOF === '1';
+  const complain = (msg) => {
+    if (required) fail(`dokaz o provjerama: ${msg}`);
+    console.warn(`[verify-deploy-dist] UPOZORENJE: dokaz o provjerama: ${msg}`);
+    console.warn('  Pokreni `npm run release:check`, pa postavi LEKTA_REQUIRE_RELEASE_PROOF=1 da gate postane tvrd.');
+  };
+
+  let head = process.env.COMMIT_REF || '';
+  if (!head) {
+    try {
+      head = execSync('git rev-parse HEAD', { cwd: ROOT, encoding: 'utf8' }).trim();
+    } catch {
+      head = '';
+    }
+  }
+
+  if (!fs.existsSync(proofPath)) {
+    complain('docs/generated/RELEASE_PROOF.json ne postoji');
+  } else {
+    let proof = null;
+    try {
+      proof = JSON.parse(fs.readFileSync(proofPath, 'utf8'));
+    } catch {
+      complain('RELEASE_PROOF.json nije valjan JSON');
+    }
+    if (proof) {
+      if (!proof.complete) {
+        const missing = Array.isArray(proof.missingRequired) ? proof.missingRequired.join(', ') : '?';
+        complain(`nije potpun, bez prolaza ostaju: ${missing}`);
+      } else if (head && proof.commit && proof.commit !== head && staleAgainst(proof.commit, head)) {
+        // Zastario dokaz je opasniji od nikakvog: izgleda kao potvrda za kod koji nije provjeren.
+        complain(`vezan je uz commit ${String(proof.commit).slice(0, 12)}, a gradi se ${head.slice(0, 12)}`);
+      } else if (proof.dirtyWorkingTree) {
+        complain('nastao je nad NECISTIM radnim stablom, pa ne pokriva sve sto se gradi');
+      } else {
+        console.log(`[verify-deploy-dist] dokaz o provjerama OK (commit ${String(proof.commit).slice(0, 12)}).`);
+      }
     }
   }
 }
