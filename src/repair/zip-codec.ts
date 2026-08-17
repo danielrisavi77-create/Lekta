@@ -6,18 +6,49 @@
 // DecompressionStream za citanje. Ne koristi JSZip ni slicnu biblioteku
 // namjerno: manje ovisnosti, potpuna kontrola nad tim sto se dira.
 //
-// VAZNO o "bit-identicnosti": writeZip UVIJEK rekomprimira svaki entry
-// (DEFLATE), pa komprimirani BYTEOVI netaknutog entryja mogu biti drugaciji
-// nego u originalnom fajlu (razliciti deflate parametri mogu dati drugaciji
-// bajt-stream za isti sadrzaj). To je OCEKIVANO i bezopasno, Word i svaki
-// alat za otvaranje zipa gleda DEKOMPRIMIRANI sadrzaj, ne komprimirane
-// bajtove. Golden test (fixers.test.ts) zato provjerava DEKOMPRIMIRANI
-// sadrzaj netaknutih entryja je bit-identican, ne sirovi zip byte stream.
+// BIT-IDENTICNOST (promijenjeno 2026-08-17, audit DOCX-17/18): writeZip vise NE
+// rekomprimira sve. Entry koji nijedan fixer nije dirao prepisuje se BAJT ZA BAJT,
+// zajedno s izvornom kompresijskom metodom, timestampom i atributima. Prije se
+// rekomprimiralo sve, pa je popravak jednog XML-a prepisivao i ugradjene slike,
+// fontove i medij; svako ponovno pakiranje je nova prilika da paket suptilno
+// odstupi od onoga sto je Word napisao.
+//
+// Kriterij "netaknut" je IDENTITET OBJEKTA (`entry.data === entry.raw.originalData`),
+// isto pravilo na koje se apply-fixers vec oslanja: fixer koji nista ne mijenja vraca
+// isti Uint8Array. Promijenjen entry se komprimira DEFLATE-om i dobiva deterministicki
+// timestamp, jer njegov sadrzaj ionako vise nije onaj koji je Word zapisao.
 
 import { DOCX_MAX_TOTAL_DECOMPRESSED_BYTES, DOCX_MAX_ZIP_ENTRIES } from './docx-budget.ts';
+/**
+ * Izvorni zapis entryja, onakav kakav je bio u ULAZNOM zipu (audit DOCX-17, DOCX-18).
+ *
+ * Cuva se da bi `writeZip` NETAKNUTE dijelove mogao prepisati bajt za bajt umjesto da ih
+ * ponovno komprimira. Popravak koji mijenja jedan XML nema nikakvog razloga prepisivati
+ * ugradjene slike, fontove i medij, a svako ponovno pakiranje je nova prilika da se paket
+ * suptilno razlikuje od onoga sto je Word napisao.
+ *
+ * `originalData` je REFERENCA na dekomprimirani sadrzaj kakav je readZip vratio. Usporedba
+ * identiteta (`entry.data === raw.originalData`) je tocno pravilo koje fixeri vec postuju:
+ * dio koji nitko nije dirao zadrzava isti objekt, promijenjen dio dobiva novi.
+ */
+export interface ZipEntryRaw {
+  compressionMethod: number;
+  compressedData: Uint8Array;
+  crc: number;
+  dosTime: number;
+  dosDate: number;
+  generalPurposeFlag: number;
+  externalAttrs: number;
+  internalAttrs: number;
+  versionMadeBy: number;
+  originalData: Uint8Array;
+}
+
 export interface ZipEntry {
   name: string;
   data: Uint8Array; // uvijek DEKOMPRIMIRAN sadrzaj
+  /** Izvorni zapis; postoji samo za entryje procitane iz zipa (novi dijelovi ga nemaju). */
+  raw?: ZipEntryRaw;
 }
 
 /** Zastitne granice citanja (WS-6.5). Izostavljeno = produkcijski defaulti (dovoljno siroki za pravi docx). */
@@ -284,7 +315,25 @@ export async function readZip(bytes: Uint8Array, limits?: ReadZipLimits): Promis
       );
     }
 
-    entries.push({ name, data });
+    entries.push({
+      name,
+      data,
+      // Izvorni zapis se cuva da bi writeZip netaknuti dio mogao prepisati bajt za bajt
+      // (DOCX-17/18). `originalData` je referenca na upravo procitani `data`, pa usporedba
+      // identiteta poslije pouzdano razlikuje dirano od nediranog.
+      raw: {
+        compressionMethod,
+        compressedData,
+        crc: expectedCrc,
+        dosTime: view.getUint16(ptr + 12, true),
+        dosDate: view.getUint16(ptr + 14, true),
+        generalPurposeFlag,
+        internalAttrs: view.getUint16(ptr + 36, true),
+        externalAttrs: view.getUint32(ptr + 38, true),
+        versionMadeBy: view.getUint16(ptr + 4, true),
+        originalData: data,
+      },
+    });
     ptr += 46 + fileNameLength + extraLength + commentLength;
   }
 
@@ -309,11 +358,47 @@ export async function writeZip(entries: ZipEntry[]): Promise<Uint8Array> {
   // prepisati iste vrijednosti kao local header, ne raditi drugi deflate.
   const prepared = [];
   for (const entry of entries) {
+    // NETAKNUT DIO SE PREPISUJE BAJT ZA BAJT (audit DOCX-17, DOCX-18).
+    //
+    // Prije se svaki entry rekomprimirao, pa je popravak jednog XML-a prepisivao i sve ugradjene
+    // slike, fontove i medij. Svako ponovno pakiranje je nova prilika da paket suptilno odstupi
+    // od onoga sto je Word napisao, a uz to su se gubili timestampovi, extra polja i atributi.
+    //
+    // Kriterij je identitet objekta: fixeri koji nista ne mijenjaju vracaju ISTI `Uint8Array`
+    // (na tome se vec oslanja postojeci komentar u apply-fixers), pa `entry.data === originalData`
+    // pouzdano znaci "nitko nije dirao ovaj dio".
+    const untouched = entry.raw && entry.data === entry.raw.originalData;
+    if (untouched) {
+      const raw = entry.raw!;
+      prepared.push({
+        entry,
+        nameBytes: new TextEncoder().encode(entry.name),
+        compressed: raw.compressedData,
+        crc: raw.crc,
+        method: raw.compressionMethod,
+        dosTime: raw.dosTime,
+        dosDate: raw.dosDate,
+        flags: raw.generalPurposeFlag,
+        internalAttrs: raw.internalAttrs,
+        externalAttrs: raw.externalAttrs,
+        versionMadeBy: raw.versionMadeBy,
+      });
+      continue;
+    }
     prepared.push({
       entry,
       nameBytes: new TextEncoder().encode(entry.name),
       compressed: await deflateRaw(entry.data),
       crc: crc32(entry.data),
+      method: 8,
+      // Promijenjen dio dobiva deterministicki timestamp (DOS epoha), kao i dosad: njegov sadrzaj
+      // ionako vise nije onaj koji je Word zapisao, pa lazni originalni datum ne bi bio istinitiji.
+      dosTime: DOS_TIME,
+      dosDate: DOS_DATE,
+      flags: 0,
+      internalAttrs: 0,
+      externalAttrs: entry.raw?.externalAttrs ?? 0,
+      versionMadeBy: entry.raw?.versionMadeBy ?? 20,
     });
   }
 
@@ -322,10 +407,10 @@ export async function writeZip(entries: ZipEntry[]): Promise<Uint8Array> {
 
     fileWriter.writeUint32(LOCAL_FILE_HEADER_SIG);
     fileWriter.writeUint16(20); // version needed
-    fileWriter.writeUint16(0); // flags
-    fileWriter.writeUint16(8); // compression method: deflate
-    fileWriter.writeUint16(DOS_TIME); // mod time
-    fileWriter.writeUint16(DOS_DATE); // mod date
+    fileWriter.writeUint16(p.flags); // flags (ocuvani za netaknute entryje)
+    fileWriter.writeUint16(p.method); // compression method (0 = STORED, 8 = DEFLATE)
+    fileWriter.writeUint16(p.dosTime); // mod time
+    fileWriter.writeUint16(p.dosDate); // mod date
     fileWriter.writeUint32(p.crc);
     fileWriter.writeUint32(p.compressed.length);
     fileWriter.writeUint32(p.entry.data.length);
@@ -339,12 +424,12 @@ export async function writeZip(entries: ZipEntry[]): Promise<Uint8Array> {
     const p = prepared[i];
 
     centralDirWriter.writeUint32(CENTRAL_DIR_SIG);
-    centralDirWriter.writeUint16(20); // version made by
+    centralDirWriter.writeUint16(p.versionMadeBy); // version made by
     centralDirWriter.writeUint16(20); // version needed
-    centralDirWriter.writeUint16(0); // flags
-    centralDirWriter.writeUint16(8); // compression method
-    centralDirWriter.writeUint16(DOS_TIME); // mod time
-    centralDirWriter.writeUint16(DOS_DATE); // mod date
+    centralDirWriter.writeUint16(p.flags); // flags
+    centralDirWriter.writeUint16(p.method); // compression method
+    centralDirWriter.writeUint16(p.dosTime); // mod time
+    centralDirWriter.writeUint16(p.dosDate); // mod date
     centralDirWriter.writeUint32(p.crc);
     centralDirWriter.writeUint32(p.compressed.length);
     centralDirWriter.writeUint32(p.entry.data.length);
@@ -352,8 +437,8 @@ export async function writeZip(entries: ZipEntry[]): Promise<Uint8Array> {
     centralDirWriter.writeUint16(0); // extra length
     centralDirWriter.writeUint16(0); // comment length
     centralDirWriter.writeUint16(0); // disk number start
-    centralDirWriter.writeUint16(0); // internal attrs
-    centralDirWriter.writeUint32(0); // external attrs
+    centralDirWriter.writeUint16(p.internalAttrs); // internal attrs (ocuvani)
+    centralDirWriter.writeUint32(p.externalAttrs); // external attrs (ocuvani)
     centralDirWriter.writeUint32(localOffsets[i]);
     centralDirWriter.writeBytes(p.nameBytes);
   }
