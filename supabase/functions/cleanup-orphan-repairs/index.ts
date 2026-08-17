@@ -1,4 +1,4 @@
-// Lekta Edge Function: cleanup-orphan-repairs (Deno, Supabase) — NACRT (WS-7).
+// Lekta Edge Function: cleanup-orphan-repairs (Deno, Supabase). ZIVO u produkciji (v8, ACTIVE).
 // GDPR higijena za "Moji popravci": uklanja SIROCE Storage BLOB-ove iz bucketa 'repair' koji vise nemaju
 // pripadni repair_jobs redak. Nastaju kad se obrise RACUN: user_id `on delete cascade` (0026) makne redak
 // repair_jobs, ali storage.objects nisu FK-cascade vezani (owner je ON DELETE SET NULL), pa original.docx

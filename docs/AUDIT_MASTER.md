@@ -2,6 +2,11 @@
 
 Datum konsolidacije: 28. srpnja 2026. Pregledan commit: `1329c43` (grana `audit/remediation-2026-07-16`).
 
+**Zadnje ažuriranje: 17. kolovoza 2026.** (grana `fix/audit-remediation-2026-08`), nakon vanjskog
+audita repozitorija i verifikacije njegovih tvrdnji protiv žive produkcije, staginga i GitHub
+postavki. Do tog ažuriranja dokument je bio zamrznut na 28.7., a repozitorij je u međuvremenu
+primio 221 commit, pa je sam bio primjer drifta na koji upozorava. Vidi poglavlje 4A.
+
 ## 0. Svrha ovog dokumenta
 
 Ovo je JEDINI kanonski audit/status dokument za Lektu. Zamjenjuje 33 razasute
@@ -33,7 +38,7 @@ preklapaju, ovaj dokument upućuje na njih umjesto da duplicira sadržaj.
 
 Lekta je tehnički zrela klijentska aplikacija: lokalna analiza radi u Web
 Workeru, parser i citation engine su golden-pokriveni, `src/` je u cijelosti
-tipiziran bez `@ts-nocheck`, CI (5 workflowa) vrti typecheck/testove/build/
+tipiziran bez `@ts-nocheck`, CI (9 workflowa, stanje 17.8.) vrti typecheck/testove/build/
 conformance/security na svaki push. Repair Engine je u zadnja 3 dana (25 do
 28.7.) prošao veliku seriju popravaka: oba P0 nalaza (gubitak OMML jednadžbi,
 malformed XML kod uparenih praznih elemenata) i gotovo svi P1 nalazi iz
@@ -102,6 +107,55 @@ potpuno adresirani, sve u poglavlju 6. LEKTA-SEC-01/02 (izvorno High) su
 RIJEŠENI, vidi poglavlje 8. RE-01/RE-02 (izvorno P0, gubitak sadržaja) su
 RIJEŠENI, vidi poglavlje 5.1. Ovo je najkraći P0 popis otkad postoji audit
 povijest za ovaj projekt.
+
+---
+
+## 4A. Vanjski audit repozitorija (17.8.2026.): rekoncilijacija
+
+Vanjski audit proglasio je Lektu NO-GO za launch s naplatom. Svaka tvrdnja je prije unosa
+ovamo VERIFICIRANA protiv stvarnog stanja (živa produkcijska baza `zrrjttizjyfcxmcpgzml`,
+staging `bnyemcnsphlitjradrst`, GitHub API, kod na grani). Nalazi koji nisu izdržali provjeru
+navedeni su odvojeno, jer je precijenjen nalaz jednako štetan kao propušten.
+
+### 4A.1 Potvrđeno i OTVORENO (P0)
+
+| ID | Opis | Dokaz |
+|---|---|---|
+| A26-01 | `data/legal/provider.json`: `oib`, `address`, `privacyController` prazni, kontakt Gmail | Isto kao P0 iz srpnja, i dalje otvoreno |
+| A26-02 | Svih 20 aktivnih redaka u `products` ima `mor_product_id = null`, pa `create-checkout` vraća `409 product_not_mapped` | SQL nad produkcijom 17.8. Nije bug nego neizvršen korak `GO_LIVE_NAPLATA.md` §3.3 |
+| A26-03 | Cjenik proturječan: `pass_zavrsni` 9,99/180d dominira `slot_zavrsni_do_obrane` 9,99/120d; `pass_diplomski` 14,99/180d dominira `slot_diplomski_do_obrane` 16,99/120d | SQL nad produkcijom 17.8. |
+| A26-04 | Migracijski identitet ne postoji: produkcija pamti 67 verzija od kojih je samo JEDNA četveroznamenkasta (`0053`), ostale su timestampi; repo ima 85 numeriranih | `supabase_migrations.schema_migrations` |
+| A26-05 | Staging nije vjerna kopija: 3 Edge funkcije naspram 16 u produkciji, a migracijski je ISPRED produkcije (105 naspram 67) | `list_edge_functions` + SQL |
+| A26-06 | `master` nezaštićen: jedini ruleset ("Tamara") ima `enforcement: disabled`, branch protection vraća 404 | GitHub API |
+| A26-07 | `src/config/deployment.ts` bez env varijabli tiho pada na produkcijski Supabase URL i anon ključ, pa `npm run dev` može čitati živu produkciju | Čitanje datoteke |
+| A26-08 | Privola nije dokaziva: server prima `consent.text`, `consent.timestamp` i `termsVersion` doslovno od klijenta; kanonski tekst živi samo u `src/ui/app.ts` i server ga nikad ne vidi | `create-checkout/index.ts:74-131` |
+| A26-09 | Webhook ne provjerava `store_id`, `test_mode` ni plaćeni iznos; nepoznat proizvod vraća 200 pa provider ne retry-a; nema tablice sirovih evenata | `webhook-mor/index.ts`, `src/report/webhook.ts` |
+| A26-10 | Baza: 13 tablica s RLS bez ijedne politike, `pg_net` u `public`, `increment_job_view(uuid)` izvršiva od `anon`, zaštita od kompromitiranih lozinki isključena | Supabase security advisor 17.8. |
+| A26-11 | **NIJE BILO U AUDITU.** `src/repair/zip-codec.ts` nikad ne provjerava CRC ulaznih zip članova (`crc32()` se koristi samo pri pisanju), a integrity gate skenira isključivo dijelove koje je sam mijenjao. Motor nema nijedan mehanizam koji bi razlikovao oštećen ulazni docx od ispravnog | `zip-codec.ts:186-225`, `apply-fixers.ts:825-827` |
+| A26-12 | Word Tier 2 nije release gate: `verify:word` je ručna PowerShell skripta koju ne zove nijedan od 9 workflowa | `package.json`, `.github/workflows/` |
+| A26-13 | CI retry pretvara stvaran pad u zeleno (`playwright.config.ts:13`), a jedini repair E2E (`tests/ux/repair-panel.spec.ts`) ne zove `repair-docx` ni ne otvara izlazni docx | Čitanje konfiguracije i testa |
+| A26-14 | `tsc --noEmit` pokriva samo `src`; `tests`, `scripts`, `supabase/functions` i `vite.config.ts` su izvan njega. `bundleSizeGuard` je definiran ali nije registriran u `plugins`, dakle mrtav | `tsconfig.json`, `vite.config.ts:143` naspram `:325` |
+
+### 4A.2 Zatvoreno 17.8.2026.
+
+| ID | Opis | Kako je zatvoreno |
+|---|---|---|
+| A26-15 | `preflight-start` i `preflight-result` bile su ACTIVE u produkciji dok je `docs/deploy/PREFLIGHT_DEPLOY.md` tvrdio da je stup ODGOĐEN. Frontend ih nikad nije zvao, pa su bile čista izložena površina | Obje undeployane; runbook nosi zapis o gašenju |
+| A26-16 | `cleanup-orphan-repairs` i `delete-repair-job` nosile su oznaku "NACRT" iako su ACTIVE u produkciji | Zaglavlja ispravljena u stvarni status |
+| A26-17 | Nije postojao način da se vidi razlika između repozitorija i deployanog stanja | `npm run deploy-drift` -> `docs/generated/DEPLOY_DRIFT.md` |
+
+### 4A.3 Nalazi audita koji NISU izdržali provjeru
+
+Navedeni su namjerno: dokument koji prepisuje tuđe tvrdnje bez provjere sam postaje izvor drifta.
+
+| Tvrdnja audita | Stvarno stanje |
+|---|---|
+| "Nepoznat `workType` tiho se pretvara u završni rad" | NETOČNO. `repair-docx/index.ts:222` odbija s 400 (`isReportWorkType`). Fallback postoji samo kao `suggestedWorkType` u 409 grani |
+| "Copy tvrdi da doslovni tekst ne ulazi u metapodatke, a ulazi" | DJELOMIČNO. Pravni tekst (`src/legal/legal-content.ts:109`) pošteno navodi naslov, autora i strukturu naslova. Kontradikcija postoji samo u marketinškom copyju (`index.html:6`, `:2055`). K tome je `parsedStructure` na serveru funkcionalno mrtav (samo presence-check), pa je ispravan popravak brisanje polja |
+| "Staging zaostaje za produkcijom (~0070 naspram 0085)" | OBRNUTO. Staging je ISPRED produkcije (105 naspram 67 migracija) |
+| "Produkcijska migracijska povijest završava oko 0061" | GORE od toga. U produkciji postoji samo jedna četveroznamenkasta verzija (`0053`); numeracija praktički ne postoji |
+| "`field-render` provjerava samo ZIP magic byteove" | DJELOMIČNO, i pogrešna meta: `field-render:27` provjerava punih 4 bajta. Slabija je `repair-docx:218` s 2 bajta |
+| "Repair E2E stvarno pada u CI-ju" | NEPOTVRĐENO iz CI-ja (GitHub Actions API nedostupan pri pregledu). Potvrđen je samo mehanizam koji to omogućuje, vidi A26-13 |
 
 ---
 
@@ -344,7 +398,7 @@ ili ako se počne koristiti `vitest --ui`.
 | Production migration schema | **DJELOMIČNO RIJEŠENO**: reminder schema je primijenjena kroz Supabase managed migration endpoint i potvrđena s pet markera; širi drift produkcijske baze i repozitorija ostaje PROD-05 | Production audit 4.8., PROD-03, PROD-05 |
 | Rate limit na `repair-docx` | **RIJEŠENO (28.7.)**: file-size limit i dvostruki dnevni cap i dalje postoje, plus tri nova sloja: (1) kill switch `REPAIR_DISABLED` (isti obrazac kao `preflight-start`), (2) `ConcurrencyGate` best-effort limit paralelnih teskih zahtjeva PO IZOLATU (`REPAIR_MAX_CONCURRENT`, default 4, 503 `{error:'busy'}`; honestno dokumentirano da NIJE globalno atomican, isto ogranicenje kao vec postojeci per-user TOCTOU), (3) globalna dnevna storage-kvota (`REPAIR_STORAGE_DAILY_CAP`, default 500 `repair_jobs` redaka/24h) koja preskace pohranu (ne sam popravak) kad je dosegnuta, fail-open isto kao postojeci null-storage slucajevi. Odluke izdvojene u `src/report/repair-limits.ts` (ciste, jedinicno testirane: `tests/repair-limits.test.ts`), DB/env glue u `index.ts`. Provjereno `deno check` (0 novih gresaka naspram baselinea, 12 pred-postojecih DOM-tip gresaka iz `helpers.ts` nepromijenjeno) jer Supabase MCP i `tsc` scope ne pokrivaju ovaj direktorij | `supabase/functions/repair-docx/index.ts`, `src/report/repair-limits.ts` |
 | `REPAIR_FREE_MODE` | Postoji kao flag, gate preskače naplatu ali čuva auth/consent/rate-limit; trenutni operativni mod (besplatna beta strategija) | `supabase/functions/repair-docx/index.ts`, `supabase/migrations/0029_repair_gen_status_free.sql`; stvarna vrijednost na živom Supabase projektu nije provjeriva iz repozitorija (dashboard postavka) |
-| CI | 5 aktivnih workflowa: `check.yml` (gate na svaki push/PR + Playwright), `conformance.yml`, `docx-smoke.yml`, `security-audit.yml` (npm audit + gitleaks, i tjedni cron), `training-pipeline.yml` (manual) | `.github/workflows/*`; vanjski audit od 27.7. koji tvrdi da CI ne postoji je ZASTARIO (ili je testirao stariju živu deploy verziju) |
+| CI | 9 aktivnih workflowa (stanje 17.8.): `check.yml` (gate na svaki push/PR + Playwright), `conformance.yml`, `docx-smoke.yml`, `docx-strict-open.yml`, `foundation-check.yml`, `repair-slow.yml`, `academic-suite-db.yml`, `security-audit.yml` (npm audit + gitleaks, i tjedni cron), `training-pipeline.yml` (manual). Nijedan nema `concurrency`, pet nema `timeout-minutes`, nijedan `uses:` nije pinan na SHA (A26-14 susjedstvo) | `.github/workflows/*`; vanjski audit od 27.7. koji tvrdi da CI ne postoji je ZASTARIO (ili je testirao stariju živu deploy verziju) |
 | Retencija, korisnički tekst | Dosljedan: "dok je ne obrišeš... kod prijave bez e-maila najviše 30 dana" na svim mjestima (`app.ts`, `src/legal/legal-content.ts`); server provodi (`cleanup-orphan-repairs`, `ANON_RETENTION_DAYS=30`) | Uskladeno od commita `71c8631` (19.7.), prije vanjskog audita 27.7. koji tvrdi suprotno, taj nalaz je ZASTARIO |
 | Retencija za e-mail prijavljene korisnike | OTVORENO ("sada: neograničeno" po `docs/PRE_LAUNCH.md`) | |
 | PITR i uptime monitor | Vlasnička radnja, status neizvjestan iz repozitorija | `docs/RUNBOOK_OPS.md` |
@@ -403,7 +457,7 @@ tvrdnji o kodu:
 | Automatska detekcija profila tiho odabire pogrešan/prvi studij | **TOČNO**, novi potvrđeni nalaz, vidi poglavlje 7 |
 | AutoFix CTA treba drugi klik da otvori panel | **VIŠE NIJE TOČNO**, popravljeno commitom `576b87e` prije reviewanog commita |
 | Retencija nedosljedna ("do brisanja" vs "30 dana") | **VIŠE NIJE TOČNO**, uskladeno od `71c8631` (19.7.), prije reviewanog commita |
-| Nema CI-ja osim npm audit workflowa | **VIŠE NIJE TOČNO**, 5 aktivnih workflowa |
+| Nema CI-ja osim npm audit workflowa | **VIŠE NIJE TOČNO**, 9 aktivnih workflowa (17.8.) |
 | Rate limit/file-size/concurrency/kill switch za repair nepotvrđeni | **DJELOMIČNO TOČNO**, vidi poglavlje 9 (2 od 5 mehanizama postoje) |
 | "15 vs 14" broj problema neobjašnjen | **DJELOMIČNO TOČNO**, vidi poglavlje 7, uzrok djelomično popravljen, arhitekturni rizik ostaje |
 | Sitemap `.html` vs extensionless nesklad | **NIJE REPRODUCIRANO**, sitemap i navigacija dosljedno koriste `.html` |
