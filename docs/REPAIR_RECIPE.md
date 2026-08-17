@@ -10,9 +10,12 @@ OOXML-om: 31 fixera (`src/repair/apply-fixers.ts`) mijenja `word/document.xml`, 
 `footnotes.xml` i podnozja, a svi ostali dijelovi dokumenta (slike, tema, veze) prolaze
 bajt-identicno (`src/repair/apply-fixers.ts`).
 
-Ulogu "prompta" ima recept: niz `{fixerId, ruleId, params}` koji klijent slozi iz
-PROFILA prije slanja. Server pravila ne izvodi - provjeri je li fixer poznat i ziv,
-sanira parametre i izvrsi. Zato je recept po fakultetu izrazen kao PODACI, ne kao tekst:
+Ulogu "prompta" ima recept: niz `{fixerId, ruleId, params}`. Klijent ga slozi iz PROFILA,
+ali od 2026-08-16 CILJANU VRIJEDNOST izvodi SERVER: za poznat par (profil, pravilo) uzima
+svoju, pecenu vrijednost iz ovog istog recepta (`data/generated/repair-params-by-profile.json`,
+vidi `src/repair/param-authority.ts`) i klijentovu ignorira. Klijentov `params` vrijedi jos
+samo tamo gdje fakultetskog pravila nema (univerzalna higijena), i to se biljezi u odgovoru
+(`paramSources`). Zato je recept po fakultetu izrazen kao PODACI, ne kao tekst:
 jedna masina, `407` skupova vrijednosti.
 
 Vrijednosti dolaze iz onoga sto zivi engine stvarno cita (`rules` profila; ciljane

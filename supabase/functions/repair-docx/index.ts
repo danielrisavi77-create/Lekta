@@ -1,4 +1,4 @@
-// Lekta Edge Function: repair-docx (Deno, Supabase) — NACRT (WS-3).
+// Lekta Edge Function: repair-docx (Deno, Supabase) — ZIVO U PRODUKCIJI.
 // Placeni SERVER-SIDE repair: korisnik uploada .docx, server iza entitlementa pokrene isti
 // CISTI repair engine iz src/repair/* (koji klijent vise NE isporucuje) i vrati ispravljen docx.
 //
@@ -10,14 +10,20 @@
 // kojeg drugog dokumenta iste vrste rada. Slot/kvota se trose TEK nakon sto applyFixers stvarno nesto
 // promijeni (korak 7a, RE-17/RE-32): pao popravak ili 0 izmjena vise ne kostaju nista.
 //
-// STATUS NACRTA (NIJE deployano):
-//  - Tok auth -> mismatch-gate -> entitlement -> applyFixers -> vrati docx je KOMPLETAN i koristi
-//    postojecu, testiranu logiku.
-//  - WS-6 (pohrana "do brisanja") je STUB (storeRepairJob) dok ne postoji migracija repair_jobs +
-//    Storage bucket. Bez toga funkcija radi, ali ne pohranjuje (nema "Moji popravci").
-//  - DENO CAVEAT: work-type-estimate.ts uvozi data/work-type-scope.json bez import-attributa; u Denu
-//    JSON uvoz treba `with { type: 'json' }`. Potvrdi pri deployu (WS-3). deflate-raw u Deno: potvrdi
-//    _deno-smoke.ts prije deploya.
+// STATUS: DEPLOYANO i aktivno (docs/GO_LIVE_REPAIR.md, docs/AUDIT_MASTER.md). Zaglavlje je do
+// 2026-08-16 i dalje tvrdilo "NACRT / NIJE deployano" iako je funkcija bila u produkciji i imala
+// produkcijske obrane ispod (ConcurrencyGate, storage kvota, kill switch); ostavljati taj tekst
+// znaci da citatelj ne moze vjerovati nijednom statusu u datoteci.
+//  - Tok auth -> mismatch-gate -> entitlement -> applyFixers -> vrati docx koristi postojecu,
+//    testiranu logiku (npm run check je pokriva kroz ciste funkcije).
+//  - Pohrana "do brisanja" (WS-6) je ZIVA: repair_jobs + Storage bucket postoje, a dovrsava se u
+//    pozadini (EdgeRuntime.waitUntil), pa odgovor nosi `storagePending` dok ishod jos nije poznat.
+//  - Rijeseni Deno caveati (potvrdjeni pri deployu): JSON uvoz u work-type-estimate.ts i
+//    deflate-raw (_deno-smoke.ts).
+//
+// Operativni podsjetnik: prije svakog deploya repair motora rucno pokreni Tier 2 provjere
+// (npm run verify:strict-open, npm run verify:word) - `npm run check` je samo Tier 0 i ne otvara
+// dokument nijednim stvarnim uredivacem.
 //
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
@@ -27,6 +33,8 @@ import { hashClientIpSalted } from '../_shared/hash-ip.ts';
 import { computeFingerprint } from '../../../src/fingerprint/fingerprint.ts';
 import { extractFingerprintInputFromDocx } from '../../../src/fingerprint/extract-from-docx.ts';
 import { readZip } from '../../../src/repair/zip-codec.ts';
+import { DOCX_MAX_UPLOAD_BYTES } from '../../../src/repair/docx-budget.ts';
+import { resolveParams, type ParamSource } from '../../../src/repair/param-authority.ts';
 import { isReportWorkType } from '../../../src/report/pricing.ts';
 import { decideReportAccess } from '../../../src/report/slot-logic.ts';
 import { coverageTierForStatus } from '../../../src/report/guarantee.ts';
@@ -59,8 +67,12 @@ const REPAIR_GATE = new ConcurrencyGate(Number(Deno.env.get('REPAIR_MAX_CONCURRE
 const REPAIR_STORAGE_DAILY_CAP = Number(Deno.env.get('REPAIR_STORAGE_DAILY_CAP') ?? '500');
 
 // Gornja granica uploada (sirovi docx). Base64 odgovor ~+33%; Edge memorija 256MB. Velik docx s
-// puno medija drzi na oku (WS-3 rizik). Uskladi s klijentskim uploadMaxBytes.
-const MAX_DOCX_BYTES = Number(Deno.env.get('REPAIR_MAX_DOCX_BYTES') ?? String(20 * 1024 * 1024));
+// puno medija drzi na oku (WS-3 rizik).
+//
+// Vrijednost se UVOZI iz src/repair/docx-budget.ts, ne ponavlja kao literal: prije je ovdje stajao
+// vlastiti `20 * 1024 * 1024` uz komentar "Uskladi s klijentskim uploadMaxBytes", dakle uskladjenost
+// je ovisila o tome da se netko sjeti promijeniti dva mjesta. Env override ostaje za hitne zahvate.
+const MAX_DOCX_BYTES = Number(Deno.env.get('REPAIR_MAX_DOCX_BYTES') ?? String(DOCX_MAX_UPLOAD_BYTES));
 
 // Provjera postojanja domacih izvora u M4 korpusu (plan docs/PLAN_KORPUS_PROVJERA_IZVORA.md, K3).
 // Placeni dodatak uz popravak; besplatni sloj se NE mijenja i ostaje 100% lokalan. Konfiguracija i
@@ -227,12 +239,24 @@ Deno.serve(async (req: Request) => {
     }
 
     // 4. validacija fixer-zahtjeva: samo poznati I ZIVI fixeri (K5/K6/K7 tamni dok WS-4 ne prodje).
+    //
+    // RE-62 (2026-08-16): CILJANA VRIJEDNOST se od sada izvodi na serveru, iz pecenog recepta
+    // (param-authority.ts), a ne preuzima od klijenta. Do sada je klijent slao i `params`, pa je
+    // rucno skrojen zahtjev mogao traziti npr. margine koje nijedan profil ne propisuje - server
+    // ih je samo tipski sanirao i primijenio. Klijentov `params` sada vrijedi SAMO tamo gdje
+    // fakultetskog pravila nema (univerzalna higijena), i to se izricito biljezi u odgovoru.
     const rawReqs: any[] = Array.isArray(meta.requests) ? meta.requests : [];
     if (!rawReqs.length || rawReqs.length > 64) return json({ error: 'bad_request' }, 400);
+    const profileRefForParams: string | null = typeof meta.profileRef === 'string' ? meta.profileRef : null;
     const requests: FixerRequest[] = [];
+    const paramSources: Record<string, ParamSource> = {};
     for (const r of rawReqs) {
       if (!r || typeof r.fixerId !== 'string' || !LIVE_FIXERS.has(r.fixerId)) continue; // tihi preskok tamnih
-      requests.push({ fixerId: r.fixerId, ruleId: String(r.ruleId ?? r.fixerId), params: (r.params && typeof r.params === 'object') ? r.params : {} });
+      const ruleId = String(r.ruleId ?? r.fixerId);
+      const clientParams = (r.params && typeof r.params === 'object') ? r.params : {};
+      const resolved = resolveParams(profileRefForParams, ruleId, r.fixerId, clientParams);
+      paramSources[ruleId] = resolved.source;
+      requests.push({ fixerId: r.fixerId, ruleId, params: resolved.params });
     }
     if (!requests.length) return json({ error: 'no_live_fixers' }, 422);
 
@@ -463,6 +487,11 @@ Deno.serve(async (req: Request) => {
       // nije vidljiv u "Moji popravci". Klijent zato ne smije tvrditi da je spremljeno. Kad je
       // jobId null (storage-kvota dosegnuta), pending je uvijek false: pohrana nije ni pokusana.
       slotId, jobId, storagePending: !!jobId && typeof bg === 'function', traceToken, fingerprint, sourceCheck,
+      // ruleId -> je li ciljanu vrijednost izveo SERVER iz profila ('profile') ili je preuzeta od
+      // klijenta jer za to pravilo nema fakultetskog zapisa ('client'). Bez ovoga sucelje ne moze
+      // posteno razlikovati "popravljeno prema pravilu tvog fakulteta" od "popravljeno prema
+      // opcoj preporuci", a upravo je ta razlika ono sto Lekta prodaje.
+      paramSources,
     }, 200);
   } catch (e) {
     console.error('[repair-docx]', e);

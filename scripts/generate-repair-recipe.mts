@@ -11,7 +11,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { buildRecipe, renderRecipeMarkdown, hasProfileRules } from '../src/repair/recipe';
+import { buildRecipe, renderRecipeMarkdown, hasProfileRules, buildParamAuthority } from '../src/repair/recipe';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -20,9 +20,16 @@ mkdirSync(join(root, 'docs', 'generated'), { recursive: true });
 writeFileSync(join(root, 'docs', 'generated', 'repair-recipe.json'), JSON.stringify(recipe, null, 2) + '\n');
 writeFileSync(join(root, 'docs', 'REPAIR_RECIPE.md'), renderRecipeMarkdown(recipe));
 
+// Peceni serverski autoritet nad ciljanom vrijednoscu (src/repair/param-authority.ts). Ide u
+// `data/generated/` a ne u `docs/`, jer NIJE dokumentacija nego ulaz u Edge funkciju.
+const authority = buildParamAuthority(recipe);
+mkdirSync(join(root, 'data', 'generated'), { recursive: true });
+writeFileSync(join(root, 'data', 'generated', 'repair-params-by-profile.json'), JSON.stringify(authority) + '\n');
+
 const totalItems = recipe.reduce((n, p) => n + p.items.length, 0);
 console.log('=== Recept popravka ===');
 // "s popravkom" broji SAMO profile s pravilom iz sluzbene upute: univerzalnu higijenu (prazni
 // odlomci) dobiva svaki profil, pa bi ukupan broj bio tocan a bezvrijedan.
 console.log(`profila: ${recipe.length}, po uputi fakulteta: ${recipe.filter(hasProfileRules).length}, stavki: ${totalItems}`);
-console.log('zapisano: docs/REPAIR_RECIPE.md, docs/generated/repair-recipe.json');
+console.log(`serverski autoritet: ${Object.keys(authority).length} profila`);
+console.log('zapisano: docs/REPAIR_RECIPE.md, docs/generated/repair-recipe.json, data/generated/repair-params-by-profile.json');
