@@ -2,8 +2,17 @@
   "name": "lekta",
   "private": true,
   "version": "2.2.2",
-  "type": "module",
   "description": "Lekta - klijentska provjera akademskih radova prema profilima zagrebackih visokih ucilista.",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielrisavi77-create/Lekta.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "npm@11.11.0",
+  "type": "module",
   "scripts": {
     "bootstrap": "node scripts/split-prototype.mjs",
     "extract-data": "node scripts/extract-data.mjs",
