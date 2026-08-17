@@ -98,6 +98,20 @@ describe('Repair Contract adapter', () => {
       requests: [{ fixerId: 'nepostojeci-fixer', ruleId: 'x', params: {} }],
     }))).rejects.toThrow(/unknown-fixer|zahtjev/i);
   });
+
+  it.each([
+    ['jobId', { jobId: 'nije-uuid' }],
+    ['userId', { userId: 'nije-uuid' }],
+    ['izvorno ime', { sourceFileName: '../Seminar.docx' }],
+    ['izlazno ime', { suggestedFileName: 'C:\\Temp\\Seminar.docx' }],
+    ['obrnuto vrijeme', {
+      createdAt: new Date('2026-08-16T11:00:00.000Z'),
+      expiresAt: new Date('2026-08-16T10:00:00.000Z'),
+    }],
+    ['engine verziju', { engineMinVersion: 'nije-semver' }],
+  ] as const)('fail-closed odbija neispravan issuer podatak: %s', async (_label, override) => {
+    await expect(buildUnsignedRepairContractV1(input(override))).rejects.toThrow(/contract|ugovor|neisprav/i);
+  });
 });
 
 describe('kompatibilnost adaptera sa svim generiranim receptima', () => {

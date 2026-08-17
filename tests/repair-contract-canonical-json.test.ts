@@ -27,6 +27,20 @@ describe('Repair Contract kanonski zapis', () => {
     expect(() => canonicalJson(JSON.parse('{"__proto__":{"polluted":true}}'))).toThrow();
   });
 
+  it('odbija rijetke nizove, accessor elemente i dodatna svojstva niza', () => {
+    const sparse = new Array(2);
+    const accessor = ['sigurno'];
+    Object.defineProperty(accessor, '0', { enumerable: true, get: () => 'izvrseno' });
+    const withExtra = ['vrijednost'] as string[] & { command?: string };
+    withExtra.command = 'Start-Process';
+    const withSymbol = ['vrijednost'] as string[] & Record<symbol, string>;
+    withSymbol[Symbol('command')] = 'Start-Process';
+
+    for (const value of [sparse, accessor, withExtra, withSymbol]) {
+      expect(() => canonicalJson(value as never)).toThrow();
+    }
+  });
+
   it('ima povratni base64url i poznati SHA-256 vektor', async () => {
     const bytes = new TextEncoder().encode('abc');
     expect(await sha256Hex(bytes)).toBe('ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad');

@@ -3,6 +3,8 @@ import type { FixerId } from '../fixer-registry.ts';
 export const REPAIR_CONTRACT_VERSION = 1 as const;
 export const REPAIR_CONTRACT_MAX_REQUESTS = 64 as const;
 export const REPAIR_CONTRACT_SIGNATURE_ALGORITHM = 'ES256-P1363' as const;
+export const REPAIR_CONTRACT_KEY_ID_PATTERN = /^[A-Za-z0-9._-]{1,80}$/;
+export const REPAIR_CONTRACT_SIGNATURE_BYTES = 64 as const;
 export const GOLDEN_GATES = ['G0', 'G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9'] as const;
 
 export type GoldenGate = (typeof GOLDEN_GATES)[number];

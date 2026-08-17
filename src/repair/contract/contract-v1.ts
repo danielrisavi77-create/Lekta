@@ -1,7 +1,9 @@
-import { sha256Hex } from './hash.ts';
+import { fromBase64Url, sha256Hex, toBase64Url } from './hash.ts';
 import { parseContractRequests, requiredExceptionScope } from './request-policy.ts';
 import {
   GOLDEN_GATES,
+  REPAIR_CONTRACT_KEY_ID_PATTERN,
+  REPAIR_CONTRACT_SIGNATURE_BYTES,
   type AllowedExceptionV1,
   type GoldenGate,
   type RepairContractOutputPolicyV1,
@@ -46,6 +48,10 @@ export type ContractParseResult =
   | { ok: true; contract: RepairContractV1 }
   | { ok: false; issues: ContractValidationIssue[] };
 
+export type UnsignedContractParseResult =
+  | { ok: true; contract: UnsignedRepairContractV1 }
+  | { ok: false; issues: ContractValidationIssue[] };
+
 export type ContractContextResult =
   | { ok: true }
   | { ok: false; issues: ContractValidationIssue[] };
@@ -69,10 +75,10 @@ const TOP_LEVEL_KEYS = [
   'userId',
   'verificationPolicy',
 ] as const;
+const UNSIGNED_TOP_LEVEL_KEYS = TOP_LEVEL_KEYS.filter((key) => key !== 'contractSignature');
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const SHA256 = /^[0-9a-f]{64}$/;
 const SEMVER = /^(0|[1-9][0-9]{0,3})\.(0|[1-9][0-9]{0,3})\.(0|[1-9][0-9]{0,3})$/;
-const BASE64URL = /^[A-Za-z0-9_-]+$/;
 const RESERVED_WINDOWS_NAME = /^(?:con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i;
 const DAY_MS = 24 * 60 * 60 * 1_000;
 
@@ -169,10 +175,13 @@ function parseSignature(value: unknown): RepairContractSignatureV1 | null {
   if (!dataObject(value) || !exactKeys(value, ['algorithm', 'keyId', 'value'])) return null;
   if (value.algorithm !== 'ES256-P1363'
     || typeof value.keyId !== 'string'
-    || !/^[A-Za-z0-9._-]{1,100}$/.test(value.keyId)
-    || typeof value.value !== 'string'
-    || !BASE64URL.test(value.value)
-    || value.value.length > 1_024) return null;
+    || !REPAIR_CONTRACT_KEY_ID_PATTERN.test(value.keyId)
+    || typeof value.value !== 'string') return null;
+  try {
+    if (fromBase64Url(value.value).length !== REPAIR_CONTRACT_SIGNATURE_BYTES) return null;
+  } catch {
+    return null;
+  }
   return { algorithm: 'ES256-P1363', keyId: value.keyId, value: value.value };
 }
 
@@ -270,6 +279,21 @@ export function unsignedPayload(contract: RepairContractV1): UnsignedRepairContr
   return payload;
 }
 
+export function parseUnsignedRepairContractV1(value: unknown): UnsignedContractParseResult {
+  if (!dataObject(value) || !exactKeys(value, UNSIGNED_TOP_LEVEL_KEYS)) {
+    return { ok: false, issues: [{ code: 'invalid-shape', path: 'contract' }] };
+  }
+  const parsed = parseRepairContractV1({
+    ...value,
+    contractSignature: {
+      algorithm: 'ES256-P1363',
+      keyId: 'unsigned-schema-validation',
+      value: toBase64Url(new Uint8Array(REPAIR_CONTRACT_SIGNATURE_BYTES)),
+    },
+  });
+  return parsed.ok ? { ok: true, contract: unsignedPayload(parsed.contract) } : parsed;
+}
+
 export async function validateRepairContractContext(
   contract: RepairContractV1,
   context: RepairContractContext,
@@ -285,8 +309,6 @@ export async function validateRepairContractContext(
   if (expiresAt - createdAt > maxLifetimeMs) return contextIssue('lifetime-too-long', 'expiresAt');
   if (context.expectedJobId !== undefined && context.expectedJobId !== contract.jobId) return contextIssue('invalid-id', 'jobId');
   if (context.expectedUserId !== undefined && context.expectedUserId !== contract.userId) return contextIssue('invalid-id', 'userId');
-  if (context.sourceBytes.length !== contract.sourceSize) return contextIssue('source-size-mismatch', 'sourceSize');
-  if (await sha256Hex(context.sourceBytes) !== contract.sourceSha256) return contextIssue('source-hash-mismatch', 'sourceSha256');
 
   const engine = parseSemver(context.engineVersion);
   const minimum = parseSemver(contract.engineMinVersion);
@@ -294,5 +316,7 @@ export async function validateRepairContractContext(
   if (!engine || !minimum || !maximum || compareSemver(engine, minimum) < 0 || compareSemver(engine, maximum) > 0) {
     return contextIssue('engine-out-of-range', 'engineVersion');
   }
+  if (context.sourceBytes.length !== contract.sourceSize) return contextIssue('source-size-mismatch', 'sourceSize');
+  if (await sha256Hex(context.sourceBytes) !== contract.sourceSha256) return contextIssue('source-hash-mismatch', 'sourceSha256');
   return { ok: true };
 }

@@ -83,6 +83,15 @@ describe('Repair Contract v1 parser', () => {
       .toMatchObject({ ok: false, issues: [{ code: 'request-policy' }] });
   });
 
+  it('parser zahtijeva keyId do 80 znakova i tocno 64 bajta P1363 potpisa', () => {
+    expect(parseRepairContractV1(validContract({
+      contractSignature: { ...validContract().contractSignature, keyId: 'x'.repeat(81) },
+    }))).toMatchObject({ ok: false, issues: [{ code: 'invalid-shape', path: 'contractSignature' }] });
+    expect(parseRepairContractV1(validContract({
+      contractSignature: { ...validContract().contractSignature, value: 'YQ' },
+    }))).toMatchObject({ ok: false, issues: [{ code: 'invalid-shape', path: 'contractSignature' }] });
+  });
+
   it('zahtijeva svih G0-G9 i svih pet sigurnosnih boolean polja', () => {
     const policy = validContract().verificationPolicy;
     expect(parseRepairContractV1(validContract({
@@ -150,5 +159,13 @@ describe('Repair Contract v1 kontekst', () => {
   it.each(['0.9.9', '1.0.1'])('odbija engine izvan ukljucivog raspona: %s', async (engineVersion) => {
     expect(await validateRepairContractContext(validContract(), { ...validContext, engineVersion }))
       .toMatchObject({ ok: false, issues: [{ code: 'engine-out-of-range' }] });
+  });
+
+  it('provjerava engine prije velicine i hasha izvora', async () => {
+    expect(await validateRepairContractContext(validContract(), {
+      ...validContext,
+      engineVersion: '0.0.0',
+      sourceBytes: new TextEncoder().encode('abd'),
+    })).toMatchObject({ ok: false, issues: [{ code: 'engine-out-of-range' }] });
   });
 });

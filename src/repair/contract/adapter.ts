@@ -1,4 +1,5 @@
 import { sha256Hex } from './hash.ts';
+import { parseUnsignedRepairContractV1 } from './contract-v1.ts';
 import { parseContractRequests, requiredExceptionScope } from './request-policy.ts';
 import {
   GOLDEN_GATES,
@@ -91,7 +92,7 @@ export async function buildUnsignedRepairContractV1(
     throw new TypeError('Vrijeme Repair Contracta nije valjano.');
   }
 
-  return {
+  const contract: UnsignedRepairContractV1 = {
     contractVersion: 1,
     jobId: input.jobId,
     userId: input.userId,
@@ -118,4 +119,10 @@ export async function buildUnsignedRepairContractV1(
       requiredGates: [...GOLDEN_GATES],
     },
   };
+  const validated = parseUnsignedRepairContractV1(contract);
+  if (!validated.ok) {
+    const first = validated.issues[0];
+    throw new TypeError(`Neispravan Repair Contract ${first.path}: ${first.code}`);
+  }
+  return validated.contract;
 }

@@ -48,6 +48,8 @@ Kanonski JSON koji koristi v1 nije proizvoljno ponovno serijaliziranje:
 - nema whitespacea;
 - ključevi svakog objekta sortiraju se kao ECMAScript default string sort (UTF-16 code units);
 - redoslijed elemenata niza ostaje nepromijenjen;
+- niz mora biti gust i smije imati samo vlastite podatkovne elemente `0..length-1`; rupe, accessor
+  elementi, simboli i dodatna svojstva niza nisu dopušteni;
 - stringovi i konačni brojevi kodiraju se semantikom `JSON.stringify`;
 - `NaN`, infinities, `undefined`, funkcije, simboli, accessor polja, ciklusi i neobični prototipovi
   nisu dopušteni;
@@ -96,6 +98,16 @@ konačni. Indeksi i offseti su integeri 0-2.000.000, heading razine 1-9, a Word 
 od -14.400 do 14.400. Polja naziva `*Fingerprint` su stringovi do 200 znakova. Tekstualna
 replacement/comment polja imaju najviše 20.000 znakova. Ugniježđeno polje `confirmed` ili
 `consent`, kada postoji, mora biti točno `true`.
+
+Shema je stroga na svakoj dubini, ne samo na vrhu `params` objekta. Svaki ugniježđeni objekt
+smije imati samo ključeve definirane tipom konkretnog fixera; nepoznati `command`, `script`,
+`action`, putanja ili drugo polje završava s `invalid-param`. Polja koja označavaju DOCX package
+part prihvaćaju samo fixer-specifične sigurne relativne nazive, a URL polja samo valjane `http`
+ili `https` URL-ove unutar propisane granice.
+
+Lektin issuer mora cijeli nepotpisani payload prvo provesti kroz
+`parseUnsignedRepairContractV1`. `buildUnsignedRepairContractV1` i `signRepairContractV1`
+primjenjuju istu shemu i ne smiju vratiti niti potpisati payload koji bi javni parser odbio.
 
 ### Fixer allow-lista i dopušteni top-level params ključevi
 

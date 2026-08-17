@@ -92,10 +92,39 @@ describe('Repair Contract ES256-P1363 signature', () => {
     expect(await verifyRepairContractV1(badEncoding, pair.publicKey)).toEqual({ ok: false, code: 'invalid-signature-encoding' });
   });
 
+  it('signature-first provjera fail-closed prihvaca unknown i nikad ne baca za neispravnu ovojnicu', async () => {
+    const { pair } = await signedContract();
+    const accessor = {};
+    Object.defineProperty(accessor, 'contractSignature', {
+      enumerable: true,
+      get: () => { throw new Error('getter se ne smije izvrsiti'); },
+    });
+    const hostileProxy = new Proxy({}, {
+      getPrototypeOf: () => { throw new Error('reflection trap'); },
+    });
+
+    for (const value of [null, {}, { contractSignature: null }, accessor, hostileProxy]) {
+      await expect(verifyRepairContractV1(value, pair.publicKey)).resolves.toEqual({
+        ok: false,
+        code: 'invalid-signature-encoding',
+      });
+    }
+  });
+
   it('odbija neispravan keyId pri potpisivanju', async () => {
     const pair = await ephemeralKeyPair();
 
     await expect(signRepairContractV1(validUnsignedContract(), pair.privateKey, 'bad key')).rejects.toThrow(/keyId/i);
+  });
+
+  it('odbija potpisati unsigned payload koji ne prolazi javnu shemu', async () => {
+    const pair = await ephemeralKeyPair();
+
+    await expect(signRepairContractV1(
+      validUnsignedContract({ jobId: 'nije-uuid' }),
+      pair.privateKey,
+      'test-key-2026-01',
+    )).rejects.toThrow(/contract|ugovor|neisprav/i);
   });
 
   it('uvozi PKCS8 privatni i SPKI javni P-256 kljuc iz base64url zapisa', async () => {

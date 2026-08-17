@@ -21,7 +21,24 @@ function encodeCanonical(value: unknown, ancestors: WeakSet<object>): string {
 
   try {
     if (Array.isArray(value)) {
-      return `[${value.map((item) => encodeCanonical(item, ancestors)).join(',')}]`;
+      const descriptors = Object.getOwnPropertyDescriptors(value);
+      const keys = Reflect.ownKeys(descriptors);
+      if (keys.some((key) => typeof key !== 'string')) {
+        throw new TypeError('Kanonski JSON ne dopusta simbolicka svojstva niza.');
+      }
+      if (keys.length !== value.length + 1 || !Object.prototype.hasOwnProperty.call(descriptors, 'length')) {
+        throw new TypeError('Kanonski JSON ne dopusta dodatna svojstva ni rupe u nizu.');
+      }
+
+      const encoded: string[] = [];
+      for (let index = 0; index < value.length; index += 1) {
+        const descriptor = descriptors[String(index)];
+        if (!descriptor || !descriptor.enumerable || !('value' in descriptor)) {
+          throw new TypeError('Kanonski JSON dopusta samo guste nizove s podatkovnim elementima.');
+        }
+        encoded.push(encodeCanonical(descriptor.value, ancestors));
+      }
+      return `[${encoded.join(',')}]`;
     }
 
     const prototype = Object.getPrototypeOf(value);

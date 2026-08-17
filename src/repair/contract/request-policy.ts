@@ -1,5 +1,6 @@
 import { FIXER_IDS, type FixerId } from '../fixer-registry.ts';
 import { canonicalUtf8 } from './canonical-json.ts';
+import { validateAssistedParams } from './assisted-request-policy.ts';
 import {
   REPAIR_CONTRACT_MAX_REQUESTS,
   type AllowedExceptionV1,
@@ -316,6 +317,7 @@ function validateParams(fixerId: ContractFixerId, params: DataObject): RequestPo
 
   if (VERSIONED_FIXERS.has(fixerId) && params.version !== 1) return 'invalid-param';
   if (!arraysArePresent(params, fixerId)) return 'invalid-param';
+  if (!validateAssistedParams(fixerId, params)) return 'invalid-param';
   if (!arraysAreConfirmed(params, fixerId) || !categoryConsentIsConfirmed(params, fixerId) || !tableLandscapeIsConfirmed(params, fixerId)) {
     return 'confirmation-required';
   }
