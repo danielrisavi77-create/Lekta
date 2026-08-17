@@ -29,16 +29,21 @@
 # "dokument ne napusta uredaj" (za besplatnu analizu) nije samo copy nego politika preglednika.
 # Dopusteni hostovi i zasto:
 #   'self'                    - vlastite stranice, Netlify forme (rucna narudzba), app asseti
-#   https://*.supabase.co     - Supabase (auth, Edge funkcije, REST): report, checkout, waitlist,
-#                               katalog, rokovi, integritet, referral (svi na projektnoj *.supabase.co)
+#   __CSP_SUPABASE__          - Supabase (auth, Edge funkcije, REST): report, checkout, waitlist,
+#                               katalog, rokovi, integritet, referral. Token se pri buildu zamjenjuje
+#                               KONKRETNIM projektnim originom (vidi cspAllowlist u vite.config.ts).
+#                               Prije 2026-08-17 ovdje je stajao wildcard https://*.supabase.co, sto
+#                               je dopustalo slanje na BILO CIJI Supabase projekt: eventualno
+#                               injektiran kod mogao je izvesti podatke na napadacev projekt, a
+#                               komentar ispod je tvrdio da je odljev tehnicki onemogucen (SEC-01).
 #   https://api.crossref.org  - "Popuni iz DOI-ja" na alatu Citati + provjera postojanja reference
 #   https://doi.org           - DOI resolver (provjera postojanja reference)
-#   https://*.lemonsqueezy.com- povratni checkout (form-action; POST/redirect na LS placanje)
+#   __CSP_LS__                - povratni checkout (form-action; POST/redirect na LS placanje)
 # VAZNO: ako se doda NOVI vanjski endpoint (npr. druga analitika), dodaj mu host OVDJE, inace ga
 # preglednik blokira. To je namjerno: nepredvidjeni odljev podataka pada zatvoreno. `npm run dev`
 # ne koristi _headers pa HMR websocket ostaje raditi.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-ws2+tIofKe8Oi9MB7J4qYjlxZsGRTkubfdubL9tzznQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://api.crossref.org https://doi.org; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://*.supabase.co https://*.lemonsqueezy.com
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-ws2+tIofKe8Oi9MB7J4qYjlxZsGRTkubfdubL9tzznQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' __CSP_SUPABASE__ https://api.crossref.org https://doi.org; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' __CSP_SUPABASE__ __CSP_LS__
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY

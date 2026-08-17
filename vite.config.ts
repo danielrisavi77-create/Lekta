@@ -64,6 +64,49 @@ function siteOriginHtml(siteOrigin: string) {
   };
 }
 
+/**
+ * CSP allowlista: zamijeni tokene u `dist/_headers` KONKRETNIM hostovima (audit SEC-01, SEC-02).
+ *
+ * Do 2026-08-17 su `connect-src` i `form-action` sadrzavali `https://*.supabase.co`, dakle svaki
+ * Supabase projekt na svijetu, uz komentar koji je tvrdio da je neocekivan odljev podataka
+ * tehnicki onemogucen. Nije bio: injektiran kod je smio slati podatke na napadacev projekt, a
+ * wildcard je to izgledao kao da pokriva.
+ *
+ * Origin se izvodi iz iste env varijable kojom je konfigurirana i sama aplikacija, pa CSP ne moze
+ * odlutati od toga na sto se app zapravo spaja. Bez env varijable pada na produkcijski projekt,
+ * jer je za CSP bolje biti prestrog nego dopustiti sve.
+ *
+ * `public/_headers` Vite kopira nakon bundlanja, pa se obrada radi u `writeBundle`, isto kao za
+ * sitemap i robots.txt.
+ */
+function cspAllowlist() {
+  const origin = (url: string): string => {
+    try {
+      return new URL(url).origin;
+    } catch {
+      return '';
+    }
+  };
+  const supabase =
+    origin(process.env.VITE_LEKTA_SUPABASE_URL ?? '') || 'https://zrrjttizjyfcxmcpgzml.supabase.co';
+  // Lemon Squeezy checkout zivi na poddomeni trgovine, koja se razlikuje po racunu, pa se uzima iz
+  // okoline. Dok naplata nije ziva, zadana vrijednost je zajednicki app host: uzi je od wildcarda,
+  // a ne lomi nista jer nijedan proizvod jos nije mapiran.
+  const lemon = origin(process.env.LEKTA_LS_CHECKOUT_ORIGIN ?? '') || 'https://app.lemonsqueezy.com';
+
+  return {
+    name: 'lekta-csp-allowlist',
+    apply: 'build' as const,
+    writeBundle() {
+      const file = resolve(__dirname, 'dist', '_headers');
+      if (!existsSync(file)) return;
+      const source = readFileSync(file, 'utf8');
+      const replaced = source.replaceAll('__CSP_SUPABASE__', supabase).replaceAll('__CSP_LS__', lemon);
+      if (replaced !== source) writeFileSync(file, replaced, 'utf8');
+    },
+  };
+}
+
 // Lekta je klijentska aplikacija; index.html je glavni entry, a verification.html je
 // odvojeni interni admin view (verifikacijska konzola, Faza C.3) koji ne dira glavni
 // app ni golden put. Sva analiza je lokalna u pregledniku (vidi VISION.md, docs/).
@@ -322,7 +365,7 @@ export default defineConfig(({ command }) => {
   // sprjecava indeksiranje/sitemap unatoc tome sto je stranica u buildu.
   if (devTools) input.verification = resolve(__dirname, 'verification.html');
   return {
-    plugins: [htmlCharsetUtf8(), siteOriginHtml(siteOrigin), citationTools(), fixHunspellNanoid(), stripRuntimeDeadProvenance(devTools), stripDevOnlyHtml(devTools), fontPreload(), assertSafeBuild(devTools)],
+    plugins: [htmlCharsetUtf8(), siteOriginHtml(siteOrigin), citationTools(), fixHunspellNanoid(), stripRuntimeDeadProvenance(devTools), stripDevOnlyHtml(devTools), fontPreload(), cspAllowlist(), assertSafeBuild(devTools)],
     define: { __DEV_TOOLS__: JSON.stringify(devTools) },
     // hunspell-asm se ne pre-bundla u dev-u da fixHunspellNanoid transform (Vite plugin) stigne do
     // njega; inace bi ga esbuild optimizer pre-bundlao mimo plugina i nanoid poziv bi pao u dev-u.

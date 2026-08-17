@@ -215,7 +215,13 @@ Deno.serve(async (req: Request) => {
     if (docxBytes.length === 0 || docxBytes.length > MAX_DOCX_BYTES) return json({ error: 'payload_too_large' }, 413);
     // brzi sanity: docx je ZIP (PK\x03\x04). Puni intake-gate (zip bomba/entry-cap) je u parseru; ovdje
     // applyFixers ionako baca na nevaljan docx (hvatamo nize).
-    if (!(docxBytes[0] === 0x50 && docxBytes[1] === 0x4b)) return json({ error: 'not_a_docx' }, 415);
+    //
+    // Provjeravaju se SVA CETIRI bajta lokalnog zaglavlja, ne samo "PK" (audit SEC-21). Sam par
+    // PK dijele i prazan arhiv (PK 05 06) i raspareni segment (PK 07 08), koji nisu ulaz s kojim
+    // ovaj put smije raditi. Isto vec radi field-render, pa su dvije ulazne tocke sada jednako
+    // stroge umjesto da jedna bude slabija bez razloga.
+    const ZIP_LOCAL_HEADER = [0x50, 0x4b, 0x03, 0x04];
+    if (!ZIP_LOCAL_HEADER.every((b, i) => docxBytes[i] === b)) return json({ error: 'not_a_docx' }, 415);
 
     let meta: any = null;
     try { meta = JSON.parse(metaRaw); } catch { meta = null; }

@@ -360,6 +360,35 @@ if (fs.existsSync(naslovnicaDir)) {
   }
 }
 
+// CSP ALLOWLISTA (audit SEC-01, SEC-02).
+//
+// `connect-src` i `form-action` su do 2026-08-17 sadrzavali `https://*.supabase.co`, dakle svaki
+// Supabase projekt na svijetu, uz komentar koji je tvrdio da je neocekivan odljev podataka
+// tehnicki onemogucen. Ovaj gate cuva da se wildcard ne vrati i da build stvarno supstituira
+// tokene: nesupstituiran token bio bi gori od wildcarda, jer bi CSP postao neispravan.
+{
+  const headersPath = path.join(DIST, '_headers');
+  if (!fs.existsSync(headersPath)) fail('dist/_headers ne postoji (CSP se ne bi primijenio)');
+  const headers = fs.readFileSync(headersPath, 'utf8');
+
+  for (const token of ['__CSP_SUPABASE__', '__CSP_LS__']) {
+    if (headers.includes(token)) fail(`dist/_headers sadrzi nesupstituiran token ${token} (cspAllowlist plugin nije odradio)`);
+  }
+
+  const csp = (headers.match(/^\s*Content-Security-Policy:\s*(.+)$/m) || [])[1] ?? '';
+  if (!csp) fail('dist/_headers nema Content-Security-Policy');
+
+  const directive = (name) => (csp.match(new RegExp(`${name} ([^;]*)`)) || [])[1] ?? '';
+  for (const name of ['connect-src', 'form-action']) {
+    const value = directive(name);
+    if (!value) fail(`CSP nema direktivu ${name}`);
+    if (/https:\/\/\*\./.test(value)) fail(`CSP ${name} sadrzi wildcard host: "${value.trim()}"`);
+    if (!/https:\/\/[a-z0-9-]+\.supabase\.co/.test(value)) {
+      fail(`CSP ${name} nema konkretan Supabase origin: "${value.trim()}"`);
+    }
+  }
+}
+
 // PRAVNI IDENTITET PRUZATELJA (audit A26-01, LEG-01/02/03).
 //
 // `data/legal/provider.json` je jedino mjesto s identitetom trgovca i voditelja obrade.
