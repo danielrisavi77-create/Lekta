@@ -19,6 +19,26 @@ if (isStaging && (!configuredUrl || !configuredAnonKey)) {
   );
 }
 
+/**
+ * LOKALNI RAZVOJ TAKODJER NE SMIJE TIHO GADJATI PRODUKCIJU (audit A26-07).
+ *
+ * `requestedMode` po zadanom je 'production', pa je `npm run dev` bez env varijabli koristio
+ * produkcijski URL i anon kljuc. Istovremeno su u dev buildu upaljeni interni alati. Lokalni
+ * rad je time mogao citati i pisati zivu bazu, a da nista u sucelju to ne kaze.
+ *
+ * Zato dev server pada isto kao staging. Produkcijski BUILD zadrzava zadane vrijednosti, jer bi
+ * inace deploy puknuo na okolini koja varijable jos nema.
+ *
+ * `TEST` se izuzima: vitest vrti u dev nacinu, a testovi ne diraju mrezu (endpointi se stubaju),
+ * pa bi ih ovo srusilo bez ikakve dobiti.
+ */
+if (import.meta.env.DEV && !import.meta.env.TEST && (!configuredUrl || !configuredAnonKey)) {
+  throw new Error(
+    'Lokalni dev server zahtijeva VITE_LEKTA_SUPABASE_URL i VITE_LEKTA_SUPABASE_ANON_KEY. ' +
+      'Kopiraj .env.example u .env i popuni ih. Bez toga bi se dev spajao na PRODUKCIJSKU bazu.',
+  );
+}
+
 const supabaseUrl = configuredUrl || PRODUCTION_SUPABASE_URL;
 
 export const DEPLOYMENT_CONFIG = {
