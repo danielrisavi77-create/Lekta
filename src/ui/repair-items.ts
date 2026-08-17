@@ -10,7 +10,7 @@ import type { ElementCaptionFormDefinition, BibliographyFormDefinition, Citation
 import type { RuleEntry } from '../profiles/profile-schema';
 import type { Issue } from '../scoring/checks';
 import type { SectionNumberingTarget } from '../repair/xml-patch';
-import { CHECK_TITLES, PAPER_SIZE_TITLE_PREFIX } from '../analysis/check-fixer-map';
+import { CHECK_TITLES, PAPER_SIZE_TITLE_PREFIX, dimensionForCheckId } from '../analysis/check-fixer-map';
 import type { HeadingCandidate, HeadingStructureWarning } from '../analysis/heading-structure';
 import { headingNumberingRules } from '../analysis/heading-numbering';
 import type { HeadingNumberingPlan } from '../analysis/heading-numbering';
@@ -24,6 +24,11 @@ import { submissionMetadataFingerprint } from '../analysis/cross-file-submission
 
 /** Minimalni oblik provjere iz analyzeDocx rezultata (result.checks[]). */
 export interface AnalyzedCheck {
+  /**
+   * Stabilan identitet provjere (`check-id-registry.ts`). Neobavezan jer rucno slozeni testni i
+   * UI fixturi nose samo naslov; korelacija tada pada na naslov (vidi `findCheckForDimension`).
+   */
+  id?: string | null;
   title: string;
   status: string;
   max: number;
@@ -104,19 +109,31 @@ function paramsFromValue(checkId: string, value: unknown): Record<string, unknow
   }
 }
 
-/** Status checka po naslovu (ili undefined ako ga nema). Za razliku od isViolated NE trazi
- *  max>0: numeriranje-checkovi su nebodovani (max=0, "Word ne sprema dovoljno podataka") na
- *  jednosekcijskom radu, ali im status ostaje 'warn' kad numeriranje od Uvoda nije potvrdjeno. */
-function checkStatusByTitle(checks: AnalyzedCheck[], title: string): string | undefined {
-  return checks.find((c) => c.title === title)?.status;
+/**
+ * Provjera koja pokriva zadanu dimenziju popravka.
+ *
+ * Primarno preko STABILNOG `check.id` (`dimensionForCheckId`), pa preimenovanje hrvatskog naslova
+ * vise ne kida vezu nalaza na fixer. Naslov ostaje samo fallback za provjere bez registriranog
+ * ID-a (rucni fixturi u testovima i starije UI projekcije).
+ */
+function findCheckForDimension(checks: AnalyzedCheck[], dimension: string): AnalyzedCheck | undefined {
+  const byId = checks.find((c) => c.id && dimensionForCheckId(c.id) === dimension);
+  if (byId) return byId;
+  return dimension === 'paper-size'
+    ? checks.find((c) => c.title.startsWith(PAPER_SIZE_PREFIX))
+    : checks.find((c) => c.title === CHECK_TITLE[dimension]);
 }
 
-/** Je li dimenzija (checkId) PREKRSENA: postoji bodovani check (max>0) koji nije 'pass'. */
-function isViolated(checkId: string, checks: AnalyzedCheck[]): boolean {
-  const chk =
-    checkId === 'paper-size'
-      ? checks.find((c) => c.title.startsWith(PAPER_SIZE_PREFIX))
-      : checks.find((c) => c.title === CHECK_TITLE[checkId]);
+/** Status checka za dimenziju (ili undefined ako ga nema). Za razliku od isViolated NE trazi
+ *  max>0: numeriranje-checkovi su nebodovani (max=0, "Word ne sprema dovoljno podataka") na
+ *  jednosekcijskom radu, ali im status ostaje 'warn' kad numeriranje od Uvoda nije potvrdjeno. */
+function checkStatusForDimension(checks: AnalyzedCheck[], dimension: string): string | undefined {
+  return findCheckForDimension(checks, dimension)?.status;
+}
+
+/** Je li dimenzija PREKRSENA: postoji bodovani check (max>0) koji nije 'pass'. */
+function isViolated(dimension: string, checks: AnalyzedCheck[]): boolean {
+  const chk = findCheckForDimension(checks, dimension);
   return !!chk && chk.max > 0 && chk.status !== 'pass';
 }
 
@@ -1222,7 +1239,7 @@ export function introSectionItem(result: any, profile: any): RepairableItem[] {
   const sections = result?.details?.sections;
   if (!Array.isArray(sections) || sections.length !== 1) return [];
   const checks: AnalyzedCheck[] = result?.checks ?? [];
-  const startStatus = checkStatusByTitle(checks, CHECK_TITLE['page-number-start']);
+  const startStatus = checkStatusForDimension(checks, 'page-number-start');
   // violated: numeriranje od Uvoda nije potvrdjeno (status != 'pass' ili check ne postoji).
   const violated = startStatus !== 'pass';
   // RE-05: align se IZVODI iz profila (isti pageNumberAlignment kao pageNumberAlignmentRepairableItem),

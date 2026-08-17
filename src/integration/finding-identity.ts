@@ -1,6 +1,7 @@
 import type { Check, Issue } from '../scoring/checks';
 import type { RuleEntry } from '../profiles/profile-schema';
-import { CHECK_TITLES, PAPER_SIZE_TITLE_PREFIX } from '../analysis/check-fixer-map';
+import { dimensionForCheckId } from '../analysis/check-fixer-map';
+import { stableCheckId as registryCheckId } from '../scoring/check-id-registry';
 
 /**
  * Supplemental aliases for profile-backed checks that are not represented in
@@ -47,15 +48,22 @@ function hash(value: string): string {
   return (out >>> 0).toString(36);
 }
 
+/**
+ * Namespace note: this returns a REPAIR DIMENSION key (`margins`, `font`, `paper-size`, ...),
+ * not a registry check id (`page.margins`). That is deliberate - `preferredRuleEntry` joins the
+ * result against `RuleEntry.checkId`, which lives in the dimension namespace.
+ *
+ * The title -> dimension step is no longer duplicated here: it goes through the shared registry
+ * (`stableCheckId` in scoring) and `dimensionForCheckId`, so renaming a Croatian check title
+ * cannot silently desynchronise this module from the rest of the engine.
+ */
 export function stableCheckId(category: string, title: string): string {
   const text = String(title || '').trim();
 
   // Existing Repair/Triage source of truth wins. This keeps cross-product
   // identity aligned with the check IDs already used inside Lekta itself.
-  if (text.startsWith(PAPER_SIZE_TITLE_PREFIX)) return 'paper-size';
-  for (const [checkId, exactTitle] of Object.entries(CHECK_TITLES)) {
-    if (text === exactTitle) return checkId;
-  }
+  const dimension = dimensionForCheckId(registryCheckId(text));
+  if (dimension) return dimension;
 
   const supplemental = SUPPLEMENTAL_CHECK_ID_ALIASES.find(entry =>
     entry.patterns.some(pattern => pattern.test(text)),
