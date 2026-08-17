@@ -5,6 +5,13 @@
 Ovaj dizajn je odobren 16. kolovoza 2026. Opisuje prvu integraciju opcenitog
 WordReplica reconstruction enginea u placeni Lektin tok popravka.
 
+Odobreno pojasnjenje od 17. kolovoza 2026. za fazu 2: Lekta deterministicki
+proizvodi kanonski popravljeni ciljni DOCX, a WordReplica taj cilj vidljivo
+rekonstruira u korisnikovu Wordu. Potpuni dizajn granice zapisan je u
+`2026-08-17-lekta-wordreplica-target-docx-poc-design.md` i ima prednost nad
+ranijim formulacijama koje su podrazumijevale ponovno lokalno izvrsavanje svakog
+fixera.
+
 Prva javna verzija podrzava:
 
 - Windows racunalo
@@ -94,7 +101,7 @@ Backend:
 - atomski upravlja stanjem posla
 - izdaje kratkotrajni claim token
 - veze claim uz jednokratni javni kljuc lokalnog runnera
-- isporucuje potpisani Repair Contract i sifrirani ulaz
+- isporucuje potpisani Repair Contract te sifrirani original i kanonski cilj
 - prima heartbeat, checkpoint sazetke i zavrsni ishod
 - pokrece ili prati serversku granu
 - odbija replay, paralelni claim i promjenu dokumenta
@@ -106,7 +113,7 @@ poznate fixer identitete i sanitizirane parametre.
 
 WordReplica:
 
-- pretvara odobrene visoke operacije u Word COM korake
+- rekonstruira kanonski popravljeni ciljni DOCX koji je proizvela Lekta
 - stvara i posjeduje svoju Word sesiju
 - rekonstruira novi dokument
 - sprema checkpoint samo za svoj posao
@@ -125,7 +132,7 @@ Runner:
 - provodi lokalni preflight za Word i disk
 - generira jednokratni par kljuceva za vezivanje posla
 - claim-a posao i provjerava potpis ugovora
-- preuzima sifrirani ulaz i potrebne komponente
+- preuzima sifrirani original, kanonski cilj i potrebne komponente
 - pokrece WordReplica core u interaktivnoj korisnickoj sesiji
 - prikazuje napredak bez otkrivanja teksta u logovima
 - sprema novu lokalnu izlaznu datoteku
@@ -137,8 +144,10 @@ to izricito zahtijeva. V1 mora preferirati portable, user-space izvrsavanje.
 ### Serverski izvrsitelj
 
 Serverska grana koristi isti popis `fixerId`, `ruleId` i `params` iz Repair
-Contracta. Moze koristiti postojeci deterministicki OOXML repair engine ili
-WordReplica Windows worker, ali ne smije uvoditi zasebnu kopiju profilnih pravila.
+Contracta. Postojeci deterministicki OOXML repair engine proizvodi kanonski
+popravljeni ciljni DOCX koji je istodobno serverski rezultat i referenca za
+lokalnu WordReplica rekonstrukciju. Ne smije postojati zasebna kopija profilnih
+pravila.
 
 Serverski rezultat ne mora biti bajt-identican lokalnom. Razlike u Word verziji,
 fontovima, printer driveru, timestampovima i metapodacima su dopustene. Rezultati
@@ -159,6 +168,9 @@ Obavezna polja omotnice:
 - `sourceSha256`: hash originalnog DOCX-a
 - `sourceSize`: ocekivani broj bajtova
 - `sourceFileName`: sanitizirano prikazno ime
+- `targetSha256`: hash kanonskog popravljenog DOCX-a
+- `targetSize`: ocekivani broj bajtova kanonskog cilja
+- `targetFileName`: sanitizirano prikazno ime kanonskog cilja
 - `createdAt` i `expiresAt`
 - `engineMinVersion` i `engineMaxVersion`
 - `requests`: uredjeni niz postojecih fixer zahtjeva
@@ -172,7 +184,7 @@ Runner odbija:
 - nepoznatu verziju ugovora
 - istekao ili vec dovrsen posao
 - neispravan potpis
-- hash ili velicinu koja ne odgovara izvoru
+- hash ili velicinu koja ne odgovara originalu ili kanonskom cilju
 - nepoznati `fixerId`
 - parametar izvan dozvoljene sheme
 - engine verziju izvan ugovorenog raspona
@@ -196,14 +208,15 @@ Kanonska stanja su:
 9. `revoked`: posao je sigurnosno ili administrativno ponisten
 
 Samo `claimed`, `processing` i `retryable` mogu nastaviti. Nastavak mora dokazati
-posjedovanje lokalnog privatnog kljuca, isti `jobId` i isti `sourceSha256`.
+posjedovanje lokalnog privatnog kljuca, isti `jobId`, isti `sourceSha256` i isti
+`targetSha256`.
 Drugi uredjaj ne moze preuzeti aktivan posao. Podrska moze opozvati stari claim i
-izdati novi samo kroz auditirani postupak, bez promjene izvornog hasha.
+izdati novi samo kroz auditirani postupak, bez promjene hasha originala ili cilja.
 
 `completed`, `local_failed`, `expired` i `revoked` terminalna su lokalna stanja.
 Podrska moze auditirano vratiti `local_failed` u `retryable`, ali samo za isti
-`jobId`, uredjaj i `sourceSha256`. Preimenovanje, kopiranje ili ponovno pokretanje
-runnera ne stvara novo pravo.
+`jobId`, uredjaj, `sourceSha256` i `targetSha256`. Preimenovanje, kopiranje ili
+ponovno pokretanje runnera ne stvara novo pravo.
 
 Serverska grana ima zaseban status (`queued`, `processing`, `ready`, `failed`).
 Lokalno terminalno stanje ne mijenja serverski status i obrnuto.
@@ -217,11 +230,13 @@ Lokalno terminalno stanje ne mijenja serverski status i obrnuto.
 4. Lekta nudi digitalno potpisani `LektaRepair-<claim-code>.exe`.
 5. Korisnik rucno pokrene runner. Nema instalacije servisa ni startup unosa.
 6. Runner obavi preflight, generira jednokratni kljuc i atomski claim-a posao.
-7. Runner preuzima ulaz i potpisani ugovor, zatim prije Worda ponovno provjerava hash.
+7. Runner preuzima original, kanonski cilj i potpisani ugovor, zatim prije Worda
+   ponovno provjerava oba hasha i velicine.
 8. Korisnik odabere izlazni folder. Zadano ime je `<izvor>-popravljeno.docx`.
 9. Runner otvara vidljivi Word i upozorava korisnika da ne uredjuje radni dokument
    dok traje rekonstrukcija.
-10. WordReplica stvara novi dokument, izvrsava ugovor i salje strukturirani napredak.
+10. WordReplica stvara novi dokument, rekonstruira kanonski cilj i salje
+    strukturirani napredak.
 11. Runner provodi zavrsne gateove i sprema lokalni rezultat.
 12. Zavrsni dokument ostaje otvoren u Wordu. Runner oznacava posao `completed`.
 13. Runner uklanja sve privremene podatke i pokusava ukloniti vlastitu preuzetu
@@ -236,7 +251,8 @@ je izbrisan i server odbija novi posao.
 
 - Runner radi u interaktivnoj korisnickoj Windows sesiji.
 - Word se pokrece s onemogucenim makronaredbama i vanjskim aktivnim sadrzajem.
-- Ulaz se otvara samo kao kontrolirani izvor. Izlaz nastaje u novom dokumentu.
+- Kanonski cilj otvara se samo kao kontrolirani izvor rekonstrukcije. Original je
+  zaseban nepromjenjivi dokaz. Izlaz nastaje u novom dokumentu.
 - WordReplica biljezi PID i identitet samo procesa koje je sama stvorila.
 - Zatvaranje, retry i cleanup smiju ciljati samo taj dokument i te procese.
 - Postojeci otvoreni Word dokumenti ostaju otvoreni i netaknuti.
@@ -248,8 +264,9 @@ je izbrisan i server odbija novi posao.
 
 ## Checkpoint, prekid i nastavak
 
-Checkpoint je vezan uz `jobId`, `sourceSha256`, verziju enginea, verziju ugovora i
-zadnju dokazanu fazu. Ne sadrzi reusable entitlement za novi dokument.
+Checkpoint je vezan uz `jobId`, `sourceSha256`, `targetSha256`, verziju enginea,
+verziju ugovora i zadnju dokazanu fazu. Ne sadrzi reusable entitlement za novi
+dokument.
 
 Ako Word zapne, prikaze blokirajuci dijalog ili prestane odgovarati:
 
@@ -257,7 +274,8 @@ Ako Word zapne, prikaze blokirajuci dijalog ili prestane odgovarati:
 2. zatvara samo svoju Word sesiju
 3. posao prelazi u `retryable`
 4. ponovno pokretanje dokazuje isti lokalni kljuc
-5. WordReplica nastavlja od zadnje dokazano sigurne tocke
+5. WordReplica nastavlja od zadnje dokazano sigurne tocke samo ako se ugovor,
+   original i kanonski cilj i dalje podudaraju sa spremljenim hashevima
 
 Ako korisnik rucno zatvori Word, nestane struje ili runner padne, isti postupak
 vrijedi nakon ponovnog pokretanja. Tehnicki retry ne naplacuje se ponovno.
@@ -300,10 +318,13 @@ Jedna grana ne smije lazno tvrditi uspjeh druge grane.
 Lokalni posao moze postati `completed` samo ako dokaze:
 
 - originalni hash i bajtovi nisu promijenjeni
+- kanonski cilj odgovara potpisanom `targetSha256`
 - izlazna datoteka postoji i nije originalna putanja
 - izlaz se otvara u Wordu s `OpenAndRepair = false`
 - vidljivi tekst prolazi propisanu usporedbu prije i poslije `Fields.Update()`
-- svaka odobrena stavka ugovora ima dokaz `applied` ili opravdani `no-op`
+- Lektin dokaz generiranja cilja biljezi svaku odobrenu stavku kao `applied` ili
+  opravdani `no-op`
+- lokalni izlaz prolazi propisanu usporedbu s kanonskim ciljem
 - nema neodobrenih promjena teksta
 - obavezni G0-G9 gateovi prolaze
 - tablice, slike, fusnote, sekcije i polja prolaze njihove strukturne provjere
@@ -316,7 +337,7 @@ Lokalni i serverski izlaz ne usporedjuju se bajt po bajt. Usporedjuju se:
 - stilovi i outline semantika
 - numeriranje i polja
 - tablice, slike, fusnote, headeri i footeri
-- primijenjene stavke Repair Contracta
+- primijenjene stavke Repair Contracta i jednakost s kanonskim ciljem
 - paginacija i render-slicnost gdje su okruzenja usporediva
 
 ## Testna strategija
@@ -377,8 +398,9 @@ plan, testove i review gate.
 
 1. `Repair Contract v1`: tipovi, sheme, potpisivanje, validacija i adapter iz
    postojeceg Lektinog recepta. Bez naplate i bez lokalnog Worda.
-2. Lokalni proof-of-concept: portable runner i WordReplica izvrsavanje za Kalogjera
-   seminar, uz original netaknut i lokalni izlaz.
+2. Lokalni proof-of-concept: razvojni portable-runner ekvivalent i WordReplica
+   rekonstrukcija Lektina kanonskog cilja za Kalogjera seminar, uz original
+   netaknut i novi lokalni izlaz.
 3. Entitlement i claim: backend state machine, jednokratni kljuc, replay obrana,
    retry i revoke.
 4. Dvostruki rezultat: lokalna i serverska grana iz istog ugovora, neovisni statusi.
