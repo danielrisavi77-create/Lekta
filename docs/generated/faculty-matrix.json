@@ -5842,13 +5842,15 @@
         "profileCoveragePassCount": 10,
         "profileCoverageFailCount": 0,
         "realCorpusPassCount": 0,
-        "realCorpusReviewCount": 0,
-        "realCorpusNoOpCount": 1,
+        "realCorpusReviewCount": 1,
+        "realCorpusNoOpCount": 0,
         "realCorpusFailCount": 0,
         "syntheticClosedLoopNotRunCount": 10
       },
       "manualReviewReasons": [
-        "nema-stvarnog-docx-uzorka"
+        "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
+        "nema-stvarnog-docx-uzorka",
+        "stvarni-docx-trazi-rucni-pregled"
       ],
       "profiles": [
         {
@@ -5912,13 +5914,16 @@
           "realDocxSampleCount": 1,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "pass",
+            "realCorpus": "review",
             "syntheticClosedLoop": "not-run"
           },
           "realCorpusOutcomes": {
-            "no-op": 1
+            "review": 1
           },
-          "manualReviewReasons": []
+          "manualReviewReasons": [
+            "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
+            "stvarni-docx-trazi-rucni-pregled"
+          ]
         },
         {
           "profileId": "ffzg-psihologija-diplomski",
@@ -11702,13 +11707,15 @@
         "profileCoveragePassCount": 2,
         "profileCoverageFailCount": 0,
         "realCorpusPassCount": 0,
-        "realCorpusReviewCount": 0,
-        "realCorpusNoOpCount": 1,
+        "realCorpusReviewCount": 1,
+        "realCorpusNoOpCount": 0,
         "realCorpusFailCount": 0,
         "syntheticClosedLoopNotRunCount": 2
       },
       "manualReviewReasons": [
-        "nema-stvarnog-docx-uzorka"
+        "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
+        "nema-stvarnog-docx-uzorka",
+        "stvarni-docx-trazi-rucni-pregled"
       ],
       "profiles": [
         {
@@ -11774,13 +11781,16 @@
           "realDocxSampleCount": 1,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "pass",
+            "realCorpus": "review",
             "syntheticClosedLoop": "not-run"
           },
           "realCorpusOutcomes": {
-            "no-op": 1
+            "review": 1
           },
-          "manualReviewReasons": []
+          "manualReviewReasons": [
+            "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
+            "stvarni-docx-trazi-rucni-pregled"
+          ]
         }
       ]
     },
@@ -13393,13 +13403,15 @@
         "profileCoveragePassCount": 6,
         "profileCoverageFailCount": 0,
         "realCorpusPassCount": 0,
-        "realCorpusReviewCount": 0,
-        "realCorpusNoOpCount": 2,
+        "realCorpusReviewCount": 2,
+        "realCorpusNoOpCount": 0,
         "realCorpusFailCount": 0,
         "syntheticClosedLoopNotRunCount": 6
       },
       "manualReviewReasons": [
-        "nema-stvarnog-docx-uzorka"
+        "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
+        "nema-stvarnog-docx-uzorka",
+        "stvarni-docx-trazi-rucni-pregled"
       ],
       "profiles": [
         {
@@ -13544,13 +13556,16 @@
           "realDocxSampleCount": 2,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "pass",
+            "realCorpus": "review",
             "syntheticClosedLoop": "not-run"
           },
           "realCorpusOutcomes": {
-            "no-op": 2
+            "review": 2
           },
-          "manualReviewReasons": []
+          "manualReviewReasons": [
+            "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
+            "stvarni-docx-trazi-rucni-pregled"
+          ]
         },
         {
           "profileId": "pmf-geologija-graduate",
@@ -14110,6 +14125,7 @@
             "review": 1
           },
           "manualReviewReasons": [
+            "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
             "stvarni-docx-trazi-rucni-pregled"
           ]
         },
@@ -16531,13 +16547,15 @@
         "profileCoveragePassCount": 5,
         "profileCoverageFailCount": 0,
         "realCorpusPassCount": 0,
-        "realCorpusReviewCount": 0,
-        "realCorpusNoOpCount": 1,
+        "realCorpusReviewCount": 1,
+        "realCorpusNoOpCount": 0,
         "realCorpusFailCount": 0,
         "syntheticClosedLoopNotRunCount": 5
       },
       "manualReviewReasons": [
-        "nema-stvarnog-docx-uzorka"
+        "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
+        "nema-stvarnog-docx-uzorka",
+        "stvarni-docx-trazi-rucni-pregled"
       ],
       "profiles": [
         {
@@ -16571,13 +16589,16 @@
           "realDocxSampleCount": 1,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "pass",
+            "realCorpus": "review",
             "syntheticClosedLoop": "not-run"
           },
           "realCorpusOutcomes": {
-            "no-op": 1
+            "review": 1
           },
-          "manualReviewReasons": []
+          "manualReviewReasons": [
+            "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
+            "stvarni-docx-trazi-rucni-pregled"
+          ]
         },
         {
           "profileId": "ttf-zavrsni",
@@ -22322,8 +22343,8 @@
     "profilesWithoutRealDocx": 398,
     "profileCoverageFailCount": 0,
     "realCorpusPassCount": 0,
-    "realCorpusReviewCount": 7,
-    "realCorpusNoOpCount": 5,
+    "realCorpusReviewCount": 12,
+    "realCorpusNoOpCount": 0,
     "realCorpusFailCount": 0,
     "syntheticClosedLoopNotRunCount": 407
   }

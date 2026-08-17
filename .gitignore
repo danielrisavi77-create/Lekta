@@ -65,3 +65,10 @@ vite.dev-preflight.config.mts
 
 # Local Netlify folder
 .netlify
+
+# Stvarni studentski radovi za real-corpus mjerenje (P1-1). NIKAD se ne commitaju:
+# tudji radovi s osobnim podacima, a fixture bi usli u povijest gita (vidi
+# tests/fixtures/docx/README.md, odjeljak Privatnost). U git ide samo REZULTAT
+# mjerenja (docs/generated/repair-real-corpus.json).
+tests/fixtures/docx-local/
+docs/generated/repair-real-corpus.local.json

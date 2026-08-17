@@ -10,17 +10,31 @@ import { detectPassRegressions } from '../../src/analysis/repair-regression';
 import { buildDefaultRepairRequests } from '../../src/repair/default-selection';
 import { inspectDocxParts } from '../../src/repair/package-integrity';
 import { readZip } from '../../src/repair/zip-codec';
-import { buildRepairableItems, universalRepairableItems } from '../../src/ui/repair-items';
+import { buildAllRepairableItems } from '../../src/ui/repair-item-assembly';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const REAL_CORPUS_ROOT = join(HERE, '..', 'fixtures', 'docx');
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 installXmlDomParser(true);
 
+/**
+ * LOKALNI, NECOMMITANI korpus (P1-1).
+ *
+ * Commitane fixture su anonimne ili sinteticke i ostaju jedini reproducibilan skup za CI. Stvarni
+ * studentski radovi se NE commitaju (tudji osobni podaci trajno bi usli u povijest gita, vidi
+ * `tests/fixtures/docx/README.md`), pa se drze ovdje i mjere lokalno. U git ide samo REZULTAT
+ * mjerenja (`docs/generated/repair-real-corpus.json`), nikad sadrzaj dokumenata.
+ *
+ * Direktorij je u `.gitignore`. Kad ne postoji, sve radi kao i prije.
+ */
+export const LOCAL_CORPUS_ROOT = join(HERE, '..', 'fixtures', 'docx-local');
+
 export interface RealCorpusManifestEntry {
   documentId: string;
   fileName: string;
   profileId: string;
+  /** Direktorij iz kojeg se datoteka cita; omogucuje spajanje commitanog i lokalnog korpusa. */
+  root?: string;
 }
 
 export interface RealCorpusResult {
@@ -63,7 +77,7 @@ export interface RealCorpusResult {
 
 export interface RealCorpusReport {
   schemaVersion: 1;
-  scope: { root: string; excludesSynthetic: true; contentStored: false };
+  scope: { root: string; excludesSynthetic: true; contentStored: false; localDocumentCount?: number };
   manifest: RealCorpusManifestEntry[];
   results: RealCorpusResult[];
   summary: {
@@ -85,7 +99,13 @@ function sidecarPath(root: string, fileName: string): string {
 }
 
 export function discoverRealCorpus(root = REAL_CORPUS_ROOT): RealCorpusManifestEntry[] {
-  return readdirSync(root)
+  let files: string[];
+  try {
+    files = readdirSync(root);
+  } catch {
+    return []; // direktorij ne postoji (npr. lokalni korpus na tudjem stroju)
+  }
+  return files
     .filter((fileName) => /\.docx$/i.test(fileName))
     .sort()
     .flatMap((fileName) => {
@@ -97,7 +117,7 @@ export function discoverRealCorpus(root = REAL_CORPUS_ROOT): RealCorpusManifestE
         return [];
       }
       if (metadata.synthetic === true || typeof metadata.profileId !== 'string' || !metadata.profileId) return [];
-      return [{ documentId: fileName.replace(/\.docx$/i, ''), fileName, profileId: metadata.profileId }];
+      return [{ documentId: fileName.replace(/\.docx$/i, ''), fileName, profileId: metadata.profileId, root }];
     });
 }
 
@@ -161,10 +181,16 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     const beforeFile = new File([bytes], entry.fileName, { type: DOCX_MIME });
     const before = await analyzeFixture(beforeFile, { profileId: entry.profileId });
     const profile = resolveProfile(entry.profileId);
-    const items = [
-      ...buildRepairableItems(before.checks ?? [], profile, repairEntriesFor(entry.profileId)),
-      ...universalRepairableItems(before.issues ?? []).filter((item) => item.violated),
-    ];
+    // ISTI sastavljac koji koristi sucelje (src/ui/repair-item-assembly.ts). Prije je harness
+    // zvao samo dva graditelja, pa je mjerio uzu povrsinu od one koju korisnik stvarno dobije:
+    // sirenje korpusa s 12 na 50 stvarnih radova nije pomaklo pokrivenost s 4 fixera jer
+    // numeriranje, sadrzaj, naslovnica, natpisi, bibliografija i sekcije nikad nisu ni ponudjeni.
+    const items = buildAllRepairableItems({
+      result: before,
+      profile,
+      entries: repairEntriesFor(entry.profileId),
+      titleTemplate: null, // naslovnica trazi odabir predloska (UI korak), pa je izvan mjerenja
+    });
     // Isti odabir kao UI checkbox (violated !== false): advisory preporuke su opt-in i NE ulaze
     // u zadani popravak. Bez ovoga je harness primjenjivao i preporuke pa je izvjestaj opisivao
     // tok koji nijedan korisnik ne izvodi (npr. pmf-matematika-uskladjen: 100/100 pa ipak margine).
@@ -199,16 +225,24 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     const integrityFailure = applied.integrityFailure
       ? `${applied.integrityFailure.part}: ${applied.integrityFailure.problem}`
       : null;
+    // TEST VIDLJIVOG TEKSTA (CLAUDE.md): popravak ne smije promijeniti tekst koji korisnik vidi.
+    // Cetiri mehanizma to SMIJU i to je namjerno, jer su format a ne argumentacija: velika slova
+    // naslova, hrvatska tehnicka tipografija, kanonizacija DOI-ja i polje sadrzaja (tekst sadrzaja
+    // GENERIRA Word iz polja, nije autorov). Bez izuzeca harness prijavljuje lazni pad.
+    const changedFixerIds = [...new Set(applied.changelog.map((change) => change.fixerId))];
+    const TEXT_CHANGING_BY_DESIGN = new Set(['heading-case-fixer', 'croatian-typography-fixer', 'link-doi-fixer', 'bibliography-repair-fixer', 'toc-field-fixer']);
+    const textChangeAllowed = changedFixerIds.some((id) => TEXT_CHANGING_BY_DESIGN.has(id));
+    const unexpectedTextChange = beforeText !== afterText && !textChangeAllowed;
     const finalResult: RealCorpusResult = {
       ...base,
-      outcome: integrityFailure || regressions || !outputReadable || malformedParts.length > 0 || droppedEntryCount > 0 || !secondPassNoOp || beforeText !== afterText ? 'fail' : unresolved ? 'review' : changed ? 'review' : 'no-op',
+      outcome: integrityFailure || regressions || !outputReadable || malformedParts.length > 0 || droppedEntryCount > 0 || !secondPassNoOp || unexpectedTextChange ? 'fail' : unresolved ? 'review' : changed ? 'review' : 'no-op',
       before: { checkCount: before.checks?.length ?? 0, passCount: checkPassCount(before.checks ?? []), score: scoreOf(before) },
       after: { checkCount: after.checks?.length ?? 0, passCount: checkPassCount(after.checks ?? []), score: scoreOf(after) },
       beforeEntryCount: beforeEntries.length,
       afterEntryCount: afterEntries.length,
       droppedEntryCount,
       offeredFixerIds: [...new Set(items.map((item) => item.fixerId))],
-      changedFixerIds: [...new Set(applied.changelog.map((change) => change.fixerId))],
+      changedFixerIds,
       targetedCheckCount: titles.length,
       targetedResolvedCount: resolved.length,
       targetedUnresolvedCount: unresolved,
@@ -231,13 +265,27 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
   }
 }
 
-export async function runRealCorpus(root = REAL_CORPUS_ROOT, options: { outputDir?: string } = {}): Promise<RealCorpusReport> {
-  const manifest = discoverRealCorpus(root);
+export async function runRealCorpus(
+  root = REAL_CORPUS_ROOT,
+  options: { outputDir?: string; includeLocal?: boolean } = {},
+): Promise<RealCorpusReport> {
+  // Lokalni korpus se DODAJE commitanom, ne zamjenjuje ga: mjerenje mora obuhvatiti i anonimne
+  // fixture koje CI vidi i stvarne radove koji nikad ne napustaju disk.
+  const manifest = [
+    ...discoverRealCorpus(root),
+    ...(options.includeLocal ? discoverRealCorpus(LOCAL_CORPUS_ROOT) : []),
+  ];
   if (options.outputDir) mkdirSync(options.outputDir, { recursive: true });
-  const results = await Promise.all(manifest.map((entry) => runOne(entry, root, options.outputDir)));
+  const results = await Promise.all(manifest.map((entry) => runOne(entry, entry.root ?? root, options.outputDir)));
+  const localCount = options.includeLocal ? discoverRealCorpus(LOCAL_CORPUS_ROOT).length : 0;
   return {
     schemaVersion: 1,
-    scope: { root: 'tests/fixtures/docx', excludesSynthetic: true, contentStored: false },
+    scope: {
+      root: localCount ? 'tests/fixtures/docx + tests/fixtures/docx-local' : 'tests/fixtures/docx',
+      excludesSynthetic: true,
+      contentStored: false,
+      ...(localCount ? { localDocumentCount: localCount } : {}),
+    },
     manifest,
     results,
     summary: {
