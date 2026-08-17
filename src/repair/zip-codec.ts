@@ -14,7 +14,7 @@
 // bajtove. Golden test (fixers.test.ts) zato provjerava DEKOMPRIMIRANI
 // sadrzaj netaknutih entryja je bit-identican, ne sirovi zip byte stream.
 
-import { DOCX_MAX_TOTAL_DECOMPRESSED_BYTES, DOCX_MAX_ZIP_ENTRIES } from './docx-budget';
+import { DOCX_MAX_TOTAL_DECOMPRESSED_BYTES, DOCX_MAX_ZIP_ENTRIES } from './docx-budget.ts';
 export interface ZipEntry {
   name: string;
   data: Uint8Array; // uvijek DEKOMPRIMIRAN sadrzaj

@@ -48,6 +48,20 @@ jobs:
       - name: Build gate (tsc + vitest + vite build)
         run: npm run check
 
+      # supabase/functions/** je Deno kod izvan tsconfig.json include-a, pa ga `npm run check`
+      # NIKAD nije provjeravao (audit TEST-01). Ondje zivi serverski kod koji barata novcem,
+      # tudjim dokumentima i pravom pristupa, dakle najgore moguce mjesto za rupu u provjeri.
+      # Vrti se samo na jednoj Node verziji: rezultat ne ovisi o Nodeu nego o Denu.
+      - name: Deno setup (za Edge typecheck)
+        if: matrix.node == 20
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Edge typecheck (deno check nad supabase/functions)
+        if: matrix.node == 20
+        run: npm run check:edge
+
   ux-gate:
     runs-on: ubuntu-latest
     timeout-minutes: 30

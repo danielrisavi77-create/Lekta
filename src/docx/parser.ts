@@ -11,7 +11,7 @@
  * cita pohranjene (method 0) zapise izravno; parseXml koristi globalni DOMParser
  * (u testu podmetnut @xmldom/xmldom, vidi tests/setup/xml-dom.ts).
  */
-import { DOCX_MAX_ZIP_ENTRIES, DOCX_MAX_DECOMPRESSED_BYTES_PER_ENTRY } from '../repair/docx-budget';
+import { DOCX_MAX_ZIP_ENTRIES, DOCX_MAX_DECOMPRESSED_BYTES_PER_ENTRY } from '../repair/docx-budget.ts';
 import { attr, els, first, direct } from '../utils/helpers.ts';
 
 interface ZipEntry {
