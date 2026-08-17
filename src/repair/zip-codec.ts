@@ -188,6 +188,7 @@ export async function readZip(bytes: Uint8Array, limits?: ReadZipLimits): Promis
       throw new Error(`zip-codec: ocekivan central directory potpis na offsetu ${ptr}`);
     }
     const compressionMethod = view.getUint16(ptr + 10, true);
+    const expectedCrc = view.getUint32(ptr + 16, true);
     const compressedSize = view.getUint32(ptr + 20, true);
     const fileNameLength = view.getUint16(ptr + 28, true);
     const extraLength = view.getUint16(ptr + 30, true);
@@ -219,6 +220,29 @@ export async function readZip(bytes: Uint8Array, limits?: ReadZipLimits): Promis
       throw new Error(`zip-codec: nepodrzana kompresijska metoda ${compressionMethod} za ${name}`);
     }
     decompressedBudget -= data.length;
+
+    /**
+     * CRC ULAZNOG CLANA (audit A26-11, nalaz izvan vanjskog audita).
+     *
+     * Do 2026-08-17 se `crc32` koristio SAMO pri pisanju, pa motor nije imao nijedan mehanizam
+     * koji bi razlikovao ostecen ulazni docx od ispravnog. To je bilo gore nego sto zvuci, jer
+     * vrata integriteta (`package-integrity.ts`) skeniraju iskljucivo dijelove koje je popravak
+     * SAM mijenjao: tiho ostecen dio koji nijedan fixer ne dira prosao bi kroz cijeli lanac,
+     * bio bi ponovno komprimiran i isporucen korisniku kao "popravljen" dokument.
+     *
+     * Provjera je namjerno na CENTRAL DIRECTORY vrijednosti, koja je autoritativna i kad je
+     * entry pisan sa streaming data descriptorom.
+     *
+     * Prazan entry (direktorij) ima CRC 0, sto se poklapa s crc32 praznog niza, pa ne treba
+     * poseban slucaj.
+     */
+    const actualCrc = crc32(data);
+    if (actualCrc !== expectedCrc) {
+      throw new Error(
+        `zip-codec: CRC se ne poklapa za "${name}" (ocekivano ${expectedCrc.toString(16)}, ` +
+          `izracunato ${actualCrc.toString(16)}); ulazni dokument je ostecen`,
+      );
+    }
 
     entries.push({ name, data });
     ptr += 46 + fileNameLength + extraLength + commentLength;
