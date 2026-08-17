@@ -93,6 +93,56 @@ zapamtiti kao obrazac: golden nije gradio parametre asistiranih fixera iz analiz
 razišle sa živim panelom. Kad god golden i panel računaju isto na dva mjesta, jedno od njih tiho
 zastari.
 
+## Lokalni korpus i nalaz o idempotentnosti (2026-08-17)
+
+Korpus je prosiren s 12 na **50 stvarnih radova**. Trideset osam novih su pravi studentski
+radovi (vecinom FPZG) i **ne commitaju se**: tudji osobni podaci trajno bi usli u povijest
+gita. Zive u `tests/fixtures/docx-local/` (gitignoriran), a mjerenje ide u
+`docs/generated/repair-real-corpus.local.json` (takodjer gitignoriran). Commitani
+`repair-real-corpus.json` i dalje opisuje ISKLJUCIVO commitane fixture, da ostane
+reproducibilan u CI-ju.
+
+Pokreni: `npx vite-node scripts/repair-real-corpus.mts -- --local`
+
+### Sto je mjerenje pokazalo
+
+**Korpus nije bio usko grlo.** Prvo prosirenje na 50 dokumenata NIJE pomaknulo pokrivenost
+(ostala 4 fixera), jer je harness sastavljao stavke NA SVOJ NACIN i zvao samo dva graditelja
+(`buildRepairableItems` + `universalRepairableItems`) od dvadesetak koje sucelje koristi.
+Mjerio je, dakle, uzi tok od onoga koji korisnik dobije. Rijeseno izdvajanjem zajednickog
+sastavljaca `src/ui/repair-item-assembly.ts`, koji sada koriste i UI i harness.
+
+Nakon toga, nad 50 radova:
+
+| mjera | prije | poslije |
+|---|---|---|
+| fixera koji se stvarno pokrenu | 4 | **15** |
+| padova integriteta | 0 | 0 |
+| PASS -> FAIL regresija | 0 | 0 |
+| neispravnih paketa / izgubljenih dijelova | 0 | 0 |
+
+### OTVORENO: drugi prolaz nije no-op (38 od 50)
+
+Jedini preostali razlog pada je **ne-idempotentnost**: primjena ISTOG recepta drugi put
+ponovno mijenja dokument. Izmjereno: pojedinacno primijenjeni fixeri JESU idempotentni
+(dokazano nad `fer-diplomski-puna-struktura`), pa je rijec o INTERAKCIJI vise fixera u
+istom prolazu, ne o pojedinom fixeru. Najcesce sudjeluju `final-document-inspector-fixer`,
+`field-integrity-fixer` i `heading-style-fixer`.
+
+Zasto to nije samo kozmetika: korisnik koji dvaput klikne Popravi dobiva dva razlicita
+dokumenta. Nije opasno po integritet (paket ostaje ispravan, nema regresija), ali jest
+neodredjenost koju placeni proizvod ne bi smio imati.
+
+### Rijeseno u istom prolazu
+
+- `link-doi-fixer` je rusio provjeru "Datumi pristupa mreznim izvorima": kanonizacijom golog
+  DOI-ja u `https://doi.org/...` referenca bi TEK TADA usla u `urlRefs`, pa bi se za nju
+  trazio datum pristupa. DOI je trajan identifikator i nijedan stil za njega ne trazi
+  "pristupljeno", pa je popravljena PROVJERA (`IS_DOI_REF` u `analyze-docx.ts`), ne fixer.
+- `toc-field-fixer` mijenja vidljivi tekst (5 od 12 commitanih radova). Odlukom vlasnika
+  upisan je kao cetvrti dopusteni mehanizam (CLAUDE.md), jer tekst sadrzaja generira Word iz
+  polja. **Uvjet koji jos nije ispunjen:** potvrda Tier 2 oraclem (`npm run verify:word`).
+
 ## Kompozitni fixturi
 
 Izolirani predlošci u `tests/helpers/repair-templates.ts` pokrivaju po jednu sposobnost i imaju
