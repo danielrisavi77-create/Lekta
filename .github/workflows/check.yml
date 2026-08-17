@@ -13,9 +13,18 @@ on:
 permissions:
   contents: read
 
+# Jedan aktivan run po grani (audit TEST-18). Bez ovoga vise pusheva u nizu vrti stare i nove
+# buildove istovremeno nad istom granom: trose CI minute i, sto je gore, zeleni status starijeg
+# commita stigne poslije novijeg pa izgleda kao da je grana ispravna.
+# Na master se NE otkazuje: tamo je svaki commit stanje koje mora imati vlastiti dokaz.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
 jobs:
   build-gate:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     # Matrica (AUD-49): CI je pinao samo Node 20, a developeri rade na Node 24 (lokalni
     # npm run check). Gate sada dokazuje zeleno na obje verzije, ukljucujuci onu koja se
     # stvarno pokrece lokalno.
@@ -41,6 +50,7 @@ jobs:
 
   ux-gate:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v7

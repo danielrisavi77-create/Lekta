@@ -143,6 +143,29 @@ navedeni su odvojeno, jer je precijenjen nalaz jednako štetan kao propušten.
 | A26-15 | `preflight-start` i `preflight-result` bile su ACTIVE u produkciji dok je `docs/deploy/PREFLIGHT_DEPLOY.md` tvrdio da je stup ODGOĐEN. Frontend ih nikad nije zvao, pa su bile čista izložena površina | Obje undeployane; runbook nosi zapis o gašenju |
 | A26-16 | `cleanup-orphan-repairs` i `delete-repair-job` nosile su oznaku "NACRT" iako su ACTIVE u produkciji | Zaglavlja ispravljena u stvarni status |
 | A26-17 | Nije postojao način da se vidi razlika između repozitorija i deployanog stanja | `npm run deploy-drift` -> `docs/generated/DEPLOY_DRIFT.md` |
+| A26-06 | `master` nezaštićen (ruleset "Tamara" `enforcement: disabled`) | Branch protection aktivna: obvezan PR, required checks `build-gate`/`conformance-matrix`/`check`, bez force-pusha i brisanja |
+| A26-08 | Privola je bila ono što klijent kaže da jest | Kanonski tekst u `src/legal/consent-text.ts` (dijeli ga i Deno); verzija obavezna, tekst se uspoređuje, `consented_at` je serverski, klijentova tvrdnja ide u `client_claimed_at` (0091) |
+| A26-09 | Webhook bez provjere `store_id`, `test_mode` i iznosa; nepoznat proizvod nestaje uz 200 | `acceptEvent` + `isFullRefund` (fail-closed); inbox `webhook_events` (0092) zapisuje događaj prije obrade, pa je replay moguć |
+| A26-11 | `zip-codec.ts` nikad nije provjeravao CRC ulaznih članova | `readZip` provjerava CRC iz central directoryja i odbija oštećen paket imenujući dio; dokazano testom koji kvari jedan bajt sadržaja |
+| SEC-01, SEC-02 | CSP je dopuštao `https://*.supabase.co` i `https://*.lemonsqueezy.com`, uz komentar da je odljev tehnički onemogućen | `cspAllowlist` plugin supstituira KONKRETNE hostove u `dist/_headers`; `verify-deploy-dist` pada na wildcard ili nesupstituiran token |
+| SEC-11, SEC-12 | CORS je bezuvjetno dopuštao localhost, a tuđem porijeklu vraćao primarno dopušteno | localhost samo uz `LEKTA_ALLOW_LOCALHOST_CORS=1`; nedopušteno porijeklo NE dobiva `Access-Control-Allow-Origin` uopće |
+| SEC-13 | `analytics-event` vraćao 200 i kad zapis padne, pa je gubitak telemetrije izgledao kao uredan rad | Neuspjeh vraća 202 uz `reason`, klijent i dalje nije srušen |
+| SEC-21 | `repair-docx` provjeravao samo 2 magic bajta (slabije od `field-render`) | Provjeravaju se sva četiri bajta lokalnog ZIP zaglavlja |
+| CODE-11 | `.gitignore` uzorkom `.env.*` pojeo i sablonu, pa kanonski popis varijabli nije postojao | `.env.example` (samo imena i objašnjenja, nijedna vrijednost) uz izričit izuzetak u `.gitignore` |
+| OPS-01..03 | `health` je vraćao 200 za svaku metodu, nije provjeravao nijednu ovisnost i nije nosio verziju: monitor je javljao "zdravo" i kad je baza nedostupna | Metode osim GET/HEAD/OPTIONS daju 405; provjerava se baza uz 3 s timeout; odgovor nosi `release` i `commit`; pad ovisnosti daje **503**, ne 200 uz `degraded` u tijelu |
+| OPS-13..17, UX-12..14 | Podsjetnici: sirova HTML interpolacija iz baze, naslovi otkrivaju vrstu rada i fakultet, `daysLeft <= 0` bez donje granice, odjava se izvršavala na GET, greške upisa se ignorirale | `esc()` na svim HTML interpolacijama; neutralni naslovi; granica `daysLeft >= -1`; odjava mijenja stanje samo na POST (GET pita), nudi povrat i pošteno prijavljuje neuspjeh; dodan `List-Unsubscribe` |
+| **NOVO, izvan audita** | **Link za odjavu u SVAKOM podsjetniku bio je 404.** Poruke su linkale na `${APP_BASE_URL}/odjava-podsjetnika`, a ta ruta ne postoji: nema je kao stranicu, `public/_redirects` ne postoji, `netlify.toml` nema redirect. Nije naškodilo samo zato što su podsjetnici još inertni (bez Resend tajni nijedna poruka nije poslana), ali bi puknulo u trenutku uključenja, i to na obavezi koja mora raditi iz prve | Linka se izravno na Edge funkciju; `UNSUB_PUBLIC_URL` ostaje za ljepši javni URL kad se doda pravi redirect |
+
+### 4A.2b Napisano, ali ČEKA primjenu na produkciju
+
+Ovo NIJE zatvoreno: kod i migracije postoje u repozitoriju, ali zahvat nad živom bazom nije izveden.
+
+| ID | Što čeka | Gdje je |
+|---|---|---|
+| A26-04 | Usklađivanje migracijskog dnevnika produkcije (66 redaka, UPDATE verzije) | `docs/deploy/MIGRATION_IDENTITY.md`, korak 3. NE kroz `supabase migration repair` |
+| A26-05 | Staging se gradi iznova iz produkcije i dobiva svih 21 Edge funkciju | isto, korak 5 |
+| A26-10 | Grantovi i RLS po advisoru | `supabase/migrations/0093_security_advisor_2026_08.sql` (nije primijenjena) |
+| A26-02, A26-03 | Mapiranje `mor_product_id` i ispravak dominiranog cjenika kroz `set_product_price` | `docs/GO_LIVE_NAPLATA.md` §3.2 i §3.3 |
 
 ### 4A.3 Nalazi audita koji NISU izdržali provjeru
 

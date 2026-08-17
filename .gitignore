@@ -11,6 +11,11 @@ tmp/
 # Tajne (Supabase/MoR/Resend) nikad u repo (security-06). .env* pokriva sve varijante.
 .env
 .env.*
+# IZUZETAK: .env.example nosi SAMO imena varijabli i objasnjenja, nijednu vrijednost. Bez njega
+# novi developer nema kanonski popis onoga sto treba postaviti, pa ga je audit prijavio kao rupu
+# (CODE-11): pravilo "nikad tajne u repo" bilo je ispravno, ali je zajedno s tajnama pojelo i
+# sablonu. Prazna vrijednost desno od znaka jednakosti je namjerna i obavezna.
+!.env.example
 .DS_Store
 __pycache__/
 *.egg-info/

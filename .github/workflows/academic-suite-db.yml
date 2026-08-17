@@ -5,6 +5,14 @@ on:
     branches: [master]
   workflow_dispatch:
 
+# Jedan aktivan run po grani (audit TEST-18). Bez ovoga vise pusheva u nizu vrti stare i nove
+# buildove istovremeno nad istom granom: trose CI minute i, sto je gore, zeleni status starijeg
+# commita stigne poslije novijeg pa izgleda kao da je grana ispravna.
+# Na master se NE otkazuje: tamo je svaki commit stanje koje mora imati vlastiti dokaz.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
 jobs:
   postgres-smoke:
     if: github.event_name == 'workflow_dispatch' || github.head_ref == 'architecture/lekta-katedra-foundation-v0.1'

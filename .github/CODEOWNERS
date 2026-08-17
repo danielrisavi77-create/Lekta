@@ -1,0 +1,49 @@
+# CODEOWNERS: tko mora pregledati promjenu prije mergea.
+#
+# Audit 2026-08-17 (CODE-19): kriticne promjene checkouta, RLS-a, pravnih tekstova i DOCX jezgre
+# nisu imale automatski dodijeljenog reviewera. Projekt trenutno ima jednog odrzavatelja, pa su
+# svi unosi isti; vrijednost datoteke nije u razlicitim imenima nego u tome sto GitHub od sada
+# SAM oznaci osjetljive putanje na svakom pull requestu, umjesto da to ovisi o pamcenju.
+#
+# Kad se tim prosiri, mijenja se samo desna strana.
+
+# Zadano: sve ostalo.
+*                                   @danielrisavi77-create
+
+# ---------------------------------------------------------------------------------------------
+# Novac. Pogresna izmjena ovdje znaci naplaceno bez prava pristupa, ili pravo pristupa bez naplate.
+# ---------------------------------------------------------------------------------------------
+/supabase/functions/create-checkout/ @danielrisavi77-create
+/supabase/functions/webhook-mor/     @danielrisavi77-create
+/src/report/webhook.ts               @danielrisavi77-create
+/src/report/checkout.ts              @danielrisavi77-create
+/src/catalog/                        @danielrisavi77-create
+
+# ---------------------------------------------------------------------------------------------
+# Pravo pristupa i pravo na podatke. Migracije nose RLS politike i grantove; jednom primijenjene
+# na produkciju ne poniste se mergeom.
+# ---------------------------------------------------------------------------------------------
+/supabase/migrations/                @danielrisavi77-create
+/supabase/functions/_shared/         @danielrisavi77-create
+
+# ---------------------------------------------------------------------------------------------
+# Pravni tekstovi i identitet pruzatelja. Mijenjaju ono na sto korisnik pristaje.
+# ---------------------------------------------------------------------------------------------
+/src/legal/                          @danielrisavi77-create
+/data/legal/                         @danielrisavi77-create
+
+# ---------------------------------------------------------------------------------------------
+# DOCX jezgra. Parser i repair su golden-zasticeni: promjena bez golden testa tiho kvari tudje
+# dokumente, a kvar se vidi tek u Wordu kod korisnika.
+# ---------------------------------------------------------------------------------------------
+/src/repair/                         @danielrisavi77-create
+/src/docx/                           @danielrisavi77-create
+/src/analysis/                       @danielrisavi77-create
+
+# ---------------------------------------------------------------------------------------------
+# Sigurnosna konfiguracija isporuke: CSP, headeri, deploy gate.
+# ---------------------------------------------------------------------------------------------
+/public/_headers                     @danielrisavi77-create
+/netlify.toml                        @danielrisavi77-create
+/scripts/verify-deploy-dist.mjs      @danielrisavi77-create
+/.github/                            @danielrisavi77-create

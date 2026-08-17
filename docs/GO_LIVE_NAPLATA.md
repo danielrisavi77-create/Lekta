@@ -39,6 +39,35 @@ Cijene su ISKLJUČIVO u tablici `products` (jedina istina, kriterij 14.2). Nakon
 3. **`products.mor_product_id`** popuni STVARNIM Lemon Squeezy variant id-jevima (vidi korak 5).
    Dok je `null`, create-checkout vraća `409 product_not_mapped`.
 
+   Stanje 17.8.2026.: **svih 20 aktivnih proizvoda ima `mor_product_id = null`**, dakle checkout
+   je u produkciji neupotrebljiv (audit A26-02). Kod radi ispravno; nedostaje ovaj korak.
+
+### 3.1 Cjenik koji sam sebi proturječi (audit A26-03, blokira launch)
+
+Provjera žive baze 17.8.2026. pokazala je dva para u kojima je skuplji proizvod **strogo lošiji**,
+pa za njih ne postoji racionalan kupac:
+
+| Proizvod | Cijena | Prozor korištenja | Odnos |
+|---|---|---|---|
+| `slot_zavrsni_do_obrane` | 9,99 € | 120 dana | ista cijena, **kraće** |
+| `pass_zavrsni` | 9,99 € | 180 dana | dominira gornji |
+| `slot_diplomski_do_obrane` | 16,99 € | 120 dana | skuplje, **kraće** |
+| `pass_diplomski` | 14,99 € | 180 dana | dominira gornji |
+
+Oba `*_do_obrane` proizvoda nose 1 slot, jednako kao pass, pa razlika nije u opsegu nego samo u
+trajanju i cijeni. Dok je ovako, ponuda kažnjava korisnika koji odabere "do obrane", a upravo je
+to naziv koji zvuči izdašnije.
+
+Odluka je poslovna, ne tehnička, pa je ovdje ne propisujemo. Tri smislena izlaza:
+
+1. **Ugasi `*_do_obrane`** (`active = false`) i zadrži pass kao jedini dugi prozor. Najjednostavnije.
+2. **Produlji ih preko passa** (npr. do obrane = 240 dana) pa viša cijena ima pokriće.
+3. **Spusti im cijenu ispod passa** i skrati prozor, da budu jeftin kratki ulaz.
+
+Što god odabereš, promjena ide **isključivo** kroz `set_product_price` (atomski upis u `products`
+i `pricing_changelog`); ručni `UPDATE price_eur` je prekršaj procesa (kriterij 14.12). Deaktivacija
+proizvoda nije promjena cijene pa ide običnim `UPDATE products SET active = false`, uz bilješku.
+
 ## 4. Lemon Squeezy (Merchant of Record)
 
 1. Otvori LS račun/trgovinu. Zabilježi **Store ID** i kreiraj **API key**.

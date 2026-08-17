@@ -90,6 +90,25 @@ nikad obrnuto, i taj drugi proizvod nikad ne smije tvrditi da je njegova provjer
 formalno mjerodavna: to ostaje isključivo Lektin posao. Vidi `src/integrations/`
 za konkretan, jednosmjeran izvoz podataka prema Katedri (`katedra-pack`).
 
+## Tvrdo pravilo: migracije idu iskljucivo kroz `supabase db push`
+
+MCP `apply_migration` se NE koristi nad Lektinim bazama. Razlog nije stil nego identitet:
+`db push` upisuje verziju iz imena datoteke (`0001`), a `apply_migration` timestamp
+(`20260719004453`), pri cemu ime ostaje u stupcu `name`. Iste migracije tako dobiju dva
+razlicita identiteta, ovisno o tome tko ih je i cime primijenio.
+
+Audit 2026-08-17 nasao je oba kvara koja iz toga slijede: produkcijski dnevnik je izgledao kao
+da gotovo nista nije primijenjeno (a bilo je 67 od 90), a staging je 38 migracija primijenio
+DVA PUTA, jednom kroz svaki od ta dva puta. Proslo je samo zato sto su ti zahvati idempotentni.
+
+- Stanje se provjerava s `npm run migration-identity` (usporedba po IMENU, ne po verziji).
+- Razlika izmedju repozitorija i deployanih Edge funkcija: `npm run deploy-drift`.
+- Dijagnoza i preostali koraci: `docs/deploy/MIGRATION_IDENTITY.md`.
+- Iznimka je iskljucivo baza koja se smije baciti.
+
+Svaka migracija mora biti idempotentna (`if not exists`, `drop ... if exists` prije `create`),
+jer se u praksi zna primijeniti vise puta.
+
 ## Tvrdo pravilo: build gate
 
 Svaka promjena mora proći prije commita:
