@@ -234,3 +234,117 @@ export function comparePackages(before: readonly PackageEntryLike[], after: read
   for (const name of afterMap.keys()) if (!beforeMap.has(name)) added.push(name);
   return { dropped: dropped.sort(), emptied: emptied.sort(), added: added.sort() };
 }
+
+/**
+ * Klasa kvara koju cisti XML skener NE VIDI (audit DOCX-20).
+ *
+ * `scanXmlWellFormed` dokazuje da je svaki dirani dio dobro oblikovan XML. To je nuzno, ali nije
+ * dovoljno: paket moze biti sastavljen od samih besprijekornih XML-ova i svejedno biti neispravan
+ * OPC paket. Dva nacina na koja se to dogadja, oba ih Word prijavi kao "dokument je ostecen":
+ *
+ *   1. dio postoji u zipu, ali `[Content_Types].xml` ne kaze kojeg je tipa (nema ni Default za
+ *      njegovu ekstenziju ni Override za njegovu punu putanju);
+ *   2. `.rels` datoteka pokazuje na dio kojeg u paketu nema (visece `r:id`).
+ *
+ * Oboje moze nastati kad popravak DODA ili UKLONI dio (K5 footer flow, uklanjanje praznih
+ * dijelova), a upravo tu XML skener ne pomaze jer je svaki pojedini dio ispravan.
+ */
+export interface PackageStructureIssue {
+  kind: 'content-type-missing' | 'dangling-relationship';
+  part: string;
+  detail: string;
+}
+
+/** Dekodiraj sadrzaj dijela kao tekst. Binarni dijelovi (slike) se ovdje nikad ne citaju. */
+function partText(entry: PackageEntryLike): string {
+  return new TextDecoder().decode(entry.data);
+}
+
+/** Normalizira putanju iz zipa i iz OPC zapisa na isti oblik (bez vodece kose crte). */
+function normalizePart(name: string): string {
+  return name.replace(/^\/+/, '').toLowerCase();
+}
+
+/**
+ * Je li svaki dio paketa pokriven `[Content_Types].xml`.
+ *
+ * `_rels/**` i sam `[Content_Types].xml` se ne navode u sadrzaju tipova, pa se preskacu.
+ * Kad `[Content_Types].xml` uopce nema, ne prijavljujemo svaki dio posebno nego jedan kvar:
+ * paket bez njega nije OPC paket i poruka mora reci upravo to.
+ */
+export function checkContentTypes(entries: readonly PackageEntryLike[]): PackageStructureIssue[] {
+  const contentTypes = entries.find((e) => normalizePart(e.name) === '[content_types].xml');
+  if (!contentTypes) {
+    return [{ kind: 'content-type-missing', part: '[Content_Types].xml', detail: 'paket nema [Content_Types].xml' }];
+  }
+  const xml = partText(contentTypes);
+  const defaults = new Set(
+    [...xml.matchAll(/<Default[^>]*Extension\s*=\s*"([^"]+)"/gi)].map((m) => m[1].toLowerCase()),
+  );
+  const overrides = new Set(
+    [...xml.matchAll(/<Override[^>]*PartName\s*=\s*"([^"]+)"/gi)].map((m) => normalizePart(m[1])),
+  );
+
+  const issues: PackageStructureIssue[] = [];
+  for (const entry of entries) {
+    const name = normalizePart(entry.name);
+    if (name === '[content_types].xml' || name.includes('_rels/')) continue;
+    if (name.endsWith('/')) continue; // direktorij, nije dio
+    if (overrides.has(name)) continue;
+    const ext = name.includes('.') ? name.slice(name.lastIndexOf('.') + 1) : '';
+    if (ext && defaults.has(ext)) continue;
+    issues.push({
+      kind: 'content-type-missing',
+      part: entry.name,
+      detail: `nema ni Default za ".${ext}" ni Override za taj dio`,
+    });
+  }
+  return issues;
+}
+
+/**
+ * Pokazuje li svaka relacija na dio koji stvarno postoji.
+ *
+ * `TargetMode="External"` se preskace: to su URL-ovi (hiperveze), ne dijelovi paketa. Relativna
+ * meta se razrjesuje u odnosu na mapu kojoj `.rels` pripada, po OPC pravilu:
+ * `word/_rels/document.xml.rels` -> baza je `word/`.
+ */
+export function checkRelationshipTargets(entries: readonly PackageEntryLike[]): PackageStructureIssue[] {
+  const present = new Set(entries.map((e) => normalizePart(e.name)));
+  const issues: PackageStructureIssue[] = [];
+
+  for (const entry of entries) {
+    const name = normalizePart(entry.name);
+    if (!name.endsWith('.rels')) continue;
+    const base = name.replace(/_rels\/[^/]*$/, ''); // "word/_rels/document.xml.rels" -> "word/"
+    const xml = partText(entry);
+    for (const m of xml.matchAll(/<Relationship[^>]*>/gi)) {
+      const tag = m[0];
+      if (/TargetMode\s*=\s*"External"/i.test(tag)) continue;
+      const target = tag.match(/Target\s*=\s*"([^"]+)"/i)?.[1];
+      if (!target) continue;
+      if (/^[a-z]+:\/\//i.test(target)) continue; // apsolutni URL bez TargetMode
+      const resolved = normalizePart(target.startsWith('/') ? target : base + target);
+      // Rijesi "../" segmente (npr. Target="../media/slika.png" iz word/_rels/).
+      const parts: string[] = [];
+      for (const seg of resolved.split('/')) {
+        if (seg === '..') parts.pop();
+        else if (seg !== '.' && seg !== '') parts.push(seg);
+      }
+      const finalPath = parts.join('/');
+      if (!present.has(finalPath)) {
+        issues.push({
+          kind: 'dangling-relationship',
+          part: entry.name,
+          detail: `relacija pokazuje na "${target}", a taj dio ne postoji u paketu`,
+        });
+      }
+    }
+  }
+  return issues;
+}
+
+/** Obje strukturne provjere odjednom. */
+export function checkPackageStructure(entries: readonly PackageEntryLike[]): PackageStructureIssue[] {
+  return [...checkContentTypes(entries), ...checkRelationshipTargets(entries)];
+}

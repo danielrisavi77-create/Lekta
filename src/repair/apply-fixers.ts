@@ -56,7 +56,7 @@ import {
   type LinkDoiFixParams,
 } from './fixers.ts';
 import { submissionMetadataFixer, type SubmissionMetadataFixParams } from './submission-metadata-fixer.ts';
-import { scanXmlWellFormed } from './package-integrity.ts';
+import { scanXmlWellFormed, checkPackageStructure } from './package-integrity.ts';
 import type { SectionNumberingTarget, ParagraphStyleFormattingRule, ParagraphFormattingTarget } from './xml-patch.ts';
 
 /** Poznati fixeri kao runtime konstanta: profile-validator provjerava clanstvo
@@ -1121,6 +1121,38 @@ export async function applyFixers(
   );
   if (integrityFailure) {
     return { docxBytes, changelog: [], skipped: requests.map((r) => r.ruleId), skippedReasons: {}, integrityFailure };
+  }
+
+  /**
+   * STRUKTURA PAKETA, ne samo dobro oblikovan XML (audit DOCX-20).
+   *
+   * Gornji skener dokazuje da je svaki DIRANI dio ispravan XML. To ne pokriva klasu kvara u kojoj
+   * su svi dijelovi besprijekorni, a paket svejedno nije valjan OPC: dio bez zapisa u
+   * `[Content_Types].xml`, ili `.rels` koji pokazuje na dio kojeg nema. Word oboje prijavljuje
+   * kao "dokument je ostecen". Nastaje upravo kad popravak DODA ili UKLONI dio.
+   *
+   * ZAUSTAVLJA SAMO ONO STO SMO MI UVELI. Struktura se mjeri i na ULAZU i na izlazu, pa se
+   * prijavljuju samo NOVI problemi. To je isto pravilo koje gate vec primjenjuje na XML kvarove
+   * (`preexisting`): dokument koji je stigao neispravan takav i odlazi, a mi o njemu ne tvrdimo
+   * nista. Bez te razlike gate bi odbijao i minimalne pakete koji nikad nisu ni imali potpun
+   * `[Content_Types].xml`, dakle kaznjavao bi korisnika za tudji ulaz.
+   */
+  const structureBefore = new Set(checkPackageStructure(entries).map((i) => `${i.kind}|${i.part}|${i.detail}`));
+  const newStructureIssues = checkPackageStructure(newEntries).filter(
+    (i) => !structureBefore.has(`${i.kind}|${i.part}|${i.detail}`),
+  );
+  if (newStructureIssues.length) {
+    const first = newStructureIssues[0];
+    return {
+      docxBytes,
+      changelog: [],
+      skipped: requests.map((r) => r.ruleId),
+      skippedReasons: {},
+      integrityFailure: {
+        part: first.part,
+        problem: `struktura paketa: ${first.detail}${newStructureIssues.length > 1 ? ` (+${newStructureIssues.length - 1} jos)` : ''}`,
+      },
+    };
   }
 
   const newDocxBytes = await writeZip(newEntries);
