@@ -98,7 +98,7 @@ export interface RepairChange { ruleId: string; beforeLabel: string; afterLabel:
 export type RepairOutcome =
   // storagePending: pohrana ("Moji popravci") se dovrsava u pozadini nakon odgovora, pa jobId JEST
   // dodijeljen, ali posao jos ne mora biti vidljiv. Sucelje tada ne smije tvrditi da je spremljeno.
-  | { kind: 'ok'; docxBytes: Uint8Array; fileName: string; changelog: RepairChange[]; skipped: string[]; slotId?: string; jobId?: string | null; storagePending: boolean; sourceCheck: RepairSourceCheck | null }
+  | { kind: 'ok'; docxBytes: Uint8Array; fileName: string; changelog: RepairChange[]; skipped: string[]; unknownFixers: string[]; slotId?: string; jobId?: string | null; storagePending: boolean; sourceCheck: RepairSourceCheck | null }
   | { kind: 'tier_mismatch'; suggestedWorkType: string }
   | { kind: 'paywall'; workType: ReportWorkType }
   // RE-33: reason razlikuje placeni dnevni strop od besplatne kvote (po korisniku ili po IP-u),
@@ -206,7 +206,7 @@ export async function uploadRepair(
 
   if (res.status === 200) {
     const data = (await res.json().catch(() => ({}))) as {
-      docxBase64?: string; fileName?: string; changelog?: RepairChange[]; skipped?: string[]; slotId?: string; jobId?: string | null;
+      docxBase64?: string; fileName?: string; changelog?: RepairChange[]; skipped?: string[]; unknownFixers?: string[]; slotId?: string; jobId?: string | null;
       storagePending?: boolean; sourceCheck?: unknown;
       error?: string; integrityFailure?: { part?: unknown; problem?: unknown; preexisting?: unknown };
     };
@@ -221,6 +221,9 @@ export async function uploadRepair(
       fileName: data.fileName || 'rad-popravljeno.docx',
       changelog: Array.isArray(data.changelog) ? data.changelog : [],
       skipped: Array.isArray(data.skipped) ? data.skipped : [],
+      // Stavke koje server nije prepoznao kao zive (audit DOCX-13). Prije su se tiho gubile, pa je
+      // korisnik dobivao dokument uvjeren da su primijenjene.
+      unknownFixers: Array.isArray(data.unknownFixers) ? data.unknownFixers.map(String) : [],
       slotId: data.slotId,
       jobId: data.jobId ?? null,
       // Stari server ne salje polje: tamo je pohrana bila gotova prije odgovora, pa false znaci

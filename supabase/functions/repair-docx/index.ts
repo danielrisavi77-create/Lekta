@@ -33,7 +33,7 @@ import { hashClientIpSalted } from '../_shared/hash-ip.ts';
 import { computeFingerprint } from '../../../src/fingerprint/fingerprint.ts';
 import { extractFingerprintInputFromDocx } from '../../../src/fingerprint/extract-from-docx.ts';
 import { readZip } from '../../../src/repair/zip-codec.ts';
-import { DOCX_MAX_UPLOAD_BYTES } from '../../../src/repair/docx-budget.ts';
+import { DOCX_MAX_UPLOAD_BYTES, REPAIR_MAX_REQUESTS, paramsWithinBudget } from '../../../src/repair/docx-budget.ts';
 import { resolveParams, type ParamSource } from '../../../src/repair/param-authority.ts';
 import { isReportWorkType } from '../../../src/report/pricing.ts';
 import { decideReportAccess } from '../../../src/report/slot-logic.ts';
@@ -259,14 +259,30 @@ Deno.serve(async (req: Request) => {
     // ih je samo tipski sanirao i primijenio. Klijentov `params` sada vrijedi SAMO tamo gdje
     // fakultetskog pravila nema (univerzalna higijena), i to se izricito biljezi u odgovoru.
     const rawReqs: any[] = Array.isArray(meta.requests) ? meta.requests : [];
-    if (!rawReqs.length || rawReqs.length > 64) return json({ error: 'bad_request' }, 400);
+    if (!rawReqs.length || rawReqs.length > REPAIR_MAX_REQUESTS) return json({ error: 'bad_request' }, 400);
     const profileRefForParams: string | null = typeof meta.profileRef === 'string' ? meta.profileRef : null;
     const requests: FixerRequest[] = [];
     const paramSources: Record<string, ParamSource> = {};
+    /**
+     * Zahtjevi koje server NE prepoznaje (audit DOCX-13).
+     *
+     * Do sada su se tiho preskakali: korisnik bi poslao stavku, dobio dokument i vjerovao da je
+     * primijenjena, iako je server nikad nije vidio kao zivu. Tisina je ovdje najgori ishod, jer
+     * je nerazlucva od uspjeha. Sada se vracaju u odgovoru pa ih sucelje moze prikazati.
+     */
+    const unknownFixers: string[] = [];
     for (const r of rawReqs) {
-      if (!r || typeof r.fixerId !== 'string' || !LIVE_FIXERS.has(r.fixerId)) continue; // tihi preskok tamnih
+      if (!r || typeof r.fixerId !== 'string' || !LIVE_FIXERS.has(r.fixerId)) {
+        if (r && typeof r.fixerId === 'string') unknownFixers.push(r.fixerId.slice(0, 80));
+        continue;
+      }
       const ruleId = String(r.ruleId ?? r.fixerId);
       const clientParams = (r.params && typeof r.params === 'object') ? r.params : {};
+      // Broj zahtjeva je bio ogranicen, ali NJIHOV SADRZAJ nije (audit DOCX-14): jedan zahtjev
+      // mogao je nositi niz od desetaka tisuca indeksa i time napuhati obradu unutar dopustenih
+      // 64 zahtjeva. Prekoracenje se ODBIJA glasno, ne preskace tiho.
+      const budget = paramsWithinBudget(clientParams);
+      if (!budget.ok) return json({ error: 'bad_request', reason: budget.reason }, 400);
       const resolved = resolveParams(profileRefForParams, ruleId, r.fixerId, clientParams);
       paramSources[ruleId] = resolved.source;
       requests.push({ fixerId: r.fixerId, ruleId, params: resolved.params });
@@ -505,6 +521,9 @@ Deno.serve(async (req: Request) => {
       // posteno razlikovati "popravljeno prema pravilu tvog fakulteta" od "popravljeno prema
       // opcoj preporuci", a upravo je ta razlika ono sto Lekta prodaje.
       paramSources,
+      // Zahtjevi koje server nije prepoznao kao zive (audit DOCX-13). Izostavljeno kad ih nema, da
+      // sucelje ne mora razlikovati praznu listu od nepostojanja polja.
+      ...(unknownFixers.length ? { unknownFixers } : {}),
     }, 200);
   } catch (e) {
     console.error('[repair-docx]', e);

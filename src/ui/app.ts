@@ -1410,6 +1410,17 @@ function renderSubmissionChecklist(r: any){
 // paywallLockHtml/startReportCheckout). Slider samo dijeli postojecu cijenu na stavke, ne mijenja
 // je - null kad vrsta rada nema definiran tier (nepoznato), slider tada prikazuje samo broj stavki.
 function ceilingPriceEurFor(r: any): number|null{const tier=tierFor(toReportWorkType(r?.settings?.workType||r?.selection?.workType||'final'));return tier?(livePriceEur(tier.workType)??tier.priceEur):null}
+// DOCX-13: stavke koje server NIJE prepoznao kao zive. Prije su se tiho gubile, pa je korisnik
+// dobivao dokument uvjeren da su primijenjene. Tisina je ovdje najgori ishod jer je nerazlucva od
+// uspjeha, zato se prikazuju odvojeno od `skipped` (koji znaci "prepoznato, ali nije trebalo").
+function unknownFixerNote(out: any): string{
+  const list=Array.isArray(out?.unknownFixers)?out.unknownFixers:[];
+  if(!list.length)return '';
+  // Bez tvrdnji o naplati: popravak se naplacuje po dokumentu, ne po stavci, pa "nije naplaceno"
+  // ne bi bilo tocno. Kaze se samo ono sto pouzdano znamo: stavka nije primijenjena.
+  return `<p><strong>Nismo prepoznali ${list.length===1?'stavku':'stavke'}:</strong> ${list.map(escapeHtml).join(', ')}. `
+    +`${list.length===1?'Ona nije primijenjena na dokument':'One nisu primijenjene na dokument'}. Ako se ovo ponovi, javi nam.</p>`;
+}
 async function renderRepairSection(r: any){
  const mount=$('#repairPanelMount'); if(!mount) return; mount.innerHTML='';
  repairPanelNode=null; repairPanelForResult=null; // dok se ne renderira stateful panel, nema sto cuvati
@@ -1701,7 +1712,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
     // (vidi repair-docx/index.ts korak 7a); gumb NIJE zakljucan (lockButton ostaje false) jer
     // korisnik moze smisleno pokusati ponovno s drugim odabirom stavki.
     const skippedLabels=out.skipped.map((s: string)=>[...items,...textItems].find((i: any)=>i.ruleId===s)?.label||s);
-    setSummary(`<strong>Nije bilo potrebnih izmjena.</strong> Odabrane stavke su već usklađene ili ih nismo mogli automatski primijeniti na ovom dokumentu.${skippedLabels.length?` <p>Nije primijenjeno: ${skippedLabels.map(escapeHtml).join(', ')}.</p>`:''}`);
+    setSummary(`<strong>Nije bilo potrebnih izmjena.</strong> Odabrane stavke su već usklađene ili ih nismo mogli automatski primijeniti na ovom dokumentu.${skippedLabels.length?` <p>Nije primijenjeno: ${skippedLabels.map(escapeHtml).join(', ')}.</p>`:''}${unknownFixerNote(out)}`);
    } else if(out.kind==='ok'){
     lockButton=true;
     // Preuzimanje NE krece automatski: a.click() nakon await-a preglednik cesto blokira (nema
@@ -1722,7 +1733,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
      :`<p><strong>Popravak nije spremljen u Moji popravci</strong> (privremena greška na serveru). Preuzmi datoteku i sačuvaj je, ovdje je više neće biti.</p>`;
     // RE-31: skipped nosi sirove ruleId slugove; mapiraj na citljivu labelu (isto kao lokalni panel).
     const skippedLabels=out.skipped.map((s: string)=>[...items,...textItems].find((i: any)=>i.ruleId===s)?.label||s);
-    setSummary(`<strong>Popravljeno na serveru (${_plIzmjena(out.changelog.length)}).</strong>${dl}${stored}${skippedLabels.length?`<p>Nije primijenjeno: ${skippedLabels.map(escapeHtml).join(', ')}.</p>`:''}`);
+    setSummary(`<strong>Popravljeno na serveru (${_plIzmjena(out.changelog.length)}).</strong>${dl}${stored}${skippedLabels.length?`<p>Nije primijenjeno: ${skippedLabels.map(escapeHtml).join(', ')}.</p>`:''}${unknownFixerNote(out)}`);
     const dlBtn: any=summary.querySelector('[data-repair-download]');
     if(dlBtn)dlBtn.onclick=()=>downloadBlob(out.docxBytes,DOCX_MIME,out.fileName);
     trackEvent('repair_server_done',{profileId:r.details?.profileDefinitionId||'',changes:out.changelog.length,stored:out.jobId?1:0,ms:uploadMs});

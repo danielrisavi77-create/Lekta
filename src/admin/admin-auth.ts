@@ -103,8 +103,38 @@ export function consumeMagicLinkFragment(now: number = Date.now()): Session | nu
   return session;
 }
 
+/**
+ * Odjava koja STVARNO opoziva sesiju (audit SEC-06).
+ *
+ * Prije je brisala samo lokalni zapis. Refresh token je ostajao valjan na Supabaseu, pa je
+ * ukradeni token nastavio raditi i nakon sto se korisnik uvjerljivo "odjavio". Za administratorsku
+ * sesiju je to najgore moguce mjesto za takvu rupu.
+ *
+ * `scope: global` opoziva SVE sesije tog korisnika, ne samo ovu. Za admin panel je to
+ * namjeravano ponasanje: odjava je ovdje sigurnosna radnja, ne udobnost.
+ *
+ * Lokalni zapis se brise ODMAH i BEZ obzira na ishod mrežnog poziva. Ako opoziv padne (offline,
+ * istekao token), korisnik svejedno mora biti odjavljen na ovom uredaju; obrnuti redoslijed bi
+ * znacio da mrezna greska ostavlja otvorenu sesiju na ekranu.
+ */
 export function adminSignOut(): void {
+  const session = adminSessionStore.load();
   adminSessionStore.save(null);
+  if (!session?.accessToken) return;
+  try {
+    void fetch(`${adminAuthConfig.supabaseUrl.replace(/\/+$/, '')}/auth/v1/logout?scope=global`, {
+      method: 'POST',
+      headers: {
+        apikey: adminAuthConfig.anonKey,
+        Authorization: `Bearer ${session.accessToken}`,
+      },
+      keepalive: true,
+    }).catch(() => {
+      /* opoziv je best-effort: lokalna sesija je vec obrisana, korisnik je odjavljen ovdje */
+    });
+  } catch {
+    /* fetch nedostupan (npr. u testu bez mreze) */
+  }
 }
 
 export { requestEmailOtp, verifyEmailOtp, signInWithPassword, setPassword };

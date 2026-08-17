@@ -175,6 +175,33 @@ export async function readZip(bytes: Uint8Array, limits?: ReadZipLimits): Promis
   const totalEntries = view.getUint16(eocdOffset + 10, true);
   const centralDirOffset = view.getUint32(eocdOffset + 16, true);
 
+  /**
+   * ZIP64 se ODBIJA IZRICITO (audit DOCX-19).
+   *
+   * Ovaj citac cita broj zapisa kao uint16, a offsete kao uint32. ZIP64 paket te vrijednosti
+   * postavlja na sentinele (0xffff / 0xffffffff) i prave brojeve drzi u zasebnom ZIP64 zapisu,
+   * koji ovdje nitko ne cita. Bez ove provjere citac bi sentinel uzeo kao STVARNU vrijednost i
+   * poceo citati central directory s besmislenog offseta: u najboljem slucaju baci nejasnu
+   * gresku o potpisu, u gorem procita smece kao valjane zapise.
+   *
+   * Odbijanje s jasnim razlogom je jedino posteno ponasanje: bolje reci "ovaj format ne
+   * podrzavamo" nego tiho isporuciti dokument sastavljen od krivo procitanih dijelova.
+   */
+  const ZIP64_EOCD_LOCATOR_SIG = 0x07064b50;
+  const zip64Sentinel =
+    totalEntries === 0xffff ||
+    centralDirOffset === 0xffffffff ||
+    view.getUint16(eocdOffset + 8, true) === 0xffff ||
+    view.getUint32(eocdOffset + 12, true) === 0xffffffff;
+  const hasZip64Locator =
+    eocdOffset >= 20 && view.getUint32(eocdOffset - 20, true) === ZIP64_EOCD_LOCATOR_SIG;
+  if (zip64Sentinel || hasZip64Locator) {
+    throw new Error(
+      'zip-codec: ZIP64 paket nije podrzan. Dokument je vjerojatno vrlo velik ili je nastao ' +
+        'alatom koji uvijek pise ZIP64; popravak ga ne moze obraditi bez rizika od tihog ostecenja.',
+    );
+  }
+
   if (totalEntries > maxEntries) {
     throw new Error(`zip-codec: previse zip entryja (${totalEntries} > ${maxEntries}), moguc entry-flood`);
   }
@@ -186,6 +213,19 @@ export async function readZip(bytes: Uint8Array, limits?: ReadZipLimits): Promis
   for (let i = 0; i < totalEntries; i++) {
     if (view.getUint32(ptr, true) !== CENTRAL_DIR_SIG) {
       throw new Error(`zip-codec: ocekivan central directory potpis na offsetu ${ptr}`);
+    }
+    /**
+     * Sifrirani zapis se ODBIJA (audit DOCX-19). Bit 0 general purpose zastavice znaci da je
+     * sadrzaj sifriran. Inflate nad sifriranim bajtovima ne baca nuzno, nego moze proizvesti
+     * smece; CRC provjera nize bi ga uhvatila, ali s porukom "dokument je ostecen", sto bi
+     * korisnika poslalo u krivom smjeru. Zasticen dokument nije ostecen, samo nije obradiv.
+     */
+    const generalPurposeFlag = view.getUint16(ptr + 8, true);
+    if (generalPurposeFlag & 0x0001) {
+      throw new Error(
+        'zip-codec: dokument je zasticen lozinkom (sifriran zip zapis), pa se ne moze popraviti. ' +
+          'Ukloni zastitu u Wordu pa pokusaj ponovno.',
+      );
     }
     const compressionMethod = view.getUint16(ptr + 10, true);
     const expectedCrc = view.getUint32(ptr + 16, true);
