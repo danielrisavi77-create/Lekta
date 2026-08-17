@@ -25,6 +25,15 @@ export interface LegalProviderConfig {
   logDays: number;    // retencija serverskih logova izvještaja (dana, migracija 0009)
   oib: string;        // prazno = redak se ne renderira, dokument nosi napomenu o dopuni
   address: string;    // prazno = redak se ne renderira
+  /**
+   * Telefonski broj trgovca. Prazno = redak se ne renderira.
+   *
+   * Zakon o zastiti potrosaca medju predugovornim informacijama trazi naziv, sjediste I
+   * telefonski broj trgovca, pa e-mail sam po sebi nije dovoljan cim se nesto naplacuje
+   * (audit LEG-02). `scripts/verify-deploy-dist.mjs` zato odbija deploy s praznim poljem
+   * kad je `LEKTA_COMMERCE_LIVE=1`.
+   */
+  phone: string;
 }
 
 export interface LegalDoc {
@@ -54,6 +63,7 @@ function resolveConfig(cfg?: Partial<LegalProviderConfig>): LegalProviderConfig 
     logDays: Number(cfg?.logDays) || providerDefaults.retentionDaysLogs || 90,
     oib: cfg?.oib ?? providerDefaults.oib ?? '',
     address: cfg?.address ?? providerDefaults.address ?? '',
+    phone: cfg?.phone ?? providerDefaults.phone ?? '',
   };
 }
 
@@ -63,13 +73,14 @@ function identityMeta(c: LegalProviderConfig): string {
   if (c.oib) bits.push(`<strong>OIB:</strong> ${esc(c.oib)}`);
   if (c.address) bits.push(`<strong>Adresa:</strong> ${esc(c.address)}`);
   bits.push(`<strong>Kontakt:</strong> ${esc(c.contact)}`);
+  if (c.phone) bits.push(`<strong>Telefon:</strong> ${esc(c.phone)}`);
   return bits.join(' · ');
 }
 
 /** Napomena o registraciji: prikazuje se dok registracijski podaci (OIB) nisu upisani. */
 function registrationNote(c: LegalProviderConfig): string {
   if (c.oib) return '';
-  return `<p class="legal-note">Puni registracijski podaci pružatelja (naziv subjekta, OIB, adresa) bit će objavljeni na ovoj stranici po dovršetku registracije subjekta. Do tada se za sva pitanja i zahtjeve koristi navedeni kontakt e-mail.</p>`;
+  return `<p class="legal-note">Puni registracijski podaci pružatelja (naziv subjekta, OIB, adresa, telefon) bit će objavljeni na ovoj stranici po dovršetku registracije subjekta. Do tada se za sva pitanja i zahtjeve koristi navedeni kontakt e-mail. Dok registracija nije dovršena, "${esc(c.controller)}" je naziv usluge, a ne registrirani pravni subjekt, i usluga se ne naplaćuje.</p>`;
 }
 
 export function legalDocuments(cfg?: Partial<LegalProviderConfig>): Record<LegalDocKind, LegalDoc> {

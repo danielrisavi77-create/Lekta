@@ -70,6 +70,7 @@ import { cellCoverage, detectWaitlist } from '../waitlist/waitlist-detect';
 import { mountWaitlistBar } from '../waitlist/waitlist-bar';
 import { submitUnknownFaculty } from '../waitlist/waitlist-client';
 import { TERMS_VERSION } from '../legal/terms-version';
+import { canonicalConsentText } from '../legal/consent-text';
 import type { PreflightPanel } from '../preflight/preflight-panel';
 import { academicYearFromDate } from '../profiles/academic-year';
 import { setProgressValue } from '../shared/premium-visuals';
@@ -141,7 +142,11 @@ const setupMode=__DEV_TOOLS__&&params.get('setup')==='1'&&setupAllowed();
    lijeno da ne uleti u glavni bundle. */
 const adminMode=params.get('admin')==='1'&&setupAllowed();
 async function openAdminStats(){const ep=String(productionConfig?.adminStatsEndpoint||'').trim();if(!ep){toast('Admin endpoint nije konfiguriran.');return}const token=await resolveAccessToken();if(authConfigured()&&!token){openAuth(()=>{void openAdminStats()});return}const { openAdminPanel }=await import('../admin/admin-panel');await openAdminPanel({cfg:{endpoint:ep},getToken:async()=>(await resolveAccessToken())||''})}
-const CHECKOUT_CONSENT_TEXT='Pristajem da isporuka digitalnog sadržaja (puni izvještaj) počne odmah nakon plaćanja i izričito se odričem prava na jednostrani raskid ugovora u roku od 14 dana (čl. 86. Zakona o zaštiti potrošača). Bez ovog pristanka kupnja se ne može dovršiti.';
+// Tekst privole vise NE zivi ovdje nego u src/legal/consent-text.ts, jer ga mora vidjeti i
+// server: `create-checkout` usporedjuje primljeni tekst s kanonskim za poslanu verziju
+// uvjeta i odbija sve ostalo (audit A26-08). Dok je zivio samo u pregledniku, zapis
+// privole nije bio dokaz nego prepricavanje klijenta.
+const CHECKOUT_CONSENT_TEXT=canonicalConsentText(TERMS_VERSION)||'';
 const DEFAULT_PRODUCTION_CONFIG={enabled:false,submissionMode:'netlify-form',orderEndpoint:'/',paymentProvider:'lemonsqueezy',paymentLinks:{format:'',panic:'',premium:''},businessName:'Lekta',contactEmail:'lekta.kontakt@gmail.com',privacyController:'',retentionDays:30,uploadMaxBytes:8*1024*1024,analyticsEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('analytics-event'),serverAnalytics:'netlify-optional',reportEndpoint:'',fieldRenderEndpoint:'',repairEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('repair-docx'),checkoutEndpoint:'',guaranteeEndpoint:'',supabaseUrl:DEPLOYMENT_CONFIG.supabaseUrl,supabaseAnonKey:DEPLOYMENT_CONFIG.supabaseAnonKey,waitlistEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('faculty-request'),referralEndpoint:'',errorEndpoint:'',preflightStartEndpoint:'',preflightResultEndpoint:'',preflightMaxUploadMb:30,adminStatsEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('admin-stats')};
 // Error tracking (P0 8-1): globalni handleri. Ako je errorEndpoint konfiguriran, salje SANITIZIRAN
 // tehnicki kontekst (poruka, skraceni stack, verzija, path) na kolektor (npr. Sentry tunnel same-

@@ -108,6 +108,28 @@ describe('legal-content', () => {
     expect(withOib.privacy.html.includes('bit će objavljeni')).toBe(false);
   });
 
+  /**
+   * LEG-02: Zakon o zastiti potrosaca medju predugovornim informacijama trazi i TELEFONSKI
+   * broj trgovca, ne samo e-mail. Polje je prazno dok subjekt nije registriran, pa se redak
+   * tada ne smije renderirati (prazan "Telefon:" bio bi gori od izostanka).
+   */
+  it('telefon se renderira samo kad postoji', () => {
+    expect(legalDocuments().privacy.html.includes('Telefon:')).toBe(false);
+    expect(legalDocuments({ phone: '+385 1 2345 678' }).privacy.html).toContain('Telefon:');
+    expect(legalDocuments({ phone: '+385 1 2345 678' }).privacy.html).toContain('+385 1 2345 678');
+  });
+
+  /**
+   * A26-01: dok registracijski podaci nisu upisani, "Lekta" je naziv usluge a ne pravni
+   * subjekt. Napomena to mora IZRICITO reci, jer bi inace redak "Voditelj obrade: Lekta"
+   * citatelju izgledao kao da voditelj obrade postoji i identificiran je.
+   */
+  it('bez OIB-a napomena izricito kaze da subjekt nije registriran i da se ne naplacuje', () => {
+    const html = legalDocuments().privacy.html;
+    expect(html).toContain('a ne registrirani pravni subjekt');
+    expect(html).toContain('ne naplaćuje');
+  });
+
   it('deterministicki: dva poziva daju identican sadrzaj (modal === stranica)', () => {
     const a = legalDocuments();
     const b = legalDocuments();

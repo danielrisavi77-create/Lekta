@@ -7,6 +7,7 @@
 // verifikacijska konzola zavrsila u distu. Bolje pasti na buildu nego objaviti rupu.
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
@@ -356,6 +357,44 @@ if (fs.existsSync(naslovnicaDir)) {
   const allNaslovnicaHtml = naslovnicaPages.map((p) => fs.readFileSync(p, 'utf8')).join('\n');
   for (const expected of ['Službeni', 'pomoćni']) {
     if (!allNaslovnicaHtml.includes(expected)) fail(`nijedna generirana naslovnica stranica ne sadrzi ocekivanu dijakriticku rijec "${expected}" (dijakriticka regresija?)`);
+  }
+}
+
+// PRAVNI IDENTITET PRUZATELJA (audit A26-01, LEG-01/02/03).
+//
+// `data/legal/provider.json` je jedino mjesto s identitetom trgovca i voditelja obrade.
+// Dok je prazan, `legal-content.ts` ga tise ispusta (renderira napomenu "bit ce objavljeni"),
+// pa se prazno stanje moze deployati a da nitko ne primijeti. Za BESPLATNU analizu to je
+// podnosljivo; za NAPLATU nije, jer identifikacija trgovca i voditelja obrade nije opcionalna.
+//
+// Zato gate nije bezuvjetan nego vezan uz `LEKTA_COMMERCE_LIVE=1`, koji se postavlja tek kad
+// naplata ide live. Do tada je nalaz glasno upozorenje, poslije je tvrd blok.
+{
+  const providerPath = path.join(ROOT, 'data', 'legal', 'provider.json');
+  const provider = JSON.parse(fs.readFileSync(providerPath, 'utf8'));
+  const REQUIRED_FOR_COMMERCE = {
+    privacyController: 'voditelj obrade (GDPR cl. 13): tko pravno odredjuje svrhe i sredstva obrade',
+    oib: 'OIB pravnog subjekta (identifikacija trgovca)',
+    address: 'sjediste pravnog subjekta',
+    phone: 'telefonski broj trgovca (predugovorna informacija, ZZP)',
+  };
+  const missing = Object.entries(REQUIRED_FOR_COMMERCE)
+    .filter(([field]) => !String(provider[field] ?? '').trim())
+    .map(([field, why]) => `${field} (${why})`);
+
+  if (missing.length) {
+    const bullets = missing.map((m) => `  - ${m}`);
+    if (process.env.LEKTA_COMMERCE_LIVE === '1') {
+      fail(['naplata je oznacena kao ZIVA (LEKTA_COMMERCE_LIVE=1), a data/legal/provider.json nema:', ...bullets].join(os.EOL));
+    }
+    console.warn(
+      [
+        '[verify-deploy-dist] UPOZORENJE: data/legal/provider.json nema:',
+        ...bullets,
+        '  Besplatna analiza time nije blokirana, ali naplata se NE SMIJE upaliti dok su prazni.',
+        '  Kad se popune, postavi LEKTA_COMMERCE_LIVE=1 da gate postane tvrd.',
+      ].join(os.EOL),
+    );
   }
 }
 
