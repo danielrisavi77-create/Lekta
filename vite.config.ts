@@ -277,7 +277,7 @@ function citationTools() {
 //       hoistani nanoid@3 ESM bez default exporta). nanoid ovdje sluzi ISKLJUCIVO za jedinstveno ime
 //       privremene datoteke u WASM in-memory FS-u, pa ga u potpunosti INLINEAMO trivijalnim generatorom.
 // Isti fix u dev i build (bez `apply`); par s optimizeDeps.exclude da esbuild pre-bundle ne zaobide ovo.
-function fixHunspellNanoid() {
+export function fixHunspellNanoid() {
   const INLINE = "const nanoid=(n=21)=>{let s='';const a='useandom-26T198340PX75pxJACKVERYMINDBUSHWOLF_GQZbfghjklqvwyzrict';for(let i=0;i<n;i++)s+=a[Math.random()*64|0];return s};";
   return {
     name: 'lekta-fix-hunspell-nanoid',
