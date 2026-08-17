@@ -6,6 +6,7 @@
  * Svaki novi closed-loop test (za bilo koji od 31 fixera) treba koristiti runClosedLoopCase
  * umjesto kopiranja ovih koraka po cetvrti put.
  */
+import { expectNotPenalised } from './check-status';
 import { expect } from 'vitest';
 import { analyzeFixture, resolveProfile } from '../../src/analysis/golden-entry';
 import { applyFixers, type FixerRequest } from '../../src/repair/apply-fixers';
@@ -112,7 +113,11 @@ export async function runClosedLoopCase(testCase: ClosedLoopCase): Promise<void>
 
   for (const title of targetTitles) {
     const check = (after.checks ?? []).find((candidate: { title: string }) => candidate.title === title);
-    expect(check?.status, `${label}: ${title}`).toBe('pass');
+    // Ciljana provjera nakon popravka ne smije kaznjavati dokument. Kad je NEBODOVANA za taj
+    // dokument (max === 0, npr. "Položaj broja stranice" kad poravnanje nije ocitljivo), status je
+    // 'informational' i tada ona popravak NE dokazuje: dokaz je `isResolved` ispod. Do 2026-08-17
+    // je i takva provjera javljala 'pass', pa je test izgledao kao potvrda popravka a nije bio.
+    expectNotPenalised(check);
   }
   if (isResolved) expect(isResolved(after), `${label}: ciljani nalaz mora nestati nakon popravka`).toBe(true);
   assertNoPassRegression(before.checks ?? [], after.checks ?? [], new Set([...targetTitles, ...exemptFromRegression]));

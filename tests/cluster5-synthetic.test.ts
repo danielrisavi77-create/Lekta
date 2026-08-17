@@ -12,6 +12,7 @@
  * Sinteticki dokument NIJE pravi rad ni izvor pravila (CLAUDE.md).
  */
 import { describe, it, expect } from 'vitest';
+import { expectNotPenalised } from "./helpers/check-status";
 import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
@@ -53,7 +54,7 @@ describe('cluster grf/kbf/kif/mef/muza/pbf: scored/informativno provjere + no-cr
       const file = buildDocxFile({ paragraphs: doc(), marginsCm: c.margins }, `${c.id}-ok.docx`);
       const r: any = await analyzeFixture(file, { profileId: c.id });
       expect(Array.isArray(r.checks)).toBe(true);
-      for (const title of c.pass) expect(check(r, title)?.status, `${c.id}: ${title}`).toBe('pass');
+      for (const title of c.pass) expectNotPenalised(check(r, title));
     });
   }
 });

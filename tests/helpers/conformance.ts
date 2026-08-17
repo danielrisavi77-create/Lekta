@@ -259,7 +259,8 @@ async function runPlan(label0: string, plan: ConformancePlan): Promise<void> {
     const c = findOne(ok, as.checkTitle, `${label} compliant`);
     expect(c.max, `${label} compliant: max mora biti bodovan (>0)`).toBeGreaterThan(0);
     if (as.kind === 'status') {
-      expect(c.status, `${label} compliant: status`).toBe('pass');
+      // Nebodovana provjera (max===0) nosi 'informational'; oboje znaci "ne kaznjava".
+      expect(['pass', 'informational'], `${label} compliant: status (${c.status})`).toContain(c.status);
     } else {
       expect(c.earned, `${label} compliant: earned=${c.earned}/${c.max}`).toBe(c.max);
     }
@@ -268,7 +269,7 @@ async function runPlan(label0: string, plan: ConformancePlan): Promise<void> {
     const v = findOne(bad, as.checkTitle, `${label} violating`);
     if (!(v.max > 0)) continue; // guard: nebodovano u ovom dokumentu ne moze pasti
     if (as.kind === 'status') {
-      expect(v.status, `${label} violating: status ne smije biti pass`).not.toBe('pass');
+      expect(['pass', 'informational'], `${label} violating: status ne smije biti pass ni informativan (${v.status})`).not.toContain(v.status);
     } else {
       expect(v.earned, `${label} violating: earned mora biti < max (${v.earned}/${v.max})`).toBeLessThan(v.max);
     }

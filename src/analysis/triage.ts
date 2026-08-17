@@ -99,7 +99,10 @@ function flagToLocation(flag: PreviewFlag): TriageLocation {
 function severityOf(check: Check): 'error' | 'warning' | 'info' {
   const s = check.issue?.severity;
   if (s === 'error' || s === 'warning' || s === 'info') return s;
-  return check.status === 'fail' ? 'error' : check.status === 'pass' ? 'info' : 'warning';
+  if (check.status === 'fail') return 'error';
+  // 'informational' (max===0) mora zavrsiti kao 'info', ne kao 'warning': nebodovana provjera nije
+  // upozorenje. Prije 2026-08-17 je i ona nosila status 'pass' pa je ova grana bila dovoljna.
+  return check.status === 'pass' || check.status === 'informational' ? 'info' : 'warning';
 }
 
 /** Je li provjera "nalaz" (problem koji vrijedi prikazati)? Bodovani ne-pass ILI (info) s issueom. */

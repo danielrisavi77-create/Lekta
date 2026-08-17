@@ -87,12 +87,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 16,
+        "passCount": 13,
         "score": 87
       },
       "after": {
         "checkCount": 19,
-        "passCount": 16,
+        "passCount": 13,
         "score": 87
       },
       "beforeEntryCount": 4,
@@ -129,12 +129,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 15,
+        "passCount": 12,
         "score": 78
       },
       "after": {
         "checkCount": 19,
-        "passCount": 15,
+        "passCount": 12,
         "score": 78
       },
       "beforeEntryCount": 14,
@@ -177,12 +177,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 16,
+        "passCount": 13,
         "score": 87
       },
       "after": {
         "checkCount": 19,
-        "passCount": 16,
+        "passCount": 13,
         "score": 87
       },
       "beforeEntryCount": 4,
@@ -219,12 +219,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 17,
+        "passCount": 15,
         "score": 94
       },
       "after": {
         "checkCount": 19,
-        "passCount": 17,
+        "passCount": 15,
         "score": 94
       },
       "beforeEntryCount": 4,
@@ -261,12 +261,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 35,
-        "passCount": 23,
+        "passCount": 17,
         "score": 75
       },
       "after": {
         "checkCount": 35,
-        "passCount": 25,
+        "passCount": 19,
         "score": 84
       },
       "beforeEntryCount": 8,
@@ -311,12 +311,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 13,
+        "passCount": 11,
         "score": 60
       },
       "after": {
         "checkCount": 19,
-        "passCount": 15,
+        "passCount": 13,
         "score": 69
       },
       "beforeEntryCount": 4,
@@ -354,12 +354,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 12,
         "score": 93
       },
       "after": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 12,
         "score": 93
       },
       "beforeEntryCount": 4,
@@ -396,12 +396,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 12,
         "score": 100
       },
       "after": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 12,
         "score": 100
       },
       "beforeEntryCount": 4,
@@ -417,8 +417,8 @@
         "toc-field-fixer"
       ],
       "targetedCheckCount": 4,
-      "targetedResolvedCount": 2,
-      "targetedUnresolvedCount": 2,
+      "targetedResolvedCount": 0,
+      "targetedUnresolvedCount": 4,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -440,12 +440,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 12,
         "score": 100
       },
       "after": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 12,
         "score": 100
       },
       "beforeEntryCount": 4,
@@ -462,8 +462,8 @@
         "toc-field-fixer"
       ],
       "targetedCheckCount": 8,
-      "targetedResolvedCount": 3,
-      "targetedUnresolvedCount": 5,
+      "targetedResolvedCount": 0,
+      "targetedUnresolvedCount": 8,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -485,12 +485,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 42,
-        "passCount": 32,
+        "passCount": 22,
         "score": 81
       },
       "after": {
         "checkCount": 42,
-        "passCount": 36,
+        "passCount": 26,
         "score": 91
       },
       "beforeEntryCount": 9,
@@ -519,8 +519,8 @@
         "field-integrity-fixer"
       ],
       "targetedCheckCount": 17,
-      "targetedResolvedCount": 6,
-      "targetedUnresolvedCount": 11,
+      "targetedResolvedCount": 5,
+      "targetedUnresolvedCount": 12,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -542,12 +542,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 38,
-        "passCount": 26,
+        "passCount": 20,
         "score": 73
       },
       "after": {
         "checkCount": 38,
-        "passCount": 31,
+        "passCount": 25,
         "score": 88
       },
       "beforeEntryCount": 9,
@@ -558,6 +558,7 @@
         "margins-fixer",
         "paper-size-fixer",
         "page-number-alignment-fixer",
+        "section-insert-fixer",
         "heading-format-fixer",
         "final-document-inspector-fixer",
         "field-integrity-fixer",
@@ -570,9 +571,9 @@
         "heading-format-fixer",
         "final-document-inspector-fixer"
       ],
-      "targetedCheckCount": 15,
+      "targetedCheckCount": 17,
       "targetedResolvedCount": 6,
-      "targetedUnresolvedCount": 9,
+      "targetedUnresolvedCount": 11,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -594,12 +595,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 16,
         "score": 95
       },
       "after": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 16,
         "score": 95
       },
       "beforeEntryCount": 4,

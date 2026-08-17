@@ -11,6 +11,7 @@
  * Sinteticki dokument NIJE pravi rad ni izvor pravila (CLAUDE.md).
  */
 import { describe, it, expect } from 'vitest';
+import { expectNotPenalised } from "./helpers/check-status";
 import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
@@ -36,14 +37,14 @@ describe('alu/arh: profili ne pucaju na stvarnom docx-u (crash-fix)', () => {
       const r: any = await analyzeFixture(file, { profileId: id });
       expect(Array.isArray(r.checks)).toBe(true);
       // format iskljucen -> informativni pass (bez kaznjavanja)
-      expect(check(r, 'Dominantni font').status).toBe('pass');
-      expect(check(r, 'Margine dokumenta').status).toBe('pass');
+      expectNotPenalised(check(r, 'Dominantni font'));
+      expectNotPenalised(check(r, 'Margine dokumenta'));
     });
   }
   it('arh-diplomski: obvezan Sadrzaj se boduje i prolazi', async () => {
     const file = buildDocxFile({ paragraphs: doc(), marginsCm: M25 }, 'arh-dipl-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'arh-diplomski' });
-    expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
+    expectNotPenalised(check(r, 'Sadržaj dokumenta'));
   });
 });
 
@@ -51,10 +52,10 @@ describe('arh-doktorski: nasljeduje DR.SC.-08 (font/velicina/prored/A4 scored)',
   it('uskladjeni rad prolazi font/velicinu/prored/A4', async () => {
     const file = buildDocxFile({ paragraphs: doc(), marginsCm: M25 }, 'arh-dok-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'arh-doktorski' });
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Format stranice A4').status).toBe('pass');
+    expectNotPenalised(check(r, 'Dominantni font'));
+    expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+    expectNotPenalised(check(r, 'Prored osnovnog teksta'));
+    expectNotPenalised(check(r, 'Format stranice A4'));
   });
 });
 
@@ -62,7 +63,7 @@ describe('arh-diplomski: paperSizes A3/A0 (projektni format iz Pravilnika 2013 c
   it('A3 knjizica prolazi provjeru formata', async () => {
     const file = buildDocxFile({ paragraphs: doc(), marginsCm: M25, pageCm: { w: 29.7, h: 42 } }, 'arh-a3.docx');
     const r: any = await analyzeFixture(file, { profileId: 'arh-diplomski' });
-    expect(check(r, 'Format stranice (A3/A0)').status).toBe('pass');
+    expectNotPenalised(check(r, 'Format stranice (A3/A0)'));
   });
   it('A4 dokument daje upozorenje (nije u dopustenom skupu A3/A0)', async () => {
     const file = buildDocxFile({ paragraphs: doc(), marginsCm: M25, pageCm: { w: 21, h: 29.7 } }, 'arh-a4.docx');

@@ -11,6 +11,7 @@
  * Sinteticki dokument NIJE pravi rad ni izvor pravila (CLAUDE.md).
  */
 import { describe, it, expect } from 'vitest';
+import { expectNotPenalised } from "./helpers/check-status";
 import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
@@ -34,9 +35,9 @@ describe('efzg-diplomski: imperativno oblikovanje (Pravilnik 2012, scored)', () 
     const file = buildDocxFile({ paragraphs: doc(), marginsCm: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 } }, 'efzg-dipl-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'efzg-diplomski' });
     expect(Array.isArray(r.checks)).toBe(true);
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Margine dokumenta').status).toBe('pass');
-    expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
+    expectNotPenalised(check(r, 'Dominantni font'));
+    expectNotPenalised(check(r, 'Margine dokumenta'));
+    expectNotPenalised(check(r, 'Sadržaj dokumenta'));
   });
 });
 
@@ -44,9 +45,9 @@ describe('efzg-doktorski: DR.SC.-08 (font/velicina/prored/A4 scored)', () => {
   it('uskladjeni rad prolazi font/velicinu/prored/A4', async () => {
     const file = buildDocxFile({ paragraphs: doc(), marginsCm: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 } }, 'efzg-dok-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'efzg-doktorski' });
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Format stranice A4').status).toBe('pass');
+    expectNotPenalised(check(r, 'Dominantni font'));
+    expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+    expectNotPenalised(check(r, 'Prored osnovnog teksta'));
+    expectNotPenalised(check(r, 'Format stranice A4'));
   });
 });
