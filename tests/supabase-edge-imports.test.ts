@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 // import nije EKSAKTNO pinan (x.y.z) i tako sprjecava povratak golog @2.
 
 const FUNCTIONS_DIR = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'supabase', 'functions');
+const CONTRACT_DIR = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'repair', 'contract');
 
 function collectTsFiles(dir: string): string[] {
   const out: string[] = [];
@@ -49,5 +50,36 @@ describe('supabase Edge importi su eksaktno pinani (dependencies-01)', () => {
     // Barem supabase-js importi moraju postojati; ako je 0, glob je puknuo.
     expect(importCount).toBeGreaterThan(0);
     expect(offenders, `Nepinan(i) esm.sh import(i):\n${offenders.join('\n')}`).toEqual([]);
+  });
+});
+
+describe('Repair Contract javni barrel ostaje kompatibilan s Edge/Deno runtimeom', () => {
+  const files = collectTsFiles(CONTRACT_DIR);
+  const sources = files.map((file) => ({ file, source: readFileSync(file, 'utf8') }));
+
+  it('pokriva sve ugovorne TypeScript module (sanity)', () => {
+    expect(files.length).toBeGreaterThanOrEqual(8);
+    expect(files).toContain(resolve(CONTRACT_DIR, 'index.ts'));
+  });
+
+  it('koristi samo relativne .ts importove bez Node builtina', () => {
+    const offenders: string[] = [];
+    const importSpecifier = /\bfrom\s+['"]([^'"]+)['"]|(?:^|\n)\s*import\s+['"]([^'"]+)['"]/g;
+    for (const { file, source } of sources) {
+      for (const match of source.matchAll(importSpecifier)) {
+        const specifier = match[1] ?? match[2];
+        if (!specifier.startsWith('.') || !specifier.endsWith('.ts') || specifier.startsWith('node:')) {
+          offenders.push(`${file.replace(CONTRACT_DIR, 'src/repair/contract').replace(/\\/g, '/')}: ${specifier}`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it('ne ovisi o process.env i ne sadrzi privatni kljuc', () => {
+    const contractSource = sources.map(({ source }) => source).join('\n');
+    expect(contractSource).not.toMatch(/from ['"]node:/);
+    expect(contractSource).not.toMatch(/process\.env/);
+    expect(contractSource).not.toMatch(/BEGIN PRIVATE KEY|PRIVATE KEY ONLY|TEST FIXTURE ONLY|FIXTURE_PRIVATE_KEY/);
   });
 });
