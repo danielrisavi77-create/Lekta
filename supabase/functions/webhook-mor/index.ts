@@ -5,7 +5,10 @@
 // (migracija 0001). Proizvod se mapira iz baze `products` po mor_product_id (LS variant),
 // ne vise iz hardkodirane liste. Rok potrosnje je po proizvodu (purchase_window_days).
 // manual_fulfillment (premium_human) -> manual_orders. Pass -> izdaje -20% kupon (coupon_grants).
-// Nepoznat proizvod -> log + 200 (bez entitlementa) da provider ne retry-a beskonacno (6.2).
+// Nepoznat proizvod -> log + 200 (bez entitlementa) da provider ne retry-a beskonacno (6.2);
+// od 2026-08-17 takav dogadjaj TRAJNO ostaje u webhook_events pa se moze replayati (PAY-06).
+// Svaki dogadjaj se zapisuje u inbox PRIJE obrade, a porijeklo (store_id, test_mode) provjerava
+// se prije ijednog upisa: potpis dokazuje samo znanje tajne, ne i cija je trgovina (PAY-04/05).
 // Odluke (potpis, parsiranje, rok, kupon) su u testiranom coreu src/report/webhook.ts.
 //
 // deno-lint-ignore-file no-explicit-any
@@ -18,6 +21,8 @@ import {
   makePassCouponCode,
   PASS_COUPON_VALID_DAYS,
   buildEntitlementInsert,
+  acceptEvent,
+  isFullRefund,
   type LemonEvent,
 } from '../../../src/report/webhook.ts';
 import { mapProductRow } from '../../../src/catalog/products-catalog.ts';
@@ -33,6 +38,14 @@ import { tryGrantReferrerReward } from '../_shared/grant-referrer-reward.ts';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const WEBHOOK_SECRET = Deno.env.get('MOR_WEBHOOK_SECRET') ?? '';
+/**
+ * Lemon Squeezy store id iz kojeg SMIJU dolaziti dogadjaji (audit PAY-04).
+ *
+ * Prazno = provjera porijekla se ne moze provesti, pa `acceptEvent` odbija SVE dogadjaje s
+ * razlogom `store_unverifiable`. To je namjerno fail-closed: tise propustanje bi znacilo da
+ * webhook prima dogadjaje bilo koje trgovine, a da nitko ne zna da gate nije konfiguriran.
+ */
+const LS_STORE_ID = Deno.env.get('LS_STORE_ID') ?? '';
 const PROVIDER = 'lemonsqueezy';
 
 function json(body: unknown, status = 200): Response {
@@ -185,11 +198,90 @@ Deno.serve(async (req: Request) => {
 
   const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 
+  // INBOX (audit PAY-06..08, PAY-14): zapisi dogadjaj PRIJE obrade, pa tek onda odlucuj.
+  //
+  // Bez ovoga je pad izmedju potpisa i entitlementa gubio dogadjaj bez traga, a nemapiran
+  // proizvod je vracao 200 pa ga provider vise nikad ne bi poslao: korisnik plati, entitlement
+  // ne nastane, jedini trag je redak u logu koji istekne. Lemon Squeezy retry prozor je
+  // ogranicen, pa se na njega nije smjelo oslanjati kao na mehanizam oporavka.
+  //
+  // Upis inboxa NE SMIJE srusiti obradu: ako on padne, kupnja je i dalje vaznija od zapisa.
+  // Zato se greska logira i ide se dalje, a `eventRowId` ostaje null.
+  const eventRowId = await (async (): Promise<string | null> => {
+    try {
+      const { data, error } = await admin
+        .from('webhook_events')
+        .insert({
+          provider: PROVIDER,
+          event_name: ev.eventName,
+          order_id: ev.orderId,
+          store_id: ev.storeId || null,
+          test_mode: ev.testMode,
+          raw_payload: JSON.parse(raw),
+          signature_valid: true,
+        })
+        .select('id')
+        .maybeSingle();
+      if (error) throw error;
+      return data?.id ?? null;
+    } catch (e) {
+      console.error('webhook-mor inbox_insert_failed', { orderId: ev.orderId, detail: String(e) });
+      return null;
+    }
+  })();
+
+  /** Zabiljezi ishod obrade uz zapis u inboxu. Nikad ne baca. */
+  const settle = async (outcome: string, detail?: string): Promise<void> => {
+    if (!eventRowId) return;
+    try {
+      await admin
+        .from('webhook_events')
+        .update({ outcome, outcome_detail: detail ?? null, processed_at: new Date().toISOString() })
+        .eq('id', eventRowId);
+    } catch (e) {
+      console.error('webhook-mor inbox_settle_failed', { eventRowId, detail: String(e) });
+    }
+  };
+
+  // PORIJEKLO DOGADJAJA (audit PAY-04/PAY-05). Ispravan HMAC potpis dokazuje samo da posiljatelj
+  // zna tajnu, NE i da dogadjaj pripada nasoj trgovini i nasem okruzenju. Bez ove provjere bi
+  // valjano potpisan dogadjaj tudje trgovine, ili dogadjaj iz testnog nacina rada, dodijelio
+  // pravo pravo pristupa. Provjera ide PRIJE svakog upisa, ukljucujuci refund granu.
+  const gate = acceptEvent(ev, {
+    expectedStoreId: LS_STORE_ID,
+    allowTestMode: Deno.env.get('LS_ALLOW_TEST_MODE') === '1',
+  });
+  if (!gate.ok) {
+    // 200: dogadjaj je tudji ili testni, dakle za nas trajno neobradiv. Retry ga ne bi popravio,
+    // a 5xx bi providera natjerao da ga ponavlja do isteka prozora.
+    console.error('webhook-mor event_refused', {
+      reason: gate.reason,
+      storeId: ev.storeId,
+      expectedStoreId: LS_STORE_ID,
+      testMode: ev.testMode,
+      orderId: ev.orderId,
+    });
+    await settle('refused', gate.reason);
+    return json({ ok: true, action: 'event_refused', reason: gate.reason }, 200);
+  }
+
   // refund: blokiraj daljnje vezivanje slotova iz tog entitlementa (sekcija 6.7)
   if (ev.refunded) {
+    // DJELOMICAN povrat ne smije oduzeti cijelo pravo pristupa (PAY-09): korisnik koji je dobio
+    // natrag dio iznosa i dalje je platio uslugu. Puni povrat i dalje gasi entitlement.
+    if (!isFullRefund(ev)) {
+      console.error('webhook-mor partial_refund_kept', {
+        orderId: ev.orderId,
+        totalCents: ev.totalCents,
+        refundedCents: ev.refundedCents,
+      });
+      await settle('processed', 'partial_refund_noted');
+      return json({ ok: true, action: 'partial_refund_noted' }, 200);
+    }
     await admin.from('entitlements').update({ status: 'refunded' }).eq('provider', PROVIDER).eq('order_id', ev.orderId);
     await pullReferralReward(admin, ev.orderId); // povuci nepotrosenu referral nagradu (0005, 6.7)
     await pullReferralSignupReward(admin, ev.orderId); // isto za pozovi-prijatelja nagradu (0013)
+    await settle('processed', 'refunded');
     return json({ ok: true, action: 'refunded' });
   }
 
@@ -199,6 +291,10 @@ Deno.serve(async (req: Request) => {
   if (!product) {
     // Nepoznat id -> log ERROR + alert; 200 bez entitlementa da provider ne retry-a (6.2).
     console.error('webhook-mor unknown_product', { variantId: ev.variantId, orderId: ev.orderId });
+    // I dalje 200: retry ne bi popravio nedostajuce mapiranje, samo bi potrosio providerov prozor.
+    // Razlika je u tome sto dogadjaj sada TRAJNO postoji u webhook_events, pa se nakon ispravka
+    // `products.mor_product_id` moze replayati umjesto da placena kupnja ostane bez traga.
+    await settle('unknown_product', `variantId=${ev.variantId}`);
     return json({ ok: true, action: 'unknown_product_logged' }, 200);
   }
 
@@ -207,13 +303,21 @@ Deno.serve(async (req: Request) => {
     const { error } = await admin
       .from('manual_orders')
       .insert({ user_id: ev.userId, product_id: product.id, order_id: ev.orderId, provider: PROVIDER });
-    if (error && (error as any).code === '23505') return json({ ok: true, action: 'duplicate_ignored' });
-    if (error) return json({ error: 'insert_failed', detail: error.message }, 500);
+    if (error && (error as any).code === '23505') {
+      await settle('processed', 'manual_order_duplicate');
+      return json({ ok: true, action: 'duplicate_ignored' });
+    }
+    if (error) {
+      await settle('failed', `manual_order_insert: ${error.message}`);
+      return json({ error: 'insert_failed', detail: error.message }, 500);
+    }
+    await settle('processed', 'manual_order_created');
     return json({ ok: true, action: 'manual_order_created' });
   }
 
   if (!product.workType) {
     console.error('webhook-mor product_without_work_type', { productId: product.id });
+    await settle('failed', `product_without_work_type: ${product.id}`);
     return json({ error: 'product_misconfigured' }, 500);
   }
 
@@ -221,8 +325,14 @@ Deno.serve(async (req: Request) => {
   const { error } = await admin
     .from('entitlements')
     .insert(buildEntitlementInsert(product, ev, PROVIDER, Date.now()));
-  if (error && (error as any).code === '23505') return json({ ok: true, action: 'duplicate_ignored' });
-  if (error) return json({ error: 'insert_failed', detail: error.message }, 500);
+  if (error && (error as any).code === '23505') {
+    await settle('processed', 'entitlement_duplicate');
+    return json({ ok: true, action: 'duplicate_ignored' });
+  }
+  if (error) {
+    await settle('failed', `entitlement_insert: ${error.message}`);
+    return json({ error: 'insert_failed', detail: error.message }, 500);
+  }
 
   // AUD-28: entitlement je JEZGRA i vec je kreiran (idempotentan preko unique(provider,order_id)).
   // Post-entitlement bonusi (referrer nagrada, pass kupon, referral atribucija) NE SMIJU srusiti
@@ -263,6 +373,7 @@ Deno.serve(async (req: Request) => {
     }
   }
 
+  await settle('processed', 'entitlement_created');
   return json({ ok: true, action: 'entitlement_created' });
  } catch (e) {
   // Pred-entitlement greska (potpis, parsiranje, entitlement insert): vrati 500 pa LS retryja i

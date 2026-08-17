@@ -9,6 +9,8 @@ import {
   makePassCouponCode,
   PASS_COUPON_VALID_DAYS,
   buildEntitlementInsert,
+  acceptEvent,
+  isFullRefund,
   type LemonWebhookPayload,
 } from '../src/report/webhook';
 
@@ -25,6 +27,14 @@ describe('parseLemonEvent', () => {
       variantId: '555',
       referralCode: '',
       refunded: false,
+      // Polja porijekla i iznosa (audit PAY-03..05, PAY-09). Kad ih payload ne nosi, moraju biti
+      // prazna/null, NIKAD izmisljena vrijednost: `acceptEvent` na temelju praznog storeId odbija
+      // dogadjaj, a to je ispravno, jer neprovjerljivo porijeklo nije isto sto i ispravno.
+      storeId: '',
+      testMode: false,
+      totalCents: null,
+      refundedCents: null,
+      currency: '',
     });
   });
   it('izvlaci referral_code iz custom_data', () => {
@@ -122,5 +132,63 @@ describe('pass kupon', () => {
   });
   it('kupon vrijedi 120 dana', () => {
     expect(PASS_COUPON_VALID_DAYS).toBe(120);
+  });
+});
+
+/**
+ * PAY-04 / PAY-05: ispravan HMAC potpis dokazuje samo da posiljatelj zna tajnu. Ne dokazuje da
+ * dogadjaj pripada NASOJ trgovini ni da dolazi iz produkcijskog nacina rada. Bez ovog gatea bi
+ * valjano potpisan dogadjaj tudje trgovine, ili testna kupnja, proizveli pravo pravo pristupa.
+ */
+describe('acceptEvent (porijeklo dogadjaja)', () => {
+  const OPTS = { expectedStoreId: '42', allowTestMode: false };
+
+  it('prihvaca dogadjaj nase trgovine iz produkcijskog nacina', () => {
+    expect(acceptEvent({ storeId: '42', testMode: false }, OPTS)).toEqual({ ok: true });
+  });
+
+  it('odbija tudju trgovinu', () => {
+    expect(acceptEvent({ storeId: '99', testMode: false }, OPTS)).toEqual({ ok: false, reason: 'store_mismatch' });
+  });
+
+  it('odbija testni nacin rada dok nije izricito dopusten', () => {
+    expect(acceptEvent({ storeId: '42', testMode: true }, OPTS)).toEqual({ ok: false, reason: 'test_mode_refused' });
+    expect(acceptEvent({ storeId: '42', testMode: true }, { ...OPTS, allowTestMode: true })).toEqual({ ok: true });
+  });
+
+  /**
+   * Fail-closed: nekonfiguriran ili nedostajuci store id NE SMIJE znaciti "propusti sve". Tise
+   * propustanje bi znacilo da webhook prima dogadjaje bilo koje trgovine, a da nitko ne zna da
+   * gate uopce nije aktivan.
+   */
+  it('odbija kad porijeklo nije provjerljivo', () => {
+    expect(acceptEvent({ storeId: '42', testMode: false }, { ...OPTS, expectedStoreId: '' }))
+      .toEqual({ ok: false, reason: 'store_unverifiable' });
+    expect(acceptEvent({ storeId: '', testMode: false }, OPTS))
+      .toEqual({ ok: false, reason: 'store_unverifiable' });
+  });
+});
+
+/**
+ * PAY-09: djelomican povrat ne smije oduzeti cijelo pravo pristupa. Korisnik kojem je vracen dio
+ * iznosa i dalje je platio uslugu.
+ */
+describe('isFullRefund', () => {
+  it('nije povrat dok refunded nije postavljen', () => {
+    expect(isFullRefund({ refunded: false, totalCents: 1699, refundedCents: 1699 })).toBe(false);
+  });
+
+  it('djelomican povrat nije potpun', () => {
+    expect(isFullRefund({ refunded: true, totalCents: 1699, refundedCents: 500 })).toBe(false);
+  });
+
+  it('puni povrat je potpun, kao i povrat veci od iznosa', () => {
+    expect(isFullRefund({ refunded: true, totalCents: 1699, refundedCents: 1699 })).toBe(true);
+    expect(isFullRefund({ refunded: true, totalCents: 1699, refundedCents: 1700 })).toBe(true);
+  });
+
+  it('bez poznatih iznosa tretira povrat kao potpun (sigurnije za korisnika)', () => {
+    expect(isFullRefund({ refunded: true, totalCents: null, refundedCents: null })).toBe(true);
+    expect(isFullRefund({ refunded: true, totalCents: 1699, refundedCents: null })).toBe(true);
   });
 });
