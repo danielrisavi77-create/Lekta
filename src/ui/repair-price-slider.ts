@@ -12,7 +12,7 @@
 // stvarno salje na popravak (getCheckedItems u pozivatelju).
 
 import type { FixerId } from '../repair/apply-fixers';
-import { priceRepairItems, priorityOrder, itemsForBudgetFraction, fractionForItems } from '../repair/repair-pricing';
+import { priorityOrder, itemsForBudgetFraction, fractionForItems } from '../repair/repair-pricing';
 import { trapModal, releaseModal } from './modal-utils';
 
 export interface PriceSliderItem {
@@ -43,9 +43,6 @@ export interface AdvancedFormDescriptor {
 export interface PriceSliderOptions<T extends PriceSliderItem> {
   /** Isti niz i isti poredak/indeksi kao popis checkboxova (data-idx). */
   items: T[];
-  /** Stropna cijena za ovu vrstu rada (WORK_TYPE_TIERS/livePriceEur), ili null kad nije poznata
-   *  (npr. besplatna beta bez konfiguriranog checkouta) - tada se prikazuje samo broj stavki. */
-  ceilingPriceEur: number | null;
   /** Roditelj koji sadrzi `<input type="checkbox" data-idx="N">` po stavci, isti poredak indeksa
    *  kao `items` (isti obrazac kao getCheckedItems u repair-panel.ts / app.ts). */
   listEl: HTMLElement;
@@ -62,10 +59,6 @@ function pluralPopravaka(n: number): string {
   if (d === 1 && dd !== 11) return 'popravak';
   if (d >= 2 && d <= 4 && !(dd >= 12 && dd <= 14)) return 'popravka';
   return 'popravaka';
-}
-
-function eur(v: number): string {
-  return `${v.toFixed(2).replace('.', ',')} €`;
 }
 
 /** Oznaka na modalu ovog panela, da re-render (nova analiza) ukloni STARI modal iz <body>
@@ -85,7 +78,7 @@ const LEDGER_MODAL_ATTR = 'data-lekta-repair-ledger-modal';
  * predodabrano"), samo prezentaciju.
  */
 export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSliderOptions<T>): HTMLElement {
-  const { items, ceilingPriceEur, listEl, advancedFormFor } = opts;
+  const { items, listEl, advancedFormFor } = opts;
   const trigger = document.createElement('div');
   trigger.className = 'lekta-repair-trigger';
   if (items.length === 0) return trigger;
@@ -144,7 +137,7 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
   totalRow.className = 'lekta-repair-ledger-total';
   const totalLabel = document.createElement('span');
   totalLabel.className = 'lekta-repair-ledger-total-label';
-  totalLabel.textContent = 'Tvoja cijena';
+  totalLabel.textContent = 'Opseg popravka';
   const totalNum = document.createElement('span');
   const totalPrice = document.createElement('b');
   const totalCount = document.createElement('small');
@@ -152,9 +145,12 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
   totalRow.append(totalLabel, totalNum);
   body.appendChild(totalRow);
 
+  // Disclaimer "Procjena. Konačna cijena je i dalje ista..." je uklonjen zajedno s iznosom:
+  // nema sto opravdavati kad se cijena vise ne prikazuje. Cijena se navodi jednom, na checkoutu,
+  // gdje je i stvarna.
   const note = document.createElement('p');
   note.className = 'lekta-repair-ledger-note';
-  note.textContent = 'Procjena. Konačna cijena je i dalje ista dok se odabir ne uključi u plaćanje.';
+  note.textContent = 'Odaberi koliko popravaka uključiti. Cijena ne ovisi o odabiru.';
   body.appendChild(note);
 
   const doneBtn = document.createElement('button');
@@ -174,7 +170,6 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
     return sel;
   }
 
-  const allPriced = priceRepairItems(items, ceilingPriceEur ?? 0);
   const ordered = priorityOrder(items);
   const rowByItem = new Map<T, HTMLButtonElement>();
   for (const item of ordered) {
@@ -280,25 +275,24 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
 
   function renderAll(): void {
     const selected = new Set(selectedItems());
-    let sum = 0;
     rowByItem.forEach((row, item) => {
       const isOn = selected.has(item);
       row.classList.toggle('on', isOn);
       row.setAttribute('aria-checked', String(isOn));
-      const priced = allPriced.find((p) => p.item === item);
-      const price = priced ? priced.priceEur : 0;
-      (row.querySelector('.lekta-repair-ledger-price') as HTMLElement).textContent = ceilingPriceEur != null ? eur(price) : '';
-      if (isOn) sum += price;
     });
+    // Prikazuje se OPSEG, nikad iznos. Ledger je jedini vidljivi popis stavki (checkbox lista je
+    // skrivena), pa bi iznos u eurima ovdje bio primarno sucelje za cijenu koja nije stvarna:
+    // checkout naplacuje fiksni tier po vrsti rada (src/report/pricing.ts) bez obzira na odabir.
+    // Tezine iz repair-pricing.ts i dalje odredjuju REDOSLIJED i korak klizaca, samo se vise ne
+    // prevode u novac.
     const countTxt = `${selected.size} od ${items.length} ${pluralPopravaka(items.length)}`;
-    totalPrice.textContent = ceilingPriceEur != null ? eur(sum) : '—';
+    totalPrice.textContent = String(selected.size);
     totalCount.textContent = countTxt;
     infoEl.innerHTML = '';
-    const priceSpan = document.createElement('span');
-    priceSpan.className = 'lekta-repair-trigger__price';
-    priceSpan.textContent = ceilingPriceEur != null ? eur(sum) : countTxt;
-    infoEl.appendChild(priceSpan);
-    if (ceilingPriceEur != null) infoEl.appendChild(document.createTextNode(` · ${countTxt}`));
+    const scopeSpan = document.createElement('span');
+    scopeSpan.className = 'lekta-repair-trigger__price';
+    scopeSpan.textContent = countTxt;
+    infoEl.appendChild(scopeSpan);
     range.value = String(Math.round(fractionForItems(items, [...selected]) * STEPS));
   }
 

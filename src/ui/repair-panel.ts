@@ -295,16 +295,20 @@ export interface RepairPanelContext {
   originalFileName: string;
   mountEl: HTMLElement;
   /** Bodovna slika PRIJE popravka (iz analize koja je otvorila panel). Uz reanalyze
-   *  omogucuje prikaz "spremnost prije -> poslije" nakon preuzimanja. */
+   *  omogucuje prikaz "spremnost prije -> poslije" i verdikt o regresiji. */
   beforeScore?: RepairScoreSnapshot;
-  /** Ponovna analiza POPRAVLJENIH bajtova istim profilom/postavkama. Vraca null ako
-   *  profil nije bodovan; smije baciti (npr. korupcija), sto hvatamo. Radi u Web Workeru
-   *  (ne blokira nit) i NIKAD ne smije sprijeciti ni ponistiti preuzimanje. */
+  /**
+   * Ponovna analiza POPRAVLJENIH bajtova istim profilom/postavkama. Vraca null ako profil nije
+   * bodovan; smije baciti (npr. korupcija), sto hvatamo. Radi u Web Workeru (ne blokira nit).
+   *
+   * Od 2026-08-16 se izvodi PRIJE isporuke i njezin verdikt odlucuje sto sucelje nudi kao glavno
+   * preuzimanje (regresija -> izvornik). Prijasnji ugovor je bio obrnut ("nikad ne smije sprijeciti
+   * preuzimanje") pa je regresirani dokument bio preuzet prije nego bi upozorenje stiglo.
+   *
+   * I dalje NIKAD ne ZAROBLJAVA dokument: kad analiza padne ili je nema, popravljeni se isporucuje
+   * uz izricitu napomenu da provjera nije izvedena.
+   */
   reanalyze?: (repairedBytes: Uint8Array) => Promise<RepairScoreSnapshot | null>;
-  /** Stropna cijena za ovu vrstu rada (WORK_TYPE_TIERS), za "koliko platiš, toliko popravaka"
-   *  slider (procjena, ne stvarna naplata - vidi repair-price-slider.ts). null/izostavljeno
-   *  sakriva iznos, ostaje samo broj ukljucenih stavki. */
-  ceilingPriceEur?: number | null;
   /** Opcionalni sandboxani LibreOffice worker. XML popravak radi i bez njega. */
   fieldRenderEndpoint?: string;
   getAccessToken?: () => Promise<string>;
@@ -474,7 +478,7 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
     deepRow.className = 'lekta-repair-panel__deep';
     deepRow.innerHTML = `
       <input type="checkbox" checked />
-      <span>Ukloni i izravno formatiranje u tekstu (dubinsko usklađivanje). Netaknuti ostaju: naslovi i stilizirani dijelovi, podebljano/kurziv, centrirano, veće naslovne veličine, formule, tablice (prored/poravnanje), simbolski fontovi, tekstualni okviri i citatne kontrole (npr. Zotero/Mendeley). Tekst pisan drugim fontom uskladit će se s fontom profila.</span>
+      <span>Uskladi i ručno formatirane dijelove, da popravak stvarno primi.</span><details class="lekta-repair-panel__deep-more"><summary>Što to znači</summary><p>Ako je oblikovanje upisano izravno u tekst, ono nadjačava stilove i popravak se vizualno ne vidi. Ovo uklanja takvo izravno oblikovanje (font, prored, poravnanje). <strong>Netaknuti ostaju:</strong> naslovi i stilizirani dijelovi, podebljano i kurziv, centrirano, veće naslovne veličine, formule, tablice (prored i poravnanje), simbolski fontovi, tekstualni okviri i citatne kontrole (npr. Zotero, Mendeley). Tekst pisan drugim fontom uskladit će se s fontom profila.</p></details><span></span>
     `;
     deepToggle = deepRow.querySelector('input');
   }
@@ -596,7 +600,6 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
         return;
       }
       renderSummary(summary, result.changelog, alreadyOk, cannotFix);
-      triggerDownload(result.docxBytes, buildFixedFileName(ctx.originalFileName));
       repairedBytes = result.docxBytes;
       latestRepairedBytes = result.docxBytes;
     } catch (err) {
@@ -610,9 +613,18 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
       downloadBtn.textContent = originalLabel;
     }
 
-    // Re-check (spremnost prije -> poslije): tek NAKON preuzimanja, kao dopuna. Preuzimanje
-    // se vec dogodilo pa ovo ne blokira korisnika; ako ponovna analiza padne, panel ostaje.
-    if (repairedBytes) await renderRecheck(summary, repairedBytes, ctx);
+    // Re-check PRIJE isporuke (obrnuto od ugovora do 2026-08-16, kad se dokument preuzimao odmah
+    // a ponovna analiza bila samo dopuna). Razlog: vrata integriteta hvataju POKVAREN paket, ali
+    // ne i SEMANTICKU regresiju - popravak koji srusi provjeru koja je prije prolazila. Takav
+    // dokument je tehnicki ispravan, pa je prije zavrsavao u Preuzimanjima kao "popravljen".
+    //
+    // Preuzimanje NIJE ukinuto, samo vise nije automatsko: korisnik uvijek moze uzeti popravljeni
+    // dokument, ali kad postoji regresija glavna ponuda je original. Kad ponovna analiza padne,
+    // popravljeni se isporucuje uz iskrenu napomenu - pad provjere ne smije zarobiti dokument.
+    if (repairedBytes) {
+      const verdict = await renderRecheck(summary, repairedBytes, ctx);
+      renderDelivery(summary, repairedBytes, verdict, ctx);
+    }
   }
 
   container.appendChild(list);
@@ -621,7 +633,7 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
   // akciju na svom retku (advancedFormFor), umjesto da cijeli panel padne natrag na dugu,
   // neogranicenu listu cim ijedna stavka nosi npr. literaturu.
   list.hidden = true;
-  container.appendChild(renderRepairLedgerModal({ items: ctx.items, ceilingPriceEur: ctx.ceilingPriceEur ?? null, listEl: list, advancedFormFor }));
+  container.appendChild(renderRepairLedgerModal({ items: ctx.items, listEl: list, advancedFormFor }));
   if (deepToggle) container.appendChild(deepRow);
   container.appendChild(downloadBtn);
   container.appendChild(renderFieldButton);
@@ -1549,15 +1561,25 @@ function categoryPct(cat: { earned: number; max: number } | undefined): number |
   return Math.round((cat.earned / cat.max) * 100);
 }
 
+/** Ishod ponovne analize; odlucuje sto se nudi kao GLAVNO preuzimanje. */
+export interface RecheckVerdict {
+  /** Ponovna analiza nije uspjela (ili je nema): isporuci popravljeni uz napomenu. */
+  unavailable: boolean;
+  /** Broj provjera koje su prije prolazile, a sada ne prolaze. */
+  regressions: number;
+}
+
 /**
- * Dopuna sazetku nakon uspjesnog popravka: ponovno analizira POPRAVLJENE bajtove istim
- * profilom i prikazuje "spremnost prije -> poslije". Read-only (ne pise u povijest).
- * Nikad ne baca: analiza koja padne daje tihu uputu; preuzimanje je vec gotovo.
+ * Ponovna analiza POPRAVLJENIH bajtova istim profilom: "spremnost prije -> poslije".
+ * Read-only (ne pise u povijest). Nikad ne baca.
+ *
+ * Od 2026-08-16 se izvodi PRIJE isporuke i vraca verdikt, jer o njemu ovisi sto je glavna
+ * ponuda za preuzimanje (vidi `renderDelivery`).
  */
-async function renderRecheck(el: HTMLElement, bytes: Uint8Array, ctx: RepairPanelContext): Promise<void> {
+async function renderRecheck(el: HTMLElement, bytes: Uint8Array, ctx: RepairPanelContext): Promise<RecheckVerdict> {
   const before = ctx.beforeScore;
   const reanalyze = ctx.reanalyze;
-  if (!reanalyze || !before) return; // lokalni const: narrowing prezivi await ispod
+  if (!reanalyze || !before) return { unavailable: true, regressions: 0 }; // lokalni const: narrowing prezivi await ispod
   const pending = document.createElement('p');
   pending.className = 'lekta-repair-panel__recheck-pending';
   pending.textContent = 'Računam spremnost popravljenog dokumenta...';
@@ -1568,46 +1590,102 @@ async function renderRecheck(el: HTMLElement, bytes: Uint8Array, ctx: RepairPane
   try {
     after = await reanalyze(bytes);
   } catch {
-    failed = true; // analiza popravljenog nije uspjela (rijetko); preuzimanje je vec gotovo
+    failed = true; // analiza popravljenog nije uspjela (rijetko)
   }
   pending.remove();
 
   if (failed) {
     const note = document.createElement('p');
     note.textContent =
-      'Novi rezultat nije bilo moguće izračunati. Učitaj popravljeni dokument ponovno da vidiš ažuriran score.';
+      'Novi rezultat nije bilo moguće izračunati, pa provjera popravljenog dokumenta ovaj put izostaje.';
     el.appendChild(note);
-    return;
+    return { unavailable: true, regressions: 0 };
   }
   if (after === null) {
     const note = document.createElement('p');
     note.textContent = 'Ovaj profil ne daje bodovnu ocjenu, pa se popravak prikazuje samo kao popis iznad.';
     el.appendChild(note);
-    return;
+    return { unavailable: true, regressions: 0 };
   }
   const box = buildBeforeAfter(before, after);
-  const regression = buildRegressionWarning(before, after, ctx);
+  const regressions = before.checks && after.checks ? detectPassRegressions(before.checks, after.checks) : [];
+  const regression = buildRegressionWarning(regressions);
   // Regresija ide ODMAH iza retka sa score-om: u zbroju se pad pojedine provjere ne vidi
   // (+6 na marginama i -3 na fusnotama izgleda kao cist +3), pa mora imati vlastito mjesto.
   if (regression) box.insertBefore(regression, box.firstChild?.nextSibling ?? null);
+  el.appendChild(box);
+  return { unavailable: false, regressions: regressions.length };
+}
+
+/**
+ * Isporuka nakon ponovne analize: sto se nudi kao GLAVNO preuzimanje.
+ *
+ * Do 2026-08-16 se popravljeni dokument preuzimao automatski PRIJE ponovne analize, pa je
+ * regresirani dokument vec bio u Preuzimanjima dok mu je upozorenje tek stizalo na ekran. Sada
+ * odluka dolazi nakon dokaza:
+ *  - bez regresije    -> glavni gumb je popravljeni dokument (kao i prije, samo eksplicitno),
+ *  - s regresijom     -> glavni gumb je IZVORNI dokument, popravljeni ostaje kao sporedan izbor,
+ *  - provjera pala    -> glavni gumb je popravljeni, uz napomenu da provjera nije uspjela.
+ *
+ * Preuzimanje je namjerno gumb, a ne automatski `triggerDownload`: nakon `await` ponovne analize
+ * programski download vise nije u korisnickoj gesti, pa ga preglednik moze blokirati (isti razlog
+ * vec je dokumentiran na serverskom putu u app.ts).
+ */
+function renderDelivery(el: HTMLElement, repaired: Uint8Array, verdict: RecheckVerdict, ctx: RepairPanelContext): void {
+  const box = document.createElement('div');
+  box.className = 'lekta-repair-panel__delivery';
+  const regressed = verdict.regressions > 0;
+
+  if (regressed) {
+    const lead = document.createElement('p');
+    lead.innerHTML =
+      '<strong>Popravljeni dokument nije ponuđen kao glavni.</strong> Popravak je tehnički ispravan, ali je srušio provjeru koja je prije prolazila (popis iznad). Preporučujemo izvorni dokument dok to ne razriješiš.';
+    box.appendChild(lead);
+  } else if (verdict.unavailable) {
+    const lead = document.createElement('p');
+    lead.textContent = 'Popravak je gotov. Provjeru popravljenog dokumenta nije bilo moguće izvesti, pa je preuzmi i provjeri ručno.';
+    box.appendChild(lead);
+  }
+
+  const primary = document.createElement('button');
+  primary.type = 'button';
+  primary.className = 'btn btn-primary';
+  const secondary = document.createElement('button');
+  secondary.type = 'button';
+  secondary.className = 'btn btn-secondary btn-sm';
+
+  const downloadRepaired = () => triggerDownload(repaired, buildFixedFileName(ctx.originalFileName));
+  const downloadOriginal = async () => {
+    try {
+      triggerDownload(await ctx.getDocxBytes(), ctx.originalFileName);
+    } catch (err) {
+      console.error('Preuzimanje izvornog dokumenta:', err);
+    }
+  };
+
+  if (regressed) {
+    primary.textContent = 'Preuzmi izvorni dokument';
+    primary.onclick = downloadOriginal;
+    secondary.textContent = 'Ipak preuzmi popravljeni';
+    secondary.onclick = downloadRepaired;
+  } else {
+    primary.textContent = 'Preuzmi popravljeni dokument';
+    primary.onclick = downloadRepaired;
+    secondary.textContent = 'Preuzmi izvorni dokument';
+    secondary.onclick = downloadOriginal;
+  }
+  box.append(primary, secondary);
   el.appendChild(box);
 }
 
 /**
  * Provjere koje su prije popravka prolazile, a sada ne prolaze.
  *
- * Preuzimanje se NE ponistava i ne blokira (dokumentirani ugovor: ponovna analiza nikad ne smije
- * sprijeciti isporuku, vidi RepairPanelContext.reanalyze) - korisnik je popravljeni dokument vec
- * dobio. Ali mora saznati sto je palo i imati izlaz natrag na izvornik, umjesto da regresija
- * tiho nestane u ukupnoj ocjeni.
+ * SAMO prikaz popisa: izbor izmedju izvornog i popravljenog dokumenta zivi u `renderDelivery`,
+ * koji se izvodi nakon ponovne analize. Prije je ovaj blok nosio vlastiti gumb "Preuzmi izvorni
+ * dokument", ali je tada bio jedini izlaz jer se popravljeni vec automatski preuzeo.
  */
-function buildRegressionWarning(
-  before: RepairScoreSnapshot,
-  after: RepairScoreSnapshot,
-  ctx: RepairPanelContext,
-): HTMLElement | null {
-  if (!before.checks || !after.checks) return null; // stariji pozivatelj bez checkova: tiho bez vrata
-  const regressions = detectPassRegressions(before.checks, after.checks);
+function buildRegressionWarning(regressions: ReturnType<typeof detectPassRegressions>): HTMLElement | null {
   if (regressions.length === 0) return null;
 
   const box = document.createElement('div');
@@ -1622,19 +1700,6 @@ function buildRegressionWarning(
     ul.appendChild(li);
   }
   box.appendChild(ul);
-
-  const back = document.createElement('button');
-  back.type = 'button';
-  back.className = 'btn btn-secondary btn-sm';
-  back.textContent = 'Preuzmi izvorni dokument';
-  back.onclick = async () => {
-    try {
-      triggerDownload(await ctx.getDocxBytes(), ctx.originalFileName);
-    } catch (err) {
-      console.error('Preuzimanje izvornog dokumenta:', err);
-    }
-  };
-  box.appendChild(back);
   return box;
 }
 
