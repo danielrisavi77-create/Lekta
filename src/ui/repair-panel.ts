@@ -244,6 +244,22 @@ export interface RepairableItem {
   /** Pravilo je institucijska PREPORUKA (advisory), ne bodovan propis: gumb se nudi kao
    * neobavezno "Preporučeno", u zasebnoj skupini, uvijek opt-in (violated je uvijek false). */
   recommended?: boolean;
+  /**
+   * ODAKLE ova stavka crpi autoritet. Prikazuje se kao dokazni cip uz redak, da korisnik ne mora
+   * pogadjati trazi li to njegov fakultet ili je opca preporuka alata:
+   *
+   *   'faculty-rule'           - verificirano pravilo fakulteta (bodovano),
+   *   'faculty-recommendation' - fakultet preporucuje, ali ne ulazi u ocjenu (advisory),
+   *   'lekta-recommendation'   - univerzalna higijena, nijedan profil je ne propisuje.
+   *
+   * Razlika je dosad postojala u podacima (`status`, `recommended`) ali ne i na ekranu, pa je
+   * "Preporučeno" bio jedini trag i nije razlikovao fakultetsku preporuku od nase.
+   *
+   * NAPOMENA: puni citat izvora (ustanova, stranica, datum provjere) ovdje NIJE dostupan - pecena
+   * `data/profiles/repair-map.json` nosi samo {ruleId, checkId, label, status, fixerId,
+   * autoFixable}. Za "str. 14 · provjereno 2026." treba prosiriti generator runtime mapa.
+   */
+  authority?: 'faculty-rule' | 'faculty-recommendation' | 'lekta-recommendation';
   /** Naslov(i) checka/issuea (analyzeDocx) ciju povredu ova stavka popravlja. Sluzi ISKLJUCIVO
    * korelaciji "koji nalaz na kartici rezultata otvara bas ovu stavku u panelu" (RESULT-03), ne
    * ulazi u zahtjev prema serveru. Prazno/izostavljeno znaci da stavka nije vezana ni za jedan

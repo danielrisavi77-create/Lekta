@@ -77,7 +77,7 @@ describe('buildRepairableItems (Opcija A: samo prekrseno)', () => {
   it('ukljuci prekrseno autoFixable+verified pravilo, params iz profila', () => {
     const items = buildRepairableItems([FAIL('Margine dokumenta')], PROFILE, [entry({ ruleId: 'margine', label: 'Margine' })]);
     expect(items).toEqual([
-      { ruleId: 'margine', fixerId: 'margins-fixer', label: 'Margine', params: { top: 2.5, right: 2.5, bottom: 2.5, left: 3 }, violated: true, matchKeys: ['Margine dokumenta'] },
+      { ruleId: 'margine', fixerId: 'margins-fixer', label: 'Margine', params: { top: 2.5, right: 2.5, bottom: 2.5, left: 3 }, violated: true, authority: 'faculty-rule', matchKeys: ['Margine dokumenta'] },
     ]);
   });
 
@@ -97,7 +97,7 @@ describe('buildRepairableItems (Opcija A: samo prekrseno)', () => {
       PROFILE,
       [entry({ ruleId: 'jc', checkId: 'justify', fixerId: 'alignment-fixer', label: 'Poravnanje' })],
     );
-    expect(items).toEqual([{ ruleId: 'jc', fixerId: 'alignment-fixer', label: 'Poravnanje', params: { val: 'both' }, violated: true, matchKeys: ['Poravnanje osnovnog teksta'] }]);
+    expect(items).toEqual([{ ruleId: 'jc', fixerId: 'alignment-fixer', label: 'Poravnanje', params: { val: 'both' }, violated: true, authority: 'faculty-rule', matchKeys: ['Poravnanje osnovnog teksta'] }]);
   });
 
   it('paper-size prepoznaje dinamican naslov ("Format stranice (A4/A3)")', () => {
@@ -106,7 +106,7 @@ describe('buildRepairableItems (Opcija A: samo prekrseno)', () => {
       PROFILE,
       [entry({ ruleId: 'ps', checkId: 'paper-size', fixerId: 'paper-size-fixer', label: 'Format' })],
     );
-    expect(items).toEqual([{ ruleId: 'ps', fixerId: 'paper-size-fixer', label: 'Format', params: { w: 21, h: 29.7 }, violated: true }]);
+    expect(items).toEqual([{ ruleId: 'ps', fixerId: 'paper-size-fixer', label: 'Format', params: { w: 21, h: 29.7 }, violated: true, authority: 'faculty-rule' }]);
   });
 
   it('includeNonViolated (Feature B): vraca i neprekrsene s violated:false', () => {
@@ -120,8 +120,8 @@ describe('buildRepairableItems (Opcija A: samo prekrseno)', () => {
       { includeNonViolated: true },
     );
     expect(items).toEqual([
-      { ruleId: 'margine', fixerId: 'margins-fixer', label: 'Margine', params: { top: 2.5, right: 2.5, bottom: 2.5, left: 3 }, violated: false, matchKeys: ['Margine dokumenta'] },
-      { ruleId: 'font', fixerId: 'font-fixer', label: 'Font', params: { fontName: 'Times New Roman' }, violated: true, matchKeys: ['Dominantni font'] },
+      { ruleId: 'margine', fixerId: 'margins-fixer', label: 'Margine', params: { top: 2.5, right: 2.5, bottom: 2.5, left: 3 }, violated: false, authority: 'faculty-rule', matchKeys: ['Margine dokumenta'] },
+      { ruleId: 'font', fixerId: 'font-fixer', label: 'Font', params: { fontName: 'Times New Roman' }, violated: true, authority: 'faculty-rule', matchKeys: ['Dominantni font'] },
     ]);
   });
 

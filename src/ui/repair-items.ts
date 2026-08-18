@@ -174,6 +174,9 @@ export function buildRepairableItems(
         params,
         violated: false,
         recommended: true,
+        // Fakultet ovo PREPORUCUJE (advisory), ne propisuje: dokazni cip to mora reci, inace
+        // korisnik ne razlikuje fakultetsku preporuku od nase opce higijene.
+        authority: 'faculty-recommendation',
         ...(CHECK_TITLE[e.checkId] ? { matchKeys: [CHECK_TITLE[e.checkId]] } : {}),
       });
       continue;
@@ -191,6 +194,8 @@ export function buildRepairableItems(
       label: e.label || CHECK_TITLE[e.checkId] || e.ruleId,
       params,
       violated,
+      // Verificirano pravilo fakulteta: jedina kategorija koja ulazi u ocjenu.
+      authority: 'faculty-rule',
       ...(CHECK_TITLE[e.checkId] ? { matchKeys: [CHECK_TITLE[e.checkId]] } : {}),
     });
   }

@@ -53,6 +53,41 @@ export interface PriceSliderOptions<T extends PriceSliderItem> {
 
 const STEPS = 1000;
 
+/**
+ * DOKAZNI CIP: odakle stavka crpi autoritet.
+ *
+ * Izostanak oznake ZNACI opcu preporuku: stavka koja nije izgradjena iz fakultetskog `ruleEntry`
+ * po definiciji nije nista sto fakultet propisuje (univerzalna higijena, npr. prazni odlomci ili
+ * hrvatska tipografija). Zato je default ovdje, na jednom mjestu, umjesto da se rucno oznacava
+ * desetak univerzalnih graditelja i da se na prvi zaboravljeni tiho tvrdi vise nego sto smijemo.
+ */
+const AUTHORITY_CHIP: Record<string, { text: string; cls: string }> = {
+  'faculty-rule': { text: 'Pravilo fakulteta', cls: 'is-rule' },
+  'faculty-recommendation': { text: 'Preporuka fakulteta, ne ulazi u ocjenu', cls: 'is-faculty-tip' },
+  'lekta-recommendation': { text: 'Opća preporuka Lekte, nije pravilo fakulteta', cls: 'is-lekta-tip' },
+};
+
+function authorityChip(item: { authority?: string }): HTMLElement {
+  const meta = AUTHORITY_CHIP[item.authority ?? 'lekta-recommendation'] ?? AUTHORITY_CHIP['lekta-recommendation'];
+  const chip = document.createElement('small');
+  chip.className = `lekta-repair-ledger-authority ${meta.cls}`;
+  chip.textContent = meta.text;
+  return chip;
+}
+
+/** Naslov zone u ledgeru (nije stavka: `role=presentation` da ga citac ekrana ne broji kao izbor). */
+function zoneHeading(title: string, explanation: string): HTMLLIElement {
+  const li = document.createElement('li');
+  li.className = 'lekta-repair-ledger-zone';
+  li.setAttribute('role', 'presentation');
+  const strong = document.createElement('strong');
+  strong.textContent = title;
+  const small = document.createElement('small');
+  small.textContent = explanation;
+  li.append(strong, small);
+  return li;
+}
+
 function pluralPopravaka(n: number): string {
   const d = n % 10;
   const dd = n % 100;
@@ -172,7 +207,37 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
 
   const ordered = priorityOrder(items);
   const rowByItem = new Map<T, HTMLButtonElement>();
-  for (const item of ordered) {
+  /**
+   * DVIJE ZONE umjesto jednog ravnog popisa.
+   *
+   * Korisnik je dotad morao istovremeno drzati u glavi sedam usporednih taksonomija (auto/assisted/
+   * manual, blocker/dorada/rucno, prekrseno/preporuceno, dubinsko, strop popravka, status profila).
+   * Jedina razlika koja mu MIJENJA odluku je: mogu li ovo pustiti bez razmisljanja, ili moram
+   * pogledati sto ce se tocno dogoditi.
+   *
+   * Granica je `requiresConfirmation`, ista zastavica koju panel vec koristi da prisili potvrdni
+   * korak prije primjene (`needsConfirm` u repair-panel.ts), pa zone ne uvode novu klasifikaciju
+   * nego imenuju onu koja vec postoji.
+   */
+  const isAdvanced = (item: T): boolean => (item as { requiresConfirmation?: boolean }).requiresConfirmation === true;
+  const safeCount = ordered.filter((item) => !isAdvanced(item)).length;
+  const advancedCount = ordered.length - safeCount;
+  /** Zone se prikazuju samo kad OBJE postoje: jedan naslov nad jedinim popisom je sum. */
+  const showZones = safeCount > 0 && advancedCount > 0;
+  const zoned = showZones ? [...ordered.filter((i) => !isAdvanced(i)), ...ordered.filter(isAdvanced)] : ordered;
+  let zoneRendered = { safe: false, advanced: false };
+
+  for (const item of zoned) {
+    if (showZones) {
+      const advanced = isAdvanced(item);
+      if (!advanced && !zoneRendered.safe) {
+        zoneRendered = { ...zoneRendered, safe: true };
+        listOl.appendChild(zoneHeading(`Sigurni automatski popravci (${safeCount})`, 'Primjenjujemo ih bez mijenjanja akademskog sadržaja.'));
+      } else if (advanced && !zoneRendered.advanced) {
+        zoneRendered = { ...zoneRendered, advanced: true };
+        listOl.appendChild(zoneHeading(`Napredni popravci (${advancedCount})`, 'Traže tvoju potvrdu jer mijenjaju strukturu, numeriranje, naslovnicu ili literaturu.'));
+      }
+    }
     const idx = items.indexOf(item);
     const li = document.createElement('li');
     const row = document.createElement('button');
@@ -193,6 +258,9 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
       renderAll();
     });
     li.appendChild(row);
+    // Cip ide ISPOD retka: redak je gumb (role=checkbox), pa cip u njemu ne smije biti jer bi
+    // postao dio klikabilne oznake i citac ekrana bi ga procitao kao dio izbora.
+    li.appendChild(authorityChip(item as { authority?: string }));
 
     // Napredna forma (literatura, citati, fusnote...): Tier A = zaseban modal ("Uredi... →"),
     // Tier B = inline <details> tu u retku. Bez descriptora ostaje obican checkbox redak.

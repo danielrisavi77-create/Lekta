@@ -296,6 +296,43 @@
   margin: 0 0 0.5rem;
   padding: 0;
 }
+/* Dokazni cip: odakle stavka crpi autoritet. Boja NIJE nalaz (crvena/zelena su rezervirane za
+   rezultat provjere), nego samo razlikuje pravilo od preporuke. */
+.lekta-repair-ledger-authority {
+  display: block;
+  margin: 0.1rem 0 0.45rem 1.6rem;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  opacity: 0.8;
+}
+.lekta-repair-ledger-authority.is-rule {
+  font-weight: 600;
+  opacity: 0.95;
+}
+
+/* Zona ledgera: "Sigurni automatski popravci" / "Napredni popravci". Nije redak izbora nego
+   naslov skupine, pa nema hover/klik stanja i nosi role=presentation. */
+.lekta-repair-ledger-zone {
+  display: block;
+  margin: 0.9rem 0 0.35rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--line, rgba(0, 0, 0, 0.12));
+}
+.lekta-repair-ledger-zone:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+.lekta-repair-ledger-zone strong {
+  display: block;
+  font-size: 0.95rem;
+}
+.lekta-repair-ledger-zone small {
+  display: block;
+  opacity: 0.75;
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
 .lekta-repair-ledger-row {
   display: flex;
   width: 100%;
