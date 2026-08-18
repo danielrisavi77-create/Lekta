@@ -10,73 +10,73 @@
       "documentId": "fer-diplomski-prazni-odlomci",
       "fileName": "fer-diplomski-prazni-odlomci.docx",
       "profileId": "fer-diplomski",
-      "root": "C:\\Users\\PC\\Desktop\\Lekta\\tests\\fixtures\\docx"
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "fer-diplomski-puna-struktura",
       "fileName": "fer-diplomski-puna-struktura.docx",
       "profileId": "fer-diplomski",
-      "root": "C:\\Users\\PC\\Desktop\\Lekta\\tests\\fixtures\\docx"
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "fer-diplomski-uskladjen",
       "fileName": "fer-diplomski-uskladjen.docx",
       "profileId": "fer-diplomski",
-      "root": "C:\\Users\\PC\\Desktop\\Lekta\\tests\\fixtures\\docx"
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "ffzg-filozofija-diplomski",
       "fileName": "ffzg-filozofija-diplomski.docx",
       "profileId": "ffzg-filozofija-diplomski",
-      "root": "C:\\Users\\PC\\Desktop\\Lekta\\tests\\fixtures\\docx"
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "fpzg-novinarstvo-bibliografija",
       "fileName": "fpzg-novinarstvo-bibliografija.docx",
       "profileId": "fpzg-novinarstvo-diplomski",
-      "root": "C:\\Users\\PC\\Desktop\\Lekta\\tests\\fixtures\\docx"
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "grf-diplomski-neuskladjen",
       "fileName": "grf-diplomski-neuskladjen.docx",
       "profileId": "grf-diplomski",
-      "root": "C:\\Users\\PC\\Desktop\\Lekta\\tests\\fixtures\\docx"
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "mef-doktorski-disertacija",
       "fileName": "mef-doktorski-disertacija.docx",
       "profileId": "mef-doktorski",
-      "root": "C:\\Users\\PC\\Desktop\\Lekta\\tests\\fixtures\\docx"
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "pmf-matematika-uskladjen",
       "fileName": "pmf-matematika-uskladjen.docx",
       "profileId": "pmf-matematika-graduate",
-      "root": "C:\\Users\\PC\\Desktop\\Lekta\\tests\\fixtures\\docx"
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "pmf-matematika-zasticeni-odlomci",
       "fileName": "pmf-matematika-zasticeni-odlomci.docx",
       "profileId": "pmf-matematika-graduate",
-      "root": "C:\\Users\\PC\\Desktop\\Lekta\\tests\\fixtures\\docx"
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "pravo-integrirani-fusnote",
       "fileName": "pravo-integrirani-fusnote.docx",
       "profileId": "pravo-integrirani-diplomski",
-      "root": "C:\\Users\\PC\\Desktop\\Lekta\\tests\\fixtures\\docx"
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "pravo-socijalni-rad-fusnote",
       "fileName": "pravo-socijalni-rad-fusnote.docx",
       "profileId": "pravo-socijalni-rad-diplomski",
-      "root": "C:\\Users\\PC\\Desktop\\Lekta\\tests\\fixtures\\docx"
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "ttf-diplomski-arial",
       "fileName": "ttf-diplomski-arial.docx",
       "profileId": "ttf-diplomski",
-      "root": "C:\\Users\\PC\\Desktop\\Lekta\\tests\\fixtures\\docx"
+      "root": "tests/fixtures/docx"
     }
   ],
   "results": [

@@ -97,6 +97,17 @@ jobs:
           # Allowlista je namjerno na TOM LITERALU, ne na putanjama tih datoteka: da je po putanji,
           # prava tajna naknadno zalijepljena u isti dokument prosla bi neopazeno.
           '''fixture-2026-08-16''',
+          # ECDSA P-256 JAVNI kljuc iz repair-contract-v1 fixtura, u SPKI DER obliku (base64url).
+          # Prefiks `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE` je doslovno ASN.1 zaglavlje SPKI
+          # strukture za P-256, dakle format koji po definiciji nosi JAVNI dio para; privatni
+          # kljuc ima drugaciji ASN.1 omot (PKCS#8, `MIGHAgEAMBMGByqGSM49...`) pa i dalje PADA.
+          # generic-api-key ga hvata samo po entropiji (5.42), ne po znacenju.
+          #
+          # Zasto uopce treba: gitleaks po defaultu skenira SVE refove, ne samo HEAD, pa nalaz
+          # dolazi iz grane `feature/repair-contract-v1` i ostaje crven i nakon sto te datoteke
+          # na ovoj grani ne postoje. Allowlista je na LITERALU, ne na putanji, iz istog razloga
+          # kao gore: putanja bi propustila pravu tajnu naknadno zalijepljenu u istu datoteku.
+          '''MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEDyEWJEJSXAqK52WXld1o0CQBkIfLxYnTpPqdgoJ9fUdmbEbTCS6pEuBYSK-6nyGsyygNYwDAtSODs-MSSzQCHA''',
           ]
           # Harvestirani sluzbeni izvori (HTML snapshoti) mogu nositi benigne eyJ/base64 blobove.
           # Lockfile nosi integritetske hasheve, ne aplikacijske tajne.

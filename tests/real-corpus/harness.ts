@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { analyzeFixture, resolveProfile } from '../../src/analysis/golden-entry';
 import { installXmlDomParser } from '../../src/docx/xml-dom-install';
@@ -265,6 +265,19 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
   }
 }
 
+/**
+ * Putanja relativna korijenu repozitorija, s kosim crtama, za SERIJALIZIRANI izvjestaj.
+ *
+ * `manifest[].root` je apsolutan jer se iz njega stvarno cita s diska. Kad je takav zavrsio u
+ * commitanom `docs/generated/repair-real-corpus.json`, artefakt je postao vezan uz JEDAN stroj:
+ * lokalno je pisalo `C:\Users\...`, a CI racunao `/home/runner/...`, pa `toEqual` nije mogao
+ * proci nigdje osim ondje gdje je generiran. Test je zato bio zelen lokalno i crven u CI-ju bez
+ * ijedne stvarne razlike u ponasanju popravka.
+ */
+function repoRelative(absolute: string): string {
+  return relative(join(HERE, '..', '..'), absolute).split(sep).join('/');
+}
+
 export async function runRealCorpus(
   root = REAL_CORPUS_ROOT,
   options: { outputDir?: string; includeLocal?: boolean } = {},
@@ -286,7 +299,8 @@ export async function runRealCorpus(
       contentStored: false,
       ...(localCount ? { localDocumentCount: localCount } : {}),
     },
-    manifest,
+    // Serijalizira se REPO-RELATIVNA putanja; apsolutna bi izvjestaj vezala uz jedan stroj.
+    manifest: manifest.map((entry) => ({ ...entry, ...(entry.root ? { root: repoRelative(entry.root) } : {}) })),
     results,
     summary: {
       documentCount: results.length,
