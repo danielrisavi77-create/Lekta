@@ -1,7 +1,12 @@
 # Dependabot (BL-P3-14): automatski PR-ovi za sigurnosne i verzijske zakrpe.
 # Dva ekosustava: npm (ovisnosti aplikacije) i github-actions (verzije akcija u workflowima).
-# Teski dev CLI-jevi (netlify-cli, supabase) se NE nadograduju automatski: dominiraju lockfileom
-# i nisu u produkcijskom bundleu (vidi BL-P2-09), pa ih dizemo rucno po potrebi da se izbjegne sum.
+# Teski dev CLI-jevi (netlify-cli, supabase) dominiraju lockfileom i nisu u produkcijskom bundleu
+# (BL-P2-09), pa im se NE prate major i minor nadogradnje: to je bio cist sum.
+#
+# PATCH nadogradnje se od 2026-08-17 vise NE ignoriraju (audit TEST-20). Prije su bili iskljuceni
+# u cijelosti, a upravo ta dva alata kontroliraju deploy i bazu: sigurnosna zakrpa u njima ticala
+# bi se stroja koji objavljuje i migrira, a Dependabot o njoj ne bi ni javio. Patch je uzak pojas
+# u kojem takve zakrpe stizu, a lockfile se ne prevrce.
 version: 2
 updates:
   - package-ecosystem: "npm"
@@ -17,7 +22,9 @@ updates:
           - "patch"
     ignore:
       - dependency-name: "netlify-cli"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
       - dependency-name: "supabase"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
