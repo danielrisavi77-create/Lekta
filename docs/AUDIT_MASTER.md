@@ -36,6 +36,29 @@ preklapaju, ovaj dokument upućuje na njih umjesto da duplicira sadržaj.
 
 ## 1. Sažetak za odluku
 
+> ### Dopuna 18.8.2026. (nadjacava tekst ispod gdje se razilaze)
+>
+> Vanjski audit od 17.8. proglasio je Lektu NO-GO za naplatu. Remedijacija je izvedena kroz
+> `fix/audit-remediation-2026-08` (PR #39, 38 commita) i **vecina nalaza je zatvorena, ali NO-GO za
+> naplatu i dalje stoji** i to iz istih razloga kao u srpnju: pravni subjekt i mapiranje proizvoda
+> nisu radnje koje kod moze obaviti.
+>
+> Sto se promijenilo, s dokazom nad zivom bazom (detalji u 4A.2b):
+> - Migracijski identitet **postoji**: 94 od 94 migracije zavedene cetveroznamenkasto, nula
+>   timestampa. Prije zahvata: 67 zapisa, od kojih JEDAN cetveroznamenkast.
+> - `anon` ne moze izvrsiti **nijednu** `SECURITY DEFINER` funkciju; servisne tablice imaju izricit
+>   deny (17 od 17 bez ijednog granta).
+> - Globalna brana istodobnih popravaka (DOCX-06) radi uzivo, potvrdjeno odbijenim trecim zahtjevom.
+> - Produkcija ima 17 od 21 Edge funkcije; 4 su namjerno vani.
+>
+> Sto NIJE promijenjeno i drzi NO-GO: prazan `provider.json` (OIB, adresa, voditelj obrade),
+> `mor_product_id = null` na svih 20 aktivnih proizvoda, i dominirani cjenik. Sve troje je radnja
+> vlasnika, ne kod.
+>
+> Jedan zapis iz ovog vala bio je **pogresan** i ispravljen je u 4A.2c: zastita `mastera` je
+> ukljucena, ali s imenom required checka koje GitHub nikad ne prijavljuje, pa nijedan PR ne moze
+> proci. Ceka radnju vlasnika.
+
 Lekta je tehnički zrela klijentska aplikacija: lokalna analiza radi u Web
 Workeru, parser i citation engine su golden-pokriveni, `src/` je u cijelosti
 tipiziran bez `@ts-nocheck`, CI (9 workflowa, stanje 17.8.) vrti typecheck/testove/build/
@@ -119,6 +142,11 @@ navedeni su odvojeno, jer je precijenjen nalaz jednako štetan kao propušten.
 
 ### 4A.1 Potvrđeno i OTVORENO (P0)
 
+> **Ovo je snimka stanja na dan 17.8.2026.**, u trenutku rekoncilijacije vanjskog audita, i ostaje
+> ovdje kao zapis onoga sto je tada bilo tocno. Nekoliko ovih nalaza je u medjuvremenu zatvoreno;
+> mjerodavan je redoslijed **4A.1 -> 4A.2 -> 4A.2b -> 4A.2c**, dakle kasnija sekcija nadjacava
+> raniju. Za trenutno stanje citaj 4A.2b (primijenjeno na produkciju, s dokazom iz zive baze).
+
 | ID | Opis | Dokaz |
 |---|---|---|
 | A26-01 | `data/legal/provider.json`: `oib`, `address`, `privacyController` prazni, kontakt Gmail | Isto kao P0 iz srpnja, i dalje otvoreno |
@@ -185,16 +213,58 @@ navedeni su odvojeno, jer je precijenjen nalaz jednako štetan kao propušten.
 | **NOVO, izvan audita** | **`repair-docx` i `generate-report` ne bi se UČITALI da su deployani bez bundlanja.** `src/repair/zip-codec.ts`, `src/docx/parser.ts` i `src/report/report.ts` uvozili su relativne module BEZ `.ts` nastavka, što Deno zahtijeva, a CLAUDE.md izričito propisuje. Radilo je samo zato što `scripts/bundle-edge.mjs` (esbuild) razriješi nastavak prije deploya, pa je `supabase functions deploy` bio skrivena mina | Dodani `.ts` nastavci; `check:edge` sada hvata ovu klasu greške umjesto da se otkrije pri deployu |
 | **NOVO, izvan audita** | **Link za odjavu u SVAKOM podsjetniku bio je 404.** Poruke su linkale na `${APP_BASE_URL}/odjava-podsjetnika`, a ta ruta ne postoji: nema je kao stranicu, `public/_redirects` ne postoji, `netlify.toml` nema redirect. Nije naškodilo samo zato što su podsjetnici još inertni (bez Resend tajni nijedna poruka nije poslana), ali bi puknulo u trenutku uključenja, i to na obavezi koja mora raditi iz prve | Linka se izravno na Edge funkciju; `UNSUB_PUBLIC_URL` ostaje za ljepši javni URL kad se doda pravi redirect |
 
-### 4A.2b Napisano, ali ČEKA primjenu na produkciju
+### 4A.2b Primijenjeno na produkciju 18.8.2026.
 
-Ovo NIJE zatvoreno: kod i migracije postoje u repozitoriju, ali zahvat nad živom bazom nije izveden.
+Do 17.8. je ovdje pisalo "napisano, ali ceka primjenu". Zahvat je izveden 18.8.; svaka tvrdnja
+ispod provjerena je UPITOM NAD ZIVOM BAZOM, ne izvedena iz koda.
 
-| ID | Što čeka | Gdje je |
+| ID | Sto je izvedeno | Dokaz nad produkcijom |
 |---|---|---|
-| A26-04 | Usklađivanje migracijskog dnevnika produkcije (66 redaka, UPDATE verzije) | `docs/deploy/MIGRATION_IDENTITY.md`, korak 3. NE kroz `supabase migration repair` |
-| A26-05 | Staging se gradi iznova iz produkcije i dobiva svih 21 Edge funkciju | isto, korak 5 |
-| A26-10 | Grantovi i RLS po advisoru | `supabase/migrations/0093_security_advisor_2026_08.sql` (nije primijenjena) |
-| A26-02, A26-03 | Mapiranje `mor_product_id` i ispravak dominiranog cjenika kroz `set_product_price` | `docs/GO_LIVE_NAPLATA.md` §3.2 i §3.3 |
+| A26-04 | Dnevnik uskladjen (66 UPDATE-a verzije) i primijenjeno preostalih 27 migracija kroz `supabase db push --linked --include-all` | `schema_migrations`: **94 cetveroznamenkaste verzije, 0 timestampa** (bilo 67 zapisa od kojih 1 cetveroznamenkasta). `npm run migration-identity`: 94/94, nula nepodudaranja |
+| A26-10 (dio) | `0093` primijenjena | **Nijedna** `SECURITY DEFINER` funkcija u `public` nije izvrsiva od `anon` (upit nad `has_function_privilege`). `increment_job_view` je time zatvoren |
+| A26-10 (dio) | Servisne tablice imaju IZRICIT deny | Svih **17** tablica s RLS-om bez politike ima **nula grantova** za `anon`/`authenticated`. Advisor ih i dalje javlja kao INFO `rls_enabled_no_policy`, ali to je ovdje lazan alarm: deny je izveden povlacenjem prava, ne izostankom politike |
+| DOCX-06 | `0094` primijenjena, globalna brana ozivljena | Provjereno uzivo: uz `max=2` treci usporedni zahtjev je odbijen; `anon` ne moze izvrsiti `try_acquire_repair_slot`. Testni redci uklonjeni |
+| A26-05 (dio) | Deployano 8 Edge funkcija | Produkcija ima **17 od 21**; 4 su namjerno vani (integrity-check, katedra-agent-worker, preflight-start, preflight-result) |
+
+**Sto od A26-10 OSTAJE otvoreno**, i to su jedina dva stvarna nalaza iz 66 WARN-ova advisora:
+
+- `pg_net` i `vector` su i dalje u shemi `public` (2 x `extension_in_public`). OTVORENO.
+- 13 x `authenticated_security_definer_function_executable`. Pregledano pojedinacno: **12 pripada
+  Katedra povrsini** (`*_agent_run`, `*_agent_payload`, `completion_*`), ciji worker nije deployan,
+  a 13. je `unsubscribe_own_deadline_subscription`, koji po namjeni MORA biti pozivljiv od
+  prijavljenog korisnika za vlastitu pretplatu. Nijedan nije dosezan od `anon`.
+
+Preostalih 50 WARN-ova (`auth_allow_anonymous_sign_ins`) svodi se na **11 politika** koje nemaju
+izricit `TO`, pa im `pg_policies` prijavljuje `{public}`. Od tih 11 ih je **9 vezano na
+`auth.uid()`**, sto za `anon` ne vraca nijedan redak. Preostale dvije su namjerno javne:
+`products_select_active` (katalog koji paywall treba procitati prije prijave) i `jobs_public_read`
+(tablica dijeljenog projekta, ne Lektina, vidi PROD-05). Nalaz je dakle higijena (`TO authenticated`
+umjesto podrazumijevanog), ne otvorena rupa.
+
+| ID | Sto JOS ceka | Gdje je |
+|---|---|---|
+| A26-05 | Staging se gradi iznova iz produkcije i dobiva svih 21 Edge funkciju | `docs/deploy/MIGRATION_IDENTITY.md`, korak 5 |
+| A26-02, A26-03 | Mapiranje `mor_product_id` i ispravak dominiranog cjenika kroz `set_product_price` | `docs/GO_LIVE_NAPLATA.md` §3.2 i §3.3 (radnja vlasnika) |
+| A26-10 | `pg_net`/`vector` iz `public` u zasebnu shemu | nema migracije |
+
+### 4A.2c Ispravak zapisa: A26-06 je bio zatvoren POGRESNO
+
+U 4A.2 stoji da je `master` zasticen uz required checks `build-gate`/`conformance-matrix`/`check`.
+Zastita jest aktivna, ali je popis konteksta bio **neispravan i zato stetan**: `build-gate` je
+matrix job, pa GitHub nikad ne prijavljuje golo ime nego `build-gate (20)` i `build-gate (24)`.
+Kontekst koji se nikad ne prijavi ostaje trajno "pending", pa je `mergeStateStatus` svakog PR-a
+zauvijek `BLOCKED` (potvrdjeno na PR #39, gdje su SVE provjere zelene). Review nije bio uzrok:
+trazi se 0 odobrenja.
+
+Ispravan popis je `check`, `ux-gate`, `build-gate (20)`, `build-gate (24)`, `conformance-matrix`.
+`ux-gate` se dodaje jer je upravo on uhvatio stvaran kvar koji je retry dotad gutao (TEST-10), pa
+bi bilo nedosljedno da ostane neobavezan. **Zahvat je radnja vlasnika** (mijenja postavke
+repozitorija) i jos nije izveden.
+
+Pouka je opcenitija od ove jedne postavke: zastita koja je "ukljucena" nije dokaz da radi. Required
+check se mora potvrditi nad STVARNIM imenima koja workflow prijavljuje, isto kao sto se migracija
+potvrdjuje upitom nad bazom, a ne citanjem datoteke.
+
 
 ### 4A.3 Nalazi audita koji NISU izdržali provjeru
 
