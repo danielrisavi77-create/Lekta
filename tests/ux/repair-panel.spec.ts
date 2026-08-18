@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import path from 'node:path';
 
 // FER diplomski, prazni odlomci: profil ima wired repair-map fixere (font/margine/prored/format
@@ -6,7 +6,7 @@ import path from 'node:path';
 // koji su gotovo univerzalni za stvarne teze - dobar reprezentativan slucaj za "predugacak panel".
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
-async function analyzeAndOpenSubmissionTab(page: import('@playwright/test').Page) {
+async function analyzeAndOpenSubmissionTab(page: Page) {
   await page.setViewportSize({ width: 1440, height: 1000 });
   // Bez ovoga `setWizardStep(3, true)` ide kroz View Transition, pa `#analyzeBtn` fizicki putuje
   // dok Playwright provjerava akcijabilnost ("element is not stable"). Klik se tada odgadja, a
@@ -30,9 +30,43 @@ async function analyzeAndOpenSubmissionTab(page: import('@playwright/test').Page
   await page.locator('#tabbtn-submission').click();
 }
 
-test('repair panel: kompaktan ledger umjesto duge liste, bez obzira na mix stavki', async ({ page }) => {
-  await analyzeAndOpenSubmissionTab(page);
+/**
+ * JEDNA analiza za sve cetiri tvrdnje.
+ *
+ * Dosad je svaki test pokretao punu analizu stvarnog `.docx`-a, dakle cetiri puta isto stanje.
+ * Uz mobilni projekt (koji je sada iskljucen, vidi `playwright.config.ts`) to je bilo osam analiza
+ * za jedan jedini prikaz panela. Pod usporednim radnicima nad DEV posluziteljem to je i palo:
+ * `#resultView` nije stigao unutar 90 s, bez ijedne navigacije, greske u konzoli ili pada workera,
+ * dakle nije bio kvar nego natjecanje za isti stroj.
+ *
+ * Tvrdnje se ne mijenjaju: sve cetiri i dalje gledaju isti panel, samo ga ne grade iznova. Cijena
+ * je serijski redoslijed (pad prvog preskace ostale), sto je za cetiri tvrdnje nad ISTIM stanjem
+ * posten kompromis.
+ */
+test.describe.configure({ mode: 'serial' });
 
+let page: Page;
+
+test.beforeAll(async ({ browser }) => {
+  page = await browser.newPage();
+  await analyzeAndOpenSubmissionTab(page);
+});
+
+test.afterAll(async () => {
+  await page?.close();
+});
+
+// Stanje modala je jedino sto testovi medjusobno mijenjaju, pa se vraca na nulu prije svakog.
+// Escape je isti put kojim ih zatvara i korisnik; tri pokusaja pokrivaju najdublje ugnjezdjenje
+// (ledger -> stavka), a tvrdnja na kraju ne dopusta da se tiho ude u test s otvorenim modalom.
+test.beforeEach(async () => {
+  for (let i = 0; i < 3 && (await page.locator('.modal-backdrop:not(.hidden)').count()); i++) {
+    await page.keyboard.press('Escape');
+  }
+  await expect(page.locator('.modal-backdrop:not(.hidden)')).toHaveCount(0);
+});
+
+test('repair panel: kompaktan ledger umjesto duge liste, bez obzira na mix stavki', async () => {
   const mount = page.locator('#repairPanelMount');
   await expect(mount.locator('.lekta-repair-trigger__btn')).toBeVisible();
   // Stara ravna lista ostaje u DOM-u (checkbox izvor istine) ali SKRIVENA - ledger je jedini
@@ -44,8 +78,7 @@ test('repair panel: kompaktan ledger umjesto duge liste, bez obzira na mix stavk
   expect(visibleInteractive).toBeLessThan(15);
 });
 
-test('repair panel: ledger modal ima focus-trap i Escape ga zatvara', async ({ page }) => {
-  await analyzeAndOpenSubmissionTab(page);
+test('repair panel: ledger modal ima focus-trap i Escape ga zatvara', async () => {
   await page.locator('#repairPanelMount .lekta-repair-trigger__btn').click();
 
   const ledger = page.locator('.modal-backdrop[data-lekta-repair-ledger-modal]');
@@ -57,8 +90,7 @@ test('repair panel: ledger modal ima focus-trap i Escape ga zatvara', async ({ p
   await expect(ledger).toBeHidden();
 });
 
-test('repair panel: Tier A "Uredi..." zamijeni ledger jednim fokusiranim modalom, "Natrag" se vraca', async ({ page }) => {
-  await analyzeAndOpenSubmissionTab(page);
+test('repair panel: Tier A "Uredi..." zamijeni ledger jednim fokusiranim modalom, "Natrag" se vraca', async () => {
   await page.locator('#repairPanelMount .lekta-repair-trigger__btn').click();
   const ledger = page.locator('.modal-backdrop[data-lekta-repair-ledger-modal]');
   await expect(ledger).toBeVisible();
@@ -79,8 +111,7 @@ test('repair panel: Tier A "Uredi..." zamijeni ledger jednim fokusiranim modalom
   await expect(ledger).toBeVisible();
 });
 
-test('repair panel: konsenzus checkbox daje jasnu povratnu informaciju umjesto tihog no-opa', async ({ page }) => {
-  await analyzeAndOpenSubmissionTab(page);
+test('repair panel: konsenzus checkbox daje jasnu povratnu informaciju umjesto tihog no-opa', async () => {
   const btn = page.locator('#repairPanelMount .lekta-repair-panel__download');
   await expect(btn).toBeEnabled();
   await btn.click();

@@ -396,7 +396,24 @@ export default defineConfig(({ command }) => {
     // watchanje svega toga iscrpi file handleove na Windowsu i rusi `npm run dev` (EMFILE).
     // Iskljuci .claude i vlastiti dist iz watchera; serviranje dist/ (citationTools) ne ovisi
     // o watcheru, a njegov targetirani watcher.add za citation-spec ostaje nepromijenjen.
-    server: { watch: { ignored: ['**/.claude/**', '**/dist/**'] } },
+    server: {
+      watch: { ignored: ['**/.claude/**', '**/dist/**'] },
+      /**
+       * UX suite (`playwright.config.ts`) se vrti nad DEV posluziteljem, pa se moduli analize
+       * transformiraju tek na prvi zahtjev. Prvi testovi koji pokrenu analizu placaju taj hladan
+       * trosak, i to usporedno s ostalim radnicima; mjereno lokalno sa 4 radnika, 4 od 12 prolaza
+       * `repair-panel` speca preslo je 90 s cekanja na `#resultView`, dok je isti test izoliran
+       * gotov u ~9 s. Nije bio ni pad analize ni reload stranice: nijedne navigacije, nijedne
+       * greske u konzoli, samo transform koji jos traje.
+       *
+       * `warmup` transformira ove datoteke i njihov graf uvoza pri dizanju posluzitelja, dakle
+       * JEDNOM i serijski, umjesto usporedno pod mjeracem vremena. Korisno je i u svakodnevnom
+       * radu: prva analiza nakon `npm run dev` krece bez cekanja.
+       */
+      warmup: {
+        clientFiles: ['./src/main.ts', './src/analysis/analyze-docx.worker.ts', './src/analysis/analyze-docx-client.ts'],
+      },
+    },
     // NAPOMENA (audit performance-05, ODBIJENO nakon mjerenja): `json.stringify:true` bi veliki JSON
     // emitirao kao `JSON.parse('...')` (brzi V8 parse), ALI Vite ASCII-escapea sav ne-ASCII u \uXXXX.
     // Ovaj korpus je gusto hrvatski (c, c, z, s, d): mjereno 20.402 \u escapea, glavni chunk naraste

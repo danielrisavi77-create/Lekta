@@ -49,7 +49,12 @@ export default defineConfig({
        * UX posao (dodirna meta ili preklapanje sticky trake), ne remedijacija, pa se ne rjesava
        * usput. Ostalih 40 mobilnih provjera se vrti i od danas stvarno stiti.
        */
-      testIgnore: /roadmap-v2\.spec\.ts/,
+      /**
+       * `repair-panel.spec.ts` tvrdo postavlja viewport 1440x1000, pa pod mobilnim projektom
+       * izvodi ISTI desktop scenarij drugi put: nula mobilne pokrivenosti, dvostruk trosak. A
+       * trosak nije zanemariv, jer svaki njegov test pokrece punu analizu stvarnog `.docx`-a.
+       */
+      testIgnore: [/roadmap-v2\.spec\.ts/, /repair-panel\.spec\.ts/],
     },
   ],
   webServer: {
