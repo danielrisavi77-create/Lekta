@@ -8,10 +8,20 @@ const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.d
 
 async function analyzeAndOpenSubmissionTab(page: import('@playwright/test').Page) {
   await page.setViewportSize({ width: 1440, height: 1000 });
+  // Bez ovoga `setWizardStep(3, true)` ide kroz View Transition, pa `#analyzeBtn` fizicki putuje
+  // dok Playwright provjerava akcijabilnost ("element is not stable"). Klik se tada odgadja, a
+  // analiza u medjuvremenu krene i gumb postane disabled + skriven, pa isti locator ceka do
+  // timeouta. `withViewTransition` (src/ui/app.ts) prvo pita `motionReduced()`, pa reduced-motion
+  // uklanja tranziciju u korijenu umjesto da je test ceka na srecu. Isti obrazac vec koriste
+  // analyzer-hero-demo i free-tools-audit specovi.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await page.locator('#uploadCtaBtn').click();
   await page.locator('#fileInput').setInputFiles(fixture);
   await page.locator('#stepToAnalyze').click();
+  // Korak 3 mora biti u DOM-u prije klika (isti barijerni obrazac kao roadmap-v2.spec.ts).
+  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '3');
+  await expect(page.locator('#analyzeBtn')).toBeEnabled();
   await page.locator('#analyzeBtn').click();
   const confirm = page.locator('[data-confirm-profile]');
   if (await confirm.isVisible().catch(() => false)) await confirm.click();
