@@ -24,6 +24,10 @@ debug.log
 # Cache harvest citata (doi.org/CSL) - transient, ne commitati
 .harvest-cache/
 .playwright-mcp/
+# Superpowers SDD: RADNO stanje izvodjenja (task briefovi, reporti, progress ledger).
+# Podjela je namjerna i vec postoji: ono sto NESTO OPISUJE ide u `docs/superpowers/plans`
+# i `specs` i commita se, a tragovi izvodjenja ne. Isti obrazac kao .artifacts/ i .harvest-cache/.
+.superpowers/
 # Playwright browser gate: lokalni screenshotovi, traceovi i HTML izvještaji.
 test-results/
 playwright-report/
