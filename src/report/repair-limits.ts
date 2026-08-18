@@ -31,6 +31,27 @@ export class ConcurrencyGate {
     if (this.inFlight > 0) this.inFlight--;
   }
 
+  /**
+   * Sigurnija inacica `tryAcquire`: vraca JEDNOKRATNU funkciju za oslobadjanje, ili null kad
+   * nema slobodnog mjesta (audit DOCX-07).
+   *
+   * `release()` brani samo pad ispod nule, ali NE brani dvostruko otpustanje iste akvizicije:
+   * uz dva zahtjeva u letu, jedan pozivatelj koji otpusti dvaput oslobodi i TUDJI slot, pa gate
+   * tiho pusti vise posla nego sto smije. To prestaje biti hipotetsko cim se oslobadjanje preda
+   * pozadinskom zadatku, jer tada postoje dva mjesta koja bi ga mogla pozvati.
+   *
+   * Ovdje je dvostruki poziv strukturno nemoguc: druga i svaka sljedeca invokacija su no-op.
+   */
+  acquire(): (() => void) | null {
+    if (!this.tryAcquire()) return null;
+    let released = false;
+    return () => {
+      if (released) return;
+      released = true;
+      this.release();
+    };
+  }
+
   get current(): number {
     return this.inFlight;
   }

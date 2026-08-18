@@ -211,7 +211,18 @@ Deno.serve(async (req: Request) => {
   const ms = (from: number) => Math.round(performance.now() - from);
   // Postavlja se true tek nakon uspjesnog REPAIR_GATE.tryAcquire(); finally ispod smije zvati
   // release() SAMO tada (ranije 401/disabled/OPTIONS izlazi nikad nisu uzeli slot).
-  let gateAcquired = false;
+  let releaseGate: (() => void) | null = null;
+  /**
+   * Je li oslobadjanje slota PREDANO pozadinskom zadatku (audit DOCX-07).
+   *
+   * Slot se do sada oslobadjao cim handler vrati odgovor, a NAJTEZI dio (dva Storage uploada, do
+   * 2 x 20 MB) tek tada krece u `EdgeRuntime.waitUntil`. Gate je time stitio laksi dio posla i
+   * puštao nove zahtjeve tocno dok instanca jos gura desetke megabajta.
+   *
+   * Kad pohrana ide u pozadinu, slot drzi ONA i oslobadja ga kad zavrsi; `finally` ispod ga tada
+   * ne smije dirati, inace bi se otpustio dvaput.
+   */
+  let gateHandedOff = false;
   try {
     if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
     if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
@@ -227,8 +238,11 @@ Deno.serve(async (req: Request) => {
     // Concurrency gate: NAKON autha (necemo brojati neautorizirani sum), PRIJE ijednog teskog
     // koraka (multipart parsing, zip citanje, applyFixers). release() u finally ispod jamci
     // oslobadjanje na SVAKOM izlazu (rani return, uspjeh ili baceni izuzetak).
-    if (!REPAIR_GATE.tryAcquire()) return json({ error: 'busy' }, 503);
-    gateAcquired = true;
+    // `acquire()` vraca JEDNOKRATNO oslobadjanje: drugi poziv je no-op. Bitno je otkad slot drzi
+    // pozadinska pohrana, jer tada postoje dva mjesta koja bi ga mogla otpustiti (ovaj `finally`
+    // i zavrsetak pohrane), a dvostruko otpustanje bi oslobodilo TUDJI slot.
+    releaseGate = REPAIR_GATE.acquire();
+    if (!releaseGate) return json({ error: 'busy' }, 503);
 
     // 2. multipart: 'file' (.docx binarno) + 'meta' (JSON: workType, signals, requests,
     //    profileStatus, profileRef, confirmedMismatch, references).
@@ -535,7 +549,12 @@ Deno.serve(async (req: Request) => {
     let msStore = 0;
     if (storeTask) {
       if (typeof bg === 'function') {
-        bg.call((globalThis as any).EdgeRuntime, storeTask);
+        // Slot ostaje zauzet dok pohrana traje (DOCX-07). `storeTask` sam po sebi ne baca (ima
+        // vlastiti try/catch), ali `finally` je svejedno ispravan oblik: oslobadjanje ne smije
+        // ovisiti o tome hoce li netko kasnije dodati granu koja baca.
+        gateHandedOff = true;
+        const releaseAfterStore = releaseGate;
+        bg.call((globalThis as any).EdgeRuntime, storeTask.finally(() => releaseAfterStore?.()));
       } else {
         await storeTask;
         msStore = ms(tStore);
@@ -571,6 +590,8 @@ Deno.serve(async (req: Request) => {
     console.error('[repair-docx]', e);
     return json({ error: 'internal' }, 500);
   } finally {
-    if (gateAcquired) REPAIR_GATE.release();
+    // Kad je pohrana preuzela slot, ona ga i oslobadja; dvostruko otpustanje bi trajno napuhalo
+    // broj slobodnih mjesta i gate bi prestao biti granica.
+    if (!gateHandedOff) releaseGate?.();
   }
 });
