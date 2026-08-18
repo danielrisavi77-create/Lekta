@@ -125,6 +125,53 @@ function toBase64(bytes: Uint8Array): string {
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
+/** Koliko dugo slot vrijedi ako ga nitko ne oslobodi (proces umro, runtime presjekao). */
+const REPAIR_SLOT_LEASE_SECONDS = Number(Deno.env.get('REPAIR_SLOT_LEASE_SECONDS') ?? '300');
+
+/**
+ * Preuzmi GLOBALNI slot popravka iz baze (audit DOCX-06).
+ *
+ * Tri ishoda, i sva tri su namjerna:
+ *   - `ok`     : slot dobiven, `release()` ga vraca (jednokratno);
+ *   - `full`   : globalni limit dosegnut -> 503, kao i kod per-instance gatea;
+ *   - `absent` : RPC ne postoji ili je pao. Tada se NE blokira popravak, nego se pada natrag na
+ *                per-instance gate, uz glasan log. Razlog: isporuka koda i isporuka migracije nisu
+ *                atomarne, pa bi tvrdo ponasanje znacilo da svaki popravak pada u prozoru izmedju
+ *                dva deploya. To NIJE tiho popustanje: stanje se logira, a nestaje cim 0094 prodje.
+ */
+async function acquireGlobalSlot(
+  admin: any,
+): Promise<{ kind: 'ok'; release: () => Promise<void> } | { kind: 'full' } | { kind: 'absent'; release: null }> {
+  try {
+    const { data, error } = await admin.rpc('try_acquire_repair_slot', {
+      p_max: Number(Deno.env.get('REPAIR_MAX_CONCURRENT') ?? '4'),
+      p_lease_seconds: REPAIR_SLOT_LEASE_SECONDS,
+    });
+    if (error) {
+      console.error('[repair-docx] globalni slot nedostupan, padam na per-instance gate', error.message);
+      return { kind: 'absent', release: null };
+    }
+    if (!data) return { kind: 'full' };
+
+    let released = false;
+    return {
+      kind: 'ok',
+      release: async () => {
+        if (released) return;
+        released = true;
+        const { error: relErr } = await admin.rpc('release_repair_slot', { p_id: data });
+        // Neoslobodjen slot nije trajan kvar: lease ga pocisti pri sljedecem preuzimanju. Log
+        // postoji da se ne cini kao da je sve u redu dok se kapacitet tise smanjuje.
+        if (relErr) console.error('[repair-docx] globalni slot nije oslobodjen', relErr.message);
+      },
+    };
+  } catch (e) {
+    console.error('[repair-docx] globalni slot: neocekivana greska, padam na per-instance gate', e);
+    return { kind: 'absent', release: null };
+  }
+}
+
+
 
 
 // WS-6: pohrani original + rezultat vezano uz korisnika (retencija "do brisanja"). Migracija
@@ -212,6 +259,8 @@ Deno.serve(async (req: Request) => {
   // Postavlja se true tek nakon uspjesnog REPAIR_GATE.tryAcquire(); finally ispod smije zvati
   // release() SAMO tada (ranije 401/disabled/OPTIONS izlazi nikad nisu uzeli slot).
   let releaseGate: (() => void) | null = null;
+  /** Oslobadjanje GLOBALNOG (bazom vodjenog) slota; null kad ga nema (vidi acquireGlobalSlot). */
+  let releaseGlobalSlot: (() => Promise<void>) | null = null;
   /**
    * Je li oslobadjanje slota PREDANO pozadinskom zadatku (audit DOCX-07).
    *
@@ -243,6 +292,22 @@ Deno.serve(async (req: Request) => {
     // i zavrsetak pohrane), a dvostruko otpustanje bi oslobodilo TUDJI slot.
     releaseGate = REPAIR_GATE.acquire();
     if (!releaseGate) return json({ error: 'busy' }, 503);
+
+    /**
+     * GLOBALNA brana preko baze (audit DOCX-06).
+     *
+     * Gate iznad je brojac u memoriji JEDNE instance. Edge funkcije se autoskaliraju, pa uz limit 4
+     * i pet toplih instanci u letu moze biti 20 popravaka: brana koja se mnozi s brojem instanci
+     * nije brana nego dojam brane. Slot iz baze je jedan za sve instance.
+     *
+     * DEGRADACIJA JE NAMJERNA I GLASNA: dok migracija 0094 nije primijenjena, RPC ne postoji i
+     * ostaje ponasanje kakvo je i danas (per-instance gate). Alternativa bi bila srusiti popravak
+     * na svakom pozivu dok se migracija ne primijeni, a to bi znacilo da isporuka koda i isporuka
+     * migracije moraju biti atomarne, sto nisu. Zato se pad RPC-a NE tretira kao "nema mjesta".
+     */
+    const globalSlot = await acquireGlobalSlot(admin);
+    if (globalSlot.kind === 'full') return json({ error: 'busy' }, 503);
+    releaseGlobalSlot = globalSlot.release;
 
     // 2. multipart: 'file' (.docx binarno) + 'meta' (JSON: workType, signals, requests,
     //    profileStatus, profileRef, confirmedMismatch, references).
@@ -554,7 +619,16 @@ Deno.serve(async (req: Request) => {
         // ovisiti o tome hoce li netko kasnije dodati granu koja baca.
         gateHandedOff = true;
         const releaseAfterStore = releaseGate;
-        bg.call((globalThis as any).EdgeRuntime, storeTask.finally(() => releaseAfterStore?.()));
+        const releaseGlobalAfterStore = releaseGlobalSlot;
+        bg.call(
+          (globalThis as any).EdgeRuntime,
+          storeTask.finally(async () => {
+            // Oba slota drzi pohrana: per-instance i globalni. Globalni se oslobadja prvi jer je
+            // on stvarna granica; per-instance je jos samo jeftina lokalna zastita.
+            await releaseGlobalAfterStore?.();
+            releaseAfterStore?.();
+          }),
+        );
       } else {
         await storeTask;
         msStore = ms(tStore);
@@ -592,6 +666,11 @@ Deno.serve(async (req: Request) => {
   } finally {
     // Kad je pohrana preuzela slot, ona ga i oslobadja; dvostruko otpustanje bi trajno napuhalo
     // broj slobodnih mjesta i gate bi prestao biti granica.
-    if (!gateHandedOff) releaseGate?.();
+    if (!gateHandedOff) {
+      // `void`: oslobadjanje globalnog slota je mrezni poziv, a `finally` ne smije produljiti
+      // odgovor. Neuspjeh se logira unutar release(), a lease ga ionako pocisti.
+      void releaseGlobalSlot?.();
+      releaseGate?.();
+    }
   }
 });

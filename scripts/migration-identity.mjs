@@ -136,6 +136,9 @@ function section(label, ref, repo, { total, matched, missing, extra, duplicates 
   }
 
   const renumbered = matched.filter((m) => m.number && m.applied.version !== m.number);
+  // Skupi parove i za `--emit-sql` (vidi dolje): isti izvor podataka kao tablica ispod, pa se
+  // ispis i generirani zahvat ne mogu razici.
+  renumberedByEnv.set(label, renumbered.map((m) => ({ from: m.applied.version, to: m.number, name: m.file })));
   lines.push('<details><summary>Poklopljeno po imenu, ali pod drugom verzijom</summary>', '');
   lines.push(`${renumbered.length} od ${matched.length} poklopljenih ima drugaciju verziju u bazi nego u repou.`, '');
   lines.push('| Repo | Verzija u bazi |', '| --- | --- |');
@@ -143,6 +146,9 @@ function section(label, ref, repo, { total, matched, missing, extra, duplicates 
   lines.push('', '</details>', '');
   return lines;
 }
+
+/** label -> parovi (stara verzija, ciljna verzija) za `--emit-sql`. */
+const renumberedByEnv = new Map();
 
 const repo = repoMigrations();
 
@@ -174,3 +180,34 @@ for (const env of ENVIRONMENTS) {
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
 fs.writeFileSync(OUT, out.join('\n'), 'utf8');
 console.log(`[migration-identity] zapisano ${path.relative(ROOT, OUT)}; nepodudaranja: ${problems}`);
+
+/**
+ * `--emit-sql`: ispisi zahvat koji dnevniku vraca identitet iz imena datoteka.
+ *
+ * Skripta ga NAMJERNO samo ispisuje, ne izvodi: zahvat dira zivi migracijski dnevnik, pa odluka
+ * kad se izvodi pripada covjeku pred SQL editorom, ne alatu koji se moze pokrenuti slucajno.
+ *
+ * Parovi dolaze iz ISTOG izracuna kao tablica u izvjestaju, pa se ispis i zahvat ne mogu razici.
+ * Zahvat dira samo `supabase_migrations.schema_migrations`; nijedna tablica, funkcija ni politika
+ * se ne mijenja.
+ */
+if (process.argv.includes('--emit-sql')) {
+  for (const [label, pairs] of renumberedByEnv) {
+    console.log('');
+    console.log(`-- ============================================================`);
+    console.log(`-- ${label}: ${pairs.length} zapisa dobiva verziju iz imena datoteke`);
+    console.log(`-- ============================================================`);
+    if (!pairs.length) {
+      console.log('-- (nema sto uskladiti)');
+      continue;
+    }
+    console.log('begin;');
+    for (const p of pairs) {
+      console.log(`update supabase_migrations.schema_migrations set version = '${p.to}' where version = '${p.from}'; -- ${p.name}`);
+    }
+    console.log('commit;');
+    console.log('');
+    console.log('-- Provjera nakon zahvata: npm run migration-identity');
+    console.log('-- Povrat: isti zahvat s zamijenjenim stranama (stare verzije su u ovom ispisu).');
+  }
+}

@@ -91,9 +91,18 @@ dokumentaciji, opet bez dobitka za samu shemu.
    -- ... i tako za svih 66 redaka
    ```
 
-   Tocnu listu parova (66 redaka, plus `0053` koji je vec ispravan) ispisuje
-   `npm run migration-identity`, u odjeljku "Poklopljeno po imenu, ali pod drugom verzijom".
-   Provedi je u jednoj transakciji kroz Supabase SQL editor. Prije toga snimi zatecen dnevnik
+   **Gotov zahvat ispisuje alat**, pa se ne prepisuje rucno:
+
+   ```
+   LEKTA_PROD_REF=<ref> npm run migration-identity -- --emit-sql
+   ```
+
+   Ispisuje 66 `update` izjava u jednoj transakciji, svaku s imenom migracije u komentaru. Parovi
+   dolaze iz ISTOG izracuna kao tablica u izvjestaju, pa se ispis i zahvat ne mogu razici. Alat
+   zahvat NAMJERNO samo ispisuje, ne izvodi: odluka kad se dira zivi dnevnik pripada covjeku pred
+   SQL editorom, ne skripti koja se moze pokrenuti slucajno.
+
+   Zalijepi ispis u Supabase SQL editor i izvedi ga. Prije toga snimi zatecen dnevnik
    (`select version, name from supabase_migrations.schema_migrations`), jer je povrat samo
    obrnuti UPDATE.
 
@@ -108,6 +117,17 @@ dokumentaciji, opet bez dobitka za samu shemu.
    na njega deployaj svih 21 Edge funkciju (danas ih ima 3).
 6. Tek kad `npm run migration-identity` za oba okruzenja prijavi 0 nepodudaranja izvan svjesno
    prihvacenih (integrity + Katedra), `db push` se smije koristiti u redovnom radu.
+
+## 3.1 Sto ceka na ovaj korak
+
+Migracija `0094_repair_global_concurrency.sql` (globalna brana istodobnih popravaka, audit
+DOCX-06) je NAPISANA i ceka isto usklađivanje. Bez njega bi `db push` uz tu jednu migraciju
+povukao i 92 druge preko RLS-a, grantova i constraintova; sve su idempotentne, ali "vjerojatno
+prezivi" nad 92 migracije nije nesto sto se otkriva na produkciji.
+
+Kod je zato pisan tako da NE ovisi o redoslijedu isporuke: dok RPC ne postoji, `repair-docx` pada
+natrag na per-instance gate uz glasan log, dakle na ponasanje kakvo je i danas. Cim `0094`
+prodje, globalna brana se ukljucuje sama, bez ijedne izmjene koda.
 
 ## 4. Pravilo od sada
 
