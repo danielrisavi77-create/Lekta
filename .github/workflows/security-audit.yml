@@ -89,6 +89,14 @@ jobs:
           regexes = [
           '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpycmp0dGl6anlmY3htY3Bnem1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1ODIzMTcsImV4cCI6MjA5OTE1ODMxN30\.[A-Za-z0-9_-]+''',
           '''lekta\.katedra-handoff-result\.v0\.1''',
+          # Naziv TESTNOG kljuca iz repair-contract-v1 fixtura (grana feature/repair-contract-v1).
+          # `keyId` je IDENTIFIKATOR kljuca, ne kljuc: doslovna vrijednost je "fixture-2026-08-16",
+          # dakle datum u imenu testnog artefakta. Pripadni `value` je ECDSA POTPIS, izlaz
+          # potpisivanja koji je javan po prirodi, a ne privatni kljuc.
+          #
+          # Allowlista je namjerno na TOM LITERALU, ne na putanjama tih datoteka: da je po putanji,
+          # prava tajna naknadno zalijepljena u isti dokument prosla bi neopazeno.
+          '''fixture-2026-08-16''',
           ]
           # Harvestirani sluzbeni izvori (HTML snapshoti) mogu nositi benigne eyJ/base64 blobove.
           # Lockfile nosi integritetske hasheve, ne aplikacijske tajne.
