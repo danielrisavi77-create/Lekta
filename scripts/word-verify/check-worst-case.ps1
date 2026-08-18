@@ -64,6 +64,22 @@ function Measure-Doc {
     # ni u tekstu ni u oblikovanju. Broj polja pada tiho ako fixer razbije fldChar par;
     # zaglavlja i podnozja nestanu kad se sekcija prepise; bookmarkovi nose ciljeve
     # unakrsnih uputa i sadrzaja, pa njihov gubitak pokvari TOC bez ijedne vidljive promjene.
+    # --- VIZUALNI INTEGRITET (audit DOCX-21) ---
+    # Postojece provjere BROJE elemente (1 tablica, 1 slika), pa ne vide da je tablica ostala
+    # tablica ali izgubila stupac, ni da je slika "prezivjela" srusena na nulu. Ni jedno se ne
+    # vidi u tekstu ni u oblikovanju, a korisnik oboje primijeti odmah.
+    #
+    # Broj STRANICA se namjerno NE usporedjuje: popravak mijenja font, prored i margine, pa je
+    # drugacija paginacija ocekivana, a ne kvar. Mjeri se ono sto popravak FORME ne smije
+    # promijeniti: dimenzije tablica, dimenzije slika i njihov medjusobni redoslijed.
+    TablicaDim   = [string](($doc.Tables | ForEach-Object { '{0}x{1}' -f $_.Rows.Count, $_.Columns.Count }) -join ',')
+    SlikaDim     = [string](($doc.InlineShapes | ForEach-Object { '{0}x{1}' -f [math]::Round($_.Width), [math]::Round($_.Height) }) -join ',')
+    # Redoslijed tablica (T) i slika (I) po polozaju. Prazni odlomci se SMIJU saziti, pa se
+    # odlomci ne broje; ono sto se ne smije promijeniti je sto dolazi prije cega.
+    ElementRed   = [string]((@(
+                      $doc.Tables | ForEach-Object { [pscustomobject]@{ Poz = $_.Range.Start; Tip = 'T' } }
+                      $doc.InlineShapes | ForEach-Object { [pscustomobject]@{ Poz = $_.Range.Start; Tip = 'I' } }
+                    ) | Sort-Object Poz | ForEach-Object { $_.Tip }) -join '')
     Polja        = [int]$doc.Fields.Count
     Bookmarkova  = [int]$doc.Bookmarks.Count
     Zaglavlja    = [int]$(($doc.Sections | ForEach-Object { $_.Headers } | Where-Object { $_.Exists }).Count)
@@ -139,6 +155,9 @@ Check 'Broj polja'        $prije.Polja        $poslije.Polja        $null -Prese
 Check 'Bookmarkova'       $prije.Bookmarkova  $poslije.Bookmarkova  $null -Preserve
 Check 'Zaglavlja'         $prije.Zaglavlja    $poslije.Zaglavlja    $null -Preserve
 Check 'Podnozja'          $prije.Podnozja     $poslije.Podnozja     $null -Preserve
+Check 'Dimenzije tablica' $prije.TablicaDim   $poslije.TablicaDim   $null -Preserve
+Check 'Dimenzije slika'   $prije.SlikaDim     $poslije.SlikaDim     $null -Preserve
+Check 'Redoslijed elem.'  $prije.ElementRed   $poslije.ElementRed   $null -Preserve
 # docProps iz PAKETA (repair.mts), jer COM BuiltInDocumentProperties ovdje ne radi.
 # Autor SMIJE nestati samo ako je primijenjen final-document-inspector, koji po zadanom cisti
 # privatne metapodatke; bez njega je gubitak autorstva regresija. Ova je razlika i otkrivena
