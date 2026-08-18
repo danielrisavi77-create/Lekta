@@ -7,13 +7,12 @@ Prazna tablica drifta je jedino prihvatljivo stanje prije deploya.
 
 ## produkcija (`zrrjttizjyfcxmcpgzml`)
 
-Repo: 21 funkcija. Deployano: 16.
+Repo: 21 funkcija. Deployano: 17.
 
 | Funkcija | Stanje |
 | --- | --- |
 | `field-render` | SAMO U REPOU (nije deployana) |
 | `integrity-check` | SAMO U REPOU (nije deployana) |
-| `katedra-agent-worker` | SAMO U REPOU (nije deployana) |
 | `preflight-result` | SAMO U REPOU (nije deployana) |
 | `preflight-start` | SAMO U REPOU (nije deployana) |
 
@@ -22,21 +21,22 @@ Repo: 21 funkcija. Deployano: 16.
 | Funkcija | Verzija | Status | verify_jwt |
 | --- | --- | --- | --- |
 | `admin-stats` | 4 | ACTIVE | true |
-| `analytics-event` | 3 | ACTIVE | false |
+| `analytics-event` | 4 | ACTIVE | false |
 | `cleanup-orphan-repairs` | 8 | ACTIVE | false |
-| `create-checkout` | 8 | ACTIVE | true |
+| `create-checkout` | 9 | ACTIVE | true |
 | `delete-repair-job` | 7 | ACTIVE | true |
 | `faculty-request` | 8 | ACTIVE | false |
 | `file-guarantee-claim` | 7 | ACTIVE | true |
 | `generate-report` | 7 | ACTIVE | true |
-| `health` | 7 | ACTIVE | false |
+| `health` | 8 | ACTIVE | false |
+| `katedra-agent-worker` | 1 | ACTIVE | true |
 | `record-completion-check` | 4 | ACTIVE | false |
 | `redeem-referral-signup` | 7 | ACTIVE | true |
-| `repair-docx` | 25 | ACTIVE | true |
-| `send-reminders` | 8 | ACTIVE | false |
+| `repair-docx` | 26 | ACTIVE | true |
+| `send-reminders` | 9 | ACTIVE | false |
 | `source-check` | 1 | ACTIVE | true |
-| `unsubscribe-reminder` | 7 | ACTIVE | false |
-| `webhook-mor` | 7 | ACTIVE | false |
+| `unsubscribe-reminder` | 8 | ACTIVE | false |
+| `webhook-mor` | 8 | ACTIVE | false |
 
 </details>
 
