@@ -1,4 +1,4 @@
-import { extractBodyParagraphs, paragraphFingerprint, xmlDecode } from './typography-structure.ts';
+import { extractBodyParagraphs } from './typography-structure.ts';
 
 export type RequiredSectionKind =
   | 'summary-hr'
@@ -94,10 +94,6 @@ function kindForKey(value: string): RequiredSectionKind | undefined {
     'popis-slika': 'figure-list', 'figure-list': 'figure-list', 'popis-tablica': 'table-list', 'table-list': 'table-list', prilozi: 'appendices', appendices: 'appendices',
   };
   return aliases[key];
-}
-
-function paragraphText(xml: string): string {
-  return [...xml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/gi)].map((m) => xmlDecode(m[1])).join('');
 }
 
 function isHeading(xml: string, paragraph: ParagraphLike): boolean {

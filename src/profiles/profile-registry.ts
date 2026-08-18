@@ -13,9 +13,7 @@ import rawLawDrafts from '../../data/profiles/pravo/drafts/law-drafts.json';
 import type {
   VerifiedProfile,
   LegalDepartment,
-  ProfileStatusMeta,
   ProfileAuthorityMeta,
-  ProfileStatusKey,
   RuleAuthorityKey,
   BaseProfiles,
   DraftsStagingFile,

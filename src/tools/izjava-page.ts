@@ -198,7 +198,7 @@ function init() {
   });
 
   $('#st-clear')?.addEventListener('click', () => {
-    for (const [key, sel] of Object.entries(FIELDS)) {
+    for (const sel of Object.values(FIELDS)) {
       const el = $(sel); if (!el) continue;
       if (el.tagName === 'SELECT') el.selectedIndex = defaultSelectedIndex(el); else el.value = '';
     }

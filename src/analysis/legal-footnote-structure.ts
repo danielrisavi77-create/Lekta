@@ -1,5 +1,4 @@
 import {
-  classifyLegalBibliographyEntry,
   classifyLegalSource,
   legalBibliographyMatch,
   legalCitationFingerprint,

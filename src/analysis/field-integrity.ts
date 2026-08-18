@@ -108,11 +108,6 @@ export function manualTocAnchorFingerprint(startParagraphIndex: number, endParag
   return hash(`manual-toc|${startParagraphIndex}|${endParagraphIndex}|${rawText}`);
 }
 
-function localName(name: string): string {
-  const index = name.indexOf(':');
-  return index >= 0 ? name.slice(index + 1) : name;
-}
-
 function attr(tag: string, name: string): string | undefined {
   const escaped = name.replace(':', '\\:');
   const match = tag.match(new RegExp(`\\b${escaped}\\s*=\\s*["']([^"']*)["']`, 'i'));
@@ -174,7 +169,7 @@ interface RawField {
   paragraphIndex?: number;
 }
 
-function scanFields(part: string, xml: string): RawField[] {
+function scanFields(_part: string, xml: string): RawField[] {
   const found: RawField[] = [];
   const simple = /<w:fldSimple\b[^>]*>[\s\S]*?<\/w:fldSimple>/gi;
   for (const match of xml.matchAll(simple)) {

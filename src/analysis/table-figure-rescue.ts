@@ -1,4 +1,4 @@
-import { els, first, attr, direct } from '../utils/helpers';
+import { els, attr } from '../utils/helpers';
 import { anchorFingerprintForXml, type ElementCandidate, type ElementStructure } from './element-structure';
 
 export interface RescueMediaInfo {
@@ -118,10 +118,6 @@ function numberAttribute(node: Element | null, name: string): number | null {
 
 function hasDescendant(node: Element, names: string[]): boolean {
   return els(node, '*').some((candidate) => names.includes(localName(candidate)));
-}
-
-function paragraphText(node: Element): string {
-  return [...els(node, '*')].filter((child) => localName(child) === 't').map((child) => child.textContent || '').join('').trim();
 }
 
 function elementXml(node: Element): string {

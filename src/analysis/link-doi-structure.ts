@@ -59,8 +59,6 @@ function textOf(xml: string): string {
   return [...xml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/gi)].map((m) => decode(m[1])).join('');
 }
 
-function escapeRegex(value: string): string { return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
-
 function relationTargets(relsXml: string | undefined): Map<string, string> {
   const result = new Map<string, string>();
   for (const match of (relsXml ?? '').matchAll(/<Relationship\b[^>]*\bId=["']([^"']+)["'][^>]*\bTarget=["']([^"']+)["'][^>]*>/gi)) result.set(match[1], decode(match[2]));
@@ -135,8 +133,6 @@ export function analyzeLinkDoiStructure(input: {
       const link = hyperlinkRanges.find((x) => x.start <= candidate.start && x.end >= candidate.end);
       const kind = kindOf(candidate.raw);
       const target = link?.target;
-      const doi = canonicalDoi(candidate.raw);
-      const normalized = doi ?? normalizedUrl(candidate.raw, input.rules);
       const tracking = kind === 'url' ? trackingParams(candidate.raw) : [];
       const displayMismatch = !!target && cleanTrailing(target) !== cleanTrailing(candidate.raw) && normalizedUrl(candidate.raw) !== cleanTrailing(target);
       const status: LinkStatus = candidate.broken ? 'broken-spacing' : displayMismatch ? 'display-target-mismatch' : tracking.length ? 'tracking-parameters' : link ? 'hyperlink-ok' : 'plain-text';

@@ -117,7 +117,7 @@ const STANDALONE: Record<string, string> = {
 export function decodeLatex(raw: string): string {
   let s = raw;
   // Akcentne naredbe: \v{c}, \v c, \'{c}, \'c, \"o ... (bazno slovo u zagradi ili odmah iza).
-  s = s.replace(/\\([v'`"^~c=.Hu])\s*\{?\s*([A-Za-z])\}?/g, (m, cmd: string, letter: string) => {
+  s = s.replace(/\\([v'`"^~c=.Hu])\s*\{?\s*([A-Za-z])\}?/g, (_m, cmd: string, letter: string) => {
     const map = ACCENT[cmd];
     return (map && map[letter]) || letter;
   });

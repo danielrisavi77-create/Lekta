@@ -47,19 +47,19 @@ import { upperCaseHeadings } from './heading-case.ts';
 import { stripDirectFormatting, type RunLevelResult } from './run-level.ts';
 import { stripOrphanedEmptyParagraphs } from './paragraph-cleanup.ts';
 import { sectionName } from '../utils/helpers.ts';
-import { elementCaptionFixer, type ElementCaptionFixParams } from './element-caption-fixer.ts';
-import { bibliographyRepairFixer, type BibliographyRepairParams } from './bibliography-repair-fixer.ts';
-import { citationBibliographySyncFixer, type CitationBibliographySyncParams } from './citation-bibliography-sync-fixer.ts';
-import { legalFootnoteRepairFixer, type LegalFootnoteRepairParams } from './legal-footnote-repair-fixer.ts';
-import { finalDocumentInspectorFixer, type FinalDocumentInspectorParams } from './final-document-inspector-fixer.ts';
-import { tableFigureRescueFixer, type TableFigureRescueParams } from './table-figure-rescue-fixer.ts';
-import { sectionSurgeryFixer, type SectionSurgeryParams } from './section-surgery-fixer.ts';
-import { fieldIntegrityFixer, type FieldIntegrityParams } from './field-integrity-fixer.ts';
-import { croatianTypographyFixer, type CroatianTypographyParams } from './croatian-typography-fixer.ts';
-import { consistencyFixer, type ConsistencyFixParams } from './consistency-fixer.ts';
-import { requiredSectionFixer, type RequiredSectionFixParams } from './required-section-fixer.ts';
-import { linkDoiFixer, type LinkDoiFixParams } from './link-doi-fixer.ts';
-import { submissionMetadataFixer, type SubmissionMetadataFixParams } from './submission-metadata-fixer.ts';
+import { type ElementCaptionFixParams } from './element-caption-fixer.ts';
+import { type BibliographyRepairParams } from './bibliography-repair-fixer.ts';
+import { type CitationBibliographySyncParams } from './citation-bibliography-sync-fixer.ts';
+import { type LegalFootnoteRepairParams } from './legal-footnote-repair-fixer.ts';
+import { type FinalDocumentInspectorParams } from './final-document-inspector-fixer.ts';
+import { type TableFigureRescueParams } from './table-figure-rescue-fixer.ts';
+import { type SectionSurgeryParams } from './section-surgery-fixer.ts';
+import { type FieldIntegrityParams } from './field-integrity-fixer.ts';
+import { type CroatianTypographyParams } from './croatian-typography-fixer.ts';
+import { type ConsistencyFixParams } from './consistency-fixer.ts';
+import { type RequiredSectionFixParams } from './required-section-fixer.ts';
+import { type LinkDoiFixParams } from './link-doi-fixer.ts';
+import { type SubmissionMetadataFixParams } from './submission-metadata-fixer.ts';
 
 export { elementCaptionFixer } from './element-caption-fixer.ts';
 export { bibliographyRepairFixer } from './bibliography-repair-fixer.ts';
@@ -183,10 +183,6 @@ function twipsToMultiplierLabel(twips: string): string {
   if (isUnset(twips)) return UNSET_LABEL;
   const n = parseInt(twips, 10);
   return `${(n / 240).toFixed(2).replace('.', ',')}x prored`;
-}
-
-function joinLabels(entries: Record<string, string>, formatFn: (v: string) => string): string {
-  return Object.values(entries).map(formatFn).join(', ');
 }
 
 // Imena strana za margins changelog: bez ovoga korisnik vidi samo vrijednosti

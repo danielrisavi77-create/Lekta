@@ -281,7 +281,7 @@ export function consistencyRepairableItem(result: any): RepairableItem[] {
   return [{ ruleId: 'consistency-engine-assisted', fixerId: 'consistency-fixer', label: 'Consistency Engine', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi odabrane kanonske varijante. Lekta mijenja samo potvrđene jednostavne tekstualne raspone, a original ostaje nepromijenjen.', consistencyForm: form, matchKeys: ['Dosljednost', 'Consistency Engine'] }];
 }
 
-export function crossFileSubmissionRepairableItem(result: any, profile: any): RepairableItem[] {
+export function crossFileSubmissionRepairableItem(result: any, _profile: any): RepairableItem[] {
   const structure = result?.details?.crossFileSubmissionConsistency;
   const issues = Array.isArray(structure?.issues) ? structure.issues.filter((issue: any) => issue.status !== 'consistent') : [];
   if (!issues.length) return [];

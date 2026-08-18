@@ -76,10 +76,6 @@ function inferValues(result: any, profile: any): TitlePageRepairValues {
   };
 }
 
-function templateHasRole(template: TitlePageTemplate, role: string): boolean {
-  return template.elements.some((element) => element.role === role);
-}
-
 /**
  * Sastavlja asistirani plan za naslovnicu. Plan se nudi samo za verificirani službeni
  * predložak i pouzdano omeđenu prvu stranicu. Tekst se ne šalje u analizu niti se mijenja

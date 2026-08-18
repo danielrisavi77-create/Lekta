@@ -1,4 +1,4 @@
-import { anchorFingerprintForXml, type ElementKind } from '../analysis/element-structure.ts';
+import { anchorFingerprintForXml } from '../analysis/element-structure.ts';
 import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 
 export interface TableFigureRescueTable {
@@ -84,8 +84,6 @@ function bodyChildren(documentXml: string): { innerStart: number; innerEnd: numb
   }
   return { innerStart, innerEnd: close, children };
 }
-
-function localNameXml(value: string): string { return value.split(':').pop() || value; }
 
 function hasUnsupported(xml: string): boolean {
   return /<(?:w:)?(?:ins|del|moveFrom|moveTo|fldSimple|txbxContent|sdtContent|sectPrChange)\b/i.test(xml) || /<w:instrText\b/i.test(xml);

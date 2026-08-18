@@ -75,9 +75,6 @@ function findHyperlinkParent(xml: string, run: { start: number; end: number }): 
 }
 function stripLinkStyle(run: string): string { return run.replace(/<w:(?:color|u)\b[^>]*\/?>/gi, ''); }
 function hasTracking(value: string): boolean { try { return [...new URL(value).searchParams.keys()].some((key) => /^(?:utm_[^]+|fbclid|gclid|dclid|mc_cid|mc_eid|_ga)$/i.test(key)); } catch { return false; } }
-function cleanTarget(value: string): string {
-  try { const url = new URL(value); for (const key of [...url.searchParams.keys()]) if (/^(?:utm_[^]+|fbclid|gclid|dclid|mc_cid|mc_eid|_ga)$/i.test(key)) url.searchParams.delete(key); return url.toString(); } catch { return value; }
-}
 function alreadyApplied(documentXml: string, rels: string, operation: LinkDoiFixParams['operations'][number]): boolean {
   const range = extractBodyParagraphs(documentXml)[operation.paragraphIndex - 1];
   if (!range) return false;

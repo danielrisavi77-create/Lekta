@@ -342,9 +342,3 @@ export function attachHeadingStructure(result: any, rules: HeadingStructureRules
     },
   };
 }
-
-function requireHeadingNumbering(): typeof import('./heading-numbering') {
-  // Statički import bi napravio cikličku ovisnost samo na razini tipova. Ovaj mali adapter
-  // ostavlja detektor upotrebljivim u izoliranim testovima, a bundler ga i dalje razrješava lokalno.
-  return { buildHeadingNumberingPlan } as typeof import('./heading-numbering');
-}

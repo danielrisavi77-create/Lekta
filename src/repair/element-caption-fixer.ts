@@ -1,4 +1,3 @@
-import { parseXml } from '../docx/parser.ts';
 import { anchorFingerprintForXml, type ElementKind } from '../analysis/element-structure.ts';
 import type { DocxXmlParts, FixerOutput } from './fixers.ts';
 

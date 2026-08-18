@@ -120,10 +120,6 @@ function footnoteBlock(xml: string, id: number): { start: number; end: number; b
   return match ? { start: match.index, end: match.index + match[0].length, block: match[0] } : null;
 }
 
-function footnoteHasReference(block: string, id: number): boolean {
-  return new RegExp(`<w:footnoteReference\\b[^>]*\\bw:id=["']${id}["']`, 'i').test(block);
-}
-
 function footnoteReferenceRun(id: number): string {
   return `<w:r><w:rPr><w:rStyle w:val="FootnoteReference"/></w:rPr><w:footnoteReference w:id="${id}"/></w:r>`;
 }

@@ -790,10 +790,10 @@ export function patchParagraphTargets(
     let next = p.inner;
     if (target.removeFakeIndent) next = stripLeadingFakeIndent(next).xml;
     if (target.clearDirectIndent) {
-      next = next.replace(/<w:ind\b([^>]*)\/>/g, (node, attrs: string) => {
+      next = next.replace(/<w:ind\b([^>]*)\/>/g, (_node, attrs: string) => {
         const cleaned = attrs.replace(/\s+w:(?:firstLine|hanging)="[^"]*"/g, '');
         return cleaned.trim() ? `<w:ind${cleaned}/>` : '';
-      }).replace(/<w:ind\b([^>]*)>([\s\S]*?)<\/w:ind>/g, (node, attrs: string, inner: string) => {
+      }).replace(/<w:ind\b([^>]*)>([\s\S]*?)<\/w:ind>/g, (_node, attrs: string, inner: string) => {
         const cleaned = attrs.replace(/\s+w:(?:firstLine|hanging)="[^"]*"/g, '');
         return cleaned.trim() ? `<w:ind${cleaned}>${inner}</w:ind>` : inner;
       });

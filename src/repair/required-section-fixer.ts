@@ -1,4 +1,4 @@
-import { extractBodyParagraphs, paragraphFingerprint, xmlEncode } from '../analysis/typography-structure.ts';
+import { extractBodyParagraphs, xmlEncode } from '../analysis/typography-structure.ts';
 import type { RequiredSectionKind } from '../analysis/required-sections-structure.ts';
 import {
   ensureHeadingNumbering,

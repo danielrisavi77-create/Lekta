@@ -216,12 +216,10 @@ function sectionNodes(document: Document): Array<{ section: Element; paragraph?:
 
 export function analyzeSectionStructure(input: SectionStructureInput): SectionStructure {
   const parts = input.packageXmlParts ?? {};
-  const children = bodyChildren(input.document);
   const relationships = relationshipTargets(parts);
   const allSections = sectionNodes(input.document);
   const globalWarnings: string[] = [];
   const evenOdd = oddEvenEnabled(parts);
-  const paragraphMap = new Map((input.paragraphs ?? []).map((paragraph) => [paragraph.index, paragraph.text]));
 
   const sections = allSections.map(({ section, paragraph, bodyChildIndex }, ordinal) => {
     const header = refs(section, 'headerReference');
