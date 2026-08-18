@@ -228,7 +228,17 @@ ispod provjerena je UPITOM NAD ZIVOM BAZOM, ne izvedena iz koda.
 
 **Sto od A26-10 OSTAJE otvoreno**, i to su jedina dva stvarna nalaza iz 66 WARN-ova advisora:
 
-- `pg_net` i `vector` su i dalje u shemi `public` (2 x `extension_in_public`). OTVORENO.
+- `pg_net` i `vector` su i dalje u shemi `public` (2 x `extension_in_public`). **Nakon mjerenja to
+  su dva razlicita nalaza, ne jedan:**
+  - `vector` ima 0 ovisnih objekata i **0 stupaca tog tipa u cijeloj bazi**, dakle instalirana je i
+    nekoristena. Migracija `0095` je premjesta u `extensions` (napisana, jos nije primijenjena).
+    `search_path` baze vec sadrzi `extensions`, pa je zahvat transparentan za kod.
+  - `pg_net` je u `public` samo po `extnamespace`; **svih 15 njezinih objekata zivi u shemi `net`**,
+    dakle u `public` od nje nema nicega. `ALTER EXTENSION ... SET SCHEMA` premjestio bi CLANOVE, pa
+    bi `net.http_post` nestao pod tim imenom, a 2 cron posla ga zovu upravo tako (uz Supabaseove
+    interne webhookove). Zahvat bi zamijenio upozorenje koje ne opisuje stvarnu izlozenost za tiho
+    pokvaren cron. **SVJESNO PRIHVACENO ODSTUPANJE**; advisor ce ga i dalje javljati i to je tocno,
+    ali mjeri deklarirani `extnamespace`, ne gdje su objekti.
 - 13 x `authenticated_security_definer_function_executable`. Pregledano pojedinacno: **12 pripada
   Katedra povrsini** (`*_agent_run`, `*_agent_payload`, `completion_*`), ciji worker nije deployan,
   a 13. je `unsubscribe_own_deadline_subscription`, koji po namjeni MORA biti pozivljiv od
