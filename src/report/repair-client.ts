@@ -116,6 +116,13 @@ export type RepairOutcome =
   | { kind: 'error'; status?: number; message: string };
 
 /** base64 -> Uint8Array (cisto, bez Node Buffera; `atob` je globalan u pregledniku/Deno/vitest). */
+import {
+  decodeRepairFrame,
+  REPAIR_BINARY_CONTENT_TYPE,
+  REPAIR_BINARY_REQUEST_HEADER,
+  REPAIR_BINARY_REQUEST_VALUE,
+} from './repair-framing';
+
 export function decodeBase64(b64: string): Uint8Array {
   const bin = atob(b64);
   const out = new Uint8Array(bin.length);
@@ -172,6 +179,38 @@ export function buildRepairMeta(input: {
  * Uploadaj dokument + meta na repair-docx i mapiraj HTTP odgovor u ishod. Ne postavlja
  * `content-type` rucno: FormData sam postavi multipart boundary. Bacanje mreze -> {kind:'error'}.
  */
+
+/**
+ * Sastavi uspjesan ishod iz METAPODATAKA i bajtova dokumenta.
+ *
+ * Dijeljeno izmedju binarnog i JSON oblika odgovora (audit DOCX-05). Da svaki oblik ima svoju
+ * kopiju ove logike, dva puta bi trebalo popraviti svaki buduci propust (npr. `unknownFixers`,
+ * koji je i nastao kao "podatak koji server salje a klijent ne cita"). Ovako je razlika izmedju
+ * oblika iskljucivo u tome KAKO su bajtovi stigli.
+ */
+function okFromMeta(meta: Record<string, unknown>, docxBytes: Uint8Array): RepairOutcome {
+  const m = meta as {
+    fileName?: string; changelog?: RepairChange[]; skipped?: string[]; unknownFixers?: unknown[];
+    slotId?: string; jobId?: string | null; storagePending?: boolean; sourceCheck?: unknown;
+  };
+  return {
+    kind: 'ok',
+    docxBytes,
+    fileName: m.fileName || 'rad-popravljeno.docx',
+    changelog: Array.isArray(m.changelog) ? m.changelog : [],
+    skipped: Array.isArray(m.skipped) ? m.skipped : [],
+    // Stavke koje server nije prepoznao kao zive (audit DOCX-13). Prije su se tiho gubile, pa je
+    // korisnik dobivao dokument uvjeren da su primijenjene.
+    unknownFixers: Array.isArray(m.unknownFixers) ? m.unknownFixers.map(String) : [],
+    slotId: m.slotId,
+    jobId: m.jobId ?? null,
+    // Stari server ne salje polje: tamo je pohrana bila gotova prije odgovora, pa false znaci
+    // "ishod je vec poznat", sto je za taj server tocno.
+    storagePending: m.storagePending === true,
+    sourceCheck: parseSourceCheck(m.sourceCheck),
+  };
+}
+
 export async function uploadRepair(
   config: RepairClientConfig,
   accessToken: string,
@@ -191,7 +230,13 @@ export async function uploadRepair(
   try {
     res = await fetchImpl(config.endpoint, {
       method: 'POST',
-      headers: { ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}) },
+      headers: {
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+        // Trazi binarni oblik odgovora (audit DOCX-05): metapodaci + sirovi bajtovi umjesto
+        // base64 u JSON-u. Stariji server ovo zaglavlje ignorira i vrati zatecen JSON, pa
+        // klijent mora znati oba oblika (grana ispod).
+        [REPAIR_BINARY_REQUEST_HEADER]: REPAIR_BINARY_REQUEST_VALUE,
+      },
       body: form,
       ...(options?.signal ? { signal: options.signal } : {}),
     });
@@ -205,6 +250,28 @@ export async function uploadRepair(
   }
 
   if (res.status === 200) {
+    /**
+     * DVA OBLIKA ODGOVORA (audit DOCX-05).
+     *
+     * Novi server vraca okvir (metapodaci + sirovi bajtovi), cime u memoriji nestaju base64 string
+     * i njegova kopija u JSON-u. Stariji server, ili onaj kojem zaglavlje nije stiglo, vraca
+     * zatecen JSON s `docxBase64`.
+     *
+     * Klijent mora znati oba: deploy nije atomaran, pa se u prijelazu nova stranica moze naci
+     * pred starim serverom i obrnuto. Razlikuju se po Content-Typeu, ne po sadrzaju, da se ne
+     * pokusava parsirati binarno tijelo kao tekst.
+     */
+    const contentType = res.headers.get('content-type') || '';
+    if (contentType.includes(REPAIR_BINARY_CONTENT_TYPE)) {
+      try {
+        const body = new Uint8Array(await res.arrayBuffer());
+        const frame = decodeRepairFrame<Record<string, unknown>>(body);
+        return okFromMeta(frame.meta, frame.docxBytes);
+      } catch (e) {
+        return { kind: 'error', status: 200, message: e instanceof Error ? e.message : 'neispravan binarni odgovor' };
+      }
+    }
+
     const data = (await res.json().catch(() => ({}))) as {
       docxBase64?: string; fileName?: string; changelog?: RepairChange[]; skipped?: string[]; unknownFixers?: string[]; slotId?: string; jobId?: string | null;
       storagePending?: boolean; sourceCheck?: unknown;
@@ -215,22 +282,7 @@ export async function uploadRepair(
       return { kind: 'integrity_failed', part: String(f?.part ?? 'nepoznat dio'), problem: String(f?.problem ?? 'neispravan izlazni paket'), preexisting: f?.preexisting === true };
     }
     if (!data.docxBase64) return { kind: 'error', status: 200, message: 'nedostaje docxBase64' };
-    return {
-      kind: 'ok',
-      docxBytes: decodeBase64(data.docxBase64),
-      fileName: data.fileName || 'rad-popravljeno.docx',
-      changelog: Array.isArray(data.changelog) ? data.changelog : [],
-      skipped: Array.isArray(data.skipped) ? data.skipped : [],
-      // Stavke koje server nije prepoznao kao zive (audit DOCX-13). Prije su se tiho gubile, pa je
-      // korisnik dobivao dokument uvjeren da su primijenjene.
-      unknownFixers: Array.isArray(data.unknownFixers) ? data.unknownFixers.map(String) : [],
-      slotId: data.slotId,
-      jobId: data.jobId ?? null,
-      // Stari server ne salje polje: tamo je pohrana bila gotova prije odgovora, pa false znaci
-      // "ishod je vec poznat", sto je za taj server tocno.
-      storagePending: data.storagePending === true,
-      sourceCheck: parseSourceCheck(data.sourceCheck),
-    };
+    return okFromMeta(data as Record<string, unknown>, decodeBase64(data.docxBase64));
   }
   if (res.status === 409) {
     const data = (await res.json().catch(() => ({}))) as { suggestedWorkType?: string; workType?: string };

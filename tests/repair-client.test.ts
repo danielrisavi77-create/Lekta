@@ -1,3 +1,4 @@
+import { encodeRepairFrame } from '../src/report/repair-framing';
 import { describe, it, expect } from 'vitest';
 
 import {
@@ -274,5 +275,92 @@ describe('uploadRepair', () => {
     const ac = new AbortController();
     await uploadRepair(config, 'j', new Uint8Array([1]), meta(), spy as unknown as typeof fetch, { signal: ac.signal });
     expect(seen).toBe(true);
+  });
+});
+
+/**
+ * KLIJENT MORA ZNATI OBA OBLIKA ODGOVORA (audit DOCX-05).
+ *
+ * Deploy nije atomaran: nova stranica se moze naci pred starim serverom (koji ne zna binarni
+ * oblik) i stara stranica pred novim (koja ne salje zaglavlje pa dobiva JSON). Ako klijent zna
+ * samo jedan oblik, popravak pukne u prijelaznom razdoblju, a to je tocno trenutak kad korisnik
+ * ne moze razumjeti zasto.
+ *
+ * Test drzi i jace svojstvo: oba oblika daju ISTI ishod, do polja. Bez toga bi se razlike uvlacile
+ * tiho (npr. `unknownFixers` koji server salje, a jedna grana ga ne cita).
+ */
+describe('uploadRepair prihvaca binarni I JSON oblik', () => {
+  const docx = new Uint8Array([0x50, 0x4b, 0x03, 0x04, 0xff, 0x00, 0x80]);
+  const serverMeta = {
+    fileName: 'rad-popravljeno.docx',
+    changelog: [{ before: 'Times', after: 'Times New Roman' }],
+    skipped: ['neka-stavka'],
+    unknownFixers: ['nepoznat-fixer'],
+    slotId: 'slot-1',
+    jobId: 'job-1',
+    storagePending: true,
+    sourceCheck: null,
+  };
+
+  const config = { endpoint: 'https://primjer.supabase.co/functions/v1/repair-docx' };
+  const meta = { workType: 'diplomski', signals: { words: 1, titleMarker: null }, requests: [], consentVersion: 'v' } as never;
+
+  it('binarni oblik: cita okvir i vraca ok', async () => {
+    let sentHeader: string | undefined;
+    const fetchImpl = (async (_url: string, init?: RequestInit) => {
+      sentHeader = (init?.headers as Record<string, string>)?.['X-Lekta-Response'];
+      return new Response(encodeRepairFrame(serverMeta, docx) as unknown as BodyInit, {
+        status: 200,
+        headers: { 'content-type': 'application/x-lekta-repair' },
+      });
+    }) as unknown as typeof fetch;
+
+    const out = await uploadRepair(config, 'token', docx, meta, fetchImpl);
+    expect(sentHeader, 'klijent mora zatraziti binarni oblik').toBe('binary');
+    expect(out.kind).toBe('ok');
+    if (out.kind !== 'ok') return;
+    expect(Array.from(out.docxBytes)).toEqual(Array.from(docx));
+    expect(out.fileName).toBe('rad-popravljeno.docx');
+    expect(out.unknownFixers).toEqual(['nepoznat-fixer']);
+    expect(out.storagePending).toBe(true);
+  });
+
+  it('JSON oblik (stariji server) i dalje radi', async () => {
+    const b64 = Buffer.from(docx).toString('base64');
+    const fetchImpl = (async () =>
+      new Response(JSON.stringify({ docxBase64: b64, ...serverMeta }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      })) as unknown as typeof fetch;
+
+    const out = await uploadRepair(config, 'token', docx, meta, fetchImpl);
+    expect(out.kind).toBe('ok');
+    if (out.kind !== 'ok') return;
+    expect(Array.from(out.docxBytes)).toEqual(Array.from(docx));
+    expect(out.unknownFixers).toEqual(['nepoznat-fixer']);
+  });
+
+  it('oba oblika daju ISTI ishod (razlika je samo u prijenosu)', async () => {
+    const b64 = Buffer.from(docx).toString('base64');
+    const binarni = await uploadRepair(config, 't', docx, meta, (async () =>
+      new Response(encodeRepairFrame(serverMeta, docx) as unknown as BodyInit, {
+        status: 200, headers: { 'content-type': 'application/x-lekta-repair' },
+      })) as unknown as typeof fetch);
+    const jsonski = await uploadRepair(config, 't', docx, meta, (async () =>
+      new Response(JSON.stringify({ docxBase64: b64, ...serverMeta }), {
+        status: 200, headers: { 'content-type': 'application/json' },
+      })) as unknown as typeof fetch);
+    expect(binarni).toEqual(jsonski);
+  });
+
+  it('krnji binarni odgovor daje jasnu gresku, ne ostecen dokument', async () => {
+    const frame = encodeRepairFrame(serverMeta, docx);
+    new DataView(frame.buffer).setUint32(0, frame.length + 999, true);
+    const fetchImpl = (async () =>
+      new Response(frame as unknown as BodyInit, {
+        status: 200, headers: { 'content-type': 'application/x-lekta-repair' },
+      })) as unknown as typeof fetch;
+    const out = await uploadRepair(config, 't', docx, meta, fetchImpl);
+    expect(out.kind).toBe('error');
   });
 });

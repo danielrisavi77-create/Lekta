@@ -34,6 +34,12 @@ import { computeFingerprint } from '../../../src/fingerprint/fingerprint.ts';
 import { extractFingerprintInputFromDocx } from '../../../src/fingerprint/extract-from-docx.ts';
 import { readZip } from '../../../src/repair/zip-codec.ts';
 import { DOCX_MAX_UPLOAD_BYTES, REPAIR_MAX_REQUESTS, paramsWithinBudget } from '../../../src/repair/docx-budget.ts';
+import {
+  encodeRepairFrame,
+  REPAIR_BINARY_CONTENT_TYPE,
+  REPAIR_BINARY_REQUEST_HEADER,
+  REPAIR_BINARY_REQUEST_VALUE,
+} from '../../../src/report/repair-framing.ts';
 import { resolveParams, type ParamSource } from '../../../src/repair/param-authority.ts';
 import { isReportWorkType } from '../../../src/report/pricing.ts';
 import { decideReportAccess } from '../../../src/report/slot-logic.ts';
@@ -119,6 +125,8 @@ function toBase64(bytes: Uint8Array): string {
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
+
+
 // WS-6: pohrani original + rezultat vezano uz korisnika (retencija "do brisanja"). Migracija
 // 0026_repair_jobs.sql daje tablicu repair_jobs (RLS select-own) + privatni bucket 'repair'.
 // Putanja je '<user_id>/<job_id>/{original,fixed}.docx' (poklapa se sa storage RLS foldername[1]).
@@ -173,6 +181,30 @@ Deno.serve(async (req: Request) => {
   const cors = corsHeadersFor(req.headers.get('Origin'), ALLOWED_ORIGINS);
   const json = (body: unknown, status = 200): Response =>
     new Response(JSON.stringify(body), { status, headers: { ...cors, 'content-type': 'application/json' } });
+
+  /**
+   * Odgovor koji nosi popravljeni dokument (audit DOCX-05).
+   *
+   * Klijent koji posalje `X-Lekta-Response: binary` dobiva okvir (metapodaci + sirovi bajtovi), pa
+   * u memoriji nestaju DVIJE velike kopije: base64 string (~1,33x dokumenta) i jos jedna njegova
+   * kopija unutar JSON.stringify. Za dokument od 20 MB to je oko 54 MB manje, na runtimeu koji
+   * ima 256 MB.
+   *
+   * Klijent koji to ne trazi dobiva zatecen JSON s `docxBase64`. Prijelazno razdoblje je nuzno:
+   * deploy nije atomaran i stranice iz predmemorije jos govore stari oblik, a popravak im ne
+   * smije puknuti.
+   */
+  const docxResponse = (docxBytes: Uint8Array, extra: Record<string, unknown>): Response => {
+    if (req.headers.get(REPAIR_BINARY_REQUEST_HEADER) !== REPAIR_BINARY_REQUEST_VALUE) {
+      return json({ docxBase64: toBase64(docxBytes), ...extra }, 200);
+    }
+    // `as Uint8Array<ArrayBuffer>`: isti obrazac kao u zip-codec.ts. TS 5.7 razlikuje
+    // ArrayBufferLike od ArrayBuffer, a BodyInit trazi uzi tip; sadrzaj je isti.
+    return new Response(encodeRepairFrame(extra, docxBytes) as Uint8Array<ArrayBuffer>, {
+      status: 200,
+      headers: { ...cors, 'content-type': REPAIR_BINARY_CONTENT_TYPE },
+    });
+  };
   // Mjerenje trajanja po fazama: bez njega je "popravak je spor" osjecaj, ne podatak. Ispisuje se
   // jednim retkom na kraju uspjesnog puta (koraci koji izadju ranije ionako nisu spori).
   const t0 = performance.now();
@@ -438,12 +470,11 @@ Deno.serve(async (req: Request) => {
       const tCorpus = performance.now();
       const sourceCheck = await corpusPromise;
       console.log(`[repair-docx] timings repair=${msRepair} store=0 corpus=${ms(tCorpus)} total=${ms(t0)} (nula izmjena)`);
-      return json({
-        docxBase64: toBase64(result.docxBytes),
+      return docxResponse(result.docxBytes, {
         fileName: (meta.fileName ? String(meta.fileName).replace(/\.docx$/i, '') : 'rad') + '-popravljeno.docx',
         changelog: [], skipped: result.skipped, skippedReasons: result.skippedReasons,
         slotId: null, jobId: null, fingerprint, sourceCheck,
-      }, 200);
+      });
     }
 
     // RE-17: popravak je STVARNO nesto promijenio - tek sada trosimo slot/kvotu.
@@ -518,8 +549,7 @@ Deno.serve(async (req: Request) => {
     console.log(`[repair-docx] timings repair=${msRepair} store=${msStore} corpus=${ms(tCorpus)} total=${ms(t0)}`);
 
     const traceToken = await sha256Hex(`${slotId}.${now}.${user.id}`);
-    return json({
-      docxBase64: toBase64(result.docxBytes),
+    return docxResponse(result.docxBytes, {
       fileName: (meta.fileName ? String(meta.fileName).replace(/\.docx$/i, '') : 'rad') + '-popravljeno.docx',
       changelog: result.changelog,
       skipped: result.skipped,
@@ -536,7 +566,7 @@ Deno.serve(async (req: Request) => {
       // Zahtjevi koje server nije prepoznao kao zive (audit DOCX-13). Izostavljeno kad ih nema, da
       // sucelje ne mora razlikovati praznu listu od nepostojanja polja.
       ...(unknownFixers.length ? { unknownFixers } : {}),
-    }, 200);
+    });
   } catch (e) {
     console.error('[repair-docx]', e);
     return json({ error: 'internal' }, 500);
