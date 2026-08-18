@@ -1,7 +1,7 @@
-import type { Check, Issue } from '../scoring/checks';
+import type { Check, Issue } from '../scoring/checks.ts';
 import { scoreMeta, categoryTotals } from '../scoring/checks.ts';
-import type { FingerprintInput } from '../fingerprint/fingerprint';
-import type { ReportWorkType } from './pricing';
+import type { FingerprintInput } from '../fingerprint/fingerprint.ts';
+import type { ReportWorkType } from './pricing.ts';
 import { coverageTierForStatus } from './guarantee.ts';
 
 /**

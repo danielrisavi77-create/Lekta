@@ -11,7 +11,7 @@
  * cita pohranjene (method 0) zapise izravno; parseXml koristi globalni DOMParser
  * (u testu podmetnut @xmldom/xmldom, vidi tests/setup/xml-dom.ts).
  */
-import { DOCX_MAX_ZIP_ENTRIES } from '../repair/docx-budget';
+import { DOCX_MAX_ZIP_ENTRIES, DOCX_MAX_DECOMPRESSED_BYTES_PER_ENTRY } from '../repair/docx-budget.ts';
 import { attr, els, first, direct } from '../utils/helpers.ts';
 
 interface ZipEntry {
@@ -27,7 +27,7 @@ interface ZipEntry {
  * Realan diplomski `document.xml` je nekoliko MB, pa 200 MB daje velik zazor bez laznih
  * odbijanja, a zaustavlja mali .docx koji deflate omjerom (~1000:1) cilja gigabajte.
  */
-export const MAX_DECOMPRESSED_BYTES = 200 * 1024 * 1024;
+export const MAX_DECOMPRESSED_BYTES = DOCX_MAX_DECOMPRESSED_BYTES_PER_ENTRY;
 
 /**
  * Gornja granica broja zapisa u arhivi. Realan .docx ima 10-40 zapisa, doktorat prepun
@@ -126,6 +126,23 @@ export class ZipReader {
   }
 
   names(): string[] { return [...this.entries.keys()]; }
+
+  /**
+   * Zbroj DEKLARIRANIH dekomprimiranih velicina svih zapisa, iz central directoryja.
+   *
+   * Jeftino (bez ijedne dekompresije) i dostupno odmah nakon `parse()`. Sluzi `docxCapability`
+   * da JOS PRIJE analize zna hoce li popravak moci progutati paket, umjesto da korisnik to sazna
+   * tek nakon privole i slanja na server. Deklarirana velicina moze lagati (bomba deklarira malo),
+   * ali za ovu namjenu je dovoljna: streaming capovi u `data()` i zip-codecu hvataju lazljivca.
+   */
+  declaredUncompressedTotal(): number {
+    let total = 0;
+    for (const e of this.entries.values()) total += e.uncomp;
+    return total;
+  }
+
+  /** Broj zapisa u arhivi (nakon `parse()`). */
+  entryCount(): number { return this.entries.size; }
 
   async data(name: string): Promise<Uint8Array | null> {
     const e = this.entries.get(name);

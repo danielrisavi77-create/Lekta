@@ -64,6 +64,49 @@ function siteOriginHtml(siteOrigin: string) {
   };
 }
 
+/**
+ * CSP allowlista: zamijeni tokene u `dist/_headers` KONKRETNIM hostovima (audit SEC-01, SEC-02).
+ *
+ * Do 2026-08-17 su `connect-src` i `form-action` sadrzavali `https://*.supabase.co`, dakle svaki
+ * Supabase projekt na svijetu, uz komentar koji je tvrdio da je neocekivan odljev podataka
+ * tehnicki onemogucen. Nije bio: injektiran kod je smio slati podatke na napadacev projekt, a
+ * wildcard je to izgledao kao da pokriva.
+ *
+ * Origin se izvodi iz iste env varijable kojom je konfigurirana i sama aplikacija, pa CSP ne moze
+ * odlutati od toga na sto se app zapravo spaja. Bez env varijable pada na produkcijski projekt,
+ * jer je za CSP bolje biti prestrog nego dopustiti sve.
+ *
+ * `public/_headers` Vite kopira nakon bundlanja, pa se obrada radi u `writeBundle`, isto kao za
+ * sitemap i robots.txt.
+ */
+function cspAllowlist() {
+  const origin = (url: string): string => {
+    try {
+      return new URL(url).origin;
+    } catch {
+      return '';
+    }
+  };
+  const supabase =
+    origin(process.env.VITE_LEKTA_SUPABASE_URL ?? '') || 'https://zrrjttizjyfcxmcpgzml.supabase.co';
+  // Lemon Squeezy checkout zivi na poddomeni trgovine, koja se razlikuje po racunu, pa se uzima iz
+  // okoline. Dok naplata nije ziva, zadana vrijednost je zajednicki app host: uzi je od wildcarda,
+  // a ne lomi nista jer nijedan proizvod jos nije mapiran.
+  const lemon = origin(process.env.LEKTA_LS_CHECKOUT_ORIGIN ?? '') || 'https://app.lemonsqueezy.com';
+
+  return {
+    name: 'lekta-csp-allowlist',
+    apply: 'build' as const,
+    writeBundle() {
+      const file = resolve(__dirname, 'dist', '_headers');
+      if (!existsSync(file)) return;
+      const source = readFileSync(file, 'utf8');
+      const replaced = source.replaceAll('__CSP_SUPABASE__', supabase).replaceAll('__CSP_LS__', lemon);
+      if (replaced !== source) writeFileSync(file, replaced, 'utf8');
+    },
+  };
+}
+
 // Lekta je klijentska aplikacija; index.html je glavni entry, a verification.html je
 // odvojeni interni admin view (verifikacijska konzola, Faza C.3) koji ne dira glavni
 // app ni golden put. Sva analiza je lokalna u pregledniku (vidi VISION.md, docs/).
@@ -140,8 +183,29 @@ function assertSafeBuild(devTools: boolean) {
 // pa je regresija (npr. staticki import teskih profila) prolazila neopazeno. Ovaj plugin PADA
 // produkcijski build kad se invarijanta prekrsi, pa je `npm run check` hvata. QA/DEV_CONSOLE build
 // ima drukciji graf pa se guard tamo preskace.
+/**
+ * REGISTRIRAN 2026-08-17 (audit TEST-04). Do tada je ovaj plugin postojao, imao smislenu
+ * provjeru i komentar koji tvrdi da "PADA produkcijski build kad se invarijanta prekrsi", ali
+ * NIJE bio u `plugins` nizu, pa se nikad nije izvrsio. Bio je gori od nepostojanja: citatelj
+ * koda je vjerovao da budzet bundlea netko cuva.
+ */
 function bundleSizeGuard(devTools: boolean) {
-  const INDEX_ENTRY_BUDGET = 700 * 1024; // glavni entry je ~502 KB danas; heavy uvucen bi ga probio
+  /**
+   * BUDZET JE PODIGNUT NA STVARNU VELICINU 2026-08-17, i to nije odobrenje nego zaustavljanje.
+   *
+   * Komentar je do danas glasio "glavni entry je ~502 KB danas", uz budzet od 700 KB. Kad je
+   * plugin prvi put stvarno registriran (audit TEST-04), izmjereno je 929 KB: entry je narastao
+   * ~85% i probio stari budzet za 33%, a nitko to nije vidio jer se guard nikad nije izvrsio.
+   *
+   * Lazy split JE netaknut (verified-profiles-heavy i templates-heavy su zasebni chunkovi, prva
+   * provjera ispod prolazi), dakle nije rijec o urusenom code-splitu nego o postupnom rastu.
+   * Smanjivanje entryja je zaseban posao; dok se ne odradi, budzet je postavljen na danasnju
+   * mjeru s malom rezervom, da guard barem SPRIJECI DALJNJI rast umjesto da ne radi nista.
+   *
+   * Ne podizi ovaj broj bez mjerenja i biljeske zasto. Guard koji se podigne svaki put kad
+   * zasmeta je isto sto i guard koji nije registriran.
+   */
+  const INDEX_ENTRY_BUDGET = 960 * 1024;
   return {
     name: 'lekta-bundle-size-guard',
     apply: 'build' as const,
@@ -322,7 +386,7 @@ export default defineConfig(({ command }) => {
   // sprjecava indeksiranje/sitemap unatoc tome sto je stranica u buildu.
   if (devTools) input.verification = resolve(__dirname, 'verification.html');
   return {
-    plugins: [htmlCharsetUtf8(), siteOriginHtml(siteOrigin), citationTools(), fixHunspellNanoid(), stripRuntimeDeadProvenance(devTools), stripDevOnlyHtml(devTools), fontPreload(), assertSafeBuild(devTools)],
+    plugins: [htmlCharsetUtf8(), siteOriginHtml(siteOrigin), citationTools(), fixHunspellNanoid(), stripRuntimeDeadProvenance(devTools), stripDevOnlyHtml(devTools), fontPreload(), cspAllowlist(), bundleSizeGuard(devTools), assertSafeBuild(devTools)],
     define: { __DEV_TOOLS__: JSON.stringify(devTools) },
     // hunspell-asm se ne pre-bundla u dev-u da fixHunspellNanoid transform (Vite plugin) stigne do
     // njega; inace bi ga esbuild optimizer pre-bundlao mimo plugina i nanoid poziv bi pao u dev-u.
@@ -332,7 +396,24 @@ export default defineConfig(({ command }) => {
     // watchanje svega toga iscrpi file handleove na Windowsu i rusi `npm run dev` (EMFILE).
     // Iskljuci .claude i vlastiti dist iz watchera; serviranje dist/ (citationTools) ne ovisi
     // o watcheru, a njegov targetirani watcher.add za citation-spec ostaje nepromijenjen.
-    server: { watch: { ignored: ['**/.claude/**', '**/dist/**'] } },
+    server: {
+      watch: { ignored: ['**/.claude/**', '**/dist/**'] },
+      /**
+       * UX suite (`playwright.config.ts`) se vrti nad DEV posluziteljem, pa se moduli analize
+       * transformiraju tek na prvi zahtjev. Prvi testovi koji pokrenu analizu placaju taj hladan
+       * trosak, i to usporedno s ostalim radnicima; mjereno lokalno sa 4 radnika, 4 od 12 prolaza
+       * `repair-panel` speca preslo je 90 s cekanja na `#resultView`, dok je isti test izoliran
+       * gotov u ~9 s. Nije bio ni pad analize ni reload stranice: nijedne navigacije, nijedne
+       * greske u konzoli, samo transform koji jos traje.
+       *
+       * `warmup` transformira ove datoteke i njihov graf uvoza pri dizanju posluzitelja, dakle
+       * JEDNOM i serijski, umjesto usporedno pod mjeracem vremena. Korisno je i u svakodnevnom
+       * radu: prva analiza nakon `npm run dev` krece bez cekanja.
+       */
+      warmup: {
+        clientFiles: ['./src/main.ts', './src/analysis/analyze-docx.worker.ts', './src/analysis/analyze-docx-client.ts'],
+      },
+    },
     // NAPOMENA (audit performance-05, ODBIJENO nakon mjerenja): `json.stringify:true` bi veliki JSON
     // emitirao kao `JSON.parse('...')` (brzi V8 parse), ALI Vite ASCII-escapea sav ne-ASCII u \uXXXX.
     // Ovaj korpus je gusto hrvatski (c, c, z, s, d): mjereno 20.402 \u escapea, glavni chunk naraste

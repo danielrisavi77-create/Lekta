@@ -67,6 +67,20 @@ npm run verify:word:worst    # Tier 2: dokument najgoreg slučaja (naslovnica, t
 Sva tri moraju vratiti izlazni kod 0. Puni Tier model i razlog zašto Tier 0 sam po sebi nije
 dovoljan su u `docs/REAL_CORPUS_TESTING.md`.
 
+**CI ovo ne pokriva i ne može.** `.github/workflows/check.yml` vrti Tier 0, a `repair-slow.yml`
+zatvoreni krug (`npm run test:slow`); `docx-strict-open.yml` pokriva Tier 1. `verify:word` i
+`verify:word:worst` traže pravi Word na Windowsu, pa ostaju **ručni korak** i jedini su dokaz da
+popravljeni dokument Word doista otvara bez popravka.
+
+Zato se izvođenje **upisuje ovdje**, inače se zaboravi i nitko poslije ne zna je li ikad izvedeno:
+
+| Datum | Verzija / commit | `verify:strict-open` | `verify:word` | `verify:word:worst` | Tko |
+|---|---|---|---|---|---|
+| _(popuni pri sljedećem deployu repair motora)_ | | | | | |
+
+Zadnja poznata izmjena Repair Enginea koja **traži novo izvođenje**: 2026-08-16 (RE-62, serverski
+autoritet nad ciljanom vrijednošću + ponovna provjera prije isporuke).
+
 ---
 
 ## A. Deploy Edge funkcija (`source-check` PA `repair-docx`)

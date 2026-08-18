@@ -83,12 +83,16 @@ Deno.serve(async (req: Request) => {
     });
     if (error) {
       console.error('[analytics-event] insert', error.code ?? error);
-      return json({ ok: true, stored: false }, 200); // telemetrija nije kriticni put; nikad ne rusi klijenta
+      // 202, ne 200 (audit SEC-13). Klijent i dalje nije srusen (telemetrija nije kriticni put),
+      // ali monitoring sada moze razlikovati zapisan dogadjaj od izgubljenog. Dok je i neuspjeh
+      // vracao 200, endpoint je skrivao vlastite kvarove: gubitak cijele telemetrije izgledao je
+      // izvana jednako kao uredan rad.
+      return json({ ok: true, stored: false, reason: 'insert_failed' }, 202);
     }
 
     return json({ ok: true, stored: true }, 200);
   } catch (e) {
     console.error('[analytics-event]', e);
-    return json({ ok: true, stored: false }, 200);
+    return json({ ok: true, stored: false, reason: 'unhandled' }, 202);
   }
 });

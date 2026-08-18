@@ -9,62 +9,74 @@
     {
       "documentId": "fer-diplomski-prazni-odlomci",
       "fileName": "fer-diplomski-prazni-odlomci.docx",
-      "profileId": "fer-diplomski"
+      "profileId": "fer-diplomski",
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "fer-diplomski-puna-struktura",
       "fileName": "fer-diplomski-puna-struktura.docx",
-      "profileId": "fer-diplomski"
+      "profileId": "fer-diplomski",
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "fer-diplomski-uskladjen",
       "fileName": "fer-diplomski-uskladjen.docx",
-      "profileId": "fer-diplomski"
+      "profileId": "fer-diplomski",
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "ffzg-filozofija-diplomski",
       "fileName": "ffzg-filozofija-diplomski.docx",
-      "profileId": "ffzg-filozofija-diplomski"
+      "profileId": "ffzg-filozofija-diplomski",
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "fpzg-novinarstvo-bibliografija",
       "fileName": "fpzg-novinarstvo-bibliografija.docx",
-      "profileId": "fpzg-novinarstvo-diplomski"
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "grf-diplomski-neuskladjen",
       "fileName": "grf-diplomski-neuskladjen.docx",
-      "profileId": "grf-diplomski"
+      "profileId": "grf-diplomski",
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "mef-doktorski-disertacija",
       "fileName": "mef-doktorski-disertacija.docx",
-      "profileId": "mef-doktorski"
+      "profileId": "mef-doktorski",
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "pmf-matematika-uskladjen",
       "fileName": "pmf-matematika-uskladjen.docx",
-      "profileId": "pmf-matematika-graduate"
+      "profileId": "pmf-matematika-graduate",
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "pmf-matematika-zasticeni-odlomci",
       "fileName": "pmf-matematika-zasticeni-odlomci.docx",
-      "profileId": "pmf-matematika-graduate"
+      "profileId": "pmf-matematika-graduate",
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "pravo-integrirani-fusnote",
       "fileName": "pravo-integrirani-fusnote.docx",
-      "profileId": "pravo-integrirani-diplomski"
+      "profileId": "pravo-integrirani-diplomski",
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "pravo-socijalni-rad-fusnote",
       "fileName": "pravo-socijalni-rad-fusnote.docx",
-      "profileId": "pravo-socijalni-rad-diplomski"
+      "profileId": "pravo-socijalni-rad-diplomski",
+      "root": "tests/fixtures/docx"
     },
     {
       "documentId": "ttf-diplomski-arial",
       "fileName": "ttf-diplomski-arial.docx",
-      "profileId": "ttf-diplomski"
+      "profileId": "ttf-diplomski",
+      "root": "tests/fixtures/docx"
     }
   ],
   "results": [
@@ -75,12 +87,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 16,
+        "passCount": 13,
         "score": 87
       },
       "after": {
         "checkCount": 19,
-        "passCount": 16,
+        "passCount": 13,
         "score": 87
       },
       "beforeEntryCount": 4,
@@ -90,12 +102,13 @@
         "paper-size-fixer",
         "font-fixer",
         "line-spacing-fixer",
-        "margins-fixer"
+        "margins-fixer",
+        "consistency-fixer"
       ],
       "changedFixerIds": [],
-      "targetedCheckCount": 4,
+      "targetedCheckCount": 6,
       "targetedResolvedCount": 2,
-      "targetedUnresolvedCount": 2,
+      "targetedUnresolvedCount": 4,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -104,7 +117,8 @@
       "integrityFailure": null,
       "manualReviewRequired": true,
       "manualReviewReasons": [
-        "ciljani-check-nije-u-potpunosti-riješen"
+        "ciljani-check-nije-u-potpunosti-riješen",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
     },
@@ -115,12 +129,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 15,
+        "passCount": 12,
         "score": 78
       },
       "after": {
         "checkCount": 19,
-        "passCount": 15,
+        "passCount": 12,
         "score": 78
       },
       "beforeEntryCount": 14,
@@ -130,12 +144,18 @@
         "paper-size-fixer",
         "font-fixer",
         "line-spacing-fixer",
-        "margins-fixer"
+        "margins-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer"
       ],
-      "changedFixerIds": [],
-      "targetedCheckCount": 4,
-      "targetedResolvedCount": 1,
-      "targetedUnresolvedCount": 3,
+      "changedFixerIds": [
+        "field-integrity-fixer",
+        "final-document-inspector-fixer"
+      ],
+      "targetedCheckCount": 14,
+      "targetedResolvedCount": 2,
+      "targetedUnresolvedCount": 12,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -144,7 +164,9 @@
       "integrityFailure": null,
       "manualReviewRequired": true,
       "manualReviewReasons": [
-        "ciljani-check-nije-u-potpunosti-riješen"
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
     },
@@ -155,12 +177,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 16,
+        "passCount": 13,
         "score": 87
       },
       "after": {
         "checkCount": 19,
-        "passCount": 16,
+        "passCount": 13,
         "score": 87
       },
       "beforeEntryCount": 4,
@@ -170,11 +192,53 @@
         "paper-size-fixer",
         "font-fixer",
         "line-spacing-fixer",
-        "margins-fixer"
+        "margins-fixer",
+        "consistency-fixer"
       ],
       "changedFixerIds": [],
-      "targetedCheckCount": 4,
+      "targetedCheckCount": 6,
       "targetedResolvedCount": 2,
+      "targetedUnresolvedCount": 4,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "ciljani-check-nije-u-potpunosti-riješen",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null
+    },
+    {
+      "documentId": "ffzg-filozofija-diplomski",
+      "fileName": "ffzg-filozofija-diplomski.docx",
+      "profileId": "ffzg-filozofija-diplomski",
+      "outcome": "review",
+      "before": {
+        "checkCount": 19,
+        "passCount": 15,
+        "score": 94
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 15,
+        "score": 94
+      },
+      "beforeEntryCount": 4,
+      "afterEntryCount": 4,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "toc-field-fixer",
+        "consistency-fixer"
+      ],
+      "changedFixerIds": [
+        "toc-field-fixer"
+      ],
+      "targetedCheckCount": 2,
+      "targetedResolvedCount": 0,
       "targetedUnresolvedCount": 2,
       "passRegressionCount": 0,
       "outputReadable": true,
@@ -184,41 +248,10 @@
       "integrityFailure": null,
       "manualReviewRequired": true,
       "manualReviewReasons": [
-        "ciljani-check-nije-u-potpunosti-riješen"
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
-      "error": null
-    },
-    {
-      "documentId": "ffzg-filozofija-diplomski",
-      "fileName": "ffzg-filozofija-diplomski.docx",
-      "profileId": "ffzg-filozofija-diplomski",
-      "outcome": "no-op",
-      "before": {
-        "checkCount": 19,
-        "passCount": 17,
-        "score": 94
-      },
-      "after": {
-        "checkCount": 19,
-        "passCount": 17,
-        "score": 94
-      },
-      "beforeEntryCount": 4,
-      "afterEntryCount": 4,
-      "droppedEntryCount": 0,
-      "offeredFixerIds": [],
-      "changedFixerIds": [],
-      "targetedCheckCount": 0,
-      "targetedResolvedCount": 0,
-      "targetedUnresolvedCount": 0,
-      "passRegressionCount": 0,
-      "outputReadable": true,
-      "packageWellFormed": true,
-      "malformedParts": [],
-      "secondPassNoOp": true,
-      "integrityFailure": null,
-      "manualReviewRequired": false,
-      "manualReviewReasons": [],
       "error": null
     },
     {
@@ -228,12 +261,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 35,
-        "passCount": 23,
+        "passCount": 17,
         "score": 75
       },
       "after": {
         "checkCount": 35,
-        "passCount": 25,
+        "passCount": 19,
         "score": 84
       },
       "beforeEntryCount": 8,
@@ -241,15 +274,22 @@
       "droppedEntryCount": 0,
       "offeredFixerIds": [
         "font-fixer",
-        "alignment-fixer"
+        "alignment-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer",
+        "link-doi-fixer"
       ],
       "changedFixerIds": [
         "font-fixer",
-        "alignment-fixer"
+        "alignment-fixer",
+        "field-integrity-fixer",
+        "link-doi-fixer",
+        "final-document-inspector-fixer"
       ],
-      "targetedCheckCount": 3,
-      "targetedResolvedCount": 2,
-      "targetedUnresolvedCount": 1,
+      "targetedCheckCount": 14,
+      "targetedResolvedCount": 4,
+      "targetedUnresolvedCount": 10,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -259,7 +299,8 @@
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "ciljani-check-nije-u-potpunosti-riješen"
+        "ciljani-check-nije-u-potpunosti-riješen",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
     },
@@ -270,12 +311,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 13,
+        "passCount": 11,
         "score": 60
       },
       "after": {
         "checkCount": 19,
-        "passCount": 15,
+        "passCount": 13,
         "score": 69
       },
       "beforeEntryCount": 4,
@@ -310,137 +351,30 @@
       "documentId": "mef-doktorski-disertacija",
       "fileName": "mef-doktorski-disertacija.docx",
       "profileId": "mef-doktorski",
-      "outcome": "no-op",
-      "before": {
-        "checkCount": 19,
-        "passCount": 18,
-        "score": 93
-      },
-      "after": {
-        "checkCount": 19,
-        "passCount": 18,
-        "score": 93
-      },
-      "beforeEntryCount": 4,
-      "afterEntryCount": 4,
-      "droppedEntryCount": 0,
-      "offeredFixerIds": [],
-      "changedFixerIds": [],
-      "targetedCheckCount": 0,
-      "targetedResolvedCount": 0,
-      "targetedUnresolvedCount": 0,
-      "passRegressionCount": 0,
-      "outputReadable": true,
-      "packageWellFormed": true,
-      "malformedParts": [],
-      "secondPassNoOp": true,
-      "integrityFailure": null,
-      "manualReviewRequired": false,
-      "manualReviewReasons": [],
-      "error": null
-    },
-    {
-      "documentId": "pmf-matematika-uskladjen",
-      "fileName": "pmf-matematika-uskladjen.docx",
-      "profileId": "pmf-matematika-graduate",
-      "outcome": "no-op",
-      "before": {
-        "checkCount": 19,
-        "passCount": 18,
-        "score": 100
-      },
-      "after": {
-        "checkCount": 19,
-        "passCount": 18,
-        "score": 100
-      },
-      "beforeEntryCount": 4,
-      "afterEntryCount": 4,
-      "droppedEntryCount": 0,
-      "offeredFixerIds": [
-        "line-spacing-fixer",
-        "margins-fixer"
-      ],
-      "changedFixerIds": [],
-      "targetedCheckCount": 2,
-      "targetedResolvedCount": 2,
-      "targetedUnresolvedCount": 0,
-      "passRegressionCount": 0,
-      "outputReadable": true,
-      "packageWellFormed": true,
-      "malformedParts": [],
-      "secondPassNoOp": true,
-      "integrityFailure": null,
-      "manualReviewRequired": false,
-      "manualReviewReasons": [],
-      "error": null
-    },
-    {
-      "documentId": "pmf-matematika-zasticeni-odlomci",
-      "fileName": "pmf-matematika-zasticeni-odlomci.docx",
-      "profileId": "pmf-matematika-graduate",
-      "outcome": "no-op",
-      "before": {
-        "checkCount": 19,
-        "passCount": 18,
-        "score": 100
-      },
-      "after": {
-        "checkCount": 19,
-        "passCount": 18,
-        "score": 100
-      },
-      "beforeEntryCount": 4,
-      "afterEntryCount": 4,
-      "droppedEntryCount": 0,
-      "offeredFixerIds": [
-        "line-spacing-fixer",
-        "margins-fixer"
-      ],
-      "changedFixerIds": [],
-      "targetedCheckCount": 2,
-      "targetedResolvedCount": 2,
-      "targetedUnresolvedCount": 0,
-      "passRegressionCount": 0,
-      "outputReadable": true,
-      "packageWellFormed": true,
-      "malformedParts": [],
-      "secondPassNoOp": true,
-      "integrityFailure": null,
-      "manualReviewRequired": false,
-      "manualReviewReasons": [],
-      "error": null
-    },
-    {
-      "documentId": "pravo-integrirani-fusnote",
-      "fileName": "pravo-integrirani-fusnote.docx",
-      "profileId": "pravo-integrirani-diplomski",
       "outcome": "review",
       "before": {
-        "checkCount": 42,
-        "passCount": 32,
-        "score": 81
+        "checkCount": 19,
+        "passCount": 12,
+        "score": 93
       },
       "after": {
-        "checkCount": 42,
-        "passCount": 34,
-        "score": 89
+        "checkCount": 19,
+        "passCount": 12,
+        "score": 93
       },
-      "beforeEntryCount": 9,
-      "afterEntryCount": 9,
+      "beforeEntryCount": 4,
+      "afterEntryCount": 4,
       "droppedEntryCount": 0,
       "offeredFixerIds": [
-        "font-fixer",
-        "margins-fixer",
-        "alignment-fixer"
+        "toc-field-fixer",
+        "consistency-fixer"
       ],
       "changedFixerIds": [
-        "font-fixer",
-        "alignment-fixer"
+        "toc-field-fixer"
       ],
-      "targetedCheckCount": 4,
-      "targetedResolvedCount": 3,
-      "targetedUnresolvedCount": 1,
+      "targetedCheckCount": 2,
+      "targetedResolvedCount": 0,
+      "targetedUnresolvedCount": 2,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -450,7 +384,154 @@
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "ciljani-check-nije-u-potpunosti-riješen"
+        "ciljani-check-nije-u-potpunosti-riješen",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null
+    },
+    {
+      "documentId": "pmf-matematika-uskladjen",
+      "fileName": "pmf-matematika-uskladjen.docx",
+      "profileId": "pmf-matematika-graduate",
+      "outcome": "review",
+      "before": {
+        "checkCount": 19,
+        "passCount": 12,
+        "score": 100
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 12,
+        "score": 100
+      },
+      "beforeEntryCount": 4,
+      "afterEntryCount": 4,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "line-spacing-fixer",
+        "margins-fixer",
+        "toc-field-fixer",
+        "consistency-fixer"
+      ],
+      "changedFixerIds": [
+        "toc-field-fixer"
+      ],
+      "targetedCheckCount": 4,
+      "targetedResolvedCount": 0,
+      "targetedUnresolvedCount": 4,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null
+    },
+    {
+      "documentId": "pmf-matematika-zasticeni-odlomci",
+      "fileName": "pmf-matematika-zasticeni-odlomci.docx",
+      "profileId": "pmf-matematika-graduate",
+      "outcome": "review",
+      "before": {
+        "checkCount": 19,
+        "passCount": 12,
+        "score": 100
+      },
+      "after": {
+        "checkCount": 19,
+        "passCount": 12,
+        "score": 100
+      },
+      "beforeEntryCount": 4,
+      "afterEntryCount": 4,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "line-spacing-fixer",
+        "margins-fixer",
+        "toc-field-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer"
+      ],
+      "changedFixerIds": [
+        "toc-field-fixer"
+      ],
+      "targetedCheckCount": 8,
+      "targetedResolvedCount": 0,
+      "targetedUnresolvedCount": 8,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null
+    },
+    {
+      "documentId": "pravo-integrirani-fusnote",
+      "fileName": "pravo-integrirani-fusnote.docx",
+      "profileId": "pravo-integrirani-diplomski",
+      "outcome": "review",
+      "before": {
+        "checkCount": 42,
+        "passCount": 22,
+        "score": 81
+      },
+      "after": {
+        "checkCount": 42,
+        "passCount": 26,
+        "score": 91
+      },
+      "beforeEntryCount": 9,
+      "afterEntryCount": 9,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "font-fixer",
+        "margins-fixer",
+        "alignment-fixer",
+        "footnote-spacing-fixer",
+        "heading-format-fixer",
+        "footnote-typography-fixer",
+        "heading-case-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer"
+      ],
+      "changedFixerIds": [
+        "font-fixer",
+        "alignment-fixer",
+        "footnote-spacing-fixer",
+        "heading-format-fixer",
+        "footnote-typography-fixer",
+        "heading-case-fixer",
+        "field-integrity-fixer",
+        "final-document-inspector-fixer"
+      ],
+      "targetedCheckCount": 17,
+      "targetedResolvedCount": 5,
+      "targetedUnresolvedCount": 12,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
     },
@@ -461,13 +542,13 @@
       "outcome": "review",
       "before": {
         "checkCount": 38,
-        "passCount": 26,
+        "passCount": 20,
         "score": 73
       },
       "after": {
         "checkCount": 38,
-        "passCount": 29,
-        "score": 85
+        "passCount": 25,
+        "score": 88
       },
       "beforeEntryCount": 9,
       "afterEntryCount": 9,
@@ -475,15 +556,24 @@
       "offeredFixerIds": [
         "font-fixer",
         "margins-fixer",
-        "paper-size-fixer"
+        "paper-size-fixer",
+        "page-number-alignment-fixer",
+        "section-insert-fixer",
+        "heading-format-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer"
       ],
       "changedFixerIds": [
         "font-fixer",
-        "margins-fixer"
+        "margins-fixer",
+        "page-number-alignment-fixer",
+        "heading-format-fixer",
+        "final-document-inspector-fixer"
       ],
-      "targetedCheckCount": 3,
-      "targetedResolvedCount": 3,
-      "targetedUnresolvedCount": 0,
+      "targetedCheckCount": 17,
+      "targetedResolvedCount": 6,
+      "targetedUnresolvedCount": 11,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -492,7 +582,9 @@
       "integrityFailure": null,
       "manualReviewRequired": true,
       "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu"
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
     },
@@ -500,45 +592,54 @@
       "documentId": "ttf-diplomski-arial",
       "fileName": "ttf-diplomski-arial.docx",
       "profileId": "ttf-diplomski",
-      "outcome": "no-op",
+      "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 16,
         "score": 95
       },
       "after": {
         "checkCount": 19,
-        "passCount": 18,
+        "passCount": 16,
         "score": 95
       },
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
       "droppedEntryCount": 0,
-      "offeredFixerIds": [],
-      "changedFixerIds": [],
-      "targetedCheckCount": 0,
+      "offeredFixerIds": [
+        "toc-field-fixer",
+        "consistency-fixer"
+      ],
+      "changedFixerIds": [
+        "toc-field-fixer"
+      ],
+      "targetedCheckCount": 2,
       "targetedResolvedCount": 0,
-      "targetedUnresolvedCount": 0,
+      "targetedUnresolvedCount": 2,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
       "malformedParts": [],
       "secondPassNoOp": true,
       "integrityFailure": null,
-      "manualReviewRequired": false,
-      "manualReviewReasons": [],
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
       "error": null
     }
   ],
   "summary": {
     "documentCount": 12,
     "passCount": 0,
-    "reviewCount": 7,
+    "reviewCount": 12,
     "failCount": 0,
     "integrityFailureCount": 0,
-    "noOpCount": 5,
-    "changedDocumentCount": 4,
-    "manualReviewCount": 7,
+    "noOpCount": 0,
+    "changedDocumentCount": 10,
+    "manualReviewCount": 12,
     "passRegressionCount": 0
   }
 }

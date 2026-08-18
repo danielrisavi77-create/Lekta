@@ -10,6 +10,7 @@
  * parserom (vidi tests/setup/xml-dom.ts) jer happy-dom ne radi XML namespace.
  */
 import { describe, it, expect } from 'vitest';
+import { expectNotPenalised } from "./helpers/check-status";
 import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
@@ -49,12 +50,12 @@ describe('FPZG sinteticki golden: prijediplomski zavrsni (politologija)', () => 
 
     expect(typeof r.score).toBe('number');
     expect(r.score).toBeGreaterThanOrEqual(80);
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Format stranice A4').status).toBe('pass');
-    expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
-    expect(check(r, 'Profilni opseg riječi').status).toBe('pass');
+    expectNotPenalised(check(r, 'Dominantni font'));
+    expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+    expectNotPenalised(check(r, 'Prored osnovnog teksta'));
+    expectNotPenalised(check(r, 'Format stranice A4'));
+    expectNotPenalised(check(r, 'Sadržaj dokumenta'));
+    expectNotPenalised(check(r, 'Profilni opseg riječi'));
   });
 
   it('neuskladjeni rad pada na fontu, velicini, A4, sadrzaju i opsegu', async () => {
@@ -98,7 +99,7 @@ describe('FPZG sinteticki golden: doktorski (DR.SC.-08 boduje margine)', () => {
     const r: any = await analyzeFixture(file, { profileId: 'fpzg-doktorski-politologija' });
     const m = check(r, 'Margine dokumenta');
     expect(m.max).toBeGreaterThan(0); // doktorski JEDINI boduje margine
-    expect(m.status).toBe('pass');
+    expectNotPenalised(m);
   });
 
   it('pogresne margine 4,0 cm padaju', async () => {

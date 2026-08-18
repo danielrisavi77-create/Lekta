@@ -1,4 +1,4 @@
-// Lekta Edge Function: delete-repair-job (Deno, Supabase) — NACRT (WS-6).
+// Lekta Edge Function: delete-repair-job (Deno, Supabase). ZIVO u produkciji (v7, ACTIVE).
 // Right to erasure za "Moji popravci": korisnik trajno brise jedan repair-posao. Uklanja I Storage
 // BLOB-ove (original + fixed) I redak u repair_jobs. Blob-brisanje MORA ici kroz Storage API
 // (service role), pa se ne moze samo RLS-om na klijentu; zato zasebna Edge funkcija.

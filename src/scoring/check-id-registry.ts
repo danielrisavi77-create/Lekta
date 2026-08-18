@@ -126,9 +126,33 @@ export const CHECK_ID_BY_TITLE: Record<string, string> = {
 
 const ID_FORMAT = /^[a-z][a-z0-9]*(?:\.[a-z0-9-]+)+$/;
 
+/** Namespace svih provjera formata papira; jedini ID prostor koji se izvodi dinamicki. */
+export const PAPER_SIZE_ID_PREFIX = 'page.size.';
+
+/**
+ * Naslov provjere formata papira nije fiksan: analyzeDocx ga slaze kao
+ * `Format stranice (${profile.paperSizes.join('/')})`, pa svaka nova kombinacija formata daje
+ * naslov koji rucni registar ne moze unaprijed pokriti. Prije ovoga takve su provjere dobivale
+ * `id: null` i tiho ispadale iz svakog ID-based wiringa (npr. `(A4/A3)`).
+ *
+ * Tri POSTOJECA unosa (`page.size.a4`, `page.size.a4-list`, `page.size.project`) imaju prednost
+ * jer se na njih vec oslanja korpus; ovo je fallback samo za neregistrirane kombinacije.
+ */
+function dynamicPaperSizeId(title: string): string | null {
+  const m = /^Format stranice\s*\((.+)\)$/.exec(title);
+  if (!m) return null;
+  const slug = m[1].toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  return slug ? `${PAPER_SIZE_ID_PREFIX}${slug}` : null;
+}
+
+/** Je li ID identitet provjere formata papira (bilo koja kombinacija formata)? */
+export function isPaperSizeCheckId(id: string | null | undefined): boolean {
+  return !!id && id.startsWith(PAPER_SIZE_ID_PREFIX);
+}
+
 /** Stabilni ID za naslov provjere, ili null ako nije registriran. */
 export function stableCheckId(title: string): string | null {
-  return CHECK_ID_BY_TITLE[title] ?? null;
+  return CHECK_ID_BY_TITLE[title] ?? dynamicPaperSizeId(title);
 }
 
 /** Provjeri je li ID dobro oblikovan (hijerarhijski, kebab, jezicno-neovisan). */

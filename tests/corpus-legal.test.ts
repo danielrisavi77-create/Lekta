@@ -8,6 +8,7 @@
  * izmjena fusnote rusi. Testira STVARNI analyzeDocx (golden put).
  */
 import { describe, it, expect, beforeAll } from 'vitest';
+import { expectNotPenalised } from "./helpers/check-status";
 import { buildDocxFile } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 import { legalBaselineSpec, LEGAL_PROFILE_ID } from './corpus/builder/legal-baseline';
@@ -30,7 +31,7 @@ describe('Lekta Error Corpus - legal-citation klaster (faza 4)', () => {
   it('pravna baza prolazi sve pravne provjere', () => {
     for (const t of LEGAL_TITLES) {
       const c = findCheck(baseline, t);
-      expect(c.status, `pravna baza NE prolazi "${t}" (${c.status} ${c.earned}/${c.max})`).toBe('pass');
+      expectNotPenalised(c);
     }
   });
 

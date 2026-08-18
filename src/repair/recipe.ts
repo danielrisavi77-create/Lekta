@@ -236,9 +236,12 @@ export function renderRecipeMarkdown(recipe: RecipeProfile[]): string {
   lines.push('`footnotes.xml` i podnozja, a svi ostali dijelovi dokumenta (slike, tema, veze) prolaze');
   lines.push('bajt-identicno (`src/repair/apply-fixers.ts`).');
   lines.push('');
-  lines.push('Ulogu "prompta" ima recept: niz `{fixerId, ruleId, params}` koji klijent slozi iz');
-  lines.push('PROFILA prije slanja. Server pravila ne izvodi - provjeri je li fixer poznat i ziv,');
-  lines.push('sanira parametre i izvrsi. Zato je recept po fakultetu izrazen kao PODACI, ne kao tekst:');
+  lines.push('Ulogu "prompta" ima recept: niz `{fixerId, ruleId, params}`. Klijent ga slozi iz PROFILA,');
+  lines.push('ali od 2026-08-16 CILJANU VRIJEDNOST izvodi SERVER: za poznat par (profil, pravilo) uzima');
+  lines.push('svoju, pecenu vrijednost iz ovog istog recepta (`data/generated/repair-params-by-profile.json`,');
+  lines.push('vidi `src/repair/param-authority.ts`) i klijentovu ignorira. Klijentov `params` vrijedi jos');
+  lines.push('samo tamo gdje fakultetskog pravila nema (univerzalna higijena), i to se biljezi u odgovoru');
+  lines.push('(`paramSources`). Zato je recept po fakultetu izrazen kao PODACI, ne kao tekst:');
   lines.push('jedna masina, `${recipe.length}` skupova vrijednosti.'.replace('${recipe.length}', String(recipe.length)));
   lines.push('');
   lines.push('Vrijednosti dolaze iz onoga sto zivi engine stvarno cita (`rules` profila; ciljane');
@@ -300,3 +303,31 @@ export function renderRecipeMarkdown(recipe: RecipeProfile[]): string {
   return lines.join('\n') + '\n';
 }
 
+
+/**
+ * PECENA projekcija recepta za SERVERSKI autoritet nad ciljanom vrijednoscu.
+ *
+ * Isti izvor kao docs/REPAIR_RECIPE.md (buildRecipe), ali sveden na ono sto Edge funkcija treba:
+ * `profileId -> ruleId -> {fixerId, params}`. Puni recipe JSON je ~1,8 MB jer nosi i prozu (labeli,
+ * citljivi target, izvori, uvjeti); ova projekcija je ~160 KB, sto je uredno za Edge bundle.
+ *
+ * Ulaze SAMO stavke sa `scope: 'profil'` i nepraznim parametrima: univerzalna higijena (prazni
+ * odlomci, hrvatska tipografija) nema fakultetsko pravilo iza sebe, pa za nju server nema sto
+ * "izvesti iz profila" i ostaje na saniranom klijentskom putu.
+ *
+ * Vidi src/repair/param-authority.ts za potrosaca i tests/repair-param-authority.test.ts za gard
+ * protiv drifta (peceni artefakt mora odgovarati zivom receptu).
+ */
+export function buildParamAuthority(recipe: RecipeProfile[] = buildRecipe()): Record<string, Record<string, { f: string; p: Record<string, unknown> }>> {
+  const out: Record<string, Record<string, { f: string; p: Record<string, unknown> }>> = {};
+  for (const profile of recipe) {
+    const byRule: Record<string, { f: string; p: Record<string, unknown> }> = {};
+    for (const item of profile.items) {
+      if (item.scope !== 'profil') continue;
+      if (!item.params || Object.keys(item.params).length === 0) continue;
+      byRule[item.ruleId] = { f: item.fixerId, p: item.params };
+    }
+    if (Object.keys(byRule).length) out[profile.id] = byRule;
+  }
+  return out;
+}

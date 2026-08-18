@@ -1,5 +1,6 @@
 'use strict';
-import { DOCX_MAX_UPLOAD_BYTES } from '../repair/docx-budget';
+import { DOCX_MAX_UPLOAD_BYTES, repairBlockerMessage } from '../repair/docx-budget';
+import { guaranteeAppliesToStatus, guaranteeStatusNote } from '../report/guarantee';
 import { escapeHtml, safeHref, clamp, fmt, normalize, sectionName, attr, els, first, textOf, direct, reframeStatusNote } from '../utils/helpers';
 import { focusResult } from '../shared/result-a11y'; // BL-P1-02: fokus + SR-najava rezultata
 // BL-P0-05-4: DOCX parser se koristi tek nakon odabira datoteke (metapodaci, detekcija konteksta),
@@ -69,6 +70,7 @@ import { cellCoverage, detectWaitlist } from '../waitlist/waitlist-detect';
 import { mountWaitlistBar } from '../waitlist/waitlist-bar';
 import { submitUnknownFaculty } from '../waitlist/waitlist-client';
 import { TERMS_VERSION } from '../legal/terms-version';
+import { canonicalConsentText } from '../legal/consent-text';
 import type { PreflightPanel } from '../preflight/preflight-panel';
 import { academicYearFromDate } from '../profiles/academic-year';
 import { setProgressValue } from '../shared/premium-visuals';
@@ -140,7 +142,11 @@ const setupMode=__DEV_TOOLS__&&params.get('setup')==='1'&&setupAllowed();
    lijeno da ne uleti u glavni bundle. */
 const adminMode=params.get('admin')==='1'&&setupAllowed();
 async function openAdminStats(){const ep=String(productionConfig?.adminStatsEndpoint||'').trim();if(!ep){toast('Admin endpoint nije konfiguriran.');return}const token=await resolveAccessToken();if(authConfigured()&&!token){openAuth(()=>{void openAdminStats()});return}const { openAdminPanel }=await import('../admin/admin-panel');await openAdminPanel({cfg:{endpoint:ep},getToken:async()=>(await resolveAccessToken())||''})}
-const CHECKOUT_CONSENT_TEXT='Pristajem da isporuka digitalnog sadržaja (puni izvještaj) počne odmah nakon plaćanja i izričito se odričem prava na jednostrani raskid ugovora u roku od 14 dana (čl. 86. Zakona o zaštiti potrošača). Bez ovog pristanka kupnja se ne može dovršiti.';
+// Tekst privole vise NE zivi ovdje nego u src/legal/consent-text.ts, jer ga mora vidjeti i
+// server: `create-checkout` usporedjuje primljeni tekst s kanonskim za poslanu verziju
+// uvjeta i odbija sve ostalo (audit A26-08). Dok je zivio samo u pregledniku, zapis
+// privole nije bio dokaz nego prepricavanje klijenta.
+const CHECKOUT_CONSENT_TEXT=canonicalConsentText(TERMS_VERSION)||'';
 const DEFAULT_PRODUCTION_CONFIG={enabled:false,submissionMode:'netlify-form',orderEndpoint:'/',paymentProvider:'lemonsqueezy',paymentLinks:{format:'',panic:'',premium:''},businessName:'Lekta',contactEmail:'lekta.kontakt@gmail.com',privacyController:'',retentionDays:30,uploadMaxBytes:8*1024*1024,analyticsEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('analytics-event'),serverAnalytics:'netlify-optional',reportEndpoint:'',fieldRenderEndpoint:'',repairEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('repair-docx'),checkoutEndpoint:'',guaranteeEndpoint:'',supabaseUrl:DEPLOYMENT_CONFIG.supabaseUrl,supabaseAnonKey:DEPLOYMENT_CONFIG.supabaseAnonKey,waitlistEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('faculty-request'),referralEndpoint:'',errorEndpoint:'',preflightStartEndpoint:'',preflightResultEndpoint:'',preflightMaxUploadMb:30,adminStatsEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('admin-stats')};
 // Error tracking (P0 8-1): globalni handleri. Ako je errorEndpoint konfiguriran, salje SANITIZIRAN
 // tehnicki kontekst (poruka, skraceni stack, verzija, path) na kolektor (npr. Sentry tunnel same-
@@ -166,6 +172,22 @@ const PRICING_TIERS=[
 ];
 // Rucni paketi za obrazac narudzbe (ljudska usluga). Automatizirana provjera je gore
 // u PRICING_TIERS i ne prolazi kroz ovaj obrazac.
+/**
+ * Paketi RUCNE obrade (obrazac narudzbe), NE cjenik automatskog popravka.
+ *
+ * Audit CODE-08 prijavio je "vise izvora istine za cijene". Provjera je pokazala da ih je TRI, a
+ * ne dva, i da jedan od njih nitko ne cita:
+ *   1. OVAJ popis: jedini koji korisnik stvarno vidi u obrascu rucne narudzbe;
+ *   2. `data/packages.json` (kroz `config-loader`): ima jos i paket `instant` (9 EUR) kojeg ovdje
+ *      NEMA, a iz aplikacije ga ne cita nitko osim jednog testa koji samo tvrdi da je jednak
+ *      svojoj vlastitoj JSON datoteci;
+ *   3. tablica `products` u bazi: JEDINI mjerodavan cjenik za placeni automatski popravak
+ *      (`slot_*`, `pass_*`, `bundle_*`), s posve drugim proizvodima i cijenama.
+ *
+ * Popisi 1 i 2 se ne smiju citati kao cjenik proizvoda. Cijena popravka dolazi iskljucivo iz
+ * baze (vidi `src/catalog/products-catalog.ts`), pa se mijenja kroz `set_product_price`, nikad
+ * ovdje. Prije nego dodas cijenu ovamo, provjeri govoris li o rucnoj obradi ili o popravku.
+ */
 const PACKAGES=[
  {id:'format',name:'Formatiranje rada',price:39,desc:'Tehnički uređena Word datoteka.',features:['Stilovi naslova i sadržaj','Numeriranje, tablice i slike','Konzistentan izgled dokumenta']},
  {id:'panic',name:'Predaja bez panike',price:69,featured:true,desc:'Formatiranje, citatnice i jedna revizija.',features:['Sve iz paketa formatiranja','Provjera citatnica i literature','Prioritetna obrada i revizija']},
@@ -589,7 +611,12 @@ async function updateProfile(){
  const _srcTxt=p.sources?.length?`Provjereno prema: ${escapeHtml(p.sources[0].title)}${p.documentDate?' ('+escapeHtml(p.documentDate)+')':(p.verifiedAt?' ('+escapeHtml(p.verifiedAt)+')':'')}`:'';
  const preflight=`<div class="preflight-box"><div class="preflight-head"><strong>Pokrivenost profila</strong><span class="preflight-score">${escapeHtml(readiness.label)} · ${readiness.overall}%</span></div>${_srcTxt?`<div class="source-line" style="margin:2px 0 6px">${_srcTxt}</div>`:''}<div class="preflight-grid"><div class="preflight-item ${readiness.exact>=80?'ok':'warn'}"><span>Normativni profil</span><b>${readiness.exact>=80?'Točno podudaranje':'Generički sloj'}</b></div><div class="preflight-item ${readiness.citation>=80?'ok':'warn'}"><span>Citatni stil</span><b>${escapeHtml(_citTxt)}</b></div><div class="preflight-item ${readiness.format>=80?'ok':'warn'}"><span>Oblikovanje</span><b>${escapeHtml(_fmtTxt)}</b></div><div class="preflight-item ${readiness.validation>=70?'ok':'warn'}"><span>Validacija</span><b>${escapeHtml(_valTxt)}</b></div></div><div class="readiness-meter"><i style="width:${readiness.overall}%"></i></div></div>`;
  const fv=p.fieldValidation,dfv=p.departmentValidation,coverage=p.coverage,fieldValidation=(fv||dfv||coverage)?`<div class="source-stack" style="border-left:3px solid var(--ok);padding-left:10px">${coverage?`<div class="source-line"><strong>${escapeHtml(coverage.label)}:</strong> ${escapeHtml(coverage.note)}</div>`:''}${fv?`<div class="source-line"><strong>Terenska verifikacija studijskog profila:</strong> ${escapeHtml(sampleSummary(fv.sample))}. ${escapeHtml(fv.scope)}</div><div class="source-line"><strong>Važno:</strong> ${escapeHtml(fv.productDecision)}</div>`:''}${dfv?`<div class="source-line"><strong>Validacija katedarskog sloja:</strong> ${escapeHtml(sampleSummary(dfv.sample))}. ${escapeHtml(dfv.productDecision)}</div>`:''}</div>`:(p.validationNote?`<div class="source-line"><strong>Status terenskog testa:</strong> ${escapeHtml(p.validationNote)}</div>`:'');
- const guaranteeHtml=(p.statusKey!=='verified'&&sm.guarantee)?`<div class="source-stack profile-guarantee" style="border-left:3px solid var(--ok);padding-left:10px;margin-top:7px"><div class="source-line"><strong>Što je pokriveno:</strong> ${escapeHtml(sm.guarantee)}</div><div class="source-line"><a href="${safeHref('#pricing')}" class="guarantee-cta">Pogledaj pakete provjere →</a></div></div>`:'';
+ // Vrijedi li garancija IZVODI se iz statusa profila (guarantee.ts), umjesto da korisnik sam
+ // povezuje "T2/T3" iz cjenika s "Potvrđeni profil" iz badgea. Recenica se prikazuje za SVAKI
+ // status, i kad garancija vrijedi i kad ne vrijedi: sutnja je prije citana kao "vrijedi".
+ const guaranteeApplies=guaranteeAppliesToStatus(p.statusKey);
+ const guaranteeLine=`<div class="source-line"><strong>Garancija:</strong> ${escapeHtml(guaranteeStatusNote(p.statusKey))}</div>`;
+ const guaranteeHtml=`<div class="source-stack profile-guarantee" style="border-left:3px solid var(--${guaranteeApplies?'ok':'warn'});padding-left:10px;margin-top:7px">${(p.statusKey!=='verified'&&sm.guarantee)?`<div class="source-line"><strong>Što je pokriveno:</strong> ${escapeHtml(sm.guarantee)}</div>`:''}${guaranteeLine}${p.statusKey!=='verified'?`<div class="source-line"><a href="${safeHref('#pricing')}" class="guarantee-cta">Pogledaj pakete provjere →</a></div>`:''}</div>`;
  const detailsBody=`${reframeStatusNote(p.note)?`<div class="source-line" style="color:var(--text)">${escapeHtml(reframeStatusNote(p.note))}</div>`:''}${facts}<div class="source-line"><strong>Autoritet pravila:</strong> ${escapeHtml(am.note)}</div>${hierarchy}<div class="source-line"><strong>Uloga repozitorija:</strong> ${escapeHtml(p.repositoryRole)}</div>${submission}${fieldValidation}${sourceHtml}<div class="source-line" style="opacity:.7">Pokrivenost mjeri koliko su pravila ovog studija provjerena prema službenom izvoru, nije jamstvo ocjene.</div><span class="profile-fingerprint">Otisak profila: ${escapeHtml(p.fingerprint)}</span>`;
  /* Kartica profila = ISHOD odabira, ne ponavljanje odabranog: put (grad/ustanova/studij) vec stoji u
     selectima iznad i u sazetku koraka 3, pa ga ovdje ne dupliciramo. Oba nekadasnja "more" bloka
@@ -860,7 +887,9 @@ function wireFindingCards(root: any,r: any){
   });
 }
 function renderReadinessHeader(r: any){
-  const readiness=resultReadiness(r?.issues||[]),el=$('#resultReadiness'),scoreLabel=$('#scoreLabel'),subtitle=$('#resultSubtitle'),stamp=$('#readyStamp');
+  // Autoritet ulazi u verdikt: "blokator" se izgovara samo kad iza nalaza stoji VERIFICIRAN
+  // fakultetski izvor. Za genericki profil isti nalaz ostaje "moguce odstupanje" (RE-63).
+  const readiness=resultReadiness(r?.issues||[],{profileStatus:r?.profileStatus??null,ruleAuthority:r?.details?.ruleAuthority??null}),el=$('#resultReadiness'),scoreLabel=$('#scoreLabel'),subtitle=$('#resultSubtitle'),stamp=$('#readyStamp');
   if(scoreLabel)scoreLabel.textContent=r?.score!=null?'Automatska tehnička ocjena':'Automatska provjera';
   if(subtitle)subtitle.textContent=`Profil: ${r?.profile||'nije odabran'}.`;
   if(el){el.className=`result-readiness result-readiness--${readiness.kind}`;el.innerHTML=`<strong>${escapeHtml(readiness.label)}</strong><span>${escapeHtml(readiness.description)}</span>`}
@@ -1397,6 +1426,17 @@ function renderSubmissionChecklist(r: any){
 // paywallLockHtml/startReportCheckout). Slider samo dijeli postojecu cijenu na stavke, ne mijenja
 // je - null kad vrsta rada nema definiran tier (nepoznato), slider tada prikazuje samo broj stavki.
 function ceilingPriceEurFor(r: any): number|null{const tier=tierFor(toReportWorkType(r?.settings?.workType||r?.selection?.workType||'final'));return tier?(livePriceEur(tier.workType)??tier.priceEur):null}
+// DOCX-13: stavke koje server NIJE prepoznao kao zive. Prije su se tiho gubile, pa je korisnik
+// dobivao dokument uvjeren da su primijenjene. Tisina je ovdje najgori ishod jer je nerazlucva od
+// uspjeha, zato se prikazuju odvojeno od `skipped` (koji znaci "prepoznato, ali nije trebalo").
+function unknownFixerNote(out: any): string{
+  const list=Array.isArray(out?.unknownFixers)?out.unknownFixers:[];
+  if(!list.length)return '';
+  // Bez tvrdnji o naplati: popravak se naplacuje po dokumentu, ne po stavci, pa "nije naplaceno"
+  // ne bi bilo tocno. Kaze se samo ono sto pouzdano znamo: stavka nije primijenjena.
+  return `<p><strong>Nismo prepoznali ${list.length===1?'stavku':'stavke'}:</strong> ${list.map(escapeHtml).join(', ')}. `
+    +`${list.length===1?'Ona nije primijenjena na dokument':'One nisu primijenjene na dokument'}. Ako se ovo ponovi, javi nam.</p>`;
+}
 async function renderRepairSection(r: any){
  const mount=$('#repairPanelMount'); if(!mount) return; mount.innerHTML='';
  repairPanelNode=null; repairPanelForResult=null; // dok se ne renderira stateful panel, nema sto cuvati
@@ -1478,7 +1518,7 @@ async function renderRepairSection(r: any){
  const textItems=headingCaseRepairableItem(r.checks||[],analyzedProfile);
  repairPanelTextItems=textItems;
  if(repairServerConfigured()){renderServerRepairPanel(mount,r,items,file,textItems);repairPanelNode=mount.firstElementChild;repairPanelForResult=r;return}
- renderRepairPanel({items,getDocxBytes:async()=>new Uint8Array(await file.arrayBuffer()),originalFileName:r.file?.name||'rad.docx',mountEl:mount,beforeScore:{score:r.score,categories:r.categories,checks:r.checks},ceilingPriceEur:ceilingPriceEurFor(r),fieldRenderEndpoint:String(productionConfig?.fieldRenderEndpoint||'').trim(),getAccessToken:async()=>String(await resolveAccessToken()||''),reanalyze:async(bytes: Uint8Array)=>{const f=new File([bytes as Uint8Array<ArrayBuffer>],r.file?.name||'rad.docx',{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});return res?{score:res.score,categories:res.categories,checks:res.checks}:null}});
+ renderRepairPanel({items,getDocxBytes:async()=>new Uint8Array(await file.arrayBuffer()),originalFileName:r.file?.name||'rad.docx',mountEl:mount,beforeScore:{score:r.score,categories:r.categories,checks:r.checks},fieldRenderEndpoint:String(productionConfig?.fieldRenderEndpoint||'').trim(),getAccessToken:async()=>String(await resolveAccessToken()||''),reanalyze:async(bytes: Uint8Array)=>{const f=new File([bytes as Uint8Array<ArrayBuffer>],r.file?.name||'rad.docx',{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});return res?{score:res.score,categories:res.categories,checks:res.checks}:null}});
  // Zapamti stvarni cvor placenog panela za ocuvanje kroz re-render checkliste.
  repairPanelNode=mount.firstElementChild; repairPanelForResult=r;
  } finally {
@@ -1546,6 +1586,16 @@ function renderTextItemsSection(host: any,r: any,textItems: any[]){
 
 function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textItems: any[]=[]){
  const wrap=document.createElement('div');wrap.className='lekta-repair-panel';
+ // Popravak ima uze granice od analize (cita CIJELI paket, analiza samo XML dijelove koje treba),
+ // pa dokument moze proci analizu a biti prevelik za popravak. Bez ove grane korisnik bi to saznao
+ // tek nakon privole i uploada, kao 422 sa servera. `details.capability` je izracunat jos pri
+ // otvaranju zipa (docx-budget.docxCapability), bez ijedne dodatne dekompresije.
+ const capability=r?.details?.capability;
+ if(capability&&capability.canRepair===false){
+  const blocked=document.createElement('p');blocked.className='lekta-repair-panel__blocked';
+  blocked.innerHTML=`<strong>Automatski popravak nije moguć za ovaj dokument.</strong> ${capability.repairBlocker?repairBlockerMessage(capability.repairBlocker):''} Analiza iznad vrijedi i možeš je koristiti za ručni ispravak.`;
+  wrap.appendChild(blocked);mount.appendChild(wrap);return;
+ }
  const intro=document.createElement('p');
  intro.innerHTML='<strong>Popravi sve jednim klikom.</strong> Dokument se šalje na server, popravi se i vraća gotov. Popravljaju se oblikovanje, numeriranje i struktura; ne diraju se sadržaj, citati ni argument. Datoteka se pohranjuje dok je ne obrišeš (Moji popravci); kod prijave bez e-maila najviše 30 dana.';
  wrap.appendChild(intro);
@@ -1585,14 +1635,14 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  // Ledger+modal je SADA uvijek jedini vidljivi prikaz (list ostaje checkbox izvor istine za
  // getCheckedItems, ali skriven) - isti mehanizam kao lokalni panel (repair-panel.ts).
  list.hidden=true;
- wrap.appendChild(renderRepairLedgerModal({items,ceilingPriceEur:ceilingPriceEurFor(r),listEl:list,advancedFormFor}));
+ wrap.appendChild(renderRepairLedgerModal({items,listEl:list,advancedFormFor}));
  // Isti v2 dubinski preklopnik i disclosure recenica kao lokalni panel (RE-35: prije je serverski
  // put PRISILNO ukljucivao deep bez ijedne rijeci u copyju).
  const deepAvailable=items.some((i: any)=>_SERVER_DEEP_FIXERS.has(i.fixerId));
  let deepToggle: any=null;
  if(deepAvailable){
   const deepRow=document.createElement('label');deepRow.className='lekta-repair-panel__deep';
-  deepRow.innerHTML='<input type="checkbox" checked /><span>Ukloni i izravno formatiranje u tekstu (dubinsko usklađivanje). Netaknuti ostaju: naslovi i stilizirani dijelovi, podebljano/kurziv, centrirano, veće naslovne veličine, formule, tablice (prored/poravnanje), simbolski fontovi, tekstualni okviri i citatne kontrole (npr. Zotero/Mendeley). Tekst pisan drugim fontom uskladit će se s fontom profila.</span>';
+  deepRow.innerHTML='<input type="checkbox" checked /><span>Uskladi i ručno formatirane dijelove, da popravak stvarno primi.</span><details class="lekta-repair-panel__deep-more"><summary>Što to znači</summary><p>Ako je oblikovanje upisano izravno u tekst, ono nadjačava stilove i popravak se vizualno ne vidi. Ovo uklanja takvo izravno oblikovanje (font, prored, poravnanje). <strong>Netaknuti ostaju:</strong> naslovi i stilizirani dijelovi, podebljano i kurziv, centrirano, veće naslovne veličine, formule, tablice (prored i poravnanje), simbolski fontovi, tekstualni okviri i citatne kontrole (npr. Zotero, Mendeley). Tekst pisan drugim fontom uskladit će se s fontom profila.</p></details><span></span>';
   wrap.appendChild(deepRow);
   deepToggle=deepRow.querySelector('input');
  }
@@ -1651,7 +1701,6 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    const requests=chosen.map((it: any)=>({fixerId:it.fixerId,ruleId:it.ruleId,params:(deep&&_SERVER_DEEP_FIXERS.has(it.fixerId))?{...it.params,deep:true}:it.params}));
    const refsForCorpus=repairReferencesFrom(r);
    const {buildRepairMeta,uploadRepair}=await loadRepairClient();
-   const {extractParsedStructure}=await loadReportClient();
    // Provjera izvora KRECE PRIJE uploada i tece usporedno s njim: ovisi samo o naslovima literature,
    // koje vec imamo iz lokalne analize. Dok je bila dio odgovora popravka, korisnik je gledao
    // spinner i nakon sto je dokument bio gotov. Namjerno BEZ await: `checkSources` ne baca (svaki
@@ -1663,7 +1712,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
      .catch((e: any)=>({kind:'unavailable',reason:e instanceof Error?e.message:'greska'}))
     :null;
    // Kad provjeru vodi zaseban poziv, popis literature se uz dokument ne salje i server ju preskace.
-   const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),sourceCheckSeparate,workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),parsedStructure:extractParsedStructure(r),requests,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch});
+   const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),sourceCheckSeparate,workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),requests,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch});
    const bytes=new Uint8Array(await file.arrayBuffer());
    // Krajnji rok: bez njega zaglavljen zahtjev drzi gumb u "Saljem" bez izlaza. Prekid se u
    // repair-clientu prevodi u citljivu poruku, ne u "mreznu gresku".
@@ -1679,7 +1728,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
     // (vidi repair-docx/index.ts korak 7a); gumb NIJE zakljucan (lockButton ostaje false) jer
     // korisnik moze smisleno pokusati ponovno s drugim odabirom stavki.
     const skippedLabels=out.skipped.map((s: string)=>[...items,...textItems].find((i: any)=>i.ruleId===s)?.label||s);
-    setSummary(`<strong>Nije bilo potrebnih izmjena.</strong> Odabrane stavke su već usklađene ili ih nismo mogli automatski primijeniti na ovom dokumentu.${skippedLabels.length?` <p>Nije primijenjeno: ${skippedLabels.map(escapeHtml).join(', ')}.</p>`:''}`);
+    setSummary(`<strong>Nije bilo potrebnih izmjena.</strong> Odabrane stavke su već usklađene ili ih nismo mogli automatski primijeniti na ovom dokumentu.${skippedLabels.length?` <p>Nije primijenjeno: ${skippedLabels.map(escapeHtml).join(', ')}.</p>`:''}${unknownFixerNote(out)}`);
    } else if(out.kind==='ok'){
     lockButton=true;
     // Preuzimanje NE krece automatski: a.click() nakon await-a preglednik cesto blokira (nema
@@ -1700,7 +1749,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
      :`<p><strong>Popravak nije spremljen u Moji popravci</strong> (privremena greška na serveru). Preuzmi datoteku i sačuvaj je, ovdje je više neće biti.</p>`;
     // RE-31: skipped nosi sirove ruleId slugove; mapiraj na citljivu labelu (isto kao lokalni panel).
     const skippedLabels=out.skipped.map((s: string)=>[...items,...textItems].find((i: any)=>i.ruleId===s)?.label||s);
-    setSummary(`<strong>Popravljeno na serveru (${_plIzmjena(out.changelog.length)}).</strong>${dl}${stored}${skippedLabels.length?`<p>Nije primijenjeno: ${skippedLabels.map(escapeHtml).join(', ')}.</p>`:''}`);
+    setSummary(`<strong>Popravljeno na serveru (${_plIzmjena(out.changelog.length)}).</strong>${dl}${stored}${skippedLabels.length?`<p>Nije primijenjeno: ${skippedLabels.map(escapeHtml).join(', ')}.</p>`:''}${unknownFixerNote(out)}`);
     const dlBtn: any=summary.querySelector('[data-repair-download]');
     if(dlBtn)dlBtn.onclick=()=>downloadBlob(out.docxBytes,DOCX_MIME,out.fileName);
     trackEvent('repair_server_done',{profileId:r.details?.profileDefinitionId||'',changes:out.changelog.length,stored:out.jobId?1:0,ms:uploadMs});
@@ -1740,10 +1789,14 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
       const scoreLine=`<p><strong>Spremnost: ${r.score} → ${res.score}${d>0?` (+${d})`:d<0?` (${d})`:''}</strong></p>`;
       const flatNote=d<=0?'<p class="muted">Bodovna ocjena se nije poboljšala. Popravljene su prepoznate stavke oblikovanja; preostale provjere traže ručnu izmjenu (upute iznad).</p>':'';
       // Regresija: provjera koja je prije prolazila, a sada ne prolazi. U ukupnom score-u se ne
-      // vidi (+6 na marginama i -3 na fusnotama izgleda kao cist +3), pa dobiva vlastiti blok i
-      // izlaz natrag na izvornik. Preuzimanje se NE ponistava - dokument je vec kod korisnika.
+      // vidi (+6 na marginama i -3 na fusnotama izgleda kao cist +3), pa dobiva vlastiti blok.
+      //
+      // Na serverskom putu preuzimanje ionako trazi klik (popup blocker, vidi gore), pa se dokument
+      // ne ponistava nego se PREMJESTA prioritet: izvornik postaje glavni gumb, a popravljeni pada
+      // na sporedni (zicanje odmah ispod). Prije je popravljeni ostajao vizualno glavni CTA i kad
+      // je ponovna analiza upravo dokazala da je nesto srusio.
       const regressions=(r.checks&&res.checks)?detectPassRegressions(r.checks,res.checks):[];
-      const regressionHtml=regressions.length?`<div class="lekta-repair-panel__regression"><p><strong>Pozor: ${regressions.length===1?'jedna provjera koja je prije prolazila sada ne prolazi':`${regressions.length} provjere koje su prije prolazile sada ne prolaze`}.</strong></p><ul>${regressions.map((x: any)=>`<li>${escapeHtml(x.title)}${x.after?` (sada: ${escapeHtml(x.after)})`:' (provjere više nema u rezultatu)'}</li>`).join('')}</ul><button type="button" class="btn btn-secondary btn-sm" data-repair-original>Preuzmi izvorni dokument</button></div>`:'';
+      const regressionHtml=regressions.length?`<div class="lekta-repair-panel__regression"><p><strong>Pozor: ${regressions.length===1?'jedna provjera koja je prije prolazila sada ne prolazi':`${regressions.length} provjere koje su prije prolazile sada ne prolaze`}.</strong></p><ul>${regressions.map((x: any)=>`<li>${escapeHtml(x.title)}${x.after?` (sada: ${escapeHtml(x.after)})`:' (provjere više nema u rezultatu)'}</li>`).join('')}</ul><p>Preporučujemo izvorni dokument dok to ne razriješiš.</p><button type="button" class="btn btn-primary" data-repair-original>Preuzmi izvorni dokument</button></div>`:'';
       // Strop: isti izracun i isti uvjeti kao lokalni panel (buildRepairCeilingNote). Do sada je
       // objasnjenje "zasto 97 nije nedovrsen posao" postojalo SAMO na besplatnom putu.
       const ceiling=res.checks?repairCeiling(res.checks):null;
@@ -1752,6 +1805,12 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
       // Zicanje TEK nakon zadnjeg innerHTML pisanja u ovaj element (inace se handler izgubi).
       const origBtn=recheck.querySelector<HTMLButtonElement>('[data-repair-original]');
       if(origBtn)origBtn.onclick=()=>downloadBlob(bytes,DOCX_MIME,r.file?.name||file.name||'rad.docx');
+      // Demotiraj popravljeni na sporedni izbor cim je regresija dokazana. Gumb OSTAJE (dokument
+      // se nikad ne zarobljava), ali prestaje biti ono sto sucelje preporucuje.
+      if(regressions.length){
+       const fixedBtn=summary.querySelector<HTMLButtonElement>('[data-repair-download]');
+       if(fixedBtn){fixedBtn.className='btn btn-secondary btn-sm';fixedBtn.textContent='Ipak preuzmi popravljeni dokument';}
+      }
      }else{recheck.remove()}
      /* "Pokaži što je popravljeno": faksimil prije/poslije. Radi SAMO kad oba modela postoje;
         inace se gumb ne prikazuje umjesto da otvori prazan prozor. Wordove revizije namjerno NE

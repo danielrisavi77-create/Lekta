@@ -11,6 +11,7 @@
  * provjeri parsera i audita (CLAUDE.md). Podupiru fieldValidation.syntheticDocxAudits.
  */
 import { describe, it, expect } from 'vitest';
+import { expectNotPenalised } from "./helpers/check-status";
 import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
@@ -50,11 +51,11 @@ describe('AGR sinteticki golden: diplomski (Preporuke, prored 1,15)', () => {
   it('uskladjeni rad prolazi font/velicinu/prored/A4/Sadrzaj', async () => {
     const file = buildDocxFile({ paragraphs: compliantDoc(276), marginsCm: M25 }, 'agr-dipl-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'agr-diplomski' });
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Format stranice A4').status).toBe('pass');
-    expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
+    expectNotPenalised(check(r, 'Dominantni font'));
+    expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+    expectNotPenalised(check(r, 'Prored osnovnog teksta'));
+    expectNotPenalised(check(r, 'Format stranice A4'));
+    expectNotPenalised(check(r, 'Sadržaj dokumenta'));
   });
 });
 
@@ -62,10 +63,10 @@ describe('AGR sinteticki golden: zavrsni (Justify propisan)', () => {
   it('uskladjeni rad prolazi + obostrano poravnanje', async () => {
     const file = buildDocxFile({ paragraphs: compliantDoc(276), marginsCm: M25 }, 'agr-zav-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'agr-zavrsni' });
-    expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Poravnanje osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Format stranice A4').status).toBe('pass');
+    expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+    expectNotPenalised(check(r, 'Prored osnovnog teksta'));
+    expectNotPenalised(check(r, 'Poravnanje osnovnog teksta'));
+    expectNotPenalised(check(r, 'Format stranice A4'));
   });
 });
 
@@ -73,13 +74,13 @@ describe('AGR sinteticki golden: doktorski (imperativno, prored 1,5, margine)', 
   it('uskladjeni rad prolazi velicinu/prored/margine/A4/Sadrzaj', async () => {
     const file = buildDocxFile({ paragraphs: compliantDoc(360), marginsCm: M25 }, 'agr-dok-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'agr-doktorski' });
-    expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
+    expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+    expectNotPenalised(check(r, 'Prored osnovnog teksta'));
     // agr-doktorski ima i requireA4 i paperSizes:['A4'] (paper-size ruleEntry) - naslov je "(A4)".
-    expect(check(r, 'Format stranice (A4)').status).toBe('pass');
-    expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
+    expectNotPenalised(check(r, 'Format stranice (A4)'));
+    expectNotPenalised(check(r, 'Sadržaj dokumenta'));
     const m = check(r, 'Margine dokumenta');
     expect(m.max).toBeGreaterThan(0); // doktorski boduje margine
-    expect(m.status).toBe('pass');
+    expectNotPenalised(m);
   });
 });

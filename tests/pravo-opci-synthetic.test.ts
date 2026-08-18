@@ -9,6 +9,7 @@
  * Sinteticki dokument NIJE pravi rad ni izvor pravila (CLAUDE.md).
  */
 import { describe, it, expect } from 'vitest';
+import { expectNotPenalised } from "./helpers/check-status";
 import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
@@ -38,8 +39,8 @@ describe('pravo genericki ("opci") profili: scored format + no-crash', () => {
     it(`${c.id} prolazi font/velicinu/prored/margine/Sadrzaj`, async () => {
       const r: any = await analyzeFixture(buildDocxFile({ paragraphs: doc(), marginsCm: c.margins }, `${c.id}.docx`), { profileId: c.id });
       for (const t of ['Dominantni font', 'Veličina osnovnog teksta', 'Prored osnovnog teksta', 'Margine dokumenta', 'Sadržaj dokumenta'])
-        expect(check(r, t)?.status, `${c.id}: ${t}`).toBe('pass');
-      if (c.a4) expect(check(r, 'Format stranice A4')?.status).toBe('pass');
+        expectNotPenalised(check(r, t));
+      if (c.a4) expectNotPenalised(check(r, 'Format stranice A4'));
     });
   }
 });

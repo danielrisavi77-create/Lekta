@@ -30,3 +30,128 @@ export const DOCX_MAX_TOTAL_DECOMPRESSED_BYTES = 64 * MB;
  * Popustiti CHECK na 4096 znacilo bi oslabiti postojecu obranu radi kozmeticke simetrije.
  */
 export const DOCX_MAX_ZIP_ENTRIES = 512;
+
+/**
+ * Najveci dekomprimirani sadrzaj JEDNOG zapisa pri ANALIZI.
+ *
+ * Analiza i popravak ne mjere isto, pa jedna brojka ne pokriva oba:
+ *  - ANALIZA cita LIJENO, samo XML dijelove koje treba (document.xml, styles.xml, footnotes...),
+ *    pa se media nikad ne dekomprimira; granica je per-zapis, s agregatom kao guardom protiv
+ *    ponovljenog citanja istog zapisa.
+ *  - POPRAVAK mora procitati CIJELI paket da ga ponovno zapise, pa je njegova granica UKUPNA
+ *    (`DOCX_MAX_TOTAL_DECOMPRESSED_BYTES`) i po prirodi stroza.
+ *
+ * Zato dokument moze proci analizu i pasti na popravku. To se NE rjesava izjednacavanjem brojki
+ * (mjere razlicite stvari) nego `docxCapability()` ispod, koji jos na intakeu iz zip central
+ * directoryja procita DEKLARIRANE velicine i unaprijed kaze je li popravak uopce moguc.
+ */
+export const DOCX_MAX_DECOMPRESSED_BYTES_PER_ENTRY = 200 * MB;
+
+/** Zasto popravak nije moguc za ovaj paket (null kad jest). */
+export type DocxRepairBlocker = 'upload-too-large' | 'too-many-entries' | 'decompresses-too-large';
+
+/** Sto se s ovim paketom realno moze, izvedeno PRIJE ijedne skupe operacije. */
+export interface DocxCapability {
+  canAnalyze: boolean;
+  canRepair: boolean;
+  /** Zbroj DEKLARIRANIH dekomprimiranih velicina svih zapisa (iz central directoryja). */
+  totalDeclaredBytes: number;
+  entryCount: number;
+  repairBlocker: DocxRepairBlocker | null;
+}
+
+/**
+ * Moze li se paket analizirati i, VAZNIJE, moze li se popraviti.
+ *
+ * Poanta je postenje sucelja: bez ovoga analiza prodje, korisnik dobije popis popravaka, klikne
+ * "Popravi", potvrdi slanje na server i tek tada dobije 422 jer zip-codec ne moze progutati paket.
+ * Ulaz je jeftin (velicina datoteke + central directory), pa se odgovor zna prije analize.
+ */
+export function docxCapability(input: { fileBytes: number; entryCount: number; totalDeclaredBytes: number }): DocxCapability {
+  const { fileBytes, entryCount, totalDeclaredBytes } = input;
+  const withinUpload = fileBytes > 0 && fileBytes <= DOCX_MAX_UPLOAD_BYTES;
+  const withinEntries = entryCount <= DOCX_MAX_ZIP_ENTRIES;
+  const withinDecompressed = totalDeclaredBytes <= DOCX_MAX_TOTAL_DECOMPRESSED_BYTES;
+  const repairBlocker: DocxRepairBlocker | null = !withinUpload
+    ? 'upload-too-large'
+    : !withinEntries
+      ? 'too-many-entries'
+      : !withinDecompressed
+        ? 'decompresses-too-large'
+        : null;
+  return {
+    canAnalyze: withinUpload && withinEntries,
+    canRepair: repairBlocker === null,
+    totalDeclaredBytes,
+    entryCount,
+    repairBlocker,
+  };
+}
+
+/** Kratko, korisniku razumljivo objasnjenje zasto popravak nije moguc (hrvatski, bez brojki iz koda). */
+export function repairBlockerMessage(blocker: DocxRepairBlocker): string {
+  switch (blocker) {
+    case 'upload-too-large':
+      return `Dokument je veći od ${Math.round(DOCX_MAX_UPLOAD_BYTES / MB)} MB, koliko automatski popravak može primiti.`;
+    case 'too-many-entries':
+      return `Dokument sadrži više od ${DOCX_MAX_ZIP_ENTRIES} ugrađenih dijelova, više nego što automatski popravak može sigurno obraditi.`;
+    case 'decompresses-too-large':
+      return `Raspakirani sadržaj dokumenta prelazi ${Math.round(DOCX_MAX_TOTAL_DECOMPRESSED_BYTES / MB)} MB, koliko automatski popravak može sigurno obraditi. Analiza je moguća, popravak nije.`;
+  }
+}
+
+/**
+ * Najveci broj zahtjeva za popravak u jednom pozivu.
+ *
+ * Postojao je vec kao gola brojka u repair-docx (`rawReqs.length > 64`); premjesten ovamo da
+ * granice dokumenta stvarno budu na JEDNOM mjestu, kako ovaj modul i tvrdi.
+ */
+export const REPAIR_MAX_REQUESTS = 64;
+
+/**
+ * Najveca serijalizirana velicina `params` JEDNOG zahtjeva (audit DOCX-14).
+ *
+ * Broj zahtjeva je bio ogranicen, ali NJIHOV SADRZAJ nije: jedan zahtjev mogao je nositi niz od
+ * desetaka tisuca indeksa odlomaka i time napuhati i parsiranje i obradu, unutar dopustenih 64
+ * zahtjeva. 16 KB je daleko iznad svega sto stvarni recept proizvodi (najveci realni `params`
+ * nosi nekoliko stotina bajtova), pa granica ne moze pogoditi ispravan poziv.
+ */
+export const REPAIR_MAX_PARAMS_BYTES = 16 * 1024;
+
+/**
+ * Najveca duljina niza unutar `params` (npr. `elements`, `entries`, indeksi odlomaka).
+ *
+ * Odvojeno od bajtne granice jer niz kratkih brojeva prodje bajtnu granicu, a i dalje moze
+ * natjerati fixer na desetke tisuca prolaza kroz dokument. Realan dokument ima najvise nekoliko
+ * stotina meta po pravilu, pa je 2000 velikodusan strop.
+ */
+export const REPAIR_MAX_PARAM_ARRAY_LENGTH = 2000;
+
+/**
+ * Je li `params` unutar granica. Vraca razlog kad nije, da ga pozivatelj moze prijaviti umjesto
+ * da tiho odbaci zahtjev (tihi preskok je zaseban nalaz, DOCX-13).
+ */
+export function paramsWithinBudget(params: unknown): { ok: true } | { ok: false; reason: 'params-too-large' | 'params-array-too-long' } {
+  let serialized: string;
+  try {
+    serialized = JSON.stringify(params ?? {});
+  } catch {
+    // Ciklicka ili neserijalizabilna struktura: tretiraj kao prekoracenje, ne kao ispravan ulaz.
+    return { ok: false, reason: 'params-too-large' };
+  }
+  if (serialized.length > REPAIR_MAX_PARAMS_BYTES) return { ok: false, reason: 'params-too-large' };
+
+  const stack: unknown[] = [params];
+  while (stack.length) {
+    const node = stack.pop();
+    if (Array.isArray(node)) {
+      if (node.length > REPAIR_MAX_PARAM_ARRAY_LENGTH) return { ok: false, reason: 'params-array-too-long' };
+      for (const v of node) if (v && typeof v === 'object') stack.push(v);
+    } else if (node && typeof node === 'object') {
+      for (const v of Object.values(node as Record<string, unknown>)) {
+        if (v && typeof v === 'object') stack.push(v);
+      }
+    }
+  }
+  return { ok: true };
+}

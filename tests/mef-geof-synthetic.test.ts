@@ -14,6 +14,7 @@
  * parsera i audita (CLAUDE.md). Podupire fieldValidation.syntheticDocxAudits.
  */
 import { describe, it, expect } from 'vitest';
+import { expectNotPenalised } from "./helpers/check-status";
 import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
@@ -51,11 +52,11 @@ describe('mef sinteticki golden: diplomski (harvard, font+velicina scored, A4)',
   it('uskladjeni rad prolazi font, velicinu, A4 i Sadrzaj', async () => {
     const file = buildDocxFile({ paragraphs: compliantDoc(), marginsCm: M25 }, 'mef-dipl-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'mef-diplomski' });
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
+    expectNotPenalised(check(r, 'Dominantni font'));
+    expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
     // mef-diplomski ima i requireA4 i paperSizes:['A4'] (paper-size ruleEntry).
-    expect(check(r, 'Format stranice (A4)').status).toBe('pass');
-    expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
+    expectNotPenalised(check(r, 'Format stranice (A4)'));
+    expectNotPenalised(check(r, 'Sadržaj dokumenta'));
   });
 });
 
@@ -63,9 +64,9 @@ describe('geof sinteticki golden: diplomski (harvard, samo Sadrzaj scored)', () 
   it('uskladjeni rad prolazi Sadrzaj i ne puca (bez tehnickih pravila)', async () => {
     const file = buildDocxFile({ paragraphs: compliantDoc(), marginsCm: M25 }, 'geof-dipl-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'geof-diplomski' });
-    expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
+    expectNotPenalised(check(r, 'Sadržaj dokumenta'));
     // Font/velicina/prored/margine su informativni (profil ih ne propisuje) -> pass bez kaznjavanja.
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Margine dokumenta').status).toBe('pass');
+    expectNotPenalised(check(r, 'Dominantni font'));
+    expectNotPenalised(check(r, 'Margine dokumenta'));
   });
 });

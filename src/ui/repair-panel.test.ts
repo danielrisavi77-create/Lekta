@@ -321,7 +321,7 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
     expect(recheck.textContent).toContain('Oblikovanje'); // kategorijska delta
   });
 
-  it('regresiju (pass -> fail) prikaze uz izlaz na izvorni dokument', async () => {
+  it('regresija (pass -> fail): izvorni dokument postaje GLAVNA ponuda', async () => {
     const mountEl = mount();
     renderRepairPanel({
       items: [marginItem()],
@@ -347,7 +347,16 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
     const box = mountEl.querySelector('.lekta-repair-panel__regression')!;
     expect(box.textContent).toContain('Oblikovanje fusnota');
     expect(box.textContent).not.toContain('Margine dokumenta'); // popravljena, nije regresija
-    expect(box.querySelector('button')?.textContent).toContain('izvorni dokument');
+
+    // Izbor vise ne zivi u bloku upozorenja nego u zoni isporuke, koja se renderira TEK nakon
+    // ponovne analize. Kad je regresija dokazana, GLAVNI gumb je izvornik, a popravljeni pada
+    // na sporedni; prije je popravljeni vec bio automatski preuzet dok je upozorenje tek stizalo.
+    await waitFor(() => !!mountEl.querySelector('.lekta-repair-panel__delivery'));
+    const delivery = mountEl.querySelector('.lekta-repair-panel__delivery')!;
+    const buttons = [...delivery.querySelectorAll('button')];
+    expect(buttons[0].textContent).toBe('Preuzmi izvorni dokument');
+    expect(buttons[0].className).toContain('btn-primary');
+    expect(buttons[1].textContent).toBe('Ipak preuzmi popravljeni');
   });
 
   it('bez regresije nema bloka upozorenja', async () => {
@@ -365,7 +374,7 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
     expect(mountEl.querySelector('.lekta-repair-panel__regression')).toBeNull();
   });
 
-  it('pad reanalyze ne rusi panel; preuzimanje se svejedno dogodilo', async () => {
+  it('pad reanalyze ne rusi panel i NE zarobljava dokument (isporuka uz napomenu)', async () => {
     const mountEl = mount();
     let downloaded = false;
     (globalThis.URL as any).createObjectURL = () => {
@@ -383,10 +392,20 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
       },
     });
     mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
-    await waitFor(() =>
-      (mountEl.querySelector('.lekta-repair-panel__summary')?.textContent || '').includes('nije bilo moguće izračunati'),
-    );
-    expect(downloaded).toBe(true); // preuzimanje se dogodilo prije re-checka
+    await waitFor(() => !!mountEl.querySelector('.lekta-repair-panel__delivery'));
+
+    // Novi ugovor: preuzimanje vise NIJE automatsko (dogadja se nakon `await` ponovne analize, gdje
+    // ga preglednik moze blokirati jer nema korisnicke geste), pa je izricit gumb.
+    expect(downloaded).toBe(false);
+    expect((mountEl.querySelector('.lekta-repair-panel__summary')?.textContent || '')).toContain('nije bilo moguće izračunati');
+
+    // Pad provjere ne smije zarobiti dokument: popravljeni ostaje GLAVNA ponuda, uz napomenu.
+    const delivery = mountEl.querySelector('.lekta-repair-panel__delivery')!;
+    const primary = delivery.querySelector('button')!;
+    expect(primary.textContent).toBe('Preuzmi popravljeni dokument');
+    expect(delivery.textContent).toContain('nije bilo moguće izvesti');
+    primary.click();
+    expect(downloaded).toBe(true);
   });
 
   it('bez reanalyze (stari pozivatelj) nema re-check bloka', async () => {
@@ -559,11 +578,12 @@ describe('renderRepairPanel: ledger+modal (uvijek, bez obzira na mix stavki)', (
       getDocxBytes: async () => singleSectionDocx(),
       originalFileName: 'rad.docx',
       mountEl,
-      ceilingPriceEur: 9.99,
     });
     expect(mountEl.querySelector('.lekta-repair-trigger')).toBeTruthy();
     expect(mountEl.querySelector<HTMLElement>('.lekta-repair-panel__list')!.hidden).toBe(true);
-    expect(mountEl.querySelector('.lekta-repair-trigger__price')?.textContent).toMatch(/€/);
+    // Ledger prikazuje OPSEG, nikad iznos: cijena je fiksna po vrsti rada i ne ovisi o odabiru.
+    expect(mountEl.querySelector('.lekta-repair-trigger__price')?.textContent).toMatch(/^\d+ od \d+ poprav/);
+    expect(mountEl.textContent).not.toMatch(/€/);
   });
 
   it('stavka s naprednom formom (Tier B): ledger i dalje kompaktan, forma je inline <details> na retku', () => {
@@ -581,7 +601,6 @@ describe('renderRepairPanel: ledger+modal (uvijek, bez obzira na mix stavki)', (
       getDocxBytes: async () => singleSectionDocx(),
       originalFileName: 'rad.docx',
       mountEl,
-      ceilingPriceEur: 9.99,
     });
     expect(mountEl.querySelector('.lekta-repair-trigger')).toBeTruthy();
     expect(mountEl.querySelector<HTMLElement>('.lekta-repair-panel__list')!.hidden).toBe(true);
@@ -613,7 +632,6 @@ describe('renderRepairPanel: ledger+modal (uvijek, bez obzira na mix stavki)', (
       getDocxBytes: async () => singleSectionDocx(),
       originalFileName: 'rad.docx',
       mountEl,
-      ceilingPriceEur: 9.99,
     });
     const ledger = openLedger(mountEl);
     const itemModal = openTierAItem(ledger, 'Literatura');
@@ -637,7 +655,6 @@ describe('renderRepairPanel: ledger+modal (uvijek, bez obzira na mix stavki)', (
       getDocxBytes: async () => singleSectionDocx(),
       originalFileName: 'rad.docx',
       mountEl,
-      ceilingPriceEur: 9.99,
     });
     mountEl.querySelector<HTMLButtonElement>('.lekta-repair-trigger__btn')!.click();
     const backdrop = document.querySelector<HTMLElement>('.modal-backdrop[data-lekta-repair-ledger-modal]')!;

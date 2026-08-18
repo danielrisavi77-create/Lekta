@@ -66,9 +66,13 @@ export function meetsExpectation(check: any, exp: CorpusExpectation): boolean {
     return exp.outcome === 'pass' ? earned === max : earned < max;
   }
   switch (exp.outcome) {
-    case 'pass': return check.status === 'pass';
+    // 'pass' u korpusu znaci "valjana varijanta ne proizvodi lazni nalaz". Nebodovana provjera
+    // (max === 0) od 2026-08-17 nosi status 'informational' umjesto 'pass', a ona po definiciji ne
+    // moze proizvesti nalaz, pa i dalje zadovoljava ocekivanje.
+    case 'pass': return check.status === 'pass' || check.status === 'informational';
     case 'fail': return check.status === 'fail';
     case 'warn': return check.status === 'warn';
-    case 'not-pass': return check.status !== 'pass';
+    // 'not-pass' trazi STVARAN nalaz: informativna provjera nije nalaz, pa ne smije zadovoljiti.
+    case 'not-pass': return check.status !== 'pass' && check.status !== 'informational';
   }
 }

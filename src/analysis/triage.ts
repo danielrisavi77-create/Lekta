@@ -16,7 +16,8 @@
  */
 import type { Check, Issue } from '../scoring/checks';
 import type { FixerId } from '../repair/apply-fixers';
-import { classifyFixability, type Fixability } from './check-fixer-map';
+import { classifyFixability, classifyFixabilityById, type Fixability } from './check-fixer-map';
+import { stableCheckId } from '../scoring/check-id-registry';
 import {
   collectPreviewFlags,
   collectIssueAnchors,
@@ -66,11 +67,11 @@ export interface TriageModel {
   counts: TriageCounts;
 }
 
-/** Naslov provjere -> izvor strukturiranih preview flagova (za precizne lokacije). */
-const REF_SOURCE_BY_CHECK: Record<string, PreviewFlagSource> = {
-  'Citirano → literatura': 'reference-missing',
-  'Literatura → citirano': 'reference-uncited',
-  'Potpunost bibliografskih zapisa': 'reference-incomplete',
+/** Stabilni checkId -> izvor strukturiranih preview flagova (za precizne lokacije). */
+const REF_SOURCE_BY_CHECK_ID: Record<string, PreviewFlagSource> = {
+  'citation.author-year.missing-reference': 'reference-missing',
+  'reference.uncited': 'reference-uncited',
+  'reference.completeness': 'reference-incomplete',
 };
 
 const DIACRITICS: Record<string, string> = { č: 'c', ć: 'c', š: 's', ž: 'z', đ: 'd', Č: 'c', Ć: 'c', Š: 's', Ž: 'z', Đ: 'd' };
@@ -98,7 +99,10 @@ function flagToLocation(flag: PreviewFlag): TriageLocation {
 function severityOf(check: Check): 'error' | 'warning' | 'info' {
   const s = check.issue?.severity;
   if (s === 'error' || s === 'warning' || s === 'info') return s;
-  return check.status === 'fail' ? 'error' : check.status === 'pass' ? 'info' : 'warning';
+  if (check.status === 'fail') return 'error';
+  // 'informational' (max===0) mora zavrsiti kao 'info', ne kao 'warning': nebodovana provjera nije
+  // upozorenje. Prije 2026-08-17 je i ona nosila status 'pass' pa je ova grana bila dovoljna.
+  return check.status === 'pass' || check.status === 'informational' ? 'info' : 'warning';
 }
 
 /** Je li provjera "nalaz" (problem koji vrijedi prikazati)? Bodovani ne-pass ILI (info) s issueom. */
@@ -114,7 +118,7 @@ function locationsFor(check: Check, detailFlags: PreviewFlag[]): TriageLocation[
     flags.push(...collectIssueAnchors([check.issue]));
     flags.push(...collectFootnoteAnchors([check.issue]));
   }
-  const refSource = REF_SOURCE_BY_CHECK[check.title];
+  const refSource = REF_SOURCE_BY_CHECK_ID[check.id ?? stableCheckId(check.title) ?? ''];
   if (refSource) flags.push(...detailFlags.filter((f) => f.source === refSource));
 
   const seen = new Set<string>();
@@ -148,7 +152,11 @@ export function buildTriage(result: TriageInput): TriageModel {
 
   for (const check of checks) {
     if (!isFinding(check)) continue;
-    const { fixability, fixId, groupKey } = classifyFixability(check.title);
+    // Klasifikacija ide preko STABILNOG identiteta; naslov je fallback samo za provjere bez
+    // registriranog `id` (rucni fixturi). `finding.id` ispod ostaje slug naslova jer je to
+    // sidro u DOM-u koje se izvodi iznova na obje strane, pa preimenovanje ne moze razdvojiti
+    // nalaz od popravka (za razliku od klasifikacije, koja bi tiho pala na 'manual').
+    const { fixability, fixId, groupKey } = check.id ? classifyFixabilityById(check.id) : classifyFixability(check.title);
     let id = `chk:${slug(check.category)}:${slug(check.title)}`;
     while (seenIds.has(id)) id += '-2';
     seenIds.add(id);

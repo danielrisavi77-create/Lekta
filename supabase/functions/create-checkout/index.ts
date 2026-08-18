@@ -11,6 +11,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { resolveCheckout, buildLemonSqueezyCheckout, checkoutMismatch } from '../../../src/report/checkout.ts';
 import { mapProductRow } from '../../../src/catalog/products-catalog.ts';
 import { corsHeadersFor } from '../_shared/cors.ts';
+import { canonicalConsentText, consentTextMatches } from '../../../src/legal/consent-text.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -69,16 +70,37 @@ Deno.serve(async (req: Request) => {
     : null;
 
   // consent gate (P0 1-1): digitalni pass se ne prodaje bez pristanka na trenutnu isporuku
-  // i odricanja od 14-dnevnog prava na odustanak. Tekst + timestamp trajno se biljeze.
+  // i odricanja od 14-dnevnog prava na odustanak.
+  //
+  // OJACANO 2026-08-17 (audit A26-08 / LEG-04..07). Prije je ovdje bila samo provjera da su dva
+  // boolean-a `true` i da je `text` neprazan string, nakon cega se KLIJENTOV tekst, KLIJENTOV
+  // timestamp i KLIJENTOVA (opcionalna) verzija uvjeta doslovno spremali u checkout_consents.
+  // Takav zapis nije bio dokaz nego prepricavanje: izmijenjen klijent mogao je poslati
+  // proizvoljan tekst, datum u proslosti ili buducnosti, ili preskociti verziju uvjeta. Za
+  // gubitak prava na jednostrani raskid (cl. 86. ZZP) teret dokaza je na trgovcu, pa je takav
+  // zapis bio bezvrijedan upravo u trenutku kad bi zatrebao.
   const consent = body.consent;
-  if (!consent || consent.immediateDelivery !== true || consent.withdrawalWaived !== true || !String(consent.text ?? '').trim()) {
+  if (!consent || consent.immediateDelivery !== true || consent.withdrawalWaived !== true) {
     return json({ error: 'consent_required' }, 400);
   }
-  let consentedAt = new Date().toISOString();
-  if (consent.timestamp) {
-    const t = new Date(consent.timestamp);
-    if (!Number.isNaN(t.getTime())) consentedAt = t.toISOString();
+  // Verzija uvjeta je OBAVEZNA i mora biti poznata; bez nje se ne zna na sto je pristanak dan.
+  const termsVersion = typeof consent.termsVersion === 'string' ? consent.termsVersion : '';
+  if (!canonicalConsentText(termsVersion)) {
+    return json({ error: 'consent_terms_version_unknown' }, 400);
   }
+  // Tekst mora biti ONAJ koji je za tu verziju stvarno prikazan, do znaka.
+  if (!consentTextMatches(consent.text, termsVersion)) {
+    return json({ error: 'consent_text_mismatch' }, 400);
+  }
+
+  // Vrijeme privole je SERVERSKO. Klijentov timestamp se cuva odvojeno kao tvrdnja klijenta:
+  // koristan je za dijagnostiku (npr. jako razilazenje sata), ali nije dokaz vremena radnje.
+  const consentedAt = new Date().toISOString();
+  const clientClaimedAt = (() => {
+    if (typeof consent.timestamp !== 'string') return null;
+    const t = new Date(consent.timestamp);
+    return Number.isNaN(t.getTime()) ? null : t.toISOString();
+  })();
 
   const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 
@@ -126,9 +148,13 @@ Deno.serve(async (req: Request) => {
     product_id: productId,
     immediate_delivery: true,
     withdrawal_waived: true,
-    consent_text: String(consent.text).slice(0, 2000),
-    terms_version: consent.termsVersion ? String(consent.termsVersion).slice(0, 64) : null,
+    // Sprema se KANONSKI tekst za tu verziju, ne ono sto je klijent poslao. Podudarnost je vec
+    // dokazana gore, pa je ovo obrana od tihe razlike u prijenosu (CRLF, rubni razmaci) i jamci
+    // da su svi zapisi iste verzije bajt-identicni.
+    consent_text: canonicalConsentText(termsVersion),
+    terms_version: termsVersion,
     consented_at: consentedAt,
+    client_claimed_at: clientClaimedAt,
   });
   if (consentErr) return json({ error: 'consent_not_recorded' }, 500);
 

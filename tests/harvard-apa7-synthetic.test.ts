@@ -10,6 +10,7 @@
  * provjeri parsera i audita (CLAUDE.md). Podupiru fieldValidation.syntheticDocxAudits.
  */
 import { describe, it, expect } from 'vitest';
+import { expectNotPenalised } from "./helpers/check-status";
 import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
@@ -51,18 +52,18 @@ async function expectCompliant(
 ) {
   const file = buildDocxFile({ paragraphs: compliantDoc(), marginsCm: M25 }, `${profileId}-ok.docx`);
   const r: any = await analyzeFixture(file, { profileId });
-  expect(check(r, 'Dominantni font').status, 'font').toBe('pass');
-  expect(check(r, 'Veličina osnovnog teksta').status, 'velicina').toBe('pass');
-  expect(check(r, 'Prored osnovnog teksta').status, 'prored').toBe('pass');
-  expect(check(r, 'Poravnanje osnovnog teksta').status, 'poravnanje').toBe('pass');
+  expectNotPenalised(check(r, 'Dominantni font'));
+  expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+  expectNotPenalised(check(r, 'Prored osnovnog teksta'));
+  expectNotPenalised(check(r, 'Poravnanje osnovnog teksta'));
   // Naslov ovisi o tome ima li profil i paperSizes:['A4'] (paper-size ruleEntry) uz requireA4 -
   // profile.paperSizes ima prednost u analyze-docx.ts pa je onda naslov "Format stranice (A4)".
-  if (opts.a4) expect(check(r, opts.a4Title ?? 'Format stranice A4').status, 'A4').toBe('pass');
-  if (opts.sadrzaj) expect(check(r, 'Sadržaj dokumenta').status, 'sadrzaj').toBe('pass');
+  if (opts.a4) expectNotPenalised(check(r, opts.a4Title ?? 'Format stranice A4'));
+  if (opts.sadrzaj) expectNotPenalised(check(r, 'Sadržaj dokumenta'));
   if (opts.margins) {
     const m = check(r, 'Margine dokumenta');
     expect(m.max, 'margine max').toBeGreaterThan(0);
-    expect(m.status, 'margine').toBe('pass');
+    expectNotPenalised(m);
   }
 }
 

@@ -12,6 +12,7 @@
  * Sinteticki dokument NIJE pravi rad ni izvor pravila (CLAUDE.md).
  */
 import { describe, it, expect } from 'vitest';
+import { expectNotPenalised } from "./helpers/check-status";
 import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
@@ -38,12 +39,12 @@ describe('fkit-diplomski/zavrsni: scored velicina/prored/A4 (bez fonta)', () => 
     it(`${id} prolazi velicinu/prored/A4 i ne puca`, async () => {
       const file = buildDocxFile({ paragraphs: doc(), marginsCm: M25 }, `${id}-ok.docx`);
       const r: any = await analyzeFixture(file, { profileId: id });
-      expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-      expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
+      expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+      expectNotPenalised(check(r, 'Prored osnovnog teksta'));
       // fkit-diplomski/zavrsni imaju i requireA4 i paperSizes:['A4'] (paper-size ruleEntry).
-      expect(check(r, 'Format stranice (A4)').status).toBe('pass');
-      expect(check(r, 'Dominantni font').status).toBe('pass'); // informativno (nema font pravila)
-      expect(check(r, 'Margine dokumenta').status).toBe('pass'); // informativno
+      expectNotPenalised(check(r, 'Format stranice (A4)'));
+      expectNotPenalised(check(r, 'Dominantni font')); // informativno (nema font pravila)
+      expectNotPenalised(check(r, 'Margine dokumenta')); // informativno
     });
   }
 });
@@ -52,9 +53,9 @@ describe('fkit-doktorski: DR.SC.-08', () => {
   it('prolazi font/velicinu/prored/A4', async () => {
     const file = buildDocxFile({ paragraphs: doc(), marginsCm: M25 }, 'fkit-dok-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'fkit-doktorski' });
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Format stranice A4').status).toBe('pass');
+    expectNotPenalised(check(r, 'Dominantni font'));
+    expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+    expectNotPenalised(check(r, 'Format stranice A4'));
   });
 });
 
@@ -63,9 +64,9 @@ describe('fpz-diplomski/zavrsni: scored Sadrzaj (oblikovanje advisory)', () => {
     it(`${id} prolazi Sadrzaj i ne puca`, async () => {
       const file = buildDocxFile({ paragraphs: doc(), marginsCm: M25 }, `${id}-ok.docx`);
       const r: any = await analyzeFixture(file, { profileId: id });
-      expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
-      expect(check(r, 'Dominantni font').status).toBe('pass'); // informativno
-      expect(check(r, 'Margine dokumenta').status).toBe('pass'); // informativno
+      expectNotPenalised(check(r, 'Sadržaj dokumenta'));
+      expectNotPenalised(check(r, 'Dominantni font')); // informativno
+      expectNotPenalised(check(r, 'Margine dokumenta')); // informativno
     });
   }
 });

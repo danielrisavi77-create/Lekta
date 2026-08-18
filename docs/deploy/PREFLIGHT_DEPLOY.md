@@ -4,6 +4,17 @@ Trajni zapis plana i svih otkrića za deploy preflight servisa ("Provjera prije
 predaje"). **ODGOĐENO** dok se lokalni proizvod ne dovede do objave (odluka vlasnika,
 2026-07-16). Kod je gotov, remediran i zelen — ovo je "pritisni play kad budeš spreman".
 
+> **Stvarno stanje 2026-08-17: preflight je UGAŠEN u produkciji.** Audit je otkrio da su
+> `preflight-start` i `preflight-result` sve vrijeme bile ACTIVE Edge funkcije na
+> produkcijskom projektu, dok je ovaj dokument tvrdio da je stup odgođen. Frontend ih
+> nikad nije zvao (`src/preflight/preflight-client.ts` nema nijednog pozivatelja i nema
+> konfiguriranih URL-ova), pa su bile čista izložena površina bez ijednog korisnika.
+> Obje su undeployane (`supabase functions delete`), čime ovaj runbook postaje istinit.
+> Prije ponovnog paljenja moraju biti ispunjeni uvjeti iz odjeljka "Preduvjeti", a k tome
+> i dva koja audit dodaje: CSP u `public/_headers` mora dopustiti host Python servisa
+> (danas bi `connect-src` blokirao upload), a `isValidPreflightConsent` mora provjeravati
+> kanonski tekst privole, ne samo tipove polja.
+
 ## Status koda (2026-07-16)
 - Preflight kod merged u master (feature/preflight, 1ab5144) — Edge funkcije, klijent,
   tier-filter, Python servis.

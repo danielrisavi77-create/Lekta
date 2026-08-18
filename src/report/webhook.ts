@@ -8,7 +8,12 @@
 
 /** Lemon Squeezy webhook payload (labava granica; citamo samo sto trebamo). */
 export interface LemonWebhookPayload {
-  meta?: { event_name?: string; custom_data?: { user_id?: string; product_id?: string; referral_code?: string } };
+  meta?: {
+    event_name?: string;
+    /** LS salje test_mode u meta; true = dogadjaj iz testnog nacina rada. */
+    test_mode?: boolean;
+    custom_data?: { user_id?: string; product_id?: string; referral_code?: string };
+  };
   data?: {
     id?: string | number;
     attributes?: {
@@ -17,6 +22,14 @@ export interface LemonWebhookPayload {
       refunded?: boolean;
       variant_id?: string | number;
       first_order_item?: { variant_id?: string | number };
+      /** Trgovina iz koje dogadjaj dolazi. Bez provjere bi tudja trgovina prosla kao nasa. */
+      store_id?: string | number;
+      /** Ukupno naplaceno, u NAJMANJOJ jedinici valute (centi). */
+      total?: number;
+      /** Koliko je vraceno, u centima. Manje od total = djelomicni povrat. */
+      refunded_amount?: number;
+      currency?: string;
+      test_mode?: boolean;
     };
   };
 }
@@ -30,6 +43,50 @@ export interface LemonEvent {
   /** Referral kod iz checkout custom_data (atribucija, sekcija 8); prazno ako ga nema. */
   referralCode: string;
   refunded: boolean;
+  /** Trgovina iz koje dogadjaj dolazi; prazno ako ga LS nije poslao (vidi acceptEvent). */
+  storeId: string;
+  /** Testni nacin rada. Testni dogadjaj NE SMIJE proizvesti pravo pravo pristupa. */
+  testMode: boolean;
+  /** Ukupno naplaceno u centima, ili null ako ga payload ne nosi. */
+  totalCents: number | null;
+  /** Vraceni iznos u centima, ili null. Manje od totalCents = djelomicni povrat. */
+  refundedCents: number | null;
+  /** Valuta (npr. "EUR"), velikim slovima; prazno ako je nema. */
+  currency: string;
+}
+
+/**
+ * Je li povrat POTPUN. Djelomican povrat ne smije oduzeti cijelo pravo pristupa (PAY-09).
+ *
+ * Kad iznosi nisu poznati (stariji ili krnji payload), vraca se true, jer je za korisnika
+ * sigurnije previse oduzeti nego naplatiti nesto sto je vraceno; ta se odluka vidi u logu.
+ */
+export function isFullRefund(ev: Pick<LemonEvent, 'refunded' | 'totalCents' | 'refundedCents'>): boolean {
+  if (!ev.refunded) return false;
+  if (ev.totalCents === null || ev.refundedCents === null) return true;
+  return ev.refundedCents >= ev.totalCents;
+}
+
+/**
+ * Smije li se dogadjaj UOPCE obraditi, prije ikakvog dodjeljivanja prava (PAY-04, PAY-05).
+ *
+ * Potpis dokazuje samo da posiljatelj zna tajnu, ne i da dogadjaj pripada NASOJ trgovini i
+ * NASEM okruzenju. Testni kljuc s ispravnim potpisom, ili valjano potpisan dogadjaj druge
+ * trgovine, inace bi proizveo pravo pravo pristupa.
+ *
+ * `expectedStoreId` prazan = provjera trgovine se preskace (uz eksplicitan razlog u odgovoru),
+ * jer je bolje jasno reci da gate nije konfiguriran nego se pretvarati da je provjeren.
+ */
+export function acceptEvent(
+  ev: Pick<LemonEvent, 'storeId' | 'testMode'>,
+  opts: { expectedStoreId: string; allowTestMode: boolean },
+): { ok: true } | { ok: false; reason: 'store_mismatch' | 'test_mode_refused' | 'store_unverifiable' } {
+  if (ev.testMode && !opts.allowTestMode) return { ok: false, reason: 'test_mode_refused' };
+  const expected = String(opts.expectedStoreId ?? '').trim();
+  if (!expected) return { ok: false, reason: 'store_unverifiable' };
+  if (!ev.storeId) return { ok: false, reason: 'store_unverifiable' };
+  if (ev.storeId !== expected) return { ok: false, reason: 'store_mismatch' };
+  return { ok: true };
 }
 
 /** Normaliziraj LS payload u ravni event. Defenzivno prema oblicima order/subscription. */
@@ -43,7 +100,22 @@ export function parseLemonEvent(payload: LemonWebhookPayload): LemonEvent {
   const variantId = String(attr.first_order_item?.variant_id ?? attr.variant_id ?? '');
   const referralCode = String(meta.custom_data?.referral_code ?? '');
   const refunded = eventName === 'order_refunded' || attr.status === 'refunded' || attr.refunded === true;
-  return { eventName, orderId, userId, variantId, referralCode, refunded };
+  const storeId = attr.store_id != null ? String(attr.store_id) : '';
+  const testMode = meta.test_mode === true || attr.test_mode === true;
+  const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
+  return {
+    eventName,
+    orderId,
+    userId,
+    variantId,
+    referralCode,
+    refunded,
+    storeId,
+    testMode,
+    totalCents: num(attr.total),
+    refundedCents: num(attr.refunded_amount),
+    currency: String(attr.currency ?? '').toUpperCase(),
+  };
 }
 
 const enc = new TextEncoder();

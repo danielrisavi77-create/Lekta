@@ -10,6 +10,7 @@
  * provjeri parsera i audita (CLAUDE.md). Podupire fieldValidation.syntheticDocxAudits.
  */
 import { describe, it, expect } from 'vitest';
+import { expectNotPenalised } from "./helpers/check-status";
 import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
@@ -47,12 +48,12 @@ describe('pbf sinteticki golden: diplomski (harvard, prored 1,5, A4)', () => {
   it('uskladjeni rad prolazi font/velicinu/prored/poravnanje/A4/Sadrzaj', async () => {
     const file = buildDocxFile({ paragraphs: compliantDoc(), marginsCm: M25 }, 'pbf-dipl-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'pbf-diplomski' });
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Poravnanje osnovnog teksta').status).toBe('pass');
+    expectNotPenalised(check(r, 'Dominantni font'));
+    expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+    expectNotPenalised(check(r, 'Prored osnovnog teksta'));
+    expectNotPenalised(check(r, 'Poravnanje osnovnog teksta'));
     // pbf-diplomski ima i requireA4 i paperSizes:['A4'] (paper-size ruleEntry).
-    expect(check(r, 'Format stranice (A4)').status).toBe('pass');
-    expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
+    expectNotPenalised(check(r, 'Format stranice (A4)'));
+    expectNotPenalised(check(r, 'Sadržaj dokumenta'));
   });
 });

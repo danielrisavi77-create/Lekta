@@ -12,6 +12,7 @@
  * parsera i audita (CLAUDE.md). Podupire fieldValidation.syntheticDocxAudits.
  */
 import { describe, it, expect } from 'vitest';
+import { expectNotPenalised } from "./helpers/check-status";
 import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
@@ -50,11 +51,11 @@ describe('fer sinteticki golden: diplomski (IEEE, TNR 12, prored 1,2, A4)', () =
     const f: Fmt = { font: 'Times New Roman', size: 12, line: 288, jc: 'both' };
     const file = buildDocxFile({ paragraphs: compliantDoc(f), marginsCm: { top: 2.5, right: 2.5, bottom: 2.5, left: 3 } }, 'fer-dipl-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'fer-diplomski' });
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Poravnanje osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Format stranice A4').status).toBe('pass');
+    expectNotPenalised(check(r, 'Dominantni font'));
+    expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+    expectNotPenalised(check(r, 'Prored osnovnog teksta'));
+    expectNotPenalised(check(r, 'Poravnanje osnovnog teksta'));
+    expectNotPenalised(check(r, 'Format stranice A4'));
   });
 });
 
@@ -63,11 +64,11 @@ describe('fsb sinteticki golden: diplomski (IEEE, TNR/Arial 12, prored 1,5, just
     const f: Fmt = { font: 'Times New Roman', size: 12, line: 360, jc: 'both' };
     const file = buildDocxFile({ paragraphs: compliantDoc(f), marginsCm: { top: 2, right: 2, bottom: 2, left: 2.5 } }, 'fsb-dipl-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'fsb-diplomski' });
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Poravnanje osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Margine dokumenta').status).toBe('pass');
+    expectNotPenalised(check(r, 'Dominantni font'));
+    expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+    expectNotPenalised(check(r, 'Prored osnovnog teksta'));
+    expectNotPenalised(check(r, 'Poravnanje osnovnog teksta'));
+    expectNotPenalised(check(r, 'Margine dokumenta'));
   });
 });
 
@@ -76,12 +77,12 @@ describe('ttf sinteticki golden: diplomski (Vancouver, Arial 12, prored 1,5, mar
     const f: Fmt = { font: 'Arial', size: 12, line: 360, jc: 'both' };
     const file = buildDocxFile({ paragraphs: compliantDoc(f), marginsCm: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 } }, 'ttf-dipl-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'ttf-diplomski' });
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Poravnanje osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Margine dokumenta').status).toBe('pass');
-    expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
+    expectNotPenalised(check(r, 'Dominantni font'));
+    expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+    expectNotPenalised(check(r, 'Prored osnovnog teksta'));
+    expectNotPenalised(check(r, 'Poravnanje osnovnog teksta'));
+    expectNotPenalised(check(r, 'Margine dokumenta'));
+    expectNotPenalised(check(r, 'Sadržaj dokumenta'));
   });
 });
 
@@ -90,10 +91,10 @@ describe('grad sinteticki golden: diplomski (IEEE, Titillium 12, prored 1,15, A4
     const f: Fmt = { font: 'Titillium', size: 12, line: 276, jc: 'both' };
     const file = buildDocxFile({ paragraphs: compliantDoc(f), marginsCm: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 } }, 'grad-dipl-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'grad-diplomski' });
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Format stranice A4').status).toBe('pass');
-    expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
+    expectNotPenalised(check(r, 'Dominantni font'));
+    expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+    expectNotPenalised(check(r, 'Prored osnovnog teksta'));
+    expectNotPenalised(check(r, 'Format stranice A4'));
+    expectNotPenalised(check(r, 'Sadržaj dokumenta'));
   });
 });

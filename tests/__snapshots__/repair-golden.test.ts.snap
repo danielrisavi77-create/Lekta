@@ -481,16 +481,16 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "before": "postojeći natpisi ili sidra",
         },
         {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
-        },
-        {
           "after": "spašene tablice i slike",
           "before": "tablice i slike",
         },
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
           "before": "Wordova polja i spremljeni rezultati",
+        },
+        {
+          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
+          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
         },
       ],
       "markers": {
@@ -2908,16 +2908,16 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "before": "Poravnanje: lijevo",
         },
         {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
-        },
-        {
           "after": "Primijenjeno 2 potvrđenih operacija nad Word sekcijama",
           "before": "2 operacija nad sekcijama nije primijenjeno",
         },
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
           "before": "Wordova polja i spremljeni rezultati",
+        },
+        {
+          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
+          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
         },
         {
           "after": "bibliografija usklađena prema potvrđenom planu",
@@ -5890,12 +5890,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "before": "Naslovi: kako ih je autor napisao",
         },
         {
-          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
-          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
-        },
-        {
           "after": "Polja označena za osvježavanje pri otvaranju",
           "before": "Wordova polja i spremljeni rezultati",
+        },
+        {
+          "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
+          "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
         },
         {
           "after": "7 elemenata naslovnice složeno prema službenom profilu, naslovnica bez broja stranice",

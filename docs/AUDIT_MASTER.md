@@ -2,6 +2,11 @@
 
 Datum konsolidacije: 28. srpnja 2026. Pregledan commit: `1329c43` (grana `audit/remediation-2026-07-16`).
 
+**Zadnje ažuriranje: 17. kolovoza 2026.** (grana `fix/audit-remediation-2026-08`), nakon vanjskog
+audita repozitorija i verifikacije njegovih tvrdnji protiv žive produkcije, staginga i GitHub
+postavki. Do tog ažuriranja dokument je bio zamrznut na 28.7., a repozitorij je u međuvremenu
+primio 221 commit, pa je sam bio primjer drifta na koji upozorava. Vidi poglavlje 4A.
+
 ## 0. Svrha ovog dokumenta
 
 Ovo je JEDINI kanonski audit/status dokument za Lektu. Zamjenjuje 33 razasute
@@ -31,9 +36,32 @@ preklapaju, ovaj dokument upućuje na njih umjesto da duplicira sadržaj.
 
 ## 1. Sažetak za odluku
 
+> ### Dopuna 18.8.2026. (nadjacava tekst ispod gdje se razilaze)
+>
+> Vanjski audit od 17.8. proglasio je Lektu NO-GO za naplatu. Remedijacija je izvedena kroz
+> `fix/audit-remediation-2026-08` (PR #39, 38 commita) i **vecina nalaza je zatvorena, ali NO-GO za
+> naplatu i dalje stoji** i to iz istih razloga kao u srpnju: pravni subjekt i mapiranje proizvoda
+> nisu radnje koje kod moze obaviti.
+>
+> Sto se promijenilo, s dokazom nad zivom bazom (detalji u 4A.2b):
+> - Migracijski identitet **postoji**: 94 od 94 migracije zavedene cetveroznamenkasto, nula
+>   timestampa. Prije zahvata: 67 zapisa, od kojih JEDAN cetveroznamenkast.
+> - `anon` ne moze izvrsiti **nijednu** `SECURITY DEFINER` funkciju; servisne tablice imaju izricit
+>   deny (17 od 17 bez ijednog granta).
+> - Globalna brana istodobnih popravaka (DOCX-06) radi uzivo, potvrdjeno odbijenim trecim zahtjevom.
+> - Produkcija ima 17 od 21 Edge funkcije; 4 su namjerno vani.
+>
+> Sto NIJE promijenjeno i drzi NO-GO: prazan `provider.json` (OIB, adresa, voditelj obrade),
+> `mor_product_id = null` na svih 20 aktivnih proizvoda, i dominirani cjenik. Sve troje je radnja
+> vlasnika, ne kod.
+>
+> Jedan zapis iz ovog vala bio je **pogresan** i ispravljen je u 4A.2c: zastita `mastera` je
+> ukljucena, ali s imenom required checka koje GitHub nikad ne prijavljuje, pa nijedan PR ne moze
+> proci. Ceka radnju vlasnika.
+
 Lekta je tehnički zrela klijentska aplikacija: lokalna analiza radi u Web
 Workeru, parser i citation engine su golden-pokriveni, `src/` je u cijelosti
-tipiziran bez `@ts-nocheck`, CI (5 workflowa) vrti typecheck/testove/build/
+tipiziran bez `@ts-nocheck`, CI (9 workflowa, stanje 17.8.) vrti typecheck/testove/build/
 conformance/security na svaki push. Repair Engine je u zadnja 3 dana (25 do
 28.7.) prošao veliku seriju popravaka: oba P0 nalaza (gubitak OMML jednadžbi,
 malformed XML kod uparenih praznih elemenata) i gotovo svi P1 nalazi iz
@@ -102,6 +130,165 @@ potpuno adresirani, sve u poglavlju 6. LEKTA-SEC-01/02 (izvorno High) su
 RIJEŠENI, vidi poglavlje 8. RE-01/RE-02 (izvorno P0, gubitak sadržaja) su
 RIJEŠENI, vidi poglavlje 5.1. Ovo je najkraći P0 popis otkad postoji audit
 povijest za ovaj projekt.
+
+---
+
+## 4A. Vanjski audit repozitorija (17.8.2026.): rekoncilijacija
+
+Vanjski audit proglasio je Lektu NO-GO za launch s naplatom. Svaka tvrdnja je prije unosa
+ovamo VERIFICIRANA protiv stvarnog stanja (živa produkcijska baza `zrrjttizjyfcxmcpgzml`,
+staging `bnyemcnsphlitjradrst`, GitHub API, kod na grani). Nalazi koji nisu izdržali provjeru
+navedeni su odvojeno, jer je precijenjen nalaz jednako štetan kao propušten.
+
+### 4A.1 Potvrđeno i OTVORENO (P0)
+
+> **Ovo je snimka stanja na dan 17.8.2026.**, u trenutku rekoncilijacije vanjskog audita, i ostaje
+> ovdje kao zapis onoga sto je tada bilo tocno. Nekoliko ovih nalaza je u medjuvremenu zatvoreno;
+> mjerodavan je redoslijed **4A.1 -> 4A.2 -> 4A.2b -> 4A.2c**, dakle kasnija sekcija nadjacava
+> raniju. Za trenutno stanje citaj 4A.2b (primijenjeno na produkciju, s dokazom iz zive baze).
+
+| ID | Opis | Dokaz |
+|---|---|---|
+| A26-01 | `data/legal/provider.json`: `oib`, `address`, `privacyController` prazni, kontakt Gmail | Isto kao P0 iz srpnja, i dalje otvoreno |
+| A26-02 | Svih 20 aktivnih redaka u `products` ima `mor_product_id = null`, pa `create-checkout` vraća `409 product_not_mapped` | SQL nad produkcijom 17.8. Nije bug nego neizvršen korak `GO_LIVE_NAPLATA.md` §3.3 |
+| A26-03 | Cjenik proturječan: `pass_zavrsni` 9,99/180d dominira `slot_zavrsni_do_obrane` 9,99/120d; `pass_diplomski` 14,99/180d dominira `slot_diplomski_do_obrane` 16,99/120d | SQL nad produkcijom 17.8. |
+| A26-04 | Migracijski identitet ne postoji: produkcija pamti 67 verzija od kojih je samo JEDNA četveroznamenkasta (`0053`), ostale su timestampi; repo ima 85 numeriranih | `supabase_migrations.schema_migrations` |
+| A26-05 | Staging nije vjerna kopija: 3 Edge funkcije naspram 16 u produkciji, a migracijski je ISPRED produkcije (105 naspram 67) | `list_edge_functions` + SQL |
+| A26-06 | `master` nezaštićen: jedini ruleset ("Tamara") ima `enforcement: disabled`, branch protection vraća 404 | GitHub API |
+| A26-07 | `src/config/deployment.ts` bez env varijabli tiho pada na produkcijski Supabase URL i anon ključ, pa `npm run dev` može čitati živu produkciju | Čitanje datoteke |
+| A26-08 | Privola nije dokaziva: server prima `consent.text`, `consent.timestamp` i `termsVersion` doslovno od klijenta; kanonski tekst živi samo u `src/ui/app.ts` i server ga nikad ne vidi | `create-checkout/index.ts:74-131` |
+| A26-09 | Webhook ne provjerava `store_id`, `test_mode` ni plaćeni iznos; nepoznat proizvod vraća 200 pa provider ne retry-a; nema tablice sirovih evenata | `webhook-mor/index.ts`, `src/report/webhook.ts` |
+| A26-10 | Baza: 13 tablica s RLS bez ijedne politike, `pg_net` u `public`, `increment_job_view(uuid)` izvršiva od `anon`, zaštita od kompromitiranih lozinki isključena | Supabase security advisor 17.8. |
+| A26-11 | **NIJE BILO U AUDITU.** `src/repair/zip-codec.ts` nikad ne provjerava CRC ulaznih zip članova (`crc32()` se koristi samo pri pisanju), a integrity gate skenira isključivo dijelove koje je sam mijenjao. Motor nema nijedan mehanizam koji bi razlikovao oštećen ulazni docx od ispravnog | `zip-codec.ts:186-225`, `apply-fixers.ts:825-827` |
+| A26-12 | Word Tier 2 nije release gate: `verify:word` je ručna PowerShell skripta koju ne zove nijedan od 9 workflowa | `package.json`, `.github/workflows/` |
+| A26-13 | CI retry pretvara stvaran pad u zeleno (`playwright.config.ts:13`), a jedini repair E2E (`tests/ux/repair-panel.spec.ts`) ne zove `repair-docx` ni ne otvara izlazni docx | Čitanje konfiguracije i testa |
+| A26-14 | `tsc --noEmit` pokriva samo `src`; `tests`, `scripts`, `supabase/functions` i `vite.config.ts` su izvan njega. `bundleSizeGuard` je definiran ali nije registriran u `plugins`, dakle mrtav | `tsconfig.json`, `vite.config.ts:143` naspram `:325` |
+
+### 4A.2 Zatvoreno 17.8.2026.
+
+| ID | Opis | Kako je zatvoreno |
+|---|---|---|
+| A26-15 | `preflight-start` i `preflight-result` bile su ACTIVE u produkciji dok je `docs/deploy/PREFLIGHT_DEPLOY.md` tvrdio da je stup ODGOĐEN. Frontend ih nikad nije zvao, pa su bile čista izložena površina | Obje undeployane; runbook nosi zapis o gašenju |
+| A26-16 | `cleanup-orphan-repairs` i `delete-repair-job` nosile su oznaku "NACRT" iako su ACTIVE u produkciji | Zaglavlja ispravljena u stvarni status |
+| A26-17 | Nije postojao način da se vidi razlika između repozitorija i deployanog stanja | `npm run deploy-drift` -> `docs/generated/DEPLOY_DRIFT.md` |
+| A26-06 | `master` nezaštićen (ruleset "Tamara" `enforcement: disabled`) | Branch protection aktivna: obvezan PR, required checks `build-gate`/`conformance-matrix`/`check`, bez force-pusha i brisanja |
+| A26-08 | Privola je bila ono što klijent kaže da jest | Kanonski tekst u `src/legal/consent-text.ts` (dijeli ga i Deno); verzija obavezna, tekst se uspoređuje, `consented_at` je serverski, klijentova tvrdnja ide u `client_claimed_at` (0091) |
+| A26-09 | Webhook bez provjere `store_id`, `test_mode` i iznosa; nepoznat proizvod nestaje uz 200 | `acceptEvent` + `isFullRefund` (fail-closed); inbox `webhook_events` (0092) zapisuje događaj prije obrade, pa je replay moguć |
+| A26-11 | `zip-codec.ts` nikad nije provjeravao CRC ulaznih članova | `readZip` provjerava CRC iz central directoryja i odbija oštećen paket imenujući dio; dokazano testom koji kvari jedan bajt sadržaja |
+| SEC-01, SEC-02 | CSP je dopuštao `https://*.supabase.co` i `https://*.lemonsqueezy.com`, uz komentar da je odljev tehnički onemogućen | `cspAllowlist` plugin supstituira KONKRETNE hostove u `dist/_headers`; `verify-deploy-dist` pada na wildcard ili nesupstituiran token |
+| SEC-11, SEC-12 | CORS je bezuvjetno dopuštao localhost, a tuđem porijeklu vraćao primarno dopušteno | localhost samo uz `LEKTA_ALLOW_LOCALHOST_CORS=1`; nedopušteno porijeklo NE dobiva `Access-Control-Allow-Origin` uopće |
+| SEC-13 | `analytics-event` vraćao 200 i kad zapis padne, pa je gubitak telemetrije izgledao kao uredan rad | Neuspjeh vraća 202 uz `reason`, klijent i dalje nije srušen |
+| SEC-21 | `repair-docx` provjeravao samo 2 magic bajta (slabije od `field-render`) | Provjeravaju se sva četiri bajta lokalnog ZIP zaglavlja |
+| CODE-11 | `.gitignore` uzorkom `.env.*` pojeo i sablonu, pa kanonski popis varijabli nije postojao | `.env.example` (samo imena i objašnjenja, nijedna vrijednost) uz izričit izuzetak u `.gitignore` |
+| OPS-01..03 | `health` je vraćao 200 za svaku metodu, nije provjeravao nijednu ovisnost i nije nosio verziju: monitor je javljao "zdravo" i kad je baza nedostupna | Metode osim GET/HEAD/OPTIONS daju 405; provjerava se baza uz 3 s timeout; odgovor nosi `release` i `commit`; pad ovisnosti daje **503**, ne 200 uz `degraded` u tijelu |
+| OPS-13..17, UX-12..14 | Podsjetnici: sirova HTML interpolacija iz baze, naslovi otkrivaju vrstu rada i fakultet, `daysLeft <= 0` bez donje granice, odjava se izvršavala na GET, greške upisa se ignorirale | `esc()` na svim HTML interpolacijama; neutralni naslovi; granica `daysLeft >= -1`; odjava mijenja stanje samo na POST (GET pita), nudi povrat i pošteno prijavljuje neuspjeh; dodan `List-Unsubscribe` |
+| TEST-01 (dio) | `tsc --noEmit` pokrivao je samo `src`, pa `supabase/functions/**` nije imao NIJEDNU provjeru: ondje živi kod koji barata novcem, tuđim dokumentima i pravom pristupa | `npm run check:edge` (`scripts/check-edge.mjs`) vrti `deno check` nad svih 21 funkcijom i **pada** ako Deno nedostaje, umjesto da se tiho preskoči; uvršten u `check:full` i u CI (`check.yml`) |
+| TEST-04 | `bundleSizeGuard` je bio definiran, imao smislenu provjeru i komentar da "PADA produkcijski build", ali NIJE bio u `plugins` nizu, pa se nikad nije izvršio | Registriran. **Pritom se otkrilo da je glavni entry narastao s dokumentiranih ~502 KB na 929 KB**, dakle 33% preko starog budžeta od 700 KB, a nitko to nije vidio jer guard nije radio. Lazy split je netaknut (heavy chunkovi su zasebni), pa je riječ o postupnom rastu, ne o urušenom code-splitu. Budžet je postavljen na današnju mjeru (960 KB) da spriječi DALJNJI rast; smanjivanje entryja ostaje otvoreno |
+| DOCX-01, DOCX-02 | Repair je na svaki poziv slao naslov, autora i naslove poglavlja (`parsedStructure`), a server ih je koristio samo kao presence-check | Polje uklonjeno iz repair puta (klijent i server); otisak se ionako računa iz bajtova zipa (RE-18). Put punog izvještaja ga zadržava jer ondje JEST potreban. Test sada čuva da se ne vrati |
+| UX-07 | JSON-LD je oglašavao `Offer` s cijenom 0 uz plaćene pakete | `offers` uklonjen: proizvod ima besplatan i plaćen sloj, pa nijedna jedna cijena nije istinita, a cijene ionako žive u bazi (`products`), ne u HTML-u |
+| CODE-22..24 | `package.json` bez `engines`, `packageManager`, `license`, `repository` | Dodani: `node >=20` (Netlify gradi na 20, CI dokazuje 20 i 24), `npm@11.11.0`, `UNLICENSED`, git URL |
+| DOCX-13 | Zahtjev s nepoznatim `fixerId` tiho se preskakao: korisnik bi dobio dokument i vjerovao da je stavka primijenjena | Odgovor nosi `unknownFixers`, klijent ga čita I sučelje ga PRIKAZUJE (odvojeno od `skipped`, koji znači "prepoznato, ali nije trebalo"). Tišina je ovdje najgori ishod jer je nerazlučiva od uspjeha; podatak koji se vrati a ne prikaže bio bi ista rupa |
+| DOCX-14 | Broj zahtjeva bio je ograničen (64), ali njihov SADRŽAJ nije: jedan zahtjev mogao je nositi niz od desetaka tisuća indeksa | `paramsWithinBudget` u `docx-budget.ts` (jedan izvor granica): 16 KB po zahtjevu i 2000 elemenata po nizu, uz dubinsko pretraživanje. Prekoračenje se odbija glasno, ne preskače |
+| DOCX-19 | ZIP64 i lozinkom zaštićeni paketi nisu se prepoznavali: sentinel (`0xffff`/`0xffffffff`) uzeo bi se kao stvarna vrijednost i čitanje bi krenulo s besmislenog offseta | `readZip` odbija oboje s razlogom koji korisnika vodi u pravom smjeru; zaštićen dokument se izričito ne prijavljuje kao "oštećen" |
+| SEC-06 | `adminSignOut` brisao je samo lokalni zapis; refresh token je ostajao valjan pa je ukraden token radio i nakon "odjave" | Poziva `/auth/v1/logout?scope=global`. Lokalni zapis se briše ODMAH i neovisno o ishodu poziva, da mrežna greška ne ostavi otvorenu sesiju na ekranu |
+| DOCX-12 | Globalni Storage cap bio je fail-open na GREŠKI UPITA: `count` se defaultirao na 0, pa je pad upita značio "kvota je prazna, samo naprijed" — strop nije štitio ništa upravo kad je baza u problemu | Greška upita se razlikuje od "nula poslova" i vodi na preskakanje pohrane. Fail-closed je ovdje jeftin: popravljeni docx se svejedno vraća, gubi se samo zapis u "Moji popravci" i sučelje to pošteno kaže (`jobId: null`) |
+| CODE-06, CODE-07 | Svi fallbackovi u `mapProductRow` išli su u smjeru "pretpostavi da je u redu": redak bez cijene postajao je AKTIVAN proizvod od 0 EUR, dakle nešto što se može prodati besplatno. Odgovor koji nije niz tiho je postajao prazan katalog | Redak s neispravnom/negativnom cijenom ili bez `id` označava se NEAKTIVNIM (jedan pokvaren proizvod ne ruši paywall, ali se ni ne prodaje); izričita cijena 0 ostaje legitimna. Odgovor koji nije niz baca umjesto da vrati `[]` |
+| CODE-08 (točnije) | Audit navodi "više izvora istine za cijene". Izvora je **TRI**, i jedan je mrtav: popis u `src/ui/app.ts` (jedini koji korisnik vidi), `data/packages.json` kroz `config-loader` (ima paket `instant` 9 EUR kojeg u UI-ju nema, a čita ga samo test koji tvrdi da je jednak svojoj JSON datoteci), i tablica `products` (jedini mjerodavan cjenik popravka) | Granica je zapisana na sva tri mjesta. Namjerno BEZ promjene ponašanja: spajanje popisa promijenilo bi ono što korisnik vidi u obrascu narudžbe, što je proizvodna odluka, ne remedijacija |
+| P0-13, P0-12 (dio) | Nije postojala jedna naredba koja vrti sve razine dokaza, pa se za konkretan commit nije moglo reći je li Tier 2 (pravi Word) uopće izveden | `npm run release:check` vrti svih 8 razina i piše `docs/generated/RELEASE_PROOF.json` (commit, vrijeme, ishod po razini). Nedostupna razina se bilježi kao `unavailable`, NE kao prolaz. `verify-deploy-dist` odbija zastario ili nepotpun dokaz kad je `LEKTA_REQUIRE_RELEASE_PROOF=1`; do tada glasno upozorava, da prvi sljedeći deploy ne padne prije nego vlasnik jednom odvrti višesatni lanac |
+| TEST-10 | Playwright retry pretvarao je stvaran pad u zeleno (točno scenarij iz audita: glavni repair tok pao prvi put, workflow zelen) | `failOnFlakyTests` u CI-ju: retry ostaje (drugi pokušaj daje trace i screenshot), ali run više ne završava zeleno ako je test uspio tek iz drugog pokušaja |
+| **NOVO, izvan audita** | **Vlastita regresija, uhvaćena prije commita.** Prvo rješenje za A26-07 bacalo je iznimku u dev načinu bez Supabase varijabli. To ruši app na učitavanju modula, dakle i Playwright UX suite (koji diže `npm run dev` i uopće ne treba backend). `npm run check` to NE bi uhvatio jer ne vrti Playwright | Dev bez konfiguracije sada pokazuje na LOKALNI Supabase (`127.0.0.1:54321`) uz glasno upozorenje: slučajan poziv pukne vidljivo umjesto da tiho uspije nad produkcijom, a app se i dalje diže. Potvrđeno punim UX prolazom (40/41; jedini pad je dokumentirani lokalni resursni flake koji izolirano prolazi) |
+| DOCX-17, DOCX-18 | `writeZip` je REKOMPRIMIRAO svaki zapis, pa je popravak jednog XML-a usput prepisivao i ugrađene slike, fontove i medij, a gubili su se timestampovi, kompresijska metoda i atributi. Svako ponovno pakiranje je nova prilika da paket suptilno odstupi od onoga što je Word napisao | Zapis koji nijedan fixer nije dirao prepisuje se BAJT ZA BAJT, s izvornom metodom, vremenom i atributima. Kriterij je identitet objekta (`entry.data === raw.originalData`), pravilo na koje se `apply-fixers` već oslanja. **Dokazano na sve tri razine**: golden nepromijenjen, Tier 1 (python-docx) 33/33 popravljenih paketa, Tier 2 (pravi Word) oba gatea prošla uz očuvane tablicu, sliku, fusnotu, sekcije, zaglavlja i dijakritiku. Novi test hvata regresiju usporedbom KOMPRIMIRANIH bajtova, jer golden gleda dekomprimirani sadržaj i prošao bi i da se sve ponovno pakira |
+| DOCX-20 (dio) | Vrata integriteta provjeravala su samo je li DIRANI dio dobro oblikovan XML. Paket može biti sastavljen od samih besprijekornih XML-ova i svejedno ne biti valjan OPC: dio bez zapisa u `[Content_Types].xml`, ili `.rels` koji pokazuje na dio kojeg nema. Word oboje javlja kao "dokument je oštećen", a nastaje upravo kad popravak DODA ili UKLONI dio | `checkPackageStructure` nad CIJELIM konačnim paketom, uz vrata isporuke. Dokazano u oba smjera: svih 13 fixtura prolazi bez lažnog pozitiva, a uklonjena slika i dio s nedeklariranim tipom se hvataju. Vanjske veze (`TargetMode="External"`) se preskaču, inače bi svaki dokument s hipervezom bio proglašen neispravnim. Zaustavlja SAMO ono što je popravak sam uveo (struktura se mjeri i na ulazu i na izlazu), isto pravilo koje gate već primjenjuje na XML kvarove: dokument koji je stigao neispravan takav i odlazi. Bez te razlike gate je odbijao 29 postojećih testnih paketa. Preostaje neprovjereno: puna OOXML shema i digitalni potpisi |
+| TEST-15 | gitleaks binarij se preuzimao i instalirao BEZ ijedne provjere integriteta, i to u jobu koji postoji zbog sigurnosti | SHA256 se provjerava prije raspakiranja. Hash je UPISAN u workflow, ne dohvaćen uz binarij: to štiti od izmijenjenog/okrnjenog preuzimanja, ali NE od kompromitiranog releasea (za to bi trebao potpis, koji gitleaks ne nudi) |
+| TEST-16 | Sve GitHub akcije koristile su promjenjive tagove, pa se sadržaj treće strane mogao promijeniti bez ijedne promjene u Lekti | Svih 9 referenci pinano na commit SHA uz komentar s verzijom (Dependabot ih i dalje ažurira) |
+| TEST-20 | Dependabot je u CIJELOSTI ignorirao `netlify-cli` i `supabase`, a upravo ta dva alata kontroliraju deploy i bazu | Ignoriraju se samo major i minor (to je bio šum); PATCH se prati, jer u tom pojasu stižu sigurnosne zakrpe |
+| TEST-09, TEST-12 (dio) | Playwright je vrtio samo Desktop Chrome; mobilni audit bio je uglavnom provjera vidljivosti | Dodan `mobile-chromium` projekt (Pixel 5 emulacija, bez novog preglednika): **38 provjera zeleno**. Firefox/WebKit ostaju otvoreni, jer ih nema smisla uključiti dok se ne može dokazati da prolaze |
+| **NOVO, izvan audita** | **Pod stvarnom mobilnom emulacijom (`isMobile` + `hasTouch`) klik na "Nastavi na profil" u sticky navigaciji ne prolazi ni u 120 s.** Na desktop Chromeu isti test prolazi, pa je nalaz bio nevidljiv. Ovo je točno ono na što TEST-12 cilja: mobilni audit nije dokazivao da se sučelje da koristiti prstom | `roadmap-v2.spec.ts` je IZRIČITO izuzet iz mobilnog projekta uz komentar koji imenuje nalaz, umjesto da se projekt tiho ugasi. Popravak je UX posao (dodirna meta ili preklapanje sticky trake), ne remedijacija |
+| OPS-06, OPS-07, OPS-10, OPS-12 | Podsjetnici: `select('*')` bez ograničenja i bez prozora po datumu (raste s bazom, ne s poslom), pa se slalo PA tek onda upisivao marker. Dva usporedna cron poziva oba bi vidjela `null` i poslala duplikat; ako bi e-mail otišao a upis markera pao, sljedeći bi ga cron poslao ponovno | Prozor po datumu (-2 do +31 dan) i `limit(200)`; marker se postavlja PRVI, uvjetno (`is(col, null)`), pa uspije samo JEDAN pozivatelj. Ako slanje padne, marker se vraća na null. Preostali prozor je obrnut i sigurniji: moguć propušten podsjetnik, ne duplikat |
+| OPS-18, OPS-19, OPS-20 | Katedra worker je runove samo ČITAO, pa su dva ticka dispatchala isti skup; serijska petlja s 180 s po runu mogla je trajati do 30 min (Edge toliko ne živi); djelomičan neuspjeh vraćao je 502 pa bi ponovni pokušaj re-dispatchao i uspjele runove | Atomsko preuzimanje UPDATE-om uz `updated_at < cutoff` (lease 10 min, bez nove kolone i migracije); budžet ticka (100 s) zaustavlja PRIJE novog poziva i prijavljuje `deferred`; djelomičan neuspjeh vraća 200, jer se neuspjeli runovi ionako vrate u red kad lease istekne |
+| DOCX-21 (dio) | Nije postojala usporedba koja bi otkrila POMAKNUT ili slomljen sadržaj: postojeće Tier 2 provjere samo BROJE elemente (1 tablica, 1 slika), pa ne vide tablicu koja je izgubila stupac ni sliku koja je "preživjela" srušena na nulu | Tier 2 mjeri dimenzije tablica (`3x4`), dimenzije slika (`90x60`) i njihov međusobni REDOSLIJED (`TI`), sve iz živog Worda. Broj STRANICA se namjerno ne uspoređuje: popravak mijenja font, prored i margine, pa je drugačija paginacija očekivana, a ne kvar. Puna vizualna usporedba renderiranih stranica ostaje otvorena |
+| DOCX-05 | Odgovor je bio JSON s `docxBase64`, pa su za dokument od 20 MB u istom trenutku živjeli: ulazni bajtovi, rezultat, base64 string (~27 MB) i JOŠ jedna njegova kopija unutar `JSON.stringify` (~27 MB). Edge runtime ima 256 MB | Binarni okvir (duljina + JSON metapodaci + sirovi bajtovi) briše obje kopije stringova, ~54 MB po velikom popravku. Vlastiti okvir, ne HTTP zaglavlje: metapodaci nose changelog i provjeru izvora (kilobajti), a zaglavlja imaju tihe granice od 8–16 KB. **Prijelazno razdoblje je ugrađeno**: server šalje binarno samo kad klijent pošalje `X-Lekta-Response: binary`, inače zatečeni JSON, jer deploy nije atomaran. Oba oblika grade ishod ISTOM funkcijom (`okFromMeta`), a test tvrdi da daju identičan rezultat |
+| DOCX-07 | Slot concurrency gatea oslobađao se čim handler vrati odgovor, a NAJTEŽI dio (dva Storage uploada, do 2 × 20 MB) tek je tada kretao u `EdgeRuntime.waitUntil`. Gate je štitio lakši dio posla i puštao nove zahtjeve dok instanca gura desetke megabajta | Slot drži POHRANA i oslobađa ga kad završi. Time nastaje druga opasnost (dva mjesta mogu otpustiti isti slot), pa je uveden `acquire()` koji vraća JEDNOKRATNO oslobađanje: `release()` je branio samo pad ispod nule, ne i da drugi poziv oslobodi TUĐI slot. `src/report/repair-limits.ts` do sada nije imao nijedan test, iako je jedina brana pred paralelnim teškim zahtjevima |
+| DOCX-06 | `ConcurrencyGate` je brojač U MEMORIJI JEDNOG IZOLATA, a Edge funkcije se autoskaliraju: uz limit 4 i pet toplih instanci u letu može biti 20 popravaka. Brana koja se množi s brojem instanci nije brana nego dojam brane, i to na najskupljoj operaciji u sustavu | Migracija `0094`: brojač u BAZI (`repair_inflight` + `try_acquire_repair_slot`/`release_repair_slot`), serijaliziran `pg_advisory_xact_lock`-om, jer bi brojanje-pa-umetanje inače bilo TOCTOU. Tablica s redcima, ne integer: proces koji umre ne može dekrementirati brojač, pa bi integer trajno curio; redak ima `started_at` i istekli nestaju sami. Funkcije su SECURITY DEFINER uz `revoke` za `anon`/`authenticated` (pouka iz 0093). **Dok migracija nije primijenjena, RPC ne postoji i kod pada natrag na per-instance gate uz glasan log** — isporuka koda i migracije nisu atomarne, pa bi tvrdo ponašanje rušilo svaki popravak u prozoru između dva deploya |
+| **NOVO, izvan audita** | **`repair-docx` i `generate-report` ne bi se UČITALI da su deployani bez bundlanja.** `src/repair/zip-codec.ts`, `src/docx/parser.ts` i `src/report/report.ts` uvozili su relativne module BEZ `.ts` nastavka, što Deno zahtijeva, a CLAUDE.md izričito propisuje. Radilo je samo zato što `scripts/bundle-edge.mjs` (esbuild) razriješi nastavak prije deploya, pa je `supabase functions deploy` bio skrivena mina | Dodani `.ts` nastavci; `check:edge` sada hvata ovu klasu greške umjesto da se otkrije pri deployu |
+| **NOVO, izvan audita** | **Link za odjavu u SVAKOM podsjetniku bio je 404.** Poruke su linkale na `${APP_BASE_URL}/odjava-podsjetnika`, a ta ruta ne postoji: nema je kao stranicu, `public/_redirects` ne postoji, `netlify.toml` nema redirect. Nije naškodilo samo zato što su podsjetnici još inertni (bez Resend tajni nijedna poruka nije poslana), ali bi puknulo u trenutku uključenja, i to na obavezi koja mora raditi iz prve | Linka se izravno na Edge funkciju; `UNSUB_PUBLIC_URL` ostaje za ljepši javni URL kad se doda pravi redirect |
+
+### 4A.2b Primijenjeno na produkciju 18.8.2026.
+
+Do 17.8. je ovdje pisalo "napisano, ali ceka primjenu". Zahvat je izveden 18.8.; svaka tvrdnja
+ispod provjerena je UPITOM NAD ZIVOM BAZOM, ne izvedena iz koda.
+
+| ID | Sto je izvedeno | Dokaz nad produkcijom |
+|---|---|---|
+| A26-04 | Dnevnik uskladjen (66 UPDATE-a verzije) i primijenjeno preostalih 27 migracija kroz `supabase db push --linked --include-all` | `schema_migrations`: **94 cetveroznamenkaste verzije, 0 timestampa** (bilo 67 zapisa od kojih 1 cetveroznamenkasta). `npm run migration-identity`: 94/94, nula nepodudaranja |
+| A26-10 (dio) | `0093` primijenjena | **Nijedna** `SECURITY DEFINER` funkcija u `public` nije izvrsiva od `anon` (upit nad `has_function_privilege`). `increment_job_view` je time zatvoren |
+| A26-10 (dio) | Servisne tablice imaju IZRICIT deny | Svih **17** tablica s RLS-om bez politike ima **nula grantova** za `anon`/`authenticated`. Advisor ih i dalje javlja kao INFO `rls_enabled_no_policy`, ali to je ovdje lazan alarm: deny je izveden povlacenjem prava, ne izostankom politike |
+| DOCX-06 | `0094` primijenjena, globalna brana ozivljena | Provjereno uzivo: uz `max=2` treci usporedni zahtjev je odbijen; `anon` ne moze izvrsiti `try_acquire_repair_slot`. Testni redci uklonjeni |
+| A26-05 (dio) | Deployano 8 Edge funkcija | Produkcija ima **17 od 21**; 4 su namjerno vani (integrity-check, katedra-agent-worker, preflight-start, preflight-result) |
+
+**Sto od A26-10 OSTAJE otvoreno**, i to su jedina dva stvarna nalaza iz 66 WARN-ova advisora:
+
+- `pg_net` i `vector` su i dalje u shemi `public` (2 x `extension_in_public`). **Nakon mjerenja to
+  su dva razlicita nalaza, ne jedan:**
+  - `vector` ima 0 ovisnih objekata i **0 stupaca tog tipa u cijeloj bazi**, dakle instalirana je i
+    nekoristena. Migracija `0095` je premjesta u `extensions` (napisana, jos nije primijenjena).
+    `search_path` baze vec sadrzi `extensions`, pa je zahvat transparentan za kod.
+  - `pg_net` je u `public` samo po `extnamespace`; **svih 15 njezinih objekata zivi u shemi `net`**,
+    dakle u `public` od nje nema nicega. `ALTER EXTENSION ... SET SCHEMA` premjestio bi CLANOVE, pa
+    bi `net.http_post` nestao pod tim imenom, a 2 cron posla ga zovu upravo tako (uz Supabaseove
+    interne webhookove). Zahvat bi zamijenio upozorenje koje ne opisuje stvarnu izlozenost za tiho
+    pokvaren cron. **SVJESNO PRIHVACENO ODSTUPANJE**; advisor ce ga i dalje javljati i to je tocno,
+    ali mjeri deklarirani `extnamespace`, ne gdje su objekti.
+- 13 x `authenticated_security_definer_function_executable`. Pregledano pojedinacno: **12 pripada
+  Katedra povrsini** (`*_agent_run`, `*_agent_payload`, `completion_*`), ciji worker nije deployan,
+  a 13. je `unsubscribe_own_deadline_subscription`, koji po namjeni MORA biti pozivljiv od
+  prijavljenog korisnika za vlastitu pretplatu. Nijedan nije dosezan od `anon`.
+
+Preostalih 50 WARN-ova (`auth_allow_anonymous_sign_ins`) svodi se na **11 politika** koje nemaju
+izricit `TO`, pa im `pg_policies` prijavljuje `{public}`. Od tih 11 ih je **9 vezano na
+`auth.uid()`**, sto za `anon` ne vraca nijedan redak. Preostale dvije su namjerno javne:
+`products_select_active` (katalog koji paywall treba procitati prije prijave) i `jobs_public_read`
+(tablica dijeljenog projekta, ne Lektina, vidi PROD-05). Nalaz je dakle higijena (`TO authenticated`
+umjesto podrazumijevanog), ne otvorena rupa.
+
+| ID | Sto JOS ceka | Gdje je |
+|---|---|---|
+| A26-05 | Staging se gradi iznova iz produkcije i dobiva svih 21 Edge funkciju | `docs/deploy/MIGRATION_IDENTITY.md`, korak 5 |
+| A26-02, A26-03 | Mapiranje `mor_product_id` i ispravak dominiranog cjenika kroz `set_product_price` | `docs/GO_LIVE_NAPLATA.md` §3.2 i §3.3 (radnja vlasnika) |
+| A26-10 | `pg_net`/`vector` iz `public` u zasebnu shemu | nema migracije |
+
+### 4A.2c Ispravak zapisa: A26-06 je bio zatvoren POGRESNO
+
+U 4A.2 stoji da je `master` zasticen uz required checks `build-gate`/`conformance-matrix`/`check`.
+Zastita jest aktivna, ali je popis konteksta bio **neispravan i zato stetan**: `build-gate` je
+matrix job, pa GitHub nikad ne prijavljuje golo ime nego `build-gate (20)` i `build-gate (24)`.
+Kontekst koji se nikad ne prijavi ostaje trajno "pending", pa je `mergeStateStatus` svakog PR-a
+zauvijek `BLOCKED` (potvrdjeno na PR #39, gdje su SVE provjere zelene). Review nije bio uzrok:
+trazi se 0 odobrenja.
+
+Ispravan popis je `check`, `ux-gate`, `build-gate (20)`, `build-gate (24)`, `conformance-matrix`.
+`ux-gate` se dodaje jer je upravo on uhvatio stvaran kvar koji je retry dotad gutao (TEST-10), pa
+bi bilo nedosljedno da ostane neobavezan. **Zahvat je radnja vlasnika** (mijenja postavke
+repozitorija) i jos nije izveden.
+
+Pouka je opcenitija od ove jedne postavke: zastita koja je "ukljucena" nije dokaz da radi. Required
+check se mora potvrditi nad STVARNIM imenima koja workflow prijavljuje, isto kao sto se migracija
+potvrdjuje upitom nad bazom, a ne citanjem datoteke.
+
+
+### 4A.3 Nalazi audita koji NISU izdržali provjeru
+
+Navedeni su namjerno: dokument koji prepisuje tuđe tvrdnje bez provjere sam postaje izvor drifta.
+
+| Tvrdnja audita | Stvarno stanje |
+|---|---|
+| "Nepoznat `workType` tiho se pretvara u završni rad" | NETOČNO. `repair-docx/index.ts:222` odbija s 400 (`isReportWorkType`). Fallback postoji samo kao `suggestedWorkType` u 409 grani |
+| "Copy tvrdi da doslovni tekst ne ulazi u metapodatke, a ulazi" | DJELOMIČNO. Pravni tekst (`src/legal/legal-content.ts:109`) pošteno navodi naslov, autora i strukturu naslova. Kontradikcija postoji samo u marketinškom copyju (`index.html:6`, `:2055`). K tome je `parsedStructure` na serveru funkcionalno mrtav (samo presence-check), pa je ispravan popravak brisanje polja |
+| "Staging zaostaje za produkcijom (~0070 naspram 0085)" | OBRNUTO. Staging je ISPRED produkcije (105 naspram 67 migracija) |
+| "Produkcijska migracijska povijest završava oko 0061" | GORE od toga. U produkciji postoji samo jedna četveroznamenkasta verzija (`0053`); numeracija praktički ne postoji |
+| "`field-render` provjerava samo ZIP magic byteove" | DJELOMIČNO, i pogrešna meta: `field-render:27` provjerava punih 4 bajta. Slabija je `repair-docx:218` s 2 bajta |
+| "FAQ schema je ručno duplicirana pa se vidljivi FAQ i JSON-LD mogu razići" (UX-08) | DJELOMIČNO. Nisu generirani iz istog izvora, to stoji, ali `tests/faq-jsonld.test.ts` već čuva sinkronizaciju i pada kad se raziđu (povod mu je bio točno takav slučaj). Rizik je zato manji nego što nalaz sugerira |
+| "Repair E2E stvarno pada u CI-ju" | NEPOTVRĐENO iz CI-ja (GitHub Actions API nedostupan pri pregledu). Potvrđen je samo mehanizam koji to omogućuje, vidi A26-13 |
 
 ---
 
@@ -344,7 +531,7 @@ ili ako se počne koristiti `vitest --ui`.
 | Production migration schema | **DJELOMIČNO RIJEŠENO**: reminder schema je primijenjena kroz Supabase managed migration endpoint i potvrđena s pet markera; širi drift produkcijske baze i repozitorija ostaje PROD-05 | Production audit 4.8., PROD-03, PROD-05 |
 | Rate limit na `repair-docx` | **RIJEŠENO (28.7.)**: file-size limit i dvostruki dnevni cap i dalje postoje, plus tri nova sloja: (1) kill switch `REPAIR_DISABLED` (isti obrazac kao `preflight-start`), (2) `ConcurrencyGate` best-effort limit paralelnih teskih zahtjeva PO IZOLATU (`REPAIR_MAX_CONCURRENT`, default 4, 503 `{error:'busy'}`; honestno dokumentirano da NIJE globalno atomican, isto ogranicenje kao vec postojeci per-user TOCTOU), (3) globalna dnevna storage-kvota (`REPAIR_STORAGE_DAILY_CAP`, default 500 `repair_jobs` redaka/24h) koja preskace pohranu (ne sam popravak) kad je dosegnuta, fail-open isto kao postojeci null-storage slucajevi. Odluke izdvojene u `src/report/repair-limits.ts` (ciste, jedinicno testirane: `tests/repair-limits.test.ts`), DB/env glue u `index.ts`. Provjereno `deno check` (0 novih gresaka naspram baselinea, 12 pred-postojecih DOM-tip gresaka iz `helpers.ts` nepromijenjeno) jer Supabase MCP i `tsc` scope ne pokrivaju ovaj direktorij | `supabase/functions/repair-docx/index.ts`, `src/report/repair-limits.ts` |
 | `REPAIR_FREE_MODE` | Postoji kao flag, gate preskače naplatu ali čuva auth/consent/rate-limit; trenutni operativni mod (besplatna beta strategija) | `supabase/functions/repair-docx/index.ts`, `supabase/migrations/0029_repair_gen_status_free.sql`; stvarna vrijednost na živom Supabase projektu nije provjeriva iz repozitorija (dashboard postavka) |
-| CI | 5 aktivnih workflowa: `check.yml` (gate na svaki push/PR + Playwright), `conformance.yml`, `docx-smoke.yml`, `security-audit.yml` (npm audit + gitleaks, i tjedni cron), `training-pipeline.yml` (manual) | `.github/workflows/*`; vanjski audit od 27.7. koji tvrdi da CI ne postoji je ZASTARIO (ili je testirao stariju živu deploy verziju) |
+| CI | 9 aktivnih workflowa (stanje 17.8.): `check.yml` (gate na svaki push/PR + Playwright), `conformance.yml`, `docx-smoke.yml`, `docx-strict-open.yml`, `foundation-check.yml`, `repair-slow.yml`, `academic-suite-db.yml`, `security-audit.yml` (npm audit + gitleaks, i tjedni cron), `training-pipeline.yml` (manual). Nijedan nema `concurrency`, pet nema `timeout-minutes`, nijedan `uses:` nije pinan na SHA (A26-14 susjedstvo) | `.github/workflows/*`; vanjski audit od 27.7. koji tvrdi da CI ne postoji je ZASTARIO (ili je testirao stariju živu deploy verziju) |
 | Retencija, korisnički tekst | Dosljedan: "dok je ne obrišeš... kod prijave bez e-maila najviše 30 dana" na svim mjestima (`app.ts`, `src/legal/legal-content.ts`); server provodi (`cleanup-orphan-repairs`, `ANON_RETENTION_DAYS=30`) | Uskladeno od commita `71c8631` (19.7.), prije vanjskog audita 27.7. koji tvrdi suprotno, taj nalaz je ZASTARIO |
 | Retencija za e-mail prijavljene korisnike | OTVORENO ("sada: neograničeno" po `docs/PRE_LAUNCH.md`) | |
 | PITR i uptime monitor | Vlasnička radnja, status neizvjestan iz repozitorija | `docs/RUNBOOK_OPS.md` |
@@ -403,7 +590,7 @@ tvrdnji o kodu:
 | Automatska detekcija profila tiho odabire pogrešan/prvi studij | **TOČNO**, novi potvrđeni nalaz, vidi poglavlje 7 |
 | AutoFix CTA treba drugi klik da otvori panel | **VIŠE NIJE TOČNO**, popravljeno commitom `576b87e` prije reviewanog commita |
 | Retencija nedosljedna ("do brisanja" vs "30 dana") | **VIŠE NIJE TOČNO**, uskladeno od `71c8631` (19.7.), prije reviewanog commita |
-| Nema CI-ja osim npm audit workflowa | **VIŠE NIJE TOČNO**, 5 aktivnih workflowa |
+| Nema CI-ja osim npm audit workflowa | **VIŠE NIJE TOČNO**, 9 aktivnih workflowa (17.8.) |
 | Rate limit/file-size/concurrency/kill switch za repair nepotvrđeni | **DJELOMIČNO TOČNO**, vidi poglavlje 9 (2 od 5 mehanizama postoje) |
 | "15 vs 14" broj problema neobjašnjen | **DJELOMIČNO TOČNO**, vidi poglavlje 7, uzrok djelomično popravljen, arhitekturni rizik ostaje |
 | Sitemap `.html` vs extensionless nesklad | **NIJE REPRODUCIRANO**, sitemap i navigacija dosljedno koriste `.html` |

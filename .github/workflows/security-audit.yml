@@ -17,15 +17,24 @@ on:
 permissions:
   contents: read
 
+# Jedan aktivan run po grani (audit TEST-18). Bez ovoga vise pusheva u nizu vrti stare i nove
+# buildove istovremeno nad istom granom: trose CI minute i, sto je gore, zeleni status starijeg
+# commita stigne poslije novijeg pa izgleda kao da je grana ispravna.
+# Na master se NE otkazuje: tamo je svaki commit stanje koje mora imati vlastiti dokaz.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
 jobs:
   npm-audit:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Node 24
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: 24
           cache: npm
@@ -39,16 +48,27 @@ jobs:
   gitleaks:
     name: Skeniranje tajni (gitleaks)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout (puna povijest za skeniranje svih commitova)
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
 
-      - name: Instaliraj gitleaks (pinano s GitHub releasea, bez marketplace akcije/licence)
+      # Binarij se provjerava po SHA256 PRIJE raspakiranja (audit TEST-15). Dosad se preuzimao i
+      # instalirao bez ijedne provjere integriteta, pa bi izmijenjen artefakt tiho dobio pravo
+      # izvrsavanja u CI-ju, i to u jobu koji postoji zbog sigurnosti.
+      #
+      # Sto ovo JEST: obrana od izmijenjenog ili okrnjenog preuzimanja i od podmetanja u prijenosu.
+      # Sto NIJE: obrana od kompromitiranog samog releasea (hash je iz istog izvora kao binarij).
+      # Za to bi trebao potpis, koji gitleaks release ne nudi; zato je hash UPISAN ovdje, a ne
+      # dohvacen s interneta uz binarij: promjena upstreama tada mora proci kroz pregled ovog fajla.
+      - name: Instaliraj gitleaks (pinana verzija + provjera SHA256)
         run: |
           VER=8.18.4
+          SHA256=ba6dbb656933921c775ee5a2d1c13a91046e7952e9d919f9bac4cec61d628e7d
           curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${VER}/gitleaks_${VER}_linux_x64.tar.gz" -o "$RUNNER_TEMP/gitleaks.tar.gz"
+          echo "${SHA256}  ${RUNNER_TEMP}/gitleaks.tar.gz" | sha256sum -c -
           tar -xzf "$RUNNER_TEMP/gitleaks.tar.gz" -C "$RUNNER_TEMP" gitleaks
           sudo install "$RUNNER_TEMP/gitleaks" /usr/local/bin/gitleaks
           gitleaks version
@@ -69,6 +89,25 @@ jobs:
           regexes = [
           '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpycmp0dGl6anlmY3htY3Bnem1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1ODIzMTcsImV4cCI6MjA5OTE1ODMxN30\.[A-Za-z0-9_-]+''',
           '''lekta\.katedra-handoff-result\.v0\.1''',
+          # Naziv TESTNOG kljuca iz repair-contract-v1 fixtura (grana feature/repair-contract-v1).
+          # `keyId` je IDENTIFIKATOR kljuca, ne kljuc: doslovna vrijednost je "fixture-2026-08-16",
+          # dakle datum u imenu testnog artefakta. Pripadni `value` je ECDSA POTPIS, izlaz
+          # potpisivanja koji je javan po prirodi, a ne privatni kljuc.
+          #
+          # Allowlista je namjerno na TOM LITERALU, ne na putanjama tih datoteka: da je po putanji,
+          # prava tajna naknadno zalijepljena u isti dokument prosla bi neopazeno.
+          '''fixture-2026-08-16''',
+          # ECDSA P-256 JAVNI kljuc iz repair-contract-v1 fixtura, u SPKI DER obliku (base64url).
+          # Prefiks `MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE` je doslovno ASN.1 zaglavlje SPKI
+          # strukture za P-256, dakle format koji po definiciji nosi JAVNI dio para; privatni
+          # kljuc ima drugaciji ASN.1 omot (PKCS#8, `MIGHAgEAMBMGByqGSM49...`) pa i dalje PADA.
+          # generic-api-key ga hvata samo po entropiji (5.42), ne po znacenju.
+          #
+          # Zasto uopce treba: gitleaks po defaultu skenira SVE refove, ne samo HEAD, pa nalaz
+          # dolazi iz grane `feature/repair-contract-v1` i ostaje crven i nakon sto te datoteke
+          # na ovoj grani ne postoje. Allowlista je na LITERALU, ne na putanji, iz istog razloga
+          # kao gore: putanja bi propustila pravu tajnu naknadno zalijepljenu u istu datoteku.
+          '''MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEDyEWJEJSXAqK52WXld1o0CQBkIfLxYnTpPqdgoJ9fUdmbEbTCS6pEuBYSK-6nyGsyygNYwDAtSODs-MSSzQCHA''',
           ]
           # Harvestirani sluzbeni izvori (HTML snapshoti) mogu nositi benigne eyJ/base64 blobove.
           # Lockfile nosi integritetske hasheve, ne aplikacijske tajne.

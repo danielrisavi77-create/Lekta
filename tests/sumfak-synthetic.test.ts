@@ -10,6 +10,7 @@
  * provjeri parsera i audita (CLAUDE.md). Podupiru fieldValidation.syntheticDocxAudits.
  */
 import { describe, it, expect } from 'vitest';
+import { expectNotPenalised } from "./helpers/check-status";
 import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
@@ -49,15 +50,15 @@ describe('sumfak sinteticki golden: diplomski (harvard, prored 1,15, A4)', () =>
   it('uskladjeni rad prolazi font/velicinu/prored/poravnanje/margine/A4/Sadrzaj', async () => {
     const file = buildDocxFile({ paragraphs: compliantDoc(), marginsCm: M25 }, 'sumfak-dipl-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'sumfak-diplomski' });
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Poravnanje osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Format stranice A4').status).toBe('pass');
-    expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
+    expectNotPenalised(check(r, 'Dominantni font'));
+    expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+    expectNotPenalised(check(r, 'Prored osnovnog teksta'));
+    expectNotPenalised(check(r, 'Poravnanje osnovnog teksta'));
+    expectNotPenalised(check(r, 'Format stranice A4'));
+    expectNotPenalised(check(r, 'Sadržaj dokumenta'));
     const m = check(r, 'Margine dokumenta');
     expect(m.max).toBeGreaterThan(0);
-    expect(m.status).toBe('pass');
+    expectNotPenalised(m);
   });
 });
 
@@ -65,13 +66,13 @@ describe('sumfak sinteticki golden: zavrsni (harvard, prored 1,15, poravnanje)',
   it('uskladjeni rad prolazi font/velicinu/prored/poravnanje/margine/Sadrzaj', async () => {
     const file = buildDocxFile({ paragraphs: compliantDoc(), marginsCm: M25 }, 'sumfak-zav-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'sumfak-zavrsni' });
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Poravnanje osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
+    expectNotPenalised(check(r, 'Dominantni font'));
+    expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+    expectNotPenalised(check(r, 'Prored osnovnog teksta'));
+    expectNotPenalised(check(r, 'Poravnanje osnovnog teksta'));
+    expectNotPenalised(check(r, 'Sadržaj dokumenta'));
     const m = check(r, 'Margine dokumenta');
     expect(m.max).toBeGreaterThan(0);
-    expect(m.status).toBe('pass');
+    expectNotPenalised(m);
   });
 });

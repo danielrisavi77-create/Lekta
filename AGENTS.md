@@ -34,11 +34,20 @@ tests/fixtures/docx/ (aktivan, snapshoti commitani).
 ## Popravak: deterministican, per-fakultet kroz PODATKE
 
 U popravku nema modela ni prompta. "Recept" je niz {fixerId, ruleId, params} koji
-klijent slozi iz profila (paramsForCheck u src/ui/repair-items.ts); server pravila
-NE izvodi, nego provjeri je li fixer poznat i ziv, sanira parametre i izvrsi.
+klijent slozi iz profila (paramsForCheck u src/ui/repair-items.ts).
 
+- CILJANU VRIJEDNOST izvodi SERVER (src/repair/param-authority.ts), ne klijent: za poznat
+  par (profileRef, ruleId) Edge funkcija uzima svoju pecenu vrijednost i klijentovu ignorira.
+  Klijentov params vrijedi jos samo gdje fakultetskog pravila nema; odgovor to oznaci kroz
+  paramSources. Gard: tests/repair-param-authority.test.ts.
+- ISPORUKA TEK NAKON PONOVNE PROVJERE: detectPassRegressions ide PRIJE preporuke za
+  preuzimanje; uz regresiju glavna ponuda je IZVORNI dokument, popravljeni ostaje sporedan.
+  Dokument se nikad ne zarobljava. Gard: tests/repair-delivery-order.test.ts.
+- IDENTITET provjere je check.id (src/scoring/check-id-registry.ts), ne hrvatski naslov;
+  check-fixer-map.ts je kljucan po checkId. Gard: tests/check-fixer-map.test.ts.
 - docs/REPAIR_RECIPE.md je GENERIRAN (npm run repair-recipe, izvor src/repair/recipe.ts).
-  Ne uredjuj ga rucno; tests/repair-recipe.test.ts pada na drift.
+  Ne uredjuj ga rucno; tests/repair-recipe.test.ts pada na drift. Ista naredba pece i
+  data/generated/repair-params-by-profile.json.
 - Dokument ide na server SAMO za popravak. Provjera izvora ide zasebnim usporednim
   pozivom (supabase/functions/source-check), a pohrana u "Moji popravci" dovrsava se
   u pozadini (EdgeRuntime.waitUntil).
@@ -71,7 +80,9 @@ ostane isti i prije i poslije osvjezavanja polja u Wordu (Fields.Update()).
 Mehanika ispod smije se mijenjati: polja, sidra, stilovi, numeracija, relacije.
 Testovi zato citaju SPOJENI tekst odlomka, ne sirovi XML; dio kvarova se u XML-u
 uopce ne vidi (RE-57, RE-58). Iznimke koje smiju dirati vidljivi tekst i to je
-namjerno: heading-case-fixer, croatian-typography-fixer, kanonizacija DOI-ja.
+namjerno: heading-case-fixer, croatian-typography-fixer, kanonizacija DOI-ja i toc-field-fixer
+(tekst sadrzaja generira Word iz polja). toc-field je privremen izuzetak dok ga ne potvrdi
+Tier 2 (npm run verify:word) usporedbom teksta prije i poslije Fields.Update().
 
 Popravak se smije nuditi i BEZ fakultetskog pravila, ali samo kao PREPORUKA:
 violated:false, recommended:true, BEZ matchKeys (ne vezuje se na bodovan check,
@@ -98,3 +109,22 @@ i BODOVANJE po pravilu bez sluzbenog izvora.
   prema DOM-u i labavim podacima, u novom logickom kodu izbjegavaj.
 - Bez localStorage hackova u novim modulima; postojeci safeStorageGet/Set ostaje.
 - Produkcijski kod, ne primjeri. Male, fokusirane promjene, svaki korak zelen.
+
+## Tvrdo pravilo: migracije idu iskljucivo kroz `supabase db push`
+
+MCP `apply_migration` se NE koristi nad Lektinim bazama. Razlog nije stil nego identitet:
+`db push` upisuje verziju iz imena datoteke (`0001`), a `apply_migration` timestamp
+(`20260719004453`), pri cemu ime ostaje u stupcu `name`. Iste migracije tako dobiju dva
+razlicita identiteta, ovisno o tome tko ih je i cime primijenio.
+
+Audit 2026-08-17 nasao je oba kvara koja iz toga slijede: produkcijski dnevnik je izgledao kao
+da gotovo nista nije primijenjeno (a bilo je 67 od 90), a staging je 38 migracija primijenio
+DVA PUTA, jednom kroz svaki od ta dva puta. Proslo je samo zato sto su ti zahvati idempotentni.
+
+- Stanje se provjerava s `npm run migration-identity` (usporedba po IMENU, ne po verziji).
+- Razlika izmedju repozitorija i deployanih Edge funkcija: `npm run deploy-drift`.
+- Dijagnoza i preostali koraci: `docs/deploy/MIGRATION_IDENTITY.md`.
+- Iznimka je iskljucivo baza koja se smije baciti.
+
+Svaka migracija mora biti idempotentna (`if not exists`, `drop ... if exists` prije `create`),
+jer se u praksi zna primijeniti vise puta.

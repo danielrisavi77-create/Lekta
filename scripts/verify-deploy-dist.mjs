@@ -7,8 +7,10 @@
 // verifikacijska konzola zavrsila u distu. Bolje pasti na buildu nego objaviti rupu.
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { SITE_ORIGIN } from './site-origin.mjs';
 
@@ -356,6 +358,152 @@ if (fs.existsSync(naslovnicaDir)) {
   const allNaslovnicaHtml = naslovnicaPages.map((p) => fs.readFileSync(p, 'utf8')).join('\n');
   for (const expected of ['Službeni', 'pomoćni']) {
     if (!allNaslovnicaHtml.includes(expected)) fail(`nijedna generirana naslovnica stranica ne sadrzi ocekivanu dijakriticku rijec "${expected}" (dijakriticka regresija?)`);
+  }
+}
+
+// CSP ALLOWLISTA (audit SEC-01, SEC-02).
+//
+// `connect-src` i `form-action` su do 2026-08-17 sadrzavali `https://*.supabase.co`, dakle svaki
+// Supabase projekt na svijetu, uz komentar koji je tvrdio da je neocekivan odljev podataka
+// tehnicki onemogucen. Ovaj gate cuva da se wildcard ne vrati i da build stvarno supstituira
+// tokene: nesupstituiran token bio bi gori od wildcarda, jer bi CSP postao neispravan.
+{
+  const headersPath = path.join(DIST, '_headers');
+  if (!fs.existsSync(headersPath)) fail('dist/_headers ne postoji (CSP se ne bi primijenio)');
+  const headers = fs.readFileSync(headersPath, 'utf8');
+
+  for (const token of ['__CSP_SUPABASE__', '__CSP_LS__']) {
+    if (headers.includes(token)) fail(`dist/_headers sadrzi nesupstituiran token ${token} (cspAllowlist plugin nije odradio)`);
+  }
+
+  const csp = (headers.match(/^\s*Content-Security-Policy:\s*(.+)$/m) || [])[1] ?? '';
+  if (!csp) fail('dist/_headers nema Content-Security-Policy');
+
+  const directive = (name) => (csp.match(new RegExp(`${name} ([^;]*)`)) || [])[1] ?? '';
+  for (const name of ['connect-src', 'form-action']) {
+    const value = directive(name);
+    if (!value) fail(`CSP nema direktivu ${name}`);
+    if (/https:\/\/\*\./.test(value)) fail(`CSP ${name} sadrzi wildcard host: "${value.trim()}"`);
+    if (!/https:\/\/[a-z0-9-]+\.supabase\.co/.test(value)) {
+      fail(`CSP ${name} nema konkretan Supabase origin: "${value.trim()}"`);
+    }
+  }
+}
+
+// DOKAZ O IZVEDENIM RAZINAMA PROVJERE (audit P0-13, P0-12).
+//
+// `npm run check` je samo Tier 0: ne otvara dokument nijednim stvarnim uredivacem. Tier 1
+// (python-docx) i Tier 2 (pravi Word) postoje kao skripte, ali su se pokretali rucno i odvojeno,
+// pa se za konkretan commit nije moglo reci JESU LI uopce izvedeni. `npm run release:check` vrti
+// sve razine i ostavlja potpisan trag; ovdje se taj trag provjerava.
+//
+// Gate je vezan uz `LEKTA_REQUIRE_RELEASE_PROOF=1`, a ne ukljucen bezuvjetno, jer bi inace prvi
+// sljedeci deploy pao dok vlasnik ne odvrti visesatni lanac. Kad ga jednom odvrti, postavi
+// zastavicu i dokaz postaje obavezan.
+{
+  /**
+   * Je li dokaz zastario u odnosu na ono sto se gradi.
+   *
+   * Ne moze se samo usporediti `proof.commit !== HEAD`, jer je sam dokaz datoteka u repozitoriju:
+   * cim ga commitas, HEAD se pomakne i dokaz bi UVIJEK ispao zastario, pa bi gate bio neupotrebljiv
+   * (klasican problem koke i jajeta). Zato se gleda STO se promijenilo: dokaz vrijedi sve dok se
+   * izmedju njegovog commita i HEAD-a nije promijenilo nista osim samog dokaza.
+   *
+   * Kad se povijest ne moze procitati (plitak clone na CI-ju), radije se NE tvrdi da je zastario:
+   * ostale provjere (`complete`, `dirtyWorkingTree`) i dalje vrijede.
+   */
+  const staleAgainst = (proofCommit, headCommit) => {
+    try {
+      const changed = execSync(`git diff --name-only ${proofCommit} ${headCommit}`, {
+        cwd: ROOT,
+        encoding: 'utf8',
+      })
+        .split(/\r?\n/)
+        .map((l) => l.trim())
+        .filter(Boolean);
+      return changed.some((f) => f !== 'docs/generated/RELEASE_PROOF.json');
+    } catch {
+      return false;
+    }
+  };
+
+  const proofPath = path.join(ROOT, 'docs', 'generated', 'RELEASE_PROOF.json');
+  const required = process.env.LEKTA_REQUIRE_RELEASE_PROOF === '1';
+  const complain = (msg) => {
+    if (required) fail(`dokaz o provjerama: ${msg}`);
+    console.warn(`[verify-deploy-dist] UPOZORENJE: dokaz o provjerama: ${msg}`);
+    console.warn('  Pokreni `npm run release:check`, pa postavi LEKTA_REQUIRE_RELEASE_PROOF=1 da gate postane tvrd.');
+  };
+
+  let head = process.env.COMMIT_REF || '';
+  if (!head) {
+    try {
+      head = execSync('git rev-parse HEAD', { cwd: ROOT, encoding: 'utf8' }).trim();
+    } catch {
+      head = '';
+    }
+  }
+
+  if (!fs.existsSync(proofPath)) {
+    complain('docs/generated/RELEASE_PROOF.json ne postoji');
+  } else {
+    let proof = null;
+    try {
+      proof = JSON.parse(fs.readFileSync(proofPath, 'utf8'));
+    } catch {
+      complain('RELEASE_PROOF.json nije valjan JSON');
+    }
+    if (proof) {
+      if (!proof.complete) {
+        const missing = Array.isArray(proof.missingRequired) ? proof.missingRequired.join(', ') : '?';
+        complain(`nije potpun, bez prolaza ostaju: ${missing}`);
+      } else if (head && proof.commit && proof.commit !== head && staleAgainst(proof.commit, head)) {
+        // Zastario dokaz je opasniji od nikakvog: izgleda kao potvrda za kod koji nije provjeren.
+        complain(`vezan je uz commit ${String(proof.commit).slice(0, 12)}, a gradi se ${head.slice(0, 12)}`);
+      } else if (proof.dirtyWorkingTree) {
+        complain('nastao je nad NECISTIM radnim stablom, pa ne pokriva sve sto se gradi');
+      } else {
+        console.log(`[verify-deploy-dist] dokaz o provjerama OK (commit ${String(proof.commit).slice(0, 12)}).`);
+      }
+    }
+  }
+}
+
+// PRAVNI IDENTITET PRUZATELJA (audit A26-01, LEG-01/02/03).
+//
+// `data/legal/provider.json` je jedino mjesto s identitetom trgovca i voditelja obrade.
+// Dok je prazan, `legal-content.ts` ga tise ispusta (renderira napomenu "bit ce objavljeni"),
+// pa se prazno stanje moze deployati a da nitko ne primijeti. Za BESPLATNU analizu to je
+// podnosljivo; za NAPLATU nije, jer identifikacija trgovca i voditelja obrade nije opcionalna.
+//
+// Zato gate nije bezuvjetan nego vezan uz `LEKTA_COMMERCE_LIVE=1`, koji se postavlja tek kad
+// naplata ide live. Do tada je nalaz glasno upozorenje, poslije je tvrd blok.
+{
+  const providerPath = path.join(ROOT, 'data', 'legal', 'provider.json');
+  const provider = JSON.parse(fs.readFileSync(providerPath, 'utf8'));
+  const REQUIRED_FOR_COMMERCE = {
+    privacyController: 'voditelj obrade (GDPR cl. 13): tko pravno odredjuje svrhe i sredstva obrade',
+    oib: 'OIB pravnog subjekta (identifikacija trgovca)',
+    address: 'sjediste pravnog subjekta',
+    phone: 'telefonski broj trgovca (predugovorna informacija, ZZP)',
+  };
+  const missing = Object.entries(REQUIRED_FOR_COMMERCE)
+    .filter(([field]) => !String(provider[field] ?? '').trim())
+    .map(([field, why]) => `${field} (${why})`);
+
+  if (missing.length) {
+    const bullets = missing.map((m) => `  - ${m}`);
+    if (process.env.LEKTA_COMMERCE_LIVE === '1') {
+      fail(['naplata je oznacena kao ZIVA (LEKTA_COMMERCE_LIVE=1), a data/legal/provider.json nema:', ...bullets].join(os.EOL));
+    }
+    console.warn(
+      [
+        '[verify-deploy-dist] UPOZORENJE: data/legal/provider.json nema:',
+        ...bullets,
+        '  Besplatna analiza time nije blokirana, ali naplata se NE SMIJE upaliti dok su prazni.',
+        '  Kad se popune, postavi LEKTA_COMMERCE_LIVE=1 da gate postane tvrd.',
+      ].join(os.EOL),
+    );
   }
 }
 

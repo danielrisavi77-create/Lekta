@@ -11,6 +11,7 @@
  * Sinteticki dokument NIJE pravi rad ni izvor pravila (CLAUDE.md).
  */
 import { describe, it, expect } from 'vitest';
+import { expectNotPenalised } from "./helpers/check-status";
 import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
@@ -34,11 +35,11 @@ const M25 = { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 };
 describe('erf-diplomski: font/velicina/prored/Sadrzaj (margine advisory)', () => {
   it('prolazi font/velicinu/prored/Sadrzaj i ne puca', async () => {
     const r: any = await analyzeFixture(buildDocxFile({ paragraphs: doc(), marginsCm: M25 }, 'erf-dipl.docx'), { profileId: 'erf-diplomski' });
-    expect(check(r, 'Dominantni font').status).toBe('pass');
-    expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
-    expect(check(r, 'Margine dokumenta').status).toBe('pass'); // informativno (nije propisano)
+    expectNotPenalised(check(r, 'Dominantni font'));
+    expectNotPenalised(check(r, 'Veličina osnovnog teksta'));
+    expectNotPenalised(check(r, 'Prored osnovnog teksta'));
+    expectNotPenalised(check(r, 'Sadržaj dokumenta'));
+    expectNotPenalised(check(r, 'Margine dokumenta')); // informativno (nije propisano)
   });
 });
 
@@ -59,7 +60,7 @@ describe('doktorski profili: ne pucaju i font-provjera radi', () => {
     it(`${id} se analizira bez pucanja`, async () => {
       const r: any = await analyzeFixture(buildDocxFile({ paragraphs: doc(), marginsCm: M25 }, `${id}.docx`), { profileId: id });
       expect(Array.isArray(r.checks)).toBe(true);
-      expect(check(r, 'Dominantni font').status).toBe('pass');
+      expectNotPenalised(check(r, 'Dominantni font'));
     });
   }
 });

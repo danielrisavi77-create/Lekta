@@ -2,8 +2,17 @@
   "name": "lekta",
   "private": true,
   "version": "2.2.2",
-  "type": "module",
   "description": "Lekta - klijentska provjera akademskih radova prema profilima zagrebackih visokih ucilista.",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielrisavi77-create/Lekta.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "npm@11.11.0",
+  "type": "module",
   "scripts": {
     "bootstrap": "node scripts/split-prototype.mjs",
     "extract-data": "node scripts/extract-data.mjs",
@@ -37,10 +46,14 @@
     "test:slow": "vitest run --config vitest.slow.config.ts",
     "conformance": "vitest run --config vitest.conformance.config.ts",
     "check": "tsc --noEmit && vitest run && vite build",
-    "check:full": "npm run check && npm run test:slow",
+    "check:edge": "node scripts/check-edge.mjs",
+    "check:full": "npm run check && npm run check:edge && npm run test:slow",
+    "release:check": "node scripts/release-check.mjs",
     "verify:strict-open": "python scripts/verify-docx/strict-open.py tests/fixtures/docx",
     "verify:word": "powershell -ExecutionPolicy Bypass -File scripts/word-verify/check.ps1",
     "verify:word:worst": "powershell -ExecutionPolicy Bypass -File scripts/word-verify/check-worst-case.ps1",
+    "deploy-drift": "node scripts/deploy-drift.mjs",
+    "migration-identity": "node scripts/migration-identity.mjs",
     "repair-recipe": "vite-node scripts/generate-repair-recipe.mts",
     "repair-coverage": "vite-node scripts/generate-repair-coverage.mts",
     "repair-real-corpus": "vite-node scripts/repair-real-corpus.mts",

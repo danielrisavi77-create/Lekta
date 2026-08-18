@@ -1,0 +1,8 @@
+{
+  "//": "Deno konfiguracija za Edge funkcije (audit TEST-01).",
+  "//lib": "src/** moduli koje ove funkcije dijele s preglednikom koriste DOM tipove (Element, DOMParser). Bez 'dom' u lib-u `deno check` prijavi 66 laznih gresaka 'Cannot find name Element', pa je provjera bila neupotrebljiva i nitko je nije vrtio.",
+  "//scope": "Namjerno ovdje, a ne u korijenu repozitorija: korijenski deno.json natjerao bi editore da CIJELI projekt tretiraju kao Deno projekt, iako je Deno samo supabase/functions.",
+  "compilerOptions": {
+    "lib": ["deno.window", "dom", "dom.iterable", "esnext"]
+  }
+}

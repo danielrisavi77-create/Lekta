@@ -1,5 +1,5 @@
 import type { Check, Issue } from '../scoring/checks';
-import { classifyFixability } from '../analysis/check-fixer-map';
+import { classifyFixability, classifyFixabilityById } from '../analysis/check-fixer-map';
 
 export type ResultReadinessKind = 'blocked' | 'needs-work' | 'manual-review' | 'clear';
 
@@ -10,6 +10,35 @@ export interface ResultReadiness {
   blockers: number;
   improvements: number;
   manualReviews: number;
+  /**
+   * Stoji li iza nalaza VERIFICIRAN sluzbeni izvor fakulteta.
+   *
+   * `false` ne znaci da je nalaz pogresan, nego da za njega nemamo potvrdjeno fakultetsko pravilo
+   * (genericki profil ili profil u istrazivanju), pa se ne smije zvati "blokatorom".
+   */
+  authoritative: boolean;
+}
+
+/** Autoritet pravila iza rezultata; isti izvor koji `ruleConfidence` u report.ts vec cita. */
+export interface ReadinessAuthority {
+  /** `profile.statusKey` ('verified' | 'partial' | 'research' | 'generic'). */
+  profileStatus?: string | null;
+  /** `details.ruleAuthority` ('official-source' | 'official-source-with-currency-caveat' | 'generic'). */
+  ruleAuthority?: string | null;
+}
+
+/**
+ * Smije li se nalaz nad ovim profilom nazvati blokatorom.
+ *
+ * Do 2026-08-16 je `resultReadiness` primao SAMO `Issue[]` i brojao severity, pa je upozorenje iz
+ * generickog fallbacka davalo isti verdikt "Nije spremno za predaju" kao prekrsaj verificiranog
+ * pravila fakulteta. Autoritet je pritom vec postojao u podacima (`details.ruleAuthority`,
+ * `profileStatus`), ali je zivio izolirano u placenom izvjestaju (report.ts `ruleConfidence`).
+ */
+function isAuthoritative(authority?: ReadinessAuthority): boolean {
+  if (!authority) return true; // stariji pozivatelj bez podatka: zadrzi zatecenu formulaciju
+  if (authority.profileStatus != null && authority.profileStatus !== 'verified') return false;
+  return authority.ruleAuthority !== 'generic';
 }
 
 function plural(count: number, one: string, few: string, many: string): string {
@@ -24,29 +53,38 @@ function plural(count: number, one: string, few: string, many: string): string {
  * Spremnost za predaju nije isto sto i tehnicka ocjena. Ova projekcija namjerno
  * cita samo vec postojeci rezultat analize i ne mijenja bodovanje ni parser.
  */
-export function resultReadiness(issues: readonly Issue[] = []): ResultReadiness {
+export function resultReadiness(issues: readonly Issue[] = [], authority?: ReadinessAuthority): ResultReadiness {
   const blockers = issues.filter((item) => item.severity === 'error').length;
   const improvements = issues.filter((item) => item.severity === 'warning').length;
   const manualReviews = issues.filter((item) => item.severity !== 'error' && item.severity !== 'warning').length;
+  const authoritative = isAuthoritative(authority);
+  const counts = { blockers, improvements, manualReviews, authoritative };
 
   if (blockers > 0) {
-    return {
-      kind: 'blocked',
-      label: 'Nije spremno za predaju',
-      description: `Pronađen je ${blockers} ${plural(blockers, 'blokator', 'blokatora', 'blokatora')}. Tehnička ocjena ne potvrđuje spremnost za predaju.`,
-      blockers,
-      improvements,
-      manualReviews,
-    };
+    // "Blokator" je tvrdnja o fakultetovom pravilu, ne o nasoj heuristici. Bez verificiranog izvora
+    // ista se cinjenica iznosi kao odstupanje koje treba provjeriti, jer nemamo cime tvrditi vise.
+    return authoritative
+      ? {
+          kind: 'blocked',
+          label: 'Nije spremno za predaju',
+          description: `Pronađen je ${blockers} ${plural(blockers, 'blokator', 'blokatora', 'blokatora')}. Tehnička ocjena ne potvrđuje spremnost za predaju.`,
+          ...counts,
+        }
+      : {
+          kind: 'blocked',
+          label: 'Provjeri prije predaje',
+          description: `Pronađeno je ${blockers} ${plural(blockers, 'moguće odstupanje', 'moguća odstupanja', 'mogućih odstupanja')}. Za ovaj profil pravila nisu potvrđena prema službenom izvoru, pa ovo nije nalaz o pravilu tvog fakulteta nego opća tehnička provjera.`,
+          ...counts,
+        };
   }
   if (improvements > 0) {
     return {
       kind: 'needs-work',
-      label: 'Treba doraditi prije predaje',
-      description: `Pronađeno je ${improvements} ${plural(improvements, 'dorada', 'dorade', 'dorada')}. Tehnička ocjena ne zamjenjuje završnu ručnu provjeru.`,
-      blockers,
-      improvements,
-      manualReviews,
+      label: authoritative ? 'Treba doraditi prije predaje' : 'Provjeri prije predaje',
+      description: authoritative
+        ? `Pronađeno je ${improvements} ${plural(improvements, 'dorada', 'dorade', 'dorada')}. Tehnička ocjena ne zamjenjuje završnu ručnu provjeru.`
+        : `Pronađeno je ${improvements} ${plural(improvements, 'moguće odstupanje', 'moguća odstupanja', 'mogućih odstupanja')}. Za ovaj profil pravila nisu potvrđena prema službenom izvoru, pa provjeri i s uputama svojeg studija.`,
+      ...counts,
     };
   }
   if (manualReviews > 0) {
@@ -54,18 +92,16 @@ export function resultReadiness(issues: readonly Issue[] = []): ResultReadiness 
       kind: 'manual-review',
       label: 'Potrebna je ručna provjera',
       description: `Nema automatskih blokatora, ali ostale su ${manualReviews} ${plural(manualReviews, 'ručna provjera', 'ručne provjere', 'ručnih provjera')}.`,
-      blockers,
-      improvements,
-      manualReviews,
+      ...counts,
     };
   }
   return {
     kind: 'clear',
     label: 'Nema automatskih blokatora',
-    description: 'Automatska provjera nije pronašla otvoreni blokator. Mentorove i posebne upute i dalje imaju prednost.',
-    blockers,
-    improvements,
-    manualReviews,
+    description: authoritative
+      ? 'Automatska provjera nije pronašla otvoreni blokator. Mentorove i posebne upute i dalje imaju prednost.'
+      : 'Opća tehnička provjera nije pronašla otvoreno odstupanje. Pravila ovog profila nisu potvrđena prema službenom izvoru, pa upute studija i mentora imaju prednost.',
+    ...counts,
   };
 }
 
@@ -95,7 +131,9 @@ export interface RepairCeiling {
 export function repairCeiling(checks: readonly Check[] = []): RepairCeiling {
   const scored = checks.filter((c) => c.scored && c.max > 0);
   const totalMax = scored.reduce((sum, c) => sum + c.max, 0);
-  const manual = scored.filter((c) => c.status !== 'pass' && classifyFixability(c.title).fixability === 'manual');
+  const manual = scored.filter(
+    (c) => c.status !== 'pass' && (c.id ? classifyFixabilityById(c.id) : classifyFixability(c.title)).fixability === 'manual',
+  );
   const lostPoints = manual.reduce((sum, c) => sum + (c.max - c.earned), 0);
   const maxScore = totalMax > 0 ? Math.round(((totalMax - lostPoints) / totalMax) * 100) : 100;
   return {

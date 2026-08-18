@@ -1,3 +1,4 @@
+import { encodeRepairFrame } from '../src/report/repair-framing';
 import { describe, it, expect } from 'vitest';
 
 import {
@@ -22,7 +23,6 @@ function b64(bytes: number[]): string {
 function meta(over: Partial<RepairMeta> = {}): RepairMeta {
   return {
     workType: 'diplomski',
-    parsedStructure: { title: 'Rad', author: 'Ana', headings: [] },
     signals: { words: 12000, titleMarker: 'graduate' },
     requests: [{ fixerId: 'font-fixer', ruleId: 'font', params: { fontName: 'Times New Roman' } }],
     fileName: 'moj-rad.docx',
@@ -42,39 +42,46 @@ describe('decodeBase64', () => {
 });
 
 describe('buildRepairMeta (sanitizacija)', () => {
-  const parsedStructure = { title: 'Naslov', author: 'Autor', headings: [{ level: 1, text: 'Uvod' }] };
   const requests = [{ fixerId: 'font-fixer', ruleId: 'font', params: {} }];
 
   it('mapira nepoznatu vrstu rada u zavrsni (fallback)', () => {
-    expect(buildRepairMeta({ workType: 'nesto', parsedStructure, requests }).workType).toBe('zavrsni');
+    expect(buildRepairMeta({ workType: 'nesto', requests }).workType).toBe('zavrsni');
   });
   it('zadrzava valjanu naplatnu vrstu', () => {
-    expect(buildRepairMeta({ workType: 'doktorski', parsedStructure, requests }).workType).toBe('doktorski');
+    expect(buildRepairMeta({ workType: 'doktorski', requests }).workType).toBe('doktorski');
   });
-  it('nikad ne nosi doslovni tekst rada, samo struktura + signali', () => {
-    const m = buildRepairMeta({ workType: 'diplomski', parsedStructure, requests, words: 9000, titleMarker: 'graduate' });
-    expect(m.parsedStructure).toEqual(parsedStructure);
+
+  /**
+   * OCEKIVANJE OBRNUTO 2026-08-17 (audit DOCX-01/02). Ranija verzija ovog testa TVRDILA je da
+   * meta nosi `parsedStructure`, dakle naslov, autora i naslove poglavlja. Naslovi poglavlja su
+   * doslovan tekst rada, a server ih je koristio samo kao presence-check: otisak se racuna iz
+   * bajtova uploadanog zipa (RE-18). Polje je zato uklonjeno i ovaj test sada cuva da se NE
+   * vrati, jer bi povratak bio tihi regres u privatnosti koji nista ne bi srusilo.
+   */
+  it('ne salje naslov, autora ni naslove poglavlja', () => {
+    const m = buildRepairMeta({ workType: 'diplomski', requests, words: 9000, titleMarker: 'graduate' });
+    expect('parsedStructure' in m).toBe(false);
     expect(m.signals).toEqual({ words: 9000, titleMarker: 'graduate' });
     const flat = JSON.stringify(m);
-    expect(flat).not.toMatch(/paragraph|excerpt|fullText/i);
+    expect(flat).not.toMatch(/paragraph|excerpt|fullText|headings|title"|author/i);
   });
   it('izostavlja opcijska polja kad ih nema', () => {
-    const m = buildRepairMeta({ workType: 'zavrsni', parsedStructure, requests });
+    const m = buildRepairMeta({ workType: 'zavrsni', requests });
     expect('profileStatus' in m).toBe(false);
     expect('confirmedMismatch' in m).toBe(false);
     expect(m.signals.words).toBe(null);
   });
   it('ukljucuje confirmedMismatch samo kad je true', () => {
-    expect(buildRepairMeta({ workType: 'zavrsni', parsedStructure, requests, confirmedMismatch: true }).confirmedMismatch).toBe(true);
-    expect('confirmedMismatch' in buildRepairMeta({ workType: 'zavrsni', parsedStructure, requests, confirmedMismatch: false })).toBe(false);
+    expect(buildRepairMeta({ workType: 'zavrsni', requests, confirmedMismatch: true }).confirmedMismatch).toBe(true);
+    expect('confirmedMismatch' in buildRepairMeta({ workType: 'zavrsni', requests, confirmedMismatch: false })).toBe(false);
   });
   it('WS-6.3: uvijek zigose consentVersion tekucim TERMS_VERSION (server ga trajno biljezi)', () => {
-    const m = buildRepairMeta({ workType: 'zavrsni', parsedStructure, requests });
+    const m = buildRepairMeta({ workType: 'zavrsni', requests });
     expect(m.consentVersion).toBe(TERMS_VERSION);
   });
 
   describe('K4: reference za provjeru u korpusu', () => {
-    const base = { workType: 'zavrsni', parsedStructure, requests } as const;
+    const base = { workType: 'zavrsni', requests } as const;
 
     it('salje samo naslov i godinu (nista suvisno)', () => {
       const m = buildRepairMeta({ ...base, references: [{ title: '  Sekundarna hipertenzija  ', year: 2014 }] });
@@ -268,5 +275,92 @@ describe('uploadRepair', () => {
     const ac = new AbortController();
     await uploadRepair(config, 'j', new Uint8Array([1]), meta(), spy as unknown as typeof fetch, { signal: ac.signal });
     expect(seen).toBe(true);
+  });
+});
+
+/**
+ * KLIJENT MORA ZNATI OBA OBLIKA ODGOVORA (audit DOCX-05).
+ *
+ * Deploy nije atomaran: nova stranica se moze naci pred starim serverom (koji ne zna binarni
+ * oblik) i stara stranica pred novim (koja ne salje zaglavlje pa dobiva JSON). Ako klijent zna
+ * samo jedan oblik, popravak pukne u prijelaznom razdoblju, a to je tocno trenutak kad korisnik
+ * ne moze razumjeti zasto.
+ *
+ * Test drzi i jace svojstvo: oba oblika daju ISTI ishod, do polja. Bez toga bi se razlike uvlacile
+ * tiho (npr. `unknownFixers` koji server salje, a jedna grana ga ne cita).
+ */
+describe('uploadRepair prihvaca binarni I JSON oblik', () => {
+  const docx = new Uint8Array([0x50, 0x4b, 0x03, 0x04, 0xff, 0x00, 0x80]);
+  const serverMeta = {
+    fileName: 'rad-popravljeno.docx',
+    changelog: [{ before: 'Times', after: 'Times New Roman' }],
+    skipped: ['neka-stavka'],
+    unknownFixers: ['nepoznat-fixer'],
+    slotId: 'slot-1',
+    jobId: 'job-1',
+    storagePending: true,
+    sourceCheck: null,
+  };
+
+  const config = { endpoint: 'https://primjer.supabase.co/functions/v1/repair-docx' };
+  const meta = { workType: 'diplomski', signals: { words: 1, titleMarker: null }, requests: [], consentVersion: 'v' } as never;
+
+  it('binarni oblik: cita okvir i vraca ok', async () => {
+    let sentHeader: string | undefined;
+    const fetchImpl = (async (_url: string, init?: RequestInit) => {
+      sentHeader = (init?.headers as Record<string, string>)?.['X-Lekta-Response'];
+      return new Response(encodeRepairFrame(serverMeta, docx) as unknown as BodyInit, {
+        status: 200,
+        headers: { 'content-type': 'application/x-lekta-repair' },
+      });
+    }) as unknown as typeof fetch;
+
+    const out = await uploadRepair(config, 'token', docx, meta, fetchImpl);
+    expect(sentHeader, 'klijent mora zatraziti binarni oblik').toBe('binary');
+    expect(out.kind).toBe('ok');
+    if (out.kind !== 'ok') return;
+    expect(Array.from(out.docxBytes)).toEqual(Array.from(docx));
+    expect(out.fileName).toBe('rad-popravljeno.docx');
+    expect(out.unknownFixers).toEqual(['nepoznat-fixer']);
+    expect(out.storagePending).toBe(true);
+  });
+
+  it('JSON oblik (stariji server) i dalje radi', async () => {
+    const b64 = Buffer.from(docx).toString('base64');
+    const fetchImpl = (async () =>
+      new Response(JSON.stringify({ docxBase64: b64, ...serverMeta }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      })) as unknown as typeof fetch;
+
+    const out = await uploadRepair(config, 'token', docx, meta, fetchImpl);
+    expect(out.kind).toBe('ok');
+    if (out.kind !== 'ok') return;
+    expect(Array.from(out.docxBytes)).toEqual(Array.from(docx));
+    expect(out.unknownFixers).toEqual(['nepoznat-fixer']);
+  });
+
+  it('oba oblika daju ISTI ishod (razlika je samo u prijenosu)', async () => {
+    const b64 = Buffer.from(docx).toString('base64');
+    const binarni = await uploadRepair(config, 't', docx, meta, (async () =>
+      new Response(encodeRepairFrame(serverMeta, docx) as unknown as BodyInit, {
+        status: 200, headers: { 'content-type': 'application/x-lekta-repair' },
+      })) as unknown as typeof fetch);
+    const jsonski = await uploadRepair(config, 't', docx, meta, (async () =>
+      new Response(JSON.stringify({ docxBase64: b64, ...serverMeta }), {
+        status: 200, headers: { 'content-type': 'application/json' },
+      })) as unknown as typeof fetch);
+    expect(binarni).toEqual(jsonski);
+  });
+
+  it('krnji binarni odgovor daje jasnu gresku, ne ostecen dokument', async () => {
+    const frame = encodeRepairFrame(serverMeta, docx);
+    new DataView(frame.buffer).setUint32(0, frame.length + 999, true);
+    const fetchImpl = (async () =>
+      new Response(frame as unknown as BodyInit, {
+        status: 200, headers: { 'content-type': 'application/x-lekta-repair' },
+      })) as unknown as typeof fetch;
+    const out = await uploadRepair(config, 't', docx, meta, fetchImpl);
+    expect(out.kind).toBe('error');
   });
 });

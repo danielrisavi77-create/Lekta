@@ -8,13 +8,21 @@ on:
     branches:
       - master
 
+# Jedan aktivan run po grani (audit TEST-18). Bez ovoga vise pusheva u nizu vrti stare i nove
+# buildove istovremeno nad istom granom: trose CI minute i, sto je gore, zeleni status starijeg
+# commita stigne poslije novijeg pa izgleda kao da je grana ispravna.
+# Na master se NE otkazuje: tamo je svaki commit stanje koje mora imati vlastiti dokaz.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
 jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
           cache: npm

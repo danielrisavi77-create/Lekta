@@ -52,11 +52,18 @@ usporedi tekst prije i poslije (`scripts/word-verify/`, Tier 2 u
 `docs/REAL_CORPUS_TESTING.md`). Testovi zato čitaju SPOJENI tekst odlomka, ne sirovi XML,
 jer se dio ovih kvarova u XML-u uopće ne vidi (RE-57, RE-58).
 
-Tri postojeća popravka SMIJU mijenjati vidljivi tekst i to je namjerno, jer je svaki od
+Četiri postojeća popravka SMIJU mijenjati vidljivi tekst i to je namjerno, jer je svaki od
 njih format, ne argumentacija: velika slova naslova (`heading-case-fixer`), hrvatska
-tehnička tipografija (`croatian-typography-fixer`) i kanonizacija DOI-ja
-(`bibliography-repair-fixer`, `link-doi-fixer`). Svaki traži izričitu potvrdu i nijedan ne
-dira rečenice tijela rada.
+tehnička tipografija (`croatian-typography-fixer`), kanonizacija DOI-ja
+(`bibliography-repair-fixer`, `link-doi-fixer`) i polje sadržaja (`toc-field-fixer`). Svaki
+traži izričitu potvrdu i nijedan ne dira rečenice tijela rada.
+
+`toc-field-fixer` je dodan 2026-08-17, nakon što je real-corpus mjerenje pokazalo da mijenja
+vidljivi tekst na 5 od 12 radova. Obrazloženje: tekst sadržaja GENERIRA Word iz polja, nije
+autorov, pa je to mehanika ispod, a ne sadržaj rada. UVJET koji još nije ispunjen: to mora
+potvrditi Tier 2 (`npm run verify:word`), doslovnom usporedbom teksta prije i poslije
+`Fields.Update()` na dokumentu koji sadržaj dobiva prvi put. Dok ta potvrda ne postoji,
+tretiraj izuzeće kao privremeno.
 
 ### Dopušteno bez fakultetskog pravila (preporuke)
 
@@ -82,6 +89,25 @@ repozitorij, nikad u Lektu. Podaci smiju teći iz Lekte prema drugom proizvodu
 nikad obrnuto, i taj drugi proizvod nikad ne smije tvrditi da je njegova provjera
 formalno mjerodavna: to ostaje isključivo Lektin posao. Vidi `src/integrations/`
 za konkretan, jednosmjeran izvoz podataka prema Katedri (`katedra-pack`).
+
+## Tvrdo pravilo: migracije idu iskljucivo kroz `supabase db push`
+
+MCP `apply_migration` se NE koristi nad Lektinim bazama. Razlog nije stil nego identitet:
+`db push` upisuje verziju iz imena datoteke (`0001`), a `apply_migration` timestamp
+(`20260719004453`), pri cemu ime ostaje u stupcu `name`. Iste migracije tako dobiju dva
+razlicita identiteta, ovisno o tome tko ih je i cime primijenio.
+
+Audit 2026-08-17 nasao je oba kvara koja iz toga slijede: produkcijski dnevnik je izgledao kao
+da gotovo nista nije primijenjeno (a bilo je 67 od 90), a staging je 38 migracija primijenio
+DVA PUTA, jednom kroz svaki od ta dva puta. Proslo je samo zato sto su ti zahvati idempotentni.
+
+- Stanje se provjerava s `npm run migration-identity` (usporedba po IMENU, ne po verziji).
+- Razlika izmedju repozitorija i deployanih Edge funkcija: `npm run deploy-drift`.
+- Dijagnoza i preostali koraci: `docs/deploy/MIGRATION_IDENTITY.md`.
+- Iznimka je iskljucivo baza koja se smije baciti.
+
+Svaka migracija mora biti idempotentna (`if not exists`, `drop ... if exists` prije `create`),
+jer se u praksi zna primijeniti vise puta.
 
 ## Tvrdo pravilo: build gate
 
@@ -160,12 +186,24 @@ engine bez golden-file testa koji PRVO dokazuje zatečeno ponašanje.
 ## Popravak: deterministican, per-fakultet kroz PODATKE
 
 U popravku nema modela ni prompta. "Recept" je niz `{fixerId, ruleId, params}` koji klijent slozi
-iz profila (`paramsForCheck` u `src/ui/repair-items.ts`); server pravila NE izvodi, nego provjeri
-je li fixer poznat i ziv, sanira parametre i izvrsi. Zato je pravilo po fakultetu izrazeno kao
+iz profila (`paramsForCheck` u `src/ui/repair-items.ts`). Zato je pravilo po fakultetu izrazeno kao
 podatak (`data/profiles/**`), nikad kao tekst upute.
 
+- CILJANU VRIJEDNOST od 2026-08-16 izvodi SERVER, ne klijent (`src/repair/param-authority.ts`).
+  Za poznat par (profileRef, ruleId) Edge funkcija uzima svoju pecenu vrijednost iz
+  `data/generated/repair-params-by-profile.json` i klijentovu IGNORIRA; klijentov `params` vrijedi
+  jos samo tamo gdje fakultetskog pravila nema (univerzalna higijena), i to odgovor oznaci kao
+  `paramSources[ruleId] === 'client'`. Prije toga je server samo tipski sanirao klijentovu
+  vrijednost, pa rucno skrojen zahtjev nije mogao biti razlikovan od profilnog.
 - Recept je zapisan u `docs/REPAIR_RECIPE.md`, GENERIRAN iz koda i profila (`npm run repair-recipe`,
   izvor `src/repair/recipe.ts`). Ne uredjuj ga rucno; `tests/repair-recipe.test.ts` pada na drift.
+  Ista naredba pece i serverski autoritet; `tests/repair-param-authority.test.ts` pada ako artefakt
+  odluta od recepta.
+- ISPORUKA IDE TEK NAKON PONOVNE PROVJERE (obrnuto od ugovora do 2026-08-16). Vrata integriteta
+  hvataju pokvaren paket, ali ne i SEMANTICKU regresiju, pa se `detectPassRegressions` izvodi PRIJE
+  nego sucelje preporuci preuzimanje: uz regresiju glavna ponuda je IZVORNI dokument. Popravljeni
+  se nikad ne zarobljava (ostaje kao sporedan izbor, a kad ponovna analiza padne, ostaje glavni uz
+  izricitu napomenu). Gard: `tests/repair-delivery-order.test.ts`.
 - Tok: dokument ide na server SAMO za popravak. Provjera izvora ide ZASEBNIM, usporednim pozivom
   (`source-check`), a pohrana u "Moji popravci" dovrsava se u pozadini (`EdgeRuntime.waitUntil`),
   pa odgovor nosi samo popravljeni docx.
@@ -187,10 +225,18 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
 - `src/ui/app.ts` - UI orkestrator (UI, narudzbe, placanje, QA). Meta: dovrsiti split.
 - `src/analysis/analyze-docx.ts` - analyzeDocx + auditni helperi (jezgra analize).
 - `src/scoring/check-id-registry.ts` - STABILNI identiteti provjera (`page.margins` i sl.).
-  `Check` od 2026-08-16 ima `id`; korelacija prije/poslije popravka i mapiranje na fixer idu
-  po njemu, hrvatski `title` je samo fallback za jos neregistrirane provjere.
+  `Check` od 2026-08-16 ima `id`; korelacija prije/poslije popravka I mapiranje na fixer idu
+  po njemu (`src/analysis/check-fixer-map.ts` je kljucan po `checkId`, ne po naslovu), hrvatski
+  `title` je samo fallback za jos neregistrirane provjere i za prezentaciju. Naslov `Format
+  stranice (...)` je dinamican pa mu se ID izvodi (`page.size.*`, `isPaperSizeCheckId`).
+  Gard: `tests/check-fixer-map.test.ts` pada kad pravilo gadja checkId koji ne postoji (tako su
+  otkrivena dva MRTVA pravila pisana nad `where` oznakama, ne nad naslovima provjera).
+- `src/repair/param-authority.ts` - serverski autoritet nad ciljanom vrijednoscu (vidi Popravak).
 - `src/repair/docx-budget.ts` - JEDAN izvor granica dokumenta (upload, dekompresija, broj
-  zapisa) za intake, analizu i popravak; ne uvodi nove granice mimo njega.
+  zapisa) za intake, analizu i popravak; ne uvodi nove granice mimo njega. VAZNO: analiza i
+  popravak ne mjere isto (analiza cita lijeno samo XML dijelove, popravak cijeli paket), pa se
+  jaz ne zatvara izjednacavanjem brojki nego `docxCapability()`, koji jos na intakeu iz zip
+  central directoryja kaze moze li se dokument POPRAVITI, a ne samo analizirati.
 - `src/repair/default-selection.ts` - `buildDefaultRepairRequests`: sto je PREDODABRANO kad
   korisnik samo klikne Popravi (`violated !== false`, isto kao UI checkbox). Testovi koji
   simuliraju korisnicki tok moraju ici kroz njega, inace mjere tok koji nitko ne izvodi.

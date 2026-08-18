@@ -22,6 +22,25 @@ export function coverageTierForStatus(status: string | null | undefined): number
   }
 }
 
+/**
+ * Vrijedi li garancija za profil ovog statusa.
+ *
+ * Postoji da UI ne mora sam ponavljati pravilo "T2/T3". Do 2026-08-16 je uvjet bio naveden samo
+ * u cjeniku i modalu kao "T2/T3", a badge profila je govorio "Potvrđeni profil" / "Službene
+ * tehničke provjere": korisnik je sam morao povezati te dvije oznake, pa na `partial` profilu
+ * nikad nije doznao da za njega garancija ne vrijedi.
+ */
+export function guaranteeAppliesToStatus(status: string | null | undefined): boolean {
+  return coverageTierForStatus(status) >= GUARANTEE_TIER_MIN;
+}
+
+/** Jedna recenica za korisnika, uz badge profila. */
+export function guaranteeStatusNote(status: string | null | undefined): string {
+  return guaranteeAppliesToStatus(status)
+    ? `Garancija vrijedi za ovaj profil: ako referada vrati rad zbog bodovanog pravila koje smo označili prolaznim, vraćamo novac (rok ${GUARANTEE_WINDOW_DAYS} dana).`
+    : 'Za ovaj profil garancija ne vrijedi, jer njegova pravila još nisu u cijelosti potvrđena prema službenom izvoru. Provjera i popravak rade normalno.';
+}
+
 export type GuaranteeRejection =
   | 'tier_too_low'
   | 'window_expired'

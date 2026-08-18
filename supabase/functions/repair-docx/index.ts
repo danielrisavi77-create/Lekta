@@ -1,4 +1,4 @@
-// Lekta Edge Function: repair-docx (Deno, Supabase) — NACRT (WS-3).
+// Lekta Edge Function: repair-docx (Deno, Supabase) — ZIVO U PRODUKCIJI.
 // Placeni SERVER-SIDE repair: korisnik uploada .docx, server iza entitlementa pokrene isti
 // CISTI repair engine iz src/repair/* (koji klijent vise NE isporucuje) i vrati ispravljen docx.
 //
@@ -10,14 +10,20 @@
 // kojeg drugog dokumenta iste vrste rada. Slot/kvota se trose TEK nakon sto applyFixers stvarno nesto
 // promijeni (korak 7a, RE-17/RE-32): pao popravak ili 0 izmjena vise ne kostaju nista.
 //
-// STATUS NACRTA (NIJE deployano):
-//  - Tok auth -> mismatch-gate -> entitlement -> applyFixers -> vrati docx je KOMPLETAN i koristi
-//    postojecu, testiranu logiku.
-//  - WS-6 (pohrana "do brisanja") je STUB (storeRepairJob) dok ne postoji migracija repair_jobs +
-//    Storage bucket. Bez toga funkcija radi, ali ne pohranjuje (nema "Moji popravci").
-//  - DENO CAVEAT: work-type-estimate.ts uvozi data/work-type-scope.json bez import-attributa; u Denu
-//    JSON uvoz treba `with { type: 'json' }`. Potvrdi pri deployu (WS-3). deflate-raw u Deno: potvrdi
-//    _deno-smoke.ts prije deploya.
+// STATUS: DEPLOYANO i aktivno (docs/GO_LIVE_REPAIR.md, docs/AUDIT_MASTER.md). Zaglavlje je do
+// 2026-08-16 i dalje tvrdilo "NACRT / NIJE deployano" iako je funkcija bila u produkciji i imala
+// produkcijske obrane ispod (ConcurrencyGate, storage kvota, kill switch); ostavljati taj tekst
+// znaci da citatelj ne moze vjerovati nijednom statusu u datoteci.
+//  - Tok auth -> mismatch-gate -> entitlement -> applyFixers -> vrati docx koristi postojecu,
+//    testiranu logiku (npm run check je pokriva kroz ciste funkcije).
+//  - Pohrana "do brisanja" (WS-6) je ZIVA: repair_jobs + Storage bucket postoje, a dovrsava se u
+//    pozadini (EdgeRuntime.waitUntil), pa odgovor nosi `storagePending` dok ishod jos nije poznat.
+//  - Rijeseni Deno caveati (potvrdjeni pri deployu): JSON uvoz u work-type-estimate.ts i
+//    deflate-raw (_deno-smoke.ts).
+//
+// Operativni podsjetnik: prije svakog deploya repair motora rucno pokreni Tier 2 provjere
+// (npm run verify:strict-open, npm run verify:word) - `npm run check` je samo Tier 0 i ne otvara
+// dokument nijednim stvarnim uredivacem.
 //
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
@@ -27,6 +33,14 @@ import { hashClientIpSalted } from '../_shared/hash-ip.ts';
 import { computeFingerprint } from '../../../src/fingerprint/fingerprint.ts';
 import { extractFingerprintInputFromDocx } from '../../../src/fingerprint/extract-from-docx.ts';
 import { readZip } from '../../../src/repair/zip-codec.ts';
+import { DOCX_MAX_UPLOAD_BYTES, REPAIR_MAX_REQUESTS, paramsWithinBudget } from '../../../src/repair/docx-budget.ts';
+import {
+  encodeRepairFrame,
+  REPAIR_BINARY_CONTENT_TYPE,
+  REPAIR_BINARY_REQUEST_HEADER,
+  REPAIR_BINARY_REQUEST_VALUE,
+} from '../../../src/report/repair-framing.ts';
+import { resolveParams, type ParamSource } from '../../../src/repair/param-authority.ts';
 import { isReportWorkType } from '../../../src/report/pricing.ts';
 import { decideReportAccess } from '../../../src/report/slot-logic.ts';
 import { coverageTierForStatus } from '../../../src/report/guarantee.ts';
@@ -59,8 +73,12 @@ const REPAIR_GATE = new ConcurrencyGate(Number(Deno.env.get('REPAIR_MAX_CONCURRE
 const REPAIR_STORAGE_DAILY_CAP = Number(Deno.env.get('REPAIR_STORAGE_DAILY_CAP') ?? '500');
 
 // Gornja granica uploada (sirovi docx). Base64 odgovor ~+33%; Edge memorija 256MB. Velik docx s
-// puno medija drzi na oku (WS-3 rizik). Uskladi s klijentskim uploadMaxBytes.
-const MAX_DOCX_BYTES = Number(Deno.env.get('REPAIR_MAX_DOCX_BYTES') ?? String(20 * 1024 * 1024));
+// puno medija drzi na oku (WS-3 rizik).
+//
+// Vrijednost se UVOZI iz src/repair/docx-budget.ts, ne ponavlja kao literal: prije je ovdje stajao
+// vlastiti `20 * 1024 * 1024` uz komentar "Uskladi s klijentskim uploadMaxBytes", dakle uskladjenost
+// je ovisila o tome da se netko sjeti promijeniti dva mjesta. Env override ostaje za hitne zahvate.
+const MAX_DOCX_BYTES = Number(Deno.env.get('REPAIR_MAX_DOCX_BYTES') ?? String(DOCX_MAX_UPLOAD_BYTES));
 
 // Provjera postojanja domacih izvora u M4 korpusu (plan docs/PLAN_KORPUS_PROVJERA_IZVORA.md, K3).
 // Placeni dodatak uz popravak; besplatni sloj se NE mijenja i ostaje 100% lokalan. Konfiguracija i
@@ -106,6 +124,55 @@ function toBase64(bytes: Uint8Array): string {
 }
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+/** Koliko dugo slot vrijedi ako ga nitko ne oslobodi (proces umro, runtime presjekao). */
+const REPAIR_SLOT_LEASE_SECONDS = Number(Deno.env.get('REPAIR_SLOT_LEASE_SECONDS') ?? '300');
+
+/**
+ * Preuzmi GLOBALNI slot popravka iz baze (audit DOCX-06).
+ *
+ * Tri ishoda, i sva tri su namjerna:
+ *   - `ok`     : slot dobiven, `release()` ga vraca (jednokratno);
+ *   - `full`   : globalni limit dosegnut -> 503, kao i kod per-instance gatea;
+ *   - `absent` : RPC ne postoji ili je pao. Tada se NE blokira popravak, nego se pada natrag na
+ *                per-instance gate, uz glasan log. Razlog: isporuka koda i isporuka migracije nisu
+ *                atomarne, pa bi tvrdo ponasanje znacilo da svaki popravak pada u prozoru izmedju
+ *                dva deploya. To NIJE tiho popustanje: stanje se logira, a nestaje cim 0094 prodje.
+ */
+async function acquireGlobalSlot(
+  admin: any,
+): Promise<{ kind: 'ok'; release: () => Promise<void> } | { kind: 'full' } | { kind: 'absent'; release: null }> {
+  try {
+    const { data, error } = await admin.rpc('try_acquire_repair_slot', {
+      p_max: Number(Deno.env.get('REPAIR_MAX_CONCURRENT') ?? '4'),
+      p_lease_seconds: REPAIR_SLOT_LEASE_SECONDS,
+    });
+    if (error) {
+      console.error('[repair-docx] globalni slot nedostupan, padam na per-instance gate', error.message);
+      return { kind: 'absent', release: null };
+    }
+    if (!data) return { kind: 'full' };
+
+    let released = false;
+    return {
+      kind: 'ok',
+      release: async () => {
+        if (released) return;
+        released = true;
+        const { error: relErr } = await admin.rpc('release_repair_slot', { p_id: data });
+        // Neoslobodjen slot nije trajan kvar: lease ga pocisti pri sljedecem preuzimanju. Log
+        // postoji da se ne cini kao da je sve u redu dok se kapacitet tise smanjuje.
+        if (relErr) console.error('[repair-docx] globalni slot nije oslobodjen', relErr.message);
+      },
+    };
+  } catch (e) {
+    console.error('[repair-docx] globalni slot: neocekivana greska, padam na per-instance gate', e);
+    return { kind: 'absent', release: null };
+  }
+}
+
+
+
 
 // WS-6: pohrani original + rezultat vezano uz korisnika (retencija "do brisanja"). Migracija
 // 0026_repair_jobs.sql daje tablicu repair_jobs (RLS select-own) + privatni bucket 'repair'.
@@ -161,13 +228,50 @@ Deno.serve(async (req: Request) => {
   const cors = corsHeadersFor(req.headers.get('Origin'), ALLOWED_ORIGINS);
   const json = (body: unknown, status = 200): Response =>
     new Response(JSON.stringify(body), { status, headers: { ...cors, 'content-type': 'application/json' } });
+
+  /**
+   * Odgovor koji nosi popravljeni dokument (audit DOCX-05).
+   *
+   * Klijent koji posalje `X-Lekta-Response: binary` dobiva okvir (metapodaci + sirovi bajtovi), pa
+   * u memoriji nestaju DVIJE velike kopije: base64 string (~1,33x dokumenta) i jos jedna njegova
+   * kopija unutar JSON.stringify. Za dokument od 20 MB to je oko 54 MB manje, na runtimeu koji
+   * ima 256 MB.
+   *
+   * Klijent koji to ne trazi dobiva zatecen JSON s `docxBase64`. Prijelazno razdoblje je nuzno:
+   * deploy nije atomaran i stranice iz predmemorije jos govore stari oblik, a popravak im ne
+   * smije puknuti.
+   */
+  const docxResponse = (docxBytes: Uint8Array, extra: Record<string, unknown>): Response => {
+    if (req.headers.get(REPAIR_BINARY_REQUEST_HEADER) !== REPAIR_BINARY_REQUEST_VALUE) {
+      return json({ docxBase64: toBase64(docxBytes), ...extra }, 200);
+    }
+    // `as Uint8Array<ArrayBuffer>`: isti obrazac kao u zip-codec.ts. TS 5.7 razlikuje
+    // ArrayBufferLike od ArrayBuffer, a BodyInit trazi uzi tip; sadrzaj je isti.
+    return new Response(encodeRepairFrame(extra, docxBytes) as Uint8Array<ArrayBuffer>, {
+      status: 200,
+      headers: { ...cors, 'content-type': REPAIR_BINARY_CONTENT_TYPE },
+    });
+  };
   // Mjerenje trajanja po fazama: bez njega je "popravak je spor" osjecaj, ne podatak. Ispisuje se
   // jednim retkom na kraju uspjesnog puta (koraci koji izadju ranije ionako nisu spori).
   const t0 = performance.now();
   const ms = (from: number) => Math.round(performance.now() - from);
   // Postavlja se true tek nakon uspjesnog REPAIR_GATE.tryAcquire(); finally ispod smije zvati
   // release() SAMO tada (ranije 401/disabled/OPTIONS izlazi nikad nisu uzeli slot).
-  let gateAcquired = false;
+  let releaseGate: (() => void) | null = null;
+  /** Oslobadjanje GLOBALNOG (bazom vodjenog) slota; null kad ga nema (vidi acquireGlobalSlot). */
+  let releaseGlobalSlot: (() => Promise<void>) | null = null;
+  /**
+   * Je li oslobadjanje slota PREDANO pozadinskom zadatku (audit DOCX-07).
+   *
+   * Slot se do sada oslobadjao cim handler vrati odgovor, a NAJTEZI dio (dva Storage uploada, do
+   * 2 x 20 MB) tek tada krece u `EdgeRuntime.waitUntil`. Gate je time stitio laksi dio posla i
+   * puštao nove zahtjeve tocno dok instanca jos gura desetke megabajta.
+   *
+   * Kad pohrana ide u pozadinu, slot drzi ONA i oslobadja ga kad zavrsi; `finally` ispod ga tada
+   * ne smije dirati, inace bi se otpustio dvaput.
+   */
+  let gateHandedOff = false;
   try {
     if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
     if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
@@ -183,10 +287,29 @@ Deno.serve(async (req: Request) => {
     // Concurrency gate: NAKON autha (necemo brojati neautorizirani sum), PRIJE ijednog teskog
     // koraka (multipart parsing, zip citanje, applyFixers). release() u finally ispod jamci
     // oslobadjanje na SVAKOM izlazu (rani return, uspjeh ili baceni izuzetak).
-    if (!REPAIR_GATE.tryAcquire()) return json({ error: 'busy' }, 503);
-    gateAcquired = true;
+    // `acquire()` vraca JEDNOKRATNO oslobadjanje: drugi poziv je no-op. Bitno je otkad slot drzi
+    // pozadinska pohrana, jer tada postoje dva mjesta koja bi ga mogla otpustiti (ovaj `finally`
+    // i zavrsetak pohrane), a dvostruko otpustanje bi oslobodilo TUDJI slot.
+    releaseGate = REPAIR_GATE.acquire();
+    if (!releaseGate) return json({ error: 'busy' }, 503);
 
-    // 2. multipart: 'file' (.docx binarno) + 'meta' (JSON: workType, parsedStructure, signals, requests,
+    /**
+     * GLOBALNA brana preko baze (audit DOCX-06).
+     *
+     * Gate iznad je brojac u memoriji JEDNE instance. Edge funkcije se autoskaliraju, pa uz limit 4
+     * i pet toplih instanci u letu moze biti 20 popravaka: brana koja se mnozi s brojem instanci
+     * nije brana nego dojam brane. Slot iz baze je jedan za sve instance.
+     *
+     * DEGRADACIJA JE NAMJERNA I GLASNA: dok migracija 0094 nije primijenjena, RPC ne postoji i
+     * ostaje ponasanje kakvo je i danas (per-instance gate). Alternativa bi bila srusiti popravak
+     * na svakom pozivu dok se migracija ne primijeni, a to bi znacilo da isporuka koda i isporuka
+     * migracije moraju biti atomarne, sto nisu. Zato se pad RPC-a NE tretira kao "nema mjesta".
+     */
+    const globalSlot = await acquireGlobalSlot(admin);
+    if (globalSlot.kind === 'full') return json({ error: 'busy' }, 503);
+    releaseGlobalSlot = globalSlot.release;
+
+    // 2. multipart: 'file' (.docx binarno) + 'meta' (JSON: workType, signals, requests,
     //    profileStatus, profileRef, confirmedMismatch, references).
     //    Iz meta je izostavljen tekst RADA (ostaju brojevi i enumi); jedina iznimka su `references`,
     //    tj. naslovi i godine iz popisa literature, koji su nuzni za provjeru postojanja izvora
@@ -203,11 +326,24 @@ Deno.serve(async (req: Request) => {
     if (docxBytes.length === 0 || docxBytes.length > MAX_DOCX_BYTES) return json({ error: 'payload_too_large' }, 413);
     // brzi sanity: docx je ZIP (PK\x03\x04). Puni intake-gate (zip bomba/entry-cap) je u parseru; ovdje
     // applyFixers ionako baca na nevaljan docx (hvatamo nize).
-    if (!(docxBytes[0] === 0x50 && docxBytes[1] === 0x4b)) return json({ error: 'not_a_docx' }, 415);
+    //
+    // Provjeravaju se SVA CETIRI bajta lokalnog zaglavlja, ne samo "PK" (audit SEC-21). Sam par
+    // PK dijele i prazan arhiv (PK 05 06) i raspareni segment (PK 07 08), koji nisu ulaz s kojim
+    // ovaj put smije raditi. Isto vec radi field-render, pa su dvije ulazne tocke sada jednako
+    // stroge umjesto da jedna bude slabija bez razloga.
+    const ZIP_LOCAL_HEADER = [0x50, 0x4b, 0x03, 0x04];
+    if (!ZIP_LOCAL_HEADER.every((b, i) => docxBytes[i] === b)) return json({ error: 'not_a_docx' }, 415);
 
     let meta: any = null;
     try { meta = JSON.parse(metaRaw); } catch { meta = null; }
-    if (!meta || !isReportWorkType(meta.workType) || !meta.parsedStructure) return json({ error: 'bad_request' }, 400);
+    // `parsedStructure` se od 2026-08-17 vise NE trazi (audit DOCX-01/02). Bio je obavezan, a
+    // koristio se iskljucivo kao presence-check: otisak se racuna iz stvarnih bajtova uploadanog
+    // zipa (vidi RE-18 nize), ne iz njega. Time je popravak na svaki poziv primao naslov, autora i
+    // naslove poglavlja, dakle doslovan tekst rada, bez ijedne funkcije.
+    //
+    // Stariji klijenti iz predmemorije ga jos salju; polje se jednostavno ignorira, pa nema
+    // prijelaznog razdoblja u kojem bi im popravak pukao.
+    if (!meta || !isReportWorkType(meta.workType)) return json({ error: 'bad_request' }, 400);
     const workType = meta.workType;
     const now = new Date().toISOString();
 
@@ -227,12 +363,40 @@ Deno.serve(async (req: Request) => {
     }
 
     // 4. validacija fixer-zahtjeva: samo poznati I ZIVI fixeri (K5/K6/K7 tamni dok WS-4 ne prodje).
+    //
+    // RE-62 (2026-08-16): CILJANA VRIJEDNOST se od sada izvodi na serveru, iz pecenog recepta
+    // (param-authority.ts), a ne preuzima od klijenta. Do sada je klijent slao i `params`, pa je
+    // rucno skrojen zahtjev mogao traziti npr. margine koje nijedan profil ne propisuje - server
+    // ih je samo tipski sanirao i primijenio. Klijentov `params` sada vrijedi SAMO tamo gdje
+    // fakultetskog pravila nema (univerzalna higijena), i to se izricito biljezi u odgovoru.
     const rawReqs: any[] = Array.isArray(meta.requests) ? meta.requests : [];
-    if (!rawReqs.length || rawReqs.length > 64) return json({ error: 'bad_request' }, 400);
+    if (!rawReqs.length || rawReqs.length > REPAIR_MAX_REQUESTS) return json({ error: 'bad_request' }, 400);
+    const profileRefForParams: string | null = typeof meta.profileRef === 'string' ? meta.profileRef : null;
     const requests: FixerRequest[] = [];
+    const paramSources: Record<string, ParamSource> = {};
+    /**
+     * Zahtjevi koje server NE prepoznaje (audit DOCX-13).
+     *
+     * Do sada su se tiho preskakali: korisnik bi poslao stavku, dobio dokument i vjerovao da je
+     * primijenjena, iako je server nikad nije vidio kao zivu. Tisina je ovdje najgori ishod, jer
+     * je nerazlucva od uspjeha. Sada se vracaju u odgovoru pa ih sucelje moze prikazati.
+     */
+    const unknownFixers: string[] = [];
     for (const r of rawReqs) {
-      if (!r || typeof r.fixerId !== 'string' || !LIVE_FIXERS.has(r.fixerId)) continue; // tihi preskok tamnih
-      requests.push({ fixerId: r.fixerId, ruleId: String(r.ruleId ?? r.fixerId), params: (r.params && typeof r.params === 'object') ? r.params : {} });
+      if (!r || typeof r.fixerId !== 'string' || !LIVE_FIXERS.has(r.fixerId)) {
+        if (r && typeof r.fixerId === 'string') unknownFixers.push(r.fixerId.slice(0, 80));
+        continue;
+      }
+      const ruleId = String(r.ruleId ?? r.fixerId);
+      const clientParams = (r.params && typeof r.params === 'object') ? r.params : {};
+      // Broj zahtjeva je bio ogranicen, ali NJIHOV SADRZAJ nije (audit DOCX-14): jedan zahtjev
+      // mogao je nositi niz od desetaka tisuca indeksa i time napuhati obradu unutar dopustenih
+      // 64 zahtjeva. Prekoracenje se ODBIJA glasno, ne preskace tiho.
+      const budget = paramsWithinBudget(clientParams);
+      if (!budget.ok) return json({ error: 'bad_request', reason: budget.reason }, 400);
+      const resolved = resolveParams(profileRefForParams, ruleId, r.fixerId, clientParams);
+      paramSources[ruleId] = resolved.source;
+      requests.push({ fixerId: r.fixerId, ruleId, params: resolved.params });
     }
     if (!requests.length) return json({ error: 'no_live_fixers' }, 422);
 
@@ -385,12 +549,11 @@ Deno.serve(async (req: Request) => {
       const tCorpus = performance.now();
       const sourceCheck = await corpusPromise;
       console.log(`[repair-docx] timings repair=${msRepair} store=0 corpus=${ms(tCorpus)} total=${ms(t0)} (nula izmjena)`);
-      return json({
-        docxBase64: toBase64(result.docxBytes),
+      return docxResponse(result.docxBytes, {
         fileName: (meta.fileName ? String(meta.fileName).replace(/\.docx$/i, '') : 'rad') + '-popravljeno.docx',
         changelog: [], skipped: result.skipped, skippedReasons: result.skippedReasons,
         slotId: null, jobId: null, fingerprint, sourceCheck,
-      }, 200);
+      });
     }
 
     // RE-17: popravak je STVARNO nesto promijenio - tek sada trosimo slot/kvotu.
@@ -405,12 +568,24 @@ Deno.serve(async (req: Request) => {
     // ijednog Storage uploada. Prekoracenje NIKAD ne kvari sam popravak (docx se svejedno
     // vraca korisniku), samo se preskace pohrana - isto fail-open ponasanje kao vec postojeci
     // slucajevi gdje storeRepairJob vrati null (Storage/DB pad).
-    const { count: recentJobCount } = await admin
+    const { count: recentJobCount, error: quotaErr } = await admin
       .from('repair_jobs')
       .select('id', { count: 'exact', head: true })
       .gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString());
-    const storageAllowed = !storageQuotaExceeded(recentJobCount ?? 0, REPAIR_STORAGE_DAILY_CAP);
-    if (!storageAllowed) {
+    // NEUSPJEH UPITA NIJE ISTO STO I "NULA POSLOVA" (audit DOCX-12). Prije se `count` samo
+    // defaultirao na 0, pa je pad upita znacio "kvota je prazna, samo naprijed": globalni dnevni
+    // strop tada nije stitio nista upravo kad je baza u problemu.
+    //
+    // Fail-closed je ovdje jeftin jer je preskakanje pohrane BEZOPASNO za korisnika: popravljeni
+    // docx se svejedno vraca u odgovoru, gubi se samo zapis u "Moji popravci", a sucelje o tome
+    // posteno izvijesti (jobId: null). Cijena pogresne procjene u drugom smjeru je neogranicen
+    // rast Storagea bez ijednog dokaza da kapacitet postoji.
+    const storageAllowed = quotaErr
+      ? false
+      : !storageQuotaExceeded(recentJobCount ?? 0, REPAIR_STORAGE_DAILY_CAP);
+    if (quotaErr) {
+      console.error('[repair-docx] storage-kvota NEPOZNATA (upit pao), preskacem pohranu', quotaErr);
+    } else if (!storageAllowed) {
       console.warn(`[repair-docx] storage-kvota dosegnuta (${recentJobCount ?? 0}/${REPAIR_STORAGE_DAILY_CAP}), preskacem pohranu`);
     }
 
@@ -439,7 +614,21 @@ Deno.serve(async (req: Request) => {
     let msStore = 0;
     if (storeTask) {
       if (typeof bg === 'function') {
-        bg.call((globalThis as any).EdgeRuntime, storeTask);
+        // Slot ostaje zauzet dok pohrana traje (DOCX-07). `storeTask` sam po sebi ne baca (ima
+        // vlastiti try/catch), ali `finally` je svejedno ispravan oblik: oslobadjanje ne smije
+        // ovisiti o tome hoce li netko kasnije dodati granu koja baca.
+        gateHandedOff = true;
+        const releaseAfterStore = releaseGate;
+        const releaseGlobalAfterStore = releaseGlobalSlot;
+        bg.call(
+          (globalThis as any).EdgeRuntime,
+          storeTask.finally(async () => {
+            // Oba slota drzi pohrana: per-instance i globalni. Globalni se oslobadja prvi jer je
+            // on stvarna granica; per-instance je jos samo jeftina lokalna zastita.
+            await releaseGlobalAfterStore?.();
+            releaseAfterStore?.();
+          }),
+        );
       } else {
         await storeTask;
         msStore = ms(tStore);
@@ -453,8 +642,7 @@ Deno.serve(async (req: Request) => {
     console.log(`[repair-docx] timings repair=${msRepair} store=${msStore} corpus=${ms(tCorpus)} total=${ms(t0)}`);
 
     const traceToken = await sha256Hex(`${slotId}.${now}.${user.id}`);
-    return json({
-      docxBase64: toBase64(result.docxBytes),
+    return docxResponse(result.docxBytes, {
       fileName: (meta.fileName ? String(meta.fileName).replace(/\.docx$/i, '') : 'rad') + '-popravljeno.docx',
       changelog: result.changelog,
       skipped: result.skipped,
@@ -463,11 +651,26 @@ Deno.serve(async (req: Request) => {
       // nije vidljiv u "Moji popravci". Klijent zato ne smije tvrditi da je spremljeno. Kad je
       // jobId null (storage-kvota dosegnuta), pending je uvijek false: pohrana nije ni pokusana.
       slotId, jobId, storagePending: !!jobId && typeof bg === 'function', traceToken, fingerprint, sourceCheck,
-    }, 200);
+      // ruleId -> je li ciljanu vrijednost izveo SERVER iz profila ('profile') ili je preuzeta od
+      // klijenta jer za to pravilo nema fakultetskog zapisa ('client'). Bez ovoga sucelje ne moze
+      // posteno razlikovati "popravljeno prema pravilu tvog fakulteta" od "popravljeno prema
+      // opcoj preporuci", a upravo je ta razlika ono sto Lekta prodaje.
+      paramSources,
+      // Zahtjevi koje server nije prepoznao kao zive (audit DOCX-13). Izostavljeno kad ih nema, da
+      // sucelje ne mora razlikovati praznu listu od nepostojanja polja.
+      ...(unknownFixers.length ? { unknownFixers } : {}),
+    });
   } catch (e) {
     console.error('[repair-docx]', e);
     return json({ error: 'internal' }, 500);
   } finally {
-    if (gateAcquired) REPAIR_GATE.release();
+    // Kad je pohrana preuzela slot, ona ga i oslobadja; dvostruko otpustanje bi trajno napuhalo
+    // broj slobodnih mjesta i gate bi prestao biti granica.
+    if (!gateHandedOff) {
+      // `void`: oslobadjanje globalnog slota je mrezni poziv, a `finally` ne smije produljiti
+      // odgovor. Neuspjeh se logira unutar release(), a lease ga ionako pocisti.
+      void releaseGlobalSlot?.();
+      releaseGate?.();
+    }
   }
 });

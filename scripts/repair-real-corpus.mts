@@ -7,9 +7,15 @@ import { runRealCorpus } from '../tests/real-corpus/harness';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outIndex = process.argv.indexOf('--out');
 const outputDir = outIndex >= 0 && process.argv[outIndex + 1] ? resolve(root, process.argv[outIndex + 1]) : undefined;
-const report = await runRealCorpus(undefined, { ...(outputDir ? { outputDir } : {}) });
+const includeLocal = process.argv.includes('--local') || process.env.LEKTA_LOCAL_CORPUS === '1';
+const report = await runRealCorpus(undefined, { ...(outputDir ? { outputDir } : {}), includeLocal });
 mkdirSync(join(root, 'docs', 'generated'), { recursive: true });
-writeFileSync(join(root, 'docs', 'generated', 'repair-real-corpus.json'), JSON.stringify(report, null, 2) + '\n');
+// Commitani izvjestaj mora ostati REPRODUCIBILAN u CI-ju, pa opisuje iskljucivo commitane fixture
+// (tests/real-corpus.test.ts ga usporedjuje s vlastitim pokretanjem). Mjerenje koje ukljucuje
+// lokalne, necommitane radove ide u zaseban, gitignoriran izvjestaj: inace bi commitani artefakt
+// tvrdio brojke koje nitko osim vlasnika diska ne moze ponoviti.
+const reportPath = includeLocal ? 'repair-real-corpus.local.json' : 'repair-real-corpus.json';
+writeFileSync(join(root, 'docs', 'generated', reportPath), JSON.stringify(report, null, 2) + '\n');
 
 if (outputDir) {
   const reviewManifest = report.results
@@ -35,6 +41,6 @@ if (outputDir) {
 console.log('=== Repair real corpus ===');
 console.log(`dokumen: ${report.summary.documentCount}, promijenjeno: ${report.summary.changedDocumentCount}`);
 console.log(`no-op: ${report.summary.noOpCount}, za pregled: ${report.summary.reviewCount}, pad: ${report.summary.failCount}`);
-console.log(`zapisano: docs/generated/repair-real-corpus.json`);
+console.log(`zapisano: docs/generated/${reportPath}`);
 if (outputDir) console.log(`paket za ručni pregled: ${outputDir}`);
 if (report.summary.failCount > 0) process.exitCode = 1;
