@@ -17,21 +17,69 @@ Deno.serve(async (req) => {
   if (!isCronAuthorized(req, CRON_SECRET)) return json({ error: 'unauthorized' }, 401);
   if (!APP_URL || !WORKER_TOKEN) return json({ error: 'worker_dispatcher_not_configured' }, 503);
 
-  const { data: runs, error } = await supabase
+  /**
+   * ATOMSKO PREUZIMANJE RUNOVA (audit OPS-18, OPS-20).
+   *
+   * Prije se runovi samo CITALI (`select` po statusu), pa su dva ticka, ili cron i rucno
+   * okidanje, vidjeli isti skup i oba ga dispatchala. Uz to je djelomican neuspjeh vracao 502,
+   * pa bi ponovni pokusaj ponovno poslao i one runove koji su vec uspjeli.
+   *
+   * Preuzimanje je UPDATE s uvjetom `updated_at < cutoff`: run se smatra zauzetim LEASE_MS nakon
+   * sto ga netko dohvati. Drugi tick tada vise ne vidi te retke, jer im je `updated_at` upravo
+   * pomaknut. Ne treba nova kolona ni migracija; koristi se ista kolona po kojoj se ionako
+   * sortira.
+   */
+  const LEASE_MS = 10 * 60 * 1000;
+  const cutoff = new Date(Date.now() - LEASE_MS).toISOString();
+
+  const { data: candidates, error } = await supabase
     .from('agent_runs')
-    .select('run_id')
+    .select('run_id, updated_at')
     .in('status', ['pending', 'running'])
+    .lt('updated_at', cutoff)
     .order('updated_at', { ascending: true })
     .limit(MAX_RUNS_PER_TICK);
   if (error) return json({ error: 'run_queue_unavailable' }, 503);
 
-  const dispatched = await dispatchAgentRuns(runs || [], {
+  const candidateIds = (candidates || []).map((r) => r.run_id).filter((id): id is string => typeof id === 'string');
+  if (!candidateIds.length) return json({ dispatched: 0, failed: 0, deferred: 0, claimed: 0 }, 200);
+
+  // Uvjet `lt(cutoff)` se PONAVLJA u updateu: samo tako je preuzimanje stvarno atomicno. Tick koji
+  // je u medjuvremenu preuzeo iste retke vec im je pomaknuo updated_at, pa ih ovaj vise ne dobiva.
+  const { data: claimed, error: claimErr } = await supabase
+    .from('agent_runs')
+    .update({ updated_at: new Date().toISOString() })
+    .in('run_id', candidateIds)
+    .lt('updated_at', cutoff)
+    .select('run_id');
+  if (claimErr) return json({ error: 'run_claim_failed' }, 503);
+
+  const runs = claimed || [];
+  if (!runs.length) return json({ dispatched: 0, failed: 0, deferred: 0, claimed: 0 }, 200);
+
+  // Budzet ticka drzi trajanje ispod Edge runtime limita (OPS-19): serijska petlja s 180 s po runu
+  // mogla je inace trajati do 30 minuta.
+  const TICK_BUDGET_MS = 100_000;
+  const dispatched = await dispatchAgentRuns(runs, {
     appUrl: APP_URL,
     workerToken: WORKER_TOKEN,
-    timeoutMs: 180_000,
+    timeoutMs: 45_000,
     maxRuns: MAX_RUNS_PER_TICK,
+    deadlineAt: Date.now() + TICK_BUDGET_MS,
   });
-  return json({ dispatched: dispatched.results.length, failed: dispatched.failed }, dispatched.failed ? 502 : 200);
+
+  // 200 i kod djelomicnog neuspjeha (OPS-20): 502 je navodio cron i monitoring na ponavljanje
+  // CIJELOG ticka, cime bi se vec uspjeli runovi dispatchali drugi put. Neuspjeli runovi se
+  // ionako sami vrate u red kad im lease istekne, pa ponavljanje nije potrebno.
+  return json(
+    {
+      dispatched: dispatched.results.length,
+      failed: dispatched.failed,
+      deferred: dispatched.deferred,
+      claimed: runs.length,
+    },
+    200,
+  );
 });
 
 function normalizeBatch(value: string | undefined): number {

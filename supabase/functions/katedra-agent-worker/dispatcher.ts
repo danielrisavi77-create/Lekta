@@ -8,6 +8,15 @@ export interface DispatchOptions {
   timeoutMs: number;
   fetchImpl?: DispatcherFetch;
   maxRuns?: number;
+  /**
+   * Trenutak do kojeg se smije dispatchati (ms od epohe). Kad se dosegne, preostali runovi se NE
+   * salju i prijavljuju se kao odgodjeni (audit OPS-19).
+   *
+   * Bez ovoga je jedan tick mogao trajati do 10 runova x 180 s = 30 minuta, jer je petlja
+   * serijska. Edge funkcija toliko ne zivi, pa bi je runtime prekinuo na pola: dio runova bi bio
+   * poslan, dio ne, a pozivatelj ne bi znao dokle se stiglo.
+   */
+  deadlineAt?: number;
 }
 
 export interface DispatchResult {
@@ -18,6 +27,8 @@ export interface DispatchResult {
 export interface DispatchBatchResult {
   results: DispatchResult[];
   failed: number;
+  /** Runovi koji nisu ni pokusani jer je istekao budzet ticka; sljedeci tick ih preuzima. */
+  deferred: number;
 }
 
 export type DispatcherFetch = (input: string, init?: RequestInit) => Promise<Response>;
@@ -35,8 +46,17 @@ export async function dispatchAgentRuns(
   const maxRuns = normalizeBatch(options.maxRuns);
   const results: DispatchResult[] = [];
   let malformed = 0;
+  let deferred = 0;
 
-  for (const run of runs.slice(0, maxRuns)) {
+  const selected = runs.slice(0, maxRuns);
+  for (let i = 0; i < selected.length; i++) {
+    const run = selected[i];
+    // Budzet ticka: prekini PRIJE novog poziva, ne usred njega. Preostali runovi ostaju
+    // neposlani i uredno se prijavljuju, umjesto da ih runtime presijece na pola.
+    if (options.deadlineAt !== undefined && Date.now() >= options.deadlineAt) {
+      deferred = selected.length - i;
+      break;
+    }
     const runId = typeof run.run_id === 'string' ? run.run_id.trim() : '';
     if (!RUN_ID_PATTERN.test(runId)) {
       malformed += 1;
@@ -61,6 +81,7 @@ export async function dispatchAgentRuns(
   return {
     results,
     failed: malformed + results.filter((result) => result.status < 200 || result.status >= 300).length,
+    deferred,
   };
 }
 

@@ -99,6 +99,56 @@ async function sendEmail(to: string, subject: string, html: string, unsubUrl: st
   return res.ok;
 }
 
+
+/**
+ * Najveci broj pretplata koje jedan poziv obradjuje (audit OPS-07).
+ *
+ * Prije se dohvacalo `select('*')` bez ikakvog ogranicenja, pa je jedan Edge poziv mogao ucitati
+ * SVE aktivne pretplate i onda ih serijski obradjivati do isteka runtime limita. Cron se vrti
+ * dnevno, pa je bolje obraditi omedjen paket i ostatak prepustiti sljedecem pokretanju nego
+ * pasti na pola posla i ne znati dokle se stiglo.
+ */
+const REMINDER_BATCH = 200;
+
+/**
+ * ATOMSKO PREUZIMANJE RAZINE (audit OPS-10, OPS-12).
+ *
+ * Prije se slalo pa TEK ONDA upisivao marker. Dvije posljedice:
+ *   - dva usporedna cron poziva (rucno okidanje uz redoviti, ili retry) oba bi vidjela `null`,
+ *     oba poslala poruku i korisnik bi dobio duplikat;
+ *   - ako bi e-mail otisao a upis markera pao, sljedeci bi ga cron poslao ponovno.
+ *
+ * Sada se marker postavlja PRVI, i to uvjetno: `is(col, null)` znaci da uspije samo JEDAN
+ * pozivatelj, ostali dobiju prazan rezultat i ne salju nista. Ako slanje poslije padne, marker se
+ * vraca na null (`releaseTier`) pa poruka nije trajno izgubljena.
+ *
+ * Preostaje uzak prozor: proces koji umre IZMEDJU uspjesnog slanja i... zapravo ne, jer je marker
+ * vec postavljen prije slanja; prozor je obrnut i sigurniji (moguc propusten podsjetnik, ne
+ * duplikat). Za podsjetnik je to ispravna strana kompromisa.
+ */
+async function claimTier(subscriptionId: string, column: string, now: Date): Promise<boolean> {
+  const { data, error } = await supabase
+    .from('deadline_subscriptions')
+    .update({ [column]: now.toISOString() })
+    .eq('id', subscriptionId)
+    .is(column, null)
+    .select('id');
+  if (error) {
+    console.error('[send-reminders] claim failed', { subscriptionId, column, error: error.message });
+    return false;
+  }
+  return Array.isArray(data) && data.length === 1;
+}
+
+/** Vrati razinu u neposlano stanje kad slanje padne, da je sljedeci cron moze pokusati ponovno. */
+async function releaseTier(subscriptionId: string, column: string): Promise<void> {
+  const { error } = await supabase
+    .from('deadline_subscriptions')
+    .update({ [column]: null })
+    .eq('id', subscriptionId);
+  if (error) console.error('[send-reminders] release failed', { subscriptionId, column, error: error.message });
+}
+
 function daysBetween(a: Date, b: Date): number {
   const ms = a.getTime() - b.getTime();
   return Math.floor(ms / (1000 * 60 * 60 * 24));
@@ -108,11 +158,20 @@ function daysBetween(a: Date, b: Date): number {
 // je zadrzano ime kolone iz 0012, ali sad znaci "dan predaje" (daysLeft<=0) - vidi komentar
 // na koloni u 0036_deadline_reminder_tiers.sql.
 async function processDeadlineReminders(): Promise<{ sent30d: number; sent14d: number; sent7d: number; sent72h: number; sent1d: number }> {
+  // Prozor po datumu (audit OPS-06/07): nijedna razina ne gadja rok dalji od 30 dana ni stariji
+  // od jednog dana, pa nema razloga uopce dohvacati te retke. Prije se dohvacalo SVE aktivne
+  // pretplate i filtriralo u JavaScriptu, sto raste s bazom umjesto s poslom koji stvarno postoji.
+  const windowStart = new Date(Date.now() - 2 * 86400000).toISOString().slice(0, 10);
+  const windowEnd = new Date(Date.now() + 31 * 86400000).toISOString().slice(0, 10);
   const { data: subs, error } = await supabase
     .from('deadline_subscriptions')
     .select('*')
     .is('unsubscribed_at', null)
-    .or('reminder_30d_sent_at.is.null,reminder_14d_sent_at.is.null,reminder_7d_sent_at.is.null,reminder_72h_sent_at.is.null,reminder_1d_sent_at.is.null');
+    .gte('deadline_date', windowStart)
+    .lte('deadline_date', windowEnd)
+    .or('reminder_30d_sent_at.is.null,reminder_14d_sent_at.is.null,reminder_7d_sent_at.is.null,reminder_72h_sent_at.is.null,reminder_1d_sent_at.is.null')
+    .order('deadline_date', { ascending: true })
+    .limit(REMINDER_BATCH);
 
   if (error || !subs) return { sent30d: 0, sent14d: 0, sent7d: 0, sent72h: 0, sent1d: 0 };
 
@@ -136,7 +195,7 @@ async function processDeadlineReminders(): Promise<{ sent30d: number; sent14d: n
       UNSUB_SECRET,
     );
 
-    if (daysLeft <= 30 && daysLeft > 14 && !sub.reminder_30d_sent_at) {
+    if (daysLeft <= 30 && daysLeft > 14 && !sub.reminder_30d_sent_at && (await claimTier(sub.id as string, 'reminder_30d_sent_at', now))) {
       const unsubUrl = `${UNSUB_BASE_URL}?token=${encodeURIComponent(await unsubToken())}`;
       const ok = await sendEmail(
         email,
@@ -146,13 +205,13 @@ async function processDeadlineReminders(): Promise<{ sent30d: number; sent14d: n
          <p><a href="${unsubUrl}">Odjavi ove podsjetnike</a></p>`,
         unsubUrl,
       );
-      if (ok) {
-        await supabase.from('deadline_subscriptions').update({ reminder_30d_sent_at: now.toISOString() }).eq('id', sub.id);
-        sent30d++;
-      }
+      // Marker je vec postavljen preuzimanjem; ako slanje padne, vrati ga da poruka ne bude
+      // trajno izgubljena.
+      if (ok) sent30d++;
+      else await releaseTier(sub.id as string, 'reminder_30d_sent_at');
     }
 
-    if (daysLeft <= 14 && daysLeft > 7 && !sub.reminder_14d_sent_at) {
+    if (daysLeft <= 14 && daysLeft > 7 && !sub.reminder_14d_sent_at && (await claimTier(sub.id as string, 'reminder_14d_sent_at', now))) {
       const unsubUrl = `${UNSUB_BASE_URL}?token=${encodeURIComponent(await unsubToken())}`;
       const ok = await sendEmail(
         email,
@@ -162,13 +221,13 @@ async function processDeadlineReminders(): Promise<{ sent30d: number; sent14d: n
          <p><a href="${unsubUrl}">Odjavi ove podsjetnike</a></p>`,
         unsubUrl,
       );
-      if (ok) {
-        await supabase.from('deadline_subscriptions').update({ reminder_14d_sent_at: now.toISOString() }).eq('id', sub.id);
-        sent14d++;
-      }
+      // Marker je vec postavljen preuzimanjem; ako slanje padne, vrati ga da poruka ne bude
+      // trajno izgubljena.
+      if (ok) sent14d++;
+      else await releaseTier(sub.id as string, 'reminder_14d_sent_at');
     }
 
-    if (daysLeft <= 7 && daysLeft > 3 && !sub.reminder_7d_sent_at) {
+    if (daysLeft <= 7 && daysLeft > 3 && !sub.reminder_7d_sent_at && (await claimTier(sub.id as string, 'reminder_7d_sent_at', now))) {
       const unsubUrl = `${UNSUB_BASE_URL}?token=${encodeURIComponent(await unsubToken())}`;
       const ok = await sendEmail(
         email,
@@ -178,13 +237,13 @@ async function processDeadlineReminders(): Promise<{ sent30d: number; sent14d: n
          <p><a href="${unsubUrl}">Odjavi ove podsjetnike</a></p>`,
         unsubUrl,
       );
-      if (ok) {
-        await supabase.from('deadline_subscriptions').update({ reminder_7d_sent_at: now.toISOString() }).eq('id', sub.id);
-        sent7d++;
-      }
+      // Marker je vec postavljen preuzimanjem; ako slanje padne, vrati ga da poruka ne bude
+      // trajno izgubljena.
+      if (ok) sent7d++;
+      else await releaseTier(sub.id as string, 'reminder_7d_sent_at');
     }
 
-    if (daysLeft <= 3 && daysLeft > 0 && !sub.reminder_72h_sent_at) {
+    if (daysLeft <= 3 && daysLeft > 0 && !sub.reminder_72h_sent_at && (await claimTier(sub.id as string, 'reminder_72h_sent_at', now))) {
       const unsubUrl = `${UNSUB_BASE_URL}?token=${encodeURIComponent(await unsubToken())}`;
       const ok = await sendEmail(
         email,
@@ -194,17 +253,17 @@ async function processDeadlineReminders(): Promise<{ sent30d: number; sent14d: n
          <p><a href="${unsubUrl}">Odjavi ove podsjetnike</a></p>`,
         unsubUrl,
       );
-      if (ok) {
-        await supabase.from('deadline_subscriptions').update({ reminder_72h_sent_at: now.toISOString() }).eq('id', sub.id);
-        sent72h++;
-      }
+      // Marker je vec postavljen preuzimanjem; ako slanje padne, vrati ga da poruka ne bude
+      // trajno izgubljena.
+      if (ok) sent72h++;
+      else await releaseTier(sub.id as string, 'reminder_72h_sent_at');
     }
 
     // Donja granica je OBAVEZNA (audit OPS-13). Bez nje bi svaki rok u proslosti kojem marker
     // nije postavljen (pretplata nastala nakon roka, propusten cron, rucno vracen marker) dobio
     // poruku "rok je danas", i to za datum od prije nekoliko mjeseci. -1 dan pokriva razliku u
     // vremenskim zonama izmedju baze i korisnika, a sve starije se tiho preskace.
-    if (daysLeft <= 0 && daysLeft >= -1 && !sub.reminder_1d_sent_at) {
+    if (daysLeft <= 0 && daysLeft >= -1 && !sub.reminder_1d_sent_at && (await claimTier(sub.id as string, 'reminder_1d_sent_at', now))) {
       const unsubUrl = `${UNSUB_BASE_URL}?token=${encodeURIComponent(await unsubToken())}`;
       const ok = await sendEmail(
         email,
@@ -214,10 +273,10 @@ async function processDeadlineReminders(): Promise<{ sent30d: number; sent14d: n
          <p><a href="${unsubUrl}">Odjavi ove podsjetnike</a></p>`,
         unsubUrl,
       );
-      if (ok) {
-        await supabase.from('deadline_subscriptions').update({ reminder_1d_sent_at: now.toISOString() }).eq('id', sub.id);
-        sent1d++;
-      }
+      // Marker je vec postavljen preuzimanjem; ako slanje padne, vrati ga da poruka ne bude
+      // trajno izgubljena.
+      if (ok) sent1d++;
+      else await releaseTier(sub.id as string, 'reminder_1d_sent_at');
     }
   }
 
