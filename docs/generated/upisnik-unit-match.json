@@ -1,0 +1,1521 @@
+{
+  "proposals": [
+    {
+      "executor": "Agricultural University of Athens, Helenska Republika",
+      "match": null,
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "Breda University of Applied Sciences",
+      "match": null,
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "EFFECTUS veleučilište",
+      "match": {
+        "unitId": "effectus",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "Evanđeosko teološko veleučilište",
+      "match": {
+        "unitId": "evtos",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.67"
+      },
+      "alternatives": [],
+      "programCount": 2
+    },
+    {
+      "executor": "Fakulteta za upravo, Univerza v Ljubljani",
+      "match": null,
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "Flensburg University of Applied Sciences",
+      "match": null,
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "Hrvatsko katoličko sveučilište",
+      "match": {
+        "unitId": "hks",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 17
+    },
+    {
+      "executor": "Hrvatsko katoličko sveučilište, Medicinski fakultet",
+      "match": {
+        "unitId": "hks",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "mef"
+      ],
+      "programCount": 2
+    },
+    {
+      "executor": "Istarsko veleučilište, Pula",
+      "match": {
+        "unitId": "iv",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.50"
+      },
+      "alternatives": [],
+      "programCount": 4
+    },
+    {
+      "executor": "Klaipedos Universitetas, Republika Litva",
+      "match": null,
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "La Rochelle Universite, Francuska Republika",
+      "match": null,
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "Libertas Međunarodno sveučilište",
+      "match": {
+        "unitId": "libertas",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.50"
+      },
+      "alternatives": [],
+      "programCount": 17
+    },
+    {
+      "executor": "Lithuanian Sports University, Faculty of Sports Biomedicine",
+      "match": null,
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "Masarykova univerzita (Brno, Češka)",
+      "match": null,
+      "alternatives": [],
+      "programCount": 2
+    },
+    {
+      "executor": "Međimursko veleučilište u Čakovcu",
+      "match": {
+        "unitId": "mev",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 4
+    },
+    {
+      "executor": "Poslovno veleučilište Zagreb",
+      "match": {
+        "unitId": "pvzg",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 2
+    },
+    {
+      "executor": "RIT Croatia",
+      "match": {
+        "unitId": "rit",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.67"
+      },
+      "alternatives": [],
+      "programCount": 4
+    },
+    {
+      "executor": "Sveučilište Algebra",
+      "match": {
+        "unitId": "algebra",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.50"
+      },
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku",
+      "match": null,
+      "alternatives": [
+        "biolos",
+        "efos",
+        "fazos"
+      ],
+      "programCount": 1
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku - Odjel za biologiju",
+      "match": {
+        "unitId": "biolos",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "efos",
+        "fizos",
+        "kemos"
+      ],
+      "programCount": 4
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku - Odjel za fiziku",
+      "match": {
+        "unitId": "fizos",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "efos",
+        "biolos",
+        "kemos"
+      ],
+      "programCount": 2
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku - Odjel za kemiju",
+      "match": {
+        "unitId": "kemos",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "efos",
+        "fizos",
+        "biolos"
+      ],
+      "programCount": 3
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Akademija za umjetnost i kulturu u Osijeku",
+      "match": {
+        "unitId": "uaos",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "efos",
+        "fizos",
+        "kemos"
+      ],
+      "programCount": 2
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Ekonomski fakultet u Osijeku",
+      "match": {
+        "unitId": "efos",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "efzg",
+        "biolos",
+        "fizos"
+      ],
+      "programCount": 11
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Fakultet agrobiotehničkih znanosti Osijek",
+      "match": {
+        "unitId": "fazos",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "foozos",
+        "ffos",
+        "kifos"
+      ],
+      "programCount": 23
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Fakultet elektrotehnike, računarstva i informacijskih tehnologija",
+      "match": {
+        "unitId": "ferit",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.89"
+      },
+      "alternatives": [
+        "biolos",
+        "efos",
+        "fizos"
+      ],
+      "programCount": 9
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Fakultet primijenjene matematike i informatike",
+      "match": {
+        "unitId": "mathos",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.88"
+      },
+      "alternatives": [
+        "efos",
+        "fizos",
+        "kemos"
+      ],
+      "programCount": 4
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Fakultet turizma i ruralnog razvoja u Požegi",
+      "match": {
+        "unitId": "ftrr",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "biolos",
+        "efos",
+        "fizos"
+      ],
+      "programCount": 5
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Fakultet za dentalnu medicinu i zdravstvo",
+      "match": {
+        "unitId": "fdmz",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.88"
+      },
+      "alternatives": [
+        "efos",
+        "biolos",
+        "fizos"
+      ],
+      "programCount": 14
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Fakultet za odgojne i obrazovne znanosti",
+      "match": {
+        "unitId": "foozos",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.88"
+      },
+      "alternatives": [
+        "fazos",
+        "efos",
+        "biolos"
+      ],
+      "programCount": 3
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Filozofski fakultet",
+      "match": {
+        "unitId": "ffos",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.83"
+      },
+      "alternatives": [
+        "ffzg",
+        "biolos",
+        "efos"
+      ],
+      "programCount": 27
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Građevinski i arhitektonski fakultet Osijek",
+      "match": {
+        "unitId": "grafos",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "arh",
+        "ffos",
+        "kifos"
+      ],
+      "programCount": 9
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Katolički bogoslovni fakultet u Đakovu",
+      "match": {
+        "unitId": "kbf",
+        "confidence": "strong",
+        "reason": "poklapa se naziv sastavnice, ustanova nije potvrdjena"
+      },
+      "alternatives": [
+        "kbfdj",
+        "biolos",
+        "efos"
+      ],
+      "programCount": 1
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Kineziološki fakultet Osijek",
+      "match": {
+        "unitId": "kifos",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "kif",
+        "ffos",
+        "mefos"
+      ],
+      "programCount": 2
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Medicinski fakultet Osijek",
+      "match": {
+        "unitId": "mefos",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "mef",
+        "ffos",
+        "kifos"
+      ],
+      "programCount": 15
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Pravni fakultet Osijek",
+      "match": {
+        "unitId": "pravos",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "pravo",
+        "ffos",
+        "kifos"
+      ],
+      "programCount": 8
+    },
+    {
+      "executor": "Sveučilište Josipa Jurja Strossmayera u Osijeku, Prehrambeno-tehnološki fakultet Osijek",
+      "match": {
+        "unitId": "ptfos",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "kifos",
+        "mefos",
+        "pravos"
+      ],
+      "programCount": 12
+    },
+    {
+      "executor": "Sveučilište Jurja Dobrile u Puli",
+      "match": null,
+      "alternatives": [
+        "fetpu",
+        "foozpu",
+        "tfpu"
+      ],
+      "programCount": 42
+    },
+    {
+      "executor": "Sveučilište Sjever",
+      "match": {
+        "unitId": "unin",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 22
+    },
+    {
+      "executor": "Sveučilište u Dubrovniku",
+      "match": {
+        "unitId": "unidu",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 26
+    },
+    {
+      "executor": "Sveučilište u Rijeci",
+      "match": null,
+      "alternatives": [
+        "apuri",
+        "biotech",
+        "efri"
+      ],
+      "programCount": 3
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Ekonomski fakultet",
+      "match": {
+        "unitId": "efri",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "efzg",
+        "veleri",
+        "ffri"
+      ],
+      "programCount": 21
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Fakultet biotehnologije i razvoja lijekova",
+      "match": {
+        "unitId": "biotech",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.80"
+      },
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Fakultet dentalne medicine",
+      "match": {
+        "unitId": "fdmri",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.75"
+      },
+      "alternatives": [
+        "veleri"
+      ],
+      "programCount": 3
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Fakultet za fiziku",
+      "match": {
+        "unitId": "fizri",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "veleri",
+        "efri",
+        "ffri"
+      ],
+      "programCount": 7
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Fakultet za matematiku",
+      "match": {
+        "unitId": "matematika",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "veleri",
+        "efri",
+        "ffri"
+      ],
+      "programCount": 5
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Fakultet za menadžment u turizmu i ugostiteljstvu",
+      "match": {
+        "unitId": "fmtu",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.80"
+      },
+      "alternatives": [],
+      "programCount": 14
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Fakultet zdravstvenih studija u Rijeci",
+      "match": {
+        "unitId": "fzsri",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "veleri"
+      ],
+      "programCount": 13
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Filozofski fakultet u Rijeci",
+      "match": {
+        "unitId": "ffri",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "ffzg",
+        "veleri",
+        "efri"
+      ],
+      "programCount": 30
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Građevinski fakultet u Rijeci",
+      "match": {
+        "unitId": "gradri",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "grad",
+        "veleri",
+        "efri"
+      ],
+      "programCount": 4
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Medicinski fakultet u Rijeci",
+      "match": {
+        "unitId": "medri",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "mef",
+        "veleri",
+        "efri"
+      ],
+      "programCount": 36
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Pomorski fakultet",
+      "match": {
+        "unitId": "pfri",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "veleri",
+        "efri",
+        "ffri"
+      ],
+      "programCount": 11
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Pravni fakultet",
+      "match": {
+        "unitId": "pravri",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "pravo",
+        "veleri",
+        "efri"
+      ],
+      "programCount": 5
+    },
+    {
+      "executor": "Sveučilište u Rijeci, Tehnički fakultet",
+      "match": {
+        "unitId": "riteh",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "veleri",
+        "efri",
+        "ffri"
+      ],
+      "programCount": 20
+    },
+    {
+      "executor": "Sveučilište u Slavonskom Brodu",
+      "match": null,
+      "alternatives": [
+        "sfsb",
+        "teho",
+        "btho"
+      ],
+      "programCount": 13
+    },
+    {
+      "executor": "Sveučilište u Splitu",
+      "match": null,
+      "alternatives": [
+        "efst",
+        "fesb",
+        "ffst"
+      ],
+      "programCount": 2
+    },
+    {
+      "executor": "Sveučilište u Splitu - Sveučilišni odjel za stručne studije",
+      "match": {
+        "unitId": "oss",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.80"
+      },
+      "alternatives": [],
+      "programCount": 11
+    },
+    {
+      "executor": "Sveučilište u Splitu - Sveučilišni odjel zdravstvenih studija",
+      "match": null,
+      "alternatives": [
+        "fzsri",
+        "ozs"
+      ],
+      "programCount": 7
+    },
+    {
+      "executor": "Sveučilište u Splitu, Ekonomski fakultet",
+      "match": {
+        "unitId": "efst",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "efzg",
+        "efri",
+        "ffst"
+      ],
+      "programCount": 14
+    },
+    {
+      "executor": "Sveučilište u Splitu, Fakultet elektrotehnike, strojarstva i brodogradnje",
+      "match": {
+        "unitId": "fesb",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.80"
+      },
+      "alternatives": [
+        "fsb"
+      ],
+      "programCount": 18
+    },
+    {
+      "executor": "Sveučilište u Splitu, Fakultet građevinarstva, arhitekture i geodezije",
+      "match": {
+        "unitId": "fgag",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [],
+      "programCount": 7
+    },
+    {
+      "executor": "Sveučilište u Splitu, Filozofski fakultet",
+      "match": {
+        "unitId": "ffst",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "ffzg",
+        "ffri",
+        "efst"
+      ],
+      "programCount": 22
+    },
+    {
+      "executor": "Sveučilište u Splitu, Katolički bogoslovni fakultet",
+      "match": {
+        "unitId": "kbfst",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "kbf"
+      ],
+      "programCount": 5
+    },
+    {
+      "executor": "Sveučilište u Splitu, Kemijsko-tehnološki fakultet",
+      "match": {
+        "unitId": "ktfst",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [],
+      "programCount": 10
+    },
+    {
+      "executor": "Sveučilište u Splitu, Kineziološki fakultet",
+      "match": {
+        "unitId": "kifst",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "kif",
+        "efst",
+        "ffst"
+      ],
+      "programCount": 9
+    },
+    {
+      "executor": "Sveučilište u Splitu, Medicinski fakultet",
+      "match": {
+        "unitId": "mefst",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "mef",
+        "medri",
+        "efst"
+      ],
+      "programCount": 24
+    },
+    {
+      "executor": "Sveučilište u Splitu, Pomorski fakultet",
+      "match": {
+        "unitId": "pfst",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "pfri",
+        "efst",
+        "ffst"
+      ],
+      "programCount": 12
+    },
+    {
+      "executor": "Sveučilište u Splitu, Pravni fakultet",
+      "match": {
+        "unitId": "pravst",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "pravo",
+        "pravri",
+        "efst"
+      ],
+      "programCount": 6
+    },
+    {
+      "executor": "Sveučilište u Splitu, Prirodoslovno-matematički fakultet",
+      "match": {
+        "unitId": "pmfst",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 1.00"
+      },
+      "alternatives": [
+        "pmf"
+      ],
+      "programCount": 22
+    },
+    {
+      "executor": "Sveučilište u Zadru",
+      "match": {
+        "unitId": "unizd",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 80
+    },
+    {
+      "executor": "Sveučilište u Zagrebu",
+      "match": null,
+      "alternatives": [
+        "adu",
+        "agr",
+        "alu"
+      ],
+      "programCount": 5
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Agronomski fakultet",
+      "match": {
+        "unitId": "agr",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "arh",
+        "efzg",
+        "ffzg"
+      ],
+      "programCount": 31
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Arhitektonski fakultet",
+      "match": {
+        "unitId": "arh",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "agr",
+        "efzg",
+        "ffzg"
+      ],
+      "programCount": 4
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Edukacijsko-rehabilitacijski fakultet",
+      "match": {
+        "unitId": "erf",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [],
+      "programCount": 9
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Ekonomski fakultet",
+      "match": {
+        "unitId": "efzg",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "agr",
+        "arh",
+        "ffzg"
+      ],
+      "programCount": 53
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet elektrotehnike i računarstva",
+      "match": {
+        "unitId": "fer",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [],
+      "programCount": 17
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet filozofije i religijskih znanosti",
+      "match": {
+        "unitId": "ffrz",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "fpz",
+        "fpzg"
+      ],
+      "programCount": 5
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet hrvatskih studija",
+      "match": {
+        "unitId": "fhs",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [],
+      "programCount": 17
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet kemijskog inženjerstva i tehnologije",
+      "match": {
+        "unitId": "fkit",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "sumfak"
+      ],
+      "programCount": 8
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet organizacije i informatike",
+      "match": {
+        "unitId": "foi",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [],
+      "programCount": 3
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet političkih znanosti",
+      "match": {
+        "unitId": "fpzg",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "fpz",
+        "ffrz"
+      ],
+      "programCount": 9
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet prometnih znanosti",
+      "match": {
+        "unitId": "fpz",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "fpzg",
+        "ffrz"
+      ],
+      "programCount": 10
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet strojarstva i brodogradnje",
+      "match": {
+        "unitId": "fsb",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "fesb"
+      ],
+      "programCount": 12
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Fakultet šumarstva i drvne tehnologije",
+      "match": {
+        "unitId": "sumfak",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "fkit"
+      ],
+      "programCount": 13
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Farmaceutsko-biokemijski fakultet",
+      "match": {
+        "unitId": "fbf",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [],
+      "programCount": 12
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Filozofski fakultet",
+      "match": {
+        "unitId": "ffzg",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "agr",
+        "arh",
+        "efzg"
+      ],
+      "programCount": 77
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Geodetski fakultet",
+      "match": {
+        "unitId": "geof",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "agr",
+        "arh",
+        "efzg"
+      ],
+      "programCount": 4
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Geotehnički fakultet",
+      "match": null,
+      "alternatives": [
+        "agr",
+        "arh",
+        "efzg"
+      ],
+      "programCount": 3
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Građevinski fakultet",
+      "match": {
+        "unitId": "grad",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "agr",
+        "arh",
+        "efzg"
+      ],
+      "programCount": 3
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Grafički fakultet",
+      "match": {
+        "unitId": "grf",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "agr",
+        "arh",
+        "efzg"
+      ],
+      "programCount": 3
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Katolički bogoslovni fakultet",
+      "match": {
+        "unitId": "kbf",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "kbfst"
+      ],
+      "programCount": 6
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Kineziološki fakultet",
+      "match": {
+        "unitId": "kif",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "agr",
+        "arh",
+        "efzg"
+      ],
+      "programCount": 9
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Medicinski fakultet",
+      "match": {
+        "unitId": "mef",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "agr",
+        "arh",
+        "efzg"
+      ],
+      "programCount": 57
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Metalurški fakultet",
+      "match": {
+        "unitId": "simet",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "agr",
+        "arh",
+        "efzg"
+      ],
+      "programCount": 5
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Muzička akademija",
+      "match": {
+        "unitId": "muza",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "adu",
+        "alu",
+        "mapu"
+      ],
+      "programCount": 2
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Pravni fakultet",
+      "match": {
+        "unitId": "pravo",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "agr",
+        "arh",
+        "efzg"
+      ],
+      "programCount": 21
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Prehrambeno-biotehnološki fakultet",
+      "match": {
+        "unitId": "pbf",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [],
+      "programCount": 11
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Prirodoslovno-matematički fakultet",
+      "match": {
+        "unitId": "pmf",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "pmfst"
+      ],
+      "programCount": 35
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Rudarsko-geološko-naftni fakultet",
+      "match": {
+        "unitId": "rgnf",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [],
+      "programCount": 6
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Stomatološki fakultet",
+      "match": {
+        "unitId": "sfzg",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "agr",
+        "arh",
+        "efzg"
+      ],
+      "programCount": 8
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Tekstilno-tehnološki fakultet",
+      "match": {
+        "unitId": "ttf",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [],
+      "programCount": 9
+    },
+    {
+      "executor": "Sveučilište u Zagrebu, Veterinarski fakultet",
+      "match": {
+        "unitId": "vef",
+        "confidence": "exact",
+        "reason": "poklapaju se i sastavnica i ustanova"
+      },
+      "alternatives": [
+        "agr",
+        "arh",
+        "efzg"
+      ],
+      "programCount": 34
+    },
+    {
+      "executor": "Sveučilište VERN",
+      "match": {
+        "unitId": "vern",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 9
+    },
+    {
+      "executor": "Tehničko veleučilište u Zagrebu",
+      "match": {
+        "unitId": "tvz",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 12
+    },
+    {
+      "executor": "Universidad Catolica de Valencia Vicente Marir (koordinator) Kraljevina Španjolska",
+      "match": null,
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "Universitat de Girona",
+      "match": null,
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "Universitatea Tehnica de Constructii Bucuresti, Rumunjska",
+      "match": null,
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "University of Ljubljana, Faculty of Maritime Studies and Transport in Portorož",
+      "match": null,
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "Univerza v Ljubljani (Ljubljana, Slovenija)",
+      "match": null,
+      "alternatives": [],
+      "programCount": 2
+    },
+    {
+      "executor": "Veleučilište \"Lavoslav Ružička\" u Vukovaru",
+      "match": {
+        "unitId": "vevu",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 4
+    },
+    {
+      "executor": "Veleučilište \"Marko Marulić\" u Kninu",
+      "match": {
+        "unitId": "veleknin",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 5
+    },
+    {
+      "executor": "Veleučilište \"Nikola Tesla\" u Gospiću",
+      "match": {
+        "unitId": "vnt",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 2
+    },
+    {
+      "executor": "Veleučilište ARCA",
+      "match": {
+        "unitId": "arca",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.50"
+      },
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "Veleučilište Aspira",
+      "match": {
+        "unitId": "aspira",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 6
+    },
+    {
+      "executor": "Veleučilište Hrvatsko zagorje Krapina",
+      "match": {
+        "unitId": "vhzk",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 3
+    },
+    {
+      "executor": "Veleučilište Ivanić-Grad",
+      "match": {
+        "unitId": "vsig",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "Veleučilište menadžmenta i sigurnosti SECURUS (u osnivanju)",
+      "match": {
+        "unitId": "securus",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.60"
+      },
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "Veleučilište PAR",
+      "match": {
+        "unitId": "par",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 3
+    },
+    {
+      "executor": "Veleučilište RRiF",
+      "match": {
+        "unitId": "rrif",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 2
+    },
+    {
+      "executor": "Veleučilište s pravom javnosti Baltazar Zaprešić",
+      "match": {
+        "unitId": "bak",
+        "confidence": "weak",
+        "reason": "preklapanje rijeci 0.50"
+      },
+      "alternatives": [],
+      "programCount": 4
+    },
+    {
+      "executor": "Veleučilište studija sigurnosti",
+      "match": {
+        "unitId": "vss",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 2
+    },
+    {
+      "executor": "Veleučilište suvremenih informacijskih tehnologija",
+      "match": {
+        "unitId": "vsite",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 2
+    },
+    {
+      "executor": "Veleučilište u Bjelovaru",
+      "match": {
+        "unitId": "vub",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 1
+    },
+    {
+      "executor": "Veleučilište u Karlovcu",
+      "match": {
+        "unitId": "vuka",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 8
+    },
+    {
+      "executor": "Veleučilište u Križevcima",
+      "match": {
+        "unitId": "vguk",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 3
+    },
+    {
+      "executor": "Veleučilište u Rijeci",
+      "match": {
+        "unitId": "veleri",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 13
+    },
+    {
+      "executor": "Veleučilište u Šibeniku",
+      "match": {
+        "unitId": "vus",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 6
+    },
+    {
+      "executor": "Veleučilište u Virovitici",
+      "match": {
+        "unitId": "vuv",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 4
+    },
+    {
+      "executor": "Veleučilište Velika Gorica",
+      "match": {
+        "unitId": "vvg",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 8
+    },
+    {
+      "executor": "Zagrebačka škola ekonomije i managementa",
+      "match": {
+        "unitId": "zsem",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 4
+    },
+    {
+      "executor": "Zdravstveno veleučilište",
+      "match": {
+        "unitId": "zvu",
+        "confidence": "exact",
+        "reason": "ustanova s jednom jedinicom istog naziva"
+      },
+      "alternatives": [],
+      "programCount": 13
+    }
+  ],
+  "unitsWithoutExecutor": [
+    "adu",
+    "alu",
+    "apuri",
+    "btho",
+    "fetpu",
+    "ffpu",
+    "fipu",
+    "foozpu",
+    "forenzika",
+    "fpzpu",
+    "inf",
+    "kbfdj",
+    "logri",
+    "mapu",
+    "mfpu",
+    "more",
+    "odhz",
+    "ozs",
+    "sfsb",
+    "sois-ft",
+    "teho",
+    "tfpu",
+    "ufri",
+    "ufzg",
+    "umas",
+    "vkjs"
+  ],
+  "summary": {
+    "executorCount": 131,
+    "unitCount": 134,
+    "byConfidence": {
+      "exact": 72,
+      "strong": 1,
+      "weak": 37,
+      "none": 21
+    },
+    "unitsMatched": 108,
+    "unitsWithoutExecutor": 26,
+    "programsWithoutUnit": 74
+  }
+}

@@ -251,14 +251,42 @@ Cilj: ne moze se tvrditi pokrivenost programa koji nikad nije evidentiran. Danas
   sinkroniziran, program bez profila uvijek ima izricit razlog, i polja koja zna samo Upisnik
   ostaju `null` umjesto da ih seed "popuni" nagadjanjem.
 
-### P1-6. Prijenos harvestiranih programa u registar
-- Harvest daje 1312 programa u `data/programs/drafts/upisnik.json`; registar ih ima 35. Prijenos
-  je namjerno ZASEBAN, ljudski korak (ista disciplina kao `ruleEntries`: skripta draftira, covjek
-  verificira), jer trazi uparivanje `izvoditelj` (151 naziv sastavnice iz Upisnika) s nasim
-  `unitId` (134 jedinice u katalogu), a to je prosudba, ne string-match.
-- AC: svaki prenesen zapis nosi `provenance.kind = 'upisnik'` i `officialProgramCode`; registar
-  dobiva `upisnikSynced: true` tek kad prijenos zavrsi; `reconcile-ratchet.json` se azurira, a
-  completion ledger tada prvi put smije prikazati `program: 'official'`.
+### P1-6. Prijenos harvestiranih programa u registar : PRIJEDLOG GOTOV (2026-08-19)
+- Izvedeno: `src/programs/unit-match.ts` + `scripts/match-upisnik-units.mts`
+  (`npm run match-upisnik-units`) + `docs/generated/upisnik-unit-match.json` +
+  `tests/unit-match.test.ts`. Modul NIKAD nista ne upisuje u registar: svakom izvoditelju daje
+  najbolju jedinicu, razinu pouzdanosti, RAZLOG i alternative, pa covjek potvrdjuje.
+- IZMJERENO: 131 pojedinacni izvoditelj naspram 134 nase jedinice.
+  **exact 72, strong 1, weak 37, bez para 21.** Nasih jedinica upareno 108, bez ijednog
+  izvoditelja 26. Programa cija nijedna sastavnica nije uparena: 74.
+- Dvije strukturne cinjenice izvora koje se ovdje tumace (parser ih cuva sirove):
+  1. `$` razdvaja VISE izvoditelja kod zdruzenih programa (44 od 1312).
+  2. Zarez NIJE pouzdana granica "ustanova, sastavnica" ("Istarsko veleuciliste, Pula" iza zareza
+     ima MJESTO), a Upisnik koristi i crticu ("Sveuciliste u Splitu - Sveucilisni odjel...").
+- Dvije greske uhvacene mjerenjem, obje zakljucane testom:
+  - goli naziv sveucilista je preklapanjem rijeci zavrsavao na proizvoljnom odjelu
+    ("Sveuciliste Josipa Jurja Strossmayera u Osijeku" -> `biolos`, 0.80). Program koji izvodi
+    CIJELO sveuciliste ne pripada jednom odjelu, pa takav izvoditelj sada ostaje neuparen uz
+    alternative. Posljedica je postena, ne bolja brojka: programa bez jedinice poraslo je s 10 na
+    74, jer je 64 njih prije imalo lazno uvjerljiv par.
+  - taj isti gard je zatim 28 ispravnih `exact` nalaza spustio na `strong` (samostalna ustanova s
+    jednom jedinicom istog naziva); vraceno, pa `exact` ostaje 72.
+
+#### Tri nalaza za ljudsku odluku
+1. **Geotehnicki fakultet (Varazdin) uopce nije u nasem katalogu** - nula pogodaka na "Geoteh"
+   medju 134 jedinice, a Upisnik mu pripisuje 3 programa. Stvarna rupa, ne problem uparivanja.
+2. **Splitski odjel je preimenovan**: Upisnik ga vodi kao "Sveucilisni odjel zdravstvenih
+   studija" (7 programa), a nas katalog kao `ozs` = "Fakultet zdravstvenih znanosti (Split)".
+   Isti entitet, drugo ime; matcher ga ne moze vidjeti, covjek moze.
+3. **Pula (42 programa) i Slavonski Brod (13)** navode kao izvoditelja GOLO sveuciliste, iako
+   njihove sastavnice u nasem katalogu postoje. Za tih 55 programa se veza program -> jedinica iz
+   ovog izvora ne moze izvesti; treba drugi izvor ili ljudska dodjela.
+
+#### Sto jos ostaje
+- AC za dovrsetak: svaki prenesen zapis nosi `provenance.kind = 'upisnik'` i
+  `officialProgramCode`; registar dobiva `upisnikSynced: true` tek kad prijenos zavrsi;
+  `reconcile-ratchet.json` se azurira, a completion ledger tada prvi put smije prikazati
+  `program: 'official'`.
 - Velicina: L. Prioritet: P1.
 
 ### P1-5. Dva studija Pravnog fakulteta koja nijedan program ne trazi
