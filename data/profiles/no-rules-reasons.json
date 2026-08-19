@@ -1,0 +1,4 @@
+{
+  "note": "Zasto profil nema bodovanih pravila. Popunjava COVJEK nakon sto pretrazi sluzbene izvore (P2-2 i P2-3 u docs/PLAN_POTPUNA_POKRIVENOST.md). Profil koji ovdje NEMA zapis vodi se kao 'no-rules-sourced' = jos nije istrazen, sto je razlicito od dokazanog odsustva pravila. Dopusteni state: 'no-technical-rules' (dokazano da fakultet ne propisuje strojno provjerljive zahtjeve) i 'source-not-found' (pravila postoje ali nisu javno objavljena).",
+  "reasons": {}
+}

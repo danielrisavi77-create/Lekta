@@ -329,22 +329,24 @@ Cilj: ne moze se tvrditi pokrivenost programa koji nikad nije evidentiran. Danas
 - Napomena: rad je ljudski (otvaranje PDF snapshota na lokatoru), alat samo priprema dosje.
 - Velicina: M (ljudski sat, ne kod). Prioritet: P1. Bez kodne ovisnosti, moze odmah.
 
-### P2-2. 24 profila bez coverage retka dobivaju eksplicitan zapis
-- Profili (izmjereno): `pravst-zavrsni`, `pravst-diplomski`, `ffos-povijest-zavrsni`,
-  `ffos-povijest-diplomski`, `unizd-kroatistika-{zavrsni,diplomski}`,
-  `unizd-ekonomija-{zavrsni,diplomski}`, `unizd-anglistika-{zavrsni,diplomski}`,
-  `unizd-sociologija-zavrsni`, `unizd-lingvistika-{zavrsni,diplomski}`,
-  `unizd-rusistika-diplomski`, `unidu-elektro-zavrsni`, `adu-gluma-diplomski`,
-  `adu-dramaturgija-diplomski`, `adu-snimanje-diplomski`, `adu-ftv-rezija-diplomski`,
-  `adu-kazalisna-rezija-diplomski`, `adu-opci-diplomski`, `alu-novi-mediji-diplomski`,
-  `alu-nastavnicki-diplomski`, `geof-opci-akademski-rad`.
-- Datoteke: `scripts/recompute-coverage.mjs` (prestaje preskakati profil bez draftova),
-  `src/verification/coverage-report.ts` (isti uvjet, inace pada drift gard).
-- AC: coverage matrica ima 407 redaka; profil bez draftova nosi
-  `state: 'no-rules-sourced' | 'no-technical-rules' | 'source-not-found'`, nikad tiho
-  odsustvo. Omjer za takav redak je `null`, ne 0 (0 lazno sugerira izmjereni promasaj).
-- Testovi: `coverage-report.test.ts` prosiren; test da je broj redaka jednak broju profila.
-- Velicina: M. Prioritet: P1. Ovisi o: P0-1.
+### P2-2. 24 profila bez coverage retka dobivaju eksplicitan zapis : GOTOVO (2026-08-19)
+- Zatecen kvar: coverage matrica je preskakala profil bez ijednog staging pravila, pa 24 profila
+  nisu postojala ni u jednom izvjestaju. Tiho odsustvo je izgledalo isto kao da profila nema.
+- Izvedeno: matrica sada ima **410 celija umjesto 386** (svaki registrirani profil), a svaka
+  celija nosi `state`:
+  - **`scored` 369** - ima bodovanih pravila;
+  - **`advisory-only` 17** - pravila postoje, nijedno nije bodovano (to je tocno skup iz P2-3);
+  - **`no-rules-sourced` 24** - nema nijednog pravila i jos nije istrazeno zasto.
+- Kljucna razlika koja se NE smije skratiti: `no-rules-sourced` znaci "jos nismo istrazili", a ne
+  "pravila nema". Zakljucak o odsutnosti pravila (`no-technical-rules`, `source-not-found`) smije
+  doci ISKLJUCIVO iz `data/profiles/no-rules-reasons.json`, gdje ga je covjek potpisao nakon
+  pretrage izvora; test to tvrdo cuva.
+- `ratio` je sada `number | null`: nula bi lazno sugerirala izmjeren promasaj tamo gdje mjerenja
+  uopce nije bilo.
+- `npm run recompute-coverage` ispisuje obje radne liste IMENOM (24 za P2-2, 17 za P2-3), pa je
+  posao odmah izvediv umjesto da se izvodi iz brojke.
+- Manifest `SCORED_COVERAGE` 386 -> 410; completion ledger cita `state` umjesto da zakljucuje iz
+  odsutnosti retka.
 
 ### P2-3. 17 profila s nula bodovanih pravila
 - Profili: `alu-diplomski`, `efzg-seminarski`, `fer-diplomski`, `fer-zavrsni`,

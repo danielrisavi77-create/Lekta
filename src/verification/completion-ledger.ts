@@ -129,6 +129,8 @@ export interface CoverageCellInput {
   profileId: string;
   scoredMachineCheckable: number;
   scoredTotal: number;
+  /** Od P2-2: zasto celija nema bodovanih pravila. Vidi CoverageState u coverage-report.ts. */
+  state?: string;
 }
 export interface WorklistRowInput {
   profileId: string;
@@ -327,8 +329,17 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
       const repairCounts = repairByProfile.get(profile.profileId) ?? { total: 0, facultySpecific: 0 };
       const programs = programsByProfile.get(profile.profileId) ?? [];
 
+      // Od P2-2 svaki profil ima coverage celiju, pa se "nema pravila" cita iz STANJA, ne iz
+      // odsutnosti retka. `advisory-only` znaci da pravila postoje ali nijedno nije bodovano;
+      // `none` da ih uopce nema (bilo neistrazeno, bilo dokazano da ih fakultet ne propisuje).
       const rules: RulesAxis =
-        cover == null ? 'none' : cover.scoredTotal === 0 ? 'advisory-only' : bulk > 0 ? 'bulk-pending' : 'verified';
+        cover == null || cover.scoredTotal === 0
+          ? cover != null && cover.state === 'advisory-only'
+            ? 'advisory-only'
+            : 'none'
+          : bulk > 0
+            ? 'bulk-pending'
+            : 'verified';
 
       const repair: RepairAxis =
         repairCounts.total === 0

@@ -81,11 +81,14 @@ function latest(dates) {
   return best;
 }
 
+const noRulesReasons = JSON.parse(readFileSync(p('data/profiles/no-rules-reasons.json'), 'utf8')).reasons ?? {};
+
 const cells = [];
 const nonMachineCheckable = new Map();
 for (const profile of [...verified, ...legal]) {
   const entries = mergedDrafts[profile.id] ?? [];
-  if (!entries.length) continue;
+  // Od P2-2 ulaze SVI profili, i oni bez ijednog staging pravila: tiho odsustvo je izgledalo isto
+  // kao da profila nema, pa se 24 takva profila nisu vidjela ni u jednom izvjestaju.
   const scored = entries.filter(isScored);
   // Brojnik omjera mora gledati istu populaciju kao nazivnik (samo machineCheckable), inace
   // omjer moze preci 100% kad profil ima vise verificiranih ne-strojnih pravila (npr.
@@ -98,7 +101,12 @@ for (const profile of [...verified, ...legal]) {
     scoredTotal: scored.length,
     machineCheckable,
     advisory: entries.length - scored.length,
-    ratio: machineCheckable ? scoredMachineCheckable / machineCheckable : 0,
+    ratio: machineCheckable ? scoredMachineCheckable / machineCheckable : null,
+    state: scored.length
+      ? 'scored'
+      : entries.length
+        ? 'advisory-only'
+        : (noRulesReasons[profile.id]?.state ?? 'no-rules-sourced'),
     lastVerified: latest(scored.map((e) => e.lastVerified)),
   });
   // Razlaganje razlike scoredTotal - scoredMachineCheckable po checkId-u: bez njega su dva
@@ -127,3 +135,24 @@ console.log(
   `Coverage preracunat: ${cells.length} celija, ${matrix.scoredMachineCheckable} bodovanih strojno provjerljivih ` +
     `(${matrix.scoredTotal} ukupno, ${matrix.scoredNonMachineCheckable} ne-strojnih).`,
 );
+
+// Profili bez bodovanih pravila su radna lista (P2-2/P2-3), pa se ispisuju imenom, ne samo brojem.
+const byState = {};
+for (const c of cells) byState[c.state] = (byState[c.state] ?? 0) + 1;
+console.log('stanja:', Object.entries(byState).map(([k, n]) => `${k}=${n}`).join(', '));
+const needsResearch = cells.filter((c) => c.state === 'no-rules-sourced').map((c) => c.profileId);
+const advisoryOnly = cells.filter((c) => c.state === 'advisory-only').map((c) => c.profileId);
+if (needsResearch.length) {
+  console.log('');
+  console.log(`BEZ IJEDNOG PRAVILA, jos neistrazeno (${needsResearch.length}) - P2-2:`);
+  for (const id of needsResearch) console.log(`  ${id}`);
+}
+if (advisoryOnly.length) {
+  console.log('');
+  console.log(`PRAVILA POSTOJE, NIJEDNO BODOVANO (${advisoryOnly.length}) - P2-3:`);
+  for (const id of advisoryOnly) console.log(`  ${id}`);
+}
+if (needsResearch.length || advisoryOnly.length) {
+  console.log('');
+  console.log('Razlog se upisuje u data/profiles/no-rules-reasons.json (potpisuje covjek).');
+}

@@ -2,7 +2,8 @@ import { describe, it, expect } from 'vitest';
 
 import storedCoverage from '../data/coverage/scored-coverage.json';
 import manifest from '../data/manifest.json';
-import { computeCoverageMatrix } from '../src/verification/coverage-report';
+import { computeCoverageMatrix, type NoRulesReasons } from '../src/verification/coverage-report';
+import noRulesReasons from '../data/profiles/no-rules-reasons.json';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import {
   VERIFIED_PROFILES_WITH_DRAFTS,
@@ -17,7 +18,11 @@ const profiles = [
 
 describe('coverage matrica: preracunata i spremljena (sekcija 6)', () => {
   it('stored scored-coverage.json deep-equals zivi izracun (drift guard)', () => {
-    const fresh = computeCoverageMatrix(profiles, SOURCE_REGISTRY as SourceEntry[]);
+    const fresh = computeCoverageMatrix(
+      profiles,
+      SOURCE_REGISTRY as SourceEntry[],
+      noRulesReasons.reasons as NoRulesReasons,
+    );
     expect(storedCoverage).toEqual(fresh);
   });
 
@@ -29,19 +34,43 @@ describe('coverage matrica: preracunata i spremljena (sekcija 6)', () => {
       if (cell.scoredMachineCheckable > 0) {
         expect(cell.ratio).toBeGreaterThan(0);
         expect(cell.lastVerified).not.toBeNull();
+      } else if (cell.machineCheckable === 0) {
+        // Bez strojno provjerljivih pravila omjer je null, ne 0: nula bi lazno sugerirala
+        // izmjeren promasaj tamo gdje mjerenja uopce nije bilo.
+        expect(cell.ratio).toBeNull();
       } else {
         expect(cell.ratio).toBe(0);
-        expect(cell.lastVerified).toBeNull();
       }
     }
   });
 
-  it('svaka celija pokriva pravni profil sa strojno provjerljivim pravilima', () => {
-    expect(storedCoverage.cells.length).toBeGreaterThan(0);
+  /**
+   * Od P2-2 matrica pokriva SVAKI profil, i onaj bez ijednog pravila. Prije je takav profil samo
+   * izostajao, pa se 24 njih nije moglo razlikovati od pokrivenih - tiho odsustvo je izgledalo
+   * isto kao da profila nema.
+   */
+  it('svaki profil ima celiju, a celija bez pravila ima izricito stanje', () => {
+    expect(storedCoverage.cells).toHaveLength(profiles.length);
     for (const cell of storedCoverage.cells) {
-      expect(cell.machineCheckable).toBeGreaterThan(0);
-      // scoredTotal + advisory pokrivaju sva pravila; potpuno verificirana celija ima advisory 0
-      expect(cell.scoredTotal + cell.advisory).toBeGreaterThan(0);
+      if (cell.machineCheckable > 0) {
+        expect(cell.scoredTotal + cell.advisory).toBeGreaterThan(0);
+      } else {
+        expect(['no-rules-sourced', 'no-technical-rules', 'source-not-found', 'advisory-only']).toContain(cell.state);
+      }
+    }
+  });
+
+  /**
+   * `no-rules-sourced` je ZADANO stanje i znaci "jos nismo istrazili", a ne "pravila nema".
+   * Zakljucak o odsutnosti pravila smije doci samo iz `no-rules-reasons.json`, gdje ga je covjek
+   * potpisao. Test cuva da se to dvoje ne izjednaci.
+   */
+  it('dokazano odsustvo pravila dolazi samo iz istrazenih razloga', () => {
+    const researched = new Set(Object.keys(noRulesReasons.reasons));
+    for (const cell of storedCoverage.cells) {
+      if (cell.state === 'no-technical-rules' || cell.state === 'source-not-found') {
+        expect(researched.has(cell.profileId), `${cell.profileId}: stanje bez potpisanog razloga`).toBe(true);
+      }
     }
   });
 

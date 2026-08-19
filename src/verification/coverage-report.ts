@@ -2,6 +2,25 @@ import type { ThesisProfile, SourceEntry } from '../profiles/profile-schema';
 import { computePublishedRules } from './published-rules';
 
 /**
+ * Stanje celije kad u njoj nema bodovanih pravila. Razlika je bitna i namjerno se ne skracuje:
+ * "jos nismo istrazili" nije isto sto i "dokazali smo da pravila nema".
+ */
+export type CoverageState =
+  /** Ima bodovanih pravila. */
+  | 'scored'
+  /** Pravila postoje u stagingu, ali nijedno nije bodovano (izvor ili verifikacija nedostaju). */
+  | 'advisory-only'
+  /** Nema nijednog staging pravila i nitko jos nije istrazio zasto. ZADANO, ne zakljucak. */
+  | 'no-rules-sourced'
+  /** Dokazano: fakultet ne propisuje strojno provjerljive zahtjeve. */
+  | 'no-technical-rules'
+  /** Pravila postoje, ali nisu javno objavljena. */
+  | 'source-not-found';
+
+/** Razlozi koje je covjek istrazio (data/profiles/no-rules-reasons.json). */
+export type NoRulesReasons = Record<string, { state: 'no-technical-rules' | 'source-not-found' }>;
+
+/**
  * Coverage matrica bodovano-verificiranih pravila (VERIFICATION_PIPELINE.md sekcije 6 i 9).
  *
  * Po celiji (profilu) racuna: koliko je pravila bodovano (scored), koliko strojno
@@ -32,8 +51,13 @@ export interface CoverageCell {
   machineCheckable: number;
   /** Sva pravila koja se ne boduju (draft, advisory, needs-recheck, retired). */
   advisory: number;
-  /** scoredMachineCheckable / machineCheckable, 0 kad nema strojno provjerljivih. */
-  ratio: number;
+  /**
+   * scoredMachineCheckable / machineCheckable. `null` kad profil NEMA strojno provjerljivih
+   * pravila: nula bi lazno sugerirala izmjeren promasaj tamo gdje mjerenja uopce nije bilo.
+   */
+  ratio: number | null;
+  /** Zasto celija nema bodovanih pravila; `scored` kad ih ima. Nikad tiho odsustvo. */
+  state: CoverageState;
   /** Najsvjeziji `lastVerified` medu bodovanim pravilima, ili null. */
   lastVerified: string | null;
 }
@@ -70,17 +94,32 @@ function latestVerified(dates: Array<string | null | undefined>): string | null 
  * provjerljiva pravila), inace omjer moze preci 100% (npr. "8/7") kad profil ima vise
  * verificiranih ne-strojnih pravila nego strojno provjerljivih - vidi tests/coverage-report.test.ts.
  */
-export function computeCoverageCell(profile: ThesisProfile, sources: SourceEntry[]): CoverageCell {
+export function computeCoverageCell(
+  profile: ThesisProfile,
+  sources: SourceEntry[],
+  reasons: NoRulesReasons = {},
+): CoverageCell {
   const { scored, advisory } = computePublishedRules(profile, sources);
   const machineCheckableScored = scored.filter((e) => e.machineCheckable);
-  const machineCheckable = (profile.ruleEntries ?? []).filter((e) => e.machineCheckable).length;
+  const entries = profile.ruleEntries ?? [];
+  const machineCheckable = entries.filter((e) => e.machineCheckable).length;
+
+  // Zadano je "jos nije istrazeno", ne "nema pravila": zakljucak o odsutnosti pravila smije doci
+  // samo iz `no-rules-reasons.json`, gdje ga je covjek potpisao nakon pretrage izvora.
+  const state: CoverageState = scored.length
+    ? 'scored'
+    : entries.length
+      ? 'advisory-only'
+      : (reasons[profile.id]?.state ?? 'no-rules-sourced');
+
   return {
     profileId: profile.id,
     scoredMachineCheckable: machineCheckableScored.length,
     scoredTotal: scored.length,
     machineCheckable,
     advisory: advisory.length,
-    ratio: machineCheckable ? machineCheckableScored.length / machineCheckable : 0,
+    ratio: machineCheckable ? machineCheckableScored.length / machineCheckable : null,
+    state,
     lastVerified: latestVerified(scored.map((e) => e.lastVerified)),
   };
 }
@@ -105,10 +144,17 @@ function countNonMachineCheckable(
  * Preracunava cijelu coverage matricu. Ukljucuje samo profile koji imaju ijedan
  * ruleEntry (celije bez granularnih pravila nisu jos u verifikacijskom toku).
  */
-export function computeCoverageMatrix(profiles: ThesisProfile[], sources: SourceEntry[]): CoverageMatrix {
+export function computeCoverageMatrix(
+  profiles: ThesisProfile[],
+  sources: SourceEntry[],
+  reasons: NoRulesReasons = {},
+): CoverageMatrix {
+  // Od P2-2 ulaze SVI profili. Prije je profil bez ijednog staging pravila jednostavno izostajao
+  // iz matrice, pa se 24 profila nije moglo razlikovati od onih koji su uredno pokriveni - tiho
+  // odsustvo je izgledalo isto kao da profila nema.
   const withEntries = profiles.filter((p) => (p.ruleEntries ?? []).length > 0);
-  const cells = withEntries
-    .map((p) => computeCoverageCell(p, sources))
+  const cells = profiles
+    .map((p) => computeCoverageCell(p, sources, reasons))
     .sort((a, b) => (a.profileId < b.profileId ? -1 : a.profileId > b.profileId ? 1 : 0));
   const scoredMachineCheckable = cells.reduce((sum, c) => sum + c.scoredMachineCheckable, 0);
   const scoredTotal = cells.reduce((sum, c) => sum + c.scoredTotal, 0);

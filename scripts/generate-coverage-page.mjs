@@ -83,7 +83,8 @@ const TIER = {
 
 function tierFor(cell) {
   if (!cell) return TIER.none;
-  if (cell.machineCheckable === 0) return cell.advisory > 0 ? TIER.advisory : TIER.none;
+  // ratio je null kad profil nema strojno provjerljivih pravila (P2-2); tada odlucuje stanje.
+  if (cell.machineCheckable === 0 || cell.ratio == null) return cell.advisory > 0 ? TIER.advisory : TIER.none;
   if (cell.ratio >= 1) return TIER.full;
   if (cell.ratio > 0) return TIER.partial;
   return cell.advisory > 0 ? TIER.advisory : TIER.none;
