@@ -60,10 +60,18 @@ traži izričitu potvrdu i nijedan ne dira rečenice tijela rada.
 
 `toc-field-fixer` je dodan 2026-08-17, nakon što je real-corpus mjerenje pokazalo da mijenja
 vidljivi tekst na 5 od 12 radova. Obrazloženje: tekst sadržaja GENERIRA Word iz polja, nije
-autorov, pa je to mehanika ispod, a ne sadržaj rada. UVJET koji još nije ispunjen: to mora
-potvrditi Tier 2 (`npm run verify:word`), doslovnom usporedbom teksta prije i poslije
-`Fields.Update()` na dokumentu koji sadržaj dobiva prvi put. Dok ta potvrda ne postoji,
-tretiraj izuzeće kao privremeno.
+autorov, pa je to mehanika ispod, a ne sadržaj rada.
+
+POTVRĐENO 2026-08-19 Tier 2 oracleom (`npm run verify:word:toc`), doslovnom usporedbom teksta
+prije i poslije `Fields.Update()` na dokumentu koji sadržaj dobiva prvi put: Word otvara
+popravljeni paket bez popravka, svih 12 autorskih odlomaka ostaje netaknuto i prije i poslije
+osvježavanja, a svih 5 stavki sadržaja izvedeno je iz STVARNIH naslova dokumenta (ništa
+izmišljeno). Izuzeće više nije privremeno.
+
+Ako se `toc-field-fixer` mijenja, ponovi tu provjeru: ona je jedini dokaz da izuzeće vrijedi.
+Pazi pritom na zamku koju je sam oracle prvo imao: stavka sadržaja nosi ISTI tekst kao naslov iz
+kojeg je izvedena, pa usporedba odlomaka "po članstvu" ne vidi ništa novo i lažno javi da polje
+nije živo. Sadržaj se zato čita izravno iz TOC raspona.
 
 ### Dopušteno bez fakultetskog pravila (preporuke)
 

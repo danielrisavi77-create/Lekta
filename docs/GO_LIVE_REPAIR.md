@@ -88,10 +88,14 @@ dijakritika) svih 19 tvrdnji iz odjeljka "NE SMIJE SE POKVARITI" prošlo je, dak
 je ostao nepromijenjen**. `verify:strict-open` je vrtjen i nad ULAZNIM fixturima i nad
 POPRAVLJENIM paketima (`.artifacts/lekta-real-corpus-review`), jer prvo ne dokazuje drugo.
 
-OTVORENO, ne pokriva ga ovo izvođenje: `toc-field-fixer` je upisan kao četvrti mehanizam koji
-smije mijenjati vidljivi tekst, ali to još NIJE potvrđeno usporedbom teksta prije i poslije
-`Fields.Update()` na dokumentu koji sadržaj dobiva prvi put. Dok ta potvrda ne postoji, izuzeće
-u `CLAUDE.md` ostaje privremeno.
+ZATVORENO 2026-08-19: `toc-field-fixer` (četvrti mehanizam koji smije mijenjati vidljivi tekst)
+potvrđen je zasebnim oracleom `npm run verify:word:toc`. Word otvara popravljeni paket bez
+popravka; svih 12 autorskih odlomaka ostaje netaknuto i prije i poslije `Fields.Update()`; svih 5
+stavki sadržaja izvedeno je iz stvarnih naslova dokumenta. Izuzeće u `CLAUDE.md` više nije
+privremeno.
+
+Tu provjeru pokreni ponovno pri svakoj izmjeni `toc-field-fixera`: ona je jedini dokaz da izuzeće
+vrijedi, a `npm run check` je ne može zamijeniti (traži Word i osvježavanje polja).
 
 ---
 
