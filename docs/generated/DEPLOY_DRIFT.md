@@ -32,9 +32,9 @@ Repo: 21 funkcija. Deployano: 17.
 | `katedra-agent-worker` | 1 | ACTIVE | true |
 | `record-completion-check` | 4 | ACTIVE | false |
 | `redeem-referral-signup` | 7 | ACTIVE | true |
-| `repair-docx` | 26 | ACTIVE | true |
+| `repair-docx` | 27 | ACTIVE | true |
 | `send-reminders` | 9 | ACTIVE | false |
-| `source-check` | 1 | ACTIVE | true |
+| `source-check` | 2 | ACTIVE | true |
 | `unsubscribe-reminder` | 8 | ACTIVE | false |
 | `webhook-mor` | 8 | ACTIVE | false |
 
