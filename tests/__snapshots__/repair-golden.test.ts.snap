@@ -469,6 +469,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "applied": 6,
       "changelog": [
         {
+          "after": "Polja označena za osvježavanje pri otvaranju",
+          "before": "Wordova polja i spremljeni rezultati",
+        },
+        {
           "after": "Font: Times New Roman, Veličina: 12 pt",
           "before": "Font: Calibri, Veličina: 11 pt",
         },
@@ -483,10 +487,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "spašene tablice i slike",
           "before": "tablice i slike",
-        },
-        {
-          "after": "Polja označena za osvježavanje pri otvaranju",
-          "before": "Wordova polja i spremljeni rezultati",
         },
         {
           "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
@@ -2892,6 +2892,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "applied": 9,
       "changelog": [
         {
+          "after": "Polja označena za osvježavanje pri otvaranju",
+          "before": "Wordova polja i spremljeni rezultati",
+        },
+        {
           "after": "Margine: lijeva 2,50 cm",
           "before": "Margine: lijeva 3,00 cm",
         },
@@ -2910,10 +2914,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Primijenjeno 2 potvrđenih operacija nad Word sekcijama",
           "before": "2 operacija nad sekcijama nije primijenjeno",
-        },
-        {
-          "after": "Polja označena za osvježavanje pri otvaranju",
-          "before": "Wordova polja i spremljeni rezultati",
         },
         {
           "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
@@ -5854,6 +5854,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "applied": 12,
       "changelog": [
         {
+          "after": "Polja označena za osvježavanje pri otvaranju",
+          "before": "Wordova polja i spremljeni rezultati",
+        },
+        {
           "after": "Margine: lijeva 2,50 cm",
           "before": "Margine: lijeva 3,00 cm",
         },
@@ -5888,10 +5892,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Naslovi: velikim slovima (4 naslova)",
           "before": "Naslovi: kako ih je autor napisao",
-        },
-        {
-          "after": "Polja označena za osvježavanje pri otvaranju",
-          "before": "Wordova polja i spremljeni rezultati",
         },
         {
           "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
@@ -7263,8 +7263,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "pravo-socijalni-rad-fusnote.docx": {
     "__kombinirano": {
-      "applied": 9,
+      "applied": 10,
       "changelog": [
+        {
+          "after": "Polja označena za osvježavanje pri otvaranju",
+          "before": "Wordova polja i spremljeni rezultati",
+        },
         {
           "after": "Margine: gornja 3,00 cm, desna 3,00 cm, donja 3,00 cm, lijeva 3,50 cm",
           "before": "Margine: gornja 2,50 cm, desna 2,50 cm, donja 2,50 cm, lijeva 3,00 cm",
@@ -7347,7 +7351,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [
         "paper-size-fixer-rule",
-        "field-integrity-fixer-rule",
         "consistency-fixer-rule",
         "section-insert-fixer-rule",
         "empty-paragraph-fixer-rule",
@@ -8784,6 +8787,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "applied": 4,
       "changelog": [
         {
+          "after": "Primijenjene potvrđene hrvatske tehničko-tipografske izmjene",
+          "before": "1 tipografskih zahvata",
+        },
+        {
           "after": "Razmak prije/poslije: 0 pt / 0 pt",
           "before": "Razmak prije/poslije: nije bilo postavljeno / nije bilo postavljeno",
         },
@@ -8794,10 +8801,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Naslovi: velikim slovima (1 naslov)",
           "before": "Naslovi: kako ih je autor napisao",
-        },
-        {
-          "after": "Primijenjene potvrđene hrvatske tehničko-tipografske izmjene",
-          "before": "1 tipografskih zahvata",
         },
       ],
       "markers": {

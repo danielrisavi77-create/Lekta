@@ -281,9 +281,9 @@
         "link-doi-fixer"
       ],
       "changedFixerIds": [
+        "field-integrity-fixer",
         "font-fixer",
         "alignment-fixer",
-        "field-integrity-fixer",
         "link-doi-fixer",
         "final-document-inspector-fixer"
       ],
@@ -509,13 +509,13 @@
         "consistency-fixer"
       ],
       "changedFixerIds": [
+        "field-integrity-fixer",
         "font-fixer",
         "alignment-fixer",
         "footnote-spacing-fixer",
         "heading-format-fixer",
         "footnote-typography-fixer",
         "heading-case-fixer",
-        "field-integrity-fixer",
         "final-document-inspector-fixer"
       ],
       "targetedCheckCount": 17,
@@ -565,6 +565,7 @@
         "consistency-fixer"
       ],
       "changedFixerIds": [
+        "field-integrity-fixer",
         "font-fixer",
         "margins-fixer",
         "page-number-alignment-fixer",

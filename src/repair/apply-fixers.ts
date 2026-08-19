@@ -201,6 +201,24 @@ const INDEX_SHIFTING_ORDER: ReadonlyMap<string, number> = new Map<string, number
 const GLOBAL_REWRITE_FIXERS: ReadonlySet<string> = new Set<string>(['final-document-inspector-fixer']);
 
 /**
+ * ANCHOR-OSJETLJIVI: fixeri ciji zahtjev nosi otisak (`anchorFingerprint`) racunat nad IZVORNIM
+ * dokumentom, pa ih svaka ranija preinaka tog odlomka ucini slijepima za vlastite mete.
+ *
+ * Zrcalna slika GLOBAL_REWRITE_FIXERS: tamo globalni prepisivac ide zadnji da ne ponisti tudja
+ * sidra, ovdje anchor-osjetljivi idu prvi da njihova sidra jos vrijede.
+ *
+ * Izmjereno na stvarnom radu (local-01, 85 Word polja): u zadanom redoslijedu
+ * `field-integrity-fixer` oznaci samo 5 polja, a izveden PRVI oznaci svih 85. Preostalih 80 nije
+ * padalo s greskom nego TIHO: otisak vise ne pogadja odlomak koji su prije njega prepisali
+ * paper-size i heading-style, pa fixer uredno preskoci metu. Posljedica koju korisnik vidi je da
+ * drugi klik na Popravi opet ima sto raditi.
+ */
+const ANCHOR_SENSITIVE_FIXERS: ReadonlySet<string> = new Set<string>([
+  'field-integrity-fixer',
+  'croatian-typography-fixer',
+]);
+
+/**
  * RE-55: dva popravka koja mijenjaju TEKST istog odlomka.
  *
  * Dvofazni model iznad rjesava "fixer pomakne INDEKSE drugima", ali ne i "fixer promijeni SADRZAJ
@@ -934,6 +952,10 @@ export async function applyFixers(
     .sort((a, b) => {
       const phase = Number(INDEX_SHIFTING_FIXERS.has(a.request.fixerId)) - Number(INDEX_SHIFTING_FIXERS.has(b.request.fixerId));
       if (phase !== 0) return phase;
+      // Anchor-osjetljivi idu na POCETAK faze: njihova sidra vrijede samo dok odlomak nije
+      // prepisan (vidi ANCHOR_SENSITIVE_FIXERS).
+      const anchor = Number(ANCHOR_SENSITIVE_FIXERS.has(b.request.fixerId)) - Number(ANCHOR_SENSITIVE_FIXERS.has(a.request.fixerId));
+      if (anchor !== 0) return anchor;
       // Globalni prepisivaci idu na kraj svoje faze (vidi GLOBAL_REWRITE_FIXERS): ponistavaju tudja
       // sidra, pa bi rano izvedeni tiho oborili sve anchor-osjetljive popravke iza sebe.
       const global = Number(GLOBAL_REWRITE_FIXERS.has(a.request.fixerId)) - Number(GLOBAL_REWRITE_FIXERS.has(b.request.fixerId));

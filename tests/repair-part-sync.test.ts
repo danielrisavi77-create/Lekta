@@ -118,3 +118,38 @@ describe('globalni prepisivaci idu posljednji u svojoj fazi', () => {
     for (const id of ids) expect(FIXER_IDS as readonly string[], id).toContain(id);
   });
 });
+
+describe('anchor-osjetljivi fixeri idu PRVI u svojoj fazi', () => {
+  /**
+   * Zrcalna slika GLOBAL_REWRITE_FIXERS. Zahtjev `field-integrity-fixera` nosi otisak
+   * (`anchorFingerprint`) racunat nad IZVORNIM dokumentom, pa ga svaka ranija preinaka tog
+   * odlomka ucini slijepim za vlastite mete.
+   *
+   * Izmjereno na stvarnom radu (85 Word polja): u zadanom redoslijedu oznacio je samo 5 polja,
+   * izveden PRVI svih 85. Preostalih 80 nije padalo s greskom nego TIHO, jer otisak vise ne
+   * pogadja odlomak koji su prije njega prepisali paper-size i heading-style. Korisnik je to
+   * vidio kao "drugi klik na Popravi opet ima sto raditi": 6 od 10 radova nije konvergiralo,
+   * nakon popravka 0 od 10.
+   */
+  it('field-integrity i croatian-typography su oznaceni kao anchor-osjetljivi', () => {
+    expect(APPLY_SRC).toContain('ANCHOR_SENSITIVE_FIXERS');
+    expect(APPLY_SRC).toMatch(/ANCHOR_SENSITIVE_FIXERS[\s\S]{0,200}'field-integrity-fixer'/);
+    expect(APPLY_SRC).toMatch(/ANCHOR_SENSITIVE_FIXERS[\s\S]{0,200}'croatian-typography-fixer'/);
+  });
+
+  it('redoslijed ih stvarno stavlja ispred ostalih u fazi', () => {
+    expect(APPLY_SRC).toContain('ANCHOR_SENSITIVE_FIXERS.has(b.request.fixerId)');
+    // Anchor-prvi mora se odluciti PRIJE globalnih prepisivaca, inace se dva pravila potiru.
+    const anchorAt = APPLY_SRC.indexOf('ANCHOR_SENSITIVE_FIXERS.has(b.request.fixerId)');
+    const globalAt = APPLY_SRC.indexOf('GLOBAL_REWRITE_FIXERS.has(a.request.fixerId)');
+    expect(anchorAt).toBeGreaterThan(-1);
+    expect(globalAt).toBeGreaterThan(anchorAt);
+  });
+
+  it('svaki naveden anchor-osjetljiv fixer je stvarno registriran', () => {
+    const listed = /ANCHOR_SENSITIVE_FIXERS[\s\S]*?\[([\s\S]*?)\]/.exec(APPLY_SRC)?.[1] ?? '';
+    const ids = [...listed.matchAll(/'([a-z0-9-]+-fixer)'/g)].map((m) => m[1]);
+    expect(ids.length).toBeGreaterThan(0);
+    for (const id of ids) expect(FIXER_IDS as readonly string[], id).toContain(id);
+  });
+});
