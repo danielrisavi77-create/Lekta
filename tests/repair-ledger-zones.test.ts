@@ -111,3 +111,86 @@ describe('ledger: dokazni cip razlikuje pravilo od preporuke', () => {
     expect(chip.closest('.lekta-repair-ledger-row')).toBeNull();
   });
 });
+
+describe('dokazni cip nosi DOKAZ, ne samo tvrdnju', () => {
+  it('pravilo fakulteta prikazuje stranicu upute i godinu provjere', () => {
+    const ledger = openLedger([
+      safe('Margine', { authority: 'faculty-rule', provenance: { sourcePage: '14', lastVerified: '2026-03-01' } } as Partial<TestItem>),
+    ]);
+    expect(ledger.querySelector('.lekta-repair-ledger-authority')!.textContent)
+      .toBe('Pravilo fakulteta · str. 14 · provjereno 2026.');
+  });
+
+  it('nepotpun dokaz ne izmislja ono cega nema', () => {
+    const samoStranica = openLedger([safe('A', { authority: 'faculty-rule', provenance: { sourcePage: '7' } } as Partial<TestItem>)]);
+    expect(samoStranica.querySelector('.lekta-repair-ledger-authority')!.textContent).toBe('Pravilo fakulteta · str. 7');
+    document.body.innerHTML = '';
+    const bezDokaza = openLedger([safe('B', { authority: 'faculty-rule' } as Partial<TestItem>)]);
+    expect(bezDokaza.querySelector('.lekta-repair-ledger-authority')!.textContent).toBe('Pravilo fakulteta');
+  });
+
+  it('OPCA preporuka nikad ne prikazuje stranicu, ni kad joj se podmetne', () => {
+    // Kljucno: nasa higijena nema fakultetski izvor, pa ne smije nalikovati na referencu upute.
+    const ledger = openLedger([
+      safe('Prazni odlomci', { authority: 'lekta-recommendation', provenance: { sourcePage: '99', lastVerified: '2026-01-01' } } as Partial<TestItem>),
+    ]);
+    const text = ledger.querySelector('.lekta-repair-ledger-authority')!.textContent ?? '';
+    expect(text).toBe('Opća preporuka Lekte, nije pravilo fakulteta');
+    expect(text).not.toContain('str.');
+  });
+
+  it('preporuka fakulteta smije nositi dokaz (ima izvor, samo ne boduje)', () => {
+    const ledger = openLedger([
+      safe('Natpisi', { authority: 'faculty-recommendation', provenance: { sourcePage: '5', lastVerified: '2025-11-02' } } as Partial<TestItem>),
+    ]);
+    expect(ledger.querySelector('.lekta-repair-ledger-authority')!.textContent)
+      .toBe('Preporuka fakulteta, ne ulazi u ocjenu · str. 5 · provjereno 2025.');
+  });
+});
+
+describe('stvaran oblik zapisa iz profila (ne izmisljen testni)', () => {
+  /**
+   * Profili NE zapisuju goli broj stranice nego puni citat, npr.
+   *   "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)"
+   * Prvi pokusaj cipa je zato prikazivao "str. str. 14, odjeljak ...".
+   */
+  const STVARNI = "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)";
+
+  it('ne udvostrucuje "str." i ne prelijeva cijeli citat u redak', () => {
+    const ledger = openLedger([
+      safe('Font', { authority: 'faculty-rule', provenance: { sourcePage: STVARNI, lastVerified: '2026-07-02' } } as Partial<TestItem>),
+    ]);
+    const chip = ledger.querySelector('.lekta-repair-ledger-authority')!;
+    expect(chip.textContent).toBe('Pravilo fakulteta · str. 14 · provjereno 2026.');
+    expect(chip.textContent).not.toContain('str. str.');
+    expect(chip.textContent).not.toContain('odjeljak');
+  });
+
+  it('puni citat se NE gubi nego ide u tooltip', () => {
+    const ledger = openLedger([
+      safe('Font', { authority: 'faculty-rule', provenance: { sourcePage: STVARNI } } as Partial<TestItem>),
+    ]);
+    expect(ledger.querySelector('.lekta-repair-ledger-authority')!.getAttribute('title')).toBe(STVARNI);
+  });
+
+  it('oznaka ODJELJKA se prikazuje kakva jest, bez laznog "str."', () => {
+    // 60% zapisa nisu stranice nego odjeljci; prisilni prefiks bi im pripisao stranicu koje nema.
+    const ledger = openLedger([
+      safe('Font', { authority: 'faculty-rule', provenance: { sourcePage: 'odjeljak Postavke stranice' } } as Partial<TestItem>),
+    ]);
+    const text = ledger.querySelector('.lekta-repair-ledger-authority')!.textContent ?? '';
+    expect(text).toBe('Pravilo fakulteta · odjeljak Postavke stranice');
+    expect(text).not.toContain('str.');
+  });
+
+  it('predugacka oznaka se skracuje, a puni tekst ostaje u tooltipu', () => {
+    const dugo = 'odjeljak 6. Tehnicko oblikovanje rada i oprema';
+    const ledger = openLedger([
+      safe('Font', { authority: 'faculty-rule', provenance: { sourcePage: dugo } } as Partial<TestItem>),
+    ]);
+    const chip = ledger.querySelector('.lekta-repair-ledger-authority')!;
+    expect(chip.textContent).toContain('…');
+    expect((chip.textContent ?? '').length).toBeLessThan('Pravilo fakulteta'.length + 35);
+    expect(chip.getAttribute('title')).toBe(dugo);
+  });
+});

@@ -45,8 +45,14 @@ function expectedMaps() {
           (e.autoFixable === true && e.status === 'verified' && e.fixerId && e.checkId) ||
           (e.status === 'advisory' && e.recommendedFixerId && e.checkId),
       )
-      .map((e) =>
-        e.autoFixable === true
+      .map((e) => {
+        // Provenijencija za dokazni cip (stranica/odjeljak upute + datum provjere). Mora pratiti
+        // scripts/gen-profile-runtime-maps.mts; ovaj test i postoji da ta dva ne odlutaju.
+        const provenance = {
+          ...(e.sourcePage != null ? { sourcePage: e.sourcePage } : {}),
+          ...(e.lastVerified != null ? { lastVerified: e.lastVerified } : {}),
+        };
+        return e.autoFixable === true
           ? {
               ruleId: e.ruleId,
               checkId: e.checkId,
@@ -54,6 +60,7 @@ function expectedMaps() {
               status: e.status,
               fixerId: e.fixerId,
               autoFixable: e.autoFixable,
+              ...provenance,
             }
           : {
               ruleId: e.ruleId,
@@ -63,8 +70,9 @@ function expectedMaps() {
               fixerId: e.recommendedFixerId,
               recommended: true,
               value: e.value,
-            },
-      );
+              ...provenance,
+            };
+      });
     const assisted = entries
       .filter(
         (e) =>

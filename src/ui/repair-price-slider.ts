@@ -67,11 +67,56 @@ const AUTHORITY_CHIP: Record<string, { text: string; cls: string }> = {
   'lekta-recommendation': { text: 'Opća preporuka Lekte, nije pravilo fakulteta', cls: 'is-lekta-tip' },
 };
 
-function authorityChip(item: { authority?: string }): HTMLElement {
+/** Godina iz ISO datuma provjere; puni datum je preciznost koju korisnik ovdje ne treba. */
+function verifiedYear(lastVerified: string | null | undefined): string | null {
+  const year = /^(\d{4})/.exec(String(lastVerified ?? ''))?.[1];
+  return year ?? null;
+}
+
+/**
+ * Kratka oznaka MJESTA u sluzbenoj uputi, iz zapisa koji je pisan kao puni citat.
+ *
+ * `sourcePage` nije uvijek broj stranice. Izmjereno na 1830 zapisa: samo 40% pocinje brojem
+ * ("str. 14, odjeljak 'FORMAT I OPREMA RADA'"), a 60% su oznake odjeljka bez ijedne stranice
+ * ("odjeljak 6. Tehnicko oblikovanje rada", "5. Tehnicko oblikovanje rada (Preporuke)"). Zato se
+ * prefiks "str." dodaje SAMO kad je vrijednost doista broj; inace se zapis prikazuje onakav kakav
+ * jest, jer vec nosi svoju rijec ("odjeljak ...").
+ *
+ * Dva zatecena kvara koja ovo sprjecava: "str. str. 14" (vrijednost vec sadrzi prefiks) i
+ * prelijevanje cijelog citata u redak. Puni zapis se ne gubi: ide u `title` (tooltip).
+ */
+const MAX_REF_CHARS = 28;
+
+function sourceRef(raw: string | null | undefined): string | null {
+  const text = String(raw ?? '').trim();
+  if (!text) return null;
+  const head = text.split(',')[0].trim();
+  if (!head) return null;
+  const bare = head.replace(/^str\.?\s*/i, '').trim();
+  if (/^\d+(\s*[-–]\s*\d+)?$/.test(bare)) return `str. ${bare}`;
+  return head.length <= MAX_REF_CHARS ? head : `${head.slice(0, MAX_REF_CHARS - 1).trimEnd()}…`;
+}
+
+function authorityChip(item: {
+  authority?: string;
+  provenance?: { sourcePage?: string | null; lastVerified?: string | null };
+}): HTMLElement {
   const meta = AUTHORITY_CHIP[item.authority ?? 'lekta-recommendation'] ?? AUTHORITY_CHIP['lekta-recommendation'];
   const chip = document.createElement('small');
   chip.className = `lekta-repair-ledger-authority ${meta.cls}`;
-  chip.textContent = meta.text;
+  // DOKAZ se dopisuje samo kad postoji. Opca preporuka Lekte ga nikad nema (nema ni izvor), pa se
+  // za nju ne smije prikazati nista sto bi nalikovalo na fakultetsku referencu.
+  const parts = [meta.text];
+  if (item.authority === 'faculty-rule' || item.authority === 'faculty-recommendation') {
+    const ref = sourceRef(item.provenance?.sourcePage);
+    const year = verifiedYear(item.provenance?.lastVerified);
+    if (ref) parts.push(ref);
+    if (year) parts.push(`provjereno ${year}.`);
+    // Puni zapis izvora (odjeljak, naslov poglavlja) ostaje dostupan, samo ne zauzima redak.
+    const full = String(item.provenance?.sourcePage ?? '').trim();
+    if (full) chip.title = full;
+  }
+  chip.textContent = parts.join(' · ');
   return chip;
 }
 

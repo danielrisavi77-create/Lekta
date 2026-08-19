@@ -255,11 +255,19 @@ export interface RepairableItem {
    * Razlika je dosad postojala u podacima (`status`, `recommended`) ali ne i na ekranu, pa je
    * "Preporučeno" bio jedini trag i nije razlikovao fakultetsku preporuku od nase.
    *
-   * NAPOMENA: puni citat izvora (ustanova, stranica, datum provjere) ovdje NIJE dostupan - pecena
-   * `data/profiles/repair-map.json` nosi samo {ruleId, checkId, label, status, fixerId,
-   * autoFixable}. Za "str. 14 · provjereno 2026." treba prosiriti generator runtime mapa.
    */
   authority?: 'faculty-rule' | 'faculty-recommendation' | 'lekta-recommendation';
+  /**
+   * DOKAZ uz tvrdnju: stranica sluzbene upute i datum zadnje provjere.
+   *
+   * Bez ovoga "Pravilo fakulteta" je tvrdnja koju korisnik ne moze provjeriti. Polja dolaze iz
+   * pecene `data/profiles/repair-map.json` (generator ih od 2026-08-19 nosi; pokrivenost je
+   * 1830/1847 za stranicu i 1733/1847 za datum), pa se cip gradi bez ijednog dodatnog dohvata.
+   *
+   * Ustanova se NE nosi ovdje: sucelje je zna iz odabranog profila, a nosenje `sourceId` znacilo
+   * bi i cijeli SOURCE_REGISTRY u bundleu.
+   */
+  provenance?: { sourcePage?: string | null; lastVerified?: string | null };
   /** Naslov(i) checka/issuea (analyzeDocx) ciju povredu ova stavka popravlja. Sluzi ISKLJUCIVO
    * korelaciji "koji nalaz na kartici rezultata otvara bas ovu stavku u panelu" (RESULT-03), ne
    * ulazi u zahtjev prema serveru. Prazno/izostavljeno znaci da stavka nije vezana ni za jedan

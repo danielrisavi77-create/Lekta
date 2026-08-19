@@ -124,6 +124,20 @@ function findCheckForDimension(checks: AnalyzedCheck[], dimension: string): Anal
     : checks.find((c) => c.title === CHECK_TITLE[dimension]);
 }
 
+/**
+ * Dokaz uz pravilo (stranica upute + datum provjere), kad ga pecena mapa nosi.
+ *
+ * Vraca `{}` kad nema nijednog podatka, da stavka ne dobije prazan `provenance` objekt koji bi
+ * u testovima izgledao kao razlika, a sucelju ne bi rekao nista.
+ */
+function provenanceOf(entry: RuleEntry): { provenance?: { sourcePage?: string; lastVerified?: string } } {
+  const provenance = {
+    ...(entry.sourcePage ? { sourcePage: String(entry.sourcePage) } : {}),
+    ...(entry.lastVerified ? { lastVerified: String(entry.lastVerified) } : {}),
+  };
+  return Object.keys(provenance).length ? { provenance } : {};
+}
+
 /** Status checka za dimenziju (ili undefined ako ga nema). Za razliku od isViolated NE trazi
  *  max>0: numeriranje-checkovi su nebodovani (max=0, "Word ne sprema dovoljno podataka") na
  *  jednosekcijskom radu, ali im status ostaje 'warn' kad numeriranje od Uvoda nije potvrdjeno. */
@@ -177,6 +191,7 @@ export function buildRepairableItems(
         // Fakultet ovo PREPORUCUJE (advisory), ne propisuje: dokazni cip to mora reci, inace
         // korisnik ne razlikuje fakultetsku preporuku od nase opce higijene.
         authority: 'faculty-recommendation',
+        ...provenanceOf(e),
         ...(CHECK_TITLE[e.checkId] ? { matchKeys: [CHECK_TITLE[e.checkId]] } : {}),
       });
       continue;
@@ -196,6 +211,7 @@ export function buildRepairableItems(
       violated,
       // Verificirano pravilo fakulteta: jedina kategorija koja ulazi u ocjenu.
       authority: 'faculty-rule',
+      ...provenanceOf(e),
       ...(CHECK_TITLE[e.checkId] ? { matchKeys: [CHECK_TITLE[e.checkId]] } : {}),
     });
   }

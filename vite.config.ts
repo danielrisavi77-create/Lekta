@@ -205,7 +205,26 @@ function bundleSizeGuard(devTools: boolean) {
    * Ne podizi ovaj broj bez mjerenja i biljeske zasto. Guard koji se podigne svaki put kad
    * zasmeta je isto sto i guard koji nije registriran.
    */
-  const INDEX_ENTRY_BUDGET = 960 * 1024;
+  /**
+   * 2026-08-19: podignuto 960 -> 1080 KB zbog provenijencije popravaka (dokazni cip: stranica ili
+   * odjeljak sluzbene upute + godina provjere, uz svaku stavku u repair panelu).
+   *
+   * MJERENJE, ne procjena:
+   *   data/profiles/repair-map.json  466 -> 621 KB sirovo, ali  22,0 -> 29,4 KB gzip (+7,4 KB),
+   *   glavni index chunk              ~917 -> 1068 KB sirovo.
+   *   Pokrivenost: 1830/1847 pravila dobiva oznaku mjesta, 1733/1847 godinu provjere.
+   *
+   * Zasto se nije moglo srezati umjesto podici: nosenje SAMO `sourcePage` (bez datuma) daje
+   * ~1021 KB, dakle i dalje preko starog budzeta. Jedina prava usteda je da ove podatke uopce
+   * nema u entryju.
+   *
+   * PRAVI POPRAVAK, zaseban posao: `repair-map.json` treba lijeni chunk. Provenijencija je
+   * potrebna TEK kad korisnik otvori repair panel, dakle iza interakcije, a danas se ucitava na
+   * prvom paintu. Uz to je 280 od 368 profila ima isti `sourcePage` za SVE svoje zapise, pa bi
+   * hoisting po profilu ustedio jos ~100 KB. Dok se to ne odradi, budzet je opet postavljen na
+   * danasnju mjeru s malom rezervom, da guard SPRJECAVA daljnji rast.
+   */
+  const INDEX_ENTRY_BUDGET = 1080 * 1024;
   return {
     name: 'lekta-bundle-size-guard',
     apply: 'build' as const,

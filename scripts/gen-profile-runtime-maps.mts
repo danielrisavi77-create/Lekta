@@ -68,8 +68,23 @@ for (const id of [...DRAFT_PROFILE_IDS].sort()) {
         (e.autoFixable === true && e.status === 'verified' && e.fixerId && e.checkId) ||
         (e.status === 'advisory' && e.recommendedFixerId && e.checkId),
     )
-    .map((e) =>
-      e.autoFixable === true
+    .map((e) => {
+      /**
+       * PROVENIJENCIJA za dokazni cip u sucelju ("str. 14 · provjereno 2026.").
+       *
+       * Dotad su ova dva tipa zapisa nosila samo {ruleId, checkId, label, status, fixerId}, pa je
+       * sucelje moglo reci SAMO je li nesto pravilo ili preporuka, ali ne i ODAKLE to zna. Bez
+       * izvora "Pravilo fakulteta" je tvrdnja koju korisnik ne moze provjeriti.
+       *
+       * Nose se samo `sourcePage` i `lastVerified`, i to samo kad postoje: to su jedina dva polja
+       * koja cip prikazuje. `sourceId` se NE nosi (trazio bi i cijeli SOURCE_REGISTRY u bundleu),
+       * a ustanovu sucelje ionako zna iz odabranog profila.
+       */
+      const provenance = {
+        ...(e.sourcePage != null ? { sourcePage: e.sourcePage } : {}),
+        ...(e.lastVerified != null ? { lastVerified: e.lastVerified } : {}),
+      };
+      return e.autoFixable === true
         ? {
             ruleId: e.ruleId,
             checkId: e.checkId,
@@ -77,6 +92,7 @@ for (const id of [...DRAFT_PROFILE_IDS].sort()) {
             status: e.status,
             fixerId: e.fixerId,
             autoFixable: e.autoFixable,
+            ...provenance,
           }
         : {
             ruleId: e.ruleId,
@@ -86,8 +102,9 @@ for (const id of [...DRAFT_PROFILE_IDS].sort()) {
             fixerId: e.recommendedFixerId,
             recommended: true,
             value: e.value,
-          },
-    );
+            ...provenance,
+          };
+    });
   // (3) ui-assisted: gate polja + value, bit-identicno onome sto svaka *RepairableItem funkcija cita.
   const assistedEntries = entries
     .filter(
