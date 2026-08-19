@@ -4136,7 +4136,7 @@
       "program": "derived",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "not-run",
+      "proof": "review",
       "assets": "generic",
       "claim": "C",
       "claimLabel": "ima sluzbena pravila i automatski popravak, ali popravak jos nije dokazan na dokumentu",
@@ -4151,10 +4151,10 @@
         "bulkPending": 0,
         "offeredRepairOptions": 5,
         "facultySpecificRepairOptions": 5,
-        "realDocxSamples": 0
+        "realDocxSamples": 1
       },
       "blockedReasons": [
-        "popravak nije izveden ni na jednom dokumentu (ni sintetickom)"
+        "stvarni dokument je popravljen, ali ishod jos trazi rucni pregled"
       ]
     },
     {
@@ -12739,8 +12739,8 @@
     "byProof": {
       "real-docx-pass": 0,
       "synthetic-pass": 0,
-      "review": 10,
-      "not-run": 426
+      "review": 11,
+      "not-run": 425
     },
     "byAssets": {
       "exact-official": 0,
