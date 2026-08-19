@@ -63,6 +63,7 @@
     "generate-benchmark-fixture": "vite-node scripts/generate-benchmark-fixture.mts",
     "verify:word:toc": "powershell -ExecutionPolicy Bypass -File scripts/word-verify/make-toc-case.ps1 && vite-node scripts/word-verify/repair-toc.mts -- .tmp-word-verify/toc-slucaj.docx .tmp-word-verify/toc-slucaj-popravljen.docx && powershell -ExecutionPolicy Bypass -File scripts/word-verify/check-toc-case.ps1",
     "worklist": "vite-node scripts/verification-worklist.mts",
+    "completion-ledger": "vite-node scripts/generate-completion-ledger.mts",
     "seed-program-registry": "vite-node scripts/seed-program-registry.mts",
     "reconcile-programs": "vite-node scripts/reconcile-programs.mts"
   },

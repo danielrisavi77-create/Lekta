@@ -38,6 +38,18 @@ function readJson(relPath) {
 }
 
 const coverage = readJson('data/coverage/scored-coverage.json');
+// Javna TVRDNJA se ne racuna ovdje: prepisuje se iz completion ledgera (P0-4 u
+// docs/PLAN_POTPUNA_POKRIVENOST.md). Tier ispod mjeri samo koliko je PRAVILA bodovano; on ne zna
+// je li popravak ikad izveden, pa je "potpuno pokriveno" bez ledgera znacilo vise nego sto je
+// itko dokazao. tests/coverage-page-claims.test.ts pada ako generator pocne sam sricati tvrdnje.
+const ledger = readJson('docs/generated/completion-ledger.json');
+const claimByProfileId = new Map();
+for (const row of ledger.rows) {
+  if (row.profileId == null) continue;
+  const prev = claimByProfileId.get(row.profileId);
+  // Profil s vise vrsta rada: pokazuje se NAJSLABIJA tvrdnja, jer jaca ne vrijedi za sve.
+  if (!prev || row.claim > prev.claim) claimByProfileId.set(row.profileId, row);
+}
 const verifiedIndex = readJson('data/profiles/verified-profiles-index.json');
 const legalDepartments = readJson('data/profiles/legal-departments.json');
 const catalog = readJson('data/catalog/zagreb-catalog.json');
@@ -63,7 +75,7 @@ for (const institution of catalog) {
 }
 
 const TIER = {
-  full: { key: 'full', label: 'Potpuno pokriveno', className: 'tier-full' },
+  full: { key: 'full', label: 'Sva pravila bodovana', className: 'tier-full' },
   partial: { key: 'partial', label: 'Djelomično pokriveno', className: 'tier-partial' },
   advisory: { key: 'advisory', label: 'Samo preporuke', className: 'tier-advisory' },
   none: { key: 'none', label: 'Nepokriveno', className: 'tier-none' },
@@ -105,6 +117,8 @@ const rows = allProfiles.map((p) => {
     machineCheckable: cell?.machineCheckable ?? 0,
     advisory: cell?.advisory ?? 0,
     lastVerified: cell?.lastVerified ?? null,
+    claim: claimByProfileId.get(p.id)?.claim ?? null,
+    claimLabel: claimByProfileId.get(p.id)?.claimLabel ?? null,
   };
 });
 
@@ -196,6 +210,8 @@ const PAGE_STYLE = `
   .badge.tier-advisory { background: color-mix(in srgb, var(--blue) 18%, transparent); color: var(--blue); }
   .badge.tier-none { background: color-mix(in srgb, var(--grey) 22%, transparent); color: var(--grey); }
   .ratio-note { display: block; margin-top: 0.15rem; font-size: 0.74rem; color: var(--paper-muted); }
+  .claim-note { display: block; margin-top: 0.25rem; font-size: 0.74rem; color: var(--paper-muted); }
+  .claim-note b { display: inline-block; min-width: 1.1rem; color: var(--ink); }
   footer { max-width: 980px; margin: 0 auto; padding: 1.3rem 1.1rem 2.4rem; border-top: 1px solid var(--desk-line); font-size: 0.85rem; color: var(--desk-muted); }
   footer a { color: var(--red); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
@@ -205,16 +221,21 @@ const legendHtml = `
 <div class="legend">
   Pravila po radu dijelimo na <strong>bodovana</strong> (strojno provjerljiva, sljediva do službenog izvora) i <strong>preporuke</strong> (savjet uz izvor, ne utječu na ocjenu). Ova tablica pokazuje udio za svaki profil, ne kvalitetu rada.
   <dl>
-    <dt class="tier-full">Potpuno pokriveno</dt><dd>sva strojno provjerljiva pravila su bodovana i verificirana uz izvor.</dd>
+    <dt class="tier-full">Sva pravila bodovana</dt><dd>sva strojno provjerljiva pravila su bodovana i verificirana uz izvor.</dd>
     <dt class="tier-partial">Djelomično pokriveno</dt><dd>dio pravila je bodovan, ostatak je savjet (advisory) ili čeka verifikaciju.</dd>
     <dt class="tier-advisory">Samo preporuke</dt><dd>izvor postoji, ali ništa nije dovoljno nedvosmisleno da se boduje - sve je savjet.</dd>
     <dt class="tier-none">Nepokriveno</dt><dd>još nema strukturiranih pravila za ovaj profil (analiza koristi opći profil).</dd>
   </dl>
+  <p>Oznaka pokraj svakog profila (<b>A</b> do <b>E</b>) kaže nešto drugo: <strong>što smijemo tvrditi</strong>.
+  Bodovana pravila znače da je pravilo pročitano iz službene upute i da ga alat mjeri; ne znače da je
+  automatski popravak ikad izveden na dokumentu tog studija. Zato profil može imati sva pravila bodovana
+  i istovremeno biti na razini <b>C</b>. Razine se izvode iz jednog izvora
+  (<code>docs/generated/completion-ledger.json</code>), pa ova stranica ne može tvrditi više od njega.</p>
 </div>`;
 
 const summaryHtml = `
 <div class="summary">
-  <div class="stat tier-full"><b>${totals.full}</b><span>potpuno pokriveno</span></div>
+  <div class="stat tier-full"><b>${totals.full}</b><span>sva pravila bodovana</span></div>
   <div class="stat tier-partial"><b>${totals.partial}</b><span>djelomično pokriveno</span></div>
   <div class="stat tier-advisory"><b>${totals.advisory}</b><span>samo preporuke</span></div>
   <div class="stat tier-none"><b>${totals.none}</b><span>nepokriveno</span></div>
@@ -222,7 +243,7 @@ const summaryHtml = `
 
 function unitSummaryText(groupRows) {
   const scoredTiers = groupRows.filter((r) => r.tier.key === 'full').length;
-  return `${scoredTiers}/${groupRows.length} potpuno`;
+  return `${scoredTiers}/${groupRows.length} sa svim pravilima`;
 }
 
 function rowHtml(r) {
@@ -232,10 +253,14 @@ function rowHtml(r) {
   const ratioNote = r.machineCheckable > 0
     ? `<span class="ratio-note">${r.scored}/${r.machineCheckable} bodovano${r.advisory ? `, ${r.advisory} preporuka` : ''}</span>`
     : (r.advisory ? `<span class="ratio-note">${r.advisory} preporuka</span>` : '');
+  // Tvrdnja je PREPISANA iz ledgera (row.claimLabel), nikad srocena ovdje.
+  const claimNote = r.claimLabel
+    ? `<span class="claim-note"><b>${esc(r.claim)}</b> ${esc(r.claimLabel)}</span>`
+    : '';
   return `<tr>
     <td>${esc(r.programText)}</td>
     <td>${esc(r.workTypeText)}</td>
-    <td><span class="badge ${r.tier.className}">${esc(r.tier.label)}</span>${ratioNote}${dateNote}</td>
+    <td><span class="badge ${r.tier.className}">${esc(r.tier.label)}</span>${ratioNote}${dateNote}${claimNote}</td>
   </tr>`;
 }
 
