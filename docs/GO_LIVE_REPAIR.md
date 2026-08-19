@@ -76,10 +76,22 @@ Zato se izvođenje **upisuje ovdje**, inače se zaboravi i nitko poslije ne zna 
 
 | Datum | Verzija / commit | `verify:strict-open` | `verify:word` | `verify:word:worst` | Tko |
 |---|---|---|---|---|---|
-| _(popuni pri sljedećem deployu repair motora)_ | | | | | |
+| 2026-08-19 | `02eef4c` | 15/15 ulaznih + 12/12 popravljenih | PROŠAO | PROŠAO | Daniel + Claude |
 
-Zadnja poznata izmjena Repair Enginea koja **traži novo izvođenje**: 2026-08-16 (RE-62, serverski
-autoritet nad ciljanom vrijednošću + ponovna provjera prije isporuke).
+Što je pokrivalo izvođenje 2026-08-19 (grana `fix/repair-panel-zones-authority`): dvosmjerna
+sinkronizacija dijelova paketa i `GLOBAL_REWRITE_FIXERS` redoslijed, serverski autoritet nad
+ciljanom vrijednošću, ponovna provjera prije isporuke, `informational` status, lijeni `repair-map`.
+
+Detalji koje je Tier 2 potvrdio, a Tier 0 ne može: Word otvara sve varijante s
+`OpenAndRepair=false`; u najgorem slučaju (naslovnica, položeni prilog, tablica, slika, fusnota,
+dijakritika) svih 19 tvrdnji iz odjeljka "NE SMIJE SE POKVARITI" prošlo je, dakle **vidljivi tekst
+je ostao nepromijenjen**. `verify:strict-open` je vrtjen i nad ULAZNIM fixturima i nad
+POPRAVLJENIM paketima (`.artifacts/lekta-real-corpus-review`), jer prvo ne dokazuje drugo.
+
+OTVORENO, ne pokriva ga ovo izvođenje: `toc-field-fixer` je upisan kao četvrti mehanizam koji
+smije mijenjati vidljivi tekst, ali to još NIJE potvrđeno usporedbom teksta prije i poslije
+`Fields.Update()` na dokumentu koji sadržaj dobiva prvi put. Dok ta potvrda ne postoji, izuzeće
+u `CLAUDE.md` ostaje privremeno.
 
 ---
 
