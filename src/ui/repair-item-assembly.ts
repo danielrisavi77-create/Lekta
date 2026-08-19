@@ -69,7 +69,18 @@ export interface RepairAssemblyInput {
  * odluke i za UI checkbox i za testove.
  */
 export function buildAllRepairableItems(input: RepairAssemblyInput): RepairableItem[] {
-  const { result: r, profile, entries, titleTemplate, includeNonViolated = false } = input;
+  const { result: r, profile: rawProfile, entries, titleTemplate, includeNonViolated = false } = input;
+  /**
+   * SEDAM asistiranih graditelja (element-caption, bibliography, citation-sync, legal-footnote,
+   * table-figure-rescue, section-surgery, required-sections) ne citaju `entries` nego
+   * `profile.ruleEntries`. `resolveProfile()` to polje NEMA, a app.ts ga postavlja rucno prije
+   * poziva; sastavljac to nije radio, pa je za svakog pozivatelja koji se na njega osloni (npr.
+   * real-corpus harness) tih sedam fixera bilo mrtvo, bez ijedne poruke.
+   *
+   * Radi se na KOPIJI profila: mutiranje tudjeg objekta bi se prelilo na pozivatelja i na sljedeci
+   * dokument u istom prolazu.
+   */
+  const profile = entries?.length ? { ...rawProfile, ruleEntries: entries } : rawProfile;
   const only = <T extends { violated?: boolean }>(items: T[]): T[] =>
     includeNonViolated ? items : items.filter((item) => item.violated !== false);
 

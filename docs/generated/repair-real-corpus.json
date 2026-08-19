@@ -278,8 +278,8 @@
       },
       "after": {
         "checkCount": 35,
-        "passCount": 19,
-        "score": 84
+        "passCount": 21,
+        "score": 87
       },
       "beforeEntryCount": 8,
       "afterEntryCount": 8,
@@ -287,21 +287,26 @@
       "offeredFixerIds": [
         "font-fixer",
         "alignment-fixer",
+        "bibliography-repair-fixer",
+        "citation-bibliography-sync-fixer",
         "final-document-inspector-fixer",
         "field-integrity-fixer",
         "consistency-fixer",
+        "section-surgery-fixer",
+        "required-section-fixer",
         "link-doi-fixer"
       ],
       "changedFixerIds": [
         "field-integrity-fixer",
         "font-fixer",
         "alignment-fixer",
-        "link-doi-fixer",
-        "final-document-inspector-fixer"
+        "section-surgery-fixer",
+        "final-document-inspector-fixer",
+        "bibliography-repair-fixer"
       ],
-      "targetedCheckCount": 14,
-      "targetedResolvedCount": 4,
-      "targetedUnresolvedCount": 10,
+      "targetedCheckCount": 23,
+      "targetedResolvedCount": 6,
+      "targetedUnresolvedCount": 17,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -655,8 +660,8 @@
       },
       "after": {
         "checkCount": 33,
-        "passCount": 19,
-        "score": 81
+        "passCount": 20,
+        "score": 83
       },
       "beforeEntryCount": 12,
       "afterEntryCount": 12,
@@ -666,10 +671,13 @@
         "line-spacing-fixer",
         "paper-size-fixer",
         "alignment-fixer",
+        "bibliography-repair-fixer",
         "final-document-inspector-fixer",
         "field-integrity-fixer",
         "croatian-typography-fixer",
         "consistency-fixer",
+        "section-surgery-fixer",
+        "required-section-fixer",
         "link-doi-fixer"
       ],
       "changedFixerIds": [
@@ -679,12 +687,13 @@
         "line-spacing-fixer",
         "paper-size-fixer",
         "alignment-fixer",
-        "link-doi-fixer",
-        "final-document-inspector-fixer"
+        "section-surgery-fixer",
+        "final-document-inspector-fixer",
+        "bibliography-repair-fixer"
       ],
-      "targetedCheckCount": 18,
-      "targetedResolvedCount": 6,
-      "targetedUnresolvedCount": 12,
+      "targetedCheckCount": 25,
+      "targetedResolvedCount": 8,
+      "targetedUnresolvedCount": 17,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -725,7 +734,9 @@
         "toc-field-fixer",
         "final-document-inspector-fixer",
         "field-integrity-fixer",
-        "consistency-fixer"
+        "consistency-fixer",
+        "section-surgery-fixer",
+        "required-section-fixer"
       ],
       "changedFixerIds": [
         "field-integrity-fixer",
@@ -736,9 +747,9 @@
         "final-document-inspector-fixer",
         "toc-field-fixer"
       ],
-      "targetedCheckCount": 14,
+      "targetedCheckCount": 18,
       "targetedResolvedCount": 5,
-      "targetedUnresolvedCount": 9,
+      "targetedUnresolvedCount": 13,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
