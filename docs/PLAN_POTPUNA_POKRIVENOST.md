@@ -282,6 +282,24 @@ Cilj: ne moze se tvrditi pokrivenost programa koji nikad nije evidentiran. Danas
    njihove sastavnice u nasem katalogu postoje. Za tih 55 programa se veza program -> jedinica iz
    ovog izvora ne moze izvesti; treba drugi izvor ili ljudska dodjela.
 
+#### Alat za potvrdjivanje (2026-08-19)
+- `src/programs/unit-match-decisions.ts` + `scripts/approve-unit-match.mts`
+  (`npm run approve-unit-match`) + `tests/unit-match-decisions.test.ts`.
+- Odluke zive u `data/programs/unit-match-decisions.json` (AUTORSKI sloj), pa regeneracija
+  prijedloga u `docs/generated/` NIKAD ne pregazi ljudsku odluku.
+- Validator ne dopusta: odluku bez potpisa, odluku bez jedinice i bez razloga, razlog izvan
+  zatvorenog skupa (`foreign-institution`, `whole-institution`, `unit-not-in-catalog`,
+  `ambiguous`), jedinicu koja ne postoji u katalogu, ni odluku za izvoditelja kojeg vise nema u
+  harvestu (preimenovanje u Upisniku se tako ne provuce tiho).
+- Svaka odluka pamti STO JE STROJ PREDLAGAO (`proposed`), pa se kasnije vidi gdje je covjek
+  odstupio (`overrides` u pokrivenosti).
+- POUKA IZ P2-1 UGRADJENA UNAPRIJED: skupno odobrenje (`--accept-exact`) je dopusteno, ali ostaje
+  VIDLJIVO kao skupno (`bulk: true`). Verifikacijski worklist je zatekao 38 pravila koja su
+  izgledala potvrdjeno a bila su odobrena skupno; ta se razlika mora zapisati u trenutku odluke
+  jer se kasnije ne moze rekonstruirati.
+- Ispis `--list` sortira po broju programa, pa se prvo rjesava ono sto najvise nosi; za splitski
+  slucaj alat sam nudi `ozs` medju alternativama.
+
 #### Sto jos ostaje
 - AC za dovrsetak: svaki prenesen zapis nosi `provenance.kind = 'upisnik'` i
   `officialProgramCode`; registar dobiva `upisnikSynced: true` tek kad prijenos zavrsi;

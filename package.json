@@ -67,7 +67,8 @@
     "seed-program-registry": "vite-node scripts/seed-program-registry.mts",
     "reconcile-programs": "vite-node scripts/reconcile-programs.mts",
     "harvest-programs": "vite-node scripts/harvest-programs.mts",
-    "match-upisnik-units": "vite-node scripts/match-upisnik-units.mts"
+    "match-upisnik-units": "vite-node scripts/match-upisnik-units.mts",
+    "approve-unit-match": "vite-node scripts/approve-unit-match.mts"
   },
   "overrides": {
     "nanoid": "^3.3.18"
