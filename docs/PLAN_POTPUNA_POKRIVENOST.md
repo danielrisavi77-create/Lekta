@@ -439,15 +439,36 @@ Cilj: ne moze se tvrditi pokrivenost programa koji nikad nije evidentiran. Danas
   odluka. Time se ne obecava popravak kojeg nema, ali se korisnika ne ostavlja bez izlaza.
 - Gard: `tests/finding-view-model.test.ts` (tri nova slucaja).
 
-### P3-2. Kombinacijski testovi fixera koji pomicu indekse odlomaka
-- Problem: dokumentirana opasnost da dva fixera pomaknu ciljeve jedan drugome; danas postoje
-  samo pojedinacni unit testovi.
-- Datoteke: `tests/repair-fixer-pairs.test.ts` (nov), `src/repair/apply-fixers.ts`.
-- AC: matrica svih parova fixera koji mijenjaju broj odlomaka; za svaki par dokaz da je ishod
-  isti bez obzira na redoslijed, ili eksplicitan, testiran redoslijed u receptu. Tvrdnja
-  `integrityFailure === null` je OBAVEZNA u svakom testu (inace prazan changelog nad ulaznim
-  bajtovima prolazi vakuumski, poznati lazno zeleni obrazac).
-- Velicina: L. Prioritet: P2.
+### P3-2. Kombinacijski testovi fixera koji pomicu indekse : GOTOVO, uz izmjeren sudar (2026-08-20)
+- Izvedeno: `src/repair/index-shift-pairs.test.ts`. Tri invarijante nad redoslijedom (svaki
+  index-shifting fixer ima izricit rang; nema mrtvih rangova; rangovi su jedinstveni) plus mjerenje
+  koje broji odlomke PRIJE i POSLIJE, pa clanstvo izvodi iz PONASANJA, ne iz pamcenja autora.
+- Invarijante su prosle, ali su vrijedne: fixer koji nije u `INDEX_SHIFTING_ORDER` tiho dobiva rang
+  0 i izvodi se medju prvima u strukturnoj fazi, dakle kao da radi na kraju dokumenta. Nista to
+  dosad nije prijavljivalo.
+
+#### Nadjen kvar, pa nadjeno da popravak nije u redoslijedu
+- `element-caption-fixer` UMECE odlomke (natpis, "Izvor:", uz `lists` i cijeli "Popis tablica" s
+  TOC poljem), a nije bio u `INDEX_SHIFTING_FIXERS`. Po RE-46 to znaci da se izvodi u prvoj fazi i
+  pomice mete svim strukturnim fixerima iza sebe.
+- Premjestanje u strukturnu fazu je IZMJERENO golden harnessom i dalo je GORE stanje na
+  `fer-diplomski-puna-struktura.docx`: primijenjenih popravaka **6 -> 5**, a natpisi su TIHO ispali
+  iz changeloga. Razlog: fixer je istovremeno ANCHOR-OSJETLJIV, pa ga bibliography i citation-sync,
+  koji u toj fazi idu prije njega, oslijepe prepisivanjem odlomaka.
+- Nijedan redoslijed ne rjesava sudar, isto kao RE-55 (link-doi vs bibliografija). Izmjena je zato
+  VRACENA, a sudar je zapisan kao `INSERTS_BUT_ANCHOR_BOUND` u kodu i zakljucan testom: fixer mora
+  biti u tocno jednom od dva skupa, nikad tiho ni u jednom. Pravo rjesenje je vlasnistvo nad
+  odlomkom ili ponovni izracun sidara izmedju faza, ne redoslijed.
+- Golden harness je ovdje odradio tocno ono zbog cega postoji: zaustavio je izmjenu koja je
+  izgledala kao ocit popravak, a mjerljivo je stetila.
+
+### P3-2b. `table-figure-rescue-fixer`: isti obrazac, jos neizmjeren
+- Umece `<w:p>` (`src/repair/table-figure-rescue-fixer.ts:298`, odlomak s portret sekcijom) i takodjer
+  nije u `INDEX_SHIFTING_FIXERS`. Nije mijenjan bez mjerenja, jer je `element-caption` upravo
+  pokazao da "ocit" popravak moze biti stetan.
+- AC: isto mjerenje kao za `element-caption` (broj odlomaka prije/poslije + golden), pa svrstavanje
+  u `INDEX_SHIFTING_FIXERS` ili u `INSERTS_BUT_ANCHOR_BOUND` s obrazlozenjem.
+- Velicina: S. Prioritet: P2.
 
 ### P3-3. Idempotencija i no-pass-regression kao obavezni gard po fixeru
 - AC: svaki od 31 fixera ima test da drugo pokretanje nad vlastitim izlazom ne mijenja bajtove

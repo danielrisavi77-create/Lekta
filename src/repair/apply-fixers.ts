@@ -156,7 +156,7 @@ export interface ApplyFixersResult {
  * Kombinacija dvaju fixera IZ OVE skupine i dalje moze pomaknuti indekse jedan drugome; to je
  * poznata, uza granica (oni se u praksi rijetko preklapaju nad istim odlomcima).
  */
-const INDEX_SHIFTING_FIXERS: ReadonlySet<string> = new Set<string>([
+export const INDEX_SHIFTING_FIXERS: ReadonlySet<string> = new Set<string>([
   'empty-paragraph-fixer', // uklanja osirotjele prazne odlomke
   'required-section-fixer', // umece nedostajuce obvezne dijelove
   'toc-field-fixer', // umece zivo TOC polje
@@ -165,6 +165,22 @@ const INDEX_SHIFTING_FIXERS: ReadonlySet<string> = new Set<string>([
   'bibliography-repair-fixer', // moze ukloniti duplicirane zapise
   'citation-bibliography-sync-fixer', // moze dodati nedostajuce zapise
 ]);
+
+/**
+ * SUDAR BEZ RJESENJA U REDOSLIJEDU (izmjereno 2026-08-20, src/repair/index-shift-pairs.test.ts).
+ *
+ * `element-caption-fixer` UMECE odlomke (natpis, "Izvor:", uz `lists` i cijeli "Popis tablica" s
+ * TOC poljem), pa bi po RE-46 pripadao u strukturnu fazu. Ali on je istovremeno ANCHOR-OSJETLJIV:
+ * mete nalazi po `anchorFingerprint` racunatom nad IZVORNIM dokumentom. Premjestanje u drugu fazu
+ * je izmjereno na `fer-diplomski-puna-struktura.docx` i dalo je GORE stanje: primijenjenih
+ * popravaka 6 -> 5, a natpisi su tiho ispali iz changeloga jer su ih bibliography i citation-sync
+ * prije njega vec prepisali.
+ *
+ * Nijedan redoslijed ne rjesava sudar, isto kao kod RE-55 (link-doi vs bibliografija). Zato ostaje
+ * u PRVOJ fazi: tako barem sam radi, a rizik je da pomakne mete strukturnim fixerima iza sebe.
+ * Pravo rjesenje je vlasnistvo nad odlomkom ili ponovni izracun sidara izmedju faza, ne redoslijed.
+ */
+export const INSERTS_BUT_ANCHOR_BOUND: ReadonlySet<string> = new Set<string>(['element-caption-fixer']);
 
 /**
  * RE-51: redoslijed UNUTAR gornje skupine, od dijela dokumenta koji je NAJDALJE od pocetka prema
@@ -176,7 +192,7 @@ const INDEX_SHIFTING_FIXERS: ReadonlySet<string> = new Set<string>([
  * bibliography-repair-fixer s metama na indeksima 529+ vracao 'invalid-params' iako je SAM prolazio.
  * Manji broj = ranije se izvodi. Fixer koji nije naveden dobiva 0 (izvodi se medju prvima).
  */
-const INDEX_SHIFTING_ORDER: ReadonlyMap<string, number> = new Map<string, number>([
+export const INDEX_SHIFTING_ORDER: ReadonlyMap<string, number> = new Map<string, number>([
   ['bibliography-repair-fixer', 0], // popis literature: kraj dokumenta
   ['citation-bibliography-sync-fixer', 1], // zapisi uz literaturu
   ['required-section-fixer', 2], // umetanje obveznih dijelova (moze biti bilo gdje)
