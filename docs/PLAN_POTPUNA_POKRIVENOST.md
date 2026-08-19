@@ -408,15 +408,36 @@ Cilj: ne moze se tvrditi pokrivenost programa koji nikad nije evidentiran. Danas
 
 ## FAZA P3: potpun graf provjera i popravaka
 
-### P3-1. Cetiri assisted provjere bez fixera
-- `structure.heading.word-styles`, `element.table.caption`, `element.figure.caption`,
-  `element.lists` (`src/analysis/check-fixer-map.ts:133-137`).
-- Za svaku: implementirati fixer ILI upisati mjereni razlog zasto ostaje bez njega, po uzoru
-  na vec obavljeno mjerenje `section-surgery` (cb74b5d) koje je dokazalo da `manual` nije
-  propust. Mjerenje ide PRIJE koda.
-- AC: nijedan `STRUCTURAL_CHECK_RULE` nema ni `fixId` ni komentar s brojkama mjerenja.
-- Testovi: `check-fixer-map-coverage.test.ts` prosiren tvrdnjom o tom invariantu.
-- Velicina: L. Prioritet: P2.
+### P3-1. Cetiri assisted provjere bez fixera : IZMJERENO, mapiranje NIJE opravdano (2026-08-20)
+- Postupak je isti kao kod `section-surgery` (cb74b5d): mjerenje PRIJE koda. Ishod je OBRNUT od
+  preporuke audita.
+- Prvo, tvrdnja audita da im "repairCeiling ostaje ispod 100" NE STOJI: `groupKey` ih vec svrstava
+  u `assisted`, a strop gleda samo `fixability === 'manual'` (`result-readiness.ts`). Stvarna
+  posljedica je uza: `finding-view-model` racuna `autoRepairable: !!triage?.fixId`, pa kartica ne
+  prikazuje gumb "Otvori mogucnost popravka".
+- Mjerenje nad svih 15 stvarnih fixtura (`tests/heading-caption-fix-offer.test.ts`):
+  - `structure.heading.word-styles` NE prijavi nalaz ni na jednom dokumentu. Nema dokaza da je
+    provjera ikad vidljiva, pa se fixer ne smije obecati na temelju pretpostavke.
+  - `element.table.caption` / `element.figure.caption` PRIJAVLJUJU nalaz, ali popravak natpisa tada
+    NIJE ponudjen (`pravo-integrirani-fusnote.docx`). Provjera se javlja kad natpisa NEMA, a
+    `elementCaptionRepairableItem` treba `elementStructure.candidates` - elemente na koje se natpis
+    moze objesiti. Mapiranje bi obecalo gumb koji ne otvara nista.
+  - `element.lists` SE emitira (`word-veliki-neuredan.docx`), ali fixer za njega ne postoji.
+- USPUT OBORENA VLASTITA STATIKA: ranije brojanje `requireListsWhenElements` po
+  `verified-profiles-heavy.json` dalo je 0 od 410 profila, a dokument pokazuje suprotno. Zastavica
+  se dobiva KOMPILACIJOM `ruleEntries`, ne stoji u heavy datoteci. Statika nad pogresnim izvorom je
+  izgledala uvjerljivo; samo je stvarni dokument to otkrio.
+- ZAKLJUCAK: nijedan od cetiri fixId se ne dodaje. Sve cetiri ostaju `assisted` bez fixera, uz
+  mjerenje zapisano u testu.
+
+### P3-1b. Kartica nalaza bez ijedne radnje : POPRAVLJENO (2026-08-20)
+- Kvar koji je mjerenje otkrilo usput, i koji je stvarniji od nalaza zbog kojeg se mjerilo: nalaz
+  `assisted` bez `fixId` nije dobivao ni gumb za popravak (ovisi o `fixId`) ni gumbe za rucnu
+  odluku (ovisili su o `fixability === 'manual'`). Kartica je ostajala BEZ IJEDNE radnje. Isto se
+  dogadjalo svakom nalazu kad popravak nije dostupan.
+- Lijek vezuje uvjet uz ono sto se STVARNO prikazuje: kad nema gumba za popravak, nudi se rucna
+  odluka. Time se ne obecava popravak kojeg nema, ali se korisnika ne ostavlja bez izlaza.
+- Gard: `tests/finding-view-model.test.ts` (tri nova slucaja).
 
 ### P3-2. Kombinacijski testovi fixera koji pomicu indekse odlomaka
 - Problem: dokumentirana opasnost da dva fixera pomaknu ciljeve jedan drugome; danas postoje

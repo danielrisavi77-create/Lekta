@@ -239,7 +239,21 @@ export function findingCardHtml(finding: FindingViewModel, repairAvailable: bool
   const auto = repairAvailable && finding.autoRepairable
     ? '<button type="button" class="btn btn-primary btn-sm" data-finding-repair>Otvori mogućnost popravka</button>'
     : '';
-  const decision = finding.fixability !== 'manual' ? '' : finding.status === 'open'
+  /**
+   * Kartica nalaza mora ponuditi BAREM JEDNU radnju.
+   *
+   * Do 2026-08-20 su gumbi za rucnu odluku ovisili o `fixability === 'manual'`, a gumb za popravak
+   * o `autoRepairable` (izvedeno iz `triage.fixId`). Nalaz koji je 'assisted' ali nema `fixId`
+   * (npr. `element.table.caption`, `element.lists`) tako nije dobivao NI JEDNO ni drugo: kartica je
+   * ostajala bez ijedne radnje, iako korisnik s njom nesto mora napraviti. Isto se dogadja svakom
+   * nalazu kad popravak nije dostupan (`repairAvailable === false`).
+   *
+   * Uvjet je zato vezan uz ono sto se STVARNO prikazuje: kad nema gumba za popravak, nudi se rucna
+   * odluka. Time se ne obecava popravak kojeg nema (mjerenje u tests/heading-caption-fix-offer.test.ts
+   * pokazuje da bi mapiranje fixera na te provjere bilo lazno obecanje), ali se ni ne ostavlja
+   * korisnika bez izlaza.
+   */
+  const decision = auto ? '' : finding.status === 'open'
     ? '<button type="button" class="btn btn-ghost btn-sm" data-finding-confirm>Označi ručno provjereno</button><button type="button" class="btn btn-ghost btn-sm" data-finding-ignore>Zanemari uz razlog</button>'
     : finding.status === 'confirmed'
       ? '<button type="button" class="btn btn-ghost btn-sm" data-finding-reopen>Poništi ručnu potvrdu</button>'

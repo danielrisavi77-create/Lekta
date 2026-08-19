@@ -121,3 +121,44 @@ describe('FindingViewModel', () => {
     expect(findings.map((finding) => finding.kind)).toEqual(['limitation', 'document']);
   });
 });
+
+describe('kartica nalaza uvijek nudi barem jednu radnju', () => {
+  /**
+   * Nalaz 'assisted' bez `fixId` (npr. `element.table.caption`, `element.lists`) nije dobivao ni
+   * gumb za popravak (jer ovisi o `fixId`) ni gumbe za rucnu odluku (jer su ovisili o
+   * `fixability === 'manual'`). Kartica je ostajala bez ijedne radnje. Mjerenje u
+   * tests/heading-caption-fix-offer.test.ts pokazuje da mapiranje fixera na te provjere danas NIJE
+   * opravdano, pa je ispravan lijek dati rucnu odluku, a ne obecati popravak kojeg nema.
+   */
+  const assistedTriage: TriageModel = {
+    counts: { auto: 0, assisted: 1, manual: 0, total: 1 },
+    findings: [
+      { id: 'cap', category: 'elements', title: 'Naslovi tablica', severity: 'warning', fixability: 'assisted', locations: [] },
+    ],
+  };
+  const assistedResult = {
+    checks: [{ category: 'elements', title: 'Naslovi tablica', status: 'warn', earned: 1, max: 5, detail: '3 tablice', scored: true, issue: null }],
+    issues: [{ severity: 'warning', category: 'elements', title: 'Naslovi tablica', detail: 'Neke tablice nemaju naslov.', where: 'Tablice' }],
+    details: { triage: assistedTriage },
+  };
+  const [finding] = buildFindingViewModels(assistedResult as never);
+
+  it('assisted bez fixId nije oznacen kao automatski popravljiv', () => {
+    expect(finding.fixability).toBe('assisted');
+    expect(finding.autoRepairable).toBe(false);
+  });
+
+  it('umjesto gumba za popravak dobiva gumbe za rucnu odluku', () => {
+    const html = findingCardHtml(finding, true);
+    expect(html).not.toContain('data-finding-repair');
+    expect(html).toContain('data-finding-confirm');
+    expect(html).toContain('data-finding-ignore');
+  });
+
+  it('kad popravak nije dostupan, i automatski nalaz dobiva rucnu odluku', () => {
+    const [auto] = buildFindingViewModels(result as never);
+    const html = findingCardHtml(auto, false);
+    expect(html).not.toContain('data-finding-repair');
+    expect(html).toContain('data-finding-confirm');
+  });
+});
