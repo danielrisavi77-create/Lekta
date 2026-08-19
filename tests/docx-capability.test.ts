@@ -19,6 +19,9 @@ import {
   DOCX_MAX_DECOMPRESSED_BYTES_PER_ENTRY,
 } from '../src/repair/docx-budget';
 import { MAX_DECOMPRESSED_BYTES, MAX_ZIP_ENTRIES } from '../src/docx/parser';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 
 const OK = { fileBytes: 2 * 1024 * 1024, entryCount: 20, totalDeclaredBytes: 8 * 1024 * 1024 };
 
@@ -80,5 +83,35 @@ describe('jedan izvor granica: parser ne smije imati vlastite brojke', () => {
 
   it('popravak je uze grlo od analize (inace capability nema smisla)', () => {
     expect(DOCX_MAX_TOTAL_DECOMPRESSED_BYTES).toBeLessThan(DOCX_MAX_DECOMPRESSED_BYTES_PER_ENTRY);
+  });
+});
+
+describe('granice popravka vrijede za OBA puta, ne samo serverski', () => {
+  /**
+   * Zastita je prvotno stajala samo u `renderServerRepairPanel`, pa je lokalni put (bez
+   * konfiguriranog repairEndpointa) i dalje nudio popravak dokumenta koji se ne moze popraviti;
+   * pao bi tek u readZip, dakle upravo lazno obecanje koje je zastita trebala ukloniti.
+   *
+   * Provjerava se na razini izvora jer je odluka u DOM orkestratoru: bitno je da se odluci PRIJE
+   * grananja na serverski/lokalni panel.
+   */
+  const APP = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'src/ui/app.ts'), 'utf8');
+
+  it('odluka pada prije izbora panela', () => {
+    const gate = APP.indexOf('renderRepairCapabilityBlock(mount,r)');
+    const server = APP.indexOf('renderServerRepairPanel(mount,r,items,file,textItems)');
+    const local = APP.indexOf('renderRepairPanel({items,');
+    expect(gate, 'gate mora postojati').toBeGreaterThan(-1);
+    expect(gate).toBeLessThan(server);
+    expect(gate).toBeLessThan(local);
+  });
+
+  it('serverski panel vise NEMA vlastitu kopiju provjere (jedan izvor odluke)', () => {
+    const server = APP.slice(APP.indexOf('function renderServerRepairPanel'));
+    expect(server.slice(0, 2000)).not.toContain('canRepair');
+  });
+
+  it('poruka o razlogu se ne umece u HTML bez escapea', () => {
+    expect(APP).toContain('escapeHtml(repairBlockerMessage(');
   });
 });

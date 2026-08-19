@@ -1498,6 +1498,12 @@ async function renderRepairSection(r: any){
  // korisniku se uvijek nudi i opcija da samo vidi prijedlog i odluci sam.
  const textItems=headingCaseRepairableItem(r.checks||[],analyzedProfile);
  repairPanelTextItems=textItems;
+ // GRANICE POPRAVKA se provjeravaju PRIJE izbora panela, da vrijede za OBA puta.
+ //
+ // Prvotno je ova zastita stajala samo u serverskom panelu, pa je lokalni put (bez konfiguriranog
+ // repairEndpointa) i dalje nudio popravak dokumenta koji se ne moze popraviti; padao bi tek u
+ // readZip, dakle upravo ono lazno obecanje koje je zastita trebala ukloniti.
+ if(!renderRepairCapabilityBlock(mount,r)){repairPanelNode=mount.firstElementChild;repairPanelForResult=r;return}
  if(repairServerConfigured()){renderServerRepairPanel(mount,r,items,file,textItems);repairPanelNode=mount.firstElementChild;repairPanelForResult=r;return}
  renderRepairPanel({items,getDocxBytes:async()=>new Uint8Array(await file.arrayBuffer()),originalFileName:r.file?.name||'rad.docx',mountEl:mount,beforeScore:{score:r.score,categories:r.categories,checks:r.checks},fieldRenderEndpoint:String(productionConfig?.fieldRenderEndpoint||'').trim(),getAccessToken:async()=>String(await resolveAccessToken()||''),reanalyze:async(bytes: Uint8Array)=>{const f=new File([bytes as Uint8Array<ArrayBuffer>],r.file?.name||'rad.docx',{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});return res?{score:res.score,categories:res.categories,checks:res.checks}:null}});
  // Zapamti stvarni cvor placenog panela za ocuvanje kroz re-render checkliste.
@@ -1565,18 +1571,28 @@ function renderTextItemsSection(host: any,r: any,textItems: any[]){
  host.appendChild(box);
 }
 
+/**
+ * Smije li se popravak UOPCE ponuditi za ovaj dokument. Vraca `true` kad smije.
+ *
+ * Popravak ima uze granice od analize (cita CIJELI paket, analiza samo XML dijelove koje treba),
+ * pa dokument moze proci analizu a biti prevelik za popravak. `details.capability` je izracunat jos
+ * pri otvaranju zipa (docx-budget.docxCapability), bez ijedne dodatne dekompresije.
+ *
+ * Zove se PRIJE izbora panela, pa vrijedi i za serverski i za lokalni put. Kad je stajala samo u
+ * serverskom panelu, lokalni je i dalje obecavao popravak koji nije mogao izvesti.
+ */
+function renderRepairCapabilityBlock(mount: any,r: any): boolean{
+ const capability=r?.details?.capability;
+ if(!capability||capability.canRepair!==false)return true;
+ const wrap=document.createElement('div');wrap.className='lekta-repair-panel';
+ const blocked=document.createElement('p');blocked.className='lekta-repair-panel__blocked';
+ blocked.innerHTML=`<strong>Automatski popravak nije moguć za ovaj dokument.</strong> ${capability.repairBlocker?escapeHtml(repairBlockerMessage(capability.repairBlocker)):''} Analiza iznad vrijedi i možeš je koristiti za ručni ispravak.`;
+ wrap.appendChild(blocked);mount.appendChild(wrap);
+ return false;
+}
+
 function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textItems: any[]=[]){
  const wrap=document.createElement('div');wrap.className='lekta-repair-panel';
- // Popravak ima uze granice od analize (cita CIJELI paket, analiza samo XML dijelove koje treba),
- // pa dokument moze proci analizu a biti prevelik za popravak. Bez ove grane korisnik bi to saznao
- // tek nakon privole i uploada, kao 422 sa servera. `details.capability` je izracunat jos pri
- // otvaranju zipa (docx-budget.docxCapability), bez ijedne dodatne dekompresije.
- const capability=r?.details?.capability;
- if(capability&&capability.canRepair===false){
-  const blocked=document.createElement('p');blocked.className='lekta-repair-panel__blocked';
-  blocked.innerHTML=`<strong>Automatski popravak nije moguć za ovaj dokument.</strong> ${capability.repairBlocker?repairBlockerMessage(capability.repairBlocker):''} Analiza iznad vrijedi i možeš je koristiti za ručni ispravak.`;
-  wrap.appendChild(blocked);mount.appendChild(wrap);return;
- }
  const intro=document.createElement('p');
  intro.innerHTML='<strong>Popravi sve jednim klikom.</strong> Dokument se šalje na server, popravi se i vraća gotov. Popravljaju se oblikovanje, numeriranje i struktura; ne diraju se sadržaj, citati ni argument. Datoteka se pohranjuje dok je ne obrišeš (Moji popravci); kod prijave bez e-maila najviše 30 dana.';
  wrap.appendChild(intro);
