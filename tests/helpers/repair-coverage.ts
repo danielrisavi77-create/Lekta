@@ -1,6 +1,9 @@
 import { resolveProfile } from '../../src/analysis/golden-entry';
 import { FIXER_IDS, type FixerId } from '../../src/repair/apply-fixers';
-import { repairEntriesFor } from '../../src/profiles/profile-runtime-maps';
+import { repairEntriesFor , ensureRepairMapHeavy } from '../../src/profiles/profile-runtime-maps';
+
+// repair-map je lijen; ucitaj ga prije prvog repairEntriesFor u ovom modulu.
+await ensureRepairMapHeavy();
 import { VERIFIED_PROFILE_REGISTRY } from '../../src/profiles/profile-registry';
 import { buildRepairableItems } from '../../src/ui/repair-items';
 import { repairSurfaceInventory } from '../../src/repair/repair-surface';

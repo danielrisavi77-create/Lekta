@@ -24,7 +24,10 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { analyzeFixture, resolveProfile } from '../src/analysis/golden-entry';
-import { repairEntriesFor } from '../src/profiles/profile-runtime-maps';
+import { repairEntriesFor , ensureRepairMapHeavy } from '../src/profiles/profile-runtime-maps';
+
+// repair-map je lijen; ucitaj ga prije prvog repairEntriesFor u ovom modulu.
+await ensureRepairMapHeavy();
 import { bibliographyRepairableItem, linkDoiRepairableItem } from '../src/ui/repair-items';
 import { applyFixers, type FixerRequest } from '../src/repair/apply-fixers';
 import { readZip } from '../src/repair/zip-codec';

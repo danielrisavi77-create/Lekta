@@ -11,10 +11,12 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { ensureRepairMapHeavy } from '../src/profiles/profile-runtime-maps';
 import { buildRecipe, renderRecipeMarkdown, hasProfileRules, buildParamAuthority } from '../src/repair/recipe';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
+await ensureRepairMapHeavy();
 const recipe = buildRecipe();
 mkdirSync(join(root, 'docs', 'generated'), { recursive: true });
 writeFileSync(join(root, 'docs', 'generated', 'repair-recipe.json'), JSON.stringify(recipe, null, 2) + '\n');

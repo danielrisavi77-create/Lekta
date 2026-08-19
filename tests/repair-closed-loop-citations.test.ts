@@ -10,7 +10,10 @@ import { analyzeFixture, resolveProfile } from '../src/analysis/golden-entry';
 import { bibliographyRepairableItem, citationBibliographySyncRepairableItem, legalFootnoteRepairableItem } from '../src/ui/repair-items';
 import { applyFixers } from '../src/repair/apply-fixers';
 import { legalFootnoteAnchorFingerprint } from '../src/analysis/legal-footnote-structure';
-import { repairEntriesFor } from '../src/profiles/profile-runtime-maps';
+import { repairEntriesFor , ensureRepairMapHeavy } from '../src/profiles/profile-runtime-maps';
+
+// repair-map je lijen; ucitaj ga prije prvog repairEntriesFor u ovom modulu.
+await ensureRepairMapHeavy();
 import { packageDoc, paragraph, documentXml, buildRepairTemplate } from './helpers/repair-templates';
 import { runClosedLoopCase, documentText } from './helpers/closed-loop-runner';
 

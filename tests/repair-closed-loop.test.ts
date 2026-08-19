@@ -15,7 +15,10 @@ import { describe, expect, it } from 'vitest';
 import { readZip } from '../src/repair/zip-codec';
 import { analyzeFixture, resolveProfile } from '../src/analysis/golden-entry';
 import { VERIFIED_PROFILE_REGISTRY } from '../src/profiles/profile-registry';
-import { repairEntriesFor } from '../src/profiles/profile-runtime-maps';
+import { repairEntriesFor , ensureRepairMapHeavy } from '../src/profiles/profile-runtime-maps';
+
+// repair-map je lijen; ucitaj ga prije prvog repairEntriesFor u ovom modulu.
+await ensureRepairMapHeavy();
 import { buildRepairableItems, type AnalyzedCheck } from '../src/ui/repair-items';
 import type { RepairableItem } from '../src/ui/repair-panel';
 import { applyFixers, type FixerRequest } from '../src/repair/apply-fixers';

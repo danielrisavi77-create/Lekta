@@ -15,6 +15,10 @@ import { buildRecipe, hasProfileRules, type RecipeProfile } from '../src/repair/
 import { resolveProfile } from '../src/analysis/golden-entry';
 import { FIXER_IDS } from '../src/repair/apply-fixers';
 import { readFileSync } from 'node:fs';
+import { ensureRepairMapHeavy } from '../src/profiles/profile-runtime-maps';
+
+// buildRecipe cita pecenu repair-mapu, koja je od 2026-08-19 lijena (izvan prvog painta).
+await ensureRepairMapHeavy();
 import { resolve } from 'node:path';
 
 const fresh = buildRecipe();

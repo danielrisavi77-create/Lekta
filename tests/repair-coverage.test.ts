@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { FIXER_IDS } from '../src/repair/apply-fixers';
-import { repairEntriesFor } from '../src/profiles/profile-runtime-maps';
+import { repairEntriesFor , ensureRepairMapHeavy } from '../src/profiles/profile-runtime-maps';
+
+// repair-map je lijen; ucitaj ga prije prvog repairEntriesFor u ovom modulu.
+await ensureRepairMapHeavy();
 import { VERIFIED_PROFILE_REGISTRY } from '../src/profiles/profile-registry';
 import { REPAIR_TEMPLATES } from './helpers/repair-templates';
 import { buildRepairCoverageMatrix, FIXER_TEMPLATE_MAP } from './helpers/repair-coverage';

@@ -4,7 +4,7 @@ import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { analyzeFixture, resolveProfile } from '../../src/analysis/golden-entry';
 import { installXmlDomParser } from '../../src/docx/xml-dom-install';
-import { repairEntriesFor } from '../../src/profiles/profile-runtime-maps';
+import { repairEntriesFor, ensureRepairMapHeavy } from '../../src/profiles/profile-runtime-maps';
 import { applyFixers, type FixerRequest } from '../../src/repair/apply-fixers';
 import { detectPassRegressions } from '../../src/analysis/repair-regression';
 import { buildDefaultRepairRequests } from '../../src/repair/default-selection';
@@ -284,6 +284,7 @@ export async function runRealCorpus(
 ): Promise<RealCorpusReport> {
   // Lokalni korpus se DODAJE commitanom, ne zamjenjuje ga: mjerenje mora obuhvatiti i anonimne
   // fixture koje CI vidi i stvarne radove koji nikad ne napustaju disk.
+  await ensureRepairMapHeavy();
   const manifest = [
     ...discoverRealCorpus(root),
     ...(options.includeLocal ? discoverRealCorpus(LOCAL_CORPUS_ROOT) : []),

@@ -9,13 +9,40 @@
  *                       buildRepairableItems cita)
  */
 import advisoryMapRaw from '../../data/profiles/advisory-map.json';
-import repairMapRaw from '../../data/profiles/repair-map.json';
 import { applyDemotion, type ScoreBase } from './advisory-levers';
 import type { RuleEntry } from './profile-schema';
 
 const ADVISORY_MAP = advisoryMapRaw as Record<string, string[]>;
-// Slim zapisi nose samo polja koja buildRepairableItems cita; double-cast jer nisu pun RuleEntry.
-const REPAIR_MAP = repairMapRaw as unknown as Record<string, RuleEntry[]>;
+
+/**
+ * `repair-map.json` je LIJEN (isti obrazac kao templates-heavy i verified-profiles-heavy).
+ *
+ * Zasto: mapa je narasla na ~620 KB otkad nosi i provenijenciju za dokazni cip, a staticki uvoz
+ * ju je stavljao u GLAVNI entry chunk, dakle na prvi paint. Nijedan njezin podatak ne treba prije
+ * nego korisnik otvori repair panel, sto je iza analize i iza interakcije.
+ *
+ * Ne vraca prazno kad jos nije ucitana nego BACA: tiho prazna mapa znacila bi "ovaj profil nema
+ * nijedno pravilo za popravak", pa bi se 7 fixera koji citaju `profile.ruleEntries` ugasilo bez
+ * ijedne poruke. To je upravo vrsta lazno zelenog koja se u ovom repou vec dogodila.
+ */
+let _repairMap: Record<string, RuleEntry[]> | null = null;
+let _repairMapReady: Promise<void> | null = null;
+
+export function ensureRepairMapHeavy(): Promise<void> {
+  if (!_repairMapReady) {
+    _repairMapReady = import('../../data/profiles/repair-map.json').then((mod) => {
+      const raw = (mod as { default?: unknown }).default ?? mod;
+      // Slim zapisi nose samo polja koja buildRepairableItems cita; double-cast jer nisu pun RuleEntry.
+      _repairMap = raw as unknown as Record<string, RuleEntry[]>;
+    });
+  }
+  return _repairMapReady;
+}
+
+/** Je li mapa spremna (za dijagnostiku i testove). */
+export function isRepairMapReady(): boolean {
+  return _repairMap !== null;
+}
 
 /**
  * Pecena scored/advisory demotija: bit-identican ishod kao applyScoredAdvisory(base, def,
@@ -35,5 +62,13 @@ export function applyBakedAdvisory(base: ScoreBase, id: string | null | undefine
  */
 export function repairEntriesFor(id: string | null | undefined): RuleEntry[] {
   if (id == null) return [];
-  return REPAIR_MAP[id] ?? [];
+  if (_repairMap === null) {
+    throw new Error(
+      'repairEntriesFor: repair-map jos nije ucitan. Pozovi `await ensureRepairMapHeavy()` prije ' +
+        'gradnje repair stavki (u pregledniku to radi renderRepairSection, u testovima i skriptama ' +
+        'ucini to u pripremi). Namjerno se baca umjesto da se vrati prazno: tiho prazna mapa ' +
+        'izgleda kao "profil nema pravila za popravak" i ugasi 7 fixera bez ijedne poruke.',
+    );
+  }
+  return _repairMap[id] ?? [];
 }

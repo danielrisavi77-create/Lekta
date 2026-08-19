@@ -54,7 +54,10 @@ import {
 } from '../src/ui/repair-items';
 import type { RepairableItem } from '../src/ui/repair-panel';
 import { confirmedParamsFor } from './helpers/confirm-repair-form';
-import { repairEntriesFor } from '../src/profiles/profile-runtime-maps';
+import { repairEntriesFor , ensureRepairMapHeavy } from '../src/profiles/profile-runtime-maps';
+
+// repair-map je lijen; ucitaj ga prije prvog repairEntriesFor u ovom modulu.
+await ensureRepairMapHeavy();
 import { ensureTemplatesHeavy, selectTemplate } from '../src/title-pages/template-loader';
 import { VERIFIED_PROFILE_REGISTRY } from '../src/profiles/profile-registry';
 import { analyzeFixture, resolveProfile } from '../src/analysis/golden-entry';

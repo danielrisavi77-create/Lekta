@@ -206,25 +206,20 @@ function bundleSizeGuard(devTools: boolean) {
    * zasmeta je isto sto i guard koji nije registriran.
    */
   /**
-   * 2026-08-19: podignuto 960 -> 1080 KB zbog provenijencije popravaka (dokazni cip: stranica ili
-   * odjeljak sluzbene upute + godina provjere, uz svaku stavku u repair panelu).
+   * 2026-08-19: `repair-map.json` je prebacen u LIJENI chunk (ensureRepairMapHeavy), pa je budzet
+   * vracen na 960 KB i entry je sada UDOBNO ispod njega, ne tik uz granicu.
    *
-   * MJERENJE, ne procjena:
-   *   data/profiles/repair-map.json  466 -> 621 KB sirovo, ali  22,0 -> 29,4 KB gzip (+7,4 KB),
-   *   glavni index chunk              ~917 -> 1068 KB sirovo.
-   *   Pokrivenost: 1830/1847 pravila dobiva oznaku mjesta, 1733/1847 godinu provjere.
+   * Kratka povijest, da se ne ponovi: dokazni cip u repair panelu trazio je provenijenciju
+   * (stranica ili odjeljak sluzbene upute + godina provjere), sto je mapu podiglo 466 -> 621 KB i
+   * entry preko granice na 1068 KB. Prvo je budzet privremeno podignut na 1080 KB, ali to je bilo
+   * lijecenje simptoma: nijedan podatak iz te mape ne treba prije nego korisnik OTVORI repair
+   * panel, dakle iza analize i iza interakcije. Lijeni uvoz je maknuo cijelu mapu iz prvog painta.
    *
-   * Zasto se nije moglo srezati umjesto podici: nosenje SAMO `sourcePage` (bez datuma) daje
-   * ~1021 KB, dakle i dalje preko starog budzeta. Jedina prava usteda je da ove podatke uopce
-   * nema u entryju.
-   *
-   * PRAVI POPRAVAK, zaseban posao: `repair-map.json` treba lijeni chunk. Provenijencija je
-   * potrebna TEK kad korisnik otvori repair panel, dakle iza interakcije, a danas se ucitava na
-   * prvom paintu. Uz to je 280 od 368 profila ima isti `sourcePage` za SVE svoje zapise, pa bi
-   * hoisting po profilu ustedio jos ~100 KB. Dok se to ne odradi, budzet je opet postavljen na
-   * danasnju mjeru s malom rezervom, da guard SPRJECAVA daljnji rast.
+   * Guard i dalje ima dvije uloge: cuva da lazy split ne pukne (provjera heavy chunkova iznad) i
+   * da entry ne pocne opet rasti. Ne podizi ovaj broj bez mjerenja i biljeske zasto; guard koji se
+   * podigne svaki put kad zasmeta je isto sto i guard koji nije registriran.
    */
-  const INDEX_ENTRY_BUDGET = 1080 * 1024;
+  const INDEX_ENTRY_BUDGET = 960 * 1024;
   return {
     name: 'lekta-bundle-size-guard',
     apply: 'build' as const,

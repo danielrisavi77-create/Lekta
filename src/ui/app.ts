@@ -24,7 +24,7 @@ import { VERIFIED_PROFILE_REGISTRY, LEGAL_DEPARTMENT_REGISTRY, BASE_PROFILES, FP
 // Advisory demotion i repair stavke citaju se iz PECENIH mapa (performance-01/02): drafts (~1,3 MB)
 // i source-registry (152 KB) vise NISU u glavnom entry chunku. Izvor istine ostaje u draftovima;
 // mape pece scripts/gen-profile-runtime-maps.mts, drift hvata tests/profile-runtime-maps.test.ts.
-import { applyBakedAdvisory, repairEntriesFor } from '../profiles/profile-runtime-maps';
+import { applyBakedAdvisory, repairEntriesFor, ensureRepairMapHeavy } from '../profiles/profile-runtime-maps';
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
 import { attachSelectSearch } from './select-search';
 import { workTypesForSelection, defaultWorkTypeForProgram, citationForDefinition, isCitationLocked, languageForDefinition, isLanguageLocked } from './work-selection';
@@ -1424,6 +1424,8 @@ async function renderRepairSection(r: any){
  const defId=r.details?.profileDefinitionId; if(!defId) return;
  if(r!==currentResult||!analyzedProfile) return; // demo, zastarjeli rezultat ili nema snapshota
  await ensureTemplatesHeavy();
+ // repair-map je lijen (~620 KB izvan prvog painta); mora biti ucitan PRIJE repairEntriesFor.
+ await ensureRepairMapHeavy();
  if(r!==currentResult||!analyzedProfile) return;
  // BAKANI ruleEntries (repair-map.json preko repairEntriesFor) MORAJU biti na analyzedProfile
  // PRIJE poziva *RepairableItem funkcija ispod: element-caption/bibliography/citation-sync/
