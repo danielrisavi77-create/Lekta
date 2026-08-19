@@ -22,11 +22,11 @@ describe('coverage matrica: preracunata i spremljena (sekcija 6)', () => {
   });
 
   it('bodovane celije imaju ratio i lastVerified; nebodovane nemaju', () => {
-    expect(storedCoverage.totalScored).toBeGreaterThan(0);
+    expect(storedCoverage.scoredMachineCheckable).toBeGreaterThan(0);
     const integ = storedCoverage.cells.find((c) => c.profileId === 'pravo-integrirani-diplomski')!;
-    expect(integ.scored).toBeGreaterThan(0);
+    expect(integ.scoredMachineCheckable).toBeGreaterThan(0);
     for (const cell of storedCoverage.cells) {
-      if (cell.scored > 0) {
+      if (cell.scoredMachineCheckable > 0) {
         expect(cell.ratio).toBeGreaterThan(0);
         expect(cell.lastVerified).not.toBeNull();
       } else {
@@ -40,9 +40,29 @@ describe('coverage matrica: preracunata i spremljena (sekcija 6)', () => {
     expect(storedCoverage.cells.length).toBeGreaterThan(0);
     for (const cell of storedCoverage.cells) {
       expect(cell.machineCheckable).toBeGreaterThan(0);
-      // scored + advisory pokrivaju sva pravila; potpuno verificirana celija ima advisory 0
-      expect(cell.scored + cell.advisory).toBeGreaterThan(0);
+      // scoredTotal + advisory pokrivaju sva pravila; potpuno verificirana celija ima advisory 0
+      expect(cell.scoredTotal + cell.advisory).toBeGreaterThan(0);
     }
+  });
+
+  /**
+   * P0-2 (docs/PLAN_POTPUNA_POKRIVENOST.md): dva broja koja su izgledala kao nepomirena razlika
+   * ("2135 vs 2150") mjere dvije razlicite populacije. Otkad svaka nosi svoje ime, razlika mora
+   * biti IZRACUNATA i RAZLOZENA, a ne prepricana. Test pada i ako se razlika promijeni bez
+   * osvjezenog razlaganja po checkId-u.
+   */
+  it('razlika strojno provjerljivih i svih bodovanih je razlozena po checkId-u', () => {
+    const { scoredMachineCheckable, scoredTotal, scoredNonMachineCheckable } = storedCoverage;
+    expect(scoredTotal - scoredMachineCheckable).toBe(scoredNonMachineCheckable);
+    const breakdown = Object.values(storedCoverage.nonMachineCheckableByCheckId);
+    expect(breakdown.reduce((n, v) => n + v, 0)).toBe(scoredNonMachineCheckable);
+    // Ne-strojna bodovana pravila nisu proizvoljan skup: to su tocno one osi koje engine
+    // primjenjuje, ali nijedan check ne mjeri strojno.
+    for (const checkId of Object.keys(storedCoverage.nonMachineCheckableByCheckId)) {
+      expect(['citation-style', 'required-sections', 'reference-count']).toContain(checkId);
+    }
+    const perCell = storedCoverage.cells.reduce((n, c) => n + c.scoredTotal - c.scoredMachineCheckable, 0);
+    expect(perCell).toBe(scoredNonMachineCheckable);
   });
 
   it('broj celija se slaze s manifestom', () => {

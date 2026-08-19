@@ -101,7 +101,7 @@ const rows = allProfiles.map((p) => {
     programText,
     workTypeText,
     tier,
-    scored: cell?.scored ?? 0,
+    scored: cell?.scoredMachineCheckable ?? 0,
     machineCheckable: cell?.machineCheckable ?? 0,
     advisory: cell?.advisory ?? 0,
     lastVerified: cell?.lastVerified ?? null,

@@ -15,13 +15,24 @@ import { computePublishedRules } from './published-rules';
 
 export interface CoverageCell {
   profileId: string;
-  /** Broj pravila koja se stvarno boduju (verified, sljedivo, snapshotiran izvor). */
-  scored: number;
+  /**
+   * Bodovana pravila koja su I strojno provjerljiva. Ovo je BROJNIK omjera i mora gledati istu
+   * populaciju kao nazivnik. Do 2026-08-19 se zvalo `scored`, sto je bilo dvosmisleno: izvjestaji
+   * su isti pojam citali cas kao "sva bodovana" cas kao "bodovana i strojna", pa je razlika
+   * izgledala kao nepomiren kvar. Ime sada nosi svoju os.
+   */
+  scoredMachineCheckable: number;
+  /**
+   * SVA bodovana pravila (verified, sljedivo, snapshotiran izvor), ukljucujuci ona koja se ne
+   * mogu strojno provjeriti (`citation-style`, `required-sections`, `reference-count`). Ovo je
+   * populacija koju covjek mora proci u verifikacijskom worklistu.
+   */
+  scoredTotal: number;
   /** Broj strojno provjerljivih pravila (nazivnik udjela). */
   machineCheckable: number;
   /** Sva pravila koja se ne boduju (draft, advisory, needs-recheck, retired). */
   advisory: number;
-  /** scored / machineCheckable, 0 kad nema strojno provjerljivih. */
+  /** scoredMachineCheckable / machineCheckable, 0 kad nema strojno provjerljivih. */
   ratio: number;
   /** Najsvjeziji `lastVerified` medu bodovanim pravilima, ili null. */
   lastVerified: string | null;
@@ -30,8 +41,14 @@ export interface CoverageCell {
 export interface CoverageMatrix {
   /** Sve celije, sortirane po profileId radi determinizma. */
   cells: CoverageCell[];
-  /** Zbroj scored kroz sve celije (brza provjera "jos nista nije bodovano"). */
-  totalScored: number;
+  /** Zbroj `scoredMachineCheckable` kroz sve celije. */
+  scoredMachineCheckable: number;
+  /** Zbroj `scoredTotal` kroz sve celije; isti broj koji vodi verifikacijski worklist. */
+  scoredTotal: number;
+  /** scoredTotal - scoredMachineCheckable. Razlika je objasnjena, ne nepomirena. */
+  scoredNonMachineCheckable: number;
+  /** Razlaganje te razlike po checkId-u, sortirano radi determinizma. */
+  nonMachineCheckableByCheckId: Record<string, number>;
 }
 
 function latestVerified(dates: Array<string | null | undefined>): string | null {
@@ -59,7 +76,8 @@ export function computeCoverageCell(profile: ThesisProfile, sources: SourceEntry
   const machineCheckable = (profile.ruleEntries ?? []).filter((e) => e.machineCheckable).length;
   return {
     profileId: profile.id,
-    scored: machineCheckableScored.length,
+    scoredMachineCheckable: machineCheckableScored.length,
+    scoredTotal: scored.length,
     machineCheckable,
     advisory: advisory.length,
     ratio: machineCheckable ? machineCheckableScored.length / machineCheckable : 0,
@@ -67,14 +85,38 @@ export function computeCoverageCell(profile: ThesisProfile, sources: SourceEntry
   };
 }
 
+/** Bodovana ali ne strojno provjerljiva pravila, prebrojana po checkId-u (za razlaganje razlike). */
+function countNonMachineCheckable(
+  profiles: ThesisProfile[],
+  sources: SourceEntry[],
+): Record<string, number> {
+  const counts = new Map<string, number>();
+  for (const profile of profiles) {
+    for (const entry of computePublishedRules(profile, sources).scored) {
+      if (entry.machineCheckable) continue;
+      const key = entry.checkId ?? '(bez checkId)';
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+  }
+  return Object.fromEntries([...counts].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)));
+}
+
 /**
  * Preracunava cijelu coverage matricu. Ukljucuje samo profile koji imaju ijedan
  * ruleEntry (celije bez granularnih pravila nisu jos u verifikacijskom toku).
  */
 export function computeCoverageMatrix(profiles: ThesisProfile[], sources: SourceEntry[]): CoverageMatrix {
-  const cells = profiles
-    .filter((p) => (p.ruleEntries ?? []).length > 0)
+  const withEntries = profiles.filter((p) => (p.ruleEntries ?? []).length > 0);
+  const cells = withEntries
     .map((p) => computeCoverageCell(p, sources))
     .sort((a, b) => (a.profileId < b.profileId ? -1 : a.profileId > b.profileId ? 1 : 0));
-  return { cells, totalScored: cells.reduce((sum, c) => sum + c.scored, 0) };
+  const scoredMachineCheckable = cells.reduce((sum, c) => sum + c.scoredMachineCheckable, 0);
+  const scoredTotal = cells.reduce((sum, c) => sum + c.scoredTotal, 0);
+  return {
+    cells,
+    scoredMachineCheckable,
+    scoredTotal,
+    scoredNonMachineCheckable: scoredTotal - scoredMachineCheckable,
+    nonMachineCheckableByCheckId: countNonMachineCheckable(withEntries, sources),
+  };
 }

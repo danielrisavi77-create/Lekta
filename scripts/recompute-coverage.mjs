@@ -82,6 +82,7 @@ function latest(dates) {
 }
 
 const cells = [];
+const nonMachineCheckable = new Map();
 for (const profile of [...verified, ...legal]) {
   const entries = mergedDrafts[profile.id] ?? [];
   if (!entries.length) continue;
@@ -93,15 +94,36 @@ for (const profile of [...verified, ...legal]) {
   const machineCheckable = entries.filter((e) => e.machineCheckable).length;
   cells.push({
     profileId: profile.id,
-    scored: scoredMachineCheckable,
+    scoredMachineCheckable,
+    scoredTotal: scored.length,
     machineCheckable,
     advisory: entries.length - scored.length,
     ratio: machineCheckable ? scoredMachineCheckable / machineCheckable : 0,
     lastVerified: latest(scored.map((e) => e.lastVerified)),
   });
+  // Razlaganje razlike scoredTotal - scoredMachineCheckable po checkId-u: bez njega su dva
+  // broja izgledala kao nepomiren kvar umjesto kao dvije populacije (vidi coverage-report.ts).
+  for (const e of scored) {
+    if (e.machineCheckable) continue;
+    const key = e.checkId ?? '(bez checkId)';
+    nonMachineCheckable.set(key, (nonMachineCheckable.get(key) ?? 0) + 1);
+  }
 }
 cells.sort((a, b) => (a.profileId < b.profileId ? -1 : a.profileId > b.profileId ? 1 : 0));
 
-const matrix = { cells, totalScored: cells.reduce((n, c) => n + c.scored, 0) };
+const scoredMachineCheckableTotal = cells.reduce((n, c) => n + c.scoredMachineCheckable, 0);
+const scoredTotal = cells.reduce((n, c) => n + c.scoredTotal, 0);
+const matrix = {
+  cells,
+  scoredMachineCheckable: scoredMachineCheckableTotal,
+  scoredTotal,
+  scoredNonMachineCheckable: scoredTotal - scoredMachineCheckableTotal,
+  nonMachineCheckableByCheckId: Object.fromEntries(
+    [...nonMachineCheckable].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)),
+  ),
+};
 writeFileSync(p('data/coverage/scored-coverage.json'), JSON.stringify(matrix, null, 2) + '\n');
-console.log(`Coverage preracunat: ${cells.length} celija, ${matrix.totalScored} bodovanih pravila.`);
+console.log(
+  `Coverage preracunat: ${cells.length} celija, ${matrix.scoredMachineCheckable} bodovanih strojno provjerljivih ` +
+    `(${matrix.scoredTotal} ukupno, ${matrix.scoredNonMachineCheckable} ne-strojnih).`,
+);

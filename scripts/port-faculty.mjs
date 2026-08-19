@@ -152,4 +152,4 @@ console.log('\n=== port-faculty sazetak ===');
 for (const s of summary) {
   console.log(`${s.faculty}: +${s.sources} izvora, +${s.profiles} profila, +${s.ledger} ledger, +${s.programs} programa`);
 }
-console.log(`Coverage: ${coverage.cells.length} celija, ${coverage.totalScored} bodovanih. Manifest usklađen.`);
+console.log(`Coverage: ${coverage.cells.length} celija, ${coverage.scoredMachineCheckable} bodovanih strojno provjerljivih. Manifest usklađen.`);

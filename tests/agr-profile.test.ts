@@ -41,7 +41,7 @@ describe('AGR (Agronomski fakultet, diplomski): produkcijski profil', () => {
 
   it('coverage celija: 2/7 strojno provjerljivih bodovano', () => {
     const cell = computeCoverageCell(agr!, SOURCE_REGISTRY as SourceEntry[]);
-    expect(cell.scored).toBe(2);
+    expect(cell.scoredMachineCheckable).toBe(2);
     expect(cell.machineCheckable).toBe(7);
     expect(cell.lastVerified).toBe('2026-07-02');
   });
