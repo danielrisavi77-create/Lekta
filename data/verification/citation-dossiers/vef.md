@@ -1,7 +1,7 @@
 # Citatni spec: vef (outcome: custom-spec, status: verified)
 
-Stil: **VEF autor-godina (sluzbeni Naputak za diplomski rad)** (token `vef`)
-Izvor: Naputak za prijavu, pisanje i oblikovanje diplomskog rada (Veterinarski fakultet Sveucilista u Zagrebu) (`vef-naputak-diplomski-2024`)
+Stil: **VEF autor-godina (službeni Naputak za diplomski rad)** (token `vef`)
+Izvor: Naputak za prijavu, pisanje i oblikovanje diplomskog rada (Veterinarski fakultet Sveučilišta u Zagrebu) (`vef-naputak-diplomski-2024`)
 Snapshot: `data/sources/vef/vef-naputak-diplomski-2024.pdf` (hash `de34916f3dda...`)
 
 ## knjiga  [str. 11] (worked-example)

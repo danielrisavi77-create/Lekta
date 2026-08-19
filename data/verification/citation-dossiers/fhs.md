@@ -1,6 +1,6 @@
 # Citatni spec: fhs (outcome: custom-spec, status: verified)
 
-Stil: **Prilagodeni APA 7 autor-godina (sluzbene upute FHS za diplomski rad)** (token `fhs-apa`)
+Stil: **Prilagođeni APA 7 autor-godina (službene upute FHS za diplomski rad)** (token `fhs-apa`)
 Izvor: Upute za izradu diplomskoga rada (Fakultet hrvatskih studija, 2026) (`fhs-upute-diplomski-2026`)
 Snapshot: `data/sources/fhs/fhs-upute-diplomski-2026.pdf` (hash `8807628d8863...`)
 

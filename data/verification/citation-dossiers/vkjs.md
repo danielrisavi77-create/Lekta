@@ -1,7 +1,7 @@
 # Citatni spec: vkjs (outcome: custom-spec, status: verified)
 
-Stil: **APA autor-godina (sluzbene upute VKJS)** (token `apa7`)
-Izvor: Upute za izradu zavrsnog i diplomskog rada (Veleuciliste kriminalistike i javne sigurnosti) (`vkjs-upute-zavrsni-diplomski-2024`)
+Stil: **APA autor-godina (službene upute VKJS)** (token `apa7`)
+Izvor: Upute za izradu završnog i diplomskog rada (Veleučilište kriminalistike i javne sigurnosti) (`vkjs-upute-zavrsni-diplomski-2024`)
 Snapshot: `data/sources/vkjs/vkjs-upute-zavrsni-diplomski-2024.pdf` (hash `630384c031cc...`)
 
 ## knjiga  [str. 11] (derived)

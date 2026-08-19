@@ -1,6 +1,6 @@
 # Citatni spec: fer (outcome: custom-spec, status: verified)
 
-Stil: **FER numericko navodenje (sluzbene upute za diplomski rad, ZEMRIS)** (token `fer`)
+Stil: **FER numeričko navođenje (službene upute za diplomski rad, ZEMRIS)** (token `fer`)
 Izvor: Upute za izradu diplomskog rada (FER, ZEMRIS predlozak) (`fer-upute-diplomski-zemris`)
 Snapshot: `data/sources/fer/fer-upute-diplomski-zemris.pdf` (hash `853f096a6496...`)
 

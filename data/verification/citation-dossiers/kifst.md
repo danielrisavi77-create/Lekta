@@ -1,7 +1,7 @@
 # Citatni spec: kifst (outcome: custom-spec, status: verified)
 
-Stil: **APA autor-godina (sluzbene upute KIFST)** (token `kifst`)
-Izvor: Upute za izradu diplomskog rada (Kinezioloski fakultet u Splitu) (`kifst-upute-diplomski-2022`)
+Stil: **APA autor-godina (službene upute KIFST)** (token `kifst`)
+Izvor: Upute za izradu diplomskog rada (Kineziološki fakultet u Splitu) (`kifst-upute-diplomski-2022`)
 Snapshot: `data/sources/kifst/kifst.pdf` (hash `3e8c1c64d65d...`)
 
 ## knjiga  [str. 5] (worked-example)

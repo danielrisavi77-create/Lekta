@@ -1,7 +1,7 @@
 # Citatni spec: pvzg (outcome: style-pin, status: verified)
 
-Stil: **Harvard (Pravilnik o zavrsnom radu PVZG)** (token `harvard`)
-Izvor: Pravilnik o zavrsnom radu, Poslovno veleuciliste Zagreb (2018) (`pvzg-pravilnik-zavrsni-2018`)
+Stil: **Harvard (Pravilnik o završnom radu PVZG)** (token `harvard`)
+Izvor: Pravilnik o završnom radu, Poslovno veleučilište Zagreb (2018) (`pvzg-pravilnik-zavrsni-2018`)
 Snapshot: `data/sources/pvzg/pvzg-pravilnik-zavrsni-2018.pdf` (hash `c91b7f287351...`)
 
 ## STYLE-PIN dokaz  [str. 8] (rule-text)

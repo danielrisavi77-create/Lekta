@@ -1,7 +1,7 @@
 # Citatni spec: kbf (outcome: custom-spec, status: verified)
 
-Stil: **Fusnotni stil Bogoslovske smotre (sluzbene upute KBF)** (token `kbf-fusnote`)
-Izvor: Upute za izradu zavrsnoga i diplomskoga rada (Katolicki bogoslovni fakultet Sveucilista u Zagrebu) (`kbf-upute-zavrsni-diplomski-2017`)
+Stil: **Fusnotni stil Bogoslovske smotre (službene upute KBF)** (token `kbf-fusnote`)
+Izvor: Upute za izradu završnoga i diplomskoga rada (Katolički bogoslovni fakultet Sveučilišta u Zagrebu) (`kbf-upute-zavrsni-diplomski-2017`)
 Snapshot: `data/sources/kbf/kbf-upute-zavrsni-diplomski-2017.pdf` (hash `be1213970cdb...`)
 
 ## knjiga  [str. 9] (worked-example)

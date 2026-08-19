@@ -1,6 +1,6 @@
 # Citatni spec: pravri (outcome: custom-spec, status: verified)
 
-Stil: **Pravne fusnote (sluzbene upute PRAVRI)** (token `pravri-fusnote`)
+Stil: **Pravne fusnote (službene upute PRAVRI)** (token `pravri-fusnote`)
 Izvor: Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023) (`pravri-upute-radovi-2023`)
 Snapshot: `data/sources/pravri/pravri-upute-radovi-2023.pdf` (hash `1943a0cbb283...`)
 

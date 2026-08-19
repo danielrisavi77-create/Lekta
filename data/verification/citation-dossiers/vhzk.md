@@ -1,7 +1,7 @@
 # Citatni spec: vhzk (outcome: custom-spec, status: verified)
 
-Stil: **Harvard (sluzbene upute VHZK)** (token `vhzk-harvard`)
-Izvor: Pravilnik o zavrsnom radu, Prilog 7: Upute za tehnicko oblikovanje i citiranje literature (Veleuciliste Hrvatsko zagorje Krapina) (`vhzk-pravilnik-zavrsni-2022`)
+Stil: **Harvard (službene upute VHZK)** (token `vhzk-harvard`)
+Izvor: Pravilnik o završnom radu, Prilog 7: Upute za tehničko oblikovanje i citiranje literature (Veleučilište Hrvatsko zagorje Krapina) (`vhzk-pravilnik-zavrsni-2022`)
 Snapshot: `data/sources/vhzk/vhzk.pdf` (hash `2c3b183451b7...`)
 
 ## knjiga  [str. 18] (worked-example)

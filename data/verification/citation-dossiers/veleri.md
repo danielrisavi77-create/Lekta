@@ -1,7 +1,7 @@
 # Citatni spec: veleri (outcome: custom-spec, status: verified)
 
-Stil: **Autor-godina (sluzbene upute Veleucilista u Rijeci)** (token `veleri`)
-Izvor: Upute za izradu i formalni izgled zavrsnog/diplomskog rada (Veleuciliste u Rijeci) (`veleri-upute-formalni-izgled`)
+Stil: **Autor-godina (službene upute Veleučilišta u Rijeci)** (token `veleri`)
+Izvor: Upute za izradu i formalni izgled završnog/diplomskog rada (Veleučilište u Rijeci) (`veleri-upute-formalni-izgled`)
 Snapshot: `data/sources/veleri/veleri.pdf` (hash `bcd508baf145...`)
 
 ## knjiga  [str. 6] (worked-example)

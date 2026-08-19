@@ -1,7 +1,7 @@
 # Citatni spec: mev-harvard (outcome: custom-spec, status: verified)
 
-Stil: **Harvard autor-godina (sluzbene upute MEV)** (token `harvard`)
-Izvor: Upute za izradu zavrsnog rada na Medimurskom veleucilistu u Cakovcu (`mev-upute-zavrsni`)
+Stil: **Harvard autor-godina (službene upute MEV)** (token `harvard`)
+Izvor: Upute za izradu završnog rada na Međimurskom veleučilištu u Čakovcu (`mev-upute-zavrsni`)
 Snapshot: `data/sources/mev/mev.pdf` (hash `422c25447635...`)
 
 ## knjiga  [str. 7] (worked-example)

@@ -1,7 +1,7 @@
 # Citatni spec: grf (outcome: custom-spec, status: verified)
 
-Stil: **GRF numericki stil (sluzbene upute za zavrsni rad)** (token `grf`)
-Izvor: Upute za izradu zavrsnog rada (Graficki fakultet Sveucilista u Zagrebu) (`grf-upute-zavrsni`)
+Stil: **GRF numerički stil (službene upute za završni rad)** (token `grf`)
+Izvor: Upute za izradu završnog rada (Grafički fakultet Sveučilišta u Zagrebu) (`grf-upute-zavrsni`)
 Snapshot: `data/sources/grf/grf-upute-zavrsni.pdf` (hash `fb5934de22d9...`)
 
 ## knjiga  [str. 5] (derived)

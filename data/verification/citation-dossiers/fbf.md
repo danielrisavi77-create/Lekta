@@ -1,7 +1,7 @@
 # Citatni spec: fbf (outcome: custom-spec, status: verified)
 
-Stil: **Vancouver numericko (sluzbene upute FBF)** (token `fbf`)
-Izvor: Uputa za prijavu teme i oblikovanje zavrsnog specijalistickog rada (Farmaceutsko-biokemijski fakultet, 2014) (`fbf-upute-spec-2014`)
+Stil: **Vancouver numeričko (službene upute FBF)** (token `fbf`)
+Izvor: Uputa za prijavu teme i oblikovanje završnog specijalističkog rada (Farmaceutsko-biokemijski fakultet, 2014) (`fbf-upute-spec-2014`)
 Snapshot: `data/sources/fbf/fbf-upute-spec-2014.pdf` (hash `f9442b886142...`)
 
 ## clanak  [str. 3] (worked-example)

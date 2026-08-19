@@ -1,6 +1,6 @@
 # Citatni spec: ptfos (outcome: custom-spec, status: verified)
 
-Stil: **PTFOS autor-godina (sluzbene upute za diplomski rad)** (token `ptfos-autor-godina`)
+Stil: **PTFOS autor-godina (službene upute za diplomski rad)** (token `ptfos-autor-godina`)
 Izvor: Upute za pisanje, ocjenu i obranu diplomskih radova (PTFOS) (`ptfos-upute-diplomski-2020`)
 Snapshot: `data/sources/ptfos/ptfos-upute-diplomski-2020.pdf` (hash `7f31be75164c...`)
 

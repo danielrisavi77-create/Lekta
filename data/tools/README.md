@@ -12,7 +12,7 @@ citation-specs/extractions/<fac>.txt
    | draft (covjek ili agent; quoteRaw DOSLOVNO iz ekstrakcije, sourcePage, NE izmislja)
    v
 citation-specs/drafts/<fac>.json             (status:"draft" — NIKAD ne izlazi u build)
-   | scripts/citation-spec-dossier.mjs       (dosje: RENDER vs IZVOR diff, MATCH/DIFF)
+   | npm run citation-dossiers               (dosje: RENDER vs IZVOR diff, MATCH/DIFF)
    v
 data/verification/citation-dossiers/<fac>.md (covjek pregleda + PDF#page link)
    | scripts/approve-citation-spec.mjs <fac> "Ime Prezime"   (SAMO COVJEK)

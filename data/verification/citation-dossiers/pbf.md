@@ -1,7 +1,7 @@
 # Citatni spec: pbf (outcome: custom-spec, status: verified)
 
-Stil: **PBF harvardski sustav (sluzbene upute za diplomski rad)** (token `pbf`)
-Izvor: Upute za izradu diplomskog rada (Prehrambeno-biotehnoloski fakultet Sveucilista u Zagrebu) (`pbf-upute-diplomski-2018`)
+Stil: **PBF harvardski sustav (službene upute za diplomski rad)** (token `pbf`)
+Izvor: Upute za izradu diplomskog rada (Prehrambeno-biotehnološki fakultet Sveučilišta u Zagrebu) (`pbf-upute-diplomski-2018`)
 Snapshot: `data/sources/pbf/pbf-upute-diplomski-2018.pdf` (hash `86cfde9d825c...`)
 
 ## knjiga  [str. 7] (worked-example)

@@ -1,7 +1,7 @@
 # Citatni spec: fpz (outcome: style-pin, status: verified)
 
-Stil: **Vancouver, inacica FPZ (sluzbene upute FPZ)** (token `vancouver`)
-Izvor: Upute za izradu zavrsnog i diplomskog rada, Fakultet prometnih znanosti (2018) (`fpz-upute-zavrsni-diplomski-2018`)
+Stil: **Vancouver, inačica FPZ (službene upute FPZ)** (token `vancouver`)
+Izvor: Upute za izradu završnog i diplomskog rada, Fakultet prometnih znanosti (2018) (`fpz-upute-zavrsni-diplomski-2018`)
 Snapshot: `data/sources/fpz/fpz-upute-zavrsni-diplomski-2018.pdf` (hash `b5040734e60a...`)
 
 ## STYLE-PIN dokaz  [str. 3] (rule-text)

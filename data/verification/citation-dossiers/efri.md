@@ -1,7 +1,7 @@
 # Citatni spec: efri (outcome: style-pin, status: verified)
 
-Stil: **Harvard (sluzbeni pravilnici EFRI)** (token `harvard`)
-Izvor: Pravilnik o zavrsnom radu Ekonomskog fakulteta Sveucilista u Rijeci (2014) (`efri-pravilnik-zavrsni-2014`)
+Stil: **Harvard (službeni pravilnici EFRI)** (token `harvard`)
+Izvor: Pravilnik o završnom radu Ekonomskog fakulteta Sveučilišta u Rijeci (2014) (`efri-pravilnik-zavrsni-2014`)
 Snapshot: `data/sources/efri/efri-pravilnik-zavrsni-2014.pdf` (hash `76d4b8d90d66...`)
 
 ## STYLE-PIN dokaz  [str. 2] (rule-text)

@@ -1,7 +1,7 @@
 # Citatni spec: mefos (outcome: custom-spec, status: verified)
 
-Stil: **Vancouver numericko (sluzbene upute MEFOS)** (token `mefos`)
-Izvor: Upute za izradu i oblikovanje zavrsnog i diplomskog rada (MEFOS, 2025) (`mefos-upute-radovi-2025`)
+Stil: **Vancouver numeričko (službene upute MEFOS)** (token `mefos`)
+Izvor: Upute za izradu i oblikovanje završnog i diplomskog rada (MEFOS, 2025) (`mefos-upute-radovi-2025`)
 Snapshot: `data/sources/mefos/mefos-upute-radovi-2025.pdf` (hash `4bfabfddce83...`)
 
 ## knjiga  [str. 11] (worked-example)

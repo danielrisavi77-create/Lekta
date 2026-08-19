@@ -1,6 +1,6 @@
 # Citatni spec: medri (outcome: custom-spec, status: verified)
 
-Stil: **Vancouver numericko (sluzbeni Naputak MEDRI)** (token `medri`)
+Stil: **Vancouver numeričko (službeni Naputak MEDRI)** (token `medri`)
 Izvor: Naputak za prijavu, oblikovanje i izradu diplomskog rada - Farmacija (MEDRI, 2025) (`medri-naputak-diplomski-farmacija-2025`)
 Snapshot: `data/sources/medri/medri-naputak-diplomski-farmacija-2025.docx` (hash `ea0173f92c1e...`)
 

@@ -1,7 +1,7 @@
 # Citatni spec: unizd-fusnote (outcome: custom-spec, status: verified)
 
-Stil: **Europski sustav fusnota (sluzbene upute Odjela za turizam UNIZD)** (token `unizd-fusnote`)
-Izvor: Upute za izradu zavrsnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Sveuciliste u Zadru) (`unizd-turizam-upute`)
+Stil: **Europski sustav fusnota (službene upute Odjela za turizam UNIZD)** (token `unizd-fusnote`)
+Izvor: Upute za izradu završnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Sveučilište u Zadru) (`unizd-turizam-upute`)
 Snapshot: `data/sources/unizd/unizd-turizam-upute.pdf` (hash `96d4895ec69f...`)
 
 ## knjiga  [str. 9] (worked-example)

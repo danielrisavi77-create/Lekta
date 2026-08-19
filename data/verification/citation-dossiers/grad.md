@@ -1,7 +1,7 @@
 # Citatni spec: grad (outcome: custom-spec, status: verified)
 
-Stil: **Numericko navodenje u uglatim zagradama (sluzbeni predlozak GRAD)** (token `grad`)
-Izvor: Sluzbeni predlozak zavrsnog/diplomskog rada Gradevinskog fakulteta u Zagrebu (2024) (`grad-predlozak-2024`)
+Stil: **Numeričko navođenje u uglatim zagradama (službeni predlozak GRAD)** (token `grad`)
+Izvor: Službeni predlozak završnog/diplomskog rada Građevinskog fakulteta u Zagrebu (2024) (`grad-predlozak-2024`)
 Snapshot: `data/sources/grad/grad-predlozak-2024.docx` (hash `6a9db283e1b6...`)
 
 ## knjiga  [str. 1] (worked-example)

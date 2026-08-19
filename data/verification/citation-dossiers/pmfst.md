@@ -1,7 +1,7 @@
 # Citatni spec: pmfst (outcome: custom-spec, status: verified)
 
 Stil: **PMFST autor-godina (upute Odjela za biologiju i kemiju)** (token `pmfst`)
-Izvor: Upute za pisanje zavrsnog rada (PMFST, odjel bio/kem) (`pmfst-upute-zavrsni`)
+Izvor: Upute za pisanje završnog rada (PMFST, odjel bio/kem) (`pmfst-upute-zavrsni`)
 Snapshot: `data/sources/pmfst/pmfst-upute-zavrsni.pdf` (hash `cb10791e4870...`)
 
 ## knjiga  [str. 4] (worked-example)

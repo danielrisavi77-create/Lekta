@@ -1,7 +1,7 @@
 # Citatni spec: veleknin (outcome: custom-spec, status: verified)
 
-Stil: **Autor-godina (sluzbene upute Veleucilista Marko Marulic u Kninu)** (token `veleknin`)
-Izvor: Upute za izradu i obranu zavrsnog rada (Veleuciliste Marko Marulic u Kninu) (`veleknin-upute-zavrsni-2020`)
+Stil: **Autor-godina (službene upute Veleučilišta Marko Marulić u Kninu)** (token `veleknin`)
+Izvor: Upute za izradu i obranu završnog rada (Veleučilište Marko Marulić u Kninu) (`veleknin-upute-zavrsni-2020`)
 Snapshot: `data/sources/veleknin/veleknin.pdf` (hash `e383dfbd3d6a...`)
 
 ## knjiga  [str. 12] (worked-example)

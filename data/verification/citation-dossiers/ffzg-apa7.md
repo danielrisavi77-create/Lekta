@@ -1,7 +1,7 @@
 # Citatni spec: ffzg-apa7 (outcome: style-pin, status: verified)
 
-Stil: **APA stil (sluzbene upute Odsjeka za psihologiju FFZG)** (token `apa7`)
-Izvor: Upute za pisanje i oblikovanje diplomskog rada na Odsjeku za psihologiju Filozofskog fakulteta Sveucilista u Zagrebu (`ffzg-psihologija-diplomski-2024`)
+Stil: **APA stil (službene upute Odsjeka za psihologiju FFZG)** (token `apa7`)
+Izvor: Upute za pisanje i oblikovanje diplomskog rada na Odsjeku za psihologiju Filozofskog fakulteta Sveučilišta u Zagrebu (`ffzg-psihologija-diplomski-2024`)
 Snapshot: `data/sources/ffzg/ffzg-psihologija-diplomski-2024.docx` (hash `ad885d20070f...`)
 
 ## STYLE-PIN dokaz  [str. 1] (rule-text)

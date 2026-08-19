@@ -1,7 +1,7 @@
 # Citatni spec: ferit (outcome: custom-spec, status: verified)
 
-Stil: **Brojcani stil citiranja (sluzbene upute FERIT)** (token `ferit-brojcani`)
-Izvor: Sluzbene upute za pisanje diplomskog rada (FERIT), t. 2.9 i 2.10 (`ferit-upute-diplomski`)
+Stil: **Brojčani stil citiranja (službene upute FERIT)** (token `ferit-brojcani`)
+Izvor: Službene upute za pisanje diplomskog rada (FERIT), t. 2.9 i 2.10 (`ferit-upute-diplomski`)
 Snapshot: `data/sources/ferit/ferit-upute-diplomski.pdf` (hash `d596eb1f8605...`)
 
 ## knjiga  [str. 3] (rule-text)

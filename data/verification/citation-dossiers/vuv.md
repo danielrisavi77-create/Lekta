@@ -1,7 +1,7 @@
 # Citatni spec: vuv (outcome: custom-spec, status: verified)
 
-Stil: **Autor-godina (sluzbene upute VUV)** (token `vuv`)
-Izvor: Upute za izradu zavrsnog/diplomskog rada (Veleuciliste u Virovitici) (`vuv-upute-radovi-2025`)
+Stil: **Autor-godina (službene upute VUV)** (token `vuv`)
+Izvor: Upute za izradu završnog/diplomskog rada (Veleučilište u Virovitici) (`vuv-upute-radovi-2025`)
 Snapshot: `data/sources/vuv/vuv.pdf` (hash `82e65a3cb997...`)
 
 ## knjiga  [str. 16] (worked-example)

@@ -1,7 +1,7 @@
 # Citatni spec: zsem (outcome: custom-spec, status: verified)
 
-Stil: **Harvard autor-godina (sluzbeni Pravilnik ZSEM)** (token `zsem`)
-Izvor: Pravilnik o diplomskom radu ZSEM (2023), cl. 31-32 (nacin citiranja i popis literature) (`zsem-pravilnik-diplomski-2023`)
+Stil: **Harvard autor-godina (službeni Pravilnik ZSEM)** (token `zsem`)
+Izvor: Pravilnik o diplomskom radu ZSEM (2023), cl. 31-32 (način citiranja i popis literature) (`zsem-pravilnik-diplomski-2023`)
 Snapshot: `data/sources/zsem/zsem-pravilnik-diplomski-2023.pdf` (hash `14cbc4cdbbff...`)
 
 ## knjiga  [str. 15] (worked-example)

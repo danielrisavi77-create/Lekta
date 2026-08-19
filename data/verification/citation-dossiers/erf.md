@@ -1,7 +1,7 @@
 # Citatni spec: erf (outcome: custom-spec, status: verified)
 
-Stil: **APA 7 autor-godina (ERF upute preko casopisa HRRI)** (token `erf`)
-Izvor: Upute autorima casopisa Hrvatska revija za rehabilitacijska istrazivanja; ERF Upute za izradu diplomskog rada upucuju na propozicije tog casopisa (`erf-hrri-upute-autorima`)
+Stil: **APA 7 autor-godina (ERF upute preko časopisa HRRI)** (token `erf`)
+Izvor: Upute autorima časopisa Hrvatska revija za rehabilitacijska istraživanja; ERF Upute za izradu diplomskog rada upućuju na propozicije tog časopisa (`erf-hrri-upute-autorima`)
 Snapshot: `data/sources/erf/erf-hrri-upute-autorima.html` (hash `0fca0d605fc1...`)
 
 ## knjiga  [str. 1] (worked-example)

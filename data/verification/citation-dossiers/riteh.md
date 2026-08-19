@@ -1,7 +1,7 @@
 # Citatni spec: riteh (outcome: custom-spec, status: verified)
 
-Stil: **Numericko citiranje u uglatim zagradama (sluzbene upute RiTeh)** (token `riteh`)
-Izvor: Upute za izradu zavrsnog i diplomskog rada (Tehnicki fakultet u Rijeci) (`riteh-upute-radovi-2025`)
+Stil: **Numeričko citiranje u uglatim zagradama (službene upute RiTeh)** (token `riteh`)
+Izvor: Upute za izradu završnog i diplomskog rada (Tehnički fakultet u Rijeci) (`riteh-upute-radovi-2025`)
 Snapshot: `data/sources/riteh/riteh.pdf` (hash `017dda8a9896...`)
 
 ## knjiga  [str. 7] (worked-example)

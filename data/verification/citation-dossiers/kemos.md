@@ -1,7 +1,7 @@
 # Citatni spec: kemos (outcome: custom-spec, status: verified)
 
-Stil: **Brojcani stil citiranja (sluzbene upute Odjela za kemiju u Osijeku)** (token `kemos-brojcani`)
-Izvor: Upute za pisanje zavrsnog / diplomskog rada, Sveuciliste u Osijeku, Odjel za kemiju (lipanj 2024.) (`kemos-upute-radovi-2024`)
+Stil: **Brojčani stil citiranja (službene upute Odjela za kemiju u Osijeku)** (token `kemos-brojcani`)
+Izvor: Upute za pisanje završnog / diplomskog rada, Sveučilište u Osijeku, Odjel za kemiju (lipanj 2024.) (`kemos-upute-radovi-2024`)
 Snapshot: `data/sources/kemos/kemos-upute-radovi-2024.pdf` (hash `c4e0f565e130...`)
 
 ## knjiga  [str. 11] (worked-example)

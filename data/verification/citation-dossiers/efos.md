@@ -1,6 +1,6 @@
 # Citatni spec: efos (outcome: custom-spec, status: verified)
 
-Stil: **Harvardski stil autor-godina (sluzbene upute EFOS)** (token `efos`)
+Stil: **Harvardski stil autor-godina (službene upute EFOS)** (token `efos`)
 Izvor: Upute za izradu studentskih radova na Ekonomskom fakultetu u Osijeku (`efos-upute-studentski-2023`)
 Snapshot: `data/sources/efos/efos-upute-studentski-2023.docx` (hash `1f107aa41b7a...`)
 

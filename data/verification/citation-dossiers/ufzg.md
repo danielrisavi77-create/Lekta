@@ -1,7 +1,7 @@
 # Citatni spec: ufzg (outcome: style-pin, status: verified)
 
-Stil: **APA (sluzbene upute UFZG)** (token `apa7`)
-Izvor: Upute za izradu zavrsnog odnosno diplomskog rada (Uciteljski fakultet u Zagrebu) (`ufzg-upute-zavrsni-diplomski-2026`)
+Stil: **APA (službene upute UFZG)** (token `apa7`)
+Izvor: Upute za izradu završnog odnosno diplomskog rada (Učiteljski fakultet u Zagrebu) (`ufzg-upute-zavrsni-diplomski-2026`)
 Snapshot: `data/sources/ufzg/ufzg-upute-zavrsni-diplomski-2026.pdf` (hash `83f5b025467e...`)
 
 ## STYLE-PIN dokaz  [str. 4] (rule-text)

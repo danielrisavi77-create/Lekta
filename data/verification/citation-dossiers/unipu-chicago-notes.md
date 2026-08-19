@@ -1,14 +1,14 @@
 # Citatni spec: unipu-chicago-notes (outcome: custom-spec, status: verified)
 
-Stil: **Chicago fusnotni stil (sluzbene upute FET Pula)** (token `chicago-notes`)
-Izvor: Naputak za izradu zavrsnih i diplomskih radova (Fakultet ekonomije i turizma, Sveuciliste Jurja Dobrile u Puli) (`fet-naputak-radovi`)
+Stil: **Chicago fusnotni stil (službene upute FET Pula)** (token `chicago-notes`)
+Izvor: Naputak za izradu završnih i diplomskih radova (Fakultet ekonomije i turizma, Sveučilište Jurja Dobrile u Puli) (`fet-naputak-radovi`)
 Snapshot: `data/sources/unipu/fet-naputak-radovi.pdf` (hash `68059a4cab8c...`)
 
 ## knjiga  [str. 6] (worked-example)
 Otvori PDF: `data/sources/unipu/fet-naputak-radovi.pdf#page=6`
 ```
 TEMPLATE: {authors}, {title}[[, {volume}. izdanje.]], {place}, {publisher}, {year}.
-QUOTE   : Ratnagar, S., Trading Encounters: From the Euphrates to the Indus in the Bronze   [grep: OK]
+QUOTE   : Ratnagar, S., Trading Encounters: From the Euphrates to the Indus in the Bronze   [grep: NEMA EKSTRAKCIJE]
 IZVOR   : Ratnagar, S., Trading Encounters: From the Euphrates to the Indus in the Bronze Age, New Delhi, Oxford University Press, 2004.
 RENDER  : Ratnagar, S., Trading Encounters: From the Euphrates to the Indus in the Bronze Age, New Delhi, Oxford University Press, 2004.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -19,7 +19,7 @@ NAPOMENA: Popis literature (referenca u literaturi) invertira prvi autor: 'Prezi
 Otvori PDF: `data/sources/unipu/fet-naputak-radovi.pdf#page=20`
 ```
 TEMPLATE: {authors}, {title}, {place}, {publisher}, {year}.
-QUOTE   : Blackledge, A. i A. Creese, Multilingualism: a Critical   [grep: OK]
+QUOTE   : Blackledge, A. i A. Creese, Multilingualism: a Critical   [grep: NEMA EKSTRAKCIJE]
 IZVOR   : Blackledge, A. i A. Creese, Multilingualism: a Critical Perspective, London, Continuum, 2010.
 RENDER  : Blackledge, A. i A. Creese, Multilingualism: a Critical Perspective, London, Continuum, 2010.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -30,7 +30,7 @@ NAPOMENA: Primjer iz tablice Chicago stila (redak 'Poglavlje u knjizi'): 'Blackl
 Otvori PDF: `data/sources/unipu/fet-naputak-radovi.pdf#page=6`
 ```
 TEMPLATE: {authors}, {title}, {container}[[, {volume}]][[ ({issue})]], {year}[[, str. {pages}]].
-QUOTE   : Prezime, Inicijal imena., Naslov knjige italic slovima. Izdanje knjige ako postoji, Mjesto   [grep: OK]
+QUOTE   : Prezime, Inicijal imena., Naslov knjige italic slovima. Izdanje knjige ako postoji, Mjesto   [grep: NEMA EKSTRAKCIJE]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Naputak za Chicago daje primjere samo za knjigu i poglavlje; casopisni clanak NIJE u ekstrakciji. Predlozak je izveden iz opceg Chicago obrasca (zarezi, invertiran prvi autor, naslov, naziv casopisa, godina, stranice). Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -39,7 +39,7 @@ NAPOMENA: Naputak za Chicago daje primjere samo za knjigu i poglavlje; casopisni
 Otvori PDF: `data/sources/unipu/fet-naputak-radovi.pdf#page=8`
 ```
 TEMPLATE: {authors}, {title}, {year}, {url}, (pristupljeno {accessed}).
-QUOTE   : 2009, http://www.rosetta.bham.ac.uk, (pristupljeno 10. rujan 2010.).   [grep: OK]
+QUOTE   : 2009, http://www.rosetta.bham.ac.uk, (pristupljeno 10. rujan 2010.).   [grep: NEMA EKSTRAKCIJE]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: U ekstrakciji je samo REP mreznog Chicago primjera (godina, URL, (pristupljeno datum)); glava (autor, naslov) je na prethodnoj, neuhvacenoj stranici (str. 7). Predlozak je izveden iz tog repa + opceg Chicago obrasca za autora/naslov; primjer nije potpun pa je example null. Potvrditi pri verifikaciji.
 ```
@@ -48,7 +48,7 @@ NAPOMENA: U ekstrakciji je samo REP mreznog Chicago primjera (godina, URL, (pris
 Otvori PDF: `data/sources/unipu/fet-naputak-radovi.pdf#page=6`
 ```
 TEMPLATE: {authors}, {title}, {institution}, {place}, {year}.
-QUOTE   : Prezime, Inicijal imena., Naslov knjige italic slovima. Izdanje knjige ako postoji, Mjesto   [grep: OK]
+QUOTE   : Prezime, Inicijal imena., Naslov knjige italic slovima. Izdanje knjige ako postoji, Mjesto   [grep: NEMA EKSTRAKCIJE]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Naputak ne obraduje citiranje zavrsnih/diplomskih radova u Chicago stilu; predlozak je izveden iz obrasca za knjigu (izdavac -> ustanova). Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -57,7 +57,7 @@ NAPOMENA: Naputak ne obraduje citiranje zavrsnih/diplomskih radova u Chicago sti
 Otvori PDF: `data/sources/unipu/fet-naputak-radovi.pdf#page=3`
 ```
 TEMPLATE: {title}, {container}[[, br. {issue}]], {year}.
-QUOTE   : Za popis koristene literature (nacin citiranja) student moze koristiti Chicago ili   [grep: OK]
+QUOTE   : Za popis koristene literature (nacin citiranja) student moze koristiti Chicago ili   [grep: NEMA EKSTRAKCIJE]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Naputak (ekonomsko-turisticki kontekst) ne obraduje navodenje propisa u Chicago stilu; predlozak je izveden iz opceg obrasca (naslov, glasilo, broj, godina). Potvrditi ili oboriti pri verifikaciji.
 ```

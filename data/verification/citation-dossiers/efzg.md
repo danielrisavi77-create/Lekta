@@ -1,7 +1,7 @@
 # Citatni spec: efzg (outcome: style-pin, status: verified)
 
-Stil: **Harvard stil (sluzbene upute EFZG za zavrsni rad)** (token `harvard`)
-Izvor: Postupak prijave, izrade i obrane zavrsnog rada na preddiplomskom sveucilisnom studiju (EFZG) (`efzg-postupak-zavrsni`)
+Stil: **Harvard stil (službene upute EFZG za završni rad)** (token `harvard`)
+Izvor: Postupak prijave, izrade i obrane završnog rada na preddiplomskom sveučilišnom studiju (EFZG) (`efzg-postupak-zavrsni`)
 Snapshot: `data/sources/efzg/efzg-postupak-zavrsni.pdf` (hash `0807863ff289...`)
 
 ## STYLE-PIN dokaz  [str. 2] (rule-text)

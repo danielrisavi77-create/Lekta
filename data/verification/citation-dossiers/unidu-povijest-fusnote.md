@@ -1,7 +1,7 @@
 # Citatni spec: unidu-povijest-fusnote (outcome: custom-spec, status: verified)
 
-Stil: **Fusnotni stil (sluzbene upute za zavrsni rad, Povijest Jadrana i Mediterana, unidu)** (token `unidu-povijest-fusnote`)
-Izvor: Upute za izradu zavrsnog rada, preddiplomski studij Povijest Jadrana i Mediterana (Sveuciliste u Dubrovniku) (`unidu-povijest-upute`)
+Stil: **Fusnotni stil (službene upute za završni rad, Povijest Jadrana i Mediterana, unidu)** (token `unidu-povijest-fusnote`)
+Izvor: Upute za izradu završnog rada, preddiplomski studij Povijest Jadrana i Mediterana (Sveučilište u Dubrovniku) (`unidu-povijest-upute`)
 Snapshot: `data/sources/unidu/unidu-povijest-upute.pdf` (hash `be4bc778e16b...`)
 
 ## knjiga  [str. 7] (worked-example)

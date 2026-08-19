@@ -1,6 +1,6 @@
 # Citatni spec: mefst (outcome: custom-spec, status: verified)
 
-Stil: **Vancouver numericko (sluzbena Uputa MEFST)** (token `mefst`)
+Stil: **Vancouver numeričko (službena Uputa MEFST)** (token `mefst`)
 Izvor: Uputa za oblikovanje diplomskoga rada (MEFST, 2021) (`mefst-uputa-diplomski-2021`)
 Snapshot: `data/sources/mefst/mefst-uputa-diplomski-2021.pdf` (hash `cf9fae26b635...`)
 

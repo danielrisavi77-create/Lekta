@@ -1,7 +1,7 @@
 # Citatni spec: unidu-harvard (outcome: style-pin, status: verified)
 
-Stil: **Harvard (sluzbene upute Odjela za komunikologiju, unidu)** (token `harvard`)
-Izvor: Upute za izradu diplomskog rada (2025), Odjel za komunikologiju (Sveuciliste u Dubrovniku) (`unidu-komunikologija-upute-2025`)
+Stil: **Harvard (službene upute Odjela za komunikologiju, unidu)** (token `harvard`)
+Izvor: Upute za izradu diplomskog rada (2025), Odjel za komunikologiju (Sveučilište u Dubrovniku) (`unidu-komunikologija-upute-2025`)
 Snapshot: `data/sources/unidu/unidu-komunikologija-upute-2025.pdf` (hash `0ffa9c114e9d...`)
 
 ## STYLE-PIN dokaz  [str. 7] (rule-text)

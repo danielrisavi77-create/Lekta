@@ -1,7 +1,7 @@
 # Citatni spec: ttf-vancouver (outcome: style-pin, status: verified)
 
-Stil: **Vancouver (sluzbene upute TTF)** (token `vancouver`)
-Izvor: Upute za izradu zavrsnog i diplomskog rada (Tekstilno-tehnoloski fakultet, Sveuciliste u Zagrebu) (`ttf-upute-zavrsni-diplomski`)
+Stil: **Vancouver (službene upute TTF)** (token `vancouver`)
+Izvor: Upute za izradu završnog i diplomskog rada (Tekstilno-tehnološki fakultet, Sveučilište u Zagrebu) (`ttf-upute-zavrsni-diplomski`)
 Snapshot: `data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf` (hash `a56354fe4ac7...`)
 
 ## STYLE-PIN dokaz  [str. 2] (rule-text)

@@ -1,7 +1,7 @@
 # Citatni spec: grafos (outcome: custom-spec, status: verified)
 
-Stil: **Brojcani stil citiranja (sluzbene smjernice GrAFOS)** (token `grafos-brojcani`)
-Izvor: Smjernice za izradu i oblikovanje diplomskih i zavrsnih radova (Gradevinski i arhitektonski fakultet Osijek, 2022.), t. 3.4 (`grafos-smjernice-2022`)
+Stil: **Brojčani stil citiranja (službene smjernice GrAFOS)** (token `grafos-brojcani`)
+Izvor: Smjernice za izradu i oblikovanje diplomskih i završnih radova (Građevinski i arhitektonski fakultet Osijek, 2022.), t. 3.4 (`grafos-smjernice-2022`)
 Snapshot: `data/sources/grafos/grafos-smjernice-2022.docx` (hash `6916e4f1620c...`)
 
 ## knjiga  [str. 1] (rule-text)

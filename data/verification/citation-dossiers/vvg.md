@@ -1,7 +1,7 @@
 # Citatni spec: vvg (outcome: custom-spec, status: verified)
 
-Stil: **Numericko citiranje u uglatim zagradama (sluzbene upute VVG)** (token `vvg`)
-Izvor: Upute za izradu diplomskog (zavrsnog) rada (Veleuciliste Velika Gorica) (`vvg-upute-radovi-2013`)
+Stil: **Numeričko citiranje u uglatim zagradama (službene upute VVG)** (token `vvg`)
+Izvor: Upute za izradu diplomskog (završnog) rada (Veleučilište Velika Gorica) (`vvg-upute-radovi-2013`)
 Snapshot: `data/sources/vvg/vvg.pdf` (hash `5d7e28333d8c...`)
 
 ## knjiga  [str. 10] (worked-example)

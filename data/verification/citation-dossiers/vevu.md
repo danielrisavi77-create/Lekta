@@ -1,7 +1,7 @@
 # Citatni spec: vevu (outcome: custom-spec, status: verified)
 
-Stil: **Autor-godina (sluzbene upute VEVU za zavrsni rad)** (token `vevu`)
-Izvor: Upute za izradu zavrsnog rada (VEVU) (`vevu-upute-zavrsni`)
+Stil: **Autor-godina (službene upute VEVU za završni rad)** (token `vevu`)
+Izvor: Upute za izradu završnog rada (VEVU) (`vevu-upute-zavrsni`)
 Snapshot: `data/sources/vevu/vevu.pdf` (hash `66d1e460151a...`)
 
 ## knjiga  [str. 11] (derived)

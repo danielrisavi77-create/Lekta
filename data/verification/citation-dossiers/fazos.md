@@ -1,7 +1,7 @@
 # Citatni spec: fazos (outcome: style-pin, status: verified)
 
-Stil: **APA stil citiranja (sluzbene upute FAZOS)** (token `apa7`)
-Izvor: Upute za izradu zavrsnog rada (Fakultet agrobiotehnickih znanosti Osijek) (`fazos-upute-zavrsni-2024`)
+Stil: **APA stil citiranja (službene upute FAZOS)** (token `apa7`)
+Izvor: Upute za izradu završnog rada (Fakultet agrobiotehničkih znanosti Osijek) (`fazos-upute-zavrsni-2024`)
 Snapshot: `data/sources/fazos/fazos-upute-zavrsni-2024.pdf` (hash `eb5b2331f173...`)
 
 ## STYLE-PIN dokaz  [str. 6] (rule-text)

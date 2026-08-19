@@ -1,7 +1,7 @@
 # Citatni spec: fmtu-chicago-notes (outcome: style-pin, status: verified)
 
-Stil: **Chicago bibliografski sustav s fusnotama (sluzbene upute FMTU)** (token `chicago-notes`)
-Izvor: Upute za prijavu, izradu, predaju i obranu zavrsnog rada na sveucilisnom prijediplomskom studiju (FMTU Opatija) (`fmtu-upute-zavrsni-2025`)
+Stil: **Chicago bibliografski sustav s fusnotama (službene upute FMTU)** (token `chicago-notes`)
+Izvor: Upute za prijavu, izradu, predaju i obranu završnog rada na sveučilišnom prijediplomskom studiju (FMTU Opatija) (`fmtu-upute-zavrsni-2025`)
 Snapshot: `data/sources/fmtu/fmtu-upute-zavrsni-2025.pdf` (hash `700b66c3100a...`)
 
 ## STYLE-PIN dokaz  [str. 11] (rule-text)

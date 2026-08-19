@@ -1,7 +1,7 @@
 # Citatni spec: ffrz (outcome: custom-spec, status: verified)
 
-Stil: **Autor-godina po pravilima casopisa Obnovljeni zivot (sluzbene upute FFRZ)** (token `ffrz`)
-Izvor: Upute za oblikovanje diplomskog rada (FFRZ, 2021), pravila navodenja prema casopisu Obnovljeni zivot (`ffrz-oblikovanje-diplomski-2021`)
+Stil: **Autor-godina po pravilima časopisa Obnovljeni život (službene upute FFRZ)** (token `ffrz`)
+Izvor: Upute za oblikovanje diplomskog rada (FFRZ, 2021), pravila navođenja prema časopisu Obnovljeni život (`ffrz-oblikovanje-diplomski-2021`)
 Snapshot: `data/sources/ffrz/ffrz-oblikovanje-diplomski-2021.pdf` (hash `224b21163df9...`)
 
 ## knjiga  [str. 6] (worked-example)

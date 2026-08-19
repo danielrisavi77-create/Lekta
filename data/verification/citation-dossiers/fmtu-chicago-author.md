@@ -1,7 +1,7 @@
 # Citatni spec: fmtu-chicago-author (outcome: style-pin, status: verified)
 
-Stil: **Chicago autor-datum sustav (sluzbene upute FMTU)** (token `chicago-author`)
-Izvor: Upute za prijavu, izradu, predaju i obranu zavrsnog rada na sveucilisnom prijediplomskom studiju (FMTU Opatija) (`fmtu-upute-zavrsni-2025`)
+Stil: **Chicago autor-datum sustav (službene upute FMTU)** (token `chicago-author`)
+Izvor: Upute za prijavu, izradu, predaju i obranu završnog rada na sveučilišnom prijediplomskom studiju (FMTU Opatija) (`fmtu-upute-zavrsni-2025`)
 Snapshot: `data/sources/fmtu/fmtu-upute-zavrsni-2025.pdf` (hash `700b66c3100a...`)
 
 ## STYLE-PIN dokaz  [str. 2] (rule-text)

@@ -1,7 +1,7 @@
 # Citatni spec: biotech (outcome: custom-spec, status: verified)
 
-Stil: **Vancouver numericko (sluzbene upute Odjela za biotehnologiju)** (token `biotech`)
-Izvor: Upute za pisanje zavrsnog i diplomskog rada (Odjel za biotehnologiju) (`biotech-upute-radovi`)
+Stil: **Vancouver numeričko (službene upute Odjela za biotehnologiju)** (token `biotech`)
+Izvor: Upute za pisanje završnog i diplomskog rada (Odjel za biotehnologiju) (`biotech-upute-radovi`)
 Snapshot: `data/sources/biotech/biotech.pdf` (hash `e5182e75a4ad...`)
 
 ## clanak  [str. 12] (worked-example)

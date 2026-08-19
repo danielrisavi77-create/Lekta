@@ -1,6 +1,6 @@
 # Citatni spec: ffzg-filoz-fusnote (outcome: custom-spec, status: verified)
 
-Stil: **Fusnotni stil Odsjeka za filozofiju (sluzbene upute FFZG)** (token `filoz-fusnote`)
+Stil: **Fusnotni stil Odsjeka za filozofiju (službene upute FFZG)** (token `filoz-fusnote`)
 Izvor: Upute za oblikovanje diplomskoga rada na studiju filozofije (Odsjek za filozofiju, Filozofski fakultet u Zagrebu) (`ffzg-filoz-diplomski-2019`)
 Snapshot: `data/sources/ffzg/ffzg-filoz-diplomski-2019.pdf` (hash `ba222ed21e3a...`)
 

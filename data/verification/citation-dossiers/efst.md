@@ -1,6 +1,6 @@
 # Citatni spec: efst (outcome: style-pin, status: verified)
 
-Stil: **Harvard (sluzbene upute EFST)** (token `harvard`)
+Stil: **Harvard (službene upute EFST)** (token `harvard`)
 Izvor: Uputa za izradu studentskih radova (Ekonomski fakultet u Splitu, 2013) (`efst-upute-studentski-radovi-2013`)
 Snapshot: `data/sources/efst/efst-upute-studentski-radovi-2013.pdf` (hash `04a74df6eab0...`)
 

@@ -1,7 +1,7 @@
 # Citatni spec: ttf-apa7 (outcome: style-pin, status: verified)
 
-Stil: **APA (7. izdanje) (sluzbene upute TTF)** (token `apa7`)
-Izvor: Upute za izradu zavrsnog i diplomskog rada (Tekstilno-tehnoloski fakultet, Sveuciliste u Zagrebu) (`ttf-upute-zavrsni-diplomski`)
+Stil: **APA (7. izdanje) (službene upute TTF)** (token `apa7`)
+Izvor: Upute za izradu završnog i diplomskog rada (Tekstilno-tehnološki fakultet, Sveučilište u Zagrebu) (`ttf-upute-zavrsni-diplomski`)
 Snapshot: `data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf` (hash `a56354fe4ac7...`)
 
 ## STYLE-PIN dokaz  [str. 2] (rule-text)

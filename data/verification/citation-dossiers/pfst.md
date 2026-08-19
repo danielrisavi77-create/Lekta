@@ -1,6 +1,6 @@
 # Citatni spec: pfst (outcome: custom-spec, status: verified)
 
-Stil: **Numericko navodenje u kutnim zagradama (sluzbene upute PFST)** (token `pfst`)
+Stil: **Numeričko navođenje u kutnim zagradama (službene upute PFST)** (token `pfst`)
 Izvor: Upute za izradu diplomskih i drugih ocjenskih radova, Pomorski fakultet u Splitu (2022) (`pfst-upute-ocjenski-2022`)
 Snapshot: `data/sources/pfst/pfst-upute-ocjenski-2022.pdf` (hash `a0cff8bd6cc0...`)
 

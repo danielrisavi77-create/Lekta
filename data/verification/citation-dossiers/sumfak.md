@@ -1,7 +1,7 @@
 # Citatni spec: sumfak (outcome: custom-spec, status: verified)
 
-Stil: **Autor-godina (sluzbene upute Fakulteta sumarstva i drvne tehnologije)** (token `sumfak`)
-Izvor: Upute za izradu zavrsnog i diplomskog rada, poglavlje Pravila citiranja i izrada popisa literature (Fakultet sumarstva i drvne tehnologije, Sveuciliste u Zagrebu) (`sumfak-upute-zavrsni-diplomski-2024`)
+Stil: **Autor-godina (službene upute Fakulteta šumarstva i drvne tehnologije)** (token `sumfak`)
+Izvor: Upute za izradu završnog i diplomskog rada, poglavlje Pravila citiranja i izrada popisa literature (Fakultet šumarstva i drvne tehnologije, Sveučilište u Zagrebu) (`sumfak-upute-zavrsni-diplomski-2024`)
 Snapshot: `data/sources/sumfak/sumfak-upute-zavrsni-diplomski-2024.docx` (hash `16c870fde070...`)
 
 ## knjiga  [str. 1] (worked-example)

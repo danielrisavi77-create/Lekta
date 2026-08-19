@@ -1,7 +1,7 @@
 # Citatni spec: zvu (outcome: custom-spec, status: verified)
 
-Stil: **Vancouver numericki (sluzbene upute ZVU)** (token `vancouver`)
-Izvor: Pravilnik o zavrsnim radovima na strucnim i specijalistickim diplomskim studijima, Prilog 3: Citiranje literature (Zdravstveno veleuciliste, 2015) (`zvu-pravilnik-zavrsni-2015`)
+Stil: **Vancouver numerički (službene upute ZVU)** (token `vancouver`)
+Izvor: Pravilnik o završnim radovima na stručnim i specijalističkim diplomskim studijima, Prilog 3: Citiranje literature (Zdravstveno veleučilište, 2015) (`zvu-pravilnik-zavrsni-2015`)
 Snapshot: `data/sources/zvu/zvu-pravilnik-zavrsni-2015.pdf` (hash `4f171b8ed92a...`)
 
 ## knjiga  [str. 15] (worked-example)

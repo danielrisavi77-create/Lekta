@@ -1,6 +1,6 @@
 # Citatni spec: mef (outcome: custom-spec, status: verified)
 
-Stil: **MEF autor-godina (sluzbeni Pravilnik o diplomskom radu)** (token `mef`)
+Stil: **MEF autor-godina (službeni Pravilnik o diplomskom radu)** (token `mef`)
 Izvor: Pravilnik o diplomskom radu Medicinskog fakulteta u Zagrebu (upute za citiranje literature) (`mef-pravilnik-diplomski-2023`)
 Snapshot: `data/sources/mef/mef-pravilnik-diplomski-2023.pdf` (hash `2f1e177187c7...`)
 

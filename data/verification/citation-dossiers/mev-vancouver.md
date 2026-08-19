@@ -1,7 +1,7 @@
 # Citatni spec: mev-vancouver (outcome: custom-spec, status: verified)
 
-Stil: **Vancouver numericki (sluzbene upute MEV)** (token `vancouver`)
-Izvor: Upute za izradu zavrsnog rada na Medimurskom veleucilistu u Cakovcu (`mev-upute-zavrsni`)
+Stil: **Vancouver numerički (službene upute MEV)** (token `vancouver`)
+Izvor: Upute za izradu završnog rada na Međimurskom veleučilištu u Čakovcu (`mev-upute-zavrsni`)
 Snapshot: `data/sources/mev/mev.pdf` (hash `422c25447635...`)
 
 ## knjiga  [str. 7] (worked-example)

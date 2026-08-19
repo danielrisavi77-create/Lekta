@@ -1,7 +1,7 @@
 # Citatni spec: rgnf (outcome: custom-spec, status: verified)
 
-Stil: **Harvard autor-godina (sluzbene upute RGNF)** (token `rgnf-harvard`)
-Izvor: Predlozak za izradu zavrsnog i diplomskog rada (Rudarsko-geolosko-naftni fakultet) (`rgnf-predlozak-2022`)
+Stil: **Harvard autor-godina (službene upute RGNF)** (token `rgnf-harvard`)
+Izvor: Predlozak za izradu završnog i diplomskog rada (Rudarsko-geološko-naftni fakultet) (`rgnf-predlozak-2022`)
 Snapshot: `data/sources/rgnf/rgnf-predlozak-2022.docx` (hash `1773255a260c...`)
 
 ## knjiga  [str. 1] (worked-example)

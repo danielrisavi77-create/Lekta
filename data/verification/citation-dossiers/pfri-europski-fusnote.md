@@ -1,7 +1,7 @@
 # Citatni spec: pfri-europski-fusnote (outcome: custom-spec, status: verified)
 
-Stil: **Europski fusnotni sustav (sluzbene upute PFRI)** (token `europski-fusnote`)
-Izvor: Upute za izradu zavrsnog rada (Sveuciliste u Rijeci, Pomorski fakultet, ozujak 2025) (`pfri-upute-zavrsni-2025`)
+Stil: **Europski fusnotni sustav (službene upute PFRI)** (token `europski-fusnote`)
+Izvor: Upute za izradu završnog rada (Sveučilište u Rijeci, Pomorski fakultet, ožujak 2025) (`pfri-upute-zavrsni-2025`)
 Snapshot: `data/sources/pfri/pfri-upute-zavrsni-2025.pdf` (hash `2b6ab8d65a52...`)
 
 ## knjiga  [str. 19] (worked-example)

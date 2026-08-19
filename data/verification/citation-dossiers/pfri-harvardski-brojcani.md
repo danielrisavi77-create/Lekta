@@ -1,7 +1,7 @@
 # Citatni spec: pfri-harvardski-brojcani (outcome: custom-spec, status: verified)
 
-Stil: **Harvardski brojcani sustav (sluzbene upute PFRI)** (token `harvardski-brojcani`)
-Izvor: Upute za izradu zavrsnog rada (Sveuciliste u Rijeci, Pomorski fakultet, ozujak 2025) (`pfri-upute-zavrsni-2025`)
+Stil: **Harvardski brojčani sustav (službene upute PFRI)** (token `harvardski-brojcani`)
+Izvor: Upute za izradu završnog rada (Sveučilište u Rijeci, Pomorski fakultet, ožujak 2025) (`pfri-upute-zavrsni-2025`)
 Snapshot: `data/sources/pfri/pfri-upute-zavrsni-2025.pdf` (hash `2b6ab8d65a52...`)
 
 ## knjiga  [str. 21] (worked-example)

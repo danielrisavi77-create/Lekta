@@ -1,7 +1,7 @@
 # Citatni spec: unin-apa7 (outcome: custom-spec, status: verified)
 
-Stil: **APA 7 autor-godina (sluzbene upute UNIN, biomedicina)** (token `apa7`)
-Izvor: Upute za izradu zavrsnih i diplomskih radova (Sveuciliste Sjever) (`unin-upute-radovi-2026`)
+Stil: **APA 7 autor-godina (službene upute UNIN, biomedicina)** (token `apa7`)
+Izvor: Upute za izradu završnih i diplomskih radova (Sveučilište Sjever) (`unin-upute-radovi-2026`)
 Snapshot: `data/sources/unin/unin-upute.docx` (hash `53d0ff0b8b18...`)
 
 ## knjiga  [str. 1] (worked-example)

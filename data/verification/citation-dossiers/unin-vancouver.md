@@ -1,7 +1,7 @@
 # Citatni spec: unin-vancouver (outcome: style-pin, status: verified)
 
-Stil: **Vancouver (sluzbene upute UNIN, tehnicke znanosti)** (token `vancouver`)
-Izvor: Upute za izradu zavrsnih i diplomskih radova (Sveuciliste Sjever) (`unin-upute-radovi-2026`)
+Stil: **Vancouver (službene upute UNIN, tehničke znanosti)** (token `vancouver`)
+Izvor: Upute za izradu završnih i diplomskih radova (Sveučilište Sjever) (`unin-upute-radovi-2026`)
 Snapshot: `data/sources/unin/unin-upute.docx` (hash `53d0ff0b8b18...`)
 
 ## STYLE-PIN dokaz  [str. 1] (rule-text)

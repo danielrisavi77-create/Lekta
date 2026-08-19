@@ -1,7 +1,7 @@
 # Citatni spec: geof (outcome: custom-spec, status: verified)
 
-Stil: **GEOF autor-godina (sluzbeni Naputak za ocjenske radove)** (token `geof`)
-Izvor: Opci naputak za pisanje ocjenskih radova na Geodetskom fakultetu (`geof-naputak-ocjenski-2000`)
+Stil: **GEOF autor-godina (službeni Naputak za ocjenske radove)** (token `geof`)
+Izvor: Opći naputak za pisanje ocjenskih radova na Geodetskom fakultetu (`geof-naputak-ocjenski-2000`)
 Snapshot: `data/sources/geof/geof-naputak-ocjenski-2000.pdf` (hash `c68ba17ed259...`)
 
 ## knjiga  [str. 3] (worked-example)

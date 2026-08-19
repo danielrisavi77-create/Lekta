@@ -1,7 +1,7 @@
 # Citatni spec: fpzg (outcome: custom-spec, status: verified)
 
-Stil: **FPZG autor-godina (sluzbena Pravila navodenja)** (token `fpzg`)
-Izvor: Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti (`fpzg-pravila-navodenja-citiranja`)
+Stil: **FPZG autor-godina (službena Pravila navođenja)** (token `fpzg`)
+Izvor: Pravila navođenja bibliografskih jedinica i citatnica na Fakultetu političkih znanosti (`fpzg-pravila-navodenja-citiranja`)
 Snapshot: `data/sources/fpzg/fpzg-pravila-navodenja-citiranja-2026.pdf` (hash `56df35ca9ab1...`)
 
 ## knjiga  [str. 1] (worked-example)

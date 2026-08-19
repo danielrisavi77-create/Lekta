@@ -1,7 +1,7 @@
 # Citatni spec: ufri (outcome: custom-spec, status: verified)
 
-Stil: **Autor-godina (sluzbene upute UFRI, diplomski rad)** (token `ufri`)
-Izvor: Upute za izradu diplomskog rada (Uciteljski fakultet u Rijeci) (`ufri-upute-diplomski-2024`)
+Stil: **Autor-godina (službene upute UFRI, diplomski rad)** (token `ufri`)
+Izvor: Upute za izradu diplomskog rada (Učiteljski fakultet u Rijeci) (`ufri-upute-diplomski-2024`)
 Snapshot: `data/sources/ufri/ufri.pdf` (hash `197d276efb3a...`)
 
 ## knjiga  [str. 3] (worked-example)

@@ -1,7 +1,7 @@
 # Citatni spec: kif (outcome: custom-spec, status: verified)
 
-Stil: **APA autor-godina, hrvatska prilagodba (sluzbene upute KIF)** (token `kif`)
-Izvor: Upute za izradu diplomskog/specijalistickog diplomskog rada (Kinezioloski fakultet Sveucilista u Zagrebu) (`kif-upute-diplomski-2023`)
+Stil: **APA autor-godina, hrvatska prilagodba (službene upute KIF)** (token `kif`)
+Izvor: Upute za izradu diplomskog/specijalističkog diplomskog rada (Kineziološki fakultet Sveučilišta u Zagrebu) (`kif-upute-diplomski-2023`)
 Snapshot: `data/sources/kif/kif-upute-diplomski-zavrsni.pdf` (hash `aa87190f7f1f...`)
 
 ## knjiga  [str. 16] (worked-example)

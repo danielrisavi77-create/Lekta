@@ -1,7 +1,7 @@
 # Citatni spec: pmf (outcome: custom-spec, status: verified)
 
 Stil: **Harvardski sustav (upute Geografskog odsjeka PMF)** (token `pmf`)
-Izvor: Upute za prijavu i izradu diplomskog rada, Geografski odsjek Prirodoslovno-matematickog fakulteta u Zagrebu (`pmf-geog-upute-diplomski-2026`)
+Izvor: Upute za prijavu i izradu diplomskog rada, Geografski odsjek Prirodoslovno-matematičkog fakulteta u Zagrebu (`pmf-geog-upute-diplomski-2026`)
 Snapshot: `data/sources/pmf/pmf-geog-diplomski-2026.pdf` (hash `bef096b5167b...`)
 
 ## knjiga  [str. 7] (worked-example)

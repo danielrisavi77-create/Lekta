@@ -1,7 +1,7 @@
 # Citatni spec: pravo (outcome: custom-spec, status: verified)
 
-Stil: **Pravni fakultet: pravne fusnote (sluzbene Upute)** (token `pravo-fusnote`)
-Izvor: Upute za oblikovanje i uredenje teksta i navodenje izvora (Pravni fakultet u Zagrebu) (`pravo-upute-oblikovanje-2024`)
+Stil: **Pravni fakultet: pravne fusnote (službene upute)** (token `pravo-fusnote`)
+Izvor: Upute za oblikovanje i uređenje teksta i navođenje izvora (Pravni fakultet u Zagrebu) (`pravo-upute-oblikovanje-2024`)
 Snapshot: `data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf` (hash `1917a74d113d...`)
 
 ## knjiga  [str. 5-6] (worked-example)

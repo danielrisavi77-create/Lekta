@@ -1,7 +1,7 @@
 # Citatni spec: sfzg (outcome: style-pin, status: verified)
 
-Stil: **Vancouver (ICMJE, sluzbene upute SFZG)** (token `vancouver`)
-Izvor: Naputak za tehnicko oblikovanje i izradu diplomskog rada na Stomatoloskom fakultetu Sveucilista u Zagrebu (`sfzg-naputak-diplomski-2024`)
+Stil: **Vancouver (ICMJE, službene upute SFZG)** (token `vancouver`)
+Izvor: Naputak za tehničko oblikovanje i izradu diplomskog rada na Stomatološkom fakultetu Sveučilišta u Zagrebu (`sfzg-naputak-diplomski-2024`)
 Snapshot: `data/sources/sfzg/sfzg-naputak-diplomski-2024.pdf` (hash `830c7620b5aa...`)
 
 ## STYLE-PIN dokaz  [str. 9] (rule-text)

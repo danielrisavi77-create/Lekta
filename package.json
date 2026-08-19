@@ -30,7 +30,7 @@
     "generate-title-page-tools": "node scripts/generate-title-page-tools.mjs",
     "generate-competitor-pages": "node scripts/generate-competitor-pages.mjs",
     "extract-citation-sections": "node scripts/extract-citation-sections.mjs",
-    "citation-dossiers": "node scripts/citation-spec-dossier.mjs",
+    "citation-dossiers": "vite-node scripts/citation-spec-dossier.mts",
     "approve-citation-spec": "node scripts/approve-citation-spec.mjs",
     "gen:worktype-scope": "node scripts/generate-work-type-scope.mjs",
     "docx-smoke": "vite-node scripts/docx-smoke.mts",
@@ -61,7 +61,8 @@
     "repair-faculty-matrix": "vite-node scripts/generate-faculty-matrix.mts",
     "pack:katedra": "vite-node scripts/generate-katedra-pack.mts",
     "generate-benchmark-fixture": "vite-node scripts/generate-benchmark-fixture.mts",
-    "verify:word:toc": "powershell -ExecutionPolicy Bypass -File scripts/word-verify/make-toc-case.ps1 && vite-node scripts/word-verify/repair-toc.mts -- .tmp-word-verify/toc-slucaj.docx .tmp-word-verify/toc-slucaj-popravljen.docx && powershell -ExecutionPolicy Bypass -File scripts/word-verify/check-toc-case.ps1"
+    "verify:word:toc": "powershell -ExecutionPolicy Bypass -File scripts/word-verify/make-toc-case.ps1 && vite-node scripts/word-verify/repair-toc.mts -- .tmp-word-verify/toc-slucaj.docx .tmp-word-verify/toc-slucaj-popravljen.docx && powershell -ExecutionPolicy Bypass -File scripts/word-verify/check-toc-case.ps1",
+    "worklist": "vite-node scripts/verification-worklist.mts"
   },
   "overrides": {
     "nanoid": "^3.3.18"
