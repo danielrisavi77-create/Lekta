@@ -65,7 +65,8 @@
     "worklist": "vite-node scripts/verification-worklist.mts",
     "completion-ledger": "vite-node scripts/generate-completion-ledger.mts",
     "seed-program-registry": "vite-node scripts/seed-program-registry.mts",
-    "reconcile-programs": "vite-node scripts/reconcile-programs.mts"
+    "reconcile-programs": "vite-node scripts/reconcile-programs.mts",
+    "harvest-programs": "vite-node scripts/harvest-programs.mts"
   },
   "overrides": {
     "nanoid": "^3.3.18"

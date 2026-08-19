@@ -198,14 +198,39 @@ Cilj: ne moze se tvrditi pokrivenost programa koji nikad nije evidentiran. Danas
   `officialProgramCode` bez `provenance.kind === 'upisnik'`, a `upisnikSynced` je `false`, pa
   nijedan zapis ne moze glumiti sluzbeni identitet. Seed nikad ne prepisuje postojeci zapis.
 
-### P1-2. Harvest i snapshot Upisnika : OTVORENO
-- Jedini preostali dio faze P1 i jedini koji trazi mrezu. Sve ostalo je pripremljeno: cim harvest
-  upise zapise s `provenance.kind = 'upisnik'` i postavi `upisnikSynced`, reconcile i completion
-  ledger automatski mijenjaju osi bez ijedne izmjene koda.
-- Datoteke: `scripts/harvest-programs.mjs` (nov), `data/programs/drafts/`, source registry.
-- AC: puni browser headeri (ModSecurity 418 gotcha); snapshot se hashira; harvest pise u
-  `drafts/`, nikad izravno u registar; ponovno pokretanje bez promjene izvora ne stvara diff.
-- Velicina: L. Prioritet: P1.
+### P1-2. Harvest i snapshot Upisnika : GOTOVO (2026-08-19)
+- Izvor je pronadjen mjerenjem, ne pretpostavkom: stari `mozvag.srce.hr/preglednik` vise ne
+  postoji (redirect u 404). Ziva sluzbena evidencija je **Upisnik studijskih programa**,
+  `https://hko.srce.hr/usp` (MZOM; programsku podrsku odrzava Srce).
+- Izvedeno: `src/programs/upisnik-parse.ts` (cist parser) + `scripts/harvest-programs.mts`
+  (`npm run harvest-programs`) + `tests/upisnik-parse.test.ts` nad uzorkom izrezanim iz STVARNOG
+  odgovora, pa CI ne treba mrezu.
+- IZMJERENO: **1312 akreditiranih programa kroz 151 sastavnicu**. Nas registar ima 35 programa
+  nad 2 jedinice. Razmjer rupe je time prvi put brojka, a ne slutnja.
+  - Sveucilisni diplomski 361, prijediplomski 294, specijalisticki 271, strucni prijediplomski
+    167, doktorski 100, strucni diplomski 76, integrirani 42, strucni kratki 1.
+- Tri stvari koje su se morale otkriti mjerenjem, i sve su zapisane u skripti da se ne moraju
+  otkrivati ponovno:
+  1. **Sesija je obavezna** - poziv na `/usp/pretrazivanje` bez kolacica sa `/usp/index` vraca
+     aplikacijsku gresku, ne prazan rezultat.
+  2. **Prazan parametar nije "sve"** - sentinela je `0` (`-1` za `strucniNaziv`), a checkbox grupe
+     traze i svoj `_`-marker (Spring MVC obrazac): bez `_vrsta=on` i drugova pretraga puca.
+  3. **Cijeli registar stane u JEDAN zahtjev** (~1 MB), pa nema paginacije ni 1312 pojedinacnih
+     dohvata detalja; server se dira jednom.
+- Shema iz P1-1 je time POTVRDJENA protiv stvarnog izvora: `sifraUpisnik` je tocno nas
+  `officialProgramCode`, a `jezikIzvodenja`, `nacinIzvodenja`, `nacinImplementacije`,
+  `jednopredmetni`, `akGodIzvodenja`, `nositelj` i `izvodac` postoje kao parametri pretrage.
+- Sto NIJE pretpostavljeno: naziv u tablici uvijek pocinje jednom znamenkom (1 na 1239 programa,
+  2 na 72, 5 na jednom). To je strukturni marker sucelja i ostaje NEPROTUMACEN u `nameMarker`.
+  Izgleda kao oznaka jezika naziva, ali dok to nije potvrdjeno iz izvora, `language` se iz njega
+  ne izvodi. Skida se tocno jedna znamenka, pa program koji se doista zove "3D dizajn" ostaje
+  citav (test to dokazuje).
+- AC ispunjeni: puni preglednicki headeri; snapshot hashiran i spremljen u gitignoriran
+  `.artifacts/` (ne commita se, isto pravilo kao za PDF-ove); harvest pise u
+  `data/programs/drafts/`, NIKAD u registar; ponovni dohvat nad nepromijenjenim izvorom ne stvara
+  diff (provjereno usporedbom dva uzastopna dohvata).
+- Zamka koju skripta izricito hvata: aplikacija na neispravan upit vraca **HTTP 200 sa stranicom
+  greske**, pa status sam po sebi nije dokaz uspjeha.
 
 ### P1-3. Reconcile: program <-> profil : GOTOVO (2026-08-19)
 - Izvedeno: `src/programs/reconcile.ts` + `scripts/reconcile-programs.mts`
@@ -225,6 +250,16 @@ Cilj: ne moze se tvrditi pokrivenost programa koji nikad nije evidentiran. Danas
 - Uz ratchet idu i strukturne tvrdnje: nijedan program ne nosi sluzbenu sifru dok Upisnik nije
   sinkroniziran, program bez profila uvijek ima izricit razlog, i polja koja zna samo Upisnik
   ostaju `null` umjesto da ih seed "popuni" nagadjanjem.
+
+### P1-6. Prijenos harvestiranih programa u registar
+- Harvest daje 1312 programa u `data/programs/drafts/upisnik.json`; registar ih ima 35. Prijenos
+  je namjerno ZASEBAN, ljudski korak (ista disciplina kao `ruleEntries`: skripta draftira, covjek
+  verificira), jer trazi uparivanje `izvoditelj` (151 naziv sastavnice iz Upisnika) s nasim
+  `unitId` (134 jedinice u katalogu), a to je prosudba, ne string-match.
+- AC: svaki prenesen zapis nosi `provenance.kind = 'upisnik'` i `officialProgramCode`; registar
+  dobiva `upisnikSynced: true` tek kad prijenos zavrsi; `reconcile-ratchet.json` se azurira, a
+  completion ledger tada prvi put smije prikazati `program: 'official'`.
+- Velicina: L. Prioritet: P1.
 
 ### P1-5. Dva studija Pravnog fakulteta koja nijedan program ne trazi
 - Nadjeno pri P1-3 (2026-08-19): od 6 profila koje u pokrivenim jedinicama nijedan program ne
