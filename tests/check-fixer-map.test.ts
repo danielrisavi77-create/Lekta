@@ -92,17 +92,21 @@ describe('format stranice: dinamican naslov dobiva stabilan identitet', () => {
   });
 });
 
-describe('poznata otvorena rupa: section surgery nema svoju provjeru', () => {
+describe('section surgery nema svoju provjeru, i to je TOCNO', () => {
   /**
-   * `section-surgery-fixer` je ZIVI, naplacen popravak, ali nijedna provjera ga ne klasificira
-   * kao 'assisted' (stara pravila su gadjala 'Numeriranje stranica'/'Sekcije', a to su `where`
-   * oznake, ne naslovi). Posljedica: repairCeiling za takav dokument racuna 'manual' i strop
-   * pada ispod 100 iako alat to zna popraviti.
+   * `section-surgery-fixer` je ZIVI, naplacen popravak koji nijedna provjera ne klasificira kao
+   * 'assisted'. Izgledalo je kao rupa koja laze korisniku; mjerenje 2026-08-19 pokazuje da nije:
    *
-   * Test PINNA zateceno stanje da promjena bude svjesna odluka (koje provjere section surgery
-   * pokriva ne izvodi se iz naslova), a ne tihi nusprodukt.
+   *   - numeriranje sekcija i margine, jedino sto on dira, VEC su pokriveni (page-numbering-fixer
+   *     je 'assisted', margins-fixer 'auto'),
+   *   - jedina preostala provjera je "Naslovnica bez broja stranice", ali ju emitiraju samo 4
+   *     profila i NIJEDAN od njih nema `section-surgery-rules`; obrnuto, svih 22 profila s tim
+   *     rules nikad ne emitiraju tu provjeru. Skupovi su disjunktni.
+   *
+   * Zato je 'manual' tocna klasifikacija, a mapiranje bi bilo lazno obecanje. Test pinna stanje
+   * da eventualna promjena bude svjesna: ako neki profil ikad dobije OBOJE, mapiranje ima smisla.
    */
-  it('nijedno pravilo trenutno ne mapira na section-surgery-fixer', () => {
+  it('nijedno pravilo ne mapira na section-surgery-fixer (i ne treba)', () => {
     const wired = wiredCheckIds().map((id) => classifyFixabilityById(id).fixId);
     expect(wired).not.toContain('section-surgery-fixer');
   });

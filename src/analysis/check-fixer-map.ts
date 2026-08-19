@@ -167,10 +167,23 @@ const STRUCTURAL_CHECK_RULES: StructuralCheckRule[] = [
  *      `check.title`.
  *
  * Pravila su uklonjena jer je mrtav kod stetniji od praznine: sugerirao je pokrivenost koje nema.
- * Posljedica druge stavke je stvarna i OSTAJE otvorena: `section-surgery-fixer` je zivi,
- * naplacen popravak bez ijedne provjere koja ga klasificira kao 'assisted', pa `repairCeiling`
- * za dokumente s tim problemom i dalje racuna 'manual'. Ispravak trazi odluku KOJE provjere
- * section surgery pokriva (ne izvodi se iz naslova) pa je namjerno izvan ovog porta.
+ * `section-surgery-fixer` je time ostao bez ijedne provjere koja ga klasificira kao 'assisted'.
+ * ISPRVA je to izgledalo kao rupa koja laze korisniku (repairCeiling bi tvrdio "rucni rad" za
+ * nesto sto alat zna popraviti), ali MJERENJE 2026-08-19 pokazuje da nije:
+ *
+ *   - Sve sto section surgery dira vec je pokriveno drugim fixerima: numeriranje sekcija
+ *     (`page.numbers.start`, `page.numbers.scheme`) je 'assisted' preko page-numbering-fixera,
+ *     margine (`page.margins`) su 'auto' preko margins-fixera.
+ *   - Jedina provjera koja bi mu preostala je `page.numbers.title-suppressed` ("Naslovnica bez
+ *     broja stranice"), ali ju emitiraju samo 4 profila (svi Pravo), a NIJEDAN od njih nema
+ *     `section-surgery-rules`. Obrnuto, svih 22 profila koji imaju te rules NIKAD ne emitiraju
+ *     tu provjeru. Skupovi su disjunktni.
+ *   - Tim 4 profila nije dostupan ni `section-insert-fixer` (checkPageNumberStartAtIntro i
+ *     checkPageNumberScheme su false), pa im doista nijedan popravak ne moze pomoci.
+ *
+ * Zakljucak: 'manual' je za tu provjeru TOCNA klasifikacija, a ne propust. Mapirati je na
+ * section-surgery bilo bi lazno obecanje za 4 profila i beskorisno za 22. Ako neki profil ikad
+ * dobije i tu provjeru i `section-surgery-rules`, tada mapiranje ima smisla i treba ga dodati.
  * `check-fixer-map.test.ts` pinning testom cuva zatecenu klasifikaciju da promjena bude svjesna.
  */
 
