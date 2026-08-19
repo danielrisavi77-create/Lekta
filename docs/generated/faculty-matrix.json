@@ -7769,12 +7769,11 @@
         "margins-fixer",
         "paper-size-fixer"
       ],
-      "realDocxSampleCount": 1,
+      "realDocxSampleCount": 2,
       "profilesWithoutRealDocx": [
         "fpzg-politologija-zavrsni",
         "fpzg-novinarstvo-zavrsni-tekst",
         "fpzg-novinarstvo-zavrsni-av",
-        "fpzg-politologija-diplomski",
         "fpzg-nacionalna-sigurnost-diplomski",
         "fpzg-mes-master-thesis",
         "fpzg-specijalisticki-odnosi-s-javnoscu",
@@ -7788,7 +7787,7 @@
         "profileCoveragePassCount": 13,
         "profileCoverageFailCount": 0,
         "realCorpusPassCount": 0,
-        "realCorpusReviewCount": 1,
+        "realCorpusReviewCount": 2,
         "realCorpusNoOpCount": 0,
         "realCorpusFailCount": 0,
         "syntheticClosedLoopNotRunCount": 13
@@ -7927,15 +7926,18 @@
           "templateIds": [
             "basic-text-styles"
           ],
-          "realDocxSampleCount": 0,
+          "realDocxSampleCount": 1,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "not-run",
+            "realCorpus": "review",
             "syntheticClosedLoop": "not-run"
           },
-          "realCorpusOutcomes": {},
+          "realCorpusOutcomes": {
+            "review": 1
+          },
           "manualReviewReasons": [
-            "nema-stvarnog-docx-uzorka"
+            "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
+            "stvarni-docx-trazi-rucni-pregled"
           ]
         },
         {
@@ -22337,13 +22339,13 @@
     "profileCount": 407,
     "offeredOptionCount": 1752,
     "mappedOptionCount": 1752,
-    "realDocxSampleCount": 12,
+    "realDocxSampleCount": 13,
     "facultiesWithRealDocx": 8,
     "facultiesWithoutRealDocx": 123,
-    "profilesWithoutRealDocx": 398,
+    "profilesWithoutRealDocx": 397,
     "profileCoverageFailCount": 0,
     "realCorpusPassCount": 0,
-    "realCorpusReviewCount": 12,
+    "realCorpusReviewCount": 13,
     "realCorpusNoOpCount": 0,
     "realCorpusFailCount": 0,
     "syntheticClosedLoopNotRunCount": 407

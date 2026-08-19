@@ -77,6 +77,12 @@
       "fileName": "ttf-diplomski-arial.docx",
       "profileId": "ttf-diplomski",
       "root": "tests/fixtures/docx"
+    },
+    {
+      "documentId": "word-veliki-neuredan",
+      "fileName": "word-veliki-neuredan.docx",
+      "profileId": "fpzg-politologija-diplomski",
+      "root": "tests/fixtures/docx"
     }
   ],
   "results": [
@@ -630,17 +636,71 @@
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
+    },
+    {
+      "documentId": "word-veliki-neuredan",
+      "fileName": "word-veliki-neuredan.docx",
+      "profileId": "fpzg-politologija-diplomski",
+      "outcome": "review",
+      "before": {
+        "checkCount": 35,
+        "passCount": 14,
+        "score": 70
+      },
+      "after": {
+        "checkCount": 35,
+        "passCount": 19,
+        "score": 86
+      },
+      "beforeEntryCount": 21,
+      "afterEntryCount": 21,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "font-fixer",
+        "line-spacing-fixer",
+        "paper-size-fixer",
+        "alignment-fixer",
+        "toc-field-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer"
+      ],
+      "changedFixerIds": [
+        "field-integrity-fixer",
+        "font-fixer",
+        "line-spacing-fixer",
+        "paper-size-fixer",
+        "alignment-fixer",
+        "final-document-inspector-fixer",
+        "toc-field-fixer"
+      ],
+      "targetedCheckCount": 14,
+      "targetedResolvedCount": 5,
+      "targetedUnresolvedCount": 9,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null
     }
   ],
   "summary": {
-    "documentCount": 12,
+    "documentCount": 13,
     "passCount": 0,
-    "reviewCount": 12,
+    "reviewCount": 13,
     "failCount": 0,
     "integrityFailureCount": 0,
     "noOpCount": 0,
-    "changedDocumentCount": 10,
-    "manualReviewCount": 12,
+    "changedDocumentCount": 11,
+    "manualReviewCount": 13,
     "passRegressionCount": 0
   }
 }

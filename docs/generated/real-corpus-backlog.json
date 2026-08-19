@@ -1,7 +1,7 @@
 {
   "generatedFrom": "docs/generated/faculty-matrix.json",
   "totalProfiles": 407,
-  "profilesWithoutSample": 398,
+  "profilesWithoutSample": 397,
   "entries": [
     {
       "profileId": "algebra-diplomski",
@@ -887,12 +887,6 @@
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
-      "unitId": "fpzg",
-      "facultyLabel": "Fakultet političkih znanosti",
-      "offeredOptionCount": 5
-    },
-    {
-      "profileId": "fpzg-politologija-diplomski",
       "unitId": "fpzg",
       "facultyLabel": "Fakultet političkih znanosti",
       "offeredOptionCount": 5
