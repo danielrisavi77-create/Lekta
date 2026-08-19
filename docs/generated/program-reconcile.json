@@ -1,0 +1,3040 @@
+{
+  "schemaVersion": 1,
+  "programs": [
+    {
+      "programId": "fpzg-ba-novinarstvo",
+      "componentId": "fpzg",
+      "name": "Prijediplomski studij Novinarstvo",
+      "state": "linked",
+      "profileIds": [
+        "fpzg-novinarstvo-zavrsni-av",
+        "fpzg-novinarstvo-zavrsni-tekst"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "fpzg-ba-politologija",
+      "componentId": "fpzg",
+      "name": "Prijediplomski studij Politologija",
+      "state": "linked",
+      "profileIds": [
+        "fpzg-politologija-zavrsni"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "fpzg-ba-vvu",
+      "componentId": "fpzg",
+      "name": "Sveučilišni prijediplomski studij Vojno vođenje i upravljanje",
+      "state": "unsupported",
+      "profileIds": [],
+      "unsupportedReason": "external-institution",
+      "fromUpisnik": false
+    },
+    {
+      "programId": "fpzg-joint-se",
+      "componentId": "fpzg",
+      "name": "Združeni interdisciplinarni diplomski studij o jugoistočnoj Europi",
+      "state": "unsupported",
+      "profileIds": [],
+      "unsupportedReason": "external-institution",
+      "fromUpisnik": false
+    },
+    {
+      "programId": "fpzg-ma-mes",
+      "componentId": "fpzg",
+      "name": "Master of European Studies",
+      "state": "linked",
+      "profileIds": [
+        "fpzg-mes-master-thesis"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "fpzg-ma-nacionalna",
+      "componentId": "fpzg",
+      "name": "Diplomski studij Politologija – Nacionalna sigurnost",
+      "state": "linked",
+      "profileIds": [
+        "fpzg-nacionalna-sigurnost-diplomski"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "fpzg-ma-novinarstvo",
+      "componentId": "fpzg",
+      "name": "Diplomski studij Novinarstvo",
+      "state": "linked",
+      "profileIds": [
+        "fpzg-novinarstvo-diplomski"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "fpzg-ma-politologija",
+      "componentId": "fpzg",
+      "name": "Diplomski studij Politologija",
+      "state": "linked",
+      "profileIds": [
+        "fpzg-politologija-diplomski"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "fpzg-phd-politologija",
+      "componentId": "fpzg",
+      "name": "Doktorski studij Politologija",
+      "state": "linked",
+      "profileIds": [
+        "fpzg-doktorski-politologija"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "fpzg-spec-diplomacija",
+      "componentId": "fpzg",
+      "name": "Sveučilišni specijalistički studij Vanjska politika i diplomacija",
+      "state": "linked",
+      "profileIds": [
+        "fpzg-specijalisticki-vanjska-politika-diplomacija"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "fpzg-spec-eu",
+      "componentId": "fpzg",
+      "name": "Sveučilišni specijalistički studij Prilagodba Europskoj uniji: upravljanje projektima i korištenje fondova i programa EU",
+      "state": "linked",
+      "profileIds": [
+        "fpzg-specijalisticki-prilagodba-eu"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "fpzg-spec-pr",
+      "componentId": "fpzg",
+      "name": "Sveučilišni specijalistički studij Odnosi s javnošću",
+      "state": "linked",
+      "profileIds": [
+        "fpzg-specijalisticki-odnosi-s-javnoscu"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "fpzg-spec-sigurnost",
+      "componentId": "fpzg",
+      "name": "Sveučilišni specijalistički studij Sigurnosna politika Republike Hrvatske",
+      "state": "linked",
+      "profileIds": [
+        "fpzg-specijalisticki-sigurnosna-politika-rh"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-ba-porezni",
+      "componentId": "pravo",
+      "name": "Stručni prijediplomski Porezni studij",
+      "state": "linked",
+      "profileIds": [
+        "pravo-porezni-prijediplomski"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-ba-socijalni",
+      "componentId": "pravo",
+      "name": "Sveučilišni prijediplomski studij Socijalni rad",
+      "state": "linked",
+      "profileIds": [
+        "pravo-socijalni-rad-zavrsni"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-ba-uprava",
+      "componentId": "pravo",
+      "name": "Stručni prijediplomski studij Javna uprava",
+      "state": "linked",
+      "profileIds": [
+        "pravo-javna-uprava-prijediplomski"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-integrirani",
+      "componentId": "pravo",
+      "name": "Sveučilišni integrirani prijediplomski i diplomski studij Pravo",
+      "state": "linked",
+      "profileIds": [
+        "pravo-integrirani-diplomski"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-joint-repic",
+      "componentId": "pravo",
+      "name": "Erasmus Mundus Joint Master – Redesigning the Post-Industrial City (MSc RePIC)",
+      "state": "unsupported",
+      "profileIds": [],
+      "unsupportedReason": "external-institution",
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-ma-politika",
+      "componentId": "pravo",
+      "name": "Sveučilišni diplomski studij Socijalna politika",
+      "state": "linked",
+      "profileIds": [
+        "pravo-socijalna-politika-diplomski"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-ma-socijalni",
+      "componentId": "pravo",
+      "name": "Sveučilišni diplomski studij Socijalni rad",
+      "state": "linked",
+      "profileIds": [
+        "pravo-socijalni-rad-diplomski"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-ma-uprava",
+      "componentId": "pravo",
+      "name": "Stručni diplomski studij Javna uprava",
+      "state": "linked",
+      "profileIds": [
+        "pravo-javna-uprava-diplomski"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-phd-pravne",
+      "componentId": "pravo",
+      "name": "Doktorski studij Pravne znanosti",
+      "state": "linked",
+      "profileIds": [
+        "pravo-doktorski-pravne-znanosti"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-phd-socijalni",
+      "componentId": "pravo",
+      "name": "Doktorski studij Socijalni rad i socijalna politika",
+      "state": "linked",
+      "profileIds": [
+        "pravo-doktorski-socijalni-rad-politika"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-spec-drustva-trgovacko",
+      "componentId": "pravo",
+      "name": "Sveučilišni specijalistički studij Pravo društava i trgovačko pravo",
+      "state": "linked",
+      "profileIds": [
+        "pravo-specijalisticki-drustva-trgovacko"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-spec-europsko-pravo",
+      "componentId": "pravo",
+      "name": "Sveučilišni specijalistički studij Europsko pravo",
+      "state": "linked",
+      "profileIds": [
+        "pravo-specijalisticki-europsko-pravo"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-spec-fiskalni",
+      "componentId": "pravo",
+      "name": "Sveučilišni specijalistički studij Fiskalni sustav i fiskalna politika",
+      "state": "linked",
+      "profileIds": [
+        "pravo-specijalisticki-fiskalni"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-spec-gradjansko-obiteljsko",
+      "componentId": "pravo",
+      "name": "Sveučilišni specijalistički studij Građanskopravne i obiteljskopravne znanosti",
+      "state": "linked",
+      "profileIds": [
+        "pravo-specijalisticki-gradjansko-obiteljsko"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-spec-javno-pravo-uprava",
+      "componentId": "pravo",
+      "name": "Sveučilišni specijalistički studij Javno pravo i javna uprava",
+      "state": "linked",
+      "profileIds": [
+        "pravo-specijalisticki-javno-pravo-uprava"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-spec-kaznenopravne",
+      "componentId": "pravo",
+      "name": "Sveučilišni specijalistički studij Kaznenopravne znanosti",
+      "state": "linked",
+      "profileIds": [
+        "pravo-specijalisticki-kaznenopravne"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-spec-medjunarodno",
+      "componentId": "pravo",
+      "name": "Sveučilišni specijalistički studij Međunarodno javno i međunarodno privatno pravo",
+      "state": "linked",
+      "profileIds": [
+        "pravo-specijalisticki-medjunarodno"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-spec-obiteljska-medijacija",
+      "componentId": "pravo",
+      "name": "Sveučilišni specijalistički studij Obiteljska medijacija",
+      "state": "linked",
+      "profileIds": [
+        "pravo-specijalisticki-obiteljska-medijacija"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-spec-prava-djece",
+      "componentId": "pravo",
+      "name": "Sveučilišni interdisciplinarni specijalistički studij Prava djece",
+      "state": "linked",
+      "profileIds": [
+        "pravo-specijalisticki-prava-djece"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-spec-psihosocijalni",
+      "componentId": "pravo",
+      "name": "Sveučilišni specijalistički studij Psihosocijalni pristup u socijalnom radu",
+      "state": "linked",
+      "profileIds": [
+        "pravo-specijalisticki-psihosocijalni"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-spec-socijalna-politika",
+      "componentId": "pravo",
+      "name": "Sveučilišni specijalistički studij Socijalna politika",
+      "state": "linked",
+      "profileIds": [
+        "pravo-specijalisticki-socijalna-politika"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    },
+    {
+      "programId": "pravo-spec-supervizija",
+      "componentId": "pravo",
+      "name": "Sveučilišni specijalistički studij Supervizija psihosocijalnog rada",
+      "state": "linked",
+      "profileIds": [
+        "pravo-specijalisticki-supervizija"
+      ],
+      "unsupportedReason": null,
+      "fromUpisnik": false
+    }
+  ],
+  "profiles": [
+    {
+      "profileId": "adu-dramaturgija-diplomski",
+      "unitId": "adu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "adu-ftv-rezija-diplomski",
+      "unitId": "adu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "adu-gluma-diplomski",
+      "unitId": "adu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "adu-kazalisna-rezija-diplomski",
+      "unitId": "adu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "adu-montaza-diplomski",
+      "unitId": "adu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "adu-opci-diplomski",
+      "unitId": "adu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "adu-produkcija-diplomski",
+      "unitId": "adu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "adu-snimanje-diplomski",
+      "unitId": "adu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "agr-diplomski",
+      "unitId": "agr",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "agr-doktorski",
+      "unitId": "agr",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "agr-zavrsni",
+      "unitId": "agr",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "algebra-diplomski",
+      "unitId": "algebra",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "algebra-diplomski-odnosi-s-javnoscu",
+      "unitId": "algebra",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "algebra-specijalisticki",
+      "unitId": "algebra",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "algebra-zavrsni",
+      "unitId": "algebra",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "alu-diplomski",
+      "unitId": "alu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "alu-doktorski",
+      "unitId": "alu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "alu-grafika-diplomski",
+      "unitId": "alu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "alu-kiparstvo-diplomski",
+      "unitId": "alu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "alu-konzerviranje-diplomski",
+      "unitId": "alu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "alu-nastavnicki-diplomski",
+      "unitId": "alu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "alu-novi-mediji-diplomski",
+      "unitId": "alu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "alu-slikarstvo-diplomski",
+      "unitId": "alu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "apuri-diplomski",
+      "unitId": "apuri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "apuri-zavrsni",
+      "unitId": "apuri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "arca-zavrsni",
+      "unitId": "arca",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "arh-diplomski",
+      "unitId": "arh",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "arh-doktorski",
+      "unitId": "arh",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "aspira-diplomski",
+      "unitId": "aspira",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "aspira-diplomski-en",
+      "unitId": "aspira",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "aspira-zavrsni",
+      "unitId": "aspira",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "aspira-zavrsni-en",
+      "unitId": "aspira",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "bak-diplomski",
+      "unitId": "bak",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "bak-zavrsni",
+      "unitId": "bak",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "biolos-diplomski",
+      "unitId": "biolos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "biolos-zavrsni",
+      "unitId": "biolos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "biotech-diplomski",
+      "unitId": "biotech",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "biotech-zavrsni",
+      "unitId": "biotech",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "dizajn-diplomski",
+      "unitId": "arh",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "effectus-diplomski",
+      "unitId": "effectus",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "effectus-seminarski",
+      "unitId": "effectus",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "effectus-zavrsni",
+      "unitId": "effectus",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efos-diplomski",
+      "unitId": "efos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efos-doktorski",
+      "unitId": "efos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efos-opci-akademski-rad",
+      "unitId": "efos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efos-specijalisticki",
+      "unitId": "efos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efos-zavrsni",
+      "unitId": "efos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efri-diplomski",
+      "unitId": "efri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efri-zavrsni",
+      "unitId": "efri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efst-diplomski",
+      "unitId": "efst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efst-opci-akademski-rad",
+      "unitId": "efst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efst-zavrsni",
+      "unitId": "efst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efzg-diplomski",
+      "unitId": "efzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efzg-doktorski",
+      "unitId": "efzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efzg-seminarski",
+      "unitId": "efzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efzg-specijalisticki",
+      "unitId": "efzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efzg-strucni-racunovodstvo",
+      "unitId": "efzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "efzg-zavrsni",
+      "unitId": "efzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "erf-diplomski",
+      "unitId": "erf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "erf-doktorski",
+      "unitId": "erf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "evtos-diplomski",
+      "unitId": "evtos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "evtos-zavrsni",
+      "unitId": "evtos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fazos-diplomski",
+      "unitId": "fazos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fazos-zavrsni",
+      "unitId": "fazos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fbf-doktorski",
+      "unitId": "fbf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fbf-specijalisticki",
+      "unitId": "fbf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fdmri-diplomski",
+      "unitId": "fdmri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fdmri-zavrsni",
+      "unitId": "fdmri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fdmz-diplomski",
+      "unitId": "fdmz",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fer-diplomski",
+      "unitId": "fer",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fer-doktorski",
+      "unitId": "fer",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fer-zavrsni",
+      "unitId": "fer",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ferit-diplomski",
+      "unitId": "ferit",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ferit-zavrsni",
+      "unitId": "ferit",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fesb-diplomski",
+      "unitId": "fesb",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fesb-zavrsni",
+      "unitId": "fesb",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fetpu-diplomski",
+      "unitId": "fetpu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fetpu-zavrsni",
+      "unitId": "fetpu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffos-diplomski",
+      "unitId": "ffos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffos-germanistika-diplomski",
+      "unitId": "ffos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffos-germanistika-zavrsni",
+      "unitId": "ffos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffos-informatologija-diplomski",
+      "unitId": "ffos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffos-informatologija-zavrsni",
+      "unitId": "ffos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffos-povijest-diplomski",
+      "unitId": "ffos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffos-povijest-zavrsni",
+      "unitId": "ffos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffos-psihologija-diplomski",
+      "unitId": "ffos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffos-psihologija-zavrsni",
+      "unitId": "ffos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffos-zavrsni",
+      "unitId": "ffos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffpu-diplomski",
+      "unitId": "ffpu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffpu-zavrsni",
+      "unitId": "ffpu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffri-diplomski",
+      "unitId": "ffri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffri-germanistika-diplomski",
+      "unitId": "ffri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffri-germanistika-zavrsni",
+      "unitId": "ffri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffri-kroatistika-zavrsni",
+      "unitId": "ffri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffri-kulturalni-diplomski",
+      "unitId": "ffri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffri-povum-diplomski",
+      "unitId": "ffri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffri-povum-zavrsni",
+      "unitId": "ffri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffri-psihologija-diplomski",
+      "unitId": "ffri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffri-zavrsni",
+      "unitId": "ffri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffrz-bakalaureatski",
+      "unitId": "ffrz",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffrz-diplomski",
+      "unitId": "ffrz",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffrz-doktorski",
+      "unitId": "ffrz",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffst-diplomski",
+      "unitId": "ffst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffst-zavrsni",
+      "unitId": "ffst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffzg-arheologija-graduate",
+      "unitId": "ffzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffzg-etnologija-graduate",
+      "unitId": "ffzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "unitId": "ffzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffzg-informacijske-zavrsni",
+      "unitId": "ffzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffzg-kroatistika-graduate",
+      "unitId": "ffzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "unitId": "ffzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffzg-pedagogija-graduate",
+      "unitId": "ffzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "unitId": "ffzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffzg-psihologija-diplomski",
+      "unitId": "ffzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ffzg-sociologija-diplomski",
+      "unitId": "ffzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fgag-diplomski",
+      "unitId": "fgag",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fgag-zavrsni",
+      "unitId": "fgag",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fhs-diplomski",
+      "unitId": "fhs",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fhs-doktorski",
+      "unitId": "fhs",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fhs-zavrsni",
+      "unitId": "fhs",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fipu-diplomski",
+      "unitId": "fipu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fipu-zavrsni",
+      "unitId": "fipu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fizos-diplomski",
+      "unitId": "fizos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fizri-diplomski",
+      "unitId": "fizri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fizri-zavrsni",
+      "unitId": "fizri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fkit-diplomski",
+      "unitId": "fkit",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fkit-doktorski",
+      "unitId": "fkit",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fkit-zavrsni",
+      "unitId": "fkit",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fmtu-diplomski",
+      "unitId": "fmtu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fmtu-zavrsni",
+      "unitId": "fmtu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "foi-diplomski",
+      "unitId": "foi",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "foi-zavrsni",
+      "unitId": "foi",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "foozos-diplomski",
+      "unitId": "foozos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "foozpu-diplomski",
+      "unitId": "foozpu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "foozpu-zavrsni",
+      "unitId": "foozpu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "forenzika-diplomski",
+      "unitId": "forenzika",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fpz-diplomski",
+      "unitId": "fpz",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fpz-zavrsni",
+      "unitId": "fpz",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fpzg-doktorski-politologija",
+      "unitId": "fpzg",
+      "state": "linked",
+      "programIds": [
+        "fpzg-phd-politologija"
+      ]
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "unitId": "fpzg",
+      "state": "linked",
+      "programIds": [
+        "fpzg-ma-mes"
+      ]
+    },
+    {
+      "profileId": "fpzg-nacionalna-sigurnost-diplomski",
+      "unitId": "fpzg",
+      "state": "linked",
+      "programIds": [
+        "fpzg-ma-nacionalna"
+      ]
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "unitId": "fpzg",
+      "state": "linked",
+      "programIds": [
+        "fpzg-ma-novinarstvo"
+      ]
+    },
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-av",
+      "unitId": "fpzg",
+      "state": "linked",
+      "programIds": [
+        "fpzg-ba-novinarstvo"
+      ]
+    },
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "unitId": "fpzg",
+      "state": "linked",
+      "programIds": [
+        "fpzg-ba-novinarstvo"
+      ]
+    },
+    {
+      "profileId": "fpzg-opci-akademski-rad",
+      "unitId": "fpzg",
+      "state": "unclaimed-by-program",
+      "programIds": []
+    },
+    {
+      "profileId": "fpzg-politologija-diplomski",
+      "unitId": "fpzg",
+      "state": "linked",
+      "programIds": [
+        "fpzg-ma-politologija"
+      ]
+    },
+    {
+      "profileId": "fpzg-politologija-zavrsni",
+      "unitId": "fpzg",
+      "state": "linked",
+      "programIds": [
+        "fpzg-ba-politologija"
+      ]
+    },
+    {
+      "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
+      "unitId": "fpzg",
+      "state": "linked",
+      "programIds": [
+        "fpzg-spec-pr"
+      ]
+    },
+    {
+      "profileId": "fpzg-specijalisticki-prilagodba-eu",
+      "unitId": "fpzg",
+      "state": "linked",
+      "programIds": [
+        "fpzg-spec-eu"
+      ]
+    },
+    {
+      "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
+      "unitId": "fpzg",
+      "state": "linked",
+      "programIds": [
+        "fpzg-spec-sigurnost"
+      ]
+    },
+    {
+      "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
+      "unitId": "fpzg",
+      "state": "linked",
+      "programIds": [
+        "fpzg-spec-diplomacija"
+      ]
+    },
+    {
+      "profileId": "fpzpu-diplomski",
+      "unitId": "fpzpu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fpzpu-zavrsni",
+      "unitId": "fpzpu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fsb-diplomski",
+      "unitId": "fsb",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fsb-doktorski",
+      "unitId": "fsb",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fsb-opci-akademski-rad",
+      "unitId": "fsb",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fsb-zavrsni",
+      "unitId": "fsb",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ftrr-diplomski",
+      "unitId": "ftrr",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ftrr-zavrsni",
+      "unitId": "ftrr",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fzsri-diplomski",
+      "unitId": "fzsri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "fzsri-zavrsni",
+      "unitId": "fzsri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "geof-diplomski",
+      "unitId": "geof",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "geof-doktorski",
+      "unitId": "geof",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "geof-opci-akademski-rad",
+      "unitId": "geof",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "grad-diplomski",
+      "unitId": "grad",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "grad-doktorski",
+      "unitId": "grad",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "grad-zavrsni",
+      "unitId": "grad",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "gradri-diplomski",
+      "unitId": "gradri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "gradri-zavrsni",
+      "unitId": "gradri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "grafos-diplomski",
+      "unitId": "grafos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "grafos-zavrsni",
+      "unitId": "grafos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "grf-diplomski",
+      "unitId": "grf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "grf-doktorski",
+      "unitId": "grf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "grf-zavrsni",
+      "unitId": "grf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "hks-diplomski",
+      "unitId": "hks",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "inf-diplomski",
+      "unitId": "inf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "inf-zavrsni",
+      "unitId": "inf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "iv-diplomski",
+      "unitId": "iv",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "iv-zavrsni",
+      "unitId": "iv",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "kbf-diplomski",
+      "unitId": "kbf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "kbf-doktorski",
+      "unitId": "kbf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "kbf-zavrsni",
+      "unitId": "kbf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "kbfdj-diplomski",
+      "unitId": "kbfdj",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "kbfst-diplomski",
+      "unitId": "kbfst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "kemos-diplomski",
+      "unitId": "kemos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "kemos-zavrsni",
+      "unitId": "kemos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "kif-diplomski",
+      "unitId": "kif",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "kif-doktorski",
+      "unitId": "kif",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "kif-specijalisticki",
+      "unitId": "kif",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "kifos-diplomski",
+      "unitId": "kifos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "kifos-zavrsni",
+      "unitId": "kifos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "kifst-diplomski",
+      "unitId": "kifst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ktfst-diplomski",
+      "unitId": "ktfst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ktfst-zavrsni",
+      "unitId": "ktfst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "libertas-diplomski",
+      "unitId": "libertas",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "libertas-diplomski-en",
+      "unitId": "libertas",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "libertas-zavrsni",
+      "unitId": "libertas",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "libertas-zavrsni-en",
+      "unitId": "libertas",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "logri-diplomski",
+      "unitId": "logri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mapu-glazbena-pedagogija-diplomski",
+      "unitId": "mapu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mapu-glazbena-pedagogija-zavrsni",
+      "unitId": "mapu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "math-uniri-diplomski",
+      "unitId": "matematika",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "math-uniri-diplomski-en",
+      "unitId": "matematika",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "math-uniri-zavrsni",
+      "unitId": "matematika",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mathos-diplomski",
+      "unitId": "mathos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mathos-zavrsni",
+      "unitId": "mathos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "medri-farmacija-diplomski",
+      "unitId": "medri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "medri-medicina-diplomski",
+      "unitId": "medri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mef-diplomski",
+      "unitId": "mef",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mef-doktorski",
+      "unitId": "mef",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mefos-diplomski",
+      "unitId": "mefos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mefos-zavrsni",
+      "unitId": "mefos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mefst-diplomski",
+      "unitId": "mefst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mev-diplomski",
+      "unitId": "mev",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mev-zavrsni",
+      "unitId": "mev",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mev-zavrsni-drustveni",
+      "unitId": "mev",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "mfpu-diplomski",
+      "unitId": "mfpu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "more-diplomski",
+      "unitId": "more",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "more-zavrsni",
+      "unitId": "more",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "muza-diplomski",
+      "unitId": "muza",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "muza-doktorski",
+      "unitId": "muza",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "oss-diplomski",
+      "unitId": "oss",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "oss-zavrsni",
+      "unitId": "oss",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ozs-diplomski",
+      "unitId": "ozs",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ozs-zavrsni",
+      "unitId": "ozs",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "par-diplomski",
+      "unitId": "par",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "par-zavrsni",
+      "unitId": "par",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pbf-diplomski",
+      "unitId": "pbf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pbf-doktorski",
+      "unitId": "pbf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pfri-diplomski",
+      "unitId": "pfri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pfri-zavrsni",
+      "unitId": "pfri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pfst-diplomski",
+      "unitId": "pfst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pfst-zavrsni",
+      "unitId": "pfst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pmf-biologija-graduate",
+      "unitId": "pmf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pmf-fizika-graduate",
+      "unitId": "pmf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pmf-geofizika-graduate",
+      "unitId": "pmf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pmf-geografija-diplomski",
+      "unitId": "pmf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pmf-geologija-graduate",
+      "unitId": "pmf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pmf-matematika-graduate",
+      "unitId": "pmf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pmfst-diplomski",
+      "unitId": "pmfst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pmfst-zavrsni",
+      "unitId": "pmfst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pravo-doktorski-pravne-znanosti",
+      "unitId": "pravo",
+      "state": "linked",
+      "programIds": [
+        "pravo-phd-pravne"
+      ]
+    },
+    {
+      "profileId": "pravo-integrirani-diplomski",
+      "unitId": "pravo",
+      "state": "linked",
+      "programIds": [
+        "pravo-integrirani"
+      ]
+    },
+    {
+      "profileId": "pravo-javna-uprava-diplomski",
+      "unitId": "pravo",
+      "state": "linked",
+      "programIds": [
+        "pravo-ma-uprava"
+      ]
+    },
+    {
+      "profileId": "pravo-javna-uprava-prijediplomski",
+      "unitId": "pravo",
+      "state": "linked",
+      "programIds": [
+        "pravo-ba-uprava"
+      ]
+    },
+    {
+      "profileId": "pravo-opci-pravni-akademski-rad",
+      "unitId": "pravo",
+      "state": "unclaimed-by-program",
+      "programIds": []
+    },
+    {
+      "profileId": "pravo-porezni-prijediplomski",
+      "unitId": "pravo",
+      "state": "linked",
+      "programIds": [
+        "pravo-ba-porezni"
+      ]
+    },
+    {
+      "profileId": "pravo-socijalna-politika-diplomski",
+      "unitId": "pravo",
+      "state": "linked",
+      "programIds": [
+        "pravo-ma-politika"
+      ]
+    },
+    {
+      "profileId": "pravo-socijalne-djelatnosti-doktorski",
+      "unitId": "pravo",
+      "state": "unclaimed-by-program",
+      "programIds": []
+    },
+    {
+      "profileId": "pravo-socijalne-djelatnosti-specijalisticki",
+      "unitId": "pravo",
+      "state": "unclaimed-by-program",
+      "programIds": []
+    },
+    {
+      "profileId": "pravo-socijalni-opci-akademski-rad",
+      "unitId": "pravo",
+      "state": "unclaimed-by-program",
+      "programIds": []
+    },
+    {
+      "profileId": "pravo-socijalni-rad-diplomski",
+      "unitId": "pravo",
+      "state": "linked",
+      "programIds": [
+        "pravo-ma-socijalni"
+      ]
+    },
+    {
+      "profileId": "pravo-socijalni-rad-zavrsni",
+      "unitId": "pravo",
+      "state": "linked",
+      "programIds": [
+        "pravo-ba-socijalni"
+      ]
+    },
+    {
+      "profileId": "pravo-specijalisticki-pravni-opci",
+      "unitId": "pravo",
+      "state": "unclaimed-by-program",
+      "programIds": []
+    },
+    {
+      "profileId": "pravos-diplomski",
+      "unitId": "pravos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pravos-zavrsni",
+      "unitId": "pravos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pravri-diplomski",
+      "unitId": "pravri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pravri-opci-akademski-rad",
+      "unitId": "pravri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pravri-specijalisticki",
+      "unitId": "pravri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pravri-zavrsni",
+      "unitId": "pravri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pravst-diplomski",
+      "unitId": "pravst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pravst-zavrsni",
+      "unitId": "pravst",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ptfos-diplomski",
+      "unitId": "ptfos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pvzg-specijalisticki",
+      "unitId": "pvzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "pvzg-zavrsni",
+      "unitId": "pvzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "radno-socijalno-pravo",
+      "unitId": null,
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "rgnf-diplomski",
+      "unitId": "rgnf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "rgnf-zavrsni",
+      "unitId": "rgnf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "riteh-diplomski",
+      "unitId": "riteh",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "riteh-zavrsni",
+      "unitId": "riteh",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "rrif-zavrsni",
+      "unitId": "rrif",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "securus-zavrsni",
+      "unitId": "securus",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "sfzg-diplomski",
+      "unitId": "sfzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "sfzg-doktorski",
+      "unitId": "sfzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "simet-zavrsni",
+      "unitId": "simet",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "sociologija",
+      "unitId": null,
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "sois-ft-vojno-inzenjerstvo-diplomski",
+      "unitId": "sois-ft",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "sois-ft-vojno-inzenjerstvo-zavrsni",
+      "unitId": "sois-ft",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "sois-ft-vojno-pomorstvo-diplomski",
+      "unitId": "sois-ft",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "sois-ft-vojno-vodjenje-diplomski",
+      "unitId": "sois-ft",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "sois-ft-vojno-vodjenje-zavrsni",
+      "unitId": "sois-ft",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "sumfak-diplomski",
+      "unitId": "sumfak",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "sumfak-zavrsni",
+      "unitId": "sumfak",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "tfpu-diplomski",
+      "unitId": "tfpu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "tfpu-zavrsni",
+      "unitId": "tfpu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "trgovacko-pravo",
+      "unitId": null,
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ttf-diplomski",
+      "unitId": "ttf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ttf-dizajn-diplomski",
+      "unitId": "ttf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ttf-dizajn-zavrsni",
+      "unitId": "ttf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ttf-doktorski",
+      "unitId": "ttf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ttf-zavrsni",
+      "unitId": "ttf",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "uaos-diplomski",
+      "unitId": "uaos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "uaos-zavrsni",
+      "unitId": "uaos",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ufri-diplomski",
+      "unitId": "ufri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ufzg-diplomski",
+      "unitId": "ufzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ufzg-doktorski",
+      "unitId": "ufzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "ufzg-zavrsni",
+      "unitId": "ufzg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "umas-diplomski",
+      "unitId": "umas",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "umas-zavrsni",
+      "unitId": "umas",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unidu-ekonomija-diplomski",
+      "unitId": "unidu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unidu-ekonomija-zavrsni",
+      "unitId": "unidu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unidu-elektro-diplomski",
+      "unitId": "unidu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unidu-elektro-zavrsni",
+      "unitId": "unidu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unidu-komunikologija-diplomski",
+      "unitId": "unidu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unidu-komunikologija-zavrsni",
+      "unitId": "unidu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unidu-marikultura-diplomski",
+      "unitId": "unidu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unidu-povijest-zavrsni",
+      "unitId": "unidu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unidu-sestrinstvo-zavrsni",
+      "unitId": "unidu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unidu-umjetnost-diplomski",
+      "unitId": "unidu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unidu-umjetnost-zavrsni",
+      "unitId": "unidu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unin-biomedicina-diplomski",
+      "unitId": "unin",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unin-biomedicina-zavrsni",
+      "unitId": "unin",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unin-drustveni-diplomski",
+      "unitId": "unin",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unin-drustveni-zavrsni",
+      "unitId": "unin",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unin-tehnicki-diplomski",
+      "unitId": "unin",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unin-tehnicki-zavrsni",
+      "unitId": "unin",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unisb-btho-diplomski",
+      "unitId": "btho",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unisb-btho-zavrsni",
+      "unitId": "btho",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unisb-odhz-diplomski",
+      "unitId": "odhz",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unisb-odhz-zavrsni",
+      "unitId": "odhz",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unisb-sfsb-diplomski",
+      "unitId": "sfsb",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unisb-sfsb-zavrsni",
+      "unitId": "sfsb",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unisb-teho-diplomski",
+      "unitId": "teho",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unisb-teho-zavrsni",
+      "unitId": "teho",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-anglistika-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-anglistika-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-arheologija-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-arheologija-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-ekologija-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-ekologija-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-ekonomija-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-ekonomija-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-etnologija-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-filozofija-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-filozofija-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-francuski-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-geografija-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-germanistika-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-germanistika-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-hispanistika-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-informacijske-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-informacijske-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-klasicna-filologija-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-klasicna-filologija-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-kroatistika-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-kroatistika-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-lingvistika-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-lingvistika-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-pedagogija-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-pomorski-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-pomorski-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-povijest-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-povijest-umj-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-povijest-umj-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-povijest-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-psihologija-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-psihologija-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-rusistika-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-sociologija-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-sociologija-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-talijanistika-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-tko-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-turizam-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-turizam-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-ucitelji-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-zdravstvo-diplomski",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "unizd-zdravstvo-zavrsni",
+      "unitId": "unizd",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vef-diplomski",
+      "unitId": "vef",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vef-doktorski",
+      "unitId": "vef",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "veleknin-diplomski",
+      "unitId": "veleknin",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "veleknin-zavrsni",
+      "unitId": "veleknin",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "veleri-diplomski",
+      "unitId": "veleri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "veleri-zavrsni",
+      "unitId": "veleri",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vevu-diplomski",
+      "unitId": "vevu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vevu-zavrsni",
+      "unitId": "vevu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vguk-diplomski",
+      "unitId": "vguk",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vguk-zavrsni",
+      "unitId": "vguk",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vhzk-zavrsni",
+      "unitId": "vhzk",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vkjs-diplomski",
+      "unitId": "vkjs",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vkjs-zavrsni",
+      "unitId": "vkjs",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vnt-diplomski",
+      "unitId": "vnt",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vnt-zavrsni",
+      "unitId": "vnt",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vsig-diplomski",
+      "unitId": "vsig",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vsig-zavrsni",
+      "unitId": "vsig",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vsite-diplomski",
+      "unitId": "vsite",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vsite-zavrsni",
+      "unitId": "vsite",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vss-diplomski",
+      "unitId": "vss",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vss-zavrsni",
+      "unitId": "vss",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vub-diplomski",
+      "unitId": "vub",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vub-zavrsni-sestrinstvo",
+      "unitId": "vub",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vub-zavrsni-tehnicki",
+      "unitId": "vub",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vuka-lovstvo-zavrsni",
+      "unitId": "vuka",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vuka-poslovni-diplomski",
+      "unitId": "vuka",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vuka-poslovni-opci-akademski-rad",
+      "unitId": "vuka",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vuka-poslovni-zavrsni",
+      "unitId": "vuka",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vuka-prehrambena-zavrsni",
+      "unitId": "vuka",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vuka-sigurnost-diplomski",
+      "unitId": "vuka",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vuka-sigurnost-zavrsni",
+      "unitId": "vuka",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vuka-strojarski-diplomski",
+      "unitId": "vuka",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vuka-strojarski-zavrsni",
+      "unitId": "vuka",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vus-diplomski",
+      "unitId": "vus",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vus-zavrsni",
+      "unitId": "vus",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vuv-diplomski",
+      "unitId": "vuv",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vuv-zavrsni",
+      "unitId": "vuv",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vvg-diplomski",
+      "unitId": "vvg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "vvg-zavrsni",
+      "unitId": "vvg",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "zsem-diplomski",
+      "unitId": "zsem",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "zsem-zavrsni",
+      "unitId": "zsem",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "zsem-zavrsni-en",
+      "unitId": "zsem",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "zvu-specijalisticki",
+      "unitId": "zvu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    },
+    {
+      "profileId": "zvu-zavrsni",
+      "unitId": "zvu",
+      "state": "unit-not-in-registry",
+      "programIds": []
+    }
+  ],
+  "unitsWithoutPrograms": [
+    "adu",
+    "agr",
+    "algebra",
+    "alu",
+    "apuri",
+    "arca",
+    "arh",
+    "aspira",
+    "bak",
+    "biolos",
+    "biotech",
+    "btho",
+    "effectus",
+    "efos",
+    "efri",
+    "efst",
+    "efzg",
+    "erf",
+    "evtos",
+    "fazos",
+    "fbf",
+    "fdmri",
+    "fdmz",
+    "fer",
+    "ferit",
+    "fesb",
+    "fetpu",
+    "ffos",
+    "ffpu",
+    "ffri",
+    "ffrz",
+    "ffst",
+    "ffzg",
+    "fgag",
+    "fhs",
+    "fipu",
+    "fizos",
+    "fizri",
+    "fkit",
+    "fmtu",
+    "foi",
+    "foozos",
+    "foozpu",
+    "forenzika",
+    "fpz",
+    "fpzpu",
+    "fsb",
+    "ftrr",
+    "fzsri",
+    "geof",
+    "grad",
+    "gradri",
+    "grafos",
+    "grf",
+    "hks",
+    "inf",
+    "iv",
+    "kbf",
+    "kbfdj",
+    "kbfst",
+    "kemos",
+    "kif",
+    "kifos",
+    "kifst",
+    "ktfst",
+    "libertas",
+    "logri",
+    "mapu",
+    "matematika",
+    "mathos",
+    "medri",
+    "mef",
+    "mefos",
+    "mefst",
+    "mev",
+    "mfpu",
+    "more",
+    "muza",
+    "odhz",
+    "oss",
+    "ozs",
+    "par",
+    "pbf",
+    "pfri",
+    "pfst",
+    "pmf",
+    "pmfst",
+    "pravos",
+    "pravri",
+    "pravst",
+    "ptfos",
+    "pvzg",
+    "rgnf",
+    "rit",
+    "riteh",
+    "rrif",
+    "securus",
+    "sfsb",
+    "sfzg",
+    "simet",
+    "sois-ft",
+    "sumfak",
+    "teho",
+    "tfpu",
+    "ttf",
+    "tvz",
+    "uaos",
+    "ufri",
+    "ufzg",
+    "umas",
+    "unidu",
+    "unin",
+    "unizd",
+    "vef",
+    "veleknin",
+    "veleri",
+    "vern",
+    "vevu",
+    "vguk",
+    "vhzk",
+    "vkjs",
+    "vnt",
+    "vsig",
+    "vsite",
+    "vss",
+    "vub",
+    "vuka",
+    "vus",
+    "vuv",
+    "vvg",
+    "zsem",
+    "zvu"
+  ],
+  "summary": {
+    "programCount": 35,
+    "profileCount": 410,
+    "unitCount": 134,
+    "unitsWithoutPrograms": 132,
+    "profilesUnclaimedInCoveredUnits": 6,
+    "programsPendingPort": 0,
+    "byProgramState": {
+      "linked": 32,
+      "needs-profile": 0,
+      "unsupported": 3
+    },
+    "byProfileState": {
+      "linked": 20,
+      "unit-not-in-registry": 384,
+      "unclaimed-by-program": 6
+    },
+    "upisnikSynced": false
+  }
+}

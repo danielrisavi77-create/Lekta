@@ -1,0 +1,1090 @@
+{
+  "schemaVersion": 1,
+  "upisnikSynced": false,
+  "programs": [
+    {
+      "id": "fpzg-ba-novinarstvo",
+      "officialInstitutionId": null,
+      "componentId": "fpzg",
+      "officialProgramCode": null,
+      "name": "Prijediplomski studij Novinarstvo",
+      "level": "prijediplomski",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "final"
+      ],
+      "expectedProfileIds": [
+        "fpzg-novinarstvo-zavrsni-tekst",
+        "fpzg-novinarstvo-zavrsni-av"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.fpzg.unizg.hr/studiji",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29",
+        "note": "Za završni rad moraju ostati odvojene tekstualna i audiovizualna varijanta."
+      }
+    },
+    {
+      "id": "fpzg-ba-politologija",
+      "officialInstitutionId": null,
+      "componentId": "fpzg",
+      "officialProgramCode": null,
+      "name": "Prijediplomski studij Politologija",
+      "level": "prijediplomski",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "final"
+      ],
+      "expectedProfileIds": [
+        "fpzg-politologija-zavrsni"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.fpzg.unizg.hr/studiji",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "fpzg-ba-vvu",
+      "officialInstitutionId": null,
+      "componentId": "fpzg",
+      "officialProgramCode": null,
+      "name": "Sveučilišni prijediplomski studij Vojno vođenje i upravljanje",
+      "level": "prijediplomski",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": "nije zabiljezen",
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "final"
+      ],
+      "expectedProfileIds": [],
+      "unsupportedReason": "external-institution",
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.fpzg.unizg.hr/studiji",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29",
+        "note": "FPZG je izvoditelj, a studij se izvodi na Hrvatskom vojnom učilištu; pravila završetka treba razgraničiti između ustanova."
+      }
+    },
+    {
+      "id": "fpzg-joint-se",
+      "officialInstitutionId": null,
+      "componentId": "fpzg",
+      "officialProgramCode": null,
+      "name": "Združeni interdisciplinarni diplomski studij o jugoistočnoj Europi",
+      "level": "združeni",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": "nije zabiljezen",
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [],
+      "unsupportedReason": "external-institution",
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.fpzg.unizg.hr/novosti?%40=2flbl",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29",
+        "note": "FPZG je partnerska ustanova; završni rad i predaja moraju slijediti pravila konzorcija i matičnog sveučilišta."
+      }
+    },
+    {
+      "id": "fpzg-ma-mes",
+      "officialInstitutionId": null,
+      "componentId": "fpzg",
+      "officialProgramCode": null,
+      "name": "Master of European Studies",
+      "level": "diplomski",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [
+        "fpzg-mes-master-thesis"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.fpzg.unizg.hr/studiji",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "fpzg-ma-nacionalna",
+      "officialInstitutionId": null,
+      "componentId": "fpzg",
+      "officialProgramCode": null,
+      "name": "Diplomski studij Politologija – Nacionalna sigurnost",
+      "level": "diplomski",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [
+        "fpzg-nacionalna-sigurnost-diplomski"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.fpzg.unizg.hr/studiji",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "fpzg-ma-novinarstvo",
+      "officialInstitutionId": null,
+      "componentId": "fpzg",
+      "officialProgramCode": null,
+      "name": "Diplomski studij Novinarstvo",
+      "level": "diplomski",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [
+        "fpzg-novinarstvo-diplomski"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.fpzg.unizg.hr/studiji",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "fpzg-ma-politologija",
+      "officialInstitutionId": null,
+      "componentId": "fpzg",
+      "officialProgramCode": null,
+      "name": "Diplomski studij Politologija",
+      "level": "diplomski",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [
+        "fpzg-politologija-diplomski"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.fpzg.unizg.hr/studiji",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "fpzg-phd-politologija",
+      "officialInstitutionId": null,
+      "componentId": "fpzg",
+      "officialProgramCode": null,
+      "name": "Doktorski studij Politologija",
+      "level": "doktorski",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "doctoral"
+      ],
+      "expectedProfileIds": [
+        "fpzg-doktorski-politologija"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.fpzg.unizg.hr/studiji",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "fpzg-spec-diplomacija",
+      "officialInstitutionId": null,
+      "componentId": "fpzg",
+      "officialProgramCode": null,
+      "name": "Sveučilišni specijalistički studij Vanjska politika i diplomacija",
+      "level": "specijalistički",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "fpzg-specijalisticki-vanjska-politika-diplomacija"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.fpzg.unizg.hr/studiji",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "fpzg-spec-eu",
+      "officialInstitutionId": null,
+      "componentId": "fpzg",
+      "officialProgramCode": null,
+      "name": "Sveučilišni specijalistički studij Prilagodba Europskoj uniji: upravljanje projektima i korištenje fondova i programa EU",
+      "level": "specijalistički",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "fpzg-specijalisticki-prilagodba-eu"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.fpzg.unizg.hr/studiji",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "fpzg-spec-pr",
+      "officialInstitutionId": null,
+      "componentId": "fpzg",
+      "officialProgramCode": null,
+      "name": "Sveučilišni specijalistički studij Odnosi s javnošću",
+      "level": "specijalistički",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "fpzg-specijalisticki-odnosi-s-javnoscu"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.fpzg.unizg.hr/studiji",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "fpzg-spec-sigurnost",
+      "officialInstitutionId": null,
+      "componentId": "fpzg",
+      "officialProgramCode": null,
+      "name": "Sveučilišni specijalistički studij Sigurnosna politika Republike Hrvatske",
+      "level": "specijalistički",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "fpzg-specijalisticki-sigurnosna-politika-rh"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.fpzg.unizg.hr/studiji",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-ba-porezni",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Stručni prijediplomski Porezni studij",
+      "level": "prijediplomski",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "final"
+      ],
+      "expectedProfileIds": [
+        "pravo-porezni-prijediplomski"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-ba-socijalni",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Sveučilišni prijediplomski studij Socijalni rad",
+      "level": "prijediplomski",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "final"
+      ],
+      "expectedProfileIds": [
+        "pravo-socijalni-rad-zavrsni"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-ba-uprava",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Stručni prijediplomski studij Javna uprava",
+      "level": "prijediplomski",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "final"
+      ],
+      "expectedProfileIds": [
+        "pravo-javna-uprava-prijediplomski"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-integrirani",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Sveučilišni integrirani prijediplomski i diplomski studij Pravo",
+      "level": "integrirani",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [
+        "pravo-integrirani-diplomski"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-joint-repic",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Erasmus Mundus Joint Master – Redesigning the Post-Industrial City (MSc RePIC)",
+      "level": "združeni",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": "nije zabiljezen",
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [],
+      "unsupportedReason": "external-institution",
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/zdruzeni-studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29",
+        "note": "Združeni program; završni rad, matična ustanova i predaja uređuju se pravilima konzorcija."
+      }
+    },
+    {
+      "id": "pravo-ma-politika",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Sveučilišni diplomski studij Socijalna politika",
+      "level": "diplomski",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [
+        "pravo-socijalna-politika-diplomski"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-ma-socijalni",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Sveučilišni diplomski studij Socijalni rad",
+      "level": "diplomski",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [
+        "pravo-socijalni-rad-diplomski"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-ma-uprava",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Stručni diplomski studij Javna uprava",
+      "level": "diplomski",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [
+        "pravo-javna-uprava-diplomski"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-phd-pravne",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Doktorski studij Pravne znanosti",
+      "level": "doktorski",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "doctoral"
+      ],
+      "expectedProfileIds": [
+        "pravo-doktorski-pravne-znanosti"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/doktorski-studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-phd-socijalni",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Doktorski studij Socijalni rad i socijalna politika",
+      "level": "doktorski",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "doctoral"
+      ],
+      "expectedProfileIds": [
+        "pravo-doktorski-socijalni-rad-politika"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/doktorski-studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-spec-drustva-trgovacko",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Sveučilišni specijalistički studij Pravo društava i trgovačko pravo",
+      "level": "specijalistički",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-drustva-trgovacko"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-spec-europsko-pravo",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Sveučilišni specijalistički studij Europsko pravo",
+      "level": "specijalistički",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-europsko-pravo"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-spec-fiskalni",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Sveučilišni specijalistički studij Fiskalni sustav i fiskalna politika",
+      "level": "specijalistički",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-fiskalni"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-spec-gradjansko-obiteljsko",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Sveučilišni specijalistički studij Građanskopravne i obiteljskopravne znanosti",
+      "level": "specijalistički",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-gradjansko-obiteljsko"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-spec-javno-pravo-uprava",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Sveučilišni specijalistički studij Javno pravo i javna uprava",
+      "level": "specijalistički",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-javno-pravo-uprava"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-spec-kaznenopravne",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Sveučilišni specijalistički studij Kaznenopravne znanosti",
+      "level": "specijalistički",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-kaznenopravne"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-spec-medjunarodno",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Sveučilišni specijalistički studij Međunarodno javno i međunarodno privatno pravo",
+      "level": "specijalistički",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-medjunarodno"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-spec-obiteljska-medijacija",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Sveučilišni specijalistički studij Obiteljska medijacija",
+      "level": "specijalistički",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-obiteljska-medijacija"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-spec-prava-djece",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Sveučilišni interdisciplinarni specijalistički studij Prava djece",
+      "level": "specijalistički",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-prava-djece"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-spec-psihosocijalni",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Sveučilišni specijalistički studij Psihosocijalni pristup u socijalnom radu",
+      "level": "specijalistički",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-psihosocijalni"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-spec-socijalna-politika",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Sveučilišni specijalistički studij Socijalna politika",
+      "level": "specijalistički",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-socijalna-politika"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    },
+    {
+      "id": "pravo-spec-supervizija",
+      "officialInstitutionId": null,
+      "componentId": "pravo",
+      "officialProgramCode": null,
+      "name": "Sveučilišni specijalistički studij Supervizija psihosocijalnog rada",
+      "level": "specijalistički",
+      "track": null,
+      "language": null,
+      "deliveryMode": null,
+      "jointPartner": null,
+      "subjectCount": null,
+      "academicYear": null,
+      "ruleVersion": null,
+      "status": "active",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-supervizija"
+      ],
+      "unsupportedReason": null,
+      "provenance": {
+        "kind": "faculty-page",
+        "sourceId": null,
+        "sourceUrl": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+        "sourcePage": null,
+        "snapshotHash": null,
+        "verifiedAt": "2026-06-29"
+      }
+    }
+  ]
+}

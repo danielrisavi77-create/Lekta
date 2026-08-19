@@ -1,0 +1,9 @@
+{
+  "note": "Zatecene brojke uskladjivanja programa i profila (P1-4). Test trazi JEDNAKOST, ne samo gornju granicu: regresija pada, ali i napredak mora biti upisan ovdje, pa se poboljsanje ne moze dogoditi tiho. Kad P1-2 sinkronizira Upisnik, ove brojke padaju.",
+  "measuredAt": "2026-08-19",
+  "unitsWithoutPrograms": 132,
+  "profilesUnitNotInRegistry": 384,
+  "profilesUnclaimedInCoveredUnits": 6,
+  "programsPendingPort": 0,
+  "upisnikSynced": false
+}
