@@ -79,6 +79,12 @@
       "root": "tests/fixtures/docx"
     },
     {
+      "documentId": "typografija-i-literatura",
+      "fileName": "typografija-i-literatura.docx",
+      "profileId": "fpzg-mes-master-thesis",
+      "root": "tests/fixtures/docx"
+    },
+    {
       "documentId": "word-veliki-neuredan",
       "fileName": "word-veliki-neuredan.docx",
       "profileId": "fpzg-politologija-diplomski",
@@ -638,6 +644,62 @@
       "error": null
     },
     {
+      "documentId": "typografija-i-literatura",
+      "fileName": "typografija-i-literatura.docx",
+      "profileId": "fpzg-mes-master-thesis",
+      "outcome": "review",
+      "before": {
+        "checkCount": 33,
+        "passCount": 14,
+        "score": 65
+      },
+      "after": {
+        "checkCount": 33,
+        "passCount": 19,
+        "score": 81
+      },
+      "beforeEntryCount": 12,
+      "afterEntryCount": 12,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "font-fixer",
+        "line-spacing-fixer",
+        "paper-size-fixer",
+        "alignment-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "croatian-typography-fixer",
+        "consistency-fixer",
+        "link-doi-fixer"
+      ],
+      "changedFixerIds": [
+        "field-integrity-fixer",
+        "croatian-typography-fixer",
+        "font-fixer",
+        "line-spacing-fixer",
+        "paper-size-fixer",
+        "alignment-fixer",
+        "link-doi-fixer",
+        "final-document-inspector-fixer"
+      ],
+      "targetedCheckCount": 18,
+      "targetedResolvedCount": 6,
+      "targetedUnresolvedCount": 12,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null
+    },
+    {
       "documentId": "word-veliki-neuredan",
       "fileName": "word-veliki-neuredan.docx",
       "profileId": "fpzg-politologija-diplomski",
@@ -693,14 +755,14 @@
     }
   ],
   "summary": {
-    "documentCount": 13,
+    "documentCount": 14,
     "passCount": 0,
-    "reviewCount": 13,
+    "reviewCount": 14,
     "failCount": 0,
     "integrityFailureCount": 0,
     "noOpCount": 0,
-    "changedDocumentCount": 11,
-    "manualReviewCount": 13,
+    "changedDocumentCount": 12,
+    "manualReviewCount": 14,
     "passRegressionCount": 0
   }
 }

@@ -1,7 +1,7 @@
 {
   "generatedFrom": "docs/generated/faculty-matrix.json",
   "totalProfiles": 407,
-  "profilesWithoutSample": 397,
+  "profilesWithoutSample": 396,
   "entries": [
     {
       "profileId": "algebra-diplomski",
@@ -869,12 +869,6 @@
     },
     {
       "profileId": "fpzg-doktorski-politologija",
-      "unitId": "fpzg",
-      "facultyLabel": "Fakultet političkih znanosti",
-      "offeredOptionCount": 5
-    },
-    {
-      "profileId": "fpzg-mes-master-thesis",
       "unitId": "fpzg",
       "facultyLabel": "Fakultet političkih znanosti",
       "offeredOptionCount": 5
