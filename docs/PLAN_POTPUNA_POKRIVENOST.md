@@ -363,32 +363,31 @@ Cilj: ne moze se tvrditi pokrivenost programa koji nikad nije evidentiran. Danas
   pravila" nisu spojeni u jedan gate; ledger iz P0-3 ih spaja.
 - Velicina: L. Prioritet: P1. Ovisi o: P2-2.
 
-### P2-4. 40 profila bez fakultetski specificnog repaira
-- Isti trostruki ishod kao P2-3, plus cetvrti: `manual-only` (fakultet propisuje samo ono sto
-  alat ne smije dirati). Univerzalna higijena ostaje ponudjena, ali UI mora reci da NIJE
-  fakultetski zahtjev (postojeci obrazac preporuke: `violated: false`, `recommended: true`,
-  bez `matchKeys`).
-- Najvece skupine: 7 ADU diplomskih, 4 ALU, `geof` (3), `unizd` (10), `pravst` (2),
-  `umas` (2), `par` (2), `unidu-elektro` (2), `vsite` (2), `gradri` (2),
-  `ffos-povijest` (2), `fpzg-novinarstvo-zavrsni-av`, `dizajn-diplomski`.
-- AC: nijedan od 40 profila ne ostaje bez eksplicitne oznake u ledgeru.
-- Velicina: XL (najveci pojedinacni blok). Prioritet: P1.
+### P2-4. Profili bez fakultetskog repaira : IZMJEREN, backlog je 5 a ne 40 (2026-08-19)
+- Audit je prijavio 34 takva profila, mjerenje je dalo 40. Oba broja mjere ISTU, preusku stvar:
+  `offeredOptionCount` broji samo PROFILNU granu (`buildRepairableItems`), koja pokriva sest osi
+  (font, velicina, prored, format papira, poravnanje, margine). Asistirane stavke ulaze kroz
+  vlastite ulazne tocke i u tom brojacu se ne vide.
+- Izvedeno: `src/programs/repair-gap.ts` + `scripts/repair-gap-report.mts` (`npm run repair-gap`)
+  + `docs/generated/repair-gap.json` + `tests/repair-gap.test.ts`. Klasifikacija ide IZ PODATAKA.
+- **Cetiri razlicite pojave, cetiri razlicita ishoda:**
 
-### P2-6. Fakultetska matrica ne pokriva 3 katedarska profila
-- Nadjeno pri P0-3 (2026-08-19): `docs/generated/faculty-matrix.json` gradi se nad 407
-  verificiranih profila i preskace `data/profiles/legal-departments.json`
-  (`trgovacko-pravo`, `radno-socijalno-pravo`, `sociologija`). Svaki od njih ima 6 bodovanih
-  pravila, uredan coverage redak i vise vrsta rada (seminar, final, graduate, project, article),
-  ali nijedan automatski test, nijednu repair opciju i nijedan redak u matrici.
-- Posljedica koju je ledger otkrio: da je ledger bio vodjen matricom, tiho bi izgubio tri profila.
-  Zato ga vodi registar; ta tri retka sada nose izricit razlog "profil nije u fakultetskoj matrici".
-- Otvoreno je i drugo pitanje: ti profili nemaju `unitId`, pa im se pomocni sadrzaji (naslovnica,
-  citatni spec, izjava) ne mogu vezati ni na jednu jedinicu. Vjerojatno pripadaju `pravo`, ali to
-  je zakljucak, ne podatak, pa ga ledger ne pretpostavlja.
-- AC: matrica ih ili pokriva (pa dobivaju automatske testove kao svi ostali), ili je izricito
-  zapisano da su katedarski sloj koji se ne nudi kao samostalan profil. `unitId` se popunjava iz
-  izvora, ne pogadja.
-- Velicina: M. Prioritet: P1.
+| Vrsta | Broj | Sto zapravo znaci |
+|---|---:|---|
+| `no-scored-rules` | 24 | Posljedica P2-2/P2-3, ne zaseban kvar. Isti onaj skup od 24 profila. |
+| `assisted-profile-gated` | 6 | Profil nosi gate (`requireToc`, `headingRules`), pa se popravak KORISNIKU NUDI. Rupa je u MJERENJU, ne u proizvodu. |
+| `not-repairable-by-nature` | 5 | Jedina pravila su `page-count` i `citation-style`. Opseg se ne postize oblikovanjem, stil se ne izmislja. **Ispravna nula.** |
+| `rule-shape-unusable` | 5 | `required-sections` je slobodan popis naziva; fixer treba kanonske kljuceve (`required-section-rules`). **Podatkovni posao.** |
+
+- STVARNI P2-4 BACKLOG su dakle **5 profila** (`dizajn-diplomski`, `par-zavrsni`, `par-diplomski`,
+  `umas-zavrsni`, `umas-diplomski`): njihovo `required-sections` pravilo treba prevesti u
+  `required-section-rules` oblik, uz izvor. Plus popravak mjere za 6 profila.
+- Provjereno usput, da se ne prijavi lazan kvar: gejt `requiredSectionsRepairableItem` trazi
+  `checkId === 'required-section-rules'` dok 130 pravila nosi `required-sections`. To NIJE mrtav
+  gejt: `required-sections` je `machineCheckable: false` slobodan popis, a `required-section-rules`
+  nosi `order` + `labels` s kanonskim kljucevima. Samo drugi oblik moze voditi fixer.
+- `toc-field-fixer` je ziv (`TOC_FIELD_LIVE = true`) i gejtan s `profile.requireToc === true`;
+  `heading-format-fixer` s `profile.headingRules`. Oba se dakle nude tim profilima.
 
 ### P2-5. `pravo`: dva doslovna citata nisu u snapshotiranoj ekstrakciji
 - Nadjeno pri P0-1 (2026-08-19), zatecen kvar: citatni spec `pravo` je `verified`, ali quoteRaw za

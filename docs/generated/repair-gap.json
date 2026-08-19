@@ -1,0 +1,297 @@
+{
+  "rows": [
+    {
+      "profileId": "geof-diplomski",
+      "kind": "assisted-profile-gated",
+      "scoredCheckIds": [
+        "toc"
+      ],
+      "gates": [
+        "requireToc"
+      ]
+    },
+    {
+      "profileId": "geof-doktorski",
+      "kind": "assisted-profile-gated",
+      "scoredCheckIds": [
+        "toc"
+      ],
+      "gates": [
+        "requireToc"
+      ]
+    },
+    {
+      "profileId": "gradri-diplomski",
+      "kind": "assisted-profile-gated",
+      "scoredCheckIds": [
+        "heading-rules"
+      ],
+      "gates": [
+        "headingRules"
+      ]
+    },
+    {
+      "profileId": "gradri-zavrsni",
+      "kind": "assisted-profile-gated",
+      "scoredCheckIds": [
+        "heading-rules"
+      ],
+      "gates": [
+        "headingRules"
+      ]
+    },
+    {
+      "profileId": "vsite-diplomski",
+      "kind": "assisted-profile-gated",
+      "scoredCheckIds": [
+        "page-count",
+        "toc"
+      ],
+      "gates": [
+        "requireToc"
+      ]
+    },
+    {
+      "profileId": "vsite-zavrsni",
+      "kind": "assisted-profile-gated",
+      "scoredCheckIds": [
+        "page-count",
+        "toc"
+      ],
+      "gates": [
+        "requireToc"
+      ]
+    },
+    {
+      "profileId": "adu-dramaturgija-diplomski",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "adu-ftv-rezija-diplomski",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "adu-gluma-diplomski",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "adu-kazalisna-rezija-diplomski",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "adu-opci-diplomski",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "adu-snimanje-diplomski",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "alu-nastavnicki-diplomski",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "alu-novi-mediji-diplomski",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "ffos-povijest-diplomski",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "ffos-povijest-zavrsni",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "geof-opci-akademski-rad",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "pravst-diplomski",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "pravst-zavrsni",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "unidu-elektro-zavrsni",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "unizd-anglistika-diplomski",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "unizd-anglistika-zavrsni",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "unizd-ekonomija-diplomski",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "unizd-ekonomija-zavrsni",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "unizd-kroatistika-diplomski",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "unizd-kroatistika-zavrsni",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "unizd-lingvistika-diplomski",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "unizd-lingvistika-zavrsni",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "unizd-rusistika-diplomski",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "unizd-sociologija-zavrsni",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "adu-produkcija-diplomski",
+      "kind": "not-repairable-by-nature",
+      "scoredCheckIds": [
+        "page-count"
+      ],
+      "gates": []
+    },
+    {
+      "profileId": "alu-doktorski",
+      "kind": "not-repairable-by-nature",
+      "scoredCheckIds": [
+        "page-count"
+      ],
+      "gates": []
+    },
+    {
+      "profileId": "alu-grafika-diplomski",
+      "kind": "not-repairable-by-nature",
+      "scoredCheckIds": [
+        "page-count"
+      ],
+      "gates": []
+    },
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-av",
+      "kind": "not-repairable-by-nature",
+      "scoredCheckIds": [
+        "citation-style"
+      ],
+      "gates": []
+    },
+    {
+      "profileId": "unidu-elektro-diplomski",
+      "kind": "not-repairable-by-nature",
+      "scoredCheckIds": [
+        "page-count"
+      ],
+      "gates": []
+    },
+    {
+      "profileId": "dizajn-diplomski",
+      "kind": "rule-shape-unusable",
+      "scoredCheckIds": [
+        "required-sections"
+      ],
+      "gates": []
+    },
+    {
+      "profileId": "par-diplomski",
+      "kind": "rule-shape-unusable",
+      "scoredCheckIds": [
+        "required-sections"
+      ],
+      "gates": []
+    },
+    {
+      "profileId": "par-zavrsni",
+      "kind": "rule-shape-unusable",
+      "scoredCheckIds": [
+        "required-sections"
+      ],
+      "gates": []
+    },
+    {
+      "profileId": "umas-diplomski",
+      "kind": "rule-shape-unusable",
+      "scoredCheckIds": [
+        "required-sections"
+      ],
+      "gates": []
+    },
+    {
+      "profileId": "umas-zavrsni",
+      "kind": "rule-shape-unusable",
+      "scoredCheckIds": [
+        "required-sections"
+      ],
+      "gates": []
+    }
+  ],
+  "summary": {
+    "no-scored-rules": 24,
+    "assisted-profile-gated": 6,
+    "not-repairable-by-nature": 5,
+    "rule-shape-unusable": 5,
+    "total": 40
+  }
+}
