@@ -451,7 +451,7 @@
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 0,
@@ -480,7 +480,7 @@
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 1,
@@ -509,7 +509,7 @@
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 1,
@@ -538,7 +538,7 @@
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 3,
@@ -567,7 +567,7 @@
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 8,
@@ -596,7 +596,7 @@
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 0,
@@ -625,7 +625,7 @@
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 0,
@@ -654,7 +654,7 @@
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 2,
@@ -1002,7 +1002,7 @@
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 6,
@@ -1031,7 +1031,7 @@
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 6,
@@ -1147,7 +1147,7 @@
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 8,
@@ -1177,7 +1177,7 @@
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 9,
@@ -1207,7 +1207,7 @@
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 8,
@@ -4023,7 +4023,7 @@
       "assetDetail": {
         "titlePage": "generic",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 7,
@@ -4106,13 +4106,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-derived",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 7,
@@ -4137,13 +4137,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-official",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 13,
@@ -4168,13 +4168,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-official",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 14,
@@ -4199,13 +4199,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-official",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 14,
@@ -4230,13 +4230,13 @@
       "rules": "verified",
       "repair": "manual-only",
       "proof": "not-run",
-      "assets": "generic",
+      "assets": "exact-derived",
       "claim": "D",
       "claimLabel": "provjerava prema sluzbenim uputama; automatski popravak pokriva samo opcu higijenu dokumenta",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 1,
@@ -4261,13 +4261,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-derived",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 14,
@@ -4290,13 +4290,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "reused",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 10,
@@ -4319,13 +4319,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "reused",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 10,
@@ -4348,13 +4348,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "reused",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 10,
@@ -4379,13 +4379,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-official",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 14,
@@ -4410,13 +4410,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-derived",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 14,
@@ -4441,13 +4441,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-official",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 14,
@@ -4472,13 +4472,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-official",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 14,
@@ -4503,13 +4503,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-official",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 14,
@@ -4534,13 +4534,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-official",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 14,
@@ -4569,7 +4569,7 @@
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 7,
@@ -4598,7 +4598,7 @@
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 7,
@@ -4801,7 +4801,7 @@
       "assetDetail": {
         "titlePage": "reused",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 5,
@@ -4830,7 +4830,7 @@
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 5,
@@ -5352,7 +5352,7 @@
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 6,
@@ -5491,13 +5491,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-official",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 7,
@@ -5520,13 +5520,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-derived",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 6,
@@ -5549,13 +5549,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-official",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 7,
@@ -5789,7 +5789,7 @@
       "assetDetail": {
         "titlePage": "generic",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 8,
@@ -5818,7 +5818,7 @@
       "assetDetail": {
         "titlePage": "generic",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 8,
@@ -6978,13 +6978,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-official",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 7,
@@ -7007,13 +7007,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-derived",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 6,
@@ -11448,13 +11448,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "reused",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 6,
@@ -11477,13 +11477,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-official",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 8,
@@ -11680,13 +11680,13 @@
       "rules": "verified",
       "repair": "faculty-specific",
       "proof": "synthetic-pass",
-      "assets": "generic",
+      "assets": "exact-official",
       "claim": "B",
       "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 5,
@@ -11773,7 +11773,7 @@
       "assetDetail": {
         "titlePage": "generic",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 8,
@@ -11802,7 +11802,7 @@
       "assetDetail": {
         "titlePage": "generic",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 8,
@@ -12411,7 +12411,7 @@
       "assetDetail": {
         "titlePage": "reused",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 4,
@@ -12440,7 +12440,7 @@
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
-        "declaration": "generic"
+        "declaration": "exact-official"
       },
       "evidence": {
         "scoredMachineCheckable": 4,
@@ -12743,10 +12743,10 @@
       "not-run": 92
     },
     "byAssets": {
-      "exact-official": 0,
-      "exact-derived": 0,
-      "reused": 0,
-      "generic": 433,
+      "exact-official": 13,
+      "exact-derived": 6,
+      "reused": 4,
+      "generic": 410,
       "unknown": 3
     },
     "byTitlePage": {
@@ -12764,10 +12764,10 @@
       "unknown": 3
     },
     "byDeclaration": {
-      "exact-official": 0,
+      "exact-official": 48,
       "exact-derived": 0,
       "reused": 0,
-      "generic": 433,
+      "generic": 385,
       "unknown": 3
     },
     "byClaim": {

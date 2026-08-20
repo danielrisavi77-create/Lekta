@@ -718,7 +718,29 @@ rijeseno (23,2%), prosjek 85,25 na 88,83, nula pass-regresija.
   propisana, nemamo tekst" - student i dalje dobiva OPCU formulaciju. Os mjeri vjernost SADRZAJA,
   pa `guidance` ostaje `generic`; vrijednost zapisa je napomena uz izvor, ne tocnost teksta. Bez
   ispravka bi izgledalo da je 27 redaka dobilo vjernu izjavu, a nije nijedan.
-- Sto OSTAJE: prikupljanje doslovnih obrazaca je LJUDSKI posao (preuzeti sluzbeni PDF/DOCX obrazac
+#### Doslovni obrasci ipak SU dohvatljivi strojno (2026-08-20, ispravak procjene)
+- Prva procjena ("obrasci se moraju prikupiti rucno") bila je prebrza. Mjerenje: od 255 PDF
+  snapshota **226 ima pravi tekstualni sloj** (ne skenirani), **104 spominju izjavu**, a **41 sadrzi
+  sam obrazac** (naslov + prvo lice na istoj stranici). Tekstualni sloj cuva dijakritiku, za razliku
+  od OCR-a - a to je presudno za tekst koji student POTPISUJE.
+- `scripts/extract_declarations.py` izvlaci obrazac uz TVRDU kontrolu kvalitete: odbacuje tekst bez
+  ijednog dijakritickog znaka, tekst sa znamenkom unutar rijeci ("Sveudili5ta" umjesto
+  "Sveucilista") i tekst s premalo slova. Izmjereno odbaceno: 1.
+- Rezultat: **15 zapisa s DOSLOVNIM obrascem** (`provenance: official` + `wording`) plus 3
+  `guidance`, ukupno 18 kroz 17 jedinica. Prije je bilo 9 zapisa kroz 3 jedinice, svi bez teksta.
+- Ucinak na ledger, prvi put stvaran: `izjava: exact-official 48` redaka (bilo 0), a 13 redaka ima
+  SVA TRI pomocna sadrzaja na `exact-official`.
+- SVI ostaju `status: 'draft'`. `provenance` govori ODAKLE tekst dolazi, `status` je li itko
+  provjerio da je prepisan TOCNO: PDF u dva stupca zna izmijesati retke
+  ("{Ime i prezime studenta, JMBAG)"). AI ne proglasava verified.
+- Preskoceno i ostavljeno covjeku: **8 jedinica ima VISE razlicitih obrazaca** (agr, efzg, ffos,
+  ffzg, fpz, pravo, unidu, unizd) - kojoj razini koji pripada se ne pogadja, jer je kriva sluzbena
+  formulacija za krivu razinu gora od opceg teksta. Uz to 2 snapshota postoje na disku ali nisu u
+  registru izvora, pa se ne mogu citirati.
+- Gard: `tests/declaration-extraction.test.ts` (dijakritika, tragovi pokvarenog sloja, sljedivost do
+  izvora i stranice, nijedan jos nije `verified`, guidance i dalje bez teksta).
+
+- Sto OSTAJE: prikupljanje preostalih obrazaca je LJUDSKI posao (preuzeti sluzbeni PDF/DOCX obrazac
   po jedinici). Tek tada zapis prelazi u `official` i `assets` os se stvarno mice. Cilj iz prvotnog
   plana (30 najvecih jedinica) ostaje otvoren.
 

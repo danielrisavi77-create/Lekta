@@ -1,5 +1,56 @@
 [
   {
+    "id": "alu-official",
+    "unitId": "alu",
+    "level": null,
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "alu-okiru-upute-2015"
+      ],
+      "sourcePage": 8,
+      "sourceNote": "doslovno iz snapshota, str. 8",
+      "verifiedAt": null
+    },
+    "status": "draft",
+    "wording": "IZJAVA O AUTORSTVU Izjava o autorstvu: Na temelju člana 0000000 statuta Sveučilišta u Zagrebu izjavljujem da sam autor(ica) diplomskog rada pod naslovom ........(naslov diplomskog rada) U Zagrebu ........dan, mjesec i godina Ime i prezime Potpis 12) 9. PRILOZI",
+    "notes": "Tekst je doslovno izvucen iz sluzbenog snapshota (tekstualni sloj PDF-a, bez OCR-a). Redoslijed redaka u viseslupcanom PDF-u zna biti izmijesan, pa prijepis treba potvrditi prije nego se zapis proglasi verificiranim."
+  },
+  {
+    "id": "biolos-official",
+    "unitId": "biolos",
+    "level": null,
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "biolos-pravilnik-zavrsni-2023"
+      ],
+      "sourcePage": 12,
+      "sourceNote": "doslovno iz snapshota, str. 12",
+      "verifiedAt": null
+    },
+    "status": "draft",
+    "wording": "IZJAVA O IZVORNOSTI ZAVRŠNOG/DIPLOMSKOG RADA Ja _______________________________ s punom {Ime i prezime studenta, JMBAG) materijalnom i moralnom odgovornošću izjavljujem kako sam ovaj rad samostalno izradio/izradila te da u njemu nema kopiranih ili prepisanih dijelova teksta tuđih radova, a da nisu označeni kao citati s napisanim izvorom odakle su preuzeti. U Osijeku, ---------- Vlastoručni potpis studenta ll",
+    "notes": "Tekst je doslovno izvucen iz sluzbenog snapshota (tekstualni sloj PDF-a, bez OCR-a). Redoslijed redaka u viseslupcanom PDF-u zna biti izmijesan, pa prijepis treba potvrditi prije nego se zapis proglasi verificiranim."
+  },
+  {
+    "id": "effectus-official",
+    "unitId": "effectus",
+    "level": null,
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "effectus-pravilnik-2023"
+      ],
+      "sourcePage": 37,
+      "sourceNote": "doslovno iz snapshota, str. 37",
+      "verifiedAt": null
+    },
+    "status": "draft",
+    "wording": "IZJAVA O AKADEMSKOJ ČESTITOSTI, SUGLASNOSTI ZA OBJAVU RADA U REPOZITORIJIMA I ISTOVJETNOSTI DIGITALNE I TISKANE VERZIJE RADA 1. Kojom izjavljujem i svojim potpisom potvrđujem da je ________________________ (navesti vrstu rada: završni / diplomski) rad isključivo rezultat osobnoga rada koji se temelji na mojim istraživanjima i oslanja se na objavljenu literaturu. Potvrđujem poštivanje nepovredivosti autorstva te točno citiranje radova drugih autora i referiranje na njih. 2. Kojom izjavljujem da sam suglasan/suglasna da se trajno pohrani i objavi moj rad u javno dostupnom repozitoriju (u skladu s odredbama Zakona visokom obrazovanju i znanstvenoj djelatnosti, NN br. 119/2022). 3. izjavljujem da sam autor/autorica predanog rada i da je sadržaj predane elektroničke datoteke u potpunosti istovjetan sa dovršenom tiskanom verzijom rada predanom u svrhu obrane istog. Ime i prezime studenta/studentice: OIB: e-mail za kontakt: Naziv studija: Naslov rada:",
+    "notes": "Tekst je doslovno izvucen iz sluzbenog snapshota (tekstualni sloj PDF-a, bez OCR-a). Redoslijed redaka u viseslupcanom PDF-u zna biti izmijesan, pa prijepis treba potvrditi prije nego se zapis proglasi verificiranim."
+  },
+  {
     "id": "ffzg-final",
     "unitId": "ffzg",
     "level": "final",
@@ -16,6 +67,23 @@
     },
     "status": "draft",
     "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
+  },
+  {
+    "id": "forenzika-official",
+    "unitId": "forenzika",
+    "level": null,
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "forenzika-pravilnik-diplomski"
+      ],
+      "sourcePage": 14,
+      "sourceNote": "doslovno iz snapshota, str. 14",
+      "verifiedAt": null
+    },
+    "status": "draft",
+    "wording": "Izjava o akademskoj čestitosti Ja, _____________________________, izjavljujem da je moj diplomski rad pod naslovom __________________________________________________ __________________________________________________________________________ rezultat mojega vlastitog rada, da se temelji na mojim istraživanjima te da se oslanja na izvore i radove navedene u bilješkama i popisu literature. Nijedan dio ovoga rada nije napisan na nedopušten način, odnosno nije prepisan bez citiranja i ne krši ničija autorska prava. Izjavljujem da nijedan dio ovoga rada nije iskorišten u nijednom drugom radu pri bilo kojoj drugoj visokoškolskoj, znanstvenoj, obrazovnoj ili inoj ustanovi. Sadržaj mojega rada u potpunosti odgovara sadržaju obranjenoga i nakon obrane uređenoga rada. Split, __________________ Potpis studenta/studentice: ______________________",
+    "notes": "Tekst je doslovno izvucen iz sluzbenog snapshota (tekstualni sloj PDF-a, bez OCR-a). Redoslijed redaka u viseslupcanom PDF-u zna biti izmijesan, pa prijepis treba potvrditi prije nego se zapis proglasi verificiranim."
   },
   {
     "id": "fpz-final",
@@ -54,111 +122,190 @@
     "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
   },
   {
-    "id": "fpzg-article",
+    "id": "fpzg-official",
     "unitId": "fpzg",
-    "level": "article",
+    "level": null,
     "provenance": {
-      "status": "guidance",
+      "status": "official",
       "sourceIds": [
         "fpzg-upute-akademski-radovi"
       ],
-      "sourcePage": null,
-      "sourceNote": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
-      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
-      "verifiedAt": "2026-08-02",
-      "note": "Izvedeno iz verificiranog pravila o strukturi rada (fpzg-opci-akademski-rad, required-section-rules)."
+      "sourcePage": 16,
+      "sourceNote": "doslovno iz snapshota, str. 16",
+      "verifiedAt": null
     },
     "status": "draft",
-    "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
+    "wording": "izjava o autorstvu rada i poštivanju etičkih pravila u akademskom radu: Izjavljujem da sam diplomski rad / završni specijalistički rad (naslov) , koji sam predao/la na ocjenu mentoru/ici (titula ime prezime mentora/ice) , napisao/la samostalno i da je u potpunosti riječ o mojem autorskom radu. Također, izjavljujem da dotični rad nije objavljen ni korišten u svrhe ispunjenja nastavnih obaveza na ovom ili nekom drugom učilištu, te da na temelju njega nisam stekao/la ECTS- bodove. Nadalje, izjavljujem da sam u radu poštivao/la etička pravila znanstvenog i akademskog rada, a posebno članke 16-19. Etičkoga kodeksa Sveučilišta u Zagrebu. (ime i prezime studenta/ice) Sveučilište u Zagrebu Fakultet političkih znanosti Diplomski studij politologije Ime i prezime studenta/ice NASLOV RADA DIPLOMSKI RAD Zagreb, godina Sveučilište u Zagrebu Fakultet političkih znanosti Diplomski studij novinarstva Ime i prezime studenta/ice NASLOV RADA DIPLOMSKI RAD Zagreb, godina Sveučilište u Zagrebu Fakultet političkih znanosti Poslijediplomski sveučilišni specijalistički studij naziv studija Ime i prezime studenta/ice",
+    "notes": "Tekst je doslovno izvucen iz sluzbenog snapshota (tekstualni sloj PDF-a, bez OCR-a). Redoslijed redaka u viseslupcanom PDF-u zna biti izmijesan, pa prijepis treba potvrditi prije nego se zapis proglasi verificiranim."
   },
   {
-    "id": "fpzg-final",
-    "unitId": "fpzg",
-    "level": "final",
+    "id": "fpzpu-official",
+    "unitId": "fpzpu",
+    "level": null,
     "provenance": {
-      "status": "guidance",
+      "status": "official",
       "sourceIds": [
-        "fpzg-upute-akademski-radovi"
+        "fpzpu-pravilnik-zavrsni-2019-procisceni"
       ],
-      "sourcePage": null,
-      "sourceNote": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
-      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
-      "verifiedAt": "2026-08-02",
-      "note": "Izvedeno iz verificiranog pravila o strukturi rada (fpzg-novinarstvo-zavrsni-tekst, required-section-rules)."
+      "sourcePage": 7,
+      "sourceNote": "doslovno iz snapshota, str. 7",
+      "verifiedAt": null
     },
     "status": "draft",
-    "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
+    "wording": "IZJAVA O AKADEMSKOJ ČESTITOSTI Ja, dolje potpisani _________________________, kandidat za prvostupnika ______________________________________________ovime izjavljujem da je ovaj Završni rad rezultat isključivo mojega vlastitog rada, da se temelji na mojim istraživanjima te da se oslanja na objavljenu literaturu kao što to pokazuju korištene bilješke i bibliografija. Izjavljujem da niti jedan dio Završnog rada nije napisan na nedozvoljen način, odnosno da je prepisan iz kojega necitiranog rada, te da ikoji dio rada krši bilo čija autorska prava. Izjavljujem, također, da nijedan dio rada nije iskorišten za koji drugi rad pri bilo kojoj drugoj visokoškolskoj, znanstvenoj ili radnoj ustanovi. Student ______________________ U Puli, _________, ________ godine",
+    "notes": "Tekst je doslovno izvucen iz sluzbenog snapshota (tekstualni sloj PDF-a, bez OCR-a). Redoslijed redaka u viseslupcanom PDF-u zna biti izmijesan, pa prijepis treba potvrditi prije nego se zapis proglasi verificiranim."
   },
   {
-    "id": "fpzg-graduate",
-    "unitId": "fpzg",
-    "level": "graduate",
+    "id": "ftrr-official",
+    "unitId": "ftrr",
+    "level": null,
     "provenance": {
-      "status": "guidance",
+      "status": "official",
       "sourceIds": [
-        "fpzg-upute-akademski-radovi"
+        "ftrr-pravilnik-zavrsni-diplomski"
       ],
-      "sourcePage": null,
-      "sourceNote": "str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
-      "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
-      "verifiedAt": "2026-08-02",
-      "note": "Izvedeno iz verificiranog pravila o strukturi rada (fpzg-mes-master-thesis, required-section-rules)."
+      "sourcePage": 5,
+      "sourceNote": "doslovno iz snapshota, str. 5",
+      "verifiedAt": null
     },
     "status": "draft",
-    "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
+    "wording": "Izjavu o autorstvu rada (Prilog 5) − postupati sukladno napucima mentora, komentora i članova povjerenstva − pristupiti izradi rada na način da pokaže sposobnost povezivanja stečenog znanja s konkretnim zadatkom, kao i samostalnost u rješavanju problema struke na razini zvanja stečenog završetkom studija. II. Prijava teme završnog/diplomskog rada Članak 8. (1) Student ispunjava obrazac Prijava teme završnog/diplomskog rada (Prilog 2) te ga u pisanom ili elektroničkom obliku predaje u Ured za studente i studije. (2) Naslov teme rada mora biti specifičan i informativan te što je više moguće određivati sadržaj rada. U naslovu rada treba izbjegavati kratice.",
+    "notes": "Tekst je doslovno izvucen iz sluzbenog snapshota (tekstualni sloj PDF-a, bez OCR-a). Redoslijed redaka u viseslupcanom PDF-u zna biti izmijesan, pa prijepis treba potvrditi prije nego se zapis proglasi verificiranim."
   },
   {
-    "id": "fpzg-project",
-    "unitId": "fpzg",
-    "level": "project",
+    "id": "hks-official",
+    "unitId": "hks",
+    "level": null,
     "provenance": {
-      "status": "guidance",
+      "status": "official",
       "sourceIds": [
-        "fpzg-upute-akademski-radovi"
+        "hks-opce-upute-diplomski-2023"
       ],
-      "sourcePage": null,
-      "sourceNote": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
-      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
-      "verifiedAt": "2026-08-02",
-      "note": "Izvedeno iz verificiranog pravila o strukturi rada (fpzg-opci-akademski-rad, required-section-rules)."
+      "sourcePage": 6,
+      "sourceNote": "doslovno iz snapshota, str. 6",
+      "verifiedAt": null
     },
     "status": "draft",
-    "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
+    "wording": "IZJAVA O AKADEMSKOJ ČESTITOSTI) _____________________________ (Ime i prezime studenta) IZJAVA O AKADEMSKOJ ČESTITOSTI kojom izjavljujem i potpisom potvrđujem da je diplomski rad: __________________________________________________________________________________ (naslov diplomskog rada) isključivo rezultat mog vlastitog i samostalnog rada koji se temelji na mojim istraživanjima i objavljenoj literaturi, a dijelovi rada, nalazi ili ideje koje su u radu citirane ili se temelje na drugim izvorima su jasno označeni kao takvi te navedeni u popisu literature. Izjavljujem da nijedan dio rada nije napisan na nedopušten način, odnosno nije prepisan iz necitiranog rada, te nijedan dio rada ne krši bilo čija autorska prava. Izjavljujem da nijedan dio rada nije iskorišten za bilo koji drugi rad u drugoj visokoškolskoj, znanstvenoj ili obrazovnoj ustanovi. U Zagrebu, _____________ ______________________ (potpis)",
+    "notes": "Tekst je doslovno izvucen iz sluzbenog snapshota (tekstualni sloj PDF-a, bez OCR-a). Redoslijed redaka u viseslupcanom PDF-u zna biti izmijesan, pa prijepis treba potvrditi prije nego se zapis proglasi verificiranim."
   },
   {
-    "id": "fpzg-seminar",
-    "unitId": "fpzg",
-    "level": "seminar",
+    "id": "kbf-official",
+    "unitId": "kbf",
+    "level": null,
     "provenance": {
-      "status": "guidance",
+      "status": "official",
       "sourceIds": [
-        "fpzg-upute-akademski-radovi"
+        "kbf-upute-zavrsni-diplomski-2017"
       ],
-      "sourcePage": null,
-      "sourceNote": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
-      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
-      "verifiedAt": "2026-08-02",
-      "note": "Izvedeno iz verificiranog pravila o strukturi rada (fpzg-opci-akademski-rad, required-section-rules)."
+      "sourcePage": 16,
+      "sourceNote": "doslovno iz snapshota, str. 16",
+      "verifiedAt": null
     },
     "status": "draft",
-    "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
+    "wording": "Izjava o autorstvu rada SVEUČILIŠTE U ZAGREBU KATOLIČKI BOGOSLOVNI FAKULTET Prilog 5 IZJAVA O AUTORSTVU ZAVRŠNOGA/DIPLOMSKOGA RADA (izaberite odgovarajuću riječ s obzirom na vrstu svojega rada) Izjavljujem da je moj završni/diplomski rad ___________________________________________ (napišite naslov svojega rada) izvorni rezultat mojeg rada te da su svi korišteni izvori, kako objavljeni tako i neobjavljeni, primjereno citirani ili parafrazirani te navedeni u popisu literature na kraju rada. U Zagrebu, ________________________ (datum i godina) ______________________________________ (vlastoručni potpis studenta/studentice)",
+    "notes": "Tekst je doslovno izvucen iz sluzbenog snapshota (tekstualni sloj PDF-a, bez OCR-a). Redoslijed redaka u viseslupcanom PDF-u zna biti izmijesan, pa prijepis treba potvrditi prije nego se zapis proglasi verificiranim."
   },
   {
-    "id": "fpzg-specialist",
-    "unitId": "fpzg",
-    "level": "specialist",
+    "id": "kifos-official",
+    "unitId": "kifos",
+    "level": null,
     "provenance": {
-      "status": "guidance",
+      "status": "official",
       "sourceIds": [
-        "fpzg-upute-akademski-radovi"
+        "kifos-upute-2024"
       ],
-      "sourcePage": null,
-      "sourceNote": "str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
-      "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
-      "verifiedAt": "2026-08-02",
-      "note": "Izvedeno iz verificiranog pravila o strukturi rada (fpzg-specijalisticki-odnosi-s-javnoscu, required-section-rules)."
+      "sourcePage": 9,
+      "sourceNote": "doslovno iz snapshota, str. 9",
+      "verifiedAt": null
     },
     "status": "draft",
-    "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
+    "wording": "IZJAVA O AKADEMSKOJ ČESTITOSTI, SUGLASNOSTI ZA OBJAVU U INSTITUCIJSKIM REPOZITORIJIMA I ISTOVJETNOSTI DIGITALNE I TISKANE VERZIJE RADA 1. Kojom izjavljujem i svojim potpisom potvrđujem da je ________________________ (navesti vrstu rada: završni/diplomski) rad isključivo rezultat osobnoga rada koji se temelji na vlastitim istraživanjima i oslanja se na objavljenu literaturu. Potvrđujem poštivanje nepovredivosti autorstva te točno citiranje radova drugih autora i referiranje na njih. 2. Kojom izjavljujem da sam suglasan/suglasna da se trajno pohrani i objavi moj rad u Institucijskom digitalnom repozitoriju Kineziološkog fakulteta Osijek, Repozitoriju Sveučilišta Josipa Jurja Strossmayera u Osijeku te javno dostupnom Repozitoriju Nacionalne i sveučilišne knjižnice u Zagrebu (u skladu s odredbama Zakona o visokom obrazovanju i znanstvenoj djelatnosti „Narodne novine“ br. 119/22.). 3. Izjavljujem da sam autor/autorica predanog rada i da je sadržaj predane elektroničke datoteke u potpunosti istovjetan sa dovršenom tiskanom verzijom rada predanom u svrhu obrane istog. Ime i prezime studenta/studentice: JMBA",
+    "notes": "Tekst je doslovno izvucen iz sluzbenog snapshota (tekstualni sloj PDF-a, bez OCR-a). Redoslijed redaka u viseslupcanom PDF-u zna biti izmijesan, pa prijepis treba potvrditi prije nego se zapis proglasi verificiranim."
+  },
+  {
+    "id": "pbf-official",
+    "unitId": "pbf",
+    "level": null,
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "pbf-upute-diplomski-2018"
+      ],
+      "sourcePage": 6,
+      "sourceNote": "doslovno iz snapshota, str. 6",
+      "verifiedAt": null
+    },
+    "status": "draft",
+    "wording": "izjavom o izvornosti ispod koje se navodi ime i prezime studenta te vlastoručni potpis: Izjavljujem da je ovaj diplomski rad izvorni rezultat mojeg rada te da se u njegovoj izradi nisam koristio/la drugim izvorima, osim onih koji su u njemu navedeni. Ovu stranicu treba uključiti u digitalni oblik diplomskog rada u pdf formatu kao skeniranu potpisanu stranicu. 5.5. Tablice i slike Nazivi svih tablica unutar rada pišu se iznad tablica. Nazivi svih slikovnih prikaza unutar rada pišu se ispod slika. Sve tablice i slikovni prikazi moraju biti citirani u tekstu, bilo kao dio rečenice ili na kraju rečenice (navedeni u zagradi). Sve slike i tablice moraju biti označene u rastućem nizu počevši od broja 1 kroz sva poglavlja do kraja diplomskog rada. Svaka tablica i slika mora imati naveden literaturni navod rada iz kojeg su preuzeti koji odgovara izvoru informacije, osim onih koje prikazuju eksperimentalne uvjete i rezultate istraživanja ili su studentovo vlastito autorsko djelo. 5.6. Jedinice i kemijska nomenklatura Ukoliko se u radu navodi više od tri jednadžbe potrebno ih je numerirati u rastućem nizu u uglatoj zagradi, npr. 1. Koristiti SI sustav jedinica i pisat",
+    "notes": "Tekst je doslovno izvucen iz sluzbenog snapshota (tekstualni sloj PDF-a, bez OCR-a). Redoslijed redaka u viseslupcanom PDF-u zna biti izmijesan, pa prijepis treba potvrditi prije nego se zapis proglasi verificiranim."
+  },
+  {
+    "id": "veleknin-official",
+    "unitId": "veleknin",
+    "level": null,
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "veleknin-upute-zavrsni-2020"
+      ],
+      "sourcePage": 22,
+      "sourceNote": "doslovno iz snapshota, str. 22",
+      "verifiedAt": null
+    },
+    "status": "draft",
+    "wording": "IZJAVA O AKADEMSKOJ ČESTITOSTI Ja, upišite ime i prezime (Matični broj: upišite matični broj) izjavljujem i svojim potpisom potvrđujem da je završni rad pod naslovom: upišite naslov rada isključivo rezultat mog vlastitog rada koji se temelji na mojim istraživanjima i oslanja se na objavljenu literaturu, a što pokazuju korištene bilješke i bibliografija. Izjavljujem da nijedan dio rada nije napisan na nedopušten način, odnosno da nije prepisan iz necitiranog rada, te da nijedan dio rada ne krši bilo čija autorska prava. Izjavljujem, također, da nijedan dio rada nije iskorišten za bilo koji drugi rad u bilo kojoj drugoj visokoškolskoj, znanstvenoj ili obrazovnoj ustanovi. Knin, upišite datum Potpis studenta/ice: ____________________________",
+    "notes": "Tekst je doslovno izvucen iz sluzbenog snapshota (tekstualni sloj PDF-a, bez OCR-a). Redoslijed redaka u viseslupcanom PDF-u zna biti izmijesan, pa prijepis treba potvrditi prije nego se zapis proglasi verificiranim."
+  },
+  {
+    "id": "vhzk-official",
+    "unitId": "vhzk",
+    "level": null,
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "vhzk-pravilnik-zavrsni-2022"
+      ],
+      "sourcePage": 14,
+      "sourceNote": "doslovno iz snapshota, str. 14",
+      "verifiedAt": null
+    },
+    "status": "draft",
+    "wording": "Izjava o akademskoj čestitosti i dozvoli za javno objavljivanje VELEUČILIŠTE HRVATSKO ZAGORJE KRAPINA I ZJ AV A O AK ADEMSKOJ ČESTITOSTI Ja, upišite Ime i Prezime izjavljujem da je moj završni rad pod naslovom upišite naslov rada izvorni rezultat mojeg rada, da se temelji na mojim istraživanjima, te da se u njegovoj izradi nisam koristio drugim izvorima osim onima koji su u njemu navedeni u bilješkama i popisu literature. Za izradu rada su korištene etički prikladne i prihvatljive metode i tehnike rada. Izjavljujem da nijedan dio rada nije napisan na nedozvoljen način, odnosno da nije prepisan iz necitiranog rada te da nijedan dio rada ne krši bilo čija autorska prava. Također izjavljujem, da nijedan dio rada nije iskorišten za bilo koji drugi rad u bilo kojoj drugoj visokoškolskoj, znanstvenoj ili obrazovnoj ustanovi. Sadržaj mojega rada u potpunosti odgovara sadržaju obranjenoga rada. Svojim vlastoručnim potpisom potvrđujem da sam suglasan da se moj završni rad javno objavi na internetu. U Krapini, datum ime i prezime studenta",
+    "notes": "Tekst je doslovno izvucen iz sluzbenog snapshota (tekstualni sloj PDF-a, bez OCR-a). Redoslijed redaka u viseslupcanom PDF-u zna biti izmijesan, pa prijepis treba potvrditi prije nego se zapis proglasi verificiranim."
+  },
+  {
+    "id": "vnt-official",
+    "unitId": "vnt",
+    "level": null,
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "vnt-pravilnik-zavrsni-2025"
+      ],
+      "sourcePage": 18,
+      "sourceNote": "doslovno iz snapshota, str. 18",
+      "verifiedAt": null
+    },
+    "status": "draft",
+    "wording": "Izjava o akademskoj čestitosti Ja, IME i PREZIME izjavljujem i svojim potpisom potvrđujem da je moj završni rad naslova: NASLOV RADA isključivo rezultat mog vlastitog rada koji se temelji na mojim istraživanjima i oslanja se na objavljenu literaturu, a što pokazuju korištene bilješke i bibliografija. Izjavljujem da nijedan dio rada nije napisan na nedozvoljen način, odnosno da je prepisan iz necitiranog rada, te da nijedan dio rada ne krši bilo čija autorska prava. Izjavljujem, također, da nijedan dio rada nije iskorišten za bilo koji drugi rad u bilo kojoj drugoj visokoškolskoj, znanstvenoj ili obrazovnoj ustanovi. Napomena (izbrisati pri izradi): TISKANA VERZIJA (obrisati za digitalni oblik): Student/ica: U Gospiću, DATUM ______________________ (potpis) Napomena (izbrisati pri izradi): DIGITALNA VERZIJA (obrisati za tiskani oblik): Student/ica: U Gospiću, DATUM IME i PREZIME",
+    "notes": "Tekst je doslovno izvucen iz sluzbenog snapshota (tekstualni sloj PDF-a, bez OCR-a). Redoslijed redaka u viseslupcanom PDF-u zna biti izmijesan, pa prijepis treba potvrditi prije nego se zapis proglasi verificiranim."
+  },
+  {
+    "id": "vus-official",
+    "unitId": "vus",
+    "level": null,
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "vus-pravilnik-zavrsni-diplomski-2023"
+      ],
+      "sourcePage": 29,
+      "sourceNote": "doslovno iz snapshota, str. 29",
+      "verifiedAt": null
+    },
+    "status": "draft",
+    "wording": "IZJAVA O AKADEMSKOJ ČESTITOSTI Ja, , student/ica Veleučilišta u Šibeniku, JMBAG izjavljujem pod materijalnom i kaznenom odgovornošću i svojim potpisom potvrđujem da je moj završni/diplomski rad na stručnom prijediplomskom / stručnom diplomskom studiju _____________________ pod naslovom: ________________________ ________________________________________________________________________ isključivo rezultat mog vlastitog rada koji se temelji na mojim istraživanjima i oslanja se na objavljenu literaturu, a što pokazuju korištene bilješke i bibliografija. Izjavljujem da nijedan dio rada nije napisan na nedozvoljen način, odnosno da je prepisan iz necitiranog rada, te da nijedan dio rada ne krši bilo čija autorska prava. Izjavljujem, također, da nijedan dio rada nije iskorišten za bilo koji drugi rad u bilo kojoj drugoj visokoškolskoj, znanstvenoj ili obrazovnoj ustanovi. U Šibeniku, ____________________ Student/ica: _____________________",
+    "notes": "Tekst je doslovno izvucen iz sluzbenog snapshota (tekstualni sloj PDF-a, bez OCR-a). Redoslijed redaka u viseslupcanom PDF-u zna biti izmijesan, pa prijepis treba potvrditi prije nego se zapis proglasi verificiranim."
   }
 ]
