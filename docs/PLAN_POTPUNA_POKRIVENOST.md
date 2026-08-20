@@ -892,6 +892,58 @@ Uz to su ispravljena tri lazna nalaza vlastite izrade:
 - **Orijentacija je izmjena vrijednosti, ne ublazavanje.** *"u polozenom formatu A4"* je landscape,
   dakle zamijenjene dimenzije. Sada ide covjeku.
 
+### POVUCENO: "14 unizd profila na razini E je tocno stanje" (2026-08-21)
+
+Ta tvrdnja je bila prekoracenje i povlaci se. Obrazac je isti onaj koji je opovrgavajuci prolaz
+nasao kod drugih (odsjecki dokument predstavljen kao jedinicni), samo sam ga ovaj put napravio ja.
+
+Sto je stvarno izmjereno: `unizd` je po odjelima i ima **32 razlicita izvora**. Odricanje dokumenta
+dokazano je na TOCNO JEDNOM (`unizd-turizam-upute`). Cetiri unizd profila koji su `advisory-only`
+stoje na posve drugim dokumentima, i nijedan se ne odrice:
+
+| izvor | odrice se? |
+|---|---|
+| `unizd-turizam-upute` | DA, str. 3 |
+| `unizd-filozofija-preporuke-diplomski` | ne |
+| `unizd-filozofija-preporuke-zavrsni` | ne |
+| `unizd-francuski-upute-2018` | ne |
+| `unizd-talijanistika-stranica` | ne |
+| svi `fer-*` izvori | ne |
+
+Provjereno mehanicki, `document_disclaimer` nad snapshotima iz registra. FER-ov slucaj i dalje stoji,
+ali na SVOM temelju (sadrzajno opovrgavanje 4 od 5 tvrdnji, izvor je `fer-upute-diplomski-zemris`,
+dakle zavodski), ne na odricanju dokumenta.
+
+### Nalaz u zivim podacima: dokument koji se odrice BODUJE dva profila
+
+Trazenje koga `unizd-turizam-upute` pokriva dalo je suprotno od ocekivanog. Ne pokriva nijedan profil
+na razini E. Pokriva `unizd-turizam-diplomski` i `unizd-turizam-zavrsni`, oba su **`scored`**, i na
+oba je SEST formatnih pravila (`paper-size`, `font`, `font-size`, `line-spacing`, `justify`,
+`margins`) u statusu **`verified`**.
+
+Predgovor tog dokumenta (str. 3) sustavno spusta vlastitu snagu, i subjekt je izricit:
+
+> *"**Ove Upute** za izradu zavrsnoga i diplomskog rada **zamisljene su kao vodic** studentima/icama
+> ... **Predstavljaju samo jednu od vise mogucnosti** kako se pisu navedeni studentski radovi. ...
+> **preporucujemo** postivanje ovih Uputa ... Uz sve navedene upute, **najvaznije su one koje vam
+> predlaze vas mentor**."*
+
+Zadnja recenica je isti izvrnuti odnos kao `ffos` cl. 8 st. 2: dokument sam sebe podredjuje mentoru.
+
+Kontrast koji pokazuje da autor razlikuje snagu kad hoce: u istom dokumentu `page-count` stoji na
+*"Diplomski rad **mora** imati najmanje 70 stranica."* Dakle "mora" postoji ondje gdje se misli, a
+formatne odredbe glase *"treba pisati"* uz predgovor koji ih proglasava jednom od mogucnosti.
+
+**Ovo je odluka vlasnika, ne popravak.** Demotiranje sest `verified` pravila mijenja ocjenu stvarnim
+korisnicima, a Upute JESU sluzbeno objavljene, sto ih po CLAUDE.md cini dopustenim izvorom. Nalaz je
+zabiljezen s punim dokazom; nista nije promijenjeno.
+
+### Sto ovo mijenja u metodi
+Provjera odricanja mora citati SUBJEKT, ne samo prepoznati anaforu. Gard je ovdje pogodio ("Ove
+Upute ... Predstavljaju samo"), ali je pogodio bez provjere, pa je isti mehanizam mogao jednako lako
+uhvatiti recenicu o necem drugom. Vrijedi i sire: nalaz o odricanju je razlog da se dokument PROCITA,
+ne presuda sama za sebe.
+
 ---
 
 ## FAZA P5: stvarni korpus i Word oracle
