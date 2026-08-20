@@ -69,7 +69,8 @@
     "harvest-programs": "vite-node scripts/harvest-programs.mts",
     "match-upisnik-units": "vite-node scripts/match-upisnik-units.mts",
     "approve-unit-match": "vite-node scripts/approve-unit-match.mts",
-    "repair-gap": "vite-node scripts/repair-gap-report.mts"
+    "repair-gap": "vite-node scripts/repair-gap-report.mts",
+    "closed-loop": "vite-node scripts/run-closed-loop.mts"
   },
   "overrides": {
     "nanoid": "^3.3.18"

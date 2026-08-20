@@ -1,0 +1,5914 @@
+{
+  "schemaVersion": 1,
+  "profileCount": 407,
+  "byOutcome": {
+    "no-rules": 33,
+    "pass": 327,
+    "no-repair": 45,
+    "unresolved": 2
+  },
+  "rows": [
+    {
+      "profileId": "adu-dramaturgija-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "adu-ftv-rezija-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "adu-gluma-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "adu-kazalisna-rezija-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "adu-montaza-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "adu-opci-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "adu-produkcija-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "adu-snimanje-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "agr-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "agr-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "agr-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "algebra-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "algebra-diplomski-odnosi-s-javnoscu",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "algebra-specijalisticki",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "algebra-zavrsni",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "alu-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "alu-doktorski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "alu-grafika-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "alu-kiparstvo-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "paper-size"
+      ],
+      "requested": 1,
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "alu-konzerviranje-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 1,
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "alu-nastavnicki-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "alu-novi-mediji-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "alu-slikarstvo-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "apuri-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "apuri-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "arca-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "paper-size"
+      ],
+      "requested": 1,
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "arh-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "arh-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "aspira-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "aspira-diplomski-en",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "aspira-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "aspira-zavrsni-en",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "bak-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "bak-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "biolos-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "biolos-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "biotech-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "biotech-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "dizajn-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "effectus-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "effectus-seminarski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "effectus-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efos-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efos-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efos-opci-akademski-rad",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efos-specijalisticki",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efos-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efri-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efri-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efst-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efst-opci-akademski-rad",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efst-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efzg-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efzg-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efzg-seminarski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efzg-specijalisticki",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efzg-strucni-racunovodstvo",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efzg-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "erf-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "erf-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "evtos-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "evtos-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fazos-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fazos-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fbf-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fbf-specijalisticki",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fdmri-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fdmri-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fdmz-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fer-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fer-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fer-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ferit-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ferit-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fesb-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fesb-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fetpu-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fetpu-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffos-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffos-germanistika-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffos-germanistika-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffos-informatologija-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffos-informatologija-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffos-povijest-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffos-povijest-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffos-psihologija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffos-psihologija-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffos-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffpu-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffpu-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffri-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffri-germanistika-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffri-germanistika-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffri-kroatistika-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffri-kulturalni-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffri-povum-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffri-povum-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffri-psihologija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffri-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffrz-bakalaureatski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffrz-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffrz-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffst-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffst-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffzg-arheologija-graduate",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffzg-etnologija-graduate",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffzg-informacijske-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffzg-kroatistika-graduate",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffzg-pedagogija-graduate",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffzg-psihologija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ffzg-sociologija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fgag-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fgag-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fhs-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fhs-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fhs-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fipu-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fipu-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fizos-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fizri-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fizri-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fkit-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fkit-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fkit-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fmtu-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fmtu-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "foi-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "foi-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "foozos-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "foozpu-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "foozpu-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "forenzika-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpz-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpz-zavrsni",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpzg-doktorski-politologija",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpzg-nacionalna-sigurnost-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-av",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpzg-opci-akademski-rad",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpzg-politologija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpzg-politologija-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpzg-specijalisticki-prilagodba-eu",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpzpu-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 2,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fpzpu-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 2,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fsb-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fsb-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fsb-opci-akademski-rad",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fsb-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ftrr-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ftrr-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fzsri-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "fzsri-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "geof-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "geof-doktorski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "geof-opci-akademski-rad",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "grad-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "grad-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "grad-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "gradri-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "gradri-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "grafos-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "grafos-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "grf-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "grf-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "grf-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "hks-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "inf-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "paper-size"
+      ],
+      "requested": 1,
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "inf-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "paper-size"
+      ],
+      "requested": 1,
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "iv-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "iv-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "kbf-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "kbf-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "kbf-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "kbfdj-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "kbfst-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing"
+      ],
+      "requested": 2,
+      "resolved": 2,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "kemos-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "kemos-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "kif-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "kif-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "kif-specijalisticki",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "kifos-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "kifos-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "kifst-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ktfst-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ktfst-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "libertas-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "libertas-diplomski-en",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "libertas-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "libertas-zavrsni-en",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "logri-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mapu-glazbena-pedagogija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mapu-glazbena-pedagogija-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "math-uniri-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "paper-size"
+      ],
+      "requested": 1,
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "math-uniri-diplomski-en",
+      "outcome": "pass",
+      "violated": [
+        "paper-size"
+      ],
+      "requested": 1,
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "math-uniri-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "paper-size"
+      ],
+      "requested": 1,
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mathos-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mathos-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "medri-farmacija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "medri-medicina-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mef-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "paper-size"
+      ],
+      "requested": 1,
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mef-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "paper-size"
+      ],
+      "requested": 1,
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mefos-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mefos-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mefst-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mev-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mev-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mev-zavrsni-drustveni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "mfpu-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "more-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "more-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "muza-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "muza-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "oss-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "oss-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ozs-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "line-spacing"
+      ],
+      "requested": 2,
+      "resolved": 2,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ozs-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "line-spacing"
+      ],
+      "requested": 2,
+      "resolved": 2,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "par-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "par-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pbf-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pbf-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pfri-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pfri-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pfst-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pfst-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pmf-biologija-graduate",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pmf-fizika-graduate",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pmf-geofizika-graduate",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pmf-geografija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pmf-geologija-graduate",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pmf-matematika-graduate",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "paper-size"
+      ],
+      "requested": 2,
+      "resolved": 2,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pmfst-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pmfst-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravo-doktorski-pravne-znanosti",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravo-integrirani-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravo-javna-uprava-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravo-javna-uprava-prijediplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravo-opci-pravni-akademski-rad",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravo-porezni-prijediplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravo-socijalna-politika-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravo-socijalne-djelatnosti-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravo-socijalne-djelatnosti-specijalisticki",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravo-socijalni-opci-akademski-rad",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravo-socijalni-rad-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravo-socijalni-rad-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravo-specijalisticki-pravni-opci",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravos-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravos-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravri-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravri-opci-akademski-rad",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravri-specijalisticki",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravri-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravst-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pravst-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ptfos-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pvzg-specijalisticki",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "pvzg-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "rgnf-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "rgnf-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "riteh-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "riteh-zavrsni",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "rrif-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "securus-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "sfzg-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "sfzg-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "simet-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "sois-ft-vojno-inzenjerstvo-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "sois-ft-vojno-inzenjerstvo-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "sois-ft-vojno-pomorstvo-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "sois-ft-vojno-vodjenje-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "sois-ft-vojno-vodjenje-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "sumfak-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "sumfak-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "tfpu-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "tfpu-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ttf-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ttf-dizajn-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ttf-dizajn-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ttf-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ttf-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "uaos-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "uaos-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ufri-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ufzg-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ufzg-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "ufzg-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "umas-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "umas-zavrsni",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unidu-ekonomija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unidu-ekonomija-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unidu-elektro-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unidu-elektro-zavrsni",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unidu-komunikologija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unidu-komunikologija-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unidu-marikultura-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unidu-povijest-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unidu-sestrinstvo-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unidu-umjetnost-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unidu-umjetnost-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unin-biomedicina-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unin-biomedicina-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unin-drustveni-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unin-drustveni-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unin-tehnicki-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unin-tehnicki-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unisb-btho-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unisb-btho-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unisb-odhz-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unisb-odhz-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unisb-sfsb-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unisb-sfsb-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unisb-teho-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unisb-teho-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-anglistika-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-anglistika-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-arheologija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 2,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-arheologija-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-ekologija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-ekologija-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-ekonomija-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-ekonomija-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-etnologija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-filozofija-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-filozofija-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-francuski-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-geografija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-germanistika-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-germanistika-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-hispanistika-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-informacijske-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-informacijske-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-klasicna-filologija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-klasicna-filologija-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-kroatistika-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-kroatistika-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-lingvistika-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-lingvistika-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-pedagogija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-pomorski-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-pomorski-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-povijest-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 2,
+      "resolved": 2,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-povijest-umj-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-povijest-umj-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-povijest-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 2,
+      "resolved": 1,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-psihologija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-psihologija-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-rusistika-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-sociologija-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-sociologija-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-talijanistika-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-tko-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-turizam-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-turizam-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-ucitelji-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-zdravstvo-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "unizd-zdravstvo-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vef-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vef-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "veleknin-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "veleknin-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "veleri-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "veleri-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vevu-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vevu-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vguk-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vguk-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vhzk-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vkjs-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vkjs-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vnt-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vnt-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vsig-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vsig-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vsite-diplomski",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vsite-zavrsni",
+      "outcome": "no-rules",
+      "violated": [],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vss-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vss-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vub-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vub-zavrsni-sestrinstvo",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vub-zavrsni-tehnicki",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vuka-lovstvo-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "paper-size"
+      ],
+      "requested": 2,
+      "resolved": 2,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vuka-poslovni-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 2,
+      "resolved": 2,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vuka-poslovni-opci-akademski-rad",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 2,
+      "resolved": 2,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vuka-poslovni-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 2,
+      "resolved": 2,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vuka-prehrambena-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 2,
+      "resolved": 2,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vuka-sigurnost-diplomski",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vuka-sigurnost-zavrsni",
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
+      "requested": 0,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vuka-strojarski-diplomski",
+      "outcome": "unresolved",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 1,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vuka-strojarski-zavrsni",
+      "outcome": "unresolved",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 1,
+      "resolved": 0,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vus-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vus-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vuv-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vuv-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 6,
+      "resolved": 6,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vvg-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "margins",
+        "paper-size"
+      ],
+      "requested": 2,
+      "resolved": 2,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "vvg-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "margins",
+        "paper-size"
+      ],
+      "requested": 2,
+      "resolved": 2,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "zsem-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "zsem-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "zsem-zavrsni-en",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "paper-size"
+      ],
+      "requested": 5,
+      "resolved": 5,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "zvu-specijalisticki",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "zvu-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    }
+  ]
+}

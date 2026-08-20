@@ -567,10 +567,44 @@ Popravi.
 - `fer-diplomski` je u uzorku imenovan kao profil BEZ ijednog popravka, jer nema bodovanih pravila
   (jedan od 17 iz P2-3). To je uredno stanje, ali mora biti imenovano da se ne cita kao kvar.
 
-### P4-3. Ratchet umjesto velikog praska
-- AC: broj profila koji NISU prosli closed-loop je commitani gornji prag koji se smije samo
-  smanjivati. Faza daje vrijednost od prvog dana i ne blokira ostatak razvoja.
-- Velicina: S. Prioritet: P2.
+### P4-3. Pogon kroz katalog i ratchet : GOTOVO (2026-08-20)
+- `scripts/run-closed-loop.mts` (`npm run closed-loop`) vrti petlju kroz SVIH 407 profila i pise
+  `docs/generated/closed-loop.json`. Izvan `npm run check` je namjerno: svaki profil su dvije
+  stvarne analize plus popravak.
+- Isti korisnicki tok kao test (dokument iz profilovih pravila, `buildDefaultRepairRequests` +
+  `deep` kao u panelu) i isti `DOMParser` koji koristi produkcijski Web Worker
+  (`installXmlDomParser`), pa pogon mjeri putanju koju korisnik doista dobiva.
+- SEST ishoda, ne dva: `pass`, `no-rules`, `no-repair`, `unresolved`, `regression`, `error`.
+  Razlika izmedju "profil nema pravila", "pravila ima ali nema popravka" i "popravak nije rijesio
+  nista" je razlika izmedju urednog stanja i kvara; spajanje u "fail" daje brojku koja vodi na
+  krivi posao (kao ono "40 profila bez popravka" koje je zapravo bilo 5).
+- **IZMJERENO nad svih 407 profila: 327 `pass`, 45 `no-repair`, 33 `no-rules`, 2 `unresolved`,
+  0 `regression`, 0 `error`.**
+- Gard: `data/profiles/closed-loop-ratchet.json` + `tests/closed-loop-report.test.ts`. `regression`
+  i `error` su TVRDA granica na nuli, ne ratchet; broj `pass` ne smije pasti.
+
+### P4-4. NALAZ: cilj popravka i cilj provjere se razilaze (22 pravila)
+- Petlja je izbacila dva `unresolved` profila (`vuka-strojarski-zavrsni`, `-diplomski`) i oni nisu
+  slucajni. Izmjereno na dokumentu: popravak postavi margine na **3/3/3/3**, a provjera ostaje
+  0/6 jer mjeri protiv **2/2/2/2,5**.
+- Uzrok: `ruleEntry.value` (status `verified`, sluzbeni izvor `vuka-strojarski-upute-2025`) kaze
+  3/3/3/3, a naslijedjeni `rules.margins` kaze 2/2/2/2,5. Popravak cita ZAPIS, provjera cita
+  NASLIJEDJENI mirror. Korisnik klikne Popravi, alat promijeni margine na verificiranu vrijednost,
+  i provjera i dalje javlja gresku.
+- Opseg (usporedba neosjetljiva na redoslijed kljuceva): **22 stvarna neslaganja** kroz 4 osi -
+  margins 15, font 4, font-size 3. Neka su drasticna:
+  - `unizd-pomorski-zavrsni` / `-diplomski`: zapis kaze Merriweather 10 pt, `rules` kaze
+    Times New Roman 12 pt;
+  - `fpzpu-zavrsni` / `-diplomski`: zapis Arial, `rules` Times New Roman;
+  - `ffri-germanistika-*`, `mev-zavrsni`, `vss-*`, `ffst-*`, `unizd-*`: razlicite margine.
+- Ovo je tocno rizik koji Option A opisuje: `ruleEntries` su izvor istine, `rules` je naslijedjeni
+  mirror, a `effectiveRules` bi ih trebao spojiti. Buduci da `tests/rule-compiler.test.ts` dokazuje
+  da je `effectiveRules` deep-equal `rules`, ovih 22 verificiranih pravila NE stize do engine-a.
+- AC: za svaki od 22 utvrditi koja je vrijednost tocna (zapis ima sluzbeni izvor i lokator, mirror
+  ga nema), pa uskladiti mirror ILI ispraviti zapis. Tek kad se slozi, popravak i ocjena govore
+  isto. Do tada dva profila ostaju imenovana u ratchetu.
+- Velicina: M (podatkovni rad uz izvore). Prioritet: **P0** - ovo nije rupa u pokrivenosti nego
+  proturjecje unutar onoga sto vec tvrdimo.
 
 ---
 
