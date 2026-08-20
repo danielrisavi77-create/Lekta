@@ -544,19 +544,68 @@ describe('Repair golden harness', () => {
     expect(result.skipped).toEqual(['margins-rule']);
   });
 
+  /**
+   * Fixeri koje sinteticki dokument NE aktivira, pa je za njih tvrdnja o idempotenciji vakuumska.
+   *
+   * Petlja je te slucajeve dosad tiho preskakala (`continue`), pa je test izgledao kao da pokriva
+   * svih 31 fixera. Popis je zato izricit i zakljucan: novi fixer koji se ne aktivira mora ovdje
+   * biti UPISAN, sto ga cini vidljivim umjesto da nestane u preskoku. Skracivanje popisa je
+   * napredak (znaci da sinteticki dokument sada aktivira i taj fixer).
+   */
+  const NOT_EXERCISED_ON_SYNTHETIC: readonly string[] = [
+    'bibliography-repair-fixer',
+    'citation-bibliography-sync-fixer',
+    'consistency-fixer',
+    'croatian-typography-fixer',
+    'element-caption-fixer',
+    'empty-paragraph-fixer',
+    'field-integrity-fixer',
+    'final-document-inspector-fixer',
+    'footnote-spacing-fixer',
+    'footnote-typography-fixer',
+    'heading-format-fixer',
+    'legal-footnote-repair-fixer',
+    'link-doi-fixer',
+    'page-number-alignment-fixer',
+    'page-numbering-fixer',
+    'paper-size-fixer',
+    'required-section-fixer',
+    'section-surgery-fixer',
+    'submission-metadata-fixer',
+    'table-figure-rescue-fixer',
+    'title-page-fixer',
+    'toc-field-fixer',
+  ];
+
   it('idempotencija: ponovna primjena istog popravka je bit-identican no-op', async () => {
     const bytes = await singleSectionDocx();
+    const notExercised: string[] = [];
     for (const fixerId of FIXER_IDS) {
       const params = SYNTHETIC_PARAMS[fixerId];
+      let exercised = false;
       for (const deep of DEEP_CAPABLE.has(fixerId) ? [false, true] : [false]) {
         const req: FixerRequest = { ruleId: `${fixerId}-rule`, fixerId, params: withDeep(fixerId, params, deep) };
         const first = await applyFixers(bytes, [req]);
-        if (first.changelog.length === 0) continue; // fixer nista nije promijenio na sintetickom, preskoci
+        if (first.changelog.length === 0) continue; // fixer nista nije promijenio na sintetickom
+        exercised = true;
         const second = await applyFixers(first.docxBytes, [req]);
         // Drugi prolaz nema sto promijeniti -> changelog prazan -> vraca prvi izlaz bit-identican.
         expect(second.changelog, `${fixerId} deep=${deep} mora biti idempotentan`).toHaveLength(0);
         expect(second.docxBytes).toBe(first.docxBytes);
       }
+      if (!exercised) notExercised.push(fixerId);
     }
-  });
+
+    // Srz: bez ove tvrdnje test prolazi i kad ga NIJEDAN fixer ne aktivira.
+    expect(
+      [...notExercised].sort(),
+      'popis neaktiviranih fixera se promijenio; osvjezi NOT_EXERCISED_ON_SYNTHETIC',
+    ).toEqual([...NOT_EXERCISED_ON_SYNTHETIC].sort());
+    // IZMJERENO 2026-08-20: idempotencija je stvarno provjerena na 9 od 31 fixera. Prag je donja
+    // granica koja se smije samo DIZATI; pad znaci da je i to malo pokrice tiho nestalo.
+    expect(
+      FIXER_IDS.length - notExercised.length,
+      'broj fixera na kojima je idempotencija stvarno provjerena ne smije pasti',
+    ).toBeGreaterThanOrEqual(9);
+  }, 120_000);
 });

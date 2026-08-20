@@ -477,10 +477,27 @@ Cilj: ne moze se tvrditi pokrivenost programa koji nikad nije evidentiran. Danas
   snapshot datoteku kao zastarjelu (`1 files removed`), pa izgleda kao da je golden nestao. Ispravno
   je `npx vitest run tests/repair-golden.test.ts -u --testTimeout=600000`.
 
-### P3-3. Idempotencija i no-pass-regression kao obavezni gard po fixeru
-- AC: svaki od 31 fixera ima test da drugo pokretanje nad vlastitim izlazom ne mijenja bajtove
-  i da `detectPassRegressions` vraca prazno.
-- Velicina: M. Prioritet: P2.
+### P3-3. Idempotencija po fixeru : IZMJERENO, pokrice je 9 od 31 (2026-08-20)
+- Zadatak je izgledao kao "napisi testove idempotencije". Mjerenje je pokazalo da test VEC postoji
+  i vrti se nad svih 31 fixera (`tests/repair-golden.test.ts`), ali da preskace svaki fixer koji na
+  sintetickom dokumentu nista ne promijeni - i to TIHO, jednim `continue`.
+- IZMJERENO: **22 od 31 fixera se nikad ne aktivira**, pa je tvrdnja o idempotenciji za njih
+  vakuumska. Stvarno je provjereno njih **9**. Test je izgledao kao gard nad cijelim motorom, a
+  pokrivao je manje od trecine.
+- Neaktivirani su, medju ostalima: `bibliography-repair`, `citation-bibliography-sync`,
+  `consistency`, `croatian-typography`, `empty-paragraph`, `field-integrity`,
+  `final-document-inspector`, `heading-format`, `link-doi`, `page-numbering`, `paper-size`,
+  `submission-metadata`, `toc-field`, `title-page`, `required-section`, `section-surgery`,
+  `element-caption`, `table-figure-rescue`.
+- Izvedeno: popis je sada IZRICIT i zakljucan (`NOT_EXERCISED_ON_SYNTHETIC`), pa novi fixer koji se
+  ne aktivira mora biti upisan umjesto da nestane u preskoku. Uz to je dodan prag koji se smije
+  samo dizati: broj stvarno provjerenih fixera ne smije pasti ispod 9.
+- Sto OSTAJE: sinteticki dokument treba obogatiti (fusnote, literatura, polja, naslovnica, sekcije)
+  da aktivira i ostale, ili im dodati vlastite ulaze. Svaki skinuti unos s popisa je mjerljiv
+  napredak. To je tek sada vidljiv posao; prije je izgledalo da je vec gotov.
+- Napomena: `no-pass-regression` dio zadatka NIJE ovdje. On je vec pokriven na razini isporuke
+  (`detectPassRegressions` prije preuzimanja, `tests/repair-delivery-order.test.ts`), sto je
+  ispravnija razina od pojedinog fixera.
 
 ### P3-4. Sedam neiskoristenih DOCX predlozaka u profilnoj matrici
 - Danas se koristi 1 od 8 (`basic-text-styles`). AC: svaki predlozak ili ima profil koji ga
