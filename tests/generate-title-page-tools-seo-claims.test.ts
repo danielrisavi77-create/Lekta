@@ -33,7 +33,9 @@ beforeAll(async () => {
   for (const inst of rawCatalog) {
     for (const u of inst.units || []) unitMeta[u.id] = { name: u.name, instId: inst.id, instName: inst.name };
   }
-});
+// Hook radi PUNI esbuild bundle. Sam po sebi <1 s (mjereno: 918 ms), ali dok na istom stroju
+// tece drugi vitest prijedje 10 s koliko je vitestov default za hook.
+}, 120000);
 
 // Heuristicka provjera gramaticke greske klase "na {Veliko Slovo...}" - lokativna konstrukcija
 // koju ne mozemo pouzdano generirati za proizvoljno ime ustanove (feminine/masculine razlika).

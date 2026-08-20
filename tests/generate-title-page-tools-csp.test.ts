@@ -44,7 +44,9 @@ describe('generate-title-page-tools: CSP (bez unsafe-inline)', () => {
     for (const inst of rawCatalog as any[]) {
       for (const u of inst.units || []) unitMeta[u.id] = { name: u.name, instId: inst.id, instName: inst.name };
     }
-  });
+  // Hook radi PUNI esbuild bundle. Sam po sebi <1 s (mjereno: csp 465 ms, seo 918 ms), ali
+  // dok na istom stroju tece drugi vitest prijedje 10 s koliko je vitestov default za hook.
+  }, 120000);
 
   it('FOUC skripta na generiranoj stranici je bajt-identicna onoj u index.html', () => {
     const indexHtml = readFileSync(join(ROOT, 'index.html'), 'utf-8');

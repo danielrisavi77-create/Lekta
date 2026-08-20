@@ -94,5 +94,10 @@ suite('DOCX golden snapshots', () => {
       out[fileName] = normalizeResult(await analyzeFixture(file, { profileId: fixtureProfileId(fileName) }));
     }
     expect(out).toMatchSnapshot();
-  }, 30000); // svih 6 fixtura + setTimeout(250) po analizi u jednom testu -> podigni s 5s defaulta
+  // Svih 6 fixtura + setTimeout(250) po analizi u JEDNOM testu, pa 5 s default ne dolazi u obzir.
+  // Podignuto 2026-08-20 s 30 s: sam po sebi traje ~20 s, ali dok na istom stroju tece drugi
+  // vitest prijedje 30 s. Tada se dogodi gore od obicnog pada, isto kao kod repair-goldena
+  // (38a94d2): test bez rezultata vitest oznaci kao "1 obsolete snapshot", a uz `-u` snapshot
+  // DATOTEKU obrise, pa izgleda kao da je golden nestao.
+  }, 300000);
 });
