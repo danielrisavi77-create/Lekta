@@ -531,7 +531,11 @@ describe('Repair golden harness', () => {
     }
 
     expect(out).toMatchSnapshot();
-  }, 60000);
+  // Timeout je 2026-08-20 podignut sa 60 s. Baseline sam po sebi traje ~40 s, ali pod opterecenjem
+  // (paralelni vitest na istom stroju) prijedje 60 s i tada se dogodi gore od obicnog pada: vitest
+  // test bez rezultata oznaci kao "1 obsolete snapshot", a uz `-u` snapshot DATOTEKU i obrise
+  // ("1 files removed"), pa izgleda kao da je golden nestao. Dvaput izmjereno danas.
+  }, 300000);
 
   it('bit-identican no-op: popravak bez promjene vraca ULAZNE bajtove', async () => {
     const bytes = await singleSectionDocx();
