@@ -492,7 +492,20 @@ Cilj: ne moze se tvrditi pokrivenost programa koji nikad nije evidentiran. Danas
 - Izvedeno: popis je sada IZRICIT i zakljucan (`NOT_EXERCISED_ON_SYNTHETIC`), pa novi fixer koji se
   ne aktivira mora biti upisan umjesto da nestane u preskoku. Uz to je dodan prag koji se smije
   samo dizati: broj stvarno provjerenih fixera ne smije pasti ispod 9.
-- Sto OSTAJE: sinteticki dokument treba obogatiti (fusnote, literatura, polja, naslovnica, sekcije)
+- ZATVORENO (2026-08-20): mjerenje je nastavljeno korak dalje i suzilo zadatak jos jednom. Od 22
+  neaktivirana fixera, njih **16 ima idempotenciju u VLASTITOM testu** (bibliography, croatian
+  typography, field-integrity, toc-field, title-page, required-section, table-figure-rescue i dr.),
+  pa je njihovo odsustvo iz goldena uredno pokrice na drugom mjestu, a ne rupa. Stvarna rupa bila je
+  **7 fixera bez ikakvog vlastitog testa**: `paper-size`, `empty-paragraph`, `heading-format`,
+  `footnote-typography`, `footnote-spacing`, `page-numbering`, `page-number-alignment`.
+- Za svih 7 napisan je `src/repair/idempotence-gaps.test.ts`, sa dokumentom koji fixer DOISTA
+  aktivira. Svaki slucaj tvrdi tri stvari: paket ostaje ispravan, PRVI prolaz je nesto promijenio
+  (inace bi tvrdnja bila vakuumska), i drugi prolaz vraca bit-identicne bajtove.
+- Napomena o mjerenju: prvi pokusaj prebrojavanja dao je lazan rezultat (glob u petlji nije
+  pogadjao datoteke s crticom u imenu), pa je ispalo da `required-section` i `table-figure-rescue`
+  nemaju idempotenciju iako je imaju. Rucna provjera dvaju slucajeva to je otkrila prije nego je
+  usla u zakljucak.
+- Sto i dalje ostaje (nije nuzno): sinteticki dokument treba obogatiti (fusnote, literatura, polja, naslovnica, sekcije)
   da aktivira i ostale, ili im dodati vlastite ulaze. Svaki skinuti unos s popisa je mjerljiv
   napredak. To je tek sada vidljiv posao; prije je izgledalo da je vec gotov.
 - Napomena: `no-pass-regression` dio zadatka NIJE ovdje. On je vec pokriven na razini isporuke
