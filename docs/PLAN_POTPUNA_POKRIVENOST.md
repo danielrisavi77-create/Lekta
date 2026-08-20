@@ -771,6 +771,56 @@ Agenti su bili tocni na sidru: svih 25 pmf/ffos citata naslo se doslovno, i to n
 Promasaji nisu bili u citanju nego u **statusu**: sto je obveza, na koga se odnosi i je li vrijednost
 jedna. To je tocno ono sto mehanicka provjera hvata, a slaganje triju agenata ne bi.
 
+### Sto zapravo stoji iza "17 profila s nula bodova" (2026-08-21)
+
+Peceni artefakt daje tocnu podjelu 410 celija: **369 `scored`, 17 `advisory-only`, 24 `no-rules-sourced`**.
+Onih 17 je ono sto revizija broji kao nula-bodovne profile. Po jedinicama:
+
+- `advisory-only` (17): unizd 4, fsb 3, fer 2, ffos 2, alu 1, efzg 1, foozos 1, muza 1, pmf 1, unidu 1
+- `no-rules-sourced` (24): unizd 10, adu 6, alu 2, ffos 2, pravst 2, geof 1, unidu 1
+
+#### Taksonomija ne razlikuje dva suprotna ishoda
+`advisory-only` je opisan kao *"pravila postoje u stagingu, ali nijedno nije bodovano (izvor ili
+verifikacija NEDOSTAJU)"*. Za FER i unizd to je netocno: izvor postoji, procitan je, i **dokazano ne
+obvezuje**. To je konacno stanje, ne rupa.
+
+Mehanizam za "dokazano nema pravila" VEC postoji (`data/profiles/no-rules-reasons.json`, stanja
+`no-technical-rules` i `source-not-found`), ali:
+1. datoteka je **prazna**, nitko je nije popunio;
+2. za tih 17 profila se **nikad ne konzultira**, jer `state` racuna `scored.length ? ... :
+   entries.length ? 'advisory-only' : reasons[...]` - postojanje ijednog `ruleEntry` presijeca prije
+   nego se do razloga dodje.
+
+Nedostaje stanje "ima advisory pravila I presudjeno je da izvor ne obvezuje vise od toga". Bez njega
+se ispravno stanje (FER, unizd = 16 profila) ne moze razlikovati od stvarnog zaostatka.
+
+#### Nalaz koji je zaustavio prenagljen upis: efzg si proturjeci
+Prva pretpostavka nakon modalne analize bila je da `efzg-seminarski` moze postati bodovan preko opce
+odredbe sa str. 13 (*"Radovi se pisu ... margine 2,5 cm sa svih strana"*). Provjera zivog profila to
+je oborila: `efzg-seminarski` crpi iz DRUGOG dokumenta (`efzg-upute-diplomski-seminarski`), gdje
+stoji *"preporucuje se sljedece"* i margine su **2,54 cm (1 inch)**, ne 2,5.
+
+Dakle efzg ima dva dokumenta koja isto pitanje uredjuju **razlicitom vrijednoscu i razlicitom
+snagom**. Koji vrijedi za seminarski rad nije citanje nego odluka o hijerarhiji izvora. Pravilo NIJE
+upisano; ide u opovrgavajuci prolaz.
+
+#### `ffos`: cetiri profila vise na krivom aktu
+- `ffos-zavrsni` -> `ffos-pravilnik-radovi` (Pravilnik, 6 pravila, `verified`)
+- `ffos-diplomski` -> `ffos-upute-diplomski` (`verified`)
+- `ffos-informatologija-zavrsni` i `-diplomski` -> `ffos-informatologija-upute`, a to su **"Upute za
+  pisanje SEMINARSKIH radova"** odsjeka, uz formulaciju *"se preporuca"*. Vodic za seminarski rad
+  koristi se kao izvor za zavrsni i diplomski, i to advisory.
+- `ffos-povijest-zavrsni` i `-diplomski` -> nemaju draft uopce.
+
+Fakultetski Pravilnik o zavrsnim i diplomskim radovima po hijerarhiji iz CLAUDE.md stoji IZNAD
+odsjekove upute i pokriva tocno te vrste rada. Pitanje je opsega, ne verifikacije: vrijednosti su vec
+ljudski verificirane u `ffos-zavrsni`. Ali sirenje na druge odsjeke je odluka i ide u opovrgavanje.
+
+#### Uzgredna potvrda da mehanicka provjera radi
+Verifikator je odbio agentovu tvrdnju o ffos marginama jer skraceni citat ne sadrzi "20". Neovisno o
+tome, vec verificirani `ffos-zavrsni` nosi `{top: 2.5, right: 2, bottom: 2.5, left: 2.5}` - dakle
+lijeva 25, desna 20 mm. Vrijednost je bila tocna, citat nije, i provjera je pogodila tocno to.
+
 ---
 
 ## FAZA P5: stvarni korpus i Word oracle
