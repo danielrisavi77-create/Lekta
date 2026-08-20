@@ -7,7 +7,7 @@
  * P0 (nemamo parser-crash nalaz) - transparentno prikazuje sto JOS nije pokriveno.
  */
 import { describe, it, expect } from 'vitest';
-import { buildCoverage, renderCoverageMarkdown, renderGapBacklog } from './corpus/coverage/coverage-report';
+import { buildCoverage, renderCoverageMarkdown, renderGapBacklog, KNOWN_HARD, KNOWN_ADVISORY } from './corpus/coverage/coverage-report';
 import { ATOMIC_CASES } from './corpus/catalog/atomic';
 import { VALID_CONTROL_CASES } from './corpus/catalog/valid-controls';
 import { BOUNDARY_CASES } from './corpus/catalog/boundary';
@@ -70,5 +70,46 @@ describe('Lekta Error Corpus - coverage izvjestaj (faza 6)', () => {
     const rep = buildCoverage();
     expect(renderCoverageMarkdown(rep)).toContain('coverage');
     expect(renderGapBacklog(rep)).toContain('gap-backlog');
+  });
+
+  /**
+   * Registar poznatih rupa ne smije postati mjesto gdje posao tiho parkira.
+   *
+   * Zateceno 2026-08-20: 19 od 23 zapisa u KNOWN_HARD opisivalo je rupe koje su odavno zatvorene
+   * (npr. "Builder ne kontrolira oblik fusnota" dok footnote-format.ts pokriva sva cetiri fusnotna
+   * checkId-a). Kod ih nikad ne cita, jer pokrivena provjera ne postane rupa, pa postoci nisu bili
+   * krivi. Steta je bila u tome sto se preostale PRAVE rupe utope medju laznima.
+   *
+   * Pokrivenost se racuna iz `rep.rows`, dakle iz ISTOG izvora koji izvjestaj koristi, a ne iz
+   * zasebnog popisa koji bi mogao odlutati na svoju stranu.
+   */
+  describe('registar poznatih rupa ne smije zastarjeti', () => {
+    it('KNOWN_HARD ne sadrzi checkId koji vec ima fail-slucaj', () => {
+      const rep = buildCoverage();
+      const covered = new Set(
+        rep.rows.filter((r) => r.checkId && (r.hasAtomic || r.hasBoundary)).map((r) => r.checkId as string),
+      );
+      const dead = Object.keys(KNOWN_HARD).filter((id) => covered.has(id));
+      expect(
+        dead,
+        'ovi zapisi tvrde da se rupa ne moze zatvoriti, a vec je zatvorena; obrisi ih iz KNOWN_HARD',
+      ).toEqual([]);
+    });
+
+    it('KNOWN_ADVISORY ne sadrzi checkId koji vec ima valid-control', () => {
+      const rep = buildCoverage();
+      const covered = new Set(
+        rep.rows.filter((r) => r.checkId && r.hasValidControl).map((r) => r.checkId as string),
+      );
+      const dead = Object.keys(KNOWN_ADVISORY).filter((id) => covered.has(id));
+      expect(dead, 'obrisi ih iz KNOWN_ADVISORY: valid-control vec postoji').toEqual([]);
+    });
+
+    it('svaki zapis pripada provjeri koja stvarno postoji u inventaru', () => {
+      const rep = buildCoverage();
+      const known = new Set(rep.rows.map((r) => r.checkId).filter(Boolean) as string[]);
+      const orphans = [...Object.keys(KNOWN_HARD), ...Object.keys(KNOWN_ADVISORY)].filter((id) => !known.has(id));
+      expect(orphans, 'zapis gadja checkId kojeg nema u inventaru provjera').toEqual([]);
+    });
   });
 });
