@@ -177,6 +177,12 @@ export interface RegistryProfileInput {
   workTypes?: string[];
 }
 
+/** Redak iz `docs/generated/closed-loop.json` (P4-3). */
+export interface ClosedLoopInput {
+  profileId: string;
+  outcome: string;
+}
+
 export interface LedgerInputs {
   /**
    * Autoritativan popis profila. Ledger se NE smije voditi po `faculties` (fakultetskoj matrici):
@@ -194,6 +200,11 @@ export interface LedgerInputs {
   titleTemplates: TitleTemplateInput[];
   citationSpecs: CitationSpecInput[];
   declarations: DeclarationInput[];
+  /**
+   * Ishod closed-loop petlje po profilu. Bez njega je `proof` os bila `not-run` za 425 od 436
+   * redaka, jer je fakultetska matrica polje `syntheticClosedLoop` uvijek drzala na `not-run`.
+   */
+  closedLoop?: ClosedLoopInput[];
 }
 
 const ASSET_ORDER: AssetAxis[] = ['exact-official', 'exact-derived', 'reused', 'generic', 'unknown'];
@@ -296,6 +307,7 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
     titlesByUnit.set(t.unitId, acc);
   }
 
+  const closedLoopByProfile = new Map((inputs.closedLoop ?? []).map((row) => [row.profileId, row.outcome]));
   const citationUnits = new Set(inputs.citationSpecs.map((s) => s.facultyId));
   const declarationsByUnit = new Map<string, DeclarationInput[]>();
   for (const d of inputs.declarations) {
@@ -348,12 +360,19 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
             ? 'faculty-specific'
             : 'universal-hygiene';
 
+      /**
+       * Redoslijed je po JACINI dokaza, ne po izvoru: stvarni studentski rad nadjacava generirani.
+       *
+       * `partial` iz closed-loopa NIJE dokaz (dio prekrsenih osi ostaje nerijesen), pa ide u
+       * `review` - popravak je nesto napravio, ali ishod trazi ljudski pogled.
+       */
+      const loop = closedLoopByProfile.get(profile.profileId);
       const proof: ProofAxis =
-        profile.automaticTests.syntheticClosedLoop === 'pass'
-          ? 'synthetic-pass'
-          : profile.automaticTests.realCorpus === 'pass'
-            ? 'real-docx-pass'
-            : profile.automaticTests.realCorpus === 'review'
+        profile.automaticTests.realCorpus === 'pass'
+          ? 'real-docx-pass'
+          : loop === 'pass' || profile.automaticTests.syntheticClosedLoop === 'pass'
+            ? 'synthetic-pass'
+            : profile.automaticTests.realCorpus === 'review' || loop === 'partial'
               ? 'review'
               : 'not-run';
 

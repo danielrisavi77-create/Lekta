@@ -50,6 +50,7 @@ const inputs: LedgerInputs = {
   titleTemplates: readJson<LedgerInputs['titleTemplates']>('data/title-pages/templates-index.json'),
   citationSpecs: readJson<LedgerInputs['citationSpecs']>('data/tools/citation-specs/verified-index.json'),
   declarations: readJson<LedgerInputs['declarations']>('data/declarations/declarations.json'),
+  closedLoop: readJson<{ rows: NonNullable<LedgerInputs['closedLoop']> }>('docs/generated/closed-loop.json').rows,
 };
 
 const fresh = buildCompletionLedger(inputs);

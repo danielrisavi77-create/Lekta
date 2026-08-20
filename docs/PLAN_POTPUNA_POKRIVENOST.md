@@ -624,6 +624,27 @@ Popravi.
 - Pouka, treca ovog tipa u ovoj fazi: prije nego se razlika proglasi kvarom, treba provjeriti mjeri
   li harness istu osnovicu koju koristi proizvod.
 
+### P4-5. Closed-loop ozicen u ledger : GOTOVO (2026-08-20)
+- `proof` os je dosad bila `not-run` za 425 od 436 redaka, jer je fakultetska matrica polje
+  `syntheticClosedLoop` uvijek drzala na `not-run`. Ledger sada cita `docs/generated/closed-loop.json`.
+- Redoslijed je po JACINI dokaza, ne po izvoru: stvaran studentski rad (`real-docx-pass`) nadjacava
+  generirani (`synthetic-pass`); `review` je slabiji od oba; `not-run` je odsutnost dokaza.
+- `partial` iz petlje NAMJERNO nije dokaz nego `review`: dio prekrsenih osi ostaje nerijesen, pa je
+  popravak nesto napravio, ali ishod trazi ljudski pogled. Svrstati ga u `pass` znacilo bi ponoviti
+  tocno onu gresku koja je maloprije ispravljena (spajanje `partial` i `pass`).
+- UCINAK, prvi put mjeren:
+
+| Os | Prije | Poslije |
+|---|---|---|
+| `proof` | not-run 425, review 11 | **synthetic-pass 337**, review 7, not-run 92 |
+| `claim` | A 0, B **0**, C 346, D 42, E 48 | A 0, **B 329**, C 17, D 42, E 48 |
+
+- Brojke se medjusobno slazu: 337 redaka ima dokaz, ali 8 ih ostaje na C jer im pravila cekaju
+  pojedinacni ljudski audit (`rules: bulk-pending`, isti broj). Ljestvica dakle radi kako je
+  zamisljena - dokaz sam po sebi ne dize razinu ako je neka druga os slabija.
+- Razina A ostaje 0 i to je tocno: trazi stvaran studentski rad, a nijedan od 12 dokumenata u
+  korpusu jos nije na `pass` (svi su `review`).
+
 ---
 
 ## FAZA P5: stvarni korpus i Word oracle
