@@ -280,9 +280,35 @@ export function parseThemeFonts(xmlText: string | null | undefined): { minor: st
 }
 
 /** Izvuci tekst odlomka (tabovi, prijelomi, nbsp). */
+/**
+ * Pripada li cvor BAS ovom odlomku, a ne nekom ugnjezdenom unutar njega.
+ *
+ * Odlomci se mogu ugnjezditi: tekstualni okvir je `w:p > w:r > w:pict > ... > w:txbxContent > w:p`,
+ * dakle unutarnji `w:p` je POTOMAK vanjskog. Buduci da `els` i `getElementsByTagName` vracaju sve
+ * potomke, tekst okvira je do 2026-08-21 ulazio i u vlastiti odlomak i u tekst nadredjenog, pa se
+ * brojao dvaput (izmjereno: 10 rijeci u okviru dalo je +20). Isto za runove, pa je okvirni font
+ * dobivao dvostruku tezinu u modeWeighted.
+ *
+ * Pravilo je namjerno opce ("najblizi `w:p` predak"), a ne popis okvirnih tagova: pokriva i VML
+ * (`w:pict`) i DrawingML (`wps:txbx`) i svako budu ugnjezdenje, bez odrzavanja popisa.
+ */
+export function ownsNode(p: any, node: any): boolean {
+  for (let a = node?.parentNode; a; a = a.parentNode) {
+    if (a === p) return true;
+    if (a.nodeName === 'w:p' || a.localName === 'p') return false;
+  }
+  return false;
+}
+
+/** Runovi koji pripadaju BAS ovom odlomku (bez onih iz ugnjezdenih okvira). Vidi `ownsNode`. */
+export function ownRuns(p: any): any[] {
+  return [...p.getElementsByTagName('w:r')].filter((r: any) => ownsNode(p, r));
+}
+
 export function paragraphText(p: any): string {
   let out = '';
   for (const n of p.getElementsByTagName('*')) {
+    if (!ownsNode(p, n)) continue;
     if (n.nodeName === 'w:t' || n.localName === 't') out += n.textContent;
     else if (n.nodeName === 'w:tab' || n.localName === 'tab') out += '\t';
     else if (n.nodeName === 'w:br' || n.localName === 'br') out += '\n';

@@ -33,6 +33,27 @@ function body(words: number): ParaSpec[] {
   return out;
 }
 
+/**
+ * Naslovnica slozena u TEKSTUALNOM OKVIRU (VML), kako se u Wordu redovito i radi.
+ *
+ * Korpus je do 2026-08-21 imao nula dokumenata s okvirom, pa je dvostruko brojanje teksta iz
+ * okvira prolazilo neprimijeceno (10 rijeci u okviru davalo je +20 rijeci i dvostruku tezinu
+ * fontu). Okvir je usidren UNUTAR odlomka (`w:p > w:r > w:pict > ... > w:txbxContent > w:p`),
+ * pa je unutarnji odlomak potomak vanjskog; vidi `ownsNode` u src/docx/parser.ts.
+ */
+function titleInTextBox(lines: string[]): ParaSpec {
+  const inner = lines
+    .map((t) => `<w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${TNR}" w:hAnsi="${TNR}"/><w:sz w:val="24"/></w:rPr><w:t xml:space="preserve">${t}</w:t></w:r></w:p>`)
+    .join('');
+  return {
+    text: '',
+    raw:
+      '<w:p><w:r><w:pict xmlns:v="urn:schemas-microsoft-com:vml"><v:shape><v:textbox><w:txbxContent>' +
+      inner +
+      '</w:txbxContent></v:textbox></v:shape></w:pict></w:r></w:p>',
+  };
+}
+
 const head = (text: string): ParaSpec => ({ text, font: TNR, sizePt: 12, styleId: 'Heading1' });
 const line = (text: string): ParaSpec => ({ text, font: TNR, sizePt: 12, jc: 'both' });
 
@@ -130,6 +151,24 @@ const CORPUS: CorpusItem[] = [
       ],
       pageCm: { w: 14.8, h: 21.0 },
       marginsCm: { top: 4, right: 4, bottom: 4, left: 4 },
+    },
+  },
+  {
+    // Naslovnica u tekstualnom okviru: jedini korpusni dokument koji pokriva `w:txbxContent`.
+    // Bez njega je dvostruko brojanje okvirnog teksta prolazilo golden zastitu neprimijeceno.
+    name: 'fpzg-diplomski-naslovnica-u-okviru',
+    profileId: 'fpzg-politologija-diplomski',
+    spec: {
+      paragraphs: [
+        titleInTextBox([
+          'Sveučilište u Zagrebu',
+          'Fakultet političkih znanosti',
+          'Analiza medijske pismenosti mladih',
+          'Diplomski rad',
+          'Zagreb, 2026.',
+        ]),
+        ...fpzgWork(11000),
+      ],
     },
   },
   {
