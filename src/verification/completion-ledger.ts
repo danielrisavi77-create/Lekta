@@ -396,10 +396,15 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
           faculty.unitId != null && citationUnits.has(faculty.unitId) ? 'exact-official' : 'generic';
         const declarationRecords =
           faculty.unitId == null ? [] : (declarationsByUnit.get(faculty.unitId) ?? []);
-        const declaration: AssetAxis = declarationRecords.length
-          ? declarationRecords.some((d) => d.provenance.status === 'official')
-            ? 'exact-official'
-            : 'exact-derived'
+        /**
+         * `guidance` NIJE `exact-derived`. Zapis te vrste kaze samo "znamo da fakultet izjavu
+         * propisuje, evo izvora" - doslovan obrazac nemamo, pa je tekst koji student dobije i
+         * dalje OPCI. Os mjeri vjernost SADRZAJA, pa guidance ostaje `generic`; vrijednost tog
+         * zapisa je napomena uz izvor, ne tocnost formulacije. Prikazati ga kao `exact-derived`
+         * znacilo bi precijeniti vlastiti posao.
+         */
+        const declaration: AssetAxis = declarationRecords.some((d) => d.provenance.status === 'official')
+          ? 'exact-official'
           : 'generic';
 
         const { claim, blockedReasons } = deriveClaim(rules, repair, proof);

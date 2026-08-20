@@ -25,5 +25,11 @@ export default defineConfig({
     // Datoteke kojima treba jos vise (korpusni testovi, golden harness) i dalje deklariraju
     // vlastiti timeout po testu, npr. `}, 30000);` - taj obrazac ostaje mjerodavan.
     testTimeout: 15000,
+    // Isto obrazlozenje vrijedi i za HOOKOVE, sto je gore promaknulo: `beforeAll` koji gradi
+    // bundle ili raspakirava paket redovno traje vise od zadanih 10000 ms pod punim opterecenjem.
+    // Izmjereno 2026-08-20: `tests/title-page-web-bundle.test.ts` pao je s "Hook timed out in
+    // 10000ms" iako je svih 31 testova PROSLO, a izolirano prolazi. Lazno crveno koje ne pokazuje
+    // nijedan stvarni kvar, a kod golden testova zna i obrisati snapshot kao zastario.
+    hookTimeout: 30000,
   },
 });

@@ -1,1 +1,164 @@
-[]
+[
+  {
+    "id": "ffzg-final",
+    "unitId": "ffzg",
+    "level": "final",
+    "provenance": {
+      "status": "guidance",
+      "sourceIds": [
+        "ffzg-inf-diplomski-2024"
+      ],
+      "sourcePage": null,
+      "sourceNote": "odjeljak 3.1. Struktura rada",
+      "quote": "Rad se sastoji od sljedeih cjelina: Naslovnica, Izjava o akademskoj cestitosti, Sadrzaj, Uvod,",
+      "verifiedAt": "2026-07-02",
+      "note": "Izvedeno iz verificiranog pravila o strukturi rada (ffzg-informacijske-zavrsni, required-sections)."
+    },
+    "status": "draft",
+    "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
+  },
+  {
+    "id": "fpz-final",
+    "unitId": "fpz",
+    "level": "final",
+    "provenance": {
+      "status": "guidance",
+      "sourceIds": [
+        "fpz-upute-zavrsni-diplomski-2018"
+      ],
+      "sourcePage": null,
+      "sourceNote": "odjeljak 2.2. Elementi zavrsnog rada",
+      "quote": "Zavrsni rad mora imati ove elemente, slozene redoslijedom prikazanim na slici 1:",
+      "verifiedAt": "2026-07-02",
+      "note": "Izvedeno iz verificiranog pravila o strukturi rada (fpz-zavrsni, required-sections)."
+    },
+    "status": "draft",
+    "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
+  },
+  {
+    "id": "fpz-graduate",
+    "unitId": "fpz",
+    "level": "graduate",
+    "provenance": {
+      "status": "guidance",
+      "sourceIds": [
+        "fpz-upute-zavrsni-diplomski-2018"
+      ],
+      "sourcePage": null,
+      "sourceNote": "odjeljak 3.2. Elementi diplomskog rada",
+      "quote": "Diplomski rad mora sadrzavati ove elemente, slozene redoslijedom prikazanim na slici",
+      "verifiedAt": "2026-07-02",
+      "note": "Izvedeno iz verificiranog pravila o strukturi rada (fpz-diplomski, required-sections)."
+    },
+    "status": "draft",
+    "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
+  },
+  {
+    "id": "fpzg-article",
+    "unitId": "fpzg",
+    "level": "article",
+    "provenance": {
+      "status": "guidance",
+      "sourceIds": [
+        "fpzg-upute-akademski-radovi"
+      ],
+      "sourcePage": null,
+      "sourceNote": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "verifiedAt": "2026-08-02",
+      "note": "Izvedeno iz verificiranog pravila o strukturi rada (fpzg-opci-akademski-rad, required-section-rules)."
+    },
+    "status": "draft",
+    "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
+  },
+  {
+    "id": "fpzg-final",
+    "unitId": "fpzg",
+    "level": "final",
+    "provenance": {
+      "status": "guidance",
+      "sourceIds": [
+        "fpzg-upute-akademski-radovi"
+      ],
+      "sourcePage": null,
+      "sourceNote": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "verifiedAt": "2026-08-02",
+      "note": "Izvedeno iz verificiranog pravila o strukturi rada (fpzg-novinarstvo-zavrsni-tekst, required-section-rules)."
+    },
+    "status": "draft",
+    "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
+  },
+  {
+    "id": "fpzg-graduate",
+    "unitId": "fpzg",
+    "level": "graduate",
+    "provenance": {
+      "status": "guidance",
+      "sourceIds": [
+        "fpzg-upute-akademski-radovi"
+      ],
+      "sourcePage": null,
+      "sourceNote": "str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "verifiedAt": "2026-08-02",
+      "note": "Izvedeno iz verificiranog pravila o strukturi rada (fpzg-mes-master-thesis, required-section-rules)."
+    },
+    "status": "draft",
+    "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
+  },
+  {
+    "id": "fpzg-project",
+    "unitId": "fpzg",
+    "level": "project",
+    "provenance": {
+      "status": "guidance",
+      "sourceIds": [
+        "fpzg-upute-akademski-radovi"
+      ],
+      "sourcePage": null,
+      "sourceNote": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "verifiedAt": "2026-08-02",
+      "note": "Izvedeno iz verificiranog pravila o strukturi rada (fpzg-opci-akademski-rad, required-section-rules)."
+    },
+    "status": "draft",
+    "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
+  },
+  {
+    "id": "fpzg-seminar",
+    "unitId": "fpzg",
+    "level": "seminar",
+    "provenance": {
+      "status": "guidance",
+      "sourceIds": [
+        "fpzg-upute-akademski-radovi"
+      ],
+      "sourcePage": null,
+      "sourceNote": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "verifiedAt": "2026-08-02",
+      "note": "Izvedeno iz verificiranog pravila o strukturi rada (fpzg-opci-akademski-rad, required-section-rules)."
+    },
+    "status": "draft",
+    "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
+  },
+  {
+    "id": "fpzg-specialist",
+    "unitId": "fpzg",
+    "level": "specialist",
+    "provenance": {
+      "status": "guidance",
+      "sourceIds": [
+        "fpzg-upute-akademski-radovi"
+      ],
+      "sourcePage": null,
+      "sourceNote": "str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "verifiedAt": "2026-08-02",
+      "note": "Izvedeno iz verificiranog pravila o strukturi rada (fpzg-specijalisticki-odnosi-s-javnoscu, required-section-rules)."
+    },
+    "status": "draft",
+    "notes": "Fakultet propisuje izjavu, ali doslovan obrazac jos nije prikupljen. Provjeri sluzbeni obrazac prije predaje; generator nudi opcu formulaciju."
+  }
+]

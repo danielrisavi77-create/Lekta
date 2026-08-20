@@ -697,15 +697,30 @@ rijeseno (23,2%), prosjek 85,25 na 88,83, nula pass-regresija.
   status u ledgeru, ne tihi izostanak.
 - Velicina: L. Prioritet: P3.
 
-### P6-3. Izjave: `declarations.json` iz `[]` u stvarne podatke
-- Arhitektura vec razlikuje `official` / `guidance` / `generic`
-  (`src/declarations/declaration-schema.ts`) i validator zabranjuje izmisljen tekst uz
-  `guidance`. Fali samo sadrzaj.
-- AC: pocetni cilj 30 najvecih jedinica s `official` formulacijom; svaka ostala jedinica
-  dobiva `guidance` s izvorom ili ostaje `generic` uz vidljivu napomenu. Pokriti izjavu o
-  izvornosti, o koristenju AI alata, o autorskim pravima i suglasnost za objavu, uz propisano
-  mjesto, potpis, datum i JMBAG.
-- Velicina: XL (podatkovni rad). Prioritet: P3.
+### P6-3. Izjave: prvi zapisi, ali samo `guidance` (2026-08-20)
+- `data/declarations/declarations.json` bio je prazan `[]`. Sada ima **9 zapisa nad 3 jedinice**
+  (`ffzg`, `fpz`, `fpzg`), generiranih iz VEC VERIFICIRANOG dokaza:
+  `scripts/seed-declarations.mts` (`npm run seed-declarations`).
+- GRANICA KOJU SEED NE PRELAZI: shema dopusta `wording` (doslovnu sluzbenu formulaciju) samo uz
+  `provenance.status === 'official'`. Doslovan obrazac nemamo: u repozitoriju je 255 PDF snapshota,
+  ali samo 15 OCR tekstova, a OCR gubi dijakritiku - "sluzbeni" tekst izvucen iz njega bio bi
+  netocan tamo gdje je najvazniji (ime, JMBAG, formulacija koju student potpisuje). Zato su SVI
+  zapisi `guidance`: "fakultet izjavu propisuje, evo izvora i lokatora, provjeri obrazac".
+- Dokaz se ne prikuplja iznova nego NASLJEDUJE iz `ruleEntries` koji su vec prosli verifikaciju
+  (status `verified` + `sourceId` + `sourcePage` + doslovan citat, i to oni koji izjavu navode kao
+  obavezan dio). Time zapis o izjavi ima istu razinu dokaza kao pravilo o strukturi rada.
+- ODBIJENO PROSIRENJE: jos 2 jedinice (`ffri`, `unizd`) imaju dokaz s izvorom, ali status pravila
+  nije `verified`. Ukljucivanje bi znacilo reci studentu "tvoj fakultet ovo propisuje" na temelju
+  pravila koje ni sami nismo smatrali dovoljno jasnim za bodovanje. Uski i tocan skup je bolji od
+  sireg i klimavog; 3 naspram 5 jedinica ionako ne mijenja razmjer.
+- ISPRAVAK U LEDGERU koji je ovaj posao otkrio: `guidance` se mapirao na `exact-derived`, sto
+  precjenjuje. `exact-derived` znaci "rekonstruirano konsenzusom", a `guidance` znaci "znamo da je
+  propisana, nemamo tekst" - student i dalje dobiva OPCU formulaciju. Os mjeri vjernost SADRZAJA,
+  pa `guidance` ostaje `generic`; vrijednost zapisa je napomena uz izvor, ne tocnost teksta. Bez
+  ispravka bi izgledalo da je 27 redaka dobilo vjernu izjavu, a nije nijedan.
+- Sto OSTAJE: prikupljanje doslovnih obrazaca je LJUDSKI posao (preuzeti sluzbeni PDF/DOCX obrazac
+  po jedinici). Tek tada zapis prelazi u `official` i `assets` os se stvarno mice. Cilj iz prvotnog
+  plana (30 najvecih jedinica) ostaje otvoren.
 
 ### P6-4. Prosirenje taksonomije vrsta rada
 - Danas 7 (`seminar`, `final`, `graduate`, `specialist`, `doctoral`, `article`, `project`).
