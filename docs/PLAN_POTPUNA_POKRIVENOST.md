@@ -645,6 +645,25 @@ Popravi.
 - Razina A ostaje 0 i to je tocno: trazi stvaran studentski rad, a nijedan od 12 dokumenata u
   korpusu jos nije na `pass` (svi su `review`).
 
+### P2-3b. Dosjei kandidata za pravila : GOTOVO (2026-08-20)
+- 41 profil je na razini E jer nema nijedno bodovano pravilo. Prva pretpostavka bila je da to trazi
+  prikupljanje izvora; MJERENJE je pokazalo suprotno: **svih 13 njihovih jedinica vec ima izvore na
+  disku** (2 do 50 datoteka po jedinici). Posao je rudarenje, ne prikupljanje - isti zakljucak kao
+  kod izjava.
+- `scripts/extract_rule_candidates.py` nalazi mjesta koja govore o fontu, velicini, proredu,
+  marginama i formatu papira, i uz svako biljezi STRANICU i doslovan kontekst. Izlaz:
+  `docs/generated/rule-candidates.json` + dosje po jedinici u `data/verification/rule-dossiers/`.
+- IZMJERENO: **479 kandidata kroz 10 jedinica**. Primjer koliko je konkretno - za `fer`
+  (2 profila na razini E) dosje sadrzi: *"Stranica treba biti A4 formata"*, *"Tekst treba od ruba
+  biti udaljen barem 2.5 cm (do 3 cm)"*, *"Preporuceni font Times New Roman (ili slican) velicine
+  12... Arial ... velicine 11"*, *"Tekst poravnati s obje strane (engl. justify)"*. Time se
+  "istrazi FER" pretvara u "potvrdi sest citata".
+- SKRIPT NE ODLUCUJE. Vrijednost pravila i `checkId` upisuje covjek: pogresno pravilo boduje
+  studentov rad krivo, a dio nalaza trazi prosudbu koju stroj ne smije donijeti (npr. FER pise
+  "PREPORUCENI font" - je li to obveza ili preporuka mijenja i autoritet i bodovanje).
+- Tri jedinice nisu dale nijednog kandidata (`fsb`, `geof`, `pravst`): njihovi snapshoti ili nemaju
+  tekstualni sloj ili ne sadrze pravila oblikovanja. Te ostaju za rucni pregled.
+
 ---
 
 ## FAZA P5: stvarni korpus i Word oracle
