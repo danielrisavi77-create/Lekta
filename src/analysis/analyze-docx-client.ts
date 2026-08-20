@@ -29,11 +29,31 @@ class AnalysisCancelledError extends Error {
   }
 }
 
+/**
+ * Analiza koju je zamijenila novija (korisnik je ucitao drugi dokument ili promijenio profil).
+ *
+ * Do 2026-08-20 taj se promise NIJE odbacivao: stari worker se gasio `terminate()`-om, ali
+ * `onmessage`/`onerror` mu vise nisu mogli okinuti (terminate ne emitira `error`), a `cancelActive`
+ * se bezuvjetno prepisivao na novu analizu. Promise je zato visio punih 180 s pa se odbacio
+ * porukom o TIMEOUTU, sto je dijagnosticki lazno: analiza nije istekla nego je zamijenjena.
+ *
+ * Nasljedjuje `AnalysisCancelledError` da ga postojeci `isAnalysisCancelled` guardovi u sucelju
+ * i dalje tiho progutaju (zamjena, kao ni prekid, nije greska koju korisnik treba vidjeti).
+ */
+class AnalysisSupersededError extends AnalysisCancelledError {
+  constructor() {
+    super('Analiza je zamijenjena novijom.');
+    this.name = 'AnalysisSupersededError';
+  }
+}
+
 import { attachHeadingStructure } from './heading-structure';
 
 /** Je li greska posljedica korisnickog prekida (pa je pozivatelj tiho proguta, bez toast greske). */
 export function isAnalysisCancelled(e: unknown): boolean {
-  return e instanceof AnalysisCancelledError || (e as { name?: string } | null)?.name === 'AnalysisCancelledError';
+  return e instanceof AnalysisCancelledError
+    || (e as { name?: string } | null)?.name === 'AnalysisCancelledError'
+    || (e as { name?: string } | null)?.name === 'AnalysisSupersededError';
 }
 
 /**
@@ -48,7 +68,9 @@ const ANALYSIS_TIMEOUT_MS = 180_000;
 let workerBroken = false; // nakon prvog infra pada ova sesija trajno radi inline
 let activeWorker: Worker | null = null;
 // Odbacivac tekuce worker-analize: postavljen dok analiza traje, gasi worker i rejecta promise.
-let cancelActive: (() => void) | null = null;
+// Prima gresku da ista putanja posluzi i korisnickom prekidu i zamjeni novijom analizom;
+// bez argumenta je prekid (AnalysisCancelledError).
+let cancelActive: ((reason?: Error) => void) | null = null;
 
 function canUseWorker(): boolean {
   return !workerBroken && typeof Worker !== 'undefined';
@@ -75,8 +97,11 @@ function analyzeInWorker(file: File, profile: any, settings: any, onProgress: an
       reject(new WorkerInfraError(String(e)));
       return;
     }
-    // Starija analiza u tijeku vise nikoga ne zanima; ugasi je da ne trosi CPU i ne
-    // salje zakasnjeli progress (guard tokena u runAnalysis svejedno odbacuje rezultat).
+    // Starija analiza u tijeku vise nikoga ne zanima. Odbaci je UREDNO, ne samo `terminate()`:
+    // gasenje workera ne okida ni `onmessage` ni `onerror`, pa bi njezin promise ostao neposlozen
+    // do vlastitog timeouta i tek onda lagao da je analiza "trajala predugo".
+    // Poziv usput cisti i njezin `timeoutTimer` (vidi `done`).
+    if (cancelActive) cancelActive(new AnalysisSupersededError());
     if (activeWorker) { try { activeWorker.terminate(); } catch { /* vec ugasen */ } }
     activeWorker = w;
     let settled = false;
@@ -91,11 +116,16 @@ function analyzeInWorker(file: File, profile: any, settings: any, onProgress: an
       if (timeoutTimer !== null) { clearTimeout(timeoutTimer); timeoutTimer = null; }
       try { w.terminate(); } catch { /* vec ugasen */ }
       if (activeWorker === w) activeWorker = null;
-      cancelActive = null;
+      // Vlasnistvo, kao i redak iznad. Bez ovog uvjeta zakasnjeli `done` STARE analize nulira
+      // `cancelActive` NOVE, aktivne analize, pa `cancelActiveAnalysis()` padne na granu koja
+      // worker ugasi ali promise ne odbaci: gumb Prekid tiho prestane raditi.
+      if (cancelActive === myCancel) cancelActive = null;
       finish();
     };
     // Izlozi prekid: cancelActiveAnalysis() ovo pozove pa se worker ugasi i promise odbaci.
-    cancelActive = () => done(() => reject(new AnalysisCancelledError()));
+    // Zamjena novijom analizom ide ISTIM putem, samo s drugim razlogom.
+    const myCancel = (reason?: Error) => done(() => reject(reason ?? new AnalysisCancelledError()));
+    cancelActive = myCancel;
     // Tvrdi timeout: obican Error (ne WorkerInfraError) da se patoloska analiza ne ponovi inline.
     timeoutTimer = setTimeout(() => done(() => reject(new Error(
       'Analiza je trajala predugo i prekinuta je radi zaštite uređaja. Pokušaj ponovno; ako se ponovi, dokument je vjerojatno prevelik za ovaj uređaj.',
