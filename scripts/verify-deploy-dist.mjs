@@ -86,7 +86,23 @@ for (const [file, marker] of legalChecks) {
   for (const slug of Object.keys(facts)) {
     const p = path.join(DIST, 'usporedba', slug, 'index.html');
     if (!fs.existsSync(p)) fail(`dist/usporedba/${slug}/index.html ne postoji (generate-competitor-pages nije prosao?)`);
-    if (!fs.readFileSync(p, 'utf8').includes('zadnja provjera')) fail(`dist/usporedba/${slug}/index.html nema datiran izvor ("zadnja provjera")`);
+    // Datiranost se cita iz STRUKTURE i iz samog datuma, ne iz natpisa "zadnja provjera".
+    // Isti razlog kao kod pokrivenost.html iznad: natpis je javni copy, pa ga prepravljanje
+    // teksta rusi, a stranica je pritom posve ispravna.
+    //
+    // Usput je tvrdnja i stroza nego prije. Stara je trazila JEDNO pojavljivanje natpisa na
+    // stranici, pa je stranica koja je tiho izgubila dio cinjenica (ili im datum) i dalje
+    // prolazila. Sada se broj izvora usporedjuje s podacima, a svaki mora nositi datum.
+    const html = fs.readFileSync(p, 'utf8');
+    const expected = (facts[slug].facts || []).length;
+    const sources = [...html.matchAll(/<span class="fact-source">([\s\S]*?)<\/span>/g)].map((m) => m[1]);
+    if (sources.length !== expected) {
+      fail(`dist/usporedba/${slug}/index.html ima ${sources.length} izvora, a podaci nose ${expected}`);
+    }
+    const undated = sources.filter((src) => !/\d{1,2}\. \d{1,2}\. \d{4}\./.test(src));
+    if (undated.length) {
+      fail(`dist/usporedba/${slug}/index.html ima ${undated.length} izvor(a) bez datuma provjere`);
+    }
   }
   if (!fs.existsSync(path.join(DIST, 'sitemap-usporedba.xml'))) fail('dist/sitemap-usporedba.xml ne postoji');
 }
