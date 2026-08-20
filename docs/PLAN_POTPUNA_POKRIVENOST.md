@@ -821,6 +821,77 @@ Verifikator je odbio agentovu tvrdnju o ffos marginama jer skraceni citat ne sad
 tome, vec verificirani `ffos-zavrsni` nosi `{top: 2.5, right: 2, bottom: 2.5, left: 2.5}` - dakle
 lijeva 25, desna 20 mm. Vrijednost je bila tocna, citat nije, i provjera je pogodila tocno to.
 
+### Opovrgavajuci prolaz: 0 oboreno, 12 od 20 SUZENO (2026-08-21)
+
+Dvadeset tvrdnji koje su prosle sve mehanicke provjere cisto poslano je agentu sa zadatkom da ih
+OBORI, uz izricito "u dvojbi presudi oboreno". Ishod: nijedna vrijednost nije bila netocna NA SVOM
+MJESTU, ali je dvanaest imalo krivo pripisan OPSEG. To je drukciji nalaz od FER pilota (gdje je
+4 od 5 palo na sadrzaju) i mijenja tezisce: opasnost nije izmisljena vrijednost nego preseljena.
+
+#### Tri obrasca kvara koja se ponavljaju
+
+**1. Odsjecki dokument predstavljen kao fakultetski.**
+- `pmf`: vrijednosti dolaze iz uputa **Bioloskog odsjeka**. Matematicki odsjek propisuje ZRCALJENE
+  uvezne margine (*"za dvostrani tisak na lijevoj stranici: lijeva 35 mm, desna 23 mm, gornja 35 mm
+  i donja 38 mm"*) i APSOLUTNI vodilac (*"fontom velicine 12pt s proredom od 15pt"*, sto uz 12 pt
+  nije 1,5 nego oko 1,25). Uniformnih 2,5 cm i prored 1,5 kao PMF pravilo oborili bi svaki sukladan
+  matematicki rad, a margins-fixer bi mu unistio uvezni prostor. Sam biolski dokument se k tome
+  samoogradjuje: *"U tim slucajevima se za izradu njihovih diplomskih radova primjenjuju pravila
+  izabranog odsjeka."*
+- `ffos`: Odsjek za njemacki jezik NOVIJIM dokumentom (srpanj 2025., Pravilnik je iz 2019.) dopusta
+  *"Times New Roman 12 oder Calibri 12 oder Arial 12"*. Ekskluzivni TNR oborio bi sukladan rad.
+- `alu`: jedini potpuni skup dolazi iz uputa JEDNOG odsjeka (OKIRU), a Pravilnik po odsjecima daje
+  razlicito: Kiparski trazi **polozeni (landscape) A4**, Graficki *"maksimalnoj velicini formata A4"*.
+- `adu`: Pravilnik vrijedi izrijekom samo za diplomski studij **Montaze**; drugi ADU izvor nema
+  nijednu odredbu o oblikovanju. Sest adu profila time ostaje nepokriveno, i to je tocno.
+
+**2. Odsjecen citat koji krije iznimku u ISTOJ recenici.** Najopasniji razred, jer citat je doslovan,
+vrijednost izvediva, kvalifikatora nema. `unidu`, str. 7, dva puta:
+- *"velicina slova u tekstu (font size) treba biti 12 tocaka"* **[, dok naslovi i podnaslovi trebaju
+  biti nesto veci (14 ili 16 tocaka)]*
+- *"prored (line spacing) treba biti 1,5 u glavnom tekstu rada"* **[, jednostruki (1) u biljeskama]**
+
+Prvo bi oborilo svaki sukladan naslov, drugo svaku sukladnu fusnotu. Iznimke su IMPERATIVNE
+(*"trebaju biti"*), ne preporuke.
+
+**3. Naslovnica kao tiha druga vrijednost za `font-size`.** Sva cetiri fakulteta: efzg 14/16 pt,
+unidu 14/18 pt, ffos 14/16 pt, adu 14/16 pt, foozos 14/12/10. Nijedna od njih nije pravilo tijela rada.
+
+#### Nalaz koji izvrce hijerarhiju iz CLAUDE.md
+`ffos-pravilnik-radovi.pdf`, clanak 8. stavak 2.: *"Ako su upute u koliziji, student je duzan
+pridrzavati se uputa mentora."* Fakultetski pravilnik SAM sebe podredjuje mentorovoj pisanoj uputi.
+To ne obara nijedno pojedino ffos pravilo, ali sva ffos formatna pravila cini **oborivim defaultom**,
+suprotno opcoj hijerarhiji (pravilnik > studij > opce upute > mentor). Vrijedi zapisati u profil.
+
+#### Jedina cista dobit kruga
+`efzg` `paper-size` danas je `advisory` u sva cetiri draft profila, jer je bio izveden iz recenice o
+OPSEGU (*"stranica teksta formata A4"*). Citat sa str. 13 je samostalan i imperativan (*"Radovi se
+pisu na papiru formata A4 (210 mm x 297 mm)"*), pa opravdava prelazak u `scored` za
+`efzg-specijalisticki`. Ni jedan drugi efzg dokument ne navodi drugi format.
+
+#### Upozorenje za popravak, ne samo za bodovanje
+Suzenje "samo tijelo rada" odgovara zivom ponasanju motora: `check-fixer-map` vodi `font-size` na
+`format.size.body`, a `fontFixer` krpa docDefaults/Normal, pa naslovi s vlastitom velicinom ostaju
+netaknuti. IZNIMKA: `fontFixer` s `deep: true` silazi na runove i pregazio bi sukladne naslove od
+14/16 pt. To je konkretan rizik, ne teorijski, jer je deep u sucelju PREDODABRAN.
+
+### Sesta mehanicka provjera: odsjecen citat
+Razred 2 je mehanicki uhvatljiv i sada se hvata: ako citat NE zavrsava na kraju recenice, a ostatak
+te iste recenice sadrzi znamenku, tvrdnja ide covjeku. Provjera ne prosudjuje je li ostatak doista
+iznimka, samo da je citat prekinut ondje gdje jos ima brojeva.
+
+Prva izvedba lazno je prijavila 24 od 33 tocne tvrdnje, jer je za citat koji vec zavrsava tockom
+mjerila SLJEDECU recenicu. Nakon grane "citat koji zavrsava na .!? nije odsjecen": 13 od 33, a oba
+stvarna unidu slucaja i dalje su uhvacena.
+
+Uz to su ispravljena tri lazna nalaza vlastite izrade:
+- **NFC normalizacija.** Tekstualni sloj `muza-pravilnik-zavrsetak-2025.pdf` mijesa slozeni i
+  rastavljeni oblik dijakritike (18 kombinirajucih znakova na str. 15). Ulomak koji IZGLEDA identicno
+  u NFC obliku ne nalazi se u sirovom tekstu, pa bi svaki tocan prijepis bio odbijen.
+- **"A-4" je A4.** Citat `alu-okiru` uputa glasi *"u formatu A-4"*; trazio se doslovno "A4".
+- **Orijentacija je izmjena vrijednosti, ne ublazavanje.** *"u polozenom formatu A4"* je landscape,
+  dakle zamijenjene dimenzije. Sada ide covjeku.
+
 ---
 
 ## FAZA P5: stvarni korpus i Word oracle

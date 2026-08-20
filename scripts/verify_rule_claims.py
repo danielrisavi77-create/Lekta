@@ -8,7 +8,7 @@ Zasto postoji: tri agenta koja citaju isti tekst dijele iste sljepoce. Ako model
 slaganje NIJE tocnost. Ove provjere su determinsticke i zato hvataju ono sto agentski pregled ne
 moze: izmisljen citat, citat s krive stranice, i vrijednost koja se iz citata ne moze izvesti.
 
-Pet provjera po tvrdnji:
+Sest provjera po tvrdnji:
   1. SIDRO   - citat se doslovno nalazi u tekstu NAVEDENE stranice (usporedba bez viska razmaka).
   2. IZVOD   - vrijednost se moze izvesti iz citata (broj/naziv se u njemu doista pojavljuje).
   3. KVALIFIKATOR - citat sadrzi rijec koja mijenja znacenje ("preporuceni", "barem", "do",
@@ -35,6 +35,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 
 try:
     import fitz  # PyMuPDF
@@ -59,7 +60,11 @@ QUALIFIERS = re.compile(
     # Uzak popis nastavaka uvijek propusti sljedecu varijantu, pa se hvata sam glagol.
     r"\b(preporu[čc]\w*|barem|najmanje|najvi[šs]e|do\s+\d|iznimno|mo[žz]e\w*"
     r"|po[žz]eljno|okvirno|obi[čc]no|u\s+pravilu|ukoliko|ako\s+se|u\s+slu[čc]aju|ovisno\s+o"
-    r"|po\s+dogovoru|s\s+mentorom|ili\s+sli[čc]an|neka\s+bude|primjerice|npr\.)\b",
+    r"|po\s+dogovoru|s\s+mentorom|ili\s+sli[čc]an|neka\s+bude|primjerice|npr\."
+    # Orijentacija nije ublazavanje nego IZMJENA vrijednosti: "u polozenom formatu A4" je landscape,
+    # dakle zamijenjene dimenzije, a ne isti A4. Provjera formata koja to ne razlikuje prijavila bi
+    # sukladan kiparski rad kao neispravan. Izmjereno na alu-pravilnik-diplomski-2014, str. 7 i 9.
+    r"|polo[žz]en\w*|uspravn\w*|landscape|portrait)\b",
     re.I,
 )
 
@@ -75,7 +80,14 @@ _page_cache: dict[tuple[str, int], str] = {}
 
 
 def squash(text: str) -> str:
-    return re.sub(r"\s+", " ", text or "").strip()
+    """Normalizira razmake I Unicode oblik dijakritike.
+
+    NFC nije kozmetika nego ispravak lazno negativnog nalaza: tekstualni sloj nekih PDF-ova mijesa
+    slozeni i rastavljeni oblik (izmjereno u muza-pravilnik-zavrsetak-2025.pdf, gdje je "s" u
+    "predlosku" zapisan kao s + U+030C, a ne kao U+0161). Bez normalizacije doslovno TOCAN citat ne
+    nalazi se na stranici s koje je prepisan, pa verifikator odbacuje valjanu tvrdnju.
+    """
+    return re.sub(r"\s+", " ", unicodedata.normalize("NFC", text or "")).strip()
 
 
 def page_text(rel_path: str, page: int) -> str:
@@ -198,10 +210,48 @@ def is_choice(check_id: str, value, quote: str) -> bool:
     return bool(re.search(r"\d\s*(pt|to[čc]\w*|cm|mm)?\s+ili\s+\d", quote, re.I))
 
 
+# --- 6. ODSJECEN CITAT koji krije iznimku -----------------------------------------------------
+#
+# Najopasniji nadjen razred: citat je doslovan, vrijednost je iz njega izvediva, nema kvalifikatora,
+# a IPAK je pogresan - jer je prekinut tocno prije iznimke u istoj recenici.
+#
+# Izmjereno na unidu-komunikologija-upute-2025.pdf, str. 7, dva puta:
+#   "velicina slova u tekstu (font size) treba biti 12 tocaka" [, DOK NASLOVI I PODNASLOVI TREBAJU
+#    BITI NESTO VECI (14 ILI 16 TOCAKA)]
+#   "prored (line spacing) treba biti 1,5 u glavnom tekstu rada" [, JEDNOSTRUKI (1) U BILJESKAMA]
+# Bodovano kako je citirano, prvo bi oborilo svaki sukladan naslov, a drugo svaku sukladnu fusnotu.
+#
+# Pravilo je namjerno grubo i bez tumacenja: ako citat NE zavrsava na kraju recenice, a ostatak te
+# iste recenice sadrzi znamenku, tvrdnja ide covjeku. Ne odlucuje je li ostatak doista iznimka - to
+# je prosudba; odlucuje samo da je citat odsjecen ondje gdje jos ima brojeva.
+SENTENCE_END = re.compile(r"[.!?](\s|$)")
+
+
+def truncated_tail(rel_path: str, page: int, quote: str) -> str | None:
+    """Ostatak recenice iza citata, ako taj ostatak jos nosi neku brojcanu vrijednost."""
+    text = squash(page_text(rel_path, page))
+    quote = squash(quote)
+    if not quote or not text:
+        return None
+    # Citat koji i sam zavrsava na kraju recenice NIJE odsjecen. Bez ove grane provjera mjeri
+    # SLJEDECU recenicu i lazno prijavljuje 24 od 33 tocne tvrdnje (izmjereno na akademijama).
+    if quote[-1] in ".!?":
+        return None
+    index = text.find(quote)
+    if index < 0:
+        return None
+    tail = text[index + len(quote) :]
+    end = SENTENCE_END.search(tail)
+    tail = tail[: end.start() + 1] if end else tail[:240]
+    return tail.strip() if re.search(r"\d", tail) else None
+
+
 def value_tokens(check_id: str, value) -> list[list[str]]:
     """Za svaki dio vrijednosti vraca DOPUSTENE zapise; svaki dio mora imati barem jedan pogodak."""
     if check_id == "paper-size":
-        return [["A4"]]
+        # "A-4" i "A 4" su isti format. Bez ovoga verifikator odbacuje TOCNU tvrdnju: izmjereno na
+        # alu-okiru uputama, gdje citat glasi "Diplomski rad se pise u formatu A-4".
+        return [["A4", "A-4", "A 4"]]
     if check_id == "font":
         return [[str(v)] for v in (value if isinstance(value, list) else [value])]
     if check_id in ("font-size", "line-spacing"):
@@ -249,6 +299,7 @@ def verify(claim: dict) -> dict:
     qualifier = QUALIFIERS.search(quote)
     disclaimer = document_disclaimer(rel) if rel else None
     choice = is_choice(check_id, value, quote)
+    tail = truncated_tail(rel, page, quote) if (rel and anchored) else None
     return {
         **claim,
         "anchored": anchored,
@@ -256,10 +307,11 @@ def verify(claim: dict) -> dict:
         "qualifier": qualifier.group(0) if qualifier else None,
         "documentDisclaimer": disclaimer,
         "isChoice": choice,
+        "truncatedTail": tail,
         # `pass` znaci samo da tvrdnja nije mehanicki neispravna. Kvalifikator i odricaj dokumenta
         # su razlozi za ljudsku odluku, ne za odbacivanje.
         "mechanicalPass": anchored and derivable,
-        "needsHuman": bool(qualifier) or bool(disclaimer) or choice,
+        "needsHuman": bool(qualifier) or bool(disclaimer) or choice or bool(tail),
         "reasons": reasons,
     }
 
@@ -289,6 +341,9 @@ def main() -> None:
     for r in results:
         if not r["mechanicalPass"]:
             print(f"    PAD [{r.get('checkId')}] {r.get('file')} str.{r.get('page')}: {'; '.join(r['reasons'])}")
+    for r in human:
+        if r["truncatedTail"]:
+            print(f"    COVJEK [{r.get('checkId')}] CITAT ODSJECEN, recenica se nastavlja: ...{r['truncatedTail'][:80]}")
     for r in human:
         if r["isChoice"]:
             print(f"    COVJEK [{r.get('checkId')}] IZBOR, ne ciljana vrijednost: {squash(r.get('quote',''))[:90]}")
