@@ -35,7 +35,10 @@ beforeAll(async () => {
   // eslint-disable-next-line no-new-func
   const factory = new Function(`${bundleJs}\n;return LektaTitlePage;`);
   LektaTitlePage = factory();
-});
+// Globalni hookTimeout je 30 s (vitest.config.ts, 02bba5c), ali ovaj hook gradi esbuild bundle
+// i pod punim paralelnim runom prijedje i to: izmjereno 2026-08-20, pao je na 30 s dok su sva
+// 4 testa prosla, a izolirano traje ~10 s. Per-file granica da se ne dira dijeljena konfiguracija.
+}, 120000);
 
 describe('title-page-web.ts esbuild-IIFE-eval harness (B5.2)', () => {
   it('bundle izlaze buildTitlePage/titlePageText/renderTemplateSheet/lineStyleCss/LEVEL_SLUGS', () => {
