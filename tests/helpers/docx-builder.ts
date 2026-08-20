@@ -52,6 +52,10 @@ export interface DocSpec {
   pageCm?: { w: number; h: number }; // default A4 21 x 29,7
   marginsCm?: { top: number; right: number; bottom: number; left: number };
   footnotes?: (string | FootnoteSpec)[]; // fusnote (string = goli tekst, ili FootnoteSpec s oblikom); word/footnotes.xml (id 1..N)
+  /** Biljeske na KRAJU dokumenta (word/endnotes.xml). Word ih tretira odvojeno od fusnota:
+   *  dokument koji ih koristi nema nijednu `w:footnote`, pa je do 2026-08-20 analiza javljala
+   *  "Nije pronadjena nijedna Word fusnota" iako biljeske postoje. */
+  endnotes?: (string | FootnoteSpec)[];
   footer?: FooterSpec; // podnožje s brojem stranice na ZAVRŠNOJ sekciji (dokument-level sectPr)
   pageNumberStart?: number; // w:pgNumType w:start na završnoj sekciji (npr. glavni tekst numeriran od 1)
 }
@@ -167,7 +171,7 @@ const STYLES_XML =
   `<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/></w:style>` +
   `</w:styles>`;
 
-function contentTypesXml(hasFootnotes: boolean, hasFooter = false): string {
+function contentTypesXml(hasFootnotes: boolean, hasFooter = false, hasEndnotes = false): string {
   return (
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
     `<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">` +
@@ -177,6 +181,9 @@ function contentTypesXml(hasFootnotes: boolean, hasFooter = false): string {
     `<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>` +
     (hasFootnotes
       ? `<Override PartName="/word/footnotes.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml"/>`
+      : '') +
+    (hasEndnotes
+      ? `<Override PartName="/word/endnotes.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml"/>`
       : '') +
     (hasFooter
       ? `<Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>`
@@ -199,6 +206,21 @@ function footnotesXml(notes: (string | FootnoteSpec)[]): string {
   return (
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
     `<w:footnotes xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">${body}</w:footnotes>`
+  );
+}
+
+/** word/endnotes.xml s biljeskama id 1..N. Isti oblik kao footnotesXml; Wordovi separatori
+ *  (id 0 i -1) se ne emitiraju, kao ni u footnotesXml. */
+function endnotesXml(notes: (string | FootnoteSpec)[]): string {
+  const body = notes
+    .map((n, i) => {
+      const spec: ParaSpec = typeof n === 'string' ? { text: n } : { ...n };
+      return `<w:endnote w:id="${i + 1}">${paraXml(spec)}</w:endnote>`;
+    })
+    .join('');
+  return (
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+    `<w:endnotes xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">${body}</w:endnotes>`
   );
 }
 
@@ -308,14 +330,16 @@ export function zipStore(files: ZipFileSpec[]): Uint8Array {
 export function buildDocx(spec: DocSpec, extraFiles: ZipFileSpec[] = []): Uint8Array {
   const enc = new TextEncoder();
   const hasFootnotes = !!spec.footnotes?.length;
+  const hasEndnotes = !!spec.endnotes?.length;
   const hasFooter = !!spec.footer;
   const files = [
-    { name: '[Content_Types].xml', data: enc.encode(contentTypesXml(hasFootnotes, hasFooter)) },
+    { name: '[Content_Types].xml', data: enc.encode(contentTypesXml(hasFootnotes, hasFooter, hasEndnotes)) },
     { name: '_rels/.rels', data: enc.encode(RELS) },
     { name: 'word/document.xml', data: enc.encode(documentXml(spec)) },
     { name: 'word/styles.xml', data: enc.encode(spec.stylesXml ?? STYLES_XML) },
   ];
   if (hasFootnotes) files.push({ name: 'word/footnotes.xml', data: enc.encode(footnotesXml(spec.footnotes!)) });
+  if (hasEndnotes) files.push({ name: 'word/endnotes.xml', data: enc.encode(endnotesXml(spec.endnotes!)) });
   if (hasFooter) {
     files.push({ name: 'word/footer1.xml', data: enc.encode(footerXml(spec.footer!)) });
     files.push({ name: 'word/_rels/document.xml.rels', data: enc.encode(DOCUMENT_RELS) });

@@ -273,13 +273,13 @@
       "outcome": "review",
       "before": {
         "checkCount": 35,
-        "passCount": 16,
-        "score": 75
+        "passCount": 15,
+        "score": 74
       },
       "after": {
         "checkCount": 35,
-        "passCount": 20,
-        "score": 87
+        "passCount": 19,
+        "score": 86
       },
       "beforeEntryCount": 8,
       "afterEntryCount": 8,
@@ -328,13 +328,13 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 9,
-        "score": 60
+        "passCount": 8,
+        "score": 56
       },
       "after": {
         "checkCount": 19,
-        "passCount": 11,
-        "score": 69
+        "passCount": 10,
+        "score": 67
       },
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
@@ -502,13 +502,13 @@
       "outcome": "review",
       "before": {
         "checkCount": 42,
-        "passCount": 21,
-        "score": 81
+        "passCount": 20,
+        "score": 80
       },
       "after": {
         "checkCount": 42,
-        "passCount": 25,
-        "score": 91
+        "passCount": 24,
+        "score": 90
       },
       "beforeEntryCount": 9,
       "afterEntryCount": 9,
@@ -559,12 +559,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 38,
-        "passCount": 19,
-        "score": 73
+        "passCount": 18,
+        "score": 72
       },
       "after": {
         "checkCount": 38,
-        "passCount": 24,
+        "passCount": 23,
         "score": 88
       },
       "beforeEntryCount": 9,
