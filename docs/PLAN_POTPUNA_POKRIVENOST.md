@@ -546,14 +546,20 @@ Popravi.
 - Stanje nakon oba ispravka: font, prored, poravnanje, margine i format papira se RJESAVAJU,
   tekst ostaje netaknut, nema regresija, paket ostaje cjelovit.
 
-#### Nalaz: velicina teksta se ne rjesava
-- Na SVAKOM profilu iz uzorka "Velicina osnovnog teksta" ostaje nerijesena, iako je popravak
-  ponudjen, `deep` ukljucen i stil nosi ciljanu vrijednost. Provjereno nad izlaznim XML-om:
-  `<w:sz w:val="20"/>` ostaje i nakon popravka, dok `docDefaults` nosi ciljanih `24` (12 pt).
-- Font se u ISTOM prolazu rijesi, pa deep ciscenje radi - ali ocito ne uklanja izravni `<w:sz>`.
-- Zakljucano testom kao ZATECENO stanje: kad se popravi, test pada i tjera da se nalaz skine s
-  popisa. Rupa tako ne moze utihnuti.
-- Sljedeci korak je popravak deep grane `font-fixera` uz golden mjerenje (isti recept kao P3-2b).
+#### ISPRAVAK: "velicina se ne rjesava" bio je kvar generatora, ne proizvoda
+- Prvi prolaz je zabiljezio da "Velicina osnovnog teksta" ostaje nerijesena na svakom profilu i to
+  je proglaseno nalazom nad proizvodom. **Netocno.**
+- `stripDirectFormatting` cisti izravnu velicinu SAMO unutar +-3 polutocke od cilja, i to je
+  namjerno: 10 pt uz cilj 12 pt vjerojatnije je potpis ispod slike nego greska. Za to postoji
+  izricit test, `src/repair/run-level.test.ts`: *"namjerno sitniji tekst (10 pt uz cilj 12 pt) je
+  izvan tolerancije i ostaje"*.
+- Moj generator je birao `cilj - 2 pt`, dakle tocno taj CUVANI slucaj, pa je ispravno i testirano
+  ponasanje izgledalo kao kvar popravka. Ispravak je u generatoru (`cilj + 1 pt`, unutar
+  tolerancije = stvarna pogreska oblikovanja), ne u fixeru.
+- Nakon ispravka velicina se RJESAVA na svim profilima iz uzorka. Test sada drzi obje strane
+  granice, pa se ni tolerancija ne moze tiho promijeniti.
+- Pouka koja se ponavlja kroz cijelu ovu fazu: prije nego se ponasanje proglasi kvarom, treba
+  provjeriti postoji li test koji ga izricito brani. Ovdje je postojao, i bio je u pravu.
 
 #### Sto ostaje za punu pokrivenost
 - Uzorak je 8 profila, ne 410: puna petlja je preskupa za `npm run check` (dvije analize plus

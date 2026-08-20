@@ -158,26 +158,22 @@ describe('closed-loop kroz profile: popravak stvarno rjesava ono sto profil prop
   });
 
   /**
-   * IZMJERENI NALAZ (2026-08-20): velicina osnovnog teksta ostaje NERIJESENA na svakom profilu,
-   * iako je popravak ponudjen, `deep` je ukljucen (kao u sucelju) i stil nosi ciljanu vrijednost.
+   * Velicina teksta: rjesava se kad je odstupanje POGRESKA, a namjerno ostaje kad je izbor.
    *
-   * Font se u istom prolazu rijesi, prored i poravnanje takodjer - dakle deep ciscenje radi, ali
-   * ocito ne uklanja izravni `<w:sz>`. Provjereno nad izlaznim XML-om: `<w:sz w:val="20"/>` ostaje
-   * i nakon popravka, dok `docDefaults` nosi ciljanih 24 (12 pt).
-   *
-   * Tvrdnja je namjerno pisana kao ZATECENO stanje, ne kao ocekivanje: kad se popravi, ovaj test
-   * pada i tjera da se nalaz skine s popisa. Tako rupa ne moze utihnuti.
+   * `stripDirectFormatting` cisti izravnu velicinu samo unutar +-3 polutocke od cilja. Izvan toga
+   * je cuva namjerno, jer 10 pt uz cilj 12 pt vjerojatnije je potpis ispod slike nego greska
+   * (src/repair/run-level.test.ts). Prvi generator je birao cilj minus 2 pt i time modelirao bas
+   * taj cuvani slucaj, pa je ISPRAVNO ponasanje izgledalo kao kvar popravka. Test zato drzi obje
+   * strane granice.
    */
-  it('ZATECENO: velicina teksta se ne rjesava na izravno oblikovanom dokumentu', () => {
-    const withSizeViolation = outcomes.filter(
-      (o) => o.violated.includes('font-size') && o.requested > 0,
-    );
-    expect(withSizeViolation.length, 'mjerenje mora imati barem jedan takav profil').toBeGreaterThan(0);
-    for (const outcome of withSizeViolation) {
+  it('velicina teksta se rjesava kad je odstupanje unutar tolerancije', () => {
+    const withSize = outcomes.filter((o) => o.violated.includes('font-size') && o.requested > 0);
+    expect(withSize.length, 'mjerenje mora imati barem jedan takav profil').toBeGreaterThan(0);
+    for (const outcome of withSize) {
       expect(
         outcome.unresolved.some((title) => /veličina osnovnog teksta/i.test(title)),
-        `${outcome.profileId}: velicina je rijesena - popravi test i skini nalaz s popisa`,
-      ).toBe(true);
+        `${outcome.profileId}: velicina je ostala nerijesena unutar tolerancije`,
+      ).toBe(false);
     }
   });
 });

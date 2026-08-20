@@ -34,9 +34,17 @@ function otherFont(target: string): string {
   return /times/i.test(target) ? 'Arial' : 'Times New Roman';
 }
 
-/** Velicina razlicita od ciljane, a i dalje realna (Word ne voli 0). */
+/**
+ * Velicina razlicita od ciljane, ali UNUTAR tolerancije deep ciscenja (+-3 polutocke).
+ *
+ * Ovo NIJE proizvoljno: `stripDirectFormatting` namjerno CUVA izravnu velicinu koja je izvan
+ * tolerancije, jer 10 pt uz cilj 12 pt vjerojatnije je potpis ispod slike nego greska
+ * (src/repair/run-level.test.ts: "namjerno sitniji tekst ... ostaje"). Prvi generator je birao
+ * cilj minus 2 pt i time modelirao tocno taj cuvan slucaj, pa je izgledalo kao da popravak ne radi.
+ * Jedan pt razlike je stvarna pogreska oblikovanja i unutar je tolerancije.
+ */
 function otherSizePt(target: number): number {
-  return target >= 12 ? target - 2 : target + 2;
+  return target + 1;
 }
 
 function otherSpacing(target: number): number {
