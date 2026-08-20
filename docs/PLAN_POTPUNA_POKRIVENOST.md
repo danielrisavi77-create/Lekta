@@ -602,6 +602,25 @@ Popravi.
   ocekuje `[12]`).
 - Ishod nakon ispravka: **329 pass, 57 no-repair, 21 no-rules, 0 unresolved, 0 regression,
   0 error.** Oba `vuka` profila prolaze.
+#### Samoprovjera petlje: dvije greske u vlastitom mjerenju
+- **Razlicite jedinice.** `resolved` je brojao NASLOVE provjera, a `violated` OSI, pa je omjer bio
+  neusporediv i `pass` je znacio samo "barem se nesto promijenilo": profil kojem je od sest osi
+  rijesena jedna prolazio je kao uspjeh. Ispravljeno: svaka prekrsena os mjeri se kroz SVOJ stabilni
+  `checkId` (`format.font.dominant`, `format.size.body`, `format.spacing.body`,
+  `format.justify.body`, `page.margins`, `page.size.*`), i uveden je zaseban ishod `partial`.
+  Brojka je pala **329 -> 282**, dakle bila je precijenjena za 47.
+- **Harness nije mjerio proizvod.** Preostali `partial` bili su gotovo svi na osi `paper-size`.
+  Mehanizam provjeren: `efzg-diplomski` IMA `paper-size` zapis, ali `advisory` bez `autoFixable` -
+  fakultet ga savjetuje, ne propisuje. Zivi engine takve dimenzije demotira
+  (`applyScoredAdvisory`, max 0), a harness nije, pa je kao "neuspjeh popravka" mjerio ono sto
+  uopce nije zahtjev. Nakon primjene iste politike: **323 pass, 6 partial**.
+- Preostalih sest (`efzg-*` x4, `grad-*` x2) svi su na `paper-size`: profil trazi format, ali za tu
+  os nema zapisa s fixerom pa popravak nije ponudjen. Podatkovni posao, ne kvar motora; imenovani su
+  u ratchetu.
+- ZAPAZENO USPUT (dokumentacija, ne kod): `src/profiles/advisory-demotion.ts` u komentaru tvrdi da
+  tu logiku koristi i `resolveProfile` u `golden-entry.ts`, a `golden-entry` izricito pise suprotno
+  (namjerno mjeri sirovi engine). Jedan od dva komentara je zastario i navodi na krivi zakljucak.
+
 - Pouka, treca ovog tipa u ovoj fazi: prije nego se razlika proglasi kvarom, treba provjeriti mjeri
   li harness istu osnovicu koju koristi proizvod.
 

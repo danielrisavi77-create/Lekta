@@ -2,10 +2,19 @@
   "note": "Zatecen ishod closed-loop petlje kroz katalog (P4-3). Brojke smiju rasti u korist 'pass', ali se ne smiju tiho promijeniti. Osvjezi s `npm run closed-loop` pa upisi ovdje.",
   "measuredAt": "2026-08-20",
   "profileCount": 407,
-  "pass": 329,
+  "pass": 323,
+  "partial": 6,
   "noRepair": 57,
   "noRules": 21,
   "unresolved": 0,
   "regression": 0,
-  "error": 0
+  "error": 0,
+  "partialProfiles": [
+    "efzg-diplomski",
+    "efzg-specijalisticki",
+    "efzg-strucni-racunovodstvo",
+    "efzg-zavrsni",
+    "grad-diplomski",
+    "grad-zavrsni"
+  ]
 }

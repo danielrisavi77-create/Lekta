@@ -37,6 +37,7 @@ describe('closed-loop kroz katalog: ishod se ne smije tiho promijeniti', () => {
     expect(count('no-repair'), 'no-repair').toBe(ratchet.noRepair);
     expect(count('no-rules'), 'no-rules').toBe(ratchet.noRules);
     expect(count('unresolved'), 'unresolved').toBe(ratchet.unresolved);
+    expect(count('partial'), 'partial').toBe(ratchet.partial);
   });
 
   /**
@@ -45,6 +46,23 @@ describe('closed-loop kroz katalog: ishod se ne smije tiho promijeniti', () => {
    * (vidi `liveProfile` u pogonu - analiza i popravak MORAJU gledati istu, `effectiveRules`
    * osnovicu, inace petlja prijavi proturjecje kojeg u proizvodu nema).
    */
+  /**
+   * `partial` znaci da je dio prekrsenih osi rijesen, a dio nije - i to je vlastiti ishod, ne
+   * `pass`. Prvo mjerenje ih je spajalo (usporedjivalo je BROJ NASLOVA provjera s BROJEM OSI, dvije
+   * razlicite jedinice) i time precijenilo pokrivenost za 47 profila.
+   *
+   * Zatecenih sest su svi na osi `paper-size` i svi u dvije obitelji: profil trazi format papira,
+   * ali za tu os nema zapisa s fixerom, pa popravak nije ponudjen. To je podatkovni posao, ne kvar
+   * motora - imenovani su da ne utihnu.
+   */
+  it('zatecenih sest djelomicnih profila ostaje imenovano', () => {
+    const partial = report.rows.filter((r) => r.outcome === 'partial').map((r) => r.profileId).sort();
+    expect(partial).toEqual([...ratchet.partialProfiles].sort());
+    for (const row of report.rows.filter((r) => r.outcome === 'partial')) {
+      expect(row.axesRemaining, `${row.profileId}: neocekivana preostala os`).toEqual(['paper-size']);
+    }
+  });
+
   it('nijedan profil ne ostaje bez ijednog rijesenog nalaza', () => {
     const unresolved = report.rows.filter((r) => r.outcome === 'unresolved').map((r) => r.profileId);
     expect(unresolved, 'popravak je izveden, a nista nije rijeseno').toEqual([]);

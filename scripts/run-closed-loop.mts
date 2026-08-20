@@ -28,6 +28,8 @@ const { detectPassRegressions } = await import('../src/analysis/repair-regressio
 const { draftRuleEntriesFor, VERIFIED_PROFILES_WITH_DRAFTS } = await import('../src/profiles/drafts-runtime');
 const { compileEffectiveRules } = await import('../src/profiles/rule-compiler');
 const { normalizeCheckFlags } = await import('../src/profiles/profile-baseline');
+const { applyScoredAdvisory } = await import('../src/profiles/advisory-demotion');
+const { SOURCE_REGISTRY } = await import('../src/verification/verification-registry');
 const { buildViolatingDocx } = await import('../tests/helpers/violating-docx');
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -55,7 +57,49 @@ function liveProfile(profileId: string): Record<string, unknown> {
   // `profile.size.some is not a function` (izmjereno).
   const merged = { ...base, ...compileEffectiveRules(withDrafts as never) } as Record<string, unknown>;
   normalizeCheckFlags(merged);
+  /**
+   * Scored/advisory demotion je PRODUKTNA politika: zivi engine boduje samo verificirani scored
+   * skup, a ostale dimenzije prikazuje informativno (max 0). Golden je namjerno ne primjenjuje jer
+   * mjeri sirovi engine, ali closed-loop mora mjeriti PROIZVOD - inace prijavi kao neuspjeh
+   * popravka ono sto fakultet uopce ne propisuje nego savjetuje (izmjereno: 29 profila je na osi
+   * `paper-size` ispadalo `partial`, a rijec je o `advisory` zapisu bez fixera).
+   */
+  applyScoredAdvisory(
+    merged as never,
+    withDrafts as never,
+    draftRuleEntriesFor(profileId),
+    SOURCE_REGISTRY as never,
+  );
   return merged;
+}
+
+
+/**
+ * Prekrsena OS -> stabilan checkId koji tu os mjeri.
+ *
+ * Ovo je ispravak greske u prvom mjerenju: `resolved` je brojao NASLOVE provjera, a `violated`
+ * OSI - razlicite jedinice, pa je omjer "rijeseno/prekrseno" bio neusporediv i `pass` je znacio
+ * samo "barem nesto se promijenilo". Sada se za svaku prekrsenu os gleda BAS njezina provjera.
+ */
+const AXIS_CHECK_ID: Record<string, string> = {
+  font: 'format.font.dominant',
+  'font-size': 'format.size.body',
+  'line-spacing': 'format.spacing.body',
+  justify: 'format.justify.body',
+  margins: 'page.margins',
+};
+
+/** Format stranice ima dinamican naslov (`page.size.*`), pa se prepoznaje po prefiksu. */
+function checkForAxis(checks: Array<{ id?: string | null; title?: string }>, axis: string) {
+  if (axis === 'paper-size') return checks.find((c) => typeof c.id === 'string' && c.id.startsWith('page.size'));
+  const wanted = AXIS_CHECK_ID[axis];
+  return wanted ? checks.find((c) => c.id === wanted) : undefined;
+}
+
+/** Provjera je rijesena kad vise ne kaznjava dokument (puni bodovi ili nije bodovana). */
+function axisResolved(check: { earned?: number; max?: number } | undefined): boolean {
+  if (!check) return false;
+  return (check.max ?? 0) === 0 || (check.earned ?? 0) >= (check.max ?? 0);
 }
 
 type Outcome =
@@ -67,6 +111,8 @@ type Outcome =
   | 'no-repair'
   /** Popravak je izveden, ali nijedan nalaz nije nestao. */
   | 'unresolved'
+  /** Dio prekrsenih osi je rijesen, dio nije. Nije dokaz pokrivenosti. */
+  | 'partial'
   /** Popravak je oborio provjeru koja je prolazila, ili je promijenio tekst rada. */
   | 'regression'
   /** Fixer je bacio ili je paket ispao neispravan. */
@@ -77,6 +123,10 @@ interface Row {
   outcome: Outcome;
   violated: string[];
   requested: number;
+  /** Osi koje su nakon popravka prestale kaznjavati dokument. */
+  axesResolved: string[];
+  /** Osi koje su i dalje prekrsene nakon popravka. */
+  axesRemaining: string[];
   resolved: number;
   regressions: number;
   textPreserved: boolean;
@@ -84,7 +134,7 @@ interface Row {
 }
 
 async function runProfile(profileId: string): Promise<Row> {
-  const base: Row = { profileId, outcome: 'error', violated: [], requested: 0, resolved: 0, regressions: 0, textPreserved: true };
+  const base: Row = { profileId, outcome: 'error', violated: [], requested: 0, axesResolved: [], axesRemaining: [], resolved: 0, regressions: 0, textPreserved: true };
   try {
     const profile = liveProfile(profileId);
     const { bytes, violated } = await buildViolatingDocx(profile);
@@ -107,16 +157,27 @@ async function runProfile(profileId: string): Promise<Row> {
       { profileId, profile },
     );
 
-    const failing = (checks: Array<{ title: string; earned?: number; max?: number }>): Set<string> =>
-      new Set(checks.filter((c) => (c.max ?? 0) > 0 && (c.earned ?? 0) < (c.max ?? 0)).map((c) => c.title));
-    const beforeFailing = failing(before.checks ?? []);
-    const afterFailing = failing(after.checks ?? []);
-    const resolved = [...beforeFailing].filter((t) => !afterFailing.has(t)).length;
+    const afterChecks = (after.checks ?? []) as Array<{ id?: string | null; title?: string; earned?: number; max?: number }>;
+    const axesResolved = violated.filter((axis) => axisResolved(checkForAxis(afterChecks, axis)));
+    const axesRemaining = violated.filter((axis) => !axesResolved.includes(axis));
     const regressions = detectPassRegressions(before.checks ?? [], after.checks ?? []).length;
 
-    const row: Row = { profileId, outcome: 'pass', violated, requested: requests.length, resolved, regressions, textPreserved: true };
+    const row: Row = {
+      profileId,
+      outcome: 'pass',
+      violated,
+      requested: requests.length,
+      axesResolved,
+      axesRemaining,
+      resolved: axesResolved.length,
+      regressions,
+      textPreserved: true,
+    };
     if (regressions > 0) return { ...row, outcome: 'regression' };
-    if (resolved === 0) return { ...row, outcome: 'unresolved' };
+    if (!axesResolved.length) return { ...row, outcome: 'unresolved' };
+    // `partial` je vlastiti ishod, ne `pass`: profil kojem je od sest osi rijesena jedna NIJE
+    // dokazan. Prvo mjerenje ih je spajalo i time precijenilo pokrivenost.
+    if (axesRemaining.length) return { ...row, outcome: 'partial' };
     return row;
   } catch (error) {
     return { ...base, note: error instanceof Error ? error.message.slice(0, 120) : String(error) };

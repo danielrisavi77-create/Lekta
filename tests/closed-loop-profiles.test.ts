@@ -25,6 +25,8 @@ import { assertPackageIntact } from './helpers/docx-package-assert';
 import { draftRuleEntriesFor, VERIFIED_PROFILES_WITH_DRAFTS } from '../src/profiles/drafts-runtime';
 import { compileEffectiveRules } from '../src/profiles/rule-compiler';
 import { normalizeCheckFlags } from '../src/profiles/profile-baseline';
+import { applyScoredAdvisory } from '../src/profiles/advisory-demotion';
+import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { DEEP_CAPABLE } from '../src/ui/repair-panel';
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
@@ -64,6 +66,19 @@ function liveProfile(profileId: string): Record<string, unknown> {
   // `profile.size.some is not a function` (izmjereno).
   const merged = { ...base, ...compileEffectiveRules(withDrafts as never) } as Record<string, unknown>;
   normalizeCheckFlags(merged);
+  /**
+   * Scored/advisory demotion je PRODUKTNA politika: zivi engine boduje samo verificirani scored
+   * skup, a ostale dimenzije prikazuje informativno (max 0). Golden je namjerno ne primjenjuje jer
+   * mjeri sirovi engine, ali closed-loop mora mjeriti PROIZVOD - inace prijavi kao neuspjeh
+   * popravka ono sto fakultet uopce ne propisuje nego savjetuje (izmjereno: 29 profila je na osi
+   * `paper-size` ispadalo `partial`, a rijec je o `advisory` zapisu bez fixera).
+   */
+  applyScoredAdvisory(
+    merged as never,
+    withDrafts as never,
+    draftRuleEntriesFor(profileId),
+    SOURCE_REGISTRY as never,
+  );
   return merged;
 }
 
