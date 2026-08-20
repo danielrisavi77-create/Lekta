@@ -164,6 +164,11 @@ export const INDEX_SHIFTING_FIXERS: ReadonlySet<string> = new Set<string>([
   'title-page-fixer', // zamjenjuje omedjenu prvu stranicu (drugaciji broj odlomaka)
   'bibliography-repair-fixer', // moze ukloniti duplicirane zapise
   'citation-bibliography-sync-fixer', // moze dodati nedostajuce zapise
+  // Izmjereno 2026-08-20 (src/repair/index-shift-pairs.test.ts): u `landscape` grani umece odlomak
+  // s portret sekcijom, pa pomice mete strukturnim fixerima iza sebe. Za razliku od
+  // `element-caption-fixer`, premjestanje u ovu fazu NE oslijepi njega samog: golden pokazuje da se
+  // i dalje primjenjuje (nijedan `applied` se nije promijenio), mijenja se samo redoslijed unosa.
+  'table-figure-rescue-fixer',
 ]);
 
 /**
@@ -195,11 +200,12 @@ export const INSERTS_BUT_ANCHOR_BOUND: ReadonlySet<string> = new Set<string>(['e
 export const INDEX_SHIFTING_ORDER: ReadonlyMap<string, number> = new Map<string, number>([
   ['bibliography-repair-fixer', 0], // popis literature: kraj dokumenta
   ['citation-bibliography-sync-fixer', 1], // zapisi uz literaturu
-  ['required-section-fixer', 2], // umetanje obveznih dijelova (moze biti bilo gdje)
-  ['section-insert-fixer', 3],
-  ['toc-field-fixer', 4], // sadrzaj: pocetak-sredina
-  ['empty-paragraph-fixer', 5], // globalno, ali front matter je zasticen
-  ['title-page-fixer', 6], // sam pocetak dokumenta: zadnji
+  ['table-figure-rescue-fixer', 2], // tablice/slike: tijelo rada, iza literature
+  ['required-section-fixer', 3], // umetanje obveznih dijelova (moze biti bilo gdje)
+  ['section-insert-fixer', 4],
+  ['toc-field-fixer', 5], // sadrzaj: pocetak-sredina
+  ['empty-paragraph-fixer', 6], // globalno, ali front matter je zasticen
+  ['title-page-fixer', 7], // sam pocetak dokumenta: zadnji
 ]);
 
 /**

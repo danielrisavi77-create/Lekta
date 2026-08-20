@@ -462,13 +462,20 @@ Cilj: ne moze se tvrditi pokrivenost programa koji nikad nije evidentiran. Danas
 - Golden harness je ovdje odradio tocno ono zbog cega postoji: zaustavio je izmjenu koja je
   izgledala kao ocit popravak, a mjerljivo je stetila.
 
-### P3-2b. `table-figure-rescue-fixer`: isti obrazac, jos neizmjeren
-- Umece `<w:p>` (`src/repair/table-figure-rescue-fixer.ts:298`, odlomak s portret sekcijom) i takodjer
-  nije u `INDEX_SHIFTING_FIXERS`. Nije mijenjan bez mjerenja, jer je `element-caption` upravo
-  pokazao da "ocit" popravak moze biti stetan.
-- AC: isto mjerenje kao za `element-caption` (broj odlomaka prije/poslije + golden), pa svrstavanje
-  u `INDEX_SHIFTING_FIXERS` ili u `INSERTS_BUT_ANCHOR_BOUND` s obrazlozenjem.
-- Velicina: S. Prioritet: P2.
+### P3-2b. `table-figure-rescue-fixer` : IZMJEREN i svrstan (2026-08-20)
+- Isti obrazac kao `element-caption-fixer`, ali SUPROTAN ishod, sto je i bio razlog da se mjeri
+  umjesto da se zakljuci po analogiji.
+- Izmjereno: u `landscape` grani (rotacija siroke tablice, uz izricitu korisnikovu potvrdu) umece
+  odlomak s portret sekcijom, pa pomice mete strukturnim fixerima iza sebe.
+- Premjestanje u strukturnu fazu je provjereno golden harnessom: **nijedan `applied` broj se nije
+  promijenio**, mijenja se samo redoslijed unosa u changelogu i u `skipped` (5 redaka premjesteno,
+  bez ijedne promjene sadrzaja). Za razliku od `element-caption-fixera`, ovaj se u drugoj fazi NE
+  oslijepi.
+- Zato je svrstan u `INDEX_SHIFTING_FIXERS` s rangom 2 (tijelo rada, iza literature). Test iz P3-2
+  sada trazi da bude u tocno jednom od dva skupa i za njega.
+- ZAMKA ZABILJEZENA USPUT: `vitest -u` nad ovim testom pada u timeout od 60 s i pritom UKLONI
+  snapshot datoteku kao zastarjelu (`1 files removed`), pa izgleda kao da je golden nestao. Ispravno
+  je `npx vitest run tests/repair-golden.test.ts -u --testTimeout=600000`.
 
 ### P3-3. Idempotencija i no-pass-regression kao obavezni gard po fixeru
 - AC: svaki od 31 fixera ima test da drugo pokretanje nad vlastitim izlazom ne mijenja bajtove

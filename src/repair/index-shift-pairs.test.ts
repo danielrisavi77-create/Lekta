@@ -122,3 +122,69 @@ describe('P3-2: fixer koji mijenja broj odlomaka mora biti proglasen', () => {
     ).toBe(false);
   });
 });
+
+describe('P3-2b: table-figure-rescue-fixer', () => {
+  /**
+   * Isti obrazac kao kod `element-caption-fixer`: fixer umece odlomak, pa treba znati smije li se
+   * izvoditi u prvoj fazi. Umetanje se dogadja samo u `landscape` grani (rotacija siroke tablice),
+   * i to uz izricitu korisnikovu potvrdu, ali jedan umetnut odlomak pomice mete jednako kao deset.
+   */
+  const tableXml =
+    '<w:tbl><w:tblPr><w:tblW w:w="9000" w:type="dxa"/></w:tblPr><w:tblGrid><w:gridCol w:w="9000"/></w:tblGrid>' +
+    '<w:tr><w:tc><w:tcPr><w:tcW w:w="9000"/></w:tcPr><w:p><w:r><w:t>Podatak</w:t></w:r></w:p></w:tc></w:tr></w:tbl>';
+  const beforeP = '<w:p><w:r><w:t>Prije tablice.</w:t></w:r></w:p>';
+  const afterP = '<w:p><w:r><w:t>Poslije tablice.</w:t></w:r></w:p>';
+  const body = `<w:document><w:body>${beforeP}${tableXml}${afterP}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/></w:sectPr></w:body></w:document>`;
+
+  async function rescueDocx(): Promise<Uint8Array> {
+    const enc = new TextEncoder();
+    return writeZip([
+      { name: 'word/document.xml', data: enc.encode(body) },
+      { name: 'word/styles.xml', data: enc.encode('<w:styles><w:style w:styleId="Normal"/></w:styles>') },
+    ]);
+  }
+
+  it('u landscape grani umece odlomak, pa mora biti izricito svrstan', async () => {
+    const paragraphCount = (xml: string): number => (xml.match(/<w:p[ >]/g) ?? []).length;
+    const out = await applyFixers(await rescueDocx(), [
+      {
+        ruleId: 'rescue',
+        fixerId: 'table-figure-rescue-fixer',
+        params: {
+          version: 1,
+          tables: [
+            {
+              id: 't',
+              bodyChildIndex: 1,
+              anchorFingerprint: anchorFingerprintForXml('table', tableXml),
+              landscape: {
+                enabled: true,
+                confirmed: true,
+                beforeFingerprint: anchorFingerprintForXml('figure', beforeP),
+                afterFingerprint: anchorFingerprintForXml('figure', afterP),
+              },
+              actions: {},
+            },
+          ],
+          figures: [],
+        },
+      },
+    ]);
+
+    expect(out.integrityFailure).toBeUndefined();
+    expect(out.changelog.length, 'popravak se doista morao primijeniti').toBeGreaterThan(0);
+
+    const entries = await readZip(out.docxBytes);
+    const after = new TextDecoder().decode(entries.find((e) => e.name === 'word/document.xml')!.data);
+    const added = paragraphCount(after) - paragraphCount(body);
+    expect(added, 'landscape grana umece odlomak s portret sekcijom').toBeGreaterThan(0);
+
+    const declared =
+      INDEX_SHIFTING_FIXERS.has('table-figure-rescue-fixer') ||
+      INSERTS_BUT_ANCHOR_BOUND.has('table-figure-rescue-fixer');
+    expect(
+      declared,
+      `table-figure-rescue-fixer umece ${added} odlomaka; mora biti ili index-shifting ili zabiljezen sudar`,
+    ).toBe(true);
+  });
+});

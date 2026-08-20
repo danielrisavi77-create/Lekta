@@ -485,12 +485,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "before": "postojeći natpisi ili sidra",
         },
         {
-          "after": "spašene tablice i slike",
-          "before": "tablice i slike",
-        },
-        {
           "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
           "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
+        },
+        {
+          "after": "spašene tablice i slike",
+          "before": "tablice i slike",
         },
       ],
       "markers": {
@@ -14024,9 +14024,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         ],
       },
       "skipped": [
-        "table-figure-rescue-fixer-rule",
         "section-surgery-fixer-rule",
         "consistency-fixer-rule",
+        "table-figure-rescue-fixer-rule",
         "required-section-fixer-rule",
         "empty-paragraph-fixer-rule",
         "title-page-fixer-rule",
