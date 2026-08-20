@@ -664,6 +664,59 @@ Popravi.
 - Tri jedinice nisu dale nijednog kandidata (`fsb`, `geof`, `pravst`): njihovi snapshoti ili nemaju
   tekstualni sloj ili ne sadrze pravila oblikovanja. Te ostaju za rucni pregled.
 
+## VERIFIKACIJSKI LANAC: mehanicka provjera + adversarijalni trio (2026-08-20)
+
+Zamjena za "covjek upisuje svaki checkId". Nacelo: tri agenta koja citaju isti tekst dijele iste
+sljepoce, pa SLAGANJE NIJE TOCNOST. Zato lanac ima dva sloja koja ne dijele te sljepoce.
+
+### Sloj 1: `scripts/verify_rule_claims.py` (deterministicki, bez modela)
+- **SIDRO**: citat se mora doslovno nalaziti u tekstu NAVEDENE stranice.
+- **IZVOD**: vrijednost se mora moci izvesti iz citata (broj/naziv se u njemu doista pojavljuje).
+- **KVALIFIKATOR**: citat koji sadrzi ublazavanje (`preporuceni`, `barem`, `do 3`, `iznimno`) ili
+  uvjet (`ukoliko`, `ako se`, `ovisno o`, `neka bude`) ide covjeku - odluka je li nesto obveza nije
+  citanje nego politika bodovanja.
+- Dokazano da grize: podmetnuta tri kvara (citat s krive stranice, IZMISLJEN citat, vrijednost koja
+  se ne izvodi) - sva tri pala. Usput nadjen bug u samom verifikatoru: odbijao je ispravnu tvrdnju
+  jer citat pise `2.5`, a trazio se samo `2,5`.
+- Rupa nadjena gledajuci sto je PROSLO: "Ukoliko se koristi font Arial ... moze koristi i font
+  velicine 11" proslo je bez zastavice iako vrijedi samo uvjetno. Dodani uvjetni kvalifikatori.
+
+### Sloj 2: adversarijalni trio (ne tri potvrde)
+1. **Izvlacenje** - predlaze vrijednost + citat + lokator.
+2. **Slijepo ponovno izvlacenje** - isti izvor, bez uvida u prvi odgovor.
+3. **Pobijanje** - pretpostavlja da su tvrdnje pogresne i trazi proturjecje, doseg i modalitet.
+
+### Pilot na FER-u: 4 od 5 tvrdnji OBORENO
+- Mehanicki: 7/7 citata doslovnih, nijedna kriva stranica, nijedan izmisljen. Greske NISU bile u
+  prijepisu nego u TUMACENJU - tocno ono sto stroj ne smije odlucivati.
+- Slijepo izvlacenje naslo je sto prvo nije: razliku izmedju obveze i vrijednosti (glagol
+  obvezujuci, ali vrijednost RASPON), sest dodatnih osi (zabrana preslikanih margina, razmak
+  izmedju odlomaka, naslovi po razinama, natpisi, tablice, font za kod) i zamku s numeracijom
+  (fizicka stranica 8 = tiskana oznaka 3).
+- Pobijanje je naslo ono najvaznije: dokument ima TRI RAZINE MODALITETA (`mora`/`ne smije` -
+  `treba` - `preporuceni`/`neka bude`) i **nijedna od pet tvrdnji nije u najjacoj**. Dokument se i
+  sam odredjuje: *"Ovaj rad daje preporuke za pisanje..."*, autor je jedan nastavnik (2013.), sto je
+  po hijerarhiji iz CLAUDE.md NAJNIZA razina autoriteta.
+- Konkretne stete koje bi bodovanje tih pravila napravilo:
+  - `font = Times New Roman` prijavilo bi kao gresku SUKLADAN kod (mora biti Courier New);
+  - `font-size = 12` prijavilo bi sukladne naslove (14/13/12), natpise (9/10), kod (11/10) i tablice;
+  - `margins = 2.5` uniformno **kodira NESUKLADAN dokument kao sukladan**, jer lijeva margina mora
+    biti veca zbog uveza;
+  - `line-spacing = 1.2` obara rad s 1,0 ili 1,4, a 1,2 uopce nije propis nego opis predloska.
+
+### Zakljucak koji mijenja plan
+`fer-diplomski` i `fer-zavrsni` NISU rupa u pokrivenosti. Njihovih 8 pravila je vec `advisory`,
+`scoredTotal: 0`, i to je TOCNO stanje: FER u ovom dokumentu doista ne propisuje oblikovanje.
+Postojeci komentar u draftu to vec kaze. Isto mjerilo treba primijeniti na ostalih 16 profila iz
+P2-3 prije nego ih se proglasi nepotpunima - dio njih je vjerojatno takodjer tocan.
+
+### Nadjen kvar u zivim podacima (za odluku)
+`fer-diplomski` i `fer-zavrsni` imaju `citation-style = "ieee"` (i `rules.recommendedCitation`),
+a citat koji ga potkrepljuje glasi: *"Ako je jako bitno, u tekst se moze izravno staviti referenca
+na neku literaturu..."* - sto o IEEE stilu ne govori nista. Provjereno neovisno, ne po agentu.
+Status je `advisory` pa NE boduje, ali `recommendedCitation` odredjuje koji citatni motor radi nad
+dokumentom, dakle ucinak postoji. Traba reverifikacija: ili naci pravi citat, ili spustiti tvrdnju.
+
 ---
 
 ## FAZA P5: stvarni korpus i Word oracle
