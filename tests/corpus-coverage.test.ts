@@ -8,6 +8,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { buildCoverage, renderCoverageMarkdown, renderGapBacklog, KNOWN_HARD, KNOWN_ADVISORY } from './corpus/coverage/coverage-report';
+import committedCoverage from './corpus/reports/check-coverage.json';
 import { ATOMIC_CASES } from './corpus/catalog/atomic';
 import { VALID_CONTROL_CASES } from './corpus/catalog/valid-controls';
 import { BOUNDARY_CASES } from './corpus/catalog/boundary';
@@ -84,25 +85,28 @@ describe('Lekta Error Corpus - coverage izvjestaj (faza 6)', () => {
    * zasebnog popisa koji bi mogao odlutati na svoju stranu.
    */
   describe('registar poznatih rupa ne smije zastarjeti', () => {
-    it('KNOWN_HARD ne sadrzi checkId koji vec ima fail-slucaj', () => {
+    /**
+     * Zapis je ZIV samo ako njegov razlog stvarno zavrsi u gap-backlogu. Slabija tvrdnja
+     * ("checkId nema fail-slucaj") propusta drugi oblik smrti: kad provjera postane informativna,
+     * razlog dolazi iz KNOWN_ADVISORY grane, pa KNOWN_HARD zapis ostaje nepročitan. Oba su oblika
+     * izmjerena 2026-08-20 (19 pokrivenih + 2 informativna od 23 zapisa).
+     */
+    it('svaki KNOWN_HARD zapis stvarno daje razlog nekoj rupi', () => {
       const rep = buildCoverage();
-      const covered = new Set(
-        rep.rows.filter((r) => r.checkId && (r.hasAtomic || r.hasBoundary)).map((r) => r.checkId as string),
-      );
-      const dead = Object.keys(KNOWN_HARD).filter((id) => covered.has(id));
-      expect(
-        dead,
-        'ovi zapisi tvrde da se rupa ne moze zatvoriti, a vec je zatvorena; obrisi ih iz KNOWN_HARD',
-      ).toEqual([]);
+      const byId = new Map(rep.gaps.map((g) => [g.checkId, g]));
+      const dead = Object.entries(KNOWN_HARD)
+        .filter(([id, entry]) => byId.get(id)?.reason !== entry.reason)
+        .map(([id]) => id);
+      expect(dead, 'ovi zapisi se nikad ne citaju; obrisi ih iz KNOWN_HARD').toEqual([]);
     });
 
-    it('KNOWN_ADVISORY ne sadrzi checkId koji vec ima valid-control', () => {
+    it('svaki KNOWN_ADVISORY zapis stvarno daje razlog nekoj rupi', () => {
       const rep = buildCoverage();
-      const covered = new Set(
-        rep.rows.filter((r) => r.checkId && r.hasValidControl).map((r) => r.checkId as string),
-      );
-      const dead = Object.keys(KNOWN_ADVISORY).filter((id) => covered.has(id));
-      expect(dead, 'obrisi ih iz KNOWN_ADVISORY: valid-control vec postoji').toEqual([]);
+      const byId = new Map(rep.gaps.map((g) => [g.checkId, g]));
+      const dead = Object.entries(KNOWN_ADVISORY)
+        .filter(([id, entry]) => byId.get(id)?.reason !== entry.reason)
+        .map(([id]) => id);
+      expect(dead, 'ovi zapisi se nikad ne citaju; obrisi ih iz KNOWN_ADVISORY').toEqual([]);
     });
 
     it('svaki zapis pripada provjeri koja stvarno postoji u inventaru', () => {
@@ -111,5 +115,23 @@ describe('Lekta Error Corpus - coverage izvjestaj (faza 6)', () => {
       const orphans = [...Object.keys(KNOWN_HARD), ...Object.keys(KNOWN_ADVISORY)].filter((id) => !known.has(id));
       expect(orphans, 'zapis gadja checkId kojeg nema u inventaru provjera').toEqual([]);
     });
+  });
+
+  /**
+   * Commitani artefakt mora odgovarati zivom izracunu.
+   *
+   * Zateceno 2026-08-20: `check-coverage.json` je tvrdio 3 rupe dok ih je zivo bilo 7, i za
+   * `citation.direct-quote-locator` je tvrdio `hasAtomic: true` iako taj checkId ima samo
+   * valid-control, dakle nijedan dokaz da provjera moze PASTI. Artefakt je time PRECJENJIVAO
+   * pokrivenost, sto je tocno suprotno od svrhe modula ("NE lazira 100%").
+   *
+   * Nista to nije usporedjivalo, pa je odlutao tiho. Isti obrazac kao repair-real-corpus.test.ts,
+   * koji svoj generirani izvjestaj usporedjuje na isti nacin.
+   */
+  it('commitani check-coverage.json odgovara zivom izracunu', () => {
+    expect(
+      JSON.parse(JSON.stringify(buildCoverage())),
+      'artefakt je odlutao: pokreni `npm run corpus:coverage` i commitaj rezultat',
+    ).toEqual(committedCoverage);
   });
 });

@@ -83,14 +83,15 @@ const CORE = new Set(['formatting', 'structure', 'citations', 'elements']);
  * provjera ne postane rupa, pa postoci nisu bili krivi; steta je bila u tome sto se preostale
  * PRAVE rupe utope medju laznima i nitko ih ne zatvori.
  *
- * Cuva ih tripwire u tests/corpus-coverage.test.ts: checkId koji ima fail-slucaj ne smije biti
- * ovdje. Zato je registar izvezen.
+ * Zapis moze umrijeti na DVA nacina, pa tripwire provjerava jaci uvjet nego "nema fail-slucaj":
+ * uz pokrivenost, zapis prestane biti citan i kad provjera postane informativna, jer razlog tada
+ * dolazi iz KNOWN_ADVISORY grane. Tako su 2026-08-20 umrla jos dva zapisa (page.numbers.scheme,
+ * scope.intro-conclusion-ratio). Zato tripwire trazi da razlog SVAKOG zapisa stvarno zavrsi u
+ * gap-backlogu, a ne samo da provjera nije pokrivena. Oba registra su zato izvezena.
  */
 export const KNOWN_HARD: Record<string, { reason: string; desiredTest: string }> = {
-  'page.numbers.scheme': { reason: 'Treba eksplicitni format numeriranja (pgNumType); builder ga ne emitira.', desiredTest: 'Dodaj pgNumType; postavi krivi format (rimski u tijelu).' },
   'citation.style-automation': { reason: 'Savjetodavna, uvijek-warn provjera (nema pass stanja).', desiredTest: 'Nije atomski testabilna kao fail; eventualno valid-control da ostaje info.' },
   'manual.checks': { reason: 'Savjetodavni podsjetnik, uvijek-warn (nema pass stanja).', desiredTest: 'Nije atomski testabilna kao fail.' },
-  'scope.intro-conclusion-ratio': { reason: 'Dijeljena baza vec warna (omjer Uvoda/Zakljucka).', desiredTest: 'Ugodi opseg Uvoda/Zakljucka baze da prolazi, pa poremeti omjer.' },
 };
 
 /**

@@ -1,14 +1,14 @@
 {
   "summary": {
-    "totalChecks": 71,
-    "scoredChecks": 54,
-    "scoredWithAtomic": 51,
-    "scoredAtomicPct": 94,
-    "scoredWithFailCase": 52,
-    "scoredFailCasePct": 96,
+    "totalChecks": 73,
+    "scoredChecks": 49,
+    "scoredWithAtomic": 45,
+    "scoredAtomicPct": 92,
+    "scoredWithFailCase": 46,
+    "scoredFailCasePct": 94,
     "checksWithValidControl": 20,
     "checksWithBoundary": 4,
-    "atomicCases": 53,
+    "atomicCases": 50,
     "validControlCases": 21,
     "boundaryCases": 14,
     "intakeCodes": 6
@@ -108,8 +108,8 @@
       "title": "Lokator uz izravne citate",
       "checkId": "citation.direct-quote-locator",
       "category": "citations",
-      "scored": true,
-      "hasAtomic": true,
+      "scored": false,
+      "hasAtomic": false,
       "hasValidControl": true,
       "hasBoundary": false
     },
@@ -276,6 +276,15 @@
       "hasBoundary": false
     },
     {
+      "title": "Format stranice (A4)",
+      "checkId": "page.size.a4-list",
+      "category": "formatting",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
       "title": "Format stranice A4",
       "checkId": "page.size.a4",
       "category": "formatting",
@@ -378,7 +387,7 @@
       "title": "Brojevi stranica u sadržaju",
       "checkId": "toc.page-numbers",
       "category": "structure",
-      "scored": true,
+      "scored": "dynamic",
       "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
@@ -432,7 +441,7 @@
       "title": "Font i veličina sadržaja",
       "checkId": "toc.format",
       "category": "structure",
-      "scored": true,
+      "scored": "dynamic",
       "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
@@ -468,7 +477,7 @@
       "title": "Naslovi dokumenta ↔ sadržaj",
       "checkId": "toc.coverage",
       "category": "structure",
-      "scored": true,
+      "scored": "dynamic",
       "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
@@ -513,8 +522,8 @@
       "title": "Omjer Uvoda i Zaključka",
       "checkId": "scope.intro-conclusion-ratio",
       "category": "structure",
-      "scored": true,
-      "hasAtomic": true,
+      "scored": false,
+      "hasAtomic": false,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -612,8 +621,8 @@
       "title": "Shema numeriranja stranica",
       "checkId": "page.numbers.scheme",
       "category": "structure",
-      "scored": true,
-      "hasAtomic": true,
+      "scored": false,
+      "hasAtomic": false,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -652,6 +661,15 @@
       "hasAtomic": false,
       "hasValidControl": false,
       "hasBoundary": false
+    },
+    {
+      "title": "Tehničko-tipografska dosljednost",
+      "checkId": "format.typography.consistency",
+      "category": "typography",
+      "scored": false,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
     }
   ],
   "gaps": [
@@ -668,6 +686,34 @@
       "title": "Zahtjevi za ručnu završnu provjeru",
       "reason": "Savjetodavni podsjetnik, uvijek-warn (nema pass stanja).",
       "desiredTest": "Nije atomski testabilna kao fail."
+    },
+    {
+      "priority": "P1",
+      "checkId": "page.size.a4-list",
+      "title": "Format stranice (A4)",
+      "reason": "Bodovana provjera bez fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.page.size.a4-list: cista varijanta prolazi, jedna mutacija ruši \"Format stranice (A4)\"."
+    },
+    {
+      "priority": "P3",
+      "checkId": "format.typography.consistency",
+      "title": "Tehničko-tipografska dosljednost",
+      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
+      "desiredTest": "valid.format.typography.consistency: valjana varijanta dosize bodovani pass (max>0), ne informativni max-0."
+    },
+    {
+      "priority": "P3",
+      "checkId": "page.numbers.scheme",
+      "title": "Shema numeriranja stranica",
+      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
+      "desiredTest": "valid.page.numbers.scheme: valjana varijanta dosize bodovani pass (max>0), ne informativni max-0."
+    },
+    {
+      "priority": "P3",
+      "checkId": "scope.intro-conclusion-ratio",
+      "title": "Omjer Uvoda i Zaključka",
+      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
+      "desiredTest": "valid.scope.intro-conclusion-ratio: valjana varijanta dosize bodovani pass (max>0), ne informativni max-0."
     },
     {
       "priority": "P3",
