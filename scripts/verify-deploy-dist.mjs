@@ -59,7 +59,14 @@ for (const [file, marker] of legalChecks) {
   const p = path.join(DIST, 'pokrivenost.html');
   if (!fs.existsSync(p)) fail('dist/pokrivenost.html ne postoji (generate-coverage-page nije prosao?)');
   const html = fs.readFileSync(p, 'utf8');
-  if (!html.includes('Potpuno pokriveno')) fail('dist/pokrivenost.html ne sadrzi ocekivane oznake statusa');
+  // Oznake statusa se provjeravaju po KLASI, ne po tekstu. Tekst je javni copy i mijenja se:
+  // d22a15a je oznaku "Potpuno pokriveno" namjerno preimenovao u "Sva pravila bodovana", jer je
+  // stara formulacija tvrdila vise nego sto completion ledger dokazuje. Verifikator je ostao na
+  // literalu iz ebc677f (2026-08-01) i time rusio CIJELI Netlify build, iako je stranica bila
+  // ispravna. Klasa je strukturna i ne mijenja se pri prepravljanju teksta.
+  const TIER_CLASSES = ["tier-full", "tier-partial", "tier-advisory", "tier-none"];
+  const missingTiers = TIER_CLASSES.filter((c) => !html.includes(`<dt class="${c}">`));
+  if (missingTiers.length) fail(`dist/pokrivenost.html nema legendu za razine: ${missingTiers.join(", ")}`);
   if (!html.includes('details class="unit"')) fail('dist/pokrivenost.html nema nijednu ustrojbenu jedinicu (prazan podatak?)');
 }
 
