@@ -294,7 +294,14 @@ export interface RepairableItem {
 }
 
 /** Fixeri koji podrzavaju v2 dubinsko ciscenje izravnog formatiranja u tekstu. */
-const DEEP_CAPABLE: ReadonlySet<FixerId> = new Set([
+/**
+ * Fixeri koji znaju ocistiti IZRAVNO oblikovanje (ne samo stilove). Izvezeno da testovi mogu
+ * zrcaliti stvarni korisnicki tok: deep preklopnik je u sucelju UKLJUCEN po zadanom, pa
+ * `buildDefaultRepairRequests` sam po sebi NE reproducira ono sto korisnik dobije klikom na
+ * Popravi (izmjereno u tests/closed-loop-profiles.test.ts: bez deep zastavice font, velicina,
+ * prored i poravnanje ostaju neprimijenjeni jer izravno oblikovanje nadjacava stil).
+ */
+export const DEEP_CAPABLE: ReadonlySet<FixerId> = new Set([
   'font-fixer',
   'line-spacing-fixer',
   'alignment-fixer',

@@ -526,28 +526,40 @@ gradi deterministicki `.docx` iz specifikacije (koristi ga `scripts/gen-golden-f
 `src/repair/default-selection.ts` daje tocno onaj skup zahtjeva koji korisnik dobije klikom na
 Popravi.
 
-### P4-1. Generator namjerno neuskladjenog dokumenta iz profila
-- Datoteke: `tests/helpers/violating-docx.ts` (nov), oslonjen na `docx-builder`.
-- AC: za dani profil generira dokument koji krsi svako bodovano, strojno provjerljivo pravilo
-  tog profila (invertirane vrijednosti: drugi font, kriva margina, krivi prored, krivo
-  poravnanje, kriv format stranice, plus strukturne varijante gdje ih profil ima).
-  Deterministicki bajtovi (fiksni DOS timestamp, isti obrazac kao `gen-composite-fixtures`).
-- Velicina: L. Prioritet: P2. Ovisi o: P2-2.
+### P4-1 i P4-2. Closed-loop kroz profile : PRVI PROLAZ (2026-08-20)
+- Zateceno: closed-loop harness (`runClosedLoopCase`) je ZREO, ima 29 slucajeva i tvrdi sve sto
+  P4-2 trazi (stvarna analiza -> popravak -> ponovna analiza, tekst ocuvan, paket cjelovit, nema
+  regresije, drugi prolaz no-op). Ali svi slucajevi rucno grade svoj dokument, pa pokrivaju
+  **TOCNO DVA profila od 410**. Zadatak dakle nije bio izgraditi petlju nego je provrtjeti.
+- Izvedeno: `tests/helpers/violating-docx.ts` gradi dokument iz PROFILOVIH vlastitih pravila
+  (`paramsForCheck` je jedini izvor ciljane vrijednosti, isti koji koristi sucelje), i
+  `tests/closed-loop-profiles.test.ts` vrti petlju nad uzorkom od 8 profila iz razlicitih obitelji.
+- **Zamka koju je mjerenje otkrilo:** `buildDefaultRepairRequests` sam po sebi NE reproducira ono
+  sto korisnik dobije. Deep preklopnik je u sucelju UKLJUCEN po zadanom
+  (`<input type="checkbox" checked />` u `repair-panel.ts`), a zahtjevi iz `default-selection` ga
+  nemaju. Bez njega font, prored i poravnanje ostaju neprimijenjeni i petlja mjeri put koji nitko
+  ne izvodi. `DEEP_CAPABLE` je zato izvezen da ga test moze zrcaliti.
+- **Druga zamka, u vlastitom generatoru:** prvi dokument nije imao `Normal` stil s proredom i
+  poravnanjem. Deep ciscenje tada izravno oblikovanje NE SMIJE ukloniti (nema na sto pasti), pa su
+  prored i poravnanje ostajali nerijeseni koliko god se popravak vrtio. Ispravan model je onaj koji
+  Word i pise: stil nosi ciljanu vrijednost, autor je nadjaca izravnim oblikovanjem.
+- Stanje nakon oba ispravka: font, prored, poravnanje, margine i format papira se RJESAVAJU,
+  tekst ostaje netaknut, nema regresija, paket ostaje cjelovit.
 
-### P4-2. Closed-loop harness
-- Petlja po profilu: generiraj krsitelja, `analyzeDocx`, `buildDefaultRepairRequests`,
-  `applyFixers`, ponovno `analyzeDocx`.
-- AC (tri odvojene tvrdnje, ne jedna):
-  1. svaki `auto` check je RIJESEN (100%, bez iznimke);
-  2. svaki `assisted` check je ISPRAVNO PRIPREMLJEN za potvrdu (ponudjen, s ciljem, i nije
-     primijenjen bez potvrde);
-  3. nijedan `manual` nalaz nije automatski promijenjen.
-  Plus: `integrityFailure === null`, nula pass-regresija, idempotencija drugog prolaza.
-- Datoteke: `scripts/run-closed-loop.mts` (nov), `docs/generated/closed-loop.json`,
-  `tests/closed-loop.test.ts` (uzorak u `npm run check`, puni skup u `test:slow`).
-- AC izvjestaja: `syntheticClosedLoopNotRunCount` pada s 407 prema 0; ledger os `proof`
-  prelazi u `synthetic-pass`.
-- Velicina: XL. Prioritet: P2. Ovisi o: P4-1.
+#### Nalaz: velicina teksta se ne rjesava
+- Na SVAKOM profilu iz uzorka "Velicina osnovnog teksta" ostaje nerijesena, iako je popravak
+  ponudjen, `deep` ukljucen i stil nosi ciljanu vrijednost. Provjereno nad izlaznim XML-om:
+  `<w:sz w:val="20"/>` ostaje i nakon popravka, dok `docDefaults` nosi ciljanih `24` (12 pt).
+- Font se u ISTOM prolazu rijesi, pa deep ciscenje radi - ali ocito ne uklanja izravni `<w:sz>`.
+- Zakljucano testom kao ZATECENO stanje: kad se popravi, test pada i tjera da se nalaz skine s
+  popisa. Rupa tako ne moze utihnuti.
+- Sljedeci korak je popravak deep grane `font-fixera` uz golden mjerenje (isti recept kao P3-2b).
+
+#### Sto ostaje za punu pokrivenost
+- Uzorak je 8 profila, ne 410: puna petlja je preskupa za `npm run check` (dvije analize plus
+  popravak po profilu). Sirenje ide kroz zaseban pogon s ratchetom (P4-3), ne kroz ovaj test.
+- `fer-diplomski` je u uzorku imenovan kao profil BEZ ijednog popravka, jer nema bodovanih pravila
+  (jedan od 17 iz P2-3). To je uredno stanje, ali mora biti imenovano da se ne cita kao kvar.
 
 ### P4-3. Ratchet umjesto velikog praska
 - AC: broj profila koji NISU prosli closed-loop je commitani gornji prag koji se smije samo
