@@ -11,7 +11,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { expectNotPenalised } from "./helpers/check-status";
-import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
+import { buildDocxFile, type ParaSpec, TOC_FIELD_PARA } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
 const TNR = 'Times New Roman';
@@ -33,6 +33,7 @@ function compliantDoc(): ParaSpec[] {
     { text: 'Sažetak rada u jednom odlomku s ključnim spoznajama istraživanja.', font: TNR, sizePt: 12, jc: 'both', spacingLine: 276 },
     { text: 'Ključne riječi: šumarstvo, sastojina, gospodarenje, analiza', font: TNR, sizePt: 12 },
     headed('Sadržaj'),
+    TOC_FIELD_PARA,
     headed('1. Uvod'),
     ...body(600),
     headed('2. Rasprava'),

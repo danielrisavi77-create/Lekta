@@ -99,12 +99,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 13,
+        "passCount": 12,
         "score": 87
       },
       "after": {
         "checkCount": 19,
-        "passCount": 13,
+        "passCount": 12,
         "score": 87
       },
       "beforeEntryCount": 4,
@@ -189,12 +189,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 13,
+        "passCount": 12,
         "score": 87
       },
       "after": {
         "checkCount": 19,
-        "passCount": 13,
+        "passCount": 12,
         "score": 87
       },
       "beforeEntryCount": 4,
@@ -231,12 +231,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 15,
-        "score": 94
+        "passCount": 13,
+        "score": 89
       },
       "after": {
         "checkCount": 19,
-        "passCount": 15,
+        "passCount": 14,
         "score": 94
       },
       "beforeEntryCount": 4,
@@ -273,12 +273,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 35,
-        "passCount": 17,
+        "passCount": 16,
         "score": 75
       },
       "after": {
         "checkCount": 35,
-        "passCount": 21,
+        "passCount": 20,
         "score": 87
       },
       "beforeEntryCount": 8,
@@ -328,12 +328,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 11,
+        "passCount": 9,
         "score": 60
       },
       "after": {
         "checkCount": 19,
-        "passCount": 13,
+        "passCount": 11,
         "score": 69
       },
       "beforeEntryCount": 4,
@@ -371,12 +371,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 12,
-        "score": 93
+        "passCount": 10,
+        "score": 84
       },
       "after": {
         "checkCount": 19,
-        "passCount": 12,
+        "passCount": 11,
         "score": 93
       },
       "beforeEntryCount": 4,
@@ -413,8 +413,8 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 12,
-        "score": 100
+        "passCount": 11,
+        "score": 92
       },
       "after": {
         "checkCount": 19,
@@ -457,8 +457,8 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 12,
-        "score": 100
+        "passCount": 11,
+        "score": 92
       },
       "after": {
         "checkCount": 19,
@@ -502,12 +502,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 42,
-        "passCount": 22,
+        "passCount": 21,
         "score": 81
       },
       "after": {
         "checkCount": 42,
-        "passCount": 26,
+        "passCount": 25,
         "score": 91
       },
       "beforeEntryCount": 9,
@@ -559,12 +559,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 38,
-        "passCount": 20,
+        "passCount": 19,
         "score": 73
       },
       "after": {
         "checkCount": 38,
-        "passCount": 25,
+        "passCount": 24,
         "score": 88
       },
       "beforeEntryCount": 9,
@@ -613,12 +613,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 16,
-        "score": 95
+        "passCount": 14,
+        "score": 90
       },
       "after": {
         "checkCount": 19,
-        "passCount": 16,
+        "passCount": 15,
         "score": 95
       },
       "beforeEntryCount": 4,
@@ -655,12 +655,12 @@
       "outcome": "review",
       "before": {
         "checkCount": 33,
-        "passCount": 14,
+        "passCount": 12,
         "score": 65
       },
       "after": {
         "checkCount": 33,
-        "passCount": 20,
+        "passCount": 18,
         "score": 83
       },
       "beforeEntryCount": 12,
@@ -692,8 +692,8 @@
         "bibliography-repair-fixer"
       ],
       "targetedCheckCount": 25,
-      "targetedResolvedCount": 8,
-      "targetedUnresolvedCount": 17,
+      "targetedResolvedCount": 7,
+      "targetedUnresolvedCount": 18,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -715,8 +715,8 @@
       "outcome": "review",
       "before": {
         "checkCount": 35,
-        "passCount": 14,
-        "score": 70
+        "passCount": 13,
+        "score": 67
       },
       "after": {
         "checkCount": 35,

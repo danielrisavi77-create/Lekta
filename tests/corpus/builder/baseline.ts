@@ -1,3 +1,4 @@
+import { TOC_FIELD_PARA } from '../../helpers/docx-builder';
 /**
  * Bazni ISPRAVNI dokument + mutacijski helperi (faza 3-4 Lekta Error Corpus).
  *
@@ -62,6 +63,7 @@ export function baselineSpec(): DocSpec {
     line('Ključne riječi: medijska pismenost, mladi, analiza, metoda'),
     // Sadržaj (TOC s PAGE poljem i stavkama)
     heading('Sadržaj'),
+    TOC_FIELD_PARA,
     PAGE_FIELD,
     line('1. Uvod\t1'),
     line('2. Razrada\t3'),

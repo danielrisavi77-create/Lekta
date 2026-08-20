@@ -13,7 +13,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { expectNotPenalised } from "./helpers/check-status";
-import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
+import { buildDocxFile, type ParaSpec, TOC_FIELD_PARA } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
 const check = (r: any, title: string) => (r.checks || []).find((c: any) => c.title === title);
@@ -35,6 +35,7 @@ function compliantDoc(f: Fmt): ParaSpec[] {
     { text: 'Sažetak rada u jednom odlomku s ključnim spoznajama istraživanja.', font: f.font, sizePt: f.size, jc: f.jc ?? 'both', spacingLine: f.line },
     { text: 'Ključne riječi: analiza, konstrukcija, materijal, metoda', font: f.font, sizePt: f.size },
     headed('Sadržaj', f),
+    TOC_FIELD_PARA,
     headed('1. Uvod', f),
     ...body(600, f),
     headed('2. Razrada', f),

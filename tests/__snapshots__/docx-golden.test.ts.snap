@@ -62,7 +62,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "Informativno: ne ulazi u službenu ocjenu. Sadržaj ili TOC polje je pronađeno",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. Sadržaj nije pronađen",
         "earned": 0,
         "max": 0,
         "status": "informational",
@@ -73,7 +73,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "PAGE polje nije pronađeno",
         "earned": 0,
         "max": 4,
-        "status": "pass",
+        "status": "fail",
         "title": "Brojevi stranica",
       },
       {
@@ -283,7 +283,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "Informativno: ne ulazi u službenu ocjenu. Sadržaj ili TOC polje je pronađeno",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. Pronađeno je Word TOC polje",
         "earned": 0,
         "max": 0,
         "status": "informational",
@@ -504,7 +504,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "Informativno: ne ulazi u službenu ocjenu. Sadržaj ili TOC polje je pronađeno",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. Sadržaj nije pronađen",
         "earned": 0,
         "max": 0,
         "status": "informational",
@@ -515,7 +515,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "PAGE polje nije pronađeno",
         "earned": 0,
         "max": 4,
-        "status": "pass",
+        "status": "fail",
         "title": "Brojevi stranica",
       },
       {
@@ -717,10 +717,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "Sadržaj ili TOC polje je pronađeno",
-        "earned": 5,
+        "detail": "Sadržaj nije pronađen",
+        "earned": 0,
         "max": 5,
-        "status": "pass",
+        "status": "fail",
         "title": "Sadržaj dokumenta",
       },
       {
@@ -728,7 +728,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "PAGE polje nije pronađeno",
         "earned": 0,
         "max": 4,
-        "status": "pass",
+        "status": "fail",
         "title": "Brojevi stranica",
       },
       {
@@ -837,6 +837,13 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
+        "detail": "Dodaj automatski sadržaj u Wordu i ažuriraj ga prije predaje.",
+        "severity": "error",
+        "title": "Nije pronađen sadržaj",
+        "where": "",
+      },
+      {
+        "category": "structure",
         "detail": "Provjeri zaglavlja i podnožja te umetni Word PAGE polje.",
         "severity": "error",
         "title": "Nisu pronađeni automatski brojevi stranica",
@@ -853,7 +860,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Filozofski fakultet (Odsjek za filozofiju), diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "partial",
-    "score": 94,
+    "score": 89,
     "stats": {
       "characters": 66335,
       "citations": 0,
@@ -950,7 +957,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Sadržaj nije pronađen",
         "earned": 0,
         "max": 5,
-        "status": "pass",
+        "status": "fail",
         "title": "Sadržaj dokumenta",
       },
       {
@@ -1361,7 +1368,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Sadržaj nije pronađen",
         "earned": 0,
         "max": 5,
-        "status": "pass",
+        "status": "fail",
         "title": "Sadržaj dokumenta",
       },
       {
@@ -1369,7 +1376,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "PAGE polje nije pronađeno",
         "earned": 0,
         "max": 4,
-        "status": "pass",
+        "status": "fail",
         "title": "Brojevi stranica",
       },
       {
@@ -1607,10 +1614,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "Sadržaj ili TOC polje je pronađeno",
-        "earned": 5,
+        "detail": "Sadržaj nije pronađen",
+        "earned": 0,
         "max": 5,
-        "status": "pass",
+        "status": "fail",
         "title": "Sadržaj dokumenta",
       },
       {
@@ -1618,7 +1625,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "PAGE polje nije pronađeno",
         "earned": 0,
         "max": 4,
-        "status": "pass",
+        "status": "fail",
         "title": "Brojevi stranica",
       },
       {
@@ -1719,6 +1726,13 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
+        "detail": "Dodaj automatski sadržaj u Wordu i ažuriraj ga prije predaje.",
+        "severity": "error",
+        "title": "Nije pronađen sadržaj",
+        "where": "",
+      },
+      {
+        "category": "structure",
         "detail": "Provjeri zaglavlja i podnožja te umetni Word PAGE polje.",
         "severity": "error",
         "title": "Nisu pronađeni automatski brojevi stranica",
@@ -1728,7 +1742,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Medicinski fakultet, doktorski rad / disertacija",
     "profileFingerprint": null,
     "profileStatus": "partial",
-    "score": 93,
+    "score": 84,
     "stats": {
       "characters": 99655,
       "citations": 0,
@@ -1814,10 +1828,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "Sadržaj ili TOC polje je pronađeno",
-        "earned": 5,
+        "detail": "Sadržaj nije pronađen",
+        "earned": 0,
         "max": 5,
-        "status": "pass",
+        "status": "fail",
         "title": "Sadržaj dokumenta",
       },
       {
@@ -1924,11 +1938,18 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "title": "Odabrani citatni stil nije u potpunosti automatiziran",
         "where": "Citatni profil",
       },
+      {
+        "category": "structure",
+        "detail": "Dodaj automatski sadržaj u Wordu i ažuriraj ga prije predaje.",
+        "severity": "error",
+        "title": "Nije pronađen sadržaj",
+        "where": "",
+      },
     ],
     "profile": "Prirodoslovno-matematicki fakultet (Matematicki odsjek), diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "partial",
-    "score": 100,
+    "score": 92,
     "stats": {
       "characters": 46931,
       "citations": 0,
@@ -2014,15 +2035,15 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "Sadržaj ili TOC polje je pronađeno",
-        "earned": 5,
+        "detail": "Sadržaj nije pronađen",
+        "earned": 0,
         "max": 5,
-        "status": "pass",
+        "status": "fail",
         "title": "Sadržaj dokumenta",
       },
       {
         "category": "structure",
-        "detail": "Informativno: ne ulazi u službenu ocjenu. Pronađeno Word PAGE polje",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. PAGE polje nije pronađeno",
         "earned": 0,
         "max": 0,
         "status": "informational",
@@ -2124,11 +2145,18 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "title": "Odabrani citatni stil nije u potpunosti automatiziran",
         "where": "Citatni profil",
       },
+      {
+        "category": "structure",
+        "detail": "Dodaj automatski sadržaj u Wordu i ažuriraj ga prije predaje.",
+        "severity": "error",
+        "title": "Nije pronađen sadržaj",
+        "where": "",
+      },
     ],
     "profile": "Prirodoslovno-matematicki fakultet (Matematicki odsjek), diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "partial",
-    "score": 100,
+    "score": 92,
     "stats": {
       "characters": 46933,
       "citations": 0,
@@ -2281,7 +2309,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Sadržaj nije pronađen",
         "earned": 0,
         "max": 5,
-        "status": "pass",
+        "status": "fail",
         "title": "Sadržaj dokumenta",
       },
       {
@@ -2696,7 +2724,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Sadržaj nije pronađen",
         "earned": 0,
         "max": 5,
-        "status": "pass",
+        "status": "fail",
         "title": "Sadržaj dokumenta",
       },
       {
@@ -3115,7 +3143,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "PAGE polje nije pronađeno",
         "earned": 0,
         "max": 4,
-        "status": "pass",
+        "status": "fail",
         "title": "Brojevi stranica",
       },
       {
@@ -3392,7 +3420,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Sadržaj nije pronađen",
         "earned": 0,
         "max": 5,
-        "status": "pass",
+        "status": "fail",
         "title": "Sadržaj dokumenta",
       },
       {
@@ -3400,7 +3428,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "PAGE polje nije pronađeno",
         "earned": 0,
         "max": 4,
-        "status": "pass",
+        "status": "fail",
         "title": "Brojevi stranica",
       },
       {
@@ -3782,7 +3810,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Sadržaj nije pronađen",
         "earned": 0,
         "max": 5,
-        "status": "pass",
+        "status": "fail",
         "title": "Sadržaj dokumenta",
       },
       {
@@ -3790,7 +3818,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "PAGE polje nije pronađeno",
         "earned": 0,
         "max": 4,
-        "status": "pass",
+        "status": "fail",
         "title": "Brojevi stranica",
       },
       {
@@ -4166,10 +4194,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "Sadržaj ili TOC polje je pronađeno",
-        "earned": 5,
+        "detail": "Sadržaj nije pronađen",
+        "earned": 0,
         "max": 5,
-        "status": "pass",
+        "status": "fail",
         "title": "Sadržaj dokumenta",
       },
       {
@@ -4177,7 +4205,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "PAGE polje nije pronađeno",
         "earned": 0,
         "max": 4,
-        "status": "pass",
+        "status": "fail",
         "title": "Brojevi stranica",
       },
       {
@@ -4286,6 +4314,13 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
+        "detail": "Dodaj automatski sadržaj u Wordu i ažuriraj ga prije predaje.",
+        "severity": "error",
+        "title": "Nije pronađen sadržaj",
+        "where": "",
+      },
+      {
+        "category": "structure",
         "detail": "Provjeri zaglavlja i podnožja te umetni Word PAGE polje.",
         "severity": "error",
         "title": "Nisu pronađeni automatski brojevi stranica",
@@ -4295,7 +4330,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Tekstilno-tehnološki fakultet, diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "partial",
-    "score": 95,
+    "score": 90,
     "stats": {
       "characters": 53267,
       "citations": 0,
@@ -4392,7 +4427,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "Sadržaj nije pronađen",
         "earned": 0,
         "max": 5,
-        "status": "pass",
+        "status": "fail",
         "title": "Sadržaj dokumenta",
       },
       {
@@ -4400,7 +4435,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "detail": "PAGE polje nije pronađeno",
         "earned": 0,
         "max": 4,
-        "status": "pass",
+        "status": "fail",
         "title": "Brojevi stranica",
       },
       {
@@ -4813,10 +4848,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "Sadržaj ili TOC polje je pronađeno",
-        "earned": 5,
+        "detail": "Sadržaj nije pronađen",
+        "earned": 0,
         "max": 5,
-        "status": "pass",
+        "status": "fail",
         "title": "Sadržaj dokumenta",
       },
       {
@@ -5080,6 +5115,13 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
+        "detail": "Dodaj automatski sadržaj u Wordu i ažuriraj ga prije predaje.",
+        "severity": "error",
+        "title": "Nije pronađen sadržaj",
+        "where": "",
+      },
+      {
+        "category": "structure",
         "detail": "Aktualne FPZG upute traže rimske brojeve na prednjim stranicama i arapske brojeve od prve stranice Uvoda, počevši od 1. U starijem prihvaćenom radu pronađena je arapska numeracija prednjih stranica, ali taj presedan ne mijenja službeno pravilo. Ova provjera je informativna: nema potvrđenog izvora za cijelu shemu pa ne ulazi u ocjenu.",
         "severity": "info",
         "title": "Informativno: Provjeri rimsku i arapsku numeraciju",
@@ -5152,7 +5194,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "FPZG · diplomska Politologija · diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 70,
+    "score": 67,
     "stats": {
       "characters": 36902,
       "citations": 0,

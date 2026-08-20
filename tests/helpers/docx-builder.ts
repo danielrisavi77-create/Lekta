@@ -91,6 +91,23 @@ function paraXml(p: ParaSpec): string {
   return `<w:p>${pPr}<w:r>${rPr}<w:t xml:space="preserve">${esc(p.text)}</w:t></w:r></w:p>`;
 }
 
+/**
+ * Pravo Word TOC polje (w:fldChar begin + w:instrText TOC + spremljeni rezultat + end).
+ *
+ * Uskladjen sinteticki rad mora ga IMATI, jer je do 2026-08-20 bodove za sadrzaj davala labava
+ * detekcija: rijec "TOC" bilo gdje u sirovom XML-u ILI odlomak ciji je cijeli tekst tocno
+ * "Sadrzaj". Goli naslov bez ijedne stavke tako je nosio punih 5 bodova.
+ */
+export const TOC_FIELD_PARA: ParaSpec = {
+  text: '',
+  raw:
+    '<w:p><w:r><w:fldChar w:fldCharType="begin"/></w:r>' +
+    '<w:r><w:instrText xml:space="preserve"> TOC \\o "1-3" \\h \\z \\u </w:instrText></w:r>' +
+    '<w:r><w:fldChar w:fldCharType="separate"/></w:r>' +
+    '<w:r><w:t xml:space="preserve">Uvod&#9;1</w:t></w:r>' +
+    '<w:r><w:fldChar w:fldCharType="end"/></w:r></w:p>',
+};
+
 const FOOTER_RID = 'rId100'; // veza document.xml.rels -> word/footer1.xml
 const REL_NS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
 

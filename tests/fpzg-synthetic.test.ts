@@ -11,7 +11,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { expectNotPenalised } from "./helpers/check-status";
-import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
+import { buildDocxFile, type ParaSpec, TOC_FIELD_PARA } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
 const TNR = 'Times New Roman';
@@ -36,6 +36,7 @@ describe('FPZG sinteticki golden: prijediplomski zavrsni (politologija)', () => 
       { text: 'Ovo je sažetak rada u jednom odlomku.', font: TNR, sizePt: 12, jc: 'both' },
       { text: 'Ključne riječi: politologija, analiza, metoda', font: TNR, sizePt: 12 },
       headed('Sadržaj'),
+      TOC_FIELD_PARA,
       headed('1. Uvod'),
       ...body(900),
       headed('2. Razrada'),

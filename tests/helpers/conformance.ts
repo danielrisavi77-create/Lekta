@@ -15,7 +15,7 @@
  * NIJE izvor pravila i nista ne mijenja u engineu ni profilima (CLAUDE.md: parser se ne dira).
  */
 import { expect } from 'vitest';
-import { buildDocxFile, type DocSpec, type ParaSpec } from './docx-builder';
+import { buildDocxFile, type DocSpec, type ParaSpec, TOC_FIELD_PARA } from './docx-builder';
 import { resolveProfile } from '../../src/analysis/golden-entry';
 import { analyzeDocx } from '../../src/analysis/analyze-docx';
 import { normalize, sectionName } from '../../src/utils/helpers';
@@ -31,8 +31,6 @@ export type ConformanceDim =
 export interface ConformanceAssertion {
   dim: ConformanceDim;
   checkTitle: string;
-  /** 'earned': Sadrzaj dokumenta i Brojevi stranica imaju status UVIJEK 'pass', boduju se kroz earned. */
-  kind: 'status' | 'earned';
   /** false kad neuskladjeni dokument ne moze pouzdano srusiti provjeru (npr. words bez wordMin). */
   assertViolating: boolean;
 }
@@ -122,6 +120,7 @@ function derivePlanFor(profileId: string, profile: any): ConformancePlan {
     { text: L.abstractText, font, sizePt, jc: 'both', spacingLine: f.spacingLine },
     { text: L.keywords, font, sizePt, spacingLine: f.spacingLine },
     headed(L.toc),
+    TOC_FIELD_PARA,
     PAGE_FIELD_PARA,
     headed(L.intro),
     ...bodyParas(Math.round(targetWords * 0.15), f),
@@ -189,22 +188,22 @@ function derivePlanFor(profileId: string, profile: any): ConformancePlan {
 
   // Dimenzije koje profil stvarno definira -> asserti. Uvjeti zrcale grane emitiranja u engineu.
   const a: ConformanceAssertion[] = [];
-  const add = (dim: ConformanceDim, checkTitle: string, kind: 'status' | 'earned', assertViolating = true) =>
-    a.push({ dim, checkTitle, kind, assertViolating });
+  const add = (dim: ConformanceDim, checkTitle: string, assertViolating = true) =>
+    a.push({ dim, checkTitle, assertViolating });
 
-  if (profile.checkFont !== false) add('font', 'Dominantni font', 'status');
-  if (profile.checkSize !== false) add('size', 'Veličina osnovnog teksta', 'status');
-  if (profile.checkSpacing !== false) add('spacing', 'Prored osnovnog teksta', 'status');
-  if (profile.checkMargins !== false) add('margins', 'Margine dokumenta', 'status');
-  if (profile.paperSizes?.length) add('paper', `Format stranice (${profile.paperSizes.join('/')})`, 'status');
-  else if (profile.requireA4) add('paper', 'Format stranice A4', 'status');
-  if (profile.justify && profile.checkJustify !== false) add('justify', 'Poravnanje osnovnog teksta', 'status');
-  if (profile.requireToc) add('toc', 'Sadržaj dokumenta', 'earned');
-  if (profile.requirePageNumbers) add('pagenums', 'Brojevi stranica', 'earned');
-  if (requirements.length && sectionsSatisfiable) add('sections', 'Dijelovi verificiranog profila', 'status');
-  if (profile.wordMin || profile.wordMax) add('words', 'Profilni opseg riječi', 'status', !!profile.wordMin);
-  if (profile.scoreStructure !== false) add('struktura', 'Osnovni dijelovi rada', 'status');
-  if (profile.legalFootnoteProfile) add('fusnote', 'Automatske fusnote', 'status');
+  if (profile.checkFont !== false) add('font', 'Dominantni font');
+  if (profile.checkSize !== false) add('size', 'Veličina osnovnog teksta');
+  if (profile.checkSpacing !== false) add('spacing', 'Prored osnovnog teksta');
+  if (profile.checkMargins !== false) add('margins', 'Margine dokumenta');
+  if (profile.paperSizes?.length) add('paper', `Format stranice (${profile.paperSizes.join('/')})`);
+  else if (profile.requireA4) add('paper', 'Format stranice A4');
+  if (profile.justify && profile.checkJustify !== false) add('justify', 'Poravnanje osnovnog teksta');
+  if (profile.requireToc) add('toc', 'Sadržaj dokumenta');
+  if (profile.requirePageNumbers) add('pagenums', 'Brojevi stranica');
+  if (requirements.length && sectionsSatisfiable) add('sections', 'Dijelovi verificiranog profila');
+  if (profile.wordMin || profile.wordMax) add('words', 'Profilni opseg riječi', !!profile.wordMin);
+  if (profile.scoreStructure !== false) add('struktura', 'Osnovni dijelovi rada');
+  if (profile.legalFootnoteProfile) add('fusnote', 'Automatske fusnote');
 
   const skipped = new Set(SKIP[profileId] ?? []);
   const assertions = a.filter((x) => !skipped.has(x.dim));
@@ -254,25 +253,28 @@ async function runPlan(label0: string, plan: ConformancePlan): Promise<void> {
   expect(bad.checks?.length, `${profileId}: violating checks prazni`).toBeGreaterThan(0);
   expect(typeof ok.score, `${profileId}: score nije broj`).toBe('number');
 
+  // Istinitost statusa nad SVIM provjerama oba dokumenta, ne samo nad planiranim dimenzijama.
+  // Do 2026-08-20 su `Sadrzaj dokumenta` i `Brojevi stranica` slali 'pass' uz 0 bodova, pa je ovaj
+  // harness za njih imao iznimku (`kind: 'earned'`) koja je kvar posvetila umjesto da ga srusi.
+  for (const [doc, name] of [[ok, 'compliant'], [bad, 'violating']] as const) {
+    const lying = (doc.checks ?? []).filter((c: any) => c.max > 0 && c.earned < c.max && c.status === 'pass');
+    expect(
+      lying.map((c: any) => `${c.title} ${c.earned}/${c.max}`),
+      `${profileId} ${name}: bodovana provjera s izgubljenim bodovima ne smije javiti pass`,
+    ).toEqual([]);
+  }
+
   for (const as of plan.assertions) {
     const label = `${profileId} [${as.dim}]`;
     const c = findOne(ok, as.checkTitle, `${label} compliant`);
     expect(c.max, `${label} compliant: max mora biti bodovan (>0)`).toBeGreaterThan(0);
-    if (as.kind === 'status') {
-      // Nebodovana provjera (max===0) nosi 'informational'; oboje znaci "ne kaznjava".
-      expect(['pass', 'informational'], `${label} compliant: status (${c.status})`).toContain(c.status);
-    } else {
-      expect(c.earned, `${label} compliant: earned=${c.earned}/${c.max}`).toBe(c.max);
-    }
+    // Nebodovana provjera (max===0) nosi 'informational'; oboje znaci "ne kaznjava".
+    expect(['pass', 'informational'], `${label} compliant: status (${c.status})`).toContain(c.status);
 
     if (!as.assertViolating) continue;
     const v = findOne(bad, as.checkTitle, `${label} violating`);
     if (!(v.max > 0)) continue; // guard: nebodovano u ovom dokumentu ne moze pasti
-    if (as.kind === 'status') {
-      expect(['pass', 'informational'], `${label} violating: status ne smije biti pass ni informativan (${v.status})`).not.toContain(v.status);
-    } else {
-      expect(v.earned, `${label} violating: earned mora biti < max (${v.earned}/${v.max})`).toBeLessThan(v.max);
-    }
+    expect(['pass', 'informational'], `${label} violating: status ne smije biti pass ni informativan (${v.status})`).not.toContain(v.status);
   }
 }
 

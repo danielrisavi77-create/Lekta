@@ -32,7 +32,18 @@ export interface Check {
   category: string;
   title: string;
   /**
-   * `'pass' | 'warn' | 'fail'` za bodovane provjere, `'informational'` za nebodovane (max===0).
+   * `'pass' | 'warn' | 'fail'` za bodovane provjere, `'informational'` za nebodovane (max===0),
+   * `'unmeasurable'` kad se vrijednost NIJE MOGLA OCITATI iz dokumenta.
+   *
+   * `'unmeasurable'` postoji jer su do 2026-08-20 tri razlicita stanja dijelila jedan ishod:
+   * "potvrdjeno ispravno", "potvrdjeno pogresno" i "nije moguce utvrditi". Trece je javljalo
+   * `pass` I PUNE BODOVE (font 8/8, prored 6/6, margine 6/6), pa je nemogucnost citanja mogla
+   * PODICI ocjenu. Izmjereno u commitanom golden baselineu: 21 blok s punim bodovima uz detail
+   * koji doslovno kaze da vrijednost nije zapisana.
+   *
+   * Nemjerljiva provjera je NEBODOVANA (max===0, scored===false), pa niti dize niti obara ocjenu:
+   * nestaje iz nazivnika umjesto da glumi prolaz. Vidi `unmeasurableCheck`.
+   *
    * Tip ostaje `string` jer ga rucni testni i UI fixturi popunjavaju slobodno.
    */
   status: string;
@@ -42,6 +53,9 @@ export interface Check {
   issue: Issue | null;
   scored: boolean;
 }
+
+/** Status provjere ciju vrijednost dokument nije zapisao, pa se NIJE MOGLA izmjeriti. */
+export const UNMEASURABLE = 'unmeasurable';
 
 /**
  * Jedan zapis provjere; max===0 znaci informativno (ne ulazi u ocjenu).
@@ -55,6 +69,13 @@ export interface Check {
  * status za te provjere bio mrtvo polje; sada nosi istinu i za potrosace koji nemaju `max` pri ruci
  * (npr. detectPassRegressions, koji informativnu provjeru vise ne moze racunati kao regresiju).
  * `scored` ostaje neovisna dimenzija: govori ulazi li provjera u ocjenu.
+ *
+ * Od 2026-08-20 funkcija drzi i INVARIJANTU BODOVA: bodovana provjera koja je izgubila bodove ne
+ * moze javiti `'pass'`. Prije toga su `Sadrzaj dokumenta` i `Brojevi stranica` slali doslovno
+ * `profile.requireToc?'pass':'pass'`, pa je nedostajuci sadrzaj davao 0/5 + `error` uz status
+ * `pass` (17 takvih blokova u commitanom golden baselineu). Normalizacija je namjerno tiha, a ne
+ * iznimka: analiza se ne smije srusiti na neocekivanom pozivatelju. Pozivatelj i dalje mora slati
+ * ispravan status; ovo je druga brava, ne zamjena za prvu.
  */
 export function makeCheck(
   category: string,
@@ -65,12 +86,31 @@ export function makeCheck(
   detail: string,
   issue: any = null,
 ): Check {
-  if (max === 0) {
+  if (status === UNMEASURABLE) {
+    // Nemjerljivo je NEBODOVANO: nestaje iz nazivnika umjesto da glumi prolaz s punim bodovima.
+    earned = 0;
+    max = 0;
+    detail = `Nije moguće utvrditi: ${detail}`;
+    if (issue) issue = { ...issue, severity: 'info', title: `Nije moguće utvrditi: ${issue.title}` };
+  } else if (max === 0) {
     status = 'informational';
     detail = `Informativno: ne ulazi u službenu ocjenu. ${detail}`;
     if (issue) issue = { ...issue, severity: 'info', title: `Informativno: ${issue.title}` };
   }
-  return { id: stableCheckId(title), category, title, status, earned: clamp(earned, 0, max), max, detail, issue, scored: max > 0 };
+  const scoredEarned = clamp(earned, 0, max);
+  if (max > 0 && scoredEarned < max && status === 'pass') status = scoredEarned > 0 ? 'warn' : 'fail';
+  return { id: stableCheckId(title), category, title, status, earned: scoredEarned, max, detail, issue, scored: max > 0 };
+}
+
+/**
+ * Provjera koju NIJE BILO MOGUCE izmjeriti (Word vrijednost nije zapisao nigdje u lancu
+ * run -> odlomak -> stil -> tema, ili dokument nema trazenu strukturu).
+ *
+ * `detail` je razlog bez prefiksa ("Word nije zapisao prored..."); prefiks dodaje `makeCheck`,
+ * isto kao za informativne provjere. Rezultat je uvijek 0/0, pa ocjenu niti dize niti obara.
+ */
+export function unmeasurableCheck(category: string, title: string, detail: string): Check {
+  return makeCheck(category, title, UNMEASURABLE, 0, 0, detail);
 }
 
 /**

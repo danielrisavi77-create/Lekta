@@ -11,7 +11,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { expectNotPenalised } from "./helpers/check-status";
-import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
+import { buildDocxFile, type ParaSpec, TOC_FIELD_PARA } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
 const TNR = 'Times New Roman';
@@ -25,7 +25,8 @@ function body(n: number, line = 360): ParaSpec[] {
 }
 function doc(line = 360): ParaSpec[] {
   return [headed('Sažetak'), { text: 'Ključne riječi: farmacija, analiza, metoda', font: TNR, sizePt: 12 },
-    headed('Sadržaj'), headed('1. Uvod'), ...body(600, line), headed('2. Razrada'), ...body(600, line),
+    headed('Sadržaj'),
+    TOC_FIELD_PARA, headed('1. Uvod'), ...body(600, line), headed('2. Razrada'), ...body(600, line),
     headed('3. Zaključak'), ...body(200, line), headed('Literatura'),
     { text: 'Prezime, I. (2021). Naslov. Zagreb.', font: TNR, sizePt: 12 }];
 }

@@ -69,10 +69,10 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Sadržaj ili TOC polje je pronađeno",
-      "earned": 5,
+      "detail": "Sadržaj nije pronađen",
+      "earned": 0,
       "max": 5,
-      "status": "pass",
+      "status": "fail",
       "title": "Sadržaj dokumenta",
     },
     {
@@ -80,7 +80,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "detail": "PAGE polje nije pronađeno",
       "earned": 0,
       "max": 4,
-      "status": "pass",
+      "status": "fail",
       "title": "Brojevi stranica",
     },
     {
@@ -293,6 +293,13 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
+      "detail": "Dodaj automatski sadržaj u Wordu i ažuriraj ga prije predaje.",
+      "severity": "error",
+      "title": "Nije pronađen sadržaj",
+      "where": "",
+    },
+    {
+      "category": "structure",
       "detail": "Provjeri zaglavlja i podnožja te umetni Word PAGE polje.",
       "severity": "error",
       "title": "Nisu pronađeni automatski brojevi stranica",
@@ -351,7 +358,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
   "profile": "FPZG · diplomska Politologija · diplomski rad",
   "profileFingerprint": null,
   "profileStatus": "verified",
-  "score": 90,
+  "score": 87,
   "stats": {
     "characters": 73498,
     "citations": 0,
@@ -440,10 +447,10 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Sadržaj ili TOC polje je pronađeno",
-      "earned": 5,
+      "detail": "Sadržaj nije pronađen",
+      "earned": 0,
       "max": 5,
-      "status": "pass",
+      "status": "fail",
       "title": "Sadržaj dokumenta",
     },
     {
@@ -451,7 +458,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "detail": "PAGE polje nije pronađeno",
       "earned": 0,
       "max": 4,
-      "status": "pass",
+      "status": "fail",
       "title": "Brojevi stranica",
     },
     {
@@ -616,6 +623,13 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
+      "detail": "Dodaj automatski sadržaj u Wordu i ažuriraj ga prije predaje.",
+      "severity": "error",
+      "title": "Nije pronađen sadržaj",
+      "where": "",
+    },
+    {
+      "category": "structure",
       "detail": "Provjeri zaglavlja i podnožja te umetni Word PAGE polje.",
       "severity": "error",
       "title": "Nisu pronađeni automatski brojevi stranica",
@@ -639,7 +653,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
   "profile": "FPZG · doktorski studij Politologija · doktorski rad",
   "profileFingerprint": null,
   "profileStatus": "verified",
-  "score": 93,
+  "score": 88,
   "stats": {
     "characters": 13746,
     "citations": 0,
@@ -739,7 +753,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "detail": "Sadržaj nije pronađen",
       "earned": 0,
       "max": 5,
-      "status": "pass",
+      "status": "fail",
       "title": "Sadržaj dokumenta",
     },
     {
@@ -747,7 +761,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "detail": "PAGE polje nije pronađeno",
       "earned": 0,
       "max": 4,
-      "status": "pass",
+      "status": "fail",
       "title": "Brojevi stranica",
     },
     {
@@ -1135,10 +1149,10 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Sadržaj ili TOC polje je pronađeno",
-      "earned": 5,
+      "detail": "Sadržaj nije pronađen",
+      "earned": 0,
       "max": 5,
-      "status": "pass",
+      "status": "fail",
       "title": "Sadržaj dokumenta",
     },
     {
@@ -1146,7 +1160,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "detail": "PAGE polje nije pronađeno",
       "earned": 0,
       "max": 4,
-      "status": "pass",
+      "status": "fail",
       "title": "Brojevi stranica",
     },
     {
@@ -1351,6 +1365,13 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
+      "detail": "Dodaj automatski sadržaj u Wordu i ažuriraj ga prije predaje.",
+      "severity": "error",
+      "title": "Nije pronađen sadržaj",
+      "where": "",
+    },
+    {
+      "category": "structure",
       "detail": "Provjeri zaglavlja i podnožja te umetni Word PAGE polje.",
       "severity": "error",
       "title": "Nisu pronađeni automatski brojevi stranica",
@@ -1395,7 +1416,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
   "profile": "FPZG · prijediplomska Politologija · završni rad",
   "profileFingerprint": null,
   "profileStatus": "verified",
-  "score": 93,
+  "score": 89,
   "stats": {
     "characters": 38650,
     "citations": 0,
@@ -1548,26 +1569,18 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Sadržaj ili TOC polje je pronađeno",
-      "earned": 5,
-      "max": 5,
-      "status": "pass",
-      "title": "Sadržaj dokumenta",
-    },
-    {
-      "category": "structure",
-      "detail": "Informativno: ne ulazi u službenu ocjenu. TOC polje je možda prisutno, ali spremljene stavke sadržaja nisu dostupne za pouzdanu provjeru",
+      "detail": "Sadržaj nije pronađen",
       "earned": 0,
-      "max": 0,
-      "status": "informational",
-      "title": "Detalji automatskog sadržaja",
+      "max": 5,
+      "status": "fail",
+      "title": "Sadržaj dokumenta",
     },
     {
       "category": "structure",
       "detail": "PAGE polje nije pronađeno",
       "earned": 0,
       "max": 4,
-      "status": "pass",
+      "status": "fail",
       "title": "Brojevi stranica",
     },
     {
@@ -1647,7 +1660,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "detail": "6 od 7 fusnota razvrstano je u prepoznatljive vrste izvora",
       "earned": 3,
       "max": 4,
-      "status": "pass",
+      "status": "warn",
       "title": "Klasifikacija pravnih izvora",
     },
     {
@@ -1787,6 +1800,13 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
+      "detail": "Dodaj automatski sadržaj u Wordu i ažuriraj ga prije predaje.",
+      "severity": "error",
+      "title": "Nije pronađen sadržaj",
+      "where": "",
+    },
+    {
+      "category": "structure",
       "detail": "Provjeri zaglavlja i podnožja te umetni Word PAGE polje.",
       "severity": "error",
       "title": "Nisu pronađeni automatski brojevi stranica",
@@ -1803,7 +1823,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
   "profile": "Pravni fakultet · integrirani studij Pravo · diplomski rad",
   "profileFingerprint": null,
   "profileStatus": "verified",
-  "score": 91,
+  "score": 88,
   "stats": {
     "characters": 18644,
     "citations": 7,
@@ -1956,26 +1976,18 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Sadržaj ili TOC polje je pronađeno",
-      "earned": 5,
-      "max": 5,
-      "status": "pass",
-      "title": "Sadržaj dokumenta",
-    },
-    {
-      "category": "structure",
-      "detail": "Informativno: ne ulazi u službenu ocjenu. TOC polje je možda prisutno, ali spremljene stavke sadržaja nisu dostupne za pouzdanu provjeru",
+      "detail": "Sadržaj nije pronađen",
       "earned": 0,
-      "max": 0,
-      "status": "informational",
-      "title": "Detalji automatskog sadržaja",
+      "max": 5,
+      "status": "fail",
+      "title": "Sadržaj dokumenta",
     },
     {
       "category": "structure",
       "detail": "PAGE polje nije pronađeno",
       "earned": 0,
       "max": 4,
-      "status": "pass",
+      "status": "fail",
       "title": "Brojevi stranica",
     },
     {
@@ -2195,6 +2207,13 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
+      "detail": "Dodaj automatski sadržaj u Wordu i ažuriraj ga prije predaje.",
+      "severity": "error",
+      "title": "Nije pronađen sadržaj",
+      "where": "",
+    },
+    {
+      "category": "structure",
       "detail": "Provjeri zaglavlja i podnožja te umetni Word PAGE polje.",
       "severity": "error",
       "title": "Nisu pronađeni automatski brojevi stranica",
@@ -2225,7 +2244,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
   "profile": "Pravni fakultet · integrirani studij Pravo · diplomski rad",
   "profileFingerprint": null,
   "profileStatus": "verified",
-  "score": 84,
+  "score": 80,
   "stats": {
     "characters": 24444,
     "citations": 0,

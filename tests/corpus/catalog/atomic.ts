@@ -127,7 +127,7 @@ export const ATOMIC_CASES: ErrorCase[] = [
     profileId: PID,
     detectableNow: true,
     build: () => mutate((ps, spec) => { spec.paragraphs = ps.filter((p) => !(p.raw && /PAGE/.test(p.raw))); }),
-    expect: { checkId: 'page.numbers.present', title: 'Brojevi stranica', kind: 'earned', outcome: 'not-pass' },
+    expect: { checkId: 'page.numbers.present', title: 'Brojevi stranica', kind: 'status', outcome: 'not-pass' },
   },
   {
     id: 'atomic.citation.author-year.missing-reference',
@@ -243,9 +243,10 @@ export const ATOMIC_CASES: ErrorCase[] = [
     id: 'atomic.toc.present',
     title: 'Nema sadržaja (TOC)',
     category: 'structure', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
-    // "Sadržaj dokumenta" ima status uvijek 'pass' (blag audit), ali gubi bodove (earned < max).
-    build: () => mutate((ps, spec) => { spec.paragraphs = ps.filter((p) => !(p.styleId && /Sadržaj/.test(p.text)) && !(p.raw && /PAGE/.test(p.raw)) && !/^\d\. \w+\t\d/.test(p.text) && !/^Literatura\t\d/.test(p.text)); }),
-    expect: { checkId: 'toc.present', title: 'Sadržaj dokumenta', kind: 'earned', outcome: 'not-pass' },
+    // Mutacija mora ukloniti I Word TOC polje: baza od 2026-08-20 ima pravo polje, a ne samo
+    // naslov "Sadržaj" (goli naslov je bodove dobivao od labave detekcije, vidi DOCX-03).
+    build: () => mutate((ps, spec) => { spec.paragraphs = ps.filter((p) => !(p.styleId && /Sadržaj/.test(p.text)) && !(p.raw && /(?:PAGE|TOC)/.test(p.raw)) && !/^\d\. \w+\t\d/.test(p.text) && !/^Literatura\t\d/.test(p.text)); }),
+    expect: { checkId: 'toc.present', title: 'Sadržaj dokumenta', kind: 'status', outcome: 'not-pass' },
   },
 
   // --- Batch C: "warn" provjere preko cleanBuild (cista varijanta prolazi; baza vec warna) -----

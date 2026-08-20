@@ -12,7 +12,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { expectNotPenalised } from "./helpers/check-status";
-import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
+import { buildDocxFile, type ParaSpec, TOC_FIELD_PARA } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
 const TNR = 'Times New Roman';
@@ -25,7 +25,7 @@ function body(n: number): ParaSpec[] {
   return out;
 }
 function doc(): ParaSpec[] {
-  return [headed('Sadržaj'), headed('1. Uvod'), ...body(600), headed('2. Zaključak'), ...body(200), headed('Literatura'),
+  return [headed('Sadržaj'), TOC_FIELD_PARA, headed('1. Uvod'), ...body(600), headed('2. Zaključak'), ...body(200), headed('Literatura'),
     { text: 'Prezime, I. (2021). Naslov. Zagreb.', font: TNR, sizePt: 12 }];
 }
 const M25 = { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 };

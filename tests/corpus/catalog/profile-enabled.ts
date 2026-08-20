@@ -1,3 +1,4 @@
+import { TOC_FIELD_PARA } from '../../helpers/docx-builder';
 /**
  * PROFILNO-UVJETOVANI atomski korpus (faza 4, "profilni enabler"): provjere koje se u engineu
  * NE emitiraju za referentni fpzg-politologija-zavrsni profil (baseline.ts), nego samo kad profil
@@ -46,6 +47,7 @@ function pravoSocialSpec(): DocSpec {
       line('This thesis summarises the key findings on social services provision in the community.', { jc: 'both' }),
       line('Keywords: social work, services, analysis, method'),
       heading('Sadržaj'),
+      TOC_FIELD_PARA,
       PAGE_FIELD,
       line('1. Uvod\t1'),
       line('2. Razrada\t3'),

@@ -12,7 +12,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { expectNotPenalised } from "./helpers/check-status";
-import { buildDocxFile, type ParaSpec } from './helpers/docx-builder';
+import { buildDocxFile, type ParaSpec, TOC_FIELD_PARA } from './helpers/docx-builder';
 import { analyzeFixture } from '../src/analysis/golden-entry';
 
 const TNR = 'Times New Roman';
@@ -32,6 +32,7 @@ function compliantDoc(work: 'diplomski' | 'zavrsni'): ParaSpec[] {
     headed('Izjava o izvornosti'),
     { text: 'Izjavljujem da je ovaj rad rezultat vlastitog istraživanja.', font: TNR, sizePt: 12, jc: 'both', spacingLine: 360 },
     headed('Sadržaj'),
+    TOC_FIELD_PARA,
     headed('Sažetak'),
     { text: 'Sažetak rada u jednom odlomku s ključnim spoznajama istraživanja.', font: TNR, sizePt: 12, jc: 'both', spacingLine: 360 },
     { text: 'Ključne riječi: socijalni rad, obitelj, podrška, metoda', font: TNR, sizePt: 12 },

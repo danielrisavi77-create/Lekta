@@ -225,7 +225,15 @@ function bookmarkStatus(parts: Record<string, string>): FieldIntegrity['bookmark
   return result;
 }
 
-function manualTocCandidates(paragraphs: FieldIntegrityInput['paragraphs']): FieldIntegrity['manualTocCandidates'] {
+/**
+ * Rucno utipkan sadrzaj: naslov "Sadrzaj" pa stavke s tockicama ili tabom i brojem stranice.
+ *
+ * Izvezeno 2026-08-20 jer bodovana provjera `Sadrzaj dokumenta` mora razlikovati TRI stanja, a ne
+ * dva: Word TOC polje, rucno utipkan sadrzaj, i nista. Prije je jedini signal bio odlomak ciji je
+ * cijeli tekst tocno "Sadrzaj", pa je goli naslov bez ijedne stavke nosio punih 5 bodova.
+ * Trazi STVARNE stavke, pa goli naslov ovdje ne prolazi.
+ */
+export function manualTocCandidates(paragraphs: FieldIntegrityInput['paragraphs']): FieldIntegrity['manualTocCandidates'] {
   if (!paragraphs?.length) return [];
   const out: FieldIntegrity['manualTocCandidates'] = [];
   for (let i = 0; i < paragraphs.length; i++) {
@@ -242,6 +250,53 @@ function manualTocCandidates(paragraphs: FieldIntegrityInput['paragraphs']): Fie
     const end = entries[entries.length - 1].index;
     const rawText = entries.map((p) => p.text).join('\n');
     out.push({ startParagraphIndex: start, endParagraphIndex: end, rawText, confidence: entries.length >= 2 ? 'high' : 'medium', replacementAllowed: entries.length >= 2, anchorFingerprint: manualTocAnchorFingerprint(start, end, rawText) });
+  }
+  return out;
+}
+
+/** Jedno Word polje pronadjeno STRUKTURNO (w:fldSimple / w:fldChar + w:instrText), po dijelu paketa. */
+export interface DocumentFieldRef {
+  /** Dio paketa u kojem polje zivi (`word/document.xml`, `word/footer1.xml`, ...). */
+  part: string;
+  kind: FieldKind;
+  /** Instrukcija bez okolnog praznog prostora (`PAGE`, `TOC \o "1-3"`, ...). */
+  instruction: string;
+  /** Redni broj odlomka (`w:p`) unutar tog dijela, kad ga je moguce odrediti. */
+  paragraphIndex?: number;
+}
+
+/**
+ * Strukturni popis Word polja po dijelovima paketa, bez ostatka `analyzeFieldIntegrity`
+ * (bookmarkovi, rucni TOC kandidati, statusi svjezine).
+ *
+ * Postoji jer je bodovana analiza do 2026-08-20 postojanje PAGE i TOC polja zakljucivala regexom
+ * `/\bPAGE\b/i` odnosno `/\bTOC\b/i` nad SIROVIM XML-om. To nije bio rubni slucaj: obican prijelom
+ * stranice `<w:br w:type="page"/>` zadovoljava `\bPAGE\b` (navodnici nisu znakovi rijeci), pa je
+ * gotovo svaki rad dobivao bodove za automatsko numeriranje stranica koje nema. Isto vrijedi za
+ * rijec "page" u engleskom sazetku i za rucno utipkano "Page 1 of 12". Mjereno, ne pretpostavljeno:
+ * closed-loop test naslovnice je zbog toga prijavio LAZNU regresiju popravka (prije: 4/4 "pass",
+ * poslije: 0/4), jer je fixer uklonio upravo taj prijelom stranice.
+ *
+ * `analyzeFieldIntegrity` treba `paragraphs`/`headings`/`elements` kojih u trenutku bodovanja jos
+ * nema, pa se ovdje dijeli samo skener polja. Isti `scanFields` i `kindForInstruction`, dakle jedan
+ * izvor istine o tome sto je polje.
+ */
+export function scanDocumentFields(parts: Record<string, string>): DocumentFieldRef[] {
+  const out: DocumentFieldRef[] = [];
+  for (const [part, xml] of Object.entries(parts)) {
+    if (!/\.xml$/i.test(part) || !xml) continue;
+    for (const rawField of scanFields(part, xml)) {
+      out.push({
+        part,
+        kind: kindForInstruction(rawField.instruction),
+        instruction: rawField.instruction.trim(),
+        ...(rawField.paragraphIndex !== undefined ? { paragraphIndex: rawField.paragraphIndex } : {}),
+      });
+    }
+    // SDT galerija sadrzaja je TOC bez instrukcije polja; analyzeFieldIntegrity je vec tako broji.
+    for (const match of xml.matchAll(/<w:docPartGallery\b[^>]*w:val=["']Table of Contents["']/gi)) {
+      out.push({ part, kind: 'toc', instruction: 'TOC', paragraphIndex: partParagraphIndex(xml, match.index || 0) });
+    }
   }
   return out;
 }

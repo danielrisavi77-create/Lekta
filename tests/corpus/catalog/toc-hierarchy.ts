@@ -1,3 +1,4 @@
+import { TOC_FIELD_PARA } from '../../helpers/docx-builder';
 /**
  * TOC + HIJERARHIJA atomski korpus (faza 4, "TOC enabler"): cetiri bodovane provjere sadrzaja i
  * hijerarhije naslova koje se emitiraju samo za profil s TOC-detalj gate-ovima
@@ -40,6 +41,7 @@ function tocSpec(): DocSpec {
       line('This thesis summarises the key findings on social services provision in the community.', { jc: 'both' }),
       line('Keywords: social work, services, analysis, method'),
       heading('Sadržaj'),
+      TOC_FIELD_PARA,
       PAGE_FIELD,
       TOC('1. Uvod\t1'),
       TOC('2. Razrada\t3'),
