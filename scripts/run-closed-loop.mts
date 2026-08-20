@@ -26,12 +26,37 @@ const { buildRepairableItems } = await import('../src/ui/repair-items');
 const { DEEP_CAPABLE } = await import('../src/ui/repair-panel');
 const { detectPassRegressions } = await import('../src/analysis/repair-regression');
 const { draftRuleEntriesFor, VERIFIED_PROFILES_WITH_DRAFTS } = await import('../src/profiles/drafts-runtime');
+const { compileEffectiveRules } = await import('../src/profiles/rule-compiler');
+const { normalizeCheckFlags } = await import('../src/profiles/profile-baseline');
 const { buildViolatingDocx } = await import('../tests/helpers/violating-docx');
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 const limitFlag = process.argv.indexOf('--limit');
 const limit = limitFlag > -1 ? Number(process.argv[limitFlag + 1]) : Infinity;
+
+/**
+ * Profil onako kako ga vidi ZIVI app: `effectiveRules` (Option A overlay), ne naslijedjeni
+ * `rules` mirror.
+ *
+ * `golden-entry.resolveProfile` namjerno klonira `entry.rules` (golden harness mjeri sirovi
+ * engine). Za closed-loop to je pogresna osnovica: popravak cita `ruleEntry`, pa bi analiza protiv
+ * mirrora mjerila DRUGU vrijednost od one koju popravak postavlja. Izmjereno na
+ * `vuka-strojarski-diplomski`: mirror kaze margine 2/2/2/2,5, zapis i `effectiveRules` kazu
+ * 3/3/3/3 - petlja je bez ovog overlaya prijavljivala lazno proturjecje izmedju popravka i ocjene.
+ */
+function liveProfile(profileId: string): Record<string, unknown> {
+  const withDrafts = (VERIFIED_PROFILES_WITH_DRAFTS as Array<{ id: string }>).find((p) => p.id === profileId);
+  const base = resolveProfile(profileId) as Record<string, unknown>;
+  if (!withDrafts) return base;
+  // Normalizacija MORA ici nakon overlaya: `applyEntry` upisuje sirovu vrijednost zapisa
+  // (npr. `size: 12`), a analizator ocekuje oblik iz `rules` (`size: [12]`). Zivi app radi isto -
+  // `currentProfile` normalizira nakon sto procita effectiveRules. Bez toga 144 profila puca na
+  // `profile.size.some is not a function` (izmjereno).
+  const merged = { ...base, ...compileEffectiveRules(withDrafts as never) } as Record<string, unknown>;
+  normalizeCheckFlags(merged);
+  return merged;
+}
 
 type Outcome =
   /** Popravak je ponudjen i barem jedan nalaz je nestao. */
@@ -61,11 +86,11 @@ interface Row {
 async function runProfile(profileId: string): Promise<Row> {
   const base: Row = { profileId, outcome: 'error', violated: [], requested: 0, resolved: 0, regressions: 0, textPreserved: true };
   try {
-    const profile = resolveProfile(profileId) as Record<string, unknown>;
+    const profile = liveProfile(profileId);
     const { bytes, violated } = await buildViolatingDocx(profile);
     if (!violated.length) return { ...base, outcome: 'no-rules' };
 
-    const before = await analyzeFixture(new File([bytes], `${profileId}.docx`, { type: DOCX_MIME }), { profileId });
+    const before = await analyzeFixture(new File([bytes], `${profileId}.docx`, { type: DOCX_MIME }), { profileId, profile });
     const items = buildRepairableItems(before.checks ?? [], profile, draftRuleEntriesFor(profileId));
     const requests = buildDefaultRepairRequests(items as never).map((request) =>
       DEEP_CAPABLE.has(request.fixerId) ? { ...request, params: { ...request.params, deep: true } } : request,
@@ -79,7 +104,7 @@ async function runProfile(profileId: string): Promise<Row> {
 
     const after = await analyzeFixture(
       new File([applied.docxBytes], `${profileId}-fixed.docx`, { type: DOCX_MIME }),
-      { profileId },
+      { profileId, profile },
     );
 
     const failing = (checks: Array<{ title: string; earned?: number; max?: number }>): Set<string> =>

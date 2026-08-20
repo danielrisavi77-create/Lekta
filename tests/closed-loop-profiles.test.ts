@@ -22,7 +22,9 @@ import { detectPassRegressions } from '../src/analysis/repair-regression';
 import { buildViolatingDocx, VIOLATABLE_CHECK_IDS } from './helpers/violating-docx';
 import { documentText } from './helpers/closed-loop-runner';
 import { assertPackageIntact } from './helpers/docx-package-assert';
-import { draftRuleEntriesFor } from '../src/profiles/drafts-runtime';
+import { draftRuleEntriesFor, VERIFIED_PROFILES_WITH_DRAFTS } from '../src/profiles/drafts-runtime';
+import { compileEffectiveRules } from '../src/profiles/rule-compiler';
+import { normalizeCheckFlags } from '../src/profiles/profile-baseline';
 import { DEEP_CAPABLE } from '../src/ui/repair-panel';
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
@@ -42,6 +44,29 @@ const SAMPLE_PROFILES = [
   'pmf-matematika-graduate',
 ] as const;
 
+/**
+ * Profil onako kako ga vidi ZIVI app: `effectiveRules` (Option A overlay), ne naslijedjeni
+ * `rules` mirror.
+ *
+ * `golden-entry.resolveProfile` namjerno klonira `entry.rules` (golden harness mjeri sirovi
+ * engine). Za closed-loop to je pogresna osnovica: popravak cita `ruleEntry`, pa bi analiza protiv
+ * mirrora mjerila DRUGU vrijednost od one koju popravak postavlja. Izmjereno na
+ * `vuka-strojarski-diplomski`: mirror kaze margine 2/2/2/2,5, zapis i `effectiveRules` kazu
+ * 3/3/3/3 - petlja je bez ovog overlaya prijavljivala lazno proturjecje izmedju popravka i ocjene.
+ */
+function liveProfile(profileId: string): Record<string, unknown> {
+  const withDrafts = (VERIFIED_PROFILES_WITH_DRAFTS as Array<{ id: string }>).find((p) => p.id === profileId);
+  const base = resolveProfile(profileId) as Record<string, unknown>;
+  if (!withDrafts) return base;
+  // Normalizacija MORA ici nakon overlaya: `applyEntry` upisuje sirovu vrijednost zapisa
+  // (npr. `size: 12`), a analizator ocekuje oblik iz `rules` (`size: [12]`). Zivi app radi isto -
+  // `currentProfile` normalizira nakon sto procita effectiveRules. Bez toga 144 profila puca na
+  // `profile.size.some is not a function` (izmjereno).
+  const merged = { ...base, ...compileEffectiveRules(withDrafts as never) } as Record<string, unknown>;
+  normalizeCheckFlags(merged);
+  return merged;
+}
+
 interface LoopOutcome {
   profileId: string;
   violated: string[];
@@ -53,13 +78,13 @@ interface LoopOutcome {
 }
 
 async function runProfile(profileId: string): Promise<LoopOutcome | null> {
-  const profile = resolveProfile(profileId) as Record<string, unknown> | undefined;
+  const profile = liveProfile(profileId);
   if (!profile) return null;
 
   const { bytes, violated } = await buildViolatingDocx(profile);
   if (!violated.length) return { profileId, violated: [], requested: 0, resolved: [], unresolved: [], textPreserved: true, regressions: 0 };
 
-  const before = await analyzeFixture(new File([bytes], `${profileId}.docx`, { type: DOCX_MIME }), { profileId });
+  const before = await analyzeFixture(new File([bytes], `${profileId}.docx`, { type: DOCX_MIME }), { profileId, profile });
   const items = buildRepairableItems(before.checks ?? [], profile, draftRuleEntriesFor(profileId));
   /**
    * Zrcali STVARNI korisnicki tok, ne samo `buildDefaultRepairRequests`. Deep preklopnik je u
@@ -79,7 +104,7 @@ async function runProfile(profileId: string): Promise<LoopOutcome | null> {
 
   const after = await analyzeFixture(
     new File([applied.docxBytes], `${profileId}-fixed.docx`, { type: DOCX_MIME }),
-    { profileId },
+    { profileId, profile },
   );
   const afterText = await documentText(applied.docxBytes);
 

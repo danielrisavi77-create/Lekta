@@ -40,11 +40,13 @@ describe('closed-loop kroz katalog: ishod se ne smije tiho promijeniti', () => {
   });
 
   /**
-   * Dva `unresolved` profila nisu slucajna: kod njih se CILJ POPRAVKA i CILJ PROVJERE razilaze
-   * (vidi nalaz o ruleEntry vs rules u planu). Popis je imenovan da rupa ne utihne.
+   * `unresolved` znaci da je popravak izveden a nijedan nalaz nije nestao. Danas ih nema, i to je
+   * tvrda granica: prvi takav profil je ili stvarni kvar popravka ili kriva osnovica u harnessu
+   * (vidi `liveProfile` u pogonu - analiza i popravak MORAJU gledati istu, `effectiveRules`
+   * osnovicu, inace petlja prijavi proturjecje kojeg u proizvodu nema).
    */
-  it('zatecena dva neuspjela profila ostaju imenovana', () => {
-    const unresolved = report.rows.filter((r) => r.outcome === 'unresolved').map((r) => r.profileId).sort();
-    expect(unresolved).toEqual(['vuka-strojarski-diplomski', 'vuka-strojarski-zavrsni']);
+  it('nijedan profil ne ostaje bez ijednog rijesenog nalaza', () => {
+    const unresolved = report.rows.filter((r) => r.outcome === 'unresolved').map((r) => r.profileId);
+    expect(unresolved, 'popravak je izveden, a nista nije rijeseno').toEqual([]);
   });
 });

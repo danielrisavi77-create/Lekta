@@ -583,28 +583,27 @@ Popravi.
 - Gard: `data/profiles/closed-loop-ratchet.json` + `tests/closed-loop-report.test.ts`. `regression`
   i `error` su TVRDA granica na nuli, ne ratchet; broj `pass` ne smije pasti.
 
-### P4-4. NALAZ: cilj popravka i cilj provjere se razilaze (22 pravila)
-- Petlja je izbacila dva `unresolved` profila (`vuka-strojarski-zavrsni`, `-diplomski`) i oni nisu
-  slucajni. Izmjereno na dokumentu: popravak postavi margine na **3/3/3/3**, a provjera ostaje
-  0/6 jer mjeri protiv **2/2/2/2,5**.
-- Uzrok: `ruleEntry.value` (status `verified`, sluzbeni izvor `vuka-strojarski-upute-2025`) kaze
-  3/3/3/3, a naslijedjeni `rules.margins` kaze 2/2/2/2,5. Popravak cita ZAPIS, provjera cita
-  NASLIJEDJENI mirror. Korisnik klikne Popravi, alat promijeni margine na verificiranu vrijednost,
-  i provjera i dalje javlja gresku.
-- Opseg (usporedba neosjetljiva na redoslijed kljuceva): **22 stvarna neslaganja** kroz 4 osi -
-  margins 15, font 4, font-size 3. Neka su drasticna:
-  - `unizd-pomorski-zavrsni` / `-diplomski`: zapis kaze Merriweather 10 pt, `rules` kaze
-    Times New Roman 12 pt;
-  - `fpzpu-zavrsni` / `-diplomski`: zapis Arial, `rules` Times New Roman;
-  - `ffri-germanistika-*`, `mev-zavrsni`, `vss-*`, `ffst-*`, `unizd-*`: razlicite margine.
-- Ovo je tocno rizik koji Option A opisuje: `ruleEntries` su izvor istine, `rules` je naslijedjeni
-  mirror, a `effectiveRules` bi ih trebao spojiti. Buduci da `tests/rule-compiler.test.ts` dokazuje
-  da je `effectiveRules` deep-equal `rules`, ovih 22 verificiranih pravila NE stize do engine-a.
-- AC: za svaki od 22 utvrditi koja je vrijednost tocna (zapis ima sluzbeni izvor i lokator, mirror
-  ga nema), pa uskladiti mirror ILI ispraviti zapis. Tek kad se slozi, popravak i ocjena govore
-  isto. Do tada dva profila ostaju imenovana u ratchetu.
-- Velicina: M (podatkovni rad uz izvore). Prioritet: **P0** - ovo nije rupa u pokrivenosti nego
-  proturjecje unutar onoga sto vec tvrdimo.
+### P4-4. POVUCENO: "cilj popravka i cilj provjere se razilaze" nije bio kvar proizvoda
+- Prvi prolaz petlje dao je dva `unresolved` profila (`vuka-strojarski-*`) i to je proglaseno
+  proturjecjem izmedju popravka i ocjene, s prioritetom P0. **Netocno; povuceno.**
+- Izmjereno do kraja: `rules.margins` kaze 2/2/2/2,5, ali `effectiveRules.margins` kaze **3/3/3/3**.
+  Overlay JEST primijenjen. Zivi app cita `effectiveRules`, pa ondje provjera i popravak traze istu
+  vrijednost i proturjecja nema.
+- Uzrok laznog signala bio je u HARNESSU: `golden-entry.resolveProfile` namjerno klonira
+  naslijedjeni `entry.rules` (golden mjeri sirovi engine), pa je analiza mjerila protiv mirrora dok
+  je popravak postavljao vrijednost iz zapisa. Ista zamka je vec zabiljezena u projektnoj memoriji.
+- Onih "22 neslaganja `ruleEntry` vs `rules`" nisu kvar nego OCEKIVANO stanje Option A migracije:
+  zapis je izvor istine, mirror je naslijedjen, a `effectiveRules` ih spaja. CLAUDE.md kao cilj
+  migracije i navodi brisanje kljuceva iz `rules` kad su izrazeni kao `ruleEntry`.
+- Ispravak u harnessu: `analyzeFixture` je dobio ADITIVAN `profile` override (zadana putanja
+  nepromijenjena, golden snapshoti netaknuti), a pogon gradi profil kao zivi app -
+  `effectiveRules` uz normalizaciju NAKON overlaya (bez nje 144 profila puca na
+  `profile.size.some is not a function`, jer `applyEntry` upisuje `size: 12` gdje analizator
+  ocekuje `[12]`).
+- Ishod nakon ispravka: **329 pass, 57 no-repair, 21 no-rules, 0 unresolved, 0 regression,
+  0 error.** Oba `vuka` profila prolaze.
+- Pouka, treca ovog tipa u ovoj fazi: prije nego se razlika proglasi kvarom, treba provjeriti mjeri
+  li harness istu osnovicu koju koristi proizvod.
 
 ---
 

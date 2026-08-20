@@ -56,9 +56,20 @@ export function resolveProfile(profileId: string) {
  * Analiziraj jedan .docx (File) odabranim profilom. Ugovor koji harness ocekuje:
  * analyzeFixture(file, { profileId }) => Promise<Result>.
  */
-export async function analyzeFixture(file: File, opts: { profileId?: string; settings?: any } = {}) {
+export async function analyzeFixture(
+  file: File,
+  opts: { profileId?: string; settings?: any; profile?: any } = {},
+) {
   const profileId = opts.profileId || VERIFIED_PROFILE_REGISTRY[0].id;
-  const profile = resolveProfile(profileId);
+  /**
+   * `opts.profile` je ADITIVAN override (zadana putanja se ne mijenja, pa golden snapshoti ostaju).
+   *
+   * Potreban je closed-loopu: `resolveProfile` namjerno klonira naslijedjeni `entry.rules`, dok
+   * zivi app cita `effectiveRules` (Option A overlay). Bez overridea analiza mjeri protiv mirrora,
+   * a popravak postavlja vrijednost iz `ruleEntry` - i petlja prijavi proturjecje kojeg u proizvodu
+   * nema (izmjereno na `vuka-strojarski-diplomski`: mirror 2/2/2/2,5, zapis i effectiveRules 3/3/3/3).
+   */
+  const profile = opts.profile ?? resolveProfile(profileId);
   const settings = {
     profileId,
     workType: profile.selection.workType,

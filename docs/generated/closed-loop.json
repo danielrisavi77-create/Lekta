@@ -2,10 +2,9 @@
   "schemaVersion": 1,
   "profileCount": 407,
   "byOutcome": {
-    "no-rules": 33,
-    "pass": 327,
-    "no-repair": 45,
-    "unresolved": 2
+    "no-rules": 21,
+    "pass": 329,
+    "no-repair": 57
   },
   "rows": [
     {
@@ -106,13 +105,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -134,8 +132,15 @@
     },
     {
       "profileId": "algebra-diplomski",
-      "outcome": "no-rules",
-      "violated": [],
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
       "requested": 0,
       "resolved": 0,
       "regressions": 0,
@@ -143,8 +148,15 @@
     },
     {
       "profileId": "algebra-diplomski-odnosi-s-javnoscu",
-      "outcome": "no-rules",
-      "violated": [],
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
       "requested": 0,
       "resolved": 0,
       "regressions": 0,
@@ -152,8 +164,15 @@
     },
     {
       "profileId": "algebra-specijalisticki",
-      "outcome": "no-rules",
-      "violated": [],
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
       "requested": 0,
       "resolved": 0,
       "regressions": 0,
@@ -161,8 +180,15 @@
     },
     {
       "profileId": "algebra-zavrsni",
-      "outcome": "no-rules",
-      "violated": [],
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
       "requested": 0,
       "resolved": 0,
       "regressions": 0,
@@ -170,8 +196,12 @@
     },
     {
       "profileId": "alu-diplomski",
-      "outcome": "no-rules",
-      "violated": [],
+      "outcome": "no-repair",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "paper-size"
+      ],
       "requested": 0,
       "resolved": 0,
       "regressions": 0,
@@ -286,6 +316,7 @@
       "profileId": "arca-zavrsni",
       "outcome": "pass",
       "violated": [
+        "font",
         "paper-size"
       ],
       "requested": 1,
@@ -448,11 +479,10 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing"
       ],
-      "requested": 3,
-      "resolved": 3,
+      "requested": 2,
+      "resolved": 2,
       "regressions": 0,
       "textPreserved": true
     },
@@ -461,11 +491,10 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing"
       ],
-      "requested": 3,
-      "resolved": 3,
+      "requested": 2,
+      "resolved": 2,
       "regressions": 0,
       "textPreserved": true
     },
@@ -483,14 +512,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -499,14 +527,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -515,14 +542,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -531,13 +557,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -546,13 +571,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -576,13 +600,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -591,13 +614,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -606,14 +628,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -622,14 +643,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -638,13 +658,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -668,13 +687,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -683,14 +701,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -711,8 +728,11 @@
     },
     {
       "profileId": "efzg-seminarski",
-      "outcome": "no-rules",
-      "violated": [],
+      "outcome": "no-repair",
+      "violated": [
+        "line-spacing",
+        "margins"
+      ],
       "requested": 0,
       "resolved": 0,
       "regressions": 0,
@@ -723,39 +743,6 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
-        "line-spacing",
-        "justify",
-        "margins",
-        "paper-size"
-      ],
-      "requested": 5,
-      "resolved": 5,
-      "regressions": 0,
-      "textPreserved": true
-    },
-    {
-      "profileId": "efzg-strucni-racunovodstvo",
-      "outcome": "pass",
-      "violated": [
-        "font",
-        "font-size",
-        "line-spacing",
-        "justify",
-        "margins",
-        "paper-size"
-      ],
-      "requested": 5,
-      "resolved": 5,
-      "regressions": 0,
-      "textPreserved": true
-    },
-    {
-      "profileId": "efzg-zavrsni",
-      "outcome": "pass",
-      "violated": [
-        "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
@@ -767,15 +754,44 @@
       "textPreserved": true
     },
     {
+      "profileId": "efzg-strucni-racunovodstvo",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "efzg-zavrsni",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
       "profileId": "erf-diplomski",
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing"
       ],
-      "requested": 3,
-      "resolved": 3,
+      "requested": 2,
+      "resolved": 2,
       "regressions": 0,
       "textPreserved": true
     },
@@ -829,14 +845,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -845,14 +860,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -875,7 +889,6 @@
       "profileId": "fbf-specijalisticki",
       "outcome": "pass",
       "violated": [
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
@@ -951,13 +964,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -981,13 +993,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -996,13 +1007,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1043,13 +1053,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1058,13 +1067,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1073,13 +1081,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1093,8 +1100,8 @@
         "margins",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1108,8 +1115,8 @@
         "margins",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1120,6 +1127,7 @@
         "font",
         "font-size",
         "line-spacing",
+        "justify",
         "margins",
         "paper-size"
       ],
@@ -1135,6 +1143,7 @@
         "font",
         "font-size",
         "line-spacing",
+        "justify",
         "margins",
         "paper-size"
       ],
@@ -1185,7 +1194,7 @@
         "paper-size"
       ],
       "requested": 6,
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1209,13 +1218,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1254,14 +1262,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1277,7 +1284,7 @@
         "paper-size"
       ],
       "requested": 6,
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1293,7 +1300,7 @@
         "paper-size"
       ],
       "requested": 6,
-      "resolved": 5,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1382,14 +1389,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1398,13 +1404,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1413,13 +1418,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1449,8 +1453,8 @@
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 6,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1465,8 +1469,8 @@
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 6,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1475,12 +1479,11 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1489,13 +1492,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1504,13 +1506,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1530,13 +1531,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1545,13 +1545,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1560,13 +1559,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1575,14 +1573,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1591,12 +1588,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
+        "justify",
         "margins"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1605,13 +1602,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1620,12 +1616,11 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1634,12 +1629,11 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1648,13 +1642,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1678,13 +1671,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1737,12 +1729,11 @@
       "profileId": "fizri-diplomski",
       "outcome": "pass",
       "violated": [
-        "font-size",
         "line-spacing",
         "paper-size"
       ],
-      "requested": 3,
-      "resolved": 3,
+      "requested": 2,
+      "resolved": 2,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1750,12 +1741,11 @@
       "profileId": "fizri-zavrsni",
       "outcome": "pass",
       "violated": [
-        "font-size",
         "line-spacing",
         "paper-size"
       ],
-      "requested": 3,
-      "resolved": 3,
+      "requested": 2,
+      "resolved": 2,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1763,12 +1753,11 @@
       "profileId": "fkit-diplomski",
       "outcome": "pass",
       "violated": [
-        "font-size",
         "line-spacing",
         "paper-size"
       ],
-      "requested": 3,
-      "resolved": 3,
+      "requested": 2,
+      "resolved": 2,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1791,12 +1780,11 @@
       "profileId": "fkit-zavrsni",
       "outcome": "pass",
       "violated": [
-        "font-size",
         "line-spacing",
         "paper-size"
       ],
-      "requested": 3,
-      "resolved": 3,
+      "requested": 2,
+      "resolved": 2,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1805,14 +1793,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1821,14 +1808,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1838,6 +1824,7 @@
       "violated": [
         "font",
         "font-size",
+        "margins",
         "paper-size"
       ],
       "requested": 3,
@@ -1851,6 +1838,7 @@
       "violated": [
         "font",
         "font-size",
+        "margins",
         "paper-size"
       ],
       "requested": 3,
@@ -1878,13 +1866,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1893,13 +1880,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -1920,8 +1906,12 @@
     },
     {
       "profileId": "fpz-diplomski",
-      "outcome": "no-rules",
-      "violated": [],
+      "outcome": "no-repair",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "margins"
+      ],
       "requested": 0,
       "resolved": 0,
       "regressions": 0,
@@ -1929,8 +1919,12 @@
     },
     {
       "profileId": "fpz-zavrsni",
-      "outcome": "no-rules",
-      "violated": [],
+      "outcome": "no-repair",
+      "violated": [
+        "font-size",
+        "line-spacing",
+        "margins"
+      ],
       "requested": 0,
       "resolved": 0,
       "regressions": 0,
@@ -2154,7 +2148,7 @@
         "paper-size"
       ],
       "requested": 4,
-      "resolved": 2,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2169,7 +2163,7 @@
         "paper-size"
       ],
       "requested": 4,
-      "resolved": 2,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2267,14 +2261,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2283,14 +2276,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2326,13 +2318,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 3,
-      "resolved": 3,
+      "requested": 2,
+      "resolved": 2,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2356,13 +2347,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 3,
-      "resolved": 3,
+      "requested": 2,
+      "resolved": 2,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2401,14 +2391,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2417,14 +2406,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2433,13 +2421,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2463,14 +2450,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2479,14 +2465,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2519,7 +2504,8 @@
         "font",
         "font-size",
         "line-spacing",
-        "margins"
+        "margins",
+        "paper-size"
       ],
       "requested": 4,
       "resolved": 4,
@@ -2533,7 +2519,8 @@
         "font",
         "font-size",
         "line-spacing",
-        "margins"
+        "margins",
+        "paper-size"
       ],
       "requested": 4,
       "resolved": 4,
@@ -2545,13 +2532,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2575,13 +2561,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2618,52 +2603,6 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
-        "line-spacing",
-        "margins",
-        "paper-size"
-      ],
-      "requested": 5,
-      "resolved": 5,
-      "regressions": 0,
-      "textPreserved": true
-    },
-    {
-      "profileId": "kemos-zavrsni",
-      "outcome": "pass",
-      "violated": [
-        "font",
-        "font-size",
-        "line-spacing",
-        "margins",
-        "paper-size"
-      ],
-      "requested": 5,
-      "resolved": 5,
-      "regressions": 0,
-      "textPreserved": true
-    },
-    {
-      "profileId": "kif-diplomski",
-      "outcome": "pass",
-      "violated": [
-        "font",
-        "font-size",
-        "line-spacing",
-        "justify",
-        "margins"
-      ],
-      "requested": 5,
-      "resolved": 5,
-      "regressions": 0,
-      "textPreserved": true
-    },
-    {
-      "profileId": "kif-doktorski",
-      "outcome": "pass",
-      "violated": [
-        "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
@@ -2674,17 +2613,58 @@
       "textPreserved": true
     },
     {
-      "profileId": "kif-specijalisticki",
+      "profileId": "kemos-zavrsni",
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "kif-diplomski",
+      "outcome": "pass",
+      "violated": [
+        "font",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "kif-doktorski",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "line-spacing",
+        "margins",
+        "paper-size"
+      ],
+      "requested": 3,
+      "resolved": 3,
+      "regressions": 0,
+      "textPreserved": true
+    },
+    {
+      "profileId": "kif-specijalisticki",
+      "outcome": "pass",
+      "violated": [
+        "font",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2723,13 +2703,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2738,14 +2717,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2754,14 +2732,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2770,13 +2747,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2785,13 +2761,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2800,12 +2775,11 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2814,12 +2788,11 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2827,6 +2800,7 @@
       "profileId": "logri-diplomski",
       "outcome": "pass",
       "violated": [
+        "font",
         "font-size",
         "line-spacing",
         "justify",
@@ -2930,13 +2904,12 @@
       "profileId": "medri-farmacija-diplomski",
       "outcome": "pass",
       "violated": [
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2944,13 +2917,12 @@
       "profileId": "medri-medicina-diplomski",
       "outcome": "pass",
       "violated": [
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2960,6 +2932,8 @@
       "violated": [
         "font",
         "font-size",
+        "line-spacing",
+        "margins",
         "paper-size"
       ],
       "requested": 1,
@@ -2983,14 +2957,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -2999,14 +2972,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3015,14 +2987,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3047,13 +3018,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
+      "requested": 4,
       "resolved": 4,
       "regressions": 0,
       "textPreserved": true
@@ -3121,8 +3091,10 @@
     },
     {
       "profileId": "muza-diplomski",
-      "outcome": "no-rules",
-      "violated": [],
+      "outcome": "no-repair",
+      "violated": [
+        "paper-size"
+      ],
       "requested": 0,
       "resolved": 0,
       "regressions": 0,
@@ -3150,6 +3122,7 @@
         "font",
         "font-size",
         "line-spacing",
+        "margins",
         "paper-size"
       ],
       "requested": 4,
@@ -3164,6 +3137,7 @@
         "font",
         "font-size",
         "line-spacing",
+        "margins",
         "paper-size"
       ],
       "requested": 4,
@@ -3176,7 +3150,9 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "line-spacing"
+        "font-size",
+        "line-spacing",
+        "margins"
       ],
       "requested": 2,
       "resolved": 2,
@@ -3188,7 +3164,9 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "line-spacing"
+        "font-size",
+        "line-spacing",
+        "margins"
       ],
       "requested": 2,
       "resolved": 2,
@@ -3232,12 +3210,11 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3261,13 +3238,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3276,13 +3252,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3291,12 +3266,11 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify"
       ],
-      "requested": 3,
-      "resolved": 3,
+      "requested": 2,
+      "resolved": 2,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3305,12 +3279,11 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify"
       ],
-      "requested": 3,
-      "resolved": 3,
+      "requested": 2,
+      "resolved": 2,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3333,20 +3306,26 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
     {
       "profileId": "pmf-geofizika-graduate",
-      "outcome": "no-rules",
-      "violated": [],
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins",
+        "paper-size"
+      ],
       "requested": 0,
       "resolved": 0,
       "regressions": 0,
@@ -3357,13 +3336,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3372,11 +3350,10 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing"
       ],
-      "requested": 3,
-      "resolved": 3,
+      "requested": 2,
+      "resolved": 2,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3384,11 +3361,12 @@
       "profileId": "pmf-matematika-graduate",
       "outcome": "pass",
       "violated": [
-        "font-size",
+        "line-spacing",
+        "margins",
         "paper-size"
       ],
-      "requested": 2,
-      "resolved": 2,
+      "requested": 1,
+      "resolved": 1,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3397,13 +3375,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3412,13 +3389,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3626,13 +3602,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3641,13 +3616,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3656,13 +3630,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3686,13 +3659,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3701,13 +3673,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3764,14 +3735,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3780,14 +3750,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3796,12 +3765,11 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3810,19 +3778,24 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
     {
       "profileId": "riteh-diplomski",
-      "outcome": "no-rules",
-      "violated": [],
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
       "requested": 0,
       "resolved": 0,
       "regressions": 0,
@@ -3830,8 +3803,14 @@
     },
     {
       "profileId": "riteh-zavrsni",
-      "outcome": "no-rules",
-      "violated": [],
+      "outcome": "no-repair",
+      "violated": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
       "requested": 0,
       "resolved": 0,
       "regressions": 0,
@@ -3842,14 +3821,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3872,13 +3850,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -3998,6 +3975,7 @@
         "font",
         "font-size",
         "line-spacing",
+        "justify",
         "margins",
         "paper-size"
       ],
@@ -4013,6 +3991,7 @@
         "font",
         "font-size",
         "line-spacing",
+        "justify",
         "margins"
       ],
       "requested": 0,
@@ -4025,13 +4004,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4040,13 +4018,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4055,13 +4032,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4115,13 +4091,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4160,13 +4135,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4175,14 +4149,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4206,14 +4179,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4240,13 +4212,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4255,13 +4226,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4288,14 +4258,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4334,13 +4303,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4364,14 +4332,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4396,13 +4363,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4411,13 +4377,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4426,13 +4391,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4441,13 +4405,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4456,13 +4419,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4471,13 +4433,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4645,7 +4606,7 @@
         "paper-size"
       ],
       "requested": 3,
-      "resolved": 2,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4691,8 +4652,8 @@
         "margins",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4826,8 +4787,8 @@
         "margins",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 3,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4976,13 +4937,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -4997,8 +4957,8 @@
         "margins",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 3,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5013,8 +4973,8 @@
         "margins",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 3,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5053,14 +5013,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5076,7 +5035,7 @@
         "paper-size"
       ],
       "requested": 2,
-      "resolved": 1,
+      "resolved": 2,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5100,13 +5059,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5137,8 +5095,8 @@
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 6,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5192,14 +5150,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5208,14 +5165,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5230,8 +5186,8 @@
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 6,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5266,12 +5222,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
+        "margins",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5311,14 +5267,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5327,14 +5282,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5343,14 +5297,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5375,14 +5328,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5422,13 +5374,12 @@
       "profileId": "vhzk-zavrsni",
       "outcome": "pass",
       "violated": [
-        "font-size",
         "line-spacing",
         "justify",
         "margins"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5437,14 +5388,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5453,14 +5403,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5551,8 +5500,8 @@
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 4,
+      "requested": 6,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5567,8 +5516,8 @@
         "margins",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 4,
+      "requested": 6,
+      "resolved": 6,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5577,14 +5526,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5722,7 +5670,7 @@
     },
     {
       "profileId": "vuka-strojarski-diplomski",
-      "outcome": "unresolved",
+      "outcome": "pass",
       "violated": [
         "font",
         "font-size",
@@ -5732,13 +5680,13 @@
         "paper-size"
       ],
       "requested": 1,
-      "resolved": 0,
+      "resolved": 1,
       "regressions": 0,
       "textPreserved": true
     },
     {
       "profileId": "vuka-strojarski-zavrsni",
-      "outcome": "unresolved",
+      "outcome": "pass",
       "violated": [
         "font",
         "font-size",
@@ -5748,7 +5696,7 @@
         "paper-size"
       ],
       "requested": 1,
-      "resolved": 0,
+      "resolved": 1,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5787,14 +5735,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5803,14 +5750,13 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "margins",
         "paper-size"
       ],
-      "requested": 6,
-      "resolved": 6,
+      "requested": 5,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5843,12 +5789,11 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5857,13 +5802,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5872,13 +5816,12 @@
       "outcome": "pass",
       "violated": [
         "font",
-        "font-size",
         "line-spacing",
         "justify",
         "paper-size"
       ],
-      "requested": 5,
-      "resolved": 5,
+      "requested": 4,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5886,13 +5829,12 @@
       "profileId": "zvu-specijalisticki",
       "outcome": "pass",
       "violated": [
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5900,13 +5842,12 @@
       "profileId": "zvu-zavrsni",
       "outcome": "pass",
       "violated": [
-        "font-size",
         "line-spacing",
         "margins",
         "paper-size"
       ],
-      "requested": 4,
-      "resolved": 4,
+      "requested": 3,
+      "resolved": 3,
       "regressions": 0,
       "textPreserved": true
     }

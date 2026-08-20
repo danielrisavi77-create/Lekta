@@ -2,10 +2,10 @@
   "note": "Zatecen ishod closed-loop petlje kroz katalog (P4-3). Brojke smiju rasti u korist 'pass', ali se ne smiju tiho promijeniti. Osvjezi s `npm run closed-loop` pa upisi ovdje.",
   "measuredAt": "2026-08-20",
   "profileCount": 407,
-  "pass": 327,
-  "noRepair": 45,
-  "noRules": 33,
-  "unresolved": 2,
+  "pass": 329,
+  "noRepair": 57,
+  "noRules": 21,
+  "unresolved": 0,
   "regression": 0,
   "error": 0
 }
