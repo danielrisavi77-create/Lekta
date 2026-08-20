@@ -717,6 +717,60 @@ na neku literaturu..."* - sto o IEEE stilu ne govori nista. Provjereno neovisno,
 Status je `advisory` pa NE boduje, ali `recommendedCitation` odredjuje koji citatni motor radi nad
 dokumentom, dakle ucinak postoji. Traba reverifikacija: ili naci pravi citat, ili spustiti tvrdnju.
 
+### Drugi krug: pet jedinica, 28 tvrdnji (2026-08-21)
+
+Lanac je pusten na `efzg`, `unidu`, `unizd`, `pmf` i `ffos`, s izmjerenim ocekivanjem iz FER pilota:
+pitanje NIJE "koliko pravila dobivamo" nego "koliko ih je legitimno advisory".
+
+| jedinica | prolazi | pada | trazi covjeka | ishod |
+|---|---|---|---|---|
+| `efzg`  | 5/5 | 0 | 0 | bodovljivo |
+| `unidu` | 5/5 | 0 | 1 (`font`) | bodovljivo osim fonta |
+| `pmf`   | 4/4 | 0 | 1 (`font-size`) | djelomicno; izvor je ODJELNI |
+| `ffos`  | 8/9 | 1 (`margins`) | 0 | bodovljivo osim margina |
+| `unizd` | 5/5 | 0 | 5 (cijeli dokument) | ostaje advisory |
+
+Nalazi koje bi cisto agentski pregled propustio:
+
+- **`efzg`: iste vrijednosti, tri razlicita modaliteta.** A4 / Calibri ili TNR / 12 / 2,5 cm / 1,5
+  pojavljuju se na str. 3 pod *"moze imati"*, na str. 10 pod *"u pravilu iznosi"* i na str. 13 kao
+  nehedgirano *"Radovi se pisu..."*. Samo trece je odredba, i jedino ono vrijedi za SVE vrste rada.
+  Bez razlikovanja modaliteta uzeo bi se bilo koji od tri i dva puta pogrijesilo.
+- **`unizd`: dokument se odrice sam.** Pet tvrdnji proslo je 5/5 BEZ ijedne zastavice, jer recenice
+  glase *"Format rada je A4 (210 x 297 mm)."* - prezent indikativa, jaci od *"treba"*. Ali isti
+  dokument o sebi kaze: *"Predstavljaju samo jednu od vise mogucnosti kako se pisu navedeni
+  studentski radovi"*. Snaga recenice ne moze nadjacati odricanje dokumenta.
+  **Zakljucak: 14 unizd profila na razini E je TOCNO stanje, drugi potvrdjen "nije rupa" nakon FER-a.**
+- **`pmf` ne propisuje font uopce.** Nijedna rijec o obitelji slova. Bodovanje fonta za pmf bilo bi
+  izmisljeno pravilo. Uz to je citat iz `pmf-biol-diplomski-2026.pdf`, dakle iz uputa JEDNOG odjela;
+  pmf je po odjelima, pa se pravilo ne smije prosiriti na geog/geol/math bez vlastitog izvora.
+- **`ffos` margine nisu simetricne** (lijeva 25, desna 20, gornja/donja 25 mm). Uniformno
+  `margins = 2.5` kodiralo bi NESUKLADAN dokument kao sukladan, isti kvar kao na FER-u.
+
+### Verifikator je narastao na PET provjera, i to iz izmjerenih promasaja
+
+Svaka nova provjera dodana je tek nakon sto je propustila konkretan slucaj, nikad preventivno:
+
+4. **DOKUMENT se odrice** - dodana nakon `unizd`. Cita SVE stranice, ne samo citiranu, jer je
+   odricaj tipicno u uvodu, a tvrdnja u sredini dokumenta.
+5. **IZBOR umjesto ciljane vrijednosti** - dodana nakon `pmf`: *"treba biti 11 ili 12 pt"* nije jedna
+   vrijednost. Popravak koji postavi 12 srusio bi rad legitimno pisan u 11. Za `font` je skup
+   normalan i ne oznacava se; za brojcane osi nije.
+
+Prozor od DVIJE recenice za odricaj isproban je i **odbacen**: odmah je dao lazno pozitivan nalaz na
+`pmf-biol` (*"To se posebice preporucuje u slucajevima pitanja o prihvatljivosti same teme"*
+preporucuje savjetovanje s mentorom, a samoreferenca je bila u susjednoj recenici o necem drugom).
+Cetiri valjane odredbe bile bi srusene tudjom recenicom. Sada se trazi ista recenica.
+
+Kontrola razlucivosti (bitna, jer gard koji uvijek okida je beskoristan): odricaj okida na `unizd`,
+a NE okida na `unidu`, `efzg`, `pmf` ni `ffos`.
+
+### Sto je ovaj krug dokazao o samom lancu
+Agenti su bili tocni na sidru: svih 25 pmf/ffos citata naslo se doslovno, i to na TOCNOJ stranici
+(provjereno pretragom kroz sve datoteke jedinice, pa je izvedena i datoteka koju agent nije naveo).
+Promasaji nisu bili u citanju nego u **statusu**: sto je obveza, na koga se odnosi i je li vrijednost
+jedna. To je tocno ono sto mehanicka provjera hvata, a slaganje triju agenata ne bi.
+
 ---
 
 ## FAZA P5: stvarni korpus i Word oracle
