@@ -41,16 +41,22 @@ function body(words: number): ParaSpec[] {
  * fontu). Okvir je usidren UNUTAR odlomka (`w:p > w:r > w:pict > ... > w:txbxContent > w:p`),
  * pa je unutarnji odlomak potomak vanjskog; vidi `ownsNode` u src/docx/parser.ts.
  */
-function titleInTextBox(lines: string[]): ParaSpec {
+function titleInTextBox(lines: string[], alternateContent = false): ParaSpec {
   const inner = lines
     .map((t) => `<w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="${TNR}" w:hAnsi="${TNR}"/><w:sz w:val="24"/></w:rPr><w:t xml:space="preserve">${t}</w:t></w:r></w:p>`)
     .join('');
+  const vml = `<w:pict><v:shape><v:textbox><w:txbxContent>${inner}</w:txbxContent></v:textbox></v:shape></w:pict>`;
+  // `alternateContent`: oblik koji Word 2010+ pise po ZADANOM, s dvije reprezentacije istog
+  // teksta. Citatelj prikazuje tocno jednu; do 2026-08-21 su se brojale obje.
+  const body = alternateContent
+    ? '<mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"' +
+      ' xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape">' +
+      `<mc:Choice Requires="wps"><w:drawing><wps:txbx><w:txbxContent>${inner}</w:txbxContent></wps:txbx></w:drawing></mc:Choice>` +
+      `<mc:Fallback>${vml}</mc:Fallback></mc:AlternateContent>`
+    : vml;
   return {
     text: '',
-    raw:
-      '<w:p><w:r><w:pict xmlns:v="urn:schemas-microsoft-com:vml"><v:shape><v:textbox><w:txbxContent>' +
-      inner +
-      '</w:txbxContent></v:textbox></v:shape></w:pict></w:r></w:p>',
+    raw: `<w:p xmlns:v="urn:schemas-microsoft-com:vml"><w:r>${body}</w:r></w:p>`,
   };
 }
 
@@ -167,6 +173,20 @@ const CORPUS: CorpusItem[] = [
           'Diplomski rad',
           'Zagreb, 2026.',
         ]),
+        ...fpzgWork(11000),
+      ],
+    },
+  },
+  {
+    // Isti okvir, ali u obliku koji Word 2010+ pise po zadanom (mc:Choice + mc:Fallback).
+    name: 'fpzg-diplomski-naslovnica-alternate-content',
+    profileId: 'fpzg-politologija-diplomski',
+    spec: {
+      paragraphs: [
+        titleInTextBox(
+          ['Sveučilište u Zagrebu', 'Fakultet političkih znanosti', 'Analiza medijske pismenosti mladih', 'Diplomski rad', 'Zagreb, 2026.'],
+          true,
+        ),
         ...fpzgWork(11000),
       ],
     },

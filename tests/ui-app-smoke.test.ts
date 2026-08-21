@@ -11,5 +11,8 @@ describe('ui/app modul', () => {
   it('evaluira se bez greske u happy-dom okruzenju bez #analyzer', async () => {
     const mod = await import('../src/ui/app');
     expect(mod).toBeTruthy();
-  }, 30000); // velik graf modula (katalog + registri + data JSON-i), transform zna trajati
+  // Velik graf modula (katalog + registri + data JSON-i). Za razliku od ostalih timeouta
+  // podignutih 2026-08-20/21, ovaj NIJE bio artefakt opterecenja: izmjereno na SLOBODNOM
+  // stroju traje 28,8 s, dakle 30 s je bilo pretijesno i bez ijednog paralelnog runa.
+  }, 180000);
 });

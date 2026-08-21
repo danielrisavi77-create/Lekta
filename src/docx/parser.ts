@@ -300,6 +300,37 @@ export function ownsNode(p: any, node: any): boolean {
   return false;
 }
 
+/**
+ * Je li cvor u granici `mc:Fallback` koju citatelj NE bi prikazao?
+ *
+ * Word od 2010. okvire pise kao `mc:AlternateContent` s dvije reprezentacije ISTOG sadrzaja:
+ * `mc:Choice Requires="wps"` (DrawingML) i `mc:Fallback` (VML). Citatelj prikazuje tocno jednu,
+ * ovisno o tome podrzava li trazeni namespace; obje nikad nisu na ekranu istovremeno.
+ *
+ * Do 2026-08-21 su se brojale obje (izmjereno: okvir s 10 rijeci dao je +20 rijeci i +3 odlomka
+ * umjesto +1). To je CESCI oblik od golog `w:pict`, jer ga Word pise po zadanom.
+ *
+ * Fallback se potiskuje SAMO kad uz njega stvarno stoji `mc:Choice`; kad ga nema, Fallback je
+ * jedina reprezentacija i mora se citati.
+ */
+export function inSuppressedFallback(node: any): boolean {
+  for (let a = node?.parentNode; a; a = a.parentNode) {
+    if (a.nodeName !== 'mc:Fallback' && a.localName !== 'Fallback') continue;
+    const alt = a.parentNode;
+    if (!alt) return false;
+    for (const sib of alt.childNodes || []) {
+      if (sib !== a && (sib.nodeName === 'mc:Choice' || sib.localName === 'Choice')) return true;
+    }
+    return false;
+  }
+  return false;
+}
+
+/** Odlomci tijela dokumenta: bez potisnute `mc:Fallback` grane. Vidi `inSuppressedFallback`. */
+export function bodyParagraphs(root: any): any[] {
+  return [...root.getElementsByTagName('w:p')].filter((p: any) => !inSuppressedFallback(p));
+}
+
 /** Runovi koji pripadaju BAS ovom odlomku (bez onih iz ugnjezdenih okvira). Vidi `ownsNode`. */
 export function ownRuns(p: any): any[] {
   return [...p.getElementsByTagName('w:r')].filter((r: any) => ownsNode(p, r));

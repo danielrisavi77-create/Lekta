@@ -70,3 +70,44 @@ describe('DOCX-06: tekst u okviru se broji jednom', () => {
     expect(String(c.detail)).toContain('Times New Roman');
   });
 });
+
+/**
+ * Word od 2010. okvir pise kao `mc:AlternateContent` s DVIJE reprezentacije ISTOG teksta:
+ * `mc:Choice` (DrawingML, `wps:txbx`) i `mc:Fallback` (VML, `w:pict`). Citatelj bira jednu,
+ * ovisno o tome podrzava li `Requires` namespace; obje nikad nisu obje na ekranu.
+ *
+ * `ownsNode` rjesava SIDRENI odlomak, ali `els(doc,'w:p')` nalazi oba ugnjezdena odlomka, pa se
+ * tekst i dalje brojao dvaput. Izmjereno: +20 rijeci i +3 odlomka za jedan okvir s 10 rijeci.
+ * Ovo je CESCI oblik od golog `w:pict`, jer ga Word pise po zadanom.
+ */
+const ALT_CONTENT: ParaSpec = {
+  raw:
+    '<w:p><w:r><mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"' +
+    ' xmlns:v="urn:schemas-microsoft-com:vml"' +
+    ' xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape">' +
+    '<mc:Choice Requires="wps"><w:drawing><wps:txbx><w:txbxContent>' +
+    `<w:p><w:r><w:t xml:space="preserve">${TEN_WORDS}</w:t></w:r></w:p>` +
+    '</w:txbxContent></wps:txbx></w:drawing></mc:Choice>' +
+    '<mc:Fallback><w:pict><v:shape><v:textbox><w:txbxContent>' +
+    `<w:p><w:r><w:t xml:space="preserve">${TEN_WORDS}</w:t></w:r></w:p>` +
+    '</w:txbxContent></v:textbox></v:shape></w:pict></mc:Fallback>' +
+    '</mc:AlternateContent></w:r></w:p>',
+};
+
+describe('DOCX-06: mc:AlternateContent se broji jednom', () => {
+  it('Choice i Fallback nose isti tekst, pa se broji samo jedna reprezentacija', async () => {
+    const base = await words([]);
+    const plain = await words([PLAIN]);
+    const alt = await words([ALT_CONTENT]);
+
+    expect(plain - base, 'kontrola').toBe(10);
+    expect(alt - base, 'Fallback je brojan uz Choice').toBe(10);
+  });
+
+  it('ne stvara odlomak za obje reprezentacije', async () => {
+    const bare: any = await analyzeFixture(buildDocxFile({ paragraphs: BODY }), { profileId: PROFILE });
+    const withAlt: any = await analyzeFixture(buildDocxFile({ paragraphs: [...BODY, ALT_CONTENT] }), { profileId: PROFILE });
+    // Sidreni odlomak + JEDNA reprezentacija = 2, ne 3.
+    expect(Number(withAlt.stats?.paragraphs) - Number(bare.stats?.paragraphs)).toBe(2);
+  });
+});
