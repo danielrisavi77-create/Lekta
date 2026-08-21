@@ -137,7 +137,30 @@ DOC_DISCLAIMER = re.compile(
 # potreban.
 SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+")
 
+# Odricaj se PONISTAVA ako isti dokument drugdje kaze da obvezuje. Izmjereno: vss-upute-zavrsni-2023
+# nosi DOSLOVNO isti predlozak predgovora kao unizd-turizam ("Predstavljaju samo jednu od vise
+# mogucnosti"), ali nastavlja "...duzni ste postivati ove Upute i svoje zavrsne radove pisati
+# sukladno ovim Uputama", dok unizd na tom mjestu kaze "preporucujemo postivanje ovih Uputa". Isti
+# tekst, suprotan zakljucak; bez ove provjere oba dobiju istu presudu.
+BINDING_OVERRIDE = re.compile(
+    r"(du[žz]n\w*\s+(ste|su|je)|obvez(n\w*\s+(ste|su|je)|uju|an\s+je)|sukladno\s+ov\w+\s+uput)",
+    re.I,
+)
+
+# "u ovim uputama" je mjesna odredba ("ondje pise"), ne subjekt odricaja. Izmjereno na mefst, gdje
+# "preporucuje se onaj koristen u ovim uputama" preporucuje STIL GRAFICKIH OZNAKA, a ne sam dokument.
+LOCATIVE_SELF = re.compile(r"\bu\s+ov\w{0,3}\s+(uput\w*|naput\w*|smjernic\w*)", re.I)
+
 _doc_cache: dict[str, object] = {}
+
+
+def binding_override(doc) -> bool:
+    """Kaze li dokument IGDJE da obvezuje. Trazi se po cijelom dokumentu, jer obvezujuca recenica i
+    ublazavajuca redovito stoje u istom predgovoru, ali ne u istoj recenici."""
+    for i in range(doc.page_count):
+        if BINDING_OVERRIDE.search(squash(doc[i].get_text())):
+            return True
+    return False
 
 
 def document_disclaimer(rel_path: str):
@@ -153,6 +176,12 @@ def document_disclaimer(rel_path: str):
             doc = None
         if doc is not None:
             try:
+                # Racuna se JEDNOM po dokumentu. Prva izvedba zvala je binding_override unutar petlje
+                # po recenicama, pa je svaki kandidat ponovno citao sve stranice; revizija od 1391
+                # pravila time je postala nemjerljivo spora.
+                binding = binding_override(doc)
+                if binding:
+                    return None  # dokument drugdje izricito kaze da obvezuje
                 for page_index in range(doc.page_count):
                     text = squash(doc[page_index].get_text())
                     if not text:
@@ -162,6 +191,8 @@ def document_disclaimer(rel_path: str):
                         hedge = DOC_DISCLAIMER.search(sentence)
                         if not hedge:
                             continue
+                        if LOCATIVE_SELF.search(sentence):
+                            continue  # samoreferenca je mjesna odredba, ne subjekt
                         if SELF_REFERENCE.search(sentence):
                             found = {
                                 "page": page_index + 1,

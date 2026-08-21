@@ -42,6 +42,33 @@
       "decidedBy": "Daniel Risavi",
       "decidedAt": "2026-08-21",
       "rationale": "Upute su sluzbeno objavljene, sto ih po CLAUDE.md cini dopustenim izvorom, a vrijednosti u pojedinim recenicama nisu ublazene. Vlasnik je odlucio ostaviti bodovanima uz zabiljezen nalaz."
+    },
+    {
+      "ruleIds": [
+        "pravo-doktorski-pravne-znanosti--footnote-font",
+        "pravo-doktorski-pravne-znanosti--footnote-size",
+        "pravo-doktorski-pravne-znanosti--footnote-spacing",
+        "pravo-doktorski-pravne-znanosti--justify",
+        "pravo-doktorski-pravne-znanosti--page-numbers",
+        "pravo-integrirani-diplomski--justify",
+        "pravo-javna-uprava-diplomski--justify",
+        "pravo-javna-uprava-prijediplomski--justify",
+        "pravo-opci-pravni-akademski-rad--justify",
+        "pravo-opci-pravni-akademski-rad--page-numbers",
+        "pravo-porezni-prijediplomski--justify",
+        "pravo-specijalisticki-pravni-opci--footnote-font",
+        "pravo-specijalisticki-pravni-opci--footnote-size",
+        "pravo-specijalisticki-pravni-opci--footnote-spacing",
+        "pravo-specijalisticki-pravni-opci--justify",
+        "pravo-specijalisticki-pravni-opci--page-numbers"
+      ],
+      "finding": "dokument se odrice",
+      "evidence": "pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf, str. 1: \"Ako student/ica nije dobio/la drugacije upute od mentora, OVE UPUTE SE PREPORUCUJU KORISTITI za oblikovanje i uredjenje teksta i navodjenje izvora u diplomskim i zavrsnim radovima.\" Subjekt je izricito \"ove upute\", uz nadredjenost mentora. Dokument je k tome prilagodba knjige: \"(Preuzeto: Curry-Sumner, Ian [et al.], Istrazivacke vjestine, Zagreb 2023.)\"",
+      "alsoNoted": "Obvezujuci pravo-pravilnik-studiji-2026 (Pravilnik o studijima i studiranju, donesen 12.7.2024) pretrazen je u cijelosti, 33 stranice: NULA pojava za A4, margine, prored, font i oblikovanje. Boljeg izvora dakle nema; alternativa nije drugi akt nego nula bodovanih formatnih pravila. Uz to, pravo-doktorski-pravne-znanosti boduje iz uputa za DIPLOMSKE I ZAVRSNE radove, dakle iz akta za drugu vrstu rada.",
+      "decision": "left-scored",
+      "decidedBy": "izvedeno iz vlasnikove odluke 2026-08-21 za istovrstan slucaj (unizd-turizam); NIJE zasebno potvrdjeno",
+      "decidedAt": "2026-08-21",
+      "rationale": "Isti razred kao unizd-turizam: sluzbeno objavljene upute koje se same spustaju na preporuku, bez obvezujuce alternative. Pogodjeno je 16 pravila kroz 7 profila, i to samo sporedne osi (justify, page-numbers, fusnote); jezgra formata na pravu nije bodovana uopce."
     }
   ]
 }

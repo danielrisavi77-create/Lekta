@@ -2048,8 +2048,7 @@
       "snapshot": "data/sources/mefst/mefst-uputa-diplomski-2021.pdf",
       "quote": "Margine: Normal (gornja: 2,5 cm; donja: 2,5 cm; lijeva 2,5 cm; desna: 2.5 cm), Orijentacija: Portrait, Veličina: A4 (21.0 cm x 29.7 cm)",
       "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'Portrait'",
-        "dokument se odrice (str. 5: 'preporučuje')"
+        "kvalifikator u citatu bodovanog pravila: 'Portrait'"
       ]
     },
     {
@@ -2060,52 +2059,7 @@
       "snapshot": "data/sources/mefst/mefst-uputa-diplomski-2021.pdf",
       "quote": "Margine: Normal (gornja: 2,5 cm; donja: 2,5 cm; lijeva 2,5 cm; desna: 2.5 cm), Orijentacija: Portrait, Veličina: A4 (21.0 cm x 29.7 cm)",
       "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'Portrait'",
-        "dokument se odrice (str. 5: 'preporučuje')"
-      ]
-    },
-    {
-      "profileId": "mefst-diplomski",
-      "ruleId": "mefst-diplomski--font",
-      "checkId": "font",
-      "sourceId": "mefst-uputa-diplomski-2021",
-      "snapshot": "data/sources/mefst/mefst-uputa-diplomski-2021.pdf",
-      "quote": "Times New Roman, veličina 12, prored 1,5, Tekst obostrano poravnat.",
-      "problems": [
-        "dokument se odrice (str. 5: 'preporučuje')"
-      ]
-    },
-    {
-      "profileId": "mefst-diplomski",
-      "ruleId": "mefst-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "mefst-uputa-diplomski-2021",
-      "snapshot": "data/sources/mefst/mefst-uputa-diplomski-2021.pdf",
-      "quote": "Times New Roman, veličina 12, prored 1,5, Tekst obostrano poravnat.",
-      "problems": [
-        "dokument se odrice (str. 5: 'preporučuje')"
-      ]
-    },
-    {
-      "profileId": "mefst-diplomski",
-      "ruleId": "mefst-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "mefst-uputa-diplomski-2021",
-      "snapshot": "data/sources/mefst/mefst-uputa-diplomski-2021.pdf",
-      "quote": "Times New Roman, veličina 12, prored 1,5, Tekst obostrano poravnat.",
-      "problems": [
-        "dokument se odrice (str. 5: 'preporučuje')"
-      ]
-    },
-    {
-      "profileId": "mefst-diplomski",
-      "ruleId": "mefst-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "mefst-uputa-diplomski-2021",
-      "snapshot": "data/sources/mefst/mefst-uputa-diplomski-2021.pdf",
-      "quote": "Times New Roman, veličina 12, prored 1,5, Tekst obostrano poravnat.",
-      "problems": [
-        "dokument se odrice (str. 5: 'preporučuje')"
+        "kvalifikator u citatu bodovanog pravila: 'Portrait'"
       ]
     },
     {
@@ -2182,8 +2136,7 @@
       "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
       "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
       "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 83%)",
-        "dokument se odrice (str. 1: 'preporučuju')"
+        "citat se NE nalazi u dokumentu (podudaranje 83%)"
       ]
     },
     {
@@ -2194,8 +2147,7 @@
       "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
       "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
       "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 83%)",
-        "dokument se odrice (str. 1: 'preporučuju')"
+        "citat se NE nalazi u dokumentu (podudaranje 83%)"
       ]
     },
     {
@@ -2206,8 +2158,7 @@
       "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
       "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
       "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 83%)",
-        "dokument se odrice (str. 1: 'preporučuju')"
+        "citat se NE nalazi u dokumentu (podudaranje 83%)"
       ]
     },
     {
@@ -2218,8 +2169,7 @@
       "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
       "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
       "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 83%)",
-        "dokument se odrice (str. 1: 'preporučuju')"
+        "citat se NE nalazi u dokumentu (podudaranje 83%)"
       ]
     },
     {
@@ -2230,19 +2180,7 @@
       "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
       "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
       "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 83%)",
-        "dokument se odrice (str. 1: 'preporučuju')"
-      ]
-    },
-    {
-      "profileId": "pravo-opci-pravni-akademski-rad",
-      "ruleId": "pravo-opci-pravni-akademski-rad--page-numbers",
-      "checkId": "page-numbers",
-      "sourceId": "pravo-upute-oblikovanje-2024",
-      "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
-      "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice.",
-      "problems": [
-        "dokument se odrice (str. 1: 'preporučuju')"
+        "citat se NE nalazi u dokumentu (podudaranje 83%)"
       ]
     },
     {
@@ -2253,19 +2191,7 @@
       "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
       "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
       "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 83%)",
-        "dokument se odrice (str. 1: 'preporučuju')"
-      ]
-    },
-    {
-      "profileId": "pravo-specijalisticki-pravni-opci",
-      "ruleId": "pravo-specijalisticki-pravni-opci--footnote-font",
-      "checkId": "footnote-font",
-      "sourceId": "pravo-upute-oblikovanje-2024",
-      "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
-      "quote": "Biljeske (fusnote) - font: Times New Roman",
-      "problems": [
-        "dokument se odrice (str. 1: 'preporučuju')"
+        "citat se NE nalazi u dokumentu (podudaranje 83%)"
       ]
     },
     {
@@ -2276,30 +2202,7 @@
       "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
       "quote": "Biljeske (fusnote) - velicina fonta: 10",
       "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 75%)",
-        "dokument se odrice (str. 1: 'preporučuju')"
-      ]
-    },
-    {
-      "profileId": "pravo-specijalisticki-pravni-opci",
-      "ruleId": "pravo-specijalisticki-pravni-opci--footnote-spacing",
-      "checkId": "footnote-spacing",
-      "sourceId": "pravo-upute-oblikovanje-2024",
-      "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
-      "quote": "Biljeske (fusnote) - prored: 1 (razmak 0 i prije i poslije)",
-      "problems": [
-        "dokument se odrice (str. 1: 'preporučuju')"
-      ]
-    },
-    {
-      "profileId": "pravo-specijalisticki-pravni-opci",
-      "ruleId": "pravo-specijalisticki-pravni-opci--page-numbers",
-      "checkId": "page-numbers",
-      "sourceId": "pravo-upute-oblikovanje-2024",
-      "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
-      "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice.",
-      "problems": [
-        "dokument se odrice (str. 1: 'preporučuju')"
+        "citat se NE nalazi u dokumentu (podudaranje 75%)"
       ]
     },
     {
@@ -2310,19 +2213,7 @@
       "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
       "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
       "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 83%)",
-        "dokument se odrice (str. 1: 'preporučuju')"
-      ]
-    },
-    {
-      "profileId": "pravo-doktorski-pravne-znanosti",
-      "ruleId": "pravo-doktorski-pravne-znanosti--footnote-font",
-      "checkId": "footnote-font",
-      "sourceId": "pravo-upute-oblikovanje-2024",
-      "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
-      "quote": "Biljeske (fusnote) - font: Times New Roman",
-      "problems": [
-        "dokument se odrice (str. 1: 'preporučuju')"
+        "citat se NE nalazi u dokumentu (podudaranje 83%)"
       ]
     },
     {
@@ -2333,30 +2224,7 @@
       "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
       "quote": "Biljeske (fusnote) - velicina fonta: 10",
       "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 75%)",
-        "dokument se odrice (str. 1: 'preporučuju')"
-      ]
-    },
-    {
-      "profileId": "pravo-doktorski-pravne-znanosti",
-      "ruleId": "pravo-doktorski-pravne-znanosti--footnote-spacing",
-      "checkId": "footnote-spacing",
-      "sourceId": "pravo-upute-oblikovanje-2024",
-      "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
-      "quote": "Biljeske (fusnote) - prored: 1 (razmak 0 i prije i poslije)",
-      "problems": [
-        "dokument se odrice (str. 1: 'preporučuju')"
-      ]
-    },
-    {
-      "profileId": "pravo-doktorski-pravne-znanosti",
-      "ruleId": "pravo-doktorski-pravne-znanosti--page-numbers",
-      "checkId": "page-numbers",
-      "sourceId": "pravo-upute-oblikovanje-2024",
-      "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
-      "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice.",
-      "problems": [
-        "dokument se odrice (str. 1: 'preporučuju')"
+        "citat se NE nalazi u dokumentu (podudaranje 75%)"
       ]
     },
     {
@@ -3666,182 +3534,6 @@
       "quote": "Završni rad studenta u pravilu ima 30-40 stranica, a diplomski rad 50-60 stranica. Rad je opremljen naslovnom stranicom, stranicom zadatka, sadržajem, zaključkom, popisom literature, sažetkom na hrvat",
       "problems": [
         "kvalifikator u citatu bodovanog pravila: 'u pravilu'"
-      ]
-    },
-    {
-      "profileId": "vss-diplomski",
-      "ruleId": "vss-diplomski--font",
-      "checkId": "font",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "snapshot": "data/sources/vss/vss-upute-zavrsni-2023.pdf",
-      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem (\"justify\"). Numeracija stranica: na desnoj strani p",
-      "problems": [
-        "dokument se odrice (str. 3: 'jednu od više mogućnosti')"
-      ]
-    },
-    {
-      "profileId": "vss-diplomski",
-      "ruleId": "vss-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "snapshot": "data/sources/vss/vss-upute-zavrsni-2023.pdf",
-      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem (\"justify\"). Numeracija stranica: na desnoj strani p",
-      "problems": [
-        "dokument se odrice (str. 3: 'jednu od više mogućnosti')"
-      ]
-    },
-    {
-      "profileId": "vss-diplomski",
-      "ruleId": "vss-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "snapshot": "data/sources/vss/vss-upute-zavrsni-2023.pdf",
-      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem (\"justify\"). Numeracija stranica: na desnoj strani p",
-      "problems": [
-        "dokument se odrice (str. 3: 'jednu od više mogućnosti')"
-      ]
-    },
-    {
-      "profileId": "vss-diplomski",
-      "ruleId": "vss-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "snapshot": "data/sources/vss/vss-upute-zavrsni-2023.pdf",
-      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem (\"justify\"). Numeracija stranica: na desnoj strani p",
-      "problems": [
-        "dokument se odrice (str. 3: 'jednu od više mogućnosti')"
-      ]
-    },
-    {
-      "profileId": "vss-diplomski",
-      "ruleId": "vss-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "snapshot": "data/sources/vss/vss-upute-zavrsni-2023.pdf",
-      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem (\"justify\"). Numeracija stranica: na desnoj strani p",
-      "problems": [
-        "dokument se odrice (str. 3: 'jednu od više mogućnosti')"
-      ]
-    },
-    {
-      "profileId": "vss-diplomski",
-      "ruleId": "vss-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "snapshot": "data/sources/vss/vss-upute-zavrsni-2023.pdf",
-      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem (\"justify\"). Numeracija stranica: na desnoj strani p",
-      "problems": [
-        "dokument se odrice (str. 3: 'jednu od više mogućnosti')"
-      ]
-    },
-    {
-      "profileId": "vss-diplomski",
-      "ruleId": "vss-diplomski--page-numbers",
-      "checkId": "page-numbers",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "snapshot": "data/sources/vss/vss-upute-zavrsni-2023.pdf",
-      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem (\"justify\"). Numeracija stranica: na desnoj strani p",
-      "problems": [
-        "dokument se odrice (str. 3: 'jednu od više mogućnosti')"
-      ]
-    },
-    {
-      "profileId": "vss-diplomski",
-      "ruleId": "vss-diplomski--citation-style",
-      "checkId": "citation-style",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "snapshot": "data/sources/vss/vss-upute-zavrsni-2023.pdf",
-      "quote": "Pri pisanju zavrsnih radova na Veleucilistu studija sigurnosti u Zagrebu potrebno je koristiti tzv. vankuverski stil citiranja.",
-      "problems": [
-        "dokument se odrice (str. 3: 'jednu od više mogućnosti')"
-      ]
-    },
-    {
-      "profileId": "vss-zavrsni",
-      "ruleId": "vss-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "snapshot": "data/sources/vss/vss-upute-zavrsni-2023.pdf",
-      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem (\"justify\"). Numeracija stranica: na desnoj strani p",
-      "problems": [
-        "dokument se odrice (str. 3: 'jednu od više mogućnosti')"
-      ]
-    },
-    {
-      "profileId": "vss-zavrsni",
-      "ruleId": "vss-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "snapshot": "data/sources/vss/vss-upute-zavrsni-2023.pdf",
-      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem (\"justify\"). Numeracija stranica: na desnoj strani p",
-      "problems": [
-        "dokument se odrice (str. 3: 'jednu od više mogućnosti')"
-      ]
-    },
-    {
-      "profileId": "vss-zavrsni",
-      "ruleId": "vss-zavrsni--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "snapshot": "data/sources/vss/vss-upute-zavrsni-2023.pdf",
-      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem (\"justify\"). Numeracija stranica: na desnoj strani p",
-      "problems": [
-        "dokument se odrice (str. 3: 'jednu od više mogućnosti')"
-      ]
-    },
-    {
-      "profileId": "vss-zavrsni",
-      "ruleId": "vss-zavrsni--margins",
-      "checkId": "margins",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "snapshot": "data/sources/vss/vss-upute-zavrsni-2023.pdf",
-      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem (\"justify\"). Numeracija stranica: na desnoj strani p",
-      "problems": [
-        "dokument se odrice (str. 3: 'jednu od više mogućnosti')"
-      ]
-    },
-    {
-      "profileId": "vss-zavrsni",
-      "ruleId": "vss-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "snapshot": "data/sources/vss/vss-upute-zavrsni-2023.pdf",
-      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem (\"justify\"). Numeracija stranica: na desnoj strani p",
-      "problems": [
-        "dokument se odrice (str. 3: 'jednu od više mogućnosti')"
-      ]
-    },
-    {
-      "profileId": "vss-zavrsni",
-      "ruleId": "vss-zavrsni--justify",
-      "checkId": "justify",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "snapshot": "data/sources/vss/vss-upute-zavrsni-2023.pdf",
-      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem (\"justify\"). Numeracija stranica: na desnoj strani p",
-      "problems": [
-        "dokument se odrice (str. 3: 'jednu od više mogućnosti')"
-      ]
-    },
-    {
-      "profileId": "vss-zavrsni",
-      "ruleId": "vss-zavrsni--page-numbers",
-      "checkId": "page-numbers",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "snapshot": "data/sources/vss/vss-upute-zavrsni-2023.pdf",
-      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem (\"justify\"). Numeracija stranica: na desnoj strani p",
-      "problems": [
-        "dokument se odrice (str. 3: 'jednu od više mogućnosti')"
-      ]
-    },
-    {
-      "profileId": "vss-zavrsni",
-      "ruleId": "vss-zavrsni--citation-style",
-      "checkId": "citation-style",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "snapshot": "data/sources/vss/vss-upute-zavrsni-2023.pdf",
-      "quote": "Pri pisanju zavrsnih radova na Veleucilistu studija sigurnosti u Zagrebu potrebno je koristiti tzv. vankuverski stil citiranja.",
-      "problems": [
-        "dokument se odrice (str. 3: 'jednu od više mogućnosti')"
       ]
     },
     {
