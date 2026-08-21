@@ -129,6 +129,14 @@ def numbers_match(full_text: str, quote: str) -> bool:
     razlikuju se samo brojevi, a upravo brojevi su ono sto se boduje. Provjera po cijelom dokumentu
     ne bi pomogla, jer se "10" i "20" negdje drugdje sigurno pojavljuju.
     """
+    # Citat zna SPOJITI dva nesusjedna odlomka bez oznake izostavljanja (izmjereno na
+    # unizd-turizam-diplomski--margins: zadnjih 137 znakova stoji na jednom mjestu, prvih 160 na
+    # drugom). Jedan prozor tada nuzno promasi polovicu brojeva. Zato se svaka recenica provjerava
+    # zasebno: unutar recenice tekst JEST susjedan.
+    parts = [p for p in re.split(r"(?<=[.!?])\s+", quote) if NUM.search(p)]
+    if len(parts) > 1:
+        return all(numbers_match(full_text, part) for part in parts)
+
     wanted = NUM.findall(quote)
     if not wanted:
         return True
@@ -278,6 +286,16 @@ def main() -> None:
     with open(os.path.join(ROOT, "data", "sources", "source-registry.json"), encoding="utf-8") as fh:
         registry = {s["id"]: s for s in json.load(fh)}
 
+    # Priznati nalazi: vlasnik ih je procitao i odlucio ostaviti bodovanima. Postoje da stvaran NOV
+    # nalaz ne bi nestao u sumu vec odlucenih; ne mijenjaju bodovanje niti tvrde da nalaz nije tocan.
+    known_path = os.path.join(ROOT, "data", "verification", "known-findings.json")
+    acknowledged: dict[str, set[str]] = {}
+    if os.path.exists(known_path):
+        with open(known_path, encoding="utf-8") as fh:
+            for item in json.load(fh).get("acknowledged", []):
+                for rule_id in item.get("ruleIds", []):
+                    acknowledged.setdefault(rule_id, set()).add(item.get("finding", ""))
+
     rows = collect_scored()
     findings: list[dict] = []
     unreadable = 0
@@ -325,6 +343,14 @@ def main() -> None:
         if tail:
             problems.append(f"citat odsjecen, recenica se nastavlja: {tail[:110]}")
 
+        known = acknowledged.get(entry.get("ruleId"), set())
+        # Nalaz se priznaje samo ako je TE VRSTE; nova vrsta nalaza na istom pravilu je i dalje nova.
+        fresh = [p for p in problems if not any(p.startswith(k) for k in known)]
+        if fresh and len(fresh) != len(problems):
+            problems = fresh
+        elif not fresh and problems:
+            problems = []
+
         if problems:
             findings.append(
                 {
@@ -338,6 +364,7 @@ def main() -> None:
                 }
             )
 
+    ack_rules = sum(1 for r in rows if acknowledged.get(r["entry"].get("ruleId")))
     audited = len(rows) - unreadable
     by_kind: dict[str, int] = {}
     for f in findings:
@@ -354,7 +381,8 @@ def main() -> None:
     print(f"bodovanih pravila: {len(rows)}")
     print(f"  revidirano (PDF snapshot citljiv): {audited}")
     print(f"  NEREVIDIRANO (doc/docx/html/rar ili necitljiv PDF): {unreadable}")
-    print(f"  pravila s barem jednim nalazom: {len(findings)}")
+    print(f"  pravila s NOVIM nalazom: {len(findings)}")
+    print(f"  pravila s priznatim nalazom (odluceno, vidi data/verification/known-findings.json): {ack_rules}")
     print("")
     for kind, count in sorted(by_kind.items(), key=lambda kv: -kv[1]):
         print(f"  {count:5}  {kind}")

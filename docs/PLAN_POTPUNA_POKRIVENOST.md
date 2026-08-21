@@ -1026,6 +1026,35 @@ Kvalifikator se sada prijavljuje samo ako stoji u ISTOJ recenici kao vrijednost 
 Dalje mehanika ne ide: razlika izmedju *"u pravilu"* koje veze samo broj stranica i onoga koje vodi
 cijelo nabrajanje je citanje, ne uzorak. To je i projektirana granica.
 
+### ODLUKA: `zvu` i `unizd-turizam` ostaju bodovani uz zabiljezen nalaz (2026-08-21)
+
+Vlasnik je procitao oba nalaza i odlucio NE demotirati. Odluka je zapisana u
+`data/verification/known-findings.json`, s dokazom, datumom i potpisom.
+
+Zapis NE mijenja bodovanje i NE tvrdi da nalaz nije tocan. Postoji zbog jednog razloga: da sljedeca
+revizija isti nalaz ne prijavi kao nov. Bez toga se 21 vec odluceno pravilo vraca u svakom izvjestaju
+i stvaran NOV nalaz se u tom sumu izgubi. Priznavanje je po VRSTI nalaza, ne po pravilu: nova vrsta
+nalaza na istom pravilu i dalje je nova.
+
+Ucinak na izvjestaj: 403 -> 382 pravila s novim nalazom, 21 priznato (kvalifikator 54 -> 46,
+odricanje 51 -> 38).
+
+### Provjera brojeva ispravljena: citat zna SPOJITI nesusjedne odlomke
+Pri zapisivanju nalaza upalila je i druga zastavica na `unizd-turizam`, koju nisam provjerio prije
+nego sam je htio zabiljeziti. Dobro je sto nisam: bila je lazna, i to iz razloga koji vrijedi sire.
+
+`unizd-turizam-diplomski--margins` nosi citat od 297 znakova koji spaja DVA NESUSJEDNA odlomka bez
+oznake izostavljanja: zadnjih 137 znakova (margine) stoji na jednom mjestu u dokumentu, prvih 160
+(format, font, prored) na drugom. Provjera brojeva gledala je JEDAN prozor, pa je nuzno promasila
+polovicu brojeva i prijavila da vrijednosti ne stoje, iako stoje sve.
+
+Popravak: brojevi se provjeravaju PO RECENICI, jer unutar recenice tekst jest susjedan. Ucinak
+181 -> 47, uz tri rucno provjerena citata (efzg str. 13, ffos, unizd-turizam) koji svi prolaze.
+
+To je sesti put u ovom krugu da je prvo mjerenje bilo krivo, a podaci ispravni. Obrazac je uvijek
+isti: profilni citat NIJE fotografija teksta nego uredan prijepis, i svaka pretpostavka o doslovnosti
+prije ili kasnije padne.
+
 ---
 
 ## FAZA P5: stvarni korpus i Word oracle

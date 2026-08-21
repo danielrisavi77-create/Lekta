@@ -1,0 +1,47 @@
+{
+  "note": "Nalazi revizije (scripts/audit_scored_quotes.py) koje je vlasnik PROCITAO i svjesno ostavio bodovanima. Postoje da sljedeca revizija ne bi isti nalaz prijavila kao nov: inace se stvaran nov nalaz izgubi u sumu vec odlucenih. Zapis NE mijenja bodovanje i NE tvrdi da nalaz nije tocan, nego da je odluka donesena uz poznat nalaz.",
+  "acknowledged": [
+    {
+      "ruleIds": [
+        "zvu-specijalisticki--font-size",
+        "zvu-specijalisticki--line-spacing",
+        "zvu-specijalisticki--margins",
+        "zvu-specijalisticki--paper-size",
+        "zvu-zavrsni--font-size",
+        "zvu-zavrsni--line-spacing",
+        "zvu-zavrsni--margins",
+        "zvu-zavrsni--paper-size"
+      ],
+      "finding": "kvalifikator u citatu bodovanog pravila",
+      "evidence": "zvu-pravilnik-zavrsni-2015.pdf: \"Opseg zavrsnoga rada ovisi o vrsti i slozenosti teme koja se obradjuje, a U PRAVILU iznosi izmedju 25 i 50 stranica osnovnog teksta rada na papiru A4 formata (...), proreda 1,5, velicine slova 12 i margina od 2,5 cm sa svih strana.\" Pretrazen je cijeli dokument (20 stranica): nijedna druga recenica ne spominje margine, prored ni velicinu slova, dakle neublazene alternative nema.",
+      "alsoNoted": "zvu-specijalisticki boduje iz Pravilnika o ZAVRSNOM radu, dakle iz akta za drugu vrstu rada.",
+      "decision": "left-scored",
+      "decidedBy": "Daniel Risavi",
+      "decidedAt": "2026-08-21",
+      "rationale": "Demotiranje bi oba zvu profila spustilo na nula bodovanih pravila (369 -> 367 scored). Vlasnik je odlucio ostaviti bodovanima uz zabiljezen nalaz."
+    },
+    {
+      "ruleIds": [
+        "unizd-turizam-diplomski--font",
+        "unizd-turizam-diplomski--font-size",
+        "unizd-turizam-diplomski--justify",
+        "unizd-turizam-diplomski--line-spacing",
+        "unizd-turizam-diplomski--margins",
+        "unizd-turizam-diplomski--page-count",
+        "unizd-turizam-diplomski--paper-size",
+        "unizd-turizam-zavrsni--font",
+        "unizd-turizam-zavrsni--font-size",
+        "unizd-turizam-zavrsni--justify",
+        "unizd-turizam-zavrsni--line-spacing",
+        "unizd-turizam-zavrsni--margins",
+        "unizd-turizam-zavrsni--paper-size"
+      ],
+      "finding": "dokument se odrice",
+      "evidence": "unizd-turizam-upute.pdf, str. 3, PREDGOVOR: \"Ove Upute ... zamisljene su kao vodic studentima/icama ... Predstavljaju samo jednu od vise mogucnosti kako se pisu navedeni studentski radovi. ... preporucujemo postivanje ovih Uputa ... Uz sve navedene upute, najvaznije su one koje vam predlaze vas mentor.\" Subjekt je izricit i odricaj je na razini dokumenta. Kontrast: page-count u istom dokumentu stoji na \"Diplomski rad MORA imati najmanje 70 stranica\", dakle autor razlikuje snagu kad hoce.",
+      "decision": "left-scored",
+      "decidedBy": "Daniel Risavi",
+      "decidedAt": "2026-08-21",
+      "rationale": "Upute su sluzbeno objavljene, sto ih po CLAUDE.md cini dopustenim izvorom, a vrijednosti u pojedinim recenicama nisu ublazene. Vlasnik je odlucio ostaviti bodovanima uz zabiljezen nalaz."
+    }
+  ]
+}
