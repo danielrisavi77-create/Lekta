@@ -384,8 +384,15 @@ export function paragraphText(p: any): string {
   for (const n of p.getElementsByTagName('*')) {
     if (!ownsNode(p, n)) continue;
     if (n.nodeName === 'w:t' || n.localName === 't') out += n.textContent;
-    else if (n.nodeName === 'w:tab' || n.localName === 'tab') out += '\t';
-    else if (n.nodeName === 'w:br' || n.localName === 'br') out += '\n';
+    // `w:ptab` je apsolutni tabulator (Word ga pise u zaglavljima i predloscima), `w:cr`
+    // prijelom retka unutar runa. Oba su RAZDJELNICI: bez njih se tekst s obje strane slijepi,
+    // pa dvije rijeci postaju jedna. Kvari i brojanje i prepoznavanje po tekstu ("Uvod" + w:cr
+    // + "u temu" -> "Uvodu temu", pa se dio rada ne prepozna). Popravci su ih poznavali vec
+    // prije (src/repair/fixers.ts), analiza nije.
+    else if (n.nodeName === 'w:tab' || n.localName === 'tab'
+      || n.nodeName === 'w:ptab' || n.localName === 'ptab') out += '\t';
+    else if (n.nodeName === 'w:br' || n.localName === 'br'
+      || n.nodeName === 'w:cr' || n.localName === 'cr') out += '\n';
   }
   return out.replace(/\u00a0/g, ' ');
 }
