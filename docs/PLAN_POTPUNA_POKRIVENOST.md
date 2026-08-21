@@ -1131,6 +1131,45 @@ Vrijedi zabiljeziti i suprotan smjer, jer bi inace popis izgledao gore nego sto 
 *"veliþine"*), pa je prijepis prekinut na ostecenju. Vrijednost 12 je vjerojatno tocna, ali citat ne
 dokazuje nista i pravilo se po njemu ne moze provjeriti.
 
+### IZMJERENO: naslovnica kao vlastita sekcija obara margine s 6/6 na 0/6 (2026-08-21)
+
+Tvrdnja iz prethodnog commita ("rad gubi bodove") bila je IZVEDENA IZ KODA, ne izmjerena. Prvi
+pokusaj mjerenja ju je prividno oborio: sva tri profila davala su `informational 0/0`. To je bio kvar
+mog harnessa, ne nalaz - `analyzeFixture(file, opts)` prima OBJEKT `{ profileId }`, a ja sam predao
+string, pa je svaki poziv pao na prvi profil u registru i tri puta mjerio isto.
+
+Nakon ispravka kvar se reproducira odlucno:
+
+| profil | bez zasebne naslovnice | s naslovnicom kao sekcijom |
+|---|---|---|
+| `grf-doktorski` | pass 6/6 | **fail 0/6** |
+| `fhs-doktorski` | pass 6/6 | **fail 0/6** |
+| `agr-doktorski` | pass 6/6 | **fail 0/6** |
+| `efzg-specijalisticki` | pass 6/6 | **fail 0/6** |
+
+Nije djelomicno oduzimanje nego PUN pad: odstupaju sve cetiri strane, 4 x 1,5 = 6 bodova.
+
+Dva nalaza koja mijenjaju sliku:
+1. **Ucinak nije vezan uz profilni podatak.** `efzg-specijalisticki` o naslovnici ne govori nista, a
+   pada jednako. Rijec je o ponasanju motora, ne o pogresnom pravilu u profilu.
+2. **Tri izvora to izricito dopustaju**, i to u istoj recenici iz koje je pravilo preuzeto:
+   *"Naslovnica ima drugacije margine."* Rad koji tocno slijedi svoju uputu gubi svih 6 bodova.
+
+Doseg: samo kad je naslovnica VLASTITA sekcija (`w:sectPr`). Kad je rijesena preko `w:titlePg`,
+margine ostaju jedne i provjera prolazi.
+
+Zatecено ponasanje je zakljucano u `tests/margins-title-page-section.test.ts` PRIJE bilo kakve
+izmjene, po pravilu iz CLAUDE.md. Test ne tvrdi da je ponasanje ispravno.
+
+#### Popravak nije napravljen, jer mijenja ocjenu svima
+Tri smjera, svaki s drugom cijenom:
+- **Izuzeti prvu sekciju iz provjere margina** kad ih dokument ima vise. Najjednostavnije, ali tiho
+  prestaje provjeravati naslovnicu i ondje gdje je uputa trazi jednakom.
+- **Izuzeti je samo kad profil to kaze** (podatak, ne opce pravilo). Ispravno po CLAUDE.md, ali ne
+  pomaze `efzg`-u i slicnima koji o naslovnici sute, a jednako padaju.
+- **Odstupanje prve sekcije prijaviti kao upozorenje umjesto pada.** Zadrzava signal, ne kaznjava
+  puno; mijenja bodovanje svim profilima.
+
 ---
 
 ## FAZA P5: stvarni korpus i Word oracle
