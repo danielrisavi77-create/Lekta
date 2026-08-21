@@ -209,6 +209,51 @@ def is_choice(check_id: str, value) -> bool:
     return False
 
 
+# Osi kojima je RASPON sama odredba: ondje "najmanje 30 stranica" nije ublazavanje nego pravilo.
+RANGE_AXES = ("page-count", "reference-count", "word-count")
+
+
+def value_atoms(value) -> list[str]:
+    """Brojevi i nazivi koje vrijednost pravila nosi, u obliku u kojem se traze u recenici."""
+    out: list[str] = []
+    if isinstance(value, dict):
+        for v in value.values():
+            out.extend(value_atoms(v))
+    elif isinstance(value, list):
+        for v in value:
+            out.extend(value_atoms(v))
+    elif isinstance(value, bool):
+        pass
+    elif value is not None:
+        text = str(value)
+        out.extend({text, text.replace(".", ","), text.replace(",", ".")})
+    return [a for a in out if a]
+
+
+def hedge_on_own_clause(quote: str, value, check_id: str) -> str | None:
+    """Kvalifikator se prijavljuje SAMO ako stoji u istoj recenici kao vrijednost pravila.
+
+    Bez ovog suzenja provjera je dala 43 nalaza od kojih je citanjem izvora 35 ispalo lazno, uvijek
+    istim obrascem: citat obuhvaca vise recenica, ublazavanje pripada onoj o OPSEGU, a odredba o
+    obliku stoji u drugoj i nosi "mora" ili goli indikativ. Primjer (fizri): "Diplomski rad MORA
+    biti otisnut ... na papiru formata A4 ... PREPORUCA SE da diplomski rad ima najvise 100 stranica.
+    Glavni tekst MORA imati velicinu slova 12". Ublazavanje se odnosi na 100 stranica, a bodovani su
+    format, velicina i prored, svi s "mora".
+    """
+    if check_id in RANGE_AXES:
+        return None  # tamo je raspon sama odredba
+    atoms = value_atoms(value)
+    sentences = [s for s in re.split(r"(?<=[.!?;])\s+", quote) if s.strip()]
+    for sentence in sentences:
+        found = QUALIFIERS.search(sentence)
+        if not found:
+            continue
+        low = fold(sentence)
+        if not atoms or any(fold(a) in low for a in atoms):
+            return found.group(0)
+    return None
+
+
 def collect_scored() -> list[dict]:
     """Sva `verified` + `scored` pravila iz staging draftova, s profilom uz svako."""
     rows: list[dict] = []
@@ -265,9 +310,9 @@ def main() -> None:
             else:
                 problems.append(f"citat se NE nalazi u dokumentu (podudaranje {cov:.0%})")
 
-        qualifier = QUALIFIERS.search(quote) if quote else None
+        qualifier = hedge_on_own_clause(quote, entry.get("value"), check_id) if quote else None
         if qualifier:
-            problems.append(f"kvalifikator u citatu bodovanog pravila: '{qualifier.group(0)}'")
+            problems.append(f"kvalifikator u citatu bodovanog pravila: '{qualifier}'")
 
         disclaimer = vrc.document_disclaimer(rel)
         if disclaimer:

@@ -983,6 +983,49 @@ treba vlastiti imperativan citat ili ostaje advisory.
 zapis da je COVJEK otvorio izvor. Zapis nije upisan dok vlasnik nije potvrdio recenicu; do tada je
 promjena stajala. AI je pripremio dokaz i suzio odluku na jedno pitanje, potpis je ostao ljudski.
 
+### Obradjena 43 bodovana pravila s ublazavanjem u vlastitom citatu (2026-08-21)
+
+43 pravila svela su se na **8 razlicitih (izvor, citat) jedinica**; ostatak su ista recenica citirana
+za vise osi ili vise profila. Svih 8 je procitano u izvoru.
+
+Ishod: **35 od 43 je LAZNA zastavica, 8 je stvarno.** Obrazac laznih je jedinstven: citat obuhvaca
+vise recenica, ublazavanje pripada onoj o OPSEGU, a odredba o obliku stoji u drugoj i nosi `mora`
+ili goli indikativ.
+
+| # | izvor | presuda |
+|---|---|---|
+| 1 | `fizri.pdf` | LAZNA. *"...MORA biti otisnut ... na papiru formata A4 ... PREPORUCA SE da diplomski rad ima najvise 100 stranica. Glavni tekst MORA imati velicinu slova 12 i ... prored 1,5."* Ublazavanje veze samo 100 stranica; sva tri bodovana pravila nose `mora`. |
+| 2 | `logri-smjernice-studentski-radovi.pdf` | LAZNA. *"FONT: preporuca se upotreba fonta koji podrzava znakove hrvatske latinice ...; VELICINA FONTA: 12; PRORED: 1,5 pt; MARGINE: Normalne ...; PORAVNANJE: obostrano"*. Ublazavanje veze `font`, a `font` uopce NIJE medju bodovanim pravilima; ostale stavke su goli natuknicni navodi. |
+| 3 | `unidu-komunikologija-upute-zavrsni.pdf` | LAZNA. *"Vrsta slova (fonta) MOZE biti Times New Roman ili Arial"* je izbor iz skupa, a `font` je i zapisan kao popis od dva clana, sto je ispravan nacin. Ostale osi nose `treba biti`. |
+| 4, 5 | `unizd-povijest-upute-2012-{diplomski,zavrsni}.pdf` | LAZNA. *"Rad se pise ... na papiru formata A-4; PREPORUCA SE uporaba pisma velicine 12 tocaka, te da odlomci imaju dvostruki prored. Margine SU: 2,5 cm osim lijeve koja JE 3,5 cm. Kod biljezaka se bira velicina slova 10, a prored JE 1,5-struki."* Ublazavanje veze velicinu i prored TIJELA, koji nisu bodovani; bodovani su format, margine i fusnote, svi u indikativu. Margine su k tome ispravno ASIMETRICNE (lijeva 3,5). |
+| 6 | `vsite-pravilnik-2014.pdf` | LAZNA. *"Zavrsni rad U PRAVILU ima 30-40 stranica ... Rad JE OPREMLJEN naslovnom stranicom, stranicom zadatka, SADRZAJEM ..."* Bodovan je samo `toc`, iz druge recenice. |
+| 7 | `zsem-pravilnik-zavrsni-2023.pdf` | LAZNA. *"...u formatu A4 U PRAVILU na ne manje od 30 stranica sadrzaja. Prilikom pisanja KORISTI SE font Times New Roman, size 12, obostrano poravnavanje, razmak 1,5pt."* Ublazavanje veze broj stranica; oblik dolazi iz druge recenice s `koristi se`. |
+| 8 | `zvu-pravilnik-zavrsni-2015.pdf` | **STVARNO.** Vidi nize. |
+
+### Stvaran nalaz: `zvu`, 8 bodovanih pravila iz jedne ublazene recenice o opsegu
+
+Cijela odredba glasi: *"Opseg zavrsnoga rada ovisi o vrsti i slozenosti teme koja se obradjuje, a
+**U PRAVILU** iznosi izmedju 25 i 50 stranica osnovnog teksta rada na papiru A4 formata (bez
+naslovnice, sadrzaja, popisa literature i priloga), proreda 1,5, velicine slova 12 i margina od
+2,5 cm sa svih strana."*
+
+Pretrazen je CIJELI dokument (20 stranica): **nijedna druga recenica ne spominje margine, prored ni
+velicinu slova.** Nema neublazene alternative. To je razlika prema `efzg`, gdje je alternativa
+postojala na str. 13, pa je ondje lijek bio ponovno citiranje, a ne demotiranje.
+
+Pogodjeno je svih 5 bodovanih pravila na oba zvu profila (`paper-size`, `font-size`, `line-spacing`,
+`margins`, `page-count`), dakle **cijeli bodovani skup obaju profila**.
+
+Uz to, zaseban nalaz iste jedinice: `zvu-specijalisticki` boduje iz *"Pravilnika o zavrsnom radu"*,
+dakle iz akta za drugu vrstu rada.
+
+Napomena za odluku: za `page-count` je raspon SAMA odredba, pa je ono najmanje sporno od pet.
+
+### Sesta provjera je suzena na temelju ovog citanja
+Kvalifikator se sada prijavljuje samo ako stoji u ISTOJ recenici kao vrijednost pravila (127 -> 54).
+Dalje mehanika ne ide: razlika izmedju *"u pravilu"* koje veze samo broj stranica i onoga koje vodi
+cijelo nabrajanje je citanje, ne uzorak. To je i projektirana granica.
+
 ---
 
 ## FAZA P5: stvarni korpus i Word oracle
