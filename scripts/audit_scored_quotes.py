@@ -195,6 +195,41 @@ def document_text(rel_path: str) -> str:
     return text
 
 
+_scanned: dict[str, bool] = {}
+
+
+def has_scanned_pages(rel_path: str) -> bool:
+    """Ima li dokument stranica koje su SLIKA bez teksta (skenirani dio).
+
+    Bez ovoga revizija lazno optuzuje. Izmjereno na forenzika-pravilnik-diplomski.pdf: stranice 1-10
+    su skenirane slike s nula znakova (ondje su clanci Pravilnika), a 11-23 su strojno pisani prilozi
+    (PRILOG 1-9). Dokument time daje 12 tisuca znakova teksta i prolazi kao "citljiv", dok su upravo
+    stranice s pravilima nevidljive. Osam bodovanih pravila citira te clanke preko OCR-a, sasvim
+    ispravno, a provjera ih je prijavila kao izmisljene.
+    """
+    if rel_path in _scanned:
+        return _scanned[rel_path]
+    result = False
+    path = os.path.join(ROOT, rel_path.replace("/", os.sep))
+    if os.path.exists(path) and path.lower().endswith(".pdf"):
+        try:
+            import fitz
+
+            doc = fitz.open(path)
+            try:
+                for i in range(doc.page_count):
+                    page = doc[i]
+                    if not page.get_text().strip() and page.get_images():
+                        result = True
+                        break
+            finally:
+                doc.close()
+        except Exception:
+            result = False
+    _scanned[rel_path] = result
+    return result
+
+
 def truncated_tail(full_text: str, quote: str) -> str | None:
     """Ostatak recenice iza citata, ako jos nosi znamenku. Citat koji zavrsava tockom nije odsjecen."""
     quote = squash(quote)
@@ -299,6 +334,7 @@ def main() -> None:
     rows = collect_scored()
     findings: list[dict] = []
     unreadable = 0
+    inconclusive = 0
 
     for row in rows:
         entry = row["entry"]
@@ -321,6 +357,10 @@ def main() -> None:
         problems: list[str] = []
         if not quote:
             problems.append("bez citata")
+        elif not quote_found(text, quote) and has_scanned_pages(rel):
+            # Citat vjerojatno dolazi sa SKENIRANE stranice, preuzet OCR-om. To nije nalaz nego
+            # granica alata, i broji se kao nerevidirano, ne kao kvar.
+            inconclusive += 1
         elif not quote_found(text, quote):
             cov = quote_coverage(text, quote)
             if cov >= COVERAGE_MIN:
@@ -381,6 +421,7 @@ def main() -> None:
     print(f"bodovanih pravila: {len(rows)}")
     print(f"  revidirano (PDF snapshot citljiv): {audited}")
     print(f"  NEREVIDIRANO (doc/docx/html/rar ili necitljiv PDF): {unreadable}")
+    print(f"  NEPROVJERIVO (citat je sa skenirane stranice, preuzet OCR-om): {inconclusive}")
     print(f"  pravila s NOVIM nalazom: {len(findings)}")
     print(f"  pravila s priznatim nalazom (odluceno, vidi data/verification/known-findings.json): {ack_rules}")
     print("")

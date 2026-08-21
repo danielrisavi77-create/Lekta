@@ -1514,35 +1514,12 @@
     },
     {
       "profileId": "forenzika-diplomski",
-      "ruleId": "forenzika-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "forenzika-pravilnik-diplomski",
-      "snapshot": "data/sources/forenzika/forenzika-pravilnik-diplomski.pdf",
-      "quote": "Pisano djelo treba biti tiskano na papiru formata A4, s označenim stranicama na donjem (gornjem) desnom rubu teksta.",
-      "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 0%)"
-      ]
-    },
-    {
-      "profileId": "forenzika-diplomski",
-      "ruleId": "forenzika-diplomski--page-numbers",
-      "checkId": "page-numbers",
-      "sourceId": "forenzika-pravilnik-diplomski",
-      "snapshot": "data/sources/forenzika/forenzika-pravilnik-diplomski.pdf",
-      "quote": "Pisano djelo treba biti tiskano na papiru formata A4, s označenim stranicama na donjem (gornjem) desnom rubu teksta.",
-      "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 0%)"
-      ]
-    },
-    {
-      "profileId": "forenzika-diplomski",
       "ruleId": "forenzika-diplomski--font",
       "checkId": "font",
       "sourceId": "forenzika-pravilnik-diplomski",
       "snapshot": "data/sources/forenzika/forenzika-pravilnik-diplomski.pdf",
       "quote": "Tekst se piše proredom od 1,5 reda, stilom Times New Roman i veličinom slova 12 pri čemu rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz obostrano poravnavanje teksta.",
       "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 3%)",
         "kvalifikator u citatu bodovanog pravila: 'najmanje'"
       ]
     },
@@ -1554,7 +1531,6 @@
       "snapshot": "data/sources/forenzika/forenzika-pravilnik-diplomski.pdf",
       "quote": "Tekst se piše proredom od 1,5 reda, stilom Times New Roman i veličinom slova 12 pri čemu rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz obostrano poravnavanje teksta.",
       "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 3%)",
         "kvalifikator u citatu bodovanog pravila: 'najmanje'"
       ]
     },
@@ -1566,7 +1542,6 @@
       "snapshot": "data/sources/forenzika/forenzika-pravilnik-diplomski.pdf",
       "quote": "Tekst se piše proredom od 1,5 reda, stilom Times New Roman i veličinom slova 12 pri čemu rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz obostrano poravnavanje teksta.",
       "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 3%)",
         "kvalifikator u citatu bodovanog pravila: 'najmanje'"
       ]
     },
@@ -1578,19 +1553,7 @@
       "snapshot": "data/sources/forenzika/forenzika-pravilnik-diplomski.pdf",
       "quote": "rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz obostrano poravnavanje teksta.",
       "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 6%)",
         "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "forenzika-diplomski",
-      "ruleId": "forenzika-diplomski--required-sections",
-      "checkId": "required-sections",
-      "sourceId": "forenzika-pravilnik-diplomski",
-      "snapshot": "data/sources/forenzika/forenzika-pravilnik-diplomski.pdf",
-      "quote": "Poglavlja diplomskog rada su: Uvod, Cilj rada, Izvori podataka i metode, Rezultati, Rasprava, Zaključci, Sažetak na hrvatskom jeziku, Sažetak na engleskom jeziku, Literatura i Životopis.",
-      "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 12%)"
       ]
     },
     {
@@ -3945,28 +3908,6 @@
       "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
       "problems": [
         "citat se NE nalazi u dokumentu (podudaranje 37%)"
-      ]
-    },
-    {
-      "profileId": "vuka-strojarski-diplomski",
-      "ruleId": "vuka-strojarski-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "vuka-strojarski-upute-2025",
-      "snapshot": "data/sources/vuka/vuka-strojarski-upute-2025.pdf",
-      "quote": "Lijeva margina 3.0 cm Gornja margina 3.0 cm ... Donja margina 3.0 cm Desna margina 3.0 cm",
-      "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 21%)"
-      ]
-    },
-    {
-      "profileId": "vuka-strojarski-zavrsni",
-      "ruleId": "vuka-strojarski-zavrsni--margins",
-      "checkId": "margins",
-      "sourceId": "vuka-strojarski-upute-2025",
-      "snapshot": "data/sources/vuka/vuka-strojarski-upute-2025.pdf",
-      "quote": "Lijeva margina 3.0 cm Gornja margina 3.0 cm ... Donja margina 3.0 cm Desna margina 3.0 cm",
-      "problems": [
-        "citat se NE nalazi u dokumentu (podudaranje 21%)"
       ]
     },
     {

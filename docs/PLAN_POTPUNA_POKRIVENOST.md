@@ -1055,6 +1055,34 @@ To je sesti put u ovom krugu da je prvo mjerenje bilo krivo, a podaci ispravni. 
 isti: profilni citat NIJE fotografija teksta nego uredan prijepis, i svaka pretpostavka o doslovnosti
 prije ili kasnije padne.
 
+### Sto je zapravo onih 197 "citat se ne nalazi" (2026-08-21)
+
+Dva uzroka su izmjerena, i nijedan nije pogresno pravilo.
+
+**1. Skenirane stranice (9 pravila).** `forenzika-pravilnik-diplomski.pdf` ima stranice 1-10 kao
+SLIKE s nula znakova, a to su clanci Pravilnika; stranice 11-23 su strojno pisani prilozi
+(PRILOG 1-9). Dokument time daje 12 tisuca znakova i prolazi kao "citljiv", dok su upravo stranice s
+pravilima nevidljive. Osam bodovanih pravila citira te clanke preko OCR-a, posve ispravno, a provjera
+ih je prijavila kao izmisljene. Brojac nerevidiranog hvatao je samo POSVE prazne dokumente, ne i
+mjesovite; sada se takvi citati broje kao NEPROVJERIVO, ne kao nalaz.
+
+**2. Parafraza umjesto doslovnog prijepisa (vecina ostatka).** `kif-diplomski--justify` citira
+*"poravnanje – obostrano"*, a dokument kaze *"Poravnano obostrano"*. Sadrzaj je isti, pravilo je
+tocno, ali `quote` po ugovoru treba biti DOSLOVAN. Tko taj niz potrazi u izvoru, nece ga naci.
+
+To je nalaz o SLJEDIVOSTI, ne o bodovanju: pravilo ne ocjenjuje krivo, ali se ne moze provjeriti
+onako kako verifikacijski lanac pretpostavlja. Raspodjela podudaranja to potvrdjuje: vecina je u
+pojasu 60-84%, dakle blizu izvornika, a ne izmisljena.
+
+### Sedam ispravaka mjerenja u jednom krugu
+Redom: dijakritika, izostavljanje, interpunkcija, krivi broj uz tocne rijeci, prozor sastavljen od
+tokena, spojeni nesusjedni odlomci, skenirane stranice. Svaki put je prvo mjerenje bilo krivo, a
+podaci ispravni.
+
+Zajednicki uzrok je jedan i vrijedi ga zapisati: **profilni `quote` nije fotografija teksta nego
+uredan prijepis**. Svaka provjera koja pretpostavi doslovnost pada, i to tiho, u smjeru laznog
+alarma. Zato revizija prijavljuje razrede i nikad ne presudjuje sama.
+
 ---
 
 ## FAZA P5: stvarni korpus i Word oracle
