@@ -109,19 +109,20 @@ describe('Repair Engine closed-loop: section-insert-fixer (jednosekcijski dokume
       profileId,
       buildBrokenDocx: () => packageDoc({ documentXml: documentXml(body, false), stylesXml, footerXml: PAGE_FOOTER_XML }),
       buildItems: (before, p) => introSectionRepairableItem(before, p),
-      // NAMJERNO isResolved umjesto targetTitles: fixer dodaje footer SAMO prednjoj sekciji (glavna
-      // ga po Wordovim pravilima nasljedjuje "continuous"), ali analiza hasAnyPageField NE simulira
-      // to nasljedjivanje (cita samo eksplicitni footerReference po sekciji) - "Numeriranje od prve
-      // stranice Uvoda" zato ostaje konzervativno 'warn' (isto bi se dogodilo i na stvarnom Word
-      // dokumentu, otud requiresConfirmation:true na ovoj stavci). Provjeravamo stvarni strukturni
-      // ishod izravno: dvije sekcije, prednja rimska+titlePg, glavna decimalna od 1.
+      // isResolved provjerava stvarni STRUKTURNI ishod: dvije sekcije, prednja rimska+titlePg,
+      // glavna decimalna od 1. Jaca je tvrdnja od statusa provjere, pa ostaje i nakon 2026-08-21.
+      //
+      // Do tada je uz nju stajalo i `exemptFromRegression` za numeriranje, jer fixer footer dodaje
+      // SAMO prednjoj sekciji (glavna ga po OOXML-u nasljedjuje), a analiza to nasljedjivanje nije
+      // simulirala, pa je "Numeriranje od prve stranice Uvoda" ostajalo 'warn' i na ISPRAVNOM radu.
+      // Ogranicenje je izmjereno i popravljeno (vidi tests/docx-section-footer-inheritance.test.ts),
+      // pa je izuzece obrisano: provjereno da test prolazi i bez njega.
       isResolved: (after) => {
         const sections = after?.details?.sections ?? [];
         return sections.length === 2 && sections[0]?.titlePageDifferent === true &&
           sections[0]?.pageNumbering?.format === 'lowerRoman' &&
           sections[1]?.pageNumbering?.format === 'decimal' && sections[1]?.pageNumbering?.start === 1;
       },
-      exemptFromRegression: [CHECK_TITLES['page-number-start'], CHECK_TITLES['page-number-scheme']],
     });
   }, 30000);
 });
