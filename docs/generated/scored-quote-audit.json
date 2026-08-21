@@ -26,17 +26,6 @@
       ]
     },
     {
-      "profileId": "alu-doktorski",
-      "ruleId": "alu-doktorski--page-count",
-      "checkId": "page-count",
-      "sourceId": "alu-vodic-doktorski-2026",
-      "snapshot": "data/sources/alu/alu-vodic-doktorski-2026.pdf",
-      "quote": "teorijskog rada (disertacije) manjeg opsega u pisanom obliku od minimalno 30 kartica",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: teksta (1 kartica od 1800 slovnih mjesta) temeljenog na izvještajima umjetničkog istraživanja, koji se predaju"
-      ]
-    },
-    {
       "profileId": "alu-kiparstvo-diplomski",
       "ruleId": "alu-kiparstvo-diplomski--font-size",
       "checkId": "font-size",
@@ -336,17 +325,6 @@
       ]
     },
     {
-      "profileId": "efst-zavrsni",
-      "ruleId": "efst-zavrsni--page-count",
-      "checkId": "page-count",
-      "sourceId": "efst-upute-studentski-radovi-2013",
-      "snapshot": "data/sources/efst/efst-upute-studentski-radovi-2013.pdf",
-      "quote": "Završni rad ima opseg između 30 i 40 stranica,",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: • Seminarski rad ima opseg između 10 i 20 stranica, • Stručni rad ima opseg između 20 i 30 stranica, • Istraži"
-      ]
-    },
-    {
       "profileId": "efzg-zavrsni",
       "ruleId": "efzg-zavrsni--required-sections",
       "checkId": "required-sections",
@@ -443,17 +421,6 @@
       "quote": "Literatura se navodi Vancouverskim stilom",
       "problems": [
         "citat odsjecen, recenica se nastavlja: , a u popisu slijede redosljedom pojavljivanja u tekstu (najviše do 30 literaturnih navoda, što novijeg datuma"
-      ]
-    },
-    {
-      "profileId": "fbf-specijalisticki",
-      "ruleId": "fbf-specijalisticki--required-sections",
-      "checkId": "required-sections",
-      "sourceId": "fbf-upute-spec-2014",
-      "snapshot": "data/sources/fbf/fbf-upute-spec-2014.pdf",
-      "quote": "Obvezatni dijelovi rada koji slijede su:",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: a) Eksperimentalni specijalistički rad: 1."
       ]
     },
     {
@@ -1139,28 +1106,6 @@
       ]
     },
     {
-      "profileId": "ffrz-diplomski",
-      "ruleId": "ffrz-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "ffrz-oblikovanje-diplomski-2021",
-      "snapshot": "data/sources/ffrz/ffrz-oblikovanje-diplomski-2021.pdf",
-      "quote": "Rad treba biti ispisan na papiru formata A4 (210x297)",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: te sadržavati najmanje 50 stranica teksta."
-      ]
-    },
-    {
-      "profileId": "ffrz-bakalaureatski",
-      "ruleId": "ffrz-bakalaureatski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "ffrz-oblikovanje-bakalaureatski-2021",
-      "snapshot": "data/sources/ffrz/ffrz-oblikovanje-bakalaureatski-2021.pdf",
-      "quote": "Rad treba biti ispisan na papiru formata A4 (210x297)",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: te sadržavati najmanje 30 stranica teksta."
-      ]
-    },
-    {
       "profileId": "ffzg-etnologija-graduate",
       "ruleId": "ffzg-etnologija-graduate--font",
       "checkId": "font",
@@ -1194,17 +1139,6 @@
       ]
     },
     {
-      "profileId": "ffzg-lingvistika-diplomski",
-      "ruleId": "ffzg-lingvistika-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "ffzg-lingvistika-diplomski-2024",
-      "snapshot": "data/sources/ffzg/ffzg-lingvistika-diplomski-2024.pdf",
-      "quote": "prored 1,5;",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: font Times New Roman; veličina fonta 12; poravnato s obje strane."
-      ]
-    },
-    {
       "profileId": "ffzg-pedagogija-graduate",
       "ruleId": "ffzg-pedagogija-graduate--margins",
       "checkId": "margins",
@@ -1224,28 +1158,6 @@
       "quote": "margine: 3 cm (lijevo, desno, gore, dolje), obostrano poravnanje;",
       "problems": [
         "citat odsjecen, recenica se nastavlja: - font: Times New Roman veličine 12 točaka za naslove i tekst, a 10 točaka za fusnote; - prored: 1,5; - strani"
-      ]
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "ruleId": "ffzg-povijest-umjetnosti-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "ffzg-povum-diplomski-2016",
-      "snapshot": "data/sources/ffzg/ffzg-povum-diplomski-2016.pdf",
-      "quote": "ima margine 2,5 cm (gore, dolje,",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: lijevo) i 2 cm (desno)."
-      ]
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "ruleId": "ffzg-povijest-umjetnosti-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "ffzg-povum-diplomski-2016",
-      "snapshot": "data/sources/ffzg/ffzg-povum-diplomski-2016.pdf",
-      "quote": "Tekst se poravnava po oba ruba (Justified)",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: i ima margine 2,5 cm (gore, dolje, lijevo) i 2 cm (desno)."
       ]
     },
     {
@@ -1557,28 +1469,6 @@
       ]
     },
     {
-      "profileId": "geof-diplomski",
-      "ruleId": "geof-diplomski--citation-style",
-      "checkId": "citation-style",
-      "sourceId": "geof-naputak-ocjenski-2000",
-      "snapshot": "data/sources/geof/geof-naputak-ocjenski-2000.pdf",
-      "quote": "Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: izdanja, npr.: (Lovrić 1988)."
-      ]
-    },
-    {
-      "profileId": "geof-doktorski",
-      "ruleId": "geof-doktorski--citation-style",
-      "checkId": "citation-style",
-      "sourceId": "geof-naputak-ocjenski-2000",
-      "snapshot": "data/sources/geof/geof-naputak-ocjenski-2000.pdf",
-      "quote": "Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: izdanja, npr.: (Lovrić 1988)."
-      ]
-    },
-    {
       "profileId": "grf-zavrsni",
       "ruleId": "grf-zavrsni--font",
       "checkId": "font",
@@ -1678,72 +1568,6 @@
       ]
     },
     {
-      "profileId": "iv-diplomski",
-      "ruleId": "iv-diplomski--font",
-      "checkId": "font",
-      "sourceId": "iv-pravilnik-2025",
-      "snapshot": "data/sources/iv/iv-pravilnik-2025.pdf",
-      "quote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: • Prored: 1,5 • Margine: 2,5 cm sa svih strana."
-      ]
-    },
-    {
-      "profileId": "iv-diplomski",
-      "ruleId": "iv-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "iv-pravilnik-2025",
-      "snapshot": "data/sources/iv/iv-pravilnik-2025.pdf",
-      "quote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: • Prored: 1,5 • Margine: 2,5 cm sa svih strana."
-      ]
-    },
-    {
-      "profileId": "iv-diplomski",
-      "ruleId": "iv-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "iv-pravilnik-2025",
-      "snapshot": "data/sources/iv/iv-pravilnik-2025.pdf",
-      "quote": "Prored: 1,5",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: • Margine: 2,5 cm sa svih strana."
-      ]
-    },
-    {
-      "profileId": "iv-zavrsni",
-      "ruleId": "iv-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "iv-pravilnik-2025",
-      "snapshot": "data/sources/iv/iv-pravilnik-2025.pdf",
-      "quote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: • Prored: 1,5 • Margine: 2,5 cm sa svih strana."
-      ]
-    },
-    {
-      "profileId": "iv-zavrsni",
-      "ruleId": "iv-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "iv-pravilnik-2025",
-      "snapshot": "data/sources/iv/iv-pravilnik-2025.pdf",
-      "quote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: • Prored: 1,5 • Margine: 2,5 cm sa svih strana."
-      ]
-    },
-    {
-      "profileId": "iv-zavrsni",
-      "ruleId": "iv-zavrsni--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "iv-pravilnik-2025",
-      "snapshot": "data/sources/iv/iv-pravilnik-2025.pdf",
-      "quote": "Prored: 1,5",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: • Margine: 2,5 cm sa svih strana."
-      ]
-    },
-    {
       "profileId": "kbf-zavrsni",
       "ruleId": "kbf-zavrsni--citation-style",
       "checkId": "citation-style",
@@ -1774,28 +1598,6 @@
       "quote": "Margine 2,5 cm sa svake strane",
       "problems": [
         "citat odsjecen, recenica se nastavlja: 2,5 cm 2,5 cm 2,5 cm 2,5 cm Tekst Times New Roman veličina fonta – 12 pt prored – 1,5 redak razmak – prije i p"
-      ]
-    },
-    {
-      "profileId": "kif-specijalisticki",
-      "ruleId": "kif-specijalisticki--page-numbers",
-      "checkId": "page-numbers",
-      "sourceId": "kif-upute-diplomski-2023",
-      "snapshot": "data/sources/kif/kif-upute-diplomski-zavrsni.pdf",
-      "quote": "Uvod je prva stranica na kojoj se mora naći napisana numeracija",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: , a kako se sve stranice prije broje uvod najčešće počinje na stranici 6."
-      ]
-    },
-    {
-      "profileId": "kif-specijalisticki",
-      "ruleId": "kif-specijalisticki--reference-count",
-      "checkId": "reference-count",
-      "sourceId": "kif-upute-diplomski-2023",
-      "snapshot": "data/sources/kif/kif-upute-diplomski-zavrsni.pdf",
-      "quote": "minimalno 20 referenci",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: 4."
       ]
     },
     {
@@ -1851,17 +1653,6 @@
       "quote": "poravnanje – obostrano",
       "problems": [
         "citat se NE nalazi u dokumentu (podudaranje 0%)"
-      ]
-    },
-    {
-      "profileId": "kif-diplomski",
-      "ruleId": "kif-diplomski--reference-count",
-      "checkId": "reference-count",
-      "sourceId": "kif-upute-diplomski-2023",
-      "snapshot": "data/sources/kif/kif-upute-diplomski-zavrsni.pdf",
-      "quote": "minimalno 20 referenci",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: 4."
       ]
     },
     {
@@ -2261,50 +2052,6 @@
       ]
     },
     {
-      "profileId": "sfzg-diplomski",
-      "ruleId": "sfzg-diplomski--font",
-      "checkId": "font",
-      "sourceId": "sfzg-naputak-diplomski-2024",
-      "snapshot": "data/sources/sfzg/sfzg-naputak-diplomski-2024.pdf",
-      "quote": "Times New Roman",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja:  Veličina pisma (Font size): 12  Prored (Line spacing): 1,5 redak (1,5 lines)  Poravnanje (Alignment): obos"
-      ]
-    },
-    {
-      "profileId": "sfzg-diplomski",
-      "ruleId": "sfzg-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "sfzg-naputak-diplomski-2024",
-      "snapshot": "data/sources/sfzg/sfzg-naputak-diplomski-2024.pdf",
-      "quote": "Prored (Line spacing): 1,5 redak (1,5 lines)",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja:  Poravnanje (Alignment): obostrano (Justified)  Lijevi rub (Margin – left): 2,5 cm  Desni rub (Margin – rig"
-      ]
-    },
-    {
-      "profileId": "sfzg-diplomski",
-      "ruleId": "sfzg-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "sfzg-naputak-diplomski-2024",
-      "snapshot": "data/sources/sfzg/sfzg-naputak-diplomski-2024.pdf",
-      "quote": "Poravnanje (Alignment): obostrano (Justified)",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja:  Lijevi rub (Margin – left): 2,5 cm  Desni rub (Margin – right): 2,5 cm  Gornji rub (Margin – top): 2.5 cm "
-      ]
-    },
-    {
-      "profileId": "sfzg-diplomski",
-      "ruleId": "sfzg-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "sfzg-naputak-diplomski-2024",
-      "snapshot": "data/sources/sfzg/sfzg-naputak-diplomski-2024.pdf",
-      "quote": "2.5 cm (do teksta, zaglavlje unutar 2,5 cm)",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja:  Donji rub (Margin – bottom): 2,5 cm Numeriranje stranica U radu se broje (numeriraju) sve stranice počevši o"
-      ]
-    },
-    {
       "profileId": "sois-ft-vojno-inzenjerstvo-diplomski",
       "ruleId": "sois-ft-vojno-inzenjerstvo-diplomski--page-count",
       "checkId": "page-count",
@@ -2511,94 +2258,6 @@
       "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
       "problems": [
         "citat se NE nalazi u dokumentu (podudaranje 48%)"
-      ]
-    },
-    {
-      "profileId": "ttf-diplomski",
-      "ruleId": "ttf-diplomski--font",
-      "checkId": "font",
-      "sourceId": "ttf-upute-zavrsni-diplomski",
-      "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
-      "quote": "Tip pisma (Font): obavezna potpora svih hrvatskih znakova",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prore"
-      ]
-    },
-    {
-      "profileId": "ttf-diplomski",
-      "ruleId": "ttf-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "ttf-upute-zavrsni-diplomski",
-      "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
-      "quote": "Prored (Line spacing): 1,5 redak",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm SVEUČILIŠTE U ZAGREBU TEKSTILNO–TEHNOLOŠKI FAKUL"
-      ]
-    },
-    {
-      "profileId": "ttf-diplomski",
-      "ruleId": "ttf-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "ttf-upute-zavrsni-diplomski",
-      "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
-      "quote": "Lijeva i desna margina: 2,5 cm",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: Gornja i donja margina: 2,5 cm SVEUČILIŠTE U ZAGREBU TEKSTILNO–TEHNOLOŠKI FAKULTET ▪ UNIVERSITY OF ZAGREB FACU"
-      ]
-    },
-    {
-      "profileId": "ttf-diplomski",
-      "ruleId": "ttf-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "ttf-upute-zavrsni-diplomski",
-      "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
-      "quote": "Poravnanje (Alignment): Obostrano (Justified)",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm SVEUČILIŠTE U Z"
-      ]
-    },
-    {
-      "profileId": "ttf-zavrsni",
-      "ruleId": "ttf-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "ttf-upute-zavrsni-diplomski",
-      "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
-      "quote": "Tip pisma (Font): obavezna potpora svih hrvatskih znakova",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prore"
-      ]
-    },
-    {
-      "profileId": "ttf-zavrsni",
-      "ruleId": "ttf-zavrsni--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "ttf-upute-zavrsni-diplomski",
-      "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
-      "quote": "Prored (Line spacing): 1,5 redak",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm SVEUČILIŠTE U ZAGREBU TEKSTILNO–TEHNOLOŠKI FAKUL"
-      ]
-    },
-    {
-      "profileId": "ttf-zavrsni",
-      "ruleId": "ttf-zavrsni--margins",
-      "checkId": "margins",
-      "sourceId": "ttf-upute-zavrsni-diplomski",
-      "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
-      "quote": "Lijeva i desna margina: 2,5 cm",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: Gornja i donja margina: 2,5 cm SVEUČILIŠTE U ZAGREBU TEKSTILNO–TEHNOLOŠKI FAKULTET ▪ UNIVERSITY OF ZAGREB FACU"
-      ]
-    },
-    {
-      "profileId": "ttf-zavrsni",
-      "ruleId": "ttf-zavrsni--justify",
-      "checkId": "justify",
-      "sourceId": "ttf-upute-zavrsni-diplomski",
-      "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
-      "quote": "Poravnanje (Alignment): Obostrano (Justified)",
-      "problems": [
-        "citat odsjecen, recenica se nastavlja: Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm SVEUČILIŠTE U Z"
       ]
     },
     {

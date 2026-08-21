@@ -241,7 +241,28 @@ def truncated_tail(full_text: str, quote: str) -> str | None:
     tail = full_text[index + len(quote) :]
     end = SENTENCE_END.search(tail)
     tail = tail[: end.start() + 1] if end else tail[:240]
-    return tail.strip() if re.search(r"\d", tail) else None
+    tail = tail.strip()
+    if not re.search(r"\d", tail) or not SCOPE_CARVEOUT.search(tail):
+        return None
+    return tail
+
+
+# Nastavak recenice prijavljuje se SAMO ako izuzima drugi dio dokumenta.
+#
+# Bez ovoga provjera mjeri pogresnu stvar. Izmjereno: 68 nalaza svelo se na 53 jedinice, a u gotovo
+# svima je "nastavak" samo SLJEDECA STAVKA u popisu specifikacija (ttf: "Prored: 1,5 redak" pa
+# "Lijeva i desna margina: 2,5 cm"; iv: "Font: Arial, 12 pt" pa "Prored: 1,5"). Popisi nemaju
+# recenicne tocke, pa svaka stavka izgleda odsjecena, a rijec je o drugoj osi, ne o iznimci.
+#
+# Opasan je samo slucaj u kojem nastavak daje DRUGU VRIJEDNOST ZA DRUGI DIO RADA, jer se ta
+# vrijednost tada boduje kao da vrijedi svugdje. Ta dva stvarna nalaza (unidu) glase:
+#   "...font size treba biti 12 tocaka" [, DOK NASLOVI I PODNASLOVI trebaju biti 14 ili 16]
+#   "...prored treba biti 1,5 u glavnom tekstu" [, jednostruki (1) U BILJESKAMA (FUSNOTAMA)]
+# Oba nastavka imenuju DIO RADA, i po tome se prepoznaju.
+SCOPE_CARVEOUT = re.compile(
+    r"(bilje[sš]k\w*|fusnot\w*|podno[žz]\w*|naslov\w*|natpis\w*|tablic\w*|prilog\w*|prilo[žz]\w*|sa[žz]et\w*|literatur\w*|korica\w*|korice)",
+    re.I,
+)
 
 
 def is_choice(check_id: str, value) -> bool:

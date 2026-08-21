@@ -1083,6 +1083,54 @@ Zajednicki uzrok je jedan i vrijedi ga zapisati: **profilni `quote` nije fotogra
 uredan prijepis**. Svaka provjera koja pretpostavi doslovnost pada, i to tiho, u smjeru laznog
 alarma. Zato revizija prijavljuje razrede i nikad ne presudjuje sama.
 
+### Red od 68 "odsjecenih citata": 31 lazna, jedan stvaran razred (2026-08-21)
+
+68 pravila svelo se na 53 jedinice. Citanje je pokazalo da provjera mjeri pogresnu stvar: u gotovo
+svima je "nastavak" samo SLJEDECA STAVKA u popisu specifikacija (`ttf`: *"Prored: 1,5 redak"* pa
+*"Lijeva i desna margina: 2,5 cm"*; `iv`: *"Font: Arial, 12 pt"* pa *"Prored: 1,5"*). Popisi nemaju
+recenicne tocke, pa svaka stavka izgleda odsjecena, a rijec je o drugoj osi, ne o iznimci.
+
+Opasan je samo slucaj u kojem nastavak daje **drugu vrijednost za drugi dio rada**. Ta dva stvarna
+nalaza (unidu) glase: *"...font size treba biti 12 tocaka"* [**dok naslovi i podnaslovi** trebaju
+biti 14 ili 16] i *"...prored treba biti 1,5 u glavnom tekstu"* [jednostruki **u biljeskama**]. Oba
+nastavka IMENUJU DIO RADA, i po tome se prepoznaju. Provjera je suzena na to: 68 -> 37.
+
+### Stvaran kvar: izuzece stoji u samom citatu, ali ga vrijednost ne odrazava
+
+| pravilo | citat sadrzi | vrijednost |
+|---|---|---|
+| `grf-doktorski--margins` | *"Naslovnica ima drugacije margine."* | ravnih 2,5 sa svih strana |
+| `fhs-doktorski--margins` | *"Naslovnica ima drugacije margine."* | ravnih 2,5 sa svih strana |
+| `agr-doktorski--margins` | izvor nastavlja *"Naslovnica ima drugacije margine!"* | ravnih 2,5 sa svih strana |
+| `fhs-diplomski--line-spacing` | *"Prored: 1,5 redak (sazetak ima jednostruki prored)"* | 1,5 |
+| `fhs-zavrsni--line-spacing` | isto | 1,5 |
+
+Da to nije teorijsko, potvrdjuje sam kod. `src/analysis/analyze-docx.ts:233` provjerava SVAKU sekciju
+protiv jedne profilne vrijednosti:
+
+```
+sections.forEach((s,i)=>{ ... if(!near(s.margins[side],profile.margins[side],strict*3)) bad.push(...) })
+marginEarn = bad.length ? Math.max(0, 6 - bad.length*1.5) : 6
+```
+
+Rad ciju naslovnicu izvor IZRICITO dopusta drukcije margine gubi bodove i dobiva upozorenje. Doseg
+ovisi o strukturi dokumenta: kvar se javlja kad je naslovnica vlastita sekcija (`w:sectPr`), a ne kad
+je rijesena preko `w:titlePg`, sto analiza vec biljezi kao `titlePageDifferent`.
+
+Isti obrazac za prored pogadja sazetak (`fhs`), gdje bi sukladan jednostruki prored bio prijavljen.
+
+### Vecina provjerenog je zapravo ISPRAVNA
+Vrijedi zabiljeziti i suprotan smjer, jer bi inace popis izgledao gore nego sto jest:
+- `grf-zavrsni--margins` = `{gore 2, desno 2,5, dolje 2, lijevo 3,5}` - tocno asimetricno, s uveznom
+  marginom, iz citata *"Margine: vez 3,5 cm, vanjski rub 2,5 cm, glava i noge 2 cm"*.
+- `mef-diplomski--font-size` = `[11, 12]` - ispravno zapisan SKUP, ne jedna ciljana vrijednost.
+
+### Jedan pokvaren citat
+`ffzg-etnologija-graduate--font-size` nosi `quote: "ine 12 to"`. To je krhotina, ne citat: izvor
+`ffzg-etnologija-diplomski-2019.pdf` ima ostecen tekstualni sloj (*"velicine"* se cita kao
+*"veliþine"*), pa je prijepis prekinut na ostecenju. Vrijednost 12 je vjerojatno tocna, ali citat ne
+dokazuje nista i pravilo se po njemu ne moze provjeriti.
+
 ---
 
 ## FAZA P5: stvarni korpus i Word oracle
