@@ -43,6 +43,8 @@ export interface RepairDiffOptions {
   after: PreviewModel;
   changelog: RepairChange[];
   fileName?: string;
+  /** "Popravljeno" nalazi (xray-resolved): POST-FESTUM iskaz iz ponovne analize, ne obecanje. */
+  resolved?: Array<{ checkId: string; title: string; beforeParagraphIndex?: number }>;
 }
 
 function el(tag: string, className?: string, text?: string): HTMLElement {
@@ -239,6 +241,22 @@ export function openRepairDiff(opts: RepairDiffOptions): void {
       clist.appendChild(li);
     }
     wrap.appendChild(clist);
+    body.appendChild(wrap);
+  }
+
+  // Traka "Popravljeno": provjere koje su prije bile prekrsene, a ponovna analiza ih sada
+  // potvrdjuje kao prosle. Iskaz NAKON dokaza (re-analiza), zato smije stajati bez ograda.
+  if (opts.resolved?.length) {
+    const MAX_LISTED = 12;
+    const wrap = el('div', 'lekta-diff-resolved');
+    wrap.appendChild(el('p', 'lekta-diff-resolved-head', `Popravljeno: ${opts.resolved.length} ${opts.resolved.length === 1 ? 'nalaz' : opts.resolved.length < 5 ? 'nalaza' : 'nalaza'}`));
+    const rlist = el('ul', 'lekta-diff-resolved-list');
+    for (const rf of opts.resolved.slice(0, MAX_LISTED)) {
+      const li = el('li', undefined, rf.title + (rf.beforeParagraphIndex != null ? ` (odlomak ${rf.beforeParagraphIndex})` : ''));
+      rlist.appendChild(li);
+    }
+    if (opts.resolved.length > MAX_LISTED) rlist.appendChild(el('li', 'lekta-diff-resolved-more', `+ još ${opts.resolved.length - MAX_LISTED}`));
+    wrap.appendChild(rlist);
     body.appendChild(wrap);
   }
 

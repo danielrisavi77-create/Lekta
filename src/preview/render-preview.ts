@@ -16,6 +16,8 @@
  *     flagTargets (bocna lista ga i dalje moze prikazati, samo bez skrolanja).
  */
 import type { PreviewFlag, PreviewParagraph, PreviewSeverity } from './preview-anchors';
+import { topFixability } from './preview-anchors';
+import './xray.css';
 
 export interface PreviewFootnote {
   id: number;
@@ -114,6 +116,8 @@ function fillParagraph(
     const mark = doc.createElement('mark');
     mark.className = `lekta-flag lekta-flag--${sev}`;
     mark.setAttribute('data-flag-severity', sev);
+    const fixability = topFixability(m.entries.map((e) => e.flag));
+    if (fixability) mark.setAttribute('data-fixability', fixability);
     const titles = [...new Set(m.entries.map((e) => e.flag.title))].join('; ');
     if (titles) mark.title = titles;
     mark.textContent = text.slice(m.start, m.end);

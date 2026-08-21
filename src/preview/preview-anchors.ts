@@ -151,9 +151,17 @@ export type PreviewFlagSource =
   | 'grammar'
   | 'existence'
   | 'issue-anchor'
-  | 'footnote-anchor';
+  | 'footnote-anchor'
+  | 'typography-structure'
+  | 'consistency';
 
-/** Usidren nalaz spreman za inline isticanje u pregledu. */
+/**
+ * Usidren nalaz spreman za inline isticanje u pregledu.
+ *
+ * GRANICA RECEPTA: flag smije nositi ISJECAK teksta dokumenta (korisnik ga ionako gleda u
+ * pregledu), ali NIKAD prijedlog zamjene (proposedText/suggestedCanonical) - to je placeni
+ * recept (recipeUnlocked gate u renderPreviewSide). Pin: tests/preview-anchors.test.ts.
+ */
 export interface PreviewFlag {
   /** 1-based indeks odlomka (poravnat s PreviewParagraph.index). 0 kad je nalaz vezan uz fusnotu. */
   paragraphIndex: number;
@@ -167,6 +175,8 @@ export interface PreviewFlag {
   /** Ljudska oznaka na hrvatskom. */
   title: string;
   source: PreviewFlagSource;
+  /** Popravljivost nalaza (sekundarni vizualni kanal u Rendgenu); popunjava se gdje je poznata. */
+  fixability?: 'auto' | 'assisted' | 'manual';
 }
 
 const REGISTER_LABELS: Record<string, string> = {
@@ -423,6 +433,97 @@ export function collectExistenceFlags(verdicts: ExistenceVerdictInput[] | null |
   return flags;
 }
 
+/** Najjaca popravljivost skupa flagova (auto > assisted > manual); null kad nijedan ne nosi. */
+export function topFixability(
+  flags: ReadonlyArray<Pick<PreviewFlag, 'fixability'>>,
+): 'auto' | 'assisted' | 'manual' | null {
+  const rank = { auto: 3, assisted: 2, manual: 1 } as const;
+  let best: 'auto' | 'assisted' | 'manual' | null = null;
+  for (const f of flags) {
+    const fx = f.fixability;
+    if (fx && (best == null || rank[fx] > rank[best])) best = fx;
+  }
+  return best;
+}
+
+/** Gornja granica flagova po strukturnom izvoru: DOM s tisucama markova nije pregled nego sum. */
+const STRUCTURE_FLAG_CAP = 300;
+
+/**
+ * Preslikaj TOP-LEVEL indeks odlomka (extractBodyParagraphs koordinate: samo izravna djeca
+ * w:body) u GLOBALNI indeks pregleda (svi w:p potomci minus mc:Fallback). Mapa dolazi iz
+ * details.paragraphCoordinates (analyzeDocx); bez nje (stariji rezultat) pada na identitetu,
+ * koja je tocna za dokumente bez tablica/okvira, a kriva cim ih ima - zato je mapa obavezna
+ * za nove rezultate, a fallback postoji samo radi kompatibilnosti.
+ */
+function topToGlobalIndex(details: any, topIndex: unknown): number | null {
+  if (!isParagraphOrdinal(topIndex) || topIndex < 1) return null;
+  const map = details?.paragraphCoordinates?.topToGlobal;
+  if (Array.isArray(map)) {
+    const mapped = map[topIndex - 1];
+    return isParagraphOrdinal(mapped) && mapped >= 1 ? mapped : null;
+  }
+  return topIndex;
+}
+
+/**
+ * Tehnicko-tipografske nedosljednosti (typographyStructure): oznaka na TOCNOM mjestu u tekstu
+ * (rawText je doslovan isjecak dokumenta). paragraphIndex izvora je TOP-LEVEL koordinata, pa se
+ * preslikava kroz paragraphCoordinates. proposedText se NAMJERNO NE prenosi (granica recepta).
+ */
+export function collectTypographyStructureFlags(details: any): PreviewFlag[] {
+  const flags: PreviewFlag[] = [];
+  const occurrences = details?.typographyStructure?.occurrences;
+  if (!Array.isArray(occurrences)) return flags;
+  for (const occ of occurrences) {
+    if (flags.length >= STRUCTURE_FLAG_CAP) break;
+    const paragraphIndex = topToGlobalIndex(details, occ?.paragraphIndex);
+    if (paragraphIndex == null) continue;
+    const excerpt = trimExcerpt(occ?.rawText);
+    if (!excerpt) continue;
+    flags.push({
+      paragraphIndex,
+      excerpt,
+      severity: 'info',
+      kind: `typography-${String(occ?.category ?? 'ostalo')}`,
+      title: 'Tehnička tipografija',
+      source: 'typography-structure',
+    });
+  }
+  return flags;
+}
+
+/**
+ * Nedosljedni pojmovi/oznake (consistencyStructure): oznaka na svakom pojavljivanju varijante.
+ * Isjecak je variant.text (tekst dokumenta); suggestedCanonical se NE prenosi (recept).
+ */
+export function collectConsistencyFlags(details: any): PreviewFlag[] {
+  const flags: PreviewFlag[] = [];
+  const groups = details?.consistencyStructure?.groups;
+  if (!Array.isArray(groups)) return flags;
+  outer: for (const group of groups) {
+    for (const variant of group?.variants ?? []) {
+      const excerpt = trimExcerpt(variant?.text);
+      if (!excerpt) continue;
+      for (const occ of variant?.occurrences ?? []) {
+        if (flags.length >= STRUCTURE_FLAG_CAP) break outer;
+        if (occ?.part !== 'word/document.xml') continue;
+        const paragraphIndex = topToGlobalIndex(details, occ?.paragraphIndex);
+        if (paragraphIndex == null) continue;
+        flags.push({
+          paragraphIndex,
+          excerpt,
+          severity: 'info',
+          kind: `consistency-${String(group?.zone ?? 'ostalo')}`,
+          title: group?.label ? `Dosljednost: ${String(group.label)}` : 'Dosljednost pojmova',
+          source: 'consistency',
+        });
+      }
+    }
+  }
+  return flags;
+}
+
 /**
  * Kljuc za deduplikaciju: ista lokacija (odlomak ILI fusnota) + isti isjecak (prefiks 40 znakova)
  * je isti nalaz. Bez isjecka razlucujemo naslovom, da dva razlicita nalaza bez isjecka na istoj
@@ -447,6 +548,10 @@ export function collectAllPreviewFlags(
 ): PreviewFlag[] {
   const merged = [
     ...collectPreviewFlags(result?.details),
+    // Strukturni izvori s tocnim mjestom (Rendgen): iza postojecih, da kod dedupa na istom
+    // mjestu prednost zadrze dosadasnji flagovi (npr. typoLint nad typographyStructure).
+    ...collectTypographyStructureFlags(result?.details),
+    ...collectConsistencyFlags(result?.details),
     ...collectIssueAnchors(result?.issues),
     ...collectFootnoteAnchors(result?.issues),
     ...collectExistenceFlags(existence),

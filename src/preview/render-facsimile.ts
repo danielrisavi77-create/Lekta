@@ -32,6 +32,9 @@ import type {
   PreviewFootnoteMark,
 } from './preview-anchors';
 import type { RenderedPreview } from './render-preview';
+import type { PageMap } from './page-map';
+import { topFixability } from './preview-anchors';
+import './xray.css';
 
 const SEVERITY_RANK: Record<PreviewSeverity, number> = { error: 3, warning: 2, info: 1 };
 
@@ -285,6 +288,8 @@ function fillFormatted(
       const mark = doc.createElement('mark');
       mark.className = `lekta-flag lekta-flag--${sev}`;
       mark.setAttribute('data-flag-severity', sev);
+      const fixability = topFixability(m.entries.map((e) => e.flag));
+      if (fixability) mark.setAttribute('data-fixability', fixability);
       const titles = [...new Set(m.entries.map((e) => e.flag.title))].join('; ');
       if (titles) mark.title = titles;
       appendStyledText(mark, text, m.start, m.end, segs, base, doc, mk);
@@ -507,7 +512,7 @@ function appendTable(
 export function renderFacsimile(
   model: PreviewModel,
   flags: PreviewFlag[],
-  options: { doc?: Document } = {},
+  options: { doc?: Document; pageMap?: PageMap | null } = {},
 ): RenderedPreview {
   const doc = options.doc ?? (globalThis as { document?: Document }).document;
   if (!doc) throw new Error('renderFacsimile: nema dostupnog document objekta.');
@@ -540,18 +545,46 @@ export function renderFacsimile(
   root.className = 'lekta-facsimile';
   if (model?.truncated) root.setAttribute('data-truncated', 'true');
 
-  // Podjela na listove po prijelomima stranica (pageBreakAfter). Bez prijeloma = jedan list.
+  // Podjela na listove. Bez pageMap: SAMO tvrdi prijelomi (pageBreakAfter), identicno kao prije
+  // (pin u tests/render-facsimile.test.ts). S pageMap (Rendgen): listovi se lome i na
+  // PROCIJENJENIM granicama; takva granica je vizualno razlicita (isprekidan rub + "~ str. N"),
+  // jer je vizualni prijelom jaca izjava od captiona, a procjena ne smije glumiti egzaktnost.
+  const pm = options.pageMap;
+  const usePageMap = !!pm && Array.isArray(pm.pageOf) && pm.pageOf.length === paragraphs.length && pm.pageCount >= 1;
   const pages: PreviewParagraph[][] = [[]];
-  for (const para of paragraphs) {
-    pages[pages.length - 1].push(para);
-    if (para.pageBreakAfter) pages.push([]);
+  const softStart: boolean[] = [false];
+  if (usePageMap && pm) {
+    for (let pos = 0; pos < paragraphs.length; pos++) {
+      pages[pages.length - 1].push(paragraphs[pos]);
+      const next = pos + 1 < paragraphs.length;
+      if (next && pm.pageOf[pos + 1] !== pm.pageOf[pos]) {
+        pages.push([]);
+        softStart.push(paragraphs[pos].pageBreakAfter !== true);
+      }
+    }
+  } else {
+    for (const para of paragraphs) {
+      pages[pages.length - 1].push(para);
+      if (para.pageBreakAfter) {
+        pages.push([]);
+        softStart.push(false);
+      }
+    }
   }
-  if (pages.length > 1 && pages[pages.length - 1].length === 0) pages.pop();
+  if (pages.length > 1 && pages[pages.length - 1].length === 0) { pages.pop(); softStart.pop(); }
   const multiPage = pages.length > 1;
 
   pages.forEach((group, pi) => {
     const page = makeSheet(model, base, doc);
-    if (multiPage) page.setAttribute('data-page', String(pi + 1));
+    if (multiPage || usePageMap) page.setAttribute('data-page', String(pi + 1));
+    if (usePageMap && softStart[pi]) {
+      page.classList.add('lekta-fac-page--soft-break');
+      const marker = doc.createElement('div');
+      marker.className = 'lekta-fac-softbreak';
+      marker.setAttribute('aria-hidden', 'true');
+      marker.textContent = `~ str. ${pi + 1} (procjena)`;
+      page.appendChild(marker);
+    }
     appendBlocks(page, group, byPara, base, doc, flagTargets);
 
     // Fusnote na dnu ZADNJEG lista (odvojene crtom); zaseban koordinatni prostor kao u MVP-u.
@@ -586,12 +619,13 @@ export function renderFacsimile(
       page.appendChild(section);
     }
 
-    // Broj stranice (samo kad ima vise listova); sjedi u donjoj margini.
+    // Broj stranice (samo kad ima vise listova); sjedi u donjoj margini. S pageMap nosi "~"
+    // prefiks: broj je procjena, ne Wordov prijelom.
     if (multiPage) {
       const pn = doc.createElement('div');
       pn.className = 'lekta-fac-pagenum';
       pn.setAttribute('aria-hidden', 'true');
-      pn.textContent = String(pi + 1);
+      pn.textContent = usePageMap ? `~${pi + 1}` : String(pi + 1);
       page.appendChild(pn);
     }
     root.appendChild(page);

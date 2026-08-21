@@ -104,17 +104,37 @@ function tagName(token: string): string | null {
   return match?.[1] ?? null;
 }
 
-/** Vraća samo w:p koji su izravna djeca w:body. Ugniježđene tablice i tekstualni okviri se ne vraćaju. */
-export function extractBodyParagraphs(documentXml: string): BodyParagraphRange[] {
+/** Top-level odlomci + preslikavanje njihovih indeksa u GLOBALNI koordinatni sustav analize. */
+export interface BodyParagraphCoordinates {
+  paragraphs: BodyParagraphRange[];
+  /**
+   * topToGlobal[i] = 1-based indeks odlomka `paragraphs[i]` u `bodyParagraphs(doc)` sustavu
+   * (SVI w:p potomci u redoslijedu dokumenta, minus potisnuta mc:Fallback grana; isti sustav
+   * kao `preview.paragraphs[].index` i `sections[].paragraphIndex` u analyzeDocx).
+   *
+   * Zasto se mapa gradi BAS OVDJE, u istom string skeneru, a ne DOM parent-provjerom: skener
+   * ISPUSTA samozatvoreni `<w:p/>` na razini bodyja (otvaranje postavi start, zatvaranja nema,
+   * sljedeci w:p ga pregazi), a DOM ne razlikuje `<w:p/>` od `<w:p></w:p>` (oba su element bez
+   * djece), pa bi vanjska rekonstrukcija na takvom dokumentu davala off-by-N za sve daljnje
+   * tipografske indekse. Globalni brojac zato zivi u samom skeneru: broji SVAKO otvaranje w:p
+   * (i samozatvoreno, i u tablici/okviru) osim unutar mc:Fallback, tocno kao bodyParagraphs.
+   */
+  topToGlobal: number[];
+}
+
+export function extractBodyParagraphsWithCoordinates(documentXml: string): BodyParagraphCoordinates {
   const bodyStart = documentXml.indexOf('<w:body');
   const bodyEnd = bodyStart < 0 ? -1 : documentXml.indexOf('</w:body>', bodyStart);
-  if (bodyStart < 0 || bodyEnd < 0) return [];
+  if (bodyStart < 0 || bodyEnd < 0) return { paragraphs: [], topToGlobal: [] };
   const body = documentXml.slice(bodyStart, bodyEnd + '</w:body>'.length);
   const tokenRe = /<[^>]+>/g;
   const stack: string[] = [];
   const paragraphs: BodyParagraphRange[] = [];
+  const topToGlobal: number[] = [];
   let paragraphStart = -1;
   let paragraphDepth = 0;
+  let globalIndex = 0;
+  let pendingGlobal = 0;
   let token: RegExpExecArray | null;
   while ((token = tokenRe.exec(body))) {
     const raw = token[0];
@@ -122,21 +142,29 @@ export function extractBodyParagraphs(documentXml: string): BodyParagraphRange[]
     if (!name || raw.startsWith('<?') || raw.startsWith('<!')) continue;
     const closing = /^<\//.test(raw);
     const selfClosing = /\/\s*>$/.test(raw);
+    if (!closing && name === 'w:p' && !stack.includes('mc:Fallback')) globalIndex++;
     if (!closing && name === 'w:p' && stack.length === 1 && stack[0] === 'w:body') {
       paragraphStart = bodyStart + token.index;
       paragraphDepth = stack.length;
+      pendingGlobal = globalIndex;
     }
     if (closing && name === 'w:p' && paragraphStart >= 0 && stack.length === paragraphDepth + 1) {
       const end = bodyStart + token.index + raw.length;
       const xml = documentXml.slice(paragraphStart, end);
       paragraphs.push({ index: paragraphs.length + 1, start: paragraphStart, end, xml, fingerprint: hash(xml) });
+      topToGlobal.push(pendingGlobal);
       paragraphStart = -1;
     }
     if (selfClosing) continue;
     if (closing) { if (stack.at(-1) === name) stack.pop(); }
     else stack.push(name);
   }
-  return paragraphs;
+  return { paragraphs, topToGlobal };
+}
+
+/** Vraća samo w:p koji su izravna djeca w:body. Ugniježđene tablice i tekstualni okviri se ne vraćaju. */
+export function extractBodyParagraphs(documentXml: string): BodyParagraphRange[] {
+  return extractBodyParagraphsWithCoordinates(documentXml).paragraphs;
 }
 
 export function editableNodes(paragraphXml: string): EditableXmlNode[] {

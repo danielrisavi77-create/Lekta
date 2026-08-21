@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { collectPreviewFlags, collectIssueAnchors, collectFootnoteAnchors, collectAllPreviewFlags, collectExistenceFlags } from '../src/preview/preview-anchors';
+import { collectPreviewFlags, collectIssueAnchors, collectFootnoteAnchors, collectAllPreviewFlags, collectExistenceFlags, collectTypographyStructureFlags, collectConsistencyFlags } from '../src/preview/preview-anchors';
 import { KIND_HOMOGLIF_CIRILICA, KIND_DVOSTRUKI_RAZMAK } from '../src/tools/typo-lint';
 import { KIND_PRVO_LICE } from '../src/audits/register';
 import { sanitizeAnalysisResult } from '../src/report/report';
@@ -291,5 +291,72 @@ describe('collectFootnoteAnchors: sidrenje na fusnote', () => {
     };
     const fn3 = collectAllPreviewFlags(result).filter((f) => f.footnoteId === 3);
     expect(fn3).toHaveLength(1);
+  });
+});
+
+describe('Rendgen kolektori: typographyStructure i consistencyStructure', () => {
+  const detailsWithMap = {
+    paragraphCoordinates: { topToGlobal: [1, 4, 5] }, // tablica izmedju 1. i 2. top-level odlomka
+    typographyStructure: {
+      occurrences: [
+        { id: 't1', category: 'multiple-spaces', paragraphIndex: 2, start: 3, end: 5, rawText: 'dva  razmaka', proposedText: 'dva razmaka', confidence: 'high', evidence: [], anchorFingerprint: 'x', safe: true },
+      ],
+    },
+    consistencyStructure: {
+      groups: [
+        {
+          id: 'g1', zone: 'element-label', label: 'Tablica/Table', confidence: 'high', evidence: [], requiresConfirmation: true,
+          suggestedCanonical: 'Tablica',
+          variants: [
+            { text: 'Table', count: 1, occurrences: [{ part: 'word/document.xml', paragraphIndex: 3, start: 0, end: 5, anchorFingerprint: 'y' }] },
+            { text: 'Tablica', count: 1, occurrences: [{ part: 'word/header1.xml', anchorFingerprint: 'z' }] },
+          ],
+        },
+      ],
+    },
+  };
+
+  it('top-level indeks se preslikava u globalni kroz paragraphCoordinates', () => {
+    const typo = collectTypographyStructureFlags(detailsWithMap);
+    expect(typo).toHaveLength(1);
+    expect(typo[0].paragraphIndex).toBe(4); // top 2 -> globalno 4
+    expect(typo[0].excerpt).toBe('dva  razmaka');
+    const cons = collectConsistencyFlags(detailsWithMap);
+    expect(cons).toHaveLength(1); // header occurrence (nije document.xml) se preskace
+    expect(cons[0].paragraphIndex).toBe(5); // top 3 -> globalno 5
+    expect(cons[0].excerpt).toBe('Table');
+  });
+
+  it('bez mape (stariji rezultat) pada na identitetu', () => {
+    const details = { typographyStructure: detailsWithMap.typographyStructure };
+    expect(collectTypographyStructureFlags(details)[0].paragraphIndex).toBe(2);
+  });
+
+  it('GRANICA RECEPTA: flag nikad ne nosi proposedText ni suggestedCanonical', () => {
+    for (const flag of [...collectTypographyStructureFlags(detailsWithMap), ...collectConsistencyFlags(detailsWithMap)]) {
+      const dump = JSON.stringify(flag);
+      expect(dump).not.toContain('dva razmaka"'); // proposedText (razlicit od rawText isjecka)
+      expect(dump).not.toContain('suggestedCanonical');
+      expect(dump).not.toContain('proposed');
+    }
+  });
+
+  it('dedup: postojeci typoLint flag ima prednost nad typographyStructure na istom mjestu', () => {
+    const result = {
+      details: {
+        ...detailsWithMap,
+        typoLint: { findings: [{ paragraphIndex: 3, kind: KIND_DVOSTRUKI_RAZMAK, excerpt: 'dva  razmaka' }] }, // 0-based 3 -> 1-based 4
+      },
+      issues: [],
+    };
+    const flags = collectAllPreviewFlags(result);
+    const atP4 = flags.filter((f) => f.paragraphIndex === 4 && f.excerpt === 'dva  razmaka');
+    expect(atP4).toHaveLength(1);
+    expect(atP4[0].source).toBe('typo');
+  });
+
+  it('cap: izvor nikad ne da vise od 300 flagova', () => {
+    const many = { typographyStructure: { occurrences: Array.from({ length: 500 }, (_, i) => ({ id: String(i), category: 'multiple-spaces', paragraphIndex: 1, start: 0, end: 1, rawText: 'x  y', proposedText: 'x y', confidence: 'high', evidence: [], anchorFingerprint: 'a', safe: true })) } };
+    expect(collectTypographyStructureFlags(many)).toHaveLength(300);
   });
 });

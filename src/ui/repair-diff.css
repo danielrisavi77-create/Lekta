@@ -114,3 +114,25 @@
 @media print {
   .lekta-diff-modes, .diff-jumps, .lekta-fac-zoombar { display: none !important; }
 }
+
+/* Traka "Popravljeno" (xray-resolved): post-festum potvrda iz ponovne analize. */
+.lekta-diff-resolved {
+  border: 1px solid rgba(26, 122, 84, 0.4);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+.lekta-diff-resolved-head {
+  margin: 0 0 6px;
+  font-weight: 700;
+  color: #1a7a54;
+}
+.lekta-diff-resolved-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+}
+.lekta-diff-resolved-more {
+  list-style: none;
+  opacity: 0.7;
+}

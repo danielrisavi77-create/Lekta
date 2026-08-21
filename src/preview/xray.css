@@ -1,0 +1,106 @@
+/* Rendgen dokumenta: sekundarni vizualni kanal POPRAVLJIVOSTI na inline oznakama.
+   Boja pozadine ostaje severity (postojece .lekta-flag--error/warning/info klase i pinovi);
+   popravljivost se prikazuje iskljucivo stilom podcrtavanja, pa oba kanala zive zajedno:
+   puna crta = automatski popravak, crtkana = uz potvrdu, tockasta = rucna provjera. */
+mark.lekta-flag[data-fixability='auto'] {
+  text-decoration: underline solid 2px;
+  text-underline-offset: 2px;
+}
+mark.lekta-flag[data-fixability='assisted'] {
+  text-decoration: underline dashed 2px;
+  text-underline-offset: 2px;
+}
+mark.lekta-flag[data-fixability='manual'] {
+  text-decoration: underline dotted 2px;
+  text-underline-offset: 2px;
+}
+
+/* PROCIJENJENI prijelom lista (pageMap): vizualno razlicit od tvrdog Wordovog prijeloma,
+   jer je vizualni prijelom jaca izjava od captiona. */
+.lekta-fac-page--soft-break {
+  border-top: 2px dashed rgba(120, 120, 120, 0.55);
+}
+.lekta-fac-softbreak {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1px 8px;
+  border: 1px dashed rgba(120, 120, 120, 0.55);
+  border-radius: 999px;
+  background: #fff;
+  font: 600 10px/1.4 system-ui, sans-serif;
+  color: rgba(90, 90, 90, 0.9);
+  letter-spacing: 0.02em;
+  user-select: none;
+  z-index: 2;
+}
+
+/* Stranicna traka Rendgena: kompaktna "toplinska" linija, jedna celija po procijenjenom listu. */
+.lekta-xray-rail {
+  margin: 0 0 12px;
+  border: 1px solid rgba(120, 120, 120, 0.3);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+.lekta-xray-rail__head {
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  opacity: 0.8;
+}
+.lekta-xray-rail__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 2px;
+}
+.lekta-xray-rail__list li { flex: 1 1 0; min-width: 0; display: flex }
+.lekta-xray-rail__page {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 22px;
+  border: 0;
+  border-radius: 3px;
+  background: rgba(120, 120, 120, 0.16);
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.lekta-xray-rail__page[data-sev='info'] { background: rgba(95, 99, 104, 0.45) }
+.lekta-xray-rail__page[data-sev='warning'] { background: rgba(176, 96, 0, 0.6) }
+.lekta-xray-rail__page[data-sev='error'] { background: rgba(179, 38, 30, 0.7) }
+.lekta-xray-rail__page:hover, .lekta-xray-rail__page:focus-visible { outline: 2px solid currentColor; outline-offset: 1px }
+.lekta-xray-rail__page b {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  font: 600 9px/1.4 system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  opacity: 0;
+  white-space: nowrap;
+}
+.lekta-xray-rail__page[data-labeled='true'] b, .lekta-xray-rail__page:hover b, .lekta-xray-rail__page:focus-visible b { opacity: 0.85 }
+.lekta-xray-rail__list { padding-bottom: 14px }
+.lekta-xray-rail__dots { display: inline-flex; gap: 1px; margin-bottom: 2px }
+.lekta-xray-rail__dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  font: 700 7px/1 system-ui, sans-serif;
+  font-style: normal;
+  color: #fff;
+  padding: 0 2px;
+  background: rgba(0, 0, 0, 0.35);
+}
+.lekta-xray-rail__dot--error { background: #7a1410 }
+.lekta-xray-rail__dot--warning { background: #7a4300 }
+.lekta-xray-rail__dot--info { background: #3c4043 }
