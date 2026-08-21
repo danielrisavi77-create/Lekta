@@ -3,9 +3,9 @@
   "profileCount": 407,
   "byOutcome": {
     "no-rules": 21,
-    "pass": 323,
+    "pass": 324,
     "no-repair": 57,
-    "partial": 6
+    "partial": 5
   },
   "rows": [
     {
@@ -1032,7 +1032,7 @@
     },
     {
       "profileId": "efzg-specijalisticki",
-      "outcome": "partial",
+      "outcome": "pass",
       "violated": [
         "font",
         "line-spacing",
@@ -1040,17 +1040,16 @@
         "margins",
         "paper-size"
       ],
-      "requested": 4,
+      "requested": 5,
       "axesResolved": [
         "font",
         "line-spacing",
         "justify",
-        "margins"
-      ],
-      "axesRemaining": [
+        "margins",
         "paper-size"
       ],
-      "resolved": 4,
+      "axesRemaining": [],
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },

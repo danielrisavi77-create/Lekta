@@ -5784,15 +5784,14 @@
           "w": 21,
           "h": 29.7
         },
-        "recommended": true,
         "source": {
           "id": "efzg-upute-specijalisticki-2021",
           "title": "Upute za izradu pisanih radova na sveucilisnom specijalistickom studiju (Ekonomski fakultet u Zagrebu, 2021)",
           "url": "https://www.efzg.unizg.hr/userdocsimages/PDS/Upute_za_izradu_pisanih_radova_na_SS%20studiju.pdf"
         },
-        "sourcePage": "odjeljak o tehnickom oblikovanju (format, font, margine, prored)",
+        "sourcePage": "str. 13 (poglavlje \"3. PRAVILA I UPUTE ZA PISANJE RADOVA\")",
         "authority": "program-page",
-        "lastVerified": "2026-07-03"
+        "lastVerified": "2026-08-21"
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",

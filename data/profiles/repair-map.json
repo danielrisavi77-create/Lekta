@@ -2258,12 +2258,11 @@
       "ruleId": "efzg-specijalisticki--paper-size",
       "checkId": "paper-size",
       "label": "Format papira",
-      "status": "advisory",
+      "status": "verified",
       "fixerId": "paper-size-fixer",
-      "recommended": true,
-      "value": "A4",
-      "sourcePage": "odjeljak o tehnickom oblikovanju (format, font, margine, prored)",
-      "lastVerified": "2026-07-03"
+      "autoFixable": true,
+      "sourcePage": "str. 13 (poglavlje \"3. PRAVILA I UPUTE ZA PISANJE RADOVA\")",
+      "lastVerified": "2026-08-21"
     }
   ],
   "efzg-strucni-racunovodstvo": [

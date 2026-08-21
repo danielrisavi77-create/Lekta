@@ -552,13 +552,13 @@
     },
     {
       "profileId": "efzg-specijalisticki",
-      "scoredMachineCheckable": 6,
-      "scoredTotal": 7,
+      "scoredMachineCheckable": 7,
+      "scoredTotal": 8,
       "machineCheckable": 8,
-      "advisory": 3,
-      "ratio": 0.75,
+      "advisory": 2,
+      "ratio": 0.875,
       "state": "scored",
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-08-21"
     },
     {
       "profileId": "efzg-strucni-racunovodstvo",
@@ -4101,8 +4101,8 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "scoredMachineCheckable": 2135,
-  "scoredTotal": 2208,
+  "scoredMachineCheckable": 2136,
+  "scoredTotal": 2209,
   "scoredNonMachineCheckable": 73,
   "nonMachineCheckableByCheckId": {
     "citation-style": 49,

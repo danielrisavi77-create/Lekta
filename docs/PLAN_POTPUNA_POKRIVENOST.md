@@ -944,6 +944,45 @@ Upute ... Predstavljaju samo"), ali je pogodio bez provjere, pa je isti mehaniza
 uhvatiti recenicu o necem drugom. Vrijedi i sire: nalaz o odricanju je razlog da se dokument PROCITA,
 ne presuda sama za sebe.
 
+### Izvedeno: `efzg-specijalisticki` `paper-size` advisory -> scored (2026-08-21)
+
+Jedina tvrdnja iz cijelog kruga koja je prosla sve provjere BEZ suzenja i bez zastavice. Vlasnik je
+potvrdio recenicu sa str. 13.
+
+Sto je bilo krivo: pravilo je citiralo recenicu o OPSEGU (*"opsega od 70 do 90 stranica teksta
+formata A4, ..."*), u kojoj je A4 usputna oznaka, a ne odredba o formatu. Zato je i bilo `advisory`
+uz `verifiedBy: owner-bulk-approval` i `reviewedBy: null`.
+
+Sto je upisano: citat je zamijenjen samostalnom, imperativnom recenicom iz poglavlja *"3. PRAVILA I
+UPUTE ZA PISANJE RADOVA"* (*"Radovi se pisu na papiru formata A4 (210 mm x 297 mm) ..."*), status je
+`verified`, `scored: true`, `autoFixable` s `paper-size-fixer`, uz `verifiedHash` snapshota.
+
+Izmjereni ucinak, sve pregradjeno iz izvora:
+
+| mjera | prije | poslije |
+|---|---|---|
+| `efzg-specijalisticki` bodovanih | 7 | **8** |
+| od toga strojno provjerljivih | 6 | **7** (od 8) |
+| closed-loop `pass` | 323 | **324** |
+| closed-loop `partial` | 6 | **5** |
+| ledger tvrdnja B | 329 | **330** |
+| ledger dokaz `synthetic-pass` | 337 | **338** |
+
+`efzg-specijalisticki` je presao iz `partial` u `pass`, uz `axesRemaining: []` i `paper-size` medju
+razrijesenima. Ratchet je azuriran (`closed-loop-ratchet.json`), promjena je u dopustenom smjeru.
+
+**Namjerno NIJE prosireno.** Preostalih pet `partial` profila (`efzg-diplomski`,
+`efzg-strucni-racunovodstvo`, `efzg-zavrsni`, `grad-diplomski`, `grad-zavrsni`) ima isti kvar
+(paper-size izveden iz recenice o opsegu), ali opovrgavajuci prolaz je izricito zabranio sirenje p13
+odredbe izvan specijalistickog studija: efzg-zavrsni i efzg-diplomski citiraju druge dokumente s
+*"u pravilu iznosi"*, a efzg-strucni-racunovodstvo propisuje font 11 i samo Calibri. Svaki od njih
+treba vlastiti imperativan citat ili ostaje advisory.
+
+### Granica koja je ovdje drzana
+`isRuleScored` trazi `status: 'verified'`, a konvencija uz njega nosi `confirmedVia: 'human-audit'` -
+zapis da je COVJEK otvorio izvor. Zapis nije upisan dok vlasnik nije potvrdio recenicu; do tada je
+promjena stajala. AI je pripremio dokaz i suzio odluku na jedno pitanje, potpis je ostao ljudski.
+
 ---
 
 ## FAZA P5: stvarni korpus i Word oracle
