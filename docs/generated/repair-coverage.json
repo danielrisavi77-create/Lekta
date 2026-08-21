@@ -2813,7 +2813,7 @@
       "fixerId": "paper-size-fixer",
       "checkId": "paper-size",
       "templateId": "basic-text-styles",
-      "recommended": true
+      "recommended": false
     },
     {
       "profileId": "efzg-strucni-racunovodstvo",
