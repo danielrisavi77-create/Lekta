@@ -5,7 +5,9 @@ import { escapeHtml, safeHref, clamp, fmt, normalize, els, first, textOf, refram
 import { focusResult } from '../shared/result-a11y'; // BL-P1-02: fokus + SR-najava rezultata
 // BL-P0-05-4: DOCX parser se koristi tek nakon odabira datoteke (metapodaci, detekcija konteksta),
 // pa se uvozi LIJENO (dinamicki import) u tim funkcijama; njegov kod ispada iz glavnog landing chunka.
-import { makeCheck, issue, scoreMeta } from '../scoring/checks';
+import { makeCheck, issue, scoreMeta, scoreFromChecks } from '../scoring/checks';
+import { projectScore } from '../scoring/score-projection';
+import { buildScorePathModel, scorePathHtml } from './score-path';
 import { parseReference } from '../citations/parse-reference';
 import { verifyReferences } from '../citations/verify-existence';
 import { VERDICT_BADGE, summarizeVerification } from '../citations/verify-badges';
@@ -378,7 +380,7 @@ function updateOrderFileMeta(){const f=selectedOrderFile(),el=$('#orderFileMeta'
 function makeOrderId(){return`TR-${new Date().toISOString().slice(0,10).replaceAll('-','')}-${Math.random().toString(36).slice(2,8).toUpperCase()}`}
 function setOrderStatus(type: any,html?: any){const el=$('#orderStatus');el.className=`order-status ${type}`;el.innerHTML=html;el.classList.remove('hidden')}
 function clearOrderStatus(){$('#orderStatus')?.classList.add('hidden');if($('#orderStatus'))$('#orderStatus').innerHTML=''}
-function sanitizeEventData(data: any){const allowed: any={};for(const[k,v]of Object.entries(data||{})){if(['event','package','profileId','workType','scoreBand','provider','source','total','found','missing','flagged','checked','profileStatus','pick','sizeBucket','category','issueCount','kind','manual','count','score','demo','method','product','ruleId','changes','stored','ms'].includes(k)&&['string','number','boolean'].includes(typeof v))allowed[k]=v}return allowed}
+function sanitizeEventData(data: any){const allowed: any={};for(const[k,v]of Object.entries(data||{})){if(['event','package','profileId','workType','scoreBand','provider','source','total','found','missing','flagged','checked','profileStatus','pick','sizeBucket','category','issueCount','kind','manual','count','score','demo','method','product','ruleId','changes','stored','ms','promised','actual','selected','segment','mode'].includes(k)&&['string','number','boolean'].includes(typeof v))allowed[k]=v}return allowed}
 async function trackEvent(event: any,data: any={}){if(!productionConfig?.analyticsEndpoint||safeStorageGet(STORAGE_KEYS.analyticsConsent)!=='granted')return false;try{await fetch(productionConfig.analyticsEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event,version:APP_VERSION,path:location.pathname||'/',timestamp:new Date().toISOString(),...sanitizeEventData(data)}),keepalive:true});return true}catch(e: any){return false}}
 function renderConsentBanner(force=false){const b=$('#consentBanner');if(!b)return;const configured=!!productionConfig?.analyticsEndpoint,choice=safeStorageGet(STORAGE_KEYS.analyticsConsent);b.classList.toggle('hidden',!configured||(!force&&!!choice))}
 function setAnalyticsConsent(value: any){safeStorageSet(STORAGE_KEYS.analyticsConsent,value);$('#consentBanner')?.classList.add('hidden');toast(value==='granted'?'Anonimna analitika je dopuštena.':'Ostat će aktivne samo nužne lokalne postavke.')}
@@ -401,18 +403,27 @@ const PREVIEW_CAPTIONS: any={
   citljivo:'Ovo je Lektin prikaz teksta, ne Microsoft Word. Crvene i žute oznake pokazuju mjesta koja Lekta može točno locirati; pravila koja vrijede za cijeli dokument navedena su desno.',
   faksimil:'Ovo je Lektin vjeran prikaz oblikovanja (font, poravnanje, margine), ne Microsoft Word: prijelomi stranica i točan razmještaj mogu se razlikovati. Crvene i žute oznake pokazuju mjesta koja Lekta može točno locirati; pravila za cijeli dokument navedena su desno.',
 };
-async function openPreview(){const r=currentResult;if(!r||!r.preview?.paragraphs?.length){toast('Pregled nije dostupan za ovaj rezultat.');return}const legend=$('#previewLegend');const existence=_existenceVerdicts&&_existenceVerdicts.result===r?_existenceVerdicts.verdicts:null;_previewCtx={r,flags:collectAllPreviewFlags(r,existence),mode:'citljivo',scroll:{},zoomState:null,zoomApi:null,anchorSelector:null};if(legend)legend.innerHTML=`<span class="pv-key"><span class="pv-swatch pv-swatch--error"></span> Treba ispraviti</span><span class="pv-key"><span class="pv-swatch pv-swatch--warning"></span> Provjeri</span><span class="pv-key"><span class="pv-swatch pv-swatch--info"></span> Informativno</span>`;$('#previewModal').classList.remove('hidden');trapModal($('#previewModal'));await renderPreviewMode();trackEvent('preview_opened',{profileId:r.details?.profileDefinitionId||''})}
+// Zadnji korisnikov izbor moda pregleda: skok s kartice nalaza ga pamti (jedan gumb, pametan
+// default), umjesto da hardkodira 'citljivo' ili trazi drugi gumb po kartici.
+let _lastPreviewMode: any='citljivo';
+// Rendgen: oboji oznake po popravljivosti iz triage lokacija (anchorId 'loc-pN'/'loc-fnN').
+function enrichFlagsWithFixability(flags: any[],r: any){try{const rank: any={auto:3,assisted:2,manual:1};const byLoc=new Map<string,string>();for(const tf of r?.details?.triage?.findings||[])for(const loc of tf?.locations||[]){const k=String(loc?.anchorId||'');if(!k)continue;const prev=byLoc.get(k);if(!prev||rank[tf.fixability]>rank[prev])byLoc.set(k,tf.fixability)}for(const f of flags){if(f.fixability)continue;const k=f.footnoteId!=null?`loc-fn${f.footnoteId}`:`loc-p${f.paragraphIndex}`;const fx=byLoc.get(k);if(fx)f.fixability=fx}}catch(e: any){}}
+async function openPreview(mode?: any){const r=currentResult;if(!r||!r.preview?.paragraphs?.length){toast('Pregled nije dostupan za ovaj rezultat.');return}const legend=$('#previewLegend');const existence=_existenceVerdicts&&_existenceVerdicts.result===r?_existenceVerdicts.verdicts:null;const flags=collectAllPreviewFlags(r,existence);enrichFlagsWithFixability(flags,r);if(mode)_lastPreviewMode=mode;_previewCtx={r,flags,mode:mode||_lastPreviewMode,scroll:{},zoomState:null,zoomApi:null,anchorSelector:null,rendered:null};const _pt=$('#previewTitle');if(_pt)_pt.textContent=_previewCtx.mode==='faksimil'?'Rendgen dokumenta':'Pregled dokumenta';if(legend)legend.innerHTML=`<span class="pv-key"><span class="pv-swatch pv-swatch--error"></span> Treba ispraviti</span><span class="pv-key"><span class="pv-swatch pv-swatch--warning"></span> Provjeri</span><span class="pv-key"><span class="pv-swatch pv-swatch--info"></span> Informativno</span><span class="pv-key pv-key--fix">Podcrtano: puna crta = automatski popravak, crtkano = uz potvrdu, točkasto = ručno</span>`;$('#previewModal').classList.remove('hidden');trapModal($('#previewModal'));await renderPreviewMode();trackEvent('preview_opened',{profileId:r.details?.profileDefinitionId||''})}
 // Prebaci mod prikaza (citljivo/faksimil) bez zatvaranja modala; ista bocna lista, drugi renderer.
 function savePreviewViewport(){const ctx=_previewCtx,docEl=$('#previewDoc');if(!ctx||!docEl)return;ctx.scroll[ctx.mode]={top:docEl.scrollTop,left:docEl.scrollLeft};if(ctx.zoomApi)ctx.zoomState=ctx.zoomApi.getState()}
-function setPreviewMode(mode: any){if(!_previewCtx||_previewCtx.mode===mode)return;savePreviewViewport();_previewCtx.zoomApi?.destroy?.();_previewCtx.zoomApi=null;_previewCtx.mode=mode;void renderPreviewMode()}
+function setPreviewMode(mode: any){if(!_previewCtx||_previewCtx.mode===mode)return;savePreviewViewport();_previewCtx.zoomApi?.destroy?.();_previewCtx.zoomApi=null;_previewCtx.mode=mode;_lastPreviewMode=mode;const _pt=$('#previewTitle');if(_pt)_pt.textContent=mode==='faksimil'?'Rendgen dokumenta':'Pregled dokumenta';void renderPreviewMode()}
 // Renderiraj trenutni mod u #previewDoc. Race-safe: ako se mod promijeni tijekom lazy importa, stara
 // render-putanja odustaje (guard po ctx i modu) pa pobijedi zadnji izbor korisnika.
-async function renderPreviewMode(){const ctx=_previewCtx;if(!ctx)return;const {r,flags,mode}=ctx;const docEl=$('#previewDoc'),side=$('#previewSide'),caption=$('#previewCaption');if(!docEl)return;docEl.textContent='Pripremam pregled...';const rendered=mode==='faksimil'?(await import('../preview/render-facsimile')).renderFacsimile(r.preview,flags):(await import('../preview/render-preview')).renderPreview(r.preview,flags);if(_previewCtx!==ctx||_previewCtx.mode!==mode)return;docEl.textContent='';docEl.classList.toggle('is-facsimile',mode==='faksimil');docEl.appendChild(rendered.root);
+async function renderPreviewMode(){const ctx=_previewCtx;if(!ctx)return;const {r,flags,mode}=ctx;const docEl=$('#previewDoc'),side=$('#previewSide'),caption=$('#previewCaption');if(!docEl)return;docEl.textContent='Pripremam pregled...';let rendered: any;if(mode==='faksimil'){const {renderFacsimile}=await import('../preview/render-facsimile');const {buildPageMap}=await import('../preview/page-map');ctx.pageMap=ctx.pageMap||buildPageMap({model:r.preview,storedPages:r.stats?.storedPages??null,sectionBreaks:(r.details?.sections||[]).map((s: any)=>s?.paragraphIndex)});rendered=renderFacsimile(r.preview,flags,{pageMap:ctx.pageMap})}else{rendered=(await import('../preview/render-preview')).renderPreview(r.preview,flags)}if(_previewCtx!==ctx||_previewCtx.mode!==mode)return;docEl.textContent='';docEl.classList.toggle('is-facsimile',mode==='faksimil');ctx.rendered=rendered;docEl.appendChild(rendered.root);
  /* Zoom: faksimil je pravi A4 (21 cm), pa bez ovoga trazi stalno skrolanje. Zadano "prilagodi
     sirini". Samo za faksimil; citljivi nacin nema stranicu pa nema sto skalirati. */
  $('#previewZoomBar')?.remove();
   if(mode==='faksimil'){try{const {attachFacsimileZoom,createZoomControls}=await import('../preview/facsimile-zoom');const z=attachFacsimileZoom(docEl,rendered.root);ctx.zoomApi=z;z.remeasure();if(ctx.zoomState)z.setState(ctx.zoomState);else z.fitWidth();const bar=createZoomControls(document,[z]);bar.id='previewZoomBar';caption?.parentElement?.insertBefore(bar,caption)}catch(e: any){console.error('Zoom:',e)}}
-  const saved=ctx.scroll[mode];if(saved&&mode!=='faksimil'){docEl.scrollTop=saved.top;docEl.scrollLeft=saved.left}if(ctx.anchorSelector){const target=docEl.querySelector(ctx.anchorSelector);target?.scrollIntoView({block:'center'});}if(caption)caption.textContent=(PREVIEW_CAPTIONS[mode]||'')+(r.preview.truncated?' Dokument je velik pa je prikaz skraćen.':'');const cb=$('#previewModeCitljivo'),fb=$('#previewModeFaksimil');if(cb){cb.classList.toggle('is-active',mode==='citljivo');cb.setAttribute('aria-selected',mode==='citljivo'?'true':'false')}if(fb){fb.classList.toggle('is-active',mode==='faksimil');fb.setAttribute('aria-selected',mode==='faksimil'?'true':'false')}if(side)renderPreviewSide(side,flags,rendered);window.__lektaIcons?.()}
+  const saved=ctx.scroll[mode];if(saved&&mode!=='faksimil'){docEl.scrollTop=saved.top;docEl.scrollLeft=saved.left}if(ctx.anchorSelector){const target=docEl.querySelector(ctx.anchorSelector);target?.scrollIntoView({block:'center'});}if(caption)caption.textContent=(PREVIEW_CAPTIONS[mode]||'')+(mode==='faksimil'&&ctx.pageMap?(ctx.pageMap.calibrated?' Brojevi stranica su Lektina procjena, usklađena s Wordovim spremljenim brojem (koji može biti zastario); za pravila o broju stranica mjerodavan je broj u Wordu.':' Brojevi stranica su gruba Lektina procjena; za pravila o broju stranica mjerodavan je broj u Wordu.'):'')+(r.preview.truncated?' Dokument je velik pa je prikaz skraćen.':'');const cb=$('#previewModeCitljivo'),fb=$('#previewModeFaksimil');if(cb){cb.classList.toggle('is-active',mode==='citljivo');cb.setAttribute('aria-selected',mode==='citljivo'?'true':'false')}if(fb){fb.classList.toggle('is-active',mode==='faksimil');fb.setAttribute('aria-selected',mode==='faksimil'?'true':'false')}if(side)renderPreviewSide(side,flags,rendered);
+  // Stranicna traka Rendgena (samo faksimil, samo kad procjena daje vise od jednog lista).
+  // Umece se NAKON renderPreviewSide (side.innerHTML bi je pregazio) i zivi na vrhu bocnog stupca.
+  if(side&&mode==='faksimil'&&ctx.pageMap&&ctx.pageMap.pageCount>1){try{const {buildPageRailModel,renderPageRail}=await import('../preview/page-rail');if(_previewCtx===ctx&&_previewCtx.mode===mode){const railModel=buildPageRailModel(ctx.pageMap,flags,r.preview,r.stats?.storedPages??null);const rail=renderPageRail(railModel,(page: number)=>{const t=docEl.querySelector(`[data-page="${page}"]`);(t as any)?.scrollIntoView({block:'start',behavior:motionReduced()?'auto':'smooth'});void trackEvent('xray_page_strip_jump',{count:page})});side.insertBefore(rail,side.firstChild)}}catch(e: any){console.error('Stranicna traka:',e)}}
+  window.__lektaIcons?.()}
 function closePreview(){savePreviewViewport();_previewCtx?.zoomApi?.destroy?.();$('#previewZoomBar')?.remove();$('#previewModal')?.classList.add('hidden');releaseModal($('#previewModal'));const d=$('#previewDoc');if(d){d.textContent='';d.classList.remove('is-facsimile')}_previewCtx=null}
 function renderPreviewSide(side: any,flags: any[],rendered: any){const dotCls=(sev: string)=>sev==='error'?'pv-dot--error':sev==='warning'?'pv-dot--warning':'pv-dot--info';const anchored=flags.length?flags.map((f: any,i: number)=>{const loc=rendered.flagTargets.has(i);return`<button type="button" class="pv-item" data-flag="${i}"${loc?'':' disabled'}><span class="pv-item-title"><span class="pv-dot ${dotCls(f.severity)}"></span>${escapeHtml(f.title)}</span><span class="pv-item-loc">${f.footnoteId!=null?`bilješka ${f.footnoteId}`:`odlomak ${f.paragraphIndex}`}${loc?'':' · izvan skraćenog prikaza'}</span>${recipeUnlocked()&&f.excerpt?`<span class="pv-item-ex">${escapeHtml(f.excerpt)}</span>`:''}</button>`}).join(''):'<p class="pv-empty">Nema mjesta koja se mogu točno označiti u tekstu.</p>';const globalIssues=(currentResult?.issues||[]).filter((x: any)=>x.category==='formatting'&&(x.severity==='error'||x.severity==='warning'));const globalHtml=globalIssues.length?`<h4>Vrijedi za cijeli dokument</h4><ul class="preview-global">${globalIssues.map((x: any)=>`<li><strong>${escapeHtml(x.title)}</strong>${recipeUnlocked()&&x.detail?`<br><span class="pv-item-loc">${escapeHtml(x.detail)}</span>`:''}</li>`).join('')}</ul>`:'';side.innerHTML=`<h4>Označeno u tekstu (${flags.length})</h4>${anchored}${globalHtml}`;side.querySelectorAll('.pv-item[data-flag]').forEach((b: any)=>{b.onclick=()=>{const idx=Number(b.dataset.flag),f=flags[idx],t=rendered.flagTargets.get(idx);if(!t)return;_previewCtx.anchorSelector=f.footnoteId!=null?`[data-fn-id="${f.footnoteId}"]`:`[data-p-index="${f.paragraphIndex}"]`;void trackEvent('finding_jump',{category:f.kind||'',source:'preview'});t.scrollIntoView({block:'center',behavior:'smooth'});t.classList.add('lekta-flag--active');setTimeout(()=>t.classList.remove('lekta-flag--active'),1600)}})}
 function openSetup(){const c=productionConfig;$('#setupEnabled').value=String(!!c.enabled);$('#setupProvider').value=c.paymentProvider||'lemonsqueezy';$('#setupOrderEndpoint').value=c.orderEndpoint||'';$('#setupBusinessName').value=c.businessName||'';$('#setupContactEmail').value=c.contactEmail||'';$('#setupRetentionDays').value=c.retentionDays||30;$('#setupUploadMb').value=Math.round((c.uploadMaxBytes||8*1024*1024)/1024/1024);$('#setupAnalyticsEndpoint').value=c.analyticsEndpoint||'';$('#setupErrorEndpoint')&&($('#setupErrorEndpoint').value=c.errorEndpoint||'');$('#setupReportEndpoint').value=c.reportEndpoint||'';$('#setupRepairEndpoint')&&($('#setupRepairEndpoint').value=c.repairEndpoint||'');$('#setupCheckoutEndpoint').value=c.checkoutEndpoint||'';$('#setupGuaranteeEndpoint')&&($('#setupGuaranteeEndpoint').value=c.guaranteeEndpoint||'');$('#setupSupabaseUrl')&&($('#setupSupabaseUrl').value=c.supabaseUrl||'');$('#setupSupabaseAnon')&&($('#setupSupabaseAnon').value=c.supabaseAnonKey||'');$('#setupPaymentLinks').innerHTML=PACKAGES.map(p=>`<div class="field full"><label for="setupPay-${p.id}">${escapeHtml(p.name)}</label><input class="input setup-payment" id="setupPay-${p.id}" data-package="${p.id}" value="${escapeHtml(c.paymentLinks?.[p.id]||'')}" placeholder="https://…"></div>`).join('');$('#setupModal').classList.remove('hidden');trapModal($('#setupModal'))}
@@ -802,10 +813,10 @@ function analysisErrorMessage(e: any){const m=String(e&&e.message||'');if(/dekom
 const DEMO_VARIANTS: any={fpzg:{label:'FPZG diplomski',toast:'Prikazan je primjer rezultata na uzorku diplomskog rada (FPZG), ne na tvom dokumentu.'},pravo:{label:'Pravo diplomski',toast:'Prikazan je primjer rezultata na uzorku diplomskog rada (Pravni fakultet), ne na tvom dokumentu.'},seminar:{label:'Seminarski (generički)',toast:'Prikazan je primjer rezultata na uzorku seminarskog rada (generički profil), ne na tvom dokumentu.'}};
 function runDemo(kind='fpzg'){void trackEvent('demo_played',{kind});document.querySelector('.lek-col-form')?.classList.add('lek-engaged');currentResult=demoResult(kind);analyzedProfile=null;withViewTransition(()=>{$('#wizardView').classList.add('hidden');$('#progressView').classList.add('hidden');renderResult(currentResult)});toast((DEMO_VARIANTS[kind]||DEMO_VARIANTS.fpzg).toast);document.querySelector('#analyzer')?.scrollIntoView({behavior:'smooth'})}
 function demoResult(kind='fpzg'){const k=(kind==='pravo'||kind==='seminar')?kind:'fpzg',r: any=k==='pravo'?demoResultPravo():k==='seminar'?demoResultSeminar():demoResultFpzg();r.demo=true;r.demoKind=k;return r}
-function demoResultFpzg(){const checks=[makeCheck('formatting','Dominantni font','pass',8,8,'Times New Roman (94%)'),makeCheck('formatting','Veličina osnovnog teksta','pass',6,6,'12 pt'),makeCheck('formatting','Prored osnovnog teksta','warn',4,6,'1,43'),makeCheck('formatting','Margine dokumenta','warn',4,6,'Desna margina: 2,0 cm'),makeCheck('formatting','Poravnanje osnovnog teksta','pass',4,4,'Obostrano'),makeCheck('structure','Hijerarhija naslova','warn',4,6,'3 moguća preskakanja razine'),makeCheck('structure','Sadržaj dokumenta','pass',5,5,'Automatski TOC pronađen'),makeCheck('structure','Brojevi stranica','pass',4,4,'PAGE polje pronađeno'),makeCheck('structure','Osnovni dijelovi rada','pass',6,6,'Uvod, zaključak i literatura prepoznati'),makeCheck('structure','Uporaba Word stilova naslova','warn',2,4,'2 ručno oblikovana naslova'),makeCheck('citations','Prepoznate citatnice','pass',3,3,'87 autor-godina zapisa'),makeCheck('citations','Citirano → literatura','fail',3,10,'5 citatnica bez podudaranja'),makeCheck('citations','Literatura → citirano','warn',4,7,'3 izvora bez citatnice'),makeCheck('citations','Potpunost bibliografskih zapisa','warn',3,5,'2 moguća nepotpuna zapisa'),makeCheck('citations','Datumi pristupa mrežnim izvorima','warn',3,5,'3 mrežna izvora bez datuma pristupa'),makeCheck('elements','Naslovi tablica','warn',3,5,'7 tablica · 5 naslova'),makeCheck('elements','Naslovi slika i grafikona','pass',5,5,'4 elementa · 4 naslova'),makeCheck('elements','Oblik poveznica','pass',3,3,'Nema očitih problema'),makeCheck('elements','Prazni odlomci','pass',2,2,'12 praznih odlomaka (4%)')];const issues=[issue('error','citations','Pet citatnica nije pronađeno u literaturi','Barić 2019, Caratan 2000, Smith 2021, Horvat 2022 i Kovač 2020.','Citatnice i literatura'),issue('warning','structure','Tri naslova preskaču razinu hijerarhije','Nakon Naslova 1 izravno se pojavljuje Naslov 3.','Odlomci 88, 142 i 209'),issue('warning','elements','Dvije tablice nemaju prepoznat naslov','Dodaj oznaku i opis iznad ili ispod tablice prema pravilima profila.','Tablice 4 i 7'),issue('warning','formatting','Desna margina odstupa od profila','Pronađeno 2,0 cm; profil očekuje približno 2,5 cm.','Postavke stranice'),issue('warning','citations','Tri mrežna izvora nemaju datum pristupa','Provjeri zahtijeva li odabrani stil datum pristupa.','Literatura'),issue('info','structure','Dva naslova možda su ručno oblikovana','Upotrijebi Word stil Heading/Naslov kako bi sadržaj ostao stabilan.','Odlomci 71 i 180')];const categories: any={};for(const c of checks){categories[c.category]??={earned:0,max:0};categories[c.category].earned+=c.earned;categories[c.category].max+=c.max}const max=checks.reduce((s,c)=>s+c.max,0),earned=checks.reduce((s,c)=>s+c.earned,0);return{version:'2.2.1-demo',appVersion:APP_VERSION,generatedAt:new Date().toISOString(),file:{name:'Primjer - diplomski rad.docx',size:1867452},profile:'Fakultet političkih znanosti · Politologija · Diplomski rad',profileStatus:'verified',selection:{country:'Hrvatska',city:'Zagreb',institution:'Sveučilište u Zagrebu',unit:'Fakultet političkih znanosti',program:'Politologija',workType:'graduate',citationStyle:'FPZG autor-godina'},settings:{profileId:'fpzg',workType:'graduate',citationStyle:'fpzg',language:'hr',strictness:'balanced'},score:Math.round(earned/max*100),checks,issues,categories,stats:{words:18426,paragraphs:326,headings:31,references:52,citations:87,tables:7,images:4,sections:2,dominantFont:'Times New Roman',dominantSize:12,dominantSpacing:1.43},details:{missingReferences:[],uncitedReferences:[],incompleteReferences:[],sections:[],submissionFacts:['Provjeri aktualni rok i postupak predaje na službenoj stranici fakulteta.'],submissionMetadata:null,ruleAuthority:'official-sources-only',profileFingerprint:'LK-2.0.0-demo0001',references:[{raw:'Watson, J. D., & Crick, F. H. C. (1953). Molecular structure of nucleic acids. Nature, 171(4356), 737-738. https://doi.org/10.1038/171737a0',p:120,author:'Watson',year:'1953'},{raw:'Petak, Z. (2008). Javne financije i proračunski proces. Zagreb: Fakultet političkih znanosti.',p:121,author:'Petak',year:'2008'},{raw:'Fabbricato, L. (2021). An invented meta-analysis of imaginary policy outcomes. Journal of Nonexistent Policy Studies, 3(1), 1-12.',p:122,author:'Fabbricato',year:'2021'}]}}}
+function demoResultFpzg(){const checks=[makeCheck('formatting','Dominantni font','pass',8,8,'Times New Roman (94%)'),makeCheck('formatting','Veličina osnovnog teksta','pass',6,6,'12 pt'),makeCheck('formatting','Prored osnovnog teksta','warn',4,6,'1,43'),makeCheck('formatting','Margine dokumenta','warn',4,6,'Desna margina: 2,0 cm'),makeCheck('formatting','Poravnanje osnovnog teksta','pass',4,4,'Obostrano'),makeCheck('structure','Hijerarhija naslova','warn',4,6,'3 moguća preskakanja razine'),makeCheck('structure','Sadržaj dokumenta','pass',5,5,'Automatski TOC pronađen'),makeCheck('structure','Brojevi stranica','pass',4,4,'PAGE polje pronađeno'),makeCheck('structure','Osnovni dijelovi rada','pass',6,6,'Uvod, zaključak i literatura prepoznati'),makeCheck('structure','Uporaba Word stilova naslova','warn',2,4,'2 ručno oblikovana naslova'),makeCheck('citations','Prepoznate citatnice','pass',3,3,'87 autor-godina zapisa'),makeCheck('citations','Citirano → literatura','fail',3,10,'5 citatnica bez podudaranja'),makeCheck('citations','Literatura → citirano','warn',4,7,'3 izvora bez citatnice'),makeCheck('citations','Potpunost bibliografskih zapisa','warn',3,5,'2 moguća nepotpuna zapisa'),makeCheck('citations','Datumi pristupa mrežnim izvorima','warn',3,5,'3 mrežna izvora bez datuma pristupa'),makeCheck('elements','Naslovi tablica','warn',3,5,'7 tablica · 5 naslova'),makeCheck('elements','Naslovi slika i grafikona','pass',5,5,'4 elementa · 4 naslova'),makeCheck('elements','Oblik poveznica','pass',3,3,'Nema očitih problema'),makeCheck('elements','Prazni odlomci','pass',2,2,'12 praznih odlomaka (4%)')];const issues=[issue('error','citations','Pet citatnica nije pronađeno u literaturi','Barić 2019, Caratan 2000, Smith 2021, Horvat 2022 i Kovač 2020.','Citatnice i literatura'),issue('warning','structure','Tri naslova preskaču razinu hijerarhije','Nakon Naslova 1 izravno se pojavljuje Naslov 3.','Odlomci 88, 142 i 209'),issue('warning','elements','Dvije tablice nemaju prepoznat naslov','Dodaj oznaku i opis iznad ili ispod tablice prema pravilima profila.','Tablice 4 i 7'),issue('warning','formatting','Desna margina odstupa od profila','Pronađeno 2,0 cm; profil očekuje približno 2,5 cm.','Postavke stranice'),issue('warning','citations','Tri mrežna izvora nemaju datum pristupa','Provjeri zahtijeva li odabrani stil datum pristupa.','Literatura'),issue('info','structure','Dva naslova možda su ručno oblikovana','Upotrijebi Word stil Heading/Naslov kako bi sadržaj ostao stabilan.','Odlomci 71 i 180')];const categories: any={};for(const c of checks){categories[c.category]??={earned:0,max:0};categories[c.category].earned+=c.earned;categories[c.category].max+=c.max}return{version:'2.2.1-demo',appVersion:APP_VERSION,generatedAt:new Date().toISOString(),file:{name:'Primjer - diplomski rad.docx',size:1867452},profile:'Fakultet političkih znanosti · Politologija · Diplomski rad',profileStatus:'verified',selection:{country:'Hrvatska',city:'Zagreb',institution:'Sveučilište u Zagrebu',unit:'Fakultet političkih znanosti',program:'Politologija',workType:'graduate',citationStyle:'FPZG autor-godina'},settings:{profileId:'fpzg',workType:'graduate',citationStyle:'fpzg',language:'hr',strictness:'balanced'},score:scoreFromChecks(checks).score,checks,issues,categories,stats:{words:18426,paragraphs:326,headings:31,references:52,citations:87,tables:7,images:4,sections:2,dominantFont:'Times New Roman',dominantSize:12,dominantSpacing:1.43},details:{missingReferences:[],uncitedReferences:[],incompleteReferences:[],sections:[],submissionFacts:['Provjeri aktualni rok i postupak predaje na službenoj stranici fakulteta.'],submissionMetadata:null,ruleAuthority:'official-sources-only',profileFingerprint:'LK-2.0.0-demo0001',references:[{raw:'Watson, J. D., & Crick, F. H. C. (1953). Molecular structure of nucleic acids. Nature, 171(4356), 737-738. https://doi.org/10.1038/171737a0',p:120,author:'Watson',year:'1953'},{raw:'Petak, Z. (2008). Javne financije i proračunski proces. Zagreb: Fakultet političkih znanosti.',p:121,author:'Petak',year:'2008'},{raw:'Fabbricato, L. (2021). An invented meta-analysis of imaginary policy outcomes. Journal of Nonexistent Policy Studies, 3(1), 1-12.',p:122,author:'Fabbricato',year:'2021'}]}}}
 // Zajednicko sastavljanje demo rezultata: kategorije i ocjena se racunaju iz checks (isti
 // obrazac kao FPZG demo), a varijanta donosi samo svoje podatke.
-function demoAssemble(base: any,checks: any,issues: any){const categories: any={};for(const c of checks){categories[c.category]??={earned:0,max:0};categories[c.category].earned+=c.earned;categories[c.category].max+=c.max}const max=checks.reduce((s: any,c: any)=>s+c.max,0),earned=checks.reduce((s: any,c: any)=>s+c.earned,0);return{version:'2.2.1-demo',appVersion:APP_VERSION,generatedAt:new Date().toISOString(),score:Math.round(earned/max*100),checks,issues,categories,...base}}
+function demoAssemble(base: any,checks: any,issues: any){const categories: any={};for(const c of checks){categories[c.category]??={earned:0,max:0};categories[c.category].earned+=c.earned;categories[c.category].max+=c.max}return{version:'2.2.1-demo',appVersion:APP_VERSION,generatedAt:new Date().toISOString(),score:scoreFromChecks(checks).score,checks,issues,categories,...base}}
 function demoResultPravo(){
  const checks=[makeCheck('formatting','Dominantni font','pass',8,8,'Times New Roman (97%)'),makeCheck('formatting','Veličina osnovnog teksta','pass',6,6,'12 pt'),makeCheck('formatting','Prored osnovnog teksta','pass',6,6,'1,5'),makeCheck('formatting','Margine dokumenta','pass',6,6,'2,5 cm sa svih strana'),makeCheck('structure','Hijerarhija naslova','pass',6,6,'Bez preskakanja razine'),makeCheck('structure','Sadržaj dokumenta','pass',5,5,'Automatski TOC pronađen'),makeCheck('structure','Brojevi stranica','pass',4,4,'PAGE polje pronađeno'),makeCheck('structure','Uporaba Word stilova naslova','warn',2,4,'3 ručno oblikovana naslova'),makeCheck('citations','Prepoznate fusnote','pass',3,3,'214 fusnota s citatima'),makeCheck('citations','Ponovljena navođenja (Ibid., op. cit.)','warn',4,7,'4 Ibid. bez jasne prethodne bilješke'),makeCheck('citations','Citirano → literatura','fail',3,10,'3 izvora iz fusnota nema u popisu literature'),makeCheck('citations','Navođenje propisa (NN)','warn',3,5,'2 propisa bez broja Narodnih novina'),makeCheck('citations','Potpunost bibliografskih zapisa','warn',3,5,'2 moguća nepotpuna zapisa'),makeCheck('elements','Naslovi tablica','pass',3,3,'2 tablice · 2 naslova'),makeCheck('elements','Oblik poveznica','pass',3,3,'Nema očitih problema'),makeCheck('elements','Prazni odlomci','warn',1,2,'28 praznih odlomaka (9%)')];
  const issues=[issue('error','citations','Tri izvora iz fusnota nisu u popisu literature','Barbić 2015, Klarić i Vedriš 2014 te Gavella 2019 citirani su u fusnotama, a nema ih u literaturi.','Fusnote 41, 87 i 156'),issue('warning','citations','Četiri Ibid. bilješke nemaju jasnu prethodnu bilješku','Ibid. se smije koristiti samo neposredno nakon pune bilješke istog izvora.','Fusnote 63, 64, 118 i 201'),issue('warning','citations','Dva propisa navedena su bez broja Narodnih novina','Zakon o obveznim odnosima i Zakon o radu navedeni su bez NN broja i izmjena.','Fusnote 12 i 95'),issue('warning','structure','Tri naslova možda su ručno oblikovana','Upotrijebi Word stil Heading/Naslov kako bi sadržaj ostao stabilan.','Odlomci 54, 122 i 240'),issue('info','elements','Povećan udio praznih odlomaka','Razmake između cjelina rješavaj stilovima odlomka, ne praznim odlomcima.','Cijeli dokument')];
@@ -842,8 +853,7 @@ function scoreBreakdownHtml(r: any): string{
   if(r?.score==null||!Array.isArray(r.checks))return '';
   const scored=r.checks.filter((c: any)=>c&&c.scored&&c.max>0);
   if(!scored.length)return '';
-  const earned=scored.reduce((s: number,c: any)=>s+(Number(c.earned)||0),0);
-  const max=scored.reduce((s: number,c: any)=>s+(Number(c.max)||0),0);
+  const {earned,max}=scoreFromChecks(scored);
   const catNames: any={formatting:'Oblikovanje',structure:'Struktura',citations:'Citatnice',elements:'Elementi'};
   const lost=scored.filter((c: any)=>c.earned<c.max).sort((a: any,b: any)=>(b.max-b.earned)-(a.max-a.earned));
   const rows=lost.map((c: any)=>`<li><span class="sw-pts">−${c.max-c.earned}</span><span class="sw-body"><span class="sw-title">${escapeHtml(c.title)}</span> <span class="sw-cat">${escapeHtml(catNames[c.category]||c.category||'')}</span>${c.detail?`<span class="sw-detail">${escapeHtml(c.detail)}</span>`:''}</span></li>`).join('');
@@ -887,6 +897,7 @@ function renderTriage(r: any){
   renderReadinessHeader(r);
   renderPhaseTwoResultViews(r);
   syncPremiumResultVisuals(r);
+  renderScorePath(r);
   window.__lektaIcons?.();
 }
 function refreshFindingViews(r: any){renderTriage(r)}
@@ -914,18 +925,18 @@ function renderPhaseTwoResultViews(r: any){
     // #resultGuide pocinje s class="hidden" u index.html; stara (sad uklonjena) renderResultGuide
     // je to cistila, ovaj blok je od Faze 2 jedini pisac pa mora sam preuzeti taj posao.
     guide.classList.remove('hidden');
-    const summary=[blockers?`${blockers} ${blockers===1?'blokator':'blokatora'}`:'',warnings?`${warnings} dorada`:'',manual?`${manual} ${manual===1?'ručna provjera':'ručne provjere'}`:''].filter(Boolean).join(', ');
+    // Brojevi blokatora/dorada/rucnih provjera NE ponavljaju se ovdje: zive u retku spremnosti iznad.
     const primary=anchored
-      ?`<button class="btn btn-primary btn-lg" id="guideOpenPreview" type="button">Otvori označeno mjesto u dokumentu →</button>`
-      :first?`<button class="btn btn-primary btn-lg" id="guideOpenPriority" type="button">Pregledaj prvi nalaz →</button>`:'';
+      ?`<button class="btn btn-primary" id="guideOpenPreview" type="button">Otvori označeno mjesto u dokumentu →</button>`
+      :first?`<button class="btn btn-primary" id="guideOpenPriority" type="button">Pregledaj prvi nalaz →</button>`:'';
     // RE-01/RESULT-01: "Zasto <ocjena>?" (scoreBreakdownHtml) i "Podijeli ocjenu" (shareScore) su
     // izvorno zivjeli u sad-uklonjenoj renderResultGuide, koja je pisala u #resultGuide PRIJE ovog
     // bloka u istom renderResult() prolazu; ovaj blok je oduvijek pisao u ISTI element POSLIJE, pa
     // je tiho brisao oboje bez ijedne vidljive greske. Sad su ovdje, jedini pisac #resultGuide-a.
-    const shareCta=(r.score!=null)?`<button class="btn btn-ghost guide-share" id="guideShareScore" type="button"><i data-lucide="share-2"></i> Podijeli ocjenu</button>`:'';
-    const katedraCta=katedraIntegrationEnabled()?`<button class="btn btn-ghost guide-katedra" id="guideKatedraCta" type="button"><i data-lucide="external-link"></i> Riješi u Katedri</button>`:'';
+    const shareCta=(r.score!=null)?`<button class="btn btn-ghost btn-sm guide-share" id="guideShareScore" type="button"><i data-lucide="share-2"></i> Podijeli ocjenu</button>`:'';
+    const katedraCta=katedraIntegrationEnabled()?`<button class="btn btn-ghost btn-sm guide-katedra" id="guideKatedraCta" type="button"><i data-lucide="external-link"></i> Riješi u Katedri</button>`:'';
     guide.innerHTML=first
-      ?`<h3 class="guide-h">Što prvo napraviti</h3><p class="guide-summary">${escapeHtml(summary)}. Počni s: <strong>${escapeHtml(first.title)}</strong>.</p>${scoreBreakdownHtml(r)}<div class="guide-cta">${primary}${shareCta}${katedraCta}<button class="tab-toggle guide-more" id="resultDetailsToggle" type="button" aria-expanded="false" aria-controls="resultDetails">Prikaži sve nalaze i provjere</button></div>`
+      ?`<h3 class="guide-h">Što prvo napraviti</h3><p class="guide-summary">Počni s: <strong>${escapeHtml(first.title)}</strong>.</p>${scoreBreakdownHtml(r)}<div class="guide-cta">${primary}${shareCta}${katedraCta}<button class="tab-toggle guide-more" id="resultDetailsToggle" type="button" aria-expanded="false" aria-controls="resultDetails">Prikaži sve nalaze i provjere</button></div>`
       :`<div class="guide-clean">Nema otvorenih problema dokumenta. Prije predaje pregledaj ograničenja analize i posebne upute profila.</div>${scoreBreakdownHtml(r)}<div class="guide-cta">${shareCta}${katedraCta}</div>`;
     $('#guideOpenPreview')?.addEventListener('click',()=>{if(anchored?.scope.kind==='anchor')void openPreviewAt(anchored.scope.paragraphIndex,anchored.scope.footnoteId)});
     $('#guideOpenPriority')?.addEventListener('click',()=>{$('#triagePanel')?.scrollIntoView({behavior:'smooth',block:'start'})});
@@ -1000,7 +1011,12 @@ function renderPhaseThreeRepairEntry(r: any){
   const entry=$('#repairEntry'),order=$('#orderFromResult');
   if(order){order.textContent='Ručna obrada uz privolu';order.title='Dokument se za ručnu obradu prilaže tek nakon tvoje izričite privole.'}
   if(!entry||entry.classList.contains('hidden'))return;
-  const auto=Number(r?.details?.triage?.counts?.auto)||0;
+  // ISTI izvor istine kao ledger ("N od M popravaka"): broj PREDODABRANIH stavki popravka
+  // (violated !== false). triage.counts.auto broji NALAZE, ne popravke, pa je CTA u kartici puta
+  // govorio "1 stavka" dok su legenda i ledger govorili 5. Triage ostaje fallback bez stavki.
+  const preselected=repairPanelItems.filter((i: any)=>i&&i.violated!==false).length;
+  const auto=preselected||Number(r?.details?.triage?.counts?.auto)||0;
+  const stavki=(n: number)=>{const d=n%10,dd=n%100;return d===1&&dd!==11?'podržanu stavku':d>=2&&d<=4&&!(dd>=12&&dd<=14)?'podržane stavke':'podržanih stavki'};
   // Preporuke fakulteta se broje ODVOJENO od bodovanih stavki i namjerno ne diraju ocjenu:
   // vecina hrvatskih uputa su preporuke, pa bi bodovanje dalo lazan nalaz studentu koji je
   // postupio po mentorovoj uputi. Broj se ipak pokazuje, jer je to stvarna vrijednost koju
@@ -1009,7 +1025,7 @@ function renderPhaseThreeRepairEntry(r: any){
   const serverSide=repairServerConfigured();
   const heading=serverSide?'Automatski popravak':'Automatski popravci na ovom uređaju';
   const action=auto
-    ?`${serverSide?'Možeš poslati na popravak':'Možeš lokalno primijeniti'} ${auto} ${auto===1?'podržanu stavku':'podržane stavke'} i preuzeti novi Word dokument.`
+    ?`${serverSide?'Možeš poslati na popravak':'Možeš lokalno primijeniti'} ${auto} ${stavki(auto)} i preuzeti novi Word dokument.`
     :`Pregledaj podržane ${serverSide?'':'lokalne '}popravke i preuzmi novi Word dokument.`;
   const disclosure=serverSide?' Dokument se pritom šalje na server radi popravka i pohranjuje dok ga ne obrišeš.':' Dokument se pri tome ne šalje na poslužitelj.';
   const recommendedNote=recommendedCount
@@ -1090,13 +1106,30 @@ function renderNetworkProof(){
   el.innerHTML=`<span class="np-dot ${msg.safe?'np-dot--ok':'np-dot--warn'}" aria-hidden="true"></span><span class="np-text">${escapeHtml(msg.text)} <span class="np-hint">${escapeHtml(msg.hint)}</span></span>`;
 }
 // Otvori pregled i skoci na odlomak/fusnotu (data-p-index / data-fn-index iz render-preview).
-async function openPreviewAt(paragraphIndex: number,footnoteId?: number){
-  await openPreview();
+// Mod se NE hardkodira: koristi se zadnji korisnikov izbor (ili opts.mode kad pozivatelj trazi
+// bas faksimil/Rendgen). Uz opts.excerpt cilja se TOCAN <mark> preko flagTargets, ne cijeli
+// odlomak - vazno kad odlomak nosi vise oznaka.
+async function openPreviewAt(paragraphIndex: number,footnoteId?: number,opts?: {mode?: any; excerpt?: string}){
+  await openPreview(opts?.mode);
   const doc=$('#previewDoc');if(!doc)return;
   const sel=footnoteId!=null?`[data-fn-id="${footnoteId}"]`:`[data-p-index="${paragraphIndex}"]`;
   if(_previewCtx)_previewCtx.anchorSelector=sel;
-  const t=doc.querySelector(sel);
-  if(t){void trackEvent('finding_jump',{source:'report'});(t as any).scrollIntoView({block:'center',behavior:'smooth'});t.classList.add('lekta-flag--active');setTimeout(()=>t.classList.remove('lekta-flag--active'),1600)}
+  let t: any=null;
+  const ctx=_previewCtx;
+  if(ctx?.rendered&&opts?.excerpt){
+    const wanted=String(opts.excerpt);
+    let fallbackIdx=-1;
+    for(let i=0;i<ctx.flags.length;i++){
+      const f=ctx.flags[i];
+      const sameLoc=footnoteId!=null?f.footnoteId===footnoteId:(f.footnoteId==null&&f.paragraphIndex===paragraphIndex);
+      if(!sameLoc||!ctx.rendered.flagTargets.has(i))continue;
+      if(f.excerpt&&(wanted.startsWith(f.excerpt)||f.excerpt.startsWith(wanted))){t=ctx.rendered.flagTargets.get(i);break}
+      if(fallbackIdx<0)fallbackIdx=i;
+    }
+    if(!t&&fallbackIdx>=0)t=ctx.rendered.flagTargets.get(fallbackIdx);
+  }
+  if(!t)t=doc.querySelector(sel);
+  if(t){void trackEvent('finding_jump',{source:'report',mode:String(_previewCtx?.mode||'')});(t as any).scrollIntoView({block:'center',behavior:'smooth'});t.classList.add('lekta-flag--active');setTimeout(()=>t.classList.remove('lekta-flag--active'),1600)}
 }
 const _celebrated=new WeakSet();
 function celebrateReady(r: any){
@@ -1135,14 +1168,63 @@ function countUp(el: any,to: any,fmtFn?: any){if(!el)return;const target=Number(
 function animateScore(ring: any,valueEl: any,score: any){countUp(valueEl,score==null?'?':score);if(!ring)return;const s=Number(score),A=_animate();if(!isFinite(s)||motionReduced()||typeof A!=='function'){ring.style.setProperty('--score',isFinite(s)?s:0);return}A(ring,{'--score':[0,s]},{duration:.95,ease:[.22,1,.36,1]})}
 function animateBars(){const A=_animate();document.querySelectorAll('#categoryGrid .bar > i').forEach((el: any)=>{const p=Number(el.dataset.fill)||0;if(motionReduced()||typeof A!=='function'){el.style.width=p+'%';return}A(el,{width:['0%',p+'%']},{duration:.8,ease:[.22,1,.36,1],delay:.12})})}
 function syncPremiumResultVisuals(r: any){
-  const score=Number(r?.score),ring=$('#resultPremiumRing'),ringValue=$('#resultPremiumRingValue'),ringLabel=$('#resultPremiumRingLabel');
-  if(ring){const percent=Number.isFinite(score)?setProgressValue(ring,score,100):setProgressValue(ring,0,100);ring.style.setProperty('--viz-value',String(percent));ring.style.setProperty('--ring-color',r?.score!=null?String(scoreMeta(r.score).color):'var(--paper-muted)')}
-  if(ringValue)ringValue.textContent=Number.isFinite(score)?String(Math.round(score)):'?';
-  if(ringLabel)ringLabel.textContent=Number.isFinite(score)?(score>=90?'Spremno za završni pregled':score>=70?'Dobra osnova za doradu':'Prvo riješi najvažnije nalaze'):'Informativni rezultat';
+  // Premium ring i severity strip su UKLONJENI (2026-08-21): ring je bio duplikat score ringa,
+  // a trojac blokatori/dorade/provjere vec zivi u #resultReadiness retku. Njihovu karticu je
+  // preuzela vrpca "Put do 100" (renderScorePath). Ostaju samo kategorije.
   const names: any={formatting:'Oblikovanje',structure:'Struktura',citations:'Citatnice',elements:'Elementi'};
   Object.entries(r?.categories||{}).forEach(([key,value]: any)=>{const card=document.querySelector<HTMLElement>(`#resultCategoryChart [data-category="${key}"]`);if(!card)return;const percent=value?.max?Math.round(Number(value.earned||0)/Number(value.max)*100):0;const label=card.querySelector('span'),number=card.querySelector('b'),bar=card.querySelector<HTMLElement>('[data-premium-progress]');if(label)label.textContent=names[key]||key;if(number)number.textContent=`${percent}%`;if(bar){bar.dataset.value=String(percent);setProgressValue(bar,percent,100)}});
-  const open=(r?.issues||[]).filter((item: any)=>item?.status!=='ignored'),counts={error:0,warning:0,info:0};open.forEach((item: any)=>{if(item?.severity in counts)counts[item.severity as keyof typeof counts]++});
-  const error=$('#resultErrorCount'),warning=$('#resultWarningCount'),info=$('#resultInfoCount');if(error)error.textContent=String(counts.error);if(warning)warning.textContent=String(counts.warning);if(info)info.textContent=String(counts.info);
+}
+// Vrpca "Put do tehnickih 100": brojke iskljucivo iz STVARNO PONUDJENIH stavki (N21: bez stavki
+// se ne prikazuje nista, da brojka ne treperi izmedju "ciste klasifikacije" i stvarne ponude).
+// _scorePathItems puni renderRepairSection kad je popis sastavljen; renderTriage samo crta.
+let _scorePathItems: any[]|null=null;
+let _scorePathShownFor: any=null;
+// Izvorno mjesto #repairEntry (sibling iza premium grida): CTA se SELI u karticu puta dok ona
+// postoji, a vraca se kad je nema, pa nikad ne nestane i nikad se ne duplicira.
+let _repairEntryHome: {parent: HTMLElement; next: Node|null}|null=null;
+function renderScorePath(r: any){
+  const card=$('#scorePathCard'),mount=$('#scorePath');
+  if(!card||!mount)return;
+  const entry=$('#repairEntry');
+  if(entry&&!_repairEntryHome&&entry.parentElement&&!mount.contains(entry))_repairEntryHome={parent:entry.parentElement,next:entry.nextSibling};
+  // Prije svakog pisanja u mount izvuci CTA van (innerHTML bi ga unistio).
+  if(entry&&_repairEntryHome&&mount.contains(entry))_repairEntryHome.parent.insertBefore(entry,_repairEntryHome.next);
+  const model=(_scorePathItems&&r===currentResult)?buildScorePathModel(r?.checks||[],_scorePathItems,r?.score):null;
+  const html=scorePathHtml(model);
+  if(!html){card.classList.add('hidden');mount.innerHTML='';return}
+  mount.innerHTML=html;card.classList.remove('hidden');
+  // JEDAN CTA popravka, uz brojku koja ga opravdava: zeleni box "Automatski popravak" vise ne stoji
+  // zasebno ispod kartice (pricao je istu pricu drugim brojevima), nego zivi u njoj.
+  const ctaSlot=mount.querySelector('[data-path-cta]');
+  if(entry&&ctaSlot)ctaSlot.appendChild(entry);
+  if(_scorePathShownFor!==r){_scorePathShownFor=r;void trackEvent('score_path_shown',{score:r?.score??0})}
+  mount.querySelectorAll('[data-path-segment]').forEach((btn: any)=>{
+    btn.onclick=()=>{
+      const segment=String(btn.dataset.pathSegment||'');
+      void trackEvent('score_path_segment_clicked',{segment});
+      if(segment==='manual'){
+        // Rucni ostatak: otvori "Svi nalazi" s filterom rucnih provjera.
+        revealResultDetails();
+        openTab('issues');
+        const filters=$('#issueFilters');
+        if(filters){filters.dataset.phaseTwoFilter='manual';renderPhaseTwoResultViews(r)}
+        $('#issuesList')?.scrollIntoView({behavior:motionReduced()?'auto':'smooth',block:'start'});
+      }else{
+        scrollToRepairPanel(r);
+      }
+    };
+  });
+  // Rendgen dokumenta: vizualni pregled s oznakama na mjestu (faksimil mod). Nudi se samo kad
+  // preview postoji; naziv je hrvatski (odluka vlasnika), "X-Ray" ostaje za marketing.
+  const linksSlot=mount.querySelector('[data-path-links]');
+  if(linksSlot&&r?.preview?.paragraphs?.length){
+    const xrayBtn=document.createElement('button');
+    xrayBtn.type='button';
+    xrayBtn.className='btn btn-ghost btn-sm score-path__open-xray';
+    xrayBtn.textContent='Rendgen dokumenta →';
+    xrayBtn.onclick=()=>{void trackEvent('xray_opened',{source:'path'});void openPreview('faksimil')};
+    linksSlot.appendChild(xrayBtn);
+  }
 }
 // Onboarding footgun (P0 7.1) + WS-2: upozori PRIJE kupnje ako je odabrana vrsta rada vjerojatno
 // niza od stvarne (npr. diplomski placen kao seminarski). Rasponi su izvedeni iz fakultetskih uputa
@@ -1249,7 +1331,10 @@ let _paywallViewedFor: any=null;
 // Vise mjesta na stranici moze renderirati zakljucani panel za ISTI rezultat (typo-lint,
 // repair panel, submission gate...); paywall_viewed se broji jednom po rezultatu (referenca
 // na currentResult), ne jednom po pozivu, inace bi jedan prikaz rezultata umjetno napuhao broj.
-function paywallLockHtml(what: any){if(currentResult&&_paywallViewedFor!==currentResult){_paywallViewedFor=currentResult;void trackEvent('paywall_viewed')}const wt=toReportWorkType(currentResult?.settings?.workType||'final'),tier=tierFor(wt),price=tier?(livePriceEur(tier.workType)??tier.priceEur):null,ob=checkoutConfigured()?doObraneProduct(wt):null;return`<div class="lock-panel"><i data-lucide="lock" aria-hidden="true"></i><div><strong>${escapeHtml(what)}</strong><p>Dio punog izvještaja: serverski potvrđen, bez vodenog žiga${tier?`, ${escapeHtml(tier.label.toLowerCase())} ${eurLabel(price)}`:''}${tier?`, uz ${tier.windowDays} dana besplatnih ponovnih provjera istog rada nakon ispravka`:', uz besplatne ponovne provjere istog rada unutar prozora'}. Pri otključavanju se poslužitelju šalju parsirana struktura i rezultat analize; sam dokument ostaje na uređaju.</p><button class="btn btn-primary btn-sm" type="button" data-unlock-cta>Otključaj puni izvještaj</button>${ob?` <button class="btn btn-secondary btn-sm" type="button" data-buy-obrana="${escapeHtml(wt)}">Do obrane: ${ob.slotWindowDays} dana ponovnih provjera · ${eurLabel(ob.priceEur)}</button>`:''}</div></div>`}
+// `projection` (odluka vlasnika 2026-08-21): agregatna procjena smije u teaser kao prodajni
+// argument, ISKLJUCIVO kao "do N (procjena)" uz recenicu o ponovnoj provjeri; brojka je agregat,
+// ne recept. Obecana brojka se poslije popravka eksplicitno usporedjuje s izmjerenom.
+function paywallLockHtml(what: any,projection?: {current: number; optimistic: number}|null){if(currentResult&&_paywallViewedFor!==currentResult){_paywallViewedFor=currentResult;void trackEvent('paywall_viewed')}const wt=toReportWorkType(currentResult?.settings?.workType||'final'),tier=tierFor(wt),price=tier?(livePriceEur(tier.workType)??tier.priceEur):null,ob=checkoutConfigured()?doObraneProduct(wt):null;const projHtml=projection&&projection.optimistic>projection.current?`<p class="lock-projection">Automatski popravak te vodi s <strong>${projection.current}</strong> na <strong>do ${projection.optimistic}</strong> (procjena; konačnu ocjenu potvrđuje ponovna provjera).</p>`:'';return`<div class="lock-panel"><i data-lucide="lock" aria-hidden="true"></i><div><strong>${escapeHtml(what)}</strong>${projHtml}<p>Dio punog izvještaja: serverski potvrđen, bez vodenog žiga${tier?`, ${escapeHtml(tier.label.toLowerCase())} ${eurLabel(price)}`:''}${tier?`, uz ${tier.windowDays} dana besplatnih ponovnih provjera istog rada nakon ispravka`:', uz besplatne ponovne provjere istog rada unutar prozora'}. Pri otključavanju se poslužitelju šalju parsirana struktura i rezultat analize; sam dokument ostaje na uređaju.</p><button class="btn btn-primary btn-sm" type="button" data-unlock-cta>Otključaj puni izvještaj</button>${ob?` <button class="btn btn-secondary btn-sm" type="button" data-buy-obrana="${escapeHtml(wt)}">Do obrane: ${ob.slotWindowDays} dana ponovnih provjera · ${eurLabel(ob.priceEur)}</button>`:''}</div></div>`}
 function wireLockCtas(){$$('[data-unlock-cta]').forEach(b=>{b.onclick=handleUnlockReport});$$('[data-buy-obrana]').forEach(b=>{b.onclick=()=>startReportCheckout(b.dataset.buyObrana,'do_obrane')});window.__lektaIcons?.()}
 const SESSION_KEY='lekta.session';
 const authStore={load:()=>safeStorageGet(SESSION_KEY,null),save:(s: any)=>safeStorageSet(SESSION_KEY,s)};
@@ -1421,6 +1506,7 @@ async function renderRepairSection(r: any){
  const mount=$('#repairPanelMount'); if(!mount) return; mount.innerHTML='';
  repairPanelNode=null; repairPanelForResult=null; // dok se ne renderira stateful panel, nema sto cuvati
  repairPanelItems=[]; repairPanelTextItems=[];
+ _scorePathItems=null; renderScorePath(r); // vrpca se skriva dok novi popis stavki nije sastavljen
  try{
  const defId=r.details?.profileDefinitionId; if(!defId) return;
  if(r!==currentResult||!analyzedProfile) return; // demo, zastarjeli rezultat ili nema snapshota
@@ -1469,7 +1555,8 @@ async function renderRepairSection(r: any){
   items.push(...linkDoiItems.filter((i: any)=>i.violated));
   items.push(...crossFileSubmissionItems.filter((i: any)=>i.violated));
   if(!items.length) return;
-  mount.innerHTML=`<div class="lekta-repair-panel"><p><strong>Ovo možemo popraviti umjesto tebe:</strong> ${items.map((i: any)=>escapeHtml(i.label)).join(', ')}.</p></div>`+paywallLockHtml('Automatski popravak s dubinskim usklađivanjem cijelog dokumenta i preuzimanje ispravljene datoteke');
+  const _teaserProjection=(r.score!=null)?(()=>{const proj=projectScore(r.checks||[],items.filter((i: any)=>i.violated!==false));return proj.optimistic.score!=null?{current:r.score,optimistic:Math.max(r.score,proj.optimistic.score)}:null})():null;
+  mount.innerHTML=`<div class="lekta-repair-panel"><p><strong>Ovo možemo popraviti umjesto tebe:</strong> ${items.map((i: any)=>escapeHtml(i.label)).join(', ')}.</p></div>`+paywallLockHtml('Automatski popravak s dubinskim usklađivanjem cijelog dokumenta i preuzimanje ispravljene datoteke',_teaserProjection);
   wireLockCtas(); return; // teaser je bez stanja: re-render na svakom toggleu je bezopasan
  }
  // Placeno (fullReport) ili soft-launch: Feature B, nudi i neprekrsene dimenzije
@@ -1491,6 +1578,8 @@ async function renderRepairSection(r: any){
  items.push(...linkDoiItems);
  items.push(...crossFileSubmissionItems);
  if(!items.length) return;
+ // Popis je sastavljen: tek SADA vrpca "Put do 100" smije dobiti brojke (N21).
+ _scorePathItems=items; renderScorePath(r);
  if(!selectedDocx){mount.innerHTML=`<div class="lekta-repair-panel"><p>Za automatski popravak ponovno učitaj .docx datoteku (dokument više nije u memoriji).</p></div>`;return}
  const file=selectedDocx;
  // WS-3: kad je repair server konfiguriran, placeni popravak ide na SERVER (upload -> gotov docx),
@@ -1506,7 +1595,7 @@ async function renderRepairSection(r: any){
  // readZip, dakle upravo ono lazno obecanje koje je zastita trebala ukloniti.
  if(!renderRepairCapabilityBlock(mount,r)){repairPanelNode=mount.firstElementChild;repairPanelForResult=r;return}
  if(repairServerConfigured()){renderServerRepairPanel(mount,r,items,file,textItems);repairPanelNode=mount.firstElementChild;repairPanelForResult=r;return}
- renderRepairPanel({items,getDocxBytes:async()=>new Uint8Array(await file.arrayBuffer()),originalFileName:r.file?.name||'rad.docx',mountEl:mount,beforeScore:{score:r.score,categories:r.categories,checks:r.checks},fieldRenderEndpoint:String(productionConfig?.fieldRenderEndpoint||'').trim(),getAccessToken:async()=>String(await resolveAccessToken()||''),reanalyze:async(bytes: Uint8Array)=>{const f=new File([bytes as Uint8Array<ArrayBuffer>],r.file?.name||'rad.docx',{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});return res?{score:res.score,categories:res.categories,checks:res.checks}:null}});
+ renderRepairPanel({items,getDocxBytes:async()=>new Uint8Array(await file.arrayBuffer()),originalFileName:r.file?.name||'rad.docx',mountEl:mount,beforeScore:{score:r.score,categories:r.categories,checks:r.checks},track:(event: string,data?: Record<string,unknown>)=>{void trackEvent(event,data||{})},fieldRenderEndpoint:String(productionConfig?.fieldRenderEndpoint||'').trim(),getAccessToken:async()=>String(await resolveAccessToken()||''),reanalyze:async(bytes: Uint8Array)=>{const f=new File([bytes as Uint8Array<ArrayBuffer>],r.file?.name||'rad.docx',{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});return res?{score:res.score,categories:res.categories,checks:res.checks}:null}});
  // Zapamti stvarni cvor placenog panela za ocuvanje kroz re-render checkliste.
  repairPanelNode=mount.firstElementChild; repairPanelForResult=r;
  } finally {
@@ -1633,16 +1722,24 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  // Ledger+modal je SADA uvijek jedini vidljivi prikaz (list ostaje checkbox izvor istine za
  // getCheckedItems, ali skriven) - isti mehanizam kao lokalni panel (repair-panel.ts).
  list.hidden=true;
- wrap.appendChild(renderRepairLedgerModal({items,listEl:list,advancedFormFor}));
+ // Ziva procjena ocjene u ledgeru: isti ugovor kao lokalni panel (A0: "sada" je r.score, slojevi
+ // klampani na >= njega; samo "do", nikad "najmanje" u v1). deepToggle se puni nize, closure ga
+ // cita u trenutku poziva (inicijalni render prije togglea = deep ukljucen, sto je i default).
+ let deepToggle: any=null;
+ let _lastServerEstimate: number|null=null;
+ const estimateFor=(Array.isArray(r.checks)&&r.score!=null)?(selected: any[])=>{const proj=projectScore(r.checks,selected,{uncertainFixerIds:deepToggle&&!deepToggle.checked?_SERVER_DEEP_FIXERS:undefined});if(proj.optimistic.score==null)return null;_lastServerEstimate=Math.max(r.score,proj.optimistic.score);return{current:r.score,optimistic:_lastServerEstimate}}:undefined;
+ const estimateHandle: {refresh?: ()=>void}={};
+ wrap.appendChild(renderRepairLedgerModal({items,listEl:list,advancedFormFor,estimateFor,refreshHandle:estimateHandle}));
  // Isti v2 dubinski preklopnik i disclosure recenica kao lokalni panel (RE-35: prije je serverski
  // put PRISILNO ukljucivao deep bez ijedne rijeci u copyju).
  const deepAvailable=items.some((i: any)=>_SERVER_DEEP_FIXERS.has(i.fixerId));
- let deepToggle: any=null;
  if(deepAvailable){
   const deepRow=document.createElement('label');deepRow.className='lekta-repair-panel__deep';
   deepRow.innerHTML='<input type="checkbox" checked /><span>Uskladi i ručno formatirane dijelove, da popravak stvarno primi.</span><details class="lekta-repair-panel__deep-more"><summary>Što to znači</summary><p>Ako je oblikovanje upisano izravno u tekst, ono nadjačava stilove i popravak se vizualno ne vidi. Ovo uklanja takvo izravno oblikovanje (font, prored, poravnanje). <strong>Netaknuti ostaju:</strong> naslovi i stilizirani dijelovi, podebljano i kurziv, centrirano, veće naslovne veličine, formule, tablice (prored i poravnanje), simbolski fontovi, tekstualni okviri i citatne kontrole (npr. Zotero, Mendeley). Tekst pisan drugim fontom uskladit će se s fontom profila.</p></details><span></span>';
   wrap.appendChild(deepRow);
   deepToggle=deepRow.querySelector('input');
+  // Zastarjela procjena u modalu je dezinformacija: promjena preklopnika ODMAH osvjezava redak.
+  if(deepToggle)deepToggle.addEventListener('change',()=>estimateHandle.refresh?.());
  }
  const consentRow=document.createElement('label');consentRow.className='lekta-repair-panel__deep';
  consentRow.innerHTML='<input type="checkbox" data-repair-consent><span>Pristajem da se dokument pošalje na server i pohrani do brisanja. Besplatna analiza ostaje na uređaju.</span>';
@@ -1782,9 +1879,14 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
     try{const f=new File([out.docxBytes as Uint8Array<ArrayBuffer>],out.fileName,{type:DOCX_MIME});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{},{skipFinalDelay:true});
      if(res&&res.score!=null&&r.score!=null){
       const d=res.score-r.score;
+      // KPI postenja: obecana procjena ("do N") vs izmjereno; svaki actual < promised je bug
+      // modela projekcije. Bez ovog mjerenja rijec "najmanje" nikad ne smije u copy.
+      if(_lastServerEstimate!=null)void trackEvent('projection_vs_recheck',{promised:_lastServerEstimate,actual:res.score});
       // RE-40: "Popravljeno" gore govori o PRIMIJENJENIM izmjenama (cinjenica); ovdje se posebno
       // priznaje kad se ocjena NIJE poboljsala, umjesto da tihi (0)/negativan broj ostane bez rijeci.
-      const scoreLine=`<p><strong>Spremnost: ${r.score} → ${res.score}${d>0?` (+${d})`:d<0?` (${d})`:''}</strong></p>`;
+      // Trust obrazac (N6): obecana teaser/ledger brojka se eksplicitno usporedjuje s izmjerenom.
+      const estimateVs=_lastServerEstimate!=null?`<p class="muted">Procijenjeno do ${_lastServerEstimate}, izmjereno ${res.score}.</p>`:'';
+      const scoreLine=`<p><strong>Spremnost: ${r.score} → ${res.score}${d>0?` (+${d})`:d<0?` (${d})`:''}</strong></p>`+estimateVs;
       const flatNote=d<=0?'<p class="muted">Bodovna ocjena se nije poboljšala. Popravljene su prepoznate stavke oblikovanja; preostale provjere traže ručnu izmjenu (upute iznad).</p>':'';
       // Regresija: provjera koja je prije prolazila, a sada ne prolazi. U ukupnom score-u se ne
       // vidi (+6 na marginama i -3 na fusnotama izgleda kao cist +3), pa dobiva vlastiti blok.
@@ -1815,7 +1917,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
         koristimo: popravak najvise mijenja styles.xml, a to OOXML ne moze prikazati kao reviziju. */
      if(res?.preview&&r.preview){
       const b=document.createElement('button');b.type='button';b.className='btn btn-secondary btn-sm';b.textContent='Pokaži što je popravljeno';
-      b.onclick=async()=>{const {openRepairDiff}=await import('./repair-diff');openRepairDiff({before:r.preview,after:res.preview,changelog:out.changelog,fileName:out.fileName});void trackEvent('repair_diff_opened',{changes:out.changelog.length})};
+      b.onclick=async()=>{const {openRepairDiff}=await import('./repair-diff');const {resolveFixedFindings}=await import('./xray-resolved');openRepairDiff({before:r.preview,after:res.preview,changelog:out.changelog,fileName:out.fileName,resolved:resolveFixedFindings(r,res)});void trackEvent('repair_diff_opened',{changes:out.changelog.length})};
       summary.appendChild(b);
      }}catch(e: any){console.error('Provjera popravljenog dokumenta:',e);recheck.innerHTML='<p class="muted">Popravljeni dokument je preuzet, ali ga nije bilo moguće ponovno provjeriti na ovom uređaju, pa usporedba prije/poslije nije dostupna.</p>'}
     // RE-37: uvijek ponudi nacin da se GLAVNI izvjestaj (ne samo redak ispod) osvjezi na popravljeni
@@ -1833,7 +1935,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    } else if(out.kind==='paywall'){
     // Goli toast je bio slijepa ulica: korisnik sazna da treba kupiti, ali nema odakle. Ista lock
     // ploca kao drugdje u izvjestaju nosi cijenu i put do placanja.
-    setSummary(`<p>Za popravak je potrebna kupnja odgovarajuće vrste rada.</p>${paywallLockHtml('Automatski popravak dokumenta')}`);wireLockCtas();
+    setSummary(`<p>Za popravak je potrebna kupnja odgovarajuće vrste rada.</p>${paywallLockHtml('Automatski popravak dokumenta',_lastServerEstimate!=null&&r.score!=null?{current:r.score,optimistic:_lastServerEstimate}:null)}`);wireLockCtas();
    }
    else if(out.kind==='unauthorized'){openAuth(()=>go(confirmedMismatch))}
    // RE-33: razlog razlikuje placeni dnevni strop (uopce ne spominje "besplatno") od besplatne

@@ -1816,11 +1816,15 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
         <div class="demo-bar hidden" id="demoBar" role="note" aria-label="Primjer izvještaja"></div>
         <div class="result-summary"><div class="score-card"><div class="score-ring" id="scoreRing"><div class="score-ring-inner"><span><b id="scoreValue">0</b><small>/ 100</small></span></div><svg class="ks-circle" viewBox="0 0 190 150" fill="none" aria-hidden="true" focusable="false"><path d="M95 14 C 158 10, 184 40, 181 75 C 178 116, 138 140, 92 137 C 44 134, 8 112, 11 72 C 14 34, 52 12, 95 16"/></svg></div><div class="score-label" id="scoreLabel">Automatska tehnička ocjena</div><div class="ready-stamp hidden" id="readyStamp" aria-hidden="true">Bez automatskih blokatora</div></div><div class="result-main"><h2 id="resultTitle">Rezultat provjere</h2><p id="resultSubtitle"></p><p class="summary-note scoring-change-note hidden" id="scoringChangeNote" role="note"></p><div class="result-readiness" id="resultReadiness" role="status" aria-live="polite"></div><div class="metrics"><div class="metric metric-jump" data-jump="issues" role="button" tabindex="0" aria-label="Prikaži sve probleme"><span>MOGUĆI PROBLEMI</span><b id="metricIssues">0</b></div><div class="metric"><span>RIJEČI</span><b id="metricWords">0</b></div><div class="metric"><span>IZVORI</span><b id="metricRefs">0</b></div><div class="metric"><span>CITATNICE</span><b id="metricCitations">0</b></div></div><div class="result-actions result-actions--util"><button class="btn btn-primary btn-sm hidden" id="unlockReport">Otključaj puni izvještaj</button><button class="btn btn-ghost btn-sm" id="orderFromResult">Naruči ručno sređivanje</button><div class="dl-menu"><button class="btn btn-ghost btn-sm dl-menu-btn" type="button" aria-haspopup="true" aria-expanded="false">Preuzmi <i data-lucide="chevron-down"></i></button><div class="dl-menu-list" role="menu"><button class="dl-item" id="printReport" type="button" role="menuitem">Spremi kao PDF</button><button class="dl-item" id="downloadHtml" type="button" role="menuitem">HTML izvještaj</button><button class="dl-item" id="downloadJson" type="button" role="menuitem">Podatke (JSON)</button><button class="dl-item" id="reportWrongCheck" type="button" role="menuitem" title="Prijavi ako je neka provjera po tvome kriva">Prijavi pogrešnu provjeru</button></div></div><button class="btn btn-ghost btn-sm" id="newAnalysis">Nova provjera</button></div></div></div>
         <section class="premium-viz-grid" id="premiumResultDashboard" aria-label="Vizualni sažetak rezultata" data-reveal>
-          <article class="premium-viz-card premium-paper-stack" data-premium-tilt>
-            <span class="premium-eyebrow">Spremnost dokumenta</span>
-            <div class="premium-ring" id="resultPremiumRing" data-premium-ring role="progressbar" aria-label="Spremnost dokumenta" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="resultPremiumRingValue">0</span><small>/ 100</small></div>
-            <h3 id="resultPremiumRingLabel">Čekam rezultat</h3>
-            <p>Broj prati samo stvarne automatske provjere ovog dokumenta.</p>
+          <!-- Vrpca "Put do tehnickih 100" je ZAMIJENILA premium ring "Spremnost dokumenta"
+               (bio je cisti duplikat glavnog score ringa iznad; odluka vlasnika 2026-08-21).
+               Puni se iz renderScorePath (app.ts) TEK kad su stavke popravka sastavljene, da
+               brojka ne treperi; do tada je kartica skrivena. -->
+          <article class="premium-viz-card hidden" id="scorePathCard">
+            <span class="premium-eyebrow">Put do tehničkih 100</span>
+            <h3>Koliko popravak može donijeti</h3>
+            <p>Što popravljamo automatski, što uz tvoju potvrdu, a što ostaje tebi.</p>
+            <div class="score-path" id="scorePath" aria-live="polite"></div>
           </article>
           <article class="premium-viz-card">
             <span class="premium-eyebrow">Pokrivenost provjera</span>
@@ -1833,16 +1837,9 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
               <div class="premium-bar" data-category="elements"><span>Elementi</span><b>0%</b><div class="premium-bar-track"><i data-premium-progress data-value="0" data-max="100"></i></div></div>
             </div>
           </article>
-          <article class="premium-viz-card">
-            <span class="premium-eyebrow">Što traži pažnju</span>
-            <h3>Prioriteti nalaza</h3>
-            <p>Otvoreni nalazi, bez skrivenog bodovanja.</p>
-            <div class="premium-severity-strip" id="resultSeverityChart" aria-label="Nalazi po ozbiljnosti">
-              <span data-tone="danger"><b id="resultErrorCount">0</b><small>blokatora</small></span>
-              <span data-tone="warn"><b id="resultWarningCount">0</b><small>dorada</small></span>
-              <span data-tone="info"><b id="resultInfoCount">0</b><small>provjera</small></span>
-            </div>
-          </article>
+          <!-- Severity strip "Sto trazi paznju" je UKLONJEN (odluka vlasnika 2026-08-21): isti
+               trojac blokatori/dorade/provjere vec zivi u retku spremnosti (#resultReadiness,
+               renderPhaseTwoResultViews), pa je kartica bila treci prikaz iste informacije. -->
         </section>
         <!-- Glavni ulaz u automatski popravak. Sam panel zivi u kartici "Spremnost za predaju"
              (#repairPanelMount), sto je korisniku nevidljivo; ovaj CTA stoji uz rezultat i vodi

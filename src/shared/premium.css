@@ -398,3 +398,53 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
   .premium-viz-card,
   .premium-tool-index__signal { box-shadow: none }
 }
+
+/* Kartica "Put do tehnickih 100" (zamijenila premium ring; vidi index.html #scorePathCard).
+   Traka 0-100 je glavni vizual; legenda-koraci ispod su <button> s akcijom; CTA popravka
+   (#repairEntry) app.ts seli u .score-path__cta da kartica nosi JEDAN poziv na akciju. */
+.score-path { display: block }
+.score-path__bar {
+  display: flex;
+  height: 14px;
+  margin-top: 14px;
+  background: color-mix(in srgb, var(--paper-2) 80%, transparent);
+  border: 1px solid var(--paper-line);
+  overflow: hidden;
+}
+.score-path__bar-seg { display: block; height: 100%; flex: 0 0 auto }
+.score-path__bar-seg--now { background: var(--paper-ink) }
+.score-path__bar-seg--auto { background: var(--premium-viz-info) }
+.score-path__bar-seg--assisted { background: var(--premium-viz-warn) }
+.score-path__bar-seg--uncovered { background: repeating-linear-gradient(135deg, var(--paper-line) 0 3px, transparent 3px 6px) }
+.score-path__bar-seg--manual { background: var(--premium-viz-danger) }
+.score-path__scale { display: flex; justify-content: space-between; font: 600 10px var(--mono); color: var(--paper-muted); margin-top: 3px }
+.score-path__row { display: flex; flex-wrap: wrap; align-items: stretch; gap: 6px; margin-top: 12px }
+.score-path__seg {
+  min-width: 0;
+  padding: 6px 10px;
+  border: 0;
+  border-left: 3px solid var(--paper-line);
+  background: transparent;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.score-path__seg b { color: var(--paper-ink); font: 700 16px var(--mono); font-variant-numeric: tabular-nums }
+.score-path__seg small { color: var(--paper-muted); font-size: 11px }
+.score-path__seg--now { border-color: var(--paper-ink) }
+.score-path__seg--auto { border-color: var(--premium-viz-info); cursor: pointer }
+.score-path__seg--assisted { border-color: var(--premium-viz-warn); cursor: pointer }
+.score-path__seg--manual { border-color: var(--premium-viz-danger); cursor: pointer }
+button.score-path__seg:hover, button.score-path__seg:focus-visible { background: color-mix(in srgb, var(--paper-2) 72%, transparent); outline: 2px solid var(--paper-ink); outline-offset: 1px }
+.score-path__arrow { align-self: center; color: var(--paper-muted) }
+.score-path__to { align-self: center; color: var(--paper-ink); font-size: 13px; margin-left: 2px }
+.score-path__to b { font: 700 15px var(--mono) }
+.score-path__rest { align-self: center; color: var(--paper-muted); margin: 0 4px; font-size: 18px }
+.score-path__note { margin: 8px 0 0; color: var(--paper-muted); font-size: 12px }
+.score-path__links { margin-top: 6px }
+.score-path__foot { margin: 8px 0 0; color: var(--paper-muted); font-size: 11px; font-style: italic }
+/* CTA popravka unutar kartice: bez vlastite zelene kutije (kartica je okvir), naslov je suvisan. */
+.score-path__cta .repair-entry { margin: 12px 0 0; padding: 12px 0 0; border: 0; border-top: 1px solid var(--paper-line); border-radius: 0; background: transparent }
+.score-path__cta .repair-entry h3 { font-size: .9rem; margin-bottom: 2px }
+.score-path__cta .repair-entry p { font-size: .85rem; margin-bottom: 10px }

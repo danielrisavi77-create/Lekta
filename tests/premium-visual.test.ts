@@ -17,8 +17,11 @@ describe('Lekta premium visual system', () => {
     const index = read('index.html');
     expect(index).toContain('data-premium-surface="analyzer"');
     expect(index).toContain('id="resultCategoryChart"');
-    expect(index).toContain('id="resultSeverityChart"');
-    expect(index).toContain('data-premium-ring');
+    // 2026-08-21 (odluka vlasnika): premium ring (duplikat score ringa) i severity strip
+    // (trojac vec zivi u #resultReadiness) zamijenjeni su vrpcom "Put do tehnickih 100".
+    expect(index).toContain('id="scorePath"');
+    expect(index).not.toContain('id="resultSeverityChart"');
+    expect(index).not.toContain('data-premium-ring');
   });
 
   it('marks all public product surfaces for the shared visual treatment', () => {
