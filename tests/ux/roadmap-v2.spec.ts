@@ -59,12 +59,19 @@ test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', asyn
   await expect(page.locator('.dl-menu-btn')).toContainText('Preuzmi izvještaj');
   await expect(page.locator('#newAnalysis')).toContainText('Ponovno analiziraj');
 
+  // Ovaj dokument nema PAGE polje, pa nalaz o brojevima stranica MORA biti u panelu. Koji je od
+  // vise nalaza iste tezine prvi NIJE tvrdnja proizvoda: priorityRank izjednacuje sve 'error'
+  // nalaze, a remi lomi puki redoslijed emitiranja iz analize. Vezanje na .first() zato je lomilo
+  // gate cim bi analiza legitimno dodala jos jedan kriticni nalaz (ovdje: dokument nema ni sadrzaj).
+  await expect(page.locator('#triagePanel')).toContainText('Nisu pronađeni automatski brojevi stranica');
   const firstFinding = page.locator('#triagePanel .finding-card').first();
-  await firstFinding.getByRole('button', { name: 'Označi ručno provjereno' }).click();
-  await expect(page.locator('#triagePanel .finding-card').first()).toContainText('Nisu pronađeni automatski brojevi stranica');
-  await expect(page.locator('#triagePanel .finding-card').first()).toContainText('Ručna potvrda ne mijenja automatsku ocjenu');
-  await firstFinding.getByRole('button', { name: 'Poništi ručnu potvrdu' }).click();
-  await expect(page.locator('#triagePanel .finding-card').first()).toContainText('Otvoreno');
+  const findingId = await firstFinding.getAttribute('data-finding-id');
+  expect(findingId, 'kartica nalaza mora nositi stabilan data-finding-id').toBeTruthy();
+  const card = page.locator(`#triagePanel .finding-card[data-finding-id="${findingId}"]`);
+  await card.getByRole('button', { name: 'Označi ručno provjereno' }).click();
+  await expect(card).toContainText('Ručna potvrda ne mijenja automatsku ocjenu');
+  await card.getByRole('button', { name: 'Poništi ručnu potvrdu' }).click();
+  await expect(card).toContainText('Otvoreno');
   await expect(page.locator('#triagePanel')).not.toContainText('Kontekst profila');
   // repairEndpoint je LIVE po defaultu (DEFAULT_PRODUCTION_CONFIG u app.ts), pa je copy server-side
   // varijanta (RE-34: gejtano na repairServerConfigured()), ne stari lokalni-only tekst.
