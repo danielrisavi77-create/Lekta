@@ -16,12 +16,14 @@ import {
   CHECK_TITLES,
   AUTO_CHECK_FIXER,
   EMPTY_PARAGRAPHS_CHECK_TITLE,
+  checkIdsForFixer,
   classifyFixability,
   classifyFixabilityById,
   dimensionForCheckId,
   wiredCheckIds,
 } from '../src/analysis/check-fixer-map';
 import { CHECK_ID_BY_TITLE, stableCheckId, isPaperSizeCheckId } from '../src/scoring/check-id-registry';
+import { FIXER_IDS } from '../src/repair/apply-fixers';
 
 const REGISTERED_IDS = new Set(Object.values(CHECK_ID_BY_TITLE));
 
@@ -109,5 +111,51 @@ describe('section surgery nema svoju provjeru, i to je TOCNO', () => {
   it('nijedno pravilo ne mapira na section-surgery-fixer (i ne treba)', () => {
     const wired = wiredCheckIds().map((id) => classifyFixabilityById(id).fixId);
     expect(wired).not.toContain('section-surgery-fixer');
+  });
+});
+
+describe('checkIdsForFixer (obrnuti indeks za projekciju ocjene)', () => {
+  it('svaki vraceni ID je registriran i unutar wiredCheckIds, za sve zive fixere', () => {
+    const wired = new Set(wiredCheckIds());
+    for (const fixerId of FIXER_IDS) {
+      for (const id of checkIdsForFixer(fixerId)) {
+        expect(REGISTERED_IDS.has(id), `${fixerId} -> ${id} nije registriran`).toBe(true);
+        expect(wired.has(id), `${fixerId} -> ${id} nije u wiredCheckIds`).toBe(true);
+      }
+    }
+  });
+
+  it('font-fixer pokriva OBJE dimenzije (font i font-size su odvojene stavke istog fixera)', () => {
+    expect([...checkIdsForFixer('font-fixer')].sort()).toEqual(['format.font.dominant', 'format.size.body']);
+  });
+
+  it('paper-size-fixer vraca [] (dinamicki page.size.* ID-jevi; graditelj cita stvarni check.id)', () => {
+    expect(checkIdsForFixer('paper-size-fixer')).toEqual([]);
+  });
+
+  it('empty-paragraph-fixer vraca element.empty-paragraphs (posebna grana, nije u AUTO_CHECK_FIXER)', () => {
+    expect([...checkIdsForFixer('empty-paragraph-fixer')]).toEqual(['element.empty-paragraphs']);
+  });
+
+  it('bibliography-repair-fixer NE tvrdi reference.completeness (namjerno manual, sadrzajna prosudba)', () => {
+    const ids = [...checkIdsForFixer('bibliography-repair-fixer')].sort();
+    expect(ids).toEqual(['citation.author-year.suffix', 'reference.alphabetical']);
+    expect(ids).not.toContain('reference.completeness');
+  });
+
+  it('citation-bibliography-sync-fixer vraca oba sync ID-a', () => {
+    expect([...checkIdsForFixer('citation-bibliography-sync-fixer')].sort()).toEqual(['citation.author-year.missing-reference', 'reference.uncited']);
+  });
+
+  it('required-section-fixer vraca structure.sections.profile', () => {
+    expect([...checkIdsForFixer('required-section-fixer')]).toEqual(['structure.sections.profile']);
+  });
+
+  it('croatian-typography-fixer vraca [] (dimenzija postoji, ali je klasifikacija manual; v1 odluka)', () => {
+    expect(checkIdsForFixer('croatian-typography-fixer')).toEqual([]);
+  });
+
+  it('heading-style-fixer vraca [] (STRUCTURAL pravilo heading.style nema fixId; stavka nosi literal)', () => {
+    expect(checkIdsForFixer('heading-style-fixer')).toEqual([]);
   });
 });

@@ -1,5 +1,5 @@
 import type { Check, Issue } from '../scoring/checks';
-import { classifyFixability, classifyFixabilityById } from '../analysis/check-fixer-map';
+import { repairPath } from '../scoring/score-projection';
 
 export type ResultReadinessKind = 'blocked' | 'needs-work' | 'manual-review' | 'clear';
 
@@ -129,16 +129,12 @@ export interface RepairCeiling {
  * to jasno komunicira korisniku umjesto da "97" izgleda kao nedovrsen posao.
  */
 export function repairCeiling(checks: readonly Check[] = []): RepairCeiling {
-  const scored = checks.filter((c) => c.scored && c.max > 0);
-  const totalMax = scored.reduce((sum, c) => sum + c.max, 0);
-  const manual = scored.filter(
-    (c) => c.status !== 'pass' && (c.id ? classifyFixabilityById(c.id) : classifyFixability(c.title)).fixability === 'manual',
-  );
-  const lostPoints = manual.reduce((sum, c) => sum + (c.max - c.earned), 0);
-  const maxScore = totalMax > 0 ? Math.round(((totalMax - lostPoints) / totalMax) * 100) : 100;
-  return {
-    hasManualGap: manual.length > 0,
-    maxScore,
-    items: manual.map((c) => ({ title: c.title, lostPoints: c.max - c.earned })),
-  };
+  // Omotac nad repairPath (kompat nacin): afterAssisted flipa sve auto+assisted ne-pass
+  // provjere, pa je razlomak identican staroj formuli (totalMax - manualLost) / totalMax.
+  // JEDINA promjena ponasanja: manual provjera BEZ izgubljenih bodova (warn uz pune bodove,
+  // npr. 'Zahtjevi za rucnu zavrsnu provjeru' 3/3) vise ne pali hasManualGap niti ulazi u
+  // items; oba ziva pozivatelja gate-aju i na score < 100, pa im je vidljivi ishod identican
+  // (strop bi u tom slucaju bio 100). Takve provjere zive u repairPath.manualAdvisories.
+  const path = repairPath(checks);
+  return { hasManualGap: path.hasManualGap, maxScore: path.afterAssisted.score ?? 100, items: path.manualItems };
 }

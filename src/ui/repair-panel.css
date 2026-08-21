@@ -413,6 +413,15 @@
   font-style: italic;
   margin: 0.625rem 0 0;
 }
+/* Ziva procjena ocjene ("84 -> do 97 (procjena)"): cinjenicni redak, ne CTA. */
+.lekta-repair-ledger-estimate {
+  margin: 0.5rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--text);
+}
+.lekta-repair-ledger-estimate small {
+  color: var(--muted);
+}
 .lekta-repair-ledger-done {
   margin-top: 1rem;
   width: 100%;

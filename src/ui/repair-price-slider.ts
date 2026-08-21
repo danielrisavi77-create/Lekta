@@ -40,6 +40,18 @@ export interface AdvancedFormDescriptor {
   render: (container: HTMLElement) => void;
 }
 
+/**
+ * Ziva procjena ocjene za odabrani skup popravaka (redak ispod opsega u ledgeru).
+ * Brojke su "do", nikad obecanje: projekcija (score-projection.ts) flipa samo dobitke, a
+ * regresije postoje; konacnu ocjenu potvrdjuje ponovna analiza (detectPassRegressions mreza).
+ */
+export interface ScoreEstimate {
+  /** Prikazno "sada": pozivatelj salje result.score (A0: projekcija nad checks zna biti niza). */
+  current: number;
+  /** "do N": optimisticni sloj projekcije, kod pozivatelja klampan na >= current. */
+  optimistic: number;
+}
+
 export interface PriceSliderOptions<T extends PriceSliderItem> {
   /** Isti niz i isti poredak/indeksi kao popis checkboxova (data-idx). */
   items: T[];
@@ -49,6 +61,12 @@ export interface PriceSliderOptions<T extends PriceSliderItem> {
   /** Samo za renderRepairLedgerModal: opisuje naprednu formu stavke, ako postoji. Izostavljeno
    *  (ili null povrat) znaci "obican checkbox redak", isto ponasanje kao danas. */
   advancedFormFor?: (item: T) => AdvancedFormDescriptor | null;
+  /** Ziva procjena za TRENUTNO odabran skup. null (ili izostavljeno, ili bez dobitka) = redak se
+   *  ne prikazuje; stariji pozivatelji i profili bez ocjene ostaju netaknuti. */
+  estimateFor?: (selected: T[]) => ScoreEstimate | null;
+  /** Izlazna rucka: ledger u nju upise svoj refresh, pa pozivatelj osvjezi procjenu kad vanjsko
+   *  stanje koje na nju utjece (npr. dubinski preklopnik) promijeni znacenje odabira. */
+  refreshHandle?: { refresh?: () => void };
 }
 
 const STEPS = 1000;
@@ -158,7 +176,7 @@ const LEDGER_MODAL_ATTR = 'data-lekta-repair-ledger-modal';
  * predodabrano"), samo prezentaciju.
  */
 export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSliderOptions<T>): HTMLElement {
-  const { items, listEl, advancedFormFor } = opts;
+  const { items, listEl, advancedFormFor, estimateFor } = opts;
   const trigger = document.createElement('div');
   trigger.className = 'lekta-repair-trigger';
   if (items.length === 0) return trigger;
@@ -225,6 +243,13 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
   totalRow.append(totalLabel, totalNum);
   body.appendChild(totalRow);
 
+  // Ziva procjena ocjene ("84 -> do 97 (procjena)"). Namjerno "do", bez rijeci "najmanje":
+  // projekcija flipa samo dobitke, regresije ne modelira; sud donosi ponovna analiza.
+  const estimateRow = document.createElement('p');
+  estimateRow.className = 'lekta-repair-ledger-estimate';
+  estimateRow.hidden = true;
+  body.appendChild(estimateRow);
+
   // Disclaimer "Procjena. Konačna cijena je i dalje ista..." je uklonjen zajedno s iznosom:
   // nema sto opravdavati kad se cijena vise ne prikazuje. Cijena se navodi jednom, na checkoutu,
   // gdje je i stvarna.
@@ -263,6 +288,11 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
    * Granica je `requiresConfirmation`, ista zastavica koju panel vec koristi da prisili potvrdni
    * korak prije primjene (`needsConfirm` u repair-panel.ts), pa zone ne uvode novu klasifikaciju
    * nego imenuju onu koja vec postoji.
+   *
+   * Kriterij zastavice: potvrdu trazi popravak koji mijenja VIDLJIVI TEKST (cetiri fixera iz
+   * CLAUDE.md, ukljucivo toc-field) ili strukturu/numeraciju. INDEX_SHIFTING sam po sebi NIJE
+   * kriterij: empty-paragraph-fixer takodjer pomice indekse, ali ne mijenja vidljivi sadrzaj,
+   * pa SVJESNO ostaje u sigurnoj zoni.
    */
   const isAdvanced = (item: T): boolean => (item as { requiresConfirmation?: boolean }).requiresConfirmation === true;
   const safeCount = ordered.filter((item) => !isAdvanced(item)).length;
@@ -387,7 +417,21 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
   }
 
   function renderAll(): void {
-    const selected = new Set(selectedItems());
+    const selectedList = selectedItems();
+    const selected = new Set(selectedList);
+    if (estimateFor) {
+      const est = estimateFor(selectedList);
+      const show = est != null && est.optimistic > est.current;
+      estimateRow.hidden = !show;
+      if (show && est) {
+        estimateRow.innerHTML = '';
+        const strong = document.createElement('strong');
+        strong.textContent = `Nakon odabranih popravaka: ${est.current} → do ${est.optimistic} (procjena).`;
+        const small = document.createElement('small');
+        small.textContent = ' Konačnu ocjenu potvrđuje ponovna provjera.';
+        estimateRow.append(strong, small);
+      }
+    }
     rowByItem.forEach((row, item) => {
       const isOn = selected.has(item);
       row.classList.toggle('on', isOn);
@@ -417,6 +461,8 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
     renderAll();
   });
 
+  // Vanjska rucka za osvjezenje (deep preklopnik i sl.); upisuje se PRIJE prvog rendera.
+  if (opts.refreshHandle) opts.refreshHandle.refresh = renderAll;
   // Pocetno stanje = ono sto je vec oznaceno (danasnji opt-out default: prekrseno predodabrano).
   renderAll();
 

@@ -77,7 +77,7 @@ describe('buildRepairableItems (Opcija A: samo prekrseno)', () => {
   it('ukljuci prekrseno autoFixable+verified pravilo, params iz profila', () => {
     const items = buildRepairableItems([FAIL('Margine dokumenta')], PROFILE, [entry({ ruleId: 'margine', label: 'Margine' })]);
     expect(items).toEqual([
-      { ruleId: 'margine', fixerId: 'margins-fixer', label: 'Margine', params: { top: 2.5, right: 2.5, bottom: 2.5, left: 3 }, violated: true, authority: 'faculty-rule', matchKeys: ['Margine dokumenta'] },
+      { ruleId: 'margine', fixerId: 'margins-fixer', label: 'Margine', params: { top: 2.5, right: 2.5, bottom: 2.5, left: 3 }, violated: true, authority: 'faculty-rule', checkIds: ['page.margins'], matchKeys: ['Margine dokumenta'] },
     ]);
   });
 
@@ -97,7 +97,7 @@ describe('buildRepairableItems (Opcija A: samo prekrseno)', () => {
       PROFILE,
       [entry({ ruleId: 'jc', checkId: 'justify', fixerId: 'alignment-fixer', label: 'Poravnanje' })],
     );
-    expect(items).toEqual([{ ruleId: 'jc', fixerId: 'alignment-fixer', label: 'Poravnanje', params: { val: 'both' }, violated: true, authority: 'faculty-rule', matchKeys: ['Poravnanje osnovnog teksta'] }]);
+    expect(items).toEqual([{ ruleId: 'jc', fixerId: 'alignment-fixer', label: 'Poravnanje', params: { val: 'both' }, violated: true, authority: 'faculty-rule', checkIds: ['format.justify.body'], matchKeys: ['Poravnanje osnovnog teksta'] }]);
   });
 
   it('paper-size prepoznaje dinamican naslov ("Format stranice (A4/A3)")', () => {
@@ -120,8 +120,8 @@ describe('buildRepairableItems (Opcija A: samo prekrseno)', () => {
       { includeNonViolated: true },
     );
     expect(items).toEqual([
-      { ruleId: 'margine', fixerId: 'margins-fixer', label: 'Margine', params: { top: 2.5, right: 2.5, bottom: 2.5, left: 3 }, violated: false, authority: 'faculty-rule', matchKeys: ['Margine dokumenta'] },
-      { ruleId: 'font', fixerId: 'font-fixer', label: 'Font', params: { fontName: 'Times New Roman' }, violated: true, authority: 'faculty-rule', matchKeys: ['Dominantni font'] },
+      { ruleId: 'margine', fixerId: 'margins-fixer', label: 'Margine', params: { top: 2.5, right: 2.5, bottom: 2.5, left: 3 }, violated: false, authority: 'faculty-rule', checkIds: ['page.margins'], matchKeys: ['Margine dokumenta'] },
+      { ruleId: 'font', fixerId: 'font-fixer', label: 'Font', params: { fontName: 'Times New Roman' }, violated: true, authority: 'faculty-rule', checkIds: ['format.font.dominant'], matchKeys: ['Dominantni font'] },
     ]);
   });
 
@@ -143,14 +143,14 @@ describe('universalRepairableItems (higijena dokumenta, bez ruleEntry gate-a)', 
   it('violated:true kad issues sadrzi tocan "Prazni odlomci" nalaz', () => {
     const items = universalRepairableItems([EMPTY_PARAGRAPHS_ISSUE]);
     expect(items).toEqual([
-      { ruleId: 'empty-paragraphs-universal', fixerId: 'empty-paragraph-fixer', label: 'Prazni odlomci', params: {}, violated: true, matchKeys: ['Dokument sadrži mnogo praznih odlomaka'] },
+      { ruleId: 'empty-paragraphs-universal', fixerId: 'empty-paragraph-fixer', label: 'Prazni odlomci', params: {}, violated: true, matchKeys: ['Dokument sadrži mnogo praznih odlomaka'], checkIds: ['element.empty-paragraphs'] },
     ]);
   });
 
   it('violated:false kad issues nema taj nalaz (prazan niz)', () => {
     const items = universalRepairableItems([]);
     expect(items).toEqual([
-      { ruleId: 'empty-paragraphs-universal', fixerId: 'empty-paragraph-fixer', label: 'Prazni odlomci', params: {}, violated: false, matchKeys: ['Dokument sadrži mnogo praznih odlomaka'] },
+      { ruleId: 'empty-paragraphs-universal', fixerId: 'empty-paragraph-fixer', label: 'Prazni odlomci', params: {}, violated: false, matchKeys: ['Dokument sadrži mnogo praznih odlomaka'], checkIds: ['element.empty-paragraphs'] },
     ]);
   });
 
@@ -189,7 +189,7 @@ describe('paragraphSpacingRepairableItem (razmak prije/poslije, ovisi o profilu)
       { checkParagraphSpacingZero: true },
     );
     expect(items).toEqual([
-      { ruleId: 'paragraph-spacing-universal', fixerId: 'paragraph-spacing-fixer', label: 'Razmak prije i poslije odlomka', params: {}, violated: false, matchKeys: ['Razmak prije i poslije odlomka'] },
+      { ruleId: 'paragraph-spacing-universal', fixerId: 'paragraph-spacing-fixer', label: 'Razmak prije i poslije odlomka', params: {}, violated: false, matchKeys: ['Razmak prije i poslije odlomka'], checkIds: ['format.spacing.paragraph'] },
     ]);
   });
 
@@ -199,7 +199,7 @@ describe('paragraphSpacingRepairableItem (razmak prije/poslije, ovisi o profilu)
       { checkParagraphSpacingZero: true },
     );
     expect(items).toEqual([
-      { ruleId: 'paragraph-spacing-universal', fixerId: 'paragraph-spacing-fixer', label: 'Razmak prije i poslije odlomka', params: {}, violated: true, matchKeys: ['Razmak prije i poslije odlomka'] },
+      { ruleId: 'paragraph-spacing-universal', fixerId: 'paragraph-spacing-fixer', label: 'Razmak prije i poslije odlomka', params: {}, violated: true, matchKeys: ['Razmak prije i poslije odlomka'], checkIds: ['format.spacing.paragraph'] },
     ]);
   });
 
@@ -241,7 +241,7 @@ describe('footnoteSpacingRepairableItem (razmak prije/poslije fusnota, ovisi o p
       { checkFootnoteParagraphSpacingZero: true },
     );
     expect(items).toEqual([
-      { ruleId: 'footnote-spacing-universal', fixerId: 'footnote-spacing-fixer', label: 'Razmak prije i poslije fusnota', params: {}, violated: false, matchKeys: ['Razmak prije i poslije fusnota'] },
+      { ruleId: 'footnote-spacing-universal', fixerId: 'footnote-spacing-fixer', label: 'Razmak prije i poslije fusnota', params: {}, violated: false, matchKeys: ['Razmak prije i poslije fusnota'], checkIds: ['footnote.spacing'] },
     ]);
   });
 
@@ -251,7 +251,7 @@ describe('footnoteSpacingRepairableItem (razmak prije/poslije fusnota, ovisi o p
       { checkFootnoteParagraphSpacingZero: true },
     );
     expect(items).toEqual([
-      { ruleId: 'footnote-spacing-universal', fixerId: 'footnote-spacing-fixer', label: 'Razmak prije i poslije fusnota', params: {}, violated: true, matchKeys: ['Razmak prije i poslije fusnota'] },
+      { ruleId: 'footnote-spacing-universal', fixerId: 'footnote-spacing-fixer', label: 'Razmak prije i poslije fusnota', params: {}, violated: true, matchKeys: ['Razmak prije i poslije fusnota'], checkIds: ['footnote.spacing'] },
     ]);
   });
 });
@@ -273,7 +273,7 @@ describe('pageNumberAlignmentRepairableItem (poravnanje broja stranice, ovisi o 
       { pageNumberAlignment: 'right' },
     );
     expect(items).toEqual([
-      { ruleId: 'page-number-alignment-universal', fixerId: 'page-number-alignment-fixer', label: 'Položaj broja stranice', params: { align: 'right' }, violated: false, matchKeys: ['Položaj broja stranice'] },
+      { ruleId: 'page-number-alignment-universal', fixerId: 'page-number-alignment-fixer', label: 'Položaj broja stranice', params: { align: 'right' }, violated: false, matchKeys: ['Položaj broja stranice'], checkIds: ['page.numbers.position'] },
     ]);
   });
 
@@ -283,7 +283,7 @@ describe('pageNumberAlignmentRepairableItem (poravnanje broja stranice, ovisi o 
       { pageNumberAlignment: 'right' },
     );
     expect(items).toEqual([
-      { ruleId: 'page-number-alignment-universal', fixerId: 'page-number-alignment-fixer', label: 'Položaj broja stranice', params: { align: 'right' }, violated: true, matchKeys: ['Položaj broja stranice'] },
+      { ruleId: 'page-number-alignment-universal', fixerId: 'page-number-alignment-fixer', label: 'Položaj broja stranice', params: { align: 'right' }, violated: true, matchKeys: ['Položaj broja stranice'], checkIds: ['page.numbers.position'] },
     ]);
   });
 
@@ -293,7 +293,7 @@ describe('pageNumberAlignmentRepairableItem (poravnanje broja stranice, ovisi o 
       { pageNumberAlignment: true },
     );
     expect(items).toEqual([
-      { ruleId: 'page-number-alignment-universal', fixerId: 'page-number-alignment-fixer', label: 'Položaj broja stranice', params: { align: 'right' }, violated: true, matchKeys: ['Položaj broja stranice'] },
+      { ruleId: 'page-number-alignment-universal', fixerId: 'page-number-alignment-fixer', label: 'Položaj broja stranice', params: { align: 'right' }, violated: true, matchKeys: ['Položaj broja stranice'], checkIds: ['page.numbers.position'] },
     ]);
   });
 });

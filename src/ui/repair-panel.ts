@@ -12,6 +12,7 @@ import { enrichWithCrossref } from '../citations/bibliography-enrichment';
 import { renderRepairLedgerModal, type AdvancedFormDescriptor } from './repair-price-slider';
 import type { Check } from '../scoring/checks';
 import { repairCeiling } from './result-readiness';
+import { projectScore } from '../scoring/score-projection';
 import { detectPassRegressions } from '../analysis/repair-regression';
 
 export interface TitlePageFormField {
@@ -273,6 +274,13 @@ export interface RepairableItem {
    * ulazi u zahtjev prema serveru. Prazno/izostavljeno znaci da stavka nije vezana ni za jedan
    * pojedinacni nalaz (npr. tocFieldItem, koji se nudi neovisno o tome je li nesto "prekrseno"). */
   matchKeys?: string[];
+  /** STABILNI checkId-jevi (check-id-registry) cije povrede ova stavka realno zatvara; hrani
+   * projekciju ocjene ("nakon odabranih popravaka"). Izvor istine je check-fixer-map
+   * (`checkIdsForFixer` / `CHECK_IDS_BY_DIMENSION`), NIKAD matchKeys (hrvatski naslovi su UI
+   * korelacija, ne identitet). Izostavljeno = stavka posteno ne tvrdi nista o ocjeni (UNBOUND
+   * lista, pin u tests/repair-item-checkids.test.ts). PREPORUKA (recommended / violated:false
+   * bez profila) nikad ne nosi checkIds: ni projekciju ne smije moci pomaknuti (CLAUDE.md). */
+  checkIds?: string[];
   /** Kandidati za pojedinačni odabir u stablu naslova. */
   headingCandidates?: HeadingCandidate[];
   headingWarnings?: HeadingStructureWarning[];
@@ -340,6 +348,8 @@ export interface RepairPanelContext {
    * uz izricitu napomenu da provjera nije izvedena.
    */
   reanalyze?: (repairedBytes: Uint8Array) => Promise<RepairScoreSnapshot | null>;
+  /** Anonimna telemetrija (app.ts trackEvent). Izostavljeno = bez slanja (testovi, harness). */
+  track?: (event: string, data?: Record<string, unknown>) => void;
   /** Opcionalni sandboxani LibreOffice worker. XML popravak radi i bez njega. */
   fieldRenderEndpoint?: string;
   getAccessToken?: () => Promise<string>;
@@ -360,6 +370,7 @@ const SIMPLE_ITEM_KEYS = new Set<string>([
   'confirmationText',
   'recommended',
   'matchKeys',
+  'checkIds',
 ]);
 
 /** Izvezeno da app.ts (isti uzi kriterij za renderServerRepairPanel) ne duplicira allowlistu. */
@@ -514,6 +525,30 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
     deepToggle = deepRow.querySelector('input');
   }
 
+  // Ziva procjena ocjene za ledger. A0: prikazno "sada" je beforeScore.score (result.score), jer
+  // projekcija nad result.checks zna biti niza (tipografski check gurnut nakon izracuna scorea);
+  // optimisticni sloj se zato klampa na >= current. Samo "do", nikad "najmanje" (v1 ugovor).
+  const beforeChecksForEstimate = ctx.beforeScore?.checks;
+  const beforeScoreForEstimate = ctx.beforeScore?.score ?? null;
+  let lastEstimate: { current: number; optimistic: number } | null = null;
+  const estimateFor = beforeChecksForEstimate && beforeScoreForEstimate != null
+    ? (selected: RepairableItem[]) => {
+        const proj = projectScore(beforeChecksForEstimate, selected, {
+          uncertainFixerIds: deepToggle && !deepToggle.checked ? DEEP_CAPABLE : undefined,
+        });
+        if (proj.optimistic.score == null) return null;
+        lastEstimate = {
+          current: beforeScoreForEstimate,
+          optimistic: Math.max(beforeScoreForEstimate, proj.optimistic.score),
+        };
+        return lastEstimate;
+      }
+    : undefined;
+  const estimateHandle: { refresh?: () => void } = {};
+  // Zastarjela brojka u modalu je dezinformacija: promjena dubinskog preklopnika ODMAH osvjezava
+  // procjenu (bez deep zastavice font/prored/poravnanje realno ne primaju).
+  deepToggle?.addEventListener('change', () => estimateHandle.refresh?.());
+
   const downloadBtn = document.createElement('button');
   downloadBtn.type = 'button';
   downloadBtn.className = 'lekta-repair-panel__download';
@@ -654,6 +689,16 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
     // popravljeni se isporucuje uz iskrenu napomenu - pad provjere ne smije zarobiti dokument.
     if (repairedBytes) {
       const verdict = await renderRecheck(summary, repairedBytes, ctx);
+      // KPI postenja: obecana procjena ("do N") vs izmjereno. Svaki actual < promised je bug
+      // modela projekcije, ne suma; bez ovog mjerenja rijec "najmanje" nikad ne smije u copy.
+      // Ista usporedba se i ISPISUJE (N6 trust obrazac): obecanje se ne skriva od korisnika.
+      if (lastEstimate && verdict.afterScore != null) {
+        ctx.track?.('projection_vs_recheck', { promised: lastEstimate.optimistic, actual: verdict.afterScore });
+        const vs = document.createElement('p');
+        vs.className = 'lekta-repair-panel__estimate-vs';
+        vs.textContent = `Procijenjeno do ${lastEstimate.optimistic}, izmjereno ${verdict.afterScore}.`;
+        summary.appendChild(vs);
+      }
       renderDelivery(summary, repairedBytes, verdict, ctx);
     }
   }
@@ -664,7 +709,7 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
   // akciju na svom retku (advancedFormFor), umjesto da cijeli panel padne natrag na dugu,
   // neogranicenu listu cim ijedna stavka nosi npr. literaturu.
   list.hidden = true;
-  container.appendChild(renderRepairLedgerModal({ items: ctx.items, listEl: list, advancedFormFor }));
+  container.appendChild(renderRepairLedgerModal({ items: ctx.items, listEl: list, advancedFormFor, estimateFor, refreshHandle: estimateHandle }));
   if (deepToggle) container.appendChild(deepRow);
   container.appendChild(downloadBtn);
   container.appendChild(renderFieldButton);
@@ -1598,6 +1643,8 @@ export interface RecheckVerdict {
   unavailable: boolean;
   /** Broj provjera koje su prije prolazile, a sada ne prolaze. */
   regressions: number;
+  /** Izmjerena ocjena popravljenog dokumenta (za projection_vs_recheck telemetriju). */
+  afterScore?: number | null;
 }
 
 /**
@@ -1645,7 +1692,7 @@ async function renderRecheck(el: HTMLElement, bytes: Uint8Array, ctx: RepairPane
   // (+6 na marginama i -3 na fusnotama izgleda kao cist +3), pa mora imati vlastito mjesto.
   if (regression) box.insertBefore(regression, box.firstChild?.nextSibling ?? null);
   el.appendChild(box);
-  return { unavailable: false, regressions: regressions.length };
+  return { unavailable: false, regressions: regressions.length, afterScore: after.score };
 }
 
 /**

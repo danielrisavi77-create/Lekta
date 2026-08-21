@@ -222,6 +222,15 @@ describe('tocFieldItem (gating, neovisno o TOC_FIELD_LIVE)', () => {
     expect(items[0].violated).toBe(true);
   });
 
+  it('trazi izricitu potvrdu: mijenja vidljivi tekst (CLAUDE.md) i umece odlomke (INDEX_SHIFTING)', () => {
+    const items = tocFieldItem(result, profile);
+    expect(items[0].requiresConfirmation).toBe(true);
+    expect(items[0].confirmationText).toContain('2. odlomak');
+    // Bez zastavice je stavka padala u ledger zonu "Sigurni automatski popravci" i primjenjivala
+    // se bez potvrdnog koraka panela (needsConfirm), suprotno tvrdom pravilu o cetiri popravka
+    // koja mijenjaju vidljivi tekst.
+  });
+
   it('profil ne trazi sadrzaj -> prazno', () => {
     expect(tocFieldItem(result, { requireToc: false })).toEqual([]);
   });

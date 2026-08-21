@@ -10,7 +10,7 @@ import type { ElementCaptionFormDefinition, BibliographyFormDefinition, Citation
 import type { RuleEntry } from '../profiles/profile-schema';
 import type { Issue } from '../scoring/checks';
 import type { SectionNumberingTarget } from '../repair/xml-patch';
-import { CHECK_TITLES, PAPER_SIZE_TITLE_PREFIX, dimensionForCheckId } from '../analysis/check-fixer-map';
+import { CHECK_TITLES, PAPER_SIZE_TITLE_PREFIX, CHECK_IDS_BY_DIMENSION, checkIdsForFixer, dimensionForCheckId } from '../analysis/check-fixer-map';
 import type { HeadingCandidate, HeadingStructureWarning } from '../analysis/heading-structure';
 import { headingNumberingRules } from '../analysis/heading-numbering';
 import type { HeadingNumberingPlan } from '../analysis/heading-numbering';
@@ -138,6 +138,20 @@ function provenanceOf(entry: RuleEntry): { provenance?: { sourcePage?: string; l
   return Object.keys(provenance).length ? { provenance } : {};
 }
 
+/**
+ * STABILNI checkId-jevi koje stavka za ovu dimenziju zatvara (hrani projekciju ocjene).
+ * paper-size ima dinamican ID po profilu (page.size.*), pa se cita iz stvarnog checka;
+ * bez pogotka stavka posteno ne tvrdi nista (prazno -> polje `checkIds` se izostavlja).
+ * Izvor istine je check-fixer-map (CHECK_IDS_BY_DIMENSION), NIKAD matchKeys.
+ */
+function checkIdsForDimension(dimension: string, checks: AnalyzedCheck[]): string[] {
+  if (dimension === 'paper-size') {
+    const id = findCheckForDimension(checks, 'paper-size')?.id;
+    return id ? [id] : [];
+  }
+  return [...(CHECK_IDS_BY_DIMENSION[dimension] ?? [])];
+}
+
 /** Status checka za dimenziju (ili undefined ako ga nema). Za razliku od isViolated NE trazi
  *  max>0: numeriranje-checkovi su nebodovani (max=0, "Word ne sprema dovoljno podataka") na
  *  jednosekcijskom radu, ali im status ostaje 'warn' kad numeriranje od Uvoda nije potvrdjeno. */
@@ -203,6 +217,7 @@ export function buildRepairableItems(
     if (!params) continue; // ni pravilo ni profil nemaju ciljanu vrijednost -> ne nudi popravak
     const violated = isViolated(e.checkId, checks);
     if (!violated && !opts?.includeNonViolated) continue; // A: samo prekrseno
+    const stableIds = checkIdsForDimension(e.checkId, checks);
     out.push({
       ruleId: e.ruleId,
       fixerId: e.fixerId as RepairableItem['fixerId'],
@@ -211,6 +226,7 @@ export function buildRepairableItems(
       violated,
       // Verificirano pravilo fakulteta: jedina kategorija koja ulazi u ocjenu.
       authority: 'faculty-rule',
+      ...(stableIds.length ? { checkIds: stableIds } : {}),
       ...provenanceOf(e),
       ...(CHECK_TITLE[e.checkId] ? { matchKeys: [CHECK_TITLE[e.checkId]] } : {}),
     });
@@ -238,6 +254,9 @@ export function universalRepairableItems(issues: Issue[]): RepairableItem[] {
       params: {},
       violated,
       matchKeys: [EMPTY_PARAGRAPHS_ISSUE_TITLE],
+      // Check 'element.empty-paragraphs' je UVIJEK informativan (0/0), pa je flip u projekciji
+      // numericki no-op; ID se ipak nosi radi potpunosti veze stavka -> provjera.
+      checkIds: [...CHECK_IDS_BY_DIMENSION['empty-paragraphs']],
     },
   ];
 }
@@ -400,6 +419,7 @@ export function paragraphSpacingRepairableItem(checks: AnalyzedCheck[], profile:
       params,
       violated: isViolated('paragraph-spacing', checks),
       matchKeys: [CHECK_TITLE['paragraph-spacing']],
+      checkIds: checkIdsForDimension('paragraph-spacing', checks),
     },
   ];
 }
@@ -465,6 +485,7 @@ export function pageNumberingRepairableItem(result: any, profile: any): Repairab
       params: { targets },
       violated,
       matchKeys: [CHECK_TITLE['page-number-start'], CHECK_TITLE['page-number-scheme']],
+      checkIds: [...CHECK_IDS_BY_DIMENSION['page-number-start'], ...CHECK_IDS_BY_DIMENSION['page-number-scheme']],
     },
   ];
 }
@@ -485,6 +506,7 @@ export function footnoteSpacingRepairableItem(checks: AnalyzedCheck[], profile: 
       params: {},
       violated: isViolated('footnote-spacing', checks),
       matchKeys: [CHECK_TITLE['footnote-spacing']],
+      checkIds: checkIdsForDimension('footnote-spacing', checks),
     },
   ];
 }
@@ -524,6 +546,7 @@ export function pageNumberAlignmentRepairableItem(checks: AnalyzedCheck[], profi
       params: { align },
       violated: isViolated('page-number-alignment', checks),
       matchKeys: [CHECK_TITLE['page-number-alignment']],
+      checkIds: checkIdsForDimension('page-number-alignment', checks),
     },
   ];
 }
@@ -567,6 +590,7 @@ export function headingFormatRepairableItem(checks: AnalyzedCheck[], profile: an
       params: { targets },
       violated: isViolated('heading-format', checks),
       matchKeys: [CHECK_TITLE['heading-format']],
+      checkIds: checkIdsForDimension('heading-format', checks),
     },
   ];
 }
@@ -615,6 +639,9 @@ export function headingStructureRepairableItem(result: any, profile: any): Repai
     params: { targets, options: { pageBreakLevels, ...(numbering ? { numbering } : {}) } },
     violated: true,
     matchKeys: ['Uporaba Word stilova naslova', 'Hijerarhija naslova'],
+    // STRUCTURAL pravilo heading.style NEMA fixId (svjesna triage odluka), pa se ID ne moze
+    // izvesti iz checkIdsForFixer; literal cuva pin test (mora biti unutar wiredCheckIds).
+    checkIds: ['structure.heading.word-styles'],
     headingCandidates: candidates,
     headingNumberingPlan: numberingPlan,
     headingWarnings: Array.isArray(structure?.warnings) ? structure.warnings : [],
@@ -794,6 +821,11 @@ export function elementCaptionRepairableItem(result: any, profile: any): Repaira
       : `Pronađeno je ${candidates.length} elemenata. Potvrdi opise i izvore prije umetanja natpisa; popisi i unakrsne upute ostaju zasebni izbor.`,
     elementCaptionForm: form,
     ...(universal ? {} : { matchKeys: ['Naslovi tablica', 'Naslovi slika i grafikona', 'Izvori ispod slika i tablica', 'Popisi slika i tablica'] }),
+    // checkIds SAMO kad postoji profilno pravilo (!universal): preporuka ne smije moci pomaknuti
+    // ni projekciju ocjene. Caption pravila nemaju fixId u STRUCTURAL_CHECK_RULES, pa literal
+    // (pin test cuva da su unutar wiredCheckIds); element.lists namjerno izostavljen (v1,
+    // neraspodijeljen izmedju element-caption i table-figure-rescue).
+    ...(universal ? {} : { checkIds: ['element.table.caption', 'element.figure.caption'] }),
   }];
 }
 
@@ -857,6 +889,7 @@ export function citationBibliographySyncRepairableItem(result: any, profile: any
     ruleId: 'citation-bibliography-sync-assisted', fixerId: 'citation-bibliography-sync-fixer', label: 'Sinkronizacija citata i bibliografije', params: form.buildParams(form), violated: true, requiresConfirmation: true,
     confirmationText: 'Potvrdi samo odabrane veze, izmjene lokatora, dodane zapise ili uklanjanje mogućih duplikata. Lekta neće mijenjati akademski sadržaj.',
     citationBibliographySyncForm: form, matchKeys: ['Citirano → literatura', 'Literatura → citirano', 'Lokator uz izravne citate', 'Isti autor i godina (a/b/c)'],
+    checkIds: [...checkIdsForFixer('citation-bibliography-sync-fixer')],
   }];
 }
 
@@ -1153,6 +1186,10 @@ export function bibliographyRepairableItem(result: any, profile: any): Repairabl
     confirmationText: 'Potvrdi sortiranje, normalizaciju i ciljano uklanjanje potpuno identičnih duplikata. Nepotpuni i slični zapisi ne mijenjaju se bez dodatne potvrde.',
     bibliographyForm: form,
     matchKeys: ['Potpunost bibliografskih zapisa', 'Citirano → literatura', 'Literatura → citirano'],
+    // IZRICITO bez 'reference.completeness': taj check je namjerno manual (gradirano, sadrzajna
+    // prosudba; pin u tests/result-readiness.test.ts), a matchKeys iznad je samo UI korelacija.
+    // checkIdsForFixer vraca reference.alphabetical + citation.author-year.suffix.
+    checkIds: [...checkIdsForFixer('bibliography-repair-fixer')],
   }];
 }
 
@@ -1183,6 +1220,10 @@ export function headingCaseRepairableItem(checks: AnalyzedCheck[], profile: any)
       params: { levels: wanted },
       violated: isViolated('heading-format', checks),
       matchKeys: [CHECK_TITLE['heading-format']],
+      // Dijeli ID s heading-format stavkom (ista provjera, dva zahvata); projekcija radi uniju
+      // pa dupli ID ne broji bodove dvaput. Stavka zivi u textItems (izvan ledgera) i v1
+      // procjena je NE cita; ID postoji da buduci potrosaci ne izgube vezu.
+      checkIds: checkIdsForDimension('heading-format', checks),
       requiresConfirmation: true,
       confirmationText: `Ovo mijenja TEKST ${opis} u velika slova. Jedini je popravak koji dira sadržaj rada, pa se primjenjuje samo uz tvoju izričitu privolu.`,
     },
@@ -1212,6 +1253,7 @@ export function footnoteTypographyRepairableItem(checks: AnalyzedCheck[], profil
       params,
       violated: isViolated('footnote-typography', checks),
       matchKeys: [CHECK_TITLE['footnote-typography']],
+      checkIds: checkIdsForDimension('footnote-typography', checks),
     },
   ];
 }
@@ -1279,6 +1321,7 @@ export function introSectionItem(result: any, profile: any): RepairableItem[] {
       // ("Provjeri rimsku i arapsku numeraciju"/"Numeriranje od prve stranice Uvoda") kad dokument
       // nema upotrebljiv split sekcija. Bar jedan od dva (nikad oba) zavrsi u items[].
       matchKeys: [CHECK_TITLE['page-number-start'], CHECK_TITLE['page-number-scheme']],
+      checkIds: [...CHECK_IDS_BY_DIMENSION['page-number-start'], ...CHECK_IDS_BY_DIMENSION['page-number-scheme']],
       requiresConfirmation: true,
       confirmationText:
         `Umetnut ćemo prijelom sekcije neposredno prije ${introIdx}. odlomka (Uvod). ` +
@@ -1303,7 +1346,7 @@ export function requiredSectionsRepairableItem(result: any, profile: any): Repai
     candidates: candidates.map((candidate: any) => ({ id: String(candidate.id), kind: String(candidate.kind), label: String(candidate.label), confidence: String(candidate.confidence), headingLevel: Number(candidate.headingLevel) || 1, ...(candidate.styleId ? { styleId: String(candidate.styleId) } : {}), numbered: candidate.numbered === true, contentPolicy: String(candidate.contentPolicy || 'none'), verifiedStatement: typeof candidate.verifiedStatement === 'string' ? candidate.verifiedStatement : undefined, placeholderText: rules.placeholderText?.[candidate.kind] || '[OVDJE UNESI SADRŽAJ]', commentText: 'Ovdje unesi sadržaj', selected: candidate.confidence === 'high' && !!candidate.insertionAnchor, contentMode: candidate.verifiedStatement ? 'statement' : rules.addComment ? 'comment' : 'none', insertionAnchor: candidate.insertionAnchor, evidence: Array.isArray(candidate.evidence) ? candidate.evidence : [], warnings: Array.isArray(candidate.warnings) ? candidate.warnings : [] })),
     buildParams: (current) => ({ version: 1, sections: current.candidates.filter((candidate) => candidate.selected && candidate.insertionAnchor).map((candidate) => ({ id: candidate.id, kind: candidate.kind, label: candidate.label, insertionAnchor: candidate.insertionAnchor, headingLevel: candidate.headingLevel, ...(candidate.styleId ? { styleId: candidate.styleId } : {}), numbered: candidate.numbered, confirmed: true, ...(candidate.contentMode === 'placeholder' ? { placeholderText: candidate.placeholderText } : {}), ...(candidate.contentMode === 'comment' ? { commentText: candidate.commentText } : {}), ...(candidate.contentMode === 'statement' && candidate.verifiedStatement ? { statementText: candidate.verifiedStatement } : {}) })) }),
   };
-  return [{ ruleId: 'required-section-rules', fixerId: 'required-section-fixer', label: 'Nedostajući obvezni dijelovi', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi umetanje samo naslova i odabranih oznaka za unos. Akademski sadržaj se ne generira.', requiredSectionsForm: form, matchKeys: ['Dijelovi verificiranog profila'] }];
+  return [{ ruleId: 'required-section-rules', fixerId: 'required-section-fixer', label: 'Nedostajući obvezni dijelovi', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi umetanje samo naslova i odabranih oznaka za unos. Akademski sadržaj se ne generira.', requiredSectionsForm: form, matchKeys: ['Dijelovi verificiranog profila'], checkIds: [...checkIdsForFixer('required-section-fixer')] }];
 }
 
 export function linkDoiRepairableItem(result: any, profile: any): RepairableItem[] {
@@ -1358,6 +1401,13 @@ export function tocFieldItem(result: any, profile: any): RepairableItem[] {
       label: 'Sadržaj: pretvori u živo TOC polje (Word ga sam ažurira)',
       params: { target: { sadrzajParagraphIndex: sadrzajIdx } },
       violated: true,
+      // toc-field je jedan od cetiri popravka koji MIJENJAJU VIDLJIVI TEKST (CLAUDE.md), a uz to
+      // umece odlomke (INDEX_SHIFTING). Zato izricita potvrda: bez nje je stavka padala u zonu
+      // "Sigurni automatski popravci" i primjenjivala se bez potvrdnog koraka.
+      requiresConfirmation: true,
+      confirmationText:
+        `Umetnut ćemo živo polje sadržaja kod naslova Sadržaj (${sadrzajIdx}. odlomak). ` +
+        'Postojeće ručne stavke se ne brišu, a tekst sadržaja generira Word iz stvarnih naslova dokumenta pri osvježavanju polja.',
       // Namjerno BEZ matchKeys: ova stavka se nudi neovisno o tome je li "Sadrzaj dokumenta"
       // check prekrsen (cesto je vec 'pass', jer paragraf "Sadrzaj" vec postoji), pa nema
       // pojedinacan nalaz na kartici rezultata kojem bi je trebalo vezati (RESULT-03).

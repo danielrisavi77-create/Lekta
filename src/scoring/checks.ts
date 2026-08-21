@@ -129,6 +129,38 @@ export function categoryTotals(checks: Check[] = []): Record<string, { earned: n
   return categories;
 }
 
+/** Sirove sume bodova i iz njih izvedena ocjena; vidi `scoreFromChecks`. */
+export interface ScoreParts {
+  earned: number;
+  max: number;
+  /** Zaokruzena ocjena 0-100, ili null kad nema nijedne bodovane provjere. */
+  score: number | null;
+}
+
+/**
+ * Jedini izvor istine za ukupnu ocjenu iz provjera. Semantika je doslovno povijesni inline
+ * izracun iz analyzeDocx: u zbroj ulazi svaka provjera s max > 0 (bez uvjeta na `scored`,
+ * koji je za makeCheck provjere ionako identican), sume su sirove, zaokruzuje se JEDNOM na
+ * kraju, a bez ijedne bodovane provjere ocjena je null, ne 0.
+ *
+ * POZOR (A0): analyzeDocx ovu funkciju zove PRIJE nego u `checks` gurne jos jedan bodovani
+ * check (Tehnicko-tipografska dosljednost kod verificiranih croatian-typography profila), pa
+ * `scoreFromChecks(result.checks)` nad GOTOVIM rezultatom nije nuzno jednak `result.score`.
+ * Potrosac koji projicira ocjenu mora "sada" prikazivati iz `result.score`, a projekcije
+ * klampati na >= `result.score`. Pomicanje izracuna iza svih push-eva je zaseban, svjestan
+ * golden korak; dok se ne napravi, ova napomena je ugovor.
+ */
+export function scoreFromChecks(checks: readonly Check[] = []): ScoreParts {
+  let earned = 0;
+  let max = 0;
+  for (const c of checks) {
+    if (!c || c.max <= 0) continue;
+    earned += c.earned;
+    max += c.max;
+  }
+  return { earned, max, score: max ? Math.round((earned / max) * 100) : null };
+}
+
 /** Zapis problema (greska/upozorenje/info) s lokacijom. */
 export function issue(severity: string, category: string, title: string, detail: string, where = ''): Issue {
   return { severity, category, title, detail, where };

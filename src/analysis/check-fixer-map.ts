@@ -223,3 +223,32 @@ export function classifyFixability(title: string): { fixability: Fixability; fix
 export function wiredCheckIds(): string[] {
   return [...new Set([...Object.values(CHECK_IDS_BY_DIMENSION).flat(), ...STRUCTURAL_CHECK_RULES.flatMap((r) => r.checkIds)])];
 }
+
+/**
+ * Obrnuti indeks: zivi fixer -> STABILNI checkId-jevi koje ta veza VEC obecava kroz
+ * AUTO_CHECK_FIXER x CHECK_IDS_BY_DIMENSION i STRUCTURAL_CHECK_RULES (fixId). NIKAD iz
+ * matchKeys: hrvatski naslovi su UI korelacija, ne identitet ("Potpunost bibliografskih
+ * zapisa" je namjerno manual iako je bibliografska stavka nosi u matchKeys).
+ *
+ * Alat za graditelje stavki i pinning testove; projekcija ocjene cita ISKLJUCIVO eksplicitni
+ * `item.checkIds`, jer jedan fixer zna pokrivati vise dimenzija (font-fixer: font i font-size
+ * su ODVOJENE stavke s istim fixerom), pa bi flip po fixerId-u flipao i neodabranu dimenziju.
+ *
+ * `paper-size-fixer` vraca []: njegovi ID-jevi su dinamicki (`page.size.*`, ovise o profilu),
+ * pa graditelj cita stvarni `check.id` preko `findCheckForDimension`. Strukturna pravila bez
+ * `fixId` (heading.style, caption.*, list.illustrations) ovdje ne daju nista; njihove stavke
+ * nose eksplicitni `checkIds` uz komentar, a pinning test cuva da su unutar `wiredCheckIds`.
+ */
+export function checkIdsForFixer(fixerId: FixerId): readonly string[] {
+  const ids = new Set<string>();
+  for (const [dimension, fixer] of Object.entries(AUTO_CHECK_FIXER)) {
+    if (fixer !== fixerId) continue;
+    for (const id of CHECK_IDS_BY_DIMENSION[dimension] ?? []) ids.add(id);
+  }
+  // empty-paragraphs nije u AUTO_CHECK_FIXER (posebna grana u autoFixerForCheckId).
+  if (fixerId === 'empty-paragraph-fixer') for (const id of CHECK_IDS_BY_DIMENSION['empty-paragraphs']) ids.add(id);
+  for (const r of STRUCTURAL_CHECK_RULES) {
+    if (r.fixId === fixerId) for (const id of r.checkIds) ids.add(id);
+  }
+  return [...ids];
+}
