@@ -228,13 +228,13 @@ export function readRPr(rPr: any): any {
 /** Procitaj paragraph svojstva: prored, poravnanje, outline razina, stil, numeriranje. */
 export function readPPr(pPr: any): any {
   if (!pPr) return {};
-  const sp = direct(pPr, 'w:spacing'), jc = direct(pPr, 'w:jc'), ol = direct(pPr, 'w:outlineLvl'), ps = direct(pPr, 'w:pStyle');
+  const sp = direct(pPr, 'w:spacing'), jc = direct(pPr, 'w:jc'), ol = direct(pPr, 'w:outlineLvl'), ps = direct(pPr, 'w:pStyle'), numPr = direct(pPr, 'w:numPr');
   let line = null;
   // Samo lineRule='auto' kodira prored kao visekratnik (240-tine). 'exact'/'atLeast' su
   // apsolutne tocke (20-tine) i NISU usporedivi s profilnim omjerom (npr. 1.5), pa ih
   // ostavljamo null (prored "nije pouzdano ocitljiv") umjesto laznog pada. Vidi AUD-01.
   if (sp && attr(sp, 'w:line')) { const v = Number(attr(sp, 'w:line')), rule = attr(sp, 'w:lineRule') || 'auto'; if (rule === 'auto') line = v / 240; }
-  return { styleId: attr(ps, 'w:val') || null, line, lineRule: attr(sp, 'w:lineRule') || null, before: sp && attr(sp, 'w:before') ? Number(attr(sp, 'w:before')) / 20 : null, after: sp && attr(sp, 'w:after') ? Number(attr(sp, 'w:after')) / 20 : null, align: attr(jc, 'w:val') || null, outline: ol ? Number(attr(ol, 'w:val')) : null, num: !!direct(pPr, 'w:numPr') };
+  return { styleId: attr(ps, 'w:val') || null, line, lineRule: attr(sp, 'w:lineRule') || null, before: sp && attr(sp, 'w:before') ? Number(attr(sp, 'w:before')) / 20 : null, after: sp && attr(sp, 'w:after') ? Number(attr(sp, 'w:after')) / 20 : null, align: attr(jc, 'w:val') || null, outline: ol ? Number(attr(ol, 'w:val')) : null, num: !!numPr, numId: numPr ? (attr(direct(numPr, 'w:numId'), 'w:val') || null) : null, numIlvl: numPr && attr(direct(numPr, 'w:ilvl'), 'w:val') != null ? Number(attr(direct(numPr, 'w:ilvl'), 'w:val')) : null };
 }
 
 /** Spoji vise objekata preskacuci falsy (kaskada stilova). */
@@ -264,6 +264,49 @@ export function parseStyles(xml: any): any {
     return o;
   }
   return { styles, resolve, defaultR, defaultP, defaultParagraphStyleId };
+}
+
+/**
+ * Razrijesi sheme numeriranja iz word/numbering.xml: `numId` -> format po razini (`w:ilvl`).
+ *
+ * Postoji zbog provjere dubine decimalnog numeriranja. Kad naslove numerira Word, broj koji se
+ * ispisuje NIJE u tekstu odlomka, pa se dubina moze doznati samo iz `w:ilvl`. Sama `ilvl` nije
+ * dovoljna: duboko NABRAJANJE (bullet) nije decimalno numeriranje i ne smije se kazniti, pa treba
+ * i `w:numFmt` te razine.
+ *
+ * `w:num` pokazuje na `w:abstractNum` preko `w:abstractNumId`; format je na `w:lvl` po `w:ilvl`.
+ * Vraca null kad dijela nema ili je neispravan, pa se ponasanje vraca na "samo tekstualna dubina".
+ */
+export function parseNumbering(xmlText: string | null | undefined): { fmtFor: (numId: string | null, ilvl: number) => string | null } | null {
+  if (!xmlText) return null;
+  let xml: any;
+  try { xml = parseXml(xmlText, 'Word numeriranje'); } catch { return null; }
+  const abstractFmt = new Map<string, Map<number, string>>();
+  for (const an of els(xml, 'w:abstractNum')) {
+    const id = attr(an, 'w:abstractNumId');
+    if (!id) continue;
+    const byLvl = new Map<number, string>();
+    for (const lvl of els(an, 'w:lvl')) {
+      const ilvl = Number(attr(lvl, 'w:ilvl'));
+      const fmt = attr(direct(lvl, 'w:numFmt'), 'w:val');
+      if (Number.isFinite(ilvl) && fmt) byLvl.set(ilvl, String(fmt).toLowerCase());
+    }
+    abstractFmt.set(id, byLvl);
+  }
+  const numToAbstract = new Map<string, string>();
+  for (const n of els(xml, 'w:num')) {
+    const id = attr(n, 'w:numId'), a = attr(direct(n, 'w:abstractNumId'), 'w:val');
+    if (id && a) numToAbstract.set(id, a);
+  }
+  if (!abstractFmt.size && !numToAbstract.size) return null;
+  return {
+    fmtFor(numId, ilvl) {
+      if (numId == null) return null;
+      const a = numToAbstract.get(String(numId));
+      if (a == null) return null;
+      return abstractFmt.get(a)?.get(ilvl) ?? null;
+    },
+  };
 }
 
 /** Razrijesi tema-fontove iz word/theme/theme1.xml: minor (tijelo) i major (naslovi) latin
