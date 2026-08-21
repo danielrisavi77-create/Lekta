@@ -245,6 +245,12 @@ checkoutEndpoint:'https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1/create-c
 server vraća 402 (paywall) pa repair ne radi dok checkout+LS nisu živi.
 
 - [ ] Config postavljen.
+- [ ] **`LEKTA_REPAIR_LIVE=1` u Netlify build okolini** (uz `DEPLOY=1`). Od tog trena
+  `verify-deploy-dist.mjs` TVRDO pada dok `privacyController` i `address` u
+  [data/legal/provider.json](../data/legal/provider.json) nisu upisani. Razlog: beta uploada i
+  pohranjuje dokument, pa GDPR čl. 13 traži imenovanog voditelja obrade neovisno o tome što se
+  ništa ne naplaćuje. Prije ove zastavice isti nalaz je bio samo upozorenje, vezano uz
+  `LEKTA_COMMERCE_LIVE=1`, pa je besplatna beta mogla proći s praznim identitetom.
 - [ ] `npm run check` zelen.
 - [ ] Commit + push.
 - [ ] Netlify deploy prošao (regenerira pravne stranice s novom "pohrana do brisanja" copy;

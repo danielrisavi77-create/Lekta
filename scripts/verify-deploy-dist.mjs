@@ -496,35 +496,75 @@ if (fs.existsSync(naslovnicaDir)) {
 //
 // `data/legal/provider.json` je jedino mjesto s identitetom trgovca i voditelja obrade.
 // Dok je prazan, `legal-content.ts` ga tise ispusta (renderira napomenu "bit ce objavljeni"),
-// pa se prazno stanje moze deployati a da nitko ne primijeti. Za BESPLATNU analizu to je
-// podnosljivo; za NAPLATU nije, jer identifikacija trgovca i voditelja obrade nije opcionalna.
+// pa se prazno stanje moze deployati a da nitko ne primijeti.
 //
-// Zato gate nije bezuvjetan nego vezan uz `LEKTA_COMMERCE_LIVE=1`, koji se postavlja tek kad
-// naplata ide live. Do tada je nalaz glasno upozorenje, poslije je tvrd blok.
+// DVA ODVOJENA PRAGA, jer ih pokrecu dva razlicita zakona i okidaju se u razlicitim trenucima:
+//
+//   1. OBRADA (GDPR cl. 13). Okida se cim dokument NAPUSTI preglednik, ne kad se naplati.
+//      Besplatna analiza je 100% lokalna pa ondje prazan identitet jos prolazi. Besplatna beta
+//      popravka NE prolazi: `GO_LIVE_REPAIR.md` je izrijekom zove "privatnosni zaokret" jer se
+//      dokument uploada i pohranjuje, a rad nosi ime studenta, fakultet i temu. Ispitanik tada
+//      ima pravo znati TKO je voditelj obrade i kome uputiti zahtjev za brisanjem. Po vlastitoj
+//      napomeni u `legal-content.ts` "Lekta" je naziv usluge, a ne pravni subjekt, pa protiv
+//      njega nema kome uputiti zahtjev. Besplatno ne znaci bez voditelja obrade.
+//
+//   2. NAPLATA (ZZP, predugovorne informacije). Trazi sve iz praga obrade, plus identifikaciju
+//      TRGOVCA: OIB i telefon.
+//
+// Zato gate nije bezuvjetan nego vezan uz zastavice koje se postave tek kad to doista ide live:
+// `LEKTA_REPAIR_LIVE=1` za betu popravka, `LEKTA_COMMERCE_LIVE=1` za naplatu (naplata
+// podrazumijeva obradu pa ukljucuje i prvi prag). Bez ijedne je nalaz glasno upozorenje.
 {
   const providerPath = path.join(ROOT, 'data', 'legal', 'provider.json');
   const provider = JSON.parse(fs.readFileSync(providerPath, 'utf8'));
-  const REQUIRED_FOR_COMMERCE = {
+
+  // Prag 1: dokument napusta preglednik (GDPR cl. 13, identitet i sjediste voditelja obrade).
+  const REQUIRED_FOR_PROCESSING = {
     privacyController: 'voditelj obrade (GDPR cl. 13): tko pravno odredjuje svrhe i sredstva obrade',
-    oib: 'OIB pravnog subjekta (identifikacija trgovca)',
     address: 'sjediste pravnog subjekta',
+  };
+  // Prag 2: naplata (sve iz praga obrade + identifikacija trgovca po ZZP-u).
+  const REQUIRED_FOR_COMMERCE = {
+    ...REQUIRED_FOR_PROCESSING,
+    oib: 'OIB pravnog subjekta (identifikacija trgovca)',
     phone: 'telefonski broj trgovca (predugovorna informacija, ZZP)',
   };
-  const missing = Object.entries(REQUIRED_FOR_COMMERCE)
-    .filter(([field]) => !String(provider[field] ?? '').trim())
-    .map(([field, why]) => `${field} (${why})`);
 
-  if (missing.length) {
-    const bullets = missing.map((m) => `  - ${m}`);
-    if (process.env.LEKTA_COMMERCE_LIVE === '1') {
-      fail(['naplata je oznacena kao ZIVA (LEKTA_COMMERCE_LIVE=1), a data/legal/provider.json nema:', ...bullets].join(os.EOL));
-    }
+  const missingFrom = (required) =>
+    Object.entries(required)
+      .filter(([field]) => !String(provider[field] ?? '').trim())
+      .map(([field, why]) => `  - ${field} (${why})`);
+
+  const commerceLive = process.env.LEKTA_COMMERCE_LIVE === '1';
+  const repairLive = process.env.LEKTA_REPAIR_LIVE === '1';
+  const missingForProcessing = missingFrom(REQUIRED_FOR_PROCESSING);
+  const missingForCommerce = missingFrom(REQUIRED_FOR_COMMERCE);
+
+  if (commerceLive && missingForCommerce.length) {
+    fail(
+      ['naplata je oznacena kao ZIVA (LEKTA_COMMERCE_LIVE=1), a data/legal/provider.json nema:', ...missingForCommerce].join(os.EOL),
+    );
+  }
+  // I bez naplate: cim se dokument uploada i pohranjuje, voditelj obrade mora biti imenovan.
+  if (repairLive && missingForProcessing.length) {
+    fail(
+      [
+        'popravak je oznacen kao ZIV (LEKTA_REPAIR_LIVE=1), dakle dokument se uploada i pohranjuje,',
+        'a data/legal/provider.json nema:',
+        ...missingForProcessing,
+        '  Besplatna beta ne oslobadja od GDPR cl. 13: ispitanik mora znati tko je voditelj obrade.',
+      ].join(os.EOL),
+    );
+  }
+
+  if (!commerceLive && !repairLive && missingForCommerce.length) {
     console.warn(
       [
         '[verify-deploy-dist] UPOZORENJE: data/legal/provider.json nema:',
-        ...bullets,
-        '  Besplatna analiza time nije blokirana, ali naplata se NE SMIJE upaliti dok su prazni.',
-        '  Kad se popune, postavi LEKTA_COMMERCE_LIVE=1 da gate postane tvrd.',
+        ...missingForCommerce,
+        '  Besplatna LOKALNA analiza time nije blokirana (nista ne napusta preglednik).',
+        `  Popravak se NE SMIJE upaliti dok nedostaje ijedno polje praga obrade (sada ih nedostaje ${missingForProcessing.length}).`,
+        '  Kad se popune, postavi LEKTA_REPAIR_LIVE=1 (beta popravka) ili LEKTA_COMMERCE_LIVE=1 (naplata) da gate postane tvrd.',
       ].join(os.EOL),
     );
   }
