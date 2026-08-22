@@ -1,6 +1,6 @@
 # Revizija bodovanih pravila: sto alat mjeri i sto je ostalo
 
-Stanje 2026-08-22. Zaseban dokument, ne primopredaja sesije: opisuje `scripts/audit_scored_quotes.py`
+Stanje 2026-08-23. Zaseban dokument, ne primopredaja sesije: opisuje `scripts/audit_scored_quotes.py`
 i redove nalaza koje proizvodi. Primopredaja je `docs/NASTAVAK_SLJEDECA_SESIJA.md`.
 
 Pokretanje: `npm run audit:scored-quotes`. NIJE u `npm run check` i nijedan test ne cita
@@ -13,15 +13,15 @@ Pokretanje: `npm run audit:scored-quotes`. NIJE u `npm run check` i nijedan test
 | | pocetak dana | sada |
 |---|---|---|
 | bodovanih pravila | 1934 | 1934 |
-| revidirano | 1391 | **1593** |
-| nerevidirano (izvor se ne cita) | 543 | **341** |
+| revidirano | 1391 | **1780** |
+| nerevidirano (izvor se ne cita) | 543 | **154** |
 | neprovjerivo (skenirano ili ostecen tekstualni sloj) | 9 | **57** |
-| pravila s NOVIM nalazom | 319 | **155** |
+| pravila s NOVIM nalazom | 319 | **160** |
 | priznato (procitano pa ostavljeno) | 37 | **47** |
 
-Nalazi po redu: 143 nedoslovna prijepisa, 7 odsjecenih, 4 bez vrijednosti u citatu, 1 kvalifikator.
+Nalazi po redu: 147 nedoslovnih prijepisa, 8 odsjecenih, 4 bez vrijednosti u citatu, 1 kvalifikator.
 
-Od 164 zatvorena nalaza, **jedan jedini** bio je stvaran kvar u bodovanju (forenzika, nize).
+Od 159 zatvorenih nalaza, **jedan jedini** bio je stvaran kvar u bodovanju (forenzika, nize).
 Ostalo je bilo mjerenje, ne podaci. To je najvazniji zakljucak i razlog zasto se svaki nalaz
 citao u izvoru prije nego je bilo sto dirano.
 
@@ -55,25 +55,30 @@ po putanji uzima sadrzaj iz RADNOG STABLA, pa bi povukao njihov rad. Cim se stab
    znaka. Zamijeniti citat u `data/profiles/ffzg/drafts/ffzg-etnologija-graduate.json` s:
    `"tekst rada treba biti u fontu Times New Roman, velicine 12 tocaka"`.
 
-3. **`vevu-diplomski--font-size`.** Izvor (.docx, sada citljiv) doslovno kaze "...naslove potpoglavlja
+3. **`grf-diplomski--font`.** Izvor (.doc, sada citljiv) glasi "Pismo: obavezna je upotreba svih
+   hrvatskih znakova – Times New Roman ili Arial", a citat je odsjecen prije fontova. Isti razred kao
+   fhs i ttf. Produziti citat do imena fontova.
+
+4. **`vevu-diplomski--font-size`.** Izvor (.docx, sada citljiv) doslovno kaze "...naslove potpoglavlja
    malim slovima 12 pt Bold, a obican tekst 12 pt", a citat je preskocio bas tu recenicu. Produziti
    citat tom recenicom.
 
-4. **63 retka tudjeg rada u `e44a69c`.** Sweep je upao izmedju moje izmjene i commita, pa su
+5. **63 retka tudjeg rada u `e44a69c`.** Sweep je upao izmedju moje izmjene i commita, pa su
    `modality`/`scope`/`modalitySource` iz `kif.json` i `ttf.json` zavrsili pod mojom porukom. Nista
    nije izgubljeno. Povijest NIJE prepravljana jer bi `--amend` u dijeljenom stablu mogao pojesti
    commit druge sesije. Odluka vlasnika.
 
 ### 2.2 Ceka autorsku odluku, nije kvar alata
 
-- **4 pravila kojima citat ne nosi vlastitu vrijednost, a izvor se ne moze strojno procitati:**
-  `grf-diplomski--font` (.doc), `ffri-povum-{diplomski,zavrsni}--footnote-size` (potpuno skeniran PDF,
-  nula znakova teksta). `.doc` je OLE binarni format; citanje bi trazilo novu ovisnost ili OCR.
-- **4 odsjecena citata koji imenuju stvarno izuzece**, ali nijedan ne cini pravilo prestrogim jer
-  motor mjeri dominantnu vrijednost. Svaki pokazuje odredbu koju profil ne zapisuje:
-  `hks-diplomski` (biljeske 10 pt, prored jednostruk, naslovi lijevo) i `ffzg-filozofija-diplomski`
-  (naslovnica, sadrzaj i sazeci se ne numeriraju). Dodavanje pravila je autorski posao.
-- **143 nedoslovna prijepisa.** Uzorak procitan: citat sazima natucnicki popis u recenicu, sve
+- **2 pravila kojima citat ne nosi vlastitu vrijednost, a izvor se ne moze procitati:**
+  `ffri-povum-{diplomski,zavrsni}--footnote-size` (potpuno skeniran PDF, nula znakova teksta). Trazilo
+  bi OCR. Preostala dva (`grf`, `vevu`) imaju sada citljiv izvor i cekaju samo upis, vidi 2.1.
+- **8 odsjecenih citata koji imenuju stvarno izuzece**, ali nijedan ne cini pravilo prestrogim jer
+  motor mjeri dominantnu vrijednost. Svaki pokazuje odredbu koju profil ne zapisuje: `hks-diplomski`
+  (biljeske 10 pt, prored jednostruk, naslovi lijevo), `ffzg-filozofija-diplomski` (naslovnica,
+  sadrzaj i sazeci se ne numeriraju) i `pmf-fizika-graduate` (uz slike i tablice velicina slova je 11,
+  ne 12). Dodavanje pravila je autorski posao.
+- **147 nedoslovnih prijepisa.** Uzorak procitan: citat sazima natucnicki popis u recenicu, sve
   vrijednosti su na mjestu. Gubi se sljedivost, ne bodovanje. Preporuka: NE prepisivati ih. Citat se
   studentu nikad ne prikazuje; u proizvodu je VRATA (`sourceId && sourcePage && quote` otkljucava
   ponude asistiranog popravka) i ne izlazi kroz izvoz prema Katedri.
@@ -109,8 +114,14 @@ fakultetom. Svako suzenje je izmjereno na svim nalazima tog reda, ne procijenjen
 | vrijednost ne stoji u citatu | citat ne spominje ono sto pravilo boduje |
 | predlozak | tvrdnja o XML-u nije potvrdjena u opsegu na koji se poziva |
 
-NE mjeri: `.doc`, `.html`, `.rar` izvore (341 pravilo), i `citation-style` os kod provjere
-vrijednosti (token je kanonska klasifikacija koju je covjek izveo iz opisa).
+NE mjeri: `.html` (7 pravila, pune web stranice s izbornicima pa je omjer suma i koristi slab) i
+`.rar` (6 pravila). Ukupno 154 nerevidirana. Ne mjeri ni `citation-style` os kod provjere vrijednosti
+(token je kanonska klasifikacija koju je covjek izveo iz opisa).
+
+Izvori se citaju iz tri formata: PDF (fitz), `.docx` (zip + XML) i naslijedjeni `.doc` (OLE, tablica
+komada). Kvaliteta izvlacenja se ne pretpostavlja nego mjeri OMJEROM: 187 novoprocitanih `.doc`
+pravila dalo je 6 nalaza (97 posto cisto), a 202 `.docx` pravila 34 nalaza (83 posto). Ostecen
+izvlacen tekst dao bi desetke.
 
 ---
 
