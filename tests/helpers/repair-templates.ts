@@ -53,8 +53,15 @@ export function paragraph(text: string, style?: string): string {
   return `<w:p>${pPr}<w:r><w:t>${text}</w:t></w:r></w:p>`;
 }
 
-export function documentXml(body: string, finalSection = true): string {
-  const sectPr = finalSection ? '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1417" w:right="1417" w:bottom="1417" w:left="1417"/></w:sectPr>' : '';
+/**
+ * `sectPrExtra` ide na POCETAK `w:sectPr` jer ondje po ECMA-376 stoje reference na zaglavlje i
+ * podnozje. Bez njega je podnozje u paketu SIROCE: dio postoji i veza u `document.xml.rels` postoji,
+ * ali ga nijedna sekcija ne referencira, pa ga Word nikad ne prikaze. Analiza od DOCX-06 takav dio
+ * NE priznaje kao broj stranice, pa fixture bez ove reference vise ne opisuje dokument nad kojim se
+ * provjera poravnanja uopce izvodi.
+ */
+export function documentXml(body: string, finalSection = true, sectPrExtra = ''): string {
+  const sectPr = finalSection ? `<w:sectPr>${sectPrExtra}<w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1417" w:right="1417" w:bottom="1417" w:left="1417"/></w:sectPr>` : '';
   return `<w:document ${DOCUMENT_NS}><w:body>${body}${sectPr}</w:body></w:document>`;
 }
 

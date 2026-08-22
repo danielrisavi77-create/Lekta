@@ -135,7 +135,10 @@ describe('Repair Engine closed-loop: page-number-alignment-fixer', () => {
     await runClosedLoopCase({
       label: `page-number-alignment/${profileId}`,
       profileId,
-      buildBrokenDocx: () => packageDoc({ documentXml: documentXml(paragraph('Tijelo teksta rada.')), stylesXml, footerXml }),
+      // `rId2` je veza koju `packageDoc` sam upise kad dobije `footerXml`. Bez ove reference podnozje
+      // je siroce (DOCX-06) pa se `Polozaj broja stranice` uopce ne izvodi, a zatvorena petlja onda
+      // ne mjeri popravak nego odsutnost provjere.
+      buildBrokenDocx: () => packageDoc({ documentXml: documentXml(paragraph('Tijelo teksta rada.'), true, '<w:footerReference w:type="default" r:id="rId2"/>'), stylesXml, footerXml }),
       buildItems: (before, p) => pageNumberAlignmentRepairableItem(before.checks ?? [], p),
       targetTitles: [CHECK_TITLES['page-number-alignment']],
     });
