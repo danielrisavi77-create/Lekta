@@ -302,13 +302,69 @@ def docx_text(path: str) -> str:
     except Exception:
         return ""
 
+# Naslijedjeni `.doc` (Word 97, OLE) nosi jos 187 bodovanih pravila. Cita se preko TABLICE KOMADA
+# (piece table) iz CLX zapisa, ne heuristickim skupljanjem citljivih nizova: samo tako se dobije
+# tocan tekst s dijakritikom i bez ostataka strukture. Provjereno prije ugradnje na grf, fesb i fer;
+# na grf-u je poznat profilni citat prisutan u izvucenom tekstu.
+#
+# Polja (`\x13 instrukcija \x14 rezultat \x15`) se odbacuju do rezultata: instrukcija je kod, ne
+# vidljivi tekst, pa bi inace "PAGE" i "TOC" ulazili u usporedbu citata.
+_DOC_CONTROL = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f]")
+
+
+def doc97_text(path: str) -> str:
+    """Vidljivi tekst naslijedjenog .doc paketa. Prazan string ako se ne moze procitati."""
+    try:
+        import struct
+
+        import olefile
+
+        ole = olefile.OleFileIO(path)
+        try:
+            stream = ole.openstream("WordDocument").read()
+            table_name = "1Table" if (struct.unpack_from("<H", stream, 0x0A)[0] & 0x0200) else "0Table"
+            if not ole.exists(table_name):
+                return ""
+            table = ole.openstream(table_name).read()
+            fc_clx, lcb_clx = struct.unpack_from("<II", stream, 0x01A2)
+            clx = table[fc_clx : fc_clx + lcb_clx]
+            at = 0
+            while at < len(clx) and clx[at] == 1:  # Prc zapisi prije tablice komada
+                at += 3 + struct.unpack_from("<H", clx, at + 1)[0]
+            if at >= len(clx) or clx[at] != 2:
+                return ""
+            size = struct.unpack_from("<I", clx, at + 1)[0]
+            pcdt = clx[at + 5 : at + 5 + size]
+            pieces = (len(pcdt) - 4) // 12
+            cps = [struct.unpack_from("<I", pcdt, 4 * k)[0] for k in range(pieces + 1)]
+            chunks: list[str] = []
+            for k in range(pieces):
+                fc = struct.unpack_from("<I", pcdt, 4 * (pieces + 1) + 8 * k + 2)[0]
+                compressed, offset = bool(fc & 0x40000000), fc & 0x3FFFFFFF
+                length = cps[k + 1] - cps[k]
+                if compressed:
+                    chunks.append(stream[offset // 2 : offset // 2 + length].decode("cp1252", "replace"))
+                else:
+                    chunks.append(stream[offset : offset + 2 * length].decode("utf-16-le", "replace"))
+            text = "".join(chunks)
+        finally:
+            ole.close()
+    except Exception:
+        return ""
+    text = re.sub(r"\x13[^\x14\x15]*[\x14\x15]?", " ", text)  # kod polja, ne vidljivi tekst
+    return squash(_DOC_CONTROL.sub(" ", text))
+
+
+
 def document_text(rel_path: str) -> str:
-    """Spojeni tekst izvora (PDF ili .docx), normaliziran. Prazan string ako se ne moze procitati."""
+    """Spojeni tekst izvora (PDF, .docx ili naslijedjeni .doc), normaliziran. Prazan ako se ne cita."""
     if rel_path in _doc_text:
         return _doc_text[rel_path]
     text = ""
     path = os.path.join(ROOT, rel_path.replace("/", os.sep))
-    if os.path.exists(path) and path.lower().endswith(".docx"):
+    if os.path.exists(path) and path.lower().endswith(".doc"):
+        text = doc97_text(path)
+    elif os.path.exists(path) and path.lower().endswith(".docx"):
         text = docx_text(path)
     elif os.path.exists(path) and path.lower().endswith(".pdf"):
         try:
@@ -831,7 +887,7 @@ def main() -> None:
                         }
                     )
 
-        if not rel.lower().endswith((".pdf", ".docx")):
+        if not rel.lower().endswith((".pdf", ".docx", ".doc")):
             # .doc / .docx / .html / .rar se ovdje NE citaju. Prijavljuje se kao NEREVIDIRANO, ne kao
             # uredno: sutnja o neprovjerenom je isti kvar kao lazno zeleno.
             unreadable += 1

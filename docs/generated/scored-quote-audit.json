@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "audited": 1593,
-  "unreadable": 341,
+  "audited": 1780,
+  "unreadable": 154,
   "findings": [
     {
       "profileId": "agr-doktorski",
@@ -100,6 +100,50 @@
       "quote": "Za citiranje u tekstu rada treba koristiti APA stil citiranja.",
       "problems": [
         "citat nije doslovan prijepis (podudaranje rijeci 78%)"
+      ]
+    },
+    {
+      "profileId": "fesb-diplomski",
+      "ruleId": "fesb-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "sourceId": "fesb-upute-diplomski-2017",
+      "snapshot": "data/sources/fesb/fesb-upute-diplomski-2017.doc",
+      "quote": "Stranice teksta rada moraju biti numerirane, navodjenjem broja stranice u njezinom donjem, desnom uglu, pri cemu numeracija stranica zapocinje od prvog poglavlja (Uvod).",
+      "problems": [
+        "citat nije doslovan prijepis (podudaranje rijeci 82%)"
+      ]
+    },
+    {
+      "profileId": "fesb-diplomski",
+      "ruleId": "fesb-diplomski--citation-style",
+      "checkId": "citation-style",
+      "sourceId": "fesb-upute-diplomski-2017",
+      "snapshot": "data/sources/fesb/fesb-upute-diplomski-2017.doc",
+      "quote": "Vlastiti brojcani sustav referenciranja: bilješke se oznacavaju brojevima u uglatim zagradama [1] redoslijedom pojavljivanja, popis izvora na kraju rada istim redoslijedom (Prezime, I.: \"Naslov\", Izda",
+      "problems": [
+        "citat nije doslovan prijepis (podudaranje rijeci 17%)"
+      ]
+    },
+    {
+      "profileId": "fesb-zavrsni",
+      "ruleId": "fesb-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "sourceId": "fesb-upute-zavrsni-2017",
+      "snapshot": "data/sources/fesb/fesb-upute-zavrsni-2017.doc",
+      "quote": "Stranice teksta rada moraju biti numerirane, navodjenjem broja stranice u njezinom donjem, desnom uglu, pri cemu numeracija stranica zapocinje od prvog poglavlja (Uvod).",
+      "problems": [
+        "citat nije doslovan prijepis (podudaranje rijeci 82%)"
+      ]
+    },
+    {
+      "profileId": "fesb-zavrsni",
+      "ruleId": "fesb-zavrsni--citation-style",
+      "checkId": "citation-style",
+      "sourceId": "fesb-upute-zavrsni-2017",
+      "snapshot": "data/sources/fesb/fesb-upute-zavrsni-2017.doc",
+      "quote": "Vlastiti brojcani sustav referenciranja: bilješke se oznacavaju brojevima u uglatim zagradama [1] redoslijedom pojavljivanja, popis izvora na kraju rada istim redoslijedom - sustav je potpuno definira",
+      "problems": [
+        "citat nije doslovan prijepis (podudaranje rijeci 12%)"
       ]
     },
     {
@@ -815,6 +859,17 @@
       "quote": "Diplomski rad mora sadrzavati sljedea poglavlja ili dijelove",
       "problems": [
         "citat nije doslovan prijepis (podudaranje rijeci 71%)"
+      ]
+    },
+    {
+      "profileId": "pmf-fizika-graduate",
+      "ruleId": "pmf-fizika-graduate--font-size",
+      "checkId": "font-size",
+      "sourceId": "pmf-phy-upute-diplomski-2014",
+      "snapshot": "data/sources/pmf/pmf-phy-diplomski-upute.doc",
+      "quote": "za tijelo teksta koristiti veličinu 12 pt",
+      "problems": [
+        "citat odsjecen, recenica se nastavlja: uz slike, grafikone i tablice koristiti prored 1,0 (ne 1,5 kao u ostalom tekstu), a veličina slova je 11 (ne 1"
       ]
     },
     {
