@@ -100,6 +100,31 @@
       "decidedBy": "Claude Opus 5 (1M context)",
       "decidedAt": "2026-08-22",
       "rationale": "Nema sto ispraviti: vrijednosti pravila odgovaraju izvoru, a rep ne mijenja njihovu os. Dodatno suzavanje rjecnika trazilo bi razlikovanje fraza, sto bi se prilagodilo bas ovim trima recenicama. Biljezi se da ih sljedeca revizija ne prijavi kao nove."
+    },
+    {
+      "ruleIds": [
+        "fer-diplomski--citation-style",
+        "fer-zavrsni--citation-style"
+      ],
+      "finding": "vrijednost se ne izvodi iz citata (citat ne spominje IEEE)",
+      "evidence": "fer-upute-diplomski-zemris, odjeljak 3.8. Pozivanje na literaturu. Citat glasi: \"Ako je jako bitno, u tekst se moze izravno staviti referenca na neku literaturu (ne samo preko broja u literaturi, kao ,,[x]\\\"\". Iz njega se izvodi samo to da se izvor navodi BROJEM U UGLATIM ZAGRADAMA, a ne cijeli IEEE stil (redoslijed i oblik autora, interpunkcija, obavezna polja). Nijedan drugi FER izvor u registru ne imenuje IEEE.",
+      "alsoNoted": "Status je bio advisory pa pravilo NIJE bodovalo, ali `rules.recommendedCitation` odredjuje koji citatni motor radi nad dokumentom, pa je ucinak postojao neovisno o statusu. Isti obrazac (advisory citation-style koji ipak konfigurira motor) ima jos 8 profila: fsb-diplomski, fsb-zavrsni, fsb-opci-akademski-rad, grad-diplomski, grad-zavrsni, grf-diplomski, grf-zavrsni, pmf-matematika-graduate. Oni NISU dirani ovom odlukom. Zaseban, jos neodlucen nalaz: fer-doktorski--citation-style = \"harvard\" stoji na fragmentu \"dominantna u pojedinoj struci (harvardski stil,\", sto je delegiranje struci, ne propis.",
+      "decision": "value-corrected",
+      "decidedBy": "Daniel Risavi (odluka u sesiji 2026-08-22)",
+      "decidedAt": "2026-08-22",
+      "rationale": "Vrijednost je spustena s \"ieee\" na \"custom\" (citationMeta label \"Prema posebnim uputama\") u draftu i u sva tri registra. Bodovno je neutralno: citationMeta mapira i ieee (mode numeric) i custom (mode custom) u istu granu analyzeDocx, pa se ocjena ne mice; mijenja se samo tvrdnja koju alat izgovara korisniku. Alternativa \"izbrisati polje\" je odbacena jer bi tada vrijedio korisnikov zatecen odabir stila, sto je losije od izricitog \"ne znamo tocan stil\"."
+    },
+    {
+      "ruleIds": [
+        "alu-kiparstvo-diplomski--paper-size"
+      ],
+      "finding": "kvalifikator u citatu bodovanog pravila",
+      "evidence": "alu-pravilnik-diplomski-2014.pdf: \"Pisano obrazlozenje ispisuje se u POLOZENOM formatu A4\". Kvalifikator je tocan, ali IZMJERENO je da nema posljedicu na bodovanje: analiza istog sinteticnog rada daje \"Format stranice A4: pass 3/3\" i za 29,7 x 21 cm (polozeno) i za 21 x 29,7 cm (uspravno), jer provjera formata usporedjuje dimenzije bez obzira na redoslijed.",
+      "alsoNoted": "Ako se provjera formata ikad pooštri na orijentaciju, ovaj nalaz postaje stvaran i treba ga ponovno otvoriti.",
+      "decision": "left-scored",
+      "decidedBy": "Claude Opus 5 (1M context)",
+      "decidedAt": "2026-08-22",
+      "rationale": "Nalaz je tocan po citatu, ali ne moze pomaknuti ocjenu, pa nema sto ispraviti u podacima."
     }
   ]
 }

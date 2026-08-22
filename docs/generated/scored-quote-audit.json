@@ -15,39 +15,6 @@
       ]
     },
     {
-      "profileId": "alu-kiparstvo-diplomski",
-      "ruleId": "alu-kiparstvo-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "alu-pravilnik-diplomski-2014",
-      "snapshot": "data/sources/alu/alu-pravilnik-diplomski-2014.pdf",
-      "quote": "Pisano obrazlozenje... najmanje 10 a najvise 20 kartica pisanog teksta sa obrazlozenjem rada pisano velicinom slova od 12 tocaka i klasicnim proredom... Pisano obrazlozenje ispisuje se u polozenom for",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "alu-kiparstvo-diplomski",
-      "ruleId": "alu-kiparstvo-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "alu-pravilnik-diplomski-2014",
-      "snapshot": "data/sources/alu/alu-pravilnik-diplomski-2014.pdf",
-      "quote": "Pisano obrazlozenje... najmanje 10 a najvise 20 kartica pisanog teksta sa obrazlozenjem rada pisano velicinom slova od 12 tocaka i klasicnim proredom... Pisano obrazlozenje ispisuje se u polozenom for",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "alu-slikarstvo-diplomski",
-      "ruleId": "alu-slikarstvo-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "alu-pravilnik-diplomski-2014",
-      "snapshot": "data/sources/alu/alu-pravilnik-diplomski-2014.pdf",
-      "quote": "Pisano obrazlozenje sadrzi: najmanje 5 a najvise 15 kartica pisanog teksta pisanih velicinom slova od 12 tocaka, klasicnim proredom i ilustrativnim pregledom radova.",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
       "profileId": "efri-diplomski",
       "ruleId": "efri-diplomski--paper-size",
       "checkId": "paper-size",
@@ -287,28 +254,6 @@
       "quote": "Za citiranje u tekstu rada treba koristiti APA stil citiranja.",
       "problems": [
         "citat se NE nalazi u dokumentu (podudaranje 78%)"
-      ]
-    },
-    {
-      "profileId": "ferit-diplomski",
-      "ruleId": "ferit-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "ferit-upute-diplomski",
-      "snapshot": "data/sources/ferit/ferit-upute-diplomski.pdf",
-      "quote": "Rad se piše na računalu (preporuča se MS Word) uz prored od 1,5. Pri obradi teksta potrebno je koristiti font Times Roman 12 pt (ili 10opi).",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'preporuča'"
-      ]
-    },
-    {
-      "profileId": "ferit-zavrsni",
-      "ruleId": "ferit-zavrsni--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "ferit-upute-zavrsni-2010",
-      "snapshot": "data/sources/ferit/ferit-upute-zavrsni-2010.pdf",
-      "quote": "Rad se piše na računalu (preporuča se MS Word) uz prored od 1,5. Pri obradi teksta potrebno je koristiti font Times Roman 12 pt (ili 10opi).",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'preporuča'"
       ]
     },
     {
@@ -1027,61 +972,6 @@
       ]
     },
     {
-      "profileId": "fizri-diplomski",
-      "ruleId": "fizri-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "fizri-pravilnik-radovi-2023",
-      "snapshot": "data/sources/fizri/fizri.pdf",
-      "quote": "Diplomski rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30 stranica. Preporuča se da diplomski rad ima najviše 100 stranica. Glavni tekst mora imat",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "fizri-zavrsni",
-      "ruleId": "fizri-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "fizri-pravilnik-radovi-2023",
-      "snapshot": "data/sources/fizri/fizri.pdf",
-      "quote": "Završni rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 15, a najviše 30 stranica teksta. Glavni tekst mora imati veličinu slova 12 i širinu proreda ",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "forenzika-diplomski",
-      "ruleId": "forenzika-diplomski--font",
-      "checkId": "font",
-      "sourceId": "forenzika-pravilnik-diplomski",
-      "snapshot": "data/sources/forenzika/forenzika-pravilnik-diplomski.pdf",
-      "quote": "Tekst se piše proredom od 1,5 reda, stilom Times New Roman i veličinom slova 12 pri čemu rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz obostrano poravnavanje teksta.",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "forenzika-diplomski",
-      "ruleId": "forenzika-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "forenzika-pravilnik-diplomski",
-      "snapshot": "data/sources/forenzika/forenzika-pravilnik-diplomski.pdf",
-      "quote": "Tekst se piše proredom od 1,5 reda, stilom Times New Roman i veličinom slova 12 pri čemu rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz obostrano poravnavanje teksta.",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "forenzika-diplomski",
-      "ruleId": "forenzika-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "forenzika-pravilnik-diplomski",
-      "snapshot": "data/sources/forenzika/forenzika-pravilnik-diplomski.pdf",
-      "quote": "Tekst se piše proredom od 1,5 reda, stilom Times New Roman i veličinom slova 12 pri čemu rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz obostrano poravnavanje teksta.",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
       "profileId": "forenzika-diplomski",
       "ruleId": "forenzika-diplomski--margins",
       "checkId": "margins",
@@ -1178,28 +1068,6 @@
       "quote": "poravnanje – obostrano",
       "problems": [
         "citat se NE nalazi u dokumentu (podudaranje 0%)"
-      ]
-    },
-    {
-      "profileId": "logri-diplomski",
-      "ruleId": "logri-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "logri-smjernice-radovi",
-      "snapshot": "data/sources/logri/logri-smjernice-studentski-radovi.pdf",
-      "quote": "FONT: preporuča se upotreba fonta koji podržava znakove hrvatske latinice (npr. Arial, Calibri, Times New Roman); VELIČINA FONTA: 12; PRORED: 1,5 pt; MARGINE: Normalne (2.5 cm vrh, 2.5 cm dno, 2.5 cm ",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'preporuča'"
-      ]
-    },
-    {
-      "profileId": "logri-diplomski",
-      "ruleId": "logri-diplomski--page-numbers",
-      "checkId": "page-numbers",
-      "sourceId": "logri-smjernice-radovi",
-      "snapshot": "data/sources/logri/logri-smjernice-studentski-radovi.pdf",
-      "quote": "FONT: preporuča se upotreba fonta koji podržava znakove hrvatske latinice (npr. Arial, Calibri, Times New Roman); VELIČINA FONTA: 12; PRORED: 1,5 pt; MARGINE: Normalne (2.5 cm vrh, 2.5 cm dno, 2.5 cm ",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'preporuča'"
       ]
     },
     {
@@ -1335,50 +1203,6 @@
       ]
     },
     {
-      "profileId": "mefst-diplomski",
-      "ruleId": "mefst-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "mefst-uputa-diplomski-2021",
-      "snapshot": "data/sources/mefst/mefst-uputa-diplomski-2021.pdf",
-      "quote": "Margine: Normal (gornja: 2,5 cm; donja: 2,5 cm; lijeva 2,5 cm; desna: 2.5 cm), Orijentacija: Portrait, Veličina: A4 (21.0 cm x 29.7 cm)",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'Portrait'"
-      ]
-    },
-    {
-      "profileId": "mefst-diplomski",
-      "ruleId": "mefst-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "mefst-uputa-diplomski-2021",
-      "snapshot": "data/sources/mefst/mefst-uputa-diplomski-2021.pdf",
-      "quote": "Margine: Normal (gornja: 2,5 cm; donja: 2,5 cm; lijeva 2,5 cm; desna: 2.5 cm), Orijentacija: Portrait, Veličina: A4 (21.0 cm x 29.7 cm)",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'Portrait'"
-      ]
-    },
-    {
-      "profileId": "oss-diplomski",
-      "ruleId": "oss-diplomski--required-sections",
-      "checkId": "required-sections",
-      "sourceId": "oss-upute-drustveni",
-      "snapshot": "data/sources/oss/oss-upute-drustveni.pdf",
-      "quote": "Završni rad sadrži sljedeće dijelove: naslovna stranica, prva stranica, sadržaj, naslov i sažetak (na hrvatskom, odnosno engleskom jeziku), uvod, izlaganje tematike (u pravilu sadrži oko pet analitičk",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'u pravilu'"
-      ]
-    },
-    {
-      "profileId": "oss-zavrsni",
-      "ruleId": "oss-zavrsni--required-sections",
-      "checkId": "required-sections",
-      "sourceId": "oss-upute-drustveni",
-      "snapshot": "data/sources/oss/oss-upute-drustveni.pdf",
-      "quote": "Završni rad sadrži sljedeće dijelove: naslovna stranica, prva stranica, sadržaj, naslov i sažetak (na hrvatskom, odnosno engleskom jeziku), uvod, izlaganje tematike (u pravilu sadrži oko pet analitičk",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'u pravilu'"
-      ]
-    },
-    {
       "profileId": "pbf-diplomski",
       "ruleId": "pbf-diplomski--required-sections",
       "checkId": "required-sections",
@@ -1486,28 +1310,6 @@
       "quote": "Biljeske (fusnote) - velicina fonta: 10",
       "problems": [
         "citat se NE nalazi u dokumentu (podudaranje 75%)"
-      ]
-    },
-    {
-      "profileId": "rrif-zavrsni",
-      "ruleId": "rrif-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "rrif-upute-zavrsni",
-      "snapshot": "data/sources/rrif/rrif-upute-zavrsni.pdf",
-      "quote": "Završni rad piše se u Microsoft Word Windows programu. Opseg rada je najmanje 30, a najviše 50 tiskanih stranica A4 formata, jednostrano. Rad treba biti napisan u skladu s jezičnim i pravopisnim pravi",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "rrif-zavrsni",
-      "ruleId": "rrif-zavrsni--justify",
-      "checkId": "justify",
-      "sourceId": "rrif-upute-zavrsni",
-      "snapshot": "data/sources/rrif/rrif-upute-zavrsni.pdf",
-      "quote": "Završni rad piše se u Microsoft Word Windows programu. Opseg rada je najmanje 30, a najviše 50 tiskanih stranica A4 formata, jednostrano. Rad treba biti napisan u skladu s jezičnim i pravopisnim pravi",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
       ]
     },
     {
@@ -1830,94 +1632,6 @@
       ]
     },
     {
-      "profileId": "unidu-komunikologija-diplomski",
-      "ruleId": "unidu-komunikologija-diplomski--font",
-      "checkId": "font",
-      "sourceId": "unidu-komunikologija-upute-2025",
-      "snapshot": "data/sources/unidu/unidu-komunikologija-upute-2025.pdf",
-      "quote": "veličina slova u tekstu (font size) treba biti 12 točaka, dok naslovi i podnaslovi trebaju biti nešto veći (14 ili 16 točaka), prored (line spacing) treba biti 1,5 u glavnom tekstu rada, jednostruki (",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'može'"
-      ]
-    },
-    {
-      "profileId": "unidu-komunikologija-diplomski",
-      "ruleId": "unidu-komunikologija-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "unidu-komunikologija-upute-2025",
-      "snapshot": "data/sources/unidu/unidu-komunikologija-upute-2025.pdf",
-      "quote": "veličina slova u tekstu (font size) treba biti 12 točaka, dok naslovi i podnaslovi trebaju biti nešto veći (14 ili 16 točaka), prored (line spacing) treba biti 1,5 u glavnom tekstu rada, jednostruki (",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'može'"
-      ]
-    },
-    {
-      "profileId": "unidu-komunikologija-diplomski",
-      "ruleId": "unidu-komunikologija-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "unidu-komunikologija-upute-2025",
-      "snapshot": "data/sources/unidu/unidu-komunikologija-upute-2025.pdf",
-      "quote": "veličina slova u tekstu (font size) treba biti 12 točaka, dok naslovi i podnaslovi trebaju biti nešto veći (14 ili 16 točaka), prored (line spacing) treba biti 1,5 u glavnom tekstu rada, jednostruki (",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'može'"
-      ]
-    },
-    {
-      "profileId": "unidu-komunikologija-diplomski",
-      "ruleId": "unidu-komunikologija-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "unidu-komunikologija-upute-2025",
-      "snapshot": "data/sources/unidu/unidu-komunikologija-upute-2025.pdf",
-      "quote": "veličina slova u tekstu (font size) treba biti 12 točaka, dok naslovi i podnaslovi trebaju biti nešto veći (14 ili 16 točaka), prored (line spacing) treba biti 1,5 u glavnom tekstu rada, jednostruki (",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'može'"
-      ]
-    },
-    {
-      "profileId": "unidu-komunikologija-diplomski",
-      "ruleId": "unidu-komunikologija-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "unidu-komunikologija-upute-2025",
-      "snapshot": "data/sources/unidu/unidu-komunikologija-upute-2025.pdf",
-      "quote": "veličina slova u tekstu (font size) treba biti 12 točaka, dok naslovi i podnaslovi trebaju biti nešto veći (14 ili 16 točaka), prored (line spacing) treba biti 1,5 u glavnom tekstu rada, jednostruki (",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'može'"
-      ]
-    },
-    {
-      "profileId": "unidu-komunikologija-zavrsni",
-      "ruleId": "unidu-komunikologija-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "unidu-komunikologija-upute-zavrsni",
-      "snapshot": "data/sources/unidu/unidu-komunikologija-upute-zavrsni.pdf",
-      "quote": "Velicina slova u tekstu (font size) treba biti 12 tocaka. Prored treba biti 1,5 u glavnom tekstu rada. Vrsta slova (fonta) moze biti Times New Roman ili Arial. Tekst treba biti formatiran u blok (just",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'moze'"
-      ]
-    },
-    {
-      "profileId": "unidu-komunikologija-zavrsni",
-      "ruleId": "unidu-komunikologija-zavrsni--justify",
-      "checkId": "justify",
-      "sourceId": "unidu-komunikologija-upute-zavrsni",
-      "snapshot": "data/sources/unidu/unidu-komunikologija-upute-zavrsni.pdf",
-      "quote": "Velicina slova u tekstu (font size) treba biti 12 tocaka. Prored treba biti 1,5 u glavnom tekstu rada. Vrsta slova (fonta) moze biti Times New Roman ili Arial. Tekst treba biti formatiran u blok (just",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'moze'"
-      ]
-    },
-    {
-      "profileId": "unidu-komunikologija-zavrsni",
-      "ruleId": "unidu-komunikologija-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "unidu-komunikologija-upute-zavrsni",
-      "snapshot": "data/sources/unidu/unidu-komunikologija-upute-zavrsni.pdf",
-      "quote": "Velicina slova u tekstu (font size) treba biti 12 tocaka. Prored treba biti 1,5 u glavnom tekstu rada. Vrsta slova (fonta) moze biti Times New Roman ili Arial. Tekst treba biti formatiran u blok (just",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'moze'"
-      ]
-    },
-    {
       "profileId": "unizd-germanistika-diplomski",
       "ruleId": "unizd-germanistika-diplomski--font",
       "checkId": "font",
@@ -2237,28 +1951,6 @@
       ]
     },
     {
-      "profileId": "unizd-povijest-diplomski",
-      "ruleId": "unizd-povijest-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "unizd-povijest-upute-2012-diplomski",
-      "snapshot": "data/sources/unizd/unizd-povijest-upute-2012-diplomski.pdf",
-      "quote": "Rad se pise racunalom na papiru formata A-4 (210 x 297 mm); preporuca se uporaba pisma velicine 12 tocaka, te da odlomci imaju dvostruki prored. Margine su: 2,5 cm osim lijeve koja je 3,5 cm. Kod bilj",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'preporuca'"
-      ]
-    },
-    {
-      "profileId": "unizd-povijest-zavrsni",
-      "ruleId": "unizd-povijest-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "unizd-povijest-upute-2012",
-      "snapshot": "data/sources/unizd/unizd-povijest-upute-2012-zavrsni.pdf",
-      "quote": "Rad se pise racunalom na papiru formata A-4 (210 x 297 mm); preporuca se uporaba pisma velicine 12 tocaka, te da odlomci imaju dvostruki prored. Margine su: 2,5 cm osim lijeve koja je 3,5 cm. Kod bilj",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'preporuca'"
-      ]
-    },
-    {
       "profileId": "unizd-psihologija-diplomski",
       "ruleId": "unizd-psihologija-diplomski--font",
       "checkId": "font",
@@ -2314,72 +2006,6 @@
       ]
     },
     {
-      "profileId": "unizd-zdravstvo-diplomski",
-      "ruleId": "unizd-zdravstvo-diplomski--font",
-      "checkId": "font",
-      "sourceId": "unizd-zdravstvo-pravilnik-2022-diplomski",
-      "snapshot": "data/sources/unizd/unizd-zdravstvo-pravilnik-diplomski-2022.pdf",
-      "quote": "Diplomski rad, bez priloga, treba sadrzavati najmanje 20 kartica ispisanih fontom Times New Roman 12 Pt. Diplomski rad treba biti oblikovan prema uputama u Prilogu 4: format papira je A4.",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "unizd-zdravstvo-diplomski",
-      "ruleId": "unizd-zdravstvo-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-zdravstvo-pravilnik-2022-diplomski",
-      "snapshot": "data/sources/unizd/unizd-zdravstvo-pravilnik-diplomski-2022.pdf",
-      "quote": "Diplomski rad, bez priloga, treba sadrzavati najmanje 20 kartica ispisanih fontom Times New Roman 12 Pt. Diplomski rad treba biti oblikovan prema uputama u Prilogu 4: format papira je A4.",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "unizd-zdravstvo-diplomski",
-      "ruleId": "unizd-zdravstvo-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "unizd-zdravstvo-pravilnik-2022-diplomski",
-      "snapshot": "data/sources/unizd/unizd-zdravstvo-pravilnik-diplomski-2022.pdf",
-      "quote": "Diplomski rad, bez priloga, treba sadrzavati najmanje 20 kartica ispisanih fontom Times New Roman 12 Pt. Diplomski rad treba biti oblikovan prema uputama u Prilogu 4: format papira je A4.",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "unizd-zdravstvo-zavrsni",
-      "ruleId": "unizd-zdravstvo-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "unizd-zdravstvo-pravilnik-2022",
-      "snapshot": "data/sources/unizd/unizd-zdravstvo-pravilnik-zavrsni-2022.pdf",
-      "quote": "Zavrsni rad, bez priloga, treba sadrzavati najmanje 16 kartica ispisanih fontom Times New Roman 12 Pt. Zavrsni rad treba biti oblikovan prema uputama u Prilogu 4: format papira je A4.",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "unizd-zdravstvo-zavrsni",
-      "ruleId": "unizd-zdravstvo-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-zdravstvo-pravilnik-2022",
-      "snapshot": "data/sources/unizd/unizd-zdravstvo-pravilnik-zavrsni-2022.pdf",
-      "quote": "Zavrsni rad, bez priloga, treba sadrzavati najmanje 16 kartica ispisanih fontom Times New Roman 12 Pt. Zavrsni rad treba biti oblikovan prema uputama u Prilogu 4: format papira je A4.",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "unizd-zdravstvo-zavrsni",
-      "ruleId": "unizd-zdravstvo-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "unizd-zdravstvo-pravilnik-2022",
-      "snapshot": "data/sources/unizd/unizd-zdravstvo-pravilnik-zavrsni-2022.pdf",
-      "quote": "Zavrsni rad, bez priloga, treba sadrzavati najmanje 16 kartica ispisanih fontom Times New Roman 12 Pt. Zavrsni rad treba biti oblikovan prema uputama u Prilogu 4: format papira je A4.",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
       "profileId": "vef-diplomski",
       "ruleId": "vef-diplomski--toc",
       "checkId": "toc",
@@ -2388,72 +2014,6 @@
       "quote": "Na sljedeoj stranici slijedi sadrzaj, prema primjeru",
       "problems": [
         "citat se NE nalazi u dokumentu (podudaranje 67%)"
-      ]
-    },
-    {
-      "profileId": "veleknin-zavrsni",
-      "ruleId": "veleknin-zavrsni--justify",
-      "checkId": "justify",
-      "sourceId": "veleknin-upute-zavrsni-2020",
-      "snapshot": "data/sources/veleknin/veleknin.pdf",
-      "quote": "Opseg rada iznosi najmanje 20 stranica osnovnog teksta rada bez uvodnih stranica završnog rada, popisa literature i priloga. Format rada je A4. Margine rada trebaju iznositi 2,5 cm. Rad se piše fontom",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "vhzk-zavrsni",
-      "ruleId": "vhzk-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "vhzk-pravilnik-zavrsni-2022",
-      "snapshot": "data/sources/vhzk/vhzk.pdf",
-      "quote": "rad se piše veličinom slova 12 pt, prored 1,5 (preporučeni oblici fonta su Arial, Time News Roman ili Calibri); sve margine rada trebaju iznositi 2,5 cm; naslovi poglavlja pišu se velikim slovima veli",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'preporučeni'"
-      ]
-    },
-    {
-      "profileId": "vhzk-zavrsni",
-      "ruleId": "vhzk-zavrsni--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "vhzk-pravilnik-zavrsni-2022",
-      "snapshot": "data/sources/vhzk/vhzk.pdf",
-      "quote": "rad se piše veličinom slova 12 pt, prored 1,5 (preporučeni oblici fonta su Arial, Time News Roman ili Calibri); sve margine rada trebaju iznositi 2,5 cm; naslovi poglavlja pišu se velikim slovima veli",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'preporučeni'"
-      ]
-    },
-    {
-      "profileId": "vhzk-zavrsni",
-      "ruleId": "vhzk-zavrsni--justify",
-      "checkId": "justify",
-      "sourceId": "vhzk-pravilnik-zavrsni-2022",
-      "snapshot": "data/sources/vhzk/vhzk.pdf",
-      "quote": "rad se piše veličinom slova 12 pt, prored 1,5 (preporučeni oblici fonta su Arial, Time News Roman ili Calibri); sve margine rada trebaju iznositi 2,5 cm; naslovi poglavlja pišu se velikim slovima veli",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'preporučeni'"
-      ]
-    },
-    {
-      "profileId": "vsite-diplomski",
-      "ruleId": "vsite-diplomski--toc",
-      "checkId": "toc",
-      "sourceId": "vsite-pravilnik-2014",
-      "snapshot": "data/sources/vsite/vsite-pravilnik-2014.pdf",
-      "quote": "Završni rad studenta u pravilu ima 30-40 stranica, a diplomski rad 50-60 stranica. Rad je opremljen naslovnom stranicom, stranicom zadatka, sadržajem, zaključkom, popisom literature, sažetkom na hrvat",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'u pravilu'"
-      ]
-    },
-    {
-      "profileId": "vsite-zavrsni",
-      "ruleId": "vsite-zavrsni--toc",
-      "checkId": "toc",
-      "sourceId": "vsite-pravilnik-2014",
-      "snapshot": "data/sources/vsite/vsite-pravilnik-2014.pdf",
-      "quote": "Završni rad studenta u pravilu ima 30-40 stranica, a diplomski rad 50-60 stranica. Rad je opremljen naslovnom stranicom, stranicom zadatka, sadržajem, zaključkom, popisom literature, sažetkom na hrvat",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'u pravilu'"
       ]
     },
     {
@@ -2564,61 +2124,6 @@
       "quote": "Tehnicko ureenje rada. Pismo: Times New Roman. Font: 12. Poravnanje teksta: obostrano. Razmak izmeu redova: 1,5.",
       "problems": [
         "citat se NE nalazi u dokumentu (podudaranje 69%)"
-      ]
-    },
-    {
-      "profileId": "zsem-diplomski",
-      "ruleId": "zsem-diplomski--heading-rules",
-      "checkId": "heading-rules",
-      "sourceId": "zsem-pravilnik-diplomski-2023",
-      "snapshot": "data/sources/zsem/zsem-pravilnik-diplomski-2023.pdf",
-      "quote": "Naslovi poglavlja i potpoglavlja moraju biti kratki i jasni, te redom numerirani arapskim brojevima, najvise do tri (3) razine, ali ne vise od toga (Primjer 1., 1.1., 1.1.1.).",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najvise'"
-      ]
-    },
-    {
-      "profileId": "zsem-zavrsni-en",
-      "ruleId": "zsem-zavrsni-en--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "zsem-pravilnik-zavrsni-2023",
-      "snapshot": "data/sources/zsem/zsem-pravilnik-zavrsni-2023.pdf",
-      "quote": "Zavrsni rad treba biti napisan na racunalu u formatu A4 u pravilu na ne manje od 30 stranica sadrzaja. Prilikom pisanja koristi se font Times New Roman, size 12, obostrano poravnavanje teksta, razmak ",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'u pravilu'"
-      ]
-    },
-    {
-      "profileId": "zsem-zavrsni-en",
-      "ruleId": "zsem-zavrsni-en--justify",
-      "checkId": "justify",
-      "sourceId": "zsem-pravilnik-zavrsni-2023",
-      "snapshot": "data/sources/zsem/zsem-pravilnik-zavrsni-2023.pdf",
-      "quote": "Zavrsni rad treba biti napisan na racunalu u formatu A4 u pravilu na ne manje od 30 stranica sadrzaja. Prilikom pisanja koristi se font Times New Roman, size 12, obostrano poravnavanje teksta, razmak ",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'u pravilu'"
-      ]
-    },
-    {
-      "profileId": "zsem-zavrsni",
-      "ruleId": "zsem-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "zsem-pravilnik-zavrsni-2023",
-      "snapshot": "data/sources/zsem/zsem-pravilnik-zavrsni-2023.pdf",
-      "quote": "Zavrsni rad treba biti napisan na racunalu u formatu A4 u pravilu na ne manje od 30 stranica sadrzaja. Prilikom pisanja koristi se font Times New Roman, size 12, obostrano poravnavanje teksta, razmak ",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'u pravilu'"
-      ]
-    },
-    {
-      "profileId": "zsem-zavrsni",
-      "ruleId": "zsem-zavrsni--justify",
-      "checkId": "justify",
-      "sourceId": "zsem-pravilnik-zavrsni-2023",
-      "snapshot": "data/sources/zsem/zsem-pravilnik-zavrsni-2023.pdf",
-      "quote": "Zavrsni rad treba biti napisan na racunalu u formatu A4 u pravilu na ne manje od 30 stranica sadrzaja. Prilikom pisanja koristi se font Times New Roman, size 12, obostrano poravnavanje teksta, razmak ",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'u pravilu'"
       ]
     }
   ]

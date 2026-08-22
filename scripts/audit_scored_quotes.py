@@ -436,27 +436,93 @@ def value_atoms(value) -> list[str]:
     return [a for a in out if a]
 
 
-def hedge_on_own_clause(quote: str, value, check_id: str) -> str | None:
-    """Kvalifikator se prijavljuje SAMO ako stoji u istoj recenici kao vrijednost pravila.
+# Imenice po kojima se prepoznaje O CEMU kvalifikator govori. Sire od AXIS_WORDS, jer nastavak zna
+# govoriti o osi koja se uopce ne boduje (opseg, alat), a upravo to je najcesci lazan nalaz.
+GOVERNED_AXES = dict(AXIS_WORDS)
+GOVERNED_AXES.update(
+    {
+        "page-count": r"stranic\w*|kartic\w*|opseg",
+        "word-count": r"rije[cč]\w*|znakov\w*",
+        "reference-count": r"navod\w*|referenc\w*",
+        "_alat": r"ms word|microsoft word|ra[cč]unal\w*|program\w*",
+    }
+)
 
-    Bez ovog suzenja provjera je dala 43 nalaza od kojih je citanjem izvora 35 ispalo lazno, uvijek
-    istim obrascem: citat obuhvaca vise recenica, ublazavanje pripada onoj o OPSEGU, a odredba o
-    obliku stoji u drugoj i nosi "mora" ili goli indikativ. Primjer (fizri): "Diplomski rad MORA
-    biti otisnut ... na papiru formata A4 ... PREPORUCA SE da diplomski rad ima najvise 100 stranica.
-    Glavni tekst MORA imati velicinu slova 12". Ublazavanje se odnosi na 100 stranica, a bodovani su
-    format, velicina i prored, svi s "mora".
+# Uspravna orijentacija je ono sto provjera formata ionako pretpostavlja, pa je "Portrait" potvrda,
+# ne izmjena. Opasan je samo POLOZENI format (zamijenjene dimenzije), zbog kojeg je rijec i usla u
+# rjecnik. Izmjereno na mefst-uputa-diplomski-2021: "Orijentacija: Portrait, Velicina: A4".
+UPRIGHT_ORIENTATION = re.compile(r"^(uspravn\w*|portrait)$", re.I)
+
+# Koliko znakova iza kvalifikatora se gleda cime on upravlja. Recenica specifikacije nabraja osi
+# gusto, pa dulji doseg pocinje hvatati sljedecu natuknicu.
+HEDGE_REACH = 60
+
+
+def bound_atoms(value) -> set[str]:
+    """Brojevi koje pravilo vec drzi kao GRANICU (`min*`, `max*`).
+
+    "najvise do tri (3) razine" uz `maxLevel: 3` nije ublazavanje nego iskaz same granice, isto kao
+    "najmanje 30 stranica" kod opsega. Bez ovoga bi svako pravilo s gornjom medjom prijavljivalo
+    vlastitu odredbu kao ublazavanje. Margine NISU takav slucaj: ondje su kljucevi strane
+    (top/right/bottom/left), pa "najmanje 2,5 cm" ostaje stvaran nalaz jer engine trazi tocno 2,5.
+    """
+    out: set[str] = set()
+    if isinstance(value, dict):
+        for key, sub in value.items():
+            if re.match(r"^(min|max)", str(key), re.I):
+                out.update(value_atoms(sub))
+            else:
+                out.update(bound_atoms(sub))
+    elif isinstance(value, list):
+        for sub in value:
+            out.update(bound_atoms(sub))
+    return {fold(a) for a in out}
+
+
+def hedge_on_own_clause(quote: str, value, check_id: str) -> str | None:
+    """Kvalifikator se prijavljuje SAMO ako upravlja vrijednoscu KOJU PRAVILO BODUJE.
+
+    Prva izvedba trazila je kvalifikator u istoj recenici kao vrijednost. To je 2026-08-22 mjereno
+    na svih 46 preostalih nalaza i palo: 43 su bila lazna. Dva razloga, oba sustavna:
+
+      1. Vrijednost tipa `true` (justify, toc, paper-size) nema tekstualni atom, pa je uvjet
+         `not atoms` propustao BILO KOJI kvalifikator iz citata.
+      2. Recenica specifikacije nabraja sve osi odjednom, pa su "najmanje 20 kartica" i "preporuca
+         se MS Word" zavrsavali u istoj recenici kao font i prored.
+
+    Sada se gleda CIME kvalifikator upravlja: gleda se unaprijed od njega, i nalaz vrijedi samo ako
+    se prije bilo koje tudje osi pojavi vrijednost ovog pravila (ili, kad vrijednosti nema, rijec
+    njegove osi). Time "najmanje 20 kartica ispisanih fontom Times New Roman" vise ne ublazava font,
+    a "rubovi moraju biti siroki najmanje 2,5 cm" i dalje ublazava margine.
     """
     if check_id in RANGE_AXES:
         return None  # tamo je raspon sama odredba
-    atoms = value_atoms(value)
-    sentences = [s for s in re.split(r"(?<=[.!?;])\s+", quote) if s.strip()]
-    for sentence in sentences:
-        found = QUALIFIERS.search(sentence)
-        if not found:
+    folded = fold(quote)
+    atoms = [re.escape(fold(a)) for a in value_atoms(value)]
+    own = "|".join(r"(?<!\d)" + a + r"(?!\d)" for a in atoms) if atoms else AXIS_WORDS.get(check_id)
+    if not own:
+        return None
+    bounds = bound_atoms(value)
+    for found in QUALIFIERS.finditer(folded):
+        if UPRIGHT_ORIENTATION.match(found.group(0)):
             continue
-        low = fold(sentence)
-        if not atoms or any(fold(a) in low for a in atoms):
-            return found.group(0)
+        ahead = folded[found.end() : found.end() + HEDGE_REACH]
+        mine = re.search(own, ahead, re.I)
+        if not mine:
+            continue
+        if any(
+            (other := re.search(pattern, ahead, re.I)) and other.start() < mine.start()
+            for axis, pattern in GOVERNED_AXES.items()
+            if axis != check_id
+        ):
+            continue
+        if mine.group(0) in bounds:
+            continue  # kvalifikator samo izrice granicu koju pravilo vec boduje
+        if isinstance(value, list) and len(value) > 1:
+            wide = folded[found.end() : found.end() + 120]
+            if sum(1 for v in value if fold(str(v)) in wide) > 1:
+                continue  # "moze biti X ili Y", a pravilo boduje OBOJE
+        return found.group(0)
     return None
 
 
