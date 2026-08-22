@@ -228,17 +228,63 @@ def numeric_forms(raw) -> list[str]:
 # ide covjeku: on odlucuje boduje li se kao clanstvo u skupu ili se ne boduje uopce.
 #
 # Za `font` je skup NORMALAN i ne oznacava se (efzg "Calibri ili Times New Roman", unidu "Times New
-# Roman ili Arial"); provjera fonta vec radi nad popisom dopustenih. Za brojcane osi nije.
-SINGLE_VALUED = ("font-size", "line-spacing", "margins")
+# Roman ili Arial"); provjera fonta vec radi nad popisom dopustenih.
+#
+# ISTO VRIJEDI ZA `font-size`, sto je do 2026-08-22 bilo krivo zapisano ovdje. Engine usporedjuje
+# clanstvo u skupu (`profile.size.some(...)`) i tako i formulira poruku (`profile.size.join(' ili ')`),
+# pa `value: [11, 12]` nije izbor jedne strane nego vjeran prijepis izvora koji dopusta oboje.
+# Izmjereno na tri profila u `tests/font-size-allowed-set.test.ts`: 11 pt i 12 pt prolaze s punim
+# bodovima, 13 pt pada. Premisa vrijedi samo za osi koje stvarno primaju JEDAN broj: prored
+# (`near(x, profile.spacing)`) i margine (`profile.margins[side]`).
+SINGLE_VALUED = ("line-spacing", "margins")
+
+# Osi na kojima izbor i dalje trazi covjeka, i ondje gdje engine zna za skup: kad je izbor zapisan u
+# CITATU ("11 ili 12"), a tvrdnja navodi samo jednu stranu, pravilo boduje uze od izvora i kaznjava
+# rad koji tocno slijedi svoju uputu.
+CHOICE_AXES = SINGLE_VALUED + ("font-size",)
+
+
+CHOICE_PAIR = re.compile(r"(\d+(?:[.,]\d+)?)\s*(?:pt|to[čc]\w*|cm|mm)?\s+ili\s+(\d+(?:[.,]\d+)?)", re.I)
+
+
+def _atoms(value) -> set[str]:
+    """Svi brojcani oblici koje vrijednost pravila nosi, ukljucujuci margine po stranama."""
+    if isinstance(value, dict):
+        return {f for v in value.values() for f in _atoms(v)}
+    if isinstance(value, list):
+        return {f for v in value for f in _atoms(v)}
+    if isinstance(value, bool) or value is None:
+        return set()
+    return set(numeric_forms(value))
+
+
+def choice_narrows_claim(quote: str, value) -> bool:
+    """Boduje li tvrdnja SAMO jednu stranu izbora koji izvor doslovno nudi.
+
+    Sam izbor u recenici nije dovoljan: `unidu-komunikologija-diplomski` u istoj recenici propisuje
+    tijelo na 12 tocaka i naslove na "14 ili 16 tocaka", pa je izbor ondje odredba DRUGE osi i nalaz
+    je bio lazan na sva tri pravila te recenice. Nalaz ima smisla samo kad je vrijednost tvrdnje
+    JEDNA strana izbora, a druga strana nije pokrivena.
+    """
+    atoms = _atoms(value)
+    if not atoms:
+        return False
+    for left, right in CHOICE_PAIR.findall(quote):
+        hit_left = bool({left, left.replace(".", ","), left.replace(",", ".")} & atoms)
+        hit_right = bool({right, right.replace(".", ","), right.replace(",", ".")} & atoms)
+        if hit_left != hit_right:
+            return True
+    return False
 
 
 def is_choice(check_id: str, value, quote: str) -> bool:
-    if check_id not in SINGLE_VALUED:
+    if check_id not in CHOICE_AXES:
         return False
     if isinstance(value, list) and len({str(v) for v in value}) > 1:
-        return True
+        # Skup je problem samo ondje gdje engine prima jedan broj.
+        return check_id in SINGLE_VALUED
     # Izbor zapisan u samom citatu ("12 ili 14"), a tvrdnja navodi samo jednu stranu.
-    return bool(re.search(r"\d\s*(pt|to[čc]\w*|cm|mm)?\s+ili\s+\d", quote, re.I))
+    return choice_narrows_claim(quote, value)
 
 
 # --- 6. ODSJECEN CITAT koji krije iznimku -----------------------------------------------------

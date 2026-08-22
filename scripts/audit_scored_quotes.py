@@ -120,6 +120,68 @@ def doc_index(full_text: str) -> dict:
     return index
 
 
+# Brojevi koji IMENUJU mjesto, a ne vrijednost pravila: "Tablica 1", "Cl. 48", "Slika 2". Oni ne
+# opisuju ono sto se boduje nego gdje je odredba nadjena, pa njihova odsutnost u odlomku nije kvar
+# pravila. Izmjereno 2026-08-22: 6 od 47 nalaza bilo je upravo to (effectus "Tablica 1" dvaput,
+# alu "Cl. 48"), a tablica je u tekstualnom sloju spljostena bez svoga natpisa.
+LABEL_NUM = re.compile(
+    r"\b(?:tablic\w*|slik\w*|grafikon\w*|shem\w*|prilog\w*|clan\w*|cl|to[čc]k\w*|str|stranic\w*|poglavlj\w*)\.?\s*"
+    r"(\d+(?:[.,]\d+)?)",
+    re.I,
+)
+
+
+# Kracenice iza kojih tocka NE zavrsava recenicu. Bez ovoga se "(Cl. 48: pohranjuju se...)" lomi
+# tocno izmedu oznake i njezina broja, pa `label_numbers` vise ne vidi da je 48 broj CLANKA i broj
+# se trazi kao da je propisana vrijednost. Izmjereno 2026-08-22 na alu-pravilnik-diplomski-2014.
+ABBREV = {
+    "cl", "clanak", "clanka", "st", "str", "tab", "sl", "npr", "tj", "itd", "god", "br", "odn",
+    "dr", "mr", "prof", "usp", "vidi",
+}
+_SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+")
+
+
+def sentences(quote: str) -> list[str]:
+    """Recenice citata, ali BEZ loma iza kracenice ("Cl. 48" ostaje jedna cjelina)."""
+    out: list[str] = []
+    for part in _SENTENCE_SPLIT.split(quote):
+        if out:
+            tail = fold(out[-1]).rstrip().rstrip(".")
+            raw_last = tail.rsplit(" ", 1)[-1] if tail else ""
+            last = "".join(ch for ch in raw_last if ch.isalpha())
+            if last in ABBREV:
+                out[-1] = out[-1] + " " + part
+                continue
+        out.append(part)
+    return out
+
+
+def label_numbers(quote: str) -> set[str]:
+    return set(LABEL_NUM.findall(fold(quote)))
+
+
+def align_end(index: dict, quote: str, start: int) -> int:
+    """Gdje ZAVRSAVA odlomak koji citat opisuje: zadnje uporiste citata, poredano unaprijed.
+
+    Prozor se do 2026-08-22 mjerio duljinom citata ("pocetak + len(citat)"), a citat redovito
+    IZOSTAVLJA stavke koje izvor nabraja izmedju: `unizd-sociologija` ima jedanaest natuknica o
+    oblikovanju, citat sest, pa je opisani odlomak dvostruko dulji od citata i zadnji broj
+    ("velicine 10 tocaka") ostajao je izvan prozora. Isto na `vuv` (sest velicina fonta, citat dvije)
+    i `ffri-kulturalni` (dvotocka spaja recenicu i natuknicu 241 znak dalje).
+
+    Poravnanje je MONOTONO: svaka sljedeca dvorijec citata trazi se tek IZA prethodne. Zato prozor
+    ne moze odlutati unatrag ni preskociti u drugi odjeljak, pa provjera i dalje hvata citat prepisan
+    iz KRIVOG odjeljka, zbog cega je i uvedena.
+    """
+    pos = start
+    for pair in bigrams(quote):
+        for hit in index["positions"].get(pair, ()):  # rastuce po konstrukciji indeksa
+            if hit >= pos:
+                pos = hit
+                break
+    return pos
+
+
 def numbers_match(full_text: str, quote: str) -> bool:
     """Brojevi iz citata moraju stajati u ODLOMKU koji citat opisuje, ne bilo gdje u dokumentu.
 
@@ -133,11 +195,11 @@ def numbers_match(full_text: str, quote: str) -> bool:
     # unizd-turizam-diplomski--margins: zadnjih 137 znakova stoji na jednom mjestu, prvih 160 na
     # drugom). Jedan prozor tada nuzno promasi polovicu brojeva. Zato se svaka recenica provjerava
     # zasebno: unutar recenice tekst JEST susjedan.
-    parts = [p for p in re.split(r"(?<=[.!?])\s+", quote) if NUM.search(p)]
+    parts = [p for p in sentences(quote) if NUM.search(p)]
     if len(parts) > 1:
         return all(numbers_match(full_text, part) for part in parts)
 
-    wanted = NUM.findall(quote)
+    wanted = [n for n in NUM.findall(quote) if n not in label_numbers(quote)]
     if not wanted:
         return True
     index = doc_index(full_text)
@@ -146,6 +208,7 @@ def numbers_match(full_text: str, quote: str) -> bool:
     fq = fold(squash(quote))
     at = folded.find(fq)
     span = max(len(fq), 80)
+    end = at + span
     if at < 0:
         hits: list[int] = []
         for pair in bigrams(quote):
@@ -160,7 +223,8 @@ def numbers_match(full_text: str, quote: str) -> bool:
             if j - i > count:
                 count, best = j - i, start
         at = best
-    window = folded[max(0, at - 40) : at + span + 40]
+        end = align_end(index, quote, best) + 80
+    window = folded[max(0, at - 40) : max(at + span, end) + 40]
     present = set(NUM.findall(window)) | {n.replace(",", ".") for n in NUM.findall(window)}
     return all(n in present or n.replace(",", ".") in present for n in wanted)
 
@@ -169,7 +233,37 @@ def quote_found(full_text: str, quote: str) -> bool:
     return quote_coverage(full_text, quote) >= COVERAGE_MIN and numbers_match(full_text, quote)
 
 # Osi na kojima skup dopustenih vrijednosti nije ciljana vrijednost (isto kao kod tvrdnji).
-NUMERIC_AXES = ("font-size", "line-spacing", "margins")
+# `font-size` je 2026-08-22 IZBACEN: engine usporedjuje clanstvo u skupu (`profile.size.some(...)`),
+# pa `value: [11, 12]` nije izbor jedne strane nego vjeran prijepis izvora koji dopusta oboje.
+# Dokaz je `tests/font-size-allowed-set.test.ts`. Ostaju osi koje stvarno primaju JEDAN broj.
+NUMERIC_AXES = ("line-spacing", "margins")
+
+# Isti razred problema u DRUGOM smjeru, i ondje gdje engine zna za skup: izbor je zapisan u CITATU
+# ("11 ili 12"), a pravilo boduje samo jednu stranu. Tada pravilo boduje uze od izvora i kaznjava rad
+# koji tocno slijedi svoju uputu, pa nalaz ostaje.
+CHOICE_AXES = NUMERIC_AXES + ("font-size",)
+CHOICE_PAIR = re.compile(r"(\d+(?:[.,]\d+)?)\s*(?:pt|to[čc]\w*|cm|mm)?\s+ili\s+(\d+(?:[.,]\d+)?)", re.I)
+
+
+def _forms(raw: str) -> set[str]:
+    return {raw, raw.replace(".", ","), raw.replace(",", ".")}
+
+
+def choice_narrows_rule(quote: str, value) -> bool:
+    """Boduje li pravilo SAMO jednu stranu izbora koji izvor doslovno nudi.
+
+    Sam izbor u recenici nije dovoljan: `unidu-komunikologija-diplomski` u istoj recenici propisuje
+    tijelo na 12 tocaka i naslove na "14 ili 16 tocaka", pa je izbor tu odredba DRUGE osi. Nalaz ima
+    smisla samo kad je vrijednost pravila JEDNA strana izbora, a druga strana nije pokrivena.
+    """
+    atoms = set(value_atoms(value))
+    if not atoms:
+        return False
+    for left, right in CHOICE_PAIR.findall(quote):
+        hit_left, hit_right = bool(_forms(left) & atoms), bool(_forms(right) & atoms)
+        if hit_left != hit_right:
+            return True
+    return False
 
 _doc_text: dict[str, str] = {}
 
@@ -265,12 +359,13 @@ SCOPE_CARVEOUT = re.compile(
 )
 
 
-def is_choice(check_id: str, value) -> bool:
-    if check_id not in NUMERIC_AXES:
+def is_choice(check_id: str, value, quote: str = "") -> bool:
+    if check_id not in CHOICE_AXES:
         return False
     if isinstance(value, list) and len({str(v) for v in value}) > 1:
-        return True
-    return False
+        # Skup je problem samo ondje gdje engine prima jedan broj.
+        return check_id in NUMERIC_AXES
+    return bool(quote and choice_narrows_rule(quote, value))
 
 
 # Osi kojima je RASPON sama odredba: ondje "najmanje 30 stranica" nije ublazavanje nego pravilo.
@@ -397,7 +492,7 @@ def main() -> None:
         if disclaimer:
             problems.append(f"dokument se odrice (str. {disclaimer['page']}: '{disclaimer['phrase']}')")
 
-        if is_choice(check_id, entry.get("value")):
+        if is_choice(check_id, entry.get("value"), quote or ""):
             problems.append("vrijednost je SKUP, ne ciljana vrijednost")
 
         tail = truncated_tail(text, quote) if quote and quote in text else None  # samo za doslovne

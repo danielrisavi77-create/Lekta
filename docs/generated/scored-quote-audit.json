@@ -33,7 +33,6 @@
       "snapshot": "data/sources/alu/alu-pravilnik-diplomski-2014.pdf",
       "quote": "Pisano obrazlozenje... najmanje 10 a najvise 20 kartica pisanog teksta sa obrazlozenjem rada pisano velicinom slova od 12 tocaka i klasicnim proredom... Pisano obrazlozenje ispisuje se u polozenom for",
       "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 88%)",
         "kvalifikator u citatu bodovanog pravila: 'najmanje'"
       ]
     },
@@ -45,19 +44,7 @@
       "snapshot": "data/sources/alu/alu-pravilnik-diplomski-2014.pdf",
       "quote": "Pisano obrazlozenje... najmanje 10 a najvise 20 kartica pisanog teksta sa obrazlozenjem rada pisano velicinom slova od 12 tocaka i klasicnim proredom... Pisano obrazlozenje ispisuje se u polozenom for",
       "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 88%)",
         "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "alu-kiparstvo-diplomski",
-      "ruleId": "alu-kiparstvo-diplomski--page-count",
-      "checkId": "page-count",
-      "sourceId": "alu-pravilnik-diplomski-2014",
-      "snapshot": "data/sources/alu/alu-pravilnik-diplomski-2014.pdf",
-      "quote": "Pisano obrazlozenje... najmanje 10 a najvise 20 kartica pisanog teksta sa obrazlozenjem rada pisano velicinom slova od 12 tocaka i klasicnim proredom... Pisano obrazlozenje ispisuje se u polozenom for",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 88%)"
       ]
     },
     {
@@ -69,105 +56,6 @@
       "quote": "Pisano obrazlozenje sadrzi: najmanje 5 a najvise 15 kartica pisanog teksta pisanih velicinom slova od 12 tocaka, klasicnim proredom i ilustrativnim pregledom radova.",
       "problems": [
         "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "biolos-diplomski",
-      "ruleId": "biolos-diplomski--font",
-      "checkId": "font",
-      "sourceId": "biolos-pravilnik-diplomski-2023",
-      "snapshot": "data/sources/biolos/biolos-pravilnik-diplomski-2023.pdf",
-      "quote": "Rad treba pisati na stranici A4 formata, s rubnicama (marginama) 3 cm lijevo te 2,5 cm desno, gore i dolje, s poravnanjem po objema marginama. Tekst diplomskog rada treba pisati fontom Times New Roman",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 93%)"
-      ]
-    },
-    {
-      "profileId": "biolos-diplomski",
-      "ruleId": "biolos-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "biolos-pravilnik-diplomski-2023",
-      "snapshot": "data/sources/biolos/biolos-pravilnik-diplomski-2023.pdf",
-      "quote": "Rad treba pisati na stranici A4 formata, s rubnicama (marginama) 3 cm lijevo te 2,5 cm desno, gore i dolje, s poravnanjem po objema marginama. Tekst diplomskog rada treba pisati fontom Times New Roman",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 93%)"
-      ]
-    },
-    {
-      "profileId": "biolos-diplomski",
-      "ruleId": "biolos-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "biolos-pravilnik-diplomski-2023",
-      "snapshot": "data/sources/biolos/biolos-pravilnik-diplomski-2023.pdf",
-      "quote": "Rad treba pisati na stranici A4 formata, s rubnicama (marginama) 3 cm lijevo te 2,5 cm desno, gore i dolje, s poravnanjem po objema marginama. Tekst diplomskog rada treba pisati fontom Times New Roman",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 93%)"
-      ]
-    },
-    {
-      "profileId": "biolos-diplomski",
-      "ruleId": "biolos-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "biolos-pravilnik-diplomski-2023",
-      "snapshot": "data/sources/biolos/biolos-pravilnik-diplomski-2023.pdf",
-      "quote": "Rad treba pisati na stranici A4 formata, s rubnicama (marginama) 3 cm lijevo te 2,5 cm desno, gore i dolje, s poravnanjem po objema marginama. Tekst diplomskog rada treba pisati fontom Times New Roman",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 93%)"
-      ]
-    },
-    {
-      "profileId": "biolos-diplomski",
-      "ruleId": "biolos-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "biolos-pravilnik-diplomski-2023",
-      "snapshot": "data/sources/biolos/biolos-pravilnik-diplomski-2023.pdf",
-      "quote": "Rad treba pisati na stranici A4 formata, s rubnicama (marginama) 3 cm lijevo te 2,5 cm desno, gore i dolje, s poravnanjem po objema marginama. Tekst diplomskog rada treba pisati fontom Times New Roman",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 93%)"
-      ]
-    },
-    {
-      "profileId": "biolos-diplomski",
-      "ruleId": "biolos-diplomski--page-numbers",
-      "checkId": "page-numbers",
-      "sourceId": "biolos-pravilnik-diplomski-2023",
-      "snapshot": "data/sources/biolos/biolos-pravilnik-diplomski-2023.pdf",
-      "quote": "Rad treba pisati na stranici A4 formata, s rubnicama (marginama) 3 cm lijevo te 2,5 cm desno, gore i dolje, s poravnanjem po objema marginama. Tekst diplomskog rada treba pisati fontom Times New Roman",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 93%)"
-      ]
-    },
-    {
-      "profileId": "effectus-diplomski",
-      "ruleId": "effectus-diplomski--required-sections",
-      "checkId": "required-sections",
-      "sourceId": "effectus-pravilnik-2023",
-      "snapshot": "data/sources/effectus/effectus-pravilnik-2023.pdf",
-      "quote": "Tablica 1: Sastavni dijelovi seminarskog, završnog i diplomskog rada ... Sažetak: Neobavezno / Obavezno / Obavezno. Abstract: Neobavezno / Obavezno / Obavezno. Sadržaj: Obavezno / Obavezno / Obavezno.",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 100%)"
-      ]
-    },
-    {
-      "profileId": "effectus-seminarski",
-      "ruleId": "effectus-seminarski--required-sections",
-      "checkId": "required-sections",
-      "sourceId": "effectus-pravilnik-2023",
-      "snapshot": "data/sources/effectus/effectus-pravilnik-2023.pdf",
-      "quote": "Tablica 1: Sastavni dijelovi seminarskog, završnog i diplomskog rada ... Sadržaj: Obavezno / Obavezno / Obavezno. Uvodni dio: Obavezno / Obavezno / Obavezno. Zaključak: Obavezno / Obavezno / Obavezno.",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 97%)"
-      ]
-    },
-    {
-      "profileId": "effectus-zavrsni",
-      "ruleId": "effectus-zavrsni--required-sections",
-      "checkId": "required-sections",
-      "sourceId": "effectus-pravilnik-2023",
-      "snapshot": "data/sources/effectus/effectus-pravilnik-2023.pdf",
-      "quote": "Tablica 1: Sastavni dijelovi seminarskog, završnog i diplomskog rada ... Sažetak: Neobavezno / Obavezno / Obavezno. Abstract: Neobavezno / Obavezno / Obavezno. Sadržaj: Obavezno / Obavezno / Obavezno.",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 100%)"
       ]
     },
     {
@@ -905,83 +793,6 @@
       "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schri",
       "problems": [
         "citat se NE nalazi u dokumentu (podudaranje 68%)"
-      ]
-    },
-    {
-      "profileId": "ffri-kulturalni-diplomski",
-      "ruleId": "ffri-kulturalni-diplomski--font",
-      "checkId": "font",
-      "sourceId": "ffri-kulturalni-upute-2021",
-      "snapshot": "data/sources/ffri/ffri-kulturalni-upute-2021.pdf",
-      "quote": "Izgled diplomskoga rada i oblikovanje teksta definirani su Pravilnikom: Diplomski rad otisnut je na papiru A4 formata. Margine: 2,5 cm. Font: Times New Roman. Velicina: 12pt, za fusnote 10pt. Prored: ",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 94%)"
-      ]
-    },
-    {
-      "profileId": "ffri-kulturalni-diplomski",
-      "ruleId": "ffri-kulturalni-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "ffri-kulturalni-upute-2021",
-      "snapshot": "data/sources/ffri/ffri-kulturalni-upute-2021.pdf",
-      "quote": "Izgled diplomskoga rada i oblikovanje teksta definirani su Pravilnikom: Diplomski rad otisnut je na papiru A4 formata. Margine: 2,5 cm. Font: Times New Roman. Velicina: 12pt, za fusnote 10pt. Prored: ",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 94%)"
-      ]
-    },
-    {
-      "profileId": "ffri-kulturalni-diplomski",
-      "ruleId": "ffri-kulturalni-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "ffri-kulturalni-upute-2021",
-      "snapshot": "data/sources/ffri/ffri-kulturalni-upute-2021.pdf",
-      "quote": "Izgled diplomskoga rada i oblikovanje teksta definirani su Pravilnikom: Diplomski rad otisnut je na papiru A4 formata. Margine: 2,5 cm. Font: Times New Roman. Velicina: 12pt, za fusnote 10pt. Prored: ",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 94%)"
-      ]
-    },
-    {
-      "profileId": "ffri-kulturalni-diplomski",
-      "ruleId": "ffri-kulturalni-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "ffri-kulturalni-upute-2021",
-      "snapshot": "data/sources/ffri/ffri-kulturalni-upute-2021.pdf",
-      "quote": "Izgled diplomskoga rada i oblikovanje teksta definirani su Pravilnikom: Diplomski rad otisnut je na papiru A4 formata. Margine: 2,5 cm. Font: Times New Roman. Velicina: 12pt, za fusnote 10pt. Prored: ",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 94%)"
-      ]
-    },
-    {
-      "profileId": "ffri-kulturalni-diplomski",
-      "ruleId": "ffri-kulturalni-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "ffri-kulturalni-upute-2021",
-      "snapshot": "data/sources/ffri/ffri-kulturalni-upute-2021.pdf",
-      "quote": "Izgled diplomskoga rada i oblikovanje teksta definirani su Pravilnikom: Diplomski rad otisnut je na papiru A4 formata. Margine: 2,5 cm. Font: Times New Roman. Velicina: 12pt, za fusnote 10pt. Prored: ",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 94%)"
-      ]
-    },
-    {
-      "profileId": "ffri-kulturalni-diplomski",
-      "ruleId": "ffri-kulturalni-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "ffri-kulturalni-upute-2021",
-      "snapshot": "data/sources/ffri/ffri-kulturalni-upute-2021.pdf",
-      "quote": "Izgled diplomskoga rada i oblikovanje teksta definirani su Pravilnikom: Diplomski rad otisnut je na papiru A4 formata. Margine: 2,5 cm. Font: Times New Roman. Velicina: 12pt, za fusnote 10pt. Prored: ",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 94%)"
-      ]
-    },
-    {
-      "profileId": "ffri-kulturalni-diplomski",
-      "ruleId": "ffri-kulturalni-diplomski--footnote-size",
-      "checkId": "footnote-size",
-      "sourceId": "ffri-kulturalni-upute-2021",
-      "snapshot": "data/sources/ffri/ffri-kulturalni-upute-2021.pdf",
-      "quote": "Izgled diplomskoga rada i oblikovanje teksta definirani su Pravilnikom: Diplomski rad otisnut je na papiru A4 formata. Margine: 2,5 cm. Font: Times New Roman. Velicina: 12pt, za fusnote 10pt. Prored: ",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 94%)"
       ]
     },
     {
@@ -1778,17 +1589,6 @@
     },
     {
       "profileId": "mef-diplomski",
-      "ruleId": "mef-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "mef-pravilnik-diplomski-2023",
-      "snapshot": "data/sources/mef/mef-pravilnik-diplomski-2023.pdf",
-      "quote": "ili Arial (velic ina fonta: 11 ili 12; prored: 1.5 ili 2, to jest 1,5 redaka ili dvostruki prored)",
-      "problems": [
-        "vrijednost je SKUP, ne ciljana vrijednost"
-      ]
-    },
-    {
-      "profileId": "mef-diplomski",
       "ruleId": "mef-diplomski--paper-size",
       "checkId": "paper-size",
       "sourceId": "mef-pravilnik-diplomski-2023",
@@ -1909,17 +1709,6 @@
       ]
     },
     {
-      "profileId": "pmf-biologija-graduate",
-      "ruleId": "pmf-biologija-graduate--font-size",
-      "checkId": "font-size",
-      "sourceId": "pmf-biol-upute-diplomski-2026",
-      "snapshot": "data/sources/pmf/pmf-biol-diplomski-2026.pdf",
-      "quote": "Velicina slova u tekstu treba biti 11 ili 12 pt.",
-      "problems": [
-        "vrijednost je SKUP, ne ciljana vrijednost"
-      ]
-    },
-    {
       "profileId": "pravo-integrirani-diplomski",
       "ruleId": "pravo-integrirani-diplomski--justify",
       "checkId": "justify",
@@ -2016,17 +1805,6 @@
       "quote": "Biljeske (fusnote) - velicina fonta: 10",
       "problems": [
         "citat se NE nalazi u dokumentu (podudaranje 75%)"
-      ]
-    },
-    {
-      "profileId": "ptfos-diplomski",
-      "ruleId": "ptfos-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "ptfos-upute-diplomski-2020",
-      "snapshot": "data/sources/ptfos/ptfos-upute-diplomski-2020.pdf",
-      "quote": "Za unos teksta koristi se font Arial, veličine 11 pt ili Calibri, veličine 12 pt, s obostranim poravnanjem, proreda 1,5 i razmakom između odlomaka 6 pt.",
-      "problems": [
-        "vrijednost je SKUP, ne ciljana vrijednost"
       ]
     },
     {
@@ -2833,72 +2611,6 @@
       ]
     },
     {
-      "profileId": "unizd-povijest-umj-diplomski",
-      "ruleId": "unizd-povijest-umj-diplomski--font",
-      "checkId": "font",
-      "sourceId": "unizd-povijest-umj-upute-diplomski-2019",
-      "snapshot": "data/sources/unizd/unizd-povijest-umj-upute-diplomski-2019.pdf",
-      "quote": "Tekst treba formatirati na sljedeci nacin: pismo Times New Roman, velicina 12, margine lijevo 3,5 i desno 2,5 cm, gore i dolje 2,5 cm, prored 1,5, tekst pisati s obostranim poravnanjem.",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 91%)"
-      ]
-    },
-    {
-      "profileId": "unizd-povijest-umj-diplomski",
-      "ruleId": "unizd-povijest-umj-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-povijest-umj-upute-diplomski-2019",
-      "snapshot": "data/sources/unizd/unizd-povijest-umj-upute-diplomski-2019.pdf",
-      "quote": "Tekst treba formatirati na sljedeci nacin: pismo Times New Roman, velicina 12, margine lijevo 3,5 i desno 2,5 cm, gore i dolje 2,5 cm, prored 1,5, tekst pisati s obostranim poravnanjem.",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 91%)"
-      ]
-    },
-    {
-      "profileId": "unizd-povijest-umj-diplomski",
-      "ruleId": "unizd-povijest-umj-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "unizd-povijest-umj-upute-diplomski-2019",
-      "snapshot": "data/sources/unizd/unizd-povijest-umj-upute-diplomski-2019.pdf",
-      "quote": "Tekst treba formatirati na sljedeci nacin: pismo Times New Roman, velicina 12, margine lijevo 3,5 i desno 2,5 cm, gore i dolje 2,5 cm, prored 1,5, tekst pisati s obostranim poravnanjem.",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 91%)"
-      ]
-    },
-    {
-      "profileId": "unizd-povijest-umj-diplomski",
-      "ruleId": "unizd-povijest-umj-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "unizd-povijest-umj-upute-diplomski-2019",
-      "snapshot": "data/sources/unizd/unizd-povijest-umj-upute-diplomski-2019.pdf",
-      "quote": "Tekst treba formatirati na sljedeci nacin: pismo Times New Roman, velicina 12, margine lijevo 3,5 i desno 2,5 cm, gore i dolje 2,5 cm, prored 1,5, tekst pisati s obostranim poravnanjem.",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 91%)"
-      ]
-    },
-    {
-      "profileId": "unizd-povijest-umj-diplomski",
-      "ruleId": "unizd-povijest-umj-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "unizd-povijest-umj-upute-diplomski-2019",
-      "snapshot": "data/sources/unizd/unizd-povijest-umj-upute-diplomski-2019.pdf",
-      "quote": "Tekst treba formatirati na sljedeci nacin: pismo Times New Roman, velicina 12, margine lijevo 3,5 i desno 2,5 cm, gore i dolje 2,5 cm, prored 1,5, tekst pisati s obostranim poravnanjem.",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 91%)"
-      ]
-    },
-    {
-      "profileId": "unizd-povijest-umj-diplomski",
-      "ruleId": "unizd-povijest-umj-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "unizd-povijest-umj-upute-diplomski-2019",
-      "snapshot": "data/sources/unizd/unizd-povijest-umj-upute-diplomski-2019.pdf",
-      "quote": "Tekst treba formatirati na sljedeci nacin: pismo Times New Roman, velicina 12, margine lijevo 3,5 i desno 2,5 cm, gore i dolje 2,5 cm, prored 1,5, tekst pisati s obostranim poravnanjem.",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 91%)"
-      ]
-    },
-    {
       "profileId": "unizd-povijest-zavrsni",
       "ruleId": "unizd-povijest-zavrsni--paper-size",
       "checkId": "paper-size",
@@ -2962,94 +2674,6 @@
       "quote": "Velicina stranice je A4. Rubnice trebaju biti sljedece velicine: lijeva 30mm, desna 25mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
       "problems": [
         "citat se NE nalazi u dokumentu (podudaranje 73%)"
-      ]
-    },
-    {
-      "profileId": "unizd-sociologija-diplomski",
-      "ruleId": "unizd-sociologija-diplomski--font",
-      "checkId": "font",
-      "sourceId": "unizd-sociologija-upute-dipr-2014",
-      "snapshot": "data/sources/unizd/unizd-sociologija-upute-dipr-2014.pdf",
-      "quote": "Tekst treba formatirati na sljedeci nacin: pismo (font): Times New Roman, velicina 12; margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm (to su automatski podesene vrijednosti u MS Word aplikaciji k",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 91%)"
-      ]
-    },
-    {
-      "profileId": "unizd-sociologija-diplomski",
-      "ruleId": "unizd-sociologija-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-sociologija-upute-dipr-2014",
-      "snapshot": "data/sources/unizd/unizd-sociologija-upute-dipr-2014.pdf",
-      "quote": "Tekst treba formatirati na sljedeci nacin: pismo (font): Times New Roman, velicina 12; margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm (to su automatski podesene vrijednosti u MS Word aplikaciji k",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 91%)"
-      ]
-    },
-    {
-      "profileId": "unizd-sociologija-diplomski",
-      "ruleId": "unizd-sociologija-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "unizd-sociologija-upute-dipr-2014",
-      "snapshot": "data/sources/unizd/unizd-sociologija-upute-dipr-2014.pdf",
-      "quote": "Tekst treba formatirati na sljedeci nacin: pismo (font): Times New Roman, velicina 12; margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm (to su automatski podesene vrijednosti u MS Word aplikaciji k",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 91%)"
-      ]
-    },
-    {
-      "profileId": "unizd-sociologija-diplomski",
-      "ruleId": "unizd-sociologija-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "unizd-sociologija-upute-dipr-2014",
-      "snapshot": "data/sources/unizd/unizd-sociologija-upute-dipr-2014.pdf",
-      "quote": "Tekst treba formatirati na sljedeci nacin: pismo (font): Times New Roman, velicina 12; margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm (to su automatski podesene vrijednosti u MS Word aplikaciji k",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 91%)"
-      ]
-    },
-    {
-      "profileId": "unizd-sociologija-diplomski",
-      "ruleId": "unizd-sociologija-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "unizd-sociologija-upute-dipr-2014",
-      "snapshot": "data/sources/unizd/unizd-sociologija-upute-dipr-2014.pdf",
-      "quote": "Tekst treba formatirati na sljedeci nacin: pismo (font): Times New Roman, velicina 12; margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm (to su automatski podesene vrijednosti u MS Word aplikaciji k",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 91%)"
-      ]
-    },
-    {
-      "profileId": "unizd-sociologija-diplomski",
-      "ruleId": "unizd-sociologija-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "unizd-sociologija-upute-dipr-2014",
-      "snapshot": "data/sources/unizd/unizd-sociologija-upute-dipr-2014.pdf",
-      "quote": "Tekst treba formatirati na sljedeci nacin: pismo (font): Times New Roman, velicina 12; margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm (to su automatski podesene vrijednosti u MS Word aplikaciji k",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 91%)"
-      ]
-    },
-    {
-      "profileId": "unizd-sociologija-diplomski",
-      "ruleId": "unizd-sociologija-diplomski--footnote-size",
-      "checkId": "footnote-size",
-      "sourceId": "unizd-sociologija-upute-dipr-2014",
-      "snapshot": "data/sources/unizd/unizd-sociologija-upute-dipr-2014.pdf",
-      "quote": "Tekst treba formatirati na sljedeci nacin: pismo (font): Times New Roman, velicina 12; margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm (to su automatski podesene vrijednosti u MS Word aplikaciji k",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 91%)"
-      ]
-    },
-    {
-      "profileId": "unizd-sociologija-diplomski",
-      "ruleId": "unizd-sociologija-diplomski--footnote-spacing",
-      "checkId": "footnote-spacing",
-      "sourceId": "unizd-sociologija-upute-dipr-2014",
-      "snapshot": "data/sources/unizd/unizd-sociologija-upute-dipr-2014.pdf",
-      "quote": "Tekst treba formatirati na sljedeci nacin: pismo (font): Times New Roman, velicina 12; margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm (to su automatski podesene vrijednosti u MS Word aplikaciji k",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 91%)"
       ]
     },
     {
@@ -3259,160 +2883,6 @@
       "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
       "problems": [
         "citat se NE nalazi u dokumentu (podudaranje 37%)"
-      ]
-    },
-    {
-      "profileId": "vuv-diplomski",
-      "ruleId": "vuv-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "vuv-upute-radovi-2025",
-      "snapshot": "data/sources/vuv/vuv.pdf",
-      "quote": "vrsta papira: standardni A4 papir; margine: - 2,5 cm s gornje i donje strane - 2 cm s desne i 3 cm s lijeve strane; prored: - 1,5 u glavnom dijelu teksta; vrsta slova: Times New Roman; veličina slova:",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 96%)"
-      ]
-    },
-    {
-      "profileId": "vuv-diplomski",
-      "ruleId": "vuv-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "vuv-upute-radovi-2025",
-      "snapshot": "data/sources/vuv/vuv.pdf",
-      "quote": "vrsta papira: standardni A4 papir; margine: - 2,5 cm s gornje i donje strane - 2 cm s desne i 3 cm s lijeve strane; prored: - 1,5 u glavnom dijelu teksta; vrsta slova: Times New Roman; veličina slova:",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 96%)"
-      ]
-    },
-    {
-      "profileId": "vuv-diplomski",
-      "ruleId": "vuv-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "vuv-upute-radovi-2025",
-      "snapshot": "data/sources/vuv/vuv.pdf",
-      "quote": "vrsta papira: standardni A4 papir; margine: - 2,5 cm s gornje i donje strane - 2 cm s desne i 3 cm s lijeve strane; prored: - 1,5 u glavnom dijelu teksta; vrsta slova: Times New Roman; veličina slova:",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 96%)"
-      ]
-    },
-    {
-      "profileId": "vuv-diplomski",
-      "ruleId": "vuv-diplomski--font",
-      "checkId": "font",
-      "sourceId": "vuv-upute-radovi-2025",
-      "snapshot": "data/sources/vuv/vuv.pdf",
-      "quote": "vrsta papira: standardni A4 papir; margine: - 2,5 cm s gornje i donje strane - 2 cm s desne i 3 cm s lijeve strane; prored: - 1,5 u glavnom dijelu teksta; vrsta slova: Times New Roman; veličina slova:",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 96%)"
-      ]
-    },
-    {
-      "profileId": "vuv-diplomski",
-      "ruleId": "vuv-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "vuv-upute-radovi-2025",
-      "snapshot": "data/sources/vuv/vuv.pdf",
-      "quote": "vrsta papira: standardni A4 papir; margine: - 2,5 cm s gornje i donje strane - 2 cm s desne i 3 cm s lijeve strane; prored: - 1,5 u glavnom dijelu teksta; vrsta slova: Times New Roman; veličina slova:",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 96%)"
-      ]
-    },
-    {
-      "profileId": "vuv-diplomski",
-      "ruleId": "vuv-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "vuv-upute-radovi-2025",
-      "snapshot": "data/sources/vuv/vuv.pdf",
-      "quote": "vrsta papira: standardni A4 papir; margine: - 2,5 cm s gornje i donje strane - 2 cm s desne i 3 cm s lijeve strane; prored: - 1,5 u glavnom dijelu teksta; vrsta slova: Times New Roman; veličina slova:",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 96%)"
-      ]
-    },
-    {
-      "profileId": "vuv-diplomski",
-      "ruleId": "vuv-diplomski--footnote-size",
-      "checkId": "footnote-size",
-      "sourceId": "vuv-upute-radovi-2025",
-      "snapshot": "data/sources/vuv/vuv.pdf",
-      "quote": "vrsta papira: standardni A4 papir; margine: - 2,5 cm s gornje i donje strane - 2 cm s desne i 3 cm s lijeve strane; prored: - 1,5 u glavnom dijelu teksta; vrsta slova: Times New Roman; veličina slova:",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 96%)"
-      ]
-    },
-    {
-      "profileId": "vuv-zavrsni",
-      "ruleId": "vuv-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "vuv-upute-radovi-2025",
-      "snapshot": "data/sources/vuv/vuv.pdf",
-      "quote": "vrsta papira: standardni A4 papir; margine: - 2,5 cm s gornje i donje strane - 2 cm s desne i 3 cm s lijeve strane; prored: - 1,5 u glavnom dijelu teksta; vrsta slova: Times New Roman; veličina slova:",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 96%)"
-      ]
-    },
-    {
-      "profileId": "vuv-zavrsni",
-      "ruleId": "vuv-zavrsni--margins",
-      "checkId": "margins",
-      "sourceId": "vuv-upute-radovi-2025",
-      "snapshot": "data/sources/vuv/vuv.pdf",
-      "quote": "vrsta papira: standardni A4 papir; margine: - 2,5 cm s gornje i donje strane - 2 cm s desne i 3 cm s lijeve strane; prored: - 1,5 u glavnom dijelu teksta; vrsta slova: Times New Roman; veličina slova:",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 96%)"
-      ]
-    },
-    {
-      "profileId": "vuv-zavrsni",
-      "ruleId": "vuv-zavrsni--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "vuv-upute-radovi-2025",
-      "snapshot": "data/sources/vuv/vuv.pdf",
-      "quote": "vrsta papira: standardni A4 papir; margine: - 2,5 cm s gornje i donje strane - 2 cm s desne i 3 cm s lijeve strane; prored: - 1,5 u glavnom dijelu teksta; vrsta slova: Times New Roman; veličina slova:",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 96%)"
-      ]
-    },
-    {
-      "profileId": "vuv-zavrsni",
-      "ruleId": "vuv-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "vuv-upute-radovi-2025",
-      "snapshot": "data/sources/vuv/vuv.pdf",
-      "quote": "vrsta papira: standardni A4 papir; margine: - 2,5 cm s gornje i donje strane - 2 cm s desne i 3 cm s lijeve strane; prored: - 1,5 u glavnom dijelu teksta; vrsta slova: Times New Roman; veličina slova:",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 96%)"
-      ]
-    },
-    {
-      "profileId": "vuv-zavrsni",
-      "ruleId": "vuv-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "vuv-upute-radovi-2025",
-      "snapshot": "data/sources/vuv/vuv.pdf",
-      "quote": "vrsta papira: standardni A4 papir; margine: - 2,5 cm s gornje i donje strane - 2 cm s desne i 3 cm s lijeve strane; prored: - 1,5 u glavnom dijelu teksta; vrsta slova: Times New Roman; veličina slova:",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 96%)"
-      ]
-    },
-    {
-      "profileId": "vuv-zavrsni",
-      "ruleId": "vuv-zavrsni--justify",
-      "checkId": "justify",
-      "sourceId": "vuv-upute-radovi-2025",
-      "snapshot": "data/sources/vuv/vuv.pdf",
-      "quote": "vrsta papira: standardni A4 papir; margine: - 2,5 cm s gornje i donje strane - 2 cm s desne i 3 cm s lijeve strane; prored: - 1,5 u glavnom dijelu teksta; vrsta slova: Times New Roman; veličina slova:",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 96%)"
-      ]
-    },
-    {
-      "profileId": "vuv-zavrsni",
-      "ruleId": "vuv-zavrsni--footnote-size",
-      "checkId": "footnote-size",
-      "sourceId": "vuv-upute-radovi-2025",
-      "snapshot": "data/sources/vuv/vuv.pdf",
-      "quote": "vrsta papira: standardni A4 papir; margine: - 2,5 cm s gornje i donje strane - 2 cm s desne i 3 cm s lijeve strane; prored: - 1,5 u glavnom dijelu teksta; vrsta slova: Times New Roman; veličina slova:",
-      "problems": [
-        "BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju 96%)"
       ]
     },
     {

@@ -69,6 +69,23 @@
       "decidedBy": "izvedeno iz vlasnikove odluke 2026-08-21 za istovrstan slucaj (unizd-turizam); NIJE zasebno potvrdjeno",
       "decidedAt": "2026-08-21",
       "rationale": "Isti razred kao unizd-turizam: sluzbeno objavljene upute koje se same spustaju na preporuku, bez obvezujuce alternative. Pogodjeno je 16 pravila kroz 7 profila, i to samo sporedne osi (justify, page-numbers, fusnote); jezgra formata na pravu nije bodovana uopce."
+    },
+    {
+      "ruleIds": [
+        "biolos-diplomski--font",
+        "biolos-diplomski--font-size",
+        "biolos-diplomski--line-spacing",
+        "biolos-diplomski--margins",
+        "biolos-diplomski--page-numbers",
+        "biolos-diplomski--paper-size"
+      ],
+      "finding": "BROJEVI iz citata ne stoje u odlomku koji citat opisuje",
+      "evidence": "biolos-pravilnik-diplomski-2023.pdf, str. 6: tekstualni sloj PDF-a daje \"3 cm lijevo te 2,n cm desno\", dakle znamenka je ostecena pri izradi PDF-a. Stranica je renderirana i procitana kao slika (fitz, 4x zoom): otisnuti tekst glasi \"3 cm lijevo te 2,5 cm desno, gore i dolje\". Citat u profilu je tocan; nedostupan je samo strojno citljiv zapis.",
+      "alsoNoted": "Ostala cetiri broja iz iste recenice (A4, 3, 12, 1,5) tekstualni sloj daje ispravno; ostecena je samo ta jedna znamenka.",
+      "decision": "left-scored",
+      "decidedBy": "Claude Opus 5 (1M context)",
+      "decidedAt": "2026-08-22",
+      "rationale": "Nema sto demotirati: vrijednost pravila odgovara otisnutom izvoru. Nalaz je granica alata (ostecen tekstualni sloj), ne kvar podatka, pa se biljezi da ga sljedeca revizija ne prijavi kao nov. Vlasnik moze unos ukloniti ako zeli vlastitu provjeru."
     }
   ]
 }
