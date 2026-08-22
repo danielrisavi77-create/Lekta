@@ -86,6 +86,20 @@
       "decidedBy": "Claude Opus 5 (1M context)",
       "decidedAt": "2026-08-22",
       "rationale": "Nema sto demotirati: vrijednost pravila odgovara otisnutom izvoru. Nalaz je granica alata (ostecen tekstualni sloj), ne kvar podatka, pa se biljezi da ga sljedeca revizija ne prijavi kao nov. Vlasnik moze unos ukloniti ako zeli vlastitu provjeru."
+    },
+    {
+      "ruleIds": [
+        "ffzg-sociologija-diplomski--margins",
+        "ufzg-diplomski--justify",
+        "ufzg-zavrsni--justify"
+      ],
+      "finding": "citat odsjecen, recenica se nastavlja",
+      "evidence": "Rijec koja je okinula os pripada DRUGOJ osi. ffzg-socio-diplomski-2014.pdf: rep glasi \"tekst poravnati po obje margine („justified“)\", dakle \"margine\" ondje opisuje poravnanje, a ne velicinu margina. ufzg-upute-zavrsni-diplomski-2026.pdf: rep glasi \"lspis rada: obostran\" (OCR od \"Ispis rada: obostran\"), dakle obostrani ISPIS na papiru, a ne obostrano poravnanje teksta. Puni repovi procitani u izvoru 2026-08-22.",
+      "alsoNoted": "Rijeci 'margine' i 'obostran' su u hrvatskim uputama dvoznacne, pa rjecnik osi na njima nuzno pogadja i tudju os.",
+      "decision": "left-scored",
+      "decidedBy": "Claude Opus 5 (1M context)",
+      "decidedAt": "2026-08-22",
+      "rationale": "Nema sto ispraviti: vrijednosti pravila odgovaraju izvoru, a rep ne mijenja njihovu os. Dodatno suzavanje rjecnika trazilo bi razlikovanje fraza, sto bi se prilagodilo bas ovim trima recenicama. Biljezi se da ih sljedeca revizija ne prijavi kao nove."
     }
   ]
 }

@@ -324,7 +324,7 @@ def has_scanned_pages(rel_path: str) -> bool:
     return result
 
 
-def truncated_tail(full_text: str, quote: str) -> str | None:
+def truncated_tail(full_text: str, quote: str, check_id: str = "", value=None) -> str | None:
     """Ostatak recenice iza citata, ako jos nosi znamenku. Citat koji zavrsava tockom nije odsjecen."""
     quote = squash(quote)
     if not quote or not full_text or quote[-1] in ".!?":
@@ -338,7 +338,54 @@ def truncated_tail(full_text: str, quote: str) -> str | None:
     tail = tail.strip()
     if not re.search(r"\d", tail) or not SCOPE_CARVEOUT.search(tail):
         return None
+    if check_id and not tail_overrides_rule(check_id, value, tail):
+        return None
     return tail
+
+
+# Rjecnik OSI: kojim rijecima izvor govori bas o onome sto pravilo boduje. Bez toga se svaka
+# natuknica popisa cita kao iznimka, i kad govori o tudjoj osi. Izmjereno 2026-08-22: od 37
+# preostalih nalaza njih 30 imalo je rep o DRUGOJ osi (pravilo o marginama, rep o fontu i proredu).
+AXIS_WORDS = {
+    "margins": r"margin\w*|rubnic\w*",
+    "font-size": r"veli[cč]in\w*|to[cč]ak\w*|to[cč]k\w*|\bpt\b|kegl",
+    "font": r"\bfont\w*|pism\w*|times|arial|calibri|garamond|antiqua|cambria|helvetica",
+    "line-spacing": r"prored\w*|jednostruk\w*|dvostruk\w*|razmak\w* (?:me[dđ]u )?redov\w*",
+    "justify": r"poravnan\w*|justif|obostran\w*",
+    "paper-size": r"format\w*|\ba4\b|papir\w*",
+    "page-numbers": r"numerir\w*|numeracij\w*|paginac\w*|broj\w* stranic\w*",
+    "footnote-size": r"fusnot\w*|bilje[sš]k\w*",
+    "citation-style": r"stil\w*|citir\w*|vancouver|apa|harvard|chicago|ieee|mla",
+}
+
+# Osi kojima je vrijednost IME, ne broj. Ondje "druga vrijednost" znaci drugo IME, a brojevi u repu
+# (velicina pisma, margine, prored) pripadaju tudjoj osi. Bez te razlike su tri `font` pravila
+# ispadala kao nalaz jer im rep spominje 12 i 1,5, sto s izborom fonta nema veze.
+NAME_AXES = {
+    "font": (
+        "times new roman", "arial", "calibri", "garamond", "book antiqua", "cambria",
+        "helvetica", "verdana", "tahoma", "georgia", "palatino",
+    ),
+    "citation-style": ("apa", "harvard", "chicago", "vancouver", "ieee", "mla", "oscola"),
+}
+
+
+def tail_overrides_rule(check_id: str, value, tail: str) -> bool:
+    """Daje li nastavak DRUGU vrijednost za dio rada, i to bas na osi koju pravilo boduje.
+
+    Tri uvjeta kumulativno: rep imenuje dio rada (SCOPE_CARVEOUT, provjeren prije ovoga), govori o
+    ISTOJ osi, i nudi vrijednost razlicitu od one koju pravilo boduje. Tek tada se druga vrijednost
+    boduje kao da vrijedi svugdje, a to je jedini razred zbog kojeg provjera postoji.
+    """
+    pattern = AXIS_WORDS.get(check_id)
+    if not pattern or not re.search(pattern, tail, re.I):
+        return False
+    folded_tail = fold(tail)
+    if check_id in NAME_AXES:
+        own = {fold(str(v)) for v in (value if isinstance(value, list) else [value]) if v}
+        return any(name in folded_tail and name not in own for name in NAME_AXES[check_id])
+    atoms = set(value_atoms(value))
+    return any(n not in atoms and n.replace(",", ".") not in atoms for n in NUM.findall(tail))
 
 
 # Nastavak recenice prijavljuje se SAMO ako izuzima drugi dio dokumenta.
@@ -495,7 +542,7 @@ def main() -> None:
         if is_choice(check_id, entry.get("value"), quote or ""):
             problems.append("vrijednost je SKUP, ne ciljana vrijednost")
 
-        tail = truncated_tail(text, quote) if quote and quote in text else None  # samo za doslovne
+        tail = truncated_tail(text, quote, check_id, entry.get("value")) if quote and quote in text else None
         if tail:
             problems.append(f"citat odsjecen, recenica se nastavlja: {tail[:110]}")
 
