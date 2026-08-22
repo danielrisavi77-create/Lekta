@@ -11,6 +11,9 @@ describe('ui/app modul', () => {
   it('evaluira se bez greske u happy-dom okruzenju bez #analyzer', async () => {
     const mod = await import('../src/ui/app');
     expect(mod).toBeTruthy();
+    expect(mod.initAnalyzerApp).toBeTypeOf('function');
+    expect(mod.loadAnalyzerDocument).toBeTypeOf('function');
+    expect(mod.subscribeAnalyzerResult).toBeTypeOf('function');
   // Velik graf modula (katalog + registri + data JSON-i). Za razliku od ostalih timeouta
   // podignutih 2026-08-20/21, ovaj NIJE bio artefakt opterecenja: izmjereno na SLOBODNOM
   // stroju traje 28,8 s, dakle 30 s je bilo pretijesno i bez ijednog paralelnog runa.
