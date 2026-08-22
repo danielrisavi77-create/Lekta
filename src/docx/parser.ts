@@ -335,10 +335,11 @@ export function parseThemeFonts(xmlText: string | null | undefined): { minor: st
  * Pravilo je namjerno opce ("najblizi `w:p` predak"), a ne popis okvirnih tagova: pokriva i VML
  * (`w:pict`) i DrawingML (`wps:txbx`) i svako budu ugnjezdenje, bez odrzavanja popisa.
  */
-export function ownsNode(p: any, node: any): boolean {
+export function ownsNode(p: any, node: any, tag = 'w:p'): boolean {
+  const local = tag.split(':').pop();
   for (let a = node?.parentNode; a; a = a.parentNode) {
     if (a === p) return true;
-    if (a.nodeName === 'w:p' || a.localName === 'p') return false;
+    if (a.nodeName === tag || a.localName === local) return false;
   }
   return false;
 }
