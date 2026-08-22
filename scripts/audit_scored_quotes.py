@@ -272,13 +272,45 @@ def choice_narrows_rule(quote: str, value) -> bool:
 _doc_text: dict[str, str] = {}
 
 
+# `.docx` je zip s XML-om, dakle citljiv bez ijedne dodatne ovisnosti. Do 2026-08-22 revizija ga je
+# preskakala i time je 202 od 1934 bodovana pravila ostajalo NEREVIDIRANO, iako svih 24 datoteke
+# stoje na disku. Preskok je bio nasljedje prve izvedbe (samo PDF), ne odluka.
+#
+# KLJUCNO: `</w:p>` i `<w:br/>` moraju postati RAZMAK prije nego se tagovi obrisu. Bez toga se
+# zadnja rijec odlomka slijepi s prvom rijeci sljedeceg ("margine2,5"), pa citat koji doslovno stoji
+# u dokumentu ispadne nenadjen. Isti razred kvara koji je u proizvodu popravljen za w:cr i w:ptab.
+DOCX_TEXT_PARTS = ("word/document.xml", "word/footnotes.xml", "word/endnotes.xml")
+_TAG = re.compile(r"<[^>]+>")
+_BREAK = re.compile(r"</w:p>|<w:br[^>]*/?>|</w:tc>|<w:tab[^>]*/?>")
+
+
+def docx_text(path: str) -> str:
+    """Spojeni vidljivi tekst .docx paketa. Prazan string ako se ne moze procitati."""
+    try:
+        import zipfile
+        import xml.sax.saxutils as saxutils
+
+        chunks: list[str] = []
+        with zipfile.ZipFile(path) as pack:
+            names = set(pack.namelist())
+            for part in DOCX_TEXT_PARTS:
+                if part not in names:
+                    continue
+                xml = pack.read(part).decode("utf-8", "replace")
+                chunks.append(_TAG.sub("", _BREAK.sub(" ", xml)))
+        return squash(saxutils.unescape(" ".join(chunks)))
+    except Exception:
+        return ""
+
 def document_text(rel_path: str) -> str:
-    """Spojeni tekst cijelog PDF-a, normaliziran. Prazan string ako se ne moze procitati."""
+    """Spojeni tekst izvora (PDF ili .docx), normaliziran. Prazan string ako se ne moze procitati."""
     if rel_path in _doc_text:
         return _doc_text[rel_path]
     text = ""
     path = os.path.join(ROOT, rel_path.replace("/", os.sep))
-    if os.path.exists(path) and path.lower().endswith(".pdf"):
+    if os.path.exists(path) and path.lower().endswith(".docx"):
+        text = docx_text(path)
+    elif os.path.exists(path) and path.lower().endswith(".pdf"):
         try:
             import fitz
 
@@ -635,6 +667,95 @@ def value_missing_from_quote(check_id: str, value, quote: str) -> list[str]:
     return missing
 
 
+# --- 8. PREDLOZAK: citat koji opisuje XML paketa, a ne prozu ------------------------------------
+#
+# Kod obveznih predlozaka (.docx) citat NIJE recenica iz dokumenta nego opis onoga sto predlozak
+# stvarno sadrzi: "Normal stil: font Times New Roman, velicina 12pt (w:sz=24), prored 1,5
+# (w:line=360 auto)". Usporedjivati to s prozom je kategorijalna greska: cim je revizija 2026-08-22
+# pocela citati .docx, tih 28 pravila odmah je palo kao "citat nije doslovan prijepis", uz
+# podudaranje od 0 do 19 posto.
+#
+# Takva tvrdnja se ne izuzima nego PROVJERAVA, i to protiv XML-a koji sama citira. To je jaca
+# provenijencija od proze: pravilo se ne poziva na recenicu koju je netko protumacio, nego na
+# postavku koju predlozak doista nosi. Izmjereno na svih 28: sve tvrdnje su tocne.
+TEMPLATE_XML_QUOTE = re.compile(
+    r"\bw:[a-zA-Z]|word/(?:styles|document|settings|numbering)\.xml|sectPr|rFonts|pgSz|pgMar",
+    re.I,
+)
+# "w:sz=24", "w:sz w:val=24", "w:rFonts w:ascii=Times New Roman", "w:line=360 auto".
+XML_CLAIM = re.compile(r"\bw:([a-zA-Z]+)\s*(?:w:val\s*)?=\s*\"?([^\",;)]+)")
+NEXT_CLAIM = re.compile(r"\s+(?=w:[a-zA-Z]+\s*=)|\s*\(")
+# Opseg u kojem tvrdnja mora vrijediti. Prvo je provjera trazila `w:sz="24"` po CIJELOM paketu i
+# time je bila vakuumska: predlozak legitimno sadrzi `w:sz="28"` (naslovi) i `w:jc="center"`
+# (naslovnica), pa su i IZMISLJENE tvrdnje prolazile. Uhvatio ju je negativni gard, ne citanje.
+PAGE_SCOPED = ("pgsz", "pgmar", "pgnumtype", "titlepg", "cols", "docgrid")
+_STYLE_NORMAL = re.compile(r"<w:style\b[^>]*w:styleId=\"Normal\".*?</w:style>", re.I | re.S)
+_DOC_DEFAULTS = re.compile(r"<w:docDefaults\b.*?</w:docDefaults>", re.I | re.S)
+_SECTPR = re.compile(r"<w:sectPr\b.*?</w:sectPr>", re.I | re.S)
+_scopes: dict[str, tuple[str, str]] = {}
+
+
+def template_scopes(path: str) -> tuple[str, str]:
+    """(XML stila Normal + docDefaults, XML svih sectPr). Prazno ako se paket ne moze procitati."""
+    if path in _scopes:
+        return _scopes[path]
+    body, page = "", ""
+    try:
+        import zipfile
+
+        with zipfile.ZipFile(path) as pack:
+            names = set(pack.namelist())
+            if "word/styles.xml" in names:
+                styles = pack.read("word/styles.xml").decode("utf-8", "replace")
+                body = " ".join(_STYLE_NORMAL.findall(styles) + _DOC_DEFAULTS.findall(styles))
+            if "word/document.xml" in names:
+                document = pack.read("word/document.xml").decode("utf-8", "replace")
+                page = " ".join(_SECTPR.findall(document))
+    except Exception:
+        body, page = "", ""
+    _scopes[path] = (body, page)
+    return _scopes[path]
+
+
+def template_claims_unmet(rel_path: str, quote: str) -> list[str]:
+    """Tvrdnje o XML-u koje predlozak NE potvrdjuje u opsegu na koji se pozivaju.
+
+    Postavke stranice se traze u `w:sectPr`, sve ostalo u stilu `Normal` i `w:docDefaults`, jer
+    citat govori bas o njima ("Normal stil: ... w:sz=24").
+
+    Dvije zamke, obje uhvacene mjerenjem na stvarnim citatima, ne citanjem koda:
+      - VRIJEDNOST zavrsava na sljedecem `w:` tokenu, a ne tek na zarezu. Bez toga je
+        "w:pgSz w:w=11906 w:h=16838 (210x297 mm = A4 format)" dalo vrijednost "11906 w:h=16838
+        (210x297 mm = A4 format" i tvrdnja nikad nije mogla proci. Ime fonta s razmacima
+        ("w:ascii=Times New Roman") i dalje prolazi jer iza njega nema `w:` tokena.
+      - OPSEG se odredjuje po ELEMENTU, ne po atributu. `<w:pgNumType w:fmt="upperRoman"/>` nosi
+        atribut `fmt`, koji sam po sebi ne kaze da je rijec o postavci stranice, pa se trazio u
+        stilu Normal i nikad nalazio.
+    """
+    path = os.path.join(ROOT, rel_path.replace("/", os.sep))
+    body, page = template_scopes(path)
+    if not body and not page:
+        return []
+    unmet: list[str] = []
+    for found in XML_CLAIM.finditer(quote):
+        name, raw = found.group(1), found.group(2)
+        raw = NEXT_CLAIM.split(raw, 1)[0].strip().rstrip(".,;:")
+        claimed = fold(raw)
+        if not claimed:
+            continue
+        lead = fold(quote[max(0, found.start() - 40) : found.start()] + name)
+        scope = page if any(word in lead for word in PAGE_SCOPED) else body
+        if not scope:
+            continue
+        actual = re.findall(rf"w:{re.escape(name)}(?:[^>]*?)\bw:val=\"([^\"]*)\"", scope, re.I)
+        actual += re.findall(rf"\bw:{re.escape(name)}=\"([^\"]*)\"", scope, re.I)
+        if not any(
+            fold(v).startswith(claimed) or claimed.startswith(fold(v)) for v in actual if v
+        ):
+            unmet.append(f"w:{name}={raw}")
+    return unmet
+
+
 def collect_scored() -> list[dict]:
     """Sva `verified` + `scored` pravila iz staging draftova, s profilom uz svako."""
     rows: list[dict] = []
@@ -710,7 +831,7 @@ def main() -> None:
                         }
                     )
 
-        if not rel.lower().endswith(".pdf"):
+        if not rel.lower().endswith((".pdf", ".docx")):
             # .doc / .docx / .html / .rar se ovdje NE citaju. Prijavljuje se kao NEREVIDIRANO, ne kao
             # uredno: sutnja o neprovjerenom je isti kvar kao lazno zeleno.
             unreadable += 1
@@ -721,6 +842,33 @@ def main() -> None:
         if not text:
             unreadable += 1
             record_unverifiable()
+            continue
+
+        # Predlozak: citat opisuje XML paketa, pa se provjerava PROTIV NJEGA i proza se preskace.
+        # Blok mora stajati PRIJE usporedbe s tekstom: dok je stajao iza nje, ista su pravila
+        # dobivala oba nalaza, i "citat nije doslovan prijepis" (podudaranje 0 do 19 posto) i
+        # ispravan nalaz o predlosku.
+        if rel.lower().endswith(".docx") and TEMPLATE_XML_QUOTE.search(quote or ""):
+            problems = list(value_problem)
+            unmet = template_claims_unmet(rel, quote)
+            if unmet:
+                problems.append(
+                    f"predlozak ne sadrzi ono sto citat tvrdi (nedostaje: {', '.join(unmet)})"
+                )
+            known = acknowledged.get(entry.get("ruleId"), set())
+            problems = [p for p in problems if not any(p.startswith(k) for k in known)]
+            if problems:
+                findings.append(
+                    {
+                        "profileId": row["profileId"],
+                        "ruleId": entry.get("ruleId"),
+                        "checkId": check_id,
+                        "sourceId": entry.get("sourceId"),
+                        "snapshot": rel,
+                        "quote": entry.get("quote"),
+                        "problems": problems,
+                    }
+                )
             continue
 
         problems: list[str] = []
@@ -751,6 +899,7 @@ def main() -> None:
             problems.append(f"dokument se odrice (str. {disclaimer['page']}: '{disclaimer['phrase']}')")
 
         problems.extend(value_problem)
+
 
         if is_choice(check_id, entry.get("value"), quote or ""):
             problems.append("vrijednost je SKUP, ne ciljana vrijednost")

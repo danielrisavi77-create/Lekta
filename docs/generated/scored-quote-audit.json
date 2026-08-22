@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "audited": 1391,
-  "unreadable": 543,
+  "audited": 1593,
+  "unreadable": 341,
   "findings": [
     {
       "profileId": "agr-doktorski",
@@ -752,6 +752,17 @@
       ]
     },
     {
+      "profileId": "mef-doktorski",
+      "ruleId": "mef-doktorski--page-numbers",
+      "checkId": "page-numbers",
+      "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
+      "snapshot": "data/sources/mef/mef-naputci-tehnicka-obrada-doktorski-2022.docx",
+      "quote": "Stranice obavezno označiti brojevima",
+      "problems": [
+        "citat odsjecen, recenica se nastavlja: (prva stranica je stranica Uvod) 7) Numerirati i označiti nazive slika i tablica (naslov slike piše se ispod s"
+      ]
+    },
+    {
       "profileId": "mef-diplomski",
       "ruleId": "mef-diplomski--page-numbers",
       "checkId": "page-numbers",
@@ -782,6 +793,17 @@
       "quote": "neki elementi ostaju zajednic ki (nac in uveza, naslovna stranica, napomena o mjestu izrade rada i mentoru, sadrzaj, popis skra enica, sazetak i kljuc ne rijec i na hrvatskom jeziku, title, summary & ",
       "problems": [
         "citat nije doslovan prijepis (podudaranje rijeci 68%)"
+      ]
+    },
+    {
+      "profileId": "ozs-diplomski",
+      "ruleId": "ozs-diplomski--required-sections",
+      "checkId": "required-sections",
+      "sourceId": "ozs-tpl-diplomski",
+      "snapshot": "data/sources/ozs/ozs-tpl-diplomski.docx",
+      "quote": "Heading1 u predlošku: 1. UVOD; 2. CILJ RADA; 3. ISPITANICI I METODE; 4. REZULTATI; 5. RASPRAVA; 6. ZAKLJUČCI; 7. LITERATURA; 8. ŽIVOTOPIS (uz SAŽETAK, SUMMARY, SADRŽAJ i Temeljnu dokumentacijsku karti",
+      "problems": [
+        "citat nije doslovan prijepis (podudaranje rijeci 62%)"
       ]
     },
     {
@@ -892,6 +914,28 @@
       "quote": "Biljeske (fusnote) - velicina fonta: 10",
       "problems": [
         "citat nije doslovan prijepis (podudaranje rijeci 75%)"
+      ]
+    },
+    {
+      "profileId": "sumfak-diplomski",
+      "ruleId": "sumfak-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "snapshot": "data/sources/sumfak/sumfak-upute-zavrsni-diplomski-2024.docx",
+      "quote": "stranice se numeriraju od sažetka do kraja teksta, a numeracija se postavlja u donji desni kut",
+      "problems": [
+        "citat odsjecen, recenica se nastavlja: svaka tablica, graf, slika mora biti numerirana, mora imati naslov i mora biti smještena na sredinu stranice n"
+      ]
+    },
+    {
+      "profileId": "sumfak-zavrsni",
+      "ruleId": "sumfak-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "snapshot": "data/sources/sumfak/sumfak-upute-zavrsni-diplomski-2024.docx",
+      "quote": "stranice se numeriraju od sažetka do kraja teksta, a numeracija se postavlja u donji desni kut",
+      "problems": [
+        "citat odsjecen, recenica se nastavlja: svaka tablica, graf, slika mora biti numerirana, mora imati naslov i mora biti smještena na sredinu stranice n"
       ]
     },
     {
@@ -1527,9 +1571,31 @@
       "checkId": "font-size",
       "sourceId": "vevu-prilog4-diplomski",
       "snapshot": "data/sources/vevu/vevu-prilog4-diplomski.docx",
-      "quote": "Format rada je A4. Sve margine teksta trebaju biti 25 mm. Pri obradi teksta koristiti font Times New Roman. Prored teksta u cijelom radu treba biti 1,5. Poravnanje teksta obostrano (justified), prvi red uvucen.",
+      "quote": "Format rada je A4. Sve margine teksta trebaju biti 25 mm. Pri obradi teksta koristiti font Times New Roman. Prored teksta u cijelom radu treba biti 1,5. Poravnanje teksta obostrano (justified), prvi r",
       "problems": [
         "vrijednost pravila ne stoji u vlastitom citatu (nedostaje: 12)"
+      ]
+    },
+    {
+      "profileId": "vuka-lovstvo-zavrsni",
+      "ruleId": "vuka-lovstvo-zavrsni--font-size",
+      "checkId": "font-size",
+      "sourceId": "vuka-lovstvo-upute-2022",
+      "snapshot": "data/sources/vuka/vuka-lovstvo-upute-2022.docx",
+      "quote": "Rad ne moze biti pisan... znakovima manjim od 3 niti vecim od 4 mm (visina slova 12 tocaka). Preporuca se font \"Arial CE\" ili \"Times New Roman CE\". Rad se pise ili tiska samo na... papira formata A4.",
+      "problems": [
+        "citat nije doslovan prijepis (podudaranje rijeci 84%)"
+      ]
+    },
+    {
+      "profileId": "vuka-lovstvo-zavrsni",
+      "ruleId": "vuka-lovstvo-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "sourceId": "vuka-lovstvo-upute-2022",
+      "snapshot": "data/sources/vuka/vuka-lovstvo-upute-2022.docx",
+      "quote": "Rad ne moze biti pisan... znakovima manjim od 3 niti vecim od 4 mm (visina slova 12 tocaka). Preporuca se font \"Arial CE\" ili \"Times New Roman CE\". Rad se pise ili tiska samo na... papira formata A4.",
+      "problems": [
+        "citat nije doslovan prijepis (podudaranje rijeci 84%)"
       ]
     },
     {
