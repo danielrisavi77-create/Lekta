@@ -15903,7 +15903,6 @@
         {
           "profileId": "sois-ft-vojno-inzenjerstvo-zavrsni",
           "programs": [
-            "Sveucilisni prijediplomski studij Vojno inzenjerstvo",
             "Vojno inzenjerstvo (prijediplomski)"
           ],
           "workTypes": [
@@ -15944,7 +15943,6 @@
         {
           "profileId": "sois-ft-vojno-inzenjerstvo-diplomski",
           "programs": [
-            "Diplomski studij Vojno inzenjerstvo",
             "Vojno inzenjerstvo (diplomski)"
           ],
           "workTypes": [
@@ -15985,7 +15983,6 @@
         {
           "profileId": "sois-ft-vojno-vodjenje-zavrsni",
           "programs": [
-            "Sveucilisni prijediplomski studij Vojno vodjenje i upravljanje",
             "Vojno vodjenje i upravljanje (prijediplomski)"
           ],
           "workTypes": [
@@ -16026,7 +16023,6 @@
         {
           "profileId": "sois-ft-vojno-vodjenje-diplomski",
           "programs": [
-            "Diplomski studij Vojno vodjenje i upravljanje",
             "Vojno vodjenje i upravljanje (diplomski)"
           ],
           "workTypes": [
@@ -16067,7 +16063,6 @@
         {
           "profileId": "sois-ft-vojno-pomorstvo-diplomski",
           "programs": [
-            "Integrirani prijediplomski i diplomski studij Vojno pomorstvo",
             "Vojno pomorstvo (integrirani prijediplomski i diplomski)"
           ],
           "workTypes": [

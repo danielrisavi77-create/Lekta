@@ -45,6 +45,13 @@ klijent slozi iz profila (paramsForCheck u src/ui/repair-items.ts).
   Dokument se nikad ne zarobljava. Gard: tests/repair-delivery-order.test.ts.
 - IDENTITET provjere je check.id (src/scoring/check-id-registry.ts), ne hrvatski naslov;
   check-fixer-map.ts je kljucan po checkId. Gard: tests/check-fixer-map.test.ts.
+- PRAVILA KOJA ANALIZA CITA slaze src/profiles/compose-profile.ts (app.ts ga zove, nije
+  zrcalo): baseline -> lagan rad -> overlay katedre -> normalizeCheckFlags -> mentorov
+  override -> scored/advisory demotija ZADNJA. Demotija preskace dimenziju koju je izricito
+  propisao specificniji izvor (katedra) i mora gasiti SVE bodovane grane te dimenzije.
+  Gard: tests/composed-profile.test.ts + tests/conformance/composed.test.ts.
+- ODABIR (jedinica, program, vrsta rada) -> profil je u src/ui/work-selection.ts; nijedan
+  profil ne smije ostati nedostizan iz carobnjaka. Gard: tests/profile-routing.test.ts.
 - docs/REPAIR_RECIPE.md je GENERIRAN (npm run repair-recipe, izvor src/repair/recipe.ts).
   Ne uredjuj ga rucno; tests/repair-recipe.test.ts pada na drift. Ista naredba pece i
   data/generated/repair-params-by-profile.json.

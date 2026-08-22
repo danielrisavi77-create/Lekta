@@ -48,12 +48,19 @@ export function isRepairMapReady(): boolean {
  * Pecena scored/advisory demotija: bit-identican ishod kao applyScoredAdvisory(base, def,
  * draftRuleEntriesFor(id), SOURCE_REGISTRY), ali bez drafts/source-registryja u runtimeu.
  * Profil BEZ ruleEntries (nije u mapi) ne dira `base` (kao i racunski put).
+ *
+ * `protectedIds` prosljedjuje dimenzije koje je izricito propisao specificniji izvor (profil
+ * katedre); one ostaju bodovane. Vidi demotionProtectedBy u advisory-levers.
  */
-export function applyBakedAdvisory(base: ScoreBase, id: string | null | undefined): string[] {
+export function applyBakedAdvisory(
+  base: ScoreBase,
+  id: string | null | undefined,
+  protectedIds?: ReadonlySet<string>,
+): string[] {
   if (id == null) return [];
   const demoted = ADVISORY_MAP[id];
   if (demoted === undefined) return []; // nema ruleEntries -> ne diraj base (advisoryDimensions ostaje unset)
-  return applyDemotion(base, demoted);
+  return applyDemotion(base, demoted, protectedIds);
 }
 
 /**

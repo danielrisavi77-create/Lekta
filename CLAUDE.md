@@ -239,6 +239,23 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
   stranice (...)` je dinamican pa mu se ID izvodi (`page.size.*`, `isPaperSizeCheckId`).
   Gard: `tests/check-fixer-map.test.ts` pada kad pravilo gadja checkId koji ne postoji (tako su
   otkrivena dva MRTVA pravila pisana nad `where` oznakama, ne nad naslovima provjera).
+- `src/profiles/compose-profile.ts` - JEDINO mjesto gdje se slazu pravila koja ANALIZA cita:
+  baseline (ili profil) -> olaksani baseline za lagan rad -> overlay katedre (rulesByWorkType) ->
+  normalizeCheckFlags -> mentorov override -> scored/advisory demotija. REDOSLIJED JE UGOVOR
+  (demotija ide zadnja, override ju gasi). Do 2026-08-22 je taj lanac zivio unutar currentProfile()
+  nad DOM-om, pa ga nijedan test nije mjerio, a conformance matrica je vrtjela SIROVI profil iz
+  registra; demotija pritom gasi barem jednu bodovanu dimenziju na 383 od 407 profila.
+- `src/profiles/advisory-levers.ts` - poluge demotije. Dva ugovora koja se lako izgube: poluga mora
+  ugasiti SVE grane kojima engine boduje tu dimenziju (`paper-size` gasi i `requireA4` i
+  `paperSizes`, inace profil s vlastitim popisom formata i dalje gubi bodove na nebodovanom
+  pravilu), i demotija PRESKACE dimenziju koju je izricito propisao specificniji izvor
+  (`demotionProtectedBy`), jer advisory mapa govori samo o izvoru OSNOVNOG profila i ne smije
+  ponistiti uputu katedre. Zasticena dimenzija ne ulazi ni u `advisoryDimensions`.
+- `src/ui/work-selection.ts` - rutiranje odabira: vidljivi programi jedinice, kandidati za
+  (jedinica, program, vrsta rada) i izbor varijante. app.ts ih ZOVE (nije zrcalo). Krovni
+  ("Opći ...") program se skriva SAMO ako je redundantan, dakle ako je svaki profil koji ga gadja
+  dostizan i preko konkretnog studija; inace krovni profil postane nedostizan i broji se u
+  pokrivenosti a nitko ga ne moze odabrati.
 - `src/repair/param-authority.ts` - serverski autoritet nad ciljanom vrijednoscu (vidi Popravak).
 - `src/repair/docx-budget.ts` - JEDAN izvor granica dokumenta (upload, dekompresija, broj
   zapisa) za intake, analizu i popravak; ne uvodi nove granice mimo njega. VAZNO: analiza i
@@ -263,7 +280,13 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
 - `supabase/migrations/**`, `supabase/functions/**` - zivi backend (repair-docx, source-check,
   waitlist, deadline-reminders, narudzbe); NIJE "bez backenda" iznad, vidi "Sto je ovo".
 - `data/**` - autorski podaci (profili, izvori, rokovi, katalog, coverage).
-- `tests/**` - vitest: registar, regresija, UI smoke, rule-compiler, docx-golden.
+- `tests/**` - vitest: registar, regresija, UI smoke, rule-compiler, docx-golden. Conformance
+  ima TRI analiticka sloja: SIROVI profil (`npm run conformance`, jedan slucaj po paru profil x
+  vrsta rada), fallback BASELINE (obitelji x svih 7 vrsta rada) i SLOZENI profil (uzorak: po jedan
+  profil za svaki obrazac demotije + sve katedre + mentorov override). Rutiranje
+  (jedinica, program, vrsta rada) -> profil je podatkovni test BEZ analiza (`tests/profile-routing`,
+  ~4.800 trojki), a struktura slaganja isto bez analiza (`tests/composed-profile`).
+  Sve tri matrice imaju tripwire uzorak u `npm run check`.
 
 Pravne stranice (`privatnost.html`, `uvjeti-koristenja.html` i dr.) generira
 `scripts/generate-legal-pages.mjs`, koji se u `netlify.toml` pokrece TEK NAKON

@@ -37,6 +37,8 @@ export interface ConformanceAssertion {
 
 export interface ConformancePlan {
   profileId: string;
+  /** Vrsta rada koja se ovim planom vrti (profil ih moze imati vise). */
+  workType: string;
   profile: any;
   compliantSpec: DocSpec;
   violatingSpec: DocSpec;
@@ -82,11 +84,20 @@ function bodyParas(words: number, f: Fmt): ParaSpec[] {
   return out;
 }
 
-/** Izvedi plan provjera za jedan profil. Baca za nepoznat profileId. */
-export function deriveConformancePlan(profileId: string): ConformancePlan {
+/**
+ * Izvedi plan provjera za jedan profil i JEDNU vrstu rada. Baca za nepoznat profileId.
+ *
+ * Vrsta rada je eksplicitna jer resolveProfile uzima workTypes[0], pa je do 2026-08-22 svaki
+ * profil s vise vrsta rada (danas 9 profila sa seminar+project+article) bio testiran samo u prvoj:
+ * 18 parova (profil, vrsta rada) nije imalo nikakvu pokrivenost. Vrsta rada ulazi u analizu kroz
+ * settings.workType (npr. zahtjev za mentorom na naslovnici), pa nije kozmeticka.
+ */
+export function deriveConformancePlan(profileId: string, workType?: string): ConformancePlan {
   // Bez test-layer guarda: normalizeCheckFlags (profile-baseline.ts) sam gasi checkX bez
   // vrijednosti, pa ovaj sloj testira PRODUKCIJSKO ponasanje, a ne vlastiti zaobilazak.
-  return derivePlanFor(profileId, resolveProfile(profileId));
+  const profile = resolveProfile(profileId);
+  if (workType) profile.selection = { ...(profile.selection || {}), workType };
+  return derivePlanFor(profileId, profile);
 }
 
 /** Jezgra derivacije nad VEC razrijesenim profilom (dijele je registarski i fallback put). */
@@ -208,7 +219,7 @@ function derivePlanFor(profileId: string, profile: any): ConformancePlan {
   const skipped = new Set(SKIP[profileId] ?? []);
   const assertions = a.filter((x) => !skipped.has(x.dim));
 
-  return { profileId, profile, compliantSpec, violatingSpec, assertions };
+  return { profileId, workType: profile.selection?.workType || 'final', profile, compliantSpec, violatingSpec, assertions };
 }
 
 /** Nadji tocno jedan check po naslovu (dupli naslov = greska u derivaciji/engineu). */
@@ -238,8 +249,13 @@ async function analyzeWith(profile: any, file: File): Promise<any> {
  * assertaj sve izvedene dimenzije. Bez ijedne dimenzije (smoke-only profili) i dalje
  * dokazuje da analiza zavrsava i vraca provjere.
  */
-export async function expectProfileConformance(profileId: string): Promise<void> {
-  await runPlan(profileId, deriveConformancePlan(profileId));
+export async function expectProfileConformance(profileId: string, workType?: string): Promise<void> {
+  await runPlan(caseId(profileId, workType), deriveConformancePlan(profileId, workType));
+}
+
+/** Runner za jedan slucaj matrice (profil + vrsta rada). Koriste ga shardovi i tripwire. */
+export async function expectConformanceCase(c: ConformanceCase): Promise<void> {
+  await runPlan(c.id, deriveConformancePlan(c.profileId, c.workType));
 }
 
 /** Analiziraj uskladjen + neuskladjen docx plana i assertaj sve izvedene dimenzije. */
@@ -283,10 +299,40 @@ export function allConformanceProfileIds(): string[] {
   return (VERIFIED_PROFILE_REGISTRY as unknown as Array<{ id: string }>).map((p) => p.id).sort();
 }
 
+/** Jedan slucaj matrice: profil vrti se jednom po vrsti rada koju stvarno nosi. */
+export interface ConformanceCase {
+  profileId: string;
+  workType: string;
+  /** Ime testa: gol profileId dok profil ima jednu vrstu rada (citljivost postojecih izvjestaja). */
+  id: string;
+}
+
+/** Ime slucaja: sufiks samo kad profil nosi vise vrsta rada. */
+function caseId(profileId: string, workType?: string): string {
+  return workType ? `${profileId} · ${workType}` : profileId;
+}
+
+/** Svi (profil, vrsta rada) parovi registra, stabilno sortirano. */
+export function allConformanceCases(): ConformanceCase[] {
+  const registry = VERIFIED_PROFILE_REGISTRY as unknown as Array<{ id: string; workTypes?: string[] }>;
+  const out: ConformanceCase[] = [];
+  for (const p of [...registry].sort((a, b) => a.id.localeCompare(b.id))) {
+    const workTypes = p.workTypes?.length ? p.workTypes : [];
+    if (workTypes.length <= 1) {
+      out.push({ profileId: p.id, workType: workTypes[0] || 'final', id: p.id });
+      continue;
+    }
+    for (const workType of workTypes) {
+      out.push({ profileId: p.id, workType, id: caseId(p.id, workType) });
+    }
+  }
+  return out;
+}
+
 /** Interleaved podjela (i % totalShards) prirodno balansira velike wordMin profile. */
-export function conformanceShardIds(shard: number, totalShards: number): string[] {
+export function conformanceShardCases(shard: number, totalShards: number): ConformanceCase[] {
   if (shard < 1 || shard > totalShards) throw new Error(`shard ${shard} izvan raspona 1..${totalShards}`);
-  return allConformanceProfileIds().filter((_, i) => i % totalShards === shard - 1);
+  return allConformanceCases().filter((_, i) => i % totalShards === shard - 1);
 }
 
 /**
@@ -294,7 +340,7 @@ export function conformanceShardIds(shard: number, totalShards: number): string[
  * svaku instituciju iz kataloga koja ima profile. Baca ako neki registry unitId ne
  * postoji u katalogu: novi fakultet bez katalog unosa mora pasti glasno, ne tiho ispasti.
  */
-export function tripwireProfileIds(): string[] {
+export function tripwireCases(): ConformanceCase[] {
   const unitToInst = new Map<string, string>();
   for (const inst of catalog as any[]) {
     for (const u of inst.units || []) unitToInst.set(u.id, inst.id);
@@ -306,7 +352,8 @@ export function tripwireProfileIds(): string[] {
     if (!byInst.has(inst)) byInst.set(inst, []);
     byInst.get(inst)!.push(p.id);
   }
-  return [...byInst.keys()].sort().map((inst) => byInst.get(inst)!.sort()[0]);
+  const picked = new Set([...byInst.keys()].sort().map((inst) => byInst.get(inst)!.sort()[0]));
+  return allConformanceCases().filter((c) => picked.has(c.profileId));
 }
 
 // --- Fallback baseline (BASE_PROFILES) -------------------------------------------------------
@@ -318,8 +365,14 @@ export function tripwireProfileIds(): string[] {
 
 /** Obitelji koje katalog stvarno koristi (+ fpzg kao poseban unit s vlastitim baselineom). */
 export const BASELINE_FAMILIES = ['social', 'stem', 'biomed', 'arts', 'mixed'] as const;
-/** Reprezentativne vrste rada: 'seminar' pokriva lightBaseline granu (gasi requireToc), ostale teske. */
-export const BASELINE_WORK_TYPES = ['final', 'graduate', 'seminar'] as const;
+/**
+ * SVE vrste rada koje carobnjak nudi, ne uzorak. Do 2026-08-22 su ovdje bile samo tri
+ * (final/graduate/seminar), pa doktorski, specijalisticki, projektni i clanak na fallback putu nisu
+ * imali nijednu analizu, iako ih carobnjak nudi za svaku jedinicu (i za tri jedinice bez ijednog
+ * profila je fallback JEDINO sto student dobije). 'seminar', 'project' i 'article' idu kroz
+ * lightBaseline granu (gasi requireToc), ostale kroz tesku.
+ */
+export const BASELINE_WORK_TYPES = ['seminar', 'final', 'graduate', 'specialist', 'doctoral', 'article', 'project'] as const;
 
 /**
  * Izgradi analizabilni baseline profil za (obitelj, vrsta rada), vjerno fallback grani
@@ -359,4 +412,152 @@ export function baselineConformanceCases(): Array<{ family: string; workType: st
 /** Runner za jednu baseline kombinaciju: analiza zavrsava i sve izvedene dimenzije se drze. */
 export async function expectBaselineConformance(family: string, workType: string): Promise<void> {
   await runPlan(`baseline-${family}-${workType}`, deriveBaselinePlan(family, workType));
+}
+
+// --- Slozeni (zivi) profil -------------------------------------------------------------------
+// Sve iznad vrti SIROVI profil iz registra (resolveProfile): svaka dimenzija bodovana, jer je to
+// najstroza mreza za detekciju parsera (CLAUDE.md: golden namjerno testira sirovi engine). Student
+// medjutim dobiva profil koji je prosao jos cetiri sloja (compose-profile.ts): baseline za jedinicu
+// bez profila, olaksani baseline za lagane radove, overlay katedre po vrsti rada, mentorov override
+// i scored/advisory demotiju. Demotija sama danas gasi barem jednu bodovanu dimenziju na 383 od 407
+// profila, pa sirova matrica NE dokazuje sto ce ocjena stvarno mjeriti.
+//
+// Ovdje se zato vrti SLOZENI profil, ali na UZORKU: po jedan profil za svaki razlicit obrazac
+// demotije + sve kombinacije katedri + mentorov override. Puna slozena matrica bi udvostrucila
+// CI trosak bez nove informacije, jer profili s istim obrascem demotije prolaze iste grane.
+import { composeAnalysisProfile, type MentorOverrideInput } from '../../src/profiles/compose-profile';
+import { LEGAL_DEPARTMENT_REGISTRY, PROFILE_STATUS } from '../../src/profiles/profile-registry';
+import advisoryMap from '../../data/profiles/advisory-map.json';
+
+/** Jedan slucaj slozene matrice. */
+export interface ComposedCase {
+  id: string;
+  profileId: string;
+  workType: string;
+  /** Katedra Pravnog fakulteta (overlay + rulesByWorkType), ako je odabrana. */
+  departmentId?: string;
+  /** Mentorov override cetiriju tehnickih dimenzija. */
+  override?: MentorOverrideInput;
+}
+
+/** Obitelj studija iz kataloga (compose je treba samo kad profila nema, ali prosljedjujemo vjerno). */
+function familyForUnit(unitId: string): string {
+  for (const inst of catalog as Array<{ units?: Array<{ id: string; family?: string }> }>) {
+    for (const u of inst.units || []) if (u.id === unitId) return u.family || 'mixed';
+  }
+  return 'mixed';
+}
+
+/** Registarski unos s vec spojenim teskim pravilima (golden-entry ih eager mergea pri uvozu). */
+function registryEntry(profileId: string): any {
+  const entry = (VERIFIED_PROFILE_REGISTRY as unknown as Array<Record<string, any>>).find((p) => p.id === profileId);
+  if (!entry) throw new Error(`Nepoznat profileId: ${profileId}`);
+  return entry;
+}
+
+/**
+ * Slozi profil kakav analiza dobije u zivom app-u za dani slucaj. Koristi PRODUKCIJSKI
+ * composeAnalysisProfile (isti modul koji zove currentProfile), pa ne moze odlutati od app-a;
+ * dodaje samo metapodatke koje analyzeDocx cita, a UI ih inace postavlja.
+ */
+export function buildComposedProfile(c: ComposedCase): any {
+  const entry = registryEntry(c.profileId);
+  const department = c.departmentId
+    ? (LEGAL_DEPARTMENT_REGISTRY as unknown as Array<Record<string, any>>).find((d) => d.id === c.departmentId) || null
+    : null;
+  if (c.departmentId && !department) throw new Error(`Nepoznata katedra: ${c.departmentId}`);
+
+  const base: any = composeAnalysisProfile({
+    definition: { id: entry.id, rules: entry.rules },
+    department,
+    family: familyForUnit(entry.unitId),
+    unitId: entry.unitId,
+    workType: c.workType,
+    // Zivi UI postavi citatni stil iz profila (syncProfileContext), pa isto radimo i ovdje.
+    citationStyle: String(entry.rules?.recommendedCitation || 'fpzg'),
+    override: c.override ?? null,
+  });
+
+  base.name = `Slozeni ${c.id}`;
+  base.statusKey = entry.status;
+  base.status = ((PROFILE_STATUS as any)[entry.status] || {}).label || entry.status;
+  base.verified = entry.status === 'verified';
+  base.definitionId = entry.id;
+  base.sources = entry.sources || [];
+  base.facts = entry.facts || [];
+  base.selection = { workType: c.workType };
+  return base;
+}
+
+/** Plan provjera nad slozenim profilom (dijeli jezgru derivacije sa sirovim putem). */
+export function deriveComposedPlan(c: ComposedCase): ConformancePlan {
+  return derivePlanFor(c.id, buildComposedProfile(c));
+}
+
+/** Runner jednog slucaja slozene matrice. */
+export async function expectComposedConformance(c: ComposedCase): Promise<void> {
+  await runPlan(c.id, deriveComposedPlan(c));
+}
+
+/** Potpis demotije: sortirani popis demotiranih checkId-jeva ('' kad demotije nema). */
+export function demotionSignature(profileId: string): string {
+  const demoted = (advisoryMap as Record<string, string[]>)[profileId];
+  return demoted === undefined ? '(nema ruleEntries)' : [...demoted].sort().join('+') || '(bez demotije)';
+}
+
+/** Po jedan (leksikografski prvi) profil za svaki razlicit obrazac demotije. */
+export function demotionSampleCases(): ComposedCase[] {
+  const bySignature = new Map<string, string[]>();
+  for (const c of allConformanceCases()) {
+    const sig = demotionSignature(c.profileId);
+    if (!bySignature.has(sig)) bySignature.set(sig, []);
+    bySignature.get(sig)!.push(c.profileId);
+  }
+  return [...bySignature.keys()].sort().map((sig) => {
+    const profileId = bySignature.get(sig)!.sort()[0];
+    const workType = registryEntry(profileId).workTypes?.[0] || 'final';
+    return { id: `composed:${profileId}`, profileId, workType };
+  });
+}
+
+/**
+ * Sve kombinacije katedre i vrste rada, svaka na pravom Pravnom profilu. Katedra je jedini sloj
+ * koji u pravila unosi NOVE zahtjeve (dijelovi rada, fusnote, opseg), a ne samo gasi postojece.
+ */
+export function departmentCases(): ComposedCase[] {
+  const out: ComposedCase[] = [];
+  const registry = VERIFIED_PROFILE_REGISTRY as unknown as Array<Record<string, any>>;
+  for (const dept of (LEGAL_DEPARTMENT_REGISTRY as unknown as Array<Record<string, any>>)) {
+    for (const workType of dept.workTypes || []) {
+      const match = registry.find(
+        (p) => p.unitId === 'pravo' && (p.workTypes || []).includes(workType) &&
+          (p.programs || []).some((program: string) => (dept.programs || []).includes(program)),
+      );
+      // Katedra bez ijednog profila za tu vrstu rada znaci da UI nudi katedru koju nista ne moze
+      // primijeniti; padamo glasno umjesto da slucaj tiho izostane iz matrice.
+      if (!match) throw new Error(`Katedra ${dept.id}: nema Pravnog profila za vrstu rada ${workType}`);
+      out.push({ id: `composed:${match.id}+${dept.id}:${workType}`, profileId: match.id, workType, departmentId: dept.id });
+    }
+  }
+  return out;
+}
+
+/** Mentorov override: korisnikove vrijednosti moraju biti mjerene i kad ih profil ne propisuje. */
+export const MENTOR_OVERRIDE: MentorOverrideInput = { font: 'Arial', sizePt: 11, spacing: 2, marginCm: 3 };
+
+/**
+ * Override slucajevi: jedan bogat profil (override gazi postojeca pravila) i jedan siromasan
+ * (vsite-zavrsni nema font ni margine pa mu normalizeCheckFlags gasi zastavice; override ih mora
+ * vratiti, inace bi korisnikov izricit zahtjev bio tiho ignoriran).
+ */
+export function overrideCases(): ComposedCase[] {
+  return [
+    { id: 'composed:fpzg-politologija-zavrsni+override', profileId: 'fpzg-politologija-zavrsni', workType: 'final', override: MENTOR_OVERRIDE },
+    { id: 'composed:vsite-zavrsni+override', profileId: 'vsite-zavrsni', workType: 'final', override: MENTOR_OVERRIDE },
+  ];
+}
+
+/** Svi slucajevi slozene matrice, stabilno sortirano. */
+export function composedConformanceCases(): ComposedCase[] {
+  return [...demotionSampleCases(), ...departmentCases(), ...overrideCases()].sort((a, b) => a.id.localeCompare(b.id));
 }

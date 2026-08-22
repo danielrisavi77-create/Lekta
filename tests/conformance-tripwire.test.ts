@@ -9,10 +9,10 @@
  * flakati pod CPU kontencijom (vidi docx-golden konvenciju).
  */
 import { describe, it } from 'vitest';
-import { expectProfileConformance, tripwireProfileIds } from './helpers/conformance';
+import { expectConformanceCase, tripwireCases } from './helpers/conformance';
 
 describe('conformance tripwire (1 profil po instituciji)', () => {
-  for (const profileId of tripwireProfileIds()) {
-    it(profileId, () => expectProfileConformance(profileId), 30000);
+  for (const c of tripwireCases()) {
+    it(c.id, () => expectConformanceCase(c), 30000);
   }
 });

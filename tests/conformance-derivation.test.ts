@@ -10,12 +10,14 @@ import { describe, it, expect } from 'vitest';
 import { buildDocx } from './helpers/docx-builder';
 import { normalize, sectionName } from '../src/utils/helpers';
 import {
+  allConformanceCases,
   allConformanceProfileIds,
-  conformanceShardIds,
+  conformanceShardCases,
   deriveConformancePlan,
-  tripwireProfileIds,
+  tripwireCases,
   type ConformancePlan,
 } from './helpers/conformance';
+import { VERIFIED_PROFILE_REGISTRY } from '../src/profiles/profile-registry';
 
 const plans = new Map<string, ConformancePlan>();
 const planFor = (id: string) => {
@@ -95,21 +97,43 @@ describe('conformance derivacija (invarijanti, bez analiza)', () => {
     expect(planFor('fpzg-politologija-zavrsni').assertions.length).toBeGreaterThanOrEqual(5);
   });
 
-  it('shardovi particioniraju sve profile bez preklapanja', () => {
-    const all = allConformanceProfileIds();
+  it('shardovi particioniraju sve slucajeve bez preklapanja', () => {
+    const all = allConformanceCases().map((c) => c.id);
     const union: string[] = [];
-    for (let s = 1; s <= 8; s++) union.push(...conformanceShardIds(s, 8));
+    for (let s = 1; s <= 8; s++) union.push(...conformanceShardCases(s, 8).map((c) => c.id));
     expect(union.sort()).toEqual([...all].sort());
     expect(new Set(union).size).toBe(all.length);
   });
 
+  it('matrica pokriva SVAKI par (profil, vrsta rada), ne samo prvu vrstu', () => {
+    // Do 2026-08-22 je matrica isla po profilu, a resolveProfile uzima workTypes[0], pa profil sa
+    // "seminar+project+article" nikad nije bio analiziran ni kao projektni ni kao clanak.
+    const expected = (VERIFIED_PROFILE_REGISTRY as unknown as Array<{ id: string; workTypes?: string[] }>)
+      .flatMap((p) => (p.workTypes?.length ? p.workTypes : ['final']).map((w) => `${p.id}|${w}`))
+      .sort();
+    const actual = allConformanceCases().map((c) => `${c.profileId}|${c.workType}`).sort();
+    expect(actual).toEqual(expected);
+    expect(actual.length).toBeGreaterThan(allConformanceProfileIds().length);
+  });
+
+  it('plan nosi trazenu vrstu rada, a ne prvu iz profila', () => {
+    const multi = (VERIFIED_PROFILE_REGISTRY as unknown as Array<{ id: string; workTypes?: string[] }>)
+      .find((p) => (p.workTypes?.length || 0) > 1);
+    expect(multi, 'registar vise nema profil s vise vrsta rada; provjeri je li to namjerno').toBeTruthy();
+    for (const workType of multi!.workTypes!) {
+      const plan = deriveConformancePlan(multi!.id, workType);
+      expect(plan.workType).toBe(workType);
+      expect(plan.profile.selection.workType).toBe(workType);
+    }
+  });
+
   it('tripwire: deterministican, bez duplikata, pokriva svaku instituciju s profilima', () => {
-    const a = tripwireProfileIds();
-    const b = tripwireProfileIds();
+    const a = tripwireCases();
+    const b = tripwireCases();
     expect(a).toEqual(b);
-    expect(new Set(a).size).toBe(a.length);
-    expect(a.length).toBeGreaterThanOrEqual(35);
+    expect(new Set(a.map((c) => c.id)).size).toBe(a.length);
+    expect(new Set(a.map((c) => c.profileId)).size).toBeGreaterThanOrEqual(35);
     const all = new Set(allConformanceProfileIds());
-    for (const id of a) expect(all.has(id), `tripwire id ${id} nije u registru`).toBe(true);
+    for (const c of a) expect(all.has(c.profileId), `tripwire id ${c.profileId} nije u registru`).toBe(true);
   });
 });
