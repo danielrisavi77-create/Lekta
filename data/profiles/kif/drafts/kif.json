@@ -3,6 +3,9 @@
     "kif-diplomski": [
       {
         "ruleId": "kif-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -26,6 +29,9 @@
       },
       {
         "ruleId": "kif-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -34,7 +40,7 @@
         "authority": "program-page",
         "sourceId": "kif-upute-diplomski-2023",
         "sourcePage": "str. 14, Upute za izradu i opremanje rada, openito - oblikovanje",
-        "quote": "velicina fonta",
+        "quote": "Tekst Times New Roman veličina fonta – 12 pt",
         "status": "verified",
         "scored": true,
         "autoFixable": true,
@@ -47,6 +53,9 @@
       },
       {
         "ruleId": "kif-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -68,6 +77,9 @@
       },
       {
         "ruleId": "kif-diplomski--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -94,6 +106,9 @@
       },
       {
         "ruleId": "kif-diplomski--page-numbers",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -113,6 +128,9 @@
       },
       {
         "ruleId": "kif-diplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -132,6 +150,9 @@
       },
       {
         "ruleId": "kif-diplomski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "citation-style",
         "value": "apa7",
         "category": "citation",
@@ -172,6 +193,9 @@
       },
       {
         "ruleId": "kif-diplomski--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -193,6 +217,9 @@
       },
       {
         "ruleId": "kif-diplomski--reference-count",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "mechanical",
         "checkId": "reference-count",
         "value": 20,
         "category": "scope",

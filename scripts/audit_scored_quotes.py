@@ -22,6 +22,7 @@ Skript NISTA ne mijenja. Nalaz je razlog da se dokument procita, ne presuda.
 
 from __future__ import annotations
 
+import difflib
 import glob
 import importlib.util
 import json
@@ -54,7 +55,10 @@ def fold(text: str) -> str:
     """
     decomposed = unicodedata.normalize("NFD", text)
     stripped = "".join(ch for ch in decomposed if not unicodedata.combining(ch))
-    return stripped.replace("đ", "d").replace("Đ", "D").lower()
+    # ß nije dijakriticki znak pa ga NFD ne rastavlja; bez ove zamjene njemacki izvori
+    # (ffri-germanistika) nikad ne pogadjaju citat pisan kao "Schriftgrosse".
+    folded = stripped.replace("đ", "d").replace("Đ", "D").lower()
+    return folded.replace("ß", "ss")
 
 
 # Citat po konvenciji smije IZOSTAVLJATI: "Rad mora sadrzavati: (...) Sadrzaj" spaja dva nesusjedna
@@ -324,6 +328,36 @@ def has_scanned_pages(rel_path: str) -> bool:
     return result
 
 
+# Prag ostecenja tekstualnog sloja. Dobiven MJERENJEM 2026-08-22, ne procjenom: udio tokena duljine
+# barem 4 koji mijesaju slova i znamenke ("zavr5ni", "bilje5ke", "formatu 44"). Kod 36 izvora bez
+# ijednog nalaza medijan je 0,11%, a najveci 2,86%; kod izvora s nalazima najnizi ostecen je 3,81%
+# (efri) a najvisi 7,41% (unipu). Izmedju 2,86 i 3,81 nema nijednog izvora, pa prag lezi u praznini.
+DAMAGED_TEXT_RATIO = 0.035
+_damaged: dict[str, bool] = {}
+
+
+def text_layer_damaged(rel_path: str) -> bool:
+    """Je li tekstualni sloj PDF-a toliko ostecen da usporedba citata vise nista ne dokazuje.
+
+    Isti razred kao `has_scanned_pages`, ali suptilniji: stranica NIJE skenirana, ima tekstualni
+    sloj, samo je taj sloj pun zamjena ("zavr5ni rad", "u formatu 44", "velidina slova"). Citat je
+    ondje uredno prepisan s OTISNUTE stranice, pa podudaranje pada ispod praga a podatak je tocan.
+    Potvrdjeno gledanjem renderirane stranice na biolos-pravilnik-diplomski-2023 ("2,n" umjesto
+    "2,5"): otisnuto je bilo ispravno.
+
+    Takav nalaz nije kvar podatka nego granica alata, pa se broji kao NEPROVJERIVO, kao i skenirano.
+    """
+    if rel_path in _damaged:
+        return _damaged[rel_path]
+    tokens = [t for t in WORD.findall(fold(document_text(rel_path))) if len(t) >= 4]
+    if len(tokens) < 200:
+        _damaged[rel_path] = False
+        return False
+    mixed = sum(1 for t in tokens if any(c.isdigit() for c in t) and any(c.isalpha() for c in t))
+    _damaged[rel_path] = mixed / len(tokens) >= DAMAGED_TEXT_RATIO
+    return _damaged[rel_path]
+
+
 def truncated_tail(full_text: str, quote: str, check_id: str = "", value=None) -> str | None:
     """Ostatak recenice iza citata, ako jos nosi znamenku. Citat koji zavrsava tockom nije odsjecen."""
     quote = squash(quote)
@@ -348,7 +382,10 @@ def truncated_tail(full_text: str, quote: str, check_id: str = "", value=None) -
 # preostalih nalaza njih 30 imalo je rep o DRUGOJ osi (pravilo o marginama, rep o fontu i proredu).
 AXIS_WORDS = {
     "margins": r"margin\w*|rubnic\w*",
-    "font-size": r"veli[cč]in\w*|to[cč]ak\w*|to[cč]k\w*|\bpt\b|kegl",
+    # `pt` je namjerno IZOSTAVLJEN: hrvatske upute istom mjerom pisu razmak prije i poslije
+    # odlomka ("razmak - prije i poslije - 0 pt"), pa je goli "pt" hvatao tudju os. Velicina
+    # slova se u tim uputama uvijek imenuje ("velicina", "tocaka"), sto guard slucajevi potvrduju.
+    "font-size": r"veli[cč]in\w*|to[cč]ak\w*|to[cč]k\w*|kegl",
     "font": r"\bfont\w*|pism\w*|times|arial|calibri|garamond|antiqua|cambria|helvetica",
     "line-spacing": r"prored\w*|jednostruk\w*|dvostruk\w*|razmak\w* (?:me[dđ]u )?redov\w*",
     "justify": r"poravnan\w*|justif|obostran\w*",
@@ -526,6 +563,78 @@ def hedge_on_own_clause(quote: str, value, check_id: str) -> str | None:
     return None
 
 
+# --- 7. CITAT KOJI NE NOSI VLASTITU VRIJEDNOST -------------------------------------------------
+#
+# Najskuplji razred za institucionalnu obranu: pravilo boduje vrijednost koju njegov citat uopce ne
+# spominje. Fakultet koji pita "pokazite gdje to pise u nasem dokumentu" tu ne dobiva odgovor.
+# Nadjeno 2026-08-22 na fhs (`value: "Times New Roman"`, citat govori samo o potpori hrvatskih
+# znakova) i na kif (`value: 12`, citat glasi doslovno "velicina fonta").
+#
+# Provjera je namjerno uska, jer je siroka verzija izmjerena i odbacena: dala je 38 pogodaka od kojih
+# je vecina bila lazna. Tri razreda laznih su iskljucena, svaki izmjeren:
+#   - JEDINICE. Izvori pisu margine u milimetrima ("lijeva 25 mm"), profil ih drzi u centimetrima
+#     (2,5). To je pretvorba, ne izostala vrijednost: 35 od 43 pogotka bilo je upravo to.
+#   - TIPFELER U IZVORU. `unizd-pomorski` ima "Marriweather" uz autorovu oznaku [sic]; usporedba
+#     imena je zato fuzzy (slicnost 0,92 pri pragu 0,85).
+#   - KANONSKI TOKEN. `citation-style` nosi klasifikaciju koju je covjek IZVEO iz opisa
+#     (`chicago-notes`, `custom`, `autor-godina`), pa se ta os ne provjerava ovako.
+VALUE_IN_QUOTE_NUMERIC = ("font-size", "line-spacing", "margins", "footnote-size", "footnote-spacing")
+VALUE_IN_QUOTE_NAMES = ("font",)
+LENGTH_AXES = ("margins",)
+NAME_SIMILARITY = 0.85
+
+
+def _length_forms(atom: str) -> set[str]:
+    """Isti rub zapisan u cm i u mm: 2,5 cm je "25 mm" u vecini hrvatskih uputa."""
+    forms = {atom, atom.replace(".", ","), atom.replace(",", ".")}
+    try:
+        value = float(atom.replace(",", "."))
+    except ValueError:
+        return forms
+    millimetres = value * 10
+    forms.add(f"{millimetres:g}")
+    forms.add(f"{millimetres:g}".replace(".", ","))
+    return forms
+
+
+def _name_in_quote(name: str, folded_quote: str) -> bool:
+    parts = [p for p in re.split(r"[^a-z0-9]+", fold(str(name))) if len(p) > 2]
+    if not parts:
+        return False
+    if len(parts) > 1:
+        return sum(1 for p in parts if p in folded_quote) * 2 >= len(parts)
+    words = re.findall(r"[a-z]{4,}", folded_quote)
+    return any(
+        difflib.SequenceMatcher(None, parts[0], word).ratio() >= NAME_SIMILARITY for word in words
+    )
+
+
+def value_missing_from_quote(check_id: str, value, quote: str) -> list[str]:
+    """Dijelovi vrijednosti kojih u vlastitom citatu NEMA. Prazna lista znaci uredan citat."""
+    if not quote or value is None:
+        return []
+    folded_quote = fold(quote)
+    if check_id in VALUE_IN_QUOTE_NAMES:
+        names = [v for v in (value if isinstance(value, list) else [value]) if v]
+        if not names:
+            return []
+        return [] if any(_name_in_quote(n, folded_quote) for n in names) else [str(n) for n in names]
+    if check_id not in VALUE_IN_QUOTE_NUMERIC:
+        return []
+    missing: list[str] = []
+    for atom in sorted(set(value_atoms(value))):
+        if not re.search(r"\d", atom):
+            continue
+        forms = _length_forms(atom) if check_id in LENGTH_AXES else {
+            atom,
+            atom.replace(".", ","),
+            atom.replace(",", "."),
+        }
+        if not any(form in folded_quote for form in forms):
+            missing.append(atom)
+    return missing
+
+
 def collect_scored() -> list[dict]:
     """Sva `verified` + `scored` pravila iz staging draftova, s profilom uz svako."""
     rows: list[dict] = []
@@ -572,21 +681,52 @@ def main() -> None:
         quote = squash(entry.get("quote") or "")
         check_id = entry.get("checkId", "")
 
+        # Usporedba citata s VLASTITOM vrijednoscu ne treba izvor, pa ide PRIJE vrata citljivosti.
+        # Inace bi ispala bas ondje gdje je najkorisnija: `grf` (.doc), `vevu` (.docx) i `ffri-povum`
+        # (potpuno skeniran PDF) su rulesi kojima se nista drugo ne moze provjeriti, a i dalje se
+        # moze vidjeti da im citat ne spominje vrijednost koju boduju.
+        missing_value = value_missing_from_quote(check_id, entry.get("value"), quote)
+        value_problem = (
+            [f"vrijednost pravila ne stoji u vlastitom citatu (nedostaje: {', '.join(missing_value)})"]
+            if missing_value
+            else []
+        )
+
+        def record_unverifiable() -> None:
+            """Izvor se ne moze procitati, ali nalaz o citatu i dalje vrijedi."""
+            if value_problem:
+                known = acknowledged.get(entry.get("ruleId"), set())
+                fresh = [p for p in value_problem if not any(p.startswith(k) for k in known)]
+                if fresh:
+                    findings.append(
+                        {
+                            "profileId": row["profileId"],
+                            "ruleId": entry.get("ruleId"),
+                            "checkId": check_id,
+                            "sourceId": entry.get("sourceId"),
+                            "snapshot": rel,
+                            "quote": entry.get("quote"),
+                            "problems": fresh,
+                        }
+                    )
+
         if not rel.lower().endswith(".pdf"):
             # .doc / .docx / .html / .rar se ovdje NE citaju. Prijavljuje se kao NEREVIDIRANO, ne kao
             # uredno: sutnja o neprovjerenom je isti kvar kao lazno zeleno.
             unreadable += 1
+            record_unverifiable()
             continue
 
         text = document_text(rel)
         if not text:
             unreadable += 1
+            record_unverifiable()
             continue
 
         problems: list[str] = []
         if not quote:
             problems.append("bez citata")
-        elif not quote_found(text, quote) and has_scanned_pages(rel):
+        elif not quote_found(text, quote) and (has_scanned_pages(rel) or text_layer_damaged(rel)):
             # Citat vjerojatno dolazi sa SKENIRANE stranice, preuzet OCR-om. To nije nalaz nego
             # granica alata, i broji se kao nerevidirano, ne kao kvar.
             inconclusive += 1
@@ -595,7 +735,12 @@ def main() -> None:
             if cov >= COVERAGE_MIN:
                 problems.append(f"BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju {cov:.0%})")
             else:
-                problems.append(f"citat se NE nalazi u dokumentu (podudaranje {cov:.0%})")
+                # Formulacija je 2026-08-22 promijenjena iz "citat se NE nalazi u dokumentu".
+                # Stara je citana kao optuzba da je pravilo izmisljeno, pa je jedna cijela sesija
+                # potrosena na 188 navodno izmisljenih pravila; citanje izvora pokazalo je da su
+                # citati UREDNI PRIJEPISI natucnickih popisa, sa svim vrijednostima na mjestu.
+                # Nalaz je o SLJEDIVOSTI (koliko je citat doslovan), ne o bodovanju.
+                problems.append(f"citat nije doslovan prijepis (podudaranje rijeci {cov:.0%})")
 
         qualifier = hedge_on_own_clause(quote, entry.get("value"), check_id) if quote else None
         if qualifier:
@@ -604,6 +749,8 @@ def main() -> None:
         disclaimer = vrc.document_disclaimer(rel)
         if disclaimer:
             problems.append(f"dokument se odrice (str. {disclaimer['page']}: '{disclaimer['phrase']}')")
+
+        problems.extend(value_problem)
 
         if is_choice(check_id, entry.get("value"), quote or ""):
             problems.append("vrijednost je SKUP, ne ciljana vrijednost")
