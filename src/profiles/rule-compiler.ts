@@ -84,7 +84,17 @@ function applyEntry(eff: EffectiveRules, entry: RuleEntry): boolean {
     case 'font': eff.font = value; return true;
     case 'font-size': eff.size = value; return true;
     case 'line-spacing': eff.spacing = value; return true;
-    case 'margins': eff.margins = value; return true;
+    case 'margins':
+      // Vrijednost smije nositi `minimum: true` (izvor kaze "najmanje 2,5 cm"). Zastavica se
+      // odvaja od strana, jer normalizeCheckFlags trazi da SVE cetiri strane budu brojevi.
+      if (value && typeof value === 'object') {
+        const { minimum, ...sides } = value as Record<string, unknown>;
+        eff.margins = sides as never;
+        if (minimum === true) eff.marginsMinimum = true;
+      } else {
+        eff.margins = value;
+      }
+      return true;
     case 'citation-style': eff.recommendedCitation = value; return true;
     case 'required-sections': eff.requiredSections = value; return true;
     case 'reference-count': eff.minReferences = value; return true;

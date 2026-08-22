@@ -307,6 +307,9 @@ export interface SectionSurgeryRules {
     numbering?: 'decimal';
     startAt?: number;
     margins?: Partial<Record<'top' | 'right' | 'bottom' | 'left', number>>;
+    /** Margine su NAJMANJE dopustene, ne ciljane. Izvor koji kaze "rubovi moraju biti siroki
+     *  najmanje 2,5 cm" ne kaznjava sira polja; bez ovoga je rad s 3 cm gubio svih 6 bodova. */
+    marginsMinimum?: boolean;
   };
   appendices?: {
     enabled?: boolean;
