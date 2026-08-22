@@ -1161,14 +1161,26 @@ margine ostaju jedne i provjera prolazi.
 Zatecено ponasanje je zakljucano u `tests/margins-title-page-section.test.ts` PRIJE bilo kakve
 izmjene, po pravilu iz CLAUDE.md. Test ne tvrdi da je ponasanje ispravno.
 
-#### Popravak nije napravljen, jer mijenja ocjenu svima
-Tri smjera, svaki s drugom cijenom:
-- **Izuzeti prvu sekciju iz provjere margina** kad ih dokument ima vise. Najjednostavnije, ali tiho
-  prestaje provjeravati naslovnicu i ondje gdje je uputa trazi jednakom.
-- **Izuzeti je samo kad profil to kaze** (podatak, ne opce pravilo). Ispravno po CLAUDE.md, ali ne
-  pomaze `efzg`-u i slicnima koji o naslovnici sute, a jednako padaju.
-- **Odstupanje prve sekcije prijaviti kao upozorenje umjesto pada.** Zadrzava signal, ne kaznjava
-  puno; mijenja bodovanje svim profilima.
+#### POPRAVLJENO: odstupanje naslovnice je upozorenje, ne pad
+Od tri razmatrana smjera odabran je treci. Izuzimanje prve sekcije tiho bi prestalo provjeravati
+naslovnicu i ondje gdje uputa trazi jednake margine; izuzimanje po profilnom podatku ne bi pomoglo
+`efzg`-u i slicnima koji o naslovnici sute a jednako padaju.
+
+Izvedba: odstupanja PRVE sekcije skupljaju se odvojeno (`coverBad`) i nose jednu odbitnicu
+(6 -> 5, status `warn`), umjesto 1,5 boda po strani. Prag `TITLE_PAGE_MAX_PARAGRAPHS = 5` postoji da
+se pod "naslovnicu" ne bi moglo sakriti pola rada: prva sekcija dulja od praga boduje se normalno, i
+to je pokriveno zasebnom tvrdnjom u testu.
+
+Golden je ostao NETAKNUT (9 tvrdnji, bez ijedne promjene snapshota), dakle nijedan fixture nema taj
+oblik i izmjena je za zatecen korpus aditivna. `tsc --noEmit` cist.
+
+#### Umalo vracena ispravna izmjena
+Nakon izmjene je `src/ui/repair-panel.test.ts` pao, i A/B usporedba (bez izmjene prolazi, s njom pada)
+optuzila je izmjenu. To je bio kriv zakljucak iz JEDNOG uzorka nestabilnog testa: taj test STUBIRA
+`reanalyze` i koristi jednosekcijski dokument, pa prava analiza u njemu uopce ne radi i izmjena na
+njega logicki ne moze utjecati. Ponovljeno mjerenje: bez izmjene 27/27 uz `tests` 12-14 s, s izmjenom
+27/27 uz 11,5 s, a globalni prag je 15 s. Test je dakle na rubu i u ovoj je sesiji DVAPUT dao lazno
+crven gate. Prag mu je podignut na 60 s, uz zapis zasto.
 
 ---
 

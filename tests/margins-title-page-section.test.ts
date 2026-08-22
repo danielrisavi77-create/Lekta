@@ -1,11 +1,11 @@
 /**
- * ZATECENO PONASANJE: naslovnica kao vlastita sekcija obara provjeru margina.
+ * Naslovnica kao vlastita sekcija UPOZORAVA, ne obara provjeru margina.
  *
- * Ovaj test NE tvrdi da je ponasanje ispravno. Po pravilu iz CLAUDE.md ("ne mijenjaj parser bez
- * golden-file testa koji PRVO dokazuje zatečeno ponasanje") on zakljucava mjerenje prije nego se o
- * popravku odlucuje.
+ * Test je najprije zakljucao ZATECENO ponasanje (pad 0/6), po pravilu iz CLAUDE.md, pa je tek onda
+ * ponasanje promijenjeno. Ovo su tvrdnje NAKON promjene; povijest ostaje zapisana jer objasnjava
+ * zasto prag i zasto upozorenje.
  *
- * Sto je izmjereno: `src/analysis/analyze-docx.ts` provjerava SVAKU zivu sekciju protiv jedne
+ * Sto je bilo izmjereno PRIJE popravka: `src/analysis/analyze-docx.ts` provjerava SVAKU zivu sekciju protiv jedne
  * profilne vrijednosti i oduzima 1,5 boda po odstupajucoj strani. Cim naslovnica ima vlastiti
  * `w:sectPr` s drugacijim marginama, sve cetiri strane odstupaju i provjera pada sa 6/6 na 0/6.
  *
@@ -16,8 +16,12 @@
  * Ucinak NIJE ogranicen na te profile: mjereno je i na `efzg-specijalisticki`, koji o naslovnici ne
  * govori nista, pa je rijec o opcem ponasanju motora, ne o profilnom podatku.
  *
- * Napomena o dosegu: kvar se javlja samo kad je naslovnica VLASTITA sekcija. Kad je rijesena preko
+ * Napomena o dosegu: ucinak se javlja samo kad je naslovnica VLASTITA sekcija. Kad je rijesena preko
  * `w:titlePg` (razlicito prvo zaglavlje unutar iste sekcije), margine ostaju jedne i provjera prolazi.
+ *
+ * POPRAVAK: odstupanje PRVE sekcije nosi jednu odbitnicu (6 -> 5, status `warn`), ne pad. Prag
+ * `TITLE_PAGE_MAX_PARAGRAPHS` postoji da se pod "naslovnicu" ne bi moglo sakriti pola rada: prva
+ * sekcija dulja od praga boduje se normalno, sto pokriva zadnja tvrdnja.
  */
 import { describe, expect, it } from 'vitest';
 import { buildDocxFile, type DocSpec } from './helpers/docx-builder';
@@ -61,12 +65,32 @@ describe('margine i naslovnica kao vlastita sekcija', () => {
     }
   }, 120000);
 
-  it('sa zasebnom naslovnicom provjera PADA, i to u punom iznosu', async () => {
+  it('sa zasebnom naslovnicom UPOZORAVA umjesto da padne', async () => {
     for (const profileId of profiles) {
       const check = await marginCheck(profileId, true);
-      expect(`${profileId}: ${check.status} ${check.earned}/${check.max}`).toBe(`${profileId}: fail 0/6`);
-      // Prigovor imenuje prvu sekciju, dakle naslovnicu, a ne tijelo rada.
-      expect(String(check.detail), profileId).toContain('1. sekcija');
+      // Prije popravka je ovdje stajalo `fail 0/6`, i to za svaki od cetiri profila.
+      expect(`${profileId}: ${check.status} ${check.earned}/${check.max}`).toBe(`${profileId}: warn 5/6`);
+      // Poruka mora imenovati naslovnicu, inace korisnik ne zna sto da provjeri.
+      expect(String(check.detail), profileId).toContain('Naslovnica');
+      expect(String(check.detail), profileId).toContain('Tijelo rada odgovara profilu');
     }
+  }, 120000);
+
+  it('duga prva sekcija se NE prolazi kao naslovnica', async () => {
+    // Isti dokument, ali naslovnica nosi 12 odlomaka, dakle vise od praga. Ondje blazi tretman ne
+    // smije vrijediti, inace bi se pod "naslovnicu" moglo sakriti pola rada.
+    const long = Array.from({ length: 12 }, (_, i) => ({ text: `Uvodni odlomak ${i + 1}.` }));
+    const spec = {
+      paragraphs: [...long, { raw: COVER_SECTION }, ...body],
+      marginsCm: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 },
+      fontName: 'Times New Roman',
+      fontSizePt: 12,
+      lineSpacing: 1.5,
+    } as unknown as DocSpec;
+    const result: any = await analyzeFixture(buildDocxFile(spec, 'duga-prva.docx'), {
+      profileId: 'grf-doktorski',
+    });
+    const check = (result.checks || []).find((c: any) => String(c.title).startsWith('Margine'));
+    expect(`${check.status} ${check.earned}/${check.max}`).toBe('fail 0/6');
   }, 120000);
 });

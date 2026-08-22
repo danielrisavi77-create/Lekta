@@ -319,7 +319,11 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
     expect(recheck.textContent).toContain('84');
     expect(recheck.textContent).toContain('+16'); // delta
     expect(recheck.textContent).toContain('Oblikovanje'); // kategorijska delta
-  });
+    // Prag je podignut jer je ovaj test IZMJERENO na rubu: bez ijedne izmjene koda datoteka trosi
+    // 11 do 14 s uz globalnih 15 s, pa je isti test u istoj sesiji dvaput dao lazno crven gate i
+    // jednom naveo na krivi zakljucak (izmjena u analyze-docx.ts optuzena je za pad koji je zapravo
+    // bio istek vremena; ponovljeno mjerenje pokazalo je 27/27 s tom izmjenom).
+  }, 60000);
 
   it('regresija (pass -> fail): izvorni dokument postaje GLAVNA ponuda', async () => {
     const mountEl = mount();
