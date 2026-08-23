@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "audited": 1778,
-  "unreadable": 154,
+  "audited": 1919,
+  "unreadable": 13,
   "findings": [
     {
       "profileId": "agr-doktorski",
@@ -507,28 +507,6 @@
       "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schri",
       "problems": [
         "citat nije doslovan prijepis (podudaranje rijeci 75%)"
-      ]
-    },
-    {
-      "profileId": "ffri-povum-diplomski",
-      "ruleId": "ffri-povum-diplomski--footnote-size",
-      "checkId": "footnote-size",
-      "sourceId": "ffri-povum-upute-diplomski",
-      "snapshot": "data/sources/ffri/ffri-povum-upute-diplomski.pdf",
-      "quote": "Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4. Upotreba tipa slova Times New Roman, velicine 12 i proreda 1,5 u osnovnom tekstu... Poravnavanje teksta po obje margine (ukljucuje i osnovni tekst i biljeske).",
-      "problems": [
-        "vrijednost pravila ne stoji u vlastitom citatu (nedostaje: 10)"
-      ]
-    },
-    {
-      "profileId": "ffri-povum-zavrsni",
-      "ruleId": "ffri-povum-zavrsni--footnote-size",
-      "checkId": "footnote-size",
-      "sourceId": "ffri-povum-upute",
-      "snapshot": "data/sources/ffri/ffri-povum-upute-zavrsni.pdf",
-      "quote": "Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4. Upotreba tipa slova Times New Roman, velicine 12 i proreda 1,5 u osnovnom tekstu... Poravnavanje teksta po obje margine (ukljucuje i osnovni tekst i biljeske).",
-      "problems": [
-        "vrijednost pravila ne stoji u vlastitom citatu (nedostaje: 10)"
       ]
     },
     {

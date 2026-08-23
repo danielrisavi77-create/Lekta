@@ -22,6 +22,7 @@ Skript NISTA ne mijenja. Nalaz je razlog da se dokument procita, ne presuda.
 
 from __future__ import annotations
 
+import collections
 import difflib
 import glob
 import importlib.util
@@ -356,6 +357,30 @@ def doc97_text(path: str) -> str:
 
 
 
+# Skenirani sluzbeni PDF nema tekstualni sloj, pa je do 2026-08-23 nosio 141 bodovano pravilo koje
+# revizija UOPCE nije gledala. Uz PDF stoji `<ime>-ocr.txt`, izlaz `scripts/ocr_pdf.py` (PyMuPDF na
+# 300 DPI + tesseract hrv+eng). Datoteka se commita: time revizija daje isti ishod i na stroju bez
+# tesseracta, a i ne placa OCR pri svakom pokretanju.
+#
+# OCR tekst NIJE isto sto i tekstualni sloj i ne smije se tako tretirati. `has_scanned_pages` za te
+# izvore i dalje vraca True, pa citat koji se ne poklopi zavrsi kao NEPROVJERIV, ne kao nalaz.
+# Drugacije bi znacilo optuziti podatak za gresku citanja, sto je greska koju je ova revizija vec
+# jednom napravila nad ostecenim tekstualnim slojem.
+def ocr_sidecar(path: str) -> str:
+    """Tekst iz `<ime>-ocr.txt` uz izvor. Prazan string ako ga nema."""
+    sidecar = os.path.splitext(path)[0] + "-ocr.txt"
+    if not os.path.exists(sidecar):
+        return ""
+    try:
+        with open(sidecar, encoding="utf-8") as fh:
+            text = fh.read()
+    except Exception:
+        return ""
+    # Oznake stranica koje pise ocr_pdf.py nisu dio dokumenta.
+    return squash(re.sub(r"=====\s*PAGE\s*\d+\s*/\s*\d+\s*=====", " ", text))
+
+
+
 def document_text(rel_path: str) -> str:
     """Spojeni tekst izvora (PDF, .docx ili naslijedjeni .doc), normaliziran. Prazan ako se ne cita."""
     if rel_path in _doc_text:
@@ -377,6 +402,8 @@ def document_text(rel_path: str) -> str:
                 doc.close()
         except Exception:
             text = ""
+    if not text and os.path.exists(path):
+        text = ocr_sidecar(path)
     _doc_text[rel_path] = text
     return text
 
@@ -854,6 +881,9 @@ def main() -> None:
     rows = collect_scored()
     findings: list[dict] = []
     unreadable = 0
+    # Zasto pravilo ostaje nerevidirano. Jedna brojka je neprozirna: "154" ne kaze treba li OCR,
+    # novi format ili je datoteka nestala, pa se ne moze ni odluciti sto s tim.
+    unread_reason: collections.Counter = collections.Counter()
     inconclusive = 0
 
     for row in rows:
@@ -896,12 +926,14 @@ def main() -> None:
             # .doc / .docx / .html / .rar se ovdje NE citaju. Prijavljuje se kao NEREVIDIRANO, ne kao
             # uredno: sutnja o neprovjerenom je isti kvar kao lazno zeleno.
             unreadable += 1
+            unread_reason[os.path.splitext(rel)[1].lower() or "(bez snapshota)"] += 1
             record_unverifiable()
             continue
 
         text = document_text(rel)
         if not text:
             unreadable += 1
+            unread_reason["skeniran izvor bez tekstualnog sloja (treba OCR)"] += 1
             record_unverifiable()
             continue
 
@@ -1006,7 +1038,9 @@ def main() -> None:
     print("=== Revizija bodovanih pravila protiv izvora ===")
     print(f"bodovanih pravila: {len(rows)}")
     print(f"  revidirano (PDF snapshot citljiv): {audited}")
-    print(f"  NEREVIDIRANO (doc/docx/html/rar ili necitljiv PDF): {unreadable}")
+    print(f"  NEREVIDIRANO (izvor se ne moze procitati): {unreadable}")
+    for reason, count in unread_reason.most_common():
+        print(f"      {count:5}  {reason}")
     print(f"  NEPROVJERIVO (citat je sa skenirane stranice, preuzet OCR-om): {inconclusive}")
     print(f"  pravila s NOVIM nalazom: {len(findings)}")
     print(f"  pravila s priznatim nalazom (odluceno, vidi data/verification/known-findings.json): {ack_rules}")
