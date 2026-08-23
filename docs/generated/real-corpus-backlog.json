@@ -1540,6 +1540,12 @@
       "offeredOptionCount": 4
     },
     {
+      "profileId": "fbf-specijalisticki",
+      "unitId": "fbf",
+      "facultyLabel": "Farmaceutsko-biokemijski fakultet",
+      "offeredOptionCount": 4
+    },
+    {
       "profileId": "ffos-informatologija-diplomski",
       "unitId": "ffos",
       "facultyLabel": "Filozofski fakultet Osijek",
@@ -1813,12 +1819,6 @@
       "profileId": "erf-diplomski",
       "unitId": "erf",
       "facultyLabel": "Edukacijsko-rehabilitacijski fakultet",
-      "offeredOptionCount": 3
-    },
-    {
-      "profileId": "fbf-specijalisticki",
-      "unitId": "fbf",
-      "facultyLabel": "Farmaceutsko-biokemijski fakultet",
       "offeredOptionCount": 3
     },
     {

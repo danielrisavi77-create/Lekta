@@ -330,7 +330,7 @@ Ukupno profila bez uzorka: **396/407**.
 ## Farmaceutsko-biokemijski fakultet (fbf)
 
 - **fbf-doktorski** — 5 ponudjenih opcija
-- **fbf-specijalisticki** — 3 ponudjenih opcija
+- **fbf-specijalisticki** — 4 ponudjenih opcija
 
 ## Fakultet dentalne medicine Rijeka (fdmri)
 

@@ -3513,14 +3513,15 @@
         "fbf-specijalisticki",
         "fbf-doktorski"
       ],
-      "offeredOptionCount": 8,
-      "mappedOptionCount": 8,
+      "offeredOptionCount": 9,
+      "mappedOptionCount": 9,
       "ruleIds": [
         "fbf-doktorski--font",
         "fbf-doktorski--font-size",
         "fbf-doktorski--line-spacing",
         "fbf-doktorski--margins",
         "fbf-doktorski--paper-size",
+        "fbf-specijalisticki--font-size",
         "fbf-specijalisticki--line-spacing",
         "fbf-specijalisticki--margins",
         "fbf-specijalisticki--paper-size"
@@ -3558,14 +3559,16 @@
             "specialist"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 3,
-          "mappedOptionCount": 3,
+          "offeredOptionCount": 4,
+          "mappedOptionCount": 4,
           "ruleIds": [
+            "fbf-specijalisticki--font-size",
             "fbf-specijalisticki--line-spacing",
             "fbf-specijalisticki--margins",
             "fbf-specijalisticki--paper-size"
           ],
           "fixerIds": [
+            "font-fixer",
             "line-spacing-fixer",
             "margins-fixer",
             "paper-size-fixer"
@@ -22214,8 +22217,8 @@
   "summary": {
     "facultyCount": 131,
     "profileCount": 407,
-    "offeredOptionCount": 1712,
-    "mappedOptionCount": 1712,
+    "offeredOptionCount": 1713,
+    "mappedOptionCount": 1713,
     "realDocxSampleCount": 14,
     "facultiesWithRealDocx": 8,
     "facultiesWithoutRealDocx": 123,
