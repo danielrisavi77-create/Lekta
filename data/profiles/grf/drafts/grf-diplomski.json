@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "grf-diplomski--font",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Times New Roman",
@@ -14,7 +17,7 @@
       "authority": "program-page",
       "sourceId": "grf-uputa-diplomski-prilog3",
       "sourcePage": "odjeljak Postavke stranice",
-      "quote": "Pismo: obavezna je upotreba svih hrvatskih znakova",
+      "quote": "Pismo: obavezna je upotreba svih hrvatskih znakova – Times New Roman ili Arial",
       "status": "verified",
       "scored": true,
       "autoFixable": true,
@@ -27,6 +30,9 @@
     },
     {
       "ruleId": "grf-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -48,6 +54,9 @@
     },
     {
       "ruleId": "grf-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -69,6 +78,9 @@
     },
     {
       "ruleId": "grf-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -95,6 +107,9 @@
     },
     {
       "ruleId": "grf-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "paper-size",
       "value": "A4",
       "category": "format",
@@ -116,6 +131,9 @@
     },
     {
       "ruleId": "grf-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",
@@ -135,6 +153,9 @@
     },
     {
       "ruleId": "grf-diplomski--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "toc",
       "value": true,
       "category": "structure",
