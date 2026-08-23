@@ -94,6 +94,9 @@
       },
       {
         "ruleId": "pravo-integrirani-diplomski--citation-style",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-fusnote",
         "category": "citation",
@@ -195,6 +198,9 @@
       },
       {
         "ruleId": "pravo-integrirani-diplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -212,6 +218,9 @@
       },
       {
         "ruleId": "pravo-integrirani-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -489,6 +498,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--citation-style",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-fusnote",
         "category": "citation",
@@ -590,6 +602,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -607,6 +622,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -870,6 +888,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--citation-style",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-fusnote",
         "category": "citation",
@@ -971,6 +992,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -988,6 +1012,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -1251,6 +1278,9 @@
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--citation-style",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-fusnote",
         "category": "citation",
@@ -1352,6 +1382,9 @@
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -1369,6 +1402,9 @@
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -1661,6 +1697,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -2682,6 +2721,9 @@
       },
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--citation-style",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-fusnote",
         "category": "citation",
@@ -2805,6 +2847,9 @@
       },
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -2977,6 +3022,9 @@
       },
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [],
         "category": "structure",
@@ -3098,6 +3146,9 @@
       },
       {
         "ruleId": "pravo-specijalisticki-pravni-opci--citation-style",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-fusnote",
         "category": "citation",
@@ -3227,6 +3278,9 @@
       },
       {
         "ruleId": "pravo-specijalisticki-pravni-opci--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -3365,6 +3419,9 @@
       },
       {
         "ruleId": "pravo-doktorski-pravne-znanosti--citation-style",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-fusnote",
         "category": "citation",
@@ -3494,6 +3551,9 @@
       },
       {
         "ruleId": "pravo-doktorski-pravne-znanosti--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -3715,6 +3775,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -3963,6 +4026,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -4102,6 +4168,9 @@
       },
       {
         "ruleId": "trgovacko-pravo--page-numbers",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",

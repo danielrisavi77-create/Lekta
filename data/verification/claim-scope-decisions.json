@@ -1421,6 +1421,1574 @@
       "scope": "whole",
       "decidedVia": "agent-read",
       "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "apuri-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "arca-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "arca-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "arh-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-diplomski-en--font",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-zavrsni-en--font",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-diplomski-en--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-zavrsni-en--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-diplomski--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (footnote), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-diplomski-en--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (footnote), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-zavrsni--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (footnote), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-zavrsni-en--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (footnote), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-diplomski-en--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-zavrsni-en--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-diplomski-en--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-zavrsni--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-zavrsni-en--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-diplomski-en--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "aspira-zavrsni-en--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efri-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efri-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efri-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efri-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efri-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efri-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efri-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efri-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efri-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efri-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efri-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efri-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efri-zavrsni--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efri-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efzg-zavrsni--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efzg-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efzg-zavrsni--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efzg-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efzg-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efzg-specijalisticki--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "efzg-specijalisticki--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffri-kroatistika-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffri-kroatistika-zavrsni--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffri-povum-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffri-povum-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffri-povum-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffri-povum-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffzg-informacijske-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffzg-informacijske-zavrsni--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffzg-kroatistika-graduate--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffzg-pedagogija-graduate--font",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffzg-pedagogija-graduate--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffzg-pedagogija-graduate--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fhs-diplomski--font",
+      "modality": "obligation",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fhs-zavrsni--font",
+      "modality": "obligation",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "foi-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "foi-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "forenzika-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-mes-master-thesis--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-opci-akademski-rad--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-mes-master-thesis--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-opci-akademski-rad--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-mes-master-thesis--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-mes-master-thesis--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "grad-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "grad-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "iv-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "iv-zavrsni--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "math-uniri-diplomski--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "math-uniri-diplomski-en--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "math-uniri-diplomski--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "math-uniri-diplomski-en--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "math-uniri-zavrsni--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "math-uniri-zavrsni--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mef-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mev-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mev-zavrsni-drustveni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mev-diplomski--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (footnote), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mev-zavrsni-drustveni--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (footnote), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mev-diplomski--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mev-zavrsni-drustveni--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mev-diplomski--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mev-zavrsni-drustveni--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mev-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mev-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "more-diplomski--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "more-zavrsni--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "trgovacko-pravo--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-socijalne-djelatnosti-doktorski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-socijalni-opci-akademski-rad--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-socijalni-rad-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-doktorski-pravne-znanosti--citation-style",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-integrirani-diplomski--citation-style",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-javna-uprava-diplomski--citation-style",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-javna-uprava-prijediplomski--citation-style",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-opci-pravni-akademski-rad--citation-style",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-porezni-prijediplomski--citation-style",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-specijalisticki-pravni-opci--citation-style",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-doktorski-pravne-znanosti--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-integrirani-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-javna-uprava-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-javna-uprava-prijediplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-opci-pravni-akademski-rad--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-porezni-prijediplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-specijalisticki-pravni-opci--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-integrirani-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-javna-uprava-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-javna-uprava-prijediplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravo-porezni-prijediplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravos-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pravos-zavrsni--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pvzg-specijalisticki--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "pvzg-zavrsni--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "rgnf-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "rgnf-zavrsni--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "simet-zavrsni--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "sois-ft-vojno-inzenjerstvo-zavrsni--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "sois-ft-vojno-vodjenje-zavrsni--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "sois-ft-vojno-inzenjerstvo-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "sois-ft-vojno-pomorstvo-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "sois-ft-vojno-vodjenje-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ttf-diplomski--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ttf-zavrsni--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "uaos-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "uaos-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "uaos-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "uaos-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "uaos-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "uaos-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "umas-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "umas-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "unidu-umjetnost-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "unidu-umjetnost-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "unidu-umjetnost-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffpu-diplomski--footnote-spacing",
+      "modality": "directive",
+      "scope": "footnote",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (footnote), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fipu-diplomski--footnote-spacing",
+      "modality": "directive",
+      "scope": "footnote",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (footnote), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-diplomski--footnote-spacing",
+      "modality": "directive",
+      "scope": "footnote",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (footnote), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mfpu-diplomski--footnote-spacing",
+      "modality": "directive",
+      "scope": "footnote",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (footnote), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffpu-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fipu-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mfpu-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffpu-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fipu-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mfpu-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffpu-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fipu-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mfpu-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffpu-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fipu-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mfpu-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffpu-zavrsni--footnote-spacing",
+      "modality": "directive",
+      "scope": "footnote",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (footnote), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fipu-zavrsni--footnote-spacing",
+      "modality": "directive",
+      "scope": "footnote",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (footnote), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-zavrsni--footnote-spacing",
+      "modality": "directive",
+      "scope": "footnote",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (footnote), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffpu-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fipu-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffpu-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fipu-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffpu-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fipu-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "ffpu-zavrsni--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "fipu-zavrsni--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-zavrsni--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "unizd-germanistika-diplomski--font",
+      "modality": "obligation",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "unizd-germanistika-diplomski--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "unizd-germanistika-zavrsni--font",
+      "modality": "obligation",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "unizd-germanistika-zavrsni--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "unizd-tko-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "veleknin-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "veleknin-zavrsni--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "vkjs-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "vkjs-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "vkjs-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "vkjs-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "vkjs-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "vkjs-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (body), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "vnt-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "vnt-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "vsig-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "vsig-zavrsni--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "vuv-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
+    },
+    {
+      "ruleId": "vuv-zavrsni--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "skupina: recenica imenuje vise dijelova rada; opseg presudjen na prirodni opseg osi (whole), pripisivanje vrijednosti provjereno u oba smjera"
     }
   ]
 }

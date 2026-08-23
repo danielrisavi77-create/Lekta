@@ -79,6 +79,9 @@
     },
     {
       "ruleId": "ffri-povum-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -100,6 +103,9 @@
     },
     {
       "ruleId": "ffri-povum-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",

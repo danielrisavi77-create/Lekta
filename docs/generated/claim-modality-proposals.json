@@ -1323,10 +1323,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: heading, bibliography"
@@ -1692,10 +1694,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -1770,10 +1774,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: bibliography, heading"
@@ -1840,10 +1846,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -1880,10 +1888,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 4,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading"
@@ -1920,10 +1930,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 4,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading"
@@ -1960,10 +1972,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 4,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading"
@@ -1998,10 +2012,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 4,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading"
@@ -2071,10 +2087,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 4,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading"
@@ -2109,10 +2127,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 4,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading"
@@ -3772,10 +3792,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -3805,10 +3827,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -3838,10 +3862,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -3871,10 +3897,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -3909,10 +3937,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -3944,10 +3974,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -3977,10 +4009,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -4041,10 +4075,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -4074,10 +4110,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -4107,10 +4145,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -4140,10 +4180,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -4178,10 +4220,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -4213,10 +4257,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -4246,10 +4292,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -4811,10 +4859,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -4853,10 +4903,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -4885,10 +4937,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -5083,10 +5137,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, table, heading"
@@ -5117,10 +5173,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, table, heading"
@@ -5344,10 +5402,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, table, heading"
@@ -5378,10 +5438,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, table, heading"
@@ -9768,10 +9830,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading"
@@ -9867,10 +9931,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading"
@@ -10226,10 +10292,12 @@
         "footnote"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: body, footnote"
@@ -10289,10 +10357,12 @@
         "footnote"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: body, footnote"
@@ -10420,10 +10490,12 @@
         "footnote"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: body, footnote"
@@ -10483,10 +10555,12 @@
         "footnote"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: body, footnote"
@@ -12637,10 +12711,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -12669,10 +12745,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -12892,10 +12970,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -13107,10 +13187,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading"
@@ -13139,10 +13221,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading"
@@ -13324,10 +13408,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -14166,10 +14252,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -14416,10 +14504,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -15686,10 +15776,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -16478,10 +16570,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: bibliography, heading"
@@ -17288,10 +17382,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 11,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading, body"
@@ -17411,10 +17507,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 8,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading, body"
@@ -17448,10 +17546,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 3,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading, body"
@@ -17706,10 +17806,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -18051,10 +18153,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 8,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -18085,10 +18189,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: body, bibliography"
@@ -19022,10 +19128,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: body, bibliography"
@@ -20256,10 +20364,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -23320,10 +23430,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading, bibliography"
@@ -23428,10 +23540,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading, bibliography"
@@ -23493,10 +23607,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading, bibliography"
@@ -23599,10 +23715,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading, bibliography"
@@ -24639,10 +24757,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -25112,10 +25232,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading, body"
@@ -25149,10 +25271,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading, body"
@@ -25184,10 +25308,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading, body"
@@ -25290,10 +25416,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading, body"
@@ -25322,10 +25450,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: heading, body"
@@ -25389,10 +25519,12 @@
         "footnote"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading, body, footnote"
@@ -25854,10 +25986,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: bibliography, heading"
@@ -25917,10 +26051,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: bibliography, heading"
@@ -29016,10 +29152,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -29959,10 +30097,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: bibliography, table, heading"
@@ -30337,10 +30477,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: bibliography, heading"
@@ -30436,10 +30578,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: bibliography, heading"
@@ -30512,10 +30656,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 7,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, bibliography"
@@ -31012,10 +31158,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 7,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -31186,10 +31334,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 4,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -31354,10 +31504,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -32121,10 +32273,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -32156,10 +32310,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -32387,10 +32543,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: table, heading"
@@ -33398,10 +33556,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: bibliography, heading"
@@ -33434,10 +33594,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, bibliography"
@@ -33472,10 +33634,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 3,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, bibliography"
@@ -34307,10 +34471,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: heading, body"
@@ -34442,10 +34608,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading"
@@ -34512,10 +34680,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -34547,10 +34717,12 @@
         "title-page"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading, title-page"
@@ -35321,10 +35493,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -36364,10 +36538,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, body"
@@ -36557,10 +36733,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, body"
@@ -36656,10 +36834,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, body"
@@ -37163,10 +37343,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 4,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, title-page, bibliography, heading"
@@ -37242,10 +37424,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 4,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -37282,10 +37466,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 4,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, title-page, bibliography, heading"
@@ -37373,10 +37559,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 4,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -37413,10 +37601,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 4,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, title-page, bibliography, heading"
@@ -37556,10 +37746,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 3,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, title-page, bibliography, heading"
@@ -37631,10 +37823,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 3,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -37669,10 +37863,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 3,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, title-page, bibliography, heading"
@@ -37758,10 +37954,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 3,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
@@ -37796,10 +37994,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 3,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, title-page, bibliography, heading"
@@ -38849,10 +39049,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: bibliography, heading"
@@ -39014,10 +39216,12 @@
         "footnote"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: bibliography, heading, body, footnote"
@@ -39048,10 +39252,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: bibliography, heading"
@@ -39213,10 +39419,12 @@
         "footnote"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: bibliography, heading, body, footnote"
@@ -41698,10 +41906,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"
@@ -43244,10 +43454,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: bibliography, body"
@@ -43341,10 +43553,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: bibliography, body"
@@ -44538,10 +44752,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading"
@@ -44572,10 +44788,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading"
@@ -44637,10 +44855,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: footnote, heading"
@@ -45021,10 +45241,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, bibliography, table, heading"
@@ -45220,10 +45442,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: body, title-page, heading"
@@ -46866,10 +47090,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading"

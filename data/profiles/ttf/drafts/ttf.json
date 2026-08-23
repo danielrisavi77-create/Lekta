@@ -175,6 +175,9 @@
       },
       {
         "ruleId": "ttf-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -419,6 +422,9 @@
       },
       {
         "ruleId": "ttf-zavrsni--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {

@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "mev-zavrsni-drustveni--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -79,6 +82,9 @@
     },
     {
       "ruleId": "mev-zavrsni-drustveni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": [
         12
@@ -126,6 +132,9 @@
     },
     {
       "ruleId": "mev-zavrsni-drustveni--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -147,6 +156,9 @@
     },
     {
       "ruleId": "mev-zavrsni-drustveni--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "agent-read",
       "checkId": "footnote-size",
       "value": [
         10

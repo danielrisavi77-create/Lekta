@@ -178,6 +178,9 @@
     },
     {
       "ruleId": "vuv-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "page-count",
       "value": {
         "min": 35,

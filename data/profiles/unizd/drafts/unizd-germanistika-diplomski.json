@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "unizd-germanistika-diplomski--font",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -102,6 +105,9 @@
     },
     {
       "ruleId": "unizd-germanistika-diplomski--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",

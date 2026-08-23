@@ -152,6 +152,9 @@
     },
     {
       "ruleId": "ffzg-kroatistika-graduate--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "toc",
       "value": true,
       "category": "structure",

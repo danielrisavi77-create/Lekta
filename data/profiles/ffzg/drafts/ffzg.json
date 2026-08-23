@@ -3,6 +3,9 @@
     "ffzg-informacijske-zavrsni": [
       {
         "ruleId": "ffzg-informacijske-zavrsni--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           "naslovnica",
@@ -32,6 +35,9 @@
       },
       {
         "ruleId": "ffzg-informacijske-zavrsni--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",

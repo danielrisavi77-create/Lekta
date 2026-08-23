@@ -97,6 +97,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -134,6 +137,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -247,6 +253,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -468,6 +477,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -485,6 +497,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -618,6 +633,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -839,6 +857,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -856,6 +877,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -989,6 +1013,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -1210,6 +1237,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -1227,6 +1257,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -1360,6 +1393,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -1581,6 +1617,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -1598,6 +1637,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -1731,6 +1773,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -1952,6 +1997,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -1969,6 +2017,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -2102,6 +2153,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -2323,6 +2377,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -2340,6 +2397,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -2473,6 +2533,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -2869,6 +2932,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -2886,6 +2952,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -2999,6 +3068,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -3237,6 +3309,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -3254,6 +3329,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -3367,6 +3445,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -3624,6 +3705,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -3641,6 +3725,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -3658,6 +3745,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -3728,6 +3818,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -3944,6 +4037,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -3961,6 +4057,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",

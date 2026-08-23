@@ -29,6 +29,9 @@
     },
     {
       "ruleId": "uaos-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": [
         12
@@ -76,6 +79,9 @@
     },
     {
       "ruleId": "uaos-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -102,6 +108,9 @@
     },
     {
       "ruleId": "uaos-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",

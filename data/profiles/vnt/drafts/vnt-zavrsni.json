@@ -178,6 +178,9 @@
     },
     {
       "ruleId": "vnt-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "required-sections",
       "value": [
         {

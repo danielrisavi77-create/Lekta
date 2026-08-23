@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "mfpu-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -100,6 +103,9 @@
     },
     {
       "ruleId": "mfpu-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -148,6 +154,9 @@
     },
     {
       "ruleId": "mfpu-diplomski--footnote-spacing",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "agent-read",
       "checkId": "footnote-spacing",
       "value": 1,
       "category": "format",
@@ -167,6 +176,9 @@
     },
     {
       "ruleId": "mfpu-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "toc",
       "value": true,
       "category": "structure",
@@ -186,6 +198,9 @@
     },
     {
       "ruleId": "mfpu-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "required-sections",
       "value": [
         {

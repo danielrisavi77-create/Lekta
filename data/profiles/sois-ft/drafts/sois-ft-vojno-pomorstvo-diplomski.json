@@ -156,6 +156,9 @@
     },
     {
       "ruleId": "sois-ft-vojno-pomorstvo-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "page-count",
       "value": {
         "min": 50

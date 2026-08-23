@@ -56,8 +56,17 @@ const SOFT = new Set(['recommendation', 'permission', 'condition']);
  * tvrdnje ona koja njemu pripada (52 od 52 font-size tvrdnje uzele su tjelesnu, nijedna fusnotnu).
  * Upisano s `modalitySource: "agent-read"`, ne `human`: nijedan od tih 202 ne nosi ublazen modalitet,
  * jer ublazavanje i dalje trazi potpis.
+ *
+ * Pala je dalje na 226 presudom nad jos 224 pravila (113 jedinica) iz skupine "recenica imenuje vise
+ * dijelova rada": specifikacija nabroji naslovnicu, naslove, fusnote i literaturu u istoj recenici,
+ * pa predlagac ne zna koju rijec uzeti. Isti postupak i ista provjera, ali u OBA smjera: tjelesna os
+ * ne smije nositi fusnotnu vrijednost, a fusnotna mora. Pet oznacenih slucajeva procitano je rucno i
+ * svih pet je ispravno (heuristika je hvatala redni broj stavka "(7)" i susjednu vrijednost).
+ *
+ * Ostatak od 120 jedinica vise nije ovaj razred: 66 nosi ublazavanje (samo `human`), 33 ima vise
+ * modalnih biljega u istoj recenici, 13 nema nijedan, 6 su predlosci.
  */
-const MISSING_MODALITY_CAP = 450;
+const MISSING_MODALITY_CAP = 226;
 
 /**
  * IZVEDENI `scored`, ne pohranjena zastavica. Razlika nije akademska: 275 pravila zadovoljava

@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "math-uniri-diplomski-en--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -49,6 +52,9 @@
     },
     {
       "ruleId": "math-uniri-diplomski-en--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "toc",
       "value": true,
       "category": "structure",
