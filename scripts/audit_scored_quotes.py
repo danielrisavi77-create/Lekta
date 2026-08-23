@@ -231,7 +231,19 @@ def numbers_match(full_text: str, quote: str) -> bool:
         end = align_end(index, quote, best) + 80
     window = folded[max(0, at - 40) : max(at + span, end) + 40]
     present = set(NUM.findall(window)) | {n.replace(",", ".") for n in NUM.findall(window)}
-    return all(n in present or n.replace(",", ".") in present for n in wanted)
+
+    def found(number: str) -> bool:
+        if number in present or number.replace(",", ".") in present:
+            return True
+        # OCR skenirane stranice zna umetnuti razmak iza decimalnog znaka ("1, 25 cm" umjesto
+        # "1,25 cm"), pa broj ispadne nenadjen a podatak je tocan (izmjereno na kbfst.pdf, 5 pravila).
+        # Trazi se SAMO razmaknuti oblik BAS tog broja, ne spaja se tekst unaprijed: globalno spajanje
+        # "1, 25" -> "1,25" moglo bi slijepiti dva nepovezana broja i stvoriti lazno POKLAPANJE, sto je
+        # gore od propustenog nalaza.
+        spaced = re.sub(r"([.,])", r"\1 ", number)
+        return spaced != number and spaced in window
+
+    return all(found(n) for n in wanted)
 
 
 def quote_found(full_text: str, quote: str) -> bool:
