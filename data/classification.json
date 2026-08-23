@@ -123,6 +123,20 @@
       "note": "Dodatno polje prvog unosa (potrosaci citaju imenovana polja); ledger nema nijedan never-marker kljuc pa mu je ovo jedini sadrzajni otisak (revizija, nalaz 4)."
     },
     {
+      "value": "LEKTA-KANARINAC-PROPRIETARY-DATA-43381f0d95ad",
+      "mustExistIn": "data/verification/scored-value-drift.json",
+      "class": "PROPRIETARY-DATA",
+      "kind": "sintetski",
+      "note": "Emitira ga GENERATOR (buildScoredValueDrift, DRIFT_KANARINAC) pa prezivljava svaki regen; rucni upis bi ga izgubio. Zatvara rezidual iz faze A."
+    },
+    {
+      "value": "LEKTA-KANARINAC-SECURITY-SENSITIVE-906244f20b91",
+      "mustExistIn": "data/generated/repair-params-by-profile.json",
+      "class": "SECURITY-SENSITIVE",
+      "kind": "sintetski",
+      "note": "Emitira ga GENERATOR (buildParamAuthority, PARAM_AUTHORITY_KANARINAC_KEY) kao zz- kljuc s PRAZNIM pravilima: nikad ne prolazi kao profil s vrijednostima. Zatvara rezidual iz faze A."
+    },
+    {
       "value": "3e0af65c4445123e25fe4dbc3ca5f7366d7c9f76bcadb4c15ffd806a90fdb4ef",
       "mustExistIn": "data/profiles/verified-profiles.json",
       "class": "PROPRIETARY-DATA",
