@@ -6376,7 +6376,7 @@
       "requirePageNumbers": true,
       "requireA4": true,
       "checkJustify": true,
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     },
     "facts": [
       "Stranica mora biti A4 formata (imperativ, scored).",
@@ -6461,7 +6461,7 @@
       "requirePageNumbers": true,
       "requireA4": true,
       "checkJustify": true,
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     },
     "facts": [
       "Stranica mora biti A4 formata (imperativ, scored).",
@@ -31137,6 +31137,7 @@
         "bottom": 2.5,
         "left": 2.5
       },
+      "marginsMinimum": true,
       "requirePageNumbers": true,
       "requiredSections": [
         {

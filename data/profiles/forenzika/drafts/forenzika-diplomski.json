@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "forenzika-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -24,6 +27,9 @@
     },
     {
       "ruleId": "forenzika-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",
@@ -43,6 +49,9 @@
     },
     {
       "ruleId": "forenzika-diplomski--font",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -66,6 +75,9 @@
     },
     {
       "ruleId": "forenzika-diplomski--font-size",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         12
@@ -89,6 +101,9 @@
     },
     {
       "ruleId": "forenzika-diplomski--line-spacing",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -110,12 +125,16 @@
     },
     {
       "ruleId": "forenzika-diplomski--margins",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
-        "left": 2.5
+        "left": 2.5,
+        "minimum": true
       },
       "category": "format",
       "label": "Margine",

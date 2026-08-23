@@ -24,7 +24,10 @@ function body(): ParaSpec[] {
 
 async function marginCheck(cm: number, minimum: boolean) {
   const base: any = resolveProfile(PROFILE);
-  const profile = minimum ? { ...base, marginsMinimum: true } : base;
+  // Zastavica se postavlja IZRICITO u oba smjera. Prva izvedba je za slucaj "bez zastavice"
+  // uzimala profil kakav jest, pa je test pao cim je forenzika tu zastavicu stvarno dobila u
+  // podacima: mjerio je podatak, a treba mjeriti PONASANJE MOTORA u obje postavke.
+  const profile = { ...base, marginsMinimum: minimum };
   const file = buildDocxFile({ paragraphs: body(), marginsCm: { top: cm, right: cm, bottom: cm, left: cm } }, `margine-${cm}.docx`);
   const result: any = await analyzeFixture(file, { profileId: PROFILE, profile });
   const check = (result.checks || []).find((c: any) => c.title === TITLE);
@@ -33,8 +36,11 @@ async function marginCheck(cm: number, minimum: boolean) {
 }
 
 describe('margine: profil smije propisati NAJMANJU vrijednost', () => {
-  it('polazno stanje: profil trazi tocno 2,5 cm', () => {
-    expect(resolveProfile(PROFILE).margins).toEqual({ top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 });
+  it('profil trazi 2,5 cm i to kao NAJMANJU vrijednost', () => {
+    const p: any = resolveProfile(PROFILE);
+    expect(p.margins).toEqual({ top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 });
+    // Izvor glasi "moraju biti siroki NAJMANJE 2,5 cm", pa profil od 2026-08-23 nosi i zastavicu.
+    expect(p.marginsMinimum).toBe(true);
   });
 
   it('bez zastavice 3 cm PADA (zateceno ponasanje ostaje netaknuto)', async () => {
