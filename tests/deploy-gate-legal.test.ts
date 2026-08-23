@@ -83,8 +83,24 @@ describe('deploy gate: pravni identitet pruzatelja', () => {
     expect(body).not.toContain('console.warn');
   });
 
-  it('bez ijedne zastavice gate ne blokira lokalnu analizu', () => {
-    expect(src).toContain('if (!commerceLive && !repairLive && missingForCommerce.length)');
+  it('okidac praga obrade se izvodi iz ISPORUCENOG bundlea, ne samo iz zastavice', () => {
+    // Prva verzija je visjela SAMO o LEKTA_REPAIR_LIVE=1, a tu varijablu ne postavlja nista u
+    // lancu deploya, dok DEFAULT_PRODUCTION_CONFIG odavno salje zivi repair-docx. Gate je time
+    // bio inertan tocno u stanju za koje je pisan.
+    expect(src).toContain('const repairShipped');
+    expect(src).toMatch(/repairLive\s*=\s*process\.env\.LEKTA_REPAIR_LIVE === '1' \|\| repairShipped/);
+    // Mora gledati JE LI DODJELA PRAZNA: put se u minifikatu ne pojavljuje doslovno
+    // (`repairEndpoint:he.functionEndpoint(\`repair-docx\`)`), pa bi trazenje URL-a dalo lazno
+    // negativno i gate bi opet sutio.
+    expect(src).toContain('repairEndpoint');
+    expect(src).toContain('EMPTY_LITERALS');
+  });
+
+  it('upozorenje o pragu naplate ne utihne kad popravak ozivi', () => {
+    // Prije je uvjet glasio `!commerceLive && !repairLive`, pa bi cim popravak postane ziv
+    // nedostajuci oib/phone nestali iz ispisa sve do tvrdog pada na naplati.
+    expect(src).toContain('if (!commerceLive && missingForCommerce.length)');
+    expect(src).not.toContain('if (!commerceLive && !repairLive && missingForCommerce.length)');
   });
 
   it('identitet voditelja obrade je sve-ili-nista, nikad polovican', () => {
@@ -108,6 +124,10 @@ describe('deploy gate: pravni identitet pruzatelja', () => {
     if (oib) {
       expect(controller, 'OIB je upisan pa privacyController vise ne smije biti prazan').not.toBe('');
       expect(address, 'OIB je upisan pa address vise ne smije biti prazan').not.toBe('');
+      // `phone` je bio izvan ove tvrdnje, pa je popunjavanje TRI od cetiri polja prolazilo i test
+      // i gate, iako napomena vec nestane na sam OIB. Prag naplate trazi i telefon.
+      const phone = String(provider.phone ?? '').trim();
+      expect(phone, 'OIB je upisan pa phone vise ne smije biti prazan (ZZP predugovorna informacija)').not.toBe('');
     }
   });
 });

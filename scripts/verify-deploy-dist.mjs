@@ -536,7 +536,26 @@ if (fs.existsSync(naslovnicaDir)) {
       .map(([field, why]) => `  - ${field} (${why})`);
 
   const commerceLive = process.env.LEKTA_COMMERCE_LIVE === '1';
-  const repairLive = process.env.LEKTA_REPAIR_LIVE === '1';
+  // Okidac praga obrade se IZVODI IZ ONOGA STO SE ISPORUCUJE, ne iz zapamcene zastavice.
+  // Prva verzija ovog gatea visjela je samo o LEKTA_REPAIR_LIVE=1, a tu varijablu ne postavlja
+  // nista u lancu deploya (netlify.toml ima samo NODE_VERSION/DEPLOY/LEKTA_SITE_ORIGIN), dok
+  // DEFAULT_PRODUCTION_CONFIG odavno salje `repairEndpoint: functionEndpoint('repair-docx')`.
+  // Gate je time bio inertan TOCNO u stanju za koje je pisan: dokument vec napusta preglednik,
+  // a provjera je sutjela. Ako izgradjeni bundle zna za repair-docx, obrada JE ziva.
+  // Put se u bundleu NE pojavljuje doslovno: minifikat glasi
+  // `repairEndpoint:he.functionEndpoint(\`repair-docx\`)`, a ugasen endpoint je prazan literal
+  // (`checkoutEndpoint:\`\``). Zato se gleda JE LI DODJELA PRAZNA, ne trazi li se doslovan URL;
+  // trazenje '/functions/v1/repair-docx' davalo je lazno NEGATIVNO i gate bi opet sutio.
+  const EMPTY_LITERALS = ['``', "''", '""'];
+  const repairShipped = assets.some((f) => {
+    const js = fs.readFileSync(path.join(DIST, 'assets', f), 'utf8');
+    const m = js.match(/repairEndpoint\s*:\s*(``|''|""|[^,}\s]{1,60})/);
+    return !!m && !EMPTY_LITERALS.includes(m[1]);
+  });
+  const repairLive = process.env.LEKTA_REPAIR_LIVE === '1' || repairShipped;
+  const repairWhy = repairShipped
+    ? 'izgradjeni bundle salje dokument na repair-docx'
+    : 'LEKTA_REPAIR_LIVE=1';
   const missingForProcessing = missingFrom(REQUIRED_FOR_PROCESSING);
   const missingForCommerce = missingFrom(REQUIRED_FOR_COMMERCE);
 
@@ -549,7 +568,7 @@ if (fs.existsSync(naslovnicaDir)) {
   if (repairLive && missingForProcessing.length) {
     fail(
       [
-        'popravak je oznacen kao ZIV (LEKTA_REPAIR_LIVE=1), dakle dokument se uploada i pohranjuje,',
+        `popravak je ZIV (${repairWhy}), dakle dokument se uploada i pohranjuje,`,
         'a data/legal/provider.json nema:',
         ...missingForProcessing,
         '  Besplatna beta ne oslobadja od GDPR cl. 13: ispitanik mora znati tko je voditelj obrade.',
@@ -557,7 +576,10 @@ if (fs.existsSync(naslovnicaDir)) {
     );
   }
 
-  if (!commerceLive && !repairLive && missingForCommerce.length) {
+  // Upozorenje o pragu NAPLATE vrijedi dok naplata nije ziva, neovisno o popravku. Prije je
+  // uvjet glasio `!commerceLive && !repairLive`, pa bi cim popravak ozivi nedostajuci oib/phone
+  // utihnuli sve do tvrdog pada na naplati.
+  if (!commerceLive && missingForCommerce.length) {
     console.warn(
       [
         '[verify-deploy-dist] UPOZORENJE: data/legal/provider.json nema:',
