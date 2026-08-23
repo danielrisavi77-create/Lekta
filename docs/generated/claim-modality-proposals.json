@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "rules": 2207,
-  "units": 1397,
+  "rules": 2205,
+  "units": 1396,
   "proposals": [
     {
       "sourceId": "adu-montaza-diplomski",
@@ -2878,10 +2878,12 @@
         "footnote"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 3,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata",
@@ -10210,7 +10212,7 @@
       "value": [
         12
       ],
-      "quote": "Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4. Upotreba tipa slova Times New Roman, velicine 12 i proreda 1,5 u osnovnom tekstu... Poravnavanje teksta po obje margine (ukljucuje i osnovni tekst i biljeske).",
+      "quote": "Upotreba tipa slova Times New Roman, veličine 12 i proreda 1,5 u osnovnom tekstu završnog rada; [...] Poravnavanje teksta po obje margine (uključuje i osnovni tekst i bilješke)",
       "ruleCount": 1,
       "profileIds": [
         "ffri-povum-zavrsni"
@@ -10274,7 +10276,7 @@
       "checkId": "justify",
       "sourcePage": "Clanak 9 Pravilnika + odsjecki dodatak",
       "value": true,
-      "quote": "Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4. Upotreba tipa slova Times New Roman, velicine 12 i proreda 1,5 u osnovnom tekstu... Poravnavanje teksta po obje margine (ukljucuje i osnovni tekst i biljeske).",
+      "quote": "Upotreba tipa slova Times New Roman, veličine 12 i proreda 1,5 u osnovnom tekstu završnog rada; [...] Poravnavanje teksta po obje margine (uključuje i osnovni tekst i bilješke)",
       "ruleCount": 1,
       "profileIds": [
         "ffri-povum-zavrsni"
@@ -10335,40 +10337,6 @@
       "reasons": []
     },
     {
-      "sourceId": "ffri-povum-upute",
-      "checkId": "paper-size",
-      "sourcePage": "Clanak 9 Pravilnika + odsjecki dodatak",
-      "value": true,
-      "quote": "Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4. Upotreba tipa slova Times New Roman, velicine 12 i proreda 1,5 u osnovnom tekstu... Poravnavanje teksta po obje margine (ukljucuje i osnovni tekst i biljeske).",
-      "ruleCount": 1,
-      "profileIds": [
-        "ffri-povum-zavrsni"
-      ],
-      "ruleIds": [
-        "ffri-povum-zavrsni--paper-size"
-      ],
-      "proposedModality": "directive",
-      "proposedScope": "whole",
-      "modalityMarks": [
-        "bare-indicative"
-      ],
-      "namedScopes": [
-        "body",
-        "footnote"
-      ],
-      "writtenModality": {
-        "count": 1,
-        "sources": [
-          "agent-read"
-        ]
-      },
-      "resolved": true,
-      "needsHuman": true,
-      "reasons": [
-        "recenica imenuje vise dijelova rada: body, footnote"
-      ]
-    },
-    {
       "sourceId": "ffri-povum-upute-diplomski",
       "checkId": "font",
       "sourcePage": "Clanak 9 Pravilnika + odsjecki dodatak",
@@ -10408,7 +10376,7 @@
       "value": [
         12
       ],
-      "quote": "Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4. Upotreba tipa slova Times New Roman, velicine 12 i proreda 1,5 u osnovnom tekstu... Poravnavanje teksta po obje margine (ukljucuje i osnovni tekst i biljeske).",
+      "quote": "Upotreba tipa slova Times New Roman, veličine 12 i proreda 1,5 u osnovnom tekstu završnog rada; [...] Poravnavanje teksta po obje margine (uključuje i osnovni tekst i bilješke)",
       "ruleCount": 1,
       "profileIds": [
         "ffri-povum-diplomski"
@@ -10472,7 +10440,7 @@
       "checkId": "justify",
       "sourcePage": "Clanak 9 Pravilnika + odsjecki dodatak",
       "value": true,
-      "quote": "Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4. Upotreba tipa slova Times New Roman, velicine 12 i proreda 1,5 u osnovnom tekstu... Poravnavanje teksta po obje margine (ukljucuje i osnovni tekst i biljeske).",
+      "quote": "Upotreba tipa slova Times New Roman, veličine 12 i proreda 1,5 u osnovnom tekstu završnog rada; [...] Poravnavanje teksta po obje margine (uključuje i osnovni tekst i bilješke)",
       "ruleCount": 1,
       "profileIds": [
         "ffri-povum-diplomski"
@@ -10531,40 +10499,6 @@
       "resolved": true,
       "needsHuman": false,
       "reasons": []
-    },
-    {
-      "sourceId": "ffri-povum-upute-diplomski",
-      "checkId": "paper-size",
-      "sourcePage": "Clanak 9 Pravilnika + odsjecki dodatak",
-      "value": true,
-      "quote": "Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4. Upotreba tipa slova Times New Roman, velicine 12 i proreda 1,5 u osnovnom tekstu... Poravnavanje teksta po obje margine (ukljucuje i osnovni tekst i biljeske).",
-      "ruleCount": 1,
-      "profileIds": [
-        "ffri-povum-diplomski"
-      ],
-      "ruleIds": [
-        "ffri-povum-diplomski--paper-size"
-      ],
-      "proposedModality": "directive",
-      "proposedScope": "whole",
-      "modalityMarks": [
-        "bare-indicative"
-      ],
-      "namedScopes": [
-        "body",
-        "footnote"
-      ],
-      "writtenModality": {
-        "count": 1,
-        "sources": [
-          "agent-read"
-        ]
-      },
-      "resolved": true,
-      "needsHuman": true,
-      "reasons": [
-        "recenica imenuje vise dijelova rada: body, footnote"
-      ]
     },
     {
       "sourceId": "ffri-pravilnik-diplomski-2023",
@@ -10720,6 +10654,35 @@
         "count": 1,
         "sources": [
           "mechanical"
+        ]
+      },
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "ffri-pravilnik-diplomski-2023",
+      "checkId": "paper-size",
+      "sourcePage": "Članak 11.",
+      "value": true,
+      "quote": "Diplomski rad otisnut je na papiru A4 formata (210 x 297 mm).",
+      "ruleCount": 1,
+      "profileIds": [
+        "ffri-povum-diplomski"
+      ],
+      "ruleIds": [
+        "ffri-povum-diplomski--paper-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [],
+      "writtenModality": {
+        "count": 1,
+        "sources": [
+          "agent-read"
         ]
       },
       "resolved": true,
@@ -10909,6 +10872,35 @@
         "count": 1,
         "sources": [
           "mechanical"
+        ]
+      },
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "ffri-pravilnik-zavrsni-2023",
+      "checkId": "paper-size",
+      "sourcePage": "Članak 8.",
+      "value": true,
+      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm).",
+      "ruleCount": 1,
+      "profileIds": [
+        "ffri-povum-zavrsni"
+      ],
+      "ruleIds": [
+        "ffri-povum-zavrsni--paper-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [],
+      "writtenModality": {
+        "count": 1,
+        "sources": [
+          "agent-read"
         ]
       },
       "resolved": true,
@@ -11193,10 +11185,12 @@
       "modalityMarks": [],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata"
@@ -11498,10 +11492,12 @@
       "modalityMarks": [],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata"
@@ -11899,42 +11895,6 @@
       ],
       "proposedModality": "directive",
       "proposedScope": "body",
-      "modalityMarks": [
-        "bare-indicative"
-      ],
-      "namedScopes": [],
-      "writtenModality": {
-        "count": 2,
-        "sources": [
-          "mechanical"
-        ]
-      },
-      "resolved": true,
-      "needsHuman": false,
-      "reasons": []
-    },
-    {
-      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
-      "checkId": "margins",
-      "sourcePage": "Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)",
-      "value": {
-        "top": 2.54,
-        "right": 2.54,
-        "bottom": 2.54,
-        "left": 2.54
-      },
-      "quote": "Normal stil: font Times New Roman, velicina 12pt (w:sz=24), prored 1,5 (w:line=360 auto), obostrano poravnanje (w:jc=both). Stranica A4 (21x29,7cm), margine 2,54cm sve strane. Footer: PAGE polje, desno poravnano, dno stranice.",
-      "ruleCount": 2,
-      "profileIds": [
-        "ffst-diplomski",
-        "ffst-zavrsni"
-      ],
-      "ruleIds": [
-        "ffst-diplomski--margins",
-        "ffst-zavrsni--margins"
-      ],
-      "proposedModality": "directive",
-      "proposedScope": "whole",
       "modalityMarks": [
         "bare-indicative"
       ],
@@ -12388,10 +12348,12 @@
         "footnote"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata",
@@ -18668,10 +18630,12 @@
       "modalityMarks": [],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata"
@@ -18928,10 +18892,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata",
@@ -19867,10 +19833,12 @@
       "modalityMarks": [],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata"
@@ -23980,10 +23948,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "citat je PREDLOZAK (LaTeX preambula), ne propisna recenica: modalitet ne postoji"
@@ -24014,10 +23984,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "citat je PREDLOZAK (LaTeX preambula), ne propisna recenica: modalitet ne postoji"
@@ -24043,10 +24015,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "citat je PREDLOZAK (LaTeX preambula), ne propisna recenica: modalitet ne postoji"
@@ -24074,10 +24048,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "citat je PREDLOZAK (LaTeX preambula), ne propisna recenica: modalitet ne postoji"
@@ -24108,10 +24084,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "citat je PREDLOZAK (LaTeX preambula), ne propisna recenica: modalitet ne postoji"
@@ -24137,10 +24115,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "citat je PREDLOZAK (LaTeX preambula), ne propisna recenica: modalitet ne postoji"
@@ -24503,10 +24483,12 @@
       "modalityMarks": [],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata"
@@ -24563,10 +24545,12 @@
       "modalityMarks": [],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata"
@@ -28736,10 +28720,12 @@
       "modalityMarks": [],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata"
@@ -29289,10 +29275,12 @@
       "modalityMarks": [],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata"
@@ -34905,10 +34893,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata",
@@ -39084,10 +39074,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje 'heading', a os po naravi mjeri 'body'"
@@ -39287,10 +39279,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "recenica imenuje 'heading', a os po naravi mjeri 'body'"
@@ -47154,10 +47148,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata",

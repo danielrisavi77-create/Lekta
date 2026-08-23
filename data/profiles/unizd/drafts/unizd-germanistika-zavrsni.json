@@ -29,6 +29,9 @@
     },
     {
       "ruleId": "unizd-germanistika-zavrsni--font-size",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": [
         12

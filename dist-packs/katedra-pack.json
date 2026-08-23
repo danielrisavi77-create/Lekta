@@ -5512,7 +5512,7 @@
    ],
    "verifiedAt": "2026-07-04",
    "citation": "harvard",
-   "font": "Times New Roman",
+   "font": "Arial",
    "size": 12,
    "spacing": 1.5,
    "sources": [
@@ -5532,7 +5532,7 @@
    ],
    "verifiedAt": "2026-07-04",
    "citation": "harvard",
-   "font": "Times New Roman",
+   "font": "Arial",
    "size": 12,
    "spacing": 1.5,
    "sources": [
@@ -10327,8 +10327,8 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-04",
-   "font": "Times New Roman",
-   "size": 12,
+   "font": "Merriweather",
+   "size": 10,
    "spacing": 1.5
   },
   {
@@ -10340,8 +10340,8 @@
     "final"
    ],
    "verifiedAt": "2026-07-04",
-   "font": "Times New Roman",
-   "size": 12,
+   "font": "Merriweather",
+   "size": 10,
    "spacing": 1.5
   },
   {

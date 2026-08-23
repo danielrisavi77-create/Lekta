@@ -63,10 +63,18 @@ const SOFT = new Set(['recommendation', 'permission', 'condition']);
  * ne smije nositi fusnotnu vrijednost, a fusnotna mora. Pet oznacenih slucajeva procitano je rucno i
  * svih pet je ispravno (heuristika je hvatala redni broj stavka "(7)" i susjednu vrijednost).
  *
- * Ostatak od 120 jedinica vise nije ovaj razred: 66 nosi ublazavanje (samo `human`), 33 ima vise
- * modalnih biljega u istoj recenici, 13 nema nijedan, 6 su predlosci.
+ * Pala je na 198 trecom serijom (28 pravila): 6 `mathos` jedinica gdje je citat LaTeX predlozak, 2
+ * `unizd-germanistika` gdje je 14 pt naslov a 12 pt tijelo, i 20 pravila golog indikativa ("Format
+ * rada je A4"), sto je u ovom vokabularu `directive`. Predlozak se broji kao propis kad NAMJERNO
+ * mijenja zadano (mathos: 10pt -> 12pt, 2,54 -> 3 cm), a ne kad je netaknut (ffst, skinut s
+ * bodovanja) - ta razlika je jedina stvar koja predloske dijeli na propise i sum.
+ *
+ * Bodovanih je 2207 -> 2205: dva `ffst-*--margins` su presudom otisla u `needs-recheck`.
+ *
+ * Ostatak od 99 jedinica vise nije ovaj razred: 66 nosi ublazavanje (samo `human`), 33 ima vise
+ * modalnih biljega u istoj recenici i trazi da se procita KOJA recenica nosi vrijednost te osi.
  */
-const MISSING_MODALITY_CAP = 226;
+const MISSING_MODALITY_CAP = 198;
 
 /**
  * IZVEDENI `scored`, ne pohranjena zastavica. Razlika nije akademska: 275 pravila zadovoljava

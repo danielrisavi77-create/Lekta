@@ -228,6 +228,9 @@
       },
       {
         "ruleId": "ffrz-diplomski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "harvard",
         "category": "citation",
@@ -474,6 +477,9 @@
       },
       {
         "ruleId": "ffrz-bakalaureatski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "harvard",
         "category": "citation",

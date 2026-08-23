@@ -334,16 +334,37 @@ def truncated_tail(rel_path: str, page: int, quote: str) -> str | None:
 # Predikatne osi nisu broj nego TVRDNJA: citat ne mora sadrzavati vrijednost `true`, nego recenicu
 # koja tu odredbu izrice. Zato imaju vlastiti oblik izvoda.
 PREDICATE_TOKENS: dict[str, list[str]] = {
-    "justify": ["obostran", "justify", "poravnan", "blok"],
-    "toc": ["sadrzaj", "sadržaj", "kazalo", "table of contents"],
-    "page-numbers": ["numerir", "numerac", "paginac", "broj stranic", "brojevi stranic", "oznacene brojevima"],
-    "footnote-font": ["fusnot", "biljesk", "bilješk", "podnozj"],
+    # KORIJENI, ne cijele rijeci: hrvatski mijenja nastavak, a izvori nisu dosljedni. Prosireno
+    # 2026-08-24 nakon mjerenja koje je 60 tvrdnji proglasilo neuporistenima; uzorak od 6 je pokazao
+    # da su 3 bile promasaj RJECNIKA, ne podataka:
+    #   - token "poravnan" nije hvatao "tekst poravnat s obje strane" (aspira, efst): jedno slovo,
+    #   - "obrojcavanje stranica" (apuri) nije bilo ni u jednom obliku,
+    #   - dijakritika se nije skidala, pa "obrojcavanje" nikad ne bi pogodilo ASCII token.
+    # Gard koji vristi na tocnu tvrdnju jednako je beskoristan kao onaj koji suti.
+    # Njemacki i opis PAKETA su ravnopravni oblici izvora: `ffri-germanistika` uputa je na njemackom
+    # ("Blocksatz"), a `ffst` citat opisuje Word predlozak ("Footer: PAGE polje"). Oboje IZRICE
+    # odredbu; da rjecnik pokriva samo hrvatsku prozu, tocna tvrdnja bi ispala neuporistena.
+    "justify": [
+        "obostran", "justify", "poravna", "poravnat", "blok", "obje strane", "objema margina",
+        "blocksatz", "w:jc=both",
+    ],
+    "toc": ["sadrzaj", "kazalo", "table of contents", "inhaltsverzeichnis"],
+    "page-numbers": [
+        "numerir", "numerac", "paginac", "broj stranic", "brojevi stranic", "oznacene brojevima",
+        "obrojcav", "brojcano", "oznacavaju stranic", "oznacene stranic", "stranice se oznac",
+        "oznacene rednim brojem", "oznacen rednim brojem", "page polje", "seitenzahl",
+    ],
+    "footnote-font": ["fusnot", "biljesk", "podnozj"],
 }
 
 
 def predicate_hit(check_id: str, quote: str) -> bool:
-    """Izrice li citat tu odredbu uopce. Namjerno grubo: dokazuje da se recenica bavi tom osi."""
-    low = quote.lower()
+    """Izrice li citat tu odredbu uopce. Namjerno grubo: dokazuje da se recenica bavi tom osi.
+
+    Usporedjuje se BEZ DIJAKRITIKE na obje strane: draft citati su mijesani (dio je vec ASCII, dio
+    nije), pa bi inace isti izvor prolazio ili padao ovisno o tome kako je prepisan.
+    """
+    low = fold(quote)
     return any(token in low for token in PREDICATE_TOKENS.get(check_id, []))
 
 
@@ -600,6 +621,19 @@ def verify(claim: dict) -> dict:
 # Pokreni: python scripts/verify_rule_claims.py --selftest
 SELFTEST: list[tuple[str, object, str, bool]] = [
     # (checkId, value, quote, ocekuje se izvod?)
+    # --- PREDIKATNE OSI: rjecnik mora pokriti kako izvori STVARNO pisu -------------------------
+    # Sve tri "grize" kontrole su prepisane iz izvora koji su prosireni rjecnik iznudili: mjerenje je
+    # 60 tvrdnji proglasilo neuporistenima, a uzorak od 6 pokazao da su 3 promasaj RJECNIKA.
+    ("justify", True, "Margine su standardne, a tekst poravnat s obje strane.", True),
+    ("justify", True, "Tekst treba biti poravnat uz lijevi i desni rub stranice.", True),
+    ("justify", True, "Die folgenden Angaben gelten verbindlich. Blocksatz.", True),
+    ("justify", True, "Rad se pise u formatu A-4, font Times New Roman, velicina 12.", False),
+    ("page-numbers", True, "Obrojčavanje stranica: u podnožju, desno", True),
+    ("page-numbers", True, "stranice trebaju biti oznacene rednim brojem (dolje desno)", True),
+    ("page-numbers", True, "Footer: PAGE polje, desno poravnano, dno stranice.", True),
+    ("page-numbers", True, "Rad treba pisati na papiru A4 formata s marginama 3 cm.", False),
+    ("toc", True, "Rad mora sadrzavati:", False),  # uvod u popis BEZ popisa: nije uporiste
+    ("toc", True, "Sadrzaj se generira automatski u Wordu.", True),
     # --- SNOPOVI PRAVILA (objekt s vise odredbi): svaki LIST mora imati vlastito sidro ----------
     # Bez ovih kontrola bi rjecnik koji pogadja sve izgledao jednako kao rjecnik koji radi.
     (

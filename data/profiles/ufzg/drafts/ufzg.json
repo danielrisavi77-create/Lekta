@@ -293,6 +293,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "apa7",
         "category": "citation",
@@ -663,6 +666,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "apa7",
         "category": "citation",

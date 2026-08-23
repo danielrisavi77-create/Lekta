@@ -6,8 +6,8 @@ Upisuje se u `ruleEntry`. Tri razine izvora: `mechanical` (strojni uzorak), `age
 (procitan citat, `npm run claim-scope`) i `human` (ljudski potpis). UBLAZEN modalitet
 (recommendation/permission/condition) smije upisati SAMO `human`, pa je sve ublazeno ovdje.
 
-Jedinica: 120. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
-Jos 262 jedinica imalo je razlog za covjeka, ali su im sva pravila u medjuvremenu
+Jedinica: 99. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
+Jos 281 jedinica imalo je razlog za covjeka, ali su im sva pravila u medjuvremenu
 upisana, pa ne cekaju nista; ostaju u `docs/generated/claim-modality-proposals.json`.
 
 ## ublazavanje u citatu (66)
@@ -312,76 +312,4 @@ upisana, pa ne cekaju nista; ostaju u `docs/generated/claim-modality-proposals.j
 - **paper-size** `vub-sestrinstvo-upute-zavrsni` (prijedlog: directive / bibliography, 1 pravila)
   - citat: "Rad treba pisati na papiru formata A4 (21 x 29,7 cm), a ispisivanje je jednostrano. Pri pisanju koristiti font Times New Roman (12 pt). Poravnanje treba biti obostrano, prored 1,5. Velicine margina: gornja, donja i desna"
   - razlozi: vise modalnih biljega u istoj recenici: directive, obligation; recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
-
-## nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata (13)
-
-- **citation-style** `effectus-pravilnik-2023` (prijedlog: nema / footnote, 3 pravila)
-  - citat: "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju in"
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata; recenica imenuje 'footnote', a os po naravi mjeri 'whole'
-- **citation-style** `ffrz-oblikovanje-bakalaureatski-2021` (prijedlog: nema / whole, 1 pravila)
-  - citat: "Obnovljeni zivot za citiranje i referiranje koristi sustav unutartekstnih citatnica (In-Text"
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata
-- **citation-style** `ffrz-oblikovanje-diplomski-2021` (prijedlog: nema / whole, 1 pravila)
-  - citat: "Obnovljeni zivot za citiranje i referiranje koristi sustav unutartekstnih citatnica (In-Text"
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata
-- **citation-style** `ffzg-filoz-diplomski-2019` (prijedlog: nema / footnote, 1 pravila)
-  - citat: "Izvori za citirane, sazete ili parafrazirane misli nekog drugog autora navode se u fusnotama na"
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata; recenica imenuje 'footnote', a os po naravi mjeri 'whole'
-- **margins** `ftrr-pravilnik-zavrsni-diplomski` (prijedlog: nema / whole, 2 pravila)
-  - citat: "Za pisanje rada je potrebno: - odabrati velicinu slova Times New Roman 12 pt i prored 1.5, - koristiti standardne margine (gore, dolje, lijevo, desno po 25 mm)"
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata
-- **citation-style** `geof-naputak-ocjenski-2000` (prijedlog: nema / bibliography, 2 pravila)
-  - citat: "Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine"
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata; recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
-- **paper-size** `grf-upute-zavrsni` (prijedlog: nema / whole, 1 pravila)
-  - citat: "Format zavrsnog rada: A-4 (21 x 29,7 cm), tvrdi uvez"
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata
-- **paper-size** `mef-naputci-tehnicka-obrada-doktorski-2022` (prijedlog: nema / whole, 1 pravila)
-  - citat: "Format radova je A 4 (21x29,7 cm)"
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata
-- **citation-style** `mef-pravilnik-diplomski-2023` (prijedlog: nema / whole, 1 pravila)
-  - citat: "Publikacije se u tekstu citiraju tako da se navede autor-godina (za rad jednog autora) ili autor-autor-godina (za rad dva autora) ili autor et al.-godina (za rad tri i vise autora)."
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata
-- **heading-rules** `pravo-katedra-radno-socijalno-upute-2021` (prijedlog: nema / heading, 1 pravila)
-  - citat: "Cjeline unutar pojedinog rada (glave, odjeljke i pododjeljke) oznacavajte samo arapskim brojevima i njihovom decimalnom kombinacijom, a nikako ne slovima ili rimskim brojevima."
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata
-- **citation-style** `pravo-scsr-upute-diplomski-2021` (prijedlog: nema / whole, 2 pravila)
-  - citat: "Referenca u tekstu se stavlja u zagrade, a sadrzi prezime autora i godinu izdanja; prema uputama iz Revije za socijalnu politiku ili iz Ljetopisa socijalnog rada"
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata
-- **citation-style** `ufzg-upute-zavrsni-diplomski-2026` (prijedlog: nema / bibliography, 2 pravila)
-  - citat: "usklaeno s APA stilom. Detaljnije upute za citiranje literature"
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata; recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
-- **citation-style** `vvg-upute-radovi-2013` (prijedlog: nema / bibliography, 2 pravila)
-  - citat: "Citiranje dijela teksta iz literature u popisu, označava se na kraju citata rednim brojem literature iz popisa u uglatim zagradama."
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata; recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
-
-## citat je PREDLOZAK (6)
-
-- **font-size** `mathos-predlozak-diplomski-2026` (prijedlog: directive / body, 1 pravila)
-  - citat: "\LoadClass[a4paper, twoside,openright]{report} ... \usepackage[a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm]{geometry} ... \usepackage[fontsize=12pt]{scrextend}"
-  - razlozi: citat je PREDLOZAK (LaTeX preambula), ne propisna recenica: modalitet ne postoji
-- **margins** `mathos-predlozak-diplomski-2026` (prijedlog: directive / whole, 1 pravila)
-  - citat: "\LoadClass[a4paper, twoside,openright]{report} ... \usepackage[a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm]{geometry} ... \usepackage[fontsize=12pt]{scrextend}"
-  - razlozi: citat je PREDLOZAK (LaTeX preambula), ne propisna recenica: modalitet ne postoji
-- **paper-size** `mathos-predlozak-diplomski-2026` (prijedlog: directive / whole, 1 pravila)
-  - citat: "\LoadClass[a4paper, twoside,openright]{report} ... \usepackage[a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm]{geometry} ... \usepackage[fontsize=12pt]{scrextend}"
-  - razlozi: citat je PREDLOZAK (LaTeX preambula), ne propisna recenica: modalitet ne postoji
-- **font-size** `mathos-predlozak-zavrsni-2026` (prijedlog: directive / body, 1 pravila)
-  - citat: "\LoadClass[a4paper, twoside,openright]{report} ... \usepackage[a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm]{geometry} ... \usepackage[fontsize=12pt]{scrextend}"
-  - razlozi: citat je PREDLOZAK (LaTeX preambula), ne propisna recenica: modalitet ne postoji
-- **margins** `mathos-predlozak-zavrsni-2026` (prijedlog: directive / whole, 1 pravila)
-  - citat: "\LoadClass[a4paper, twoside,openright]{report} ... \usepackage[a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm]{geometry} ... \usepackage[fontsize=12pt]{scrextend}"
-  - razlozi: citat je PREDLOZAK (LaTeX preambula), ne propisna recenica: modalitet ne postoji
-- **paper-size** `mathos-predlozak-zavrsni-2026` (prijedlog: directive / whole, 1 pravila)
-  - citat: "\LoadClass[a4paper, twoside,openright]{report} ... \usepackage[a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm]{geometry} ... \usepackage[fontsize=12pt]{scrextend}"
-  - razlozi: citat je PREDLOZAK (LaTeX preambula), ne propisna recenica: modalitet ne postoji
-
-## recenica imenuje 'heading', a os po naravi mjeri 'body' (2)
-
-- **font-size** `unizd-germanistika-pravilnik-diplomski-2017` (prijedlog: directive / heading, 1 pravila)
-  - citat: "Rad mora biti izrađen na računalu i to: slovima Times New Roman C, veličina slova 14 (naslovi poglavlja, masnim slovima); slovima Times New Roman C, veličina slova 12 („tijelo“ rada, naslovi podpoglavlja; Literatura/Bibl"
-  - razlozi: recenica imenuje 'heading', a os po naravi mjeri 'body'
-- **font-size** `unizd-germanistika-pravilnik-zavrsni-2020` (prijedlog: directive / heading, 1 pravila)
-  - citat: "Rad mora biti izrađen na računalu i to: slovima Times New Roman C, veličina slova 14 (naslovi poglavlja, masnim slovima); slovima Times New Roman C, veličina slova 12 („tijelo“ rada, naslovi podpoglavlja; Literatura/Bibl"
-  - razlozi: recenica imenuje 'heading', a os po naravi mjeri 'body'
 

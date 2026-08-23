@@ -2002,6 +2002,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-social-author",
         "category": "citation",
@@ -2367,6 +2370,9 @@
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-social-author",
         "category": "citation",
@@ -4358,6 +4364,9 @@
       },
       {
         "ruleId": "radno-socijalno-pravo--heading-rules",
+        "modality": "directive",
+        "scope": "heading",
+        "modalitySource": "agent-read",
         "checkId": "heading-rules",
         "value": {
           "numberRequired": true,

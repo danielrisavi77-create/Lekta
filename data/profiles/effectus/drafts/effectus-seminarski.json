@@ -228,6 +228,9 @@
     },
     {
       "ruleId": "effectus-seminarski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "citation-style",
       "value": "chicago-notes",
       "category": "citation",
