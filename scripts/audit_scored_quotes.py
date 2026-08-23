@@ -1079,7 +1079,11 @@ _SRC_SPEC = (
     "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova - Arial "
     "Velicina slova (Font size): 12 tipografskih tocaka Prored (Line spacing): 1,5 redak"
 )
-_SRC_LIST = "Rad se sastoji od: 3. naslovnice 4. sazetaka i kljucnih rijeci 5. uvoda 6. popisa literature"
+# Izvor NEMA rednih brojeva: u stvarnom slucaju (math-uniri) djelitelj recenica prelomi nabrajanje
+# pa broj sljedece stavke zavrsi na kraju prethodnog ulomka, a u opisanom odlomku ga NEMA. Ako
+# sinteticki izvor sadrzi bas tu znamenku pokraj sidra, kontrola prolazi i s podmetnutim kvarom
+# i bez njega, dakle ne grize. Uhvaceno mutacijom, ne citanjem.
+_SRC_LIST = "Rad se sastoji od: naslovnice, sazetaka i kljucnih rijeci, uvoda, popisa literature"
 _SRC_OCR = "Uvlaka prvoga retka u odlomku: 1, 25 cm i prored 1,5 redak"
 _SRC_MARG = "Margine rada iznose 2,5 cm sa svih strana."
 
@@ -1101,7 +1105,7 @@ ANCHOR_SELFTEST: list[tuple[str, str, str, object, bool]] = [
 # (opis, izvor, citat, ocekuje se da brojevi STOJE?)
 NUMBERS_SELFTEST: list[tuple[str, str, str, bool]] = [
     ("redni broj popisa nije vrijednost", _SRC_LIST, "naslovnice 4.", True),
-    ("krivi redni broj u popisu i dalje pada", _SRC_LIST, "9. popisa literature", False),
+    ("broj kojeg u odlomku NEMA i dalje pada", _SRC_LIST, "popisa literature na 9 stranica", False),
     ("OCR razmak u decimalnom broju", _SRC_OCR, "uvlaka prvoga retka u odlomku: 1,25 cm", True),
     ("stvarno drugaciji broj i dalje pada", _SRC_MARG, "Margine rada iznose 3,5 cm sa svih strana.", False),
     ("desetinka na kraju recenice ostaje vrijednost", _SRC_MARG,
