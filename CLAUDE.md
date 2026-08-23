@@ -195,37 +195,6 @@ artefaktima (scored-value-drift, repair-params) idu kroz BUILDER, nikad rucno: r
 izbrisao. Novi podatkovni direktorij ili nova staza bez razreda = crveni check; dodaj
 pravilo SVJESNO, uz biljesku.
 
-Lanac dokaza (izvor + snapshot + stranica + doslovan citat + potpis) zivi u `ruleEntries`
-(`data/profiles/<unit>/drafts/*.json`), a motor boduje iz naslijedjenog `rules` objekta
-(`composeAnalysisProfile` klonira `definition.rules`, NIKAD `ruleEntries`; svih 407 registriranih
-profila ima prazan `ruleEntries`). Do 2026-08-22 te dvije strane nitko nije usporedjivao.
-
-Izmjereno pri prvom mjerenju: **40 parova (profil, os) kroz 23 profila** bodovalo je vrijednost koju
-njihova vlastita `verified` tvrdnja s citatom opovrgava. `unizd-pomorski-*`: izvor propisuje
-Merriweather 10 pt, motor je trazio Times New Roman/Arial/Calibri 11-12 pt, pa je rad koji tocno
-slijedi svoju uputu gubio bodove. Uz to je serverski popravak upisivao TNR 12 u studentov dokument,
-pod ruleId-em cija provenijencija kaze Merriweather 10.
-
-- Usporedbu radi `src/verification/scored-value-binding.ts`, po OSI a ne po kljucu `rules`: motor
-  vecinu dimenzija cita kroz par (zastavica, vrijednost), pa usporedba po kljucu daje lazne nalaze
-  (`paper-size: "A4"` proizvodi `paperSizes`, zrcalo nosi `requireA4`, ista odredba drukcije zapisana).
-- Artefakt je `data/verification/scored-value-drift.json` (`npm run scored-value-drift`).
-  `advisory-demotion.ts` ga cita i GASI bodovanje osi s raskorakom dok vlasnik ne presudi.
-  Dosjei s dokazom: `npm run drift-dossiers` -> `data/verification/drift-dossiers/`.
-- Gard: `tests/scored-value-drift.test.ts` (commitani artefakt = svjez izracun, ratchet koji smije
-  samo padati, negativne kontrole koje dokazuju da provjera grize).
-- KRUGA NEMA I TO JE NAMJERNO: raskorak se racuna iskljucivo iz tvrdnji i `rules`, nikad iz demotije.
-  Provjera koja preskace vec demotirane osi sama sebe pobrise u sljedecem krugu (popis se isprazni,
-  demotija nestane, kvar se vrati). Zato `computeBaseDemotedAdvisory` postoji odvojeno od
-  `computeDemotedAdvisory`.
-- Demotija je PRIVREMENA. Presuda po slucaju je vlasnikova: (A) tvrdnja je tocna pa se vrijednost
-  prenosi u `rules` sva tri registra, (B) tvrdnja je preseljena (krivo pripisan opseg ili odsjecki
-  izvor) pa se ispravlja tvrdnja, (C) oba su obranjiva pa je to odluka o hijerarhiji izvora.
-  Obrazac B nije rijedak: opovrgavajuci prolaz 2026-08-21 nasao ga je na 12 od 20 tvrdnji, pa
-  tvrdnja koja se ne slaze sa zrcalom NIJE automatski ona tocna.
-- `scored-coverage.json` se time NE mijenja i to nije nesklad koji treba poravnati: coverage mjeri
-  tvrdnje sljedive do izvora, demotija mjeri sto motor boduje. Dvije populacije, imenuju se.
-
 ## Tvrdo pravilo: gard bez dokaza da grize ne racuna se
 
 Svaki verifikacijski gard mora imati MUTACIJU u `tests/gate-mutations.test.ts`: podmetnut poznat kvar
@@ -346,7 +315,9 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
   vrijednost, pa rucno skrojen zahtjev nije mogao biti razlikovan od profilnog.
 - Recept je zapisan u `docs/REPAIR_RECIPE.md`, GENERIRAN iz koda i profila (`npm run repair-recipe`,
   izvor `src/repair/recipe.ts`). Ne uredjuj ga rucno; `tests/repair-recipe.test.ts` pada na drift.
-  Ista naredba pece i serverski autoritet; `tests/repair-param-authority.test.ts` pada ako artefakt
+  Ista naredba pece i serverski autoritet I profile-rules artefakt (ulancano 2026-08-23,
+  jedan okidac za sve tri pecene projekcije; deploy oba projekta: `npm run
+  deploy:profile-rules`); `tests/repair-param-authority.test.ts` pada ako artefakt
   odluta od recepta.
 - ISPORUKA IDE TEK NAKON PONOVNE PROVJERE (obrnuto od ugovora do 2026-08-16). Vrata integriteta
   hvataju pokvaren paket, ali ne i SEMANTICKU regresiju, pa se `detectPassRegressions` izvodi PRIJE
@@ -440,7 +411,6 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
   korisnik samo klikne Popravi (`violated !== false`, isto kao UI checkbox). Testovi koji
   simuliraju korisnicki tok moraju ici kroz njega, inace mjere tok koji nitko ne izvodi.
 - `src/analysis/analyze-docx-client.ts` - most prema Web Workeru, inline fallback.
-- `src/profiles/profile-loader.ts` - registar profila, hidracija izvora, kompilacija.
 - `src/profiles/rule-compiler.ts` - Option A: ruleEntries -> effectiveRules.
 - `src/profiles/profile-schema.ts` - tipovi profila i pravila.
 - `src/profiles/profile-validator.ts` - strukturna validacija profila.

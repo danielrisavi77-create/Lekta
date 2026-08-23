@@ -1,5 +1,4 @@
 import { APP_VERSION } from '../config/app-version';
-import { findVerifiedProfile } from '../profiles/profile-registry';
 import { isAcademicWorkType } from './academic-suite-contracts';
 import { currentCompletionHandoffToken, currentKatedraProjectId } from './katedra-entry';
 import { toKatedraSharedResult } from './katedra-handoff';
@@ -58,12 +57,12 @@ export function captureKatedraHandoffCandidate(result: any, profile: any, settin
 
   if (!profileId) return false;
 
-  // MRTAV PUT (dokumentirano 2026-08-23): registry NIKAD ne nosi ruleEntries (heavy ih
-  // nema, CLAUDE.md: svih 407 profila ima prazan ruleEntries), pa je ovo uvijek [].
-  // Analysis is started only after ensureProfileRules(), so a verified profile
-  // found here already carries its authored ruleEntries. Missing entries are a
-  // valid fallback: stable checkId still works and ruleId remains null.
-  const ruleEntries = findVerifiedProfile(profileId)?.ruleEntries || [];
+  // Registry NIKAD ne nosi ruleEntries (CLAUDE.md: svih 407 profila ima prazan
+  // ruleEntries; evidence zivi samo u privatnim draftovima koji ne ulaze u bundle).
+  // Do 2026-08-23 je ovdje stajao read `findVerifiedProfile(id)?.ruleEntries || []` koji
+  // je UVIJEK davao [] uz komentar koji je tvrdio suprotno. Prazan niz je valjan
+  // ugovor za Katedru: stabilni checkId radi, ruleId ostaje null.
+  const ruleEntries: never[] = [];
 
   // `profile.fingerprint` is already derived from the exact runtime rule values,
   // selected profile, citation setup, sources and app version. Treat it as an
