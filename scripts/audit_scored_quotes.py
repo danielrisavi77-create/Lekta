@@ -204,6 +204,12 @@ def numbers_match(full_text: str, quote: str) -> bool:
     if len(parts) > 1:
         return all(numbers_match(full_text, part) for part in parts)
 
+    # Redni broj koji OTVARA sljedecu stavku popisa zavrsi na kraju prethodnog ulomka kad djelitelj
+    # recenica prelomi nabrajanje ("... naslovnice [...] 4." pa "sazetaka i kljucnih rijeci 5.").
+    # Takav broj imenuje MJESTO u popisu, ne vrijednost, isto kao "Tablica 1", samo iza a ne ispred.
+    # Uvjet je uzak: razmak ispred, najvise dvije znamenke i tocka na kraju, pa "margine 2,5." ostaje
+    # netaknuta (ondje je "5." iza zareza, ne iza razmaka).
+    quote = re.sub(r"\s+\d{1,2}\.\s*$", "", quote)
     wanted = [n for n in NUM.findall(quote) if n not in label_numbers(quote)]
     if not wanted:
         return True
