@@ -4,11 +4,11 @@
   "schemaVersion": 1,
   "counts": {
     "unapplied": 24,
-    "drift": 37,
+    "drift": 14,
     "unbacked": 82,
     "citation:non-canonical-token": 26,
     "citation:not-applied": 6,
-    "profilesDemoted": 20
+    "profilesDemoted": 13
   },
   "demotedByProfile": {
     "ffos-germanistika-diplomski": [
@@ -20,47 +20,19 @@
     "ffos-psihologija-diplomski": [
       "margins"
     ],
-    "ffri-germanistika-diplomski": [
-      "margins"
-    ],
-    "ffri-germanistika-zavrsni": [
-      "margins"
-    ],
     "ffst-diplomski": [
-      "font",
-      "font-size",
       "margins"
     ],
     "ffst-zavrsni": [
-      "font",
-      "font-size",
-      "margins"
-    ],
-    "fpzpu-diplomski": [
-      "font",
-      "margins"
-    ],
-    "fpzpu-zavrsni": [
-      "font",
-      "margins"
-    ],
-    "mev-zavrsni": [
       "margins"
     ],
     "unizd-arheologija-diplomski": [
       "margins"
     ],
-    "unizd-ekologija-zavrsni": [
-      "font",
+    "unizd-germanistika-zavrsni": [
       "font-size"
     ],
-    "unizd-germanistika-zavrsni": [
-      "font",
-      "font-size",
-      "margins"
-    ],
     "unizd-pomorski-diplomski": [
-      "font",
       "font-size"
     ],
     "unizd-pomorski-zavrsni": [
@@ -71,21 +43,12 @@
       "margins"
     ],
     "unizd-sociologija-diplomski": [
-      "font",
-      "font-size"
-    ],
-    "unizd-ucitelji-diplomski": [
-      "font",
       "font-size"
     ],
     "vss-diplomski": [
-      "font",
-      "font-size",
       "margins"
     ],
     "vss-zavrsni": [
-      "font",
-      "font-size",
       "margins"
     ]
   },
@@ -213,86 +176,6 @@
       "claimValue": true
     },
     {
-      "profileId": "mev-zavrsni",
-      "ruleId": "mev-zavrsni--margins",
-      "checkId": "margins",
-      "sourceId": "mev-upute-zavrsni",
-      "sourcePage": "Upute, Dodatak tehnicko oblikovanje",
-      "kind": "drift",
-      "claimValue": {
-        "top": 3,
-        "right": 3,
-        "bottom": 3,
-        "left": 3,
-        "minimum": false
-      },
-      "scoredValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5,
-        "minimum": false
-      }
-    },
-    {
-      "profileId": "ffri-germanistika-zavrsni",
-      "ruleId": "ffri-germanistika-zavrsni--margins",
-      "checkId": "margins",
-      "sourceId": "ffri-germanistika-leitfaden-2018",
-      "sourcePage": "S3.7, str. 20 (uz obvezujucu deklaraciju na str. 5)",
-      "kind": "drift",
-      "claimValue": {
-        "top": 2,
-        "right": 3,
-        "bottom": 2,
-        "left": 3,
-        "minimum": false
-      },
-      "scoredValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5,
-        "minimum": false
-      }
-    },
-    {
-      "profileId": "ffri-germanistika-diplomski",
-      "ruleId": "ffri-germanistika-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "ffri-germanistika-leitfaden-2018",
-      "sourcePage": "S3.7, str. 20 (uz obvezujucu deklaraciju na str. 5)",
-      "kind": "drift",
-      "claimValue": {
-        "top": 2,
-        "right": 3,
-        "bottom": 2,
-        "left": 3,
-        "minimum": false
-      },
-      "scoredValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5,
-        "minimum": false
-      }
-    },
-    {
-      "profileId": "fpzpu-zavrsni",
-      "ruleId": "fpzpu-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "fpzpu-pravilnik-zavrsni-2019-procisceni",
-      "sourcePage": "Clanak 5, stavak 1",
-      "kind": "drift",
-      "claimValue": [
-        "Arial"
-      ],
-      "scoredValue": [
-        "Times New Roman"
-      ]
-    },
-    {
       "profileId": "fpzpu-zavrsni",
       "ruleId": "fpzpu-zavrsni--line-spacing",
       "checkId": "line-spacing",
@@ -302,42 +185,6 @@
       "claimValue": 1.5
     },
     {
-      "profileId": "fpzpu-zavrsni",
-      "ruleId": "fpzpu-zavrsni--margins",
-      "checkId": "margins",
-      "sourceId": "fpzpu-pravilnik-zavrsni-2019-procisceni",
-      "sourcePage": "Clanak 5, stavak 1",
-      "kind": "drift",
-      "claimValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5,
-        "minimum": false
-      },
-      "scoredValue": {
-        "top": 3.5,
-        "right": 2.5,
-        "bottom": 3,
-        "left": 3,
-        "minimum": false
-      }
-    },
-    {
-      "profileId": "fpzpu-diplomski",
-      "ruleId": "fpzpu-diplomski--font",
-      "checkId": "font",
-      "sourceId": "fpzpu-pravilnik-zavrsni-2019-procisceni",
-      "sourcePage": "Clanak 5, stavak 1",
-      "kind": "drift",
-      "claimValue": [
-        "Arial"
-      ],
-      "scoredValue": [
-        "Times New Roman"
-      ]
-    },
-    {
       "profileId": "fpzpu-diplomski",
       "ruleId": "fpzpu-diplomski--line-spacing",
       "checkId": "line-spacing",
@@ -345,59 +192,6 @@
       "sourcePage": "Clanak 5, stavak 1",
       "kind": "unapplied",
       "claimValue": 1.5
-    },
-    {
-      "profileId": "fpzpu-diplomski",
-      "ruleId": "fpzpu-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "fpzpu-pravilnik-zavrsni-2019-procisceni",
-      "sourcePage": "Clanak 5, stavak 1",
-      "kind": "drift",
-      "claimValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5,
-        "minimum": false
-      },
-      "scoredValue": {
-        "top": 3.5,
-        "right": 2.5,
-        "bottom": 3,
-        "left": 3,
-        "minimum": false
-      }
-    },
-    {
-      "profileId": "ffst-zavrsni",
-      "ruleId": "ffst-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
-      "sourcePage": "Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)",
-      "kind": "drift",
-      "claimValue": [
-        "Times New Roman"
-      ],
-      "scoredValue": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ]
-    },
-    {
-      "profileId": "ffst-zavrsni",
-      "ruleId": "ffst-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
-      "sourcePage": "Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)",
-      "kind": "drift",
-      "claimValue": [
-        12
-      ],
-      "scoredValue": [
-        12,
-        11
-      ]
     },
     {
       "profileId": "ffst-zavrsni",
@@ -420,37 +214,6 @@
         "left": 2.5,
         "minimum": false
       }
-    },
-    {
-      "profileId": "ffst-diplomski",
-      "ruleId": "ffst-diplomski--font",
-      "checkId": "font",
-      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
-      "sourcePage": "Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)",
-      "kind": "drift",
-      "claimValue": [
-        "Times New Roman"
-      ],
-      "scoredValue": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ]
-    },
-    {
-      "profileId": "ffst-diplomski",
-      "ruleId": "ffst-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
-      "sourcePage": "Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)",
-      "kind": "drift",
-      "claimValue": [
-        12
-      ],
-      "scoredValue": [
-        12,
-        11
-      ]
     },
     {
       "profileId": "ffst-diplomski",
@@ -959,37 +722,6 @@
       ]
     },
     {
-      "profileId": "unizd-ekologija-zavrsni",
-      "ruleId": "unizd-ekologija-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "unizd-ekologija-upute",
-      "sourcePage": "cijeli dokument",
-      "kind": "drift",
-      "claimValue": [
-        "Times New Roman"
-      ],
-      "scoredValue": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ]
-    },
-    {
-      "profileId": "unizd-ekologija-zavrsni",
-      "ruleId": "unizd-ekologija-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-ekologija-upute",
-      "sourcePage": "cijeli dokument",
-      "kind": "drift",
-      "claimValue": [
-        12
-      ],
-      "scoredValue": [
-        12,
-        11
-      ]
-    },
-    {
       "profileId": "unizd-arheologija-diplomski",
       "ruleId": "unizd-arheologija-diplomski--margins",
       "checkId": "margins",
@@ -1127,22 +859,6 @@
     },
     {
       "profileId": "unizd-germanistika-zavrsni",
-      "ruleId": "unizd-germanistika-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "unizd-germanistika-pravilnik-zavrsni-2020",
-      "sourcePage": "Prilog 2, \"Izgled zavrsnog rada\"",
-      "kind": "drift",
-      "claimValue": [
-        "Times New Roman"
-      ],
-      "scoredValue": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ]
-    },
-    {
-      "profileId": "unizd-germanistika-zavrsni",
       "ruleId": "unizd-germanistika-zavrsni--font-size",
       "checkId": "font-size",
       "sourceId": "unizd-germanistika-pravilnik-zavrsni-2020",
@@ -1155,28 +871,6 @@
         12,
         11
       ]
-    },
-    {
-      "profileId": "unizd-germanistika-zavrsni",
-      "ruleId": "unizd-germanistika-zavrsni--margins",
-      "checkId": "margins",
-      "sourceId": "unizd-germanistika-pravilnik-zavrsni-2020",
-      "sourcePage": "Prilog 2, \"Izgled zavrsnog rada\"",
-      "kind": "drift",
-      "claimValue": {
-        "top": 3,
-        "right": 3,
-        "bottom": 3,
-        "left": 3,
-        "minimum": false
-      },
-      "scoredValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5,
-        "minimum": false
-      }
     },
     {
       "profileId": "unizd-povijest-zavrsni",
@@ -1255,22 +949,6 @@
       "kind": "unbacked",
       "scoredValue": [
         "A4"
-      ]
-    },
-    {
-      "profileId": "unizd-sociologija-diplomski",
-      "ruleId": "unizd-sociologija-diplomski--font",
-      "checkId": "font",
-      "sourceId": "unizd-sociologija-upute-dipr-2014",
-      "sourcePage": "Odjeljak 5, \"Upute za pisanje diplomskoga rada\"",
-      "kind": "drift",
-      "claimValue": [
-        "Times New Roman"
-      ],
-      "scoredValue": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
       ]
     },
     {
@@ -1492,22 +1170,6 @@
     },
     {
       "profileId": "unizd-pomorski-diplomski",
-      "ruleId": "unizd-pomorski-diplomski--font",
-      "checkId": "font",
-      "sourceId": "unizd-pomorski-pravilnik-upute",
-      "sourcePage": "Upute diplomski",
-      "kind": "drift",
-      "claimValue": [
-        "Merriweather"
-      ],
-      "scoredValue": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ]
-    },
-    {
-      "profileId": "unizd-pomorski-diplomski",
       "ruleId": "unizd-pomorski-diplomski--font-size",
       "checkId": "font-size",
       "sourceId": "unizd-pomorski-pravilnik-upute",
@@ -1515,68 +1177,6 @@
       "kind": "drift",
       "claimValue": [
         10
-      ],
-      "scoredValue": [
-        12,
-        11
-      ]
-    },
-    {
-      "profileId": "unizd-ucitelji-diplomski",
-      "ruleId": "unizd-ucitelji-diplomski--font",
-      "checkId": "font",
-      "sourceId": "unizd-ucitelji-pravila-2018",
-      "sourcePage": "Odjeljak \"Izgled diplomskog rada\"",
-      "kind": "drift",
-      "claimValue": [
-        "Times New Roman"
-      ],
-      "scoredValue": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ]
-    },
-    {
-      "profileId": "unizd-ucitelji-diplomski",
-      "ruleId": "unizd-ucitelji-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-ucitelji-pravila-2018",
-      "sourcePage": "Odjeljak \"Izgled diplomskog rada\"",
-      "kind": "drift",
-      "claimValue": [
-        12
-      ],
-      "scoredValue": [
-        12,
-        11
-      ]
-    },
-    {
-      "profileId": "vss-zavrsni",
-      "ruleId": "vss-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "sourcePage": "Odjeljak \"1.1. IZGLED ZAVRSNOG RADA\", str. 5",
-      "kind": "drift",
-      "claimValue": [
-        "Times New Roman"
-      ],
-      "scoredValue": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ]
-    },
-    {
-      "profileId": "vss-zavrsni",
-      "ruleId": "vss-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "sourcePage": "Odjeljak \"1.1. IZGLED ZAVRSNOG RADA\", str. 5",
-      "kind": "drift",
-      "claimValue": [
-        12
       ],
       "scoredValue": [
         12,
@@ -1604,37 +1204,6 @@
         "left": 2.5,
         "minimum": false
       }
-    },
-    {
-      "profileId": "vss-diplomski",
-      "ruleId": "vss-diplomski--font",
-      "checkId": "font",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "sourcePage": "Odjeljak \"1.1. IZGLED ZAVRSNOG RADA\", str. 5",
-      "kind": "drift",
-      "claimValue": [
-        "Times New Roman"
-      ],
-      "scoredValue": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ]
-    },
-    {
-      "profileId": "vss-diplomski",
-      "ruleId": "vss-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "sourcePage": "Odjeljak \"1.1. IZGLED ZAVRSNOG RADA\", str. 5",
-      "kind": "drift",
-      "claimValue": [
-        12
-      ],
-      "scoredValue": [
-        12,
-        11
-      ]
     },
     {
       "profileId": "vss-diplomski",

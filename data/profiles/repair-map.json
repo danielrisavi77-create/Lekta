@@ -4060,6 +4060,16 @@
       "lastVerified": "2026-07-28"
     },
     {
+      "ruleId": "ffri-germanistika-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine (lijevo/desno 3cm, gore/dolje 2cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true,
+      "sourcePage": "S3.7, str. 20 (uz obvezujucu deklaraciju na str. 5)",
+      "lastVerified": "2026-07-28"
+    },
+    {
       "ruleId": "ffri-germanistika-diplomski--paper-size",
       "checkId": "paper-size",
       "label": "Format papira A4",
@@ -4119,6 +4129,16 @@
       "label": "Prored",
       "status": "verified",
       "fixerId": "line-spacing-fixer",
+      "autoFixable": true,
+      "sourcePage": "S3.7, str. 20 (uz obvezujucu deklaraciju na str. 5)",
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "ruleId": "ffri-germanistika-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine (lijevo/desno 3cm, gore/dolje 2cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
       "autoFixable": true,
       "sourcePage": "S3.7, str. 20 (uz obvezujucu deklaraciju na str. 5)",
       "lastVerified": "2026-07-28"
@@ -4768,6 +4788,26 @@
   ],
   "ffst-diplomski": [
     {
+      "ruleId": "ffst-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)",
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "ruleId": "ffst-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)",
+      "lastVerified": "2026-07-28"
+    },
+    {
       "ruleId": "ffst-diplomski--line-spacing",
       "checkId": "line-spacing",
       "label": "Prored",
@@ -4799,6 +4839,26 @@
     }
   ],
   "ffst-zavrsni": [
+    {
+      "ruleId": "ffst-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)",
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "ruleId": "ffst-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)",
+      "lastVerified": "2026-07-28"
+    },
     {
       "ruleId": "ffst-zavrsni--line-spacing",
       "checkId": "line-spacing",
@@ -7840,6 +7900,16 @@
   ],
   "fpzpu-diplomski": [
     {
+      "ruleId": "fpzpu-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Clanak 5, stavak 1",
+      "lastVerified": "2026-07-27"
+    },
+    {
       "ruleId": "fpzpu-diplomski--font-size",
       "checkId": "font-size",
       "label": "Velicina slova",
@@ -7860,6 +7930,16 @@
       "lastVerified": "2026-07-27"
     },
     {
+      "ruleId": "fpzpu-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true,
+      "sourcePage": "Clanak 5, stavak 1",
+      "lastVerified": "2026-07-27"
+    },
+    {
       "ruleId": "fpzpu-diplomski--paper-size",
       "checkId": "paper-size",
       "label": "Format papira A4",
@@ -7871,6 +7951,16 @@
     }
   ],
   "fpzpu-zavrsni": [
+    {
+      "ruleId": "fpzpu-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Clanak 5, stavak 1",
+      "lastVerified": "2026-07-27"
+    },
     {
       "ruleId": "fpzpu-zavrsni--font-size",
       "checkId": "font-size",
@@ -7887,6 +7977,16 @@
       "label": "Prored",
       "status": "verified",
       "fixerId": "line-spacing-fixer",
+      "autoFixable": true,
+      "sourcePage": "Clanak 5, stavak 1",
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "ruleId": "fpzpu-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
       "autoFixable": true,
       "sourcePage": "Clanak 5, stavak 1",
       "lastVerified": "2026-07-27"
@@ -10672,6 +10772,16 @@
       "label": "Obostrano poravnanje",
       "status": "verified",
       "fixerId": "alignment-fixer",
+      "autoFixable": true,
+      "sourcePage": "Upute, Dodatak tehnicko oblikovanje",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "mev-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
       "autoFixable": true,
       "sourcePage": "Upute, Dodatak tehnicko oblikovanje",
       "lastVerified": "2026-07-02"
@@ -16138,6 +16248,26 @@
   ],
   "unizd-ekologija-zavrsni": [
     {
+      "ruleId": "unizd-ekologija-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "cijeli dokument",
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "ruleId": "unizd-ekologija-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "cijeli dokument",
+      "lastVerified": "2026-07-28"
+    },
+    {
       "ruleId": "unizd-ekologija-zavrsni--line-spacing",
       "checkId": "line-spacing",
       "label": "Prored",
@@ -16523,11 +16653,31 @@
   ],
   "unizd-germanistika-zavrsni": [
     {
+      "ruleId": "unizd-germanistika-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Prilog 2, \"Izgled zavrsnog rada\"",
+      "lastVerified": "2026-07-28"
+    },
+    {
       "ruleId": "unizd-germanistika-zavrsni--line-spacing",
       "checkId": "line-spacing",
       "label": "Prored",
       "status": "verified",
       "fixerId": "line-spacing-fixer",
+      "autoFixable": true,
+      "sourcePage": "Prilog 2, \"Izgled zavrsnog rada\"",
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "ruleId": "unizd-germanistika-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine (sve 3cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
       "autoFixable": true,
       "sourcePage": "Prilog 2, \"Izgled zavrsnog rada\"",
       "lastVerified": "2026-07-28"
@@ -16922,6 +17072,16 @@
     }
   ],
   "unizd-pomorski-diplomski": [
+    {
+      "ruleId": "unizd-pomorski-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Upute diplomski",
+      "lastVerified": "2026-07-28"
+    },
     {
       "ruleId": "unizd-pomorski-diplomski--line-spacing",
       "checkId": "line-spacing",
@@ -17395,6 +17555,16 @@
   ],
   "unizd-sociologija-diplomski": [
     {
+      "ruleId": "unizd-sociologija-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Odjeljak 5, \"Upute za pisanje diplomskoga rada\"",
+      "lastVerified": "2026-07-28"
+    },
+    {
       "ruleId": "unizd-sociologija-diplomski--margins",
       "checkId": "margins",
       "label": "Margine",
@@ -17791,6 +17961,26 @@
     }
   ],
   "unizd-ucitelji-diplomski": [
+    {
+      "ruleId": "unizd-ucitelji-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Odjeljak \"Izgled diplomskog rada\"",
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "ruleId": "unizd-ucitelji-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Odjeljak \"Izgled diplomskog rada\"",
+      "lastVerified": "2026-07-28"
+    },
     {
       "ruleId": "unizd-ucitelji-diplomski--line-spacing",
       "checkId": "line-spacing",
@@ -18878,6 +19068,26 @@
   ],
   "vss-diplomski": [
     {
+      "ruleId": "vss-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Odjeljak \"1.1. IZGLED ZAVRSNOG RADA\", str. 5",
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "ruleId": "vss-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Odjeljak \"1.1. IZGLED ZAVRSNOG RADA\", str. 5",
+      "lastVerified": "2026-07-27"
+    },
+    {
       "ruleId": "vss-diplomski--line-spacing",
       "checkId": "line-spacing",
       "label": "Prored",
@@ -18909,6 +19119,26 @@
     }
   ],
   "vss-zavrsni": [
+    {
+      "ruleId": "vss-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Odjeljak \"1.1. IZGLED ZAVRSNOG RADA\", str. 5",
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "ruleId": "vss-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Odjeljak \"1.1. IZGLED ZAVRSNOG RADA\", str. 5",
+      "lastVerified": "2026-07-27"
+    },
     {
       "ruleId": "vss-zavrsni--line-spacing",
       "checkId": "line-spacing",

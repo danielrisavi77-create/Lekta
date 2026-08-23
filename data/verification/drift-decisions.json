@@ -1,0 +1,445 @@
+{
+  "note": "Presude o raskoracima izmedju tvrdnje i bodovane vrijednosti. Pise ih `scripts/apply-drift-decision.mjs`, uvijek uz ljudski potpis. Postoji da se odluka ne izgubi i da sljedeca revizija ne prijavi vec presudjen slucaj kao nov.",
+  "decisions": [
+    {
+      "ruleId": "ffri-germanistika-diplomski--margins",
+      "profileId": "ffri-germanistika-diplomski",
+      "checkId": "margins",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": {
+        "top": 2,
+        "right": 3,
+        "bottom": 2,
+        "left": 3,
+        "minimum": false
+      },
+      "engineValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "sourceId": "ffri-germanistika-leitfaden-2018",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "ffri-germanistika-zavrsni--margins",
+      "profileId": "ffri-germanistika-zavrsni",
+      "checkId": "margins",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": {
+        "top": 2,
+        "right": 3,
+        "bottom": 2,
+        "left": 3,
+        "minimum": false
+      },
+      "engineValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "sourceId": "ffri-germanistika-leitfaden-2018",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "ffst-diplomski--font",
+      "profileId": "ffst-diplomski",
+      "checkId": "font",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        "Times New Roman"
+      ],
+      "engineValue": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "ffst-diplomski--font-size",
+      "profileId": "ffst-diplomski",
+      "checkId": "font-size",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        12
+      ],
+      "engineValue": [
+        12,
+        11
+      ],
+      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "ffst-zavrsni--font",
+      "profileId": "ffst-zavrsni",
+      "checkId": "font",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        "Times New Roman"
+      ],
+      "engineValue": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "ffst-zavrsni--font-size",
+      "profileId": "ffst-zavrsni",
+      "checkId": "font-size",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        12
+      ],
+      "engineValue": [
+        12,
+        11
+      ],
+      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "fpzpu-diplomski--font",
+      "profileId": "fpzpu-diplomski",
+      "checkId": "font",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        "Arial"
+      ],
+      "engineValue": [
+        "Times New Roman"
+      ],
+      "sourceId": "fpzpu-pravilnik-zavrsni-2019-procisceni",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "fpzpu-diplomski--margins",
+      "profileId": "fpzpu-diplomski",
+      "checkId": "margins",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "engineValue": {
+        "top": 3.5,
+        "right": 2.5,
+        "bottom": 3,
+        "left": 3,
+        "minimum": false
+      },
+      "sourceId": "fpzpu-pravilnik-zavrsni-2019-procisceni",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "fpzpu-zavrsni--font",
+      "profileId": "fpzpu-zavrsni",
+      "checkId": "font",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        "Arial"
+      ],
+      "engineValue": [
+        "Times New Roman"
+      ],
+      "sourceId": "fpzpu-pravilnik-zavrsni-2019-procisceni",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "fpzpu-zavrsni--margins",
+      "profileId": "fpzpu-zavrsni",
+      "checkId": "margins",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "engineValue": {
+        "top": 3.5,
+        "right": 2.5,
+        "bottom": 3,
+        "left": 3,
+        "minimum": false
+      },
+      "sourceId": "fpzpu-pravilnik-zavrsni-2019-procisceni",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "mev-zavrsni--margins",
+      "profileId": "mev-zavrsni",
+      "checkId": "margins",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": {
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3,
+        "minimum": false
+      },
+      "engineValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "sourceId": "mev-upute-zavrsni",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "unizd-ekologija-zavrsni--font",
+      "profileId": "unizd-ekologija-zavrsni",
+      "checkId": "font",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        "Times New Roman"
+      ],
+      "engineValue": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "sourceId": "unizd-ekologija-upute",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "unizd-ekologija-zavrsni--font-size",
+      "profileId": "unizd-ekologija-zavrsni",
+      "checkId": "font-size",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        12
+      ],
+      "engineValue": [
+        12,
+        11
+      ],
+      "sourceId": "unizd-ekologija-upute",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "unizd-germanistika-zavrsni--font",
+      "profileId": "unizd-germanistika-zavrsni",
+      "checkId": "font",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        "Times New Roman"
+      ],
+      "engineValue": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "sourceId": "unizd-germanistika-pravilnik-zavrsni-2020",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "unizd-germanistika-zavrsni--margins",
+      "profileId": "unizd-germanistika-zavrsni",
+      "checkId": "margins",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": {
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3,
+        "minimum": false
+      },
+      "engineValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "sourceId": "unizd-germanistika-pravilnik-zavrsni-2020",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "unizd-pomorski-diplomski--font",
+      "profileId": "unizd-pomorski-diplomski",
+      "checkId": "font",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        "Merriweather"
+      ],
+      "engineValue": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "sourceId": "unizd-pomorski-pravilnik-upute",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "unizd-sociologija-diplomski--font",
+      "profileId": "unizd-sociologija-diplomski",
+      "checkId": "font",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        "Times New Roman"
+      ],
+      "engineValue": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "sourceId": "unizd-sociologija-upute-dipr-2014",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "unizd-ucitelji-diplomski--font",
+      "profileId": "unizd-ucitelji-diplomski",
+      "checkId": "font",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        "Times New Roman"
+      ],
+      "engineValue": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "sourceId": "unizd-ucitelji-pravila-2018",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "unizd-ucitelji-diplomski--font-size",
+      "profileId": "unizd-ucitelji-diplomski",
+      "checkId": "font-size",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        12
+      ],
+      "engineValue": [
+        12,
+        11
+      ],
+      "sourceId": "unizd-ucitelji-pravila-2018",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "vss-diplomski--font",
+      "profileId": "vss-diplomski",
+      "checkId": "font",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        "Times New Roman"
+      ],
+      "engineValue": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "sourceId": "vss-upute-zavrsni-2023",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "vss-diplomski--font-size",
+      "profileId": "vss-diplomski",
+      "checkId": "font-size",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        12
+      ],
+      "engineValue": [
+        12,
+        11
+      ],
+      "sourceId": "vss-upute-zavrsni-2023",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "vss-zavrsni--font",
+      "profileId": "vss-zavrsni",
+      "checkId": "font",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        "Times New Roman"
+      ],
+      "engineValue": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "sourceId": "vss-upute-zavrsni-2023",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "vss-zavrsni--font-size",
+      "profileId": "vss-zavrsni",
+      "checkId": "font-size",
+      "decision": "claim",
+      "machineVerdict": "claim-supported",
+      "claimValue": [
+        12
+      ],
+      "engineValue": [
+        12,
+        11
+      ],
+      "sourceId": "vss-upute-zavrsni-2023",
+      "decidedBy": "Daniel Risavi",
+      "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    }
+  ]
+}

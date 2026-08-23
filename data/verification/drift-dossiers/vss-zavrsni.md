@@ -5,39 +5,7 @@ tvrdnja ili vrijednost koju motor boduje. Pazi na tri obrasca koja su se vec pon
 odsjecki dokument predstavljen kao fakultetski, citat odsjecen prije iznimke u istoj recenici,
 i naslovnica kao tiha druga vrijednost.
 
-## RASKORAK: tvrdnja i motor kazu razlicito (demotirano dok se ne presudi) (3)
-
-### font - Font
-- Tvrdnja (izvor): `["Times New Roman"]`
-- Motor boduje: `["Times New Roman","Arial","Calibri"]`
-- ruleId: `vss-zavrsni--font`
-- Izvor: vss-upute-zavrsni-2023 - Upute za izradu zavrsnog rada (Veleuciliste studija sigurnosti, lipanj 2023)
-- Lokator: Odjeljak "1.1. IZGLED ZAVRSNOG RADA", str. 5
-- Snapshot: `data/sources/vss/vss-upute-zavrsni-2023.pdf`
-- Citat: "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem ("justify"). Numeracija stranica: na desnoj strani podnozja stranice. Lijeva margina se podesava na 3,0 cm, a ostale margine na 2,5 cm."
-- Autoritet: general
-- Zadnja provjera: 2026-07-27 (Daniel Risavi)
-
-**Sto kaze sam izvor:** IZVOR NOSI VRIJEDNOST TVRDNJE, ne onu koju motor boduje -> zrcalo je krivo
-- U izvoru NEMA vrijednosti motora: Arial; Calibri
-- Iz izvora: "...du teksta na racunalu (preporucuje se ms word). ✓ format rada je a4 (210 x 297 mm). ✓ rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. ✓ rad treba pisati s obostranim poravnanje..."
-- Iz izvora: "...du teksta na racunalu (preporucuje se ms word). ✓ format rada je a4 (210 x 297 mm). ✓ rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. ✓ rad treba pisati s obostranim poravnanje..."
-
-### font-size - Velicina slova
-- Tvrdnja (izvor): `[12]`
-- Motor boduje: `[12,11]`
-- ruleId: `vss-zavrsni--font-size`
-- Izvor: vss-upute-zavrsni-2023 - Upute za izradu zavrsnog rada (Veleuciliste studija sigurnosti, lipanj 2023)
-- Lokator: Odjeljak "1.1. IZGLED ZAVRSNOG RADA", str. 5
-- Snapshot: `data/sources/vss/vss-upute-zavrsni-2023.pdf`
-- Citat: "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem ("justify"). Numeracija stranica: na desnoj strani podnozja stranice. Lijeva margina se podesava na 3,0 cm, a ostale margine na 2,5 cm."
-- Autoritet: general
-- Zadnja provjera: 2026-07-27 (Daniel Risavi)
-
-**Sto kaze sam izvor:** IZVOR NOSI VRIJEDNOST TVRDNJE, ne onu koju motor boduje -> zrcalo je krivo
-- U izvoru NEMA vrijednosti motora: 11 / 11,0 / 11.0
-- Iz izvora: "...porucuje se ms word). ✓ format rada je a4 (210 x 297 mm). ✓ rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. ✓ rad treba pisati s obostranim poravnanjem („justify“), te s uvlace..."
-- Iz izvora: "...porucuje se ms word). ✓ format rada je a4 (210 x 297 mm). ✓ rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. ✓ rad treba pisati s obostranim poravnanjem („justify“), te s uvlace..."
+## RASKORAK: tvrdnja i motor kazu razlicito (demotirano dok se ne presudi) (1)
 
 ### margins - Margine (lijeva 3cm zbog uveza)
 - Tvrdnja (izvor): `{"top":2.5,"right":2.5,"bottom":2.5,"left":3,"minimum":false}`

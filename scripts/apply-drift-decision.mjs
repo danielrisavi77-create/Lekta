@@ -65,9 +65,15 @@ const has = (name) => process.argv.includes(`--${name}`);
 function readJson(rel) {
   return JSON.parse(readFileSync(p(rel), 'utf8'));
 }
-/** Zapis natrag uz OCUVANE zavrsetke redaka: registri se razlikuju (jedan CRLF, drugi LF). */
+/**
+ * Zapis natrag uz OCUVANE zavrsetke redaka: registri se razlikuju (jedan CRLF, drugi LF).
+ *
+ * NOVA datoteka (prvi zapis u dnevnik odluka) je slucaj koji je 2026-08-24 srusio alat NAKON sto je
+ * vec upisao obje registarske izmjene: vrijednosti su bile primijenjene, a potpis nije zabiljezen.
+ * Poluprimijenjeno stanje je gore od oba cista ishoda, pa se odsutnost datoteke tretira kao LF.
+ */
 function writeJson(rel, data) {
-  const raw = readFileSync(p(rel), 'utf8');
+  const raw = existsSync(p(rel)) ? readFileSync(p(rel), 'utf8') : '';
   const crlf = raw.includes('\r\n');
   const text = `${JSON.stringify(data, null, 2)}\n`;
   writeFileSync(p(rel), crlf ? text.replace(/\n/g, '\r\n') : text, 'utf8');
