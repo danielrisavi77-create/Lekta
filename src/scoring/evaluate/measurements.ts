@@ -99,6 +99,22 @@ export interface FormattingMeasurements {
   footnoteParagraphSpacing: ZeroSpacingMeasurement;
 }
 
+/**
+ * Strukturni otisak BEZ teksta (sav 2): svi tekstualni izvori (npr. odlomak "Uvod")
+ * potroseni su pri mjerenju i svedeni na indekse/boolove. Puni ih jezgra pri analizi,
+ * trose ih ciste evaluacije u src/scoring/evaluate/structure.ts.
+ */
+export interface StructureMeasurements {
+  /** Postoji li PAGE polje u tijelu dokumenta ili referenciranom zaglavlju/podnozju. */
+  pageFieldInBody: boolean;
+  /** Indeks zadnjeg odlomka prve (naslovne) stranice; 45 kad prijelom nije pronadjen. */
+  firstPageEndIndex: number;
+  /** Indeks odlomka "Uvod"/"Introduction" (po nazivu sekcije), ili null. */
+  introParagraphIndex: number | null;
+  /** Broj praznih odlomaka. */
+  emptyParagraphs: number;
+}
+
 export interface DocumentMeasurements {
   measurementsVersion: typeof MEASUREMENTS_VERSION;
   body: DominantsMeasurement;
@@ -112,5 +128,13 @@ export interface DocumentMeasurements {
   sections: SectionMeasurement[];
   paragraphSpacing: ZeroSpacingMeasurement;
   footnoteParagraphSpacing: ZeroSpacingMeasurement;
+  structure: StructureMeasurements;
   counts: CountsMeasurement;
+}
+
+/** Podskup mjerenja koji trebaju ciste strukturne evaluacije (sav 2). */
+export interface StructureEvalMeasurements {
+  sections: SectionMeasurement[];
+  structure: StructureMeasurements;
+  counts: Pick<CountsMeasurement, 'storedPages' | 'paragraphs'>;
 }
