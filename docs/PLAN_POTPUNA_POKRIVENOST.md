@@ -2042,3 +2042,56 @@ je "nestao" a da ga nitko nije presudio, i brojka je izgledala bolje. Motor i tv
 razlicitim putevima (`engineAxisValue` naspram sirovog `readAxis`): uvjet o praznoj vrijednosti
 opisuje `normalizeCheckFlags`, dakle profil, a tvrdnja legitimno nosi oblike kakve profil nikad nema.
 
+---
+
+### DUBINSKI VERIFIKATOR: 44 pravila dobila izvod, a korpusni prolaz DOKAZANO NE VALJA (2026-08-23)
+
+Dvije stvari iz istog mjerenja, i druga je vaznija.
+
+**1. Snopovi pravila vise nisu NEPROVJERIVI.** Od 2207 bodovanih tvrdnji, 443 su stajale na osima
+bez pravila izvoda. Njih 399 zapravo pokrivaju predikatni tokeni (`justify`, `page-numbers`, `toc`,
+`footnote-font`), pa je stvarna rupa bila 44 pravila na cetiri osi koje nose SNOP odredbi:
+`bibliography-rules`, `citation-sync-rules`, `section-surgery-rules`, `required-section-rules`.
+
+Sva 44 dolaze iz jednog izvora (`fpzg-upute-akademski-radovi`) i svode se na 13 listova, pa je
+rjecnik prepisan iz recenica koje te odredbe propisuju, ne izmisljen. Svaki LIST mora imati vlastito
+sidro; list bez unosa u rjecniku vraca NEPROVJERIVO, nikad prolaz. Natpisi sekcija traze se po
+KORIJENU rijeci jer hrvatski citat mijenja padez (propis: "Kljucne rijeci"; izvor: "nekoliko
+kljucnih rijeci") - trazenje cijele rijeci ondje promasi TOCNU tvrdnju, sto je isti razred greske
+kao `paper-size` koji je ignorirao vrijednost.
+
+Ishod: svih 44 se izvodi, uz 11 novih negativnih kontrola (`npm run verify:claims:selftest`: 45
+slucajeva, 20 osi, 0 promasaja). Kontrole idu u oba smjera: pola snopa nije snop (citat s abecednim
+redoslijedom ali bez sufiksa PADA), a vrijednost izvan rjecnika daje NEPROVJERIVO umjesto tihog
+prolaza.
+
+**2. Korpusni prolaz tim alatom NE valja, i to je izmjereno, ne pretpostavljeno.**
+
+Verifikator trazi TOCAN broj stranice i DOSLOVAN podniz. Nasi lokatori su tekstualni opisi, ali
+751 od 2207 (34%) sam navodi stranicu ("str. 5, odjeljak ..."), pa se na njih smije pustiti. Ucinjeno:
+
+| ishod | broj |
+|---|---|
+| prolazi (sidro + izvod) | 107 |
+| NEPROVJERIVO | 4 |
+| **pada** | **640** |
+
+Prije bilo kakve optuzbe, uzorak od 40 padova rasclanjen je do uzroka:
+
+- **12** citat POSTOJI, ali na drugoj stranici (pomaci +12, +1, +2: tiskani broj stranice nije indeks
+  u PDF-u, sto je svojstvo dokumenta, ne pogreska tvrdnje).
+- **28** nije nadjen doslovnim podnizom; od njih **18** nalazi tolerantno podudaranje revizije
+  (dijakritika, interpunkcija, prijelom retka), **3** su vec priznati nalazi, a preostalih **7** ima
+  pokrivanje 0,64-0,83 i reviziju legitimno prolaze jer imaju doslovno SIDRO koje nosi vrijednost.
+
+Dakle od 40 padova nijedan nije nov stvaran nalaz. Ekstrapolirano na 640, korpusni prolaz ovim
+alatom bio bi gotovo cisti sum, i zato NIJE ozicen u CI. Podjela ostaje: `audit_scored_quotes.py`
+radi korpus (tolerantno podudaranje + pokazivost), `verify_rule_claims.py` radi pojedinacnu tvrdnju
+sa znanom stranicom (strogo). Zapisano da sljedeca sesija ne "popravi" ovo tako da ga pusti u gate.
+
+**Vlastite pogreske u mjerenju, zabiljezene jer su pouka:** tri puta sam sondu napisao drukcije nego
+sto revizija stvarno radi (`document_text` umjesto `evidence_text`, sirovi citat umjesto `squash`,
+`ruleId` umjesto `ruleIds` u priznatim nalazima). Svaki put je sonda pokazivala kvar kojeg nema. To
+je isti razred greske kao gard koji ne grize, samo obrnutog predznaka: alat koji vristi na sve jednako
+je beskoristan kao onaj koji suti. Zato se nalaz ne prijavljuje dok se ne rasclani do uzroka.
+
