@@ -12,32 +12,34 @@ kontrole suzenja (`npm run audit:selftest`) PRIJE svega ostaloga.
 
 ## 1. Brojke
 
-| | pocetak dana | sada |
+| | pocetak (2026-08-22) | sada (2026-08-24) |
 |---|---|---|
 | bodovanih pravila | 1934 | 1932 |
 | revidirano | 1391 | **1932** |
 | nerevidirano (izvor se ne cita) | 543 | **0** |
-| neprovjerivo (skenirano ili ostecen tekstualni sloj) | 9 | **35** |
-| pravila s NOVIM nalazom | 319 | **~50, pada uzivo** |
-| priznato (procitano pa ostavljeno) | 37 | **53** |
+| neprovjerivo (skenirano ili ostecen tekstualni sloj) | 9 | **31** |
+| pravila s NOVIM nalazom | 319 | **0** |
+| priznato (procitano pa ostavljeno) | 37 | **57** |
 
-Zadnja dva retka su POKRETNA META i namjerno nisu prikovana: dok se ova revizija vrti, citati se
-ispravljaju, pa je brojka pala s 51 na 46 unutar jednog sata. Mjerodavan je artefakt
-(`docs/generated/scored-quote-audit.json`), ne ovaj zapis. Nalazi su po redu gotovo iskljucivo
-vrijednosti koje leze u PARAFRAZI a ne u doslovnom dijelu citata, uz pokoji citat bez ijednog
-doslovnog sidra i pokoji gdje brojevi ne stoje. Redovi "kvalifikator", "vrijednost je SKUP" i
-"predlozak" su PRAZNI. Pad bodovanih pravila s 1934 na 1932 nije iz ove revizije:
+**Red novih nalaza je prazan.** Svih 1932 bodovanih pravila ima izvor koji se cita i citat koji se
+u tom izvoru pokaze. Nijedan red provjere (parafraza, brojevi, odsjecen citat, kvalifikator,
+vrijednost izvan citata, predlozak) ne prijavljuje nista neodluceno. Mjerodavan je artefakt
+(`docs/generated/scored-quote-audit.json`), ne ovaj zapis.
+
+Prazno NIJE isto sto i "sve je bilo tocno". Od oko 320 zatvorenih nalaza tocno JEDAN je bio kvar u
+bodovanju (forenzika, nize) i jedan je svjesno odstupanje koje ostaje (`unizd-pomorski`, nize).
+Ostalo je bilo MJERENJE, ne podaci: citat je bio vjeran a provjera ga nije znala pokazati.
+
+Pad bodovanih pravila s 1934 na 1932 nije iz ove revizije:
 `vuka-strojarski-{diplomski,zavrsni}--margins` demotirao je drift alat paralelne sesije.
 
 `nerevidirano` je palo na NULU: svaki izvor iza bodovanog pravila sada se stvarno cita. `neprovjerivo`
 je 2026-08-23 palo s 72 na 35 suzenjem potiskivanja skeniranih dokumenata (`text_layer_covers_axis`):
 prije je jedna stranica-slika opravdavala tisinu nad CIJELIM dokumentom, sada samo nad osima o kojima
 citljivi sloj ne govori nista. Tih 37 otkljucanih pravila proslo je SVE, pa se artefakt nije
-promijenio ni za bajt; detalji i negativne kontrole u `docs/PLAN_POTPUNA_POKRIVENOST.md`.
-
-Od 163 zatvorena nalaza, **jedan jedini** bio je stvaran kvar u bodovanju (forenzika, nize).
-Ostalo je bilo mjerenje, ne podaci. To je najvazniji zakljucak i razlog zasto se svaki nalaz
-citao u izvoru prije nego je bilo sto dirano.
+promijenio ni za bajt; detalji i negativne kontrole u `docs/PLAN_POTPUNA_POKRIVENOST.md`. S 35 na 31
+palo je 2026-08-24 uvodjenjem drugog citanja (odjeljak 3.1): cetiri pravila vise nisu presucena nego
+POTVRDJENA.
 
 ---
 
@@ -62,7 +64,20 @@ izolirani gate (369/369).
 3. **`grf-diplomski--font`** i **4. `vevu-diplomski--font-size`**: citati produzeni doslovno do
    vrijednosti koju pravilo boduje. Oba izvora su citljiva tek otkad revizija cita `.doc` i `.docx`.
 
-5. **63 retka tudjeg rada u `e44a69c`.** JEDINO sto ostaje otvoreno iz ovog odjeljka. Sweep je upao
+6. **Dva stvarna kvara citata, nadjena 2026-08-24** kad je popravljena mjera pustila provjeru da se
+   uopce izvede. Oba su spajala tudje rijeci u jednu tvrdnju:
+
+   - `sois-ft-vojno-*-diplomski--page-count` (3 profila): citat je glasio "Opseg diplomskog rada
+     (...) **treba biti** najmanje 50 stranica". Izvor te recenice nema. "treba biti najmanje" stoji
+     uz **30** stranica za ZAVRSNI rad, a diplomski dobiva samo "(...) najmanje 50 stranica". Citat
+     je dakle uzeo glagolski dio jedne odredbe i broj druge. Prepisana je cijela odredba, pa se sada
+     vidi koji broj kojoj vrsti rada pripada.
+   - `ffri-germanistika-{diplomski,zavrsni}` (14 pravila): citat je bio REKONSTRUIRAN, ne prepisan.
+     Njemacki umlauti su bili pretipkani u ASCII ("Schriftgrosse", "Fussnoten", "Seitenrander"), a
+     odredbe iz Layout tablice slozene u jednu recenicu koje u dokumentu nema. Izvor je pritom posve
+     citljiv. Zamijenjeno obvezujucom izjavom sa str. 5 plus doslovnim Layout blokom sa str. 21.
+
+7. **63 retka tudjeg rada u `e44a69c`.** JEDINO sto ostaje otvoreno iz ovog odjeljka. Sweep je upao
    izmedju izmjene i commita, pa su `modality`/`scope`/`modalitySource` iz `kif.json` i `ttf.json`
    zavrsili pod mojom porukom. Nista nije izgubljeno. Povijest NIJE prepravljana jer bi `--amend` u
    dijeljenom stablu mogao pojesti commit druge sesije. Odluka vlasnika.
@@ -83,6 +98,12 @@ izolirani gate (369/369).
   vrijednosti su na mjestu. Gubi se sljedivost, ne bodovanje. Preporuka: NE prepisivati ih. Citat se
   studentu nikad ne prikazuje; u proizvodu je VRATA (`sourceId && sourcePage && quote` otkljucava
   ponude asistiranog popravka) i ne izlazi kroz izvoz prema Katedri.
+- **`unizd-pomorski-zavrsni--font` je jedino svjesno odstupanje koje ostaje.** Izvor doslovno pise
+  "fontom Marriweather", profil boduje "Merriweather". Razlika je jedno slovo i namjerna: font
+  "Marriweather" ne postoji, pa bi bodovanje doslovnog imena palo na SVAKOM radu, ukljucujuci onaj
+  koji uputu tocno slijedi. Citat je oznaku "[sic - tipfeler u izvoru]" nosio i prije revizije.
+  Provjera to ne moze prestati prijavljivati ni uz najbolji citat, jer vrijednost po definiciji ne
+  lezi u izvoru; zato je zapisano u `known-findings`, a ne popravljeno.
 
 ### 2.3 Odgovoreno mjerenjem, ne treba vise nista
 
@@ -114,6 +135,37 @@ fakultetom. Svako suzenje je izmjereno na svim nalazima tog reda, ne procijenjen
 | kvalifikator | ublazavanje upravlja bas vrijednoscu koja se boduje |
 | vrijednost ne stoji u citatu | citat ne spominje ono sto pravilo boduje |
 | predlozak | tvrdnja o XML-u nije potvrdjena u opsegu na koji se poziva |
+
+### 3.1 Drugo citanje: OCR pratitelj kao dokaz, ne kao tisina
+
+Do 2026-08-24 se izvor citao JEDNOM. Kad je tekstualni sloj PDF-a pokvaren, tocno pravilo je
+izgledalo kao izmisljeno. `evidence_text` zato spaja dva citanja istog dokumenta: tekstualni sloj
+i OCR pratitelja (`<ime>-ocr.txt`). Citat koji potvrdi bilo koje od dva citanja jest potvrdjen.
+
+- **Zasto nije dovoljna mjera ostecenja.** `ffri-pravilnik-diplomski-2023` daje "Velicina: I2pt" i
+  "papiru 44 formata (2tO x 291 mm)", a otisnuta stranica (provjereno renderiranjem na 4x) glasi
+  "12pt" i "A4 formata (210 x 297 mm)". Udio mijesanih tokena je ipak samo **0,8 posto**, ispod
+  praga 3,5, jer je kvar zbijen bas u brojeve dok se ostatak dokumenta izvlaci uredno. Globalna
+  mjera taj razred ne vidi i spustanje praga bi ju samo otupilo.
+- **`document_text` NAMJERNO ostaje samo tekstualni sloj.** O njemu govore `text_layer_damaged` i
+  `text_layer_covers_axis`. Kad bi i oni vidjeli OCR, skenirani izvor bi se poceo tretirati kao da
+  ima tekstualni sloj i 141 skenirano pravilo bi opet postalo optuzba.
+- **Ne moze utisati nalaz.** OCR ne zna sto pravilo tvrdi, pa ne moze proizvesti slaganje. Tvrdnje
+  koje nema ni na otisnutoj stranici pada i dalje; to tvrdi negativna kontrola, ne obrazlozenje.
+- **CI ne treba tesseract.** Pratitelji su commitane datoteke; OCR se vrti rucno kad se izvor doda.
+
+Isti krug je otkrio jos dva kvara MJERE, oba nadjena tek kad je nesto drugo popravljeno:
+
+- **`numbers_match` je preskakao lokalizaciju kad broj nosi JEDNA recenica.** Grana po recenicama
+  imala je uvjet `len(parts) > 1`, pa je citat s brojem u drugoj od cetiri recenice padao natrag na
+  prozor CIJELOG citata. Kod `apuri` se prozor slozio oko opisa popisa literature, gdje "1." iz
+  "UVOD ... numerira se brojem 1." nije ni moglo stajati: rijeci su se poklapale 95 posto i ispalo
+  je "BROJEVI ne stoje" nad doslovnim prijepisom.
+- **OCR natuknicu (•) cita kao slovo "e" na pocetku retka.** To nije rijec dokumenta, a lomi sidro
+  kroz popis: kod `ffri-pravilnik-zavrsni-2023` je oblikovanje u pet natuknica, pa je najdulje sidro
+  padalo na "font times new roman", a "Prored: 1,5" ostajalo izvan svakog sidra. Skup je zatvoren na
+  "e" jer ostali glifovi natuknice nisu slova pa ih `anchor_form` ionako mice, a hrvatske jednoslovne
+  rijeci ("i", "a", "o", "u") se ne smiju dirati.
 
 NE mjeri: `.html` (7 pravila, pune web stranice s izbornicima pa je omjer suma i koristi slab) i
 `.rar` (6 pravila). Ukupno 13 nerevidiranih, i ispis sada kaze RAZLOG po razlog umjesto jedne

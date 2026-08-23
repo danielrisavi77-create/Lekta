@@ -200,8 +200,14 @@ def numbers_match(full_text: str, quote: str) -> bool:
     # unizd-turizam-diplomski--margins: zadnjih 137 znakova stoji na jednom mjestu, prvih 160 na
     # drugom). Jedan prozor tada nuzno promasi polovicu brojeva. Zato se svaka recenica provjerava
     # zasebno: unutar recenice tekst JEST susjedan.
+    # Lokalizacija vrijedi i kad broj nosi JEDNA recenica visecelnog citata. Dok je uvjet glasio
+    # `len(parts) > 1`, takav citat je padao natrag na prozor CIJELOG citata: `apuri` nosi broj u
+    # drugoj od cetiri recenice ("UVOD ... numerira se brojem 1."), prozor se slozio oko najduljeg
+    # susjedstva (opis popisa literature), i "1." ondje nije ni moglo stajati. Rijeci su se pritom
+    # poklapale 95 posto, pa je ispalo "BROJEVI ne stoje" nad citatom koji je doslovan prijepis.
+    # Uvjet `parts[0] != quote` cuva od beskonacne rekurzije: dijelovi se strogo smanjuju.
     parts = [p for p in sentences(quote) if NUM.search(p)]
-    if len(parts) > 1:
+    if parts and (len(parts) > 1 or squash(parts[0]) != squash(quote)):
         return all(numbers_match(full_text, part) for part in parts)
 
     # Redni broj koji OTVARA sljedecu stavku popisa zavrsi na kraju prethodnog ulomka kad djelitelj
@@ -497,7 +503,19 @@ def ocr_sidecar(path: str) -> str:
     except Exception:
         return ""
     # Oznake stranica koje pise ocr_pdf.py nisu dio dokumenta.
-    return squash(re.sub(r"=====\s*PAGE\s*\d+\s*/\s*\d+\s*=====", " ", text))
+    text = re.sub(r"=====\s*PAGE\s*\d+\s*/\s*\d+\s*=====", " ", text)
+    return squash(_OCR_BULLET.sub("", text))
+
+
+# Tesseract natuknicu (•) na pocetku retka cita kao samostalno slovo "e" ("e Margine: 2,5 cm").
+# To nije rijec dokumenta, a lomi doslovno sidro kroz popis: `ffri-pravilnik-zavrsni-2023` ima
+# oblikovanje u pet natuknica, pa je najdulje sidro padalo na "font times new roman" i vrijednost
+# "Prored: 1,5" ostajala izvan svakog sidra iako je otisnuta i OCR ju cita.
+#
+# Skup je ZATVOREN na "e" namjerno. Ostali glifovi natuknice (*, •, —, ») nisu slova, pa ih
+# `anchor_form` ionako uklanja; jedino slovo treba imenovati rucno. Hrvatske jednoslovne rijeci
+# ("i", "a", "o", "u", "s", "k") se NE diraju, jer bi se time pojeo stvaran tekst.
+_OCR_BULLET = re.compile(r"(?m)^[ \t]*e(?=\s)")
 
 
 
@@ -529,6 +547,46 @@ def document_text(rel_path: str) -> str:
         text = ocr_sidecar(path)
     _doc_text[rel_path] = text
     return text
+
+
+_evidence: dict[str, str] = {}
+
+
+def join_readings(primary: str, extra: str) -> str:
+    """Spaja dva citanja istog izvora. Izdvojeno iz `evidence_text` da ga selftest moze mjeriti
+    bez datoteka. Prazan ili vec sadrzan pratitelj ne dodaje nista."""
+    if not extra or extra in primary:
+        return primary
+    return f"{primary} {extra}"
+
+
+def evidence_text(rel_path: str) -> str:
+    """Dokazni tekst: tekstualni sloj PLUS OCR pratitelj, kad izvor ima oba.
+
+    OCR je DRUGO CITANJE ISTIH otisnutih stranica, ne drugi dokument, pa citat koji potvrdi bilo
+    koje od dva citanja jest potvrdjen. Sluzi ISKLJUCIVO potvrdi citata. `document_text` namjerno
+    ostaje samo tekstualni sloj, jer o njemu govore `text_layer_damaged` i `text_layer_covers_axis`;
+    kad bi i oni vidjeli OCR, skenirani izvor bi se pocelo tretirati kao da ima tekstualni sloj i
+    141 skenirano pravilo bi opet postalo optuzba.
+
+    Razlog je izmjeren, ne nacelan. `ffri-pravilnik-diplomski-2023` u tekstualnom sloju daje
+    "Velicina: I2pt" i "papiru 44 formata (2tO x 291 mm)", dok otisnuta stranica (provjereno
+    renderiranjem) i njen OCR daju "12pt" i "A4 formata (210 x 297 mm)". Bez drugog citanja pet
+    tocnih pravila izgleda kao pet izmisljenih. Globalna mjera ostecenja ih ne spasava: udio
+    mijesanih tokena je 0,8 posto, ispod praga 3,5, jer je kvar zbijen bas u brojeve a ostatak
+    dokumenta se izvlaci uredno.
+
+    Suprotan smjer je nemoguc i to je kljucno za postenje mjere: OCR ne zna sto pravilo tvrdi, pa
+    ne moze proizvesti slaganje. Tvrdnja koje nema ni na otisnutoj stranici pada i dalje.
+    """
+    if rel_path in _evidence:
+        return _evidence[rel_path]
+    primary = document_text(rel_path)
+    path = os.path.join(ROOT, rel_path.replace("/", os.sep))
+    # Kad je `primary` prazan, `document_text` je pratitelja vec vratio; drugog citanja nema.
+    extra = ocr_sidecar(path) if primary and os.path.exists(path) else ""
+    _evidence[rel_path] = join_readings(primary, extra)
+    return _evidence[rel_path]
 
 
 _scanned: dict[str, bool] = {}
@@ -1086,6 +1144,29 @@ _SRC_SPEC = (
 _SRC_LIST = "Rad se sastoji od: naslovnice, sazetaka i kljucnih rijeci, uvoda, popisa literature"
 _SRC_OCR = "Uvlaka prvoga retka u odlomku: 1, 25 cm i prored 1,5 redak"
 _SRC_MARG = "Margine rada iznose 2,5 cm sa svih strana."
+# Popis obaveznih dijelova rada u kojem broj stoji u JEDNOJ stavci, daleko od ostalih ulomaka koje
+# citat prepisuje. Prepisano po obrascu `apuri`, uz razmak izmedju stavki kakav stvarni dokument ima:
+# bez njega jedan prozor pokrije cijeli izvor i kontrola postane prazna.
+_SRC_PARTS = (
+    "- SAZETAK je jezgrovit prikaz glavnih teza rada u duzini od najvise pola kartice teksta. "
+    "- SADRZAJ je popis svih dijelova rada tocno onim redoslijedom kojim se pojavljuju u tekstu s "
+    "naznakom brojeva stranica na kojima zapocinju. Sastavljen je od naslova i podnaslova pojedinih "
+    "dijelova, a generira se automatski u programu za obradu teksta. "
+    "- OPSEG teksta rada iznosi najmanje 30 stranica ne racunajuci priloge. "
+    "- OSNOVNO TIJELO TEKSTA ILI RASPRAVA obuhvaca razradu teme kroz poglavlja i odjeljke od kojih "
+    "je svako numerirano ovisno o razini kojoj pripada, a razrada mora slijediti redoslijed najavljen "
+    "u uvodnome poglavlju te se oslanjati na izvore navedene na kraju rada. "
+    "- ZAKLJUCAK je posljednje poglavlje rada u kojem se sazimaju nalazi i naznacuju otvorena pitanja "
+    "koja su se ovim radom otvorila, bez uvodjenja novih izvora i novih tvrdnji. "
+    "- LITERATURA je popis koristenih izvora te se numerira kao poglavlje. Izvori se u popisu "
+    "numeriraju abecednim redom prema prezimenima autora."
+)
+_QUOTE_PARTS = (
+    "SAZETAK je jezgrovit prikaz glavnih teza rada u duzini od najvise pola kartice teksta. "
+    "[...] OPSEG teksta rada iznosi najmanje 30 stranica ne racunajuci priloge. "
+    "[...] LITERATURA je popis koristenih izvora te se numerira kao poglavlje. Izvori se u popisu "
+    "numeriraju abecednim redom prema prezimenima autora."
+)
 
 # (opis, izvor, citat, vrijednost, ocekuje se UREDAN citat?)
 ANCHOR_SELFTEST: list[tuple[str, str, str, object, bool]] = [
@@ -1110,6 +1191,32 @@ NUMBERS_SELFTEST: list[tuple[str, str, str, bool]] = [
     ("stvarno drugaciji broj i dalje pada", _SRC_MARG, "Margine rada iznose 3,5 cm sa svih strana.", False),
     ("desetinka na kraju recenice ostaje vrijednost", _SRC_MARG,
      "Margine rada iznose 2,5 cm sa svih strana.", True),
+    # Broj nosi SAMO jedna od cetiri recenice citata. Prije 2026-08-23 se tu preskakala grana po
+    # recenicama i mjerio prozor cijelog citata, pa je tocan prijepis ispadao kao kriv broj.
+    ("broj u jednoj od vise recenica se mjeri NA SVOM MJESTU", _SRC_PARTS, _QUOTE_PARTS, True),
+    ("kriv broj u toj istoj recenici i dalje pada", _SRC_PARTS,
+     _QUOTE_PARTS.replace("najmanje 30 stranica", "najmanje 40 stranica"), False),
+]
+
+# (opis, tekstualni sloj, OCR pratitelj, citat, ocekuje se POTVRDA?)
+# Drugo citanje smije spasiti tvrdnju koju je sloj pokvario, ali NE smije spasiti tvrdnju koje na
+# otisnutoj stranici nema. Bez donja dva retka mehanizam bi mogao samo utisati nalaze.
+EVIDENCE_SELFTEST: list[tuple[str, str, str, str, bool]] = [
+    ("ostecen sloj, OCR potvrdjuje", "Velicina: I2pt, za fusnote 10pt",
+     "Velicina: 12pt, za fusnote 10pt", "Velicina: 12pt, za fusnote 10pt", True),
+    ("tvrdnje nema ni u jednom citanju", "Velicina: I2pt, za fusnote 10pt",
+     "Velicina: 12pt, za fusnote 10pt", "Velicina: 14pt, za fusnote 11pt", False),
+    ("bez pratitelja ostaje kako je i bilo", "Velicina: I2pt, za fusnote 10pt", "",
+     "Velicina: 12pt, za fusnote 10pt", False),
+]
+
+# (opis, sirovi redci OCR-a, ocekivani tekst nakon ciscenja natuknica)
+BULLET_SELFTEST: list[tuple[str, str, str]] = [
+    ("natuknica se mice", "e Margine: 2,5 cm\ne Prored: 1,5", "Margine: 2,5 cm Prored: 1,5"),
+    ("hrvatski veznik se NE dira", "i Margine: 2,5 cm\no Prored: 1,5",
+     "i Margine: 2,5 cm o Prored: 1,5"),
+    ("slovo usred retka se NE dira", "Margine e 2,5 cm", "Margine e 2,5 cm"),
+    ("rijec koja pocinje na e ostaje", "elementi rada\ne Prored: 1,5", "elementi rada Prored: 1,5"),
 ]
 
 # (opis, os, vrijednost, nastavak citata, ocekuje se NALAZ?)
@@ -1174,7 +1281,27 @@ def selftest() -> int:
             failures += 1
             print(f"  PROMASAJ [odsjecen] ocekivano {expected}, dobiveno {got}: {label}")
 
-    total = len(COVERS_SELFTEST) + len(real) + len(ANCHOR_SELFTEST) + len(NUMBERS_SELFTEST) + len(TAIL_SELFTEST)
+    for label, layer, ocr, quote, expected in EVIDENCE_SELFTEST:
+        got = quote_found(join_readings(layer, ocr), quote)
+        if got != expected:
+            failures += 1
+            print(f"  PROMASAJ [drugo citanje] ocekivano {expected}, dobiveno {got}: {label}")
+
+    for label, raw_lines, expected_text in BULLET_SELFTEST:
+        got = squash(_OCR_BULLET.sub("", raw_lines))
+        if got != expected_text:
+            failures += 1
+            print(f"  PROMASAJ [natuknica] ocekivano {expected_text!r}, dobiveno {got!r}: {label}")
+
+    total = (
+        len(COVERS_SELFTEST)
+        + len(real)
+        + len(ANCHOR_SELFTEST)
+        + len(NUMBERS_SELFTEST)
+        + len(TAIL_SELFTEST)
+        + len(EVIDENCE_SELFTEST)
+        + len(BULLET_SELFTEST)
+    )
     print(f"negativne kontrole suzenja: {total} slucajeva, promasaja: {failures}")
     return failures
 
@@ -1252,6 +1379,9 @@ def main() -> None:
             continue
 
         text = document_text(rel)
+        # `evidence` je ono cime se citat POTVRDJUJE (sloj + OCR pratitelj), `text` ono o cemu
+        # govore mjere o tekstualnom sloju. Razlika je namjerna; vidi `evidence_text`.
+        evidence = evidence_text(rel)
         if not text:
             unreadable += 1
             unread_reason["skeniran izvor bez tekstualnog sloja (treba OCR)"] += 1
@@ -1289,7 +1419,7 @@ def main() -> None:
         if not quote:
             problems.append("bez citata")
         elif (
-            not quote_found(text, quote)
+            not quote_found(evidence, quote)
             and (has_scanned_pages(rel) or text_layer_damaged(rel))
             and not text_layer_covers_axis(text, check_id)
         ):
@@ -1299,8 +1429,8 @@ def main() -> None:
             # SUZENO 2026-08-23: samo kad citljivi dio dokumenta o TOJ OSI uopce ne govori. Kad govori
             # (vuka: "margine 2,0 cm ..."), citat koji se ne usidri je nalaz, a ne granica alata.
             inconclusive += 1
-        elif not quote_found(text, quote):
-            cov = quote_coverage(text, quote)
+        elif not quote_found(evidence, quote):
+            cov = quote_coverage(evidence, quote)
             if cov >= COVERAGE_MIN:
                 problems.append(f"BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju {cov:.0%})")
             else:
@@ -1308,11 +1438,11 @@ def main() -> None:
                 # imati doslovno sidro u izvoru i vrijednost mora lezati bas u njemu. Postotak je do
                 # 2026-08-23 kaznjavao vjerno sazimanje natucnickog popisa (75 od 148 nalaza) i
                 # istovremeno propustao citat kojemu vrijednost lezi u parafrazi.
-                anchors = literal_anchors(text, quote)
+                anchors = literal_anchors(evidence, quote)
                 # Vrijednost smije nositi i KRACE sidro: "velicina fonta 10" su tri rijeci, ali nosi
                 # bas ono sto se boduje, pa je jaci dokaz od cetiri opce rijeci. Ispod tri se ne ide,
                 # jer goli broj stoji u svakom dokumentu.
-                value_anchors = literal_anchors(text, quote, 3)
+                value_anchors = literal_anchors(evidence, quote, 3)
                 if not anchors and value_outside_anchors(entry.get("value"), value_anchors):
                     problems.append(
                         f"citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci {cov:.0%})"
@@ -1337,7 +1467,11 @@ def main() -> None:
         if is_choice(check_id, entry.get("value"), quote or ""):
             problems.append("vrijednost je SKUP, ne ciljana vrijednost")
 
-        tail = truncated_tail(text, quote, check_id, entry.get("value")) if quote and quote in text else None
+        tail = (
+            truncated_tail(evidence, quote, check_id, entry.get("value"))
+            if quote and quote in evidence
+            else None
+        )
         if tail:
             problems.append(f"citat odsjecen, recenica se nastavlja: {tail[:110]}")
 

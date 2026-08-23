@@ -167,6 +167,18 @@
       "decidedBy": "Claude Opus 5 (1M context)",
       "decidedAt": "2026-08-23",
       "rationale": "Ne cini pravilo prestrogim: motor mjeri DOMINANTNU velicinu, pa biljeske i naslovi ne mogu oboriti provjeru tijela teksta. Dodavanje bodovanog `footnoteSize` mijenja ono po cemu se studenti ocjenjuju i trazi ljudski prolaz, pa se biljezi s imenom zastavice umjesto da se doda."
+    },
+    {
+      "ruleIds": [
+        "unizd-pomorski-zavrsni--font"
+      ],
+      "finding": "vrijednost pravila lezi u parafrazi",
+      "evidence": "unizd-pomorski-upute-zavrsni.pdf, odjeljak \"Izgled zavrsnog rada\", doslovno: \"- Rad treba pisati fontom Marriweather, velicine 10 pt, uz prored 1,5.\" Bodovana vrijednost je \"Merriweather\". Razlika je JEDNO SLOVO i namjerna je: font \"Marriweather\" ne postoji, a \"Merriweather\" je stvarna Googleova porodica pisama. Citat u profilu vec nosi oznaku \"[sic - tipfeler u izvoru]\", dakle odstupanje je bilo zapisano i prije ove revizije.",
+      "alsoNoted": "Ovo je jedini nalaz revizije u kojem bodovana vrijednost SVJESNO odstupa od doslovnog teksta izvora. Provjera ga zato ne moze prestati prijavljivati ni uz najbolji citat: vrijednost po definiciji ne lezi u izvoru. To je razlog za zapis, ne za popravak.",
+      "decision": "left-scored",
+      "decidedBy": "Claude Opus 5 (1M context)",
+      "decidedAt": "2026-08-23",
+      "rationale": "Bodovanje doslovnog \"Marriweather\" palo bi na SVAKOM radu, jer taj font ne postoji ni na jednom sustavu, pa bi student koji tocno slijedi uputu (instalira Merriweather) uvijek gubio bodove. To je isti kvar zbog kojeg je `unizd-pomorski` vec jednom demotiran u scored-value-drift reviziji, samo u drugom smjeru. Ispravak tipfelera je citanje izvora, ne izmisljanje pravila: mjeri se ista odredba istog izvora."
     }
   ]
 }
