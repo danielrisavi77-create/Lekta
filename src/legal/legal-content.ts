@@ -80,7 +80,15 @@ function identityMeta(c: LegalProviderConfig): string {
 /** Napomena o registraciji: prikazuje se dok registracijski podaci (OIB) nisu upisani. */
 function registrationNote(c: LegalProviderConfig): string {
   if (c.oib) return '';
-  return `<p class="legal-note">Puni registracijski podaci pružatelja (naziv subjekta, OIB, adresa, telefon) bit će objavljeni na ovoj stranici po dovršetku registracije subjekta. Do tada se za sva pitanja i zahtjeve koristi navedeni kontakt e-mail. Dok registracija nije dovršena, "${esc(c.controller)}" je naziv usluge, a ne registrirani pravni subjekt, i usluga se ne naplaćuje.</p>`;
+  // Rečenica je prije tvrdila da je VODITELJ naziv usluge. To je vrijedilo samo dok je
+  // privacyController bio prazan pa se izvodio iz naziva usluge (`|| org`). Kad je voditelj
+  // imenovana fizička osoba, a GDPR čl. 13 to dopušta i bez registriranog subjekta, ta tvrdnja
+  // postaje neistinita: ime osobe nije naziv usluge. Naziv usluge je uvijek `c.org`.
+  const named = c.controller.trim() && c.controller.trim() !== c.org.trim();
+  const who = named
+    ? ` Voditelj obrade je ${esc(c.controller)} kao fizička osoba, s adresom navedenom iznad.`
+    : '';
+  return `<p class="legal-note">Puni registracijski podaci pružatelja (naziv subjekta, OIB, adresa, telefon) bit će objavljeni na ovoj stranici po dovršetku registracije subjekta. Do tada se za sva pitanja i zahtjeve koristi navedeni kontakt e-mail. Dok registracija nije dovršena, "${esc(c.org)}" je naziv usluge, a ne registrirani pravni subjekt, i usluga se ne naplaćuje.${who}</p>`;
 }
 
 export function legalDocuments(cfg?: Partial<LegalProviderConfig>): Record<LegalDocKind, LegalDoc> {
