@@ -41,14 +41,16 @@ const SOFT = new Set(['recommendation', 'permission', 'condition']);
 
 /**
  * RATCHET nad IZVEDENIM skupom (2207 pravila), ne nad pohranjenim (1932). Strojni izvod je popunio
- * 1402, a 805 ceka covjeka (ublazavanje u citatu, vise modalnih razina u istoj recenici, citat koji
+ * 1555, a 652 ceka covjeka (ublazavanje u citatu, vise modalnih razina u istoj recenici, citat koji
  * imenuje drugi dio rada, LaTeX predlozak umjesto propisa). Broj smije samo PADATI: novo bodovano
  * pravilo bez modaliteta ga podize i gard pada.
  *
- * Brojka je 2026-08-23 narasla s 530 na 805 jer je selekcija ISPRAVLJENA, ne jer je stanje gore:
- * prije se mjerilo 1932 pravila umjesto 2207.
+ * Brojka je 2026-08-23 prvo narasla s 530 na 805 jer je selekcija ISPRAVLJENA (prije se mjerilo
+ * 1932 pravila umjesto 2207), pa pala na 652 kad je ISTI ispravak primijenjen i na predlagac: dok je
+ * `propose_claim_modality.py` birao po pohranjenoj zastavici, 275 pravila koja vezu motor nikad nije
+ * ni dobilo prijedlog. Rast pa pad iste brojke nije kolebanje nego dvije faze jednog ispravka.
  */
-const MISSING_MODALITY_CAP = 805;
+const MISSING_MODALITY_CAP = 652;
 
 /**
  * IZVEDENI `scored`, ne pohranjena zastavica. Razlika nije akademska: 275 pravila zadovoljava

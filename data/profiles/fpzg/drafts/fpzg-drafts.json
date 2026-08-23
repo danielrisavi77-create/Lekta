@@ -5,6 +5,9 @@
     "fpzg-politologija-diplomski": [
       {
         "ruleId": "fpzg-politologija-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -26,6 +29,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -47,6 +53,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -66,6 +75,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -324,6 +336,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -355,6 +370,9 @@
     "fpzg-nacionalna-sigurnost-diplomski": [
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -376,6 +394,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -397,6 +418,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -416,6 +440,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -674,6 +701,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -705,6 +735,9 @@
     "fpzg-novinarstvo-diplomski": [
       {
         "ruleId": "fpzg-novinarstvo-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -726,6 +759,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -747,6 +783,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -766,6 +805,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -1024,6 +1066,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -1055,6 +1100,9 @@
     "fpzg-specijalisticki-odnosi-s-javnoscu": [
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -1076,6 +1124,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -1097,6 +1148,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -1116,6 +1170,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -1374,6 +1431,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -1405,6 +1465,9 @@
     "fpzg-specijalisticki-prilagodba-eu": [
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -1426,6 +1489,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -1447,6 +1513,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -1466,6 +1535,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -1724,6 +1796,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -1755,6 +1830,9 @@
     "fpzg-specijalisticki-sigurnosna-politika-rh": [
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -1776,6 +1854,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -1797,6 +1878,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -1816,6 +1900,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -2074,6 +2161,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -2105,6 +2195,9 @@
     "fpzg-specijalisticki-vanjska-politika-diplomacija": [
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -2126,6 +2219,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -2147,6 +2243,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -2166,6 +2265,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -2424,6 +2526,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -2455,6 +2560,9 @@
     "fpzg-doktorski-politologija": [
       {
         "ruleId": "fpzg-doktorski-politologija--font",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -2476,6 +2584,9 @@
       },
       {
         "ruleId": "fpzg-doktorski-politologija--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -2497,6 +2608,9 @@
       },
       {
         "ruleId": "fpzg-doktorski-politologija--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -2516,6 +2630,9 @@
       },
       {
         "ruleId": "fpzg-doktorski-politologija--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -2540,6 +2657,9 @@
       },
       {
         "ruleId": "fpzg-doktorski-politologija--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -2559,6 +2679,9 @@
       },
       {
         "ruleId": "fpzg-doktorski-politologija--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -2612,6 +2735,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -2633,6 +2759,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -2654,6 +2783,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -2673,6 +2805,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -2796,6 +2931,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--word-count",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "word-count",
         "value": {
           "min": 5000,
@@ -2905,6 +3043,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -2953,6 +3094,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -2974,6 +3118,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -2995,6 +3142,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -3014,6 +3164,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -3137,6 +3290,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--word-count",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "word-count",
         "value": {
           "min": 5000,
@@ -3246,6 +3402,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -3313,6 +3472,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -3334,6 +3496,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -3355,6 +3520,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -3374,6 +3542,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -3586,6 +3757,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -3634,6 +3808,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -3655,6 +3832,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -3676,6 +3856,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -3801,6 +3984,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [

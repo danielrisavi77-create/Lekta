@@ -121,6 +121,9 @@
     },
     {
       "ruleId": "ffri-povum-zavrsni--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "mechanical",
       "checkId": "footnote-size",
       "value": [
         10

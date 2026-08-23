@@ -1727,6 +1727,39 @@ Zatecena raspodjela: **23 `claim-supported`** (zrcalo je krivo, ocekivano `--dec
 
 ---
 
+### TRECA POJAVA ISTOG KVARA: predlagac je birao po pohranjenoj zastavici (2026-08-23)
+
+Adversarijalni prolaz je nasao da gardi mjere POHRANJENI `scored`, a motor veze po izvedenom
+`isRuleScored` (razlika: 275 pravila). Popravljeno je na dva mjesta (`claim-fields.test.ts`,
+`verify-source-hashes.mjs`), ali NE i na trecem: `propose_claim_modality.py` je i dalje birao po
+zastavici, pa tih 275 pravila **nikad nije ni dobilo prijedlog modaliteta**. Trajno su sjedila u
+zaostatku, iako je dio njih strojno razrjesiv.
+
+Isti ispravak primijenjen i ondje. Ucinak:
+
+| mjera | prije | poslije |
+|---|---|---|
+| jedinica (izvor, citat, os) | 1310 | **1401** |
+| jednoznacnih | 962 | **1018** |
+| pravila s modalitetom | 1402 | **1555** |
+| bez modaliteta (ratchet) | 805 | **652** |
+
+Ratchet je spusten u ISTOM commitu, kako njegovo vlastito pravilo i trazi. Rast pa pad iste brojke
+(530 -> 805 -> 652) nije kolebanje nego dvije faze jednog ispravka: prvo je ispravljena populacija
+koja se MJERI, pa populacija koja se OBRADJUJE.
+
+Ugovor je izdrzao: **nula** mehanicki upisanih ublazenih modaliteta i nakon sirenja skupa.
+
+`scored-value-drift.json` i `advisory-map.json` ostali su bit-identicni, sto je i bila namjera:
+modalitet i opseg su OPIS citata, ne presuda o bodovanju, pa ne smiju pomaknuti ocjenu.
+
+#### Pouka koja se ponavlja
+Kad se nadje kvar u odabiru populacije, popravak nije gotov na mjestu gdje je nadjen. Ovaj je imao
+TRI pojave (test, hash gard, predlagac), i trecu je otkrilo tek pitanje "gdje se jos bira po istom
+uvjetu", ne ponovno citanje nalaza.
+
+---
+
 ## FAZA P5: stvarni korpus i Word oracle
 
 Danas: 12 dokumenata, 9 profila, 8 jedinica, 0 PASS, 12 review, 22 od 95 ciljanih checkova

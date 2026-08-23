@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "rules": 1932,
-  "units": 1309,
+  "rules": 2207,
+  "units": 1401,
   "proposals": [
     {
       "sourceId": "adu-montaza-diplomski",
@@ -8144,7 +8144,7 @@
       "value": [
         10
       ],
-      "quote": "Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4. Upotreba tipa slova Times New Roman, velicine 12 i proreda 1,5 u osnovnom tekstu... Poravnavanje teksta po obje margine (ukljucuje i osnovni tekst i biljeske).",
+      "quote": "Upotreba tipa slova Times New Roman, veličine 12 i proreda 1,5 u osnovnom tekstu završnog rada; Upotreba tipa slova Times New Roman, veličine 10 i proreda 1 u tekstu bilješki",
       "ruleCount": 1,
       "profileIds": [
         "ffri-povum-zavrsni"
@@ -8152,18 +8152,16 @@
       "ruleIds": [
         "ffri-povum-zavrsni--footnote-size"
       ],
-      "proposedModality": null,
+      "proposedModality": "directive",
       "proposedScope": "footnote",
-      "modalityMarks": [],
+      "modalityMarks": [
+        "bare-indicative"
+      ],
       "namedScopes": [
-        "body",
         "footnote"
       ],
-      "needsHuman": true,
-      "reasons": [
-        "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata",
-        "recenica imenuje vise dijelova rada: body, footnote"
-      ]
+      "needsHuman": false,
+      "reasons": []
     },
     {
       "sourceId": "ffri-povum-upute",
@@ -8302,7 +8300,7 @@
       "value": [
         10
       ],
-      "quote": "Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4. Upotreba tipa slova Times New Roman, velicine 12 i proreda 1,5 u osnovnom tekstu... Poravnavanje teksta po obje margine (ukljucuje i osnovni tekst i biljeske).",
+      "quote": "Upotreba tipa slova Times New Roman, veličine 12 i proreda 1,5 u osnovnom tekstu završnog rada; Upotreba tipa slova Times New Roman, veličine 10 i proreda 1 u tekstu bilješki",
       "ruleCount": 1,
       "profileIds": [
         "ffri-povum-diplomski"
@@ -8310,18 +8308,16 @@
       "ruleIds": [
         "ffri-povum-diplomski--footnote-size"
       ],
-      "proposedModality": null,
+      "proposedModality": "directive",
       "proposedScope": "footnote",
-      "modalityMarks": [],
+      "modalityMarks": [
+        "bare-indicative"
+      ],
       "namedScopes": [
-        "body",
         "footnote"
       ],
-      "needsHuman": true,
-      "reasons": [
-        "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata",
-        "recenica imenuje vise dijelova rada: body, footnote"
-      ]
+      "needsHuman": false,
+      "reasons": []
     },
     {
       "sourceId": "ffri-povum-upute-diplomski",
@@ -13220,6 +13216,513 @@
       "reasons": []
     },
     {
+      "sourceId": "fpzg-drsc08-doktorski",
+      "checkId": "font",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "value": [
+        "Times New Roman"
+      ],
+      "quote": "Postavke stranice: Font (tip pisma): obavezna potpora svih hrvatskih znakova - Times New Roman. Velicina pisma: 12 tipografskih tocaka. Prored: 1,5 redak.",
+      "ruleCount": 1,
+      "profileIds": [
+        "fpzg-doktorski-politologija"
+      ],
+      "ruleIds": [
+        "fpzg-doktorski-politologija--font"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "fpzg-drsc08-doktorski",
+      "checkId": "font-size",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "value": [
+        12
+      ],
+      "quote": "Postavke stranice: Font (tip pisma): obavezna potpora svih hrvatskih znakova - Times New Roman. Velicina pisma: 12 tipografskih tocaka. Prored: 1,5 redak.",
+      "ruleCount": 1,
+      "profileIds": [
+        "fpzg-doktorski-politologija"
+      ],
+      "ruleIds": [
+        "fpzg-doktorski-politologija--font-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "fpzg-drsc08-doktorski",
+      "checkId": "line-spacing",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "value": 1.5,
+      "quote": "Postavke stranice: Font (tip pisma): obavezna potpora svih hrvatskih znakova - Times New Roman. Velicina pisma: 12 tipografskih tocaka. Prored: 1,5 redak.",
+      "ruleCount": 1,
+      "profileIds": [
+        "fpzg-doktorski-politologija"
+      ],
+      "ruleIds": [
+        "fpzg-doktorski-politologija--line-spacing"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "fpzg-drsc08-doktorski",
+      "checkId": "margins",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "quote": "Lijeva i desna margina: 2,5 cm. Gornja i donja margina: 2,5 cm. Naslovnica ima drugacije margine.",
+      "ruleCount": 1,
+      "profileIds": [
+        "fpzg-doktorski-politologija"
+      ],
+      "ruleIds": [
+        "fpzg-doktorski-politologija--margins"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "fpzg-drsc08-doktorski",
+      "checkId": "page-numbers",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "value": true,
+      "quote": "Stranice trebaju biti numerirane. Broje se sve stranice od Uvoda do kraja rada. Numeracija se pise u donjem desnom kutu.",
+      "ruleCount": 1,
+      "profileIds": [
+        "fpzg-doktorski-politologija"
+      ],
+      "ruleIds": [
+        "fpzg-doktorski-politologija--page-numbers"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "fpzg-drsc08-doktorski",
+      "checkId": "paper-size",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "value": true,
+      "quote": "Rad treba biti ispisan na papiru formata A4 (210x297).",
+      "ruleCount": 1,
+      "profileIds": [
+        "fpzg-doktorski-politologija"
+      ],
+      "ruleIds": [
+        "fpzg-doktorski-politologija--paper-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "fpzg-odluka-zavrsni-opseg-2025",
+      "checkId": "word-count",
+      "sourcePage": "str. 1 (opseg zavrsnog rada: 5 ECTS, 20-25 kartica, 5000-6000 rijeci)",
+      "value": {
+        "min": 5000,
+        "max": 6000
+      },
+      "quote": "Zavrsni rad ukljucuje 5 ECTS bodova, sto se odnosi na 20 do 25 kartica teksta odnosno 5000 do 6000 rijeci.",
+      "ruleCount": 2,
+      "profileIds": [
+        "fpzg-novinarstvo-zavrsni-tekst",
+        "fpzg-politologija-zavrsni"
+      ],
+      "ruleIds": [
+        "fpzg-novinarstvo-zavrsni-tekst--word-count",
+        "fpzg-politologija-zavrsni--word-count"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "fpzg-pravila-navodenja-citiranja",
+      "checkId": "citation-style",
+      "sourcePage": "str. 1, naslov i primjeri unutartekstnih citatnica",
+      "value": "fpzg",
+      "quote": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti. Unutartekstna citatnica navodi se u obliku (prezime, godina), npr. (Becker, 2007), (Petak, 2001).",
+      "ruleCount": 13,
+      "profileIds": [
+        "fpzg-doktorski-politologija",
+        "fpzg-mes-master-thesis",
+        "fpzg-nacionalna-sigurnost-diplomski",
+        "fpzg-novinarstvo-diplomski",
+        "fpzg-novinarstvo-zavrsni-av",
+        "fpzg-novinarstvo-zavrsni-tekst",
+        "fpzg-opci-akademski-rad",
+        "fpzg-politologija-diplomski",
+        "fpzg-politologija-zavrsni",
+        "fpzg-specijalisticki-odnosi-s-javnoscu",
+        "fpzg-specijalisticki-prilagodba-eu",
+        "fpzg-specijalisticki-sigurnosna-politika-rh",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija"
+      ],
+      "ruleIds": [
+        "fpzg-doktorski-politologija--citation-style",
+        "fpzg-mes-master-thesis--citation-style",
+        "fpzg-nacionalna-sigurnost-diplomski--citation-style",
+        "fpzg-novinarstvo-diplomski--citation-style",
+        "fpzg-novinarstvo-zavrsni-av--citation-style",
+        "fpzg-novinarstvo-zavrsni-tekst--citation-style",
+        "fpzg-opci-akademski-rad--citation-style",
+        "fpzg-politologija-diplomski--citation-style",
+        "fpzg-politologija-zavrsni--citation-style",
+        "fpzg-specijalisticki-odnosi-s-javnoscu--citation-style",
+        "fpzg-specijalisticki-prilagodba-eu--citation-style",
+        "fpzg-specijalisticki-sigurnosna-politika-rh--citation-style",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija--citation-style"
+      ],
+      "proposedModality": "recommendation",
+      "proposedScope": "bibliography",
+      "modalityMarks": [
+        "recommendation"
+      ],
+      "namedScopes": [
+        "bibliography"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
+        "recenica imenuje 'bibliography', a os po naravi mjeri 'whole'"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "bibliography-rules",
+      "sourcePage": "str. 18, odjeljak 'Popis literature'",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      },
+      "quote": "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "ruleCount": 8,
+      "profileIds": [
+        "fpzg-mes-master-thesis",
+        "fpzg-nacionalna-sigurnost-diplomski",
+        "fpzg-novinarstvo-diplomski",
+        "fpzg-politologija-diplomski",
+        "fpzg-specijalisticki-odnosi-s-javnoscu",
+        "fpzg-specijalisticki-prilagodba-eu",
+        "fpzg-specijalisticki-sigurnosna-politika-rh",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija"
+      ],
+      "ruleIds": [
+        "fpzg-mes-master-thesis--bibliography-rules",
+        "fpzg-nacionalna-sigurnost-diplomski--bibliography-rules",
+        "fpzg-novinarstvo-diplomski--bibliography-rules",
+        "fpzg-politologija-diplomski--bibliography-rules",
+        "fpzg-specijalisticki-odnosi-s-javnoscu--bibliography-rules",
+        "fpzg-specijalisticki-prilagodba-eu--bibliography-rules",
+        "fpzg-specijalisticki-sigurnosna-politika-rh--bibliography-rules",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija--bibliography-rules"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "bibliography",
+      "modalityMarks": [
+        "condition",
+        "directive"
+      ],
+      "namedScopes": [
+        "bibliography"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "ublazavanje u citatu (condition): pripisivanje osi je citanje, ne uzorak",
+        "vise modalnih biljega u istoj recenici: condition, directive",
+        "recenica imenuje 'bibliography', a os po naravi mjeri 'whole'"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "bibliography-rules",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 18 (Popis literature)",
+      "value": {
+        "sort": "alphabetical",
+        "authorYearSuffixes": true
+      },
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+      "ruleCount": 3,
+      "profileIds": [
+        "fpzg-novinarstvo-zavrsni-tekst",
+        "fpzg-opci-akademski-rad",
+        "fpzg-politologija-zavrsni"
+      ],
+      "ruleIds": [
+        "fpzg-novinarstvo-zavrsni-tekst--bibliography-rules",
+        "fpzg-opci-akademski-rad--bibliography-rules",
+        "fpzg-politologija-zavrsni--bibliography-rules"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "bibliography",
+      "modalityMarks": [
+        "condition",
+        "directive"
+      ],
+      "namedScopes": [
+        "bibliography"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "ublazavanje u citatu (condition): pripisivanje osi je citanje, ne uzorak",
+        "vise modalnih biljega u istoj recenici: condition, directive",
+        "recenica imenuje 'bibliography', a os po naravi mjeri 'whole'"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "citation-sync-rules",
+      "sourcePage": "str. 21, odjeljak 'Citatnice'",
+      "value": {
+        "mode": "author-year"
+      },
+      "quote": "Pri izradi diplomskog i zavrsnog specijalistickog rada na Fakultetu politickih znanosti studenti/ce trebaju koristiti citatni stil s citatnicama u obliku unutartekstnih biljezaka (tekstnote), te bibliografskim jedinicama u obliku autor - godina.",
+      "ruleCount": 8,
+      "profileIds": [
+        "fpzg-mes-master-thesis",
+        "fpzg-nacionalna-sigurnost-diplomski",
+        "fpzg-novinarstvo-diplomski",
+        "fpzg-politologija-diplomski",
+        "fpzg-specijalisticki-odnosi-s-javnoscu",
+        "fpzg-specijalisticki-prilagodba-eu",
+        "fpzg-specijalisticki-sigurnosna-politika-rh",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija"
+      ],
+      "ruleIds": [
+        "fpzg-mes-master-thesis--citation-sync-rules",
+        "fpzg-nacionalna-sigurnost-diplomski--citation-sync-rules",
+        "fpzg-novinarstvo-diplomski--citation-sync-rules",
+        "fpzg-politologija-diplomski--citation-sync-rules",
+        "fpzg-specijalisticki-odnosi-s-javnoscu--citation-sync-rules",
+        "fpzg-specijalisticki-prilagodba-eu--citation-sync-rules",
+        "fpzg-specijalisticki-sigurnosna-politika-rh--citation-sync-rules",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija--citation-sync-rules"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "bibliography",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [
+        "bibliography"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje 'bibliography', a os po naravi mjeri 'whole'"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "citation-sync-rules",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 21 (Citatnice)",
+      "value": {
+        "mode": "author-year"
+      },
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Pri izradi diplomskog i zavrsnog specijalistickog rada na Fakultetu politickih znanosti studenti/ce trebaju koristiti citatni stil s citatnicama u obliku unutartekstnih biljezaka (tekstnote), te bibliografskim jedinicama u obliku autor - godina.",
+      "ruleCount": 3,
+      "profileIds": [
+        "fpzg-novinarstvo-zavrsni-tekst",
+        "fpzg-opci-akademski-rad",
+        "fpzg-politologija-zavrsni"
+      ],
+      "ruleIds": [
+        "fpzg-novinarstvo-zavrsni-tekst--citation-sync-rules",
+        "fpzg-opci-akademski-rad--citation-sync-rules",
+        "fpzg-politologija-zavrsni--citation-sync-rules"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "bibliography",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [
+        "bibliography"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje 'bibliography', a os po naravi mjeri 'whole'"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "font",
+      "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+      "value": [
+        "Times New Roman"
+      ],
+      "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+      "ruleCount": 8,
+      "profileIds": [
+        "fpzg-mes-master-thesis",
+        "fpzg-nacionalna-sigurnost-diplomski",
+        "fpzg-novinarstvo-diplomski",
+        "fpzg-politologija-diplomski",
+        "fpzg-specijalisticki-odnosi-s-javnoscu",
+        "fpzg-specijalisticki-prilagodba-eu",
+        "fpzg-specijalisticki-sigurnosna-politika-rh",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija"
+      ],
+      "ruleIds": [
+        "fpzg-mes-master-thesis--font",
+        "fpzg-nacionalna-sigurnost-diplomski--font",
+        "fpzg-novinarstvo-diplomski--font",
+        "fpzg-politologija-diplomski--font",
+        "fpzg-specijalisticki-odnosi-s-javnoscu--font",
+        "fpzg-specijalisticki-prilagodba-eu--font",
+        "fpzg-specijalisticki-sigurnosna-politika-rh--font",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija--font"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "font",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+      "value": [
+        "Times New Roman"
+      ],
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+      "ruleCount": 3,
+      "profileIds": [
+        "fpzg-novinarstvo-zavrsni-tekst",
+        "fpzg-opci-akademski-rad",
+        "fpzg-politologija-zavrsni"
+      ],
+      "ruleIds": [
+        "fpzg-novinarstvo-zavrsni-tekst--font",
+        "fpzg-opci-akademski-rad--font",
+        "fpzg-politologija-zavrsni--font"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "font-size",
+      "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+      "value": [
+        12
+      ],
+      "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+      "ruleCount": 8,
+      "profileIds": [
+        "fpzg-mes-master-thesis",
+        "fpzg-nacionalna-sigurnost-diplomski",
+        "fpzg-novinarstvo-diplomski",
+        "fpzg-politologija-diplomski",
+        "fpzg-specijalisticki-odnosi-s-javnoscu",
+        "fpzg-specijalisticki-prilagodba-eu",
+        "fpzg-specijalisticki-sigurnosna-politika-rh",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija"
+      ],
+      "ruleIds": [
+        "fpzg-mes-master-thesis--font-size",
+        "fpzg-nacionalna-sigurnost-diplomski--font-size",
+        "fpzg-novinarstvo-diplomski--font-size",
+        "fpzg-politologija-diplomski--font-size",
+        "fpzg-specijalisticki-odnosi-s-javnoscu--font-size",
+        "fpzg-specijalisticki-prilagodba-eu--font-size",
+        "fpzg-specijalisticki-sigurnosna-politika-rh--font-size",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija--font-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "font-size",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+      "value": [
+        12
+      ],
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+      "ruleCount": 3,
+      "profileIds": [
+        "fpzg-novinarstvo-zavrsni-tekst",
+        "fpzg-opci-akademski-rad",
+        "fpzg-politologija-zavrsni"
+      ],
+      "ruleIds": [
+        "fpzg-novinarstvo-zavrsni-tekst--font-size",
+        "fpzg-opci-akademski-rad--font-size",
+        "fpzg-politologija-zavrsni--font-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
       "sourceId": "fpzg-upute-akademski-radovi",
       "checkId": "justify",
       "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
@@ -13265,6 +13768,805 @@
       "needsHuman": true,
       "reasons": [
         "recenica imenuje vise dijelova rada: title-page, heading, body"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "line-spacing",
+      "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+      "value": 1.5,
+      "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+      "ruleCount": 8,
+      "profileIds": [
+        "fpzg-mes-master-thesis",
+        "fpzg-nacionalna-sigurnost-diplomski",
+        "fpzg-novinarstvo-diplomski",
+        "fpzg-politologija-diplomski",
+        "fpzg-specijalisticki-odnosi-s-javnoscu",
+        "fpzg-specijalisticki-prilagodba-eu",
+        "fpzg-specijalisticki-sigurnosna-politika-rh",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija"
+      ],
+      "ruleIds": [
+        "fpzg-mes-master-thesis--line-spacing",
+        "fpzg-nacionalna-sigurnost-diplomski--line-spacing",
+        "fpzg-novinarstvo-diplomski--line-spacing",
+        "fpzg-politologija-diplomski--line-spacing",
+        "fpzg-specijalisticki-odnosi-s-javnoscu--line-spacing",
+        "fpzg-specijalisticki-prilagodba-eu--line-spacing",
+        "fpzg-specijalisticki-sigurnosna-politika-rh--line-spacing",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija--line-spacing"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "line-spacing",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+      "value": 1.5,
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+      "ruleCount": 3,
+      "profileIds": [
+        "fpzg-novinarstvo-zavrsni-tekst",
+        "fpzg-opci-akademski-rad",
+        "fpzg-politologija-zavrsni"
+      ],
+      "ruleIds": [
+        "fpzg-novinarstvo-zavrsni-tekst--line-spacing",
+        "fpzg-opci-akademski-rad--line-spacing",
+        "fpzg-politologija-zavrsni--line-spacing"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "page-numbers",
+      "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+      "value": true,
+      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "ruleCount": 8,
+      "profileIds": [
+        "fpzg-mes-master-thesis",
+        "fpzg-nacionalna-sigurnost-diplomski",
+        "fpzg-novinarstvo-diplomski",
+        "fpzg-politologija-diplomski",
+        "fpzg-specijalisticki-odnosi-s-javnoscu",
+        "fpzg-specijalisticki-prilagodba-eu",
+        "fpzg-specijalisticki-sigurnosna-politika-rh",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija"
+      ],
+      "ruleIds": [
+        "fpzg-mes-master-thesis--page-numbers",
+        "fpzg-nacionalna-sigurnost-diplomski--page-numbers",
+        "fpzg-novinarstvo-diplomski--page-numbers",
+        "fpzg-politologija-diplomski--page-numbers",
+        "fpzg-specijalisticki-odnosi-s-javnoscu--page-numbers",
+        "fpzg-specijalisticki-prilagodba-eu--page-numbers",
+        "fpzg-specijalisticki-sigurnosna-politika-rh--page-numbers",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija--page-numbers"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "title-page",
+        "heading",
+        "body"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje vise dijelova rada: title-page, heading, body"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "page-numbers",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+      "value": true,
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi rimskim, osnovni tekst arapskim brojkama.",
+      "ruleCount": 3,
+      "profileIds": [
+        "fpzg-novinarstvo-zavrsni-tekst",
+        "fpzg-opci-akademski-rad",
+        "fpzg-politologija-zavrsni"
+      ],
+      "ruleIds": [
+        "fpzg-novinarstvo-zavrsni-tekst--page-numbers",
+        "fpzg-opci-akademski-rad--page-numbers",
+        "fpzg-politologija-zavrsni--page-numbers"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "title-page",
+        "heading",
+        "body"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje vise dijelova rada: title-page, heading, body"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "paper-size",
+      "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+      "value": true,
+      "quote": "Diplomski ili zavrsni specijalisticki rad treba biti otisnut racunalnim pisacem na papiru formata A4 (21x29,7 cm), te ukoricen (meki ili tvrdi uvez).",
+      "ruleCount": 8,
+      "profileIds": [
+        "fpzg-mes-master-thesis",
+        "fpzg-nacionalna-sigurnost-diplomski",
+        "fpzg-novinarstvo-diplomski",
+        "fpzg-politologija-diplomski",
+        "fpzg-specijalisticki-odnosi-s-javnoscu",
+        "fpzg-specijalisticki-prilagodba-eu",
+        "fpzg-specijalisticki-sigurnosna-politika-rh",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija"
+      ],
+      "ruleIds": [
+        "fpzg-mes-master-thesis--paper-size",
+        "fpzg-nacionalna-sigurnost-diplomski--paper-size",
+        "fpzg-novinarstvo-diplomski--paper-size",
+        "fpzg-politologija-diplomski--paper-size",
+        "fpzg-specijalisticki-odnosi-s-javnoscu--paper-size",
+        "fpzg-specijalisticki-prilagodba-eu--paper-size",
+        "fpzg-specijalisticki-sigurnosna-politika-rh--paper-size",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija--paper-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "paper-size",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+      "value": true,
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Rad treba biti otisnut na papiru formata A4 (21x29,7 cm), te ukoricen.",
+      "ruleCount": 2,
+      "profileIds": [
+        "fpzg-novinarstvo-zavrsni-tekst",
+        "fpzg-politologija-zavrsni"
+      ],
+      "ruleIds": [
+        "fpzg-novinarstvo-zavrsni-tekst--paper-size",
+        "fpzg-politologija-zavrsni--paper-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "required-section-rules",
+      "sourcePage": "str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "keywords-hr"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu",
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi"
+        }
+      },
+      "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "ruleCount": 8,
+      "profileIds": [
+        "fpzg-mes-master-thesis",
+        "fpzg-nacionalna-sigurnost-diplomski",
+        "fpzg-novinarstvo-diplomski",
+        "fpzg-politologija-diplomski",
+        "fpzg-specijalisticki-odnosi-s-javnoscu",
+        "fpzg-specijalisticki-prilagodba-eu",
+        "fpzg-specijalisticki-sigurnosna-politika-rh",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija"
+      ],
+      "ruleIds": [
+        "fpzg-mes-master-thesis--required-section-rules",
+        "fpzg-nacionalna-sigurnost-diplomski--required-section-rules",
+        "fpzg-novinarstvo-diplomski--required-section-rules",
+        "fpzg-politologija-diplomski--required-section-rules",
+        "fpzg-specijalisticki-odnosi-s-javnoscu--required-section-rules",
+        "fpzg-specijalisticki-prilagodba-eu--required-section-rules",
+        "fpzg-specijalisticki-sigurnosna-politika-rh--required-section-rules",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija--required-section-rules"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "required-section-rules",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 9, 16, 19 (STRUKTURA RADA, izjava o autorstvu, sazetak i kljucne rijeci)",
+      "value": {
+        "order": [
+          "originality-statement",
+          "summary-hr",
+          "keywords-hr"
+        ],
+        "labels": {
+          "originality-statement": "Izjava o autorstvu",
+          "summary-hr": "Sažetak",
+          "keywords-hr": "Ključne riječi"
+        }
+      },
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj... Na prvoj sljedecoj stranici treba stajati izjava o autorstvu. Na samom kraju rada potrebno je napisati njegov sazetak... Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+      "ruleCount": 3,
+      "profileIds": [
+        "fpzg-novinarstvo-zavrsni-tekst",
+        "fpzg-opci-akademski-rad",
+        "fpzg-politologija-zavrsni"
+      ],
+      "ruleIds": [
+        "fpzg-novinarstvo-zavrsni-tekst--required-section-rules",
+        "fpzg-opci-akademski-rad--required-section-rules",
+        "fpzg-politologija-zavrsni--required-section-rules"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "required-sections",
+      "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (str. 16)",
+      "value": [
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "izvori i literatura",
+            "bibliografija",
+            "references"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "sažetak / abstract",
+          "terms": [
+            "sazetak",
+            "abstract"
+          ]
+        },
+        {
+          "key": "keywords",
+          "label": "ključne riječi / keywords",
+          "terms": [
+            "kljucne rijeci",
+            "keywords"
+          ]
+        }
+      ],
+      "quote": "Akademski radovi sastoje se od tri cjeline: prethodnoga dijela, osnovnog teksta i zavrsnoga dijela. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj, a u zavrsnome sazetak, kljucne rijeci i popis literature.",
+      "ruleCount": 1,
+      "profileIds": [
+        "fpzg-mes-master-thesis"
+      ],
+      "ruleIds": [
+        "fpzg-mes-master-thesis--required-sections"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [
+        "title-page",
+        "bibliography",
+        "heading"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "required-sections",
+      "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (izjava o autorstvu, str. 16)",
+      "value": [
+        {
+          "key": "declaration",
+          "label": "izjava o autorstvu",
+          "terms": [
+            "izjava o autorstvu",
+            "izjava o izvornosti",
+            "izjava o akademskoj cestitosti"
+          ]
+        },
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "izvori i literatura",
+            "bibliografija",
+            "references"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "sažetak / abstract",
+          "terms": [
+            "sazetak",
+            "abstract"
+          ]
+        },
+        {
+          "key": "keywords",
+          "label": "ključne riječi / keywords",
+          "terms": [
+            "kljucne rijeci",
+            "keywords"
+          ]
+        }
+      ],
+      "quote": "Akademski radovi sastoje se od tri cjeline: prethodnoga dijela, osnovnog teksta i zavrsnoga dijela. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj, a u zavrsnome sazetak, kljucne rijeci i popis literature. Njih mora sadrzavati svaki diplomski i zavrsni specijalisticki rad. Na prvoj sljedecoj stranici treba stajati izjava o autorstvu.",
+      "ruleCount": 7,
+      "profileIds": [
+        "fpzg-nacionalna-sigurnost-diplomski",
+        "fpzg-novinarstvo-diplomski",
+        "fpzg-politologija-diplomski",
+        "fpzg-specijalisticki-odnosi-s-javnoscu",
+        "fpzg-specijalisticki-prilagodba-eu",
+        "fpzg-specijalisticki-sigurnosna-politika-rh",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija"
+      ],
+      "ruleIds": [
+        "fpzg-nacionalna-sigurnost-diplomski--required-sections",
+        "fpzg-novinarstvo-diplomski--required-sections",
+        "fpzg-politologija-diplomski--required-sections",
+        "fpzg-specijalisticki-odnosi-s-javnoscu--required-sections",
+        "fpzg-specijalisticki-prilagodba-eu--required-sections",
+        "fpzg-specijalisticki-sigurnosna-politika-rh--required-sections",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija--required-sections"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "obligation",
+        "directive"
+      ],
+      "namedScopes": [
+        "title-page",
+        "bibliography",
+        "heading"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "vise modalnih biljega u istoj recenici: obligation, directive",
+        "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "required-sections",
+      "sourcePage": "str. 6 (opca klauzula) i str. 9 (STRUKTURA RADA)",
+      "value": [
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "izvori i literatura",
+            "bibliografija",
+            "references"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "sažetak / abstract",
+          "terms": [
+            "sazetak",
+            "abstract"
+          ]
+        },
+        {
+          "key": "keywords",
+          "label": "ključne riječi / keywords",
+          "terms": [
+            "kljucne rijeci",
+            "keywords"
+          ]
+        }
+      ],
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Akademski radovi sastoje se od prethodnoga dijela, osnovnog teksta i zavrsnoga dijela; obavezni su sadrzaj, uvod, tijelo teksta, zakljucak, sazetak, kljucne rijeci i popis literature.",
+      "ruleCount": 2,
+      "profileIds": [
+        "fpzg-novinarstvo-zavrsni-tekst",
+        "fpzg-politologija-zavrsni"
+      ],
+      "ruleIds": [
+        "fpzg-novinarstvo-zavrsni-tekst--required-sections",
+        "fpzg-politologija-zavrsni--required-sections"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "bibliography",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [
+        "bibliography"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje 'bibliography', a os po naravi mjeri 'whole'"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "section-surgery-rules",
+      "sourcePage": "str. 15, odjeljak 'Format rada'",
+      "value": {
+        "frontMatter": {
+          "numbering": "roman",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      },
+      "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "ruleCount": 8,
+      "profileIds": [
+        "fpzg-mes-master-thesis",
+        "fpzg-nacionalna-sigurnost-diplomski",
+        "fpzg-novinarstvo-diplomski",
+        "fpzg-politologija-diplomski",
+        "fpzg-specijalisticki-odnosi-s-javnoscu",
+        "fpzg-specijalisticki-prilagodba-eu",
+        "fpzg-specijalisticki-sigurnosna-politika-rh",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija"
+      ],
+      "ruleIds": [
+        "fpzg-mes-master-thesis--section-surgery-rules",
+        "fpzg-nacionalna-sigurnost-diplomski--section-surgery-rules",
+        "fpzg-novinarstvo-diplomski--section-surgery-rules",
+        "fpzg-politologija-diplomski--section-surgery-rules",
+        "fpzg-specijalisticki-odnosi-s-javnoscu--section-surgery-rules",
+        "fpzg-specijalisticki-prilagodba-eu--section-surgery-rules",
+        "fpzg-specijalisticki-sigurnosna-politika-rh--section-surgery-rules",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija--section-surgery-rules"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "body"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje 'body', a os po naravi mjeri 'whole'"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "section-surgery-rules",
+      "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 15 (Format rada)",
+      "value": {
+        "frontMatter": {
+          "numbering": "roman",
+          "removePageNumberFromTitlePage": true
+        },
+        "mainMatter": {
+          "numbering": "decimal",
+          "startAt": 1
+        }
+      },
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+      "ruleCount": 3,
+      "profileIds": [
+        "fpzg-novinarstvo-zavrsni-tekst",
+        "fpzg-opci-akademski-rad",
+        "fpzg-politologija-zavrsni"
+      ],
+      "ruleIds": [
+        "fpzg-novinarstvo-zavrsni-tekst--section-surgery-rules",
+        "fpzg-opci-akademski-rad--section-surgery-rules",
+        "fpzg-politologija-zavrsni--section-surgery-rules"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "body"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje 'body', a os po naravi mjeri 'whole'"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "toc",
+      "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (izjava o autorstvu, str. 16)",
+      "value": true,
+      "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj. Kratak sadrzaj daje pregled naslova poglavlja i potpoglavlja.",
+      "ruleCount": 8,
+      "profileIds": [
+        "fpzg-mes-master-thesis",
+        "fpzg-nacionalna-sigurnost-diplomski",
+        "fpzg-novinarstvo-diplomski",
+        "fpzg-politologija-diplomski",
+        "fpzg-specijalisticki-odnosi-s-javnoscu",
+        "fpzg-specijalisticki-prilagodba-eu",
+        "fpzg-specijalisticki-sigurnosna-politika-rh",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija"
+      ],
+      "ruleIds": [
+        "fpzg-mes-master-thesis--toc",
+        "fpzg-nacionalna-sigurnost-diplomski--toc",
+        "fpzg-novinarstvo-diplomski--toc",
+        "fpzg-politologija-diplomski--toc",
+        "fpzg-specijalisticki-odnosi-s-javnoscu--toc",
+        "fpzg-specijalisticki-prilagodba-eu--toc",
+        "fpzg-specijalisticki-sigurnosna-politika-rh--toc",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija--toc"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [
+        "title-page",
+        "heading"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje vise dijelova rada: title-page, heading"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "toc",
+      "sourcePage": "str. 6 (opca klauzula) i str. 9 (STRUKTURA RADA)",
+      "value": true,
+      "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Akademski radovi sastoje se od prethodnoga dijela, osnovnog teksta i zavrsnoga dijela; obavezni su sadrzaj, uvod, tijelo teksta, zakljucak, sazetak, kljucne rijeci i popis literature.",
+      "ruleCount": 2,
+      "profileIds": [
+        "fpzg-novinarstvo-zavrsni-tekst",
+        "fpzg-politologija-zavrsni"
+      ],
+      "ruleIds": [
+        "fpzg-novinarstvo-zavrsni-tekst--toc",
+        "fpzg-politologija-zavrsni--toc"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [
+        "body",
+        "bibliography"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje vise dijelova rada: body, bibliography"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "word-count",
+      "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+      "value": {
+        "min": 10000,
+        "max": 12000
+      },
+      "quote": "Ne smije sadrzavati manje od 10.000 ni vise od 12.000 rijeci (diplomski rad na studiju politologije).",
+      "ruleCount": 2,
+      "profileIds": [
+        "fpzg-nacionalna-sigurnost-diplomski",
+        "fpzg-politologija-diplomski"
+      ],
+      "ruleIds": [
+        "fpzg-nacionalna-sigurnost-diplomski--word-count",
+        "fpzg-politologija-diplomski--word-count"
+      ],
+      "proposedModality": "permission",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "prohibition",
+        "permission"
+      ],
+      "namedScopes": [],
+      "needsHuman": true,
+      "reasons": [
+        "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
+        "vise modalnih biljega u istoj recenici: prohibition, permission"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "word-count",
+      "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+      "value": {
+        "min": 12000,
+        "max": 15000
+      },
+      "quote": "Ne smije sadrzavati manje od 12.000 ni vise od 15.000 rijeci (diplomski rad na studiju novinarstva).",
+      "ruleCount": 1,
+      "profileIds": [
+        "fpzg-novinarstvo-diplomski"
+      ],
+      "ruleIds": [
+        "fpzg-novinarstvo-diplomski--word-count"
+      ],
+      "proposedModality": "permission",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "prohibition",
+        "permission"
+      ],
+      "namedScopes": [],
+      "needsHuman": true,
+      "reasons": [
+        "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
+        "vise modalnih biljega u istoj recenici: prohibition, permission"
+      ]
+    },
+    {
+      "sourceId": "fpzg-upute-akademski-radovi",
+      "checkId": "word-count",
+      "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+      "value": {
+        "min": 8000,
+        "max": 12000
+      },
+      "quote": "Ne smije sadrzavati manje od 8.000 ni vise od 12.000 rijeci (zavrsni specijalisticki rad).",
+      "ruleCount": 4,
+      "profileIds": [
+        "fpzg-specijalisticki-odnosi-s-javnoscu",
+        "fpzg-specijalisticki-prilagodba-eu",
+        "fpzg-specijalisticki-sigurnosna-politika-rh",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija"
+      ],
+      "ruleIds": [
+        "fpzg-specijalisticki-odnosi-s-javnoscu--word-count",
+        "fpzg-specijalisticki-prilagodba-eu--word-count",
+        "fpzg-specijalisticki-sigurnosna-politika-rh--word-count",
+        "fpzg-specijalisticki-vanjska-politika-diplomacija--word-count"
+      ],
+      "proposedModality": "permission",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "prohibition",
+        "permission"
+      ],
+      "namedScopes": [],
+      "needsHuman": true,
+      "reasons": [
+        "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
+        "vise modalnih biljega u istoj recenici: prohibition, permission"
       ]
     },
     {
@@ -21508,6 +22810,80 @@
     },
     {
       "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+      "checkId": "footnote-font",
+      "sourcePage": "str. 3, odjeljak 2 (font fusnota implicitno)",
+      "value": [
+        "Times New Roman"
+      ],
+      "quote": "Tip slova Times New Roman; za tekst u biljeskama velicina slova 10.",
+      "ruleCount": 1,
+      "profileIds": [
+        "radno-socijalno-pravo"
+      ],
+      "ruleIds": [
+        "radno-socijalno-pravo--footnote-font"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "footnote",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+      "checkId": "footnote-size",
+      "sourcePage": "str. 3, odjeljak 2",
+      "value": [
+        10
+      ],
+      "quote": "Za tekst u biljeskama (fusnotama) potrebno je koristiti velicinu slova 10.",
+      "ruleCount": 1,
+      "profileIds": [
+        "radno-socijalno-pravo"
+      ],
+      "ruleIds": [
+        "radno-socijalno-pravo--footnote-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "footnote",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [
+        "footnote"
+      ],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+      "checkId": "footnote-spacing",
+      "sourcePage": "str. 3, odjeljak 2 (bez proreda = jednostruki)",
+      "value": 1,
+      "quote": "Za tekst u biljeskama potrebno je koristiti velicinu slova 10, bez proreda i razmaka nakon svake biljeske.",
+      "ruleCount": 1,
+      "profileIds": [
+        "radno-socijalno-pravo"
+      ],
+      "ruleIds": [
+        "radno-socijalno-pravo--footnote-spacing"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "footnote",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [
+        "footnote"
+      ],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
       "checkId": "heading-rules",
       "sourcePage": "str. 3, odjeljak 5 (Oznacavanje cjelina i sadrzaj)",
       "value": {
@@ -21541,6 +22917,510 @@
       ]
     },
     {
+      "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+      "checkId": "page-numbers",
+      "sourcePage": "str. 3, odjeljak 2",
+      "value": true,
+      "quote": "Stranice trebaju biti oznacene arapskim brojevima (dolje desno), pri cemu se prva brojcana oznaka stavlja na prvu stranicu uvoda.",
+      "ruleCount": 1,
+      "profileIds": [
+        "radno-socijalno-pravo"
+      ],
+      "ruleIds": [
+        "radno-socijalno-pravo--page-numbers"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+      "checkId": "toc",
+      "sourcePage": "str. 2, odjeljak 1 (Opce napomene)",
+      "value": true,
+      "quote": "Svi radovi moraju imati sadrzaj, uvod, razradu teme po smislenim cjelinama i zakljucak.",
+      "ruleCount": 1,
+      "profileIds": [
+        "radno-socijalno-pravo"
+      ],
+      "ruleIds": [
+        "radno-socijalno-pravo--toc"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-katedra-sociologija-upute",
+      "checkId": "font",
+      "sourcePage": "odjeljak 'Opcenita struktura rada', recenica o oblikovanju rada",
+      "value": [
+        "Times New Roman"
+      ],
+      "quote": "Stranice moraju biti numerirane, font Times New Roman, velicina 12, obostrano poravnanje, prored 1,5.",
+      "ruleCount": 1,
+      "profileIds": [
+        "sociologija"
+      ],
+      "ruleIds": [
+        "sociologija--font"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-katedra-sociologija-upute",
+      "checkId": "font-size",
+      "sourcePage": "odjeljak 'Opcenita struktura rada', recenica o oblikovanju rada",
+      "value": [
+        12
+      ],
+      "quote": "Stranice moraju biti numerirane, font Times New Roman, velicina 12, obostrano poravnanje, prored 1,5.",
+      "ruleCount": 1,
+      "profileIds": [
+        "sociologija"
+      ],
+      "ruleIds": [
+        "sociologija--font-size"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-katedra-sociologija-upute",
+      "checkId": "line-spacing",
+      "sourcePage": "odjeljak 'Opcenita struktura rada', recenica o oblikovanju rada",
+      "value": 1.5,
+      "quote": "Stranice moraju biti numerirane, font Times New Roman, velicina 12, obostrano poravnanje, prored 1,5.",
+      "ruleCount": 1,
+      "profileIds": [
+        "sociologija"
+      ],
+      "ruleIds": [
+        "sociologija--line-spacing"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-katedra-sociologija-upute",
+      "checkId": "page-numbers",
+      "sourcePage": "odjeljak 'Opcenita struktura rada', recenica o oblikovanju rada",
+      "value": true,
+      "quote": "Stranice moraju biti numerirane, font Times New Roman, velicina 12, obostrano poravnanje, prored 1,5.",
+      "ruleCount": 1,
+      "profileIds": [
+        "sociologija"
+      ],
+      "ruleIds": [
+        "sociologija--page-numbers"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-katedra-sociologija-upute",
+      "checkId": "required-sections",
+      "sourcePage": "odjeljak 'Opcenita struktura rada' (obvezni dijelovi rada)",
+      "value": [
+        {
+          "key": "toc",
+          "label": "kratak sadržaj",
+          "terms": [
+            "sadržaj",
+            "kratak sadržaj"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "body",
+          "label": "razrada rada po poglavljima",
+          "terms": [
+            "razrada",
+            "sredisnji dio",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zaključak"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ],
+      "quote": "Pisani rad mora imati: naslovnicu, kratak sadrzaj, uvod, razradu rada po poglavljima, zakljucak, popis literature i popis priloga (ukoliko ih ima).",
+      "ruleCount": 1,
+      "profileIds": [
+        "sociologija"
+      ],
+      "ruleIds": [
+        "sociologija--required-sections"
+      ],
+      "proposedModality": "condition",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "obligation",
+        "condition"
+      ],
+      "namedScopes": [
+        "title-page",
+        "bibliography",
+        "heading"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "ublazavanje u citatu (condition): pripisivanje osi je citanje, ne uzorak",
+        "vise modalnih biljega u istoj recenici: obligation, condition",
+        "recenica imenuje vise dijelova rada: title-page, bibliography, heading"
+      ]
+    },
+    {
+      "sourceId": "pravo-katedra-sociologija-upute",
+      "checkId": "toc",
+      "sourcePage": "odjeljak 'Opcenita struktura rada' (obvezni dijelovi rada)",
+      "value": true,
+      "quote": "Kratak sadrzaj mora imati popis svih naslova poglavlja i potpoglavlja s odgovarajucom stranicom na kojoj poglavlje/potpoglavlje pocinje.",
+      "ruleCount": 1,
+      "profileIds": [
+        "sociologija"
+      ],
+      "ruleIds": [
+        "sociologija--toc"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "heading",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [
+        "heading"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje 'heading', a os po naravi mjeri 'whole'"
+      ]
+    },
+    {
+      "sourceId": "pravo-katedra-trgovacko-upute",
+      "checkId": "footnote-font",
+      "sourcePage": "str. 2, odjeljak FONT, PRORED (font fusnota implicitno)",
+      "value": [
+        "Times New Roman"
+      ],
+      "quote": "Rad se pise upotrebom fonta Times New Roman velicine 12 s proredom 1,5; velicina fonta u biljeskama iznosi 10.",
+      "ruleCount": 1,
+      "profileIds": [
+        "trgovacko-pravo"
+      ],
+      "ruleIds": [
+        "trgovacko-pravo--footnote-font"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "footnote",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-katedra-trgovacko-upute",
+      "checkId": "footnote-size",
+      "sourcePage": "str. 2, odjeljak FONT, PRORED",
+      "value": [
+        10
+      ],
+      "quote": "Velicina fonta u biljeskama iznosi 10 s proredom 1,15 izmedu redova teksta.",
+      "ruleCount": 1,
+      "profileIds": [
+        "trgovacko-pravo"
+      ],
+      "ruleIds": [
+        "trgovacko-pravo--footnote-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "footnote",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [
+        "footnote"
+      ],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-katedra-trgovacko-upute",
+      "checkId": "footnote-spacing",
+      "sourcePage": "str. 2, odjeljak FONT, PRORED",
+      "value": 1.15,
+      "quote": "Velicina fonta u biljeskama iznosi 10 s proredom 1,15 izmedu redova teksta.",
+      "ruleCount": 1,
+      "profileIds": [
+        "trgovacko-pravo"
+      ],
+      "ruleIds": [
+        "trgovacko-pravo--footnote-spacing"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "footnote",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [
+        "footnote"
+      ],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-katedra-trgovacko-upute",
+      "checkId": "page-numbers",
+      "sourcePage": "str. 2, odjeljak FONT, PRORED I DRUGE FORMALNOSTI",
+      "value": true,
+      "quote": "Stranice Rada moraju biti numerirane na doljnjem desnom rubu stranice (naslovna stranica se ne numerira).",
+      "ruleCount": 1,
+      "profileIds": [
+        "trgovacko-pravo"
+      ],
+      "ruleIds": [
+        "trgovacko-pravo--page-numbers"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [
+        "title-page",
+        "heading"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje vise dijelova rada: title-page, heading"
+      ]
+    },
+    {
+      "sourceId": "pravo-katedra-trgovacko-upute",
+      "checkId": "required-sections",
+      "sourcePage": "str. 1, odjeljak STRUKTURA",
+      "value": [
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadržaj"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zaključak"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis literature i pravnih izvora",
+          "terms": [
+            "popis literature",
+            "izvori i literatura",
+            "literatura",
+            "bibliografija"
+          ]
+        },
+        {
+          "key": "abbr",
+          "label": "popis kratica",
+          "terms": [
+            "popis kratica",
+            "kratice"
+          ]
+        }
+      ],
+      "quote": "Rad je nuzno strukturirati tako da sadrzi uvod, sredisnji dio rada, zakljucak te popis literature. Prije uvoda nalazi se sadrzaj rada. Prije uvoda potrebno je navesti popis koristenih kratica.",
+      "ruleCount": 1,
+      "profileIds": [
+        "trgovacko-pravo"
+      ],
+      "ruleIds": [
+        "trgovacko-pravo--required-sections"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "bibliography",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [
+        "bibliography"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje 'bibliography', a os po naravi mjeri 'whole'"
+      ]
+    },
+    {
+      "sourceId": "pravo-katedra-trgovacko-upute",
+      "checkId": "toc",
+      "sourcePage": "str. 1, odjeljak STRUKTURA",
+      "value": true,
+      "quote": "Prije uvoda nalazi se sadrzaj rada sa svim poglavljima i oznacenim brojem stranica za svako poglavlje.",
+      "ruleCount": 1,
+      "profileIds": [
+        "trgovacko-pravo"
+      ],
+      "ruleIds": [
+        "trgovacko-pravo--toc"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "heading",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "heading"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje 'heading', a os po naravi mjeri 'whole'"
+      ]
+    },
+    {
+      "sourceId": "pravo-scsr-upute-diplomski-2021",
+      "checkId": "citation-style",
+      "sourcePage": "str. 13 i 17, Upute za navodjenje literature / Navodjenje citata i referenci u tekstu",
+      "value": "pravo-social-author",
+      "quote": "Referenca u tekstu se stavlja u zagrade, a sadrzi prezime autora i godinu izdanja; prema uputama iz Revije za socijalnu politiku ili iz Ljetopisa socijalnog rada",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalna-politika-diplomski",
+        "pravo-socijalni-rad-diplomski"
+      ],
+      "ruleIds": [
+        "pravo-socijalna-politika-diplomski--citation-style",
+        "pravo-socijalni-rad-diplomski--citation-style"
+      ],
+      "proposedModality": null,
+      "proposedScope": "whole",
+      "modalityMarks": [],
+      "namedScopes": [],
+      "needsHuman": true,
+      "reasons": [
+        "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata"
+      ]
+    },
+    {
+      "sourceId": "pravo-scsr-upute-diplomski-2021",
+      "checkId": "font",
+      "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+      "value": [
+        "Times New Roman"
+      ],
+      "quote": "oblik i velicina slova treba biti jednaka u cijelom tekstu (velicina: 12, oblik: Times New Roman)",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalna-politika-diplomski",
+        "pravo-socijalni-rad-diplomski"
+      ],
+      "ruleIds": [
+        "pravo-socijalna-politika-diplomski--font",
+        "pravo-socijalni-rad-diplomski--font"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-diplomski-2021",
+      "checkId": "font-size",
+      "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+      "value": [
+        12
+      ],
+      "quote": "oblik i velicina slova treba biti jednaka u cijelom tekstu (velicina: 12, oblik: Times New Roman)",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalna-politika-diplomski",
+        "pravo-socijalni-rad-diplomski"
+      ],
+      "ruleIds": [
+        "pravo-socijalna-politika-diplomski--font-size",
+        "pravo-socijalni-rad-diplomski--font-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
       "sourceId": "pravo-scsr-upute-diplomski-2021",
       "checkId": "footnote-size",
       "sourcePage": "str. 11, odjeljak 'Upute za oblikovanje teksta rada' (1. Osnovne upute)",
@@ -21570,6 +23450,56 @@
     },
     {
       "sourceId": "pravo-scsr-upute-diplomski-2021",
+      "checkId": "heading-rules",
+      "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+      "value": {
+        "size": 12,
+        "align": "left",
+        "numberRequired": true,
+        "trailingDot": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 5,
+        "levels": {
+          "1": {
+            "bold": true
+          },
+          "2": {
+            "italic": true
+          },
+          "3": {
+            "italic": true
+          },
+          "4": {
+            "italic": true
+          },
+          "5": {
+            "italic": true
+          }
+        }
+      },
+      "quote": "glavni naslovi trebaju biti oznaceni masnim slovima (bold), a podnaslovi kosim slovima (italic) s brojcanim oznacavanjem arapskim brojkama, pri cemu je iza zadnjeg broja potrebno staviti tocku (najvise 5 u nizu)",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalna-politika-diplomski",
+        "pravo-socijalni-rad-diplomski"
+      ],
+      "ruleIds": [
+        "pravo-socijalna-politika-diplomski--heading-rules",
+        "pravo-socijalni-rad-diplomski--heading-rules"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "heading",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [
+        "heading"
+      ],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-diplomski-2021",
       "checkId": "justify",
       "sourcePage": "str. 11, odjeljak 'Upute za oblikovanje teksta rada' (1. Osnovne upute)",
       "value": true,
@@ -21587,6 +23517,30 @@
       "proposedScope": "body",
       "modalityMarks": [
         "bare-indicative"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-diplomski-2021",
+      "checkId": "line-spacing",
+      "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+      "value": 1.5,
+      "quote": "prored treba biti: 1,5",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalna-politika-diplomski",
+        "pravo-socijalni-rad-diplomski"
+      ],
+      "ruleIds": [
+        "pravo-socijalna-politika-diplomski--line-spacing",
+        "pravo-socijalni-rad-diplomski--line-spacing"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "directive"
       ],
       "namedScopes": [],
       "needsHuman": false,
@@ -21622,6 +23576,1055 @@
       "reasons": []
     },
     {
+      "sourceId": "pravo-scsr-upute-diplomski-2021",
+      "checkId": "page-numbers",
+      "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+      "value": true,
+      "quote": "stranice trebaju biti oznacene rednim brojem (dolje desno), pri cemu se prva brojcana oznaka stavlja na prvu stranicu uvoda",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalna-politika-diplomski",
+        "pravo-socijalni-rad-diplomski"
+      ],
+      "ruleIds": [
+        "pravo-socijalna-politika-diplomski--page-numbers",
+        "pravo-socijalni-rad-diplomski--page-numbers"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-diplomski-2021",
+      "checkId": "required-sections",
+      "sourcePage": "str. 3-10, struktura rada i naslovni listovi",
+      "value": [
+        {
+          "key": "declaration",
+          "label": "izjava o izvornosti",
+          "terms": [
+            "izjava o izvornosti"
+          ]
+        },
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadržaj",
+            "contents"
+          ]
+        },
+        {
+          "key": "abstractHr",
+          "label": "sažetak na hrvatskom",
+          "terms": [
+            "sažetak"
+          ]
+        },
+        {
+          "key": "abstractEn",
+          "label": "abstract na engleskom",
+          "terms": [
+            "abstract"
+          ]
+        },
+        {
+          "key": "keywordsHr",
+          "label": "ključne riječi",
+          "terms": [
+            "ključne riječi"
+          ]
+        },
+        {
+          "key": "keywordsEn",
+          "label": "keywords",
+          "terms": [
+            "keywords",
+            "key words"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zaključak"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "literatura",
+          "terms": [
+            "literatura",
+            "references"
+          ]
+        }
+      ],
+      "quote": "Treca stranica sadrzava naslov, sazetak, kljucne rijeci na hrvatskom i engleskom jeziku; Cetvrta stranica sadrzi izjavu o izvornosti",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalna-politika-diplomski",
+        "pravo-socijalni-rad-diplomski"
+      ],
+      "ruleIds": [
+        "pravo-socijalna-politika-diplomski--required-sections",
+        "pravo-socijalni-rad-diplomski--required-sections"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "heading",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "heading"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje 'heading', a os po naravi mjeri 'whole'"
+      ]
+    },
+    {
+      "sourceId": "pravo-scsr-upute-diplomski-2021",
+      "checkId": "toc",
+      "sourcePage": "str. 7-9, Drugi list (Sadrzaj)",
+      "value": true,
+      "quote": "Na drugoj stranici se nalazi sadrzaj rada i ona se ne numerira",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalna-politika-diplomski",
+        "pravo-socijalni-rad-diplomski"
+      ],
+      "ruleIds": [
+        "pravo-socijalna-politika-diplomski--toc",
+        "pravo-socijalni-rad-diplomski--toc"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-poslijediplomski",
+      "checkId": "citation-style",
+      "sourcePage": "str. 18, Citiranje i navodjenje autora u tekstu",
+      "value": "pravo-social-author",
+      "quote": "Referenca u tekstu se stavlja u zagrade, a sadrzi prezime autora i godinu izdanja. Ako je rijec o preciznijem navodu ili citatu u referencu treba ukljuciti i broj stranice.",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalne-djelatnosti-doktorski",
+        "pravo-socijalne-djelatnosti-specijalisticki"
+      ],
+      "ruleIds": [
+        "pravo-socijalne-djelatnosti-doktorski--citation-style",
+        "pravo-socijalne-djelatnosti-specijalisticki--citation-style"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-poslijediplomski",
+      "checkId": "font",
+      "sourcePage": "str. 7, Format teksta",
+      "value": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "quote": "oblik i velicina slova mora biti jednaka u cijelom tekstu (velicina: 12, oblik: Times New Roman ili Arial)",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalne-djelatnosti-doktorski",
+        "pravo-socijalne-djelatnosti-specijalisticki"
+      ],
+      "ruleIds": [
+        "pravo-socijalne-djelatnosti-doktorski--font",
+        "pravo-socijalne-djelatnosti-specijalisticki--font"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-poslijediplomski",
+      "checkId": "font-size",
+      "sourcePage": "str. 7, Format teksta",
+      "value": [
+        12
+      ],
+      "quote": "oblik i velicina slova mora biti jednaka u cijelom tekstu (velicina: 12, oblik: Times New Roman ili Arial)",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalne-djelatnosti-doktorski",
+        "pravo-socijalne-djelatnosti-specijalisticki"
+      ],
+      "ruleIds": [
+        "pravo-socijalne-djelatnosti-doktorski--font-size",
+        "pravo-socijalne-djelatnosti-specijalisticki--font-size"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-poslijediplomski",
+      "checkId": "line-spacing",
+      "sourcePage": "str. 7, Format teksta",
+      "value": 1.5,
+      "quote": "prored: 1,5",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalne-djelatnosti-doktorski",
+        "pravo-socijalne-djelatnosti-specijalisticki"
+      ],
+      "ruleIds": [
+        "pravo-socijalne-djelatnosti-doktorski--line-spacing",
+        "pravo-socijalne-djelatnosti-specijalisticki--line-spacing"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-poslijediplomski",
+      "checkId": "margins",
+      "sourcePage": "str. 7, Format teksta",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "quote": "margine: 2,5 cm s lijeve strane te 2,5 cm s desne strane, gore i dolje",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalne-djelatnosti-doktorski",
+        "pravo-socijalne-djelatnosti-specijalisticki"
+      ],
+      "ruleIds": [
+        "pravo-socijalne-djelatnosti-doktorski--margins",
+        "pravo-socijalne-djelatnosti-specijalisticki--margins"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-poslijediplomski",
+      "checkId": "page-numbers",
+      "sourcePage": "str. 7, Format teksta",
+      "value": true,
+      "quote": "stranice moraju biti oznacene rednim brojem (dolje desno), pri cemu se prva brojcana oznaka stavlja na prvu stranicu uvoda",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalne-djelatnosti-doktorski",
+        "pravo-socijalne-djelatnosti-specijalisticki"
+      ],
+      "ruleIds": [
+        "pravo-socijalne-djelatnosti-doktorski--page-numbers",
+        "pravo-socijalne-djelatnosti-specijalisticki--page-numbers"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-poslijediplomski",
+      "checkId": "required-sections",
+      "sourcePage": "str. 5-7, Okvirna struktura specijalistickog zavrsnog rada / Format teksta",
+      "value": [
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadržaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zaključak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "bibliografija",
+            "references"
+          ]
+        }
+      ],
+      "quote": "Okvirna struktura specijalistickog zavrsnog rada: Uvod, Prikaz koncepata i pojmova, Pregledno poglavlje (informacije o problemu), Analiza problema, Prikaz nalaza, Prikaz preporuka, Zakljucak. Obavezni redoslijed dijelova: naslovna stranica, sadrzaj, popis kratica, uvod, sredisnji dio, zakljucak, popis tablica i slika, literatura, prilozi.",
+      "ruleCount": 1,
+      "profileIds": [
+        "pravo-socijalne-djelatnosti-specijalisticki"
+      ],
+      "ruleIds": [
+        "pravo-socijalne-djelatnosti-specijalisticki--required-sections"
+      ],
+      "proposedModality": "recommendation",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "recommendation",
+        "obligation"
+      ],
+      "namedScopes": [
+        "heading",
+        "title-page",
+        "bibliography",
+        "table"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
+        "vise modalnih biljega u istoj recenici: recommendation, obligation",
+        "recenica imenuje vise dijelova rada: heading, title-page, bibliography, table"
+      ]
+    },
+    {
+      "sourceId": "pravo-scsr-upute-poslijediplomski",
+      "checkId": "required-sections",
+      "sourcePage": "str. 6-7, Okvirna struktura disertacije / Format teksta",
+      "value": [
+        {
+          "key": "abstractHr",
+          "label": "sažetak na hrvatskom",
+          "terms": [
+            "sažetak"
+          ]
+        },
+        {
+          "key": "abstractEn",
+          "label": "abstract na engleskom",
+          "terms": [
+            "abstract",
+            "summary"
+          ]
+        },
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadržaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zaključak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "bibliografija",
+            "references"
+          ]
+        }
+      ],
+      "quote": "Svaka doktorska disertacija mora imati sazetak na hrvatskom i engleskom jeziku, opsega do 1 000 rijeci. Okvirna struktura disertacije: Sazetak (HR i EN), Uvod, Pregled relevantne literature, Prikaz glavnih teza, Opis koristene metodologije, Prikaz i interpretacija nalaza, Zakljucak + prilozi.",
+      "ruleCount": 1,
+      "profileIds": [
+        "pravo-socijalne-djelatnosti-doktorski"
+      ],
+      "ruleIds": [
+        "pravo-socijalne-djelatnosti-doktorski--required-sections"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "bibliography",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [
+        "bibliography"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje 'bibliography', a os po naravi mjeri 'whole'"
+      ]
+    },
+    {
+      "sourceId": "pravo-scsr-upute-poslijediplomski",
+      "checkId": "toc",
+      "sourcePage": "str. 12, Sadrzaj",
+      "value": true,
+      "quote": "U sadrzaju je potrebno navesti popis svih naslova i podnaslova poglavlja s naznakom stranica na kojima se ista nalaze (do trece razine numeracije), ukljucujuci i popis kratica, tablica, slika, literature, priloga; naslov Sadrzaj pise se na vrhu stranice lijevo i ne oznacava se brojem.",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalne-djelatnosti-doktorski",
+        "pravo-socijalne-djelatnosti-specijalisticki"
+      ],
+      "ruleIds": [
+        "pravo-socijalne-djelatnosti-doktorski--toc",
+        "pravo-socijalne-djelatnosti-specijalisticki--toc"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [
+        "bibliography",
+        "table",
+        "heading"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje vise dijelova rada: bibliography, table, heading"
+      ]
+    },
+    {
+      "sourceId": "pravo-scsr-upute-poslijediplomski",
+      "checkId": "word-count",
+      "sourcePage": "str. 5, Doktorska disertacija",
+      "value": {
+        "min": 45000,
+        "max": 60000
+      },
+      "quote": "Doktorska disertacija duzinom u pravilu treba obuhvatiti izmedju 45 000 i 60 000 rijeci ili izmedju 150 i 200 kartica.",
+      "ruleCount": 1,
+      "profileIds": [
+        "pravo-socijalne-djelatnosti-doktorski"
+      ],
+      "ruleIds": [
+        "pravo-socijalne-djelatnosti-doktorski--word-count"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "recommendation",
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": true,
+      "reasons": [
+        "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
+        "vise modalnih biljega u istoj recenici: recommendation, directive"
+      ]
+    },
+    {
+      "sourceId": "pravo-scsr-upute-poslijediplomski",
+      "checkId": "word-count",
+      "sourcePage": "str. 4, Specijalisticki zavrsni rad",
+      "value": {
+        "min": 20000,
+        "max": 25000
+      },
+      "quote": "Specijalisticki zavrsni rad duzinom u pravilu treba obuhvatiti izmedju 20 000 i 25 000 rijeci (izmedju 70 i 90 kartica).",
+      "ruleCount": 1,
+      "profileIds": [
+        "pravo-socijalne-djelatnosti-specijalisticki"
+      ],
+      "ruleIds": [
+        "pravo-socijalne-djelatnosti-specijalisticki--word-count"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "recommendation",
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": true,
+      "reasons": [
+        "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
+        "vise modalnih biljega u istoj recenici: recommendation, directive"
+      ]
+    },
+    {
+      "sourceId": "pravo-scsr-upute-zavrsni-2024",
+      "checkId": "citation-style",
+      "sourcePage": "str. 13, Navodjenje autora u tekstu",
+      "value": "pravo-social-author",
+      "quote": "Referenca u tekstu se stavlja u zagrade, a sadrzi prezime autora i godinu izdanja. Ako je rijec o preciznijem navodu ili citatu u referencu treba ukljuciti i broj stranice.",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalni-opci-akademski-rad",
+        "pravo-socijalni-rad-zavrsni"
+      ],
+      "ruleIds": [
+        "pravo-socijalni-opci-akademski-rad--citation-style",
+        "pravo-socijalni-rad-zavrsni--citation-style"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-zavrsni-2024",
+      "checkId": "font",
+      "sourcePage": "str. 8, Upute za oblikovanje teksta, t.1 Osnovne upute",
+      "value": [
+        "Times New Roman"
+      ],
+      "quote": "oblik i velicina slova treba biti jednaka u cijelom tekstu (velicina: 12, oblik: Times New Roman)",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalni-opci-akademski-rad",
+        "pravo-socijalni-rad-zavrsni"
+      ],
+      "ruleIds": [
+        "pravo-socijalni-opci-akademski-rad--font",
+        "pravo-socijalni-rad-zavrsni--font"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-zavrsni-2024",
+      "checkId": "font-size",
+      "sourcePage": "str. 8, Upute za oblikovanje teksta, t.1 Osnovne upute",
+      "value": [
+        12
+      ],
+      "quote": "oblik i velicina slova treba biti jednaka u cijelom tekstu (velicina: 12, oblik: Times New Roman)",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalni-opci-akademski-rad",
+        "pravo-socijalni-rad-zavrsni"
+      ],
+      "ruleIds": [
+        "pravo-socijalni-opci-akademski-rad--font-size",
+        "pravo-socijalni-rad-zavrsni--font-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-zavrsni-2024",
+      "checkId": "heading-rules",
+      "sourcePage": "str. 8, Upute za oblikovanje teksta, t.1",
+      "value": {
+        "size": 12,
+        "align": "left",
+        "numberRequired": true,
+        "trailingDot": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 5,
+        "levels": {
+          "1": {
+            "bold": true
+          },
+          "2": {
+            "italic": true
+          },
+          "3": {
+            "italic": true
+          },
+          "4": {
+            "italic": true
+          },
+          "5": {
+            "italic": true
+          }
+        }
+      },
+      "quote": "glavni naslovi trebaju biti oznaceni masnim slovima (bold), a podnaslovi kosim slovima (italic) s brojcanim oznacavanjem arapskim brojkama, pri cemu je prije naslova, a iza zadnjeg broja potrebno staviti tocku, npr. 1. ...1.2. ...1.2.1... (najvise 5 u nizu)",
+      "ruleCount": 1,
+      "profileIds": [
+        "pravo-socijalni-rad-zavrsni"
+      ],
+      "ruleIds": [
+        "pravo-socijalni-rad-zavrsni--heading-rules"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "heading",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-zavrsni-2024",
+      "checkId": "line-spacing",
+      "sourcePage": "str. 8, Upute za oblikovanje teksta, t.1",
+      "value": 1.5,
+      "quote": "prored treba biti: 1,5",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalni-opci-akademski-rad",
+        "pravo-socijalni-rad-zavrsni"
+      ],
+      "ruleIds": [
+        "pravo-socijalni-opci-akademski-rad--line-spacing",
+        "pravo-socijalni-rad-zavrsni--line-spacing"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-zavrsni-2024",
+      "checkId": "margins",
+      "sourcePage": "str. 8, Upute za oblikovanje teksta, t.1",
+      "value": {
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3.5
+      },
+      "quote": "margine trebaju biti slijedece: 3,5 cm s lijeve strane te 3 cm s desne strane, gore i dolje",
+      "ruleCount": 2,
+      "profileIds": [
+        "pravo-socijalni-opci-akademski-rad",
+        "pravo-socijalni-rad-zavrsni"
+      ],
+      "ruleIds": [
+        "pravo-socijalni-opci-akademski-rad--margins",
+        "pravo-socijalni-rad-zavrsni--margins"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-zavrsni-2024",
+      "checkId": "page-count",
+      "sourcePage": "str. 2, Opce napomene",
+      "value": {
+        "min": 20,
+        "max": 30
+      },
+      "quote": "Ukupna duljina zavrsnog rada treba biti u rasponu izmedju 20 i 30 stranica teksta.",
+      "ruleCount": 1,
+      "profileIds": [
+        "pravo-socijalni-rad-zavrsni"
+      ],
+      "ruleIds": [
+        "pravo-socijalni-rad-zavrsni--page-count"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-zavrsni-2024",
+      "checkId": "page-numbers",
+      "sourcePage": "str. 8, Upute za oblikovanje teksta, t.1",
+      "value": true,
+      "quote": "stranice trebaju biti oznacene rednim brojem (dolje desno), pri cemu se prva brojcana oznaka stavlja na prvu stranicu uvoda",
+      "ruleCount": 1,
+      "profileIds": [
+        "pravo-socijalni-rad-zavrsni"
+      ],
+      "ruleIds": [
+        "pravo-socijalni-rad-zavrsni--page-numbers"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-scsr-upute-zavrsni-2024",
+      "checkId": "required-sections",
+      "sourcePage": "str. 2-3, Struktura zavrsnog rada",
+      "value": [],
+      "quote": "Struktura zavrsnog rada: Sazetak, Uvod, Razrada teme po poglavljima, Zakljucak, Literatura, Prilog.",
+      "ruleCount": 1,
+      "profileIds": [
+        "pravo-socijalni-opci-akademski-rad"
+      ],
+      "ruleIds": [
+        "pravo-socijalni-opci-akademski-rad--required-sections"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "bibliography",
+        "heading"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje vise dijelova rada: bibliography, heading"
+      ]
+    },
+    {
+      "sourceId": "pravo-scsr-upute-zavrsni-2024",
+      "checkId": "required-sections",
+      "sourcePage": "str. 2-4 i 7, Struktura zavrsnog rada / Formativni izgled",
+      "value": [
+        {
+          "key": "declaration",
+          "label": "izjava o izvornosti",
+          "terms": [
+            "izjava o izvornosti"
+          ]
+        },
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadržaj",
+            "contents"
+          ]
+        },
+        {
+          "key": "abstractHr",
+          "label": "sažetak na hrvatskom",
+          "terms": [
+            "sažetak"
+          ]
+        },
+        {
+          "key": "abstractEn",
+          "label": "abstract na engleskom",
+          "terms": [
+            "abstract"
+          ]
+        },
+        {
+          "key": "keywordsHr",
+          "label": "ključne riječi",
+          "terms": [
+            "ključne riječi"
+          ]
+        },
+        {
+          "key": "keywordsEn",
+          "label": "keywords",
+          "terms": [
+            "keywords",
+            "key words"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zaključak"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "literatura",
+          "terms": [
+            "literatura",
+            "references"
+          ]
+        }
+      ],
+      "quote": "Struktura zavrsnog rada: Sazetak, Uvod, Razrada teme po poglavljima, Zakljucak, Literatura, Prilog. Na drugoj stranici se nalazi sadrzaj; Treca stranica sadrzava naslov, sazetak, kljucne rijeci na hrvatskom i engleskom jeziku; Cetvrta stranica sadrzi izjavu o izvornosti.",
+      "ruleCount": 1,
+      "profileIds": [
+        "pravo-socijalni-rad-zavrsni"
+      ],
+      "ruleIds": [
+        "pravo-socijalni-rad-zavrsni--required-sections"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "bibliography",
+        "heading"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje vise dijelova rada: bibliography, heading"
+      ]
+    },
+    {
+      "sourceId": "pravo-scsr-upute-zavrsni-2024",
+      "checkId": "toc",
+      "sourcePage": "str. 4 i 6, Formativni izgled / Drugi list (Sadrzaj)",
+      "value": true,
+      "quote": "Na drugoj stranici se nalazi sadrzaj rada i ona se ne numerira; preporucuje se decimalna numeracija poglavlja i odlomaka u poglavljima (npr. 1.1., 1.2.)",
+      "ruleCount": 1,
+      "profileIds": [
+        "pravo-socijalni-rad-zavrsni"
+      ],
+      "ruleIds": [
+        "pravo-socijalni-rad-zavrsni--toc"
+      ],
+      "proposedModality": "recommendation",
+      "proposedScope": "heading",
+      "modalityMarks": [
+        "recommendation"
+      ],
+      "namedScopes": [
+        "heading"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
+        "recenica imenuje 'heading', a os po naravi mjeri 'whole'"
+      ]
+    },
+    {
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "checkId": "citation-style",
+      "sourcePage": "odjeljak 5. Navodenje bibliografskih podataka (citiranje)",
+      "value": "pravo-fusnote",
+      "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane.",
+      "ruleCount": 7,
+      "profileIds": [
+        "pravo-doktorski-pravne-znanosti",
+        "pravo-integrirani-diplomski",
+        "pravo-javna-uprava-diplomski",
+        "pravo-javna-uprava-prijediplomski",
+        "pravo-opci-pravni-akademski-rad",
+        "pravo-porezni-prijediplomski",
+        "pravo-specijalisticki-pravni-opci"
+      ],
+      "ruleIds": [
+        "pravo-doktorski-pravne-znanosti--citation-style",
+        "pravo-integrirani-diplomski--citation-style",
+        "pravo-javna-uprava-diplomski--citation-style",
+        "pravo-javna-uprava-prijediplomski--citation-style",
+        "pravo-opci-pravni-akademski-rad--citation-style",
+        "pravo-porezni-prijediplomski--citation-style",
+        "pravo-specijalisticki-pravni-opci--citation-style"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [
+        "footnote",
+        "bibliography"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje vise dijelova rada: footnote, bibliography"
+      ]
+    },
+    {
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "checkId": "font",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "value": [
+        "Times New Roman"
+      ],
+      "quote": "Glavni tekst (...) font: Times New Roman",
+      "ruleCount": 7,
+      "profileIds": [
+        "pravo-doktorski-pravne-znanosti",
+        "pravo-integrirani-diplomski",
+        "pravo-javna-uprava-diplomski",
+        "pravo-javna-uprava-prijediplomski",
+        "pravo-opci-pravni-akademski-rad",
+        "pravo-porezni-prijediplomski",
+        "pravo-specijalisticki-pravni-opci"
+      ],
+      "ruleIds": [
+        "pravo-doktorski-pravne-znanosti--font",
+        "pravo-integrirani-diplomski--font",
+        "pravo-javna-uprava-diplomski--font",
+        "pravo-javna-uprava-prijediplomski--font",
+        "pravo-opci-pravni-akademski-rad--font",
+        "pravo-porezni-prijediplomski--font",
+        "pravo-specijalisticki-pravni-opci--font"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "body"
+      ],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "checkId": "font-size",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "value": [
+        12
+      ],
+      "quote": "Glavni tekst (...) velicina fonta: 12",
+      "ruleCount": 7,
+      "profileIds": [
+        "pravo-doktorski-pravne-znanosti",
+        "pravo-integrirani-diplomski",
+        "pravo-javna-uprava-diplomski",
+        "pravo-javna-uprava-prijediplomski",
+        "pravo-opci-pravni-akademski-rad",
+        "pravo-porezni-prijediplomski",
+        "pravo-specijalisticki-pravni-opci"
+      ],
+      "ruleIds": [
+        "pravo-doktorski-pravne-znanosti--font-size",
+        "pravo-integrirani-diplomski--font-size",
+        "pravo-javna-uprava-diplomski--font-size",
+        "pravo-javna-uprava-prijediplomski--font-size",
+        "pravo-opci-pravni-akademski-rad--font-size",
+        "pravo-porezni-prijediplomski--font-size",
+        "pravo-specijalisticki-pravni-opci--font-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "body"
+      ],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "checkId": "footnote-font",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "value": [
+        "Times New Roman"
+      ],
+      "quote": "Biljeske (fusnote) (...) font: Times New Roman",
+      "ruleCount": 5,
+      "profileIds": [
+        "pravo-integrirani-diplomski",
+        "pravo-javna-uprava-diplomski",
+        "pravo-javna-uprava-prijediplomski",
+        "pravo-opci-pravni-akademski-rad",
+        "pravo-porezni-prijediplomski"
+      ],
+      "ruleIds": [
+        "pravo-integrirani-diplomski--footnote-font",
+        "pravo-javna-uprava-diplomski--footnote-font",
+        "pravo-javna-uprava-prijediplomski--footnote-font",
+        "pravo-opci-pravni-akademski-rad--footnote-font",
+        "pravo-porezni-prijediplomski--footnote-font"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "footnote",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "footnote"
+      ],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
       "sourceId": "pravo-upute-oblikovanje-2024",
       "checkId": "footnote-font",
       "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta, Biljeske (fusnote)",
@@ -21637,6 +24640,40 @@
       "ruleIds": [
         "pravo-doktorski-pravne-znanosti--footnote-font",
         "pravo-specijalisticki-pravni-opci--footnote-font"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "footnote",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "footnote"
+      ],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "checkId": "footnote-size",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "value": [
+        10
+      ],
+      "quote": "Biljeske (fusnote) (...) velicina fonta: 10",
+      "ruleCount": 5,
+      "profileIds": [
+        "pravo-integrirani-diplomski",
+        "pravo-javna-uprava-diplomski",
+        "pravo-javna-uprava-prijediplomski",
+        "pravo-opci-pravni-akademski-rad",
+        "pravo-porezni-prijediplomski"
+      ],
+      "ruleIds": [
+        "pravo-integrirani-diplomski--footnote-size",
+        "pravo-javna-uprava-diplomski--footnote-size",
+        "pravo-javna-uprava-prijediplomski--footnote-size",
+        "pravo-opci-pravni-akademski-rad--footnote-size",
+        "pravo-porezni-prijediplomski--footnote-size"
       ],
       "proposedModality": "directive",
       "proposedScope": "footnote",
@@ -21680,6 +24717,38 @@
     {
       "sourceId": "pravo-upute-oblikovanje-2024",
       "checkId": "footnote-spacing",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "value": 1,
+      "quote": "Biljeske (fusnote) (...) prored: 1 (razmak 0 i prije i poslije)",
+      "ruleCount": 5,
+      "profileIds": [
+        "pravo-integrirani-diplomski",
+        "pravo-javna-uprava-diplomski",
+        "pravo-javna-uprava-prijediplomski",
+        "pravo-opci-pravni-akademski-rad",
+        "pravo-porezni-prijediplomski"
+      ],
+      "ruleIds": [
+        "pravo-integrirani-diplomski--footnote-spacing",
+        "pravo-javna-uprava-diplomski--footnote-spacing",
+        "pravo-javna-uprava-prijediplomski--footnote-spacing",
+        "pravo-opci-pravni-akademski-rad--footnote-spacing",
+        "pravo-porezni-prijediplomski--footnote-spacing"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "footnote",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "footnote"
+      ],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "checkId": "footnote-spacing",
       "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta, Biljeske (fusnote)",
       "value": 1,
       "quote": "Biljeske (fusnote) - prored: 1 (razmak 0 i prije i poslije)",
@@ -21699,6 +24768,55 @@
       ],
       "namedScopes": [
         "footnote"
+      ],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "checkId": "heading-rules",
+      "sourcePage": "odjeljak 3. Naslovi",
+      "value": {
+        "size": 12,
+        "align": "left",
+        "numberRequired": true,
+        "trailingDot": true,
+        "romanLevelOneAllowed": true,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true
+          },
+          "2": {
+            "bold": true
+          },
+          "3": {
+            "bold": true,
+            "italic": true
+          }
+        }
+      },
+      "quote": "naslov 1. razine: font 12, TISKANA SLOVA; naslov 2. razine: font 12, podebljano (bold); naslov 3. razine: font 12, podebljano i kurzivirano (bold i italik). Naslovi se poravnavaju slijeva (left aligned).",
+      "ruleCount": 4,
+      "profileIds": [
+        "pravo-integrirani-diplomski",
+        "pravo-javna-uprava-diplomski",
+        "pravo-javna-uprava-prijediplomski",
+        "pravo-porezni-prijediplomski"
+      ],
+      "ruleIds": [
+        "pravo-integrirani-diplomski--heading-rules",
+        "pravo-javna-uprava-diplomski--heading-rules",
+        "pravo-javna-uprava-prijediplomski--heading-rules",
+        "pravo-porezni-prijediplomski--heading-rules"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "heading",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "heading"
       ],
       "needsHuman": false,
       "reasons": []
@@ -21741,10 +24859,85 @@
     },
     {
       "sourceId": "pravo-upute-oblikovanje-2024",
+      "checkId": "line-spacing",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "value": 1.5,
+      "quote": "Glavni tekst (...) prored: 1,5 (razmak 0 i prije i poslije)",
+      "ruleCount": 7,
+      "profileIds": [
+        "pravo-doktorski-pravne-znanosti",
+        "pravo-integrirani-diplomski",
+        "pravo-javna-uprava-diplomski",
+        "pravo-javna-uprava-prijediplomski",
+        "pravo-opci-pravni-akademski-rad",
+        "pravo-porezni-prijediplomski",
+        "pravo-specijalisticki-pravni-opci"
+      ],
+      "ruleIds": [
+        "pravo-doktorski-pravne-znanosti--line-spacing",
+        "pravo-integrirani-diplomski--line-spacing",
+        "pravo-javna-uprava-diplomski--line-spacing",
+        "pravo-javna-uprava-prijediplomski--line-spacing",
+        "pravo-opci-pravni-akademski-rad--line-spacing",
+        "pravo-porezni-prijediplomski--line-spacing",
+        "pravo-specijalisticki-pravni-opci--line-spacing"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "body",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "body"
+      ],
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "pravo-upute-oblikovanje-2024",
       "checkId": "page-numbers",
       "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
       "value": true,
       "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice.",
+      "ruleCount": 7,
+      "profileIds": [
+        "pravo-doktorski-pravne-znanosti",
+        "pravo-integrirani-diplomski",
+        "pravo-javna-uprava-diplomski",
+        "pravo-javna-uprava-prijediplomski",
+        "pravo-opci-pravni-akademski-rad",
+        "pravo-porezni-prijediplomski",
+        "pravo-specijalisticki-pravni-opci"
+      ],
+      "ruleIds": [
+        "pravo-doktorski-pravne-znanosti--page-numbers",
+        "pravo-integrirani-diplomski--page-numbers",
+        "pravo-javna-uprava-diplomski--page-numbers",
+        "pravo-javna-uprava-prijediplomski--page-numbers",
+        "pravo-opci-pravni-akademski-rad--page-numbers",
+        "pravo-porezni-prijediplomski--page-numbers",
+        "pravo-specijalisticki-pravni-opci--page-numbers"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [
+        "title-page",
+        "heading"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje vise dijelova rada: title-page, heading"
+      ]
+    },
+    {
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "checkId": "required-sections",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+      "value": [],
+      "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija).",
       "ruleCount": 3,
       "profileIds": [
         "pravo-doktorski-pravne-znanosti",
@@ -21752,9 +24945,137 @@
         "pravo-specijalisticki-pravni-opci"
       ],
       "ruleIds": [
-        "pravo-doktorski-pravne-znanosti--page-numbers",
-        "pravo-opci-pravni-akademski-rad--page-numbers",
-        "pravo-specijalisticki-pravni-opci--page-numbers"
+        "pravo-doktorski-pravne-znanosti--required-sections",
+        "pravo-opci-pravni-akademski-rad--required-sections",
+        "pravo-specijalisticki-pravni-opci--required-sections"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "obligation",
+        "directive"
+      ],
+      "namedScopes": [
+        "heading",
+        "bibliography"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "vise modalnih biljega u istoj recenici: obligation, directive",
+        "recenica imenuje vise dijelova rada: heading, bibliography"
+      ]
+    },
+    {
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "checkId": "required-sections",
+      "sourcePage": "odjeljak 4 (obvezni dijelovi rada) i odjeljak 2 (sadrzaj)",
+      "value": [
+        {
+          "key": "declaration",
+          "label": "izjava o izvornosti",
+          "terms": [
+            "izjava o izvornosti",
+            "izjava autora o izvornosti"
+          ]
+        },
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "body",
+          "label": "središnji dio",
+          "terms": [
+            "sredisnji dio",
+            "razrada",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "izvori i literatura / bibliografija",
+          "terms": [
+            "izvori i literatura",
+            "popis izvora i literature",
+            "popis literature",
+            "bibliografija",
+            "literatura",
+            "references"
+          ]
+        }
+      ],
+      "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija). Nakon naslovne stranice treba biti stranica sa sadrzajem.",
+      "ruleCount": 4,
+      "profileIds": [
+        "pravo-integrirani-diplomski",
+        "pravo-javna-uprava-diplomski",
+        "pravo-javna-uprava-prijediplomski",
+        "pravo-porezni-prijediplomski"
+      ],
+      "ruleIds": [
+        "pravo-integrirani-diplomski--required-sections",
+        "pravo-javna-uprava-diplomski--required-sections",
+        "pravo-javna-uprava-prijediplomski--required-sections",
+        "pravo-porezni-prijediplomski--required-sections"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "obligation",
+        "directive"
+      ],
+      "namedScopes": [
+        "heading",
+        "bibliography",
+        "title-page"
+      ],
+      "needsHuman": true,
+      "reasons": [
+        "vise modalnih biljega u istoj recenici: obligation, directive",
+        "recenica imenuje vise dijelova rada: heading, bibliography, title-page"
+      ]
+    },
+    {
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "checkId": "toc",
+      "sourcePage": "odjeljak 2. Sadrzaj",
+      "value": true,
+      "quote": "Nakon naslovne stranice treba biti stranica sa sadrzajem.",
+      "ruleCount": 4,
+      "profileIds": [
+        "pravo-integrirani-diplomski",
+        "pravo-javna-uprava-diplomski",
+        "pravo-javna-uprava-prijediplomski",
+        "pravo-porezni-prijediplomski"
+      ],
+      "ruleIds": [
+        "pravo-integrirani-diplomski--toc",
+        "pravo-javna-uprava-diplomski--toc",
+        "pravo-javna-uprava-prijediplomski--toc",
+        "pravo-porezni-prijediplomski--toc"
       ],
       "proposedModality": "directive",
       "proposedScope": "whole",

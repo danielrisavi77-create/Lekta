@@ -5,9 +5,9 @@ GENERIRANO (`npm run claim-modality`). Ne uredjuj rucno.
 Upisuje se u `ruleEntry` uz `modalitySource: "human"`. Strojni prijedlog (`mechanical`) NIKAD
 ne nosi ublazen modalitet, pa je sve ublazeno ovdje.
 
-Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
+Jedinica: 383. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
 
-## recenica imenuje vise dijelova rada (104)
+## recenica imenuje vise dijelova rada (115)
 
 - **required-sections** `apuri-pravilnik-diplomski-2025` (prijedlog: directive / whole, 1 pravila)
   - citat: "SAŽETAK je jezgrovit prikaz glavnih teza rada u dužini od najviše pola kartice teksta. [...] UVOD je prvo poglavlje u radu i numerira se brojem 1. [...] LITERATURA je popis korištenih izvora te se numerira kao poglavlje."
@@ -153,6 +153,21 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
 - **justify** `fpzg-upute-akademski-radovi` (prijedlog: directive / body, 11 pravila)
   - citat: "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se numeriraju, ali ne i naslovnice; prethod"
   - razlozi: recenica imenuje vise dijelova rada: title-page, heading, body
+- **page-numbers** `fpzg-upute-akademski-radovi` (prijedlog: directive / whole, 8 pravila)
+  - citat: "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda."
+  - razlozi: recenica imenuje vise dijelova rada: title-page, heading, body
+- **page-numbers** `fpzg-upute-akademski-radovi` (prijedlog: directive / whole, 3 pravila)
+  - citat: "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi rimskim, osnovni tekst arapsk"
+  - razlozi: recenica imenuje vise dijelova rada: title-page, heading, body
+- **required-sections** `fpzg-upute-akademski-radovi` (prijedlog: obligation / whole, 1 pravila)
+  - citat: "Akademski radovi sastoje se od tri cjeline: prethodnoga dijela, osnovnog teksta i zavrsnoga dijela. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj, a u zavrsnome sazetak, kljucne rijeci i pop"
+  - razlozi: recenica imenuje vise dijelova rada: title-page, bibliography, heading
+- **toc** `fpzg-upute-akademski-radovi` (prijedlog: obligation / whole, 8 pravila)
+  - citat: "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj. Kratak sadrzaj daje pregled naslova poglavlja i potpoglavlja."
+  - razlozi: recenica imenuje vise dijelova rada: title-page, heading
+- **toc** `fpzg-upute-akademski-radovi` (prijedlog: obligation / whole, 2 pravila)
+  - citat: "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Akademski radovi sastoje se od prethodnoga dijela, osnovnog teksta i zavrsnoga dijela; obavezni su"
+  - razlozi: recenica imenuje vise dijelova rada: body, bibliography
 - **required-sections** `grad-predlozak-2024` (prijedlog: directive / whole, 2 pravila)
   - citat: "Rad mora sadržavati: Naslovnicu. ... Sažetak na hrvatskom i engleskom jeziku ... Ključne riječi ... Sadržaj ... Tekst rada (počevši s Uvodom) ... Zaključak ... Popis literature"
   - razlozi: recenica imenuje vise dijelova rada: body, bibliography
@@ -198,8 +213,26 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
 - **required-sections** `more-upute-zavrsni-diplomski` (prijedlog: obligation / whole, 1 pravila)
   - citat: "Sadržaj završnog rada mora uključivati sljedeća poglavlja: Uvod, Razrada teme, Zaključci i Literatura."
   - razlozi: recenica imenuje vise dijelova rada: bibliography, heading
-- **page-numbers** `pravo-upute-oblikovanje-2024` (prijedlog: directive / whole, 3 pravila)
+- **page-numbers** `pravo-katedra-trgovacko-upute` (prijedlog: obligation / whole, 1 pravila)
+  - citat: "Stranice Rada moraju biti numerirane na doljnjem desnom rubu stranice (naslovna stranica se ne numerira)."
+  - razlozi: recenica imenuje vise dijelova rada: title-page, heading
+- **toc** `pravo-scsr-upute-poslijediplomski` (prijedlog: directive / whole, 2 pravila)
+  - citat: "U sadrzaju je potrebno navesti popis svih naslova i podnaslova poglavlja s naznakom stranica na kojima se ista nalaze (do trece razine numeracije), ukljucujuci i popis kratica, tablica, slika, literature, priloga; naslov"
+  - razlozi: recenica imenuje vise dijelova rada: bibliography, table, heading
+- **required-sections** `pravo-scsr-upute-zavrsni-2024` (prijedlog: directive / whole, 1 pravila)
+  - citat: "Struktura zavrsnog rada: Sazetak, Uvod, Razrada teme po poglavljima, Zakljucak, Literatura, Prilog."
+  - razlozi: recenica imenuje vise dijelova rada: bibliography, heading
+- **required-sections** `pravo-scsr-upute-zavrsni-2024` (prijedlog: directive / whole, 1 pravila)
+  - citat: "Struktura zavrsnog rada: Sazetak, Uvod, Razrada teme po poglavljima, Zakljucak, Literatura, Prilog. Na drugoj stranici se nalazi sadrzaj; Treca stranica sadrzava naslov, sazetak, kljucne rijeci na hrvatskom i engleskom j"
+  - razlozi: recenica imenuje vise dijelova rada: bibliography, heading
+- **citation-style** `pravo-upute-oblikovanje-2024` (prijedlog: obligation / whole, 7 pravila)
+  - citat: "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane."
+  - razlozi: recenica imenuje vise dijelova rada: footnote, bibliography
+- **page-numbers** `pravo-upute-oblikovanje-2024` (prijedlog: directive / whole, 7 pravila)
   - citat: "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice."
+  - razlozi: recenica imenuje vise dijelova rada: title-page, heading
+- **toc** `pravo-upute-oblikovanje-2024` (prijedlog: directive / whole, 4 pravila)
+  - citat: "Nakon naslovne stranice treba biti stranica sa sadrzajem."
   - razlozi: recenica imenuje vise dijelova rada: title-page, heading
 - **page-count** `pravos-upute-radovi` (prijedlog: directive / whole, 2 pravila)
   - citat: "Diplomski/završni rad treba imati najmanje 20 stranica ne računajući naslovnu stranicu, sažetak, sadržaj, popis literature i priloge."
@@ -322,7 +355,7 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
   - citat: "opseg rada (ne računajući naslovnu stranicu, sadržaj i priloge): prijediplomski studij - između 20-35 stranica, diplomski studij - između 35-60 stranica."
   - razlozi: recenica imenuje vise dijelova rada: title-page, heading
 
-## ublazavanje u citatu (53)
+## ublazavanje u citatu (64)
 
 - **justify** `apuri-pravilnik-diplomski-2025` (prijedlog: directive / body, 1 pravila)
   - citat: "Pismo osnovnog teksta je Times New Roman, a veličina slova 12 tipografskih točaka. Pismo bilježaka pod tekstom i bilježaka na kraju teksta je Times New Roman veličine slova 10 tipografskih točaka. Prored između redaka tr"
@@ -339,6 +372,24 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
 - **line-spacing** `ferit-upute-zavrsni-2010` (prijedlog: recommendation / body, 1 pravila)
   - citat: "Rad se piše na računalu (preporuča se MS Word) uz prored od 1,5. Pri obradi teksta potrebno je koristiti font Times Roman 12 pt (ili 10opi)."
   - razlozi: ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak
+- **citation-style** `fpzg-pravila-navodenja-citiranja` (prijedlog: recommendation / bibliography, 13 pravila)
+  - citat: "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti. Unutartekstna citatnica navodi se u obliku (prezime, godina), npr. (Becker, 2007), (Petak, 2001)."
+  - razlozi: ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak; recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
+- **bibliography-rules** `fpzg-upute-akademski-radovi` (prijedlog: directive / bibliography, 8 pravila)
+  - citat: "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim redom za radove istog autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati s"
+  - razlozi: ublazavanje u citatu (condition): pripisivanje osi je citanje, ne uzorak; vise modalnih biljega u istoj recenici: condition, directive; recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
+- **bibliography-rules** `fpzg-upute-akademski-radovi` (prijedlog: directive / bibliography, 3 pravila)
+  - citat: "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora i kronoloskim r"
+  - razlozi: ublazavanje u citatu (condition): pripisivanje osi je citanje, ne uzorak; vise modalnih biljega u istoj recenici: condition, directive; recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
+- **word-count** `fpzg-upute-akademski-radovi` (prijedlog: permission / whole, 2 pravila)
+  - citat: "Ne smije sadrzavati manje od 10.000 ni vise od 12.000 rijeci (diplomski rad na studiju politologije)."
+  - razlozi: ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak; vise modalnih biljega u istoj recenici: prohibition, permission
+- **word-count** `fpzg-upute-akademski-radovi` (prijedlog: permission / whole, 1 pravila)
+  - citat: "Ne smije sadrzavati manje od 12.000 ni vise od 15.000 rijeci (diplomski rad na studiju novinarstva)."
+  - razlozi: ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak; vise modalnih biljega u istoj recenici: prohibition, permission
+- **word-count** `fpzg-upute-akademski-radovi` (prijedlog: permission / whole, 4 pravila)
+  - citat: "Ne smije sadrzavati manje od 8.000 ni vise od 12.000 rijeci (zavrsni specijalisticki rad)."
+  - razlozi: ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak; vise modalnih biljega u istoj recenici: prohibition, permission
 - **font** `grafos-smjernice-2022` (prijedlog: directive / body, 2 pravila)
   - citat: "Tekst rada mora biti oblikovan na sljedeći način: rad se ispisuje jednostrano na papiru formata A4 (210x297 mm), naslovi i podnaslovi trebaju biti 14 ili 16 pt, podebljano (bold), poravnati uz lijevi rub, veličina slova "
   - razlozi: ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak; vise modalnih biljega u istoj recenici: obligation, permission, directive; recenica imenuje vise dijelova rada: heading, body
@@ -381,6 +432,21 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
 - **required-sections** `oss-upute-drustveni` (prijedlog: recommendation / whole, 2 pravila)
   - citat: "Završni rad sadrži sljedeće dijelove: naslovna stranica, prva stranica, sadržaj, naslov i sažetak (na hrvatskom, odnosno engleskom jeziku), uvod, izlaganje tematike (u pravilu sadrži oko pet analitički strukturiranih dij"
   - razlozi: ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak; recenica imenuje vise dijelova rada: title-page, bibliography, table, heading
+- **required-sections** `pravo-katedra-sociologija-upute` (prijedlog: condition / whole, 1 pravila)
+  - citat: "Pisani rad mora imati: naslovnicu, kratak sadrzaj, uvod, razradu rada po poglavljima, zakljucak, popis literature i popis priloga (ukoliko ih ima)."
+  - razlozi: ublazavanje u citatu (condition): pripisivanje osi je citanje, ne uzorak; vise modalnih biljega u istoj recenici: obligation, condition; recenica imenuje vise dijelova rada: title-page, bibliography, heading
+- **required-sections** `pravo-scsr-upute-poslijediplomski` (prijedlog: recommendation / whole, 1 pravila)
+  - citat: "Okvirna struktura specijalistickog zavrsnog rada: Uvod, Prikaz koncepata i pojmova, Pregledno poglavlje (informacije o problemu), Analiza problema, Prikaz nalaza, Prikaz preporuka, Zakljucak. Obavezni redoslijed dijelova"
+  - razlozi: ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak; vise modalnih biljega u istoj recenici: recommendation, obligation; recenica imenuje vise dijelova rada: heading, title-page, bibliography, table
+- **word-count** `pravo-scsr-upute-poslijediplomski` (prijedlog: directive / whole, 1 pravila)
+  - citat: "Doktorska disertacija duzinom u pravilu treba obuhvatiti izmedju 45 000 i 60 000 rijeci ili izmedju 150 i 200 kartica."
+  - razlozi: ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak; vise modalnih biljega u istoj recenici: recommendation, directive
+- **word-count** `pravo-scsr-upute-poslijediplomski` (prijedlog: directive / whole, 1 pravila)
+  - citat: "Specijalisticki zavrsni rad duzinom u pravilu treba obuhvatiti izmedju 20 000 i 25 000 rijeci (izmedju 70 i 90 kartica)."
+  - razlozi: ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak; vise modalnih biljega u istoj recenici: recommendation, directive
+- **toc** `pravo-scsr-upute-zavrsni-2024` (prijedlog: recommendation / heading, 1 pravila)
+  - citat: "Na drugoj stranici se nalazi sadrzaj rada i ona se ne numerira; preporucuje se decimalna numeracija poglavlja i odlomaka u poglavljima (npr. 1.1., 1.2.)"
+  - razlozi: ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak; recenica imenuje 'heading', a os po naravi mjeri 'whole'
 - **citation-style** `riteh-upute-radovi-2025` (prijedlog: recommendation / bibliography, 2 pravila)
   - citat: "U tekstu se literatura navodi unutar pravokutnih zagrada [1]. Reference se navode pod rednim brojem pod kojim se pojavljuju u popisu, u uglatim zagradama (npr. [1] ili [1, 2, 3, 5])."
   - razlozi: ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak; recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
@@ -598,7 +664,7 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
   - citat: "vrsta papira: standardni A4 papir; margine: - 2,5 cm s gornje i donje strane - 2 cm s desne i 3 cm s lijeve strane; prored: - 1,5 u glavnom dijelu teksta; vrsta slova: Times New Roman; veličina slova: - font 12 u tekstu,"
   - razlozi: recenica imenuje 'footnote', a os po naravi mjeri 'body'
 
-## recenica imenuje 'bibliography', a os po naravi mjeri 'whole' (32)
+## recenica imenuje 'bibliography', a os po naravi mjeri 'whole' (37)
 
 - **required-sections** `arh-pravilnik-diplomski-2013` (prijedlog: directive / bibliography, 1 pravila)
   - citat: "pisani dio s obrazlozenjem projekta, tehnickim pokazateljima i literaturom/izvorima"
@@ -633,6 +699,15 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
 - **page-count** `ffos-upute-diplomski` (prijedlog: directive / bibliography, 1 pravila)
   - citat: "Diplomski rad treba imati između 30 i 50 stranica ne računajući sažetak, sadržaj, popis literature i priloge."
   - razlozi: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
+- **citation-sync-rules** `fpzg-upute-akademski-radovi` (prijedlog: directive / bibliography, 8 pravila)
+  - citat: "Pri izradi diplomskog i zavrsnog specijalistickog rada na Fakultetu politickih znanosti studenti/ce trebaju koristiti citatni stil s citatnicama u obliku unutartekstnih biljezaka (tekstnote), te bibliografskim jedinicama"
+  - razlozi: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
+- **citation-sync-rules** `fpzg-upute-akademski-radovi` (prijedlog: directive / bibliography, 3 pravila)
+  - citat: "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Pri izradi diplomskog i zavrsnog specijalistickog rada na Fakultetu politickih znanosti studenti/c"
+  - razlozi: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
+- **required-sections** `fpzg-upute-akademski-radovi` (prijedlog: obligation / bibliography, 2 pravila)
+  - citat: "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Akademski radovi sastoje se od prethodnoga dijela, osnovnog teksta i zavrsnoga dijela; obavezni su"
+  - razlozi: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
 - **required-sections** `iv-pravilnik-2025` (prijedlog: directive / bibliography, 2 pravila)
   - citat: "Rad mora sadržavati sljedeće cjeline: NASLOVNA STRANICA PRVA; NASLOVNA STRANICA DRUGA; IZJAVA O AKADEMSKOJ ČESTITOSTI; IZJAVA O KORIŠTENJU AUTRORSKOG DJELA; SADRŽAJ; UVOD; TEORIJSKI I/ILI ANALITIČKI DIO (GLAVNI DIO); MET"
   - razlozi: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
@@ -666,6 +741,12 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
 - **page-count** `pmfst-upute-zavrsni` (prijedlog: directive / bibliography, 1 pravila)
   - citat: "Minimalan broj stranica od uvoda do kraja literature je 20, a maksimalan broj je 40 stranica."
   - razlozi: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
+- **required-sections** `pravo-katedra-trgovacko-upute` (prijedlog: directive / bibliography, 1 pravila)
+  - citat: "Rad je nuzno strukturirati tako da sadrzi uvod, sredisnji dio rada, zakljucak te popis literature. Prije uvoda nalazi se sadrzaj rada. Prije uvoda potrebno je navesti popis koristenih kratica."
+  - razlozi: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
+- **required-sections** `pravo-scsr-upute-poslijediplomski` (prijedlog: obligation / bibliography, 1 pravila)
+  - citat: "Svaka doktorska disertacija mora imati sazetak na hrvatskom i engleskom jeziku, opsega do 1 000 rijeci. Okvirna struktura disertacije: Sazetak (HR i EN), Uvod, Pregled relevantne literature, Prikaz glavnih teza, Opis kor"
+  - razlozi: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
 - **citation-style** `unidu-komunikologija-upute-2025` (prijedlog: directive / bibliography, 1 pravila)
   - citat: "Studenti trebaju koristiti harvardski stil citiranja literature."
   - razlozi: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
@@ -697,7 +778,7 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
   - citat: "Literatura se navodi Vancouverskim stilom citiranja. Na literaturu se u tekstu poziva tako da se u okrugloj zagradi navede redni broj pod kojim je referenca u popisu literature."
   - razlozi: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
 
-## vise modalnih biljega u istoj recenici (30)
+## vise modalnih biljega u istoj recenici (33)
 
 - **page-numbers** `adu-montaza-diplomski` (prijedlog: directive / heading, 1 pravila)
   - citat: "Pisani diplomski rad pise se racunalnim programom za pisanje i obradu teksta. Velicine je stranice A4 (210x297 mm). Rubovi (margine) teksta trebaju biti 25 mm, osim lijevog ruba koji treba biti sirok 40 mm. Rad treba pis"
@@ -753,6 +834,9 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
 - **paper-size** `fdmz-upute-2025` (prijedlog: directive / whole, 1 pravila)
   - citat: "Diplomski rad tiska se na papiru standardne velicine (A4, 210x297 mm) sa slobodnim rubnicima od 2,5 cm, s proredom 1,5. Za ispis ostaloga teksta (ostatka rada) treba rabiti pismo velicine 12 tipografskih tocaka vrste Tim"
   - razlozi: vise modalnih biljega u istoj recenici: directive, obligation
+- **required-sections** `fpzg-upute-akademski-radovi` (prijedlog: directive / whole, 7 pravila)
+  - citat: "Akademski radovi sastoje se od tri cjeline: prethodnoga dijela, osnovnog teksta i zavrsnoga dijela. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj, a u zavrsnome sazetak, kljucne rijeci i pop"
+  - razlozi: vise modalnih biljega u istoj recenici: obligation, directive; recenica imenuje vise dijelova rada: title-page, bibliography, heading
 - **font** `fzsri-upute-radovi-2022` (prijedlog: directive / body, 2 pravila)
   - citat: "- završni ili diplomski rad treba biti oblikovan na papiru standardne veličine (A4, 210×297 mm), sa slobodnim rubnicima od 2,5 cm; - tekst je potrebno pisati s obostranim poravnanjem, prored 1,5; - za ispis treba rabiti "
   - razlozi: vise modalnih biljega u istoj recenici: obligation, directive
@@ -777,6 +861,12 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
 - **line-spacing** `medri-naputak-diplomski-farmacija-2025` (prijedlog: directive / body, 1 pravila)
   - citat: "Diplomski rad treba biti pripremljen u pisanom obliku na računalu, sukladno Uputama, na stranici standardne veličine (A4, 210x297 mm), sa slobodnim rubnicima od 2,5 cm i u dvostrukom proredu. Potrebno je rabiti pismo vel"
   - razlozi: vise modalnih biljega u istoj recenici: directive, obligation
+- **required-sections** `pravo-upute-oblikovanje-2024` (prijedlog: directive / whole, 3 pravila)
+  - citat: "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija)."
+  - razlozi: vise modalnih biljega u istoj recenici: obligation, directive; recenica imenuje vise dijelova rada: heading, bibliography
+- **required-sections** `pravo-upute-oblikovanje-2024` (prijedlog: directive / whole, 4 pravila)
+  - citat: "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija). Nakon naslovne stranice treba biti stranica "
+  - razlozi: vise modalnih biljega u istoj recenici: obligation, directive; recenica imenuje vise dijelova rada: heading, bibliography, title-page
 - **heading-rules** `riteh-upute-radovi-2025` (prijedlog: directive / heading, 2 pravila)
   - citat: "Poglavlja moraju biti numerirana i svakom poglavlju treba pridijeliti odgovarajući naslov. Naslov poglavlja piše se velikim slovima veličine 14 pt. bold. Prva razina potpoglavlja piše se malim slovima veličine 12 pt. bol"
   - razlozi: vise modalnih biljega u istoj recenici: obligation, directive
@@ -790,7 +880,7 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
   - citat: "Rad treba pisati na papiru formata A4 (21 x 29,7 cm), a ispisivanje je jednostrano. Pri pisanju koristiti font Times New Roman (12 pt). Poravnanje treba biti obostrano, prored 1,5. Velicine margina: gornja, donja i desna"
   - razlozi: vise modalnih biljega u istoj recenici: directive, obligation; recenica imenuje 'bibliography', a os po naravi mjeri 'whole'
 
-## recenica imenuje 'heading', a os po naravi mjeri 'whole' (27)
+## recenica imenuje 'heading', a os po naravi mjeri 'whole' (30)
 
 - **margins** `adu-montaza-diplomski` (prijedlog: directive / heading, 1 pravila)
   - citat: "Pisani diplomski rad pise se racunalnim programom za pisanje i obradu teksta. Velicine je stranice A4 (210x297 mm). Rubovi (margine) teksta trebaju biti 25 mm, osim lijevog ruba koji treba biti sirok 40 mm. Rad treba pis"
@@ -860,6 +950,15 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
   - razlozi: recenica imenuje 'heading', a os po naravi mjeri 'whole'
 - **required-sections** `pmf-geog-upute-diplomski-2026` (prijedlog: obligation / heading, 1 pravila)
   - citat: "Navedeni dijelovi koji slijede su obvezni dijelovi strukture diplomskog rada, a ne naslovi"
+  - razlozi: recenica imenuje 'heading', a os po naravi mjeri 'whole'
+- **toc** `pravo-katedra-sociologija-upute` (prijedlog: obligation / heading, 1 pravila)
+  - citat: "Kratak sadrzaj mora imati popis svih naslova poglavlja i potpoglavlja s odgovarajucom stranicom na kojoj poglavlje/potpoglavlje pocinje."
+  - razlozi: recenica imenuje 'heading', a os po naravi mjeri 'whole'
+- **toc** `pravo-katedra-trgovacko-upute` (prijedlog: directive / heading, 1 pravila)
+  - citat: "Prije uvoda nalazi se sadrzaj rada sa svim poglavljima i oznacenim brojem stranica za svako poglavlje."
+  - razlozi: recenica imenuje 'heading', a os po naravi mjeri 'whole'
+- **required-sections** `pravo-scsr-upute-diplomski-2021` (prijedlog: directive / heading, 2 pravila)
+  - citat: "Treca stranica sadrzava naslov, sazetak, kljucne rijeci na hrvatskom i engleskom jeziku; Cetvrta stranica sadrzi izjavu o izvornosti"
   - razlozi: recenica imenuje 'heading', a os po naravi mjeri 'whole'
 - **toc** `sumfak-upute-zavrsni-diplomski-2024` (prijedlog: directive / heading, 2 pravila)
   - citat: "Sadržaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj započinju."
@@ -991,7 +1090,7 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
   - citat: "Visina slova 12 tocaka, a naslova 14 podebljano te prored 1,5. Preporuca se font "Arial CE" ili "Times New Roman CE"."
   - razlozi: recenica imenuje 'heading', a os po naravi mjeri 'body'
 
-## nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata (16)
+## nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata (15)
 
 - **citation-style** `effectus-pravilnik-2023` (prijedlog: nema / footnote, 3 pravila)
   - citat: "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju in"
@@ -1002,12 +1101,6 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
 - **citation-style** `fesb-upute-zavrsni-2017` (prijedlog: nema / whole, 1 pravila)
   - citat: "Vlastiti brojcani sustav referenciranja: bilješke se oznacavaju brojevima u uglatim zagradama [1] redoslijedom pojavljivanja, popis izvora na kraju rada istim redoslijedom - sustav je potpuno definiran u dokumentu, ali n"
   - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata; recenica imenuje vise dijelova rada: footnote, bibliography
-- **footnote-size** `ffri-povum-upute` (prijedlog: nema / footnote, 1 pravila)
-  - citat: "Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4. Upotreba tipa slova Times New Roman, velicine 12 i proreda 1,5 u osnovnom tekstu... Poravnavanje teksta po obje margine (ukljucuje i osnovni tekst i biljesk"
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata; recenica imenuje vise dijelova rada: body, footnote
-- **footnote-size** `ffri-povum-upute-diplomski` (prijedlog: nema / footnote, 1 pravila)
-  - citat: "Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4. Upotreba tipa slova Times New Roman, velicine 12 i proreda 1,5 u osnovnom tekstu... Poravnavanje teksta po obje margine (ukljucuje i osnovni tekst i biljesk"
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata; recenica imenuje vise dijelova rada: body, footnote
 - **citation-style** `ffrz-oblikovanje-bakalaureatski-2021` (prijedlog: nema / whole, 1 pravila)
   - citat: "Obnovljeni zivot za citiranje i referiranje koristi sustav unutartekstnih citatnica (In-Text"
   - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata
@@ -1034,6 +1127,9 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
   - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata
 - **heading-rules** `pravo-katedra-radno-socijalno-upute-2021` (prijedlog: nema / heading, 1 pravila)
   - citat: "Cjeline unutar pojedinog rada (glave, odjeljke i pododjeljke) oznacavajte samo arapskim brojevima i njihovom decimalnom kombinacijom, a nikako ne slovima ili rimskim brojevima."
+  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata
+- **citation-style** `pravo-scsr-upute-diplomski-2021` (prijedlog: nema / whole, 2 pravila)
+  - citat: "Referenca u tekstu se stavlja u zagrade, a sadrzi prezime autora i godinu izdanja; prema uputama iz Revije za socijalnu politiku ili iz Ljetopisa socijalnog rada"
   - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata
 - **citation-style** `ufzg-upute-zavrsni-diplomski-2026` (prijedlog: nema / bibliography, 2 pravila)
   - citat: "usklaeno s APA stilom. Detaljnije upute za citiranje literature"
@@ -1063,6 +1159,21 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
   - citat: "\LoadClass[a4paper, twoside,openright]{report} ... \usepackage[a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm]{geometry} ... \usepackage[fontsize=12pt]{scrextend}"
   - razlozi: citat je PREDLOZAK (LaTeX preambula), ne propisna recenica: modalitet ne postoji
 
+## recenica imenuje 'body', a os po naravi mjeri 'whole' (4)
+
+- **margins** `ffzg-kroatistika-diplomski-2026` (prijedlog: directive / body, 1 pravila)
+  - citat: "Osnovni tekst: Times New Roman, 12 p, sve margine 2,5 cm, prored 1,5."
+  - razlozi: recenica imenuje 'body', a os po naravi mjeri 'whole'
+- **section-surgery-rules** `fpzg-upute-akademski-radovi` (prijedlog: directive / body, 8 pravila)
+  - citat: "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda."
+  - razlozi: recenica imenuje 'body', a os po naravi mjeri 'whole'
+- **section-surgery-rules** `fpzg-upute-akademski-radovi` (prijedlog: directive / body, 3 pravila)
+  - citat: "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkam"
+  - razlozi: recenica imenuje 'body', a os po naravi mjeri 'whole'
+- **paper-size** `oss-upute-drustveni` (prijedlog: directive / body, 2 pravila)
+  - citat: "osnovnog teksta rada na papiru A4 formata"
+  - razlozi: recenica imenuje 'body', a os po naravi mjeri 'whole'
+
 ## recenica imenuje 'bibliography', a os po naravi mjeri 'body' (3)
 
 - **justify** `veleknin-upute-diplomski` (prijedlog: directive / bibliography, 1 pravila)
@@ -1074,15 +1185,6 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
 - **justify** `vub-tehnicki-upute-zavrsni` (prijedlog: directive / bibliography, 1 pravila)
   - citat: "Rad treba pisati na papiru formata A4. Pri pisanju koristiti font Times New Roman (12 pt). Poravnanje treba biti obostrano, prored 1,5. Velicine margina: sve cetiri margine trebaju biti 25 mm. Literatura se navodi vancou"
   - razlozi: recenica imenuje 'bibliography', a os po naravi mjeri 'body'
-
-## recenica imenuje 'body', a os po naravi mjeri 'whole' (2)
-
-- **margins** `ffzg-kroatistika-diplomski-2026` (prijedlog: directive / body, 1 pravila)
-  - citat: "Osnovni tekst: Times New Roman, 12 p, sve margine 2,5 cm, prored 1,5."
-  - razlozi: recenica imenuje 'body', a os po naravi mjeri 'whole'
-- **paper-size** `oss-upute-drustveni` (prijedlog: directive / body, 2 pravila)
-  - citat: "osnovnog teksta rada na papiru A4 formata"
-  - razlozi: recenica imenuje 'body', a os po naravi mjeri 'whole'
 
 ## recenica imenuje 'table', a os po naravi mjeri 'whole' (1)
 

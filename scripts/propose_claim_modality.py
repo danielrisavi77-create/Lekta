@@ -186,8 +186,27 @@ def propose_scope(quote: str, value, check_id: str) -> tuple[str, list[str]]:
     return natural, named
 
 
+# IZVEDENI `scored`, isti uvjet kao `isRuleScored` u src/verification/verification-gate.ts.
+# Pohranjena zastavica `scored` NIJE mjerodavna: 275 pravila zadovoljava izvedeni uvjet (dakle veze
+# motor kroz computePublishedRules, demotiju i coverage matricu) a nema `scored: true` u podacima.
+# Dok je izbor isao po zastavici, tih 275 pravila NIKAD nije ni dobilo prijedlog modaliteta, pa su
+# trajno sjedila u zaostatku iako je dio njih strojno razrjesiv. Isti kvar je adversarijalni prolaz
+# nasao u `claim-fields.test.ts` i `verify-source-hashes.mjs`; ovo je treca njegova pojava.
+OFFICIAL_AUTHORITIES = {"binding", "program-page", "general"}
+
+
+def rule_is_scored(entry: dict) -> bool:
+    return (
+        entry.get("status") == "verified"
+        and entry.get("authority") in OFFICIAL_AUTHORITIES
+        and entry.get("sourceId") is not None
+        and entry.get("sourcePage") is not None
+        and entry.get("quote") is not None
+    )
+
+
 def collect_scored() -> list[dict]:
-    """Sva `verified` + `scored` pravila iz staging draftova, s profilom uz svako."""
+    """Sva pravila koja VEZU MOTOR (izvedeni scored), s profilom uz svako."""
     rows: list[dict] = []
     for path in sorted(glob.glob(os.path.join(ROOT, "data", "profiles", "*", "drafts", "*.json"))):
         try:
@@ -198,7 +217,7 @@ def collect_scored() -> list[dict]:
         groups = data["profiles"].items() if "profiles" in data else [(data.get("profileId"), data.get("entries", []))]
         for profile_id, entries in groups:
             for entry in entries or []:
-                if entry.get("status") == "verified" and entry.get("scored"):
+                if rule_is_scored(entry):
                     rows.append({"profileId": profile_id, "entry": entry})
     return rows
 
