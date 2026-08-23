@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "biolos-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font",
       "value": [
         "Times New Roman",
@@ -27,6 +30,9 @@
     },
     {
       "ruleId": "biolos-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": [
         12
@@ -50,6 +56,9 @@
     },
     {
       "ruleId": "biolos-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -100,6 +109,9 @@
     },
     {
       "ruleId": "biolos-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -128,8 +140,8 @@
       "machineCheckable": true,
       "authority": "general",
       "sourceId": "biolos-pravilnik-diplomski-2023",
-      "sourcePage": "Prilog \"Upute za izradu diplomskog rada\", str. 5",
-      "quote": "Rad treba pisati na stranici A4 formata, s rubnicama (marginama) 3 cm lijevo te 2,5 cm desno, gore i dolje, s poravnanjem po objema marginama. Tekst diplomskog rada treba pisati fontom Times New Roman ili Arial (odabrani font mora se koristiti kroz cijeli tekst diplomskog rada) velicine slova 12 pt i uz prored 1,5.",
+      "sourcePage": "Prilog \"Upute za izradu diplomskog rada\", odjeljak 6. Sadrzaj rada (str. 7 PDF-a)",
+      "quote": "Numeriranje stranica započinje na prvoj stranici Uvoda diplomskog rada, a numeriraju se sve stranice s tekstom, slikama i tablicama. Brojevi stranica ispisuju se u donjem desnom kutu.",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",

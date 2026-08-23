@@ -157,6 +157,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -517,6 +520,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -897,6 +903,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -1277,6 +1286,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -1657,6 +1669,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -2037,6 +2052,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -2417,6 +2435,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {

@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "vub-zavrsni-sestrinstvo--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -76,6 +79,9 @@
     },
     {
       "ruleId": "vub-zavrsni-sestrinstvo--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",

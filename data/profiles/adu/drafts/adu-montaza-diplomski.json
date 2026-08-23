@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "adu-montaza-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -129,6 +132,9 @@
     },
     {
       "ruleId": "adu-montaza-diplomski--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",

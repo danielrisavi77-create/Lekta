@@ -108,6 +108,9 @@
     },
     {
       "ruleId": "fdmri-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -129,6 +132,9 @@
     },
     {
       "ruleId": "fdmri-diplomski--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",

@@ -114,6 +114,9 @@
       },
       {
         "ruleId": "pravo-integrirani-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -518,6 +521,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -908,6 +914,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -1298,6 +1307,9 @@
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -2747,6 +2759,9 @@
       },
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [],
         "category": "structure",
@@ -3172,6 +3187,9 @@
       },
       {
         "ruleId": "pravo-specijalisticki-pravni-opci--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [],
         "category": "structure",
@@ -3445,6 +3463,9 @@
       },
       {
         "ruleId": "pravo-doktorski-pravne-znanosti--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [],
         "category": "structure",
