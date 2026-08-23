@@ -280,7 +280,7 @@ def anchor_form(text: str) -> str:
 _anchor_src: dict[str, str] = {}
 
 
-def literal_anchors(full_text: str, quote: str) -> list[str]:
+def literal_anchors(full_text: str, quote: str, min_words: int = ANCHOR_MIN_WORDS) -> list[str]:
     """Najduzi neprekinuti ulomci citata koji DOSLOVNO stoje u izvoru.
 
     Citat po konvenciji smije IZOSTAVLJATI (`ELISION`), pa se dijeli na ulomke i svaki se sidri
@@ -294,10 +294,13 @@ def literal_anchors(full_text: str, quote: str) -> list[str]:
     anchors: list[str] = []
     for segment in ELISION.split(quote):
         words = anchor_form(segment).split()
+        # Od dvorijecnog citata se ne moze traziti cetiri rijeci. `kif` glasi doslovno
+        # "poravnanje - obostrano" i STOJI u izvoru, a prag ga je proglasavao neusidrenim.
+        need = min(min_words, len(words))
         start = 0
         while start < len(words):
             end = 0
-            for stop in range(len(words), start + ANCHOR_MIN_WORDS - 1, -1):
+            for stop in range(len(words), start + need - 1, -1):
                 if " ".join(words[start:stop]) in folded:
                     end = stop
                     break
@@ -587,7 +590,8 @@ AXIS_VOCABULARY: dict[str, str] = {
     "paper-size": r"format\w*\s+(?:papira|rada|stranice)|\ba\s?-?\s?4\b",
     "justify": r"obostran\w*|poravnan\w*|justify",
     "toc": r"\bsadrzaj\w*|kazal\w*",
-    "page-numbers": r"numerir\w*|paginac\w*|broj\w*\s+stranic\w*|oznacen\w*\s+stranic",
+    # Oba reda rijeci: "oznacenim stranicama" (forenzika) i "stranice se oznacavaju".
+    "page-numbers": r"numerir\w*|paginac\w*|broj\w*\s+stranic\w*|oznac\w*\s+stranic\w*|stranic\w*\s+se\s+oznac\w*",
     "required-sections": r"poglavlj\w*|dijelov\w*\s+rada|struktur\w*\s+rada",
     "footnote-size": r"biljesk\w*|fusnot\w*|podnozj\w*",
     "footnote-font": r"biljesk\w*|fusnot\w*|podnozj\w*",
@@ -1043,7 +1047,62 @@ def collect_scored() -> list[dict]:
     return rows
 
 
+# --- NEGATIVNE KONTROLE ZA SUZENJE SUZBIJANJA ---------------------------------------------------
+#
+# Gard koji ne grize gori je od nikakvog. `text_layer_covers_axis` odlucuje hoce li se neusidren
+# citat prijaviti ili sutke odbaciti kao "granica alata", pa mora imati dokaz u OBA smjera. Kontrole
+# su sinteticke i deterministicke (bez datoteka), plus dvije nad STVARNIM dokumentima koji su ovaj
+# gard i motivirali.
+#
+# Pokreni:  python scripts/audit_scored_quotes.py --selftest
+COVERS_SELFTEST: list[tuple[str, str, bool]] = [
+    # (tekstualni sloj, os, ocekuje se da sloj o toj osi GOVORI?)
+    ("margine 2,0 cm (desno, gore i dolje) i 2,5 cm (lijevo)", "margins", True),
+    ("PRILOG 1: obrazac izjave o izvornosti, mentor, datum, potpis studenta", "margins", False),
+    ("Tekst se pise stilom Times New Roman", "font", True),
+    ("PRILOG 2: zaglavlje i sastavnica za radionicke crteze", "font", False),
+    ("Tekst se pise proredom od 1,5 reda", "line-spacing", True),
+    ("Rad se predaje u tri uvezana primjerka", "line-spacing", False),
+    ("Pisano djelo treba biti tiskano na papiru formata A4", "paper-size", True),
+    ("Povjerenstvo ocjenjuje rad u roku od 30 dana", "paper-size", False),
+    ("stranice se oznacavaju na donjem desnom rubu", "page-numbers", True),
+    ("mentor moze biti nastavnik Fakulteta", "page-numbers", False),
+]
+
+
+def selftest() -> int:
+    """Vraca broj promasaja. Nula znaci da suzenje razlikuje oba smjera."""
+    failures = 0
+    for text, axis, expected in COVERS_SELFTEST:
+        got = text_layer_covers_axis(text, axis)
+        if got != expected:
+            failures += 1
+            print(f"  PROMASAJ [{axis}] ocekivano {expected}, dobiveno {got}: {text[:60]}")
+
+    # Stvarni dokumenti koji su gard motivirali. `vuka` ima pravila u TEKSTU (8 stranica) i priloge
+    # kao slike, pa se njegov neusidren citat MORA prijaviti. `forenzika` ima obrnuto: clanci su
+    # skenirani, a tekstualni sloj su prilozi, pa suzbijanje ostaje ispravno.
+    real = [
+        ("data/sources/vuka/vuka-strojarski-upute-2025.pdf", "margins", True),
+        ("data/sources/forenzika/forenzika-pravilnik-diplomski.pdf", "margins", False),
+        ("data/sources/forenzika/forenzika-pravilnik-diplomski.pdf", "font", False),
+    ]
+    for rel, axis, expected in real:
+        if not os.path.exists(os.path.join(ROOT, rel.replace("/", os.sep))):
+            print(f"  PRESKOCENO (nema datoteke): {rel}")
+            continue
+        got = text_layer_covers_axis(document_text(rel), axis)
+        if got != expected:
+            failures += 1
+            print(f"  PROMASAJ [{axis}] {rel}: ocekivano {expected}, dobiveno {got}")
+
+    print(f"negativne kontrole suzenja: {len(COVERS_SELFTEST) + len(real)} slucajeva, promasaja: {failures}")
+    return failures
+
+
 def main() -> None:
+    if "--selftest" in sys.argv:
+        raise SystemExit(1 if selftest() else 0)
     out_flag = sys.argv.index("--json") if "--json" in sys.argv else -1
     out_path = sys.argv[out_flag + 1] if out_flag > -1 else os.path.join(ROOT, "docs", "generated", "scored-quote-audit.json")
 
@@ -1171,11 +1230,15 @@ def main() -> None:
                 # 2026-08-23 kaznjavao vjerno sazimanje natucnickog popisa (75 od 148 nalaza) i
                 # istovremeno propustao citat kojemu vrijednost lezi u parafrazi.
                 anchors = literal_anchors(text, quote)
-                if not anchors:
+                # Vrijednost smije nositi i KRACE sidro: "velicina fonta 10" su tri rijeci, ali nosi
+                # bas ono sto se boduje, pa je jaci dokaz od cetiri opce rijeci. Ispod tri se ne ide,
+                # jer goli broj stoji u svakom dokumentu.
+                value_anchors = literal_anchors(text, quote, 3)
+                if not anchors and value_outside_anchors(entry.get("value"), value_anchors):
                     problems.append(
                         f"citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci {cov:.0%})"
                     )
-                elif value_outside_anchors(entry.get("value"), anchors):
+                elif value_outside_anchors(entry.get("value"), anchors + value_anchors):
                     problems.append(
                         "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata "
                         f"(najdulje sidro: {max(anchors, key=len)[:90]})"
