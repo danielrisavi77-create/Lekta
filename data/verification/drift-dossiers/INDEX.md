@@ -2,21 +2,16 @@
 
 GENERIRANO (`npm run drift-dossiers`) iz `data/verification/scored-value-drift.json`. Ne uredjuj rucno.
 
-Raskorak: 14. Neprimijenjeno: 24. Bez tvrdnje: 82.
-Profila s demotijom zbog raskoraka: 13.
+Raskorak: 0. Neprimijenjeno: 24. Bez tvrdnje: 82.
+Profila s demotijom zbog raskoraka: 0.
 
 - [alu-kiparstvo-diplomski](alu-kiparstvo-diplomski.md) - 1 (unapplied)
 - [alu-konzerviranje-diplomski](alu-konzerviranje-diplomski.md) - 5 (unapplied)
 - [alu-slikarstvo-diplomski](alu-slikarstvo-diplomski.md) - 1 (unapplied)
 - [efos-opci-akademski-rad](efos-opci-akademski-rad.md) - 1 (unapplied)
 - [efst-opci-akademski-rad](efst-opci-akademski-rad.md) - 1 (unapplied)
-- [ffos-germanistika-diplomski](ffos-germanistika-diplomski.md) - 1 (drift)
-- [ffos-germanistika-zavrsni](ffos-germanistika-zavrsni.md) - 1 (drift)
 - [ffos-povijest-diplomski](ffos-povijest-diplomski.md) - 5 (unbacked)
 - [ffos-povijest-zavrsni](ffos-povijest-zavrsni.md) - 5 (unbacked)
-- [ffos-psihologija-diplomski](ffos-psihologija-diplomski.md) - 1 (drift)
-- [ffst-diplomski](ffst-diplomski.md) - 1 (drift)
-- [ffst-zavrsni](ffst-zavrsni.md) - 1 (drift)
 - [fpzpu-diplomski](fpzpu-diplomski.md) - 1 (unapplied)
 - [fpzpu-zavrsni](fpzpu-zavrsni.md) - 1 (unapplied)
 - [pravo-doktorski-pravne-znanosti](pravo-doktorski-pravne-znanosti.md) - 5 (unapplied)
@@ -28,19 +23,11 @@ Profila s demotijom zbog raskoraka: 13.
 - [pravst-zavrsni](pravst-zavrsni.md) - 6 (unbacked)
 - [unizd-anglistika-diplomski](unizd-anglistika-diplomski.md) - 6 (unbacked)
 - [unizd-anglistika-zavrsni](unizd-anglistika-zavrsni.md) - 6 (unbacked)
-- [unizd-arheologija-diplomski](unizd-arheologija-diplomski.md) - 1 (drift)
 - [unizd-ekonomija-diplomski](unizd-ekonomija-diplomski.md) - 6 (unbacked)
 - [unizd-ekonomija-zavrsni](unizd-ekonomija-zavrsni.md) - 6 (unbacked)
-- [unizd-germanistika-zavrsni](unizd-germanistika-zavrsni.md) - 1 (drift)
 - [unizd-kroatistika-diplomski](unizd-kroatistika-diplomski.md) - 6 (unbacked)
 - [unizd-kroatistika-zavrsni](unizd-kroatistika-zavrsni.md) - 6 (unbacked)
 - [unizd-lingvistika-diplomski](unizd-lingvistika-diplomski.md) - 6 (unbacked)
 - [unizd-lingvistika-zavrsni](unizd-lingvistika-zavrsni.md) - 6 (unbacked)
-- [unizd-pomorski-diplomski](unizd-pomorski-diplomski.md) - 1 (drift)
-- [unizd-pomorski-zavrsni](unizd-pomorski-zavrsni.md) - 2 (drift)
-- [unizd-povijest-zavrsni](unizd-povijest-zavrsni.md) - 1 (drift)
 - [unizd-rusistika-diplomski](unizd-rusistika-diplomski.md) - 6 (unbacked)
-- [unizd-sociologija-diplomski](unizd-sociologija-diplomski.md) - 1 (drift)
 - [unizd-sociologija-zavrsni](unizd-sociologija-zavrsni.md) - 6 (unbacked)
-- [vss-diplomski](vss-diplomski.md) - 1 (drift)
-- [vss-zavrsni](vss-zavrsni.md) - 1 (drift)

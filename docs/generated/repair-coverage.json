@@ -919,7 +919,7 @@
     },
     {
       "profileId": "ffos-psihologija-diplomski",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 6
     },
     {
       "profileId": "ffos-informatologija-zavrsni",
@@ -931,11 +931,11 @@
     },
     {
       "profileId": "ffos-germanistika-zavrsni",
-      "offeredOptionCount": 3
+      "offeredOptionCount": 4
     },
     {
       "profileId": "ffos-germanistika-diplomski",
-      "offeredOptionCount": 3
+      "offeredOptionCount": 4
     },
     {
       "profileId": "uaos-zavrsni",
@@ -1023,7 +1023,7 @@
     },
     {
       "profileId": "unizd-arheologija-diplomski",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 6
     },
     {
       "profileId": "unizd-klasicna-filologija-zavrsni",
@@ -1051,7 +1051,7 @@
     },
     {
       "profileId": "unizd-germanistika-zavrsni",
-      "offeredOptionCount": 4
+      "offeredOptionCount": 5
     },
     {
       "profileId": "unizd-germanistika-diplomski",
@@ -1067,7 +1067,7 @@
     },
     {
       "profileId": "unizd-povijest-zavrsni",
-      "offeredOptionCount": 3
+      "offeredOptionCount": 4
     },
     {
       "profileId": "unizd-povijest-diplomski",
@@ -1083,7 +1083,7 @@
     },
     {
       "profileId": "unizd-sociologija-diplomski",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 6
     },
     {
       "profileId": "unizd-lingvistika-zavrsni",
@@ -1099,11 +1099,11 @@
     },
     {
       "profileId": "unizd-pomorski-zavrsni",
-      "offeredOptionCount": 3
+      "offeredOptionCount": 5
     },
     {
       "profileId": "unizd-pomorski-diplomski",
-      "offeredOptionCount": 4
+      "offeredOptionCount": 5
     },
     {
       "profileId": "unizd-ucitelji-diplomski",
@@ -1207,11 +1207,11 @@
     },
     {
       "profileId": "vss-zavrsni",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 6
     },
     {
       "profileId": "vss-diplomski",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 6
     },
     {
       "profileId": "vuka-poslovni-zavrsni",
@@ -10065,6 +10065,14 @@
     },
     {
       "profileId": "ffos-psihologija-diplomski",
+      "ruleId": "ffos-psihologija-diplomski--margins",
+      "fixerId": "margins-fixer",
+      "checkId": "margins",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "ffos-psihologija-diplomski",
       "ruleId": "ffos-psihologija-diplomski--paper-size",
       "fixerId": "paper-size-fixer",
       "checkId": "paper-size",
@@ -10145,6 +10153,14 @@
     },
     {
       "profileId": "ffos-germanistika-zavrsni",
+      "ruleId": "ffos-germanistika-zavrsni--font",
+      "fixerId": "font-fixer",
+      "checkId": "font",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "ffos-germanistika-zavrsni",
       "ruleId": "ffos-germanistika-zavrsni--font-size",
       "fixerId": "font-fixer",
       "checkId": "font-size",
@@ -10164,6 +10180,14 @@
       "ruleId": "ffos-germanistika-zavrsni--margins",
       "fixerId": "margins-fixer",
       "checkId": "margins",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "ffos-germanistika-diplomski",
+      "ruleId": "ffos-germanistika-diplomski--font",
+      "fixerId": "font-fixer",
+      "checkId": "font",
       "templateId": "basic-text-styles",
       "recommended": false
     },
@@ -10841,6 +10865,14 @@
     },
     {
       "profileId": "unizd-arheologija-diplomski",
+      "ruleId": "unizd-arheologija-diplomski--margins",
+      "fixerId": "margins-fixer",
+      "checkId": "margins",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "unizd-arheologija-diplomski",
       "ruleId": "unizd-arheologija-diplomski--justify",
       "fixerId": "alignment-fixer",
       "checkId": "justify",
@@ -11009,6 +11041,14 @@
     },
     {
       "profileId": "unizd-germanistika-zavrsni",
+      "ruleId": "unizd-germanistika-zavrsni--font-size",
+      "fixerId": "font-fixer",
+      "checkId": "font-size",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "unizd-germanistika-zavrsni",
       "ruleId": "unizd-germanistika-zavrsni--line-spacing",
       "fixerId": "line-spacing-fixer",
       "checkId": "line-spacing",
@@ -11145,6 +11185,14 @@
     },
     {
       "profileId": "unizd-povijest-zavrsni",
+      "ruleId": "unizd-povijest-zavrsni--margins",
+      "fixerId": "margins-fixer",
+      "checkId": "margins",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "unizd-povijest-zavrsni",
       "ruleId": "unizd-povijest-zavrsni--font-size",
       "fixerId": "font-fixer",
       "checkId": "font-size",
@@ -11225,6 +11273,14 @@
     },
     {
       "profileId": "unizd-sociologija-diplomski",
+      "ruleId": "unizd-sociologija-diplomski--font-size",
+      "fixerId": "font-fixer",
+      "checkId": "font-size",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "unizd-sociologija-diplomski",
       "ruleId": "unizd-sociologija-diplomski--margins",
       "fixerId": "margins-fixer",
       "checkId": "margins",
@@ -11257,6 +11313,22 @@
     },
     {
       "profileId": "unizd-pomorski-zavrsni",
+      "ruleId": "unizd-pomorski-zavrsni--font",
+      "fixerId": "font-fixer",
+      "checkId": "font",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "unizd-pomorski-zavrsni",
+      "ruleId": "unizd-pomorski-zavrsni--font-size",
+      "fixerId": "font-fixer",
+      "checkId": "font-size",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "unizd-pomorski-zavrsni",
       "ruleId": "unizd-pomorski-zavrsni--line-spacing",
       "fixerId": "line-spacing-fixer",
       "checkId": "line-spacing",
@@ -11284,6 +11356,14 @@
       "ruleId": "unizd-pomorski-diplomski--font",
       "fixerId": "font-fixer",
       "checkId": "font",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "unizd-pomorski-diplomski",
+      "ruleId": "unizd-pomorski-diplomski--font-size",
+      "fixerId": "font-fixer",
+      "checkId": "font-size",
       "templateId": "basic-text-styles",
       "recommended": false
     },
@@ -12241,6 +12321,14 @@
     },
     {
       "profileId": "vss-zavrsni",
+      "ruleId": "vss-zavrsni--margins",
+      "fixerId": "margins-fixer",
+      "checkId": "margins",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "vss-zavrsni",
       "ruleId": "vss-zavrsni--paper-size",
       "fixerId": "paper-size-fixer",
       "checkId": "paper-size",
@@ -12276,6 +12364,14 @@
       "ruleId": "vss-diplomski--line-spacing",
       "fixerId": "line-spacing-fixer",
       "checkId": "line-spacing",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "vss-diplomski",
+      "ruleId": "vss-diplomski--margins",
+      "fixerId": "margins-fixer",
+      "checkId": "margins",
       "templateId": "basic-text-styles",
       "recommended": false
     },
@@ -15895,8 +15991,8 @@
   ],
   "summary": {
     "profileCount": 407,
-    "profileOptionCount": 1736,
-    "rowCount": 1736,
+    "profileOptionCount": 1748,
+    "rowCount": 1748,
     "fixerCount": 5,
     "registeredFixerCount": 31,
     "profileFixerCount": 5,

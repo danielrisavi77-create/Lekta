@@ -440,6 +440,296 @@
       "sourceId": "vss-upute-zavrsni-2023",
       "decidedBy": "Daniel Risavi",
       "note": "odobreno u pregledu popisa docs/ODLUKE_ZA_VLASNIKA.md, skupina A (izvor podupire tvrdnju)"
+    },
+    {
+      "ruleId": "ffos-germanistika-zavrsni--font",
+      "profileId": "ffos-germanistika-zavrsni",
+      "checkId": "font",
+      "decision": "claim",
+      "machineVerdict": "both-present",
+      "claimValue": [
+        "Times New Roman",
+        "Calibri",
+        "Arial"
+      ],
+      "engineValue": [
+        "Times New Roman"
+      ],
+      "sourceId": "ffos-germanistika-upute-2025",
+      "decidedBy": "Daniel Risavi",
+      "note": "izvor doslovno: \"text: times new roman 12 oder calibri 12 oder arial 12\" - dopusta SVA TRI, motor je bio prestrog"
+    },
+    {
+      "ruleId": "ffos-germanistika-diplomski--font",
+      "profileId": "ffos-germanistika-diplomski",
+      "checkId": "font",
+      "decision": "claim",
+      "machineVerdict": "both-present",
+      "claimValue": [
+        "Times New Roman",
+        "Calibri",
+        "Arial"
+      ],
+      "engineValue": [
+        "Times New Roman"
+      ],
+      "sourceId": "ffos-germanistika-upute-diplomski-2025",
+      "decidedBy": "Daniel Risavi",
+      "note": "izvor doslovno: \"text: times new roman 12 oder calibri 12 oder arial 12\" - dopusta SVA TRI, motor je bio prestrog"
+    },
+    {
+      "ruleId": "unizd-arheologija-diplomski--margins",
+      "profileId": "unizd-arheologija-diplomski",
+      "checkId": "margins",
+      "decision": "claim",
+      "machineVerdict": "both-present",
+      "claimValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3,
+        "minimum": false
+      },
+      "engineValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "sourceId": "unizd-arheologija-pravilnik-diplomski-2016",
+      "decidedBy": "Daniel Risavi",
+      "note": "izvor doslovno: \"standardne margine od 3 cm za lijevu i 2,5 cm za ostale strane\""
+    },
+    {
+      "ruleId": "unizd-povijest-zavrsni--margins",
+      "profileId": "unizd-povijest-zavrsni",
+      "checkId": "margins",
+      "decision": "claim",
+      "machineVerdict": "both-present",
+      "claimValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3.5,
+        "minimum": false
+      },
+      "engineValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "sourceId": "unizd-povijest-upute-2012",
+      "decidedBy": "Daniel Risavi",
+      "note": "izvor doslovno: \"margine su: 2,5 cm osim lijeve koja je 3,5 cm\""
+    },
+    {
+      "ruleId": "vss-zavrsni--margins",
+      "profileId": "vss-zavrsni",
+      "checkId": "margins",
+      "decision": "claim",
+      "machineVerdict": "both-present",
+      "claimValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3,
+        "minimum": false
+      },
+      "engineValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "sourceId": "vss-upute-zavrsni-2023",
+      "decidedBy": "Daniel Risavi",
+      "note": "izvor doslovno: \"lijeva margina se podesava na 3,0 cm, a ostale margine na 2,5 cm\""
+    },
+    {
+      "ruleId": "vss-diplomski--margins",
+      "profileId": "vss-diplomski",
+      "checkId": "margins",
+      "decision": "claim",
+      "machineVerdict": "both-present",
+      "claimValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3,
+        "minimum": false
+      },
+      "engineValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "sourceId": "vss-upute-zavrsni-2023",
+      "decidedBy": "Daniel Risavi",
+      "note": "izvor doslovno: \"lijeva margina se podesava na 3,0 cm, a ostale margine na 2,5 cm\""
+    },
+    {
+      "ruleId": "unizd-pomorski-diplomski--font-size",
+      "profileId": "unizd-pomorski-diplomski",
+      "checkId": "font-size",
+      "decision": "claim",
+      "machineVerdict": "both-present",
+      "claimValue": [
+        10
+      ],
+      "engineValue": [
+        12,
+        11
+      ],
+      "sourceId": "unizd-pomorski-pravilnik-upute",
+      "decidedBy": "Daniel Risavi",
+      "note": "izvor doslovno: \"rad treba pisati fontom Merriweather, velicine 10 pt\" - 12 i 11 su NASLOVI i PODNASLOVI, motor ih je bodovao kao tijelo rada"
+    },
+    {
+      "ruleId": "unizd-pomorski-zavrsni--font-size",
+      "profileId": "unizd-pomorski-zavrsni",
+      "checkId": "font-size",
+      "decision": "claim",
+      "machineVerdict": "both-present",
+      "claimValue": [
+        10
+      ],
+      "engineValue": [
+        12,
+        11
+      ],
+      "sourceId": "unizd-pomorski-pravilnik-upute-zavrsni",
+      "decidedBy": "Daniel Risavi",
+      "note": "izvor doslovno: \"rad treba pisati fontom marriweather, velicine 10 pt\" - 12 i 11 su NASLOVI i PODNASLOVI, motor ih je bodovao kao tijelo rada"
+    },
+    {
+      "ruleId": "unizd-pomorski-zavrsni--font",
+      "profileId": "unizd-pomorski-zavrsni",
+      "checkId": "font",
+      "decision": "claim",
+      "machineVerdict": "neither",
+      "claimValue": [
+        "Merriweather"
+      ],
+      "engineValue": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "sourceId": "unizd-pomorski-pravilnik-upute-zavrsni",
+      "decidedBy": "Daniel Risavi",
+      "note": "presuda je bila `neither` jer izvor font pise s tipfelerom (\"marriweather\"); isti fakultet u uputi za diplomski pise \"Merriweather\". Motorove vrijednosti (TNR/Arial/Calibri) u izvoru NE postoje."
+    },
+    {
+      "ruleId": "ffst-zavrsni--margins",
+      "profileId": "ffst-zavrsni",
+      "checkId": "margins",
+      "decision": "claim-wrong",
+      "machineVerdict": "neither",
+      "claimValue": {
+        "top": 2.54,
+        "right": 2.54,
+        "bottom": 2.54,
+        "left": 2.54,
+        "minimum": false
+      },
+      "engineValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
+      "decidedBy": "Daniel Risavi",
+      "note": "Tvrdnja dolazi iz POSTAVKI PAKETA predloska (.docx), ne iz recenice, a predlozak je netaknut Word dokument: pgMar 1440 twips = 2,54 cm sa svih strana (Wordova tvornicka vrijednost), docDefaults sz=22 (11 pt) i line=259 (prored 1,08), bez ijednog imena fonta. Wordova zadana postavka nije fakultetsko pravilo. Skinuto s bodovanja do reverifikacije; NE potvrdjuje motorovih 2,5 cm."
+    },
+    {
+      "ruleId": "ffst-diplomski--margins",
+      "profileId": "ffst-diplomski",
+      "checkId": "margins",
+      "decision": "claim-wrong",
+      "machineVerdict": "neither",
+      "claimValue": {
+        "top": 2.54,
+        "right": 2.54,
+        "bottom": 2.54,
+        "left": 2.54,
+        "minimum": false
+      },
+      "engineValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
+      "decidedBy": "Daniel Risavi",
+      "note": "Tvrdnja dolazi iz POSTAVKI PAKETA predloska (.docx), ne iz recenice, a predlozak je netaknut Word dokument: pgMar 1440 twips = 2,54 cm sa svih strana (Wordova tvornicka vrijednost), docDefaults sz=22 (11 pt) i line=259 (prored 1,08), bez ijednog imena fonta. Wordova zadana postavka nije fakultetsko pravilo. Skinuto s bodovanja do reverifikacije; NE potvrdjuje motorovih 2,5 cm."
+    },
+    {
+      "ruleId": "ffos-psihologija-diplomski--margins",
+      "profileId": "ffos-psihologija-diplomski",
+      "checkId": "margins",
+      "decision": "claim",
+      "machineVerdict": "neither",
+      "claimValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "engineValue": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "sourceId": "ffos-psihologija-diplomski-2015",
+      "decidedBy": "Daniel Risavi",
+      "note": "izvor doslovno: 'Sve cetiri rubnice trebaju biti velicine 25 mm' = 2,5 cm sa svih strana; motorova desna margina od 2 cm nema uporiste. Presuda 'neither' je artefakt jedinice: presuditelj trazi centimetre, izvor pise milimetre."
+    },
+    {
+      "ruleId": "unizd-germanistika-zavrsni--font-size",
+      "profileId": "unizd-germanistika-zavrsni",
+      "checkId": "font-size",
+      "decision": "claim",
+      "machineVerdict": "neither",
+      "claimValue": [
+        12
+      ],
+      "engineValue": [
+        12,
+        11
+      ],
+      "sourceId": "unizd-germanistika-pravilnik-zavrsni-2020",
+      "decidedBy": "Daniel Risavi",
+      "note": "izvor: 'velicina slova 12 (tijelo rada, naslovi podpoglavlja)'; 11 pt pripada DUGIM CITATIMA ('citati ... dulji od pet redaka ... velicina slova: 11 ili 12'), 14 pt naslovima poglavlja, 10 pt fusnotama. Motorov [12,11] je citatnu velicinu bodovao kao tijelo rada."
+    },
+    {
+      "ruleId": "unizd-sociologija-diplomski--font-size",
+      "profileId": "unizd-sociologija-diplomski",
+      "checkId": "font-size",
+      "decision": "claim",
+      "machineVerdict": "neither",
+      "claimValue": [
+        12
+      ],
+      "engineValue": [
+        12,
+        11
+      ],
+      "sourceId": "unizd-sociologija-upute-dipr-2014",
+      "decidedBy": "Daniel Risavi",
+      "note": "izvor doslovno: 'pismo (font): Times New Roman, velicina 12'. Broja 11 u uputi nema; motorov [12,11] nema uporiste."
     }
   ]
 }

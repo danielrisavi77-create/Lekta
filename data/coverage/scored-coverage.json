@@ -1022,21 +1022,21 @@
     },
     {
       "profileId": "ffst-diplomski",
-      "scoredMachineCheckable": 7,
-      "scoredTotal": 7,
+      "scoredMachineCheckable": 6,
+      "scoredTotal": 6,
       "machineCheckable": 7,
-      "advisory": 0,
-      "ratio": 1,
+      "advisory": 1,
+      "ratio": 0.8571428571428571,
       "state": "scored",
       "lastVerified": "2026-07-28"
     },
     {
       "profileId": "ffst-zavrsni",
-      "scoredMachineCheckable": 7,
-      "scoredTotal": 7,
+      "scoredMachineCheckable": 6,
+      "scoredTotal": 6,
       "machineCheckable": 7,
-      "advisory": 0,
-      "ratio": 1,
+      "advisory": 1,
+      "ratio": 0.8571428571428571,
       "state": "scored",
       "lastVerified": "2026-07-28"
     },
@@ -4101,8 +4101,8 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "scoredMachineCheckable": 2134,
-  "scoredTotal": 2207,
+  "scoredMachineCheckable": 2132,
+  "scoredTotal": 2205,
   "scoredNonMachineCheckable": 73,
   "nonMachineCheckableByCheckId": {
     "citation-style": 49,

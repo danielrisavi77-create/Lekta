@@ -412,14 +412,12 @@
     "page-numbers"
   ],
   "ffos-germanistika-diplomski": [
-    "font",
     "justify",
     "paper-size",
     "toc",
     "page-numbers"
   ],
   "ffos-germanistika-zavrsni": [
-    "font",
     "justify",
     "paper-size",
     "toc",
@@ -446,7 +444,6 @@
     "page-numbers"
   ],
   "ffos-psihologija-diplomski": [
-    "margins",
     "toc",
     "page-numbers"
   ],
@@ -1633,7 +1630,6 @@
     "font",
     "font-size",
     "line-spacing",
-    "margins",
     "toc",
     "page-numbers"
   ],
@@ -1700,7 +1696,6 @@
     "page-numbers"
   ],
   "unizd-germanistika-zavrsni": [
-    "font-size",
     "justify",
     "toc",
     "page-numbers"
@@ -1738,14 +1733,11 @@
     "page-numbers"
   ],
   "unizd-pomorski-diplomski": [
-    "font-size",
     "margins",
     "toc",
     "page-numbers"
   ],
   "unizd-pomorski-zavrsni": [
-    "font",
-    "font-size",
     "margins",
     "toc",
     "page-numbers"
@@ -1770,7 +1762,6 @@
     "font",
     "font-size",
     "line-spacing",
-    "margins",
     "justify",
     "toc",
     "page-numbers"
@@ -1786,7 +1777,6 @@
     "page-numbers"
   ],
   "unizd-sociologija-diplomski": [
-    "font-size",
     "toc",
     "page-numbers"
   ],
@@ -1922,11 +1912,9 @@
     "page-numbers"
   ],
   "vss-diplomski": [
-    "margins",
     "toc"
   ],
   "vss-zavrsni": [
-    "margins",
     "toc"
   ],
   "vub-diplomski": [

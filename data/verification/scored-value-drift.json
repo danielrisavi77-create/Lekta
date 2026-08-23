@@ -4,54 +4,12 @@
   "schemaVersion": 1,
   "counts": {
     "unapplied": 24,
-    "drift": 14,
     "unbacked": 82,
     "citation:non-canonical-token": 26,
     "citation:not-applied": 6,
-    "profilesDemoted": 13
+    "profilesDemoted": 0
   },
-  "demotedByProfile": {
-    "ffos-germanistika-diplomski": [
-      "font"
-    ],
-    "ffos-germanistika-zavrsni": [
-      "font"
-    ],
-    "ffos-psihologija-diplomski": [
-      "margins"
-    ],
-    "ffst-diplomski": [
-      "margins"
-    ],
-    "ffst-zavrsni": [
-      "margins"
-    ],
-    "unizd-arheologija-diplomski": [
-      "margins"
-    ],
-    "unizd-germanistika-zavrsni": [
-      "font-size"
-    ],
-    "unizd-pomorski-diplomski": [
-      "font-size"
-    ],
-    "unizd-pomorski-zavrsni": [
-      "font",
-      "font-size"
-    ],
-    "unizd-povijest-zavrsni": [
-      "margins"
-    ],
-    "unizd-sociologija-diplomski": [
-      "font-size"
-    ],
-    "vss-diplomski": [
-      "margins"
-    ],
-    "vss-zavrsni": [
-      "margins"
-    ]
-  },
+  "demotedByProfile": {},
   "findings": [
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
@@ -194,50 +152,6 @@
       "claimValue": 1.5
     },
     {
-      "profileId": "ffst-zavrsni",
-      "ruleId": "ffst-zavrsni--margins",
-      "checkId": "margins",
-      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
-      "sourcePage": "Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)",
-      "kind": "drift",
-      "claimValue": {
-        "top": 2.54,
-        "right": 2.54,
-        "bottom": 2.54,
-        "left": 2.54,
-        "minimum": false
-      },
-      "scoredValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5,
-        "minimum": false
-      }
-    },
-    {
-      "profileId": "ffst-diplomski",
-      "ruleId": "ffst-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
-      "sourcePage": "Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)",
-      "kind": "drift",
-      "claimValue": {
-        "top": 2.54,
-        "right": 2.54,
-        "bottom": 2.54,
-        "left": 2.54,
-        "minimum": false
-      },
-      "scoredValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5,
-        "minimum": false
-      }
-    },
-    {
       "profileId": "pravst-zavrsni",
       "ruleId": null,
       "checkId": "font",
@@ -446,60 +360,6 @@
       ]
     },
     {
-      "profileId": "ffos-psihologija-diplomski",
-      "ruleId": "ffos-psihologija-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "ffos-psihologija-diplomski-2015",
-      "sourcePage": "cijeli dokument",
-      "kind": "drift",
-      "claimValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5,
-        "minimum": false
-      },
-      "scoredValue": {
-        "top": 2.5,
-        "right": 2,
-        "bottom": 2.5,
-        "left": 2.5,
-        "minimum": false
-      }
-    },
-    {
-      "profileId": "ffos-germanistika-zavrsni",
-      "ruleId": "ffos-germanistika-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "ffos-germanistika-upute-2025",
-      "sourcePage": "S2.2 \"Allgemeine Textformatierung\"",
-      "kind": "drift",
-      "claimValue": [
-        "Times New Roman",
-        "Calibri",
-        "Arial"
-      ],
-      "scoredValue": [
-        "Times New Roman"
-      ]
-    },
-    {
-      "profileId": "ffos-germanistika-diplomski",
-      "ruleId": "ffos-germanistika-diplomski--font",
-      "checkId": "font",
-      "sourceId": "ffos-germanistika-upute-diplomski-2025",
-      "sourcePage": "S2.2 \"Allgemeine Textformatierung\"",
-      "kind": "drift",
-      "claimValue": [
-        "Times New Roman",
-        "Calibri",
-        "Arial"
-      ],
-      "scoredValue": [
-        "Times New Roman"
-      ]
-    },
-    {
       "profileId": "unizd-kroatistika-zavrsni",
       "ruleId": null,
       "checkId": "font",
@@ -722,28 +582,6 @@
       ]
     },
     {
-      "profileId": "unizd-arheologija-diplomski",
-      "ruleId": "unizd-arheologija-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "unizd-arheologija-pravilnik-diplomski-2016",
-      "sourcePage": "Clanak 7 (diplomski)",
-      "kind": "drift",
-      "claimValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 3,
-        "minimum": false
-      },
-      "scoredValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5,
-        "minimum": false
-      }
-    },
-    {
       "profileId": "unizd-anglistika-zavrsni",
       "ruleId": null,
       "checkId": "font",
@@ -858,43 +696,6 @@
       ]
     },
     {
-      "profileId": "unizd-germanistika-zavrsni",
-      "ruleId": "unizd-germanistika-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-germanistika-pravilnik-zavrsni-2020",
-      "sourcePage": "Prilog 2, \"Izgled zavrsnog rada\"",
-      "kind": "drift",
-      "claimValue": [
-        12
-      ],
-      "scoredValue": [
-        12,
-        11
-      ]
-    },
-    {
-      "profileId": "unizd-povijest-zavrsni",
-      "ruleId": "unizd-povijest-zavrsni--margins",
-      "checkId": "margins",
-      "sourceId": "unizd-povijest-upute-2012",
-      "sourcePage": "Upute 2012",
-      "kind": "drift",
-      "claimValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 3.5,
-        "minimum": false
-      },
-      "scoredValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5,
-        "minimum": false
-      }
-    },
-    {
       "profileId": "unizd-sociologija-zavrsni",
       "ruleId": null,
       "checkId": "font",
@@ -949,21 +750,6 @@
       "kind": "unbacked",
       "scoredValue": [
         "A4"
-      ]
-    },
-    {
-      "profileId": "unizd-sociologija-diplomski",
-      "ruleId": "unizd-sociologija-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-sociologija-upute-dipr-2014",
-      "sourcePage": "Odjeljak 5, \"Upute za pisanje diplomskoga rada\"",
-      "kind": "drift",
-      "claimValue": [
-        12
-      ],
-      "scoredValue": [
-        12,
-        11
       ]
     },
     {
@@ -1136,96 +922,6 @@
       "scoredValue": [
         "A4"
       ]
-    },
-    {
-      "profileId": "unizd-pomorski-zavrsni",
-      "ruleId": "unizd-pomorski-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "unizd-pomorski-pravilnik-upute-zavrsni",
-      "sourcePage": "Upute zavrsni",
-      "kind": "drift",
-      "claimValue": [
-        "Merriweather"
-      ],
-      "scoredValue": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ]
-    },
-    {
-      "profileId": "unizd-pomorski-zavrsni",
-      "ruleId": "unizd-pomorski-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-pomorski-pravilnik-upute-zavrsni",
-      "sourcePage": "Upute zavrsni",
-      "kind": "drift",
-      "claimValue": [
-        10
-      ],
-      "scoredValue": [
-        12,
-        11
-      ]
-    },
-    {
-      "profileId": "unizd-pomorski-diplomski",
-      "ruleId": "unizd-pomorski-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-pomorski-pravilnik-upute",
-      "sourcePage": "Upute diplomski",
-      "kind": "drift",
-      "claimValue": [
-        10
-      ],
-      "scoredValue": [
-        12,
-        11
-      ]
-    },
-    {
-      "profileId": "vss-zavrsni",
-      "ruleId": "vss-zavrsni--margins",
-      "checkId": "margins",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "sourcePage": "Odjeljak \"1.1. IZGLED ZAVRSNOG RADA\", str. 5",
-      "kind": "drift",
-      "claimValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 3,
-        "minimum": false
-      },
-      "scoredValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5,
-        "minimum": false
-      }
-    },
-    {
-      "profileId": "vss-diplomski",
-      "ruleId": "vss-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "vss-upute-zavrsni-2023",
-      "sourcePage": "Odjeljak \"1.1. IZGLED ZAVRSNOG RADA\", str. 5",
-      "kind": "drift",
-      "claimValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 3,
-        "minimum": false
-      },
-      "scoredValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5,
-        "minimum": false
-      }
     },
     {
       "profileId": "alu-slikarstvo-diplomski",

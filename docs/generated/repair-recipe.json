@@ -8813,6 +8813,24 @@
     ],
     "items": [
       {
+        "ruleId": "ffos-germanistika-diplomski--font",
+        "fixerId": "font-fixer",
+        "label": "Font (tri opcije)",
+        "scope": "profil",
+        "target": "Times New Roman",
+        "params": {
+          "fontName": "Times New Roman"
+        },
+        "source": {
+          "id": "ffos-germanistika-upute-diplomski-2025",
+          "title": "Upute za izradu zavrsnih/diplomskih radova, srpanj 2025 (Odsjek za njemacki jezik i knjizevnost, FFOS)",
+          "url": "https://www.ffos.unios.hr/wp-content/uploads/2025/07/upute-za-izradu-zavrsnih-radova-germanistika_srpanj-2025.pdf (zavrsni) / .../upute-za-izradu-diplomskih-radova-germanistika_srpanj-2025.pdf (diplomski)"
+        },
+        "sourcePage": "S2.2 \"Allgemeine Textformatierung\"",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
         "ruleId": "ffos-germanistika-diplomski--font-size",
         "fixerId": "font-fixer",
         "label": "Velicina slova",
@@ -8901,6 +8919,24 @@
       "final"
     ],
     "items": [
+      {
+        "ruleId": "ffos-germanistika-zavrsni--font",
+        "fixerId": "font-fixer",
+        "label": "Font (tri opcije)",
+        "scope": "profil",
+        "target": "Times New Roman",
+        "params": {
+          "fontName": "Times New Roman"
+        },
+        "source": {
+          "id": "ffos-germanistika-upute-2025",
+          "title": "Upute za izradu zavrsnih/diplomskih radova, srpanj 2025 (Odsjek za njemacki jezik i knjizevnost, FFOS)",
+          "url": "https://www.ffos.unios.hr/wp-content/uploads/2025/07/upute-za-izradu-zavrsnih-radova-germanistika_srpanj-2025.pdf (zavrsni) / .../upute-za-izradu-diplomskih-radova-germanistika_srpanj-2025.pdf (diplomski)"
+        },
+        "sourcePage": "S2.2 \"Allgemeine Textformatierung\"",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
       {
         "ruleId": "ffos-germanistika-zavrsni--font-size",
         "fixerId": "font-fixer",
@@ -9314,6 +9350,27 @@
         "target": "prored 1,5",
         "params": {
           "multiplier": 1.5
+        },
+        "source": {
+          "id": "ffos-psihologija-diplomski-2015",
+          "title": "Upute za oblikovanje diplomskog rada, 2015 (Odsjek za psihologiju, FFOS)",
+          "url": "https://www.ffos.unios.hr/wp-content/uploads/2021/03/Psihologija_upute-za-oblikovanje-diplomskog-rada-2015.pdf"
+        },
+        "sourcePage": "cijeli dokument",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "ffos-psihologija-diplomski--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine (uniformno 2,5cm)",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
         },
         "source": {
           "id": "ffos-psihologija-diplomski-2015",
@@ -38251,6 +38308,27 @@
         "lastVerified": "2026-07-28"
       },
       {
+        "ruleId": "unizd-arheologija-diplomski--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine (lijeva 3cm)",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 3 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3
+        },
+        "source": {
+          "id": "unizd-arheologija-pravilnik-diplomski-2016",
+          "title": "Pravilnik o zavrsnom/diplomskom radu, listopad 2016 (Odjel za arheologiju, diplomski primjerak)",
+          "url": "https://arheologija.unizd.hr/.../PRAVILNIK - dIPLOMSKI rad_1.pdf"
+        },
+        "sourcePage": "Clanak 7 (diplomski)",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
         "ruleId": "unizd-arheologija-diplomski--justify",
         "fixerId": "alignment-fixer",
         "label": "Poravnanje",
@@ -39485,6 +39563,24 @@
         "lastVerified": "2026-07-28"
       },
       {
+        "ruleId": "unizd-germanistika-zavrsni--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova (tijelo)",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "source": {
+          "id": "unizd-germanistika-pravilnik-zavrsni-2020",
+          "title": "Pravilnik o izradi zavrsnog rada na dvopredmetnom preddiplomskom studiju njemackog jezika i knjizevnosti",
+          "url": "https://germanistika.unizd.hr/Portals/9/zdoc/Pravilnik_%20Zavrsni%20rad_2020.pdf"
+        },
+        "sourcePage": "Prilog 2, \"Izgled zavrsnog rada\"",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
         "ruleId": "unizd-germanistika-zavrsni--line-spacing",
         "fixerId": "line-spacing-fixer",
         "label": "Prored",
@@ -40461,6 +40557,24 @@
         "lastVerified": "2026-07-28"
       },
       {
+        "ruleId": "unizd-pomorski-diplomski--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        },
+        "source": {
+          "id": "unizd-pomorski-pravilnik-upute",
+          "title": "Upute za pisanje zavrsnog/diplomskog rada (Pomorski odjel, Sveuciliste u Zadru)",
+          "url": "https://pomorskiodjel.unizd.hr/Portals/1/upute%20diplomski_2.pdf (diplomski) / Upute%20zavrsni_1.pdf (zavrsni)"
+        },
+        "sourcePage": "Upute diplomski",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
         "ruleId": "unizd-pomorski-diplomski--line-spacing",
         "fixerId": "line-spacing-fixer",
         "label": "Prored",
@@ -40547,6 +40661,42 @@
       "final"
     ],
     "items": [
+      {
+        "ruleId": "unizd-pomorski-zavrsni--font",
+        "fixerId": "font-fixer",
+        "label": "Font",
+        "scope": "profil",
+        "target": "Merriweather",
+        "params": {
+          "fontName": "Merriweather"
+        },
+        "source": {
+          "id": "unizd-pomorski-pravilnik-upute-zavrsni",
+          "title": "Upute za pisanje zavrsnog rada (Pomorski odjel, Sveuciliste u Zadru)",
+          "url": "https://pomorskiodjel.unizd.hr/Portals/1/Upute%20zavrsni_1.pdf"
+        },
+        "sourcePage": "Upute zavrsni",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "unizd-pomorski-zavrsni--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        },
+        "source": {
+          "id": "unizd-pomorski-pravilnik-upute-zavrsni",
+          "title": "Upute za pisanje zavrsnog rada (Pomorski odjel, Sveuciliste u Zadru)",
+          "url": "https://pomorskiodjel.unizd.hr/Portals/1/Upute%20zavrsni_1.pdf"
+        },
+        "sourcePage": "Upute zavrsni",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
       {
         "ruleId": "unizd-pomorski-zavrsni--line-spacing",
         "fixerId": "line-spacing-fixer",
@@ -41062,6 +41212,27 @@
         "lastVerified": "2026-07-28"
       },
       {
+        "ruleId": "unizd-povijest-zavrsni--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine (lijeva 3,5cm)",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 3,5 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3.5
+        },
+        "source": {
+          "id": "unizd-povijest-upute-2012",
+          "title": "Upute za pisanje zavrsnog/diplomskog rada",
+          "url": "https://povijest.unizd.hr/Portals/3/Dokumenti/05_PREDDIPLOMSKI_Zavrsni%20rad_Upute_za_pisanje_2012%20(1).pdf (zavrsni) / 10_DIPLOMSKI_... (diplomski)"
+        },
+        "sourcePage": "Upute 2012",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
         "ruleId": "unizd-povijest-zavrsni--font-size",
         "fixerId": "font-fixer",
         "label": "Velicina slova (preporuka)",
@@ -41433,6 +41604,24 @@
         "target": "Times New Roman",
         "params": {
           "fontName": "Times New Roman"
+        },
+        "source": {
+          "id": "unizd-sociologija-upute-dipr-2014",
+          "title": "Upute za prijavu i izradu diplomskoga rada",
+          "url": "https://www.unizd.hr/Portals/13/NASTAVNI_MATERIJALI/Upute%20DipR%202014%20cultsoc.pdf"
+        },
+        "sourcePage": "Odjeljak 5, \"Upute za pisanje diplomskoga rada\"",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "unizd-sociologija-diplomski--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
         },
         "source": {
           "id": "unizd-sociologija-upute-dipr-2014",
@@ -44789,6 +44978,27 @@
         "lastVerified": "2026-07-27"
       },
       {
+        "ruleId": "vss-diplomski--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine (lijeva 3cm zbog uveza)",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 3 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3
+        },
+        "source": {
+          "id": "vss-upute-zavrsni-2023",
+          "title": "Upute za izradu zavrsnog rada (Veleuciliste studija sigurnosti, lipanj 2023)",
+          "url": "https://www.ssbm.ch/dokument/Upute%20za%20izradu%20zavrsnog%20rada.pdf?_t=1699439120"
+        },
+        "sourcePage": "Odjeljak \"1.1. IZGLED ZAVRSNOG RADA\", str. 5",
+        "authority": "general",
+        "lastVerified": "2026-07-27"
+      },
+      {
         "ruleId": "vss-diplomski--paper-size",
         "fixerId": "paper-size-fixer",
         "label": "Format papira A4",
@@ -44901,6 +45111,27 @@
         "target": "prored 1,5",
         "params": {
           "multiplier": 1.5
+        },
+        "source": {
+          "id": "vss-upute-zavrsni-2023",
+          "title": "Upute za izradu zavrsnog rada (Veleuciliste studija sigurnosti, lipanj 2023)",
+          "url": "https://www.ssbm.ch/dokument/Upute%20za%20izradu%20zavrsnog%20rada.pdf?_t=1699439120"
+        },
+        "sourcePage": "Odjeljak \"1.1. IZGLED ZAVRSNOG RADA\", str. 5",
+        "authority": "general",
+        "lastVerified": "2026-07-27"
+      },
+      {
+        "ruleId": "vss-zavrsni--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine (lijeva 3cm zbog uveza)",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 3 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3
         },
         "source": {
           "id": "vss-upute-zavrsni-2023",

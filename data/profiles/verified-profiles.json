@@ -28078,7 +28078,7 @@
       "requireA4": true,
       "margins": {
         "top": 2.5,
-        "right": 2,
+        "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
       },
@@ -28409,7 +28409,9 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman"
+        "Times New Roman",
+        "Calibri",
+        "Arial"
       ],
       "size": [
         12
@@ -28521,7 +28523,9 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman"
+        "Times New Roman",
+        "Calibri",
+        "Arial"
       ],
       "size": [
         12
@@ -30749,7 +30753,7 @@
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
-        "left": 2.5
+        "left": 3
       }
     },
     "facts": [],
@@ -31408,8 +31412,7 @@
         "Times New Roman"
       ],
       "size": [
-        12,
-        11
+        12
       ],
       "spacing": 1.5,
       "requireA4": true,
@@ -31798,7 +31801,7 @@
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
-        "left": 2.5
+        "left": 3.5
       },
       "footnoteSize": [
         10
@@ -32175,8 +32178,7 @@
         "Times New Roman"
       ],
       "size": [
-        12,
-        11
+        12
       ],
       "spacing": 1.5,
       "requireA4": true,
@@ -32554,13 +32556,10 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
+        "Merriweather"
       ],
       "size": [
-        12,
-        11
+        10
       ],
       "spacing": 1.5,
       "requireA4": true,
@@ -32649,8 +32648,7 @@
         "Merriweather"
       ],
       "size": [
-        12,
-        11
+        10
       ],
       "spacing": 1.5,
       "requireA4": true,
@@ -35013,7 +35011,7 @@
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
-        "left": 2.5
+        "left": 3
       },
       "requirePageNumbers": true
     },
@@ -35087,7 +35085,7 @@
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
-        "left": 2.5
+        "left": 3
       },
       "requirePageNumbers": true
     },
