@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "rules": 2205,
-  "units": 1396,
+  "units": 1395,
   "proposals": [
     {
       "sourceId": "adu-montaza-diplomski",
@@ -155,10 +155,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation",
@@ -188,10 +190,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation",
@@ -2357,10 +2361,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: obligation, directive"
@@ -2389,10 +2395,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: obligation, directive"
@@ -2419,10 +2427,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: obligation, directive"
@@ -2465,9 +2475,9 @@
     {
       "sourceId": "biolos-pravilnik-diplomski-2023",
       "checkId": "page-numbers",
-      "sourcePage": "Prilog \"Upute za izradu diplomskog rada\", str. 5",
+      "sourcePage": "Prilog \"Upute za izradu diplomskog rada\", odjeljak 6. Sadrzaj rada (str. 7 PDF-a)",
       "value": true,
-      "quote": "Rad treba pisati na stranici A4 formata, s rubnicama (marginama) 3 cm lijevo te 2,5 cm desno, gore i dolje, s poravnanjem po objema marginama. Tekst diplomskog rada treba pisati fontom Times New Roman ili Arial (odabrani font mora se koristiti kroz cijeli tekst diplomskog rada) velicine slova 12 pt i uz prored 1,5.",
+      "quote": "Numeriranje stranica započinje na prvoj stranici Uvoda diplomskog rada, a numeriraju se sve stranice s tekstom, slikama i tablicama. Brojevi stranica ispisuju se u donjem desnom kutu.",
       "ruleCount": 1,
       "profileIds": [
         "biolos-diplomski"
@@ -2476,20 +2486,23 @@
         "biolos-diplomski--page-numbers"
       ],
       "proposedModality": "directive",
-      "proposedScope": "whole",
+      "proposedScope": "table",
       "modalityMarks": [
-        "directive",
-        "obligation"
+        "bare-indicative"
       ],
-      "namedScopes": [],
+      "namedScopes": [
+        "table"
+      ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
-        "vise modalnih biljega u istoj recenici: directive, obligation"
+        "recenica imenuje 'table', a os po naravi mjeri 'whole'"
       ]
     },
     {
@@ -2513,10 +2526,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation"
@@ -2651,9 +2666,9 @@
     {
       "sourceId": "biolos-pravilnik-zavrsni-2023",
       "checkId": "page-numbers",
-      "sourcePage": "Prilog \"Upute za izradu zavrsnog rada\", str. 4",
+      "sourcePage": "Prilog \"Upute za izradu zavrsnog rada\", odjeljak 6. Sadrzaj rada (str. 6 PDF-a)",
       "value": true,
-      "quote": "Rad treba pisati na papiru A4 formata, s rubnicama (marginama) 3 cm lijevo te 2,5 cm desno, gore i dolje, s poravnanjem po objema marginama. Fontom Times New Roman ili Arial velicine slova 12 pt te proreda 1,5.",
+      "quote": "Numeriranje stranica započinje na prvoj stranici Uvoda završnog rada, a numeriraju se sve stranice s tekstom, slikama i tablicama. Brojevi stranica ispisuju se u donjem desnom kutu.",
       "ruleCount": 1,
       "profileIds": [
         "biolos-zavrsni"
@@ -2662,11 +2677,13 @@
         "biolos-zavrsni--page-numbers"
       ],
       "proposedModality": "directive",
-      "proposedScope": "whole",
+      "proposedScope": "table",
       "modalityMarks": [
-        "directive"
+        "bare-indicative"
       ],
-      "namedScopes": [],
+      "namedScopes": [
+        "table"
+      ],
       "writtenModality": {
         "count": 1,
         "sources": [
@@ -2674,8 +2691,10 @@
         ]
       },
       "resolved": true,
-      "needsHuman": false,
-      "reasons": []
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje 'table', a os po naravi mjeri 'whole'"
+      ]
     },
     {
       "sourceId": "biolos-pravilnik-zavrsni-2023",
@@ -2731,10 +2750,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: obligation, directive"
@@ -2763,10 +2784,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: obligation, directive"
@@ -2795,10 +2818,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: obligation, directive"
@@ -6222,10 +6247,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation"
@@ -6464,10 +6491,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation"
@@ -6997,10 +7026,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation"
@@ -7027,10 +7058,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation"
@@ -7214,10 +7247,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation"
@@ -7244,10 +7279,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation"
@@ -7436,10 +7473,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation"
@@ -7529,10 +7568,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation"
@@ -10719,13 +10760,13 @@
       "reasons": []
     },
     {
-      "sourceId": "ffri-pravilnik-zavrsni-2023",
+      "sourceId": "ffri-pravilnik-zavrsni-2026",
       "checkId": "font",
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
       "value": [
         "Times New Roman"
       ],
-      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano; Obrojčavanje stranica: u podnožju, desno, počevsi od Uvoda.",
       "ruleCount": 1,
       "profileIds": [
         "ffri-zavrsni"
@@ -10750,11 +10791,11 @@
       "reasons": []
     },
     {
-      "sourceId": "ffri-pravilnik-zavrsni-2023",
+      "sourceId": "ffri-pravilnik-zavrsni-2026",
       "checkId": "font-size",
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
       "value": 12,
-      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano; Obrojčavanje stranica: u podnožju, desno, počevsi od Uvoda.",
       "ruleCount": 1,
       "profileIds": [
         "ffri-zavrsni"
@@ -10783,11 +10824,11 @@
       ]
     },
     {
-      "sourceId": "ffri-pravilnik-zavrsni-2023",
+      "sourceId": "ffri-pravilnik-zavrsni-2026",
       "checkId": "justify",
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
       "value": true,
-      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano; Obrojčavanje stranica: u podnožju, desno, počevsi od Uvoda.",
       "ruleCount": 1,
       "profileIds": [
         "ffri-zavrsni"
@@ -10816,11 +10857,11 @@
       ]
     },
     {
-      "sourceId": "ffri-pravilnik-zavrsni-2023",
+      "sourceId": "ffri-pravilnik-zavrsni-2026",
       "checkId": "line-spacing",
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
       "value": 1.5,
-      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano; Obrojčavanje stranica: u podnožju, desno, počevsi od Uvoda.",
       "ruleCount": 1,
       "profileIds": [
         "ffri-zavrsni"
@@ -10845,16 +10886,16 @@
       "reasons": []
     },
     {
-      "sourceId": "ffri-pravilnik-zavrsni-2023",
+      "sourceId": "ffri-pravilnik-zavrsni-2026",
       "checkId": "margins",
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
       "value": {
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
       },
-      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano; Obrojčavanje stranica: u podnožju, desno, počevsi od Uvoda.",
       "ruleCount": 1,
       "profileIds": [
         "ffri-zavrsni"
@@ -10866,64 +10907,6 @@
       "proposedScope": "whole",
       "modalityMarks": [
         "obligation"
-      ],
-      "namedScopes": [],
-      "writtenModality": {
-        "count": 1,
-        "sources": [
-          "mechanical"
-        ]
-      },
-      "resolved": true,
-      "needsHuman": false,
-      "reasons": []
-    },
-    {
-      "sourceId": "ffri-pravilnik-zavrsni-2023",
-      "checkId": "paper-size",
-      "sourcePage": "Članak 8.",
-      "value": true,
-      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm).",
-      "ruleCount": 1,
-      "profileIds": [
-        "ffri-povum-zavrsni"
-      ],
-      "ruleIds": [
-        "ffri-povum-zavrsni--paper-size"
-      ],
-      "proposedModality": "directive",
-      "proposedScope": "whole",
-      "modalityMarks": [
-        "bare-indicative"
-      ],
-      "namedScopes": [],
-      "writtenModality": {
-        "count": 1,
-        "sources": [
-          "agent-read"
-        ]
-      },
-      "resolved": true,
-      "needsHuman": false,
-      "reasons": []
-    },
-    {
-      "sourceId": "ffri-pravilnik-zavrsni-2023",
-      "checkId": "paper-size",
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
-      "value": "A4",
-      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
-      "ruleCount": 1,
-      "profileIds": [
-        "ffri-zavrsni"
-      ],
-      "ruleIds": [
-        "ffri-zavrsni--paper-size"
-      ],
-      "proposedModality": "directive",
-      "proposedScope": "whole",
-      "modalityMarks": [
-        "bare-indicative"
       ],
       "namedScopes": [],
       "writtenModality": {
@@ -10994,6 +10977,42 @@
         "count": 1,
         "sources": [
           "agent-read"
+        ]
+      },
+      "resolved": true,
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje 'footnote', a os po naravi mjeri 'whole'"
+      ]
+    },
+    {
+      "sourceId": "ffri-pravilnik-zavrsni-2026",
+      "checkId": "paper-size",
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "value": true,
+      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano; Obrojčavanje stranica: u podnožju, desno, počevsi od Uvoda.",
+      "ruleCount": 2,
+      "profileIds": [
+        "ffri-povum-zavrsni",
+        "ffri-zavrsni"
+      ],
+      "ruleIds": [
+        "ffri-povum-zavrsni--paper-size",
+        "ffri-zavrsni--paper-size"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "footnote",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [
+        "footnote"
+      ],
+      "writtenModality": {
+        "count": 2,
+        "sources": [
+          "agent-read",
+          "mechanical"
         ]
       },
       "resolved": true,
@@ -17878,10 +17897,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 7,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: obligation, directive",
@@ -18699,10 +18720,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: obligation, directive"
@@ -18731,10 +18754,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: obligation, directive"
@@ -18763,10 +18788,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation"
@@ -19177,10 +19204,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: obligation, directive"
@@ -24147,10 +24176,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: obligation, directive"
@@ -24177,10 +24208,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation"
@@ -24302,10 +24335,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: obligation, directive"
@@ -24332,10 +24367,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation"
@@ -31185,10 +31222,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 3,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: obligation, directive",
@@ -31283,10 +31322,12 @@
         "title-page"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 4,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: obligation, directive",
@@ -32610,10 +32651,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: obligation, directive"
@@ -36370,10 +36413,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation"
@@ -45906,10 +45951,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation",
@@ -46002,10 +46049,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "vise modalnih biljega u istoj recenici: directive, obligation",

@@ -3556,6 +3556,20 @@
       "scope": "whole",
       "decidedVia": "agent-read",
       "note": "isto kao biolos-diplomski: citat zamijenjen recenicom koja numeriranje stvarno propisuje."
+    },
+    {
+      "ruleId": "biolos-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "goli indikativ: 'Numeriranje stranica zapocinje na prvoj stranici Uvoda ... numeriraju se sve stranice'. Citat je prethodno bio prepisan iz KRIVOG odlomka (oblikovanje teksta) i numeriranje uopce nije spominjao; zamijenjen recenicom koja ga propisuje, uz tocan lokator."
+    },
+    {
+      "ruleId": "biolos-zavrsni--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "agent-read",
+      "note": "isto kao biolos-diplomski: citat zamijenjen recenicom koja numeriranje stvarno propisuje."
     }
   ]
 }

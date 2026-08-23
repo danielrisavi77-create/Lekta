@@ -45,8 +45,13 @@ Razvrstano po vrsti ublazavanja (mjereno):
 provode nista. Popunjavanje znaci da motor pocinje bodovati strukturu ondje gdje dosad nije,
 dakle promocija, dakle tvoj potpis. Gard: ratchet u `tests/claim-fields.test.ts` (cap 4).
 
-## C. Sto NE ceka tebe (za orijentaciju)
+## C. Sto NE ceka tebe
 
-Preostale 54 jedinice u `modality-worklist.md` (vise modalnih biljega, nema biljega, predlosci)
-su citanje, ne odluka o bodovanju, pa ih mogu odraditi bez tebe.
+NISTA. `modality-worklist.md` je 2026-08-24 sveden na JEDNU skupinu, i to je tocno ova gore:
+"ublazavanje u citatu (66)". Sve ostalo (383 -> 66 jedinica) je odradjeno citanjem citata.
+
+Ako te zanima sto je pritom ispalo, a nije bila odluka nego prijepis: `biolos--page-numbers` je
+tvrdio da su brojevi stranica obavezni, a citat mu je bio prepisan iz odlomka o oblikovanju teksta i
+numeriranje uopce nije spominjao. Izvor to propisuje, pa je citat zamijenjen recenicom koja to
+doista kaze.
 
