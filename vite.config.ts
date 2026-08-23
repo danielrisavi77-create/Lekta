@@ -149,12 +149,28 @@ function stripRuntimeDeadProvenance(devTools: boolean) {
     enforce: 'pre' as const,
     transform(code: string, id: string) {
       if (devTools) return null;
-      if (!id.split('?')[0].replace(/\\/g, '/').endsWith('/verified-profiles.json')) return null;
-      const data = JSON.parse(code) as Array<{ fieldValidation?: { publicSources?: unknown } }>;
-      for (const p of data) {
-        if (p.fieldValidation && 'publicSources' in p.fieldValidation) delete p.fieldValidation.publicSources;
+      const path = id.split('?')[0].replace(/\\/g, '/');
+      if (path.endsWith('/verified-profiles.json')) {
+        const data = JSON.parse(code) as Array<{ fieldValidation?: { publicSources?: unknown } }>;
+        for (const p of data) {
+          if (p.fieldValidation && 'publicSources' in p.fieldValidation) delete p.fieldValidation.publicSources;
+        }
+        return { code: JSON.stringify(data), map: null };
       }
-      return { code: JSON.stringify(data), map: null };
+      // Citatni specovi (data/tools/citation-specs/verified/*.json) bundlaju se CIJELI preko
+      // import.meta.glob, a klijent (src/citations/faculty-styles.ts) cita samo verifiedAt;
+      // `verifiedBy` (potpis verifikatora) je mrtva provenijencija u bundleu (odluka vlasnika
+      // 2026-08-23: ime ne mora biti javno). Strip iz bundlea, izvor i SEO generator netaknuti.
+      // Time `verifiedBy` opet moze biti never-marker (scripts/security/never-markers.mjs),
+      // treci sloj zastite drafts evidencea uz reviewedBy i confirmedVia.
+      if (/\/data\/tools\/citation-specs\/verified\/[^/]+\.json$/.test(path)) {
+        const spec = JSON.parse(code) as Record<string, unknown>;
+        if ('verifiedBy' in spec) {
+          delete spec.verifiedBy;
+          return { code: JSON.stringify(spec), map: null };
+        }
+      }
+      return null;
     },
   };
 }

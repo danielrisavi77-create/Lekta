@@ -27,12 +27,13 @@
 //    Draftsku evidence i dalje cuvaju verifiedBy/reviewedBy/confirmedVia kljucevi,
 //    zabrana drafts modula u grafu (classification-guard) i kanarinci.
 
-//  - "verifiedBy": javni verificirani citatni specovi ga NAMJERNO nose (autorstvo
-//    verifikacije, svih 71 u dist chunkovima), pa bi marker bio trajno crven.
-//    Drafts evidence i dalje cuvaju reviewedBy + confirmedVia kljucevi, kanarinci
-//    i zabrana drafts modula u grafu. Kandidat za minimizaciju u fazi B:
-//    izbaciti verifiedBy iz klijentskog citatnog speca pa vratiti marker.
+//
+// "verifiedBy" je VRACEN na listu (2026-08-23, odluka vlasnika da potpis verifikatora
+// ne mora biti javan): do tada su ga citatni specovi nosili u 71 dist chunku pa bi
+// marker bio trajno crven. Sada ga stripRuntimeDeadProvenance (vite.config.ts) brise
+// iz bundlea (klijent cita samo verifiedAt), pa je pojava kljuca u distu opet curenje.
 export const NEVER_KEY_MARKERS = [
+  'verifiedBy',
   'reviewedBy',
   'confirmedVia',
   'snapshotHash',

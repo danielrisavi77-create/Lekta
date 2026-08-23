@@ -185,10 +185,15 @@ kljuceve) i prirodni (publicSources sha256 otisci). NE koristi source-registry
 `snapshotHash` kao kanarinca: za izvore s citatnim specom ista vrijednost NAMJERNO izlazi
 u bundle kao `spec.verifiedHash`. Never-markeri su KLJUC-oblik u TRI varijante ("k":,
 escapano \"k\": i minificirani identifier k: iza interpunkcije, jer rolldown kljuceve
-emitira BEZ navodnika); goli niz lazno pali na prozu u note poljima. `verifiedHash` i
-`verifiedBy` NISU markeri: javni citatni specovi ih namjerno nose u bundleu (drafts
-evidence cuvaju reviewedBy/confirmedVia + kanarinci + zabrana modula). Novi podatkovni
-direktorij ili nova staza bez razreda = crveni check; dodaj pravilo SVJESNO, uz biljesku.
+emitira BEZ navodnika); goli niz lazno pali na prozu u note poljima. `verifiedHash` NIJE
+marker: javni citatni specovi ga namjerno nose u bundleu (gate protiv zastarjelog speca).
+`verifiedBy` JEST marker (vracen 2026-08-23, potpis verifikatora ne mora biti javan):
+stripRuntimeDeadProvenance ga brise iz citatnih specova u bundleu (klijent cita samo
+verifiedAt), izvor i SEO generator su netaknuti. Drafts evidence tako cuvaju TRI kljuca
+(verifiedBy/reviewedBy/confirmedVia) + kanarinci + zabrana modula. Kanarinci u GENERIRANIM
+artefaktima (scored-value-drift, repair-params) idu kroz BUILDER, nikad rucno: regen bi ih
+izbrisao. Novi podatkovni direktorij ili nova staza bez razreda = crveni check; dodaj
+pravilo SVJESNO, uz biljesku.
 
 Lanac dokaza (izvor + snapshot + stranica + doslovan citat + potpis) zivi u `ruleEntries`
 (`data/profiles/<unit>/drafts/*.json`), a motor boduje iz naslijedjenog `rules` objekta
@@ -398,7 +403,14 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
   `paperSizes`, inace profil s vlastitim popisom formata i dalje gubi bodove na nebodovanom
   pravilu), i demotija PRESKACE dimenziju koju je izricito propisao specificniji izvor
   (`demotionProtectedBy`), jer advisory mapa govori samo o izvoru OSNOVNOG profila i ne smije
-  ponistiti uputu katedre. Zasticena dimenzija ne ulazi ni u `advisoryDimensions`.
+  ponistiti uputu katedre. Zasticena dimenzija ne ulazi ni u `advisoryDimensions`. Od 2026-08-23 jos
+  dva, oba iz adversarijalnog prolaza nad vlastitim gardovima i oba tada latentna: zastita trazi da
+  overlay dimenziju PROPISE (vrijednost, ili zastavica na `true` kod booleovih osi), jer je gola
+  `checkFont: true` prije ponistavala demotiju bez ijedne vrijednosti pa se dalje bodovala bas ona
+  koju tvrdnja opovrgava; i PODPROVJERE PRATE RODITELJA (polozaj broja stranice, naslovnica bez
+  broja, numeriranje od Uvoda, tri podprovjere sadrzaja = 19 bodova su visile o tome je li polje
+  PRONADJENO, a ne boduje li se ta os). Zato i obratno: overlay koji propisuje DIJETE stiti
+  RODITELJA, inace taj isti gate tiho ugasi katedrin zahtjev.
 - `src/ui/work-selection.ts` - rutiranje odabira: vidljivi programi jedinice, kandidati za
   (jedinica, program, vrsta rada) i izbor varijante. app.ts ih ZOVE (nije zrcalo). Krovni
   ("Opći ...") program se skriva SAMO ako je redundantan, dakle ako je svaki profil koji ga gadja
