@@ -124,7 +124,7 @@
       "authority": "binding",
       "sourceId": "fesb-upute-diplomski-2017",
       "sourcePage": "Tehnicke upute za izradu pisanog dijela rada",
-      "quote": "Vlastiti brojcani sustav referenciranja: bilješke se oznacavaju brojevima u uglatim zagradama [1] redoslijedom pojavljivanja, popis izvora na kraju rada istim redoslijedom (Prezime, I.: \"Naslov\", Izdavac, mjesto, godina.) - sustav je potpuno definiran u dokumentu, ali nikad imenovan kao poznati standard (APA/IEEE/Chicago).",
+      "quote": "Reference se navode pod rednim brojem pod kojim se pojavljuju u popisu, u uglatim zagradama (npr. [1]).",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",

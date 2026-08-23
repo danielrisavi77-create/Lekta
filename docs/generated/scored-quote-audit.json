@@ -15,39 +15,6 @@
       ]
     },
     {
-      "profileId": "erf-diplomski",
-      "ruleId": "erf-diplomski--required-sections",
-      "checkId": "required-sections",
-      "sourceId": "erf-upute-diplomski",
-      "snapshot": "data/sources/erf/erf-upute-diplomski.pdf",
-      "quote": "treba sadrzavati sljedea poglavlja",
-      "problems": [
-        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 33%)"
-      ]
-    },
-    {
-      "profileId": "fesb-diplomski",
-      "ruleId": "fesb-diplomski--citation-style",
-      "checkId": "citation-style",
-      "sourceId": "fesb-upute-diplomski-2017",
-      "snapshot": "data/sources/fesb/fesb-upute-diplomski-2017.doc",
-      "quote": "Vlastiti brojcani sustav referenciranja: bilješke se oznacavaju brojevima u uglatim zagradama [1] redoslijedom pojavljivanja, popis izvora na kraju rada istim redoslijedom (Prezime, I.: \"Naslov\", Izda",
-      "problems": [
-        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 17%)"
-      ]
-    },
-    {
-      "profileId": "fesb-zavrsni",
-      "ruleId": "fesb-zavrsni--citation-style",
-      "checkId": "citation-style",
-      "sourceId": "fesb-upute-zavrsni-2017",
-      "snapshot": "data/sources/fesb/fesb-upute-zavrsni-2017.doc",
-      "quote": "Vlastiti brojcani sustav referenciranja: bilješke se oznacavaju brojevima u uglatim zagradama [1] redoslijedom pojavljivanja, popis izvora na kraju rada istim redoslijedom - sustav je potpuno definira",
-      "problems": [
-        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 12%)"
-      ]
-    },
-    {
       "profileId": "ffri-diplomski",
       "ruleId": "ffri-diplomski--paper-size",
       "checkId": "paper-size",
@@ -335,17 +302,6 @@
     },
     {
       "profileId": "ufzg-zavrsni",
-      "ruleId": "ufzg-zavrsni--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
-      "snapshot": "data/sources/ufzg/ufzg-upute-zavrsni-diplomski-2026.pdf",
-      "quote": "Razmak meu redovima: 1,5",
-      "problems": [
-        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 50%)"
-      ]
-    },
-    {
-      "profileId": "ufzg-zavrsni",
       "ruleId": "ufzg-zavrsni--required-sections",
       "checkId": "required-sections",
       "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
@@ -353,17 +309,6 @@
       "quote": "Strucni rad treba sadrzavati sljedee dijelove:",
       "problems": [
         "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: strucni rad treba sadrzavati)"
-      ]
-    },
-    {
-      "profileId": "ufzg-diplomski",
-      "ruleId": "ufzg-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
-      "snapshot": "data/sources/ufzg/ufzg-upute-zavrsni-diplomski-2026.pdf",
-      "quote": "Razmak meu redovima: 1,5",
-      "problems": [
-        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 50%)"
       ]
     },
     {
