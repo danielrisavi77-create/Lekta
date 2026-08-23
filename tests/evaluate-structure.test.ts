@@ -13,7 +13,7 @@ import { describe, it, expect } from 'vitest';
 import { readdirSync, existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { analyzeFixture, resolveProfile } from '../src/analysis/golden-entry';
-import { evaluatePageNumbers, evaluateScopePages, evaluateEmptyParagraphs, evaluateHeadingHierarchy, evaluateHeadingDepth } from '../src/scoring/evaluate/structure';
+import { evaluatePageNumbers, evaluateScopePages, evaluateEmptyParagraphs, evaluateHeadingHierarchy, evaluateHeadingDepth, evaluateTocPresent } from '../src/scoring/evaluate/structure';
 import type { StructureEvalMeasurements } from '../src/scoring/evaluate/measurements';
 import { stableCheckId } from '../src/scoring/check-id-registry';
 
@@ -63,6 +63,7 @@ describe.skipIf(!sample.length)('evaluate structure (sav 2): ekvivalencija, cist
       const pure = [
         ...evaluateHeadingHierarchy(m, profile),
         ...evaluateHeadingDepth(m, profile),
+        ...evaluateTocPresent(m, profile).checks,
         ...evaluatePageNumbers(m, profile),
         ...evaluateScopePages(m, profile),
         ...evaluateEmptyParagraphs(m),

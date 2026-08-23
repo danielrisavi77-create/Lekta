@@ -56,6 +56,18 @@ export function evaluateHeadingDepth(m: StructureEvalMeasurements, profile: any)
  return checks;
 }
 
+/**
+ * "Sadrzaj dokumenta" (do 5 bodova): TOC polje ili rucno utipkan sadrzaj. Vraca i
+ * `toc` gate jer jezgra nakon njega odlucuje o auditDetailedToc (koji OSTAJE u jezgri:
+ * treba runs i tekst stavki, tekst-lokalno zauvijek). Bajt-identicno preseljeno.
+ */
+export function evaluateTocPresent(m: StructureEvalMeasurements, profile: any): { checks: any[]; toc: boolean } {
+ const _tocField=m.structure.tocFieldPresent,_manualTocEntries=m.structure.manualTocEntryCount;
+ const toc=_tocField||_manualTocEntries>0;const tocOk=!profile.requireToc||toc;
+ const checks=[makeCheck('structure','Sadržaj dokumenta',tocOk?'pass':'fail',profile.requireToc?(tocOk?5:0):0,profile.requireToc?5:0,_tocField?'Pronađeno je Word TOC polje':(_manualTocEntries?`Sadržaj je utipkan ručno (${_manualTocEntries} stavki), bez Word TOC polja: Word ga neće ažurirati pri promjeni stranica`:'Sadržaj nije pronađen'),tocOk?null:issue('error','structure','Nije pronađen sadržaj','Dodaj automatski sadržaj u Wordu i ažuriraj ga prije predaje.'))];
+ return{checks,toc};
+}
+
 /** "Prazni odlomci" (informativno, 0/0): udio praznih odlomaka. */
 export function evaluateEmptyParagraphs(m: StructureEvalMeasurements): any[] {
  const empty=m.structure.emptyParagraphs,paragraphsLen=m.counts.paragraphs;

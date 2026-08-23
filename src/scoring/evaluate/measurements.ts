@@ -134,6 +134,10 @@ export interface StructureMeasurements {
   firstPageEndIndex: number;
   /** Indeks odlomka "Uvod"/"Introduction" (po nazivu sekcije), ili null. */
   introParagraphIndex: number | null;
+  /** Postoji li Word TOC polje u paketu. */
+  tocFieldPresent: boolean;
+  /** Broj stavki rucno utipkanog sadrzaja (0 kad TOC polje postoji ili ga nema). Tekst potrosen pri mjerenju. */
+  manualTocEntryCount: number;
   /** Broj praznih odlomaka. */
   emptyParagraphs: number;
 }
