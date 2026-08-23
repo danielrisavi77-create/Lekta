@@ -147,39 +147,6 @@
       ]
     },
     {
-      "profileId": "kbf-zavrsni",
-      "ruleId": "kbf-zavrsni--citation-style",
-      "checkId": "citation-style",
-      "sourceId": "kbf-upute-zavrsni-diplomski-2017",
-      "snapshot": "data/sources/kbf/kbf-upute-zavrsni-diplomski-2017.pdf",
-      "quote": "Prilikom navoenje literature potrebno je dosljedno se pridrzavati pravila o navoenju",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: literature potrebno je dosljedno se pridrzavati pravila o)"
-      ]
-    },
-    {
-      "profileId": "kbf-diplomski",
-      "ruleId": "kbf-diplomski--citation-style",
-      "checkId": "citation-style",
-      "sourceId": "kbf-upute-zavrsni-diplomski-2017",
-      "snapshot": "data/sources/kbf/kbf-upute-zavrsni-diplomski-2017.pdf",
-      "quote": "Prilikom navoenje literature potrebno je dosljedno se pridrzavati pravila o navoenju",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: literature potrebno je dosljedno se pridrzavati pravila o)"
-      ]
-    },
-    {
-      "profileId": "pbf-diplomski",
-      "ruleId": "pbf-diplomski--required-sections",
-      "checkId": "required-sections",
-      "sourceId": "pbf-upute-diplomski-2018",
-      "snapshot": "data/sources/pbf/pbf-upute-diplomski-2018.pdf",
-      "quote": "Diplomski rad mora sadrzavati sljedea poglavlja ili dijelove",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: diplomski rad mora sadrzavati)"
-      ]
-    },
-    {
       "profileId": "sois-ft-vojno-inzenjerstvo-diplomski",
       "ruleId": "sois-ft-vojno-inzenjerstvo-diplomski--page-count",
       "checkId": "page-count",
@@ -210,28 +177,6 @@
       "quote": "Opseg diplomskog rada (ukljucujuci biljeske, graficke priloge, literaturu i ostale elemente rada) treba biti najmanje 50 stranica.",
       "problems": [
         "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: priloge literaturu i ostale elemente rada treba biti najmanje)"
-      ]
-    },
-    {
-      "profileId": "ufzg-zavrsni",
-      "ruleId": "ufzg-zavrsni--required-sections",
-      "checkId": "required-sections",
-      "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
-      "snapshot": "data/sources/ufzg/ufzg-upute-zavrsni-diplomski-2026.pdf",
-      "quote": "Strucni rad treba sadrzavati sljedee dijelove:",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: strucni rad treba sadrzavati)"
-      ]
-    },
-    {
-      "profileId": "ufzg-diplomski",
-      "ruleId": "ufzg-diplomski--required-sections",
-      "checkId": "required-sections",
-      "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
-      "snapshot": "data/sources/ufzg/ufzg-upute-zavrsni-diplomski-2026.pdf",
-      "quote": "Empirijski rad treba sadrzavati sljedee dijelove:",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: empirijski rad treba sadrzavati)"
       ]
     },
     {
