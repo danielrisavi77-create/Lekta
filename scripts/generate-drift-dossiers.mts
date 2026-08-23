@@ -48,6 +48,8 @@ type Adjudication = {
   ruleId: string;
   verdict: string;
   claimQuoteInSource: boolean | null;
+  claimQuoteCoverage: number | null;
+  claimQuoteKind: 'text' | 'package-settings';
   evidence: string[];
   engineAtomsMissingFromSource: string[];
   claimAtomsMissingFromSource: string[];
@@ -103,10 +105,23 @@ function section(profileId: string, rows: ScoredValueFinding[]): string {
       const adj = row.ruleId ? adjByRule.get(row.ruleId) : undefined;
       if (adj) {
         lines.push('', `**Sto kaze sam izvor:** ${VERDICT_LABEL[adj.verdict] ?? adj.verdict}`);
-        if (adj.claimQuoteInSource === false) {
+        if (adj.claimQuoteKind === 'package-settings') {
           lines.push(
-            '- **CITAT SE NE NALAZI U DOKUMENTU KOJI CITIRA.** To je najtezi oblik nalaza: pravilo je',
-            '  `verified` i ljudski potpisano, a njegovo uporiste u navedenom izvoru ne postoji.',
+            `- Citat OPISUJE POSTAVKE PAKETA (OOXML), ne recenicu. Pokrivanje nad vidljivim tekstom`,
+            `  (${adj.claimQuoteCoverage}) ovdje NIJE mjera istinitosti: postavke zive u styles.xml i`,
+            '  `<w:sectPr><w:pgMar>`, pa ih citanje teksta ne vidi. Provjerava se otvaranjem paketa.',
+            '  Zasebno pitanje, i ono je za covjeka: predlozak OPISUJE, ne propisuje.',
+          );
+        } else if (adj.claimQuoteInSource === false && (adj.claimQuoteCoverage ?? 1) < 0.4) {
+          lines.push(
+            `- **CITAT SE NE NALAZI U DOKUMENTU KOJI CITIRA** (pokrivanje ${adj.claimQuoteCoverage}).`,
+            '  To je najtezi oblik nalaza: pravilo je `verified` i ljudski potpisano, a njegovo',
+            '  uporiste u navedenom izvoru ne postoji.',
+          );
+        } else if (adj.claimQuoteInSource === false) {
+          lines.push(
+            `- Citat nije doslovan prijepis (pokrivanje ${adj.claimQuoteCoverage}), ali je blizu izvornika:`,
+            '  parafraza ili urednicka napomena, ne izmisljanje. Nalaz o SLJEDIVOSTI, ne o bodovanju.',
           );
         }
         if (adj.engineAtomsMissingFromSource.length) {

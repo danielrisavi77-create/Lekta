@@ -18,7 +18,10 @@ i naslovnica kao tiha druga vrijednost.
 - Autoritet: binding
 - Zadnja provjera: 2026-07-28 (Daniel Risavi)
 
-**Sto kaze sam izvor:** snapshot nije strojno citljiv (nije PDF ili nema tekstualni sloj)
+**Sto kaze sam izvor:** IZVOR NOSI VRIJEDNOST TVRDNJE, ne onu koju motor boduje -> zrcalo je krivo
+- U izvoru NEMA vrijednosti motora: Arial; Calibri
+- Iz izvora: "...a obradu teksta na racunalu (preporuca se ms word). format rada je a4 (210 x 297 mm). rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. tekst treba pisati s obostranim poravnanje..."
+- Iz izvora: "...a obradu teksta na racunalu (preporuca se ms word). format rada je a4 (210 x 297 mm). rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. tekst treba pisati s obostranim poravnanje..."
 
 ### font-size - Velicina slova
 - Tvrdnja (izvor): `[12]`
@@ -31,5 +34,8 @@ i naslovnica kao tiha druga vrijednost.
 - Autoritet: binding
 - Zadnja provjera: 2026-07-28 (Daniel Risavi)
 
-**Sto kaze sam izvor:** snapshot nije strojno citljiv (nije PDF ili nema tekstualni sloj)
+**Sto kaze sam izvor:** IZVOR NOSI VRIJEDNOST TVRDNJE, ne onu koju motor boduje -> zrcalo je krivo
+- U izvoru NEMA vrijednosti motora: 11 / 11,0 / 11.0
+- Iz izvora: "...u (preporuca se ms word). format rada je a4 (210 x 297 mm). rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. tekst treba pisati s obostranim poravnanjem („justify“). naslovi vel..."
+- Iz izvora: "...u (preporuca se ms word). format rada je a4 (210 x 297 mm). rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. tekst treba pisati s obostranim poravnanjem („justify“). naslovi vel..."
 

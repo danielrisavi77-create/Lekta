@@ -28,6 +28,7 @@ postupak koji se vec pokazao ispravnim (68 pravila = 53 jedinice, 43 = 8 jedinic
 from __future__ import annotations
 
 import glob
+import importlib.util
 import json
 import os
 import re
@@ -51,25 +52,20 @@ def fold(text: str) -> str:
     return re.sub(r"\s+", " ", stripped.lower().replace("đ", "d"))
 
 
-_cache: dict[str, str] = {}
+# Citanje izvora se NE pise ponovno nego posudjuje od revizije: ona vec zna PDF, `.docx` (zip s
+# XML-om), naslijedjeni `.doc` (OLE tablica komada), HTML i pratitelje `<ime>-ocr.txt` /
+# `<ime>-text.txt`. Prva izvedba ovdje citala je samo PDF, pa je 8 raskoraka ispadalo "necitljivo"
+# iako su im izvori `.docx` koji revizija bez problema cita. Dvije izvedbe istog citanja bi k tome
+# neizbjezno odlutale jedna od druge.
+_audit_spec = importlib.util.spec_from_file_location(
+    "_audit", os.path.join(os.path.dirname(os.path.abspath(__file__)), "audit_scored_quotes.py")
+)
+_audit = importlib.util.module_from_spec(_audit_spec)
+_audit_spec.loader.exec_module(_audit)
 
 
 def doc_text(rel: str) -> str:
-    if rel in _cache:
-        return _cache[rel]
-    text = ""
-    path = os.path.join(ROOT, rel.replace("/", os.sep))
-    if os.path.exists(path) and path.lower().endswith(".pdf"):
-        try:
-            doc = fitz.open(path)
-            try:
-                text = " ".join(doc[i].get_text() for i in range(doc.page_count))
-            finally:
-                doc.close()
-        except Exception:
-            text = ""
-    _cache[rel] = text
-    return text
+    return _audit.document_text(rel)
 
 
 def atom_groups(value) -> list[list[str]]:
@@ -147,6 +143,27 @@ def find_windows(text: str, needle: str, radius: int = 110) -> list[str]:
 def bigrams(text: str) -> list[str]:
     words = [w for w in re.findall(r"[a-z0-9]+", fold(text)) if w]
     return [f"{a} {b}" for a, b in zip(words, words[1:])]
+
+
+# Citat koji OPISUJE POSTAVKE PAKETA, a ne recenicu iz dokumenta. Prepoznaje se po OOXML oznakama
+# koje autor navodi kao dokaz (`w:sz=24`, `w:line=360`, `w:jc=both`, `w:pgMar`).
+#
+# Zasto to mora biti zaseban razred: `document_text` cita VIDLJIVI tekst, a te postavke zive u
+# `word/styles.xml` i `<w:sectPr><w:pgMar>`, dakle u atributima. Pokrivanje takvog citata ispada
+# 0,08, sto je NIZE od `vuka` (0,21) koji je doista izmisljen. Bez razlikovanja bi sest ispravnih
+# `ffst-*` pravila bilo optuzeno za izmisljanje. Provjereno rucno na
+# `ffst-predlozak-zavrsnoga-diplomskoga-final.docx`: Normal stil nosi w:ascii="Times New Roman",
+# w:sz=24 (12 pt), w:line=360 (1,5), w:jc=both, a pgMar 1440 twipsa (2,54 cm) sa svih strana,
+# dakle tocno ono sto tvrdnje kazu.
+#
+# NAPOMENA ZA PRESUDU, ne za stroj: predlozak OPISUJE, ne propisuje. FER pilot je pao tocno na tome
+# (`line-spacing = 1.2` bio je opis predloska). Je li predlozak obvezujuc je pitanje hijerarhije
+# izvora i ostaje covjeku.
+OOXML_MARKER = re.compile(r"w:(sz|line|jc|pgMar|ascii|spacing)\s*=|<w:", re.I)
+
+
+def quote_describes_settings(quote: str) -> bool:
+    return bool(OOXML_MARKER.search(quote or ""))
 
 
 def quote_coverage(text: str, quote: str) -> float:
@@ -276,6 +293,9 @@ def main() -> None:
                 # Broj uz boolean: 0,2 je odsutan citat, 0,8 je parafraza. Bez broja se to ne
                 # razlikuje, a razlika je izmedju "izmisljeno" i "uredan prijepis".
                 "claimQuoteCoverage": quote_cov,
+                # Kad je citat opis postavki paketa, pokrivanje nad vidljivim tekstom nije mjera
+                # istinitosti nego mjera krive usporedbe.
+                "claimQuoteKind": "package-settings" if quote_describes_settings(quote) else "text",
                 "verdict": verdict,
                 "evidence": evidence,
             }

@@ -19,8 +19,8 @@ i naslovnica kao tiha druga vrijednost.
 - Zadnja provjera: 2026-07-28 (Daniel Risavi)
 
 **Sto kaze sam izvor:** izvor ne nosi NIJEDNU -> pravilo ide na reverifikaciju
-- **CITAT SE NE NALAZI U DOKUMENTU KOJI CITIRA.** To je najtezi oblik nalaza: pravilo je
-  `verified` i ljudski potpisano, a njegovo uporiste u navedenom izvoru ne postoji.
+- Citat nije doslovan prijepis (pokrivanje 0.7), ali je blizu izvornika:
+  parafraza ili urednicka napomena, ne izmisljanje. Nalaz o SLJEDIVOSTI, ne o bodovanju.
 - U izvoru NEMA vrijednosti motora: Times New Roman; Arial; Calibri
 - U izvoru NEMA vrijednosti tvrdnje: Merriweather
 
@@ -36,8 +36,8 @@ i naslovnica kao tiha druga vrijednost.
 - Zadnja provjera: 2026-07-28 (Daniel Risavi)
 
 **Sto kaze sam izvor:** izvor nosi OBJE vrijednosti -> pitanje opsega ili hijerarhije, trazi citanje
-- **CITAT SE NE NALAZI U DOKUMENTU KOJI CITIRA.** To je najtezi oblik nalaza: pravilo je
-  `verified` i ljudski potpisano, a njegovo uporiste u navedenom izvoru ne postoji.
+- Citat nije doslovan prijepis (pokrivanje 0.7), ali je blizu izvornika:
+  parafraza ili urednicka napomena, ne izmisljanje. Nalaz o SLJEDIVOSTI, ne o bodovanju.
 - Iz izvora: "...(preporuca se ms word). - format rada je a4 (210 x 297 mm). - rad treba pisati fontom marriweather, velicine 10 pt, uz prored 1,5. - rad treba pisati s obostranim poravnanjem („justify“). - naslovi se..."
 - Iz izvora: "...ored 1,5. - rad treba pisati s obostranim poravnanjem („justify“). - naslovi se pisu velikim slovima velicine 12 pt, a podnaslovi velicine 11 pt, podebljano („bold“), poravnati uz lijevi rub teksta. -..."
 

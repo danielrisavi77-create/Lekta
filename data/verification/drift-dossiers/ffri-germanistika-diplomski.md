@@ -19,8 +19,8 @@ i naslovnica kao tiha druga vrijednost.
 - Zadnja provjera: 2026-07-28 (Daniel Risavi)
 
 **Sto kaze sam izvor:** IZVOR NOSI VRIJEDNOST TVRDNJE, ne onu koju motor boduje -> zrcalo je krivo
-- **CITAT SE NE NALAZI U DOKUMENTU KOJI CITIRA.** To je najtezi oblik nalaza: pravilo je
-  `verified` i ljudski potpisano, a njegovo uporiste u navedenom izvoru ne postoji.
+- Citat nije doslovan prijepis (pokrivanje 0.68), ali je blizu izvornika:
+  parafraza ili urednicka napomena, ne izmisljanje. Nalaz o SLJEDIVOSTI, ne o bodovanju.
 - U izvoru NEMA vrijednosti motora: 2,5 / 2.5
 - Iz izvora: "...extausrichtung: blocksatz zeilenabstand: 1,5 seitenrander rechts und links: 3 cm seitenrander oben und unten: 2 cm titelblatt (s. anhang) schriftart: times new roman angaben zur institution: großbuchs..."
 - Iz izvora: "...seitenzahlen: rechts unten, 10pt textausrichtung: blocksatz zeilenabstand: 1,5 seitenrander rechts und links: 3 cm seitenrander oben und unten: 2 cm titelblatt (s. anhang) schriftart: times new roman ..."

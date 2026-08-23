@@ -19,8 +19,8 @@ i naslovnica kao tiha druga vrijednost.
 - Zadnja provjera: 2026-07-28 (Daniel Risavi)
 
 **Sto kaze sam izvor:** izvor nosi OBJE vrijednosti -> pitanje opsega ili hijerarhije, trazi citanje
-- **CITAT SE NE NALAZI U DOKUMENTU KOJI CITIRA.** To je najtezi oblik nalaza: pravilo je
-  `verified` i ljudski potpisano, a njegovo uporiste u navedenom izvoru ne postoji.
+- Citat nije doslovan prijepis (pokrivanje 0.81), ali je blizu izvornika:
+  parafraza ili urednicka napomena, ne izmisljanje. Nalaz o SLJEDIVOSTI, ne o bodovanju.
 - Iz izvora: "...ossen mit dem schlusswort. die anderen teile werden nicht mitgerechnet. 2.2 allgemeine textformatierung text: times new roman 12 oder calibri 12 oder arial 12, zeilenabstand 1,5 titelseite: times new ..."
 - Iz izvora: "...t. die anderen teile werden nicht mitgerechnet. 2.2 allgemeine textformatierung text: times new roman 12 oder calibri 12 oder arial 12, zeilenabstand 1,5 titelseite: times new roman 14/16 marginen: re..."
 

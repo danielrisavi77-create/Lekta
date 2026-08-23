@@ -1,9 +1,8 @@
 {
   "schemaVersion": 1,
   "counts": {
-    "neither": 5,
-    "claim-supported": 17,
-    "unreadable": 8,
+    "neither": 7,
+    "claim-supported": 23,
     "both-present": 8
   },
   "rows": [
@@ -25,6 +24,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": false,
       "claimQuoteCoverage": 0.81,
+      "claimQuoteKind": "text",
       "verdict": "both-present",
       "evidence": [
         "ossen mit dem schlusswort. die anderen teile werden nicht mitgerechnet. 2.2 allgemeine textformatierung text: times new roman 12 oder calibri 12 oder arial 12, zeilenabstand 1,5 titelseite: times new roman 14/16 marginen: rechts 20 mm;",
@@ -50,6 +50,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": false,
       "claimQuoteCoverage": 0.81,
+      "claimQuoteKind": "text",
       "verdict": "both-present",
       "evidence": [
         "dabei sehr hoch, dass somit ihre arbeit auch an qualitat verloren hat. 2.2 allgemeine textformatierung text: times new roman 12 oder calibri 12 oder arial 12, zeilenabstand 1,5 titelseite: times new roman 14/16 marginen: rechts 20 mm;",
@@ -81,6 +82,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.94,
+      "claimQuoteKind": "text",
       "verdict": "both-present",
       "evidence": [
         "biti ispisan racunalnim pisacem na papiru formata a4 (21 x 29,7 cm) uz standardne margine od 3 cm za lijevu i 2,5 cm za ostale strane. kako bi rad bio pregledan i sustavno oblikovan, preporucuje se vrsta slova times new rom",
@@ -105,6 +107,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.87,
+      "claimQuoteKind": "text",
       "verdict": "both-present",
       "evidence": [
         "(preporuca se ms word). - format rada je a4 (210 x 297 mm). - rad treba pisati fontom merriweather, velicine 10 pt, uz prored 1,5. - rad treba pisati s obostranim poravnanjem („justify“). - naslovi se pisu velikim slovima",
@@ -129,6 +132,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": false,
       "claimQuoteCoverage": 0.7,
+      "claimQuoteKind": "text",
       "verdict": "both-present",
       "evidence": [
         "(preporuca se ms word). - format rada je a4 (210 x 297 mm). - rad treba pisati fontom marriweather, velicine 10 pt, uz prored 1,5. - rad treba pisati s obostranim poravnanjem („justify“). - naslovi se pisu velikim slovima",
@@ -160,6 +164,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.96,
+      "claimQuoteKind": "text",
       "verdict": "both-present",
       "evidence": [
         "0 x 297 mm); preporuca se uporaba pisma velicine 12 tocaka, te da odlomci imaju dvostruki prored. margine su: 2,5 cm osim li- jeve koja je 3,5 cm. kod biljezaka se bira velicina slova 10, a prored je 1,5-struki. zavrsni rad",
@@ -191,6 +196,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.96,
+      "claimQuoteKind": "text",
       "verdict": "both-present",
       "evidence": [
         "o nemaju numerirane stranice na kojima se nalaze. ✓ lijeva margina se podesava na 3,0 cm, a ostale margine na 2,5 cm. ✓ tablice i slike (grafikoni, dijagrami, ...) numeriraju se rednim brojem od 1 do n (tablica 1. prva je t",
@@ -222,6 +228,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.96,
+      "claimQuoteKind": "text",
       "verdict": "both-present",
       "evidence": [
         "o nemaju numerirane stranice na kojima se nalaze. ✓ lijeva margina se podesava na 3,0 cm, a ostale margine na 2,5 cm. ✓ tablice i slike (grafikoni, dijagrami, ...) numeriraju se rednim brojem od 1 do n (tablica 1. prva je t",
@@ -255,6 +262,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": false,
       "claimQuoteCoverage": 0.68,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "extausrichtung: blocksatz zeilenabstand: 1,5 seitenrander rechts und links: 3 cm seitenrander oben und unten: 2 cm titelblatt (s. anhang) schriftart: times new roman angaben zur institution: großbuchstaben, 16pt (erste ze",
@@ -287,10 +295,119 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": false,
       "claimQuoteCoverage": 0.68,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "extausrichtung: blocksatz zeilenabstand: 1,5 seitenrander rechts und links: 3 cm seitenrander oben und unten: 2 cm titelblatt (s. anhang) schriftart: times new roman angaben zur institution: großbuchstaben, 16pt (erste ze",
         "seitenzahlen: rechts unten, 10pt textausrichtung: blocksatz zeilenabstand: 1,5 seitenrander rechts und links: 3 cm seitenrander oben und unten: 2 cm titelblatt (s. anhang) schriftart: times new roman angaben zur instituti"
+      ]
+    },
+    {
+      "profileId": "ffst-diplomski",
+      "ruleId": "ffst-diplomski--font",
+      "checkId": "font",
+      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
+      "snapshot": "data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx",
+      "claimValue": [
+        "Times New Roman"
+      ],
+      "engineValue": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "engineAtomsMissingFromSource": [
+        "Arial",
+        "Calibri"
+      ],
+      "claimAtomsMissingFromSource": [],
+      "claimQuoteInSource": false,
+      "claimQuoteCoverage": 0.08,
+      "claimQuoteKind": "package-settings",
+      "verdict": "claim-supported",
+      "evidence": [
+        ", citate, slike i tablice. u ovom predlosku stil normal definiran je na sljedeci nacin: tekst je pisan fontom times new roman, velicine 12 pt, proredom 1,5 pt. odlomci su obostrano poravnani, bez razmaka prije i poslije odlomka (0 pt).",
+        ", citate, slike i tablice. u ovom predlosku stil normal definiran je na sljedeci nacin: tekst je pisan fontom times new roman, velicine 12 pt, proredom 1,5 pt. odlomci su obostrano poravnani, bez razmaka prije i poslije odlomka (0 pt)."
+      ]
+    },
+    {
+      "profileId": "ffst-diplomski",
+      "ruleId": "ffst-diplomski--font-size",
+      "checkId": "font-size",
+      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
+      "snapshot": "data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx",
+      "claimValue": [
+        12
+      ],
+      "engineValue": [
+        12,
+        11
+      ],
+      "engineAtomsMissingFromSource": [
+        "11 / 11,0 / 11.0"
+      ],
+      "claimAtomsMissingFromSource": [],
+      "claimQuoteInSource": false,
+      "claimQuoteCoverage": 0.08,
+      "claimQuoteKind": "package-settings",
+      "verdict": "claim-supported",
+      "evidence": [
+        "u ovom predlosku stil normal definiran je na sljedeci nacin: tekst je pisan fontom times new roman, velicine 12 pt, proredom 1,5 pt. odlomci su obostrano poravnani, bez razmaka prije i poslije odlomka (0 pt). naslov prve",
+        "u ovom predlosku stil normal definiran je na sljedeci nacin: tekst je pisan fontom times new roman, velicine 12 pt, proredom 1,5 pt. odlomci su obostrano poravnani, bez razmaka prije i poslije odlomka (0 pt). naslov prve"
+      ]
+    },
+    {
+      "profileId": "ffst-zavrsni",
+      "ruleId": "ffst-zavrsni--font",
+      "checkId": "font",
+      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
+      "snapshot": "data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx",
+      "claimValue": [
+        "Times New Roman"
+      ],
+      "engineValue": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "engineAtomsMissingFromSource": [
+        "Arial",
+        "Calibri"
+      ],
+      "claimAtomsMissingFromSource": [],
+      "claimQuoteInSource": false,
+      "claimQuoteCoverage": 0.08,
+      "claimQuoteKind": "package-settings",
+      "verdict": "claim-supported",
+      "evidence": [
+        ", citate, slike i tablice. u ovom predlosku stil normal definiran je na sljedeci nacin: tekst je pisan fontom times new roman, velicine 12 pt, proredom 1,5 pt. odlomci su obostrano poravnani, bez razmaka prije i poslije odlomka (0 pt).",
+        ", citate, slike i tablice. u ovom predlosku stil normal definiran je na sljedeci nacin: tekst je pisan fontom times new roman, velicine 12 pt, proredom 1,5 pt. odlomci su obostrano poravnani, bez razmaka prije i poslije odlomka (0 pt)."
+      ]
+    },
+    {
+      "profileId": "ffst-zavrsni",
+      "ruleId": "ffst-zavrsni--font-size",
+      "checkId": "font-size",
+      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
+      "snapshot": "data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx",
+      "claimValue": [
+        12
+      ],
+      "engineValue": [
+        12,
+        11
+      ],
+      "engineAtomsMissingFromSource": [
+        "11 / 11,0 / 11.0"
+      ],
+      "claimAtomsMissingFromSource": [],
+      "claimQuoteInSource": false,
+      "claimQuoteCoverage": 0.08,
+      "claimQuoteKind": "package-settings",
+      "verdict": "claim-supported",
+      "evidence": [
+        "u ovom predlosku stil normal definiran je na sljedeci nacin: tekst je pisan fontom times new roman, velicine 12 pt, proredom 1,5 pt. odlomci su obostrano poravnani, bez razmaka prije i poslije odlomka (0 pt). naslov prve",
+        "u ovom predlosku stil normal definiran je na sljedeci nacin: tekst je pisan fontom times new roman, velicine 12 pt, proredom 1,5 pt. odlomci su obostrano poravnani, bez razmaka prije i poslije odlomka (0 pt). naslov prve"
       ]
     },
     {
@@ -311,6 +428,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.9,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "om u radu na visokoskolskoj ustanovi. clanak 5. (1) zavrsni rad treba biti napisan u formatu a4; vrsta slova: arial; velicina slova teksta 12; podrubne biljeske 10; prored 1,5; prored u biljesci1,0; margine 2,5 cm u digitalno"
@@ -343,6 +461,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.9,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "vrsta slova: arial; velicina slova teksta 12; podrubne biljeske 10; prored 1,5; prored u biljesci1,0; margine 2,5 cm u digitalnom obliku (na cd-u), a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 pravilnika)",
@@ -367,6 +486,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.9,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "om u radu na visokoskolskoj ustanovi. clanak 5. (1) zavrsni rad treba biti napisan u formatu a4; vrsta slova: arial; velicina slova teksta 12; podrubne biljeske 10; prored 1,5; prored u biljesci1,0; margine 2,5 cm u digitalno"
@@ -399,6 +519,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.9,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "vrsta slova: arial; velicina slova teksta 12; podrubne biljeske 10; prored 1,5; prored u biljesci1,0; margine 2,5 cm u digitalnom obliku (na cd-u), a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 pravilnika)",
@@ -431,6 +552,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.91,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "ja - font 12 – tekst rada - font 10 – fusnote. 5. poravnanje teksta je obostrano. 6. margine trebaju iznositi 3 cm. 7. prored: - 1,5 u glavnom dijelu teksta - 1 u pozivnim biljeskama, odnosno fusnotama. 8. rad treba pisat"
@@ -457,6 +579,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.97,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "radu teksta na racunalu (preporuca se ms word). - format rada je a4 (210 x 297 mm). - rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. - rad treba pisati s obostranim poravnanjem („justify“). - naslovi se pisu ve",
@@ -482,6 +605,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.97,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "reporuca se ms word). - format rada je a4 (210 x 297 mm). - rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. - rad treba pisati s obostranim poravnanjem („justify“). - naslovi se pisu velikim slovima",
@@ -509,6 +633,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": false,
       "claimQuoteCoverage": 0.62,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "da i kljucnim rijecima: key words) izgled zavrsnog rada: a) rad mora biti izraden na racunalu i to: - slovima times new roman c, velicina slova 14 (naslovi poglavlja, masnim slovima); - slovima times new roman c, velicina slova 12 („ti",
@@ -541,6 +666,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": false,
       "claimQuoteCoverage": 0.62,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "ih znakova; - podnozne napomene (fusnote), velicina slova 10; - sve margine (gornja i donja, lijeva i desna): 3 cm; - paginacija: 1,25 do 1,5 cm od donjeg ruba stranice. b) izgled naslovne stranice (korice) i prvih dviju"
@@ -568,6 +694,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.87,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "radu teksta na racunalu (preporuca se ms word). - format rada je a4 (210 x 297 mm). - rad treba pisati fontom merriweather, velicine 10 pt, uz prored 1,5. - rad treba pisati s obostranim poravnanjem („justify“). - naslovi se pisu ve"
@@ -594,10 +721,65 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.91,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "kog i muskog roda, odnosno zamjenica \"ona\" i \"on\". tekst treba formatirati na sljedeci nacin:  pismo (font): times new roman, velicina 12  margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm (to su automatski podesene vrijednosti u m",
         "kog i muskog roda, odnosno zamjenica \"ona\" i \"on\". tekst treba formatirati na sljedeci nacin:  pismo (font): times new roman, velicina 12  margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm (to su automatski podesene vrijednosti u m"
+      ]
+    },
+    {
+      "profileId": "unizd-ucitelji-diplomski",
+      "ruleId": "unizd-ucitelji-diplomski--font",
+      "checkId": "font",
+      "sourceId": "unizd-ucitelji-pravila-2018",
+      "snapshot": "data/sources/unizd/unizd-ucitelji-pravila-2018.docx",
+      "claimValue": [
+        "Times New Roman"
+      ],
+      "engineValue": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "engineAtomsMissingFromSource": [
+        "Arial",
+        "Calibri"
+      ],
+      "claimAtomsMissingFromSource": [],
+      "claimQuoteInSource": true,
+      "claimQuoteCoverage": 0.89,
+      "claimQuoteKind": "text",
+      "verdict": "claim-supported",
+      "evidence": [
+        "a obradu teksta na racunalu (preporuca se ms word). format rada je a4 (210 x 297 mm). rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. tekst treba pisati s obostranim poravnanjem („justify“). naslovi velicine 14",
+        "a obradu teksta na racunalu (preporuca se ms word). format rada je a4 (210 x 297 mm). rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. tekst treba pisati s obostranim poravnanjem („justify“). naslovi velicine 14"
+      ]
+    },
+    {
+      "profileId": "unizd-ucitelji-diplomski",
+      "ruleId": "unizd-ucitelji-diplomski--font-size",
+      "checkId": "font-size",
+      "sourceId": "unizd-ucitelji-pravila-2018",
+      "snapshot": "data/sources/unizd/unizd-ucitelji-pravila-2018.docx",
+      "claimValue": [
+        12
+      ],
+      "engineValue": [
+        12,
+        11
+      ],
+      "engineAtomsMissingFromSource": [
+        "11 / 11,0 / 11.0"
+      ],
+      "claimAtomsMissingFromSource": [],
+      "claimQuoteInSource": true,
+      "claimQuoteCoverage": 0.89,
+      "claimQuoteKind": "text",
+      "verdict": "claim-supported",
+      "evidence": [
+        "u (preporuca se ms word). format rada je a4 (210 x 297 mm). rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. tekst treba pisati s obostranim poravnanjem („justify“). naslovi velicine 14 pt i podnaslo",
+        "u (preporuca se ms word). format rada je a4 (210 x 297 mm). rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. tekst treba pisati s obostranim poravnanjem („justify“). naslovi velicine 14 pt i podnaslo"
       ]
     },
     {
@@ -621,6 +803,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.96,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "du teksta na racunalu (preporucuje se ms word). ✓ format rada je a4 (210 x 297 mm). ✓ rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. ✓ rad treba pisati s obostranim poravnanjem („justify“), te s uvlacenjem prvo",
@@ -646,6 +829,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.96,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "porucuje se ms word). ✓ format rada je a4 (210 x 297 mm). ✓ rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. ✓ rad treba pisati s obostranim poravnanjem („justify“), te s uvlacenjem prvog retka odlom",
@@ -673,6 +857,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.96,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "du teksta na racunalu (preporucuje se ms word). ✓ format rada je a4 (210 x 297 mm). ✓ rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. ✓ rad treba pisati s obostranim poravnanjem („justify“), te s uvlacenjem prvo",
@@ -698,6 +883,7 @@
       "claimAtomsMissingFromSource": [],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.96,
+      "claimQuoteKind": "text",
       "verdict": "claim-supported",
       "evidence": [
         "porucuje se ms word). ✓ format rada je a4 (210 x 297 mm). ✓ rad treba pisati fontom times new roman, velicine 12 pt, uz prored 1,5. ✓ rad treba pisati s obostranim poravnanjem („justify“), te s uvlacenjem prvog retka odlom",
@@ -730,6 +916,7 @@
       ],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 1.0,
+      "claimQuoteKind": "text",
       "verdict": "neither",
       "evidence": []
     },
@@ -762,6 +949,71 @@
       ],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.88,
+      "claimQuoteKind": "text",
+      "verdict": "neither",
+      "evidence": []
+    },
+    {
+      "profileId": "ffst-diplomski",
+      "ruleId": "ffst-diplomski--margins",
+      "checkId": "margins",
+      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
+      "snapshot": "data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx",
+      "claimValue": {
+        "top": 2.54,
+        "right": 2.54,
+        "bottom": 2.54,
+        "left": 2.54,
+        "minimum": false
+      },
+      "engineValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "engineAtomsMissingFromSource": [
+        "2,5 / 2.5"
+      ],
+      "claimAtomsMissingFromSource": [
+        "2,54 / 2.54"
+      ],
+      "claimQuoteInSource": false,
+      "claimQuoteCoverage": 0.08,
+      "claimQuoteKind": "package-settings",
+      "verdict": "neither",
+      "evidence": []
+    },
+    {
+      "profileId": "ffst-zavrsni",
+      "ruleId": "ffst-zavrsni--margins",
+      "checkId": "margins",
+      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
+      "snapshot": "data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx",
+      "claimValue": {
+        "top": 2.54,
+        "right": 2.54,
+        "bottom": 2.54,
+        "left": 2.54,
+        "minimum": false
+      },
+      "engineValue": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "engineAtomsMissingFromSource": [
+        "2,5 / 2.5"
+      ],
+      "claimAtomsMissingFromSource": [
+        "2,54 / 2.54"
+      ],
+      "claimQuoteInSource": false,
+      "claimQuoteCoverage": 0.08,
+      "claimQuoteKind": "package-settings",
       "verdict": "neither",
       "evidence": []
     },
@@ -787,6 +1039,7 @@
       ],
       "claimQuoteInSource": false,
       "claimQuoteCoverage": 0.62,
+      "claimQuoteKind": "text",
       "verdict": "neither",
       "evidence": []
     },
@@ -814,6 +1067,7 @@
       ],
       "claimQuoteInSource": false,
       "claimQuoteCoverage": 0.7,
+      "claimQuoteKind": "text",
       "verdict": "neither",
       "evidence": []
     },
@@ -839,184 +1093,8 @@
       ],
       "claimQuoteInSource": true,
       "claimQuoteCoverage": 0.91,
+      "claimQuoteKind": "text",
       "verdict": "neither",
-      "evidence": []
-    },
-    {
-      "profileId": "ffst-diplomski",
-      "ruleId": "ffst-diplomski--font",
-      "checkId": "font",
-      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
-      "snapshot": "data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx",
-      "claimValue": [
-        "Times New Roman"
-      ],
-      "engineValue": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "engineAtomsMissingFromSource": [],
-      "claimAtomsMissingFromSource": [],
-      "claimQuoteInSource": null,
-      "claimQuoteCoverage": null,
-      "verdict": "unreadable",
-      "evidence": []
-    },
-    {
-      "profileId": "ffst-diplomski",
-      "ruleId": "ffst-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
-      "snapshot": "data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx",
-      "claimValue": [
-        12
-      ],
-      "engineValue": [
-        12,
-        11
-      ],
-      "engineAtomsMissingFromSource": [],
-      "claimAtomsMissingFromSource": [],
-      "claimQuoteInSource": null,
-      "claimQuoteCoverage": null,
-      "verdict": "unreadable",
-      "evidence": []
-    },
-    {
-      "profileId": "ffst-diplomski",
-      "ruleId": "ffst-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
-      "snapshot": "data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx",
-      "claimValue": {
-        "top": 2.54,
-        "right": 2.54,
-        "bottom": 2.54,
-        "left": 2.54,
-        "minimum": false
-      },
-      "engineValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5,
-        "minimum": false
-      },
-      "engineAtomsMissingFromSource": [],
-      "claimAtomsMissingFromSource": [],
-      "claimQuoteInSource": null,
-      "claimQuoteCoverage": null,
-      "verdict": "unreadable",
-      "evidence": []
-    },
-    {
-      "profileId": "ffst-zavrsni",
-      "ruleId": "ffst-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
-      "snapshot": "data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx",
-      "claimValue": [
-        "Times New Roman"
-      ],
-      "engineValue": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "engineAtomsMissingFromSource": [],
-      "claimAtomsMissingFromSource": [],
-      "claimQuoteInSource": null,
-      "claimQuoteCoverage": null,
-      "verdict": "unreadable",
-      "evidence": []
-    },
-    {
-      "profileId": "ffst-zavrsni",
-      "ruleId": "ffst-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
-      "snapshot": "data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx",
-      "claimValue": [
-        12
-      ],
-      "engineValue": [
-        12,
-        11
-      ],
-      "engineAtomsMissingFromSource": [],
-      "claimAtomsMissingFromSource": [],
-      "claimQuoteInSource": null,
-      "claimQuoteCoverage": null,
-      "verdict": "unreadable",
-      "evidence": []
-    },
-    {
-      "profileId": "ffst-zavrsni",
-      "ruleId": "ffst-zavrsni--margins",
-      "checkId": "margins",
-      "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
-      "snapshot": "data/sources/ffst/ffst-predlozak-zavrsnoga-diplomskoga-final.docx",
-      "claimValue": {
-        "top": 2.54,
-        "right": 2.54,
-        "bottom": 2.54,
-        "left": 2.54,
-        "minimum": false
-      },
-      "engineValue": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5,
-        "minimum": false
-      },
-      "engineAtomsMissingFromSource": [],
-      "claimAtomsMissingFromSource": [],
-      "claimQuoteInSource": null,
-      "claimQuoteCoverage": null,
-      "verdict": "unreadable",
-      "evidence": []
-    },
-    {
-      "profileId": "unizd-ucitelji-diplomski",
-      "ruleId": "unizd-ucitelji-diplomski--font",
-      "checkId": "font",
-      "sourceId": "unizd-ucitelji-pravila-2018",
-      "snapshot": "data/sources/unizd/unizd-ucitelji-pravila-2018.docx",
-      "claimValue": [
-        "Times New Roman"
-      ],
-      "engineValue": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "engineAtomsMissingFromSource": [],
-      "claimAtomsMissingFromSource": [],
-      "claimQuoteInSource": null,
-      "claimQuoteCoverage": null,
-      "verdict": "unreadable",
-      "evidence": []
-    },
-    {
-      "profileId": "unizd-ucitelji-diplomski",
-      "ruleId": "unizd-ucitelji-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-ucitelji-pravila-2018",
-      "snapshot": "data/sources/unizd/unizd-ucitelji-pravila-2018.docx",
-      "claimValue": [
-        12
-      ],
-      "engineValue": [
-        12,
-        11
-      ],
-      "engineAtomsMissingFromSource": [],
-      "claimAtomsMissingFromSource": [],
-      "claimQuoteInSource": null,
-      "claimQuoteCoverage": null,
-      "verdict": "unreadable",
       "evidence": []
     }
   ]

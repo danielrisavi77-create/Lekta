@@ -19,8 +19,8 @@ i naslovnica kao tiha druga vrijednost.
 - Zadnja provjera: 2026-07-28 (Daniel Risavi)
 
 **Sto kaze sam izvor:** IZVOR NOSI VRIJEDNOST TVRDNJE, ne onu koju motor boduje -> zrcalo je krivo
-- **CITAT SE NE NALAZI U DOKUMENTU KOJI CITIRA.** To je najtezi oblik nalaza: pravilo je
-  `verified` i ljudski potpisano, a njegovo uporiste u navedenom izvoru ne postoji.
+- Citat nije doslovan prijepis (pokrivanje 0.62), ali je blizu izvornika:
+  parafraza ili urednicka napomena, ne izmisljanje. Nalaz o SLJEDIVOSTI, ne o bodovanju.
 - U izvoru NEMA vrijednosti motora: Arial; Calibri
 - Iz izvora: "...da i kljucnim rijecima: key words) izgled zavrsnog rada: a) rad mora biti izraden na racunalu i to: - slovima times new roman c, velicina slova 14 (naslovi poglavlja, masnim slovima); - slovima times ..."
 - Iz izvora: "...da i kljucnim rijecima: key words) izgled zavrsnog rada: a) rad mora biti izraden na racunalu i to: - slovima times new roman c, velicina slova 14 (naslovi poglavlja, masnim slovima); - slovima times ..."
@@ -37,8 +37,8 @@ i naslovnica kao tiha druga vrijednost.
 - Zadnja provjera: 2026-07-28 (Daniel Risavi)
 
 **Sto kaze sam izvor:** izvor ne nosi NIJEDNU -> pravilo ide na reverifikaciju
-- **CITAT SE NE NALAZI U DOKUMENTU KOJI CITIRA.** To je najtezi oblik nalaza: pravilo je
-  `verified` i ljudski potpisano, a njegovo uporiste u navedenom izvoru ne postoji.
+- Citat nije doslovan prijepis (pokrivanje 0.62), ali je blizu izvornika:
+  parafraza ili urednicka napomena, ne izmisljanje. Nalaz o SLJEDIVOSTI, ne o bodovanju.
 - U izvoru NEMA vrijednosti motora: 12 / 12,0 / 12.0; 11 / 11,0 / 11.0
 - U izvoru NEMA vrijednosti tvrdnje: 12 / 12,0 / 12.0
 
@@ -54,8 +54,8 @@ i naslovnica kao tiha druga vrijednost.
 - Zadnja provjera: 2026-07-28 (Daniel Risavi)
 
 **Sto kaze sam izvor:** IZVOR NOSI VRIJEDNOST TVRDNJE, ne onu koju motor boduje -> zrcalo je krivo
-- **CITAT SE NE NALAZI U DOKUMENTU KOJI CITIRA.** To je najtezi oblik nalaza: pravilo je
-  `verified` i ljudski potpisano, a njegovo uporiste u navedenom izvoru ne postoji.
+- Citat nije doslovan prijepis (pokrivanje 0.62), ali je blizu izvornika:
+  parafraza ili urednicka napomena, ne izmisljanje. Nalaz o SLJEDIVOSTI, ne o bodovanju.
 - U izvoru NEMA vrijednosti motora: 2,5 / 2.5
 - Iz izvora: "...ih znakova; - podnozne napomene (fusnote), velicina slova 10; - sve margine (gornja i donja, lijeva i desna): 3 cm; - paginacija: 1,25 do 1,5 cm od donjeg ruba stranice. b) izgled naslovne stranice (k..."
 

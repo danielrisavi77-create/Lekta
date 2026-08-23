@@ -1612,6 +1612,87 @@ Brojka mutacija: **18 -> 26**, tvrdnji 22 -> 31.
 
 ---
 
+### TRECI RAZRED CITATA: opis postavki paketa (2026-08-23)
+
+Presuda za raskorake citala je samo PDF, pa je 8 slucajeva vodila kao "necitljivo". Revizija je u
+medjuvremenu naucila citati `.docx` (zip s XML-om), naslijedjeni `.doc` i pratitelje `-ocr.txt` /
+`-text.txt`; presuda sada posudjuje TO citanje umjesto da ga pise ponovno. **Necitljivih: 8 -> 0.**
+
+Novi raspored presuda nad 38 raskoraka: `claim-supported` 23, `both-present` 8, `neither` 7.
+
+#### Sest `ffst-*` pravila s pokrivanjem 0,08, a nijedno nije izmisljeno
+Nakon sto je `.docx` postao citljiv, sest `ffst-*` tvrdnji ispalo je na pokrivanju **0,08**, dakle
+NIZE od `vuka` (0,21) koji je doista bio izmisljen. Citanje je pokazalo suprotno.
+
+Njihov citat glasi: *"Normal stil: font Times New Roman, velicina 12pt (w:sz=24), prored 1,5
+(w:line=360 auto), obostrano poravnanje (w:jc=both). Stranica A4, margine 2,54cm sve strane."* To je
+OPIS POSTAVKI PAKETA, ne recenica iz dokumenta. `document_text` cita VIDLJIVI tekst, a te postavke
+zive u `word/styles.xml` i `<w:sectPr><w:pgMar>`, dakle u atributima.
+
+Provjereno otvaranjem paketa, i sve se slaze do znamenke:
+
+| tvrdnja | u paketu |
+|---|---|
+| Times New Roman | `w:ascii="Times New Roman"` (stil Normal) |
+| 12 pt | `w:sz="24"` (pola tocke) |
+| prored 1,5 | `w:line="360"` |
+| obostrano | `w:jc="both"` |
+| margine 2,54 cm | `pgMar 1440` twipsa sa svih strana |
+
+Da se islo po brojci, sest ispravnih pravila bilo bi optuzeno za izmisljanje. Presuda zato nosi
+`claimQuoteKind`: `text` naspram `package-settings`. Nad tekstualnim citatima sada **nijedan** raskorak
+nema sumnjivo pokrivanje, dakle jedini dokazano izmisljeni citati su ona dva `vuka` pravila.
+
+Zapazeno usput, za covjeka: treci `sectPr` u istom predlosku nosi margine 2,33/2,22/0,49/2,29 cm
+(vjerojatno naslovnica ili podnozje), dakle predlozak nije jednoobrazan.
+
+**Pitanje koje ostaje covjeku, i ono je vaznije od brojke:** predlozak OPISUJE, ne propisuje. FER
+pilot je pao tocno na tome (`line-spacing = 1.2` bio je opis predloska, ne propis). Ove tvrdnje same
+tvrde obveznost preko lokatora (*"obvezujuc preko Pravilnik Clanak 9 -> Upute"*), sto je odluka o
+hijerarhiji izvora, ne citanje.
+
+---
+
+### FORENZIKA: sedam pravila koja nijedan alat ne moze provjeriti, provjerena citanjem (2026-08-23)
+
+Adversarijalni nalaz D11 je i dalje otvoren i to je **stvarno lazno zeleno**: `forenzika-diplomski`
+ima 7 bodovanih pravila s pokrivanjem citata **0,00 do 0,12**, dakle NIZE od `vuka` (0,21) koji je
+oznacen kao izmisljen, a revizija za njih prijavljuje **nula nalaza**. Uzrok je `has_scanned_pages`:
+stranice 1-10 tog PDF-a su slike (ondje su clanci Pravilnika), 11-23 su strojno pisani prilozi, pa
+dokument daje 12 tisuca znakova i prolazi kao "citljiv" dok su stranice s pravilima nevidljive.
+OCR pratitelja za taj izvor nema, a tesseract/ocrmypdf nisu na stroju.
+
+Rijeseno onako kako je vec jednom rijesen `biolos`: stranice su RENDERIRANE (PyMuPDF, 3x) i
+procitane kao slika. Ishod: **svih 7 citata je doslovno tocno, i lokatori su tocni.**
+
+- Clanak 9, st. 1 (str. 5): *"Pisano djelo treba biti tiskano na papiru formata A4, s oznacenim
+  stranicama na donjem (gornjem) desnom rubu teksta."* -> pokriva `paper-size` i `page-numbers`.
+- Clanak 9, st. 3 (str. 5): *"Tekst se pise proredom od 1,5 reda, stilom Times New Roman i velicinom
+  slova 12 pri cemu rubovi na obje strane, gore i dolje, moraju biti siroki najmanje 2,5 cm, uz
+  obostrano poravnavanje teksta."* -> pokriva `font`, `font-size`, `line-spacing`, `margins`.
+- Clanak 8, st. 3 (str. 3): *"Poglavlja diplomskog rada su: Uvod, Cilj rada, Izvori podataka i
+  metode, Rezultati, Rasprava, Zakljucci, Sazetak na hrvatskom jeziku, Sazetak na engleskom jeziku,
+  Literatura i Zivotopis."* -> pokriva `required-sections`.
+
+#### Dvije potvrde koje su ispale usput
+
+1. **`marginsMinimum` je tocan.** Izvor doslovno kaze *"moraju biti siroki NAJMANJE 2,5 cm"*, dakle
+   donja medja, ne ciljana vrijednost. Rad s 3 cm sa svih strana je SUKLADAN. To neovisno potvrdjuje
+   izmjenu iz `2c214fd`.
+2. **`scope` je vec zapisan tocno.** Clanak 9, st. 5 istog dokumenta kaze *"Naslovi poglavlja se pisu
+   velicinom slova 16, a pod-poglavlja velicinom 14"*, dakle 12 vrijedi samo za tijelo rada. Strojni
+   izvod je `font-size` vec upisao kao `scope: body`, a `margins` kao `modality: obligation`. To je
+   prva neovisna potvrda da polje `scope` hvata bas onaj razred kvara zbog kojeg je uvedeno
+   ("naslovnica/naslov kao tiha druga vrijednost").
+
+#### Sto ostaje
+Nalaz o `has_scanned_pages` NIJE zatvoren: sljedeci takav dokument ce opet proci kao cist. Trajno
+rjesenje je ili OCR pratitelj za taj izvor (`scripts/ocr_pdf.py`, treba tesseract) ili suzenje garda
+tako da "mjesovit dokument" ne znaci automatski "neprovjerivo". `audit_scored_quotes.py` nije diran
+jer ga je paralelna sesija drzala otvorenim.
+
+---
+
 ## FAZA P5: stvarni korpus i Word oracle
 
 Danas: 12 dokumenata, 9 profila, 8 jedinica, 0 PASS, 12 review, 22 od 95 ciljanih checkova

@@ -18,7 +18,14 @@ i naslovnica kao tiha druga vrijednost.
 - Autoritet: binding
 - Zadnja provjera: 2026-07-28 (Daniel Risavi)
 
-**Sto kaze sam izvor:** snapshot nije strojno citljiv (nije PDF ili nema tekstualni sloj)
+**Sto kaze sam izvor:** IZVOR NOSI VRIJEDNOST TVRDNJE, ne onu koju motor boduje -> zrcalo je krivo
+- Citat OPISUJE POSTAVKE PAKETA (OOXML), ne recenicu. Pokrivanje nad vidljivim tekstom
+  (0.08) ovdje NIJE mjera istinitosti: postavke zive u styles.xml i
+  `<w:sectPr><w:pgMar>`, pa ih citanje teksta ne vidi. Provjerava se otvaranjem paketa.
+  Zasebno pitanje, i ono je za covjeka: predlozak OPISUJE, ne propisuje.
+- U izvoru NEMA vrijednosti motora: Arial; Calibri
+- Iz izvora: "..., citate, slike i tablice. u ovom predlosku stil normal definiran je na sljedeci nacin: tekst je pisan fontom times new roman, velicine 12 pt, proredom 1,5 pt. odlomci su obostrano poravnani, bez razm..."
+- Iz izvora: "..., citate, slike i tablice. u ovom predlosku stil normal definiran je na sljedeci nacin: tekst je pisan fontom times new roman, velicine 12 pt, proredom 1,5 pt. odlomci su obostrano poravnani, bez razm..."
 
 ### font-size - Velicina slova
 - Tvrdnja (izvor): `[12]`
@@ -31,7 +38,14 @@ i naslovnica kao tiha druga vrijednost.
 - Autoritet: binding
 - Zadnja provjera: 2026-07-28 (Daniel Risavi)
 
-**Sto kaze sam izvor:** snapshot nije strojno citljiv (nije PDF ili nema tekstualni sloj)
+**Sto kaze sam izvor:** IZVOR NOSI VRIJEDNOST TVRDNJE, ne onu koju motor boduje -> zrcalo je krivo
+- Citat OPISUJE POSTAVKE PAKETA (OOXML), ne recenicu. Pokrivanje nad vidljivim tekstom
+  (0.08) ovdje NIJE mjera istinitosti: postavke zive u styles.xml i
+  `<w:sectPr><w:pgMar>`, pa ih citanje teksta ne vidi. Provjerava se otvaranjem paketa.
+  Zasebno pitanje, i ono je za covjeka: predlozak OPISUJE, ne propisuje.
+- U izvoru NEMA vrijednosti motora: 11 / 11,0 / 11.0
+- Iz izvora: "...u ovom predlosku stil normal definiran je na sljedeci nacin: tekst je pisan fontom times new roman, velicine 12 pt, proredom 1,5 pt. odlomci su obostrano poravnani, bez razmaka prije i poslije odlomka..."
+- Iz izvora: "...u ovom predlosku stil normal definiran je na sljedeci nacin: tekst je pisan fontom times new roman, velicine 12 pt, proredom 1,5 pt. odlomci su obostrano poravnani, bez razmaka prije i poslije odlomka..."
 
 ### margins - Margine
 - Tvrdnja (izvor): `{"top":2.54,"right":2.54,"bottom":2.54,"left":2.54,"minimum":false}`
@@ -44,5 +58,11 @@ i naslovnica kao tiha druga vrijednost.
 - Autoritet: binding
 - Zadnja provjera: 2026-07-28 (Daniel Risavi)
 
-**Sto kaze sam izvor:** snapshot nije strojno citljiv (nije PDF ili nema tekstualni sloj)
+**Sto kaze sam izvor:** izvor ne nosi NIJEDNU -> pravilo ide na reverifikaciju
+- Citat OPISUJE POSTAVKE PAKETA (OOXML), ne recenicu. Pokrivanje nad vidljivim tekstom
+  (0.08) ovdje NIJE mjera istinitosti: postavke zive u styles.xml i
+  `<w:sectPr><w:pgMar>`, pa ih citanje teksta ne vidi. Provjerava se otvaranjem paketa.
+  Zasebno pitanje, i ono je za covjeka: predlozak OPISUJE, ne propisuje.
+- U izvoru NEMA vrijednosti motora: 2,5 / 2.5
+- U izvoru NEMA vrijednosti tvrdnje: 2,54 / 2.54
 
