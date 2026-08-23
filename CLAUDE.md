@@ -127,6 +127,40 @@ npm run check   # tsc --noEmit && vitest run && vite build
 
 Ako `check` pada, promjena nije gotova. Ne commitaj crveno.
 
+## Tvrdo pravilo: bodovana vrijednost mora se slagati s verificiranom tvrdnjom
+
+Lanac dokaza (izvor + snapshot + stranica + doslovan citat + potpis) zivi u `ruleEntries`
+(`data/profiles/<unit>/drafts/*.json`), a motor boduje iz naslijedjenog `rules` objekta
+(`composeAnalysisProfile` klonira `definition.rules`, NIKAD `ruleEntries`; svih 407 registriranih
+profila ima prazan `ruleEntries`). Do 2026-08-22 te dvije strane nitko nije usporedjivao.
+
+Prvo mjerenje: **40 parova (profil, os) kroz 23 profila** bodovalo je vrijednost koju njihova vlastita
+`verified` tvrdnja s citatom opovrgava. `unizd-pomorski-*`: izvor propisuje Merriweather 10 pt, motor
+je trazio Times New Roman/Arial/Calibri 11-12 pt, pa je rad koji tocno slijedi svoju uputu gubio
+bodove. Serverski popravak je uz to upisivao TNR 12 u studentov dokument, pod ruleId-em cija
+provenijencija kaze Merriweather 10.
+
+- Usporedbu radi `src/verification/scored-value-binding.ts`, po OSI a ne po kljucu `rules`: motor
+  vecinu dimenzija cita kroz par (zastavica, vrijednost), pa usporedba po kljucu daje lazne nalaze
+  (`paper-size: "A4"` proizvodi `paperSizes`, zrcalo nosi `requireA4`, ista odredba drukcije zapisana).
+  Izmjereno: usporedba po kljucu dala je 227 laznih `unbacked`.
+- Artefakt je `data/verification/scored-value-drift.json` (`npm run scored-value-drift`).
+  `advisory-demotion.ts` ga cita i GASI bodovanje osi s raskorakom dok vlasnik ne presudi; ta os
+  ispada i iz `repair-map.json`, inace popravak i dalje upisuje vrijednost iz zrcala.
+  Dokazni dosjei: `npm run drift-adjudicate` pa `npm run drift-dossiers`.
+- Gard: `tests/scored-value-drift.test.ts` (commitani artefakt = svjez izracun, ratchet koji smije
+  samo padati, negativne kontrole) i `tests/gate-mutations.test.ts`.
+- KRUGA NEMA I TO JE NAMJERNO: raskorak se racuna iskljucivo iz tvrdnji i `rules`, nikad iz demotije.
+  Provjera koja preskace vec demotirane osi sama sebe pobrise u sljedecem krugu (popis se isprazni,
+  demotija nestane, kvar se vrati). Zato `computeBaseDemotedAdvisory` stoji odvojeno od
+  `computeDemotedAdvisory`.
+- Demotija je PRIVREMENA i FAIL-SAFE, pa se radi strojno. UKLJUCIVANJE bodovanja trazi ljudski
+  potpis. Tvrdnja koja se ne slaze sa zrcalom NIJE automatski ona tocna: opovrgavajuci prolaz
+  2026-08-21 nasao je krivo pripisan opseg na 12 od 20 tvrdnji, a presuda 2026-08-23 je nasla 17
+  slucajeva gdje je krivo zrcalo i 2 gdje je kriva tvrdnja.
+- `scored-coverage.json` se time NE mijenja i to nije nesklad koji treba poravnati: coverage mjeri
+  tvrdnje sljedive do izvora, demotija mjeri sto motor boduje. Dvije populacije, imenuju se.
+
 ## Tvrdo pravilo: privatni sloj ne ide u javni bundle (klasifikacijski manifest)
 
 `data/classification.json` je jedini izvor istine o tome sto smije u javni browser bundle
@@ -358,6 +392,20 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
   ("Opći ...") program se skriva SAMO ako je redundantan, dakle ako je svaki profil koji ga gadja
   dostizan i preko konkretnog studija; inace krovni profil postane nedostizan i broji se u
   pokrivenosti a nitko ga ne moze odabrati.
+- `src/profiles/profile-rules-contract.ts` - ugovor rules-on-demand isporuke (v1): served polja
+  (heavy minus profileLabel/catalogPrograms/publicSources) + buildProfileRulesArtifact (injektiran
+  sha256; dijele ga generator `npm run gen-profile-rules-server`, Edge funkcija profile-rules i
+  drift test tests/profile-rules-server.test.ts). Artefakt: data/generated/profile-rules-server.json.
+- `src/report/profile-rules-client.ts` - klijent profile-rules endpointa (union ishoda, timeout,
+  JEDAN retry samo za unavailable). `src/profiles/profile-rules-local.ts` - dev provider iz lazy
+  chunkova (RUNTIME gate u app.ts wireProfileRulesProvider, NE build konstanta: chunkovi moraju
+  ostati u grafu dok bundleSizeGuard u fazi B2 zahtijeva heavy chunk).
+- PRAVILA PROFILA U PREGLEDNIKU (faza B): ensureProfileRules(profileId) dohvaca JEDAN profil preko
+  providera i prime-a njegove repair unose; currentProfile BACA ako definicija postoji a pravila
+  nisu ucitana (light indeks nosi djelomican rules objekt pa bi compose tiho bodovao po 2-4 kljuca),
+  a na 'failed' POSTENO degradira na opcu provjeru (definition=null, vidljiva oznaka + toast).
+  repairEntriesFor cita primed store s fallbackom na bulk mapu (testovi/skripte i dalje koriste
+  ensureRepairMapHeavy).
 - `src/repair/param-authority.ts` - serverski autoritet nad ciljanom vrijednoscu (vidi Popravak).
 - `src/repair/docx-budget.ts` - JEDAN izvor granica dokumenta (upload, dekompresija, broj
   zapisa) za intake, analizu i popravak; ne uvodi nove granice mimo njega. VAZNO: analiza i
