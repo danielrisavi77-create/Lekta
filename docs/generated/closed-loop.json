@@ -1646,7 +1646,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 5,
+      "requested": 6,
       "axesResolved": [
         "font",
         "font-size",
@@ -1784,7 +1784,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 5,
+      "requested": 6,
       "axesResolved": [
         "font",
         "font-size",
@@ -1809,7 +1809,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 5,
+      "requested": 6,
       "axesResolved": [
         "font",
         "font-size",
@@ -2047,7 +2047,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 3,
+      "requested": 5,
       "axesResolved": [
         "font",
         "font-size",
@@ -2072,7 +2072,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 3,
+      "requested": 5,
       "axesResolved": [
         "font",
         "font-size",
@@ -3075,7 +3075,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 2,
+      "requested": 4,
       "axesResolved": [
         "font",
         "font-size",
@@ -3098,7 +3098,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 2,
+      "requested": 4,
       "axesResolved": [
         "font",
         "font-size",
@@ -4346,7 +4346,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 3,
+      "requested": 4,
       "axesResolved": [
         "font",
         "line-spacing",
@@ -6638,7 +6638,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 2,
+      "requested": 3,
       "axesResolved": [
         "font",
         "font-size",
@@ -6711,7 +6711,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 3,
+      "requested": 5,
       "axesResolved": [
         "font",
         "font-size",
@@ -6886,7 +6886,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 2,
+      "requested": 5,
       "axesResolved": [
         "font",
         "font-size",
@@ -7115,7 +7115,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 3,
+      "requested": 5,
       "axesResolved": [
         "font",
         "font-size",
@@ -7140,7 +7140,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 3,
+      "requested": 5,
       "axesResolved": [
         "font",
         "font-size",
@@ -7234,7 +7234,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 1,
+      "requested": 2,
       "axesResolved": [
         "font",
         "font-size",
@@ -7321,7 +7321,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 4,
+      "requested": 6,
       "axesResolved": [
         "font",
         "font-size",
@@ -7448,7 +7448,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 4,
+      "requested": 6,
       "axesResolved": [
         "font",
         "font-size",
@@ -7916,7 +7916,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 3,
+      "requested": 6,
       "axesResolved": [
         "font",
         "font-size",
@@ -7941,7 +7941,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 3,
+      "requested": 6,
       "axesResolved": [
         "font",
         "font-size",

@@ -2434,8 +2434,8 @@
         "scoredMachineCheckable": 4,
         "scoredTotal": 4,
         "bulkPending": 0,
-        "offeredRepairOptions": 3,
-        "facultySpecificRepairOptions": 3,
+        "offeredRepairOptions": 4,
+        "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -2463,8 +2463,8 @@
         "scoredMachineCheckable": 4,
         "scoredTotal": 4,
         "bulkPending": 0,
-        "offeredRepairOptions": 3,
-        "facultySpecificRepairOptions": 3,
+        "offeredRepairOptions": 4,
+        "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -2608,8 +2608,8 @@
         "scoredMachineCheckable": 6,
         "scoredTotal": 6,
         "bulkPending": 0,
-        "offeredRepairOptions": 5,
-        "facultySpecificRepairOptions": 5,
+        "offeredRepairOptions": 6,
+        "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -2782,8 +2782,8 @@
         "scoredMachineCheckable": 7,
         "scoredTotal": 7,
         "bulkPending": 0,
-        "offeredRepairOptions": 5,
-        "facultySpecificRepairOptions": 5,
+        "offeredRepairOptions": 6,
+        "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -2811,8 +2811,8 @@
         "scoredMachineCheckable": 7,
         "scoredTotal": 7,
         "bulkPending": 0,
-        "offeredRepairOptions": 5,
-        "facultySpecificRepairOptions": 5,
+        "offeredRepairOptions": 6,
+        "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -3098,11 +3098,11 @@
         "declaration": "generic"
       },
       "evidence": {
-        "scoredMachineCheckable": 7,
-        "scoredTotal": 7,
+        "scoredMachineCheckable": 6,
+        "scoredTotal": 6,
         "bulkPending": 0,
-        "offeredRepairOptions": 3,
-        "facultySpecificRepairOptions": 3,
+        "offeredRepairOptions": 5,
+        "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -3127,11 +3127,11 @@
         "declaration": "generic"
       },
       "evidence": {
-        "scoredMachineCheckable": 7,
-        "scoredTotal": 7,
+        "scoredMachineCheckable": 6,
+        "scoredTotal": 6,
         "bulkPending": 0,
-        "offeredRepairOptions": 3,
-        "facultySpecificRepairOptions": 3,
+        "offeredRepairOptions": 5,
+        "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -4575,8 +4575,8 @@
         "scoredMachineCheckable": 7,
         "scoredTotal": 7,
         "bulkPending": 0,
-        "offeredRepairOptions": 3,
-        "facultySpecificRepairOptions": 3,
+        "offeredRepairOptions": 5,
+        "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -4604,8 +4604,8 @@
         "scoredMachineCheckable": 7,
         "scoredTotal": 7,
         "bulkPending": 0,
-        "offeredRepairOptions": 3,
-        "facultySpecificRepairOptions": 3,
+        "offeredRepairOptions": 5,
+        "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -6520,8 +6520,8 @@
         "scoredMachineCheckable": 7,
         "scoredTotal": 7,
         "bulkPending": 0,
-        "offeredRepairOptions": 4,
-        "facultySpecificRepairOptions": 4,
+        "offeredRepairOptions": 5,
+        "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -10213,8 +10213,8 @@
         "scoredMachineCheckable": 3,
         "scoredTotal": 3,
         "bulkPending": 0,
-        "offeredRepairOptions": 5,
-        "facultySpecificRepairOptions": 2,
+        "offeredRepairOptions": 6,
+        "facultySpecificRepairOptions": 3,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -10300,8 +10300,8 @@
         "scoredMachineCheckable": 5,
         "scoredTotal": 5,
         "bulkPending": 0,
-        "offeredRepairOptions": 3,
-        "facultySpecificRepairOptions": 3,
+        "offeredRepairOptions": 5,
+        "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -10561,8 +10561,8 @@
         "scoredMachineCheckable": 6,
         "scoredTotal": 6,
         "bulkPending": 0,
-        "offeredRepairOptions": 2,
-        "facultySpecificRepairOptions": 2,
+        "offeredRepairOptions": 5,
+        "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -10880,8 +10880,8 @@
         "scoredMachineCheckable": 5,
         "scoredTotal": 5,
         "bulkPending": 0,
-        "offeredRepairOptions": 3,
-        "facultySpecificRepairOptions": 3,
+        "offeredRepairOptions": 5,
+        "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -10909,8 +10909,8 @@
         "scoredMachineCheckable": 5,
         "scoredTotal": 5,
         "bulkPending": 0,
-        "offeredRepairOptions": 3,
-        "facultySpecificRepairOptions": 3,
+        "offeredRepairOptions": 5,
+        "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -11025,8 +11025,8 @@
         "scoredMachineCheckable": 4,
         "scoredTotal": 4,
         "bulkPending": 0,
-        "offeredRepairOptions": 3,
-        "facultySpecificRepairOptions": 1,
+        "offeredRepairOptions": 4,
+        "facultySpecificRepairOptions": 2,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -11141,8 +11141,8 @@
         "scoredMachineCheckable": 8,
         "scoredTotal": 8,
         "bulkPending": 0,
-        "offeredRepairOptions": 4,
-        "facultySpecificRepairOptions": 4,
+        "offeredRepairOptions": 6,
+        "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -11315,8 +11315,8 @@
         "scoredMachineCheckable": 6,
         "scoredTotal": 6,
         "bulkPending": 0,
-        "offeredRepairOptions": 4,
-        "facultySpecificRepairOptions": 4,
+        "offeredRepairOptions": 6,
+        "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -11953,8 +11953,8 @@
         "scoredMachineCheckable": 7,
         "scoredTotal": 8,
         "bulkPending": 0,
-        "offeredRepairOptions": 3,
-        "facultySpecificRepairOptions": 3,
+        "offeredRepairOptions": 6,
+        "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
       "blockedReasons": [
@@ -11982,8 +11982,8 @@
         "scoredMachineCheckable": 7,
         "scoredTotal": 8,
         "bulkPending": 0,
-        "offeredRepairOptions": 3,
-        "facultySpecificRepairOptions": 3,
+        "offeredRepairOptions": 6,
+        "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
       "blockedReasons": [
