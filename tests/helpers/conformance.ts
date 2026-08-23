@@ -181,7 +181,16 @@ function derivePlanFor(profileId: string, profile: any): ConformancePlan {
   const vSize = Math.max(...(profile.size?.length ? profile.size : [12])) + 5;
   const vSpacingLine = spacing >= 1.4 ? 240 : 480;
   const pm = profile.margins ?? { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 };
-  const vMargins = { top: pm.top + 1.5, right: pm.right + 1.5, bottom: pm.bottom + 1.5, left: pm.left + 1.5 };
+  // Uz `marginsMinimum` profil trazi "najmanje X cm" (izvor: "rubovi moraju biti siroki najmanje
+  // 2,5 cm"), pa engine mjeri `got >= want - tolerancija`. SIRA margina je tada USKLADJENA, ne
+  // prekrsaj, i slucaj bi lazno prolazio kao pass. Prekrsaj je onda UZA margina.
+  const marginsAreMinimum = profile.marginsMinimum === true;
+  const vMarginSide = (want: number): number =>
+    marginsAreMinimum ? Math.max(0.2, want - 1.5) : want + 1.5;
+  const vMargins = {
+    top: vMarginSide(pm.top), right: vMarginSide(pm.right),
+    bottom: vMarginSide(pm.bottom), left: vMarginSide(pm.left),
+  };
   const vPage = profile.paperSizes?.length
     ? (() => {
         const alt = Object.keys(PAPER_CM).find((k) => !profile.paperSizes.includes(k))!;
