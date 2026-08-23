@@ -29,7 +29,26 @@ describe('mapRepairJobRow', () => {
       id: 'j1', workType: 'diplomski', label: 'Moj rad', status: 'done',
       originalBytes: 1000, resultBytes: 900, changesCount: 5,
       resultPath: 'u1/j1/fixed.docx', createdAt: '2026-07-19T10:00:00Z',
+      deleting: false,
     });
+  });
+
+  /**
+   * Audit P1-10 (migracija 0098). Posao kojem je brisanje zapoceto pa prekinuto pokazuje na
+   * blobove kojih vise nema, pa ga sucelje NE SMIJE nuditi za preuzimanje.
+   */
+  it('deleting_at oznacava posao u brisanju', () => {
+    const job = mapRepairJobRow({
+      id: 'j2', result_path: 'p', created_at: 't', deleting_at: '2026-08-23T10:00:00Z',
+    });
+    expect(job.deleting).toBe(true);
+  });
+
+  it('bez deleting_at posao je zdrav', () => {
+    expect(mapRepairJobRow({ id: 'j3', result_path: 'p', created_at: 't' }).deleting).toBe(false);
+    expect(mapRepairJobRow({ id: 'j4', result_path: 'p', created_at: 't', deleting_at: null }).deleting).toBe(false);
+    // Prazan string je PostgREST-ov nacin da kaze "nista", ne valjan trenutak.
+    expect(mapRepairJobRow({ id: 'j5', result_path: 'p', created_at: 't', deleting_at: '' }).deleting).toBe(false);
   });
   it('null brojevi ostaju null', () => {
     const job = mapRepairJobRow({ id: 'j', result_path: 'p', created_at: 't' });

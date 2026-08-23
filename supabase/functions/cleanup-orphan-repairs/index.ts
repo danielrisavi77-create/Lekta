@@ -24,6 +24,9 @@ const BATCH = 500;      // objekata po rundi (jedan storage.remove poziv)
 const MAX_ROUNDS = 40;  // gornja granica (~20k objekata po pozivu); ostatak pocisti sljedeci cron
 // Retencija anonimnih popravaka (0033). Vlasnikova odluka: 30 dana.
 const ANON_RETENTION_DAYS = Number(Deno.env.get('REPAIR_ANON_RETENTION_DAYS') ?? '30');
+// Koliko dugo brisanje smije "trajati" prije nego ga cron smatra zaglavljenim (0098). Edge poziv
+// traje sekunde, pa je 15 minuta velikodusno i ne moze uhvatiti brisanje koje je jos u letu.
+const STUCK_GRACE_MINUTES = Number(Deno.env.get('REPAIR_STUCK_DELETE_GRACE_MINUTES') ?? '15');
 
 Deno.serve(async (req: Request) => {
   const json = (body: unknown, status = 200): Response =>
@@ -76,7 +79,37 @@ Deno.serve(async (req: Request) => {
       if (rows.length < BATCH) break;
     }
 
-    return json({ ok: true, removed, anonymousRemoved }, 200);
+    // FAZA 3 (0098, audit P1-10): ZAGLAVLJENA BRISANJA. `delete-repair-job` prvo zapise namjeru
+    // (`deleting_at`), pa ukloni blobove, pa obrise redak. Prekid izmedju ta dva koraka ostavlja
+    // redak koji pokazuje na datoteke kojih vise nema; korisnik bi inace trajno gledao posao koji
+    // se ne da preuzeti. Faza 1 cisti suprotan smjer (blob bez retka), pa ovaj slucaj do sada nije
+    // imao vlasnika.
+    //
+    // Ponavljanje je bezopasno: Storage remove nad nepostojecim objektom nije greska, pa dovrsavanje
+    // vec dovrsenog brisanja jednostavno prodje. Prag (`STUCK_GRACE_MINUTES`) postoji da se ne dira
+    // brisanje koje upravo traje, isti razlog kao grace period u fazi 1.
+    let stuckCompleted = 0;
+    for (let round = 0; round < MAX_ROUNDS; round++) {
+      const { data, error } = await admin.rpc('find_stuck_repair_deletions', {
+        p_grace_minutes: STUCK_GRACE_MINUTES, p_limit: BATCH,
+      });
+      if (error) { console.error('[cleanup-orphan-repairs] stuck rpc', error); return json({ error: 'stuck_query_failed', removed, anonymousRemoved, stuckCompleted }, 500); }
+      const rows = (data ?? []) as Array<{ job_id: string; original_path: string | null; result_path: string | null }>;
+      if (rows.length === 0) break;
+
+      const paths = rows.flatMap((r) => [r.original_path, r.result_path]).filter((s): s is string => typeof s === 'string' && !!s);
+      if (paths.length) {
+        const { error: rmErr } = await admin.storage.from('repair').remove(paths);
+        if (rmErr) { console.error('[cleanup-orphan-repairs] stuck remove', rmErr); return json({ error: 'stuck_remove_failed', removed, anonymousRemoved, stuckCompleted }, 502); }
+      }
+      const { error: delErr } = await admin.from('repair_jobs').delete().in('id', rows.map((r) => r.job_id));
+      if (delErr) { console.error('[cleanup-orphan-repairs] stuck delete', delErr); return json({ error: 'stuck_delete_failed', removed, anonymousRemoved, stuckCompleted }, 500); }
+
+      stuckCompleted += rows.length;
+      if (rows.length < BATCH) break;
+    }
+
+    return json({ ok: true, removed, anonymousRemoved, stuckCompleted }, 200);
   } catch (e) {
     console.error('[cleanup-orphan-repairs]', e);
     return json({ error: 'internal' }, 500);
