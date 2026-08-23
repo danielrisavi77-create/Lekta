@@ -87,13 +87,14 @@ describe('deploy gate: pravni identitet pruzatelja', () => {
     // Prva verzija je visjela SAMO o LEKTA_REPAIR_LIVE=1, a tu varijablu ne postavlja nista u
     // lancu deploya, dok DEFAULT_PRODUCTION_CONFIG odavno salje zivi repair-docx. Gate je time
     // bio inertan tocno u stanju za koje je pisan.
-    expect(src).toContain('const repairShipped');
-    expect(src).toMatch(/repairLive\s*=\s*process\.env\.LEKTA_REPAIR_LIVE === '1' \|\| repairShipped/);
-    // Mora gledati JE LI DODJELA PRAZNA: put se u minifikatu ne pojavljuje doslovno
-    // (`repairEndpoint:he.functionEndpoint(\`repair-docx\`)`), pa bi trazenje URL-a dalo lazno
-    // negativno i gate bi opet sutio.
-    expect(src).toContain('repairEndpoint');
-    expect(src).toContain('EMPTY_LITERALS');
+    expect(src).toContain('shippedCapabilities');
+    expect(src).toMatch(/repairLive\s*=\s*process\.env\.LEKTA_REPAIR_LIVE === '1' \|\| shipped\.repair/);
+    // OBA praga, ne samo obrada: naplata bez registriranog subjekta je isti kvar, drugi zakon.
+    expect(src).toMatch(/commerceLive\s*=\s*process\.env\.LEKTA_COMMERCE_LIVE === '1' \|\| shipped\.commerce/);
+    // Sama detekcija (prazan literal vs zivi poziv, spread oblik paymentLinks) dokazuje se
+    // sintetickim bundleom u tests/deploy-gate-shipped-config.test.ts, jer pravi dist danas ima
+    // naplatu ugasenu pa bi nad njim isao dokazati samo negativan smjer.
+    expect(src).toContain('deploy-gate-shipped-config.mjs');
   });
 
   it('upozorenje o pragu naplate ne utihne kad popravak ozivi', () => {

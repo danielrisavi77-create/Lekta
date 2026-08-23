@@ -535,33 +535,26 @@ if (fs.existsSync(naslovnicaDir)) {
       .filter(([field]) => !String(provider[field] ?? '').trim())
       .map(([field, why]) => `  - ${field} (${why})`);
 
-  const commerceLive = process.env.LEKTA_COMMERCE_LIVE === '1';
-  // Okidac praga obrade se IZVODI IZ ONOGA STO SE ISPORUCUJE, ne iz zapamcene zastavice.
-  // Prva verzija ovog gatea visjela je samo o LEKTA_REPAIR_LIVE=1, a tu varijablu ne postavlja
-  // nista u lancu deploya (netlify.toml ima samo NODE_VERSION/DEPLOY/LEKTA_SITE_ORIGIN), dok
-  // DEFAULT_PRODUCTION_CONFIG odavno salje `repairEndpoint: functionEndpoint('repair-docx')`.
-  // Gate je time bio inertan TOCNO u stanju za koje je pisan: dokument vec napusta preglednik,
-  // a provjera je sutjela. Ako izgradjeni bundle zna za repair-docx, obrada JE ziva.
-  // Put se u bundleu NE pojavljuje doslovno: minifikat glasi
-  // `repairEndpoint:he.functionEndpoint(\`repair-docx\`)`, a ugasen endpoint je prazan literal
-  // (`checkoutEndpoint:\`\``). Zato se gleda JE LI DODJELA PRAZNA, ne trazi li se doslovan URL;
-  // trazenje '/functions/v1/repair-docx' davalo je lazno NEGATIVNO i gate bi opet sutio.
-  const EMPTY_LITERALS = ['``', "''", '""'];
-  const repairShipped = assets.some((f) => {
-    const js = fs.readFileSync(path.join(DIST, 'assets', f), 'utf8');
-    const m = js.match(/repairEndpoint\s*:\s*(``|''|""|[^,}\s]{1,60})/);
-    return !!m && !EMPTY_LITERALS.includes(m[1]);
-  });
-  const repairLive = process.env.LEKTA_REPAIR_LIVE === '1' || repairShipped;
-  const repairWhy = repairShipped
-    ? 'izgradjeni bundle salje dokument na repair-docx'
-    : 'LEKTA_REPAIR_LIVE=1';
+  // OBA praga se izvode iz ONOGA STO SE ISPORUCUJE, ne iz zapamcenih zastavica: LEKTA_REPAIR_LIVE
+  // i LEKTA_COMMERCE_LIVE ne postavlja nista u lancu deploya (netlify.toml ima samo NODE_VERSION,
+  // DEPLOY i LEKTA_SITE_ORIGIN), pa je gate koji visi samo o njima inertan tocno u stanju za koje
+  // je pisan. Detekcija i obrazlozenje zive u zasebnom modulu jer se tako mogu testirati
+  // sintetickim bundleom: pravi dist danas ima naplatu UGASENU, pa bi se nad njim mogao dokazati
+  // samo negativan smjer (vidi tests/deploy-gate-shipped-config.test.ts).
+  const { shippedCapabilities } = await import('./deploy-gate-shipped-config.mjs');
+  const shipped = shippedCapabilities(
+    assets.map((f) => fs.readFileSync(path.join(DIST, 'assets', f), 'utf8')),
+  );
+  const commerceLive = process.env.LEKTA_COMMERCE_LIVE === '1' || shipped.commerce;
+  const commerceWhy = shipped.why.commerce ?? 'LEKTA_COMMERCE_LIVE=1';
+  const repairLive = process.env.LEKTA_REPAIR_LIVE === '1' || shipped.repair;
+  const repairWhy = shipped.why.repair ?? 'LEKTA_REPAIR_LIVE=1';
   const missingForProcessing = missingFrom(REQUIRED_FOR_PROCESSING);
   const missingForCommerce = missingFrom(REQUIRED_FOR_COMMERCE);
 
   if (commerceLive && missingForCommerce.length) {
     fail(
-      ['naplata je oznacena kao ZIVA (LEKTA_COMMERCE_LIVE=1), a data/legal/provider.json nema:', ...missingForCommerce].join(os.EOL),
+      [`naplata je ZIVA (${commerceWhy}), a data/legal/provider.json nema:`, ...missingForCommerce].join(os.EOL),
     );
   }
   // I bez naplate: cim se dokument uploada i pohranjuje, voditelj obrade mora biti imenovan.
