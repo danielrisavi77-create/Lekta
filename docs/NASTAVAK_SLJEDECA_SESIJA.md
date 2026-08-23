@@ -38,6 +38,7 @@ Dva alata i jedan popravak u proizvodu.
 | `scripts/propose_claim_modality.py` | Predlaze MODALITET i OPSEG po jedinici (izvor, citat, os); nikad ne upisuje ublazen modalitet. |
 | `scripts/apply_claim_modality.py` | Upisuje jednoznacne prijedloge u ruleEntries (`modalitySource: mechanical`). 1404 od 1934, 530 ceka covjeka. |
 | `tests/gate-mutations.test.ts` | Mutacijsko testiranje: podmece 18 poznatih kvarova i trazi da ih gard prijavi. 18/18 uhvaceno, trajno u `npm run check`. |
+| `scripts/apply-drift-decision.mjs` | Presuda o JEDNOM raskoraku uz obavezan `--by` potpis; odbija odluku koja proturjeci strojnoj presudi bez `--force`. |
 | `scripts/adjudicate_drift.py` | Cita snapshot i kaze koju od dvije vrijednosti izvor NOSI. 17 claim-supported, 2 engine-supported, 8 both-present, 5 neither, 8 necitljivo. |
 | `data/verification/drift-dossiers/` | Dokazni dosje po profilu (`npm run drift-dossiers`): izvor, lokator, citat i obje vrijednosti jedna do druge. |
 | `data/verification/known-findings.json` | Nalazi koje je vlasnik procitao i svjesno ostavio. Postoji da nov nalaz ne nestane u sumu vec odlucenih. Priznavanje je po VRSTI nalaza, pa nova vrsta na istom pravilu ostaje nova. |
@@ -108,6 +109,7 @@ optuzis svoju izmjenu, ponovi mjerenje barem dvaput.
 ```bash
 npm run scored-value-drift                     # tvrdnja vs. bodovana vrijednost (pa gen-profile-runtime-maps)
 npm run drift-adjudicate                       # sto o svakom raskoraku kaze sam izvor
+npm run drift-apply -- --rule <id> --decision claim --by "Ime"   # presuda, suho bez --write
 npx vitest run tests/gate-mutations.test.ts    # dokaz da garda grizu (18/18)
 npm run drift-dossiers                         # dokazni dosjei za te raskorake
 npm run claim-modality                         # prijedlog modaliteta i opsega (pa :apply za upis)

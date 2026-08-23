@@ -1693,6 +1693,40 @@ jer ga je paralelna sesija drzala otvorenim.
 
 ---
 
+### ALAT ZA PRESUDU: 38 raskoraka postaje 38 naredbi s potpisom (2026-08-23)
+
+Demotija je zaustavila krivo bodovanje, ali nijedan slucaj nije rijesila. Rjesavanje rukom trazi
+izmjenu u DVA registra (`verified-profiles.json` i `-heavy.json`; light indeks ne nosi pravila) plus
+pregradnju sest artefakata, pa je 38 odluka zapravo bilo 38 visekoraknih zahvata i zato su stajale.
+
+`npm run drift-apply -- --rule <ruleId> --decision claim|claim-wrong --by "Ime" [--note] [--write]`
+
+- `claim`: izvor podupire TVRDNJU -> njezina vrijednost ide u `rules` oba registra. Raskorak nestaje
+  i demotija se sama dize pri pregradnji.
+- `claim-wrong`: izvor podupire ZRCALO -> tvrdnja ide u `needs-recheck`, `scored:false`,
+  `autoFixable:false`, uz OBAVEZAN `--note`. Pravilo pod reverifikacijom ne smije ni bodovati ni
+  pokretati popravak; drugo je lako previdjeti.
+
+Cetiri garda, svaki iz izmjerenog razloga:
+
+1. **`--by` je obavezan.** Ukljucivanje bodovanja je jedina stvar u ovom lancu koja trazi covjeka
+   (gasenje je fail-safe i radi se strojno). Potpis je ono sto tu granicu drzi, pa bez njega alat
+   odbija raditi.
+2. **Suho je zadano.** `--write` se trazi izricito.
+3. **Odluka koja proturjeci PRESUDI se odbija** bez `--force`. Nije birokracija: od 38 raskoraka
+   `vuka` je bio jedini u kojem je zrcalo bilo u pravu, a takav se najlakse zamijeni s ostala 23 u
+   kojima je u pravu tvrdnja. Alat ispisuje i pokrivanje citata na kojem presuda stoji.
+4. **Zavrseci redaka se cuvaju** po datoteci (jedan registar je CRLF, drugi LF), inace jedna odluka
+   proizvede diff od nekoliko tisuca redaka i zatrpa stvarnu izmjenu.
+
+Svaka presuda se biljezi u `data/verification/drift-decisions.json` (tvrdnja, zrcalo, strojna
+presuda, potpis), da se odluka ne izgubi i da je sljedeca revizija ne prijavi kao nov nalaz.
+
+Zatecena raspodjela: **23 `claim-supported`** (zrcalo je krivo, ocekivano `--decision claim`),
+**8 `both-present`** (izvor nosi obje, pitanje hijerarhije), **7 `neither`** (reverifikacija).
+
+---
+
 ## FAZA P5: stvarni korpus i Word oracle
 
 Danas: 12 dokumenata, 9 profila, 8 jedinica, 0 PASS, 12 review, 22 od 95 ciljanih checkova
