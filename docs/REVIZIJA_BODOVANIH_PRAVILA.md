@@ -13,17 +13,17 @@ Pokretanje: `npm run audit:scored-quotes`. NIJE u `npm run check` i nijedan test
 | | pocetak dana | sada |
 |---|---|---|
 | bodovanih pravila | 1934 | 1932 |
-| revidirano | 1391 | **1778** |
-| nerevidirano (izvor se ne cita) | 543 | **154** |
-| neprovjerivo (skenirano ili ostecen tekstualni sloj) | 9 | **55** |
-| pravila s NOVIM nalazom | 319 | **158** |
+| revidirano | 1391 | **1919** |
+| nerevidirano (izvor se ne cita) | 543 | **13** |
+| neprovjerivo (skenirano ili ostecen tekstualni sloj) | 9 | **88** |
+| pravila s NOVIM nalazom | 319 | **156** |
 | priznato (procitano pa ostavljeno) | 37 | **47** |
 
-Nalazi po redu: 148 nedoslovnih prijepisa, 8 odsjecenih, 2 bez vrijednosti u citatu. Red kvalifikatora je
-PRAZAN. Pad bodovanih pravila s 1934 na 1932 nije iz ove revizije: `vuka-strojarski-{diplomski,zavrsni}--margins`
+Nalazi po redu: 148 nedoslovnih prijepisa i 8 odsjecenih. Redovi "kvalifikator", "vrijednost ne stoji
+u citatu", "brojevi ne stoje", "vrijednost je SKUP" i "predlozak" su PRAZNI. Pad bodovanih pravila s 1934 na 1932 nije iz ove revizije: `vuka-strojarski-{diplomski,zavrsni}--margins`
 demotirao je drift alat paralelne sesije.
 
-Od 161 zatvorenog nalaza, **jedan jedini** bio je stvaran kvar u bodovanju (forenzika, nize).
+Od 163 zatvorena nalaza, **jedan jedini** bio je stvaran kvar u bodovanju (forenzika, nize).
 Ostalo je bilo mjerenje, ne podaci. To je najvazniji zakljucak i razlog zasto se svaki nalaz
 citao u izvoru prije nego je bilo sto dirano.
 
@@ -62,9 +62,6 @@ izolirani gate (369/369).
 
 ### 2.2 Ceka autorsku odluku, nije kvar alata
 
-- **2 pravila kojima citat ne nosi vlastitu vrijednost, a izvor se ne moze procitati:**
-  `ffri-povum-{diplomski,zavrsni}--footnote-size` (potpuno skeniran PDF, nula znakova teksta). Trazilo
-  bi OCR.
 - **8 odsjecenih citata koji imenuju stvarno izuzece**, ali nijedan ne cini pravilo prestrogim jer
   motor mjeri dominantnu vrijednost. Svaki pokazuje odredbu koju profil ne zapisuje: `hks-diplomski`
   (biljeske 10 pt, prored jednostruk, naslovi lijevo), `ffzg-filozofija-diplomski` (naslovnica,
@@ -107,11 +104,15 @@ fakultetom. Svako suzenje je izmjereno na svim nalazima tog reda, ne procijenjen
 | predlozak | tvrdnja o XML-u nije potvrdjena u opsegu na koji se poziva |
 
 NE mjeri: `.html` (7 pravila, pune web stranice s izbornicima pa je omjer suma i koristi slab) i
-`.rar` (6 pravila). Ukupno 154 nerevidirana. Ne mjeri ni `citation-style` os kod provjere vrijednosti
+`.rar` (6 pravila). Ukupno 13 nerevidiranih, i ispis sada kaze RAZLOG po razlog umjesto jedne
+neprozirne brojke. Ne mjeri ni `citation-style` os kod provjere vrijednosti
 (token je kanonska klasifikacija koju je covjek izveo iz opisa).
 
-Izvori se citaju iz tri formata: PDF (fitz), `.docx` (zip + XML) i naslijedjeni `.doc` (OLE, tablica
-komada). Kvaliteta izvlacenja se ne pretpostavlja nego mjeri OMJEROM: 187 novoprocitanih `.doc`
+Izvori se citaju iz cetiri puta: PDF (fitz), `.docx` (zip + XML), naslijedjeni `.doc` (OLE, tablica
+komada) i `<ime>-ocr.txt` uz skenirani PDF (`scripts/ocr_pdf.py`). OCR tekst se NE tretira kao
+tekstualni sloj: `has_scanned_pages` ostaje True, pa nepoklopljen citat zavrsi kao NEPROVJERIV, ne kao
+nalaz. Da je ta granica krivo postavljena, 141 skenirano pravilo dalo bi desetke laznih optuzbi; dalo
+je NULA (108 potvrdjeno, 33 neprovjerivo). Kvaliteta izvlacenja se ne pretpostavlja nego mjeri OMJEROM: 187 novoprocitanih `.doc`
 pravila dalo je 6 nalaza (97 posto cisto), a 202 `.docx` pravila 34 nalaza (83 posto). Ostecen
 izvlacen tekst dao bi desetke.
 
