@@ -153,6 +153,20 @@
       "decidedBy": "Claude Opus 5 (1M context)",
       "decidedAt": "2026-08-23",
       "rationale": "Dodavanje BODOVANOG pravila mijenja ono po cemu se studenti ocjenjuju na zivim profilima, a CLAUDE.md za bodovano pravilo trazi potvrdjenu provenijenciju uz ljudski prolaz (`verifiedBy`, `confirmedVia: human-audit`), koji agent ne moze potpisati. Zato se ne dodaje nego zapisuje s TOCNOM zastavicom i doslovnom odredbom, da odluka bude jedan korak a ne nova istraga."
+    },
+    {
+      "ruleIds": [
+        "vuka-poslovni-diplomski--font-size",
+        "vuka-poslovni-zavrsni--font-size",
+        "vuka-poslovni-opci-akademski-rad--font-size"
+      ],
+      "finding": "citat odsjecen, recenica se nastavlja",
+      "evidence": "vuka-poslovni-upute.pdf: \"odabrati veličinu slova teksta 12 (Arial ili Times New Roman) za bilješke („fusnote“) odabrati veličinu slova 10, za naslove glava 16 bold\". Izuzece je stvarno i na ISTOJ osi: biljeske 10, naslovi glava 16, tijelo 12. Motor ima pojam `footnoteSize`, ali ga profil ne zapisuje; za velicinu NASLOVA pojma nema.",
+      "alsoNoted": "Nalaz se pojavio TEK nakon sto je citat 2026-08-23 prepisan rijecima izvora. Dok je citat bio parafraza (\"Visina teksta mora biti 12 tocaka razumljivog fonta\"), provjera nastavka se nije mogla ni izvesti. Doslovan citat je dakle otkrio odredbu koju je parafraza skrivala.",
+      "decision": "left-scored",
+      "decidedBy": "Claude Opus 5 (1M context)",
+      "decidedAt": "2026-08-23",
+      "rationale": "Ne cini pravilo prestrogim: motor mjeri DOMINANTNU velicinu, pa biljeske i naslovi ne mogu oboriti provjeru tijela teksta. Dodavanje bodovanog `footnoteSize` mijenja ono po cemu se studenti ocjenjuju i trazi ljudski prolaz, pa se biljezi s imenom zastavice umjesto da se doda."
     }
   ]
 }

@@ -92,28 +92,6 @@
       ]
     },
     {
-      "profileId": "ffri-psihologija-diplomski",
-      "ruleId": "ffri-psihologija-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "ffri-psihologija-brosura-2022",
-      "snapshot": "data/sources/ffri/ffri-psihologija-brosura-2022.pdf",
-      "quote": "Tehnicku opremu diplomskog rada potrebno je izvesti sukladno Clanku 11. Pravilnika: format A4, font Times New Roman 12pt (fusnote 10pt), prored 1,5, obostrano poravnanje. [Margine NAMJERNO izostavljen",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: tehnicku opremu diplomskog rada potrebno je izvesti sukladno clanku 11 pravilnika)"
-      ]
-    },
-    {
-      "profileId": "ffri-psihologija-diplomski",
-      "ruleId": "ffri-psihologija-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "ffri-psihologija-brosura-2022",
-      "snapshot": "data/sources/ffri/ffri-psihologija-brosura-2022.pdf",
-      "quote": "Tehnicku opremu diplomskog rada potrebno je izvesti sukladno Clanku 11. Pravilnika: format A4, font Times New Roman 12pt (fusnote 10pt), prored 1,5, obostrano poravnanje. [Margine NAMJERNO izostavljen",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: tehnicku opremu diplomskog rada potrebno je izvesti sukladno clanku 11 pravilnika)"
-      ]
-    },
-    {
       "profileId": "ffri-zavrsni",
       "ruleId": "ffri-zavrsni--font-size",
       "checkId": "font-size",
@@ -180,50 +158,6 @@
       ]
     },
     {
-      "profileId": "unizd-germanistika-diplomski",
-      "ruleId": "unizd-germanistika-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-germanistika-pravilnik-diplomski-2017",
-      "snapshot": "data/sources/unizd/unizd-germanistika-pravilnik-diplomski-2017.pdf",
-      "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve marg",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: slovima times new roman c velicina)"
-      ]
-    },
-    {
-      "profileId": "unizd-germanistika-diplomski",
-      "ruleId": "unizd-germanistika-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "unizd-germanistika-pravilnik-diplomski-2017",
-      "snapshot": "data/sources/unizd/unizd-germanistika-pravilnik-diplomski-2017.pdf",
-      "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve marg",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: slovima times new roman c velicina)"
-      ]
-    },
-    {
-      "profileId": "unizd-germanistika-zavrsni",
-      "ruleId": "unizd-germanistika-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-germanistika-pravilnik-zavrsni-2020",
-      "snapshot": "data/sources/unizd/unizd-germanistika-pravilnik-zavrsni-2020.pdf",
-      "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve marg",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: slovima times new roman c velicina)"
-      ]
-    },
-    {
-      "profileId": "unizd-germanistika-zavrsni",
-      "ruleId": "unizd-germanistika-zavrsni--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "unizd-germanistika-pravilnik-zavrsni-2020",
-      "snapshot": "data/sources/unizd/unizd-germanistika-pravilnik-zavrsni-2020.pdf",
-      "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve marg",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: slovima times new roman c velicina)"
-      ]
-    },
-    {
       "profileId": "unizd-pomorski-zavrsni",
       "ruleId": "unizd-pomorski-zavrsni--font",
       "checkId": "font",
@@ -243,83 +177,6 @@
       "quote": "Velicina stranice je A4. Rubnice trebaju biti sljedece velicine: lijeva 30mm, desna 25mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
       "problems": [
         "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: rad treba pisati fontom times new roman velicine 12pt uz prored 1,5)"
-      ]
-    },
-    {
-      "profileId": "vuka-poslovni-diplomski",
-      "ruleId": "vuka-poslovni-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "vuka-poslovni-upute",
-      "snapshot": "data/sources/vuka/vuka-poslovni-upute.pdf",
-      "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: arial ili times new roman)"
-      ]
-    },
-    {
-      "profileId": "vuka-poslovni-diplomski",
-      "ruleId": "vuka-poslovni-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "vuka-poslovni-upute",
-      "snapshot": "data/sources/vuka/vuka-poslovni-upute.pdf",
-      "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: arial ili times new roman)"
-      ]
-    },
-    {
-      "profileId": "vuka-poslovni-opci-akademski-rad",
-      "ruleId": "vuka-poslovni-opci-akademski-rad--font-size",
-      "checkId": "font-size",
-      "sourceId": "vuka-poslovni-upute",
-      "snapshot": "data/sources/vuka/vuka-poslovni-upute.pdf",
-      "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: arial ili times new roman)"
-      ]
-    },
-    {
-      "profileId": "vuka-poslovni-opci-akademski-rad",
-      "ruleId": "vuka-poslovni-opci-akademski-rad--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "vuka-poslovni-upute",
-      "snapshot": "data/sources/vuka/vuka-poslovni-upute.pdf",
-      "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: arial ili times new roman)"
-      ]
-    },
-    {
-      "profileId": "vuka-poslovni-zavrsni",
-      "ruleId": "vuka-poslovni-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "vuka-poslovni-upute",
-      "snapshot": "data/sources/vuka/vuka-poslovni-upute.pdf",
-      "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: arial ili times new roman)"
-      ]
-    },
-    {
-      "profileId": "vuka-poslovni-zavrsni",
-      "ruleId": "vuka-poslovni-zavrsni--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "vuka-poslovni-upute",
-      "snapshot": "data/sources/vuka/vuka-poslovni-upute.pdf",
-      "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: arial ili times new roman)"
-      ]
-    },
-    {
-      "profileId": "zsem-diplomski",
-      "ruleId": "zsem-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "zsem-pravilnik-diplomski-2023",
-      "snapshot": "data/sources/zsem/zsem-pravilnik-diplomski-2023.pdf",
-      "quote": "Tehnicko ureenje rada. Pismo: Times New Roman. Font: 12. Poravnanje teksta: obostrano. Razmak izmeu redova: 1,5.",
-      "problems": [
-        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: rada pismo times new roman font 12 poravnanje teksta obostrano)"
       ]
     }
   ]

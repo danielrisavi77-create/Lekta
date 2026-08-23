@@ -2785,6 +2785,16 @@
       "autoFixable": true,
       "sourcePage": "odjeljak B. Oblikovanje zavrsnog specijalistickog rada",
       "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "fbf-specijalisticki--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "odjeljak B. Oblikovanje zavrsnog specijalistickog rada",
+      "lastVerified": "2026-07-02"
     }
   ],
   "fdmri-diplomski": [

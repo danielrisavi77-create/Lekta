@@ -4,16 +4,13 @@
   "schemaVersion": 1,
   "counts": {
     "unapplied": 24,
-    "drift": 38,
+    "drift": 37,
     "unbacked": 82,
     "citation:non-canonical-token": 26,
     "citation:not-applied": 6,
-    "profilesDemoted": 21
+    "profilesDemoted": 20
   },
   "demotedByProfile": {
-    "fbf-specijalisticki": [
-      "font-size"
-    ],
     "ffos-germanistika-diplomski": [
       "font"
     ],
@@ -214,23 +211,6 @@
       "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
       "kind": "unapplied",
       "claimValue": true
-    },
-    {
-      "profileId": "fbf-specijalisticki",
-      "ruleId": "fbf-specijalisticki--font-size",
-      "checkId": "font-size",
-      "sourceId": "fbf-upute-spec-2014",
-      "sourcePage": "odjeljak B. Oblikovanje zavrsnog specijalistickog rada",
-      "kind": "drift",
-      "claimValue": {
-        "min": 10,
-        "max": 12
-      },
-      "scoredValue": [
-        10,
-        11,
-        12
-      ]
     },
     {
       "profileId": "mev-zavrsni",
