@@ -58,6 +58,8 @@ export function captureKatedraHandoffCandidate(result: any, profile: any, settin
 
   if (!profileId) return false;
 
+  // MRTAV PUT (dokumentirano 2026-08-23): registry NIKAD ne nosi ruleEntries (heavy ih
+  // nema, CLAUDE.md: svih 407 profila ima prazan ruleEntries), pa je ovo uvijek [].
   // Analysis is started only after ensureProfileRules(), so a verified profile
   // found here already carries its authored ruleEntries. Missing entries are a
   // valid fallback: stable checkId still works and ruleId remains null.

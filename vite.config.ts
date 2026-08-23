@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, statSync, createReadStream, readFileSync, writeFileSync } from 'node:fs';
 import { stripDevOnly } from './scripts/strip-dev-only.mjs';
 import { resolveDevTools } from './scripts/dev-console.mjs';
+import { classificationGuard } from './scripts/security/classification-guard.mjs';
 
 // Vite dev i preview posluzuju HTML kao 'text/html' bez charseta i oslanjaju se na
 // <meta charset="utf-8"> u dokumentu. Ovaj mali plugin eksplicitno dodaje
@@ -229,12 +230,24 @@ function bundleSizeGuard(devTools: boolean) {
         (o): o is { type: 'chunk'; fileName: string; name: string; isEntry: boolean; code: string } =>
           (o as { type: string }).type === 'chunk',
       );
-      const heavy = chunks.find((c) => /verified-profiles-heavy/.test(c.fileName));
-      if (!heavy) {
-        throw new Error(
-          '[bundle-guard] verified-profiles-heavy chunk ne postoji: teski profili su vjerojatno ' +
-          'uvuceni u drugi chunk (lazy split se izgubio). Vrati dinamicki import teskih profila.',
-        );
+      // FAZA B3 (2026-08-23, rules-on-demand): invarijanta je OKRENUTA. Do B3 je guard
+      // zahtijevao da heavy postoji kao zaseban lazy chunk; sada pravila stizu per-profil
+      // sa servera (profile-rules Edge funkcija), lokalni provider je DEV-only
+      // (tree-shakean iz produkcijskog builda), pa bulk chunkovi NE SMIJU postojati:
+      // njihova pojava znaci da je netko vratio bulk isporuku baze pravila pregledniku.
+      for (const [name, pattern] of [
+        ['verified-profiles-heavy', /verified-profiles-heavy/],
+        ['repair-map', /(^|\/)repair-map-/],
+      ] as const) {
+        const bulk = chunks.find((c) => pattern.test(c.fileName));
+        if (bulk) {
+          throw new Error(
+            `[bundle-guard] ${name} chunk (${bulk.fileName}) postoji u javnom buildu: bulk baza ` +
+            'pravila se od faze B3 NE isporucuje pregledniku (rules-on-demand, profile-rules ' +
+            'endpoint). Vjerojatno je lokalni provider usao u produkcijski graf; vidi ' +
+            'src/profiles/profile-rules-local.ts i wireProfileRulesProvider u app.ts.',
+          );
+        }
       }
       const indexEntry = chunks.find((c) => c.isEntry && c.name === 'index');
       if (indexEntry) {
@@ -380,6 +393,7 @@ export default defineConfig(({ command }) => {
   const siteOrigin = (process.env.LEKTA_SITE_ORIGIN || 'https://lektahr.netlify.app').replace(/\/+$/, '');
   const input: Record<string, string> = {
     index: resolve(__dirname, 'index.html'),
+    demo: resolve(__dirname, 'demo.html'),
     usporedba: resolve(__dirname, 'landing_usporedba.html'),
     benchmark: resolve(__dirname, 'landing_benchmark.html'),
     citatiLiteratura: resolve(__dirname, 'citati-i-literatura.html'),
@@ -400,7 +414,7 @@ export default defineConfig(({ command }) => {
   // sprjecava indeksiranje/sitemap unatoc tome sto je stranica u buildu.
   if (devTools) input.verification = resolve(__dirname, 'verification.html');
   return {
-    plugins: [htmlCharsetUtf8(), siteOriginHtml(siteOrigin), citationTools(), fixHunspellNanoid(), stripRuntimeDeadProvenance(devTools), stripDevOnlyHtml(devTools), fontPreload(), cspAllowlist(), bundleSizeGuard(devTools), assertSafeBuild(devTools)],
+    plugins: [htmlCharsetUtf8(), siteOriginHtml(siteOrigin), citationTools(), fixHunspellNanoid(), stripRuntimeDeadProvenance(devTools), stripDevOnlyHtml(devTools), fontPreload(), cspAllowlist(), classificationGuard(devTools, __dirname), bundleSizeGuard(devTools), assertSafeBuild(devTools)],
     define: { __DEV_TOOLS__: JSON.stringify(devTools) },
     // hunspell-asm se ne pre-bundla u dev-u da fixHunspellNanoid transform (Vite plugin) stigne do
     // njega; inace bi ga esbuild optimizer pre-bundlao mimo plugina i nanoid poziv bi pao u dev-u.

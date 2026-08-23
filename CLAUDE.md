@@ -368,6 +368,18 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
 
 - `src/ui/app.ts` - UI orkestrator (UI, narudzbe, placanje, QA). Meta: dovrsiti split.
 - `src/analysis/analyze-docx.ts` - analyzeDocx + auditni helperi (jezgra analize).
+- `src/scoring/evaluate/measurements.ts` - DocumentMeasurements (faza D "cisti sav"): verzioniran
+  tip MJERLJIVIH cinjenica dokumenta (dominante, sekcije, markeri, brojaci, razmaci), BEZ ijednog
+  importa (Deno-ready). "Facts" polovica para; "rules" polovica je academic-core-export.ts. Zivi
+  aditivno u result.details.measurements (NIJE u goldenu; sanitizeAnalysisResult ga ne propusta na
+  mrezu). NIKAD ne nosi tekst rada (tests/measurements-tripwire.test.ts).
+- `src/scoring/evaluate/formatting.ts` - evaluateFormatting(measurements, profile, strict) ->
+  {checks, issues}: CISTA evaluacija ~40 bodova oblikovanja, preseljena BAJT-IDENTICNO iz jezgre
+  (blok Dominantni font .. oznake fusnota). Redoslijed checks/issues je ugovor goldena. Gard:
+  tests/evaluate-formatting.test.ts (ekvivalencija s pipelineom + deep-freeze cistoca + registriran
+  checkId). Analiza NE mutira profil (tests/profile-no-mutation.test.ts; opseg je lokalni scope).
+  SAV 2 (structure bez teksta) i dalje zivi u jezgri; citations/legal/toc/title/method OSTAJU
+  tekst-lokalni zauvijek.
 - `src/scoring/check-id-registry.ts` - STABILNI identiteti provjera (`page.margins` i sl.).
   `Check` od 2026-08-16 ima `id`; korelacija prije/poslije popravka I mapiranje na fixer idu
   po njemu (`src/analysis/check-fixer-map.ts` je kljucan po `checkId`, ne po naslovu), hrvatski

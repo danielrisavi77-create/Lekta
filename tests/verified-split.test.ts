@@ -11,7 +11,12 @@ import { describe, it, expect } from 'vitest';
 import rawSrc from '../data/profiles/verified-profiles.json';
 import committedIndex from '../data/profiles/verified-profiles-index.json';
 import committedHeavy from '../data/profiles/verified-profiles-heavy.json';
-import { VERIFIED_PROFILE_REGISTRY, ensureProfileRules } from '../src/profiles/profile-registry';
+import {
+  VERIFIED_PROFILE_REGISTRY,
+  ensureProfileRules,
+  setProfileRulesProvider,
+  resetProfileRulesForTests,
+} from '../src/profiles/profile-registry';
 
 const src = rawSrc as any[];
 
@@ -49,8 +54,18 @@ describe('verified-profiles split: drift + korektnost', () => {
     expect(committedHeavy).toEqual(expected);
   });
 
-  it('ensureProfileRules spoji heavy u registry -> pun profil (bez publicSources)', async () => {
-    await ensureProfileRules();
+  it('ensureProfileRules (per profil, injektiran provider) spoji heavy u registry', async () => {
+    // Faza B: ensureProfileRules vise ne dohvaca bulk chunk nego zove injektiran provider
+    // po profilu; ovdje se injektira lokalni heavy da test i dalje dokazuje mutation ugovor
+    // (Object.assign u ISTE objekte registryja) i cistocu od publicSources.
+    resetProfileRulesForTests();
+    setProfileRulesProvider(async (id) => {
+      const full = (committedHeavy as Record<string, any>)[id];
+      return full
+        ? { kind: 'ok', profile: full, repairEntries: [] }
+        : { kind: 'failed', reason: 'nepoznat profil' };
+    });
+    for (const p of src) await ensureProfileRules(p.id);
     const byId: Record<string, any> = {};
     for (const p of src) byId[p.id] = stripPublicSources(p);
     for (const entry of VERIFIED_PROFILE_REGISTRY as any[]) {
