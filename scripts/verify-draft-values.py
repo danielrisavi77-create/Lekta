@@ -205,7 +205,7 @@ def claims(check_id: str, value, quote: str) -> tuple[list[str], list[str]]:
                     need(
                         says(quote, r"fusnot|biljesk|fussnote|footnote")
                         and not says(quote, r"(nicht|nije|ne|niti)\s+(in\s+)?(den\s+)?(fusnot|biljesk|fussnot)")
-                        and not says(quote, r"apa|harvard|autor.{0,4}godin|\(\s*[a-z][^)]{0,40}(19|20)\d\d"),
+                        and not says(quote, r"apa\b|harvard|autor.{0,4}godin|\(\s*[a-z][^)]{0,40}\b(19|20)\d\d"),
                         "mode=footnote",
                     )
                 else:
