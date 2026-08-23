@@ -258,28 +258,48 @@ def numbers_match(full_text: str, quote: str) -> bool:
 ANCHOR_MIN_WORDS = 4
 
 
+# Usporedni oblik za sidra: interpunkcija se mice, ALI ne decimalni znak unutar broja. Bez toga se
+# sidro lomi tocno pred vrijednoscu: citat pise "Zeilenabstand 1,5. Marginen", izvor "Zeilenabstand
+# 1,5 Titelseite", pa je tocka iza broja prekidala niz i "1,5" je ispadalo iz sidra (ffos-germanistika).
+_ANCHOR_PUNCT = re.compile(r"(?<!\d)[.,]|[.,](?!\d)|[^\w\s.,]")
+
+
+def anchor_form(text: str) -> str:
+    return squash(_ANCHOR_PUNCT.sub(" ", fold(text)))
+
+
+# Kljuc je SAM TEKST, ne `id()`: Python identitet niza ponovno koristi nakon oslobadjanja memorije,
+# pa bi dva izvora mogla zamijeniti normalizirani oblik. Izvori su vec u `_doc_text`, pa se ovdje
+# drzi samo referenca i njihov normalizirani oblik.
+_anchor_src: dict[str, str] = {}
+
+
 def literal_anchors(full_text: str, quote: str) -> list[str]:
     """Najduzi neprekinuti ulomci citata koji DOSLOVNO stoje u izvoru.
 
-    Pohlepno slijeva: za svaku pocetnu rijec uzima najdulji nastavak koji je jos podniz izvora, pa
-    nastavlja iza njega. Kratki ulomci (ispod `ANCHOR_MIN_WORDS`) se ne broje, jer se niz od dvije
-    ceste rijeci nadje u svakom dokumentu i ne dokazuje nista.
+    Citat po konvenciji smije IZOSTAVLJATI (`ELISION`), pa se dijeli na ulomke i svaki se sidri
+    zasebno; inace "Rad mora sadrzavati: (...) Sadrzaj" nema nijedno sidro iako obje strane stoje u
+    izvoru. Kratki ulomci (ispod `ANCHOR_MIN_WORDS`) se ne broje, jer se niz od dvije ceste rijeci
+    nadje u svakom dokumentu i ne dokazuje nista.
     """
-    folded = doc_index(full_text)["folded"]
-    words = fold(squash(quote)).split()
+    if full_text not in _anchor_src:
+        _anchor_src[full_text] = anchor_form(full_text)
+    folded = _anchor_src[full_text]
     anchors: list[str] = []
-    start = 0
-    while start < len(words):
-        end = 0
-        for stop in range(len(words), start + ANCHOR_MIN_WORDS - 1, -1):
-            if " ".join(words[start:stop]) in folded:
-                end = stop
-                break
-        if end:
-            anchors.append(" ".join(words[start:end]))
-            start = end
-        else:
-            start += 1
+    for segment in ELISION.split(quote):
+        words = anchor_form(segment).split()
+        start = 0
+        while start < len(words):
+            end = 0
+            for stop in range(len(words), start + ANCHOR_MIN_WORDS - 1, -1):
+                if " ".join(words[start:stop]) in folded:
+                    end = stop
+                    break
+            if end:
+                anchors.append(" ".join(words[start:end]))
+                start = end
+            else:
+                start += 1
     return anchors
 
 
@@ -289,7 +309,8 @@ def value_outside_anchors(value, anchors: list[str]) -> bool:
     Logicka vrijednost (`true`) nema tekstualni oblik pa nema sto leziti; ondje je dovoljno da sidro
     uopce postoji, jer ono dokazuje da odredba u izvoru stoji.
     """
-    atoms = {fold(atom) for atom in value_atoms(value)}
+    atoms = {anchor_form(atom) for atom in value_atoms(value)}
+    atoms = {atom for atom in atoms if atom}
     if not atoms:
         return False
     return not any(any(atom in anchor for atom in atoms) for anchor in anchors)
@@ -534,6 +555,46 @@ def has_scanned_pages(rel_path: str) -> bool:
             result = False
     _scanned[rel_path] = result
     return result
+
+
+# --- KOGA SKENIRANA STRANICA STVARNO POKRIVA -----------------------------------------------------
+#
+# `has_scanned_pages` gasi nalaz za SVA pravila dokumenta cim u njemu postoji ijedna stranica-slika.
+# To je ispravno za `forenzika-pravilnik-diplomski` (skenirani su bas clanci Pravilnika, a tekstualni
+# sloj su prilozi), ali je bilo pogresno za `vuka-strojarski-upute-2025`: ondje je 8 tekstualnih
+# stranica S PRAVILIMA i 3 slikovne na kraju (prilozi s naslovnicama). Posljedica je bila stvarno
+# lazno zeleno: `vuka-strojarski-*--margins` ima pokrivanje citata 0,21 i citat koji u dokumentu ne
+# postoji, a revizija je sutjela. Nadjeno usporedbom s vrijednoscu koju motor boduje, ne ovim alatom.
+#
+# Razlika koju gard nije vidio: jesu li skenirane stranice one S PRAVILIMA ili prilozi. Provjereni
+# signal je jednostavan i mjeren na oba dokumenta: **govori li citljivi tekstualni sloj uopce o TOJ
+# OSI**. Kod `vuka` tekst doslovno kaze "margine 2,0 cm (desno, gore i dolje) i 2,5 cm (lijevo)", pa
+# citat koji se ne usidri jest nalaz. Kod `forenzika` tekstualni sloj ne spominje nijednu formatnu os.
+#
+# ODBACEN signal, da se ne isproba ponovno: "usidruje li se ijedno DRUGO pravilo iz istog dokumenta"
+# ne razlikuje ta dva slucaja, jer je u oba 0 od N.
+AXIS_VOCABULARY: dict[str, str] = {
+    "margins": r"margin\w*|rubov\w*\s+(?:na|od)",
+    "font": r"\bfont\w*|times new roman|arial|calibri|garamond|merriweather",
+    "font-size": r"veli[c]in\w*\s+(?:slova|fonta|pisma)|\bpt\b|to[c]ak\w*",
+    "line-spacing": r"\bprored\w*|razmak\w*\s+(?:medju|izmedju)\s+red",
+    "paper-size": r"format\w*\s+(?:papira|rada|stranice)|\ba\s?-?\s?4\b",
+    "justify": r"obostran\w*|poravnan\w*|justify",
+    "toc": r"\bsadrzaj\w*|kazal\w*",
+    "page-numbers": r"numerir\w*|paginac\w*|broj\w*\s+stranic\w*|oznacen\w*\s+stranic",
+    "required-sections": r"poglavlj\w*|dijelov\w*\s+rada|struktur\w*\s+rada",
+    "footnote-size": r"biljesk\w*|fusnot\w*|podnozj\w*",
+    "footnote-font": r"biljesk\w*|fusnot\w*|podnozj\w*",
+    "footnote-spacing": r"biljesk\w*|fusnot\w*|podnozj\w*",
+    "page-count": r"stranic\w*|opseg\w*",
+    "reference-count": r"literatur\w*|referenc\w*|izvor\w*",
+}
+
+
+def text_layer_covers_axis(text: str, check_id: str) -> bool:
+    """Govori li CITLJIVI tekst uopce o toj osi. Ako da, neusidren citat je nalaz, ne granica alata."""
+    pattern = AXIS_VOCABULARY.get(check_id or "")
+    return bool(pattern and re.search(pattern, fold(text), re.I))
 
 
 # Prag ostecenja tekstualnog sloja. Dobiven MJERENJEM 2026-08-22, ne procjenom: udio tokena duljine
@@ -1083,9 +1144,16 @@ def main() -> None:
         problems: list[str] = []
         if not quote:
             problems.append("bez citata")
-        elif not quote_found(text, quote) and (has_scanned_pages(rel) or text_layer_damaged(rel)):
+        elif (
+            not quote_found(text, quote)
+            and (has_scanned_pages(rel) or text_layer_damaged(rel))
+            and not text_layer_covers_axis(text, check_id)
+        ):
             # Citat vjerojatno dolazi sa SKENIRANE stranice, preuzet OCR-om. To nije nalaz nego
             # granica alata, i broji se kao nerevidirano, ne kao kvar.
+            #
+            # SUZENO 2026-08-23: samo kad citljivi dio dokumenta o TOJ OSI uopce ne govori. Kad govori
+            # (vuka: "margine 2,0 cm ..."), citat koji se ne usidri je nalaz, a ne granica alata.
             inconclusive += 1
         elif not quote_found(text, quote):
             cov = quote_coverage(text, quote)
