@@ -140,6 +140,10 @@ njihova vlastita `verified` tvrdnja s citatom opovrgava (`unizd-pomorski-*`: izv
   Dokazni dosjei: `npm run drift-dossiers`.
 - Gard `tests/scored-value-drift.test.ts`: artefakt = svjez izracun, ratchet smije samo padati,
   negativne kontrole dokazuju da provjera grize.
+- Raskoraka je NULA od 2026-08-24 (svih 37 presudjeno i potpisano, data/verification/
+  drift-decisions.json), a ratchet je spusten na 0. Mutacija o demotiji zato PODMECE raskorak
+  umjesto da ga trazi u podacima: gard koji trazi da kvar postoji prestaje gristi kad je posao
+  gotov, dakle u najgorem trenutku.
 - Raskorak se NIKAD ne racuna iz demotije (inace se gard sam pobrise u sljedecem krugu); zato
   `computeBaseDemotedAdvisory` stoji odvojeno od `computeDemotedAdvisory`.
 - Tvrdnja koja se ne slaze sa zrcalom NIJE automatski ona tocna: opovrgavajuci prolaz nasao je krivo

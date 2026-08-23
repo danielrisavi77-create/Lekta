@@ -158,6 +158,16 @@ provenijencija kaze Merriweather 10.
   potpis. Tvrdnja koja se ne slaze sa zrcalom NIJE automatski ona tocna: opovrgavajuci prolaz
   2026-08-21 nasao je krivo pripisan opseg na 12 od 20 tvrdnji, a presuda 2026-08-23 je nasla 17
   slucajeva gdje je krivo zrcalo i 2 gdje je kriva tvrdnja.
+- ZATVORENO 2026-08-24: raskoraka je NULA. Svih 37 presudjeno i potpisano
+  (`data/verification/drift-decisions.json`; 35 u korist tvrdnje, 2 protiv). Ratchet je spusten na 0,
+  pa svaki nov raskorak pada odmah. Tri su bila motor koji je velicinu NASLOVA bodovao kao tijelo
+  rada (`unizd-pomorski`, `unizd-germanistika`, `unizd-sociologija`), dva su bila Wordov tvornicki
+  rub iz netaknutog .docx predloska predstavljen kao pravilo (`ffst-*`, oba `claim-wrong`), a dva su
+  bila artefakt ALATA a ne podataka: presuditelj trazi centimetre a izvor pise milimetre, i izvor
+  ima tipfeler u imenu fonta.
+- GARD KOJI PRESTANE GRISTI KAD JE POSAO GOTOV nije gard: mutacija o demotiji uzimala je profil IZ
+  artefakta, pa bi s nulom raskoraka prolazila vakuumski. Sada raskorak PODMECE
+  (`computeDemotedAdvisory` prima skup za testove; produkcija ga nikad ne prosljedjuje).
 - `scored-coverage.json` se time NE mijenja i to nije nesklad koji treba poravnati: coverage mjeri
   tvrdnje sljedive do izvora, demotija mjeri sto motor boduje. Dvije populacije, imenuju se.
 
