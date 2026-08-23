@@ -35,6 +35,27 @@ export function evaluateScopePages(m: StructureEvalMeasurements, profile: any): 
  return checks;
 }
 
+/**
+ * "Hijerarhija naslova" (do 6 bodova): preskakanje razine izmedju uzastopnih naslova.
+ * Preseljeno bajt-identicno iz jezgre; `headings[i].text.slice(0,55)` -> `excerpt.slice(0,55)`
+ * (excerpt je vec max 70, slice na 55 daje identican niz kao izvorni slice nad tekstom).
+ */
+export function evaluateHeadingHierarchy(m: StructureEvalMeasurements, profile: any): any[] {
+ const headings=m.structure.headings;
+ let jumps: any[]=[];for(let i=1;i<headings.length;i++)if(headings[i].level>headings[i-1].level+1)jumps.push(headings[i]);const styledHeadingCount=headings.length;
+ return[makeCheck('structure','Hijerarhija naslova',profile.scoreStructure===false?'pass':jumps.length?'warn':'pass',profile.scoreStructure===false?0:(jumps.length?Math.max(1,6-jumps.length):6),profile.scoreStructure===false?0:6,jumps.length?`${jumps.length} moguća preskakanja razine`:`${styledHeadingCount} naslova prepoznato`,jumps.length?issue('warning','structure','Naslovi preskaču razinu hijerarhije',jumps.slice(0,5).map(p=>`odlomak ${p.index}: ${p.excerpt.slice(0,55)}`).join('; ')):null)];
+}
+
+/**
+ * "Dubina decimalnog numeriranja" (do 3 boda). Odluka tooDeep (regex nad tekstom +
+ * numberingMap) donesena je PRI MJERENJU; ovdje se trosi samo gotov popis.
+ */
+export function evaluateHeadingDepth(m: StructureEvalMeasurements, profile: any): any[] {
+ const checks: any[]=[];
+ if(profile.maxDecimalLevels){const tooDeep=m.structure.tooDeepParagraphs;const depthOk=!tooDeep.length;checks.push(makeCheck('structure','Dubina decimalnog numeriranja',profile.scoreStructure===false?'pass':depthOk?'pass':'warn',profile.scoreStructure===false?0:(depthOk?3:1),profile.scoreStructure===false?0:3,depthOk?`Nisu pronađeni naslovi dublji od ${profile.maxDecimalLevels} razine`:`${tooDeep.length} naslova ima više od ${profile.maxDecimalLevels} razine`,depthOk?null:issue('warning','structure','Previše razina numeriranja naslova',tooDeep.slice(0,5).map(p=>`odlomak ${p.index}: ${p.excerpt.slice(0,70)}`).join('; '),'Naslovi')))}
+ return checks;
+}
+
 /** "Prazni odlomci" (informativno, 0/0): udio praznih odlomaka. */
 export function evaluateEmptyParagraphs(m: StructureEvalMeasurements): any[] {
  const empty=m.structure.emptyParagraphs,paragraphsLen=m.counts.paragraphs;

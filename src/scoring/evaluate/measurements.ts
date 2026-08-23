@@ -100,11 +100,34 @@ export interface FormattingMeasurements {
 }
 
 /**
+ * Naslov kao mjerenje (sav 2, heading v2). `excerpt` je DOKUMENTIRANA IZNIMKA od
+ * pravila "bez teksta": kratki isjecak NASLOVA (do 70 znakova) koji vec danas napusta
+ * preglednik kroz issue.detail ("odlomak N: ...") i documentStructure.headings, pa
+ * NIJE nova granica. Tijelo odlomaka, fusnote i runs i dalje NIKAD ne ulaze; tripwire
+ * to cuva (iznimka je ogranicena na headings[].excerpt i max duljinu).
+ */
+export interface HeadingMeasurement {
+  index: number;
+  level: number;
+  /** Isjecak naslova, max HEADING_EXCERPT_MAX znakova (iznimka, vidi iznad). */
+  excerpt: string;
+  /** Predubok decimalni prefiks ili Word numeriranje iznad profilnog praga (odlucuje se pri mjerenju). */
+  tooDeep: boolean;
+}
+
+/** Gornja granica isjecka naslova u mjerenju; tripwire odbija dulje. */
+export const HEADING_EXCERPT_MAX = 70;
+
+/**
  * Strukturni otisak BEZ teksta (sav 2): svi tekstualni izvori (npr. odlomak "Uvod")
  * potroseni su pri mjerenju i svedeni na indekse/boolove. Puni ih jezgra pri analizi,
  * trose ih ciste evaluacije u src/scoring/evaluate/structure.ts.
  */
 export interface StructureMeasurements {
+  /** Svi Heading odlomci redom (razina + kratki isjecak); za hierarchy/depth evaluacije. */
+  headings: HeadingMeasurement[];
+  /** Odlomci koje je numeriranje (decimalni prefiks ili Word num) oznacilo predubokima; izvan headings jer tooDeep gleda SVE odlomke. */
+  tooDeepParagraphs: Array<Pick<HeadingMeasurement, 'index' | 'excerpt'>>;
   /** Postoji li PAGE polje u tijelu dokumenta ili referenciranom zaglavlju/podnozju. */
   pageFieldInBody: boolean;
   /** Indeks zadnjeg odlomka prve (naslovne) stranice; 45 kad prijelom nije pronadjen. */
