@@ -66,3 +66,6 @@ jobs:
 
       - name: Rate-limit slotovi (P1-05)
         run: psql -v ON_ERROR_STOP=1 -f scripts/rate-slots-smoke.sql
+
+      - name: Garancijski dokaz (P1-09)
+        run: psql -v ON_ERROR_STOP=1 -f scripts/guarantee-evidence-smoke.sql

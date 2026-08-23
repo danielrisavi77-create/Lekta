@@ -47,7 +47,7 @@
     "conformance": "vitest run --config vitest.conformance.config.ts",
     "check": "tsc --noEmit && vitest run && vite build",
     "check:edge": "node scripts/check-edge.mjs",
-    "smoke:db": "psql -v ON_ERROR_STOP=1 -f scripts/rate-slots-smoke.sql",
+    "smoke:db": "psql -v ON_ERROR_STOP=1 -f scripts/rate-slots-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/guarantee-evidence-smoke.sql",
     "smoke:db:mutation": "bash scripts/rate-slots-mutation-check.sh",
     "check:full": "npm run check && npm run check:edge && npm run test:slow",
     "release:check": "node scripts/release-check.mjs",
