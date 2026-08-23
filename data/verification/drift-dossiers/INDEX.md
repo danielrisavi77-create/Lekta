@@ -2,15 +2,14 @@
 
 GENERIRANO (`npm run drift-dossiers`) iz `data/verification/scored-value-drift.json`. Ne uredjuj rucno.
 
-Raskorak: 38. Neprimijenjeno: 24. Bez tvrdnje: 82.
-Profila s demotijom zbog raskoraka: 21.
+Raskorak: 37. Neprimijenjeno: 24. Bez tvrdnje: 82.
+Profila s demotijom zbog raskoraka: 20.
 
 - [alu-kiparstvo-diplomski](alu-kiparstvo-diplomski.md) - 1 (unapplied)
 - [alu-konzerviranje-diplomski](alu-konzerviranje-diplomski.md) - 5 (unapplied)
 - [alu-slikarstvo-diplomski](alu-slikarstvo-diplomski.md) - 1 (unapplied)
 - [efos-opci-akademski-rad](efos-opci-akademski-rad.md) - 1 (unapplied)
 - [efst-opci-akademski-rad](efst-opci-akademski-rad.md) - 1 (unapplied)
-- [fbf-specijalisticki](fbf-specijalisticki.md) - 1 (drift)
 - [ffos-germanistika-diplomski](ffos-germanistika-diplomski.md) - 1 (drift)
 - [ffos-germanistika-zavrsni](ffos-germanistika-zavrsni.md) - 1 (drift)
 - [ffos-povijest-diplomski](ffos-povijest-diplomski.md) - 5 (unbacked)
