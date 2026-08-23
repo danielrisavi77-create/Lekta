@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "vvg-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": "A4",
       "category": "format",
@@ -24,6 +27,9 @@
     },
     {
       "ruleId": "vvg-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "margins",
       "value": {
         "top": 2.5,

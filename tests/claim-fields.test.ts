@@ -49,8 +49,15 @@ const SOFT = new Set(['recommendation', 'permission', 'condition']);
  * 1932 pravila umjesto 2207), pa pala na 652 kad je ISTI ispravak primijenjen i na predlagac: dok je
  * `propose_claim_modality.py` birao po pohranjenoj zastavici, 275 pravila koja vezu motor nikad nije
  * ni dobilo prijedlog. Rast pa pad iste brojke nije kolebanje nego dvije faze jednog ispravka.
+ *
+ * Pala je na 450 istog dana, presudom nad 202 pravila (109 profila) iz skupine "recenica imenuje X,
+ * a os po naravi mjeri Y": specifikacija u istoj recenici nabroji i tijelo i fusnotu, pa predlagac
+ * uzme krivu rijec kao opseg. Opseg je presudjen na PRIRODNI opseg osi, uz provjeru da je vrijednost
+ * tvrdnje ona koja njemu pripada (52 od 52 font-size tvrdnje uzele su tjelesnu, nijedna fusnotnu).
+ * Upisano s `modalitySource: "agent-read"`, ne `human`: nijedan od tih 202 ne nosi ublazen modalitet,
+ * jer ublazavanje i dalje trazi potpis.
  */
-const MISSING_MODALITY_CAP = 652;
+const MISSING_MODALITY_CAP = 450;
 
 /**
  * IZVEDENI `scored`, ne pohranjena zastavica. Razlika nije akademska: 275 pravila zadovoljava
@@ -102,11 +109,21 @@ describe('tvrdnja nosi modalitet i opseg', () => {
    * prored; `unizd-povijest` veze velicinu pisma, ne format papira; `vhzk` veze font, ne prored.
    * Zato mehanika smije upisati samo `obligation` i `directive`; sve ostalo ide covjeku.
    */
-  it('mehanicki upis NIKAD ne nosi ublazen modalitet', () => {
+  it('upis bez ljudskog potpisa NIKAD ne nosi ublazen modalitet', () => {
+    // Prosireno 2026-08-23 s `mechanical` na SVAKI izvor osim `human`. Dotad je ugovor bio vezan uz
+    // jednu vrijednost, pa je nova razina upisa (`agent-read`, citanje citata alatom
+    // scripts/apply-claim-scope.mjs) prolazila pokraj njega bez ijedne tvrdnje. Granica nije "tko
+    // je pokrenuo alat" nego "je li netko potpisao": ublazavanje se pripisuje CITANJEM, a citanje
+    // koje nitko ne potpise nije dokaz.
     const bad = scored
-      .filter((r) => r.entry.modalitySource === 'mechanical' && SOFT.has(String(r.entry.modality)))
-      .map((r) => `${r.entry.ruleId}: ${r.entry.modality}`);
+      .filter((r) => r.entry.modalitySource !== 'human' && SOFT.has(String(r.entry.modality)))
+      .map((r) => `${r.entry.ruleId}: ${r.entry.modality} (${r.entry.modalitySource})`);
     expect(bad).toEqual([]);
+  });
+
+  it('vokabular izvora upisa je zatvoren', () => {
+    const sources = new Set(scored.map((r) => r.entry.modalitySource).filter(Boolean));
+    expect([...sources].sort()).toEqual(['agent-read', 'mechanical']);
   });
 
   it('ratchet: broj bodovanih pravila bez modaliteta smije samo padati', () => {

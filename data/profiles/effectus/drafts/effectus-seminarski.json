@@ -201,6 +201,9 @@
     },
     {
       "ruleId": "effectus-seminarski--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "required-sections",
       "value": [
         { "key": "sadrzaj", "label": "sadržaj", "terms": ["sadržaj", "sadrzaj"] },

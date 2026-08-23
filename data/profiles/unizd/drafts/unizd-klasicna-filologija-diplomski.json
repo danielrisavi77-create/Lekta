@@ -29,6 +29,9 @@
     },
     {
       "ruleId": "unizd-klasicna-filologija-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": [
         12
@@ -76,6 +79,9 @@
     },
     {
       "ruleId": "unizd-klasicna-filologija-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",

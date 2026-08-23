@@ -140,6 +140,9 @@
     },
     {
       "ruleId": "unidu-komunikologija-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "citation-style",
       "value": "harvard",
       "category": "citation",

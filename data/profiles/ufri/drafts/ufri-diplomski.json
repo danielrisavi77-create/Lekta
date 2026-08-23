@@ -53,6 +53,9 @@
     },
     {
       "ruleId": "ufri-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -98,6 +101,9 @@
     },
     {
       "ruleId": "ufri-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",

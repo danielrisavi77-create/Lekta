@@ -154,6 +154,9 @@
     },
     {
       "ruleId": "evtos-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "page-count",
       "value": {
         "min": 50,
@@ -176,6 +179,9 @@
     },
     {
       "ruleId": "evtos-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "required-sections",
       "value": [
         {

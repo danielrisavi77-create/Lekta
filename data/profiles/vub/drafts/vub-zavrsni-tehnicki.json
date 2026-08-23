@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "vub-zavrsni-tehnicki--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -76,6 +79,9 @@
     },
     {
       "ruleId": "vub-zavrsni-tehnicki--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -121,6 +127,9 @@
     },
     {
       "ruleId": "vub-zavrsni-tehnicki--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -147,6 +156,9 @@
     },
     {
       "ruleId": "vub-zavrsni-tehnicki--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "citation-style",
       "value": "vancouver",
       "category": "citation",

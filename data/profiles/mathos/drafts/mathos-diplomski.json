@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "mathos-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "toc",
       "value": true,
       "category": "structure",
@@ -22,6 +25,9 @@
     },
     {
       "ruleId": "mathos-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "required-sections",
       "value": [
         {

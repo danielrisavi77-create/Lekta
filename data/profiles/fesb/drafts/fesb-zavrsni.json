@@ -97,6 +97,9 @@
     },
     {
       "ruleId": "fesb-zavrsni--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",

@@ -24,6 +24,9 @@
     },
     {
       "ruleId": "arca-zavrsni--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",

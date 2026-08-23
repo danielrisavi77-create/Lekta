@@ -155,6 +155,9 @@
       },
       {
         "ruleId": "kbf-zavrsni--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -174,6 +177,9 @@
       },
       {
         "ruleId": "kbf-zavrsni--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           "naslovnica",
@@ -201,6 +207,9 @@
       },
       {
         "ruleId": "kbf-zavrsni--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "chicago-notes",
         "category": "citation",
@@ -390,6 +399,9 @@
       },
       {
         "ruleId": "kbf-diplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -409,6 +421,9 @@
       },
       {
         "ruleId": "kbf-diplomski--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           "naslovnica",
@@ -436,6 +451,9 @@
       },
       {
         "ruleId": "kbf-diplomski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "chicago-notes",
         "category": "citation",

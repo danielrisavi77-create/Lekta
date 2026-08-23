@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "kbfst-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font",
       "value": [
         "Times New Roman"

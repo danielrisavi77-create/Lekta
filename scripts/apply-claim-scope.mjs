@@ -27,6 +27,7 @@
  * zatrpao stvarnu izmjenu. Isti razlog i isti postupak kao `scripts/apply_claim_modality.py`.
  */
 import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -107,6 +108,25 @@ function indexDrafts() {
   return index;
 }
 
+/** Staze s necommitanim izmjenama, normalizirane na kose crte kao u indexDrafts. */
+function dirtyFiles() {
+  try {
+    const out = execFileSync('git', ['status', '--porcelain', '--', 'data/profiles'], {
+      cwd: root,
+      encoding: 'utf8',
+    });
+    return new Set(
+      out
+        .split(/\r?\n/)
+        .map((line) => line.slice(3).trim().replace(/\\/g, '/'))
+        .filter(Boolean),
+    );
+  } catch {
+    // Bez gita se ne pretpostavlja da je sve cisto: to bi bila tiha suprotnost namjeri.
+    throw new Error('Ne mogu procitati `git status`; upis bi mogao pregaziti tudje izmjene.');
+  }
+}
+
 function main() {
   const human = has('human');
   const by = arg('by');
@@ -119,7 +139,13 @@ function main() {
   const index = indexDrafts();
 
   const byFile = new Map();
-  const stats = { upisano: 0, 'vec upisano': 0, 'preskoceno (ljudski potvrdjeno)': 0, 'nepoznat ruleId': 0 };
+  const stats = {
+    upisano: 0,
+    'vec upisano': 0,
+    'preskoceno (ljudski potvrdjeno)': 0,
+    'preskoceno (datoteka ima necommitane izmjene)': 0,
+    'nepoznat ruleId': 0,
+  };
   for (const d of decisions) {
     const hit = index.get(d.ruleId);
     if (!hit) {
@@ -140,7 +166,16 @@ function main() {
     byFile.set(hit.rel, list);
   }
 
+  const dirty = dirtyFiles();
   for (const [rel, plan] of byFile) {
+    // U DIJELJENOM radnom stablu (vise sesija odjednom) upis je citaj-pa-prepisi cijelu datoteku, pa
+    // bi izmjena druge sesije koja stigne izmedju to dvoje nestala BEZ ijedne poruke. Datoteka s
+    // necommitanim izmjenama se zato preskace: njezine se odluke primjenjuju u mirnijem prozoru.
+    // Nije zaobilazenje nego posljedica stvarnog kvara (CLAUDE.md, "Konvencije").
+    if (dirty.has(rel)) {
+      stats['preskoceno (datoteka ima necommitane izmjene)'] += plan.size;
+      continue;
+    }
     const raw = readFileSync(p(rel), 'utf8');
     const newline = raw.includes('\r\n') ? '\r\n' : '\n';
     const lines = raw.replace(/\r\n/g, '\n').split('\n');

@@ -53,6 +53,9 @@
     },
     {
       "ruleId": "ffzg-kroatistika-graduate--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "margins",
       "value": {
         "top": 2.5,

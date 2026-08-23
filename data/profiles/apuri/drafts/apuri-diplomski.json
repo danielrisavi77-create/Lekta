@@ -122,6 +122,9 @@
     },
     {
       "ruleId": "apuri-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",
@@ -196,6 +199,9 @@
     },
     {
       "ruleId": "apuri-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "toc",
       "value": true,
       "category": "structure",

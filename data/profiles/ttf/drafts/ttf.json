@@ -153,6 +153,9 @@
       },
       {
         "ruleId": "ttf-diplomski--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -394,6 +397,9 @@
       },
       {
         "ruleId": "ttf-zavrsni--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",

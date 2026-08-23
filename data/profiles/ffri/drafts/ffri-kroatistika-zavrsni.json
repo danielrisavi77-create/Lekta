@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "ffri-kroatistika-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -52,6 +55,9 @@
     },
     {
       "ruleId": "ffri-kroatistika-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -166,6 +172,9 @@
     },
     {
       "ruleId": "ffri-kroatistika-zavrsni--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",

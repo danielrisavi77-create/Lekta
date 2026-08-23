@@ -102,6 +102,9 @@
     },
     {
       "ruleId": "mev-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",

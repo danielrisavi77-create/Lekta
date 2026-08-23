@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "apuri-zavrsni--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -24,6 +27,9 @@
     },
     {
       "ruleId": "apuri-zavrsni--font",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -47,6 +53,9 @@
     },
     {
       "ruleId": "apuri-zavrsni--font-size",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": [
         12
@@ -70,6 +79,9 @@
     },
     {
       "ruleId": "apuri-zavrsni--line-spacing",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -91,6 +103,9 @@
     },
     {
       "ruleId": "apuri-zavrsni--margins",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -139,6 +154,9 @@
     },
     {
       "ruleId": "apuri-zavrsni--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -160,6 +178,9 @@
     },
     {
       "ruleId": "apuri-zavrsni--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",

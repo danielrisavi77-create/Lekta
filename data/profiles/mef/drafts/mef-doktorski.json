@@ -48,6 +48,9 @@
     },
     {
       "ruleId": "mef-doktorski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "toc",
       "status": "verified",
       "scored": true,

@@ -1980,6 +1980,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -2342,6 +2345,9 @@
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -3886,6 +3892,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -4013,6 +4022,9 @@
     "trgovacko-pravo": [
       {
         "ruleId": "trgovacko-pravo--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -4070,6 +4082,9 @@
       },
       {
         "ruleId": "trgovacko-pravo--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -4436,6 +4451,9 @@
       },
       {
         "ruleId": "sociologija--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",

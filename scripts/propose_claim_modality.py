@@ -245,10 +245,16 @@ def main() -> None:
                 "sourcePage": entry.get("sourcePage"),
                 "ruleIds": [],
                 "profileIds": [],
+                "writtenSources": [],
             },
         )
         unit["ruleIds"].append(entry.get("ruleId"))
         unit["profileIds"].append(row["profileId"])
+        # Sto je VEC upisano. Bez ovoga popis i dalje trazi covjeka za jedinicu koja je rijesena, pa
+        # "382 ceka" znaci nesto drugo nego sto pise. Zapis ostaje u JSON-u (potpun trag), a iz
+        # worklista ispada, jer worklist je POPIS POSLA, ne arhiva.
+        if entry.get("modality"):
+            unit["writtenSources"].append(entry.get("modalitySource") or "bez izvora")
 
     proposals = []
     stats = Counter()
@@ -293,6 +299,11 @@ def main() -> None:
                 "proposedScope": scope,
                 "modalityMarks": marks,
                 "namedScopes": named,
+                "writtenModality": {
+                    "count": len(unit["writtenSources"]),
+                    "sources": sorted(set(unit["writtenSources"])),
+                },
+                "resolved": len(unit["writtenSources"]) == len(unit["ruleIds"]),
                 "needsHuman": bool(reasons),
                 "reasons": reasons,
             }
@@ -318,8 +329,14 @@ def main() -> None:
     # vec pokazao ispravnim (68 pravila = 53 jedinice, 43 = 8 jedinica).
     worklist = os.path.join(ROOT, "data", "verification", "modality-worklist.md")
     by_reason: dict[str, list[dict]] = {}
+    resolved = 0
     for proposal in proposals:
         if not proposal["needsHuman"]:
+            continue
+        # Rijesena jedinica (SVA njezina pravila vec nose modalitet) ispada iz popisa posla. Zapis
+        # ostaje u JSON-u: ovo je popis onoga sto CEKA, a ne arhiva onoga sto je razlog nekad bio.
+        if proposal["resolved"]:
+            resolved += 1
             continue
         key = proposal["reasons"][0].split(":")[0].split("(")[0].strip()
         by_reason.setdefault(key, []).append(proposal)
@@ -328,10 +345,13 @@ def main() -> None:
         "",
         "GENERIRANO (`npm run claim-modality`). Ne uredjuj rucno.",
         "",
-        "Upisuje se u `ruleEntry` uz `modalitySource: \"human\"`. Strojni prijedlog (`mechanical`) NIKAD",
-        "ne nosi ublazen modalitet, pa je sve ublazeno ovdje.",
+        "Upisuje se u `ruleEntry`. Tri razine izvora: `mechanical` (strojni uzorak), `agent-read`",
+        "(procitan citat, `npm run claim-scope`) i `human` (ljudski potpis). UBLAZEN modalitet",
+        "(recommendation/permission/condition) smije upisati SAMO `human`, pa je sve ublazeno ovdje.",
         "",
         f"Jedinica: {sum(len(v) for v in by_reason.values())}. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.",
+        f"Jos {resolved} jedinica imalo je razlog za covjeka, ali su im sva pravila u medjuvremenu",
+        "upisana, pa ne cekaju nista; ostaju u `docs/generated/claim-modality-proposals.json`.",
         "",
     ]
     for reason, group in sorted(by_reason.items(), key=lambda kv: -len(kv[1])):

@@ -104,6 +104,9 @@
       },
       {
         "ruleId": "pbf-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -145,6 +148,9 @@
       },
       {
         "ruleId": "pbf-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           "naslovnica",

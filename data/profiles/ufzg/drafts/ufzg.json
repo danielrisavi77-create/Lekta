@@ -176,6 +176,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -500,6 +503,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",

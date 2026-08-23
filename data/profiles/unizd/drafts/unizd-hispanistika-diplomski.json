@@ -29,6 +29,9 @@
     },
     {
       "ruleId": "unizd-hispanistika-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": [
         12
@@ -52,6 +55,9 @@
     },
     {
       "ruleId": "unizd-hispanistika-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -73,6 +79,9 @@
     },
     {
       "ruleId": "unizd-hispanistika-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",

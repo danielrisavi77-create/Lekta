@@ -82,6 +82,9 @@
     },
     {
       "ruleId": "ffri-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -127,6 +130,9 @@
     },
     {
       "ruleId": "ffri-zavrsni--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -148,6 +154,9 @@
     },
     {
       "ruleId": "ffri-zavrsni--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",

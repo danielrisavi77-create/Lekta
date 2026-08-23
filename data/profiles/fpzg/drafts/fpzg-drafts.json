@@ -289,6 +289,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -309,6 +312,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -654,6 +660,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -674,6 +683,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -1019,6 +1031,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -1039,6 +1054,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -1384,6 +1402,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -1404,6 +1425,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -1749,6 +1773,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -1769,6 +1796,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -2114,6 +2144,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -2134,6 +2167,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -2479,6 +2515,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -2499,6 +2538,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -2861,6 +2903,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -2996,6 +3041,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -3016,6 +3064,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -3220,6 +3271,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -3355,6 +3409,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -3375,6 +3432,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -3710,6 +3770,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -3730,6 +3793,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -3937,6 +4003,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -3957,6 +4026,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {

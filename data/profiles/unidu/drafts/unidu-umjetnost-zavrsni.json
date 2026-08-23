@@ -53,6 +53,9 @@
     },
     {
       "ruleId": "unidu-umjetnost-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "line-spacing",
       "value": 1.15,
       "category": "format",

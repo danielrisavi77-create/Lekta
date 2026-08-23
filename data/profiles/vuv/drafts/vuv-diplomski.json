@@ -27,6 +27,9 @@
     },
     {
       "ruleId": "vuv-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -103,6 +106,9 @@
     },
     {
       "ruleId": "vuv-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -124,6 +130,9 @@
     },
     {
       "ruleId": "vuv-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",
