@@ -1,6 +1,7 @@
 {
-  "schemaVersion": 1,
-  "audited": 1932,
+  "schemaVersion": 2,
+  "audited": 1930,
   "unreadable": 0,
-  "findings": []
+  "findings": [],
+  "unverifiable": []
 }

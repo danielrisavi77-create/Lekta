@@ -1332,6 +1332,7 @@ def main() -> None:
     # novi format ili je datoteka nestala, pa se ne moze ni odluciti sto s tim.
     unread_reason: collections.Counter = collections.Counter()
     inconclusive = 0
+    unverifiable: list[dict] = []
 
     for row in rows:
         entry = row["entry"]
@@ -1428,7 +1429,26 @@ def main() -> None:
             #
             # SUZENO 2026-08-23: samo kad citljivi dio dokumenta o TOJ OSI uopce ne govori. Kad govori
             # (vuka: "margine 2,0 cm ..."), citat koji se ne usidri je nalaz, a ne granica alata.
+            #
+            # POPISUJE SE, ne samo broji (2026-08-24). Gola brojka "31 neprovjerivo" ne kaze KOJA su
+            # pravila ni sto bi ih otkljucalo, pa se sutnja ne moze ni smanjivati ni provjeravati.
+            # Isti razlog zbog kojeg `unreadable` vec ima razlog po razlog.
             inconclusive += 1
+            unverifiable.append(
+                {
+                    "profileId": row["profileId"],
+                    "ruleId": entry.get("ruleId"),
+                    "checkId": check_id,
+                    "sourceId": entry.get("sourceId"),
+                    "snapshot": rel,
+                    "reason": (
+                        "skenirane stranice" if has_scanned_pages(rel) else "ostecen tekstualni sloj"
+                    ),
+                    "hasSidecar": bool(
+                        ocr_sidecar(os.path.join(ROOT, rel.replace("/", os.sep)))
+                    ),
+                }
+            )
         elif not quote_found(evidence, quote):
             cov = quote_coverage(evidence, quote)
             if cov >= COVERAGE_MIN:
@@ -1506,7 +1526,20 @@ def main() -> None:
 
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
-        json.dump({"schemaVersion": 1, "audited": audited, "unreadable": unreadable, "findings": findings}, fh, ensure_ascii=False, indent=2)
+        json.dump(
+            {
+                "schemaVersion": 2,
+                "audited": audited,
+                "unreadable": unreadable,
+                "findings": findings,
+                # Sutnja se popisuje kao i nalaz. Bez toga "31 neprovjerivo" ne kaze koja su pravila
+                # ni sto bi ih otkljucalo, pa se broj ne moze ni smanjivati ni osporiti.
+                "unverifiable": unverifiable,
+            },
+            fh,
+            ensure_ascii=False,
+            indent=2,
+        )
         fh.write("\n")
 
     print("=== Revizija bodovanih pravila protiv izvora ===")
@@ -1516,6 +1549,15 @@ def main() -> None:
     for reason, count in unread_reason.most_common():
         print(f"      {count:5}  {reason}")
     print(f"  NEPROVJERIVO (citat je sa skenirane stranice, preuzet OCR-om): {inconclusive}")
+    # Po IZVORU, jer se sutnja i uklanja po izvoru (jedan OCR pratitelj otkljuca sva pravila iza
+    # istog dokumenta). Zastavica kaze ima li izvor vec pratitelja: ako ima a pravilo je i dalje
+    # neprovjerivo, OCR ga nije procitao i pomoci ce samo ljudsko oko.
+    unverified_by_source: collections.Counter = collections.Counter(
+        f"{u['snapshot']} [{u['reason']}, pratitelj: {'da' if u['hasSidecar'] else 'NE'}]"
+        for u in unverifiable
+    )
+    for source, count in unverified_by_source.most_common():
+        print(f"      {count:5}  {source}")
     print(f"  pravila s NOVIM nalazom: {len(findings)}")
     print(f"  pravila s priznatim nalazom (odluceno, vidi data/verification/known-findings.json): {ack_rules}")
     print("")

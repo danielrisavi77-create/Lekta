@@ -14,17 +14,20 @@ kontrole suzenja (`npm run audit:selftest`) PRIJE svega ostaloga.
 
 | | pocetak (2026-08-22) | sada (2026-08-24) |
 |---|---|---|
-| bodovanih pravila | 1934 | 1932 |
-| revidirano | 1391 | **1932** |
+| bodovanih pravila | 1934 | 1930 |
+| revidirano | 1391 | **1930** |
 | nerevidirano (izvor se ne cita) | 543 | **0** |
-| neprovjerivo (skenirano ili ostecen tekstualni sloj) | 9 | **31** |
+| neprovjerivo (skenirano ili ostecen tekstualni sloj) | 9 | **0** |
 | pravila s NOVIM nalazom | 319 | **0** |
 | priznato (procitano pa ostavljeno) | 37 | **57** |
 
-**Red novih nalaza je prazan.** Svih 1932 bodovanih pravila ima izvor koji se cita i citat koji se
-u tom izvoru pokaze. Nijedan red provjere (parafraza, brojevi, odsjecen citat, kvalifikator,
+**Sva tri reda sutnje su prazna.** Svako bodovano pravilo ima izvor koji se stvarno cita i citat
+koji se u tom izvoru pokaze. Nijedan red provjere (parafraza, brojevi, odsjecen citat, kvalifikator,
 vrijednost izvan citata, predlozak) ne prijavljuje nista neodluceno. Mjerodavan je artefakt
 (`docs/generated/scored-quote-audit.json`), ne ovaj zapis.
+
+Pad s 1934 na 1930 nije iz ove revizije: cetiri pravila demotirao je drift alat
+(`vuka-strojarski-*--margins` i dalje dva u presudi raskoraka).
 
 Prazno NIJE isto sto i "sve je bilo tocno". Od oko 320 zatvorenih nalaza tocno JEDAN je bio kvar u
 bodovanju (forenzika, nize) i jedan je svjesno odstupanje koje ostaje (`unizd-pomorski`, nize).
@@ -38,8 +41,19 @@ je 2026-08-23 palo s 72 na 35 suzenjem potiskivanja skeniranih dokumenata (`text
 prije je jedna stranica-slika opravdavala tisinu nad CIJELIM dokumentom, sada samo nad osima o kojima
 citljivi sloj ne govori nista. Tih 37 otkljucanih pravila proslo je SVE, pa se artefakt nije
 promijenio ni za bajt; detalji i negativne kontrole u `docs/PLAN_POTPUNA_POKRIVENOST.md`. S 35 na 31
-palo je 2026-08-24 uvodjenjem drugog citanja (odjeljak 3.1): cetiri pravila vise nisu presucena nego
-POTVRDJENA.
+palo je 2026-08-24 uvodjenjem drugog citanja (odjeljak 3.1), a s 31 na NULU istog dana, kad je
+sutnja prvi put POPISANA umjesto samo prebrojana:
+
+- Popis je pokazao da iza 31 pravila stoje samo CETIRI izvora, a ne 31 zaseban slucaj. Dok je stajala
+  gola brojka, izgledalo je kao trideset i jedan problem.
+- `unipu-zavrsni-izmjene-2021` (18 pravila) i `forenzika-pravilnik-diplomski` (7) nisu imali OCR
+  pratitelja. Nakon dva pokretanja `scripts/ocr_pdf.py` svih 25 je POTVRDJENO, bez ijednog nalaza.
+  Dokaz nije pretpostavljen: sloj `unipu` daje "Zavr5ni rad ... u formatu 44; ... podrubne bilje5ke
+  10", a OCR "Zavrsni rad ... u formatu A4; ... podrubne biljeske 10". `forenzika` OCR doslovno nosi
+  "rubovi ... moraju biti siroki najmanje 2,5 cm", odredbu zbog koje je nastao jedini stvarni kvar
+  bodovanja u cijeloj reviziji.
+- `ffri-povum` (6 pravila) je imao pratitelja, pa je ostatak bio autorski, ne tehnicki: citat je bio
+  SPOJEN IZ DVA DOKUMENTA. Vidi 2.1, tocku 8.
 
 ---
 
@@ -77,7 +91,19 @@ izolirani gate (369/369).
      odredbe iz Layout tablice slozene u jednu recenicu koje u dokumentu nema. Izvor je pritom posve
      citljiv. Zamijenjeno obvezujucom izjavom sa str. 5 plus doslovnim Layout blokom sa str. 21.
 
-7. **63 retka tudjeg rada u `e44a69c`.** JEDINO sto ostaje otvoreno iz ovog odjeljka. Sweep je upao
+8. **`ffri-povum` (6 pravila): citat spojen iz DVA dokumenta.** Odsjecki dodatak je bio naveden kao
+   izvor, a prva recenica citata ("Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4")
+   u njemu ne stoji: dodatak sam kaze da "nadopunjuje izneseno u Cl. 9 Pravilnika o zavrsnom radu
+   FF". `font-size` i `justify` DOISTA stoje u dodatku ("Upotreba tipa slova Times New Roman,
+   velicine 12 i proreda 1,5 u osnovnom tekstu"; "Poravnavanje teksta po obje margine") pa su dobili
+   njegov doslovan tekst. `paper-size` u dodatku NE stoji, pa je vezan na akt koji ga propisuje
+   (`ffri-pravilnik-{diplomski,zavrsni}-2023`, clanci 11. i 8.). Vrijednost se nije mijenjala.
+
+   OTVORENO ZA VLASNIKA: registar ima i `ffri-pravilnik-zavrsni-2026`, koji koriste 2 pravila, dok
+   ostalih 12 ffri pravila koristi izdanja iz 2023. Uzeo sam 2023 radi sklada unutar jedinice, ali
+   ako 2026 zamjenjuje raniji akt, bumpati treba SVE zajedno, ne samo povum.
+
+9. **63 retka tudjeg rada u `e44a69c`.** JEDINO sto ostaje otvoreno iz ovog odjeljka. Sweep je upao
    izmedju izmjene i commita, pa su `modality`/`scope`/`modalitySource` iz `kif.json` i `ttf.json`
    zavrsili pod mojom porukom. Nista nije izgubljeno. Povijest NIJE prepravljana jer bi `--amend` u
    dijeljenom stablu mogao pojesti commit druge sesije. Odluka vlasnika.
