@@ -125,6 +125,34 @@
       "decidedBy": "Claude Opus 5 (1M context)",
       "decidedAt": "2026-08-22",
       "rationale": "Nalaz je tocan po citatu, ali ne moze pomaknuti ocjenu, pa nema sto ispraviti u podacima."
+    },
+    {
+      "ruleIds": [
+        "hks-diplomski--justify",
+        "pmf-fizika-graduate--font-size"
+      ],
+      "finding": "citat odsjecen, recenica se nastavlja",
+      "evidence": "Izuzece je STVARNO i na istoj osi, ali motor nema pojam kojim bi ga izrazio. hks-opce-upute-diplomski-2023.pdf: \"naslovi i podnaslovi poglavlja (lijevo poravnanje)\" uz tijelo koje mora biti obostrano poravnano. pmf-phy-diplomski-upute.doc: \"uz slike, grafikone i tablice koristiti prored 1,0 (ne 1,5 kao u ostalom tekstu), a velicina slova je 11 (ne 12 kao u ostalom tekstu)\". Provjereno u kodu: `analyze-docx.ts` nema nijedan pojam za poravnanje NASLOVA zasebno ni za velicinu slova u PRILOZIMA (nula pojava).",
+      "alsoNoted": "Ni jedno ni drugo ne cini pravilo prestrogim: motor mjeri DOMINANTNU vrijednost, pa naslovi i prilozi ne mogu oboriti provjeru tijela teksta.",
+      "decision": "left-scored",
+      "decidedBy": "Claude Opus 5 (1M context)",
+      "decidedAt": "2026-08-23",
+      "rationale": "Nema sto zapisati ni ispraviti: odredba postoji, posljedice na ocjenu nema, a motor je ne moze izraziti. Biljezi se da je procitana."
+    },
+    {
+      "ruleIds": [
+        "ffzg-filozofija-diplomski--page-numbers",
+        "mef-doktorski--page-numbers",
+        "hks-diplomski--font-size",
+        "hks-diplomski--line-spacing"
+      ],
+      "finding": "citat odsjecen, recenica se nastavlja",
+      "evidence": "Cetiri izuzeca koja motor VEC ZNA izraziti, ali ih profil ne zapisuje. Redom, s odredbom iz izvora i zastavicom koja bi je nosila:\n  ffzg-filoz-diplomski-2019.pdf: \"naslovnu stranicu i stranice sa sadrzajem i sazecima ne numerirati\" -> `checkTitlePageNumberSuppression`\n  mef-uputa-doktorski: \"Stranice obavezno oznaciti brojevima (prva stranica je stranica Uvod)\" -> `checkPageNumberStartAtIntro`\n  hks-opce-upute-diplomski-2023.pdf: \"biljeske se pisu na dnu stranice (footnote), a pismo (font) je velicine 10\" -> `footnoteSize`\n  isti izvor: \"...prored jednostruk s obostranim poravnanjem\" (za biljeske) -> `footnoteSpacing`\nPostojanje sva cetiri pojma provjereno u `analyze-docx.ts` i `rule-compiler.ts`.",
+      "alsoNoted": "Nijedno ne cini postojece pravilo prestrogim; rijec je o odredbi koja se NE mjeri, ne o krivom bodovanju. Zato je posljedica propustena prilika, ne kvar.",
+      "decision": "left-scored",
+      "decidedBy": "Claude Opus 5 (1M context)",
+      "decidedAt": "2026-08-23",
+      "rationale": "Dodavanje BODOVANOG pravila mijenja ono po cemu se studenti ocjenjuju na zivim profilima, a CLAUDE.md za bodovano pravilo trazi potvrdjenu provenijenciju uz ljudski prolaz (`verifiedBy`, `confirmedVia: human-audit`), koji agent ne moze potpisati. Zato se ne dodaje nego zapisuje s TOCNOM zastavicom i doslovnom odredbom, da odluka bude jedan korak a ne nova istraga."
     }
   ]
 }

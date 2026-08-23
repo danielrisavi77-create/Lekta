@@ -471,6 +471,11 @@ ModSecurity vraca HTTP 418.
   DOM-u i labavim podacima (UI glue: `$`/`$$`, lookup-mape); u novom logickom kodu izbjegavaj.
 - Bez localStorage hackova u novim modulima; postojeći `safeStorageGet/Set` ostaje.
 - Produkcijski kod, ne primjeri. Male, fokusirane promjene, svaki korak zelen.
+- U DIJELJENOM radnom stablu (vise sesija odjednom) `git commit -- <putanje>` uzima sadrzaj iz
+  RADNOG STABLA u trenutku commita, ne tvoju izmjenu. Generator druge sesije zna upasti izmedju
+  izmjene i commita, pa tudji rad zavrsi pod tvojom porukom (dogodilo se 2026-08-22, 63 retka).
+  Neposredno prije commita PONOVI `git diff --stat -- <putanje>` i usporedi s onim sto si mijenjao.
+  Ako je vec uslo, NE prepravljaj povijest dok druga sesija radi: amend joj moze pojesti commit.
 
 ## Codex (drugo misljenje)
 

@@ -366,10 +366,38 @@ def doc97_text(path: str) -> str:
 # izvore i dalje vraca True, pa citat koji se ne poklopi zavrsi kao NEPROVJERIV, ne kao nalaz.
 # Drugacije bi znacilo optuziti podatak za gresku citanja, sto je greska koju je ova revizija vec
 # jednom napravila nad ostecenim tekstualnim slojem.
+# Sluzbena uputa zna biti samo stranica studija. Cita se bez ijedne nove ovisnosti: van izbacimo
+# `script`, `style` i komentare (nisu vidljivi tekst), pa tagove pretvorimo u razmak. Razmak je
+# nuzan, ne kozmetika: bez njega se "</td><td>" spoji u jednu rijec i citat koji doslovno stoji na
+# stranici ispadne nenadjen, isti kvar kao `</w:p>` kod .docx.
+_HTML_DROP = re.compile(r"<(script|style)\b.*?</\1>|<!--.*?-->", re.I | re.S)
+_HTML_TAG = re.compile(r"<[^>]+>")
+
+
+def html_text(path: str) -> str:
+    """Vidljivi tekst HTML stranice. Prazan string ako se ne moze procitati."""
+    try:
+        import xml.sax.saxutils as saxutils
+
+        with open(path, encoding="utf-8", errors="replace") as fh:
+            raw = fh.read()
+        text = _HTML_TAG.sub(" ", _HTML_DROP.sub(" ", raw))
+        text = saxutils.unescape(text, {"&nbsp;": " ", "&scaron;": "s", "&ccaron;": "c"})
+        return squash(re.sub(r"&[#a-zA-Z0-9]{2,8};", " ", text))
+    except Exception:
+        return ""
+
+
+
 def ocr_sidecar(path: str) -> str:
-    """Tekst iz `<ime>-ocr.txt` uz izvor. Prazan string ako ga nema."""
-    sidecar = os.path.splitext(path)[0] + "-ocr.txt"
-    if not os.path.exists(sidecar):
+    """Tekst iz pratitelja uz izvor: `<ime>-ocr.txt` (OCR skenirane stranice) ili `<ime>-text.txt`
+    (izvuceno iz arhive, npr. `.cls` iz `.rar` predloska). Prazan string ako pratitelja nema."""
+    for suffix in ("-ocr.txt", "-text.txt"):
+        candidate = os.path.splitext(path)[0] + suffix
+        if os.path.exists(candidate):
+            sidecar = candidate
+            break
+    else:
         return ""
     try:
         with open(sidecar, encoding="utf-8") as fh:
@@ -382,12 +410,15 @@ def ocr_sidecar(path: str) -> str:
 
 
 def document_text(rel_path: str) -> str:
-    """Spojeni tekst izvora (PDF, .docx ili naslijedjeni .doc), normaliziran. Prazan ako se ne cita."""
+    """Spojeni tekst izvora, normaliziran. Cita PDF, .docx, naslijedjeni .doc i HTML stranicu, a za
+    ostalo (skenirani PDF, `.rar` predlozak) pada na pratitelja uz datoteku. Prazan ako nista ne uspije."""
     if rel_path in _doc_text:
         return _doc_text[rel_path]
     text = ""
     path = os.path.join(ROOT, rel_path.replace("/", os.sep))
-    if os.path.exists(path) and path.lower().endswith(".doc"):
+    if os.path.exists(path) and path.lower().endswith((".html", ".htm")):
+        text = html_text(path)
+    elif os.path.exists(path) and path.lower().endswith(".doc"):
         text = doc97_text(path)
     elif os.path.exists(path) and path.lower().endswith(".docx"):
         text = docx_text(path)
@@ -522,6 +553,22 @@ NAME_AXES = {
 }
 
 
+# Rijec koja okida os, ali pripada PRILOGU a ne stranici. "svaka tablica, graf, slika mora biti
+# numerirana" je numeracija priloga, pa je hvatati kao izuzece o numeraciji STRANICA znaci isto sto
+# i ranije kod "po obje margine" (poravnanje, ne margine) i "obostran ispis" (papir, ne poravnanje).
+# Hrvatske upute istom rijeci opisuju dvije osi, pa se gleda sto joj NEPOSREDNO PRETHODI.
+AXIS_DISQUALIFIER = {
+    "page-numbers": r"(tablic\w*|slik\w*|grafikon\w*|graf\b|prilog\w*|prilo[žz]\w*|natpis\w*)[^.]{0,40}$",
+}
+
+
+def axis_hit_is_foreign(check_id: str, tail: str, at: int) -> bool:
+    """Pripada li rijec koja je okinula os nekoj drugoj stvari (prilogu umjesto stranici)."""
+    pattern = AXIS_DISQUALIFIER.get(check_id)
+    return bool(pattern and re.search(pattern, tail[:at], re.I))
+
+
+
 def tail_overrides_rule(check_id: str, value, tail: str) -> bool:
     """Daje li nastavak DRUGU vrijednost za dio rada, i to bas na osi koju pravilo boduje.
 
@@ -530,7 +577,13 @@ def tail_overrides_rule(check_id: str, value, tail: str) -> bool:
     boduje kao da vrijedi svugdje, a to je jedini razred zbog kojeg provjera postoji.
     """
     pattern = AXIS_WORDS.get(check_id)
-    if not pattern or not re.search(pattern, tail, re.I):
+    if not pattern:
+        return False
+    hit = next(
+        (m for m in re.finditer(pattern, tail, re.I) if not axis_hit_is_foreign(check_id, tail, m.start())),
+        None,
+    )
+    if not hit:
         return False
     folded_tail = fold(tail)
     if check_id in NAME_AXES:
@@ -922,7 +975,8 @@ def main() -> None:
                         }
                     )
 
-        if not rel.lower().endswith((".pdf", ".docx", ".doc")):
+        # `.rar` nema citac, ali ima pratitelja `-text.txt` (izvuceno iz arhive), pa ulazi ovdje.
+        if not rel.lower().endswith((".pdf", ".docx", ".doc", ".html", ".htm", ".rar")):
             # .doc / .docx / .html / .rar se ovdje NE citaju. Prijavljuje se kao NEREVIDIRANO, ne kao
             # uredno: sutnja o neprovjerenom je isti kvar kao lazno zeleno.
             unreadable += 1
@@ -1037,7 +1091,7 @@ def main() -> None:
 
     print("=== Revizija bodovanih pravila protiv izvora ===")
     print(f"bodovanih pravila: {len(rows)}")
-    print(f"  revidirano (PDF snapshot citljiv): {audited}")
+    print(f"  revidirano (izvor procitan): {audited}")
     print(f"  NEREVIDIRANO (izvor se ne moze procitati): {unreadable}")
     for reason, count in unread_reason.most_common():
         print(f"      {count:5}  {reason}")

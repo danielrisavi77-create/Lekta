@@ -35,6 +35,11 @@ uklanjaj kanarince (LEKTA-KANARINAC-* i top-level "kanarinac" kljuc u draftovima
 writeri draftova moraju propagirati nepoznate top-level kljuceve. Novu stazu bez
 razreda check odbija: dodaj pravilo svjesno, uz biljesku.
 
+Pravila profila u pregledniku stizu PO PROFILU (ensureProfileRules(profileId) preko
+providera; produkcija = profile-rules Edge funkcija, dev = lokalni lazy chunkovi).
+currentProfile BACA kad definicija postoji a pravila nisu ucitana (light-stub zamka);
+kvar dohvata posteno degradira na opcu provjeru, NIKAD tiho bodovanje.
+
 ## Parser: ne diraj bez golden testa
 
 Legal Citation Engine i OOXML parser (src/docx, src/audits, src/citations,
@@ -203,3 +208,10 @@ DVA PUTA, jednom kroz svaki od ta dva puta. Proslo je samo zato sto su ti zahvat
 
 Svaka migracija mora biti idempotentna (`if not exists`, `drop ... if exists` prije `create`),
 jer se u praksi zna primijeniti vise puta.
+
+## Dijeljeno radno stablo
+
+`git commit -- <putanje>` uzima sadrzaj iz RADNOG STABLA u trenutku commita, ne tvoju izmjenu.
+Kad vise sesija radi u istom stablu, generator druge sesije zna upasti izmedju izmjene i commita
+i njezin rad zavrsi pod tvojom porukom. Prije commita ponovi `git diff --stat -- <putanje>`.
+Povijest se NE prepravlja dok druga sesija radi u istom stablu.
