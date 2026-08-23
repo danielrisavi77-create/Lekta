@@ -13,6 +13,7 @@
 //
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
+import { readTextBounded } from '../_shared/read-body.ts';
 import {
   verifyLemonSignature,
   parseLemonEvent,
@@ -24,6 +25,7 @@ import {
   acceptEvent,
   isFullRefund,
   type LemonEvent,
+  type LemonWebhookPayload,
 } from '../../../src/report/webhook.ts';
 import { mapProductRow } from '../../../src/catalog/products-catalog.ts';
 import {
@@ -185,15 +187,30 @@ async function pullReferralSignupReward(admin: any, orderId: string): Promise<vo
   }
 }
 
+// Gornja granica sirovog tijela webhooka (audit P1-06). Vidi _shared/read-body.ts.
+const MAX_WEBHOOK_BODY_BYTES = 512 * 1024;
+
 Deno.serve(async (req: Request) => {
  try {
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
-  const raw = await req.text();
+  // GRANICA TIJELA PRIJE POTPISA (audit P1-06). Ovo je javan endpoint s `verify_jwt = false`:
+  // svatko na internetu smije poslati zahtjev, a HMAC ga odbija TEK NAKON sto je tijelo vec
+  // procitano. `req.text()` bez granice znaci da nepotpisan zahtjev moze alocirati koliko god
+  // posiljatelj hoce, prije nego je ijedna provjera stigla reci ne.
+  //
+  // Granica je namjerno velikodusna prema stvarnom prometu: najveci Lemon Squeezy `order_created`
+  // s punim `meta.custom_data` i stavkama je reda velicine desetak KiB.
+  const rawBody = await readTextBounded(req, MAX_WEBHOOK_BODY_BYTES);
+  if (!rawBody.ok) return json({ error: 'payload_too_large' }, 413);
+  const raw = rawBody.text;
   if (!(await verifyLemonSignature(raw, req.headers.get('X-Signature'), WEBHOOK_SECRET))) {
     return json({ error: 'invalid_signature' }, 401);
   }
-  const ev = parseLemonEvent(JSON.parse(raw));
+  // JSON se parsira TOCNO JEDNOM i tek nakon sto je potpis prosao.
+  let parsed: LemonWebhookPayload;
+  try { parsed = JSON.parse(raw) as LemonWebhookPayload; } catch { return json({ error: 'bad_request' }, 400); }
+  const ev = parseLemonEvent(parsed);
   if (!ev.orderId || !ev.userId) return json({ error: 'bad_request' }, 400);
 
   const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
