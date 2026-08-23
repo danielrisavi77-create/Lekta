@@ -56,6 +56,12 @@ jobs:
       # to nista nije racunalo - `runVerificationGate` je usporedjivao dva ZAPISANA broja, pa je
       # tvrdnja o nepromjenjivosti 233 MB izvora pocivala na tome da ih nitko nije dirao.
       # Nije u `npm run check` zbog cijene (13 s nad 175 MB), ali se vrti pri svakom pushu.
+      # Suzenje suzbijanja skeniranih stranica odlucuje hoce li se neusidren citat prijaviti ili
+      # sutke odbaciti. Gard koji ne grize gori je od nikakvog, pa ima kontrole u OBA smjera,
+      # ukljucujuci dva stvarna dokumenta koja su ga motivirala (vuka i forenzika).
+      - name: Negativne kontrole suzenja (revizija stvarno grize)
+        run: npm run audit:selftest
+
       - name: Snapshoti bodovanih pravila su nepromijenjeni
         run: npm run verify:source-hashes
 

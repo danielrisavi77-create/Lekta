@@ -3,8 +3,10 @@
 Stanje 2026-08-23. Zaseban dokument, ne primopredaja sesije: opisuje `scripts/audit_scored_quotes.py`
 i redove nalaza koje proizvodi. Primopredaja je `docs/NASTAVAK_SLJEDECA_SESIJA.md`.
 
-Pokretanje: `npm run audit:scored-quotes`. NIJE u `npm run check` i nijedan test ne cita
-`docs/generated/scored-quote-audit.json`.
+Pokretanje: `npm run audit:scored-quotes`. NIJE u `npm run check` (cita PDF-ove, treba Python), ali
+OD 2026-08-23 JEST u obaveznom CI-ju: `.github/workflows/rule-claims.yml` regenerira artefakt i pada
+ako se razlikuje od commitanog (`docs/generated/scored-quote-audit.json`), plus vrti negativne
+kontrole suzenja (`npm run audit:selftest`) PRIJE svega ostaloga.
 
 ---
 
@@ -13,15 +15,25 @@ Pokretanje: `npm run audit:scored-quotes`. NIJE u `npm run check` i nijedan test
 | | pocetak dana | sada |
 |---|---|---|
 | bodovanih pravila | 1934 | 1932 |
-| revidirano | 1391 | **1919** |
-| nerevidirano (izvor se ne cita) | 543 | **13** |
-| neprovjerivo (skenirano ili ostecen tekstualni sloj) | 9 | **88** |
-| pravila s NOVIM nalazom | 319 | **156** |
-| priznato (procitano pa ostavljeno) | 37 | **47** |
+| revidirano | 1391 | **1932** |
+| nerevidirano (izvor se ne cita) | 543 | **0** |
+| neprovjerivo (skenirano ili ostecen tekstualni sloj) | 9 | **35** |
+| pravila s NOVIM nalazom | 319 | **~50, pada uzivo** |
+| priznato (procitano pa ostavljeno) | 37 | **53** |
 
-Nalazi po redu: 148 nedoslovnih prijepisa i 8 odsjecenih. Redovi "kvalifikator", "vrijednost ne stoji
-u citatu", "brojevi ne stoje", "vrijednost je SKUP" i "predlozak" su PRAZNI. Pad bodovanih pravila s 1934 na 1932 nije iz ove revizije: `vuka-strojarski-{diplomski,zavrsni}--margins`
-demotirao je drift alat paralelne sesije.
+Zadnja dva retka su POKRETNA META i namjerno nisu prikovana: dok se ova revizija vrti, citati se
+ispravljaju, pa je brojka pala s 51 na 46 unutar jednog sata. Mjerodavan je artefakt
+(`docs/generated/scored-quote-audit.json`), ne ovaj zapis. Nalazi su po redu gotovo iskljucivo
+vrijednosti koje leze u PARAFRAZI a ne u doslovnom dijelu citata, uz pokoji citat bez ijednog
+doslovnog sidra i pokoji gdje brojevi ne stoje. Redovi "kvalifikator", "vrijednost je SKUP" i
+"predlozak" su PRAZNI. Pad bodovanih pravila s 1934 na 1932 nije iz ove revizije:
+`vuka-strojarski-{diplomski,zavrsni}--margins` demotirao je drift alat paralelne sesije.
+
+`nerevidirano` je palo na NULU: svaki izvor iza bodovanog pravila sada se stvarno cita. `neprovjerivo`
+je 2026-08-23 palo s 72 na 35 suzenjem potiskivanja skeniranih dokumenata (`text_layer_covers_axis`):
+prije je jedna stranica-slika opravdavala tisinu nad CIJELIM dokumentom, sada samo nad osima o kojima
+citljivi sloj ne govori nista. Tih 37 otkljucanih pravila proslo je SVE, pa se artefakt nije
+promijenio ni za bajt; detalji i negativne kontrole u `docs/PLAN_POTPUNA_POKRIVENOST.md`.
 
 Od 163 zatvorena nalaza, **jedan jedini** bio je stvaran kvar u bodovanju (forenzika, nize).
 Ostalo je bilo mjerenje, ne podaci. To je najvazniji zakljucak i razlog zasto se svaki nalaz

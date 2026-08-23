@@ -1686,10 +1686,9 @@ procitane kao slika. Ishod: **svih 7 citata je doslovno tocno, i lokatori su toc
    ("naslovnica/naslov kao tiha druga vrijednost").
 
 #### Sto ostaje
-Nalaz o `has_scanned_pages` NIJE zatvoren: sljedeci takav dokument ce opet proci kao cist. Trajno
-rjesenje je ili OCR pratitelj za taj izvor (`scripts/ocr_pdf.py`, treba tesseract) ili suzenje garda
-tako da "mjesovit dokument" ne znaci automatski "neprovjerivo". `audit_scored_quotes.py` nije diran
-jer ga je paralelna sesija drzala otvorenim.
+Nista: nalaz o `has_scanned_pages` je zatvoren istoga dana suzenjem opisanim u sljedecoj sekciji.
+`forenzika` i dalje ostaje potisnuta (i mora), jer njezin citljivi sloj o tim osima ne govori nista;
+razlika je u tome sto se to sada MJERI umjesto da se pretpostavlja iz prisutnosti ijedne slike.
 
 ---
 
@@ -1918,3 +1917,45 @@ pravila u Hrvatskoj, sa 407 profila i posteno oznacenim stupnjem pokrivenosti".
   (`violated: false`, `recommended: true`, bez `matchKeys`), ali ne smije pomaknuti ocjenu.
 - Ne izjednacava brojke iz razlicitih artefakata da bi "izgledale slozno": razlika 2135/2208
   je stvarna razlika dviju populacija i rjesava se imenovanjem, ne poravnavanjem.
+
+---
+
+### SUZENJE POTISKIVANJA: 37 pravila je izaslo iz "neprovjerivo" u stvarnu provjeru (2026-08-23)
+
+Zadnji preostali oblik laznog zelenog u lancu tvrdnji (adversarijalni nalaz D11) zatvoren je u
+`scripts/audit_scored_quotes.py`. Kvar nije bio u tome STO se potiskuje nego CIME se potiskivanje
+opravdava: `has_scanned_pages` vraca `true` cim dokument ima ijednu stranicu-sliku, pa je SVAKO
+pravilo iz tog dokumenta dobivalo indulgenciju, ukljucujuci i ona ciji je propis uredno u citljivom
+sloju. Dokument s deset skeniranih stranica i trinaest strojno pisanih tako je bio jednako
+"neprovjeriv" kao cisti skenirani faksimil.
+
+Suzenje je jedan uvjet vise, a ne novi mehanizam: potiskivanje sada vrijedi samo ako citljivi tekst
+o TOJ OSI ne govori nista (`text_layer_covers_axis`). Ako sloj sadrzi rjecnik osi (ime fonta uz
+"font"/"pismo", broj uz jedinicu za margine, "prored", "obostran\w*", "oznac\w* stranic\w*" i
+slicno), citat se provjerava kao i svaki drugi.
+
+**Izmjereno, prije i poslije:**
+
+| | prije | poslije |
+|---|---|---|
+| NEPROVJERIVO | 72 | **35** |
+| pravila u stvarnoj provjeri | 1895 | **1932** |
+| nalaza u artefaktu | 51 | **51** |
+
+Trideset sedam pravila je izaslo iz tisine i **svih 37 je proslo**. To je najbolji moguci ishod i
+ujedno najlakse krivo procitan: ne znaci da suzenje nije bilo potrebno, nego da je 37 tvrdnji bilo
+tocno a da to nitko nije provjeravao. Artefakt se pritom nije promijenio ni za bajt, pa je promjena
+CI-neutralna: `docs/generated/scored-quote-audit.json` ostaje identican.
+
+Izvori koji su i dalje istinski neprovjerivi (35 pravila): `unipu-zavrsni-izmjene-2021` (18),
+`forenzika-pravilnik-diplomski` (7), `ffri-povum-upute-diplomski` (3), `ffri-povum-upute` (3),
+`efri-pravilnik-diplomski-2014` (2), `efri-pravilnik-zavrsni-2014` (2). Za njih vrijedi postupak iz
+prethodne sekcije: renderiraj stranice i procitaj ih.
+
+**Gard nad gardom.** Po tvrdom pravilu ovog repozitorija (`gard bez dokaza da grize ne racuna se`)
+diskriminator ima vlastite negativne kontrole u OBA smjera, dostupne kao `npm run audit:selftest` i
+ozicene u `.github/workflows/rule-claims.yml`: 10 sintetickih slucajeva (sloj koji os spominje mora
+je pokriti, sloj koji je ne spominje ne smije) i 3 nad STVARNIM dokumentima koji su suzenje
+motivirali (`vuka` mora biti pokriven na `margins`, `forenzika` ne smije biti pokrivena ni na jednoj
+od pet osi). Prva izvedba je jednu kontrolu promasila (regex je trazio red rijeci "oznacene
+stranice", a izvor kaze "stranice se oznacavaju"), sto je tocno razlog zasto kontrole postoje.
