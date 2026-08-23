@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "effectus-seminarski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "paper-size",
       "value": "A4",
       "category": "format",
@@ -24,6 +27,9 @@
     },
     {
       "ruleId": "effectus-seminarski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -50,6 +56,9 @@
     },
     {
       "ruleId": "effectus-seminarski--font",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -73,6 +82,9 @@
     },
     {
       "ruleId": "effectus-seminarski--font-size",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -94,6 +106,9 @@
     },
     {
       "ruleId": "effectus-seminarski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -115,6 +130,9 @@
     },
     {
       "ruleId": "effectus-seminarski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.15,
       "category": "format",
@@ -136,6 +154,9 @@
     },
     {
       "ruleId": "effectus-seminarski--page-count",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-count",
       "value": {
         "min": 10,
@@ -158,6 +179,9 @@
     },
     {
       "ruleId": "effectus-seminarski--reference-count",
+      "modality": "directive",
+      "scope": "bibliography",
+      "modalitySource": "mechanical",
       "checkId": "reference-count",
       "value": 5,
       "category": "scope",

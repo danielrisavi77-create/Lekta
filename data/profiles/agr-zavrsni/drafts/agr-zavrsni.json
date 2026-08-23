@@ -85,6 +85,9 @@
     },
     {
       "ruleId": "agr-zavrsni--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",

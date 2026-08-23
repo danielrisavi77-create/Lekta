@@ -24,6 +24,9 @@
     },
     {
       "ruleId": "math-uniri-diplomski-en--page-count",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-count",
       "value": {
         "min": 30,

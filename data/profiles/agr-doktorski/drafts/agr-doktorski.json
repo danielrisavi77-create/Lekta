@@ -6,6 +6,9 @@
   "entries": [
     {
       "ruleId": "agr-doktorski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "status": "verified",
       "scored": true,
@@ -27,6 +30,9 @@
     },
     {
       "ruleId": "agr-doktorski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "status": "verified",
       "scored": true,
@@ -48,6 +54,9 @@
     },
     {
       "ruleId": "agr-doktorski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "status": "verified",
       "scored": true,
@@ -74,6 +83,9 @@
     },
     {
       "ruleId": "agr-doktorski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "paper-size",
       "status": "verified",
       "scored": true,
@@ -95,6 +107,9 @@
     },
     {
       "ruleId": "agr-doktorski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-numbers",
       "status": "verified",
       "scored": true,
@@ -114,6 +129,9 @@
     },
     {
       "ruleId": "agr-doktorski--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "toc",
       "status": "verified",
       "scored": true,

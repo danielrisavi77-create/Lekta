@@ -67,6 +67,31 @@ export interface RuleEntry {
    */
   confirmedVia?: 'human' | 'human-audit' | 'ai-3pass-batch' | 'ai-1pass-batch' | null;
   /**
+   * MODALITET izvora: koliko jako izvor obvezuje. Sest razina, jedna vise nego sto se obicno trazi,
+   * i to iz izmjerenog razloga: FER dokument ima TRI razine (`mora`/`ne smije` : `treba` :
+   * `preporuceni`/`neka bude`) i nijedna od pet FER tvrdnji nije bila u najjacoj. Da `treba` upadne
+   * u `obligation`, tocno taj nalaz bi nestao. `directive` je zato obvezujuca formulacija koja NIJE
+   * najjaca: goli indikativ, natuknicna specifikacija i `treba`.
+   */
+  modality?: 'obligation' | 'directive' | 'prohibition' | 'recommendation' | 'permission' | 'condition';
+  /**
+   * OPSEG: na koji dio rada se odredba odnosi. Opovrgavajuci prolaz 2026-08-21 nasao je krivo
+   * pripisan opseg na 12 od 20 tvrdnji, i to je bio najcesci razred kvara: vrijednost nije bila
+   * netocna nego PRESELJENA (naslovnica citana kao naslov, fusnota kao tijelo rada).
+   */
+  scope?: 'whole' | 'body' | 'heading' | 'caption' | 'table' | 'footnote' | 'bibliography' | 'code' | 'title-page';
+  /**
+   * Tko je upisao `modality`/`scope`. `mechanical` znaci deterministicki izvod iz citata
+   * (`scripts/propose_claim_modality.py`), koji NIKAD ne upisuje ublazen modalitet: svaka pojava
+   * ublazavanja ide covjeku, jer je pripisivanje ublazavanja pravoj osi citanje, ne uzorak.
+   */
+  modalitySource?: 'mechanical' | 'human';
+  /**
+   * Slobodna biljeska uz pravilo. Koristi se kad se pravilo OZNACI za reverifikaciju: bez zapisa
+   * zasto, sljedeca sesija vidi samo `needs-recheck` i mora ponoviti cijelo mjerenje.
+   */
+  note?: string;
+  /**
    * `snapshotHash` izvora protiv kojeg je covjek verificirao pravilo. Ako se trenutni
    * snapshotHash izvora razlikuje od ovoga, izvor je promijenjen nakon verifikacije pa
    * vrata javljaju drift (VERIFICATION_PIPELINE.md sekcija 6, freshness). Postavlja ga

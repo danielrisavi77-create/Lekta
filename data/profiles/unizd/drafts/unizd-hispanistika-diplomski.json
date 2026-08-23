@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "unizd-hispanistika-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -91,6 +94,9 @@
     },
     {
       "ruleId": "unizd-hispanistika-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,

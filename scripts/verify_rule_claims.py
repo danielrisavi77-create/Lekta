@@ -323,23 +323,104 @@ def truncated_tail(rel_path: str, page: int, quote: str) -> str | None:
     return tail.strip() if re.search(r"\d", tail) else None
 
 
+# --- 7. IZVOD ZA PREDIKATNE OSI -----------------------------------------------------------------
+#
+# Do 2026-08-22 je `value_tokens` pokrivao pet osi (paper-size, font, font-size, line-spacing,
+# margins), a za sve ostale vracao prazno, sto je postavljalo `derivable = False` i tvrdnja je
+# MEHANICKI PADALA. Izmjereno: 628 od 1934 bodovanih pravila (32,5%) stoji na osi koja kroz ovaj
+# verifikator nije mogla proci, i to ne zato sto je s njima nesto bilo, nego zato sto pravila izvoda
+# nije bilo. Pad koji znaci "ne znam" je gori od nikakvog nalaza jer trosi ljudsku paznju na sum.
+#
+# Predikatne osi nisu broj nego TVRDNJA: citat ne mora sadrzavati vrijednost `true`, nego recenicu
+# koja tu odredbu izrice. Zato imaju vlastiti oblik izvoda.
+PREDICATE_TOKENS: dict[str, list[str]] = {
+    "justify": ["obostran", "justify", "poravnan", "blok"],
+    "toc": ["sadrzaj", "sadržaj", "kazalo", "table of contents"],
+    "page-numbers": ["numerir", "numerac", "paginac", "broj stranic", "brojevi stranic", "oznacene brojevima"],
+    "footnote-font": ["fusnot", "biljesk", "bilješk", "podnozj"],
+}
+
+
+def predicate_hit(check_id: str, quote: str) -> bool:
+    """Izrice li citat tu odredbu uopce. Namjerno grubo: dokazuje da se recenica bavi tom osi."""
+    low = quote.lower()
+    return any(token in low for token in PREDICATE_TOKENS.get(check_id, []))
+
+
+def range_tokens(value) -> list[list[str]]:
+    """Za osi kojima je RASPON sama odredba (page-count, word-count): svaka granica mora se pojaviti."""
+    if isinstance(value, dict):
+        bounds = [v for k, v in sorted(value.items()) if k in ("min", "max", "target") and v is not None]
+    elif isinstance(value, list):
+        bounds = list(value)
+    else:
+        bounds = [value]
+    return [numeric_forms(v) for v in bounds if v is not None]
+
+
 def value_tokens(check_id: str, value) -> list[list[str]]:
     """Za svaki dio vrijednosti vraca DOPUSTENE zapise; svaki dio mora imati barem jedan pogodak."""
     if check_id == "paper-size":
         # "A-4" i "A 4" su isti format. Bez ovoga verifikator odbacuje TOCNU tvrdnju: izmjereno na
         # alu-okiru uputama, gdje citat glasi "Diplomski rad se pise u formatu A-4".
-        return [["A4", "A-4", "A 4"]]
+        #
+        # ISPRAVAK 2026-08-22: prije se vrijednost IGNORIRALA i uvijek se trazio A4, pa bi se tvrdnja
+        # `value: "A3"` "izvela" iz citata koji govori o A4. Sada se trazi naziv koji tvrdnja doista
+        # nosi; boolean `true` i dalje znaci A4 (naslijedeno znacenje, vidi rule-compiler).
+        names = value if isinstance(value, list) else [value]
+        groups: list[list[str]] = []
+        for name in names:
+            if isinstance(name, bool) or name is None:
+                groups.append(["A4", "A-4", "A 4"])
+                continue
+            text = str(name).upper().replace("-", "").replace(" ", "")
+            groups.append([text, f"{text[:1]}-{text[1:]}", f"{text[:1]} {text[1:]}"])
+        return groups or [["A4", "A-4", "A 4"]]
     if check_id == "font":
         return [[str(v)] for v in (value if isinstance(value, list) else [value])]
-    if check_id in ("font-size", "line-spacing"):
-        raw = value if not isinstance(value, list) else value[0]
-        return [numeric_forms(raw)]
+    if check_id in ("font-size", "line-spacing", "footnote-size", "footnote-spacing"):
+        # ISPRAVAK 2026-08-22: prije se za listu gledao SAMO `value[0]`, pa drugi clan dopustenog
+        # skupa ("11 ili 12") nikad nije bio usidren. Sada je dovoljno da se pojavi BILO KOJI clan:
+        # skup je zapisan kao skup jer izvor dopusta oboje, pa citat ne mora navesti oba.
+        raws = value if isinstance(value, list) else [value]
+        forms: list[str] = []
+        for raw in raws:
+            forms.extend(numeric_forms(raw))
+        return [forms] if forms else []
     if check_id == "margins":
         vals = list(value.values()) if isinstance(value, dict) else [value]
         # Jednake margine se u uputama navode JEDNOM ("2.5 cm sa svih strana"), pa se traze
         # razlicite vrijednosti, ne cetiri ponavljanja iste.
-        unique = sorted({str(v) for v in vals})
+        unique = sorted({str(v) for v in vals if not isinstance(v, bool)})
         return [numeric_forms(v) for v in unique]
+    if check_id in ("page-count", "word-count", "reference-count"):
+        return range_tokens(value)
+    if check_id == "required-sections":
+        # Svaki nazvani dio rada mora se pojaviti u citatu. Popis je odredba, ne primjer.
+        names = value if isinstance(value, list) else [value]
+        out: list[list[str]] = []
+        for name in names:
+            text = str(name.get("label") if isinstance(name, dict) else name)
+            out.append([text, text[:6]] if len(text) > 6 else [text])
+        return out
+    if check_id == "heading-rules":
+        return range_tokens(value.get("size") if isinstance(value, dict) else value)
+    if check_id == "citation-style":
+        # Naziv stila ILI njegov nedvosmislen potpis. `custom` po definiciji nema potpis, pa se ne
+        # izvodi mehanicki: to je oznaka "stil postoji, nije standardni".
+        token = str(value).lower()
+        if token in ("custom", "none", "null"):
+            return []
+        signatures = {
+            "ieee": ["ieee", "[1]", "uglat"],
+            "vancouver": ["vancouver", "[1]", "uglat"],
+            "apa7": ["apa"],
+            "harvard": ["harvard"],
+            "chicago-notes": ["chicago"],
+            "chicago-author": ["chicago"],
+            "mla9": ["mla"],
+        }
+        return [signatures.get(token, [token])]
     return []
 
 
@@ -361,10 +442,22 @@ def verify(claim: dict) -> dict:
     elif not anchored:
         reasons.append("citat se NE nalazi doslovno na navedenoj stranici")
 
+    # PAD i NEPROVJERIVO su razlicite presude, i to razlikovanje je uvedeno 2026-08-22.
+    # Prije je os bez pravila izvoda dobivala `derivable = False`, dakle isti ishod kao izmisljena
+    # vrijednost. Os koju verifikator ne zna provjeriti nije laz: `unsupported` je odsutnost dokaza,
+    # a `False` je dokaz odsutnosti, i mijesati ih znaci trositi ljudsku paznju na sum.
     groups = value_tokens(check_id, value)
+    derivable: bool | str
     if not groups:
-        derivable = False
-        reasons.append(f"za checkId '{check_id}' nema pravila izvoda (vrijednost se ne moze mehanicki provjeriti)")
+        if predicate_hit(check_id, quote):
+            # Predikatna os: citat izrice odredbu iako u njoj nema broja koji bi se usporedio.
+            derivable = True
+        elif check_id in PREDICATE_TOKENS:
+            derivable = False
+            reasons.append(f"citat ne izrice odredbu o '{check_id}' (nijedan prepoznat pojam)")
+        else:
+            derivable = "unsupported"
+            reasons.append(f"za checkId '{check_id}' nema pravila izvoda (NEPROVJERIVO, ne pad)")
     else:
         lowered = quote.lower()
         missing = [g for g in groups if not any(form.lower() in lowered for form in g)]
@@ -387,13 +480,83 @@ def verify(claim: dict) -> dict:
         "truncatedTail": tail,
         # `pass` znaci samo da tvrdnja nije mehanicki neispravna. Kvalifikator i odricaj dokumenta
         # su razlozi za ljudsku odluku, ne za odbacivanje.
-        "mechanicalPass": anchored and derivable,
+        # `unsupported` NIJE prolaz: tvrdnja se ne moze potvrditi, ali nije ni oborena. Zato ima
+        # vlastito polje i ne broji se ni u prolaze ni u padove.
+        "mechanicalPass": anchored and derivable is True,
+        "unsupported": derivable == "unsupported",
         "needsHuman": bool(qualifier) or bool(disclaimer) or choice or bool(tail),
         "reasons": reasons,
     }
 
 
+# --- NEGATIVNE KONTROLE -------------------------------------------------------------------------
+#
+# Gard bez dokaza da grize gori je od nikakvog. Svaka os koja je 2026-08-22 dobila pravilo izvoda
+# ovdje ima par: citat iz kojeg se vrijednost DOISTA izvodi i citat iz kojeg se NE izvodi. Kad bi
+# izvod bio prazan, oba bi prosla i to se ovdje vidi odmah.
+#
+# Pokreni: python scripts/verify_rule_claims.py --selftest
+SELFTEST: list[tuple[str, object, str, bool]] = [
+    # (checkId, value, quote, ocekuje se izvod?)
+    ("paper-size", "A4", "Stranica treba biti A4 formata.", True),
+    ("paper-size", "A3", "Stranica treba biti A4 formata.", False),  # prije 2026-08-22 je PROLAZILO
+    ("paper-size", "A3", "Plakat se predaje u formatu A3.", True),
+    ("font-size", [11, 12], "velicina slova 11 ili 12 tocaka", True),
+    ("font-size", [11, 12], "velicina slova 12 tocaka", True),  # dovoljan je jedan clan skupa
+    ("font-size", [10], "velicina slova 12 tocaka", False),
+    ("line-spacing", 1.5, "prored 1,5", True),
+    ("line-spacing", 2, "prored 1,5", False),
+    ("footnote-size", [10], "Kod biljezaka se bira velicina slova 10", True),
+    ("footnote-size", [9], "Kod biljezaka se bira velicina slova 10", False),
+    ("footnote-spacing", 1, "Biljeske (fusnote) - prored: 1", True),
+    ("page-count", {"min": 25, "max": 50}, "Rad moze imati najmanje 25, a najvise 50 stranica.", True),
+    ("page-count", {"min": 30, "max": 50}, "Rad moze imati najmanje 25, a najvise 50 stranica.", False),
+    ("reference-count", 20, "minimalno 20 referenci", True),
+    ("reference-count", 30, "minimalno 20 referenci", False),
+    ("word-count", {"min": 8000, "max": 10000}, "opseg od 8000 do 10000 rijeci", True),
+    ("citation-style", "ieee", "Literatura se navodi po IEEE standardu.", True),
+    ("citation-style", "ieee", "Ako je jako bitno, u tekst se moze staviti referenca na literaturu.", False),
+    ("citation-style", "harvard", "koristi se Harvardski sustav citiranja", True),
+    ("citation-style", "apa7", "koristi se Harvardski sustav citiranja", False),
+    ("justify", True, "Tekst poravnati s obje strane (engl. justify).", True),
+    ("justify", True, "Rad se pise fontom Times New Roman.", False),
+    ("toc", True, "Rad mora sadrzavati sadrzaj s brojevima stranica.", True),
+    ("toc", True, "Rad mora sadrzavati zakljucak.", False),
+    ("page-numbers", True, "sve ostale stranice trebaju biti numerirane", True),
+    ("page-numbers", True, "Rad se uvezuje termo uvezom.", False),
+    ("required-sections", ["uvod", "zakljucak"], "Rad sadrzi uvod, razradu i zakljucak.", True),
+    ("required-sections", ["uvod", "sazetak"], "Rad sadrzi uvod, razradu i zakljucak.", False),
+    ("heading-rules", {"size": 14}, "Naslovi se pisu velicinom 14.", True),
+    ("heading-rules", {"size": 16}, "Naslovi se pisu velicinom 14.", False),
+    ("font", ["Merriweather"], "Rad treba pisati fontom Merriweather, velicine 10 pt.", True),
+    ("font", ["Times New Roman"], "Rad treba pisati fontom Merriweather, velicine 10 pt.", False),
+    ("margins", {"top": 2.5, "right": 2.5, "bottom": 2.5, "left": 3.5}, "Margine su 2,5 cm osim lijeve koja je 3,5 cm.", True),
+    ("margins", {"top": 3, "right": 3, "bottom": 3, "left": 3}, "Margine su 2,5 cm sa svih strana.", False),
+]
+
+
+def selftest() -> int:
+    """Vraca broj promasaja. Nula znaci da svaka os grize u oba smjera."""
+    failures = 0
+    for check_id, value, quote, expected in SELFTEST:
+        groups = value_tokens(check_id, value)
+        if groups:
+            lowered = squash(quote).lower()
+            got = all(any(form.lower() in lowered for form in g) for g in groups)
+        else:
+            got = predicate_hit(check_id, quote)
+        if got != expected:
+            failures += 1
+            print(f"  PROMASAJ [{check_id}] ocekivano izvod={expected}, dobiveno={got}: {quote[:70]}")
+    covered = sorted({c for c, *_ in SELFTEST})
+    print(f"negativne kontrole: {len(SELFTEST)} slucajeva, {len(covered)} osi, promasaja: {failures}")
+    print(f"  pokrivene osi: {', '.join(covered)}")
+    return failures
+
+
 def main() -> None:
+    if "--selftest" in sys.argv:
+        raise SystemExit(1 if selftest() else 0)
     if len(sys.argv) < 2:
         print("Upotreba: python scripts/verify_rule_claims.py <claims.json>", file=sys.stderr)
         raise SystemExit(2)
@@ -403,6 +566,7 @@ def main() -> None:
 
     results = [verify(c) for c in claims]
     ok = [r for r in results if r["mechanicalPass"]]
+    unsupported = [r for r in results if r["unsupported"]]
     human = [r for r in ok if r["needsHuman"]]
 
     out_path = os.path.splitext(sys.argv[1])[0] + ".verified.json"
@@ -414,9 +578,13 @@ def main() -> None:
     print(f"tvrdnji: {len(results)}")
     print(f"  prolazi mehanicki (sidro + izvod): {len(ok)}")
     print(f"  od toga trazi ljudsku odluku (kvalifikator): {len(human)}")
-    print(f"  pada: {len(results) - len(ok)}")
+    print(f"  NEPROVJERIVO (os bez pravila izvoda): {len(unsupported)}")
+    print(f"  pada: {len(results) - len(ok) - len(unsupported)}")
     for r in results:
-        if not r["mechanicalPass"]:
+        if r["unsupported"]:
+            print(f"    NEPROVJERIVO [{r.get('checkId')}] {r.get('file')} str.{r.get('page')}")
+    for r in results:
+        if not r["mechanicalPass"] and not r["unsupported"]:
             print(f"    PAD [{r.get('checkId')}] {r.get('file')} str.{r.get('page')}: {'; '.join(r['reasons'])}")
     for r in human:
         if r["truncatedTail"]:

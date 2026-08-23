@@ -24,6 +24,9 @@
     },
     {
       "ruleId": "zsem-zavrsni-en--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -47,6 +50,9 @@
     },
     {
       "ruleId": "zsem-zavrsni-en--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -68,6 +74,9 @@
     },
     {
       "ruleId": "zsem-zavrsni-en--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",

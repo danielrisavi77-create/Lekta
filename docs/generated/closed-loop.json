@@ -2,10 +2,9 @@
   "schemaVersion": 1,
   "profileCount": 407,
   "byOutcome": {
-    "no-rules": 21,
-    "pass": 324,
-    "no-repair": 57,
-    "partial": 5
+    "no-rules": 23,
+    "pass": 327,
+    "no-repair": 57
   },
   "rows": [
     {
@@ -115,8 +114,7 @@
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "requested": 0,
       "axesResolved": [],
@@ -154,8 +152,7 @@
         "font-size",
         "line-spacing",
         "justify",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "requested": 0,
       "axesResolved": [],
@@ -237,8 +234,7 @@
       "outcome": "no-repair",
       "violated": [
         "font-size",
-        "line-spacing",
-        "paper-size"
+        "line-spacing"
       ],
       "requested": 0,
       "axesResolved": [],
@@ -411,10 +407,8 @@
     },
     {
       "profileId": "arh-diplomski",
-      "outcome": "no-repair",
-      "violated": [
-        "paper-size"
-      ],
+      "outcome": "no-rules",
+      "violated": [],
       "requested": 0,
       "axesResolved": [],
       "axesRemaining": [],
@@ -971,13 +965,12 @@
     },
     {
       "profileId": "efzg-diplomski",
-      "outcome": "partial",
+      "outcome": "pass",
       "violated": [
         "font",
         "line-spacing",
         "justify",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "requested": 3,
       "axesResolved": [
@@ -986,9 +979,7 @@
         "justify",
         "margins"
       ],
-      "axesRemaining": [
-        "paper-size"
-      ],
+      "axesRemaining": [],
       "resolved": 4,
       "regressions": 0,
       "textPreserved": true
@@ -1055,13 +1046,12 @@
     },
     {
       "profileId": "efzg-strucni-racunovodstvo",
-      "outcome": "partial",
+      "outcome": "pass",
       "violated": [
         "font",
         "line-spacing",
         "justify",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "requested": 4,
       "axesResolved": [
@@ -1070,22 +1060,19 @@
         "justify",
         "margins"
       ],
-      "axesRemaining": [
-        "paper-size"
-      ],
+      "axesRemaining": [],
       "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
     {
       "profileId": "efzg-zavrsni",
-      "outcome": "partial",
+      "outcome": "pass",
       "violated": [
         "font",
         "line-spacing",
         "justify",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "requested": 3,
       "axesResolved": [
@@ -1094,9 +1081,7 @@
         "justify",
         "margins"
       ],
-      "axesRemaining": [
-        "paper-size"
-      ],
+      "axesRemaining": [],
       "resolved": 4,
       "regressions": 0,
       "textPreserved": true
@@ -1353,8 +1338,7 @@
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "requested": 0,
       "axesResolved": [],
@@ -1391,8 +1375,7 @@
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "requested": 0,
       "axesResolved": [],
@@ -1661,7 +1644,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 6,
+      "requested": 5,
       "axesResolved": [
         "font",
         "font-size",
@@ -1799,7 +1782,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 6,
+      "requested": 5,
       "axesResolved": [
         "font",
         "font-size",
@@ -1824,7 +1807,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 6,
+      "requested": 5,
       "axesResolved": [
         "font",
         "font-size",
@@ -2062,7 +2045,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 6,
+      "requested": 3,
       "axesResolved": [
         "font",
         "font-size",
@@ -2087,7 +2070,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 6,
+      "requested": 3,
       "axesResolved": [
         "font",
         "font-size",
@@ -2722,7 +2705,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 5,
+      "requested": 4,
       "axesResolved": [
         "font",
         "font-size",
@@ -3090,7 +3073,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 4,
+      "requested": 2,
       "axesResolved": [
         "font",
         "font-size",
@@ -3113,7 +3096,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 4,
+      "requested": 2,
       "axesResolved": [
         "font",
         "font-size",
@@ -3325,12 +3308,11 @@
     },
     {
       "profileId": "grad-diplomski",
-      "outcome": "partial",
+      "outcome": "pass",
       "violated": [
         "font",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "requested": 2,
       "axesResolved": [
@@ -3338,9 +3320,7 @@
         "line-spacing",
         "margins"
       ],
-      "axesRemaining": [
-        "paper-size"
-      ],
+      "axesRemaining": [],
       "resolved": 3,
       "regressions": 0,
       "textPreserved": true
@@ -3370,12 +3350,11 @@
     },
     {
       "profileId": "grad-zavrsni",
-      "outcome": "partial",
+      "outcome": "pass",
       "violated": [
         "font",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "requested": 2,
       "axesResolved": [
@@ -3383,9 +3362,7 @@
         "line-spacing",
         "margins"
       ],
-      "axesRemaining": [
-        "paper-size"
-      ],
+      "axesRemaining": [],
       "resolved": 3,
       "regressions": 0,
       "textPreserved": true
@@ -4367,7 +4344,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 4,
+      "requested": 3,
       "axesResolved": [
         "font",
         "line-spacing",
@@ -4476,10 +4453,8 @@
     },
     {
       "profileId": "muza-diplomski",
-      "outcome": "no-repair",
-      "violated": [
-        "paper-size"
-      ],
+      "outcome": "no-rules",
+      "violated": [],
       "requested": 0,
       "axesResolved": [],
       "axesRemaining": [],
@@ -5748,8 +5723,7 @@
         "font-size",
         "line-spacing",
         "justify",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "requested": 0,
       "axesResolved": [],
@@ -6662,7 +6636,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 3,
+      "requested": 2,
       "axesResolved": [
         "font",
         "font-size",
@@ -6735,7 +6709,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 5,
+      "requested": 3,
       "axesResolved": [
         "font",
         "font-size",
@@ -6910,7 +6884,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 5,
+      "requested": 2,
       "axesResolved": [
         "font",
         "font-size",
@@ -7139,7 +7113,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 5,
+      "requested": 3,
       "axesResolved": [
         "font",
         "font-size",
@@ -7164,7 +7138,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 5,
+      "requested": 3,
       "axesResolved": [
         "font",
         "font-size",
@@ -7258,7 +7232,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 2,
+      "requested": 1,
       "axesResolved": [
         "font",
         "font-size",
@@ -7345,7 +7319,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 6,
+      "requested": 4,
       "axesResolved": [
         "font",
         "font-size",
@@ -7472,7 +7446,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 6,
+      "requested": 4,
       "axesResolved": [
         "font",
         "font-size",
@@ -7940,7 +7914,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 6,
+      "requested": 3,
       "axesResolved": [
         "font",
         "font-size",
@@ -7965,7 +7939,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 6,
+      "requested": 3,
       "axesResolved": [
         "font",
         "font-size",
@@ -8185,7 +8159,7 @@
     },
     {
       "profileId": "vuka-strojarski-diplomski",
-      "outcome": "pass",
+      "outcome": "no-repair",
       "violated": [
         "font",
         "font-size",
@@ -8193,22 +8167,16 @@
         "justify",
         "margins"
       ],
-      "requested": 1,
-      "axesResolved": [
-        "font",
-        "font-size",
-        "line-spacing",
-        "justify",
-        "margins"
-      ],
+      "requested": 0,
+      "axesResolved": [],
       "axesRemaining": [],
-      "resolved": 5,
+      "resolved": 0,
       "regressions": 0,
       "textPreserved": true
     },
     {
       "profileId": "vuka-strojarski-zavrsni",
-      "outcome": "pass",
+      "outcome": "no-repair",
       "violated": [
         "font",
         "font-size",
@@ -8216,16 +8184,10 @@
         "justify",
         "margins"
       ],
-      "requested": 1,
-      "axesResolved": [
-        "font",
-        "font-size",
-        "line-spacing",
-        "justify",
-        "margins"
-      ],
+      "requested": 0,
+      "axesResolved": [],
       "axesRemaining": [],
-      "resolved": 5,
+      "resolved": 0,
       "regressions": 0,
       "textPreserved": true
     },

@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "unizd-arheologija-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -24,6 +27,9 @@
     },
     {
       "ruleId": "unizd-arheologija-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -50,6 +56,9 @@
     },
     {
       "ruleId": "unizd-arheologija-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "justify",
       "value": true,
       "category": "format",

@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "kif-specijalisticki--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": ["Times New Roman"],
       "category": "format",
@@ -24,6 +27,9 @@
     },
     {
       "ruleId": "kif-specijalisticki--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -45,6 +51,9 @@
     },
     {
       "ruleId": "kif-specijalisticki--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -66,6 +75,9 @@
     },
     {
       "ruleId": "kif-specijalisticki--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": { "top": 2.5, "bottom": 2.5, "left": 2.5, "right": 2.5 },
       "category": "format",
@@ -87,6 +99,9 @@
     },
     {
       "ruleId": "kif-specijalisticki--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -108,6 +123,9 @@
     },
     {
       "ruleId": "kif-specijalisticki--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",
@@ -127,6 +145,9 @@
     },
     {
       "ruleId": "kif-specijalisticki--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "citation-style",
       "value": "apa7",
       "category": "citation",
@@ -165,6 +186,9 @@
     },
     {
       "ruleId": "kif-specijalisticki--reference-count",
+      "modality": "directive",
+      "scope": "bibliography",
+      "modalitySource": "mechanical",
       "checkId": "reference-count",
       "value": 20,
       "category": "scope",

@@ -127,6 +127,84 @@ npm run check   # tsc --noEmit && vitest run && vite build
 
 Ako `check` pada, promjena nije gotova. Ne commitaj crveno.
 
+## Tvrdo pravilo: privatni sloj ne ide u javni bundle (klasifikacijski manifest)
+
+`data/classification.json` je jedini izvor istine o tome sto smije u javni browser bundle
+(PUBLIC/PRIVATE-IP/PROPRIETARY-DATA/SECURITY-SENSITIVE + bundle allowed/forbidden/derived;
+zadnje pravilo koje pogodi stazu vrijedi, kao .gitignore). Cuvaju ga TRI sloja:
+
+- `scripts/security/classification-guard.mjs` (vite plugin): javni build PADA ako
+  forbidden/derived ILI NEKLASIFICIRAN repo modul ude u Rollup graf s renderiranim
+  sadrzajem (deny-by-default). Grize dokazano (negativne kontrole 2026-08-23: probni
+  import scored-value-drift srusio build, dva puta). SENTINEL: nula mapiranih modula
+  = pad, ne cist prolaz (krivo slovo pogona na Windowsu inace daje tihi vakuum);
+  klasifikacija je case-insensitive jer je Windows FS case-insensitive pa bi
+  'DATA/...' import inace prosao kao nepokriven.
+- `scripts/verify-dist-classification.mjs`: post-build sken dist/ + dist-packs/ na
+  kanarince i never-markere; CI korak u check.yml + zadnji korak verify-deploy-dist.
+- `tests/classification.test.ts`: pokrivenost (ukljucujuci netracked), mrtva pravila,
+  postojanje kanarinaca u izvorima, prikovane presude.
+
+Kanarinci: sintetski (`LEKTA-KANARINAC-...` u publicSources izvora istine i top-level
+`kanarinac` kljuc u par draftova; writeri draftova MORAJU propagirati nepoznate top-level
+kljuceve) i prirodni (publicSources sha256 otisci). NE koristi source-registry
+`snapshotHash` kao kanarinca: za izvore s citatnim specom ista vrijednost NAMJERNO izlazi
+u bundle kao `spec.verifiedHash`. Never-markeri su KLJUC-oblik u TRI varijante ("k":,
+escapano \"k\": i minificirani identifier k: iza interpunkcije, jer rolldown kljuceve
+emitira BEZ navodnika); goli niz lazno pali na prozu u note poljima. `verifiedHash` i
+`verifiedBy` NISU markeri: javni citatni specovi ih namjerno nose u bundleu (drafts
+evidence cuvaju reviewedBy/confirmedVia + kanarinci + zabrana modula). Novi podatkovni
+direktorij ili nova staza bez razreda = crveni check; dodaj pravilo SVJESNO, uz biljesku.
+
+Lanac dokaza (izvor + snapshot + stranica + doslovan citat + potpis) zivi u `ruleEntries`
+(`data/profiles/<unit>/drafts/*.json`), a motor boduje iz naslijedjenog `rules` objekta
+(`composeAnalysisProfile` klonira `definition.rules`, NIKAD `ruleEntries`; svih 407 registriranih
+profila ima prazan `ruleEntries`). Do 2026-08-22 te dvije strane nitko nije usporedjivao.
+
+Izmjereno pri prvom mjerenju: **40 parova (profil, os) kroz 23 profila** bodovalo je vrijednost koju
+njihova vlastita `verified` tvrdnja s citatom opovrgava. `unizd-pomorski-*`: izvor propisuje
+Merriweather 10 pt, motor je trazio Times New Roman/Arial/Calibri 11-12 pt, pa je rad koji tocno
+slijedi svoju uputu gubio bodove. Uz to je serverski popravak upisivao TNR 12 u studentov dokument,
+pod ruleId-em cija provenijencija kaze Merriweather 10.
+
+- Usporedbu radi `src/verification/scored-value-binding.ts`, po OSI a ne po kljucu `rules`: motor
+  vecinu dimenzija cita kroz par (zastavica, vrijednost), pa usporedba po kljucu daje lazne nalaze
+  (`paper-size: "A4"` proizvodi `paperSizes`, zrcalo nosi `requireA4`, ista odredba drukcije zapisana).
+- Artefakt je `data/verification/scored-value-drift.json` (`npm run scored-value-drift`).
+  `advisory-demotion.ts` ga cita i GASI bodovanje osi s raskorakom dok vlasnik ne presudi.
+  Dosjei s dokazom: `npm run drift-dossiers` -> `data/verification/drift-dossiers/`.
+- Gard: `tests/scored-value-drift.test.ts` (commitani artefakt = svjez izracun, ratchet koji smije
+  samo padati, negativne kontrole koje dokazuju da provjera grize).
+- KRUGA NEMA I TO JE NAMJERNO: raskorak se racuna iskljucivo iz tvrdnji i `rules`, nikad iz demotije.
+  Provjera koja preskace vec demotirane osi sama sebe pobrise u sljedecem krugu (popis se isprazni,
+  demotija nestane, kvar se vrati). Zato `computeBaseDemotedAdvisory` postoji odvojeno od
+  `computeDemotedAdvisory`.
+- Demotija je PRIVREMENA. Presuda po slucaju je vlasnikova: (A) tvrdnja je tocna pa se vrijednost
+  prenosi u `rules` sva tri registra, (B) tvrdnja je preseljena (krivo pripisan opseg ili odsjecki
+  izvor) pa se ispravlja tvrdnja, (C) oba su obranjiva pa je to odluka o hijerarhiji izvora.
+  Obrazac B nije rijedak: opovrgavajuci prolaz 2026-08-21 nasao ga je na 12 od 20 tvrdnji, pa
+  tvrdnja koja se ne slaze sa zrcalom NIJE automatski ona tocna.
+- `scored-coverage.json` se time NE mijenja i to nije nesklad koji treba poravnati: coverage mjeri
+  tvrdnje sljedive do izvora, demotija mjeri sto motor boduje. Dvije populacije, imenuju se.
+
+## Tvrdo pravilo: gard bez dokaza da grize ne racuna se
+
+Svaki verifikacijski gard mora imati MUTACIJU u `tests/gate-mutations.test.ts`: podmetnut poznat kvar
+i tvrdnju da ga gard prijavi. Stanje 2026-08-23: 18 mutacija, 18 uhvaceno.
+
+Razlog je izmjeren, ne nacelan. `paper-size` izvod je IGNORIRAO vrijednost i uvijek trazio A4, pa bi
+se tvrdnja `A3` "izvela" iz citata o A4; izgledao je zdravo dok se nije podmetnula kriva vrijednost.
+`audit_scored_quotes` nije prijavio citat s pokrivanjem 0,21 uz prag 0,85 jer ga je
+`has_scanned_pages` proglasio neprovjerivim, i drugi prolaz ISTIM alatom bi ga opet propustio.
+
+- Svaka mutacija ima i BASELINE tvrdnju (nemutiran ulaz mora biti cist), inace "prolazi" i gard koji
+  vristi na sve.
+- Vise prolaza istim alatom NIJE provjera. FER pilot: 7/7 citata doslovnih, a 4 od 5 tvrdnji
+  oboreno. Slaganje nije tocnost; razliku prave RAZLICITI alati i unakrsna usporedba artefakata.
+- Boolean nad pragom nije nalaz nego prijedlog: `claimQuoteInSource` je po pragu 0,85 oznacio 11
+  tvrdnji kao izmisljene, a mjerenje je pokazalo da su dvije (0,21), dok je devet parafraza
+  (0,62-0,81). Presuda zato nosi BROJ, ne zastavicu.
+
 ## Arhitektura (stanje i smjer)
 
 - `data/` je tipiziran i modularan: profili, izvori, rokovi, katalog, coverage,
@@ -172,6 +250,30 @@ ponašanje.
    jednakosti za taj ključ; tada se oslanjamo na "nula diagnostics" + golden testove).
 4. Novi `checkId` koji još nije podržan: dodaj mapiranje u `applyEntry` u `rule-compiler.ts`
    i pokrij testom. Bez mapiranja kompajler vraća diagnostic i pravilo se NE primjenjuje.
+
+### Modalitet i opseg su dio tvrdnje, ne komentar
+
+Svaki `ruleEntry` uz vrijednost nosi i `modality` (koliko jako izvor obvezuje) i `scope` (na koji dio
+rada se odnosi), uz `modalitySource` koji kaze tko ih je upisao.
+
+Razlog je izmjeren, ne stilski. FER pilot je oborio 4 od 5 tvrdnji i nijedna nije pala na krivom
+prijepisu nego na TUMACENJU (preporuka citana kao obveza, opis predloska kao propis). Opovrgavajuci
+prolaz je zatim nasao krivo pripisan OPSEG na 12 od 20 tvrdnji: vrijednost nije bila netocna nego
+PRESELJENA (naslovnica citana kao naslov, fusnota kao tijelo rada).
+
+- `modality` ima SEST razina, jednu vise nego uobicajeno: `obligation` (`mora`/`duzan`), `directive`
+  (`treba`, goli indikativ, natuknicna specifikacija), `prohibition`, `recommendation`, `permission`,
+  `condition`. `directive` postoji jer FER dokument ima tri razine i nijedna FER tvrdnja nije bila u
+  najjacoj; da `treba` upadne u `obligation`, tocno taj nalaz bi nestao.
+- Prijedlog radi `npm run claim-modality` (`scripts/propose_claim_modality.py`), upis
+  `npm run claim-modality:apply`. Skript NE ODLUCUJE.
+- UGOVOR: mehanika nikad ne upisuje ublazen modalitet. Pripisivanje ublazavanja pravoj osi je
+  citanje, ne uzorak (`ferit`: *"Rad se pise na racunalu (preporuca se MS Word) uz prored od 1,5"* -
+  ublazavanje veze PROGRAM, ne prored). Svaka pojava ublazavanja ide covjeku.
+- Gard: `tests/claim-fields.test.ts` (vokabular, ugovor strojnog upisa, ratchet broja pravila bez
+  modaliteta koji smije samo padati).
+- Zatecено stanje 2026-08-22: 1404 od 1934 bodovanih pravila ima modalitet i opseg iz strojnog
+  izvoda, 530 ceka covjeka.
 
 ### Hijerarhija pravila i uloga repozitorija
 

@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "unin-biomedicina-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -26,6 +29,9 @@
     },
     {
       "ruleId": "unin-biomedicina-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -47,6 +53,9 @@
     },
     {
       "ruleId": "unin-biomedicina-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -68,6 +77,9 @@
     },
     {
       "ruleId": "unin-biomedicina-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -89,6 +101,9 @@
     },
     {
       "ruleId": "unin-biomedicina-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2,
@@ -115,6 +130,9 @@
     },
     {
       "ruleId": "unin-biomedicina-diplomski--heading-rules",
+      "modality": "directive",
+      "scope": "heading",
+      "modalitySource": "mechanical",
       "checkId": "heading-rules",
       "value": {
         "numberRequired": true,

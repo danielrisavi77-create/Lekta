@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "vuka-lovstvo-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         12

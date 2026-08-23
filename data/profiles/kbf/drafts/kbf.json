@@ -6,6 +6,9 @@
     "kbf-zavrsni": [
       {
         "ruleId": "kbf-zavrsni--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -29,6 +32,9 @@
       },
       {
         "ruleId": "kbf-zavrsni--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -50,6 +56,9 @@
       },
       {
         "ruleId": "kbf-zavrsni--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -71,6 +80,9 @@
       },
       {
         "ruleId": "kbf-zavrsni--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -97,6 +109,9 @@
       },
       {
         "ruleId": "kbf-zavrsni--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -116,6 +131,9 @@
       },
       {
         "ruleId": "kbf-zavrsni--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -223,6 +241,9 @@
     "kbf-diplomski": [
       {
         "ruleId": "kbf-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -246,6 +267,9 @@
       },
       {
         "ruleId": "kbf-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -267,6 +291,9 @@
       },
       {
         "ruleId": "kbf-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -288,6 +315,9 @@
       },
       {
         "ruleId": "kbf-diplomski--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -314,6 +344,9 @@
       },
       {
         "ruleId": "kbf-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -333,6 +366,9 @@
       },
       {
         "ruleId": "kbf-diplomski--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "justify",
         "value": true,
         "category": "format",

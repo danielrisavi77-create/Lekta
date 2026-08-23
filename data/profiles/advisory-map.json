@@ -329,6 +329,7 @@
   ],
   "fbf-specijalisticki": [
     "font",
+    "font-size",
     "justify",
     "toc"
   ],
@@ -412,12 +413,14 @@
     "page-numbers"
   ],
   "ffos-germanistika-diplomski": [
+    "font",
     "justify",
     "paper-size",
     "toc",
     "page-numbers"
   ],
   "ffos-germanistika-zavrsni": [
+    "font",
     "justify",
     "paper-size",
     "toc",
@@ -444,6 +447,7 @@
     "page-numbers"
   ],
   "ffos-psihologija-diplomski": [
+    "margins",
     "toc",
     "page-numbers"
   ],
@@ -470,10 +474,12 @@
     "page-numbers"
   ],
   "ffri-germanistika-diplomski": [
+    "margins",
     "toc",
     "page-numbers"
   ],
   "ffri-germanistika-zavrsni": [
+    "margins",
     "toc",
     "page-numbers"
   ],
@@ -513,9 +519,15 @@
     "toc"
   ],
   "ffst-diplomski": [
+    "font",
+    "font-size",
+    "margins",
     "toc"
   ],
   "ffst-zavrsni": [
+    "font",
+    "font-size",
+    "margins",
     "toc"
   ],
   "ffzg-arheologija-graduate": [
@@ -735,11 +747,15 @@
     "margins"
   ],
   "fpzpu-diplomski": [
+    "font",
+    "margins",
     "justify",
     "toc",
     "page-numbers"
   ],
   "fpzpu-zavrsni": [
+    "font",
+    "margins",
     "justify",
     "toc",
     "page-numbers"
@@ -1073,6 +1089,7 @@
   ],
   "mev-zavrsni": [
     "font",
+    "margins",
     "toc",
     "page-numbers"
   ],
@@ -1628,6 +1645,7 @@
     "font",
     "font-size",
     "line-spacing",
+    "margins",
     "toc",
     "page-numbers"
   ],
@@ -1644,6 +1662,8 @@
     "page-numbers"
   ],
   "unizd-ekologija-zavrsni": [
+    "font",
+    "font-size",
     "margins",
     "toc",
     "page-numbers"
@@ -1694,6 +1714,9 @@
     "page-numbers"
   ],
   "unizd-germanistika-zavrsni": [
+    "font",
+    "font-size",
+    "margins",
     "justify",
     "toc",
     "page-numbers"
@@ -1731,11 +1754,15 @@
     "page-numbers"
   ],
   "unizd-pomorski-diplomski": [
+    "font",
+    "font-size",
     "margins",
     "toc",
     "page-numbers"
   ],
   "unizd-pomorski-zavrsni": [
+    "font",
+    "font-size",
     "margins",
     "toc",
     "page-numbers"
@@ -1760,6 +1787,7 @@
     "font",
     "font-size",
     "line-spacing",
+    "margins",
     "justify",
     "toc",
     "page-numbers"
@@ -1775,6 +1803,8 @@
     "page-numbers"
   ],
   "unizd-sociologija-diplomski": [
+    "font",
+    "font-size",
     "toc",
     "page-numbers"
   ],
@@ -1801,6 +1831,8 @@
     "page-numbers"
   ],
   "unizd-ucitelji-diplomski": [
+    "font",
+    "font-size",
     "toc",
     "page-numbers"
   ],
@@ -1910,9 +1942,15 @@
     "page-numbers"
   ],
   "vss-diplomski": [
+    "font",
+    "font-size",
+    "margins",
     "toc"
   ],
   "vss-zavrsni": [
+    "font",
+    "font-size",
+    "margins",
     "toc"
   ],
   "vub-diplomski": [
@@ -1991,6 +2029,7 @@
     "font",
     "font-size",
     "line-spacing",
+    "margins",
     "justify",
     "paper-size",
     "toc",
@@ -2000,6 +2039,7 @@
     "font",
     "font-size",
     "line-spacing",
+    "margins",
     "justify",
     "paper-size",
     "toc",

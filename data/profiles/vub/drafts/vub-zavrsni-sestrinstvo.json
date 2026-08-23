@@ -24,6 +24,9 @@
     },
     {
       "ruleId": "vub-zavrsni-sestrinstvo--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -47,6 +50,9 @@
     },
     {
       "ruleId": "vub-zavrsni-sestrinstvo--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         12
@@ -91,6 +97,9 @@
     },
     {
       "ruleId": "vub-zavrsni-sestrinstvo--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -112,6 +121,9 @@
     },
     {
       "ruleId": "vub-zavrsni-sestrinstvo--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -157,6 +169,9 @@
     },
     {
       "ruleId": "vub-zavrsni-sestrinstvo--reference-count",
+      "modality": "obligation",
+      "scope": "bibliography",
+      "modalitySource": "mechanical",
       "checkId": "reference-count",
       "value": 20,
       "category": "references",

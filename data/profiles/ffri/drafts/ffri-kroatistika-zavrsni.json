@@ -26,6 +26,9 @@
     },
     {
       "ruleId": "ffri-kroatistika-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         14
@@ -91,6 +94,9 @@
     },
     {
       "ruleId": "ffri-kroatistika-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -117,6 +123,9 @@
     },
     {
       "ruleId": "ffri-kroatistika-zavrsni--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "mechanical",
       "checkId": "footnote-size",
       "value": [
         10

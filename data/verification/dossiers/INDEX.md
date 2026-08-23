@@ -2,8 +2,8 @@
 
 Audit masovno odobrenih (owner-bulk-approval) scored pravila. Otvori dosje profila, provjeri svako pravilo protiv izvora na lokatoru, pa u konzoli/rucno postavi verifiedBy=svoje ime.
 
-Profila sa scored: 369. Scored ukupno: 2209.
-Vec ljudski potvrdjeno: 2171. Za audit (bulk): 38. Needs-recheck: 0. Dosjea zapisano: 8.
+Profila sa scored: 367. Scored ukupno: 2207.
+Vec ljudski potvrdjeno: 2169. Za audit (bulk): 38. Needs-recheck: 2. Dosjea zapisano: 10.
 
 | Profil | Za audit (bulk) | Ljudski OK | Scored | Recheck | Dosje |
 |---|---:|---:|---:|---:|---|
@@ -15,4 +15,6 @@ Vec ljudski potvrdjeno: 2171. Za audit (bulk): 38. Needs-recheck: 0. Dosjea zapi
 | kif-diplomski | 2 | 8 | 10 | 0 | [kif-diplomski.md](kif-diplomski.md) |
 | effectus-diplomski | 1 | 8 | 9 | 0 | [effectus-diplomski.md](effectus-diplomski.md) |
 | effectus-zavrsni | 1 | 8 | 9 | 0 | [effectus-zavrsni.md](effectus-zavrsni.md) |
+| vuka-strojarski-diplomski | 0 | 0 | 0 | 1 | [vuka-strojarski-diplomski.md](vuka-strojarski-diplomski.md) |
+| vuka-strojarski-zavrsni | 0 | 0 | 0 | 1 | [vuka-strojarski-zavrsni.md](vuka-strojarski-zavrsni.md) |
 

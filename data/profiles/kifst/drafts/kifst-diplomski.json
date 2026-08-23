@@ -26,6 +26,9 @@
     },
     {
       "ruleId": "kifst-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -47,6 +50,9 @@
     },
     {
       "ruleId": "kifst-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -68,6 +74,9 @@
     },
     {
       "ruleId": "kifst-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -115,6 +124,9 @@
     },
     {
       "ruleId": "kifst-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "citation-style",
       "value": "apa",
       "category": "citation",

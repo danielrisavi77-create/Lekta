@@ -24,6 +24,9 @@
     },
     {
       "ruleId": "unidu-umjetnost-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -71,6 +74,9 @@
     },
     {
       "ruleId": "unidu-umjetnost-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Times New Roman",
@@ -95,6 +101,9 @@
     },
     {
       "ruleId": "unidu-umjetnost-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         12

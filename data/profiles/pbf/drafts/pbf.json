@@ -6,6 +6,9 @@
     "pbf-diplomski": [
       {
         "ruleId": "pbf-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -29,6 +32,9 @@
       },
       {
         "ruleId": "pbf-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -50,6 +56,9 @@
       },
       {
         "ruleId": "pbf-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -71,6 +80,9 @@
       },
       {
         "ruleId": "pbf-diplomski--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": "A4",
         "category": "format",
@@ -111,6 +123,9 @@
       },
       {
         "ruleId": "pbf-diplomski--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -159,6 +174,9 @@
       },
       {
         "ruleId": "pbf-diplomski--page-count",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-count",
         "value": {
           "min": 40,

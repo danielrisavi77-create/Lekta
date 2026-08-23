@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "par-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "required-sections",
       "value": [
         {

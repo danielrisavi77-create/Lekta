@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "unidu-komunikologija-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "paper-size",
       "value": "A4",
       "category": "format",

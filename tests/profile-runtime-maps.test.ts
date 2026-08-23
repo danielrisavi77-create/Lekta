@@ -13,7 +13,7 @@ import { describe, it, expect } from 'vitest';
 import bakedAdvisory from '../data/profiles/advisory-map.json';
 import bakedRepair from '../data/profiles/repair-map.json';
 import { DRAFT_PROFILE_IDS, draftRuleEntriesFor } from '../src/profiles/drafts-runtime';
-import { computeDemotedAdvisory, applyScoredAdvisory } from '../src/profiles/advisory-demotion';
+import { computeDemotedAdvisory, applyScoredAdvisory, driftDemotedFor } from '../src/profiles/advisory-demotion';
 import { applyBakedAdvisory } from '../src/profiles/profile-runtime-maps';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import type { SourceEntry } from '../src/profiles/profile-schema';
@@ -39,7 +39,11 @@ function expectedMaps() {
     const entries = draftRuleEntriesFor(id);
     if (entries.length === 0) continue;
     advisory[id] = computeDemotedAdvisory({ id }, entries, SOURCES);
+    // Os s raskorakom tvrdnje i zrcala ispada i iz REPAIR mape (vidi gen-profile-runtime-maps.mts):
+    // inace demotija zaustavi krivo bodovanje, a popravak i dalje upise vrijednost iz zrcala.
+    const drifted = new Set(driftDemotedFor(id));
     const r = entries
+      .filter((e) => !(e.checkId && drifted.has(e.checkId)))
       .filter(
         (e) =>
           (e.autoFixable === true && e.status === 'verified' && e.fixerId && e.checkId) ||

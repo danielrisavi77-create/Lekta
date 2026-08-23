@@ -3,6 +3,9 @@
     "efzg-zavrsni": [
       {
         "ruleId": "efzg-zavrsni--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -29,6 +32,9 @@
       },
       {
         "ruleId": "efzg-zavrsni--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman",
@@ -53,6 +59,9 @@
       },
       {
         "ruleId": "efzg-zavrsni--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -74,6 +83,9 @@
       },
       {
         "ruleId": "efzg-zavrsni--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -214,6 +226,9 @@
       },
       {
         "ruleId": "efzg-zavrsni--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -237,6 +252,9 @@
     "efzg-diplomski": [
       {
         "ruleId": "efzg-diplomski--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -263,6 +281,9 @@
       },
       {
         "ruleId": "efzg-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman",
@@ -287,6 +308,9 @@
       },
       {
         "ruleId": "efzg-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -308,6 +332,9 @@
       },
       {
         "ruleId": "efzg-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -329,6 +356,9 @@
       },
       {
         "ruleId": "efzg-diplomski--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -453,6 +483,9 @@
     "efzg-specijalisticki": [
       {
         "ruleId": "efzg-specijalisticki--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -479,6 +512,9 @@
       },
       {
         "ruleId": "efzg-specijalisticki--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman",
@@ -503,6 +539,9 @@
       },
       {
         "ruleId": "efzg-specijalisticki--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -524,6 +563,9 @@
       },
       {
         "ruleId": "efzg-specijalisticki--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -545,6 +587,9 @@
       },
       {
         "ruleId": "efzg-specijalisticki--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -634,6 +679,9 @@
       },
       {
         "ruleId": "efzg-specijalisticki--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": "A4",
         "category": "format",
@@ -673,6 +721,9 @@
     "efzg-strucni-racunovodstvo": [
       {
         "ruleId": "efzg-strucni-racunovodstvo--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -699,6 +750,9 @@
       },
       {
         "ruleId": "efzg-strucni-racunovodstvo--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Calibri"
@@ -722,6 +776,9 @@
       },
       {
         "ruleId": "efzg-strucni-racunovodstvo--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 11,
         "category": "format",
@@ -743,6 +800,9 @@
       },
       {
         "ruleId": "efzg-strucni-racunovodstvo--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -764,6 +824,9 @@
       },
       {
         "ruleId": "efzg-strucni-racunovodstvo--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "justify",
         "value": true,
         "category": "format",

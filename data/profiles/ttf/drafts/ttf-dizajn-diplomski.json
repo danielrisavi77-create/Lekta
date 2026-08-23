@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "ttf-dizajn-diplomski--font",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Arial"
@@ -26,6 +29,9 @@
     },
     {
       "ruleId": "ttf-dizajn-diplomski--font-size",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         12
@@ -49,6 +55,9 @@
     },
     {
       "ruleId": "ttf-dizajn-diplomski--line-spacing",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -70,6 +79,9 @@
     },
     {
       "ruleId": "ttf-dizajn-diplomski--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -91,6 +103,9 @@
     },
     {
       "ruleId": "ttf-dizajn-diplomski--margins",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -117,6 +132,9 @@
     },
     {
       "ruleId": "ttf-dizajn-diplomski--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "toc",
       "value": true,
       "category": "structure",
@@ -136,6 +154,9 @@
     },
     {
       "ruleId": "ttf-dizajn-diplomski--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-numbers",
       "value": true,
       "category": "structure",

@@ -24,6 +24,9 @@
     },
     {
       "ruleId": "math-uniri-diplomski--page-count",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-count",
       "value": {
         "min": 30,
@@ -65,6 +68,9 @@
     },
     {
       "ruleId": "math-uniri-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "required-sections",
       "value": [
         {

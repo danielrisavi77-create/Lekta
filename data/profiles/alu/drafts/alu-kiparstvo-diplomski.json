@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "alu-kiparstvo-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         12
@@ -26,6 +29,9 @@
     },
     {
       "ruleId": "alu-kiparstvo-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -47,6 +53,9 @@
     },
     {
       "ruleId": "alu-kiparstvo-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-count",
       "value": {
         "min": 10,

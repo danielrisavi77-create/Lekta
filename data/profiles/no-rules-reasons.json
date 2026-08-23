@@ -1,4 +1,21 @@
 {
-  "note": "Zasto profil nema bodovanih pravila. Popunjava COVJEK nakon sto pretrazi sluzbene izvore (P2-2 i P2-3 u docs/PLAN_POTPUNA_POKRIVENOST.md). Profil koji ovdje NEMA zapis vodi se kao 'no-rules-sourced' = jos nije istrazen, sto je razlicito od dokazanog odsustva pravila. Dopusteni state: 'no-technical-rules' (dokazano da fakultet ne propisuje strojno provjerljive zahtjeve) i 'source-not-found' (pravila postoje ali nisu javno objavljena).",
-  "reasons": {}
+  "note": "Zasto profil nema bodovanih pravila. Popunjava COVJEK nakon sto pretrazi sluzbene izvore (P2-2 i P2-3 u docs/PLAN_POTPUNA_POKRIVENOST.md). Profil koji ovdje NEMA zapis vodi se kao 'no-rules-sourced' (nema pravila, jos nije istrazen) ili 'advisory-only' (pravila postoje, nijedno ne boduje) - oboje je ZAOSTATAK, ne zakljucak. Dopusteni state: 'no-technical-rules' (dokazano da fakultet ne propisuje strojno provjerljive zahtjeve), 'source-not-found' (pravila postoje ali nisu javno objavljena) i 'advisory-by-decision' (izvor je PROCITAN i presudjeno je da ne obvezuje vise od preporuke - konacno stanje, ne rupa). Zapis ovdje NADJACAVA izvedeno stanje.",
+  "reasons": {
+    "fer-diplomski": {
+      "state": "advisory-by-decision",
+      "decidedBy": "Daniel Risavi",
+      "decidedAt": "2026-08-21",
+      "evidence": "Adversarijalni prolaz (docs/PLAN_POTPUNA_POKRIVENOST.md, 'Pilot na FER-u: 4 od 5 tvrdnji OBORENO'). Mehanicki je sve bilo uredno: 7/7 citata doslovnih, nijedna kriva stranica, nijedan izmisljen. Greske su bile u TUMACENJU. Izvor `fer-upute-diplomski-zemris` sam sebe odredjuje ('Ovaj rad daje preporuke za pisanje...'), autor je jedan nastavnik (2013.), dakle najniza razina autoriteta po hijerarhiji iz CLAUDE.md. Dokument ima TRI razine modaliteta (mora/ne smije : treba : preporuceni/neka bude) i nijedna od pet tvrdnji nije u najjacoj.",
+      "harmIfScored": "font=Times New Roman prijavilo bi kao gresku SUKLADAN kod (mora biti Courier New); font-size=12 prijavilo bi sukladne naslove (14/13/12), natpise (9/10) i tablice; margins=2,5 uniformno KODIRA NESUKLADAN dokument kao sukladan jer lijeva margina mora biti veca zbog uveza; line-spacing=1,2 obara rad s 1,0 ili 1,4, a 1,2 uopce nije propis nego opis predloska.",
+      "note": "Vrijedi za dokument ZEMRIS-a, ne za cijeli FER: `fer-doktorski` ima vlastiti izvor (`fer-formalno-oblikovanje-doktorski-2012`) i SEST bodovanih pravila. Ovo nije tvrdnja da FER nema pravila, nego da ih OVAJ izvor ne propisuje."
+    },
+    "fer-zavrsni": {
+      "state": "advisory-by-decision",
+      "decidedBy": "Daniel Risavi",
+      "decidedAt": "2026-08-21",
+      "evidence": "Adversarijalni prolaz (docs/PLAN_POTPUNA_POKRIVENOST.md, 'Pilot na FER-u: 4 od 5 tvrdnji OBORENO'). Mehanicki je sve bilo uredno: 7/7 citata doslovnih, nijedna kriva stranica, nijedan izmisljen. Greske su bile u TUMACENJU. Izvor `fer-upute-diplomski-zemris` sam sebe odredjuje ('Ovaj rad daje preporuke za pisanje...'), autor je jedan nastavnik (2013.), dakle najniza razina autoriteta po hijerarhiji iz CLAUDE.md. Dokument ima TRI razine modaliteta (mora/ne smije : treba : preporuceni/neka bude) i nijedna od pet tvrdnji nije u najjacoj.",
+      "harmIfScored": "font=Times New Roman prijavilo bi kao gresku SUKLADAN kod (mora biti Courier New); font-size=12 prijavilo bi sukladne naslove (14/13/12), natpise (9/10) i tablice; margins=2,5 uniformno KODIRA NESUKLADAN dokument kao sukladan jer lijeva margina mora biti veca zbog uveza; line-spacing=1,2 obara rad s 1,0 ili 1,4, a 1,2 uopce nije propis nego opis predloska.",
+      "note": "Vrijedi za dokument ZEMRIS-a, ne za cijeli FER: `fer-doktorski` ima vlastiti izvor (`fer-formalno-oblikovanje-doktorski-2012`) i SEST bodovanih pravila. Ovo nije tvrdnja da FER nema pravila, nego da ih OVAJ izvor ne propisuje."
+    }
+  }
 }

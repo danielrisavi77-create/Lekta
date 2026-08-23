@@ -697,7 +697,7 @@
       "machineCheckable": 6,
       "advisory": 8,
       "ratio": 0,
-      "state": "advisory-only",
+      "state": "advisory-by-decision",
       "lastVerified": null
     },
     {
@@ -717,7 +717,7 @@
       "machineCheckable": 6,
       "advisory": 8,
       "ratio": 0,
-      "state": "advisory-only",
+      "state": "advisory-by-decision",
       "lastVerified": null
     },
     {
@@ -3972,23 +3972,23 @@
     },
     {
       "profileId": "vuka-strojarski-diplomski",
-      "scoredMachineCheckable": 1,
-      "scoredTotal": 1,
+      "scoredMachineCheckable": 0,
+      "scoredTotal": 0,
       "machineCheckable": 1,
-      "advisory": 0,
-      "ratio": 1,
-      "state": "scored",
-      "lastVerified": "2026-07-27"
+      "advisory": 1,
+      "ratio": 0,
+      "state": "advisory-only",
+      "lastVerified": null
     },
     {
       "profileId": "vuka-strojarski-zavrsni",
-      "scoredMachineCheckable": 1,
-      "scoredTotal": 1,
+      "scoredMachineCheckable": 0,
+      "scoredTotal": 0,
       "machineCheckable": 1,
-      "advisory": 0,
-      "ratio": 1,
-      "state": "scored",
-      "lastVerified": "2026-07-27"
+      "advisory": 1,
+      "ratio": 0,
+      "state": "advisory-only",
+      "lastVerified": null
     },
     {
       "profileId": "vus-diplomski",
@@ -4101,8 +4101,8 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "scoredMachineCheckable": 2136,
-  "scoredTotal": 2209,
+  "scoredMachineCheckable": 2134,
+  "scoredTotal": 2207,
   "scoredNonMachineCheckable": 73,
   "nonMachineCheckableByCheckId": {
     "citation-style": 49,

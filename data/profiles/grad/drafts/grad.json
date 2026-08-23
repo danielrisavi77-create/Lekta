@@ -3,6 +3,9 @@
     "grad-diplomski": [
       {
         "ruleId": "grad-diplomski--font",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Titillium"
@@ -26,6 +29,9 @@
       },
       {
         "ruleId": "grad-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -47,6 +53,9 @@
       },
       {
         "ruleId": "grad-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.15,
         "category": "format",
@@ -68,6 +77,9 @@
       },
       {
         "ruleId": "grad-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -87,6 +99,9 @@
       },
       {
         "ruleId": "grad-diplomski--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -190,6 +205,9 @@
     "grad-zavrsni": [
       {
         "ruleId": "grad-zavrsni--font",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Titillium"
@@ -213,6 +231,9 @@
       },
       {
         "ruleId": "grad-zavrsni--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -234,6 +255,9 @@
       },
       {
         "ruleId": "grad-zavrsni--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.15,
         "category": "format",
@@ -255,6 +279,9 @@
       },
       {
         "ruleId": "grad-zavrsni--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -274,6 +301,9 @@
       },
       {
         "ruleId": "grad-zavrsni--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "toc",
         "value": true,
         "category": "structure",

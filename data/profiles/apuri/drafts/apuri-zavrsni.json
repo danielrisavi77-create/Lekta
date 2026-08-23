@@ -117,6 +117,9 @@
     },
     {
       "ruleId": "apuri-zavrsni--footnote-size",
+      "modality": "obligation",
+      "scope": "footnote",
+      "modalitySource": "mechanical",
       "checkId": "footnote-size",
       "value": 10,
       "category": "format",

@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "vkjs-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "paper-size",
       "value": "A4",
       "category": "format",
@@ -24,6 +27,9 @@
     },
     {
       "ruleId": "vkjs-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -115,6 +121,9 @@
     },
     {
       "ruleId": "vkjs-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -136,6 +145,9 @@
     },
     {
       "ruleId": "vkjs-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "citation-style",
       "value": "apa",
       "category": "citation",

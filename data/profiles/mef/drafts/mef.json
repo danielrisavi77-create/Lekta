@@ -3,6 +3,9 @@
     "mef-diplomski": [
       {
         "ruleId": "mef-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman",
@@ -27,6 +30,9 @@
       },
       {
         "ruleId": "mef-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           11,
@@ -90,6 +96,9 @@
       },
       {
         "ruleId": "mef-diplomski--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": "A4",
         "category": "format",
@@ -130,6 +139,9 @@
       },
       {
         "ruleId": "mef-diplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "toc",
         "value": true,
         "category": "structure",

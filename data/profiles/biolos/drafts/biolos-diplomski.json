@@ -71,6 +71,9 @@
     },
     {
       "ruleId": "biolos-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,

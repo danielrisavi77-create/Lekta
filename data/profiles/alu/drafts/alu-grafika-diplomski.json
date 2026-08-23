@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "alu-grafika-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-count",
       "value": {
         "min": 15,

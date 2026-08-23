@@ -45,6 +45,9 @@
     },
     {
       "ruleId": "vhzk-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -92,6 +95,9 @@
     },
     {
       "ruleId": "vhzk-zavrsni--reference-count",
+      "modality": "directive",
+      "scope": "bibliography",
+      "modalitySource": "mechanical",
       "checkId": "reference-count",
       "value": 15,
       "category": "references",
@@ -111,6 +117,9 @@
     },
     {
       "ruleId": "vhzk-zavrsni--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "citation-style",
       "value": "harvard",
       "category": "citation",

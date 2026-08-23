@@ -114,9 +114,9 @@
       {
         "ruleId": "fer-diplomski--citation-style",
         "checkId": "citation-style",
-        "value": "ieee",
+        "value": "custom",
         "category": "citation",
-        "label": "Stil citiranja (numericki, uglate zagrade)",
+        "label": "Stil citiranja (prema posebnim uputama)",
         "machineCheckable": false,
         "authority": "general",
         "sourceId": "fer-upute-diplomski-zemris",
@@ -265,9 +265,9 @@
       {
         "ruleId": "fer-zavrsni--citation-style",
         "checkId": "citation-style",
-        "value": "ieee",
+        "value": "custom",
         "category": "citation",
-        "label": "Stil citiranja (numericki, uglate zagrade)",
+        "label": "Stil citiranja (prema posebnim uputama)",
         "machineCheckable": false,
         "authority": "general",
         "sourceId": "fer-upute-diplomski-zemris",
@@ -304,5 +304,5 @@
     ]
   },
   "generatedAt": "2026-07-02",
-  "source": "Port pilot: Upute za izradu diplomskog rada (FER, ZEMRIS, Leonardo Jelenkovic, 2013). Dokument izrijekom vrijedi i za zavrsne radove i seminare, ne i za doktorsku disertaciju. Autorski dokument nastavnika/zavoda pa je authority general (nije faculty-wide pravilnik). Scored samo imperativna, verbatim potvrdena format-pravila: A4 (Stranica treba biti A4 formata) i numeracija stranica. Font, velicina, prored, margine, citiranje i cjeline formulirani kao preporuke ili raspon -> advisory."
+  "source": "Port pilot: Upute za izradu diplomskog rada (FER, ZEMRIS, Leonardo Jelenkovic, 2013). Dokument izrijekom vrijedi i za zavrsne radove i seminare, ne i za doktorsku disertaciju. Autorski dokument nastavnika/zavoda pa je authority general (nije faculty-wide pravilnik). Scored samo imperativna, verbatim potvrdena format-pravila: A4 (Stranica treba biti A4 formata) i numeracija stranica. Font, velicina, prored, margine, citiranje i cjeline formulirani kao preporuke ili raspon -> advisory. ISPRAVAK 2026-08-22: citation-style je bio \"ieee\", a citat koji ga potkrepljuje (\"Ako je jako bitno, u tekst se moze izravno staviti referenca...\") o IEEE-u ne govori nista; govori samo da se referenca navodi brojem u uglatim zagradama, sto nije isto sto i cijeli IEEE stil (redoslijed autora, interpunkcija, polja). Vrijednost je spustena na \"custom\" (\"Prema posebnim uputama\"). Bodovno je neutralno jer ieee i custom vode u istu granu analyzeDocx, mijenja se samo tvrdnja koju alat izgovara. Vidi data/verification/known-findings.json."
 }

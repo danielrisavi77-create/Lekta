@@ -61,35 +61,17 @@ Ukupno profila bez uzorka: **396/407**.
 
 - **fdmz-diplomski** — 6 ponudjenih opcija
 
-## Filozofski fakultet Osijek (ffos)
-
-- **ffos-psihologija-diplomski** — 6 ponudjenih opcija
-- **ffos-diplomski** — 5 ponudjenih opcija
-- **ffos-psihologija-zavrsni** — 5 ponudjenih opcija
-- **ffos-zavrsni** — 5 ponudjenih opcija
-- **ffos-germanistika-diplomski** — 4 ponudjenih opcija
-- **ffos-germanistika-zavrsni** — 4 ponudjenih opcija
-- **ffos-informatologija-diplomski** — 4 ponudjenih opcija
-- **ffos-informatologija-zavrsni** — 4 ponudjenih opcija
-- **ffos-povijest-diplomski** — 0 ponudjenih opcija
-- **ffos-povijest-zavrsni** — 0 ponudjenih opcija
-
 ## Filozofski fakultet u Rijeci (ffri)
 
 - **ffri-diplomski** — 6 ponudjenih opcija
-- **ffri-germanistika-diplomski** — 6 ponudjenih opcija
-- **ffri-germanistika-zavrsni** — 6 ponudjenih opcija
 - **ffri-kroatistika-zavrsni** — 6 ponudjenih opcija
 - **ffri-kulturalni-diplomski** — 6 ponudjenih opcija
 - **ffri-zavrsni** — 6 ponudjenih opcija
+- **ffri-germanistika-diplomski** — 5 ponudjenih opcija
+- **ffri-germanistika-zavrsni** — 5 ponudjenih opcija
 - **ffri-povum-diplomski** — 5 ponudjenih opcija
 - **ffri-povum-zavrsni** — 5 ponudjenih opcija
 - **ffri-psihologija-diplomski** — 5 ponudjenih opcija
-
-## Filozofski fakultet u Splitu (ffst)
-
-- **ffst-diplomski** — 6 ponudjenih opcija
-- **ffst-zavrsni** — 6 ponudjenih opcija
 
 ## Filozofski fakultet (ffzg)
 
@@ -145,7 +127,7 @@ Ukupno profila bez uzorka: **396/407**.
 
 - **mev-diplomski** — 6 ponudjenih opcija
 - **mev-zavrsni-drustveni** — 6 ponudjenih opcija
-- **mev-zavrsni** — 5 ponudjenih opcija
+- **mev-zavrsni** — 4 ponudjenih opcija
 
 ## Prirodoslovno-matematički fakultet (pmf)
 
@@ -217,25 +199,19 @@ Ukupno profila bez uzorka: **396/407**.
 
 ## Sveučilište u Zadru (unizd)
 
-- **unizd-arheologija-diplomski** — 6 ponudjenih opcija
 - **unizd-arheologija-zavrsni** — 6 ponudjenih opcija
 - **unizd-etnologija-diplomski** — 6 ponudjenih opcija
 - **unizd-povijest-umj-diplomski** — 6 ponudjenih opcija
 - **unizd-povijest-umj-zavrsni** — 6 ponudjenih opcija
-- **unizd-sociologija-diplomski** — 6 ponudjenih opcija
 - **unizd-turizam-diplomski** — 6 ponudjenih opcija
 - **unizd-turizam-zavrsni** — 6 ponudjenih opcija
-- **unizd-ucitelji-diplomski** — 6 ponudjenih opcija
+- **unizd-arheologija-diplomski** — 5 ponudjenih opcija
 - **unizd-ekologija-diplomski** — 5 ponudjenih opcija
-- **unizd-ekologija-zavrsni** — 5 ponudjenih opcija
 - **unizd-germanistika-diplomski** — 5 ponudjenih opcija
-- **unizd-germanistika-zavrsni** — 5 ponudjenih opcija
 - **unizd-hispanistika-diplomski** — 5 ponudjenih opcija
 - **unizd-klasicna-filologija-diplomski** — 5 ponudjenih opcija
 - **unizd-klasicna-filologija-zavrsni** — 5 ponudjenih opcija
 - **unizd-pedagogija-diplomski** — 5 ponudjenih opcija
-- **unizd-pomorski-diplomski** — 5 ponudjenih opcija
-- **unizd-pomorski-zavrsni** — 5 ponudjenih opcija
 - **unizd-psihologija-diplomski** — 5 ponudjenih opcija
 - **unizd-psihologija-zavrsni** — 5 ponudjenih opcija
 - **unizd-tko-diplomski** — 5 ponudjenih opcija
@@ -243,13 +219,19 @@ Ukupno profila bez uzorka: **396/407**.
 - **unizd-informacijske-diplomski** — 4 ponudjenih opcija
 - **unizd-informacijske-zavrsni** — 4 ponudjenih opcija
 - **unizd-povijest-diplomski** — 4 ponudjenih opcija
-- **unizd-povijest-zavrsni** — 4 ponudjenih opcija
+- **unizd-sociologija-diplomski** — 4 ponudjenih opcija
+- **unizd-ucitelji-diplomski** — 4 ponudjenih opcija
+- **unizd-ekologija-zavrsni** — 3 ponudjenih opcija
 - **unizd-filozofija-diplomski** — 3 ponudjenih opcija
 - **unizd-filozofija-zavrsni** — 3 ponudjenih opcija
 - **unizd-francuski-diplomski** — 3 ponudjenih opcija
+- **unizd-pomorski-diplomski** — 3 ponudjenih opcija
+- **unizd-pomorski-zavrsni** — 3 ponudjenih opcija
+- **unizd-povijest-zavrsni** — 3 ponudjenih opcija
 - **unizd-talijanistika-diplomski** — 3 ponudjenih opcija
 - **unizd-zdravstvo-diplomski** — 3 ponudjenih opcija
 - **unizd-zdravstvo-zavrsni** — 3 ponudjenih opcija
+- **unizd-germanistika-zavrsni** — 2 ponudjenih opcija
 - **unizd-anglistika-diplomski** — 0 ponudjenih opcija
 - **unizd-anglistika-zavrsni** — 0 ponudjenih opcija
 - **unizd-ekonomija-diplomski** — 0 ponudjenih opcija
@@ -280,11 +262,6 @@ Ukupno profila bez uzorka: **396/407**.
 
 - **vkjs-diplomski** — 6 ponudjenih opcija
 - **vkjs-zavrsni** — 6 ponudjenih opcija
-
-## Veleučilište studija sigurnosti (vss)
-
-- **vss-diplomski** — 6 ponudjenih opcija
-- **vss-zavrsni** — 6 ponudjenih opcija
 
 ## Veleučilište u Bjelovaru (vub)
 
@@ -353,7 +330,7 @@ Ukupno profila bez uzorka: **396/407**.
 ## Farmaceutsko-biokemijski fakultet (fbf)
 
 - **fbf-doktorski** — 5 ponudjenih opcija
-- **fbf-specijalisticki** — 4 ponudjenih opcija
+- **fbf-specijalisticki** — 3 ponudjenih opcija
 
 ## Fakultet dentalne medicine Rijeka (fdmri)
 
@@ -379,6 +356,19 @@ Ukupno profila bez uzorka: **396/407**.
 
 - **fetpu-diplomski** — 5 ponudjenih opcija
 - **fetpu-zavrsni** — 5 ponudjenih opcija
+
+## Filozofski fakultet Osijek (ffos)
+
+- **ffos-diplomski** — 5 ponudjenih opcija
+- **ffos-psihologija-diplomski** — 5 ponudjenih opcija
+- **ffos-psihologija-zavrsni** — 5 ponudjenih opcija
+- **ffos-zavrsni** — 5 ponudjenih opcija
+- **ffos-informatologija-diplomski** — 4 ponudjenih opcija
+- **ffos-informatologija-zavrsni** — 4 ponudjenih opcija
+- **ffos-germanistika-diplomski** — 3 ponudjenih opcija
+- **ffos-germanistika-zavrsni** — 3 ponudjenih opcija
+- **ffos-povijest-diplomski** — 0 ponudjenih opcija
+- **ffos-povijest-zavrsni** — 0 ponudjenih opcija
 
 ## Filozofski fakultet u Puli (ffpu)
 
@@ -433,11 +423,6 @@ Ukupno profila bez uzorka: **396/407**.
 - **fpzg-specijalisticki-vanjska-politika-diplomacija** — 5 ponudjenih opcija
 - **fpzg-opci-akademski-rad** — 4 ponudjenih opcija
 - **fpzg-novinarstvo-zavrsni-av** — 0 ponudjenih opcija
-
-## Fakultet prirodnih znanosti u Puli (fpzpu)
-
-- **fpzpu-diplomski** — 5 ponudjenih opcija
-- **fpzpu-zavrsni** — 5 ponudjenih opcija
 
 ## Fakultet strojarstva i brodogradnje (fsb)
 
@@ -711,6 +696,11 @@ Ukupno profila bez uzorka: **396/407**.
 - **biotech-diplomski** — 3 ponudjenih opcija
 - **biotech-zavrsni** — 3 ponudjenih opcija
 
+## Filozofski fakultet u Splitu (ffst)
+
+- **ffst-diplomski** — 3 ponudjenih opcija
+- **ffst-zavrsni** — 3 ponudjenih opcija
+
 ## Fakultet za fiziku u Rijeci (fizri)
 
 - **fizri-diplomski** — 3 ponudjenih opcija
@@ -721,6 +711,11 @@ Ukupno profila bez uzorka: **396/407**.
 - **fpz-diplomski** — 3 ponudjenih opcija
 - **fpz-zavrsni** — 3 ponudjenih opcija
 
+## Fakultet prirodnih znanosti u Puli (fpzpu)
+
+- **fpzpu-diplomski** — 3 ponudjenih opcija
+- **fpzpu-zavrsni** — 3 ponudjenih opcija
+
 ## Katolički bogoslovni fakultet u Splitu (kbfst)
 
 - **kbfst-diplomski** — 3 ponudjenih opcija
@@ -729,6 +724,11 @@ Ukupno profila bez uzorka: **396/407**.
 
 - **mathos-diplomski** — 3 ponudjenih opcija
 - **mathos-zavrsni** — 3 ponudjenih opcija
+
+## Veleučilište studija sigurnosti (vss)
+
+- **vss-diplomski** — 3 ponudjenih opcija
+- **vss-zavrsni** — 3 ponudjenih opcija
 
 ## Veleučilište u Karlovcu (vuka)
 
@@ -739,8 +739,8 @@ Ukupno profila bez uzorka: **396/407**.
 - **vuka-poslovni-diplomski** — 2 ponudjenih opcija
 - **vuka-poslovni-opci-akademski-rad** — 2 ponudjenih opcija
 - **vuka-poslovni-zavrsni** — 2 ponudjenih opcija
-- **vuka-strojarski-diplomski** — 1 ponudjenih opcija
-- **vuka-strojarski-zavrsni** — 1 ponudjenih opcija
+- **vuka-strojarski-diplomski** — 0 ponudjenih opcija
+- **vuka-strojarski-zavrsni** — 0 ponudjenih opcija
 
 ## Veleučilište Arca (Split) (arca)
 

@@ -26,7 +26,7 @@ import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { DRAFT_PROFILE_IDS, draftRuleEntriesFor } from '../src/profiles/drafts-runtime';
-import { computeDemotedAdvisory } from '../src/profiles/advisory-demotion';
+import { computeDemotedAdvisory, driftDemotedFor } from '../src/profiles/advisory-demotion';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import type { SourceEntry } from '../src/profiles/profile-schema';
 
@@ -50,6 +50,13 @@ const repairMap: Record<string, unknown[]> = {};
 for (const id of [...DRAFT_PROFILE_IDS].sort()) {
   const entries = draftRuleEntriesFor(id);
   if (entries.length === 0) continue;
+  // Os na kojoj se tvrdnja i zrcalo ne slazu ispada I IZ POPRAVKA, ne samo iz bodovanja.
+  // Bez ovoga demotija zaustavi krivo bodovanje, a popravak i dalje upise vrijednost iz zrcala u
+  // studentov dokument: `unizd-pomorski-zavrsni--font` je serverski autoritet mapirao na
+  // "Times New Roman", pod ruleId-em cija provenijencija kaze Merriweather 10 pt. Params racuna
+  // `paramsForCheck` iz `definition.rules`, pa se ne moze popraviti tocnijom vrijednoscu bez
+  // ljudske presude; dok presude nema, popravak se za tu os NE NUDI.
+  const drifted = new Set(driftDemotedFor(id));
   // advisory: identican izracun kao zivi applyScoredAdvisory (kljuc postoji cim profil ima ruleEntries,
   // makar demotiran skup bio prazan -> app tada postavlja advisoryDimensions=[]).
   advisoryMap[id] = computeDemotedAdvisory({ id }, entries, SOURCES);
@@ -63,6 +70,7 @@ for (const id of [...DRAFT_PROFILE_IDS].sort()) {
   // params BEZ oslanjanja na definition.rules (koji za advisory-only institucije nikad nije
   // populiran tim poljima).
   const repairEntries = entries
+    .filter((e) => !(e.checkId && drifted.has(e.checkId)))
     .filter(
       (e) =>
         (e.autoFixable === true && e.status === 'verified' && e.fixerId && e.checkId) ||

@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "pfst-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Times New Roman",
@@ -27,6 +30,9 @@
     },
     {
       "ruleId": "pfst-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -48,6 +54,9 @@
     },
     {
       "ruleId": "pfst-diplomski--line-spacing",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -69,6 +78,9 @@
     },
     {
       "ruleId": "pfst-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "justify",
       "value": true,
       "category": "format",

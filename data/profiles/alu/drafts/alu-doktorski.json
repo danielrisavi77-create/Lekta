@@ -4,6 +4,9 @@
   "entries": [
     {
       "ruleId": "alu-doktorski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-count",
       "value": {
         "min": 30

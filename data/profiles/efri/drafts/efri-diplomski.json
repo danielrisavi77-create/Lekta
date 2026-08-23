@@ -157,6 +157,9 @@
     },
     {
       "ruleId": "efri-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "citation-style",
       "value": "harvard",
       "category": "citation",

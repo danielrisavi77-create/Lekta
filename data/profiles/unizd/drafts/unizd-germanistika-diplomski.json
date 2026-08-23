@@ -49,6 +49,9 @@
     },
     {
       "ruleId": "unizd-germanistika-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -70,6 +73,9 @@
     },
     {
       "ruleId": "unizd-germanistika-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 3,
@@ -117,6 +123,9 @@
     },
     {
       "ruleId": "unizd-germanistika-diplomski--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "mechanical",
       "checkId": "footnote-size",
       "value": [
         10

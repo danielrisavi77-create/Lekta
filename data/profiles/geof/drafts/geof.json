@@ -3,6 +3,9 @@
     "geof-diplomski": [
       {
         "ruleId": "geof-diplomski--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -72,6 +75,9 @@
     "geof-doktorski": [
       {
         "ruleId": "geof-doktorski--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "toc",
         "value": true,
         "category": "structure",

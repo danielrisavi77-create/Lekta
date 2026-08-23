@@ -49,6 +49,9 @@
     },
     {
       "ruleId": "aspira-zavrsni-en--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",

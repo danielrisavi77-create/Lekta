@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "vuka-poslovni-opci-akademski-rad--font-size",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         12
@@ -26,6 +29,9 @@
     },
     {
       "ruleId": "vuka-poslovni-opci-akademski-rad--line-spacing",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",

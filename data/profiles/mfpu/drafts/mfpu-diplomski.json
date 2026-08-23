@@ -24,6 +24,9 @@
     },
     {
       "ruleId": "mfpu-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Arial"
@@ -47,6 +50,9 @@
     },
     {
       "ruleId": "mfpu-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         12
@@ -70,6 +76,9 @@
     },
     {
       "ruleId": "mfpu-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -117,6 +126,9 @@
     },
     {
       "ruleId": "mfpu-diplomski--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "mechanical",
       "checkId": "footnote-size",
       "value": 10,
       "category": "format",

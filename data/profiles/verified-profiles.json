@@ -178,6 +178,12 @@
       },
       "publicSources": [
         {
+          "pid": "kanarinac:0",
+          "repository": "kanarinac",
+          "level": "kanarinac",
+          "kanarinac": "LEKTA-KANARINAC-PROPRIETARY-DATA-4219a804879e"
+        },
+        {
           "pid": "fpzg:2890",
           "repository": "zir.nsk.hr",
           "pageFormat": "A4",

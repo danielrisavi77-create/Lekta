@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "algebra-diplomski-odnosi-s-javnoscu--word-count",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "word-count",
       "value": {
         "min": 20000,

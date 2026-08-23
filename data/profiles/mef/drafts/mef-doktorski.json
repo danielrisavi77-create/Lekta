@@ -26,6 +26,9 @@
     },
     {
       "ruleId": "mef-doktorski--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-numbers",
       "status": "verified",
       "scored": true,

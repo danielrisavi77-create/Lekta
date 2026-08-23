@@ -33,6 +33,13 @@ Dva alata i jedan popravak u proizvodu.
 |---|---|
 | `scripts/verify_rule_claims.py` | Sest mehanickih provjera TVRDNJE prije nego postane pravilo: sidro, izvod, kvalifikator, odricaj dokumenta, izbor iz skupa, odsjecen citat. |
 | `scripts/audit_scored_quotes.py` | Iste provjere UNATRAG, nad 1934 pravila koja vec boduju radove. Pise `docs/generated/scored-quote-audit.json`. |
+| `src/verification/scored-value-binding.ts` | Usporedjuje VERIFICIRANU TVRDNJU s vrijednoscu koju motor stvarno boduje. Nasla 40 raskoraka kroz 23 profila. |
+| `data/verification/scored-value-drift.json` | Artefakt te usporedbe (`npm run scored-value-drift`); `advisory-demotion.ts` iz njega gasi bodovanje osi s raskorakom. |
+| `scripts/propose_claim_modality.py` | Predlaze MODALITET i OPSEG po jedinici (izvor, citat, os); nikad ne upisuje ublazen modalitet. |
+| `scripts/apply_claim_modality.py` | Upisuje jednoznacne prijedloge u ruleEntries (`modalitySource: mechanical`). 1404 od 1934, 530 ceka covjeka. |
+| `tests/gate-mutations.test.ts` | Mutacijsko testiranje: podmece 18 poznatih kvarova i trazi da ih gard prijavi. 18/18 uhvaceno, trajno u `npm run check`. |
+| `scripts/adjudicate_drift.py` | Cita snapshot i kaze koju od dvije vrijednosti izvor NOSI. 17 claim-supported, 2 engine-supported, 8 both-present, 5 neither, 8 necitljivo. |
+| `data/verification/drift-dossiers/` | Dokazni dosje po profilu (`npm run drift-dossiers`): izvor, lokator, citat i obje vrijednosti jedna do druge. |
 | `data/verification/known-findings.json` | Nalazi koje je vlasnik procitao i svjesno ostavio. Postoji da nov nalaz ne nestane u sumu vec odlucenih. Priznavanje je po VRSTI nalaza, pa nova vrsta na istom pravilu ostaje nova. |
 | `tests/margins-title-page-section.test.ts` + izmjena u `analyze-docx.ts` | Naslovnica s vlastitim `w:sectPr` obarala je margine sa 6/6 na 0/6; sada je upozorenje (5/6). |
 
@@ -40,8 +47,10 @@ Dva alata i jedan popravak u proizvodu.
 
 ## 3. Otvoreni redovi (sve mjereno, `npm run` ekvivalent: `python scripts/audit_scored_quotes.py`)
 
-Zadnje mjerenje: **1391 revidirano, 543 nerevidirano (format), 9 neprovjerivo (skenirano),
-37 priznato, 319 s novim nalazom.**
+Zadnje mjerenje (2026-08-22, nakon suzenja provjere brojeva i oznaka mjesta):
+**1391 revidirano, 543 nerevidirano (format), 271 s novim nalazom.**
+Redovi "brojevi ne stoje" (47) i "vrijednost je SKUP" (3) su ISCEZLI: oba su bila lazna i provjera je
+suzena, ne otpisana. Ranija brojka od 319 nalaza odnosila se na stanje prije toga.
 
 | red | koliko | sto je vec utvrdjeno | sto ostaje |
 |---|---|---|---|
@@ -97,6 +106,13 @@ optuzis svoju izmjenu, ponovi mjerenje barem dvaput.
 ## 6. Naredbe
 
 ```bash
+npm run scored-value-drift                     # tvrdnja vs. bodovana vrijednost (pa gen-profile-runtime-maps)
+npm run drift-adjudicate                       # sto o svakom raskoraku kaze sam izvor
+npx vitest run tests/gate-mutations.test.ts    # dokaz da garda grizu (18/18)
+npm run drift-dossiers                         # dokazni dosjei za te raskorake
+npm run claim-modality                         # prijedlog modaliteta i opsega (pa :apply za upis)
+npm run verify:claims:selftest                 # 34 negativne kontrole, 16 osi (dokaz da izvod grize)
+npm run verify:source-hashes                   # sha256 snapshota bodovanih pravila (231 dat., 175 MB)
 python scripts/audit_scored_quotes.py          # revizija bodovanih pravila
 python scripts/verify_rule_claims.py <claims.json>   # provjera novih tvrdnji
 npm run closed-loop                            # 407 profila; zadnje: 324 pass, 5 partial

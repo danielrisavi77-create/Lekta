@@ -1,0 +1,116 @@
+# Verifikacijski lanac za BODOVANA PRAVILA: mehanicka provjera tvrdnji protiv sluzbenih izvora.
+#
+# Zaseban od check.yml namjerno, iz dva razloga. Prvi je isti kao kod docx-strict-open: python +
+# PyMuPDF ne smiju uci u tvrdi build gate (`npm run check` ostaje cisti Node lanac). Drugi je cijena:
+# revizija cita 255 PDF snapshota, sto je predugo za gate koji se vrti pri svakoj izmjeni.
+#
+# Brzi sloj te provjere JEST u `npm run check`, i to bez PDF-ova:
+#   - tests/scored-value-drift.test.ts  (tvrdnja vs. vrijednost koju motor boduje)
+#   - tests/claim-fields.test.ts        (modalitet i opseg, ratchet)
+#   - tests/verification-gate-sweep.ts  (sekcija 6 VERIFICATION_PIPELINE.md)
+# Ovdje je spori sloj: citat protiv STVARNOG teksta izvora.
+name: rule-claims
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+jobs:
+  rule-claims:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Node 24
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Python 3.12
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+
+      - name: Instaliraj ovisnosti
+        run: |
+          npm ci
+          pip install pymupdf
+
+      # Prvo se dokazuje da provjera GRIZE, pa tek onda da podaci prolaze. Obrnut redoslijed daje
+      # zeleno i kad je izvod prazan: tada svaka tvrdnja "prolazi" jer se nista ne trazi.
+      - name: Negativne kontrole (izvod stvarno grize)
+        run: npm run verify:claims:selftest
+
+      # Integritet snapshota: sha256 STVARNE datoteke mora se slagati s registrom. Do 2026-08-22
+      # to nista nije racunalo - `runVerificationGate` je usporedjivao dva ZAPISANA broja, pa je
+      # tvrdnja o nepromjenjivosti 233 MB izvora pocivala na tome da ih nitko nije dirao.
+      # Nije u `npm run check` zbog cijene (13 s nad 175 MB), ali se vrti pri svakom pushu.
+      - name: Snapshoti bodovanih pravila su nepromijenjeni
+        run: npm run verify:source-hashes
+
+      - name: Prijedlog modaliteta je u koraku s pravilima
+        run: |
+          npm run claim-modality -- --json /tmp/claim-modality.json
+          python - <<'PY'
+          import json
+          fresh = json.load(open('/tmp/claim-modality.json', encoding='utf-8'))
+          baked = json.load(open('docs/generated/claim-modality-proposals.json', encoding='utf-8'))
+          if fresh != baked:
+              raise SystemExit(
+                  'claim-modality-proposals.json je ustajao. Pokreni `npm run claim-modality` pa commitaj.'
+              )
+          print('claim-modality: bez drifta')
+          PY
+
+      # Revizija BODOVANIH pravila protiv stvarnog teksta izvora. Pada na drift, isti obrazac kao
+      # tests/repair-recipe.test.ts: izvjestaj koji nitko ne regenerira laze o stanju.
+      # Presuda za raskorake mora pratiti popis raskoraka. Bez ovoga dosje pokazuje presudu za
+      # slucaj koji vise ne postoji, ili je nema za novi.
+      - name: Presuda za raskorake je u koraku s popisom
+        run: |
+          npm run drift-adjudicate -- --json /tmp/drift-adjudication.json
+          python - <<'PY'
+          import json
+          fresh = json.load(open('/tmp/drift-adjudication.json', encoding='utf-8'))
+          baked = json.load(open('docs/generated/drift-adjudication.json', encoding='utf-8'))
+          if fresh != baked:
+              raise SystemExit('drift-adjudication.json je ustajao. Pokreni `npm run drift-adjudicate` pa commitaj.')
+          print('presuda za raskorake: bez drifta')
+          PY
+
+      - name: Revizija bodovanih citata (drift guard)
+        run: |
+          npm run audit:scored-quotes -- --json /tmp/scored-quote-audit.json
+          python - <<'PY'
+          import json
+          fresh = json.load(open('/tmp/scored-quote-audit.json', encoding='utf-8'))
+          baked = json.load(open('docs/generated/scored-quote-audit.json', encoding='utf-8'))
+          if fresh != baked:
+              a, b = fresh.get('findings', []), baked.get('findings', [])
+              raise SystemExit(
+                  f'scored-quote-audit.json je ustajao (svjeze {len(a)} nalaza, commitano {len(b)}). '
+                  'Pokreni `npm run audit:scored-quotes` pa PROCITAJ nove nalaze prije commita.'
+              )
+          print('revizija citata: bez drifta')
+          PY
+
+      - name: Upload izvjestaja kad nesto padne
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: rule-claims-reports
+          path: |
+            /tmp/scored-quote-audit.json
+            /tmp/claim-modality.json
+          if-no-files-found: warn

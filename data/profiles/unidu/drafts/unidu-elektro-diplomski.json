@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "unidu-elektro-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-count",
       "value": {
         "min": 50

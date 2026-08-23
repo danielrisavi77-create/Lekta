@@ -102,11 +102,13 @@ for (const profile of [...verified, ...legal]) {
     machineCheckable,
     advisory: entries.length - scored.length,
     ratio: machineCheckable ? scoredMachineCheckable / machineCheckable : null,
+    // Mora ostati bit-identicno computeCoverageCell u src/verification/coverage-report.ts:
+    // razlog koji je covjek POTPISAO nadjacava izvedeno stanje. Prije 2026-08-22 se konzultirao tek
+    // kad profil nema nijedan ruleEntry, pa se dokazano stanje ("izvor procitan, ne obvezuje") nije
+    // moglo razlikovati od zaostatka ("nitko jos nije pogledao").
     state: scored.length
       ? 'scored'
-      : entries.length
-        ? 'advisory-only'
-        : (noRulesReasons[profile.id]?.state ?? 'no-rules-sourced'),
+      : (noRulesReasons[profile.id]?.state ?? (entries.length ? 'advisory-only' : 'no-rules-sourced')),
     lastVerified: latest(scored.map((e) => e.lastVerified)),
   });
   // Razlaganje razlike scoredTotal - scoredMachineCheckable po checkId-u: bez njega su dva
@@ -142,6 +144,7 @@ for (const c of cells) byState[c.state] = (byState[c.state] ?? 0) + 1;
 console.log('stanja:', Object.entries(byState).map(([k, n]) => `${k}=${n}`).join(', '));
 const needsResearch = cells.filter((c) => c.state === 'no-rules-sourced').map((c) => c.profileId);
 const advisoryOnly = cells.filter((c) => c.state === 'advisory-only').map((c) => c.profileId);
+const decided = cells.filter((c) => c.state === 'advisory-by-decision').map((c) => c.profileId);
 if (needsResearch.length) {
   console.log('');
   console.log(`BEZ IJEDNOG PRAVILA, jos neistrazeno (${needsResearch.length}) - P2-2:`);
@@ -151,6 +154,11 @@ if (advisoryOnly.length) {
   console.log('');
   console.log(`PRAVILA POSTOJE, NIJEDNO BODOVANO (${advisoryOnly.length}) - P2-3:`);
   for (const id of advisoryOnly) console.log(`  ${id}`);
+}
+if (decided.length) {
+  console.log('');
+  console.log(`PRESUDJENO: izvor procitan, ne obvezuje (${decided.length}) - konacno stanje, NE zaostatak:`);
+  for (const id of decided) console.log(`  ${id}`);
 }
 if (needsResearch.length || advisoryOnly.length) {
   console.log('');

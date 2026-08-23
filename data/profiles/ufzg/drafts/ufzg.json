@@ -3,6 +3,9 @@
     "ufzg-zavrsni": [
       {
         "ruleId": "ufzg-zavrsni--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -26,6 +29,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -47,6 +53,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -68,6 +77,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -94,6 +106,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": "A4",
         "category": "format",
@@ -115,6 +130,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -136,6 +154,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -174,6 +195,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-sections",
         "value": [
           {
@@ -241,6 +265,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--page-count",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-count",
         "value": {
           "min": 20,
@@ -300,6 +327,9 @@
     "ufzg-diplomski": [
       {
         "ruleId": "ufzg-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -323,6 +353,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -344,6 +377,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -365,6 +401,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -391,6 +430,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": "A4",
         "category": "format",
@@ -412,6 +454,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -433,6 +478,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -471,6 +519,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-sections",
         "value": [
           {
@@ -559,6 +610,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--page-count",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-count",
         "value": {
           "min": 25,
@@ -581,6 +635,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--reference-count",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "mechanical",
         "checkId": "reference-count",
         "value": 30,
         "category": "scope",
