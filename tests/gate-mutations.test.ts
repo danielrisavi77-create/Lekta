@@ -24,10 +24,11 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
-import { findScoredValueFindings } from '../src/verification/scored-value-binding';
+import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { computeCoverageCell } from '../src/verification/coverage-report';
-import { collectCompileDiagnostics } from '../src/profiles/rule-compiler';
+import { collectCompileDiagnostics, compileEffectiveRules } from '../src/profiles/rule-compiler';
 import { computeBaseDemotedAdvisory, computeDemotedAdvisory } from '../src/profiles/advisory-demotion';
+import { demotionProtectedBy } from '../src/profiles/advisory-levers';
 import { draftRuleEntriesFor } from '../src/profiles/drafts-runtime';
 import driftArtifact from '../data/verification/scored-value-drift.json';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
@@ -385,6 +386,92 @@ const MUTATIONS: Mutation[] = [
       return (demoted[DRIFTED_PROFILE_ID] ?? []).includes(DRIFTED_AXIS);
     },
   },
+  // --- zastita od demotije: overlay katedre mora PROPISATI, ne samo spomenuti kljuc ----------------
+  {
+    id: 'poluge/gola-zastavica-ne-stiti',
+    axis: 'font',
+    imitates:
+      'overlay katedre s golom zastavicom (`checkFont: true`, bez fonta) ponistava demotiju a ne ' +
+      'propisuje nikakvu vrijednost, pa se dalje boduje bas ona vrijednost osnovnog profila koju ' +
+      'tvrdnja s citatom opovrgava',
+    caught: () => !demotionProtectedBy({ checkFont: true }).has('font'),
+    // Netrivijalnost: zastita mora RADITI kad overlay stvarno nosi vrijednost, inace tvrdnja iznad
+    // prolazi zato sto funkcija nikad nista ne stiti.
+    cleanBefore: () => demotionProtectedBy({ font: ['Arial'] }).has('font'),
+  },
+  {
+    id: 'poluge/ugasena-zastavica-ne-stiti',
+    imitates:
+      'overlay koji dimenziju GASI (`requireToc: false`) prije je stitio od demotije, pa je os ' +
+      'ispadala iz advisoryDimensions i sucelje je nije oznacilo kao informativnu',
+    caught: () => !demotionProtectedBy({ requireToc: false }).has('toc'),
+    cleanBefore: () => demotionProtectedBy({ requireToc: true }).has('toc'),
+  },
+  {
+    id: 'poluge/podprovjera-stiti-roditelja-stranice',
+    imitates:
+      'katedra propisuje polozaj broja stranice a ne i `requirePageNumbers`; otkad podprovjere vise ' +
+      'o roditelju, nezasticena os bi joj tiho ugasila bas taj zahtjev (3 boda) uz nula poruka',
+    caught: () => demotionProtectedBy({ pageNumberAlignment: 'right' }).has('page-numbers'),
+    cleanBefore: () => !demotionProtectedBy({}).has('page-numbers'),
+  },
+  {
+    id: 'poluge/podprovjera-stiti-roditelja-sadrzaj',
+    imitates:
+      'isti kvar na osi sadrzaja: `tocDetailedCheck` bez `requireToc` izgubio bi devet bodova ' +
+      'podprovjera sadrzaja koje katedra izricito trazi',
+    caught: () => demotionProtectedBy({ tocDetailedCheck: true }).has('toc'),
+    cleanBefore: () => !demotionProtectedBy({}).has('toc'),
+  },
+  {
+    id: 'vezanje/prazna-vrijednost-nije-bodovanje',
+    axis: 'font',
+    imitates:
+      'profil s `font: []`: normalizeCheckFlags takvu provjeru GASI, a vezanje ju je citalo kao ' +
+      'bodovanu, pa je prijavljivalo `unbacked` nad dimenzijom koju motor uopce ne gleda i time ' +
+      'demotiralo os koja i tako nije bodovala',
+    caught: () =>
+      findScoredValueFindings({ id: 'mut-prazno', rules: { font: [] }, ruleEntries: [] } as unknown as ThesisProfile, SOURCES, {
+        demotedCheckIds: new Set(),
+      }).filter((f) => f.checkId === 'font').length === 0,
+    cleanBefore: () =>
+      findScoredValueFindings(
+        { id: 'mut-puno', rules: { font: ['Times New Roman'] }, ruleEntries: [] } as unknown as ThesisProfile,
+        SOURCES,
+        { demotedCheckIds: new Set() },
+      ).some((f) => f.checkId === 'font' && f.kind === 'unbacked'),
+  },
+  {
+    id: 'kompajler/raspon-se-prosiruje-u-popis',
+    axis: 'font-size',
+    imitates:
+      'tvrdnja `{min:10,max:12}` upisana u `eff.size` doslovno: motor cita `profile.size.some(...)` ' +
+      'pa bi na objektu pukao cim `ruleEntries` postanu zivi, a usporedba je isti propis zapisan ' +
+      'kao raspon prijavljivala kao raskorak i demotirala velicinu pisma (fbf-specijalisticki)',
+    caught: () => {
+      const eff = compileEffectiveRules({
+        id: '_',
+        rules: {},
+        ruleEntries: [goodEntry({ checkId: 'font-size', value: { min: 10, max: 12 } as never })],
+      } as unknown as ThesisProfile) as Record<string, unknown>;
+      return Array.isArray(eff.size) && sameRuleValue(eff.size, [10, 11, 12]);
+    },
+    // Netrivijalnost u OBA smjera: obican popis prolazi netaknut, a raspon koji se ne smije
+    // prosiriti (decimalna granica, prevelik raspon) ostaje kakav jest umjesto da se izmisli popis.
+    cleanBefore: () => {
+      const of = (value: unknown) =>
+        (compileEffectiveRules({
+          id: '_',
+          rules: {},
+          ruleEntries: [goodEntry({ checkId: 'font-size', value: value as never })],
+        } as unknown as ThesisProfile) as Record<string, unknown>).size;
+      return (
+        sameRuleValue(of([11, 12]), [11, 12]) &&
+        !Array.isArray(of({ min: 10.5, max: 12 })) &&
+        !Array.isArray(of({ min: 1, max: 400 }))
+      );
+    },
+  },
 ];
 
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
@@ -406,7 +493,7 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
   it('N od N mutacija uhvaceno, i broj mutacija ne smije pasti', () => {
     const caught = MUTATIONS.filter((m) => m.cleanBefore() && m.caught());
     expect(caught).toHaveLength(MUTATIONS.length);
-    expect(MUTATIONS.length).toBeGreaterThanOrEqual(26);
+    expect(MUTATIONS.length).toBeGreaterThanOrEqual(32);
   });
 
   /**
@@ -417,7 +504,7 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
    */
   it('mutacije vjezbaju vise osi, ne samo font', () => {
     const axes = new Set(MUTATIONS.map((m) => m.axis).filter(Boolean));
-    expect([...axes].sort()).toEqual(['font', 'justify', 'margins', 'paper-size']);
+    expect([...axes].sort()).toEqual(['font', 'font-size', 'justify', 'margins', 'paper-size']);
   });
 
   it('isRuleScored je izvedena istina, ne pohranjena zastavica', () => {

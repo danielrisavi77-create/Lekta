@@ -102,15 +102,15 @@ export function composeAnalysisProfile(input: ComposeProfileInput): Record<strin
   // Lagani rad BEZ posebnog profila: opci baseline ne smije traziti Sadrzaj ni teza-strukturu.
   if (isLightBaseline(definition, workType)) base.requireToc = false;
 
-  // Kljucevi koje je katedra izricito propisala: demotija osnovnog profila ih ne smije ugasiti
-  // (specificniji sluzbeni izvor pobjedjuje, vidi demotionProtectedBy).
-  const overlayKeys: string[] = [];
+  // Sto je katedra izricito PROPISALA: demotija osnovnog profila to ne smije ugasiti (specificniji
+  // sluzbeni izvor pobjedjuje, vidi demotionProtectedBy). Cuva se cijeli overlay, ne samo njegovi
+  // kljucevi: gola zastavica bez vrijednosti nije propis i ne smije nadjacati verifikaciju.
+  let overlay: Record<string, unknown> = {};
   if (department) {
-    const overlay = deepMerge(
+    overlay = deepMerge(
       structuredClone((department.rules || {}) as Record<string, unknown>),
       department.rulesByWorkType?.[workType] || {},
     );
-    overlayKeys.push(...Object.keys(overlay));
     deepMerge(base, overlay);
   }
 
@@ -139,7 +139,7 @@ export function composeAnalysisProfile(input: ComposeProfileInput): Record<strin
   // biti demotiran u informativan. Profil bez ruleEntries ostaje netaknut (advisoryDimensions unset).
   // Dimenzije koje je katedra izricito propisala su zasticene: advisory mapa govori o izvoru
   // OSNOVNOG profila i ne moze ponistiti noviji, specificniji izvor katedre.
-  if (!override && definition) applyBakedAdvisory(base, definition.id, demotionProtectedBy(overlayKeys));
+  if (!override && definition) applyBakedAdvisory(base, definition.id, demotionProtectedBy(overlay));
 
   return base;
 }

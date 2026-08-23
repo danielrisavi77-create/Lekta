@@ -65,8 +65,13 @@ klijent slozi iz profila (paramsForCheck u src/ui/repair-items.ts).
 - PRAVILA KOJA ANALIZA CITA slaze src/profiles/compose-profile.ts (app.ts ga zove, nije
   zrcalo): baseline -> lagan rad -> overlay katedre -> normalizeCheckFlags -> mentorov
   override -> scored/advisory demotija ZADNJA. Demotija preskace dimenziju koju je izricito
-  propisao specificniji izvor (katedra) i mora gasiti SVE bodovane grane te dimenzije.
-  Gard: tests/composed-profile.test.ts + tests/conformance/composed.test.ts.
+  propisao specificniji izvor (katedra) i mora gasiti SVE bodovane grane te dimenzije,
+  UKLJUCUJUCI PODPROVJERE (polozaj broja stranice, naslovnica bez broja, numeriranje od
+  Uvoda, podprovjere sadrzaja: 19 bodova koji su visili o tome je li polje pronadjeno, a
+  ne boduje li se os). Zastita vrijedi samo ako overlay dimenziju PROPISE (vrijednost, ili
+  zastavica na true kod booleovih osi); gola zastavica nije propis. Overlay koji propisuje
+  dijete stiti i roditelja. Gard: tests/composed-profile.test.ts + tests/gate-mutations.test.ts
+  + tests/conformance/composed.test.ts.
 - ODABIR (jedinica, program, vrsta rada) -> profil je u src/ui/work-selection.ts; nijedan
   profil ne smije ostati nedostizan iz carobnjaka. Gard: tests/profile-routing.test.ts.
 - docs/REPAIR_RECIPE.md je GENERIRAN (npm run repair-recipe, izvor src/repair/recipe.ts).

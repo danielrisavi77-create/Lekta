@@ -28,7 +28,7 @@ pravilo nije vezano uz potvrdjen izvor - ne nagadja se.
 - profila: **407**
 - s popravkom po UPUTI FAKULTETA: **371**
 - samo univerzalna higijena (prazni odlomci), bez potvrdjenih tehnickih pravila: **36**
-- ukupno stavki recepta: **2687**
+- ukupno stavki recepta: **2688**
 
 Sto se NE popravlja automatski: sadrzaj, argument, citati i literatura (osim provjere
 postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
@@ -861,6 +861,7 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 | Format papira | `paper-size-fixer` | 21 x 29,7 cm | [Uputa za prijavu teme i oblikovanje zavrsnog specijalistickog rada (Farmaceutsko-biokemijski fakultet, 2014)](https://fbf.pharma.hr/UserDocsImages/Dokumenti/Studiji/PSS/Dokumenti-i-upute/Upute-spec_2014_v20140219.pdf) | odjeljak B. Oblikovanje zavrsnog specijalistickog rada |
 | Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Uputa za prijavu teme i oblikovanje zavrsnog specijalistickog rada (Farmaceutsko-biokemijski fakultet, 2014)](https://fbf.pharma.hr/UserDocsImages/Dokumenti/Studiji/PSS/Dokumenti-i-upute/Upute-spec_2014_v20140219.pdf) | odjeljak B. Oblikovanje zavrsnog specijalistickog rada |
 | Prored | `line-spacing-fixer` | prored 2 | [Uputa za prijavu teme i oblikovanje zavrsnog specijalistickog rada (Farmaceutsko-biokemijski fakultet, 2014)](https://fbf.pharma.hr/UserDocsImages/Dokumenti/Studiji/PSS/Dokumenti-i-upute/Upute-spec_2014_v20140219.pdf) | odjeljak B. Oblikovanje zavrsnog specijalistickog rada |
+| Velicina slova | `font-fixer` | 10 pt | [Uputa za prijavu teme i oblikovanje zavrsnog specijalistickog rada (Farmaceutsko-biokemijski fakultet, 2014)](https://fbf.pharma.hr/UserDocsImages/Dokumenti/Studiji/PSS/Dokumenti-i-upute/Upute-spec_2014_v20140219.pdf) | odjeljak B. Oblikovanje zavrsnog specijalistickog rada |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 

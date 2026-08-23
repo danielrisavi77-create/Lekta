@@ -199,7 +199,7 @@
     },
     {
       "profileId": "fbf-specijalisticki",
-      "offeredOptionCount": 3
+      "offeredOptionCount": 4
     },
     {
       "profileId": "sfzg-diplomski",
@@ -3532,6 +3532,14 @@
       "ruleId": "fbf-specijalisticki--line-spacing",
       "fixerId": "line-spacing-fixer",
       "checkId": "line-spacing",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "fbf-specijalisticki",
+      "ruleId": "fbf-specijalisticki--font-size",
+      "fixerId": "font-fixer",
+      "checkId": "font-size",
       "templateId": "basic-text-styles",
       "recommended": false
     },
@@ -15703,8 +15711,8 @@
   ],
   "summary": {
     "profileCount": 407,
-    "profileOptionCount": 1712,
-    "rowCount": 1712,
+    "profileOptionCount": 1713,
+    "rowCount": 1713,
     "fixerCount": 5,
     "registeredFixerCount": 31,
     "profileFixerCount": 5,

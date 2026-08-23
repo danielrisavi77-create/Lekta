@@ -1959,3 +1959,86 @@ je pokriti, sloj koji je ne spominje ne smije) i 3 nad STVARNIM dokumentima koji
 motivirali (`vuka` mora biti pokriven na `margins`, `forenzika` ne smije biti pokrivena ni na jednoj
 od pet osi). Prva izvedba je jednu kontrolu promasila (regex je trazio red rijeci "oznacene
 stranice", a izvor kaze "stranice se oznacavaju"), sto je tocno razlog zasto kontrole postoje.
+
+---
+
+### DVIJE IZLAZNE RUPE DEMOTIJE, OBJE LATENTNE, OBJE ZATVORENE (2026-08-23)
+
+Demotija gasi bodovanje osi kojoj tvrdnja proturjeci. Adversarijalni prolaz nad vlastitim gardovima
+zabiljezio je dva nacina da se ta odluka zaobidje. Nijedan danas ne pali ni na jednom profilu, i to je
+zapisano bas zato sto se gard uveden bez izmjerene stete kasnije lako "pojednostavi" natrag.
+
+**1. Zastita se okidala na PRISUTNOST kljuca, ne na propis.** `demotionProtectedBy` je preskakala
+demotiju cim overlay katedre spomene ijedan kljuc te osi, ukljucujuci golu zastavicu. Overlay s
+`checkFont: true` bez `font` tako je ponistavao demotiju a nije propisivao nikakvu vrijednost, pa se
+dalje bodovala vrijednost OSNOVNOG profila, tocno ona koju tvrdnja s citatom opovrgava. Simetricno je
+i `checkFont: false` "stitio", pa je os ispadala iz `advisoryDimensions` i sucelje je nije oznacilo
+kao informativnu.
+
+Zastita sada trazi propis: za osi koje nose vrijednost (font, velicina, prored, margine, format) mora
+postojati VRIJEDNOST; za booleove osi zastavica postavljena na `true`. Sve tri postojece katedre nose
+vrijednost (`sociologija` font/size/spacing/justify, sve tri `requireToc`/`requirePageNumbers`), pa je
+ponasanje na danasnjim podacima bit-identicno: 18 testova slozenog profila prolazi nepromijenjeno.
+
+**2. Podprovjere su nadzivljavale roditelja.** Demotija gasi `requireToc` i `requirePageNumbers`, cime
+glavne provjere padnu na 0/0, ali su njihova djeca bodovala dalje: polozaj broja stranice (3),
+naslovnica bez broja (3), numeriranje od Uvoda (4), te font, brojevi stranica i pokrivenost naslova u
+sadrzaju (3+3+3). **Devetnaest bodova iz osi za koju verifikacija tvrdi da se ne smije bodovati.**
+
+Uvjet je bio pogresan po sadrzaju, ne po obliku: djeca su visila o tome je li polje PRONADJENO
+(`pageNums`, `tocDetailedCheck`), nikad o tome boduje li se ta os uopce. Sada vise o roditelju, po
+istom obrascu koji demotija vec koristi: provjera OSTAJE u ispisu, bodovi padnu na 0/0. Zato se ni
+duljina niza provjera ne mijenja i golden ostaje netaknut (47 testova, 0 promjena snapshota).
+
+Uz to je zatvoren i suprotan smjer, koji bi taj popravak sam po sebi otvorio: overlay koji propisuje
+DIJETE (`pageNumberAlignment`, `tocDetailedCheck`) sada stiti i RODITELJA. Poravnanje broja stranice
+koji ne postoji nema smisla, pa katedra koja trazi poravnanje implicitno trazi i broj stranice; bez
+toga bi novi gate tiho ugasio bas ono sto katedra izricito propisuje.
+
+**Izmjereno prije popravka:** 0 od 386 profila u advisory mapi ima zivu podprovjeru iznad demotirane
+osi. Zastavice su rijetke (`pageNumberAlignment` 3 profila, `tocDetailedCheck` 7) i ne preklapaju se s
+demotiranim osima (`page-numbers` demotiran na 249, `toc` na 301 profilu).
+
+**Gardovi, i dokaz da grizu.** Cetiri nove mutacije u `tests/gate-mutations.test.ts` (30 ukupno, 30
+uhvaceno) i invarijanta nad podacima u `tests/composed-profile.test.ts`. Obje strane su dokazane
+vracanjem starog ponasanja: gola zastavica i ugasena zastavica obje ponovno prolaze zastitu i obje
+mutacije padnu. Invarijanta je dokazana podmetanjem kljuca koji profili stvarno nose
+(`requiredSections`): prijavila je 41 curenje, dakle ne prolazi vakuumski.
+
+---
+
+### TRECA RUPA, I JEDINA S POSLJEDICOM DANAS: RASPON KAO RASKORAK (2026-08-23)
+
+Trece zaobilazenje nije bilo latentno. `fbf-specijalisticki--font-size` nosi tvrdnju
+`{min: 10, max: 12}`, a zrcalo `size: [10, 11, 12]`. To je ISTA odredba ("od 10 do 12 pt"), zapisana
+dvojako, ali ju je usporedba prijavila kao raskorak. Posljedica nije bila teorijska: demotija je
+UGASILA bodovanje velicine pisma na profilu na kojem se tvrdnja i motor savrseno slazu, i izbacila
+to pravilo iz `repair-map.json`, pa ga ni automatski popravak vise nije nudio. Fakultetovo vlastito
+pravilo prestalo se provjeravati zbog ZAPISA, ne zbog neslaganja.
+
+**Popravljeno na izvoru, ne na usporedbi, i ta razlika je cijela poanta.** Prvi pokusaj je popustio
+`sameRuleValue` da raspon izjednaci s popisom. To bi radilo, ali bi ujedno oslabilo tvrdnju koja
+stiti margine (ondje je objekt legitiman oblik: cetiri strane), i proturjecilo bi postojecem gardu
+koji kaze da objekt i lista nisu ista vrijednost. Umjesto toga raspon se prosiruje u popis jos u
+`rule-compiler.applyEntry`, dakle ondje gdje tvrdnja postaje pravilo.
+
+Tim putem je ispalo i nesto sto usporedba nije ni trazila: `applyEntry` je `{min,max}` upisivao u
+`eff.size` DOSLOVNO, a motor tu vrijednost cita kao `profile.size.some(...)`. Dok su `ruleEntries`
+prazni to nista ne kvari, ali smjer migracije (Option A) je upravo da postanu zivi, i tog dana bi
+taj profil rusio analizu. Jedan popravak, dva kvara.
+
+**Ucinak, zabiljezen kako jest:** raskoraka 38 -> 37, profila s demotijom zbog raskoraka 21 -> 20,
+`repair-map.json` +1 pravilo. Ratchet u `tests/scored-value-drift.test.ts` spusten na 37 u istom
+commitu.
+
+**Ovo NIJE promocija pravila i zato ne ceka potpis.** Nijedna nova vrijednost nije upisana ni
+odlucena: tvrdnja i zrcalo su se slagale i prije, samo ih instrument nije znao usporediti. Skida se
+demotija koju je uveo moj vlastiti alat istog dana, cime se stanje vraca na zatecено. Preostalih 37
+raskoraka su stvarna neslaganja i dalje cekaju vlasnikovu presudu (`npm run drift-apply`).
+
+**Zamka usput, vrijedna zapisa:** prvo suzenje je uvjet "vrijednost mora postojati" primijenilo na
+OBJE strane usporedbe, pa je tvrdnju-raspon proglasilo praznom i TIHO ISPUSTILO iz usporedbe. Nalaz
+je "nestao" a da ga nitko nije presudio, i brojka je izgledala bolje. Motor i tvrdnja zato citaju
+razlicitim putevima (`engineAxisValue` naspram sirovog `readAxis`): uvjet o praznoj vrijednosti
+opisuje `normalizeCheckFlags`, dakle profil, a tvrdnja legitimno nosi oblike kakve profil nikad nema.
+

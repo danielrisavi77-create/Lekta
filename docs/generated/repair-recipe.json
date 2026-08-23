@@ -7079,6 +7079,24 @@
         "lastVerified": "2026-07-02"
       },
       {
+        "ruleId": "fbf-specijalisticki--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        },
+        "source": {
+          "id": "fbf-upute-spec-2014",
+          "title": "Uputa za prijavu teme i oblikovanje zavrsnog specijalistickog rada (Farmaceutsko-biokemijski fakultet, 2014)",
+          "url": "https://fbf.pharma.hr/UserDocsImages/Dokumenti/Studiji/PSS/Dokumenti-i-upute/Upute-spec_2014_v20140219.pdf"
+        },
+        "sourcePage": "odjeljak B. Oblikovanje zavrsnog specijalistickog rada",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",

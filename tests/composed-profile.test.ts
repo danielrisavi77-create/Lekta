@@ -189,3 +189,48 @@ describe('slozena matrica: sastav', () => {
     expect(new Set(samples.map((s) => s.profileId)).size).toBe(samples.length);
   });
 });
+
+/**
+ * PODPROVJERE NE SMIJU BODOVATI DIMENZIJU KOJU RODITELJ NE BODUJE.
+ *
+ * Demotija gasi roditeljsku os (`requireToc`, `requirePageNumbers`) i time glavnu provjeru svodi na
+ * 0/0, ali je do 2026-08-23 ostavljala zivom njezinu djecu: polozaj broja stranice (3), naslovnica
+ * bez broja (3), numeriranje od Uvoda (4) i tri podprovjere sadrzaja (3+3+3). Devetnaest bodova
+ * dolazilo je iz osi za koju verifikacija tvrdi da se ne smije bodovati.
+ *
+ * Zatvoreno na dva mjesta i oba su ovdje pokrivena: kod (podprovjere sada vise o roditelju,
+ * `structure.ts` i `auditDetailedToc`) i PODACI (ova invarijanta). Kad bi netko sutra profilu dodao
+ * `pageNumberAlignment` a os ostala demotirana, kod bi to preziveo tiho, a ovaj test ne.
+ *
+ * Popis je prazan i takav mora ostati; mjereno pri uvodjenju: 0 od 386 profila u advisory mapi.
+ */
+const SUBCHECK_LEAKS: string[] = [];
+
+const SUBCHECKS: Record<string, readonly string[]> = {
+  'page-numbers': ['pageNumberAlignment', 'checkTitlePageNumberSuppression', 'checkPageNumberStartAtIntro'],
+  'toc': ['tocDetailedCheck'],
+};
+
+describe('slozeni profil: podprovjere prate roditeljsku os', () => {
+  it('nijedna podprovjera ne ostaje ziva iznad demotirane osi', () => {
+    const map = advisoryMap as unknown as Record<string, string[]>;
+    const leaks: string[] = [];
+    let inspected = 0;
+    for (const c of allConformanceCases()) {
+      const demoted = map[c.profileId] ?? [];
+      if (!demoted.length) continue;
+      const composed = buildComposedProfile(c) as Record<string, unknown>;
+      inspected += 1;
+      for (const [axis, children] of Object.entries(SUBCHECKS)) {
+        if (!demoted.includes(axis)) continue;
+        for (const child of children) {
+          if (composed[child]) leaks.push(`${c.profileId} [${axis} -> ${child}]`);
+        }
+      }
+    }
+    // Netrivijalnost: da mapa nije procitana ili da slucajevi ne postoje, popis bi bio prazan iz
+    // krivog razloga. Isti razred greske kao vakuumski prolaz rule-compiler testa.
+    expect(inspected).toBeGreaterThan(50);
+    expect([...new Set(leaks)].sort()).toEqual([...SUBCHECK_LEAKS].sort());
+  });
+});

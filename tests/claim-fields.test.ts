@@ -59,6 +59,11 @@ const MISSING_MODALITY_CAP = 652;
  * bilo je nevidljivo svakoj tvrdnji u ovoj datoteci: vokabularu, ugovoru o ublazenom modalitetu,
  * pravilu o paru i ratchetu. Novo pravilo je moglo poceti bodovati bez ijedne provjere modaliteta.
  */
+/** Prazna vrijednost: popis ili objekt bez ijednog clana. `false` i `0` su VRIJEDNOSTI, ne praznina. */
+const isEmptyValue = (v: unknown): boolean =>
+  (Array.isArray(v) && v.length === 0) ||
+  (v != null && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length === 0);
+
 const scored: Array<{ profileId: string; entry: RuleEntry }> = [];
 for (const id of DRAFT_PROFILE_IDS) {
   for (const entry of draftRuleEntriesFor(id)) {
@@ -122,4 +127,37 @@ describe('tvrdnja nosi modalitet i opseg', () => {
       .map((r) => r.entry.ruleId);
     expect(bad).toEqual([]);
   });
+
+  /**
+   * BODOVANA TVRDNJA S PRAZNOM VRIJEDNOSCU ne provodi nista, a broji se kao bodovana.
+   *
+   * Zatecено 2026-08-23: cetiri `required-sections` tvrdnje (`pravo-opci-pravni-akademski-rad`,
+   * `pravo-socijalni-opci-akademski-rad`, `pravo-specijalisticki-pravni-opci`,
+   * `pravo-doktorski-pravne-znanosti`) nose `value: []` uz citat koji sekcije NABRAJA
+   * ("Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja)..."). Zrcalo
+   * ima isto prazan popis, pa raskoraka NEMA i vezanje vrijednosti ih ne vidi; ta cetiri profila
+   * jednostavno ne provjeravaju strukturu iako im je izvor propisuje.
+   *
+   * Ovo je zato RATCHET, ne pad: popunjavanje vrijednosti znaci da motor pocinje bodovati ono sto
+   * dosad nije, a ukljucivanje bodovanja u ovom lancu trazi ljudski potpis (vidi
+   * `scripts/apply-drift-decision.mjs`). Mehanika smije prijaviti i sprijeciti rast, ne odluciti.
+   *
+   * `value: false` se NE broji: kod booleove osi je `false` puna vrijednost, ne praznina
+   * (`ffzg-psihologija-diplomski--justify`, citat "tekst se pise lijevo poravnato" - izvor
+   * poravnanje izricito NE trazi, i to je tvrdnja, ne rupa).
+   */
+  it('ratchet: bodovana tvrdnja s praznom vrijednosti smije samo nestajati', () => {
+    const EMPTY_VALUE_CAP = 4;
+    const empty = scored.filter((r) => isEmptyValue(r.entry.value));
+    expect(
+      empty.length,
+      `prazna vrijednost: ${empty.map((r) => `${r.entry.ruleId} (${r.entry.checkId})`).join(', ')}`,
+    ).toBeLessThanOrEqual(EMPTY_VALUE_CAP);
+    // Netrivijalnost se dokazuje nad PREDIKATOM, ne nad podacima: `value: false` danas ne postoji u
+    // izvedenom bodovanom skupu (jedini takav, ffzg-psihologija justify, ne prolazi isRuleScored),
+    // pa bi tvrdnja "postoji false u podacima" pala iz krivog razloga i tjerala na krivi popravak.
+    expect([false, 0, '', ['x'], { a: 1 }].some(isEmptyValue)).toBe(false);
+    expect([[], {}].every(isEmptyValue)).toBe(true);
+  });
 });
+

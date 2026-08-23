@@ -78,11 +78,37 @@ function clone<T>(value: T): T {
  */
 const PENDING_HUMAN_PASS: ReadonlySet<string> = new Set(['draft', 'ai-confirmed', 'needs-recheck', 'retired']);
 
+/**
+ * `{min, max}` cjelobrojni raspon -> popis svih vrijednosti u njemu, ili `null` ako to nije takav
+ * raspon. USKO namjerno: samo cjelobrojne granice i najvise 50 clanova. Decimalni korak nema
+ * jednoznacno prosirenje (10-12 pt je 10/11/12, ali 10-12 moglo bi ukljucivati i 10,5), a sirok
+ * raspon je znak da vrijednost nije nabrojiva pa se ne smije tiho pretvoriti u popis.
+ */
+function expandNumericRange(value: unknown): number[] | null {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const keys = Object.keys(value as object);
+  if (keys.length !== 2 || !keys.includes('min') || !keys.includes('max')) return null;
+  const { min, max } = value as { min: unknown; max: unknown };
+  if (!Number.isInteger(min) || !Number.isInteger(max)) return null;
+  const lo = min as number;
+  const hi = max as number;
+  if (hi < lo || hi - lo > 50) return null;
+  return Array.from({ length: hi - lo + 1 }, (_, i) => lo + i);
+}
+
 function applyEntry(eff: EffectiveRules, entry: RuleEntry): boolean {
   const value = entry.value as any;
   switch (entry.checkId) {
     case 'font': eff.font = value; return true;
-    case 'font-size': eff.size = value; return true;
+    case 'font-size':
+      // Raspon se PROSIRUJE u popis. Motor cita `profile.size.some(...)`, pa bi mu doslovan
+      // `{min:10,max:12}` (fbf-specijalisticki) pukao cim `ruleEntries` postanu zivi, sto je smjer
+      // migracije Option A. Dok su prazni, ovo nista ne mijenja (effectiveRules === rules).
+      // Uz to je zrcalo isti propis vec zapisalo kao `[10,11,12]`, pa je usporedba tvrdnje i
+      // bodovane vrijednosti prijavljivala raskorak ondje gdje se strane savrseno slazu, i
+      // demotirala velicinu pisma na profilu bez ijednog stvarnog neslaganja.
+      eff.size = expandNumericRange(value) ?? (value as never);
+      return true;
     case 'line-spacing': eff.spacing = value; return true;
     case 'margins':
       // Vrijednost smije nositi `minimum: true` (izvor kaze "najmanje 2,5 cm"). Zastavica se
