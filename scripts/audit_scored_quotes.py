@@ -1070,6 +1070,58 @@ COVERS_SELFTEST: list[tuple[str, str, bool]] = [
 ]
 
 
+# --- NEGATIVNE KONTROLE ZA SUZENJA CITATA -------------------------------------------------------
+#
+# Isti razlog kao gore: svako suzenje mora imati dokaz da i dalje GRIZE. Sva su izvedena mjerenjem na
+# stvarnim nalazima, pa se ovdje cuva razlog zbog kojeg su uvedena i granica preko koje ne smiju.
+# Sinteticki i deterministicki, bez datoteka.
+_SRC_SPEC = (
+    "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova - Arial "
+    "Velicina slova (Font size): 12 tipografskih tocaka Prored (Line spacing): 1,5 redak"
+)
+_SRC_LIST = "Rad se sastoji od: 3. naslovnice 4. sazetaka i kljucnih rijeci 5. uvoda 6. popisa literature"
+_SRC_OCR = "Uvlaka prvoga retka u odlomku: 1, 25 cm i prored 1,5 redak"
+_SRC_MARG = "Margine rada iznose 2,5 cm sa svih strana."
+
+# (opis, izvor, citat, vrijednost, ocekuje se UREDAN citat?)
+ANCHOR_SELFTEST: list[tuple[str, str, str, object, bool]] = [
+    ("sazimanje kojem je vrijednost U SIDRU", _SRC_SPEC,
+     "Velicina slova (Font size): 12 tipografskih tocaka", 12, True),
+    ("vrijednost samo u PARAFRAZI", _SRC_SPEC,
+     "Velicina slova (Font size): dvanaest tipografskih tocaka", 12, False),
+    ("nijedan doslovan ulomak", _SRC_SPEC, "Rad se pise zutim slovima na plavom papiru", 12, False),
+    ("sidro nosi DRUGI broj od bodovanog", _SRC_SPEC,
+     "Velicina slova (Font size): 12 tipografskih tocaka", 14, False),
+    ("kratak citat koji doslovno stoji", "poravnanje - obostrano Jezik hrvatski",
+     "poravnanje - obostrano", True, True),
+    ("interpunkcija ne lomi sidro pred vrijednoscu", _SRC_SPEC,
+     "Prored (Line spacing): 1,5 redak.", 1.5, True),
+]
+
+# (opis, izvor, citat, ocekuje se da brojevi STOJE?)
+NUMBERS_SELFTEST: list[tuple[str, str, str, bool]] = [
+    ("redni broj popisa nije vrijednost", _SRC_LIST, "naslovnice 4.", True),
+    ("krivi redni broj u popisu i dalje pada", _SRC_LIST, "9. popisa literature", False),
+    ("OCR razmak u decimalnom broju", _SRC_OCR, "uvlaka prvoga retka u odlomku: 1,25 cm", True),
+    ("stvarno drugaciji broj i dalje pada", _SRC_MARG, "Margine rada iznose 3,5 cm sa svih strana.", False),
+    ("desetinka na kraju recenice ostaje vrijednost", _SRC_MARG,
+     "Margine rada iznose 2,5 cm sa svih strana.", True),
+]
+
+# (opis, os, vrijednost, nastavak citata, ocekuje se NALAZ?)
+TAIL_SELFTEST: list[tuple[str, str, object, str, bool]] = [
+    ("naslovi 14 ili 16 uz tijelo 12", "font-size", 12,
+     "dok naslovi i podnaslovi trebaju biti nesto veci (14 ili 16 tocaka)", True),
+    ("fusnote jednostruko uz tijelo 1,5", "line-spacing", 1.5,
+     "a jednostruki (1) u biljeskama (fusnotama)", True),
+    ("rep o TUDJOJ osi ne okida", "margins", {"top": 3, "right": 3, "bottom": 3, "left": 3},
+     "- font: Times New Roman velicine 12 tocaka za naslove i tekst, a 10 tocaka za fusnote", False),
+    ("numeracija PRILOGA nije numeracija stranica", "page-numbers", True,
+     "svaka tablica, graf, slika mora biti numerirana, mora imati naslov", False),
+    ("razmak prije i poslije nije velicina slova", "font-size", 12,
+     "prored - 1,5 redak razmak - prije i poslije - 0 pt poravnanje - obostrano, naslovi podebljani", False),
+]
+
 def selftest() -> int:
     """Vraca broj promasaja. Nula znaci da suzenje razlikuje oba smjera."""
     failures = 0
@@ -1096,7 +1148,30 @@ def selftest() -> int:
             failures += 1
             print(f"  PROMASAJ [{axis}] {rel}: ocekivano {expected}, dobiveno {got}")
 
-    print(f"negativne kontrole suzenja: {len(COVERS_SELFTEST) + len(real)} slucajeva, promasaja: {failures}")
+    for label, src, quote, value, expected in ANCHOR_SELFTEST:
+        anchors = literal_anchors(src, quote)
+        value_anchors = literal_anchors(src, quote, 3)
+        clean = (bool(anchors) or not value_outside_anchors(value, value_anchors)) and not value_outside_anchors(
+            value, anchors + value_anchors
+        )
+        if clean != expected:
+            failures += 1
+            print(f"  PROMASAJ [sidro] ocekivano uredno={expected}, dobiveno {clean}: {label}")
+
+    for label, src, quote, expected in NUMBERS_SELFTEST:
+        got = numbers_match(src, quote)
+        if got != expected:
+            failures += 1
+            print(f"  PROMASAJ [brojevi] ocekivano {expected}, dobiveno {got}: {label}")
+
+    for label, check_id, value, tail, expected in TAIL_SELFTEST:
+        got = tail_overrides_rule(check_id, value, tail)
+        if got != expected:
+            failures += 1
+            print(f"  PROMASAJ [odsjecen] ocekivano {expected}, dobiveno {got}: {label}")
+
+    total = len(COVERS_SELFTEST) + len(real) + len(ANCHOR_SELFTEST) + len(NUMBERS_SELFTEST) + len(TAIL_SELFTEST)
+    print(f"negativne kontrole suzenja: {total} slucajeva, promasaja: {failures}")
     return failures
 
 
