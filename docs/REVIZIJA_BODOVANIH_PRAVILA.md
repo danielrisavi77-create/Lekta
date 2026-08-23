@@ -12,16 +12,18 @@ Pokretanje: `npm run audit:scored-quotes`. NIJE u `npm run check` i nijedan test
 
 | | pocetak dana | sada |
 |---|---|---|
-| bodovanih pravila | 1934 | 1934 |
-| revidirano | 1391 | **1780** |
+| bodovanih pravila | 1934 | 1932 |
+| revidirano | 1391 | **1778** |
 | nerevidirano (izvor se ne cita) | 543 | **154** |
-| neprovjerivo (skenirano ili ostecen tekstualni sloj) | 9 | **57** |
-| pravila s NOVIM nalazom | 319 | **160** |
+| neprovjerivo (skenirano ili ostecen tekstualni sloj) | 9 | **55** |
+| pravila s NOVIM nalazom | 319 | **158** |
 | priznato (procitano pa ostavljeno) | 37 | **47** |
 
-Nalazi po redu: 147 nedoslovnih prijepisa, 8 odsjecenih, 4 bez vrijednosti u citatu, 1 kvalifikator.
+Nalazi po redu: 148 nedoslovnih prijepisa, 8 odsjecenih, 2 bez vrijednosti u citatu. Red kvalifikatora je
+PRAZAN. Pad bodovanih pravila s 1934 na 1932 nije iz ove revizije: `vuka-strojarski-{diplomski,zavrsni}--margins`
+demotirao je drift alat paralelne sesije.
 
-Od 159 zatvorenih nalaza, **jedan jedini** bio je stvaran kvar u bodovanju (forenzika, nize).
+Od 161 zatvorenog nalaza, **jedan jedini** bio je stvaran kvar u bodovanju (forenzika, nize).
 Ostalo je bilo mjerenje, ne podaci. To je najvazniji zakljucak i razlog zasto se svaki nalaz
 citao u izvoru prije nego je bilo sto dirano.
 
@@ -29,56 +31,46 @@ citao u izvoru prije nego je bilo sto dirano.
 
 ## 2. Sto je ostalo OTVORENO
 
-### 2.1 Blokirano tudjim necommitanim radom
+### 2.1 Zatvoreno 2026-08-23
 
-Paralelna sesija drzi ~367 datoteka necommitano (sweep `apply_claim_modality.py`). `git commit`
-po putanji uzima sadrzaj iz RADNOG STABLA, pa bi povukao njihov rad. Cim se stablo smiri:
+Cetiri popravka koja su cekala da se radno stablo smiri su upisana (`2c214fd`, `d9996e5`), uz zeleni
+izolirani gate (369/369).
 
-1. **forenzika, ciljana vrijednost umjesto najmanje.** Jedini nalaz koji stvarno mice ocjenu.
-   Izvor: "rubovi na obje strane, gore i dolje, moraju biti siroki NAJMANJE 2,5 cm". Profil boduje
-   tocno 2,5, engine usporedjuje uz toleranciju 0,36 cm, pa rad s 3 cm sa svih strana dobiva
-   `Margine dokumenta: fail 0/6`. Izmjereno kroz zivu analizu.
+1. **forenzika: margine kao NAJMANJE dopustene.** Jedini nalaz cijele revizije koji je stvarno micao
+   ocjenu. Rad s 3 cm sa svih strana, uskladjen s uputom "najmanje 2,5 cm", dobivao je `fail 0/6`;
+   sada `pass 6/6`, dok 2 cm i dalje pada. Zastavica stoji u paru: `rules.marginsMinimum` u runtimeu
+   i `value.minimum` u draftu.
 
-   Motor to od `ec940fa` zna (`marginsMinimum`, pokriveno `tests/margins-minimum.test.ts`), ali
-   zastavica je mrtvo slovo dok je profil ne ukljuci. Izmjena je jedna, u
-   `data/profiles/verified-profiles.json`, profil `forenzika-diplomski`:
+   ZAMKA: zastavica upisana UNUTAR `rules.margins` ne radi nista. Engine cita `profile.marginsMinimum`,
+   a kompajler `minimum` razdvaja samo iz `ruleEntries`. Uhvaceno tek zivom analizom.
 
-   ```json
-   "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5, "minimum": true }
-   ```
+2. **`ffzg-etnologija-graduate--font-size`**, citat "ine 12 to" zamijenjen citljivim rasponom sa
+   stranice 2 (otisnuto: "u fontu Times New Roman, velicine 12 tocaka").
 
-   Kompajler `minimum` odvaja od strana, pa `normalizeCheckFlags` i dalje vidi cetiri broja.
+3. **`grf-diplomski--font`** i **4. `vevu-diplomski--font-size`**: citati produzeni doslovno do
+   vrijednosti koju pravilo boduje. Oba izvora su citljiva tek otkad revizija cita `.doc` i `.docx`.
 
-2. **`ffzg-etnologija-graduate--font-size`, citat "ine 12 to".** Vrijednost 12 je TOCNA. Stranica 2
-   izvora je renderirana i procitana kao slika: otisnuto stoji "u fontu Times New Roman, velicine 12
-   tocaka, s proredom". Znak `þ` je artefakt izvlacenja teksta, a citat je krhotina izmedju dva takva
-   znaka. Zamijeniti citat u `data/profiles/ffzg/drafts/ffzg-etnologija-graduate.json` s:
-   `"tekst rada treba biti u fontu Times New Roman, velicine 12 tocaka"`.
+5. **63 retka tudjeg rada u `e44a69c`.** JEDINO sto ostaje otvoreno iz ovog odjeljka. Sweep je upao
+   izmedju izmjene i commita, pa su `modality`/`scope`/`modalitySource` iz `kif.json` i `ttf.json`
+   zavrsili pod mojom porukom. Nista nije izgubljeno. Povijest NIJE prepravljana jer bi `--amend` u
+   dijeljenom stablu mogao pojesti commit druge sesije. Odluka vlasnika.
 
-3. **`grf-diplomski--font`.** Izvor (.doc, sada citljiv) glasi "Pismo: obavezna je upotreba svih
-   hrvatskih znakova – Times New Roman ili Arial", a citat je odsjecen prije fontova. Isti razred kao
-   fhs i ttf. Produziti citat do imena fontova.
-
-4. **`vevu-diplomski--font-size`.** Izvor (.docx, sada citljiv) doslovno kaze "...naslove potpoglavlja
-   malim slovima 12 pt Bold, a obican tekst 12 pt", a citat je preskocio bas tu recenicu. Produziti
-   citat tom recenicom.
-
-5. **63 retka tudjeg rada u `e44a69c`.** Sweep je upao izmedju moje izmjene i commita, pa su
-   `modality`/`scope`/`modalitySource` iz `kif.json` i `ttf.json` zavrsili pod mojom porukom. Nista
-   nije izgubljeno. Povijest NIJE prepravljana jer bi `--amend` u dijeljenom stablu mogao pojesti
-   commit druge sesije. Odluka vlasnika.
+   Isto se ponovilo namjerno i zapisano u `2c214fd` i `d9996e5`: fajl se ne moze commitati po
+   dijelovima, pa te izmjene nose 2 retka njihove `recommendedCitation` promjene i mehanicka polja
+   iz sweepa. Cijena je mjerena: nosenje tudje izmjene povlaci i pregradnju artefakata koji o njoj
+   ovise (`dist-packs/katedra-pack.json`), a svaki od njih ima svoj drift gard.
 
 ### 2.2 Ceka autorsku odluku, nije kvar alata
 
 - **2 pravila kojima citat ne nosi vlastitu vrijednost, a izvor se ne moze procitati:**
   `ffri-povum-{diplomski,zavrsni}--footnote-size` (potpuno skeniran PDF, nula znakova teksta). Trazilo
-  bi OCR. Preostala dva (`grf`, `vevu`) imaju sada citljiv izvor i cekaju samo upis, vidi 2.1.
+  bi OCR.
 - **8 odsjecenih citata koji imenuju stvarno izuzece**, ali nijedan ne cini pravilo prestrogim jer
   motor mjeri dominantnu vrijednost. Svaki pokazuje odredbu koju profil ne zapisuje: `hks-diplomski`
   (biljeske 10 pt, prored jednostruk, naslovi lijevo), `ffzg-filozofija-diplomski` (naslovnica,
   sadrzaj i sazeci se ne numeriraju) i `pmf-fizika-graduate` (uz slike i tablice velicina slova je 11,
   ne 12). Dodavanje pravila je autorski posao.
-- **147 nedoslovnih prijepisa.** Uzorak procitan: citat sazima natucnicki popis u recenicu, sve
+- **148 nedoslovnih prijepisa.** Uzorak procitan: citat sazima natucnicki popis u recenicu, sve
   vrijednosti su na mjestu. Gubi se sljedivost, ne bodovanje. Preporuka: NE prepisivati ih. Citat se
   studentu nikad ne prikazuje; u proizvodu je VRATA (`sourceId && sourcePage && quote` otkljucava
   ponude asistiranog popravka) i ne izlazi kroz izvoz prema Katedri.

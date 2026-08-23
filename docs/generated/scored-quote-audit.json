@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "audited": 1780,
+  "audited": 1778,
   "unreadable": 154,
   "findings": [
     {
@@ -653,6 +653,17 @@
       ]
     },
     {
+      "profileId": "ffzg-etnologija-graduate",
+      "ruleId": "ffzg-etnologija-graduate--font-size",
+      "checkId": "font-size",
+      "sourceId": "ffzg-etnologija-diplomski-2019",
+      "snapshot": "data/sources/ffzg/ffzg-etnologija-diplomski-2019.pdf",
+      "quote": "tekst rada treba biti u fontu Times New Roman, veličine 12 točaka",
+      "problems": [
+        "citat nije doslovan prijepis (podudaranje rijeci 73%)"
+      ]
+    },
+    {
       "profileId": "ffzg-informacijske-zavrsni",
       "ruleId": "ffzg-informacijske-zavrsni--required-sections",
       "checkId": "required-sections",
@@ -683,28 +694,6 @@
       "quote": "stranice numerirati arapskim brojkama u donjem desnom kutu;",
       "problems": [
         "citat odsjecen, recenica se nastavlja: - naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati; - tekst pisati s obostranim poravnanjem;"
-      ]
-    },
-    {
-      "profileId": "forenzika-diplomski",
-      "ruleId": "forenzika-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "forenzika-pravilnik-diplomski",
-      "snapshot": "data/sources/forenzika/forenzika-pravilnik-diplomski.pdf",
-      "quote": "rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz obostrano poravnavanje teksta.",
-      "problems": [
-        "kvalifikator u citatu bodovanog pravila: 'najmanje'"
-      ]
-    },
-    {
-      "profileId": "grf-diplomski",
-      "ruleId": "grf-diplomski--font",
-      "checkId": "font",
-      "sourceId": "grf-uputa-diplomski-prilog3",
-      "snapshot": "data/sources/grf/grf-uputa-diplomski-prilog3.doc",
-      "quote": "Pismo: obavezna je upotreba svih hrvatskih znakova",
-      "problems": [
-        "vrijednost pravila ne stoji u vlastitom citatu (nedostaje: Times New Roman, Arial)"
       ]
     },
     {
@@ -1618,17 +1607,6 @@
       "quote": "Na sljedeoj stranici slijedi sadrzaj, prema primjeru",
       "problems": [
         "citat nije doslovan prijepis (podudaranje rijeci 67%)"
-      ]
-    },
-    {
-      "profileId": "vevu-diplomski",
-      "ruleId": "vevu-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "vevu-prilog4-diplomski",
-      "snapshot": "data/sources/vevu/vevu-prilog4-diplomski.docx",
-      "quote": "Format rada je A4. Sve margine teksta trebaju biti 25 mm. Pri obradi teksta koristiti font Times New Roman. Prored teksta u cijelom radu treba biti 1,5. Poravnanje teksta obostrano (justified), prvi r",
-      "problems": [
-        "vrijednost pravila ne stoji u vlastitom citatu (nedostaje: 12)"
       ]
     },
     {

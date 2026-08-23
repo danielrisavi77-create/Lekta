@@ -593,6 +593,11 @@ def bound_atoms(value) -> set[str]:
     """
     out: set[str] = set()
     if isinstance(value, dict):
+        # `minimum: true` znaci da pravilo vrijednost boduje kao DONJU MEDJU, pa je "najmanje 2,5 cm"
+        # iskaz same odredbe, ne ublazavanje. Bez ovoga bi forenzika ostala prijavljena i nakon sto je
+        # engine naucio taj pojam (`marginsMinimum`), dakle nalaz bi trazio ono sto je vec ispravljeno.
+        if value.get("minimum") is True:
+            out.update(a for sub in value.values() for a in value_atoms(sub))
         for key, sub in value.items():
             if re.match(r"^(min|max)", str(key), re.I):
                 out.update(value_atoms(sub))
