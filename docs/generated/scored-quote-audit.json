@@ -11,51 +11,7 @@
       "snapshot": "data/sources/agr/agr-upute-doktorski-2026.pdf",
       "quote": "Rad mora sadrzavati: (...) Sadrzaj",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 67%)"
-      ]
-    },
-    {
-      "profileId": "efzg-zavrsni",
-      "ruleId": "efzg-zavrsni--required-sections",
-      "checkId": "required-sections",
-      "sourceId": "efzg-postupak-zavrsni",
-      "snapshot": "data/sources/efzg/efzg-postupak-zavrsni.pdf",
-      "quote": "Zavrsni rad se sastoji od sljedeih dijelova: naslovnica, sadrzaj, uvod, sredisnji dio rada, zakljucak,",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 85%)"
-      ]
-    },
-    {
-      "profileId": "efzg-zavrsni",
-      "ruleId": "efzg-zavrsni--toc",
-      "checkId": "toc",
-      "sourceId": "efzg-postupak-zavrsni",
-      "snapshot": "data/sources/efzg/efzg-postupak-zavrsni.pdf",
-      "quote": "Zavrsni rad se sastoji od sljedeih dijelova: naslovnica, sadrzaj, uvod, sredisnji dio rada, zakljucak,",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 85%)"
-      ]
-    },
-    {
-      "profileId": "efzg-specijalisticki",
-      "ruleId": "efzg-specijalisticki--required-sections",
-      "checkId": "required-sections",
-      "sourceId": "efzg-upute-specijalisticki-2021",
-      "snapshot": "data/sources/efzg/efzg-upute-specijalisticki-2021.pdf",
-      "quote": "Sveucilisni specijalisticki rad se sastoji od sljedecih dijelova: korice, naslovna stranica, sazetak i kljucne rijeci, izjava o akademskoj cestitosti, sadrzaj, poglavlja, zakljucak, popis literature, ",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 79%)"
-      ]
-    },
-    {
-      "profileId": "efzg-specijalisticki",
-      "ruleId": "efzg-specijalisticki--toc",
-      "checkId": "toc",
-      "sourceId": "efzg-upute-specijalisticki-2021",
-      "snapshot": "data/sources/efzg/efzg-upute-specijalisticki-2021.pdf",
-      "quote": "Sveucilisni specijalisticki rad se sastoji od sljedecih dijelova: korice, naslovna stranica, sazetak i kljucne rijeci, izjava o akademskoj cestitosti, sadrzaj, poglavlja, zakljucak, popis literature, ",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 79%)"
+        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 67%)"
       ]
     },
     {
@@ -66,7 +22,7 @@
       "snapshot": "data/sources/erf/erf-upute-diplomski.pdf",
       "quote": "treba sadrzavati sljedea poglavlja",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 33%)"
+        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 33%)"
       ]
     },
     {
@@ -77,40 +33,7 @@
       "snapshot": "data/sources/erf/erf-upute-diplomski.pdf",
       "quote": "treba sadrzavati sljedea poglavlja",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 33%)"
-      ]
-    },
-    {
-      "profileId": "fazos-diplomski",
-      "ruleId": "fazos-diplomski--citation-style",
-      "checkId": "citation-style",
-      "sourceId": "fazos-upute-diplomski-2024",
-      "snapshot": "data/sources/fazos/fazos-upute-diplomski-2024.pdf",
-      "quote": "Za citiranje u tekstu rada treba koristiti APA stil citiranja.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 78%)"
-      ]
-    },
-    {
-      "profileId": "fazos-zavrsni",
-      "ruleId": "fazos-zavrsni--citation-style",
-      "checkId": "citation-style",
-      "sourceId": "fazos-upute-zavrsni-2024",
-      "snapshot": "data/sources/fazos/fazos-upute-zavrsni-2024.pdf",
-      "quote": "Za citiranje u tekstu rada treba koristiti APA stil citiranja.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 78%)"
-      ]
-    },
-    {
-      "profileId": "fesb-diplomski",
-      "ruleId": "fesb-diplomski--page-numbers",
-      "checkId": "page-numbers",
-      "sourceId": "fesb-upute-diplomski-2017",
-      "snapshot": "data/sources/fesb/fesb-upute-diplomski-2017.doc",
-      "quote": "Stranice teksta rada moraju biti numerirane, navodjenjem broja stranice u njezinom donjem, desnom uglu, pri cemu numeracija stranica zapocinje od prvog poglavlja (Uvod).",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 82%)"
+        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 33%)"
       ]
     },
     {
@@ -121,18 +44,7 @@
       "snapshot": "data/sources/fesb/fesb-upute-diplomski-2017.doc",
       "quote": "Vlastiti brojcani sustav referenciranja: bilješke se oznacavaju brojevima u uglatim zagradama [1] redoslijedom pojavljivanja, popis izvora na kraju rada istim redoslijedom (Prezime, I.: \"Naslov\", Izda",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 17%)"
-      ]
-    },
-    {
-      "profileId": "fesb-zavrsni",
-      "ruleId": "fesb-zavrsni--page-numbers",
-      "checkId": "page-numbers",
-      "sourceId": "fesb-upute-zavrsni-2017",
-      "snapshot": "data/sources/fesb/fesb-upute-zavrsni-2017.doc",
-      "quote": "Stranice teksta rada moraju biti numerirane, navodjenjem broja stranice u njezinom donjem, desnom uglu, pri cemu numeracija stranica zapocinje od prvog poglavlja (Uvod).",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 82%)"
+        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 17%)"
       ]
     },
     {
@@ -143,29 +55,7 @@
       "snapshot": "data/sources/fesb/fesb-upute-zavrsni-2017.doc",
       "quote": "Vlastiti brojcani sustav referenciranja: bilješke se oznacavaju brojevima u uglatim zagradama [1] redoslijedom pojavljivanja, popis izvora na kraju rada istim redoslijedom - sustav je potpuno definira",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 12%)"
-      ]
-    },
-    {
-      "profileId": "ffos-germanistika-diplomski",
-      "ruleId": "ffos-germanistika-diplomski--font",
-      "checkId": "font",
-      "sourceId": "ffos-germanistika-upute-diplomski-2025",
-      "snapshot": "data/sources/ffos/ffos-germanistika-diplomski-2025.pdf",
-      "quote": "Text: Times New Roman 12 oder Calibri 12 oder Arial 12, Zeilenabstand 1,5. Marginen: rechts 20mm; links, oben und unten 25mm.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 81%)"
-      ]
-    },
-    {
-      "profileId": "ffos-germanistika-diplomski",
-      "ruleId": "ffos-germanistika-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "ffos-germanistika-upute-diplomski-2025",
-      "snapshot": "data/sources/ffos/ffos-germanistika-diplomski-2025.pdf",
-      "quote": "Text: Times New Roman 12 oder Calibri 12 oder Arial 12, Zeilenabstand 1,5. Marginen: rechts 20mm; links, oben und unten 25mm.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 81%)"
+        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 12%)"
       ]
     },
     {
@@ -176,40 +66,7 @@
       "snapshot": "data/sources/ffos/ffos-germanistika-diplomski-2025.pdf",
       "quote": "Text: Times New Roman 12 oder Calibri 12 oder Arial 12, Zeilenabstand 1,5. Marginen: rechts 20mm; links, oben und unten 25mm.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 81%)"
-      ]
-    },
-    {
-      "profileId": "ffos-germanistika-diplomski",
-      "ruleId": "ffos-germanistika-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "ffos-germanistika-upute-diplomski-2025",
-      "snapshot": "data/sources/ffos/ffos-germanistika-diplomski-2025.pdf",
-      "quote": "Text: Times New Roman 12 oder Calibri 12 oder Arial 12, Zeilenabstand 1,5. Marginen: rechts 20mm; links, oben und unten 25mm.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 81%)"
-      ]
-    },
-    {
-      "profileId": "ffos-germanistika-zavrsni",
-      "ruleId": "ffos-germanistika-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "ffos-germanistika-upute-2025",
-      "snapshot": "data/sources/ffos/ffos-germanistika-zavrsni-2025.pdf",
-      "quote": "Text: Times New Roman 12 oder Calibri 12 oder Arial 12, Zeilenabstand 1,5. Marginen: rechts 20mm; links, oben und unten 25mm.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 81%)"
-      ]
-    },
-    {
-      "profileId": "ffos-germanistika-zavrsni",
-      "ruleId": "ffos-germanistika-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "ffos-germanistika-upute-2025",
-      "snapshot": "data/sources/ffos/ffos-germanistika-zavrsni-2025.pdf",
-      "quote": "Text: Times New Roman 12 oder Calibri 12 oder Arial 12, Zeilenabstand 1,5. Marginen: rechts 20mm; links, oben und unten 25mm.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 81%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: text: times new roman 12 oder calibri 12 oder arial 12, zeilenabstand)"
       ]
     },
     {
@@ -220,73 +77,7 @@
       "snapshot": "data/sources/ffos/ffos-germanistika-zavrsni-2025.pdf",
       "quote": "Text: Times New Roman 12 oder Calibri 12 oder Arial 12, Zeilenabstand 1,5. Marginen: rechts 20mm; links, oben und unten 25mm.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 81%)"
-      ]
-    },
-    {
-      "profileId": "ffos-germanistika-zavrsni",
-      "ruleId": "ffos-germanistika-zavrsni--margins",
-      "checkId": "margins",
-      "sourceId": "ffos-germanistika-upute-2025",
-      "snapshot": "data/sources/ffos/ffos-germanistika-zavrsni-2025.pdf",
-      "quote": "Text: Times New Roman 12 oder Calibri 12 oder Arial 12, Zeilenabstand 1,5. Marginen: rechts 20mm; links, oben und unten 25mm.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 81%)"
-      ]
-    },
-    {
-      "profileId": "ffos-psihologija-zavrsni",
-      "ruleId": "ffos-psihologija-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "ffos-psihologija-zavrsni-2014",
-      "snapshot": "data/sources/ffos/ffos-psihologija-zavrsni-2014.pdf",
-      "quote": "Velicina je stranice A4. Rubnice trebaju biti sljedece velicine: lijeva 25mm, desna 20mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 77%)"
-      ]
-    },
-    {
-      "profileId": "ffos-psihologija-zavrsni",
-      "ruleId": "ffos-psihologija-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "ffos-psihologija-zavrsni-2014",
-      "snapshot": "data/sources/ffos/ffos-psihologija-zavrsni-2014.pdf",
-      "quote": "Velicina je stranice A4. Rubnice trebaju biti sljedece velicine: lijeva 25mm, desna 20mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 77%)"
-      ]
-    },
-    {
-      "profileId": "ffos-psihologija-zavrsni",
-      "ruleId": "ffos-psihologija-zavrsni--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "ffos-psihologija-zavrsni-2014",
-      "snapshot": "data/sources/ffos/ffos-psihologija-zavrsni-2014.pdf",
-      "quote": "Velicina je stranice A4. Rubnice trebaju biti sljedece velicine: lijeva 25mm, desna 20mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 77%)"
-      ]
-    },
-    {
-      "profileId": "ffos-psihologija-zavrsni",
-      "ruleId": "ffos-psihologija-zavrsni--margins",
-      "checkId": "margins",
-      "sourceId": "ffos-psihologija-zavrsni-2014",
-      "snapshot": "data/sources/ffos/ffos-psihologija-zavrsni-2014.pdf",
-      "quote": "Velicina je stranice A4. Rubnice trebaju biti sljedece velicine: lijeva 25mm, desna 20mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 77%)"
-      ]
-    },
-    {
-      "profileId": "ffos-psihologija-zavrsni",
-      "ruleId": "ffos-psihologija-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "ffos-psihologija-zavrsni-2014",
-      "snapshot": "data/sources/ffos/ffos-psihologija-zavrsni-2014.pdf",
-      "quote": "Velicina je stranice A4. Rubnice trebaju biti sljedece velicine: lijeva 25mm, desna 20mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 77%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: text: times new roman 12 oder calibri 12 oder arial 12, zeilenabstand)"
       ]
     },
     {
@@ -297,7 +88,7 @@
       "snapshot": "data/sources/ffri/ffri-pravilnik-diplomski-2023.pdf",
       "quote": "Diplomski rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanj",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 60%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: oblikovanje teksta mora biti kako slijedi:)"
       ]
     },
     {
@@ -308,7 +99,7 @@
       "snapshot": "data/sources/ffri/ffri-pravilnik-diplomski-2023.pdf",
       "quote": "Diplomski rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanj",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 60%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: oblikovanje teksta mora biti kako slijedi:)"
       ]
     },
     {
@@ -319,7 +110,7 @@
       "snapshot": "data/sources/ffri/ffri-pravilnik-diplomski-2023.pdf",
       "quote": "Diplomski rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanj",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 60%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: oblikovanje teksta mora biti kako slijedi:)"
       ]
     },
     {
@@ -330,7 +121,7 @@
       "snapshot": "data/sources/ffri/ffri-pravilnik-diplomski-2023.pdf",
       "quote": "Diplomski rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanj",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 60%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: oblikovanje teksta mora biti kako slijedi:)"
       ]
     },
     {
@@ -341,29 +132,7 @@
       "snapshot": "data/sources/ffri/ffri-pravilnik-diplomski-2023.pdf",
       "quote": "Diplomski rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanj",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 60%)"
-      ]
-    },
-    {
-      "profileId": "ffri-diplomski",
-      "ruleId": "ffri-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "ffri-pravilnik-diplomski-2023",
-      "snapshot": "data/sources/ffri/ffri-pravilnik-diplomski-2023.pdf",
-      "quote": "Diplomski rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanj",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 60%)"
-      ]
-    },
-    {
-      "profileId": "ffri-germanistika-diplomski",
-      "ruleId": "ffri-germanistika-diplomski--font",
-      "checkId": "font",
-      "sourceId": "ffri-germanistika-leitfaden-2018",
-      "snapshot": "data/sources/ffri/ffri-germanistika-leitfaden-2018.pdf",
-      "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schri",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: oblikovanje teksta mora biti kako slijedi:)"
       ]
     },
     {
@@ -374,7 +143,7 @@
       "snapshot": "data/sources/ffri/ffri-germanistika-leitfaden-2018.pdf",
       "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schri",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: der vorliegende leitfaden ist fur alle studierenden und lehrenden ab dem zeitpunkt der ver)"
       ]
     },
     {
@@ -385,7 +154,7 @@
       "snapshot": "data/sources/ffri/ffri-germanistika-leitfaden-2018.pdf",
       "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schri",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: der vorliegende leitfaden ist fur alle studierenden und lehrenden ab dem zeitpunkt der ver)"
       ]
     },
     {
@@ -396,29 +165,7 @@
       "snapshot": "data/sources/ffri/ffri-germanistika-leitfaden-2018.pdf",
       "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schri",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
-      ]
-    },
-    {
-      "profileId": "ffri-germanistika-diplomski",
-      "ruleId": "ffri-germanistika-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "ffri-germanistika-leitfaden-2018",
-      "snapshot": "data/sources/ffri/ffri-germanistika-leitfaden-2018.pdf",
-      "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schri",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
-      ]
-    },
-    {
-      "profileId": "ffri-germanistika-diplomski",
-      "ruleId": "ffri-germanistika-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "ffri-germanistika-leitfaden-2018",
-      "snapshot": "data/sources/ffri/ffri-germanistika-leitfaden-2018.pdf",
-      "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schri",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: der vorliegende leitfaden ist fur alle studierenden und lehrenden ab dem zeitpunkt der ver)"
       ]
     },
     {
@@ -429,18 +176,7 @@
       "snapshot": "data/sources/ffri/ffri-germanistika-leitfaden-2018.pdf",
       "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schri",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
-      ]
-    },
-    {
-      "profileId": "ffri-germanistika-zavrsni",
-      "ruleId": "ffri-germanistika-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "ffri-germanistika-leitfaden-2018",
-      "snapshot": "data/sources/ffri/ffri-germanistika-leitfaden-2018.pdf",
-      "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schri",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: der vorliegende leitfaden ist fur alle studierenden und lehrenden ab dem zeitpunkt der ver)"
       ]
     },
     {
@@ -451,7 +187,7 @@
       "snapshot": "data/sources/ffri/ffri-germanistika-leitfaden-2018.pdf",
       "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schri",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: der vorliegende leitfaden ist fur alle studierenden und lehrenden ab dem zeitpunkt der ver)"
       ]
     },
     {
@@ -462,7 +198,7 @@
       "snapshot": "data/sources/ffri/ffri-germanistika-leitfaden-2018.pdf",
       "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schri",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: der vorliegende leitfaden ist fur alle studierenden und lehrenden ab dem zeitpunkt der ver)"
       ]
     },
     {
@@ -473,29 +209,7 @@
       "snapshot": "data/sources/ffri/ffri-germanistika-leitfaden-2018.pdf",
       "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schri",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
-      ]
-    },
-    {
-      "profileId": "ffri-germanistika-zavrsni",
-      "ruleId": "ffri-germanistika-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "ffri-germanistika-leitfaden-2018",
-      "snapshot": "data/sources/ffri/ffri-germanistika-leitfaden-2018.pdf",
-      "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schri",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
-      ]
-    },
-    {
-      "profileId": "ffri-germanistika-zavrsni",
-      "ruleId": "ffri-germanistika-zavrsni--justify",
-      "checkId": "justify",
-      "sourceId": "ffri-germanistika-leitfaden-2018",
-      "snapshot": "data/sources/ffri/ffri-germanistika-leitfaden-2018.pdf",
-      "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schri",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: der vorliegende leitfaden ist fur alle studierenden und lehrenden ab dem zeitpunkt der ver)"
       ]
     },
     {
@@ -506,7 +220,7 @@
       "snapshot": "data/sources/ffri/ffri-germanistika-leitfaden-2018.pdf",
       "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schri",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: der vorliegende leitfaden ist fur alle studierenden und lehrenden ab dem zeitpunkt der ver)"
       ]
     },
     {
@@ -517,7 +231,7 @@
       "snapshot": "data/sources/ffri/ffri-psihologija-brosura-2022.pdf",
       "quote": "Tehnicku opremu diplomskog rada potrebno je izvesti sukladno Clanku 11. Pravilnika: format A4, font Times New Roman 12pt (fusnote 10pt), prored 1,5, obostrano poravnanje. [Margine NAMJERNO izostavljen",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 28%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: tehnicku opremu diplomskog rada potrebno je izvesti sukladno clanku 11.)"
       ]
     },
     {
@@ -528,7 +242,7 @@
       "snapshot": "data/sources/ffri/ffri-psihologija-brosura-2022.pdf",
       "quote": "Tehnicku opremu diplomskog rada potrebno je izvesti sukladno Clanku 11. Pravilnika: format A4, font Times New Roman 12pt (fusnote 10pt), prored 1,5, obostrano poravnanje. [Margine NAMJERNO izostavljen",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 28%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: tehnicku opremu diplomskog rada potrebno je izvesti sukladno clanku 11.)"
       ]
     },
     {
@@ -539,40 +253,7 @@
       "snapshot": "data/sources/ffri/ffri-psihologija-brosura-2022.pdf",
       "quote": "Tehnicku opremu diplomskog rada potrebno je izvesti sukladno Clanku 11. Pravilnika: format A4, font Times New Roman 12pt (fusnote 10pt), prored 1,5, obostrano poravnanje. [Margine NAMJERNO izostavljen",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 28%)"
-      ]
-    },
-    {
-      "profileId": "ffri-psihologija-diplomski",
-      "ruleId": "ffri-psihologija-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "ffri-psihologija-brosura-2022",
-      "snapshot": "data/sources/ffri/ffri-psihologija-brosura-2022.pdf",
-      "quote": "Tehnicku opremu diplomskog rada potrebno je izvesti sukladno Clanku 11. Pravilnika: format A4, font Times New Roman 12pt (fusnote 10pt), prored 1,5, obostrano poravnanje. [Margine NAMJERNO izostavljen",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 28%)"
-      ]
-    },
-    {
-      "profileId": "ffri-psihologija-diplomski",
-      "ruleId": "ffri-psihologija-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "ffri-psihologija-brosura-2022",
-      "snapshot": "data/sources/ffri/ffri-psihologija-brosura-2022.pdf",
-      "quote": "Tehnicku opremu diplomskog rada potrebno je izvesti sukladno Clanku 11. Pravilnika: format A4, font Times New Roman 12pt (fusnote 10pt), prored 1,5, obostrano poravnanje. [Margine NAMJERNO izostavljen",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 28%)"
-      ]
-    },
-    {
-      "profileId": "ffri-zavrsni",
-      "ruleId": "ffri-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "ffri-pravilnik-zavrsni-2023",
-      "snapshot": "data/sources/ffri/ffri-pravilnik-zavrsni-2023.pdf",
-      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje:",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 69%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: tehnicku opremu diplomskog rada potrebno je izvesti sukladno clanku 11.)"
       ]
     },
     {
@@ -583,7 +264,7 @@
       "snapshot": "data/sources/ffri/ffri-pravilnik-zavrsni-2023.pdf",
       "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje:",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 69%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: oblikovanje teksta mora biti kako slijedi:)"
       ]
     },
     {
@@ -594,7 +275,7 @@
       "snapshot": "data/sources/ffri/ffri-pravilnik-zavrsni-2023.pdf",
       "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje:",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 69%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: oblikovanje teksta mora biti kako slijedi:)"
       ]
     },
     {
@@ -605,7 +286,7 @@
       "snapshot": "data/sources/ffri/ffri-pravilnik-zavrsni-2023.pdf",
       "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje:",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 69%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: oblikovanje teksta mora biti kako slijedi:)"
       ]
     },
     {
@@ -616,18 +297,7 @@
       "snapshot": "data/sources/ffri/ffri-pravilnik-zavrsni-2023.pdf",
       "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje:",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 69%)"
-      ]
-    },
-    {
-      "profileId": "ffri-zavrsni",
-      "ruleId": "ffri-zavrsni--justify",
-      "checkId": "justify",
-      "sourceId": "ffri-pravilnik-zavrsni-2023",
-      "snapshot": "data/sources/ffri/ffri-pravilnik-zavrsni-2023.pdf",
-      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje:",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 69%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: oblikovanje teksta mora biti kako slijedi:)"
       ]
     },
     {
@@ -638,40 +308,7 @@
       "snapshot": "data/sources/ffzg/ffzg-etnologija-diplomski-2019.pdf",
       "quote": "tekst rada treba biti u fontu Times New Roman, veličine 12 točaka",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 73%)"
-      ]
-    },
-    {
-      "profileId": "ffzg-informacijske-zavrsni",
-      "ruleId": "ffzg-informacijske-zavrsni--required-sections",
-      "checkId": "required-sections",
-      "sourceId": "ffzg-inf-diplomski-2024",
-      "snapshot": "data/sources/ffzg/ffzg-inf-diplomski-2024.pdf",
-      "quote": "Rad se sastoji od sljedeih cjelina: Naslovnica, Izjava o akademskoj cestitosti, Sadrzaj, Uvod,",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 83%)"
-      ]
-    },
-    {
-      "profileId": "ffzg-informacijske-zavrsni",
-      "ruleId": "ffzg-informacijske-zavrsni--toc",
-      "checkId": "toc",
-      "sourceId": "ffzg-inf-diplomski-2024",
-      "snapshot": "data/sources/ffzg/ffzg-inf-diplomski-2024.pdf",
-      "quote": "Rad se sastoji od sljedeih cjelina: Naslovnica, Izjava o akademskoj cestitosti, Sadrzaj, Uvod,",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 83%)"
-      ]
-    },
-    {
-      "profileId": "grf-zavrsni",
-      "ruleId": "grf-zavrsni--page-numbers",
-      "checkId": "page-numbers",
-      "sourceId": "grf-upute-zavrsni",
-      "snapshot": "data/sources/grf/grf-upute-zavrsni.pdf",
-      "quote": "Numeriranje stranica ide od prve stranice uvoda do zadnje u tekuem nizu.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 82%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: tekst rada treba biti u fontu times new roman,)"
       ]
     },
     {
@@ -682,7 +319,7 @@
       "snapshot": "data/sources/kbf/kbf-upute-zavrsni-diplomski-2017.pdf",
       "quote": "Prilikom navoenje literature potrebno je dosljedno se pridrzavati pravila o navoenju",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 70%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: literature potrebno je dosljedno se pridrzavati pravila o)"
       ]
     },
     {
@@ -693,7 +330,7 @@
       "snapshot": "data/sources/kbf/kbf-upute-zavrsni-diplomski-2017.pdf",
       "quote": "Prilikom navoenje literature potrebno je dosljedno se pridrzavati pravila o navoenju",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 70%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: literature potrebno je dosljedno se pridrzavati pravila o)"
       ]
     },
     {
@@ -704,7 +341,7 @@
       "snapshot": "data/sources/kif/kif-upute-diplomski-zavrsni.pdf",
       "quote": "se mora nai napisana numeracija",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 50%)"
+        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 50%)"
       ]
     },
     {
@@ -715,40 +352,7 @@
       "snapshot": "data/sources/kif/kif-upute-oblikovanje-diplomski.pdf",
       "quote": "poravnanje – obostrano",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 0%)"
-      ]
-    },
-    {
-      "profileId": "mef-diplomski",
-      "ruleId": "mef-diplomski--page-numbers",
-      "checkId": "page-numbers",
-      "sourceId": "mef-pravilnik-diplomski-2023",
-      "snapshot": "data/sources/mef/mef-pravilnik-diplomski-2023.pdf",
-      "quote": "Numeriranje stranica zapoc inje s poglavljem Uvod, tako da je prva stranica Uvoda ujedno i prva numerirana stranica rada.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 83%)"
-      ]
-    },
-    {
-      "profileId": "mef-diplomski",
-      "ruleId": "mef-diplomski--toc",
-      "checkId": "toc",
-      "sourceId": "mef-pravilnik-diplomski-2023",
-      "snapshot": "data/sources/mef/mef-pravilnik-diplomski-2023.pdf",
-      "quote": "Na c etvrtoj stranici se upisuje Sadrzaj.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 50%)"
-      ]
-    },
-    {
-      "profileId": "mef-diplomski",
-      "ruleId": "mef-diplomski--required-sections",
-      "checkId": "required-sections",
-      "sourceId": "mef-pravilnik-diplomski-2023",
-      "snapshot": "data/sources/mef/mef-pravilnik-diplomski-2023.pdf",
-      "quote": "neki elementi ostaju zajednic ki (nac in uveza, naslovna stranica, napomena o mjestu izrade rada i mentoru, sadrzaj, popis skra enica, sazetak i kljuc ne rijec i na hrvatskom jeziku, title, summary & ",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 68%)"
+        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 0%)"
       ]
     },
     {
@@ -759,7 +363,7 @@
       "snapshot": "data/sources/ozs/ozs-tpl-diplomski.docx",
       "quote": "Heading1 u predlošku: 1. UVOD; 2. CILJ RADA; 3. ISPITANICI I METODE; 4. REZULTATI; 5. RASPRAVA; 6. ZAKLJUČCI; 7. LITERATURA; 8. ŽIVOTOPIS (uz SAŽETAK, SUMMARY, SADRŽAJ i Temeljnu dokumentacijsku karti",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 62%)"
+        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 62%)"
       ]
     },
     {
@@ -770,106 +374,7 @@
       "snapshot": "data/sources/pbf/pbf-upute-diplomski-2018.pdf",
       "quote": "Diplomski rad mora sadrzavati sljedea poglavlja ili dijelove",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 71%)"
-      ]
-    },
-    {
-      "profileId": "pravo-integrirani-diplomski",
-      "ruleId": "pravo-integrirani-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "pravo-upute-oblikovanje-2024",
-      "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
-      "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 83%)"
-      ]
-    },
-    {
-      "profileId": "pravo-javna-uprava-prijediplomski",
-      "ruleId": "pravo-javna-uprava-prijediplomski--justify",
-      "checkId": "justify",
-      "sourceId": "pravo-upute-oblikovanje-2024",
-      "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
-      "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 83%)"
-      ]
-    },
-    {
-      "profileId": "pravo-javna-uprava-diplomski",
-      "ruleId": "pravo-javna-uprava-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "pravo-upute-oblikovanje-2024",
-      "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
-      "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 83%)"
-      ]
-    },
-    {
-      "profileId": "pravo-porezni-prijediplomski",
-      "ruleId": "pravo-porezni-prijediplomski--justify",
-      "checkId": "justify",
-      "sourceId": "pravo-upute-oblikovanje-2024",
-      "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
-      "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 83%)"
-      ]
-    },
-    {
-      "profileId": "pravo-opci-pravni-akademski-rad",
-      "ruleId": "pravo-opci-pravni-akademski-rad--justify",
-      "checkId": "justify",
-      "sourceId": "pravo-upute-oblikovanje-2024",
-      "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
-      "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 83%)"
-      ]
-    },
-    {
-      "profileId": "pravo-specijalisticki-pravni-opci",
-      "ruleId": "pravo-specijalisticki-pravni-opci--justify",
-      "checkId": "justify",
-      "sourceId": "pravo-upute-oblikovanje-2024",
-      "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
-      "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 83%)"
-      ]
-    },
-    {
-      "profileId": "pravo-specijalisticki-pravni-opci",
-      "ruleId": "pravo-specijalisticki-pravni-opci--footnote-size",
-      "checkId": "footnote-size",
-      "sourceId": "pravo-upute-oblikovanje-2024",
-      "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
-      "quote": "Biljeske (fusnote) - velicina fonta: 10",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
-      ]
-    },
-    {
-      "profileId": "pravo-doktorski-pravne-znanosti",
-      "ruleId": "pravo-doktorski-pravne-znanosti--justify",
-      "checkId": "justify",
-      "sourceId": "pravo-upute-oblikovanje-2024",
-      "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
-      "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 83%)"
-      ]
-    },
-    {
-      "profileId": "pravo-doktorski-pravne-znanosti",
-      "ruleId": "pravo-doktorski-pravne-znanosti--footnote-size",
-      "checkId": "footnote-size",
-      "sourceId": "pravo-upute-oblikovanje-2024",
-      "snapshot": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
-      "quote": "Biljeske (fusnote) - velicina fonta: 10",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: diplomski rad mora sadrzavati)"
       ]
     },
     {
@@ -880,7 +385,7 @@
       "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
       "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 48%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: stranice moraju biti numerirane.)"
       ]
     },
     {
@@ -891,7 +396,7 @@
       "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
       "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 48%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: stranice moraju biti numerirane.)"
       ]
     },
     {
@@ -902,18 +407,7 @@
       "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
       "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 48%)"
-      ]
-    },
-    {
-      "profileId": "ttf-dizajn-diplomski",
-      "ruleId": "ttf-dizajn-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "ttf-upute-zavrsni-diplomski",
-      "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
-      "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 48%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: stranice moraju biti numerirane.)"
       ]
     },
     {
@@ -924,29 +418,7 @@
       "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
       "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 48%)"
-      ]
-    },
-    {
-      "profileId": "ttf-dizajn-diplomski",
-      "ruleId": "ttf-dizajn-diplomski--toc",
-      "checkId": "toc",
-      "sourceId": "ttf-upute-zavrsni-diplomski",
-      "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
-      "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 48%)"
-      ]
-    },
-    {
-      "profileId": "ttf-dizajn-diplomski",
-      "ruleId": "ttf-dizajn-diplomski--page-numbers",
-      "checkId": "page-numbers",
-      "sourceId": "ttf-upute-zavrsni-diplomski",
-      "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
-      "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 48%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: stranice moraju biti numerirane.)"
       ]
     },
     {
@@ -957,7 +429,7 @@
       "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
       "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 48%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: stranice moraju biti numerirane.)"
       ]
     },
     {
@@ -968,7 +440,7 @@
       "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
       "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 48%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: stranice moraju biti numerirane.)"
       ]
     },
     {
@@ -979,18 +451,7 @@
       "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
       "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 48%)"
-      ]
-    },
-    {
-      "profileId": "ttf-dizajn-zavrsni",
-      "ruleId": "ttf-dizajn-zavrsni--justify",
-      "checkId": "justify",
-      "sourceId": "ttf-upute-zavrsni-diplomski",
-      "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
-      "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 48%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: stranice moraju biti numerirane.)"
       ]
     },
     {
@@ -1001,29 +462,7 @@
       "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
       "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 48%)"
-      ]
-    },
-    {
-      "profileId": "ttf-dizajn-zavrsni",
-      "ruleId": "ttf-dizajn-zavrsni--toc",
-      "checkId": "toc",
-      "sourceId": "ttf-upute-zavrsni-diplomski",
-      "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
-      "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 48%)"
-      ]
-    },
-    {
-      "profileId": "ttf-dizajn-zavrsni",
-      "ruleId": "ttf-dizajn-zavrsni--page-numbers",
-      "checkId": "page-numbers",
-      "sourceId": "ttf-upute-zavrsni-diplomski",
-      "snapshot": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
-      "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 48%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: stranice moraju biti numerirane.)"
       ]
     },
     {
@@ -1034,18 +473,7 @@
       "snapshot": "data/sources/ufzg/ufzg-upute-zavrsni-diplomski-2026.pdf",
       "quote": "Razmak meu redovima: 1,5",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 50%)"
-      ]
-    },
-    {
-      "profileId": "ufzg-zavrsni",
-      "ruleId": "ufzg-zavrsni--toc",
-      "checkId": "toc",
-      "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
-      "snapshot": "data/sources/ufzg/ufzg-upute-zavrsni-diplomski-2026.pdf",
-      "quote": "sadrzaj (popis svih poglavlja i potpoglavlja s pripadajuim rednim brojevima stranica)",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 80%)"
+        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 50%)"
       ]
     },
     {
@@ -1056,18 +484,7 @@
       "snapshot": "data/sources/ufzg/ufzg-upute-zavrsni-diplomski-2026.pdf",
       "quote": "Strucni rad treba sadrzavati sljedee dijelove:",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 60%)"
-      ]
-    },
-    {
-      "profileId": "ufzg-zavrsni",
-      "ruleId": "ufzg-zavrsni--page-count",
-      "checkId": "page-count",
-      "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
-      "snapshot": "data/sources/ufzg/ufzg-upute-zavrsni-diplomski-2026.pdf",
-      "quote": "Zavrsni rad treba imati izmeu 20 i 40 stranica, a diplomski rad izmeu 25 i 50 stranica",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: strucni rad treba sadrzavati)"
       ]
     },
     {
@@ -1078,18 +495,7 @@
       "snapshot": "data/sources/ufzg/ufzg-upute-zavrsni-diplomski-2026.pdf",
       "quote": "Razmak meu redovima: 1,5",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 50%)"
-      ]
-    },
-    {
-      "profileId": "ufzg-diplomski",
-      "ruleId": "ufzg-diplomski--toc",
-      "checkId": "toc",
-      "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
-      "snapshot": "data/sources/ufzg/ufzg-upute-zavrsni-diplomski-2026.pdf",
-      "quote": "sadrzaj (popis svih poglavlja i potpoglavlja s pripadajuim rednim brojevima stranica)",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 80%)"
+        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 50%)"
       ]
     },
     {
@@ -1100,29 +506,7 @@
       "snapshot": "data/sources/ufzg/ufzg-upute-zavrsni-diplomski-2026.pdf",
       "quote": "Empirijski rad treba sadrzavati sljedee dijelove:",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 60%)"
-      ]
-    },
-    {
-      "profileId": "ufzg-diplomski",
-      "ruleId": "ufzg-diplomski--page-count",
-      "checkId": "page-count",
-      "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
-      "snapshot": "data/sources/ufzg/ufzg-upute-zavrsni-diplomski-2026.pdf",
-      "quote": "Zavrsni rad treba imati izmeu 20 i 40 stranica, a diplomski rad izmeu 25 i 50 stranica",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 75%)"
-      ]
-    },
-    {
-      "profileId": "unizd-germanistika-diplomski",
-      "ruleId": "unizd-germanistika-diplomski--font",
-      "checkId": "font",
-      "sourceId": "unizd-germanistika-pravilnik-diplomski-2017",
-      "snapshot": "data/sources/unizd/unizd-germanistika-pravilnik-diplomski-2017.pdf",
-      "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve marg",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 62%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: empirijski rad treba sadrzavati)"
       ]
     },
     {
@@ -1133,7 +517,7 @@
       "snapshot": "data/sources/unizd/unizd-germanistika-pravilnik-diplomski-2017.pdf",
       "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve marg",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 62%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: slovima times new roman c, velicina)"
       ]
     },
     {
@@ -1144,7 +528,7 @@
       "snapshot": "data/sources/unizd/unizd-germanistika-pravilnik-diplomski-2017.pdf",
       "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve marg",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 62%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: slovima times new roman c, velicina)"
       ]
     },
     {
@@ -1155,18 +539,7 @@
       "snapshot": "data/sources/unizd/unizd-germanistika-pravilnik-diplomski-2017.pdf",
       "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve marg",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 62%)"
-      ]
-    },
-    {
-      "profileId": "unizd-germanistika-diplomski",
-      "ruleId": "unizd-germanistika-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "unizd-germanistika-pravilnik-diplomski-2017",
-      "snapshot": "data/sources/unizd/unizd-germanistika-pravilnik-diplomski-2017.pdf",
-      "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve marg",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 62%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: slovima times new roman c, velicina)"
       ]
     },
     {
@@ -1177,18 +550,7 @@
       "snapshot": "data/sources/unizd/unizd-germanistika-pravilnik-diplomski-2017.pdf",
       "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve marg",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 62%)"
-      ]
-    },
-    {
-      "profileId": "unizd-germanistika-zavrsni",
-      "ruleId": "unizd-germanistika-zavrsni--font",
-      "checkId": "font",
-      "sourceId": "unizd-germanistika-pravilnik-zavrsni-2020",
-      "snapshot": "data/sources/unizd/unizd-germanistika-pravilnik-zavrsni-2020.pdf",
-      "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve marg",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 62%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: slovima times new roman c, velicina)"
       ]
     },
     {
@@ -1199,7 +561,7 @@
       "snapshot": "data/sources/unizd/unizd-germanistika-pravilnik-zavrsni-2020.pdf",
       "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve marg",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 62%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: slovima times new roman c, velicina)"
       ]
     },
     {
@@ -1210,7 +572,7 @@
       "snapshot": "data/sources/unizd/unizd-germanistika-pravilnik-zavrsni-2020.pdf",
       "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve marg",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 62%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: slovima times new roman c, velicina)"
       ]
     },
     {
@@ -1221,18 +583,7 @@
       "snapshot": "data/sources/unizd/unizd-germanistika-pravilnik-zavrsni-2020.pdf",
       "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve marg",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 62%)"
-      ]
-    },
-    {
-      "profileId": "unizd-germanistika-zavrsni",
-      "ruleId": "unizd-germanistika-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "unizd-germanistika-pravilnik-zavrsni-2020",
-      "snapshot": "data/sources/unizd/unizd-germanistika-pravilnik-zavrsni-2020.pdf",
-      "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve marg",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 62%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: slovima times new roman c, velicina)"
       ]
     },
     {
@@ -1243,7 +594,7 @@
       "snapshot": "data/sources/unizd/unizd-germanistika-pravilnik-zavrsni-2020.pdf",
       "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve marg",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 62%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: slovima times new roman c, velicina)"
       ]
     },
     {
@@ -1254,18 +605,7 @@
       "snapshot": "data/sources/unizd/unizd-klasicna-filologija-upute-2021.pdf",
       "quote": "Tip pisma (font): Times New Roman. Tijelo teksta: 12 tipografskih tocaka (fusnote 10). Lijeva i desna margina: 2,5 cm; gornja i donja: 2,5 cm. U tijelu teksta prored 1,5. Tekst je obostrano poravnat.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 80%)"
-      ]
-    },
-    {
-      "profileId": "unizd-klasicna-filologija-diplomski",
-      "ruleId": "unizd-klasicna-filologija-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-klasicna-filologija-upute-2021",
-      "snapshot": "data/sources/unizd/unizd-klasicna-filologija-upute-2021.pdf",
-      "quote": "Tip pisma (font): Times New Roman. Tijelo teksta: 12 tipografskih tocaka (fusnote 10). Lijeva i desna margina: 2,5 cm; gornja i donja: 2,5 cm. U tijelu teksta prored 1,5. Tekst je obostrano poravnat.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 80%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: tijelo teksta: 12 tipografskih tocaka)"
       ]
     },
     {
@@ -1276,29 +616,7 @@
       "snapshot": "data/sources/unizd/unizd-klasicna-filologija-upute-2021.pdf",
       "quote": "Tip pisma (font): Times New Roman. Tijelo teksta: 12 tipografskih tocaka (fusnote 10). Lijeva i desna margina: 2,5 cm; gornja i donja: 2,5 cm. U tijelu teksta prored 1,5. Tekst je obostrano poravnat.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 80%)"
-      ]
-    },
-    {
-      "profileId": "unizd-klasicna-filologija-diplomski",
-      "ruleId": "unizd-klasicna-filologija-diplomski--justify",
-      "checkId": "justify",
-      "sourceId": "unizd-klasicna-filologija-upute-2021",
-      "snapshot": "data/sources/unizd/unizd-klasicna-filologija-upute-2021.pdf",
-      "quote": "Tip pisma (font): Times New Roman. Tijelo teksta: 12 tipografskih tocaka (fusnote 10). Lijeva i desna margina: 2,5 cm; gornja i donja: 2,5 cm. U tijelu teksta prored 1,5. Tekst je obostrano poravnat.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 80%)"
-      ]
-    },
-    {
-      "profileId": "unizd-klasicna-filologija-diplomski",
-      "ruleId": "unizd-klasicna-filologija-diplomski--margins",
-      "checkId": "margins",
-      "sourceId": "unizd-klasicna-filologija-upute-2021",
-      "snapshot": "data/sources/unizd/unizd-klasicna-filologija-upute-2021.pdf",
-      "quote": "Tip pisma (font): Times New Roman. Tijelo teksta: 12 tipografskih tocaka (fusnote 10). Lijeva i desna margina: 2,5 cm; gornja i donja: 2,5 cm. U tijelu teksta prored 1,5. Tekst je obostrano poravnat.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 80%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: tijelo teksta: 12 tipografskih tocaka)"
       ]
     },
     {
@@ -1309,7 +627,7 @@
       "snapshot": "data/sources/unizd/unizd-klasicna-filologija-upute-2021.pdf",
       "quote": "Tip pisma (font): Times New Roman. Tijelo teksta: 12 tipografskih tocaka (fusnote 10). Lijeva i desna margina: 2,5 cm; gornja i donja: 2,5 cm. U tijelu teksta prored 1,5. Tekst je obostrano poravnat.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 80%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: tijelo teksta: 12 tipografskih tocaka)"
       ]
     },
     {
@@ -1320,18 +638,7 @@
       "snapshot": "data/sources/unizd/unizd-klasicna-filologija-upute-2021.pdf",
       "quote": "Tip pisma (font): Times New Roman. Tijelo teksta: 12 tipografskih tocaka (fusnote 10). Lijeva i desna margina: 2,5 cm; gornja i donja: 2,5 cm. U tijelu teksta prored 1,5. Tekst je obostrano poravnat.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 80%)"
-      ]
-    },
-    {
-      "profileId": "unizd-klasicna-filologija-zavrsni",
-      "ruleId": "unizd-klasicna-filologija-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-klasicna-filologija-upute-2021",
-      "snapshot": "data/sources/unizd/unizd-klasicna-filologija-upute-2021.pdf",
-      "quote": "Tip pisma (font): Times New Roman. Tijelo teksta: 12 tipografskih tocaka (fusnote 10). Lijeva i desna margina: 2,5 cm; gornja i donja: 2,5 cm. U tijelu teksta prored 1,5. Tekst je obostrano poravnat.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 80%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: tijelo teksta: 12 tipografskih tocaka)"
       ]
     },
     {
@@ -1342,29 +649,7 @@
       "snapshot": "data/sources/unizd/unizd-klasicna-filologija-upute-2021.pdf",
       "quote": "Tip pisma (font): Times New Roman. Tijelo teksta: 12 tipografskih tocaka (fusnote 10). Lijeva i desna margina: 2,5 cm; gornja i donja: 2,5 cm. U tijelu teksta prored 1,5. Tekst je obostrano poravnat.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 80%)"
-      ]
-    },
-    {
-      "profileId": "unizd-klasicna-filologija-zavrsni",
-      "ruleId": "unizd-klasicna-filologija-zavrsni--justify",
-      "checkId": "justify",
-      "sourceId": "unizd-klasicna-filologija-upute-2021",
-      "snapshot": "data/sources/unizd/unizd-klasicna-filologija-upute-2021.pdf",
-      "quote": "Tip pisma (font): Times New Roman. Tijelo teksta: 12 tipografskih tocaka (fusnote 10). Lijeva i desna margina: 2,5 cm; gornja i donja: 2,5 cm. U tijelu teksta prored 1,5. Tekst je obostrano poravnat.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 80%)"
-      ]
-    },
-    {
-      "profileId": "unizd-klasicna-filologija-zavrsni",
-      "ruleId": "unizd-klasicna-filologija-zavrsni--margins",
-      "checkId": "margins",
-      "sourceId": "unizd-klasicna-filologija-upute-2021",
-      "snapshot": "data/sources/unizd/unizd-klasicna-filologija-upute-2021.pdf",
-      "quote": "Tip pisma (font): Times New Roman. Tijelo teksta: 12 tipografskih tocaka (fusnote 10). Lijeva i desna margina: 2,5 cm; gornja i donja: 2,5 cm. U tijelu teksta prored 1,5. Tekst je obostrano poravnat.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 80%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: tijelo teksta: 12 tipografskih tocaka)"
       ]
     },
     {
@@ -1375,7 +660,7 @@
       "snapshot": "data/sources/unizd/unizd-klasicna-filologija-upute-2021.pdf",
       "quote": "Tip pisma (font): Times New Roman. Tijelo teksta: 12 tipografskih tocaka (fusnote 10). Lijeva i desna margina: 2,5 cm; gornja i donja: 2,5 cm. U tijelu teksta prored 1,5. Tekst je obostrano poravnat.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 80%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: tijelo teksta: 12 tipografskih tocaka)"
       ]
     },
     {
@@ -1386,84 +671,7 @@
       "snapshot": "data/sources/unizd/unizd-pomorski-upute-zavrsni.pdf",
       "quote": "Rad treba pisati fontom Marriweather [sic - tipfeler u izvoru], velicine 10 pt, uz prored 1,5. Format rada je A4 (210x297mm). Rad treba pisati s obostranim poravnanjem (,,justify\").",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 70%)"
-      ]
-    },
-    {
-      "profileId": "unizd-pomorski-zavrsni",
-      "ruleId": "unizd-pomorski-zavrsni--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-pomorski-pravilnik-upute-zavrsni",
-      "snapshot": "data/sources/unizd/unizd-pomorski-upute-zavrsni.pdf",
-      "quote": "Rad treba pisati fontom Marriweather [sic - tipfeler u izvoru], velicine 10 pt, uz prored 1,5. Format rada je A4 (210x297mm). Rad treba pisati s obostranim poravnanjem (,,justify\").",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 70%)"
-      ]
-    },
-    {
-      "profileId": "unizd-pomorski-zavrsni",
-      "ruleId": "unizd-pomorski-zavrsni--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "unizd-pomorski-pravilnik-upute-zavrsni",
-      "snapshot": "data/sources/unizd/unizd-pomorski-upute-zavrsni.pdf",
-      "quote": "Rad treba pisati fontom Marriweather [sic - tipfeler u izvoru], velicine 10 pt, uz prored 1,5. Format rada je A4 (210x297mm). Rad treba pisati s obostranim poravnanjem (,,justify\").",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 70%)"
-      ]
-    },
-    {
-      "profileId": "unizd-pomorski-zavrsni",
-      "ruleId": "unizd-pomorski-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "unizd-pomorski-pravilnik-upute-zavrsni",
-      "snapshot": "data/sources/unizd/unizd-pomorski-upute-zavrsni.pdf",
-      "quote": "Rad treba pisati fontom Marriweather [sic - tipfeler u izvoru], velicine 10 pt, uz prored 1,5. Format rada je A4 (210x297mm). Rad treba pisati s obostranim poravnanjem (,,justify\").",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 70%)"
-      ]
-    },
-    {
-      "profileId": "unizd-pomorski-zavrsni",
-      "ruleId": "unizd-pomorski-zavrsni--justify",
-      "checkId": "justify",
-      "sourceId": "unizd-pomorski-pravilnik-upute-zavrsni",
-      "snapshot": "data/sources/unizd/unizd-pomorski-upute-zavrsni.pdf",
-      "quote": "Rad treba pisati fontom Marriweather [sic - tipfeler u izvoru], velicine 10 pt, uz prored 1,5. Format rada je A4 (210x297mm). Rad treba pisati s obostranim poravnanjem (,,justify\").",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 70%)"
-      ]
-    },
-    {
-      "profileId": "unizd-psihologija-diplomski",
-      "ruleId": "unizd-psihologija-diplomski--font",
-      "checkId": "font",
-      "sourceId": "unizd-psihologija-upute-diplomski",
-      "snapshot": "data/sources/unizd/unizd-psihologija-upute-diplomski.pdf",
-      "quote": "Velicina stranice je A4. Rubnice trebaju biti sljedece velicine: lijeva 30mm, desna 25mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 73%)"
-      ]
-    },
-    {
-      "profileId": "unizd-psihologija-diplomski",
-      "ruleId": "unizd-psihologija-diplomski--font-size",
-      "checkId": "font-size",
-      "sourceId": "unizd-psihologija-upute-diplomski",
-      "snapshot": "data/sources/unizd/unizd-psihologija-upute-diplomski.pdf",
-      "quote": "Velicina stranice je A4. Rubnice trebaju biti sljedece velicine: lijeva 30mm, desna 25mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 73%)"
-      ]
-    },
-    {
-      "profileId": "unizd-psihologija-diplomski",
-      "ruleId": "unizd-psihologija-diplomski--line-spacing",
-      "checkId": "line-spacing",
-      "sourceId": "unizd-psihologija-upute-diplomski",
-      "snapshot": "data/sources/unizd/unizd-psihologija-upute-diplomski.pdf",
-      "quote": "Velicina stranice je A4. Rubnice trebaju biti sljedece velicine: lijeva 30mm, desna 25mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 73%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: rad treba pisati s obostranim poravnanjem)"
       ]
     },
     {
@@ -1474,29 +682,7 @@
       "snapshot": "data/sources/unizd/unizd-psihologija-upute-diplomski.pdf",
       "quote": "Velicina stranice je A4. Rubnice trebaju biti sljedece velicine: lijeva 30mm, desna 25mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 73%)"
-      ]
-    },
-    {
-      "profileId": "unizd-psihologija-diplomski",
-      "ruleId": "unizd-psihologija-diplomski--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "unizd-psihologija-upute-diplomski",
-      "snapshot": "data/sources/unizd/unizd-psihologija-upute-diplomski.pdf",
-      "quote": "Velicina stranice je A4. Rubnice trebaju biti sljedece velicine: lijeva 30mm, desna 25mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 73%)"
-      ]
-    },
-    {
-      "profileId": "vef-diplomski",
-      "ruleId": "vef-diplomski--toc",
-      "checkId": "toc",
-      "sourceId": "vef-naputak-diplomski-2024",
-      "snapshot": "data/sources/vef/vef-naputak-diplomski-2024.pdf",
-      "quote": "Na sljedeoj stranici slijedi sadrzaj, prema primjeru",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 67%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: rad treba pisati fontom times new roman, velicine 12pt uz prored 1,5.)"
       ]
     },
     {
@@ -1507,18 +693,7 @@
       "snapshot": "data/sources/vuka/vuka-lovstvo-upute-2022.docx",
       "quote": "Rad ne moze biti pisan... znakovima manjim od 3 niti vecim od 4 mm (visina slova 12 tocaka). Preporuca se font \"Arial CE\" ili \"Times New Roman CE\". Rad se pise ili tiska samo na... papira formata A4.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 84%)"
-      ]
-    },
-    {
-      "profileId": "vuka-lovstvo-zavrsni",
-      "ruleId": "vuka-lovstvo-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "sourceId": "vuka-lovstvo-upute-2022",
-      "snapshot": "data/sources/vuka/vuka-lovstvo-upute-2022.docx",
-      "quote": "Rad ne moze biti pisan... znakovima manjim od 3 niti vecim od 4 mm (visina slova 12 tocaka). Preporuca se font \"Arial CE\" ili \"Times New Roman CE\". Rad se pise ili tiska samo na... papira formata A4.",
-      "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 84%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: rad se pise ili tiska samo)"
       ]
     },
     {
@@ -1529,7 +704,7 @@
       "snapshot": "data/sources/vuka/vuka-poslovni-upute.pdf",
       "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 37%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: (arial ili times new)"
       ]
     },
     {
@@ -1540,7 +715,7 @@
       "snapshot": "data/sources/vuka/vuka-poslovni-upute.pdf",
       "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 37%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: (arial ili times new)"
       ]
     },
     {
@@ -1551,7 +726,7 @@
       "snapshot": "data/sources/vuka/vuka-poslovni-upute.pdf",
       "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 37%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: (arial ili times new)"
       ]
     },
     {
@@ -1562,7 +737,7 @@
       "snapshot": "data/sources/vuka/vuka-poslovni-upute.pdf",
       "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 37%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: (arial ili times new)"
       ]
     },
     {
@@ -1573,7 +748,7 @@
       "snapshot": "data/sources/vuka/vuka-poslovni-upute.pdf",
       "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 37%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: (arial ili times new)"
       ]
     },
     {
@@ -1584,7 +759,7 @@
       "snapshot": "data/sources/vuka/vuka-poslovni-upute.pdf",
       "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 37%)"
+        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata (najdulje sidro: (arial ili times new)"
       ]
     },
     {
@@ -1595,7 +770,7 @@
       "snapshot": "data/sources/zsem/zsem-pravilnik-diplomski-2023.pdf",
       "quote": "Tehnicko ureenje rada. Pismo: Times New Roman. Font: 12. Poravnanje teksta: obostrano. Razmak izmeu redova: 1,5.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 69%)"
+        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 69%)"
       ]
     },
     {
@@ -1606,7 +781,7 @@
       "snapshot": "data/sources/zsem/zsem-pravilnik-diplomski-2023.pdf",
       "quote": "Tehnicko ureenje rada. Pismo: Times New Roman. Font: 12. Poravnanje teksta: obostrano. Razmak izmeu redova: 1,5.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 69%)"
+        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 69%)"
       ]
     },
     {
@@ -1617,7 +792,7 @@
       "snapshot": "data/sources/zsem/zsem-pravilnik-diplomski-2023.pdf",
       "quote": "Tehnicko ureenje rada. Pismo: Times New Roman. Font: 12. Poravnanje teksta: obostrano. Razmak izmeu redova: 1,5.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 69%)"
+        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 69%)"
       ]
     },
     {
@@ -1628,7 +803,7 @@
       "snapshot": "data/sources/zsem/zsem-pravilnik-diplomski-2023.pdf",
       "quote": "Tehnicko ureenje rada. Pismo: Times New Roman. Font: 12. Poravnanje teksta: obostrano. Razmak izmeu redova: 1,5.",
       "problems": [
-        "citat nije doslovan prijepis (podudaranje rijeci 69%)"
+        "citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci 69%)"
       ]
     }
   ]

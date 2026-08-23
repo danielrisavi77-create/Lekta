@@ -246,6 +246,56 @@ def numbers_match(full_text: str, quote: str) -> bool:
     return all(found(n) for n in wanted)
 
 
+# Doslovnost NIJE cilj; cilj je POKAZIVOST: da fakultet koji pita "gdje to pise u nasem dokumentu"
+# dobije recenicu koju moze provjeriti. Postotak podudaranja rijeci to ne mjeri. Kaznjava sazimanje
+# koje nista ne izmislja (izvor je natuknicki popis, citat ga spaja u recenicu), a istovremeno
+# PROPUSTA slucaj u kojem se 85 posto rijeci poklapa ali bas vrijednost lezi u parafrazi.
+#
+# Zato se od 2026-08-23 mjeri ovo: citat mora imati barem jedno DOSLOVNO sidro u izvoru, i vrijednost
+# koju pravilo boduje mora lezati U TOM SIDRU. Izmjereno na svih 148 tadasnjih nalaza: 75 ih je vec
+# zadovoljavalo taj uvjet (34 sa stvarnom vrijednoscu, 41 s logickom koja nema sto nositi), a provjera
+# ih je prijavljivala jer je mjerila krivu stvar.
+ANCHOR_MIN_WORDS = 4
+
+
+def literal_anchors(full_text: str, quote: str) -> list[str]:
+    """Najduzi neprekinuti ulomci citata koji DOSLOVNO stoje u izvoru.
+
+    Pohlepno slijeva: za svaku pocetnu rijec uzima najdulji nastavak koji je jos podniz izvora, pa
+    nastavlja iza njega. Kratki ulomci (ispod `ANCHOR_MIN_WORDS`) se ne broje, jer se niz od dvije
+    ceste rijeci nadje u svakom dokumentu i ne dokazuje nista.
+    """
+    folded = doc_index(full_text)["folded"]
+    words = fold(squash(quote)).split()
+    anchors: list[str] = []
+    start = 0
+    while start < len(words):
+        end = 0
+        for stop in range(len(words), start + ANCHOR_MIN_WORDS - 1, -1):
+            if " ".join(words[start:stop]) in folded:
+                end = stop
+                break
+        if end:
+            anchors.append(" ".join(words[start:end]))
+            start = end
+        else:
+            start += 1
+    return anchors
+
+
+def value_outside_anchors(value, anchors: list[str]) -> bool:
+    """Lezi li vrijednost pravila IZVAN svakog doslovnog sidra.
+
+    Logicka vrijednost (`true`) nema tekstualni oblik pa nema sto leziti; ondje je dovoljno da sidro
+    uopce postoji, jer ono dokazuje da odredba u izvoru stoji.
+    """
+    atoms = {fold(atom) for atom in value_atoms(value)}
+    if not atoms:
+        return False
+    return not any(any(atom in anchor for atom in atoms) for anchor in anchors)
+
+
+
 def quote_found(full_text: str, quote: str) -> bool:
     return quote_coverage(full_text, quote) >= COVERAGE_MIN and numbers_match(full_text, quote)
 
@@ -1042,12 +1092,20 @@ def main() -> None:
             if cov >= COVERAGE_MIN:
                 problems.append(f"BROJEVI iz citata ne stoje u odlomku koji citat opisuje (rijeci se poklapaju {cov:.0%})")
             else:
-                # Formulacija je 2026-08-22 promijenjena iz "citat se NE nalazi u dokumentu".
-                # Stara je citana kao optuzba da je pravilo izmisljeno, pa je jedna cijela sesija
-                # potrosena na 188 navodno izmisljenih pravila; citanje izvora pokazalo je da su
-                # citati UREDNI PRIJEPISI natucnickih popisa, sa svim vrijednostima na mjestu.
-                # Nalaz je o SLJEDIVOSTI (koliko je citat doslovan), ne o bodovanju.
-                problems.append(f"citat nije doslovan prijepis (podudaranje rijeci {cov:.0%})")
+                # Ne mjeri se POSTOTAK podudaranja nego POKAZIVOST: citat smije sazimati, ali mora
+                # imati doslovno sidro u izvoru i vrijednost mora lezati bas u njemu. Postotak je do
+                # 2026-08-23 kaznjavao vjerno sazimanje natucnickog popisa (75 od 148 nalaza) i
+                # istovremeno propustao citat kojemu vrijednost lezi u parafrazi.
+                anchors = literal_anchors(text, quote)
+                if not anchors:
+                    problems.append(
+                        f"citat nema nijedan doslovan ulomak u izvoru (podudaranje rijeci {cov:.0%})"
+                    )
+                elif value_outside_anchors(entry.get("value"), anchors):
+                    problems.append(
+                        "vrijednost pravila lezi u parafrazi, ne u doslovnom dijelu citata "
+                        f"(najdulje sidro: {max(anchors, key=len)[:90]})"
+                    )
 
         qualifier = hedge_on_own_clause(quote, entry.get("value"), check_id) if quote else None
         if qualifier:
