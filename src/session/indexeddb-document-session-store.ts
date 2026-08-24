@@ -1,6 +1,5 @@
 import {
   applyLocalDocumentSessionUpdate,
-  isLocalDocumentSessionId,
   sanitizeLocalDocumentSession,
   summarizeLocalDocumentSession,
   type LocalDocumentSessionStore,
@@ -187,7 +186,11 @@ export class IndexedDbDocumentSessionStore implements LocalDocumentSessionStore 
   }
 
   async put(session: LocalDocumentSessionV1): Promise<void> {
-    const sanitized = sanitizeLocalDocumentSession(session, this.currentTime());
+    await this.putAt(session, this.currentTime());
+  }
+
+  private async putAt(session: LocalDocumentSessionV1, now: number): Promise<void> {
+    const sanitized = sanitizeLocalDocumentSession(session, now);
     if (!sanitized) throw storeError('invalid-record');
     await this.runRequest('readwrite', (store) => store.put(sanitized));
   }
@@ -201,7 +204,7 @@ export class IndexedDbDocumentSessionStore implements LocalDocumentSessionStore 
       await this.delete(id);
       return null;
     }
-    if (rawHasAnalysis(raw) && !sanitized.workspace?.analysis) await this.put(sanitized);
+    if (rawHasAnalysis(raw) && !sanitized.workspace?.analysis) await this.putAt(sanitized, now);
     return sanitized;
   }
 
@@ -221,17 +224,16 @@ export class IndexedDbDocumentSessionStore implements LocalDocumentSessionStore 
   }
 
   async list(now = this.currentTime()): Promise<LocalDocumentSessionSummary[]> {
-    const records = await this.runRequest('readonly', (store) => store.getAll());
+    const entries = await this.readAllEntries();
     const summaries: LocalDocumentSessionSummary[] = [];
 
-    for (const raw of records) {
+    for (const { key, value: raw } of entries) {
       const sanitized = sanitizeLocalDocumentSession(raw, now);
       if (!sanitized) {
-        const id = typeof raw === 'object' && raw !== null ? (raw as { id?: unknown }).id : undefined;
-        if (typeof id === 'string' && isLocalDocumentSessionId(id)) await this.delete(id);
+        await this.deleteKey(key);
         continue;
       }
-      if (rawHasAnalysis(raw) && !sanitized.workspace?.analysis) await this.put(sanitized);
+      if (rawHasAnalysis(raw) && !sanitized.workspace?.analysis) await this.putAt(sanitized, now);
       summaries.push(summarizeLocalDocumentSession(sanitized));
     }
 
@@ -239,7 +241,11 @@ export class IndexedDbDocumentSessionStore implements LocalDocumentSessionStore 
   }
 
   async delete(id: string): Promise<void> {
-    await this.runRequest('readwrite', (store) => store.delete(id));
+    await this.deleteKey(id);
+  }
+
+  private async deleteKey(key: IDBValidKey): Promise<void> {
+    await this.runRequest('readwrite', (store) => store.delete(key));
   }
 
   async deleteExpired(now = this.currentTime()): Promise<number> {
@@ -256,9 +262,54 @@ export class IndexedDbDocumentSessionStore implements LocalDocumentSessionStore 
     const keys = await this.runRequest('readonly', (store) => (
       store.index(LOCAL_DOCUMENT_EXPIRY_INDEX).getAllKeys(range)
     ));
-    const uniqueKeys = [...new Set(keys.map(String))];
-    for (const key of uniqueKeys) await this.delete(key);
+    const uniqueKeys = [...new Set(keys)];
+    for (const key of uniqueKeys) await this.deleteKey(key);
     return uniqueKeys.length;
+  }
+
+  private async readAllEntries(): Promise<Array<{ key: IDBValidKey; value: unknown }>> {
+    const database = await this.database();
+
+    return new Promise((resolve, reject) => {
+      let transaction: IDBTransaction;
+      try {
+        transaction = database.transaction(LOCAL_DOCUMENT_STORE_NAME, 'readonly');
+      } catch (error) {
+        reject(storeError('transaction', error));
+        return;
+      }
+
+      const entries: Array<{ key: IDBValidKey; value: unknown }> = [];
+      let settled = false;
+      const fail = (code: 'request' | 'transaction', cause?: unknown) => {
+        if (settled) return;
+        settled = true;
+        reject(storeError(code, cause));
+      };
+
+      transaction.onerror = () => fail('transaction', transaction.error);
+      transaction.onabort = () => fail('transaction', transaction.error);
+      transaction.oncomplete = () => {
+        if (settled) return;
+        settled = true;
+        resolve(entries);
+      };
+
+      let request: IDBRequest<IDBCursorWithValue | null>;
+      try {
+        request = transaction.objectStore(LOCAL_DOCUMENT_STORE_NAME).openCursor();
+      } catch (error) {
+        fail('request', error);
+        return;
+      }
+      request.onerror = () => fail('request', request.error);
+      request.onsuccess = () => {
+        const cursor = request.result;
+        if (!cursor) return;
+        entries.push({ key: cursor.primaryKey, value: cursor.value });
+        cursor.continue();
+      };
+    });
   }
 
   private async database(): Promise<IDBDatabase> {

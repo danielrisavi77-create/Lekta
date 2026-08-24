@@ -108,6 +108,7 @@ describe('model lokalne dokumentne sesije', () => {
     expect(isLocalDocumentSessionId(SESSION_ID.toUpperCase())).toBe(false);
     expect(isLocalDocumentSessionId('8f55d977-3b42-1f00-98b5-9bb4e58db314')).toBe(false);
     expect(isLocalDocumentSessionId('8f55d977-3b42-4f00-78b5-9bb4e58db314')).toBe(false);
+    expect(isLocalDocumentSessionId(`${SESSION_ID}\n`)).toBe(false);
     expect(isLocalDocumentSessionId('../rad.docx')).toBe(false);
 
     expect(sessionFragment(SESSION_ID)).toBe(`#session=${SESSION_ID}`);
@@ -118,6 +119,7 @@ describe('model lokalne dokumentne sesije', () => {
     expect(parseSessionFragment(`#profile=fpzg&session=${SESSION_ID}`)).toBeNull();
     expect(parseSessionFragment(`#session=${SESSION_ID}&session=${SECOND_SESSION_ID}`)).toBeNull();
     expect(parseSessionFragment(`#session=${SESSION_ID.toUpperCase()}`)).toBeNull();
+    expect(parseSessionFragment(`#session=${SESSION_ID}\n`)).toBeNull();
     expect(() => sessionFragment('rad.docx')).toThrow(TypeError);
 
     const fragment = sessionFragment(SESSION_ID);
@@ -282,7 +284,14 @@ describe('MemoryDocumentSessionStore', () => {
   });
 });
 
-type FakeFailure = 'open' | 'blocked' | 'quota' | 'request' | 'transaction';
+type FakeFailure =
+  | 'open'
+  | 'blocked'
+  | 'quota'
+  | 'request'
+  | 'transaction'
+  | 'transaction-error'
+  | 'transaction-abort';
 
 class FakeRequest<T> {
   result!: T;
@@ -313,7 +322,19 @@ class FakeTransaction {
   }
 
   complete(): void {
-    queueMicrotask(() => this.oncomplete?.(new Event('complete')));
+    queueMicrotask(() => {
+      if (this.database.failure === 'transaction-error') {
+        this.error = new DOMException('Transakcijska greška', 'UnknownError');
+        this.onerror?.(new Event('error'));
+        return;
+      }
+      if (this.database.failure === 'transaction-abort') {
+        this.error = new DOMException('Transakcija je prekinuta', 'AbortError');
+        this.onabort?.(new Event('abort'));
+        return;
+      }
+      this.oncomplete?.(new Event('complete'));
+    });
   }
 }
 
@@ -327,9 +348,9 @@ class FakeIndex {
     const request = new FakeRequest<IDBValidKey[]>();
     const upper = (range as unknown as { upper: number }).upper;
     queueMicrotask(() => {
-      request.result = [...this.database.records.values()]
-        .filter((record) => Number((record as { expiresAt?: unknown }).expiresAt) <= upper)
-        .map((record) => String((record as { id: unknown }).id));
+      request.result = [...this.database.records.entries()]
+        .filter(([, record]) => Number((record as { expiresAt?: unknown }).expiresAt) <= upper)
+        .map(([key]) => key);
       request.onsuccess?.(new Event('success'));
       this.transaction.complete();
     });
@@ -380,7 +401,7 @@ class FakeObjectStore {
         request.onerror?.(new Event('error'));
         return;
       }
-      request.result = structuredClone(this.database.records.get(String(key)));
+      request.result = structuredClone(this.database.records.get(key));
       request.onsuccess?.(new Event('success'));
       this.transaction.complete();
     });
@@ -397,10 +418,39 @@ class FakeObjectStore {
     return request;
   }
 
+  openCursor(): FakeRequest<IDBCursorWithValue | null> {
+    const request = new FakeRequest<IDBCursorWithValue | null>();
+    const entries = [...this.database.records.entries()];
+    let index = 0;
+    const emit = () => {
+      queueMicrotask(() => {
+        if (index >= entries.length) {
+          request.result = null;
+          request.onsuccess?.(new Event('success'));
+          this.transaction.complete();
+          return;
+        }
+        const [key, value] = entries[index]!;
+        request.result = {
+          key,
+          primaryKey: key,
+          value: structuredClone(value),
+          continue: () => {
+            index += 1;
+            emit();
+          },
+        } as unknown as IDBCursorWithValue;
+        request.onsuccess?.(new Event('success'));
+      });
+    };
+    emit();
+    return request;
+  }
+
   delete(key: IDBValidKey): FakeRequest<undefined> {
     const request = new FakeRequest<undefined>();
     queueMicrotask(() => {
-      this.database.records.delete(String(key));
+      this.database.records.delete(key);
       request.result = undefined;
       request.onsuccess?.(new Event('success'));
       this.transaction.complete();
@@ -411,7 +461,7 @@ class FakeObjectStore {
 
 class FakeDatabase {
   readonly objectStoreNames = { contains: (name: string) => this.storeCreated && name === LOCAL_DOCUMENT_STORE_NAME };
-  readonly records = new Map<string, unknown>();
+  readonly records = new Map<IDBValidKey, unknown>();
   readonly transactionModes: IDBTransactionMode[] = [];
   storeCreated = false;
   indexCreated = false;
@@ -523,6 +573,47 @@ describe('IndexedDbDocumentSessionStore', () => {
     expect((fake.database.records.get(SESSION_ID) as LocalDocumentSessionV1).workspace?.analysis).toBeUndefined();
   });
 
+  it('list briše oštećene zapise po stvarnom primary keyju i kad vrijednost nema valjan UUID', async () => {
+    const fake = new FakeIndexedDbFactory();
+    const store = new IndexedDbDocumentSessionStore({
+      indexedDB: fake as unknown as IDBFactory,
+      keyRange: fakeKeyRange(),
+      now: () => CREATED_AT + 1_000,
+    });
+
+    await store.put(makeSession());
+    fake.database.records.set('malformed-key', { ...makeSession(), id: 'nije-uuid' });
+    fake.database.records.set(42, { ...makeSession(), id: 42 });
+    fake.database.records.set('missing-id-key', { ...makeSession(), id: undefined });
+
+    expect((await store.list()).map((summary) => summary.id)).toEqual([SESSION_ID]);
+    expect([...fake.database.records.keys()]).toEqual([SESSION_ID]);
+  });
+
+  it('sanitizaciju ne pretvara u invalid-record grešku ako sat prijeđe istek nakon read validacije', async () => {
+    let currentTime = CREATED_AT + 1_000;
+    const fake = new FakeIndexedDbFactory();
+    const store = new IndexedDbDocumentSessionStore({
+      indexedDB: fake as unknown as IDBFactory,
+      keyRange: fakeKeyRange(),
+      now: () => currentTime,
+    });
+    await store.put(makeSession());
+    fake.database.records.set(SESSION_ID, makeSession(SESSION_ID, {
+      workspace: {
+        stage: 'results',
+        analysis: { schemaVersion: 8 as 1, createdAt: CREATED_AT + 100, payload: null },
+      },
+    }));
+    currentTime = CREATED_AT + LOCAL_DOCUMENT_TTL_MS;
+
+    await expect(store.get(SESSION_ID, CREATED_AT + 2_000)).resolves.toMatchObject({
+      id: SESSION_ID,
+      workspace: { stage: 'results' },
+    });
+    expect((fake.database.records.get(SESSION_ID) as LocalDocumentSessionV1).workspace?.analysis).toBeUndefined();
+  });
+
   it.each([
     ['unavailable', undefined, 'unavailable'],
     ['blocked', new FakeIndexedDbFactory('blocked'), 'blocked'],
@@ -530,6 +621,8 @@ describe('IndexedDbDocumentSessionStore', () => {
     ['quota', new FakeIndexedDbFactory('quota'), 'quota'],
     ['request', new FakeIndexedDbFactory('request'), 'request'],
     ['transaction', new FakeIndexedDbFactory('transaction'), 'transaction'],
+    ['transaction error event', new FakeIndexedDbFactory('transaction-error'), 'transaction'],
+    ['transaction abort event', new FakeIndexedDbFactory('transaction-abort'), 'transaction'],
   ] as const)('vraća stabilnu tipiziranu grešku za %s bez localStorage fallbacka', async (_label, fake, code) => {
     const localStorageSpy = vi.spyOn(Storage.prototype, 'setItem');
     const store = new IndexedDbDocumentSessionStore({
