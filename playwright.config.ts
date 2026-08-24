@@ -60,7 +60,7 @@ export default defineConfig({
        * izvodi ISTI desktop scenarij drugi put: nula mobilne pokrivenosti, dvostruk trosak. A
        * trosak nije zanemariv, jer svaki njegov test pokrece punu analizu stvarnog `.docx`-a.
        */
-      testIgnore: [/repair-panel\.spec\.ts/],
+      testIgnore: [/repair-panel\.spec\.ts/, /desktop-flow\.spec\.ts/],
     },
     /**
      * FIREFOX I WEBKIT (audit P1-18). Do sada je release matrica bila samo Chromium (desktop +
@@ -75,8 +75,8 @@ export default defineConfig({
      * u gate nesto sto nitko nije vidio kako se ponasa. Vrte se u zasebnom `browser-matrix`
      * workflowu, vidljivo; u obavezne provjere se PROMICU tek nakon prvog zelenog prolaza.
      */
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] }, testMatch: /roadmap-v2\.spec\.ts/ },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] }, testMatch: /roadmap-v2\.spec\.ts/ },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] }, testMatch: /(roadmap-v2|desktop-flow)\.spec\.ts/ },
+    { name: 'webkit', use: { ...devices['Desktop Safari'] }, testMatch: /(roadmap-v2|desktop-flow)\.spec\.ts/ },
     { name: 'mobile-webkit', use: { ...devices['iPhone 13'] },
       testMatch: /(roadmap-v2|mobile-critical-path)\.spec\.ts/ },
   ],

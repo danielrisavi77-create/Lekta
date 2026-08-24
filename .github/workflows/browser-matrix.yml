@@ -5,6 +5,23 @@
 # se vrti SAMO kriticni put, ne cijela suite: cilj je dokazati da se do rezultata moze doci u
 # svakom pregledniku.
 #
+# PRVI STVARNI PROLAZ (2026-08-24, commit 84d6f7b): 8 proslo, dva nalaza.
+#
+#   1. `desktop zadrzava brz prijelaz` padao je na mobile-webkitu (`data-step` "1" umjesto "2").
+#      To je bila GRESKA U RASPOREDU PROJEKATA, ne kvar proizvoda: desktop i mobilni tok se stvarno
+#      razlikuju (desktop nakon uploada skace na korak 2, mobilni ostaje na 1). Desktop tok je
+#      zato odvojen u `desktop-flow.spec.ts` i vise ga mobilni projekti ne vrte.
+#
+#   2. OTVOREN NALAZ, FIREFOX: isti test je na Firefoxu bio FLAKY. Klik na `#stepToAnalyze`
+#      ponekad ne prebaci s koraka 2 na 3 (`data-step` ostaje "2"), a iz drugog pokusaja prolazi.
+#      Rukovatelj je `_profileConfirmed=true; updateProfile(); setWizardStep(3,true)`, dakle
+#      sinkroni niz u kojem bi iznimka iz `updateProfile()` progutala `setWizardStep`. Sumnja je na
+#      utrku s asinkronim ucitavanjem pravila profila, koja bi na sporijem pregledniku pogodila i
+#      stvarnog korisnika.
+#      NIJE POPRAVLJENO i to je namjerno: popravak utrke koji se ne moze odvrtjeti u Firefoxu bio
+#      bi nagadjanje. Zapisano je ovdje da se ne izgubi i da se ne pomijesa s gornjim, rijesenim
+#      nalazom. Ovo je upravo ono zbog cega matrica postoji.
+#
 # ZASTO ZASEBNO OD check.yml, A NE ODMAH U GATEU. Ovi preglednici jos nijednom nisu odvrtjeli ovu
 # suite. Staviti ih odmah u obavezne provjere znacilo bi blokirati svaki PR necim sto nitko nije
 # vidio kako se ponasa, a prvi crveni rezultat bi se onda rjesavao pod pritiskom. Ovako je nalaz
