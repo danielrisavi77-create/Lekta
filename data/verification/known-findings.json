@@ -152,7 +152,33 @@
       "decision": "left-scored",
       "decidedBy": "Claude Opus 5 (1M context)",
       "decidedAt": "2026-08-23",
-      "rationale": "Dodavanje BODOVANOG pravila mijenja ono po cemu se studenti ocjenjuju na zivim profilima, a CLAUDE.md za bodovano pravilo trazi potvrdjenu provenijenciju uz ljudski prolaz (`verifiedBy`, `confirmedVia: human-audit`), koji agent ne moze potpisati. Zato se ne dodaje nego zapisuje s TOCNOM zastavicom i doslovnom odredbom, da odluka bude jedan korak a ne nova istraga."
+      "rationale": "Dodavanje BODOVANOG pravila mijenja ono po cemu se studenti ocjenjuju na zivim profilima, a CLAUDE.md za bodovano pravilo trazi potvrdjenu provenijenciju uz ljudski prolaz (`verifiedBy`, `confirmedVia: human-audit`), koji agent ne moze potpisati. Zato se ne dodaje nego zapisuje s TOCNOM zastavicom i doslovnom odredbom, da odluka bude jedan korak a ne nova istraga. RAZRIJESENO 2026-08-24: vlasnik je odobrio da te odredbe postanu bodovane, pa su upisane kao pravila s punom provenijencijom (ruleEntry u nacrtu + zastavica u `rules` zivog profila). Novi ruleId-evi: hks-diplomski--footnote-size, hks-diplomski--footnote-spacing, ffzg-filozofija-diplomski--page-number-title-suppression, mef-doktorski--page-number-start-at-intro. Zapis OSTAJE jer se nalaz odnosi na odsjecen citat RODITELJSKOG pravila, koji i dalje stoji."
+    },
+    {
+      "ruleIds": [
+        "vuka-poslovni-diplomski--font-size",
+        "vuka-poslovni-zavrsni--font-size",
+        "vuka-poslovni-opci-akademski-rad--font-size"
+      ],
+      "finding": "citat odsjecen, recenica se nastavlja",
+      "evidence": "vuka-poslovni-upute.pdf: \"odabrati veličinu slova teksta 12 (Arial ili Times New Roman) za bilješke („fusnote“) odabrati veličinu slova 10, za naslove glava 16 bold\". Izuzece je stvarno i na ISTOJ osi: biljeske 10, naslovi glava 16, tijelo 12. Motor ima pojam `footnoteSize`, ali ga profil ne zapisuje; za velicinu NASLOVA pojma nema.",
+      "alsoNoted": "Nalaz se pojavio TEK nakon sto je citat 2026-08-23 prepisan rijecima izvora. Dok je citat bio parafraza (\"Visina teksta mora biti 12 tocaka razumljivog fonta\"), provjera nastavka se nije mogla ni izvesti. Doslovan citat je dakle otkrio odredbu koju je parafraza skrivala.",
+      "decision": "left-scored",
+      "decidedBy": "Claude Opus 5 (1M context)",
+      "decidedAt": "2026-08-23",
+      "rationale": "Ne cini pravilo prestrogim: motor mjeri DOMINANTNU velicinu, pa biljeske i naslovi ne mogu oboriti provjeru tijela teksta. Dodavanje bodovanog `footnoteSize` mijenja ono po cemu se studenti ocjenjuju i trazi ljudski prolaz, pa se biljezi s imenom zastavice umjesto da se doda. RAZRIJESENO 2026-08-24: vlasnik je odobrio, pa `footnoteSize: [10]` sada nose sva tri profila (vuka-poslovni-{diplomski,zavrsni,opci-akademski-rad}--footnote-size). Velicina NASLOVA (16 bold) ostaje nezapisana jer motor za nju nema pojam."
+    },
+    {
+      "ruleIds": [
+        "unizd-pomorski-zavrsni--font"
+      ],
+      "finding": "vrijednost pravila lezi u parafrazi",
+      "evidence": "unizd-pomorski-upute-zavrsni.pdf, odjeljak \"Izgled zavrsnog rada\", doslovno: \"- Rad treba pisati fontom Marriweather, velicine 10 pt, uz prored 1,5.\" Bodovana vrijednost je \"Merriweather\". Razlika je JEDNO SLOVO i namjerna je: font \"Marriweather\" ne postoji, a \"Merriweather\" je stvarna Googleova porodica pisama. Citat u profilu vec nosi oznaku \"[sic - tipfeler u izvoru]\", dakle odstupanje je bilo zapisano i prije ove revizije.",
+      "alsoNoted": "Ovo je jedini nalaz revizije u kojem bodovana vrijednost SVJESNO odstupa od doslovnog teksta izvora. Provjera ga zato ne moze prestati prijavljivati ni uz najbolji citat: vrijednost po definiciji ne lezi u izvoru. To je razlog za zapis, ne za popravak.",
+      "decision": "left-scored",
+      "decidedBy": "Claude Opus 5 (1M context)",
+      "decidedAt": "2026-08-23",
+      "rationale": "Bodovanje doslovnog \"Marriweather\" palo bi na SVAKOM radu, jer taj font ne postoji ni na jednom sustavu, pa bi student koji tocno slijedi uputu (instalira Merriweather) uvijek gubio bodove. To je isti kvar zbog kojeg je `unizd-pomorski` vec jednom demotiran u scored-value-drift reviziji, samo u drugom smjeru. Ispravak tipfelera je citanje izvora, ne izmisljanje pravila: mjeri se ista odredba istog izvora."
     }
   ]
 }

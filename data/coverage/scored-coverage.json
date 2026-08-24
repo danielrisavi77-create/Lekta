@@ -832,23 +832,23 @@
     },
     {
       "profileId": "ffos-povijest-diplomski",
-      "scoredMachineCheckable": 0,
-      "scoredTotal": 0,
-      "machineCheckable": 0,
+      "scoredMachineCheckable": 5,
+      "scoredTotal": 5,
+      "machineCheckable": 5,
       "advisory": 0,
-      "ratio": null,
-      "state": "no-rules-sourced",
-      "lastVerified": null
+      "ratio": 1,
+      "state": "scored",
+      "lastVerified": "2026-07-02"
     },
     {
       "profileId": "ffos-povijest-zavrsni",
-      "scoredMachineCheckable": 0,
-      "scoredTotal": 0,
-      "machineCheckable": 0,
+      "scoredMachineCheckable": 5,
+      "scoredTotal": 5,
+      "machineCheckable": 5,
       "advisory": 0,
-      "ratio": null,
-      "state": "no-rules-sourced",
-      "lastVerified": null
+      "ratio": 1,
+      "state": "scored",
+      "lastVerified": "2026-07-02"
     },
     {
       "profileId": "ffos-psihologija-diplomski",
@@ -958,7 +958,7 @@
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-07-28"
+      "lastVerified": "2026-08-24"
     },
     {
       "profileId": "ffri-povum-zavrsni",
@@ -968,7 +968,7 @@
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-07-28"
+      "lastVerified": "2026-08-24"
     },
     {
       "profileId": "ffri-psihologija-diplomski",
@@ -988,7 +988,7 @@
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-08-01"
+      "lastVerified": "2026-08-24"
     },
     {
       "profileId": "ffrz-bakalaureatski",
@@ -1022,21 +1022,21 @@
     },
     {
       "profileId": "ffst-diplomski",
-      "scoredMachineCheckable": 7,
-      "scoredTotal": 7,
+      "scoredMachineCheckable": 6,
+      "scoredTotal": 6,
       "machineCheckable": 7,
-      "advisory": 0,
-      "ratio": 1,
+      "advisory": 1,
+      "ratio": 0.8571428571428571,
       "state": "scored",
       "lastVerified": "2026-07-28"
     },
     {
       "profileId": "ffst-zavrsni",
-      "scoredMachineCheckable": 7,
-      "scoredTotal": 7,
+      "scoredMachineCheckable": 6,
+      "scoredTotal": 6,
       "machineCheckable": 7,
-      "advisory": 0,
-      "ratio": 1,
+      "advisory": 1,
+      "ratio": 0.8571428571428571,
       "state": "scored",
       "lastVerified": "2026-07-28"
     },
@@ -1062,13 +1062,13 @@
     },
     {
       "profileId": "ffzg-filozofija-diplomski",
-      "scoredMachineCheckable": 7,
-      "scoredTotal": 9,
-      "machineCheckable": 7,
+      "scoredMachineCheckable": 8,
+      "scoredTotal": 10,
+      "machineCheckable": 8,
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-08-24"
     },
     {
       "profileId": "ffzg-informacijske-zavrsni",
@@ -1732,13 +1732,13 @@
     },
     {
       "profileId": "hks-diplomski",
-      "scoredMachineCheckable": 6,
-      "scoredTotal": 6,
-      "machineCheckable": 6,
+      "scoredMachineCheckable": 9,
+      "scoredTotal": 9,
+      "machineCheckable": 9,
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-08-24"
     },
     {
       "profileId": "inf-diplomski",
@@ -2082,13 +2082,13 @@
     },
     {
       "profileId": "mef-doktorski",
-      "scoredMachineCheckable": 3,
-      "scoredTotal": 3,
-      "machineCheckable": 3,
+      "scoredMachineCheckable": 4,
+      "scoredTotal": 4,
+      "machineCheckable": 4,
       "advisory": 3,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-08-24"
     },
     {
       "profileId": "mefos-diplomski",
@@ -2597,7 +2597,7 @@
       "machineCheckable": 0,
       "advisory": 0,
       "ratio": null,
-      "state": "no-rules-sourced",
+      "state": "source-not-found",
       "lastVerified": null
     },
     {
@@ -2607,7 +2607,7 @@
       "machineCheckable": 0,
       "advisory": 0,
       "ratio": null,
-      "state": "no-rules-sourced",
+      "state": "source-not-found",
       "lastVerified": null
     },
     {
@@ -3152,81 +3152,81 @@
     },
     {
       "profileId": "unisb-btho-diplomski",
-      "scoredMachineCheckable": 5,
-      "scoredTotal": 5,
+      "scoredMachineCheckable": 4,
+      "scoredTotal": 4,
       "machineCheckable": 5,
-      "advisory": 0,
-      "ratio": 1,
+      "advisory": 1,
+      "ratio": 0.8,
       "state": "scored",
       "lastVerified": "2026-07-27"
     },
     {
       "profileId": "unisb-btho-zavrsni",
-      "scoredMachineCheckable": 5,
-      "scoredTotal": 5,
+      "scoredMachineCheckable": 4,
+      "scoredTotal": 4,
       "machineCheckable": 5,
-      "advisory": 0,
-      "ratio": 1,
+      "advisory": 1,
+      "ratio": 0.8,
       "state": "scored",
       "lastVerified": "2026-07-27"
     },
     {
       "profileId": "unisb-odhz-diplomski",
-      "scoredMachineCheckable": 5,
-      "scoredTotal": 5,
+      "scoredMachineCheckable": 4,
+      "scoredTotal": 4,
       "machineCheckable": 5,
-      "advisory": 0,
-      "ratio": 1,
+      "advisory": 1,
+      "ratio": 0.8,
       "state": "scored",
       "lastVerified": "2026-07-27"
     },
     {
       "profileId": "unisb-odhz-zavrsni",
-      "scoredMachineCheckable": 5,
-      "scoredTotal": 5,
+      "scoredMachineCheckable": 4,
+      "scoredTotal": 4,
       "machineCheckable": 5,
-      "advisory": 0,
-      "ratio": 1,
+      "advisory": 1,
+      "ratio": 0.8,
       "state": "scored",
       "lastVerified": "2026-07-27"
     },
     {
       "profileId": "unisb-sfsb-diplomski",
-      "scoredMachineCheckable": 5,
-      "scoredTotal": 5,
+      "scoredMachineCheckable": 4,
+      "scoredTotal": 4,
       "machineCheckable": 5,
-      "advisory": 0,
-      "ratio": 1,
+      "advisory": 1,
+      "ratio": 0.8,
       "state": "scored",
       "lastVerified": "2026-07-27"
     },
     {
       "profileId": "unisb-sfsb-zavrsni",
-      "scoredMachineCheckable": 5,
-      "scoredTotal": 5,
+      "scoredMachineCheckable": 4,
+      "scoredTotal": 4,
       "machineCheckable": 5,
-      "advisory": 0,
-      "ratio": 1,
+      "advisory": 1,
+      "ratio": 0.8,
       "state": "scored",
       "lastVerified": "2026-07-27"
     },
     {
       "profileId": "unisb-teho-diplomski",
-      "scoredMachineCheckable": 5,
-      "scoredTotal": 5,
+      "scoredMachineCheckable": 4,
+      "scoredTotal": 4,
       "machineCheckable": 5,
-      "advisory": 0,
-      "ratio": 1,
+      "advisory": 1,
+      "ratio": 0.8,
       "state": "scored",
       "lastVerified": "2026-07-27"
     },
     {
       "profileId": "unisb-teho-zavrsni",
-      "scoredMachineCheckable": 5,
-      "scoredTotal": 5,
+      "scoredMachineCheckable": 4,
+      "scoredTotal": 4,
       "machineCheckable": 5,
-      "advisory": 0,
-      "ratio": 1,
+      "advisory": 1,
+      "ratio": 0.8,
       "state": "scored",
       "lastVerified": "2026-07-27"
     },
@@ -3237,7 +3237,7 @@
       "machineCheckable": 0,
       "advisory": 0,
       "ratio": null,
-      "state": "no-rules-sourced",
+      "state": "source-not-found",
       "lastVerified": null
     },
     {
@@ -3247,7 +3247,7 @@
       "machineCheckable": 0,
       "advisory": 0,
       "ratio": null,
-      "state": "no-rules-sourced",
+      "state": "source-not-found",
       "lastVerified": null
     },
     {
@@ -3297,7 +3297,7 @@
       "machineCheckable": 0,
       "advisory": 0,
       "ratio": null,
-      "state": "no-rules-sourced",
+      "state": "source-not-found",
       "lastVerified": null
     },
     {
@@ -3307,7 +3307,7 @@
       "machineCheckable": 0,
       "advisory": 0,
       "ratio": null,
-      "state": "no-rules-sourced",
+      "state": "source-not-found",
       "lastVerified": null
     },
     {
@@ -3437,7 +3437,7 @@
       "machineCheckable": 0,
       "advisory": 0,
       "ratio": null,
-      "state": "no-rules-sourced",
+      "state": "source-not-found",
       "lastVerified": null
     },
     {
@@ -3447,7 +3447,7 @@
       "machineCheckable": 0,
       "advisory": 0,
       "ratio": null,
-      "state": "no-rules-sourced",
+      "state": "source-not-found",
       "lastVerified": null
     },
     {
@@ -3457,7 +3457,7 @@
       "machineCheckable": 0,
       "advisory": 0,
       "ratio": null,
-      "state": "no-rules-sourced",
+      "state": "source-not-found",
       "lastVerified": null
     },
     {
@@ -3467,7 +3467,7 @@
       "machineCheckable": 0,
       "advisory": 0,
       "ratio": null,
-      "state": "no-rules-sourced",
+      "state": "source-not-found",
       "lastVerified": null
     },
     {
@@ -3567,7 +3567,7 @@
       "machineCheckable": 0,
       "advisory": 0,
       "ratio": null,
-      "state": "no-rules-sourced",
+      "state": "source-not-found",
       "lastVerified": null
     },
     {
@@ -3587,7 +3587,7 @@
       "machineCheckable": 0,
       "advisory": 0,
       "ratio": null,
-      "state": "no-rules-sourced",
+      "state": "source-not-found",
       "lastVerified": null
     },
     {
@@ -3912,33 +3912,33 @@
     },
     {
       "profileId": "vuka-poslovni-diplomski",
-      "scoredMachineCheckable": 2,
-      "scoredTotal": 2,
-      "machineCheckable": 2,
+      "scoredMachineCheckable": 3,
+      "scoredTotal": 3,
+      "machineCheckable": 3,
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-07-27"
+      "lastVerified": "2026-08-24"
     },
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
-      "scoredMachineCheckable": 2,
-      "scoredTotal": 2,
-      "machineCheckable": 2,
+      "scoredMachineCheckable": 3,
+      "scoredTotal": 3,
+      "machineCheckable": 3,
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-07-27"
+      "lastVerified": "2026-08-24"
     },
     {
       "profileId": "vuka-poslovni-zavrsni",
-      "scoredMachineCheckable": 2,
-      "scoredTotal": 2,
-      "machineCheckable": 2,
+      "scoredMachineCheckable": 3,
+      "scoredTotal": 3,
+      "machineCheckable": 3,
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-07-27"
+      "lastVerified": "2026-08-24"
     },
     {
       "profileId": "vuka-prehrambena-zavrsni",
@@ -4101,8 +4101,8 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "scoredMachineCheckable": 2134,
-  "scoredTotal": 2207,
+  "scoredMachineCheckable": 2142,
+  "scoredTotal": 2215,
   "scoredNonMachineCheckable": 73,
   "nonMachineCheckableByCheckId": {
     "citation-style": 49,

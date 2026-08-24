@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "mev-diplomski--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -79,6 +82,9 @@
     },
     {
       "ruleId": "mev-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": [
         12
@@ -102,6 +108,9 @@
     },
     {
       "ruleId": "mev-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -123,6 +132,9 @@
     },
     {
       "ruleId": "mev-diplomski--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -144,6 +156,9 @@
     },
     {
       "ruleId": "mev-diplomski--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "agent-read",
       "checkId": "footnote-size",
       "value": [
         10

@@ -24,12 +24,13 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
-import { findScoredValueFindings } from '../src/verification/scored-value-binding';
+import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
 import { computeCoverageCell } from '../src/verification/coverage-report';
-import { collectCompileDiagnostics } from '../src/profiles/rule-compiler';
+import { collectCompileDiagnostics, compileEffectiveRules } from '../src/profiles/rule-compiler';
 import { computeBaseDemotedAdvisory, computeDemotedAdvisory } from '../src/profiles/advisory-demotion';
-import { draftRuleEntriesFor } from '../src/profiles/drafts-runtime';
-import driftArtifact from '../data/verification/scored-value-drift.json';
+import { demotionProtectedBy } from '../src/profiles/advisory-levers';
+import { DRAFT_PROFILE_IDS, draftRuleEntriesFor } from '../src/profiles/drafts-runtime';
+import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/profile-schema';
@@ -40,13 +41,27 @@ const NOW = '2026-06-30';
 const REAL_SOURCE_ID = 'pravo-upute-oblikovanje-2024';
 const REAL_SOURCE = SOURCES.find((s) => s.id === REAL_SOURCE_ID)!;
 
-/** Profil koji STVARNO ima raskorak, uzet iz artefakta, pa mutacija 18 ne moze biti prazna. */
-const DRIFTED_PROFILE_ID = Object.keys(
-  (driftArtifact as { demotedByProfile: Record<string, string[]> }).demotedByProfile,
-).sort()[0]!;
-const DRIFTED_AXIS = (driftArtifact as { demotedByProfile: Record<string, string[]> }).demotedByProfile[
-  DRIFTED_PROFILE_ID
-]![0]!;
+/**
+ * Profil na kojem se vjezba demotija zbog raskoraka.
+ *
+ * Do 2026-08-24 se uzimao iz artefakta, jer je izmisljen profil davao vakuumsku tvrdnju. Tog dana je
+ * broj raskoraka pao na NULU (svih 37 presudjeno), pa artefakt vise nema nijedan profil i tvrdnja bi
+ * se opet ispraznila, samo tise. Zato se raskorak sada PODMECE (`computeDemotedAdvisory` prima skup
+ * za testove), a profil je stvaran i ima bodovanu tvrdnju za tu os - bez toga base i puna verzija
+ * vracaju isto pa se zamjena base -> puna u generatoru ne bi vidjela.
+ */
+const DEMOTION_FIXTURE = (() => {
+  for (const id of DRAFT_PROFILE_IDS) {
+    const entries = draftRuleEntriesFor(id);
+    if (!entries.length) continue;
+    const base = computeBaseDemotedAdvisory({ id }, entries, SOURCES);
+    const axis = DEMOTABLE_CHECK_IDS.find(
+      (checkId) => !base.includes(checkId) && entries.some((e) => e.checkId === checkId && isRuleScored(e)),
+    );
+    if (axis) return { id, axis };
+  }
+  throw new Error('Nema profila s bodovanom demotabilnom osi: tvrdnja o demotiji bi bila prazna.');
+})();
 
 /** Potpuno valjana bodovana tvrdnja. Sve mutacije kvare TOCNO JEDNU stvar na njoj. */
 function goodEntry(over: Partial<RuleEntry> = {}): RuleEntry {
@@ -372,17 +387,106 @@ const MUTATIONS: Mutation[] = [
      * Zamjena base -> puna u generatoru time postaje vidljiva.
      */
     caught: () => {
-      const id = DRIFTED_PROFILE_ID;
+      const { id, axis } = DEMOTION_FIXTURE;
       const entries = draftRuleEntriesFor(id);
-      const axis = DRIFTED_AXIS;
       const base = computeBaseDemotedAdvisory({ id }, entries, SOURCES);
-      const full = computeDemotedAdvisory({ id }, entries, SOURCES);
+      const full = computeDemotedAdvisory({ id }, entries, SOURCES, { [id]: [axis] });
       return !base.includes(axis) && full.includes(axis);
     },
     cleanBefore: () => {
-      // Netrivijalnost: profil i os moraju stvarno postojati u artefaktu, inace je tvrdnja prazna.
-      const demoted = (driftArtifact as { demotedByProfile: Record<string, string[]> }).demotedByProfile;
-      return (demoted[DRIFTED_PROFILE_ID] ?? []).includes(DRIFTED_AXIS);
+      // Netrivijalnost: BEZ podmetnutog raskoraka puna verzija mora vratiti isto sto i base. Da to ne
+      // stoji, gornja tvrdnja bi prolazila zato sto os pada iz nekog drugog razloga.
+      const { id, axis } = DEMOTION_FIXTURE;
+      const entries = draftRuleEntriesFor(id);
+      const base = computeBaseDemotedAdvisory({ id }, entries, SOURCES);
+      const full = computeDemotedAdvisory({ id }, entries, SOURCES);
+      return !base.includes(axis) && !full.includes(axis);
+    },
+  },
+  // --- zastita od demotije: overlay katedre mora PROPISATI, ne samo spomenuti kljuc ----------------
+  {
+    id: 'poluge/gola-zastavica-ne-stiti',
+    axis: 'font',
+    imitates:
+      'overlay katedre s golom zastavicom (`checkFont: true`, bez fonta) ponistava demotiju a ne ' +
+      'propisuje nikakvu vrijednost, pa se dalje boduje bas ona vrijednost osnovnog profila koju ' +
+      'tvrdnja s citatom opovrgava',
+    caught: () => !demotionProtectedBy({ checkFont: true }).has('font'),
+    // Netrivijalnost: zastita mora RADITI kad overlay stvarno nosi vrijednost, inace tvrdnja iznad
+    // prolazi zato sto funkcija nikad nista ne stiti.
+    cleanBefore: () => demotionProtectedBy({ font: ['Arial'] }).has('font'),
+  },
+  {
+    id: 'poluge/ugasena-zastavica-ne-stiti',
+    imitates:
+      'overlay koji dimenziju GASI (`requireToc: false`) prije je stitio od demotije, pa je os ' +
+      'ispadala iz advisoryDimensions i sucelje je nije oznacilo kao informativnu',
+    caught: () => !demotionProtectedBy({ requireToc: false }).has('toc'),
+    cleanBefore: () => demotionProtectedBy({ requireToc: true }).has('toc'),
+  },
+  {
+    id: 'poluge/podprovjera-stiti-roditelja-stranice',
+    imitates:
+      'katedra propisuje polozaj broja stranice a ne i `requirePageNumbers`; otkad podprovjere vise ' +
+      'o roditelju, nezasticena os bi joj tiho ugasila bas taj zahtjev (3 boda) uz nula poruka',
+    caught: () => demotionProtectedBy({ pageNumberAlignment: 'right' }).has('page-numbers'),
+    cleanBefore: () => !demotionProtectedBy({}).has('page-numbers'),
+  },
+  {
+    id: 'poluge/podprovjera-stiti-roditelja-sadrzaj',
+    imitates:
+      'isti kvar na osi sadrzaja: `tocDetailedCheck` bez `requireToc` izgubio bi devet bodova ' +
+      'podprovjera sadrzaja koje katedra izricito trazi',
+    caught: () => demotionProtectedBy({ tocDetailedCheck: true }).has('toc'),
+    cleanBefore: () => !demotionProtectedBy({}).has('toc'),
+  },
+  {
+    id: 'vezanje/prazna-vrijednost-nije-bodovanje',
+    axis: 'font',
+    imitates:
+      'profil s `font: []`: normalizeCheckFlags takvu provjeru GASI, a vezanje ju je citalo kao ' +
+      'bodovanu, pa je prijavljivalo `unbacked` nad dimenzijom koju motor uopce ne gleda i time ' +
+      'demotiralo os koja i tako nije bodovala',
+    caught: () =>
+      findScoredValueFindings({ id: 'mut-prazno', rules: { font: [] }, ruleEntries: [] } as unknown as ThesisProfile, SOURCES, {
+        demotedCheckIds: new Set(),
+      }).filter((f) => f.checkId === 'font').length === 0,
+    cleanBefore: () =>
+      findScoredValueFindings(
+        { id: 'mut-puno', rules: { font: ['Times New Roman'] }, ruleEntries: [] } as unknown as ThesisProfile,
+        SOURCES,
+        { demotedCheckIds: new Set() },
+      ).some((f) => f.checkId === 'font' && f.kind === 'unbacked'),
+  },
+  {
+    id: 'kompajler/raspon-se-prosiruje-u-popis',
+    axis: 'font-size',
+    imitates:
+      'tvrdnja `{min:10,max:12}` upisana u `eff.size` doslovno: motor cita `profile.size.some(...)` ' +
+      'pa bi na objektu pukao cim `ruleEntries` postanu zivi, a usporedba je isti propis zapisan ' +
+      'kao raspon prijavljivala kao raskorak i demotirala velicinu pisma (fbf-specijalisticki)',
+    caught: () => {
+      const eff = compileEffectiveRules({
+        id: '_',
+        rules: {},
+        ruleEntries: [goodEntry({ checkId: 'font-size', value: { min: 10, max: 12 } as never })],
+      } as unknown as ThesisProfile) as Record<string, unknown>;
+      return Array.isArray(eff.size) && sameRuleValue(eff.size, [10, 11, 12]);
+    },
+    // Netrivijalnost u OBA smjera: obican popis prolazi netaknut, a raspon koji se ne smije
+    // prosiriti (decimalna granica, prevelik raspon) ostaje kakav jest umjesto da se izmisli popis.
+    cleanBefore: () => {
+      const of = (value: unknown) =>
+        (compileEffectiveRules({
+          id: '_',
+          rules: {},
+          ruleEntries: [goodEntry({ checkId: 'font-size', value: value as never })],
+        } as unknown as ThesisProfile) as Record<string, unknown>).size;
+      return (
+        sameRuleValue(of([11, 12]), [11, 12]) &&
+        !Array.isArray(of({ min: 10.5, max: 12 })) &&
+        !Array.isArray(of({ min: 1, max: 400 }))
+      );
     },
   },
 ];
@@ -406,7 +510,7 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
   it('N od N mutacija uhvaceno, i broj mutacija ne smije pasti', () => {
     const caught = MUTATIONS.filter((m) => m.cleanBefore() && m.caught());
     expect(caught).toHaveLength(MUTATIONS.length);
-    expect(MUTATIONS.length).toBeGreaterThanOrEqual(26);
+    expect(MUTATIONS.length).toBeGreaterThanOrEqual(32);
   });
 
   /**
@@ -417,7 +521,7 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
    */
   it('mutacije vjezbaju vise osi, ne samo font', () => {
     const axes = new Set(MUTATIONS.map((m) => m.axis).filter(Boolean));
-    expect([...axes].sort()).toEqual(['font', 'justify', 'margins', 'paper-size']);
+    expect([...axes].sort()).toEqual(['font', 'font-size', 'justify', 'margins', 'paper-size']);
   });
 
   it('isRuleScored je izvedena istina, ne pohranjena zastavica', () => {

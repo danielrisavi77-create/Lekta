@@ -108,6 +108,9 @@
     },
     {
       "ruleId": "alu-konzerviranje-diplomski--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -129,6 +132,9 @@
     },
     {
       "ruleId": "alu-konzerviranje-diplomski--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",

@@ -130,6 +130,9 @@
     },
     {
       "ruleId": "pmfst-zavrsni--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "page-count",
       "value": {
         "min": 20,

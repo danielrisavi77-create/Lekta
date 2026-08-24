@@ -59,6 +59,9 @@
     },
     {
       "ruleId": "vuka-sigurnost-diplomski--citation-style",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "citation-style",
       "value": "ieee",
       "category": "citation",

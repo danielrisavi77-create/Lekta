@@ -56,6 +56,9 @@
     },
     {
       "ruleId": "vkjs-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -79,6 +82,9 @@
     },
     {
       "ruleId": "vkjs-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -100,6 +106,9 @@
     },
     {
       "ruleId": "vkjs-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",

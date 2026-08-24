@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "vhzk-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -24,6 +27,9 @@
     },
     {
       "ruleId": "vhzk-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -74,6 +80,9 @@
     },
     {
       "ruleId": "vhzk-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "justify",
       "value": true,
       "category": "format",

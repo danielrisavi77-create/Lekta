@@ -179,6 +179,9 @@
     },
     {
       "ruleId": "effectus-zavrsni--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "citation-style",
       "value": "chicago-notes",
       "category": "citation",
@@ -198,6 +201,9 @@
     },
     {
       "ruleId": "effectus-zavrsni--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "required-sections",
       "value": [
         { "key": "sazetak", "label": "sažetak", "terms": ["sažetak", "sazetak"] },

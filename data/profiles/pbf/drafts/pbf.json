@@ -104,6 +104,9 @@
       },
       {
         "ruleId": "pbf-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -145,6 +148,9 @@
       },
       {
         "ruleId": "pbf-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           "naslovnica",
@@ -163,7 +169,7 @@
         "authority": "program-page",
         "sourceId": "pbf-upute-diplomski-2018",
         "sourcePage": "odjeljak 5.4. Glavni dijelovi diplomskog rada",
-        "quote": "Diplomski rad mora sadrzavati sljedea poglavlja ili dijelove",
+        "quote": "Diplomski rad mora sadržavati sljedeća poglavlja ili dijelove",
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",

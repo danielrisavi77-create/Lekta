@@ -107,6 +107,9 @@
       },
       {
         "ruleId": "efzg-zavrsni--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -126,6 +129,9 @@
       },
       {
         "ruleId": "efzg-zavrsni--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           "naslovnica",
@@ -155,6 +161,9 @@
       },
       {
         "ruleId": "efzg-zavrsni--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -380,6 +389,9 @@
       },
       {
         "ruleId": "efzg-diplomski--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           "naslovnica",
@@ -410,6 +422,9 @@
       },
       {
         "ruleId": "efzg-diplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -611,6 +626,9 @@
       },
       {
         "ruleId": "efzg-specijalisticki--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           "naslovnica",
@@ -641,6 +659,9 @@
       },
       {
         "ruleId": "efzg-specijalisticki--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",

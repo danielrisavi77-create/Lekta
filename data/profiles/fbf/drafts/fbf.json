@@ -132,6 +132,9 @@
       },
       {
         "ruleId": "fbf-specijalisticki--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "vancouver",
         "category": "citation",

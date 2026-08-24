@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "unizd-povijest-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "paper-size",
       "value": true,
       "category": "format",

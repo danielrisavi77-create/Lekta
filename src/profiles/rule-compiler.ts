@@ -38,11 +38,14 @@ export const COMPILED_CHECK_IDS = [
   'page-count',
   'toc',
   'page-numbers',
+  'page-number-title-suppression',
+  'page-number-start-at-intro',
   'paper-size',
   'justify',
   'footnote-font',
   'footnote-size',
   'footnote-spacing',
+  'footnote-justify',
   'heading-rules',
   'element-caption-rules',
   'bibliography-rules',
@@ -78,11 +81,37 @@ function clone<T>(value: T): T {
  */
 const PENDING_HUMAN_PASS: ReadonlySet<string> = new Set(['draft', 'ai-confirmed', 'needs-recheck', 'retired']);
 
+/**
+ * `{min, max}` cjelobrojni raspon -> popis svih vrijednosti u njemu, ili `null` ako to nije takav
+ * raspon. USKO namjerno: samo cjelobrojne granice i najvise 50 clanova. Decimalni korak nema
+ * jednoznacno prosirenje (10-12 pt je 10/11/12, ali 10-12 moglo bi ukljucivati i 10,5), a sirok
+ * raspon je znak da vrijednost nije nabrojiva pa se ne smije tiho pretvoriti u popis.
+ */
+function expandNumericRange(value: unknown): number[] | null {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const keys = Object.keys(value as object);
+  if (keys.length !== 2 || !keys.includes('min') || !keys.includes('max')) return null;
+  const { min, max } = value as { min: unknown; max: unknown };
+  if (!Number.isInteger(min) || !Number.isInteger(max)) return null;
+  const lo = min as number;
+  const hi = max as number;
+  if (hi < lo || hi - lo > 50) return null;
+  return Array.from({ length: hi - lo + 1 }, (_, i) => lo + i);
+}
+
 function applyEntry(eff: EffectiveRules, entry: RuleEntry): boolean {
   const value = entry.value as any;
   switch (entry.checkId) {
     case 'font': eff.font = value; return true;
-    case 'font-size': eff.size = value; return true;
+    case 'font-size':
+      // Raspon se PROSIRUJE u popis. Motor cita `profile.size.some(...)`, pa bi mu doslovan
+      // `{min:10,max:12}` (fbf-specijalisticki) pukao cim `ruleEntries` postanu zivi, sto je smjer
+      // migracije Option A. Dok su prazni, ovo nista ne mijenja (effectiveRules === rules).
+      // Uz to je zrcalo isti propis vec zapisalo kao `[10,11,12]`, pa je usporedba tvrdnje i
+      // bodovane vrijednosti prijavljivala raskorak ondje gdje se strane savrseno slazu, i
+      // demotirala velicinu pisma na profilu bez ijednog stvarnog neslaganja.
+      eff.size = expandNumericRange(value) ?? (value as never);
+      return true;
     case 'line-spacing': eff.spacing = value; return true;
     case 'margins':
       // Vrijednost smije nositi `minimum: true` (izvor kaze "najmanje 2,5 cm"). Zastavica se
@@ -113,6 +142,12 @@ function applyEntry(eff: EffectiveRules, entry: RuleEntry): boolean {
       return true;
     case 'toc': eff.requireToc = boolOf(value); return true;
     case 'page-numbers': eff.requirePageNumbers = boolOf(value); return true;
+    // Dvije PODPROVJERE numeriranja, svaka vrijedna 3 boda u `evaluatePageNumbers`. Postojale su u
+    // motoru i u `advisory-levers` (kao zastita od demotije), ali ih autorski sloj nije mogao
+    // izraziti: `page-numbers` postavlja samo `requirePageNumbers`. Bez ovoga se odredba tipa
+    // "naslovnu stranicu (...) ne numerirati" morala upisivati ravno u `rules`, mimo provenijencije.
+    case 'page-number-title-suppression': eff.checkTitlePageNumberSuppression = boolOf(value); return true;
+    case 'page-number-start-at-intro': eff.checkPageNumberStartAtIntro = boolOf(value); return true;
     case 'paper-size':
       // Naziv formata ('A3') ili lista naziva (['A3','A0']) -> eff.paperSizes (projektni radovi).
       // Boolean zadrzava naslijedeno ponasanje: true -> eff.requireA4 (standardni A4 tekst).
@@ -123,6 +158,10 @@ function applyEntry(eff: EffectiveRules, entry: RuleEntry): boolean {
     case 'footnote-font': eff.footnoteFont = value; return true;
     case 'footnote-size': eff.footnoteSize = value; return true;
     case 'footnote-spacing': eff.footnoteSpacing = value; return true;
+    // Cetvrta grana provjere "Oblikovanje fusnota" (uz font, velicinu i prored). Motor ju je citao
+    // kao `profile.footnoteJustify` i pet je profila vec nosi, ali autorski sloj ju nije mogao
+    // izraziti. NE dodaje bodove: sve cetiri grane ulaze u JEDNU provjeru (`footFmtOk`).
+    case 'footnote-justify': eff.footnoteJustify = boolOf(value); return true;
     case 'heading-rules': eff.headingRules = value; return true;
     case 'element-caption-rules': eff.elementCaptionRules = value; return true;
     case 'bibliography-rules': eff.bibliographyRules = value; return true;

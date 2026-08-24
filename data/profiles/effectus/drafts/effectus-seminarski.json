@@ -201,6 +201,9 @@
     },
     {
       "ruleId": "effectus-seminarski--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "required-sections",
       "value": [
         { "key": "sadrzaj", "label": "sadržaj", "terms": ["sadržaj", "sadrzaj"] },
@@ -225,6 +228,9 @@
     },
     {
       "ruleId": "effectus-seminarski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "citation-style",
       "value": "chicago-notes",
       "category": "citation",

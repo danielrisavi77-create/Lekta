@@ -108,6 +108,9 @@
     },
     {
       "ruleId": "veleknin-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",

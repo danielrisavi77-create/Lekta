@@ -170,6 +170,9 @@
     },
     {
       "ruleId": "unin-biomedicina-zavrsni--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "citation-style",
       "value": "apa",
       "category": "citation",

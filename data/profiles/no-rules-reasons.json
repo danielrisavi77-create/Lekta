@@ -16,6 +16,102 @@
       "evidence": "Adversarijalni prolaz (docs/PLAN_POTPUNA_POKRIVENOST.md, 'Pilot na FER-u: 4 od 5 tvrdnji OBORENO'). Mehanicki je sve bilo uredno: 7/7 citata doslovnih, nijedna kriva stranica, nijedan izmisljen. Greske su bile u TUMACENJU. Izvor `fer-upute-diplomski-zemris` sam sebe odredjuje ('Ovaj rad daje preporuke za pisanje...'), autor je jedan nastavnik (2013.), dakle najniza razina autoriteta po hijerarhiji iz CLAUDE.md. Dokument ima TRI razine modaliteta (mora/ne smije : treba : preporuceni/neka bude) i nijedna od pet tvrdnji nije u najjacoj.",
       "harmIfScored": "font=Times New Roman prijavilo bi kao gresku SUKLADAN kod (mora biti Courier New); font-size=12 prijavilo bi sukladne naslove (14/13/12), natpise (9/10) i tablice; margins=2,5 uniformno KODIRA NESUKLADAN dokument kao sukladan jer lijeva margina mora biti veca zbog uveza; line-spacing=1,2 obara rad s 1,0 ili 1,4, a 1,2 uopce nije propis nego opis predloska.",
       "note": "Vrijedi za dokument ZEMRIS-a, ne za cijeli FER: `fer-doktorski` ima vlastiti izvor (`fer-formalno-oblikovanje-doktorski-2012`) i SEST bodovanih pravila. Ovo nije tvrdnja da FER nema pravila, nego da ih OVAJ izvor ne propisuje."
+    },
+    "unizd-anglistika-diplomski": {
+      "state": "source-not-found",
+      "decidedBy": "Daniel Risavi",
+      "decidedAt": "2026-08-24",
+      "evidence": "Stranica \"UPUTE O IZGLEDU RADOVA I POPRATNOJ DOKUMENTACIJI\" (anglistika.unizd.hr) ne sadrzi pravila oblikovanja nego upucuje na istu sveucilisnu stranicu s obrascima. Potragu je proveo agent po uputi vlasnika; odluku o prestanku bodovanja donio je vlasnik.",
+      "harmIfScored": "Vrijednosti koje su se bodovale nisu bile pravilo fakulteta nego OPCI BASELINE: font [Times New Roman, Arial, Calibri], velicina [12, 11], prored 1,5, margine 2,5 cm sa svih strana - isti skup na svih dvanaest profila. Rad koji slijedi neku drugu, jednako valjanu praksu svoga odsjeka gubio je bodove na standardu koji mu nitko nije propisao, a sucelje je to prikazivalo kao provjeru njegova fakulteta.",
+      "note": "Reverzibilno: cim se nadje objavljen izvor, tvrdnje se upisu i bodovanje se vraca. Ovo NIJE tvrdnja da fakultet nema pravila, nego da ih za tu vrstu rada nije javno objavio."
+    },
+    "unizd-anglistika-zavrsni": {
+      "state": "source-not-found",
+      "decidedBy": "Daniel Risavi",
+      "decidedAt": "2026-08-24",
+      "evidence": "Stranica \"UPUTE O IZGLEDU RADOVA I POPRATNOJ DOKUMENTACIJI\" (anglistika.unizd.hr) ne sadrzi pravila oblikovanja nego upucuje na istu sveucilisnu stranicu s obrascima. Potragu je proveo agent po uputi vlasnika; odluku o prestanku bodovanja donio je vlasnik.",
+      "harmIfScored": "Vrijednosti koje su se bodovale nisu bile pravilo fakulteta nego OPCI BASELINE: font [Times New Roman, Arial, Calibri], velicina [12, 11], prored 1,5, margine 2,5 cm sa svih strana - isti skup na svih dvanaest profila. Rad koji slijedi neku drugu, jednako valjanu praksu svoga odsjeka gubio je bodove na standardu koji mu nitko nije propisao, a sucelje je to prikazivalo kao provjeru njegova fakulteta.",
+      "note": "Reverzibilno: cim se nadje objavljen izvor, tvrdnje se upisu i bodovanje se vraca. Ovo NIJE tvrdnja da fakultet nema pravila, nego da ih za tu vrstu rada nije javno objavio."
+    },
+    "unizd-ekonomija-diplomski": {
+      "state": "source-not-found",
+      "decidedBy": "Daniel Risavi",
+      "decidedAt": "2026-08-24",
+      "evidence": "Odjel objavljuje \"UPUTE ZA IZRADU SEMINARSKOG RADA\" koje oblikovanje propisuju IZRICITO za seminarski rad (\"Tekst seminarskog rada pise se fontom Times New Roman, velicine slova 12 uz prored 1,5 i normalne margine\"). Za zavrsni i diplomski rad takav dokument nije objavljen. Potragu je proveo agent po uputi vlasnika; odluku o prestanku bodovanja donio je vlasnik.",
+      "harmIfScored": "Vrijednosti koje su se bodovale nisu bile pravilo fakulteta nego OPCI BASELINE: font [Times New Roman, Arial, Calibri], velicina [12, 11], prored 1,5, margine 2,5 cm sa svih strana - isti skup na svih dvanaest profila. Rad koji slijedi neku drugu, jednako valjanu praksu svoga odsjeka gubio je bodove na standardu koji mu nitko nije propisao, a sucelje je to prikazivalo kao provjeru njegova fakulteta.",
+      "note": "Reverzibilno: cim se nadje objavljen izvor, tvrdnje se upisu i bodovanje se vraca. Ovo NIJE tvrdnja da fakultet nema pravila, nego da ih za tu vrstu rada nije javno objavio."
+    },
+    "unizd-ekonomija-zavrsni": {
+      "state": "source-not-found",
+      "decidedBy": "Daniel Risavi",
+      "decidedAt": "2026-08-24",
+      "evidence": "Odjel objavljuje \"UPUTE ZA IZRADU SEMINARSKOG RADA\" koje oblikovanje propisuju IZRICITO za seminarski rad (\"Tekst seminarskog rada pise se fontom Times New Roman, velicine slova 12 uz prored 1,5 i normalne margine\"). Za zavrsni i diplomski rad takav dokument nije objavljen. Potragu je proveo agent po uputi vlasnika; odluku o prestanku bodovanja donio je vlasnik.",
+      "harmIfScored": "Vrijednosti koje su se bodovale nisu bile pravilo fakulteta nego OPCI BASELINE: font [Times New Roman, Arial, Calibri], velicina [12, 11], prored 1,5, margine 2,5 cm sa svih strana - isti skup na svih dvanaest profila. Rad koji slijedi neku drugu, jednako valjanu praksu svoga odsjeka gubio je bodove na standardu koji mu nitko nije propisao, a sucelje je to prikazivalo kao provjeru njegova fakulteta.",
+      "note": "Reverzibilno: cim se nadje objavljen izvor, tvrdnje se upisu i bodovanje se vraca. Ovo NIJE tvrdnja da fakultet nema pravila, nego da ih za tu vrstu rada nije javno objavio."
+    },
+    "unizd-kroatistika-diplomski": {
+      "state": "source-not-found",
+      "decidedBy": "Daniel Risavi",
+      "decidedAt": "2026-08-24",
+      "evidence": "Stranica Odjela za kroatistiku (kroatistika.unizd.hr/zavrsni-i-diplomski-radovi) ne propisuje oblikovanje nego upucuje na Sveucilisnu knjiznicu, a ondje su SAMO obrasci naslovnice i korica, bez pravila o fontu, velicini, proredu i marginama. Potragu je proveo agent po uputi vlasnika; odluku o prestanku bodovanja donio je vlasnik.",
+      "harmIfScored": "Vrijednosti koje su se bodovale nisu bile pravilo fakulteta nego OPCI BASELINE: font [Times New Roman, Arial, Calibri], velicina [12, 11], prored 1,5, margine 2,5 cm sa svih strana - isti skup na svih dvanaest profila. Rad koji slijedi neku drugu, jednako valjanu praksu svoga odsjeka gubio je bodove na standardu koji mu nitko nije propisao, a sucelje je to prikazivalo kao provjeru njegova fakulteta.",
+      "note": "Reverzibilno: cim se nadje objavljen izvor, tvrdnje se upisu i bodovanje se vraca. Ovo NIJE tvrdnja da fakultet nema pravila, nego da ih za tu vrstu rada nije javno objavio."
+    },
+    "unizd-kroatistika-zavrsni": {
+      "state": "source-not-found",
+      "decidedBy": "Daniel Risavi",
+      "decidedAt": "2026-08-24",
+      "evidence": "Stranica Odjela za kroatistiku (kroatistika.unizd.hr/zavrsni-i-diplomski-radovi) ne propisuje oblikovanje nego upucuje na Sveucilisnu knjiznicu, a ondje su SAMO obrasci naslovnice i korica, bez pravila o fontu, velicini, proredu i marginama. Potragu je proveo agent po uputi vlasnika; odluku o prestanku bodovanja donio je vlasnik.",
+      "harmIfScored": "Vrijednosti koje su se bodovale nisu bile pravilo fakulteta nego OPCI BASELINE: font [Times New Roman, Arial, Calibri], velicina [12, 11], prored 1,5, margine 2,5 cm sa svih strana - isti skup na svih dvanaest profila. Rad koji slijedi neku drugu, jednako valjanu praksu svoga odsjeka gubio je bodove na standardu koji mu nitko nije propisao, a sucelje je to prikazivalo kao provjeru njegova fakulteta.",
+      "note": "Reverzibilno: cim se nadje objavljen izvor, tvrdnje se upisu i bodovanje se vraca. Ovo NIJE tvrdnja da fakultet nema pravila, nego da ih za tu vrstu rada nije javno objavio."
+    },
+    "unizd-lingvistika-diplomski": {
+      "state": "source-not-found",
+      "decidedBy": "Daniel Risavi",
+      "decidedAt": "2026-08-24",
+      "evidence": "Stranica dokumenata Odjela za lingvistiku nudi \"objedinjeni obrazac za pisanje zavrsnog-diplomskog rada\" (naslovnica i popratni obrasci) i APA standarde za citiranje, ali ne dokument koji propisuje font, velicinu, prored ili margine. Potragu je proveo agent po uputi vlasnika; odluku o prestanku bodovanja donio je vlasnik.",
+      "harmIfScored": "Vrijednosti koje su se bodovale nisu bile pravilo fakulteta nego OPCI BASELINE: font [Times New Roman, Arial, Calibri], velicina [12, 11], prored 1,5, margine 2,5 cm sa svih strana - isti skup na svih dvanaest profila. Rad koji slijedi neku drugu, jednako valjanu praksu svoga odsjeka gubio je bodove na standardu koji mu nitko nije propisao, a sucelje je to prikazivalo kao provjeru njegova fakulteta.",
+      "note": "Reverzibilno: cim se nadje objavljen izvor, tvrdnje se upisu i bodovanje se vraca. Ovo NIJE tvrdnja da fakultet nema pravila, nego da ih za tu vrstu rada nije javno objavio."
+    },
+    "unizd-lingvistika-zavrsni": {
+      "state": "source-not-found",
+      "decidedBy": "Daniel Risavi",
+      "decidedAt": "2026-08-24",
+      "evidence": "Stranica dokumenata Odjela za lingvistiku nudi \"objedinjeni obrazac za pisanje zavrsnog-diplomskog rada\" (naslovnica i popratni obrasci) i APA standarde za citiranje, ali ne dokument koji propisuje font, velicinu, prored ili margine. Potragu je proveo agent po uputi vlasnika; odluku o prestanku bodovanja donio je vlasnik.",
+      "harmIfScored": "Vrijednosti koje su se bodovale nisu bile pravilo fakulteta nego OPCI BASELINE: font [Times New Roman, Arial, Calibri], velicina [12, 11], prored 1,5, margine 2,5 cm sa svih strana - isti skup na svih dvanaest profila. Rad koji slijedi neku drugu, jednako valjanu praksu svoga odsjeka gubio je bodove na standardu koji mu nitko nije propisao, a sucelje je to prikazivalo kao provjeru njegova fakulteta.",
+      "note": "Reverzibilno: cim se nadje objavljen izvor, tvrdnje se upisu i bodovanje se vraca. Ovo NIJE tvrdnja da fakultet nema pravila, nego da ih za tu vrstu rada nije javno objavio."
+    },
+    "unizd-rusistika-diplomski": {
+      "state": "source-not-found",
+      "decidedBy": "Daniel Risavi",
+      "decidedAt": "2026-08-24",
+      "evidence": "Pretragom unizd.hr nije nadjen dokument Odjela za rusistiku koji propisuje oblikovanje zavrsnog ili diplomskog rada. Potragu je proveo agent po uputi vlasnika; odluku o prestanku bodovanja donio je vlasnik.",
+      "harmIfScored": "Vrijednosti koje su se bodovale nisu bile pravilo fakulteta nego OPCI BASELINE: font [Times New Roman, Arial, Calibri], velicina [12, 11], prored 1,5, margine 2,5 cm sa svih strana - isti skup na svih dvanaest profila. Rad koji slijedi neku drugu, jednako valjanu praksu svoga odsjeka gubio je bodove na standardu koji mu nitko nije propisao, a sucelje je to prikazivalo kao provjeru njegova fakulteta.",
+      "note": "Reverzibilno: cim se nadje objavljen izvor, tvrdnje se upisu i bodovanje se vraca. Ovo NIJE tvrdnja da fakultet nema pravila, nego da ih za tu vrstu rada nije javno objavio."
+    },
+    "unizd-sociologija-zavrsni": {
+      "state": "source-not-found",
+      "decidedBy": "Daniel Risavi",
+      "decidedAt": "2026-08-24",
+      "evidence": "Uputa unizd-sociologija-upute-dipr-2014 postoji i pokriva DIPLOMSKI rad, ali se izricito zove \"Upute za prijavu i izradu diplomskoga rada\" i kaze da je diplomski rad \"jedini nacin ostvarivanja zavrsnosti na diplomskom studiju sociologije\". O zavrsnom radu ne govori nista. Potragu je proveo agent po uputi vlasnika; odluku o prestanku bodovanja donio je vlasnik.",
+      "harmIfScored": "Vrijednosti koje su se bodovale nisu bile pravilo fakulteta nego OPCI BASELINE: font [Times New Roman, Arial, Calibri], velicina [12, 11], prored 1,5, margine 2,5 cm sa svih strana - isti skup na svih dvanaest profila. Rad koji slijedi neku drugu, jednako valjanu praksu svoga odsjeka gubio je bodove na standardu koji mu nitko nije propisao, a sucelje je to prikazivalo kao provjeru njegova fakulteta.",
+      "note": "Reverzibilno: cim se nadje objavljen izvor, tvrdnje se upisu i bodovanje se vraca. Ovo NIJE tvrdnja da fakultet nema pravila, nego da ih za tu vrstu rada nije javno objavio."
+    },
+    "pravst-diplomski": {
+      "state": "source-not-found",
+      "decidedBy": "Daniel Risavi",
+      "decidedAt": "2026-08-24",
+      "evidence": "Stranica dokumentacije Pravnog fakulteta u Splitu nosi samo proceduralne akte (Pravilnik o pohrani i objavi ocjenskih radova, Izjava o pohrani, Obrazac prijave teme). Nijedan dokument ne propisuje oblikovanje teksta. Potragu je proveo agent po uputi vlasnika; odluku o prestanku bodovanja donio je vlasnik.",
+      "harmIfScored": "Vrijednosti koje su se bodovale nisu bile pravilo fakulteta nego OPCI BASELINE: font [Times New Roman, Arial, Calibri], velicina [12, 11], prored 1,5, margine 2,5 cm sa svih strana - isti skup na svih dvanaest profila. Rad koji slijedi neku drugu, jednako valjanu praksu svoga odsjeka gubio je bodove na standardu koji mu nitko nije propisao, a sucelje je to prikazivalo kao provjeru njegova fakulteta.",
+      "note": "Reverzibilno: cim se nadje objavljen izvor, tvrdnje se upisu i bodovanje se vraca. Ovo NIJE tvrdnja da fakultet nema pravila, nego da ih za tu vrstu rada nije javno objavio."
+    },
+    "pravst-zavrsni": {
+      "state": "source-not-found",
+      "decidedBy": "Daniel Risavi",
+      "decidedAt": "2026-08-24",
+      "evidence": "Stranica dokumentacije Pravnog fakulteta u Splitu nosi samo proceduralne akte (Pravilnik o pohrani i objavi ocjenskih radova, Izjava o pohrani, Obrazac prijave teme). Nijedan dokument ne propisuje oblikovanje teksta. Potragu je proveo agent po uputi vlasnika; odluku o prestanku bodovanja donio je vlasnik.",
+      "harmIfScored": "Vrijednosti koje su se bodovale nisu bile pravilo fakulteta nego OPCI BASELINE: font [Times New Roman, Arial, Calibri], velicina [12, 11], prored 1,5, margine 2,5 cm sa svih strana - isti skup na svih dvanaest profila. Rad koji slijedi neku drugu, jednako valjanu praksu svoga odsjeka gubio je bodove na standardu koji mu nitko nije propisao, a sucelje je to prikazivalo kao provjeru njegova fakulteta.",
+      "note": "Reverzibilno: cim se nadje objavljen izvor, tvrdnje se upisu i bodovanje se vraca. Ovo NIJE tvrdnja da fakultet nema pravila, nego da ih za tu vrstu rada nije javno objavio."
     }
   }
 }

@@ -167,6 +167,9 @@
     },
     {
       "ruleId": "kif-specijalisticki--word-count",
+      "modality": "prohibition",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "word-count",
       "value": { "min": 6000 },
       "category": "scope",

@@ -44,11 +44,18 @@ def fold(text: str) -> str:
 # FER tvrdnji nije bila u najjacoj. Kad bi `treba` upalo u `obligation`, tocno taj nalaz bi nestao.
 # Zato `directive` stoji zasebno: obvezujuca formulacija koja NIJE najjaca.
 MODALITY_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
-    ("prohibition", re.compile(r"\b(ne\s+smij\w*|zabranj\w*|nije\s+dopust\w*|ne\s+koristi\s+se)\b")),
+    # `ne moz\w*` je dodan 2026-08-24 uz `ne smij\w*`: sedam jedinica (medri, fpzg, kif, vuka) nosi
+    # "rad NE MOZE sadrzavati manje od 15 niti vise od 50 stranica" ili "opseg NE SMIJE biti manji od
+    # 4000 rijeci". Bez toga se palio samo `moze`/`smije` iz permission uzorka, pa je ZABRANA citana
+    # kao DOPUSTENJE, i to bas na tvrdim granicama opsega.
+    ("prohibition", re.compile(r"\b(ne\s+smij\w*|ne\s+moz\w*|zabranj\w*|nije\s+dopust\w*|ne\s+koristi\s+se)\b")),
     ("obligation", re.compile(r"\b(mora\w*|duzn\w*|obvez\w*|nuzno\s+je|obavezn\w*)\b")),
     ("condition", re.compile(r"\b(ukoliko|ako\s+se|u\s+slucaju|ovisno\s+o|po\s+dogovoru)\b")),
     ("recommendation", re.compile(r"\b(preporu\w*|pozeljno|u\s+pravilu|okvirno|obicno|neka\s+bude|primjerice|npr)\b")),
-    ("permission", re.compile(r"\b(moze\w*|smije\w*|dopusteno\s+je)\b")),
+    # NEGATIVNI POGLED UNAZAD: bez njega se `moze`/`smije` pali i unutar `ne moze`/`ne smije`, pa
+    # ista recenica dobiva i prohibition i permission, a jedinica zavrsava u skupini "ublazavanje"
+    # koja ceka covjeka. Ulaz je normaliziran na jedan razmak (fold), pa je `(?<!ne )` dovoljan.
+    ("permission", re.compile(r"\b(?<!ne )(moze\w*|smije\w*|dopusteno\s+je)\b")),
     ("directive", re.compile(r"\b(treba\w*|potrebno\s+je|pise\s+se|pisu\s+se|koristi\s+se|iznosi|opremljen\w*)\b")),
 ]
 
@@ -186,8 +193,27 @@ def propose_scope(quote: str, value, check_id: str) -> tuple[str, list[str]]:
     return natural, named
 
 
+# IZVEDENI `scored`, isti uvjet kao `isRuleScored` u src/verification/verification-gate.ts.
+# Pohranjena zastavica `scored` NIJE mjerodavna: 275 pravila zadovoljava izvedeni uvjet (dakle veze
+# motor kroz computePublishedRules, demotiju i coverage matricu) a nema `scored: true` u podacima.
+# Dok je izbor isao po zastavici, tih 275 pravila NIKAD nije ni dobilo prijedlog modaliteta, pa su
+# trajno sjedila u zaostatku iako je dio njih strojno razrjesiv. Isti kvar je adversarijalni prolaz
+# nasao u `claim-fields.test.ts` i `verify-source-hashes.mjs`; ovo je treca njegova pojava.
+OFFICIAL_AUTHORITIES = {"binding", "program-page", "general"}
+
+
+def rule_is_scored(entry: dict) -> bool:
+    return (
+        entry.get("status") == "verified"
+        and entry.get("authority") in OFFICIAL_AUTHORITIES
+        and entry.get("sourceId") is not None
+        and entry.get("sourcePage") is not None
+        and entry.get("quote") is not None
+    )
+
+
 def collect_scored() -> list[dict]:
-    """Sva `verified` + `scored` pravila iz staging draftova, s profilom uz svako."""
+    """Sva pravila koja VEZU MOTOR (izvedeni scored), s profilom uz svako."""
     rows: list[dict] = []
     for path in sorted(glob.glob(os.path.join(ROOT, "data", "profiles", "*", "drafts", "*.json"))):
         try:
@@ -198,12 +224,48 @@ def collect_scored() -> list[dict]:
         groups = data["profiles"].items() if "profiles" in data else [(data.get("profileId"), data.get("entries", []))]
         for profile_id, entries in groups:
             for entry in entries or []:
-                if entry.get("status") == "verified" and entry.get("scored"):
+                if rule_is_scored(entry):
                     rows.append({"profileId": profile_id, "entry": entry})
     return rows
 
 
+# --- NEGATIVNE KONTROLE ---------------------------------------------------------------------
+#
+# Gard bez dokaza da grize ne racuna se (CLAUDE.md). Ovdje se dokazuje da uzorci modaliteta
+# razlikuju ZABRANU od DOPUSTENJA, jer je upravo to bio kvar: `moze`/`smije` palilo se i unutar
+# `ne moze`/`ne smije`, pa je sedam jedinica s tvrdim granicama opsega zavrsilo kao "ublazavanje".
+# Kontrole idu u OBA smjera: negacija mora dati prohibition I NE SMIJE dati permission, a obicno
+# dopustenje mora i dalje dati permission.
+MODALITY_SELFTEST: list[tuple[str, str]] = [
+    ("Diplomski rad ne moze sadrzavati manje od 15 niti vise od 50 stranica.", "prohibition"),
+    ("Opseg ne smije biti manji od 4000 rijeci", "prohibition"),
+    ("Ne smije sadrzavati manje od 10.000 ni vise od 12.000 rijeci", "prohibition"),
+    ("Rad ne moze biti pisan znakovima manjim od 3 mm", "prohibition"),
+    ("Diplomski rad moze imati najmanje 25, a najvise 50 stranica.", "permission"),
+    ("vrsta slova (font) moze biti Times New Roman ili Arial", "permission"),
+    ("Zaostale izvore mozete konzultirati ovu stranicu", "permission"),
+    ("Rad mora imati najmanje 30 stranica.", "obligation"),
+    ("Preporuca se font Arial ili Times New Roman.", "recommendation"),
+    ("Rad treba pisati fontom Times New Roman.", "directive"),
+]
+
+
+def selftest() -> int:
+    """Vraca broj promasaja. Nula znaci da uzorci razlikuju zabranu od dopustenja."""
+    failures = 0
+    for quote, expected in MODALITY_SELFTEST:
+        marks = [name for name, rx in MODALITY_PATTERNS if rx.search(fold(quote))]
+        both = "permission" in marks and "prohibition" in marks
+        if expected not in marks or both:
+            failures += 1
+            print(f"  PROMASAJ ocekivano={expected} dobiveno={marks}: {quote[:70]}")
+    print(f"negativne kontrole modaliteta: {len(MODALITY_SELFTEST)} slucajeva, promasaja: {failures}")
+    return failures
+
+
 def main() -> None:
+    if "--selftest" in sys.argv:
+        raise SystemExit(1 if selftest() else 0)
     out_flag = sys.argv.index("--json") if "--json" in sys.argv else -1
     out_path = (
         sys.argv[out_flag + 1]
@@ -226,10 +288,16 @@ def main() -> None:
                 "sourcePage": entry.get("sourcePage"),
                 "ruleIds": [],
                 "profileIds": [],
+                "writtenSources": [],
             },
         )
         unit["ruleIds"].append(entry.get("ruleId"))
         unit["profileIds"].append(row["profileId"])
+        # Sto je VEC upisano. Bez ovoga popis i dalje trazi covjeka za jedinicu koja je rijesena, pa
+        # "382 ceka" znaci nesto drugo nego sto pise. Zapis ostaje u JSON-u (potpun trag), a iz
+        # worklista ispada, jer worklist je POPIS POSLA, ne arhiva.
+        if entry.get("modality"):
+            unit["writtenSources"].append(entry.get("modalitySource") or "bez izvora")
 
     proposals = []
     stats = Counter()
@@ -274,6 +342,11 @@ def main() -> None:
                 "proposedScope": scope,
                 "modalityMarks": marks,
                 "namedScopes": named,
+                "writtenModality": {
+                    "count": len(unit["writtenSources"]),
+                    "sources": sorted(set(unit["writtenSources"])),
+                },
+                "resolved": len(unit["writtenSources"]) == len(unit["ruleIds"]),
                 "needsHuman": bool(reasons),
                 "reasons": reasons,
             }
@@ -299,8 +372,14 @@ def main() -> None:
     # vec pokazao ispravnim (68 pravila = 53 jedinice, 43 = 8 jedinica).
     worklist = os.path.join(ROOT, "data", "verification", "modality-worklist.md")
     by_reason: dict[str, list[dict]] = {}
+    resolved = 0
     for proposal in proposals:
         if not proposal["needsHuman"]:
+            continue
+        # Rijesena jedinica (SVA njezina pravila vec nose modalitet) ispada iz popisa posla. Zapis
+        # ostaje u JSON-u: ovo je popis onoga sto CEKA, a ne arhiva onoga sto je razlog nekad bio.
+        if proposal["resolved"]:
+            resolved += 1
             continue
         key = proposal["reasons"][0].split(":")[0].split("(")[0].strip()
         by_reason.setdefault(key, []).append(proposal)
@@ -309,10 +388,13 @@ def main() -> None:
         "",
         "GENERIRANO (`npm run claim-modality`). Ne uredjuj rucno.",
         "",
-        "Upisuje se u `ruleEntry` uz `modalitySource: \"human\"`. Strojni prijedlog (`mechanical`) NIKAD",
-        "ne nosi ublazen modalitet, pa je sve ublazeno ovdje.",
+        "Upisuje se u `ruleEntry`. Tri razine izvora: `mechanical` (strojni uzorak), `agent-read`",
+        "(procitan citat, `npm run claim-scope`) i `human` (ljudski potpis). UBLAZEN modalitet",
+        "(recommendation/permission/condition) smije upisati SAMO `human`, pa je sve ublazeno ovdje.",
         "",
         f"Jedinica: {sum(len(v) for v in by_reason.values())}. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.",
+        f"Jos {resolved} jedinica imalo je razlog za covjeka, ali su im sva pravila u medjuvremenu",
+        "upisana, pa ne cekaju nista; ostaju u `docs/generated/claim-modality-proposals.json`.",
         "",
     ]
     for reason, group in sorted(by_reason.items(), key=lambda kv: -len(kv[1])):

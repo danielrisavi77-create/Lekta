@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "oss-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -161,6 +164,9 @@
     },
     {
       "ruleId": "oss-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "required-sections",
       "value": [
         {

@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "aspira-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -26,6 +29,9 @@
     },
     {
       "ruleId": "aspira-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": [
         12
@@ -73,6 +79,9 @@
     },
     {
       "ruleId": "aspira-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -94,6 +103,9 @@
     },
     {
       "ruleId": "aspira-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -115,6 +127,9 @@
     },
     {
       "ruleId": "aspira-diplomski--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "agent-read",
       "checkId": "footnote-size",
       "value": [
         10
@@ -136,6 +151,9 @@
     },
     {
       "ruleId": "aspira-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",

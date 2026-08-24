@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "unidu-komunikologija-zavrsni--font",
+      "modality": "permission",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "font",
       "value": [
         "Times New Roman",
@@ -77,6 +80,9 @@
     },
     {
       "ruleId": "unidu-komunikologija-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -127,6 +133,9 @@
     },
     {
       "ruleId": "unidu-komunikologija-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -148,6 +157,9 @@
     },
     {
       "ruleId": "unidu-komunikologija-zavrsni--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "citation-style",
       "value": "harvard",
       "category": "citation",

@@ -1,0 +1,245 @@
+{
+  "note": "Odluke o tvrdnjama koje su bile VERIFICIRANE, a motor ih nije citao (nalaz `unapplied`). Zrcalo je bilo prazno, ne krivo, pa ih `apply-drift-decision` nije vidio. Odluku je donio vlasnik 2026-08-24; provjeru tvrdnji (status, lokator, citat nosi vrijednost) proveo je agent.",
+  "decidedBy": "Daniel Risavi",
+  "decidedAt": "2026-08-24",
+  "decisions": [
+    {
+      "ruleId": "pravo-opci-pravni-akademski-rad--page-numbers",
+      "profileId": "pravo-opci-pravni-akademski-rad",
+      "checkId": "page-numbers",
+      "value": true,
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta"
+    },
+    {
+      "ruleId": "pravo-socijalni-opci-akademski-rad--margins",
+      "profileId": "pravo-socijalni-opci-akademski-rad",
+      "checkId": "margins",
+      "value": {
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3.5,
+        "minimum": false
+      },
+      "sourceId": "pravo-scsr-upute-zavrsni-2024",
+      "sourcePage": "str. 8, Upute za oblikovanje teksta, t.1"
+    },
+    {
+      "ruleId": "pravo-specijalisticki-pravni-opci--font",
+      "profileId": "pravo-specijalisticki-pravni-opci",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta"
+    },
+    {
+      "ruleId": "pravo-specijalisticki-pravni-opci--font-size",
+      "profileId": "pravo-specijalisticki-pravni-opci",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta"
+    },
+    {
+      "ruleId": "pravo-specijalisticki-pravni-opci--line-spacing",
+      "profileId": "pravo-specijalisticki-pravni-opci",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta"
+    },
+    {
+      "ruleId": "pravo-specijalisticki-pravni-opci--justify",
+      "profileId": "pravo-specijalisticki-pravni-opci",
+      "checkId": "justify",
+      "value": true,
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta"
+    },
+    {
+      "ruleId": "pravo-specijalisticki-pravni-opci--page-numbers",
+      "profileId": "pravo-specijalisticki-pravni-opci",
+      "checkId": "page-numbers",
+      "value": true,
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta"
+    },
+    {
+      "ruleId": "pravo-doktorski-pravne-znanosti--font",
+      "profileId": "pravo-doktorski-pravne-znanosti",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta"
+    },
+    {
+      "ruleId": "pravo-doktorski-pravne-znanosti--font-size",
+      "profileId": "pravo-doktorski-pravne-znanosti",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta"
+    },
+    {
+      "ruleId": "pravo-doktorski-pravne-znanosti--line-spacing",
+      "profileId": "pravo-doktorski-pravne-znanosti",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta"
+    },
+    {
+      "ruleId": "pravo-doktorski-pravne-znanosti--justify",
+      "profileId": "pravo-doktorski-pravne-znanosti",
+      "checkId": "justify",
+      "value": true,
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta"
+    },
+    {
+      "ruleId": "pravo-doktorski-pravne-znanosti--page-numbers",
+      "profileId": "pravo-doktorski-pravne-znanosti",
+      "checkId": "page-numbers",
+      "value": true,
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta"
+    },
+    {
+      "ruleId": "fpzpu-zavrsni--line-spacing",
+      "profileId": "fpzpu-zavrsni",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "sourceId": "fpzpu-pravilnik-zavrsni-2019-procisceni",
+      "sourcePage": "Clanak 5, stavak 1"
+    },
+    {
+      "ruleId": "fpzpu-diplomski--line-spacing",
+      "profileId": "fpzpu-diplomski",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "sourceId": "fpzpu-pravilnik-zavrsni-2019-procisceni",
+      "sourcePage": "Clanak 5, stavak 1"
+    },
+    {
+      "ruleId": "alu-slikarstvo-diplomski--font-size",
+      "profileId": "alu-slikarstvo-diplomski",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "sourceId": "alu-pravilnik-diplomski-2014",
+      "sourcePage": "Clanak 32 (Slikarski odsjek)"
+    },
+    {
+      "ruleId": "alu-kiparstvo-diplomski--font-size",
+      "profileId": "alu-kiparstvo-diplomski",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "sourceId": "alu-pravilnik-diplomski-2014",
+      "sourcePage": "Clanak 39, 48 (Kiparski odsjek)"
+    },
+    {
+      "ruleId": "alu-konzerviranje-diplomski--font",
+      "profileId": "alu-konzerviranje-diplomski",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "sourceId": "alu-okiru-upute-2015",
+      "sourcePage": "Clanak 92. Pravilnika o diplomskom radu i diplomskom ispitu ALU (implementirano ovom Uputom)"
+    },
+    {
+      "ruleId": "alu-konzerviranje-diplomski--font-size",
+      "profileId": "alu-konzerviranje-diplomski",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "sourceId": "alu-okiru-upute-2015",
+      "sourcePage": "Clanak 92. Pravilnika o diplomskom radu i diplomskom ispitu ALU (implementirano ovom Uputom)"
+    },
+    {
+      "ruleId": "alu-konzerviranje-diplomski--line-spacing",
+      "profileId": "alu-konzerviranje-diplomski",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "sourceId": "alu-okiru-upute-2015",
+      "sourcePage": "Clanak 92. Pravilnika o diplomskom radu i diplomskom ispitu ALU (implementirano ovom Uputom)"
+    },
+    {
+      "ruleId": "alu-konzerviranje-diplomski--margins",
+      "profileId": "alu-konzerviranje-diplomski",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "sourceId": "alu-okiru-upute-2015",
+      "sourcePage": "Clanak 92. Pravilnika o diplomskom radu i diplomskom ispitu ALU (implementirano ovom Uputom)"
+    },
+    {
+      "ruleId": "alu-konzerviranje-diplomski--justify",
+      "profileId": "alu-konzerviranje-diplomski",
+      "checkId": "justify",
+      "value": true,
+      "sourceId": "alu-okiru-upute-2015",
+      "sourcePage": "Clanak 92. Pravilnika o diplomskom radu i diplomskom ispitu ALU (implementirano ovom Uputom)"
+    },
+    {
+      "ruleId": "efst-opci-akademski-rad--margins",
+      "profileId": "efst-opci-akademski-rad",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "sourceId": "efst-upute-studentski-radovi-2013",
+      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\""
+    },
+    {
+      "ruleId": "efos-opci-akademski-rad--margins",
+      "profileId": "efos-opci-akademski-rad",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "sourceId": "efos-upute-studentski-2023",
+      "sourcePage": "Upute, travanj 2023"
+    },
+    {
+      "ruleId": "pravri-opci-akademski-rad--margins",
+      "profileId": "pravri-opci-akademski-rad",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "minimum": false
+      },
+      "sourceId": "pravri-upute-radovi-2023",
+      "sourcePage": "2.1. Normativ stranice / Kartica teksta"
+    }
+  ]
+}

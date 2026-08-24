@@ -130,6 +130,9 @@
     },
     {
       "ruleId": "securus-zavrsni--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "citation-style",
       "value": "apa",
       "category": "citation",

@@ -6,6 +6,9 @@
     "arh-diplomski": [
       {
         "ruleId": "arh-diplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -25,6 +28,9 @@
       },
       {
         "ruleId": "arh-diplomski--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           "naslovnica",

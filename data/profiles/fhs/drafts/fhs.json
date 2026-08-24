@@ -6,6 +6,9 @@
     "fhs-diplomski": [
       {
         "ruleId": "fhs-diplomski--font",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -241,6 +244,9 @@
     "fhs-zavrsni": [
       {
         "ruleId": "fhs-zavrsni--font",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "font",
         "value": [
           "Times New Roman"

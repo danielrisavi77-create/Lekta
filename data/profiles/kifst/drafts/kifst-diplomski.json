@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "kifst-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -103,6 +106,9 @@
     },
     {
       "ruleId": "kifst-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",

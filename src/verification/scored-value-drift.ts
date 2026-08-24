@@ -34,8 +34,12 @@ export interface CitationStyleFinding {
   sourcePage: string | null;
 }
 
+/** Kanarinac artefakta; vrijednost je prikovana i u data/classification.json (self-test). */
+export const DRIFT_KANARINAC = 'LEKTA-KANARINAC-PROPRIETARY-DATA-43381f0d95ad';
+
 export interface ScoredValueDriftArtifact {
   note: string;
+  kanarinac: string;
   schemaVersion: 1;
   counts: Record<string, number>;
   /** profileId -> checkId-jevi koje demotija gasi zbog raskoraka. Cita ga advisory-demotion.ts. */
@@ -112,6 +116,10 @@ export function buildScoredValueDrift(
 
   return {
     note: 'GENERIRANO. Ne uredjuj rucno. Regeneriraj s `npm run scored-value-drift`.',
+    // Kanarinac privatnog sloja (data/classification.json): emitira ga GENERATOR, ne
+    // rucni upis, pa prezivljava svaki regen. Artefakt je data/verification/** forbidden;
+    // pojava ovog niza u dist/ = curenje (scripts/verify-dist-classification.mjs).
+    kanarinac: DRIFT_KANARINAC,
     schemaVersion: 1,
     counts,
     demotedByProfile: Object.fromEntries(Object.entries(demotedByProfile).sort()),

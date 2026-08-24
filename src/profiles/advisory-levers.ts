@@ -35,18 +35,43 @@ export const DEMOTION: Array<[string, (b: ScoreBase) => void]> = [
 export const DEMOTABLE_CHECK_IDS: readonly string[] = DEMOTION.map(([id]) => id);
 
 /**
- * checkId -> kljucevi profila kojima se ta dimenzija PROPISUJE. Sluzi da se prepozna kad neki
- * drugi, specificniji izvor (danas: profil katedre) tu dimenziju izricito trazi.
+ * checkId -> je li overlay tu dimenziju stvarno PROPISAO.
+ *
+ * Predikat, ne popis kljuceva, i razlika je bitna. Do 2026-08-23 se zastita okidala na PRISUTNOST
+ * kljuca, pa je overlay s golom zastavicom (`checkFont: true`, bez `font`) ponistavao demotiju a da
+ * nije propisao nikakvu vrijednost: bodovala se i dalje vrijednost OSNOVNOG profila, upravo ona koju
+ * je demotija ugasila jer joj tvrdnja proturjeci. Zastavica kaze "provjeravaj", ne "evo vrijednosti",
+ * pa sama po sebi ne moze nadjacati verifikacijski status osnovnog izvora.
+ *
+ * Danasnji podaci nisu pogodjeni (sve tri katedre nose vrijednost: `sociologija` font/size/spacing/
+ * justify, sve tri requireToc/requirePageNumbers), pa je ovo zatvaranje latentne rupe, ne popravak
+ * zatecenog kvara. Zabiljezeno kao takvo namjerno: gard koji se uvodi bez izmjerene stete lako se
+ * kasnije "pojednostavi" natrag.
+ *
+ * Za osi koje nose vrijednost trazi se VRIJEDNOST; za booleove osi zastavica postavljena na `true`
+ * (ondje zastavica JEST vrijednost). `checkFont: false` vise ne stiti nista, i to je tocno: overlay
+ * koji dimenziju gasi nema sto braniti od demotije koja radi isto.
  */
-export const DEMOTION_RULE_KEYS: Readonly<Record<string, readonly string[]>> = {
-  'font': ['font', 'checkFont'],
-  'font-size': ['size', 'checkSize'],
-  'line-spacing': ['spacing', 'checkSpacing'],
-  'margins': ['margins', 'checkMargins'],
-  'justify': ['justify', 'checkJustify'],
-  'paper-size': ['paperSizes', 'requireA4'],
-  'toc': ['requireToc'],
-  'page-numbers': ['requirePageNumbers'],
+const hasValue = (v: unknown): boolean =>
+  v != null && (!Array.isArray(v) || v.length > 0) && (typeof v !== 'object' || Object.keys(v as object).length > 0);
+
+export const DEMOTION_PRESCRIBED_BY: Readonly<Record<string, (overlay: ScoreBase) => boolean>> = {
+  'font': (o) => hasValue(o.font),
+  'font-size': (o) => hasValue(o.size),
+  'line-spacing': (o) => hasValue(o.spacing),
+  'margins': (o) => hasValue(o.margins),
+  'justify': (o) => o.justify === true,
+  'paper-size': (o) => hasValue(o.paperSizes) || o.requireA4 === true,
+  // Podprovjere PROPISUJU roditeljsku os: poravnanje broja stranice koji ne postoji nema smisla, kao
+  // ni font stavki sadrzaja bez sadrzaja. Bez ovoga bi gate uveden 2026-08-23 u structure.ts i
+  // auditDetailedToc (podprovjere se ne boduju dok se roditelj ne boduje) tiho ugasio bas ono sto
+  // katedra izricito trazi, a zastita postoji da se to ne dogodi.
+  'toc': (o) => o.requireToc === true || o.tocDetailedCheck === true,
+  'page-numbers': (o) =>
+    o.requirePageNumbers === true ||
+    hasValue(o.pageNumberAlignment) ||
+    o.checkTitlePageNumberSuppression === true ||
+    o.checkPageNumberStartAtIntro === true,
 };
 
 /**
@@ -57,12 +82,13 @@ export const DEMOTION_RULE_KEYS: Readonly<Record<string, readonly string[]>> = {
  * sluzbenog izvora i po hijerarhiji je specificniji. Bez ove zastite demotija osnovnog profila
  * gasila je `requireToc` koji katedra izricito trazi (5 od 8 kombinacija na Pravnom fakultetu),
  * pa se sadrzaj rada tiho nije provjeravao iako ga uputa katedre propisuje.
+ *
+ * Prima OVERLAY, ne njegove kljuceve: vrijednost je dio odluke (vidi DEMOTION_PRESCRIBED_BY).
  */
-export function demotionProtectedBy(overlayKeys: Iterable<string>): Set<string> {
-  const keys = new Set(overlayKeys);
+export function demotionProtectedBy(overlay: ScoreBase): Set<string> {
   const protectedIds = new Set<string>();
-  for (const [checkId, ruleKeys] of Object.entries(DEMOTION_RULE_KEYS)) {
-    if (ruleKeys.some((k) => keys.has(k))) protectedIds.add(checkId);
+  for (const [checkId, prescribes] of Object.entries(DEMOTION_PRESCRIBED_BY)) {
+    if (prescribes(overlay)) protectedIds.add(checkId);
   }
   return protectedIds;
 }

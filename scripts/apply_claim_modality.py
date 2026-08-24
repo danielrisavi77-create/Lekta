@@ -34,7 +34,12 @@ RULE_ID_LINE = re.compile(r'^(\s*)"ruleId"\s*:\s*"([^"]+)"\s*,\s*$')
 
 
 def load_plan() -> dict[str, dict]:
-    """ruleId -> {modality, scope} za jedinice koje ne traze covjeka."""
+    """ruleId -> {modality, scope} za jedinice koje ne traze covjeka.
+
+    Skup pravila odredjuje PREDLAGAC (`propose_claim_modality.py`), koji od 2026-08-23 bira po
+    IZVEDENOM `scored` (isRuleScored), ne po pohranjenoj zastavici. Ovaj upisivac ide po `ruleId` iz
+    prijedloga, pa se sirenje skupa ovdje dogadja samo od sebe i ne treba mu vlastiti uvjet.
+    """
     with open(PROPOSALS, encoding="utf-8") as fh:
         data = json.load(fh)
     plan: dict[str, dict] = {}

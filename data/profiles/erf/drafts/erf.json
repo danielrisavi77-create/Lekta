@@ -77,6 +77,9 @@
       },
       {
         "ruleId": "erf-diplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -85,7 +88,7 @@
         "authority": "program-page",
         "sourceId": "erf-upute-diplomski",
         "sourcePage": "str. 1-2, A) Istrazivacki rad / B) Pregledni rad (poglavlje Sadrzaj)",
-        "quote": "treba sadrzavati sljedea poglavlja",
+        "quote": "treba sadržavati sljedeća poglavlja",
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
@@ -96,6 +99,9 @@
       },
       {
         "ruleId": "erf-diplomski--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           "sazetak",
@@ -111,7 +117,7 @@
         "authority": "program-page",
         "sourceId": "erf-upute-diplomski",
         "sourcePage": "str. 1-2, A) Istrazivacki rad / B) Pregledni rad",
-        "quote": "treba sadrzavati sljedea poglavlja",
+        "quote": "treba sadržavati sljedeća poglavlja",
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",

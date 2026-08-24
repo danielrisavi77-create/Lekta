@@ -77,6 +77,9 @@
     },
     {
       "ruleId": "unidu-povijest-zavrsni--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",

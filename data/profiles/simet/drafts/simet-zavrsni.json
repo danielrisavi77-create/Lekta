@@ -149,6 +149,9 @@
     },
     {
       "ruleId": "simet-zavrsni--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "required-sections",
       "value": [
         {

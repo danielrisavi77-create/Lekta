@@ -94,14 +94,26 @@ export interface NetworkProofMessage {
   hint: string;
 }
 
-/** Sazetak -> poruka na hrvatskom (bez HTML-a). null kad mjerenje nije pouzdano (ne prikazuj). */
-export function networkProofMessage(s: NetworkSummary | null | undefined): NetworkProofMessage | null {
+/**
+ * Sazetak -> poruka na hrvatskom (bez HTML-a). null kad mjerenje nije pouzdano (ne prikazuj).
+ * opts.rulesFetchedFromServer: od faze B pravila odabranog profila dolaze s Lektinog
+ * posluzitelja PRIJE mjernog prozora analize (runAnalysis: await ensureProfileRules ide
+ * prije startNetworkProbe). Taj zahtjev ne nosi nista iz dokumenta, ali POSTENJE trazi
+ * da ga poruka izrijekom imenuje umjesto da ga presuti.
+ */
+export function networkProofMessage(
+  s: NetworkSummary | null | undefined,
+  opts: { rulesFetchedFromServer?: boolean } = {},
+): NetworkProofMessage | null {
   if (!s || !s.supported) return null;
   const hint = 'Provjeri sam: otvori DevTools → Network.';
+  const rulesNote = opts.rulesFetchedFromServer
+    ? ' Pravila odabranog profila dohvaćena su s Lektinog poslužitelja prije analize; taj zahtjev sadrži samo identifikator profila, ništa iz dokumenta.'
+    : '';
   if (s.external === 0) {
     return {
       safe: true,
-      text: 'Tijekom analize tvoj dokument nije poslan nijednom vanjskom poslužitelju (0 vanjskih mrežnih zahtjeva).',
+      text: `Tijekom analize tvoj dokument nije poslan nijednom vanjskom poslužitelju (0 vanjskih mrežnih zahtjeva).${rulesNote}`,
       hint,
     };
   }
