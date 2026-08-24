@@ -46,7 +46,7 @@
     "test:ux:browsers": "playwright test --project=firefox --project=webkit --project=mobile-webkit",
     "test:slow": "vitest run --config vitest.slow.config.ts",
     "conformance": "vitest run --config vitest.conformance.config.ts",
-    "check": "tsc --noEmit && vitest run && vite build",
+    "check": "oxlint && tsc --noEmit && vitest run && vite build",
     "check:edge": "node scripts/check-edge.mjs",
     "smoke:db": "psql -v ON_ERROR_STOP=1 -f scripts/rate-slots-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/guarantee-evidence-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/repair-deletion-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/anon-purge-smoke.sql",
     "smoke:db:mutation": "bash scripts/rate-slots-mutation-check.sh",
@@ -86,7 +86,8 @@
     "approve-unit-match": "vite-node scripts/approve-unit-match.mts",
     "repair-gap": "vite-node scripts/repair-gap-report.mts",
     "closed-loop": "vite-node scripts/run-closed-loop.mts",
-    "seed-declarations": "vite-node scripts/seed-declarations.mts"
+    "seed-declarations": "vite-node scripts/seed-declarations.mts",
+    "lint": "oxlint"
   },
   "overrides": {
     "nanoid": "^3.3.18"
@@ -98,6 +99,7 @@
     "esbuild": "^0.28.1",
     "happy-dom": "^20.10.6",
     "netlify-cli": "^26.2.0",
+    "oxlint": "^1.79.0",
     "supabase": "^2.109.1",
     "typescript": "^7.0.2",
     "vite": "^8.1.4",

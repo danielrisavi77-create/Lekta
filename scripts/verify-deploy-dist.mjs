@@ -450,6 +450,14 @@ if (fs.existsSync(naslovnicaDir)) {
     }
   };
 
+  // Najveca dopustena starost dokaza. Podesivo, jer je 14 dana odluka o riziku, a ne cinjenica.
+  const MAX_PROOF_AGE_DAYS = Number(process.env.LEKTA_PROOF_MAX_AGE_DAYS ?? '14');
+  const proofAgeDays = (proof) => {
+    const t = Date.parse(String(proof?.createdAt ?? ''));
+    if (!Number.isFinite(t)) return Number.POSITIVE_INFINITY; // bez vremena ne mozemo tvrditi da je svjez
+    return Math.floor((Date.now() - t) / 86_400_000);
+  };
+
   const proofPath = path.join(ROOT, 'docs', 'generated', 'RELEASE_PROOF.json');
   const required = process.env.LEKTA_REQUIRE_RELEASE_PROOF === '1';
   const complain = (msg) => {
@@ -485,6 +493,17 @@ if (fs.existsSync(naslovnicaDir)) {
         complain(`vezan je uz commit ${String(proof.commit).slice(0, 12)}, a gradi se ${head.slice(0, 12)}`);
       } else if (proof.dirtyWorkingTree) {
         complain('nastao je nad NECISTIM radnim stablom, pa ne pokriva sve sto se gradi');
+      } else if (proofAgeDays(proof) > MAX_PROOF_AGE_DAYS) {
+        // STAROST, ODVOJENO OD ZASTARJELOSTI PO COMMITU (audit P0-03).
+        //
+        // `staleAgainst` hvata promjenu KODA, ali ne i protek VREMENA. Dokaz smije ostati "svjez"
+        // po toj mjeri mjesecima ako se izmedju mijenjao samo sam dokaz, a Tier 1 i Tier 2 ovise o
+        // stvarima izvan repozitorija: verziji Worda, LibreOfficea, pythona i python-docxa. Prolaz
+        // od prije pola godine ne govori nista o tome kako se paket danas otvara.
+        complain(
+          `star je ${proofAgeDays(proof)} dana (dopusteno ${MAX_PROOF_AGE_DAYS}); Tier 1 i Tier 2 ovise o ` +
+          'verzijama Worda/LibreOfficea izvan repozitorija, pa stari prolaz ne dokazuje danasnje ponasanje',
+        );
       } else {
         console.log(`[verify-deploy-dist] dokaz o provjerama OK (commit ${String(proof.commit).slice(0, 12)}).`);
       }

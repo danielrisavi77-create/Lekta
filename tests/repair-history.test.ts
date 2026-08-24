@@ -118,7 +118,10 @@ describe('deleteRepairJob', () => {
     let seen: RequestInit | undefined;
     const out = await deleteRepairJob(config, 'jwt', 'j1', async (_u, init) => { seen = init; return res(200, { ok: true, jobId: 'j1' }); });
     expect(out).toEqual({ ok: true });
-    expect((seen?.headers as Record<string, string>).Authorization).toBe('Bearer jwt');
+    // Prvo dokazi da je zahtjev POSLAN: bez ovoga `seen?.headers` kratko spoji na
+    // undefined i test pukne TypeErrorom umjesto da padne na tvrdnji (oxlint P1-20).
+    expect(seen).toBeTruthy();
+    expect((seen!.headers as Record<string, string>).Authorization).toBe('Bearer jwt');
     expect(JSON.parse(String(seen?.body))).toEqual({ jobId: 'j1' });
   });
   it('404 -> ok:false s razlogom', async () => {

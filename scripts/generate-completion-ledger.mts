@@ -24,7 +24,7 @@ import { buildCompletionLedger, type LedgerInputs } from '../src/verification/co
 import type { ThesisProfile, SourceEntry } from '../src/profiles/profile-schema';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const readJson = <T>(rel: string): T => JSON.parse(readFileSync(join(root, rel), 'utf8')) as T;
+const readJson = <T,>(rel: string): T => JSON.parse(readFileSync(join(root, rel), 'utf8')) as T;
 
 const profiles = [
   ...VERIFIED_PROFILES_WITH_DRAFTS,
