@@ -12,21 +12,46 @@
 #      razlikuju (desktop nakon uploada skace na korak 2, mobilni ostaje na 1). Desktop tok je
 #      zato odvojen u `desktop-flow.spec.ts` i vise ga mobilni projekti ne vrte.
 #
-#   2. OTVOREN NALAZ, FIREFOX: isti test je na Firefoxu bio FLAKY. Klik na `#stepToAnalyze`
-#      ponekad ne prebaci s koraka 2 na 3 (`data-step` ostaje "2"), a iz drugog pokusaja prolazi.
-#      Rukovatelj je `_profileConfirmed=true; updateProfile(); setWizardStep(3,true)`, dakle
-#      sinkroni niz u kojem bi iznimka iz `updateProfile()` progutala `setWizardStep`. Sumnja je na
-#      utrku s asinkronim ucitavanjem pravila profila, koja bi na sporijem pregledniku pogodila i
-#      stvarnog korisnika.
-#      NIJE POPRAVLJENO i to je namjerno: popravak utrke koji se ne moze odvrtjeti u Firefoxu bio
-#      bi nagadjanje. Zapisano je ovdje da se ne izgubi i da se ne pomijesa s gornjim, rijesenim
-#      nalazom. Ovo je upravo ono zbog cega matrica postoji.
+#   2. OTVOREN NALAZ, FIREFOX: isti test je na Firefoxu FLAKY. Klik na `#stepToAnalyze` ponekad ne
+#      prebaci s koraka 2 na 3 (`data-step` ostaje "2"), a iz drugog pokusaja prolazi. VIDJENO
+#      DVAPUT, na 84d6f7b i na d8c85b4, dakle nije jednokratno.
+#
+#      ISPRAVAK RANIJE BILJESKE (2026-08-24). Prvo je ovdje pisalo da je rukovatelj sinkroni niz u
+#      kojem bi iznimka iz `updateProfile()` progutala `setWizardStep`. TO JE NETOCNO i nije smjelo
+#      ostati zapisano: `updateProfile` je `async` i poziva se BEZ `await`, pa njegovo odbijanje ne
+#      moze sinkrono prekinuti sljedeci redak. Kriva dijagnoza u repozitoriju je gora od nikakve,
+#      jer sljedecega salje u slijepu ulicu.
+#
+#      STO JE STVARNO UTVRDJENO CITANJEM:
+#        - Jedina asinkrona karika izmedju klika i `data-step` je `setWizardStep(3,true)` ->
+#          `withViewTransition` -> `document.startViewTransition(() => mutate())`. Grana bez te
+#          API-je zove `mutate()` SINKRONO, pa je Firefox nekad bio imun; danas Firefox tu API-ju
+#          ima, pa ide asinkronom granom kao i Chromium.
+#        - NIJE utrka od jednog okvira: test cheka preko `expect(...).toHaveAttribute`, koji se
+#          ponavlja do isteka. Znaci da `data-step` u tim prolazima NIKAD ne stigne do "3".
+#        - Vodeca hipoteza je PREKLAPANJE tranzicija: `setFile` je vec pozvao `setWizardStep(2,true)`,
+#          a `updateProfile()` u pozadini prerenderira profil. Nova `startViewTransition` preskace
+#          prethodnu, pa je moguce da update callback jednog poziva ne dodje na red.
+#
+#      NIJE POPRAVLJENO i to je namjerno. Popravak bi dirao `withViewTransition`, dakle animaciju za
+#      SVE preglednike, na temelju hipoteze koju u ovoj okolini nije moguce odvrtjeti (proxy
+#      zabranjuje Playwrightov download host, pa se Firefox ne moze instalirati). Nagadjanje nad
+#      dijeljenim kodom je gore od poznatog, zapisanog i vidljivog nalaza.
+#
+#      SLJEDECI KORAK za onoga tko ima Firefox: `npx playwright install firefox`, pa
+#      `npm run test:ux:browsers -- --project=firefox --repeat-each=10`, i u tragu (`trace.zip` je
+#      artefakt ovog posla) provjeriti je li update callback tranzicije uopce pozvan.
 #
 # ZASTO ZASEBNO OD check.yml, A NE ODMAH U GATEU. Ovi preglednici jos nijednom nisu odvrtjeli ovu
 # suite. Staviti ih odmah u obavezne provjere znacilo bi blokirati svaki PR necim sto nitko nije
 # vidio kako se ponasa, a prvi crveni rezultat bi se onda rjesavao pod pritiskom. Ovako je nalaz
-# vidljiv i mjerljiv, a u obavezne provjere se PROMICE nakon prvog zelenog prolaza (tada se ovaj
-# posao spoji u check.yml ili se doda u required checks).
+# vidljiv i mjerljiv.
+#
+# KRITERIJ ZA PROMAKNUCE, ispravljen: NIJE "prvi zeleni prolaz". Taj kriterij je bio prekratak i
+# mjerenje ga je oborilo, jer je Firefox nalaz iz tocke 2 vidjen DVAPUT. Gard koji je povremeno
+# crven bez kvara u proizvodu je gori od nijednog: nauci ljude da crveno ignoriraju. Uvjet je zato
+# da nalaz iz tocke 2 bude zatvoren (popravljen ili dokazano nepostojeci), pa tek onda niz uzastopnih
+# zelenih prolaza; tada se ovaj posao spaja u check.yml ili dodaje u required checks.
 name: browser-matrix
 
 on:
