@@ -102,7 +102,7 @@
     "supabase": "^2.109.1",
     "typescript": "^7.0.2",
     "vite": "^8.1.4",
-    "vitest": "^2.1.4"
+    "vitest": "^4.1.10"
   },
   "dependencies": {
     "@fontsource-variable/inter-tight": "^5.2.7",
