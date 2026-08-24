@@ -13,6 +13,7 @@ import crypto from 'node:crypto';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { SITE_ORIGIN } from './site-origin.mjs';
+import { LEGAL_PAGES } from './lib/legal-pages.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
@@ -39,16 +40,9 @@ for (const f of assets) {
 }
 
 // 3. pravne stranice postoje i sadrze ocekivane markere
-const legalChecks = [
-  ['privatnost.html', 'AZOP'],
-  ['garancija.html', '5 radnih dana'],
-  ['obrada-dokumenata.html', 'Lokalna analiza'],
-  ['kolacici.html', 'localStorage'],
-  ['uvjeti-koristenja.html', 'Predmet usluge'],
-  ['pravila-povrata.html', 'Merchant of Record'],
-  ['odricanje-od-odgovornosti.html', 'heuristička'],
-];
-for (const [file, marker] of legalChecks) {
+// Popis je izdvojen u scripts/lib/legal-pages.mjs jer ga dijeli i post-deploy smoke; dok je bio
+// prepisan na dva mjesta, nova stranica se lako dodala samo u jedan alat.
+for (const [file, marker] of LEGAL_PAGES) {
   const p = path.join(DIST, file);
   if (!fs.existsSync(p)) fail(`dist/${file} ne postoji (generate-legal-pages nije prosao?)`);
   if (!fs.readFileSync(p, 'utf8').includes(marker)) fail(`dist/${file} ne sadrzi "${marker}"`);

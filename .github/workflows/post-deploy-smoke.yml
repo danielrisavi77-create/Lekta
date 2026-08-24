@@ -1,0 +1,60 @@
+# Provjera ZIVE instalacije po rasporedu (audit P1-29).
+#
+# Sve ostale provjere u ovom repozitoriju mjere kod prije nego ode van. Ova jedina gleda ono sto je
+# stvarno posluzeno: pravne stranice koje generira korak POSLIJE `vite build`, resurse koje
+# naslovnica trazi (djelomican deploy), sigurnosna zaglavlja iz `public/_headers` i zivost Edge
+# funkcija. Vidi zaglavlje `scripts/post-deploy-smoke.mjs` za popis kvarova koje hvata.
+#
+# NE UPISUJE NISTA. Vrti se nad produkcijom, pa je svaka provjera citanje ili odbijen poziv.
+name: post-deploy-smoke
+
+on:
+  schedule:
+    # Svakih 6 sati. Rjedje ne bi vidjelo kratak ispad, cesce ne dodaje nista: deploy se ne dogadja
+    # toliko cesto, a ovo NIJE zamjena za uptime monitor (on mjeri minute, ovo mjeri ispravnost).
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      site:
+        description: 'Origin stranice (prazno = produkcija)'
+        required: false
+      functions:
+        description: 'Origin Edge funkcija (prazno = produkcija)'
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version: '20'
+
+      # DOKAZ DA GRIZE, PRIJE STVARNOG POZIVA. Self-test vrti svaku tvrdnju nad sinteticki
+      # pokvarenim odgovorom i pada ako ijedna to ne prijavi. Bez ovoga bi zeleni smoke mogao
+      # znaciti i "sve je u redu" i "provjere vise ne rade", a to su dvije vrlo razlicite stvari.
+      - name: Self-test (mutacije)
+        run: node scripts/post-deploy-smoke.mjs --self-test
+
+      - name: Smoke nad zivom instalacijom
+        id: smoke
+        run: |
+          set +e
+          node scripts/post-deploy-smoke.mjs \
+            ${{ inputs.site && format('--site {0}', inputs.site) || '' }} \
+            ${{ inputs.functions && format('--functions {0}', inputs.functions) || '' }}
+          code=$?
+          set -e
+          # Izlazni kod 2 znaci NEUVJERLJIVO: runner nije uspio do oba pruzatelja, sto je nalaz o
+          # runneru a ne o produkciji. Takav run se ne oglasava kao ispad, jer bi lazna uzbuna vrlo
+          # brzo dovela do toga da se ovaj workflow ignorira.
+          if [ "$code" = "2" ]; then
+            echo "::warning::post-deploy-smoke neuvjerljiv (runner nije dosao do produkcije), ne tvrdi se nista o ispravnosti."
+            exit 0
+          fi
+          exit $code

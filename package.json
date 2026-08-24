@@ -87,7 +87,9 @@
     "repair-gap": "vite-node scripts/repair-gap-report.mts",
     "closed-loop": "vite-node scripts/run-closed-loop.mts",
     "seed-declarations": "vite-node scripts/seed-declarations.mts",
-    "lint": "oxlint"
+    "lint": "oxlint",
+    "post-deploy-smoke": "node scripts/post-deploy-smoke.mjs",
+    "post-deploy-smoke:self-test": "node scripts/post-deploy-smoke.mjs --self-test"
   },
   "overrides": {
     "nanoid": "^3.3.18"
