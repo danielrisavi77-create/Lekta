@@ -40,43 +40,42 @@ Ratchet praznih vrijednosti spusten na 0.
 
 ---
 
-## C. OTVORENO: 82 osi koje motor boduje BEZ IJEDNE TVRDNJE
+## C. ZATVORENO: 82 osi koje je motor bodovao bez ijedne tvrdnje
 
-Ovo je najveca preostala rupa u lancu i trazi tvoju odluku, jer se u oba smjera mijenja bodovanje.
+Potraga za izvorima provedena je po odsjeku. Ishod:
 
-Cetrnaest profila nema **nijedan** unos u draftu, a motor im boduje sest formatnih osi (font,
-velicina, prored, margine, format papira, poravnanje) iz naslijedjenog `rules` objekta:
+**Rijeseno iz postojeceg izvora (2 profila).** `ffos-povijest-{zavrsni,diplomski}`: fakultetski akt
+FFOS-a (`ffos-pravilnik-radovi`, donijelo Fakultetsko vijece; `ffos-upute-diplomski`, koje izricito
+govore o "odsjeka ili samostalne katedre") vrijedi za odsjek bez vlastitih uputa. Prikvacen je isti
+izvor, ista stranica, isti citat i ista vrijednost kao na fakultetskim profilima.
 
-| jedinica | profili |
+**Izvora nema (12 profila) - bodovanje zaustavljeno tvojom odlukom.** Po odsjeku:
+
+| odsjek | sto je potraga nasla |
 |---|---|
-| unizd | kroatistika, ekonomija, anglistika, sociologija, lingvistika, rusistika (12 profila) |
-| pravst | zavrsni, diplomski |
-| ffos | povijest zavrsni, povijest diplomski |
+| kroatistika, anglistika | stranice upucuju na Sveucilisnu knjiznicu; ondje su SAMO obrasci naslovnice |
+| ekonomija | pravila postoje, ali izricito za SEMINARSKI rad |
+| lingvistika | samo "objedinjeni obrazac" (naslovnica) i APA standardi |
+| rusistika | nijedan takav dokument nije nadjen |
+| sociologija (zavrsni) | uputa je izricito za DIPLOMSKI rad i o zavrsnom ne govori nista |
+| pravst | samo proceduralni akti (pohrana i objava, prijava teme) |
 
-To je izravno protivno pravilu iz CLAUDE.md ("bodovana pravila smiju doci samo iz navedenih
-sluzbenih izvora"): tih 82 para (profil, os) boduje se bez ijednog izvora.
+Vrijednosti su maknute iz `rules`, pa provjere postaju informativne (0 bodova). Razlog je u
+`data/profiles/no-rules-reasons.json` sa stanjem `source-not-found`, dokazom potrage po odsjeku i
+opisom stete: isti genericki skup bodovao se na svih dvanaest profila, pa je rad koji slijedi
+drukciju, jednako valjanu praksu svoga odsjeka gubio bodove na standardu koji mu nitko nije
+propisao. Reverzibilno cim se izvor nadje.
 
-**STO SE ZAPRAVO BODUJE, i to je najvazniji dio:** tih 12 od 14 profila boduje GENERICKI BASELINE,
-ne fakultetsko pravilo. Vrijednosti su doslovno `font: [TNR, Arial, Calibri]`, `size: [12, 11]`,
-`spacing: 1.5`, `margins: 2,5 cm sa svih strana` - isti opci skup na `unizd-kroatistika`,
-`unizd-anglistika`, `unizd-ekonomija`, `pravst` i ostalima. To NIJE "izgubili smo izvor"; to je
-"izvora nikad nije bilo, motor pada na opci baseline i prikazuje ga kao fakultetsku provjeru".
-(`ffos-povijest-*` odstupa: TNR/12/1,5 uz desnu marginu 2 cm, pa je vjerojatno odnekud portan.)
+---
 
-Uz to, `unizd` NEMA krovni pravilnik: svih 33 srodna profila oslanjaju se na upute PO ODSJEKU
-(`unizd-turizam-upute`, `unizd-klasicna-filologija-upute-2021`, `unizd-arheologija-*`,
-`unizd-etnologija-upute-2021`, `unizd-povijest-umj-*`, `unizd-sociologija-upute-dipr-2014`). Znaci
-da se izvor za kroatistiku, anglistiku, ekonomiju, lingvistiku i rusistiku mora traziti po odsjeku,
-jedan po jedan. Jedina blizina: `unizd-sociologija-zavrsni` je nepokriven, a uputa
-`unizd-sociologija-upute-dipr-2014` postoji i vec pokriva diplomski istog odsjeka.
+## Stanje lanca
 
-Dvije mogucnosti, i obje su tvoje:
+| mjera | prije | sada |
+|---|---|---|
+| osi koje motor boduje bez tvrdnje | 82 | **0** |
+| raskoraka izmedju tvrdnje i zrcala | 37 | **0** |
+| bodovanih pravila bez modaliteta | 2207 | **0** |
+| scored profila | 367 | 369 |
 
-1. **Nadji izvor po odsjeku i napisi tvrdnje.** Realno je 12 zasebnih potraga, ne jedna.
-2. **Demotiraj tih sest osi na informativne** dok se izvor ne nadje. Fail-safe je i tehnicki
-   trivijalno, ali tim profilima nestaje gotovo cijela provjera oblikovanja.
-
-Preporuka: (2) odmah, jer se danas studentu prikazuje opci baseline kao da je pravilo njegova
-fakulteta, pa (1) kad izvor stigne. Ne diram bez tvoje rijeci: prva mogucnost dodaje bodovana
-pravila, druga ih oduzima.
-
+Ostaje 24 nalaza `unapplied`: tvrdnja POSTOJI, a motor tu dimenziju ne provjerava. To je tise
+popustanje, ne bodovanje bez uporista, i zaseban je posao.
