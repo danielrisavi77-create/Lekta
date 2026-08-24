@@ -45,7 +45,12 @@ jobs:
       - name: Instaliraj ovisnosti
         run: |
           npm ci
-          pip install pymupdf
+          # `olefile` NIJE opcionalan. `doc97_text` cita naslijedjeni .doc preko njega, a bez njega
+          # vraca PRAZAN string, pa 21 izvor (193 bodovana pravila) tiho ispadne iz revizije. Gore
+          # od toga: ispadnu i CETIRI stvarna nalaza (148 -> 144), a razlog se prijavi kao
+          # "skeniran izvor bez tekstualnog sloja (treba OCR)", sto salje u posve krivu dijagnozu.
+          # Bez ovoga drift gard ispod NE MOZE proci ni na ispravnom artefaktu.
+          pip install pymupdf olefile
 
       # Prvo se dokazuje da provjera GRIZE, pa tek onda da podaci prolaze. Obrnut redoslijed daje
       # zeleno i kad je izvod prazan: tada svaka tvrdnja "prolazi" jer se nista ne trazi.
