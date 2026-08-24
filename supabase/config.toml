@@ -433,6 +433,21 @@ verify_jwt = false
 [functions.health]
 verify_jwt = false
 
+# client-error: prvostrana sabirnica klijentskih gresaka (P1-28). Anoniman upis je NAMJERAN i
+# nuzan: greska se cesto dogodi PRIJE nego korisnik uopce ima sesiju, a upravo su te greske
+# najzanimljivije. Funkcija se sama stiti IP kvotom (`claim_ip_rate_slot`), granicom tijela od
+# 8 KB i redakcijom svakog polja; IP se ne sprema ni kao hash.
+[functions.client-error]
+verify_jwt = false
+
+# process-bonus-outbox: cron radnik koji ponavlja obveze nakon kupnje (P1-07). Poziva ga
+# raspored, ne korisnik, pa Supabase JWT-a nema; stiti se DEDICIRANOM tajnom
+# BONUS_OUTBOX_CRON_SECRET (Bearer, nikad service role) i fail-closed je bez nje, isti obrazac
+# kao send-reminders. Da je verify_jwt ostao na zadanom `true`, gateway bi odbio cron poziv
+# PRIJE funkcije i radnik se ne bi nikad izvrsio.
+[functions.process-bonus-outbox]
+verify_jwt = false
+
 # Cloud integritet (Faza 4) i Provjera prije predaje: oboje traze prijavljenog
 # korisnika (gateway JWT + getUser u funkciji).
 [functions.integrity-check]
