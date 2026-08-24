@@ -228,17 +228,63 @@ def numeric_forms(raw) -> list[str]:
 # ide covjeku: on odlucuje boduje li se kao clanstvo u skupu ili se ne boduje uopce.
 #
 # Za `font` je skup NORMALAN i ne oznacava se (efzg "Calibri ili Times New Roman", unidu "Times New
-# Roman ili Arial"); provjera fonta vec radi nad popisom dopustenih. Za brojcane osi nije.
-SINGLE_VALUED = ("font-size", "line-spacing", "margins")
+# Roman ili Arial"); provjera fonta vec radi nad popisom dopustenih.
+#
+# ISTO VRIJEDI ZA `font-size`, sto je do 2026-08-22 bilo krivo zapisano ovdje. Engine usporedjuje
+# clanstvo u skupu (`profile.size.some(...)`) i tako i formulira poruku (`profile.size.join(' ili ')`),
+# pa `value: [11, 12]` nije izbor jedne strane nego vjeran prijepis izvora koji dopusta oboje.
+# Izmjereno na tri profila u `tests/font-size-allowed-set.test.ts`: 11 pt i 12 pt prolaze s punim
+# bodovima, 13 pt pada. Premisa vrijedi samo za osi koje stvarno primaju JEDAN broj: prored
+# (`near(x, profile.spacing)`) i margine (`profile.margins[side]`).
+SINGLE_VALUED = ("line-spacing", "margins")
+
+# Osi na kojima izbor i dalje trazi covjeka, i ondje gdje engine zna za skup: kad je izbor zapisan u
+# CITATU ("11 ili 12"), a tvrdnja navodi samo jednu stranu, pravilo boduje uze od izvora i kaznjava
+# rad koji tocno slijedi svoju uputu.
+CHOICE_AXES = SINGLE_VALUED + ("font-size",)
+
+
+CHOICE_PAIR = re.compile(r"(\d+(?:[.,]\d+)?)\s*(?:pt|to[čc]\w*|cm|mm)?\s+ili\s+(\d+(?:[.,]\d+)?)", re.I)
+
+
+def _atoms(value) -> set[str]:
+    """Svi brojcani oblici koje vrijednost pravila nosi, ukljucujuci margine po stranama."""
+    if isinstance(value, dict):
+        return {f for v in value.values() for f in _atoms(v)}
+    if isinstance(value, list):
+        return {f for v in value for f in _atoms(v)}
+    if isinstance(value, bool) or value is None:
+        return set()
+    return set(numeric_forms(value))
+
+
+def choice_narrows_claim(quote: str, value) -> bool:
+    """Boduje li tvrdnja SAMO jednu stranu izbora koji izvor doslovno nudi.
+
+    Sam izbor u recenici nije dovoljan: `unidu-komunikologija-diplomski` u istoj recenici propisuje
+    tijelo na 12 tocaka i naslove na "14 ili 16 tocaka", pa je izbor ondje odredba DRUGE osi i nalaz
+    je bio lazan na sva tri pravila te recenice. Nalaz ima smisla samo kad je vrijednost tvrdnje
+    JEDNA strana izbora, a druga strana nije pokrivena.
+    """
+    atoms = _atoms(value)
+    if not atoms:
+        return False
+    for left, right in CHOICE_PAIR.findall(quote):
+        hit_left = bool({left, left.replace(".", ","), left.replace(",", ".")} & atoms)
+        hit_right = bool({right, right.replace(".", ","), right.replace(",", ".")} & atoms)
+        if hit_left != hit_right:
+            return True
+    return False
 
 
 def is_choice(check_id: str, value, quote: str) -> bool:
-    if check_id not in SINGLE_VALUED:
+    if check_id not in CHOICE_AXES:
         return False
     if isinstance(value, list) and len({str(v) for v in value}) > 1:
-        return True
+        # Skup je problem samo ondje gdje engine prima jedan broj.
+        return check_id in SINGLE_VALUED
     # Izbor zapisan u samom citatu ("12 ili 14"), a tvrdnja navodi samo jednu stranu.
-    return bool(re.search(r"\d\s*(pt|to[čc]\w*|cm|mm)?\s+ili\s+\d", quote, re.I))
+    return choice_narrows_claim(quote, value)
 
 
 # --- 6. ODSJECEN CITAT koji krije iznimku -----------------------------------------------------
@@ -277,23 +323,227 @@ def truncated_tail(rel_path: str, page: int, quote: str) -> str | None:
     return tail.strip() if re.search(r"\d", tail) else None
 
 
+# --- 7. IZVOD ZA PREDIKATNE OSI -----------------------------------------------------------------
+#
+# Do 2026-08-22 je `value_tokens` pokrivao pet osi (paper-size, font, font-size, line-spacing,
+# margins), a za sve ostale vracao prazno, sto je postavljalo `derivable = False` i tvrdnja je
+# MEHANICKI PADALA. Izmjereno: 628 od 1934 bodovanih pravila (32,5%) stoji na osi koja kroz ovaj
+# verifikator nije mogla proci, i to ne zato sto je s njima nesto bilo, nego zato sto pravila izvoda
+# nije bilo. Pad koji znaci "ne znam" je gori od nikakvog nalaza jer trosi ljudsku paznju na sum.
+#
+# Predikatne osi nisu broj nego TVRDNJA: citat ne mora sadrzavati vrijednost `true`, nego recenicu
+# koja tu odredbu izrice. Zato imaju vlastiti oblik izvoda.
+PREDICATE_TOKENS: dict[str, list[str]] = {
+    # KORIJENI, ne cijele rijeci: hrvatski mijenja nastavak, a izvori nisu dosljedni. Prosireno
+    # 2026-08-24 nakon mjerenja koje je 60 tvrdnji proglasilo neuporistenima; uzorak od 6 je pokazao
+    # da su 3 bile promasaj RJECNIKA, ne podataka:
+    #   - token "poravnan" nije hvatao "tekst poravnat s obje strane" (aspira, efst): jedno slovo,
+    #   - "obrojcavanje stranica" (apuri) nije bilo ni u jednom obliku,
+    #   - dijakritika se nije skidala, pa "obrojcavanje" nikad ne bi pogodilo ASCII token.
+    # Gard koji vristi na tocnu tvrdnju jednako je beskoristan kao onaj koji suti.
+    # Njemacki i opis PAKETA su ravnopravni oblici izvora: `ffri-germanistika` uputa je na njemackom
+    # ("Blocksatz"), a `ffst` citat opisuje Word predlozak ("Footer: PAGE polje"). Oboje IZRICE
+    # odredbu; da rjecnik pokriva samo hrvatsku prozu, tocna tvrdnja bi ispala neuporistena.
+    "justify": [
+        "obostran", "justify", "poravna", "poravnat", "blok", "obje strane", "objema margina",
+        "blocksatz", "w:jc=both",
+    ],
+    "toc": ["sadrzaj", "kazalo", "table of contents", "inhaltsverzeichnis"],
+    "page-numbers": [
+        "numerir", "numerac", "paginac", "broj stranic", "brojevi stranic", "oznacene brojevima",
+        "obrojcav", "brojcano", "oznacavaju stranic", "oznacene stranic", "stranice se oznac",
+        "oznacene rednim brojem", "oznacen rednim brojem", "page polje", "seitenzahl",
+    ],
+    "footnote-font": ["fusnot", "biljesk", "podnozj"],
+}
+
+
+def predicate_hit(check_id: str, quote: str) -> bool:
+    """Izrice li citat tu odredbu uopce. Namjerno grubo: dokazuje da se recenica bavi tom osi.
+
+    Usporedjuje se BEZ DIJAKRITIKE na obje strane: draft citati su mijesani (dio je vec ASCII, dio
+    nije), pa bi inace isti izvor prolazio ili padao ovisno o tome kako je prepisan.
+    """
+    low = fold(quote)
+    return any(token in low for token in PREDICATE_TOKENS.get(check_id, []))
+
+
+def range_tokens(value) -> list[list[str]]:
+    """Za osi kojima je RASPON sama odredba (page-count, word-count): svaka granica mora se pojaviti."""
+    if isinstance(value, dict):
+        bounds = [v for k, v in sorted(value.items()) if k in ("min", "max", "target") and v is not None]
+    elif isinstance(value, list):
+        bounds = list(value)
+    else:
+        bounds = [value]
+    return [numeric_forms(v) for v in bounds if v is not None]
+
+
+COMPOSITE_AXES = {
+    "bibliography-rules",
+    "citation-sync-rules",
+    "section-surgery-rules",
+    "required-section-rules",
+}
+
+
+def fold(text: str) -> str:
+    """Bez dijakritike, malim slovima. Citati u draftovima su miejsani: dio je vec ASCII."""
+    stripped = unicodedata.normalize("NFD", text or "")
+    return "".join(c for c in stripped if not unicodedata.combining(c)).lower()
+
+
+def _word_group(word: str) -> list[str]:
+    """Oblici jedne rijeci natpisa: KORIJEN s dijakritikom i bez nje.
+
+    Korijen a ne cijela rijec jer hrvatski citat mijenja padez: propis kaze "Kljucne rijeci", a izvor
+    "uz sazetak treba navesti i nekoliko kljucnih rijeci". Trazenje cijele rijeci ondje promasi
+    TOCNU tvrdnju, sto je isti razred greske kao `paper-size` koji je ignorirao vrijednost.
+    """
+    stem_len = max(4, len(word) - 2)
+    return sorted({word[:stem_len].lower(), fold(word)[:stem_len]})
+
+
+def label_groups(label: str) -> list[list[str]]:
+    """Natpis sekcije -> po jedna skupina za svaku ZNACAJNU rijec (>=4 znaka)."""
+    words = [w for w in re.findall(r"\w+", label or "", flags=re.UNICODE) if len(w) >= 4]
+    return [_word_group(w) for w in words]
+
+
+# Snopovi pravila: objekt s vise odredbi, gdje svaki LIST mora imati vlastito sidro u citatu.
+#
+# Rjecnik je izveden iz STVARNIH citata koji te snopove nose, ne iz pretpostavke. Sva 44 bodovana
+# pravila na ove cetiri osi dolaze iz jednog izvora (fpzg-upute-akademski-radovi) i svode se na 13
+# listova, pa je svaki oblik ovdje prepisan iz recenice koja ga propisuje. List bez unosa vraca
+# NEPROVJERIVO (prazan izlaz), nikad prolaz: izmisljen rjecnik bi "izveo" bilo koju vrijednost, sto
+# je tocno kvar koji je `paper-size` vec jednom imao.
+COMPOSITE_VOCABULARY: dict[tuple[str, str, str], list[str]] = {
+    # "izvori redaju abecedno prema prezimenu autora"
+    ("bibliography-rules", "sort", '"alphabetical"'): ["abeced"],
+    # "treba ih razlikovati slovima (a, b, c itd) iza godine izdanja"
+    ("bibliography-rules", "authorYearSuffixes", "true"): ["slovima (a", "iza godine"],
+    # "bibliografskim jedinicama u obliku autor - godina"
+    ("citation-sync-rules", "mode", '"author-year"'): ["autor - godina", "autor-godina", "autor – godina"],
+    # "prethodni dijelovi numeriraju se rimskim brojkama"
+    ("section-surgery-rules", "frontMatter.numbering", '"roman"'): ["rimsk"],
+    # "Stranice rada se numeriraju, ali ne i naslovnice"
+    ("section-surgery-rules", "frontMatter.removePageNumberFromTitlePage", "true"): [
+        "ne i naslovnic",
+        "osim naslovnic",
+        "bez naslovnic",
+    ],
+    # "a osnovni tekst arapskima"
+    ("section-surgery-rules", "mainMatter.numbering", '"decimal"'): ["arapsk", "decimaln"],
+    # "tako da brojka 1 bude na prvoj stranici uvoda"
+    ("section-surgery-rules", "mainMatter.startAt", "1"): ["brojka 1", "broj 1", "od 1"],
+}
+
+
+def _leaves(value, prefix: str = "") -> list[tuple[str, object]]:
+    if isinstance(value, dict):
+        out: list[tuple[str, object]] = []
+        for key, sub in value.items():
+            out.extend(_leaves(sub, f"{prefix}.{key}" if prefix else str(key)))
+        return out
+    if isinstance(value, list):
+        out = []
+        for item in value:
+            out.extend(_leaves(item, f"{prefix}[]"))
+        return out
+    return [(prefix, value)]
+
+
+def composite_tokens(check_id: str, value) -> list[list[str]]:
+    """Snop pravila -> po jedna skupina za svaki list. Nepoznat list = NEPROVJERIVO, ne prolaz."""
+    if not isinstance(value, dict):
+        return []
+    labels = value.get("labels") if isinstance(value.get("labels"), dict) else {}
+    groups: list[list[str]] = []
+    for path, leaf in _leaves(value):
+        # `order[]` i `labels.X` govore o ISTOJ sekciji; sidro je natpis, pa se broji jednom.
+        if path.startswith("order["):
+            label = labels.get(leaf) if isinstance(leaf, str) else None
+            if not label:
+                return []  # sekcija bez natpisa: nema se sto traziti u citatu
+            continue
+        if path.startswith("labels."):
+            found = label_groups(str(leaf))
+            if not found:
+                return []
+            groups.extend(found)
+            continue
+        forms = COMPOSITE_VOCABULARY.get((check_id, path, json.dumps(leaf, ensure_ascii=False)))
+        if forms is None:
+            return []
+        groups.append(forms)
+    return groups
+
+
 def value_tokens(check_id: str, value) -> list[list[str]]:
     """Za svaki dio vrijednosti vraca DOPUSTENE zapise; svaki dio mora imati barem jedan pogodak."""
     if check_id == "paper-size":
         # "A-4" i "A 4" su isti format. Bez ovoga verifikator odbacuje TOCNU tvrdnju: izmjereno na
         # alu-okiru uputama, gdje citat glasi "Diplomski rad se pise u formatu A-4".
-        return [["A4", "A-4", "A 4"]]
+        #
+        # ISPRAVAK 2026-08-22: prije se vrijednost IGNORIRALA i uvijek se trazio A4, pa bi se tvrdnja
+        # `value: "A3"` "izvela" iz citata koji govori o A4. Sada se trazi naziv koji tvrdnja doista
+        # nosi; boolean `true` i dalje znaci A4 (naslijedeno znacenje, vidi rule-compiler).
+        names = value if isinstance(value, list) else [value]
+        groups: list[list[str]] = []
+        for name in names:
+            if isinstance(name, bool) or name is None:
+                groups.append(["A4", "A-4", "A 4"])
+                continue
+            text = str(name).upper().replace("-", "").replace(" ", "")
+            groups.append([text, f"{text[:1]}-{text[1:]}", f"{text[:1]} {text[1:]}"])
+        return groups or [["A4", "A-4", "A 4"]]
     if check_id == "font":
         return [[str(v)] for v in (value if isinstance(value, list) else [value])]
-    if check_id in ("font-size", "line-spacing"):
-        raw = value if not isinstance(value, list) else value[0]
-        return [numeric_forms(raw)]
+    if check_id in ("font-size", "line-spacing", "footnote-size", "footnote-spacing"):
+        # ISPRAVAK 2026-08-22: prije se za listu gledao SAMO `value[0]`, pa drugi clan dopustenog
+        # skupa ("11 ili 12") nikad nije bio usidren. Sada je dovoljno da se pojavi BILO KOJI clan:
+        # skup je zapisan kao skup jer izvor dopusta oboje, pa citat ne mora navesti oba.
+        raws = value if isinstance(value, list) else [value]
+        forms: list[str] = []
+        for raw in raws:
+            forms.extend(numeric_forms(raw))
+        return [forms] if forms else []
     if check_id == "margins":
         vals = list(value.values()) if isinstance(value, dict) else [value]
         # Jednake margine se u uputama navode JEDNOM ("2.5 cm sa svih strana"), pa se traze
         # razlicite vrijednosti, ne cetiri ponavljanja iste.
-        unique = sorted({str(v) for v in vals})
+        unique = sorted({str(v) for v in vals if not isinstance(v, bool)})
         return [numeric_forms(v) for v in unique]
+    if check_id in ("page-count", "word-count", "reference-count"):
+        return range_tokens(value)
+    if check_id == "required-sections":
+        # Svaki nazvani dio rada mora se pojaviti u citatu. Popis je odredba, ne primjer.
+        names = value if isinstance(value, list) else [value]
+        out: list[list[str]] = []
+        for name in names:
+            text = str(name.get("label") if isinstance(name, dict) else name)
+            out.append([text, text[:6]] if len(text) > 6 else [text])
+        return out
+    if check_id == "heading-rules":
+        return range_tokens(value.get("size") if isinstance(value, dict) else value)
+    if check_id == "citation-style":
+        # Naziv stila ILI njegov nedvosmislen potpis. `custom` po definiciji nema potpis, pa se ne
+        # izvodi mehanicki: to je oznaka "stil postoji, nije standardni".
+        token = str(value).lower()
+        if token in ("custom", "none", "null"):
+            return []
+        signatures = {
+            "ieee": ["ieee", "[1]", "uglat"],
+            "vancouver": ["vancouver", "[1]", "uglat"],
+            "apa7": ["apa"],
+            "harvard": ["harvard"],
+            "chicago-notes": ["chicago"],
+            "chicago-author": ["chicago"],
+            "mla9": ["mla"],
+        }
+        return [signatures.get(token, [token])]
+    if check_id in COMPOSITE_AXES:
+        return composite_tokens(check_id, value)
     return []
 
 
@@ -315,10 +565,22 @@ def verify(claim: dict) -> dict:
     elif not anchored:
         reasons.append("citat se NE nalazi doslovno na navedenoj stranici")
 
+    # PAD i NEPROVJERIVO su razlicite presude, i to razlikovanje je uvedeno 2026-08-22.
+    # Prije je os bez pravila izvoda dobivala `derivable = False`, dakle isti ishod kao izmisljena
+    # vrijednost. Os koju verifikator ne zna provjeriti nije laz: `unsupported` je odsutnost dokaza,
+    # a `False` je dokaz odsutnosti, i mijesati ih znaci trositi ljudsku paznju na sum.
     groups = value_tokens(check_id, value)
+    derivable: bool | str
     if not groups:
-        derivable = False
-        reasons.append(f"za checkId '{check_id}' nema pravila izvoda (vrijednost se ne moze mehanicki provjeriti)")
+        if predicate_hit(check_id, quote):
+            # Predikatna os: citat izrice odredbu iako u njoj nema broja koji bi se usporedio.
+            derivable = True
+        elif check_id in PREDICATE_TOKENS:
+            derivable = False
+            reasons.append(f"citat ne izrice odredbu o '{check_id}' (nijedan prepoznat pojam)")
+        else:
+            derivable = "unsupported"
+            reasons.append(f"za checkId '{check_id}' nema pravila izvoda (NEPROVJERIVO, ne pad)")
     else:
         lowered = quote.lower()
         missing = [g for g in groups if not any(form.lower() in lowered for form in g)]
@@ -341,13 +603,169 @@ def verify(claim: dict) -> dict:
         "truncatedTail": tail,
         # `pass` znaci samo da tvrdnja nije mehanicki neispravna. Kvalifikator i odricaj dokumenta
         # su razlozi za ljudsku odluku, ne za odbacivanje.
-        "mechanicalPass": anchored and derivable,
+        # `unsupported` NIJE prolaz: tvrdnja se ne moze potvrditi, ali nije ni oborena. Zato ima
+        # vlastito polje i ne broji se ni u prolaze ni u padove.
+        "mechanicalPass": anchored and derivable is True,
+        "unsupported": derivable == "unsupported",
         "needsHuman": bool(qualifier) or bool(disclaimer) or choice or bool(tail),
         "reasons": reasons,
     }
 
 
+# --- NEGATIVNE KONTROLE -------------------------------------------------------------------------
+#
+# Gard bez dokaza da grize gori je od nikakvog. Svaka os koja je 2026-08-22 dobila pravilo izvoda
+# ovdje ima par: citat iz kojeg se vrijednost DOISTA izvodi i citat iz kojeg se NE izvodi. Kad bi
+# izvod bio prazan, oba bi prosla i to se ovdje vidi odmah.
+#
+# Pokreni: python scripts/verify_rule_claims.py --selftest
+SELFTEST: list[tuple[str, object, str, bool]] = [
+    # (checkId, value, quote, ocekuje se izvod?)
+    # --- PREDIKATNE OSI: rjecnik mora pokriti kako izvori STVARNO pisu -------------------------
+    # Sve tri "grize" kontrole su prepisane iz izvora koji su prosireni rjecnik iznudili: mjerenje je
+    # 60 tvrdnji proglasilo neuporistenima, a uzorak od 6 pokazao da su 3 promasaj RJECNIKA.
+    ("justify", True, "Margine su standardne, a tekst poravnat s obje strane.", True),
+    ("justify", True, "Tekst treba biti poravnat uz lijevi i desni rub stranice.", True),
+    ("justify", True, "Die folgenden Angaben gelten verbindlich. Blocksatz.", True),
+    ("justify", True, "Rad se pise u formatu A-4, font Times New Roman, velicina 12.", False),
+    ("page-numbers", True, "Obrojčavanje stranica: u podnožju, desno", True),
+    ("page-numbers", True, "stranice trebaju biti oznacene rednim brojem (dolje desno)", True),
+    ("page-numbers", True, "Footer: PAGE polje, desno poravnano, dno stranice.", True),
+    ("page-numbers", True, "Rad treba pisati na papiru A4 formata s marginama 3 cm.", False),
+    ("toc", True, "Rad mora sadrzavati:", False),  # uvod u popis BEZ popisa: nije uporiste
+    ("toc", True, "Sadrzaj se generira automatski u Wordu.", True),
+    # --- SNOPOVI PRAVILA (objekt s vise odredbi): svaki LIST mora imati vlastito sidro ----------
+    # Bez ovih kontrola bi rjecnik koji pogadja sve izgledao jednako kao rjecnik koji radi.
+    (
+        "section-surgery-rules",
+        {"frontMatter": {"numbering": "roman", "removePageNumberFromTitlePage": True},
+         "mainMatter": {"numbering": "decimal", "startAt": 1}},
+        "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        True,
+    ),
+    (   # isti snop, citat BEZ rimskih brojki: jedan list bez sidra rusi cijeli izvod
+        "section-surgery-rules",
+        {"frontMatter": {"numbering": "roman", "removePageNumberFromTitlePage": True},
+         "mainMatter": {"numbering": "decimal", "startAt": 1}},
+        "Stranice rada se numeriraju, ali ne i naslovnice; osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        False,
+    ),
+    (   # citat govori o numeriranju, ali NE o naslovnici: druga odredba istog snopa
+        "section-surgery-rules",
+        {"frontMatter": {"numbering": "roman", "removePageNumberFromTitlePage": True},
+         "mainMatter": {"numbering": "decimal", "startAt": 1}},
+        "Prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        False,
+    ),
+    (   # VRIJEDNOST koja nije u rjecniku (frontMatter arapski) -> NEPROVJERIVO, nikad tihi prolaz
+        "section-surgery-rules",
+        {"frontMatter": {"numbering": "decimal"}},
+        "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        False,
+    ),
+    (
+        "bibliography-rules",
+        {"sort": "alphabetical", "authorYearSuffixes": True},
+        "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+        True,
+    ),
+    (   # abecedni redoslijed jest u citatu, sufiksi NISU: pola snopa nije snop
+        "bibliography-rules",
+        {"sort": "alphabetical", "authorYearSuffixes": True},
+        "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora.",
+        False,
+    ),
+    (
+        "citation-sync-rules",
+        {"mode": "author-year"},
+        "bibliografskim jedinicama u obliku autor - godina",
+        True,
+    ),
+    (   # citat govori o citiranju, ali NE imenuje autor-godina
+        "citation-sync-rules",
+        {"mode": "author-year"},
+        "Studenti trebaju koristiti citatni stil s citatnicama u obliku unutartekstnih biljezaka.",
+        False,
+    ),
+    (   # NATPISI sekcija: korijen rijeci mora podnijeti padez ("Kljucne rijeci" vs "kljucnih rijeci")
+        "required-section-rules",
+        {"order": ["summary-hr", "keywords-hr"],
+         "labels": {"summary-hr": "Sažetak", "keywords-hr": "Ključne riječi"}},
+        "Na samom kraju rada potrebno je napisati njegov sazetak. Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+        True,
+    ),
+    (   # jedna od dvije sekcije nije spomenuta
+        "required-section-rules",
+        {"order": ["summary-hr", "keywords-hr"],
+         "labels": {"summary-hr": "Sažetak", "keywords-hr": "Ključne riječi"}},
+        "Na samom kraju rada potrebno je napisati njegov sazetak.",
+        False,
+    ),
+    (   # sekcija bez natpisa: nema se sto traziti u citatu -> NEPROVJERIVO
+        "required-section-rules",
+        {"order": ["summary-hr"]},
+        "Na samom kraju rada potrebno je napisati njegov sazetak.",
+        False,
+    ),
+    ("paper-size", "A4", "Stranica treba biti A4 formata.", True),
+    ("paper-size", "A3", "Stranica treba biti A4 formata.", False),  # prije 2026-08-22 je PROLAZILO
+    ("paper-size", "A3", "Plakat se predaje u formatu A3.", True),
+    ("font-size", [11, 12], "velicina slova 11 ili 12 tocaka", True),
+    ("font-size", [11, 12], "velicina slova 12 tocaka", True),  # dovoljan je jedan clan skupa
+    ("font-size", [10], "velicina slova 12 tocaka", False),
+    ("line-spacing", 1.5, "prored 1,5", True),
+    ("line-spacing", 2, "prored 1,5", False),
+    ("footnote-size", [10], "Kod biljezaka se bira velicina slova 10", True),
+    ("footnote-size", [9], "Kod biljezaka se bira velicina slova 10", False),
+    ("footnote-spacing", 1, "Biljeske (fusnote) - prored: 1", True),
+    ("page-count", {"min": 25, "max": 50}, "Rad moze imati najmanje 25, a najvise 50 stranica.", True),
+    ("page-count", {"min": 30, "max": 50}, "Rad moze imati najmanje 25, a najvise 50 stranica.", False),
+    ("reference-count", 20, "minimalno 20 referenci", True),
+    ("reference-count", 30, "minimalno 20 referenci", False),
+    ("word-count", {"min": 8000, "max": 10000}, "opseg od 8000 do 10000 rijeci", True),
+    ("citation-style", "ieee", "Literatura se navodi po IEEE standardu.", True),
+    ("citation-style", "ieee", "Ako je jako bitno, u tekst se moze staviti referenca na literaturu.", False),
+    ("citation-style", "harvard", "koristi se Harvardski sustav citiranja", True),
+    ("citation-style", "apa7", "koristi se Harvardski sustav citiranja", False),
+    ("justify", True, "Tekst poravnati s obje strane (engl. justify).", True),
+    ("justify", True, "Rad se pise fontom Times New Roman.", False),
+    ("toc", True, "Rad mora sadrzavati sadrzaj s brojevima stranica.", True),
+    ("toc", True, "Rad mora sadrzavati zakljucak.", False),
+    ("page-numbers", True, "sve ostale stranice trebaju biti numerirane", True),
+    ("page-numbers", True, "Rad se uvezuje termo uvezom.", False),
+    ("required-sections", ["uvod", "zakljucak"], "Rad sadrzi uvod, razradu i zakljucak.", True),
+    ("required-sections", ["uvod", "sazetak"], "Rad sadrzi uvod, razradu i zakljucak.", False),
+    ("heading-rules", {"size": 14}, "Naslovi se pisu velicinom 14.", True),
+    ("heading-rules", {"size": 16}, "Naslovi se pisu velicinom 14.", False),
+    ("font", ["Merriweather"], "Rad treba pisati fontom Merriweather, velicine 10 pt.", True),
+    ("font", ["Times New Roman"], "Rad treba pisati fontom Merriweather, velicine 10 pt.", False),
+    ("margins", {"top": 2.5, "right": 2.5, "bottom": 2.5, "left": 3.5}, "Margine su 2,5 cm osim lijeve koja je 3,5 cm.", True),
+    ("margins", {"top": 3, "right": 3, "bottom": 3, "left": 3}, "Margine su 2,5 cm sa svih strana.", False),
+]
+
+
+def selftest() -> int:
+    """Vraca broj promasaja. Nula znaci da svaka os grize u oba smjera."""
+    failures = 0
+    for check_id, value, quote, expected in SELFTEST:
+        groups = value_tokens(check_id, value)
+        if groups:
+            lowered = squash(quote).lower()
+            got = all(any(form.lower() in lowered for form in g) for g in groups)
+        else:
+            got = predicate_hit(check_id, quote)
+        if got != expected:
+            failures += 1
+            print(f"  PROMASAJ [{check_id}] ocekivano izvod={expected}, dobiveno={got}: {quote[:70]}")
+    covered = sorted({c for c, *_ in SELFTEST})
+    print(f"negativne kontrole: {len(SELFTEST)} slucajeva, {len(covered)} osi, promasaja: {failures}")
+    print(f"  pokrivene osi: {', '.join(covered)}")
+    return failures
+
+
 def main() -> None:
+    if "--selftest" in sys.argv:
+        raise SystemExit(1 if selftest() else 0)
     if len(sys.argv) < 2:
         print("Upotreba: python scripts/verify_rule_claims.py <claims.json>", file=sys.stderr)
         raise SystemExit(2)
@@ -357,6 +775,7 @@ def main() -> None:
 
     results = [verify(c) for c in claims]
     ok = [r for r in results if r["mechanicalPass"]]
+    unsupported = [r for r in results if r["unsupported"]]
     human = [r for r in ok if r["needsHuman"]]
 
     out_path = os.path.splitext(sys.argv[1])[0] + ".verified.json"
@@ -368,9 +787,13 @@ def main() -> None:
     print(f"tvrdnji: {len(results)}")
     print(f"  prolazi mehanicki (sidro + izvod): {len(ok)}")
     print(f"  od toga trazi ljudsku odluku (kvalifikator): {len(human)}")
-    print(f"  pada: {len(results) - len(ok)}")
+    print(f"  NEPROVJERIVO (os bez pravila izvoda): {len(unsupported)}")
+    print(f"  pada: {len(results) - len(ok) - len(unsupported)}")
     for r in results:
-        if not r["mechanicalPass"]:
+        if r["unsupported"]:
+            print(f"    NEPROVJERIVO [{r.get('checkId')}] {r.get('file')} str.{r.get('page')}")
+    for r in results:
+        if not r["mechanicalPass"] and not r["unsupported"]:
             print(f"    PAD [{r.get('checkId')}] {r.get('file')} str.{r.get('page')}: {'; '.join(r['reasons'])}")
     for r in human:
         if r["truncatedTail"]:

@@ -1,0 +1,53 @@
+{
+  "note": "Presude nad skupinama \"citat je PREDLOZAK\" i \"recenica imenuje heading, a os mjeri body\".",
+  "decisions": [
+    {
+      "ruleId": "mathos-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "LaTeX predlozak fakulteta. Vrijednosti su NAMJERNE izmjene, ne zadane: report klasa je 10pt (predlozak trazi 12pt), geometry bez opcija daje ~2,54 cm (predlozak trazi 3 cm). Predlozak koji mijenja zadano propisuje; usporedi ffst-* gdje je .docx predlozak bio NETAKNUT i tvrdnja je zato skinuta."
+    },
+    {
+      "ruleId": "mathos-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "LaTeX predlozak fakulteta. Vrijednosti su NAMJERNE izmjene, ne zadane: report klasa je 10pt (predlozak trazi 12pt), geometry bez opcija daje ~2,54 cm (predlozak trazi 3 cm). Predlozak koji mijenja zadano propisuje; usporedi ffst-* gdje je .docx predlozak bio NETAKNUT i tvrdnja je zato skinuta."
+    },
+    {
+      "ruleId": "mathos-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "LaTeX predlozak fakulteta. Vrijednosti su NAMJERNE izmjene, ne zadane: report klasa je 10pt (predlozak trazi 12pt), geometry bez opcija daje ~2,54 cm (predlozak trazi 3 cm). Predlozak koji mijenja zadano propisuje; usporedi ffst-* gdje je .docx predlozak bio NETAKNUT i tvrdnja je zato skinuta."
+    },
+    {
+      "ruleId": "mathos-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "LaTeX predlozak fakulteta. Vrijednosti su NAMJERNE izmjene, ne zadane: report klasa je 10pt (predlozak trazi 12pt), geometry bez opcija daje ~2,54 cm (predlozak trazi 3 cm). Predlozak koji mijenja zadano propisuje; usporedi ffst-* gdje je .docx predlozak bio NETAKNUT i tvrdnja je zato skinuta."
+    },
+    {
+      "ruleId": "mathos-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "LaTeX predlozak fakulteta. Vrijednosti su NAMJERNE izmjene, ne zadane: report klasa je 10pt (predlozak trazi 12pt), geometry bez opcija daje ~2,54 cm (predlozak trazi 3 cm). Predlozak koji mijenja zadano propisuje; usporedi ffst-* gdje je .docx predlozak bio NETAKNUT i tvrdnja je zato skinuta."
+    },
+    {
+      "ruleId": "mathos-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "LaTeX predlozak fakulteta. Vrijednosti su NAMJERNE izmjene, ne zadane: report klasa je 10pt (predlozak trazi 12pt), geometry bez opcija daje ~2,54 cm (predlozak trazi 3 cm). Predlozak koji mijenja zadano propisuje; usporedi ffst-* gdje je .docx predlozak bio NETAKNUT i tvrdnja je zato skinuta."
+    },
+    {
+      "ruleId": "unizd-germanistika-diplomski--font-size",
+      "modality": "obligation",
+      "scope": "body",
+      "note": "citat: 'Rad MORA biti izradjen na racunalu i to: ... velicina slova 12 (tijelo rada)'. Obveza pokriva nabrajanje iza 'i to:'. 14 pt su naslovi poglavlja, pa je opseg tijelo rada, ne naslov."
+    },
+    {
+      "ruleId": "unizd-germanistika-zavrsni--font-size",
+      "modality": "obligation",
+      "scope": "body",
+      "note": "citat: 'Rad MORA biti izradjen na racunalu i to: ... velicina slova 12 (tijelo rada)'. Obveza pokriva nabrajanje iza 'i to:'. 14 pt su naslovi poglavlja, pa je opseg tijelo rada, ne naslov."
+    }
+  ]
+}

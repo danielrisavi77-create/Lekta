@@ -1,0 +1,824 @@
+===== PAGE 1/23 =====
+Temeljem članka 21., Pravilnika Fakulteta za forenzičke znanosti Sveučilišta u Splitu,
+Stručno vijeće na svojoj XVII. sjednici u ak. godini 2024./2025. održanoj 10. rujna 2025.
+
+donijelo je
+
+PRAVILNIK
+O
+DIPLOMSKOM RADU I ISPITU
+
+I. OPĆE ODREDBE
+
+Članak 1.
+Ovim Pravilnikom propisuje se postupak izrade i obrane diplomskog rada na Fakultetu za
+
+forenzičke znanosti Sveučilišta u Splitu (u daljem tekstu: Fakultet).
+
+Članak 2.
+Na kraju sveučilišnog diplomskog studija izrađuje se diplomski rad i polaže diplomski ispit.
+
+Članak 3.
+Diplomski rad je samostalni rad studenta, a svrha mu je ocjenjivanje studentove sposobnosti i
+samostalnosti u obradi problema iz struke, uz korištenje literature, eksperimentalnih studija
+slučajeva, empirijskih istraživanja, računske i analitičke obrade, znanja i iskustava stručnjaka
+
+iz prakse te svih ostalih izvora neophodnih za izradu rada.
+
+Članak 4.
+(1) Ako je student tijekom studija izradio jedan ili više radova koji po opsegu i sadržaju
+odgovaraju diplomskom radu, Stručno vijeće na prijedlog Povjerenstva za diplomske ispite (u
+daljnjem tekstu Povjerenstvo), može te radove priznati kao diplomski rad.
+(2) Povjerenstvo može kao diplomski rad priznati izum, tehničko unapređenje, znanstveno
+
+otkriće, odnosno rad kojim je student ostvario osobno kreativno — tehnološko ili ekonomsko
+
+===== PAGE 2/23 =====
+rješenje u gospodarskim ili javnim institucijama, a koje po sadržaju i opsegu odgovara
+diplomskom radu.
+(3) U slučaju propisanim stavkom 1 ovoga članka mentor diplomskog rada treba Povjerenstvu
+
+podnijeti zahtjev za priznavanje diplomskog rada.
+II. PRIJAVA TEME DIPLOMSKOG RADA
+
+Članak 5.
+(1) Student odabire temu diplomskog rada u posljednjoj godini studija.
+(2) Za izbor teme diplomskog rada student se prijavljuje predmetnom nastavniku kod kojeg
+želi izraditi diplomski rad.
+(3) Postupak prijave tema diplomskih radova započinje u listopadu te traje do kraja lipnja
+tekuće akademske godine.
+(4) Do roka navedenog u prethodnom stavku ovoga članka student treba izabrati mentora te u
+suradnji s mentorom razraditi i prijaviti temu diplomskog rada. Ukoliko student samostalno ne
+pronađe mentora dva mjeseca prije krajnjeg roka, može o tome pisanim putem obavijestiti
+Povjerenstvo za diplomske ispite.
+(5) Prijava teme diplomskog rada provodi se na obrascima koji se nalaze u prilogu ovoga
+Pravilnika (Prilog 1. i Prilog 2.) koji se trebaju predati Studentskoj referadi Fakulteta do 5. u
+mjesecu.
+(6) Studentska referada pristigle prijave tema diplomskih radova dostavlja Povjerenstvu.
+(7) Prijava treba sadržavati pisanu suglasnost mentora za izradu rada, naziv teme diplomskog
+rada i prijedlog ispitnog povjerenstva usmene obrane diplomskog rada.
+(8) Predložene teme diplomskih radova razmatra Povjerenstvo te ih u slučaju potvrde
+dostavlja Stručnom vijeću na usvajanje na sjednici u tekućem mjesecu.
+(9) Nakon usvajanja na sjednici Stručnog vijeća teme se oglašavaju na nastavnom portalu.
+(10) Mentor može u tekućoj akademskoj godini predložiti do pet tema diplomskih radova.
+(11) Iznimno se, uz dopuštenje Povjerenstva, mentoru mogu odobriti dodatne teme.
+(12) Diplomski rad može se izraditi iz svih predmeta struke koji se predaju na sveučilišnom
+diplomskom studiju.
+(13) Ako student ne prijavi temu diplomskog rada na način i u rokovima utvrđenim ovim
+
+Pravilnikom, u narednoj akademskoj godini ponovo upisuje diplomski rad.
+
+Članak 6.
+
+===== PAGE 3/23 =====
+Student može jednom promijeniti temu diplomskog rada za što mu je potrebna suglasnost
+
+mentora.
+
+II. MENTOR
+
+Članak 7.
+(1) Planiranje i izvedbu rada vodi studentov mentor te po potrebi i komentor.
+(2) Mentor može biti svaki izabrani nastavnik Fakulteta koji najmanje ima znanstveni stupanj
+doktora znanosti.
+(3) Iznimno, mentor može biti i osoba koja ne sudjeluje u nastavi na Fakultetu, uz
+obrazloženu zamolbu Povjerenstvu.
+(4) U slučaju prihvaćanja zahtjeva iz stavka 3, potrebno je predložiti kao komentora,
+nastavnika sa Fakulteta.
+(5) Komentor može biti nastavnik Fakulteta koji sudjeluje u izvođenju nastave na studiju.
+(6) Komentor može biti i druga osoba koja ne izvodi nastavu na Fakultetu te ima završen
+najmanje sveučilišni diplomski studij, a koju mentor odredi za komentoriranje rada.
+
+(7) Dužnosti mentora su:
+
+"> odabrati i staviti na raspolaganje kandidatu osnovnu literaturu i uputiti ga na način i
+mogućnosti pribavljanja dopunske literature,
+
+" uvesti kandidata u problematiku i metode praktičnog dijela rada i nadzirati njegov rad,
+
+* dati upute kandidatu za pripremu i izradu pisanoga dijela rada,
+
+" uputiti kandidata na način izlaganja prilikom obrane rada,
+
+"dogovoriti obranu rada s Povjerenstvom,
+
+* sudjelovati, kao član Povjerenstva, u javnoj obrani rada.
+
+TV. IZRADA DIPLOMSKOG RADA
+
+Članak 8.
+(1) Diplomski rad treba izraditi prema naputcima ovog Pravilnika.
+(2) Preporučuje se da rad ima minimalno 30 stranica teksta.
+(3) Poglavlja diplomskog rada su: Uvod, Cilj rada, Izvori podataka i metode, Rezultati,
+Rasprava, Zaključci, Sažetak na hrvatskom jeziku, Sažetak na engleskom jeziku, Literatura i
+
+Životopis.
+
+===== PAGE 4/23 =====
+Uvod. U uvodnom dijelu kandidat uvodi, na temelju spoznaje iz literature, u područje
+svojega istraživanja. Na kraju se kandidat, na osnovi prethodno navedenoga,
+opredjeljuje za neku užu temu iz područja, uz obrazloženje svrhe (važnosti) te teme.
+Cilj rada. Opisati što se točno želi istražiti iz užeg područja odabrane teme, opisati
+način istraživanja i postaviti hipotezu ili navesti što se očekuje od postavljenog
+istraživanja. Student treba odabrati realan, izvediv Cilj, na koji će moći dati odgovore
+koji izravno odgovaraju hipotezi.
+
+Izvori podataka i metode. Opisati materijale ili i uzorke na kojima je obavljeno
+istraživanje i metode (postupke) koji su upotrijebljeni u istraživanju (intervju,
+eksperimentalni studiji slučajeva, empirijska istraživanja, laboratorijski testovi, ankete,
+korištene statističke metode, itd.).
+
+. Rezultati. Opisuju se dobiveni rezultati, Rezultati se trebaju prikazati u preglednim
+tablicama i slikama (grafikonima) koji moraju biti jasni i bez čitanja teksta. Kad je to
+potrebno, obvezatna je primjena statističkih metoda.
+
+Rasprava. U raspravi se kritički uspoređuju vlastiti rezultati s rezultatima drugih,
+odnosno s onim što se općenito zna o tom problemu. U raspravi ne treba ponavljati
+opis rezultata, nego se oni obrazlažu, ističući pritom i moguće nedostatke dobivenih
+rezultata odnosno proučavanja. U tom dijelu student će pokazati koliko je upoznat s
+rezultatima drugih u užem području istraživanja i, eventualno, predložiti proširenje
+istraživanja u budućem radu. Prema potrebi poglavlja rezultati i rasprava se mogu
+povezati u jedno poglavlje.
+
+Zaključci. Zaključci su numerički poredane kratke tvrdnje, koje ne treba posebno
+opisivati odnosno obrazlagati. Zaključci se temelje samo na rezultatima dobivenim u
+vlastitom proučavanju. Ako je potrebno uključiti rezultate drugih (da bi se pojačala
+vjerodostojnost vlastitih opažanja) onda to treba istaknuti. Ako nisu dobiveni rezultati
+koji su postavljeni u ciljevima, to treba navesti, a takav ishod ne umanjuje vrijednost
+rada.
+
+Literatura. Svaki rad treba imati 15 - 30 (pročitanih) referencija, koje je potrebno
+propisno citirati. S obzirom na interdiscilpinarnost studijskog programa Forenzika
+moguće je rabiti jedan od sljedeća tri stila za navođenje literature: APA sustav
+citiranja, Vancouverski sustav citiranja ili Chicago sustav citiranja. Student u
+dogovoru s mentorom odabire odgovarajući stil te odabrani stil dosljedno primjenjuje.
+Upute za svaki od stilova citiranja i navođenja literature dostupni su na mrežnoj
+
+stranici časopisa ST OPEN: http://st-open.unist.hr/index.php/st-open/citing-literature.
+
+
+===== PAGE 5/23 =====
+h. Sažetci (na hrvatskom i engleskom jeziku). Sažetak treba biti strukturiran (Cilj,
+Metode, Rezultati, Zaključci) i ne dulji od 400 riječi. Sažetak treba na početku imati
+naveden naslov rada, a na kraju popis ključnih riječi.
+
+i. Izjava o akademskoj čestitosti. Iza životopisa se prilaže izjava o akademskoj
+čestitosti (prilog 3.) koju je potrebno nadopuniti sa osobnim podacima.
+
+(4) Svi ostali prilozi diplomskom radu se ne numeriraju i nalaze se na kraju rada.
+
+(5) Ako se u okviru istraživanja za diplomski rad podrazumijeva uključivanje ljudi i/ili
+
+životinja kao sudionika, potrebno je, prije provedbe istraživanja, ishoditi pozitivno
+
+mišljenje Etičkog povjerenstva Fakulteta, te po potrebi, i druge institucije na kojoj se
+
+istraživanje provodi.
+
+Članak 9.
+
+Tiskani rad ima ovaj oblik:
+
+1. Pisano djelo treba biti tiskano na papiru formata A4, s označenim stranicama na
+donjem (gornjem) desnom rubu teksta.
+
+2. Naslovna stranica sadrži naziv sveučilišta i fakulteta, naziv modula, naslov rada,
+oznaku diplomski rad, akademsku godinu, ime mentora i komentora (ako je
+imenovan). Slijediti primjer iz priloga 4. ovog Pravilnika.
+
+3. Tekst se piše proredom od 1,5 reda, stilom Times New Roman i veličinom slova 12 pri
+čemu rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz
+obostrano poravnavanje teksta.
+
+4. Za označavanje poglavlja ili pod-poglavlja preporučuje se decimalno načelo:
+
+" 1. (poglavlje)
+
+= 1.1. (pod-poglavlje)
+
+" 1.1.1. (pod-pod-poglavlje)
+
+* 1.1.1.1. (pod-pod-pod-poglavlje).
+
+5. Naslovi poglavlja i pod-poglavlja mogu se istaknuti velikim odnosno malim masnim
+slovima i pišu se istim stilom kao i tekst. Naslovi poglavlja se pišu veličinom slova 16,
+a pod-poglavlja veličinom 14.
+
+6. Novo poglavlje započinje na novoj stranici.
+
+7. Slike (grafikoni) i tablice moraju biti jasno brojčano označeni. Naslov tablice se
+postavlja iznad teksta (bez točke na kraju!), a naslov slike (crteža) ispod slike (crteža).
+
+Tekstovi u podbilješkama tablica označuju se simbolima prema preporuci ICMJE.
+
+===== PAGE 6/23 =====
+Simboli se nalaze (i jasno povezuju) u tablici i u podbilješkama. Slike i tablice mogu
+biti umetnute u tekst (nakon njih s dva do tri proreda slijedi tekst). Ako su slika
+(grafikon) ili tablica preuzeti od nekog drugog autora ili izvora obavezno je navođenje
+izvora uz prethodno dobivenu suglasnost vlasnika autorskog prava osim ako se radi o
+materijalima otvorenog pristupa.
+
+8. Citati se navode sukladno članku 8. stavak 3.
+V. PREDAJA DIPLOMSKOG RADA
+
+Članak 10.
+(1) Prvu radnu verziju diplomskog rada student je dužan predati mentoru najkasnije do 15.
+srpnja.
+(2) Cjelovitu verziju diplomskog rada, uređenu prema odredbama ovoga Pravilnika te
+uputama mentora, student je dužan predati mentoru najkasnije do 31. kolovoza. U protivnom,
+u narednoj akademskoj godini ponovo upisuje diplomski rad.
+(3) Od prihvaćanja teme diplomskog rada do predaje rada treba proteći minimalno dva
+mjeseca.
+(4) Mentor ima pravo propitivanja studenta o diplomskom radu radi utvrđivanja
+vjerodostojnosti i samostalnosti studenta u radu.
+(5) Radi zaštite od plagiranja, obvezna je provjera izvornosti svakog diplomskog rada s
+pomoću programa za provjeru izvornosti.
+(6) Provjera izvornosti provodi se tijekom pisanja rada (ako se rad dostavlja u više faza) pri
+čemu rad provjerava sam student te uz predanu svaku inačicu rada student mora priložiti
+mentoru izvještaj programa o provedenoj provjeri izvornosti.
+(7) Nakon zaprimanja konačne inačice diplomskog rada, rad se službeno pregledava te se
+provjerava njegova izvornost, što se potvrđuje ispunjavanjem Izvješća o provedenoj provjeri
+izvornosti diplomskoga rada (Prilog 9.).
+(8) Izvornost rada u pravilu, uz studenta obvezno provjerava i mentor.
+(9) Nakon provjere izvornosti rada, obveza mentora je ispuniti i potpisati Izvješće o
+provedenoj provjeri izvornosti diplomskoga rada (Prilog 9.).
+(10) Primjerak diplomskog rada u elektronskom obliku, zajedno s Izvješćem o provedenoj
+provjeri izvornosti diplomskoga rada (Prilog 9.) i Izvještajem iz programa za provjeru
+izvornosti student dostavlja Povjerenstvu za diplomske ispite koje ih prosljeđuje Ispitnom
+
+povjerenstvu na pregled.
+
+===== PAGE 7/23 =====
+(11) Ako formalni uvjeti iz stavka 10. nisu ispunjeni student ne može pristupiti obrani
+diplomskog rada.
+
+(12) Rad se provjerava korištenjem računalnoga programa kojeg je Fakultet odobrio za
+uporabu.
+
+(13) Ako se kontrolom izvornosti rada utvrdi da rad nije u skladu s prihvatljivim kriterijima
+mentora u smislu izvornosti, ovisno o procjeni mentora, rad se vraća na doradu ili se izrada
+diplomskog rada prekida i student ima obvezu biranja nove teme i mentora diplomskog rada.
+(14) Članovi Ispitnog povjerenstva dužni su pregledati rad i pripadajuće priloge te u pisanom
+obliku priopćiti svoje mišljenje mentoru i studentu u roku od 8 dana (Prilog 5.).
+
+(15) Prihvaćen i ispravljen te uvezani rad student donosi na obranu diplomskog rada u 5
+uvezanih primjeraka, od kojih najmanje dva tvrdo ukoričena u korice plave boje.
+
+(16) Student uz tvrdo ukoričeni primjerak za knjižnicu Fakulteta dostavlja primjerak svog
+rada i Izvještaj iz programa za provjeru izvornosti u pdf obliku na dva CD-a, zatim potpisanu
+Izjavu o akademskoj čestitosti (Prilog 3.), potpisanu Izjavu o odobrenju za pohranu i objavu
+ocjenskog rada (Prilog 6.) kao i Potvrdu mentora za predaju digitalnog i tiskanog primjerka
+ocjenskog rada (Prilog 7.).
+
+(17) Diplomski rad u tiskanom obliku treba biti na hrvatskom jeziku i na latiničnom pismu.
+(18) Po odobrenju Stručnog vijeća Fakulteta diplomski rad može biti napisan na jednom od
+svjetskih jezika, a u tom slučaju uz sažetak na tom jeziku rad mora sadržavati i sažetke na
+hrvatskom i engleskom jeziku.
+
+(19) Diplomski rad, odobren od strane mentora mora se dostaviti Povjerenstvu za diplomske
+ispite najkasnije petnaest dana prije završetka tekuće akademske godine, a obrana rada treba
+biti do kraja iste akademske godine.
+
+(20) Obrane se u tekućoj akademskoj godini održavaju tokom mjeseca veljače, srpnja i rujna.
+U iznimnim situacijama, studenti mogu uputiti pisanu zamolbu i obrazloženje za odobrenjem
+obrane diplomskog rada u nekom drugom terminu. Povjerenstvo za diplomske ispite zamolbu
+
+će razmotriti i obavijestiti studenta o ishodu.
+
+Članak 11.
+(1) Zbog organiziranja poslova oko diplomskih ispita Stručno vijeće Fakulteta bira stalno
+Povjerenstvo.
+(2) Za člana ovog Povjerenstva mogu biti izabrani nastavnici Fakulteta na znanstveno-
+
+nastavnom ili nastavnom radnom mjestu.
+
+===== PAGE 8/23 =====
+(3) Povjerenstvo utvrđuje obrasce koje treba popuniti prilikom obavljanja radnji oko
+diplomskog rada i diplomskog ispita. |
+
+Članak 12.
+(1) Na prijedlog mentora Povjerenstvo određuje Ispitno povjerenstvo od tri člana za svakog
+predloženika.
+(2) Barem jedan član Ispitnog povjerenstva treba biti zaposlenik Sveučilišnog odjela.
+(3) U odsutnosti jednog od članova zamjenjuje ga predsjednik povjerenstva za diplomske
+ispite, pomoćnik pročelnika za nastavu ili drugi zaposlenik Sveučilišnog odjela uz prethodnu
+
+suglasnost predsjednika Povjerenstva.
+
+Članak 13.
+Ako predloženi diplomski rad ne bude prihvaćen, Ispitno povjerenstvo će odrediti preradbu ili
+
+dopunu predloženog rada ili izradu novog rada.
+VI. DIPLOMSKI ISPIT
+
+Članak 14.
+Diplomskom ispitu može pristupiti predloženik koji zadovoljava sljedeće uvjete:
+1. daje bio upisan na Diplomskom sveučilišnom studiju Forenzika,
+2. da je udovoljio svim oblicima nastave propisane Nastavnim planom i programom,
+
+3. da mu je prihvaćen diplomski rad.
+
+Članak 15.
+(1) Usmeni ispit sastoji se od obrane diplomskog rada na kojem se provjerava znanje
+predloženika iz tog područja.
+(2) Usmenom ispitu može pristupiti predloženik čiji je diplomski rad prihvaćen.
+(3) Student može pristupiti obrani diplomskog rada najranije u roku od 8 (osam) dana po
+predaji uvezanog rada, a najkasnije u roku od mjesec dana od predaje rada.
+(4) Nadnevak obrane diplomskog rada sporazumno utvrđuju članovi Ispitnog povjerenstva i o
+tome obavještavaju Povjerenstvo za diplomske ispite.
+(5) Usmeni se ispit polaže pred Ispitnim povjerenstvom i mora se obaviti u jednom danu.
+(6) Povjerenstvo za diplomske ispite obavještava studenta o terminu obrane diplomskog rada.
+(7) Obrana diplomskog rada je javna, a mjesto i vrijeme obrane objavljuje se na oglasnoj ploči
+
+i mrežnoj stranici Fakulteta i to najkasnije 5 radnih dana prije termina obrane.
+
+===== PAGE 9/23 =====
+(8) Za obranu diplomskog rada student mora izraditi prezentaciju rada u programu
+
+PowerPoint ili nekom od ekvivalentnih računalnih programa.
+
+Članak 16.
+(1) Student može zbog opravdanih razloga najmanje dva dana prije obrane diplomskog rada
+zatražiti odgodu.
+(2) O opravdanosti razloga odgode odlučuje Ispitno povjerenstvo, te se određuje novi datum
+
+obrane diplomskog rada.
+
+Članak 17.
+Student koji bez opravdanog razloga ne pristupi obrani diplomskog rada, u roku od 30 dana
+od predaje uvezanog rada gubi pravo na obranu i mora zatražiti da mu se odobri izbor nove
+
+teme diplomskog rada u okviru istog ili drugog predmeta.
+
+Članak 18.
+(1) O tijeku usmenog dijela diplomskog ispita vodi se zapisnik u koji se upisuju podatci o
+diplomskom radu, usmenom dijelu ispita te konačna ocjena ispita. (Prilog 8.)
+(2) Zapisnik potpisuju svi članovi Ispitnog povjerenstva i predsjednik Povjerenstva za
+
+diplomske ispite.
+
+Članak 19.
+(1) Ocjenu uspjeha predloženika na diplomskom ispitu donosi Ispitno povjerenstvo odmah
+nakon održavanja usmenog dijela ispita i to na temelju diplomskog rada i odgovora na
+usmenom dijelu ispita.
+
+(2) Na ocjenu diplomskog rada i ocjenu obrane student nema pravo žalbe.
+
+Članak 20.
+Ako predloženik ne zadovolji na usmenom dijelu diplomskog ispita, Ispitno povjerenstvo će
+
+mu odrediti novi rok za polaganje, a može mu naložiti i izradbu novog diplomskog rada.
+
+Članak 21.
+Ako je ocjena obrane pozitivna predsjednik Povjerenstva objavljuje da je student uspješno
+
+obranio diplomski rad sa zaključnom ocjenom i time stekao pravo na akademski naziv
+
+===== PAGE 10/23 =====
+sveučilišni magistar/magistra forenzike (univ. mag. forens.), a time i sva prava i obaveze koje
+
+iz tog zvanja proizlaze.
+
+Članak 22.
+(1) Na temelju zapisnika o obrani diplomskog rada Studentska referada unosi podatke o
+uspjehu u Informacijski sustav visokih učilišta (ISVU) i matičnu knjigu diplomiranih
+studenata te izdaje potvrdnicu o diplomiranju, koja važi do izdavanja diplome.
+
+(2) Potvrdnicu iz stavka 1. ovog članka potpisuje dekan Fakulteta.
+
+Članak 23.
+(1) Sedam (7) radnih dana nakon usmene obrane student može podići potvrdnicu o
+diplomiranju, kao i ostale potrebne dokumente u Studentskoj referadi.
+(2) Jedan primjerak diplomskog rada vraća se studentu, po jedan zadržava mentor i ostala dva
+
+člana Povjerenstva, dok peti ostaje u arhivi Fakulteta.
+
+VII. ZAVRŠNE ODREDBE
+
+Članak 24.
+Ovaj Pravilnik objavljen je na oglasnoj ploči Fakulteta za forenzičke znanosti dana 10. rujna
+
+2025. te stupa na snagu osmog dana od dana objave.
+
+KLASA:029-03/24-05/10
+URBROJ:2181-227-102-181
+
+Split, 10. rujna 2025.
+
+10
+
+===== PAGE 11/23 =====
+(PRILOG 1.)
+Ime i prezime mentora:
+Ime i prezime komentora:
+Potpis mentora:
+
+Diplomski rad je izrađen u suradnji sa nastavnom bazom/ gospodarstvom ( navesti naziv):
+
+Fakultet za forenzičke znanosti
+Povjerenstvu za diplomske ispite
+
+PREDMET: ZAMOLBA ZA PRIHVAĆANJE TEME DIPLOMSKOG RADA U AK. GODINI 20xx./20xx.
+
+Predlažem Povjerenstvu teme diplomskih radova:
+
+Tema diplomskog rada: Naziv kolegija iz kojeg se brani diplomski rad:
+
+Tema diplomskog rada na engleskom jeziku: Opis zadatka (Ukratko opisati temu s glavnim ciljem rada):
+
+napomena: ako je zbog posebnosti teme potrebno čuvanje rada u tajnosti molimo to navesti prilikom prijave teme. U tom slučaju objavljuje se samo
+sažetak rada.
+
+
+===== PAGE 12/23 =====
+(PRILOG 2.)
+
+SVEUČILIŠTE U SPLITU
+
+Fakultet za forenzičke znanosti
+
+PODATCI O STUDENTU
+Ime i prezime
+
+Modul
+
+JMBAG
+
+Adresa stalnog boravka
+E-mail adresa; br.tel.
+
+POVJERENSTVU ZA DIPLOMSKE ISPITE
+
+Predmet: Prijava teme diplomskog rada
+
+Temeljem Pravilnika Fakulteta za forenzičke znanosti i Pravilnika o diplomskom radu i ispitu
+stekao-la sam uvjet za utvrđivanje teme diplomskog rada iz označenog modula.
+
+MODUL (zaokruži odgovarajući)
+
+1. ISTRAŽIVANJE MJESTA DOGAĐAJA
+
+2. FORENZIČNA KEMIJA I MOLEKULARNA BIOLOGIJA
+
+3. FORENZIKA I NACIONALNE SIGURNOSTI
+
+4. FINANCIJ SKO-RAČUNOVODSTVENA FORENZIKA
+
+5. MENADŽMENT U VATROGASTVU I ISTRAGE POŽARA
+
+Rad bi izvodio-la u
+
+Nastavnik - mentor
+
+Potpis studenta:
+
+
+===== PAGE 13/23 =====
+S popisa odobrenih tema diplomskih radova prijavljujem temu za izradu diplomskog rada pod
+
+nazivom:
+
+U Ispitno povjerenstvo predlaže se:
+
+1.
+
+2.
+
+Potpis mentora:
+
+Split, godine
+
+ISPUNJAVA POVJERENSTVO
+
+Povjerenstvo za diplomske ispite primilo je zahtjev dana i zavelo pod
+brojem
+
+Prijava se prihvaća
+
+Prijava se odbija
+
+Predsjednik Povjerenstva za diplomske
+ispite:
+
+
+===== PAGE 14/23 =====
+(PRILOG 3.)
+SVEUČILIŠTE U SPLITU
+
+Fakultet za forenzičke znanosti
+
+Izjava o akademskoj čestitosti
+
+Ja, , izjavljujem da je moj diplomski rad pod naslovom
+
+rezultat mojega vlastitog rada, da se temelji na mojim istraživanjima te da se oslanja na izvore
+i radove navedene u bilješkama i popisu literature. Nijedan dio ovoga rada nije napisan na
+nedopušten način, odnosno nije prepisan bez citiranja i ne krši ničija autorska prava.
+Izjavljujem da nijedan dio ovoga rada nije iskorišten u nijednom drugom radu pri bilo kojoj
+drugoj visokoškolskoj, znanstvenoj, obrazovnoj ili inoj ustanovi.
+
+Sadržaj mojega rada u potpunosti odgovara sadržaju obranjenoga i nakon obrane uređenoga
+
+rada.
+
+Split,
+
+Potpis studenta/studentice:
+
+
+===== PAGE 15/23 =====
+PRILOG 4 (Tvrde korice.)
+
+SVEUČILIŠTE U SPLITU
+FAKULTET ZA FORENZIČKE ZNANOSTI
+NAVESTI MODUL
+
+DIPLOMSKI RAD
+
+NASLOV RADA
+
+IME I PREZIME
+
+Split, mjesec 1 godina
+
+===== PAGE 16/23 =====
+PRILOG 4. (unutrašnja stranica)
+
+SVEUČILIŠTE U SPLITU
+FAKULTET ZA FORENZIČKE ZNANOSTI
+NAVESTI MODUL
+
+DIPLOMSKI RAD
+
+NASLOV RADA
+
+IME MENTORA
+
+IME I PREZIME
+
+JMBAG
+
+Split, mjesec 1 godina
+
+===== PAGE 17/23 =====
+PRILOG 4. NASTAVAK
+
+Rad je izrađen U ..........000000aaa vanka anna
+pod nadZOTOM _..........00aaaaaa kavana
+
+u vremenskom razdoblju od ............. dO ...........
+
+Datum predaje diplomskog rada:
+
+Datum prihvaćanja rada:
+
+Datum usmenog polaganja:
+
+Povjerenstvo: 1.
+
+2.
+
+3.
+
+
+===== PAGE 18/23 =====
+(PRILOG 5.)
+
+SVEUČILIŠTE U SPLITU
+
+Fakultet za forenzičke znanosti
+
+POVJERENSTVO ZA DIPLOMSKE ISPITE
+
+(član Ispitnog povjerenstva)
+
+Povjerenstvo za diplomske ispite Fakulteta za forenzičke znanosti dostavlja Vam neuvezani
+
+diplomski rad predloženika
+
+s molbom da ga pregledate, te u roku od 15 dana vratite s obrazloženjem.
+1. RAD SE PRIHVAĆA
+
+2. RAD SE NE PRIHVAĆA
+
+3. RAD TREBA NADOPUNITI
+
+PRIMJEDBE:
+
+Član Ispitnog povjerenstva
+
+U Splitu, godine
+
+
+===== PAGE 19/23 =====
+(PRILOG 6.)
+SVEUČILIŠTE U SPLITU
+Fakultet za forenzičke znanosti
+
+IZJAVA
+o odobrenju za pohranu i objavu ocjenskog rada
+
+kojom ja , OIB: ,
+student Fakulteta za forenzičke znanosti, kao autor ocjenskog rada pod naslovom:
+
+» dajem odobrenje da se moj ocjenski rad , bez naknade, trajno javno objavi u otvorenom pristupu u
+Digitalnom repozitoriju Sveučilišta u Splitu te repozitoriju Nacionalne i sveučilišne knjižnice u Zagrebu
+(u skladu sa odredbama Zakona o znanstvenoj djelatnosti i visokom obrazovanju (NN br. 119/22).
+
+Ovom izjavom potvrđujem da sam autor/autorica predanog ocjenskog rada
+(zavšnog/diplomskog/doktorskog- zaokružite odgovarajuće) i da sadržaj njegove elektroničke inačice
+u potpunosti odgovara sadržaju obranjenog i dovršenog ocjenskog rada.
+
+*U slučaju potrebe dodatnog ograničavanja pristupa Vašem ocjenskom radu, mentor podnosi
+obrazloženi zahtjev nadležnom tijelu Odjela prilikom prijave teme diplomskog rada ( Prilog 1).
+
+Split,
+
+(vlastoručni potpis studenta)
+
+U svrhu podržavanja otvorenog pristupa ocjenskim radovima trajno pohranjenim i objavljenim u javno
+dostupnom digitalnom repozitoriju Sveučilišta u Splitu, ovom izjavom dajem pravo iskorištavanja mog
+ocjenskog rada kao autorskog djela pod uvjetima Creative Commons licencije:
+
+1) CC BY (Imenovanje)
+
+2) CC BY-SA (Imenovanje — Dijeli pod istim uvjetima)
+
+3) CC BY-ND (Imenovanje — Bez prerada)
+
+4) CC BY-NC (Imenovanje — Nekomercijalno)
+
+5) CC BY-NC-SA (Imenovanje — Nekomercijalno — Dijeli pod istim uvjetima)
+6) CC BY-NC-ND (Imenovanje — Nekomercijalno — Bez prerada)
+
+Ovime potvrđujem da mi je prilikom potpisivanja ove izjave pravni tekst licencija bio dostupan te da
+sam upoznat s uvjetima pod kojim dajem pravo iskorištavanja navedenog djela.
+
+(vlastoručni potpis studenta)
+
+===== PAGE 20/23 =====
+O Creative Commons (CC) licencijama
+
+CC licencije pomažu autorima da zadrže svoja autorska i srodna prava, a drugima dopuste da umnožavaju, distribuiraju i na
+neke načine koriste njihova djela, barem u nekomercijalne svrhe. Svaka CC licencija također osigurava autorima da će ih se
+priznati i označiti kao autore djela. CC licencije pravovaljane su u čitavom svijetu.
+
+Prilikom odabira autor treba odgovoriti na nekoliko pitanja - prvo, želi li dopustiti korištenje djela u komercijalne svrhe ili ne,
+a zatim želi li dopustiti prerade ili ne? Ako davatelj licence odluči da dopušta prerade, može se također odučiti da od svatko
+tko koristi djelo, novonastalo djelo učini dostupnim pod istim licencnim uvjetima.
+
+CC licencije iziskuju od primatelja da traži dopuštenje za sve ostala korištenja djela koje su prema zakonu isključivo pravo
+autora, a koje licencija izrijekom ne dopušta.
+
+Licencije:
+
+(GONI
+EY Imenovanje (CC BY)
+
+Ova licencija dopušta drugima da distribuiraju, mijenjaju i prerađuju Vaše djelo, čak i u komercijalne svrhe, dokle god Vas
+navode kao autora izvornog djela. To je najotvorenija CC licencija.
+
+Sažetak licencije: https://creativecommons.org/licenses/by/4.0/deed.hr
+Puni pravni tekst: https://creativecommons.org/licenses/by/4.0/legalcode
+
+Imenovanje-Dijeli pod istim uvjetima (CC BY-SA)
+
+Ova licencija dopušta drugima da mijenjaju i prerađuju Vaše djelo, čak i u komercijalne svrhe, dokle god Vas navode kao
+autora i licenciraju novonastala djela pod istim uvjetima (sve daljnje prerade će također dopuštati komercijalno korištenje).
+
+Sažetak licencije: https://creativecommons.org/licenses/by-sa/4.0/deed.hr
+Puni pravni tekst: https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+© ST Imenovanje-Bez prerada (CC BY-ND)
+
+Ova licencija dopušta redistribuiranje, komercijalno i nekomercijalno, dokle god se djelo distribuira cjelovito i u
+neizmijenjenom obliku, uz isticanje Vašeg autorstva.
+
+Sažetak licencije: https://creativecommons.org/licenses/by-nd/4.0/deed.hr
+Puni pravni tekst: https://creativecommons.org/licenses/by-nd/4.0/legalcode
+
+Imenovanje-Nekomercijalno (CC BY-NC)
+
+Ova licencija dopušta drugima da mijenjaju i prerađuju Vaše djelo u nekomercijalne svrhe. Iako njihova nova djela bazirana
+na Vašem moraju Vas navesti kao autora i biti nekomercijalna, ona pritom ne moraju biti licencirana pod istim uvjetima.
+
+Sažetak licencije: https://creativecommons.org/licenses/by-nc/4.0/deed.hr
+Puni pravni tekst: https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+Imenovanje-Nekomercijalno-Dijeli pod istim uvjetima (CC BY-NC-SA)
+
+Ova licencija dopušta drugima da mijenjaju i prerađuju Vaše djelo u nekomercijalne svrhe, pod uvjetom da Vas navedu kao
+autora izvornog djela i licenciraju novonastala djela pod istim uvjetima.
+
+Sažetak licencije: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.hr
+Puni pravni tekst: https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+
+SUNT Imenovanje-Nekomercijalno-Bez prerada (CC BY-NC-ND)
+
+Ovo je najrestriktivnija od CC licencija — dopušta drugima da preuzmu Vaše djelo i da ga dijele s drugima pod uvjetom da
+Vas navedu kao autora, ali ga ne smiju mijenjati ili koristiti u komercijalne svrhe.
+
+Sažetak licencije: https://creativecommons.org/licenses/by-nc-nd/4.0/deed.hr
+Puni pravni tekst: https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
+
+(PRILOG 7.)
+
+===== PAGE 21/23 =====
+SVEUČILIŠTE U SPLITU
+
+Fakultet za forenzičke znanosti
+
+Potvrda mentora za predaju obranjenog rada
+
+Fakultet:
+
+Student/studentica:
+
+Vrsta rada:
+
+Naslov rada:
+
+Mentor/mentorica rada:
+
+Komentor/komentorica rada:
+
+Znanstveno područje:
+
+Znanstveno polje/polja:
+
+Split,
+
+Potpis mentora/mentorice:
+
+
+===== PAGE 22/23 =====
+(PRILOG 8.)
+
+SVEUČILIŠTE U SPLITU
+
+Fakultet za forenzičke znanosti
+
+POVJERENSTVO ZA DIPLOMSKE ISPITE
+
+Ispitno povjerenstvo u sastavu:
+
+1.
+2.
+3.
+
+Pregledalo je rad predloženika
+
+i nakon usmenog dijela diplomskog ispita zaključilo:
+
+a) rad se prihvaća s ocjenom
+
+b) rad treba dopuniti u roku
+
+c) predloženiku se daje novi zadatak
+
+U Splitu,
+
+Članovi Ispitnog povjerenstva:
+
+1.
+
+2.
+
+3.
+
+Predsjednik Povjerenstva za diplomske ispite:
+
+
+===== PAGE 23/23 =====
+(PRILOG 9.)
+
+Izvješće o provedenoj provjeri izvornosti diplomskog rada
+
+Studij :
+
+Modul:
+
+JMBAG:
+
+Mentor:
+
+Naslov rada:
+
+Datum zadnje provjere rada:
+
+Postotak podudarnosti:
+
+Program = korišten za = provjeru
+izvornosti:
+
+Izjava mentora o izvornosti studentskog rada
+
+Rad zadovoljava uvjete izvornosti
+(DA/NE ):
+
+Obrazloženje mentora:
+
+Datum
+
+Potpis mentora
+

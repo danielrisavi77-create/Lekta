@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "ffzg-kroatistika-graduate--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -26,6 +29,9 @@
     },
     {
       "ruleId": "ffzg-kroatistika-graduate--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -47,6 +53,9 @@
     },
     {
       "ruleId": "ffzg-kroatistika-graduate--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -73,6 +82,9 @@
     },
     {
       "ruleId": "ffzg-kroatistika-graduate--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -94,6 +106,9 @@
     },
     {
       "ruleId": "ffzg-kroatistika-graduate--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -115,6 +130,9 @@
     },
     {
       "ruleId": "ffzg-kroatistika-graduate--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",
@@ -134,6 +152,9 @@
     },
     {
       "ruleId": "ffzg-kroatistika-graduate--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "toc",
       "value": true,
       "category": "structure",

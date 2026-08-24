@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "algebra-zavrsni--word-count",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "word-count",
       "value": {
         "min": 12000,

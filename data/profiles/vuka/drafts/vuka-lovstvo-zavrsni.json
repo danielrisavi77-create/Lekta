@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "vuka-lovstvo-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         12
@@ -26,6 +29,9 @@
     },
     {
       "ruleId": "vuka-lovstvo-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "paper-size",
       "value": true,
       "category": "format",

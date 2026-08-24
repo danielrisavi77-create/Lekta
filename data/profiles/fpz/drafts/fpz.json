@@ -3,6 +3,9 @@
     "fpz-zavrsni": [
       {
         "ruleId": "fpz-zavrsni--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-sections",
         "value": [
           "zadatak",
@@ -34,6 +37,9 @@
       },
       {
         "ruleId": "fpz-zavrsni--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -53,6 +59,9 @@
       },
       {
         "ruleId": "fpz-zavrsni--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -166,6 +175,9 @@
     "fpz-diplomski": [
       {
         "ruleId": "fpz-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-sections",
         "value": [
           "zadatak",
@@ -197,6 +209,9 @@
       },
       {
         "ruleId": "fpz-diplomski--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -216,6 +231,9 @@
       },
       {
         "ruleId": "fpz-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",

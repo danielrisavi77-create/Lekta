@@ -1,8 +1,12 @@
 {
+  "kanarinac": "LEKTA-KANARINAC-PROPRIETARY-DATA-f4c0603fef64",
   "profiles": {
     "ttf-diplomski": [
       {
         "ruleId": "ttf-diplomski--font",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Arial"
@@ -13,7 +17,7 @@
         "authority": "program-page",
         "sourceId": "ttf-upute-zavrsni-diplomski",
         "sourcePage": "Postavke stranice",
-        "quote": "Tip pisma (Font): obavezna potpora svih hrvatskih znakova",
+        "quote": "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
         "status": "verified",
         "scored": true,
         "autoFixable": true,
@@ -26,6 +30,9 @@
       },
       {
         "ruleId": "ttf-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -34,7 +41,7 @@
         "authority": "program-page",
         "sourceId": "ttf-upute-zavrsni-diplomski",
         "sourcePage": "Postavke stranice",
-        "quote": "Velicina slova (Font size): 12 tipografskih tocaka",
+        "quote": "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
         "status": "verified",
         "scored": true,
         "autoFixable": true,
@@ -47,6 +54,9 @@
       },
       {
         "ruleId": "ttf-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -55,7 +65,7 @@
         "authority": "program-page",
         "sourceId": "ttf-upute-zavrsni-diplomski",
         "sourcePage": "Postavke stranice",
-        "quote": "Prored (Line spacing): 1,5 redak",
+        "quote": "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
         "status": "verified",
         "scored": true,
         "autoFixable": true,
@@ -68,6 +78,9 @@
       },
       {
         "ruleId": "ttf-diplomski--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -81,7 +94,7 @@
         "authority": "program-page",
         "sourceId": "ttf-upute-zavrsni-diplomski",
         "sourcePage": "Postavke stranice",
-        "quote": "Lijeva i desna margina: 2,5 cm",
+        "quote": "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
         "status": "verified",
         "scored": true,
         "autoFixable": true,
@@ -94,6 +107,9 @@
       },
       {
         "ruleId": "ttf-diplomski--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -115,6 +131,9 @@
       },
       {
         "ruleId": "ttf-diplomski--page-numbers",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -134,6 +153,9 @@
       },
       {
         "ruleId": "ttf-diplomski--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -153,6 +175,9 @@
       },
       {
         "ruleId": "ttf-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -226,6 +251,9 @@
     "ttf-zavrsni": [
       {
         "ruleId": "ttf-zavrsni--font",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Arial"
@@ -236,7 +264,7 @@
         "authority": "program-page",
         "sourceId": "ttf-upute-zavrsni-diplomski",
         "sourcePage": "Postavke stranice",
-        "quote": "Tip pisma (Font): obavezna potpora svih hrvatskih znakova",
+        "quote": "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
         "status": "verified",
         "scored": true,
         "autoFixable": true,
@@ -249,6 +277,9 @@
       },
       {
         "ruleId": "ttf-zavrsni--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -257,7 +288,7 @@
         "authority": "program-page",
         "sourceId": "ttf-upute-zavrsni-diplomski",
         "sourcePage": "Postavke stranice",
-        "quote": "Velicina slova (Font size): 12 tipografskih tocaka",
+        "quote": "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
         "status": "verified",
         "scored": true,
         "autoFixable": true,
@@ -270,6 +301,9 @@
       },
       {
         "ruleId": "ttf-zavrsni--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -278,7 +312,7 @@
         "authority": "program-page",
         "sourceId": "ttf-upute-zavrsni-diplomski",
         "sourcePage": "Postavke stranice",
-        "quote": "Prored (Line spacing): 1,5 redak",
+        "quote": "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
         "status": "verified",
         "scored": true,
         "autoFixable": true,
@@ -291,6 +325,9 @@
       },
       {
         "ruleId": "ttf-zavrsni--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -304,7 +341,7 @@
         "authority": "program-page",
         "sourceId": "ttf-upute-zavrsni-diplomski",
         "sourcePage": "Postavke stranice",
-        "quote": "Lijeva i desna margina: 2,5 cm",
+        "quote": "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
         "status": "verified",
         "scored": true,
         "autoFixable": true,
@@ -317,6 +354,9 @@
       },
       {
         "ruleId": "ttf-zavrsni--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -338,6 +378,9 @@
       },
       {
         "ruleId": "ttf-zavrsni--page-numbers",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -357,6 +400,9 @@
       },
       {
         "ruleId": "ttf-zavrsni--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -376,6 +422,9 @@
       },
       {
         "ruleId": "ttf-zavrsni--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {

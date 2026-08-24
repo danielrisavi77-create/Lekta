@@ -3,6 +3,9 @@
     "ufzg-zavrsni": [
       {
         "ruleId": "ufzg-zavrsni--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -26,6 +29,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -47,6 +53,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -55,7 +64,7 @@
         "authority": "program-page",
         "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
         "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada",
-        "quote": "Razmak meu redovima: 1,5",
+        "quote": "Razmak među redovima: 1,5",
         "status": "verified",
         "scored": true,
         "autoFixable": true,
@@ -68,6 +77,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -94,6 +106,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": "A4",
         "category": "format",
@@ -115,6 +130,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -136,6 +154,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -155,6 +176,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -174,6 +198,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-sections",
         "value": [
           {
@@ -230,7 +257,7 @@
         "authority": "program-page",
         "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
         "sourcePage": "odjeljak 1.1. Struktura strucnog rada",
-        "quote": "Strucni rad treba sadrzavati sljedee dijelove:",
+        "quote": "Stručni rad treba sadržavati sljedeće dijelove",
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
@@ -241,6 +268,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--page-count",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-count",
         "value": {
           "min": 20,
@@ -263,6 +293,9 @@
       },
       {
         "ruleId": "ufzg-zavrsni--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "apa7",
         "category": "citation",
@@ -300,6 +333,9 @@
     "ufzg-diplomski": [
       {
         "ruleId": "ufzg-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -323,6 +359,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -344,6 +383,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -352,7 +394,7 @@
         "authority": "program-page",
         "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
         "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada",
-        "quote": "Razmak meu redovima: 1,5",
+        "quote": "Razmak među redovima: 1,5",
         "status": "verified",
         "scored": true,
         "autoFixable": true,
@@ -365,6 +407,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -391,6 +436,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": "A4",
         "category": "format",
@@ -412,6 +460,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -433,6 +484,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -452,6 +506,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -471,6 +528,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-sections",
         "value": [
           {
@@ -548,7 +608,7 @@
         "authority": "program-page",
         "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
         "sourcePage": "odjeljak 1.2. Struktura empirijskog rada",
-        "quote": "Empirijski rad treba sadrzavati sljedee dijelove:",
+        "quote": "Empirijski rad treba sadržavati sljedeće dijelove",
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
@@ -559,6 +619,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--page-count",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-count",
         "value": {
           "min": 25,
@@ -581,6 +644,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--reference-count",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "mechanical",
         "checkId": "reference-count",
         "value": 30,
         "category": "scope",
@@ -600,6 +666,9 @@
       },
       {
         "ruleId": "ufzg-diplomski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "apa7",
         "category": "citation",

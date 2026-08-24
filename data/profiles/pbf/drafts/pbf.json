@@ -6,6 +6,9 @@
     "pbf-diplomski": [
       {
         "ruleId": "pbf-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -29,6 +32,9 @@
       },
       {
         "ruleId": "pbf-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -50,6 +56,9 @@
       },
       {
         "ruleId": "pbf-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -71,6 +80,9 @@
       },
       {
         "ruleId": "pbf-diplomski--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": "A4",
         "category": "format",
@@ -92,6 +104,9 @@
       },
       {
         "ruleId": "pbf-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -111,6 +126,9 @@
       },
       {
         "ruleId": "pbf-diplomski--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -130,6 +148,9 @@
       },
       {
         "ruleId": "pbf-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           "naslovnica",
@@ -148,7 +169,7 @@
         "authority": "program-page",
         "sourceId": "pbf-upute-diplomski-2018",
         "sourcePage": "odjeljak 5.4. Glavni dijelovi diplomskog rada",
-        "quote": "Diplomski rad mora sadrzavati sljedea poglavlja ili dijelove",
+        "quote": "Diplomski rad mora sadržavati sljedeća poglavlja ili dijelove",
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
@@ -159,6 +180,9 @@
       },
       {
         "ruleId": "pbf-diplomski--page-count",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-count",
         "value": {
           "min": 40,

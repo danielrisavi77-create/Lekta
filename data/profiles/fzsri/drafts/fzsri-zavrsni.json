@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "fzsri-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "paper-size",
       "value": "A4",
       "category": "format",
@@ -24,6 +27,9 @@
     },
     {
       "ruleId": "fzsri-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -50,6 +56,9 @@
     },
     {
       "ruleId": "fzsri-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -71,6 +80,9 @@
     },
     {
       "ruleId": "fzsri-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -92,6 +104,9 @@
     },
     {
       "ruleId": "fzsri-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -113,6 +128,9 @@
     },
     {
       "ruleId": "fzsri-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font",
       "value": [
         "Calibri",

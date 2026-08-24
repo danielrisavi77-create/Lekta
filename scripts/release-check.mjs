@@ -44,6 +44,10 @@ const TIERS = [
   { id: 'strict-open', label: 'Tier 1: python-docx strict open', cmd: 'npm run verify:strict-open', required: true },
   { id: 'word', label: 'Tier 2: pravi Microsoft Word', cmd: 'npm run verify:word', required: true, windowsOnly: true },
   { id: 'word-worst', label: 'Tier 2: Word, najgori slucaj', cmd: 'npm run verify:word:worst', required: true, windowsOnly: true },
+  // Faza C zastite baze pravila: mrezna enumeracija profile-rules endpointa. Trazi
+  // LEKTA_STAGING_ORIGIN (samo staging, nikad produkcija); bez varijable je unavailable,
+  // ne prolaz (isti obrazac kao Word razine: nedostupno != prolazno).
+  { id: 'extraction', label: 'Tier 2: extraction probe (staging)', cmd: 'node scripts/extraction-probe.mjs', required: true, requiresEnv: 'LEKTA_STAGING_ORIGIN' },
 ];
 
 const args = process.argv.slice(2);
@@ -76,7 +80,9 @@ if (!selected.length) {
 if (dryRun) {
   console.log('[release-check] plan (nista se ne pokrece):');
   for (const t of selected) {
-    const skip = t.windowsOnly && process.platform !== 'win32' ? '  [preskace se: nije Windows]' : '';
+    const skip = t.windowsOnly && process.platform !== 'win32'
+      ? '  [preskace se: nije Windows]'
+      : (t.requiresEnv && !process.env[t.requiresEnv] ? `  [preskace se: ${t.requiresEnv} nije postavljen]` : '');
     console.log(`  ${t.id.padEnd(12)} ${t.cmd}${skip}`);
   }
   process.exit(0);
@@ -96,6 +102,11 @@ for (const tier of selected) {
   if (tier.windowsOnly && process.platform !== 'win32') {
     console.log(`\n=== ${tier.label} -> NEDOSTUPNO (nije Windows) ===`);
     results.push({ id: tier.id, label: tier.label, status: 'unavailable', reason: 'not-windows' });
+    continue;
+  }
+  if (tier.requiresEnv && !process.env[tier.requiresEnv]) {
+    console.log(`\n=== ${tier.label} -> NEDOSTUPNO (${tier.requiresEnv} nije postavljen) ===`);
+    results.push({ id: tier.id, label: tier.label, status: 'unavailable', reason: `missing-env:${tier.requiresEnv}` });
     continue;
   }
   console.log(`\n=== ${tier.label} ===`);

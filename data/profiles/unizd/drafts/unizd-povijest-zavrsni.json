@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "unizd-povijest-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -24,6 +27,9 @@
     },
     {
       "ruleId": "unizd-povijest-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -50,6 +56,9 @@
     },
     {
       "ruleId": "unizd-povijest-zavrsni--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "mechanical",
       "checkId": "footnote-size",
       "value": [
         10
@@ -71,6 +80,9 @@
     },
     {
       "ruleId": "unizd-povijest-zavrsni--footnote-spacing",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "mechanical",
       "checkId": "footnote-spacing",
       "value": 1.5,
       "category": "format",

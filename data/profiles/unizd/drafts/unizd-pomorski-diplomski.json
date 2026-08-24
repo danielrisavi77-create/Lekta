@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "unizd-pomorski-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Merriweather"
@@ -26,6 +29,9 @@
     },
     {
       "ruleId": "unizd-pomorski-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         10
@@ -49,6 +55,9 @@
     },
     {
       "ruleId": "unizd-pomorski-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -70,6 +79,9 @@
     },
     {
       "ruleId": "unizd-pomorski-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -91,6 +103,9 @@
     },
     {
       "ruleId": "unizd-pomorski-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "justify",
       "value": true,
       "category": "format",

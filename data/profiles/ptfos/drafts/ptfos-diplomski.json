@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "ptfos-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": "A4",
       "category": "format",
@@ -24,6 +27,9 @@
     },
     {
       "ruleId": "ptfos-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -50,6 +56,9 @@
     },
     {
       "ruleId": "ptfos-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Arial",
@@ -74,6 +83,9 @@
     },
     {
       "ruleId": "ptfos-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         11,
@@ -98,6 +110,9 @@
     },
     {
       "ruleId": "ptfos-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -119,6 +134,9 @@
     },
     {
       "ruleId": "ptfos-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",

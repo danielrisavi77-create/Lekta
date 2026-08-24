@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "ffri-germanistika-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -13,7 +16,7 @@
       "authority": "binding",
       "sourceId": "ffri-germanistika-leitfaden-2018",
       "sourcePage": "S3.7, str. 20 (uz obvezujucu deklaraciju na str. 5)",
-      "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schriftart Times New Roman, Schriftgrosse 12pt (Fussnoten 10pt), Zeilenabstand 1,5, Textausrichtung Blocksatz, Seitenrander rechts/links 3cm, oben/unten 2cm.",
+      "quote": "Der vorliegende Leitfaden ist für alle Studierenden und Lehrenden ab dem Zeitpunkt der Veröffentlichung ein verbindliches Dokument. [...] Die folgenden Angaben gelten verbindlich für Seminar-, Bachelor- und Master-Arbeiten. Papierformat: DIN A4 Schriftart: Times New Roman Schriftgröße: 12pt Schriftgröße Fußnoten: 10pt Seitenzahlen: rechts unten, 10pt Textausrichtung: Blocksatz Zeilenabstand: 1,5 Seitenränder rechts und links: 3 cm Seitenränder oben und unten: 2 cm",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -26,6 +29,9 @@
     },
     {
       "ruleId": "ffri-germanistika-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         12
@@ -36,7 +42,7 @@
       "authority": "binding",
       "sourceId": "ffri-germanistika-leitfaden-2018",
       "sourcePage": "S3.7, str. 20 (uz obvezujucu deklaraciju na str. 5)",
-      "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schriftart Times New Roman, Schriftgrosse 12pt (Fussnoten 10pt), Zeilenabstand 1,5, Textausrichtung Blocksatz, Seitenrander rechts/links 3cm, oben/unten 2cm.",
+      "quote": "Der vorliegende Leitfaden ist für alle Studierenden und Lehrenden ab dem Zeitpunkt der Veröffentlichung ein verbindliches Dokument. [...] Die folgenden Angaben gelten verbindlich für Seminar-, Bachelor- und Master-Arbeiten. Papierformat: DIN A4 Schriftart: Times New Roman Schriftgröße: 12pt Schriftgröße Fußnoten: 10pt Seitenzahlen: rechts unten, 10pt Textausrichtung: Blocksatz Zeilenabstand: 1,5 Seitenränder rechts und links: 3 cm Seitenränder oben und unten: 2 cm",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -49,6 +55,9 @@
     },
     {
       "ruleId": "ffri-germanistika-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -57,7 +66,7 @@
       "authority": "binding",
       "sourceId": "ffri-germanistika-leitfaden-2018",
       "sourcePage": "S3.7, str. 20 (uz obvezujucu deklaraciju na str. 5)",
-      "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schriftart Times New Roman, Schriftgrosse 12pt (Fussnoten 10pt), Zeilenabstand 1,5, Textausrichtung Blocksatz, Seitenrander rechts/links 3cm, oben/unten 2cm.",
+      "quote": "Der vorliegende Leitfaden ist für alle Studierenden und Lehrenden ab dem Zeitpunkt der Veröffentlichung ein verbindliches Dokument. [...] Die folgenden Angaben gelten verbindlich für Seminar-, Bachelor- und Master-Arbeiten. Papierformat: DIN A4 Schriftart: Times New Roman Schriftgröße: 12pt Schriftgröße Fußnoten: 10pt Seitenzahlen: rechts unten, 10pt Textausrichtung: Blocksatz Zeilenabstand: 1,5 Seitenränder rechts und links: 3 cm Seitenränder oben und unten: 2 cm",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -70,6 +79,9 @@
     },
     {
       "ruleId": "ffri-germanistika-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2,
@@ -83,7 +95,7 @@
       "authority": "binding",
       "sourceId": "ffri-germanistika-leitfaden-2018",
       "sourcePage": "S3.7, str. 20 (uz obvezujucu deklaraciju na str. 5)",
-      "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schriftart Times New Roman, Schriftgrosse 12pt (Fussnoten 10pt), Zeilenabstand 1,5, Textausrichtung Blocksatz, Seitenrander rechts/links 3cm, oben/unten 2cm.",
+      "quote": "Der vorliegende Leitfaden ist für alle Studierenden und Lehrenden ab dem Zeitpunkt der Veröffentlichung ein verbindliches Dokument. [...] Die folgenden Angaben gelten verbindlich für Seminar-, Bachelor- und Master-Arbeiten. Papierformat: DIN A4 Schriftart: Times New Roman Schriftgröße: 12pt Schriftgröße Fußnoten: 10pt Seitenzahlen: rechts unten, 10pt Textausrichtung: Blocksatz Zeilenabstand: 1,5 Seitenränder rechts und links: 3 cm Seitenränder oben und unten: 2 cm",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -96,6 +108,9 @@
     },
     {
       "ruleId": "ffri-germanistika-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -104,7 +119,7 @@
       "authority": "binding",
       "sourceId": "ffri-germanistika-leitfaden-2018",
       "sourcePage": "S3.7, str. 20 (uz obvezujucu deklaraciju na str. 5)",
-      "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schriftart Times New Roman, Schriftgrosse 12pt (Fussnoten 10pt), Zeilenabstand 1,5, Textausrichtung Blocksatz, Seitenrander rechts/links 3cm, oben/unten 2cm.",
+      "quote": "Der vorliegende Leitfaden ist für alle Studierenden und Lehrenden ab dem Zeitpunkt der Veröffentlichung ein verbindliches Dokument. [...] Die folgenden Angaben gelten verbindlich für Seminar-, Bachelor- und Master-Arbeiten. Papierformat: DIN A4 Schriftart: Times New Roman Schriftgröße: 12pt Schriftgröße Fußnoten: 10pt Seitenzahlen: rechts unten, 10pt Textausrichtung: Blocksatz Zeilenabstand: 1,5 Seitenränder rechts und links: 3 cm Seitenränder oben und unten: 2 cm",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -117,6 +132,9 @@
     },
     {
       "ruleId": "ffri-germanistika-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -125,7 +143,7 @@
       "authority": "binding",
       "sourceId": "ffri-germanistika-leitfaden-2018",
       "sourcePage": "S3.7, str. 20 (uz obvezujucu deklaraciju na str. 5)",
-      "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schriftart Times New Roman, Schriftgrosse 12pt (Fussnoten 10pt), Zeilenabstand 1,5, Textausrichtung Blocksatz, Seitenrander rechts/links 3cm, oben/unten 2cm.",
+      "quote": "Der vorliegende Leitfaden ist für alle Studierenden und Lehrenden ab dem Zeitpunkt der Veröffentlichung ein verbindliches Dokument. [...] Die folgenden Angaben gelten verbindlich für Seminar-, Bachelor- und Master-Arbeiten. Papierformat: DIN A4 Schriftart: Times New Roman Schriftgröße: 12pt Schriftgröße Fußnoten: 10pt Seitenzahlen: rechts unten, 10pt Textausrichtung: Blocksatz Zeilenabstand: 1,5 Seitenränder rechts und links: 3 cm Seitenränder oben und unten: 2 cm",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -138,6 +156,9 @@
     },
     {
       "ruleId": "ffri-germanistika-zavrsni--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "mechanical",
       "checkId": "footnote-size",
       "value": [
         10
@@ -148,7 +169,7 @@
       "authority": "binding",
       "sourceId": "ffri-germanistika-leitfaden-2018",
       "sourcePage": "S3.7, str. 20 (uz obvezujucu deklaraciju na str. 5)",
-      "quote": "Der vorliegende Leitfaden ist fur alle Studierenden und Lehrenden ab dem Zeitpunkt der Veroffentlichung ein verbindliches Dokument. Die folgenden Angaben gelten verbindlich: Papierformat DIN A4, Schriftart Times New Roman, Schriftgrosse 12pt (Fussnoten 10pt), Zeilenabstand 1,5, Textausrichtung Blocksatz, Seitenrander rechts/links 3cm, oben/unten 2cm.",
+      "quote": "Der vorliegende Leitfaden ist für alle Studierenden und Lehrenden ab dem Zeitpunkt der Veröffentlichung ein verbindliches Dokument. [...] Die folgenden Angaben gelten verbindlich für Seminar-, Bachelor- und Master-Arbeiten. Papierformat: DIN A4 Schriftart: Times New Roman Schriftgröße: 12pt Schriftgröße Fußnoten: 10pt Seitenzahlen: rechts unten, 10pt Textausrichtung: Blocksatz Zeilenabstand: 1,5 Seitenränder rechts und links: 3 cm Seitenränder oben und unten: 2 cm",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",

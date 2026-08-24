@@ -85,6 +85,9 @@
     },
     {
       "ruleId": "agr-zavrsni--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",
@@ -104,6 +107,9 @@
     },
     {
       "ruleId": "agr-zavrsni--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "toc",
       "value": true,
       "category": "structure",

@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "kbfst-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -26,6 +29,9 @@
     },
     {
       "ruleId": "kbfst-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         12,
@@ -50,6 +56,9 @@
     },
     {
       "ruleId": "kbfst-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -71,6 +80,9 @@
     },
     {
       "ruleId": "kbfst-diplomski--footnote-font",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "mechanical",
       "checkId": "footnote-font",
       "value": [
         "Times New Roman"
@@ -92,6 +104,9 @@
     },
     {
       "ruleId": "kbfst-diplomski--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "mechanical",
       "checkId": "footnote-size",
       "value": [
         10

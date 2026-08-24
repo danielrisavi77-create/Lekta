@@ -6,12 +6,23 @@
  */
 
 /** Ima li profil vrijednost bez koje engine ne moze izvesti pripadnu provjeru. */
-const HAS_VALUE: Array<[flag: string, has: (b: any) => boolean]> = [
-  ['checkFont', (b) => Array.isArray(b.font) && b.font.length > 0],
-  ['checkSize', (b) => Array.isArray(b.size) && b.size.length > 0],
-  ['checkSpacing', (b) => typeof b.spacing === 'number'],
-  ['checkMargins', (b) => !!b.margins && ['top', 'right', 'bottom', 'left'].every((s) => typeof b.margins[s] === 'number')],
-];
+/**
+ * Zastavica -> ima li profil vrijednost bez koje ta provjera ne moze bodovati.
+ *
+ * IZVEZENO jer mora biti JEDAN izvor istine. `scored-value-binding.readAxis` racuna sto motor
+ * boduje, pa mora odgovarati bas ovom uvjetu: profil s `font: []` ovdje gasi `checkFont`, a
+ * `readAxis` je do 2026-08-23 vracao `[]` kao da se boduje, cime bi prijavio raskorak ili
+ * `unbacked` nad dimenzijom koju motor uopce ne gleda. Danas takav profil ne postoji (0 od 407),
+ * ali dvije kopije istog uvjeta razidju se tiho, a ovaj se cita samo kroz posljedicu.
+ */
+export const CHECK_FLAG_HAS_VALUE: Readonly<Record<string, (b: any) => boolean>> = {
+  checkFont: (b) => Array.isArray(b.font) && b.font.length > 0,
+  checkSize: (b) => Array.isArray(b.size) && b.size.length > 0,
+  checkSpacing: (b) => typeof b.spacing === 'number',
+  checkMargins: (b) => !!b.margins && ['top', 'right', 'bottom', 'left'].every((s) => typeof b.margins[s] === 'number'),
+};
+
+const HAS_VALUE: Array<[flag: string, has: (b: any) => boolean]> = Object.entries(CHECK_FLAG_HAS_VALUE);
 
 export function normalizeCheckFlags(base: any): any {
   base.checkFont = base.checkFont !== false;

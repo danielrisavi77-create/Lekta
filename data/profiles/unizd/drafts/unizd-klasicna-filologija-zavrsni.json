@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "unizd-klasicna-filologija-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -26,6 +29,9 @@
     },
     {
       "ruleId": "unizd-klasicna-filologija-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": [
         12
@@ -49,6 +55,9 @@
     },
     {
       "ruleId": "unizd-klasicna-filologija-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -57,7 +66,7 @@
       "authority": "binding",
       "sourceId": "unizd-klasicna-filologija-upute-2021",
       "sourcePage": "str. 2-3 \"Postavke stranice\"",
-      "quote": "Tip pisma (font): Times New Roman. Tijelo teksta: 12 tipografskih tocaka (fusnote 10). Lijeva i desna margina: 2,5 cm; gornja i donja: 2,5 cm. U tijelu teksta prored 1,5. Tekst je obostrano poravnat.",
+      "quote": "Prored: u tijelu teksta: 1,5 lines",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -70,6 +79,9 @@
     },
     {
       "ruleId": "unizd-klasicna-filologija-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -91,6 +103,9 @@
     },
     {
       "ruleId": "unizd-klasicna-filologija-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -117,6 +132,9 @@
     },
     {
       "ruleId": "unizd-klasicna-filologija-zavrsni--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "mechanical",
       "checkId": "footnote-size",
       "value": [
         10
@@ -127,7 +145,7 @@
       "authority": "binding",
       "sourceId": "unizd-klasicna-filologija-upute-2021",
       "sourcePage": "str. 2-3 \"Postavke stranice\"",
-      "quote": "Tip pisma (font): Times New Roman. Tijelo teksta: 12 tipografskih tocaka (fusnote 10). Lijeva i desna margina: 2,5 cm; gornja i donja: 2,5 cm. U tijelu teksta prored 1,5. Tekst je obostrano poravnat.",
+      "quote": "podnožne bilješke (fusnote): 10 tipografskih točaka",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",

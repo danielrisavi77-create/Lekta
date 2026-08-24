@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "umas-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "required-sections",
       "value": [
         {

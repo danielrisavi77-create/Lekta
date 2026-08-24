@@ -535,21 +535,33 @@ if (fs.existsSync(naslovnicaDir)) {
       .filter(([field]) => !String(provider[field] ?? '').trim())
       .map(([field, why]) => `  - ${field} (${why})`);
 
-  const commerceLive = process.env.LEKTA_COMMERCE_LIVE === '1';
-  const repairLive = process.env.LEKTA_REPAIR_LIVE === '1';
+  // OBA praga se izvode iz ONOGA STO SE ISPORUCUJE, ne iz zapamcenih zastavica: LEKTA_REPAIR_LIVE
+  // i LEKTA_COMMERCE_LIVE ne postavlja nista u lancu deploya (netlify.toml ima samo NODE_VERSION,
+  // DEPLOY i LEKTA_SITE_ORIGIN), pa je gate koji visi samo o njima inertan tocno u stanju za koje
+  // je pisan. Detekcija i obrazlozenje zive u zasebnom modulu jer se tako mogu testirati
+  // sintetickim bundleom: pravi dist danas ima naplatu UGASENU, pa bi se nad njim mogao dokazati
+  // samo negativan smjer (vidi tests/deploy-gate-shipped-config.test.ts).
+  const { shippedCapabilities } = await import('./deploy-gate-shipped-config.mjs');
+  const shipped = shippedCapabilities(
+    assets.map((f) => fs.readFileSync(path.join(DIST, 'assets', f), 'utf8')),
+  );
+  const commerceLive = process.env.LEKTA_COMMERCE_LIVE === '1' || shipped.commerce;
+  const commerceWhy = shipped.why.commerce ?? 'LEKTA_COMMERCE_LIVE=1';
+  const repairLive = process.env.LEKTA_REPAIR_LIVE === '1' || shipped.repair;
+  const repairWhy = shipped.why.repair ?? 'LEKTA_REPAIR_LIVE=1';
   const missingForProcessing = missingFrom(REQUIRED_FOR_PROCESSING);
   const missingForCommerce = missingFrom(REQUIRED_FOR_COMMERCE);
 
   if (commerceLive && missingForCommerce.length) {
     fail(
-      ['naplata je oznacena kao ZIVA (LEKTA_COMMERCE_LIVE=1), a data/legal/provider.json nema:', ...missingForCommerce].join(os.EOL),
+      [`naplata je ZIVA (${commerceWhy}), a data/legal/provider.json nema:`, ...missingForCommerce].join(os.EOL),
     );
   }
   // I bez naplate: cim se dokument uploada i pohranjuje, voditelj obrade mora biti imenovan.
   if (repairLive && missingForProcessing.length) {
     fail(
       [
-        'popravak je oznacen kao ZIV (LEKTA_REPAIR_LIVE=1), dakle dokument se uploada i pohranjuje,',
+        `popravak je ZIV (${repairWhy}), dakle dokument se uploada i pohranjuje,`,
         'a data/legal/provider.json nema:',
         ...missingForProcessing,
         '  Besplatna beta ne oslobadja od GDPR cl. 13: ispitanik mora znati tko je voditelj obrade.',
@@ -557,7 +569,10 @@ if (fs.existsSync(naslovnicaDir)) {
     );
   }
 
-  if (!commerceLive && !repairLive && missingForCommerce.length) {
+  // Upozorenje o pragu NAPLATE vrijedi dok naplata nije ziva, neovisno o popravku. Prije je
+  // uvjet glasio `!commerceLive && !repairLive`, pa bi cim popravak ozivi nedostajuci oib/phone
+  // utihnuli sve do tvrdog pada na naplati.
+  if (!commerceLive && missingForCommerce.length) {
     console.warn(
       [
         '[verify-deploy-dist] UPOZORENJE: data/legal/provider.json nema:',
@@ -568,6 +583,18 @@ if (fs.existsSync(naslovnicaDir)) {
       ].join(os.EOL),
     );
   }
+}
+
+console.log(`[verify-deploy-dist] OK: bez dev alata u HTML/JS, pravne stranice prisutne, konzola iskljucena, origin unutar ${SITE_ORIGIN}, svi inline <script> pokriveni CSP whitelistom, citatne SEO stranice imaju OG/Twitter/favicon i noindex/sitemap su konzistentni, /fakulteti hub pokriva sve jedinice s ispravnim pretraga/analitika/citatni linkovima, naslovnica SEO stranice imaju OG/Twitter/favicon i sitemap je konzistentan.`);
+
+// 11. Klasifikacijski sken (faza A zastite baze pravila): kanarinci i never-markeri
+// privatnog sloja (drafts evidence, ledger, source-registry, izvor istine) ne smiju
+// ni u jedan emitirani artefakt. Pokriva i SEO generatore koji pisu u dist mimo
+// Rollup grafa (classification-guard vite plugin vidi samo bundle).
+const { runClassificationScan } = await import('./verify-dist-classification.mjs');
+const classificationViolations = runClassificationScan({ rootDir: ROOT });
+if (classificationViolations.length) {
+  fail(['klasifikacijski sken artefakata:', ...classificationViolations.map((v) => `  - ${v}`)].join(os.EOL));
 }
 
 console.log(`[verify-deploy-dist] OK: bez dev alata u HTML/JS, pravne stranice prisutne, konzola iskljucena, origin unutar ${SITE_ORIGIN}, svi inline <script> pokriveni CSP whitelistom, citatne SEO stranice imaju OG/Twitter/favicon i noindex/sitemap su konzistentni, /fakulteti hub pokriva sve jedinice s ispravnim pretraga/analitika/citatni linkovima, naslovnica SEO stranice imaju OG/Twitter/favicon i sitemap je konzistentan.`);

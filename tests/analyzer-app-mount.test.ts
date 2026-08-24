@@ -39,6 +39,18 @@ vi.mock('../src/docx/quick-stats', async (importOriginal) => {
       : actual.docxQuickStats(file),
   };
 });
+vi.mock('../src/report/profile-rules-client', () => ({
+  fetchProfileRulesWithRetry: async (_config: unknown, profileId: string) => {
+    const artifact = JSON.parse(readFileSync(
+      resolve(process.cwd(), 'data/generated/profile-rules-server.json'),
+      'utf8',
+    )) as { datasetVersion: string; profiles: Record<string, { profile: Record<string, unknown>; repairEntries: unknown[] }> };
+    const entry = artifact.profiles[profileId];
+    return entry
+      ? { kind: 'ok' as const, record: { v: 1 as const, profileId, datasetVersion: artifact.datasetVersion, ...entry } }
+      : { kind: 'not_found' as const };
+  },
+}));
 vi.mock('../src/ui/repair-items', async (importOriginal) => {
   const actual = await importOriginal<typeof import('../src/ui/repair-items')>();
   return {
@@ -539,7 +551,6 @@ describe('mountable analyzer runtime', () => {
       document.getElementById('analyzeBtn')?.click();
       await vi.waitFor(() => expect(listener).toHaveBeenCalledTimes(1), { timeout: 15_000 });
       await vi.waitFor(() => expect(repairControl.reanalyze).toBeTypeOf('function'), { timeout: 15_000 });
-
       listener.mockClear();
       analysisClient.analyze.mockClear();
       await repairControl.reanalyze!(new Uint8Array([80, 75, 3, 4]));

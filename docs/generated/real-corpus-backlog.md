@@ -65,14 +65,14 @@ Ukupno profila bez uzorka: **396/407**.
 
 - **ffos-psihologija-diplomski** — 6 ponudjenih opcija
 - **ffos-diplomski** — 5 ponudjenih opcija
+- **ffos-povijest-diplomski** — 5 ponudjenih opcija
+- **ffos-povijest-zavrsni** — 5 ponudjenih opcija
 - **ffos-psihologija-zavrsni** — 5 ponudjenih opcija
 - **ffos-zavrsni** — 5 ponudjenih opcija
 - **ffos-germanistika-diplomski** — 4 ponudjenih opcija
 - **ffos-germanistika-zavrsni** — 4 ponudjenih opcija
 - **ffos-informatologija-diplomski** — 4 ponudjenih opcija
 - **ffos-informatologija-zavrsni** — 4 ponudjenih opcija
-- **ffos-povijest-diplomski** — 0 ponudjenih opcija
-- **ffos-povijest-zavrsni** — 0 ponudjenih opcija
 
 ## Filozofski fakultet u Rijeci (ffri)
 
@@ -85,11 +85,6 @@ Ukupno profila bez uzorka: **396/407**.
 - **ffri-povum-diplomski** — 5 ponudjenih opcija
 - **ffri-povum-zavrsni** — 5 ponudjenih opcija
 - **ffri-psihologija-diplomski** — 5 ponudjenih opcija
-
-## Filozofski fakultet u Splitu (ffst)
-
-- **ffst-diplomski** — 6 ponudjenih opcija
-- **ffst-zavrsni** — 6 ponudjenih opcija
 
 ## Filozofski fakultet (ffzg)
 
@@ -391,6 +386,11 @@ Ukupno profila bez uzorka: **396/407**.
 - **ffrz-diplomski** — 5 ponudjenih opcija
 - **ffrz-doktorski** — 5 ponudjenih opcija
 
+## Filozofski fakultet u Splitu (ffst)
+
+- **ffst-diplomski** — 5 ponudjenih opcija
+- **ffst-zavrsni** — 5 ponudjenih opcija
+
 ## Fakultet hrvatskih studija (fhs)
 
 - **fhs-diplomski** — 5 ponudjenih opcija
@@ -598,26 +598,6 @@ Ukupno profila bez uzorka: **396/407**.
 - **unin-tehnicki-diplomski** — 5 ponudjenih opcija
 - **unin-tehnicki-zavrsni** — 5 ponudjenih opcija
 
-## Biotehnicki odjel (UNISB) (btho)
-
-- **unisb-btho-diplomski** — 5 ponudjenih opcija
-- **unisb-btho-zavrsni** — 5 ponudjenih opcija
-
-## Odjel društveno-humanističkih znanosti (UNISB) (odhz)
-
-- **unisb-odhz-diplomski** — 5 ponudjenih opcija
-- **unisb-odhz-zavrsni** — 5 ponudjenih opcija
-
-## Strojarski fakultet u Slavonskom Brodu (sfsb)
-
-- **unisb-sfsb-diplomski** — 5 ponudjenih opcija
-- **unisb-sfsb-zavrsni** — 5 ponudjenih opcija
-
-## Tehnicki odjel (UNISB) (teho)
-
-- **unisb-teho-diplomski** — 5 ponudjenih opcija
-- **unisb-teho-zavrsni** — 5 ponudjenih opcija
-
 ## Veterinarski fakultet (vef)
 
 - **vef-diplomski** — 5 ponudjenih opcija
@@ -687,6 +667,26 @@ Ukupno profila bez uzorka: **396/407**.
 
 - **simet-zavrsni** — 4 ponudjenih opcija
 
+## Biotehnicki odjel (UNISB) (btho)
+
+- **unisb-btho-diplomski** — 4 ponudjenih opcija
+- **unisb-btho-zavrsni** — 4 ponudjenih opcija
+
+## Odjel društveno-humanističkih znanosti (UNISB) (odhz)
+
+- **unisb-odhz-diplomski** — 4 ponudjenih opcija
+- **unisb-odhz-zavrsni** — 4 ponudjenih opcija
+
+## Strojarski fakultet u Slavonskom Brodu (sfsb)
+
+- **unisb-sfsb-diplomski** — 4 ponudjenih opcija
+- **unisb-sfsb-zavrsni** — 4 ponudjenih opcija
+
+## Tehnicki odjel (UNISB) (teho)
+
+- **unisb-teho-diplomski** — 4 ponudjenih opcija
+- **unisb-teho-zavrsni** — 4 ponudjenih opcija
+
 ## Veleučilište Hrvatsko zagorje Krapina (vhzk)
 
 - **vhzk-zavrsni** — 4 ponudjenih opcija
@@ -739,8 +739,8 @@ Ukupno profila bez uzorka: **396/407**.
 - **vuka-poslovni-diplomski** — 2 ponudjenih opcija
 - **vuka-poslovni-opci-akademski-rad** — 2 ponudjenih opcija
 - **vuka-poslovni-zavrsni** — 2 ponudjenih opcija
-- **vuka-strojarski-diplomski** — 1 ponudjenih opcija
-- **vuka-strojarski-zavrsni** — 1 ponudjenih opcija
+- **vuka-strojarski-diplomski** — 0 ponudjenih opcija
+- **vuka-strojarski-zavrsni** — 0 ponudjenih opcija
 
 ## Veleučilište Arca (Split) (arca)
 

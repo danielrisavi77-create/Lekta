@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "fizri-diplomski--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "paper-size",
       "value": "A4",
       "category": "format",
@@ -24,6 +27,9 @@
     },
     {
       "ruleId": "fizri-diplomski--font-size",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -45,6 +51,9 @@
     },
     {
       "ruleId": "fizri-diplomski--line-spacing",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -66,6 +75,9 @@
     },
     {
       "ruleId": "fizri-diplomski--page-count",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-count",
       "value": {
         "min": 30

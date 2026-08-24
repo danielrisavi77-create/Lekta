@@ -83,8 +83,25 @@ describe('deploy gate: pravni identitet pruzatelja', () => {
     expect(body).not.toContain('console.warn');
   });
 
-  it('bez ijedne zastavice gate ne blokira lokalnu analizu', () => {
-    expect(src).toContain('if (!commerceLive && !repairLive && missingForCommerce.length)');
+  it('okidac praga obrade se izvodi iz ISPORUCENOG bundlea, ne samo iz zastavice', () => {
+    // Prva verzija je visjela SAMO o LEKTA_REPAIR_LIVE=1, a tu varijablu ne postavlja nista u
+    // lancu deploya, dok DEFAULT_PRODUCTION_CONFIG odavno salje zivi repair-docx. Gate je time
+    // bio inertan tocno u stanju za koje je pisan.
+    expect(src).toContain('shippedCapabilities');
+    expect(src).toMatch(/repairLive\s*=\s*process\.env\.LEKTA_REPAIR_LIVE === '1' \|\| shipped\.repair/);
+    // OBA praga, ne samo obrada: naplata bez registriranog subjekta je isti kvar, drugi zakon.
+    expect(src).toMatch(/commerceLive\s*=\s*process\.env\.LEKTA_COMMERCE_LIVE === '1' \|\| shipped\.commerce/);
+    // Sama detekcija (prazan literal vs zivi poziv, spread oblik paymentLinks) dokazuje se
+    // sintetickim bundleom u tests/deploy-gate-shipped-config.test.ts, jer pravi dist danas ima
+    // naplatu ugasenu pa bi nad njim isao dokazati samo negativan smjer.
+    expect(src).toContain('deploy-gate-shipped-config.mjs');
+  });
+
+  it('upozorenje o pragu naplate ne utihne kad popravak ozivi', () => {
+    // Prije je uvjet glasio `!commerceLive && !repairLive`, pa bi cim popravak postane ziv
+    // nedostajuci oib/phone nestali iz ispisa sve do tvrdog pada na naplati.
+    expect(src).toContain('if (!commerceLive && missingForCommerce.length)');
+    expect(src).not.toContain('if (!commerceLive && !repairLive && missingForCommerce.length)');
   });
 
   it('identitet voditelja obrade je sve-ili-nista, nikad polovican', () => {
@@ -108,6 +125,10 @@ describe('deploy gate: pravni identitet pruzatelja', () => {
     if (oib) {
       expect(controller, 'OIB je upisan pa privacyController vise ne smije biti prazan').not.toBe('');
       expect(address, 'OIB je upisan pa address vise ne smije biti prazan').not.toBe('');
+      // `phone` je bio izvan ove tvrdnje, pa je popunjavanje TRI od cetiri polja prolazilo i test
+      // i gate, iako napomena vec nestane na sam OIB. Prag naplate trazi i telefon.
+      const phone = String(provider.phone ?? '').trim();
+      expect(phone, 'OIB je upisan pa phone vise ne smije biti prazan (ZZP predugovorna informacija)').not.toBe('');
     }
   });
 });

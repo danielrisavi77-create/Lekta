@@ -1,0 +1,1223 @@
+{
+  "note": "GENERIRANO iz claim-modality-proposals.json za skupine gdje predlagac uzme rijec iz recenice kao opseg, a os po naravi mjeri drugo. Opseg se presudjuje na PRIRODNI opseg osi.",
+  "decisions": [
+    {
+      "ruleId": "adu-montaza-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "agr-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "agr-zavrsni--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "alu-konzerviranje-diplomski--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "alu-konzerviranje-diplomski--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "apuri-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "apuri-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "apuri-zavrsni--font",
+      "modality": "obligation",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "apuri-zavrsni--font-size",
+      "modality": "obligation",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "apuri-zavrsni--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "apuri-zavrsni--line-spacing",
+      "modality": "obligation",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "apuri-zavrsni--margins",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "apuri-zavrsni--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "apuri-zavrsni--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "arca-zavrsni--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'table', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "arh-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "effectus-seminarski--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "effectus-diplomski--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "effectus-zavrsni--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "efos-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "erf-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "erf-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "evtos-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "evtos-zavrsni--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "evtos-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "evtos-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fbf-specijalisticki--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fdmri-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fesb-diplomski--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fesb-zavrsni--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffos-zavrsni--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffos-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffri-kroatistika-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffri-kroatistika-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffri-kulturalni-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffri-kulturalni-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffri-kulturalni-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffri-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffri-diplomski--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffri-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffri-zavrsni--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffri-zavrsni--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffri-kroatistika-zavrsni--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffzg-arheologija-graduate--font",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffzg-arheologija-graduate--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffzg-arheologija-graduate--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffzg-arheologija-graduate--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffzg-arheologija-graduate--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffzg-informacijske-zavrsni--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ffzg-kroatistika-graduate--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'body', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-mes-master-thesis--citation-sync-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--citation-sync-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--citation-sync-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--citation-sync-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--citation-sync-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--citation-sync-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--citation-sync-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--citation-sync-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--citation-sync-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-opci-akademski-rad--citation-sync-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--citation-sync-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-mes-master-thesis--section-surgery-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'body', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--section-surgery-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'body', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--section-surgery-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'body', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--section-surgery-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'body', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--section-surgery-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'body', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--section-surgery-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'body', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--section-surgery-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'body', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--section-surgery-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'body', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--section-surgery-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'body', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-opci-akademski-rad--section-surgery-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'body', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--section-surgery-rules",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'body', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzpu-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "fpzpu-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "iv-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "iv-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "kbf-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "kbf-zavrsni--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "kbf-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "kbf-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "kbf-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "kbf-zavrsni--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "kbfst-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "kifos-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "kifos-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "kifst-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "kifst-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ktfst-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ktfst-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ktfst-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ktfst-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ktfst-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ktfst-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ktfst-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ktfst-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ktfst-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ktfst-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ktfst-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ktfst-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "mathos-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "mathos-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "mathos-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "mathos-zavrsni--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "mef-doktorski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "mef-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "mev-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "mev-zavrsni-drustveni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "more-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "more-zavrsni--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "oss-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'body', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "oss-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'body', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ozs-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pbf-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pbf-diplomski--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pmf-geografija-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pmf-geografija-diplomski--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pmf-geologija-graduate--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'title-page', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pmf-matematika-graduate--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pmfst-zavrsni--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "sociologija--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "trgovacko-pravo--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "trgovacko-pravo--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pravo-socijalna-politika-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pravo-socijalni-rad-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pravo-socijalne-djelatnosti-doktorski--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ptfos-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ptfos-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pvzg-specijalisticki--font",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pvzg-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pvzg-specijalisticki--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pvzg-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pvzg-specijalisticki--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pvzg-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pvzg-specijalisticki--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pvzg-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pvzg-specijalisticki--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pvzg-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pvzg-specijalisticki--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "pvzg-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "sumfak-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "sumfak-zavrsni--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ttf-diplomski--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ttf-zavrsni--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ufri-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ufri-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ufzg-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "ufzg-zavrsni--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "unidu-komunikologija-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "unidu-komunikologija-zavrsni--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "unidu-umjetnost-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "unidu-umjetnost-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "unin-biomedicina-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "unin-biomedicina-zavrsni--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "unizd-hispanistika-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "unizd-hispanistika-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "unizd-hispanistika-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "unizd-klasicna-filologija-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "unizd-klasicna-filologija-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "unizd-klasicna-filologija-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "unizd-klasicna-filologija-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "unizd-pedagogija-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "unizd-sociologija-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "unizd-sociologija-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "veleknin-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vevu-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vevu-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vevu-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vevu-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vguk-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vguk-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vguk-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vguk-zavrsni--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vss-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vss-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vss-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vss-zavrsni--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vss-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vss-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vub-zavrsni-sestrinstvo--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vub-zavrsni-tehnicki--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vub-zavrsni-tehnicki--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vub-zavrsni-tehnicki--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vub-zavrsni-tehnicki--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vub-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'bibliography', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vuka-prehrambena-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vuka-prehrambena-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'heading', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vuv-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vuv-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vuv-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vuv-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'body'; opseg presudjen na prirodni opseg osi (body), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vuv-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vuv-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vvg-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vvg-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vvg-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    },
+    {
+      "ruleId": "vvg-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "skupina: recenica imenuje 'footnote', a os po naravi mjeri 'whole'; opseg presudjen na prirodni opseg osi (whole), vrijednost tvrdnje provjerena da pripada njemu"
+    }
+  ]
+}

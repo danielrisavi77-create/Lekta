@@ -1,0 +1,311 @@
+{
+  "note": "Skupina \"vise modalnih biljega u istoj recenici\": modalitet je onaj RECENICE KOJA NOSI VRIJEDNOST te osi, ne najjaci u citatu.",
+  "decisions": [
+    {
+      "ruleId": "adu-montaza-diplomski--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"Sve stranice moraju biti numerirane.\""
+    },
+    {
+      "ruleId": "adu-montaza-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"Velicine je stranice A4 (210x297 mm).\""
+    },
+    {
+      "ruleId": "biolos-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"Tekst treba pisati fontom Times New Roman ili Arial\"; MORA veze DOSLJEDNOST odabranog fonta, ne izbor."
+    },
+    {
+      "ruleId": "biolos-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"... velicine slova 12 pt\" visi o \"treba pisati\"."
+    },
+    {
+      "ruleId": "biolos-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"... uz prored 1,5\" visi o \"treba pisati\"."
+    },
+    {
+      "ruleId": "biolos-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"Rad treba pisati na stranici A4 formata\"."
+    },
+    {
+      "ruleId": "biotech-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"treba koristiti pismo Verdana\"; \"obavezna\" veze POTPORU HRVATSKIH ZNAKOVA."
+    },
+    {
+      "ruleId": "biotech-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"treba koristiti pismo Verdana\"; \"obavezna\" veze POTPORU HRVATSKIH ZNAKOVA."
+    },
+    {
+      "ruleId": "biotech-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"velicine 12 tipografskih tocaka\" visi o \"treba koristiti\"."
+    },
+    {
+      "ruleId": "biotech-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"velicine 12 tipografskih tocaka\" visi o \"treba koristiti\"."
+    },
+    {
+      "ruleId": "biotech-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"prored od 1,5\" visi o \"treba koristiti\"."
+    },
+    {
+      "ruleId": "biotech-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"prored od 1,5\" visi o \"treba koristiti\"."
+    },
+    {
+      "ruleId": "fazos-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"Rad treba pisati ... s obostranim poravnavanjem\"; MORA veze jednostrani ispis."
+    },
+    {
+      "ruleId": "fazos-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"Rad treba pisati ... s obostranim poravnavanjem\"; MORA veze jednostrani ispis."
+    },
+    {
+      "ruleId": "fdmri-diplomski--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"sve stranice teksta ... moraju biti numerirane\"."
+    },
+    {
+      "ruleId": "fdmri-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"treba biti pisan ... (A4, 210x297 mm)\"."
+    },
+    {
+      "ruleId": "fdmri-zavrsni--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"sve stranice teksta ... moraju biti numerirane\"."
+    },
+    {
+      "ruleId": "fdmri-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"treba biti pisan ... (A4, 210x297 mm)\"."
+    },
+    {
+      "ruleId": "fdmz-diplomski--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"Tekst mora biti obostrano poravnat\"."
+    },
+    {
+      "ruleId": "fdmz-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"tiska se na papiru standardne velicine (A4)\" - goli indikativ."
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"obavezni su dijelovi rada ... Njih mora sadrzavati svaki rad.\""
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"obavezni su dijelovi rada ... Njih mora sadrzavati svaki rad.\""
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"obavezni su dijelovi rada ... Njih mora sadrzavati svaki rad.\""
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"obavezni su dijelovi rada ... Njih mora sadrzavati svaki rad.\""
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"obavezni su dijelovi rada ... Njih mora sadrzavati svaki rad.\""
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"obavezni su dijelovi rada ... Njih mora sadrzavati svaki rad.\""
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"obavezni su dijelovi rada ... Njih mora sadrzavati svaki rad.\""
+    },
+    {
+      "ruleId": "fzsri-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"treba rabiti ... slova Calibri, TNR ili Arial\"; \"obvezatna\" veze POTPORU HRVATSKIH ZNAKOVA."
+    },
+    {
+      "ruleId": "fzsri-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"treba rabiti ... slova Calibri, TNR ili Arial\"; \"obvezatna\" veze POTPORU HRVATSKIH ZNAKOVA."
+    },
+    {
+      "ruleId": "fzsri-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"pismo velicine 12 tipografskih tocaka\" visi o \"treba rabiti\"."
+    },
+    {
+      "ruleId": "fzsri-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"pismo velicine 12 tipografskih tocaka\" visi o \"treba rabiti\"."
+    },
+    {
+      "ruleId": "fzsri-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"tekst je potrebno pisati s obostranim poravnanjem\"."
+    },
+    {
+      "ruleId": "fzsri-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"tekst je potrebno pisati s obostranim poravnanjem\"."
+    },
+    {
+      "ruleId": "gradri-diplomski--heading-rules",
+      "modality": "obligation",
+      "scope": "heading",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"Poglavlja moraju biti numerirana\" - vrijednost nosi numberRequired."
+    },
+    {
+      "ruleId": "gradri-zavrsni--heading-rules",
+      "modality": "obligation",
+      "scope": "heading",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"Poglavlja moraju biti numerirana\" - vrijednost nosi numberRequired."
+    },
+    {
+      "ruleId": "medri-medicina-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"Potrebno je rabiti pismo velicine 12\"."
+    },
+    {
+      "ruleId": "medri-medicina-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: dvostruki prored stoji u recenici \"treba biti pripremljen ...\"."
+    },
+    {
+      "ruleId": "medri-farmacija-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"Potrebno je rabiti pismo velicine 12\"; \"obvezatna\" veze potporu hrvatskih znakova."
+    },
+    {
+      "ruleId": "medri-farmacija-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: dvostruki prored stoji u recenici \"treba biti pripremljen ...\"."
+    },
+    {
+      "ruleId": "pravo-doktorski-pravne-znanosti--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"Rad mora imati uvodni dio, sredisnji dio ... te zakljucni dio.\""
+    },
+    {
+      "ruleId": "pravo-opci-pravni-akademski-rad--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"Rad mora imati uvodni dio, sredisnji dio ... te zakljucni dio.\""
+    },
+    {
+      "ruleId": "pravo-specijalisticki-pravni-opci--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"Rad mora imati uvodni dio, sredisnji dio ... te zakljucni dio.\""
+    },
+    {
+      "ruleId": "pravo-integrirani-diplomski--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"Rad mora imati uvodni dio, sredisnji dio ... te zakljucni dio.\""
+    },
+    {
+      "ruleId": "pravo-javna-uprava-diplomski--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"Rad mora imati uvodni dio, sredisnji dio ... te zakljucni dio.\""
+    },
+    {
+      "ruleId": "pravo-javna-uprava-prijediplomski--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"Rad mora imati uvodni dio, sredisnji dio ... te zakljucni dio.\""
+    },
+    {
+      "ruleId": "pravo-porezni-prijediplomski--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"Rad mora imati uvodni dio, sredisnji dio ... te zakljucni dio.\""
+    },
+    {
+      "ruleId": "riteh-diplomski--heading-rules",
+      "modality": "obligation",
+      "scope": "heading",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"Poglavlja moraju biti numerirana\"."
+    },
+    {
+      "ruleId": "riteh-zavrsni--heading-rules",
+      "modality": "obligation",
+      "scope": "heading",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"Poglavlja moraju biti numerirana\"."
+    },
+    {
+      "ruleId": "unidu-povijest-zavrsni--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s MORA/obavezan: \"Tekst mora biti obostrano poravnan\"."
+    },
+    {
+      "ruleId": "vub-zavrsni-sestrinstvo--justify",
+      "modality": "directive",
+      "scope": "body",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"Poravnanje treba biti obostrano\"; MORA veze BROJ REFERENCIJA."
+    },
+    {
+      "ruleId": "vub-zavrsni-sestrinstvo--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "nositelj vrijednosti je recenica s TREBA/potrebno je ili goli indikativ; MORA u istom citatu veze DRUGU odredbu: \"Rad treba pisati na papiru formata A4\"; MORA veze broj referencija."
+    }
+  ]
+}

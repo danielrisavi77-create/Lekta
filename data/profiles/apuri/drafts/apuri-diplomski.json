@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "apuri-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -26,6 +29,9 @@
     },
     {
       "ruleId": "apuri-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         12
@@ -49,6 +55,9 @@
     },
     {
       "ruleId": "apuri-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -70,6 +79,9 @@
     },
     {
       "ruleId": "apuri-diplomski--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "mechanical",
       "checkId": "footnote-size",
       "value": 10,
       "category": "format",
@@ -89,6 +101,9 @@
     },
     {
       "ruleId": "apuri-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -110,6 +125,9 @@
     },
     {
       "ruleId": "apuri-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",
@@ -129,6 +147,9 @@
     },
     {
       "ruleId": "apuri-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "required-sections",
       "value": [
         {
@@ -184,6 +205,9 @@
     },
     {
       "ruleId": "apuri-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "toc",
       "value": true,
       "category": "structure",

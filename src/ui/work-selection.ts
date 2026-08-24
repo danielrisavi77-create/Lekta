@@ -143,3 +143,75 @@ export function languageForDefinition(def: DefinitionLike | null | undefined): s
 export function isLanguageLocked(def: DefinitionLike | null | undefined): boolean {
   return !!def?.rules?.languageLocked;
 }
+
+// --- Rutiranje odabira u profil ---------------------------------------------------------------
+// Do 2026-08-22 je ovaj lanac zivio samo u src/ui/app.ts, ucitan iz DOM-a (populatePrograms /
+// eligibleDefinitions / findVerifiedDefinition), pa se nije dao testirati bez carobnjaka. Odluka
+// koji profil student dobije za (jedinica, program, vrsta rada) je pritom najosjetljivija tocka
+// proizvoda: promasaj ne pada glasno nego tiho posluzi opci baseline umjesto fakultetskih pravila.
+// Funkcije ispod su DOM-free i app.ts ih ZOVE (nisu zrcalo koje odluta), a tests/profile-routing
+// vrti ih preko svih kataloskih trojki.
+
+/** Minimalni oblik kataloske jedinice koji rutiranje cita. */
+export interface UnitLike {
+  id: string;
+  programs?: string[];
+}
+
+/** Profil kakav rutiranje treba: identitet + varijanta (pravila ga ovdje ne zanimaju). */
+export interface RoutableProfile extends ProfileLike {
+  id: string;
+  variant?: string;
+}
+
+/** Zamjena za jedinicu bez ijednog programa u katalogu. */
+export const FALLBACK_PROGRAM = 'Opći profil ustanove';
+
+/**
+ * Programi koje carobnjak stvarno ponudi za jedinicu, tocno kako ih renderira populatePrograms():
+ * krovni "Opći ..." unos se skriva kad SVAKI konkretan studij vec ima vlastiti profil (inace bi
+ * student birao izmedju smjera i krovnog profila bez razloga). Sortirano hrvatskom kolacijom, jer
+ * je prvi element ujedno zadani odabir.
+ *
+ * Krovni se unos skriva SAMO ako je stvarno redundantan, to jest ako je svaki profil koji ga gadja
+ * dostizan i preko nekog konkretnog studija. Bez tog uvjeta krovni profil koji NE navodi nijedan
+ * konkretan studij (danas adu-opci-diplomski) postaje nedostizan: broji se u pokrivenosti, a
+ * nijedan student ga ne moze odabrati.
+ */
+export function visibleProgramsForUnit(registry: RoutableProfile[], unit: UnitLike): string[] {
+  const programs = unit.programs?.length ? unit.programs : [FALLBACK_PROGRAM];
+  const specific = programs.filter((p) => !/^Opći/.test(p));
+  const allSpecificCovered =
+    specific.length > 0 &&
+    specific.every((p) => registry.some((d) => d.unitId === unit.id && d.programs.includes(p)));
+  const umbrellaRedundant = programs
+    .filter((p) => /^Opći/.test(p))
+    .every((p) =>
+      registry
+        .filter((d) => d.unitId === unit.id && d.programs.includes(p))
+        .every((d) => d.programs.some((other) => other !== p && specific.includes(other))),
+    );
+  const visible = allSpecificCovered && umbrellaRedundant ? specific : programs;
+  return [...visible].sort((a, b) => String(a).localeCompare(String(b), 'hr'));
+}
+
+/** Profili koji odgovaraju odabiru (jedinica + program + vrsta rada). Preslikava eligibleDefinitions(). */
+export function eligibleDefinitionsFor<T extends RoutableProfile>(
+  registry: T[],
+  unitId: string,
+  program: string,
+  workType: string,
+): T[] {
+  return registry.filter(
+    (d) => d.unitId === unitId && (d.workTypes || []).includes(workType) && d.programs.includes(program),
+  );
+}
+
+/**
+ * Konacan profil za odabir: trazena varijanta, pa profil bez varijante, inace null (= opci baseline).
+ * Preslikava findVerifiedDefinition(). Vise od jednog kandidata bez varijante znaci da ishod ovisi
+ * o poretku u registru; tests/profile-routing to sprjecava nad cijelim katalogom.
+ */
+export function resolveDefinition<T extends RoutableProfile>(defs: T[], variant: string): T | null {
+  return defs.find((d) => d.variant === variant) || defs.find((d) => !d.variant) || null;
+}

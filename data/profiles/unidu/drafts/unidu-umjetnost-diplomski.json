@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "unidu-umjetnost-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "paper-size",
       "value": "A4",
       "category": "format",
@@ -24,6 +27,9 @@
     },
     {
       "ruleId": "unidu-umjetnost-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -50,6 +56,9 @@
     },
     {
       "ruleId": "unidu-umjetnost-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "line-spacing",
       "value": 1.15,
       "category": "format",
@@ -71,6 +80,9 @@
     },
     {
       "ruleId": "unidu-umjetnost-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Times New Roman",
@@ -95,6 +107,9 @@
     },
     {
       "ruleId": "unidu-umjetnost-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -116,6 +131,9 @@
     },
     {
       "ruleId": "unidu-umjetnost-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",

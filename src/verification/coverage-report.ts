@@ -10,6 +10,13 @@ export type CoverageState =
   | 'scored'
   /** Pravila postoje u stagingu, ali nijedno nije bodovano (izvor ili verifikacija nedostaju). */
   | 'advisory-only'
+  /**
+   * Pravila postoje, izvor je PROCITAN i presudjeno je da ne obvezuje vise od preporuke.
+   * Konacno stanje, ne zaostatak. Razlika prema `advisory-only` nije kozmeticka: ondje nedostaje
+   * dokaz, ovdje dokaz postoji i kaze "fakultet ovo ne propisuje". Bez te razlike se ispravno
+   * stanje (FER) ne moze razlikovati od stvarne rupe.
+   */
+  | 'advisory-by-decision'
   /** Nema nijednog staging pravila i nitko jos nije istrazio zasto. ZADANO, ne zakljucak. */
   | 'no-rules-sourced'
   /** Dokazano: fakultet ne propisuje strojno provjerljive zahtjeve. */
@@ -18,7 +25,10 @@ export type CoverageState =
   | 'source-not-found';
 
 /** Razlozi koje je covjek istrazio (data/profiles/no-rules-reasons.json). */
-export type NoRulesReasons = Record<string, { state: 'no-technical-rules' | 'source-not-found' }>;
+export type NoRulesReasons = Record<
+  string,
+  { state: 'no-technical-rules' | 'source-not-found' | 'advisory-by-decision' }
+>;
 
 /**
  * Coverage matrica bodovano-verificiranih pravila (VERIFICATION_PIPELINE.md sekcije 6 i 9).
@@ -106,11 +116,16 @@ export function computeCoverageCell(
 
   // Zadano je "jos nije istrazeno", ne "nema pravila": zakljucak o odsutnosti pravila smije doci
   // samo iz `no-rules-reasons.json`, gdje ga je covjek potpisao nakon pretrage izvora.
+  // Razlog koji je covjek POTPISAO ima prednost pred izvedenim stanjem. Do 2026-08-22 se
+  // `no-rules-reasons.json` konzultirao TEK kad profil nema nijedan ruleEntry, pa se za profil s
+  // advisory pravilima nikad nije ni pogledao: postojanje ijednog zapisa presijecalo je prije nego
+  // se do razloga dodje. Time se dokazano stanje ("izvor procitan, ne obvezuje") nije moglo
+  // razlikovati od zaostatka ("nitko jos nije pogledao"), a to je razlika izmedju gotovog posla i
+  // rupe u pokrivenosti.
+  const signed = reasons[profile.id]?.state;
   const state: CoverageState = scored.length
     ? 'scored'
-    : entries.length
-      ? 'advisory-only'
-      : (reasons[profile.id]?.state ?? 'no-rules-sourced');
+    : (signed ?? (entries.length ? 'advisory-only' : 'no-rules-sourced'));
 
   return {
     profileId: profile.id,

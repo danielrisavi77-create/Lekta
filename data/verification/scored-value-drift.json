@@ -1,0 +1,338 @@
+{
+  "note": "GENERIRANO. Ne uredjuj rucno. Regeneriraj s `npm run scored-value-drift`.",
+  "kanarinac": "LEKTA-KANARINAC-PROPRIETARY-DATA-43381f0d95ad",
+  "schemaVersion": 1,
+  "counts": {
+    "citation:non-canonical-token": 26,
+    "citation:not-applied": 6,
+    "profilesDemoted": 0
+  },
+  "demotedByProfile": {},
+  "findings": [],
+  "citationStyle": [
+    {
+      "profileId": "agr-diplomski",
+      "ruleId": "agr-diplomski--citation-style",
+      "claimValue": "autor-godina",
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": "agr-upute-diplomski-2019",
+      "sourcePage": "odjeljak 5. Pravila citiranja, a) Citiranje izvora u tekstu",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "agr-zavrsni",
+      "ruleId": "agr-zavrsni--citation-style",
+      "claimValue": "autor-godina",
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": "agr-upute-zavrsni-2017",
+      "sourcePage": "4. Pravila citiranja i izrada popisa literature",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "fpz-zavrsni",
+      "ruleId": "fpz-zavrsni--citation-style",
+      "claimValue": "fusnote ili uglate zagrade s brojem",
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "sourcePage": "odjeljak 6.5.2. Oznake izvora podataka",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "fpz-diplomski",
+      "ruleId": "fpz-diplomski--citation-style",
+      "claimValue": "fusnote ili uglate zagrade s brojem",
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "sourcePage": "odjeljak 6.5.2. Oznake izvora podataka",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "fhs-zavrsni",
+      "ruleId": "fhs-zavrsni--citation-style",
+      "claimValue": "custom",
+      "liveValue": null,
+      "scored": false,
+      "sourceId": "fhs-upute-zavrsni-diplomski-2023",
+      "sourcePage": "odjeljak Literatura (OPE TEHNICKE UPUTE)",
+      "kind": "not-applied"
+    },
+    {
+      "profileId": "muza-diplomski",
+      "ruleId": "muza-diplomski--citation-style",
+      "claimValue": "prema uputama mentora",
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": "muza-pravilnik-zavrsetak-2025",
+      "sourcePage": "Prilog 1: Upute za izradu diplomskog rada (zajednicke za sve studije)",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "alu-doktorski",
+      "ruleId": "alu-doktorski--citation-style",
+      "claimValue": null,
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": "alu-pravila-smjernice-doktorandi",
+      "sourcePage": "Smjernice - disertacija",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "vkjs-zavrsni",
+      "ruleId": "vkjs-zavrsni--citation-style",
+      "claimValue": "apa",
+      "liveValue": "apa7",
+      "scored": true,
+      "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+      "sourcePage": "t. 3.",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "vkjs-diplomski",
+      "ruleId": "vkjs-diplomski--citation-style",
+      "claimValue": "apa",
+      "liveValue": "apa7",
+      "scored": true,
+      "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+      "sourcePage": "t. 3.",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "fazos-zavrsni",
+      "ruleId": "fazos-zavrsni--citation-style",
+      "claimValue": "apa",
+      "liveValue": "apa7",
+      "scored": true,
+      "sourceId": "fazos-upute-zavrsni-2024",
+      "sourcePage": "pogl. citiranje",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "fazos-diplomski",
+      "ruleId": "fazos-diplomski--citation-style",
+      "claimValue": "apa",
+      "liveValue": "apa7",
+      "scored": true,
+      "sourceId": "fazos-upute-diplomski-2024",
+      "sourcePage": "pogl. citiranje",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "unizd-psihologija-zavrsni",
+      "ruleId": "unizd-psihologija-zavrsni--citation-style",
+      "claimValue": "apa",
+      "liveValue": "apa7",
+      "scored": true,
+      "sourceId": "unizd-psihologija-upute",
+      "sourcePage": "Upute, citiranje",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "kifst-diplomski",
+      "ruleId": "kifst-diplomski--citation-style",
+      "claimValue": "apa",
+      "liveValue": "apa7",
+      "scored": true,
+      "sourceId": "kifst-upute-diplomski-2022",
+      "sourcePage": "Upute, citiranje",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "unin-biomedicina-zavrsni",
+      "ruleId": "unin-biomedicina-zavrsni--citation-style",
+      "claimValue": "apa",
+      "liveValue": "apa7",
+      "scored": true,
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, stilovi citiranja",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "unin-biomedicina-diplomski",
+      "ruleId": "unin-biomedicina-diplomski--citation-style",
+      "claimValue": "apa",
+      "liveValue": "apa7",
+      "scored": true,
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, stilovi citiranja",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "vss-zavrsni",
+      "ruleId": "vss-zavrsni--citation-style",
+      "claimValue": "vancouver",
+      "liveValue": null,
+      "scored": true,
+      "sourceId": "vss-upute-zavrsni-2023",
+      "sourcePage": "Odjeljak \"LITERATURA\", str. 18",
+      "kind": "not-applied"
+    },
+    {
+      "profileId": "vss-diplomski",
+      "ruleId": "vss-diplomski--citation-style",
+      "claimValue": "vancouver",
+      "liveValue": null,
+      "scored": true,
+      "sourceId": "vss-upute-zavrsni-2023",
+      "sourcePage": "Odjeljak \"LITERATURA\", str. 18",
+      "kind": "not-applied"
+    },
+    {
+      "profileId": "efst-opci-akademski-rad",
+      "ruleId": "efst-opci-akademski-rad--citation-style",
+      "claimValue": "harvard",
+      "liveValue": null,
+      "scored": false,
+      "sourceId": "efst-upute-studentski-radovi-2013",
+      "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
+      "kind": "not-applied"
+    },
+    {
+      "profileId": "foi-zavrsni",
+      "ruleId": "foi-zavrsni--citation-style",
+      "claimValue": "apa",
+      "liveValue": null,
+      "scored": false,
+      "sourceId": "foi-preporuke-citiranja-apa",
+      "sourcePage": "Preporuke citiranja (APA/IEEE)",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "foi-diplomski",
+      "ruleId": "foi-diplomski--citation-style",
+      "claimValue": "apa",
+      "liveValue": null,
+      "scored": false,
+      "sourceId": "foi-preporuke-citiranja-apa",
+      "sourcePage": "Preporuke citiranja (APA/IEEE)",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "more-zavrsni",
+      "ruleId": "more-zavrsni--citation-style",
+      "claimValue": "harvard",
+      "liveValue": null,
+      "scored": false,
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Smjernice za citiranje i poglavlje Literatura', pododjeljak 'citiranje u tekstu', t. 1",
+      "kind": "not-applied"
+    },
+    {
+      "profileId": "more-diplomski",
+      "ruleId": "more-diplomski--citation-style",
+      "claimValue": "harvard",
+      "liveValue": null,
+      "scored": false,
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Smjernice za citiranje i poglavlje Literatura', pododjeljak 'citiranje u tekstu', t. 1",
+      "kind": "not-applied"
+    },
+    {
+      "profileId": "forenzika-diplomski",
+      "ruleId": "forenzika-diplomski--citation-style",
+      "claimValue": [
+        "apa",
+        "vancouver",
+        "chicago"
+      ],
+      "liveValue": null,
+      "scored": false,
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 8., poglavlje g. Literatura (str. 4)",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "kifos-zavrsni",
+      "ruleId": "kifos-zavrsni--citation-style",
+      "claimValue": "apa",
+      "liveValue": null,
+      "scored": true,
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "kifos-diplomski",
+      "ruleId": "kifos-diplomski--citation-style",
+      "claimValue": "apa",
+      "liveValue": null,
+      "scored": true,
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "logri-diplomski",
+      "ruleId": "logri-diplomski--citation-style",
+      "claimValue": "apa",
+      "liveValue": null,
+      "scored": false,
+      "sourceId": "logri-smjernice-radovi",
+      "sourcePage": "Smjernice za studentske radove, t.3 Navodjenje literature prema APA standardu",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "iv-zavrsni",
+      "ruleId": "iv-zavrsni--citation-style",
+      "claimValue": "apa",
+      "liveValue": null,
+      "scored": false,
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 7 Citiranje i referenciranje (str. 4–5)",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "iv-diplomski",
+      "ruleId": "iv-diplomski--citation-style",
+      "claimValue": "apa",
+      "liveValue": null,
+      "scored": false,
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 7 Citiranje i referenciranje (str. 4–5)",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "vsig-zavrsni",
+      "ruleId": "vsig-zavrsni--citation-style",
+      "claimValue": "apa",
+      "liveValue": null,
+      "scored": true,
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'NAVOĐENJE IZVORA', str. 26/41 (PDF str. 26)",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "vsig-diplomski",
+      "ruleId": "vsig-diplomski--citation-style",
+      "claimValue": "apa",
+      "liveValue": null,
+      "scored": true,
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'NAVOĐENJE IZVORA', str. 26/41 (PDF str. 26)",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "securus-zavrsni",
+      "ruleId": "securus-zavrsni--citation-style",
+      "claimValue": "apa",
+      "liveValue": null,
+      "scored": true,
+      "sourceId": "securus-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 17. stavak 2. i Članak 21. stavak 1.",
+      "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "unizd-tko-diplomski",
+      "ruleId": "unizd-tko-diplomski--citation-style",
+      "claimValue": "chicago",
+      "liveValue": null,
+      "scored": false,
+      "sourceId": "unizd-tko-upute-diplomski",
+      "sourcePage": "str. 6, odjeljak 1.3.6. Literatura",
+      "kind": "non-canonical-token"
+    }
+  ]
+}

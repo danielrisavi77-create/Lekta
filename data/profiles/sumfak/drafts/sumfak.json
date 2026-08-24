@@ -179,6 +179,9 @@
       },
       {
         "ruleId": "sumfak-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -198,6 +201,9 @@
       },
       {
         "ruleId": "sumfak-diplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -357,6 +363,9 @@
       },
       {
         "ruleId": "sumfak-zavrsni--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -376,6 +385,9 @@
       },
       {
         "ruleId": "sumfak-zavrsni--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",

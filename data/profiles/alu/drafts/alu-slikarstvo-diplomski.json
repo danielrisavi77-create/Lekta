@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "alu-slikarstvo-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         12
@@ -26,6 +29,9 @@
     },
     {
       "ruleId": "alu-slikarstvo-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-count",
       "value": {
         "min": 5,

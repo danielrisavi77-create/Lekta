@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "vuka-strojarski-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 3,
@@ -17,15 +20,16 @@
       "verifiedHash": "d73de07034527be55b6b5c4a80422ed4d61844292ad0c4427d70474ae7fbf7f2",
       "sourcePage": "predlozak korica, oznake 'Lijeva/Gornja/Donja/Desna margina'",
       "quote": "Lijeva margina 3.0 cm Gornja margina 3.0 cm ... Donja margina 3.0 cm Desna margina 3.0 cm",
-      "autoFixable": true,
+      "autoFixable": false,
       "fixerId": "margins-fixer",
       "machineCheckable": true,
-      "status": "verified",
-      "scored": true,
+      "status": "needs-recheck",
+      "scored": false,
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "lastVerified": "2026-07-27",
-      "confirmedVia": "ai-1pass-batch"
+      "confirmedVia": null,
+      "note": "OZNACENO ZA REVERIFIKACIJU 2026-08-23 (mehanicki nalaz, scripts/adjudicate_drift.py). Citat se NE nalazi u dokumentu koji citira: pokrivanje parova rijeci 0,21 uz prag 0,85, a niz \"3,0 cm\" u cijelom dokumentu ne postoji nijednom. O marginama dokument kaze tocno jedno: \"margine 2,0 cm (desno, gore i dolje) i 2,5 cm (lijevo)\". Vlastiti sourcePage odaje uzrok: \"predlozak korica\" - vrijednost je ocitana s PREDLOSKA NASLOVNICE, ne iz pravila za tijelo rada (obrazac \"naslovnica kao tiha druga vrijednost\"). Da je tvrdnja nosila scope: 'title-page', nikad ne bi bodovala margine tijela rada. NAPOMENA: confirmedVia je bio 'ai-1pass-batch', ne 'human-audit'. PRIJEDLOG ZA POTPIS: value {top:2,right:2,bottom:2,left:2.5}, citat \"margine 2,0 cm (desno, gore i dolje) i 2,5 cm (lijevo)\", scope 'whole', modality 'directive'."
     }
   ]
 }

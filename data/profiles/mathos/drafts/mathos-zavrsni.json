@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "mathos-zavrsni--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "toc",
       "value": true,
       "category": "structure",
@@ -22,6 +25,9 @@
     },
     {
       "ruleId": "mathos-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "required-sections",
       "value": [
         {
@@ -91,6 +97,9 @@
     },
     {
       "ruleId": "mathos-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": [
         12
@@ -114,6 +123,9 @@
     },
     {
       "ruleId": "mathos-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "margins",
       "value": {
         "top": 3,
@@ -140,6 +152,9 @@
     },
     {
       "ruleId": "mathos-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",

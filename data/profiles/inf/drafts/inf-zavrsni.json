@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "inf-zavrsni--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "paper-size",
       "value": "A4",
       "category": "format",
@@ -24,6 +27,9 @@
     },
     {
       "ruleId": "inf-zavrsni--page-count",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-count",
       "value": {
         "min": 30

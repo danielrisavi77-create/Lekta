@@ -20,10 +20,26 @@ test('artifact demo radi jednokratni motion, replay i fokus prijelaz', async ({ 
   await page.goto(route);
 
   await expect(page.locator('#demoStage')).toHaveAttribute('data-demo-state', 'result', { timeout: 6_000 });
+  // Prozor u kojem stanje stoji na 'intro' ili 'scanning' traje 1,85 s (vidi timere u
+  // prototype/analyzer-hero-demo.ts: scanning na 260 ms, marked na 1850 ms). Na opterecenom
+  // stroju poll zna uzeti prvi uzorak tek nakon tog prozora i onda zauvijek vidi samo 'result',
+  // pa gate pada bez ijednog kvara u proizvodu. Zato prijelaze BILJEZIMO umjesto da ih lovimo:
+  // observer se postavlja PRIJE klika, pa tvrdnja ne ovisi o tome kad je uzorak uzet.
+  await page.evaluate(() => {
+    const stage = document.getElementById('demoStage');
+    if (!stage) return;
+    const seen: string[] = [stage.dataset.demoState ?? ''];
+    (window as unknown as { __demoStates: string[] }).__demoStates = seen;
+    new MutationObserver(() => seen.push(stage.dataset.demoState ?? ''))
+      .observe(stage, { attributes: true, attributeFilter: ['data-demo-state'] });
+  });
   await page.locator('#demoReplay').click();
-  await expect.poll(async () => page.locator('#demoStage').getAttribute('data-demo-state'))
-    .toMatch(/intro|scanning/);
   await expect(page.locator('#demoStage')).toHaveAttribute('data-demo-state', 'result', { timeout: 6_000 });
+  const seen = await page.evaluate(
+    () => (window as unknown as { __demoStates?: string[] }).__demoStates ?? [],
+  );
+  expect(seen, 'replay mora ponovno proci kroz intro i scanning').toContain('intro');
+  expect(seen, 'replay mora ponovno proci kroz intro i scanning').toContain('scanning');
 
   await page.locator('#demoUploadCta').click();
   await expect(page.locator('#demoAnalyzerPreview')).toBeFocused();

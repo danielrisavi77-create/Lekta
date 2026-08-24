@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "ffos-germanistika-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Times New Roman",
@@ -28,6 +31,9 @@
     },
     {
       "ruleId": "ffos-germanistika-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         12
@@ -51,6 +57,9 @@
     },
     {
       "ruleId": "ffos-germanistika-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -72,6 +81,9 @@
     },
     {
       "ruleId": "ffos-germanistika-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,

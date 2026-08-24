@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "vsite-zavrsni--page-count",
+      "modality": "recommendation",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "page-count",
       "value": {
         "min": 30,
@@ -25,6 +28,9 @@
     },
     {
       "ruleId": "vsite-zavrsni--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "toc",
       "value": true,
       "category": "structure",

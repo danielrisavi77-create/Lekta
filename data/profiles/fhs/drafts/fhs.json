@@ -6,6 +6,9 @@
     "fhs-diplomski": [
       {
         "ruleId": "fhs-diplomski--font",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -16,7 +19,7 @@
         "authority": "program-page",
         "sourceId": "fhs-upute-diplomski-2026",
         "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
-        "quote": "Font (tip pisma): obavezna potpora svih hrvatskih znakova",
+        "quote": "Font (tip pisma): obavezna potpora svih hrvatskih znakova – Times New Roman (osim naslovnih stranica)",
         "status": "verified",
         "scored": true,
         "autoFixable": true,
@@ -29,6 +32,9 @@
       },
       {
         "ruleId": "fhs-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -50,6 +56,9 @@
       },
       {
         "ruleId": "fhs-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -71,6 +80,9 @@
       },
       {
         "ruleId": "fhs-diplomski--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -84,7 +96,7 @@
         "authority": "program-page",
         "sourceId": "fhs-upute-diplomski-2026",
         "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
-        "quote": "Lijeva i desna margina: 2,5 cm",
+        "quote": "Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
         "status": "verified",
         "scored": true,
         "autoFixable": true,
@@ -97,6 +109,9 @@
       },
       {
         "ruleId": "fhs-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -116,6 +131,9 @@
       },
       {
         "ruleId": "fhs-diplomski--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -137,6 +155,9 @@
       },
       {
         "ruleId": "fhs-diplomski--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -156,6 +177,9 @@
       },
       {
         "ruleId": "fhs-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-sections",
         "value": [
           "naslovnica",
@@ -220,6 +244,9 @@
     "fhs-zavrsni": [
       {
         "ruleId": "fhs-zavrsni--font",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -230,7 +257,7 @@
         "authority": "program-page",
         "sourceId": "fhs-upute-zavrsni-diplomski-2023",
         "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
-        "quote": "Font (tip pisma): obavezna potpora svih hrvatskih znakova",
+        "quote": "Font (tip pisma): obavezna potpora svih hrvatskih znakova – Times New Roman (osim naslovnih stranica)",
         "status": "verified",
         "scored": true,
         "autoFixable": true,
@@ -243,6 +270,9 @@
       },
       {
         "ruleId": "fhs-zavrsni--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -264,6 +294,9 @@
       },
       {
         "ruleId": "fhs-zavrsni--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -285,6 +318,9 @@
       },
       {
         "ruleId": "fhs-zavrsni--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -298,7 +334,7 @@
         "authority": "program-page",
         "sourceId": "fhs-upute-zavrsni-diplomski-2023",
         "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
-        "quote": "Lijeva i desna margina: 2,5 cm",
+        "quote": "Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
         "status": "verified",
         "scored": true,
         "autoFixable": true,
@@ -311,6 +347,9 @@
       },
       {
         "ruleId": "fhs-zavrsni--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -330,6 +369,9 @@
       },
       {
         "ruleId": "fhs-zavrsni--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -351,6 +393,9 @@
       },
       {
         "ruleId": "fhs-zavrsni--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -370,6 +415,9 @@
       },
       {
         "ruleId": "fhs-zavrsni--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-sections",
         "value": [
           "naslovnica",

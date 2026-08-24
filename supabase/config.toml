@@ -415,6 +415,12 @@ verify_jwt = true
 [functions.faculty-request]
 verify_jwt = false
 
+# profile-rules: rules-on-demand isporuka pravila JEDNOG profila (faza B zastite baze
+# pravila). Anoniman GET (besplatna analiza ne smije ovisiti o GoTrue); funkcija sama
+# opcionalno razrijesi Bearer za user-scope rate limit, IP cap vrijedi uvijek.
+[functions.profile-rules]
+verify_jwt = false
+
 [functions.send-reminders]
 verify_jwt = false
 

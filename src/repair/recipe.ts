@@ -329,5 +329,14 @@ export function buildParamAuthority(recipe: RecipeProfile[] = buildRecipe()): Re
     }
     if (Object.keys(byRule).length) out[profile.id] = byRule;
   }
+  // Kanarinac privatnog sloja (data/classification.json): emitira ga GENERATOR pa prezivljava
+  // regen. Kljuc s PRAZNIM pravilima: nikad ne moze proci kao profil s vrijednostima
+  // (resolveParams za njega vraca 'client', drift test "nista sto recept ne propisuje" ga
+  // preskace), a zz- prefiks cuva da nije Object.keys()[0] u testovima. Artefakt je
+  // data/generated/** forbidden; pojava niza u dist/ = curenje.
+  out[PARAM_AUTHORITY_KANARINAC_KEY] = {};
   return out;
 }
+
+/** Kljuc kanarinca u pecenom artefaktu; vrijednost prikovana i u data/classification.json. */
+export const PARAM_AUTHORITY_KANARINAC_KEY = 'zz-kanarinac-LEKTA-KANARINAC-SECURITY-SENSITIVE-906244f20b91';

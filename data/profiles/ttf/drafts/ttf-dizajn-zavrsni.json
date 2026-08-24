@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "ttf-dizajn-zavrsni--font",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Arial"
@@ -13,7 +16,7 @@
       "authority": "binding",
       "sourceId": "ttf-upute-zavrsni-diplomski",
       "sourcePage": "str. 1, \"Postavke stranice\"",
-      "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
+      "quote": "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -26,6 +29,9 @@
     },
     {
       "ruleId": "ttf-dizajn-zavrsni--font-size",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         12
@@ -36,7 +42,7 @@
       "authority": "binding",
       "sourceId": "ttf-upute-zavrsni-diplomski",
       "sourcePage": "str. 1, \"Postavke stranice\"",
-      "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
+      "quote": "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -49,6 +55,9 @@
     },
     {
       "ruleId": "ttf-dizajn-zavrsni--line-spacing",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -57,7 +66,7 @@
       "authority": "binding",
       "sourceId": "ttf-upute-zavrsni-diplomski",
       "sourcePage": "str. 1, \"Postavke stranice\"",
-      "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
+      "quote": "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -70,6 +79,9 @@
     },
     {
       "ruleId": "ttf-dizajn-zavrsni--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -91,6 +103,9 @@
     },
     {
       "ruleId": "ttf-dizajn-zavrsni--margins",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -104,7 +119,7 @@
       "authority": "binding",
       "sourceId": "ttf-upute-zavrsni-diplomski",
       "sourcePage": "str. 1, \"Postavke stranice\"",
-      "quote": "Font: Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, poravnanje Justified, prored 1,5, margine 2,5 cm sa svih strana. Rad mora imati sadrzaj. Stranice moraju biti numerirane.",
+      "quote": "Postavke stranice: Tip pisma (Font): obavezna potpora svih hrvatskih znakova – Arial Veličina slova (Font size): 12 tipografskih točaka Poravnanje (Alignment): Obostrano (Justified) Prored (Line spacing): 1,5 redak Lijeva i desna margina: 2,5 cm Gornja i donja margina: 2,5 cm",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -117,6 +132,9 @@
     },
     {
       "ruleId": "ttf-dizajn-zavrsni--toc",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "toc",
       "value": true,
       "category": "structure",
@@ -136,6 +154,9 @@
     },
     {
       "ruleId": "ttf-dizajn-zavrsni--page-numbers",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-numbers",
       "value": true,
       "category": "structure",

@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "adu-produkcija-diplomski--page-count",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "page-count",
       "value": {
         "min": 40,

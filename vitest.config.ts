@@ -6,6 +6,10 @@ export default defineConfig({
   define: { __DEV_TOOLS__: 'true' },
   test: {
     environment: 'happy-dom',
+    // Puni ~4,4 tisuće DOCX/verifikacijski paket na 8 GB hostu OOM-a s default paralelizmom; jedan fork worker čuva pokrivenost i smanjuje peak memoriju.
+    pool: 'forks',
+    maxWorkers: 1,
+    minWorkers: 1,
     // Gate MORA pasti ako se ne kolektira nijedan test (npr. loše rješavanje globa ili
     // toolchain regresija koja tiho kolektira 0): inace `npm run check` laže zeleno. Vidi AUD-46.
     passWithNoTests: false,

@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "medri-farmacija-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "paper-size",
       "value": "A4",
       "category": "format",
@@ -24,6 +27,9 @@
     },
     {
       "ruleId": "medri-farmacija-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -50,6 +56,9 @@
     },
     {
       "ruleId": "medri-farmacija-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "line-spacing",
       "value": 2,
       "category": "format",
@@ -71,6 +80,9 @@
     },
     {
       "ruleId": "medri-farmacija-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -92,6 +104,9 @@
     },
     {
       "ruleId": "medri-farmacija-diplomski--page-count",
+      "modality": "prohibition",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "page-count",
       "value": {
         "min": 15,

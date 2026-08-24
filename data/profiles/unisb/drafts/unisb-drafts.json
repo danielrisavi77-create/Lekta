@@ -1,9 +1,13 @@
 {
+  "kanarinac": "LEKTA-KANARINAC-PROPRIETARY-DATA-6d64f7f58b1e",
   "faculty": "Sveuciliste u Slavonskom Brodu",
   "profiles": {
     "unisb-btho-zavrsni": [
       {
         "ruleId": "unisb-btho-zavrsni--font",
+        "modality": "recommendation",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -27,6 +31,9 @@
       },
       {
         "ruleId": "unisb-btho-zavrsni--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "font-size",
         "value": [
           12
@@ -50,6 +57,9 @@
       },
       {
         "ruleId": "unisb-btho-zavrsni--line-spacing",
+        "modality": "recommendation",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "line-spacing",
         "value": 1,
         "category": "format",
@@ -71,6 +81,9 @@
       },
       {
         "ruleId": "unisb-btho-zavrsni--margins",
+        "modality": "recommendation",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "margins",
         "value": {
           "top": 2,
@@ -106,20 +119,23 @@
         "sourceId": "unisb-upute-zavrsni-diplomski-2024",
         "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
         "quote": "Tekst pisanog dijela rada treba pisati samo s jedne strane lista (preporuka: jednostruki prored kao sto je pisan i ovaj tekst). Na stranici ne bi trebalo biti vise od 30 redaka teksta uz velicinu slova 12 pt (preporuka: pismo Times New Roman uz velicinu slova 12 pt). Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
-        "status": "verified",
-        "scored": true,
+        "status": "needs-recheck",
+        "scored": false,
         "verifiedBy": "Daniel Risavi",
         "reviewedBy": "Daniel Risavi",
         "lastVerified": "2026-07-27",
-        "confirmedVia": "ai-1pass-batch",
+        "confirmedVia": null,
         "verifiedHash": "43d7ca1ed9f60e876f40f27e7b355a98b87bcb2ece19b25e02d7d5dc7d3c74f1",
-        "autoFixable": true,
+        "autoFixable": false,
         "fixerId": "paper-size-fixer"
       }
     ],
     "unisb-btho-diplomski": [
       {
         "ruleId": "unisb-btho-diplomski--font",
+        "modality": "recommendation",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -143,6 +159,9 @@
       },
       {
         "ruleId": "unisb-btho-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "font-size",
         "value": [
           12
@@ -166,6 +185,9 @@
       },
       {
         "ruleId": "unisb-btho-diplomski--line-spacing",
+        "modality": "recommendation",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "line-spacing",
         "value": 1,
         "category": "format",
@@ -187,6 +209,9 @@
       },
       {
         "ruleId": "unisb-btho-diplomski--margins",
+        "modality": "recommendation",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "margins",
         "value": {
           "top": 2,
@@ -222,20 +247,23 @@
         "sourceId": "unisb-upute-zavrsni-diplomski-2024",
         "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
         "quote": "Tekst pisanog dijela rada treba pisati samo s jedne strane lista (preporuka: jednostruki prored kao sto je pisan i ovaj tekst). Na stranici ne bi trebalo biti vise od 30 redaka teksta uz velicinu slova 12 pt (preporuka: pismo Times New Roman uz velicinu slova 12 pt). Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
-        "status": "verified",
-        "scored": true,
+        "status": "needs-recheck",
+        "scored": false,
         "verifiedBy": "Daniel Risavi",
         "reviewedBy": "Daniel Risavi",
         "lastVerified": "2026-07-27",
-        "confirmedVia": "ai-1pass-batch",
+        "confirmedVia": null,
         "verifiedHash": "43d7ca1ed9f60e876f40f27e7b355a98b87bcb2ece19b25e02d7d5dc7d3c74f1",
-        "autoFixable": true,
+        "autoFixable": false,
         "fixerId": "paper-size-fixer"
       }
     ],
     "unisb-odhz-zavrsni": [
       {
         "ruleId": "unisb-odhz-zavrsni--font",
+        "modality": "recommendation",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -259,6 +287,9 @@
       },
       {
         "ruleId": "unisb-odhz-zavrsni--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "font-size",
         "value": [
           12
@@ -282,6 +313,9 @@
       },
       {
         "ruleId": "unisb-odhz-zavrsni--line-spacing",
+        "modality": "recommendation",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "line-spacing",
         "value": 1,
         "category": "format",
@@ -303,6 +337,9 @@
       },
       {
         "ruleId": "unisb-odhz-zavrsni--margins",
+        "modality": "recommendation",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "margins",
         "value": {
           "top": 2,
@@ -338,20 +375,23 @@
         "sourceId": "unisb-upute-zavrsni-diplomski-2024",
         "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
         "quote": "Tekst pisanog dijela rada treba pisati samo s jedne strane lista (preporuka: jednostruki prored kao sto je pisan i ovaj tekst). Na stranici ne bi trebalo biti vise od 30 redaka teksta uz velicinu slova 12 pt (preporuka: pismo Times New Roman uz velicinu slova 12 pt). Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
-        "status": "verified",
-        "scored": true,
+        "status": "needs-recheck",
+        "scored": false,
         "verifiedBy": "Daniel Risavi",
         "reviewedBy": "Daniel Risavi",
         "lastVerified": "2026-07-27",
-        "confirmedVia": "ai-1pass-batch",
+        "confirmedVia": null,
         "verifiedHash": "43d7ca1ed9f60e876f40f27e7b355a98b87bcb2ece19b25e02d7d5dc7d3c74f1",
-        "autoFixable": true,
+        "autoFixable": false,
         "fixerId": "paper-size-fixer"
       }
     ],
     "unisb-odhz-diplomski": [
       {
         "ruleId": "unisb-odhz-diplomski--font",
+        "modality": "recommendation",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -375,6 +415,9 @@
       },
       {
         "ruleId": "unisb-odhz-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "font-size",
         "value": [
           12
@@ -398,6 +441,9 @@
       },
       {
         "ruleId": "unisb-odhz-diplomski--line-spacing",
+        "modality": "recommendation",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "line-spacing",
         "value": 1,
         "category": "format",
@@ -419,6 +465,9 @@
       },
       {
         "ruleId": "unisb-odhz-diplomski--margins",
+        "modality": "recommendation",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "margins",
         "value": {
           "top": 2,
@@ -454,20 +503,23 @@
         "sourceId": "unisb-upute-zavrsni-diplomski-2024",
         "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
         "quote": "Tekst pisanog dijela rada treba pisati samo s jedne strane lista (preporuka: jednostruki prored kao sto je pisan i ovaj tekst). Na stranici ne bi trebalo biti vise od 30 redaka teksta uz velicinu slova 12 pt (preporuka: pismo Times New Roman uz velicinu slova 12 pt). Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
-        "status": "verified",
-        "scored": true,
+        "status": "needs-recheck",
+        "scored": false,
         "verifiedBy": "Daniel Risavi",
         "reviewedBy": "Daniel Risavi",
         "lastVerified": "2026-07-27",
-        "confirmedVia": "ai-1pass-batch",
+        "confirmedVia": null,
         "verifiedHash": "43d7ca1ed9f60e876f40f27e7b355a98b87bcb2ece19b25e02d7d5dc7d3c74f1",
-        "autoFixable": true,
+        "autoFixable": false,
         "fixerId": "paper-size-fixer"
       }
     ],
     "unisb-sfsb-zavrsni": [
       {
         "ruleId": "unisb-sfsb-zavrsni--font",
+        "modality": "recommendation",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -491,6 +543,9 @@
       },
       {
         "ruleId": "unisb-sfsb-zavrsni--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "font-size",
         "value": [
           12
@@ -514,6 +569,9 @@
       },
       {
         "ruleId": "unisb-sfsb-zavrsni--line-spacing",
+        "modality": "recommendation",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "line-spacing",
         "value": 1,
         "category": "format",
@@ -535,6 +593,9 @@
       },
       {
         "ruleId": "unisb-sfsb-zavrsni--margins",
+        "modality": "recommendation",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "margins",
         "value": {
           "top": 2,
@@ -570,20 +631,23 @@
         "sourceId": "unisb-upute-zavrsni-diplomski-2024",
         "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
         "quote": "Tekst pisanog dijela rada treba pisati samo s jedne strane lista (preporuka: jednostruki prored kao sto je pisan i ovaj tekst). Na stranici ne bi trebalo biti vise od 30 redaka teksta uz velicinu slova 12 pt (preporuka: pismo Times New Roman uz velicinu slova 12 pt). Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
-        "status": "verified",
-        "scored": true,
+        "status": "needs-recheck",
+        "scored": false,
         "verifiedBy": "Daniel Risavi",
         "reviewedBy": "Daniel Risavi",
         "lastVerified": "2026-07-27",
-        "confirmedVia": "ai-1pass-batch",
+        "confirmedVia": null,
         "verifiedHash": "43d7ca1ed9f60e876f40f27e7b355a98b87bcb2ece19b25e02d7d5dc7d3c74f1",
-        "autoFixable": true,
+        "autoFixable": false,
         "fixerId": "paper-size-fixer"
       }
     ],
     "unisb-sfsb-diplomski": [
       {
         "ruleId": "unisb-sfsb-diplomski--font",
+        "modality": "recommendation",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -607,6 +671,9 @@
       },
       {
         "ruleId": "unisb-sfsb-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "font-size",
         "value": [
           12
@@ -630,6 +697,9 @@
       },
       {
         "ruleId": "unisb-sfsb-diplomski--line-spacing",
+        "modality": "recommendation",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "line-spacing",
         "value": 1,
         "category": "format",
@@ -651,6 +721,9 @@
       },
       {
         "ruleId": "unisb-sfsb-diplomski--margins",
+        "modality": "recommendation",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "margins",
         "value": {
           "top": 2,
@@ -686,20 +759,23 @@
         "sourceId": "unisb-upute-zavrsni-diplomski-2024",
         "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
         "quote": "Tekst pisanog dijela rada treba pisati samo s jedne strane lista (preporuka: jednostruki prored kao sto je pisan i ovaj tekst). Na stranici ne bi trebalo biti vise od 30 redaka teksta uz velicinu slova 12 pt (preporuka: pismo Times New Roman uz velicinu slova 12 pt). Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
-        "status": "verified",
-        "scored": true,
+        "status": "needs-recheck",
+        "scored": false,
         "verifiedBy": "Daniel Risavi",
         "reviewedBy": "Daniel Risavi",
         "lastVerified": "2026-07-27",
-        "confirmedVia": "ai-1pass-batch",
+        "confirmedVia": null,
         "verifiedHash": "43d7ca1ed9f60e876f40f27e7b355a98b87bcb2ece19b25e02d7d5dc7d3c74f1",
-        "autoFixable": true,
+        "autoFixable": false,
         "fixerId": "paper-size-fixer"
       }
     ],
     "unisb-teho-zavrsni": [
       {
         "ruleId": "unisb-teho-zavrsni--font",
+        "modality": "recommendation",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -723,6 +799,9 @@
       },
       {
         "ruleId": "unisb-teho-zavrsni--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "font-size",
         "value": [
           12
@@ -746,6 +825,9 @@
       },
       {
         "ruleId": "unisb-teho-zavrsni--line-spacing",
+        "modality": "recommendation",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "line-spacing",
         "value": 1,
         "category": "format",
@@ -767,6 +849,9 @@
       },
       {
         "ruleId": "unisb-teho-zavrsni--margins",
+        "modality": "recommendation",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "margins",
         "value": {
           "top": 2,
@@ -802,20 +887,23 @@
         "sourceId": "unisb-upute-zavrsni-diplomski-2024",
         "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
         "quote": "Tekst pisanog dijela rada treba pisati samo s jedne strane lista (preporuka: jednostruki prored kao sto je pisan i ovaj tekst). Na stranici ne bi trebalo biti vise od 30 redaka teksta uz velicinu slova 12 pt (preporuka: pismo Times New Roman uz velicinu slova 12 pt). Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
-        "status": "verified",
-        "scored": true,
+        "status": "needs-recheck",
+        "scored": false,
         "verifiedBy": "Daniel Risavi",
         "reviewedBy": "Daniel Risavi",
         "lastVerified": "2026-07-27",
-        "confirmedVia": "ai-1pass-batch",
+        "confirmedVia": null,
         "verifiedHash": "43d7ca1ed9f60e876f40f27e7b355a98b87bcb2ece19b25e02d7d5dc7d3c74f1",
-        "autoFixable": true,
+        "autoFixable": false,
         "fixerId": "paper-size-fixer"
       }
     ],
     "unisb-teho-diplomski": [
       {
         "ruleId": "unisb-teho-diplomski--font",
+        "modality": "recommendation",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -839,6 +927,9 @@
       },
       {
         "ruleId": "unisb-teho-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "font-size",
         "value": [
           12
@@ -862,6 +953,9 @@
       },
       {
         "ruleId": "unisb-teho-diplomski--line-spacing",
+        "modality": "recommendation",
+        "scope": "body",
+        "modalitySource": "human",
         "checkId": "line-spacing",
         "value": 1,
         "category": "format",
@@ -883,6 +977,9 @@
       },
       {
         "ruleId": "unisb-teho-diplomski--margins",
+        "modality": "recommendation",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "margins",
         "value": {
           "top": 2,
@@ -918,14 +1015,14 @@
         "sourceId": "unisb-upute-zavrsni-diplomski-2024",
         "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
         "quote": "Tekst pisanog dijela rada treba pisati samo s jedne strane lista (preporuka: jednostruki prored kao sto je pisan i ovaj tekst). Na stranici ne bi trebalo biti vise od 30 redaka teksta uz velicinu slova 12 pt (preporuka: pismo Times New Roman uz velicinu slova 12 pt). Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
-        "status": "verified",
-        "scored": true,
+        "status": "needs-recheck",
+        "scored": false,
         "verifiedBy": "Daniel Risavi",
         "reviewedBy": "Daniel Risavi",
         "lastVerified": "2026-07-27",
-        "confirmedVia": "ai-1pass-batch",
+        "confirmedVia": null,
         "verifiedHash": "43d7ca1ed9f60e876f40f27e7b355a98b87bcb2ece19b25e02d7d5dc7d3c74f1",
-        "autoFixable": true,
+        "autoFixable": false,
         "fixerId": "paper-size-fixer"
       }
     ]

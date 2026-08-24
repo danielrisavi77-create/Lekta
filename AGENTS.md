@@ -23,6 +23,23 @@ npm run check   # tsc --noEmit && vitest run && vite build
 
 Ako check pada, promjena nije gotova. Ne commitaj crveno.
 
+## Privatni sloj ne ide u javni bundle
+
+`data/classification.json` klasificira staze (PUBLIC/PRIVATE-IP/PROPRIETARY-DATA/
+SECURITY-SENSITIVE); zadnje pravilo koje pogodi vrijedi. Vite plugin
+(scripts/security/classification-guard.mjs) RUSI javni build ako forbidden/derived
+modul ude u graf; post-build sken (scripts/verify-dist-classification.mjs) trazi
+kanarince i never-markere u dist/ i dist-packs/. Drafts evidence, ledger,
+source-registry i data/profiles/verified-profiles.json NIKAD u preglednik. Ne
+uklanjaj kanarince (LEKTA-KANARINAC-* i top-level "kanarinac" kljuc u draftovima);
+writeri draftova moraju propagirati nepoznate top-level kljuceve. Novu stazu bez
+razreda check odbija: dodaj pravilo svjesno, uz biljesku.
+
+Pravila profila u pregledniku stizu PO PROFILU (ensureProfileRules(profileId) preko
+providera; produkcija = profile-rules Edge funkcija, dev = lokalni lazy chunkovi).
+currentProfile BACA kad definicija postoji a pravila nisu ucitana (light-stub zamka);
+kvar dohvata posteno degradira na opcu provjeru, NIKAD tiho bodovanje.
+
 ## Parser: ne diraj bez golden testa
 
 Legal Citation Engine i OOXML parser (src/docx, src/audits, src/citations,
@@ -45,6 +62,18 @@ klijent slozi iz profila (paramsForCheck u src/ui/repair-items.ts).
   Dokument se nikad ne zarobljava. Gard: tests/repair-delivery-order.test.ts.
 - IDENTITET provjere je check.id (src/scoring/check-id-registry.ts), ne hrvatski naslov;
   check-fixer-map.ts je kljucan po checkId. Gard: tests/check-fixer-map.test.ts.
+- PRAVILA KOJA ANALIZA CITA slaze src/profiles/compose-profile.ts (app.ts ga zove, nije
+  zrcalo): baseline -> lagan rad -> overlay katedre -> normalizeCheckFlags -> mentorov
+  override -> scored/advisory demotija ZADNJA. Demotija preskace dimenziju koju je izricito
+  propisao specificniji izvor (katedra) i mora gasiti SVE bodovane grane te dimenzije,
+  UKLJUCUJUCI PODPROVJERE (polozaj broja stranice, naslovnica bez broja, numeriranje od
+  Uvoda, podprovjere sadrzaja: 19 bodova koji su visili o tome je li polje pronadjeno, a
+  ne boduje li se os). Zastita vrijedi samo ako overlay dimenziju PROPISE (vrijednost, ili
+  zastavica na true kod booleovih osi); gola zastavica nije propis. Overlay koji propisuje
+  dijete stiti i roditelja. Gard: tests/composed-profile.test.ts + tests/gate-mutations.test.ts
+  + tests/conformance/composed.test.ts.
+- ODABIR (jedinica, program, vrsta rada) -> profil je u src/ui/work-selection.ts; nijedan
+  profil ne smije ostati nedostizan iz carobnjaka. Gard: tests/profile-routing.test.ts.
 - docs/REPAIR_RECIPE.md je GENERIRAN (npm run repair-recipe, izvor src/repair/recipe.ts).
   Ne uredjuj ga rucno; tests/repair-recipe.test.ts pada na drift. Ista naredba pece i
   data/generated/repair-params-by-profile.json.
@@ -95,6 +124,31 @@ empty-paragraph-fixer, croatian-typography-fixer, element-caption-fixer (RE-59).
 Zabranjeno ostaje: pisanje/prepravljanje recenica, generiranje sadrzaja modelom,
 i BODOVANJE po pravilu bez sluzbenog izvora.
 
+## Tvrdo pravilo: bodovana vrijednost mora se slagati s verificiranom tvrdnjom
+
+Lanac dokaza (izvor + snapshot + stranica + doslovan citat + potpis) zivi u `ruleEntries`
+(`data/profiles/<unit>/drafts/*.json`), a motor boduje iz naslijedjenog `rules`
+(`composeAnalysisProfile` klonira `definition.rules`, NIKAD `ruleEntries`). Do 2026-08-22 se te dvije
+strane nisu usporedjivale, pa je 40 parova (profil, os) kroz 23 profila bodovalo vrijednost koju
+njihova vlastita `verified` tvrdnja s citatom opovrgava (`unizd-pomorski-*`: izvor Merriweather
+10 pt, motor je trazio TNR/Arial/Calibri 11-12 pt).
+
+- Usporedba: `src/verification/scored-value-binding.ts`, po OSI a ne po kljucu `rules` (motor cita
+  par zastavica+vrijednost, pa usporedba po kljucu daje lazne nalaze).
+- Artefakt `data/verification/scored-value-drift.json` (`npm run scored-value-drift`);
+  `advisory-demotion.ts` ga cita i gasi bodovanje osi s raskorakom dok vlasnik ne presudi.
+  Dokazni dosjei: `npm run drift-dossiers`.
+- Gard `tests/scored-value-drift.test.ts`: artefakt = svjez izracun, ratchet smije samo padati,
+  negativne kontrole dokazuju da provjera grize.
+- Raskoraka je NULA od 2026-08-24 (svih 37 presudjeno i potpisano, data/verification/
+  drift-decisions.json), a ratchet je spusten na 0. Mutacija o demotiji zato PODMECE raskorak
+  umjesto da ga trazi u podacima: gard koji trazi da kvar postoji prestaje gristi kad je posao
+  gotov, dakle u najgorem trenutku.
+- Raskorak se NIKAD ne racuna iz demotije (inace se gard sam pobrise u sljedecem krugu); zato
+  `computeBaseDemotedAdvisory` stoji odvojeno od `computeDemotedAdvisory`.
+- Tvrdnja koja se ne slaze sa zrcalom NIJE automatski ona tocna: opovrgavajuci prolaz nasao je krivo
+  pripisan opseg na 12 od 20 tvrdnji. Presuda je vlasnikova, po slucaju.
+
 ## Pravila profila (Option A)
 
 - ruleEntries u data/** su autorski izvor istine; rules je naslijedeni agregat
@@ -103,6 +157,38 @@ i BODOVANJE po pravilu bez sluzbenog izvora.
 - sourcePage koji nije rucno potvrdjen ostaje null, ne nagadjaj ga.
 - Studentski radovi iz repozitorija sluze iskljucivo regresijskom testiranju
   parsera, nikada kao izvor pravila.
+
+## Modalitet i opseg su dio tvrdnje
+
+Svaki `ruleEntry` uz vrijednost nosi `modality` (koliko jako izvor obvezuje), `scope` (na koji dio
+rada se odnosi) i `modalitySource` (tko ih je upisao). FER pilot je oborio 4 od 5 tvrdnji na
+TUMACENJU, ne na prijepisu; opovrgavajuci prolaz je nasao krivo pripisan opseg na 12 od 20.
+
+- `modality`: `obligation` | `directive` | `prohibition` | `recommendation` | `permission` |
+  `condition`. `directive` (`treba`, goli indikativ, natuknicna specifikacija) postoji jer izvori
+  imaju tri razine, a ne dvije.
+- `npm run claim-modality` predlaze, `npm run claim-modality:apply` upisuje. Skript NE ODLUCUJE.
+- Mehanika NIKAD ne upisuje ublazen modalitet: pripisivanje ublazavanja pravoj osi je citanje, ne
+  uzorak. Svako ublazavanje ide covjeku.
+- Gard `tests/claim-fields.test.ts`: vokabular, ugovor strojnog upisa, ratchet koji smije samo padati.
+
+## Tvrdo pravilo: gard bez dokaza da grize ne racuna se
+
+Svaki verifikacijski gard mora imati MUTACIJU u `tests/gate-mutations.test.ts`: podmetnut poznat kvar
+i tvrdnju da ga gard prijavi. Stanje 2026-08-23: 18 mutacija, 18 uhvaceno.
+
+Razlog je izmjeren, ne nacelan. `paper-size` izvod je IGNORIRAO vrijednost i uvijek trazio A4, pa bi
+se tvrdnja `A3` "izvela" iz citata o A4; izgledao je zdravo dok se nije podmetnula kriva vrijednost.
+`audit_scored_quotes` nije prijavio citat s pokrivanjem 0,21 uz prag 0,85 jer ga je
+`has_scanned_pages` proglasio neprovjerivim, i drugi prolaz ISTIM alatom bi ga opet propustio.
+
+- Svaka mutacija ima i BASELINE tvrdnju (nemutiran ulaz mora biti cist), inace "prolazi" i gard koji
+  vristi na sve.
+- Vise prolaza istim alatom NIJE provjera. FER pilot: 7/7 citata doslovnih, a 4 od 5 tvrdnji
+  oboreno. Slaganje nije tocnost; razliku prave RAZLICITI alati i unakrsna usporedba artefakata.
+- Boolean nad pragom nije nalaz nego prijedlog: `claimQuoteInSource` je po pragu 0,85 oznacio 11
+  tvrdnji kao izmisljene, a mjerenje je pokazalo da su dvije (0,21), dok je devet parafraza
+  (0,62-0,81). Presuda zato nosi BROJ, ne zastavicu.
 
 ## Konvencije
 
@@ -131,3 +217,10 @@ DVA PUTA, jednom kroz svaki od ta dva puta. Proslo je samo zato sto su ti zahvat
 
 Svaka migracija mora biti idempotentna (`if not exists`, `drop ... if exists` prije `create`),
 jer se u praksi zna primijeniti vise puta.
+
+## Dijeljeno radno stablo
+
+`git commit -- <putanje>` uzima sadrzaj iz RADNOG STABLA u trenutku commita, ne tvoju izmjenu.
+Kad vise sesija radi u istom stablu, generator druge sesije zna upasti izmedju izmjene i commita
+i njezin rad zavrsi pod tvojom porukom. Prije commita ponovi `git diff --stat -- <putanje>`.
+Povijest se NE prepravlja dok druga sesija radi u istom stablu.

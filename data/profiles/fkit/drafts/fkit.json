@@ -3,6 +3,9 @@
     "fkit-diplomski": [
       {
         "ruleId": "fkit-diplomski--paper-size",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": "A4",
         "category": "format",
@@ -24,6 +27,9 @@
       },
       {
         "ruleId": "fkit-diplomski--font-size",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -45,6 +51,9 @@
       },
       {
         "ruleId": "fkit-diplomski--line-spacing",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -68,6 +77,9 @@
     "fkit-zavrsni": [
       {
         "ruleId": "fkit-zavrsni--paper-size",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": "A4",
         "category": "format",
@@ -89,6 +101,9 @@
       },
       {
         "ruleId": "fkit-zavrsni--font-size",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": 12,
         "category": "format",
@@ -110,6 +125,9 @@
       },
       {
         "ruleId": "fkit-zavrsni--line-spacing",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",

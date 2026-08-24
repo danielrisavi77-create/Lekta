@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "unizd-psihologija-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -13,7 +16,7 @@
       "authority": "binding",
       "sourceId": "unizd-psihologija-upute-diplomski",
       "sourcePage": "Odjeljak 1 \"Izgled diplomskog rada\"",
-      "quote": "Velicina stranice je A4. Rubnice trebaju biti sljedece velicine: lijeva 30mm, desna 25mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
+      "quote": "Veličina stranice je A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 30 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman, veličine 12pt uz prored 1,5.",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -26,6 +29,9 @@
     },
     {
       "ruleId": "unizd-psihologija-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "font-size",
       "value": [
         12
@@ -36,7 +42,7 @@
       "authority": "binding",
       "sourceId": "unizd-psihologija-upute-diplomski",
       "sourcePage": "Odjeljak 1 \"Izgled diplomskog rada\"",
-      "quote": "Velicina stranice je A4. Rubnice trebaju biti sljedece velicine: lijeva 30mm, desna 25mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
+      "quote": "Veličina stranice je A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 30 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman, veličine 12pt uz prored 1,5.",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -49,6 +55,9 @@
     },
     {
       "ruleId": "unizd-psihologija-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "mechanical",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -57,7 +66,7 @@
       "authority": "binding",
       "sourceId": "unizd-psihologija-upute-diplomski",
       "sourcePage": "Odjeljak 1 \"Izgled diplomskog rada\"",
-      "quote": "Velicina stranice je A4. Rubnice trebaju biti sljedece velicine: lijeva 30mm, desna 25mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
+      "quote": "Veličina stranice je A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 30 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman, veličine 12pt uz prored 1,5.",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -70,6 +79,9 @@
     },
     {
       "ruleId": "unizd-psihologija-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -83,7 +95,7 @@
       "authority": "binding",
       "sourceId": "unizd-psihologija-upute-diplomski",
       "sourcePage": "Odjeljak 1 \"Izgled diplomskog rada\"",
-      "quote": "Velicina stranice je A4. Rubnice trebaju biti sljedece velicine: lijeva 30mm, desna 25mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
+      "quote": "Veličina stranice je A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 30 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman, veličine 12pt uz prored 1,5.",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -96,6 +108,9 @@
     },
     {
       "ruleId": "unizd-psihologija-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "mechanical",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -104,7 +119,7 @@
       "authority": "binding",
       "sourceId": "unizd-psihologija-upute-diplomski",
       "sourcePage": "Odjeljak 1 \"Izgled diplomskog rada\"",
-      "quote": "Velicina stranice je A4. Rubnice trebaju biti sljedece velicine: lijeva 30mm, desna 25mm, gornja i donja po 25mm. Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5.",
+      "quote": "Veličina stranice je A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 30 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman, veličine 12pt uz prored 1,5.",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",

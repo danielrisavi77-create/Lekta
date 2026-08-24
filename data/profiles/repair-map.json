@@ -3726,6 +3726,110 @@
       "lastVerified": "2026-07-28"
     }
   ],
+  "ffos-povijest-diplomski": [
+    {
+      "ruleId": "ffos-povijest-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true,
+      "sourcePage": "dio II Izgled diplomskoga rada",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "ffos-povijest-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true,
+      "sourcePage": "dio II Izgled diplomskoga rada",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "ffos-povijest-diplomski--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "dio II Izgled diplomskoga rada",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "ffos-povijest-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "dio II Izgled diplomskoga rada",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "ffos-povijest-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true,
+      "sourcePage": "dio II Izgled diplomskoga rada",
+      "lastVerified": "2026-07-02"
+    }
+  ],
+  "ffos-povijest-zavrsni": [
+    {
+      "ruleId": "ffos-povijest-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true,
+      "sourcePage": "Upute za zavrsni rad (dio II)",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "ffos-povijest-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true,
+      "sourcePage": "Upute za zavrsni rad (dio II)",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "ffos-povijest-zavrsni--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Upute za zavrsni rad (dio II)",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "ffos-povijest-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Upute za zavrsni rad (dio II)",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "ffos-povijest-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true,
+      "sourcePage": "Upute za zavrsni rad (dio II)",
+      "lastVerified": "2026-07-02"
+    }
+  ],
   "ffos-psihologija-diplomski": [
     {
       "ruleId": "ffos-psihologija-diplomski--font",
@@ -4430,8 +4534,8 @@
       "status": "verified",
       "fixerId": "paper-size-fixer",
       "autoFixable": true,
-      "sourcePage": "Clanak 9 Pravilnika + odsjecki dodatak",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Članak 11.",
+      "lastVerified": "2026-08-24"
     },
     {
       "ruleId": "ffri-povum-diplomski--justify",
@@ -4482,8 +4586,8 @@
       "status": "verified",
       "fixerId": "paper-size-fixer",
       "autoFixable": true,
-      "sourcePage": "Clanak 9 Pravilnika + odsjecki dodatak",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "lastVerified": "2026-08-24"
     },
     {
       "ruleId": "ffri-povum-zavrsni--justify",
@@ -4606,8 +4710,8 @@
       "status": "verified",
       "fixerId": "paper-size-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
-      "lastVerified": "2026-07-02"
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "lastVerified": "2026-08-24"
     },
     {
       "ruleId": "ffri-zavrsni--margins",
@@ -4616,8 +4720,8 @@
       "status": "verified",
       "fixerId": "margins-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
-      "lastVerified": "2026-07-02"
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "lastVerified": "2026-08-24"
     },
     {
       "ruleId": "ffri-zavrsni--font",
@@ -4626,8 +4730,8 @@
       "status": "verified",
       "fixerId": "font-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
-      "lastVerified": "2026-07-02"
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "lastVerified": "2026-08-24"
     },
     {
       "ruleId": "ffri-zavrsni--font-size",
@@ -4636,8 +4740,8 @@
       "status": "verified",
       "fixerId": "font-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
-      "lastVerified": "2026-07-02"
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "lastVerified": "2026-08-24"
     },
     {
       "ruleId": "ffri-zavrsni--line-spacing",
@@ -4646,8 +4750,8 @@
       "status": "verified",
       "fixerId": "line-spacing-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
-      "lastVerified": "2026-07-02"
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "lastVerified": "2026-08-24"
     },
     {
       "ruleId": "ffri-zavrsni--justify",
@@ -4656,8 +4760,8 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
-      "lastVerified": "2026-07-02"
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "lastVerified": "2026-08-24"
     }
   ],
   "ffrz-bakalaureatski": [
@@ -4848,16 +4952,6 @@
       "lastVerified": "2026-07-28"
     },
     {
-      "ruleId": "ffst-diplomski--margins",
-      "checkId": "margins",
-      "label": "Margine",
-      "status": "verified",
-      "fixerId": "margins-fixer",
-      "autoFixable": true,
-      "sourcePage": "Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)",
-      "lastVerified": "2026-07-28"
-    },
-    {
       "ruleId": "ffst-diplomski--paper-size",
       "checkId": "paper-size",
       "label": "Format papira A4",
@@ -4905,16 +4999,6 @@
       "label": "Prored",
       "status": "verified",
       "fixerId": "line-spacing-fixer",
-      "autoFixable": true,
-      "sourcePage": "Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)",
-      "lastVerified": "2026-07-28"
-    },
-    {
-      "ruleId": "ffst-zavrsni--margins",
-      "checkId": "margins",
-      "label": "Margine",
-      "status": "verified",
-      "fixerId": "margins-fixer",
       "autoFixable": true,
       "sourcePage": "Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)",
       "lastVerified": "2026-07-28"
@@ -15740,16 +15824,6 @@
       "autoFixable": true,
       "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
       "lastVerified": "2026-07-27"
-    },
-    {
-      "ruleId": "unisb-btho-diplomski--paper-size",
-      "checkId": "paper-size",
-      "label": "Format papira A4",
-      "status": "verified",
-      "fixerId": "paper-size-fixer",
-      "autoFixable": true,
-      "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
-      "lastVerified": "2026-07-27"
     }
   ],
   "unisb-btho-zavrsni": [
@@ -15789,16 +15863,6 @@
       "label": "Margine (uvezni rub lijevo 2,5 cm)",
       "status": "verified",
       "fixerId": "margins-fixer",
-      "autoFixable": true,
-      "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
-      "lastVerified": "2026-07-27"
-    },
-    {
-      "ruleId": "unisb-btho-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "label": "Format papira A4",
-      "status": "verified",
-      "fixerId": "paper-size-fixer",
       "autoFixable": true,
       "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
       "lastVerified": "2026-07-27"
@@ -15844,16 +15908,6 @@
       "autoFixable": true,
       "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
       "lastVerified": "2026-07-27"
-    },
-    {
-      "ruleId": "unisb-odhz-diplomski--paper-size",
-      "checkId": "paper-size",
-      "label": "Format papira A4",
-      "status": "verified",
-      "fixerId": "paper-size-fixer",
-      "autoFixable": true,
-      "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
-      "lastVerified": "2026-07-27"
     }
   ],
   "unisb-odhz-zavrsni": [
@@ -15893,16 +15947,6 @@
       "label": "Margine (uvezni rub lijevo 2,5 cm)",
       "status": "verified",
       "fixerId": "margins-fixer",
-      "autoFixable": true,
-      "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
-      "lastVerified": "2026-07-27"
-    },
-    {
-      "ruleId": "unisb-odhz-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "label": "Format papira A4",
-      "status": "verified",
-      "fixerId": "paper-size-fixer",
       "autoFixable": true,
       "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
       "lastVerified": "2026-07-27"
@@ -15948,16 +15992,6 @@
       "autoFixable": true,
       "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
       "lastVerified": "2026-07-27"
-    },
-    {
-      "ruleId": "unisb-sfsb-diplomski--paper-size",
-      "checkId": "paper-size",
-      "label": "Format papira A4",
-      "status": "verified",
-      "fixerId": "paper-size-fixer",
-      "autoFixable": true,
-      "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
-      "lastVerified": "2026-07-27"
     }
   ],
   "unisb-sfsb-zavrsni": [
@@ -15997,16 +16031,6 @@
       "label": "Margine (uvezni rub lijevo 2,5 cm)",
       "status": "verified",
       "fixerId": "margins-fixer",
-      "autoFixable": true,
-      "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
-      "lastVerified": "2026-07-27"
-    },
-    {
-      "ruleId": "unisb-sfsb-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "label": "Format papira A4",
-      "status": "verified",
-      "fixerId": "paper-size-fixer",
       "autoFixable": true,
       "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
       "lastVerified": "2026-07-27"
@@ -16052,16 +16076,6 @@
       "autoFixable": true,
       "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
       "lastVerified": "2026-07-27"
-    },
-    {
-      "ruleId": "unisb-teho-diplomski--paper-size",
-      "checkId": "paper-size",
-      "label": "Format papira A4",
-      "status": "verified",
-      "fixerId": "paper-size-fixer",
-      "autoFixable": true,
-      "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
-      "lastVerified": "2026-07-27"
     }
   ],
   "unisb-teho-zavrsni": [
@@ -16101,16 +16115,6 @@
       "label": "Margine (uvezni rub lijevo 2,5 cm)",
       "status": "verified",
       "fixerId": "margins-fixer",
-      "autoFixable": true,
-      "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
-      "lastVerified": "2026-07-27"
-    },
-    {
-      "ruleId": "unisb-teho-zavrsni--paper-size",
-      "checkId": "paper-size",
-      "label": "Format papira A4",
-      "status": "verified",
-      "fixerId": "paper-size-fixer",
       "autoFixable": true,
       "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
       "lastVerified": "2026-07-27"
@@ -19712,30 +19716,6 @@
       "value": 1.5,
       "sourcePage": "Upute SIZ 2026",
       "lastVerified": "2026-07-28"
-    }
-  ],
-  "vuka-strojarski-diplomski": [
-    {
-      "ruleId": "vuka-strojarski-diplomski--margins",
-      "checkId": "margins",
-      "label": "Margine",
-      "status": "verified",
-      "fixerId": "margins-fixer",
-      "autoFixable": true,
-      "sourcePage": "predlozak korica, oznake 'Lijeva/Gornja/Donja/Desna margina'",
-      "lastVerified": "2026-07-27"
-    }
-  ],
-  "vuka-strojarski-zavrsni": [
-    {
-      "ruleId": "vuka-strojarski-zavrsni--margins",
-      "checkId": "margins",
-      "label": "Margine",
-      "status": "verified",
-      "fixerId": "margins-fixer",
-      "autoFixable": true,
-      "sourcePage": "predlozak korica, oznake 'Lijeva/Gornja/Donja/Desna margina'",
-      "lastVerified": "2026-07-27"
     }
   ],
   "vus-diplomski": [
