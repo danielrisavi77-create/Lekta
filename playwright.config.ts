@@ -25,7 +25,13 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    /**
+     * Mobilni kriticni put se NE vrti na desktopu: ondje upload odmah skace na korak 2, pa bi test
+     * mjerio tok koji na sirokom ekranu ne postoji. Izuzece je strukturno (po projektu), ne
+     * `test.skip()` u tijelu: runtime skip je audit P1-17 prijavio kao nacin da suite bude zelena
+     * a da nista ne vrti.
+     */
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] }, testIgnore: [/mobile-critical-path\.spec\.ts/] },
     /**
      * MOBILNI PROJEKT (audit TEST-09, TEST-12). Dosad se sve vrtjelo samo na Desktop Chromeu, a
      * mobilni audit je bio uglavnom provjera vidljivosti: nije dokazivao da se sucelje da koristiti
@@ -54,8 +60,25 @@ export default defineConfig({
        * izvodi ISTI desktop scenarij drugi put: nula mobilne pokrivenosti, dvostruk trosak. A
        * trosak nije zanemariv, jer svaki njegov test pokrece punu analizu stvarnog `.docx`-a.
        */
-      testIgnore: [/roadmap-v2\.spec\.ts/, /repair-panel\.spec\.ts/],
+      testIgnore: [/repair-panel\.spec\.ts/],
     },
+    /**
+     * FIREFOX I WEBKIT (audit P1-18). Do sada je release matrica bila samo Chromium (desktop +
+     * mobilna emulacija), pa su upload .docx-a, Web Worker, blob download i modal/focus na
+     * Safariju i Firefoxu bili potpuno nepokriveni.
+     *
+     * Vrte SAMO kriticni put (`roadmap-v2`), ne cijelu suite: cilj je dokazati da se do rezultata
+     * moze doci u svakom pregledniku, ne udvostruciti sve provjere u tri preglednika.
+     *
+     * NISU u `npm run test:ux` niti u `check.yml` gateu. Razlog je posten: ovi preglednici jos
+     * nijednom nisu odvrtjeli ovu suite, pa bi ih odmah proglasiti blokirajucima znacilo pustiti
+     * u gate nesto sto nitko nije vidio kako se ponasa. Vrte se u zasebnom `browser-matrix`
+     * workflowu, vidljivo; u obavezne provjere se PROMICU tek nakon prvog zelenog prolaza.
+     */
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] }, testMatch: /roadmap-v2\.spec\.ts/ },
+    { name: 'webkit', use: { ...devices['Desktop Safari'] }, testMatch: /roadmap-v2\.spec\.ts/ },
+    { name: 'mobile-webkit', use: { ...devices['iPhone 13'] },
+      testMatch: /(roadmap-v2|mobile-critical-path)\.spec\.ts/ },
   ],
   webServer: {
     command: 'npm run dev -- --host 127.0.0.1 --port 4173',

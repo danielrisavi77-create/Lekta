@@ -1,0 +1,56 @@
+# Kriticni put u FIREFOXU I WEBKITU (audit P1-18).
+#
+# Release matrica je do sada bila samo Chromium (desktop + mobilna emulacija), pa su upload
+# .docx-a, Web Worker, blob download i modal/focus na Safariju i Firefoxu bili nepokriveni. Ovdje
+# se vrti SAMO kriticni put, ne cijela suite: cilj je dokazati da se do rezultata moze doci u
+# svakom pregledniku.
+#
+# ZASTO ZASEBNO OD check.yml, A NE ODMAH U GATEU. Ovi preglednici jos nijednom nisu odvrtjeli ovu
+# suite. Staviti ih odmah u obavezne provjere znacilo bi blokirati svaki PR necim sto nitko nije
+# vidio kako se ponasa, a prvi crveni rezultat bi se onda rjesavao pod pritiskom. Ovako je nalaz
+# vidljiv i mjerljiv, a u obavezne provjere se PROMICE nakon prvog zelenog prolaza (tada se ovaj
+# posao spoji u check.yml ili se doda u required checks).
+name: browser-matrix
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+jobs:
+  browser-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Node 24
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Instaliraj ovisnosti
+        run: npm ci
+
+      - name: Instaliraj Firefox i WebKit
+        run: npx playwright install --with-deps firefox webkit
+
+      - name: Kriticni put u Firefoxu i WebKitu
+        run: npm run test:ux:browsers
+
+      - name: Trag pri padu
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: browser-matrix-trace
+          path: test-results/
+          if-no-files-found: ignore

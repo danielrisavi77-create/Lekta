@@ -72,3 +72,6 @@ jobs:
 
       - name: Stanje brisanja popravka (P1-10)
         run: psql -v ON_ERROR_STOP=1 -f scripts/repair-deletion-smoke.sql
+
+      - name: Ciscenje anonimnih racuna (P1-11)
+        run: psql -v ON_ERROR_STOP=1 -f scripts/anon-purge-smoke.sql

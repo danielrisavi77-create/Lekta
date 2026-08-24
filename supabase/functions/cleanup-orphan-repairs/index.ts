@@ -27,6 +27,20 @@ const ANON_RETENTION_DAYS = Number(Deno.env.get('REPAIR_ANON_RETENTION_DAYS') ??
 // Koliko dugo brisanje smije "trajati" prije nego ga cron smatra zaglavljenim (0098). Edge poziv
 // traje sekunde, pa je 15 minuta velikodusno i ne moze uhvatiti brisanje koje je jos u letu.
 const STUCK_GRACE_MINUTES = Number(Deno.env.get('REPAIR_STUCK_DELETE_GRACE_MINUTES') ?? '15');
+// ---------------------------------------------------------------------------
+// Ciscenje NAPUSTENIH anonimnih racuna (audit P1-11, migracija 0099).
+//
+// SUHI HOD JE ZADANO STANJE. Brisanje auth racuna kaskadno brise podatke kroz cetrdesetak
+// tablica i nema povrata, pa se ne pali samo time sto je kod deployan. Prvo se gleda broj u
+// odgovoru i logu, pa se tek onda svjesno postavi ANON_PURGE_APPLY=1.
+//
+// Da suhi hod nije uzaludan, mjereno je na produkciji 2026-08-24: od 3 racuna koja je audit
+// nazvao brisivima ("stariji od 30 dana bez repair poslova"), predikat iz kataloga vraca SAMO
+// JEDAN. Druga dva imaju 7 odnosno 1 redak u `report_generations`. Rucni popis tablica obrisao
+// bi ih i tiho odnio tih 8 zapisa.
+const ANON_PURGE_APPLY = Deno.env.get('ANON_PURGE_APPLY') === '1';
+const ANON_PURGE_DAYS = Number(Deno.env.get('ANON_PURGE_DAYS') ?? '30');
+const ANON_PURGE_BATCH = Number(Deno.env.get('ANON_PURGE_BATCH') ?? '50');
 
 Deno.serve(async (req: Request) => {
   const json = (body: unknown, status = 200): Response =>
@@ -109,7 +123,43 @@ Deno.serve(async (req: Request) => {
       if (rows.length < BATCH) break;
     }
 
-    return json({ ok: true, removed, anonymousRemoved, stuckCompleted }, 200);
+    // FAZA 4 (0099, audit P1-11): NAPUSTENI ANONIMNI RACUNI.
+    //
+    // Faza 2 cisti anonimne DOKUMENTE, ali sam racun ostaje zauvijek. Svaki posjet koji dodirne
+    // popravak stvara jedan, pa auth.users raste bez gornje granice i botu je dovoljan jedan
+    // poziv da doda novi.
+    //
+    // Kandidate bira `find_purgeable_anonymous_users`, koja popis tablica cita iz pg_constraint
+    // pri svakom pozivu: racun s ijednim retkom bilo gdje NIJE kandidat, pa nova tablica
+    // automatski stiti racune bez ijedne izmjene koda.
+    let anonUsersPurgeable = 0;
+    let anonUsersDeleted = 0;
+    {
+      const { data, error } = await admin.rpc('find_purgeable_anonymous_users', {
+        p_days: ANON_PURGE_DAYS, p_limit: ANON_PURGE_BATCH,
+      });
+      if (error) {
+        // NE rusi cijeli cron: faze 1-3 su vec odradile posao i njihov rezultat je vrijedan.
+        console.error('[cleanup-orphan-repairs] anon users rpc', error);
+      } else {
+        const rows = (data ?? []) as Array<{ user_id: string }>;
+        anonUsersPurgeable = rows.length;
+        if (ANON_PURGE_APPLY) {
+          for (const row of rows) {
+            if (!row?.user_id) continue;
+            const { error: delErr } = await admin.auth.admin.deleteUser(row.user_id);
+            if (delErr) { console.error('[cleanup-orphan-repairs] deleteUser', row.user_id, delErr); continue; }
+            anonUsersDeleted++;
+          }
+        }
+      }
+      console.log(`[cleanup-orphan-repairs] anon racuni: kandidata=${anonUsersPurgeable} obrisano=${anonUsersDeleted} apply=${ANON_PURGE_APPLY}`);
+    }
+
+    return json({
+      ok: true, removed, anonymousRemoved, stuckCompleted,
+      anonUsersPurgeable, anonUsersDeleted, anonUsersDryRun: !ANON_PURGE_APPLY,
+    }, 200);
   } catch (e) {
     console.error('[cleanup-orphan-repairs]', e);
     return json({ error: 'internal' }, 500);
