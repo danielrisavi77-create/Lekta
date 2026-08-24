@@ -3,8 +3,8 @@
   "profileCount": 407,
   "byOutcome": {
     "no-rules": 35,
-    "pass": 329,
-    "no-repair": 43
+    "pass": 332,
+    "no-repair": 40
   },
   "rows": [
     {
@@ -272,7 +272,7 @@
         "font-size",
         "paper-size"
       ],
-      "requested": 1,
+      "requested": 2,
       "axesResolved": [
         "font-size",
         "paper-size"
@@ -293,7 +293,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 1,
+      "requested": 6,
       "axesResolved": [
         "font",
         "font-size",
@@ -331,14 +331,16 @@
     },
     {
       "profileId": "alu-slikarstvo-diplomski",
-      "outcome": "no-repair",
+      "outcome": "pass",
       "violated": [
         "font-size"
       ],
-      "requested": 0,
-      "axesResolved": [],
+      "requested": 1,
+      "axesResolved": [
+        "font-size"
+      ],
       "axesRemaining": [],
-      "resolved": 0,
+      "resolved": 1,
       "regressions": 0,
       "textPreserved": true
     },
@@ -797,7 +799,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 4,
+      "requested": 5,
       "axesResolved": [
         "font",
         "font-size",
@@ -929,7 +931,7 @@
         "justify",
         "margins"
       ],
-      "requested": 4,
+      "requested": 5,
       "axesResolved": [
         "font",
         "font-size",
@@ -3083,7 +3085,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 4,
+      "requested": 5,
       "axesResolved": [
         "font",
         "font-size",
@@ -3106,7 +3108,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 4,
+      "requested": 5,
       "axesResolved": [
         "font",
         "font-size",
@@ -4899,7 +4901,7 @@
     },
     {
       "profileId": "pravo-doktorski-pravne-znanosti",
-      "outcome": "no-repair",
+      "outcome": "pass",
       "violated": [
         "font",
         "font-size",
@@ -4907,10 +4909,16 @@
         "justify",
         "margins"
       ],
-      "requested": 0,
-      "axesResolved": [],
+      "requested": 4,
+      "axesResolved": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
       "axesRemaining": [],
-      "resolved": 0,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5108,7 +5116,7 @@
         "justify",
         "margins"
       ],
-      "requested": 3,
+      "requested": 4,
       "axesResolved": [
         "font",
         "font-size",
@@ -5169,7 +5177,7 @@
     },
     {
       "profileId": "pravo-specijalisticki-pravni-opci",
-      "outcome": "no-repair",
+      "outcome": "pass",
       "violated": [
         "font",
         "font-size",
@@ -5177,10 +5185,16 @@
         "justify",
         "margins"
       ],
-      "requested": 0,
-      "axesResolved": [],
+      "requested": 4,
+      "axesResolved": [
+        "font",
+        "font-size",
+        "line-spacing",
+        "justify",
+        "margins"
+      ],
       "axesRemaining": [],
-      "resolved": 0,
+      "resolved": 5,
       "regressions": 0,
       "textPreserved": true
     },
@@ -5257,7 +5271,7 @@
         "margins",
         "paper-size"
       ],
-      "requested": 4,
+      "requested": 5,
       "axesResolved": [
         "font",
         "font-size",

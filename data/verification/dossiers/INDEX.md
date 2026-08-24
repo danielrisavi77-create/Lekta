@@ -2,8 +2,8 @@
 
 Audit masovno odobrenih (owner-bulk-approval) scored pravila. Otvori dosje profila, provjeri svako pravilo protiv izvora na lokatoru, pa u konzoli/rucno postavi verifiedBy=svoje ime.
 
-Profila sa scored: 369. Scored ukupno: 2215.
-Vec ljudski potvrdjeno: 2177. Za audit (bulk): 38. Needs-recheck: 12. Dosjea zapisano: 20.
+Profila sa scored: 369. Scored ukupno: 2218.
+Vec ljudski potvrdjeno: 2180. Za audit (bulk): 38. Needs-recheck: 12. Dosjea zapisano: 20.
 
 | Profil | Za audit (bulk) | Ljudski OK | Scored | Recheck | Dosje |
 |---|---:|---:|---:|---:|---|
