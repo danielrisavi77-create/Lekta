@@ -5,7 +5,7 @@ GENERIRANO (`npm run claim-modality`). Ne uredjuj rucno.
 Upisuje se u `ruleEntry` uz `modalitySource: "human"`. Strojni prijedlog (`mechanical`) NIKAD
 ne nosi ublazen modalitet, pa je sve ublazeno ovdje.
 
-Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
+Jedinica: 347. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
 
 ## recenica imenuje vise dijelova rada (104)
 
@@ -991,7 +991,7 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
   - citat: "Visina slova 12 tocaka, a naslova 14 podebljano te prored 1,5. Preporuca se font "Arial CE" ili "Times New Roman CE"."
   - razlozi: recenica imenuje 'heading', a os po naravi mjeri 'body'
 
-## nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata (16)
+## nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata (14)
 
 - **citation-style** `effectus-pravilnik-2023` (prijedlog: nema / footnote, 3 pravila)
   - citat: "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju in"
@@ -1002,12 +1002,6 @@ Jedinica: 349. Grupirano po razlogu, jer razlog odredjuje kako se slucaj cita.
 - **citation-style** `fesb-upute-zavrsni-2017` (prijedlog: nema / whole, 1 pravila)
   - citat: "Vlastiti brojcani sustav referenciranja: bilješke se oznacavaju brojevima u uglatim zagradama [1] redoslijedom pojavljivanja, popis izvora na kraju rada istim redoslijedom - sustav je potpuno definiran u dokumentu, ali n"
   - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata; recenica imenuje vise dijelova rada: footnote, bibliography
-- **footnote-size** `ffri-povum-upute` (prijedlog: nema / footnote, 1 pravila)
-  - citat: "Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4. Upotreba tipa slova Times New Roman, velicine 12 i proreda 1,5 u osnovnom tekstu... Poravnavanje teksta po obje margine (ukljucuje i osnovni tekst i biljesk"
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata; recenica imenuje vise dijelova rada: body, footnote
-- **footnote-size** `ffri-povum-upute-diplomski` (prijedlog: nema / footnote, 1 pravila)
-  - citat: "Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4. Upotreba tipa slova Times New Roman, velicine 12 i proreda 1,5 u osnovnom tekstu... Poravnavanje teksta po obje margine (ukljucuje i osnovni tekst i biljesk"
-  - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata; recenica imenuje vise dijelova rada: body, footnote
 - **citation-style** `ffrz-oblikovanje-bakalaureatski-2021` (prijedlog: nema / whole, 1 pravila)
   - citat: "Obnovljeni zivot za citiranje i referiranje koristi sustav unutartekstnih citatnica (In-Text"
   - razlozi: nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata

@@ -8144,7 +8144,7 @@
       "value": [
         10
       ],
-      "quote": "Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4. Upotreba tipa slova Times New Roman, velicine 12 i proreda 1,5 u osnovnom tekstu... Poravnavanje teksta po obje margine (ukljucuje i osnovni tekst i biljeske).",
+      "quote": "Upotreba tipa slova Times New Roman, veličine 12 i proreda 1,5 u osnovnom tekstu završnog rada; Upotreba tipa slova Times New Roman, veličine 10 i proreda 1 u tekstu bilješki",
       "ruleCount": 1,
       "profileIds": [
         "ffri-povum-zavrsni"
@@ -8152,18 +8152,16 @@
       "ruleIds": [
         "ffri-povum-zavrsni--footnote-size"
       ],
-      "proposedModality": null,
+      "proposedModality": "directive",
       "proposedScope": "footnote",
-      "modalityMarks": [],
+      "modalityMarks": [
+        "bare-indicative"
+      ],
       "namedScopes": [
-        "body",
         "footnote"
       ],
-      "needsHuman": true,
-      "reasons": [
-        "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata",
-        "recenica imenuje vise dijelova rada: body, footnote"
-      ]
+      "needsHuman": false,
+      "reasons": []
     },
     {
       "sourceId": "ffri-povum-upute",
@@ -8302,7 +8300,7 @@
       "value": [
         10
       ],
-      "quote": "Zavrsni rad otisnut je racunalnim pisacem na papiru formata A4. Upotreba tipa slova Times New Roman, velicine 12 i proreda 1,5 u osnovnom tekstu... Poravnavanje teksta po obje margine (ukljucuje i osnovni tekst i biljeske).",
+      "quote": "Upotreba tipa slova Times New Roman, veličine 12 i proreda 1,5 u osnovnom tekstu završnog rada; Upotreba tipa slova Times New Roman, veličine 10 i proreda 1 u tekstu bilješki",
       "ruleCount": 1,
       "profileIds": [
         "ffri-povum-diplomski"
@@ -8310,18 +8308,16 @@
       "ruleIds": [
         "ffri-povum-diplomski--footnote-size"
       ],
-      "proposedModality": null,
+      "proposedModality": "directive",
       "proposedScope": "footnote",
-      "modalityMarks": [],
+      "modalityMarks": [
+        "bare-indicative"
+      ],
       "namedScopes": [
-        "body",
         "footnote"
       ],
-      "needsHuman": true,
-      "reasons": [
-        "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata",
-        "recenica imenuje vise dijelova rada: body, footnote"
-      ]
+      "needsHuman": false,
+      "reasons": []
     },
     {
       "sourceId": "ffri-povum-upute-diplomski",
