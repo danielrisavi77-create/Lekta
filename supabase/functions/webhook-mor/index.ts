@@ -27,7 +27,7 @@ import {
   type LemonEvent,
   type LemonWebhookPayload,
 } from '../../../src/report/webhook.ts';
-import { mapProductRow } from '../../../src/catalog/products-catalog.ts';
+import { mapProductRow, type Product } from '../../../src/catalog/products-catalog.ts';
 import {
   validateReferral,
   referralRewardEntitlement,
@@ -201,7 +201,7 @@ async function pullReferralSignupReward(admin: any, orderId: string): Promise<vo
 type BonusKind = 'referrer_reward' | 'pass_coupon' | 'referral_attribution';
 
 /** Koje obveze ovaj order uopce stvara. Jedno mjesto, da se upis i izvrsenje ne raziđu. */
-function plannedBonuses(ev: LemonEvent, product: { kind?: string; workType?: string }): Array<{ kind: BonusKind; payload: Record<string, unknown> }> {
+function plannedBonuses(ev: LemonEvent, product: Product): Array<{ kind: BonusKind; payload: Record<string, unknown> }> {
   const out: Array<{ kind: BonusKind; payload: Record<string, unknown> }> = [
     { kind: 'referrer_reward', payload: { userId: ev.userId, workType: product.workType ?? '' } },
   ];
@@ -221,7 +221,7 @@ function plannedBonuses(ev: LemonEvent, product: { kind?: string; workType?: str
  *
  * Ne baca: upis outboxa ne smije srusiti handler kojem je jezgra (entitlement) vec uspjela.
  */
-async function enqueueBonuses(admin: any, ev: LemonEvent, product: { kind?: string; workType?: string }): Promise<void> {
+async function enqueueBonuses(admin: any, ev: LemonEvent, product: Product): Promise<void> {
   const rows = plannedBonuses(ev, product).map((b) => ({
     user_id: ev.userId, order_id: ev.orderId, kind: b.kind, payload: b.payload,
   }));
