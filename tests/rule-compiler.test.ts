@@ -43,6 +43,20 @@ describe('rule-compiler faithfulness', () => {
     expect(collectCompileDiagnostics([profile])).toEqual([]);
   });
 
+  it('poravnanje fusnota ima svoj checkId, odvojen od poravnanja tijela', () => {
+    // `justify` i `footnote-justify` su DVIJE osi iz dvije razlicite odredbe: hks propisuje
+    // "tekst mora biti obostrano poravnan" za tijelo i, u zasebnoj natuknici o biljeskama,
+    // "prored jednostruk s obostranim poravnanjem". Bez vlastitog checkId-a druga se nije mogla
+    // zapisati, pa je odredba postojala u izvoru a nije se provjeravala.
+    const profile: ThesisProfile = {
+      id: 'demo-fj',
+      rules: { justify: true },
+      ruleEntries: [{ ruleId: 'r-fj', checkId: 'footnote-justify', value: true }],
+    };
+    expect(compileEffectiveRules(profile)).toEqual({ justify: true, footnoteJustify: true });
+    expect(collectCompileDiagnostics([profile])).toEqual([]);
+  });
+
   it('overlay-a prepoznati ruleEntry preko baseline rules', () => {
     const profile: ThesisProfile = {
       id: 'demo',

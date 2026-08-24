@@ -14893,7 +14893,8 @@
       "footnoteSize": [
         10
       ],
-      "footnoteSpacing": 1
+      "footnoteSpacing": 1,
+      "footnoteJustify": true
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Hrvatsko katolicko sveučilište), čitano izravno. Opseg (u karticama) i citatni stil odreduju se odjelnim Posebnim uputama i razlikuju se po odjelu -> nisu u institucijskom scored skupu.",

@@ -45,6 +45,7 @@ export const COMPILED_CHECK_IDS = [
   'footnote-font',
   'footnote-size',
   'footnote-spacing',
+  'footnote-justify',
   'heading-rules',
   'element-caption-rules',
   'bibliography-rules',
@@ -157,6 +158,10 @@ function applyEntry(eff: EffectiveRules, entry: RuleEntry): boolean {
     case 'footnote-font': eff.footnoteFont = value; return true;
     case 'footnote-size': eff.footnoteSize = value; return true;
     case 'footnote-spacing': eff.footnoteSpacing = value; return true;
+    // Cetvrta grana provjere "Oblikovanje fusnota" (uz font, velicinu i prored). Motor ju je citao
+    // kao `profile.footnoteJustify` i pet je profila vec nosi, ali autorski sloj ju nije mogao
+    // izraziti. NE dodaje bodove: sve cetiri grane ulaze u JEDNU provjeru (`footFmtOk`).
+    case 'footnote-justify': eff.footnoteJustify = boolOf(value); return true;
     case 'heading-rules': eff.headingRules = value; return true;
     case 'element-caption-rules': eff.elementCaptionRules = value; return true;
     case 'bibliography-rules': eff.bibliographyRules = value; return true;
