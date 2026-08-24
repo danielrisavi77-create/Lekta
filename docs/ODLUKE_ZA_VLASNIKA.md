@@ -68,14 +68,39 @@ propisao. Reverzibilno cim se izvor nadje.
 
 ---
 
+## D. ZATVORENO: 24 verificirane tvrdnje koje motor nije citao
+
+Nalaz `unapplied`: tvrdnja je verificirana i oznacena kao bodovana, a provjera se ne izvodi.
+
+MJERENJE JE PROMIJENILO NARAV NALAZA. Ocekivalo se prazno zrcalo; svih 24 osi imalo je VRIJEDNOST,
+a uz nju izricit `checkX: false`. Presudno: nijedna od tih 24 nije bila u `advisory-map.json`, dakle
+to nije demotija nego gasenje bez ijednog zapisanog razloga, koje proturjeci verificiranoj tvrdnji.
+Prvi pokusaj upisa bio je zato no-op na 8 od 12 profila i to je uhvaceno usporedbom prije commita.
+
+Sada se provjerava, po tvojoj odluci: `pravo-specijalisticki-pravni-opci` i
+`pravo-doktorski-pravne-znanosti` po pet osi (font TNR, 12 pt, prored 1,5, obostrano poravnanje,
+numeracija), `alu-konzerviranje` pet, `alu-{kiparstvo,slikarstvo}` po jednu, `fpzpu-*` prored,
+te margine odnosno numeracija na cetiri opca profila. Zapis: `data/verification/unapplied-decisions.json`.
+
+---
+
 ## Stanje lanca
 
 | mjera | prije | sada |
 |---|---|---|
-| osi koje motor boduje bez tvrdnje | 82 | **0** |
 | raskoraka izmedju tvrdnje i zrcala | 37 | **0** |
+| osi koje motor boduje bez tvrdnje | 82 | **0** |
 | bodovanih pravila bez modaliteta | 2207 | **0** |
-| scored profila | 367 | 369 |
+| verificiranih tvrdnji koje motor ne cita | 24 | **0** |
 
-Ostaje 24 nalaza `unapplied`: tvrdnja POSTOJI, a motor tu dimenziju ne provjerava. To je tise
-popustanje, ne bodovanje bez uporista, i zaseban je posao.
+Artefakt `scored-value-drift.json` nema vise NIJEDAN strukturni nalaz.
+
+## Jedino sto ostaje: citatni tokeni (32)
+
+Dvadeset sest tvrdnji nosi ljudski opis stila umjesto kanonskog tokena, a sest ih motor ne
+primjenjuje. Razdioba: 18 x `"apa"`, 2 x `"autor-godina"`, 2 x `"fusnote ili uglate zagrade s
+brojem"`, po jedan `"chicago"`, `"prema uputama mentora"`, `null` i jedan popis triju stilova.
+
+Ovo NIJE mehanicki prijepis i zato ceka tebe: prijelaz s `"apa"` na kanonski `apa7` je tvrdnja o
+IZDANJU standarda. Ako izvor kaze samo "APA", upis `apa7` dodaje ono sto izvor ne kaze - isti razred
+greske koji je ovaj lanac cijelo vrijeme lovio.
