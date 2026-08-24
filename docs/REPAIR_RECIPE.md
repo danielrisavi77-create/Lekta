@@ -28,7 +28,7 @@ pravilo nije vezano uz potvrdjen izvor - ne nagadja se.
 - profila: **407**
 - s popravkom po UPUTI FAKULTETA: **371**
 - samo univerzalna higijena (prazni odlomci), bez potvrdjenih tehnickih pravila: **36**
-- ukupno stavki recepta: **2720**
+- ukupno stavki recepta: **2715**
 
 Sto se NE popravlja automatski: sadrzaj, argument, citati i literatura (osim provjere
 postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
@@ -1295,7 +1295,7 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 | Font | `font-fixer` | Times New Roman | [Upute za izradu zavrsnog/diplomskog rada (Odsjek za povijest umjetnosti, FFRI)](https://ffri.uniri.hr/files/dokumentiodsjeka/PU/Upute-zavrsni.pdf (zavrsni) / Upute-diplomski.pdf (diplomski)) | Clanak 9 Pravilnika + odsjecki dodatak |
 | Velicina slova | `font-fixer` | 12 pt | [Upute za izradu zavrsnog/diplomskog rada (Odsjek za povijest umjetnosti, FFRI)](https://ffri.uniri.hr/files/dokumentiodsjeka/PU/Upute-zavrsni.pdf (zavrsni) / Upute-diplomski.pdf (diplomski)) | Clanak 9 Pravilnika + odsjecki dodatak |
 | Prored | `line-spacing-fixer` | prored 1,5 | [Upute za izradu zavrsnog/diplomskog rada (Odsjek za povijest umjetnosti, FFRI)](https://ffri.uniri.hr/files/dokumentiodsjeka/PU/Upute-zavrsni.pdf (zavrsni) / Upute-diplomski.pdf (diplomski)) | Clanak 9 Pravilnika + odsjecki dodatak |
-| Format papira A4 | `paper-size-fixer` | 21 x 29,7 cm | [Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)](https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf) | Članak 8. (oblikovanje završnoga rada) |
+| Format papira A4 | `paper-size-fixer` | 21 x 29,7 cm | [Pravilnik o zavrsnom radu (FFRI, 2023)](https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf) | Članak 8. |
 | Poravnanje | `alignment-fixer` | obostrano | [Upute za izradu zavrsnog/diplomskog rada (Odsjek za povijest umjetnosti, FFRI)](https://ffri.uniri.hr/files/dokumentiodsjeka/PU/Upute-zavrsni.pdf (zavrsni) / Upute-diplomski.pdf (diplomski)) | Clanak 9 Pravilnika + odsjecki dodatak |
 | Font i veličina fusnota | `footnote-typography-fixer` | 10 pt |  |  |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
@@ -1321,12 +1321,12 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 
 | Pravilo | Fixer | Ciljana vrijednost | Izvor | Str. |
 |---|---|---|---|---|
-| Format papira | `paper-size-fixer` | 21 x 29,7 cm | [Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)](https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf) | Članak 8. (oblikovanje završnoga rada) |
-| Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)](https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf) | Članak 8. (oblikovanje završnoga rada) |
-| Vrsta slova | `font-fixer` | Times New Roman | [Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)](https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf) | Članak 8. (oblikovanje završnoga rada) |
-| Velicina slova | `font-fixer` | 12 pt | [Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)](https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf) | Članak 8. (oblikovanje završnoga rada) |
-| Prored | `line-spacing-fixer` | prored 1,5 | [Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)](https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf) | Članak 8. (oblikovanje završnoga rada) |
-| Obostrano poravnanje | `alignment-fixer` | obostrano | [Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)](https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf) | Članak 8. (oblikovanje završnoga rada) |
+| Format papira | `paper-size-fixer` | 21 x 29,7 cm | [Pravilnik o zavrsnom radu (FFRI, 2023)](https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf) | Članak 8. (oblikovanje zavrsnoga rada) |
+| Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Pravilnik o zavrsnom radu (FFRI, 2023)](https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf) | Članak 8. (oblikovanje zavrsnoga rada) |
+| Vrsta slova | `font-fixer` | Times New Roman | [Pravilnik o zavrsnom radu (FFRI, 2023)](https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf) | Članak 8. (oblikovanje zavrsnoga rada) |
+| Velicina slova | `font-fixer` | 12 pt | [Pravilnik o zavrsnom radu (FFRI, 2023)](https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf) | Članak 8. (oblikovanje zavrsnoga rada) |
+| Prored | `line-spacing-fixer` | prored 1,5 | [Pravilnik o zavrsnom radu (FFRI, 2023)](https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf) | Članak 8. (oblikovanje zavrsnoga rada) |
+| Obostrano poravnanje | `alignment-fixer` | obostrano | [Pravilnik o zavrsnom radu (FFRI, 2023)](https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf) | Članak 8. (oblikovanje zavrsnoga rada) |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 
@@ -2404,7 +2404,6 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 | Margine | `margins-fixer` | 2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo) | [Opce upute za izradu diplomskog rada (HKS, izmjene prosinac 2023)](https://www.unicath.hr/sites/default/files/2024-10/Opc%CC%81e-upute-za-izradu-diplomskog-rada-izmjene-prosinac-2023.pdf) | Opce upute, dio I. (Diplomski rad pise se), str. 1 |
 | Prored | `line-spacing-fixer` | prored 1,5 | [Opce upute za izradu diplomskog rada (HKS, izmjene prosinac 2023)](https://www.unicath.hr/sites/default/files/2024-10/Opc%CC%81e-upute-za-izradu-diplomskog-rada-izmjene-prosinac-2023.pdf) | Opce upute, dio I. (Diplomski rad pise se), str. 1 |
 | Obostrano poravnanje | `alignment-fixer` | obostrano | [Opce upute za izradu diplomskog rada (HKS, izmjene prosinac 2023)](https://www.unicath.hr/sites/default/files/2024-10/Opc%CC%81e-upute-za-izradu-diplomskog-rada-izmjene-prosinac-2023.pdf) | Opce upute, dio I. (Diplomski rad pise se), str. 1 |
-| Font i veličina fusnota | `footnote-typography-fixer` | 10 pt |  |  |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 
@@ -2913,7 +2912,6 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 |---|---|---|---|---|
 | Format papira | `paper-size-fixer` | 21 x 29,7 cm | [Naputci za tehnicku obradu doktorskog rada (Medicinski fakultet Sveucilista u Zagrebu)](https://mef.unizg.hr/app/uploads/2022/06/NAPUTCI-ZA-TEHNICKU-OBRADU-DOKTORSKOG-RADA-3-6-2022-korekcije.docx) | tocka 1) Format radova |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
-| Numeriranje stranica od Uvoda | `page-numbering-fixer / section-insert-fixer` | prednji listovi rimski, glavni tekst arapski od 1, broj right<br><sub>Uvod je prepoznat. Kad prijelom sekcije vec pada tocno na Uvod, postavlja se numeriranje nad postojecim sekcijama; kad prijeloma nema (jednosekcijski rad), umece se prijelom, uz izricitu potvrdu mjesta.</sub> |  |  |
 | Sadrzaj kao zivo TOC polje | `toc-field-fixer` | Word sam azurira sadrzaj<br><sub>Dokument ima naslov Sadrzaj, a jos nema zivo TOC polje. Nedestruktivno: rucne stavke se ne brisu.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 
@@ -5314,7 +5312,6 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 |---|---|---|---|---|
 | Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje seminarskih i zavrsnih radova - Poslovni odjel (Veleuciliste u Karlovcu)](https://www.vuka.hr/_download/repository/Upute_za_pisanje_seminarskih_i_zavrsnih_radova_PO.pdf) | odjeljak o oblikovanju (seminarski/zavrsni radovi) |
 | Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje seminarskih i zavrsnih radova - Poslovni odjel (Veleuciliste u Karlovcu)](https://www.vuka.hr/_download/repository/Upute_za_pisanje_seminarskih_i_zavrsnih_radova_PO.pdf) | odjeljak o oblikovanju (seminarski/zavrsni radovi) |
-| Font i veličina fusnota | `footnote-typography-fixer` | 10 pt |  |  |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 
@@ -5326,7 +5323,6 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 |---|---|---|---|---|
 | Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje seminarskih i zavrsnih radova - Poslovni odjel (Veleuciliste u Karlovcu)](https://www.vuka.hr/_download/repository/Upute_za_pisanje_seminarskih_i_zavrsnih_radova_PO.pdf) | odjeljak o oblikovanju (seminarski/zavrsni radovi) |
 | Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje seminarskih i zavrsnih radova - Poslovni odjel (Veleuciliste u Karlovcu)](https://www.vuka.hr/_download/repository/Upute_za_pisanje_seminarskih_i_zavrsnih_radova_PO.pdf) | odjeljak o oblikovanju (seminarski/zavrsni radovi) |
-| Font i veličina fusnota | `footnote-typography-fixer` | 10 pt |  |  |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 
@@ -5338,7 +5334,6 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 |---|---|---|---|---|
 | Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje seminarskih i zavrsnih radova - Poslovni odjel (Veleuciliste u Karlovcu)](https://www.vuka.hr/_download/repository/Upute_za_pisanje_seminarskih_i_zavrsnih_radova_PO.pdf) | odjeljak o oblikovanju (seminarski/zavrsni radovi) |
 | Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje seminarskih i zavrsnih radova - Poslovni odjel (Veleuciliste u Karlovcu)](https://www.vuka.hr/_download/repository/Upute_za_pisanje_seminarskih_i_zavrsnih_radova_PO.pdf) | odjeljak o oblikovanju (seminarski/zavrsni radovi) |
-| Font i veličina fusnota | `footnote-typography-fixer` | 10 pt |  |  |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 

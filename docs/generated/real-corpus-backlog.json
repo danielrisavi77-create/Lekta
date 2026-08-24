@@ -1414,54 +1414,6 @@
       "offeredOptionCount": 5
     },
     {
-      "profileId": "unisb-btho-diplomski",
-      "unitId": "btho",
-      "facultyLabel": "Biotehnicki odjel (UNISB)",
-      "offeredOptionCount": 5
-    },
-    {
-      "profileId": "unisb-btho-zavrsni",
-      "unitId": "btho",
-      "facultyLabel": "Biotehnicki odjel (UNISB)",
-      "offeredOptionCount": 5
-    },
-    {
-      "profileId": "unisb-odhz-diplomski",
-      "unitId": "odhz",
-      "facultyLabel": "Odjel društveno-humanističkih znanosti (UNISB)",
-      "offeredOptionCount": 5
-    },
-    {
-      "profileId": "unisb-odhz-zavrsni",
-      "unitId": "odhz",
-      "facultyLabel": "Odjel društveno-humanističkih znanosti (UNISB)",
-      "offeredOptionCount": 5
-    },
-    {
-      "profileId": "unisb-sfsb-diplomski",
-      "unitId": "sfsb",
-      "facultyLabel": "Strojarski fakultet u Slavonskom Brodu",
-      "offeredOptionCount": 5
-    },
-    {
-      "profileId": "unisb-sfsb-zavrsni",
-      "unitId": "sfsb",
-      "facultyLabel": "Strojarski fakultet u Slavonskom Brodu",
-      "offeredOptionCount": 5
-    },
-    {
-      "profileId": "unisb-teho-diplomski",
-      "unitId": "teho",
-      "facultyLabel": "Tehnicki odjel (UNISB)",
-      "offeredOptionCount": 5
-    },
-    {
-      "profileId": "unisb-teho-zavrsni",
-      "unitId": "teho",
-      "facultyLabel": "Tehnicki odjel (UNISB)",
-      "offeredOptionCount": 5
-    },
-    {
       "profileId": "unizd-ekologija-diplomski",
       "unitId": "unizd",
       "facultyLabel": "Sveučilište u Zadru",
@@ -1801,6 +1753,54 @@
       "profileId": "unidu-marikultura-diplomski",
       "unitId": "unidu",
       "facultyLabel": "Sveučilište u Dubrovniku",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "unisb-btho-diplomski",
+      "unitId": "btho",
+      "facultyLabel": "Biotehnicki odjel (UNISB)",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "unisb-btho-zavrsni",
+      "unitId": "btho",
+      "facultyLabel": "Biotehnicki odjel (UNISB)",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "unisb-odhz-diplomski",
+      "unitId": "odhz",
+      "facultyLabel": "Odjel društveno-humanističkih znanosti (UNISB)",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "unisb-odhz-zavrsni",
+      "unitId": "odhz",
+      "facultyLabel": "Odjel društveno-humanističkih znanosti (UNISB)",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "unisb-sfsb-diplomski",
+      "unitId": "sfsb",
+      "facultyLabel": "Strojarski fakultet u Slavonskom Brodu",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "unisb-sfsb-zavrsni",
+      "unitId": "sfsb",
+      "facultyLabel": "Strojarski fakultet u Slavonskom Brodu",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "unisb-teho-diplomski",
+      "unitId": "teho",
+      "facultyLabel": "Tehnicki odjel (UNISB)",
+      "offeredOptionCount": 4
+    },
+    {
+      "profileId": "unisb-teho-zavrsni",
+      "unitId": "teho",
+      "facultyLabel": "Tehnicki odjel (UNISB)",
       "offeredOptionCount": 4
     },
     {

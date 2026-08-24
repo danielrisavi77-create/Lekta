@@ -4482,7 +4482,7 @@
       "status": "verified",
       "fixerId": "paper-size-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "sourcePage": "Članak 8.",
       "lastVerified": "2026-07-28"
     },
     {
@@ -4606,7 +4606,7 @@
       "status": "verified",
       "fixerId": "paper-size-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
       "lastVerified": "2026-07-02"
     },
     {
@@ -4616,7 +4616,7 @@
       "status": "verified",
       "fixerId": "margins-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
       "lastVerified": "2026-07-02"
     },
     {
@@ -4626,7 +4626,7 @@
       "status": "verified",
       "fixerId": "font-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
       "lastVerified": "2026-07-02"
     },
     {
@@ -4636,7 +4636,7 @@
       "status": "verified",
       "fixerId": "font-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
       "lastVerified": "2026-07-02"
     },
     {
@@ -4646,7 +4646,7 @@
       "status": "verified",
       "fixerId": "line-spacing-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
       "lastVerified": "2026-07-02"
     },
     {
@@ -4656,7 +4656,7 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
       "lastVerified": "2026-07-02"
     }
   ],

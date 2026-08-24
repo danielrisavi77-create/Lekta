@@ -1923,25 +1923,22 @@
         "unisb-btho-zavrsni",
         "unisb-btho-diplomski"
       ],
-      "offeredOptionCount": 10,
-      "mappedOptionCount": 10,
+      "offeredOptionCount": 8,
+      "mappedOptionCount": 8,
       "ruleIds": [
         "unisb-btho-diplomski--font",
         "unisb-btho-diplomski--font-size",
         "unisb-btho-diplomski--line-spacing",
         "unisb-btho-diplomski--margins",
-        "unisb-btho-diplomski--paper-size",
         "unisb-btho-zavrsni--font",
         "unisb-btho-zavrsni--font-size",
         "unisb-btho-zavrsni--line-spacing",
-        "unisb-btho-zavrsni--margins",
-        "unisb-btho-zavrsni--paper-size"
+        "unisb-btho-zavrsni--margins"
       ],
       "fixerIds": [
         "font-fixer",
         "line-spacing-fixer",
-        "margins-fixer",
-        "paper-size-fixer"
+        "margins-fixer"
       ],
       "realDocxSampleCount": 0,
       "profilesWithoutRealDocx": [
@@ -1970,20 +1967,18 @@
             "final"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 5,
-          "mappedOptionCount": 5,
+          "offeredOptionCount": 4,
+          "mappedOptionCount": 4,
           "ruleIds": [
             "unisb-btho-zavrsni--font",
             "unisb-btho-zavrsni--font-size",
             "unisb-btho-zavrsni--line-spacing",
-            "unisb-btho-zavrsni--margins",
-            "unisb-btho-zavrsni--paper-size"
+            "unisb-btho-zavrsni--margins"
           ],
           "fixerIds": [
             "font-fixer",
             "line-spacing-fixer",
-            "margins-fixer",
-            "paper-size-fixer"
+            "margins-fixer"
           ],
           "templateIds": [
             "basic-text-styles"
@@ -2008,20 +2003,18 @@
             "graduate"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 5,
-          "mappedOptionCount": 5,
+          "offeredOptionCount": 4,
+          "mappedOptionCount": 4,
           "ruleIds": [
             "unisb-btho-diplomski--font",
             "unisb-btho-diplomski--font-size",
             "unisb-btho-diplomski--line-spacing",
-            "unisb-btho-diplomski--margins",
-            "unisb-btho-diplomski--paper-size"
+            "unisb-btho-diplomski--margins"
           ],
           "fixerIds": [
             "font-fixer",
             "line-spacing-fixer",
-            "margins-fixer",
-            "paper-size-fixer"
+            "margins-fixer"
           ],
           "templateIds": [
             "basic-text-styles"
@@ -12519,25 +12512,22 @@
         "unisb-odhz-zavrsni",
         "unisb-odhz-diplomski"
       ],
-      "offeredOptionCount": 10,
-      "mappedOptionCount": 10,
+      "offeredOptionCount": 8,
+      "mappedOptionCount": 8,
       "ruleIds": [
         "unisb-odhz-diplomski--font",
         "unisb-odhz-diplomski--font-size",
         "unisb-odhz-diplomski--line-spacing",
         "unisb-odhz-diplomski--margins",
-        "unisb-odhz-diplomski--paper-size",
         "unisb-odhz-zavrsni--font",
         "unisb-odhz-zavrsni--font-size",
         "unisb-odhz-zavrsni--line-spacing",
-        "unisb-odhz-zavrsni--margins",
-        "unisb-odhz-zavrsni--paper-size"
+        "unisb-odhz-zavrsni--margins"
       ],
       "fixerIds": [
         "font-fixer",
         "line-spacing-fixer",
-        "margins-fixer",
-        "paper-size-fixer"
+        "margins-fixer"
       ],
       "realDocxSampleCount": 0,
       "profilesWithoutRealDocx": [
@@ -12566,20 +12556,18 @@
             "final"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 5,
-          "mappedOptionCount": 5,
+          "offeredOptionCount": 4,
+          "mappedOptionCount": 4,
           "ruleIds": [
             "unisb-odhz-zavrsni--font",
             "unisb-odhz-zavrsni--font-size",
             "unisb-odhz-zavrsni--line-spacing",
-            "unisb-odhz-zavrsni--margins",
-            "unisb-odhz-zavrsni--paper-size"
+            "unisb-odhz-zavrsni--margins"
           ],
           "fixerIds": [
             "font-fixer",
             "line-spacing-fixer",
-            "margins-fixer",
-            "paper-size-fixer"
+            "margins-fixer"
           ],
           "templateIds": [
             "basic-text-styles"
@@ -12604,20 +12592,18 @@
             "graduate"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 5,
-          "mappedOptionCount": 5,
+          "offeredOptionCount": 4,
+          "mappedOptionCount": 4,
           "ruleIds": [
             "unisb-odhz-diplomski--font",
             "unisb-odhz-diplomski--font-size",
             "unisb-odhz-diplomski--line-spacing",
-            "unisb-odhz-diplomski--margins",
-            "unisb-odhz-diplomski--paper-size"
+            "unisb-odhz-diplomski--margins"
           ],
           "fixerIds": [
             "font-fixer",
             "line-spacing-fixer",
-            "margins-fixer",
-            "paper-size-fixer"
+            "margins-fixer"
           ],
           "templateIds": [
             "basic-text-styles"
@@ -15500,25 +15486,22 @@
         "unisb-sfsb-zavrsni",
         "unisb-sfsb-diplomski"
       ],
-      "offeredOptionCount": 10,
-      "mappedOptionCount": 10,
+      "offeredOptionCount": 8,
+      "mappedOptionCount": 8,
       "ruleIds": [
         "unisb-sfsb-diplomski--font",
         "unisb-sfsb-diplomski--font-size",
         "unisb-sfsb-diplomski--line-spacing",
         "unisb-sfsb-diplomski--margins",
-        "unisb-sfsb-diplomski--paper-size",
         "unisb-sfsb-zavrsni--font",
         "unisb-sfsb-zavrsni--font-size",
         "unisb-sfsb-zavrsni--line-spacing",
-        "unisb-sfsb-zavrsni--margins",
-        "unisb-sfsb-zavrsni--paper-size"
+        "unisb-sfsb-zavrsni--margins"
       ],
       "fixerIds": [
         "font-fixer",
         "line-spacing-fixer",
-        "margins-fixer",
-        "paper-size-fixer"
+        "margins-fixer"
       ],
       "realDocxSampleCount": 0,
       "profilesWithoutRealDocx": [
@@ -15547,20 +15530,18 @@
             "final"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 5,
-          "mappedOptionCount": 5,
+          "offeredOptionCount": 4,
+          "mappedOptionCount": 4,
           "ruleIds": [
             "unisb-sfsb-zavrsni--font",
             "unisb-sfsb-zavrsni--font-size",
             "unisb-sfsb-zavrsni--line-spacing",
-            "unisb-sfsb-zavrsni--margins",
-            "unisb-sfsb-zavrsni--paper-size"
+            "unisb-sfsb-zavrsni--margins"
           ],
           "fixerIds": [
             "font-fixer",
             "line-spacing-fixer",
-            "margins-fixer",
-            "paper-size-fixer"
+            "margins-fixer"
           ],
           "templateIds": [
             "basic-text-styles"
@@ -15585,20 +15566,18 @@
             "graduate"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 5,
-          "mappedOptionCount": 5,
+          "offeredOptionCount": 4,
+          "mappedOptionCount": 4,
           "ruleIds": [
             "unisb-sfsb-diplomski--font",
             "unisb-sfsb-diplomski--font-size",
             "unisb-sfsb-diplomski--line-spacing",
-            "unisb-sfsb-diplomski--margins",
-            "unisb-sfsb-diplomski--paper-size"
+            "unisb-sfsb-diplomski--margins"
           ],
           "fixerIds": [
             "font-fixer",
             "line-spacing-fixer",
-            "margins-fixer",
-            "paper-size-fixer"
+            "margins-fixer"
           ],
           "templateIds": [
             "basic-text-styles"
@@ -16237,25 +16216,22 @@
         "unisb-teho-zavrsni",
         "unisb-teho-diplomski"
       ],
-      "offeredOptionCount": 10,
-      "mappedOptionCount": 10,
+      "offeredOptionCount": 8,
+      "mappedOptionCount": 8,
       "ruleIds": [
         "unisb-teho-diplomski--font",
         "unisb-teho-diplomski--font-size",
         "unisb-teho-diplomski--line-spacing",
         "unisb-teho-diplomski--margins",
-        "unisb-teho-diplomski--paper-size",
         "unisb-teho-zavrsni--font",
         "unisb-teho-zavrsni--font-size",
         "unisb-teho-zavrsni--line-spacing",
-        "unisb-teho-zavrsni--margins",
-        "unisb-teho-zavrsni--paper-size"
+        "unisb-teho-zavrsni--margins"
       ],
       "fixerIds": [
         "font-fixer",
         "line-spacing-fixer",
-        "margins-fixer",
-        "paper-size-fixer"
+        "margins-fixer"
       ],
       "realDocxSampleCount": 0,
       "profilesWithoutRealDocx": [
@@ -16284,20 +16260,18 @@
             "final"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 5,
-          "mappedOptionCount": 5,
+          "offeredOptionCount": 4,
+          "mappedOptionCount": 4,
           "ruleIds": [
             "unisb-teho-zavrsni--font",
             "unisb-teho-zavrsni--font-size",
             "unisb-teho-zavrsni--line-spacing",
-            "unisb-teho-zavrsni--margins",
-            "unisb-teho-zavrsni--paper-size"
+            "unisb-teho-zavrsni--margins"
           ],
           "fixerIds": [
             "font-fixer",
             "line-spacing-fixer",
-            "margins-fixer",
-            "paper-size-fixer"
+            "margins-fixer"
           ],
           "templateIds": [
             "basic-text-styles"
@@ -16322,20 +16296,18 @@
             "graduate"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 5,
-          "mappedOptionCount": 5,
+          "offeredOptionCount": 4,
+          "mappedOptionCount": 4,
           "ruleIds": [
             "unisb-teho-diplomski--font",
             "unisb-teho-diplomski--font-size",
             "unisb-teho-diplomski--line-spacing",
-            "unisb-teho-diplomski--margins",
-            "unisb-teho-diplomski--paper-size"
+            "unisb-teho-diplomski--margins"
           ],
           "fixerIds": [
             "font-fixer",
             "line-spacing-fixer",
-            "margins-fixer",
-            "paper-size-fixer"
+            "margins-fixer"
           ],
           "templateIds": [
             "basic-text-styles"
@@ -22312,8 +22284,8 @@
   "summary": {
     "facultyCount": 131,
     "profileCount": 407,
-    "offeredOptionCount": 1748,
-    "mappedOptionCount": 1748,
+    "offeredOptionCount": 1740,
+    "mappedOptionCount": 1740,
     "realDocxSampleCount": 14,
     "facultiesWithRealDocx": 8,
     "facultiesWithoutRealDocx": 123,

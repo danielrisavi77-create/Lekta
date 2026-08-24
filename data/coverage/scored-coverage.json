@@ -1062,13 +1062,13 @@
     },
     {
       "profileId": "ffzg-filozofija-diplomski",
-      "scoredMachineCheckable": 8,
-      "scoredTotal": 10,
-      "machineCheckable": 8,
+      "scoredMachineCheckable": 7,
+      "scoredTotal": 9,
+      "machineCheckable": 7,
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-08-24"
+      "lastVerified": "2026-07-02"
     },
     {
       "profileId": "ffzg-informacijske-zavrsni",
@@ -1732,13 +1732,13 @@
     },
     {
       "profileId": "hks-diplomski",
-      "scoredMachineCheckable": 8,
-      "scoredTotal": 8,
-      "machineCheckable": 8,
+      "scoredMachineCheckable": 6,
+      "scoredTotal": 6,
+      "machineCheckable": 6,
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-08-24"
+      "lastVerified": "2026-07-02"
     },
     {
       "profileId": "inf-diplomski",
@@ -2082,13 +2082,13 @@
     },
     {
       "profileId": "mef-doktorski",
-      "scoredMachineCheckable": 4,
-      "scoredTotal": 4,
-      "machineCheckable": 4,
+      "scoredMachineCheckable": 3,
+      "scoredTotal": 3,
+      "machineCheckable": 3,
       "advisory": 3,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-08-24"
+      "lastVerified": "2026-07-02"
     },
     {
       "profileId": "mefos-diplomski",
@@ -3912,33 +3912,33 @@
     },
     {
       "profileId": "vuka-poslovni-diplomski",
-      "scoredMachineCheckable": 3,
-      "scoredTotal": 3,
-      "machineCheckable": 3,
+      "scoredMachineCheckable": 2,
+      "scoredTotal": 2,
+      "machineCheckable": 2,
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-08-24"
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
-      "scoredMachineCheckable": 3,
-      "scoredTotal": 3,
-      "machineCheckable": 3,
+      "scoredMachineCheckable": 2,
+      "scoredTotal": 2,
+      "machineCheckable": 2,
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-08-24"
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "vuka-poslovni-zavrsni",
-      "scoredMachineCheckable": 3,
-      "scoredTotal": 3,
-      "machineCheckable": 3,
+      "scoredMachineCheckable": 2,
+      "scoredTotal": 2,
+      "machineCheckable": 2,
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
-      "lastVerified": "2026-08-24"
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "vuka-prehrambena-zavrsni",
@@ -4101,8 +4101,8 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "scoredMachineCheckable": 2131,
-  "scoredTotal": 2204,
+  "scoredMachineCheckable": 2124,
+  "scoredTotal": 2197,
   "scoredNonMachineCheckable": 73,
   "nonMachineCheckableByCheckId": {
     "citation-style": 49,

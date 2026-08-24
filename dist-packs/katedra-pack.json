@@ -7668,6 +7668,12 @@
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
+   "sections": [
+    "uvod",
+    "sredisnji dio",
+    "zakljucak",
+    "popis koristenih izvora i literature"
+   ],
    "facts": [
     "doktorski rad",
     "pravne fusnote – informativno",
@@ -7880,6 +7886,12 @@
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
+   "sections": [
+    "uvod",
+    "sredisnji dio",
+    "zakljucak",
+    "popis koristenih izvora i literature"
+   ],
    "facts": [
     "pravne fusnote",
     "TNR 12 · prored 1,5",
@@ -8126,6 +8138,13 @@
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
+   "sections": [
+    "sazetak",
+    "uvod",
+    "razrada teme po poglavljima",
+    "zakljucak",
+    "literatura"
+   ],
    "facts": [
     "autor–godina",
     "TNR 12 · prored 1,5",
@@ -8283,6 +8302,12 @@
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
+   "sections": [
+    "uvod",
+    "sredisnji dio",
+    "zakljucak",
+    "popis koristenih izvora i literature"
+   ],
    "facts": [
     "završni specijalistički rad",
     "pravne fusnote – informativno",

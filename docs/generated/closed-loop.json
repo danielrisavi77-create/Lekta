@@ -6414,19 +6414,17 @@
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
-      "requested": 5,
+      "requested": 4,
       "axesResolved": [
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "axesRemaining": [],
-      "resolved": 5,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -6437,19 +6435,17 @@
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
-      "requested": 5,
+      "requested": 4,
       "axesResolved": [
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "axesRemaining": [],
-      "resolved": 5,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -6460,19 +6456,17 @@
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
-      "requested": 5,
+      "requested": 4,
       "axesResolved": [
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "axesRemaining": [],
-      "resolved": 5,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -6483,19 +6477,17 @@
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
-      "requested": 5,
+      "requested": 4,
       "axesResolved": [
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "axesRemaining": [],
-      "resolved": 5,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -6506,19 +6498,17 @@
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
-      "requested": 5,
+      "requested": 4,
       "axesResolved": [
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "axesRemaining": [],
-      "resolved": 5,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -6529,19 +6519,17 @@
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
-      "requested": 5,
+      "requested": 4,
       "axesResolved": [
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "axesRemaining": [],
-      "resolved": 5,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -6552,19 +6540,17 @@
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
-      "requested": 5,
+      "requested": 4,
       "axesResolved": [
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "axesRemaining": [],
-      "resolved": 5,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },
@@ -6575,19 +6561,17 @@
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
-      "requested": 5,
+      "requested": 4,
       "axesResolved": [
         "font",
         "font-size",
         "line-spacing",
-        "margins",
-        "paper-size"
+        "margins"
       ],
       "axesRemaining": [],
-      "resolved": 5,
+      "resolved": 4,
       "regressions": 0,
       "textPreserved": true
     },

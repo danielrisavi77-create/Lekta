@@ -10823,7 +10823,7 @@
         },
         "sourcePage": "Članak 11.",
         "authority": "binding",
-        "lastVerified": "2026-08-24"
+        "lastVerified": "2026-07-28"
       },
       {
         "ruleId": "ffri-povum-diplomski--justify",
@@ -10950,13 +10950,13 @@
           "h": 29.7
         },
         "source": {
-          "id": "ffri-pravilnik-zavrsni-2026",
-          "title": "Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)",
-          "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf"
+          "id": "ffri-pravilnik-zavrsni-2023",
+          "title": "Pravilnik o zavrsnom radu (FFRI, 2023)",
+          "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf"
         },
-        "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+        "sourcePage": "Članak 8.",
         "authority": "binding",
-        "lastVerified": "2026-08-24"
+        "lastVerified": "2026-07-28"
       },
       {
         "ruleId": "ffri-povum-zavrsni--justify",
@@ -11152,13 +11152,13 @@
           "h": 29.7
         },
         "source": {
-          "id": "ffri-pravilnik-zavrsni-2026",
-          "title": "Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)",
-          "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf"
+          "id": "ffri-pravilnik-zavrsni-2023",
+          "title": "Pravilnik o zavrsnom radu (FFRI, 2023)",
+          "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf"
         },
-        "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+        "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
         "authority": "program-page",
-        "lastVerified": "2026-08-24"
+        "lastVerified": "2026-07-02"
       },
       {
         "ruleId": "ffri-zavrsni--margins",
@@ -11173,13 +11173,13 @@
           "left": 2.5
         },
         "source": {
-          "id": "ffri-pravilnik-zavrsni-2026",
-          "title": "Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)",
-          "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf"
+          "id": "ffri-pravilnik-zavrsni-2023",
+          "title": "Pravilnik o zavrsnom radu (FFRI, 2023)",
+          "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf"
         },
-        "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+        "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
         "authority": "program-page",
-        "lastVerified": "2026-08-24"
+        "lastVerified": "2026-07-02"
       },
       {
         "ruleId": "ffri-zavrsni--font",
@@ -11191,13 +11191,13 @@
           "fontName": "Times New Roman"
         },
         "source": {
-          "id": "ffri-pravilnik-zavrsni-2026",
-          "title": "Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)",
-          "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf"
+          "id": "ffri-pravilnik-zavrsni-2023",
+          "title": "Pravilnik o zavrsnom radu (FFRI, 2023)",
+          "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf"
         },
-        "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+        "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
         "authority": "program-page",
-        "lastVerified": "2026-08-24"
+        "lastVerified": "2026-07-02"
       },
       {
         "ruleId": "ffri-zavrsni--font-size",
@@ -11209,13 +11209,13 @@
           "fontSizePt": 12
         },
         "source": {
-          "id": "ffri-pravilnik-zavrsni-2026",
-          "title": "Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)",
-          "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf"
+          "id": "ffri-pravilnik-zavrsni-2023",
+          "title": "Pravilnik o zavrsnom radu (FFRI, 2023)",
+          "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf"
         },
-        "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+        "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
         "authority": "program-page",
-        "lastVerified": "2026-08-24"
+        "lastVerified": "2026-07-02"
       },
       {
         "ruleId": "ffri-zavrsni--line-spacing",
@@ -11227,13 +11227,13 @@
           "multiplier": 1.5
         },
         "source": {
-          "id": "ffri-pravilnik-zavrsni-2026",
-          "title": "Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)",
-          "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf"
+          "id": "ffri-pravilnik-zavrsni-2023",
+          "title": "Pravilnik o zavrsnom radu (FFRI, 2023)",
+          "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf"
         },
-        "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+        "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
         "authority": "program-page",
-        "lastVerified": "2026-08-24"
+        "lastVerified": "2026-07-02"
       },
       {
         "ruleId": "ffri-zavrsni--justify",
@@ -11245,13 +11245,13 @@
           "val": "both"
         },
         "source": {
-          "id": "ffri-pravilnik-zavrsni-2026",
-          "title": "Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)",
-          "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf"
+          "id": "ffri-pravilnik-zavrsni-2023",
+          "title": "Pravilnik o zavrsnom radu (FFRI, 2023)",
+          "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf"
         },
-        "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+        "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
         "authority": "program-page",
-        "lastVerified": "2026-08-24"
+        "lastVerified": "2026-07-02"
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
@@ -20183,16 +20183,6 @@
         "lastVerified": "2026-07-02"
       },
       {
-        "ruleId": "footnote-typography-universal",
-        "fixerId": "footnote-typography-fixer",
-        "label": "Font i veličina fusnota",
-        "scope": "profil",
-        "target": "10 pt",
-        "params": {
-          "fontSizePt": 10
-        }
-      },
-      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -24148,15 +24138,6 @@
           "fields": []
         },
         "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
-      },
-      {
-        "ruleId": "page-numbering-universal / section-insert-intro",
-        "fixerId": "page-numbering-fixer / section-insert-fixer",
-        "label": "Numeriranje stranica od Uvoda",
-        "scope": "profil",
-        "target": "prednji listovi rimski, glavni tekst arapski od 1, broj right",
-        "params": {},
-        "condition": "Uvod je prepoznat. Kad prijelom sekcije vec pada tocno na Uvod, postavlja se numeriranje nad postojecim sekcijama; kad prijeloma nema (jednosekcijski rad), umece se prijelom, uz izricitu potvrdu mjesta."
       },
       {
         "ruleId": "toc-field-universal",
@@ -45635,16 +45616,6 @@
         "lastVerified": "2026-07-27"
       },
       {
-        "ruleId": "footnote-typography-universal",
-        "fixerId": "footnote-typography-fixer",
-        "label": "Font i veličina fusnota",
-        "scope": "profil",
-        "target": "10 pt",
-        "params": {
-          "fontSizePt": 10
-        }
-      },
-      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -45715,16 +45686,6 @@
         "lastVerified": "2026-07-27"
       },
       {
-        "ruleId": "footnote-typography-universal",
-        "fixerId": "footnote-typography-fixer",
-        "label": "Font i veličina fusnota",
-        "scope": "profil",
-        "target": "10 pt",
-        "params": {
-          "fontSizePt": 10
-        }
-      },
-      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -45791,16 +45752,6 @@
         "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
         "authority": "general",
         "lastVerified": "2026-07-27"
-      },
-      {
-        "ruleId": "footnote-typography-universal",
-        "fixerId": "footnote-typography-fixer",
-        "label": "Font i veličina fusnota",
-        "scope": "profil",
-        "target": "10 pt",
-        "params": {
-          "fontSizePt": 10
-        }
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",

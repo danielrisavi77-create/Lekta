@@ -598,26 +598,6 @@ Ukupno profila bez uzorka: **396/407**.
 - **unin-tehnicki-diplomski** — 5 ponudjenih opcija
 - **unin-tehnicki-zavrsni** — 5 ponudjenih opcija
 
-## Biotehnicki odjel (UNISB) (btho)
-
-- **unisb-btho-diplomski** — 5 ponudjenih opcija
-- **unisb-btho-zavrsni** — 5 ponudjenih opcija
-
-## Odjel društveno-humanističkih znanosti (UNISB) (odhz)
-
-- **unisb-odhz-diplomski** — 5 ponudjenih opcija
-- **unisb-odhz-zavrsni** — 5 ponudjenih opcija
-
-## Strojarski fakultet u Slavonskom Brodu (sfsb)
-
-- **unisb-sfsb-diplomski** — 5 ponudjenih opcija
-- **unisb-sfsb-zavrsni** — 5 ponudjenih opcija
-
-## Tehnicki odjel (UNISB) (teho)
-
-- **unisb-teho-diplomski** — 5 ponudjenih opcija
-- **unisb-teho-zavrsni** — 5 ponudjenih opcija
-
 ## Veterinarski fakultet (vef)
 
 - **vef-diplomski** — 5 ponudjenih opcija
@@ -686,6 +666,26 @@ Ukupno profila bez uzorka: **396/407**.
 ## Metalurski fakultet (simet)
 
 - **simet-zavrsni** — 4 ponudjenih opcija
+
+## Biotehnicki odjel (UNISB) (btho)
+
+- **unisb-btho-diplomski** — 4 ponudjenih opcija
+- **unisb-btho-zavrsni** — 4 ponudjenih opcija
+
+## Odjel društveno-humanističkih znanosti (UNISB) (odhz)
+
+- **unisb-odhz-diplomski** — 4 ponudjenih opcija
+- **unisb-odhz-zavrsni** — 4 ponudjenih opcija
+
+## Strojarski fakultet u Slavonskom Brodu (sfsb)
+
+- **unisb-sfsb-diplomski** — 4 ponudjenih opcija
+- **unisb-sfsb-zavrsni** — 4 ponudjenih opcija
+
+## Tehnicki odjel (UNISB) (teho)
+
+- **unisb-teho-diplomski** — 4 ponudjenih opcija
+- **unisb-teho-zavrsni** — 4 ponudjenih opcija
 
 ## Veleučilište Hrvatsko zagorje Krapina (vhzk)
 
