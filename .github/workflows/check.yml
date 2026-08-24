@@ -24,7 +24,9 @@ concurrency:
 jobs:
   build-gate:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # Puni jednoforkni paket od ~4,4 tisuce testova lokalno traje ~43 min; 75 min ostavlja
+    # marginu za setup, post-build klasifikacijski sken i Edge typecheck.
+    timeout-minutes: 75
     # Matrica (AUD-49): CI je pinao samo Node 20, a developeri rade na Node 24 (lokalni
     # npm run check). Gate sada dokazuje zeleno na obje verzije, ukljucujuci onu koja se
     # stvarno pokrece lokalno.

@@ -40,6 +40,20 @@ describe('closed-loop kroz katalog: ishod se ne smije tiho promijeniti', () => {
     expect(count('partial'), 'partial').toBe(ratchet.partial);
   });
 
+  it('biljezi datum i tocne kategorije svjezeg punog kataloga', () => {
+    expect.soft(ratchet.measuredAt).toBe('2026-08-24');
+    for (const token of [
+      'pass=332',
+      'no-repair=40',
+      'no-rules=35',
+      'partial=0',
+      'regression=0',
+      'error=0',
+    ]) {
+      expect.soft(ratchet.changeNote).toContain(token);
+    }
+  });
+
   /**
    * `unresolved` znaci da je popravak izveden a nijedan nalaz nije nestao. Danas ih nema, i to je
    * tvrda granica: prvi takav profil je ili stvarni kvar popravka ili kriva osnovica u harnessu
