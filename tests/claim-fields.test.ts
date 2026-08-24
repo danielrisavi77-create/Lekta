@@ -140,7 +140,7 @@ describe('tvrdnja nosi modalitet i opseg', () => {
 
   it('vokabular izvora upisa je zatvoren', () => {
     const sources = new Set(scored.map((r) => r.entry.modalitySource).filter(Boolean));
-    expect([...sources].sort()).toEqual(['agent-read', 'mechanical']);
+    expect([...sources].sort()).toEqual(['agent-read', 'human', 'mechanical']);
   });
 
   it('ratchet: broj bodovanih pravila bez modaliteta smije samo padati', () => {
@@ -181,7 +181,7 @@ describe('tvrdnja nosi modalitet i opseg', () => {
    * poravnanje izricito NE trazi, i to je tvrdnja, ne rupa).
    */
   it('ratchet: bodovana tvrdnja s praznom vrijednosti smije samo nestajati', () => {
-    const EMPTY_VALUE_CAP = 4;
+    const EMPTY_VALUE_CAP = 0;
     const empty = scored.filter((r) => isEmptyValue(r.entry.value));
     expect(
       empty.length,

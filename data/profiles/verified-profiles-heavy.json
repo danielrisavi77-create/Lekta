@@ -4527,7 +4527,48 @@
       "requireA4": false,
       "recommendedCitation": "pravo-fusnote",
       "accessDate": false,
-      "requiredSections": [],
+      "requiredSections": [
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "uvodni dio",
+            "introduction"
+          ]
+        },
+        {
+          "key": "body",
+          "label": "sredisnji dio",
+          "terms": [
+            "sredisnji dio",
+            "razrada",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak",
+            "zakljucni dio",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis koristenih izvora i literature",
+          "terms": [
+            "izvori i literatura",
+            "popis literature",
+            "literatura",
+            "bibliografija",
+            "references"
+          ]
+        }
+      ],
       "requireElementSources": false,
       "requireListsWhenElements": false,
       "manualChecks": [
@@ -4680,7 +4721,52 @@
       "requireA4": true,
       "recommendedCitation": "pravo-social-author",
       "accessDate": true,
-      "requiredSections": [],
+      "requiredSections": [
+        {
+          "key": "abstract",
+          "label": "sazetak",
+          "terms": [
+            "sazetak",
+            "abstract"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "body",
+          "label": "razrada teme po poglavljima",
+          "terms": [
+            "razrada",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "bibliografija",
+            "references"
+          ]
+        }
+      ],
       "requireElementSources": true,
       "requireListsWhenElements": false,
       "manualChecks": [
@@ -4834,7 +4920,48 @@
       "requireA4": false,
       "recommendedCitation": "pravo-fusnote",
       "accessDate": false,
-      "requiredSections": [],
+      "requiredSections": [
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "uvodni dio",
+            "introduction"
+          ]
+        },
+        {
+          "key": "body",
+          "label": "sredisnji dio",
+          "terms": [
+            "sredisnji dio",
+            "razrada",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak",
+            "zakljucni dio",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis koristenih izvora i literature",
+          "terms": [
+            "izvori i literatura",
+            "popis literature",
+            "literatura",
+            "bibliografija",
+            "references"
+          ]
+        }
+      ],
       "requireElementSources": false,
       "requireListsWhenElements": false,
       "checkPageNumberScheme": false,
@@ -4958,7 +5085,48 @@
       "requireA4": false,
       "recommendedCitation": "pravo-fusnote",
       "accessDate": false,
-      "requiredSections": [],
+      "requiredSections": [
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "uvodni dio",
+            "introduction"
+          ]
+        },
+        {
+          "key": "body",
+          "label": "sredisnji dio",
+          "terms": [
+            "sredisnji dio",
+            "razrada",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak",
+            "zakljucni dio",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis koristenih izvora i literature",
+          "terms": [
+            "izvori i literatura",
+            "popis literature",
+            "literatura",
+            "bibliografija",
+            "references"
+          ]
+        }
+      ],
       "requireElementSources": false,
       "requireListsWhenElements": false,
       "checkPageNumberScheme": false,

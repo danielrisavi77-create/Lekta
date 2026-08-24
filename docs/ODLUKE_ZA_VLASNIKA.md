@@ -14,28 +14,23 @@ pada odmah, bez zalihe.
 
 ---
 
-## A. Ublazen modalitet u citatu (66 jedinica, 146 pravila)
+## ZATVORENO: ublazen modalitet (66 jedinica, 146 pravila)
 
-Mehanika ovo NIKAD ne upisuje, i to nije opreznost nego izmjereno: FER pilot je oborio 4 od 5
-tvrdnji i nijedna nije pala na krivom prijepisu nego na TUMACENJU. Pripisivanje ublazavanja
-pravoj osi je citanje: `ferit` citat glasi *"Rad se pise na racunalu (preporuca se MS Word) uz
-prored od 1,5"*, gdje ublazavanje veze PROGRAM, ne prored.
+Procitano jedno po jedno, potpisano. Od 66 jedinica samo 12 stvarno ublazava VLASTITU OS; ostalo su
+bili kvarovi u predlagacu:
 
-Popis s citatima: `data/verification/modality-worklist.md`, skupina "ublazavanje u citatu".
-Upis: `npm run claim-scope -- --from <odluke.json> --human --by "TVOJE IME" --write`.
+| razred | jedinica | sto je zapravo bilo |
+|---|---|---|
+| negacija citana kao dopustenje | 7 | "rad NE MOZE sadrzavati manje od 15 stranica" -> to je ZABRANA |
+| naziv sekcije kao modalitet | 1 | okidac je bio naslov poglavlja "Prikaz preporuka" |
+| `npr.` kao preporuka | 4 | uvodi PRIMJER formata, ne ublazava obvezu |
+| ublazavanje veze DRUGU odredbu | 43 | "(preporuca se MS Word)" veze program, ne prored |
+| ublazavanje stvarno veze os | 12 | npr. "vrsta slova (font) moze biti TNR, Arial ili Arial Narrow" |
 
-**Ovo NE mijenja bodovanje.** Modalitet i opseg su opis citata, ne presuda o tome boduje li se
-pravilo. Zato je najmanje hitna stavka na popisu.
+Predlagac je popravljen (`ne moz\w*` u zabranama, `(?<!ne )` u dopustenjima), uz deset negativnih
+kontrola u CI-ju. `modality-worklist.md` ima NULA jedinica; zaostatak je 0 od 2204 bodovana pravila.
 
-Razvrstano po vrsti ublazavanja (mjereno):
-
-| vrsta | jedinica |
-|---|---|
-| stvarna preporuka (`preporuca se`, `pozeljno`, `u pravilu`) | 34 |
-| dopustenje (`moze`, `smije`, `dopusteno je`) | 24 |
-| uvjet (`ukoliko`, `ako se`, `u slucaju`) | 3 |
-| samo PRIMJER (`npr.`, `primjerice`) - vjerojatno nije ublazavanje | 4 |
-| vise vrsta u istoj recenici | 1 |
+---
 
 ## B. Cetiri bodovana pravila s PRAZNOM vrijednoscu
 
@@ -47,11 +42,9 @@ dakle promocija, dakle tvoj potpis. Gard: ratchet u `tests/claim-fields.test.ts`
 
 ## C. Sto NE ceka tebe
 
-NISTA. `modality-worklist.md` je 2026-08-24 sveden na JEDNU skupinu, i to je tocno ova gore:
-"ublazavanje u citatu (66)". Sve ostalo (383 -> 66 jedinica) je odradjeno citanjem citata.
+NISTA osim tocke B. Sve ostalo je zatvoreno.
 
-Ako te zanima sto je pritom ispalo, a nije bila odluka nego prijepis: `biolos--page-numbers` je
-tvrdio da su brojevi stranica obavezni, a citat mu je bio prepisan iz odlomka o oblikovanju teksta i
-numeriranje uopce nije spominjao. Izvor to propisuje, pa je citat zamijenjen recenicom koja to
-doista kaze.
-
+Usput je pri citanju ispao nalaz koji nije bio na popisu, i on je vec rijesen: `unisb` je bodovao
+FORMAT PAPIRA bez ijednog uporista. Citirani Clanak 3. govori o jednostranom ispisu, broju redaka,
+velicini slova i marginama; format papira ne spominje. Jedini A4 u dokumentu je Clanak 18. i odnosi
+se na SLIKE I DIJAGRAME. Osam pravila kroz osam profila skinuto je s bodovanja do reverifikacije.
