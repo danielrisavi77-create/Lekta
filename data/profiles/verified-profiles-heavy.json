@@ -22306,26 +22306,7 @@
     "profileLabel": "Pravni Split, završni rad",
     "verifiedAt": "2026-07-04",
     "documentDate": null,
-    "rules": {
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
-    },
+    "rules": {},
     "facts": [],
     "note": "Pravni fakultet u Splitu javno NE objavljuje uputu koja propisuje citatni stil ni oblikovanje (detaljne upute su iza intranet logina; javni Pravilnik o pohrani i Vodic ne diraju citiranje/format). Prikazana format-pravila su OPĆI baseline, NISU fakultetski propis. Citatni stil CUSTOM. Validacija podatkovno blokirana: repozitorij nema otvorenih završnih radova (embargo).",
     "sources": [
@@ -22366,26 +22347,7 @@
     "profileLabel": "Pravni Split, diplomski rad",
     "verifiedAt": "2026-07-04",
     "documentDate": null,
-    "rules": {
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
-    },
+    "rules": {},
     "facts": [],
     "note": "Pravni fakultet u Splitu javno NE objavljuje uputu koja propisuje citatni stil ni oblikovanje (detaljne upute su iza intranet logina; javni Pravilnik o pohrani i Vodic ne diraju citiranje/format). Prikazana format-pravila su OPĆI baseline, NISU fakultetski propis. Citatni stil CUSTOM.",
     "sources": [
@@ -23667,25 +23629,7 @@
     "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "harvard",
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
+      "recommendedCitation": "harvard"
     },
     "facts": [],
     "note": "Citat HARVARD MANDIRAN: Pravilnik Čl.9 doslovno 'pri navođenju izvora koristi Harvardski citatni stil' (OCR verificirano byte-level). Format nije brojkama propisan u Pravilniku pa su format-pravila opći baseline (nisu odjelni propis).",
@@ -23737,25 +23681,7 @@
     "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "harvard",
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
+      "recommendedCitation": "harvard"
     },
     "facts": [],
     "note": "Citat HARVARD MANDIRAN: Pravilnik Čl.9 doslovno 'pri navođenju izvora koristi Harvardski citatni stil' (OCR verificirano byte-level). Format nije brojkama propisan u Pravilniku pa su format-pravila opći baseline (nisu odjelni propis).",
@@ -23807,22 +23733,7 @@
     "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "harvard",
-      "font": [
-        "Times New Roman"
-      ],
-      "size": [
-        12
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
+      "recommendedCitation": "harvard"
     },
     "facts": [],
     "note": "Citat HARVARD MANDIRAN na odjelnoj razini: odjelne Upute imperativno 'koristi se Harvardski sustav citiranja' + odjelni Harvard vodic (Panjkota 2010) linkan sa stranice Izrada diplomskog rada (snapshot). Oblikovanje (TNR 12, prored 1,5, margine 2,5, justify) iz odjelnih Uputa.",
@@ -23884,22 +23795,7 @@
     "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "harvard",
-      "font": [
-        "Times New Roman"
-      ],
-      "size": [
-        12
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
+      "recommendedCitation": "harvard"
     },
     "facts": [],
     "note": "Citat HARVARD MANDIRAN na odjelnoj razini: odjelne Upute imperativno 'koristi se Harvardski sustav citiranja' + odjelni Harvard vodic (Panjkota 2010) linkan sa stranice Izrada diplomskog rada (snapshot). Oblikovanje (TNR 12, prored 1,5, margine 2,5, justify) iz odjelnih Uputa.",
@@ -24912,26 +24808,7 @@
     "profileLabel": "Zadar - Anglistika, završni rad",
     "verifiedAt": "2026-07-04",
     "documentDate": null,
-    "rules": {
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
-    },
+    "rules": {},
     "facts": [],
     "note": "Odjelni Pravilnik je proceduralan, ne propisuje oblikovanje brojkama ni imenovani citatni stil (byte-level provjereno) pa je citat custom. Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
     "sources": [
@@ -24985,26 +24862,7 @@
     "profileLabel": "Zadar - Anglistika, diplomski rad",
     "verifiedAt": "2026-07-04",
     "documentDate": null,
-    "rules": {
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
-    },
+    "rules": {},
     "facts": [],
     "note": "Odjelni Pravilnik je proceduralan, ne propisuje oblikovanje brojkama ni imenovani citatni stil (byte-level provjereno) pa je citat custom. Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
     "sources": [
@@ -25546,26 +25404,7 @@
     "profileLabel": "Zadar - Sociologija, završni rad",
     "verifiedAt": "2026-07-04",
     "documentDate": null,
-    "rules": {
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
-    },
+    "rules": {},
     "facts": [],
     "note": "Odjelni javni dokumenti su administrativni (prijava teme/mentorstvo) i NE propisuju oblikovanje ni citatni stil (byte-level provjereno). Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
     "sources": [
@@ -25703,26 +25542,7 @@
     "profileLabel": "Zadar - Lingvistika, završni rad",
     "verifiedAt": "2026-07-04",
     "documentDate": null,
-    "rules": {
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
-    },
+    "rules": {},
     "facts": [],
     "note": "Odjel ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na odjelnim stranicama). Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
     "sources": [],
@@ -25769,26 +25589,7 @@
     "profileLabel": "Zadar - Lingvistika, diplomski rad",
     "verifiedAt": "2026-07-04",
     "documentDate": null,
-    "rules": {
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
-    },
+    "rules": {},
     "facts": [],
     "note": "Odjel ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na odjelnim stranicama). Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
     "sources": [],
@@ -25835,26 +25636,7 @@
     "profileLabel": "Zadar - Rusistika, diplomski rad",
     "verifiedAt": "2026-07-04",
     "documentDate": null,
-    "rules": {
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
-    },
+    "rules": {},
     "facts": [],
     "note": "Odjel ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na odjelnim stranicama). Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
     "sources": [],
