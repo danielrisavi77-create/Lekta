@@ -32,19 +32,38 @@ kontrola u CI-ju. `modality-worklist.md` ima NULA jedinica; zaostatak je 0 od 22
 
 ---
 
-## B. Cetiri bodovana pravila s PRAZNOM vrijednoscu
+## B. ZATVORENO: cetiri bodovana pravila s praznom vrijednoscu
 
-`pravo-opci-pravni-akademski-rad`, `pravo-socijalni-opci-akademski-rad`,
-`pravo-specijalisticki-pravni-opci`, `pravo-doktorski-pravne-znanosti` - svako nosi
-`required-sections` s `value: []` uz citat koji sekcije NABRAJA. Broje se kao bodovana, a ne
-provode nista. Popunjavanje znaci da motor pocinje bodovati strukturu ondje gdje dosad nije,
-dakle promocija, dakle tvoj potpis. Gard: ratchet u `tests/claim-fields.test.ts` (cap 4).
+Popunjeno iz vlastitih citata, kljucevi preslikani iz `pravo-integrirani-diplomski`. "Prilog" je
+namjerno izostavljen: rad bez priloga uredno postoji, pa bi obavezan prilog obarao valjane radove.
+Ratchet praznih vrijednosti spusten na 0.
 
-## C. Sto NE ceka tebe
+---
 
-NISTA osim tocke B. Sve ostalo je zatvoreno.
+## C. OTVORENO: 82 osi koje motor boduje BEZ IJEDNE TVRDNJE
 
-Usput je pri citanju ispao nalaz koji nije bio na popisu, i on je vec rijesen: `unisb` je bodovao
-FORMAT PAPIRA bez ijednog uporista. Citirani Clanak 3. govori o jednostranom ispisu, broju redaka,
-velicini slova i marginama; format papira ne spominje. Jedini A4 u dokumentu je Clanak 18. i odnosi
-se na SLIKE I DIJAGRAME. Osam pravila kroz osam profila skinuto je s bodovanja do reverifikacije.
+Ovo je najveca preostala rupa u lancu i trazi tvoju odluku, jer se u oba smjera mijenja bodovanje.
+
+Cetrnaest profila nema **nijedan** unos u draftu, a motor im boduje sest formatnih osi (font,
+velicina, prored, margine, format papira, poravnanje) iz naslijedjenog `rules` objekta:
+
+| jedinica | profili |
+|---|---|
+| unizd | kroatistika, ekonomija, anglistika, sociologija, lingvistika, rusistika (12 profila) |
+| pravst | zavrsni, diplomski |
+| ffos | povijest zavrsni, povijest diplomski |
+
+To je izravno protivno pravilu iz CLAUDE.md ("bodovana pravila smiju doci samo iz navedenih
+sluzbenih izvora"): tih 82 para (profil, os) boduje se bez ijednog izvora.
+
+Dvije mogucnosti, i obje su tvoje:
+
+1. **Nadji izvor i napisi tvrdnje.** Za `unizd` (33 srodna profila vec ima tvrdnje) i `ffos` (8)
+   izgledi su dobri: vjerojatno vrijedi isti fakultetski pravilnik. `pravst` nema NIJEDAN profil s
+   tvrdnjom, pa je ondje potrebno krenuti od nule.
+2. **Demotiraj tih sest osi na informativne** dok se izvor ne nadje. Fail-safe je i tehnicki je
+   trivijalno, ali tim profilima nestaje gotovo cijela provjera oblikovanja.
+
+Preporuka: (1) za unizd i ffos, (2) privremeno za pravst. Ne diram bez tvoje rijeci jer prva
+mogucnost dodaje bodovana pravila, a druga ih oduzima.
+
