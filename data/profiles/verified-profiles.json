@@ -5047,7 +5047,7 @@
       "justify": true,
       "checkJustify": true,
       "requireToc": false,
-      "requirePageNumbers": false,
+      "requirePageNumbers": true,
       "requireA4": false,
       "recommendedCitation": "pravo-fusnote",
       "accessDate": false,
@@ -5237,7 +5237,7 @@
         "bottom": 3,
         "left": 3.5
       },
-      "checkMargins": false,
+      "checkMargins": true,
       "justify": true,
       "checkJustify": true,
       "requireToc": false,
@@ -5438,9 +5438,9 @@
       },
       "checkMargins": false,
       "justify": true,
-      "checkJustify": false,
+      "checkJustify": true,
       "requireToc": false,
-      "requirePageNumbers": false,
+      "requirePageNumbers": true,
       "requireA4": false,
       "recommendedCitation": "pravo-fusnote",
       "accessDate": false,
@@ -5495,9 +5495,9 @@
       "quoteLocatorRequired": false,
       "checkAlphabeticalRefs": false,
       "checkDuplicateYears": false,
-      "checkFont": false,
-      "checkSize": false,
-      "checkSpacing": false,
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
       "scoreStructure": false,
       "scoreElements": false,
       "legalFootnoteProfile": false,
@@ -5603,9 +5603,9 @@
       },
       "checkMargins": false,
       "justify": true,
-      "checkJustify": false,
+      "checkJustify": true,
       "requireToc": false,
-      "requirePageNumbers": false,
+      "requirePageNumbers": true,
       "requireA4": false,
       "recommendedCitation": "pravo-fusnote",
       "accessDate": false,
@@ -5660,9 +5660,9 @@
       "quoteLocatorRequired": false,
       "checkAlphabeticalRefs": false,
       "checkDuplicateYears": false,
-      "checkFont": false,
-      "checkSize": false,
-      "checkSpacing": false,
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
       "scoreStructure": false,
       "scoreElements": false,
       "legalFootnoteProfile": false,
@@ -27201,7 +27201,7 @@
       "size": [
         12
       ],
-      "checkSpacing": false,
+      "checkSpacing": true,
       "requireA4": true,
       "margins": {
         "top": 2.5,
@@ -27309,7 +27309,7 @@
       "size": [
         12
       ],
-      "checkSpacing": false,
+      "checkSpacing": true,
       "requireA4": true,
       "margins": {
         "top": 2.5,
@@ -37528,7 +37528,7 @@
     "documentDate": null,
     "rules": {
       "checkFont": false,
-      "checkSize": false,
+      "checkSize": true,
       "checkSpacing": false,
       "checkMargins": false,
       "checkJustify": false,
@@ -37625,7 +37625,7 @@
     "documentDate": null,
     "rules": {
       "checkFont": false,
-      "checkSize": false,
+      "checkSize": true,
       "checkSpacing": false,
       "checkMargins": false,
       "checkJustify": false,
@@ -37999,11 +37999,11 @@
     "verifiedAt": "2026-07-05",
     "documentDate": null,
     "rules": {
-      "checkFont": false,
-      "checkSize": false,
-      "checkSpacing": false,
-      "checkMargins": false,
-      "checkJustify": false,
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
+      "checkMargins": true,
+      "checkJustify": true,
       "font": [
         "Times New Roman"
       ],
@@ -38602,7 +38602,7 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "checkMargins": false,
+      "checkMargins": true,
       "justify": true,
       "checkJustify": true,
       "requireToc": false,
@@ -38671,7 +38671,7 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "checkMargins": false,
+      "checkMargins": true,
       "requireToc": false,
       "requireA4": true,
       "recommendedCitation": "harvard",
@@ -38742,7 +38742,7 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "checkMargins": false,
+      "checkMargins": true,
       "requireToc": false,
       "requireA4": true,
       "recommendedCitation": "pravo-fusnote",

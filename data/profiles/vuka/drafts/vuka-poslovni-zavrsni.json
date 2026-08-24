@@ -74,6 +74,47 @@
       "lastVerified": "2026-08-24",
       "confirmedVia": "human",
       "verifiedHash": "cdd389a04f661585bb47dd26b7d36bb2c4ff3fce7a00ddf87091a9a485fbd64f"
+    },
+    {
+      "ruleId": "vuka-poslovni-zavrsni--heading-rules",
+      "modality": "obligation",
+      "scope": "heading",
+      "modalitySource": "agent-read",
+      "checkId": "heading-rules",
+      "value": {
+        "levels": {
+          "1": {
+            "size": 16,
+            "bold": true,
+            "uppercase": true
+          },
+          "2": {
+            "size": 14,
+            "bold": true,
+            "uppercase": false
+          },
+          "3": {
+            "size": 12,
+            "bold": true,
+            "uppercase": false
+          }
+        }
+      },
+      "category": "format",
+      "label": "Oblikovanje naslova po razinama",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "vuka-poslovni-upute",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Claude Opus 5 (1M context)",
+      "lastVerified": "2026-08-24",
+      "confirmedVia": "human",
+      "verifiedHash": "cdd389a04f661585bb47dd26b7d36bb2c4ff3fce7a00ddf87091a9a485fbd64f",
+      "note": "Izvor imenuje dijelove rada rijecima (glave / poglavlja / potpoglavlja); vezanje na Wordove razine naslova 1/2/3 je CITANJE, ne prijepis. Isto citanje koristi 18 profila koji vec imaju headingRules.levels."
     }
   ]
 }

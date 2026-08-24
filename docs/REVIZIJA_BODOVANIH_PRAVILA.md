@@ -14,8 +14,8 @@ kontrole suzenja (`npm run audit:selftest`) PRIJE svega ostaloga.
 
 | | pocetak (2026-08-22) | sada (2026-08-24) |
 |---|---|---|
-| bodovanih pravila | 1934 | 1930 |
-| revidirano | 1391 | **1930** |
+| bodovanih pravila | 1934 | 1943 |
+| revidirano | 1391 | **1943** |
 | nerevidirano (izvor se ne cita) | 543 | **0** |
 | neprovjerivo (skenirano ili ostecen tekstualni sloj) | 9 | **0** |
 | pravila s NOVIM nalazom | 319 | **0** |
@@ -28,9 +28,9 @@ vrijednost izvan citata, predlozak) ne prijavljuje nista neodluceno. Mjerodavan 
 
 UKUPAN BROJ JE POKRETNA META i namjerno nije prikovan: 1934 -> 1930 (drift alat demotirao cetiri)
 -> 1937 (sedam DODANO odlukom vlasnika, tocka 8) -> 1929 (presuda nad zabranama citanim kao
-dopustenje) -> 1930 (osmo pravilo, poravnanje fusnota). Ono sto se NE mice su tri nule:
-nerevidiranih, neprovjerivih i novih nalaza. Svako novo ili izmijenjeno pravilo prolazi istu
-reviziju, pa broj smije rasti bez da itko ista izgubi na sljedivosti.
+dopustenje) -> 1943 (poravnanje fusnota, stepenica naslova, i paralelni rad druge sesije). Ono sto
+se NE mice su tri nule: nerevidiranih, neprovjerivih i novih nalaza. Svako novo ili izmijenjeno
+pravilo prolazi istu reviziju, pa broj smije rasti bez da itko ista izgubi na sljedivosti.
 
 Prazno NIJE isto sto i "sve je bilo tocno". Od oko 320 zatvorenih nalaza tocno JEDAN je bio kvar u
 bodovanju (forenzika, nize) i jedan je svjesno odstupanje koje ostaje (`unizd-pomorski`, nize).
@@ -112,7 +112,7 @@ izolirani gate (369/369).
    "cita" dolazi iz OCR pratitelja. Citat je zato prepisan s RENDERIRANE stranice i nosi
    "Velicina" s dijakritikom, koju je OCR ispustio.
 
-8. **Pet odredbi koje je motor znao mjeriti, a profil ih nije zapisivao, sada su bodovane**
+8. **Sest odredbi koje je motor znao mjeriti, a profil ih nije zapisivao, sada su bodovane**
     (odobrenje vlasnika 2026-08-24). Svaka je prije upisa procitana u izvoru:
 
     | pravilo | zastavica | odredba |
@@ -122,6 +122,7 @@ izolirani gate (369/369).
     | `hks-diplomski` | `footnoteSize` `[10]`, `footnoteSpacing` `1` | "biljeske se pisu na dnu stranice (footnote), a pismo (font) je velicine 10, prored jednostruk" |
     | `vuka-poslovni-*` (3) | `footnoteSize` `[10]` | "za biljeske ('fusnote') odabrati velicinu slova 10" |
     | `hks-diplomski` | `footnoteJustify` | "...prored jednostruk s obostranim poravnanjem" (dopunjeno, nize) |
+    | `vuka-poslovni-*` (3) | `headingRules.levels[N].size` | "za naslove glava 16 bold (...) poglavlja (...) 14 bold, a potpoglavlja (...) 12 bold" (dopunjeno, nize) |
 
     Tri odredbe se do sada NISU mogle izraziti kroz `ruleEntry`, pa su se morale upisivati ravno u
     `rules`, mimo lanca provenijencije: dvije podprovjere numeriranja (`page-numbers` postavlja samo
@@ -141,8 +142,24 @@ izolirani gate (369/369).
     fusnota ulaze u JEDNU provjeru ("Oblikovanje fusnota", `footFmtOk`); pravilo ju postrozuje, ne
     prosiruje bodovanje.
 
-    OSTAJE nezapisano: velicina NASLOVA za `vuka` (16 bold). Motor za nju nema pojam, pa se ne bi
-    imalo cime provjeriti.
+    DOPUNJENO drugi put, isto na zahtjev vlasnika: **velicina NASLOVA za `vuka`**. Prva procjena
+    ("motor za nju nema pojam") bila je KRIVA i ispravlja se: `auditHeadingRules` postoji, vrijedi
+    6 bodova i vec ga koristi 18 profila. Nedostajala je samo velicina PO RAZINI, jer je `rules.size`
+    bila jedna vrijednost za sve razine, pa se stepenica nije mogla izraziti. Dodano je
+    `levels[N].size` (prednost pred `rules.size`), a `vuka-poslovni-*` dobiva tri razine iz izvora:
+    glave 16 bold verzal, poglavlja 14 bold, potpoglavlja 12 bold.
+
+    OVO JEST PROSIRENJE BODOVANJA, za razliku od poravnanja fusnota: provjera se izvodi samo uz
+    `if(profile.headingRules)`, pa ta tri profila dobivaju 6 bodova kojih prije nisu imala. Rad koji
+    stepenicu slijedi ih dobiva sve, rad koji ju ne slijedi gubi do pet.
+
+    OVDJE JE JEDNA INTERPRETACIJA i zato je zapisana u `note` samog pravila: izvor imenuje dijelove
+    rada rijecima ("glave", "poglavlja", "potpoglavlja"), a profil ih vezuje na Wordove razine
+    naslova 1/2/3. To je citanje, ne prijepis. Isto citanje vec koristi svih 18 profila s
+    `headingRules.levels`, pa se ovime ne uvodi nov obrazac.
+
+    Golden je nakon svega BAJT-IDENTICAN: nijedna golden fixtura ne koristi profil s ovim pravilom,
+    a profil koji velicinu ne propisuje prolazi kroz istu granu kao i prije.
 
 9. **63 retka tudjeg rada u `e44a69c`, i 22 moja retka u njihovom `7dd60bda`.** ZATVORENO ODLUKOM
     2026-08-24: povijest se NE prepravlja. Sadrzaj je u oba smjera netaknut, sporna je samo poruka
