@@ -152,7 +152,7 @@
       "decision": "left-scored",
       "decidedBy": "Claude Opus 5 (1M context)",
       "decidedAt": "2026-08-23",
-      "rationale": "Dodavanje BODOVANOG pravila mijenja ono po cemu se studenti ocjenjuju na zivim profilima, a CLAUDE.md za bodovano pravilo trazi potvrdjenu provenijenciju uz ljudski prolaz (`verifiedBy`, `confirmedVia: human-audit`), koji agent ne moze potpisati. Zato se ne dodaje nego zapisuje s TOCNOM zastavicom i doslovnom odredbom, da odluka bude jedan korak a ne nova istraga."
+      "rationale": "Dodavanje BODOVANOG pravila mijenja ono po cemu se studenti ocjenjuju na zivim profilima, a CLAUDE.md za bodovano pravilo trazi potvrdjenu provenijenciju uz ljudski prolaz (`verifiedBy`, `confirmedVia: human-audit`), koji agent ne moze potpisati. Zato se ne dodaje nego zapisuje s TOCNOM zastavicom i doslovnom odredbom, da odluka bude jedan korak a ne nova istraga. RAZRIJESENO 2026-08-24: vlasnik je odobrio da te odredbe postanu bodovane, pa su upisane kao pravila s punom provenijencijom (ruleEntry u nacrtu + zastavica u `rules` zivog profila). Novi ruleId-evi: hks-diplomski--footnote-size, hks-diplomski--footnote-spacing, ffzg-filozofija-diplomski--page-number-title-suppression, mef-doktorski--page-number-start-at-intro. Zapis OSTAJE jer se nalaz odnosi na odsjecen citat RODITELJSKOG pravila, koji i dalje stoji."
     },
     {
       "ruleIds": [
@@ -166,7 +166,7 @@
       "decision": "left-scored",
       "decidedBy": "Claude Opus 5 (1M context)",
       "decidedAt": "2026-08-23",
-      "rationale": "Ne cini pravilo prestrogim: motor mjeri DOMINANTNU velicinu, pa biljeske i naslovi ne mogu oboriti provjeru tijela teksta. Dodavanje bodovanog `footnoteSize` mijenja ono po cemu se studenti ocjenjuju i trazi ljudski prolaz, pa se biljezi s imenom zastavice umjesto da se doda."
+      "rationale": "Ne cini pravilo prestrogim: motor mjeri DOMINANTNU velicinu, pa biljeske i naslovi ne mogu oboriti provjeru tijela teksta. Dodavanje bodovanog `footnoteSize` mijenja ono po cemu se studenti ocjenjuju i trazi ljudski prolaz, pa se biljezi s imenom zastavice umjesto da se doda. RAZRIJESENO 2026-08-24: vlasnik je odobrio, pa `footnoteSize: [10]` sada nose sva tri profila (vuka-poslovni-{diplomski,zavrsni,opci-akademski-rad}--footnote-size). Velicina NASLOVA (16 bold) ostaje nezapisana jer motor za nju nema pojam."
     },
     {
       "ruleIds": [

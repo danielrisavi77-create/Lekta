@@ -1796,6 +1796,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -3749,6 +3752,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "required-sections",
         "value": [
           {
@@ -3842,6 +3848,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--word-count",
+        "modality": "recommendation",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 20000,
@@ -4093,6 +4102,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--word-count",
+        "modality": "recommendation",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 45000,
@@ -4491,6 +4503,9 @@
       },
       {
         "ruleId": "sociologija--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "required-sections",
         "value": [
           {

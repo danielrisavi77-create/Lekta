@@ -59,6 +59,12 @@ jobs:
       # Suzenje suzbijanja skeniranih stranica odlucuje hoce li se neusidren citat prijaviti ili
       # sutke odbaciti. Gard koji ne grize gori je od nikakvog, pa ima kontrole u OBA smjera,
       # ukljucujuci dva stvarna dokumenta koja su ga motivirala (vuka i forenzika).
+      # Uzorci modaliteta moraju razlikovati ZABRANU od DOPUSTENJA. Do 2026-08-24 se `moze`/`smije`
+      # palilo i unutar `ne moze`/`ne smije`, pa je sedam jedinica s tvrdim granicama opsega
+      # ("rad NE MOZE sadrzavati manje od 15 stranica") citano kao ublazavanje, dakle obrnuto.
+      - name: Negativne kontrole modaliteta (zabrana nije dopustenje)
+        run: npm run claim-modality:selftest
+
       - name: Negativne kontrole suzenja (revizija stvarno grize)
         run: npm run audit:selftest
 

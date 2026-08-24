@@ -71,6 +71,7 @@
     "drift-apply": "node scripts/apply-drift-decision.mjs",
     "drift-dossiers": "vite-node scripts/generate-drift-dossiers.mts",
     "claim-modality": "python scripts/propose_claim_modality.py",
+    "claim-modality:selftest": "python scripts/propose_claim_modality.py --selftest",
     "claim-modality:apply": "python scripts/apply_claim_modality.py --write",
     "claim-scope": "node scripts/apply-claim-scope.mjs",
     "audit:scored-quotes": "python scripts/audit_scored_quotes.py",

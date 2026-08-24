@@ -27,6 +27,9 @@
     },
     {
       "ruleId": "ferit-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -48,6 +51,9 @@
     },
     {
       "ruleId": "ferit-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "font",
       "value": [
         "Times New Roman"

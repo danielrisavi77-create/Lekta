@@ -164,6 +164,9 @@
     },
     {
       "ruleId": "oss-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "required-sections",
       "value": [
         {

@@ -44,11 +44,18 @@ def fold(text: str) -> str:
 # FER tvrdnji nije bila u najjacoj. Kad bi `treba` upalo u `obligation`, tocno taj nalaz bi nestao.
 # Zato `directive` stoji zasebno: obvezujuca formulacija koja NIJE najjaca.
 MODALITY_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
-    ("prohibition", re.compile(r"\b(ne\s+smij\w*|zabranj\w*|nije\s+dopust\w*|ne\s+koristi\s+se)\b")),
+    # `ne moz\w*` je dodan 2026-08-24 uz `ne smij\w*`: sedam jedinica (medri, fpzg, kif, vuka) nosi
+    # "rad NE MOZE sadrzavati manje od 15 niti vise od 50 stranica" ili "opseg NE SMIJE biti manji od
+    # 4000 rijeci". Bez toga se palio samo `moze`/`smije` iz permission uzorka, pa je ZABRANA citana
+    # kao DOPUSTENJE, i to bas na tvrdim granicama opsega.
+    ("prohibition", re.compile(r"\b(ne\s+smij\w*|ne\s+moz\w*|zabranj\w*|nije\s+dopust\w*|ne\s+koristi\s+se)\b")),
     ("obligation", re.compile(r"\b(mora\w*|duzn\w*|obvez\w*|nuzno\s+je|obavezn\w*)\b")),
     ("condition", re.compile(r"\b(ukoliko|ako\s+se|u\s+slucaju|ovisno\s+o|po\s+dogovoru)\b")),
     ("recommendation", re.compile(r"\b(preporu\w*|pozeljno|u\s+pravilu|okvirno|obicno|neka\s+bude|primjerice|npr)\b")),
-    ("permission", re.compile(r"\b(moze\w*|smije\w*|dopusteno\s+je)\b")),
+    # NEGATIVNI POGLED UNAZAD: bez njega se `moze`/`smije` pali i unutar `ne moze`/`ne smije`, pa
+    # ista recenica dobiva i prohibition i permission, a jedinica zavrsava u skupini "ublazavanje"
+    # koja ceka covjeka. Ulaz je normaliziran na jedan razmak (fold), pa je `(?<!ne )` dovoljan.
+    ("permission", re.compile(r"\b(?<!ne )(moze\w*|smije\w*|dopusteno\s+je)\b")),
     ("directive", re.compile(r"\b(treba\w*|potrebno\s+je|pise\s+se|pisu\s+se|koristi\s+se|iznosi|opremljen\w*)\b")),
 ]
 
@@ -222,7 +229,43 @@ def collect_scored() -> list[dict]:
     return rows
 
 
+# --- NEGATIVNE KONTROLE ---------------------------------------------------------------------
+#
+# Gard bez dokaza da grize ne racuna se (CLAUDE.md). Ovdje se dokazuje da uzorci modaliteta
+# razlikuju ZABRANU od DOPUSTENJA, jer je upravo to bio kvar: `moze`/`smije` palilo se i unutar
+# `ne moze`/`ne smije`, pa je sedam jedinica s tvrdim granicama opsega zavrsilo kao "ublazavanje".
+# Kontrole idu u OBA smjera: negacija mora dati prohibition I NE SMIJE dati permission, a obicno
+# dopustenje mora i dalje dati permission.
+MODALITY_SELFTEST: list[tuple[str, str]] = [
+    ("Diplomski rad ne moze sadrzavati manje od 15 niti vise od 50 stranica.", "prohibition"),
+    ("Opseg ne smije biti manji od 4000 rijeci", "prohibition"),
+    ("Ne smije sadrzavati manje od 10.000 ni vise od 12.000 rijeci", "prohibition"),
+    ("Rad ne moze biti pisan znakovima manjim od 3 mm", "prohibition"),
+    ("Diplomski rad moze imati najmanje 25, a najvise 50 stranica.", "permission"),
+    ("vrsta slova (font) moze biti Times New Roman ili Arial", "permission"),
+    ("Zaostale izvore mozete konzultirati ovu stranicu", "permission"),
+    ("Rad mora imati najmanje 30 stranica.", "obligation"),
+    ("Preporuca se font Arial ili Times New Roman.", "recommendation"),
+    ("Rad treba pisati fontom Times New Roman.", "directive"),
+]
+
+
+def selftest() -> int:
+    """Vraca broj promasaja. Nula znaci da uzorci razlikuju zabranu od dopustenja."""
+    failures = 0
+    for quote, expected in MODALITY_SELFTEST:
+        marks = [name for name, rx in MODALITY_PATTERNS if rx.search(fold(quote))]
+        both = "permission" in marks and "prohibition" in marks
+        if expected not in marks or both:
+            failures += 1
+            print(f"  PROMASAJ ocekivano={expected} dobiveno={marks}: {quote[:70]}")
+    print(f"negativne kontrole modaliteta: {len(MODALITY_SELFTEST)} slucajeva, promasaja: {failures}")
+    return failures
+
+
 def main() -> None:
+    if "--selftest" in sys.argv:
+        raise SystemExit(1 if selftest() else 0)
     out_flag = sys.argv.index("--json") if "--json" in sys.argv else -1
     out_path = (
         sys.argv[out_flag + 1]

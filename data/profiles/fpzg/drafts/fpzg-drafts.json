@@ -117,6 +117,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--word-count",
+        "modality": "prohibition",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 10000,
@@ -239,6 +242,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -280,6 +286,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -602,6 +611,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--word-count",
+        "modality": "prohibition",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 10000,
@@ -622,6 +634,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -663,6 +678,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -985,6 +1003,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--word-count",
+        "modality": "prohibition",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 12000,
@@ -1005,6 +1026,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -1046,6 +1070,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -1368,6 +1395,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--word-count",
+        "modality": "prohibition",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 8000,
@@ -1388,6 +1418,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -1429,6 +1462,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -1751,6 +1787,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--word-count",
+        "modality": "prohibition",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 8000,
@@ -1771,6 +1810,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -1812,6 +1854,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -2134,6 +2179,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--word-count",
+        "modality": "prohibition",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 8000,
@@ -2154,6 +2202,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -2195,6 +2246,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -2517,6 +2571,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--word-count",
+        "modality": "prohibition",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 8000,
@@ -2537,6 +2594,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -2578,6 +2638,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -2825,6 +2888,9 @@
       },
       {
         "ruleId": "fpzg-doktorski-politologija--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -2844,6 +2910,9 @@
     "fpzg-politologija-zavrsni": [
       {
         "ruleId": "fpzg-politologija-zavrsni--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -3113,6 +3182,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -3221,6 +3293,9 @@
     "fpzg-novinarstvo-zavrsni-tekst": [
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -3490,6 +3565,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -3598,6 +3676,9 @@
     "fpzg-novinarstvo-zavrsni-av": [
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-av--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -3617,6 +3698,9 @@
     "fpzg-mes-master-thesis": [
       {
         "ruleId": "fpzg-mes-master-thesis--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -3863,6 +3947,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -3971,6 +4058,9 @@
     "fpzg-opci-akademski-rad": [
       {
         "ruleId": "fpzg-opci-akademski-rad--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -4102,6 +4192,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",

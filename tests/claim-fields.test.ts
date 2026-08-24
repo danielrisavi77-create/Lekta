@@ -74,7 +74,7 @@ const SOFT = new Set(['recommendation', 'permission', 'condition']);
  * Ostatak od 99 jedinica vise nije ovaj razred: 66 nosi ublazavanje (samo `human`), 33 ima vise
  * modalnih biljega u istoj recenici i trazi da se procita KOJA recenica nosi vrijednost te osi.
  */
-const MISSING_MODALITY_CAP = 146;
+const MISSING_MODALITY_CAP = 0;
 
 /**
  * IZVEDENI `scored`, ne pohranjena zastavica. Razlika nije akademska: 275 pravila zadovoljava

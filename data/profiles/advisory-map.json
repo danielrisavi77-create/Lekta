@@ -1588,41 +1588,49 @@
   ],
   "unisb-btho-diplomski": [
     "justify",
+    "paper-size",
     "toc",
     "page-numbers"
   ],
   "unisb-btho-zavrsni": [
     "justify",
+    "paper-size",
     "toc",
     "page-numbers"
   ],
   "unisb-odhz-diplomski": [
     "justify",
+    "paper-size",
     "toc",
     "page-numbers"
   ],
   "unisb-odhz-zavrsni": [
     "justify",
+    "paper-size",
     "toc",
     "page-numbers"
   ],
   "unisb-sfsb-diplomski": [
     "justify",
+    "paper-size",
     "toc",
     "page-numbers"
   ],
   "unisb-sfsb-zavrsni": [
     "justify",
+    "paper-size",
     "toc",
     "page-numbers"
   ],
   "unisb-teho-diplomski": [
     "justify",
+    "paper-size",
     "toc",
     "page-numbers"
   ],
   "unisb-teho-zavrsni": [
     "justify",
+    "paper-size",
     "toc",
     "page-numbers"
   ],

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "rules": 2205,
-  "units": 1395,
+  "rules": 2204,
+  "units": 1399,
   "proposals": [
     {
       "sourceId": "adu-montaza-diplomski",
@@ -1196,10 +1196,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
@@ -7781,10 +7783,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -7840,10 +7844,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak"
@@ -7935,10 +7941,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -7994,10 +8002,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak"
@@ -8086,10 +8096,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak"
@@ -8148,10 +8160,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak"
@@ -12530,6 +12544,40 @@
       "resolved": true,
       "needsHuman": false,
       "reasons": []
+    },
+    {
+      "sourceId": "ffzg-filoz-diplomski-2019",
+      "checkId": "page-number-title-suppression",
+      "sourcePage": "odjeljak Tekst treba oblikovati na sljedeci nacin",
+      "value": true,
+      "quote": "naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati;",
+      "ruleCount": 1,
+      "profileIds": [
+        "ffzg-filozofija-diplomski"
+      ],
+      "ruleIds": [
+        "ffzg-filozofija-diplomski--page-number-title-suppression"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "title-page",
+        "heading"
+      ],
+      "writtenModality": {
+        "count": 1,
+        "sources": [
+          "human"
+        ]
+      },
+      "resolved": true,
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje vise dijelova rada: title-page, heading"
+      ]
     },
     {
       "sourceId": "ffzg-filoz-diplomski-2019",
@@ -16969,10 +17017,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 13,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -17019,10 +17069,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 8,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (condition): pripisivanje osi je citanje, ne uzorak",
@@ -17060,10 +17112,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 3,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (condition): pripisivanje osi je citanje, ne uzorak",
@@ -18201,23 +18255,21 @@
         "fpzg-nacionalna-sigurnost-diplomski--word-count",
         "fpzg-politologija-diplomski--word-count"
       ],
-      "proposedModality": "permission",
+      "proposedModality": "prohibition",
       "proposedScope": "whole",
       "modalityMarks": [
-        "prohibition",
-        "permission"
+        "prohibition"
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
-      "needsHuman": true,
-      "reasons": [
-        "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
-        "vise modalnih biljega u istoj recenici: prohibition, permission"
-      ]
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
     },
     {
       "sourceId": "fpzg-upute-akademski-radovi",
@@ -18235,23 +18287,21 @@
       "ruleIds": [
         "fpzg-novinarstvo-diplomski--word-count"
       ],
-      "proposedModality": "permission",
+      "proposedModality": "prohibition",
       "proposedScope": "whole",
       "modalityMarks": [
-        "prohibition",
-        "permission"
+        "prohibition"
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
-      "needsHuman": true,
-      "reasons": [
-        "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
-        "vise modalnih biljega u istoj recenici: prohibition, permission"
-      ]
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
     },
     {
       "sourceId": "fpzg-upute-akademski-radovi",
@@ -18275,23 +18325,21 @@
         "fpzg-specijalisticki-sigurnosna-politika-rh--word-count",
         "fpzg-specijalisticki-vanjska-politika-diplomacija--word-count"
       ],
-      "proposedModality": "permission",
+      "proposedModality": "prohibition",
       "proposedScope": "whole",
       "modalityMarks": [
-        "prohibition",
-        "permission"
+        "prohibition"
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 4,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
-      "needsHuman": true,
-      "reasons": [
-        "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
-        "vise modalnih biljega u istoj recenici: prohibition, permission"
-      ]
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
     },
     {
       "sourceId": "fpzpu-pravilnik-zavrsni-2019-procisceni",
@@ -19246,10 +19294,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
@@ -19284,10 +19334,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
@@ -19322,10 +19374,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
@@ -19360,10 +19414,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
@@ -19403,10 +19459,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
@@ -19441,10 +19499,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
@@ -19956,6 +20016,70 @@
         "count": 1,
         "sources": [
           "mechanical"
+        ]
+      },
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "hks-opce-upute-diplomski-2023",
+      "checkId": "footnote-size",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "value": [
+        10
+      ],
+      "quote": "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem",
+      "ruleCount": 1,
+      "profileIds": [
+        "hks-diplomski"
+      ],
+      "ruleIds": [
+        "hks-diplomski--footnote-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "footnote",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "footnote"
+      ],
+      "writtenModality": {
+        "count": 1,
+        "sources": [
+          "human"
+        ]
+      },
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "hks-opce-upute-diplomski-2023",
+      "checkId": "footnote-spacing",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "value": 1,
+      "quote": "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem",
+      "ruleCount": 1,
+      "profileIds": [
+        "hks-diplomski"
+      ],
+      "ruleIds": [
+        "hks-diplomski--footnote-spacing"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "footnote",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "footnote"
+      ],
+      "writtenModality": {
+        "count": 1,
+        "sources": [
+          "human"
         ]
       },
       "resolved": true,
@@ -21776,23 +21900,21 @@
       "ruleIds": [
         "kif-diplomski--word-count"
       ],
-      "proposedModality": "permission",
+      "proposedModality": "prohibition",
       "proposedScope": "whole",
       "modalityMarks": [
-        "prohibition",
-        "permission"
+        "prohibition"
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
-      "needsHuman": true,
-      "reasons": [
-        "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
-        "vise modalnih biljega u istoj recenici: prohibition, permission"
-      ]
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
     },
     {
       "sourceId": "kif-upute-diplomski-2023",
@@ -21809,23 +21931,21 @@
       "ruleIds": [
         "kif-specijalisticki--word-count"
       ],
-      "proposedModality": "permission",
+      "proposedModality": "prohibition",
       "proposedScope": "whole",
       "modalityMarks": [
-        "prohibition",
-        "permission"
+        "prohibition"
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
-      "needsHuman": true,
-      "reasons": [
-        "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
-        "vise modalnih biljega u istoj recenici: prohibition, permission"
-      ]
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
     },
     {
       "sourceId": "kif-upute-oblikovanje-diplomski",
@@ -23261,10 +23381,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -23357,10 +23479,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -24269,21 +24393,21 @@
       "ruleIds": [
         "medri-medicina-diplomski--page-count"
       ],
-      "proposedModality": "permission",
+      "proposedModality": "prohibition",
       "proposedScope": "whole",
       "modalityMarks": [
-        "permission"
+        "prohibition"
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
-      "needsHuman": true,
-      "reasons": [
-        "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak"
-      ]
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
     },
     {
       "sourceId": "medri-naputak-diplomski-2026",
@@ -24428,21 +24552,21 @@
       "ruleIds": [
         "medri-farmacija-diplomski--page-count"
       ],
-      "proposedModality": "permission",
+      "proposedModality": "prohibition",
       "proposedScope": "whole",
       "modalityMarks": [
-        "permission"
+        "prohibition"
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
-      "needsHuman": true,
-      "reasons": [
-        "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak"
-      ]
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
     },
     {
       "sourceId": "medri-naputak-diplomski-farmacija-2025",
@@ -24467,6 +24591,35 @@
         "count": 1,
         "sources": [
           "mechanical"
+        ]
+      },
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
+      "checkId": "page-number-start-at-intro",
+      "sourcePage": "tocka 6) Stranice obavezno oznaciti brojevima",
+      "value": true,
+      "quote": "Stranice obavezno označiti brojevima (prva stranica je stranica Uvod)",
+      "ruleCount": 1,
+      "profileIds": [
+        "mef-doktorski"
+      ],
+      "ruleIds": [
+        "mef-doktorski--page-number-start-at-intro"
+      ],
+      "proposedModality": "obligation",
+      "proposedScope": "whole",
+      "modalityMarks": [
+        "obligation"
+      ],
+      "namedScopes": [],
+      "writtenModality": {
+        "count": 1,
+        "sources": [
+          "human"
         ]
       },
       "resolved": true,
@@ -25637,10 +25790,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -26319,10 +26474,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -29013,10 +29170,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (condition): pripisivanje osi je citanje, ne uzorak",
@@ -30001,10 +30160,12 @@
         "table"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -30157,10 +30318,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -30191,10 +30354,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -30636,10 +30801,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -32607,10 +32774,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -32898,10 +33067,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -33267,10 +33438,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak"
@@ -35791,10 +35964,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
@@ -35827,10 +36002,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
@@ -35863,10 +36040,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
@@ -35899,10 +36078,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
@@ -35940,10 +36121,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
@@ -36036,10 +36219,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak"
@@ -36100,10 +36285,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
@@ -36200,10 +36387,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak",
@@ -38077,10 +38266,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 8,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -38124,10 +38315,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 8,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -38169,10 +38362,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 8,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -38219,55 +38414,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 8,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
-      "needsHuman": true,
-      "reasons": [
-        "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
-        "vise modalnih biljega u istoj recenici: recommendation, directive"
-      ]
-    },
-    {
-      "sourceId": "unisb-upute-zavrsni-diplomski-2024",
-      "checkId": "paper-size",
-      "sourcePage": "Clanak 3. (Oblik i sadrzaj rada)",
-      "value": true,
-      "quote": "Tekst pisanog dijela rada treba pisati samo s jedne strane lista (preporuka: jednostruki prored kao sto je pisan i ovaj tekst). Na stranici ne bi trebalo biti vise od 30 redaka teksta uz velicinu slova 12 pt (preporuka: pismo Times New Roman uz velicinu slova 12 pt). Slobodni rubovi (margine) ne bi trebali biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm (kao i ovaj dokument).",
-      "ruleCount": 8,
-      "profileIds": [
-        "unisb-btho-diplomski",
-        "unisb-btho-zavrsni",
-        "unisb-odhz-diplomski",
-        "unisb-odhz-zavrsni",
-        "unisb-sfsb-diplomski",
-        "unisb-sfsb-zavrsni",
-        "unisb-teho-diplomski",
-        "unisb-teho-zavrsni"
-      ],
-      "ruleIds": [
-        "unisb-btho-diplomski--paper-size",
-        "unisb-btho-zavrsni--paper-size",
-        "unisb-odhz-diplomski--paper-size",
-        "unisb-odhz-zavrsni--paper-size",
-        "unisb-sfsb-diplomski--paper-size",
-        "unisb-sfsb-zavrsni--paper-size",
-        "unisb-teho-diplomski--paper-size",
-        "unisb-teho-zavrsni--paper-size"
-      ],
-      "proposedModality": "directive",
-      "proposedScope": "whole",
-      "modalityMarks": [
-        "recommendation",
-        "directive"
-      ],
-      "namedScopes": [],
-      "writtenModality": {
-        "count": 0,
-        "sources": []
-      },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -41043,10 +41195,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak"
@@ -41166,10 +41320,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak"
@@ -44594,10 +44750,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -44628,10 +44786,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -44659,10 +44819,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak"
@@ -45313,10 +45475,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (permission): pripisivanje osi je citanje, ne uzorak"
@@ -45517,10 +45681,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak"
@@ -45553,10 +45719,12 @@
         "heading"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -46578,22 +46746,24 @@
       "ruleIds": [
         "vuka-lovstvo-zavrsni--paper-size"
       ],
-      "proposedModality": "permission",
+      "proposedModality": "recommendation",
       "proposedScope": "whole",
       "modalityMarks": [
-        "permission",
+        "prohibition",
         "recommendation"
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 1,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
-        "ublazavanje u citatu (permission, recommendation): pripisivanje osi je citanje, ne uzorak",
-        "vise modalnih biljega u istoj recenici: permission, recommendation"
+        "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
+        "vise modalnih biljega u istoj recenici: prohibition, recommendation"
       ]
     },
     {
@@ -46625,6 +46795,43 @@
         "count": 3,
         "sources": [
           "mechanical"
+        ]
+      },
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "vuka-poslovni-upute",
+      "checkId": "footnote-size",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "value": [
+        10
+      ],
+      "quote": "odabrati veličinu slova teksta 12 (Arial ili Times New Roman) za bilješke (“fusnote“ ) odabrati veličinu slova 10",
+      "ruleCount": 3,
+      "profileIds": [
+        "vuka-poslovni-diplomski",
+        "vuka-poslovni-opci-akademski-rad",
+        "vuka-poslovni-zavrsni"
+      ],
+      "ruleIds": [
+        "vuka-poslovni-diplomski--footnote-size",
+        "vuka-poslovni-opci-akademski-rad--footnote-size",
+        "vuka-poslovni-zavrsni--footnote-size"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "footnote",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "footnote"
+      ],
+      "writtenModality": {
+        "count": 3,
+        "sources": [
+          "human"
         ]
       },
       "resolved": true,
@@ -46757,10 +46964,12 @@
         "bibliography"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -47534,10 +47743,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -47600,10 +47811,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -47633,10 +47846,12 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -47671,10 +47886,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -47710,10 +47927,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -47754,10 +47973,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -47796,10 +48017,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",
@@ -47835,10 +48058,12 @@
         "body"
       ],
       "writtenModality": {
-        "count": 0,
-        "sources": []
+        "count": 2,
+        "sources": [
+          "human"
+        ]
       },
-      "resolved": false,
+      "resolved": true,
       "needsHuman": true,
       "reasons": [
         "ublazavanje u citatu (recommendation): pripisivanje osi je citanje, ne uzorak",

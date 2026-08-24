@@ -3570,6 +3570,1110 @@
       "scope": "whole",
       "decidedVia": "agent-read",
       "note": "isto kao biolos-diplomski: citat zamijenjen recenicom koja numeriranje stvarno propisuje."
+    },
+    {
+      "ruleId": "apuri-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze LIJEVU MARGINU za uvez; poravnanje je \"Tekst urediti obostranim poravnavanjem\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "ferit-diplomski--font",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"(preporuca se MS Word)\" veze PROGRAM; font je \"potrebno je koristiti font Times Roman\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "ferit-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"(preporuca se MS Word)\" veze program; prored 1,5 stoji u glavnoj recenici. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "ferit-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka veze MS Word, ne font. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "ferit-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka veze MS Word. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fesb-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. [1]\" uvodi PRIMJER formata, ne preporuku. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fesb-zavrsni--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. [1]\" uvodi primjer formata. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-doktorski-politologija--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. (Becker, 2007)\" je primjer; odredba je goli indikativ \"citatnica se navodi u obliku (prezime, godina)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-mes-master-thesis--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. (Becker, 2007)\" je primjer; odredba je goli indikativ \"citatnica se navodi u obliku (prezime, godina)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. (Becker, 2007)\" je primjer; odredba je goli indikativ \"citatnica se navodi u obliku (prezime, godina)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. (Becker, 2007)\" je primjer; odredba je goli indikativ \"citatnica se navodi u obliku (prezime, godina)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-av--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. (Becker, 2007)\" je primjer; odredba je goli indikativ \"citatnica se navodi u obliku (prezime, godina)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. (Becker, 2007)\" je primjer; odredba je goli indikativ \"citatnica se navodi u obliku (prezime, godina)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-opci-akademski-rad--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. (Becker, 2007)\" je primjer; odredba je goli indikativ \"citatnica se navodi u obliku (prezime, godina)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. (Becker, 2007)\" je primjer; odredba je goli indikativ \"citatnica se navodi u obliku (prezime, godina)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. (Becker, 2007)\" je primjer; odredba je goli indikativ \"citatnica se navodi u obliku (prezime, godina)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. (Becker, 2007)\" je primjer; odredba je goli indikativ \"citatnica se navodi u obliku (prezime, godina)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. (Becker, 2007)\" je primjer; odredba je goli indikativ \"citatnica se navodi u obliku (prezime, godina)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. (Becker, 2007)\" je primjer; odredba je goli indikativ \"citatnica se navodi u obliku (prezime, godina)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. (Becker, 2007)\" je primjer; odredba je goli indikativ \"citatnica se navodi u obliku (prezime, godina)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-mes-master-thesis--bibliography-rules",
+      "modality": "directive",
+      "scope": "bibliography",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: uvjet \"Ako se navodi vise radova istog autora\" uvjetuje SUFIKSE (a, b, c), a abecedni redoslijed je bezuvjetan. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--bibliography-rules",
+      "modality": "directive",
+      "scope": "bibliography",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: uvjet \"Ako se navodi vise radova istog autora\" uvjetuje SUFIKSE (a, b, c), a abecedni redoslijed je bezuvjetan. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--bibliography-rules",
+      "modality": "directive",
+      "scope": "bibliography",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: uvjet \"Ako se navodi vise radova istog autora\" uvjetuje SUFIKSE (a, b, c), a abecedni redoslijed je bezuvjetan. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--bibliography-rules",
+      "modality": "directive",
+      "scope": "bibliography",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: uvjet \"Ako se navodi vise radova istog autora\" uvjetuje SUFIKSE (a, b, c), a abecedni redoslijed je bezuvjetan. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--bibliography-rules",
+      "modality": "directive",
+      "scope": "bibliography",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: uvjet \"Ako se navodi vise radova istog autora\" uvjetuje SUFIKSE (a, b, c), a abecedni redoslijed je bezuvjetan. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--bibliography-rules",
+      "modality": "directive",
+      "scope": "bibliography",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: uvjet \"Ako se navodi vise radova istog autora\" uvjetuje SUFIKSE (a, b, c), a abecedni redoslijed je bezuvjetan. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--bibliography-rules",
+      "modality": "directive",
+      "scope": "bibliography",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: uvjet \"Ako se navodi vise radova istog autora\" uvjetuje SUFIKSE (a, b, c), a abecedni redoslijed je bezuvjetan. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--bibliography-rules",
+      "modality": "directive",
+      "scope": "bibliography",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: uvjet \"Ako se navodi vise radova istog autora\" uvjetuje SUFIKSE (a, b, c), a abecedni redoslijed je bezuvjetan. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--bibliography-rules",
+      "modality": "directive",
+      "scope": "bibliography",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: uvjet veze sufikse, ne abecedni redoslijed. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-opci-akademski-rad--bibliography-rules",
+      "modality": "directive",
+      "scope": "bibliography",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: uvjet veze sufikse, ne abecedni redoslijed. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--bibliography-rules",
+      "modality": "directive",
+      "scope": "bibliography",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: uvjet veze sufikse, ne abecedni redoslijed. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--word-count",
+      "modality": "prohibition",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "NEGACIJA: predlagac je \"moze\"/\"smije\" uhvatio unutar \"NE moze\"/\"NE smije\" i procitao zabranu kao dopustenje. Odredba je tvrda granica. Citat: \"NE SMIJE sadrzavati manje od 10.000 ni vise od 12.000 rijeci.\" | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--word-count",
+      "modality": "prohibition",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "NEGACIJA: predlagac je \"moze\"/\"smije\" uhvatio unutar \"NE moze\"/\"NE smije\" i procitao zabranu kao dopustenje. Odredba je tvrda granica. Citat: \"NE SMIJE sadrzavati manje od 10.000 ni vise od 12.000 rijeci.\" | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--word-count",
+      "modality": "prohibition",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "NEGACIJA: predlagac je \"moze\"/\"smije\" uhvatio unutar \"NE moze\"/\"NE smije\" i procitao zabranu kao dopustenje. Odredba je tvrda granica. Citat: \"NE SMIJE sadrzavati manje od 12.000 ni vise od 15.000 rijeci.\" | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--word-count",
+      "modality": "prohibition",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "NEGACIJA: predlagac je \"moze\"/\"smije\" uhvatio unutar \"NE moze\"/\"NE smije\" i procitao zabranu kao dopustenje. Odredba je tvrda granica. Citat: \"NE SMIJE sadrzavati manje od 8.000 ni vise od 12.000 rijeci.\" | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--word-count",
+      "modality": "prohibition",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "NEGACIJA: predlagac je \"moze\"/\"smije\" uhvatio unutar \"NE moze\"/\"NE smije\" i procitao zabranu kao dopustenje. Odredba je tvrda granica. Citat: \"NE SMIJE sadrzavati manje od 8.000 ni vise od 12.000 rijeci.\" | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--word-count",
+      "modality": "prohibition",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "NEGACIJA: predlagac je \"moze\"/\"smije\" uhvatio unutar \"NE moze\"/\"NE smije\" i procitao zabranu kao dopustenje. Odredba je tvrda granica. Citat: \"NE SMIJE sadrzavati manje od 8.000 ni vise od 12.000 rijeci.\" | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--word-count",
+      "modality": "prohibition",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "NEGACIJA: predlagac je \"moze\"/\"smije\" uhvatio unutar \"NE moze\"/\"NE smije\" i procitao zabranu kao dopustenje. Odredba je tvrda granica. Citat: \"NE SMIJE sadrzavati manje od 8.000 ni vise od 12.000 rijeci.\" | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "grafos-diplomski--font",
+      "modality": "permission",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"vrsta slova (font) moze biti Times New Roman, Arial ili Arial Narrow\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "grafos-zavrsni--font",
+      "modality": "permission",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"vrsta slova (font) moze biti Times New Roman, Arial ili Arial Narrow\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "grafos-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze FONT; velicina je \"velicina slova u tekstu (font size) treba biti 12 pt\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "grafos-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze FONT; velicina je \"velicina slova u tekstu (font size) treba biti 12 pt\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "grafos-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze font; \"poravnanje teksta treba biti obostrano (justify)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "grafos-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze font; \"poravnanje teksta treba biti obostrano (justify)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "grafos-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze font; \"prored (line spacing) treba biti 1,5\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "grafos-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze font; \"prored (line spacing) treba biti 1,5\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "grafos-diplomski--margins",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze font; \"margine teksta MORAJU biti: lijeva i gornja 25 mm, desna i donja 20 mm\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "grafos-zavrsni--margins",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze font; \"margine teksta MORAJU biti: lijeva i gornja 25 mm, desna i donja 20 mm\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "grafos-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze font; \"rad se ispisuje jednostrano na papiru formata A4\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "grafos-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze font; \"rad se ispisuje jednostrano na papiru formata A4\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "kif-diplomski--word-count",
+      "modality": "prohibition",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "NEGACIJA: predlagac je \"moze\"/\"smije\" uhvatio unutar \"NE moze\"/\"NE smije\" i procitao zabranu kao dopustenje. Odredba je tvrda granica. Citat: \"Opseg NE SMIJE biti manji od 4000 rijeci\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "kif-specijalisticki--word-count",
+      "modality": "prohibition",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "NEGACIJA: predlagac je \"moze\"/\"smije\" uhvatio unutar \"NE moze\"/\"NE smije\" i procitao zabranu kao dopustenje. Odredba je tvrda granica. Citat: \"Opseg NE SMIJE biti manji od 6000 rijeci\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "logri-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka veze font; \"PORAVNANJE TEKSTA: obostrano\" je natuknicna specifikacija. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "logri-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka veze font; \"NUMERIRANJE: dolje desno (naslovna stranica se ne numerira)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "medri-medicina-diplomski--page-count",
+      "modality": "prohibition",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "NEGACIJA: predlagac je \"moze\"/\"smije\" uhvatio unutar \"NE moze\"/\"NE smije\" i procitao zabranu kao dopustenje. Odredba je tvrda granica. Citat: \"Diplomski rad NE MOZE sadrzavati manje od 15 niti vise od 50 stranica.\" | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "medri-farmacija-diplomski--page-count",
+      "modality": "prohibition",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "NEGACIJA: predlagac je \"moze\"/\"smije\" uhvatio unutar \"NE moze\"/\"NE smije\" i procitao zabranu kao dopustenje. Odredba je tvrda granica. Citat: \"Diplomski rad NE MOZE sadrzavati manje od 15 niti vise od 50 stranica.\" | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "mev-zavrsni--page-count",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: vrijednost (min 30) dolazi iz \"Zavrsni rad MORA imati najmanje 30 stranica\"; preporuka veze raspon 30-80. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "oss-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"(u pravilu sadrzi oko pet analitickih dijelova)\" veze UNUTARNJU STRUKTURU izlaganja tematike; popis je \"Zavrsni rad sadrzi sljedece dijelove:\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "oss-zavrsni--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"(u pravilu sadrzi oko pet analitickih dijelova)\" veze UNUTARNJU STRUKTURU izlaganja tematike; popis je \"Zavrsni rad sadrzi sljedece dijelove:\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "sociologija--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"(ukoliko ih ima)\" veze POPIS PRILOGA; \"Pisani rad MORA imati: naslovnicu, kratak sadrzaj, ...\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--required-sections",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "NIJE MODALITET: okidac je NAZIV SEKCIJE \"Prikaz preporuka\". Odredba je \"Obavezni redoslijed dijelova\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "pravo-socijalne-djelatnosti-doktorski--word-count",
+      "modality": "recommendation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"duzinom U PRAVILU treba obuhvatiti izmedju 45 000 i 60 000 rijeci\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--word-count",
+      "modality": "recommendation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"duzinom U PRAVILU treba obuhvatiti izmedju 20 000 i 25 000 rijeci\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "pravo-socijalni-rad-zavrsni--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka veze DECIMALNU NUMERACIJU poglavlja; \"Na drugoj stranici se nalazi sadrzaj rada\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "riteh-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. [1] ili [1, 2, 3, 5]\" je primjer. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "riteh-zavrsni--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"npr. [1] ili [1, 2, 3, 5]\" je primjer. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "securus-zavrsni--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"preporukama APA stila\" imenuje ono sto APA SADRZI; uporaba je \"koriste se kod svakog izravnog citiranja\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "sfzg-diplomski--page-count",
+      "modality": "permission",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"Diplomski rad MOZE imati najmanje 25, a najvise 50 stranica\" - raspon je izrazen kao dopustenje. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unidu-komunikologija-diplomski--font",
+      "modality": "permission",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"vrsta slova (font) moze biti Times New Roman ili Arial\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unidu-komunikologija-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze font; \"velicina slova u tekstu treba biti 12 tocaka\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unidu-komunikologija-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze font; \"tekst treba biti formatiran u blok (justify)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unidu-komunikologija-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze font; \"prored treba biti 1,5 u glavnom tekstu\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unidu-komunikologija-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze font; \"margine trebaju biti po 2,5 centimetara sa svake strane\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unidu-komunikologija-zavrsni--font",
+      "modality": "permission",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"Vrsta slova (fonta) moze biti Times New Roman ili Arial\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unidu-komunikologija-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze font; \"Tekst treba biti formatiran u blok (justify)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unidu-komunikologija-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: dopustenje veze font; \"Papir koji se koristi treba biti standardni bijeli, A4 formata\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-btho-diplomski--font",
+      "modality": "recommendation",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"(preporuka: pismo Times New Roman uz velicinu slova 12 pt)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-btho-zavrsni--font",
+      "modality": "recommendation",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"(preporuka: pismo Times New Roman uz velicinu slova 12 pt)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-odhz-diplomski--font",
+      "modality": "recommendation",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"(preporuka: pismo Times New Roman uz velicinu slova 12 pt)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-odhz-zavrsni--font",
+      "modality": "recommendation",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"(preporuka: pismo Times New Roman uz velicinu slova 12 pt)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-sfsb-diplomski--font",
+      "modality": "recommendation",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"(preporuka: pismo Times New Roman uz velicinu slova 12 pt)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-sfsb-zavrsni--font",
+      "modality": "recommendation",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"(preporuka: pismo Times New Roman uz velicinu slova 12 pt)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-teho-diplomski--font",
+      "modality": "recommendation",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"(preporuka: pismo Times New Roman uz velicinu slova 12 pt)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-teho-zavrsni--font",
+      "modality": "recommendation",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"(preporuka: pismo Times New Roman uz velicinu slova 12 pt)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-btho-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka u zagradi veze FONT; \"uz velicinu slova 12 pt\" je tvrdnja glavne recenice. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-btho-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka u zagradi veze FONT; \"uz velicinu slova 12 pt\" je tvrdnja glavne recenice. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-odhz-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka u zagradi veze FONT; \"uz velicinu slova 12 pt\" je tvrdnja glavne recenice. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-odhz-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka u zagradi veze FONT; \"uz velicinu slova 12 pt\" je tvrdnja glavne recenice. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-sfsb-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka u zagradi veze FONT; \"uz velicinu slova 12 pt\" je tvrdnja glavne recenice. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-sfsb-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka u zagradi veze FONT; \"uz velicinu slova 12 pt\" je tvrdnja glavne recenice. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-teho-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka u zagradi veze FONT; \"uz velicinu slova 12 pt\" je tvrdnja glavne recenice. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-teho-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka u zagradi veze FONT; \"uz velicinu slova 12 pt\" je tvrdnja glavne recenice. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-btho-diplomski--line-spacing",
+      "modality": "recommendation",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"(preporuka: jednostruki prored kao sto je pisan i ovaj tekst)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-btho-zavrsni--line-spacing",
+      "modality": "recommendation",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"(preporuka: jednostruki prored kao sto je pisan i ovaj tekst)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-odhz-diplomski--line-spacing",
+      "modality": "recommendation",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"(preporuka: jednostruki prored kao sto je pisan i ovaj tekst)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-odhz-zavrsni--line-spacing",
+      "modality": "recommendation",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"(preporuka: jednostruki prored kao sto je pisan i ovaj tekst)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-sfsb-diplomski--line-spacing",
+      "modality": "recommendation",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"(preporuka: jednostruki prored kao sto je pisan i ovaj tekst)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-sfsb-zavrsni--line-spacing",
+      "modality": "recommendation",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"(preporuka: jednostruki prored kao sto je pisan i ovaj tekst)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-teho-diplomski--line-spacing",
+      "modality": "recommendation",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"(preporuka: jednostruki prored kao sto je pisan i ovaj tekst)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-teho-zavrsni--line-spacing",
+      "modality": "recommendation",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"(preporuka: jednostruki prored kao sto je pisan i ovaj tekst)\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-btho-diplomski--margins",
+      "modality": "recommendation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"Slobodni rubovi (margine) NE BI TREBALI biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-btho-zavrsni--margins",
+      "modality": "recommendation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"Slobodni rubovi (margine) NE BI TREBALI biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-odhz-diplomski--margins",
+      "modality": "recommendation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"Slobodni rubovi (margine) NE BI TREBALI biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-odhz-zavrsni--margins",
+      "modality": "recommendation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"Slobodni rubovi (margine) NE BI TREBALI biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-sfsb-diplomski--margins",
+      "modality": "recommendation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"Slobodni rubovi (margine) NE BI TREBALI biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-sfsb-zavrsni--margins",
+      "modality": "recommendation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"Slobodni rubovi (margine) NE BI TREBALI biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-teho-diplomski--margins",
+      "modality": "recommendation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"Slobodni rubovi (margine) NE BI TREBALI biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unisb-teho-zavrsni--margins",
+      "modality": "recommendation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"Slobodni rubovi (margine) NE BI TREBALI biti manji od 2 cm, a na rubu koji se uvezuje 2,5 cm\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unizd-povijest-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka veze velicinu pisma, ne format papira. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "unizd-povijest-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka veze VELICINU PISMA; \"Rad se pise racunalom na papiru formata A-4\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "vhzk-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"(preporuceni oblici fonta su Arial...)\" veze FONT; \"rad se pise velicinom slova 12 pt\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "vhzk-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka veze font; \"potrebno je koristiti obostrano poravnanje teksta\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "vhzk-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka veze font; \"prored 1,5\" stoji uz velicinu slova. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "vsig-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"mozete konzultirati ovu stranicu ili prirucnik\" veze DODATNE IZVORE, ne obvezu stila. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "vsig-zavrsni--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"mozete konzultirati ovu stranicu ili prirucnik\" veze DODATNE IZVORE, ne obvezu stila. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "vsite-diplomski--page-count",
+      "modality": "recommendation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"u pravilu ima ... diplomski rad 50-60 stranica\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "vsite-zavrsni--page-count",
+      "modality": "recommendation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"u pravilu ima ... diplomski rad 50-60 stranica\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "vsite-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"u pravilu\" veze broj stranica; \"Rad je opremljen ... sadrzajem\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "vsite-zavrsni--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"u pravilu\" veze broj stranica; \"Rad je opremljen ... sadrzajem\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "vuka-lovstvo-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka veze font, a \"ne moze\" veze VISINU SLOVA; \"Rad se pise ili tiska samo na... papira formata A4\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "vuka-sigurnost-diplomski--citation-style",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka veze FONT; citiranje je \"U tekstu je obavezno citiranje literature prema redoslijedu pojavljivanja\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "vuka-sigurnost-zavrsni--citation-style",
+      "modality": "obligation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: preporuka veze FONT; citiranje je \"U tekstu je obavezno citiranje literature prema redoslijedu pojavljivanja\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "zsem-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"u pravilu\" veze BROJ STRANICA; \"koristi se ... obostrano poravnavanje teksta\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "zsem-zavrsni-en--justify",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"u pravilu\" veze BROJ STRANICA; \"koristi se ... obostrano poravnavanje teksta\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "zsem-zavrsni--page-count",
+      "modality": "recommendation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"u pravilu na ne manje od 30 stranica sadrzaja\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "zsem-zavrsni-en--page-count",
+      "modality": "recommendation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"u pravilu na ne manje od 30 stranica sadrzaja\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "zsem-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"u pravilu\" veze broj stranica; \"treba biti napisan na racunalu u formatu A4\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "zsem-zavrsni-en--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"u pravilu\" veze broj stranica; \"treba biti napisan na racunalu u formatu A4\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "zvu-specijalisticki--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"u pravilu\" veze OPSEG u stranicama; velicina opisuje standardnu stranicu. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "zvu-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"u pravilu\" veze OPSEG u stranicama; velicina opisuje standardnu stranicu. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "zvu-specijalisticki--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"u pravilu\" veze opseg; prored opisuje standardnu stranicu. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "zvu-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"u pravilu\" veze opseg; prored opisuje standardnu stranicu. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "zvu-specijalisticki--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"u pravilu\" veze opseg; margine opisuju standardnu stranicu. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "zvu-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"u pravilu\" veze opseg; margine opisuju standardnu stranicu. | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "zvu-specijalisticki--page-count",
+      "modality": "recommendation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"u pravilu iznosi izmedju 25 i 50 stranica\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "zvu-zavrsni--page-count",
+      "modality": "recommendation",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje veze BAS OVU OS: \"u pravilu iznosi izmedju 25 i 50 stranica\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "zvu-specijalisticki--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"u pravilu\" veze opseg; \"na papiru A4 formata\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
+    },
+    {
+      "ruleId": "zvu-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "decidedVia": "human",
+      "decidedBy": "Daniel Risavi",
+      "note": "ublazavanje u citatu veze DRUGU odredbu, ne ovu os: \"u pravilu\" veze opseg; \"na papiru A4 formata\". | citanje: agent (2026-08-24); potvrda: vlasnik, pregled skupine \"ublazavanje u citatu\"."
     }
   ]
 }

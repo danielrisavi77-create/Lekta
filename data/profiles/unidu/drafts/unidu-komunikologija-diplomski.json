@@ -27,6 +27,9 @@
     },
     {
       "ruleId": "unidu-komunikologija-diplomski--font",
+      "modality": "permission",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "font",
       "value": [
         "Times New Roman",
@@ -51,6 +54,9 @@
     },
     {
       "ruleId": "unidu-komunikologija-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -72,6 +78,9 @@
     },
     {
       "ruleId": "unidu-komunikologija-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -93,6 +102,9 @@
     },
     {
       "ruleId": "unidu-komunikologija-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -114,6 +126,9 @@
     },
     {
       "ruleId": "unidu-komunikologija-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "margins",
       "value": {
         "top": 2.5,

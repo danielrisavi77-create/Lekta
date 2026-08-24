@@ -1247,35 +1247,35 @@
     },
     {
       "profileId": "unisb-sfsb-zavrsni",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 4
     },
     {
       "profileId": "unisb-sfsb-diplomski",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 4
     },
     {
       "profileId": "unisb-teho-zavrsni",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 4
     },
     {
       "profileId": "unisb-teho-diplomski",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 4
     },
     {
       "profileId": "unisb-btho-zavrsni",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 4
     },
     {
       "profileId": "unisb-btho-diplomski",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 4
     },
     {
       "profileId": "unisb-odhz-zavrsni",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 4
     },
     {
       "profileId": "unisb-odhz-diplomski",
-      "offeredOptionCount": 5
+      "offeredOptionCount": 4
     },
     {
       "profileId": "ftrr-zavrsni",
@@ -12552,14 +12552,6 @@
       "recommended": false
     },
     {
-      "profileId": "unisb-sfsb-zavrsni",
-      "ruleId": "unisb-sfsb-zavrsni--paper-size",
-      "fixerId": "paper-size-fixer",
-      "checkId": "paper-size",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
       "profileId": "unisb-sfsb-diplomski",
       "ruleId": "unisb-sfsb-diplomski--font",
       "fixerId": "font-fixer",
@@ -12588,14 +12580,6 @@
       "ruleId": "unisb-sfsb-diplomski--margins",
       "fixerId": "margins-fixer",
       "checkId": "margins",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
-      "profileId": "unisb-sfsb-diplomski",
-      "ruleId": "unisb-sfsb-diplomski--paper-size",
-      "fixerId": "paper-size-fixer",
-      "checkId": "paper-size",
       "templateId": "basic-text-styles",
       "recommended": false
     },
@@ -12632,14 +12616,6 @@
       "recommended": false
     },
     {
-      "profileId": "unisb-teho-zavrsni",
-      "ruleId": "unisb-teho-zavrsni--paper-size",
-      "fixerId": "paper-size-fixer",
-      "checkId": "paper-size",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
       "profileId": "unisb-teho-diplomski",
       "ruleId": "unisb-teho-diplomski--font",
       "fixerId": "font-fixer",
@@ -12668,14 +12644,6 @@
       "ruleId": "unisb-teho-diplomski--margins",
       "fixerId": "margins-fixer",
       "checkId": "margins",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
-      "profileId": "unisb-teho-diplomski",
-      "ruleId": "unisb-teho-diplomski--paper-size",
-      "fixerId": "paper-size-fixer",
-      "checkId": "paper-size",
       "templateId": "basic-text-styles",
       "recommended": false
     },
@@ -12712,14 +12680,6 @@
       "recommended": false
     },
     {
-      "profileId": "unisb-btho-zavrsni",
-      "ruleId": "unisb-btho-zavrsni--paper-size",
-      "fixerId": "paper-size-fixer",
-      "checkId": "paper-size",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
       "profileId": "unisb-btho-diplomski",
       "ruleId": "unisb-btho-diplomski--font",
       "fixerId": "font-fixer",
@@ -12748,14 +12708,6 @@
       "ruleId": "unisb-btho-diplomski--margins",
       "fixerId": "margins-fixer",
       "checkId": "margins",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
-      "profileId": "unisb-btho-diplomski",
-      "ruleId": "unisb-btho-diplomski--paper-size",
-      "fixerId": "paper-size-fixer",
-      "checkId": "paper-size",
       "templateId": "basic-text-styles",
       "recommended": false
     },
@@ -12792,14 +12744,6 @@
       "recommended": false
     },
     {
-      "profileId": "unisb-odhz-zavrsni",
-      "ruleId": "unisb-odhz-zavrsni--paper-size",
-      "fixerId": "paper-size-fixer",
-      "checkId": "paper-size",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
       "profileId": "unisb-odhz-diplomski",
       "ruleId": "unisb-odhz-diplomski--font",
       "fixerId": "font-fixer",
@@ -12828,14 +12772,6 @@
       "ruleId": "unisb-odhz-diplomski--margins",
       "fixerId": "margins-fixer",
       "checkId": "margins",
-      "templateId": "basic-text-styles",
-      "recommended": false
-    },
-    {
-      "profileId": "unisb-odhz-diplomski",
-      "ruleId": "unisb-odhz-diplomski--paper-size",
-      "fixerId": "paper-size-fixer",
-      "checkId": "paper-size",
       "templateId": "basic-text-styles",
       "recommended": false
     },
@@ -15991,8 +15927,8 @@
   ],
   "summary": {
     "profileCount": 407,
-    "profileOptionCount": 1748,
-    "rowCount": 1748,
+    "profileOptionCount": 1740,
+    "rowCount": 1740,
     "fixerCount": 5,
     "registeredFixerCount": 31,
     "profileFixerCount": 5,

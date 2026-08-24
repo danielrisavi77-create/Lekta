@@ -101,6 +101,9 @@
     },
     {
       "ruleId": "apuri-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "justify",
       "value": true,
       "category": "format",

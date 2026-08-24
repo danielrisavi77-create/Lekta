@@ -152,6 +152,9 @@
     },
     {
       "ruleId": "mev-zavrsni--page-count",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "page-count",
       "value": {
         "min": 30

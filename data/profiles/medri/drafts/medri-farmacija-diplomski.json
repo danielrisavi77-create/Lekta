@@ -104,6 +104,9 @@
     },
     {
       "ruleId": "medri-farmacija-diplomski--page-count",
+      "modality": "prohibition",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "page-count",
       "value": {
         "min": 15,

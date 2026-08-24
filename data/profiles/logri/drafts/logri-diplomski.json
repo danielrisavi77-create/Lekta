@@ -102,6 +102,9 @@
     },
     {
       "ruleId": "logri-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -123,6 +126,9 @@
     },
     {
       "ruleId": "logri-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",

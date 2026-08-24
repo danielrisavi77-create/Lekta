@@ -130,6 +130,9 @@
     },
     {
       "ruleId": "vsig-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "citation-style",
       "value": "apa",
       "category": "citation",
