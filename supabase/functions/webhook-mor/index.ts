@@ -187,6 +187,66 @@ async function pullReferralSignupReward(admin: any, orderId: string): Promise<vo
   }
 }
 
+// ---------------------------------------------------------------------------
+// OUTBOX ZA OBVEZE NAKON KUPNJE (audit P1-07, migracija 0100).
+//
+// Tri bonusa nakon entitlementa (nagrada preporucitelju, pass kupon, referral atribucija) love
+// svoju gresku i nastavljaju, da tranzijentni pad ne srusi handler u 500. To je ispravno (AUD-28
+// nize), ali uhvacena greska se dosad SAMO LOGIRALA: nigdje nije ostajao zapis da obveza postoji,
+// pa je nitko nikad nije ponovio. Iduci webhook za isti order izlazi na `duplicate_ignored` PRIJE
+// bonusa, dakle korisnik je platio a obecano ne stigne NIKAD.
+//
+// Sada se obveza ZAPISE prije nego se pokusa izvrsiti. Pokusaj i dalje ide odmah (korisnik bonus
+// najcesce dobije u istoj sekundi); ako padne, redak ostaje `pending` i radnik ga ponovi.
+type BonusKind = 'referrer_reward' | 'pass_coupon' | 'referral_attribution';
+
+/** Koje obveze ovaj order uopce stvara. Jedno mjesto, da se upis i izvrsenje ne raziđu. */
+function plannedBonuses(ev: LemonEvent, product: { kind?: string; workType?: string }): Array<{ kind: BonusKind; payload: Record<string, unknown> }> {
+  const out: Array<{ kind: BonusKind; payload: Record<string, unknown> }> = [
+    { kind: 'referrer_reward', payload: { userId: ev.userId, workType: product.workType ?? '' } },
+  ];
+  if (isPassProduct(product.kind)) {
+    out.push({ kind: 'pass_coupon', payload: { userId: ev.userId } });
+  }
+  if (ev.referralCode) {
+    out.push({ kind: 'referral_attribution', payload: { referralCode: ev.referralCode } });
+  }
+  return out;
+}
+
+/**
+ * Zapisi obveze. Poziva se i na putu `duplicate_ignored`, i to je namjerno: bas taj retry je dosad
+ * bio slijepa ulica, a ovako postaje TOCKA OPORAVKA. Webhook koji ponovno stigne za vec obradjen
+ * order jos jednom osigura da obveze postoje.
+ *
+ * Ne baca: upis outboxa ne smije srusiti handler kojem je jezgra (entitlement) vec uspjela.
+ */
+async function enqueueBonuses(admin: any, ev: LemonEvent, product: { kind?: string; workType?: string }): Promise<void> {
+  const rows = plannedBonuses(ev, product).map((b) => ({
+    user_id: ev.userId, order_id: ev.orderId, kind: b.kind, payload: b.payload,
+  }));
+  if (!rows.length) return;
+  try {
+    const { error } = await admin.from('bonus_outbox')
+      .upsert(rows, { onConflict: 'order_id,kind', ignoreDuplicates: true });
+    if (error) console.error('webhook-mor bonus_outbox_enqueue_failed', { orderId: ev.orderId, error: error.message });
+  } catch (e) {
+    console.error('webhook-mor bonus_outbox_enqueue_threw', { orderId: ev.orderId, error: String(e) });
+  }
+}
+
+/** Oznaci obvezu izvrsenom. Tiho na gresci: radnik ce je ionako ponoviti, a dvostruko izvrsenje
+ *  je bezopasno jer su svi bonusi idempotentni preko vlastitih unique indeksa. */
+async function markBonusDone(admin: any, orderId: string, kind: BonusKind): Promise<void> {
+  try {
+    await admin.from('bonus_outbox')
+      .update({ status: 'done', done_at: new Date().toISOString(), last_error: null })
+      .eq('order_id', orderId).eq('kind', kind);
+  } catch (e) {
+    console.error('webhook-mor bonus_outbox_mark_failed', { orderId, kind, error: String(e) });
+  }
+}
+
 // Gornja granica sirovog tijela webhooka (audit P1-06). Vidi _shared/read-body.ts.
 const MAX_WEBHOOK_BODY_BYTES = 512 * 1024;
 
@@ -343,6 +403,10 @@ Deno.serve(async (req: Request) => {
     .from('entitlements')
     .insert(buildEntitlementInsert(product, ev, PROVIDER, Date.now()));
   if (error && (error as any).code === '23505') {
+    // TOCKA OPORAVKA (audit P1-07). Dosad je ovaj put izlazio PRIJE bonusa, pa je obveza koja je
+    // pri prvom pokusaju pala ostajala izgubljena zauvijek. Sada retry jos jednom osigura da
+    // obveze postoje; radnik ih preuzme i izvrsi.
+    await enqueueBonuses(admin, ev, product);
     await settle('processed', 'entitlement_duplicate');
     return json({ ok: true, action: 'duplicate_ignored' });
   }
@@ -360,7 +424,12 @@ Deno.serve(async (req: Request) => {
 
   // Referral (pozovi-prijatelja, 0013): kupceva placena kupnja nagraduje preporucitelja internim
   // entitlementom. Fail-safe (interni try/catch); ZASEBAN od attributeReferral (0005 program).
+  // Obveze se zapisuju PRIJE pokusaja: pad usred izvrsenja tako ostavlja `pending` redak, a ne
+  // prazninu (audit P1-07).
+  await enqueueBonuses(admin, ev, product);
+
   await tryGrantReferrerReward(admin, ev.userId, product.workType, ev.orderId);
+  await markBonusDone(admin, ev.orderId, 'referrer_reward');
 
   // pass bonus kupon (6.5): samo uz tek kreiran entitlement (ne na duplikat)
   if (isPassProduct(product.kind)) {
@@ -374,7 +443,9 @@ Deno.serve(async (req: Request) => {
         source_order_id: ev.orderId,
         expires_at: isoAfterDays(Date.now(), PASS_COUPON_VALID_DAYS),
       }, { onConflict: 'source_order_id,reason', ignoreDuplicates: true });
+      await markBonusDone(admin, ev.orderId, 'pass_coupon');
     } catch (e) {
+      // Redak ostaje `pending`: radnik ga ponovi. Prije je ovdje zavrsavao trag.
       console.error('webhook-mor pass_coupon_failed', { orderId: ev.orderId, error: String(e) });
     }
     // TODO(integracija): kreiraj -20% Lemon Squeezy discount (vrijedi na slot_zavrsni/slot_diplomski)
@@ -385,7 +456,9 @@ Deno.serve(async (req: Request) => {
   if (ev.referralCode) {
     try {
       await attributeReferral(admin, ev);
+      await markBonusDone(admin, ev.orderId, 'referral_attribution');
     } catch (e) {
+      // Redak ostaje `pending`: radnik ga ponovi.
       console.error('webhook-mor attribute_referral_failed', { orderId: ev.orderId, error: String(e) });
     }
   }

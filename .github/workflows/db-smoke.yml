@@ -75,3 +75,6 @@ jobs:
 
       - name: Ciscenje anonimnih racuna (P1-11)
         run: psql -v ON_ERROR_STOP=1 -f scripts/anon-purge-smoke.sql
+
+      - name: Outbox bonus obveza (P1-07)
+        run: psql -v ON_ERROR_STOP=1 -f scripts/bonus-outbox-smoke.sql
