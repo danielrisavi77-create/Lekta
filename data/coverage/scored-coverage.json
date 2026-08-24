@@ -3912,9 +3912,9 @@
     },
     {
       "profileId": "vuka-poslovni-diplomski",
-      "scoredMachineCheckable": 3,
-      "scoredTotal": 3,
-      "machineCheckable": 3,
+      "scoredMachineCheckable": 4,
+      "scoredTotal": 4,
+      "machineCheckable": 4,
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
@@ -3922,9 +3922,9 @@
     },
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
-      "scoredMachineCheckable": 3,
-      "scoredTotal": 3,
-      "machineCheckable": 3,
+      "scoredMachineCheckable": 4,
+      "scoredTotal": 4,
+      "machineCheckable": 4,
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
@@ -3932,9 +3932,9 @@
     },
     {
       "profileId": "vuka-poslovni-zavrsni",
-      "scoredMachineCheckable": 3,
-      "scoredTotal": 3,
-      "machineCheckable": 3,
+      "scoredMachineCheckable": 4,
+      "scoredTotal": 4,
+      "machineCheckable": 4,
       "advisory": 0,
       "ratio": 1,
       "state": "scored",
@@ -4101,8 +4101,8 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "scoredMachineCheckable": 2142,
-  "scoredTotal": 2215,
+  "scoredMachineCheckable": 2145,
+  "scoredTotal": 2218,
   "scoredNonMachineCheckable": 73,
   "nonMachineCheckableByCheckId": {
     "citation-style": 49,

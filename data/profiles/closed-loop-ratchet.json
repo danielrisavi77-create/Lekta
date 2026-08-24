@@ -1,1 +1,14 @@
-{"note": "Zatecen ishod closed-loop petlje kroz katalog (P4-3). Brojke smiju rasti u korist 'pass', ali se ne smiju tiho promijeniti. Osvjezi s `npm run closed-loop` pa upisi ovdje.", "measuredAt": "2026-08-22", "changeNote": "Mjerenje 2026-08-22 nosi DVIJE nezavisne promjene i ne smije se citati kao jedan pomak. (1) Pet 'partial' profila (efzg x3, grad x2) preslo je u 'pass' i dva ('arh-diplomski', 'muza-diplomski') u 'no-rules' zbog RANIJE, jos necommitane izmjene poluge paper-size (demotija sada gasi i `paperSizes`, ne samo `requireA4`); artefakt na HEAD-u je bio ustajao pa se ta promjena tek sada vidi. (2) 'vuka-strojarski-zavrsni' i '-diplomski' pali su s 'pass' na 'no-repair', i to je NAZADAK koji smo svjesno prihvatili: margine su im jedina bodovana os, a tvrdnja s citatom (3,0 cm sa svih strana) i zrcalo (2/2/2/2,5) se ne slazu, pa je os demotirana dok vlasnik ne presudi (vidi data/verification/scored-value-drift.json i drift-dossiers/). Rast 'pass' 324->327 zato NIJE napredak u pokrivenosti nego posljedica prve promjene.", "profileCount": 407, "pass": 327, "partial": 0, "noRepair": 57, "noRules": 23, "unresolved": 0, "regression": 0, "error": 0, "partialProfiles": []}
+{
+  "note": "Zatecen ishod closed-loop petlje kroz katalog (P4-3). Brojke smiju rasti u korist 'pass', ali se ne smiju tiho promijeniti. Osvjezi s `npm run closed-loop` pa upisi ovdje.",
+  "measuredAt": "2026-08-24",
+  "changeNote": "Mjerenje 2026-08-24 nosi TRI nezavisne promjene i nijedna se ne smije citati kao pomak u pokrivenosti. (1) pass 327 -> 332: 37 raskoraka izmedju tvrdnje i zrcala je presudjeno i potpisano (data/verification/drift-decisions.json), pa demotiranim osima vraceno bodovanje i popravak; uz to su ffos-povijest-{zavrsni,diplomski} dobili fakultetski akt kao dokaz (592df077), a 24 verificirane tvrdnje koje je zrcalo neobjasnjeno gasilo sada se provode (e70ed4be). (2) noRules 23 -> 35: tocno dvanaest profila je PRESTALO bodovati sest formatnih osi jer im nijedan objavljen izvor ne propisuje pravila (402fafc7, razlozi u no-rules-reasons.json, stanje `source-not-found`); to je namjeran gubitak provjere, ne kvar. (3) noRepair 57 -> 40: posljedica prve dvije, jer profil koji je dobio bodovanu os obicno dobije i popravak. regression i error ostaju na NULI i to je tvrda granica, ne ratchet.",
+  "profileCount": 407,
+  "pass": 332,
+  "partial": 0,
+  "noRepair": 40,
+  "noRules": 35,
+  "unresolved": 0,
+  "regression": 0,
+  "error": 0,
+  "partialProfiles": []
+}
