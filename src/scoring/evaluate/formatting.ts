@@ -15,11 +15,13 @@
  * (categoryTotals i golden snapshot ovise o insertion orderu); issues nose samo
  * marginske direktne pushe, na istoj relativnoj poziciji kao prije.
  */
-import { makeCheck, unmeasurableCheck, issue } from '../checks';
-import { near } from '../../audits/metrics';
-import { normalize } from '../../utils/helpers';
-import { evaluateZeroParagraphSpacing } from '../../audits/structure';
-import type { FormattingMeasurements } from './measurements';
+// Eksplicitne .ts ekstenzije: modul se dijeli s Deno Edge okruzenjem (Academic Core),
+// a Deno ih u relativnim importima zahtijeva (ista konvencija kao src/report za repair-docx).
+import { makeCheck, unmeasurableCheck, issue } from '../checks.ts';
+import { near } from '../../audits/metrics.ts';
+import { normalize } from '../../utils/helpers.ts';
+import { evaluateZeroParagraphSpacing } from '../../audits/structure.ts';
+import type { FormattingMeasurements } from './measurements.ts';
 
 /**
  * Koliko odlomaka smije obuhvatiti PRVA sekcija da bi se jos smatrala naslovnicom.

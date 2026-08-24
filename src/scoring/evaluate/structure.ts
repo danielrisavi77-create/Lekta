@@ -16,8 +16,9 @@
  * REDOSLIJED: svaka funkcija emitira checkove tocno onim redom kojim ih je jezgra
  * pushala; pozivatelj ih ubacuje na ISTOJ poziciji (insertion order je ugovor goldena).
  */
-import { makeCheck, issue } from '../checks';
-import type { StructureEvalMeasurements } from './measurements';
+// Eksplicitne .ts ekstenzije: Deno-dijeljen modul (vidi formatting.ts).
+import { makeCheck, issue } from '../checks.ts';
+import type { StructureEvalMeasurements } from './measurements.ts';
 
 /** Blok "Brojevi stranica" + poravnanje + naslovnica bez broja + numeriranje od Uvoda. */
 export function evaluatePageNumbers(m: StructureEvalMeasurements, profile: any): any[] {

@@ -4,7 +4,8 @@
  * Ciste funkcije; tijela prepisana 1:1 (dodani su samo `: any` tipovi na granici), pa golden
  * snapshoti ostaju nepromijenjeni. Koriste ih auditi (audits/structure) i analyzeDocx.
  */
-import { sectionName } from '../utils/helpers';
+// Eksplicitna .ts ekstenzija: u Deno grafu Academic Core sava (evaluateFormatting).
+import { sectionName } from '../utils/helpers.ts';
 
 export function modeWeighted(map: any): any{let best=null,max=-1,total=0;for(const[k,v]of map){total+=v;if(v>max){best=k;max=v}}return{value:best,weight:max,total,share:total?max/total:0}}
 export function addWeight(map: any, key: any, w: any): any{if(key==null||key===''||!w)return;map.set(String(key),(map.get(String(key))||0)+w)}

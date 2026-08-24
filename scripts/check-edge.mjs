@@ -69,3 +69,19 @@ if (failed.length) {
   process.exit(1);
 }
 console.log(`[check-edge] OK: ${entries.length} Edge funkcija prolazi deno typecheck.`);
+
+// Academic Core sav: IZVRSNI smoke u samom Denu (ne samo typecheck). Ciste evaluacije
+// (formatting + structure) vrte se nad sintetickim mjerenjima s tocno poznatim
+// ocekivanjima; "Deno-ready" tako ostaje izvrsena cinjenica, ne tvrdnja po konstrukciji.
+// Config je isti kao za funkcije (dom lib; helpers.ts nosi Element tipove).
+const SMOKE = path.join(ROOT, 'scripts', 'deno', 'evaluate-smoke.ts');
+try {
+  execFileSync('deno', ['check', '--no-lock', '--config', CONFIG, SMOKE], { stdio: 'pipe', encoding: 'utf8' });
+  const out = execFileSync('deno', ['run', '--no-lock', SMOKE], { stdio: 'pipe', encoding: 'utf8' });
+  console.log(out.trim());
+} catch (e) {
+  const out = `${e.stdout ?? ''}${e.stderr ?? ''}`.trim();
+  console.error('[check-edge] FAIL: evaluate-smoke u Denu nije prosao.');
+  if (out) console.error(out.split('\n').map((l) => `        ${l}`).join('\n'));
+  process.exit(1);
+}
