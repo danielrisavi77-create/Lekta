@@ -45,6 +45,42 @@ jobs:
       - name: Audit produkcijskih ovisnosti (high+)
         run: npm audit --omit=dev --audit-level=high
 
+      # PUN GRAF, UKLJUCUJUCI BUILD ALATE (audit P1-21).
+      #
+      # Korak iznad gleda samo ono sto zavrsi u browser bundleu. Ali build i CI izvrsavaju desetke
+      # dev alata nad ovim kodom i nad artefaktom koji se deploya: kompromitiran test runner ili
+      # bundler utjece na ono sto se objavi jednako kao i runtime ovisnost. Do sada taj graf nitko
+      # nije ni mjerio.
+      #
+      # NIJE blokirajuc, i to je posteno stanje a ne izgovor: mjereno 2026-08-24 pun graf ima 21
+      # high/critical nalaz, SVE transitivno pod `netlify-cli`, uz `vitest`/`vite` (critical je sam
+      # vitest, sto zatvara vec otvoreni dependabot PR #8). Nijedan se ne da popraviti u ovom
+      # repozitoriju bez odluke o nadogradnji tih alata, pa bi tvrdi gate samo trajno obojio CI
+      # crveno i naucio sve da ga ignoriraju. Ovako je broj VIDLJIV i mjerljiv po commitu, a gate
+      # postaje tvrd kad vlasnik odluci o nadogradnji.
+      - name: Audit punog grafa (vidljivo, ne blokira)
+        continue-on-error: true
+        run: |
+          echo "::group::Pun dependency graf (runtime + build)"
+          npm audit --audit-level=high || true
+          echo "::endgroup::"
+          BROJ=$(npm audit --json 2>/dev/null | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const v=JSON.parse(s).vulnerabilities||{};console.log(Object.values(v).filter(x=>['high','critical'].includes(x.severity)).length)})")
+          echo "high/critical u punom grafu: $BROJ"
+          echo "### Supply chain: $BROJ high/critical u punom grafu" >> "$GITHUB_STEP_SUMMARY"
+          echo "Produkcijski graf (ono sto ide u bundle) je zaseban korak iznad i JEST blokirajuc." >> "$GITHUB_STEP_SUMMARY"
+
+      # SBOM (audit P1-21). Popis svega sto je stvarno instalirano, vezan uz commit, da se poslije
+      # moze odgovoriti "je li ta ranjiva verzija bila u ovom buildu" bez pogadjanja.
+      - name: SBOM
+        run: npm sbom --sbom-format cyclonedx --omit=dev > sbom-runtime.json || npm ls --all --json > sbom-runtime.json
+
+      - name: Spremi SBOM
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sbom-${{ github.sha }}
+          path: sbom-runtime.json
+          if-no-files-found: warn
+
   gitleaks:
     name: Skeniranje tajni (gitleaks)
     runs-on: ubuntu-latest
