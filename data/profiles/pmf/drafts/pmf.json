@@ -152,6 +152,9 @@
       },
       {
         "ruleId": "pmf-geografija-diplomski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "harvard",
         "category": "citation",
@@ -171,6 +174,9 @@
       },
       {
         "ruleId": "pmf-geografija-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           "uvod",

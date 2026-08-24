@@ -56,6 +56,9 @@
     },
     {
       "ruleId": "unidu-umjetnost-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "line-spacing",
       "value": 1.15,
       "category": "format",
@@ -128,6 +131,9 @@
     },
     {
       "ruleId": "unidu-umjetnost-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",

@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "zsem-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "paper-size",
       "value": "A4",
       "category": "format",
@@ -98,6 +101,9 @@
     },
     {
       "ruleId": "zsem-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -119,6 +125,9 @@
     },
     {
       "ruleId": "zsem-zavrsni--page-count",
+      "modality": "recommendation",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "page-count",
       "value": {
         "min": 30

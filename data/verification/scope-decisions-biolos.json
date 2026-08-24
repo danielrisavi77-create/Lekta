@@ -1,0 +1,17 @@
+{
+  "note": "Popravak citata koji nije podupirao vlastitu tvrdnju, uz modalitet.",
+  "decisions": [
+    {
+      "ruleId": "biolos-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: 'Numeriranje stranica zapocinje na prvoj stranici Uvoda ... numeriraju se sve stranice'. Citat je prethodno bio prepisan iz KRIVOG odlomka (oblikovanje teksta) i numeriranje uopce nije spominjao; zamijenjen recenicom koja ga propisuje, uz tocan lokator."
+    },
+    {
+      "ruleId": "biolos-zavrsni--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "isto kao biolos-diplomski: citat zamijenjen recenicom koja numeriranje stvarno propisuje."
+    }
+  ]
+}

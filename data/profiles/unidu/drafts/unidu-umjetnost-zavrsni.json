@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "unidu-umjetnost-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -53,6 +56,9 @@
     },
     {
       "ruleId": "unidu-umjetnost-zavrsni--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "line-spacing",
       "value": 1.15,
       "category": "format",
@@ -127,6 +133,9 @@
     },
     {
       "ruleId": "unidu-umjetnost-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",

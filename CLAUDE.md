@@ -158,6 +158,16 @@ provenijencija kaze Merriweather 10.
   potpis. Tvrdnja koja se ne slaze sa zrcalom NIJE automatski ona tocna: opovrgavajuci prolaz
   2026-08-21 nasao je krivo pripisan opseg na 12 od 20 tvrdnji, a presuda 2026-08-23 je nasla 17
   slucajeva gdje je krivo zrcalo i 2 gdje je kriva tvrdnja.
+- ZATVORENO 2026-08-24: raskoraka je NULA. Svih 37 presudjeno i potpisano
+  (`data/verification/drift-decisions.json`; 35 u korist tvrdnje, 2 protiv). Ratchet je spusten na 0,
+  pa svaki nov raskorak pada odmah. Tri su bila motor koji je velicinu NASLOVA bodovao kao tijelo
+  rada (`unizd-pomorski`, `unizd-germanistika`, `unizd-sociologija`), dva su bila Wordov tvornicki
+  rub iz netaknutog .docx predloska predstavljen kao pravilo (`ffst-*`, oba `claim-wrong`), a dva su
+  bila artefakt ALATA a ne podataka: presuditelj trazi centimetre a izvor pise milimetre, i izvor
+  ima tipfeler u imenu fonta.
+- GARD KOJI PRESTANE GRISTI KAD JE POSAO GOTOV nije gard: mutacija o demotiji uzimala je profil IZ
+  artefakta, pa bi s nulom raskoraka prolazila vakuumski. Sada raskorak PODMECE
+  (`computeDemotedAdvisory` prima skup za testove; produkcija ga nikad ne prosljedjuje).
 - `scored-coverage.json` se time NE mijenja i to nije nesklad koji treba poravnati: coverage mjeri
   tvrdnje sljedive do izvora, demotija mjeri sto motor boduje. Dvije populacije, imenuju se.
 
@@ -185,41 +195,15 @@ kljuceve) i prirodni (publicSources sha256 otisci). NE koristi source-registry
 `snapshotHash` kao kanarinca: za izvore s citatnim specom ista vrijednost NAMJERNO izlazi
 u bundle kao `spec.verifiedHash`. Never-markeri su KLJUC-oblik u TRI varijante ("k":,
 escapano \"k\": i minificirani identifier k: iza interpunkcije, jer rolldown kljuceve
-emitira BEZ navodnika); goli niz lazno pali na prozu u note poljima. `verifiedHash` i
-`verifiedBy` NISU markeri: javni citatni specovi ih namjerno nose u bundleu (drafts
-evidence cuvaju reviewedBy/confirmedVia + kanarinci + zabrana modula). Novi podatkovni
-direktorij ili nova staza bez razreda = crveni check; dodaj pravilo SVJESNO, uz biljesku.
-
-Lanac dokaza (izvor + snapshot + stranica + doslovan citat + potpis) zivi u `ruleEntries`
-(`data/profiles/<unit>/drafts/*.json`), a motor boduje iz naslijedjenog `rules` objekta
-(`composeAnalysisProfile` klonira `definition.rules`, NIKAD `ruleEntries`; svih 407 registriranih
-profila ima prazan `ruleEntries`). Do 2026-08-22 te dvije strane nitko nije usporedjivao.
-
-Izmjereno pri prvom mjerenju: **40 parova (profil, os) kroz 23 profila** bodovalo je vrijednost koju
-njihova vlastita `verified` tvrdnja s citatom opovrgava. `unizd-pomorski-*`: izvor propisuje
-Merriweather 10 pt, motor je trazio Times New Roman/Arial/Calibri 11-12 pt, pa je rad koji tocno
-slijedi svoju uputu gubio bodove. Uz to je serverski popravak upisivao TNR 12 u studentov dokument,
-pod ruleId-em cija provenijencija kaze Merriweather 10.
-
-- Usporedbu radi `src/verification/scored-value-binding.ts`, po OSI a ne po kljucu `rules`: motor
-  vecinu dimenzija cita kroz par (zastavica, vrijednost), pa usporedba po kljucu daje lazne nalaze
-  (`paper-size: "A4"` proizvodi `paperSizes`, zrcalo nosi `requireA4`, ista odredba drukcije zapisana).
-- Artefakt je `data/verification/scored-value-drift.json` (`npm run scored-value-drift`).
-  `advisory-demotion.ts` ga cita i GASI bodovanje osi s raskorakom dok vlasnik ne presudi.
-  Dosjei s dokazom: `npm run drift-dossiers` -> `data/verification/drift-dossiers/`.
-- Gard: `tests/scored-value-drift.test.ts` (commitani artefakt = svjez izracun, ratchet koji smije
-  samo padati, negativne kontrole koje dokazuju da provjera grize).
-- KRUGA NEMA I TO JE NAMJERNO: raskorak se racuna iskljucivo iz tvrdnji i `rules`, nikad iz demotije.
-  Provjera koja preskace vec demotirane osi sama sebe pobrise u sljedecem krugu (popis se isprazni,
-  demotija nestane, kvar se vrati). Zato `computeBaseDemotedAdvisory` postoji odvojeno od
-  `computeDemotedAdvisory`.
-- Demotija je PRIVREMENA. Presuda po slucaju je vlasnikova: (A) tvrdnja je tocna pa se vrijednost
-  prenosi u `rules` sva tri registra, (B) tvrdnja je preseljena (krivo pripisan opseg ili odsjecki
-  izvor) pa se ispravlja tvrdnja, (C) oba su obranjiva pa je to odluka o hijerarhiji izvora.
-  Obrazac B nije rijedak: opovrgavajuci prolaz 2026-08-21 nasao ga je na 12 od 20 tvrdnji, pa
-  tvrdnja koja se ne slaze sa zrcalom NIJE automatski ona tocna.
-- `scored-coverage.json` se time NE mijenja i to nije nesklad koji treba poravnati: coverage mjeri
-  tvrdnje sljedive do izvora, demotija mjeri sto motor boduje. Dvije populacije, imenuju se.
+emitira BEZ navodnika); goli niz lazno pali na prozu u note poljima. `verifiedHash` NIJE
+marker: javni citatni specovi ga namjerno nose u bundleu (gate protiv zastarjelog speca).
+`verifiedBy` JEST marker (vracen 2026-08-23, potpis verifikatora ne mora biti javan):
+stripRuntimeDeadProvenance ga brise iz citatnih specova u bundleu (klijent cita samo
+verifiedAt), izvor i SEO generator su netaknuti. Drafts evidence tako cuvaju TRI kljuca
+(verifiedBy/reviewedBy/confirmedVia) + kanarinci + zabrana modula. Kanarinci u GENERIRANIM
+artefaktima (scored-value-drift, repair-params) idu kroz BUILDER, nikad rucno: regen bi ih
+izbrisao. Novi podatkovni direktorij ili nova staza bez razreda = crveni check; dodaj
+pravilo SVJESNO, uz biljesku.
 
 ## Tvrdo pravilo: gard bez dokaza da grize ne racuna se
 
@@ -341,7 +325,9 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
   vrijednost, pa rucno skrojen zahtjev nije mogao biti razlikovan od profilnog.
 - Recept je zapisan u `docs/REPAIR_RECIPE.md`, GENERIRAN iz koda i profila (`npm run repair-recipe`,
   izvor `src/repair/recipe.ts`). Ne uredjuj ga rucno; `tests/repair-recipe.test.ts` pada na drift.
-  Ista naredba pece i serverski autoritet; `tests/repair-param-authority.test.ts` pada ako artefakt
+  Ista naredba pece i serverski autoritet I profile-rules artefakt (ulancano 2026-08-23,
+  jedan okidac za sve tri pecene projekcije; deploy oba projekta: `npm run
+  deploy:profile-rules`); `tests/repair-param-authority.test.ts` pada ako artefakt
   odluta od recepta.
 - ISPORUKA IDE TEK NAKON PONOVNE PROVJERE (obrnuto od ugovora do 2026-08-16). Vrata integriteta
   hvataju pokvaren paket, ali ne i SEMANTICKU regresiju, pa se `detectPassRegressions` izvodi PRIJE
@@ -368,6 +354,18 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
 
 - `src/ui/app.ts` - UI orkestrator (UI, narudzbe, placanje, QA). Meta: dovrsiti split.
 - `src/analysis/analyze-docx.ts` - analyzeDocx + auditni helperi (jezgra analize).
+- `src/scoring/evaluate/measurements.ts` - DocumentMeasurements (faza D "cisti sav"): verzioniran
+  tip MJERLJIVIH cinjenica dokumenta (dominante, sekcije, markeri, brojaci, razmaci), BEZ ijednog
+  importa (Deno-ready). "Facts" polovica para; "rules" polovica je academic-core-export.ts. Zivi
+  aditivno u result.details.measurements (NIJE u goldenu; sanitizeAnalysisResult ga ne propusta na
+  mrezu). NIKAD ne nosi tekst rada (tests/measurements-tripwire.test.ts).
+- `src/scoring/evaluate/formatting.ts` - evaluateFormatting(measurements, profile, strict) ->
+  {checks, issues}: CISTA evaluacija ~40 bodova oblikovanja, preseljena BAJT-IDENTICNO iz jezgre
+  (blok Dominantni font .. oznake fusnota). Redoslijed checks/issues je ugovor goldena. Gard:
+  tests/evaluate-formatting.test.ts (ekvivalencija s pipelineom + deep-freeze cistoca + registriran
+  checkId). Analiza NE mutira profil (tests/profile-no-mutation.test.ts; opseg je lokalni scope).
+  SAV 2 (structure bez teksta) i dalje zivi u jezgri; citations/legal/toc/title/method OSTAJU
+  tekst-lokalni zauvijek.
 - `src/scoring/check-id-registry.ts` - STABILNI identiteti provjera (`page.margins` i sl.).
   `Check` od 2026-08-16 ima `id`; korelacija prije/poslije popravka I mapiranje na fixer idu
   po njemu (`src/analysis/check-fixer-map.ts` je kljucan po `checkId`, ne po naslovu), hrvatski
@@ -386,7 +384,14 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
   `paperSizes`, inace profil s vlastitim popisom formata i dalje gubi bodove na nebodovanom
   pravilu), i demotija PRESKACE dimenziju koju je izricito propisao specificniji izvor
   (`demotionProtectedBy`), jer advisory mapa govori samo o izvoru OSNOVNOG profila i ne smije
-  ponistiti uputu katedre. Zasticena dimenzija ne ulazi ni u `advisoryDimensions`.
+  ponistiti uputu katedre. Zasticena dimenzija ne ulazi ni u `advisoryDimensions`. Od 2026-08-23 jos
+  dva, oba iz adversarijalnog prolaza nad vlastitim gardovima i oba tada latentna: zastita trazi da
+  overlay dimenziju PROPISE (vrijednost, ili zastavica na `true` kod booleovih osi), jer je gola
+  `checkFont: true` prije ponistavala demotiju bez ijedne vrijednosti pa se dalje bodovala bas ona
+  koju tvrdnja opovrgava; i PODPROVJERE PRATE RODITELJA (polozaj broja stranice, naslovnica bez
+  broja, numeriranje od Uvoda, tri podprovjere sadrzaja = 19 bodova su visile o tome je li polje
+  PRONADJENO, a ne boduje li se ta os). Zato i obratno: overlay koji propisuje DIJETE stiti
+  RODITELJA, inace taj isti gate tiho ugasi katedrin zahtjev.
 - `src/ui/work-selection.ts` - rutiranje odabira: vidljivi programi jedinice, kandidati za
   (jedinica, program, vrsta rada) i izbor varijante. app.ts ih ZOVE (nije zrcalo). Krovni
   ("Opći ...") program se skriva SAMO ako je redundantan, dakle ako je svaki profil koji ga gadja
@@ -416,7 +421,6 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
   korisnik samo klikne Popravi (`violated !== false`, isto kao UI checkbox). Testovi koji
   simuliraju korisnicki tok moraju ici kroz njega, inace mjere tok koji nitko ne izvodi.
 - `src/analysis/analyze-docx-client.ts` - most prema Web Workeru, inline fallback.
-- `src/profiles/profile-loader.ts` - registar profila, hidracija izvora, kompilacija.
 - `src/profiles/rule-compiler.ts` - Option A: ruleEntries -> effectiveRules.
 - `src/profiles/profile-schema.ts` - tipovi profila i pravila.
 - `src/profiles/profile-validator.ts` - strukturna validacija profila.

@@ -27,6 +27,9 @@
     },
     {
       "ruleId": "mev-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -48,6 +51,9 @@
     },
     {
       "ruleId": "mev-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -146,6 +152,9 @@
     },
     {
       "ruleId": "mev-zavrsni--page-count",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "page-count",
       "value": {
         "min": 30

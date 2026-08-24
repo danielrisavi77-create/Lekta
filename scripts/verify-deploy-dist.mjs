@@ -605,3 +605,15 @@ if (fs.existsSync(naslovnicaDir)) {
 }
 
 console.log(`[verify-deploy-dist] OK: bez dev alata u HTML/JS, pravne stranice prisutne, konzola iskljucena, origin unutar ${SITE_ORIGIN}, svi inline <script> pokriveni CSP whitelistom, citatne SEO stranice imaju OG/Twitter/favicon i noindex/sitemap su konzistentni, /fakulteti hub pokriva sve jedinice s ispravnim pretraga/analitika/citatni linkovima, naslovnica SEO stranice imaju OG/Twitter/favicon i sitemap je konzistentan.`);
+
+// 11. Klasifikacijski sken (faza A zastite baze pravila): kanarinci i never-markeri
+// privatnog sloja (drafts evidence, ledger, source-registry, izvor istine) ne smiju
+// ni u jedan emitirani artefakt. Pokriva i SEO generatore koji pisu u dist mimo
+// Rollup grafa (classification-guard vite plugin vidi samo bundle).
+const { runClassificationScan } = await import('./verify-dist-classification.mjs');
+const classificationViolations = runClassificationScan({ rootDir: ROOT });
+if (classificationViolations.length) {
+  fail(['klasifikacijski sken artefakata:', ...classificationViolations.map((v) => `  - ${v}`)].join(os.EOL));
+}
+
+console.log(`[verify-deploy-dist] OK: bez dev alata u HTML/JS, pravne stranice prisutne, konzola iskljucena, origin unutar ${SITE_ORIGIN}, svi inline <script> pokriveni CSP whitelistom, citatne SEO stranice imaju OG/Twitter/favicon i noindex/sitemap su konzistentni, /fakulteti hub pokriva sve jedinice s ispravnim pretraga/analitika/citatni linkovima, naslovnica SEO stranice imaju OG/Twitter/favicon i sitemap je konzistentan.`);

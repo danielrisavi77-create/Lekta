@@ -56,6 +56,9 @@
     },
     {
       "ruleId": "fzsri-zavrsni--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -101,6 +104,9 @@
     },
     {
       "ruleId": "fzsri-zavrsni--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -122,6 +128,9 @@
     },
     {
       "ruleId": "fzsri-zavrsni--font",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font",
       "value": [
         "Calibri",

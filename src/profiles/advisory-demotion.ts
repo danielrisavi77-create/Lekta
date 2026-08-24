@@ -80,9 +80,21 @@ export function computeDemotedAdvisory(
   definition: { id: string } | null | undefined,
   ruleEntries: RuleEntry[] | undefined,
   sources: SourceEntry[],
+  /**
+   * SAV za testove: skup raskoraka umjesto onoga iz artefakta.
+   *
+   * Postoji jer je 2026-08-24 broj raskoraka pao na NULU (svih 37 presudjeno i potpisano), pa je
+   * mutacija koja dokazuje da demotija zbog raskoraka stize do motora ostala bez ijednog stvarnog
+   * profila i tiho bi prolazila vakuumski. Gard koji trazi da kvar postoji u podacima prestaje
+   * gristi tocno onda kad je posao odradjen, sto je najgori trenutak za to.
+   *
+   * Produkcija ovaj argument NIKAD ne prosljedjuje.
+   */
+  driftOverride?: Readonly<Record<string, readonly string[]>>,
 ): string[] {
   const base = computeBaseDemotedAdvisory(definition, ruleEntries, sources);
-  const drifted = definition ? (DRIFT_DEMOTED[definition.id] ?? []) : [];
+  const table = driftOverride ?? DRIFT_DEMOTED;
+  const drifted = definition ? (table[definition.id] ?? []) : [];
   if (drifted.length === 0) return base;
   // Redoslijed ostaje onaj iz DEMOTABLE_CHECK_IDS: pecena mapa se commita, pa mora biti difabilna.
   const set = new Set([...base, ...drifted]);

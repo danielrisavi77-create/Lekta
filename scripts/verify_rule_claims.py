@@ -334,16 +334,37 @@ def truncated_tail(rel_path: str, page: int, quote: str) -> str | None:
 # Predikatne osi nisu broj nego TVRDNJA: citat ne mora sadrzavati vrijednost `true`, nego recenicu
 # koja tu odredbu izrice. Zato imaju vlastiti oblik izvoda.
 PREDICATE_TOKENS: dict[str, list[str]] = {
-    "justify": ["obostran", "justify", "poravnan", "blok"],
-    "toc": ["sadrzaj", "sadržaj", "kazalo", "table of contents"],
-    "page-numbers": ["numerir", "numerac", "paginac", "broj stranic", "brojevi stranic", "oznacene brojevima"],
-    "footnote-font": ["fusnot", "biljesk", "bilješk", "podnozj"],
+    # KORIJENI, ne cijele rijeci: hrvatski mijenja nastavak, a izvori nisu dosljedni. Prosireno
+    # 2026-08-24 nakon mjerenja koje je 60 tvrdnji proglasilo neuporistenima; uzorak od 6 je pokazao
+    # da su 3 bile promasaj RJECNIKA, ne podataka:
+    #   - token "poravnan" nije hvatao "tekst poravnat s obje strane" (aspira, efst): jedno slovo,
+    #   - "obrojcavanje stranica" (apuri) nije bilo ni u jednom obliku,
+    #   - dijakritika se nije skidala, pa "obrojcavanje" nikad ne bi pogodilo ASCII token.
+    # Gard koji vristi na tocnu tvrdnju jednako je beskoristan kao onaj koji suti.
+    # Njemacki i opis PAKETA su ravnopravni oblici izvora: `ffri-germanistika` uputa je na njemackom
+    # ("Blocksatz"), a `ffst` citat opisuje Word predlozak ("Footer: PAGE polje"). Oboje IZRICE
+    # odredbu; da rjecnik pokriva samo hrvatsku prozu, tocna tvrdnja bi ispala neuporistena.
+    "justify": [
+        "obostran", "justify", "poravna", "poravnat", "blok", "obje strane", "objema margina",
+        "blocksatz", "w:jc=both",
+    ],
+    "toc": ["sadrzaj", "kazalo", "table of contents", "inhaltsverzeichnis"],
+    "page-numbers": [
+        "numerir", "numerac", "paginac", "broj stranic", "brojevi stranic", "oznacene brojevima",
+        "obrojcav", "brojcano", "oznacavaju stranic", "oznacene stranic", "stranice se oznac",
+        "oznacene rednim brojem", "oznacen rednim brojem", "page polje", "seitenzahl",
+    ],
+    "footnote-font": ["fusnot", "biljesk", "podnozj"],
 }
 
 
 def predicate_hit(check_id: str, quote: str) -> bool:
-    """Izrice li citat tu odredbu uopce. Namjerno grubo: dokazuje da se recenica bavi tom osi."""
-    low = quote.lower()
+    """Izrice li citat tu odredbu uopce. Namjerno grubo: dokazuje da se recenica bavi tom osi.
+
+    Usporedjuje se BEZ DIJAKRITIKE na obje strane: draft citati su mijesani (dio je vec ASCII, dio
+    nije), pa bi inace isti izvor prolazio ili padao ovisno o tome kako je prepisan.
+    """
+    low = fold(quote)
     return any(token in low for token in PREDICATE_TOKENS.get(check_id, []))
 
 
@@ -356,6 +377,106 @@ def range_tokens(value) -> list[list[str]]:
     else:
         bounds = [value]
     return [numeric_forms(v) for v in bounds if v is not None]
+
+
+COMPOSITE_AXES = {
+    "bibliography-rules",
+    "citation-sync-rules",
+    "section-surgery-rules",
+    "required-section-rules",
+}
+
+
+def fold(text: str) -> str:
+    """Bez dijakritike, malim slovima. Citati u draftovima su miejsani: dio je vec ASCII."""
+    stripped = unicodedata.normalize("NFD", text or "")
+    return "".join(c for c in stripped if not unicodedata.combining(c)).lower()
+
+
+def _word_group(word: str) -> list[str]:
+    """Oblici jedne rijeci natpisa: KORIJEN s dijakritikom i bez nje.
+
+    Korijen a ne cijela rijec jer hrvatski citat mijenja padez: propis kaze "Kljucne rijeci", a izvor
+    "uz sazetak treba navesti i nekoliko kljucnih rijeci". Trazenje cijele rijeci ondje promasi
+    TOCNU tvrdnju, sto je isti razred greske kao `paper-size` koji je ignorirao vrijednost.
+    """
+    stem_len = max(4, len(word) - 2)
+    return sorted({word[:stem_len].lower(), fold(word)[:stem_len]})
+
+
+def label_groups(label: str) -> list[list[str]]:
+    """Natpis sekcije -> po jedna skupina za svaku ZNACAJNU rijec (>=4 znaka)."""
+    words = [w for w in re.findall(r"\w+", label or "", flags=re.UNICODE) if len(w) >= 4]
+    return [_word_group(w) for w in words]
+
+
+# Snopovi pravila: objekt s vise odredbi, gdje svaki LIST mora imati vlastito sidro u citatu.
+#
+# Rjecnik je izveden iz STVARNIH citata koji te snopove nose, ne iz pretpostavke. Sva 44 bodovana
+# pravila na ove cetiri osi dolaze iz jednog izvora (fpzg-upute-akademski-radovi) i svode se na 13
+# listova, pa je svaki oblik ovdje prepisan iz recenice koja ga propisuje. List bez unosa vraca
+# NEPROVJERIVO (prazan izlaz), nikad prolaz: izmisljen rjecnik bi "izveo" bilo koju vrijednost, sto
+# je tocno kvar koji je `paper-size` vec jednom imao.
+COMPOSITE_VOCABULARY: dict[tuple[str, str, str], list[str]] = {
+    # "izvori redaju abecedno prema prezimenu autora"
+    ("bibliography-rules", "sort", '"alphabetical"'): ["abeced"],
+    # "treba ih razlikovati slovima (a, b, c itd) iza godine izdanja"
+    ("bibliography-rules", "authorYearSuffixes", "true"): ["slovima (a", "iza godine"],
+    # "bibliografskim jedinicama u obliku autor - godina"
+    ("citation-sync-rules", "mode", '"author-year"'): ["autor - godina", "autor-godina", "autor – godina"],
+    # "prethodni dijelovi numeriraju se rimskim brojkama"
+    ("section-surgery-rules", "frontMatter.numbering", '"roman"'): ["rimsk"],
+    # "Stranice rada se numeriraju, ali ne i naslovnice"
+    ("section-surgery-rules", "frontMatter.removePageNumberFromTitlePage", "true"): [
+        "ne i naslovnic",
+        "osim naslovnic",
+        "bez naslovnic",
+    ],
+    # "a osnovni tekst arapskima"
+    ("section-surgery-rules", "mainMatter.numbering", '"decimal"'): ["arapsk", "decimaln"],
+    # "tako da brojka 1 bude na prvoj stranici uvoda"
+    ("section-surgery-rules", "mainMatter.startAt", "1"): ["brojka 1", "broj 1", "od 1"],
+}
+
+
+def _leaves(value, prefix: str = "") -> list[tuple[str, object]]:
+    if isinstance(value, dict):
+        out: list[tuple[str, object]] = []
+        for key, sub in value.items():
+            out.extend(_leaves(sub, f"{prefix}.{key}" if prefix else str(key)))
+        return out
+    if isinstance(value, list):
+        out = []
+        for item in value:
+            out.extend(_leaves(item, f"{prefix}[]"))
+        return out
+    return [(prefix, value)]
+
+
+def composite_tokens(check_id: str, value) -> list[list[str]]:
+    """Snop pravila -> po jedna skupina za svaki list. Nepoznat list = NEPROVJERIVO, ne prolaz."""
+    if not isinstance(value, dict):
+        return []
+    labels = value.get("labels") if isinstance(value.get("labels"), dict) else {}
+    groups: list[list[str]] = []
+    for path, leaf in _leaves(value):
+        # `order[]` i `labels.X` govore o ISTOJ sekciji; sidro je natpis, pa se broji jednom.
+        if path.startswith("order["):
+            label = labels.get(leaf) if isinstance(leaf, str) else None
+            if not label:
+                return []  # sekcija bez natpisa: nema se sto traziti u citatu
+            continue
+        if path.startswith("labels."):
+            found = label_groups(str(leaf))
+            if not found:
+                return []
+            groups.extend(found)
+            continue
+        forms = COMPOSITE_VOCABULARY.get((check_id, path, json.dumps(leaf, ensure_ascii=False)))
+        if forms is None:
+            return []
+        groups.append(forms)
+    return groups
 
 
 def value_tokens(check_id: str, value) -> list[list[str]]:
@@ -421,6 +542,8 @@ def value_tokens(check_id: str, value) -> list[list[str]]:
             "mla9": ["mla"],
         }
         return [signatures.get(token, [token])]
+    if check_id in COMPOSITE_AXES:
+        return composite_tokens(check_id, value)
     return []
 
 
@@ -498,6 +621,92 @@ def verify(claim: dict) -> dict:
 # Pokreni: python scripts/verify_rule_claims.py --selftest
 SELFTEST: list[tuple[str, object, str, bool]] = [
     # (checkId, value, quote, ocekuje se izvod?)
+    # --- PREDIKATNE OSI: rjecnik mora pokriti kako izvori STVARNO pisu -------------------------
+    # Sve tri "grize" kontrole su prepisane iz izvora koji su prosireni rjecnik iznudili: mjerenje je
+    # 60 tvrdnji proglasilo neuporistenima, a uzorak od 6 pokazao da su 3 promasaj RJECNIKA.
+    ("justify", True, "Margine su standardne, a tekst poravnat s obje strane.", True),
+    ("justify", True, "Tekst treba biti poravnat uz lijevi i desni rub stranice.", True),
+    ("justify", True, "Die folgenden Angaben gelten verbindlich. Blocksatz.", True),
+    ("justify", True, "Rad se pise u formatu A-4, font Times New Roman, velicina 12.", False),
+    ("page-numbers", True, "Obrojčavanje stranica: u podnožju, desno", True),
+    ("page-numbers", True, "stranice trebaju biti oznacene rednim brojem (dolje desno)", True),
+    ("page-numbers", True, "Footer: PAGE polje, desno poravnano, dno stranice.", True),
+    ("page-numbers", True, "Rad treba pisati na papiru A4 formata s marginama 3 cm.", False),
+    ("toc", True, "Rad mora sadrzavati:", False),  # uvod u popis BEZ popisa: nije uporiste
+    ("toc", True, "Sadrzaj se generira automatski u Wordu.", True),
+    # --- SNOPOVI PRAVILA (objekt s vise odredbi): svaki LIST mora imati vlastito sidro ----------
+    # Bez ovih kontrola bi rjecnik koji pogadja sve izgledao jednako kao rjecnik koji radi.
+    (
+        "section-surgery-rules",
+        {"frontMatter": {"numbering": "roman", "removePageNumberFromTitlePage": True},
+         "mainMatter": {"numbering": "decimal", "startAt": 1}},
+        "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        True,
+    ),
+    (   # isti snop, citat BEZ rimskih brojki: jedan list bez sidra rusi cijeli izvod
+        "section-surgery-rules",
+        {"frontMatter": {"numbering": "roman", "removePageNumberFromTitlePage": True},
+         "mainMatter": {"numbering": "decimal", "startAt": 1}},
+        "Stranice rada se numeriraju, ali ne i naslovnice; osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        False,
+    ),
+    (   # citat govori o numeriranju, ali NE o naslovnici: druga odredba istog snopa
+        "section-surgery-rules",
+        {"frontMatter": {"numbering": "roman", "removePageNumberFromTitlePage": True},
+         "mainMatter": {"numbering": "decimal", "startAt": 1}},
+        "Prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        False,
+    ),
+    (   # VRIJEDNOST koja nije u rjecniku (frontMatter arapski) -> NEPROVJERIVO, nikad tihi prolaz
+        "section-surgery-rules",
+        {"frontMatter": {"numbering": "decimal"}},
+        "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        False,
+    ),
+    (
+        "bibliography-rules",
+        {"sort": "alphabetical", "authorYearSuffixes": True},
+        "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora. Ako se navodi vise radova istog autora koji imaju istu godinu izdanja, treba ih razlikovati slovima (a, b, c itd) iza godine izdanja.",
+        True,
+    ),
+    (   # abecedni redoslijed jest u citatu, sufiksi NISU: pola snopa nije snop
+        "bibliography-rules",
+        {"sort": "alphabetical", "authorYearSuffixes": True},
+        "Popis literature gradi se tako da se izvori redaju abecedno prema prezimenu autora.",
+        False,
+    ),
+    (
+        "citation-sync-rules",
+        {"mode": "author-year"},
+        "bibliografskim jedinicama u obliku autor - godina",
+        True,
+    ),
+    (   # citat govori o citiranju, ali NE imenuje autor-godina
+        "citation-sync-rules",
+        {"mode": "author-year"},
+        "Studenti trebaju koristiti citatni stil s citatnicama u obliku unutartekstnih biljezaka.",
+        False,
+    ),
+    (   # NATPISI sekcija: korijen rijeci mora podnijeti padez ("Kljucne rijeci" vs "kljucnih rijeci")
+        "required-section-rules",
+        {"order": ["summary-hr", "keywords-hr"],
+         "labels": {"summary-hr": "Sažetak", "keywords-hr": "Ključne riječi"}},
+        "Na samom kraju rada potrebno je napisati njegov sazetak. Uz sazetak treba navesti i nekoliko kljucnih rijeci.",
+        True,
+    ),
+    (   # jedna od dvije sekcije nije spomenuta
+        "required-section-rules",
+        {"order": ["summary-hr", "keywords-hr"],
+         "labels": {"summary-hr": "Sažetak", "keywords-hr": "Ključne riječi"}},
+        "Na samom kraju rada potrebno je napisati njegov sazetak.",
+        False,
+    ),
+    (   # sekcija bez natpisa: nema se sto traziti u citatu -> NEPROVJERIVO
+        "required-section-rules",
+        {"order": ["summary-hr"]},
+        "Na samom kraju rada potrebno je napisati njegov sazetak.",
+        False,
+    ),
     ("paper-size", "A4", "Stranica treba biti A4 formata.", True),
     ("paper-size", "A3", "Stranica treba biti A4 formata.", False),  # prije 2026-08-22 je PROLAZILO
     ("paper-size", "A3", "Plakat se predaje u formatu A3.", True),

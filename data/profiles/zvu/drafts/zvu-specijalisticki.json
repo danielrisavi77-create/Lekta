@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "zvu-specijalisticki--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "paper-size",
       "value": "A4",
       "category": "format",
@@ -24,6 +27,9 @@
     },
     {
       "ruleId": "zvu-specijalisticki--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -45,6 +51,9 @@
     },
     {
       "ruleId": "zvu-specijalisticki--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "line-spacing",
       "value": 1.5,
       "category": "format",
@@ -66,6 +75,9 @@
     },
     {
       "ruleId": "zvu-specijalisticki--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -92,6 +104,9 @@
     },
     {
       "ruleId": "zvu-specijalisticki--page-count",
+      "modality": "recommendation",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "page-count",
       "value": {
         "min": 25,

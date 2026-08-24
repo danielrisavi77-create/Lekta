@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "unizd-germanistika-zavrsni--font",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -26,6 +29,9 @@
     },
     {
       "ruleId": "unizd-germanistika-zavrsni--font-size",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": [
         12
@@ -36,7 +42,7 @@
       "authority": "binding",
       "sourceId": "unizd-germanistika-pravilnik-zavrsni-2020",
       "sourcePage": "Prilog 2, \"Izgled zavrsnog rada\"",
-      "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve margine (gornja/donja, lijeva/desna): 3 cm. Rad otisnut na papiru formata A4 (21x29,7 cm).",
+      "quote": "Rad mora biti izrađen na računalu i to: slovima Times New Roman C, veličina slova 14 (naslovi poglavlja, masnim slovima); slovima Times New Roman C, veličina slova 12 („tijelo“ rada, naslovi podpoglavlja; Literatura/Bibliografija, sažeci); prored u glavnom tekstu („tijelu“ rada): 1,5",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -60,7 +66,7 @@
       "authority": "binding",
       "sourceId": "unizd-germanistika-pravilnik-zavrsni-2020",
       "sourcePage": "Prilog 2, \"Izgled zavrsnog rada\"",
-      "quote": "Rad mora biti izradjen na racunalu: slovima Times New Roman C, velicina 14 (naslovi poglavlja) / 12 (tijelo, podnaslovi, literatura, sazeci); prored u glavnom tekstu 1,5; fusnote velicina 10; sve margine (gornja/donja, lijeva/desna): 3 cm. Rad otisnut na papiru formata A4 (21x29,7 cm).",
+      "quote": "Rad mora biti izrađen na računalu i to: slovima Times New Roman C, veličina slova 14 (naslovi poglavlja, masnim slovima); slovima Times New Roman C, veličina slova 12 („tijelo“ rada, naslovi podpoglavlja; Literatura/Bibliografija, sažeci); prored u glavnom tekstu („tijelu“ rada): 1,5",
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
@@ -102,6 +108,9 @@
     },
     {
       "ruleId": "unizd-germanistika-zavrsni--paper-size",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",

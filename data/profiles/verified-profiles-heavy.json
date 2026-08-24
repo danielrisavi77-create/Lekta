@@ -4523,11 +4523,52 @@
       "justify": true,
       "checkJustify": true,
       "requireToc": false,
-      "requirePageNumbers": false,
+      "requirePageNumbers": true,
       "requireA4": false,
       "recommendedCitation": "pravo-fusnote",
       "accessDate": false,
-      "requiredSections": [],
+      "requiredSections": [
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "uvodni dio",
+            "introduction"
+          ]
+        },
+        {
+          "key": "body",
+          "label": "sredisnji dio",
+          "terms": [
+            "sredisnji dio",
+            "razrada",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak",
+            "zakljucni dio",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis koristenih izvora i literature",
+          "terms": [
+            "izvori i literatura",
+            "popis literature",
+            "literatura",
+            "bibliografija",
+            "references"
+          ]
+        }
+      ],
       "requireElementSources": false,
       "requireListsWhenElements": false,
       "manualChecks": [
@@ -4672,7 +4713,7 @@
         "bottom": 3,
         "left": 3.5
       },
-      "checkMargins": false,
+      "checkMargins": true,
       "justify": true,
       "checkJustify": true,
       "requireToc": false,
@@ -4680,7 +4721,52 @@
       "requireA4": true,
       "recommendedCitation": "pravo-social-author",
       "accessDate": true,
-      "requiredSections": [],
+      "requiredSections": [
+        {
+          "key": "abstract",
+          "label": "sazetak",
+          "terms": [
+            "sazetak",
+            "abstract"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "body",
+          "label": "razrada teme po poglavljima",
+          "terms": [
+            "razrada",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "bibliografija",
+            "references"
+          ]
+        }
+      ],
       "requireElementSources": true,
       "requireListsWhenElements": false,
       "manualChecks": [
@@ -4828,13 +4914,54 @@
       },
       "checkMargins": false,
       "justify": true,
-      "checkJustify": false,
+      "checkJustify": true,
       "requireToc": false,
-      "requirePageNumbers": false,
+      "requirePageNumbers": true,
       "requireA4": false,
       "recommendedCitation": "pravo-fusnote",
       "accessDate": false,
-      "requiredSections": [],
+      "requiredSections": [
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "uvodni dio",
+            "introduction"
+          ]
+        },
+        {
+          "key": "body",
+          "label": "sredisnji dio",
+          "terms": [
+            "sredisnji dio",
+            "razrada",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak",
+            "zakljucni dio",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis koristenih izvora i literature",
+          "terms": [
+            "izvori i literatura",
+            "popis literature",
+            "literatura",
+            "bibliografija",
+            "references"
+          ]
+        }
+      ],
       "requireElementSources": false,
       "requireListsWhenElements": false,
       "checkPageNumberScheme": false,
@@ -4844,9 +4971,9 @@
       "quoteLocatorRequired": false,
       "checkAlphabeticalRefs": false,
       "checkDuplicateYears": false,
-      "checkFont": false,
-      "checkSize": false,
-      "checkSpacing": false,
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
       "scoreStructure": false,
       "scoreElements": false,
       "legalFootnoteProfile": false,
@@ -4952,13 +5079,54 @@
       },
       "checkMargins": false,
       "justify": true,
-      "checkJustify": false,
+      "checkJustify": true,
       "requireToc": false,
-      "requirePageNumbers": false,
+      "requirePageNumbers": true,
       "requireA4": false,
       "recommendedCitation": "pravo-fusnote",
       "accessDate": false,
-      "requiredSections": [],
+      "requiredSections": [
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "uvodni dio",
+            "introduction"
+          ]
+        },
+        {
+          "key": "body",
+          "label": "sredisnji dio",
+          "terms": [
+            "sredisnji dio",
+            "razrada",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak",
+            "zakljucni dio",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis koristenih izvora i literature",
+          "terms": [
+            "izvori i literatura",
+            "popis literature",
+            "literatura",
+            "bibliografija",
+            "references"
+          ]
+        }
+      ],
       "requireElementSources": false,
       "requireListsWhenElements": false,
       "checkPageNumberScheme": false,
@@ -4968,9 +5136,9 @@
       "quoteLocatorRequired": false,
       "checkAlphabeticalRefs": false,
       "checkDuplicateYears": false,
-      "checkFont": false,
-      "checkSize": false,
-      "checkSpacing": false,
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
       "scoreStructure": false,
       "scoreElements": false,
       "legalFootnoteProfile": false,
@@ -7630,7 +7798,8 @@
           ]
         }
       ],
-      "justify": true
+      "justify": true,
+      "checkTitlePageNumberSuppression": true
     },
     "facts": [
       "Diplomski rad mora sadržavati naslovnu stranicu, sadržaj, sažetke i ključne riječi, uvod, razradu teme, zaključak i popis literature (imperativ).",
@@ -12046,7 +12215,8 @@
       "recommendedCitation": "vancouver",
       "paperSizes": [
         "A4"
-      ]
+      ],
+      "checkPageNumberStartAtIntro": true
     },
     "facts": [
       "Format rada je A4 (imperativna tehnička uputa, scored).",
@@ -14719,7 +14889,12 @@
       },
       "paperSizes": [
         "A4"
-      ]
+      ],
+      "footnoteSize": [
+        10
+      ],
+      "footnoteSpacing": 1,
+      "footnoteJustify": true
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Hrvatsko katolicko sveučilište), čitano izravno. Opseg (u karticama) i citatni stil odreduju se odjelnim Posebnim uputama i razlikuju se po odjelu -> nisu u institucijskom scored skupu.",
@@ -20385,10 +20560,10 @@
       "justify": true,
       "requireA4": true,
       "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
       },
       "footnoteSize": [
         10
@@ -21236,10 +21411,10 @@
       "justify": true,
       "requireA4": true,
       "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
+        "top": 2,
+        "right": 3,
+        "bottom": 2,
+        "left": 3
       },
       "recommendedCitation": "harvard",
       "footnoteSize": [
@@ -21317,10 +21492,10 @@
       "justify": true,
       "requireA4": true,
       "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
+        "top": 2,
+        "right": 3,
+        "bottom": 2,
+        "left": 3
       },
       "recommendedCitation": "harvard",
       "footnoteSize": [
@@ -21701,18 +21876,18 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman"
+        "Arial"
       ],
       "size": [
         12
       ],
-      "checkSpacing": false,
+      "checkSpacing": true,
       "requireA4": true,
       "margins": {
-        "top": 3.5,
+        "top": 2.5,
         "right": 2.5,
-        "bottom": 3,
-        "left": 3
+        "bottom": 2.5,
+        "left": 2.5
       },
       "recommendedCitation": "harvard",
       "spacing": 1.5,
@@ -21775,18 +21950,18 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman"
+        "Arial"
       ],
       "size": [
         12
       ],
-      "checkSpacing": false,
+      "checkSpacing": true,
       "requireA4": true,
       "margins": {
-        "top": 3.5,
+        "top": 2.5,
         "right": 2.5,
-        "bottom": 3,
-        "left": 3
+        "bottom": 2.5,
+        "left": 2.5
       },
       "recommendedCitation": "harvard",
       "spacing": 1.5,
@@ -21849,13 +22024,10 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
+        "Times New Roman"
       ],
       "size": [
-        12,
-        11
+        12
       ],
       "spacing": 1.5,
       "requireA4": true,
@@ -21928,13 +22100,10 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
+        "Times New Roman"
       ],
       "size": [
-        12,
-        11
+        12
       ],
       "spacing": 1.5,
       "requireA4": true,
@@ -22137,26 +22306,7 @@
     "profileLabel": "Pravni Split, završni rad",
     "verifiedAt": "2026-07-04",
     "documentDate": null,
-    "rules": {
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
-    },
+    "rules": {},
     "facts": [],
     "note": "Pravni fakultet u Splitu javno NE objavljuje uputu koja propisuje citatni stil ni oblikovanje (detaljne upute su iza intranet logina; javni Pravilnik o pohrani i Vodic ne diraju citiranje/format). Prikazana format-pravila su OPĆI baseline, NISU fakultetski propis. Citatni stil CUSTOM. Validacija podatkovno blokirana: repozitorij nema otvorenih završnih radova (embargo).",
     "sources": [
@@ -22197,26 +22347,7 @@
     "profileLabel": "Pravni Split, diplomski rad",
     "verifiedAt": "2026-07-04",
     "documentDate": null,
-    "rules": {
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
-    },
+    "rules": {},
     "facts": [],
     "note": "Pravni fakultet u Splitu javno NE objavljuje uputu koja propisuje citatni stil ni oblikovanje (detaljne upute su iza intranet logina; javni Pravilnik o pohrani i Vodic ne diraju citiranje/format). Prikazana format-pravila su OPĆI baseline, NISU fakultetski propis. Citatni stil CUSTOM.",
     "sources": [
@@ -22522,7 +22653,7 @@
       "requireA4": true,
       "margins": {
         "top": 2.5,
-        "right": 2,
+        "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
       },
@@ -22751,7 +22882,9 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman"
+        "Times New Roman",
+        "Calibri",
+        "Arial"
       ],
       "size": [
         12
@@ -22829,7 +22962,9 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman"
+        "Times New Roman",
+        "Calibri",
+        "Arial"
       ],
       "size": [
         12
@@ -23494,25 +23629,7 @@
     "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "harvard",
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
+      "recommendedCitation": "harvard"
     },
     "facts": [],
     "note": "Citat HARVARD MANDIRAN: Pravilnik Čl.9 doslovno 'pri navođenju izvora koristi Harvardski citatni stil' (OCR verificirano byte-level). Format nije brojkama propisan u Pravilniku pa su format-pravila opći baseline (nisu odjelni propis).",
@@ -23564,25 +23681,7 @@
     "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "harvard",
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
+      "recommendedCitation": "harvard"
     },
     "facts": [],
     "note": "Citat HARVARD MANDIRAN: Pravilnik Čl.9 doslovno 'pri navođenju izvora koristi Harvardski citatni stil' (OCR verificirano byte-level). Format nije brojkama propisan u Pravilniku pa su format-pravila opći baseline (nisu odjelni propis).",
@@ -23634,22 +23733,7 @@
     "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "harvard",
-      "font": [
-        "Times New Roman"
-      ],
-      "size": [
-        12
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
+      "recommendedCitation": "harvard"
     },
     "facts": [],
     "note": "Citat HARVARD MANDIRAN na odjelnoj razini: odjelne Upute imperativno 'koristi se Harvardski sustav citiranja' + odjelni Harvard vodic (Panjkota 2010) linkan sa stranice Izrada diplomskog rada (snapshot). Oblikovanje (TNR 12, prored 1,5, margine 2,5, justify) iz odjelnih Uputa.",
@@ -23711,22 +23795,7 @@
     "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "harvard",
-      "font": [
-        "Times New Roman"
-      ],
-      "size": [
-        12
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
+      "recommendedCitation": "harvard"
     },
     "facts": [],
     "note": "Citat HARVARD MANDIRAN na odjelnoj razini: odjelne Upute imperativno 'koristi se Harvardski sustav citiranja' + odjelni Harvard vodic (Panjkota 2010) linkan sa stranice Izrada diplomskog rada (snapshot). Oblikovanje (TNR 12, prored 1,5, margine 2,5, justify) iz odjelnih Uputa.",
@@ -23860,13 +23929,10 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
+        "Times New Roman"
       ],
       "size": [
-        12,
-        11
+        12
       ],
       "spacing": 1.5,
       "requireA4": true,
@@ -24416,7 +24482,7 @@
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
-        "left": 2.5
+        "left": 3
       }
     },
     "facts": [],
@@ -24742,26 +24808,7 @@
     "profileLabel": "Zadar - Anglistika, završni rad",
     "verifiedAt": "2026-07-04",
     "documentDate": null,
-    "rules": {
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
-    },
+    "rules": {},
     "facts": [],
     "note": "Odjelni Pravilnik je proceduralan, ne propisuje oblikovanje brojkama ni imenovani citatni stil (byte-level provjereno) pa je citat custom. Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
     "sources": [
@@ -24815,26 +24862,7 @@
     "profileLabel": "Zadar - Anglistika, diplomski rad",
     "verifiedAt": "2026-07-04",
     "documentDate": null,
-    "rules": {
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
-    },
+    "rules": {},
     "facts": [],
     "note": "Odjelni Pravilnik je proceduralan, ne propisuje oblikovanje brojkama ni imenovani citatni stil (byte-level provjereno) pa je citat custom. Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
     "sources": [
@@ -24890,22 +24918,19 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
+        "Times New Roman"
       ],
       "size": [
-        12,
-        11
+        12
       ],
       "spacing": 1.5,
       "requireA4": true,
       "justify": true,
       "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
       },
       "footnoteSize": [
         10
@@ -25189,7 +25214,7 @@
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
-        "left": 2.5
+        "left": 3.5
       },
       "footnoteSize": [
         10
@@ -25379,26 +25404,7 @@
     "profileLabel": "Zadar - Sociologija, završni rad",
     "verifiedAt": "2026-07-04",
     "documentDate": null,
-    "rules": {
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
-    },
+    "rules": {},
     "facts": [],
     "note": "Odjelni javni dokumenti su administrativni (prijava teme/mentorstvo) i NE propisuju oblikovanje ni citatni stil (byte-level provjereno). Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
     "sources": [
@@ -25459,13 +25465,10 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
+        "Times New Roman"
       ],
       "size": [
-        12,
-        11
+        12
       ],
       "spacing": 1.5,
       "requireA4": true,
@@ -25539,26 +25542,7 @@
     "profileLabel": "Zadar - Lingvistika, završni rad",
     "verifiedAt": "2026-07-04",
     "documentDate": null,
-    "rules": {
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
-    },
+    "rules": {},
     "facts": [],
     "note": "Odjel ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na odjelnim stranicama). Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
     "sources": [],
@@ -25605,26 +25589,7 @@
     "profileLabel": "Zadar - Lingvistika, diplomski rad",
     "verifiedAt": "2026-07-04",
     "documentDate": null,
-    "rules": {
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
-    },
+    "rules": {},
     "facts": [],
     "note": "Odjel ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na odjelnim stranicama). Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
     "sources": [],
@@ -25671,26 +25636,7 @@
     "profileLabel": "Zadar - Rusistika, diplomski rad",
     "verifiedAt": "2026-07-04",
     "documentDate": null,
-    "rules": {
-      "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
-      ],
-      "size": [
-        12,
-        11
-      ],
-      "spacing": 1.5,
-      "requireA4": true,
-      "justify": true,
-      "margins": {
-        "top": 2.5,
-        "right": 2.5,
-        "bottom": 2.5,
-        "left": 2.5
-      }
-    },
+    "rules": {},
     "facts": [],
     "note": "Odjel ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na odjelnim stranicama). Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
     "sources": [],
@@ -25739,13 +25685,10 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
+        "Merriweather"
       ],
       "size": [
-        12,
-        11
+        10
       ],
       "spacing": 1.5,
       "requireA4": true,
@@ -25805,13 +25748,10 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
+        "Merriweather"
       ],
       "size": [
-        12,
-        11
+        10
       ],
       "spacing": 1.5,
       "requireA4": true,
@@ -25871,13 +25811,10 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
+        "Times New Roman"
       ],
       "size": [
-        12,
-        11
+        12
       ],
       "spacing": 1.5,
       "requireA4": true,
@@ -27565,13 +27502,10 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
+        "Times New Roman"
       ],
       "size": [
-        12,
-        11
+        12
       ],
       "spacing": 1.5,
       "requireA4": true,
@@ -27580,7 +27514,7 @@
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
-        "left": 2.5
+        "left": 3
       },
       "requirePageNumbers": true
     },
@@ -27632,13 +27566,10 @@
     "documentDate": null,
     "rules": {
       "font": [
-        "Times New Roman",
-        "Arial",
-        "Calibri"
+        "Times New Roman"
       ],
       "size": [
-        12,
-        11
+        12
       ],
       "spacing": 1.5,
       "requireA4": true,
@@ -27647,7 +27578,7 @@
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
-        "left": 2.5
+        "left": 3
       },
       "requirePageNumbers": true
     },
@@ -27713,7 +27644,10 @@
         "right": 2.54,
         "bottom": 2.54,
         "left": 2.54
-      }
+      },
+      "footnoteSize": [
+        10
+      ]
     },
     "facts": [],
     "note": "Citat FUSNOTE MANDIRANE: odjelne Upute doslovno 'obavezno se moraju koristiti bibliografske pozivne bilješke... europski sustav pozivnih biljezaka ispod teksta (fusnote)' (byte-level verificirano) -> mod notes (token chicago-notes). Format: Arial/TNR 12, prored 1,5, margine 2,54. Krovni Pravilnik 2025 delegira na odjelne Upute.",
@@ -27784,7 +27718,10 @@
         "right": 2.54,
         "bottom": 2.54,
         "left": 2.54
-      }
+      },
+      "footnoteSize": [
+        10
+      ]
     },
     "facts": [],
     "note": "Citat FUSNOTE MANDIRANE: odjelne Upute doslovno 'obavezno se moraju koristiti bibliografske pozivne bilješke... europski sustav pozivnih biljezaka ispod teksta (fusnote)' (byte-level verificirano) -> mod notes (token chicago-notes). Format: Arial/TNR 12, prored 1,5, margine 2,54. Krovni Pravilnik 2025 delegira na odjelne Upute.",
@@ -29449,7 +29386,7 @@
     "documentDate": null,
     "rules": {
       "checkFont": false,
-      "checkSize": false,
+      "checkSize": true,
       "checkSpacing": false,
       "checkMargins": false,
       "checkJustify": false,
@@ -29520,7 +29457,7 @@
     "documentDate": null,
     "rules": {
       "checkFont": false,
-      "checkSize": false,
+      "checkSize": true,
       "checkSpacing": false,
       "checkMargins": false,
       "checkJustify": false,
@@ -29790,11 +29727,11 @@
     "verifiedAt": "2026-07-05",
     "documentDate": null,
     "rules": {
-      "checkFont": false,
-      "checkSize": false,
-      "checkSpacing": false,
-      "checkMargins": false,
-      "checkJustify": false,
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
+      "checkMargins": true,
+      "checkJustify": true,
       "font": [
         "Times New Roman"
       ],
@@ -30289,7 +30226,7 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "checkMargins": false,
+      "checkMargins": true,
       "justify": true,
       "checkJustify": true,
       "requireToc": false,
@@ -30358,7 +30295,7 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "checkMargins": false,
+      "checkMargins": true,
       "requireToc": false,
       "requireA4": true,
       "recommendedCitation": "harvard",
@@ -30429,7 +30366,7 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "checkMargins": false,
+      "checkMargins": true,
       "requireToc": false,
       "requireA4": true,
       "recommendedCitation": "pravo-fusnote",
@@ -30576,6 +30513,9 @@
         "istraživački rad",
         "projektni rad",
         "znanstveni članak"
+      ],
+      "footnoteSize": [
+        10
       ]
     },
     "note": "Opći profil za seminarski, projektni i istraživački rad: tehničko oblikovanje (font, veličina, prored, A4) i citiranje (Chicago fusnote) provjerava se prema izvoru „Upute za pisanje seminarskih i zavrsnih radova, Poslovni odjel (Veleuciliste u Karlovcu)\", koji obuhvaća seminarske i završne radove. Opseg, struktura i sadržaj ovise o kolegiju i pisanoj uputi mentora; nije zaseban fakultetski propis za seminar.",

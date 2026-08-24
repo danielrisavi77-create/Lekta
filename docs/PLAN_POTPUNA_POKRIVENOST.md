@@ -1686,10 +1686,9 @@ procitane kao slika. Ishod: **svih 7 citata je doslovno tocno, i lokatori su toc
    ("naslovnica/naslov kao tiha druga vrijednost").
 
 #### Sto ostaje
-Nalaz o `has_scanned_pages` NIJE zatvoren: sljedeci takav dokument ce opet proci kao cist. Trajno
-rjesenje je ili OCR pratitelj za taj izvor (`scripts/ocr_pdf.py`, treba tesseract) ili suzenje garda
-tako da "mjesovit dokument" ne znaci automatski "neprovjerivo". `audit_scored_quotes.py` nije diran
-jer ga je paralelna sesija drzala otvorenim.
+Nista: nalaz o `has_scanned_pages` je zatvoren istoga dana suzenjem opisanim u sljedecoj sekciji.
+`forenzika` i dalje ostaje potisnuta (i mora), jer njezin citljivi sloj o tim osima ne govori nista;
+razlika je u tome sto se to sada MJERI umjesto da se pretpostavlja iz prisutnosti ijedne slike.
 
 ---
 
@@ -1724,6 +1723,39 @@ presuda, potpis), da se odluka ne izgubi i da je sljedeca revizija ne prijavi ka
 
 Zatecena raspodjela: **23 `claim-supported`** (zrcalo je krivo, ocekivano `--decision claim`),
 **8 `both-present`** (izvor nosi obje, pitanje hijerarhije), **7 `neither`** (reverifikacija).
+
+---
+
+### TRECA POJAVA ISTOG KVARA: predlagac je birao po pohranjenoj zastavici (2026-08-23)
+
+Adversarijalni prolaz je nasao da gardi mjere POHRANJENI `scored`, a motor veze po izvedenom
+`isRuleScored` (razlika: 275 pravila). Popravljeno je na dva mjesta (`claim-fields.test.ts`,
+`verify-source-hashes.mjs`), ali NE i na trecem: `propose_claim_modality.py` je i dalje birao po
+zastavici, pa tih 275 pravila **nikad nije ni dobilo prijedlog modaliteta**. Trajno su sjedila u
+zaostatku, iako je dio njih strojno razrjesiv.
+
+Isti ispravak primijenjen i ondje. Ucinak:
+
+| mjera | prije | poslije |
+|---|---|---|
+| jedinica (izvor, citat, os) | 1310 | **1401** |
+| jednoznacnih | 962 | **1018** |
+| pravila s modalitetom | 1402 | **1555** |
+| bez modaliteta (ratchet) | 805 | **652** |
+
+Ratchet je spusten u ISTOM commitu, kako njegovo vlastito pravilo i trazi. Rast pa pad iste brojke
+(530 -> 805 -> 652) nije kolebanje nego dvije faze jednog ispravka: prvo je ispravljena populacija
+koja se MJERI, pa populacija koja se OBRADJUJE.
+
+Ugovor je izdrzao: **nula** mehanicki upisanih ublazenih modaliteta i nakon sirenja skupa.
+
+`scored-value-drift.json` i `advisory-map.json` ostali su bit-identicni, sto je i bila namjera:
+modalitet i opseg su OPIS citata, ne presuda o bodovanju, pa ne smiju pomaknuti ocjenu.
+
+#### Pouka koja se ponavlja
+Kad se nadje kvar u odabiru populacije, popravak nije gotov na mjestu gdje je nadjen. Ovaj je imao
+TRI pojave (test, hash gard, predlagac), i trecu je otkrilo tek pitanje "gdje se jos bira po istom
+uvjetu", ne ponovno citanje nalaza.
 
 ---
 
@@ -1885,3 +1917,181 @@ pravila u Hrvatskoj, sa 407 profila i posteno oznacenim stupnjem pokrivenosti".
   (`violated: false`, `recommended: true`, bez `matchKeys`), ali ne smije pomaknuti ocjenu.
 - Ne izjednacava brojke iz razlicitih artefakata da bi "izgledale slozno": razlika 2135/2208
   je stvarna razlika dviju populacija i rjesava se imenovanjem, ne poravnavanjem.
+
+---
+
+### SUZENJE POTISKIVANJA: 37 pravila je izaslo iz "neprovjerivo" u stvarnu provjeru (2026-08-23)
+
+Zadnji preostali oblik laznog zelenog u lancu tvrdnji (adversarijalni nalaz D11) zatvoren je u
+`scripts/audit_scored_quotes.py`. Kvar nije bio u tome STO se potiskuje nego CIME se potiskivanje
+opravdava: `has_scanned_pages` vraca `true` cim dokument ima ijednu stranicu-sliku, pa je SVAKO
+pravilo iz tog dokumenta dobivalo indulgenciju, ukljucujuci i ona ciji je propis uredno u citljivom
+sloju. Dokument s deset skeniranih stranica i trinaest strojno pisanih tako je bio jednako
+"neprovjeriv" kao cisti skenirani faksimil.
+
+Suzenje je jedan uvjet vise, a ne novi mehanizam: potiskivanje sada vrijedi samo ako citljivi tekst
+o TOJ OSI ne govori nista (`text_layer_covers_axis`). Ako sloj sadrzi rjecnik osi (ime fonta uz
+"font"/"pismo", broj uz jedinicu za margine, "prored", "obostran\w*", "oznac\w* stranic\w*" i
+slicno), citat se provjerava kao i svaki drugi.
+
+**Izmjereno, prije i poslije:**
+
+| | prije | poslije |
+|---|---|---|
+| NEPROVJERIVO | 72 | **35** |
+| pravila u stvarnoj provjeri | 1895 | **1932** |
+| nalaza u artefaktu | 51 | **51** |
+
+Trideset sedam pravila je izaslo iz tisine i **svih 37 je proslo**. To je najbolji moguci ishod i
+ujedno najlakse krivo procitan: ne znaci da suzenje nije bilo potrebno, nego da je 37 tvrdnji bilo
+tocno a da to nitko nije provjeravao. Artefakt se pritom nije promijenio ni za bajt, pa je promjena
+CI-neutralna: `docs/generated/scored-quote-audit.json` ostaje identican.
+
+Izvori koji su i dalje istinski neprovjerivi (35 pravila): `unipu-zavrsni-izmjene-2021` (18),
+`forenzika-pravilnik-diplomski` (7), `ffri-povum-upute-diplomski` (3), `ffri-povum-upute` (3),
+`efri-pravilnik-diplomski-2014` (2), `efri-pravilnik-zavrsni-2014` (2). Za njih vrijedi postupak iz
+prethodne sekcije: renderiraj stranice i procitaj ih.
+
+**Gard nad gardom.** Po tvrdom pravilu ovog repozitorija (`gard bez dokaza da grize ne racuna se`)
+diskriminator ima vlastite negativne kontrole u OBA smjera, dostupne kao `npm run audit:selftest` i
+ozicene u `.github/workflows/rule-claims.yml`: 10 sintetickih slucajeva (sloj koji os spominje mora
+je pokriti, sloj koji je ne spominje ne smije) i 3 nad STVARNIM dokumentima koji su suzenje
+motivirali (`vuka` mora biti pokriven na `margins`, `forenzika` ne smije biti pokrivena ni na jednoj
+od pet osi). Prva izvedba je jednu kontrolu promasila (regex je trazio red rijeci "oznacene
+stranice", a izvor kaze "stranice se oznacavaju"), sto je tocno razlog zasto kontrole postoje.
+
+---
+
+### DVIJE IZLAZNE RUPE DEMOTIJE, OBJE LATENTNE, OBJE ZATVORENE (2026-08-23)
+
+Demotija gasi bodovanje osi kojoj tvrdnja proturjeci. Adversarijalni prolaz nad vlastitim gardovima
+zabiljezio je dva nacina da se ta odluka zaobidje. Nijedan danas ne pali ni na jednom profilu, i to je
+zapisano bas zato sto se gard uveden bez izmjerene stete kasnije lako "pojednostavi" natrag.
+
+**1. Zastita se okidala na PRISUTNOST kljuca, ne na propis.** `demotionProtectedBy` je preskakala
+demotiju cim overlay katedre spomene ijedan kljuc te osi, ukljucujuci golu zastavicu. Overlay s
+`checkFont: true` bez `font` tako je ponistavao demotiju a nije propisivao nikakvu vrijednost, pa se
+dalje bodovala vrijednost OSNOVNOG profila, tocno ona koju tvrdnja s citatom opovrgava. Simetricno je
+i `checkFont: false` "stitio", pa je os ispadala iz `advisoryDimensions` i sucelje je nije oznacilo
+kao informativnu.
+
+Zastita sada trazi propis: za osi koje nose vrijednost (font, velicina, prored, margine, format) mora
+postojati VRIJEDNOST; za booleove osi zastavica postavljena na `true`. Sve tri postojece katedre nose
+vrijednost (`sociologija` font/size/spacing/justify, sve tri `requireToc`/`requirePageNumbers`), pa je
+ponasanje na danasnjim podacima bit-identicno: 18 testova slozenog profila prolazi nepromijenjeno.
+
+**2. Podprovjere su nadzivljavale roditelja.** Demotija gasi `requireToc` i `requirePageNumbers`, cime
+glavne provjere padnu na 0/0, ali su njihova djeca bodovala dalje: polozaj broja stranice (3),
+naslovnica bez broja (3), numeriranje od Uvoda (4), te font, brojevi stranica i pokrivenost naslova u
+sadrzaju (3+3+3). **Devetnaest bodova iz osi za koju verifikacija tvrdi da se ne smije bodovati.**
+
+Uvjet je bio pogresan po sadrzaju, ne po obliku: djeca su visila o tome je li polje PRONADJENO
+(`pageNums`, `tocDetailedCheck`), nikad o tome boduje li se ta os uopce. Sada vise o roditelju, po
+istom obrascu koji demotija vec koristi: provjera OSTAJE u ispisu, bodovi padnu na 0/0. Zato se ni
+duljina niza provjera ne mijenja i golden ostaje netaknut (47 testova, 0 promjena snapshota).
+
+Uz to je zatvoren i suprotan smjer, koji bi taj popravak sam po sebi otvorio: overlay koji propisuje
+DIJETE (`pageNumberAlignment`, `tocDetailedCheck`) sada stiti i RODITELJA. Poravnanje broja stranice
+koji ne postoji nema smisla, pa katedra koja trazi poravnanje implicitno trazi i broj stranice; bez
+toga bi novi gate tiho ugasio bas ono sto katedra izricito propisuje.
+
+**Izmjereno prije popravka:** 0 od 386 profila u advisory mapi ima zivu podprovjeru iznad demotirane
+osi. Zastavice su rijetke (`pageNumberAlignment` 3 profila, `tocDetailedCheck` 7) i ne preklapaju se s
+demotiranim osima (`page-numbers` demotiran na 249, `toc` na 301 profilu).
+
+**Gardovi, i dokaz da grizu.** Cetiri nove mutacije u `tests/gate-mutations.test.ts` (30 ukupno, 30
+uhvaceno) i invarijanta nad podacima u `tests/composed-profile.test.ts`. Obje strane su dokazane
+vracanjem starog ponasanja: gola zastavica i ugasena zastavica obje ponovno prolaze zastitu i obje
+mutacije padnu. Invarijanta je dokazana podmetanjem kljuca koji profili stvarno nose
+(`requiredSections`): prijavila je 41 curenje, dakle ne prolazi vakuumski.
+
+---
+
+### TRECA RUPA, I JEDINA S POSLJEDICOM DANAS: RASPON KAO RASKORAK (2026-08-23)
+
+Trece zaobilazenje nije bilo latentno. `fbf-specijalisticki--font-size` nosi tvrdnju
+`{min: 10, max: 12}`, a zrcalo `size: [10, 11, 12]`. To je ISTA odredba ("od 10 do 12 pt"), zapisana
+dvojako, ali ju je usporedba prijavila kao raskorak. Posljedica nije bila teorijska: demotija je
+UGASILA bodovanje velicine pisma na profilu na kojem se tvrdnja i motor savrseno slazu, i izbacila
+to pravilo iz `repair-map.json`, pa ga ni automatski popravak vise nije nudio. Fakultetovo vlastito
+pravilo prestalo se provjeravati zbog ZAPISA, ne zbog neslaganja.
+
+**Popravljeno na izvoru, ne na usporedbi, i ta razlika je cijela poanta.** Prvi pokusaj je popustio
+`sameRuleValue` da raspon izjednaci s popisom. To bi radilo, ali bi ujedno oslabilo tvrdnju koja
+stiti margine (ondje je objekt legitiman oblik: cetiri strane), i proturjecilo bi postojecem gardu
+koji kaze da objekt i lista nisu ista vrijednost. Umjesto toga raspon se prosiruje u popis jos u
+`rule-compiler.applyEntry`, dakle ondje gdje tvrdnja postaje pravilo.
+
+Tim putem je ispalo i nesto sto usporedba nije ni trazila: `applyEntry` je `{min,max}` upisivao u
+`eff.size` DOSLOVNO, a motor tu vrijednost cita kao `profile.size.some(...)`. Dok su `ruleEntries`
+prazni to nista ne kvari, ali smjer migracije (Option A) je upravo da postanu zivi, i tog dana bi
+taj profil rusio analizu. Jedan popravak, dva kvara.
+
+**Ucinak, zabiljezen kako jest:** raskoraka 38 -> 37, profila s demotijom zbog raskoraka 21 -> 20,
+`repair-map.json` +1 pravilo. Ratchet u `tests/scored-value-drift.test.ts` spusten na 37 u istom
+commitu.
+
+**Ovo NIJE promocija pravila i zato ne ceka potpis.** Nijedna nova vrijednost nije upisana ni
+odlucena: tvrdnja i zrcalo su se slagale i prije, samo ih instrument nije znao usporediti. Skida se
+demotija koju je uveo moj vlastiti alat istog dana, cime se stanje vraca na zatecено. Preostalih 37
+raskoraka su stvarna neslaganja i dalje cekaju vlasnikovu presudu (`npm run drift-apply`).
+
+**Zamka usput, vrijedna zapisa:** prvo suzenje je uvjet "vrijednost mora postojati" primijenilo na
+OBJE strane usporedbe, pa je tvrdnju-raspon proglasilo praznom i TIHO ISPUSTILO iz usporedbe. Nalaz
+je "nestao" a da ga nitko nije presudio, i brojka je izgledala bolje. Motor i tvrdnja zato citaju
+razlicitim putevima (`engineAxisValue` naspram sirovog `readAxis`): uvjet o praznoj vrijednosti
+opisuje `normalizeCheckFlags`, dakle profil, a tvrdnja legitimno nosi oblike kakve profil nikad nema.
+
+---
+
+### DUBINSKI VERIFIKATOR: 44 pravila dobila izvod, a korpusni prolaz DOKAZANO NE VALJA (2026-08-23)
+
+Dvije stvari iz istog mjerenja, i druga je vaznija.
+
+**1. Snopovi pravila vise nisu NEPROVJERIVI.** Od 2207 bodovanih tvrdnji, 443 su stajale na osima
+bez pravila izvoda. Njih 399 zapravo pokrivaju predikatni tokeni (`justify`, `page-numbers`, `toc`,
+`footnote-font`), pa je stvarna rupa bila 44 pravila na cetiri osi koje nose SNOP odredbi:
+`bibliography-rules`, `citation-sync-rules`, `section-surgery-rules`, `required-section-rules`.
+
+Sva 44 dolaze iz jednog izvora (`fpzg-upute-akademski-radovi`) i svode se na 13 listova, pa je
+rjecnik prepisan iz recenica koje te odredbe propisuju, ne izmisljen. Svaki LIST mora imati vlastito
+sidro; list bez unosa u rjecniku vraca NEPROVJERIVO, nikad prolaz. Natpisi sekcija traze se po
+KORIJENU rijeci jer hrvatski citat mijenja padez (propis: "Kljucne rijeci"; izvor: "nekoliko
+kljucnih rijeci") - trazenje cijele rijeci ondje promasi TOCNU tvrdnju, sto je isti razred greske
+kao `paper-size` koji je ignorirao vrijednost.
+
+Ishod: svih 44 se izvodi, uz 11 novih negativnih kontrola (`npm run verify:claims:selftest`: 45
+slucajeva, 20 osi, 0 promasaja). Kontrole idu u oba smjera: pola snopa nije snop (citat s abecednim
+redoslijedom ali bez sufiksa PADA), a vrijednost izvan rjecnika daje NEPROVJERIVO umjesto tihog
+prolaza.
+
+**2. Korpusni prolaz tim alatom NE valja, i to je izmjereno, ne pretpostavljeno.**
+
+Verifikator trazi TOCAN broj stranice i DOSLOVAN podniz. Nasi lokatori su tekstualni opisi, ali
+751 od 2207 (34%) sam navodi stranicu ("str. 5, odjeljak ..."), pa se na njih smije pustiti. Ucinjeno:
+
+| ishod | broj |
+|---|---|
+| prolazi (sidro + izvod) | 107 |
+| NEPROVJERIVO | 4 |
+| **pada** | **640** |
+
+Prije bilo kakve optuzbe, uzorak od 40 padova rasclanjen je do uzroka:
+
+- **12** citat POSTOJI, ali na drugoj stranici (pomaci +12, +1, +2: tiskani broj stranice nije indeks
+  u PDF-u, sto je svojstvo dokumenta, ne pogreska tvrdnje).
+- **28** nije nadjen doslovnim podnizom; od njih **18** nalazi tolerantno podudaranje revizije
+  (dijakritika, interpunkcija, prijelom retka), **3** su vec priznati nalazi, a preostalih **7** ima
+  pokrivanje 0,64-0,83 i reviziju legitimno prolaze jer imaju doslovno SIDRO koje nosi vrijednost.
+
+Dakle od 40 padova nijedan nije nov stvaran nalaz. Ekstrapolirano na 640, korpusni prolaz ovim
+alatom bio bi gotovo cisti sum, i zato NIJE ozicen u CI. Podjela ostaje: `audit_scored_quotes.py`
+radi korpus (tolerantno podudaranje + pokazivost), `verify_rule_claims.py` radi pojedinacnu tvrdnju
+sa znanom stranicom (strogo). Zapisano da sljedeca sesija ne "popravi" ovo tako da ga pusti u gate.
+
+**Vlastite pogreske u mjerenju, zabiljezene jer su pouka:** tri puta sam sondu napisao drukcije nego
+sto revizija stvarno radi (`document_text` umjesto `evidence_text`, sirovi citat umjesto `squash`,
+`ruleId` umjesto `ruleIds` u priznatim nalazima). Svaki put je sonda pokazivala kvar kojeg nema. To
+je isti razred greske kao gard koji ne grize, samo obrnutog predznaka: alat koji vristi na sve jednako
+je beskoristan kao onaj koji suti. Zato se nalaz ne prijavljuje dok se ne rasclani do uzroka.
+

@@ -5,6 +5,9 @@
     "fpzg-politologija-diplomski": [
       {
         "ruleId": "fpzg-politologija-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -26,6 +29,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -47,6 +53,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -66,6 +75,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -85,6 +97,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -102,6 +117,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--word-count",
+        "modality": "prohibition",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 10000,
@@ -122,6 +140,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -139,6 +160,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -218,6 +242,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -235,6 +262,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -256,6 +286,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -277,6 +310,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -297,6 +333,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -324,6 +363,9 @@
       },
       {
         "ruleId": "fpzg-politologija-diplomski--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -355,6 +397,9 @@
     "fpzg-nacionalna-sigurnost-diplomski": [
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -376,6 +421,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -397,6 +445,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -416,6 +467,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -435,6 +489,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -452,6 +509,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -469,6 +529,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -548,6 +611,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--word-count",
+        "modality": "prohibition",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 10000,
@@ -568,6 +634,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -585,6 +654,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -606,6 +678,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -627,6 +702,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -647,6 +725,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -674,6 +755,9 @@
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -705,6 +789,9 @@
     "fpzg-novinarstvo-diplomski": [
       {
         "ruleId": "fpzg-novinarstvo-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -726,6 +813,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -747,6 +837,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -766,6 +859,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -785,6 +881,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -802,6 +901,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -819,6 +921,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -898,6 +1003,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--word-count",
+        "modality": "prohibition",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 12000,
@@ -918,6 +1026,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -935,6 +1046,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -956,6 +1070,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -977,6 +1094,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -997,6 +1117,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -1024,6 +1147,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -1055,6 +1181,9 @@
     "fpzg-specijalisticki-odnosi-s-javnoscu": [
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -1076,6 +1205,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -1097,6 +1229,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -1116,6 +1251,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -1135,6 +1273,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -1152,6 +1293,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -1169,6 +1313,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -1248,6 +1395,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--word-count",
+        "modality": "prohibition",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 8000,
@@ -1268,6 +1418,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -1285,6 +1438,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -1306,6 +1462,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -1327,6 +1486,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -1347,6 +1509,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -1374,6 +1539,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -1405,6 +1573,9 @@
     "fpzg-specijalisticki-prilagodba-eu": [
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -1426,6 +1597,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -1447,6 +1621,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -1466,6 +1643,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -1485,6 +1665,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -1502,6 +1685,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -1519,6 +1705,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -1598,6 +1787,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--word-count",
+        "modality": "prohibition",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 8000,
@@ -1618,6 +1810,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -1635,6 +1830,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -1656,6 +1854,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -1677,6 +1878,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -1697,6 +1901,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -1724,6 +1931,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -1755,6 +1965,9 @@
     "fpzg-specijalisticki-sigurnosna-politika-rh": [
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -1776,6 +1989,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -1797,6 +2013,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -1816,6 +2035,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -1835,6 +2057,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -1852,6 +2077,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -1869,6 +2097,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -1948,6 +2179,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--word-count",
+        "modality": "prohibition",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 8000,
@@ -1968,6 +2202,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -1985,6 +2222,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -2006,6 +2246,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -2027,6 +2270,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -2047,6 +2293,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -2074,6 +2323,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -2105,6 +2357,9 @@
     "fpzg-specijalisticki-vanjska-politika-diplomacija": [
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -2126,6 +2381,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -2147,6 +2405,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -2166,6 +2427,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -2185,6 +2449,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -2202,6 +2469,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -2219,6 +2489,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -2298,6 +2571,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--word-count",
+        "modality": "prohibition",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 8000,
@@ -2318,6 +2594,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -2335,6 +2614,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -2356,6 +2638,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -2377,6 +2662,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -2397,6 +2685,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -2424,6 +2715,9 @@
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -2455,6 +2749,9 @@
     "fpzg-doktorski-politologija": [
       {
         "ruleId": "fpzg-doktorski-politologija--font",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -2476,6 +2773,9 @@
       },
       {
         "ruleId": "fpzg-doktorski-politologija--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -2497,6 +2797,9 @@
       },
       {
         "ruleId": "fpzg-doktorski-politologija--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -2516,6 +2819,9 @@
       },
       {
         "ruleId": "fpzg-doktorski-politologija--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -2540,6 +2846,9 @@
       },
       {
         "ruleId": "fpzg-doktorski-politologija--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -2559,6 +2868,9 @@
       },
       {
         "ruleId": "fpzg-doktorski-politologija--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -2576,6 +2888,9 @@
       },
       {
         "ruleId": "fpzg-doktorski-politologija--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -2595,6 +2910,9 @@
     "fpzg-politologija-zavrsni": [
       {
         "ruleId": "fpzg-politologija-zavrsni--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -2612,6 +2930,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -2633,6 +2954,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -2654,6 +2978,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -2673,6 +3000,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -2692,6 +3022,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -2709,6 +3042,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -2726,6 +3062,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -2796,6 +3135,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--word-count",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "word-count",
         "value": {
           "min": 5000,
@@ -2816,6 +3158,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -2837,6 +3182,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -2858,6 +3206,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -2878,6 +3229,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -2905,6 +3259,9 @@
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -2936,6 +3293,9 @@
     "fpzg-novinarstvo-zavrsni-tekst": [
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -2953,6 +3313,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -2974,6 +3337,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -2995,6 +3361,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -3014,6 +3383,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -3033,6 +3405,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -3050,6 +3425,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -3067,6 +3445,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -3137,6 +3518,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--word-count",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "word-count",
         "value": {
           "min": 5000,
@@ -3157,6 +3541,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -3178,6 +3565,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -3199,6 +3589,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -3219,6 +3612,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -3246,6 +3642,9 @@
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -3277,6 +3676,9 @@
     "fpzg-novinarstvo-zavrsni-av": [
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-av--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -3296,6 +3698,9 @@
     "fpzg-mes-master-thesis": [
       {
         "ruleId": "fpzg-mes-master-thesis--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -3313,6 +3718,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -3334,6 +3742,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -3355,6 +3766,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -3374,6 +3788,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--paper-size",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "paper-size",
         "value": true,
         "category": "format",
@@ -3393,6 +3810,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -3410,6 +3830,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -3427,6 +3850,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -3497,6 +3923,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -3518,6 +3947,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -3539,6 +3971,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -3559,6 +3994,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -3586,6 +4024,9 @@
       },
       {
         "ruleId": "fpzg-mes-master-thesis--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [
@@ -3617,6 +4058,9 @@
     "fpzg-opci-akademski-rad": [
       {
         "ruleId": "fpzg-opci-akademski-rad--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "citation-style",
         "value": "fpzg",
         "category": "citation",
@@ -3634,6 +4078,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -3655,6 +4102,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -3676,6 +4126,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -3695,6 +4148,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -3712,6 +4168,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--justify",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "agent-read",
         "checkId": "justify",
         "value": true,
         "category": "format",
@@ -3733,6 +4192,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--bibliography-rules",
+        "modality": "directive",
+        "scope": "bibliography",
+        "modalitySource": "human",
         "checkId": "bibliography-rules",
         "value": {
           "sort": "alphabetical",
@@ -3754,6 +4216,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--citation-sync-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-sync-rules",
         "value": {
           "mode": "author-year"
@@ -3774,6 +4239,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--section-surgery-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "section-surgery-rules",
         "value": {
           "frontMatter": {
@@ -3801,6 +4269,9 @@
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--required-section-rules",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "required-section-rules",
         "value": {
           "order": [

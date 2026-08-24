@@ -6,6 +6,9 @@
     "pravo-integrirani-diplomski": [
       {
         "ruleId": "pravo-integrirani-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -27,6 +30,9 @@
       },
       {
         "ruleId": "pravo-integrirani-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -48,6 +54,9 @@
       },
       {
         "ruleId": "pravo-integrirani-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -85,6 +94,9 @@
       },
       {
         "ruleId": "pravo-integrirani-diplomski--citation-style",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-fusnote",
         "category": "citation",
@@ -102,6 +114,9 @@
       },
       {
         "ruleId": "pravo-integrirani-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -186,6 +201,9 @@
       },
       {
         "ruleId": "pravo-integrirani-diplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -203,6 +221,9 @@
       },
       {
         "ruleId": "pravo-integrirani-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -220,6 +241,9 @@
       },
       {
         "ruleId": "pravo-integrirani-diplomski--footnote-font",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-font",
         "value": [
           "Times New Roman"
@@ -239,6 +263,9 @@
       },
       {
         "ruleId": "pravo-integrirani-diplomski--footnote-size",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-size",
         "value": [
           10
@@ -258,6 +285,9 @@
       },
       {
         "ruleId": "pravo-integrirani-diplomski--footnote-spacing",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-spacing",
         "value": 1,
         "category": "format",
@@ -275,6 +305,9 @@
       },
       {
         "ruleId": "pravo-integrirani-diplomski--heading-rules",
+        "modality": "directive",
+        "scope": "heading",
+        "modalitySource": "mechanical",
         "checkId": "heading-rules",
         "value": {
           "size": 12,
@@ -380,6 +413,9 @@
     "pravo-javna-uprava-prijediplomski": [
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -401,6 +437,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -422,6 +461,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -459,6 +501,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--citation-style",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-fusnote",
         "category": "citation",
@@ -476,6 +521,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -560,6 +608,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -577,6 +628,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -594,6 +648,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--footnote-font",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-font",
         "value": [
           "Times New Roman"
@@ -613,6 +670,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--footnote-size",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-size",
         "value": [
           10
@@ -632,6 +692,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--footnote-spacing",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-spacing",
         "value": 1,
         "category": "format",
@@ -649,6 +712,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--heading-rules",
+        "modality": "directive",
+        "scope": "heading",
+        "modalitySource": "mechanical",
         "checkId": "heading-rules",
         "value": {
           "size": 12,
@@ -740,6 +806,9 @@
     "pravo-javna-uprava-diplomski": [
       {
         "ruleId": "pravo-javna-uprava-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -761,6 +830,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -782,6 +854,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -819,6 +894,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--citation-style",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-fusnote",
         "category": "citation",
@@ -836,6 +914,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -920,6 +1001,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -937,6 +1021,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -954,6 +1041,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--footnote-font",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-font",
         "value": [
           "Times New Roman"
@@ -973,6 +1063,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--footnote-size",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-size",
         "value": [
           10
@@ -992,6 +1085,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--footnote-spacing",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-spacing",
         "value": 1,
         "category": "format",
@@ -1009,6 +1105,9 @@
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--heading-rules",
+        "modality": "directive",
+        "scope": "heading",
+        "modalitySource": "mechanical",
         "checkId": "heading-rules",
         "value": {
           "size": 12,
@@ -1100,6 +1199,9 @@
     "pravo-porezni-prijediplomski": [
       {
         "ruleId": "pravo-porezni-prijediplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -1121,6 +1223,9 @@
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -1142,6 +1247,9 @@
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -1179,6 +1287,9 @@
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--citation-style",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-fusnote",
         "category": "citation",
@@ -1196,6 +1307,9 @@
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -1280,6 +1394,9 @@
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -1297,6 +1414,9 @@
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -1314,6 +1434,9 @@
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--footnote-font",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-font",
         "value": [
           "Times New Roman"
@@ -1333,6 +1456,9 @@
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--footnote-size",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-size",
         "value": [
           10
@@ -1352,6 +1478,9 @@
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--footnote-spacing",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-spacing",
         "value": 1,
         "category": "format",
@@ -1369,6 +1498,9 @@
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--heading-rules",
+        "modality": "directive",
+        "scope": "heading",
+        "modalitySource": "mechanical",
         "checkId": "heading-rules",
         "value": {
           "size": 12,
@@ -1460,6 +1592,9 @@
     "pravo-socijalni-rad-zavrsni": [
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -1481,6 +1616,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -1502,6 +1640,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -1521,6 +1662,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 3,
@@ -1545,6 +1689,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "citation-style",
         "value": "pravo-social-author",
         "category": "citation",
@@ -1562,6 +1709,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -1646,6 +1796,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -1663,6 +1816,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -1693,6 +1849,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--heading-rules",
+        "modality": "directive",
+        "scope": "heading",
+        "modalitySource": "mechanical",
         "checkId": "heading-rules",
         "value": {
           "size": 12,
@@ -1734,6 +1893,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--page-count",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-count",
         "value": {
           "min": 20,
@@ -1756,6 +1918,9 @@
     "pravo-socijalni-rad-diplomski": [
       {
         "ruleId": "pravo-socijalni-rad-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -1777,6 +1942,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -1798,6 +1966,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -1846,6 +2017,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-social-author",
         "category": "citation",
@@ -1863,6 +2037,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -1947,6 +2124,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -1964,6 +2144,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -1994,6 +2177,9 @@
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--heading-rules",
+        "modality": "directive",
+        "scope": "heading",
+        "modalitySource": "mechanical",
         "checkId": "heading-rules",
         "value": {
           "size": 12,
@@ -2100,6 +2286,9 @@
     "pravo-socijalna-politika-diplomski": [
       {
         "ruleId": "pravo-socijalna-politika-diplomski--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -2121,6 +2310,9 @@
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -2142,6 +2334,9 @@
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -2190,6 +2385,9 @@
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-social-author",
         "category": "citation",
@@ -2207,6 +2405,9 @@
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -2291,6 +2492,9 @@
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -2308,6 +2512,9 @@
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -2338,6 +2545,9 @@
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--heading-rules",
+        "modality": "directive",
+        "scope": "heading",
+        "modalitySource": "mechanical",
         "checkId": "heading-rules",
         "value": {
           "size": 12,
@@ -2444,6 +2654,9 @@
     "pravo-opci-pravni-akademski-rad": [
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -2465,6 +2678,9 @@
       },
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -2486,6 +2702,9 @@
       },
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -2523,6 +2742,9 @@
       },
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--citation-style",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-fusnote",
         "category": "citation",
@@ -2540,8 +2762,11 @@
       },
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
-        "value": [],
+        "value": [{"key": "intro", "label": "uvod", "terms": ["uvod", "uvodni dio", "introduction"]}, {"key": "body", "label": "sredisnji dio", "terms": ["sredisnji dio", "razrada", "poglavlje", "glava", "chapter"]}, {"key": "conclusion", "label": "zakljucak", "terms": ["zakljucak", "zakljucni dio", "conclusion"]}, {"key": "refs", "label": "popis koristenih izvora i literature", "terms": ["izvori i literatura", "popis literature", "literatura", "bibliografija", "references"]}],
         "category": "structure",
         "label": "Obvezni dijelovi rada",
         "machineCheckable": true,
@@ -2558,6 +2783,9 @@
       },
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--footnote-font",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-font",
         "value": [
           "Times New Roman"
@@ -2577,6 +2805,9 @@
       },
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--footnote-size",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-size",
         "value": [
           10
@@ -2596,6 +2827,9 @@
       },
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--footnote-spacing",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-spacing",
         "value": 1,
         "category": "format",
@@ -2637,6 +2871,9 @@
       },
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -2687,6 +2924,9 @@
     "pravo-socijalni-opci-akademski-rad": [
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -2709,6 +2949,9 @@
       },
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -2731,6 +2974,9 @@
       },
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -2751,6 +2997,9 @@
       },
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 3,
@@ -2776,6 +3025,9 @@
       },
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "citation-style",
         "value": "pravo-social-author",
         "category": "citation",
@@ -2794,8 +3046,11 @@
       },
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
-        "value": [],
+        "value": [{"key": "abstract", "label": "sazetak", "terms": ["sazetak", "abstract"]}, {"key": "intro", "label": "uvod", "terms": ["uvod", "introduction"]}, {"key": "body", "label": "razrada teme po poglavljima", "terms": ["razrada", "poglavlje", "glava", "chapter"]}, {"key": "conclusion", "label": "zakljucak", "terms": ["zakljucak", "conclusion"]}, {"key": "refs", "label": "literatura", "terms": ["literatura", "popis literature", "bibliografija", "references"]}],
         "category": "structure",
         "label": "Obvezni dijelovi rada",
         "machineCheckable": true,
@@ -2827,6 +3082,9 @@
     "pravo-specijalisticki-pravni-opci": [
       {
         "ruleId": "pravo-specijalisticki-pravni-opci--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -2848,6 +3106,9 @@
       },
       {
         "ruleId": "pravo-specijalisticki-pravni-opci--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -2869,6 +3130,9 @@
       },
       {
         "ruleId": "pravo-specijalisticki-pravni-opci--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -2906,6 +3170,9 @@
       },
       {
         "ruleId": "pravo-specijalisticki-pravni-opci--citation-style",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-fusnote",
         "category": "citation",
@@ -2923,8 +3190,11 @@
       },
       {
         "ruleId": "pravo-specijalisticki-pravni-opci--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
-        "value": [],
+        "value": [{"key": "intro", "label": "uvod", "terms": ["uvod", "uvodni dio", "introduction"]}, {"key": "body", "label": "sredisnji dio", "terms": ["sredisnji dio", "razrada", "poglavlje", "glava", "chapter"]}, {"key": "conclusion", "label": "zakljucak", "terms": ["zakljucak", "zakljucni dio", "conclusion"]}, {"key": "refs", "label": "popis koristenih izvora i literature", "terms": ["izvori i literatura", "popis literature", "literatura", "bibliografija", "references"]}],
         "category": "structure",
         "label": "Obvezni dijelovi rada",
         "machineCheckable": true,
@@ -3035,6 +3305,9 @@
       },
       {
         "ruleId": "pravo-specijalisticki-pravni-opci--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -3085,6 +3358,9 @@
     "pravo-doktorski-pravne-znanosti": [
       {
         "ruleId": "pravo-doktorski-pravne-znanosti--font",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -3106,6 +3382,9 @@
       },
       {
         "ruleId": "pravo-doktorski-pravne-znanosti--font-size",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -3127,6 +3406,9 @@
       },
       {
         "ruleId": "pravo-doktorski-pravne-znanosti--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -3164,6 +3446,9 @@
       },
       {
         "ruleId": "pravo-doktorski-pravne-znanosti--citation-style",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "citation-style",
         "value": "pravo-fusnote",
         "category": "citation",
@@ -3181,8 +3466,11 @@
       },
       {
         "ruleId": "pravo-doktorski-pravne-znanosti--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
-        "value": [],
+        "value": [{"key": "intro", "label": "uvod", "terms": ["uvod", "uvodni dio", "introduction"]}, {"key": "body", "label": "sredisnji dio", "terms": ["sredisnji dio", "razrada", "poglavlje", "glava", "chapter"]}, {"key": "conclusion", "label": "zakljucak", "terms": ["zakljucak", "zakljucni dio", "conclusion"]}, {"key": "refs", "label": "popis koristenih izvora i literature", "terms": ["izvori i literatura", "popis literature", "literatura", "bibliografija", "references"]}],
         "category": "structure",
         "label": "Obvezni dijelovi rada",
         "machineCheckable": true,
@@ -3293,6 +3581,9 @@
       },
       {
         "ruleId": "pravo-doktorski-pravne-znanosti--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -3343,6 +3634,9 @@
     "pravo-socijalne-djelatnosti-specijalisticki": [
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--font",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman",
@@ -3365,6 +3659,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--font-size",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -3386,6 +3683,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -3405,6 +3705,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -3429,6 +3732,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "citation-style",
         "value": "pravo-social-author",
         "category": "citation",
@@ -3446,6 +3752,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "required-sections",
         "value": [
           {
@@ -3499,6 +3808,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -3516,6 +3828,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--page-numbers",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -3533,6 +3848,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--word-count",
+        "modality": "recommendation",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 20000,
@@ -3555,6 +3873,9 @@
     "pravo-socijalne-djelatnosti-doktorski": [
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--font",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman",
@@ -3577,6 +3898,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--font-size",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -3598,6 +3922,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--line-spacing",
+        "modality": "directive",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -3617,6 +3944,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--margins",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "margins",
         "value": {
           "top": 2.5,
@@ -3641,6 +3971,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--citation-style",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "citation-style",
         "value": "pravo-social-author",
         "category": "citation",
@@ -3658,6 +3991,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -3726,6 +4062,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -3743,6 +4082,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--page-numbers",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -3760,6 +4102,9 @@
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--word-count",
+        "modality": "recommendation",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 45000,
@@ -3782,6 +4127,9 @@
     "trgovacko-pravo": [
       {
         "ruleId": "trgovacko-pravo--required-sections",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "required-sections",
         "value": [
           {
@@ -3839,6 +4187,9 @@
       },
       {
         "ruleId": "trgovacko-pravo--toc",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -3856,6 +4207,9 @@
       },
       {
         "ruleId": "trgovacko-pravo--page-numbers",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -3873,6 +4227,9 @@
       },
       {
         "ruleId": "trgovacko-pravo--footnote-font",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-font",
         "value": [
           "Times New Roman"
@@ -3892,6 +4249,9 @@
       },
       {
         "ruleId": "trgovacko-pravo--footnote-size",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-size",
         "value": [
           10
@@ -3911,6 +4271,9 @@
       },
       {
         "ruleId": "trgovacko-pravo--footnote-spacing",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-spacing",
         "value": 1.15,
         "category": "format",
@@ -3930,6 +4293,9 @@
     "radno-socijalno-pravo": [
       {
         "ruleId": "radno-socijalno-pravo--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -3947,6 +4313,9 @@
       },
       {
         "ruleId": "radno-socijalno-pravo--page-numbers",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",
@@ -3964,6 +4333,9 @@
       },
       {
         "ruleId": "radno-socijalno-pravo--footnote-font",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-font",
         "value": [
           "Times New Roman"
@@ -3983,6 +4355,9 @@
       },
       {
         "ruleId": "radno-socijalno-pravo--footnote-size",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-size",
         "value": [
           10
@@ -4002,6 +4377,9 @@
       },
       {
         "ruleId": "radno-socijalno-pravo--footnote-spacing",
+        "modality": "directive",
+        "scope": "footnote",
+        "modalitySource": "mechanical",
         "checkId": "footnote-spacing",
         "value": 1,
         "category": "format",
@@ -4019,6 +4397,9 @@
       },
       {
         "ruleId": "radno-socijalno-pravo--heading-rules",
+        "modality": "directive",
+        "scope": "heading",
+        "modalitySource": "agent-read",
         "checkId": "heading-rules",
         "value": {
           "numberRequired": true,
@@ -4052,6 +4433,9 @@
     "sociologija": [
       {
         "ruleId": "sociologija--font",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font",
         "value": [
           "Times New Roman"
@@ -4073,6 +4457,9 @@
       },
       {
         "ruleId": "sociologija--font-size",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "font-size",
         "value": [
           12
@@ -4094,6 +4481,9 @@
       },
       {
         "ruleId": "sociologija--line-spacing",
+        "modality": "obligation",
+        "scope": "body",
+        "modalitySource": "mechanical",
         "checkId": "line-spacing",
         "value": 1.5,
         "category": "format",
@@ -4113,6 +4503,9 @@
       },
       {
         "ruleId": "sociologija--required-sections",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "required-sections",
         "value": [
           {
@@ -4172,6 +4565,9 @@
       },
       {
         "ruleId": "sociologija--toc",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "agent-read",
         "checkId": "toc",
         "value": true,
         "category": "structure",
@@ -4189,6 +4585,9 @@
       },
       {
         "ruleId": "sociologija--page-numbers",
+        "modality": "obligation",
+        "scope": "whole",
+        "modalitySource": "mechanical",
         "checkId": "page-numbers",
         "value": true,
         "category": "format",

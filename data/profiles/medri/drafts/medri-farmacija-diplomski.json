@@ -56,6 +56,9 @@
     },
     {
       "ruleId": "medri-farmacija-diplomski--line-spacing",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "line-spacing",
       "value": 2,
       "category": "format",
@@ -77,6 +80,9 @@
     },
     {
       "ruleId": "medri-farmacija-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -98,6 +104,9 @@
     },
     {
       "ruleId": "medri-farmacija-diplomski--page-count",
+      "modality": "prohibition",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "page-count",
       "value": {
         "min": 15,

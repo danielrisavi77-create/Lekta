@@ -48,6 +48,14 @@ jobs:
       - name: Build gate (tsc + vitest + vite build)
         run: npm run check
 
+      # Faza A zastite baze pravila: post-build sken dist artefakata na kanarince i
+      # never-markere privatnog sloja (drafts evidence, ledger, source-registry).
+      # Vitest sloj (tests/classification.test.ts) cuva manifest i izvore; vite plugin
+      # (classification-guard) pada na krivom importu u samom buildu; ovaj korak cuva
+      # EMITIRANE datoteke nakon vite builda, ukljucujuci dist-packs/.
+      - name: Klasifikacijski sken dist artefakata
+        run: node scripts/verify-dist-classification.mjs
+
       # supabase/functions/** je Deno kod izvan tsconfig.json include-a, pa ga `npm run check`
       # NIKAD nije provjeravao (audit TEST-01). Ondje zivi serverski kod koji barata novcem,
       # tudjim dokumentima i pravom pristupa, dakle najgore moguce mjesto za rupu u provjeri.

@@ -96,15 +96,16 @@
       "sourceId": "ffst-predlozak-zavrsnoga-diplomskoga",
       "sourcePage": "Predlozak, stil Normal + footer2.xml (obvezujuc preko Pravilnik Clanak 9 -> Upute)",
       "quote": "Normal stil: font Times New Roman, velicina 12pt (w:sz=24), prored 1,5 (w:line=360 auto), obostrano poravnanje (w:jc=both). Stranica A4 (21x29,7cm), margine 2,54cm sve strane. Footer: PAGE polje, desno poravnano, dno stranice.",
-      "status": "verified",
-      "scored": true,
+      "status": "needs-recheck",
+      "scored": false,
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "lastVerified": "2026-07-28",
-      "confirmedVia": "ai-1pass-batch",
+      "confirmedVia": null,
       "verifiedHash": "f1f5f8d14de0780a2e23876bf2330ba3efe2b2e70b5cae57ae889a10648692fc",
-      "autoFixable": true,
-      "fixerId": "margins-fixer"
+      "autoFixable": false,
+      "fixerId": "margins-fixer",
+      "note": "OZNACENO ZA REVERIFIKACIJU (Daniel Risavi): Tvrdnja dolazi iz POSTAVKI PAKETA predloska (.docx), ne iz recenice, a predlozak je netaknut Word dokument: pgMar 1440 twips = 2,54 cm sa svih strana (Wordova tvornicka vrijednost), docDefaults sz=22 (11 pt) i line=259 (prored 1,08), bez ijednog imena fonta. Wordova zadana postavka nije fakultetsko pravilo. Skinuto s bodovanja do reverifikacije; NE potvrdjuje motorovih 2,5 cm."
     },
     {
       "ruleId": "ffst-diplomski--paper-size",

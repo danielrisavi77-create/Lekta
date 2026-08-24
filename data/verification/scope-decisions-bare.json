@@ -1,0 +1,125 @@
+{
+  "note": "Presude nad skupinom \"nema modalnog biljega\": goli indikativ je directive.",
+  "decisions": [
+    {
+      "ruleId": "effectus-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "effectus-seminarski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "effectus-zavrsni--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "ffrz-bakalaureatski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "ffrz-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "ffzg-filozofija-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "ftrr-diplomski--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "ftrr-zavrsni--margins",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "geof-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "geof-doktorski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "grf-zavrsni--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "mef-doktorski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "mef-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "radno-socijalno-pravo--heading-rules",
+      "modality": "directive",
+      "scope": "heading",
+      "note": "imperativ uz izricitu ZABRANU: 'oznacavajte samo arapskim brojevima ... a nikako ne slovima ili rimskim brojevima'. Vrijednost osi nosi pozitivan zahtjev (decimalno numeriranje), pa je modalitet `directive`; zabranjeni dio je zapisan kao `romanLevelOneAllowed: false`."
+    },
+    {
+      "ruleId": "pravo-socijalna-politika-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "pravo-socijalni-rad-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "ufzg-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "ufzg-zavrsni--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "vvg-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    },
+    {
+      "ruleId": "vvg-zavrsni--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "note": "goli indikativ: recenica navodi praksu kao cinjenicu ('Format rada je A4', 'Literatura se citira navodjenjem...'), bez modalnog glagola. U ovom vokabularu je to `directive`, ne `obligation` (nema 'mora'/'duzan') i ne `recommendation` (nema ublazavanja)."
+    }
+  ]
+}

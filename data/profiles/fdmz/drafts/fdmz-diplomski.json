@@ -108,6 +108,9 @@
     },
     {
       "ruleId": "fdmz-diplomski--paper-size",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "paper-size",
       "value": true,
       "category": "format",
@@ -129,6 +132,9 @@
     },
     {
       "ruleId": "fdmz-diplomski--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",

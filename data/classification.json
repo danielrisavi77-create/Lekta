@@ -1,0 +1,161 @@
+{
+  "version": 1,
+  "napomena": "Klasifikacija imovine repozitorija (faza A plana zastite baze pravila). Semantika kao .gitignore: ZADNJE pravilo koje pogodi stazu vrijedi, pa opca pravila stoje gore a iznimke i najprivatnije staze dolje. bundle: allowed = smije u javni browser bundle; forbidden = nikad; derived = izvor ne smije, u bundle smiju samo navedene projekcije (derivedBy). Polje until je dokumentacijski podsjetnik na planirani flip, enforcement cita iskljucivo trenutnu bundle vrijednost. Potrosaci: scripts/security/classification-guard.mjs (vite plugin, pada build), scripts/verify-dist-classification.mjs (post-build sken), tests/classification.test.ts (pokrivenost, mrtva pravila, kanarinci).",
+  "rules": [
+    { "pattern": "src/**", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "docs/**", "class": "PRIVATE-IP", "bundle": "forbidden" },
+    { "pattern": "scripts/**", "class": "PRIVATE-IP", "bundle": "forbidden" },
+    { "pattern": "supabase/**", "class": "SECURITY-SENSITIVE", "bundle": "forbidden" },
+    {
+      "pattern": "tests/**",
+      "class": "PRIVATE-IP",
+      "bundle": "forbidden",
+      "note": "tests/fixtures/docx su PRAVI studentski radovi (GDPR); nikad u bundle (revizija 2026-08-23, nalaz 7)."
+    },
+    { "pattern": "public/**", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "*.html", "class": "PUBLIC", "bundle": "allowed", "note": "Rollup entryji u korijenu (index.html i alatne stranice). Manifest * NE prelazi /, pa ovo hvata SAMO korijen; podstabla (prototype/, reference/) imaju vlastita pravila jer ih git pathspec *.html u testu pokrivenosti dovodi u opseg." },
+    { "pattern": "prototype/**", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Interni dizajn prototipovi." },
+    { "pattern": "reference/**", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Interni referentni artefakti (coverage matrica, wireflow)." },
+    { "pattern": "data/**", "class": "PROPRIETARY-DATA", "bundle": "forbidden" },
+
+    { "pattern": "data/classification.json", "class": "PRIVATE-IP", "bundle": "forbidden" },
+    { "pattern": "data/packages.json", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/work-type-labels.json", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/work-type-scope.json", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/checks/**", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/catalog/**", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/coverage/**", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/submission/**", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/methodology/**", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/title-pages/**", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/tools/citation-specs/verified/**", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/tools/citation-specs/verified-index.json", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/legal/**", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/declarations/**", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/competitors/**", "class": "PUBLIC", "bundle": "allowed" },
+
+    { "pattern": "data/profiles/verified-profiles-index.json", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/profiles/legal-departments.json", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/profiles/profile-authority.json", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/profiles/base-profiles.json", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/profiles/fpzg-partial.json", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/profiles/profile-status.json", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/profiles/advisory-map.json", "class": "PUBLIC", "bundle": "allowed" },
+    {
+      "pattern": "data/profiles/verified-profiles-heavy.json",
+      "class": "PROPRIETARY-DATA",
+      "bundle": "forbidden",
+      "note": "FLIP faza B3 (2026-08-23): vrijednosti su pojedinacno javne (SEO), ali BULK agregat se vise ne isporucuje pregledniku; pravila idu per-profil s profile-rules endpointa. Testovi/golden i dalje citaju datoteku iz repoa (nisu browser bundle)."
+    },
+    {
+      "pattern": "data/profiles/repair-map.json",
+      "class": "PROPRIETARY-DATA",
+      "bundle": "forbidden",
+      "note": "FLIP faza B3: provenijencija dokaznog cipa (sourcePage, quote) servira se per-profil (repairEntries u profile-rules odgovoru), bulk mapa vise ne ide u dist."
+    },
+
+    {
+      "pattern": "data/profiles/verified-profiles.json",
+      "class": "PROPRIETARY-DATA",
+      "bundle": "derived",
+      "derivedBy": ["scripts/gen-verified-split.mjs"],
+      "note": "Izvor istine; u bundle smiju SAMO projekcije index+heavy bez fieldValidation.publicSources."
+    },
+    {
+      "pattern": "data/profiles/*/drafts/**",
+      "class": "PROPRIETARY-DATA",
+      "bundle": "forbidden",
+      "note": "ruleEntries s evidence: doslovan citat + stranica + verifiedHash + potpis. Srce moata."
+    },
+    { "pattern": "data/verification/**", "class": "PROPRIETARY-DATA", "bundle": "forbidden" },
+    { "pattern": "data/sources/**", "class": "PROPRIETARY-DATA", "bundle": "forbidden" },
+    { "pattern": "data/generated/**", "class": "SECURITY-SENSITIVE", "bundle": "forbidden", "note": "Serverski artefakti (repair-params-by-profile, profile-rules-server); pripadaju Edge bundleu, nikad pregledniku." },
+
+    {
+      "pattern": "src/verification/**",
+      "class": "PRIVATE-IP",
+      "bundle": "forbidden",
+      "note": "Verifikacijski sloj vuce ledger + source-registry; smije ga uvoziti samo interna konzola i testovi."
+    },
+    { "pattern": "src/ui/verification-console.ts", "class": "PRIVATE-IP", "bundle": "forbidden" },
+    {
+      "pattern": "src/profiles/drafts-runtime.ts",
+      "class": "PRIVATE-IP",
+      "bundle": "forbidden",
+      "note": "Eager glob ~2,6 MB draft evidencea; do ovog garda cuvala ga je samo disciplina importa."
+    },
+    { "pattern": "src/profiles/advisory-demotion.ts", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Racunski put demotije (drift artefakt + published-rules); zivi app cita pecenu advisory-map." },
+    { "pattern": "src/analysis/golden-entry.ts", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Eager heavy merge za golden/conformance; test i build sloj." },
+    { "pattern": "src/repair/recipe.ts", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Build/docs sloj recepta (CLAUDE.md: NIJE u bundleu)." },
+    { "pattern": "src/repair/param-authority.ts", "class": "SECURITY-SENSITIVE", "bundle": "forbidden", "note": "Serverski autoritet ciljanih vrijednosti; uvozi ga Edge funkcija repair-docx." }
+  ],
+  "canaries": [
+    {
+      "value": "LEKTA-KANARINAC-PROPRIETARY-DATA-4219a804879e",
+      "mustExistIn": "data/profiles/verified-profiles.json",
+      "class": "PROPRIETARY-DATA",
+      "kind": "sintetski",
+      "note": "Unutar fieldValidation.publicSources: i gen-verified-split i stripRuntimeDeadProvenance brisu CIJELO polje, pa je odsutnost kanarinca iz dista dokaz da strip lanac radi."
+    },
+    {
+      "value": "LEKTA-KANARINAC-PROPRIETARY-DATA-2ba5443a14ba",
+      "mustExistIn": "data/profiles/fpzg/drafts/fpzg-drafts.json",
+      "class": "PROPRIETARY-DATA",
+      "kind": "sintetski"
+    },
+    {
+      "value": "LEKTA-KANARINAC-PROPRIETARY-DATA-6d64f7f58b1e",
+      "mustExistIn": "data/profiles/unisb/drafts/unisb-drafts.json",
+      "class": "PROPRIETARY-DATA",
+      "kind": "sintetski"
+    },
+    {
+      "value": "LEKTA-KANARINAC-PROPRIETARY-DATA-f4c0603fef64",
+      "mustExistIn": "data/profiles/ttf/drafts/ttf.json",
+      "class": "PROPRIETARY-DATA",
+      "kind": "sintetski"
+    },
+    {
+      "value": "LEKTA-KANARINAC-PROPRIETARY-DATA-80c4bfc1043c",
+      "mustExistIn": "data/verification/ledger.json",
+      "class": "PROPRIETARY-DATA",
+      "kind": "sintetski",
+      "note": "Dodatno polje prvog unosa (potrosaci citaju imenovana polja); ledger nema nijedan never-marker kljuc pa mu je ovo jedini sadrzajni otisak (revizija, nalaz 4)."
+    },
+    {
+      "value": "LEKTA-KANARINAC-PROPRIETARY-DATA-43381f0d95ad",
+      "mustExistIn": "data/verification/scored-value-drift.json",
+      "class": "PROPRIETARY-DATA",
+      "kind": "sintetski",
+      "note": "Emitira ga GENERATOR (buildScoredValueDrift, DRIFT_KANARINAC) pa prezivljava svaki regen; rucni upis bi ga izgubio. Zatvara rezidual iz faze A."
+    },
+    {
+      "value": "LEKTA-KANARINAC-SECURITY-SENSITIVE-906244f20b91",
+      "mustExistIn": "data/generated/repair-params-by-profile.json",
+      "class": "SECURITY-SENSITIVE",
+      "kind": "sintetski",
+      "note": "Emitira ga GENERATOR (buildParamAuthority, PARAM_AUTHORITY_KANARINAC_KEY) kao zz- kljuc s PRAZNIM pravilima: nikad ne prolazi kao profil s vrijednostima. Zatvara rezidual iz faze A."
+    },
+    {
+      "value": "3e0af65c4445123e25fe4dbc3ca5f7366d7c9f76bcadb4c15ffd806a90fdb4ef",
+      "mustExistIn": "data/profiles/verified-profiles.json",
+      "class": "PROPRIETARY-DATA",
+      "kind": "prirodni",
+      "note": "publicSources sha256 (fpzg:2890): strip lanac brise cijelo polje iz svih izlaza pa je odsutnost iz dista dokaz. NE koristiti source-registry snapshotHash kao kanarinca: za izvore s citatnim specom ista vrijednost NAMJERNO izlazi u javni bundle kao spec.verifiedHash (nauceno na pravo-* 2026-08-23)."
+    },
+    {
+      "value": "46777553c8a1ecac24c6b943f8214ea45ba6eec368270ce0f8100e9c255d1de3",
+      "mustExistIn": "data/profiles/verified-profiles.json",
+      "class": "PROPRIETARY-DATA",
+      "kind": "prirodni",
+      "note": "publicSources sha256 (fpzg:2930)."
+    },
+    {
+      "value": "a4ab0cd2304c45f7dfdb7cf9489b5c9237fca985e2d195e9b0523432352b2f39",
+      "mustExistIn": "data/profiles/verified-profiles.json",
+      "class": "PROPRIETARY-DATA",
+      "kind": "prirodni",
+      "note": "publicSources sha256 (biotechri:235, biotech-diplomski)."
+    }
+  ]
+}

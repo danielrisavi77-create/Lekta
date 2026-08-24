@@ -82,6 +82,9 @@
     },
     {
       "ruleId": "ffri-diplomski--font-size",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -127,6 +130,9 @@
     },
     {
       "ruleId": "ffri-diplomski--justify",
+      "modality": "obligation",
+      "scope": "body",
+      "modalitySource": "agent-read",
       "checkId": "justify",
       "value": true,
       "category": "format",

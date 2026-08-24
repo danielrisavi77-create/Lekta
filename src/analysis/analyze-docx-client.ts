@@ -171,6 +171,9 @@ export async function analyzeDocxOffThread(file: File, profile: any, settings: a
   if (canUseWorker()) {
     try {
       const result = await analyzeInWorker(file, profile, settings, onProgress, options);
+      // BACKLOG (faza D): attachHeadingStructure trci NA GLAVNOJ NITI nad preview.paragraphs,
+      // dakle izvan worker granice; kad sav 2 uvede heading measurements, ovo se moze preseliti
+      // u internal. Zaseban problem od evaluacijskog sava; ne dirati usput.
       // Obje strane su omotavale isti return: grana obogacuje rezultat strukturom naslova,
       // master ga hvata za povratak u Katedru. Redoslijed je bitan, ne proizvoljan: Katedra
       // mora vidjeti KONACAN rezultat, pa obogacivanje ide prvo.

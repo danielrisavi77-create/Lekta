@@ -172,6 +172,9 @@
       },
       {
         "ruleId": "kif-diplomski--word-count",
+        "modality": "prohibition",
+        "scope": "whole",
+        "modalitySource": "human",
         "checkId": "word-count",
         "value": {
           "min": 4000

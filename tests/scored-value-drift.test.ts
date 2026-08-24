@@ -43,8 +43,12 @@ const RATCHET = {
    * 2026-08-23: 40 -> 38, jer su dva `vuka-strojarski` pravila oznacena `needs-recheck` (citat im
    * ne postoji u izvoru). Ratchet se SPUSTA u istom commitu u kojem nalaz nestane; da se nije
    * spustio, gard bi nosio dvije jedinice neradjene zalihe i dva nova raskoraka bi prosla zeleno.
+   *
+   * 2026-08-24: NULA. Svih 37 je presudjeno i potpisano (`data/verification/drift-decisions.json`,
+   * 35 `claim` + 2 `claim-wrong`). Od sada svaki raskorak koji se pojavi znaci da je nesto poceto
+   * bodovati mimo vlastitog dokaza, i gard pada odmah, bez zalihe.
    */
-  drift: 38,
+  drift: 0,
   /** Verificirana tvrdnja postoji, a motor tu dimenziju uopce ne provjerava (tiho popustanje). */
   unapplied: 24,
   /** Motor boduje dimenziju bez ijedne tvrdnje: svih 82 su u 14 profila koji nemaju nijedan ruleEntry. */
@@ -91,6 +95,14 @@ describe('scored-value-drift: artefakt je u koraku s podacima', () => {
   });
 });
 
+/**
+ * OVE DVIJE TVRDNJE SU OD 2026-08-24 PRAZNE, i to je namjerno stanje, ne propust: nema vise nijednog
+ * raskoraka. Ostaju jer su drift-gard nad artefaktom: cim se raskorak vrati, moraju ga uhvatiti.
+ *
+ * Da mehanizam i dalje GRIZE dokazuje mutacija `demotija/osnovni-izracun-ne-ovisi-o-raskoraku` u
+ * tests/gate-mutations.test.ts, koja raskorak PODMECE umjesto da ga trazi u podacima. Bez nje bi
+ * ovaj opis bio isprika za vakuumski prolaz.
+ */
 describe('scored-value-drift: demotija stvarno stize do motora', () => {
   it('svaka os s raskorakom je demotirana u pecenoj advisory mapi', () => {
     const demoted = (baked as { demotedByProfile: Record<string, string[]> }).demotedByProfile;
@@ -185,8 +197,12 @@ describe('sameRuleValue: normalizacija koja je nuzna, ne kozmeticka', () => {
   });
 
   it('objekt i lista nisu ista vrijednost ma kako se serijalizirali', () => {
-    // fbf-specijalisticki: tvrdnja {min:10,max:12}, zrcalo [10,11,12]. Motor prima listu i
-    // `profile.size.some` bi na objektu pukao, pa to nije "isto zapisano drukcije".
+    // Pravilo stoji: motor prima listu i `profile.size.some` bi na objektu pukao, pa usporedba ne
+    // smije objekt tiho izjednaciti s popisom.
     expect(sameRuleValue({ min: 10, max: 12 }, [10, 11, 12])).toBe(false);
+    // Slucaj koji je to motivirao (fbf-specijalisticki) VISE NE DOLAZI dovde: raspon se prosiruje u
+    // popis jos u `rule-compiler.applyEntry`, dakle na izvoru, a ne zaobilazi ovdje na usporedbi.
+    // Razlika je bitna jer bi popustanje ovdje sakrilo i stvaran raskorak nad marginama, gdje je
+    // objekt (strane) legitiman oblik. Gard: mutacija `kompajler/raspon-se-prosiruje-u-popis`.
   });
 });

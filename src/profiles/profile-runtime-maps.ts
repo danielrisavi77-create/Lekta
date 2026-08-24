@@ -28,6 +28,20 @@ const ADVISORY_MAP = advisoryMapRaw as Record<string, string[]>;
 let _repairMap: Record<string, RuleEntry[]> | null = null;
 let _repairMapReady: Promise<void> | null = null;
 
+/**
+ * Rules-on-demand (faza B): repair unosi jednog profila stizu i S POSLUZITELJEM u
+ * istom odgovoru kao pravila (profile-rules), pa ih ensureProfileRules PRIME-a
+ * ovdje po profilu. Bulk mapa (ensureRepairMapHeavy) ostaje kao fallback za dev
+ * lokalni provider, testove i skripte koje trebaju SVE profile odjednom.
+ */
+const _primedRepair = new Map<string, RuleEntry[]>();
+
+/** Upisi repair unose jednog profila (poziva ensureProfileRules nakon dohvata). */
+export function primeRepairEntries(id: string, entries: unknown[]): void {
+  // Slim zapisi nose samo polja koja buildRepairableItems cita; double-cast kao i bulk mapa.
+  _primedRepair.set(id, (Array.isArray(entries) ? entries : []) as unknown as RuleEntry[]);
+}
+
 export function ensureRepairMapHeavy(): Promise<void> {
   if (!_repairMapReady) {
     _repairMapReady = import('../../data/profiles/repair-map.json').then((mod) => {
@@ -69,12 +83,16 @@ export function applyBakedAdvisory(
  */
 export function repairEntriesFor(id: string | null | undefined): RuleEntry[] {
   if (id == null) return [];
+  const primed = _primedRepair.get(id);
+  if (primed) return primed;
   if (_repairMap === null) {
     throw new Error(
-      'repairEntriesFor: repair-map jos nije ucitan. Pozovi `await ensureRepairMapHeavy()` prije ' +
-        'gradnje repair stavki (u pregledniku to radi renderRepairSection, u testovima i skriptama ' +
-        'ucini to u pripremi). Namjerno se baca umjesto da se vrati prazno: tiho prazna mapa ' +
-        'izgleda kao "profil nema pravila za popravak" i ugasi 7 fixera bez ijedne poruke.',
+      'repairEntriesFor: repair unosi za ovaj profil nisu ni primeani (ensureProfileRules) ni ' +
+        'ucitani kao bulk mapa (ensureRepairMapHeavy). U pregledniku pozovi `await ' +
+        'ensureProfileRules(id)` prije gradnje repair stavki (radi renderRepairSection); u ' +
+        'testovima i skriptama `await ensureRepairMapHeavy()`. Namjerno se baca umjesto da se ' +
+        'vrati prazno: tiho prazna mapa izgleda kao "profil nema pravila za popravak" i ugasi ' +
+        '7 fixera bez ijedne poruke.',
     );
   }
   return _repairMap[id] ?? [];

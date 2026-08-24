@@ -108,6 +108,9 @@
     },
     {
       "ruleId": "vsig-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",
@@ -127,6 +130,9 @@
     },
     {
       "ruleId": "vsig-diplomski--citation-style",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "citation-style",
       "value": "apa",
       "category": "citation",

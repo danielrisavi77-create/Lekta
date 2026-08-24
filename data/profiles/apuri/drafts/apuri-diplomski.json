@@ -101,6 +101,9 @@
     },
     {
       "ruleId": "apuri-diplomski--justify",
+      "modality": "directive",
+      "scope": "body",
+      "modalitySource": "human",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -122,6 +125,9 @@
     },
     {
       "ruleId": "apuri-diplomski--page-numbers",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "page-numbers",
       "value": true,
       "category": "format",
@@ -141,6 +147,9 @@
     },
     {
       "ruleId": "apuri-diplomski--required-sections",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "required-sections",
       "value": [
         {
@@ -196,6 +205,9 @@
     },
     {
       "ruleId": "apuri-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "agent-read",
       "checkId": "toc",
       "value": true,
       "category": "structure",

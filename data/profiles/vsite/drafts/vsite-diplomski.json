@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "vsite-diplomski--page-count",
+      "modality": "recommendation",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "page-count",
       "value": {
         "min": 50,
@@ -25,6 +28,9 @@
     },
     {
       "ruleId": "vsite-diplomski--toc",
+      "modality": "directive",
+      "scope": "whole",
+      "modalitySource": "human",
       "checkId": "toc",
       "value": true,
       "category": "structure",

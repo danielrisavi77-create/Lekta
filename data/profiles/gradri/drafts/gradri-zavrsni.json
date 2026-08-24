@@ -3,6 +3,9 @@
   "entries": [
     {
       "ruleId": "gradri-zavrsni--heading-rules",
+      "modality": "obligation",
+      "scope": "heading",
+      "modalitySource": "agent-read",
       "checkId": "heading-rules",
       "value": {
         "numberRequired": true,

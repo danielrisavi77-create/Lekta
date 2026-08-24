@@ -1,6 +1,7 @@
 import type { ThesisProfile, RuleEntry, SourceEntry } from '../profiles/profile-schema';
 import { compileEffectiveRules, type EffectiveRules } from '../profiles/rule-compiler';
 import { computePublishedRules } from './published-rules';
+import { CHECK_FLAG_HAS_VALUE } from '../profiles/profile-baseline';
 
 /**
  * Vezanje BODOVANE VRIJEDNOSTI na verificiranu tvrdnju.
@@ -68,6 +69,31 @@ export interface ScoredValueFinding {
  * Kanonsko citanje jedne dimenzije iz spljostenih pravila, tocno onako kako je motor cita.
  * `undefined` znaci "motor tu dimenziju ne boduje".
  */
+/**
+ * Vrijednost koju motor STVARNO boduje. Razlikuje se od sirovog citanja u jednoj stvari:
+ * `normalizeCheckFlags` gasi provjeru kojoj profil nema vrijednost (prazan popis fontova,
+ * nepotpune margine), pa bi bez toga usporedba prijavila raskorak ili `unbacked` nad dimenzijom
+ * koju motor uopce ne gleda. Uvjet se NE prepisuje nego dijeli (`CHECK_FLAG_HAS_VALUE`).
+ *
+ * VRIJEDI SAMO ZA MOTOR. Strana TVRDNJE ide kroz sirovi `readAxis`, jer tvrdnja legitimno nosi
+ * oblike koje profil nikad nema: `font-size` zna biti raspon `{min,max}` (`fbf-specijalisticki`),
+ * a to nije "prazna vrijednost" nego drukcije zapisana. Kad je ovaj uvjet nakratko vrijedio i za
+ * tvrdnje, taj se raspon tiho ISPUSTIO iz usporedbe i jedan raskorak je "nestao" a da nitko nista
+ * nije presudio: tocno lazno zeleno protiv kojeg cijeli ovaj modul postoji.
+ */
+const ENGINE_FLAG: Partial<Record<BoundCheckId, keyof typeof CHECK_FLAG_HAS_VALUE>> = {
+  'font': 'checkFont',
+  'font-size': 'checkSize',
+  'line-spacing': 'checkSpacing',
+  'margins': 'checkMargins',
+};
+
+function engineAxisValue(rules: EffectiveRules, checkId: BoundCheckId): unknown {
+  const flag = ENGINE_FLAG[checkId];
+  if (flag && !CHECK_FLAG_HAS_VALUE[flag]!(rules)) return undefined;
+  return readAxis(rules, checkId);
+}
+
 function readAxis(rules: EffectiveRules, checkId: BoundCheckId): unknown {
   switch (checkId) {
     case 'font':
@@ -167,7 +193,7 @@ export function findScoredValueFindings(
 
   for (const checkId of BOUND_CHECK_IDS) {
     const entry = claimByAxis.get(checkId);
-    const scoredValue = readAxis(rules, checkId);
+    const scoredValue = engineAxisValue(rules, checkId);
 
     if (entry) {
       const claimValue = claimAxisValue(entry, checkId);

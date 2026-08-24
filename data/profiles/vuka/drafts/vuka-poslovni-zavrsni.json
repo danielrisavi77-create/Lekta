@@ -16,7 +16,7 @@
       "authority": "general",
       "verifiedHash": "cdd389a04f661585bb47dd26b7d36bb2c4ff3fce7a00ddf87091a9a485fbd64f",
       "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
-      "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
+      "quote": "odabrati veličinu slova teksta 12 (Arial ili Times New Roman)",
       "autoFixable": true,
       "fixerId": "font-fixer",
       "machineCheckable": true,
@@ -40,7 +40,7 @@
       "authority": "general",
       "verifiedHash": "cdd389a04f661585bb47dd26b7d36bb2c4ff3fce7a00ddf87091a9a485fbd64f",
       "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
-      "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
+      "quote": "Završni radovi pišu se računalom na papiru formata A4 (210 x 297 mm) s proredom 1,5.",
       "autoFixable": true,
       "fixerId": "line-spacing-fixer",
       "machineCheckable": true,
@@ -50,6 +50,71 @@
       "reviewedBy": "Daniel Risavi",
       "lastVerified": "2026-07-27",
       "confirmedVia": "ai-1pass-batch"
+    },
+    {
+      "ruleId": "vuka-poslovni-zavrsni--footnote-size",
+      "modality": "obligation",
+      "scope": "footnote",
+      "modalitySource": "agent-read",
+      "checkId": "footnote-size",
+      "value": [
+        10
+      ],
+      "category": "format",
+      "label": "Veličina slova u bilješkama",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "vuka-poslovni-upute",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "odabrati veličinu slova teksta 12 (Arial ili Times New Roman) za bilješke (“fusnote“ ) odabrati veličinu slova 10",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Claude Opus 5 (1M context)",
+      "lastVerified": "2026-08-24",
+      "confirmedVia": "human",
+      "verifiedHash": "cdd389a04f661585bb47dd26b7d36bb2c4ff3fce7a00ddf87091a9a485fbd64f"
+    },
+    {
+      "ruleId": "vuka-poslovni-zavrsni--heading-rules",
+      "modality": "obligation",
+      "scope": "heading",
+      "modalitySource": "agent-read",
+      "checkId": "heading-rules",
+      "value": {
+        "levels": {
+          "1": {
+            "size": 16,
+            "bold": true,
+            "uppercase": true
+          },
+          "2": {
+            "size": 14,
+            "bold": true,
+            "uppercase": false
+          },
+          "3": {
+            "size": 12,
+            "bold": true,
+            "uppercase": false
+          }
+        }
+      },
+      "category": "format",
+      "label": "Oblikovanje naslova po razinama",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "vuka-poslovni-upute",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Claude Opus 5 (1M context)",
+      "lastVerified": "2026-08-24",
+      "confirmedVia": "human",
+      "verifiedHash": "cdd389a04f661585bb47dd26b7d36bb2c4ff3fce7a00ddf87091a9a485fbd64f",
+      "note": "Izvor imenuje dijelove rada rijecima (glave / poglavlja / potpoglavlja); vezanje na Wordove razine naslova 1/2/3 je CITANJE, ne prijepis. Isto citanje koristi 18 profila koji vec imaju headingRules.levels."
     }
   ]
 }
