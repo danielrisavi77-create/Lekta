@@ -78,3 +78,6 @@ jobs:
 
       - name: Outbox bonus obveza (P1-07)
         run: psql -v ON_ERROR_STOP=1 -f scripts/bonus-outbox-smoke.sql
+
+      - name: Sabirnica klijentskih gresaka (P1-28)
+        run: psql -v ON_ERROR_STOP=1 -f scripts/client-errors-smoke.sql

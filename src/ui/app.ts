@@ -62,6 +62,7 @@ import { uploadCapBytes, decompressionBudgetBytes } from '../analysis/memory-bud
 import { detectContextFromText, needsProfileConfirmation, isConfidentDetection } from './profile-detect';
 import { citationMeta } from '../citations/citation-meta';
 import { APP_VERSION } from '../config/app-version';
+import { buildErrorReport, makeIncidentId } from '../report/error-redaction';
 import { SOCIAL_METHOD_REGISTRY, SOCIAL_METHOD_SOURCE } from '../methodology/methodology-loader';
 import { cellCoverage, detectWaitlist } from '../waitlist/waitlist-detect';
 import { mountWaitlistBar } from '../waitlist/waitlist-bar';
@@ -145,7 +146,7 @@ const adminMode=params.get('admin')==='1'&&setupAllowed();
 // uvjeta i odbija sve ostalo (audit A26-08). Dok je zivio samo u pregledniku, zapis
 // privole nije bio dokaz nego prepricavanje klijenta.
 const CHECKOUT_CONSENT_TEXT=canonicalConsentText(TERMS_VERSION)||'';
-const DEFAULT_PRODUCTION_CONFIG={enabled:false,submissionMode:'netlify-form',orderEndpoint:'/',paymentProvider:'lemonsqueezy',paymentLinks:{format:'',panic:'',premium:''},businessName:'Lekta',contactEmail:'lekta.kontakt@gmail.com',privacyController:'',retentionDays:30,uploadMaxBytes:8*1024*1024,analyticsEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('analytics-event'),serverAnalytics:'netlify-optional',reportEndpoint:'',fieldRenderEndpoint:'',repairEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('repair-docx'),checkoutEndpoint:'',guaranteeEndpoint:'',supabaseUrl:DEPLOYMENT_CONFIG.supabaseUrl,supabaseAnonKey:DEPLOYMENT_CONFIG.supabaseAnonKey,waitlistEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('faculty-request'),referralEndpoint:'',errorEndpoint:'',preflightStartEndpoint:'',preflightResultEndpoint:'',preflightMaxUploadMb:30,adminStatsEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('admin-stats')};
+const DEFAULT_PRODUCTION_CONFIG={enabled:false,submissionMode:'netlify-form',orderEndpoint:'/',paymentProvider:'lemonsqueezy',paymentLinks:{format:'',panic:'',premium:''},businessName:'Lekta',contactEmail:'lekta.kontakt@gmail.com',privacyController:'',retentionDays:30,uploadMaxBytes:8*1024*1024,analyticsEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('analytics-event'),serverAnalytics:'netlify-optional',reportEndpoint:'',fieldRenderEndpoint:'',repairEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('repair-docx'),checkoutEndpoint:'',guaranteeEndpoint:'',supabaseUrl:DEPLOYMENT_CONFIG.supabaseUrl,supabaseAnonKey:DEPLOYMENT_CONFIG.supabaseAnonKey,waitlistEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('faculty-request'),referralEndpoint:'',errorEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('client-error'),preflightStartEndpoint:'',preflightResultEndpoint:'',preflightMaxUploadMb:30,adminStatsEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('admin-stats')};
 // Error tracking (P0 8-1): globalni handleri. Ako je errorEndpoint konfiguriran, salje SANITIZIRAN
 // tehnicki kontekst (poruka, skraceni stack, verzija, path) na kolektor (npr. Sentry tunnel same-
 // origin ili /functions/v1/log-error). Bez endpointa: samo console.error (Supabase/hosting logovi).
@@ -153,7 +154,23 @@ const DEFAULT_PRODUCTION_CONFIG={enabled:false,submissionMode:'netlify-form',ord
 // navigator.userAgent (BL-P0-04-4 privola/GDPR data-flow-08): UA je uklonjen iz payloada da se
 // bez privole ne salje pseudonimni otisak preglednika. NE dodavati ga natrag bez pravne osnove.
 let _errSent=0;
-function installErrorTracking(){const send=(kind: any,message: any,stack: any)=>{try{console.error('[lekta]',kind,message);const ep=productionConfig?.errorEndpoint;if(!ep||_errSent>=20)return;_errSent++;const payload={kind,message:String(message||'').slice(0,500),stack:String(stack||'').slice(0,2000),version:APP_VERSION,path:location.pathname||'/',timestamp:new Date().toISOString()};const blob=new Blob([JSON.stringify(payload)],{type:'application/json'});try{if(!(navigator.sendBeacon&&navigator.sendBeacon(ep,blob)))void fetch(ep,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true})}catch(e: any){}}catch(e: any){}};try{window.addEventListener('error',(e: any)=>send('error',e?.message||'error',e?.error?.stack));window.addEventListener('unhandledrejection',(e: any)=>{const r=e?.reason;send('unhandledrejection',r?.message||String(r||'rejection'),r?.stack)})}catch(e: any){}}
+// KLIJENT REDAKTIRA PRIJE SLANJA (audit P1-28). Poruka i stack su slobodan tekst, pa u njih lako
+// upadne ime datoteke ("Ivan_Horvat_diplomski.docx"), e-mail ili token iz URL-a. `buildErrorReport`
+// ih redaktira i odbacuje svako polje izvan dogovorenog oblika. Posluzitelj vrti ISTI modul pri
+// primitku; ovo nije dvostruki posao nego obrana u dubinu, isti obrazac kao kod analitike.
+//
+// `incidentId` se generira OVDJE, ne na posluzitelju, jer se salje preko `sendBeacon` koji odgovor
+// ne cita. Korisnik ga tako moze procitati podrsci, a iz njega se ne da doci do njega.
+// Korisnik mora MOCI dobiti oznaku incidenta, inace je sabirnica korisna samo nama (audit P1-28
+// trazi "korisnicki incident ID"). Javlja se SAMO na prvu gresku po ucitavanju stranice: svaka
+// sljedeca je najcesce posljedica prve, a niz toastova bi uplasio korisnika bez ikakve koristi.
+let _incidentToastShown=false;
+function announceIncident(incidentId: string){if(_incidentToastShown)return;_incidentToastShown=true;
+ try{toast(`Došlo je do greške. Ako javiš podršci, navedi oznaku ${incidentId}.`)}catch(e: any){}}
+function installErrorTracking(){const send=(kind: any,message: any,stack: any,feature?: any)=>{try{console.error('[lekta]',kind,message);const ep=productionConfig?.errorEndpoint;if(!ep||_errSent>=20)return;_errSent++;
+ const incidentId=makeIncidentId();announceIncident(incidentId);
+ const payload=buildErrorReport({kind,message,stack,version:APP_VERSION,path:location.pathname||'/',feature:feature||'nepoznato'},incidentId,new Date().toISOString());
+ const blob=new Blob([JSON.stringify(payload)],{type:'application/json'});try{if(!(navigator.sendBeacon&&navigator.sendBeacon(ep,blob)))void fetch(ep,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true})}catch(e: any){}}catch(e: any){}};try{window.addEventListener('error',(e: any)=>send('error',e?.message||'error',e?.error?.stack));window.addEventListener('unhandledrejection',(e: any)=>{const r=e?.reason;send('unhandledrejection',r?.message||String(r||'rejection'),r?.stack)})}catch(e: any){}}
 /* FPZG_SUBMISSION_CALENDAR se uvozi iz submission-loader (data/submission/fpzg-calendar.json) */
 let productionConfig: any=null;
 let lastProfileContext='';let _profileConfirmed=false;
