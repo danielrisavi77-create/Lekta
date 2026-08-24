@@ -181,6 +181,23 @@ se tvrdnja `A3` "izvela" iz citata o A4; izgledao je zdravo dok se nije podmetnu
   tvrdnji kao izmisljene, a mjerenje je pokazalo da su dvije (0,21), dok je devet parafraza
   (0,62-0,81). Presuda zato nosi BROJ, ne zastavicu.
 
+### Drift gard koji trazi regeneraciju moze traziti da POKVARIS podatke
+
+Poruka "artefakt je ustajao, regeneriraj pa commitaj" pretpostavlja da su svjez izracun i commitani
+artefakt racunati u ISTOJ okolini. Kad nisu, uputa je obrnuta od ispravnog poteza.
+
+Izmjereno 2026-08-24 na `scored-quote-audit.json`: bez `olefile` CI je citao 21 `.doc` izvor kao
+prazan (revidirano 1739 umjesto 1932, nalaza 144 umjesto 148). Regeneracija bi ozelenila CI, izbacila
+193 bodovana pravila iz revizije i obrisala cetiri stvarna nalaza.
+
+- Prije regeneracije usporedi i BROJ PROVJERENIH JEDINICA, ne samo broj nalaza. Manja pokrivenost uz
+  manje nalaza znaci da citac zakazuje, ne da je artefakt star.
+- Citac koji nedostaje ne baca nego vraca prazno. Svaka takva ovisnost mora biti u CI `pip install`.
+- Pratitelj uz izvor bez citaca (`-ocr.txt`, `-text.txt`) MORA biti commitan, inace je artefakt
+  reproducibilan samo na stroju na kojem je pecen.
+- Dijagnostika laze: kvar citanja `.doc` i `.rar` prijavljuje se kao "skeniran izvor bez tekstualnog
+  sloja (treba OCR)". Nabroji izvore s praznim `document_text` i gledaj nastavak, ne poruku.
+
 ## Konvencije
 
 - Hrvatski je default jezik sadrzaja i komentara u domenskim datotekama.

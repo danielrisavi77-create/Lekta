@@ -239,6 +239,35 @@ se tvrdnja `A3` "izvela" iz citata o A4; izgledao je zdravo dok se nije podmetnu
   tvrdnji kao izmisljene, a mjerenje je pokazalo da su dvije (0,21), dok je devet parafraza
   (0,62-0,81). Presuda zato nosi BROJ, ne zastavicu.
 
+### Drift gard koji trazi regeneraciju moze traziti da POKVARIS podatke
+
+Gardovi tipa "artefakt je ustajao, regeneriraj pa commitaj" pretpostavljaju da su svjez izracun i
+commitani artefakt racunati u ISTOJ okolini. Kad nisu, uputa iz poruke je tocno obrnuta od
+ispravnog poteza.
+
+Izmjereno 2026-08-24 na `scored-quote-audit.json`. CI je javio "ustajao (svjeze 144 nalaza,
+commitano 148)". Artefakt je bio ISPRAVAN, a CI je citao krivo:
+
+    bez `olefile` i bez rar pratitelja:  revidirano 1739, nerevidirano 193, nalaza 144
+    s `olefile` i rar pratiteljima:      revidirano 1932, nerevidirano   0, nalaza 148 (= commitano)
+
+Regeneracija bi ozelenila CI, izbacila 193 bodovana pravila iz revizije i obrisala CETIRI stvarna
+nalaza. Zeleno bi znacilo MANJE provjere.
+
+- PRIJE regeneracije bilo kojeg verifikacijskog artefakta usporedi i BROJ PROVJERENIH JEDINICA, ne
+  samo broj nalaza. Pad pokrivenosti uz manje nalaza je znak da citac zakazuje, ne da je artefakt
+  star.
+- Citac koji nedostaje ne baca nego vraca prazno: `doc97_text` cita `.doc` preko `olefile` i bez
+  njega vraca prazan string. Svaka takva ovisnost mora biti u CI `pip install`, inace gard ne moze
+  proci ni na ispravnim podacima.
+- Pratitelj uz izvor bez citaca (`-ocr.txt` za skenirani PDF, `-text.txt` za `.rar`) MORA biti
+  commitan. Tri mathos `.rar` predloska nisu imala nijedan (`git ls-files` ih je imao nula), pa je
+  artefakt bio reproducibilan samo na stroju na kojem je pecen.
+- ZAMKA U DIJAGNOSTICI: kad citac zakaze, razlog se prijavi kao "skeniran izvor bez tekstualnog
+  sloja (treba OCR)", jer `.doc` i `.rar` produ kroz dopusteni popis nastavaka i zavrse u istoj
+  grani kao skeniran PDF. Poruka salje na OCR, a nijedan od 21 pogodenog izvora nije skeniran PDF.
+  Ne vjeruj toj poruci: nabroji koji izvori vracaju prazan `document_text` i gledaj njihov nastavak.
+
 ## Arhitektura (stanje i smjer)
 
 - `data/` je tipiziran i modularan: profili, izvori, rokovi, katalog, coverage,
