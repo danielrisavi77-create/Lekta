@@ -56,14 +56,27 @@ velicina, prored, margine, format papira, poravnanje) iz naslijedjenog `rules` o
 To je izravno protivno pravilu iz CLAUDE.md ("bodovana pravila smiju doci samo iz navedenih
 sluzbenih izvora"): tih 82 para (profil, os) boduje se bez ijednog izvora.
 
+**STO SE ZAPRAVO BODUJE, i to je najvazniji dio:** tih 12 od 14 profila boduje GENERICKI BASELINE,
+ne fakultetsko pravilo. Vrijednosti su doslovno `font: [TNR, Arial, Calibri]`, `size: [12, 11]`,
+`spacing: 1.5`, `margins: 2,5 cm sa svih strana` - isti opci skup na `unizd-kroatistika`,
+`unizd-anglistika`, `unizd-ekonomija`, `pravst` i ostalima. To NIJE "izgubili smo izvor"; to je
+"izvora nikad nije bilo, motor pada na opci baseline i prikazuje ga kao fakultetsku provjeru".
+(`ffos-povijest-*` odstupa: TNR/12/1,5 uz desnu marginu 2 cm, pa je vjerojatno odnekud portan.)
+
+Uz to, `unizd` NEMA krovni pravilnik: svih 33 srodna profila oslanjaju se na upute PO ODSJEKU
+(`unizd-turizam-upute`, `unizd-klasicna-filologija-upute-2021`, `unizd-arheologija-*`,
+`unizd-etnologija-upute-2021`, `unizd-povijest-umj-*`, `unizd-sociologija-upute-dipr-2014`). Znaci
+da se izvor za kroatistiku, anglistiku, ekonomiju, lingvistiku i rusistiku mora traziti po odsjeku,
+jedan po jedan. Jedina blizina: `unizd-sociologija-zavrsni` je nepokriven, a uputa
+`unizd-sociologija-upute-dipr-2014` postoji i vec pokriva diplomski istog odsjeka.
+
 Dvije mogucnosti, i obje su tvoje:
 
-1. **Nadji izvor i napisi tvrdnje.** Za `unizd` (33 srodna profila vec ima tvrdnje) i `ffos` (8)
-   izgledi su dobri: vjerojatno vrijedi isti fakultetski pravilnik. `pravst` nema NIJEDAN profil s
-   tvrdnjom, pa je ondje potrebno krenuti od nule.
-2. **Demotiraj tih sest osi na informativne** dok se izvor ne nadje. Fail-safe je i tehnicki je
+1. **Nadji izvor po odsjeku i napisi tvrdnje.** Realno je 12 zasebnih potraga, ne jedna.
+2. **Demotiraj tih sest osi na informativne** dok se izvor ne nadje. Fail-safe je i tehnicki
    trivijalno, ali tim profilima nestaje gotovo cijela provjera oblikovanja.
 
-Preporuka: (1) za unizd i ffos, (2) privremeno za pravst. Ne diram bez tvoje rijeci jer prva
-mogucnost dodaje bodovana pravila, a druga ih oduzima.
+Preporuka: (2) odmah, jer se danas studentu prikazuje opci baseline kao da je pravilo njegova
+fakulteta, pa (1) kad izvor stigne. Ne diram bez tvoje rijeci: prva mogucnost dodaje bodovana
+pravila, druga ih oduzima.
 
