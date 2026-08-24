@@ -50,6 +50,30 @@
       "reviewedBy": "Daniel Risavi",
       "lastVerified": "2026-07-27",
       "confirmedVia": "ai-1pass-batch"
+    },
+    {
+      "ruleId": "vuka-poslovni-zavrsni--footnote-size",
+      "modality": "obligation",
+      "scope": "footnote",
+      "modalitySource": "agent-read",
+      "checkId": "footnote-size",
+      "value": [
+        10
+      ],
+      "category": "format",
+      "label": "Veličina slova u bilješkama",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "vuka-poslovni-upute",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "odabrati veličinu slova teksta 12 (Arial ili Times New Roman) za bilješke (“fusnote“ ) odabrati veličinu slova 10",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Claude Opus 5 (1M context)",
+      "lastVerified": "2026-08-24",
+      "confirmedVia": "human",
+      "verifiedHash": "cdd389a04f661585bb47dd26b7d36bb2c4ff3fce7a00ddf87091a9a485fbd64f"
     }
   ]
 }

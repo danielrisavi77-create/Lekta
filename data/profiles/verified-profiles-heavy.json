@@ -7798,7 +7798,8 @@
           ]
         }
       ],
-      "justify": true
+      "justify": true,
+      "checkTitlePageNumberSuppression": true
     },
     "facts": [
       "Diplomski rad mora sadržavati naslovnu stranicu, sadržaj, sažetke i ključne riječi, uvod, razradu teme, zaključak i popis literature (imperativ).",
@@ -12214,7 +12215,8 @@
       "recommendedCitation": "vancouver",
       "paperSizes": [
         "A4"
-      ]
+      ],
+      "checkPageNumberStartAtIntro": true
     },
     "facts": [
       "Format rada je A4 (imperativna tehnička uputa, scored).",
@@ -14887,7 +14889,11 @@
       },
       "paperSizes": [
         "A4"
-      ]
+      ],
+      "footnoteSize": [
+        10
+      ],
+      "footnoteSpacing": 1
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Hrvatsko katolicko sveučilište), čitano izravno. Opseg (u karticama) i citatni stil odreduju se odjelnim Posebnim uputama i razlikuju se po odjelu -> nisu u institucijskom scored skupu.",
@@ -27855,7 +27861,10 @@
         "right": 2.54,
         "bottom": 2.54,
         "left": 2.54
-      }
+      },
+      "footnoteSize": [
+        10
+      ]
     },
     "facts": [],
     "note": "Citat FUSNOTE MANDIRANE: odjelne Upute doslovno 'obavezno se moraju koristiti bibliografske pozivne bilješke... europski sustav pozivnih biljezaka ispod teksta (fusnote)' (byte-level verificirano) -> mod notes (token chicago-notes). Format: Arial/TNR 12, prored 1,5, margine 2,54. Krovni Pravilnik 2025 delegira na odjelne Upute.",
@@ -27926,7 +27935,10 @@
         "right": 2.54,
         "bottom": 2.54,
         "left": 2.54
-      }
+      },
+      "footnoteSize": [
+        10
+      ]
     },
     "facts": [],
     "note": "Citat FUSNOTE MANDIRANE: odjelne Upute doslovno 'obavezno se moraju koristiti bibliografske pozivne bilješke... europski sustav pozivnih biljezaka ispod teksta (fusnote)' (byte-level verificirano) -> mod notes (token chicago-notes). Format: Arial/TNR 12, prored 1,5, margine 2,54. Krovni Pravilnik 2025 delegira na odjelne Upute.",
@@ -30718,6 +30730,9 @@
         "istraživački rad",
         "projektni rad",
         "znanstveni članak"
+      ],
+      "footnoteSize": [
+        10
       ]
     },
     "note": "Opći profil za seminarski, projektni i istraživački rad: tehničko oblikovanje (font, veličina, prored, A4) i citiranje (Chicago fusnote) provjerava se prema izvoru „Upute za pisanje seminarskih i zavrsnih radova, Poslovni odjel (Veleuciliste u Karlovcu)\", koji obuhvaća seminarske i završne radove. Opseg, struktura i sadržaj ovise o kolegiju i pisanoj uputi mentora; nije zaseban fakultetski propis za seminar.",

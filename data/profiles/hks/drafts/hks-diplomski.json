@@ -151,6 +151,52 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "hks-diplomski--footnote-size",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "agent-read",
+      "checkId": "footnote-size",
+      "value": [
+        10
+      ],
+      "category": "format",
+      "label": "Veličina slova u bilješkama",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "hks-opce-upute-diplomski-2023",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "quote": "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Claude Opus 5 (1M context)",
+      "lastVerified": "2026-08-24",
+      "confirmedVia": "human",
+      "verifiedHash": "c3a0193ffb9b03ce3d04e79ff0a6f7827e50121326d3050b90a51783b3858f88"
+    },
+    {
+      "ruleId": "hks-diplomski--footnote-spacing",
+      "modality": "directive",
+      "scope": "footnote",
+      "modalitySource": "agent-read",
+      "checkId": "footnote-spacing",
+      "value": 1,
+      "category": "format",
+      "label": "Prored u bilješkama",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "hks-opce-upute-diplomski-2023",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "quote": "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Claude Opus 5 (1M context)",
+      "lastVerified": "2026-08-24",
+      "confirmedVia": "human",
+      "verifiedHash": "c3a0193ffb9b03ce3d04e79ff0a6f7827e50121326d3050b90a51783b3858f88"
     }
   ],
   "generatedAt": "2026-07-02"

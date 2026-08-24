@@ -94,10 +94,10 @@
       "status": "verified",
       "scored": true,
       "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "lastVerified": "2026-07-28",
+      "reviewedBy": "Claude Opus 5 (1M context)",
+      "lastVerified": "2026-08-24",
       "confirmedVia": "ai-1pass-batch",
-      "verifiedHash": "50c1ac2c1e8211bc91f6e7a29db4860031eb07c7bcab5775104d78294fbd0a3d",
+      "verifiedHash": "14a2c4b3bb48541e9573ca87532bfee262cf46ebb567891f39d9f4b9dc77bd24",
       "autoFixable": true,
       "fixerId": "paper-size-fixer"
     },

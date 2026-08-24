@@ -204,6 +204,28 @@
       "sourcePage": "tocka 5) stavka 10 Popis literature",
       "quote": "Popis literature (prema naputcima Liječničkog vjesnika)",
       "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "mef-doktorski--page-number-start-at-intro",
+      "modality": "obligation",
+      "scope": "whole",
+      "modalitySource": "agent-read",
+      "checkId": "page-number-start-at-intro",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje pocinje od Uvoda",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
+      "sourcePage": "tocka 6) Stranice obavezno oznaciti brojevima",
+      "quote": "Stranice obavezno označiti brojevima (prva stranica je stranica Uvod)",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Claude Opus 5 (1M context)",
+      "lastVerified": "2026-08-24",
+      "confirmedVia": "human",
+      "verifiedHash": "8cad70ffeb947004dab365200762be290a065d2d4b3337226f745b6bbd056303"
     }
   ]
 }

@@ -14,8 +14,8 @@ kontrole suzenja (`npm run audit:selftest`) PRIJE svega ostaloga.
 
 | | pocetak (2026-08-22) | sada (2026-08-24) |
 |---|---|---|
-| bodovanih pravila | 1934 | 1930 |
-| revidirano | 1391 | **1930** |
+| bodovanih pravila | 1934 | 1929 |
+| revidirano | 1391 | **1929** |
 | nerevidirano (izvor se ne cita) | 543 | **0** |
 | neprovjerivo (skenirano ili ostecen tekstualni sloj) | 9 | **0** |
 | pravila s NOVIM nalazom | 319 | **0** |
@@ -26,8 +26,10 @@ koji se u tom izvoru pokaze. Nijedan red provjere (parafraza, brojevi, odsjecen 
 vrijednost izvan citata, predlozak) ne prijavljuje nista neodluceno. Mjerodavan je artefakt
 (`docs/generated/scored-quote-audit.json`), ne ovaj zapis.
 
-Pad s 1934 na 1930 nije iz ove revizije: cetiri pravila demotirao je drift alat
-(`vuka-strojarski-*--margins` i dalje dva u presudi raskoraka).
+UKUPAN BROJ JE POKRETNA META i namjerno nije prikovan: 1934 -> 1930 (drift alat demotirao cetiri)
+-> 1937 (sedam DODANO odlukom vlasnika, tocka 10) -> 1929 (presuda nad zabranama citanim kao
+dopustenje). Ono sto se NE mice su tri nule: nerevidiranih, neprovjerivih i novih nalaza. Svako
+novo ili izmijenjeno pravilo prolazi istu reviziju.
 
 Prazno NIJE isto sto i "sve je bilo tocno". Od oko 320 zatvorenih nalaza tocno JEDAN je bio kvar u
 bodovanju (forenzika, nize) i jedan je svjesno odstupanje koje ostaje (`unizd-pomorski`, nize).
@@ -99,11 +101,46 @@ izolirani gate (369/369).
    njegov doslovan tekst. `paper-size` u dodatku NE stoji, pa je vezan na akt koji ga propisuje
    (`ffri-pravilnik-{diplomski,zavrsni}-2023`, clanci 11. i 8.). Vrijednost se nije mijenjala.
 
-   OTVORENO ZA VLASNIKA: registar ima i `ffri-pravilnik-zavrsni-2026`, koji koriste 2 pravila, dok
-   ostalih 12 ffri pravila koristi izdanja iz 2023. Uzeo sam 2023 radi sklada unutar jedinice, ali
-   ako 2026 zamjenjuje raniji akt, bumpati treba SVE zajedno, ne samo povum.
+9. **ffri zavrsni: akt na snazi je izdanje iz 2026, ne 2023.** Profil je bio RASCIJEPLJEN: 6 pravila
+   je citiralo Pravilnik iz 2023, a `ffri-zavrsni--page-numbers` onaj iz 2026. Provjereno u izvoru:
+   2026 stupa na snagu 06.02.2026 i "primjenjuje se na sve zavrsne radove i zavrsne ispite prijavljene
+   od pocetka ljetnog semestra ak. god. 2025./2026.", dakle po hijerarhiji izvora on je mjerodavan.
+   Vrijednosti su u oba izdanja ISTE (Clanak 8: A4, margine 2,5 cm, TNR, 12pt / fusnote 10pt, prored
+   1,5, obostrano), pa se bodovanje nije promijenilo, samo tvrdnja o tome sto je izvor. Premjesteno
+   je svih 7 pravila (6 + `ffri-povum-zavrsni--paper-size`). Diplomski ostaje na izdanju iz 2023,
+   jer novijeg nema.
 
-9. **63 retka tudjeg rada u `e44a69c`.** JEDINO sto ostaje otvoreno iz ovog odjeljka. Sweep je upao
+   ZAMKA: PDF iz 2026 je CIST SKENER (nula znakova u tekstualnom sloju), pa sve sto se o njemu
+   "cita" dolazi iz OCR pratitelja. Citat je zato prepisan s RENDERIRANE stranice i nosi
+   "Velicina" s dijakritikom, koju je OCR ispustio.
+
+10. **Cetiri odredbe koje je motor znao mjeriti, a profil ih nije zapisivao, sada su bodovane**
+    (odobrenje vlasnika 2026-08-24). Svaka je prije upisa procitana u izvoru:
+
+    | pravilo | zastavica | odredba |
+    |---|---|---|
+    | `ffzg-filozofija-diplomski` | `checkTitlePageNumberSuppression` | "naslovnu stranicu i stranice sa sadrzajem i sazecima ne numerirati" |
+    | `mef-doktorski` | `checkPageNumberStartAtIntro` | "Stranice obavezno oznaciti brojevima (prva stranica je stranica Uvod)" |
+    | `hks-diplomski` | `footnoteSize` `[10]`, `footnoteSpacing` `1` | "biljeske se pisu na dnu stranice (footnote), a pismo (font) je velicine 10, prored jednostruk" |
+    | `vuka-poslovni-*` (3) | `footnoteSize` `[10]` | "za biljeske ('fusnote') odabrati velicinu slova 10" |
+
+    Dvije podprovjere numeriranja do sada se NISU mogle izraziti kroz `ruleEntry`: `page-numbers`
+    postavlja samo `requirePageNumbers`. Dodana su im dva `checkId`-a
+    (`page-number-title-suppression`, `page-number-start-at-intro`) uz test, kako CLAUDE.md trazi za
+    novi checkId. Bez mapiranja kompajler vrati diagnostic i pravilo se TIHO ne primijeni.
+
+    ZAMKA: `footnoteSize` motor cita s `(profile.footnoteSize||[]).some(...)`, pa vrijednost MORA
+    biti polje; skalar baca TypeError. `footnoteSpacing` je skalar.
+
+    NIJE dodano, iako stoji u istoj recenici: `footnoteJustify` za `hks` ("s obostranim
+    poravnanjem") i velicina NASLOVA za `vuka` (16 bold, motor za nju nema pojam). Prvo je
+    izostavljeno jer nije bilo u popisu koji je vlasnik vidio kad je odobravao.
+
+11. **63 retka tudjeg rada u `e44a69c`, i 22 moja retka u njihovom `7dd60bda`.** ZATVORENO ODLUKOM
+    2026-08-24: povijest se NE prepravlja. Sadrzaj je u oba smjera netaknut, sporna je samo poruka
+    pod kojom stoji; `--amend` ili rebase nad granom na kojoj druga sesija aktivno commita moze
+    pojesti tudji rad, sto je gora steta od krive atribucije. Pravilo koje iz toga slijedi vec stoji
+    u CLAUDE.md i AGENTS.md. Sweep je upao
    izmedju izmjene i commita, pa su `modality`/`scope`/`modalitySource` iz `kif.json` i `ttf.json`
    zavrsili pod mojom porukom. Nista nije izgubljeno. Povijest NIJE prepravljana jer bi `--amend` u
    dijeljenom stablu mogao pojesti commit druge sesije. Odluka vlasnika.

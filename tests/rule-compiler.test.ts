@@ -21,6 +21,28 @@ describe('rule-compiler faithfulness', () => {
     expect(compileEffectiveRules(profile)).toEqual(profile.rules);
   });
 
+  it('podprovjere numeriranja imaju svoj checkId, ne samo zastavicu u rules', () => {
+    // Do 2026-08-24 su `checkTitlePageNumberSuppression` i `checkPageNumberStartAtIntro` postojali
+    // u motoru (3 boda svaki) i u zastiti od demotije, ali ih autorski sloj nije mogao izraziti, pa
+    // se odredba "naslovnu stranicu (...) ne numerirati" morala upisivati ravno u `rules`, mimo
+    // lanca provenijencije. Ovaj test cuva mapiranje: bez njega kompajler vraca diagnostic i
+    // pravilo se TIHO ne primijeni.
+    const profile: ThesisProfile = {
+      id: 'demo-pn',
+      rules: { requirePageNumbers: true },
+      ruleEntries: [
+        { ruleId: 'r-sup', checkId: 'page-number-title-suppression', value: true },
+        { ruleId: 'r-intro', checkId: 'page-number-start-at-intro', value: true },
+      ],
+    };
+    expect(compileEffectiveRules(profile)).toEqual({
+      requirePageNumbers: true,
+      checkTitlePageNumberSuppression: true,
+      checkPageNumberStartAtIntro: true,
+    });
+    expect(collectCompileDiagnostics([profile])).toEqual([]);
+  });
+
   it('overlay-a prepoznati ruleEntry preko baseline rules', () => {
     const profile: ThesisProfile = {
       id: 'demo',

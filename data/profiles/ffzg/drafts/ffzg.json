@@ -355,6 +355,28 @@
         "reviewedBy": "Daniel Risavi",
         "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f",
         "confirmedVia": "human-audit"
+      },
+      {
+        "ruleId": "ffzg-filozofija-diplomski--page-number-title-suppression",
+        "modality": "directive",
+        "scope": "whole",
+        "modalitySource": "agent-read",
+        "checkId": "page-number-title-suppression",
+        "value": true,
+        "category": "format",
+        "label": "Naslovnica i sazeci bez broja stranice",
+        "machineCheckable": true,
+        "authority": "program-page",
+        "sourceId": "ffzg-filoz-diplomski-2019",
+        "sourcePage": "odjeljak Tekst treba oblikovati na sljedeci nacin",
+        "quote": "naslovnu stranicu i stranice sa sadržajem i sažecima ne numerirati;",
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Claude Opus 5 (1M context)",
+        "lastVerified": "2026-08-24",
+        "confirmedVia": "human",
+        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f"
       }
     ]
   },

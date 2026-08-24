@@ -38,6 +38,8 @@ export const COMPILED_CHECK_IDS = [
   'page-count',
   'toc',
   'page-numbers',
+  'page-number-title-suppression',
+  'page-number-start-at-intro',
   'paper-size',
   'justify',
   'footnote-font',
@@ -139,6 +141,12 @@ function applyEntry(eff: EffectiveRules, entry: RuleEntry): boolean {
       return true;
     case 'toc': eff.requireToc = boolOf(value); return true;
     case 'page-numbers': eff.requirePageNumbers = boolOf(value); return true;
+    // Dvije PODPROVJERE numeriranja, svaka vrijedna 3 boda u `evaluatePageNumbers`. Postojale su u
+    // motoru i u `advisory-levers` (kao zastita od demotije), ali ih autorski sloj nije mogao
+    // izraziti: `page-numbers` postavlja samo `requirePageNumbers`. Bez ovoga se odredba tipa
+    // "naslovnu stranicu (...) ne numerirati" morala upisivati ravno u `rules`, mimo provenijencije.
+    case 'page-number-title-suppression': eff.checkTitlePageNumberSuppression = boolOf(value); return true;
+    case 'page-number-start-at-intro': eff.checkPageNumberStartAtIntro = boolOf(value); return true;
     case 'paper-size':
       // Naziv formata ('A3') ili lista naziva (['A3','A0']) -> eff.paperSizes (projektni radovi).
       // Boolean zadrzava naslijedeno ponasanje: true -> eff.requireA4 (standardni A4 tekst).
