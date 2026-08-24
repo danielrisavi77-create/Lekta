@@ -383,15 +383,17 @@
       "afterEntryCount": 4,
       "droppedEntryCount": 0,
       "offeredFixerIds": [
+        "section-insert-fixer",
         "toc-field-fixer",
         "consistency-fixer"
       ],
       "changedFixerIds": [
+        "section-insert-fixer",
         "toc-field-fixer"
       ],
-      "targetedCheckCount": 2,
+      "targetedCheckCount": 4,
       "targetedResolvedCount": 0,
-      "targetedUnresolvedCount": 2,
+      "targetedUnresolvedCount": 4,
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,

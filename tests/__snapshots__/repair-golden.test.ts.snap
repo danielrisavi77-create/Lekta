@@ -4724,11 +4724,15 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "mef-doktorski-disertacija.docx": {
     "__kombinirano": {
-      "applied": 2,
+      "applied": 3,
       "changelog": [
         {
           "after": "Format stranice: 21,00 cm x 29,70 cm",
           "before": "Format stranice: 21,00 cm x 29,70 cm",
+        },
+        {
+          "after": "Umetnut prijelom sekcije prije Uvoda: rimski na prednjim listovima, arapski od Uvoda (od 1), naslovnica bez broja",
+          "before": "Numeriranje od Uvoda nije postavljeno (jedna sekcija)",
         },
         {
           "after": "Umetnuto automatsko TOC polje (Word ga osvježi pri otvaranju); ručno upisane stavke sadržaja ispod možeš obrisati",
@@ -4764,7 +4768,27 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "right": "1418",
               "top": "1418",
             },
-            "pgNumType": null,
+            "pgNumType": {
+              "fmt": "lowerRoman",
+              "start": "1",
+            },
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": true,
+          },
+          {
+            "pgMar": {
+              "bottom": "1418",
+              "left": "1418",
+              "right": "1418",
+              "top": "1418",
+            },
+            "pgNumType": {
+              "fmt": "decimal",
+              "start": "1",
+            },
             "pgSz": {
               "h": "16838",
               "w": "11906",
@@ -4980,7 +5004,79 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-stavke-za-ovaj-dokument",
     },
     "section-insert-fixer": {
-      "params": "nema-stavke-za-ovaj-dokument",
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Umetnut prijelom sekcije prije Uvoda: rimski na prednjim listovima, arapski od Uvoda (od 1), naslovnica bez broja",
+          "before": "Numeriranje od Uvoda nije postavljeno (jedna sekcija)",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 251,
+          "runFonts": 262,
+          "runSz": 262,
+        },
+        "docDefaults": {
+          "ascii": "Times New Roman",
+          "hAnsi": "Times New Roman",
+          "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": null,
+          "lineRule": null,
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1418",
+              "left": "1418",
+              "right": "1418",
+              "top": "1418",
+            },
+            "pgNumType": {
+              "fmt": "lowerRoman",
+              "start": "1",
+            },
+            "pgSz": {
+              "h": "16840",
+              "w": "11907",
+            },
+            "titlePg": true,
+          },
+          {
+            "pgMar": {
+              "bottom": "1418",
+              "left": "1418",
+              "right": "1418",
+              "top": "1418",
+            },
+            "pgNumType": {
+              "fmt": "decimal",
+              "start": "1",
+            },
+            "pgSz": {
+              "h": "16840",
+              "w": "11907",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "target": {
+          "align": "right",
+          "introParagraphIndex": 5,
+        },
+      },
+      "skipped": [],
     },
     "section-surgery-fixer": {
       "params": "nema-stavke-za-ovaj-dokument",

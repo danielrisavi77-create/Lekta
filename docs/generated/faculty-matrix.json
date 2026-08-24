@@ -4409,8 +4409,8 @@
         "ffos-germanistika-zavrsni",
         "ffos-germanistika-diplomski"
       ],
-      "offeredOptionCount": 37,
-      "mappedOptionCount": 37,
+      "offeredOptionCount": 47,
+      "mappedOptionCount": 47,
       "ruleIds": [
         "ffos-diplomski--font",
         "ffos-diplomski--font-size",
@@ -4433,6 +4433,16 @@
         "ffos-informatologija-zavrsni--font-size",
         "ffos-informatologija-zavrsni--justify",
         "ffos-informatologija-zavrsni--line-spacing",
+        "ffos-povijest-diplomski--font",
+        "ffos-povijest-diplomski--font-size",
+        "ffos-povijest-diplomski--line-spacing",
+        "ffos-povijest-diplomski--margins",
+        "ffos-povijest-diplomski--paper-size",
+        "ffos-povijest-zavrsni--font",
+        "ffos-povijest-zavrsni--font-size",
+        "ffos-povijest-zavrsni--line-spacing",
+        "ffos-povijest-zavrsni--margins",
+        "ffos-povijest-zavrsni--paper-size",
         "ffos-psihologija-diplomski--font",
         "ffos-psihologija-diplomski--font-size",
         "ffos-psihologija-diplomski--justify",
@@ -4568,11 +4578,24 @@
             "final"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 0,
-          "mappedOptionCount": 0,
-          "ruleIds": [],
-          "fixerIds": [],
-          "templateIds": [],
+          "offeredOptionCount": 5,
+          "mappedOptionCount": 5,
+          "ruleIds": [
+            "ffos-povijest-zavrsni--font",
+            "ffos-povijest-zavrsni--font-size",
+            "ffos-povijest-zavrsni--line-spacing",
+            "ffos-povijest-zavrsni--margins",
+            "ffos-povijest-zavrsni--paper-size"
+          ],
+          "fixerIds": [
+            "font-fixer",
+            "line-spacing-fixer",
+            "margins-fixer",
+            "paper-size-fixer"
+          ],
+          "templateIds": [
+            "basic-text-styles"
+          ],
           "realDocxSampleCount": 0,
           "automaticTests": {
             "profileCoverage": "pass",
@@ -4593,11 +4616,24 @@
             "graduate"
           ],
           "profileStatus": "partial",
-          "offeredOptionCount": 0,
-          "mappedOptionCount": 0,
-          "ruleIds": [],
-          "fixerIds": [],
-          "templateIds": [],
+          "offeredOptionCount": 5,
+          "mappedOptionCount": 5,
+          "ruleIds": [
+            "ffos-povijest-diplomski--font",
+            "ffos-povijest-diplomski--font-size",
+            "ffos-povijest-diplomski--line-spacing",
+            "ffos-povijest-diplomski--margins",
+            "ffos-povijest-diplomski--paper-size"
+          ],
+          "fixerIds": [
+            "font-fixer",
+            "line-spacing-fixer",
+            "margins-fixer",
+            "paper-size-fixer"
+          ],
+          "templateIds": [
+            "basic-text-styles"
+          ],
           "realDocxSampleCount": 0,
           "automaticTests": {
             "profileCoverage": "pass",
@@ -22284,8 +22320,8 @@
   "summary": {
     "facultyCount": 131,
     "profileCount": 407,
-    "offeredOptionCount": 1740,
-    "mappedOptionCount": 1740,
+    "offeredOptionCount": 1750,
+    "mappedOptionCount": 1750,
     "realDocxSampleCount": 14,
     "facultiesWithRealDocx": 8,
     "facultiesWithoutRealDocx": 123,

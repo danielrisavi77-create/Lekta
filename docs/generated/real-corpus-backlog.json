@@ -700,6 +700,18 @@
       "offeredOptionCount": 5
     },
     {
+      "profileId": "ffos-povijest-diplomski",
+      "unitId": "ffos",
+      "facultyLabel": "Filozofski fakultet Osijek",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "ffos-povijest-zavrsni",
+      "unitId": "ffos",
+      "facultyLabel": "Filozofski fakultet Osijek",
+      "offeredOptionCount": 5
+    },
+    {
       "profileId": "ffos-psihologija-zavrsni",
       "unitId": "ffos",
       "facultyLabel": "Filozofski fakultet Osijek",
@@ -2197,18 +2209,6 @@
       "profileId": "dizajn-diplomski",
       "unitId": "arh",
       "facultyLabel": "Arhitektonski fakultet",
-      "offeredOptionCount": 0
-    },
-    {
-      "profileId": "ffos-povijest-diplomski",
-      "unitId": "ffos",
-      "facultyLabel": "Filozofski fakultet Osijek",
-      "offeredOptionCount": 0
-    },
-    {
-      "profileId": "ffos-povijest-zavrsni",
-      "unitId": "ffos",
-      "facultyLabel": "Filozofski fakultet Osijek",
       "offeredOptionCount": 0
     },
     {

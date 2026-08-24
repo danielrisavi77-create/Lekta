@@ -907,11 +907,11 @@
     },
     {
       "profileId": "ffos-povijest-zavrsni",
-      "offeredOptionCount": 0
+      "offeredOptionCount": 5
     },
     {
       "profileId": "ffos-povijest-diplomski",
-      "offeredOptionCount": 0
+      "offeredOptionCount": 5
     },
     {
       "profileId": "ffos-psihologija-zavrsni",
@@ -10000,6 +10000,86 @@
       "recommended": true
     },
     {
+      "profileId": "ffos-povijest-zavrsni",
+      "ruleId": "ffos-povijest-zavrsni--paper-size",
+      "fixerId": "paper-size-fixer",
+      "checkId": "paper-size",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "ffos-povijest-zavrsni",
+      "ruleId": "ffos-povijest-zavrsni--margins",
+      "fixerId": "margins-fixer",
+      "checkId": "margins",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "ffos-povijest-zavrsni",
+      "ruleId": "ffos-povijest-zavrsni--font",
+      "fixerId": "font-fixer",
+      "checkId": "font",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "ffos-povijest-zavrsni",
+      "ruleId": "ffos-povijest-zavrsni--font-size",
+      "fixerId": "font-fixer",
+      "checkId": "font-size",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "ffos-povijest-zavrsni",
+      "ruleId": "ffos-povijest-zavrsni--line-spacing",
+      "fixerId": "line-spacing-fixer",
+      "checkId": "line-spacing",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "ffos-povijest-diplomski",
+      "ruleId": "ffos-povijest-diplomski--paper-size",
+      "fixerId": "paper-size-fixer",
+      "checkId": "paper-size",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "ffos-povijest-diplomski",
+      "ruleId": "ffos-povijest-diplomski--margins",
+      "fixerId": "margins-fixer",
+      "checkId": "margins",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "ffos-povijest-diplomski",
+      "ruleId": "ffos-povijest-diplomski--font",
+      "fixerId": "font-fixer",
+      "checkId": "font",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "ffos-povijest-diplomski",
+      "ruleId": "ffos-povijest-diplomski--font-size",
+      "fixerId": "font-fixer",
+      "checkId": "font-size",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
+      "profileId": "ffos-povijest-diplomski",
+      "ruleId": "ffos-povijest-diplomski--line-spacing",
+      "fixerId": "line-spacing-fixer",
+      "checkId": "line-spacing",
+      "templateId": "basic-text-styles",
+      "recommended": false
+    },
+    {
       "profileId": "ffos-psihologija-zavrsni",
       "ruleId": "ffos-psihologija-zavrsni--font",
       "fixerId": "font-fixer",
@@ -15927,8 +16007,8 @@
   ],
   "summary": {
     "profileCount": 407,
-    "profileOptionCount": 1740,
-    "rowCount": 1740,
+    "profileOptionCount": 1750,
+    "rowCount": 1750,
     "fixerCount": 5,
     "registeredFixerCount": 31,
     "profileFixerCount": 5,

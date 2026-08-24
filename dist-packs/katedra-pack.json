@@ -8463,9 +8463,6 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-04",
-   "font": "Times New Roman",
-   "size": 12,
-   "spacing": 1.5,
    "sources": [
     {
      "t": "Pravilnik o pohrani i objavi ocjenskih radova (Pravni fakultet u Splitu, 2026)",
@@ -8486,9 +8483,6 @@
     "final"
    ],
    "verifiedAt": "2026-07-04",
-   "font": "Times New Roman",
-   "size": 12,
-   "spacing": 1.5,
    "sources": [
     {
      "t": "Pravilnik o pohrani i objavi ocjenskih radova (Pravni fakultet u Splitu, 2026)",
@@ -9851,9 +9845,6 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-04",
-   "font": "Times New Roman",
-   "size": 12,
-   "spacing": 1.5,
    "sources": [
     {
      "t": "Pravilnik o diplomskom radu (Odjel za anglistiku, Zadar)",
@@ -9870,9 +9861,6 @@
     "final"
    ],
    "verifiedAt": "2026-07-04",
-   "font": "Times New Roman",
-   "size": 12,
-   "spacing": 1.5,
    "sources": [
     {
      "t": "Pravilnik o diplomskom radu (Odjel za anglistiku, Zadar)",
@@ -9971,9 +9959,6 @@
    ],
    "verifiedAt": "2026-07-04",
    "citation": "harvard",
-   "font": "Times New Roman",
-   "size": 12,
-   "spacing": 1.5,
    "sources": [
     {
      "t": "Upute za izradu seminarskog rada (Odjel za ekonomiju, Zadar)",
@@ -9995,9 +9980,6 @@
    ],
    "verifiedAt": "2026-07-04",
    "citation": "harvard",
-   "font": "Times New Roman",
-   "size": 12,
-   "spacing": 1.5,
    "sources": [
     {
      "t": "Upute za izradu seminarskog rada (Odjel za ekonomiju, Zadar)",
@@ -10267,9 +10249,6 @@
    ],
    "verifiedAt": "2026-07-04",
    "citation": "harvard",
-   "font": "Times New Roman",
-   "size": 12,
-   "spacing": 1.5,
    "sources": [
     {
      "t": "Pravilnik o izradi, obrani i ocjeni diplomskog rada (Odjel za kroatistiku)",
@@ -10287,9 +10266,6 @@
    ],
    "verifiedAt": "2026-07-04",
    "citation": "harvard",
-   "font": "Times New Roman",
-   "size": 12,
-   "spacing": 1.5,
    "sources": [
     {
      "t": "Pravilnik o izradi, obrani i ocjeni zavrsnog rada (Odjel za kroatistiku, 2023)",
@@ -10305,10 +10281,7 @@
    "workTypes": [
     "graduate"
    ],
-   "verifiedAt": "2026-07-04",
-   "font": "Times New Roman",
-   "size": 12,
-   "spacing": 1.5
+   "verifiedAt": "2026-07-04"
   },
   {
    "id": "unizd-lingvistika-zavrsni",
@@ -10318,10 +10291,7 @@
    "workTypes": [
     "final"
    ],
-   "verifiedAt": "2026-07-04",
-   "font": "Times New Roman",
-   "size": 12,
-   "spacing": 1.5
+   "verifiedAt": "2026-07-04"
   },
   {
    "id": "unizd-pedagogija-diplomski",
@@ -10496,10 +10466,7 @@
    "workTypes": [
     "graduate"
    ],
-   "verifiedAt": "2026-07-04",
-   "font": "Times New Roman",
-   "size": 12,
-   "spacing": 1.5
+   "verifiedAt": "2026-07-04"
   },
   {
    "id": "unizd-sociologija-diplomski",
@@ -10533,9 +10500,6 @@
     "final"
    ],
    "verifiedAt": "2026-07-04",
-   "font": "Times New Roman",
-   "size": 12,
-   "spacing": 1.5,
    "sources": [
     {
      "t": "Upute za prijavu zavrsnog rada (Odjel za sociologiju, administrativne)",

@@ -3726,6 +3726,110 @@
       "lastVerified": "2026-07-28"
     }
   ],
+  "ffos-povijest-diplomski": [
+    {
+      "ruleId": "ffos-povijest-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true,
+      "sourcePage": "dio II Izgled diplomskoga rada",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "ffos-povijest-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true,
+      "sourcePage": "dio II Izgled diplomskoga rada",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "ffos-povijest-diplomski--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "dio II Izgled diplomskoga rada",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "ffos-povijest-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "dio II Izgled diplomskoga rada",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "ffos-povijest-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true,
+      "sourcePage": "dio II Izgled diplomskoga rada",
+      "lastVerified": "2026-07-02"
+    }
+  ],
+  "ffos-povijest-zavrsni": [
+    {
+      "ruleId": "ffos-povijest-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true,
+      "sourcePage": "Upute za zavrsni rad (dio II)",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "ffos-povijest-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true,
+      "sourcePage": "Upute za zavrsni rad (dio II)",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "ffos-povijest-zavrsni--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Upute za zavrsni rad (dio II)",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "ffos-povijest-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true,
+      "sourcePage": "Upute za zavrsni rad (dio II)",
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "ruleId": "ffos-povijest-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true,
+      "sourcePage": "Upute za zavrsni rad (dio II)",
+      "lastVerified": "2026-07-02"
+    }
+  ],
   "ffos-psihologija-diplomski": [
     {
       "ruleId": "ffos-psihologija-diplomski--font",
@@ -4431,7 +4535,7 @@
       "fixerId": "paper-size-fixer",
       "autoFixable": true,
       "sourcePage": "Članak 11.",
-      "lastVerified": "2026-07-28"
+      "lastVerified": "2026-08-24"
     },
     {
       "ruleId": "ffri-povum-diplomski--justify",
@@ -4482,8 +4586,8 @@
       "status": "verified",
       "fixerId": "paper-size-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8.",
-      "lastVerified": "2026-07-28"
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "lastVerified": "2026-08-24"
     },
     {
       "ruleId": "ffri-povum-zavrsni--justify",
@@ -4606,8 +4710,8 @@
       "status": "verified",
       "fixerId": "paper-size-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
-      "lastVerified": "2026-07-02"
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "lastVerified": "2026-08-24"
     },
     {
       "ruleId": "ffri-zavrsni--margins",
@@ -4616,8 +4720,8 @@
       "status": "verified",
       "fixerId": "margins-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
-      "lastVerified": "2026-07-02"
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "lastVerified": "2026-08-24"
     },
     {
       "ruleId": "ffri-zavrsni--font",
@@ -4626,8 +4730,8 @@
       "status": "verified",
       "fixerId": "font-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
-      "lastVerified": "2026-07-02"
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "lastVerified": "2026-08-24"
     },
     {
       "ruleId": "ffri-zavrsni--font-size",
@@ -4636,8 +4740,8 @@
       "status": "verified",
       "fixerId": "font-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
-      "lastVerified": "2026-07-02"
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "lastVerified": "2026-08-24"
     },
     {
       "ruleId": "ffri-zavrsni--line-spacing",
@@ -4646,8 +4750,8 @@
       "status": "verified",
       "fixerId": "line-spacing-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
-      "lastVerified": "2026-07-02"
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "lastVerified": "2026-08-24"
     },
     {
       "ruleId": "ffri-zavrsni--justify",
@@ -4656,8 +4760,8 @@
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true,
-      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
-      "lastVerified": "2026-07-02"
+      "sourcePage": "Članak 8. (oblikovanje završnoga rada)",
+      "lastVerified": "2026-08-24"
     }
   ],
   "ffrz-bakalaureatski": [

@@ -2535,27 +2535,27 @@
       "workType": "graduate",
       "programIds": [],
       "program": "missing",
-      "rules": "none",
-      "repair": "manual-only",
-      "proof": "not-run",
+      "rules": "verified",
+      "repair": "faculty-specific",
+      "proof": "synthetic-pass",
       "assets": "generic",
-      "claim": "E",
-      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
         "declaration": "generic"
       },
       "evidence": {
-        "scoredMachineCheckable": 0,
-        "scoredTotal": 0,
+        "scoredMachineCheckable": 5,
+        "scoredTotal": 5,
         "bulkPending": 0,
-        "offeredRepairOptions": 0,
-        "facultySpecificRepairOptions": 0,
+        "offeredRepairOptions": 5,
+        "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema staging pravila za profil"
+        "nema dokaza na stvarnom studentskom radu"
       ]
     },
     {
@@ -2564,27 +2564,27 @@
       "workType": "final",
       "programIds": [],
       "program": "missing",
-      "rules": "none",
-      "repair": "manual-only",
-      "proof": "not-run",
+      "rules": "verified",
+      "repair": "faculty-specific",
+      "proof": "synthetic-pass",
       "assets": "generic",
-      "claim": "E",
-      "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "generic",
         "declaration": "generic"
       },
       "evidence": {
-        "scoredMachineCheckable": 0,
-        "scoredTotal": 0,
+        "scoredMachineCheckable": 5,
+        "scoredTotal": 5,
         "bulkPending": 0,
-        "offeredRepairOptions": 0,
-        "facultySpecificRepairOptions": 0,
+        "offeredRepairOptions": 5,
+        "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
       "blockedReasons": [
-        "nema staging pravila za profil"
+        "nema dokaza na stvarnom studentskom radu"
       ]
     },
     {
@@ -3214,8 +3214,8 @@
         "declaration": "generic"
       },
       "evidence": {
-        "scoredMachineCheckable": 7,
-        "scoredTotal": 9,
+        "scoredMachineCheckable": 8,
+        "scoredTotal": 10,
         "bulkPending": 0,
         "offeredRepairOptions": 5,
         "facultySpecificRepairOptions": 5,
@@ -5355,8 +5355,8 @@
         "declaration": "exact-official"
       },
       "evidence": {
-        "scoredMachineCheckable": 6,
-        "scoredTotal": 6,
+        "scoredMachineCheckable": 9,
+        "scoredTotal": 9,
         "bulkPending": 0,
         "offeredRepairOptions": 6,
         "facultySpecificRepairOptions": 6,
@@ -6372,8 +6372,8 @@
         "declaration": "generic"
       },
       "evidence": {
-        "scoredMachineCheckable": 3,
-        "scoredTotal": 3,
+        "scoredMachineCheckable": 4,
+        "scoredTotal": 4,
         "bulkPending": 0,
         "offeredRepairOptions": 1,
         "facultySpecificRepairOptions": 1,
@@ -12124,8 +12124,8 @@
         "declaration": "generic"
       },
       "evidence": {
-        "scoredMachineCheckable": 2,
-        "scoredTotal": 2,
+        "scoredMachineCheckable": 3,
+        "scoredTotal": 3,
         "bulkPending": 0,
         "offeredRepairOptions": 2,
         "facultySpecificRepairOptions": 2,
@@ -12153,8 +12153,8 @@
         "declaration": "generic"
       },
       "evidence": {
-        "scoredMachineCheckable": 2,
-        "scoredTotal": 2,
+        "scoredMachineCheckable": 3,
+        "scoredTotal": 3,
         "bulkPending": 0,
         "offeredRepairOptions": 2,
         "facultySpecificRepairOptions": 2,
@@ -12182,8 +12182,8 @@
         "declaration": "generic"
       },
       "evidence": {
-        "scoredMachineCheckable": 2,
-        "scoredTotal": 2,
+        "scoredMachineCheckable": 3,
+        "scoredTotal": 3,
         "bulkPending": 0,
         "offeredRepairOptions": 2,
         "facultySpecificRepairOptions": 2,
@@ -12211,8 +12211,8 @@
         "declaration": "generic"
       },
       "evidence": {
-        "scoredMachineCheckable": 2,
-        "scoredTotal": 2,
+        "scoredMachineCheckable": 3,
+        "scoredTotal": 3,
         "bulkPending": 0,
         "offeredRepairOptions": 2,
         "facultySpecificRepairOptions": 2,
@@ -12240,8 +12240,8 @@
         "declaration": "generic"
       },
       "evidence": {
-        "scoredMachineCheckable": 2,
-        "scoredTotal": 2,
+        "scoredMachineCheckable": 3,
+        "scoredTotal": 3,
         "bulkPending": 0,
         "offeredRepairOptions": 2,
         "facultySpecificRepairOptions": 2,
@@ -12726,21 +12726,21 @@
       "unsupported": 3
     },
     "byRules": {
-      "verified": 378,
+      "verified": 380,
       "bulk-pending": 8,
       "advisory-only": 19,
-      "none": 31
+      "none": 29
     },
     "byRepair": {
-      "faculty-specific": 344,
+      "faculty-specific": 346,
       "universal-hygiene": 37,
-      "manual-only": 55
+      "manual-only": 53
     },
     "byProof": {
       "real-docx-pass": 0,
-      "synthetic-pass": 341,
+      "synthetic-pass": 343,
       "review": 1,
-      "not-run": 94
+      "not-run": 92
     },
     "byAssets": {
       "exact-official": 13,
@@ -12772,10 +12772,10 @@
     },
     "byClaim": {
       "A": 0,
-      "B": 333,
+      "B": 335,
       "C": 11,
       "D": 42,
-      "E": 50
+      "E": 48
     },
     "programGaps": 413,
     "programsWithoutProfile": [
@@ -12786,7 +12786,7 @@
     "nationalClaimBlockers": [
       "413 redaka nema evidentiran studijski program (sluzbeni Upisnik jos nije sinkroniziran)",
       "3 evidentiranih programa nema nijedan profil: fpzg: Sveučilišni prijediplomski studij Vojno vođenje i upravljanje; fpzg: Združeni interdisciplinarni diplomski studij o jugoistočnoj Europi; pravo: Erasmus Mundus Joint Master – Redesigning the Post-Industrial City (MSc RePIC)",
-      "103 redaka nije na razini A ili B (popravak nije dokazan na dokumentu)"
+      "101 redaka nije na razini A ili B (popravak nije dokazan na dokumentu)"
     ]
   }
 }

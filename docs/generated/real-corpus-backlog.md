@@ -65,14 +65,14 @@ Ukupno profila bez uzorka: **396/407**.
 
 - **ffos-psihologija-diplomski** — 6 ponudjenih opcija
 - **ffos-diplomski** — 5 ponudjenih opcija
+- **ffos-povijest-diplomski** — 5 ponudjenih opcija
+- **ffos-povijest-zavrsni** — 5 ponudjenih opcija
 - **ffos-psihologija-zavrsni** — 5 ponudjenih opcija
 - **ffos-zavrsni** — 5 ponudjenih opcija
 - **ffos-germanistika-diplomski** — 4 ponudjenih opcija
 - **ffos-germanistika-zavrsni** — 4 ponudjenih opcija
 - **ffos-informatologija-diplomski** — 4 ponudjenih opcija
 - **ffos-informatologija-zavrsni** — 4 ponudjenih opcija
-- **ffos-povijest-diplomski** — 0 ponudjenih opcija
-- **ffos-povijest-zavrsni** — 0 ponudjenih opcija
 
 ## Filozofski fakultet u Rijeci (ffri)
 
