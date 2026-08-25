@@ -48,6 +48,13 @@ function localSession(): LocalDocumentSessionV1 {
       quickStats: null,
       suspicious: false,
       suspicionReason: null,
+      capability: {
+        canAnalyze: true,
+        canRepair: true,
+        totalDeclaredBytes: 4,
+        entryCount: 1,
+        repairBlocker: null,
+      },
     },
   };
 }

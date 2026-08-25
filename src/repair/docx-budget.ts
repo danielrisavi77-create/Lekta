@@ -17,6 +17,24 @@ const MB = 1024 * 1024;
 /** Najveci .docx koji se prima na BILO KOJEM koraku (analiza i popravak dijele ovu granicu). */
 export const DOCX_MAX_UPLOAD_BYTES = 20 * MB;
 
+/**
+ * Gornja granica uploada prilagođena memoriji uređaja.
+ *
+ * Ovaj izračun živi uz zajednički tvrdi limit kako bi minimalni intake i puni analizator
+ * koristili istu odluku bez uvlačenja teškog src/analysis grafa u početni bundle.
+ * Vrlo slab uređaj (deviceMemory <= 2 GB) dobiva 12 MB. Svi ostali uređaji ostaju na
+ * zajedničkom limitu od 20 MB; coarse pointer se prima radi jedinstvenog pozivnog ugovora.
+ */
+export function uploadCapBytes(
+  opts: { deviceMemory?: number | null; coarsePointer?: boolean } = {},
+): number {
+  const deviceMemory = typeof opts.deviceMemory === 'number' && opts.deviceMemory > 0
+    ? opts.deviceMemory
+    : null;
+  if (deviceMemory !== null && deviceMemory <= 2) return 12 * MB;
+  return DOCX_MAX_UPLOAD_BYTES;
+}
+
 /** Najveci ukupan dekomprimirani sadrzaj paketa (zip-bomba guard u zip-codecu). */
 export const DOCX_MAX_TOTAL_DECOMPRESSED_BYTES = 64 * MB;
 

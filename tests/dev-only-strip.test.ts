@@ -11,7 +11,7 @@ import { resolve } from 'node:path';
 // @ts-expect-error - .mjs util bez deklaracija (dijeli se s vite.config.ts)
 import { stripDevOnly, devOnlyMarkersBalanced } from '../scripts/strip-dev-only.mjs';
 
-const html = readFileSync(resolve(__dirname, '..', 'index.html'), 'utf8');
+const html = readFileSync(resolve(__dirname, '..', 'rad', 'index.html'), 'utf8');
 
 function inlineScripts(s: string): string[] {
   return [...s.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]);

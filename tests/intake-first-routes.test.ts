@@ -1,11 +1,9 @@
-import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const originalIndexHash = '7c4e38f7305521ebd5a91044d1e9a001fd6ff441601d659053a78790600488fd';
 
 const routes = [
   {
@@ -50,9 +48,10 @@ const originalIndex = source('index.html');
 const themeRestoreScript = executableInlineScripts(originalIndex).find((body) => body.includes('lekta.theme'));
 
 describe('intake-first MPA route inputs', () => {
-  it('zadržava javni root netaknut tijekom route-shell taska', () => {
-    const hash = createHash('sha256').update(originalIndex).digest('hex');
-    expect(hash).toBe(originalIndexHash);
+  it('root aktivira samo novi intake entrypoint', () => {
+    expect(originalIndex).toContain('src="/src/routes/intake/main.ts"');
+    expect(originalIndex).not.toContain('src="/src/main.ts"');
+    expect(originalIndex).not.toContain('id="analyzer"');
   });
 
   it('registrira sva tri nova Vite ulaza', () => {

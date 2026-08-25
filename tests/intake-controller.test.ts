@@ -1,0 +1,317 @@
+// @vitest-environment happy-dom
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { IntakeOk, IntakeVerdict } from '../src/docx/intake-gate';
+import {
+  mountIntakeController,
+  type IntakeControllerDependencies,
+} from '../src/routes/intake/intake-controller';
+import { LocalDocumentSessionStoreError } from '../src/session/indexeddb-document-session-store';
+import type { LocalDocumentSessionV1 } from '../src/session/local-document-session';
+
+const SESSION_ID = '123e4567-e89b-42d3-a456-426614174000';
+const SECOND_SESSION_ID = '223e4567-e89b-42d3-a456-426614174001';
+const DOCX_TYPE = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+const accepted: IntakeOk = {
+  kind: 'ok',
+  quickStats: null,
+  suspicious: false,
+  suspicionReason: null,
+  capability: {
+    canAnalyze: true,
+    canRepair: true,
+    totalDeclaredBytes: 64,
+    entryCount: 4,
+    repairBlocker: null,
+  },
+};
+
+function renderFixture(): void {
+  document.body.innerHTML = `
+    <main id="intakeStage" data-intake-state="idle">
+      <button id="intakeDropzone" type="button">Odaberi .docx</button>
+      <input id="intakeFile" type="file" accept=".docx" hidden>
+      <strong id="intakeFileName"></strong>
+      <p id="intakeStatus" aria-live="polite"></p>
+      <p id="intakeError" role="alert" hidden></p>
+      <button id="intakeMemoryAction" type="button" hidden>Nastavi samo u ovom tabu</button>
+    </main>
+  `;
+}
+
+function makeFile(name = 'diplomski-rad.docx', size = 64): File {
+  return new File([new Uint8Array(size)], name, {
+    type: DOCX_TYPE,
+    lastModified: 1_000,
+  });
+}
+
+function sessionFor(file: File, id = SESSION_ID): LocalDocumentSessionV1 {
+  const now = Date.now();
+  return {
+    schemaVersion: 1,
+    id,
+    createdAt: now,
+    expiresAt: now + 86_400_000,
+    document: {
+      name: file.name,
+      type: file.type,
+      lastModified: file.lastModified,
+      bytes: new Uint8Array([80, 75, 3, 4]).buffer,
+    },
+    intake: accepted,
+  };
+}
+
+function dependencies(
+  overrides: Partial<IntakeControllerDependencies> = {},
+): IntakeControllerDependencies {
+  return {
+    maxUploadBytes: 128,
+    inspectFile: vi.fn(async (): Promise<IntakeVerdict> => accepted),
+    createSession: vi.fn(async (file: File) => sessionFor(file)),
+    persistentStore: {
+      put: vi.fn(async () => undefined),
+      delete: vi.fn(async () => undefined),
+    },
+    navigate: vi.fn(),
+    mountMemoryWorkspace: vi.fn(async () => undefined),
+    transitionDelayMs: 0,
+    ...overrides,
+  };
+}
+
+beforeEach(() => {
+  renderFixture();
+});
+
+describe('intake controller', () => {
+  it('otvara file picker klikom te tipkama Enter i Space', () => {
+    const deps = dependencies();
+    const controller = mountIntakeController(document, deps);
+    const input = document.querySelector<HTMLInputElement>('#intakeFile')!;
+    const open = vi.spyOn(input, 'click').mockImplementation(() => undefined);
+    const dropzone = document.querySelector<HTMLElement>('#intakeDropzone')!;
+
+    dropzone.click();
+    dropzone.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    dropzone.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+
+    expect(open).toHaveBeenCalledTimes(3);
+    controller.destroy();
+  });
+
+  it('drag and drop prolazi isti tok i navigira samo na kanonski session fragment', async () => {
+    const deps = dependencies();
+    mountIntakeController(document, deps);
+    const dropped = makeFile();
+    const event = new Event('drop', { bubbles: true, cancelable: true });
+    Object.defineProperty(event, 'dataTransfer', { value: { files: [dropped] } });
+
+    document.querySelector<HTMLElement>('#intakeDropzone')!.dispatchEvent(event);
+    await vi.waitFor(() => {
+      expect(deps.navigate).toHaveBeenCalledWith(`/rad/#session=${SESSION_ID}`);
+    });
+
+    expect(deps.inspectFile).toHaveBeenCalledWith(dropped);
+    expect(deps.persistentStore.put).toHaveBeenCalledOnce();
+  });
+
+  it('odbija krivu ekstenziju i preveliku datoteku prije intake inspekcije', async () => {
+    const deps = dependencies();
+    const controller = mountIntakeController(document, deps);
+
+    await controller.selectFile(makeFile('rad.pdf'));
+    expect(document.querySelector('#intakeError')?.textContent).toMatch(/\.docx/i);
+
+    await controller.selectFile(makeFile('prevelik.docx', 129));
+    expect(document.querySelector('#intakeError')?.textContent).toMatch(/velik|MB/i);
+    expect(deps.inspectFile).not.toHaveBeenCalled();
+    expect(deps.persistentStore.put).not.toHaveBeenCalled();
+  });
+
+  it('intake reject ostaje na ulazu i ne stvara niti sprema sesiju', async () => {
+    const deps = dependencies({
+      inspectFile: vi.fn(async () => ({
+        kind: 'reject',
+        code: 'not-zip',
+        message: 'Datoteka nije pravi .docx dokument.',
+      })),
+    });
+    const controller = mountIntakeController(document, deps);
+
+    await controller.selectFile(makeFile());
+
+    expect(document.querySelector('#intakeError')?.textContent).toContain('nije pravi');
+    expect(deps.createSession).not.toHaveBeenCalled();
+    expect(deps.persistentStore.put).not.toHaveBeenCalled();
+    expect(deps.navigate).not.toHaveBeenCalled();
+  });
+
+  it('ne navigira dok IndexedDB put nije uspješno dovrsen', async () => {
+    let release!: () => void;
+    const pendingPut = new Promise<void>((resolve) => { release = resolve; });
+    const deps = dependencies({
+      persistentStore: {
+        put: vi.fn(() => pendingPut),
+        delete: vi.fn(async () => undefined),
+      },
+    });
+    const controller = mountIntakeController(document, deps);
+
+    const selection = controller.selectFile(makeFile());
+    await vi.waitFor(() => expect(deps.persistentStore.put).toHaveBeenCalledOnce());
+    expect(deps.navigate).not.toHaveBeenCalled();
+
+    release();
+    await selection;
+    expect(deps.navigate).toHaveBeenCalledWith(`/rad/#session=${SESSION_ID}`);
+  });
+
+  it('quota kvar nudi iskren, eksplicitan nastavak samo u ovom tabu', async () => {
+    const deps = dependencies({
+      persistentStore: {
+        put: vi.fn(async () => {
+          throw new LocalDocumentSessionStoreError('quota', 'Nema dovoljno prostora.');
+        }),
+        delete: vi.fn(async () => undefined),
+      },
+    });
+    const controller = mountIntakeController(document, deps);
+
+    await controller.selectFile(makeFile());
+
+    const action = document.querySelector<HTMLButtonElement>('#intakeMemoryAction')!;
+    expect(action.hidden).toBe(false);
+    expect(document.querySelector('#intakeError')?.textContent).toMatch(/prostora|pohran/i);
+    expect(deps.navigate).not.toHaveBeenCalled();
+    expect(deps.mountMemoryWorkspace).not.toHaveBeenCalled();
+  });
+
+  it('memory-only workspace učitava tek nakon klika i upozorava na osvježavanje', async () => {
+    const deps = dependencies({
+      persistentStore: {
+        put: vi.fn(async () => {
+          throw new LocalDocumentSessionStoreError('unavailable', 'Pohrana nije dostupna.');
+        }),
+        delete: vi.fn(async () => undefined),
+      },
+    });
+    const controller = mountIntakeController(document, deps);
+    await controller.selectFile(makeFile());
+
+    expect(deps.mountMemoryWorkspace).not.toHaveBeenCalled();
+    document.querySelector<HTMLButtonElement>('#intakeMemoryAction')!.click();
+
+    await vi.waitFor(() => expect(deps.mountMemoryWorkspace).toHaveBeenCalledOnce());
+    expect(deps.navigate).not.toHaveBeenCalled();
+    expect(document.querySelector('#intakeStatus')?.textContent).toMatch(/osvjež|refresh|ponovno učitavanje/i);
+  });
+
+  it('ime datoteke prikazuje samo kao tekst, bez HTML-a i bez logiranja', async () => {
+    const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    const info = vi.spyOn(console, 'info').mockImplementation(() => undefined);
+    const deps = dependencies();
+    const controller = mountIntakeController(document, deps);
+    const name = '<img src=x onerror=alert(1)>.docx';
+
+    await controller.selectFile(makeFile(name));
+
+    expect(document.querySelector('#intakeFileName')?.textContent).toBe(name);
+    expect(document.querySelector('#intakeFileName img')).toBeNull();
+    expect(log).not.toHaveBeenCalled();
+    expect(info).not.toHaveBeenCalled();
+    log.mockRestore();
+    info.mockRestore();
+  });
+
+  it('sporiji stari odabir ne može prebrisati noviji dokument', async () => {
+    let releaseFirst!: (verdict: IntakeVerdict) => void;
+    const firstVerdict = new Promise<IntakeVerdict>((resolve) => { releaseFirst = resolve; });
+    const inspectFile = vi.fn((file: File): Promise<IntakeVerdict> => (
+      file.name === 'prvi.docx' ? firstVerdict : Promise.resolve(accepted)
+    ));
+    const deps = dependencies({ inspectFile });
+    const controller = mountIntakeController(document, deps);
+
+    const first = controller.selectFile(makeFile('prvi.docx'));
+    await controller.selectFile(makeFile('drugi.docx'));
+    releaseFirst(accepted);
+    await first;
+
+    expect(deps.createSession).toHaveBeenCalledOnce();
+    expect(deps.createSession).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'drugi.docx' }),
+      accepted,
+    );
+    expect(deps.navigate).toHaveBeenCalledTimes(1);
+  });
+
+  it('briše kasno spremljenu sesiju starog odabira bez diranja novijeg dokumenta', async () => {
+    let releaseFirstPut!: () => void;
+    const firstPut = new Promise<void>((resolve) => { releaseFirstPut = resolve; });
+    const persistentStore = {
+      put: vi.fn((storedSession: LocalDocumentSessionV1) => (
+        storedSession.id === SESSION_ID ? firstPut : Promise.resolve()
+      )),
+      delete: vi.fn(async () => undefined),
+    };
+    const deps = dependencies({
+      createSession: vi.fn(async (file: File) => sessionFor(
+        file,
+        file.name === 'prvi.docx' ? SESSION_ID : SECOND_SESSION_ID,
+      )),
+      persistentStore,
+    });
+    const controller = mountIntakeController(document, deps);
+
+    const first = controller.selectFile(makeFile('prvi.docx'));
+    await vi.waitFor(() => expect(persistentStore.put).toHaveBeenCalledOnce());
+    await controller.selectFile(makeFile('drugi.docx'));
+    releaseFirstPut();
+    await first;
+
+    expect(persistentStore.delete).toHaveBeenCalledWith(SESSION_ID);
+    expect(persistentStore.delete).not.toHaveBeenCalledWith(SECOND_SESSION_ID);
+    expect(deps.navigate).toHaveBeenCalledTimes(1);
+    expect(deps.navigate).toHaveBeenCalledWith(`/rad/#session=${SECOND_SESSION_ID}`);
+  });
+
+  it('kasni memory-only prijelaz starog dokumenta ne prepisuje noviji odabir', async () => {
+    let releaseMemoryWorkspace!: () => void;
+    let isCurrent!: () => boolean;
+    const memoryWorkspace = new Promise<void>((resolve) => { releaseMemoryWorkspace = resolve; });
+    const persistentStore = {
+      put: vi.fn(async () => {
+        throw new LocalDocumentSessionStoreError('unavailable', 'Pohrana nije dostupna.');
+      }),
+      delete: vi.fn(async () => undefined),
+    };
+    const mountMemoryWorkspace = vi.fn((
+      _session: LocalDocumentSessionV1,
+      options: { isCurrent(): boolean },
+    ) => {
+      isCurrent = options.isCurrent;
+      return memoryWorkspace;
+    });
+    const deps = dependencies({ persistentStore, mountMemoryWorkspace });
+    const controller = mountIntakeController(document, deps);
+
+    await controller.selectFile(makeFile('prvi.docx'));
+    document.querySelector<HTMLButtonElement>('#intakeMemoryAction')!.click();
+    await vi.waitFor(() => expect(mountMemoryWorkspace).toHaveBeenCalledOnce());
+    expect(isCurrent()).toBe(true);
+
+    await controller.selectFile(makeFile('drugi.docx'));
+    expect(isCurrent()).toBe(false);
+    expect(document.querySelector('#intakeFileName')?.textContent).toBe('drugi.docx');
+    expect(document.querySelector<HTMLButtonElement>('#intakeMemoryAction')!.hidden).toBe(false);
+
+    releaseMemoryWorkspace();
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(document.querySelector('#intakeFileName')?.textContent).toBe('drugi.docx');
+    expect(document.querySelector<HTMLButtonElement>('#intakeMemoryAction')!.hidden).toBe(false);
+  });
+});

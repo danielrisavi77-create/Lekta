@@ -32,6 +32,13 @@ const intake: IntakeOk = {
   quickStats: { words: 1_234, pages: 8 },
   suspicious: false,
   suspicionReason: null,
+  capability: {
+    canAnalyze: true,
+    canRepair: true,
+    totalDeclaredBytes: 32_768,
+    entryCount: 12,
+    repairBlocker: null,
+  },
 };
 
 function validAnalysisPayload() {
@@ -90,6 +97,7 @@ describe('model lokalne dokumentne sesije', () => {
         lastModified: original.lastModified,
       },
     });
+    expect(session.intake.capability).toEqual(intake.capability);
 
     const restored = fileFromLocalDocumentSession(session);
     expect(restored).toBeInstanceOf(File);
@@ -137,6 +145,24 @@ describe('model lokalne dokumentne sesije', () => {
     expect(sanitizeLocalDocumentSession(makeSession(SESSION_ID, {
       expiresAt: CREATED_AT + LOCAL_DOCUMENT_TTL_MS + 1,
     }), CREATED_AT)).toBeNull();
+  });
+
+  it('čuva eksplicitni fail-open capability null, a odbija nevaljan blocker', () => {
+    const failOpen = makeSession(SESSION_ID, {
+      intake: { ...intake, capability: null },
+    });
+    expect(sanitizeLocalDocumentSession(failOpen, CREATED_AT)?.intake.capability).toBeNull();
+
+    const malformed = makeSession(SESSION_ID, {
+      intake: {
+        ...intake,
+        capability: {
+          ...intake.capability!,
+          repairBlocker: 'nepoznat-blocker',
+        } as IntakeOk['capability'],
+      },
+    });
+    expect(sanitizeLocalDocumentSession(malformed, CREATED_AT)).toBeNull();
   });
 
   it('uklanja samo nevaljan analysis snapshot, a čuva dokument i potvrđeni profil', () => {

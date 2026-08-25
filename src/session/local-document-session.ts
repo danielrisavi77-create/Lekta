@@ -85,6 +85,40 @@ function isFiniteTimestamp(value: unknown): value is number {
 function isNullablePositiveNumber(value: unknown): value is number | null {
   return value === null || (typeof value === 'number' && Number.isFinite(value) && value > 0);
 }
+function sanitizeCapability(value: unknown): IntakeOk['capability'] | undefined {
+  if (value === null) return null;
+  if (!isRecord(value)) return undefined;
+
+  const keys = Object.keys(value).sort();
+  const expectedKeys = ['canAnalyze', 'canRepair', 'entryCount', 'repairBlocker', 'totalDeclaredBytes'];
+  if (keys.length !== expectedKeys.length || keys.some((key, index) => key !== expectedKeys[index])) return undefined;
+  if (typeof value.canAnalyze !== 'boolean' || typeof value.canRepair !== 'boolean') return undefined;
+  if (
+    typeof value.totalDeclaredBytes !== 'number'
+    || !Number.isSafeInteger(value.totalDeclaredBytes)
+    || value.totalDeclaredBytes <= 0
+    || typeof value.entryCount !== 'number'
+    || !Number.isSafeInteger(value.entryCount)
+    || value.entryCount <= 0
+  ) return undefined;
+
+  const blocker = value.repairBlocker;
+  if (
+    blocker !== null
+    && blocker !== 'upload-too-large'
+    && blocker !== 'too-many-entries'
+    && blocker !== 'decompresses-too-large'
+  ) return undefined;
+  if (value.canRepair !== (blocker === null) || (!value.canAnalyze && value.canRepair)) return undefined;
+
+  return {
+    canAnalyze: value.canAnalyze,
+    canRepair: value.canRepair,
+    totalDeclaredBytes: value.totalDeclaredBytes,
+    entryCount: value.entryCount,
+    repairBlocker: blocker,
+  };
+}
 
 function cloneBytes(bytes: ArrayBuffer): ArrayBuffer {
   return bytes.slice(0);
@@ -97,6 +131,9 @@ function cloneUnknown(value: unknown): unknown {
 function sanitizeIntake(value: unknown): IntakeOk | null {
   if (!isRecord(value) || value.kind !== 'ok' || typeof value.suspicious !== 'boolean') return null;
   if (!(value.suspicionReason === null || typeof value.suspicionReason === 'string')) return null;
+  if (!Object.prototype.hasOwnProperty.call(value, 'capability')) return null;
+  const capability = sanitizeCapability(value.capability);
+  if (capability === undefined) return null;
 
   let quickStats: IntakeOk['quickStats'] = null;
   if (value.quickStats !== null) {
@@ -110,6 +147,7 @@ function sanitizeIntake(value: unknown): IntakeOk | null {
     quickStats,
     suspicious: value.suspicious,
     suspicionReason: value.suspicionReason,
+    capability,
   };
 }
 

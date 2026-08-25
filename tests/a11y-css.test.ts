@@ -26,7 +26,7 @@ describe('fokus prsten kontrast (BL-P3-05)', () => {
 });
 
 describe('velicina male mete 24px (BL-P3-04)', () => {
-  const css = read('index.html');
+  const css = read('rad/index.html');
   it.each(['remove-file', 'wl-close'])('.%s ima min 24x24 i centriran sadrzaj', (cls) => {
     const re = new RegExp(`\\.${cls}\\{[^}]*min-width:24px;min-height:24px;display:inline-grid;place-items:center[^}]*\\}`);
     expect(css).toMatch(re);

@@ -14,7 +14,7 @@ describe('Lekta premium visual system', () => {
   });
 
   it('exposes real-data visualization surfaces on the analyzer result', () => {
-    const index = read('index.html');
+    const index = read('rad/index.html');
     expect(index).toContain('data-premium-surface="analyzer"');
     expect(index).toContain('id="resultCategoryChart"');
     expect(index).toContain('id="resultSeverityChart"');

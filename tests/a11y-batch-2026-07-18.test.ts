@@ -12,7 +12,7 @@ import { dirname, join } from 'node:path';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (f: string) => readFileSync(join(root, f), 'utf8');
 const PAGES = [
-  'index.html', 'alati.html', 'citat.html', 'kartice.html', 'naslovnica.html',
+  'alati.html', 'citat.html', 'kartice.html', 'naslovnica.html',
   'literatura.html', 'izjava.html', 'landing_usporedba.html', 'landing_benchmark.html',
 ];
 
@@ -105,6 +105,12 @@ describe('mobileNav landmark + aria-current (AUD a11y #4)', () => {
     expect(tag).toMatch(/role="navigation"/);
     expect(tag).toMatch(/aria-label="Mobilna navigacija"/);
   });
+
+  it('saznaj-vise route shell ima označenu mobilnu navigaciju', () => {
+    expect(read('saznaj-vise/index.html')).toMatch(
+      /<nav class="route-mobile-nav"[^>]*aria-label="Mobilna navigacija"/,
+    );
+  });
 });
 
 describe('themeBtn label-in-name (AUD a11y #Izjava-2, WCAG 2.5.3)', () => {
@@ -113,6 +119,12 @@ describe('themeBtn label-in-name (AUD a11y #Izjava-2, WCAG 2.5.3)', () => {
     const tag = html.match(/<button class="lampa-btn" id="themeBtn"[^>]*>/)?.[0] ?? '';
     const label = tag.match(/aria-label="([^"]*)"/)?.[1] ?? '';
     expect(label).toMatch(/Lampa/);
+  });
+
+  it('saznaj-vise route theme gumb ima label-in-name', () => {
+    const html = read('saznaj-vise/index.html');
+    const tag = html.match(/<button class="route-icon-button"[^>]*data-route-theme[^>]*>/)?.[0] ?? '';
+    expect(tag).toMatch(/aria-label="Lampa:/);
   });
   it('ui-boot.ts setupThemeToggle() PREPISUJE aria-label na svaki reflect() poziv (boot + klik) - i taj runtime label mora sadrzavati "Lampa", inace staticki popravak gore ne prezivi prvi reflect()', () => {
     const ts = read('src/shared/ui-boot.ts');

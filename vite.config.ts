@@ -296,7 +296,8 @@ function fontPreload() {
     apply: 'build' as const,
     transformIndexHtml: {
       order: 'post' as const,
-      handler(html: string, ctx: { bundle?: Record<string, unknown> }) {
+      handler(html: string, ctx: { bundle?: Record<string, unknown>; filename?: string }) {
+        if (ctx.filename && resolve(ctx.filename) === resolve(__dirname, 'index.html')) return html;
         if (!ctx.bundle) return html;
         const links = Object.keys(ctx.bundle)
           .filter((f) => f.endsWith('.woff2') && WANTED.some((r) => r.test(f)))

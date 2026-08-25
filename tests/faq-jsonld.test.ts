@@ -22,7 +22,7 @@ function decodeEntities(s: string): string {
 }
 
 describe('FAQ JSON-LD mirror', () => {
-  const html = readFileSync(join(root, 'index.html'), 'utf8');
+  const html = readFileSync(join(root, 'saznaj-vise', 'index.html'), 'utf8');
 
   // Vidljivi FAQ: <div class="faq"> ... </div> (bez ugnijezdjenih divova, pa non-greedy do prvog </div>)
   const faqBlock = html.match(/<div class="faq">([\s\S]*?)<\/div>/);
@@ -58,7 +58,7 @@ describe('FAQ JSON-LD mirror', () => {
 });
 
 describe.each(['izjava.html', 'alati.html', 'landing_usporedba.html', 'citati-i-literatura.html'])('FAQ JSON-LD mirror: %s', (page) => {
-  // Isti obrazac kao index.html gore, primijenjen po stranici umjesto generalizirano preko
+  // Isti obrazac kao saznaj-vise/index.html gore, primijenjen po stranici umjesto generalizirano preko
   // svih *.html (siri sweep otkrio je vec postojeci, nepovezan drift na naslovnica.html i
   // citat.html izvan dosega ove promjene). Konkretan povod za izjava.html: FAQPage JSON-LD
   // odgovor na "Je li izjava o izvornosti obavezna?" izostavljao je zavrsnu recenicu

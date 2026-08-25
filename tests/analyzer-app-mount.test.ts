@@ -84,34 +84,37 @@ function deferred<T>() {
 }
 
 function analyzerOnlyFixture(policy = 'after-profile-confirmation', target = document): void {
-  const source = readFileSync(resolve(process.cwd(), 'index.html'), 'utf8');
-  const start = source.indexOf('<section class="section section-soft" id="analyzer">');
-  const end = source.indexOf('<section class="ks-marquee"', start);
-  if (start < 0 || end < 0) throw new Error('index.html nema #analyzer fixture');
-  const markup = source.slice(start, end);
+  const source = readFileSync(resolve(process.cwd(), 'rad', 'index.html'), 'utf8');
+  const bodyStart = source.indexOf('<body');
+  const bodyOpenEnd = source.indexOf('>', bodyStart);
+  const bodyEnd = source.lastIndexOf('</body>');
+  if (bodyStart < 0 || bodyOpenEnd < 0 || bodyEnd < 0) {
+    throw new Error(`${route}/index.html nema valjani <body> fixture`);
+  }
   const host = target.createElement('div');
-  host.innerHTML = markup;
+  host.innerHTML = source.slice(bodyOpenEnd + 1, bodyEnd);
   const analyzer = host.querySelector<HTMLElement>('#analyzer');
-  if (!analyzer) throw new Error('index.html nema #analyzer fixture');
+  if (!analyzer) throw new Error('rad/index.html nema #analyzer fixture');
   analyzer.dataset.analysisStart = policy;
   target.body.replaceChildren(target.importNode(analyzer, true));
 }
 
-function fullPageFixture(target: Document): void {
-  const source = readFileSync(resolve(process.cwd(), 'index.html'), 'utf8');
+function fullPageFixture(target: Document, route: 'rad' | 'saznaj-vise' = 'rad'): void {
+  const source = readFileSync(resolve(process.cwd(), route, 'index.html'), 'utf8');
   const bodyStart = source.indexOf('<body');
   const bodyOpenEnd = source.indexOf('>', bodyStart);
   const bodyEnd = source.lastIndexOf('</body>');
-  if (bodyStart < 0 || bodyOpenEnd < 0 || bodyEnd < 0) throw new Error('index.html nema valjani <body> fixture');
+  if (bodyStart < 0 || bodyOpenEnd < 0 || bodyEnd < 0) throw new Error(`${route}/index.html nema valjani <body> fixture`);
   const host = target.createElement('div');
   host.innerHTML = source.slice(bodyOpenEnd + 1, bodyEnd);
   target.body.replaceChildren(...Array.from(host.childNodes));
 }
 
 async function mountPartialPage(
-  missingLegacyRoot: string,
+  missingLegacyRoot: string | null,
   config: Record<string, unknown> = {},
   prepare?: (target: Document) => void,
+  route: 'rad' | 'saznaj-vise' = 'rad',
 ): Promise<Document> {
   document.body.replaceChildren();
   localStorage.clear();
@@ -121,11 +124,13 @@ async function mountPartialPage(
     supabaseAnonKey: '',
     ...config,
   }));
-  const supplied = document.implementation.createHTMLDocument(`Partial route without ${missingLegacyRoot}`);
-  fullPageFixture(supplied);
-  const missing = supplied.getElementById(missingLegacyRoot);
-  if (!missing) throw new Error(`index.html nema #${missingLegacyRoot} fixture`);
-  missing.remove();
+  const supplied = document.implementation.createHTMLDocument(`Partial ${route} route`);
+  fullPageFixture(supplied, route);
+  if (missingLegacyRoot) {
+    const missing = supplied.getElementById(missingLegacyRoot);
+    if (!missing) throw new Error(`${route}/index.html nema #${missingLegacyRoot} fixture`);
+    missing.remove();
+  }
   prepare?.(supplied);
   vi.resetModules();
   const isolatedApp = await import('../src/ui/app');
@@ -218,7 +223,7 @@ describe.sequential('supplied Document mount boundary', () => {
 
     expect(inputClick).toHaveBeenCalledTimes(1);
     supplied.getElementById('demoBtn')?.click();
-    expect(supplied.querySelector('.lek-col-form')?.classList.contains('lek-engaged')).toBe(true);
+    expect(supplied.getElementById('resultView')?.classList.contains('hidden')).toBe(false);
     expect(globalSentinel.classList.contains('lek-engaged')).toBe(false);
     expect(document.getElementById('lekResultProgress')).toBeNull();
     expect(document.getElementById('analyzer')).toBeNull();
@@ -241,7 +246,7 @@ describe.sequential('root-aware mount domain regressions', () => {
     let supplied: Document;
 
     beforeAll(async () => {
-      supplied = await mountPartialPage('checkGrid');
+      supplied = await mountPartialPage(null);
     }, 180_000);
 
     it('institution change repopulates the unit select through the profile cascade handler', () => {
@@ -268,7 +273,7 @@ describe.sequential('root-aware mount domain regressions', () => {
     let supplied: Document;
 
     beforeAll(async () => {
-      supplied = await mountPartialPage('orderModal');
+      supplied = await mountPartialPage(null, {}, undefined, 'saznaj-vise');
     }, 180_000);
 
     it('landing mount populates both the check and pricing grids', () => {
@@ -276,16 +281,13 @@ describe.sequential('root-aware mount domain regressions', () => {
       expect(supplied.getElementById('pricingGrid')?.childElementCount).toBeGreaterThan(0);
     });
 
-    it('uploadCtaBtn engages the analyzer form and invokes the real file-input click boundary', () => {
-      const form = supplied.querySelector<HTMLElement>('.lek-col-form');
-      const input = supplied.getElementById('fileInput') as HTMLInputElement;
-      const inputClick = vi.spyOn(input, 'click').mockImplementation(() => undefined);
+    it('landing upload akcije vode na minimalni root bez skrivene analyzer interakcije', () => {
+      const uploadLinks = [...supplied.querySelectorAll<HTMLAnchorElement>('a[href="/"]')]
+        .filter((link) => /učitaj|provjeri|dokument|rad/i.test(link.textContent ?? ''));
 
-      supplied.getElementById('uploadCtaBtn')?.click();
-
-      expect(form?.classList.contains('lek-engaged')).toBe(true);
-      expect(inputClick).toHaveBeenCalledTimes(1);
-      inputClick.mockRestore();
+      expect(uploadLinks.length).toBeGreaterThan(0);
+      expect(supplied.getElementById('uploadCtaBtn')).toBeNull();
+      expect(supplied.getElementById('fileInput')).toBeNull();
     });
   });
 
@@ -403,21 +405,20 @@ describe.sequential('root-aware mount domain regressions', () => {
     });
   });
 
-  describe('dev controls on a partial route', () => {
+  describe('dev controls outside explicit QA mode', () => {
     let supplied: Document;
 
     beforeAll(async () => {
-      supplied = await mountPartialPage('orderModal');
+      supplied = await mountPartialPage(null, {}, undefined, 'saznaj-vise');
     }, 180_000);
 
-    it('qaBtn opens qaModal and closeQa closes it through the dev binder', () => {
-      const modal = supplied.getElementById('qaModal') as HTMLElement;
+    it('ne izlaže niti otvara QA konzolu bez eksplicitnog QA moda', () => {
+      const button = supplied.getElementById('qaBtn');
+      const modal = supplied.getElementById('qaModal');
 
-      supplied.getElementById('qaBtn')?.click();
-      expect(modal.classList.contains('hidden')).toBe(false);
-
-      supplied.getElementById('closeQa')?.click();
-      expect(modal.classList.contains('hidden')).toBe(true);
+      expect(button?.classList.contains('hidden') ?? true).toBe(true);
+      button?.click();
+      expect(modal?.classList.contains('hidden') ?? true).toBe(true);
     });
   });
 });

@@ -5,6 +5,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { uploadCapBytes, decompressionBudgetBytes } from '../src/analysis/memory-budget';
+import { uploadCapBytes as sharedUploadCapBytes } from '../src/repair/docx-budget';
 
 const MB = 1024 * 1024;
 
@@ -31,6 +32,10 @@ describe('uploadCapBytes', () => {
   it('nevaljan deviceMemory (0, negativan) tretira se kao nedostupan', () => {
     expect(uploadCapBytes({ deviceMemory: 0 })).toBe(20 * MB);
     expect(uploadCapBytes({ deviceMemory: -1, coarsePointer: false })).toBe(20 * MB);
+  });
+
+  it('analiza re-eksportira isti lagani izračun koji koristi root intake', () => {
+    expect(uploadCapBytes).toBe(sharedUploadCapBytes);
   });
 });
 
