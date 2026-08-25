@@ -420,6 +420,9 @@ export default defineConfig(({ command }) => {
     literatura: resolve(__dirname, 'literatura.html'),
     izjava: resolve(__dirname, 'izjava.html'),
     admin: resolve(__dirname, 'admin.html'),
+    rad: resolve(__dirname, 'rad/index.html'),
+    saznajVise: resolve(__dirname, 'saznaj-vise/index.html'),
+    mojiRadovi: resolve(__dirname, 'moji-radovi/index.html'),
   };
   // Interna verifikacijska konzola ulazi u build SAMO kad su dev alati ukljuceni (QA opt-in).
   // admin.html (Lekta Control Center) NIJE u ovoj grani: za razliku od verification.html (razvojni

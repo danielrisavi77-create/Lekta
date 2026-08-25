@@ -1,0 +1,22 @@
+.learn-more-page {
+  min-height: 100vh;
+}
+
+.learn-more-page > .section:first-child {
+  padding-top: 72px;
+}
+
+.learn-more-page .lek-head-cta .btn,
+.learn-more-page .ks-cta .btn {
+  min-height: 48px;
+}
+
+.learn-more-page .ks-marquee {
+  margin-top: 0;
+}
+
+@media (max-width: 760px) {
+  .learn-more-page > .section:first-child {
+    padding-top: 44px;
+  }
+}

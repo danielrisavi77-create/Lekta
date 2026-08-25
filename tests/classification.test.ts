@@ -90,6 +90,9 @@ describe('klasifikacijski manifest', () => {
     expect(verdict('data/profiles/repair-map.json')).toBe('PROPRIETARY-DATA/forbidden');
     expect(verdict('src/ui/app.ts')).toBe('PUBLIC/allowed');
     expect(verdict('data/tools/citation-specs/verified/fpzg.json')).toBe('PUBLIC/allowed');
+    expect(verdict('rad/index.html')).toBe('PUBLIC/allowed');
+    expect(verdict('saznaj-vise/index.html')).toBe('PUBLIC/allowed');
+    expect(verdict('moji-radovi/index.html')).toBe('PUBLIC/allowed');
   });
 
   it('matcher semantika: ** preko segmenata, * unutar segmenta, zadnje pravilo vrijedi', () => {

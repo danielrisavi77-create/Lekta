@@ -291,11 +291,16 @@ describe.sequential('root-aware mount domain regressions', () => {
 
   describe('commerce, legal and auth controls on a route without history', () => {
     let supplied: Document;
+    let fetchMock: { mockRestore(): void };
 
     beforeAll(async () => {
+      fetchMock = vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('test catalog offline'));
       supplied = await mountPartialPage('historyModal', {
         enabled: true,
         orderEndpoint: '/orders',
+        analyticsEndpoint: '/analytics',
+        supabaseUrl: 'https://example.supabase.co',
+        supabaseAnonKey: 'test-anon-key',
       }, (target) => {
         const orderButton = target.createElement('button');
         orderButton.id = 'partialOrderButton';
@@ -304,6 +309,10 @@ describe.sequential('root-aware mount domain regressions', () => {
         target.body.append(orderButton);
       });
     }, 180_000);
+
+    afterAll(() => {
+      fetchMock.mockRestore();
+    });
 
     it('order-btn opens orderModal and closeModal closes it through commerce handlers', () => {
       const modal = supplied.getElementById('orderModal') as HTMLElement;
@@ -332,6 +341,27 @@ describe.sequential('root-aware mount domain regressions', () => {
       modal.classList.remove('hidden');
       supplied.getElementById('closeAuth')?.click();
       expect(modal.classList.contains('hidden')).toBe(true);
+    });
+
+    it('data-auth-entry otvara postojeci auth modal kada je auth konfiguriran', () => {
+      const entry = supplied.querySelector<HTMLButtonElement>('[data-auth-entry]');
+      const modal = supplied.getElementById('authModal') as HTMLElement;
+
+      expect(entry?.classList.contains('hidden')).toBe(false);
+      entry?.click();
+      expect(modal.classList.contains('hidden')).toBe(false);
+
+      supplied.getElementById('closeAuth')?.click();
+      expect(modal.classList.contains('hidden')).toBe(true);
+    });
+
+    it('privacySettingsBtn ponovno otvara izbor anonimne analitike', () => {
+      const banner = supplied.getElementById('consentBanner') as HTMLElement;
+      banner.classList.add('hidden');
+
+      supplied.getElementById('privacySettingsBtn')?.click();
+
+      expect(banner.classList.contains('hidden')).toBe(false);
     });
   });
 
@@ -448,7 +478,8 @@ describe('mountable analyzer runtime', () => {
 
     analysisClient.analyze.mockClear();
     const file = validDocx('stvarna-analiza.docx');
-    await app.loadAnalyzerDocument({ file, source: 'memory-only' });
+    const admission = await app.loadAnalyzerDocument({ file, source: 'memory-only' });
+    expect(admission).toEqual({ accepted: true });
     document.getElementById('workType')?.dispatchEvent(new Event('change', { bubbles: true }));
     document.getElementById('analyzeBtn')?.click();
 
@@ -568,8 +599,9 @@ describe('mountable analyzer runtime', () => {
       type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     });
 
-    await app.loadAnalyzerDocument({ file: cachedButInvalid, source: 'workspace-session' });
+    const admission = await app.loadAnalyzerDocument({ file: cachedButInvalid, source: 'workspace-session' });
 
+    expect(admission).toMatchObject({ accepted: false, reason: 'intake-rejected' });
     expect(document.getElementById('dropError')?.textContent).toMatch(/premal/i);
     expect((document.getElementById('analyzeBtn') as HTMLButtonElement).disabled).toBe(true);
   });
@@ -594,6 +626,76 @@ describe('mountable analyzer runtime', () => {
     await app.loadAnalyzerDocument({ file: validDocx('legacy.docx'), source: 'memory-only' });
     await vi.waitFor(() => expect(analysisClient.analyze).toHaveBeenCalledTimes(1), { timeout: 10_000 });
   }, 30_000);
+
+  it('stari admission vraca superseded nakon zadnjeg asinkronog prozora', async () => {
+    document.getElementById('newAnalysis')?.click();
+    delete document.getElementById('analyzer')!.dataset.analysisStart;
+    quickStatsControl.disabled = true;
+    analysisClient.analyze.mockClear();
+    intakeControl.override = async () => ({ kind: 'ok' });
+
+    const profileRegistry = await import('../src/profiles/profile-registry');
+    const localRules = await import('../src/profiles/profile-rules-local');
+    const rulesArtifact = JSON.parse(readFileSync(
+      resolve(process.cwd(), 'data/generated/profile-rules-server.json'),
+      'utf8',
+    )) as {
+      profiles: Record<string, {
+        profile: Record<string, unknown>;
+        repairEntries: unknown[];
+      }>;
+    };
+    const rulesRelease = deferred<void>();
+    let fpzgRulesRequested = false;
+    profileRegistry.resetProfileRulesForTests();
+    profileRegistry.setProfileRulesProvider(async (profileId) => {
+      const entry = rulesArtifact.profiles[profileId];
+      if (!entry) return { kind: 'failed', reason: 'Testni profil nije pronaden.' };
+      if (profileId.startsWith('fpzg-')) {
+        fpzgRulesRequested = true;
+        await rulesRelease.promise;
+      }
+      return {
+        kind: 'ok',
+        profile: entry.profile,
+        repairEntries: entry.repairEntries,
+      };
+    });
+
+    const institution = document.getElementById('institutionSelect') as HTMLSelectElement;
+    institution.value = 'unios';
+    institution.dispatchEvent(new Event('change', { bubbles: true }));
+    const fileA = buildDocxFile({
+      paragraphs: [
+        { text: 'Sveu\u010dili\u0161te u Zagrebu Fakultet politi\u010dkih znanosti Diplomski rad' },
+        ...Array.from({ length: 45 }, () => ({
+          text: 'Akademski odlomak za detekciju profila. '.repeat(8),
+        })),
+      ],
+    }, 'admission-a-fpzg.docx');
+    const fileB = validDocx('admission-b.docx');
+    const loadA = app.loadAnalyzerDocument({ file: fileA, source: 'memory-only' });
+    let loadB: ReturnType<typeof app.loadAnalyzerDocument> | null = null;
+
+    try {
+      await vi.waitFor(() => expect(fpzgRulesRequested).toBe(true), { timeout: 15_000 });
+      loadB = app.loadAnalyzerDocument({ file: fileB, source: 'memory-only' });
+      rulesRelease.resolve();
+
+      await expect(loadA).resolves.toMatchObject({
+        accepted: false,
+        reason: 'superseded',
+      });
+      await expect(loadB).resolves.toEqual({ accepted: true });
+    } finally {
+      rulesRelease.resolve();
+      await Promise.allSettled([loadA, ...(loadB ? [loadB] : [])]);
+      profileRegistry.resetProfileRulesForTests();
+      localRules.installLocalRulesProvider();
+      analysisClient.analyze.mockImplementation(async (input: File) => completedResult(input));
+      document.getElementById('newAnalysis')?.click();
+    }
+  }, 60_000);
 
   it('stale admission A ne mijenja profil niti analizira B prije B intake verdicta', async () => {
     document.getElementById('newAnalysis')?.click();
@@ -627,7 +729,7 @@ describe('mountable analyzer runtime', () => {
     };
 
     const loadA = app.loadAnalyzerDocument({ file: fileA, source: 'memory-only' });
-    let loadB: Promise<void> | null = null;
+    let loadB: ReturnType<typeof app.loadAnalyzerDocument> | null = null;
     try {
       await vi.waitFor(() => expect(fileA.arrayBuffer).toHaveBeenCalledTimes(1), { timeout: 15_000 });
       loadB = app.loadAnalyzerDocument({ file: fileB, source: 'memory-only' });

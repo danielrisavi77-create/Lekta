@@ -24,6 +24,14 @@ describe('browser storage', () => {
     expect(safeStorageGet('lekta.preferences.v2')).toEqual({ language: 'hr', strictness: 'strict' });
   });
 
+  it('sprema tekstualnu vrijednost bez JSON navodnika za prepaint temu', async () => {
+    const { safeStorageGet, safeStorageSetText } = await loadFresh();
+
+    expect(safeStorageSetText('lekta.theme', 'light')).toBe(true);
+    expect(localStorage.getItem('lekta.theme')).toBe('light');
+    expect(safeStorageGet('lekta.theme')).toBe('light');
+  });
+
   it('vraca zadani fallback za nepostojeci ili neispravan JSON zapis', async () => {
     const { safeStorageGet } = await loadFresh();
     localStorage.setItem('lekta.preferences.v2', '{nije-json');
@@ -43,6 +51,17 @@ describe('browser storage', () => {
     expect(safeStorageSet('lekta.preferences.v2', value)).toBe(false);
     value.theme = 'light';
     expect(safeStorageGet('lekta.preferences.v2')).toEqual({ theme: 'dark' });
+  });
+
+  it('tekstualnu vrijednost cuva u memoriji kada localStorage nije dostupan', async () => {
+    vi.stubGlobal('localStorage', {
+      getItem: () => { throw new Error('blocked'); },
+      setItem: () => { throw new Error('blocked'); },
+    });
+    const { safeStorageGet, safeStorageSetText } = await loadFresh();
+
+    expect(safeStorageSetText('lekta.theme', 'dark')).toBe(false);
+    expect(safeStorageGet('lekta.theme')).toBe('dark');
   });
 
   it('migrira sve thesisready kljuceve, cuva postojeci lekta zapis i uklanja stare kljuceve', async () => {

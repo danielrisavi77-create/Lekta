@@ -45,3 +45,13 @@ export function safeStorageSet(key: string, value: unknown): boolean {
     return false;
   }
 }
+
+export function safeStorageSetText(key: string, value: string): boolean {
+  SESSION_MEMORY.set(key, value);
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch {
+    return false;
+  }
+}

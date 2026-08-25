@@ -89,6 +89,13 @@ export interface AnalyzerDocumentAdmission {
  file: File;
  source: 'workspace-session'|'memory-only';
 }
+export type AnalyzerDocumentAdmissionResult =
+ | { accepted: true }
+ | {
+   accepted: false;
+   reason: 'unsupported-file'|'intake-rejected'|'superseded'|'cleared';
+   message: string;
+ };
 export interface AnalyzerResultEvent {
  result: unknown;
  profile: unknown;
@@ -240,7 +247,9 @@ function mountHistoryModals(doc: Document){if(!doc.getElementById('historyModal'
 function mountDevTools(doc: Document){if(!__DEV_TOOLS__||(!doc.getElementById('qaModal')&&!doc.getElementById('setupModal')))return;doc.getElementById('qaBtn')?.classList.toggle('hidden',!qaMode);bindDevControls(doc)}
 function mountAnalyzer(doc: Document){if(!doc.getElementById('analyzer'))return;initCatalog();restorePreferences();applyFacultyContext();syncProfileContext();applyUnitFromUrl();bindAnalyzerRoute(doc);updateProfile();updatePackageUi();updateRepairHistoryButton();if(!paidOffersLive())doc.getElementById('orderFromResult')?.classList.add('hidden');if(location.search.includes('demo=1'))setTimeout(runDemo,300)}
 export function initAnalyzerApp(doc: Document=document): void{if(_mountedDocuments.has(doc))return;if(_runtimeDocument&&_runtimeDocument!==doc)throw new Error('Analyzer runtime podrzava samo jedan aktivni Document.');const previousDocument=_runtimeDocument;_runtimeDocument=doc;try{if(hasLegacyPage(doc)){initLegacy(doc);_mountedDocuments.add(doc);return}productionConfig=loadProductionConfig();wireProfileRulesProvider();captureReferralCode();if(!_errorTrackingInstalled){installErrorTracking();_errorTrackingInstalled=true}void ensureRetailCatalog();if(adminMode){location.replace('/admin.html');_mountedDocuments.add(doc);return}mountAnalyzer(doc);mountLanding(doc);mountCommerceModals(doc);mountHistoryModals(doc);mountDevTools(doc);bindDocumentControls(doc);_mountedDocuments.add(doc)}catch(error){_runtimeDocument=previousDocument;throw error}}
-export async function loadAnalyzerDocument(input: AnalyzerDocumentAdmission): Promise<void>{const admission=setFile(input.file);await admission}
+export function loadAnalyzerDocument(
+ input: AnalyzerDocumentAdmission,
+): Promise<AnalyzerDocumentAdmissionResult>{return setFile(input.file)}
 function initLegacy(doc: Document){
  renderCheckGrid(doc);
  productionConfig=loadProductionConfig();wireProfileRulesProvider();captureReferralCode();installErrorTracking();initCatalog();void ensureRetailCatalog();restorePreferences();applyFacultyContext();syncProfileContext();applyUnitFromUrl();updateRepairHistoryButton();if(adminMode){location.replace('/admin.html');return}
@@ -444,43 +453,53 @@ function revealAnalyzerForm(pick: any){if(!_engagedTracked){_engagedTracked=true
 // Spekulativna analiza odmah krece u pozadini pa je ponovni Analiziraj bez promjena prakticki instantan.
 function speculativeAnalysisAllowed(){return $('#analyzer')?.dataset.analysisStart!=='after-profile-confirmation'}
 function backToWizardFromResult(step: any){withViewTransition(()=>{$('#resultView')?.classList.add('hidden');$('#wizardView')?.classList.remove('hidden');setWizardStep(step)});runtimeDocument().querySelector('#analyzer')?.scrollIntoView({behavior:'smooth'});if(speculativeAnalysisAllowed())void startSpeculativeAnalysis()}
-function setFile(file: any): Promise<void>{
+function setFile(file: any): Promise<AnalyzerDocumentAdmissionResult>{
   if(file!==selectedDocx){findingStates.clear();_detectToken++}
   const err=$('#dropError'),clearErr=()=>{if(err){err.textContent='';err.classList.add('hidden')}$('#dropzone').classList.remove('has-error')};
- const _cap=effectiveUploadCap();if(file&&(!file.name.toLowerCase().endsWith('.docx')||file.size>_cap)){const tooBig=file.size>_cap,isDoc=/\.doc$/i.test(file.name),isMacroExt=/\.(docm|dotm)$/i.test(file.name),msg=tooBig?`Dokument je veći od ${Math.round(_cap/1024/1024)} MB${isLikelyMobile()?' (na mobitelu je granica niža radi memorije; za velike dokumente otvori na računalu)':''}.`:isMacroExt?'Dokumenti s makronaredbama (.docm i .dotm) nisu podržani. U Wordu spremi rad kao .docx bez makronaredbi.':isDoc?'Stariji .doc format nije podržan. U Wordu odaberi Datoteka pa Spremi kao i odaberi .docx.':'Odaberi Word dokument u .docx formatu.';setFile(null);$('#fileInput').value='';if(err){err.textContent=msg;err.classList.remove('hidden')}$('#dropzone').classList.add('has-error');toast(msg);return Promise.resolve()}
+ const _cap=effectiveUploadCap();if(file&&(!file.name.toLowerCase().endsWith('.docx')||file.size>_cap)){const tooBig=file.size>_cap,isDoc=/\.doc$/i.test(file.name),isMacroExt=/\.(docm|dotm)$/i.test(file.name),msg=tooBig?`Dokument je veći od ${Math.round(_cap/1024/1024)} MB${isLikelyMobile()?' (na mobitelu je granica niža radi memorije; za velike dokumente otvori na računalu)':''}.`:isMacroExt?'Dokumenti s makronaredbama (.docm i .dotm) nisu podržani. U Wordu spremi rad kao .docx bez makronaredbi.':isDoc?'Stariji .doc format nije podržan. U Wordu odaberi Datoteka pa Spremi kao i odaberi .docx.':'Odaberi Word dokument u .docx formatu.';void setFile(null);$('#fileInput').value='';if(err){err.textContent=msg;err.classList.remove('hidden')}$('#dropzone').classList.add('has-error');toast(msg);return Promise.resolve({accepted:false,reason:'unsupported-file',message:msg})}
  clearErr();$('#detectBadge')?.classList.add('hidden');
  selectedDocx=file||null;$('#dropEmpty').classList.toggle('hidden',!!file);$('#selectedFile').classList.toggle('hidden',!file);$('#dropzone').classList.toggle('has-file',!!file);$('#analyzeBtn').disabled=!file;$('#demoBtn')?.classList.toggle('hidden',!!file);setWizardStep(file&&!usesCompactUploadFlow()?2:1,!!file);
  if(file){$('#selectedName').textContent=file.name;$('#selectedMeta').textContent=`${(file.size/1024/1024).toFixed(2)} MB · spremno za lokalnu analizu`;void trackEvent('file_selected',{sizeBucket:file.size<1024*1024?'under_1mb':file.size<5*1024*1024?'1_5mb':'over_5mb'});updateQuickStats(file);updateProfile();return admitFile(file)}
- $('#fileInput').value='';_intakeToken++;_statsToken++;_intake={file:null,promise:null,verdict:null,confirmedSuspicious:false};_activeAdmission=null;invalidateSpeculative();return Promise.resolve()
+ $('#fileInput').value='';_intakeToken++;_statsToken++;_intake={file:null,promise:null,verdict:null,confirmedSuspicious:false};_activeAdmission=null;invalidateSpeculative();return Promise.resolve({accepted:false,reason:'cleared',message:'Dokument je uklonjen.'})
 }
 // Intake gate sloj 1: trijaza datoteke PRIJE detekcije konteksta i spekulativne analize.
 // Tvrdi reject (nedvosmisleno nije rad: premalo, nije ZIP, korupcija, makronaredbe, prazno)
 // cisti odabir i pokazuje poruku; tek OK datoteka ide na detekciju + spekulaciju, pa
 // bomba/makro/ne-zip nikad ne dodje do workera ni do DOM parsea na glavnoj niti.
 // Gate modul je fail-open (vlastita greska propusta datoteku); engine iza ima svoje capove.
-let _activeAdmission: Promise<void>|null=null;
-function admitFile(file: any){const run=admitFileRun(file);_activeAdmission=run;const clear=()=>{if(_activeAdmission===run)_activeAdmission=null};void run.then(clear,clear);return run}
-async function admitFileRun(file: any){
+let _activeAdmission: Promise<AnalyzerDocumentAdmissionResult>|null=null;
+function admitFile(file: any): Promise<AnalyzerDocumentAdmissionResult>{const run=admitFileRun(file);_activeAdmission=run;const clear=()=>{if(_activeAdmission===run)_activeAdmission=null};void run.then(clear,clear);return run}
+async function admitFileRun(file: any): Promise<AnalyzerDocumentAdmissionResult>{
  const token=++_intakeToken;
  const { inspectDocxIntake }=await import('../docx/intake-gate');
- if(token!==_intakeToken||selectedDocx!==file)return;
+ if(token!==_intakeToken||selectedDocx!==file){
+  return {accepted:false,reason:'superseded',message:'Drugi dokument je postao aktivan.'};
+ }
  const promise=inspectDocxIntake(file);
  _intake={file,promise,verdict:null,confirmedSuspicious:false};
  const v=await promise;
- if(token!==_intakeToken||selectedDocx!==file)return;
+ if(token!==_intakeToken||selectedDocx!==file){
+  return {accepted:false,reason:'superseded',message:'Drugi dokument je postao aktivan.'};
+ }
  _intake.verdict=v;
  if(v.kind==='reject'){
-  setFile(null);
+  void setFile(null);
   const err=$('#dropError');if(err){err.textContent=v.message;err.classList.remove('hidden')}
   $('#dropzone')?.classList.add('has-error');toast(v.message);
-  return;
+  return {accepted:false,reason:'intake-rejected',message:v.message};
  }
  // Spekulativna analiza svjesno krece i za SUMNJIV dokument (gate blokira samo klik na
  // Analiziraj do potvrde); kod potvrde se spekulativni rezultat normalno posvaja pa je
  // potvrda prakticki besplatna.
  await applyDetectedContext(file,token);
- if(token!==_intakeToken||selectedDocx!==file)return;
+ if(token!==_intakeToken||selectedDocx!==file){
+  return {accepted:false,reason:'superseded',message:'Drugi dokument je postao aktivan.'};
+ }
  if(speculativeAnalysisAllowed())await startSpeculativeAnalysis();
+ if(token!==_intakeToken||selectedDocx!==file){
+  return {accepted:false,reason:'superseded',message:'Drugi dokument je postao aktivan.'};
+ }
+ return {accepted:true};
 }
 // Feature 4: auto-detekcija fakulteta/studija/razine s uploada. Cisto citanje parsera (bez izmjene
 // enginea): iz naslovnice + core naslova heuristicki pogadja kombinaciju i prretpopuni izbornike.
