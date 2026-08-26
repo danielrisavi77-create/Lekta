@@ -17,10 +17,6 @@ export interface RouteShellOptions {
   readonly privacySettingsAvailable: boolean;
 }
 
-interface LegacyRouteShellOptions {
-  readonly current: 'workspace' | 'learn-more' | 'my-work';
-}
-
 function reflectTheme(button: HTMLButtonElement, doc: Document): void {
   const dark = doc.documentElement.dataset.theme !== 'light';
   button.setAttribute('aria-pressed', dark ? 'true' : 'false');
@@ -59,94 +55,6 @@ function wireSkipLink(doc: Document, signal: AbortSignal): void {
     },
     { signal },
   );
-}
-
-function wireTheme(doc: Document, signal: AbortSignal): void {
-  const button = doc.querySelector<HTMLButtonElement>('[data-route-theme]');
-  if (!button) return;
-  if (!doc.documentElement.dataset.theme) doc.documentElement.dataset.theme = 'dark';
-  reflectTheme(button, doc);
-  button.addEventListener(
-    'click',
-    () => {
-      const theme = doc.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
-      doc.documentElement.dataset.theme = theme;
-      reflectTheme(button, doc);
-      safeStorageSetText('lekta.theme', theme);
-    },
-    { signal },
-  );
-}
-
-function wireMobileNavigation(doc: Document, signal: AbortSignal): void {
-  const button = doc.querySelector<HTMLButtonElement>('[data-route-menu-button]');
-  const navigation = doc.querySelector<HTMLElement>('[data-route-menu]');
-  if (!button || !navigation) return;
-
-  const reflectMenu = (open: boolean): void => {
-    navigation.hidden = !open;
-    button.setAttribute('aria-expanded', open ? 'true' : 'false');
-    button.setAttribute('aria-label', open ? 'Zatvori izbornik' : 'Otvori izbornik');
-  };
-  const close = (restoreFocus = false): void => {
-    reflectMenu(false);
-    if (restoreFocus) button.focus();
-  };
-  const open = (): void => {
-    reflectMenu(true);
-    navigation.querySelector<HTMLElement>(
-      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
-    )?.focus();
-  };
-
-  button.setAttribute('aria-label', navigation.hidden ? 'Otvori izbornik' : 'Zatvori izbornik');
-  button.addEventListener(
-    'click',
-    () => {
-      if (navigation.hidden) open();
-      else close();
-    },
-    { signal },
-  );
-  navigation.addEventListener(
-    'click',
-    (event) => {
-      if ((event.target as HTMLElement).closest('a, [data-auth-entry]')) close();
-    },
-    { signal },
-  );
-  doc.addEventListener(
-    'keydown',
-    (event) => {
-      if (event.key !== 'Escape' || navigation.hidden) return;
-      event.preventDefault();
-      close(true);
-    },
-    { signal },
-  );
-
-  const media = doc.defaultView?.matchMedia?.('(min-width: 761px)');
-  const handleBreakpoint = (event: MediaQueryListEvent): void => {
-    if (event.matches) close();
-  };
-  if (!media) return;
-
-  if (typeof media.addEventListener === 'function') {
-    media.addEventListener('change', handleBreakpoint);
-    signal.addEventListener('abort', () => media.removeEventListener('change', handleBreakpoint), {
-      once: true,
-    });
-  } else {
-    media.addListener(handleBreakpoint);
-    signal.addEventListener('abort', () => media.removeListener(handleBreakpoint), { once: true });
-  }
-  if (media.matches) close();
-}
-
-function normalizeOptions(options: RouteShellOptions | LegacyRouteShellOptions): RouteShellOptions {
-  if ('variant' in options) return options;
-  const variant: RouteShellVariant = options.current === 'learn-more' ? 'content' : options.current;
-  return { current: options.current, variant, privacySettingsAvailable: false };
 }
 
 function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: AbortSignal): void {
@@ -294,22 +202,17 @@ function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: 
 
 const routeShellControllers = new WeakMap<Document, AbortController>();
 
-export function mountRouteShell(doc: Document, options: RouteShellOptions): void;
-export function mountRouteShell(doc: Document, options: LegacyRouteShellOptions): void;
-export function mountRouteShell(doc: Document, options: RouteShellOptions | LegacyRouteShellOptions): void {
+export function mountRouteShell(doc: Document, options: RouteShellOptions): void {
   routeShellControllers.get(doc)?.abort();
 
   const controller = new AbortController();
   routeShellControllers.set(doc, controller);
-  const normalized = normalizeOptions(options);
-  mountDirectoryPanel(doc, normalized, controller.signal);
+  mountDirectoryPanel(doc, options, controller.signal);
   wireSkipLink(doc, controller.signal);
-  wireTheme(doc, controller.signal);
-  wireMobileNavigation(doc, controller.signal);
-  doc.documentElement.dataset.route = normalized.current;
-  doc.documentElement.dataset.routeVariant = normalized.variant;
+  doc.documentElement.dataset.route = options.current;
+  doc.documentElement.dataset.routeVariant = options.variant;
   doc.querySelectorAll<HTMLElement>('[data-route-link]').forEach((link) => {
-    if (link.dataset.routeLink === normalized.current) link.setAttribute('aria-current', 'page');
+    if (link.dataset.routeLink === options.current) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   });
 }

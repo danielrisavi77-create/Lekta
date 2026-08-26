@@ -2,12 +2,33 @@ import { uploadCapBytes } from '../../repair/docx-budget';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import {
   createLocalDocumentSession,
+  sessionFragment,
   type LocalDocumentSessionV1,
 } from '../../session/local-document-session';
+import { mountRouteShell } from '../shared/route-shell';
 import { mountIntakeController } from './intake-controller';
 import './intake.css';
 
 const persistentStore = new IndexedDbDocumentSessionStore();
+const intakeShellOptions = {
+  current: 'intake',
+  variant: 'intake',
+  privacySettingsAvailable: false,
+} as const;
+
+mountRouteShell(document, intakeShellOptions);
+void persistentStore.list()
+  .then(([summary]) => {
+    if (!summary) return;
+    mountRouteShell(document, {
+      ...intakeShellOptions,
+      continuation: {
+        href: `/rad/${sessionFragment(summary.id)}`,
+        label: 'Nastavi trenutačni rad',
+      },
+    });
+  })
+  .catch(() => undefined);
 
 interface NavigatorWithDeviceMemory extends Navigator {
   readonly deviceMemory?: number;

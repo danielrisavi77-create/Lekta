@@ -106,10 +106,14 @@ describe('mobileNav landmark + aria-current (AUD a11y #4)', () => {
     expect(tag).toMatch(/aria-label="Mobilna navigacija"/);
   });
 
-  it('saznaj-vise route shell ima označenu mobilnu navigaciju', () => {
-    expect(read('saznaj-vise/index.html')).toMatch(
-      /<nav class="route-mobile-nav"[^>]*aria-label="Mobilna navigacija"/,
-    );
+  it('saznaj-vise route shell ima dostupan okidač imenika', () => {
+    const html = read('saznaj-vise/index.html');
+    const button = html.match(
+      /<button class="route-icon-button"[^>]*data-route-directory-button[^>]*>Sve<[/]button>/,
+    )?.[0] ?? '';
+    expect(button).toMatch(/aria-controls="route-directory"/);
+    expect(button).toMatch(/aria-expanded="false"/);
+    expect(html.match(/data-route-directory-layer/g) ?? []).toHaveLength(1);
   });
 });
 
@@ -121,11 +125,6 @@ describe('themeBtn label-in-name (AUD a11y #Izjava-2, WCAG 2.5.3)', () => {
     expect(label).toMatch(/Lampa/);
   });
 
-  it('saznaj-vise route theme gumb ima label-in-name', () => {
-    const html = read('saznaj-vise/index.html');
-    const tag = html.match(/<button class="route-icon-button"[^>]*data-route-theme[^>]*>/)?.[0] ?? '';
-    expect(tag).toMatch(/aria-label="Lampa:/);
-  });
   it('ui-boot.ts setupThemeToggle() PREPISUJE aria-label na svaki reflect() poziv (boot + klik) - i taj runtime label mora sadrzavati "Lampa", inace staticki popravak gore ne prezivi prvi reflect()', () => {
     const ts = read('src/shared/ui-boot.ts');
     const m = ts.match(/btn\.setAttribute\('aria-label', (.+)\);/);

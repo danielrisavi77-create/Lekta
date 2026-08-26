@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+import { mountRouteShell } from '../src/routes/shared/route-shell';
 import { buildDocxFile } from './helpers/docx-builder';
 
 const analysisClient = vi.hoisted(() => ({
@@ -132,6 +133,9 @@ async function mountPartialPage(
     missing.remove();
   }
   prepare?.(supplied);
+  mountRouteShell(supplied, route === 'rad'
+    ? { current: 'workspace', variant: 'workspace', privacySettingsAvailable: true }
+    : { current: 'learn-more', variant: 'content', privacySettingsAvailable: true });
   vi.resetModules();
   const isolatedApp = await import('../src/ui/app');
   isolatedApp.initAnalyzerApp(supplied);

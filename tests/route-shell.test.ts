@@ -2,33 +2,17 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mountRouteShell } from '../src/routes/shared/route-shell';
 
-interface MatchMediaHarness {
-  setDesktop(matches: boolean): void;
-}
-
-function stubMatchMedia(): MatchMediaHarness {
-  let desktop = false;
-  const listeners = new Set<(event: { matches: boolean }) => void>();
+function stubMatchMedia(): void {
   vi.stubGlobal('matchMedia', vi.fn((query: string) => ({
-    matches: query === '(min-width: 761px)' ? desktop : false,
+    matches: false,
     media: query,
     onchange: null,
-    addEventListener: (_type: string, listener: (event: { matches: boolean }) => void) => {
-      if (query === '(min-width: 761px)') listeners.add(listener);
-    },
-    removeEventListener: (_type: string, listener: (event: { matches: boolean }) => void) => {
-      listeners.delete(listener);
-    },
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
     addListener: vi.fn(),
     removeListener: vi.fn(),
     dispatchEvent: vi.fn(),
   })));
-  return {
-    setDesktop(matches: boolean) {
-      desktop = matches;
-      for (const listener of listeners) listener({ matches });
-    },
-  };
 }
 
 function renderShell(): void {
@@ -36,25 +20,13 @@ function renderShell(): void {
   document.body.innerHTML = `
     <a class="skip-link" href="#main-content">Preskoci</a>
     <header>
-      <button type="button" data-route-theme>Lampa</button>
+      <a href="/">Lekta</a>
       <button
         type="button"
         data-route-directory-button
         aria-controls="route-directory"
         aria-expanded="false"
       >Sve</button>
-
-      <button
-        type="button"
-        data-route-menu-button
-        aria-expanded="false"
-        aria-label="Otvori izbornik"
-      >Izbornik</button>
-      <nav data-route-menu hidden>
-        <a href="/rad/" data-route-link="workspace">Rad</a>
-        <a href="/saznaj-vise/" data-route-link="learn-more">Saznaj vise</a>
-        <button type="button" data-auth-entry>Prijava</button>
-      </nav>
     </header>
     <main id="main-content" tabindex="-1"></main>
     <div data-route-directory-layer></div>
@@ -88,75 +60,21 @@ describe('route shell', () => {
     expect(document.querySelector('[data-route-destination="account-repairs"]')).toBeNull();
   });
 
-  it('sprema promjenu teme kao raw vrijednost kompatibilnu s prepaint skriptom', () => {
+  it('panel sprema promjenu teme kao raw vrijednost kompatibilnu s prepaint skriptom', () => {
+    // Mutation caught: uklanjanje teme iz directory utility dijela ili krivi storage format.
     stubMatchMedia();
-    mountRouteShell(document, { current: 'workspace' });
-    const button = document.querySelector<HTMLButtonElement>('[data-route-theme]')!;
+    mountRouteShell(document, {
+      current: 'workspace',
+      variant: 'workspace',
+      privacySettingsAvailable: false,
+    });
+    const button = document.querySelector<HTMLButtonElement>('[data-route-directory-theme]')!;
 
     button.click();
 
     expect(document.documentElement.dataset.theme).toBe('light');
     expect(localStorage.getItem('lekta.theme')).toBe('light');
     expect(button.getAttribute('aria-pressed')).toBe('false');
-  });
-
-  it('pri otvaranju izbornika azurira pristupacno ime i fokusira prvu vezu', () => {
-    stubMatchMedia();
-    mountRouteShell(document, { current: 'workspace' });
-    const button = document.querySelector<HTMLButtonElement>('[data-route-menu-button]')!;
-    const navigation = document.querySelector<HTMLElement>('[data-route-menu]')!;
-    const firstLink = navigation.querySelector<HTMLAnchorElement>('a')!;
-
-    button.click();
-
-    expect(navigation.hidden).toBe(false);
-    expect(button.getAttribute('aria-expanded')).toBe('true');
-    expect(button.getAttribute('aria-label')).toBe('Zatvori izbornik');
-    expect(document.activeElement).toBe(firstLink);
-  });
-
-  it('Escape zatvara izbornik s bilo kojeg fokusa i vraca fokus gumbu', () => {
-    stubMatchMedia();
-    mountRouteShell(document, { current: 'workspace' });
-    const button = document.querySelector<HTMLButtonElement>('[data-route-menu-button]')!;
-    const navigation = document.querySelector<HTMLElement>('[data-route-menu]')!;
-    button.click();
-
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
-
-    expect(navigation.hidden).toBe(true);
-    expect(button.getAttribute('aria-expanded')).toBe('false');
-    expect(button.getAttribute('aria-label')).toBe('Otvori izbornik');
-    expect(document.activeElement).toBe(button);
-  });
-
-  it('prelazak na desktop breakpoint zatvara otvoreni mobilni izbornik', () => {
-    const media = stubMatchMedia();
-    mountRouteShell(document, { current: 'workspace' });
-    const button = document.querySelector<HTMLButtonElement>('[data-route-menu-button]')!;
-    const navigation = document.querySelector<HTMLElement>('[data-route-menu]')!;
-    button.click();
-
-    media.setDesktop(true);
-
-    expect(navigation.hidden).toBe(true);
-    expect(button.getAttribute('aria-expanded')).toBe('false');
-    expect(button.getAttribute('aria-label')).toBe('Otvori izbornik');
-  });
-
-  it('mobilna auth akcija zatvara otvoreni izbornik', () => {
-    stubMatchMedia();
-    mountRouteShell(document, { current: 'workspace' });
-    const button = document.querySelector<HTMLButtonElement>('[data-route-menu-button]')!;
-    const navigation = document.querySelector<HTMLElement>('[data-route-menu]')!;
-    const auth = navigation.querySelector<HTMLButtonElement>('[data-auth-entry]')!;
-    button.click();
-
-    auth.click();
-
-    expect(navigation.hidden).toBe(true);
-    expect(button.getAttribute('aria-expanded')).toBe('false');
-    expect(button.getAttribute('aria-label')).toBe('Otvori izbornik');
   });
 
   it('otvaranje panela fokusira naslov i izolira pozadinu', () => {
@@ -208,15 +126,6 @@ describe('route directory lifecycle', () => {
     expect([...document.querySelectorAll<HTMLDetailsElement>('[data-route-directory-group]')].filter((group) => group.open).map((group) => group.dataset.routeDirectoryGroup)).toEqual(['your-work']);
   });
 
-  it('legacy bridge never exposes privacy settings or a continuation', () => {
-    // Mutation caught: widening the bridge to infer private host state.
-    stubMatchMedia();
-    mountRouteShell(document, { current: 'workspace' });
-    expect(document.documentElement.dataset.routeVariant).toBe('workspace');
-    expect(document.querySelector('[data-route-privacy-settings]')).toBeNull();
-    expect(document.querySelector('[data-route-continuation]')).toBeNull();
-  });
-
   it('remount closes an open panel and panel interaction performs no network or late module load', () => {
     // Mutation caught: retained listeners after remount or a lazy feature/network path from the panel.
     stubMatchMedia(); const fetch = vi.fn(); vi.stubGlobal('fetch', fetch);
@@ -230,94 +139,20 @@ describe('route directory lifecycle', () => {
     expect(document.querySelectorAll('script, link[rel="modulepreload"]').length).toBe(scripts);
   });
 });
-interface ControlledMediaQuery {
-  setDesktop(matches: boolean): void;
-  listenerCount(): number;
-  removedCount(): number;
-}
-
-function controlledMatchMedia(legacy = false): ControlledMediaQuery {
-  let desktop = false;
-  let removed = 0;
-  const listeners = new Set<(event: MediaQueryListEvent) => void>();
-  const mediaQuery = {
-    get matches() {
-      return desktop;
-    },
-    media: '(min-width: 761px)',
-    onchange: null,
-    addEventListener: legacy
-      ? undefined
-      : (_type: string, listener: EventListenerOrEventListenerObject) => {
-          listeners.add(listener as (event: MediaQueryListEvent) => void);
-        },
-    removeEventListener: legacy
-      ? undefined
-      : (_type: string, listener: EventListenerOrEventListenerObject) => {
-          removed += 1;
-          listeners.delete(listener as (event: MediaQueryListEvent) => void);
-        },
-    addListener: legacy
-      ? (listener: (event: MediaQueryListEvent) => void) => {
-          listeners.add(listener);
-        }
-      : undefined,
-    removeListener: legacy
-      ? (listener: (event: MediaQueryListEvent) => void) => {
-          removed += 1;
-          listeners.delete(listener);
-        }
-      : undefined,
-    dispatchEvent: () => true,
-  } as unknown as MediaQueryList;
-
-  vi.stubGlobal('matchMedia', vi.fn(() => mediaQuery));
-
-  return {
-    setDesktop(matches) {
-      desktop = matches;
-      for (const listener of listeners) {
-        listener({ matches } as MediaQueryListEvent);
-      }
-    },
-    listenerCount() {
-      return listeners.size;
-    },
-    removedCount() {
-      return removed;
-    },
-  };
-}
-
 describe('route shell remount ownership', () => {
-  it('remount then one legacy theme click toggles exactly once', () => {
-    mountRouteShell(document, { current: 'workspace' });
-    mountRouteShell(document, { current: 'workspace' });
+  it('remount then one panel theme click toggles exactly once', () => {
+    const options = {
+      current: 'workspace',
+      variant: 'workspace',
+      privacySettingsAvailable: false,
+    } as const;
+    mountRouteShell(document, options);
+    mountRouteShell(document, options);
 
-    document.querySelector<HTMLButtonElement>('[data-route-theme]')?.click();
+    document.querySelector<HTMLButtonElement>('[data-route-directory-theme]')?.click();
 
     expect(document.documentElement.dataset.theme).toBe('light');
   });
-
-  it.each([false, true])(
-    'remount leaves one active matchMedia listener and legacy navigation behaves once (%s fallback)',
-    (legacyFallback) => {
-      const media = controlledMatchMedia(legacyFallback);
-      mountRouteShell(document, { current: 'workspace' });
-      mountRouteShell(document, { current: 'workspace' });
-
-      expect(media.listenerCount()).toBe(1);
-      expect(media.removedCount()).toBe(1);
-
-      const menuButton = document.querySelector<HTMLButtonElement>('[data-route-menu-button]');
-      const menu = document.querySelector<HTMLElement>('[data-route-menu]');
-      menuButton?.click();
-      expect(menu?.hidden).toBe(false);
-
-      media.setDesktop(true);
-      expect(menu?.hidden).toBe(true);
-    },
-  );
 
   it('remount leaves one skip-link focus and scroll action', () => {
     const main = document.querySelector<HTMLElement>('main');
@@ -326,8 +161,16 @@ describe('route shell remount ownership', () => {
     Object.defineProperty(main, 'scrollIntoView', { configurable: true, value: scrollIntoView });
     skipLink?.setAttribute('data-route-focus-bound', 'true');
 
-    mountRouteShell(document, { current: 'workspace' });
-    mountRouteShell(document, { current: 'workspace' });
+    mountRouteShell(document, {
+      current: 'workspace',
+      variant: 'workspace',
+      privacySettingsAvailable: false,
+    });
+    mountRouteShell(document, {
+      current: 'workspace',
+      variant: 'workspace',
+      privacySettingsAvailable: false,
+    });
     skipLink?.click();
 
     expect(document.activeElement).toBe(main);
@@ -371,8 +214,16 @@ it('creates one owned skip link when a host has no static skip link', () => {
   const scrollIntoView = vi.fn();
   Object.defineProperty(main, 'scrollIntoView', { configurable: true, value: scrollIntoView });
 
-  mountRouteShell(document, { current: 'workspace' });
-  mountRouteShell(document, { current: 'workspace' });
+  mountRouteShell(document, {
+    current: 'workspace',
+    variant: 'workspace',
+    privacySettingsAvailable: false,
+  });
+  mountRouteShell(document, {
+    current: 'workspace',
+    variant: 'workspace',
+    privacySettingsAvailable: false,
+  });
   document.querySelector<HTMLAnchorElement>('.skip-link')?.click();
 
   expect(document.querySelectorAll('.skip-link')).toHaveLength(1);

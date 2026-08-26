@@ -1,7 +1,11 @@
 import { mountRouteShell } from '../shared/route-shell';
 import './learn-more.css';
 
-mountRouteShell(document, { current: 'learn-more' });
+mountRouteShell(document, {
+  current: 'learn-more',
+  variant: 'content',
+  privacySettingsAvailable: true,
+});
 
 void Promise.all([
   import('../../shared/ui-boot'),

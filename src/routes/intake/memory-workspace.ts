@@ -35,6 +35,18 @@ interface DocumentSnapshot {
   activeElement: HTMLElement | null;
 }
 
+const workspaceShellOptions = {
+  current: 'workspace',
+  variant: 'workspace',
+  privacySettingsAvailable: true,
+} as const;
+
+const intakeShellOptions = {
+  current: 'intake',
+  variant: 'intake',
+  privacySettingsAvailable: false,
+} as const;
+
 function attributesOf(element: Element): Array<{ name: string; value: string }> {
   return [...element.attributes].map(({ name, value }) => ({ name, value }));
 }
@@ -158,6 +170,7 @@ export async function mountMemoryWorkspace(
     installWorkspaceShell(doc, shell);
     renderWorkspaceShell(doc);
     addMemoryOnlyWarning(doc);
+    mountRouteShell(doc, workspaceShellOptions);
 
     await runtime.mountWorkspaceRuntime(doc, {
       fragment: sessionFragment(session.id),
@@ -166,12 +179,14 @@ export async function mountMemoryWorkspace(
     if (!options.isCurrent()) {
       restoreDocument(doc, snapshot, shell.headNodes);
       changedDocument = false;
+      mountRouteShell(doc, intakeShellOptions);
       return;
     }
-
-    mountRouteShell(doc, { current: 'workspace' });
   } catch (error) {
-    if (changedDocument) restoreDocument(doc, snapshot, shell.headNodes);
+    if (changedDocument) {
+      restoreDocument(doc, snapshot, shell.headNodes);
+      mountRouteShell(doc, intakeShellOptions);
+    }
     throw error;
   }
 }

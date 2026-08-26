@@ -2,7 +2,11 @@ import { mountRouteShell } from '../shared/route-shell';
 import { renderWorkspaceBootError, renderWorkspaceShell } from './workspace-shell';
 import './workspace.css';
 
-mountRouteShell(document, { current: 'workspace' });
+mountRouteShell(document, {
+  current: 'workspace',
+  variant: 'workspace',
+  privacySettingsAvailable: true,
+});
 renderWorkspaceShell(document);
 
 void import('./workspace-runtime')

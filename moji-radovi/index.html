@@ -20,18 +20,12 @@
     <a class="route-brand" href="/" aria-label="Lekta, nova provjera"><span class="route-mark" aria-hidden="true">L✓</span><span>Lekta</span></a>
     <nav class="route-links" aria-label="Glavna navigacija">
       <a href="/">Nova provjera</a>
-      <a href="/saznaj-vise/" data-route-link="learn-more">Saznaj više</a>
       <a href="/moji-radovi/" data-route-link="my-work">Moji radovi</a>
     </nav>
-    <button class="route-icon-button" type="button" data-route-theme aria-label="Lampa: ugasi" aria-pressed="true">◐</button>
-    <button class="route-icon-button route-menu-button" type="button" data-route-menu-button aria-label="Otvori izbornik" aria-expanded="false">☰</button>
+    <button class="route-icon-button" type="button" data-route-directory-button aria-controls="route-directory" aria-expanded="false">Sve</button>
   </div>
-  <nav class="route-mobile-nav" data-route-menu aria-label="Mobilna navigacija" hidden>
-    <a href="/">Nova provjera</a>
-    <a href="/saznaj-vise/" data-route-link="learn-more">Saznaj više</a>
-    <a href="/moji-radovi/" data-route-link="my-work">Moji radovi</a>
-  </nav>
 </header>
+<div data-route-directory-layer></div>
 <main id="main-content" tabindex="-1" class="my-work-page route-shell">
   <section class="my-work-intro" aria-labelledby="my-work-title">
     <div>

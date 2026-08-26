@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mountMemoryWorkspace } from '../src/routes/intake/memory-workspace';
+import { mountRouteShell } from '../src/routes/shared/route-shell';
 import type { LocalDocumentSessionV1 } from '../src/session/local-document-session';
 
 const SESSION_ID = '123e4567-e89b-42d3-a456-426614174000';
@@ -38,12 +39,12 @@ function workspaceHtml(): string {
       <body class="workspace-body">
         <a class="skip-link" href="#main-content">Preskoči</a>
         <header>
-          <button type="button" data-route-theme>Lampa</button>
-          <button type="button" data-route-menu-button aria-expanded="false">Izbornik</button>
-          <nav data-route-menu hidden>
-            <a href="/rad/" data-route-link="workspace">Korektorski stol</a>
-            <a href="/saznaj-vise/" data-route-link="learn-more">Saznaj više</a>
+          <a href="/">Lekta</a>
+          <nav aria-label="Glavna navigacija">
+            <a href="/">Nova provjera</a>
+            <a href="/moji-radovi/">Moji radovi</a>
           </nav>
+          <button type="button" data-route-directory-button aria-controls="route-directory" aria-expanded="false">Sve</button>
         </header>
         <main id="main-content" tabindex="-1">
           <section id="workspace-status">
@@ -53,6 +54,7 @@ function workspaceHtml(): string {
           <span data-workspace-document-name></span>
           <div id="analyzer"></div>
         </main>
+        <div data-route-directory-layer></div>
         <script>document.body.dataset.scriptExecuted = 'true'</script>
       </body>
     </html>`;
@@ -66,21 +68,45 @@ function response(): Response {
 }
 
 beforeEach(() => {
+  vi.unstubAllGlobals();
+  vi.stubGlobal('matchMedia', vi.fn(() => ({ matches: false })));
   document.documentElement.removeAttribute('data-route');
+  document.documentElement.removeAttribute('data-route-variant');
   document.documentElement.dataset.theme = 'light';
   document.title = 'Lekta: učitaj rad';
   document.body.className = 'intake-root';
-  document.body.innerHTML = '<main id="original"><button id="originalAction">Odaberi</button></main>';
+  document.body.innerHTML = `
+    <a class="skip-link" href="#main-content">Preskoči</a>
+    <header>
+      <a href="/">Lekta</a>
+      <a href="/moji-radovi/">Moji radovi</a>
+      <button type="button" data-route-directory-button aria-controls="route-directory" aria-expanded="false">Sve</button>
+    </header>
+    <main id="main-content"><div id="original"><button id="originalAction">Odaberi</button></div></main>
+    <div data-route-directory-layer></div>
+  `;
+  mountRouteShell(document, {
+    current: 'intake',
+    variant: 'intake',
+    privacySettingsAvailable: false,
+  });
   document.querySelectorAll('[data-memory-workspace-style]').forEach((node) => node.remove());
 });
 
 describe('memory-only workspace', () => {
-  it('učitava pravi route shell, stilove i runtime bez izvršavanja fetched scriptova', async () => {
+  it('montira workspace shell i privacy kontrolu prije runtimea bez izvršavanja fetched scriptova', async () => {
+    // Mutation caught: runtime se pokrene prije shella pa ne može vezati dinamički privacySettingsBtn.
+    let runtimeObservedPrivacy = false;
+    let runtimeRoute: string | undefined;
+    let runtimeVariant: string | undefined;
     const runtime = vi.fn(async (
       doc: Document,
       options: { fragment: string; store: { get(id: string): Promise<LocalDocumentSessionV1 | null> } },
     ) => {
       expect(doc.querySelector('#analyzer')).not.toBeNull();
+      runtimeObservedPrivacy = doc.getElementById('privacySettingsBtn') !== null;
+      runtimeRoute = doc.documentElement.dataset.route;
+      runtimeVariant = doc.documentElement.dataset.routeVariant;
       expect(options.fragment).toBe(`#session=${SESSION_ID}`);
       expect((await options.store.get(SESSION_ID))?.document.name).toBe('diplomski-rad.docx');
     });
@@ -93,6 +119,9 @@ describe('memory-only workspace', () => {
     });
 
     expect(runtime).toHaveBeenCalledOnce();
+    expect(runtimeObservedPrivacy).toBe(true);
+    expect(runtimeRoute).toBe('workspace');
+    expect(runtimeVariant).toBe('workspace');
     expect(document.title).toBe('Korektorski stol | Lekta');
     expect(document.body.className).toBe('workspace-body');
     expect(document.querySelectorAll('script')).toHaveLength(0);
@@ -100,19 +129,26 @@ describe('memory-only workspace', () => {
     expect(document.querySelector('[data-memory-workspace-style]')).not.toBeNull();
     expect(document.body.textContent).toMatch(/samo u ovom tabu/i);
     expect(document.documentElement.dataset.route).toBe('workspace');
-    expect(document.querySelector('[data-route-link="workspace"]')?.getAttribute('aria-current')).toBe('page');
+    expect(document.documentElement.dataset.routeVariant).toBe('workspace');
+    expect(document.querySelectorAll('#privacySettingsBtn')).toHaveLength(1);
+    expect(document.getElementById('privacySettingsBtn')?.hidden).toBe(false);
 
-    const theme = document.querySelector<HTMLButtonElement>('[data-route-theme]')!;
+    const theme = document.querySelector<HTMLButtonElement>('[data-route-directory-theme]')!;
     theme.click();
     expect(document.documentElement.dataset.theme).toBe('dark');
 
-    const menu = document.querySelector<HTMLElement>('[data-route-menu]')!;
-    document.querySelector<HTMLButtonElement>('[data-route-menu-button]')!.click();
-    expect(menu.hidden).toBe(false);
+    document.querySelector<HTMLButtonElement>('[data-route-directory-button]')!.click();
+    expect(document.querySelector<HTMLElement>('[role="dialog"]')?.hidden).toBe(false);
+    expect(document.querySelector('[data-route-menu], [data-route-menu-button], [data-route-theme]')).toBeNull();
   });
 
-  it('na runtime kvar atomski vraća iste intake čvorove, a njihovi listeneri ostaju aktivni', async () => {
+  it('na runtime kvar vraća intake i prenosi listener ownership na novi intake shell', async () => {
+    // Mutation caught: rollback ne remounta intake ili ostavi workspace i prvi intake listener živima.
     const original = document.querySelector<HTMLButtonElement>('#originalAction')!;
+    const originalDialog = document.querySelector<HTMLElement>('[role="dialog"]')!;
+    let workspaceHadPrivacy = false;
+    let workspaceTrigger: HTMLButtonElement | null = null;
+    let workspaceDialog: HTMLElement | null = null;
     const click = vi.fn();
     original.addEventListener('click', click);
 
@@ -121,7 +157,11 @@ describe('memory-only workspace', () => {
       isCurrent: () => true,
       fetchWorkspace: async () => response(),
       loadRuntime: async () => ({
-        mountWorkspaceRuntime: async () => {
+        mountWorkspaceRuntime: async (doc: Document) => {
+          workspaceHadPrivacy = doc.getElementById('privacySettingsBtn') !== null;
+          workspaceTrigger = doc.querySelector<HTMLButtonElement>('[data-route-directory-button]')!;
+          workspaceDialog = doc.querySelector<HTMLElement>('[role="dialog"]')!;
+          workspaceTrigger?.click();
           throw new Error('runtime failed');
         },
       }),
@@ -131,16 +171,41 @@ describe('memory-only workspace', () => {
     expect(document.body.className).toBe('intake-root');
     expect(document.querySelector('#originalAction')).toBe(original);
     expect(document.querySelector('[data-memory-workspace-style]')).toBeNull();
-    expect(document.documentElement.dataset.route).toBeUndefined();
+    expect(document.documentElement.dataset.route).toBe('intake');
+    expect(document.documentElement.dataset.routeVariant).toBe('intake');
+
+    expect(workspaceHadPrivacy).toBe(true);
+    expect(workspaceTrigger).not.toBeNull();
+    expect(workspaceDialog).not.toBeNull();
+    if (!workspaceTrigger || !workspaceDialog) return;
+    expect(workspaceDialog.hidden).toBe(true);
+    workspaceTrigger.click();
+    expect(workspaceDialog.hidden).toBe(true);
+
+    const restoredTrigger = document.querySelector<HTMLButtonElement>('[data-route-directory-button]')!;
+    restoredTrigger.click();
+    expect(document.querySelector<HTMLElement>('[role="dialog"]')?.hidden).toBe(false);
+    expect(originalDialog.hidden).toBe(true);
+
     original.click();
     expect(click).toHaveBeenCalledOnce();
   });
 
   it('kasni runtime starog odabira vraća intake umjesto da prepiše noviji tok', async () => {
+    // Mutation caught: stale rollback vrati DOM bez živog intake shella ili ostavi workspace listener.
     let current = true;
     let releaseRuntime!: () => void;
+    let workspaceHadPrivacy = false;
+    let workspaceTrigger: HTMLButtonElement | null = null;
+    let workspaceDialog: HTMLElement | null = null;
     const runtimePending = new Promise<void>((resolve) => { releaseRuntime = resolve; });
-    const runtime = vi.fn(() => runtimePending);
+    const runtime = vi.fn((doc: Document) => {
+      workspaceHadPrivacy = doc.getElementById('privacySettingsBtn') !== null;
+      workspaceTrigger = doc.querySelector<HTMLButtonElement>('[data-route-directory-button]')!;
+      workspaceDialog = doc.querySelector<HTMLElement>('[role="dialog"]')!;
+      workspaceTrigger?.click();
+      return runtimePending;
+    });
     const original = document.querySelector('#original')!;
 
     const mounting = mountMemoryWorkspace(session(), {
@@ -159,6 +224,18 @@ describe('memory-only workspace', () => {
     expect(document.querySelector('#original')).toBe(original);
     expect(document.querySelector('#analyzer')).toBeNull();
     expect(document.querySelector('[data-memory-workspace-style]')).toBeNull();
+    expect(document.documentElement.dataset.route).toBe('intake');
+    expect(document.documentElement.dataset.routeVariant).toBe('intake');
+    expect(workspaceHadPrivacy).toBe(true);
+    expect(workspaceTrigger).not.toBeNull();
+    expect(workspaceDialog).not.toBeNull();
+    if (!workspaceTrigger || !workspaceDialog) return;
+    expect(workspaceDialog.hidden).toBe(true);
+    workspaceTrigger.click();
+    expect(workspaceDialog.hidden).toBe(true);
+
+    document.querySelector<HTMLButtonElement>('[data-route-directory-button]')!.click();
+    expect(document.querySelector<HTMLElement>('[role="dialog"]')?.hidden).toBe(false);
   });
 
   it('stale rezultat prije commita uopće ne mijenja intake DOM', async () => {
@@ -175,5 +252,7 @@ describe('memory-only workspace', () => {
     expect(document.querySelector('#original')).toBe(original);
     expect(runtime).not.toHaveBeenCalled();
     expect(document.querySelector('[data-memory-workspace-style]')).toBeNull();
+    expect(document.documentElement.dataset.route).toBe('intake');
+    expect(document.documentElement.dataset.routeVariant).toBe('intake');
   });
 });

@@ -60,7 +60,7 @@ describe('minimalni intake ulaz', () => {
     expect(html).toContain('id="intakeError"');
     expect(html).toContain('id="intakeMemoryAction"');
     expect(html).toContain('href="/moji-radovi/"');
-    expect(html).toContain('href="/saznaj-vise/"');
+    expect(html).toContain('href="/saznaj-vise/#how"');
     expect(html).not.toMatch(/id=["']analyzer["']|pricing|cijene|Često postavljena pitanja|Kako radi provjera/i);
   });
 
