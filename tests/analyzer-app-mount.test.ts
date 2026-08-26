@@ -628,6 +628,42 @@ describe('mountable analyzer runtime', () => {
     await vi.waitFor(() => expect(analysisClient.analyze).toHaveBeenCalledTimes(1), { timeout: 10_000 });
   }, 30_000);
 
+  it('uklanjanje dokumenta otkazuje odgodenu spekulativnu analizu prije intakea novog dokumenta', async () => {
+    document.getElementById('newAnalysis')?.click();
+    const analyzer = document.getElementById('analyzer')!;
+    analyzer.dataset.analysisStart = 'after-profile-confirmation';
+    quickStatsControl.disabled = true;
+    intakeControl.override = async () => ({ kind: 'ok' });
+
+    await app.loadAnalyzerDocument({ file: validDocx('timer-old.docx'), source: 'memory-only' });
+    delete analyzer.dataset.analysisStart;
+    document.getElementById('workType')?.dispatchEvent(new Event('change', { bubbles: true }));
+    document.getElementById('newAnalysis')?.click();
+
+    const nextFile = validDocx('timer-new.docx');
+    const nextIntake = deferred<any>();
+    const nextIntakeStarted = deferred<void>();
+    intakeControl.override = async (file: File) => {
+      if (file === nextFile) {
+        nextIntakeStarted.resolve();
+        return nextIntake.promise;
+      }
+      return { kind: 'ok' };
+    };
+    analysisClient.analyze.mockClear();
+
+    const nextAdmission = app.loadAnalyzerDocument({ file: nextFile, source: 'memory-only' });
+    try {
+      await nextIntakeStarted.promise;
+      await new Promise((resolve) => setTimeout(resolve, 550));
+      expect(analysisClient.analyze).not.toHaveBeenCalled();
+    } finally {
+      nextIntake.resolve({ kind: 'reject', message: 'test cleanup' });
+      await Promise.allSettled([nextAdmission]);
+      document.getElementById('newAnalysis')?.click();
+    }
+  }, 30_000);
+
   it('stari admission vraca superseded nakon zadnjeg asinkronog prozora', async () => {
     document.getElementById('newAnalysis')?.click();
     delete document.getElementById('analyzer')!.dataset.analysisStart;
