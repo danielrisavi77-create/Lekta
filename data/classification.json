@@ -3,6 +3,7 @@
   "napomena": "Klasifikacija imovine repozitorija (faza A plana zastite baze pravila). Semantika kao .gitignore: ZADNJE pravilo koje pogodi stazu vrijedi, pa opca pravila stoje gore a iznimke i najprivatnije staze dolje. bundle: allowed = smije u javni browser bundle; forbidden = nikad; derived = izvor ne smije, u bundle smiju samo navedene projekcije (derivedBy). Polje until je dokumentacijski podsjetnik na planirani flip, enforcement cita iskljucivo trenutnu bundle vrijednost. Potrosaci: scripts/security/classification-guard.mjs (vite plugin, pada build), scripts/verify-dist-classification.mjs (post-build sken), tests/classification.test.ts (pokrivenost, mrtva pravila, kanarinci).",
   "rules": [
     { "pattern": "src/**", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "src/routes/shared/public-route-directory.json", "class": "PUBLIC", "bundle": "allowed", "note": "Kanonski javni direktorij ruta, bez korisničkih podataka, profila, cijena ili poslovne logike." },
     { "pattern": "docs/**", "class": "PRIVATE-IP", "bundle": "forbidden" },
     { "pattern": "scripts/**", "class": "PRIVATE-IP", "bundle": "forbidden" },
     { "pattern": "supabase/**", "class": "SECURITY-SENSITIVE", "bundle": "forbidden" },
