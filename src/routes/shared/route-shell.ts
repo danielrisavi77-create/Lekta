@@ -202,8 +202,15 @@ function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: 
 
 const routeShellControllers = new WeakMap<Document, AbortController>();
 
+export function disposeRouteShell(doc: Document): void {
+  const controller = routeShellControllers.get(doc);
+  if (!controller) return;
+  routeShellControllers.delete(doc);
+  controller.abort();
+}
+
 export function mountRouteShell(doc: Document, options: RouteShellOptions): void {
-  routeShellControllers.get(doc)?.abort();
+  disposeRouteShell(doc);
 
   const controller = new AbortController();
   routeShellControllers.set(doc, controller);

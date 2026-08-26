@@ -16,10 +16,11 @@ const intakeShellOptions = {
   privacySettingsAvailable: false,
 } as const;
 
+const intakeHost = document.getElementById('intakeStage');
 mountRouteShell(document, intakeShellOptions);
 void persistentStore.list()
   .then(([summary]) => {
-    if (!summary) return;
+    if (!summary || !intakeHost?.isConnected) return;
     mountRouteShell(document, {
       ...intakeShellOptions,
       continuation: {

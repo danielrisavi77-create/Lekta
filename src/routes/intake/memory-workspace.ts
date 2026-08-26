@@ -3,7 +3,7 @@ import {
   sessionFragment,
   type LocalDocumentSessionV1,
 } from '../../session/local-document-session';
-import { mountRouteShell } from '../shared/route-shell';
+import { disposeRouteShell, mountRouteShell } from '../shared/route-shell';
 import { renderWorkspaceShell } from '../workspace/workspace-shell';
 import '../workspace/workspace.css';
 
@@ -177,6 +177,7 @@ export async function mountMemoryWorkspace(
       store: memoryStore,
     });
     if (!options.isCurrent()) {
+      disposeRouteShell(doc);
       restoreDocument(doc, snapshot, shell.headNodes);
       changedDocument = false;
       mountRouteShell(doc, intakeShellOptions);
@@ -184,6 +185,7 @@ export async function mountMemoryWorkspace(
     }
   } catch (error) {
     if (changedDocument) {
+      disposeRouteShell(doc);
       restoreDocument(doc, snapshot, shell.headNodes);
       mountRouteShell(doc, intakeShellOptions);
     }

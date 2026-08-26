@@ -114,6 +114,15 @@ function parsed(path: string): Document {
   return doc;
 }
 
+function installRootHost(): HTMLElement {
+  const rootDoc = parsed('index.html');
+  const sourceHost = rootDoc.getElementById('intakeStage');
+  if (!sourceHost) throw new Error('Nedostaje #intakeStage u root fixtureu.');
+  const host = document.importNode(sourceHost, true);
+  document.body.replaceChildren(host);
+  return host;
+}
+
 function normalizedText(element: Element): string {
   return element.textContent?.replace(/\s+/g, ' ').trim() ?? '';
 }
@@ -240,6 +249,7 @@ describe('granice route shellova', () => {
 
   it('root montira Sve prije listanja i remounta samo najnoviju sesiju', async () => {
     // Mutation caught: IndexedDB blokira Sve ili host koristi stariju sesiju.
+    installRootHost();
     const newestId = '123e4567-e89b-42d3-a456-426614174000';
     const olderId = '223e4567-e89b-42d3-a456-426614174000';
     let resolveList!: (value: LocalDocumentSessionSummary[]) => void;
@@ -271,6 +281,32 @@ describe('granice route shellova', () => {
     });
     const shellOptions = intakeHost.mountShell.mock.calls.map(([, options]) => options);
     expect(JSON.stringify(shellOptions)).not.toMatch(/najnoviji-rad|stariji-rad/);
+  });
+
+  it('kasni continuation ne remounta intake nakon zamjene izvornog hosta', async () => {
+    // Mutation caught: dovršetak starog list() poziva prepiše memory-only workspace shell.
+    const originalIntakeHost = installRootHost();
+    let resolveList!: (value: LocalDocumentSessionSummary[]) => void;
+    const pendingList = new Promise<LocalDocumentSessionSummary[]>((resolve) => {
+      resolveList = resolve;
+    });
+    intakeHost.list.mockReturnValueOnce(pendingList);
+
+    await import('../src/routes/intake/main');
+    expect(intakeHost.mountShell).toHaveBeenCalledTimes(1);
+
+    const workspaceHost = document.createElement('main');
+    workspaceHost.id = 'analyzer';
+    originalIntakeHost.replaceWith(workspaceHost);
+    expect(originalIntakeHost.isConnected).toBe(false);
+
+    resolveList([
+      sessionSummary('123e4567-e89b-42d3-a456-426614174000', 'novi-rad.docx', 200),
+    ]);
+    await pendingList;
+    await Promise.resolve();
+
+    expect(intakeHost.mountShell).toHaveBeenCalledTimes(1);
   });
 
   it.each([

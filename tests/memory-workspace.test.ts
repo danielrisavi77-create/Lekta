@@ -151,6 +151,10 @@ describe('memory-only workspace', () => {
     let workspaceDialog: HTMLElement | null = null;
     const click = vi.fn();
     original.addEventListener('click', click);
+    document.body.style.overflow = 'clip';
+    document.body.tabIndex = -1;
+    original.focus();
+    expect(document.activeElement).toBe(original);
 
     await expect(mountMemoryWorkspace(session(), {
       doc: document,
@@ -161,7 +165,11 @@ describe('memory-only workspace', () => {
           workspaceHadPrivacy = doc.getElementById('privacySettingsBtn') !== null;
           workspaceTrigger = doc.querySelector<HTMLButtonElement>('[data-route-directory-button]')!;
           workspaceDialog = doc.querySelector<HTMLElement>('[role="dialog"]')!;
+          doc.body.tabIndex = -1;
+          doc.body.focus();
           workspaceTrigger?.click();
+          expect(doc.body.style.overflow).toBe('hidden');
+          expect(doc.activeElement?.id).toBe('route-directory-title');
           throw new Error('runtime failed');
         },
       }),
@@ -173,6 +181,8 @@ describe('memory-only workspace', () => {
     expect(document.querySelector('[data-memory-workspace-style]')).toBeNull();
     expect(document.documentElement.dataset.route).toBe('intake');
     expect(document.documentElement.dataset.routeVariant).toBe('intake');
+    expect(document.body.style.overflow).toBe('clip');
+    expect(document.activeElement).toBe(original);
 
     expect(workspaceHadPrivacy).toBe(true);
     expect(workspaceTrigger).not.toBeNull();
@@ -203,10 +213,19 @@ describe('memory-only workspace', () => {
       workspaceHadPrivacy = doc.getElementById('privacySettingsBtn') !== null;
       workspaceTrigger = doc.querySelector<HTMLButtonElement>('[data-route-directory-button]')!;
       workspaceDialog = doc.querySelector<HTMLElement>('[role="dialog"]')!;
+      doc.body.tabIndex = -1;
+      doc.body.focus();
       workspaceTrigger?.click();
+      expect(doc.body.style.overflow).toBe('hidden');
+      expect(doc.activeElement?.id).toBe('route-directory-title');
       return runtimePending;
     });
     const original = document.querySelector('#original')!;
+    const originalAction = document.querySelector<HTMLButtonElement>('#originalAction')!;
+    document.body.style.overflow = 'scroll';
+    document.body.tabIndex = -1;
+    originalAction.focus();
+    expect(document.activeElement).toBe(originalAction);
 
     const mounting = mountMemoryWorkspace(session(), {
       doc: document,
@@ -226,6 +245,8 @@ describe('memory-only workspace', () => {
     expect(document.querySelector('[data-memory-workspace-style]')).toBeNull();
     expect(document.documentElement.dataset.route).toBe('intake');
     expect(document.documentElement.dataset.routeVariant).toBe('intake');
+    expect(document.body.style.overflow).toBe('scroll');
+    expect(document.activeElement).toBe(originalAction);
     expect(workspaceHadPrivacy).toBe(true);
     expect(workspaceTrigger).not.toBeNull();
     expect(workspaceDialog).not.toBeNull();
