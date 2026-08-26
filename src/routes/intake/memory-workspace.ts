@@ -163,6 +163,7 @@ export async function mountMemoryWorkspace(
   await memoryStore.put(session);
   if (!options.isCurrent()) return;
 
+  disposeRouteShell(doc);
   const snapshot = captureDocument(doc);
   let changedDocument = false;
   try {

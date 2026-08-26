@@ -2,6 +2,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mountMemoryWorkspace } from '../src/routes/intake/memory-workspace';
 import { mountRouteShell } from '../src/routes/shared/route-shell';
+import { MemoryDocumentSessionStore } from '../src/session/indexeddb-document-session-store';
 import type { LocalDocumentSessionV1 } from '../src/session/local-document-session';
 
 const SESSION_ID = '123e4567-e89b-42d3-a456-426614174000';
@@ -65,6 +66,27 @@ function response(): Response {
     status: 200,
     headers: { 'content-type': 'text/html; charset=utf-8' },
   });
+}
+
+class DeferredPreparationStore extends MemoryDocumentSessionStore {
+  private signalPreparationStarted!: () => void;
+  private releasePreparation!: () => void;
+  readonly preparationStarted = new Promise<void>((resolve) => {
+    this.signalPreparationStarted = resolve;
+  });
+  private readonly preparationPending = new Promise<void>((resolve) => {
+    this.releasePreparation = resolve;
+  });
+
+  override async put(value: LocalDocumentSessionV1): Promise<void> {
+    this.signalPreparationStarted();
+    await this.preparationPending;
+    await super.put(value);
+  }
+
+  release(): void {
+    this.releasePreparation();
+  }
 }
 
 beforeEach(() => {
@@ -201,6 +223,66 @@ describe('memory-only workspace', () => {
     expect(click).toHaveBeenCalledOnce();
   });
 
+  it('runtime kvar nakon odgođene pripreme vraća settled intake snapshot', async () => {
+    // Mutation caught: intake shell se disposa tek nakon captureDocument() pa snapshot pamti otvoreni panel.
+    const originalAction = document.querySelector<HTMLButtonElement>('#originalAction')!;
+    const intakeTrigger = document.querySelector<HTMLButtonElement>('[data-route-directory-button]')!;
+    const intakeDialog = document.querySelector<HTMLElement>('[role="dialog"]')!;
+    const store = new DeferredPreparationStore();
+    let workspaceTrigger: HTMLButtonElement | null = null;
+    let workspaceDialog: HTMLElement | null = null;
+    document.body.style.overflow = 'clip';
+    originalAction.focus();
+    expect(document.activeElement).toBe(originalAction);
+
+    const mounting = mountMemoryWorkspace(session(), {
+      doc: document,
+      isCurrent: () => true,
+      fetchWorkspace: async () => response(),
+      loadRuntime: async () => ({
+        mountWorkspaceRuntime: async (doc: Document) => {
+          workspaceTrigger = doc.querySelector<HTMLButtonElement>('[data-route-directory-button]')!;
+          workspaceDialog = doc.querySelector<HTMLElement>('[role="dialog"]')!;
+          workspaceTrigger?.focus();
+          workspaceTrigger?.click();
+          expect(doc.body.style.overflow).toBe('hidden');
+          expect(doc.activeElement?.id).toBe('route-directory-title');
+          throw new Error('runtime failed after deferred preparation');
+        },
+      }),
+      createStore: () => store,
+    });
+    const failedMount = expect(mounting).rejects.toThrow('runtime failed after deferred preparation');
+
+    await store.preparationStarted;
+    expect(document.querySelector('#analyzer')).toBeNull();
+    intakeTrigger.click();
+    expect(intakeDialog.hidden).toBe(false);
+    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.activeElement?.id).toBe('route-directory-title');
+
+    store.release();
+    await failedMount;
+
+    expect.soft(document.body.style.overflow).toBe('clip');
+    expect.soft(document.activeElement).toBe(originalAction);
+    expect(intakeDialog.hidden).toBe(true);
+    expect(workspaceTrigger).not.toBeNull();
+    expect(workspaceDialog).not.toBeNull();
+    if (!workspaceTrigger || !workspaceDialog) return;
+    expect(workspaceDialog.hidden).toBe(true);
+    workspaceTrigger.click();
+    expect(workspaceDialog.hidden).toBe(true);
+
+    const restoredTrigger = document.querySelector<HTMLButtonElement>('[data-route-directory-button]')!;
+    const restoredDialog = document.querySelector<HTMLElement>('[role="dialog"]')!;
+    expect(restoredTrigger).toBe(intakeTrigger);
+    expect(restoredDialog).not.toBe(intakeDialog);
+    restoredTrigger.click();
+    expect(restoredDialog.hidden).toBe(false);
+    expect(intakeDialog.hidden).toBe(true);
+  });
+
   it('kasni runtime starog odabira vraća intake umjesto da prepiše noviji tok', async () => {
     // Mutation caught: stale rollback vrati DOM bez živog intake shella ili ostavi workspace listener.
     let current = true;
@@ -257,6 +339,72 @@ describe('memory-only workspace', () => {
 
     document.querySelector<HTMLButtonElement>('[data-route-directory-button]')!.click();
     expect(document.querySelector<HTMLElement>('[role="dialog"]')?.hidden).toBe(false);
+  });
+
+  it('stale nakon runtimea i odgođene pripreme vraća settled intake snapshot', async () => {
+    // Mutation caught: stale rollback obnavlja snapshot snimljen dok je intake direktorij još otvoren.
+    let current = true;
+    let releaseRuntime!: () => void;
+    const runtimePending = new Promise<void>((resolve) => { releaseRuntime = resolve; });
+    const originalAction = document.querySelector<HTMLButtonElement>('#originalAction')!;
+    const intakeTrigger = document.querySelector<HTMLButtonElement>('[data-route-directory-button]')!;
+    const intakeDialog = document.querySelector<HTMLElement>('[role="dialog"]')!;
+    const store = new DeferredPreparationStore();
+    let workspaceTrigger: HTMLButtonElement | null = null;
+    let workspaceDialog: HTMLElement | null = null;
+    const runtime = vi.fn((doc: Document) => {
+      workspaceTrigger = doc.querySelector<HTMLButtonElement>('[data-route-directory-button]')!;
+      workspaceDialog = doc.querySelector<HTMLElement>('[role="dialog"]')!;
+      workspaceTrigger?.focus();
+      workspaceTrigger?.click();
+      expect(doc.body.style.overflow).toBe('hidden');
+      expect(doc.activeElement?.id).toBe('route-directory-title');
+      return runtimePending;
+    });
+    document.body.style.overflow = 'scroll';
+    originalAction.focus();
+    expect(document.activeElement).toBe(originalAction);
+
+    const mounting = mountMemoryWorkspace(session(), {
+      doc: document,
+      isCurrent: () => current,
+      fetchWorkspace: async () => response(),
+      loadRuntime: async () => ({ mountWorkspaceRuntime: runtime }),
+      createStore: () => store,
+    });
+
+    await store.preparationStarted;
+    expect(document.querySelector('#analyzer')).toBeNull();
+    intakeTrigger.click();
+    expect(intakeDialog.hidden).toBe(false);
+    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.activeElement?.id).toBe('route-directory-title');
+
+    store.release();
+    await vi.waitFor(() => expect(runtime).toHaveBeenCalledOnce());
+    expect(document.querySelector('#analyzer')).not.toBeNull();
+
+    current = false;
+    releaseRuntime();
+    await mounting;
+
+    expect.soft(document.body.style.overflow).toBe('scroll');
+    expect.soft(document.activeElement).toBe(originalAction);
+    expect(intakeDialog.hidden).toBe(true);
+    expect(workspaceTrigger).not.toBeNull();
+    expect(workspaceDialog).not.toBeNull();
+    if (!workspaceTrigger || !workspaceDialog) return;
+    expect(workspaceDialog.hidden).toBe(true);
+    workspaceTrigger.click();
+    expect(workspaceDialog.hidden).toBe(true);
+
+    const restoredTrigger = document.querySelector<HTMLButtonElement>('[data-route-directory-button]')!;
+    const restoredDialog = document.querySelector<HTMLElement>('[role="dialog"]')!;
+    expect(restoredTrigger).toBe(intakeTrigger);
+    expect(restoredDialog).not.toBe(intakeDialog);
+    restoredTrigger.click();
+    expect(restoredDialog.hidden).toBe(false);
+    expect(intakeDialog.hidden).toBe(true);
   });
 
   it('stale rezultat prije commita uopće ne mijenja intake DOM', async () => {
