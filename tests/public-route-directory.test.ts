@@ -94,9 +94,26 @@ describe('public route directory', () => {
       { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/verification.html', description: 'Opis', release: 'core' }] }] },
       { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/qa', description: 'Opis', release: 'core' }] }] },
       { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/qa.html', description: 'Opis', release: 'core' }] }] },
+      { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/admin?x', description: 'Opis', release: 'core' }] }] },
+      { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/admin#x', description: 'Opis', release: 'core' }] }] },
+      { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/verification?x', description: 'Opis', release: 'core' }] }] },
+      { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/verification#x', description: 'Opis', release: 'core' }] }] },
+      { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/qa?x', description: 'Opis', release: 'core' }] }] },
+      { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/qa#x', description: 'Opis', release: 'core' }] }] },
     ];
     for (const invalidDirectory of invalidDirectories) {
       expect(() => validatePublicRouteDirectory(invalidDirectory)).toThrow(Error);
+    }
+  });
+  it('allows nonreserved paths that only share a reserved prefix', () => {
+    for (const href of ['/administrator', '/quality']) {
+      expect(() => validatePublicRouteDirectory({
+        groups: [{
+          id: 'your-work',
+          label: 'Tvoj rad',
+          destinations: [{ id: 'intake', label: 'Nova provjera', href, description: 'Opis', release: 'core' }],
+        }],
+      })).not.toThrow();
     }
   });
 });

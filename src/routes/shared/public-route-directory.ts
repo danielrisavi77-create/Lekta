@@ -40,7 +40,7 @@ function isAllowedPublicHref(href: string): href is `/${string}` {
   return href.startsWith('/')
     && !href.startsWith('//')
     && !href.startsWith('/#')
-    && !/^\/(?:admin|verification|qa)(?:[/.]|$)/.test(href);
+    && !/^\/(?:admin|verification|qa)(?:[/.?#]|$)/.test(href);
 }
 export function validatePublicRouteDirectory(value: unknown): readonly PublicRouteGroup[] {
   if (!isJsonRecord(value) || !Array.isArray(value.groups)) throw new Error('Javni direktorij mora imati polje groups.');
