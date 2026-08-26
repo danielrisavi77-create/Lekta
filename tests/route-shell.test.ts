@@ -230,3 +230,152 @@ describe('route directory lifecycle', () => {
     expect(document.querySelectorAll('script, link[rel="modulepreload"]').length).toBe(scripts);
   });
 });
+interface ControlledMediaQuery {
+  setDesktop(matches: boolean): void;
+  listenerCount(): number;
+  removedCount(): number;
+}
+
+function controlledMatchMedia(legacy = false): ControlledMediaQuery {
+  let desktop = false;
+  let removed = 0;
+  const listeners = new Set<(event: MediaQueryListEvent) => void>();
+  const mediaQuery = {
+    get matches() {
+      return desktop;
+    },
+    media: '(min-width: 761px)',
+    onchange: null,
+    addEventListener: legacy
+      ? undefined
+      : (_type: string, listener: EventListenerOrEventListenerObject) => {
+          listeners.add(listener as (event: MediaQueryListEvent) => void);
+        },
+    removeEventListener: legacy
+      ? undefined
+      : (_type: string, listener: EventListenerOrEventListenerObject) => {
+          removed += 1;
+          listeners.delete(listener as (event: MediaQueryListEvent) => void);
+        },
+    addListener: legacy
+      ? (listener: (event: MediaQueryListEvent) => void) => {
+          listeners.add(listener);
+        }
+      : undefined,
+    removeListener: legacy
+      ? (listener: (event: MediaQueryListEvent) => void) => {
+          removed += 1;
+          listeners.delete(listener);
+        }
+      : undefined,
+    dispatchEvent: () => true,
+  } as unknown as MediaQueryList;
+
+  vi.stubGlobal('matchMedia', vi.fn(() => mediaQuery));
+
+  return {
+    setDesktop(matches) {
+      desktop = matches;
+      for (const listener of listeners) {
+        listener({ matches } as MediaQueryListEvent);
+      }
+    },
+    listenerCount() {
+      return listeners.size;
+    },
+    removedCount() {
+      return removed;
+    },
+  };
+}
+
+describe('route shell remount ownership', () => {
+  it('remount then one legacy theme click toggles exactly once', () => {
+    mountRouteShell(document, { current: 'workspace' });
+    mountRouteShell(document, { current: 'workspace' });
+
+    document.querySelector<HTMLButtonElement>('[data-route-theme]')?.click();
+
+    expect(document.documentElement.dataset.theme).toBe('light');
+  });
+
+  it.each([false, true])(
+    'remount leaves one active matchMedia listener and legacy navigation behaves once (%s fallback)',
+    (legacyFallback) => {
+      const media = controlledMatchMedia(legacyFallback);
+      mountRouteShell(document, { current: 'workspace' });
+      mountRouteShell(document, { current: 'workspace' });
+
+      expect(media.listenerCount()).toBe(1);
+      expect(media.removedCount()).toBe(1);
+
+      const menuButton = document.querySelector<HTMLButtonElement>('[data-route-menu-button]');
+      const menu = document.querySelector<HTMLElement>('[data-route-menu]');
+      menuButton?.click();
+      expect(menu?.hidden).toBe(false);
+
+      media.setDesktop(true);
+      expect(menu?.hidden).toBe(true);
+    },
+  );
+
+  it('remount leaves one skip-link focus and scroll action', () => {
+    const main = document.querySelector<HTMLElement>('main');
+    const skipLink = document.querySelector<HTMLAnchorElement>('.skip-link');
+    const scrollIntoView = vi.fn();
+    Object.defineProperty(main, 'scrollIntoView', { configurable: true, value: scrollIntoView });
+    skipLink?.setAttribute('data-route-focus-bound', 'true');
+
+    mountRouteShell(document, { current: 'workspace' });
+    mountRouteShell(document, { current: 'workspace' });
+    skipLink?.click();
+
+    expect(document.activeElement).toBe(main);
+    expect(scrollIntoView).toHaveBeenCalledTimes(1);
+  });
+
+  it('remount while the directory is open restores prior inert, overflow, and focus before replacement', () => {
+    const header = document.querySelector<HTMLElement>('header');
+    const main = document.querySelector<HTMLElement>('main');
+    const priorFocus = document.createElement('button');
+    priorFocus.textContent = 'Raniji fokus';
+    document.body.append(priorFocus);
+    header!.inert = true;
+    main!.inert = false;
+    document.body.style.overflow = 'clip';
+    priorFocus.focus();
+
+    mountRouteShell(document, {
+      current: 'workspace',
+      variant: 'workspace',
+      privacySettingsAvailable: false,
+    });
+    document.querySelector<HTMLButtonElement>('[data-route-directory-button]')?.click();
+
+    mountRouteShell(document, {
+      current: 'workspace',
+      variant: 'workspace',
+      privacySettingsAvailable: false,
+    });
+
+    expect(header?.inert).toBe(true);
+    expect(main?.inert).toBe(false);
+    expect(document.body.style.overflow).toBe('clip');
+    expect(document.activeElement).toBe(priorFocus);
+  });
+});
+
+it('creates one owned skip link when a host has no static skip link', () => {
+  document.querySelector('.skip-link')?.remove();
+  const main = document.querySelector<HTMLElement>('main');
+  const scrollIntoView = vi.fn();
+  Object.defineProperty(main, 'scrollIntoView', { configurable: true, value: scrollIntoView });
+
+  mountRouteShell(document, { current: 'workspace' });
+  mountRouteShell(document, { current: 'workspace' });
+  document.querySelector<HTMLAnchorElement>('.skip-link')?.click();
+
+  expect(document.querySelectorAll('.skip-link')).toHaveLength(1);
+  expect(document.activeElement).toBe(main);
+  expect(scrollIntoView).toHaveBeenCalledTimes(1);
+});

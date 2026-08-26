@@ -1,5 +1,4 @@
 import { safeStorageSetText } from '../../shared/browser-storage';
-import { setupSkipLink } from '../../shared/skip-link';
 import { releasedPublicRouteGroups } from './public-route-directory';
 import '../../shared/skip-link.css';
 import './route-shell.css';
@@ -29,32 +28,57 @@ function reflectTheme(button: HTMLButtonElement, doc: Document): void {
   button.title = dark ? 'Ugasi radnu lampu' : 'Upali radnu lampu';
 }
 
-function wireTheme(doc: Document): void {
+function ensureSkipLink(doc: Document): HTMLAnchorElement | null {
+  const main = doc.querySelector<HTMLElement>('main');
+  if (!main) return null;
+  if (!main.id) main.id = 'main-content';
+  if (!main.hasAttribute('tabindex')) main.tabIndex = -1;
+
+  const existing = doc.querySelector<HTMLAnchorElement>('.skip-link');
+  if (existing) return existing;
+
+  const link = doc.createElement('a');
+  link.className = 'skip-link';
+  link.href = `#${main.id}`;
+  link.textContent = 'Preskoči na sadržaj';
+  doc.body.prepend(link);
+  return link;
+}
+
+function wireSkipLink(doc: Document, signal: AbortSignal): void {
+  const main = doc.querySelector<HTMLElement>('main');
+  const link = ensureSkipLink(doc);
+  if (!main || !link) return;
+
+  link.addEventListener(
+    'click',
+    (event) => {
+      event.preventDefault();
+      main.focus();
+      main.scrollIntoView({ block: 'start' });
+    },
+    { signal },
+  );
+}
+
+function wireTheme(doc: Document, signal: AbortSignal): void {
   const button = doc.querySelector<HTMLButtonElement>('[data-route-theme]');
   if (!button) return;
   if (!doc.documentElement.dataset.theme) doc.documentElement.dataset.theme = 'dark';
   reflectTheme(button, doc);
-  button.addEventListener('click', () => {
-    const theme = doc.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
-    doc.documentElement.dataset.theme = theme;
-    reflectTheme(button, doc);
-    safeStorageSetText('lekta.theme', theme);
-  });
+  button.addEventListener(
+    'click',
+    () => {
+      const theme = doc.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+      doc.documentElement.dataset.theme = theme;
+      reflectTheme(button, doc);
+      safeStorageSetText('lekta.theme', theme);
+    },
+    { signal },
+  );
 }
 
-function wireSkipLink(doc: Document): void {
-  const main = doc.querySelector<HTMLElement>('main');
-  const link = setupSkipLink(doc);
-  if (!main || !link || link.dataset.routeFocusBound === 'true') return;
-  link.dataset.routeFocusBound = 'true';
-  link.addEventListener('click', (event) => {
-    event.preventDefault();
-    main.focus();
-    main.scrollIntoView({ block: 'start' });
-  });
-}
-
-function wireMobileNavigation(doc: Document): void {
+function wireMobileNavigation(doc: Document, signal: AbortSignal): void {
   const button = doc.querySelector<HTMLButtonElement>('[data-route-menu-button]');
   const navigation = doc.querySelector<HTMLElement>('[data-route-menu]');
   if (!button || !navigation) return;
@@ -76,91 +100,48 @@ function wireMobileNavigation(doc: Document): void {
   };
 
   button.setAttribute('aria-label', navigation.hidden ? 'Otvori izbornik' : 'Zatvori izbornik');
-  if (button.dataset.routeMenuBound === 'true') return;
-  button.dataset.routeMenuBound = 'true';
-  button.addEventListener('click', () => {
-    if (navigation.hidden) open();
-    else close();
-  });
-  navigation.addEventListener('click', (event) => {
-    if ((event.target as HTMLElement).closest('a, [data-auth-entry]')) close();
-  });
-  doc.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape' || navigation.hidden) return;
-    event.preventDefault();
-    close(true);
-  });
+  button.addEventListener(
+    'click',
+    () => {
+      if (navigation.hidden) open();
+      else close();
+    },
+    { signal },
+  );
+  navigation.addEventListener(
+    'click',
+    (event) => {
+      if ((event.target as HTMLElement).closest('a, [data-auth-entry]')) close();
+    },
+    { signal },
+  );
+  doc.addEventListener(
+    'keydown',
+    (event) => {
+      if (event.key !== 'Escape' || navigation.hidden) return;
+      event.preventDefault();
+      close(true);
+    },
+    { signal },
+  );
 
   const media = doc.defaultView?.matchMedia?.('(min-width: 761px)');
   const handleBreakpoint = (event: MediaQueryListEvent): void => {
     if (event.matches) close();
   };
-  if (media) {
-    if (typeof media.addEventListener === 'function') {
-      media.addEventListener('change', handleBreakpoint);
-    } else {
-      media.addListener(handleBreakpoint);
-    }
-    if (media.matches) {
-      close();
-    }
+  if (!media) return;
+
+  if (typeof media.addEventListener === 'function') {
+    media.addEventListener('change', handleBreakpoint);
+    signal.addEventListener('abort', () => media.removeEventListener('change', handleBreakpoint), {
+      once: true,
+    });
+  } else {
+    media.addListener(handleBreakpoint);
+    signal.addEventListener('abort', () => media.removeListener(handleBreakpoint), { once: true });
   }
+  if (media.matches) close();
 }
-
-function renderRouteDirectory(doc: Document): void {
-  const layer = doc.querySelector<HTMLElement>('[data-route-directory-layer]');
-  if (!layer) return;
-
-  const directory = doc.createElement('section');
-  directory.id = 'route-directory';
-  directory.dataset.routeDirectory = 'true';
-  directory.setAttribute('role', 'dialog');
-  directory.setAttribute('aria-modal', 'true');
-  directory.setAttribute('aria-labelledby', 'route-directory-title');
-  directory.hidden = true;
-  const title = doc.createElement('h2');
-  title.id = 'route-directory-title';
-  title.tabIndex = -1;
-  title.textContent = 'Sve mogucnosti';
-  directory.append(title);
-  for (const group of releasedPublicRouteGroups) {
-    const groupElement = doc.createElement('section');
-    groupElement.dataset.routeDirectoryGroup = group.id;
-    const heading = doc.createElement('h2');
-    heading.textContent = group.label;
-    groupElement.append(heading);
-    for (const destination of group.destinations) {
-      const link = doc.createElement('a');
-      link.href = destination.href;
-      link.dataset.routeDestination = destination.id;
-      link.textContent = destination.label;
-      groupElement.append(link);
-    }
-    directory.append(groupElement);
-  }
-  layer.replaceChildren(directory);
-
-}
-void wireRouteDirectory;
-
-function wireRouteDirectory(doc: Document): void {
-  renderRouteDirectory(doc);
-  const button = doc.querySelector<HTMLButtonElement>('[data-route-directory-button]');
-  const dialog = doc.querySelector<HTMLElement>('[data-route-directory]');
-  const title = doc.querySelector<HTMLElement>('#route-directory-title');
-  const main = doc.querySelector<HTMLElement>('main');
-  if (!button || !dialog || !title || !main) return;
-
-  button.addEventListener('click', () => {
-    dialog.hidden = false;
-    button.setAttribute('aria-expanded', 'true');
-    main.inert = true;
-    doc.body.style.overflow = 'hidden';
-    title.focus();
-  });
-}
-
-const routeShellMounts = new WeakMap<Document, { controller: AbortController; close: () => void }>();
 
 function normalizeOptions(options: RouteShellOptions | LegacyRouteShellOptions): RouteShellOptions {
   if ('variant' in options) return options;
@@ -168,10 +149,10 @@ function normalizeOptions(options: RouteShellOptions | LegacyRouteShellOptions):
   return { current: options.current, variant, privacySettingsAvailable: false };
 }
 
-function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: AbortSignal): () => void {
+function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: AbortSignal): void {
   const layer = doc.querySelector<HTMLElement>('[data-route-directory-layer]');
   const trigger = doc.querySelector<HTMLButtonElement>('[data-route-directory-button]');
-  if (!layer || !trigger) return () => undefined;
+  if (!layer || !trigger) return;
 
   const backdrop = doc.createElement('div');
   backdrop.dataset.routeDirectoryBackdrop = 'true';
@@ -182,6 +163,7 @@ function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: 
   dialog.setAttribute('aria-modal', 'true');
   dialog.setAttribute('aria-labelledby', 'route-directory-title');
   dialog.hidden = true;
+
   const title = doc.createElement('h2');
   title.id = 'route-directory-title';
   title.tabIndex = -1;
@@ -191,6 +173,7 @@ function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: 
   closeButton.dataset.routeDirectoryClose = 'true';
   closeButton.textContent = 'Zatvori';
   dialog.append(title, closeButton);
+
   const desktop = doc.defaultView?.matchMedia?.('(min-width: 761px)').matches ?? true;
   for (const group of releasedPublicRouteGroups) {
     const details = doc.createElement('details');
@@ -217,32 +200,116 @@ function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: 
     }
     dialog.append(details);
   }
+
   const utility = doc.createElement('section');
   const theme = doc.createElement('button');
   theme.type = 'button';
   theme.dataset.routeDirectoryTheme = 'true';
   const privacy = doc.createElement('a');
-  privacy.href = '/privatnost.html'; privacy.textContent = 'Privatnost';
+  privacy.href = '/privatnost.html';
+  privacy.textContent = 'Privatnost';
   const processing = doc.createElement('a');
-  processing.href = '/obrada-dokumenata.html'; processing.textContent = 'Obrada dokumenata';
+  processing.href = '/obrada-dokumenata.html';
+  processing.textContent = 'Obrada dokumenata';
   utility.append(theme);
-  if (options.privacySettingsAvailable) { const settings = doc.createElement('button'); settings.type = 'button'; settings.id = 'privacySettingsBtn'; settings.dataset.routePrivacySettings = 'true'; settings.textContent = 'Postavke privatnosti'; utility.append(settings); }
-  utility.append(privacy, processing); dialog.append(utility); backdrop.append(dialog); layer.replaceChildren(backdrop);
-  if (!doc.documentElement.dataset.theme) doc.documentElement.dataset.theme = 'dark'; reflectTheme(theme, doc);
-  let opener: HTMLElement | null = null; let locked = false; let overflow = ''; const inert = new Map<HTMLElement, boolean>();
-  const close = (): void => { dialog.hidden = true; trigger.setAttribute('aria-expanded', 'false'); if (!locked) return; for (const [element, value] of inert) element.inert = value; doc.body.style.overflow = overflow; locked = false; opener?.focus(); opener = null; };
-  const open = (): void => { if (locked) return; opener = doc.activeElement instanceof HTMLElement ? doc.activeElement : null; overflow = doc.body.style.overflow; for (const element of [...doc.body.children] as HTMLElement[]) if (element !== layer) { inert.set(element, element.inert); element.inert = true; } locked = true; dialog.hidden = false; trigger.setAttribute('aria-expanded', 'true'); doc.body.style.overflow = 'hidden'; title.focus(); };
-  trigger.setAttribute('aria-expanded', 'false'); trigger.addEventListener('click', open, { signal }); closeButton.addEventListener('click', close, { signal }); backdrop.addEventListener('click', (event) => { if (event.target === backdrop) close(); }, { signal }); doc.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !dialog.hidden) { event.preventDefault(); close(); } }, { signal });
-  theme.addEventListener('click', () => { const next = doc.documentElement.dataset.theme === 'light' ? 'dark' : 'light'; doc.documentElement.dataset.theme = next; reflectTheme(theme, doc); safeStorageSetText('lekta.theme', next); }, { signal });
-  return close;
+  if (options.privacySettingsAvailable) {
+    const settings = doc.createElement('button');
+    settings.type = 'button';
+    settings.id = 'privacySettingsBtn';
+    settings.dataset.routePrivacySettings = 'true';
+    settings.textContent = 'Postavke privatnosti';
+    utility.append(settings);
+  }
+  utility.append(privacy, processing);
+  dialog.append(utility);
+  backdrop.append(dialog);
+  layer.replaceChildren(backdrop);
+
+  if (!doc.documentElement.dataset.theme) doc.documentElement.dataset.theme = 'dark';
+  reflectTheme(theme, doc);
+
+  let opener: HTMLElement | null = null;
+  let locked = false;
+  let overflow = '';
+  const inert = new Map<HTMLElement, boolean>();
+  const close = (): void => {
+    dialog.hidden = true;
+    trigger.setAttribute('aria-expanded', 'false');
+    if (!locked) return;
+    for (const [element, value] of inert) element.inert = value;
+    inert.clear();
+    doc.body.style.overflow = overflow;
+    locked = false;
+    opener?.focus();
+    opener = null;
+  };
+  const open = (): void => {
+    if (locked) return;
+    opener = doc.activeElement instanceof HTMLElement ? doc.activeElement : null;
+    overflow = doc.body.style.overflow;
+    for (const element of [...doc.body.children] as HTMLElement[]) {
+      if (element === layer) continue;
+      inert.set(element, element.inert);
+      element.inert = true;
+    }
+    locked = true;
+    dialog.hidden = false;
+    trigger.setAttribute('aria-expanded', 'true');
+    doc.body.style.overflow = 'hidden';
+    title.focus();
+  };
+
+  trigger.setAttribute('aria-expanded', 'false');
+  trigger.addEventListener('click', open, { signal });
+  closeButton.addEventListener('click', close, { signal });
+  backdrop.addEventListener(
+    'click',
+    (event) => {
+      if (event.target === backdrop) close();
+    },
+    { signal },
+  );
+  doc.addEventListener(
+    'keydown',
+    (event) => {
+      if (event.key === 'Escape' && !dialog.hidden) {
+        event.preventDefault();
+        close();
+      }
+    },
+    { signal },
+  );
+  theme.addEventListener(
+    'click',
+    () => {
+      const next = doc.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+      doc.documentElement.dataset.theme = next;
+      reflectTheme(theme, doc);
+      safeStorageSetText('lekta.theme', next);
+    },
+    { signal },
+  );
+  signal.addEventListener('abort', close, { once: true });
 }
+
+const routeShellControllers = new WeakMap<Document, AbortController>();
 
 export function mountRouteShell(doc: Document, options: RouteShellOptions): void;
 export function mountRouteShell(doc: Document, options: LegacyRouteShellOptions): void;
 export function mountRouteShell(doc: Document, options: RouteShellOptions | LegacyRouteShellOptions): void {
-  const previous = routeShellMounts.get(doc); previous?.close(); previous?.controller.abort();
-  const normalized = normalizeOptions(options); const controller = new AbortController(); const close = mountDirectoryPanel(doc, normalized, controller.signal);
-  wireSkipLink(doc); wireTheme(doc); wireMobileNavigation(doc); doc.documentElement.dataset.route = normalized.current; doc.documentElement.dataset.routeVariant = normalized.variant;
-  doc.querySelectorAll<HTMLElement>('[data-route-link]').forEach((link) => { if (link.dataset.routeLink === normalized.current) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current'); });
-  routeShellMounts.set(doc, { controller, close });
+  routeShellControllers.get(doc)?.abort();
+
+  const controller = new AbortController();
+  routeShellControllers.set(doc, controller);
+  const normalized = normalizeOptions(options);
+  mountDirectoryPanel(doc, normalized, controller.signal);
+  wireSkipLink(doc, controller.signal);
+  wireTheme(doc, controller.signal);
+  wireMobileNavigation(doc, controller.signal);
+  doc.documentElement.dataset.route = normalized.current;
+  doc.documentElement.dataset.routeVariant = normalized.variant;
+  doc.querySelectorAll<HTMLElement>('[data-route-link]').forEach((link) => {
+    if (link.dataset.routeLink === normalized.current) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
 }
