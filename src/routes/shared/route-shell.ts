@@ -64,6 +64,8 @@ function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: 
 
   const backdrop = doc.createElement('div');
   backdrop.dataset.routeDirectoryBackdrop = 'true';
+  backdrop.hidden = true;
+
   const dialog = doc.createElement('section');
   dialog.id = 'route-directory';
   dialog.dataset.routeDirectory = 'true';
@@ -142,6 +144,7 @@ function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: 
   const inert = new Map<HTMLElement, boolean>();
   const close = (): void => {
     dialog.hidden = true;
+    backdrop.hidden = true;
     trigger.setAttribute('aria-expanded', 'false');
     if (!locked) return;
     for (const [element, value] of inert) element.inert = value;
@@ -161,6 +164,7 @@ function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: 
       element.inert = true;
     }
     locked = true;
+    backdrop.hidden = false;
     dialog.hidden = false;
     trigger.setAttribute('aria-expanded', 'true');
     doc.body.style.overflow = 'hidden';

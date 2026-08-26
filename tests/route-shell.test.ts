@@ -87,12 +87,16 @@ describe('route shell', () => {
     });
     const button = document.querySelector<HTMLButtonElement>('[data-route-directory-button]')!;
     const main = document.querySelector<HTMLElement>('main')!;
+    const backdrop = document.querySelector<HTMLElement>('[data-route-directory-backdrop]')!;
+    const dialog = document.querySelector<HTMLElement>('[role="dialog"]')!;
+    expect(backdrop.hidden).toBe(true);
+    expect(dialog.hidden).toBe(true);
     button.focus();
 
     button.click();
 
-    const dialog = document.querySelector<HTMLElement>('[role="dialog"]')!;
     const title = document.querySelector<HTMLElement>('#route-directory-title')!;
+    expect(backdrop.hidden).toBe(false);
     expect(dialog.hidden).toBe(false);
     expect(button.getAttribute('aria-expanded')).toBe('true');
     expect(document.activeElement).toBe(title);
@@ -110,9 +114,9 @@ describe('route directory lifecycle', () => {
     const backdrop = document.querySelector<HTMLElement>('[data-route-directory-backdrop]')!;
     trigger.focus(); trigger.click(); dialog.click(); expect(dialog.hidden).toBe(false);
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-    expect(dialog.hidden).toBe(true); expect(document.querySelector<HTMLElement>('main')!.inert).toBe(false); expect(document.activeElement).toBe(trigger);
-    trigger.click(); document.querySelector<HTMLButtonElement>('[data-route-directory-close]')!.click(); expect(dialog.hidden).toBe(true);
-    trigger.click(); backdrop.click(); expect(dialog.hidden).toBe(true);
+    expect(dialog.hidden).toBe(true); expect(backdrop.hidden).toBe(true); expect(document.querySelector<HTMLElement>('main')!.inert).toBe(false); expect(document.activeElement).toBe(trigger);
+    trigger.click(); document.querySelector<HTMLButtonElement>('[data-route-directory-close]')!.click(); expect(dialog.hidden).toBe(true); expect(backdrop.hidden).toBe(true);
+    trigger.click(); backdrop.click(); expect(dialog.hidden).toBe(true); expect(backdrop.hidden).toBe(true);
   });
 
   it('puni options put prikazuje nastavak, privacy utility, aktivnu rutu i mobilne skupine', () => {
@@ -131,7 +135,10 @@ describe('route directory lifecycle', () => {
     stubMatchMedia(); const fetch = vi.fn(); vi.stubGlobal('fetch', fetch);
     mountRouteShell(document, { current: 'workspace', variant: 'workspace', privacySettingsAvailable: false });
     const trigger = document.querySelector<HTMLButtonElement>('[data-route-directory-button]')!; trigger.click();
+    const priorBackdrop = document.querySelector<HTMLElement>('[data-route-directory-backdrop]')!;
     mountRouteShell(document, { current: 'workspace', variant: 'workspace', privacySettingsAvailable: false });
+    expect(priorBackdrop.hidden).toBe(true);
+    expect(document.querySelector<HTMLElement>('[data-route-directory-backdrop]')!.hidden).toBe(true);
     const scripts = document.querySelectorAll('script, link[rel="modulepreload"]').length;
     trigger.click(); document.querySelector<HTMLButtonElement>('[data-route-directory-theme]')!.click();
     expect(document.querySelector<HTMLElement>('[role="dialog"]')!.hidden).toBe(false);

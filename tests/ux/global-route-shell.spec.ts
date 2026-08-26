@@ -40,6 +40,28 @@ function seconds(value: string): number {
   return Math.max(...value.split(',').map((part) => Number.parseFloat(part) || 0));
 }
 
+async function readMotion(target: Locator): Promise<{
+  animationDuration: string;
+  animationName: string;
+  frameProperties: string[];
+  transitionDuration: string;
+}> {
+  return target.evaluate((node) => {
+    const style = getComputedStyle(node);
+    const frameProperties = node.getAnimations().flatMap((animation) => {
+      const effect = animation.effect;
+      if (!(effect instanceof KeyframeEffect)) return [];
+      return effect.getKeyframes().flatMap((frame) => Object.keys(frame));
+    }).filter((property) => !['offset', 'computedOffset', 'easing', 'composite'].includes(property));
+    return {
+      animationDuration: style.animationDuration,
+      animationName: style.animationName,
+      frameProperties: [...new Set(frameProperties)],
+      transitionDuration: style.transitionDuration,
+    };
+  });
+}
+
 async function expectNoSeriousAxeViolations(page: Page): Promise<void> {
   const results = await new AxeBuilder({ page }).analyze();
   const serious = results.violations.filter((violation) =>
@@ -53,7 +75,10 @@ test('desktop dialog supports real pointer dismissal, Escape and focus return', 
   await gotoRoot(page);
 
   const trigger = page.locator('[data-route-directory-button]');
+  const backdrop = page.locator('[data-route-directory-backdrop]');
+  await expect(backdrop).toHaveAttribute('hidden', '');
   const dialog = await openDirectory(page);
+  await expect(backdrop).not.toHaveAttribute('hidden', '');
   const titleBox = await page.getByRole('heading', { name: 'Sve mogućnosti' }).boundingBox();
   expect(titleBox, 'naslov dijaloga mora imati stvarnu pointer površinu').not.toBeNull();
   await page.mouse.click(titleBox!.x + titleBox!.width / 2, titleBox!.y + titleBox!.height / 2);
@@ -61,11 +86,12 @@ test('desktop dialog supports real pointer dismissal, Escape and focus return', 
 
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
+  await expect(backdrop).toHaveAttribute('hidden', '');
   await expect(trigger).toBeFocused();
 
   await trigger.click();
   await expect(dialog).toBeVisible();
-  const backdrop = page.locator('[data-route-directory-backdrop]');
+  await expect(backdrop).not.toHaveAttribute('hidden', '');
   const backdropBox = await backdrop.boundingBox();
   const dialogBox = await dialog.boundingBox();
   expect(backdropBox, 'backdrop mora pokrivati viewport').not.toBeNull();
@@ -75,6 +101,7 @@ test('desktop dialog supports real pointer dismissal, Escape and focus return', 
   expect(dialogBox!.x).toBeGreaterThan(backdropBox!.x + 8);
   await page.mouse.click(backdropBox!.x + 4, backdropBox!.y + 4);
   await expect(dialog).toBeHidden();
+  await expect(backdrop).toHaveAttribute('hidden', '');
   await expect(trigger).toBeFocused();
 });
 
@@ -101,9 +128,13 @@ test('desktop paper has two columns and mobile paper is a one-column bottom shee
   expect(box, 'mobilni sheet mora imati mjerljivu površinu').not.toBeNull();
   expect(Math.abs(box!.y + box!.height - MOBILE.height)).toBeLessThanOrEqual(1);
   expect(box!.width).toBeGreaterThanOrEqual(MOBILE.width - 2);
-  await expect(dialog.locator('details[data-route-directory-group]')).toHaveCount(4);
+  const groups = dialog.locator('details[data-route-directory-group]');
+  await expect(groups).toHaveCount(4);
   await expect(dialog.locator('details[data-route-directory-group=your-work]')).toHaveAttribute('open', '');
-  await expect(dialog.locator('details[data-route-directory-group]:not([data-route-directory-group=your-work]) summary')).toHaveCount(3);
+  await expect(dialog.locator('details[data-route-directory-group]:not([open])')).toHaveCount(3);
+  expect(await groups.evaluateAll((nodes) => nodes
+    .filter((node) => (node as HTMLDetailsElement).open)
+    .map((node) => (node as HTMLElement).dataset.routeDirectoryGroup))).toEqual(['your-work']);
 });
 
 test('320 px stays free of horizontal overflow with the directory closed and open', async ({ page }) => {
@@ -183,40 +214,29 @@ test('opening motion is short and limited to opacity and transform', async ({ pa
   await useTheme(page, 'light');
   await gotoRoot(page, DESKTOP);
   const dialog = await openDirectory(page);
-  const motion = await dialog.evaluate((node) => {
-    const style = getComputedStyle(node);
-    const frameProperties = node.getAnimations().flatMap((animation) => {
-      const effect = animation.effect;
-      if (!(effect instanceof KeyframeEffect)) return [];
-      return effect.getKeyframes().flatMap((frame) => Object.keys(frame));
-    }).filter((property) => !['offset', 'computedOffset', 'easing', 'composite'].includes(property));
-    return {
-      animationDuration: style.animationDuration,
-      animationName: style.animationName,
-      frameProperties: [...new Set(frameProperties)],
-      transitionDuration: style.transitionDuration,
-    };
-  });
-  expect(seconds(motion.animationDuration)).toBeGreaterThan(0);
-  expect(seconds(motion.animationDuration)).toBeLessThanOrEqual(.18);
-  expect(motion.animationName).not.toBe('none');
-  expect(motion.frameProperties.sort()).toEqual(['opacity', 'transform']);
-  expect(seconds(motion.transitionDuration)).toBe(0);
+  const backdrop = page.locator('[data-route-directory-backdrop]');
+  const paperMotion = await readMotion(dialog);
+  const backdropMotion = await readMotion(backdrop);
+  for (const motion of [paperMotion, backdropMotion]) {
+    expect(seconds(motion.animationDuration)).toBeGreaterThan(0);
+    expect(seconds(motion.animationDuration)).toBeLessThanOrEqual(.18);
+    expect(motion.animationName).not.toBe('none');
+    expect(motion.frameProperties.every((property) => ['opacity', 'transform'].includes(property))).toBe(true);
+    expect(seconds(motion.transitionDuration)).toBe(0);
+  }
+  expect(paperMotion.frameProperties.sort()).toEqual(['opacity', 'transform']);
+  expect(backdropMotion.frameProperties).toEqual(['opacity']);
 
   await page.keyboard.press('Escape');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await openDirectory(page);
-  const reduced = await dialog.evaluate((node) => {
-    const style = getComputedStyle(node);
-    return {
-      animationDuration: style.animationDuration,
-      animationName: style.animationName,
-      transitionDuration: style.transitionDuration,
-    };
-  });
-  expect(seconds(reduced.animationDuration)).toBe(0);
-  expect(reduced.animationName).toBe('none');
-  expect(seconds(reduced.transitionDuration)).toBe(0);
+  const reducedPaper = await readMotion(dialog);
+  const reducedBackdrop = await readMotion(backdrop);
+  for (const reduced of [reducedPaper, reducedBackdrop]) {
+    expect(seconds(reduced.animationDuration)).toBe(0);
+    expect(reduced.animationName).toBe('none');
+    expect(seconds(reduced.transitionDuration)).toBe(0);
+  }
 });
 
 test('visual snapshots: desktop and mobile, closed and open', async ({ page }, testInfo) => {

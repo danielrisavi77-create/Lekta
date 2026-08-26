@@ -92,10 +92,6 @@ a { color: inherit; }
   animation: route-directory-backdrop-in 160ms ease-out both;
 }
 
-[data-route-directory-backdrop]:has(> [data-route-directory][hidden]) {
-  display: none;
-}
-
 [data-route-directory] {
   position: relative;
   width: min(920px, 100%);
