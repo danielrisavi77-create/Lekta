@@ -1,3 +1,9 @@
+:root[data-route-variant=workspace] {
+  --route-header-min-height: 68px;
+  --route-shell-inline: 32px;
+  --route-nav-gap: 22px;
+}
+
 .workspace-page {
   min-height: calc(100vh - 68px);
   padding: 46px 0 24px;

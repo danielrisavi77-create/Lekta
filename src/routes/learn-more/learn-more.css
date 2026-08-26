@@ -1,3 +1,9 @@
+:root[data-route-variant=content] {
+  --route-header-min-height: 64px;
+  --route-shell-inline: 32px;
+  --route-nav-gap: 18px;
+}
+
 .learn-more-page {
   min-height: 100vh;
 }

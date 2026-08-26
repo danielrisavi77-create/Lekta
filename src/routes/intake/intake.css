@@ -14,6 +14,12 @@
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+:root[data-route-variant=intake] {
+  --route-header-min-height: 72px;
+  --route-shell-inline: 40px;
+  --route-nav-gap: 10px;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -63,54 +69,6 @@ a {
 
 .skip-link:focus {
   transform: translateY(0);
-}
-
-.intake-topbar {
-  width: min(1120px, calc(100% - 40px));
-  min-height: 72px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
-
-.intake-brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--intake-ink);
-  font: 650 23px/1 Georgia, "Times New Roman", serif;
-  text-decoration: none;
-  letter-spacing: -.02em;
-}
-
-.intake-brand-mark {
-  width: 25px;
-  height: 25px;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--intake-line);
-  border-radius: 7px;
-  background: var(--intake-paper);
-  box-shadow: 2px 3px 0 rgba(77, 56, 38, .12);
-  color: var(--intake-accent);
-  font: 800 18px/1 ui-monospace, monospace;
-  transform: rotate(-2deg);
-}
-
-.intake-my-work {
-  color: var(--intake-muted);
-  font-size: 13px;
-  font-weight: 750;
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-}
-
-.intake-my-work:hover,
-.intake-my-work:focus-visible {
-  color: var(--intake-ink);
-  border-bottom-color: currentColor;
 }
 
 .intake-main {
@@ -381,13 +339,8 @@ a {
 }
 
 @media (max-width: 600px) {
-  .intake-topbar,
   .intake-main {
     width: min(100% - 24px, 1120px);
-  }
-
-  .intake-topbar {
-    min-height: 62px;
   }
 
   .intake-main {
