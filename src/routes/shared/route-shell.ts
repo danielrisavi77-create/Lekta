@@ -1,10 +1,25 @@
 import { safeStorageSetText } from '../../shared/browser-storage';
 import { setupSkipLink } from '../../shared/skip-link';
+import { releasedPublicRouteGroups } from './public-route-directory';
 import '../../shared/skip-link.css';
 import './route-shell.css';
 
+export type RouteShellVariant = 'intake' | 'workspace' | 'content' | 'my-work';
+
+export interface RouteContinuation {
+  readonly href: `/${string}`;
+  readonly label: string;
+}
+
 export interface RouteShellOptions {
-  current: 'workspace' | 'learn-more' | 'my-work';
+  readonly current: string;
+  readonly variant: RouteShellVariant;
+  readonly continuation?: RouteContinuation;
+  readonly privacySettingsAvailable: boolean;
+}
+
+interface LegacyRouteShellOptions {
+  readonly current: 'workspace' | 'learn-more' | 'my-work';
 }
 
 function reflectTheme(button: HTMLButtonElement, doc: Document): void {
@@ -92,16 +107,142 @@ function wireMobileNavigation(doc: Document): void {
   }
 }
 
-export function mountRouteShell(
-  doc: Document = document,
-  options: RouteShellOptions,
-): void {
-  wireSkipLink(doc);
-  wireTheme(doc);
-  wireMobileNavigation(doc);
-  doc.documentElement.dataset.route = options.current;
-  doc.querySelectorAll<HTMLElement>('[data-route-link]').forEach((link) => {
-    if (link.dataset.routeLink === options.current) link.setAttribute('aria-current', 'page');
-    else link.removeAttribute('aria-current');
+function renderRouteDirectory(doc: Document): void {
+  const layer = doc.querySelector<HTMLElement>('[data-route-directory-layer]');
+  if (!layer) return;
+
+  const directory = doc.createElement('section');
+  directory.id = 'route-directory';
+  directory.dataset.routeDirectory = 'true';
+  directory.setAttribute('role', 'dialog');
+  directory.setAttribute('aria-modal', 'true');
+  directory.setAttribute('aria-labelledby', 'route-directory-title');
+  directory.hidden = true;
+  const title = doc.createElement('h2');
+  title.id = 'route-directory-title';
+  title.tabIndex = -1;
+  title.textContent = 'Sve mogucnosti';
+  directory.append(title);
+  for (const group of releasedPublicRouteGroups) {
+    const groupElement = doc.createElement('section');
+    groupElement.dataset.routeDirectoryGroup = group.id;
+    const heading = doc.createElement('h2');
+    heading.textContent = group.label;
+    groupElement.append(heading);
+    for (const destination of group.destinations) {
+      const link = doc.createElement('a');
+      link.href = destination.href;
+      link.dataset.routeDestination = destination.id;
+      link.textContent = destination.label;
+      groupElement.append(link);
+    }
+    directory.append(groupElement);
+  }
+  layer.replaceChildren(directory);
+
+}
+void wireRouteDirectory;
+
+function wireRouteDirectory(doc: Document): void {
+  renderRouteDirectory(doc);
+  const button = doc.querySelector<HTMLButtonElement>('[data-route-directory-button]');
+  const dialog = doc.querySelector<HTMLElement>('[data-route-directory]');
+  const title = doc.querySelector<HTMLElement>('#route-directory-title');
+  const main = doc.querySelector<HTMLElement>('main');
+  if (!button || !dialog || !title || !main) return;
+
+  button.addEventListener('click', () => {
+    dialog.hidden = false;
+    button.setAttribute('aria-expanded', 'true');
+    main.inert = true;
+    doc.body.style.overflow = 'hidden';
+    title.focus();
   });
+}
+
+const routeShellMounts = new WeakMap<Document, { controller: AbortController; close: () => void }>();
+
+function normalizeOptions(options: RouteShellOptions | LegacyRouteShellOptions): RouteShellOptions {
+  if ('variant' in options) return options;
+  const variant: RouteShellVariant = options.current === 'learn-more' ? 'content' : options.current;
+  return { current: options.current, variant, privacySettingsAvailable: false };
+}
+
+function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: AbortSignal): () => void {
+  const layer = doc.querySelector<HTMLElement>('[data-route-directory-layer]');
+  const trigger = doc.querySelector<HTMLButtonElement>('[data-route-directory-button]');
+  if (!layer || !trigger) return () => undefined;
+
+  const backdrop = doc.createElement('div');
+  backdrop.dataset.routeDirectoryBackdrop = 'true';
+  const dialog = doc.createElement('section');
+  dialog.id = 'route-directory';
+  dialog.dataset.routeDirectory = 'true';
+  dialog.setAttribute('role', 'dialog');
+  dialog.setAttribute('aria-modal', 'true');
+  dialog.setAttribute('aria-labelledby', 'route-directory-title');
+  dialog.hidden = true;
+  const title = doc.createElement('h2');
+  title.id = 'route-directory-title';
+  title.tabIndex = -1;
+  title.textContent = 'Sve mogućnosti';
+  const closeButton = doc.createElement('button');
+  closeButton.type = 'button';
+  closeButton.dataset.routeDirectoryClose = 'true';
+  closeButton.textContent = 'Zatvori';
+  dialog.append(title, closeButton);
+  const desktop = doc.defaultView?.matchMedia?.('(min-width: 761px)').matches ?? true;
+  for (const group of releasedPublicRouteGroups) {
+    const details = doc.createElement('details');
+    details.dataset.routeDirectoryGroup = group.id;
+    details.open = desktop || group.id === 'your-work';
+    const summary = doc.createElement('summary');
+    summary.textContent = `${group.label} (${group.destinations.length})`;
+    details.append(summary);
+    for (const destination of group.destinations) {
+      const link = doc.createElement('a');
+      link.href = destination.href;
+      link.dataset.routeDestination = destination.id;
+      link.dataset.routeLink = destination.id;
+      link.textContent = destination.label;
+      if (destination.id === options.current) link.setAttribute('aria-current', 'page');
+      details.append(link);
+      if (group.id === 'your-work' && destination.id === 'intake' && options.continuation) {
+        const continuation = doc.createElement('a');
+        continuation.href = options.continuation.href;
+        continuation.dataset.routeContinuation = 'true';
+        continuation.textContent = options.continuation.label;
+        details.append(continuation);
+      }
+    }
+    dialog.append(details);
+  }
+  const utility = doc.createElement('section');
+  const theme = doc.createElement('button');
+  theme.type = 'button';
+  theme.dataset.routeDirectoryTheme = 'true';
+  const privacy = doc.createElement('a');
+  privacy.href = '/privatnost.html'; privacy.textContent = 'Privatnost';
+  const processing = doc.createElement('a');
+  processing.href = '/obrada-dokumenata.html'; processing.textContent = 'Obrada dokumenata';
+  utility.append(theme);
+  if (options.privacySettingsAvailable) { const settings = doc.createElement('button'); settings.type = 'button'; settings.id = 'privacySettingsBtn'; settings.dataset.routePrivacySettings = 'true'; settings.textContent = 'Postavke privatnosti'; utility.append(settings); }
+  utility.append(privacy, processing); dialog.append(utility); backdrop.append(dialog); layer.replaceChildren(backdrop);
+  if (!doc.documentElement.dataset.theme) doc.documentElement.dataset.theme = 'dark'; reflectTheme(theme, doc);
+  let opener: HTMLElement | null = null; let locked = false; let overflow = ''; const inert = new Map<HTMLElement, boolean>();
+  const close = (): void => { dialog.hidden = true; trigger.setAttribute('aria-expanded', 'false'); if (!locked) return; for (const [element, value] of inert) element.inert = value; doc.body.style.overflow = overflow; locked = false; opener?.focus(); opener = null; };
+  const open = (): void => { if (locked) return; opener = doc.activeElement instanceof HTMLElement ? doc.activeElement : null; overflow = doc.body.style.overflow; for (const element of [...doc.body.children] as HTMLElement[]) if (element !== layer) { inert.set(element, element.inert); element.inert = true; } locked = true; dialog.hidden = false; trigger.setAttribute('aria-expanded', 'true'); doc.body.style.overflow = 'hidden'; title.focus(); };
+  trigger.setAttribute('aria-expanded', 'false'); trigger.addEventListener('click', open, { signal }); closeButton.addEventListener('click', close, { signal }); backdrop.addEventListener('click', (event) => { if (event.target === backdrop) close(); }, { signal }); doc.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !dialog.hidden) { event.preventDefault(); close(); } }, { signal });
+  theme.addEventListener('click', () => { const next = doc.documentElement.dataset.theme === 'light' ? 'dark' : 'light'; doc.documentElement.dataset.theme = next; reflectTheme(theme, doc); safeStorageSetText('lekta.theme', next); }, { signal });
+  return close;
+}
+
+export function mountRouteShell(doc: Document, options: RouteShellOptions): void;
+export function mountRouteShell(doc: Document, options: LegacyRouteShellOptions): void;
+export function mountRouteShell(doc: Document, options: RouteShellOptions | LegacyRouteShellOptions): void {
+  const previous = routeShellMounts.get(doc); previous?.close(); previous?.controller.abort();
+  const normalized = normalizeOptions(options); const controller = new AbortController(); const close = mountDirectoryPanel(doc, normalized, controller.signal);
+  wireSkipLink(doc); wireTheme(doc); wireMobileNavigation(doc); doc.documentElement.dataset.route = normalized.current; doc.documentElement.dataset.routeVariant = normalized.variant;
+  doc.querySelectorAll<HTMLElement>('[data-route-link]').forEach((link) => { if (link.dataset.routeLink === normalized.current) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current'); });
+  routeShellMounts.set(doc, { controller, close });
 }
