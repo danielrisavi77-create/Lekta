@@ -36,6 +36,12 @@ function nonEmptyString(record: JsonRecord, key: string, context: string): strin
   return value;
 }
 
+function isAllowedPublicHref(href: string): href is `/${string}` {
+  return href.startsWith('/')
+    && !href.startsWith('//')
+    && !href.startsWith('/#')
+    && !/^\/(?:admin|verification|qa)(?:[/.]|$)/.test(href);
+}
 export function validatePublicRouteDirectory(value: unknown): readonly PublicRouteGroup[] {
   if (!isJsonRecord(value) || !Array.isArray(value.groups)) throw new Error('Javni direktorij mora imati polje groups.');
   const destinationIds = new Set<string>();
@@ -56,7 +62,7 @@ export function validatePublicRouteDirectory(value: unknown): readonly PublicRou
       destinationIds.add(destinationId);
       const destinationLabel = nonEmptyString(destinationValue, 'label', context);
       const href = nonEmptyString(destinationValue, 'href', context);
-      if (!href.startsWith('/')) throw new Error(`Javni direktorij: ${context}.href mora biti root-relative.`);
+      if (!isAllowedPublicHref(href)) throw new Error(`Javni direktorij: ${context}.href mora biti dopuštena javna root-relative putanja.`);
       const description = nonEmptyString(destinationValue, 'description', context);
       const release = nonEmptyString(destinationValue, 'release', context);
       if (!belongsTo(releases, release)) throw new Error(`Javni direktorij: nepoznati release ${release}.`);

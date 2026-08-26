@@ -86,6 +86,14 @@ describe('public route directory', () => {
       { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/', description: 'Opis', release: 'core' }, { id: 'intake', label: 'Druga provjera', href: '/drugo/', description: 'Opis', release: 'core' }] }] },
       { groups: [{ id: 'your-work', label: '', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/', description: 'Opis', release: 'core' }] }] },
       { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: 'https://lekta.hr/', description: 'Opis', release: 'core' }] }] },
+      { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '//host/path', description: 'Opis', release: 'core' }] }] },
+      { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/#stari-fragment', description: 'Opis', release: 'core' }] }] },
+      { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/admin', description: 'Opis', release: 'core' }] }] },
+      { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/admin.html', description: 'Opis', release: 'core' }] }] },
+      { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/verification', description: 'Opis', release: 'core' }] }] },
+      { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/verification.html', description: 'Opis', release: 'core' }] }] },
+      { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/qa', description: 'Opis', release: 'core' }] }] },
+      { groups: [{ id: 'your-work', label: 'Tvoj rad', destinations: [{ id: 'intake', label: 'Nova provjera', href: '/qa.html', description: 'Opis', release: 'core' }] }] },
     ];
     for (const invalidDirectory of invalidDirectories) {
       expect(() => validatePublicRouteDirectory(invalidDirectory)).toThrow(Error);
