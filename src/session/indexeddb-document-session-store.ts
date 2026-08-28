@@ -1,7 +1,10 @@
 import {
   applyLocalDocumentSessionUpdate,
+  LOCAL_DOCUMENT_TTL_MS,
+  isLocalDocumentSessionId,
   sanitizeLocalDocumentSession,
   summarizeLocalDocumentSession,
+  summarizeStoredLocalDocumentSession,
   type LocalDocumentSessionStore,
   type LocalDocumentSessionSummary,
   type LocalDocumentSessionUpdate,
@@ -9,9 +12,11 @@ import {
 } from './local-document-session';
 
 export const LOCAL_DOCUMENT_DB_NAME = 'lekta-local-documents';
-export const LOCAL_DOCUMENT_DB_VERSION = 1;
+export const LOCAL_DOCUMENT_DB_VERSION = 2;
 export const LOCAL_DOCUMENT_STORE_NAME = 'sessions';
 export const LOCAL_DOCUMENT_EXPIRY_INDEX = 'expiresAt';
+export const LOCAL_DOCUMENT_SUMMARY_STORE_NAME = 'session-summaries';
+export const LOCAL_DOCUMENT_SUMMARY_EXPIRY_INDEX = 'expiresAt';
 
 export type LocalDocumentSessionStoreErrorCode =
   | 'unavailable'
@@ -61,6 +66,41 @@ function storeError(
 
 function nowIsValid(now: number): boolean {
   return Number.isFinite(now) && now >= 0;
+}
+
+const LOCAL_DOCUMENT_SUMMARY_STAGES = new Set<LocalDocumentSessionSummary['stage']>([
+  'profile',
+  'results',
+  'repairPlan',
+  'comparison',
+  'submission',
+]);
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function sanitizeStoredSummary(
+  value: unknown,
+  now: number,
+  expectedKey?: IDBValidKey,
+): LocalDocumentSessionSummary | null {
+  if (!nowIsValid(now) || !isRecord(value) || !isLocalDocumentSessionId(value.id)) return null;
+  if (expectedKey !== undefined && expectedKey !== value.id) return null;
+  if (typeof value.name !== 'string' || value.name.length === 0) return null;
+  if (typeof value.createdAt !== 'number' || !nowIsValid(value.createdAt)) return null;
+  if (typeof value.expiresAt !== 'number' || !nowIsValid(value.expiresAt)) return null;
+  if (value.expiresAt <= value.createdAt) return null;
+  if (value.expiresAt > value.createdAt + LOCAL_DOCUMENT_TTL_MS || value.expiresAt <= now) return null;
+  if (typeof value.stage !== 'string'
+    || !LOCAL_DOCUMENT_SUMMARY_STAGES.has(value.stage as LocalDocumentSessionSummary['stage'])) return null;
+  return {
+    id: value.id,
+    name: value.name,
+    createdAt: value.createdAt,
+    expiresAt: value.expiresAt,
+    stage: value.stage as LocalDocumentSessionSummary['stage'],
+  };
 }
 
 function rawHasAnalysis(value: unknown): boolean {
@@ -148,7 +188,10 @@ export class MemoryDocumentSessionStore implements LocalDocumentSessionStore {
       const expiresAt = typeof raw === 'object' && raw !== null
         ? (raw as { expiresAt?: unknown }).expiresAt
         : undefined;
-      if (typeof expiresAt === 'number' && Number.isFinite(expiresAt) && expiresAt <= now) {
+      if (typeof expiresAt !== 'number'
+        || !Number.isFinite(expiresAt)
+        || expiresAt < 0
+        || expiresAt <= now) {
         this.records.delete(id);
         deleted += 1;
       }
@@ -192,7 +235,11 @@ export class IndexedDbDocumentSessionStore implements LocalDocumentSessionStore 
   private async putAt(session: LocalDocumentSessionV1, now: number): Promise<void> {
     const sanitized = sanitizeLocalDocumentSession(session, now);
     if (!sanitized) throw storeError('invalid-record');
-    await this.runRequest('readwrite', (store) => store.put(sanitized));
+    const summary = summarizeLocalDocumentSession(sanitized);
+    await this.runAtomicSessionAndSummary((sessions, summaries) => [
+      sessions.put(sanitized),
+      summaries.put(summary),
+    ]);
   }
 
   async get(id: string, now = this.currentTime()): Promise<LocalDocumentSessionV1 | null> {
@@ -224,19 +271,7 @@ export class IndexedDbDocumentSessionStore implements LocalDocumentSessionStore 
   }
 
   async list(now = this.currentTime()): Promise<LocalDocumentSessionSummary[]> {
-    const entries = await this.readAllEntries();
-    const summaries: LocalDocumentSessionSummary[] = [];
-
-    for (const { key, value: raw } of entries) {
-      const sanitized = sanitizeLocalDocumentSession(raw, now);
-      if (!sanitized) {
-        await this.deleteKey(key);
-        continue;
-      }
-      if (rawHasAnalysis(raw) && !sanitized.workspace?.analysis) await this.putAt(sanitized, now);
-      summaries.push(summarizeLocalDocumentSession(sanitized));
-    }
-
+    const { summaries } = await this.reconcileSummaries(now);
     return summaries.sort((left, right) => right.createdAt - left.createdAt);
   }
 
@@ -245,46 +280,96 @@ export class IndexedDbDocumentSessionStore implements LocalDocumentSessionStore 
   }
 
   private async deleteKey(key: IDBValidKey): Promise<void> {
-    await this.runRequest('readwrite', (store) => store.delete(key));
+    await this.runAtomicSessionAndSummary((sessions, summaries) => [
+      sessions.delete(key),
+      summaries.delete(key),
+    ]);
   }
 
   async deleteExpired(now = this.currentTime()): Promise<number> {
     if (!nowIsValid(now)) throw storeError('invalid-record');
     if (!this.keyRange) throw storeError('unavailable');
 
-    let range: IDBKeyRange;
     try {
-      range = this.keyRange.upperBound(now);
+      this.keyRange.upperBound(now);
     } catch (error) {
       throw storeError('request', error);
     }
 
-    const keys = await this.runRequest('readonly', (store) => (
-      store.index(LOCAL_DOCUMENT_EXPIRY_INDEX).getAllKeys(range)
-    ));
-    const uniqueKeys = [...new Set(keys)];
-    for (const key of uniqueKeys) await this.deleteKey(key);
-    return uniqueKeys.length;
+    return (await this.reconcileSummaries(now)).deleted;
   }
 
-  private async readAllEntries(): Promise<Array<{ key: IDBValidKey; value: unknown }>> {
+  private async reconcileSummaries(now: number): Promise<{
+    summaries: LocalDocumentSessionSummary[];
+    deleted: number;
+  }> {
+    if (!nowIsValid(now)) throw storeError('invalid-record');
     const database = await this.database();
 
     return new Promise((resolve, reject) => {
       let transaction: IDBTransaction;
       try {
-        transaction = database.transaction(LOCAL_DOCUMENT_STORE_NAME, 'readonly');
+        transaction = database.transaction(
+          [LOCAL_DOCUMENT_STORE_NAME, LOCAL_DOCUMENT_SUMMARY_STORE_NAME],
+          'readwrite',
+        );
       } catch (error) {
         reject(storeError('transaction', error));
         return;
       }
 
-      const entries: Array<{ key: IDBValidKey; value: unknown }> = [];
+      const summariesByKey = new Map<IDBValidKey, LocalDocumentSessionSummary>();
+      const invalidSummaryKeys = new Set<IDBValidKey>();
+      let sessionKeys: IDBValidKey[] | null = null;
+      let summaryCursorDone = false;
+      let reconciled = false;
+      let deleted = 0;
+      let resultSummaries: LocalDocumentSessionSummary[] = [];
       let settled = false;
+
       const fail = (code: 'request' | 'transaction', cause?: unknown) => {
         if (settled) return;
         settled = true;
         reject(storeError(code, cause));
+      };
+      const abortAndFail = (cause: unknown) => {
+        try {
+          transaction.abort();
+        } catch {
+          // The transaction may already be inactive.
+        }
+        fail('request', cause);
+      };
+      const track = (request: IDBRequest) => {
+        request.onerror = () => fail('request', request.error);
+      };
+      const reconcile = () => {
+        if (reconciled || !summaryCursorDone || sessionKeys === null) return;
+        reconciled = true;
+
+        const sessionKeySet = new Set<IDBValidKey>(sessionKeys);
+        const sessionDeletes = new Set<IDBValidKey>();
+        const summaryDeletes = new Set<IDBValidKey>(invalidSummaryKeys);
+
+        for (const [key] of summariesByKey) {
+          if (sessionKeySet.has(key)) continue;
+          summariesByKey.delete(key);
+          summaryDeletes.add(key);
+        }
+        for (const key of sessionKeys) {
+          if (!summariesByKey.has(key)) sessionDeletes.add(key);
+        }
+
+        deleted = sessionDeletes.size;
+        resultSummaries = [...summariesByKey.values()];
+        try {
+          const sessions = transaction.objectStore(LOCAL_DOCUMENT_STORE_NAME);
+          const summaries = transaction.objectStore(LOCAL_DOCUMENT_SUMMARY_STORE_NAME);
+          for (const key of sessionDeletes) track(sessions.delete(key));
+          for (const key of summaryDeletes) track(summaries.delete(key));
+        } catch (error) {
+          abortAndFail(error);
+        }
       };
 
       transaction.onerror = () => fail('transaction', transaction.error);
@@ -292,22 +377,41 @@ export class IndexedDbDocumentSessionStore implements LocalDocumentSessionStore 
       transaction.oncomplete = () => {
         if (settled) return;
         settled = true;
-        resolve(entries);
+        resolve({ summaries: resultSummaries, deleted });
       };
 
-      let request: IDBRequest<IDBCursorWithValue | null>;
+      let keysRequest: IDBRequest<IDBValidKey[]>;
+      let cursorRequest: IDBRequest<IDBCursorWithValue | null>;
       try {
-        request = transaction.objectStore(LOCAL_DOCUMENT_STORE_NAME).openCursor();
+        keysRequest = transaction.objectStore(LOCAL_DOCUMENT_STORE_NAME).getAllKeys();
+        cursorRequest = transaction.objectStore(LOCAL_DOCUMENT_SUMMARY_STORE_NAME).openCursor();
       } catch (error) {
-        fail('request', error);
+        abortAndFail(error);
         return;
       }
-      request.onerror = () => fail('request', request.error);
-      request.onsuccess = () => {
-        const cursor = request.result;
-        if (!cursor) return;
-        entries.push({ key: cursor.primaryKey, value: cursor.value });
-        cursor.continue();
+
+      track(keysRequest);
+      keysRequest.onsuccess = () => {
+        sessionKeys = keysRequest.result;
+        reconcile();
+      };
+
+      track(cursorRequest);
+      cursorRequest.onsuccess = () => {
+        const cursor = cursorRequest.result;
+        if (!cursor) {
+          summaryCursorDone = true;
+          reconcile();
+          return;
+        }
+        const summary = sanitizeStoredSummary(cursor.value, now, cursor.primaryKey);
+        if (summary) summariesByKey.set(cursor.primaryKey, summary);
+        else invalidSummaryKeys.add(cursor.primaryKey);
+        try {
+          cursor.continue();
+        } catch (error) {
+          abortAndFail(error);
+        }
       };
     });
   }
@@ -345,17 +449,67 @@ export class IndexedDbDocumentSessionStore implements LocalDocumentSessionStore 
 
       request.onblocked = () => fail(storeError('blocked'));
       request.onerror = () => fail(storeError('request', request.error));
-      request.onupgradeneeded = () => {
+      request.onupgradeneeded = (event) => {
+        const transaction = request.transaction;
+        if (!transaction) {
+          fail(storeError('transaction'));
+          return;
+        }
+        const abortUpgrade = (cause: unknown) => {
+          try {
+            transaction.abort();
+          } catch {
+            // The versionchange transaction may already be inactive.
+          }
+          fail(storeError('transaction', cause));
+        };
+
         try {
           const database = request.result;
-          const store = database.objectStoreNames.contains(LOCAL_DOCUMENT_STORE_NAME)
-            ? request.transaction!.objectStore(LOCAL_DOCUMENT_STORE_NAME)
+          const sessions = database.objectStoreNames.contains(LOCAL_DOCUMENT_STORE_NAME)
+            ? transaction.objectStore(LOCAL_DOCUMENT_STORE_NAME)
             : database.createObjectStore(LOCAL_DOCUMENT_STORE_NAME, { keyPath: 'id' });
-          if (!store.indexNames.contains(LOCAL_DOCUMENT_EXPIRY_INDEX)) {
-            store.createIndex(LOCAL_DOCUMENT_EXPIRY_INDEX, 'expiresAt');
+          if (!sessions.indexNames.contains(LOCAL_DOCUMENT_EXPIRY_INDEX)) {
+            sessions.createIndex(LOCAL_DOCUMENT_EXPIRY_INDEX, 'expiresAt');
           }
+
+          const summaries = database.objectStoreNames.contains(LOCAL_DOCUMENT_SUMMARY_STORE_NAME)
+            ? transaction.objectStore(LOCAL_DOCUMENT_SUMMARY_STORE_NAME)
+            : database.createObjectStore(LOCAL_DOCUMENT_SUMMARY_STORE_NAME, { keyPath: 'id' });
+          if (!summaries.indexNames.contains(LOCAL_DOCUMENT_SUMMARY_EXPIRY_INDEX)) {
+            summaries.createIndex(LOCAL_DOCUMENT_SUMMARY_EXPIRY_INDEX, 'expiresAt');
+          }
+          if (event.oldVersion >= 2) return;
+
+          const migrationNow = this.currentTime();
+          if (!nowIsValid(migrationNow)) {
+            abortUpgrade(storeError('invalid-record'));
+            return;
+          }
+
+          const cursorRequest = sessions.openCursor();
+          cursorRequest.onerror = () => abortUpgrade(cursorRequest.error);
+          cursorRequest.onsuccess = () => {
+            const cursor = cursorRequest.result;
+            if (!cursor) return;
+
+            const raw = cursor.value;
+            const summary = summarizeStoredLocalDocumentSession(raw, migrationNow);
+            if (summary && cursor.primaryKey === summary.id) {
+              const summaryPut = summaries.put(summary);
+              summaryPut.onerror = () => abortUpgrade(summaryPut.error);
+            } else {
+              const deletion = cursor.delete();
+              deletion.onerror = () => abortUpgrade(deletion.error);
+            }
+            try {
+              cursor.continue();
+            } catch (error) {
+              abortUpgrade(error);
+            }
+          };
         } catch (error) {
-          fail(storeError('transaction', error));
+          abortUpgrade(error);
         }
       };
       request.onsuccess = () => {
@@ -368,6 +522,62 @@ export class IndexedDbDocumentSessionStore implements LocalDocumentSessionStore 
         database.onversionchange = () => database.close();
         resolve(database);
       };
+    });
+  }
+
+  private async runAtomicSessionAndSummary(
+    operation: (
+      sessions: IDBObjectStore,
+      summaries: IDBObjectStore,
+    ) => readonly IDBRequest[],
+  ): Promise<void> {
+    const database = await this.database();
+
+    return new Promise<void>((resolve, reject) => {
+      let transaction: IDBTransaction;
+      try {
+        transaction = database.transaction(
+          [LOCAL_DOCUMENT_STORE_NAME, LOCAL_DOCUMENT_SUMMARY_STORE_NAME],
+          'readwrite',
+        );
+      } catch (error) {
+        reject(storeError('transaction', error));
+        return;
+      }
+
+      let settled = false;
+      const fail = (code: 'request' | 'transaction', cause?: unknown) => {
+        if (settled) return;
+        settled = true;
+        reject(storeError(code, cause));
+      };
+
+      transaction.onerror = () => fail('transaction', transaction.error);
+      transaction.onabort = () => fail('transaction', transaction.error);
+      transaction.oncomplete = () => {
+        if (settled) return;
+        settled = true;
+        resolve();
+      };
+
+      let requests: readonly IDBRequest[];
+      try {
+        requests = operation(
+          transaction.objectStore(LOCAL_DOCUMENT_STORE_NAME),
+          transaction.objectStore(LOCAL_DOCUMENT_SUMMARY_STORE_NAME),
+        );
+      } catch (error) {
+        try {
+          transaction.abort();
+        } catch {
+          // The transaction may already be inactive.
+        }
+        fail('request', error);
+        return;
+      }
+      for (const request of requests) {
+        request.onerror = () => fail('request', request.error);
+      }
     });
   }
 

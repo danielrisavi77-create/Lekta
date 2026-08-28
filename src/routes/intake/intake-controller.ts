@@ -173,9 +173,15 @@ export function mountIntakeController(
     setState('ready', 'Dokument je spreman. Otvaram korektorski stol.');
     elements.stage.classList.add('intake-leaving');
     await delay(dependencies.transitionDelayMs ?? 180);
-    if (token === selectionToken) {
-      dependencies.navigate(`/rad/${sessionFragment(session.id)}`);
+    if (token !== selectionToken) {
+      try {
+        await dependencies.persistentStore.delete(session.id);
+      } catch {
+        // Best effort: napustena spremljena sesija ne smije blokirati noviji odabir.
+      }
+      return;
     }
+    dependencies.navigate(`/rad/${sessionFragment(session.id)}`);
   };
 
   const openPicker = (): void => {

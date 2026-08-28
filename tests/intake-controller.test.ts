@@ -277,6 +277,70 @@ describe('intake controller', () => {
     expect(deps.navigate).toHaveBeenCalledWith(`/rad/#session=${SECOND_SESSION_ID}`);
   });
 
+  it('brise spremljenu sesiju kada novi odabir zastari prijelaz od 180 ms', async () => {
+    vi.useFakeTimers();
+    try {
+      const deps = dependencies({ transitionDelayMs: 180 });
+      const controller = mountIntakeController(document, deps);
+
+      const selection = controller.selectFile(makeFile('prvi.docx'));
+      await vi.advanceTimersByTimeAsync(0);
+      expect(deps.persistentStore.put).toHaveBeenCalledOnce();
+      expect(document.querySelector<HTMLElement>('#intakeStage')?.dataset.intakeState).toBe('ready');
+
+      await controller.selectFile(makeFile('novi.pdf'));
+      await vi.advanceTimersByTimeAsync(180);
+      await selection;
+
+      expect(deps.persistentStore.delete).toHaveBeenCalledWith(SESSION_ID);
+      expect(deps.navigate).not.toHaveBeenCalled();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('brise spremljenu sesiju kada destroy nastupi tijekom prijelaza od 180 ms', async () => {
+    vi.useFakeTimers();
+    try {
+      const deps = dependencies({ transitionDelayMs: 180 });
+      const controller = mountIntakeController(document, deps);
+
+      const selection = controller.selectFile(makeFile());
+      await vi.advanceTimersByTimeAsync(0);
+      expect(deps.persistentStore.put).toHaveBeenCalledOnce();
+      expect(document.querySelector<HTMLElement>('#intakeStage')?.dataset.intakeState).toBe('ready');
+
+      controller.destroy();
+      await vi.advanceTimersByTimeAsync(180);
+      await selection;
+
+      expect(deps.persistentStore.delete).toHaveBeenCalledWith(SESSION_ID);
+      expect(deps.navigate).not.toHaveBeenCalled();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('best-effort cleanup ne propagira delete gresku niti navigira nakon destroy', async () => {
+    vi.useFakeTimers();
+    try {
+      const deps = dependencies({ transitionDelayMs: 180 });
+      deps.persistentStore.delete.mockRejectedValueOnce(new Error('delete failed'));
+      const controller = mountIntakeController(document, deps);
+
+      const selection = controller.selectFile(makeFile());
+      await vi.advanceTimersByTimeAsync(0);
+      controller.destroy();
+      await vi.advanceTimersByTimeAsync(180);
+
+      await expect(selection).resolves.toBeUndefined();
+      expect(deps.persistentStore.delete).toHaveBeenCalledWith(SESSION_ID);
+      expect(deps.navigate).not.toHaveBeenCalled();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('kasni memory-only prijelaz starog dokumenta ne prepisuje noviji odabir', async () => {
     let releaseMemoryWorkspace!: () => void;
     let isCurrent!: () => boolean;

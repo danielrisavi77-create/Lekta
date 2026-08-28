@@ -195,20 +195,26 @@ function sanitizeAnalysis(value: unknown): StoredAnalysisSnapshot | null {
   }
 }
 
-function sanitizeWorkspace(value: unknown): LocalWorkspaceSnapshot | null {
+function sanitizeWorkspaceMetadata(value: unknown): Omit<LocalWorkspaceSnapshot, 'analysis'> | null {
   if (!isRecord(value) || typeof value.stage !== 'string') return null;
   if (!WORKSPACE_STAGES.has(value.stage as LocalWorkspaceSnapshot['stage'])) return null;
   if (!(value.selectedFindingId === undefined || typeof value.selectedFindingId === 'string')) return null;
 
   const workspace: LocalWorkspaceSnapshot = { stage: value.stage as LocalWorkspaceSnapshot['stage'] };
   if (typeof value.selectedFindingId === 'string') workspace.selectedFindingId = value.selectedFindingId;
+  return workspace;
+}
 
-  const analysis = sanitizeAnalysis(value.analysis);
+function sanitizeWorkspace(value: unknown): LocalWorkspaceSnapshot | null {
+  const metadata = sanitizeWorkspaceMetadata(value);
+  if (!metadata) return null;
+  const workspace: LocalWorkspaceSnapshot = { ...metadata };
+  const analysis = sanitizeAnalysis((value as Record<string, unknown>).analysis);
   if (analysis) workspace.analysis = analysis;
   return workspace;
 }
 
-function sanitizeDocument(value: unknown): LocalDocumentSessionV1['document'] | null {
+function sanitizeDocumentMetadata(value: unknown): LocalDocumentSessionV1['document'] | null {
   if (!isRecord(value)) return null;
   if (typeof value.name !== 'string' || value.name.length === 0) return null;
   if (typeof value.type !== 'string' || !isFiniteTimestamp(value.lastModified)) return null;
@@ -218,8 +224,32 @@ function sanitizeDocument(value: unknown): LocalDocumentSessionV1['document'] | 
     name: value.name,
     type: value.type,
     lastModified: value.lastModified,
-    bytes: cloneBytes(value.bytes),
+    bytes: value.bytes,
   };
+}
+
+function sanitizeDocument(value: unknown): LocalDocumentSessionV1['document'] | null {
+  const document = sanitizeDocumentMetadata(value);
+  if (!document) return null;
+  return { ...document, bytes: cloneBytes(document.bytes) };
+}
+
+type ValidLocalDocumentSessionRecord = Record<string, unknown> & {
+  id: string;
+  createdAt: number;
+  expiresAt: number;
+};
+
+function validLocalDocumentSessionRecord(
+  value: unknown,
+  now: number,
+): ValidLocalDocumentSessionRecord | null {
+  if (!isRecord(value) || value.schemaVersion !== LOCAL_DOCUMENT_SCHEMA_VERSION) return null;
+  if (!isLocalDocumentSessionId(value.id)) return null;
+  if (!isFiniteTimestamp(value.createdAt) || !isFiniteTimestamp(value.expiresAt)) return null;
+  if (value.expiresAt <= value.createdAt || value.expiresAt > value.createdAt + LOCAL_DOCUMENT_TTL_MS) return null;
+  if (!isFiniteTimestamp(now) || value.expiresAt <= now) return null;
+  return value as ValidLocalDocumentSessionRecord;
 }
 
 export function isLocalDocumentSessionId(value: unknown): value is string {
@@ -284,38 +314,63 @@ export function sanitizeLocalDocumentSession(
   value: unknown,
   now = Date.now(),
 ): LocalDocumentSessionV1 | null {
-  if (!isRecord(value) || value.schemaVersion !== LOCAL_DOCUMENT_SCHEMA_VERSION) return null;
-  if (!isLocalDocumentSessionId(value.id)) return null;
-  if (!isFiniteTimestamp(value.createdAt) || !isFiniteTimestamp(value.expiresAt)) return null;
-  if (value.expiresAt <= value.createdAt || value.expiresAt > value.createdAt + LOCAL_DOCUMENT_TTL_MS) return null;
-  if (!isFiniteTimestamp(now) || value.expiresAt <= now) return null;
-
-  const document = sanitizeDocument(value.document);
-  const sanitizedIntake = sanitizeIntake(value.intake);
+  const record = validLocalDocumentSessionRecord(value, now);
+  if (!record) return null;
+  const document = sanitizeDocument(record.document);
+  const sanitizedIntake = sanitizeIntake(record.intake);
   if (!document || !sanitizedIntake) return null;
 
   const session: LocalDocumentSessionV1 = {
     schemaVersion: LOCAL_DOCUMENT_SCHEMA_VERSION,
-    id: value.id,
-    createdAt: value.createdAt,
-    expiresAt: value.expiresAt,
+    id: record.id,
+    createdAt: record.createdAt,
+    expiresAt: record.expiresAt,
     document,
     intake: sanitizedIntake,
   };
 
-  if (value.profile !== undefined) {
-    const profile = sanitizeProfile(value.profile);
+  if (record.profile !== undefined) {
+    const profile = sanitizeProfile(record.profile);
     if (!profile) return null;
     session.profile = profile;
   }
 
-  if (value.workspace !== undefined) {
-    const workspace = sanitizeWorkspace(value.workspace);
+  if (record.workspace !== undefined) {
+    const workspace = sanitizeWorkspace(record.workspace);
     if (!workspace) return null;
     session.workspace = workspace;
   }
 
   return session;
+}
+
+export function summarizeStoredLocalDocumentSession(
+  value: unknown,
+  now = Date.now(),
+): LocalDocumentSessionSummary | null {
+  const record = validLocalDocumentSessionRecord(value, now);
+  if (!record) return null;
+
+  const document = sanitizeDocumentMetadata(record.document);
+  const sanitizedIntake = sanitizeIntake(record.intake);
+  if (!document || !sanitizedIntake) return null;
+
+  if (record.profile !== undefined && !sanitizeProfile(record.profile)) return null;
+
+  let stage: LocalDocumentSessionSummary['stage'] = 'profile';
+  if (record.workspace !== undefined) {
+    const workspace = sanitizeWorkspaceMetadata(record.workspace);
+    if (!workspace) return null;
+    stage = workspace.stage;
+  }
+
+  return {
+    id: record.id,
+    name: document.name,
+    createdAt: record.createdAt,
+    expiresAt: record.expiresAt,
+    stage,
+  };
 }
 
 export function applyLocalDocumentSessionUpdate(
