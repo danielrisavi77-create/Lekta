@@ -540,6 +540,34 @@ const MUTATIONS: Mutation[] = [
       inputPaths: SAFE_ROUTE_SHELL_INPUTS,
     }).length === 0,
   },
+  {
+    id: 'shell-budget/embedded-or-scoped-feature-input',
+    imitates: 'shell metafile skriva zabranjeni token u imenu src datoteke ili scoped/prefixed paketa',
+    caught: () => {
+      const forbiddenPaths = inspectRouteShellBudget({
+        jsGzipBytes: MAX_SHELL_JS_GZIP,
+        cssGzipBytes: MAX_SHELL_CSS_GZIP,
+        inputPaths: [
+          ...SAFE_ROUTE_SHELL_INPUTS,
+          'src/routes/foo-analysis.ts',
+          'node_modules/@lucide/icons/index.js',
+          'node_modules/@scope/vendor-lucide-react/index.js',
+        ],
+      })
+        .filter((issue) => issue.kind === 'forbidden-input')
+        .map((issue) => issue.inputPath);
+      return [
+        'src/routes/foo-analysis.ts',
+        'node_modules/@lucide/icons/index.js',
+        'node_modules/@scope/vendor-lucide-react/index.js',
+      ].every((inputPath) => forbiddenPaths.includes(inputPath));
+    },
+    cleanBefore: () => inspectRouteShellBudget({
+      jsGzipBytes: MAX_SHELL_JS_GZIP,
+      cssGzipBytes: MAX_SHELL_CSS_GZIP,
+      inputPaths: SAFE_ROUTE_SHELL_INPUTS,
+    }).length === 0,
+  },
 ];
 
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
@@ -561,7 +589,7 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
   it('N od N mutacija uhvaceno, i broj mutacija ne smije pasti', () => {
     const caught = MUTATIONS.filter((m) => m.cleanBefore() && m.caught());
     expect(caught).toHaveLength(MUTATIONS.length);
-    expect(MUTATIONS.length).toBeGreaterThanOrEqual(34);
+    expect(MUTATIONS.length).toBeGreaterThanOrEqual(35);
   });
 
   /**

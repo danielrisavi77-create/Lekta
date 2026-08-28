@@ -40,9 +40,7 @@ function normalizeInputPath(inputPath: string): string {
 
 function forbiddenVocabulary(inputPath: string): string | null {
   const normalized = normalizeInputPath(inputPath).toLowerCase();
-  return FORBIDDEN_SHELL_GRAPH_VOCABULARY.find((vocabulary) =>
-    new RegExp(`(?:^|/)${vocabulary}(?:[./-]|$)`).test(normalized),
-  ) ?? null;
+  return FORBIDDEN_SHELL_GRAPH_VOCABULARY.find((vocabulary) => normalized.includes(vocabulary)) ?? null;
 }
 
 export function inspectRouteShellBudget(measurement: RouteShellBudgetMeasurement): RouteShellBudgetIssue[] {
