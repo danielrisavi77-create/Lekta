@@ -3,7 +3,7 @@ export const MAX_SHELL_CSS_GZIP = 12 * 1024;
 
 const FORBIDDEN_SHELL_GRAPH_RULES = [
   { vocabulary: 'ui-boot', pattern: /(?:^|[/_.-])ui-boot(?:$|[/_.-])/u },
-  { vocabulary: 'lucide', pattern: /(?:^|[/_.-])lucide(?:$|[/_.-])/u },
+  { vocabulary: 'lucide', pattern: /(?:^|[/@_.-])lucide(?:$|[/_.-])/u },
   { vocabulary: 'premium', pattern: /(?:^|[/_.-])premium(?:$|[/_.-])/u },
   { vocabulary: 'motion', pattern: /(?:^|[/_.-])motion(?:$|[/_.-])/u },
   { vocabulary: 'analysis', pattern: /(?:^|[/_.-])analysis(?:$|[/_.-])/u },
