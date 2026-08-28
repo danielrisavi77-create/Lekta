@@ -14,12 +14,15 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 375, height: 667 }
   test(`mobilni upload stane u prvi ekran ${viewport.width}x${viewport.height}`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await page.goto('/');
-    await expectInsideFold(page, '.lek-head-copy h1', viewport.height);
-    await expectInsideFold(page, '.lek-top-lead', viewport.height);
-    await expectInsideFold(page, '#dropzone', viewport.height);
-    await expectInsideFold(page, '#browseBtn', viewport.height);
+    await expectInsideFold(page, '.intake-title', viewport.height);
+    await expectInsideFold(page, '.intake-intro', viewport.height);
+    await expectInsideFold(page, '#intakeDropzone', viewport.height);
 
-    await page.locator('#fileInput').setInputFiles(fixture);
+    await Promise.all([
+      page.waitForURL(/\/rad\/#session=[^&]+$/),
+      page.locator('#intakeFile').setInputFiles(fixture),
+    ]);
+    await expect(page.locator('#main-content')).toHaveAttribute('data-workspace-state', 'profile', { timeout: 90_000 });
     await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '1');
     const sticky = page.locator('.lek-stepnav-1');
     await expect(sticky).toBeVisible();
@@ -33,8 +36,11 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 375, height: 667 }
 test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/');
-  await page.locator('#uploadCtaBtn').click();
-  await page.locator('#fileInput').setInputFiles(fixture);
+  await Promise.all([
+    page.waitForURL(/\/rad\/#session=[^&]+$/),
+    page.locator('#intakeFile').setInputFiles(fixture),
+  ]);
+  await expect(page.locator('#main-content')).toHaveAttribute('data-workspace-state', 'profile', { timeout: 90_000 });
   await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
   await page.locator('#stepToAnalyze').click();
   await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '3');

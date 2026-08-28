@@ -16,8 +16,12 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
   // analyzer-hero-demo i free-tools-audit specovi.
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-  await page.locator('#uploadCtaBtn').click();
-  await page.locator('#fileInput').setInputFiles(fixture);
+  await Promise.all([
+    page.waitForURL(/\/rad\/#session=[^&]+$/),
+    page.locator('#intakeFile').setInputFiles(fixture),
+  ]);
+  await expect(page.locator('#main-content')).toHaveAttribute('data-workspace-state', 'profile', { timeout: 90_000 });
+  await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '2');
   await page.locator('#stepToAnalyze').click();
   // Korak 3 mora biti u DOM-u prije klika (isti barijerni obrazac kao roadmap-v2.spec.ts).
   await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '3');
