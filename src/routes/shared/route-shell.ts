@@ -17,6 +17,12 @@ export interface RouteShellOptions {
   readonly privacySettingsAvailable: boolean;
 }
 
+function activeHtmlElement(doc: Document): HTMLElement | null {
+  const active = doc.activeElement;
+  const HtmlElement = doc.defaultView?.HTMLElement;
+  return active && HtmlElement && active instanceof HtmlElement ? active as HTMLElement : null;
+}
+
 function reflectTheme(button: HTMLButtonElement, doc: Document): void {
   const dark = doc.documentElement.dataset.theme !== 'light';
   button.setAttribute('aria-pressed', dark ? 'true' : 'false');
@@ -84,7 +90,8 @@ function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: 
   closeButton.textContent = 'Zatvori';
   dialog.append(title, closeButton);
 
-  const desktop = doc.defaultView?.matchMedia?.('(min-width: 761px)').matches ?? true;
+  const directoryMedia = doc.defaultView?.matchMedia?.('(min-width: 761px)');
+  const desktop = directoryMedia?.matches ?? true;
   for (const group of releasedPublicRouteGroups) {
     const details = doc.createElement('details');
     details.dataset.routeDirectoryGroup = group.id;
@@ -109,6 +116,29 @@ function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: 
       }
     }
     dialog.append(details);
+  }
+
+  const syncDirectoryGroups = (event: MediaQueryListEvent): void => {
+    doc.querySelectorAll<HTMLDetailsElement>('[data-route-directory-group]').forEach((details) => {
+      details.open = event.matches || details.dataset.routeDirectoryGroup === 'your-work';
+    });
+  };
+  if (directoryMedia) {
+    if (typeof directoryMedia.addEventListener === 'function') {
+      directoryMedia.addEventListener('change', syncDirectoryGroups);
+      signal.addEventListener(
+        'abort',
+        () => directoryMedia.removeEventListener('change', syncDirectoryGroups),
+        { once: true },
+      );
+    } else if (typeof directoryMedia.addListener === 'function') {
+      directoryMedia.addListener(syncDirectoryGroups);
+      signal.addEventListener(
+        'abort',
+        () => directoryMedia.removeListener(syncDirectoryGroups),
+        { once: true },
+      );
+    }
   }
 
   const utility = doc.createElement('section');
@@ -156,7 +186,7 @@ function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: 
   };
   const open = (): void => {
     if (locked) return;
-    opener = doc.activeElement instanceof HTMLElement ? doc.activeElement : null;
+    opener = activeHtmlElement(doc);
     overflow = doc.body.style.overflow;
     for (const element of [...doc.body.children] as HTMLElement[]) {
       if (element === layer) continue;
@@ -171,6 +201,7 @@ function mountDirectoryPanel(doc: Document, options: RouteShellOptions, signal: 
     title.focus();
   };
 
+  dialog.querySelector<HTMLButtonElement>('[data-route-privacy-settings]')?.addEventListener('click', close, { signal });
   trigger.setAttribute('aria-expanded', 'false');
   trigger.addEventListener('click', open, { signal });
   closeButton.addEventListener('click', close, { signal });

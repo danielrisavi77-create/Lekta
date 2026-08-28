@@ -105,6 +105,32 @@ describe('public route directory', () => {
       expect(() => validatePublicRouteDirectory(invalidDirectory)).toThrow(Error);
     }
   });
+
+  it('odbija root-looking putanje koje URL parser moze pretvoriti u cross-origin ili rezerviranu rutu', () => {
+    // Mutations caught: backslash authority escape, stripped controls, whitespace, and encoded reserved paths.
+    const unsafeHrefs = [
+      '/\\evil.example',
+      '/folder\\child',
+      '/\n/evil.example',
+      '/\r/evil.example',
+      '/\t/evil.example',
+      '/safe path',
+      '/safe\u00a0path',
+      '/%61dmin',
+      '/%76erification',
+      '/%71a',
+    ] as const;
+
+    for (const href of unsafeHrefs) {
+      expect(() => validatePublicRouteDirectory({
+        groups: [{
+          id: 'your-work',
+          label: 'Tvoj rad',
+          destinations: [{ id: 'intake', label: 'Nova provjera', href, description: 'Opis', release: 'core' }],
+        }],
+      }), href).toThrow(Error);
+    }
+  });
   it('allows nonreserved paths that only share a reserved prefix', () => {
     for (const href of ['/administrator', '/quality']) {
       expect(() => validatePublicRouteDirectory({

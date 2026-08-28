@@ -36,11 +36,23 @@ function nonEmptyString(record: JsonRecord, key: string, context: string): strin
   return value;
 }
 
+const publicRouteOrigin = 'https://route-directory.invalid';
+const unsafePublicHrefCharacters = /[\\\s\u0000-\u001f\u007f-\u009f]/u;
+const reservedPublicPath = /^\/(?:admin|verification|qa)(?:[/.]|$)/i;
+
 function isAllowedPublicHref(href: string): href is `/${string}` {
-  return href.startsWith('/')
-    && !href.startsWith('//')
-    && !href.startsWith('/#')
-    && !/^\/(?:admin|verification|qa)(?:[/.?#]|$)/.test(href);
+  if (!href.startsWith('/')
+    || href.startsWith('//')
+    || href.startsWith('/#')
+    || unsafePublicHrefCharacters.test(href)) return false;
+
+  try {
+    const parsed = new URL(href, publicRouteOrigin);
+    if (parsed.origin !== publicRouteOrigin) return false;
+    return !reservedPublicPath.test(decodeURIComponent(parsed.pathname));
+  } catch {
+    return false;
+  }
 }
 export function validatePublicRouteDirectory(value: unknown): readonly PublicRouteGroup[] {
   if (!isJsonRecord(value) || !Array.isArray(value.groups)) throw new Error('Javni direktorij mora imati polje groups.');

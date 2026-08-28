@@ -338,6 +338,16 @@ a {
   text-align: center;
 }
 
+@media (max-width: 760px) {
+  .intake-learn-more {
+    display: inline-flex;
+    min-height: 44px;
+    padding-inline: 6px;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 @media (max-width: 600px) {
   .intake-main {
     width: min(100% - 24px, 1120px);

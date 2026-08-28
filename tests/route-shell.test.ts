@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { mountRouteShell } from '../src/routes/shared/route-shell';
+import { disposeRouteShell, mountRouteShell } from '../src/routes/shared/route-shell';
 
 function stubMatchMedia(): void {
   vi.stubGlobal('matchMedia', vi.fn((query: string) => ({
@@ -13,6 +13,40 @@ function stubMatchMedia(): void {
     removeListener: vi.fn(),
     dispatchEvent: vi.fn(),
   })));
+}
+
+type MediaChangeListener = (event: MediaQueryListEvent) => void;
+
+function controlledMatchMedia(initialMatches: boolean): {
+  setMatches(matches: boolean): void;
+  listenerCount(): number;
+} {
+  const media = '(min-width: 761px)';
+  const listeners = new Set<MediaChangeListener>();
+  let matches = initialMatches;
+  const mediaQuery = {
+    get matches() { return matches; },
+    media,
+    onchange: null,
+    addEventListener: vi.fn((type: string, listener: EventListenerOrEventListenerObject) => {
+      if (type === 'change' && typeof listener === 'function') listeners.add(listener as MediaChangeListener);
+    }),
+    removeEventListener: vi.fn((type: string, listener: EventListenerOrEventListenerObject) => {
+      if (type === 'change' && typeof listener === 'function') listeners.delete(listener as MediaChangeListener);
+    }),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    dispatchEvent: vi.fn(() => true),
+  } as unknown as MediaQueryList;
+  vi.stubGlobal('matchMedia', vi.fn(() => mediaQuery));
+  return {
+    setMatches(nextMatches: boolean) {
+      matches = nextMatches;
+      const event = { matches, media } as MediaQueryListEvent;
+      for (const listener of [...listeners]) listener(event);
+    },
+    listenerCount: () => listeners.size,
+  };
 }
 
 function renderShell(): void {
@@ -101,7 +135,45 @@ describe('route shell', () => {
     expect(button.getAttribute('aria-expanded')).toBe('true');
     expect(document.activeElement).toBe(title);
     expect(main.inert).toBe(true);
-});
+  });
+
+  it('zatvara panel prije nego vanjski privacy listener otkrije i fokusira sibling UI', () => {
+    // Mutation caught: privacy click leaves the external modal inert behind the open directory.
+    stubMatchMedia();
+    mountRouteShell(document, {
+      current: 'workspace',
+      variant: 'workspace',
+      privacySettingsAvailable: true,
+    });
+    const privacySurface = document.createElement('section');
+    privacySurface.hidden = true;
+    privacySurface.tabIndex = -1;
+    document.body.append(privacySurface);
+    const main = document.querySelector<HTMLElement>('main')!;
+    const trigger = document.querySelector<HTMLButtonElement>('[data-route-directory-button]')!;
+    const settings = document.querySelector<HTMLButtonElement>('#privacySettingsBtn')!;
+    let observedState: { mainInert: boolean; privacyInert: boolean; focused: boolean } | null = null;
+    settings.addEventListener('click', () => {
+      privacySurface.hidden = false;
+      privacySurface.focus();
+      observedState = {
+        mainInert: main.inert,
+        privacyInert: privacySurface.inert,
+        focused: document.activeElement === privacySurface,
+      };
+    });
+
+    trigger.click();
+    settings.click();
+
+    expect(observedState).toEqual({
+      mainInert: false,
+      privacyInert: false,
+      focused: true,
+    });
+    expect(document.querySelector<HTMLElement>('[role="dialog"]')!.hidden).toBe(true);
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
 });
 
 describe('route directory lifecycle', () => {
@@ -236,4 +308,90 @@ it('creates one owned skip link when a host has no static skip link', () => {
   expect(document.querySelectorAll('.skip-link')).toHaveLength(1);
   expect(document.activeElement).toBe(main);
   expect(scrollIntoView).toHaveBeenCalledTimes(1);
+});
+
+it('prati media query promjene bez reloada i odspaja listener pri disposeu', () => {
+  // Mutation caught: reading matchMedia only at mount or retaining its listener after disposal.
+  const media = controlledMatchMedia(false);
+  mountRouteShell(document, {
+    current: 'workspace',
+    variant: 'workspace',
+    privacySettingsAvailable: false,
+  });
+  const openGroupIds = () => [...document.querySelectorAll<HTMLDetailsElement>('[data-route-directory-group]')]
+    .filter((group) => group.open)
+    .map((group) => group.dataset.routeDirectoryGroup);
+
+  expect(openGroupIds()).toEqual(['your-work']);
+  expect(media.listenerCount()).toBe(1);
+
+  media.setMatches(true);
+  expect(openGroupIds()).toEqual(['your-work', 'rules-trust', 'free-tools', 'proof-help']);
+
+  media.setMatches(false);
+  expect(openGroupIds()).toEqual(['your-work']);
+
+  disposeRouteShell(document);
+  expect(media.listenerCount()).toBe(0);
+  media.setMatches(true);
+  expect(openGroupIds()).toEqual(['your-work']);
+});
+
+it('vraca fokus otvaracu iz document realma', () => {
+  const frame = document.createElement('iframe');
+  document.body.append(frame);
+  const frameWindow = frame.contentWindow;
+  const frameDoc = frame.contentDocument;
+  if (!frameWindow || !frameDoc) throw new Error('Iframe realm nije dostupan.');
+  Object.defineProperty(frameWindow, 'matchMedia', {
+    configurable: true,
+    value: vi.fn((query: string) => ({
+      matches: false, media: query, onchange: null,
+      addEventListener: vi.fn(), removeEventListener: vi.fn(),
+      addListener: vi.fn(), removeListener: vi.fn(), dispatchEvent: vi.fn(),
+    })),
+  });
+  frameDoc.body.innerHTML = `
+    <header><button type="button" data-route-directory-button aria-controls="route-directory">Sve</button></header>
+    <main id="main-content"></main>
+    <div data-route-directory-layer></div>
+  `;
+  const trigger = frameDoc.querySelector<HTMLButtonElement>('[data-route-directory-button]')!;
+  const FrameHTMLElement = frameWindow.HTMLElement;
+  vi.stubGlobal('HTMLElement', class ForeignHTMLElement {});
+  expect(trigger instanceof FrameHTMLElement).toBe(true);
+  expect(trigger instanceof globalThis.HTMLElement).toBe(false);
+  mountRouteShell(frameDoc, { current: 'workspace', variant: 'workspace', privacySettingsAvailable: false });
+  trigger.focus();
+  trigger.click();
+  frameDoc.dispatchEvent(new frameWindow.KeyboardEvent('keydown', { key: 'Escape' }));
+  expect(frameDoc.activeElement).toBe(trigger);
+  disposeRouteShell(frameDoc);
+  frame.remove();
+});
+
+it('podrzava legacy MediaQueryList listener i uklanja ga pri disposeu', () => {
+  const listeners = new Set<(event: MediaQueryListEvent) => void>();
+  const addListener = vi.fn((listener: (event: MediaQueryListEvent) => void) => listeners.add(listener));
+  const removeListener = vi.fn((listener: (event: MediaQueryListEvent) => void) => listeners.delete(listener));
+  vi.stubGlobal('matchMedia', vi.fn((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener,
+    removeListener,
+    dispatchEvent: vi.fn(() => true),
+  } as unknown as MediaQueryList)));
+
+  expect(() => mountRouteShell(document, {
+    current: 'workspace',
+    variant: 'workspace',
+    privacySettingsAvailable: false,
+  })).not.toThrow();
+  expect(addListener).toHaveBeenCalledOnce();
+  expect(listeners.size).toBe(1);
+
+  disposeRouteShell(document);
+  expect(removeListener).toHaveBeenCalledOnce();
+  expect(listeners.size).toBe(0);
 });

@@ -157,7 +157,7 @@ test('mobile header and every visible open-panel control meet 44 px targets', as
   await gotoRoot(page, MOBILE);
   const dialog = await openDirectory(page);
   const undersized = await page.locator(
-    'header a, header button, [data-route-directory] a, [data-route-directory] button, [data-route-directory] summary',
+    'header a, header button, [data-route-directory] a, [data-route-directory] button, [data-route-directory] summary, .intake-learn-more',
   ).evaluateAll((nodes) => nodes.flatMap((node) => {
     const rect = node.getBoundingClientRect();
     if (!rect.width && !rect.height) return [];
@@ -167,6 +167,21 @@ test('mobile header and every visible open-panel control meet 44 px targets', as
   }));
 
   await expect(dialog).toBeVisible();
+  await expect(page.locator('.intake-learn-more')).toHaveCount(2);
+  expect(undersized, JSON.stringify(undersized)).toEqual([]);
+});
+
+test('720 px mobile-shell quiet links meet 44 px targets', async ({ page }) => {
+  await useTheme(page, 'light');
+  await gotoRoot(page, { width: 720, height: 844 });
+  const links = page.locator('.intake-learn-more');
+  await expect(links).toHaveCount(2);
+  const undersized = await links.evaluateAll((nodes) => nodes.flatMap((node) => {
+    const rect = node.getBoundingClientRect();
+    return rect.width >= 44 && rect.height >= 44
+      ? []
+      : [{ label: node.textContent?.trim() ?? node.tagName, width: rect.width, height: rect.height }];
+  }));
   expect(undersized, JSON.stringify(undersized)).toEqual([]);
 });
 

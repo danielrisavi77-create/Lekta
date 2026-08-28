@@ -1,19 +1,21 @@
 export const MAX_SHELL_JS_GZIP = 8 * 1024;
 export const MAX_SHELL_CSS_GZIP = 12 * 1024;
 
-const FORBIDDEN_SHELL_GRAPH_VOCABULARY = [
-  'ui-boot',
-  'lucide',
-  'premium',
-  'motion',
-  'analysis',
-  'profiles',
-  'repair',
-  'auth',
-  'history',
-  'preflight',
-  'preview',
-  'landing',
+const FORBIDDEN_SHELL_GRAPH_RULES = [
+  { vocabulary: 'ui-boot', pattern: /(?:^|[/_.-])ui-boot(?:$|[/_.-])/u },
+  { vocabulary: 'lucide', pattern: /(?:^|[/_.-])lucide(?:$|[/_.-])/u },
+  { vocabulary: 'premium', pattern: /(?:^|[/_.-])premium(?:$|[/_.-])/u },
+  { vocabulary: 'motion', pattern: /(?:^|[/_.-])motion(?:$|[/_.-])/u },
+  { vocabulary: 'analysis', pattern: /(?:^|[/_.-])analysis(?:$|[/_.-])/u },
+  { vocabulary: 'profiles', pattern: /(?:^|[/_.-])profiles(?:$|[/_.-])/u },
+  { vocabulary: 'repair', pattern: /(?:^|[/_.-])repair(?:$|[/_.-])/u },
+  { vocabulary: 'auth', pattern: /(?:^|[/_.-])auth(?:$|[/_.-])/u },
+  { vocabulary: 'history', pattern: /(?:^|[/_.-])history(?:$|[/_.-])/u },
+  { vocabulary: 'preflight', pattern: /(?:^|[/_.-])preflight(?:$|[/_.-])/u },
+  { vocabulary: 'preview', pattern: /(?:^|[/_.-])preview(?:$|[/_.-])/u },
+  { vocabulary: 'landing', pattern: /(?:^|[/_.-])landing(?:$|[/_.-])/u },
+  { vocabulary: 'src/report', pattern: /(?:^|\/)src\/report(?:\/|$)/u },
+  { vocabulary: '@supabase', pattern: /(?:^|\/)node_modules\/@supabase(?:\/|$)/u },
 ] as const;
 
 export interface RouteShellBudgetMeasurement {
@@ -40,7 +42,7 @@ function normalizeInputPath(inputPath: string): string {
 
 function forbiddenVocabulary(inputPath: string): string | null {
   const normalized = normalizeInputPath(inputPath).toLowerCase();
-  return FORBIDDEN_SHELL_GRAPH_VOCABULARY.find((vocabulary) => normalized.includes(vocabulary)) ?? null;
+  return FORBIDDEN_SHELL_GRAPH_RULES.find(({ pattern }) => pattern.test(normalized))?.vocabulary ?? null;
 }
 
 export function inspectRouteShellBudget(measurement: RouteShellBudgetMeasurement): RouteShellBudgetIssue[] {

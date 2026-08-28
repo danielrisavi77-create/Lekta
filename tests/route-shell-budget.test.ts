@@ -45,4 +45,35 @@ describe('route shell performance budget', () => {
 
     expect(issues, issues.map(issueMessage).join('\n')).toEqual([]);
   });
+
+  it('odbija feature ulaze po putanji bez blokiranja shared shell infrastrukture', () => {
+    // Mutations caught: singular profile-rules client and scoped Supabase package used to evade token matching.
+    const issues = inspectRouteShellBudget({
+      jsGzipBytes: 0,
+      cssGzipBytes: 0,
+      inputPaths: [
+        'src/report/profile-rules-client.ts',
+        'node_modules\\@supabase\\supabase-js\\dist\\module\\index.js',
+        'src/analysis/analyze-docx.ts',
+        'src/profiles/profile-index.ts',
+      ],
+    });
+
+    expect(issues.filter((issue) => issue.kind === 'forbidden-input').map((issue) => issue.inputPath)).toEqual([
+      'src/report/profile-rules-client.ts',
+      'node_modules/@supabase/supabase-js/dist/module/index.js',
+      'src/analysis/analyze-docx.ts',
+      'src/profiles/profile-index.ts',
+    ]);
+    expect(inspectRouteShellBudget({
+      jsGzipBytes: 0,
+      cssGzipBytes: 0,
+      inputPaths: [
+        'src/routes/shared/route-shell.ts',
+        'src/routes/shared/public-route-directory.ts',
+        'src/shared/browser-storage.ts',
+        'src/routes/shared/route-shell.css',
+      ],
+    })).toEqual([]);
+  });
 });
