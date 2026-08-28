@@ -508,16 +508,16 @@ const MUTATIONS: Mutation[] = [
     imitates: 'shell bundle raste jedan bajt preko oba fiksna gzip limita, pa novi feature tiho ulazi u prvi paint',
     caught: () => {
       const issues = inspectRouteShellBudget({
-        jsGzipBytes: MAX_SHELL_JS_GZIP + 1,
-        cssGzipBytes: MAX_SHELL_CSS_GZIP + 1,
+        jsGzipBytes: 8 * 1024 + 1,
+        cssGzipBytes: 12 * 1024 + 1,
         inputPaths: SAFE_ROUTE_SHELL_INPUTS,
       });
-      return issues.some((issue) => issue.kind === 'js-gzip' && issue.actualBytes === MAX_SHELL_JS_GZIP + 1)
-        && issues.some((issue) => issue.kind === 'css-gzip' && issue.actualBytes === MAX_SHELL_CSS_GZIP + 1);
+      return issues.some((issue) => issue.kind === 'js-gzip' && issue.actualBytes === 8 * 1024 + 1)
+        && issues.some((issue) => issue.kind === 'css-gzip' && issue.actualBytes === 12 * 1024 + 1);
     },
-    cleanBefore: () => inspectRouteShellBudget({
-      jsGzipBytes: MAX_SHELL_JS_GZIP,
-      cssGzipBytes: MAX_SHELL_CSS_GZIP,
+    cleanBefore: () => MAX_SHELL_JS_GZIP === 8 * 1024 && MAX_SHELL_CSS_GZIP === 12 * 1024 && inspectRouteShellBudget({
+      jsGzipBytes: 8 * 1024,
+      cssGzipBytes: 12 * 1024,
       inputPaths: SAFE_ROUTE_SHELL_INPUTS,
     }).length === 0,
   },

@@ -34,6 +34,7 @@ describe('route shell performance budget', () => {
     const cssFiles = result.outputFiles.filter((file) => file.path.endsWith('.css'));
     expect(jsFiles, 'esbuild mora emitirati tocno jedan shell JS izlaz').toHaveLength(1);
     expect(cssFiles, 'esbuild mora emitirati tocno jedan shell CSS izlaz').toHaveLength(1);
+    expect(result.metafile, 'esbuild mora vratiti potpuni metafile import grafa').toBeDefined();
     if (jsFiles.length !== 1 || cssFiles.length !== 1 || !result.metafile) return;
 
     const issues = inspectRouteShellBudget({
