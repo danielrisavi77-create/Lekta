@@ -237,7 +237,38 @@ describe.sequential('supplied Document mount boundary', () => {
     const second = document.implementation.createHTMLDocument('Drugi analyzer runtime');
     analyzerOnlyFixture('after-profile-confirmation', second);
     expect(() => isolatedApp.initAnalyzerApp(second)).toThrow(/jedan aktivni Document/i);
+    isolatedApp.disposeAnalyzerApp(supplied);
+    expect(() => isolatedApp.initAnalyzerApp(second)).not.toThrow();
+    isolatedApp.disposeAnalyzerApp(second);
   }, 180_000);
+  it('legacy setup timer ne dira DOM nakon disposea', async () => {
+    const previousUrl = location.href;
+    vi.useFakeTimers();
+    try {
+      history.replaceState(null, '', '/?setup=1');
+      document.body.replaceChildren(document.createElement('div'));
+      const supplied = document.implementation.createHTMLDocument('Legacy setup runtime');
+      fullPageFixture(supplied, 'rad');
+      for (const id of ['checkGrid', 'pricingGrid']) {
+        const legacyRoot = supplied.createElement('div');
+        legacyRoot.id = id;
+        supplied.body.append(legacyRoot);
+      }
+      vi.resetModules();
+      const isolatedApp = await import('../src/ui/app');
+
+      isolatedApp.initAnalyzerApp(supplied);
+      expect(supplied.getElementById('setupModal')?.classList.contains('hidden')).toBe(true);
+      isolatedApp.disposeAnalyzerApp(supplied);
+
+      expect(() => vi.advanceTimersByTime(300)).not.toThrow();
+      expect(supplied.getElementById('setupModal')?.classList.contains('hidden')).toBe(true);
+    } finally {
+      vi.useRealTimers();
+      history.replaceState(null, '', previousUrl);
+    }
+  }, 180_000);
+
 });
 
 describe.sequential('root-aware mount domain regressions', () => {
@@ -318,6 +349,21 @@ describe.sequential('root-aware mount domain regressions', () => {
 
     afterAll(() => {
       fetchMock.mockRestore();
+    });
+
+    it('analyzer mount odmah prikazuje konfigurirani consent izbor', () => {
+      const banner = supplied.getElementById('consentBanner') as HTMLElement;
+      expect(banner.classList.contains('hidden')).toBe(false);
+    });
+
+    it('analyzer mount povezuje nedostajuci fakultet s postojecim waitlist panelom', () => {
+      const button = supplied.getElementById('noFacultyBtn') as HTMLButtonElement;
+      const panel = supplied.getElementById('noFacultyPanel') as HTMLElement;
+
+      expect(button.classList.contains('hidden')).toBe(false);
+      expect(panel.hidden).toBe(true);
+      button.click();
+      expect(panel.hidden).toBe(false);
     });
 
     it('order-btn opens orderModal and closeModal closes it through commerce handlers', () => {
@@ -469,6 +515,99 @@ describe('mountable analyzer runtime', () => {
     expect(document.getElementById('qaModal')).toBeNull();
     expect(() => app.initAnalyzerApp(document)).not.toThrow();
   });
+
+  it('dispose uklanja document listenere i ponovni mount ostavlja samo jednu kopiju', () => {
+    app.disposeAnalyzerApp(document);
+    const disposedEvent = new Event('dragover', { bubbles: true, cancelable: true });
+    const disposedPreventDefault = vi.spyOn(disposedEvent, 'preventDefault');
+    document.dispatchEvent(disposedEvent);
+    expect(disposedPreventDefault).not.toHaveBeenCalled();
+
+    app.initAnalyzerApp(document);
+    app.disposeAnalyzerApp(document);
+    app.initAnalyzerApp(document);
+
+    const activeEvent = new Event('dragover', { bubbles: true, cancelable: true });
+    const activePreventDefault = vi.spyOn(activeEvent, 'preventDefault');
+    document.dispatchEvent(activeEvent);
+    expect(activePreventDefault).toHaveBeenCalledOnce();
+
+    const dropzone = document.getElementById('dropzone') as HTMLElement;
+    const dragEnterEvent = new Event('dragenter', { bubbles: false, cancelable: true });
+    const dragEnterPreventDefault = vi.spyOn(dragEnterEvent, 'preventDefault');
+    dropzone.dispatchEvent(dragEnterEvent);
+
+    const institution = document.getElementById('institutionSelect') as HTMLSelectElement;
+    institution.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+    const openPanelCount = document.querySelectorAll('.lek-combo').length;
+
+    app.disposeAnalyzerApp(document);
+    const disposedPanelCount = document.querySelectorAll('.lek-combo').length;
+    document.querySelectorAll('.lek-combo').forEach((panel) => panel.remove());
+    app.initAnalyzerApp(document);
+
+    expect(dragEnterPreventDefault).toHaveBeenCalledOnce();
+    expect(openPanelCount).toBe(1);
+    expect(disposedPanelCount).toBe(0);
+  });
+  it('dispose resetira profilni kontekst prije remounta istog DOM-a', () => {
+    const citation = document.getElementById('citationStyle') as HTMLSelectElement;
+    const expectedCitation = citation.value;
+    const wrongCitation = Array.from(citation.options).find((option) => option.value !== expectedCitation);
+    expect(wrongCitation).toBeTruthy();
+
+    app.disposeAnalyzerApp(document);
+    const preferences = JSON.parse(localStorage.getItem('lekta.preferences.v2') ?? '{}');
+    preferences.citation = wrongCitation!.value;
+    localStorage.setItem('lekta.preferences.v2', JSON.stringify(preferences));
+    citation.value = wrongCitation!.value;
+    app.initAnalyzerApp(document);
+
+    expect(citation.value).toBe(expectedCitation);
+  });
+
+
+  it('accepted event emitira samo zavrseni korisnicki odabir s intake dokazom', async () => {
+    const listener = vi.fn();
+    const unsubscribe = app.subscribeAnalyzerDocumentAccepted(listener);
+    quickStatsControl.disabled = true;
+    intakeControl.override = async () => ({
+      kind: 'ok',
+      quickStats: null,
+      suspicious: false,
+      suspicionReason: null,
+      capability: null,
+    });
+
+    try {
+      const restored = validDocx('restored-session.docx');
+      await app.loadAnalyzerDocument({ file: restored, source: 'workspace-session' });
+      expect(listener).not.toHaveBeenCalled();
+      document.getElementById('newAnalysis')?.click();
+
+      const selected = validDocx('user-selection.docx');
+      const input = document.getElementById('fileInput') as HTMLInputElement;
+      const change = input.onchange as ((event: { target: { files: File[] } }) => void) | null;
+      expect(change).not.toBeNull();
+      change?.({ target: { files: [selected] } });
+
+      await vi.waitFor(() => expect(listener).toHaveBeenCalledOnce(), { timeout: 15_000 });
+      expect(listener).toHaveBeenCalledWith({
+        file: selected,
+        source: 'user-selection',
+        intake: {
+          kind: 'ok',
+          quickStats: null,
+          suspicious: false,
+          suspicionReason: null,
+          capability: null,
+        },
+      });
+    } finally {
+      unsubscribe();
+      document.getElementById('newAnalysis')?.click();
+    }
+  }, 30_000);
 
   it('ponovni mount ne udvostrucuje listenere, emitira stvarni rezultat i preskace demo', async () => {
     app.initAnalyzerApp(document);

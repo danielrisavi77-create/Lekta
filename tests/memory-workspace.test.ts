@@ -123,13 +123,14 @@ describe('memory-only workspace', () => {
     let runtimeVariant: string | undefined;
     const runtime = vi.fn(async (
       doc: Document,
-      options: { fragment: string; store: { get(id: string): Promise<LocalDocumentSessionV1 | null> } },
+      options: { fragment: string; sessionScope?: 'persistent' | 'tab'; store: { get(id: string): Promise<LocalDocumentSessionV1 | null> } },
     ) => {
       expect(doc.querySelector('#analyzer')).not.toBeNull();
       runtimeObservedPrivacy = doc.getElementById('privacySettingsBtn') !== null;
       runtimeRoute = doc.documentElement.dataset.route;
       runtimeVariant = doc.documentElement.dataset.routeVariant;
       expect(options.fragment).toBe(`#session=${SESSION_ID}`);
+      expect(options.sessionScope).toBe('tab');
       expect((await options.store.get(SESSION_ID))?.document.name).toBe('diplomski-rad.docx');
     });
 
@@ -171,6 +172,10 @@ describe('memory-only workspace', () => {
     let workspaceHadPrivacy = false;
     let workspaceTrigger: HTMLButtonElement | null = null;
     let workspaceDialog: HTMLElement | null = null;
+    const disposeRuntime = vi.fn((doc: Document) => {
+      expect(doc.querySelector('#analyzer')).not.toBeNull();
+      expect(doc.querySelector('#original')).toBeNull();
+    });
     const click = vi.fn();
     original.addEventListener('click', click);
     document.body.style.overflow = 'clip';
@@ -194,8 +199,10 @@ describe('memory-only workspace', () => {
           expect(doc.activeElement?.id).toBe('route-directory-title');
           throw new Error('runtime failed');
         },
+        disposeWorkspaceRuntime: disposeRuntime,
       }),
     })).rejects.toThrow('runtime failed');
+    expect(disposeRuntime).toHaveBeenCalledOnce();
 
     expect(document.title).toBe('Lekta: učitaj rad');
     expect(document.body.className).toBe('intake-root');
@@ -290,6 +297,10 @@ describe('memory-only workspace', () => {
     let workspaceHadPrivacy = false;
     let workspaceTrigger: HTMLButtonElement | null = null;
     let workspaceDialog: HTMLElement | null = null;
+    const disposeRuntime = vi.fn((doc: Document) => {
+      expect(doc.querySelector('#analyzer')).not.toBeNull();
+      expect(doc.querySelector('#original')).toBeNull();
+    });
     const runtimePending = new Promise<void>((resolve) => { releaseRuntime = resolve; });
     const runtime = vi.fn((doc: Document) => {
       workspaceHadPrivacy = doc.getElementById('privacySettingsBtn') !== null;
@@ -313,7 +324,10 @@ describe('memory-only workspace', () => {
       doc: document,
       isCurrent: () => current,
       fetchWorkspace: async () => response(),
-      loadRuntime: async () => ({ mountWorkspaceRuntime: runtime }),
+      loadRuntime: async () => ({
+        mountWorkspaceRuntime: runtime,
+        disposeWorkspaceRuntime: disposeRuntime,
+      }),
     });
     await vi.waitFor(() => expect(runtime).toHaveBeenCalledOnce());
     expect(document.querySelector('#analyzer')).not.toBeNull();
@@ -321,7 +335,7 @@ describe('memory-only workspace', () => {
     current = false;
     releaseRuntime();
     await mounting;
-
+    expect(disposeRuntime).toHaveBeenCalledOnce();
     expect(document.querySelector('#original')).toBe(original);
     expect(document.querySelector('#analyzer')).toBeNull();
     expect(document.querySelector('[data-memory-workspace-style]')).toBeNull();

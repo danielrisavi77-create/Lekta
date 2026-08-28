@@ -10,7 +10,10 @@ import '../workspace/workspace.css';
 type WorkspaceRuntimeModule = Pick<
   typeof import('../workspace/workspace-runtime'),
   'mountWorkspaceRuntime'
->;
+> & Partial<Pick<
+  typeof import('../workspace/workspace-runtime'),
+  'disposeWorkspaceRuntime'
+>>;
 
 export interface MemoryWorkspaceOptions {
   doc?: Document;
@@ -176,8 +179,10 @@ export async function mountMemoryWorkspace(
     await runtime.mountWorkspaceRuntime(doc, {
       fragment: sessionFragment(session.id),
       store: memoryStore,
+      sessionScope: 'tab',
     });
     if (!options.isCurrent()) {
+      runtime.disposeWorkspaceRuntime?.(doc);
       disposeRouteShell(doc);
       restoreDocument(doc, snapshot, shell.headNodes);
       changedDocument = false;
@@ -186,6 +191,7 @@ export async function mountMemoryWorkspace(
     }
   } catch (error) {
     if (changedDocument) {
+      runtime.disposeWorkspaceRuntime?.(doc);
       disposeRouteShell(doc);
       restoreDocument(doc, snapshot, shell.headNodes);
       mountRouteShell(doc, intakeShellOptions);

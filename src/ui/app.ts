@@ -74,6 +74,7 @@ import { submitUnknownFaculty } from '../waitlist/waitlist-client';
 import { TERMS_VERSION } from '../legal/terms-version';
 import { canonicalConsentText } from '../legal/consent-text';
 import type { PreflightPanel } from '../preflight/preflight-panel';
+import type { IntakeOk } from '../docx/intake-gate';
 import { academicYearFromDate } from '../profiles/academic-year';
 import { setProgressValue } from '../shared/premium-visuals';
 import { computeFingerprint } from '../fingerprint/fingerprint';
@@ -85,9 +86,10 @@ let _runtimeDocument: Document|null=null;
 function runtimeDocument(): Document{return _runtimeDocument??document}
 function focusResult(titleEl: HTMLElement|null,message='Rezultat analize je spreman.'){return focusResultInDocument(titleEl,message,runtimeDocument())}
 const $=(s: string,r: any=runtimeDocument()): any=>r.querySelector(s), $$=(s: string,r: any=runtimeDocument()): any[]=>[...r.querySelectorAll(s)];
+export type AnalyzerDocumentSource='workspace-session'|'memory-only'|'user-selection';
 export interface AnalyzerDocumentAdmission {
  file: File;
- source: 'workspace-session'|'memory-only';
+ source: AnalyzerDocumentSource;
 }
 export type AnalyzerDocumentAdmissionResult =
  | { accepted: true }
@@ -100,11 +102,20 @@ export interface AnalyzerResultEvent {
  result: unknown;
  profile: unknown;
 }
+export interface AnalyzerDocumentAcceptedEvent {
+ file: File;
+ source: 'user-selection';
+ intake: IntakeOk;
+}
 const _mountedDocuments=new WeakSet<Document>();
+const _mountAbortControllers=new WeakMap<Document,AbortController>();
 const _analyzerResultListeners=new Set<(event: AnalyzerResultEvent)=>void>();
+const _analyzerDocumentAcceptedListeners=new Set<(event: AnalyzerDocumentAcceptedEvent)=>void>();
 let _errorTrackingInstalled=false;
 function emitAnalyzerResult(event: AnalyzerResultEvent){for(const listener of _analyzerResultListeners){try{listener(event)}catch(e: any){console.error('Analyzer result listener:',e)}}}
+function emitAnalyzerDocumentAccepted(event: AnalyzerDocumentAcceptedEvent){for(const listener of _analyzerDocumentAcceptedListeners){try{listener(event)}catch(e: any){console.error('Analyzer document listener:',e)}}}
 export function subscribeAnalyzerResult(listener: (event: AnalyzerResultEvent)=>void): ()=>void{_analyzerResultListeners.add(listener);return()=>{_analyzerResultListeners.delete(listener)}}
+export function subscribeAnalyzerDocumentAccepted(listener: (event: AnalyzerDocumentAcceptedEvent)=>void): ()=>void{_analyzerDocumentAcceptedListeners.add(listener);return()=>{_analyzerDocumentAcceptedListeners.delete(listener)}}
 let selectedDocx: any=null,selectedPdf: any=null,selectedMetadataDocx: any=null,selectedAvFile: any=null,currentPdfAudit: any=null,currentMetadataAudit: any=null,currentResult: any=null;
 let _repairClientPromise: Promise<typeof import('../report/repair-client')>|null=null;
 function loadRepairClient(){return _repairClientPromise??=import('../report/repair-client')}
@@ -182,6 +193,7 @@ function installErrorTracking(){const send=(kind: any,message: any,stack: any)=>
 /* FPZG_SUBMISSION_CALENDAR se uvozi iz submission-loader (data/submission/fpzg-calendar.json) */
 let productionConfig: any=null;
 let lastProfileContext='';let _profileConfirmed=false;
+let _profileRenderToken=0;
 /* ZAGREB_CATALOG se sada uvozi iz catalog-loader (data/catalog/zagreb-catalog.json) */
 /* INSTITUTIONAL_COVERAGE_MATRIX i COVERAGE_STATUS_META se uvoze iz coverage-loader (data/coverage) */
 /* SOCIAL_METHOD_REGISTRY i SOCIAL_METHOD_SOURCE se uvoze iz methodology-loader (data/methodology) */
@@ -241,27 +253,49 @@ function hasLegacyPage(doc: Document){return!!(doc.getElementById('checkGrid')&&
 function renderCheckGrid(doc: Document){const grid=$('#checkGrid',doc);if(!grid)return;grid.innerHTML=CHECK_ITEMS.map(([i,t,d])=>`<article class="check-card" data-reveal><span class="check-icon">${i}</span><h3>${t}</h3><p>${d}</p></article>`).join('');window.__lektaReveal?.()}
 function renderPricingGrid(doc: Document){const grid=$('#pricingGrid',doc);if(!grid)return;grid.innerHTML=PRICING_TIERS.map(p=>{const soon=p.id!=='free'&&!paidOffersLive();const badge=soon?'<span class="popular soon">USKORO</span>':(p.featured?'<span class="popular">PREPORUČENO</span>':'');const cta=soon?`<button class="btn btn-secondary" type="button" disabled aria-disabled="true">Uskoro</button>`:(p.cta.order?`<button class="btn btn-secondary order-btn" data-package="${p.cta.order}">${p.cta.label}</button>`:`<a class="btn ${p.featured?'btn-primary':'btn-secondary'}" href="${p.cta.href}">${p.cta.label}</a>`);return`<article class="price-card ${p.featured?'featured':''}${soon?' soon':''}">${badge}<h3>${p.name}</h3><div class="price">${p.price}</div><p>${p.desc}</p><ul class="features">${p.features.map(x=>`<li>${x}</li>`).join('')}</ul>${cta}</article>`}).join('')}
 function renderPackagePicks(doc: Document){const picks=$('#packagePicks',doc);if(!picks)return;picks.innerHTML=PACKAGES.map(p=>`<label class="package-pick"><span><input type="radio" name="package" value="${p.id}" ${p.id==='format'?'checked':''}><strong>${p.name} · ${p.price} €</strong><small>${p.desc}</small></span></label>`).join('')}
-function mountLanding(doc: Document){if(!doc.getElementById('checkGrid')&&!doc.getElementById('pricingGrid')&&!doc.getElementById('uploadCtaBtn')&&!doc.getElementById('paperCoverBtn'))return;renderCheckGrid(doc);renderPricingGrid(doc);renderHeroCoverage();wireNoFaculty();renderConsentBanner();bindLandingControls(doc)}
-function mountCommerceModals(doc: Document){if(!doc.getElementById('orderModal')&&!doc.getElementById('authModal')&&!doc.getElementById('legalModal')&&!doc.getElementById('guaranteeModal')&&!doc.getElementById('checkoutConsentModal'))return;renderPackagePicks(doc);renderAuthEntry();bindCommerceControls(doc)}
+function mountLanding(doc: Document,signal: AbortSignal){if(!doc.getElementById('checkGrid')&&!doc.getElementById('pricingGrid')&&!doc.getElementById('uploadCtaBtn')&&!doc.getElementById('paperCoverBtn'))return;renderCheckGrid(doc);renderPricingGrid(doc);renderHeroCoverage();wireNoFaculty();renderConsentBanner();bindLandingControls(doc,signal)}
+function mountCommerceModals(doc: Document,signal: AbortSignal){if(!doc.getElementById('orderModal')&&!doc.getElementById('authModal')&&!doc.getElementById('legalModal')&&!doc.getElementById('guaranteeModal')&&!doc.getElementById('checkoutConsentModal'))return;renderPackagePicks(doc);renderAuthEntry();bindCommerceControls(doc,signal)}
 function mountHistoryModals(doc: Document){if(!doc.getElementById('historyModal')&&!doc.getElementById('repairHistoryModal'))return;updateHistoryBadge();updateRepairHistoryButton();bindHistoryControls(doc)}
-function mountDevTools(doc: Document){if(!__DEV_TOOLS__||(!doc.getElementById('qaModal')&&!doc.getElementById('setupModal')))return;doc.getElementById('qaBtn')?.classList.toggle('hidden',!qaMode);bindDevControls(doc)}
-function mountAnalyzer(doc: Document){if(!doc.getElementById('analyzer'))return;initCatalog();restorePreferences();applyFacultyContext();syncProfileContext();applyUnitFromUrl();bindAnalyzerRoute(doc);updateProfile();updatePackageUi();updateRepairHistoryButton();if(!paidOffersLive())doc.getElementById('orderFromResult')?.classList.add('hidden');if(location.search.includes('demo=1'))setTimeout(runDemo,300)}
-export function initAnalyzerApp(doc: Document=document): void{if(_mountedDocuments.has(doc))return;if(_runtimeDocument&&_runtimeDocument!==doc)throw new Error('Analyzer runtime podrzava samo jedan aktivni Document.');const previousDocument=_runtimeDocument;_runtimeDocument=doc;try{if(hasLegacyPage(doc)){initLegacy(doc);_mountedDocuments.add(doc);return}productionConfig=loadProductionConfig();wireProfileRulesProvider();captureReferralCode();if(!_errorTrackingInstalled){installErrorTracking();_errorTrackingInstalled=true}void ensureRetailCatalog();if(adminMode){location.replace('/admin.html');_mountedDocuments.add(doc);return}mountAnalyzer(doc);mountLanding(doc);mountCommerceModals(doc);mountHistoryModals(doc);mountDevTools(doc);bindDocumentControls(doc);_mountedDocuments.add(doc)}catch(error){_runtimeDocument=previousDocument;throw error}}
+function mountDevTools(doc: Document,signal: AbortSignal){if(!__DEV_TOOLS__||(!doc.getElementById('qaModal')&&!doc.getElementById('setupModal')))return;doc.getElementById('qaBtn')?.classList.toggle('hidden',!qaMode);bindDevControls(doc,signal)}
+function mountAnalyzer(doc: Document,signal: AbortSignal){if(!doc.getElementById('analyzer'))return;initCatalog();restorePreferences();applyFacultyContext();syncProfileContext();applyUnitFromUrl();bindAnalyzerRoute(doc,signal);updateProfile();updatePackageUi();updateRepairHistoryButton();wireNoFaculty();renderConsentBanner();if(!paidOffersLive())doc.getElementById('orderFromResult')?.classList.add('hidden');if(location.search.includes('demo=1'))setTimeout(()=>{if(!signal.aborted)runDemo()},300)}
+export function initAnalyzerApp(doc: Document=document): void{if(_mountedDocuments.has(doc))return;if(_runtimeDocument&&_runtimeDocument!==doc)throw new Error('Analyzer runtime podrzava samo jedan aktivni Document.');const previousDocument=_runtimeDocument;const Controller=doc.defaultView?.AbortController??globalThis.AbortController;const controller=new Controller();_runtimeDocument=doc;_mountAbortControllers.set(doc,controller);try{if(hasLegacyPage(doc)){initLegacy(doc,controller.signal);_mountedDocuments.add(doc);return}productionConfig=loadProductionConfig();wireProfileRulesProvider();captureReferralCode();if(!_errorTrackingInstalled){installErrorTracking();_errorTrackingInstalled=true}void ensureRetailCatalog();if(adminMode){location.replace('/admin.html');_mountedDocuments.add(doc);return}mountAnalyzer(doc,controller.signal);mountLanding(doc,controller.signal);mountCommerceModals(doc,controller.signal);mountHistoryModals(doc);mountDevTools(doc,controller.signal);bindDocumentControls(doc,controller.signal);_mountedDocuments.add(doc)}catch(error){controller.abort();_mountAbortControllers.delete(doc);_runtimeDocument=previousDocument;throw error}}
+export function disposeAnalyzerApp(doc: Document=document): void{
+ const controller=_mountAbortControllers.get(doc);
+ controller?.abort();
+ _mountAbortControllers.delete(doc);
+ _mountedDocuments.delete(doc);
+ if(_runtimeDocument!==doc)return;
+ clearTimeout(_specTimer);_specTimer=null;
+ _profileRenderToken++;
+ _intakeToken++;_statsToken++;_detectToken++;_analyzeToken++;
+ _activeAdmission=null;
+ cancelActiveAnalysis();
+ clearSpec();
+ if(preflightPanel){preflightPanel.dispose();preflightPanel=null;preflightPanelForResult=null}
+ selectedDocx=null;selectedPdf=null;selectedMetadataDocx=null;selectedAvFile=null;
+ currentPdfAudit=null;currentMetadataAudit=null;currentResult=null;analyzedProfile=null;
+ repairPanelNode=null;repairPanelForResult=null;repairPanelItems=[];repairPanelTextItems=[];
+ findingStates.clear();
+ _intake={file:null,promise:null,verdict:null,confirmedSuspicious:false};
+ _profileConfirmed=false;
+ lastProfileContext='';
+ _runtimeDocument=null;
+}
 export function loadAnalyzerDocument(
  input: AnalyzerDocumentAdmission,
-): Promise<AnalyzerDocumentAdmissionResult>{return setFile(input.file)}
-function initLegacy(doc: Document){
+): Promise<AnalyzerDocumentAdmissionResult>{return setFile(input.file,input.source)}
+function initLegacy(doc: Document,signal: AbortSignal){
  renderCheckGrid(doc);
- productionConfig=loadProductionConfig();wireProfileRulesProvider();captureReferralCode();installErrorTracking();initCatalog();void ensureRetailCatalog();restorePreferences();applyFacultyContext();syncProfileContext();applyUnitFromUrl();updateRepairHistoryButton();if(adminMode){location.replace('/admin.html');return}
- renderPricingGrid(doc);renderPackagePicks(doc);bind(doc);updateProfile();updateHistoryBadge();updatePackageUi();if(__DEV_TOOLS__)$('#qaBtn',doc)?.classList.toggle('hidden',!qaMode);renderConsentBanner();renderHeroCoverage();wireNoFaculty();if(!paidOffersLive())$('#orderFromResult',doc)?.classList.add('hidden');renderAuthEntry();
+ productionConfig=loadProductionConfig();wireProfileRulesProvider();captureReferralCode();if(!_errorTrackingInstalled){installErrorTracking();_errorTrackingInstalled=true}initCatalog();void ensureRetailCatalog();restorePreferences();applyFacultyContext();syncProfileContext();applyUnitFromUrl();updateRepairHistoryButton();if(adminMode){location.replace('/admin.html');return}
+ renderPricingGrid(doc);renderPackagePicks(doc);bind(doc,signal);updateProfile();updateHistoryBadge();updatePackageUi();if(__DEV_TOOLS__)$('#qaBtn',doc)?.classList.toggle('hidden',!qaMode);renderConsentBanner();renderHeroCoverage();wireNoFaculty();if(!paidOffersLive())$('#orderFromResult',doc)?.classList.add('hidden');renderAuthEntry();
  // Cjenik copy: dok su placene tarife "Uskoro" (soft-launch), staticni HTML nosi besplatnu poruku;
  // kad naplata proradi (paidOffersLive), vrati se placeni jamstveni/disclaimer copy s payment info.
  if(paidOffersLive()){const _gn=$('#guaranteeNote');if(_gn)_gn.innerHTML='✓ <strong>Jamstvo pokrivenosti:</strong> za studije s verificiranim službenim pravilnikom, ako ti referada vrati rad zbog pravila koje je Lekta označila ispravnim, vraćamo novac i besplatno ručno popravimo. Prijava u roku od 30 dana od kupnje, uz dokaz i sporno pravilo. Jamčimo točnost provjere prema pravilniku, a ne ocjenu, prihvaćanje rada ni izvornost teksta (nije provjera plagijata).';const _pd=$('#pricingDisclaimer');if(_pd)_pd.textContent='Usluga provjerava oblikovanje, strukturu, opseg i citatnu tehniku prema dostupnim pravilima. Nije provjera plagijata ni sličnosti teksta (nije Turnitin) i ne jamči prihvaćanje rada, ocjenu, akademsku kvalitetu sadržaja ni odluku mentora ili povjerenstva. Plaćanje se provodi na sigurnoj stranici konfiguriranog payment providera.'}
  let theme=null;try{theme=localStorage.getItem('lekta.theme')}catch(e: any){}if(theme)doc.documentElement.dataset.theme=theme;
- if(location.search.includes('demo=1'))setTimeout(runDemo,300);
+ if(location.search.includes('demo=1'))setTimeout(()=>{if(!signal.aborted)runDemo()},300);
  void trackEvent('landing_view');
 }
-function bindAnalyzerRoute(doc: Document){
+function bindAnalyzerRoute(doc: Document,signal?: AbortSignal){
  if(!doc.getElementById('analyzer'))return;
  const q=(selector: string)=>$(selector,doc);
  const qa=(selector: string)=>$$(selector,doc);
@@ -270,9 +304,9 @@ function bindAnalyzerRoute(doc: Document){
  if(dropzone&&fileInput){
   dropzone.onclick=(e: any)=>{if(!e.target.closest('button'))fileInput.click()};
   dropzone.onkeydown=(e: any)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fileInput.click()}};
-  for(const ev of ['dragenter','dragover'])dropzone.addEventListener(ev,(e: any)=>{e.preventDefault();dropzone.classList.add('drag')});
-  for(const ev of ['dragleave','drop'])dropzone.addEventListener(ev,(e: any)=>{e.preventDefault();dropzone.classList.remove('drag')});
-  dropzone.addEventListener('drop',(e: any)=>void setFile(e.dataTransfer.files[0]));
+  for(const ev of ['dragenter','dragover'])dropzone.addEventListener(ev,(e: any)=>{e.preventDefault();dropzone.classList.add('drag')},{signal});
+  for(const ev of ['dragleave','drop'])dropzone.addEventListener(ev,(e: any)=>{e.preventDefault();dropzone.classList.remove('drag')},{signal});
+  dropzone.addEventListener('drop',(e: any)=>void setFile(e.dataTransfer.files[0]),{signal});
  }
  if(fileInput)fileInput.onchange=(e: any)=>void setFile(e.target.files[0]);
  if(remove)remove.onclick=(e: any)=>{e.stopPropagation();void setFile(null)};
@@ -310,7 +344,7 @@ function bindAnalyzerRoute(doc: Document){
  const checklist=q('#submissionChecklist');if(checklist){checklist.onchange=(e: any)=>{const control=e.target.closest('[data-submission-check]');if(control){saveSubmissionCheck(control.dataset.submissionCheck,control.checked);if(currentResult)renderSubmissionChecklist(currentResult)}};checklist.onclick=(e: any)=>{const download=e.target.closest('[data-download-submission]');if(download){downloadSubmissionReport();return}const ph=e.target.closest('[data-open-phase]');if(ph){$('#resultView')?.classList.add('hidden');if($('#wizardView'))$('#wizardView').classList.remove('hidden');setWizardStep(3);const advanced=doc.querySelector('.advanced-options');if(advanced)(advanced as any).open=true;doc.querySelector('#analyzer')?.scrollIntoView({behavior:'smooth'});setTimeout(()=>$('#submissionPhase')?.focus(),350)}}}
  const category=q('#categoryGrid');if(category){category.onclick=(e: any)=>{const card=e.target.closest('[data-cat-tab]');if(!card)return;const tab=card.dataset.catTab;if(tab&&tab!=='overview'){revealResultDetails();revealDetails();openTab(tab)}};category.onkeydown=(e: any)=>{if(e.key!=='Enter'&&e.key!==' ')return;const card=e.target.closest('[data-cat-tab]');if(!card)return;e.preventDefault();card.click()}};
  qa('.metric-jump').forEach((metric: any)=>{metric.onclick=()=>{revealResultDetails();openTab(metric.dataset.jump)};metric.onkeydown=(e: any)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();revealResultDetails();openTab(metric.dataset.jump)}}});
- const downloadMenu=doc.querySelector('.dl-menu'),downloadButton=downloadMenu?.querySelector('.dl-menu-btn');if(downloadMenu&&downloadButton){const setExpanded=(value: boolean)=>downloadButton.setAttribute('aria-expanded',value?'true':'false');downloadMenu.addEventListener('mouseenter',()=>setExpanded(true));downloadMenu.addEventListener('mouseleave',()=>setExpanded(false));downloadMenu.addEventListener('focusin',()=>setExpanded(true));downloadMenu.addEventListener('focusout',()=>setExpanded(false));downloadMenu.addEventListener('keydown',(e: any)=>{if(e.key==='Escape'){setExpanded(false);const active=doc.activeElement as any;active?.blur?.()}})}
+ const downloadMenu=doc.querySelector('.dl-menu'),downloadButton=downloadMenu?.querySelector('.dl-menu-btn');if(downloadMenu&&downloadButton){const setExpanded=(value: boolean)=>downloadButton.setAttribute('aria-expanded',value?'true':'false');downloadMenu.addEventListener('mouseenter',()=>setExpanded(true),{signal});downloadMenu.addEventListener('mouseleave',()=>setExpanded(false),{signal});downloadMenu.addEventListener('focusin',()=>setExpanded(true),{signal});downloadMenu.addEventListener('focusout',()=>setExpanded(false),{signal});downloadMenu.addEventListener('keydown',(e: any)=>{if(e.key==='Escape'){setExpanded(false);const active=doc.activeElement as any;active?.blur?.()}},{signal})}
  const phaseHint=q('#openPhaseFromHint');if(phaseHint)phaseHint.onclick=()=>{setWizardStep(3);const advanced=doc.querySelector('.advanced-options');if(advanced)(advanced as any).open=true;const phase=q('#submissionPhase');if(phase){phase.focus();phase.scrollIntoView({behavior:'smooth',block:'center'})}};
 
  const fresh=q('#newAnalysis');if(fresh)fresh.onclick=resetAnalyzer;
@@ -329,35 +363,35 @@ function bindAnalyzerRoute(doc: Document){
  const downloadJson=q('#downloadJson');if(downloadJson)downloadJson.onclick=downloadResult;
  const orderFromResult=q('#orderFromResult');if(orderFromResult&&q('#orderModal'))orderFromResult.onclick=()=>openOrder('panic');
 
- for(const selector of ['#institutionSelect','#unitSelect','#programSelect','#workType','#workVariant','#departmentSelect','#methodologySelect'])q(selector)?.addEventListener('change',()=>{_profileConfirmed=true});
- q('#analyzeProfile')?.addEventListener('click',(e: any)=>{if(e.target.closest('[data-confirm-profile]')){_profileConfirmed=true;updateProfile();void runAnalysis()}else if(e.target.closest('[data-change-profile]')){q('#institutionSelect')?.focus();q('#institutionSelect')?.scrollIntoView({behavior:'smooth',block:'center'})}else if(e.target.closest('[data-confirm-docgate]')){_intake.confirmedSuspicious=true;void runAnalysis()}else if(e.target.closest('[data-change-docfile]')){setWizardStep(1);try{q('#dropzone')?.focus()}catch(_error: any){}}});
- q('#wizardView')?.addEventListener('change',()=>{invalidateSpeculative();clearTimeout(_specTimer);if(speculativeAnalysisAllowed())_specTimer=setTimeout(()=>{void startSpeculativeAnalysis()},450)});
+ for(const selector of ['#institutionSelect','#unitSelect','#programSelect','#workType','#workVariant','#departmentSelect','#methodologySelect'])q(selector)?.addEventListener('change',()=>{_profileConfirmed=true},{signal});
+ q('#analyzeProfile')?.addEventListener('click',(e: any)=>{if(e.target.closest('[data-confirm-profile]')){_profileConfirmed=true;updateProfile();void runAnalysis()}else if(e.target.closest('[data-change-profile]')){q('#institutionSelect')?.focus();q('#institutionSelect')?.scrollIntoView({behavior:'smooth',block:'center'})}else if(e.target.closest('[data-confirm-docgate]')){_intake.confirmedSuspicious=true;void runAnalysis()}else if(e.target.closest('[data-change-docfile]')){setWizardStep(1);try{q('#dropzone')?.focus()}catch(_error: any){}}},{signal});
+ q('#wizardView')?.addEventListener('change',()=>{invalidateSpeculative();clearTimeout(_specTimer);if(speculativeAnalysisAllowed())_specTimer=setTimeout(()=>{void startSpeculativeAnalysis()},450)},{signal});
  const stepBackDoc=q('#stepBackDoc');if(stepBackDoc)stepBackDoc.onclick=()=>{setWizardStep(1,true);try{q('#dropzone')?.focus()}catch(_error: any){}};
  const stepToProfile=q('#stepToProfile');if(stepToProfile)stepToProfile.onclick=()=>{setWizardStep(2,true);try{q('#institutionSelect')?.focus()}catch(_error: any){}};
  const stepToAnalyze=q('#stepToAnalyze');if(stepToAnalyze)stepToAnalyze.onclick=()=>{_profileConfirmed=true;updateProfile();setWizardStep(3,true);try{q('#analyzeBtn')?.focus()}catch(_error: any){}};
  const stepBackProfile=q('#stepBackProfile');if(stepBackProfile)stepBackProfile.onclick=()=>{setWizardStep(2,true);try{q('#institutionSelect')?.focus()}catch(_error: any){}};
  const resultBackDoc=q('#resultBackDoc');if(resultBackDoc)resultBackDoc.onclick=()=>{backToWizardFromResult(1);try{q('#dropzone')?.focus({preventScroll:true})}catch(_error: any){}};
  const resultBackProfile=q('#resultBackProfile');if(resultBackProfile)resultBackProfile.onclick=()=>{backToWizardFromResult(2);try{q('#institutionSelect')?.focus({preventScroll:true})}catch(_error: any){}};
- stepToProfile?.addEventListener('click',()=>{void trackEvent('profile_step_opened',{})});
- stepToAnalyze?.addEventListener('click',()=>{const p=currentProfile().p;void trackEvent('profile_completed',{profileStatus:p.statusKey||'generic'})});
- q('#profileNote')?.addEventListener('click',(e: any)=>{if(e.target.closest('[data-profile-change]')){q('#institutionSelect')?.focus();q('#institutionSelect')?.scrollIntoView({behavior:'smooth',block:'center'})}});
- doc.addEventListener('dragover',(e: any)=>e.preventDefault());
- doc.addEventListener('drop',(e: any)=>{if(!e.target.closest('#dropzone,input[type="file"]'))e.preventDefault()});
- if(institution)attachSelectSearch({select:institution,placeholder:'Pretraži sveučilišta i ustanove…'});
- if(unit)attachSelectSearch({select:unit,placeholder:'Upiši ime fakulteta, npr. filozofski…',getOptions:()=>allUnits().sort(byNameHr).map((candidate: any)=>({value:candidate.id,label:candidate.name,sub:candidate.institutionName,extra:{institutionId:candidate.institutionId}})),apply:(option)=>{if(option.extra?.institutionId&&institution&&institution.value!==option.extra.institutionId){institution.value=option.extra.institutionId;institution.dispatchEvent(new Event('change',{bubbles:true}))}if(unit){unit.value=option.value;unit.dispatchEvent(new Event('change',{bubbles:true}))}}});
- if(program)attachSelectSearch({select:program,placeholder:'Pretraži studije…'});
+ stepToProfile?.addEventListener('click',()=>{void trackEvent('profile_step_opened',{})},{signal});
+ stepToAnalyze?.addEventListener('click',()=>{const p=currentProfile().p;void trackEvent('profile_completed',{profileStatus:p.statusKey||'generic'})},{signal});
+ q('#profileNote')?.addEventListener('click',(e: any)=>{if(e.target.closest('[data-profile-change]')){q('#institutionSelect')?.focus();q('#institutionSelect')?.scrollIntoView({behavior:'smooth',block:'center'})}},{signal});
+ doc.addEventListener('dragover',(e: any)=>e.preventDefault(),{signal});
+ doc.addEventListener('drop',(e: any)=>{if(!e.target.closest('#dropzone,input[type="file"]'))e.preventDefault()},{signal});
+ if(institution)attachSelectSearch({select:institution,placeholder:'Pretraži sveučilišta i ustanove…',signal});
+ if(unit)attachSelectSearch({select:unit,placeholder:'Upiši ime fakulteta, npr. filozofski…',signal,getOptions:()=>allUnits().sort(byNameHr).map((candidate: any)=>({value:candidate.id,label:candidate.name,sub:candidate.institutionName,extra:{institutionId:candidate.institutionId}})),apply:(option)=>{if(option.extra?.institutionId&&institution&&institution.value!==option.extra.institutionId){institution.value=option.extra.institutionId;institution.dispatchEvent(new Event('change',{bubbles:true}))}if(unit){unit.value=option.value;unit.dispatchEvent(new Event('change',{bubbles:true}))}}});
+ if(program)attachSelectSearch({select:program,placeholder:'Pretraži studije…',signal});
 }
 
-function bindLandingControls(doc: Document){
+function bindLandingControls(doc: Document,signal?: AbortSignal){
  const q=(selector: string)=>$(selector,doc);
  const heroDemo=q('#heroDemoBtn');if(heroDemo)heroDemo.onclick=()=>{doc.querySelector('#analyzer')?.scrollIntoView();setTimeout(()=>runDemo('fpzg'),300)};
  const paperCover=q('#paperCoverBtn');if(paperCover)paperCover.onclick=()=>revealAnalyzerForm(true);
  const upload=q('#uploadCtaBtn');if(upload)upload.onclick=()=>revealAnalyzerForm(true);
- q('#paperCover')?.addEventListener('dragenter',()=>revealAnalyzerForm(false));
- doc.addEventListener('click',(e: any)=>{if(e.target.closest('a[href="#analyzer"]'))revealAnalyzerForm(false)});
+ q('#paperCover')?.addEventListener('dragenter',()=>revealAnalyzerForm(false),{signal});
+ doc.addEventListener('click',(e: any)=>{if(e.target.closest('a[href="#analyzer"]'))revealAnalyzerForm(false)},{signal});
 }
 
-function bindCommerceControls(doc: Document){
+function bindCommerceControls(doc: Document,signal?: AbortSignal){
  const q=(selector: string)=>$(selector,doc);
  $$('.order-btn',doc).forEach((button: any)=>{if(q('#orderModal'))button.onclick=()=>openOrder(button.dataset.package)});
  const closeModal=q('#closeModal');if(closeModal)closeModal.onclick=closeOrder;
@@ -365,7 +399,7 @@ function bindCommerceControls(doc: Document){
  const orderModal=q('#orderModal');if(orderModal)orderModal.onclick=(e: any)=>{if(e.target.id==='orderModal')closeOrder()};
  const submitOrderButton=q('#submitOrder');if(submitOrderButton)submitOrderButton.onclick=submitOrder;
  const orderDocument=q('#orderDocument');if(orderDocument)orderDocument.onchange=updateOrderFileMeta;
- if(q('#legalModal'))doc.addEventListener('click',(e: any)=>{const button=e.target.closest('.legal-open');if(button){e.preventDefault();void openLegal(button.dataset.legal)}});
+ if(q('#legalModal'))doc.addEventListener('click',(e: any)=>{const button=e.target.closest('.legal-open');if(button){e.preventDefault();void openLegal(button.dataset.legal)}},{signal});
  for(const selector of ['#closeLegal','#closeLegalBottom']){const close=q(selector);if(close)close.onclick=closeLegal}
  const legalModal=q('#legalModal');if(legalModal)legalModal.onclick=(e: any)=>{if(e.target.id==='legalModal')closeLegal()};
  const privacy=q('#privacySettingsBtn');if(privacy)privacy.onclick=openPrivacySettings;
@@ -375,8 +409,8 @@ function bindCommerceControls(doc: Document){
  const authSubmitButton=q('#authSubmit');if(authSubmitButton)authSubmitButton.onclick=authSubmit;
  const authChange=q('#authChangeEmail');if(authChange)authChange.onclick=authChangeEmail;
  const authModal=q('#authModal');if(authModal)authModal.onclick=(e: any)=>{if(e.target.id==='authModal')closeAuth()};
- q('#authCode')?.addEventListener('keydown',(e: any)=>{if(e.key==='Enter')void authSubmit()});
- q('#authEmail')?.addEventListener('keydown',(e: any)=>{if(e.key==='Enter'&&_authStep==='email')void authSubmit()});
+ q('#authCode')?.addEventListener('keydown',(e: any)=>{if(e.key==='Enter')void authSubmit()},{signal});
+ q('#authEmail')?.addEventListener('keydown',(e: any)=>{if(e.key==='Enter'&&_authStep==='email')void authSubmit()},{signal});
  const closeGuaranteeButton=q('#closeGuarantee');if(closeGuaranteeButton)closeGuaranteeButton.onclick=closeGuarantee;
  const guaranteeSubmit=q('#guaranteeSubmit');if(guaranteeSubmit)guaranteeSubmit.onclick=submitGuaranteeClaim;
  const guaranteeModal=q('#guaranteeModal');if(guaranteeModal)guaranteeModal.onclick=(e: any)=>{if(e.target.id==='guaranteeModal')closeGuarantee()};
@@ -397,7 +431,7 @@ function bindHistoryControls(doc: Document){
  const repairList=q('#repairHistoryList');if(repairList)repairList.onclick=handleRepairHistoryAction;
 }
 
-function bindDevControls(doc: Document){
+function bindDevControls(doc: Document,signal?: AbortSignal){
  if(!__DEV_TOOLS__)return;
  const q=(selector: string)=>$(selector,doc);
  const qaButton=q('#qaBtn');if(qaButton&&q('#qaModal'))qaButton.onclick=openQa;
@@ -409,10 +443,10 @@ function bindDevControls(doc: Document){
  const save=q('#saveProductionConfig');if(save)save.onclick=saveSetupConfig;
  const reset=q('#resetProductionConfig');if(reset)reset.onclick=resetSetupConfig;
  const exportConfig=q('#exportProductionConfig');if(exportConfig)exportConfig.onclick=exportProductionConfig;
- if(setupMode&&setupModal)setTimeout(openSetup,250);
+ if(setupMode&&setupModal)setTimeout(()=>{if(!signal?.aborted)openSetup()},250);
 }
 
-function bindDocumentControls(doc: Document){
+function bindDocumentControls(doc: Document,signal?: AbortSignal){
  doc.addEventListener('keydown',(e: any)=>{
   if(e.key==='Escape'){
    const modalOpen=!!doc.querySelector('.modal-backdrop:not(.hidden)');
@@ -428,16 +462,16 @@ function bindDocumentControls(doc: Document){
    const progressView=$('#progressView',doc);if(!modalOpen&&progressView&&!progressView.classList.contains('hidden'))cancelAnalysis();
   }
   if(__DEV_TOOLS__&&e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==='q'&&qaMode&&$('#qaModal',doc))openQa();
- });
+ },{signal});
 }
 
-function bind(doc: Document=runtimeDocument()){
- bindAnalyzerRoute(doc);
- bindLandingControls(doc);
- bindCommerceControls(doc);
+function bind(doc: Document=runtimeDocument(),signal: AbortSignal|undefined=_mountAbortControllers.get(doc)?.signal){
+ bindAnalyzerRoute(doc,signal);
+ bindLandingControls(doc,signal);
+ bindCommerceControls(doc,signal);
  bindHistoryControls(doc);
- bindDevControls(doc);
- bindDocumentControls(doc);
+ bindDevControls(doc,signal);
+ bindDocumentControls(doc,signal);
 }
 
 // Wizard paneli (jedan ekran po koraku): 1 Dokument, 2 Profil, 3 Provjera. data-step na #wizardView
@@ -453,13 +487,13 @@ function revealAnalyzerForm(pick: any){if(!_engagedTracked){_engagedTracked=true
 // Spekulativna analiza odmah krece u pozadini pa je ponovni Analiziraj bez promjena prakticki instantan.
 function speculativeAnalysisAllowed(){return $('#analyzer')?.dataset.analysisStart!=='after-profile-confirmation'}
 function backToWizardFromResult(step: any){withViewTransition(()=>{$('#resultView')?.classList.add('hidden');$('#wizardView')?.classList.remove('hidden');setWizardStep(step)});runtimeDocument().querySelector('#analyzer')?.scrollIntoView({behavior:'smooth'});if(speculativeAnalysisAllowed())void startSpeculativeAnalysis()}
-function setFile(file: any): Promise<AnalyzerDocumentAdmissionResult>{
+function setFile(file: any,source: AnalyzerDocumentSource='user-selection'): Promise<AnalyzerDocumentAdmissionResult>{
   if(file!==selectedDocx){clearTimeout(_specTimer);_specTimer=null;findingStates.clear();_detectToken++}
   const err=$('#dropError'),clearErr=()=>{if(err){err.textContent='';err.classList.add('hidden')}$('#dropzone').classList.remove('has-error')};
  const _cap=effectiveUploadCap();if(file&&(!file.name.toLowerCase().endsWith('.docx')||file.size>_cap)){const tooBig=file.size>_cap,isDoc=/\.doc$/i.test(file.name),isMacroExt=/\.(docm|dotm)$/i.test(file.name),msg=tooBig?`Dokument je veći od ${Math.round(_cap/1024/1024)} MB${isLikelyMobile()?' (na mobitelu je granica niža radi memorije; za velike dokumente otvori na računalu)':''}.`:isMacroExt?'Dokumenti s makronaredbama (.docm i .dotm) nisu podržani. U Wordu spremi rad kao .docx bez makronaredbi.':isDoc?'Stariji .doc format nije podržan. U Wordu odaberi Datoteka pa Spremi kao i odaberi .docx.':'Odaberi Word dokument u .docx formatu.';void setFile(null);$('#fileInput').value='';if(err){err.textContent=msg;err.classList.remove('hidden')}$('#dropzone').classList.add('has-error');toast(msg);return Promise.resolve({accepted:false,reason:'unsupported-file',message:msg})}
  clearErr();$('#detectBadge')?.classList.add('hidden');
  selectedDocx=file||null;$('#dropEmpty').classList.toggle('hidden',!!file);$('#selectedFile').classList.toggle('hidden',!file);$('#dropzone').classList.toggle('has-file',!!file);$('#analyzeBtn').disabled=!file;$('#demoBtn')?.classList.toggle('hidden',!!file);setWizardStep(file&&!usesCompactUploadFlow()?2:1,!!file);
- if(file){$('#selectedName').textContent=file.name;$('#selectedMeta').textContent=`${(file.size/1024/1024).toFixed(2)} MB · spremno za lokalnu analizu`;void trackEvent('file_selected',{sizeBucket:file.size<1024*1024?'under_1mb':file.size<5*1024*1024?'1_5mb':'over_5mb'});updateQuickStats(file);updateProfile();return admitFile(file)}
+ if(file){$('#selectedName').textContent=file.name;$('#selectedMeta').textContent=`${(file.size/1024/1024).toFixed(2)} MB · spremno za lokalnu analizu`;void trackEvent('file_selected',{sizeBucket:file.size<1024*1024?'under_1mb':file.size<5*1024*1024?'1_5mb':'over_5mb'});updateQuickStats(file);updateProfile();return admitFile(file,source)}
  $('#fileInput').value='';_intakeToken++;_statsToken++;_intake={file:null,promise:null,verdict:null,confirmedSuspicious:false};_activeAdmission=null;invalidateSpeculative();return Promise.resolve({accepted:false,reason:'cleared',message:'Dokument je uklonjen.'})
 }
 // Intake gate sloj 1: trijaza datoteke PRIJE detekcije konteksta i spekulativne analize.
@@ -468,8 +502,8 @@ function setFile(file: any): Promise<AnalyzerDocumentAdmissionResult>{
 // bomba/makro/ne-zip nikad ne dodje do workera ni do DOM parsea na glavnoj niti.
 // Gate modul je fail-open (vlastita greska propusta datoteku); engine iza ima svoje capove.
 let _activeAdmission: Promise<AnalyzerDocumentAdmissionResult>|null=null;
-function admitFile(file: any): Promise<AnalyzerDocumentAdmissionResult>{const run=admitFileRun(file);_activeAdmission=run;const clear=()=>{if(_activeAdmission===run)_activeAdmission=null};void run.then(clear,clear);return run}
-async function admitFileRun(file: any): Promise<AnalyzerDocumentAdmissionResult>{
+function admitFile(file: any,source: AnalyzerDocumentSource): Promise<AnalyzerDocumentAdmissionResult>{const run=admitFileRun(file,source);_activeAdmission=run;const clear=()=>{if(_activeAdmission===run)_activeAdmission=null};void run.then(clear,clear);return run}
+async function admitFileRun(file: any,source: AnalyzerDocumentSource): Promise<AnalyzerDocumentAdmissionResult>{
  const token=++_intakeToken;
  const { inspectDocxIntake }=await import('../docx/intake-gate');
  if(token!==_intakeToken||selectedDocx!==file){
@@ -499,6 +533,7 @@ async function admitFileRun(file: any): Promise<AnalyzerDocumentAdmissionResult>
  if(token!==_intakeToken||selectedDocx!==file){
   return {accepted:false,reason:'superseded',message:'Drugi dokument je postao aktivan.'};
  }
+ if(source==='user-selection')emitAnalyzerDocumentAccepted({file,source,intake:v});
  return {accepted:true};
 }
 // Feature 4: auto-detekcija fakulteta/studija/razine s uploada. Cisto citanje parsera (bez izmjene
@@ -821,7 +856,9 @@ function workTypeLabel(v: any){return (WORK_TYPE_LABELS as any)[v]||v}
 // providera). updateProfile cita currentProfile()->definition.rules pa mora pricekati dohvat;
 // picker/hero rade odmah. Kvar dohvata currentProfile posteno degradira (vidi branu gore).
 async function updateProfile(){
- await ensureProfileRules(currentDefinitionId());
+ const doc=runtimeDocument(),token=++_profileRenderToken,definitionId=currentDefinitionId();
+ await ensureProfileRules(definitionId);
+ if(token!==_profileRenderToken||_runtimeDocument!==doc)return;
  const {p}=currentProfile(),sel=p.selection,sm=(PROFILE_STATUS as any)[p.statusKey]||PROFILE_STATUS.generic,am=p.authority||PROFILE_AUTHORITY.generic;
  const sourceHtml=p.sources?.length?`<div class="source-stack">${p.sources.map((s: any)=>`<div class="source-line">Službeni izvor: <a href="${escapeHtml(safeHref(s.url))}" target="_blank" rel="noopener">${escapeHtml(s.title)}</a></div>`).join('')}${p.verifiedAt?`<div class="source-line">Ručno provjereno: ${escapeHtml(new Date(p.verifiedAt+'T12:00:00').toLocaleDateString('hr-HR'))}${p.documentDate?' · Dokument: '+escapeHtml(p.documentDate):''}${academicYearFromDate(p.verifiedAt)?' · ak. godina verifikacije: '+escapeHtml(academicYearFromDate(p.verifiedAt)):''}</div>`:''}</div>`:`<div class="source-line">Posebna pravila još nisu povezana s provjerenim službenim izvorom. Primjenjuje se generička provjera.</div>`;
  const facts=p.facts?.length?`<div class="rule-facts">${p.facts.map((f: any)=>`<span class="rule-fact">${escapeHtml(f)}</span>`).join('')}</div>`:'';

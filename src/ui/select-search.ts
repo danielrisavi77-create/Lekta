@@ -17,6 +17,7 @@ export interface ComboOption {
 export interface ComboConfig {
   select: HTMLSelectElement | null;
   placeholder: string;
+  signal?: AbortSignal;
   /** Opcije za plohu; default cita zive <option> elemente selecta pri svakom otvaranju. */
   getOptions?: () => ComboOption[];
   /** Primjena odabira; default postavlja select.value i salje change (bubbles). */
@@ -34,6 +35,8 @@ let comboSeq = 0;
 export function attachSelectSearch(cfg: ComboConfig): void {
   const select = cfg.select;
   if (!select) return;
+  if (cfg.signal?.aborted) return;
+  const ownerDocument = select.ownerDocument;
   const field = select.closest('.field');
   if (!(field instanceof HTMLElement)) return;
   field.classList.add('lek-combo-field');
@@ -66,9 +69,10 @@ export function attachSelectSearch(cfg: ComboConfig): void {
     if (!panel) return;
     panel.remove();
     panel = null; input = null; list = null; active = -1;
-    document.removeEventListener('mousedown', onDocDown, true);
+    ownerDocument.removeEventListener('mousedown', onDocDown, true);
     if (refocus) select.focus({ preventScroll: true });
   };
+  cfg.signal?.addEventListener('abort', () => close(false), { once: true });
 
   const render = (): void => {
     if (!list || !input) return;
@@ -96,7 +100,7 @@ export function attachSelectSearch(cfg: ComboConfig): void {
   const open = (seed: string): void => {
     if (panel) { input?.focus(); return; }
     options = cfg.getOptions ? cfg.getOptions() : defaultOptions();
-    panel = document.createElement('div');
+    panel = ownerDocument.createElement('div');
     panel.className = 'lek-combo';
     panel.innerHTML = `<input type="text" class="lek-combo-input" role="combobox" aria-expanded="true" aria-controls="${listId}" aria-autocomplete="list" aria-label="${escapeHtml(cfg.placeholder)}" autocomplete="off" spellcheck="false" placeholder="${escapeHtml(cfg.placeholder)}"><div class="lek-combo-list" role="listbox" id="${listId}"></div>`;
     field.appendChild(panel);
@@ -113,7 +117,7 @@ export function attachSelectSearch(cfg: ComboConfig): void {
         if (pick) { applyPick(pick); close(true); }
       }
     });
-    document.addEventListener('mousedown', onDocDown, true);
+    ownerDocument.addEventListener('mousedown', onDocDown, { capture: true, signal: cfg.signal });
     if (input) input.value = seed;
     active = -1;
     render();
@@ -123,7 +127,7 @@ export function attachSelectSearch(cfg: ComboConfig): void {
   select.addEventListener('mousedown', (e) => {
     e.preventDefault();
     if (panel) close(true); else open('');
-  });
+  }, { signal: cfg.signal });
   select.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === ' ' || e.key === 'Enter' || (e.altKey && (e.key === 'ArrowDown' || e.key === 'ArrowUp'))) {
       e.preventDefault();
@@ -132,5 +136,5 @@ export function attachSelectSearch(cfg: ComboConfig): void {
       e.preventDefault();
       open(e.key);
     }
-  });
+  }, { signal: cfg.signal });
 }
