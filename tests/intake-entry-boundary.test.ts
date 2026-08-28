@@ -19,7 +19,7 @@ function resolveRelativeImport(from: string, specifier: string): string | null {
   const base = resolve(dirname(from), specifier);
   const candidates = extname(base)
     ? [base]
-    : [base, `${base}.ts`, `${base}.tsx`, `${base}.css`, resolve(base, 'index.ts')];
+    : [base, `${base}.ts`, `${base}.tsx`, `${base}.css`, `${base}.json`, resolve(base, 'index.ts')];
   return candidates.find((candidate) => existsSync(candidate)) ?? null;
 }
 
@@ -99,6 +99,21 @@ describe('minimalni intake ulaz', () => {
 
     expect(forbidden).toEqual([]);
     expect(graph.some((path) => path.endsWith('/src/repair/docx-budget.ts'))).toBe(true);
+  });
+
+  it('root static graph includes the shared shell and public directory', () => {
+    // Mutacija hvacena: root vise ne montira shell ili prvi paint dobije feature modul.
+    const graph = [...collectStaticGraph(INTAKE_MAIN)].map((path) => path.replaceAll('\\', '/'));
+    expect(graph).toEqual(expect.arrayContaining([
+      expect.stringMatching(/\/src\/routes\/shared\/route-shell\.ts$/),
+      expect.stringMatching(/\/src\/routes\/shared\/public-route-directory\.ts$/),
+      expect.stringMatching(/\/src\/routes\/shared\/public-route-directory\.json$/),
+    ]));
+    const sharedForbidden = graph.filter((path) => (
+      /(?:^|\/)(?:ui-boot|lucide|premium|motion|analysis|profiles|repair|auth|history|preflight|preview|landing)(?:[./-]|$)/i.test(path)
+      && !path.endsWith('/src/repair/docx-budget.ts')
+    ));
+    expect(sharedForbidden).toEqual([]);
   });
 
   it('intake gate i puni workspace ostaju dinamički iza korisničke akcije', () => {

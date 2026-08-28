@@ -34,9 +34,22 @@ import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/profile-schema';
+import {
+  inspectRouteShellBudget,
+  MAX_SHELL_CSS_GZIP,
+  MAX_SHELL_JS_GZIP,
+} from './helpers/route-shell-budget';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
+const SAFE_ROUTE_SHELL_INPUTS = [
+  'src/routes/shared/route-shell.ts',
+  'src/routes/shared/route-shell.css',
+  'src/routes/shared/public-route-directory.ts',
+  'src/routes/shared/public-route-directory.json',
+  'src/shared/browser-storage.ts',
+  'src/shared/skip-link.css',
+] as const;
 /** Stvaran, snapshotiran izvor sa sha256 (isti koji koriste ostali verifikacijski testovi). */
 const REAL_SOURCE_ID = 'pravo-upute-oblikovanje-2024';
 const REAL_SOURCE = SOURCES.find((s) => s.id === REAL_SOURCE_ID)!;
@@ -489,6 +502,44 @@ const MUTATIONS: Mutation[] = [
       );
     },
   },
+  // --- route shell: fixed gzip limits and feature-free graph -------------------------------------
+  {
+    id: 'shell-budget/gzip-over-fixed-limit',
+    imitates: 'shell bundle raste jedan bajt preko oba fiksna gzip limita, pa novi feature tiho ulazi u prvi paint',
+    caught: () => {
+      const issues = inspectRouteShellBudget({
+        jsGzipBytes: MAX_SHELL_JS_GZIP + 1,
+        cssGzipBytes: MAX_SHELL_CSS_GZIP + 1,
+        inputPaths: SAFE_ROUTE_SHELL_INPUTS,
+      });
+      return issues.some((issue) => issue.kind === 'js-gzip' && issue.actualBytes === MAX_SHELL_JS_GZIP + 1)
+        && issues.some((issue) => issue.kind === 'css-gzip' && issue.actualBytes === MAX_SHELL_CSS_GZIP + 1);
+    },
+    cleanBefore: () => inspectRouteShellBudget({
+      jsGzipBytes: MAX_SHELL_JS_GZIP,
+      cssGzipBytes: MAX_SHELL_CSS_GZIP,
+      inputPaths: SAFE_ROUTE_SHELL_INPUTS,
+    }).length === 0,
+  },
+  {
+    id: 'shell-budget/forbidden-feature-input',
+    imitates: 'shell metafile dobiva analysis modul, pa analiza ulazi u javni navigacijski graf',
+    caught: () => inspectRouteShellBudget({
+      jsGzipBytes: MAX_SHELL_JS_GZIP,
+      cssGzipBytes: MAX_SHELL_CSS_GZIP,
+      inputPaths: [...SAFE_ROUTE_SHELL_INPUTS, String.raw`src\analysis\analyze-docx.ts`, 'node_modules/lucide/dist/lucide.js'],
+    }).some((issue) => issue.kind === 'forbidden-input' && issue.inputPath === 'src/analysis/analyze-docx.ts')
+      && inspectRouteShellBudget({
+        jsGzipBytes: MAX_SHELL_JS_GZIP,
+        cssGzipBytes: MAX_SHELL_CSS_GZIP,
+        inputPaths: ['node_modules/lucide/dist/lucide.js'],
+      }).some((issue) => issue.kind === 'forbidden-input' && issue.inputPath === 'node_modules/lucide/dist/lucide.js'),
+    cleanBefore: () => inspectRouteShellBudget({
+      jsGzipBytes: MAX_SHELL_JS_GZIP,
+      cssGzipBytes: MAX_SHELL_CSS_GZIP,
+      inputPaths: SAFE_ROUTE_SHELL_INPUTS,
+    }).length === 0,
+  },
 ];
 
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
@@ -510,7 +561,7 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
   it('N od N mutacija uhvaceno, i broj mutacija ne smije pasti', () => {
     const caught = MUTATIONS.filter((m) => m.cleanBefore() && m.caught());
     expect(caught).toHaveLength(MUTATIONS.length);
-    expect(MUTATIONS.length).toBeGreaterThanOrEqual(32);
+    expect(MUTATIONS.length).toBeGreaterThanOrEqual(34);
   });
 
   /**

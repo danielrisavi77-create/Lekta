@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import esbuild from 'esbuild';
 import type { LocalDocumentSessionSummary } from '../src/session/local-document-session';
 
 const intakeHost = vi.hoisted(() => ({
@@ -415,6 +416,45 @@ describe('granice route shellova', () => {
     expect(staticImports).not.toEqual(expect.arrayContaining([
       expect.stringMatching(/ui-boot|lucide|premium|motion|analysis|profiles|repair|landing|preflight|preview|history/i),
     ]));
+  });
+
+  it('dijeljeni shell ima samo dopustene staticke importe i bez dinamickog feature grafa', async () => {
+    // Mutacija hvacena: shell uvodi feature import ili odgada feature graf iza import().
+    const path = join(root, 'src/routes/shared/route-shell.ts');
+    const routeShell = readFileSync(path, 'utf8');
+    const staticImports = [...routeShell.matchAll(/(?:import|export)\s+(?:type\s+)?(?:[^'";]+?\s+from\s+)?["']([^"']+)["']/g)]
+      .map((match) => match[1]);
+    expect(staticImports).toEqual([
+      '../../shared/browser-storage',
+      './public-route-directory',
+      '../../shared/skip-link.css',
+      './route-shell.css',
+    ]);
+    expect([...routeShell.matchAll(/\bimport\s*\(/g)]).toEqual([]);
+
+    const result = await esbuild.build({
+      absWorkingDir: root,
+      entryPoints: ['src/routes/shared/route-shell.ts'],
+      bundle: true,
+      minify: true,
+      write: false,
+      format: 'esm',
+      platform: 'browser',
+      target: 'es2022',
+      metafile: true,
+      outdir: 'route-shell-import-gate',
+    });
+    expect(result.metafile, 'esbuild mora vratiti potpuni metafile import grafa').toBeDefined();
+    if (!result.metafile) return;
+    const inputs = Object.keys(result.metafile.inputs).map((input) => input.replaceAll('\\', '/')).sort();
+    expect(inputs).toEqual([
+      'src/routes/shared/public-route-directory.json',
+      'src/routes/shared/public-route-directory.ts',
+      'src/routes/shared/route-shell.css',
+      'src/routes/shared/route-shell.ts',
+      'src/shared/browser-storage.ts',
+      'src/shared/skip-link.css',
+    ]);
   });
 
   it('workspace prikazuje restoring shell prije dinamičkog učitavanja runtimea', () => {
