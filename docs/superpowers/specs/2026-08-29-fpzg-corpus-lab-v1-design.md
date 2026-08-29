@@ -32,7 +32,7 @@ Lekta already has the correct core direction in `tests/real-corpus/harness.ts` a
 - run a second repair pass and require no-op;
 - require independent Tier 1 and Tier 2 validation for stronger release evidence.
 
-The existing documentation also records a local corpus of 50 real works, mostly FPZG. It demonstrated that increasing corpus size alone is not enough: shared production/harness logic matters more, and multi-fixer idempotence had been a measured issue. FPZG Corpus Lab therefore extends this harness instead of creating a second validator.
+The existing documentation also records a local corpus of 50 real works, mostly FPZG. It demonstrated that increasing corpus size alone is not enough: shared production/harness logic matters more, and multi-fixer idempotence had been a measured issue. The historical local snapshot documented 38 of 50 documents changing again on the second pass; if those private fixtures are still available, they become named Phase 0 regression cases rather than being discarded. FPZG Corpus Lab therefore extends this harness instead of creating a second validator.
 
 ### 2.2 Supabase corpus inventory
 
@@ -76,7 +76,8 @@ Every fixture therefore has an immutable evidence class and allowed claims:
 | `gold-original` | authorized original DOCX | yes, where manually labelled | yes | yes |
 | `mutation` | deterministic mutation of a known DOCX | yes for the injected fault | yes for the injected fault | yes |
 | `reconstructed` | PDF -> DOCX conversion | no for original Word formatting | only against converter output, not original formatting | yes |
-| `holdout` | locked subset of the above | same rules as source class | same rules as source class | yes; release-only evidence |
+
+**Holdout is not a fourth fixture class.** It is an orthogonal release-control flag over any of the three evidence classes above. A `gold-original`, `mutation` or `reconstructed` fixture can be development or holdout, while its evidentiary meaning remains unchanged.
 
 A result derived only from `reconstructed` fixtures may never be used to claim that the original FPZG thesis used an incorrect Word style, section break, field, footer, footnote object or page-number configuration.
 
@@ -266,7 +267,7 @@ Before conversion, classify each PDF as:
 - `mixed`;
 - `unsupported/corrupt`.
 
-Phase 1 reconstructed fixtures accept only `born-digital`. OCR is a separate future validation track because combining OCR error, PDF-reflow error and Lekta error in one initial pipeline makes diagnosis ambiguous.
+Reconstruction v1 accepts only `born-digital`. OCR is a separate future validation track because combining OCR error, PDF-reflow error and Lekta error in one initial pipeline makes diagnosis ambiguous.
 
 The classifier records at minimum:
 
@@ -570,7 +571,7 @@ One row per immutable validation fixture.
 - `id uuid`;
 - `source_id uuid nullable`;
 - `faculty_id text`;
-- `fixture_class text`;
+- `fixture_class text` (`gold-original`, `mutation`, `reconstructed`);
 - `work_type text`;
 - `profile_id text`;
 - `rule_era text`;
