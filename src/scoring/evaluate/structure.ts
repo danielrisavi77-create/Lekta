@@ -43,7 +43,16 @@ export function evaluateScopePages(m: StructureEvalMeasurements, profile: any): 
  */
 export function evaluateHeadingHierarchy(m: StructureEvalMeasurements, profile: any): any[] {
  const headings=m.structure.headings;
- let jumps: any[]=[];for(let i=1;i<headings.length;i++)if(headings[i].level>headings[i-1].level+1)jumps.push(headings[i]);const styledHeadingCount=headings.length;
+ // PRVI naslov nije izuzet: razina prije njega je 0. Do 2026-08-24 je petlja kretala od i=1, pa
+ // prvi naslov nije prolazio nikakvu provjeru, a posljedica nije bila teorijska: rad iz stvarnog
+ // korpusa sa 14 naslova, SVI razine 3, nije imao nijedan uzastopni skok i dobivao je punih 6
+ // bodova za hijerarhiju koje nema. Pravilo se ne mijenja, samo se prestaje preskakati prvi clan.
+ let jumps: any[]=[],prevLevel=0;for(const h of headings){if(h.level>prevLevel+1)jumps.push(h);prevLevel=h.level}const styledHeadingCount=headings.length;
+ // BEZ IJEDNOG NASLOVA provjera ne moze nista tvrditi, pa ne smije ni dati bodove: dotad je
+ // dokument bez ijednog Heading odlomka dobivao 6/6 za hijerarhiju. Nula od nule je isti oblik
+ // koji `auditHeadingRules` vec koristi ("Nema dovoljno Heading/Naslov odlomaka"), i ne kaznjava:
+ // vadi provjeru i iz brojnika i iz nazivnika.
+ if(!styledHeadingCount)return[makeCheck('structure','Hijerarhija naslova','warn',0,0,'Nema odlomaka u stilu Heading/Naslov, pa se hijerarhija ne moze provjeriti')];
  return[makeCheck('structure','Hijerarhija naslova',profile.scoreStructure===false?'pass':jumps.length?'warn':'pass',profile.scoreStructure===false?0:(jumps.length?Math.max(1,6-jumps.length):6),profile.scoreStructure===false?0:6,jumps.length?`${jumps.length} moguća preskakanja razine`:`${styledHeadingCount} naslova prepoznato`,jumps.length?issue('warning','structure','Naslovi preskaču razinu hijerarhije',jumps.slice(0,5).map(p=>`odlomak ${p.index}: ${p.excerpt.slice(0,55)}`).join('; ')):null)];
 }
 

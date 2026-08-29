@@ -1,137 +1,121 @@
-# Nastavak: sto raditi u sljedecoj sesiji
+# Primopredaja: stvarni DOCX korpus (2026-08-24)
 
-Stanje na kraju sesije 2026-08-21. Pisano tako da se moze nastaviti bez ove povijesti razgovora.
+## Stanje u jednoj recenici
 
----
+Korpus je narastao s 52 na 102 mjerena dokumenta, sva cetiri pada su popravljena (0 padova, 0
+regresija, 0 ne-idempotentnih), a `npm run check` je crven ISKLJUCIVO zbog artefakata koje
+invalidiraju commitovi PARALELNE sesije, ne zbog ovog posla.
 
-## 1. Zatecено stanje, bez uljepsavanja
+## Sto je napravljeno
 
-- **Grana je `docx-truthful-status`, ne `master`.** `master` je 25 commita iza i fast-forward je
-  moguc (`git merge-base --is-ancestor master HEAD` prolazi). Nije pomaknut jer je paralelna sesija
-  cijelo vrijeme radila u istom radnom stablu.
-- **Puni `npm run check` NIJE zeleno izmjeren na cistom stablu.** Zadnji puni run bio je crven
-  (5 datoteka), od cega su dvije bile stvarne i popravljene (`worklist` i `repair-coverage` bili su
-  ustajali), a tri istek vremena zbog zagusenja, sto je potvrdjeno ponovnim pokretanjem na praznom
-  stroju. Poslije toga su izmjene pokrivane CILJANO, jer je paralelna sesija drzala ~20 datoteka
-  nekomitirano (`demo.html`, `src/demo/**`, `app.ts`, `vite.config.ts`, `parser.ts`).
-- **Prvi zadatak sljedece sesije:** provjeriti je li stablo cisto, pa tek onda `npm run check`.
-  Ako je cist i zelen, `git branch -f master <sha>` (fast-forward, bez `checkout`, jer je stablo
-  dijeljeno).
+| faza | sadrzaj |
+| --- | --- |
+| F0 | mjerenje: `pass` je dostizan, korelacija po `check.id`, istinit nazivnik, `deep` kao u sucelju |
+| F3 | "djelomicno popravljeno": jedan izvor tvrdnje i brojki za panel i serverski put |
+| F2 | LibreOffice traka: prava `soffice` konverzija, kontrola 100/100, gard provenijencije |
+| F1 | `corpus-ingest`: pseudonimizacija, privola, izvedene znacajke, 246 radova izvan repozitorija |
 
-### Zamka koja se ponovila triput
-Omotac pozadinske naredbe javlja `exited with code 0` i kad je vitest crven. **Ishod se cita iz
-retka `Test Files`**, nikad iz izlaznog koda. Zato svaka duga naredba ide uz `> datoteka 2>&1` i
-eksplicitan `echo EXIT=$?`.
+Novi moduli: `src/repair/repair-outcome.ts`, `src/corpus/{pseudonymize,docx-features}.ts`,
+`scripts/corpus-ingest.mts`, `scripts/corpus-gen/{libreoffice,scenarios}.mjs`.
 
----
+## Cetiri popravljena kvara motora, sve nasao STVARNI korpus
 
-## 2. Sto je ova sesija napravila
+1. **Popravak je tvrdio izmjenu koje nema** kad tijelo rada nije u stilu `Normal` (`BodyText`,
+   `NormalWeb`, `Standardno`). Tri sloja: stil tijela se nije krpao, deep ciscenje je preskakalo
+   cijeli odlomak, a poravnanje se nije naslijedilo. Vidi `REAL_CORPUS_TESTING.md`.
+2. **Zapis literature je postajao `Heading1`.** Zapis pocinje brojem kao poglavlje i stane u 180
+   znakova, pa je bio predodabran kandidat. Referenca bi usla u SADRZAJ rada.
+3. **Naslovnicka oznaka je postajala `Heading1`.** "ZAVRSNI RAD" je oznaka vrste rada, ne naslov.
+4. **Razine naslova su preskakale hijerarhiju** jer su se izvodile iz ranga velicine fonta.
 
-Dva alata i jedan popravak u proizvodu.
+Uz to: **lazna `toc.coverage` regresija** vise ne demotira ispravno popravljen dokument
+(`dropStaleFieldRegressions`, uvjetovano zivim TOC poljem oznacenim za osvjezavanje).
 
-| artefakt | sto radi |
-|---|---|
-| `scripts/verify_rule_claims.py` | Sest mehanickih provjera TVRDNJE prije nego postane pravilo: sidro, izvod, kvalifikator, odricaj dokumenta, izbor iz skupa, odsjecen citat. |
-| `scripts/audit_scored_quotes.py` | Iste provjere UNATRAG, nad 1934 pravila koja vec boduju radove. Pise `docs/generated/scored-quote-audit.json`. |
-| `src/verification/scored-value-binding.ts` | Usporedjuje VERIFICIRANU TVRDNJU s vrijednoscu koju motor stvarno boduje. Nasla 40 raskoraka kroz 23 profila. |
-| `data/verification/scored-value-drift.json` | Artefakt te usporedbe (`npm run scored-value-drift`); `advisory-demotion.ts` iz njega gasi bodovanje osi s raskorakom. |
-| `scripts/propose_claim_modality.py` | Predlaze MODALITET i OPSEG po jedinici (izvor, citat, os); nikad ne upisuje ublazen modalitet. |
-| `scripts/apply_claim_modality.py` | Upisuje jednoznacne prijedloge u ruleEntries (`modalitySource: mechanical`). 1404 od 1934, 530 ceka covjeka. |
-| `tests/gate-mutations.test.ts` | Mutacijsko testiranje: podmece 18 poznatih kvarova i trazi da ih gard prijavi. 18/18 uhvaceno, trajno u `npm run check`. |
-| `scripts/apply-drift-decision.mjs` | Presuda o JEDNOM raskoraku uz obavezan `--by` potpis; odbija odluku koja proturjeci strojnoj presudi bez `--force`. |
-| `scripts/adjudicate_drift.py` | Cita snapshot i kaze koju od dvije vrijednosti izvor NOSI. 17 claim-supported, 2 engine-supported, 8 both-present, 5 neither, 8 necitljivo. |
-| `data/verification/drift-dossiers/` | Dokazni dosje po profilu (`npm run drift-dossiers`): izvor, lokator, citat i obje vrijednosti jedna do druge. |
-| `data/verification/known-findings.json` | Nalazi koje je vlasnik procitao i svjesno ostavio. Postoji da nov nalaz ne nestane u sumu vec odlucenih. Priznavanje je po VRSTI nalaza, pa nova vrsta na istom pravilu ostaje nova. |
-| `tests/margins-title-page-section.test.ts` + izmjena u `analyze-docx.ts` | Naslovnica s vlastitim `w:sectPr` obarala je margine sa 6/6 na 0/6; sada je upozorenje (5/6). |
+Ono sto je tjednima bilo zavedeno kao "drugi prolaz nije no-op" bio je SIMPTOM kvara 2, ne
+zaseban problem.
 
----
+## ZASTO GATE NIJE ZELEN (tocna dijagnoza, 2026-08-24)
 
-## 3. Otvoreni redovi (sve mjereno, `npm run` ekvivalent: `python scripts/audit_scored_quotes.py`)
+Zadnje stanje: **4472 od 4476 testova prolazi**. Padaju `docx-golden`, `synthetic-golden`,
+`real-corpus` i `completion-ledger`.
 
-Zadnje mjerenje (2026-08-22, nakon suzenja provjere brojeva i oznaka mjesta):
-**1391 revidirano, 543 nerevidirano (format), 271 s novim nalazom.**
-Redovi "brojevi ne stoje" (47) i "vrijednost je SKUP" (3) su ISCEZLI: oba su bila lazna i provjera je
-suzena, ne otpisana. Ranija brojka od 319 nalaza odnosila se na stanje prije toga.
+Uzrok NIJE ovaj posao nego NECOMMITANE izmjene paralelne sesije u radnom stablu:
 
-| red | koliko | sto je vec utvrdjeno | sto ostaje |
-|---|---|---|---|
-| citat se NE nalazi | 188 | Uzorak procitan: uglavnom PARAFRAZA, ne izmisljen citat (`kif` ima *"Poravnano obostrano"*, profil citira *"poravnanje – obostrano"*). Nalaz o SLJEDIVOSTI, ne o bodovanju. | Odluciti je li vrijedno ispravljati citate na doslovne. Nizak prioritet. |
-| brojevi ne stoje | 47 | Nije pregledano. | Isti postupak: grupirati po (izvor, citat), procitati u izvoru. |
-| kvalifikator | 46 | 43 su vec obradjena i 35 ih je bilo lazno. Ostatak nije. | Grupirati i procitati; ocekivati visok udio laznih. |
-| odsjecen citat | 37 | 68 obradjeno, 31 lazna, nasao stvaran kvar s marginama. | Preostalih 37 su izuzeca koja imenuju dio rada; provjeriti odrazava li ih vrijednost. |
-| vrijednost je SKUP | 3 | Nije pregledano. | Najmanji red, brz. |
+    M data/profiles/verified-profiles.json
+    M data/profiles/verified-profiles-heavy.json
+    M data/profiles/closed-loop-ratchet.json
 
-**Postupak koji se pokazao ispravnim** (i jedini koji treba slijediti):
-1. Grupiraj nalaze po **(izvor, citat)**, ne po pravilu. 68 pravila bilo je 53 jedinice, 43 su bile 8.
-2. Procitaj svaku jedinicu U IZVORU, ne u izvjestaju.
-3. Ako je nalaz lazan, **suzi provjeru** umjesto da ga otpises.
-4. Prije nego tvrdis kvar u proizvodu, **reproduciraj ga testom**.
+Ta datoteka nosi pravila po kojima motor boduje. Dok se mijenja, mijenjaju se i rezultati analize,
+pa golden snapshoti i korpusni artefakti odlutaju pri svakom pokretanju.
 
----
+**Golden NIJE ponovno pregradjen namjerno.** Pregradnja bi u MOJE snapshote upisala TUDJE
+necommitane izmjene pravila, tocno ono pred cim upozorava CLAUDE.md ("tudji rad zavrsi pod tvojom
+porukom"). Kad paralelna sesija commita svoje izmjene profila, lanac se vraca u red ovako:
 
-## 4. Otvorene odluke vlasnika
+    npx vitest run tests/docx-golden.test.ts tests/synthetic-golden.test.ts -u
+    npx vite-node scripts/repair-real-corpus.mts
+    npm run repair-faculty-matrix
+    npx vite-node scripts/generate-real-corpus-backlog.mts
+    npm run completion-ledger
 
-1. **`ffzg-etnologija-graduate--font-size` nosi `quote: "ine 12 to"`** - krhotinu s ostecenog
-   tekstualnog sloja (*"velicine"* se cita kao *"veliþine"*). Vrijednost 12 je vjerojatno tocna, ali
-   citat ne dokazuje nista. Ispraviti citat ili spustiti pravilo.
-2. **`pravo` (16 pravila, 7 profila)** zapisano je u registar kao "ostaje bodovano", ali odluka je
-   IZVEDENA iz odluke za `unizd-turizam`, ne zasebno potvrdjena. Vidi `decidedBy` u registru.
-3. **`fhs-doktorski--paper-size` = `True`** i `unidu-komunikologija-zavrsni--paper-size` = `True`,
-   dakle boolean umjesto `"A4"`. Nije provjereno kako se to ponasa u bodovanju.
-4. **`zvu-specijalisticki` i `pravo-doktorski-pravne-znanosti`** boduju iz akta za DRUGU vrstu rada
-   (Pravilnik o zavrsnom radu, odnosno upute za diplomske i zavrsne radove).
+Sve ostalo je vec vraceno u red u ovoj sesiji: `closed-loop` (svjez izracun daje TOCNO potpisan
+ratchet 332/40/35, dakle potpis je bio ispravan a izvjestaj ustajao), `coverage-report`,
+`verification-worklist`, `scored-value-drift`, `profile-rules-server`, `repair-recipe`,
+`repair-coverage`, `profile-runtime-maps`, `repair-param-authority`.
 
----
+## Sto je ranije blokiralo gate (rijeseno)
 
-## 5. Sto NE raditi ponovno
+Paralelna sesija je tijekom rada commitala niz promjena bodovanja (`feat(bodovanje): ...`,
+`chore(artefakti): cijeli lanac pregradjen`). Svaka takva promjena invalidira profilno izvedene
+artefakte. Zadnje stanje: `4461 od 4467` testova prolazi, a padaju:
 
-Sedam puta u ovoj sesiji prvo mjerenje bilo je krivo, a podaci ispravni. Uzrok je uvijek isti:
-**profilni `quote` nije fotografija teksta nego uredan prijepis.** Konkretno, sve je vec ugradjeno u
-`audit_scored_quotes.py` i ne treba ponovno otkrivati:
+| test | tko ga vraca u red |
+| --- | --- |
+| `closed-loop-report` | **VLASNIK**: `npm run closed-loop` pa RUCNI potpis u `data/profiles/closed-loop-ratchet.json` (ratchet smije samo u korist `pass`) |
+| `coverage-report` | paralelna sesija (`scored-coverage`) |
+| `scored-value-drift` | paralelna sesija (`npm run scored-value-drift`) |
+| `verification-worklist` | paralelna sesija (`npm run worklist`) |
 
-- dijakritika je ogoljena OCR-om (`fold()`),
-- citati IZOSTAVLJAJU (`(...)`),
-- interpunkcija je normalizirana (zato parovi rijeci, ne doslovan niz),
-- brojevi se provjeravaju PO RECENICI, jer citat zna spojiti nesusjedne odlomke,
-- mjesovit PDF (skenirani clanci + strojno pisani prilozi) NIJE citljiv dokument,
-- odricaj dokumenta pada pred *"duzni ste postivati"* negdje drugdje u istom dokumentu,
-- *"u ovim uputama"* je mjesna odredba, ne subjekt odricaja.
+`closed-loop-ratchet.json` NAMJERNO nije diran: on trazi ljudski potpis, a strojno prepisivanje bi
+poništilo upravo onu zastitu zbog koje postoji.
 
-I jedna zamka u suprotnom smjeru, jednako skupa: **`src/ui/repair-panel.test.ts` je nestabilan**
-(trosi 11-14 s uz prag koji je bio 15 s) i dvaput je dao lazno crven gate. Jednom je A/B usporedba iz
-jednog uzorka optuzila ISPRAVNU izmjenu u `analyze-docx.ts`. Prag mu je podignut na 60 s. Prije nego
-optuzis svoju izmjenu, ponovi mjerenje barem dvaput.
+**Redoslijed regeneracije** (nauceno na tezi nacin, `gen-profile-runtime-maps` se lako previdi):
 
----
+    npx vite-node scripts/gen-profile-runtime-maps.mts   # advisory-map + repair-map
+    npm run repair-recipe                                 # pece i profile-rules-server
+    npm run repair-coverage
+    npm run worklist
+    npx vite-node scripts/repair-real-corpus.mts
+    npm run repair-faculty-matrix
+    npx vite-node scripts/generate-real-corpus-backlog.mts
+    npm run completion-ledger
 
-## 6. Naredbe
+## Korpus
 
-```bash
-npm run scored-value-drift                     # tvrdnja vs. bodovana vrijednost (pa gen-profile-runtime-maps)
-npm run drift-adjudicate                       # sto o svakom raskoraku kaze sam izvor
-npm run drift-apply -- --rule <id> --decision claim --by "Ime"   # presuda, suho bez --write
-npx vitest run tests/gate-mutations.test.ts    # dokaz da garda grizu (18/18)
-npm run drift-dossiers                         # dokazni dosjei za te raskorake
-npm run claim-modality                         # prijedlog modaliteta i opsega (pa :apply za upis)
-npm run verify:claims:selftest                 # 34 negativne kontrole, 16 osi (dokaz da izvod grize)
-npm run verify:source-hashes                   # sha256 snapshota bodovanih pravila (231 dat., 175 MB)
-python scripts/audit_scored_quotes.py          # revizija bodovanih pravila
-python scripts/verify_rule_claims.py <claims.json>   # provjera novih tvrdnji
-npm run closed-loop                            # 407 profila; zadnje: 324 pass, 5 partial
-npm run recompute-coverage                     # data/coverage/scored-coverage.json
-npm run worklist                               # verifikacijski dosjei (drift guard pada bez ovoga)
-npm run repair-coverage                        # docs/generated/repair-coverage.json
-npm run repair-recipe                          # REPAIR_RECIPE.md + serverski autoritet
-npx vite-node scripts/gen-profile-runtime-maps.mts   # advisory-map.json, repair-map.json
-```
+- 246 pseudonimiziranih radova u `C:/Users/PC/LektaCorpus/corpus`, keyring odvojen, privola u
+  `_consent.json` (`scope: local-testing`).
+- Mjeri se preko `LEKTA_CORPUS_SOURCE`; bez te varijable sve radi kao prije i ostaje reproducibilno.
+- 245/246 prolazi Tier 1; jedini pad je kvar U IZVORNOM dokumentu (nema `png` Default u
+  `[Content_Types].xml`).
 
-**Nakon svake izmjene profilnih podataka pregradi SVE gore**, ne samo coverage. Ova sesija je
-zaboravila `worklist` i `repair-coverage` i time obojila gate u crveno.
+## Sto ostaje
 
----
-
-## 7. Sirи kontekst
-
-Puni plan, sa svim mjerenjima i povucenim tvrdnjama, je `docs/PLAN_POTPUNA_POKRIVENOST.md`.
-Ondje su i tri odjeljka koja objasnjavaju zasto je nesto POVUCENO, jer su povlacenja jednako vazna
-kao nalazi.
+1. **196 od 246 radova nema prepoznat profil.** Automatika pokriva 50 kroz 7 profila; ostalima
+   treba rucna dodjela ili bolja detekcija naslovnice.
+2. ~~**`evaluateHeadingHierarchy` prolazi vakuumski**~~ **RIJESENO 2026-08-24** (odluka vlasnika).
+   Petlja je kretala od `i=1`, pa prvi naslov nije prolazio nikakvu provjeru; uz to je dokument BEZ
+   ijednog naslova takodjer dobivao 6/6. Izmjereno na sva 246 rada ovog korpusa PRIJE zahvata:
+   45 dokumenata nema nijedan naslov, a 36 nema nijednu razinu 1 i svejedno je dobivalo pune bodove,
+   dakle **81 od 246 (33%)** je imalo 6 besplatnih bodova za hijerarhiju koja nije provjerena.
+   Popravak ne mijenja pravilo nego ga prestaje preskakati na prvom clanu (razina prije prvog
+   naslova je 0); dokument bez naslova sada vraca 0/0, isti oblik koji `auditHeadingRules` vec
+   koristi. Golden se pomaknuo na TOCNO jednoj fixturi (`grf-diplomski-neuskladjen`, koja doslovno
+   nema naslove): 6/6 -> 0/0, ocjena 56 -> 53. Gard: `tests/heading-hierarchy-vacuum.test.ts`,
+   8 slucajeva, obje grane dokazane mutacijom.
+3. **Pseudonimizacija nije dokaziva potpunost.** 76 od 246 dokumenata nema nijedan prepoznat pojam
+   (`vacuous: true`); uz `scope: local-testing` to je prihvatljivo, uz siri scope nije.
+4. **Moderni Word.** Sve je Word 2010; `w15`/`w16` dijelove ovaj stroj ne moze proizvesti.
+5. **`.env.corpus` sadrzi zivi Supabase `service_role` kljuc u cistom tekstu.** Rotacija je jedini
+   pravi lijek i moze ju izvesti samo vlasnik.
+6. F4 (ledger pokrivenosti po mrezi profil x vrsta rada x vrsta dokumenta), F5 (Word/LibreOffice
+   oracle vodjen manifestom), F6 (PDF traka, strogo ogradjena).
