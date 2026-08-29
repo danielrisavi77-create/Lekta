@@ -1,0 +1,1794 @@
+{
+  "schemaVersion": 1,
+  "napomena": "GENERIRANO (npm run citation-claim-coverage). Ne uredjuj rucno. Mjeri je li citatni token profila potkrijepljen tvrdnjom; NE mijenja bodovanje.",
+  "counts": {
+    "none": 155,
+    "advisory": 23,
+    "verified": 40
+  },
+  "contradictedCount": 3,
+  "byToken": {
+    "harvard": 74,
+    "custom": 9,
+    "apa7": 31,
+    "vancouver": 23,
+    "chicago-notes": 20,
+    "ieee": 26,
+    "chicago-author": 6,
+    "fpzg": 13,
+    "pravo-fusnote": 10,
+    "pravo-social-author": 6
+  },
+  "contradicted": [
+    {
+      "profileId": "fpz-diplomski",
+      "token": "custom",
+      "claim": "advisory",
+      "claimedValue": "fusnote ili uglate zagrade s brojem",
+      "authority": "program-page",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018"
+    },
+    {
+      "profileId": "fpz-zavrsni",
+      "token": "custom",
+      "claim": "advisory",
+      "claimedValue": "fusnote ili uglate zagrade s brojem",
+      "authority": "program-page",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018"
+    },
+    {
+      "profileId": "muza-diplomski",
+      "token": "custom",
+      "claim": "advisory",
+      "claimedValue": "prema uputama mentora",
+      "authority": "program-page",
+      "sourceId": "muza-pravilnik-zavrsetak-2025"
+    }
+  ],
+  "rows": [
+    {
+      "profileId": "agr-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "agr-doktorski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "agr-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "alu-doktorski",
+      "token": "custom",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "bak-diplomski",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "bak-zavrsni",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "biolos-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "biolos-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "biotech-diplomski",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "biotech-zavrsni",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "effectus-diplomski",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "effectus-seminarski",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "effectus-zavrsni",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "efos-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "efos-opci-akademski-rad",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "efos-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "efri-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "efri-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "efzg-diplomski",
+      "token": "harvard",
+      "claim": "advisory",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "efzg-pravilnik-diplomski-2012"
+    },
+    {
+      "profileId": "efzg-specijalisticki",
+      "token": "harvard",
+      "claim": "advisory",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "efzg-upute-specijalisticki-2021"
+    },
+    {
+      "profileId": "efzg-strucni-racunovodstvo",
+      "token": "harvard",
+      "claim": "advisory",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "efzg-upute-strucni-diplomski-racunovodstvo"
+    },
+    {
+      "profileId": "efzg-zavrsni",
+      "token": "harvard",
+      "claim": "advisory",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "efzg-postupak-zavrsni"
+    },
+    {
+      "profileId": "erf-diplomski",
+      "token": "apa7",
+      "claim": "advisory",
+      "claimedValue": "apa7",
+      "authority": "program-page",
+      "sourceId": "erf-upute-diplomski"
+    },
+    {
+      "profileId": "fazos-diplomski",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "fazos-zavrsni",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "fbf-specijalisticki",
+      "token": "vancouver",
+      "claim": "verified",
+      "claimedValue": "vancouver",
+      "authority": "program-page",
+      "sourceId": "fbf-upute-spec-2014"
+    },
+    {
+      "profileId": "fdmz-diplomski",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "fer-diplomski",
+      "token": "custom",
+      "claim": "advisory",
+      "claimedValue": "custom",
+      "authority": "general",
+      "sourceId": "fer-upute-diplomski-zemris"
+    },
+    {
+      "profileId": "fer-doktorski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "fer-zavrsni",
+      "token": "custom",
+      "claim": "advisory",
+      "claimedValue": "custom",
+      "authority": "general",
+      "sourceId": "fer-upute-diplomski-zemris"
+    },
+    {
+      "profileId": "ferit-diplomski",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ferit-zavrsni",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "fesb-diplomski",
+      "token": "custom",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "fesb-zavrsni",
+      "token": "custom",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffos-germanistika-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffos-germanistika-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffos-informatologija-diplomski",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffos-informatologija-zavrsni",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffos-povijest-diplomski",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffos-povijest-zavrsni",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffos-psihologija-diplomski",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffos-psihologija-zavrsni",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffri-germanistika-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffri-germanistika-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffri-kulturalni-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffri-povum-diplomski",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffri-povum-zavrsni",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffri-psihologija-diplomski",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffrz-bakalaureatski",
+      "token": "harvard",
+      "claim": "verified",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "ffrz-oblikovanje-bakalaureatski-2021"
+    },
+    {
+      "profileId": "ffrz-diplomski",
+      "token": "harvard",
+      "claim": "verified",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "ffrz-oblikovanje-diplomski-2021"
+    },
+    {
+      "profileId": "ffzg-arheologija-graduate",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffzg-etnologija-graduate",
+      "token": "chicago-author",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "token": "chicago-notes",
+      "claim": "verified",
+      "claimedValue": "chicago-notes",
+      "authority": "program-page",
+      "sourceId": "ffzg-filoz-diplomski-2019"
+    },
+    {
+      "profileId": "ffzg-informacijske-zavrsni",
+      "token": "harvard",
+      "claim": "advisory",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "ffzg-inf-diplomski-2024"
+    },
+    {
+      "profileId": "ffzg-kroatistika-graduate",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffzg-pedagogija-graduate",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffzg-psihologija-diplomski",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ffzg-sociologija-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "fhs-diplomski",
+      "token": "apa7",
+      "claim": "advisory",
+      "claimedValue": "apa7",
+      "authority": "program-page",
+      "sourceId": "fhs-upute-diplomski-2026"
+    },
+    {
+      "profileId": "fmtu-diplomski",
+      "token": "chicago-author",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "fmtu-zavrsni",
+      "token": "chicago-author",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "foozos-diplomski",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "fpz-diplomski",
+      "token": "custom",
+      "claim": "advisory",
+      "claimedValue": "fusnote ili uglate zagrade s brojem",
+      "authority": "program-page",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018"
+    },
+    {
+      "profileId": "fpz-zavrsni",
+      "token": "custom",
+      "claim": "advisory",
+      "claimedValue": "fusnote ili uglate zagrade s brojem",
+      "authority": "program-page",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018"
+    },
+    {
+      "profileId": "fpzg-doktorski-politologija",
+      "token": "fpzg",
+      "claim": "verified",
+      "claimedValue": "fpzg",
+      "authority": "general",
+      "sourceId": "fpzg-pravila-navodenja-citiranja"
+    },
+    {
+      "profileId": "fpzg-mes-master-thesis",
+      "token": "fpzg",
+      "claim": "verified",
+      "claimedValue": "fpzg",
+      "authority": "general",
+      "sourceId": "fpzg-pravila-navodenja-citiranja"
+    },
+    {
+      "profileId": "fpzg-nacionalna-sigurnost-diplomski",
+      "token": "fpzg",
+      "claim": "verified",
+      "claimedValue": "fpzg",
+      "authority": "general",
+      "sourceId": "fpzg-pravila-navodenja-citiranja"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "token": "fpzg",
+      "claim": "verified",
+      "claimedValue": "fpzg",
+      "authority": "general",
+      "sourceId": "fpzg-pravila-navodenja-citiranja"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-av",
+      "token": "fpzg",
+      "claim": "verified",
+      "claimedValue": "fpzg",
+      "authority": "general",
+      "sourceId": "fpzg-pravila-navodenja-citiranja"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "token": "fpzg",
+      "claim": "verified",
+      "claimedValue": "fpzg",
+      "authority": "general",
+      "sourceId": "fpzg-pravila-navodenja-citiranja"
+    },
+    {
+      "profileId": "fpzg-opci-akademski-rad",
+      "token": "fpzg",
+      "claim": "verified",
+      "claimedValue": "fpzg",
+      "authority": "general",
+      "sourceId": "fpzg-pravila-navodenja-citiranja"
+    },
+    {
+      "profileId": "fpzg-politologija-diplomski",
+      "token": "fpzg",
+      "claim": "verified",
+      "claimedValue": "fpzg",
+      "authority": "general",
+      "sourceId": "fpzg-pravila-navodenja-citiranja"
+    },
+    {
+      "profileId": "fpzg-politologija-zavrsni",
+      "token": "fpzg",
+      "claim": "verified",
+      "claimedValue": "fpzg",
+      "authority": "general",
+      "sourceId": "fpzg-pravila-navodenja-citiranja"
+    },
+    {
+      "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
+      "token": "fpzg",
+      "claim": "verified",
+      "claimedValue": "fpzg",
+      "authority": "general",
+      "sourceId": "fpzg-pravila-navodenja-citiranja"
+    },
+    {
+      "profileId": "fpzg-specijalisticki-prilagodba-eu",
+      "token": "fpzg",
+      "claim": "verified",
+      "claimedValue": "fpzg",
+      "authority": "general",
+      "sourceId": "fpzg-pravila-navodenja-citiranja"
+    },
+    {
+      "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
+      "token": "fpzg",
+      "claim": "verified",
+      "claimedValue": "fpzg",
+      "authority": "general",
+      "sourceId": "fpzg-pravila-navodenja-citiranja"
+    },
+    {
+      "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
+      "token": "fpzg",
+      "claim": "verified",
+      "claimedValue": "fpzg",
+      "authority": "general",
+      "sourceId": "fpzg-pravila-navodenja-citiranja"
+    },
+    {
+      "profileId": "fpzpu-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "fpzpu-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "fsb-diplomski",
+      "token": "ieee",
+      "claim": "advisory",
+      "claimedValue": "ieee",
+      "authority": "general",
+      "sourceId": "fsb-upute-radovi-2020"
+    },
+    {
+      "profileId": "fsb-opci-akademski-rad",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "fsb-zavrsni",
+      "token": "ieee",
+      "claim": "advisory",
+      "claimedValue": "ieee",
+      "authority": "general",
+      "sourceId": "fsb-upute-radovi-2020"
+    },
+    {
+      "profileId": "ftrr-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ftrr-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "fzsri-diplomski",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "fzsri-zavrsni",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "geof-diplomski",
+      "token": "harvard",
+      "claim": "verified",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "geof-naputak-ocjenski-2000"
+    },
+    {
+      "profileId": "geof-doktorski",
+      "token": "harvard",
+      "claim": "verified",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "geof-naputak-ocjenski-2000"
+    },
+    {
+      "profileId": "geof-opci-akademski-rad",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "grad-diplomski",
+      "token": "ieee",
+      "claim": "advisory",
+      "claimedValue": "ieee",
+      "authority": "program-page",
+      "sourceId": "grad-predlozak-2024"
+    },
+    {
+      "profileId": "grad-zavrsni",
+      "token": "ieee",
+      "claim": "advisory",
+      "claimedValue": "ieee",
+      "authority": "program-page",
+      "sourceId": "grad-predlozak-2024"
+    },
+    {
+      "profileId": "grafos-diplomski",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "grafos-zavrsni",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "grf-diplomski",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "grf-zavrsni",
+      "token": "ieee",
+      "claim": "advisory",
+      "claimedValue": "ieee",
+      "authority": "program-page",
+      "sourceId": "grf-upute-zavrsni"
+    },
+    {
+      "profileId": "kbf-diplomski",
+      "token": "chicago-notes",
+      "claim": "verified",
+      "claimedValue": "chicago-notes",
+      "authority": "program-page",
+      "sourceId": "kbf-upute-zavrsni-diplomski-2017"
+    },
+    {
+      "profileId": "kbf-zavrsni",
+      "token": "chicago-notes",
+      "claim": "verified",
+      "claimedValue": "chicago-notes",
+      "authority": "program-page",
+      "sourceId": "kbf-upute-zavrsni-diplomski-2017"
+    },
+    {
+      "profileId": "kemos-diplomski",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "kemos-zavrsni",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "kif-diplomski",
+      "token": "apa7",
+      "claim": "verified",
+      "claimedValue": "apa7",
+      "authority": "program-page",
+      "sourceId": "kif-upute-diplomski-2023"
+    },
+    {
+      "profileId": "kif-doktorski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "kif-specijalisticki",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "kifst-diplomski",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "medri-farmacija-diplomski",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "medri-medicina-diplomski",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "mef-diplomski",
+      "token": "harvard",
+      "claim": "verified",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "mef-pravilnik-diplomski-2023"
+    },
+    {
+      "profileId": "mef-doktorski",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "mefos-diplomski",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "mefos-zavrsni",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "mefst-diplomski",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "mev-zavrsni",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "muza-diplomski",
+      "token": "custom",
+      "claim": "advisory",
+      "claimedValue": "prema uputama mentora",
+      "authority": "program-page",
+      "sourceId": "muza-pravilnik-zavrsetak-2025"
+    },
+    {
+      "profileId": "pbf-diplomski",
+      "token": "harvard",
+      "claim": "advisory",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "pbf-upute-diplomski-2018"
+    },
+    {
+      "profileId": "pfri-diplomski",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "pfri-zavrsni",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "pfst-diplomski",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "pfst-zavrsni",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "pmf-biologija-graduate",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "pmf-fizika-graduate",
+      "token": "custom",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "pmf-geofizika-graduate",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "pmf-geografija-diplomski",
+      "token": "harvard",
+      "claim": "verified",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "pmf-geog-upute-diplomski-2026"
+    },
+    {
+      "profileId": "pmf-geologija-graduate",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "pmf-matematika-graduate",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "pmfst-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "pmfst-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "pravo-doktorski-pravne-znanosti",
+      "token": "pravo-fusnote",
+      "claim": "verified",
+      "claimedValue": "pravo-fusnote",
+      "authority": "general",
+      "sourceId": "pravo-upute-oblikovanje-2024"
+    },
+    {
+      "profileId": "pravo-integrirani-diplomski",
+      "token": "pravo-fusnote",
+      "claim": "verified",
+      "claimedValue": "pravo-fusnote",
+      "authority": "general",
+      "sourceId": "pravo-upute-oblikovanje-2024"
+    },
+    {
+      "profileId": "pravo-javna-uprava-diplomski",
+      "token": "pravo-fusnote",
+      "claim": "verified",
+      "claimedValue": "pravo-fusnote",
+      "authority": "general",
+      "sourceId": "pravo-upute-oblikovanje-2024"
+    },
+    {
+      "profileId": "pravo-javna-uprava-prijediplomski",
+      "token": "pravo-fusnote",
+      "claim": "verified",
+      "claimedValue": "pravo-fusnote",
+      "authority": "general",
+      "sourceId": "pravo-upute-oblikovanje-2024"
+    },
+    {
+      "profileId": "pravo-opci-pravni-akademski-rad",
+      "token": "pravo-fusnote",
+      "claim": "verified",
+      "claimedValue": "pravo-fusnote",
+      "authority": "general",
+      "sourceId": "pravo-upute-oblikovanje-2024"
+    },
+    {
+      "profileId": "pravo-porezni-prijediplomski",
+      "token": "pravo-fusnote",
+      "claim": "verified",
+      "claimedValue": "pravo-fusnote",
+      "authority": "general",
+      "sourceId": "pravo-upute-oblikovanje-2024"
+    },
+    {
+      "profileId": "pravo-socijalna-politika-diplomski",
+      "token": "pravo-social-author",
+      "claim": "verified",
+      "claimedValue": "pravo-social-author",
+      "authority": "program-page",
+      "sourceId": "pravo-scsr-upute-diplomski-2021"
+    },
+    {
+      "profileId": "pravo-socijalne-djelatnosti-doktorski",
+      "token": "pravo-social-author",
+      "claim": "verified",
+      "claimedValue": "pravo-social-author",
+      "authority": "program-page",
+      "sourceId": "pravo-scsr-upute-poslijediplomski"
+    },
+    {
+      "profileId": "pravo-socijalne-djelatnosti-specijalisticki",
+      "token": "pravo-social-author",
+      "claim": "verified",
+      "claimedValue": "pravo-social-author",
+      "authority": "program-page",
+      "sourceId": "pravo-scsr-upute-poslijediplomski"
+    },
+    {
+      "profileId": "pravo-socijalni-opci-akademski-rad",
+      "token": "pravo-social-author",
+      "claim": "verified",
+      "claimedValue": "pravo-social-author",
+      "authority": "program-page",
+      "sourceId": "pravo-scsr-upute-zavrsni-2024"
+    },
+    {
+      "profileId": "pravo-socijalni-rad-diplomski",
+      "token": "pravo-social-author",
+      "claim": "verified",
+      "claimedValue": "pravo-social-author",
+      "authority": "program-page",
+      "sourceId": "pravo-scsr-upute-diplomski-2021"
+    },
+    {
+      "profileId": "pravo-socijalni-rad-zavrsni",
+      "token": "pravo-social-author",
+      "claim": "verified",
+      "claimedValue": "pravo-social-author",
+      "authority": "program-page",
+      "sourceId": "pravo-scsr-upute-zavrsni-2024"
+    },
+    {
+      "profileId": "pravo-specijalisticki-pravni-opci",
+      "token": "pravo-fusnote",
+      "claim": "verified",
+      "claimedValue": "pravo-fusnote",
+      "authority": "general",
+      "sourceId": "pravo-upute-oblikovanje-2024"
+    },
+    {
+      "profileId": "pravri-diplomski",
+      "token": "pravo-fusnote",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "pravri-opci-akademski-rad",
+      "token": "pravo-fusnote",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "pravri-zavrsni",
+      "token": "pravo-fusnote",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ptfos-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "rgnf-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "rgnf-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "riteh-diplomski",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "riteh-zavrsni",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "sfzg-diplomski",
+      "token": "vancouver",
+      "claim": "verified",
+      "claimedValue": "vancouver",
+      "authority": "program-page",
+      "sourceId": "sfzg-naputak-diplomski-2024"
+    },
+    {
+      "profileId": "sumfak-diplomski",
+      "token": "harvard",
+      "claim": "advisory",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024"
+    },
+    {
+      "profileId": "sumfak-zavrsni",
+      "token": "harvard",
+      "claim": "advisory",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024"
+    },
+    {
+      "profileId": "ttf-diplomski",
+      "token": "vancouver",
+      "claim": "advisory",
+      "claimedValue": "vancouver",
+      "authority": "program-page",
+      "sourceId": "ttf-upute-zavrsni-diplomski"
+    },
+    {
+      "profileId": "ttf-dizajn-diplomski",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ttf-dizajn-zavrsni",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ttf-zavrsni",
+      "token": "vancouver",
+      "claim": "advisory",
+      "claimedValue": "vancouver",
+      "authority": "program-page",
+      "sourceId": "ttf-upute-zavrsni-diplomski"
+    },
+    {
+      "profileId": "ufri-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "ufzg-diplomski",
+      "token": "apa7",
+      "claim": "verified",
+      "claimedValue": "apa7",
+      "authority": "program-page",
+      "sourceId": "ufzg-upute-zavrsni-diplomski-2026"
+    },
+    {
+      "profileId": "ufzg-zavrsni",
+      "token": "apa7",
+      "claim": "verified",
+      "claimedValue": "apa7",
+      "authority": "program-page",
+      "sourceId": "ufzg-upute-zavrsni-diplomski-2026"
+    },
+    {
+      "profileId": "unidu-ekonomija-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unidu-ekonomija-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unidu-elektro-diplomski",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unidu-elektro-zavrsni",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unidu-komunikologija-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unidu-komunikologija-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unidu-marikultura-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unidu-povijest-zavrsni",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unidu-umjetnost-diplomski",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unidu-umjetnost-zavrsni",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unin-biomedicina-diplomski",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unin-biomedicina-zavrsni",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unin-drustveni-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unin-drustveni-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unin-tehnicki-diplomski",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unin-tehnicki-zavrsni",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unizd-ekologija-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unizd-ekonomija-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unizd-ekonomija-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unizd-etnologija-diplomski",
+      "token": "chicago-author",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unizd-geografija-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unizd-informacijske-diplomski",
+      "token": "chicago-author",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unizd-informacijske-zavrsni",
+      "token": "chicago-author",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unizd-kroatistika-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unizd-kroatistika-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unizd-pedagogija-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unizd-povijest-umj-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unizd-povijest-umj-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unizd-psihologija-diplomski",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unizd-psihologija-zavrsni",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unizd-zdravstvo-diplomski",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "unizd-zdravstvo-zavrsni",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vef-diplomski",
+      "token": "harvard",
+      "claim": "advisory",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "vef-naputak-diplomski-2024"
+    },
+    {
+      "profileId": "veleri-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "veleri-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vevu-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vevu-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vguk-diplomski",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vguk-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vhzk-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vkjs-diplomski",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vkjs-zavrsni",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vub-diplomski",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vub-zavrsni-sestrinstvo",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vub-zavrsni-tehnicki",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vuka-lovstvo-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vuka-poslovni-diplomski",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vuka-poslovni-opci-akademski-rad",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vuka-poslovni-zavrsni",
+      "token": "chicago-notes",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vuka-prehrambena-zavrsni",
+      "token": "harvard",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vuka-sigurnost-diplomski",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vuka-sigurnost-zavrsni",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vuka-strojarski-diplomski",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vuka-strojarski-zavrsni",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vus-diplomski",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vus-zavrsni",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vuv-diplomski",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vuv-zavrsni",
+      "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vvg-diplomski",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vvg-zavrsni",
+      "token": "ieee",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    }
+  ]
+}

@@ -81,6 +81,7 @@
     "verify:source-hashes": "node scripts/verify-source-hashes.mjs",
     "completion-ledger": "vite-node scripts/generate-completion-ledger.mts",
     "gen-profile-claims": "vite-node scripts/gen-profile-claims.mts",
+    "citation-claim-coverage": "vite-node scripts/gen-citation-claim-coverage.mts",
     "seed-program-registry": "vite-node scripts/seed-program-registry.mts",
     "reconcile-programs": "vite-node scripts/reconcile-programs.mts",
     "harvest-programs": "vite-node scripts/harvest-programs.mts",
