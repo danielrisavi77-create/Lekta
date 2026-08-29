@@ -471,6 +471,30 @@ verify_jwt = false
 [functions.admin-stats]
 verify_jwt = true
 
+# TRI BLOKA NIZE SU NEDOSTAJALA (nadopunjeno 2026-08-29, provjereno protiv zive produkcije).
+# Vazno je da postoje i kad se slazu s produkcijom: funkcija BEZ [functions.*] bloka dobiva CLI
+# default `verify_jwt = true`, pa bi prvi sljedeci `supabase functions deploy` tiho zatvorio
+# javne endpointe. Za prve dvije je to bio stvaran, jos neaktiviran kvar: obje na produkciji rade
+# s `false`, a `deploy-drift` ga ne vidi jer usporeduje POSTOJANJE funkcija, ne njihovu konfiguraciju.
+
+# Anoniman first-party analytics sink. Vlastito zaglavlje funkcije to i kaze ("deploy s
+# --no-verify-jwt, nema 401 grane"): funkcija nema granu koja bi vratila 401, pa bi uz JWT gateway
+# odbio SVAKI dogadjaj i telemetrija bi tiho presusila. Stiti se allowlistom payloada, rate limitom
+# i time sto ne upisuje ip_hash ni jedan osobni identifikator.
+[functions.analytics-event]
+verify_jwt = false
+
+# Handoff iz Academic Completiona. Namjerno NE koristi korisnikov Supabase JWT nego kratkotrajnu
+# neprozirnu capability (u bazi samo sha256 otisak, sirovi token u URL fragmentu, vezan na jedan
+# projekt). Ta capability i RPC su stvarna granica autorizacije; JWT na gatewayu bi samo srusio tok.
+[functions.record-completion-check]
+verify_jwt = false
+
+# Katedra agent worker: trazi JWT. Na produkciji je vec `true`, ali samo zato sto se poklopio s CLI
+# defaultom. Zapisano izricito da ne ovisi o defaultu koji se moze promijeniti.
+[functions.katedra-agent-worker]
+verify_jwt = true
+
 [analytics]
 enabled = true
 port = 54327
