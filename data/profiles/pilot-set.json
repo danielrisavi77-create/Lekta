@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "napomena": "AUTORSKI podatak (SCOPE-01), ne generira se. Odluka o tome koje profile smijemo promovirati u javnoj beti. Nije isto sto i razina dokaza: razinu racuna completion ledger (data/profiles/profile-claims.json), ovdje se biljezi ODLUKA i ono sto joj jos fali.",
+  "decidedBy": "Daniel Rišavi",
+  "decidedAt": "2026-08-29",
+  "rationale": "Odabir je PRESJEK dokaza i potraznje, a ne popis zelja: val 1 uzima samo profile koji vec imaju stvarne studentske radove u korpusu. Profili bez ijednog uzorka (396 od 407) ne mogu se promovirati bez obzira na to koliko su im pravila uredna.",
+  "criteria": {
+    "minRealDocuments": 10,
+    "minRealPass": 1,
+    "minClaim": "B",
+    "requiresVisualReview": true,
+    "requiredDocumentKinds": [
+      "ispravan-rad",
+      "neispravan-rad-s-poznatim-problemima",
+      "mnogo-sekcija",
+      "tablice-slike-i-natpisi",
+      "fusnote",
+      "komentari-i-track-changes",
+      "word",
+      "libreoffice",
+      "google-docs-ili-pages-izvoz",
+      "neazuriran-sadrzaj-i-polja"
+    ],
+    "note": "minRealDocuments je 10 jer requiredDocumentKinds ima deset vrsta, a profil koji nema svaku od njih nije dokazan nego uzorkovan. minRealPass je 1 jer bez ijednog prolaza ne znamo je li `pass` na tom profilu uopce dostizan. Razina A dodatno trazi vizualni pregled (Tier 1.5 / Tier 2), koji je rucni i zato se biljezi zasebno."
+  },
+  "measurement": {
+    "source": "docs/generated/repair-real-corpus.local.json",
+    "measuredAt": "2026-08-29",
+    "note": "Izvor je gitignoriran (sadrzi mjerenja nad stvarnim studentskim radovima), pa su ovdje zabiljezeni SAMO agregatni brojevi, bez imena datoteka i bez sadrzaja. Brojevi su snimka i zastarijevaju; regeneriraju se s `npx vite-node scripts/repair-real-corpus.mts`."
+  },
+  "wave1": [
+    {
+      "profileId": "fpzg-politologija-zavrsni",
+      "unitId": "fpzg",
+      "claim": "B",
+      "realDocuments": 26,
+      "realPass": 2,
+      "ready": false,
+      "blockers": ["nema zapisa o vizualnom pregledu (uvjet za razinu A)"],
+      "reason": "Najbolje pokriven profil u korpusu i jedini s vise od jednog stvarnog prolaza."
+    },
+    {
+      "profileId": "fpzg-politologija-diplomski",
+      "unitId": "fpzg",
+      "claim": "B",
+      "realDocuments": 24,
+      "realPass": 0,
+      "ready": false,
+      "blockers": ["nijedan stvarni dokument nije `pass`", "nema zapisa o vizualnom pregledu"],
+      "reason": "Isti odsjek i isti izvor pravila kao zavrsni, druga vrsta rada."
+    },
+    {
+      "profileId": "fpzg-opci-akademski-rad",
+      "unitId": "fpzg",
+      "claim": "B",
+      "realDocuments": 22,
+      "realPass": 0,
+      "ready": false,
+      "blockers": ["nijedan stvarni dokument nije `pass`", "nema zapisa o vizualnom pregledu"],
+      "reason": "Krovni FPZG profil; hvata radove koje detekcija ne uspije svrstati u odsjek."
+    },
+    {
+      "profileId": "efzg-zavrsni",
+      "unitId": "efzg",
+      "claim": "B",
+      "realDocuments": 5,
+      "realPass": 0,
+      "ready": false,
+      "blockers": ["manje od 10 stvarnih dokumenata", "nijedan stvarni dokument nije `pass`", "nema zapisa o vizualnom pregledu"],
+      "reason": "Druga ustanova osim FPZG-a s vise od jednog uzorka; potrebna za tvrdnju da pilot nije jedan fakultet."
+    },
+    {
+      "profileId": "pravo-opci-pravni-akademski-rad",
+      "unitId": "pravo",
+      "claim": "B",
+      "realDocuments": 3,
+      "realPass": 0,
+      "ready": false,
+      "blockers": ["manje od 10 stvarnih dokumenata", "nijedan stvarni dokument nije `pass`", "nema zapisa o vizualnom pregledu"],
+      "reason": "Pravni fakultet ima vlastiti citatni model (fusnote), pa pokriva put koji FPZG i EFZG ne diraju."
+    },
+    {
+      "profileId": "pravo-integrirani-diplomski",
+      "unitId": "pravo",
+      "claim": "B",
+      "realDocuments": 2,
+      "realPass": 0,
+      "ready": false,
+      "blockers": ["manje od 10 stvarnih dokumenata", "nijedan stvarni dokument nije `pass`", "nema zapisa o vizualnom pregledu"],
+      "reason": "Jedini pravni profil sa statusom `verified` i stvarnim uzorcima."
+    }
+  ],
+  "wave2": [
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "unitId": "fpzg",
+      "claim": "B",
+      "realDocuments": 1,
+      "reason": "Vlasnik ga je trazio u prvom valu, ali ima jedan uzorak. Ulazi cim korpus naraste."
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "unitId": "ffzg",
+      "claim": "B",
+      "realDocuments": 1,
+      "reason": "FFZG iz vlasnikova popisa; jedan uzorak."
+    },
+    {
+      "profileId": "pmf-matematika-graduate",
+      "unitId": "pmf",
+      "claim": "B",
+      "realDocuments": 2,
+      "reason": "PMF iz vlasnikova popisa; dva uzorka. Nosi i `ieee` citatni token koji T3 jos provjerava."
+    },
+    {
+      "profileId": "grf-diplomski",
+      "unitId": "grf",
+      "claim": "B",
+      "realDocuments": 1,
+      "reason": "Kandidat za tehnicki fakultet u pilotu. Jedan uzorak, i nosi `ieee` token koji T3 provjerava."
+    },
+    {
+      "profileId": "ttf-diplomski",
+      "unitId": "ttf",
+      "claim": "B",
+      "realDocuments": 1,
+      "reason": "Drugi kandidat za tehnicki fakultet; jedan uzorak."
+    }
+  ],
+  "excluded": [
+    {
+      "profileId": "fer-diplomski",
+      "unitId": "fer",
+      "claim": "E",
+      "realDocuments": 3,
+      "reason": "Dva neovisna razloga. Autoritet izvora je `general` (osobna stranica nastavnika na ZEMRIS-u), sto je ispod razine katedre. I razina dokaza je E: profil nema bodovanih pravila iz sluzbenog izvora, pa promocija ne bi imala sto tvrditi. Vlasnik ga je izricito izuzeo iz prvog vala."
+    },
+    {
+      "profileId": "efzg-seminarski",
+      "unitId": "efzg",
+      "claim": "E",
+      "realDocuments": 8,
+      "reason": "Ima osam stvarnih radova, ali razinu dokaza E: nema bodovanih pravila iz sluzbenog izvora. Broj uzoraka ne nadoknaduje nepostojanje pravila, pa profil ne ulazi u pilot dok se izvor ne nade."
+    }
+  ]
+}

@@ -41,6 +41,7 @@
     { "pattern": "data/profiles/fpzg-partial.json", "class": "PUBLIC", "bundle": "allowed" },
     { "pattern": "data/profiles/profile-status.json", "class": "PUBLIC", "bundle": "allowed" },
     { "pattern": "data/profiles/advisory-map.json", "class": "PUBLIC", "bundle": "allowed" },
+    { "pattern": "data/profiles/profile-claims.json", "class": "PUBLIC", "bundle": "allowed", "note": "SCOPE-01: projekcija razine dokaza A-E iz completion ledgera (claim + doslovno prepisan claimLabel). Javna je NAMJERNO: to je oznaka koju korisnik mora vidjeti prije nego se osloni na profil. Ne nosi ni jedan citat, stranicu ni potpis; provenijencija ostaje u draftovima." },
     {
       "pattern": "data/profiles/verified-profiles-heavy.json",
       "class": "PROPRIETARY-DATA",

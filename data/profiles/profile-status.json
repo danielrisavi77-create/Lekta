@@ -1,7 +1,7 @@
 {
   "verified": {
-    "label": "Potvrđeni profil",
-    "note": "Pravila su povezana sa službenim izvorom i ručno provjerena."
+    "label": "Pravila potvrđena",
+    "note": "Pravila su povezana sa službenim izvorom i ručno provjerena. To govori o PRAVILIMA, ne o popravku: koliko je automatski popravak dokazan na dokumentima pokazuje zasebna oznaka razine dokaza."
   },
   "partial": {
     "label": "Službene tehničke provjere",

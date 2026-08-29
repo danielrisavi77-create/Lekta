@@ -21,6 +21,27 @@ function decodeEntities(s: string): string {
     .trim();
 }
 
+/**
+ * COPY-01: formulacije koje tvrde vise nego sto dokaz nosi. Izmjereno na stvarnom korpusu na dan
+ * uvodenja: 49 od 248 ciljanih provjera razrijeseno (19,8 %), 3 od 102 dokumenta `pass`, a razina
+ * dokaza A u completion ledgeru ima 0 profila od 410. Zato javni tekst ne smije tvrditi da se
+ * popravlja CIJELI dokument.
+ *
+ * Popis je namjerno uzak i doslovan. Siroka heuristika (npr. rijec "cijeli" bilo gdje) palila bi
+ * na prozu, prvi lazni nalaz bi doveo do gasenja garda, i ostali bismo bez ijedne provjere.
+ */
+const OVERCLAIMS = [
+  'u velikoj mjeri',
+  'ispravlja cijeli',
+  'popravlja cijeli',
+  'u potpunosti popravlja',
+];
+
+function overclaims(htmlText: string): string[] {
+  const lower = htmlText.toLowerCase();
+  return OVERCLAIMS.filter((phrase) => lower.includes(phrase));
+}
+
 describe('FAQ JSON-LD mirror', () => {
   const html = readFileSync(join(root, 'index.html'), 'utf8');
 
@@ -54,6 +75,53 @@ describe('FAQ JSON-LD mirror', () => {
     );
     expect(answers.length).toBe(structured.length);
     for (const a of answers) expect(a.length).toBeGreaterThan(10);
+  });
+
+  /**
+   * Ova je tvrdnja dosad postojala SAMO za cetiri druge stranice, a index.html je usporedivao
+   * jedino PITANJA. Odgovor je zato mogao tiho odlutati izmedu vidljivog FAQ-a i JSON-LD-a,
+   * a JSON-LD je onaj koji Google prikazuje. Izmjereno na dan uvodenja: 7 pitanja, 0 drifta.
+   */
+  it('vidljivi i JSON-LD odgovor su identicni za svako pitanje', () => {
+    const visibleAnswers = [
+      ...(faqBlock?.[1] ?? '').matchAll(/<summary>[\s\S]*?<\/summary><p>([\s\S]*?)<\/p>/g),
+    ].map((m) => decodeEntities(m[1]));
+    const entries = (faqPage?.mainEntity ?? []) as Array<{ name: string; acceptedAnswer?: { text?: string } }>;
+    expect(visibleAnswers.length).toBe(entries.length);
+    entries.forEach((q, i) => {
+      expect(decodeEntities(q.acceptedAnswer?.text ?? ''), `pitanje "${q.name}"`).toBe(visibleAnswers[i]);
+    });
+  });
+
+  /**
+   * COPY-01: javni copy ne smije tvrditi vise nego sto dokaz nosi. Mjereno na stvarnom
+   * korpusu: 49 od 248 ciljanih provjera razrijeseno, 3 od 102 dokumenta `pass`, a razina
+   * dokaza A ima 0 profila. Formulacija "u velikoj mjeri" je zato uklonjena iz OBA mirrora.
+   */
+  it('odgovor o automatskom popravku ne obecava cijeli dokument', () => {
+    const entries = (faqPage?.mainEntity ?? []) as Array<{ name: string; acceptedAnswer?: { text?: string } }>;
+    const q = entries.find((e) => /automatski ispraviti cijeli Word/i.test(e.name));
+    expect(q, 'pitanje o automatskom popravku postoji').toBeDefined();
+    const answer = decodeEntities(q?.acceptedAnswer?.text ?? '');
+    expect(answer).toMatch(/odabrane tehničke elemente/i);
+    expect(answer).toMatch(/završni pregled/i);
+    expect(overclaims(html)).toEqual([]);
+  });
+
+  /**
+   * Gard bez dokaza da grize se ne racuna (tvrdo pravilo repozitorija). Mutacija je ovdje, a ne
+   * u gate-mutations.test.ts, jer ondje svaka mutacija gradi ThesisProfile i mjeri verifikacijski
+   * lanac; ovo je druga populacija (javni tekst). Obje grane su dokazane: nemutiran ulaz mora
+   * biti cist, inace "prolazi" i gard koji vristi na sve.
+   */
+  it('gard na preuveličan copy stvarno grize', () => {
+    const mutiran = html.replace(
+      'Ne cijeli dokument, nego odabrane tehničke elemente.',
+      'Da, u velikoj mjeri.',
+    );
+    expect(mutiran, 'mutacija je stvarno promijenila ulaz').not.toBe(html);
+    expect(overclaims(mutiran)).toContain('u velikoj mjeri');
+    expect(overclaims(html), 'baseline: nemutiran ulaz je cist').toEqual([]);
   });
 });
 
