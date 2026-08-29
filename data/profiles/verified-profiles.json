@@ -35137,7 +35137,26 @@
       },
       "footnoteSize": [
         10
-      ]
+      ],
+      "headingRules": {
+        "levels": {
+          "1": {
+            "size": 16,
+            "bold": true,
+            "uppercase": true
+          },
+          "2": {
+            "size": 14,
+            "bold": true,
+            "uppercase": false
+          },
+          "3": {
+            "size": 12,
+            "bold": true,
+            "uppercase": false
+          }
+        }
+      }
     },
     "facts": [],
     "note": "Citat FUSNOTE MANDIRANE: odjelne Upute doslovno 'obavezno se moraju koristiti bibliografske pozivne bilješke... europski sustav pozivnih biljezaka ispod teksta (fusnote)' (byte-level verificirano) -> mod notes (token chicago-notes). Format: Arial/TNR 12, prored 1,5, margine 2,54. Krovni Pravilnik 2025 delegira na odjelne Upute.",
@@ -35237,7 +35256,26 @@
       },
       "footnoteSize": [
         10
-      ]
+      ],
+      "headingRules": {
+        "levels": {
+          "1": {
+            "size": 16,
+            "bold": true,
+            "uppercase": true
+          },
+          "2": {
+            "size": 14,
+            "bold": true,
+            "uppercase": false
+          },
+          "3": {
+            "size": 12,
+            "bold": true,
+            "uppercase": false
+          }
+        }
+      }
     },
     "facts": [],
     "note": "Citat FUSNOTE MANDIRANE: odjelne Upute doslovno 'obavezno se moraju koristiti bibliografske pozivne bilješke... europski sustav pozivnih biljezaka ispod teksta (fusnote)' (byte-level verificirano) -> mod notes (token chicago-notes). Format: Arial/TNR 12, prored 1,5, margine 2,54. Krovni Pravilnik 2025 delegira na odjelne Upute.",
@@ -38892,7 +38930,26 @@
       ],
       "footnoteSize": [
         10
-      ]
+      ],
+      "headingRules": {
+        "levels": {
+          "1": {
+            "size": 16,
+            "bold": true,
+            "uppercase": true
+          },
+          "2": {
+            "size": 14,
+            "bold": true,
+            "uppercase": false
+          },
+          "3": {
+            "size": 12,
+            "bold": true,
+            "uppercase": false
+          }
+        }
+      }
     },
     "note": "Opći profil za seminarski, projektni i istraživački rad: tehničko oblikovanje (font, veličina, prored, A4) i citiranje (Chicago fusnote) provjerava se prema izvoru „Upute za pisanje seminarskih i zavrsnih radova, Poslovni odjel (Veleuciliste u Karlovcu)\", koji obuhvaća seminarske i završne radove. Opseg, struktura i sadržaj ovise o kolegiju i pisanoj uputi mentora; nije zaseban fakultetski propis za seminar.",
     "normativeScope": [

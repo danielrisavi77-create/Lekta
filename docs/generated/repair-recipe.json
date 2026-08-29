@@ -45824,6 +45824,29 @@
         "lastVerified": "2026-07-27"
       },
       {
+        "ruleId": "heading-format-universal",
+        "fixerId": "heading-format-fixer",
+        "label": "Oblikovanje naslova po razinama",
+        "scope": "profil",
+        "target": "razina 1 podebljano; razina 2 podebljano; razina 3 podebljano",
+        "params": {
+          "targets": [
+            {
+              "level": 1,
+              "bold": true
+            },
+            {
+              "level": 2,
+              "bold": true
+            },
+            {
+              "level": 3,
+              "bold": true
+            }
+          ]
+        }
+      },
+      {
         "ruleId": "footnote-typography-universal",
         "fixerId": "footnote-typography-fixer",
         "label": "Font i veličina fusnota",
@@ -45832,6 +45855,19 @@
         "params": {
           "fontSizePt": 10
         }
+      },
+      {
+        "ruleId": "heading-case-universal",
+        "fixerId": "heading-case-fixer",
+        "label": "Velika slova naslova",
+        "scope": "profil",
+        "target": "velika slova, razine 1",
+        "params": {
+          "levels": [
+            1
+          ]
+        },
+        "condition": "Trazi izricitu privolu (mijenja autorov tekst ili strukturu)."
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
@@ -45904,6 +45940,29 @@
         "lastVerified": "2026-07-27"
       },
       {
+        "ruleId": "heading-format-universal",
+        "fixerId": "heading-format-fixer",
+        "label": "Oblikovanje naslova po razinama",
+        "scope": "profil",
+        "target": "razina 1 podebljano; razina 2 podebljano; razina 3 podebljano",
+        "params": {
+          "targets": [
+            {
+              "level": 1,
+              "bold": true
+            },
+            {
+              "level": 2,
+              "bold": true
+            },
+            {
+              "level": 3,
+              "bold": true
+            }
+          ]
+        }
+      },
+      {
         "ruleId": "footnote-typography-universal",
         "fixerId": "footnote-typography-fixer",
         "label": "Font i veličina fusnota",
@@ -45912,6 +45971,19 @@
         "params": {
           "fontSizePt": 10
         }
+      },
+      {
+        "ruleId": "heading-case-universal",
+        "fixerId": "heading-case-fixer",
+        "label": "Velika slova naslova",
+        "scope": "profil",
+        "target": "velika slova, razine 1",
+        "params": {
+          "levels": [
+            1
+          ]
+        },
+        "condition": "Trazi izricitu privolu (mijenja autorov tekst ili strukturu)."
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
@@ -45982,6 +46054,29 @@
         "lastVerified": "2026-07-27"
       },
       {
+        "ruleId": "heading-format-universal",
+        "fixerId": "heading-format-fixer",
+        "label": "Oblikovanje naslova po razinama",
+        "scope": "profil",
+        "target": "razina 1 podebljano; razina 2 podebljano; razina 3 podebljano",
+        "params": {
+          "targets": [
+            {
+              "level": 1,
+              "bold": true
+            },
+            {
+              "level": 2,
+              "bold": true
+            },
+            {
+              "level": 3,
+              "bold": true
+            }
+          ]
+        }
+      },
+      {
         "ruleId": "footnote-typography-universal",
         "fixerId": "footnote-typography-fixer",
         "label": "Font i veličina fusnota",
@@ -45990,6 +46085,19 @@
         "params": {
           "fontSizePt": 10
         }
+      },
+      {
+        "ruleId": "heading-case-universal",
+        "fixerId": "heading-case-fixer",
+        "label": "Velika slova naslova",
+        "scope": "profil",
+        "target": "velika slova, razine 1",
+        "params": {
+          "levels": [
+            1
+          ]
+        },
+        "condition": "Trazi izricitu privolu (mijenja autorov tekst ili strukturu)."
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
