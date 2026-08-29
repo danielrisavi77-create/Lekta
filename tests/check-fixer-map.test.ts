@@ -22,6 +22,9 @@ import {
   wiredCheckIds,
 } from '../src/analysis/check-fixer-map';
 import { CHECK_ID_BY_TITLE, stableCheckId, isPaperSizeCheckId } from '../src/scoring/check-id-registry';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
 
 const REGISTERED_IDS = new Set(Object.values(CHECK_ID_BY_TITLE));
 
@@ -109,5 +112,67 @@ describe('section surgery nema svoju provjeru, i to je TOCNO', () => {
   it('nijedno pravilo ne mapira na section-surgery-fixer (i ne treba)', () => {
     const wired = wiredCheckIds().map((id) => classifyFixabilityById(id).fixId);
     expect(wired).not.toContain('section-surgery-fixer');
+  });
+});
+
+/**
+ * ISTA KLASA KVARA, DRUGO MJESTO: `matchKeys` u `src/ui/repair-items.ts`.
+ *
+ * Zaglavlje ove datoteke opisuje pravilo pisano nad naslovom koji analiza nikad ne emitira. Gard
+ * iznad cuva `check-fixer-map.ts`, ali `repair-items.ts` nikad nije bio pokriven, a upravo ondje
+ * `matchKeys` odlucuje hoce li se popravak MOCI izbrojati kao razrijesen: `computeRepairOutcome`
+ * radi `stableCheckId(title)` i naslov koji registar ne poznaje odbacuje u `unmappedMatchKeys`,
+ * dakle IZVAN `targeted`. Stavka se korisniku nudi, primijeni se i promijeni dokument, a nijedna
+ * provjera to ne moze potvrditi.
+ *
+ * Izmjereno na 102 stvarna rada (`docs/generated/repair-real-corpus.local.json`): 13 razlicitih
+ * neregistriranih kljuceva, svaki na 74 do 97 dokumenata.
+ *
+ * Gleda se SAMO doslovne nizove. Kljucevi izvedeni iz `CHECK_TITLE[...]` dolaze iz registra pa su
+ * tocni po konstrukciji.
+ */
+describe('repair-items: matchKeys moraju biti naslovi koje analiza stvarno emitira', () => {
+  const SRC = readFileSync(
+    resolve(dirname(fileURLToPath(import.meta.url)), '../src/ui/repair-items.ts'),
+    'utf8',
+  );
+  /** Svaki doslovan `matchKeys: ['...', '...']`, s brojem retka radi citljive poruke o padu. */
+  const literalArrays = [...SRC.matchAll(/matchKeys: \[\s*('[^\]]*?')\s*\]/g)].map((m) => ({
+    keys: [...m[1].matchAll(/'([^']*)'/g)].map((k) => k[1]),
+    line: SRC.slice(0, m.index ?? 0).split('\n').length,
+  }));
+
+  it('mjerenje je netrivijalno (inace bi prazan popis "prosao")', () => {
+    expect(literalArrays.length).toBeGreaterThanOrEqual(15);
+    expect(literalArrays.every((a) => a.keys.length > 0)).toBe(true);
+    // Kontrola u DRUGOM smjeru: vecina kljuceva JEST registrirana, pa gard ne "hvata" tako sto
+    // odbija sve. Bez ove tvrdnje bi i pokvaren `stableCheckId` (uvijek null) izgledao kao nalaz.
+    const all = literalArrays.flatMap((a) => a.keys);
+    expect(all.filter((k) => stableCheckId(k)).length).toBeGreaterThan(all.length / 2);
+  });
+
+  /**
+   * RATCHET, smije samo padati. Tri stavke nemaju NIJEDAN mjerljiv kljuc, dakle strukturno ne mogu
+   * biti razrijesene ni na jednom dokumentu: Consistency Engine, Cross-file Submission Consistency
+   * i Final Document Inspector. Zadnja od njih stvarno mijenja dokument (vidljiva je u
+   * `changedFixerIds` na stvarnom korpusu), pa je jaz izmedju ucinka i mjerenja najveci bas ondje.
+   */
+  it('nijedna NOVA stavka ne smije ostati bez ijednog mjerljivog kljuca', () => {
+    const KNOWN_UNMEASURABLE = 3;
+    const zeroKey = literalArrays
+      .filter((a) => !a.keys.some((k) => stableCheckId(k)))
+      .map((a) => `redak ${a.line}: [${a.keys.join(', ')}]`);
+    expect(
+      zeroKey.length,
+      `stavke bez ijednog registriranog matchKeya:\n${zeroKey.join('\n')}`,
+    ).toBeLessThanOrEqual(KNOWN_UNMEASURABLE);
+  });
+
+  /** Poimenicni popis neregistriranih kljuceva; svaki novi mora biti svjesna odluka. */
+  it('popis neregistriranih kljuceva ne smije rasti', () => {
+    const unregistered = [
+      ...new Set(literalArrays.flatMap((a) => a.keys).filter((k) => !stableCheckId(k))),
+    ].sort();
+    expect(unregistered.length, `neregistrirani: ${unregistered.join(' | ')}`).toBeLessThanOrEqual(16);
   });
 });
