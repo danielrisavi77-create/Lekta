@@ -1193,6 +1193,19 @@ function setResultsCockpitAdvanced(open:boolean){
   if(open){revealResultDetails();revealDetails()}
 }
 function handleResultsCockpitAction(r:any,action:ResultsCockpitAction){
+  if(action.kind==='preview-location'){
+    if(Number.isInteger(action.paragraphIndex)&&action.paragraphIndex>=0)void openPreviewAt(action.paragraphIndex,action.footnoteId);
+    return;
+  }
+  if(action.kind==='open-findings'){
+    setResultsCockpitAdvanced(true);
+    openTab('issues');
+    return;
+  }
+  if(action.kind==='simulate-repair'||action.kind==='repair-safe'){
+    scrollToRepairPanel(r);
+    return;
+  }
   const finding=findingsFor(r).find(x=>x.id===action.findingId);
   if(!finding)return;
   if(action.kind==='preview'){
@@ -1223,6 +1236,28 @@ function handleResultsCockpitAction(r:any,action:ResultsCockpitAction){
   toast('Nalaz je vra\u0107en u otvorene stavke.');
   refreshFindingViews(r);
 }
+function cockpitDnaSegmentsForResult(r:any){
+  const structural=Array.isArray(r?.details?.measurements?.structure?.headings)?r.details.measurements.structure.headings:[];
+  const fallback=Array.isArray(r?.documentStructure?.headings)?r.documentStructure.headings:[];
+  const headings=structural.length?structural:fallback;
+  const paragraphs=Array.isArray(r?.preview?.paragraphs)?r.preview.paragraphs:[];
+  if(!headings.length)return undefined;
+  const seen=new Set<number>();
+  const segments:any[]=[];
+  for(const heading of headings){
+    const label=String(heading?.text||heading?.excerpt||'').trim();
+    if(!label)continue;
+    const direct=Number(heading?.index);
+    const match=Number.isInteger(direct)&&direct>=0?direct:Number(paragraphs.find((paragraph:any)=>String(paragraph?.text||'').trim()===label)?.index);
+    if(!Number.isInteger(match)||match<0||seen.has(match))continue;
+    seen.add(match);
+    const paragraph=paragraphs.find((item:any)=>Number(item?.index)===match);
+    const page=Number(paragraph?.page);
+    segments.push({id:`heading-${match}`,label,value:`Odlomak ${match}`,paragraphIndex:match,...(Number.isFinite(page)&&page>0?{page}: {})});
+    if(segments.length>=8)break;
+  }
+  return segments.length?segments:undefined;
+}
 function renderResultsCockpitForResult(r:any){
   const mount=$('#resultCockpit') as HTMLElement|null;
   const resultView=$('#resultView') as HTMLElement|null;
@@ -1246,6 +1281,7 @@ function renderResultsCockpitForResult(r:any){
     states:findingStates,
     repairItems:[...repairPanelItems,...repairPanelTextItems],
     ruleEntries:analyzedProfile?.ruleEntries,
+    documentDnaSegments:cockpitDnaSegmentsForResult(r),
   });
   renderResultsCockpit(mount,model,{
     repairAvailable:!r?.demo,

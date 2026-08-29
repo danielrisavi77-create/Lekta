@@ -20,6 +20,23 @@ export interface VisualAuthorityModel {
   authoritative: boolean;
 }
 
+export interface VisualReadinessSignals {
+  blockers: number;
+  warnings: number;
+  manualReviews: number;
+  automaticFixes: number;
+  informationalChecks: number;
+  totalChecks: number;
+}
+
+export interface VisualResultHeaderModel {
+  documentName: string;
+  profile: string;
+  profileStatus: string | null;
+  profileConfirmed: boolean;
+  authorityLabel: string;
+}
+
 export type VisualScoreModel =
   | { kind: 'scored'; value: number; max: 100; scoredChecks: number; authority: VisualAuthorityKind }
   | { kind: 'unscored'; label: string; reason: string };
@@ -71,6 +88,8 @@ export interface VisualDocumentDnaSegmentInput {
   label: string;
   value: string;
   page?: number | null;
+  paragraphIndex?: number;
+  footnoteId?: number;
 }
 
 export interface VisualDocumentDnaAvailable {
@@ -93,6 +112,8 @@ export interface VisualRepairSignal {
 }
 
 export interface VisualResultInput extends FindingResultInput {
+  file?: { name?: string; size?: number };
+  profile?: string | null;
   score?: number | null;
   categories?: Record<string, VisualCategoryInput>;
   scoredChecks?: number | null;
@@ -115,6 +136,7 @@ export interface VisualResultOptions {
 export interface VisualResultContentFreeMetadata {
   score: { kind: 'scored'; value: number; max: 100; scoredChecks: number } | { kind: 'unscored' };
   readinessKind: ResultReadiness['kind'];
+  signals: VisualReadinessSignals;
   authorityKind: VisualAuthorityKind;
   capabilities: VisualResultCapabilities;
   documentFindingCount: number;
@@ -126,6 +148,8 @@ export interface VisualResultContentFreeMetadata {
 export interface VisualResultModel {
   score: VisualScoreModel;
   readiness: ResultReadiness;
+  signals: VisualReadinessSignals;
+  header: VisualResultHeaderModel;
   authority: VisualAuthorityModel;
   findings: {
     document: VisualFindingModel[];
@@ -194,11 +218,15 @@ function scoreModel(result: VisualResultInput, authority: VisualAuthorityKind): 
   if (typeof result.score !== 'number' || !Number.isFinite(result.score)) {
     return { kind: 'unscored', label: 'Nije bodovano', reason: 'Rezultat nema bodovanu tehnicku ocjenu.' };
   }
+  const scoredChecks = scoredCheckCount(result);
+  if (scoredChecks <= 0) {
+    return { kind: 'unscored', label: 'Nije bodovano', reason: 'Za ovaj rezultat nisu dostupne bodovane provjere.' };
+  }
   return {
     kind: 'scored',
     value: Math.max(0, Math.min(100, result.score)),
     max: 100,
-    scoredChecks: scoredCheckCount(result),
+    scoredChecks,
     authority,
   };
 }
@@ -244,7 +272,35 @@ function documentDna(segments: readonly VisualDocumentDnaSegmentInput[] | undefi
       label: segment.label,
       value: segment.value,
       ...(Object.prototype.hasOwnProperty.call(segment, 'page') ? { page: segment.page ?? null } : {}),
+      ...(typeof segment.paragraphIndex === 'number' && Number.isInteger(segment.paragraphIndex) && segment.paragraphIndex >= 0 ? { paragraphIndex: segment.paragraphIndex } : {}),
+      ...(typeof segment.footnoteId === 'number' && Number.isInteger(segment.footnoteId) && segment.footnoteId >= 0 ? { footnoteId: segment.footnoteId } : {}),
     })),
+  };
+}
+
+function nonNegativeCount(value: unknown): number {
+  return typeof value === 'number' && Number.isFinite(value) && value >= 0 ? Math.floor(value) : 0;
+}
+
+function readinessSignals(result: VisualResultInput, readiness: ResultReadiness): VisualReadinessSignals {
+  const checks = Array.isArray(result.checks) ? result.checks : [];
+  return {
+    blockers: readiness.blockers,
+    warnings: readiness.improvements,
+    manualReviews: readiness.manualReviews,
+    automaticFixes: nonNegativeCount(result.details?.triage?.counts?.auto),
+    informationalChecks: checks.filter((check) => check.max === 0).length,
+    totalChecks: checks.length,
+  };
+}
+
+function headerModel(result: VisualResultInput, authority: VisualAuthorityKind): VisualResultHeaderModel {
+  return {
+    documentName: trimString(result.file?.name) ?? 'Dokument',
+    profile: trimString(result.profile) ?? 'Profil nije odabran',
+    profileStatus: trimString(result.profileStatus),
+    profileConfirmed: authority === 'verified',
+    authorityLabel: authority === 'verified' ? 'Pravila provjerena prema slu?benim izvorima' : 'Opseg provjere ima ograni?enja',
   };
 }
 function categoryModels(input: VisualResultInput['categories']): VisualCategoryModel[] {
@@ -307,6 +363,8 @@ export function buildVisualResultModel(result: VisualResultInput, options: Visua
   const readiness = resultReadiness(documentIssues, readinessAuthority);
   const authority = authorityKind(readinessAuthority);
   const score = scoreModel(result, authority);
+  const signals = readinessSignals(result, readiness);
+  const header = headerModel(result, authority);
   const categories = categoryModels(result.categories);
   const capabilities: VisualResultCapabilities = {
     preview: result.capabilities?.preview === true,
@@ -317,6 +375,8 @@ export function buildVisualResultModel(result: VisualResultInput, options: Visua
   return {
     score,
     readiness,
+    signals,
+    header,
     authority: authorityModel(authority, readiness.authoritative),
     findings: {
       document: visualDocument,
@@ -329,6 +389,7 @@ export function buildVisualResultModel(result: VisualResultInput, options: Visua
     contentFreeMetadata: {
       score: contentFreeScore(score),
       readinessKind: readiness.kind,
+      signals,
       authorityKind: authority,
       capabilities,
       documentFindingCount: visualDocument.length,

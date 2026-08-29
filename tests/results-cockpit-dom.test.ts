@@ -156,6 +156,123 @@ describe('Results Cockpit V1', () => {
     expect(mount.querySelector('[data-cockpit-category="formatting"] [role="progressbar"]')).toBeTruthy();
   });
 
+  it('izvodi stvarne signale spremnosti iz nalaza, provjera i triage podataka', () => {
+    const model = buildVisualResultModel(result({
+      checks: [
+        { category: 'formatting', title: 'Font', status: 'pass', earned: 2, max: 2, detail: '', issue: null, scored: true },
+        { category: 'formatting', title: 'Margine', status: 'fail', earned: 0, max: 2, detail: '', issue: null, scored: true },
+        { category: 'structure', title: 'Informativna provjera', status: 'informational', earned: 0, max: 0, detail: '', issue: null, scored: false },
+      ],
+      details: { triage: { counts: { auto: 3, assisted: 1, manual: 2, total: 6 }, findings: [] }, ruleAuthority: 'official-source' },
+    }));
+
+    expect(model.signals).toMatchObject({
+      blockers: 1,
+      warnings: 2,
+      manualReviews: 1,
+      automaticFixes: 3,
+      informationalChecks: 1,
+      totalChecks: 3,
+    });
+  });
+
+  it('ne prikazuje izmi?ljenu ocjenu kada nema bodovanih provjera', () => {
+    const model = buildVisualResultModel(result({ score: 92, scoredChecks: 0, checks: [] }));
+
+    expect(model.score.kind).toBe('unscored');
+  });
+
+  it('izla?e sa?ete podatke dokumenta i stvarno sidro DNA segmenta', () => {
+    const model = buildVisualResultModel(result({
+      file: { name: 'DIPLOMSKI_RAD.docx' },
+    }), {
+      documentDnaSegments: [{ id: 'intro', label: 'Uvod', value: 'Odlomak 12', page: 3, paragraphIndex: 12 }],
+    });
+
+    expect(model.header).toMatchObject({
+      documentName: 'DIPLOMSKI_RAD.docx',
+      profile: 'FPZG / Politologija / Diplomski rad',
+      profileConfirmed: true,
+    });
+    expect(model.documentDna).toEqual({
+      kind: 'available',
+      segments: [{ id: 'intro', label: 'Uvod', value: 'Odlomak 12', page: 3, paragraphIndex: 12 }],
+    });
+  });
+
+  it('prikazuje jedan Readiness Halo sa stvarnim slojevima i brojkama', () => {
+    const mount = document.createElement('section');
+    const model = buildVisualResultModel(result({ file: { name: 'DIPLOMSKI_RAD.docx' } }));
+
+    renderResultsCockpit(mount, model, { repairAvailable: true });
+
+    expect(mount.querySelectorAll('[data-cockpit-score]')).toHaveLength(1);
+    expect(mount.querySelector('[data-readiness-halo]')).toBeTruthy();
+    expect(mount.querySelector('[data-halo-layer="scored"]')).toBeTruthy();
+    expect(mount.querySelector('[data-halo-layer="blockers"]')).toBeTruthy();
+    expect(mount.querySelector('[data-halo-layer="informational"]')).toBeTruthy();
+    expect(mount.textContent).toContain('1 blokator');
+    expect(mount.textContent).toContain('2 upozorenja');
+    expect(mount.textContent).toContain('1 sigurna popravka');
+  });
+
+  it('kod nebodovanog rezultata prikazuje provjerena pravila bez izmi?ljene ocjene', () => {
+    const mount = document.createElement('section');
+    const model = buildVisualResultModel(result({
+      score: null,
+      scoredChecks: 0,
+      checks: [
+        { category: 'formatting', title: 'A', status: 'informational', earned: 0, max: 0, detail: '', issue: null, scored: false },
+        { category: 'structure', title: 'B', status: 'informational', earned: 0, max: 0, detail: '', issue: null, scored: false },
+        { category: 'citations', title: 'C', status: 'informational', earned: 0, max: 0, detail: '', issue: null, scored: false },
+        { category: 'elements', title: 'D', status: 'informational', earned: 0, max: 0, detail: '', issue: null, scored: false },
+      ],
+    }));
+
+    renderResultsCockpit(mount, model, { repairAvailable: false });
+
+    const score = mount.querySelector('[data-cockpit-score]');
+    expect(score?.textContent).not.toContain('/ 100');
+    expect(mount.textContent).toContain('Provjereno 4 pravila');
+    expect(mount.textContent).not.toContain('92');
+  });
+
+  it('prikazuje dokument, profil i stvarne DNA segmente', () => {
+    const mount = document.createElement('section');
+    const model = buildVisualResultModel(result({ file: { name: 'DIPLOMSKI_RAD.docx' } }), {
+      documentDnaSegments: [
+        { id: 'intro', label: 'Uvod', value: 'Odlomak 12', paragraphIndex: 12 },
+        { id: 'methods', label: 'Metode', value: 'Odlomak 40', paragraphIndex: 40 },
+      ],
+    });
+
+    renderResultsCockpit(mount, model, { repairAvailable: true });
+
+    expect(mount.querySelector('[data-cockpit-header]')?.textContent).toContain('DIPLOMSKI_RAD.docx');
+    expect(mount.textContent).toContain('FPZG / Politologija / Diplomski rad');
+    expect(mount.textContent).toContain('Pravila provjerena prema slu?benim izvorima');
+    expect(mount.querySelectorAll('[data-cockpit-dna-segment]')).toHaveLength(2);
+  });
+
+  it('usmjerava DNA i glavne akcije na postoje?e callbacke', () => {
+    const mount = document.createElement('section');
+    const onAction = vi.fn<(action: ResultsCockpitAction) => void>();
+    const model = buildVisualResultModel(result(), {
+      documentDnaSegments: [{ id: 'intro', label: 'Uvod', value: 'Odlomak 12', paragraphIndex: 12 }],
+    });
+
+    renderResultsCockpit(mount, model, { repairAvailable: true, onAction });
+    mount.querySelector<HTMLButtonElement>('[data-cockpit-dna-segment]')?.click();
+    mount.querySelector<HTMLButtonElement>('[data-cockpit-action="open-findings"]')?.click();
+    mount.querySelector<HTMLButtonElement>('[data-cockpit-action="simulate-repair"]')?.click();
+    mount.querySelector<HTMLButtonElement>('[data-cockpit-action="repair-safe"]')?.click();
+
+    expect(onAction).toHaveBeenNthCalledWith(1, { kind: 'preview-location', paragraphIndex: 12 });
+    expect(onAction).toHaveBeenNthCalledWith(2, { kind: 'open-findings' });
+    expect(onAction).toHaveBeenNthCalledWith(3, { kind: 'simulate-repair' });
+    expect(onAction).toHaveBeenNthCalledWith(4, { kind: 'repair-safe' });
+  });
+
   it('uses cockpit by default and allows an explicit legacy opt-out', () => {
     expect(resultRendererFor(document)).toBe('legacy');
     const cockpitView = document.implementation.createHTMLDocument('cockpit');

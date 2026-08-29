@@ -233,6 +233,7 @@ describe('VisualResultModel', () => {
       'limitationFindingCount',
       'readinessKind',
       'score',
+     'signals',
       'topFindingIds',
     ]);
   });
