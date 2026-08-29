@@ -999,7 +999,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       {
         "category": "structure",
         "detail": "41 riječi (glavni tekst od Uvoda do Zaključka + 0 riječi u fusnotama); profil: 12.000-15.000",
-        "earned": 2,
+        "earned": 1,
         "max": 5,
         "status": "warn",
         "title": "Profilni opseg riječi",
@@ -1283,7 +1283,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "FPZG · diplomsko Novinarstvo · diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 73,
+    "score": 72,
     "stats": {
       "characters": 885,
       "citations": 4,
@@ -1669,7 +1669,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       {
         "category": "structure",
         "detail": "2.853 riječi (glavni tekst od Uvoda do Zaključka + 0 riječi u fusnotama); profil: 5.000-6.000",
-        "earned": 2,
+        "earned": 1,
         "max": 5,
         "status": "warn",
         "title": "Profilni opseg riječi",
@@ -1685,7 +1685,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       {
         "category": "structure",
         "detail": "Mogu nedostajati: Sveučilište u Zagrebu, Fakultet političkih znanosti, Zagreb i godina, vrsta rada",
-        "earned": 2,
+        "earned": 1,
         "max": 4,
         "status": "warn",
         "title": "Elementi naslovne stranice",
@@ -1931,7 +1931,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "FPZG · prijediplomska Politologija · završni rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 75,
+    "score": 73,
     "stats": {
       "characters": 22260,
       "citations": 9,
@@ -4196,7 +4196,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       {
         "category": "structure",
         "detail": "Mogu nedostajati: Sveučilište u Zagrebu, Pravni fakultet, Zagreb i godina, vrsta rada, mentor",
-        "earned": 2,
+        "earned": 1,
         "max": 4,
         "status": "warn",
         "title": "Elementi naslovne stranice",
@@ -4451,7 +4451,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Pravni fakultet · integrirani studij Pravo · diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 71,
+    "score": 70,
     "stats": {
       "characters": 122,
       "citations": 0,
@@ -4587,7 +4587,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       {
         "category": "structure",
         "detail": "34 riječi (glavni tekst od Uvoda do kraja dokumenta + 0 riječi u fusnotama); profil: 5.000-6.000",
-        "earned": 2,
+        "earned": 1,
         "max": 5,
         "status": "warn",
         "title": "Profilni opseg riječi",
@@ -4603,7 +4603,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       {
         "category": "structure",
         "detail": "Mogu nedostajati: Sveučilište u Zagrebu, Fakultet političkih znanosti, Zagreb i godina, vrsta rada",
-        "earned": 2,
+        "earned": 1,
         "max": 4,
         "status": "warn",
         "title": "Elementi naslovne stranice",
@@ -4855,7 +4855,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "FPZG · prijediplomska Politologija · završni rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 64,
+    "score": 63,
     "stats": {
       "characters": 255,
       "citations": 0,
@@ -5214,7 +5214,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       {
         "category": "structure",
         "detail": "Mogu nedostajati: Sveučilište u Zagrebu, Fakultet političkih znanosti, Zagreb i godina, vrsta rada, mentor",
-        "earned": 2,
+        "earned": 1,
         "max": 4,
         "status": "warn",
         "title": "Elementi naslovne stranice",
@@ -5495,7 +5495,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "FPZG · Master of European Studies · Master's Thesis",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 63,
+    "score": 62,
     "stats": {
       "characters": 431,
       "citations": 0,
@@ -5631,7 +5631,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       {
         "category": "structure",
         "detail": "4.041 riječi (glavni tekst od Uvoda do Zaključka + 2 riječi u fusnotama); profil: 10.000-12.000",
-        "earned": 2,
+        "earned": 1,
         "max": 5,
         "status": "warn",
         "title": "Profilni opseg riječi",
@@ -5647,7 +5647,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       {
         "category": "structure",
         "detail": "Mogu nedostajati: Fakultet političkih znanosti, vrsta rada, mentor",
-        "earned": 2,
+        "earned": 1,
         "max": 4,
         "status": "warn",
         "title": "Elementi naslovne stranice",
@@ -5936,7 +5936,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "FPZG · diplomska Politologija · diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 65,
+    "score": 64,
     "stats": {
       "characters": 36902,
       "citations": 0,
