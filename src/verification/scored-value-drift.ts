@@ -25,8 +25,12 @@ export interface CitationStyleFinding {
    * `value-mismatch`: oba su kanonska, a razlicita.
    * `not-applied`: tvrdnja postoji, a motor nema `recommendedCitation`, pa radi na korisnikovu
    *   zatecenom odabiru stila umjesto na onome sto izvor navodi.
+   * `unbacked`: motor IMA `recommendedCitation`, a nijednu tvrdnju o stilu profil ne nosi. Ta
+   *   vrijednost bira citatni motor koji stvarno analizira studentov rad, a nijedan izvor je ne
+   *   propisuje. Jedina je vrsta koja se racuna iz ODSUTNOSTI tvrdnje, pa ju je rani `return []`
+   *   strukturno skrivao: profil bez ijednog `citation-style` unosa nije proizvodio nijedan redak.
    */
-  kind: 'non-canonical-token' | 'value-mismatch' | 'not-applied';
+  kind: 'non-canonical-token' | 'value-mismatch' | 'not-applied' | 'unbacked';
   claimValue: unknown;
   liveValue: unknown;
   scored: boolean;
@@ -58,8 +62,24 @@ function isCanonicalToken(value: unknown): value is string {
 
 function citationFindings(profile: ThesisProfile, sources: SourceEntry[]): CitationStyleFinding[] {
   const entries = (profile.ruleEntries ?? []).filter((e) => e.checkId === 'citation-style');
-  if (!entries.length) return [];
   const live = (profile.rules as Record<string, unknown> | undefined)?.recommendedCitation ?? null;
+  // Bez ijedne tvrdnje nema se sto usporediti, ali AKO motor ipak nosi vrijednost, upravo je to
+  // nalaz: citatni motor je odabran bez izvora. Prazan `return []` je tu granu sutke gutao.
+  if (!entries.length) {
+    if (live == null) return [];
+    return [
+      {
+        profileId: profile.id,
+        ruleId: null,
+        kind: 'unbacked',
+        claimValue: null,
+        liveValue: live,
+        scored: false,
+        sourceId: null,
+        sourcePage: null,
+      },
+    ];
+  }
   const scoredIds = new Set(computePublishedRules(profile, sources).scored.map((e) => e.ruleId));
   const out: CitationStyleFinding[] = [];
   for (const entry of entries) {

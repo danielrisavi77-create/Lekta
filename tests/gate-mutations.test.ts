@@ -25,6 +25,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
+import { buildScoredValueDrift } from '../src/verification/scored-value-drift';
 import { computeCoverageCell } from '../src/verification/coverage-report';
 import { collectCompileDiagnostics, compileEffectiveRules } from '../src/profiles/rule-compiler';
 import { computeBaseDemotedAdvisory, computeDemotedAdvisory } from '../src/profiles/advisory-demotion';
@@ -489,6 +490,34 @@ const MUTATIONS: Mutation[] = [
       );
     },
   },
+  {
+    // Namjerno BEZ `axis`: ta tvrdnja vjezba `readAxis` nad BODOVANIM osima, a citatni stil se ne
+    // boduje. Upravo zato ga nijedan postojeci gard nije vidio.
+    id: 'citation/zivi-stil-bez-ijedne-tvrdnje',
+    imitates:
+      'profil nosi `recommendedCitation` a nema nijednu tvrdnju o stilu: citatni motor koji stvarno ' +
+      'analizira studentov rad odabran je bez izvora, stranice i citata. Rani `return []` u ' +
+      '`citationFindings` je tu granu sutke gutao, pa je klasa koju je FER pilot otkrio na jednom ' +
+      'profilu (IEEE bez izvora, ispravljeno 2026-08-22) ostala nevidljiva na jos 95 profila',
+    caught: () =>
+      buildScoredValueDrift(
+        [
+          {
+            id: 'mutacija-citation-unbacked',
+            rules: { recommendedCitation: 'ieee' },
+            ruleEntries: [],
+          } as unknown as ThesisProfile,
+        ],
+        SOURCES,
+      ).citationStyle.some((c) => c.kind === 'unbacked' && c.liveValue === 'ieee'),
+    // Baseline: profil BEZ zivog stila ne smije prijaviti nista. Bez ovoga bi gard "hvatao" tako
+    // sto vristi na svaki profil koji citatni stil uopce nema.
+    cleanBefore: () =>
+      buildScoredValueDrift(
+        [{ id: 'mutacija-citation-cist', rules: {}, ruleEntries: [] } as unknown as ThesisProfile],
+        SOURCES,
+      ).citationStyle.length === 0,
+  },
 ];
 
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
@@ -510,7 +539,7 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
   it('N od N mutacija uhvaceno, i broj mutacija ne smije pasti', () => {
     const caught = MUTATIONS.filter((m) => m.cleanBefore() && m.caught());
     expect(caught).toHaveLength(MUTATIONS.length);
-    expect(MUTATIONS.length).toBeGreaterThanOrEqual(32);
+    expect(MUTATIONS.length).toBeGreaterThanOrEqual(33);
   });
 
   /**

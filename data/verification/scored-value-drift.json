@@ -3,8 +3,10 @@
   "kanarinac": "LEKTA-KANARINAC-PROPRIETARY-DATA-43381f0d95ad",
   "schemaVersion": 1,
   "counts": {
-    "citation:non-canonical-token": 26,
-    "citation:not-applied": 6,
+    "citation:non-canonical-token": 23,
+    "citation:not-applied": 4,
+    "citation:value-mismatch": 9,
+    "citation:unbacked": 95,
     "profilesDemoted": 0
   },
   "demotedByProfile": {},
@@ -31,26 +33,6 @@
       "kind": "non-canonical-token"
     },
     {
-      "profileId": "fpz-zavrsni",
-      "ruleId": "fpz-zavrsni--citation-style",
-      "claimValue": "fusnote ili uglate zagrade s brojem",
-      "liveValue": "custom",
-      "scored": false,
-      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
-      "sourcePage": "odjeljak 6.5.2. Oznake izvora podataka",
-      "kind": "non-canonical-token"
-    },
-    {
-      "profileId": "fpz-diplomski",
-      "ruleId": "fpz-diplomski--citation-style",
-      "claimValue": "fusnote ili uglate zagrade s brojem",
-      "liveValue": "custom",
-      "scored": false,
-      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
-      "sourcePage": "odjeljak 6.5.2. Oznake izvora podataka",
-      "kind": "non-canonical-token"
-    },
-    {
       "profileId": "fhs-zavrsni",
       "ruleId": "fhs-zavrsni--citation-style",
       "claimValue": "custom",
@@ -61,14 +43,14 @@
       "kind": "not-applied"
     },
     {
-      "profileId": "muza-diplomski",
-      "ruleId": "muza-diplomski--citation-style",
-      "claimValue": "prema uputama mentora",
+      "profileId": "pmf-matematika-graduate",
+      "ruleId": "pmf-matematika-graduate--citation-style",
+      "claimValue": "ieee",
       "liveValue": "custom",
       "scored": false,
-      "sourceId": "muza-pravilnik-zavrsetak-2025",
-      "sourcePage": "Prilog 1: Upute za izradu diplomskog rada (zajednicke za sve studije)",
-      "kind": "non-canonical-token"
+      "sourceId": "pmf-math-upute-diplomski-2024",
+      "sourcePage": "Prilog 1: Upute za izradu diplomskog rada, II. Izgled diplomskog rada",
+      "kind": "value-mismatch"
     },
     {
       "profileId": "alu-doktorski",
@@ -79,6 +61,16 @@
       "sourceId": "alu-pravila-smjernice-doktorandi",
       "sourcePage": "Smjernice - disertacija",
       "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "grf-diplomski",
+      "ruleId": "grf-diplomski--citation-style",
+      "claimValue": "ieee",
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": "grf-uputa-diplomski-prilog3",
+      "sourcePage": "odjeljak Literatura",
+      "kind": "value-mismatch"
     },
     {
       "profileId": "vkjs-zavrsni",
@@ -101,6 +93,196 @@
       "kind": "non-canonical-token"
     },
     {
+      "profileId": "pravri-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "pravo-fusnote",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "pravri-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "pravo-fusnote",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "pfri-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-notes",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "pfri-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-notes",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "medri-farmacija-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "vancouver",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "fmtu-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-author",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "fmtu-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-author",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "pmfst-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "pmfst-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "pfst-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "pfst-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "mefst-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "vancouver",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ferit-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ferit-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "grafos-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "grafos-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ptfos-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "efos-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "efos-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
       "profileId": "fazos-zavrsni",
       "ruleId": "fazos-zavrsni--citation-style",
       "claimValue": "apa",
@@ -121,6 +303,46 @@
       "kind": "non-canonical-token"
     },
     {
+      "profileId": "mefos-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "vancouver",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "mefos-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "vancouver",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "kemos-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "kemos-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
       "profileId": "unizd-psihologija-zavrsni",
       "ruleId": "unizd-psihologija-zavrsni--citation-style",
       "claimValue": "apa",
@@ -129,6 +351,136 @@
       "sourceId": "unizd-psihologija-upute",
       "sourcePage": "Upute, citiranje",
       "kind": "non-canonical-token"
+    },
+    {
+      "profileId": "unizd-povijest-umj-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unidu-povijest-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-notes",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unidu-ekonomija-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unidu-ekonomija-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unidu-umjetnost-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-notes",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "medri-medicina-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "vancouver",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "fzsri-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "vancouver",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "fzsri-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "vancouver",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "biotech-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "vancouver",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "biotech-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "vancouver",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ufri-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "riteh-zavrsni",
+      "ruleId": "riteh-zavrsni--citation-style",
+      "claimValue": "ieee",
+      "liveValue": "custom",
+      "scored": true,
+      "sourceId": "riteh-upute-radovi-2025",
+      "sourcePage": "Upute, literatura",
+      "kind": "value-mismatch"
+    },
+    {
+      "profileId": "riteh-diplomski",
+      "ruleId": "riteh-diplomski--citation-style",
+      "claimValue": "ieee",
+      "liveValue": "custom",
+      "scored": true,
+      "sourceId": "riteh-upute-radovi-2025",
+      "sourcePage": "Upute, literatura",
+      "kind": "value-mismatch"
     },
     {
       "profileId": "kifst-diplomski",
@@ -161,24 +513,644 @@
       "kind": "non-canonical-token"
     },
     {
-      "profileId": "vss-zavrsni",
-      "ruleId": "vss-zavrsni--citation-style",
-      "claimValue": "vancouver",
-      "liveValue": null,
-      "scored": true,
-      "sourceId": "vss-upute-zavrsni-2023",
-      "sourcePage": "Odjeljak \"LITERATURA\", str. 18",
-      "kind": "not-applied"
+      "profileId": "veleri-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
     },
     {
-      "profileId": "vss-diplomski",
-      "ruleId": "vss-diplomski--citation-style",
-      "claimValue": "vancouver",
-      "liveValue": null,
+      "profileId": "veleri-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "mev-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "vancouver",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "vvg-zavrsni",
+      "ruleId": "vvg-zavrsni--citation-style",
+      "claimValue": "ieee",
+      "liveValue": "custom",
       "scored": true,
-      "sourceId": "vss-upute-zavrsni-2023",
-      "sourcePage": "Odjeljak \"LITERATURA\", str. 18",
-      "kind": "not-applied"
+      "sourceId": "vvg-upute-radovi-2013",
+      "sourcePage": "Upute, citiranje",
+      "kind": "value-mismatch"
+    },
+    {
+      "profileId": "vvg-diplomski",
+      "ruleId": "vvg-diplomski--citation-style",
+      "claimValue": "ieee",
+      "liveValue": "custom",
+      "scored": true,
+      "sourceId": "vvg-upute-radovi-2013",
+      "sourcePage": "Upute, citiranje",
+      "kind": "value-mismatch"
+    },
+    {
+      "profileId": "vevu-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "vuv-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "apa7",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "vuv-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "apa7",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ffri-germanistika-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ffri-germanistika-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ffri-psihologija-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "apa7",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ffri-povum-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-notes",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ffri-povum-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-notes",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ffri-kulturalni-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "fpzpu-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "fpzpu-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ffos-povijest-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-notes",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ffos-povijest-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-notes",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ffos-psihologija-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "apa7",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ffos-psihologija-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "apa7",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ffos-informatologija-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "apa7",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ffos-informatologija-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "apa7",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ffos-germanistika-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ffos-germanistika-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "fdmz-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "vancouver",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "foozos-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "apa7",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "biolos-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "biolos-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unizd-kroatistika-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unizd-kroatistika-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unizd-ekonomija-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unizd-ekonomija-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unizd-ekologija-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unizd-etnologija-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-author",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unizd-geografija-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unizd-zdravstvo-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "vancouver",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unizd-zdravstvo-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "vancouver",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unizd-informacijske-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-author",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unizd-informacijske-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-author",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unizd-psihologija-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "apa7",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unizd-povijest-umj-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unidu-marikultura-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unidu-umjetnost-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-notes",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unidu-elektro-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "unidu-elektro-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "vevu-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "vus-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "apa7",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "vus-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "apa7",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "bak-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "apa7",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "bak-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "apa7",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "vguk-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "vguk-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "vuka-poslovni-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-notes",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "vuka-poslovni-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-notes",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "vuka-strojarski-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "vuka-strojarski-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "vuka-sigurnost-zavrsni",
+      "ruleId": "vuka-sigurnost-zavrsni--citation-style",
+      "claimValue": "ieee",
+      "liveValue": "custom",
+      "scored": true,
+      "sourceId": "vuka-sigurnost-upute-2026",
+      "sourcePage": "Upute SIZ 2026",
+      "kind": "value-mismatch"
+    },
+    {
+      "profileId": "vuka-sigurnost-diplomski",
+      "ruleId": "vuka-sigurnost-diplomski--citation-style",
+      "claimValue": "ieee",
+      "liveValue": "custom",
+      "scored": true,
+      "sourceId": "vuka-sigurnost-upute-2026",
+      "sourcePage": "Upute SIZ 2026",
+      "kind": "value-mismatch"
+    },
+    {
+      "profileId": "vuka-prehrambena-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "vuka-lovstvo-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ftrr-zavrsni",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "ftrr-diplomski",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "pmf-geofizika-graduate",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "fsb-opci-akademski-rad",
+      "ruleId": "fsb-opci-akademski-rad--citation-style",
+      "claimValue": "ieee",
+      "liveValue": "custom",
+      "scored": false,
+      "sourceId": "fsb-upute-radovi-2020",
+      "sourcePage": "Upute, opci dio",
+      "kind": "value-mismatch"
     },
     {
       "profileId": "efst-opci-akademski-rad",
@@ -189,6 +1161,26 @@
       "sourceId": "efst-upute-studentski-radovi-2013",
       "sourcePage": "Odjeljak 4, \"Oblikovanje teksta\"",
       "kind": "not-applied"
+    },
+    {
+      "profileId": "geof-opci-akademski-rad",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "harvard",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
+    },
+    {
+      "profileId": "vuka-poslovni-opci-akademski-rad",
+      "ruleId": null,
+      "kind": "unbacked",
+      "claimValue": null,
+      "liveValue": "chicago-notes",
+      "scored": false,
+      "sourceId": null,
+      "sourcePage": null
     },
     {
       "profileId": "foi-zavrsni",
@@ -248,7 +1240,7 @@
       "profileId": "kifos-zavrsni",
       "ruleId": "kifos-zavrsni--citation-style",
       "claimValue": "apa",
-      "liveValue": null,
+      "liveValue": "apa",
       "scored": true,
       "sourceId": "kifos-upute-2024",
       "sourcePage": "PDF str. 2",
@@ -258,7 +1250,7 @@
       "profileId": "kifos-diplomski",
       "ruleId": "kifos-diplomski--citation-style",
       "claimValue": "apa",
-      "liveValue": null,
+      "liveValue": "apa",
       "scored": true,
       "sourceId": "kifos-upute-2024",
       "sourcePage": "PDF str. 2",
@@ -298,7 +1290,7 @@
       "profileId": "vsig-zavrsni",
       "ruleId": "vsig-zavrsni--citation-style",
       "claimValue": "apa",
-      "liveValue": null,
+      "liveValue": "apa",
       "scored": true,
       "sourceId": "vsig-pravilnik-2023",
       "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'NAVOĐENJE IZVORA', str. 26/41 (PDF str. 26)",
@@ -308,7 +1300,7 @@
       "profileId": "vsig-diplomski",
       "ruleId": "vsig-diplomski--citation-style",
       "claimValue": "apa",
-      "liveValue": null,
+      "liveValue": "apa",
       "scored": true,
       "sourceId": "vsig-pravilnik-2023",
       "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'NAVOĐENJE IZVORA', str. 26/41 (PDF str. 26)",
@@ -318,7 +1310,7 @@
       "profileId": "securus-zavrsni",
       "ruleId": "securus-zavrsni--citation-style",
       "claimValue": "apa",
-      "liveValue": null,
+      "liveValue": "apa",
       "scored": true,
       "sourceId": "securus-pravilnik-zavrsni-2023",
       "sourcePage": "Članak 17. stavak 2. i Članak 21. stavak 1.",

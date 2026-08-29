@@ -53,10 +53,42 @@ const RATCHET = {
   unapplied: 24,
   /** Motor boduje dimenziju bez ijedne tvrdnje: svih 82 su u 14 profila koji nemaju nijedan ruleEntry. */
   unbacked: 82,
-  /** Tvrdnja nosi ljudski opis stila umjesto kanonskog tokena (`apa` umjesto `apa7`). */
-  'citation:non-canonical-token': 26,
-  /** Tvrdnja o stilu postoji, motor nema `recommendedCitation`, pa vrijedi korisnikov odabir. */
-  'citation:not-applied': 6,
+  /**
+   * Tvrdnja nosi ljudski opis stila umjesto kanonskog tokena (`apa` umjesto `apa7`).
+   * 2026-08-29: 26 -> 23 nakon commita `32f869e2`. Spusteno u istom prolazu u kojem je nalaz pao,
+   * po doktrini iz `drift` unosa gore: nespusten ratchet nosi neradjenu zalihu.
+   */
+  'citation:non-canonical-token': 23,
+  /**
+   * Tvrdnja o stilu postoji, motor nema `recommendedCitation`, pa vrijedi korisnikov odabir.
+   * 2026-08-29: 6 -> 4, isti commit.
+   */
+  'citation:not-applied': 4,
+  /**
+   * Tvrdnja i motor nose RAZLICIT kanonski token. Do 2026-08-29 ova vrsta nije imala nijedan slucaj
+   * pa nije ni bila u ratchetu, sto znaci da je rasla nezapazeno.
+   *
+   * Pojavila se s commitom `32f869e2` ("IEEE maknut s 26 profila jer ga nijedan izvor ne propisuje"):
+   * motor je prebacen na `custom`, ali je na devet profila `citation-style` tvrdnja ostala `ieee`.
+   * SEST od devet je `scored: true` (`riteh-*`, `vvg-*`, `vuka-sigurnost-*`), dakle bodovana
+   * vrijednost proturjeci vlastitoj verificiranoj tvrdnji, tocno ono sto tvrdo pravilo u CLAUDE.md
+   * zabranjuje. Zahvat na motoru je bio ispravan; nedovrsena je druga polovica, same tvrdnje.
+   */
+  'citation:value-mismatch': 9,
+  /**
+   * Motor NOSI `recommendedCitation`, a profil nema nijednu tvrdnju o stilu. Ta vrijednost bira
+   * citatni motor koji analizira studentov rad, dakle mijenja nalaze, a nijedan izvor je ne
+   * propisuje.
+   *
+   * Zateceno stanje 2026-08-29 (prvo mjerenje): 95 profila. Raspodjela po vrijednosti:
+   * harvard 38, vancouver 13, apa7 13, chicago-notes 12, ieee 12, chicago-author 5, pravo-fusnote 2.
+   *
+   * Ovo je ISTA klasa koju je FER pilot otkrio na jednom profilu (IEEE bez izvora, ispravljeno
+   * 2026-08-22), samo 95 puta. Nijedan postojeci gard je nije vidio: `scored-value-binding` mjeri
+   * samo BODOVANE osi, a citatni stil se ne boduje, pa profil bez tvrdnje nije proizvodio redak.
+   * Broj smije samo padati: ili se nadje izvor i upise tvrdnja, ili se vrijednost makne.
+   */
+  'citation:unbacked': 95,
 } as const;
 
 /** Potpuno valjana bodovana tvrdnja vezana na snapshotiran izvor (isti obrazac kao verification-gate.test). */
@@ -177,6 +209,62 @@ describe('scored-value-binding: provjera grize (negativne kontrole)', () => {
     } as ThesisProfile;
     // Bez demotedCheckIds nema `unbacked` grane, pa draft tvrdnja ne smije proizvesti nista.
     expect(findScoredValueFindings(profile, sources)).toEqual([]);
+  });
+});
+
+/**
+ * Negativne kontrole za `citation:unbacked`.
+ *
+ * Ova grana se racuna iz ODSUTNOSTI tvrdnje, sto je obrnuto od svih ostalih, pa se lako pokvari u
+ * oba smjera: rani `return []` ju je sutke gutao (kvar koji je i motivirao dodavanje), a preohlapa
+ * verzija bi prijavila svaki profil koji uopce nema citatni stil. Zato kontrole idu u OBA smjera,
+ * ukljucujuci povijesni slucaj koji je klasu otkrio (IEEE bez ijednog izvora, FER 2026-08-22).
+ */
+describe('citation:unbacked grize u oba smjera', () => {
+  const citation = (profile: ThesisProfile) =>
+    buildScoredValueDrift([profile], SOURCES).citationStyle;
+
+  it('BASELINE: profil bez stila i bez tvrdnje ne daje nista', () => {
+    const profile = { id: 'kontrola-bez-stila', rules: {}, ruleEntries: [] } as ThesisProfile;
+    expect(citation(profile)).toEqual([]);
+  });
+
+  it('motor nosi stil bez ijedne tvrdnje: nalaz `unbacked` s vrijednoscu koju motor stvarno pokrece', () => {
+    const profile = {
+      id: 'kontrola-citation-unbacked',
+      rules: { recommendedCitation: 'ieee' },
+      ruleEntries: [],
+    } as ThesisProfile;
+    const found = citation(profile);
+    expect(found).toHaveLength(1);
+    expect(found[0]).toMatchObject({
+      kind: 'unbacked',
+      profileId: 'kontrola-citation-unbacked',
+      ruleId: null,
+      claimValue: null,
+      liveValue: 'ieee',
+      sourceId: null,
+    });
+  });
+
+  it('tvrdnja koja pokriva stil ukida `unbacked` (inace bi se isti profil prijavio dvaput)', () => {
+    const profile = {
+      id: 'kontrola-citation-pokriven',
+      rules: { recommendedCitation: 'harvard' },
+      ruleEntries: [scoredEntry({ ruleId: 'r-cit', checkId: 'citation-style', value: 'harvard' })],
+    } as ThesisProfile;
+    expect(citation(profile)).toEqual([]);
+  });
+
+  it('tvrdnja bez zivog stila ostaje `not-applied`, ne postaje `unbacked`', () => {
+    const profile = {
+      id: 'kontrola-citation-not-applied',
+      rules: {},
+      ruleEntries: [scoredEntry({ ruleId: 'r-cit', checkId: 'citation-style', value: 'harvard' })],
+    } as ThesisProfile;
+    const found = citation(profile);
+    expect(found).toHaveLength(1);
+    expect(found[0]?.kind).toBe('not-applied');
   });
 });
 
