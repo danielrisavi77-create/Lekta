@@ -37,7 +37,12 @@ function loadRegistry() {
 
 function pdfText(absPath) {
   try {
-    const out = execFileSync('pdftotext', ['-layout', absPath, '-'], { maxBuffer: 64 * 1024 * 1024 });
+    // -enc UTF-8 NIJE kozmetika. Bez njega pdftotext pise u kodnoj stranici sustava, u kojoj
+    // hrvatska slova nemaju mjesto: c i s i z se presloce u ASCII, a c s kvackom i d s crtom
+    // NESTANU bez traga. Izmjereno na biotech izvoru: 'sljedeci' je izlazio kao 'sljedei'.
+    // Posljedica nije bila kozmeticka nego dokazna: citati u specovima prestali su biti
+    // doslovni, a jedan profil je iz ostecenog citata izveo kriv navodnik.
+    const out = execFileSync('pdftotext', ['-layout', '-enc', 'UTF-8', absPath, '-'], { maxBuffer: 64 * 1024 * 1024 });
     return out.toString('utf-8');
   } catch {
     return null;
