@@ -94,10 +94,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -197,7 +197,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Fakultet elektrotehnike i racunarstva, diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "partial",
-    "score": 87,
+    "score": 86,
     "stats": {
       "characters": 60011,
       "citations": 0,
@@ -316,10 +316,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -538,10 +538,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -641,7 +641,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Fakultet elektrotehnike i racunarstva, diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "partial",
-    "score": 87,
+    "score": 86,
     "stats": {
       "characters": 59999,
       "citations": 0,
@@ -760,10 +760,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -863,7 +863,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Filozofski fakultet (Odsjek za filozofiju), diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "partial",
-    "score": 89,
+    "score": 88,
     "stats": {
       "characters": 66335,
       "citations": 0,
@@ -1022,10 +1022,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "8 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: 8 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Zahtjevi za ručnu završnu provjeru",
       },
       {
@@ -1062,10 +1062,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -1283,7 +1283,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "FPZG · diplomsko Novinarstvo · diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 74,
+    "score": 73,
     "stats": {
       "characters": 885,
       "citations": 4,
@@ -1402,10 +1402,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -1533,7 +1533,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Grafički fakultet, diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "partial",
-    "score": 53,
+    "score": 51,
     "stats": {
       "characters": 392,
       "citations": 0,
@@ -1692,10 +1692,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "7 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: 7 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Zahtjevi za ručnu završnu provjeru",
       },
       {
@@ -1732,10 +1732,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -1931,7 +1931,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "FPZG · prijediplomska Politologija · završni rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 76,
+    "score": 75,
     "stats": {
       "characters": 22260,
       "citations": 9,
@@ -2090,10 +2090,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "7 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: 7 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Zahtjevi za ručnu završnu provjeru",
       },
       {
@@ -2130,10 +2130,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -2378,10 +2378,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -2593,10 +2593,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -2682,7 +2682,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Prirodoslovno-matematicki fakultet (Matematicki odsjek), diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "partial",
-    "score": 92,
+    "score": 91,
     "stats": {
       "characters": 46931,
       "citations": 0,
@@ -2801,10 +2801,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -2890,7 +2890,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Prirodoslovno-matematicki fakultet (Matematicki odsjek), diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "partial",
-    "score": 92,
+    "score": 91,
     "stats": {
       "characters": 46933,
       "citations": 0,
@@ -3113,10 +3113,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "6 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: 6 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Zahtjevi za ručnu završnu provjeru",
       },
       {
@@ -3545,10 +3545,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "5 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: 5 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Zahtjevi za ručnu završnu provjeru",
       },
       {
@@ -3585,10 +3585,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -3782,7 +3782,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Pravni fakultet · Sveučilišni diplomski studij Socijalni rad · diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 72,
+    "score": 70,
     "stats": {
       "characters": 442,
       "citations": 0,
@@ -3901,10 +3901,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -4004,7 +4004,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Fakultet elektrotehnike i racunarstva, diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "partial",
-    "score": 88,
+    "score": 87,
     "stats": {
       "characters": 169,
       "citations": 0,
@@ -4219,10 +4219,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "6 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: 6 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Zahtjevi za ručnu završnu provjeru",
       },
       {
@@ -4610,10 +4610,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "7 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: 7 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Zahtjevi za ručnu završnu provjeru",
       },
       {
@@ -4650,10 +4650,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -4855,7 +4855,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "FPZG · prijediplomska Politologija · završni rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 66,
+    "score": 64,
     "stats": {
       "characters": 255,
       "citations": 0,
@@ -4974,10 +4974,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -5070,7 +5070,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Tekstilno-tehnološki fakultet, diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "partial",
-    "score": 90,
+    "score": 89,
     "stats": {
       "characters": 53267,
       "citations": 0,
@@ -5221,10 +5221,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "7 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: 7 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Zahtjevi za ručnu završnu provjeru",
       },
       {
@@ -5261,10 +5261,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -5495,7 +5495,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "FPZG · Master of European Studies · Master's Thesis",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 65,
+    "score": 63,
     "stats": {
       "characters": 431,
       "citations": 0,
@@ -5654,10 +5654,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "7 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: 7 zahtjeva nije moguće pouzdano provjeriti bez Wordova prijeloma stranica i stručnog pregleda",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Zahtjevi za ručnu završnu provjeru",
       },
       {
@@ -5694,10 +5694,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
-        "earned": 3,
-        "max": 3,
-        "status": "warn",
+        "detail": "Nije moguće utvrditi: FPZG autor-godina: ručna završna provjera potrebna",
+        "earned": 0,
+        "max": 0,
+        "status": "unmeasurable",
         "title": "Automatizacija citatnog stila",
       },
       {
@@ -5936,7 +5936,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "FPZG · diplomska Politologija · diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 67,
+    "score": 65,
     "stats": {
       "characters": 36902,
       "citations": 0,
