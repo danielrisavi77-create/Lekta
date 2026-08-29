@@ -43,6 +43,18 @@
       "root": "tests/fixtures/docx"
     },
     {
+      "documentId": "lo-fpzg-zavrsni-neuskladjen",
+      "fileName": "lo-fpzg-zavrsni-neuskladjen.docx",
+      "profileId": "fpzg-politologija-zavrsni",
+      "root": "tests/fixtures/docx"
+    },
+    {
+      "documentId": "lo-fpzg-zavrsni-uskladjen",
+      "fileName": "lo-fpzg-zavrsni-uskladjen.docx",
+      "profileId": "fpzg-politologija-zavrsni",
+      "root": "tests/fixtures/docx"
+    },
+    {
       "documentId": "mef-doktorski-disertacija",
       "fileName": "mef-doktorski-disertacija.docx",
       "profileId": "mef-doktorski",
@@ -100,12 +112,12 @@
       "before": {
         "checkCount": 19,
         "passCount": 12,
-        "score": 87
+        "score": 86
       },
       "after": {
         "checkCount": 19,
         "passCount": 12,
-        "score": 87
+        "score": 86
       },
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
@@ -190,12 +202,12 @@
       "before": {
         "checkCount": 19,
         "passCount": 12,
-        "score": 87
+        "score": 86
       },
       "after": {
         "checkCount": 19,
         "passCount": 12,
-        "score": 87
+        "score": 86
       },
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
@@ -232,7 +244,7 @@
       "before": {
         "checkCount": 19,
         "passCount": 13,
-        "score": 89
+        "score": 88
       },
       "after": {
         "checkCount": 19,
@@ -274,12 +286,12 @@
       "before": {
         "checkCount": 35,
         "passCount": 15,
-        "score": 74
+        "score": 72
       },
       "after": {
         "checkCount": 35,
         "passCount": 19,
-        "score": 86
+        "score": 85
       },
       "beforeEntryCount": 8,
       "afterEntryCount": 8,
@@ -328,13 +340,13 @@
       "outcome": "review",
       "before": {
         "checkCount": 19,
-        "passCount": 8,
-        "score": 56
+        "passCount": 7,
+        "score": 51
       },
       "after": {
         "checkCount": 19,
-        "passCount": 10,
-        "score": 67
+        "passCount": 9,
+        "score": 62
       },
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
@@ -361,6 +373,109 @@
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
         "ciljani-check-nije-u-potpunosti-riješen"
+      ],
+      "error": null
+    },
+    {
+      "documentId": "lo-fpzg-zavrsni-neuskladjen",
+      "fileName": "lo-fpzg-zavrsni-neuskladjen.docx",
+      "profileId": "fpzg-politologija-zavrsni",
+      "outcome": "review",
+      "before": {
+        "checkCount": 34,
+        "passCount": 17,
+        "score": 73
+      },
+      "after": {
+        "checkCount": 34,
+        "passCount": 18,
+        "score": 75
+      },
+      "beforeEntryCount": 12,
+      "afterEntryCount": 12,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "font-fixer",
+        "line-spacing-fixer",
+        "paper-size-fixer",
+        "alignment-fixer",
+        "bibliography-repair-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer",
+        "section-surgery-fixer"
+      ],
+      "changedFixerIds": [
+        "field-integrity-fixer",
+        "font-fixer",
+        "line-spacing-fixer",
+        "paper-size-fixer",
+        "alignment-fixer",
+        "section-surgery-fixer",
+        "final-document-inspector-fixer"
+      ],
+      "targetedCheckCount": 20,
+      "targetedResolvedCount": 4,
+      "targetedUnresolvedCount": 16,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
+      ],
+      "error": null
+    },
+    {
+      "documentId": "lo-fpzg-zavrsni-uskladjen",
+      "fileName": "lo-fpzg-zavrsni-uskladjen.docx",
+      "profileId": "fpzg-politologija-zavrsni",
+      "outcome": "review",
+      "before": {
+        "checkCount": 34,
+        "passCount": 26,
+        "score": 100
+      },
+      "after": {
+        "checkCount": 34,
+        "passCount": 26,
+        "score": 100
+      },
+      "beforeEntryCount": 12,
+      "afterEntryCount": 12,
+      "droppedEntryCount": 0,
+      "offeredFixerIds": [
+        "heading-style-fixer",
+        "bibliography-repair-fixer",
+        "final-document-inspector-fixer",
+        "field-integrity-fixer",
+        "consistency-fixer",
+        "section-surgery-fixer"
+      ],
+      "changedFixerIds": [
+        "field-integrity-fixer",
+        "section-surgery-fixer",
+        "final-document-inspector-fixer"
+      ],
+      "targetedCheckCount": 18,
+      "targetedResolvedCount": 6,
+      "targetedUnresolvedCount": 12,
+      "passRegressionCount": 0,
+      "outputReadable": true,
+      "packageWellFormed": true,
+      "malformedParts": [],
+      "secondPassNoOp": true,
+      "integrityFailure": null,
+      "manualReviewRequired": true,
+      "manualReviewReasons": [
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
+        "ciljani-check-nije-u-potpunosti-riješen",
+        "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
     },
@@ -416,7 +531,7 @@
       "before": {
         "checkCount": 19,
         "passCount": 11,
-        "score": 92
+        "score": 91
       },
       "after": {
         "checkCount": 19,
@@ -460,7 +575,7 @@
       "before": {
         "checkCount": 19,
         "passCount": 11,
-        "score": 92
+        "score": 91
       },
       "after": {
         "checkCount": 19,
@@ -562,12 +677,12 @@
       "before": {
         "checkCount": 38,
         "passCount": 18,
-        "score": 72
+        "score": 70
       },
       "after": {
         "checkCount": 38,
         "passCount": 23,
-        "score": 88
+        "score": 87
       },
       "beforeEntryCount": 9,
       "afterEntryCount": 9,
@@ -616,7 +731,7 @@
       "before": {
         "checkCount": 19,
         "passCount": 14,
-        "score": 90
+        "score": 89
       },
       "after": {
         "checkCount": 19,
@@ -658,12 +773,12 @@
       "before": {
         "checkCount": 33,
         "passCount": 12,
-        "score": 65
+        "score": 62
       },
       "after": {
         "checkCount": 33,
         "passCount": 18,
-        "score": 83
+        "score": 81
       },
       "beforeEntryCount": 12,
       "afterEntryCount": 12,
@@ -718,12 +833,12 @@
       "before": {
         "checkCount": 35,
         "passCount": 13,
-        "score": 67
+        "score": 64
       },
       "after": {
         "checkCount": 35,
         "passCount": 19,
-        "score": 86
+        "score": 83
       },
       "beforeEntryCount": 21,
       "afterEntryCount": 21,
@@ -768,14 +883,14 @@
     }
   ],
   "summary": {
-    "documentCount": 14,
+    "documentCount": 16,
     "passCount": 0,
-    "reviewCount": 14,
+    "reviewCount": 16,
     "failCount": 0,
     "integrityFailureCount": 0,
     "noOpCount": 0,
-    "changedDocumentCount": 12,
-    "manualReviewCount": 14,
+    "changedDocumentCount": 14,
+    "manualReviewCount": 16,
     "passRegressionCount": 0
   }
 }
