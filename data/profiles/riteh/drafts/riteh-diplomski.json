@@ -38,7 +38,7 @@
       "scope": "whole",
       "modalitySource": "human",
       "checkId": "citation-style",
-      "value": "ieee",
+      "value": "custom",
       "category": "citation",
       "label": "Stil citiranja (numericki, uglate zagrade)",
       "machineCheckable": false,
@@ -52,7 +52,8 @@
       "lastVerified": "2026-07-02",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "note": "Vrijednost spustena s \"ieee\" na \"custom\" 2026-08-29. Citat propisuje BROJCANO navodjenje u uglatim zagradama, a ne IEEE: IEEE je imenovan stil s vlastitim pravilima oblikovanja koja izvor nigdje ne navodi. Pretrazena su sva citljiva vrela svih 26 profila s tim tokenom; rijec \"IEEE\" pojavljuje se u tocno jednom, i to kao ime casopisa u primjeru literature (\"IEEE Trans. Ind. Electron.\"). Bodovno neutralno (izmjereno: ieee, vancouver i custom daju istu ocjenu, isti broj bodovanih provjera i isti nazivnik). Isti postupak kao FER 2c214fd7."
     },
     {
       "ruleId": "riteh-diplomski--font",

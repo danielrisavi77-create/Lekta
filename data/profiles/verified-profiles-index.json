@@ -905,7 +905,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -931,7 +931,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -1207,7 +1207,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -1234,7 +1234,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -1490,7 +1490,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -2045,7 +2045,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -2303,7 +2303,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -3480,7 +3480,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -3503,7 +3503,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -3551,7 +3551,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -3577,7 +3577,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -3591,7 +3591,7 @@
     ],
     "status": "partial",
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -3605,7 +3605,7 @@
     ],
     "status": "partial",
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -3876,7 +3876,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -3899,7 +3899,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -4483,7 +4483,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -4518,7 +4518,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -4821,7 +4821,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -4846,7 +4846,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -6622,7 +6622,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -6648,7 +6648,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -7090,7 +7090,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -7113,7 +7113,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -7136,7 +7136,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -7159,7 +7159,7 @@
       }
     },
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -7835,7 +7835,7 @@
     ],
     "status": "partial",
     "rules": {
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     }
   },
   {

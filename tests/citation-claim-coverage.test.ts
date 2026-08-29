@@ -31,17 +31,35 @@ const art = artifact as unknown as {
   counts: Record<string, number>;
   contradictedCount: number;
   contradicted: Row[];
+  unknownTokenCount: number;
+  unknownToken: Row[];
   rows: Row[];
 };
 
 /**
  * Ratchet, u korist dokaza. `verified` smije samo rasti, `none` i `advisory` samo padati.
- * Zatecено stanje 2026-08-29: 40 / 23 / 155, uz 3 profila cija tvrdnja proturjeci tokenu.
+ *
+ * Povijest praga `none`: 155 (pri uvodjenju) -> 162. Rast NIJE popustanje garda nego posljedica
+ * commita 888526c9, koji je dodao sedam novih profila s citatnim tokenom i bez ijedne tvrdnje:
+ * kifos-{diplomski,zavrsni}, securus-zavrsni, vsig-{diplomski,zavrsni}, vss-{diplomski,zavrsni}.
+ * Prag se dize IMENOVANO da se tocno ti profili mogu zatvoriti; svako sljedece dizanje trazi isti
+ * obrazac (tko, kojim commitom, koji profili).
+ *
+ * `contradicted` je s 3 spusten na 0 nakon normalizacije u kanonski token i vise se ne vraca.
  */
 const MIN_VERIFIED = 40;
 const MAX_ADVISORY = 23;
-const MAX_NONE = 155;
-const MAX_CONTRADICTED = 3;
+const MAX_NONE = 162;
+const MAX_CONTRADICTED = 0;
+
+/**
+ * Token kojeg motor NE POZNAJE tisi je od svega ostalog: `citationMeta` na nepoznat token pada na
+ * `custom`, pa profil koji je htio APA autor-godina dobije granu "bez stila" i izgubi pet bodovanih
+ * provjera i 26 bodova nazivnika (izmjereno). Zateceno: pet profila nosi `"apa"` umjesto kanonskog
+ * `apa7`. Prijelaz na `apa7` je tvrdnja o IZDANJU standarda i ceka vlasnika, pa se ovdje samo drzi
+ * da broj ne raste.
+ */
+const MAX_UNKNOWN_TOKEN = 5;
 
 describe('citatni token: koliko ih tvrdnja potkrepljuje', () => {
   it('artefakt pokriva svaki profil koji postavlja citatni token', () => {
@@ -64,14 +82,29 @@ describe('citatni token: koliko ih tvrdnja potkrepljuje', () => {
     expect(art.counts.advisory ?? 0, 'vise profila samo sa savjetodavnom tvrdnjom').toBeLessThanOrEqual(MAX_ADVISORY);
     expect(art.counts.none ?? 0, 'vise profila bez ijedne tvrdnje').toBeLessThanOrEqual(MAX_NONE);
     expect(art.contradictedCount, 'vise tvrdnji koje proturjece tokenu').toBeLessThanOrEqual(MAX_CONTRADICTED);
+    expect(art.unknownTokenCount, 'vise tokena koje motor ne poznaje').toBeLessThanOrEqual(MAX_UNKNOWN_TOKEN);
   });
 
-  it('nijedan ieee profil se ne predstavlja kao verificiran dok to nije', () => {
-    // Obrazac koji je na FER-u vec opovrgnut (2c214fd7: ieee -> custom) zivi jos na 26 profila.
-    const ieee = art.rows.filter((r) => r.token === 'ieee');
-    expect(ieee.length).toBeGreaterThan(0);
-    const laznoVerificirani = ieee.filter((r) => r.claim === 'verified').map((r) => r.profileId);
-    expect(laznoVerificirani, 'ako je ijedan stvarno verificiran, makni ga iz ovog popisa').toEqual([]);
+  it('svaki motoru nepoznat token je imenovan, ne samo prebrojan', () => {
+    expect(art.unknownToken.length).toBe(art.unknownTokenCount);
+    for (const r of art.unknownToken) {
+      expect(r.profileId.length, 'zapis bez profila nije upotrebljiv').toBeGreaterThan(0);
+      expect(r.token.length).toBeGreaterThan(0);
+    }
+  });
+
+  /**
+   * Presudjeno 2026-08-29 (data/verification/known-findings.json): token `ieee` maknut je sa svih
+   * 26 profila jer ga nijedan izvor ne propisuje. Pretrazena su sva 24 citljiva vrela u punom
+   * opsegu; rijec "IEEE" pojavljuje se u tocno jednom, i to kao ime casopisa u primjeru literature
+   * ("IEEE Trans. Ind. Electron."). Izvori propisuju BROJCANO navodjenje, a grad izricito prepusta
+   * izbor stila autoru ("u skladu s odabranim stilom navodjenja").
+   *
+   * Ovo NIJE prazna tvrdnja: pada cim netko vrati imenovan stil bez verificirane tvrdnje.
+   */
+  it('imenovan medjunarodni stil ne vraca se bez verificirane tvrdnje', () => {
+    const bezDokaza = art.rows.filter((r) => r.token === 'ieee' && r.claim !== 'verified');
+    expect(bezDokaza.map((r) => r.profileId), 'ieee je presudjen 2026-08-29 i ne vraca se bez izvora').toEqual([]);
   });
 
   /**
@@ -88,5 +121,9 @@ describe('citatni token: koliko ih tvrdnja potkrepljuje', () => {
     ];
     expect(brojNepotkrijepljenih(mutiran)).toBe((art.counts.none ?? 0) + 1);
     expect(brojNepotkrijepljenih(mutiran)).toBeGreaterThan(MAX_NONE);
+
+    // Ista mutacija mora pasti i na presudi o imenovanom stilu, ne samo na brojacu.
+    const vraceniIeee = mutiran.filter((r) => r.token === 'ieee' && r.claim !== 'verified');
+    expect(vraceniIeee.map((r) => r.profileId)).toEqual(['izmisljen-profil']);
   });
 });

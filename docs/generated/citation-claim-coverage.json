@@ -2,49 +2,67 @@
   "schemaVersion": 1,
   "napomena": "GENERIRANO (npm run citation-claim-coverage). Ne uredjuj rucno. Mjeri je li citatni token profila potkrijepljen tvrdnjom; NE mijenja bodovanje.",
   "counts": {
-    "none": 155,
+    "none": 162,
     "advisory": 23,
     "verified": 40
   },
-  "contradictedCount": 3,
+  "contradictedCount": 0,
+  "unknownTokenCount": 5,
+  "unknownToken": [
+    {
+      "profileId": "kifos-diplomski",
+      "token": "apa",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "kifos-zavrsni",
+      "token": "apa",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "securus-zavrsni",
+      "token": "apa",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vsig-diplomski",
+      "token": "apa",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vsig-zavrsni",
+      "token": "apa",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    }
+  ],
   "byToken": {
     "harvard": 74,
-    "custom": 9,
+    "custom": 35,
     "apa7": 31,
-    "vancouver": 23,
+    "vancouver": 25,
     "chicago-notes": 20,
-    "ieee": 26,
     "chicago-author": 6,
     "fpzg": 13,
+    "apa": 5,
     "pravo-fusnote": 10,
     "pravo-social-author": 6
   },
-  "contradicted": [
-    {
-      "profileId": "fpz-diplomski",
-      "token": "custom",
-      "claim": "advisory",
-      "claimedValue": "fusnote ili uglate zagrade s brojem",
-      "authority": "program-page",
-      "sourceId": "fpz-upute-zavrsni-diplomski-2018"
-    },
-    {
-      "profileId": "fpz-zavrsni",
-      "token": "custom",
-      "claim": "advisory",
-      "claimedValue": "fusnote ili uglate zagrade s brojem",
-      "authority": "program-page",
-      "sourceId": "fpz-upute-zavrsni-diplomski-2018"
-    },
-    {
-      "profileId": "muza-diplomski",
-      "token": "custom",
-      "claim": "advisory",
-      "claimedValue": "prema uputama mentora",
-      "authority": "program-page",
-      "sourceId": "muza-pravilnik-zavrsetak-2025"
-    }
-  ],
+  "contradicted": [],
   "rows": [
     {
       "profileId": "agr-diplomski",
@@ -288,7 +306,7 @@
     },
     {
       "profileId": "ferit-diplomski",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -296,7 +314,7 @@
     },
     {
       "profileId": "ferit-zavrsni",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -562,7 +580,7 @@
       "profileId": "fpz-diplomski",
       "token": "custom",
       "claim": "advisory",
-      "claimedValue": "fusnote ili uglate zagrade s brojem",
+      "claimedValue": "custom",
       "authority": "program-page",
       "sourceId": "fpz-upute-zavrsni-diplomski-2018"
     },
@@ -570,7 +588,7 @@
       "profileId": "fpz-zavrsni",
       "token": "custom",
       "claim": "advisory",
-      "claimedValue": "fusnote ili uglate zagrade s brojem",
+      "claimedValue": "custom",
       "authority": "program-page",
       "sourceId": "fpz-upute-zavrsni-diplomski-2018"
     },
@@ -696,15 +714,15 @@
     },
     {
       "profileId": "fsb-diplomski",
-      "token": "ieee",
+      "token": "custom",
       "claim": "advisory",
-      "claimedValue": "ieee",
+      "claimedValue": "custom",
       "authority": "general",
       "sourceId": "fsb-upute-radovi-2020"
     },
     {
       "profileId": "fsb-opci-akademski-rad",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -712,9 +730,9 @@
     },
     {
       "profileId": "fsb-zavrsni",
-      "token": "ieee",
+      "token": "custom",
       "claim": "advisory",
-      "claimedValue": "ieee",
+      "claimedValue": "custom",
       "authority": "general",
       "sourceId": "fsb-upute-radovi-2020"
     },
@@ -776,23 +794,23 @@
     },
     {
       "profileId": "grad-diplomski",
-      "token": "ieee",
+      "token": "custom",
       "claim": "advisory",
-      "claimedValue": "ieee",
+      "claimedValue": "custom",
       "authority": "program-page",
       "sourceId": "grad-predlozak-2024"
     },
     {
       "profileId": "grad-zavrsni",
-      "token": "ieee",
+      "token": "custom",
       "claim": "advisory",
-      "claimedValue": "ieee",
+      "claimedValue": "custom",
       "authority": "program-page",
       "sourceId": "grad-predlozak-2024"
     },
     {
       "profileId": "grafos-diplomski",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -800,7 +818,7 @@
     },
     {
       "profileId": "grafos-zavrsni",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -808,7 +826,7 @@
     },
     {
       "profileId": "grf-diplomski",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -816,9 +834,9 @@
     },
     {
       "profileId": "grf-zavrsni",
-      "token": "ieee",
+      "token": "custom",
       "claim": "advisory",
-      "claimedValue": "ieee",
+      "claimedValue": "custom",
       "authority": "program-page",
       "sourceId": "grf-upute-zavrsni"
     },
@@ -840,7 +858,7 @@
     },
     {
       "profileId": "kemos-diplomski",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -848,7 +866,7 @@
     },
     {
       "profileId": "kemos-zavrsni",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -873,6 +891,22 @@
     {
       "profileId": "kif-specijalisticki",
       "token": "apa7",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "kifos-diplomski",
+      "token": "apa",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "kifos-zavrsni",
+      "token": "apa",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -954,7 +988,7 @@
       "profileId": "muza-diplomski",
       "token": "custom",
       "claim": "advisory",
-      "claimedValue": "prema uputama mentora",
+      "claimedValue": "custom",
       "authority": "program-page",
       "sourceId": "muza-pravilnik-zavrsetak-2025"
     },
@@ -984,7 +1018,7 @@
     },
     {
       "profileId": "pfst-diplomski",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -992,7 +1026,7 @@
     },
     {
       "profileId": "pfst-zavrsni",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -1040,7 +1074,7 @@
     },
     {
       "profileId": "pmf-matematika-graduate",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -1216,7 +1250,7 @@
     },
     {
       "profileId": "riteh-diplomski",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -1224,7 +1258,15 @@
     },
     {
       "profileId": "riteh-zavrsni",
-      "token": "ieee",
+      "token": "custom",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "securus-zavrsni",
+      "token": "apa",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -1328,7 +1370,7 @@
     },
     {
       "profileId": "unidu-elektro-diplomski",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -1336,7 +1378,7 @@
     },
     {
       "profileId": "unidu-elektro-zavrsni",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -1647,6 +1689,38 @@
       "sourceId": null
     },
     {
+      "profileId": "vsig-diplomski",
+      "token": "apa",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vsig-zavrsni",
+      "token": "apa",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vss-diplomski",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
+      "profileId": "vss-zavrsni",
+      "token": "vancouver",
+      "claim": "none",
+      "claimedValue": null,
+      "authority": null,
+      "sourceId": null
+    },
+    {
       "profileId": "vub-diplomski",
       "token": "vancouver",
       "claim": "none",
@@ -1712,7 +1786,7 @@
     },
     {
       "profileId": "vuka-sigurnost-diplomski",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -1720,7 +1794,7 @@
     },
     {
       "profileId": "vuka-sigurnost-zavrsni",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -1728,7 +1802,7 @@
     },
     {
       "profileId": "vuka-strojarski-diplomski",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -1736,7 +1810,7 @@
     },
     {
       "profileId": "vuka-strojarski-zavrsni",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -1776,7 +1850,7 @@
     },
     {
       "profileId": "vvg-diplomski",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -1784,7 +1858,7 @@
     },
     {
       "profileId": "vvg-zavrsni",
-      "token": "ieee",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,

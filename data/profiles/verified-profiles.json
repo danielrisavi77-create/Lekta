@@ -7181,7 +7181,7 @@
         "left": 2.5
       },
       "checkJustify": true,
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     },
     "facts": [
       "Font Times New Roman ili Arial veličine 12, prored 1,5 i poravnanje justified navedeni su kao specifikacija oblikovanja (advisory).",
@@ -7292,7 +7292,7 @@
         "left": 2.5
       },
       "checkJustify": true,
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     },
     "facts": [
       "Font Times New Roman ili Arial veličine 12, prored 1,5 i poravnanje justified navedeni su kao specifikacija oblikovanja (advisory).",
@@ -8537,7 +8537,7 @@
       "requireToc": true,
       "requirePageNumbers": true,
       "requireA4": true,
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "requiredSections": [
         {
           "key": "naslovnica",
@@ -8705,7 +8705,7 @@
       "requireToc": true,
       "requirePageNumbers": true,
       "requireA4": true,
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "requiredSections": [
         {
           "key": "naslovnica",
@@ -10248,7 +10248,7 @@
       "requireA4": true,
       "checkJustify": true,
       "checkMargins": true,
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "paperSizes": [
         "A4"
       ],
@@ -13244,7 +13244,7 @@
       ],
       "requireA4": true,
       "requireToc": true,
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "paperSizes": [
         "A4"
       ]
@@ -14720,7 +14720,7 @@
       "requireToc": true,
       "requirePageNumbers": true,
       "requireA4": true,
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "paperSizes": [
         "A4"
       ]
@@ -19893,7 +19893,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "font": [
         "Times New Roman",
         "Arial"
@@ -19987,7 +19987,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "font": [
         "Times New Roman",
         "Arial"
@@ -20186,7 +20186,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "font": [
         "Times New Roman"
       ],
@@ -20291,7 +20291,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "font": [
         "Times New Roman"
       ],
@@ -20401,7 +20401,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "font": [
         "Times New Roman",
         "Arial",
@@ -20459,7 +20459,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "font": [
         "Times New Roman",
         "Arial",
@@ -21656,7 +21656,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "font": [
         "Times New Roman"
       ],
@@ -21755,7 +21755,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "font": [
         "Times New Roman"
       ],
@@ -24168,7 +24168,7 @@
           }
         }
       },
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Tehnički fakultet u Rijeci), čitano izravno.",
@@ -24273,7 +24273,7 @@
           }
         }
       },
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "custom"
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Tehnički fakultet u Rijeci), čitano izravno.",
@@ -25730,7 +25730,7 @@
         "bottom": 2.5,
         "left": 3
       },
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "paperSizes": [
         "A4"
       ]
@@ -25827,7 +25827,7 @@
         "bottom": 2.5,
         "left": 3
       },
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "paperSizes": [
         "A4"
       ]
@@ -33559,7 +33559,7 @@
     ],
     "profileLabel": "Dubrovnik - Elektrotehnika i primijenjeno racunarstvo, završni rad",
     "rules": {
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "checkFont": false,
       "checkSize": false,
       "checkSpacing": false,
@@ -33653,7 +33653,7 @@
     ],
     "profileLabel": "Dubrovnik - Elektrotehnika i primijenjeno racunarstvo, diplomski rad",
     "rules": {
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "checkFont": false,
       "checkSize": false,
       "checkSpacing": false,
@@ -35620,7 +35620,7 @@
     "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "font": [
         "Arial",
         "Times New Roman"
@@ -35719,7 +35719,7 @@
     "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "font": [
         "Arial",
         "Times New Roman"
@@ -35818,7 +35818,7 @@
     "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "font": [
         "Arial",
         "Times New Roman"
@@ -35908,7 +35908,7 @@
     "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "font": [
         "Arial",
         "Times New Roman"
@@ -38836,7 +38836,7 @@
       "requireToc": false,
       "requirePageNumbers": true,
       "requireA4": true,
-      "recommendedCitation": "ieee",
+      "recommendedCitation": "custom",
       "accessDate": true,
       "requiredSections": [],
       "requireElementSources": false,

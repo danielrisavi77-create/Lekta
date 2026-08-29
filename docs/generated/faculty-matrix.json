@@ -7791,9 +7791,8 @@
         "margins-fixer",
         "paper-size-fixer"
       ],
-      "realDocxSampleCount": 3,
+      "realDocxSampleCount": 5,
       "profilesWithoutRealDocx": [
-        "fpzg-politologija-zavrsni",
         "fpzg-novinarstvo-zavrsni-tekst",
         "fpzg-novinarstvo-zavrsni-av",
         "fpzg-nacionalna-sigurnost-diplomski",
@@ -7808,7 +7807,7 @@
         "profileCoveragePassCount": 13,
         "profileCoverageFailCount": 0,
         "realCorpusPassCount": 0,
-        "realCorpusReviewCount": 3,
+        "realCorpusReviewCount": 5,
         "realCorpusNoOpCount": 0,
         "realCorpusFailCount": 0,
         "syntheticClosedLoopNotRunCount": 13
@@ -7846,15 +7845,18 @@
           "templateIds": [
             "basic-text-styles"
           ],
-          "realDocxSampleCount": 0,
+          "realDocxSampleCount": 2,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "not-run",
+            "realCorpus": "review",
             "syntheticClosedLoop": "not-run"
           },
-          "realCorpusOutcomes": {},
+          "realCorpusOutcomes": {
+            "review": 2
+          },
           "manualReviewReasons": [
-            "nema-stvarnog-docx-uzorka"
+            "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
+            "stvarni-docx-trazi-rucni-pregled"
           ]
         },
         {
@@ -22322,13 +22324,13 @@
     "profileCount": 407,
     "offeredOptionCount": 1750,
     "mappedOptionCount": 1750,
-    "realDocxSampleCount": 14,
+    "realDocxSampleCount": 16,
     "facultiesWithRealDocx": 8,
     "facultiesWithoutRealDocx": 123,
-    "profilesWithoutRealDocx": 396,
+    "profilesWithoutRealDocx": 395,
     "profileCoverageFailCount": 0,
     "realCorpusPassCount": 0,
-    "realCorpusReviewCount": 14,
+    "realCorpusReviewCount": 16,
     "realCorpusNoOpCount": 0,
     "realCorpusFailCount": 0,
     "syntheticClosedLoopNotRunCount": 407

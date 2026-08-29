@@ -28,7 +28,7 @@ pravilo nije vezano uz potvrdjen izvor - ne nagadja se.
 - profila: **407**
 - s popravkom po UPUTI FAKULTETA: **373**
 - samo univerzalna higijena (prazni odlomci), bez potvrdjenih tehnickih pravila: **34**
-- ukupno stavki recepta: **2730**
+- ukupno stavki recepta: **2736**
 
 Sto se NE popravlja automatski: sadrzaj, argument, citati i literatura (osim provjere
 postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
@@ -5342,7 +5342,9 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 |---|---|---|---|---|
 | Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje seminarskih i zavrsnih radova - Poslovni odjel (Veleuciliste u Karlovcu)](https://www.vuka.hr/_download/repository/Upute_za_pisanje_seminarskih_i_zavrsnih_radova_PO.pdf) | odjeljak o oblikovanju (seminarski/zavrsni radovi) |
 | Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje seminarskih i zavrsnih radova - Poslovni odjel (Veleuciliste u Karlovcu)](https://www.vuka.hr/_download/repository/Upute_za_pisanje_seminarskih_i_zavrsnih_radova_PO.pdf) | odjeljak o oblikovanju (seminarski/zavrsni radovi) |
+| Oblikovanje naslova po razinama | `heading-format-fixer` | razina 1 16 pt podebljano; razina 2 14 pt podebljano; razina 3 12 pt podebljano |  |  |
 | Font i veličina fusnota | `footnote-typography-fixer` | 10 pt |  |  |
+| Velika slova naslova | `heading-case-fixer` | velika slova, razine 1<br><sub>Trazi izricitu privolu (mijenja autorov tekst ili strukturu).</sub> |  |  |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 
@@ -5354,7 +5356,9 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 |---|---|---|---|---|
 | Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje seminarskih i zavrsnih radova - Poslovni odjel (Veleuciliste u Karlovcu)](https://www.vuka.hr/_download/repository/Upute_za_pisanje_seminarskih_i_zavrsnih_radova_PO.pdf) | odjeljak o oblikovanju (seminarski/zavrsni radovi) |
 | Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje seminarskih i zavrsnih radova - Poslovni odjel (Veleuciliste u Karlovcu)](https://www.vuka.hr/_download/repository/Upute_za_pisanje_seminarskih_i_zavrsnih_radova_PO.pdf) | odjeljak o oblikovanju (seminarski/zavrsni radovi) |
+| Oblikovanje naslova po razinama | `heading-format-fixer` | razina 1 16 pt podebljano; razina 2 14 pt podebljano; razina 3 12 pt podebljano |  |  |
 | Font i veličina fusnota | `footnote-typography-fixer` | 10 pt |  |  |
+| Velika slova naslova | `heading-case-fixer` | velika slova, razine 1<br><sub>Trazi izricitu privolu (mijenja autorov tekst ili strukturu).</sub> |  |  |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 
@@ -5366,7 +5370,9 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 |---|---|---|---|---|
 | Velicina slova | `font-fixer` | 12 pt | [Upute za pisanje seminarskih i zavrsnih radova - Poslovni odjel (Veleuciliste u Karlovcu)](https://www.vuka.hr/_download/repository/Upute_za_pisanje_seminarskih_i_zavrsnih_radova_PO.pdf) | odjeljak o oblikovanju (seminarski/zavrsni radovi) |
 | Prored | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje seminarskih i zavrsnih radova - Poslovni odjel (Veleuciliste u Karlovcu)](https://www.vuka.hr/_download/repository/Upute_za_pisanje_seminarskih_i_zavrsnih_radova_PO.pdf) | odjeljak o oblikovanju (seminarski/zavrsni radovi) |
+| Oblikovanje naslova po razinama | `heading-format-fixer` | razina 1 16 pt podebljano; razina 2 14 pt podebljano; razina 3 12 pt podebljano |  |  |
 | Font i veličina fusnota | `footnote-typography-fixer` | 10 pt |  |  |
+| Velika slova naslova | `heading-case-fixer` | velika slova, razine 1<br><sub>Trazi izricitu privolu (mijenja autorov tekst ili strukturu).</sub> |  |  |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 

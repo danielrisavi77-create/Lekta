@@ -73,8 +73,14 @@ const RATCHET = {
    * SEST od devet je `scored: true` (`riteh-*`, `vvg-*`, `vuka-sigurnost-*`), dakle bodovana
    * vrijednost proturjeci vlastitoj verificiranoj tvrdnji, tocno ono sto tvrdo pravilo u CLAUDE.md
    * zabranjuje. Zahvat na motoru je bio ispravan; nedovrsena je druga polovica, same tvrdnje.
+   *
+   * ZATVORENO 2026-08-30, spusteno s 9 na 0. Druga polovica je dovrsena: svih 14 `citation-style`
+   * tvrdnji s vrijednoscu `ieee` prebaceno je na `custom`. Devet ih je prvi prolaz promasio jer
+   * draftovi u ovom repozitoriju imaju DVA oblika, `profiles: {}` i `entries: []`, a obilazak je
+   * znao samo prvi; drugi prolaz ide neovisno o obliku. Dijagnoza iznad je bila tocna i pomogla je
+   * naci preostalih devet.
    */
-  'citation:value-mismatch': 9,
+  'citation:value-mismatch': 0,
   /**
    * Motor NOSI `recommendedCitation`, a profil nema nijednu tvrdnju o stilu. Ta vrijednost bira
    * citatni motor koji analizira studentov rad, dakle mijenja nalaze, a nijedan izvor je ne

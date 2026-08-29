@@ -179,6 +179,43 @@
       "decidedBy": "Claude Opus 5 (1M context)",
       "decidedAt": "2026-08-23",
       "rationale": "Bodovanje doslovnog \"Marriweather\" palo bi na SVAKOM radu, jer taj font ne postoji ni na jednom sustavu, pa bi student koji tocno slijedi uputu (instalira Merriweather) uvijek gubio bodove. To je isti kvar zbog kojeg je `unizd-pomorski` vec jednom demotiran u scored-value-drift reviziji, samo u drugom smjeru. Ispravak tipfelera je citanje izvora, ne izmisljanje pravila: mjeri se ista odredba istog izvora."
+    },
+    {
+      "ruleIds": [
+        "ferit-diplomski--citation-style",
+        "ferit-zavrsni--citation-style",
+        "fsb-diplomski--citation-style",
+        "fsb-opci-akademski-rad--citation-style",
+        "fsb-zavrsni--citation-style",
+        "grad-diplomski--citation-style",
+        "grad-zavrsni--citation-style",
+        "grafos-diplomski--citation-style",
+        "grafos-zavrsni--citation-style",
+        "grf-diplomski--citation-style",
+        "grf-zavrsni--citation-style",
+        "kemos-diplomski--citation-style",
+        "kemos-zavrsni--citation-style",
+        "pfst-diplomski--citation-style",
+        "pfst-zavrsni--citation-style",
+        "pmf-matematika-graduate--citation-style",
+        "riteh-diplomski--citation-style",
+        "riteh-zavrsni--citation-style",
+        "unidu-elektro-diplomski--citation-style",
+        "unidu-elektro-zavrsni--citation-style",
+        "vuka-sigurnost-diplomski--citation-style",
+        "vuka-sigurnost-zavrsni--citation-style",
+        "vuka-strojarski-diplomski--citation-style",
+        "vuka-strojarski-zavrsni--citation-style",
+        "vvg-diplomski--citation-style",
+        "vvg-zavrsni--citation-style"
+      ],
+      "finding": "IEEE na 26 profila bez ijednog izvora koji taj stil propisuje",
+      "evidence": "Pretrazena su SVA citljiva sluzbena vrela tih 26 profila (24 od 26; unidu-elektro nema snapshot), svako u punom opsegu i u vlastitom formatu (PDF preko PyMuPDF, DOCX preko word/*.xml, DOC preko UTF-16LE). Rijec \"IEEE\" pojavljuje se u TOCNO JEDNOM dokumentu (riteh) i to kao ime casopisa u primjeru literature: \"Vainio, O.; Ovaska, S. J.: ... IEEE Trans. Ind. Electron., Vol. 44, No. 2, pp. 258-264, 1997.\" Isti dokument na drugom mjestu spominje \"Harvard Univ.\", takodjer kao dio primjera. Ono sto izvori STVARNO propisuju je brojcano navodjenje: fsb \"Svaki literaturni navod treba oznaciti brojem [1]\", grf \"Literatura se obiljezava rednim brojem\", pmf \"Na literaturu se poziva stavljanjem rednog broja reference unutar uglatih zagrada\". grad ide i dalje: \"Popis literature treba izraditi u skladu s ODABRANIM stilom navodjenja prema [1]\", dakle izvor izricito prepusta izbor stila autoru.",
+      "alsoNoted": "Prethodna odluka (2026-08-22, fer-diplomski/fer-zavrsni) imenovala je osam od ovih profila i zabiljezila da NISU dirani. Ovo je njihov nastavak, prosiren na svih 26 nakon mjerenja. Izmjereno usput: `citation-style` nije u DEMOTABLE_CHECK_IDS, pa `advisory` status na toj osi ne gasi nista i motor se konfigurira bez obzira na verifikacijski status. To je zaseban, jos neodlucen nalaz; popisan je u docs/generated/citation-claim-coverage.json (od 218 profila s tokenom: 40 verificiranih, 23 savjetodavna, 155 bez ijedne tvrdnje). Neodlucen ostaje i fer-doktorski--citation-style = \"harvard\".",
+      "decision": "value-corrected",
+      "decidedBy": "Daniel Risavi (odluka u sesiji 2026-08-29)",
+      "decidedAt": "2026-08-29",
+      "rationale": "Vrijednost spustena s \"ieee\" na \"custom\" (citationMeta label \"Prema posebnim uputama\") u pet draft unosa i u sva tri registra. Bodovno je neutralno i to je IZMJERENO, ne pretpostavljeno: na fpzg-novinarstvo-bibliografija.docx i pmf-matematika-uskladjen.docx ieee, vancouver i custom daju istu ocjenu, isti broj bodovanih provjera i isti nazivnik, jer sve tri grane iskljucuju autor-godina provjere. Mijenja se samo tvrdnja koju alat izgovara korisniku: umjesto imenovanog medjunarodnog stila, \"prema posebnim uputama\". Brisanje polja je odbaceno iz istog razloga kao 2026-08-22: tada bi vrijedio korisnikov zatecen odabir stila."
     }
   ]
 }

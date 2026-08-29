@@ -37,7 +37,7 @@
       {
         "ruleId": "muza-diplomski--citation-style",
         "checkId": "citation-style",
-        "value": "prema uputama mentora",
+        "value": "custom",
         "category": "citation",
         "label": "Stil citiranja (odreuje mentor)",
         "machineCheckable": false,
@@ -48,7 +48,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "note": "Normalizirano u kanonski token 2026-08-29. Citat izvora: \"Specificne znacajke rada poput nacina navodjenja izvora i sl. odredjuje mentor\", dakle izvor izricito delegira mentoru; `custom` (\"Prema posebnim uputama\") je vjeran zapis, a token u `rules` je vec bio `custom`."
       }
     ]
   },

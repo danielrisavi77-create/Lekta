@@ -24,6 +24,13 @@ const CITATION_META: Record<string, CitationMeta> = {
   custom: { label: 'Prema posebnim uputama', accessDate: false, mode: 'custom' },
 };
 
+/**
+ * Tokeni koje motor POZNAJE. Postoji jer `citationMeta` na nepoznat token tiho pada na `custom`
+ * (redak ispod), pa profil koji je htio autor-godina dobije granu "bez stila" i izgubi bodovane
+ * citatne provjere. Bez ovog popisa se takav promasaj ne moze ni izmjeriti.
+ */
+export const CITATION_TOKENS: readonly string[] = Object.keys(CITATION_META);
+
 export function citationMeta(id: string): CitationMeta {
   return CITATION_META[id] || CITATION_META.custom;
 }

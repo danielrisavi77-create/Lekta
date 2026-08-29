@@ -223,7 +223,7 @@
       {
         "ruleId": "grf-zavrsni--citation-style",
         "checkId": "citation-style",
-        "value": "ieee",
+        "value": "custom",
         "category": "citation",
         "label": "Stil citiranja (numeriranje po redoslijedu citiranja)",
         "machineCheckable": false,
@@ -234,7 +234,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "note": "Vrijednost spustena s \"ieee\" na \"custom\" 2026-08-29. Citat ovog pravila propisuje BROJCANO navodjenje u uglatim zagradama, a ne IEEE: IEEE je imenovan stil s vlastitim pravilima oblikovanja koja izvor nigdje ne navodi. Pretrazena su sva 24 citljiva izvora tih 26 profila; rijec \"IEEE\" pojavljuje se u tocno jednom, i to kao ime casopisa u primjeru literature (\"IEEE Trans. Ind. Electron.\"), ne kao propis. Bodovno neutralno (citationMeta: ieee -> numeric, custom -> custom, obje grane iskljucuju autor-godina provjere; izmjereno na dvije fixture: ista ocjena, isti broj bodovanih provjera, isti nazivnik). Isti postupak kao FER 2c214fd7."
       }
     ]
   },

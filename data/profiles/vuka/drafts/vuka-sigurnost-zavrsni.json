@@ -63,7 +63,7 @@
       "scope": "whole",
       "modalitySource": "human",
       "checkId": "citation-style",
-      "value": "ieee",
+      "value": "custom",
       "category": "citation",
       "label": "Stil citiranja (obavezno, numericki po redoslijedu)",
       "machineCheckable": true,
@@ -77,7 +77,8 @@
       "reviewedBy": "Daniel Risavi",
       "lastVerified": "2026-07-28",
       "confirmedVia": "ai-1pass-batch",
-      "verifiedHash": "53f81d674eab02246a2fdca11e8c440fe55b3713de085b3a4910793a96608245"
+      "verifiedHash": "53f81d674eab02246a2fdca11e8c440fe55b3713de085b3a4910793a96608245",
+      "note": "Vrijednost spustena s \"ieee\" na \"custom\" 2026-08-29. Citat propisuje BROJCANO navodjenje u uglatim zagradama, a ne IEEE: IEEE je imenovan stil s vlastitim pravilima oblikovanja koja izvor nigdje ne navodi. Pretrazena su sva citljiva vrela svih 26 profila s tim tokenom; rijec \"IEEE\" pojavljuje se u tocno jednom, i to kao ime casopisa u primjeru literature (\"IEEE Trans. Ind. Electron.\"). Bodovno neutralno (izmjereno: ieee, vancouver i custom daju istu ocjenu, isti broj bodovanih provjera i isti nazivnik). Isti postupak kao FER 2c214fd7."
     }
   ]
 }

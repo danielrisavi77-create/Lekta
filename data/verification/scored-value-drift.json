@@ -5,7 +5,6 @@
   "counts": {
     "citation:non-canonical-token": 23,
     "citation:not-applied": 4,
-    "citation:value-mismatch": 9,
     "citation:unbacked": 95,
     "profilesDemoted": 0
   },
@@ -43,16 +42,6 @@
       "kind": "not-applied"
     },
     {
-      "profileId": "pmf-matematika-graduate",
-      "ruleId": "pmf-matematika-graduate--citation-style",
-      "claimValue": "ieee",
-      "liveValue": "custom",
-      "scored": false,
-      "sourceId": "pmf-math-upute-diplomski-2024",
-      "sourcePage": "Prilog 1: Upute za izradu diplomskog rada, II. Izgled diplomskog rada",
-      "kind": "value-mismatch"
-    },
-    {
       "profileId": "alu-doktorski",
       "ruleId": "alu-doktorski--citation-style",
       "claimValue": null,
@@ -61,16 +50,6 @@
       "sourceId": "alu-pravila-smjernice-doktorandi",
       "sourcePage": "Smjernice - disertacija",
       "kind": "non-canonical-token"
-    },
-    {
-      "profileId": "grf-diplomski",
-      "ruleId": "grf-diplomski--citation-style",
-      "claimValue": "ieee",
-      "liveValue": "custom",
-      "scored": false,
-      "sourceId": "grf-uputa-diplomski-prilog3",
-      "sourcePage": "odjeljak Literatura",
-      "kind": "value-mismatch"
     },
     {
       "profileId": "vkjs-zavrsni",
@@ -463,26 +442,6 @@
       "sourcePage": null
     },
     {
-      "profileId": "riteh-zavrsni",
-      "ruleId": "riteh-zavrsni--citation-style",
-      "claimValue": "ieee",
-      "liveValue": "custom",
-      "scored": true,
-      "sourceId": "riteh-upute-radovi-2025",
-      "sourcePage": "Upute, literatura",
-      "kind": "value-mismatch"
-    },
-    {
-      "profileId": "riteh-diplomski",
-      "ruleId": "riteh-diplomski--citation-style",
-      "claimValue": "ieee",
-      "liveValue": "custom",
-      "scored": true,
-      "sourceId": "riteh-upute-radovi-2025",
-      "sourcePage": "Upute, literatura",
-      "kind": "value-mismatch"
-    },
-    {
       "profileId": "kifst-diplomski",
       "ruleId": "kifst-diplomski--citation-style",
       "claimValue": "apa",
@@ -541,26 +500,6 @@
       "scored": false,
       "sourceId": null,
       "sourcePage": null
-    },
-    {
-      "profileId": "vvg-zavrsni",
-      "ruleId": "vvg-zavrsni--citation-style",
-      "claimValue": "ieee",
-      "liveValue": "custom",
-      "scored": true,
-      "sourceId": "vvg-upute-radovi-2013",
-      "sourcePage": "Upute, citiranje",
-      "kind": "value-mismatch"
-    },
-    {
-      "profileId": "vvg-diplomski",
-      "ruleId": "vvg-diplomski--citation-style",
-      "claimValue": "ieee",
-      "liveValue": "custom",
-      "scored": true,
-      "sourceId": "vvg-upute-radovi-2013",
-      "sourcePage": "Upute, citiranje",
-      "kind": "value-mismatch"
     },
     {
       "profileId": "vevu-zavrsni",
@@ -1073,26 +1012,6 @@
       "sourcePage": null
     },
     {
-      "profileId": "vuka-sigurnost-zavrsni",
-      "ruleId": "vuka-sigurnost-zavrsni--citation-style",
-      "claimValue": "ieee",
-      "liveValue": "custom",
-      "scored": true,
-      "sourceId": "vuka-sigurnost-upute-2026",
-      "sourcePage": "Upute SIZ 2026",
-      "kind": "value-mismatch"
-    },
-    {
-      "profileId": "vuka-sigurnost-diplomski",
-      "ruleId": "vuka-sigurnost-diplomski--citation-style",
-      "claimValue": "ieee",
-      "liveValue": "custom",
-      "scored": true,
-      "sourceId": "vuka-sigurnost-upute-2026",
-      "sourcePage": "Upute SIZ 2026",
-      "kind": "value-mismatch"
-    },
-    {
       "profileId": "vuka-prehrambena-zavrsni",
       "ruleId": null,
       "kind": "unbacked",
@@ -1141,16 +1060,6 @@
       "scored": false,
       "sourceId": null,
       "sourcePage": null
-    },
-    {
-      "profileId": "fsb-opci-akademski-rad",
-      "ruleId": "fsb-opci-akademski-rad--citation-style",
-      "claimValue": "ieee",
-      "liveValue": "custom",
-      "scored": false,
-      "sourceId": "fsb-upute-radovi-2020",
-      "sourcePage": "Upute, opci dio",
-      "kind": "value-mismatch"
     },
     {
       "profileId": "efst-opci-akademski-rad",

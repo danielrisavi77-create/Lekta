@@ -18,6 +18,7 @@
  * Gard:     tests/citation-claim-coverage.test.ts (drift + ratchet koji smije samo padati)
  */
 import { readFileSync, readdirSync, existsSync, writeFileSync } from 'node:fs';
+import { CITATION_TOKENS } from '../src/citations/citation-meta';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -94,6 +95,13 @@ const contradicted = rows.filter(
   (r) => r.claimedValue != null && String(r.claimedValue) !== r.token,
 );
 
+/**
+ * Token kojeg motor NE POZNAJE. Nije kozmetika: `citationMeta` na nepoznat token pada na `custom`,
+ * pa profil koji je htio APA autor-godina dobije granu "bez stila" i time izgubi pet bodovanih
+ * provjera i 26 bodova nazivnika (izmjereno). Kanonski token za APA je `apa7`, ne `apa`.
+ */
+const unknownToken = rows.filter((r) => !CITATION_TOKENS.includes(r.token));
+
 const artifact = {
   schemaVersion: 1,
   napomena:
@@ -101,6 +109,8 @@ const artifact = {
     'profila potkrijepljen tvrdnjom; NE mijenja bodovanje.',
   counts,
   contradictedCount: contradicted.length,
+  unknownTokenCount: unknownToken.length,
+  unknownToken,
   byToken: rows.reduce<Record<string, number>>((acc, r) => {
     acc[r.token] = (acc[r.token] ?? 0) + 1;
     return acc;
@@ -119,5 +129,5 @@ console.log(
       .sort()
       .map(([k, v]) => `${k}:${v}`)
       .join(' ') +
-    `), proturjecnih ${contradicted.length}`,
+    `), proturjecnih ${contradicted.length}, motoru nepoznatih tokena ${unknownToken.length}`,
 );

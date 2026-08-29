@@ -2677,6 +2677,14 @@
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
+   "sections": [
+    "sazetak",
+    "sadrzaj",
+    "uvod",
+    "zakljucak",
+    "literatura",
+    "prilozi"
+   ],
    "facts": [
     "Rad se piše fontom Times New Roman, veličina 12 pt, prored 1,5 (gola obvezna specifikacija, scored).",
     "Rad (istraživački ili pregledni) treba sadržavati propisana poglavlja ukljucujuci Sadržaj (imperativ, scored).",
@@ -3040,7 +3048,7 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-02",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
@@ -3060,7 +3068,7 @@
     "final"
    ],
    "verifiedAt": "2026-07-02",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
@@ -5551,7 +5559,7 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-02",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
@@ -5599,7 +5607,7 @@
     "article"
    ],
    "verifiedAt": "2026-07-06",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
@@ -5619,7 +5627,7 @@
     "final"
    ],
    "verifiedAt": "2026-07-02",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
@@ -5799,10 +5807,19 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-02",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Titillium",
    "size": 12,
    "spacing": 1.15,
+   "sections": [
+    "naslovnica",
+    "sazetak",
+    "kljucne rijeci",
+    "sadrzaj",
+    "uvod",
+    "zakljucak",
+    "popis literature"
+   ],
    "facts": [
     "Font Titillium je obavezan (obavezna potpora svih hrvatskih znakova), veličina 12 pt, prored 1,15 (imperativ: 'koristite font Titillium 12 pt, s proredom 1,15') -> scored.",
     "Numeracija stranica je obvezna: naslovne stranice se ne numeriraju, zatim rimski pa arapski brojevi, broj stranice desno na dnu -> scored.",
@@ -5846,10 +5863,19 @@
     "final"
    ],
    "verifiedAt": "2026-07-02",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Titillium",
    "size": 12,
    "spacing": 1.15,
+   "sections": [
+    "naslovnica",
+    "sazetak",
+    "kljucne rijeci",
+    "sadrzaj",
+    "uvod",
+    "zakljucak",
+    "popis literature"
+   ],
    "facts": [
     "Isti faculty-wide Predlozak izrijekom vrijedi za završni i diplomski rad.",
     "Font Titillium je obavezan, veličina 12 pt, prored 1,15 (imperativ 'koristite') -> scored.",
@@ -5910,7 +5936,7 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-02",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
@@ -5930,7 +5956,7 @@
     "final"
    ],
    "verifiedAt": "2026-07-02",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
@@ -5950,7 +5976,7 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-02",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
@@ -5998,7 +6024,7 @@
     "final"
    ],
    "verifiedAt": "2026-07-02",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
@@ -6271,7 +6297,7 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-02",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
@@ -6291,7 +6317,7 @@
     "final"
    ],
    "verifiedAt": "2026-07-02",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
@@ -6393,6 +6419,7 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-16",
+   "citation": "apa",
    "pageMin": 30,
    "pageMax": 50,
    "font": "Times New Roman",
@@ -6421,6 +6448,7 @@
     "final"
    ],
    "verifiedAt": "2026-07-16",
+   "citation": "apa",
    "pageMin": 15,
    "pageMax": 30,
    "font": "Times New Roman",
@@ -6840,6 +6868,13 @@
    "citation": "harvard",
    "font": "Times New Roman",
    "size": 11,
+   "sections": [
+    "Sazetak",
+    "Summary",
+    "Uvod",
+    "Literatura",
+    "Zivotopis"
+   ],
    "facts": [
     "Rad se tiska na papiru A4 formata, fontom Times New Roman ili Arial (imperativ, scored).",
     "Veličina fonta je 11 ili 12 (imperativ, scored).",
@@ -7269,6 +7304,9 @@
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
+   "sections": [
+    "izjava o akademskoj cestitosti"
+   ],
    "sources": [
     {
      "t": "Pravilnik o izradi i obrani zavrsnih i diplomskih radova (Veleuciliste PAR, 2023)",
@@ -7288,6 +7326,9 @@
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
+   "sections": [
+    "izjava o akademskoj cestitosti"
+   ],
    "sources": [
     {
      "t": "Pravilnik o izradi i obrani zavrsnih i diplomskih radova (Veleuciliste PAR, 2023)",
@@ -7403,7 +7444,7 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-02",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
@@ -7423,7 +7464,7 @@
     "final"
    ],
    "verifiedAt": "2026-07-02",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
@@ -7531,6 +7572,16 @@
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
+   "sections": [
+    "uvod",
+    "pregled dosadasnjih istrazivanja i literature",
+    "teorijski pristup",
+    "metode istrazivanja",
+    "rezultati",
+    "rasprava",
+    "zakljucak",
+    "literatura i izvori"
+   ],
    "facts": [
     "Rad se piše fontom Times New Roman veličine 12, prored 1,5 (imperativ, scored).",
     "Rad je A4 formata, margine 2,5 cm (imperativ, scored).",
@@ -7591,7 +7642,7 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-02",
-   "citation": "ieee",
+   "citation": "custom",
    "size": 12,
    "facts": [
     "Diplomski rad mora biti otisnut na papiru formata A4 (imperativ, scored).",
@@ -8627,7 +8678,7 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-03",
-   "citation": "ieee",
+   "citation": "custom",
    "sources": [
     {
      "t": "Upute za izradu i samoarhiviranje završnog / diplomskog rada (RITEH, 2025)",
@@ -8644,7 +8695,7 @@
     "final"
    ],
    "verifiedAt": "2026-07-03",
-   "citation": "ieee",
+   "citation": "custom",
    "sources": [
     {
      "t": "Upute za izradu i samoarhiviranje završnog / diplomskog rada (RITEH, 2025)",
@@ -8682,6 +8733,7 @@
     "final"
    ],
    "verifiedAt": "2026-07-17",
+   "citation": "apa",
    "font": "Times New Roman",
    "size": 12,
    "sources": [
@@ -9395,7 +9447,7 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-04",
-   "citation": "ieee",
+   "citation": "custom",
    "pageMin": 50,
    "sources": [
     {
@@ -9413,7 +9465,7 @@
     "final"
    ],
    "verifiedAt": "2026-07-04",
-   "citation": "ieee",
+   "citation": "custom",
    "sources": [
     {
      "t": "Predlozak za ocjenske radove (Fakultet elektrotehnike i primijenjenog racunarstva, Dubrovnik)",
@@ -10993,6 +11045,7 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-17",
+   "citation": "apa",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
@@ -11012,6 +11065,7 @@
     "final"
    ],
    "verifiedAt": "2026-07-17",
+   "citation": "apa",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5,
@@ -11067,6 +11121,7 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-04",
+   "citation": "vancouver",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5
@@ -11080,6 +11135,7 @@
     "final"
    ],
    "verifiedAt": "2026-07-04",
+   "citation": "vancouver",
    "font": "Times New Roman",
    "size": 12,
    "spacing": 1.5
@@ -11255,7 +11311,7 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-04",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Arial",
    "size": 12,
    "spacing": 1.5,
@@ -11275,7 +11331,7 @@
     "final"
    ],
    "verifiedAt": "2026-07-04",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Arial",
    "size": 12,
    "spacing": 1.5,
@@ -11295,7 +11351,7 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-04",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Arial",
    "size": 12,
    "spacing": 1.5,
@@ -11315,7 +11371,7 @@
     "final"
    ],
    "verifiedAt": "2026-07-04",
-   "citation": "ieee",
+   "citation": "custom",
    "font": "Arial",
    "size": 12,
    "spacing": 1.5,
@@ -11419,7 +11475,7 @@
     "graduate"
    ],
    "verifiedAt": "2026-07-03",
-   "citation": "ieee",
+   "citation": "custom",
    "sources": [
     {
      "t": "Upute za izradu i obranu završnog i diplomskog rada (Veleučilište Velika Gorica, 2013)",
@@ -11436,7 +11492,7 @@
     "final"
    ],
    "verifiedAt": "2026-07-03",
-   "citation": "ieee",
+   "citation": "custom",
    "sources": [
     {
      "t": "Upute za izradu i obranu završnog i diplomskog rada (Veleučilište Velika Gorica, 2013)",
