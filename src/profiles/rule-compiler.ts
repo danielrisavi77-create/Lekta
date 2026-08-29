@@ -99,6 +99,25 @@ function expandNumericRange(value: unknown): number[] | null {
   return Array.from({ length: hi - lo + 1 }, (_, i) => lo + i);
 }
 
+/**
+ * Dijelovi rada u obliku koji motor stvarno cita: `{key, label, terms}`.
+ *
+ * `detectRequiredSections` trazi dio po `r.terms`, pa goli niz imena (`["sazetak","uvod"]`) daje
+ * `terms = []` i svaki dio ispadne NEPREPOZNAT, iako ga rad ima. Autorski sloj taj oblik ipak
+ * koristi, pa se prevodi ovdje umjesto da se u svakom nacrtu prepisuje rucno.
+ *
+ * Objektni unosi prolaze netaknuti; string dobiva sam sebe kao jedini pojam, sto je tocno ono sto
+ * bi covjek napisao (`sectionName` ionako normalizira dijakritiku i velika slova pri usporedbi).
+ */
+export function normalizeRequiredSections(value: unknown): unknown {
+  if (!Array.isArray(value)) return value;
+  return value.map((item) => {
+    if (typeof item !== 'string') return item;
+    const name = item.trim();
+    return { key: name, label: name, terms: [name] };
+  });
+}
+
 function applyEntry(eff: EffectiveRules, entry: RuleEntry): boolean {
   const value = entry.value as any;
   switch (entry.checkId) {
@@ -125,7 +144,12 @@ function applyEntry(eff: EffectiveRules, entry: RuleEntry): boolean {
       }
       return true;
     case 'citation-style': eff.recommendedCitation = value; return true;
-    case 'required-sections': eff.requiredSections = value; return true;
+    // Goli niz imena se NORMALIZIRA u oblik koji motor stvarno cita. `detectRequiredSections`
+    // gleda `r.terms`, pa bi `["sazetak","uvod"]` dalo `terms = []` i svaki dio bi ispao
+    // NEPREPOZNAT: profil bi izgubio bodove za dijelove koje rad ima. Izmjereno 2026-08-24: cetiri
+    // nacrta (erf, grad x2, pmf-geografija) nose upravo taj oblik i zato nikad nisu ni primijenjeni.
+    // Objektni oblik `{key,label,terms}` prolazi netaknut.
+    case 'required-sections': eff.requiredSections = normalizeRequiredSections(value); return true;
     case 'reference-count': eff.minReferences = value; return true;
     case 'word-count':
       if (value && typeof value === 'object') {

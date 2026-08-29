@@ -37,12 +37,15 @@ const ALIASES: Record<string, string[]> = {
 /**
  * RATCHET: koliko ih danas nedostaje. Smije samo PADATI.
  *
- * Izmjereno 2026-08-24 nakon vracanja cetiri izgubljena pravila: 14, sve na dvije osi koje
- * `BOUND_CHECK_IDS` ne prati (`required-sections` 7, `citation-style` 7). Nijedno od njih nije
- * nastalo u ovoj sesiji i svako trazi vlastito citanje izvora, pa se ne tvrdi nula nego se
- * zabranjuje RAST.
+ * 2026-08-24, redom: 18 (zatecено) -> 14 (vracena cetiri izgubljena) -> 0 (primijenjeno preostalih
+ * 14, nakon sto je utvrdjeno ZASTO nisu bila primijenjena). Nula znaci da svako bodovano pravilo s
+ * provenijencijom u nacrtu ima i kljuc u zivom profilu.
+ *
+ * Sedam ih je cekalo na kvar u kompajleru: `required-sections` je goli niz imena propustao
+ * neizmijenjen, a `detectRequiredSections` trazi dio po `r.terms`, pa bi primjena oznacila SVAKI
+ * dio kao nedostajuci. Normalizacija je dodana u `rule-compiler`; tek je onda primjena bila sigurna.
  */
-const RATCHET = 14;
+const RATCHET = 0;
 
 interface Loss { ruleId: string; checkId: string; keys: string[] }
 

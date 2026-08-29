@@ -218,18 +218,46 @@ export function buildRepairableItems(
   return out;
 }
 
-// Naslov checka "Prazni odlomci" iz analyzeDocx (src/analysis/analyze-docx.ts), byte-za-byte
-// (dijakritika). Koristi se SAMO za korelaciju "je li prekrseno", ne kao izvor pravila.
+// Naslov nalaza "Prazni odlomci" kako ga zapise `issue()` u src/scoring/evaluate/structure.ts,
+// byte-za-byte (dijakritika). Koristi se SAMO za korelaciju "je li prekrseno", ne kao izvor pravila.
 const EMPTY_PARAGRAPHS_ISSUE_TITLE = 'Dokument sadrži mnogo praznih odlomaka';
+/** Naslov same PROVJERE; `makeCheck` ga ne prepisuje, pa je stabilan kljuc za korelaciju. */
+const EMPTY_PARAGRAPHS_CHECK_TITLE = 'Prazni odlomci';
+
+/**
+ * Prefiksi koje `makeCheck` (src/scoring/checks.ts) DODAJE naslovu nalaza.
+ *
+ * Zasto ovo postoji: `makeCheck` pri `max === 0` prepisuje nalaz u
+ * `{ severity: 'info', title: 'Informativno: ' + title }`, a pri `unmeasurable` u
+ * `'Nije moguće utvrditi: ' + title`. Provjera "Prazni odlomci" je nebodovana (0/0), pa nalaz koji
+ * stigne ovamo NIKAD ne nosi goli naslov nego prefiksirani.
+ *
+ * IZMJERENO 2026-08-29: usporedba po golom naslovu zato nije pogadjala nikad, pa je `violated`
+ * uvijek bio `false`, `buildAllRepairableItems` je stavku odbacivao (`only()` filtrira
+ * `violated !== false`), i `empty-paragraph-fixer` je bio ponudjen NULA puta na 116 stvarnih
+ * dokumenata, ukljucujuci fixture koja se zove `fer-diplomski-prazni-odlomci.docx`. Korisnik je
+ * vidio nalaz o praznim odlomcima i nije dobio popravak koji u alatu postoji.
+ */
+const MAKE_CHECK_TITLE_PREFIXES = ['Informativno: ', 'Nije moguće utvrditi: '] as const;
+
+/** Naslov nalaza bez prefiksa koje je dodao `makeCheck`. */
+export function baseIssueTitle(title: string): string {
+  for (const prefix of MAKE_CHECK_TITLE_PREFIXES) {
+    if (title.startsWith(prefix)) return title.slice(prefix.length);
+  }
+  return title;
+}
 
 /**
  * Univerzalna higijena dokumenta (prazni odlomci): NIJE vezana ni za jedan institucijski
  * ruleEntry pa namjerno zaobilazi cijeli ruleEntry gate (autoFixable/status/fixerId) iz
  * buildRepairableItems. Prekrsenost se racuna izravno iz issues[] (category:'elements' +
- * tocan naslov checka), ne iz profila.
+ * naslov nalaza), ne iz profila.
  */
 export function universalRepairableItems(issues: Issue[]): RepairableItem[] {
-  const violated = issues.some((i) => i.category === 'elements' && i.title === EMPTY_PARAGRAPHS_ISSUE_TITLE);
+  const violated = issues.some(
+    (i) => i.category === 'elements' && baseIssueTitle(i.title) === EMPTY_PARAGRAPHS_ISSUE_TITLE,
+  );
   return [
     {
       ruleId: 'empty-paragraphs-universal',
@@ -237,7 +265,14 @@ export function universalRepairableItems(issues: Issue[]): RepairableItem[] {
       label: 'Prazni odlomci',
       params: {},
       violated,
-      matchKeys: [EMPTY_PARAGRAPHS_ISSUE_TITLE],
+      // Sva tri oblika: naslov provjere (stabilan), goli naslov nalaza i prefiksirani nalaz kakav
+      // korisnik doista vidi. `pickTargetItem` korelira po naslovu nalaza ILI provjere, pa je bez
+      // prefiksiranog oblika klik na "Otvori mogucnost popravka" na toj kartici padao na fallback.
+      matchKeys: [
+        EMPTY_PARAGRAPHS_CHECK_TITLE,
+        EMPTY_PARAGRAPHS_ISSUE_TITLE,
+        `${MAKE_CHECK_TITLE_PREFIXES[0]}${EMPTY_PARAGRAPHS_ISSUE_TITLE}`,
+      ],
     },
   ];
 }
@@ -543,13 +578,19 @@ export function headingFormatRepairableItem(checks: AnalyzedCheck[], profile: an
   if (!rules || typeof rules !== 'object') return [];
   const levels = rules.levels && typeof rules.levels === 'object' ? rules.levels : {};
   const maxLevel = Number(rules.maxLevel) || 3;
-  const sizeHalfPoints = Number.isFinite(Number(rules.size)) ? Math.round(Number(rules.size) * 2) : undefined;
+  // Velicina PO RAZINI ima prednost pred globalnom, isto kao u analizi (`auditHeadingRules`).
+  // Do 2026-08-24 je popravak citao samo `rules.size`, pa je za profil sa stepenicom (vuka: glave
+  // 16, poglavlja 14, potpoglavlja 12) analiza os BODOVALA a popravak ju nije znao postaviti.
+  const halfPoints = (value: unknown): number | undefined =>
+    Number.isFinite(Number(value)) ? Math.round(Number(value) * 2) : undefined;
+  const globalSizeHalfPoints = halfPoints(rules.size);
   const alignLeft = String(rules.align || '') === 'left';
 
   const targets: Array<Record<string, unknown>> = [];
   for (let level = 1; level <= maxLevel; level++) {
     const spec = levels[String(level)] || {};
     const target: Record<string, unknown> = { level };
+    const sizeHalfPoints = halfPoints(spec.size) ?? globalSizeHalfPoints;
     if (sizeHalfPoints !== undefined) target.sizeHalfPoints = sizeHalfPoints;
     if (spec.bold === true) target.bold = true;
     if (spec.italic === true) target.italic = true;
@@ -586,6 +627,9 @@ export function headingStructureRepairableItem(result: any, profile: any): Repai
   const targets = numberingPlan
     ? numberingPlan.mappings.filter((mapping) => mapping.selectedByDefault).map((mapping) => ({
         paragraphIndex: mapping.paragraphIndex,
+        // Sidro protiv zastarjele mete: `heading-style-fixer` inace gadja samo po indeksu, pa ga
+        // svaki fixer koji ukloni odlomak (empty-paragraph i ostali INDEX_SHIFTING) tiho premjesti.
+        anchorText: mapping.text,
         level: mapping.level,
         numbered: mapping.numbered,
         removeManualNumbering: mapping.removeManualNumbering,
@@ -595,6 +639,7 @@ export function headingStructureRepairableItem(result: any, profile: any): Repai
       }))
     : candidates.filter((candidate) => candidate.selectedByDefault).map((candidate) => ({
         paragraphIndex: candidate.paragraphIndex,
+        anchorText: candidate.text,
         level: candidate.proposedLevel,
         numbered: candidate.numbered,
         clearDirectFont: sizeSpecified,

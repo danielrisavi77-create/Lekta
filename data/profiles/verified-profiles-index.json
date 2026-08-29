@@ -6996,6 +6996,9 @@
         "metadataSpotChecks": 0,
         "years": []
       }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
     }
   },
   {
@@ -7016,6 +7019,9 @@
         "metadataSpotChecks": 0,
         "years": []
       }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
     }
   },
   {
@@ -8058,7 +8064,10 @@
     "workTypes": [
       "final"
     ],
-    "status": "partial"
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "apa"
+    }
   },
   {
     "id": "kifos-diplomski",
@@ -8069,7 +8078,10 @@
     "workTypes": [
       "graduate"
     ],
-    "status": "partial"
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "apa"
+    }
   },
   {
     "id": "fdmri-zavrsni",
@@ -8157,7 +8169,10 @@
     "workTypes": [
       "final"
     ],
-    "status": "partial"
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "apa"
+    }
   },
   {
     "id": "vsig-diplomski",
@@ -8168,7 +8183,10 @@
     "workTypes": [
       "graduate"
     ],
-    "status": "partial"
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "apa"
+    }
   },
   {
     "id": "arca-zavrsni",
@@ -8190,7 +8208,10 @@
     "workTypes": [
       "final"
     ],
-    "status": "partial"
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "apa"
+    }
   },
   {
     "id": "evtos-zavrsni",

@@ -6714,6 +6714,43 @@
       "recommendedCitation": "harvard",
       "paperSizes": [
         "A4"
+      ],
+      "requiredSections": [
+        {
+          "key": "sazetak",
+          "label": "Sazetak",
+          "terms": [
+            "sazetak"
+          ]
+        },
+        {
+          "key": "summary",
+          "label": "Summary",
+          "terms": [
+            "summary"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura"
+          ]
+        },
+        {
+          "key": "zivotopis",
+          "label": "Zivotopis",
+          "terms": [
+            "zivotopis"
+          ]
+        }
       ]
     },
     "facts": [
@@ -7414,7 +7451,58 @@
       "requireToc": true,
       "requirePageNumbers": true,
       "requireA4": true,
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "ieee",
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "naslovnica",
+          "terms": [
+            "naslovnica"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "sazetak",
+          "terms": [
+            "sazetak"
+          ]
+        },
+        {
+          "key": "kljucne rijeci",
+          "label": "kljucne rijeci",
+          "terms": [
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "popis literature",
+          "label": "popis literature",
+          "terms": [
+            "popis literature"
+          ]
+        }
+      ]
     },
     "facts": [
       "Font Titillium je obavezan (obavezna potpora svih hrvatskih znakova), veličina 12 pt, prored 1,15 (imperativ: 'koristite font Titillium 12 pt, s proredom 1,15') -> scored.",
@@ -7505,7 +7593,58 @@
       "requireToc": true,
       "requirePageNumbers": true,
       "requireA4": true,
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "ieee",
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "naslovnica",
+          "terms": [
+            "naslovnica"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "sazetak",
+          "terms": [
+            "sazetak"
+          ]
+        },
+        {
+          "key": "kljucne rijeci",
+          "label": "kljucne rijeci",
+          "terms": [
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "popis literature",
+          "label": "popis literature",
+          "terms": [
+            "popis literature"
+          ]
+        }
+      ]
     },
     "facts": [
       "Isti faculty-wide Predlozak izrijekom vrijedi za završni i diplomski rad.",
@@ -7888,6 +8027,64 @@
       "recommendedCitation": "harvard",
       "paperSizes": [
         "A4"
+      ],
+      "requiredSections": [
+        {
+          "key": "uvod",
+          "label": "uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "pregled dosadasnjih istrazivanja i literature",
+          "label": "pregled dosadasnjih istrazivanja i literature",
+          "terms": [
+            "pregled dosadasnjih istrazivanja i literature"
+          ]
+        },
+        {
+          "key": "teorijski pristup",
+          "label": "teorijski pristup",
+          "terms": [
+            "teorijski pristup"
+          ]
+        },
+        {
+          "key": "metode istrazivanja",
+          "label": "metode istrazivanja",
+          "terms": [
+            "metode istrazivanja"
+          ]
+        },
+        {
+          "key": "rezultati",
+          "label": "rezultati",
+          "terms": [
+            "rezultati"
+          ]
+        },
+        {
+          "key": "rasprava",
+          "label": "rasprava",
+          "terms": [
+            "rasprava"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura i izvori",
+          "label": "literatura i izvori",
+          "terms": [
+            "literatura i izvori"
+          ]
+        }
       ]
     },
     "facts": [
@@ -8770,7 +8967,51 @@
       ],
       "spacing": 1.5,
       "requireToc": true,
-      "recommendedCitation": "apa7"
+      "recommendedCitation": "apa7",
+      "requiredSections": [
+        {
+          "key": "sazetak",
+          "label": "sazetak",
+          "terms": [
+            "sazetak"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "literatura",
+          "terms": [
+            "literatura"
+          ]
+        },
+        {
+          "key": "prilozi",
+          "label": "prilozi",
+          "terms": [
+            "prilozi"
+          ]
+        }
+      ]
     },
     "facts": [
       "Rad se piše fontom Times New Roman, veličina 12 pt, prored 1,5 (gola obvezna specifikacija, scored).",
@@ -27410,7 +27651,17 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "requiredSections": [
+        {
+          "key": "declaration",
+          "label": "izjava o akademskoj cestitosti",
+          "terms": [
+            "izjava o akademskoj cestitosti",
+            "izjava o akademskoj čestitosti"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Pravilnik je proceduralan: NE propisuje oblikovanje brojkama ni citatni stil (provjereno OCR-om cijelog dokumenta) pa je citat custom. Validacija podatkovno blokirana: repozitorij PAR nema deponiranih otvorenih radova. Format-pravila su OPĆI hrvatski akademski baseline, NISU institucijski propis (institucija ne objavljuje javnu uputu o oblikovanju); koristi upute mentora.",
@@ -27464,7 +27715,17 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "requiredSections": [
+        {
+          "key": "declaration",
+          "label": "izjava o akademskoj cestitosti",
+          "terms": [
+            "izjava o akademskoj cestitosti",
+            "izjava o akademskoj čestitosti"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Pravilnik je proceduralan: NE propisuje oblikovanje brojkama ni citatni stil (provjereno OCR-om cijelog dokumenta) pa je citat custom. Validacija podatkovno blokirana: repozitorij PAR nema deponiranih otvorenih radova. Format-pravila su OPĆI hrvatski akademski baseline, NISU institucijski propis (institucija ne objavljuje javnu uputu o oblikovanju); koristi upute mentora.",
@@ -27516,7 +27777,8 @@
         "bottom": 2.5,
         "left": 3
       },
-      "requirePageNumbers": true
+      "requirePageNumbers": true,
+      "recommendedCitation": "vancouver"
     },
     "facts": [],
     "note": "Institucija ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na vss.hr) pa je citat custom. Format-pravila su OPĆI hrvatski akademski baseline, NISU institucijski propis (institucija ne objavljuje javnu uputu o oblikovanju); koristi upute mentora.",
@@ -27580,7 +27842,8 @@
         "bottom": 2.5,
         "left": 3
       },
-      "requirePageNumbers": true
+      "requirePageNumbers": true,
+      "recommendedCitation": "vancouver"
     },
     "facts": [],
     "note": "Institucija ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na vss.hr) pa je citat custom. Format-pravila su OPĆI hrvatski akademski baseline, NISU institucijski propis (institucija ne objavljuje javnu uputu o oblikovanju); koristi upute mentora.",
@@ -31872,7 +32135,8 @@
             "reference"
           ]
         }
-      ]
+      ],
+      "recommendedCitation": "apa"
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -31974,7 +32238,8 @@
             "reference"
           ]
         }
-      ]
+      ],
+      "recommendedCitation": "apa"
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -32727,7 +32992,8 @@
         "left": 2.5
       },
       "spacing": 1.5,
-      "requirePageNumbers": true
+      "requirePageNumbers": true,
+      "recommendedCitation": "apa"
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -32780,7 +33046,8 @@
         "left": 2.5
       },
       "spacing": 1.5,
-      "requirePageNumbers": true
+      "requirePageNumbers": true,
+      "recommendedCitation": "apa"
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -32918,7 +33185,8 @@
       "size": [
         12
       ],
-      "requirePageNumbers": true
+      "requirePageNumbers": true,
+      "recommendedCitation": "apa"
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",

@@ -45828,19 +45828,22 @@
         "fixerId": "heading-format-fixer",
         "label": "Oblikovanje naslova po razinama",
         "scope": "profil",
-        "target": "razina 1 podebljano; razina 2 podebljano; razina 3 podebljano",
+        "target": "razina 1 16 pt podebljano; razina 2 14 pt podebljano; razina 3 12 pt podebljano",
         "params": {
           "targets": [
             {
               "level": 1,
+              "sizeHalfPoints": 32,
               "bold": true
             },
             {
               "level": 2,
+              "sizeHalfPoints": 28,
               "bold": true
             },
             {
               "level": 3,
+              "sizeHalfPoints": 24,
               "bold": true
             }
           ]
@@ -45944,19 +45947,22 @@
         "fixerId": "heading-format-fixer",
         "label": "Oblikovanje naslova po razinama",
         "scope": "profil",
-        "target": "razina 1 podebljano; razina 2 podebljano; razina 3 podebljano",
+        "target": "razina 1 16 pt podebljano; razina 2 14 pt podebljano; razina 3 12 pt podebljano",
         "params": {
           "targets": [
             {
               "level": 1,
+              "sizeHalfPoints": 32,
               "bold": true
             },
             {
               "level": 2,
+              "sizeHalfPoints": 28,
               "bold": true
             },
             {
               "level": 3,
+              "sizeHalfPoints": 24,
               "bold": true
             }
           ]
@@ -46058,19 +46064,22 @@
         "fixerId": "heading-format-fixer",
         "label": "Oblikovanje naslova po razinama",
         "scope": "profil",
-        "target": "razina 1 podebljano; razina 2 podebljano; razina 3 podebljano",
+        "target": "razina 1 16 pt podebljano; razina 2 14 pt podebljano; razina 3 12 pt podebljano",
         "params": {
           "targets": [
             {
               "level": 1,
+              "sizeHalfPoints": 32,
               "bold": true
             },
             {
               "level": 2,
+              "sizeHalfPoints": 28,
               "bold": true
             },
             {
               "level": 3,
+              "sizeHalfPoints": 24,
               "bold": true
             }
           ]

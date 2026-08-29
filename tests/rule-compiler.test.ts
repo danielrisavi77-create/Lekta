@@ -43,6 +43,34 @@ describe('rule-compiler faithfulness', () => {
     expect(collectCompileDiagnostics([profile])).toEqual([]);
   });
 
+  it('goli niz imena dijelova se normalizira u oblik koji motor cita', () => {
+    // `detectRequiredSections` trazi dio po `r.terms`. Bez normalizacije bi `["sazetak","uvod"]`
+    // dalo `terms: []`, pa bi SVAKI dio ispao neprepoznat i profil bi gubio bodove za dijelove
+    // koje rad ima. Cetiri nacrta (erf, grad x2, pmf-geografija) nose upravo taj oblik.
+    const profile: ThesisProfile = {
+      id: 'demo-rs',
+      rules: {},
+      ruleEntries: [{ ruleId: 'r-rs', checkId: 'required-sections', value: ['sazetak', 'uvod'] }],
+    };
+    expect(compileEffectiveRules(profile)).toEqual({
+      requiredSections: [
+        { key: 'sazetak', label: 'sazetak', terms: ['sazetak'] },
+        { key: 'uvod', label: 'uvod', terms: ['uvod'] },
+      ],
+    });
+  });
+
+  it('objektni oblik dijelova prolazi netaknut', () => {
+    // Kontrola u drugom smjeru: normalizacija ne smije prepisati vec autorirane pojmove.
+    const sections = [{ key: 'sazetak', label: 'Sažetak', terms: ['sažetak', 'abstract'] }];
+    const profile: ThesisProfile = {
+      id: 'demo-rs2',
+      rules: {},
+      ruleEntries: [{ ruleId: 'r-rs2', checkId: 'required-sections', value: sections }],
+    };
+    expect((compileEffectiveRules(profile) as any).requiredSections).toEqual(sections);
+  });
+
   it('poravnanje fusnota ima svoj checkId, odvojen od poravnanja tijela', () => {
     // `justify` i `footnote-justify` su DVIJE osi iz dvije razlicite odredbe: hks propisuje
     // "tekst mora biti obostrano poravnan" za tijelo i, u zasebnoj natuknici o biljeskama,
