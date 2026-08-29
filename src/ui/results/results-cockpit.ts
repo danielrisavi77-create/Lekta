@@ -78,7 +78,7 @@ export function resultRendererFor(doc: Document): ResultsRenderer {
   if (requested === 'legacy') return 'legacy';
   const root = doc.documentElement.dataset.resultRenderer ?? doc.body?.dataset.resultRenderer;
   if (root === 'cockpit' || root === 'v1') return 'cockpit';
-  return requested === 'cockpit' ? 'cockpit' : 'legacy';
+  return root === 'legacy' ? 'legacy' : 'cockpit';
 }
 
 export function renderResultsCockpit(mount: HTMLElement, model: VisualResultModel, options: ResultsCockpitOptions): void {

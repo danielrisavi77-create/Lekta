@@ -274,7 +274,7 @@ describe('Results Cockpit V1', () => {
   });
 
   it('uses cockpit by default and allows an explicit legacy opt-out', () => {
-    expect(resultRendererFor(document)).toBe('legacy');
+    expect(resultRendererFor(document)).toBe('cockpit');
     const cockpitView = document.implementation.createHTMLDocument('cockpit');
     cockpitView.documentElement.dataset.resultRenderer = 'cockpit';
     Object.defineProperty(cockpitView, 'defaultView', { value: { location: { search: '' } } });
