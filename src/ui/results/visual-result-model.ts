@@ -24,6 +24,9 @@ export type VisualScoreModel =
   | { kind: 'scored'; value: number; max: 100; scoredChecks: number; authority: VisualAuthorityKind }
   | { kind: 'unscored'; label: string; reason: string };
 
+export interface VisualCategoryInput { earned?: number; max?: number; }
+export interface VisualCategoryModel { id: string; label: string; earned: number; max: number; percentage: number; }
+
 export interface VisualExactEvidenceInput {
   verified?: boolean;
   sourceId?: string;
@@ -91,6 +94,7 @@ export interface VisualRepairSignal {
 
 export interface VisualResultInput extends FindingResultInput {
   score?: number | null;
+  categories?: Record<string, VisualCategoryInput>;
   scoredChecks?: number | null;
   generatedAt?: string;
   profileStatus?: string | null;
@@ -128,6 +132,7 @@ export interface VisualResultModel {
     limitations: VisualFindingModel[];
     top: VisualFindingModel[];
   };
+  categories: VisualCategoryModel[];
   capabilities: VisualResultCapabilities;
   documentDna: VisualDocumentDnaModel;
   contentFreeMetadata: VisualResultContentFreeMetadata;
@@ -242,6 +247,17 @@ function documentDna(segments: readonly VisualDocumentDnaSegmentInput[] | undefi
     })),
   };
 }
+function categoryModels(input: VisualResultInput['categories']): VisualCategoryModel[] {
+  if (!input) return [];
+  const labels: Record<string, string> = { formatting: 'Oblikovanje', structure: 'Struktura', citations: 'Citatnice', elements: 'Elementi' };
+  return Object.entries(input).flatMap(([id, value]) => {
+    const max = Number(value?.max);
+    const earned = Number(value?.earned);
+    if (!Number.isFinite(max) || max <= 0 || !Number.isFinite(earned)) return [];
+    return [{ id, label: labels[id] ?? id, earned, max, percentage: Math.max(0, Math.min(100, Math.round((earned / max) * 100))) }];
+  });
+}
+
 
 function contentFreeScore(score: VisualScoreModel): VisualResultContentFreeMetadata['score'] {
   return score.kind === 'scored'
@@ -291,6 +307,7 @@ export function buildVisualResultModel(result: VisualResultInput, options: Visua
   const readiness = resultReadiness(documentIssues, readinessAuthority);
   const authority = authorityKind(readinessAuthority);
   const score = scoreModel(result, authority);
+  const categories = categoryModels(result.categories);
   const capabilities: VisualResultCapabilities = {
     preview: result.capabilities?.preview === true,
     repair: visualDocument.some((finding) => finding.capabilities.repair),
@@ -306,6 +323,7 @@ export function buildVisualResultModel(result: VisualResultInput, options: Visua
       limitations: visualLimitations,
       top: visualTop,
     },
+    categories,
     capabilities,
     documentDna: documentDna(options.documentDnaSegments),
     contentFreeMetadata: {

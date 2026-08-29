@@ -43,6 +43,8 @@ import { renderRepairPanel, renderConfirmation, advancedFormFor } from './repair
 import { renderRepairLedgerModal } from './repair-price-slider';
 import { trapModal, releaseModal } from './modal-utils';
 import { buildFindingViewModels, findingCardHtml, topFindings, type FindingSessionState, type FindingViewModel } from './finding-view-model';
+import { buildVisualResultModel } from './results/visual-result-model';
+import { renderResultsCockpit, resultRendererFor, type ResultsCockpitAction } from './results/results-cockpit';
 import { collectAllPreviewFlags } from '../preview/preview-anchors';
 import { resultReadiness, repairCeiling } from './result-readiness';
 import { detectPassRegressions } from '../analysis/repair-regression';
@@ -1156,8 +1158,105 @@ function renderTriage(r: any){
   renderPhaseTwoResultViews(r);
   syncPremiumResultVisuals(r);
   window.__lektaIcons?.();
+  renderResultsCockpitForResult(r);
 }
 function refreshFindingViews(r: any){renderTriage(r)}
+function resultsCockpitEnabled(){return resultRendererFor(runtimeDocument())==='cockpit'}
+const RESULTS_COCKPIT_ADVANCED_IDS=['repairEntry','resultGuide','triagePanel','networkProof','nextSteps','fullReportBanner','waitlistBar','resultDetails'];
+function ensureResultsCockpitAdvancedShell(): HTMLElement|null{
+  const mount=$('#resultCockpit') as HTMLElement|null;
+  if(!mount)return null;
+  const existing=$('#resultCockpitAdvanced') as HTMLElement|null;
+  if(existing)return existing;
+  const shell=runtimeDocument().createElement('section');
+  shell.id='resultCockpitAdvanced';
+  shell.className='result-cockpit-advanced-shell';
+  shell.setAttribute('aria-label','Napredna provjera');
+  shell.innerHTML='<div class="result-cockpit-advanced-head"><strong>Napredna provjera</strong><p>Detaljne tablice, plan ispravaka i dodatne provjere ostaju dostupni ovdje.</p></div><div class="result-cockpit-advanced-content" id="resultCockpitAdvancedContent" data-cockpit-advanced-content></div>';
+  mount.insertAdjacentElement('afterend',shell);
+  const content=shell.querySelector<HTMLElement>('[data-cockpit-advanced-content]');
+  if(!content)return shell;
+  for(const id of RESULTS_COCKPIT_ADVANCED_IDS){
+    const node=$('#'+id) as HTMLElement|null;
+    if(node&&node!==shell)content.appendChild(node);
+  }
+  return shell;
+}
+function setResultsCockpitAdvanced(open:boolean){
+  const shell=$('#resultCockpitAdvanced') as HTMLElement|null;
+  const content=$('#resultCockpitAdvancedContent') as HTMLElement|null;
+  if(!content)return;
+  content.hidden=!open;
+  if(shell)shell.dataset.open=String(open);
+  const toggle=$('#resultCockpit [data-cockpit-advanced]') as HTMLElement|null;
+  toggle?.setAttribute('aria-expanded',String(open));
+  if(open){revealResultDetails();revealDetails()}
+}
+function handleResultsCockpitAction(r:any,action:ResultsCockpitAction){
+  const finding=findingsFor(r).find(x=>x.id===action.findingId);
+  if(!finding)return;
+  if(action.kind==='preview'){
+    void trackEvent('finding_opened',{category:finding.category});
+    if(finding.scope.kind==='anchor')void openPreviewAt(finding.scope.paragraphIndex,finding.scope.footnoteId);
+    return;
+  }
+  if(action.kind==='repair'){
+    void trackEvent('finding_opened',{category:finding.category});
+    scrollToRepairPanel(r,finding);
+    return;
+  }
+  if(action.kind==='confirm'){
+    findingStates.set(finding.id,{status:'confirmed'});
+    void trackEvent('finding_resolved',{category:finding.category,manual:true});
+    toast('Nalaz je ozna\u010Den kao ru\u010Dno provjeren. Automatska ocjena se nije promijenila.');
+    refreshFindingViews(r);
+    return;
+  }
+  if(action.kind==='ignore'){
+    findingStates.set(finding.id,{status:'ignored',ignoredReason:action.reason});
+    void trackEvent('finding_ignored',{category:finding.category});
+    toast('Nalaz je zanemaren i uklonjen iz tri najva\u017Enija koraka. Automatska ocjena se nije promijenila.');
+    refreshFindingViews(r);
+    return;
+  }
+  findingStates.delete(finding.id);
+  toast('Nalaz je vra\u0107en u otvorene stavke.');
+  refreshFindingViews(r);
+}
+function renderResultsCockpitForResult(r:any){
+  const mount=$('#resultCockpit') as HTMLElement|null;
+  const resultView=$('#resultView') as HTMLElement|null;
+  if(!mount||!resultView)return;
+  const enabled=resultsCockpitEnabled();
+  resultView.classList.toggle('result-renderer-v1',enabled);
+  const shell=ensureResultsCockpitAdvancedShell();
+  const content=shell?.querySelector<HTMLElement>('[data-cockpit-advanced-content]');
+  if(!enabled){
+    mount.className='';
+    mount.innerHTML='';
+    if(content)content.hidden=false;
+    if(shell)shell.dataset.open='false';
+    return;
+  }
+  const advancedOpen=shell?.dataset.open==='true';
+  const model=buildVisualResultModel({
+    ...r,
+    capabilities:{preview:true,repair:!r?.demo,exactEvidence:false},
+  },{
+    states:findingStates,
+    repairItems:[...repairPanelItems,...repairPanelTextItems],
+    ruleEntries:analyzedProfile?.ruleEntries,
+  });
+  renderResultsCockpit(mount,model,{
+    repairAvailable:!r?.demo,
+    advancedOpen,
+    onAction:(action)=>handleResultsCockpitAction(r,action),
+    onAdvancedToggle:(open)=>setResultsCockpitAdvanced(open),
+  });
+  setResultsCockpitAdvanced(advancedOpen);
+  window.__lektaIcons?.();
+}
+
 
 // Faza 2: jedan put kroz nalaze. Prioriteti ostaju gore, a puni popis zivi na
 // jednom mjestu. Ogranicenja alata ostaju dostupna, ali nisu "problemi rada".
@@ -1785,7 +1884,7 @@ async function renderRepairSection(r: any){
   // se prvi put zove SINKRONO odmah nakon poziva ove funkcije (renderResult), dok je mount jos prazan
   // -> #repairEntry ostajao trajno skriven i kad panel ispod stvarno ima sadrzaj. try/finally hvata
   // SVAKI izlaz iz ove funkcije (i rane return-ove kad nema stavki, gdje ponovni izracun ostaje no-op).
-  if(r===currentResult) renderRepairCta(r);
+   if(r===currentResult){renderRepairCta(r);renderResultsCockpitForResult(r);}
  }
 }
 
