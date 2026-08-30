@@ -25,6 +25,8 @@ export interface RegressionCheckLike {
 }
 
 export interface PassRegression {
+  /** Stabilan identitet provjere, kad ga ima; pozivatelji filtriraju po njemu, ne po naslovu. */
+  id?: string | null;
   title: string;
   category?: string;
   /** Status poslije popravka; undefined kad provjera vise uopce ne postoji u rezultatu. */
@@ -60,6 +62,7 @@ export function detectPassRegressions(
     const beforeEarned = check.earned ?? 0;
     const afterEarned = match?.earned ?? 0;
     out.push({
+      ...(check.id != null ? { id: check.id } : {}),
       title: check.title,
       ...(check.category != null ? { category: check.category } : {}),
       ...(match?.status != null ? { after: match.status } : {}),
@@ -67,4 +70,47 @@ export function detectPassRegressions(
     });
   }
   return out;
+}
+
+/**
+ * Provjere koje mjere POHRANJEN tekst Wordovog polja, a ne stvarno stanje dokumenta.
+ *
+ * Kad popravak doda naslov, `toc.coverage` usporedi 45 naslova s 41 stavkom sadrzaja i prijavi
+ * pad, iako je sadrzaj ZIVO polje koje Word regenerira pri otvaranju. Izmjereno 2026-08-23 na
+ * `corpus-0084`: 3/3 -> 1/3, naslova 42 -> 45, stavki sadrzaja 41 -> 41, uz 49 polja oznacenih
+ * `w:dirty`. Dokument je bio ISPRAVAN; ustajao je samo pohranjeni tekst.
+ */
+const STALE_FIELD_CHECK_IDS: ReadonlySet<string> = new Set(['toc.coverage', 'toc.page-numbers']);
+
+/**
+ * Hoce li Word regenerirati sadrzaj pri otvaranju? Trazi ZIVO TOC polje koje je oznaceno kao
+ * ustajalo (`w:dirty`, status `stale`). Bez oznake Word ne osvjezava sam, pa bi student vidio
+ * stari sadrzaj i pad bi bio STVARAN: zato se uvjet ne smije svesti na "postoji TOC polje".
+ */
+export function tocFieldWillRefresh(result: unknown): boolean {
+  // Lokalni panel ne barata punim rezultatom nego snimkom bodova, pa smije predati gotovu
+  // zastavicu; serverski put i harness predaju cijeli rezultat i zastavica se izvodi ovdje.
+  const direct = (result as { tocFieldWillRefresh?: unknown })?.tocFieldWillRefresh;
+  if (typeof direct === 'boolean') return direct;
+  const fields = (result as { details?: { fieldIntegrity?: { fields?: Array<{ kind?: string; dirty?: boolean; status?: string }> } } })
+    ?.details?.fieldIntegrity?.fields;
+  if (!Array.isArray(fields)) return false;
+  const toc = fields.filter((field) => field.kind === 'toc');
+  return toc.length > 0 && toc.some((field) => field.dirty === true || field.status === 'stale');
+}
+
+/**
+ * Makni regresije koje su posljedica USTAJALOG polja, a ne stete.
+ *
+ * Zasto to nije "gutanje nalaza": bez ovoga `detectPassRegressions` demotira ispravno popravljen
+ * dokument na sporedan izbor, pa sucelje korisniku preporuci IZVORNI dokument koji je losiji.
+ * Uvjet je uzak i provjerljiv (zivo TOC polje oznaceno za osvjezavanje), a sve ostale regresije
+ * prolaze nedirnute.
+ */
+export function dropStaleFieldRegressions(
+  regressions: readonly PassRegression[],
+  afterResult: unknown,
+): PassRegression[] {
+  if (!tocFieldWillRefresh(afterResult)) return [...regressions];
+  return regressions.filter((regression) => !(regression.id && STALE_FIELD_CHECK_IDS.has(regression.id)));
 }

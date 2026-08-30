@@ -12,7 +12,9 @@ import { enrichWithCrossref } from '../citations/bibliography-enrichment';
 import { renderRepairLedgerModal, type AdvancedFormDescriptor } from './repair-price-slider';
 import type { Check } from '../scoring/checks';
 import { repairCeiling } from './result-readiness';
-import { detectPassRegressions } from '../analysis/repair-regression';
+import { detectPassRegressions, dropStaleFieldRegressions } from '../analysis/repair-regression';
+import { DEEP_CAPABLE } from '../repair/default-selection';
+import { summarizeRepairOutcome, describeRepairOutcome, type RepairOutcome } from '../repair/repair-outcome';
 
 export interface TitlePageFormField {
   key: string;
@@ -293,24 +295,22 @@ export interface RepairableItem {
   crossFileSubmissionForm?: CrossFileSubmissionFormDefinition;
 }
 
-/** Fixeri koji podrzavaju v2 dubinsko ciscenje izravnog formatiranja u tekstu. */
 /**
- * Fixeri koji znaju ocistiti IZRAVNO oblikovanje (ne samo stilove). Izvezeno da testovi mogu
- * zrcaliti stvarni korisnicki tok: deep preklopnik je u sucelju UKLJUCEN po zadanom, pa
- * `buildDefaultRepairRequests` sam po sebi NE reproducira ono sto korisnik dobije klikom na
- * Popravi (izmjereno u tests/closed-loop-profiles.test.ts: bez deep zastavice font, velicina,
- * prored i poravnanje ostaju neprimijenjeni jer izravno oblikovanje nadjacava stil).
+ * Fixeri koji podrzavaju dubinsko ciscenje izravnog formatiranja.
+ *
+ * Definicija zivi u repair jezgri (`src/repair/default-selection.ts`) jer je cinjenica o
+ * fixerima, ne o sucelju; ovdje se samo re-izvozi da postojeci pozivatelji ostanu netaknuti.
  */
-export const DEEP_CAPABLE: ReadonlySet<FixerId> = new Set([
-  'font-fixer',
-  'line-spacing-fixer',
-  'alignment-fixer',
-  'paragraph-spacing-fixer',
-  'footnote-spacing-fixer',
-] as FixerId[]);
+export { DEEP_CAPABLE };
 
 /** Bodovna slika (ukupni score + po kategorijama) za usporedbu prije/poslije popravka. */
 export interface RepairScoreSnapshot {
+  /**
+   * Hoce li Word regenerirati sadrzaj pri otvaranju (zivo TOC polje oznaceno kao ustajalo).
+   * Bez toga bi popravak koji DODA naslov izgledao kao regresija `toc.coverage`, jer pohranjeni
+   * tekst sadrzaja jos ne zna za novi naslov. Vidi `tocFieldWillRefresh`.
+   */
+  tocFieldWillRefresh?: boolean;
   score: number | null;
   categories: Record<string, { earned: number; max: number }>;
   /** Provjere iz analize (za repairCeiling - "koliko je automatski popravak realno u stanju
@@ -653,7 +653,7 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
     // dokument, ali kad postoji regresija glavna ponuda je original. Kad ponovna analiza padne,
     // popravljeni se isporucuje uz iskrenu napomenu - pad provjere ne smije zarobiti dokument.
     if (repairedBytes) {
-      const verdict = await renderRecheck(summary, repairedBytes, ctx);
+      const verdict = await renderRecheck(summary, repairedBytes, ctx, checkedItems);
       renderDelivery(summary, repairedBytes, verdict, ctx);
     }
   }
@@ -1598,6 +1598,15 @@ export interface RecheckVerdict {
   unavailable: boolean;
   /** Broj provjera koje su prije prolazile, a sada ne prolaze. */
   regressions: number;
+  /**
+   * Koliko je od CILJANOG stvarno razrijeseno. `null` kad se ne moze izracunati (nema provjera).
+   *
+   * Bez ovoga je sucelje znalo samo koliko je izmjena primijenjeno, deltu ocjene i koliko je
+   * provjera PALO, pa je dokument s dvije od sest razrijesenih ciljanih provjera i nepromijenjenom
+   * ocjenom dobivao poruku "Popravljeno (N izmjena)": tocan opis onoga sto je ucinjeno, ali ne i
+   * ishoda.
+   */
+  outcome: RepairOutcome | null;
 }
 
 /**
@@ -1607,10 +1616,15 @@ export interface RecheckVerdict {
  * Od 2026-08-16 se izvodi PRIJE isporuke i vraca verdikt, jer o njemu ovisi sto je glavna
  * ponuda za preuzimanje (vidi `renderDelivery`).
  */
-async function renderRecheck(el: HTMLElement, bytes: Uint8Array, ctx: RepairPanelContext): Promise<RecheckVerdict> {
+async function renderRecheck(
+  el: HTMLElement,
+  bytes: Uint8Array,
+  ctx: RepairPanelContext,
+  selectedItems: readonly RepairableItem[] = [],
+): Promise<RecheckVerdict> {
   const before = ctx.beforeScore;
   const reanalyze = ctx.reanalyze;
-  if (!reanalyze || !before) return { unavailable: true, regressions: 0 }; // lokalni const: narrowing prezivi await ispod
+  if (!reanalyze || !before) return { unavailable: true, regressions: 0, outcome: null }; // lokalni const: narrowing prezivi await ispod
   const pending = document.createElement('p');
   pending.className = 'lekta-repair-panel__recheck-pending';
   pending.textContent = 'Računam spremnost popravljenog dokumenta...';
@@ -1630,22 +1644,52 @@ async function renderRecheck(el: HTMLElement, bytes: Uint8Array, ctx: RepairPane
     note.textContent =
       'Novi rezultat nije bilo moguće izračunati, pa provjera popravljenog dokumenta ovaj put izostaje.';
     el.appendChild(note);
-    return { unavailable: true, regressions: 0 };
+    return { unavailable: true, regressions: 0, outcome: null };
   }
   if (after === null) {
     const note = document.createElement('p');
     note.textContent = 'Ovaj profil ne daje bodovnu ocjenu, pa se popravak prikazuje samo kao popis iznad.';
     el.appendChild(note);
-    return { unavailable: true, regressions: 0 };
+    return { unavailable: true, regressions: 0, outcome: null };
   }
   const box = buildBeforeAfter(before, after);
-  const regressions = before.checks && after.checks ? detectPassRegressions(before.checks, after.checks) : [];
+  // Ustajalo TOC polje nije steta: Word ga regenerira pri otvaranju.
+  const regressions = before.checks && after.checks
+    ? dropStaleFieldRegressions(detectPassRegressions(before.checks, after.checks), after)
+    : [];
   const regression = buildRegressionWarning(regressions);
   // Regresija ide ODMAH iza retka sa score-om: u zbroju se pad pojedine provjere ne vidi
   // (+6 na marginama i -3 na fusnotama izgleda kao cist +3), pa mora imati vlastito mjesto.
   if (regression) box.insertBefore(regression, box.firstChild?.nextSibling ?? null);
+  // ISHOD (koliko je od ciljanog razrijeseno) ide odmah uz ocjenu: rast ocjene sam po sebi ne
+  // kaze je li popravak dovrsen, a bez toga djelomican rezultat izgleda potpuno.
+  const outcome = before.checks && after.checks
+    ? summarizeRepairOutcome({ before: before.checks, after: after.checks, selected: selectedItems })
+    : null;
+  const outcomeLine = buildOutcomeLine(outcome);
+  if (outcomeLine) box.insertBefore(outcomeLine, box.firstChild?.nextSibling ?? null);
   el.appendChild(box);
-  return { unavailable: false, regressions: regressions.length };
+  return { unavailable: false, regressions: regressions.length, outcome };
+}
+
+/**
+ * Iskrena recenica o ISHODU: "razrijeseno N od M".
+ *
+ * Tvrdnja i brojke dolaze iz `describeRepairOutcome` (`src/repair/repair-outcome.ts`), isti izvor
+ * koji koristi serverski put u `app.ts`. Ovdje je samo omot u DOM. Obrazac je preuzet iz
+ * `src/ui/source-check-view.ts` ("Rezultat je djelomican", uvijek koliko od koliko), gdje je vec
+ * zapisano zasto: bez toga djelomican rezultat izgleda kao potpun.
+ */
+export function buildOutcomeLine(outcome: RepairOutcome | null): HTMLElement | null {
+  const copy = describeRepairOutcome(outcome);
+  if (!copy) return null;
+  const p = document.createElement('p');
+  p.className = 'lekta-repair-panel__outcome';
+  const strong = document.createElement('strong');
+  strong.textContent = copy.headline;
+  p.appendChild(strong);
+  p.appendChild(document.createTextNode(copy.detail));
+  return p;
 }
 
 /**
@@ -1675,6 +1719,14 @@ function renderDelivery(el: HTMLElement, repaired: Uint8Array, verdict: RecheckV
   } else if (verdict.unavailable) {
     const lead = document.createElement('p');
     lead.textContent = 'Popravak je gotov. Provjeru popravljenog dokumenta nije bilo moguće izvesti, pa je preuzmi i provjeri ručno.';
+    box.appendChild(lead);
+  } else if (verdict.outcome && (verdict.outcome.kind === 'partial' || verdict.outcome.kind === 'none')) {
+    // Djelomican ishod NIJE regresija (dokument je i dalje bolji nego prije), pa glavna ponuda
+    // ostaje popravljeni dokument. Ali poruka ne smije zvucati dovrseno: preostali nalazi su
+    // razlog zbog kojeg korisnik jos ima posla.
+    const lead = document.createElement('p');
+    lead.innerHTML =
+      '<strong>Posao nije gotov.</strong> Popravljeni dokument je bolji nego prije, ali dio nalaza ostaje (vidi iznad). Preuzmi ga i razriješi preostalo.';
     box.appendChild(lead);
   }
 
