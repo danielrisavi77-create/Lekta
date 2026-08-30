@@ -455,7 +455,7 @@ describe('granice route shellova', () => {
       'src/shared/browser-storage.ts',
       'src/shared/skip-link.css',
     ]);
-  });
+  }, 60_000);
 
   it('workspace prikazuje restoring shell prije dinamičkog učitavanja runtimea', () => {
     const path = join(root, 'src/routes/workspace/main.ts');

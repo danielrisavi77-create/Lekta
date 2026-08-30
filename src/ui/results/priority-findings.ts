@@ -48,7 +48,7 @@ export function priorityFindingHtml(finding: VisualFindingModel, repairAvailable
   const evidence = finding.exactEvidence ? '<details class="cockpit-finding__evidence"><summary>Dokaz iz izvora</summary><p>' + escapeHtml(finding.exactEvidence.quote) + '</p><small>' + escapeHtml(finding.exactEvidence.title) + (finding.exactEvidence.page != null ? ', str. ' + finding.exactEvidence.page : '') + '</small></details>' : '';
   const source = finding.source?.exact && finding.exactEvidence ? '<a class="cockpit-finding__source" href="' + escapeHtml(finding.exactEvidence.url) + '" target="_blank" rel="noopener">Otvori izvor</a>' : '';
   return [
-    '<article class="cockpit-finding cockpit-finding--', escapeHtml(finding.severity), ' cockpit-finding--', escapeHtml(finding.status), '" data-cockpit-finding data-finding-id="', escapeHtml(finding.id), '">',
+    '<article class="cockpit-finding cockpit-finding--', escapeHtml(finding.severity), ' cockpit-finding--', escapeHtml(finding.status), '" data-cockpit-finding data-cockpit-priority-card data-finding-id="', escapeHtml(finding.id), '">',
     '<div class="cockpit-finding__index">0', String(finding.priorityRank + 1), '</div><div class="cockpit-finding__body">',
     '<div class="cockpit-finding__meta"><span>', severityLabel(finding.severity), '</span><span>', categoryLabel(finding.category), '</span></div><h3>', escapeHtml(finding.title), '</h3>',
     '<div class="cockpit-finding__answer"><strong>Za\u0161to</strong><p>', escapeHtml(finding.explanation), '</p></div>',

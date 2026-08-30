@@ -87,9 +87,10 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   const advancedOpen = options.advancedOpen === true;
   const haloStatus = haloStatusLabel(model);
   mount.className = 'result-cockpit result-cockpit--' + status.tone;
+  mount.dataset.cockpitExperience = 'correction-desk';
   mount.innerHTML = [
     headerHtml(model),
-    '<div class="cockpit-hero" data-cockpit-status="', status.tone, '">',
+    '<div class="cockpit-hero" data-cockpit-hero data-cockpit-status="', status.tone, '">',
     '<div class="cockpit-hero__copy"><span class="cockpit-kicker">Rezultat provjere</span><h2>', escapeHtml(status.label), '</h2><p>', escapeHtml(status.description), '</p></div>',
     readinessHaloHtml(model.score, model.signals, haloStatus),
     '<button type="button" class="button button-primary cockpit-primary" data-cockpit-primary',

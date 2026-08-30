@@ -284,4 +284,13 @@ describe('Results Cockpit V1', () => {
     Object.defineProperty(legacyView, 'defaultView', { value: { location: { search: '?resultRenderer=legacy' } } });
     expect(resultRendererFor(legacyView)).toBe('legacy');
   });
+
+  it('exposes the correction-desk visual structure without changing the result contract', () => {
+    const mount = document.createElement('section');
+    renderResultsCockpit(mount, buildVisualResultModel(result()), { repairAvailable: true });
+
+    expect(mount.dataset.cockpitExperience).toBe('correction-desk');
+    expect(mount.querySelector('[data-cockpit-hero]')).toBeTruthy();
+    expect(mount.querySelectorAll('[data-cockpit-priority-card]')).toHaveLength(3);
+  });
 });

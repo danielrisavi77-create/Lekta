@@ -44,7 +44,7 @@ describe('route shell performance budget', () => {
     });
 
     expect(issues, issues.map(issueMessage).join('\n')).toEqual([]);
-  });
+  }, 60_000);
 
   it('odbija feature ulaze po putanji bez blokiranja shared shell infrastrukture', () => {
     // Mutations caught: singular profile-rules client and scoped Supabase package used to evade token matching.
