@@ -21,6 +21,7 @@
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
 import { describe, it, expect } from 'vitest';
+import { countsAsRealDocxProof, type EvidenceManifest } from '../src/corpus/evidence-manifest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
@@ -106,6 +107,19 @@ interface Mutation {
   cleanBefore: () => boolean;
 }
 
+/** Uredan manifest dokaza, uz podesiv trenutak zapisa ocekivanja (run je uvijek u 10:00). */
+function manifestWithRecordedAt(recordedAt: string): EvidenceManifest {
+  return {
+    expected: {
+      findings: [{ checkId: 'page.margins', expectFail: true }],
+      recordedAt,
+      recordedBy: 'Daniel',
+    },
+    visualReview: { reviewedAt: '2026-08-30T11:00:00.000Z', reviewedBy: 'Daniel', verdict: 'slaze-se' },
+    runs: ['2026-08-30T10:00:00.000Z'],
+  };
+}
+
 const MUTATIONS: Mutation[] = [
   // --- sekcija 6 VERIFICATION_PIPELINE.md: bodovano pravilo ne smije lagati o izvoru -------------
   {
@@ -178,6 +192,23 @@ const MUTATIONS: Mutation[] = [
         (f) => f.kind === 'drift',
       ),
     cleanBefore: () => findScoredValueFindings(profileWith(goodEntry()), SOURCES).length === 0,
+  },
+  // --- manifest dokaza: run bez ljudskog ocekivanja NIJE dokaz na stvarnom radu ----------------
+  {
+    id: 'dokaz/ocekivanje-zapisano-nakon-runa',
+    imitates:
+      'dokument koji je "prosao" na stvarnom radu, a ocekivanje je zapisano tek nakon runa, pa se s alatom nije moglo ni ne sloziti',
+    caught: () => !countsAsRealDocxProof(manifestWithRecordedAt('2026-08-30T12:00:00.000Z')),
+    cleanBefore: () => countsAsRealDocxProof(manifestWithRecordedAt('2026-08-30T09:00:00.000Z')),
+  },
+  {
+    id: 'dokaz/pregled-bez-potpisa',
+    imitates: 'razina A bez ijednog covjeka koji je dokument otvorio i potpisao da se slaze s onim sto alat javlja',
+    caught: () => {
+      const m = manifestWithRecordedAt('2026-08-30T09:00:00.000Z');
+      return !countsAsRealDocxProof({ ...m, visualReview: { ...m.visualReview, reviewedBy: '' } });
+    },
+    cleanBefore: () => countsAsRealDocxProof(manifestWithRecordedAt('2026-08-30T09:00:00.000Z')),
   },
   {
     id: 'vezanje/tvrdnja-se-ne-primjenjuje',
