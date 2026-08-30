@@ -272,7 +272,8 @@
       "quote": "Preporučuje se da rad ima minimalno 30 stranica teksta.",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
+      "verifiedHash": "6eed97bb4df913d63e75e9875b112e634c8964554f6805012cde652ae1972841"
     },
     {
       "ruleId": "forenzika-diplomski--citation-style",
@@ -291,7 +292,8 @@
       "quote": "Svaki rad treba imati 15 - 30 (pročitanih) referencija, koje je potrebno propisno citirati. S obzirom na interdisciplinarnost studijskog programa Forenzika moguće je rabiti jedan od sljedeća tri stila za navođenje literature: APA sustav citiranja, Vancouverski sustav citiranja ili Chicago sustav citiranja. Student u dogovoru s mentorom odabire odgovarajući stil te odabrani stil dosljedno primjenjuje.",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
+      "verifiedHash": "6eed97bb4df913d63e75e9875b112e634c8964554f6805012cde652ae1972841"
     }
   ],
   "generatedAt": "2026-07-16"

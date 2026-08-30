@@ -166,7 +166,8 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit",
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "fceee5de0245a45ee633e7fa918cbef6c968a83f5458fd78c45026d9b877694b"
     },
     {
       "ruleId": "kif-doktorski--citation-style",
@@ -183,7 +184,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "fceee5de0245a45ee633e7fa918cbef6c968a83f5458fd78c45026d9b877694b"
     },
     {
       "ruleId": "kif-doktorski--required-sections",
@@ -210,7 +212,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "fceee5de0245a45ee633e7fa918cbef6c968a83f5458fd78c45026d9b877694b"
     }
   ]
 }

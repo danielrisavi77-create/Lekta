@@ -72,7 +72,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "c68ba17ed2595d7b6686e66d9be59d4c576d01c9012f41bf1316df398c4f0be6"
       }
     ],
     "geof-doktorski": [
@@ -148,7 +149,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "c68ba17ed2595d7b6686e66d9be59d4c576d01c9012f41bf1316df398c4f0be6"
       }
     ]
   },

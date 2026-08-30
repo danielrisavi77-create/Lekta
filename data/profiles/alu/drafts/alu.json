@@ -21,7 +21,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "font-fixer"
+        "recommendedFixerId": "font-fixer",
+        "verifiedHash": "add03721e40b03cc2d3b688a5dd7fb4f7b714a0eff47d786396bd891a550892b"
       },
       {
         "ruleId": "alu-diplomski--line-spacing",
@@ -37,7 +38,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "add03721e40b03cc2d3b688a5dd7fb4f7b714a0eff47d786396bd891a550892b"
       },
       {
         "ruleId": "alu-diplomski--paper-size",
@@ -54,7 +56,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "paper-size-fixer"
+        "recommendedFixerId": "paper-size-fixer",
+        "verifiedHash": "add03721e40b03cc2d3b688a5dd7fb4f7b714a0eff47d786396bd891a550892b"
       },
       {
         "ruleId": "alu-diplomski--page-count",
@@ -73,7 +76,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "add03721e40b03cc2d3b688a5dd7fb4f7b714a0eff47d786396bd891a550892b"
       },
       {
         "ruleId": "alu-diplomski--required-sections",
@@ -92,7 +96,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "add03721e40b03cc2d3b688a5dd7fb4f7b714a0eff47d786396bd891a550892b"
       }
     ]
   }

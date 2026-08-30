@@ -167,7 +167,8 @@
       "machineCheckable": false,
       "sourcePage": "tocka 5) Rad mora sadrzavati (Sadrzaj, Popis oznaka i kratica te poglavlja 1-11)",
       "quote": "Rad mora sadržavati:",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "8cad70ffeb947004dab365200762be290a065d2d4b3337226f745b6bbd056303"
     },
     {
       "ruleId": "mef-doktorski--word-count",
@@ -186,7 +187,8 @@
       "machineCheckable": false,
       "sourcePage": "tocka 5) stavke 9 (kratki sadrzaj EN) i 11 (kratka biografija)",
       "quote": "Kratka biografija (do 200 riječi)",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "8cad70ffeb947004dab365200762be290a065d2d4b3337226f745b6bbd056303"
     },
     {
       "ruleId": "mef-doktorski--citation-style",
@@ -203,7 +205,8 @@
       "machineCheckable": false,
       "sourcePage": "tocka 5) stavka 10 Popis literature",
       "quote": "Popis literature (prema naputcima Liječničkog vjesnika)",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "8cad70ffeb947004dab365200762be290a065d2d4b3337226f745b6bbd056303"
     },
     {
       "ruleId": "mef-doktorski--page-number-start-at-intro",

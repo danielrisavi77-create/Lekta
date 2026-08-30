@@ -143,7 +143,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "ba5b786114e83db3df96ae9994c4a00bce4ff2197f6ac43e1a68821d64402896"
       },
       {
         "ruleId": "erf-diplomski--citation-style",
@@ -167,7 +168,8 @@
         "lastVerified": "2026-07-03",
         "verifiedBy": "Daniel Risavi",
         "reviewedBy": "Daniel Risavi",
-        "confirmedVia": "human-audit"
+        "confirmedVia": "human-audit",
+        "verifiedHash": "ba5b786114e83db3df96ae9994c4a00bce4ff2197f6ac43e1a68821d64402896"
       }
     ]
   },

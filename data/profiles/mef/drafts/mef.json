@@ -70,7 +70,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "line-spacing-fixer"
+        "recommendedFixerId": "line-spacing-fixer",
+        "verifiedHash": "2f1e177187c7871d78abba9d73b7827f92641587702269f83b44fea0d4792ec0"
       },
       {
         "ruleId": "mef-diplomski--margins",
@@ -92,7 +93,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "margins-fixer"
+        "recommendedFixerId": "margins-fixer",
+        "verifiedHash": "2f1e177187c7871d78abba9d73b7827f92641587702269f83b44fea0d4792ec0"
       },
       {
         "ruleId": "mef-diplomski--paper-size",
@@ -259,7 +261,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "2f1e177187c7871d78abba9d73b7827f92641587702269f83b44fea0d4792ec0"
       }
     ]
   },

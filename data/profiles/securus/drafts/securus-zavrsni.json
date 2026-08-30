@@ -217,7 +217,8 @@
       "quote": "Obvezni dijelovi rada redom su: 1) Korice (Prilog 5.) 2) Praznog lista 3) Druge stranice - podkorice (Prilog 6.) 4) Potpisanog teksta zadatka (Prilog 4.) 5) Sažetka na hrvatskom jeziku 6) Sažetka na engleskom jeziku (Abstract) 7) Popisa ključnih riječi na hrvatskom i engleskom jeziku 8) Sadržaja 9) Uvoda 10) Razrade teme prema definiranom zadatku 11) Zaključka 12) Popisa literature i drugih izvora podataka koji su korišteni u izradi završnog rada",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
+      "verifiedHash": "ec5a39f6a42e3cf2506f2e774ac47ab72dd17d9744dd525a103fb535e4e9fb02"
     }
   ],
   "generatedAt": "2026-07-17"

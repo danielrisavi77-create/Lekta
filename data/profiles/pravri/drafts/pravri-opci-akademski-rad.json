@@ -144,7 +144,8 @@
       "status": "advisory",
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "1943a0cbb283419c152c8d42da42080384c73297d2f69ea643ce1251d74b1e08"
     }
   ]
 }

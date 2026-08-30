@@ -117,7 +117,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "0a2be31042af3b9056b38f6035902cbc3838ee06dd38fb04267f98c0108b8642"
     },
     {
       "ruleId": "unizd-povijest-diplomski--line-spacing",
@@ -134,7 +135,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "line-spacing-fixer"
+      "recommendedFixerId": "line-spacing-fixer",
+      "verifiedHash": "0a2be31042af3b9056b38f6035902cbc3838ee06dd38fb04267f98c0108b8642"
     }
   ]
 }

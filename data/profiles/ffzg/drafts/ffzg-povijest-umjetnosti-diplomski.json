@@ -192,7 +192,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--citation-style",
@@ -209,7 +210,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--required-sections",
@@ -238,7 +240,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--toc",
@@ -255,7 +258,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--bibliography-rules",
@@ -275,7 +279,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--required-section-rules",
@@ -307,7 +312,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--section-surgery-rules",
@@ -333,7 +339,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--table-figure-rescue-rules",
@@ -357,7 +364,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382"
     }
   ],
   "generatedAt": "2026-07-02"

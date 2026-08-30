@@ -327,7 +327,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
       }
     ],
     "ufzg-diplomski": [

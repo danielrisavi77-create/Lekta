@@ -7,7 +7,9 @@
       "scope": "body",
       "modalitySource": "mechanical",
       "checkId": "font",
-      "value": ["Times New Roman"],
+      "value": [
+        "Times New Roman"
+      ],
       "category": "format",
       "label": "Font",
       "machineCheckable": true,
@@ -79,7 +81,12 @@
       "scope": "whole",
       "modalitySource": "mechanical",
       "checkId": "margins",
-      "value": { "top": 2.5, "bottom": 2.5, "left": 2.5, "right": 2.5 },
+      "value": {
+        "top": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "right": 2.5
+      },
       "category": "format",
       "label": "Margine",
       "machineCheckable": true,
@@ -171,7 +178,9 @@
       "scope": "whole",
       "modalitySource": "human",
       "checkId": "word-count",
-      "value": { "min": 6000 },
+      "value": {
+        "min": 6000
+      },
       "category": "scope",
       "label": "Opseg (rijeci, strucni/specijalisticki diplomski rad)",
       "machineCheckable": true,
@@ -212,7 +221,13 @@
     {
       "ruleId": "kif-specijalisticki--required-sections",
       "checkId": "required-sections",
-      "value": ["uvod", "razrada teme", "zakljucak", "literatura", "prilozi"],
+      "value": [
+        "uvod",
+        "razrada teme",
+        "zakljucak",
+        "literatura",
+        "prilozi"
+      ],
       "category": "structure",
       "label": "Obvezne cjeline strucnog/specijalistickog diplomskog rada",
       "machineCheckable": false,
@@ -223,7 +238,8 @@
       "status": "advisory",
       "lastVerified": "2026-08-01",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "aa87190f7f1f28ff1aabcff1e92858edbe044e9bc2298f5cf7c90bf2c0383982"
     }
   ],
   "generatedAt": "2026-08-01"

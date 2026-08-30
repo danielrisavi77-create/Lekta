@@ -172,7 +172,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "084bbd032bd8cba8394dae06bc4e15be28e6ec79c8db997276e8bb55059a40c4"
     },
     {
       "ruleId": "unizd-povijest-umj-diplomski--section-surgery-rules",
@@ -197,7 +198,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "084bbd032bd8cba8394dae06bc4e15be28e6ec79c8db997276e8bb55059a40c4"
     }
   ]
 }

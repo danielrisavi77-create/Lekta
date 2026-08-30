@@ -217,7 +217,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860"
       }
     ]
   }

@@ -43,7 +43,8 @@
       "status": "advisory",
       "scored": false,
       "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "2e12145dcef0b66c342720559c1ea9b2cdbce9fef413096cc06e26d4ae24dcde"
     },
     {
       "ruleId": "ozs-diplomski--line-spacing",
@@ -88,7 +89,8 @@
       "status": "advisory",
       "scored": false,
       "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
-      "recommendedFixerId": "margins-fixer"
+      "recommendedFixerId": "margins-fixer",
+      "verifiedHash": "2e12145dcef0b66c342720559c1ea9b2cdbce9fef413096cc06e26d4ae24dcde"
     },
     {
       "ruleId": "ozs-diplomski--page-numbers",

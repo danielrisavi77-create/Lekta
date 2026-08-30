@@ -16,7 +16,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "paper-size-fixer"
+        "recommendedFixerId": "paper-size-fixer",
+        "verifiedHash": "bb9b2dbbf90e2c4d8d1127c3b05e1d5ab1288a180d2d505193cf8d9b1a04d433"
       },
       {
         "ruleId": "muza-diplomski--word-count",
@@ -32,7 +33,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "bb9b2dbbf90e2c4d8d1127c3b05e1d5ab1288a180d2d505193cf8d9b1a04d433"
       },
       {
         "ruleId": "muza-diplomski--citation-style",
@@ -49,7 +51,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "note": "Normalizirano u kanonski token 2026-08-29. Citat izvora: \"Specificne znacajke rada poput nacina navodjenja izvora i sl. odredjuje mentor\", dakle izvor izricito delegira mentoru; `custom` (\"Prema posebnim uputama\") je vjeran zapis, a token u `rules` je vec bio `custom`."
+        "note": "Normalizirano u kanonski token 2026-08-29. Citat izvora: \"Specificne znacajke rada poput nacina navodjenja izvora i sl. odredjuje mentor\", dakle izvor izricito delegira mentoru; `custom` (\"Prema posebnim uputama\") je vjeran zapis, a token u `rules` je vec bio `custom`.",
+        "verifiedHash": "bb9b2dbbf90e2c4d8d1127c3b05e1d5ab1288a180d2d505193cf8d9b1a04d433"
       }
     ]
   },

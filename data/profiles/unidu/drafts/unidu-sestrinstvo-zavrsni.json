@@ -19,7 +19,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "50853e52e68b8e3d18129054f2b4c376b925b64e91576f0c3e1f76a6377b6c2c"
     },
     {
       "ruleId": "unidu-sestrinstvo-zavrsni--font-size",
@@ -38,7 +39,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "50853e52e68b8e3d18129054f2b4c376b925b64e91576f0c3e1f76a6377b6c2c"
     },
     {
       "ruleId": "unidu-sestrinstvo-zavrsni--line-spacing",
@@ -55,7 +57,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "line-spacing-fixer"
+      "recommendedFixerId": "line-spacing-fixer",
+      "verifiedHash": "50853e52e68b8e3d18129054f2b4c376b925b64e91576f0c3e1f76a6377b6c2c"
     },
     {
       "ruleId": "unidu-sestrinstvo-zavrsni--margins",
@@ -77,7 +80,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "margins-fixer"
+      "recommendedFixerId": "margins-fixer",
+      "verifiedHash": "50853e52e68b8e3d18129054f2b4c376b925b64e91576f0c3e1f76a6377b6c2c"
     },
     {
       "ruleId": "unidu-sestrinstvo-zavrsni--justify",
@@ -94,7 +98,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "alignment-fixer"
+      "recommendedFixerId": "alignment-fixer",
+      "verifiedHash": "50853e52e68b8e3d18129054f2b4c376b925b64e91576f0c3e1f76a6377b6c2c"
     }
   ]
 }

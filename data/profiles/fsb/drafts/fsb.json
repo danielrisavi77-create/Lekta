@@ -18,7 +18,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "font-fixer"
+        "recommendedFixerId": "font-fixer",
+        "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
       },
       {
         "ruleId": "fsb-diplomski--font",
@@ -38,7 +39,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "font-fixer"
+        "recommendedFixerId": "font-fixer",
+        "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
       },
       {
         "ruleId": "fsb-diplomski--line-spacing",
@@ -55,7 +57,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "line-spacing-fixer"
+        "recommendedFixerId": "line-spacing-fixer",
+        "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
       },
       {
         "ruleId": "fsb-diplomski--margins",
@@ -77,7 +80,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "margins-fixer"
+        "recommendedFixerId": "margins-fixer",
+        "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
       },
       {
         "ruleId": "fsb-diplomski--page-numbers",
@@ -93,7 +97,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
       },
       {
         "ruleId": "fsb-diplomski--citation-style",
@@ -110,7 +115,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "note": "Vrijednost spustena s \"ieee\" na \"custom\" 2026-08-29. Citat ovog pravila propisuje BROJCANO navodjenje u uglatim zagradama, a ne IEEE: IEEE je imenovan stil s vlastitim pravilima oblikovanja koja izvor nigdje ne navodi. Pretrazena su sva 24 citljiva izvora tih 26 profila; rijec \"IEEE\" pojavljuje se u tocno jednom, i to kao ime casopisa u primjeru literature (\"IEEE Trans. Ind. Electron.\"), ne kao propis. Bodovno neutralno (citationMeta: ieee -> numeric, custom -> custom, obje grane iskljucuju autor-godina provjere; izmjereno na dvije fixture: ista ocjena, isti broj bodovanih provjera, isti nazivnik). Isti postupak kao FER 2c214fd7."
+        "note": "Vrijednost spustena s \"ieee\" na \"custom\" 2026-08-29. Citat ovog pravila propisuje BROJCANO navodjenje u uglatim zagradama, a ne IEEE: IEEE je imenovan stil s vlastitim pravilima oblikovanja koja izvor nigdje ne navodi. Pretrazena su sva 24 citljiva izvora tih 26 profila; rijec \"IEEE\" pojavljuje se u tocno jednom, i to kao ime casopisa u primjeru literature (\"IEEE Trans. Ind. Electron.\"), ne kao propis. Bodovno neutralno (citationMeta: ieee -> numeric, custom -> custom, obje grane iskljucuju autor-godina provjere; izmjereno na dvije fixture: ista ocjena, isti broj bodovanih provjera, isti nazivnik). Isti postupak kao FER 2c214fd7.",
+        "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
       },
       {
         "ruleId": "fsb-diplomski--required-sections",
@@ -132,7 +138,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
       }
     ],
     "fsb-zavrsni": [
@@ -153,7 +160,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "font-fixer"
+        "recommendedFixerId": "font-fixer",
+        "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
       },
       {
         "ruleId": "fsb-zavrsni--font",
@@ -173,7 +181,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "font-fixer"
+        "recommendedFixerId": "font-fixer",
+        "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
       },
       {
         "ruleId": "fsb-zavrsni--line-spacing",
@@ -190,7 +199,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "line-spacing-fixer"
+        "recommendedFixerId": "line-spacing-fixer",
+        "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
       },
       {
         "ruleId": "fsb-zavrsni--margins",
@@ -212,7 +222,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "margins-fixer"
+        "recommendedFixerId": "margins-fixer",
+        "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
       },
       {
         "ruleId": "fsb-zavrsni--page-numbers",
@@ -228,7 +239,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
       },
       {
         "ruleId": "fsb-zavrsni--citation-style",
@@ -245,7 +257,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "note": "Vrijednost spustena s \"ieee\" na \"custom\" 2026-08-29. Citat ovog pravila propisuje BROJCANO navodjenje u uglatim zagradama, a ne IEEE: IEEE je imenovan stil s vlastitim pravilima oblikovanja koja izvor nigdje ne navodi. Pretrazena su sva 24 citljiva izvora tih 26 profila; rijec \"IEEE\" pojavljuje se u tocno jednom, i to kao ime casopisa u primjeru literature (\"IEEE Trans. Ind. Electron.\"), ne kao propis. Bodovno neutralno (citationMeta: ieee -> numeric, custom -> custom, obje grane iskljucuju autor-godina provjere; izmjereno na dvije fixture: ista ocjena, isti broj bodovanih provjera, isti nazivnik). Isti postupak kao FER 2c214fd7."
+        "note": "Vrijednost spustena s \"ieee\" na \"custom\" 2026-08-29. Citat ovog pravila propisuje BROJCANO navodjenje u uglatim zagradama, a ne IEEE: IEEE je imenovan stil s vlastitim pravilima oblikovanja koja izvor nigdje ne navodi. Pretrazena su sva 24 citljiva izvora tih 26 profila; rijec \"IEEE\" pojavljuje se u tocno jednom, i to kao ime casopisa u primjeru literature (\"IEEE Trans. Ind. Electron.\"), ne kao propis. Bodovno neutralno (citationMeta: ieee -> numeric, custom -> custom, obje grane iskljucuju autor-godina provjere; izmjereno na dvije fixture: ista ocjena, isti broj bodovanih provjera, isti nazivnik). Isti postupak kao FER 2c214fd7.",
+        "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
       },
       {
         "ruleId": "fsb-zavrsni--required-sections",
@@ -267,7 +280,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
       }
     ]
   },

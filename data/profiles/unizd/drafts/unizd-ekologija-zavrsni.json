@@ -142,7 +142,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "fd76f1f3416ffefa085dc206b72206ade3c15ca79698b58dd05f3aaa59ae71f0"
     },
     {
       "ruleId": "unizd-ekologija-zavrsni--citation-sync-rules",
@@ -161,7 +162,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "fd76f1f3416ffefa085dc206b72206ade3c15ca79698b58dd05f3aaa59ae71f0"
     },
     {
       "ruleId": "unizd-ekologija-zavrsni--required-section-rules",
@@ -189,7 +191,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "fd76f1f3416ffefa085dc206b72206ade3c15ca79698b58dd05f3aaa59ae71f0"
     },
     {
       "ruleId": "unizd-ekologija-zavrsni--section-surgery-rules",
@@ -214,7 +217,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "fd76f1f3416ffefa085dc206b72206ade3c15ca79698b58dd05f3aaa59ae71f0"
     },
     {
       "ruleId": "unizd-ekologija-zavrsni--element-caption-rules",
@@ -243,7 +247,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "fd76f1f3416ffefa085dc206b72206ade3c15ca79698b58dd05f3aaa59ae71f0"
     }
   ]
 }

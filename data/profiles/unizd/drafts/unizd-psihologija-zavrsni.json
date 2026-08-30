@@ -193,7 +193,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "e5303b61dcbb0307882e1e33981b096cd6c843b8b9b713eaba6d614d6c16d53a"
     },
     {
       "ruleId": "unizd-psihologija-zavrsni--citation-sync-rules",
@@ -213,7 +214,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "e5303b61dcbb0307882e1e33981b096cd6c843b8b9b713eaba6d614d6c16d53a"
     },
     {
       "ruleId": "unizd-psihologija-zavrsni--section-surgery-rules",
@@ -237,7 +239,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "e5303b61dcbb0307882e1e33981b096cd6c843b8b9b713eaba6d614d6c16d53a"
     }
   ],
   "generatedAt": "2026-07-02"

@@ -87,7 +87,8 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit",
-      "recommendedFixerId": "line-spacing-fixer"
+      "recommendedFixerId": "line-spacing-fixer",
+      "verifiedHash": "d3109c012d242807de80c829ce2242a4e99a4bbdb82d3c6ba1caf06c66f96f6a"
     },
     {
       "ruleId": "pmf-matematika-graduate--margins",
@@ -110,7 +111,8 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit",
-      "recommendedFixerId": "margins-fixer"
+      "recommendedFixerId": "margins-fixer",
+      "verifiedHash": "d3109c012d242807de80c829ce2242a4e99a4bbdb82d3c6ba1caf06c66f96f6a"
     },
     {
       "ruleId": "pmf-matematika-graduate--citation-style",
@@ -128,7 +130,8 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit",
-      "note": "Vrijednost spustena s \"ieee\" na \"custom\" 2026-08-29. Citat propisuje BROJCANO navodjenje u uglatim zagradama, a ne IEEE: IEEE je imenovan stil s vlastitim pravilima oblikovanja koja izvor nigdje ne navodi. Pretrazena su sva citljiva vrela svih 26 profila s tim tokenom; rijec \"IEEE\" pojavljuje se u tocno jednom, i to kao ime casopisa u primjeru literature (\"IEEE Trans. Ind. Electron.\"). Bodovno neutralno (izmjereno: ieee, vancouver i custom daju istu ocjenu, isti broj bodovanih provjera i isti nazivnik). Isti postupak kao FER 2c214fd7."
+      "note": "Vrijednost spustena s \"ieee\" na \"custom\" 2026-08-29. Citat propisuje BROJCANO navodjenje u uglatim zagradama, a ne IEEE: IEEE je imenovan stil s vlastitim pravilima oblikovanja koja izvor nigdje ne navodi. Pretrazena su sva citljiva vrela svih 26 profila s tim tokenom; rijec \"IEEE\" pojavljuje se u tocno jednom, i to kao ime casopisa u primjeru literature (\"IEEE Trans. Ind. Electron.\"). Bodovno neutralno (izmjereno: ieee, vancouver i custom daju istu ocjenu, isti broj bodovanih provjera i isti nazivnik). Isti postupak kao FER 2c214fd7.",
+      "verifiedHash": "d3109c012d242807de80c829ce2242a4e99a4bbdb82d3c6ba1caf06c66f96f6a"
     },
     {
       "ruleId": "pmf-matematika-graduate--required-sections",
@@ -153,7 +156,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "d3109c012d242807de80c829ce2242a4e99a4bbdb82d3c6ba1caf06c66f96f6a"
     }
   ],
   "generatedAt": "2026-07-02"

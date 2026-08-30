@@ -95,6 +95,55 @@ for (const id of DRAFT_PROFILE_IDS) {
   }
 }
 
+/**
+ * DOKAZNI SET BODOVANE TVRDNJE. Do 2026-08-30 je ratchet postojao samo za modalitet, pa je ostalih
+ * osam polja moglo tiho nestati: novo bodovano pravilo bez izvora, bez stranice ili bez potpisa
+ * proslo bi svaku provjeru u ovoj datoteci.
+ *
+ * Prag je NULA za svako polje, i to nije ambicija nego izmjereno stanje: na 2218 bodovanih pravila
+ * nijedno ne fali. `verifiedHash` je bio jedina iznimka (dva pravila) i popunjen je iz
+ * `source-registry` tek nakon sto je provjereno da je svaki od 99 snapshota u gitu imao TOCNO JEDNU
+ * verziju, dakle da danasnji hash jest onaj protiv kojeg je tvrdnja i verificirana. Bez te provjere
+ * upis bi bio izmisljanje sidra, ne popunjavanje.
+ */
+const REQUIRED_EVIDENCE_FIELDS = [
+  'sourceId',
+  'verifiedHash',
+  'sourcePage',
+  'quote',
+  'authority',
+  'lastVerified',
+  'verifiedBy',
+  'modality',
+  'scope',
+] as const;
+
+describe('bodovana tvrdnja nosi cijeli dokazni set', () => {
+  it('nijedno bodovano pravilo nema prazno dokazno polje', () => {
+    const rupe: string[] = [];
+    for (const { profileId, entry } of scored) {
+      for (const field of REQUIRED_EVIDENCE_FIELDS) {
+        const v = (entry as unknown as Record<string, unknown>)[field];
+        if (v == null || v === '') rupe.push(`${profileId} ${entry.ruleId ?? entry.checkId}: ${field}`);
+      }
+    }
+    expect(rupe.slice(0, 20), `rupa u dokaznom setu: ${rupe.length}`).toEqual([]);
+  });
+
+  /**
+   * Gard bez dokaza da grize se ne racuna. Podmece se tocno kvar zbog kojeg gard postoji: bodovano
+   * pravilo kojemu je netko maknuo sidro izvora. Obje grane su dokazane.
+   */
+  it('gard na prazno dokazno polje stvarno grize', () => {
+    const brojRupa = (entries: Array<Record<string, unknown>>) =>
+      entries.filter((e) => REQUIRED_EVIDENCE_FIELDS.some((f) => e[f] == null || e[f] === '')).length;
+    const stvarne = scored.map(({ entry }) => entry as unknown as Record<string, unknown>);
+    expect(brojRupa(stvarne), 'baseline: zatecen skup je potpun').toBe(0);
+    const mutiran = [...stvarne, { ...stvarne[0], verifiedHash: null }];
+    expect(brojRupa(mutiran)).toBe(1);
+  });
+});
+
 describe('tvrdnja nosi modalitet i opseg', () => {
   it('mjerenje je netrivijalno (guard protiv vacuous-pass)', () => {
     expect(scored.length).toBeGreaterThan(2000);

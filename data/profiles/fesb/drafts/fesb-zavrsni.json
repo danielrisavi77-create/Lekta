@@ -18,7 +18,8 @@
       "lastVerified": "2026-07-30",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "cfef01ffbe0f720267f27717b54cd67f7f81d8d61b71cc9b2071d286369c42f6"
     },
     {
       "ruleId": "fesb-zavrsni--font-size",
@@ -37,7 +38,8 @@
       "lastVerified": "2026-07-30",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "cfef01ffbe0f720267f27717b54cd67f7f81d8d61b71cc9b2071d286369c42f6"
     },
     {
       "ruleId": "fesb-zavrsni--line-spacing",
@@ -54,7 +56,8 @@
       "lastVerified": "2026-07-30",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "line-spacing-fixer"
+      "recommendedFixerId": "line-spacing-fixer",
+      "verifiedHash": "cfef01ffbe0f720267f27717b54cd67f7f81d8d61b71cc9b2071d286369c42f6"
     },
     {
       "ruleId": "fesb-zavrsni--margins",
@@ -76,7 +79,8 @@
       "lastVerified": "2026-07-30",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "margins-fixer"
+      "recommendedFixerId": "margins-fixer",
+      "verifiedHash": "cfef01ffbe0f720267f27717b54cd67f7f81d8d61b71cc9b2071d286369c42f6"
     },
     {
       "ruleId": "fesb-zavrsni--justify",
@@ -93,7 +97,8 @@
       "lastVerified": "2026-07-30",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "alignment-fixer"
+      "recommendedFixerId": "alignment-fixer",
+      "verifiedHash": "cfef01ffbe0f720267f27717b54cd67f7f81d8d61b71cc9b2071d286369c42f6"
     },
     {
       "ruleId": "fesb-zavrsni--page-numbers",

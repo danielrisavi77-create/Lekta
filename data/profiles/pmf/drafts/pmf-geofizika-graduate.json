@@ -18,7 +18,8 @@
       "lastVerified": "2026-07-30",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "0ee2f1625aaf2eb8f65c1c28b439d06fc0cb011d048cdbbeaf628877759431e2"
     },
     {
       "ruleId": "pmf-geofizika-graduate--font-size",
@@ -37,7 +38,8 @@
       "lastVerified": "2026-07-30",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "0ee2f1625aaf2eb8f65c1c28b439d06fc0cb011d048cdbbeaf628877759431e2"
     },
     {
       "ruleId": "pmf-geofizika-graduate--line-spacing",
@@ -54,7 +56,8 @@
       "lastVerified": "2026-07-30",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "line-spacing-fixer"
+      "recommendedFixerId": "line-spacing-fixer",
+      "verifiedHash": "0ee2f1625aaf2eb8f65c1c28b439d06fc0cb011d048cdbbeaf628877759431e2"
     },
     {
       "ruleId": "pmf-geofizika-graduate--margins",
@@ -76,7 +79,8 @@
       "lastVerified": "2026-07-30",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "margins-fixer"
+      "recommendedFixerId": "margins-fixer",
+      "verifiedHash": "0ee2f1625aaf2eb8f65c1c28b439d06fc0cb011d048cdbbeaf628877759431e2"
     },
     {
       "ruleId": "pmf-geofizika-graduate--justify",
@@ -93,7 +97,8 @@
       "lastVerified": "2026-07-30",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "alignment-fixer"
+      "recommendedFixerId": "alignment-fixer",
+      "verifiedHash": "0ee2f1625aaf2eb8f65c1c28b439d06fc0cb011d048cdbbeaf628877759431e2"
     },
     {
       "ruleId": "pmf-geofizika-graduate--paper-size",
@@ -110,7 +115,8 @@
       "lastVerified": "2026-07-30",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "paper-size-fixer"
+      "recommendedFixerId": "paper-size-fixer",
+      "verifiedHash": "0ee2f1625aaf2eb8f65c1c28b439d06fc0cb011d048cdbbeaf628877759431e2"
     }
   ]
 }

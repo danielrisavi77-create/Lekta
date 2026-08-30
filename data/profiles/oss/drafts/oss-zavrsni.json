@@ -120,7 +120,8 @@
       "status": "advisory",
       "scored": false,
       "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
-      "recommendedFixerId": "margins-fixer"
+      "recommendedFixerId": "margins-fixer",
+      "verifiedHash": "68690a8d965192f85e8b7c64bc83b6206bec34f252581588bb45d7e205e66d73"
     },
     {
       "ruleId": "oss-zavrsni--page-numbers",
@@ -160,7 +161,8 @@
       "quote": "Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 35 stranica (na preddiplomskim stručnim studijima), odnosno između 40 i 50 stranica (na specijalističkim diplomskim stručnim studijima) osnovnog teksta rada na papiru A4 formata",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
+      "verifiedHash": "68690a8d965192f85e8b7c64bc83b6206bec34f252581588bb45d7e205e66d73"
     },
     {
       "ruleId": "oss-zavrsni--required-sections",

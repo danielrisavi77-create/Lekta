@@ -72,7 +72,8 @@
       "lastVerified": "2026-07-27",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "017dda8a9896c3a7e61d4d44b00c9a209640e79eb5716742590b3a6167f8f2db"
     },
     {
       "ruleId": "riteh-zavrsni--font-size",
@@ -91,7 +92,8 @@
       "lastVerified": "2026-07-27",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "017dda8a9896c3a7e61d4d44b00c9a209640e79eb5716742590b3a6167f8f2db"
     },
     {
       "ruleId": "riteh-zavrsni--line-spacing",
@@ -108,7 +110,8 @@
       "lastVerified": "2026-07-27",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "line-spacing-fixer"
+      "recommendedFixerId": "line-spacing-fixer",
+      "verifiedHash": "017dda8a9896c3a7e61d4d44b00c9a209640e79eb5716742590b3a6167f8f2db"
     },
     {
       "ruleId": "riteh-zavrsni--margins",
@@ -130,7 +133,8 @@
       "lastVerified": "2026-07-27",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "margins-fixer"
+      "recommendedFixerId": "margins-fixer",
+      "verifiedHash": "017dda8a9896c3a7e61d4d44b00c9a209640e79eb5716742590b3a6167f8f2db"
     },
     {
       "ruleId": "riteh-zavrsni--justify",
@@ -147,7 +151,8 @@
       "lastVerified": "2026-07-27",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "alignment-fixer"
+      "recommendedFixerId": "alignment-fixer",
+      "verifiedHash": "017dda8a9896c3a7e61d4d44b00c9a209640e79eb5716742590b3a6167f8f2db"
     }
   ],
   "generatedAt": "2026-07-03"

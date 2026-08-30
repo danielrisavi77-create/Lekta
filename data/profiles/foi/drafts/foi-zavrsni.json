@@ -195,7 +195,8 @@
       "status": "advisory",
       "scored": false,
       "note": "Advisory: nije jedinstveno/nedvosmisleno propisano u izvoru (vidi quote).",
-      "recommendedFixerId": "margins-fixer"
+      "recommendedFixerId": "margins-fixer",
+      "verifiedHash": "57551d6b28d3af1046aaad67a04b54001ccaa92a9ac5f509d9b8bc806ec38358"
     },
     {
       "ruleId": "foi-zavrsni--citation-style",
@@ -210,7 +211,8 @@
       "quote": "FOI dopusta APA ili IEEE stil (student bira uz mentora); Preporuke citiranja objavljene na FOI-radovi. Stil nije jedinstveno propisan pa ostaje advisory.",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: nije jedinstveno/nedvosmisleno propisano u izvoru (vidi quote)."
+      "note": "Advisory: nije jedinstveno/nedvosmisleno propisano u izvoru (vidi quote).",
+      "verifiedHash": "9c293fbbdda869dec80831a92d2330270a4d0ebaa61b93c5f17df07cc210bedd"
     }
   ],
   "generatedAt": "2026-07-16"

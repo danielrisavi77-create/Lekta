@@ -131,7 +131,8 @@
       "status": "advisory",
       "scored": false,
       "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "1e17ff9505c307ef0244f1a73ffe489af5983b7fb8e2c72ef6806c51b8dffa55"
     }
   ],
   "generatedAt": "2026-07-17"

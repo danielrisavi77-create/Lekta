@@ -193,7 +193,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "bff2cedf29ff0ca3d65d3ddab8bf5e48ae193495a25c1094e1c0a681017e20de"
     },
     {
       "ruleId": "ffzg-kroatistika-graduate--page-count",
@@ -212,7 +213,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "bff2cedf29ff0ca3d65d3ddab8bf5e48ae193495a25c1094e1c0a681017e20de"
     },
     {
       "ruleId": "ffzg-kroatistika-graduate--citation-style",
@@ -229,7 +231,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "bff2cedf29ff0ca3d65d3ddab8bf5e48ae193495a25c1094e1c0a681017e20de"
     }
   ],
   "generatedAt": "2026-07-02"

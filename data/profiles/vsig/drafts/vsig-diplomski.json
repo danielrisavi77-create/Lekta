@@ -201,7 +201,8 @@
       "quote": "TEORIJSKI RAD (STRUČNI) Rad treba sadržavati sljedeća poglavlja: - Sadržaj - Uvod (teorijska pozadina, dosadašnje spoznaje, problem) - Razrada teme po poglavljima i potpoglavljima - Zaključak - Literatura (minimalno 15 referenci) - Prilozi. [Uz to, str. 21: 'Nakon naslovne stranice, slijedi stranica na kojoj se nalaze naslovi, sažeci (250 — 300 riječi) i ključne riječi, na hrvatskom i engleskom jeziku.' Eksperimentalni rad dodatno traži Ciljeve i hipoteze, Metode istraživanja, Rezultate i Raspravu — struktura je dualna, ovisno o vrsti rada, pa je popis dan kao zajednička okosnica.]",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
+      "verifiedHash": "153d6b271e89d4959e39cfda51852fcbcdf221dbfa8e84c4fba0676a49e73c0b"
     }
   ],
   "generatedAt": "2026-07-17"

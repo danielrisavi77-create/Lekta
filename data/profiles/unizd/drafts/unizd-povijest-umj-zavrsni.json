@@ -170,7 +170,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "27ff705e1b96ca518f15bf0cdb2b19c87b585a23788efb157415b7dc1c9c8ac6"
     },
     {
       "ruleId": "unizd-povijest-umj-zavrsni--section-surgery-rules",
@@ -195,7 +196,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "27ff705e1b96ca518f15bf0cdb2b19c87b585a23788efb157415b7dc1c9c8ac6"
     }
   ],
   "generatedAt": "2026-07-02"

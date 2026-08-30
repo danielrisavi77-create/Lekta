@@ -167,7 +167,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "9c6e95ab738afce19518872a512c3a45565e3f64657ab41e5cd90c98fc51cd87"
     },
     {
       "ruleId": "ffzg-lingvistika-diplomski--citation-style",
@@ -184,7 +185,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "9c6e95ab738afce19518872a512c3a45565e3f64657ab41e5cd90c98fc51cd87"
     },
     {
       "ruleId": "ffzg-lingvistika-diplomski--citation-sync-rules",
@@ -204,7 +206,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "9c6e95ab738afce19518872a512c3a45565e3f64657ab41e5cd90c98fc51cd87"
     }
   ],
   "generatedAt": "2026-07-02"

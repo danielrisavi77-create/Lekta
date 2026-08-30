@@ -161,7 +161,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "margins-fixer"
+        "recommendedFixerId": "margins-fixer",
+        "verifiedHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece"
       },
       {
         "ruleId": "vef-diplomski--page-count",
@@ -179,7 +180,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece"
       },
       {
         "ruleId": "vef-diplomski--citation-style",
@@ -195,7 +197,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece"
       },
       {
         "ruleId": "vef-diplomski--required-sections",
@@ -222,7 +225,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece"
       }
     ]
   },

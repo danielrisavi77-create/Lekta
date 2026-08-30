@@ -168,7 +168,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "380e2f937442f9fd06470b6f03f23b28dbd957b32df38405e0681d3647903ac1"
     },
     {
       "ruleId": "unizd-pedagogija-diplomski--citation-sync-rules",
@@ -188,7 +189,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "380e2f937442f9fd06470b6f03f23b28dbd957b32df38405e0681d3647903ac1"
     },
     {
       "ruleId": "unizd-pedagogija-diplomski--required-section-rules",
@@ -220,7 +222,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "380e2f937442f9fd06470b6f03f23b28dbd957b32df38405e0681d3647903ac1"
     },
     {
       "ruleId": "unizd-pedagogija-diplomski--section-surgery-rules",
@@ -245,7 +248,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "380e2f937442f9fd06470b6f03f23b28dbd957b32df38405e0681d3647903ac1"
     },
     {
       "ruleId": "unizd-pedagogija-diplomski--element-caption-rules",
@@ -274,7 +278,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "380e2f937442f9fd06470b6f03f23b28dbd957b32df38405e0681d3647903ac1"
     }
   ],
   "generatedAt": "2026-07-02"

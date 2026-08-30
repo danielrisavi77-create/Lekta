@@ -19,7 +19,8 @@
       "status": "advisory",
       "scored": false,
       "note": "Advisory: preporuka/dualno u izvoru (vidi quote).",
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "bc87c88089a2b3c0a1f687ef9f6c56e9685a3c1225a82f44d29c730547f099a0"
     },
     {
       "ruleId": "logri-diplomski--font-size",
@@ -190,7 +191,8 @@
       "quote": "Studentski seminarski radovi u pravilu se sastoje od: Uvoda, Razrade teme (nekoliko potpoglavlja), Zaključka i Literature.",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: preporuka/dualno u izvoru (vidi quote)."
+      "note": "Advisory: preporuka/dualno u izvoru (vidi quote).",
+      "verifiedHash": "bc87c88089a2b3c0a1f687ef9f6c56e9685a3c1225a82f44d29c730547f099a0"
     },
     {
       "ruleId": "logri-diplomski--citation-style",
@@ -205,7 +207,8 @@
       "quote": "Prilikom navođenja literature preporuča se koristiti APA standard/stil za citiranje, parafraziranje i popisivanje literature i izvora.",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: preporuka/dualno u izvoru (vidi quote)."
+      "note": "Advisory: preporuka/dualno u izvoru (vidi quote).",
+      "verifiedHash": "bc87c88089a2b3c0a1f687ef9f6c56e9685a3c1225a82f44d29c730547f099a0"
     }
   ],
   "generatedAt": "2026-07-16"

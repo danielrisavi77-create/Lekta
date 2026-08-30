@@ -96,7 +96,8 @@
         "lastVerified": "2026-07-28",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "font-fixer"
+        "recommendedFixerId": "font-fixer",
+        "verifiedHash": "3328794a2b9b7963f80af701a01b43ceb10002798f70da52bc5f77af55806880"
       },
       {
         "ruleId": "fpz-zavrsni--line-spacing",
@@ -113,7 +114,8 @@
         "lastVerified": "2026-07-28",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "line-spacing-fixer"
+        "recommendedFixerId": "line-spacing-fixer",
+        "verifiedHash": "3328794a2b9b7963f80af701a01b43ceb10002798f70da52bc5f77af55806880"
       },
       {
         "ruleId": "fpz-zavrsni--margins",
@@ -135,7 +137,8 @@
         "lastVerified": "2026-07-28",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "margins-fixer"
+        "recommendedFixerId": "margins-fixer",
+        "verifiedHash": "3328794a2b9b7963f80af701a01b43ceb10002798f70da52bc5f77af55806880"
       },
       {
         "ruleId": "fpz-zavrsni--citation-style",
@@ -152,7 +155,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "note": "Normalizirano u kanonski token 2026-08-29. Izvor navodi DVIJE dopustene alternative (fusnote ili uglate zagrade s brojem), dakle ne propisuje jedan imenovani stil; `custom` (\"Prema posebnim uputama\") je vjeran zapis te tvrdnje, a token u `rules` je vec bio `custom`."
+        "note": "Normalizirano u kanonski token 2026-08-29. Izvor navodi DVIJE dopustene alternative (fusnote ili uglate zagrade s brojem), dakle ne propisuje jedan imenovani stil; `custom` (\"Prema posebnim uputama\") je vjeran zapis te tvrdnje, a token u `rules` je vec bio `custom`.",
+        "verifiedHash": "b5040734e60a8238520b526c1511b288a92172718388bb5bfeda110c897a7c5b"
       },
       {
         "ruleId": "fpz-zavrsni--footnote-size",
@@ -170,7 +174,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-28",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "3328794a2b9b7963f80af701a01b43ceb10002798f70da52bc5f77af55806880"
       }
     ],
     "fpz-diplomski": [
@@ -269,7 +274,8 @@
         "lastVerified": "2026-07-28",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "font-fixer"
+        "recommendedFixerId": "font-fixer",
+        "verifiedHash": "3328794a2b9b7963f80af701a01b43ceb10002798f70da52bc5f77af55806880"
       },
       {
         "ruleId": "fpz-diplomski--line-spacing",
@@ -286,7 +292,8 @@
         "lastVerified": "2026-07-28",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "line-spacing-fixer"
+        "recommendedFixerId": "line-spacing-fixer",
+        "verifiedHash": "3328794a2b9b7963f80af701a01b43ceb10002798f70da52bc5f77af55806880"
       },
       {
         "ruleId": "fpz-diplomski--margins",
@@ -308,7 +315,8 @@
         "lastVerified": "2026-07-28",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "margins-fixer"
+        "recommendedFixerId": "margins-fixer",
+        "verifiedHash": "3328794a2b9b7963f80af701a01b43ceb10002798f70da52bc5f77af55806880"
       },
       {
         "ruleId": "fpz-diplomski--citation-style",
@@ -325,7 +333,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "note": "Normalizirano u kanonski token 2026-08-29. Izvor navodi DVIJE dopustene alternative (fusnote ili uglate zagrade s brojem), dakle ne propisuje jedan imenovani stil; `custom` (\"Prema posebnim uputama\") je vjeran zapis te tvrdnje, a token u `rules` je vec bio `custom`."
+        "note": "Normalizirano u kanonski token 2026-08-29. Izvor navodi DVIJE dopustene alternative (fusnote ili uglate zagrade s brojem), dakle ne propisuje jedan imenovani stil; `custom` (\"Prema posebnim uputama\") je vjeran zapis te tvrdnje, a token u `rules` je vec bio `custom`.",
+        "verifiedHash": "b5040734e60a8238520b526c1511b288a92172718388bb5bfeda110c897a7c5b"
       },
       {
         "ruleId": "fpz-diplomski--footnote-size",
@@ -343,7 +352,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-28",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "3328794a2b9b7963f80af701a01b43ceb10002798f70da52bc5f77af55806880"
       }
     ]
   },

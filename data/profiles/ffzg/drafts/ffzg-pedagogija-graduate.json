@@ -212,7 +212,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543"
     },
     {
       "ruleId": "ffzg-pedagogija-graduate--required-sections",
@@ -235,7 +236,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543"
     }
   ],
   "generatedAt": "2026-07-02"

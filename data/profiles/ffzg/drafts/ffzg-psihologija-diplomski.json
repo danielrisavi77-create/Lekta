@@ -166,7 +166,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "ad885d20070f3349adae2f27ef0d08ea1223e7cf1322521e25a41f8b2d02fac4"
     },
     {
       "ruleId": "ffzg-psihologija-diplomski--citation-style",
@@ -183,7 +184,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "ad885d20070f3349adae2f27ef0d08ea1223e7cf1322521e25a41f8b2d02fac4"
     },
     {
       "ruleId": "ffzg-psihologija-diplomski--justify",
@@ -201,7 +203,8 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit",
-      "recommendedFixerId": "alignment-fixer"
+      "recommendedFixerId": "alignment-fixer",
+      "verifiedHash": "ad885d20070f3349adae2f27ef0d08ea1223e7cf1322521e25a41f8b2d02fac4"
     },
     {
       "ruleId": "ffzg-psihologija-diplomski--required-sections",
@@ -227,7 +230,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "ad885d20070f3349adae2f27ef0d08ea1223e7cf1322521e25a41f8b2d02fac4"
     }
   ],
   "generatedAt": "2026-07-02"

@@ -242,7 +242,8 @@
       "quote": "Jedan autor: ime autora (bez inicijala) i godina publikacije (npr. Petrić (2011) opisuje ..., odnosno (Petrić, 2011)).",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
+      "verifiedHash": "e1733e2cb428ceb635561276131fc83a17916d8c666bcff8567f8df6183c51ff"
     }
   ],
   "generatedAt": "2026-07-16"

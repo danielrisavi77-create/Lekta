@@ -16,7 +16,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "paper-size-fixer"
+        "recommendedFixerId": "paper-size-fixer",
+        "verifiedHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188"
       },
       {
         "ruleId": "fer-diplomski--page-numbers",
@@ -32,7 +33,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188"
       },
       {
         "ruleId": "fer-diplomski--font",
@@ -51,7 +53,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "font-fixer"
+        "recommendedFixerId": "font-fixer",
+        "verifiedHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188"
       },
       {
         "ruleId": "fer-diplomski--font-size",
@@ -70,7 +73,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "font-fixer"
+        "recommendedFixerId": "font-fixer",
+        "verifiedHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188"
       },
       {
         "ruleId": "fer-diplomski--line-spacing",
@@ -87,7 +91,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "line-spacing-fixer"
+        "recommendedFixerId": "line-spacing-fixer",
+        "verifiedHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188"
       },
       {
         "ruleId": "fer-diplomski--margins",
@@ -109,7 +114,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "margins-fixer"
+        "recommendedFixerId": "margins-fixer",
+        "verifiedHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188"
       },
       {
         "ruleId": "fer-diplomski--citation-style",
@@ -125,7 +131,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188"
       },
       {
         "ruleId": "fer-diplomski--required-sections",
@@ -148,7 +155,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188"
       }
     ],
     "fer-zavrsni": [
@@ -167,7 +175,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "paper-size-fixer"
+        "recommendedFixerId": "paper-size-fixer",
+        "verifiedHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188"
       },
       {
         "ruleId": "fer-zavrsni--page-numbers",
@@ -183,7 +192,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188"
       },
       {
         "ruleId": "fer-zavrsni--font",
@@ -202,7 +212,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "font-fixer"
+        "recommendedFixerId": "font-fixer",
+        "verifiedHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188"
       },
       {
         "ruleId": "fer-zavrsni--font-size",
@@ -221,7 +232,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "font-fixer"
+        "recommendedFixerId": "font-fixer",
+        "verifiedHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188"
       },
       {
         "ruleId": "fer-zavrsni--line-spacing",
@@ -238,7 +250,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "line-spacing-fixer"
+        "recommendedFixerId": "line-spacing-fixer",
+        "verifiedHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188"
       },
       {
         "ruleId": "fer-zavrsni--margins",
@@ -260,7 +273,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "margins-fixer"
+        "recommendedFixerId": "margins-fixer",
+        "verifiedHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188"
       },
       {
         "ruleId": "fer-zavrsni--citation-style",
@@ -276,7 +290,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188"
       },
       {
         "ruleId": "fer-zavrsni--required-sections",
@@ -299,7 +314,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188"
       }
     ]
   },

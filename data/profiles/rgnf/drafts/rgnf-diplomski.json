@@ -170,7 +170,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "1773255a260cb9605b38b69acbc64296411f95d298b11cc1adb957b01984bd35"
     }
   ],
   "generatedAt": "2026-07-02"

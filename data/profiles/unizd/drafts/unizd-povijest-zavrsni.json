@@ -117,7 +117,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "9928abb8bfee23c1167e6f1ca13830e2e8d112bc308fe5b9b41d18d13f064ccc"
     },
     {
       "ruleId": "unizd-povijest-zavrsni--line-spacing",
@@ -134,7 +135,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "line-spacing-fixer"
+      "recommendedFixerId": "line-spacing-fixer",
+      "verifiedHash": "9928abb8bfee23c1167e6f1ca13830e2e8d112bc308fe5b9b41d18d13f064ccc"
     }
   ]
 }

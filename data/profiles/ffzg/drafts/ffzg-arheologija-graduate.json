@@ -153,7 +153,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "007ac625ba065042ecbb3b1f2c1b40b0f20a00b9f23e139f6340e1eb9ddef32e"
     },
     {
       "ruleId": "ffzg-arheologija-graduate--citation-style",
@@ -170,7 +171,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "007ac625ba065042ecbb3b1f2c1b40b0f20a00b9f23e139f6340e1eb9ddef32e"
     },
     {
       "ruleId": "ffzg-arheologija-graduate--page-count",
@@ -190,7 +192,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "007ac625ba065042ecbb3b1f2c1b40b0f20a00b9f23e139f6340e1eb9ddef32e"
     },
     {
       "ruleId": "ffzg-arheologija-graduate--citation-sync-rules",
@@ -210,7 +213,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "007ac625ba065042ecbb3b1f2c1b40b0f20a00b9f23e139f6340e1eb9ddef32e"
     },
     {
       "ruleId": "ffzg-arheologija-graduate--required-section-rules",
@@ -244,7 +248,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "007ac625ba065042ecbb3b1f2c1b40b0f20a00b9f23e139f6340e1eb9ddef32e"
     }
   ],
   "generatedAt": "2026-07-02"

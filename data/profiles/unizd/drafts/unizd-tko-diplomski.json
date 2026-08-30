@@ -168,7 +168,8 @@
       "quote": "Optimalan opseg rada je između 30 i 50 stranica teksta.",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: opisno/optimalno u izvoru (vidi quote)."
+      "note": "Advisory: opisno/optimalno u izvoru (vidi quote).",
+      "verifiedHash": "ab4812a811af3968d45b0d0c046beb9405ce8a47a6256cbc27c8fc9a583db07f"
     },
     {
       "ruleId": "unizd-tko-diplomski--required-sections",
@@ -272,7 +273,8 @@
       "quote": "Pri pisanju referenci koristi se prilagođeni (autor godina, broj stranice) Chicago stil (The Chicago Manual of Style).",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: opisno/optimalno u izvoru (vidi quote)."
+      "note": "Advisory: opisno/optimalno u izvoru (vidi quote).",
+      "verifiedHash": "ab4812a811af3968d45b0d0c046beb9405ce8a47a6256cbc27c8fc9a583db07f"
     },
     {
       "ruleId": "unizd-tko-diplomski--bibliography-rules",
@@ -292,7 +294,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "ab4812a811af3968d45b0d0c046beb9405ce8a47a6256cbc27c8fc9a583db07f"
     },
     {
       "ruleId": "unizd-tko-diplomski--citation-sync-rules",
@@ -312,7 +315,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "ab4812a811af3968d45b0d0c046beb9405ce8a47a6256cbc27c8fc9a583db07f"
     },
     {
       "ruleId": "unizd-tko-diplomski--required-section-rules",
@@ -342,7 +346,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "ab4812a811af3968d45b0d0c046beb9405ce8a47a6256cbc27c8fc9a583db07f"
     },
     {
       "ruleId": "unizd-tko-diplomski--section-surgery-rules",
@@ -366,7 +371,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "ab4812a811af3968d45b0d0c046beb9405ce8a47a6256cbc27c8fc9a583db07f"
     }
   ],
   "generatedAt": "2026-07-17"

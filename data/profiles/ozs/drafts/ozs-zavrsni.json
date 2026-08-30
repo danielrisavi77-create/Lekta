@@ -43,7 +43,8 @@
       "status": "advisory",
       "scored": false,
       "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "1c41b3cc27890550200b207f9381f992ae49c9f9cf9d978e409b8da39e5f1b35"
     },
     {
       "ruleId": "ozs-zavrsni--line-spacing",
@@ -88,7 +89,8 @@
       "status": "advisory",
       "scored": false,
       "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
-      "recommendedFixerId": "margins-fixer"
+      "recommendedFixerId": "margins-fixer",
+      "verifiedHash": "1c41b3cc27890550200b207f9381f992ae49c9f9cf9d978e409b8da39e5f1b35"
     },
     {
       "ruleId": "ozs-zavrsni--page-numbers",
@@ -189,7 +191,8 @@
       "quote": "Heading1 u teorijsko-esejskom predlošku: 1. UVOD; 2. CILJ RADA; 3. RASPRAVA; 4. ZAKLJUČAK; 5. LITERATURA; 6. ŽIVOTOPIS (uz SAŽETAK, SUMMARY, SADRŽAJ). Istraživački predložak dodatno ima 3. ISPITANICI I METODE i 4. REZULTATI, pa je popis dualan (advisory je zajednički presjek)",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
+      "verifiedHash": "9cbed0c2ea91d8518f3a435482ecf91b35fb8a5d215460f9a006feb57c2543b9"
     }
   ],
   "generatedAt": "2026-07-16"

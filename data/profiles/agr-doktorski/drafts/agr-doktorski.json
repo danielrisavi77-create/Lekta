@@ -164,7 +164,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "7d88702516094d932f4eac67a91bf49d8119c214cc6aa56f03954b4e9bcd0f4c"
     },
     {
       "ruleId": "agr-doktorski--required-sections",
@@ -192,7 +193,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "7d88702516094d932f4eac67a91bf49d8119c214cc6aa56f03954b4e9bcd0f4c"
     }
   ]
 }

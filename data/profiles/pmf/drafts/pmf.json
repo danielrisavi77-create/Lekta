@@ -220,7 +220,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1"
       },
       {
         "ruleId": "pmf-geografija-diplomski--toc",
@@ -236,7 +237,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1"
       }
     ]
   },

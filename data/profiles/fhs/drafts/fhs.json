@@ -222,7 +222,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "8807628d8863819448f91e61efff4d58e41747bc3d2d5db98e0a5521b748e2a6"
       },
       {
         "ruleId": "fhs-diplomski--citation-style",
@@ -238,7 +239,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "8807628d8863819448f91e61efff4d58e41747bc3d2d5db98e0a5521b748e2a6"
       }
     ],
     "fhs-zavrsni": [
@@ -460,7 +462,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "91726744ca26a6363a89cb6c18057a63fb3677ccbc4ca1d95d3ace4bea0cf5bc"
       },
       {
         "ruleId": "fhs-zavrsni--citation-style",
@@ -476,7 +479,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "91726744ca26a6363a89cb6c18057a63fb3677ccbc4ca1d95d3ace4bea0cf5bc"
       }
     ]
   }

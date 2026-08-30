@@ -225,7 +225,8 @@
       "quote": "Diplomski rad: optimalno između 40 i 60 stranica teksta. ... Vrijednost i kvaliteta rada ne određuju se opsegom, već jasnoćom ciljeva, ispravnošću primijenjenih metoda te kvalitetom analize i zaključaka.",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
+      "verifiedHash": "591cc934a85b7ded7a1ebdfd157e7262c407c09e3444eb82a63e1babf0cf4b22"
     },
     {
       "ruleId": "iv-diplomski--citation-style",
@@ -240,7 +241,8 @@
       "quote": "Društvene znanosti – APA stil citiranja (autor–godina) [...] Tehničke znanosti – numerički stil",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
+      "verifiedHash": "591cc934a85b7ded7a1ebdfd157e7262c407c09e3444eb82a63e1babf0cf4b22"
     },
     {
       "ruleId": "iv-diplomski--paper-size",
@@ -256,7 +258,8 @@
       "status": "advisory",
       "scored": false,
       "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
-      "recommendedFixerId": "paper-size-fixer"
+      "recommendedFixerId": "paper-size-fixer",
+      "verifiedHash": "97b90192482c28e27e9128b029bf9de3fef24c6d3505597adfa444f01a892858"
     }
   ],
   "generatedAt": "2026-07-17"

@@ -95,7 +95,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "725a5fda8628067c100a56419ac8a6f33bbdaf8a0d052fad3752540f1aa8f376"
     },
     {
       "ruleId": "unizd-arheologija-diplomski--font-size",
@@ -114,7 +115,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "725a5fda8628067c100a56419ac8a6f33bbdaf8a0d052fad3752540f1aa8f376"
     },
     {
       "ruleId": "unizd-arheologija-diplomski--line-spacing",
@@ -131,7 +133,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "line-spacing-fixer"
+      "recommendedFixerId": "line-spacing-fixer",
+      "verifiedHash": "725a5fda8628067c100a56419ac8a6f33bbdaf8a0d052fad3752540f1aa8f376"
     }
   ]
 }

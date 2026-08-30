@@ -43,7 +43,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "0e34f2044d0f533e40ca4787df1d4d36db5007ec092a99e2f4bae4495b7d1dae"
     },
     {
       "ruleId": "algebra-diplomski--font-size",
@@ -62,7 +63,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "0e34f2044d0f533e40ca4787df1d4d36db5007ec092a99e2f4bae4495b7d1dae"
     },
     {
       "ruleId": "algebra-diplomski--line-spacing",
@@ -79,7 +81,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "line-spacing-fixer"
+      "recommendedFixerId": "line-spacing-fixer",
+      "verifiedHash": "0e34f2044d0f533e40ca4787df1d4d36db5007ec092a99e2f4bae4495b7d1dae"
     },
     {
       "ruleId": "algebra-diplomski--justify",
@@ -96,7 +99,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "alignment-fixer"
+      "recommendedFixerId": "alignment-fixer",
+      "verifiedHash": "0e34f2044d0f533e40ca4787df1d4d36db5007ec092a99e2f4bae4495b7d1dae"
     },
     {
       "ruleId": "algebra-diplomski--paper-size",
@@ -113,7 +117,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "paper-size-fixer"
+      "recommendedFixerId": "paper-size-fixer",
+      "verifiedHash": "0e34f2044d0f533e40ca4787df1d4d36db5007ec092a99e2f4bae4495b7d1dae"
     },
     {
       "ruleId": "algebra-diplomski--margins",
@@ -135,7 +140,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "margins-fixer"
+      "recommendedFixerId": "margins-fixer",
+      "verifiedHash": "0e34f2044d0f533e40ca4787df1d4d36db5007ec092a99e2f4bae4495b7d1dae"
     }
   ]
 }

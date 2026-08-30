@@ -95,7 +95,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "1e4dd44b50b056a5a94243ec86efcee21853ca15a2e617ca2ce4428bedcb330f"
     },
     {
       "ruleId": "unizd-arheologija-zavrsni--font-size",
@@ -114,7 +115,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "1e4dd44b50b056a5a94243ec86efcee21853ca15a2e617ca2ce4428bedcb330f"
     },
     {
       "ruleId": "unizd-arheologija-zavrsni--line-spacing",
@@ -131,7 +133,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "line-spacing-fixer"
+      "recommendedFixerId": "line-spacing-fixer",
+      "verifiedHash": "1e4dd44b50b056a5a94243ec86efcee21853ca15a2e617ca2ce4428bedcb330f"
     }
   ]
 }

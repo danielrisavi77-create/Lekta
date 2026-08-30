@@ -94,7 +94,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "8daaa26933e050582a2253681f943a9caf765cd12760de91ebd283b84097d3c7"
     },
     {
       "ruleId": "unizd-zdravstvo-zavrsni--required-section-rules",
@@ -124,7 +125,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "8daaa26933e050582a2253681f943a9caf765cd12760de91ebd283b84097d3c7"
     },
     {
       "ruleId": "unizd-zdravstvo-zavrsni--element-caption-rules",
@@ -151,7 +153,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "8daaa26933e050582a2253681f943a9caf765cd12760de91ebd283b84097d3c7"
     }
   ]
 }

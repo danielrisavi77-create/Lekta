@@ -69,7 +69,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "e34ef7c2c471f8ad43c0d3ce25d249fe8c3a28e5491dc2ca452c002ffadd4310"
     }
   ]
 }

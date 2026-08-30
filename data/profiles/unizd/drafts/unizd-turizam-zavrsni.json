@@ -169,7 +169,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "96d4895ec69f1dd6648ca946f324eb7032cc25ed6a3184e55ef7b5e64c7b5728"
     },
     {
       "ruleId": "unizd-turizam-zavrsni--required-section-rules",
@@ -201,7 +202,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "96d4895ec69f1dd6648ca946f324eb7032cc25ed6a3184e55ef7b5e64c7b5728"
     },
     {
       "ruleId": "unizd-turizam-zavrsni--section-surgery-rules",
@@ -225,7 +227,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "96d4895ec69f1dd6648ca946f324eb7032cc25ed6a3184e55ef7b5e64c7b5728"
     }
   ],
   "generatedAt": "2026-07-02"

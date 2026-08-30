@@ -169,7 +169,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "margins-fixer"
+        "recommendedFixerId": "margins-fixer",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
       },
       {
         "ruleId": "grad-diplomski--paper-size",
@@ -186,7 +187,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "paper-size-fixer"
+        "recommendedFixerId": "paper-size-fixer",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
       },
       {
         "ruleId": "grad-diplomski--citation-style",
@@ -203,7 +205,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "note": "Vrijednost spustena s \"ieee\" na \"custom\" 2026-08-29. Citat ovog pravila propisuje BROJCANO navodjenje u uglatim zagradama, a ne IEEE: IEEE je imenovan stil s vlastitim pravilima oblikovanja koja izvor nigdje ne navodi. Pretrazena su sva 24 citljiva izvora tih 26 profila; rijec \"IEEE\" pojavljuje se u tocno jednom, i to kao ime casopisa u primjeru literature (\"IEEE Trans. Ind. Electron.\"), ne kao propis. Bodovno neutralno (citationMeta: ieee -> numeric, custom -> custom, obje grane iskljucuju autor-godina provjere; izmjereno na dvije fixture: ista ocjena, isti broj bodovanih provjera, isti nazivnik). Isti postupak kao FER 2c214fd7."
+        "note": "Vrijednost spustena s \"ieee\" na \"custom\" 2026-08-29. Citat ovog pravila propisuje BROJCANO navodjenje u uglatim zagradama, a ne IEEE: IEEE je imenovan stil s vlastitim pravilima oblikovanja koja izvor nigdje ne navodi. Pretrazena su sva 24 citljiva izvora tih 26 profila; rijec \"IEEE\" pojavljuje se u tocno jednom, i to kao ime casopisa u primjeru literature (\"IEEE Trans. Ind. Electron.\"), ne kao propis. Bodovno neutralno (citationMeta: ieee -> numeric, custom -> custom, obje grane iskljucuju autor-godina provjere; izmjereno na dvije fixture: ista ocjena, isti broj bodovanih provjera, isti nazivnik). Isti postupak kao FER 2c214fd7.",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
       }
     ],
     "grad-zavrsni": [
@@ -375,7 +378,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "margins-fixer"
+        "recommendedFixerId": "margins-fixer",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
       },
       {
         "ruleId": "grad-zavrsni--paper-size",
@@ -392,7 +396,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "paper-size-fixer"
+        "recommendedFixerId": "paper-size-fixer",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
       },
       {
         "ruleId": "grad-zavrsni--citation-style",
@@ -409,7 +414,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "note": "Vrijednost spustena s \"ieee\" na \"custom\" 2026-08-29. Citat ovog pravila propisuje BROJCANO navodjenje u uglatim zagradama, a ne IEEE: IEEE je imenovan stil s vlastitim pravilima oblikovanja koja izvor nigdje ne navodi. Pretrazena su sva 24 citljiva izvora tih 26 profila; rijec \"IEEE\" pojavljuje se u tocno jednom, i to kao ime casopisa u primjeru literature (\"IEEE Trans. Ind. Electron.\"), ne kao propis. Bodovno neutralno (citationMeta: ieee -> numeric, custom -> custom, obje grane iskljucuju autor-godina provjere; izmjereno na dvije fixture: ista ocjena, isti broj bodovanih provjera, isti nazivnik). Isti postupak kao FER 2c214fd7."
+        "note": "Vrijednost spustena s \"ieee\" na \"custom\" 2026-08-29. Citat ovog pravila propisuje BROJCANO navodjenje u uglatim zagradama, a ne IEEE: IEEE je imenovan stil s vlastitim pravilima oblikovanja koja izvor nigdje ne navodi. Pretrazena su sva 24 citljiva izvora tih 26 profila; rijec \"IEEE\" pojavljuje se u tocno jednom, i to kao ime casopisa u primjeru literature (\"IEEE Trans. Ind. Electron.\"), ne kao propis. Bodovno neutralno (citationMeta: ieee -> numeric, custom -> custom, obje grane iskljucuju autor-godina provjere; izmjereno na dvije fixture: ista ocjena, isti broj bodovanih provjera, isti nazivnik). Isti postupak kao FER 2c214fd7.",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
       }
     ]
   },

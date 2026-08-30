@@ -151,7 +151,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "e65363cbefec01e79e410e053d952e8856b4c739559f0e7954a5037c1e2c204d"
     },
     {
       "ruleId": "ffri-psihologija-diplomski--section-surgery-rules",
@@ -177,7 +178,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "e65363cbefec01e79e410e053d952e8856b4c739559f0e7954a5037c1e2c204d"
     },
     {
       "ruleId": "ffri-psihologija-diplomski--citation-sync-rules",
@@ -197,7 +199,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "e65363cbefec01e79e410e053d952e8856b4c739559f0e7954a5037c1e2c204d"
     }
   ]
 }

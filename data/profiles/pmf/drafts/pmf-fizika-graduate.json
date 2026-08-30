@@ -165,7 +165,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "e7fc10240bac403404d760e3275708aaff546e123ef3625e4202bbc275e48683"
     },
     {
       "ruleId": "pmf-fizika-graduate--required-sections",
@@ -187,7 +188,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "e7fc10240bac403404d760e3275708aaff546e123ef3625e4202bbc275e48683"
     }
   ],
   "generatedAt": "2026-07-02"

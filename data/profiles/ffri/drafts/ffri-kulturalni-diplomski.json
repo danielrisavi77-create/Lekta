@@ -204,7 +204,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "5497e20bc8b063fce733ab100671956ea835898eaa8dd38ca43c2f1e9a9ca4dd"
     },
     {
       "ruleId": "ffri-kulturalni-diplomski--section-surgery-rules",
@@ -230,7 +231,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "5497e20bc8b063fce733ab100671956ea835898eaa8dd38ca43c2f1e9a9ca4dd"
     },
     {
       "ruleId": "ffri-kulturalni-diplomski--citation-sync-rules",
@@ -250,7 +252,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "5497e20bc8b063fce733ab100671956ea835898eaa8dd38ca43c2f1e9a9ca4dd"
     },
     {
       "ruleId": "ffri-kulturalni-diplomski--bibliography-rules",
@@ -270,7 +273,8 @@
       "scored": false,
       "lastVerified": null,
       "verifiedBy": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "5497e20bc8b063fce733ab100671956ea835898eaa8dd38ca43c2f1e9a9ca4dd"
     }
   ]
 }

@@ -44,7 +44,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "7633072e3d6f875a0e35f6ee0a95be3388aeb92eefd952e3cd56f2103e3274d9"
     },
     {
       "ruleId": "alu-doktorski--citation-style",
@@ -61,7 +62,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "ace48ae2a9a29e243d78703232fc48a1fa0ae150a1083ece44793958dd1cc79b"
     }
   ]
 }

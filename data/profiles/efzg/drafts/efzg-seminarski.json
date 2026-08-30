@@ -16,7 +16,8 @@
       "lastVerified": "2026-08-01",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "a9144962b6935e040a6138550d51e606917884f8f1b3c216bef6fc212e3f5eda"
     },
     {
       "ruleId": "efzg-seminarski--line-spacing",
@@ -33,12 +34,18 @@
       "lastVerified": "2026-08-01",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "line-spacing-fixer"
+      "recommendedFixerId": "line-spacing-fixer",
+      "verifiedHash": "a9144962b6935e040a6138550d51e606917884f8f1b3c216bef6fc212e3f5eda"
     },
     {
       "ruleId": "efzg-seminarski--margins",
       "checkId": "margins",
-      "value": { "top": 2.54, "right": 2.54, "bottom": 2.54, "left": 2.54 },
+      "value": {
+        "top": 2.54,
+        "right": 2.54,
+        "bottom": 2.54,
+        "left": 2.54
+      },
       "category": "format",
       "label": "Margine (preporuka)",
       "machineCheckable": true,
@@ -50,12 +57,15 @@
       "lastVerified": "2026-08-01",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "margins-fixer"
+      "recommendedFixerId": "margins-fixer",
+      "verifiedHash": "a9144962b6935e040a6138550d51e606917884f8f1b3c216bef6fc212e3f5eda"
     },
     {
       "ruleId": "efzg-seminarski--footnote-size",
       "checkId": "footnote-size",
-      "value": [10],
+      "value": [
+        10
+      ],
       "category": "format",
       "label": "Velicina fusnote (preporuka)",
       "machineCheckable": true,
@@ -66,12 +76,16 @@
       "status": "advisory",
       "lastVerified": "2026-08-01",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "a9144962b6935e040a6138550d51e606917884f8f1b3c216bef6fc212e3f5eda"
     },
     {
       "ruleId": "efzg-seminarski--page-count",
       "checkId": "page-count",
-      "value": { "min": 10, "max": 15 },
+      "value": {
+        "min": 10,
+        "max": 15
+      },
       "category": "scope",
       "label": "Opseg (10-15 str., preporuka)",
       "machineCheckable": true,
@@ -82,7 +96,8 @@
       "status": "advisory",
       "lastVerified": "2026-08-01",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "verifiedHash": "a9144962b6935e040a6138550d51e606917884f8f1b3c216bef6fc212e3f5eda"
     }
   ],
   "generatedAt": "2026-08-01"

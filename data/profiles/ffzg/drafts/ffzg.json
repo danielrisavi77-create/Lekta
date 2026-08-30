@@ -95,7 +95,8 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null,
-        "recommendedFixerId": "font-fixer"
+        "recommendedFixerId": "font-fixer",
+        "verifiedHash": "569ef74171db53273efeada5532f0d0b0a520335f725f66f2136c0aad190486e"
       },
       {
         "ruleId": "ffzg-informacijske-zavrsni--word-count",
@@ -113,7 +114,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "569ef74171db53273efeada5532f0d0b0a520335f725f66f2136c0aad190486e"
       },
       {
         "ruleId": "ffzg-informacijske-zavrsni--citation-style",
@@ -129,7 +131,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "569ef74171db53273efeada5532f0d0b0a520335f725f66f2136c0aad190486e"
       }
     ],
     "ffzg-filozofija-diplomski": [

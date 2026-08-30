@@ -19,7 +19,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
     },
     {
       "ruleId": "fsb-opci-akademski-rad--font-size",
@@ -38,7 +39,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
     },
     {
       "ruleId": "fsb-opci-akademski-rad--line-spacing",
@@ -55,7 +57,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "line-spacing-fixer"
+      "recommendedFixerId": "line-spacing-fixer",
+      "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
     },
     {
       "ruleId": "fsb-opci-akademski-rad--justify",
@@ -72,7 +75,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "alignment-fixer"
+      "recommendedFixerId": "alignment-fixer",
+      "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
     },
     {
       "ruleId": "fsb-opci-akademski-rad--margins",
@@ -94,7 +98,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "recommendedFixerId": "margins-fixer"
+      "recommendedFixerId": "margins-fixer",
+      "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
     },
     {
       "ruleId": "fsb-opci-akademski-rad--citation-style",
@@ -111,7 +116,8 @@
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "note": "Vrijednost spustena s \"ieee\" na \"custom\" 2026-08-29. Citat propisuje BROJCANO navodjenje u uglatim zagradama, a ne IEEE: IEEE je imenovan stil s vlastitim pravilima oblikovanja koja izvor nigdje ne navodi. Pretrazena su sva citljiva vrela svih 26 profila s tim tokenom; rijec \"IEEE\" pojavljuje se u tocno jednom, i to kao ime casopisa u primjeru literature (\"IEEE Trans. Ind. Electron.\"). Bodovno neutralno (izmjereno: ieee, vancouver i custom daju istu ocjenu, isti broj bodovanih provjera i isti nazivnik). Isti postupak kao FER 2c214fd7."
+      "note": "Vrijednost spustena s \"ieee\" na \"custom\" 2026-08-29. Citat propisuje BROJCANO navodjenje u uglatim zagradama, a ne IEEE: IEEE je imenovan stil s vlastitim pravilima oblikovanja koja izvor nigdje ne navodi. Pretrazena su sva citljiva vrela svih 26 profila s tim tokenom; rijec \"IEEE\" pojavljuje se u tocno jednom, i to kao ime casopisa u primjeru literature (\"IEEE Trans. Ind. Electron.\"). Bodovno neutralno (izmjereno: ieee, vancouver i custom daju istu ocjenu, isti broj bodovanih provjera i isti nazivnik). Isti postupak kao FER 2c214fd7.",
+      "verifiedHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e"
     }
   ]
 }

@@ -244,7 +244,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
       }
     ],
     "kbf-diplomski": [
@@ -488,7 +489,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
       }
     ]
   }

@@ -22,7 +22,8 @@
       "sourcePage": "5. Tehnicko oblikovanje rada (Preporuke)",
       "quote": "rad se pise velicinom slova 12 pt, prored 1,15",
       "confirmedVia": "human-audit",
-      "recommendedFixerId": "font-fixer"
+      "recommendedFixerId": "font-fixer",
+      "verifiedHash": "b3ec76035faeedb729c41a046bb522e2b86dbe9f7ebdebee3ecfe7640a323781"
     },
     {
       "ruleId": "agr-zavrsni--line-spacing",
@@ -40,7 +41,8 @@
       "sourcePage": "5. Tehnicko oblikovanje rada (Preporuke)",
       "quote": "rad se pise velicinom slova 12 pt, prored 1,15",
       "confirmedVia": "human-audit",
-      "recommendedFixerId": "line-spacing-fixer"
+      "recommendedFixerId": "line-spacing-fixer",
+      "verifiedHash": "b3ec76035faeedb729c41a046bb522e2b86dbe9f7ebdebee3ecfe7640a323781"
     },
     {
       "ruleId": "agr-zavrsni--margins",
@@ -63,7 +65,8 @@
       "sourcePage": "5. Tehnicko oblikovanje rada (Preporuke)",
       "quote": "margine rada trebaju iznositi 2,5 cm",
       "confirmedVia": "human-audit",
-      "recommendedFixerId": "margins-fixer"
+      "recommendedFixerId": "margins-fixer",
+      "verifiedHash": "b3ec76035faeedb729c41a046bb522e2b86dbe9f7ebdebee3ecfe7640a323781"
     },
     {
       "ruleId": "agr-zavrsni--paper-size",
@@ -81,7 +84,8 @@
       "sourcePage": "1. Uvodne odrednice",
       "quote": "Zavrsni rad je pisani tekst opsega 20 - 30 stranica osnovnog teksta na papiru A4 formata",
       "confirmedVia": "human-audit",
-      "recommendedFixerId": "paper-size-fixer"
+      "recommendedFixerId": "paper-size-fixer",
+      "verifiedHash": "b3ec76035faeedb729c41a046bb522e2b86dbe9f7ebdebee3ecfe7640a323781"
     },
     {
       "ruleId": "agr-zavrsni--page-numbers",
@@ -145,7 +149,8 @@
       "machineCheckable": true,
       "sourcePage": "1. Uvodne odrednice",
       "quote": "Zavrsni rad je pisani tekst opsega 20 - 30 stranica osnovnog teksta na papiru A4 formata",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "b3ec76035faeedb729c41a046bb522e2b86dbe9f7ebdebee3ecfe7640a323781"
     },
     {
       "ruleId": "agr-zavrsni--citation-style",
@@ -162,7 +167,8 @@
       "machineCheckable": false,
       "sourcePage": "4. Pravila citiranja i izrada popisa literature",
       "quote": "Citiranje izvora - jedan autor / dva autora / vise autora (autor, godina)",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "b3ec76035faeedb729c41a046bb522e2b86dbe9f7ebdebee3ecfe7640a323781"
     },
     {
       "ruleId": "agr-zavrsni--required-sections",
@@ -186,7 +192,8 @@
       "machineCheckable": false,
       "sourcePage": "odjeljak 2. Struktura i sadrzaj zavrsnog rada (str. 4)",
       "quote": "naslov / sazetak (do 1000 znakova, 3-5 kljucnih rijeci) / sadrzaj / uvod / ... / zakljucak / popis literature",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "verifiedHash": "b3ec76035faeedb729c41a046bb522e2b86dbe9f7ebdebee3ecfe7640a323781"
     }
   ]
 }
