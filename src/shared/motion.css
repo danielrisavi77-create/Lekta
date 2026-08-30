@@ -31,25 +31,14 @@ p { text-wrap: pretty }
   html { scroll-behavior: smooth }
 }
 
-/*
- * Tekstura papira: suptilan SVG sum preko cijele povrsine da topla pozadina djeluje
- * opipljivo. Data-URI (bez mreznog dohvata), pointer-events:none, ne utjece na interakciju.
- */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 2147483000;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 160px 160px;
-  opacity: .03;
-  mix-blend-mode: multiply;
+/* Tekstura papira ostaje dio pozadine, ne zaseban fixed sloj. Tako ne stvara novu
+ * kompozicijsku površinu preko cijelog viewporta dok korisnik pomiče sadržaj. */
+body {
+  background-image: radial-gradient(circle at 20% 25%, rgba(69, 58, 45, .14) 0 1px, transparent 1.4px), radial-gradient(circle at 75% 65%, rgba(69, 58, 45, .1) 0 1px, transparent 1.4px);
+  background-size: 17px 19px, 23px 21px;
 }
-/* Radna lampa (Tinta i papir): zrno postoji samo na svijetlom papiru, nikad u darku. */
-[data-theme="dark"] body::after { opacity: 0 }
-/* Tekstura se ne printa (inace bi sum prekrio A4 naslovnicu/izjavu pri ispisu/PDF-u). */
-@media print { body::after { display: none } }
+[data-theme="dark"] body { background-image: none }
+@media print { body { background-image: none } }
 
 /*
  * View Transitions: glatki cross-fade pri navigaciji medu stranicama (index <-> alati).
@@ -66,6 +55,12 @@ body::after {
 .logo { view-transition-name: lekta-logo }
 
 @media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
   ::view-transition-old(root), ::view-transition-new(root) { animation: none }
 }
 
@@ -103,32 +98,10 @@ body::after {
   #resultView.result-enter .priority-item:nth-child(4) { animation-delay: .46s }
 }
 
-/* Korak 5 - suptilna dubina hero prizora (parallax) + will-change higijena.
-   Scroll-driven animacija (bez JS, bez scroll listenera): mapira polozaj scrolla na napredak
-   animacije pa je compositor-driven i bez janka. Progresivno pobojlsanje - nepodrzani preglednici
-   (@supports promasi) jednostavno ne parallaxaju. CLS-safe po konstrukciji: na scroll 0 (pocetni
-   above-fold) animacija je na 0% = neutralno stanje elementa, pa NEMA pomaka pri loadu (LCP/CLS se
-   ne kvare). Samo desktop (>1000px) da se ne trosi baterija na mobitelu i da se stack ne mice.
-   Meta target je .lek-paper-cover (bez vlastitog transforma; dijete .lek-cover-stage zadrzava svoj
-   hover-lift jer je drugi element; a cover je vec display:none kad je analyzer engaged/rezultat, pa
-   se parallax sam gasi izvan pocetnog hero stanja). Tekst/CTA (lijevi stupac) se NAMJERNO ne dira -
-   samo dekorativni demo papir dobiva drift, sto stvara dubinu izmedju stupaca. Reduced-motion off. */
-@supports (animation-timeline: scroll()) {
-  @media (min-width: 1001px) and (prefers-reduced-motion: no-preference) {
-    @keyframes lekta-hero-parallax { to { transform: translateY(-46px); opacity: .5 } }
-    .lek-paper-cover {
-      animation: lekta-hero-parallax linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 720px;
-      will-change: transform, opacity;
-    }
-  }
-}
-/* Perpetualni marquee: transform-only petlja (ksMarquee), drzi je na compositoru radi glatkoce na
-   slabijim uredajima. Vec je reduced-motion gejtirana u index.html (.ks-tape-track animation:none). */
-@media (prefers-reduced-motion: no-preference) {
-  .ks-tape-track { will-change: transform }
-}
+/* Hero papir ostaje statican. Scroll-driven parallax je dekorativan, ali je dodavao repaint
+   tocno na prijelazu iz hero sekcije u ostatak stranice. */
+/* Traka je namjerno staticna. Beskonacna marquee animacija je na duljem scrollu stvarala
+   konkurenciju glavnom prikazu i povremene blokade, a tekst ostaje potpuno citljiv i bez gibanja. */
 
 /* Marketing: paywall lock-panel dobiva SUPTILAN reveal (fade-up), nikad pulsiranje - kod ove
    publike (student, trust-critical) povjerenje > pritisak. Vise lock-panela na rezultatu vecinom
@@ -148,4 +121,10 @@ body::after {
     #lekResultProgress { animation: lekta-read-progress linear both; animation-timeline: scroll(root) }
     @keyframes lekta-read-progress { from { transform: scaleX(0) } to { transform: scaleX(1) } }
   }
+}
+
+/* IntersectionObserver samo prebacuje klasu, a browser sam pauzira CSS timeline. */
+.motion-offscreen,
+.motion-offscreen * {
+  animation-play-state: paused !important;
 }

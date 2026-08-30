@@ -42,7 +42,7 @@ export interface RequiredSectionCandidate {
   aliases: string[];
   confidence: RequiredSectionConfidence;
   present: boolean;
-  insertionAnchor?: { paragraphIndex: number; anchorFingerprint: string; position: 'before' | 'after' };
+  insertionAnchor?: { paragraphIndex: number; anchorFingerprint: string; anchorText?: string; position: 'before' | 'after' };
   headingLevel: number;
   styleId?: string;
   numbered: boolean;
@@ -113,14 +113,34 @@ function labelAliases(kind: RequiredSectionKind, rules?: RequiredSectionRules, p
   return { label, aliases };
 }
 
+/**
+ * Vidljivi tekst odlomka iz njegova XML-a.
+ *
+ * Sluzi kao DRUGO sidro, uz otisak. Otisak se racuna nad cijelim XML-om odlomka, pa ga promijeni
+ * svaki zahvat koji dira oblikovanje, i onda kad odlomak ostane isti: `heading-style-fixer` dodaje
+ * `pStyle`, a `final-document-inspector-fixer` brise `w:rsid*` atribute iz svakog dijela paketa.
+ *
+ * IZMJERENO 2026-08-30: `required-section-fixer` je zbog toga u punom lancu odbijao 7 od 7 puta uz
+ * `stale-anchor`, dok je SAM primjenjivao 5 od 7. Tekst oba ta zahvata prezivi, pa je pouzdaniji
+ * pokazatelj "je li ovo jos uvijek isti odlomak".
+ */
+function paragraphTextOf(xml: string): string {
+  return [...xml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)]
+    .map((match) => match[1])
+    .join('')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function findAnchor(index: number, paragraphs: ParagraphLike[], ranges: ReturnType<typeof extractBodyParagraphs>, existing: number[]): RequiredSectionCandidate['insertionAnchor'] | undefined {
   const next = existing.find((x) => x > index);
-  if (next !== undefined && ranges[next - 1]) return { paragraphIndex: next, anchorFingerprint: ranges[next - 1].fingerprint, position: 'before' };
+  if (next !== undefined && ranges[next - 1]) return { paragraphIndex: next, anchorFingerprint: ranges[next - 1].fingerprint, anchorText: paragraphTextOf(ranges[next - 1].xml), position: 'before' };
   const previous = [...existing].reverse().find((x) => x < index);
-  if (previous !== undefined && ranges[previous - 1]) return { paragraphIndex: previous, anchorFingerprint: ranges[previous - 1].fingerprint, position: 'after' };
+  if (previous !== undefined && ranges[previous - 1]) return { paragraphIndex: previous, anchorFingerprint: ranges[previous - 1].fingerprint, anchorText: paragraphTextOf(ranges[previous - 1].xml), position: 'after' };
   const fallback = paragraphs.find((p) => p.index >= index) ?? paragraphs.at(-1);
   const range = fallback ? ranges[fallback.index - 1] : undefined;
-  return range ? { paragraphIndex: fallback!.index, anchorFingerprint: range.fingerprint, position: fallback!.index >= index ? 'before' : 'after' } : undefined;
+  return range ? { paragraphIndex: fallback!.index, anchorFingerprint: range.fingerprint, anchorText: paragraphTextOf(range.xml), position: fallback!.index >= index ? 'before' : 'after' } : undefined;
 }
 
 export function analyzeRequiredSectionsStructure(input: {

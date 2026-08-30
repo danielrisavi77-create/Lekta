@@ -13,6 +13,33 @@ describe('required sections structure', () => {
     expect(result.candidates.find((x) => x.kind === 'abstract')?.insertionAnchor).toBeDefined();
   });
 
+
+  /**
+   * INVARIANT KOJI JE UBIO PREDODABIR (2026-08-29).
+   *
+   * `confidence = present ? 'high' : 'medium'`, pa NEDOSTAJUCI dio nikad nije `high`.
+   * `requiredSectionsRepairableItem` gleda iskljucivo nedostajuce dijelove, a predodabirao je uz
+   * `confidence === 'high'`, sto je uvjet neispunjiv po konstrukciji: fixer je na 116 stvarnih
+   * dokumenata ponudjen 49 puta i nijednom nista nije promijenio.
+   *
+   * Ovaj test PRIBIJA invariant, da se predodabir vise ne moze vezati uz `high`.
+   */
+  it('nedostajuci dio NIKAD nije high, nego medium (ili low bez sidra)', () => {
+    const xml = doc(`${p('Uvod')}<w:p><w:r><w:t>Tekst</w:t></w:r></w:p>`);
+    const result = analyzeRequiredSectionsStructure({
+      documentXml: xml,
+      paragraphs: [{ index: 1, text: 'Uvod', headingLevel: 1 }, { index: 2, text: 'Tekst' }],
+      profileRequiredSections: [{ key: 'abstract', label: 'Abstract' }, { key: 'keywords-en', label: 'Keywords' }],
+    });
+    const missing = result.candidates.filter((candidate) => !candidate.present);
+    expect(missing.length).toBeGreaterThan(0);
+    expect(missing.every((candidate) => candidate.confidence !== 'high')).toBe(true);
+    // Sidro postoji tocno kad pouzdanost NIJE `low`; na tome pociva novi uvjet predodabira.
+    for (const candidate of missing) {
+      expect(Boolean(candidate.insertionAnchor)).toBe(candidate.confidence !== 'low');
+    }
+  });
+
   it('ne duplicira alias Keywords', () => {
     const xml = doc(`${p('Keywords')}${p('Uvod')}`);
     const result = analyzeRequiredSectionsStructure({ documentXml: xml, paragraphs: [{ index: 1, text: 'Keywords', headingLevel: 1 }, { index: 2, text: 'Uvod', headingLevel: 1 }], profileRequiredSections: [{ key: 'keywords-en', label: 'Keywords' }] });

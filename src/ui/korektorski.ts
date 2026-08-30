@@ -1,7 +1,12 @@
 // Korektorski stol: ponasanja dekora landinga (index-only, uvozi ga src/main.ts).
 // Default "radna lampa" tema postavlja se u ui-boot.ts (dijeljeno za sve stranice).
-// Ovdje: traka napretka citanja (3px crvena, fixed top) + parallax svjetla lampe na
-// scroll + sekcijske scene + demo video + "oznaci rijeseno". Sve progresivno.
+import { createFrameCoalescer } from '../shared/frame-coalescer';
+import { videoViewportAction } from './video-loading-policy';
+import { progressPercent, scrollRange } from './scroll-state';
+
+// Ovdje: traka napretka citanja (3px crvena, fixed top) + sekcijske scene + demo video
+// + "oznaci rijeseno". Dekorativna lampa ostaje staticna da scroll ne pokrece repaint velike
+// radijalne povrsine.
 
 function prefersReduced(): boolean {
   return typeof window.matchMedia === 'function'
@@ -10,15 +15,29 @@ function prefersReduced(): boolean {
 
 function setupDesk(): void {
   const bar = document.querySelector<HTMLElement>('.ks-progress > i');
-  const lamp = document.querySelector<HTMLElement>('.ks-lamp');
-  if (!bar && !lamp) return;
-  const reduced = prefersReduced();
+  if (!bar) return;
+  let availableScroll = 0;
+  const measureScrollRange = () => {
+    availableScroll = scrollRange(document.documentElement.scrollHeight, window.innerHeight);
+  };
+  measureScrollRange();
+  window.addEventListener('resize', measureScrollRange, { passive: true });
+  if (typeof ResizeObserver === 'function') {
+    new ResizeObserver(measureScrollRange).observe(document.body);
+  }
+  const renderScrollState = () => {
+    bar.style.width = progressPercent(window.scrollY, availableScroll) + '%';
+  };
+  const scheduleScroll = createFrameCoalescer<void>(renderScrollState);
+  let scrollIdleTimer = 0;
   const onScroll = () => {
-    if (bar) {
-      const h = document.documentElement.scrollHeight - window.innerHeight;
-      bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
-    }
-    if (lamp && !reduced) lamp.style.transform = `translateY(${window.scrollY * 0.12}px)`;
+    document.body.classList.add('is-scrolling');
+    if (scrollIdleTimer) window.clearTimeout(scrollIdleTimer);
+    scrollIdleTimer = window.setTimeout(() => {
+      document.body.classList.remove('is-scrolling');
+      scrollIdleTimer = 0;
+    }, 120);
+    scheduleScroll.schedule(undefined);
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
@@ -63,8 +82,8 @@ function fmtTime(s: number): string {
 
 // Demo video s custom KS kontrolama (bez autoplaya i loopa): pokrece se rucno (play overlay ili
 // klik na video). Kontrolna traka (play/pauza, +-10s, seek, glasnoca, brzina, kvaliteta, fullscreen)
-// pojavi se tek kad demo krene. Protiv stekanja: preload none dok je sekcija daleko, IO s velikim
-// rootMarginom unaprijed bufferira; izlazak iz vidokruga pauzira, povratak nastavlja samo ako je
+// pojavi se tek kad demo krene. Protiv stekanja: preload ostaje none sve do eksplicitnog playa;
+// izlazak iz vidokruga pauzira, povratak nastavlja samo ako je
 // vec sviralo. Na kraju umjesto restarta zavrsni ekran (pecat + ponovi / CTA sa "kreni ovdje" spotom).
 function setupVideo(): void {
   const v = document.querySelector<HTMLVideoElement>('.ks-video');
@@ -81,7 +100,9 @@ function setupVideo(): void {
     endOverlay.hidden = !show;
     if (show) endOverlay.focus();
   };
-  const start = () => { v.play().catch(() => { v.controls = true; }); };
+  const start = () => {
+    if (videoViewportAction(true) === 'resume') v.play().catch(() => { v.controls = true; });
+  };
 
   playOverlay?.addEventListener('click', start);
   v.addEventListener('click', () => { if (v.paused || v.ended) start(); else v.pause(); });
@@ -214,16 +235,6 @@ function setupVideo(): void {
     }
   }, { threshold: 0.35 });
   io.observe(v);
-  // Prefetch: kad se sekcija priblizi na ~900px, bufferiraj unaprijed. load() resetira
-  // reprodukciju pa se smije pozvati samo dok nista jos nije pusteno.
-  let started = false;
-  v.addEventListener('play', () => { started = true; }, { once: true });
-  const pre = new IntersectionObserver((entries) => {
-    if (!entries.some((e) => e.isIntersecting)) return;
-    pre.disconnect();
-    if (!started) { v.preload = 'auto'; v.load(); }
-  }, { rootMargin: '900px 0px' });
-  pre.observe(v);
 }
 
 // Mini toast u postojeci #toastWrap (isti izgled kao app.ts toast, ali neovisan modul).

@@ -58,7 +58,7 @@ a{color:inherit}:focus-visible{outline:2px solid var(--brand);outline-offset:2px
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .serif{font-family:var(--ink-serif)}
 .shell{width:min(var(--max),calc(100% - 40px));margin:auto}
-.topbar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid color-mix(in srgb,var(--line) 80%,transparent)}
+.topbar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 96%,transparent);border-bottom:1px solid color-mix(in srgb,var(--line) 80%,transparent)}
 .nav{height:70px;display:flex;align-items:center;gap:22px}
 .logo{display:flex;align-items:center;gap:9px;text-decoration:none;font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600;font-size:21px;letter-spacing:-.01em;color:var(--text)}
 .logo-tick{width:15px;height:13px;flex:0 0 auto;color:var(--brand);transform:translateY(1px)}
@@ -103,7 +103,7 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
 /* ===== KS: Korektorski stol chrome (dijeljeni predlozak) ===== */
 ::selection{background:var(--red);color:#fff}
 h1,h2,h3,h4{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:400}
-.topbar{background:color-mix(in srgb,var(--desk) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--desk-line)}
+.topbar{background:color-mix(in srgb,var(--desk) 96%,transparent);border-bottom:1px solid var(--desk-line)}
 .topbar.scrolled{background:color-mix(in srgb,var(--desk) 92%,transparent);border-bottom-color:var(--desk-line);box-shadow:none}
 .nav{height:66px;gap:24px}
 .logo{gap:12px;color:var(--desk-ink);font-family:var(--display-serif)}

@@ -3,6 +3,8 @@ import {
   paramsForCheck,
   buildRepairableItems,
   universalRepairableItems,
+  requiredSectionsRepairableItem,
+  pickTargetItem,
   paragraphSpacingRepairableItem,
   footnoteSpacingRepairableItem,
   pageNumberAlignmentRepairableItem,
@@ -131,6 +133,14 @@ describe('buildRepairableItems (Opcija A: samo prekrseno)', () => {
   });
 });
 
+/**
+ * Nalaz kakav zapise `issue()` u `src/scoring/evaluate/structure.ts`, PRIJE nego ga `makeCheck`
+ * dotakne. Do 2026-08-29 je ovo bio JEDINI oblik koji je test provjeravao, pa je test prolazio
+ * dok je produkcija bila mrtva: provjera "Prazni odlomci" je nebodovana (0/0), a `makeCheck` pri
+ * `max === 0` naslov nalaza prepisuje u `Informativno: ...`. Usporedba po golom naslovu zato u
+ * zivom toku nije pogadjala nikad, i `empty-paragraph-fixer` je bio ponudjen NULA puta na 116
+ * stvarnih dokumenata. Ostaje kao ulaz, ali vise nije jedini.
+ */
 const EMPTY_PARAGRAPHS_ISSUE: Issue = {
   severity: 'info',
   category: 'elements',
@@ -139,19 +149,66 @@ const EMPTY_PARAGRAPHS_ISSUE: Issue = {
   where: '',
 };
 
+/** Isti nalaz NAKON `makeCheck`, dakle oblik koji stavka doista dobije iz analize. */
+const EMPTY_PARAGRAPHS_ISSUE_AS_DELIVERED: Issue = {
+  ...EMPTY_PARAGRAPHS_ISSUE,
+  title: `Informativno: ${EMPTY_PARAGRAPHS_ISSUE.title}`,
+};
+
+/**
+ * Kljuc korelacije je SAMO naslov provjere.
+ *
+ * Nalaz nosi oba naslova (`[issue.title, check.title]`), pa `pickTargetItem` zatvara korelaciju i
+ * bez naslova nalaza. Naslove nalaza `stableCheckId` ne prepoznaje, pa bi zavrsili u
+ * `unmappedMatchKeys`: izmjereno 2026-08-30, dva takva kljuca na 14 od 54 rada, bez ikakve koristi.
+ */
+const EMPTY_PARAGRAPHS_MATCH_KEYS = ['Prazni odlomci'];
+
 describe('universalRepairableItems (higijena dokumenta, bez ruleEntry gate-a)', () => {
-  it('violated:true kad issues sadrzi tocan "Prazni odlomci" nalaz', () => {
+  it('violated:true kad issues sadrzi goli "Prazni odlomci" nalaz', () => {
     const items = universalRepairableItems([EMPTY_PARAGRAPHS_ISSUE]);
     expect(items).toEqual([
-      { ruleId: 'empty-paragraphs-universal', fixerId: 'empty-paragraph-fixer', label: 'Prazni odlomci', params: {}, violated: true, matchKeys: ['Dokument sadrži mnogo praznih odlomaka'] },
+      { ruleId: 'empty-paragraphs-universal', fixerId: 'empty-paragraph-fixer', label: 'Prazni odlomci', params: {}, violated: true, matchKeys: EMPTY_PARAGRAPHS_MATCH_KEYS },
     ]);
+  });
+
+  /**
+   * KLJUCNA tvrdnja: nalaz kakav analiza DOISTA isporuci, s prefiksom koji dodaje `makeCheck`.
+   * Bez nje je cijeli opis iznad prolazio na ulazu koji u proizvodu ne postoji.
+   */
+  it('violated:true i za isporuceni oblik s "Informativno: " prefiksom', () => {
+    const items = universalRepairableItems([EMPTY_PARAGRAPHS_ISSUE_AS_DELIVERED]);
+    expect(items[0].violated).toBe(true);
+  });
+
+
+  /**
+   * Korelacija mora prezivjeti suzavanje kljuceva: nalaz nosi i naslov nalaza i naslov provjere,
+   * pa `pickTargetItem` pogadja stavku preko naslova PROVJERE. Bez ove tvrdnje bi suzavanje
+   * matchKeys tiho slomilo klik "Otvori mogucnost popravka" na kartici tog nalaza.
+   */
+  it('nalaz i dalje pogadja stavku preko naslova provjere', () => {
+    const items = universalRepairableItems([EMPTY_PARAGRAPHS_ISSUE_AS_DELIVERED]);
+    const findingKeys = [EMPTY_PARAGRAPHS_ISSUE_AS_DELIVERED.title, 'Prazni odlomci'];
+    expect(pickTargetItem(findingKeys, items)?.fixerId).toBe('empty-paragraph-fixer');
   });
 
   it('violated:false kad issues nema taj nalaz (prazan niz)', () => {
     const items = universalRepairableItems([]);
     expect(items).toEqual([
-      { ruleId: 'empty-paragraphs-universal', fixerId: 'empty-paragraph-fixer', label: 'Prazni odlomci', params: {}, violated: false, matchKeys: ['Dokument sadrži mnogo praznih odlomaka'] },
+      { ruleId: 'empty-paragraphs-universal', fixerId: 'empty-paragraph-fixer', label: 'Prazni odlomci', params: {}, violated: false, matchKeys: EMPTY_PARAGRAPHS_MATCH_KEYS },
     ]);
+  });
+
+  /**
+   * Skidanje prefiksa NE SMIJE postati "podudaraj bilo sto sto zavrsava tim tekstom": prefiks je
+   * zatvoren popis iz `makeCheck`, a ne proizvoljan prolog.
+   */
+  it('violated:false kad je prefiks izmisljen, ne onaj koji makeCheck dodaje', () => {
+    const items = universalRepairableItems([
+      { ...EMPTY_PARAGRAPHS_ISSUE, title: `Napomena: ${EMPTY_PARAGRAPHS_ISSUE.title}` },
+    ]);
+    expect(items[0].violated).toBe(false);
   });
 
   it('violated:false kad issues sadrzi samo nepovezane nalaze (druga kategorija ili naslov)', () => {
@@ -499,5 +556,58 @@ describe('tableFigureRescueRepairableItem: preporuka bez profilnog pravila (RE-6
     expect(items[0].violated).toBe(true);
     expect(items[0].recommended).toBeUndefined();
     expect(items[0].matchKeys?.length).toBeGreaterThan(0);
+  });
+});
+
+/**
+ * PREDODABIR OBVEZNIH DIJELOVA (2026-08-29).
+ *
+ * Uvjet je do tog dana glasio `confidence === 'high' && insertionAnchor`, a stavka gleda iskljucivo
+ * NEDOSTAJUCE dijelove, koje analiza po konstrukciji nikad ne oznaci kao `high`
+ * (`confidence = present ? 'high' : 'medium'`). Fixer je zato na 116 stvarnih dokumenata ponudjen
+ * 49 puta i nijednom nista nije promijenio: `params.sections` su uvijek bili prazni.
+ */
+describe('requiredSectionsRepairableItem: predodabir nedostajucih dijelova', () => {
+  const RULE_ENTRY = {
+    checkId: 'required-section-rules',
+    status: 'verified',
+    sourceId: 'izvor-1',
+    sourcePage: 'str. 4',
+    quote: 'Rad mora sadrzavati sazetak i kljucne rijeci.',
+    value: {},
+  } as unknown as RuleEntry;
+
+  const candidate = (over: Record<string, unknown>) => ({
+    id: 'c1', kind: 'abstract', label: 'Abstract', confidence: 'medium', present: false,
+    headingLevel: 1, numbered: false, contentPolicy: 'none', evidence: [], warnings: [],
+    insertionAnchor: { paragraphIndex: 3, anchorFingerprint: 'fp-1', position: 'before' },
+    ...over,
+  });
+
+  const build = (candidates: unknown[]) => requiredSectionsRepairableItem(
+    { details: { requiredSectionsStructure: { candidates, summary: { text: 'nedostaje 1' } } } },
+    { ruleEntries: [RULE_ENTRY] },
+  );
+
+  it('medium sa sidrom SE predodabire i salje nepraznu sekciju', () => {
+    const items = build([candidate({})]);
+    expect(items).toHaveLength(1);
+    expect((items[0].params as any).sections).toHaveLength(1);
+    expect((items[0].params as any).sections[0].kind).toBe('abstract');
+    // Nista se ne umece bez izricite potvrde, i to mora ostati tako.
+    expect(items[0].requiresConfirmation).toBe(true);
+  });
+
+  it('NEGATIVNA KONTROLA: low ili bez sidra se NE predodabire', () => {
+    expect(((build([candidate({ confidence: 'low' })])[0].params as any).sections)).toHaveLength(0);
+    expect(((build([candidate({ insertionAnchor: undefined })])[0].params as any).sections)).toHaveLength(0);
+  });
+
+  it('bez verificiranog pravila profila stavke uopce nema', () => {
+    const items = requiredSectionsRepairableItem(
+      { details: { requiredSectionsStructure: { candidates: [candidate({})], summary: { text: 'x' } } } },
+      { ruleEntries: [] },
+    );
+    expect(items).toEqual([]);
   });
 });

@@ -22,7 +22,14 @@ import { join } from 'node:path';
  */
 
 const ROOT = join(__dirname, '..');
-const SCANNED_DIRS = ['scripts', 'tests'];
+/**
+ * `src` je dodan 2026-08-29: kvar se tog dana pojavio JOS TRI puta, i to bas u proizvodnom
+ * kodu koji ovaj gard dotad nije gledao (`src/repair/apply-fixers.ts`, dva uzorka, i
+ * `src/repair/link-doi-fixer.ts`). Posljedica nije bila samo promasen uzorak: u
+ * `paragraphTextsForAnchors` je `/<w:p\b[^>]*>/` s bajtom 0x08 prestao nalaziti ijedan
+ * odlomak, pa je sidro protiv zastarjele mete tiho radilo nad praznim popisom.
+ */
+const SCANNED_DIRS = ['scripts', 'tests', 'src'];
 const SCANNED_EXT = /\.(py|mjs|mts|ts|js)$/;
 const BACKSPACE = 0x08;
 

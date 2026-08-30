@@ -220,6 +220,29 @@ export function buildRepairableItems(
 
 // Naslov nalaza "Prazni odlomci" kako ga zapise `issue()` u src/scoring/evaluate/structure.ts,
 // byte-za-byte (dijakritika). Koristi se SAMO za korelaciju "je li prekrseno", ne kao izvor pravila.
+/**
+ * MRTVI `matchKeys` UKLONJENI 2026-08-30.
+ *
+ * `matchKeys` koreliraju nalaz sa stavkom popravka preko `pickTargetItem`, a nalaz nosi
+ * `[issue.title, check.title]`. Kljuc koji nije naslov PROVJERE zato ne moze pogoditi nista, a
+ * `summarizeRepairOutcome` ga prijavi u `unmappedMatchKeys`.
+ *
+ * IZMJERENO na stvarnom radu: `stableCheckId` ne prepoznaje nijedan od ovih kljuceva, i nijedna
+ * emitirana provjera ne nosi takav naslov, jer su to `where` oznake LOKACIJE, ne naslovi provjera
+ * (isti razred kao dva mrtva pravila zatecena pri portu na checkId, vidi
+ * `src/analysis/check-fixer-map.ts`):
+ *
+ *   croatian-typography  'Tipografska dosljednost', 'Tehnicko-tipografske pogreske'
+ *   field-integrity      'Sadrzaj', 'Word polja', 'Cross-reference'
+ *   section-surgery      'Numeriranje stranica', 'Sekcije'
+ *
+ * Sva tri fixera zadrzavaju po jedan ZIV kljuc, pa korelacija ostaje netaknuta. Na 54 stvarna rada
+ * ti su mrtvi kljucevi cinili vecinu popisa `unmappedMatchKeys` (svaki 39 do 47 pojava).
+ *
+ * NAMJERNO NISU dirani `final-document-inspector-fixer` i `consistency-fixer`: oni NEMAJU nijedan
+ * ziv kljuc, pa bi im brisanje sakrilo cinjenicu da ni s jednom provjerom nisu korelirani. Ta
+ * sutnja se imenuje, ne brise.
+ */
 const EMPTY_PARAGRAPHS_ISSUE_TITLE = 'Dokument sadrži mnogo praznih odlomaka';
 /** Naslov same PROVJERE; `makeCheck` ga ne prepisuje, pa je stabilan kljuc za korelaciju. */
 const EMPTY_PARAGRAPHS_CHECK_TITLE = 'Prazni odlomci';
@@ -265,14 +288,19 @@ export function universalRepairableItems(issues: Issue[]): RepairableItem[] {
       label: 'Prazni odlomci',
       params: {},
       violated,
-      // Sva tri oblika: naslov provjere (stabilan), goli naslov nalaza i prefiksirani nalaz kakav
-      // korisnik doista vidi. `pickTargetItem` korelira po naslovu nalaza ILI provjere, pa je bez
-      // prefiksiranog oblika klik na "Otvori mogucnost popravka" na toj kartici padao na fallback.
-      matchKeys: [
-        EMPTY_PARAGRAPHS_CHECK_TITLE,
-        EMPTY_PARAGRAPHS_ISSUE_TITLE,
-        `${MAKE_CHECK_TITLE_PREFIXES[0]}${EMPTY_PARAGRAPHS_ISSUE_TITLE}`,
-      ],
+      /**
+       * SAMO naslov provjere, i to je namjerno.
+       *
+       * `pickTargetItem` korelira nalaz sa stavkom preko `finding.matchKeys`, a nalaz nosi OBA
+       * naslova (`[issue.title, check.title]`, vidi `src/ui/finding-view-model.ts`), pa naslov
+       * provjere sam po sebi zatvara korelaciju.
+       *
+       * Naslove NALAZA ovdje ne treba dodavati: `stableCheckId` ih ne prepoznaje, pa bi zavrsili u
+       * `unmappedMatchKeys` i tiho napuhali popis nemapiranih kljuceva. Izmjereno 2026-08-30: dva
+       * takva kljuca pojavila su se na 14 od 54 rada, a nisu nosila nikakvu korelaciju koju
+       * `Prazni odlomci` vec ne nosi.
+       */
+      matchKeys: [EMPTY_PARAGRAPHS_CHECK_TITLE],
     },
   ];
 }
@@ -308,7 +336,7 @@ export function croatianTypographyRepairableItem(result: any): RepairableItem[] 
     const selected = new Set(selectedCategories.map((category) => category.category));
     return { version: 1, categories: selectedCategories, operations: current.occurrences.filter((occurrence) => occurrence.selected && selected.has(occurrence.category)).map((occurrence) => occurrence.operation) };
   };
-  return [{ ruleId: 'croatian-typography-universal', fixerId: 'croatian-typography-fixer', label: 'Hrvatski tehničko-tipografski čistač', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi samo odabrane tehničko-tipografske izmjene. Akademski sadržaj i složene Word strukture ostaju nepromijenjeni.', croatianTypographyForm: form, matchKeys: ['Tehničko-tipografska dosljednost', 'Tipografska dosljednost', 'Tehničko-tipografske pogreške'] }];
+  return [{ ruleId: 'croatian-typography-universal', fixerId: 'croatian-typography-fixer', label: 'Hrvatski tehničko-tipografski čistač', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi samo odabrane tehničko-tipografske izmjene. Akademski sadržaj i složene Word strukture ostaju nepromijenjeni.', croatianTypographyForm: form, matchKeys: ['Tehničko-tipografska dosljednost'] }];
 }
 
 export function consistencyRepairableItem(result: any): RepairableItem[] {
@@ -991,7 +1019,7 @@ export function fieldIntegrityRepairableItem(result: any): RepairableItem[] {
     settings: { updateFieldsOnOpen: true as const },
     ...(current.manualTocCandidates.some((candidate) => candidate.selected) ? { manualToc: current.manualTocCandidates.filter((candidate) => candidate.selected).map((candidate) => ({ startParagraphIndex: candidate.startParagraphIndex, endParagraphIndex: candidate.endParagraphIndex, anchorFingerprint: candidate.anchorFingerprint, action: 'replace-with-live-toc' as const, confirmed: true as const })) } : {}),
   });
-  return [{ ruleId: 'field-integrity-assisted', fixerId: 'field-integrity-fixer', label: 'Field Integrity', params: form.buildParams(form), violated: true, requiresConfirmation: false, confirmationText: 'Izradit će se nova XML-popravljena kopija. Originalni dokument ostaje nepromijenjen; konačni brojevi stranica ovise o Wordu ili LibreOffice renderu.', fieldIntegrityForm: form, matchKeys: ['Sadržaj', 'Word polja', 'Cross-reference', 'Brojevi stranica'] }];
+  return [{ ruleId: 'field-integrity-assisted', fixerId: 'field-integrity-fixer', label: 'Field Integrity', params: form.buildParams(form), violated: true, requiresConfirmation: false, confirmationText: 'Izradit će se nova XML-popravljena kopija. Originalni dokument ostaje nepromijenjen; konačni brojevi stranica ovise o Wordu ili LibreOffice renderu.', fieldIntegrityForm: form, matchKeys: ['Brojevi stranica'] }];
 }
 
 export function tableFigureRescueRepairableItem(result: any, profile: any): RepairableItem[] {
@@ -1082,7 +1110,7 @@ export function sectionSurgeryRepairableItem(result: any, profile: any): Repaira
   if (!operationCount) return [];
   const form: SectionSurgeryFormDefinition = { sections: sectionForms, summary: `Pronađeno je ${sectionForms.length} Word sekcija i ${operationCount} profilnih operacija. Sigurne geometrijske i numeracijske promjene su predodabrane, a prekid veza zaglavlja/podnožja traži zasebnu potvrdu.`, buildParams: () => ({}) };
   form.buildParams = (current) => ({ version: 1, operations: current.sections.flatMap((section) => section.operations.filter((operation) => operation.selected && !operation.disabled).map((operation) => operation.operation)) });
-  return [{ ruleId: 'section-surgery-assisted', fixerId: 'section-surgery-fixer', label: 'Section Surgery Engine', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi promjene sekcija. Lekta može promijeniti margine, orijentaciju, numeriranje i nasljeđivanje zaglavlja/podnožja, ali ne mijenja tekst rada. Original ostaje nepromijenjen.', sectionSurgeryForm: form, matchKeys: ['Numeriranje stranica', 'Margine dokumenta', 'Sekcije'] }];
+  return [{ ruleId: 'section-surgery-assisted', fixerId: 'section-surgery-fixer', label: 'Section Surgery Engine', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi promjene sekcija. Lekta može promijeniti margine, orijentaciju, numeriranje i nasljeđivanje zaglavlja/podnožja, ali ne mijenja tekst rada. Original ostaje nepromijenjen.', sectionSurgeryForm: form, matchKeys: ['Margine dokumenta'] }];
 }
 
 export function legalFootnoteRepairableItem(result: any, profile: any): RepairableItem[] {
@@ -1333,6 +1361,23 @@ export function introSectionItem(result: any, profile: any): RepairableItem[] {
   ];
 }
 
+/**
+ * PREDODABIR JE DO 2026-08-29 BIO NEISPUNJIV.
+ *
+ * Uvjet je glasio `confidence === 'high' && insertionAnchor`, a ova stavka gleda ISKLJUCIVO
+ * nedostajuce dijelove (`candidates.filter((c) => !c.present)`). U
+ * `src/analysis/required-sections-structure.ts` pak stoji
+ * `confidence = present ? 'high' : 'medium'`, dakle nedostajuci dio NIKAD nije `high`.
+ *
+ * Posljedica je izmjerena: `required-section-fixer` je na 116 stvarnih dokumenata ponudjen 49 puta
+ * i nijednom nista nije promijenio, jer su mu `params.sections` uvijek bili prazni.
+ *
+ * Za nedostajuci dio smislena je razlika `medium` (nadjeno sigurno sidro) prema `low` (sidra nema
+ * ili ih je vise, pa ga analiza i BRISE). Zato uvjet sada glasi "nije `low` i ima sidro"; oba
+ * dijela stoje namjerno, da predodabir ostane tocan i ako se pravila pouzdanosti prosire.
+ *
+ * Stavka i dalje nosi `requiresConfirmation: true`, pa se nista ne umece bez izricite potvrde.
+ */
 export function requiredSectionsRepairableItem(result: any, profile: any): RepairableItem[] {
   const entries = Array.isArray(profile?.ruleEntries) ? profile.ruleEntries : [];
   const ruleEntry = entries.find((entry: RuleEntry) => entry?.checkId === 'required-section-rules' && ASSISTED_STATUSES.has(entry?.status) && entry?.sourceId && entry?.sourcePage && entry?.quote);
@@ -1345,7 +1390,7 @@ export function requiredSectionsRepairableItem(result: any, profile: any): Repai
   const rules = profile?.effectiveRules?.requiredSectionRules || profile?.requiredSectionRules || ruleEntry.value || {};
   const form: RequiredSectionsFormDefinition = {
     summary: structure.summary?.text || `Nedostaje ${candidates.length} obveznih dijelova.`,
-    candidates: candidates.map((candidate: any) => ({ id: String(candidate.id), kind: String(candidate.kind), label: String(candidate.label), confidence: String(candidate.confidence), headingLevel: Number(candidate.headingLevel) || 1, ...(candidate.styleId ? { styleId: String(candidate.styleId) } : {}), numbered: candidate.numbered === true, contentPolicy: String(candidate.contentPolicy || 'none'), verifiedStatement: typeof candidate.verifiedStatement === 'string' ? candidate.verifiedStatement : undefined, placeholderText: rules.placeholderText?.[candidate.kind] || '[OVDJE UNESI SADRŽAJ]', commentText: 'Ovdje unesi sadržaj', selected: candidate.confidence === 'high' && !!candidate.insertionAnchor, contentMode: candidate.verifiedStatement ? 'statement' : rules.addComment ? 'comment' : 'none', insertionAnchor: candidate.insertionAnchor, evidence: Array.isArray(candidate.evidence) ? candidate.evidence : [], warnings: Array.isArray(candidate.warnings) ? candidate.warnings : [] })),
+    candidates: candidates.map((candidate: any) => ({ id: String(candidate.id), kind: String(candidate.kind), label: String(candidate.label), confidence: String(candidate.confidence), headingLevel: Number(candidate.headingLevel) || 1, ...(candidate.styleId ? { styleId: String(candidate.styleId) } : {}), numbered: candidate.numbered === true, contentPolicy: String(candidate.contentPolicy || 'none'), verifiedStatement: typeof candidate.verifiedStatement === 'string' ? candidate.verifiedStatement : undefined, placeholderText: rules.placeholderText?.[candidate.kind] || '[OVDJE UNESI SADRŽAJ]', commentText: 'Ovdje unesi sadržaj', selected: candidate.confidence !== 'low' && !!candidate.insertionAnchor, contentMode: candidate.verifiedStatement ? 'statement' : rules.addComment ? 'comment' : 'none', insertionAnchor: candidate.insertionAnchor, evidence: Array.isArray(candidate.evidence) ? candidate.evidence : [], warnings: Array.isArray(candidate.warnings) ? candidate.warnings : [] })),
     buildParams: (current) => ({ version: 1, sections: current.candidates.filter((candidate) => candidate.selected && candidate.insertionAnchor).map((candidate) => ({ id: candidate.id, kind: candidate.kind, label: candidate.label, insertionAnchor: candidate.insertionAnchor, headingLevel: candidate.headingLevel, ...(candidate.styleId ? { styleId: candidate.styleId } : {}), numbered: candidate.numbered, confirmed: true, ...(candidate.contentMode === 'placeholder' ? { placeholderText: candidate.placeholderText } : {}), ...(candidate.contentMode === 'comment' ? { commentText: candidate.commentText } : {}), ...(candidate.contentMode === 'statement' && candidate.verifiedStatement ? { statementText: candidate.verifiedStatement } : {}) })) }),
   };
   return [{ ruleId: 'required-section-rules', fixerId: 'required-section-fixer', label: 'Nedostajući obvezni dijelovi', params: form.buildParams(form), violated: true, requiresConfirmation: true, confirmationText: 'Potvrdi umetanje samo naslova i odabranih oznaka za unos. Akademski sadržaj se ne generira.', requiredSectionsForm: form, matchKeys: ['Dijelovi verificiranog profila'] }];

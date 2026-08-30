@@ -15,7 +15,7 @@ export interface RequiredSectionFixParams {
     id: string;
     kind: RequiredSectionKind;
     label: string;
-    insertionAnchor: { paragraphIndex: number; anchorFingerprint: string; position: 'before' | 'after' };
+    insertionAnchor: { paragraphIndex: number; anchorFingerprint: string; anchorText?: string; position: 'before' | 'after' };
     headingLevel: number;
     styleId?: string;
     numbered: boolean;
@@ -78,6 +78,22 @@ function hasExistingLabel(documentXml: string, label: string): boolean {
   });
 }
 
+/**
+ * Vidljivi tekst odlomka, normaliziran (entiteti razrijeseni, razmaci sazeti).
+ *
+ * DRUGO sidro uz otisak. Otisak se racuna nad cijelim XML-om odlomka, pa ga promijeni svaki zahvat
+ * koji dira samo oblikovanje: `heading-style-fixer` dodaje `pStyle`, a `final-document-inspector-fixer`
+ * brise `w:rsid*` atribute kroz cijeli paket. Odlomak je pritom i dalje isti odlomak.
+ */
+function anchorTextOf(xml: string): string {
+  return [...xml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)]
+    .map((match) => match[1])
+    .join('')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export function requiredSectionFixer(parts: DocxXmlParts, params: RequiredSectionFixParams): FixerOutput {
   if (!params || params.version !== 1 || !Array.isArray(params.sections) || params.sections.length > 50) return noOp(parts, 'invalid-params');
   const ids = new Set<string>();
@@ -92,7 +108,22 @@ export function requiredSectionFixer(parts: DocxXmlParts, params: RequiredSectio
   const validated = params.sections.map((section) => {
     if (hasExistingLabel(parts.documentXml, section.label)) return { section, range: undefined };
     const range = ranges[section.insertionAnchor.paragraphIndex - 1];
-    if (!range || range.fingerprint !== section.insertionAnchor.anchorFingerprint) return { section, range: undefined, error: 'stale-anchor' as const };
+    /**
+     * Sidro vrijedi ako se poklapa OTISAK ili, kad ga zahvat nad oblikovanjem promijeni, TEKST.
+     *
+     * IZMJERENO 2026-08-30: u punom lancu je ovaj fixer odbijao 7 od 7 puta uz `stale-anchor`, a
+     * SAM je primjenjivao 5 od 7. Krivci su tocno dva, oba utvrdjena testom u parovima:
+     * `heading-style-fixer` (dodaje `pStyle`) i `final-document-inspector-fixer` (brise `w:rsid*`).
+     * Nijedan od njih ne mijenja tekst odlomka, pa je odbijanje bilo lazno.
+     *
+     * Ovo NIJE re-anchoring: ne trazi se odlomak drugdje u dokumentu, nego se na ISTOM indeksu
+     * dopusta druga, uza potvrda identiteta. Prazan tekst se ne priznaje kao podudaranje, inace bi
+     * svaki prazan odlomak prolazio kao sidro za bilo sto.
+     */
+    const anchorText = section.insertionAnchor.anchorText;
+    const fingerprintOk = Boolean(range) && range.fingerprint === section.insertionAnchor.anchorFingerprint;
+    const textOk = Boolean(range) && typeof anchorText === 'string' && anchorText.length > 0 && anchorTextOf(range.xml) === anchorText;
+    if (!range || (!fingerprintOk && !textOk)) return { section, range: undefined, error: 'stale-anchor' as const };
     if (PROTECTED.test(range.xml)) return { section, range, error: 'unsupported-structure' as const };
     return { section, range };
   });

@@ -449,10 +449,25 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
         ? headingFormatFixer(parts, p.targets)
         : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
     }
+
     case 'heading-style-fixer': {
       const p = params as {
         targets?: Array<{
           paragraphIndex?: unknown;
+          /**
+           * Tekst naslova kakav je analiza VIDJELA. Sidro protiv zastarjele mete.
+           *
+           * Zasto: `heading-style-fixer` do 2026-08-29 gadja iskljucivo po `paragraphIndex`, bez
+           * ikakvog sidra, za razliku od `link-doi`, `croatian-typography` i `required-section`.
+           * Cim `empty-paragraph-fixer` (INDEX_SHIFTING) ukloni odlomke, isti indeksi pokazuju na
+           * druge odlomke. U prvom prolazu to ne skodi jer INDEX_SHIFTING fixeri idu ZADNJI, ali
+           * ponovna primjena ISTIH zahtjeva na vec popravljen dokument tada nije no-op: izmjereno
+           * na 9 od 54 stvarna rada, gdje je `heading-style-fixer` opalio drugi put.
+           *
+           * Neobavezno: zahtjev bez sidra se ponasa kao prije, pa stari klijenti i pecene
+           * projekcije rade nepromijenjeno.
+           */
+          anchorText?: unknown;
           level?: unknown;
           numbered?: unknown;
           removeManualNumbering?: unknown;
@@ -472,6 +487,7 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
             if (!Number.isInteger(paragraphIndex) || paragraphIndex < 1 || !Number.isInteger(level) || level < 1 || level > 9) return [];
             return [{
               paragraphIndex,
+              anchorText: typeof target.anchorText === 'string' ? target.anchorText : undefined,
               level,
               numbered: target.numbered === true,
               removeManualNumbering: target.removeManualNumbering === true,
@@ -493,8 +509,26 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
             trailingDot: rawNumbering.trailingDot !== false,
           }
         : undefined;
-      return targets.length
-        ? headingStyleFixer(parts, targets, { pageBreakLevels, numbering })
+      /**
+       * Zastarjela meta se ODBACUJE, ne primjenjuje na krivi odlomak.
+       *
+       * Provjera stoji ovdje, a ne u `headingStyleFixer`, iz dva razloga: ovdje su bajtovi
+       * dokumenta vec dostupni, i `HeadingStyleRepairTarget` (src/repair/fixers.ts) tako ostaje
+       * nepromijenjen, pa se ugovor fixera ne siri zbog provjere koja je stvar poziva.
+       */
+      const paragraphTexts = paragraphTextsForAnchors(parts.documentXml);
+      const anchoredCount = targets.filter((target) => target.anchorText !== undefined).length;
+      const freshTargets = targets.filter((target) => {
+        if (target.anchorText === undefined) return true;
+        return normalizeAnchorText(paragraphTexts[target.paragraphIndex - 1] ?? '') === normalizeAnchorText(target.anchorText);
+      });
+      // Sve mete su bile usidrene i nijedna vise ne stoji: to je zastarjelo sidro, ne prazan zahtjev.
+      if (anchoredCount > 0 && freshTargets.length === 0) {
+        return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'stale-anchor' as const };
+      }
+      const applicable = freshTargets.map(({ anchorText: _anchorText, ...target }) => target);
+      return applicable.length
+        ? headingStyleFixer(parts, applicable, { pageBreakLevels, numbering })
         : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
     }
     case 'title-page-fixer': {
@@ -815,7 +849,7 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
         const value = raw as Record<string, unknown>;
         const anchor = value.insertionAnchor as Record<string, unknown> | undefined;
         if (value.confirmed !== true || typeof value.id !== 'string' || typeof value.kind !== 'string' || !kinds.has(value.kind) || typeof value.label !== 'string' || !anchor || !Number.isInteger(anchor.paragraphIndex) || typeof anchor.anchorFingerprint !== 'string' || !['before', 'after'].includes(String(anchor.position)) || !Number.isInteger(value.headingLevel) || Number(value.headingLevel) < 1 || Number(value.headingLevel) > 9 || typeof value.numbered !== 'boolean') return [];
-        const out: RequiredSectionFixParams['sections'][number] = { id: value.id.slice(0, 300), kind: value.kind as RequiredSectionFixParams['sections'][number]['kind'], label: value.label.slice(0, 200), insertionAnchor: { paragraphIndex: Number(anchor.paragraphIndex), anchorFingerprint: String(anchor.anchorFingerprint).slice(0, 120), position: anchor.position as 'before' | 'after' }, headingLevel: Number(value.headingLevel), numbered: value.numbered, confirmed: true };
+        const out: RequiredSectionFixParams['sections'][number] = { id: value.id.slice(0, 300), kind: value.kind as RequiredSectionFixParams['sections'][number]['kind'], label: value.label.slice(0, 200), insertionAnchor: { paragraphIndex: Number(anchor.paragraphIndex), anchorFingerprint: String(anchor.anchorFingerprint).slice(0, 120), ...(typeof anchor.anchorText === 'string' && anchor.anchorText ? { anchorText: anchor.anchorText.slice(0, 2000) } : {}), position: anchor.position as 'before' | 'after' }, headingLevel: Number(value.headingLevel), numbered: value.numbered, confirmed: true };
         if (typeof value.styleId === 'string') out.styleId = value.styleId.slice(0, 100);
         for (const key of ['placeholderText', 'commentText', 'statementText'] as const) if (typeof value[key] === 'string') out[key] = value[key].slice(0, 20000);
         return [out];
@@ -904,6 +938,39 @@ export function detectIntegrityFailure(
     return { part: name, problem: 'dio paketa je nestao iz popravljenog dokumenta' };
   }
   return null;
+}
+
+/**
+ * NAPOMENA O MJESTU: ove dvije funkcije MORAJU stajati na modulskoj razini.
+ * Deklarirane izmedju `case` grana unutar `switch` bloka zavrsavaju u temporalnoj mrtvoj
+ * zoni, pa poziv iz ranije grane baca "Cannot access ... before initialization", a
+ * `applyFixers` iznimku fixera guta u `catch` i prijavi ga kao preskocen BEZ razloga.
+ * Izmjereno 2026-08-29: `heading-style-fixer` je tako tiho prestao raditi.
+ */
+/**
+ * Tekst svakog odlomka, indeksiran ISTO kao `headingStyleFixer` (1-bazirano, po otvarajucem
+ * `<w:p ...>` tagu). Poravnanje s fixerom je uvjet, ne detalj: on broji
+ * `documentXml.match(/<w:p\b[^>]*>/g)`, pa svaki drukciji nacin brojanja daje drugi odlomak.
+ */
+function paragraphTextsForAnchors(documentXml: string): string[] {
+  const opens = [...documentXml.matchAll(/<w:p\b[^>]*>/g)];
+  return opens.map((open, index) => {
+    const start = (open.index ?? 0) + open[0].length;
+    const end = index + 1 < opens.length ? (opens[index + 1].index ?? documentXml.length) : documentXml.length;
+    return [...documentXml.slice(start, end).matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)].map((match) => match[1]).join('');
+  });
+}
+
+/** Usporedba sidra je otporna na razmake i XML entitete, ali ne i na promjenu sadrzaja. */
+function normalizeAnchorText(value: string): string {
+  return value
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 export async function applyFixers(

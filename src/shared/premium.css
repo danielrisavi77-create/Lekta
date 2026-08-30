@@ -142,7 +142,6 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
   transform: perspective(1200px) rotateX(var(--premium-rotate-x)) rotateY(var(--premium-rotate-y));
   transform-style: preserve-3d;
   transition: transform .42s var(--ease-spring), box-shadow .42s var(--ease-spring);
-  will-change: transform;
 }
 
 [data-premium-tilt]:hover {

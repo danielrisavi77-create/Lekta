@@ -48,8 +48,27 @@ function ensureRNamespace(xml: string): string { return /xmlns:r=["']/i.test(xml
 function paragraphTextNodes(xml: string): Array<{ start: number; end: number; contentStart: number; contentEnd: number; text: string }> {
   return [...xml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/gi)].map((match) => ({ start: match.index ?? 0, end: (match.index ?? 0) + match[0].length, contentStart: (match.index ?? 0) + match[0].indexOf('>') + 1, contentEnd: (match.index ?? 0) + match[0].length - match[0].match(/<\/w:t>$/i)![0].length, text: decode(match[1]) }));
 }
+/**
+ * Pocetak runa koji sadrzi zadani `<w:t>` cvor.
+ *
+ * Trazi se `<w:r` iza kojeg slijedi razmak ili `>`, a NE puki `lastIndexOf('<w:r')`.
+ *
+ * IZMJERENO 2026-08-29: goli `lastIndexOf('<w:r', node.start)` gadja `<w:rPr>` i `<w:rFonts>`,
+ * jer oba doslovno pocinju nizom `<w:r`. Kandidat tada ne prolazi provjeru `/^<w:r(?:\s|>)/` i
+ * fixer odustaje s `unsupported-structure`. Posljedica je bila da je `link-doi-fixer` radio SAMO
+ * na runu bez ijednog svojstva (`<w:r><w:t>...</w:t></w:r>`), sto Word prakticki nikad ne pise:
+ *
+ *   run s `<w:rFonts>` (Wordov uobicajen zapis)  -> unsupported-structure
+ *   run samo s `<w:sz>`                          -> unsupported-structure
+ *   run bez ijednog `<w:rPr>`                    -> popravak prolazi
+ *
+ * Granica rijeci se ovdje ne moze koristiti umjesto lookaheada: izmedju `r` i `P` u `<w:rPr>`
+ * nema granice rijeci (oba su znakovi rijeci), pa bi taj uzorak bio tocan, ali `lastIndexOf` ne
+ * prima uzorak. Zato skeniranje unatrag ide regexom.
+ */
 function enclosingRun(xml: string, node: { start: number; end: number }): { start: number; end: number; xml: string } | undefined {
-  const start = xml.lastIndexOf('<w:r', node.start);
+  let start = -1;
+  for (const match of xml.slice(0, node.start).matchAll(/<w:r(?=[\s>])/gi)) start = match.index ?? start;
   const end = xml.indexOf('</w:r>', node.end);
   if (start < 0 || end < 0) return undefined;
   const runEnd = end + '</w:r>'.length;
@@ -117,6 +136,23 @@ export function linkDoiFixer(parts: DocxXmlParts, params: LinkDoiFixParams): Fix
   let documentXml = parts.documentXml;
   let rels = parts.documentRelsXml ?? parts.packageXmlParts?.['word/_rels/document.xml.rels'] ?? '';
   const replacements: Array<{ start: number; end: number; value: string }> = [];
+  /**
+   * Rasponi koje je vec preuzela neka ranija operacija u OVOM pozivu.
+   *
+   * Zasto: svaka operacija racuna `beforeText`/`afterText` nad CIJELIM tekstom svojega runa i
+   * gura zamjenu preko cijelog raspona tog runa. Dvije operacije nad ISTIM runom time upisuju dva
+   * zapisa s identicnim `start`/`end`, pa druga zamjena rezuje po vec izmijenjenom nizu i paket
+   * ostaje neispravan.
+   *
+   * IZMJERENO 2026-08-29 na stvarnom diplomskom radu: jedan bibliografski zapis nosi dvije URL
+   * adrese u istom runu; svaka operacija SAMA prolazi uredno, a obje zajedno daju
+   * `word/document.xml: ocekivan </w:p>, a nadjen </w:hyperlink>`. Vrata integriteta to uhvate, ali
+   * odbiju CIJELI popravak, pa je korisnik zbog jedne poveznice gubio i svih ostalih sest zahvata.
+   *
+   * Spajanje dviju poveznica u jedan run trazi trodijelnu podjelu runa i nije ovdje rijeseno;
+   * druga operacija se zato posteno PRESKACE, a dokument ostaje valjan.
+   */
+  const claimedRanges = new Set<number>();
   for (const operation of pending) {
     const range = ranges[operation.paragraphIndex - 1];
     const paragraphXml = documentXml.slice(range.start, range.end);
@@ -145,6 +181,8 @@ export function linkDoiFixer(parts: DocxXmlParts, params: LinkDoiFixParams): Fix
       if (parent?.id) {
         const nextRun = runWithText(partsOfRun.rPr, `${beforeText}${visible}${afterText}`);
         replacement = paragraphXml.slice(parent.start, run.start) + nextRun + paragraphXml.slice(run.end, parent.end);
+        if (claimedRanges.has(range.start + parent.start)) continue;
+        claimedRanges.add(range.start + parent.start);
         replacements.push({ start: range.start + parent.start, end: range.start + parent.end, value: paragraphXml.slice(parent.start, run.start) + nextRun + paragraphXml.slice(run.end, parent.end) });
         continue;
       }
@@ -155,8 +193,12 @@ export function linkDoiFixer(parts: DocxXmlParts, params: LinkDoiFixParams): Fix
       const visible = operation.replacementText ?? oldText;
       replacement = runWithText(partsOfRun.rPr, `${beforeText}${visible}${afterText}`);
     }
+    if (claimedRanges.has(range.start + run.start)) continue;
+    claimedRanges.add(range.start + run.start);
     replacements.push({ start: range.start + run.start, end: range.start + run.end, value: replacement });
   }
+  // Sve operacije su pale na vec preuzet raspon: nista se nije primijenilo, pa se to i kaze.
+  if (!replacements.length) return noOp(parts, 'unsupported-structure');
   for (const replacement of replacements.sort((a, b) => b.start - a.start)) documentXml = documentXml.slice(0, replacement.start) + replacement.value + documentXml.slice(replacement.end);
   const packageXmlParts = { ...(parts.packageXmlParts ?? {}) };
   const nextParts: DocxXmlParts = { ...parts, documentXml: ensureRNamespace(documentXml), documentRelsXml: rels, packageXmlParts: { ...packageXmlParts, 'word/_rels/document.xml.rels': rels } };

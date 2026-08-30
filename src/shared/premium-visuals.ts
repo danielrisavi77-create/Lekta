@@ -1,3 +1,5 @@
+import { createFrameCoalescer } from './frame-coalescer';
+
 export type PremiumTone = 'brand' | 'pass' | 'warn' | 'danger' | 'info';
 
 export interface PremiumBarValue {
@@ -35,16 +37,27 @@ function setupPremiumTilt(): void {
   document.querySelectorAll<HTMLElement>('[data-premium-tilt]').forEach((card) => {
     if (card.dataset.premiumTiltReady === 'true') return;
     card.dataset.premiumTiltReady = 'true';
+    let bounds: DOMRect | null = null;
+    const coalescer = createFrameCoalescer<{ x: number; y: number }>((value) => {
+      card.style.setProperty('--premium-rotate-x', `${value.y.toFixed(2)}deg`);
+      card.style.setProperty('--premium-rotate-y', `${value.x.toFixed(2)}deg`);
+    });
+    card.addEventListener('pointerenter', () => {
+      bounds = card.getBoundingClientRect();
+      card.style.willChange = 'transform';
+    });
     card.addEventListener('pointermove', (event) => {
-      const bounds = card.getBoundingClientRect();
+      if (!bounds) bounds = card.getBoundingClientRect();
       const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 4;
       const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * -4;
-      card.style.setProperty('--premium-rotate-x', `${y.toFixed(2)}deg`);
-      card.style.setProperty('--premium-rotate-y', `${x.toFixed(2)}deg`);
+      coalescer.schedule({ x, y });
     });
     card.addEventListener('pointerleave', () => {
+      coalescer.cancel();
       card.style.setProperty('--premium-rotate-x', '0deg');
       card.style.setProperty('--premium-rotate-y', '0deg');
+      card.style.willChange = 'auto';
+      bounds = null;
     });
   });
 }

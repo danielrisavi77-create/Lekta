@@ -19,6 +19,8 @@ import './skip-link.css'; // pristupacni "Preskoci na sadrzaj" (BL-P1-01)
 import './a11y.css'; // dijeljeni a11y sloj: forced-colors fokus fallback (BL-P2-02)
 import { setupSkipLink } from './skip-link';
 import { setupPremiumVisuals } from './premium-visuals';
+import { createFrameCoalescer } from './frame-coalescer';
+import { shouldDeferReveal } from './reveal-policy';
 import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap, Lamp, Share2, Wand2 } from 'lucide';
 
 // Korektorski stol: "radna lampa" (tamni stol) je default na SVIM stranicama. Kad korisnik
@@ -63,16 +65,18 @@ function renderIcons() {
 // nakon prvog prolaza, pa app.ts poziva ovaj refresh da ih pretvori u SVG.
 (window as any).__lektaIcons = renderIcons;
 
-// Reveal-on-scroll uz progresivno pobojlsanje: klasu `reveal-ready` postavljamo cim se
-// modul izvrsi, pa je bez JS-a sadrzaj odmah vidljiv (nema skrivenih [data-reveal] elemenata).
-// S JS-om se kartice pojavljuju kad udu u vidokrug; stagger je po stupcu (setTimeout, ne CSS
-// delay, da hover kasnije nema zaostatak). Postuje prefers-reduced-motion.
+// Reveal je progresivno poboljsanje, ali sadrzaj je po defaultu odmah vidljiv. Samo elementi s
+// data-reveal-mode="deferred" koriste ulaz pri ulasku u viewport, pa dugi landing ne izgleda kao
+// da se ucitava u komadima tijekom scrolla.
 document.documentElement.classList.add('reveal-ready');
 // Reveal preko native IntersectionObservera (bez ovisnosti): klasa .reveal-in je idempotentna,
 // CSS prijelaz na karticama odraduje animaciju; stagger po stupcu setTimeoutom (ne CSS delay,
 // da kasniji hover nema zaostatak). .reveal-ready gejtira skriveno stanje pa je bez JS-a vidljivo.
 function setupReveal() {
-  const els = document.querySelectorAll<HTMLElement>('[data-reveal]:not(.reveal-in)');
+  const allEls = [...document.querySelectorAll<HTMLElement>('[data-reveal]:not(.reveal-in)')];
+  allEls.filter((el) => !shouldDeferReveal(el)).forEach((el) => el.classList.add('reveal-in'));
+  const els = allEls.filter(shouldDeferReveal);
+  if (!els.length) return;
   if (prefersReduced() || typeof IntersectionObserver === 'undefined') {
     els.forEach((el) => el.classList.add('reveal-in'));
     return;
@@ -104,6 +108,22 @@ function setupReveal() {
 // app.ts injektira check-kartice nakon boota pa ponovno skenira nove [data-reveal] elemente.
 (window as any).__lektaReveal = setupReveal;
 
+// Dekorativne animacije ne smiju raditi dok je njihova sekcija izvan viewporta. To je osobito
+// važno na rezultatu analize: landing i privatnost ostaju u DOM-u ispod njega, ali korisniku nisu
+// vidljivi i ne trebaju trošiti frameove. Obuhvaćamo i CSS i WAAPI animacije, jer hero-demo koristi
+// element.animate(), koji `animation-play-state` sam po sebi ne zaustavlja.
+function pauseOffscreenMotion() {
+  if (prefersReduced() || typeof IntersectionObserver === 'undefined') return;
+  const targets = [...document.querySelectorAll<HTMLElement>('.ks-priv-scena')];
+  if (!targets.length) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      (entry.target as HTMLElement).classList.toggle('motion-offscreen', !entry.isIntersecting);
+    });
+  }, { rootMargin: '120px 0px' });
+  targets.forEach((target) => io.observe(target));
+}
+
 // Hero: fina ulazna kaskada na load (ease-out, stagger). Progresivno: elementi su vidljivi po
 // defaultu, Motion samo poboljsava ulaz. Djeca .hero-copy nemaju hover pa nema sukoba stilova.
 function animateHero() {
@@ -129,17 +149,27 @@ function setupTilt() {
   if (!card) return;
   const MAX = 6;
   const rest = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0)';
-  card.style.willChange = 'transform';
-  card.addEventListener('pointermove', (e) => {
-    const r = card.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
+  let bounds: DOMRect | null = null;
+  const coalescer = createFrameCoalescer<string>((transform) => {
+    card.style.transform = transform;
+  });
+  card.addEventListener('pointerenter', () => {
+    bounds = card.getBoundingClientRect();
+    card.style.willChange = 'transform';
     card.style.transition = 'transform 0s';
-    card.style.transform = `perspective(900px) rotateX(${(-py * MAX).toFixed(2)}deg) rotateY(${(px * MAX).toFixed(2)}deg) translateY(-4px)`;
+  });
+  card.addEventListener('pointermove', (e) => {
+    if (!bounds) bounds = card.getBoundingClientRect();
+    const px = (e.clientX - bounds.left) / bounds.width - 0.5;
+    const py = (e.clientY - bounds.top) / bounds.height - 0.5;
+    coalescer.schedule(`perspective(900px) rotateX(${(-py * MAX).toFixed(2)}deg) rotateY(${(px * MAX).toFixed(2)}deg) translateY(-4px)`);
   });
   card.addEventListener('pointerleave', () => {
+    coalescer.cancel();
     card.style.transition = 'transform .5s var(--ease-spring, ease)';
     card.style.transform = rest;
+    card.style.willChange = 'auto';
+    bounds = null;
   });
 }
 
@@ -219,7 +249,7 @@ function setupTopbarScroll() {
 }
 
 function boot() {
-  setupSkipLink(); renderIcons(); setupReveal(); animateHero(); setupTilt(); setupPremiumVisuals(); setupNavTools(); setupThemeToggle(); setupMobileNav(); setupTopbarScroll();
+  setupSkipLink(); renderIcons(); setupReveal(); pauseOffscreenMotion(); animateHero(); setupTilt(); setupPremiumVisuals(); setupNavTools(); setupThemeToggle(); setupMobileNav(); setupTopbarScroll();
 }
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);
