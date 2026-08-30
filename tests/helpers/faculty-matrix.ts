@@ -2,6 +2,8 @@ import type { RepairCoverageMatrix } from './repair-coverage';
 import { buildRepairCoverageMatrix } from './repair-coverage';
 import type { RealCorpusReport } from '../real-corpus/harness';
 import generatedCorpusReport from '../../docs/generated/repair-real-corpus.json';
+import generatedClosedLoop from '../../docs/generated/closed-loop.json';
+import { buildCoverageCells, type ClosedLoopReport, type CoverageCellReport } from './coverage-cells';
 import { VERIFIED_PROFILE_REGISTRY } from '../../src/profiles/profile-registry';
 import rawCatalog from '../../data/catalog/zagreb-catalog.json';
 
@@ -13,6 +15,13 @@ const FACULTY_BY_ID = new Map(
 );
 
 export type FacultyAutomaticStatus = 'pass' | 'review' | 'not-run';
+
+/**
+ * Ishod `npm run closed-loop` za profil. Do 2026-08-29 je bio prikovan na `'not-run'` iako
+ * `docs/generated/closed-loop.json` ima redak za svih 407 profila: matrica ga jednostavno nije
+ * citala, pa je najjeftiniji dio pokrivenosti koji vec postoji izvjestavan kao neodradjen.
+ */
+export type ClosedLoopStatus = 'pass' | 'no-repair' | 'no-rules' | 'not-run';
 
 export interface FacultyMatrixProfile {
   profileId: string;
@@ -28,8 +37,11 @@ export interface FacultyMatrixProfile {
   automaticTests: {
     profileCoverage: 'pass' | 'fail';
     realCorpus: FacultyAutomaticStatus;
-    syntheticClosedLoop: 'not-run';
+    syntheticClosedLoop: ClosedLoopStatus;
   };
+  /** Osi koje je closed-loop prekrsio i NIJE vratio u prolaz; prazno kad ih nema. */
+  closedLoopAxesRemaining: string[];
+  cellSummary: CoverageCellReport['summary'];
   realCorpusOutcomes: Record<string, number>;
   manualReviewReasons: string[];
 }
@@ -53,8 +65,10 @@ export interface FacultyMatrixRow {
     realCorpusReviewCount: number;
     realCorpusNoOpCount: number;
     realCorpusFailCount: number;
+    syntheticClosedLoopPassCount: number;
     syntheticClosedLoopNotRunCount: number;
   };
+  cellSummary: CoverageCellReport['summary'];
   manualReviewReasons: string[];
   profiles: FacultyMatrixProfile[];
 }
@@ -65,7 +79,7 @@ export interface FacultyMatrixReport {
     profileSource: string;
     repairSource: string;
     realCorpusSource: string;
-    syntheticClosedLoop: 'not-run';
+    closedLoopSource: string;
   };
   faculties: FacultyMatrixRow[];
   summary: {
@@ -82,8 +96,14 @@ export interface FacultyMatrixReport {
     realCorpusReviewCount: number;
     realCorpusNoOpCount: number;
     realCorpusFailCount: number;
+    syntheticClosedLoopPassCount: number;
     syntheticClosedLoopNotRunCount: number;
+    cellCount: number;
+    coveredCellCount: number;
+    uncoveredCellCount: number;
+    resolvedCellCount: number;
   };
+  cellSummary: CoverageCellReport['summary'];
 }
 
 function unique(values: string[]): string[] {
@@ -121,10 +141,38 @@ function reasonsForProfile(
   return unique(reasons);
 }
 
+/** Zbroj celija za jedan podskup; isti oblik kao ukupni sazetak, da se brojke mogu usporediti. */
+function summarizeCells(cells: CoverageCellReport['cells']): CoverageCellReport['summary'] {
+  const byReason = {
+    'profil-ne-propisuje-os': 0,
+    'univerzalna-higijena-bez-dokaza': 0,
+    'closed-loop-nije-rijesio': 0,
+    'nema-dokaza': 0,
+  } as CoverageCellReport['summary']['byReason'];
+  let covered = 0;
+  let resolved = 0;
+  for (const cell of cells) {
+    if (cell.status === 'pokriveno') {
+      covered += 1;
+      if (cell.evidence.strength === 'resolved') resolved += 1;
+    } else {
+      byReason[cell.reason] += 1;
+    }
+  }
+  return { cellCount: cells.length, coveredCount: covered, uncoveredCount: cells.length - covered, resolvedCount: resolved, byReason };
+}
+
+function closedLoopStatus(outcome: string | undefined): ClosedLoopStatus {
+  if (outcome === 'pass' || outcome === 'no-repair' || outcome === 'no-rules') return outcome;
+  return 'not-run';
+}
+
 function buildProfileRow(
   profile: (ReturnType<typeof buildRepairCoverageMatrix>['profiles'])[number],
   matrix: RepairCoverageMatrix,
   corpus: RealCorpusReport,
+  closedLoop: ClosedLoopReport,
+  cellReport: CoverageCellReport,
 ): FacultyMatrixProfile {
   const rows = matrix.rows.filter((row) => row.profileId === profile.profileId);
   const registryProfile = VERIFIED_PROFILE_REGISTRY.find((candidate) => candidate.id === profile.profileId);
@@ -133,6 +181,8 @@ function buildProfileRow(
   const mappedOptionCount = rows.length;
   const coveragePass = mappedOptionCount === profile.offeredOptionCount;
   const corpusOutcomes = outcomeCounts(samples);
+  const loop = closedLoop.rows.find((row) => row.profileId === profile.profileId);
+  const cells = cellReport.cells.filter((cell) => cell.profileId === profile.profileId);
 
   return {
     profileId: profile.profileId,
@@ -148,8 +198,10 @@ function buildProfileRow(
     automaticTests: {
       profileCoverage: coveragePass ? 'pass' : 'fail',
       realCorpus: corpusStatus(samples),
-      syntheticClosedLoop: 'not-run',
+      syntheticClosedLoop: closedLoopStatus(loop?.outcome),
     },
+    closedLoopAxesRemaining: [...(loop?.axesRemaining ?? [])].sort(),
+    cellSummary: summarizeCells(cells),
     realCorpusOutcomes: corpusOutcomes,
     manualReviewReasons: reasonsForProfile(profile.profileId, samples, coveragePass),
   };
@@ -159,7 +211,9 @@ function buildProfileRow(
 export function buildFacultyMatrixReport(
   matrix = buildRepairCoverageMatrix(),
   corpus: RealCorpusReport = generatedCorpusReport as RealCorpusReport,
+  closedLoop: ClosedLoopReport = generatedClosedLoop as ClosedLoopReport,
 ): FacultyMatrixReport {
+  const cellReport = buildCoverageCells(matrix, closedLoop, corpus);
   const registryById = new Map(matrix.profiles.map((profile) => [profile.profileId, profile]));
   const profileIdsByUnit = new Map<string, string[]>();
 
@@ -175,7 +229,7 @@ export function buildFacultyMatrixReport(
     const profiles = profileIds
       .map((profileId) => registryById.get(profileId))
       .filter((profile): profile is NonNullable<typeof profile> => Boolean(profile))
-      .map((profile) => buildProfileRow(profile, matrix, corpus));
+      .map((profile) => buildProfileRow(profile, matrix, corpus, closedLoop, cellReport));
     const facultyResults = corpus.results.filter((result) => profiles.some((profile) => profile.profileId === result.profileId));
     const profilesWithoutRealDocx = profiles.filter((profile) => profile.realDocxSampleCount === 0).map((profile) => profile.profileId);
     const allReasons = unique(profiles.flatMap((profile) => profile.manualReviewReasons));
@@ -199,8 +253,10 @@ export function buildFacultyMatrixReport(
         realCorpusReviewCount: facultyResults.filter((result) => result.outcome === 'review').length,
         realCorpusNoOpCount: facultyResults.filter((result) => result.outcome === 'no-op').length,
         realCorpusFailCount: facultyResults.filter((result) => result.outcome === 'fail' || result.error).length,
-        syntheticClosedLoopNotRunCount: profiles.length,
+        syntheticClosedLoopPassCount: profiles.filter((profile) => profile.automaticTests.syntheticClosedLoop === 'pass').length,
+        syntheticClosedLoopNotRunCount: profiles.filter((profile) => profile.automaticTests.syntheticClosedLoop === 'not-run').length,
       },
+      cellSummary: summarizeCells(cellReport.cells.filter((cell) => profileIds.includes(cell.profileId))),
       manualReviewReasons: allReasons,
       profiles,
     };
@@ -214,7 +270,7 @@ export function buildFacultyMatrixReport(
       profileSource: 'src/profiles/profile-registry.ts',
       repairSource: 'tests/helpers/repair-coverage.ts',
       realCorpusSource: 'docs/generated/repair-real-corpus.json',
-      syntheticClosedLoop: 'not-run',
+      closedLoopSource: 'docs/generated/closed-loop.json',
     },
     faculties,
     summary: {
@@ -231,7 +287,13 @@ export function buildFacultyMatrixReport(
       realCorpusReviewCount: allResults.filter((result) => result.outcome === 'review').length,
       realCorpusNoOpCount: allResults.filter((result) => result.outcome === 'no-op').length,
       realCorpusFailCount: allResults.filter((result) => result.outcome === 'fail' || result.error).length,
-      syntheticClosedLoopNotRunCount: allProfiles.length,
+      syntheticClosedLoopPassCount: allProfiles.filter((profile) => profile.automaticTests.syntheticClosedLoop === 'pass').length,
+      syntheticClosedLoopNotRunCount: allProfiles.filter((profile) => profile.automaticTests.syntheticClosedLoop === 'not-run').length,
+      cellCount: cellReport.summary.cellCount,
+      coveredCellCount: cellReport.summary.coveredCount,
+      uncoveredCellCount: cellReport.summary.uncoveredCount,
+      resolvedCellCount: cellReport.summary.resolvedCount,
     },
+    cellSummary: cellReport.summary,
   };
 }

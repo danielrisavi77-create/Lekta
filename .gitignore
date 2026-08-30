@@ -81,3 +81,4 @@ vite.dev-preflight.config.mts
 # mjerenja (docs/generated/repair-real-corpus.json).
 tests/fixtures/docx-local/
 docs/generated/repair-real-corpus.local.json
+docs/generated/coverage-cells.local.json

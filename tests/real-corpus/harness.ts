@@ -1,16 +1,20 @@
 import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
-import { dirname, join, relative, sep } from 'node:path';
+import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { analyzeFixture, resolveProfile } from '../../src/analysis/golden-entry';
 import { installXmlDomParser } from '../../src/docx/xml-dom-install';
 import { repairEntriesFor, ensureRepairMapHeavy } from '../../src/profiles/profile-runtime-maps';
 import { applyFixers, type FixerRequest } from '../../src/repair/apply-fixers';
-import { detectPassRegressions } from '../../src/analysis/repair-regression';
-import { buildDefaultRepairRequests } from '../../src/repair/default-selection';
+import { detectPassRegressions, dropStaleFieldRegressions } from '../../src/analysis/repair-regression';
+import { buildDefaultRepairRequests, defaultSelectedItems } from '../../src/repair/default-selection';
+import { summarizeRepairOutcome } from '../../src/repair/repair-outcome';
 import { inspectDocxParts } from '../../src/repair/package-integrity';
 import { readZip } from '../../src/repair/zip-codec';
 import { buildAllRepairableItems } from '../../src/ui/repair-item-assembly';
+import { sidecarAdmitted, type CorpusSidecar } from './corpus-track';
+
+export { sidecarAdmitted, ADMITTED_TRACKS, type CorpusTrack, type CorpusSidecar } from './corpus-track';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const REAL_CORPUS_ROOT = join(HERE, '..', 'fixtures', 'docx');
@@ -28,6 +32,18 @@ installXmlDomParser(true);
  * Direktorij je u `.gitignore`. Kad ne postoji, sve radi kao i prije.
  */
 export const LOCAL_CORPUS_ROOT = join(HERE, '..', 'fixtures', 'docx-local');
+
+/**
+ * Korpus IZVAN stabla (`LEKTA_CORPUS_SOURCE`).
+ *
+ * Gitignoriran direktorij unutar stabla je jedan `git add -f` daleko od objave, a izmjereno je da
+ * je bar jedna datoteka lokalnog korpusa (`_mapping.json`) vec nosila prezimena u citljivom obliku.
+ * Zato pseudonimizirani radovi iz `scripts/corpus-ingest.mts` zive izvan repozitorija, a ovdje se
+ * samo CITAJU. Kad varijabla nije postavljena, sve radi kao i prije.
+ */
+export const EXTERNAL_CORPUS_ROOT = process.env.LEKTA_CORPUS_SOURCE
+  ? resolve(process.env.LEKTA_CORPUS_SOURCE)
+  : null;
 
 export interface RealCorpusManifestEntry {
   documentId: string;
@@ -49,9 +65,37 @@ export interface RealCorpusResult {
   droppedEntryCount: number;
   offeredFixerIds: string[];
   changedFixerIds: string[];
+  /**
+   * Ciljane provjere: one koje su PRIJE popravka stvarno padale (`max > 0 && earned < max`) i
+   * meta su ZATRAZENOG fixera. Prije se brojalo `matchKeys` SVIH ponudjenih stavki, pa je
+   * nazivnik sadrzavao i neprekrsene bodovane stavke (nose `matchKeys`, a `violated: false` ih
+   * izbacuje iz zahtjeva) i naslove koje analiza nikad ne emitira. Takav "5 od 18" nije mjerio
+   * popravak nego popis ponuda.
+   */
   targetedCheckCount: number;
   targetedResolvedCount: number;
   targetedUnresolvedCount: number;
+  /** Ciljano automatskim fixerom (bez potvrde) i dalje pada: stvarni jaz motora. */
+  autoUnresolvedCount: number;
+  /**
+   * Ciljano asistiranom stavkom (u sucelju trazi potvrdu) i dalje pada. Harness ju je PRIMIJENIO,
+   * pa je ovo stvaran jaz asistiranog fixera, ne "alat ceka korisnika".
+   */
+  assistedUnresolvedCount: number;
+  /**
+   * Ciljano stavkom koja trazi potvrdu, ali joj je zadani odabir prazan, pa fixer NIJE imao sto
+   * primijeniti. Odvojeno od `assistedUnresolvedCount`, jer to nije jaz motora nego cekanje
+   * ljudskog odabira. Do 2026-08-29 je ulazilo u isti broj i napuhavalo ga.
+   */
+  awaitingConfirmationCount: number;
+  /** Padalo prije popravka, a nijedna stavka ga ne cilja: izvan granice automatskog popravka. */
+  manualOnlyCount: number;
+  /**
+   * `matchKeys` naslovi koje `stableCheckId` ne prepoznaje. Takav naslov analiza ne emitira, pa
+   * je po starom racunu bio TRAJNO "nerazrijesen" i tiho je obarao postotak. Imenuje se umjesto
+   * da se broji (isti obrazac kao dva mrtva pravila u `check-fixer-map`).
+   */
+  unmappedMatchKeys: string[];
   passRegressionCount: number;
   outputReadable: boolean;
   /**
@@ -91,6 +135,12 @@ export interface RealCorpusReport {
     changedDocumentCount: number;
     manualReviewCount: number;
     passRegressionCount: number;
+    targetedCheckCount: number;
+    targetedResolvedCount: number;
+    autoUnresolvedCount: number;
+    assistedUnresolvedCount: number;
+    awaitingConfirmationCount: number;
+    manualOnlyCount: number;
   };
 }
 
@@ -110,14 +160,16 @@ export function discoverRealCorpus(root = REAL_CORPUS_ROOT): RealCorpusManifestE
     .sort()
     .flatMap((fileName) => {
       const sidecar = sidecarPath(root, fileName);
-      let metadata: { profileId?: unknown; synthetic?: unknown } = {};
+      let metadata: CorpusSidecar = {};
       try {
-        metadata = JSON.parse(readFileSync(sidecar, 'utf8')) as typeof metadata;
+        metadata = JSON.parse(readFileSync(sidecar, 'utf8')) as CorpusSidecar;
       } catch {
         return [];
       }
-      if (metadata.synthetic === true || typeof metadata.profileId !== 'string' || !metadata.profileId) return [];
-      return [{ documentId: fileName.replace(/\.docx$/i, ''), fileName, profileId: metadata.profileId, root }];
+      if (!sidecarAdmitted(metadata)) return [];
+      return [
+        { documentId: fileName.replace(/\.docx$/i, ''), fileName, profileId: metadata.profileId as string, root },
+      ];
     });
 }
 
@@ -141,14 +193,6 @@ function textFingerprint(entries: Array<{ name: string; data: Uint8Array }>): st
   return createHash('sha256').update(text, 'utf8').digest('hex');
 }
 
-function afterCheckForTitle(checks: Array<{ title?: string; status?: string }>, title: string) {
-  return checks.find((check) => check.title === title);
-}
-
-function targetedTitles(items: Array<{ matchKeys?: string[] }>): string[] {
-  return [...new Set(items.flatMap((item) => item.matchKeys ?? []))];
-}
-
 async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: string): Promise<RealCorpusResult> {
   const base = {
     documentId: entry.documentId,
@@ -165,6 +209,11 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     targetedCheckCount: 0,
     targetedResolvedCount: 0,
     targetedUnresolvedCount: 0,
+    autoUnresolvedCount: 0,
+    assistedUnresolvedCount: 0,
+    awaitingConfirmationCount: 0,
+    manualOnlyCount: 0,
+    unmappedMatchKeys: [] as string[],
     passRegressionCount: 0,
     outputReadable: false,
     packageWellFormed: false,
@@ -194,6 +243,11 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     // Isti odabir kao UI checkbox (violated !== false): advisory preporuke su opt-in i NE ulaze
     // u zadani popravak. Bez ovoga je harness primjenjivao i preporuke pa je izvjestaj opisivao
     // tok koji nijedan korisnik ne izvodi (npr. pmf-matematika-uskladjen: 100/100 pa ipak margine).
+    // Isti odabir koji sucelje salje: `violated !== false` PLUS `deep` (u panelu ukljucen po
+    // zadanom). Harness je dosad slao plitke zahtjeve, pa je mjerio slabiji popravak od onoga
+    // koji korisnik dobije: izravno oblikovanje nadjacava stil i font/velicina/prored/poravnanje
+    // tiho ne prime.
+    const selected = defaultSelectedItems(items);
     const requests: FixerRequest[] = buildDefaultRepairRequests(items);
     const beforeEntries = await readZip(bytes);
     const beforeText = textFingerprint(beforeEntries);
@@ -208,12 +262,22 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     const afterFile = new File([applied.docxBytes], `${entry.documentId}-repaired.docx`, { type: DOCX_MIME });
     const after = await analyzeFixture(afterFile, { profileId: entry.profileId });
     const afterText = textFingerprint(afterEntries);
-    const titles = targetedTitles(items);
-    const resolved = titles.filter((title) => afterCheckForTitle(after.checks ?? [], title)?.status === 'pass');
-    const unresolved = titles.length - resolved.length;
+    // ISTI izracun koji koristi sucelje (src/repair/repair-outcome.ts), da se dva prikaza
+    // istog ishoda ne mogu razici.
+    const outcome = summarizeRepairOutcome({
+      before: before.checks ?? [],
+      after: after.checks ?? [],
+      selected,
+    });
+    const unresolved = outcome.unresolved.length;
+
     // Ista funkcija koju koristi produkcija (kljuca po stabilnom id-u, fallback naslov),
     // umjesto vlastite kopije logike koja je znala izracunati isto na svoj nacin.
-    const regressions = detectPassRegressions(before.checks ?? [], after.checks ?? []).length;
+    // Ustajalo TOC polje nije steta: Word ga regenerira pri otvaranju (vidi dropStaleFieldRegressions).
+    const regressions = dropStaleFieldRegressions(
+      detectPassRegressions(before.checks ?? [], after.checks ?? []),
+      after,
+    ).length;
     const second = await applyFixers(applied.docxBytes, requests);
     const secondPassNoOp = second.changelog.length === 0 && second.docxBytes === applied.docxBytes;
     const changed = applied.changelog.length > 0;
@@ -230,12 +294,44 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     // naslova, hrvatska tehnicka tipografija, kanonizacija DOI-ja i polje sadrzaja (tekst sadrzaja
     // GENERIRA Word iz polja, nije autorov). Bez izuzeca harness prijavljuje lazni pad.
     const changedFixerIds = [...new Set(applied.changelog.map((change) => change.fixerId))];
-    const TEXT_CHANGING_BY_DESIGN = new Set(['heading-case-fixer', 'croatian-typography-fixer', 'link-doi-fixer', 'bibliography-repair-fixer', 'toc-field-fixer']);
+    /**
+     * `required-section-fixer` je dodan 2026-08-30, uz odluku vlasnika.
+     *
+     * Umece ISKLJUCIVO naslov koji propisuje verificirano pravilo profila (`required-section-rules`
+     * sa `sourceId`, `sourcePage` i doslovnim citatom), nikakav sadrzaj: izmjereno na
+     * `local-36-diplomski` razlika je 25 znakova, i to naslov "kljucne rijeci / keywords". Rezervirani
+     * tekst i komentar se umecu samo kad ih profil izricito trazi, i stavka uvijek trazi izricitu
+     * korisnikovu potvrdu (`requiresConfirmation: true`).
+     *
+     * Granica ostaje ista: umece se natpis koji je fakultet sam propisao, nikad recenica rada.
+     */
+    const TEXT_CHANGING_BY_DESIGN = new Set(['heading-case-fixer', 'croatian-typography-fixer', 'link-doi-fixer', 'bibliography-repair-fixer', 'toc-field-fixer', 'required-section-fixer']);
     const textChangeAllowed = changedFixerIds.some((id) => TEXT_CHANGING_BY_DESIGN.has(id));
     const unexpectedTextChange = beforeText !== afterText && !textChangeAllowed;
     const finalResult: RealCorpusResult = {
       ...base,
-      outcome: integrityFailure || regressions || !outputReadable || malformedParts.length > 0 || droppedEntryCount > 0 || !secondPassNoOp || unexpectedTextChange ? 'fail' : unresolved ? 'review' : changed ? 'review' : 'no-op',
+      /**
+       * `pass` je do sada bio NEDOSTIZAN: izraz je glasio `unresolved ? 'review' : changed ?
+       * 'review' : 'no-op'`, pa je svaki promijenjen dokument zavrsavao na `review` i
+       * `passCount` je uvijek bio 0. "Gotovo je kada svi prolaze" time nije imalo definiciju.
+       *
+       * Sada: `pass` znaci da je bilo sto mjeriti (barem jedna ciljana provjera je padala) i da
+       * je sve ciljano razrijeseno, bez regresije i uz ispravan paket. Dokument koji se
+       * promijenio a nije imao nijednu ciljanu provjeru ostaje `review`, jer je promjena
+       * stvarna ali je nijedan bodovan check ne potvrdjuje.
+       *
+       * `manualReviewRequired` je ODVOJEN od ovoga: strojni `pass` ne ukida vizualni pregled u
+       * Wordu ili LibreOfficeu (Tier 1.5/2), on je i dalje uvjet za razinu A u ledgeru.
+       */
+      outcome: integrityFailure || regressions || !outputReadable || malformedParts.length > 0 || droppedEntryCount > 0 || !secondPassNoOp || unexpectedTextChange
+        ? 'fail'
+        : unresolved > 0
+          ? 'review'
+          : outcome.targeted.length > 0
+            ? 'pass'
+            : changed
+              ? 'review'
+              : 'no-op',
       before: { checkCount: before.checks?.length ?? 0, passCount: checkPassCount(before.checks ?? []), score: scoreOf(before) },
       after: { checkCount: after.checks?.length ?? 0, passCount: checkPassCount(after.checks ?? []), score: scoreOf(after) },
       beforeEntryCount: beforeEntries.length,
@@ -243,9 +339,14 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
       droppedEntryCount,
       offeredFixerIds: [...new Set(items.map((item) => item.fixerId))],
       changedFixerIds,
-      targetedCheckCount: titles.length,
-      targetedResolvedCount: resolved.length,
+      targetedCheckCount: outcome.targeted.length,
+      targetedResolvedCount: outcome.resolved.length,
       targetedUnresolvedCount: unresolved,
+      autoUnresolvedCount: outcome.autoUnresolved.length,
+      assistedUnresolvedCount: outcome.assistedUnresolved.length,
+      awaitingConfirmationCount: outcome.awaitingConfirmation.length,
+      manualOnlyCount: outcome.manualOnly.length,
+      unmappedMatchKeys: outcome.unmappedMatchKeys,
       passRegressionCount: regressions,
       outputReadable,
       packageWellFormed: malformedParts.length === 0,
@@ -288,10 +389,14 @@ export async function runRealCorpus(
   const manifest = [
     ...discoverRealCorpus(root),
     ...(options.includeLocal ? discoverRealCorpus(LOCAL_CORPUS_ROOT) : []),
+    ...(options.includeLocal && EXTERNAL_CORPUS_ROOT ? discoverRealCorpus(EXTERNAL_CORPUS_ROOT) : []),
   ];
   if (options.outputDir) mkdirSync(options.outputDir, { recursive: true });
   const results = await Promise.all(manifest.map((entry) => runOne(entry, entry.root ?? root, options.outputDir)));
-  const localCount = options.includeLocal ? discoverRealCorpus(LOCAL_CORPUS_ROOT).length : 0;
+  const localCount = options.includeLocal
+    ? discoverRealCorpus(LOCAL_CORPUS_ROOT).length +
+      (EXTERNAL_CORPUS_ROOT ? discoverRealCorpus(EXTERNAL_CORPUS_ROOT).length : 0)
+    : 0;
   return {
     schemaVersion: 1,
     scope: {
@@ -313,6 +418,12 @@ export async function runRealCorpus(
       changedDocumentCount: results.filter((result) => result.changedFixerIds.length > 0).length,
       manualReviewCount: results.filter((result) => result.manualReviewRequired).length,
       passRegressionCount: results.reduce((total, result) => total + result.passRegressionCount, 0),
+      targetedCheckCount: results.reduce((total, result) => total + result.targetedCheckCount, 0),
+      targetedResolvedCount: results.reduce((total, result) => total + result.targetedResolvedCount, 0),
+      autoUnresolvedCount: results.reduce((total, result) => total + result.autoUnresolvedCount, 0),
+      assistedUnresolvedCount: results.reduce((total, result) => total + result.assistedUnresolvedCount, 0),
+      awaitingConfirmationCount: results.reduce((total, result) => total + result.awaitingConfirmationCount, 0),
+      manualOnlyCount: results.reduce((total, result) => total + result.manualOnlyCount, 0),
     },
   };
 }

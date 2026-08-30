@@ -1,0 +1,200 @@
+/**
+ * CELIJE POKRIVENOSTI: (profil x fixer), svaka s dokazom ili s razlogom zasto ga nema.
+ *
+ * Zasto postoji: `faculty-matrix.json` je do 2026-08-29 brojao SAMO profilne osi (font, velicina,
+ * prored, poravnanje, margine, format papira). Za FPZG je to 59 celija kroz 13 profila, i sve iz
+ * istih sest dimenzija. Istovremeno je mjerenje 74 stvarna FPZG rada
+ * (`docs/generated/repair-real-corpus.local.json`) pokazalo 192 nerijesene ciljane provjere, od
+ * kojih 175 na fixerima kojih u matrici NEMA (heading-style, section-surgery, field-integrity,
+ * consistency, bibliography-repair, citation-bibliography-sync, required-section, croatian-
+ * typography, link-doi, toc-field, final-document-inspector). Matrica je time izvjestavala o
+ * dimenziji na kojoj proizvod ne pada, a sutjela o onoj na kojoj pada.
+ *
+ * UGOVOR (iz F2.4 specifikacije, tocka 7): svaka celija ima TOCNO JEDAN od dva statusa. Nikad
+ * prazno, nikad treci status. "Nije primjenjivo" NAMJERNO nije status nego RAZLOG uz
+ * `nepokriveno`: treci status bi postao izlaz za nuzdu kojim se matrica isprazni a broj ostane
+ * lijep, sto je obrazac na kojem je ovaj projekt vec izgorio.
+ */
+import { FIXER_IDS, type FixerId } from '../../src/repair/apply-fixers';
+import type { RepairCoverageMatrix } from './repair-coverage';
+import type { RealCorpusReport } from '../real-corpus/harness';
+import type { CorpusTrack } from '../real-corpus/corpus-track';
+
+/** Redak `docs/generated/closed-loop.json` (`npm run closed-loop`). */
+export interface ClosedLoopRow {
+  profileId: string;
+  outcome: string;
+  violated: string[];
+  axesResolved: string[];
+  axesRemaining: string[];
+  regressions: number;
+  textPreserved: boolean;
+}
+
+export interface ClosedLoopReport {
+  rows: ClosedLoopRow[];
+}
+
+/**
+ * Jacina dokaza. Razlika je stvarna, pa se imenuje umjesto da se stopi u jedan broj:
+ *
+ * - `resolved` provjera je PRIJE padala i POSLIJE popravka prolazi (closed-loop mjeri bas to).
+ * - `applied`  fixer je promijenio dokument bez regresije, ali artefakt ne kaze je li se ijedna
+ *              provjera zbog toga prevrnula. `repair-real-corpus.json` nosi `changedFixerIds` po
+ *              dokumentu, a rijesenost samo zbirno (`targetedResolvedCount`), pa se po fixeru
+ *              jaci zakljucak ne moze izvesti bez laganja.
+ */
+export type EvidenceStrength = 'resolved' | 'applied';
+
+export interface CellEvidence {
+  kind: 'closed-loop' | 'real' | 'generated';
+  strength: EvidenceStrength;
+  /** Traka korpusa za dokaz iz dokumenta; `converted` ovdje ne moze doci (vidi corpus-track.ts). */
+  track?: CorpusTrack;
+  artifactId: string;
+  checkIds?: string[];
+}
+
+/**
+ * Razlozi su ZATVOREN popis, ne slobodan tekst: samo tako se moze traziti da broj celija bez
+ * dokaza pada, a da se razlog ne prepise u nesto blaze.
+ */
+export type UncoveredReason =
+  /** Nijedno pravilo profila ne gadja taj fixer; nema sto popraviti dok se pravilo ne doda. */
+  | 'profil-ne-propisuje-os'
+  /** Univerzalna higijena: vrijedi za svaki dokument, ali dokaza jos nema. Zatvara se generatorom. */
+  | 'univerzalna-higijena-bez-dokaza'
+  /** Profil os propisuje, closed-loop ju je pokusao popraviti i nije uspio. Stvaran jaz motora. */
+  | 'closed-loop-nije-rijesio'
+  /** Profil os propisuje, ali je nijedno mjerenje jos nije dotaklo. */
+  | 'nema-dokaza';
+
+export type CoverageCell =
+  | { profileId: string; fixerId: FixerId; status: 'pokriveno'; evidence: CellEvidence }
+  | { profileId: string; fixerId: FixerId; status: 'nepokriveno'; reason: UncoveredReason };
+
+export interface CoverageCellReport {
+  cells: CoverageCell[];
+  summary: {
+    cellCount: number;
+    coveredCount: number;
+    uncoveredCount: number;
+    /** Dokaz jacine `resolved`; jedina brojka koja tvrdi da se provjera doista prevrnula. */
+    resolvedCount: number;
+    byReason: Record<UncoveredReason, number>;
+  };
+}
+
+/**
+ * Fixeri koje uopce moze ponuditi PROFILNA grana popravka (`buildRepairableItems`).
+ *
+ * Izvodi se iz same matrice, ne iz rucnog popisa: fixer koji se ni na jednom od 407 profila ne
+ * pojavljuje kao redak je univerzalna higijena i ne smije dobiti razlog `profil-ne-propisuje-os`,
+ * jer profil to nikad i ne propisuje, a fixer svejedno vrijedi za svaki dokument.
+ */
+export function profileGatedFixers(matrix: RepairCoverageMatrix): Set<string> {
+  return new Set(matrix.rows.map((row) => row.fixerId));
+}
+
+/** Gradi celije za sve profile iz matrice, po jedna za svaki registriran fixer. */
+export function buildCoverageCells(
+  matrix: RepairCoverageMatrix,
+  closedLoop: ClosedLoopReport,
+  corpus: RealCorpusReport,
+): CoverageCellReport {
+  const gated = profileGatedFixers(matrix);
+  const loopByProfile = new Map(closedLoop.rows.map((row) => [row.profileId, row]));
+  const cells: CoverageCell[] = [];
+
+  for (const profile of matrix.profiles) {
+    const profileId = profile.profileId;
+    const rows = matrix.rows.filter((row) => row.profileId === profileId);
+    const loop = loopByProfile.get(profileId);
+    const resolvedAxes = new Set(loop?.axesResolved ?? []);
+    const samples = corpus.results.filter((result) => result.profileId === profileId);
+
+    for (const fixerId of FIXER_IDS) {
+      const fixerRows = rows.filter((row) => row.fixerId === fixerId);
+      const checkIds = [...new Set(fixerRows.map((row) => row.checkId))].sort();
+
+      // 1) Najjaci dokaz: closed-loop je os prekrsio i popravkom ju vratio u prolaz.
+      const loopCovered = checkIds.filter((checkId) => resolvedAxes.has(checkId));
+      if (loopCovered.length) {
+        cells.push({
+          profileId,
+          fixerId,
+          status: 'pokriveno',
+          evidence: {
+            kind: 'closed-loop',
+            strength: 'resolved',
+            artifactId: `closed-loop:${profileId}`,
+            checkIds: loopCovered,
+          },
+        });
+        continue;
+      }
+
+      // 2) Slabiji dokaz: fixer je na stvarnom radu promijenio dokument bez regresije.
+      const sample = samples.find(
+        (result) => (result.changedFixerIds ?? []).includes(fixerId) && result.passRegressionCount === 0,
+      );
+      if (sample) {
+        cells.push({
+          profileId,
+          fixerId,
+          status: 'pokriveno',
+          evidence: {
+            kind: 'real',
+            strength: 'applied',
+            track: 'real',
+            artifactId: sample.documentId,
+            checkIds: checkIds.length ? checkIds : undefined,
+          },
+        });
+        continue;
+      }
+
+      cells.push({
+        profileId,
+        fixerId,
+        status: 'nepokriveno',
+        reason: uncoveredReason(fixerRows.length, gated.has(fixerId), loop),
+      });
+    }
+  }
+
+  return { cells, summary: summarize(cells) };
+}
+
+function uncoveredReason(ruleCount: number, isGated: boolean, loop: ClosedLoopRow | undefined): UncoveredReason {
+  if (ruleCount === 0) return isGated ? 'profil-ne-propisuje-os' : 'univerzalna-higijena-bez-dokaza';
+  // Profil os propisuje. Je li ju closed-loop pokusao i nije uspio, ili ju nikad nije dotaknuo?
+  if (loop && loop.axesRemaining.length > 0) return 'closed-loop-nije-rijesio';
+  return 'nema-dokaza';
+}
+
+function summarize(cells: CoverageCell[]): CoverageCellReport['summary'] {
+  const byReason: Record<UncoveredReason, number> = {
+    'profil-ne-propisuje-os': 0,
+    'univerzalna-higijena-bez-dokaza': 0,
+    'closed-loop-nije-rijesio': 0,
+    'nema-dokaza': 0,
+  };
+  let covered = 0;
+  let resolved = 0;
+  for (const cell of cells) {
+    if (cell.status === 'pokriveno') {
+      covered += 1;
+      if (cell.evidence.strength === 'resolved') resolved += 1;
+    } else {
+      byReason[cell.reason] += 1;
+    }
+  }
+  return {
+    cellCount: cells.length,
+    coveredCount: covered,
+    uncoveredCount: cells.length - covered,
+    resolvedCount: resolved,
+    byReason,
+  };
+}

@@ -15,6 +15,7 @@
  * Korelacija ide po STABILNOM `check.id` (`src/scoring/check-id-registry.ts`), kako trazi
  * AGENTS.md, a ne po hrvatskom naslovu.
  */
+import { hasActionableParams } from './default-selection';
 import { stableCheckId } from '../scoring/check-id-registry';
 
 /** Provjera onako kako je vraca analiza; labavije od `Check`, da ju mogu koristiti i harnessi. */
@@ -30,6 +31,11 @@ export interface OutcomeCheckLike {
 export interface OutcomeItemLike {
   matchKeys?: string[];
   requiresConfirmation?: boolean;
+  /**
+   * Parametri kakvi bi bili POSLANI. Sluze samo za razlikovanje "primijenjeno pa i dalje pada" od
+   * "nije imalo sto primijeniti"; kad ih pozivatelj ne prosljedi, ponasanje je kao prije.
+   */
+  params?: Record<string, unknown>;
 }
 
 export type RepairOutcomeKind =
@@ -58,6 +64,17 @@ export interface RepairOutcome {
    * koji zna da stavka NIJE potvrdjena smije to nazvati cekanjem.
    */
   assistedUnresolved: string[];
+  /**
+   * Ciljano stavkom koja trazi potvrdu, ali cijim su parametrima svi odabiri prazni, pa fixer nije
+   * imao STO primijeniti. To NIJE jaz motora nego cekanje ljudskog odabira, i zato ne ulazi ni u
+   * `targeted` ni u `assistedUnresolved`.
+   *
+   * Bez ovog razreda je mjerenje tvrdilo suprotno od istine: `assistedUnresolvedCount` je na 74
+   * stvarna FPZG rada iznosio 175, a velik dio toga su bile stavke koje harness nikad nije
+   * stvarno primijenio (`consistency`, `citation-bibliography-sync`, `required-section`: 221
+   * ponuda, 0 promjena na 116 dokumenata).
+   */
+  awaitingConfirmation: string[];
   /** Padalo prije popravka, a nijedna odabrana stavka ga ne cilja: izvan granice popravka. */
   manualOnly: string[];
   /**
@@ -112,9 +129,12 @@ export function summarizeRepairOutcome(input: {
 
   const auto = new Set<string>();
   const assisted = new Set<string>();
+  const awaiting = new Set<string>();
   const unmapped = new Set<string>();
 
   for (const item of input.selected) {
+    // Stavka koja trazi potvrdu, a nema nijedan odabran zahvat, nije primijenjena nego CEKA.
+    const waiting = item.requiresConfirmation === true && !hasActionableParams(item.params);
     for (const title of item.matchKeys ?? []) {
       const id = stableCheckId(title);
       if (!id) {
@@ -122,17 +142,23 @@ export function summarizeRepairOutcome(input: {
         continue;
       }
       if (!isFailingCheck(beforeById.get(id))) continue;
-      (item.requiresConfirmation ? assisted : auto).add(id);
+      (waiting ? awaiting : item.requiresConfirmation ? assisted : auto).add(id);
     }
   }
   // Stavka bez potvrde ima prednost: isti check moze gadjati i automatski i asistirani fixer.
   for (const id of auto) assisted.delete(id);
+  // Isti redoslijed prednosti vrijedi i za cekanje: check koji je BILO STO stvarno primijenilo
+  // nije "u cekanju", inace bi jedna prazna stavka sakrila stvaran jaz drugoga.
+  for (const id of auto) awaiting.delete(id);
+  for (const id of assisted) awaiting.delete(id);
 
   const targeted = [...auto, ...assisted].sort();
   const resolved = targeted.filter((id) => isResolvedCheck(afterById.get(id)));
   const unresolved = targeted.filter((id) => !isResolvedCheck(afterById.get(id)));
+  // `awaiting` se iskljucuje i odavde: takav nalaz NIJE izvan granice popravka (alat ga zna
+  // popraviti cim covjek odabere), pa bi ga `manualOnly` krivo prikazao kao rucni posao.
   const manualOnly = [...beforeById.entries()]
-    .filter(([id, check]) => isFailingCheck(check) && !auto.has(id) && !assisted.has(id))
+    .filter(([id, check]) => isFailingCheck(check) && !auto.has(id) && !assisted.has(id) && !awaiting.has(id))
     .map(([id]) => id)
     .sort();
 
@@ -151,6 +177,7 @@ export function summarizeRepairOutcome(input: {
     unresolved,
     autoUnresolved: [...auto].filter((id) => !isResolvedCheck(afterById.get(id))).sort(),
     assistedUnresolved: [...assisted].filter((id) => !isResolvedCheck(afterById.get(id))).sort(),
+    awaitingConfirmation: [...awaiting].filter((id) => !isResolvedCheck(afterById.get(id))).sort(),
     manualOnly,
     unmappedMatchKeys: [...unmapped].sort(),
   };

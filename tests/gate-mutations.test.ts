@@ -35,6 +35,7 @@ import { DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-levers';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/profile-schema';
+import { sidecarAdmitted } from './real-corpus/corpus-track';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -490,6 +491,36 @@ const MUTATIONS: Mutation[] = [
       );
     },
   },
+  // --- zid izmedju traka korpusa: `converted` nikad ne broji kao dokaz profila ----------------
+  {
+    id: 'korpus/converted-traka-ulazi-u-mjerenje',
+    imitates:
+      'docx nastao pretvorbom PDF-a udje u `discoverRealCorpus` i pocne brojati kao dokaz profila: ' +
+      'matrica tada mjeri konverter (bez stilova, bez TOC polja, prored izveden iz razmaka linija), ' +
+      'a ne studentov dokument, i to korelirano kroz cijeli skup pa izgleda puno i ne znaci nista',
+    caught: () => !sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'converted' }),
+    // Netrivijalnost: isti sidecar bez trake i s dopustenom trakom MORA proci, inace bi zid
+    // "hvatao" tako sto odbija sve, a mjerenje bi ostalo prazno umjesto pokvareno.
+    cleanBefore: () =>
+      sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni' }) &&
+      sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'real' }) &&
+      sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'generated' }) &&
+      !sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', synthetic: true }),
+  },
+  {
+    id: 'korpus/nepoznata-traka-tumaci-se-kao-real',
+    imitates:
+      'tipfeler ili nova traka u sidecaru (`converted-v2`, `koncertirano`) protumaci se kao `real` ' +
+      'jer filtar nabraja SAMO zabranjene vrijednosti; deny-by-default trazi bijeli popis, isto ' +
+      'nacelo kojim classification-guard obara build na neklasificiranom modulu',
+    caught: () =>
+      !sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: 'converted-v2' }) &&
+      !sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: '' }) &&
+      !sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: null }),
+    // Baseline: `undefined` NIJE nepoznata vrijednost nego izostanak polja, i mora proci, jer su
+    // svi postojeci sidecari nastali prije uvodjenja trake.
+    cleanBefore: () => sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', track: undefined }),
+  },
   {
     // Namjerno BEZ `axis`: ta tvrdnja vjezba `readAxis` nad BODOVANIM osima, a citatni stil se ne
     // boduje. Upravo zato ga nijedan postojeci gard nije vidio.
@@ -539,7 +570,7 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
   it('N od N mutacija uhvaceno, i broj mutacija ne smije pasti', () => {
     const caught = MUTATIONS.filter((m) => m.cleanBefore() && m.caught());
     expect(caught).toHaveLength(MUTATIONS.length);
-    expect(MUTATIONS.length).toBeGreaterThanOrEqual(33);
+    expect(MUTATIONS.length).toBeGreaterThanOrEqual(35);
   });
 
   /**

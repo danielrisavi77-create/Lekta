@@ -52,11 +52,25 @@ usporedi tekst prije i poslije (`scripts/word-verify/`, Tier 2 u
 `docs/REAL_CORPUS_TESTING.md`). Testovi zato čitaju SPOJENI tekst odlomka, ne sirovi XML,
 jer se dio ovih kvarova u XML-u uopće ne vidi (RE-57, RE-58).
 
-Četiri postojeća popravka SMIJU mijenjati vidljivi tekst i to je namjerno, jer je svaki od
+Pet postojećih popravaka SMIJE mijenjati vidljivi tekst i to je namjerno, jer je svaki od
 njih format, ne argumentacija: velika slova naslova (`heading-case-fixer`), hrvatska
 tehnička tipografija (`croatian-typography-fixer`), kanonizacija DOI-ja
-(`bibliography-repair-fixer`, `link-doi-fixer`) i polje sadržaja (`toc-field-fixer`). Svaki
-traži izričitu potvrdu i nijedan ne dira rečenice tijela rada.
+(`bibliography-repair-fixer`, `link-doi-fixer`), polje sadržaja (`toc-field-fixer`) i
+nedostajući obvezni naslov (`required-section-fixer`). Svaki traži izričitu potvrdu i
+nijedan ne dira rečenice tijela rada.
+
+`required-section-fixer` je dodan 2026-08-30, odlukom vlasnika. Umeće ISKLJUČIVO natpis koji
+propisuje verificirano pravilo profila (`required-section-rules` sa `sourceId`, `sourcePage` i
+doslovnim citatom), nikakav sadržaj: izmjereno na jednom stvarnom radu razlika je 25 znakova, i to
+naslov "ključne riječi / keywords". Rezervirani tekst i komentar umeću se samo kad ih profil
+izričito traži. Granica je time ista kao za ostale: umeće se natpis koji je fakultet sam propisao,
+nikad rečenica rada.
+
+Do 2026-08-30 taj popravak nikad nije ni radio: predodabir je tražio `confidence === 'high'`, a
+analiza nedostajućem dijelu po konstrukciji daje `medium` (`present ? 'high' : 'medium'`), pa je
+uvjet bio neispunjiv. Nakon popravka ga je lanac odbijao uz `stale-anchor`, jer je istovremeno
+INDEX_SHIFTING i ovisan o sidru; riješeno je time da sidro vrijedi uz podudaranje otiska ILI teksta
+odlomka. Vidi `docs/superpowers/specs/2026-08-29-prazni-asistirani-fixeri.md`.
 
 `toc-field-fixer` je dodan 2026-08-17, nakon što je real-corpus mjerenje pokazalo da mijenja
 vidljivi tekst na 5 od 12 radova. Obrazloženje: tekst sadržaja GENERIRA Word iz polja, nije

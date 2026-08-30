@@ -1,4 +1,21 @@
-import type { FixerRequest } from './apply-fixers';
+import type { FixerId, FixerRequest } from './apply-fixers';
+
+/**
+ * Fixeri koji znaju ocistiti IZRAVNO oblikovanje (ne samo stilove).
+ *
+ * Zivi u repair jezgri, a ne u `src/ui/repair-panel.ts`, jer je to cinjenica o FIXERIMA (koji
+ * primaju `params.deep`), ne o sucelju. Dok je bio samo u panelu, svaki pozivatelj izvan UI-a
+ * morao ga je zicati rucno, a `tests/real-corpus/harness.ts` to nije radio: mjerio je popravak
+ * BEZ deep zastavice, dakle slabiji od onog koji korisnik stvarno dobije, jer izravno
+ * oblikovanje nadjacava stil pa font, velicina, prored i poravnanje tiho ne prime.
+ */
+export const DEEP_CAPABLE: ReadonlySet<FixerId> = new Set([
+  'font-fixer',
+  'line-spacing-fixer',
+  'alignment-fixer',
+  'paragraph-spacing-fixer',
+  'footnote-spacing-fixer',
+] as FixerId[]);
 
 /**
  * Stavka onako kako je gradi `src/ui/repair-items.ts`. Namjerno strukturna (a ne uvoz
@@ -28,11 +45,45 @@ export function defaultSelectedItems<T extends DefaultSelectableItem>(items: rea
   return items.filter((item) => item.violated !== false);
 }
 
-/** `defaultSelectedItems` preslikan u zahtjeve prema `applyFixers`. */
-export function buildDefaultRepairRequests(items: readonly DefaultSelectableItem[]): FixerRequest[] {
+/**
+ * Ima li zahtjev ista za primijeniti, ili ceka ljudski odabir?
+ *
+ * Zasto postoji: stavke s formom (`requiresConfirmation`) racunaju `params` JEDNOM, pri gradnji,
+ * dakle PRIJE nego je covjek ista odabrao. Kod dijela njih je zadani odabir prazan po
+ * konstrukciji, pa `params` nose prazne nizove i fixer nema sto raditi.
+ *
+ * IZMJERENO 2026-08-29: `consistency-fixer` (110 ponuda), `citation-bibliography-sync-fixer` (62)
+ * i `required-section-fixer` (49) na 116 stvarnih dokumenata nisu promijenili NIJEDAN. Prva dva
+ * grade svaki odabir s tvrdim `selected: false`, treci trazi `confidence === 'high'` a detektor
+ * na tim dokumentima daje samo `medium`. To NIJE kvar: Lekta ne smije pogadjati koji je oblik
+ * tocan, jer bi to bio sadrzaj. Kvar je bio sto ih je mjerenje brojalo kao primijenjene, pa je
+ * njihov nazivnik ulazio u "jaz asistiranog fixera".
+ *
+ * Pravilo: ako `params` nema NIJEDAN niz, zahtjev je akcijski (npr. `empty-paragraph-fixer` ima
+ * `params: {}` i uredno radi). Ako nizova ima, barem jedan mora biti neprazan.
+ */
+export function hasActionableParams(params: Record<string, unknown> | null | undefined): boolean {
+  if (!params) return true;
+  const arrays = Object.values(params).filter((value): value is unknown[] => Array.isArray(value));
+  if (!arrays.length) return true;
+  return arrays.some((value) => value.length > 0);
+}
+
+/**
+ * `defaultSelectedItems` preslikan u zahtjeve prema `applyFixers`.
+ *
+ * `deep` je UKLJUCEN po zadanom jer je takav i preklopnik u panelu
+ * (`repair-panel.ts`: `<input type="checkbox" checked />`). Zadana vrijednost mora opisivati
+ * ono sto korisnik stvarno posalje; tko hoce plitak popravak, trazi ga izricito.
+ */
+export function buildDefaultRepairRequests(
+  items: readonly DefaultSelectableItem[],
+  options: { deep?: boolean } = {},
+): FixerRequest[] {
+  const deep = options.deep !== false;
   return defaultSelectedItems(items).map((item) => ({
     fixerId: item.fixerId,
     ruleId: item.ruleId,
-    params: item.params,
+    params: deep && DEEP_CAPABLE.has(item.fixerId as FixerId) ? { ...item.params, deep: true } : item.params,
   })) as FixerRequest[];
 }
