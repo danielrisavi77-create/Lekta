@@ -33,6 +33,8 @@ const art = artifact as unknown as {
   contradicted: Row[];
   unknownTokenCount: number;
   unknownToken: Row[];
+  styleNotInQuoteCount: number;
+  styleNotInQuote: Row[];
   rows: Row[];
 };
 
@@ -61,6 +63,21 @@ const MAX_CONTRADICTED = 0;
  */
 const MAX_UNKNOWN_TOKEN = 5;
 
+/**
+ * Tvrdnja IMENUJE stil, a njezin vlastiti citat to ime nikad ne izgovara. Takva tvrdnja je
+ * ZAKLJUCAK, ne prijepis odredbe, i to je tocno razred koji je FER pilot otkrio: cetiri od pet
+ * tvrdnji ondje nije palo na krivom prijepisu nego na TUMACENJU.
+ *
+ * Zatecено 2026-08-30: 13 profila (33 tvrdnje, od cega 14 sa statusom `verified`). Primjeri koji
+ * najbolje pokazuju razred: `chicago-notes` na citatu koji kaze samo "citati se pisu u fusnoti"
+ * (fusnota nije Chicago), `harvard` na citatu o velicini stranice i marginama (druga os posve),
+ * `apa7` na "po propozicijama casopisa" (delegiranje, ne propis).
+ *
+ * Ne mijenja se bodovanje niti se tvrdnje diraju: presuda po tvrdnji je vlasnikova. Ovdje se samo
+ * drzi da broj ne raste.
+ */
+const MAX_STYLE_NOT_IN_QUOTE = 13;
+
 describe('citatni token: koliko ih tvrdnja potkrepljuje', () => {
   it('artefakt pokriva svaki profil koji postavlja citatni token', () => {
     const expected = (registry as Array<{ id: string; rules?: { recommendedCitation?: string } }>)
@@ -83,6 +100,17 @@ describe('citatni token: koliko ih tvrdnja potkrepljuje', () => {
     expect(art.counts.none ?? 0, 'vise profila bez ijedne tvrdnje').toBeLessThanOrEqual(MAX_NONE);
     expect(art.contradictedCount, 'vise tvrdnji koje proturjece tokenu').toBeLessThanOrEqual(MAX_CONTRADICTED);
     expect(art.unknownTokenCount, 'vise tokena koje motor ne poznaje').toBeLessThanOrEqual(MAX_UNKNOWN_TOKEN);
+    expect(
+      art.styleNotInQuoteCount,
+      'vise tvrdnji koje imenuju stil sto ga njihov citat ne spominje',
+    ).toBeLessThanOrEqual(MAX_STYLE_NOT_IN_QUOTE);
+  });
+
+  it('svaka tvrdnja bez imena stila u citatu je imenovana, ne samo prebrojana', () => {
+    expect(art.styleNotInQuote.length).toBe(art.styleNotInQuoteCount);
+    for (const r of art.styleNotInQuote) {
+      expect(r.profileId.length, 'zapis bez profila nije upotrebljiv').toBeGreaterThan(0);
+    }
   });
 
   it('svaki motoru nepoznat token je imenovan, ne samo prebrojan', () => {

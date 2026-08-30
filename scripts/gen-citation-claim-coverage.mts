@@ -31,7 +31,22 @@ interface DraftEntry {
   authority?: string;
   sourceId?: string;
   sourcePage?: string | null;
+  quote?: string | null;
 }
+
+/**
+ * Imenovani stilovi i korijen po kojem se ime prepoznaje u citatu. `custom` i `none` nisu ovdje:
+ * oni po definiciji ne imenuju stil, pa se od njihova citata to ni ne trazi.
+ */
+const NAMED_STYLE_ROOT: Record<string, string> = {
+  ieee: 'ieee',
+  vancouver: 'vancouver',
+  apa7: 'apa',
+  harvard: 'harvard',
+  'chicago-notes': 'chicago',
+  'chicago-author': 'chicago',
+  mla9: 'mla',
+};
 
 /** profileId -> citation-style tvrdnje iz autorskih draftova (izvor istine). */
 function citationClaims(): Record<string, DraftEntry[]> {
@@ -74,6 +89,16 @@ const rows = registry
         ? 'advisory'
         : 'none';
     const backing = entries.find((e) => e.status === 'verified') ?? entries[0];
+    /**
+     * Tvrdnja imenuje stil, a njezin vlastiti citat to ime nikad ne izgovara. Nije sitnica: takva
+     * tvrdnja je ZAKLJUCAK iz opisa ("citati se pisu u fusnoti" -> chicago-notes), a ne prijepis
+     * odredbe. Izmjereno na dan uvodjenja: 33 takve tvrdnje, od cega 14 sa statusom `verified`.
+     */
+    const unnamed = entries.some((e) => {
+      const root = NAMED_STYLE_ROOT[String(e.value)];
+      if (!root) return false;
+      return !String(e.quote ?? '').toLowerCase().includes(root);
+    });
     return {
       profileId: p.id,
       token: p.rules!.recommendedCitation!,
@@ -81,6 +106,7 @@ const rows = registry
       claimedValue: backing?.value ?? null,
       authority: backing?.authority ?? null,
       sourceId: backing?.sourceId ?? null,
+      quoteNamesStyle: !unnamed,
     };
   })
   .sort((a, b) => a.profileId.localeCompare(b.profileId));
@@ -102,6 +128,9 @@ const contradicted = rows.filter(
  */
 const unknownToken = rows.filter((r) => !CITATION_TOKENS.includes(r.token));
 
+/** Profili cija tvrdnja imenuje stil koji njezin citat ne spominje. */
+const styleNotInQuote = rows.filter((r) => r.quoteNamesStyle === false);
+
 const artifact = {
   schemaVersion: 1,
   napomena:
@@ -111,6 +140,8 @@ const artifact = {
   contradictedCount: contradicted.length,
   unknownTokenCount: unknownToken.length,
   unknownToken,
+  styleNotInQuoteCount: styleNotInQuote.length,
+  styleNotInQuote,
   byToken: rows.reduce<Record<string, number>>((acc, r) => {
     acc[r.token] = (acc[r.token] ?? 0) + 1;
     return acc;
@@ -129,5 +160,5 @@ console.log(
       .sort()
       .map(([k, v]) => `${k}:${v}`)
       .join(' ') +
-    `), proturjecnih ${contradicted.length}, motoru nepoznatih tokena ${unknownToken.length}`,
+    `), proturjecnih ${contradicted.length}, motoru nepoznatih tokena ${unknownToken.length}, stil neimenovan u citatu ${styleNotInQuote.length}`,
 );

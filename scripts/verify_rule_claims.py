@@ -532,9 +532,18 @@ def value_tokens(check_id: str, value) -> list[list[str]]:
         token = str(value).lower()
         if token in ("custom", "none", "null"):
             return []
+        # IMENOVAN STIL MORA BITI IMENOVAN. Do 2026-08-30 su `ieee` i `vancouver` prolazili i na
+        # golom "[1]" ili "uglat", dakle na dokazu koji ta dva stila NE RAZLIKUJE i koji jednako
+        # opisuje obicno brojcano navodjenje. Izvod bi tako mehanicki potvrdio tvrdnju koju izvor
+        # ne izrice: tocno razred greske zbog kojeg je 26 profila 2026-08-29 vraceno s `ieee` na
+        # `custom` (nijedan njihov izvor IEEE ne spominje; jedina pojava rijeci u cijelom korpusu
+        # tih vrela bilo je ime casopisa u primjeru literature).
+        #
+        # Zaostravanje ne obara nijednu postojecu tvrdnju: izmjereno na svih 141 `citation-style`
+        # unosa, nijedan ne prolazi SAMO na zagradi. Gard je dakle preventivan, ne retroaktivan.
         signatures = {
-            "ieee": ["ieee", "[1]", "uglat"],
-            "vancouver": ["vancouver", "[1]", "uglat"],
+            "ieee": ["ieee"],
+            "vancouver": ["vancouver"],
             "apa7": ["apa"],
             "harvard": ["harvard"],
             "chicago-notes": ["chicago"],
@@ -625,6 +634,11 @@ SELFTEST: list[tuple[str, object, str, bool]] = [
     # Sve tri "grize" kontrole su prepisane iz izvora koji su prosireni rjecnik iznudili: mjerenje je
     # 60 tvrdnji proglasilo neuporistenima, a uzorak od 6 pokazao da su 3 promasaj RJECNIKA.
     ("justify", True, "Margine su standardne, a tekst poravnat s obje strane.", True),
+    # --- IMENOVAN CITATNI STIL: ime, ne puka zagrada -------------------------------------------
+    ("citation-style", "ieee", "Literatura se navodi prema IEEE standardu.", True),
+    ("citation-style", "ieee", "Svaki literaturni navod treba oznaciti brojem [1], koji se poziva na izvor.", False),
+    ("citation-style", "vancouver", "Koristi se Vancouver stil citiranja.", True),
+    ("citation-style", "vancouver", "Reference se navode rednim brojem u uglatim zagradama.", False),
     ("justify", True, "Tekst treba biti poravnat uz lijevi i desni rub stranice.", True),
     ("justify", True, "Die folgenden Angaben gelten verbindlich. Blocksatz.", True),
     ("justify", True, "Rad se pise u formatu A-4, font Times New Roman, velicina 12.", False),

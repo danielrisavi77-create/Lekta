@@ -15,7 +15,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "kifos-zavrsni",
@@ -23,7 +24,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "securus-zavrsni",
@@ -31,7 +33,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vsig-diplomski",
@@ -39,7 +42,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vsig-zavrsni",
@@ -47,7 +51,128 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
+    }
+  ],
+  "styleNotInQuoteCount": 13,
+  "styleNotInQuote": [
+    {
+      "profileId": "erf-diplomski",
+      "token": "apa7",
+      "claim": "advisory",
+      "claimedValue": "apa7",
+      "authority": "program-page",
+      "sourceId": "erf-upute-diplomski",
+      "quoteNamesStyle": false
+    },
+    {
+      "profileId": "ffrz-bakalaureatski",
+      "token": "harvard",
+      "claim": "verified",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "ffrz-oblikovanje-bakalaureatski-2021",
+      "quoteNamesStyle": false
+    },
+    {
+      "profileId": "ffrz-diplomski",
+      "token": "harvard",
+      "claim": "verified",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "ffrz-oblikovanje-diplomski-2021",
+      "quoteNamesStyle": false
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "token": "chicago-notes",
+      "claim": "verified",
+      "claimedValue": "chicago-notes",
+      "authority": "program-page",
+      "sourceId": "ffzg-filoz-diplomski-2019",
+      "quoteNamesStyle": false
+    },
+    {
+      "profileId": "geof-diplomski",
+      "token": "harvard",
+      "claim": "verified",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "geof-naputak-ocjenski-2000",
+      "quoteNamesStyle": false
+    },
+    {
+      "profileId": "geof-doktorski",
+      "token": "harvard",
+      "claim": "verified",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "geof-naputak-ocjenski-2000",
+      "quoteNamesStyle": false
+    },
+    {
+      "profileId": "kbf-diplomski",
+      "token": "chicago-notes",
+      "claim": "verified",
+      "claimedValue": "chicago-notes",
+      "authority": "program-page",
+      "sourceId": "kbf-upute-zavrsni-diplomski-2017",
+      "quoteNamesStyle": false
+    },
+    {
+      "profileId": "kbf-zavrsni",
+      "token": "chicago-notes",
+      "claim": "verified",
+      "claimedValue": "chicago-notes",
+      "authority": "program-page",
+      "sourceId": "kbf-upute-zavrsni-diplomski-2017",
+      "quoteNamesStyle": false
+    },
+    {
+      "profileId": "mef-diplomski",
+      "token": "harvard",
+      "claim": "verified",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "mef-pravilnik-diplomski-2023",
+      "quoteNamesStyle": false
+    },
+    {
+      "profileId": "sfzg-diplomski",
+      "token": "vancouver",
+      "claim": "verified",
+      "claimedValue": "vancouver",
+      "authority": "program-page",
+      "sourceId": "sfzg-naputak-diplomski-2024",
+      "quoteNamesStyle": false
+    },
+    {
+      "profileId": "sumfak-diplomski",
+      "token": "harvard",
+      "claim": "advisory",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "quoteNamesStyle": false
+    },
+    {
+      "profileId": "sumfak-zavrsni",
+      "token": "harvard",
+      "claim": "advisory",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "quoteNamesStyle": false
+    },
+    {
+      "profileId": "vef-diplomski",
+      "token": "harvard",
+      "claim": "advisory",
+      "claimedValue": "harvard",
+      "authority": "program-page",
+      "sourceId": "vef-naputak-diplomski-2024",
+      "quoteNamesStyle": false
     }
   ],
   "byToken": {
@@ -70,7 +195,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "agr-doktorski",
@@ -78,7 +204,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "agr-zavrsni",
@@ -86,7 +213,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "alu-doktorski",
@@ -94,7 +222,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "bak-diplomski",
@@ -102,7 +231,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "bak-zavrsni",
@@ -110,7 +240,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "biolos-diplomski",
@@ -118,7 +249,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "biolos-zavrsni",
@@ -126,7 +258,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "biotech-diplomski",
@@ -134,7 +267,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "biotech-zavrsni",
@@ -142,7 +276,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "effectus-diplomski",
@@ -150,7 +285,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "effectus-seminarski",
@@ -158,7 +294,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "effectus-zavrsni",
@@ -166,7 +303,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "efos-diplomski",
@@ -174,7 +312,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "efos-opci-akademski-rad",
@@ -182,7 +321,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "efos-zavrsni",
@@ -190,7 +330,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "efri-diplomski",
@@ -198,7 +339,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "efri-zavrsni",
@@ -206,7 +348,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "efzg-diplomski",
@@ -214,7 +357,8 @@
       "claim": "advisory",
       "claimedValue": "harvard",
       "authority": "program-page",
-      "sourceId": "efzg-pravilnik-diplomski-2012"
+      "sourceId": "efzg-pravilnik-diplomski-2012",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "efzg-specijalisticki",
@@ -222,7 +366,8 @@
       "claim": "advisory",
       "claimedValue": "harvard",
       "authority": "program-page",
-      "sourceId": "efzg-upute-specijalisticki-2021"
+      "sourceId": "efzg-upute-specijalisticki-2021",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "efzg-strucni-racunovodstvo",
@@ -230,7 +375,8 @@
       "claim": "advisory",
       "claimedValue": "harvard",
       "authority": "program-page",
-      "sourceId": "efzg-upute-strucni-diplomski-racunovodstvo"
+      "sourceId": "efzg-upute-strucni-diplomski-racunovodstvo",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "efzg-zavrsni",
@@ -238,7 +384,8 @@
       "claim": "advisory",
       "claimedValue": "harvard",
       "authority": "program-page",
-      "sourceId": "efzg-postupak-zavrsni"
+      "sourceId": "efzg-postupak-zavrsni",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "erf-diplomski",
@@ -246,7 +393,8 @@
       "claim": "advisory",
       "claimedValue": "apa7",
       "authority": "program-page",
-      "sourceId": "erf-upute-diplomski"
+      "sourceId": "erf-upute-diplomski",
+      "quoteNamesStyle": false
     },
     {
       "profileId": "fazos-diplomski",
@@ -254,7 +402,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fazos-zavrsni",
@@ -262,7 +411,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fbf-specijalisticki",
@@ -270,7 +420,8 @@
       "claim": "verified",
       "claimedValue": "vancouver",
       "authority": "program-page",
-      "sourceId": "fbf-upute-spec-2014"
+      "sourceId": "fbf-upute-spec-2014",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fdmz-diplomski",
@@ -278,7 +429,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fer-diplomski",
@@ -286,7 +438,8 @@
       "claim": "advisory",
       "claimedValue": "custom",
       "authority": "general",
-      "sourceId": "fer-upute-diplomski-zemris"
+      "sourceId": "fer-upute-diplomski-zemris",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fer-doktorski",
@@ -294,7 +447,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fer-zavrsni",
@@ -302,7 +456,8 @@
       "claim": "advisory",
       "claimedValue": "custom",
       "authority": "general",
-      "sourceId": "fer-upute-diplomski-zemris"
+      "sourceId": "fer-upute-diplomski-zemris",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ferit-diplomski",
@@ -310,7 +465,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ferit-zavrsni",
@@ -318,7 +474,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fesb-diplomski",
@@ -326,7 +483,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fesb-zavrsni",
@@ -334,7 +492,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffos-germanistika-diplomski",
@@ -342,7 +501,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffos-germanistika-zavrsni",
@@ -350,7 +510,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffos-informatologija-diplomski",
@@ -358,7 +519,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffos-informatologija-zavrsni",
@@ -366,7 +528,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffos-povijest-diplomski",
@@ -374,7 +537,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffos-povijest-zavrsni",
@@ -382,7 +546,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffos-psihologija-diplomski",
@@ -390,7 +555,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffos-psihologija-zavrsni",
@@ -398,7 +564,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffri-germanistika-diplomski",
@@ -406,7 +573,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffri-germanistika-zavrsni",
@@ -414,7 +582,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffri-kulturalni-diplomski",
@@ -422,7 +591,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffri-povum-diplomski",
@@ -430,7 +600,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffri-povum-zavrsni",
@@ -438,7 +609,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffri-psihologija-diplomski",
@@ -446,7 +618,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffrz-bakalaureatski",
@@ -454,7 +627,8 @@
       "claim": "verified",
       "claimedValue": "harvard",
       "authority": "program-page",
-      "sourceId": "ffrz-oblikovanje-bakalaureatski-2021"
+      "sourceId": "ffrz-oblikovanje-bakalaureatski-2021",
+      "quoteNamesStyle": false
     },
     {
       "profileId": "ffrz-diplomski",
@@ -462,7 +636,8 @@
       "claim": "verified",
       "claimedValue": "harvard",
       "authority": "program-page",
-      "sourceId": "ffrz-oblikovanje-diplomski-2021"
+      "sourceId": "ffrz-oblikovanje-diplomski-2021",
+      "quoteNamesStyle": false
     },
     {
       "profileId": "ffzg-arheologija-graduate",
@@ -470,7 +645,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffzg-etnologija-graduate",
@@ -478,7 +654,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffzg-filozofija-diplomski",
@@ -486,7 +663,8 @@
       "claim": "verified",
       "claimedValue": "chicago-notes",
       "authority": "program-page",
-      "sourceId": "ffzg-filoz-diplomski-2019"
+      "sourceId": "ffzg-filoz-diplomski-2019",
+      "quoteNamesStyle": false
     },
     {
       "profileId": "ffzg-informacijske-zavrsni",
@@ -494,7 +672,8 @@
       "claim": "advisory",
       "claimedValue": "harvard",
       "authority": "program-page",
-      "sourceId": "ffzg-inf-diplomski-2024"
+      "sourceId": "ffzg-inf-diplomski-2024",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffzg-kroatistika-graduate",
@@ -502,7 +681,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffzg-lingvistika-diplomski",
@@ -510,7 +690,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffzg-pedagogija-graduate",
@@ -518,7 +699,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffzg-povijest-umjetnosti-diplomski",
@@ -526,7 +708,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffzg-psihologija-diplomski",
@@ -534,7 +717,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ffzg-sociologija-diplomski",
@@ -542,7 +726,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fhs-diplomski",
@@ -550,7 +735,8 @@
       "claim": "advisory",
       "claimedValue": "apa7",
       "authority": "program-page",
-      "sourceId": "fhs-upute-diplomski-2026"
+      "sourceId": "fhs-upute-diplomski-2026",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fmtu-diplomski",
@@ -558,7 +744,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fmtu-zavrsni",
@@ -566,7 +753,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "foozos-diplomski",
@@ -574,7 +762,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpz-diplomski",
@@ -582,7 +771,8 @@
       "claim": "advisory",
       "claimedValue": "custom",
       "authority": "program-page",
-      "sourceId": "fpz-upute-zavrsni-diplomski-2018"
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpz-zavrsni",
@@ -590,7 +780,8 @@
       "claim": "advisory",
       "claimedValue": "custom",
       "authority": "program-page",
-      "sourceId": "fpz-upute-zavrsni-diplomski-2018"
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpzg-doktorski-politologija",
@@ -598,7 +789,8 @@
       "claim": "verified",
       "claimedValue": "fpzg",
       "authority": "general",
-      "sourceId": "fpzg-pravila-navodenja-citiranja"
+      "sourceId": "fpzg-pravila-navodenja-citiranja",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpzg-mes-master-thesis",
@@ -606,7 +798,8 @@
       "claim": "verified",
       "claimedValue": "fpzg",
       "authority": "general",
-      "sourceId": "fpzg-pravila-navodenja-citiranja"
+      "sourceId": "fpzg-pravila-navodenja-citiranja",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
@@ -614,7 +807,8 @@
       "claim": "verified",
       "claimedValue": "fpzg",
       "authority": "general",
-      "sourceId": "fpzg-pravila-navodenja-citiranja"
+      "sourceId": "fpzg-pravila-navodenja-citiranja",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpzg-novinarstvo-diplomski",
@@ -622,7 +816,8 @@
       "claim": "verified",
       "claimedValue": "fpzg",
       "authority": "general",
-      "sourceId": "fpzg-pravila-navodenja-citiranja"
+      "sourceId": "fpzg-pravila-navodenja-citiranja",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-av",
@@ -630,7 +825,8 @@
       "claim": "verified",
       "claimedValue": "fpzg",
       "authority": "general",
-      "sourceId": "fpzg-pravila-navodenja-citiranja"
+      "sourceId": "fpzg-pravila-navodenja-citiranja",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
@@ -638,7 +834,8 @@
       "claim": "verified",
       "claimedValue": "fpzg",
       "authority": "general",
-      "sourceId": "fpzg-pravila-navodenja-citiranja"
+      "sourceId": "fpzg-pravila-navodenja-citiranja",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
@@ -646,7 +843,8 @@
       "claim": "verified",
       "claimedValue": "fpzg",
       "authority": "general",
-      "sourceId": "fpzg-pravila-navodenja-citiranja"
+      "sourceId": "fpzg-pravila-navodenja-citiranja",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpzg-politologija-diplomski",
@@ -654,7 +852,8 @@
       "claim": "verified",
       "claimedValue": "fpzg",
       "authority": "general",
-      "sourceId": "fpzg-pravila-navodenja-citiranja"
+      "sourceId": "fpzg-pravila-navodenja-citiranja",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpzg-politologija-zavrsni",
@@ -662,7 +861,8 @@
       "claim": "verified",
       "claimedValue": "fpzg",
       "authority": "general",
-      "sourceId": "fpzg-pravila-navodenja-citiranja"
+      "sourceId": "fpzg-pravila-navodenja-citiranja",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
@@ -670,7 +870,8 @@
       "claim": "verified",
       "claimedValue": "fpzg",
       "authority": "general",
-      "sourceId": "fpzg-pravila-navodenja-citiranja"
+      "sourceId": "fpzg-pravila-navodenja-citiranja",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpzg-specijalisticki-prilagodba-eu",
@@ -678,7 +879,8 @@
       "claim": "verified",
       "claimedValue": "fpzg",
       "authority": "general",
-      "sourceId": "fpzg-pravila-navodenja-citiranja"
+      "sourceId": "fpzg-pravila-navodenja-citiranja",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
@@ -686,7 +888,8 @@
       "claim": "verified",
       "claimedValue": "fpzg",
       "authority": "general",
-      "sourceId": "fpzg-pravila-navodenja-citiranja"
+      "sourceId": "fpzg-pravila-navodenja-citiranja",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
@@ -694,7 +897,8 @@
       "claim": "verified",
       "claimedValue": "fpzg",
       "authority": "general",
-      "sourceId": "fpzg-pravila-navodenja-citiranja"
+      "sourceId": "fpzg-pravila-navodenja-citiranja",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpzpu-diplomski",
@@ -702,7 +906,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fpzpu-zavrsni",
@@ -710,7 +915,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fsb-diplomski",
@@ -718,7 +924,8 @@
       "claim": "advisory",
       "claimedValue": "custom",
       "authority": "general",
-      "sourceId": "fsb-upute-radovi-2020"
+      "sourceId": "fsb-upute-radovi-2020",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fsb-opci-akademski-rad",
@@ -726,7 +933,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fsb-zavrsni",
@@ -734,7 +942,8 @@
       "claim": "advisory",
       "claimedValue": "custom",
       "authority": "general",
-      "sourceId": "fsb-upute-radovi-2020"
+      "sourceId": "fsb-upute-radovi-2020",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ftrr-diplomski",
@@ -742,7 +951,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ftrr-zavrsni",
@@ -750,7 +960,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fzsri-diplomski",
@@ -758,7 +969,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "fzsri-zavrsni",
@@ -766,7 +978,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "geof-diplomski",
@@ -774,7 +987,8 @@
       "claim": "verified",
       "claimedValue": "harvard",
       "authority": "program-page",
-      "sourceId": "geof-naputak-ocjenski-2000"
+      "sourceId": "geof-naputak-ocjenski-2000",
+      "quoteNamesStyle": false
     },
     {
       "profileId": "geof-doktorski",
@@ -782,7 +996,8 @@
       "claim": "verified",
       "claimedValue": "harvard",
       "authority": "program-page",
-      "sourceId": "geof-naputak-ocjenski-2000"
+      "sourceId": "geof-naputak-ocjenski-2000",
+      "quoteNamesStyle": false
     },
     {
       "profileId": "geof-opci-akademski-rad",
@@ -790,7 +1005,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "grad-diplomski",
@@ -798,7 +1014,8 @@
       "claim": "advisory",
       "claimedValue": "custom",
       "authority": "program-page",
-      "sourceId": "grad-predlozak-2024"
+      "sourceId": "grad-predlozak-2024",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "grad-zavrsni",
@@ -806,7 +1023,8 @@
       "claim": "advisory",
       "claimedValue": "custom",
       "authority": "program-page",
-      "sourceId": "grad-predlozak-2024"
+      "sourceId": "grad-predlozak-2024",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "grafos-diplomski",
@@ -814,7 +1032,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "grafos-zavrsni",
@@ -822,7 +1041,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "grf-diplomski",
@@ -830,7 +1050,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "grf-zavrsni",
@@ -838,7 +1059,8 @@
       "claim": "advisory",
       "claimedValue": "custom",
       "authority": "program-page",
-      "sourceId": "grf-upute-zavrsni"
+      "sourceId": "grf-upute-zavrsni",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "kbf-diplomski",
@@ -846,7 +1068,8 @@
       "claim": "verified",
       "claimedValue": "chicago-notes",
       "authority": "program-page",
-      "sourceId": "kbf-upute-zavrsni-diplomski-2017"
+      "sourceId": "kbf-upute-zavrsni-diplomski-2017",
+      "quoteNamesStyle": false
     },
     {
       "profileId": "kbf-zavrsni",
@@ -854,7 +1077,8 @@
       "claim": "verified",
       "claimedValue": "chicago-notes",
       "authority": "program-page",
-      "sourceId": "kbf-upute-zavrsni-diplomski-2017"
+      "sourceId": "kbf-upute-zavrsni-diplomski-2017",
+      "quoteNamesStyle": false
     },
     {
       "profileId": "kemos-diplomski",
@@ -862,7 +1086,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "kemos-zavrsni",
@@ -870,7 +1095,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "kif-diplomski",
@@ -878,7 +1104,8 @@
       "claim": "verified",
       "claimedValue": "apa7",
       "authority": "program-page",
-      "sourceId": "kif-upute-diplomski-2023"
+      "sourceId": "kif-upute-diplomski-2023",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "kif-doktorski",
@@ -886,7 +1113,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "kif-specijalisticki",
@@ -894,7 +1122,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "kifos-diplomski",
@@ -902,7 +1131,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "kifos-zavrsni",
@@ -910,7 +1140,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "kifst-diplomski",
@@ -918,7 +1149,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "medri-farmacija-diplomski",
@@ -926,7 +1158,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "medri-medicina-diplomski",
@@ -934,7 +1167,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "mef-diplomski",
@@ -942,7 +1176,8 @@
       "claim": "verified",
       "claimedValue": "harvard",
       "authority": "program-page",
-      "sourceId": "mef-pravilnik-diplomski-2023"
+      "sourceId": "mef-pravilnik-diplomski-2023",
+      "quoteNamesStyle": false
     },
     {
       "profileId": "mef-doktorski",
@@ -950,7 +1185,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "mefos-diplomski",
@@ -958,7 +1194,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "mefos-zavrsni",
@@ -966,7 +1203,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "mefst-diplomski",
@@ -974,7 +1212,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "mev-zavrsni",
@@ -982,7 +1221,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "muza-diplomski",
@@ -990,7 +1230,8 @@
       "claim": "advisory",
       "claimedValue": "custom",
       "authority": "program-page",
-      "sourceId": "muza-pravilnik-zavrsetak-2025"
+      "sourceId": "muza-pravilnik-zavrsetak-2025",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pbf-diplomski",
@@ -998,7 +1239,8 @@
       "claim": "advisory",
       "claimedValue": "harvard",
       "authority": "program-page",
-      "sourceId": "pbf-upute-diplomski-2018"
+      "sourceId": "pbf-upute-diplomski-2018",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pfri-diplomski",
@@ -1006,7 +1248,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pfri-zavrsni",
@@ -1014,7 +1257,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pfst-diplomski",
@@ -1022,7 +1266,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pfst-zavrsni",
@@ -1030,7 +1275,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pmf-biologija-graduate",
@@ -1038,7 +1284,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pmf-fizika-graduate",
@@ -1046,7 +1293,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pmf-geofizika-graduate",
@@ -1054,7 +1302,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pmf-geografija-diplomski",
@@ -1062,7 +1311,8 @@
       "claim": "verified",
       "claimedValue": "harvard",
       "authority": "program-page",
-      "sourceId": "pmf-geog-upute-diplomski-2026"
+      "sourceId": "pmf-geog-upute-diplomski-2026",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pmf-geologija-graduate",
@@ -1070,7 +1320,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pmf-matematika-graduate",
@@ -1078,7 +1329,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pmfst-diplomski",
@@ -1086,7 +1338,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pmfst-zavrsni",
@@ -1094,7 +1347,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pravo-doktorski-pravne-znanosti",
@@ -1102,7 +1356,8 @@
       "claim": "verified",
       "claimedValue": "pravo-fusnote",
       "authority": "general",
-      "sourceId": "pravo-upute-oblikovanje-2024"
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pravo-integrirani-diplomski",
@@ -1110,7 +1365,8 @@
       "claim": "verified",
       "claimedValue": "pravo-fusnote",
       "authority": "general",
-      "sourceId": "pravo-upute-oblikovanje-2024"
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pravo-javna-uprava-diplomski",
@@ -1118,7 +1374,8 @@
       "claim": "verified",
       "claimedValue": "pravo-fusnote",
       "authority": "general",
-      "sourceId": "pravo-upute-oblikovanje-2024"
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
@@ -1126,7 +1383,8 @@
       "claim": "verified",
       "claimedValue": "pravo-fusnote",
       "authority": "general",
-      "sourceId": "pravo-upute-oblikovanje-2024"
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
@@ -1134,7 +1392,8 @@
       "claim": "verified",
       "claimedValue": "pravo-fusnote",
       "authority": "general",
-      "sourceId": "pravo-upute-oblikovanje-2024"
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pravo-porezni-prijediplomski",
@@ -1142,7 +1401,8 @@
       "claim": "verified",
       "claimedValue": "pravo-fusnote",
       "authority": "general",
-      "sourceId": "pravo-upute-oblikovanje-2024"
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pravo-socijalna-politika-diplomski",
@@ -1150,7 +1410,8 @@
       "claim": "verified",
       "claimedValue": "pravo-social-author",
       "authority": "program-page",
-      "sourceId": "pravo-scsr-upute-diplomski-2021"
+      "sourceId": "pravo-scsr-upute-diplomski-2021",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pravo-socijalne-djelatnosti-doktorski",
@@ -1158,7 +1419,8 @@
       "claim": "verified",
       "claimedValue": "pravo-social-author",
       "authority": "program-page",
-      "sourceId": "pravo-scsr-upute-poslijediplomski"
+      "sourceId": "pravo-scsr-upute-poslijediplomski",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pravo-socijalne-djelatnosti-specijalisticki",
@@ -1166,7 +1428,8 @@
       "claim": "verified",
       "claimedValue": "pravo-social-author",
       "authority": "program-page",
-      "sourceId": "pravo-scsr-upute-poslijediplomski"
+      "sourceId": "pravo-scsr-upute-poslijediplomski",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pravo-socijalni-opci-akademski-rad",
@@ -1174,7 +1437,8 @@
       "claim": "verified",
       "claimedValue": "pravo-social-author",
       "authority": "program-page",
-      "sourceId": "pravo-scsr-upute-zavrsni-2024"
+      "sourceId": "pravo-scsr-upute-zavrsni-2024",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
@@ -1182,7 +1446,8 @@
       "claim": "verified",
       "claimedValue": "pravo-social-author",
       "authority": "program-page",
-      "sourceId": "pravo-scsr-upute-diplomski-2021"
+      "sourceId": "pravo-scsr-upute-diplomski-2021",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
@@ -1190,7 +1455,8 @@
       "claim": "verified",
       "claimedValue": "pravo-social-author",
       "authority": "program-page",
-      "sourceId": "pravo-scsr-upute-zavrsni-2024"
+      "sourceId": "pravo-scsr-upute-zavrsni-2024",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pravo-specijalisticki-pravni-opci",
@@ -1198,7 +1464,8 @@
       "claim": "verified",
       "claimedValue": "pravo-fusnote",
       "authority": "general",
-      "sourceId": "pravo-upute-oblikovanje-2024"
+      "sourceId": "pravo-upute-oblikovanje-2024",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pravri-diplomski",
@@ -1206,7 +1473,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pravri-opci-akademski-rad",
@@ -1214,7 +1482,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "pravri-zavrsni",
@@ -1222,7 +1491,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ptfos-diplomski",
@@ -1230,7 +1500,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "rgnf-diplomski",
@@ -1238,7 +1509,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "rgnf-zavrsni",
@@ -1246,7 +1518,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "riteh-diplomski",
@@ -1254,7 +1527,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "riteh-zavrsni",
@@ -1262,7 +1536,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "securus-zavrsni",
@@ -1270,7 +1545,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "sfzg-diplomski",
@@ -1278,7 +1554,8 @@
       "claim": "verified",
       "claimedValue": "vancouver",
       "authority": "program-page",
-      "sourceId": "sfzg-naputak-diplomski-2024"
+      "sourceId": "sfzg-naputak-diplomski-2024",
+      "quoteNamesStyle": false
     },
     {
       "profileId": "sumfak-diplomski",
@@ -1286,7 +1563,8 @@
       "claim": "advisory",
       "claimedValue": "harvard",
       "authority": "program-page",
-      "sourceId": "sumfak-upute-zavrsni-diplomski-2024"
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "quoteNamesStyle": false
     },
     {
       "profileId": "sumfak-zavrsni",
@@ -1294,7 +1572,8 @@
       "claim": "advisory",
       "claimedValue": "harvard",
       "authority": "program-page",
-      "sourceId": "sumfak-upute-zavrsni-diplomski-2024"
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "quoteNamesStyle": false
     },
     {
       "profileId": "ttf-diplomski",
@@ -1302,7 +1581,8 @@
       "claim": "advisory",
       "claimedValue": "vancouver",
       "authority": "program-page",
-      "sourceId": "ttf-upute-zavrsni-diplomski"
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ttf-dizajn-diplomski",
@@ -1310,7 +1590,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ttf-dizajn-zavrsni",
@@ -1318,7 +1599,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ttf-zavrsni",
@@ -1326,7 +1608,8 @@
       "claim": "advisory",
       "claimedValue": "vancouver",
       "authority": "program-page",
-      "sourceId": "ttf-upute-zavrsni-diplomski"
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ufri-diplomski",
@@ -1334,7 +1617,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ufzg-diplomski",
@@ -1342,7 +1626,8 @@
       "claim": "verified",
       "claimedValue": "apa7",
       "authority": "program-page",
-      "sourceId": "ufzg-upute-zavrsni-diplomski-2026"
+      "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "ufzg-zavrsni",
@@ -1350,7 +1635,8 @@
       "claim": "verified",
       "claimedValue": "apa7",
       "authority": "program-page",
-      "sourceId": "ufzg-upute-zavrsni-diplomski-2026"
+      "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unidu-ekonomija-diplomski",
@@ -1358,7 +1644,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unidu-ekonomija-zavrsni",
@@ -1366,7 +1653,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unidu-elektro-diplomski",
@@ -1374,7 +1662,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unidu-elektro-zavrsni",
@@ -1382,7 +1671,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unidu-komunikologija-diplomski",
@@ -1390,7 +1680,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unidu-komunikologija-zavrsni",
@@ -1398,7 +1689,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unidu-marikultura-diplomski",
@@ -1406,7 +1698,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unidu-povijest-zavrsni",
@@ -1414,7 +1707,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unidu-umjetnost-diplomski",
@@ -1422,7 +1716,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unidu-umjetnost-zavrsni",
@@ -1430,7 +1725,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unin-biomedicina-diplomski",
@@ -1438,7 +1734,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unin-biomedicina-zavrsni",
@@ -1446,7 +1743,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unin-drustveni-diplomski",
@@ -1454,7 +1752,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unin-drustveni-zavrsni",
@@ -1462,7 +1761,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unin-tehnicki-diplomski",
@@ -1470,7 +1770,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unin-tehnicki-zavrsni",
@@ -1478,7 +1779,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unizd-ekologija-diplomski",
@@ -1486,7 +1788,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unizd-ekonomija-diplomski",
@@ -1494,7 +1797,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unizd-ekonomija-zavrsni",
@@ -1502,7 +1806,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unizd-etnologija-diplomski",
@@ -1510,7 +1815,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unizd-geografija-diplomski",
@@ -1518,7 +1824,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unizd-informacijske-diplomski",
@@ -1526,7 +1833,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unizd-informacijske-zavrsni",
@@ -1534,7 +1842,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unizd-kroatistika-diplomski",
@@ -1542,7 +1851,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unizd-kroatistika-zavrsni",
@@ -1550,7 +1860,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unizd-pedagogija-diplomski",
@@ -1558,7 +1869,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unizd-povijest-umj-diplomski",
@@ -1566,7 +1878,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unizd-povijest-umj-zavrsni",
@@ -1574,7 +1887,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unizd-psihologija-diplomski",
@@ -1582,7 +1896,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unizd-psihologija-zavrsni",
@@ -1590,7 +1905,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unizd-zdravstvo-diplomski",
@@ -1598,7 +1914,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "unizd-zdravstvo-zavrsni",
@@ -1606,7 +1923,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vef-diplomski",
@@ -1614,7 +1932,8 @@
       "claim": "advisory",
       "claimedValue": "harvard",
       "authority": "program-page",
-      "sourceId": "vef-naputak-diplomski-2024"
+      "sourceId": "vef-naputak-diplomski-2024",
+      "quoteNamesStyle": false
     },
     {
       "profileId": "veleri-diplomski",
@@ -1622,7 +1941,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "veleri-zavrsni",
@@ -1630,7 +1950,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vevu-diplomski",
@@ -1638,7 +1959,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vevu-zavrsni",
@@ -1646,7 +1968,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vguk-diplomski",
@@ -1654,7 +1977,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vguk-zavrsni",
@@ -1662,7 +1986,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vhzk-zavrsni",
@@ -1670,7 +1995,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vkjs-diplomski",
@@ -1678,7 +2004,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vkjs-zavrsni",
@@ -1686,7 +2013,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vsig-diplomski",
@@ -1694,7 +2022,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vsig-zavrsni",
@@ -1702,7 +2031,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vss-diplomski",
@@ -1710,7 +2040,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vss-zavrsni",
@@ -1718,7 +2049,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vub-diplomski",
@@ -1726,7 +2058,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vub-zavrsni-sestrinstvo",
@@ -1734,7 +2067,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vub-zavrsni-tehnicki",
@@ -1742,7 +2076,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vuka-lovstvo-zavrsni",
@@ -1750,7 +2085,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vuka-poslovni-diplomski",
@@ -1758,7 +2094,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
@@ -1766,7 +2103,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vuka-poslovni-zavrsni",
@@ -1774,7 +2112,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vuka-prehrambena-zavrsni",
@@ -1782,7 +2121,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vuka-sigurnost-diplomski",
@@ -1790,7 +2130,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vuka-sigurnost-zavrsni",
@@ -1798,7 +2139,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vuka-strojarski-diplomski",
@@ -1806,7 +2148,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vuka-strojarski-zavrsni",
@@ -1814,7 +2157,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vus-diplomski",
@@ -1822,7 +2166,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vus-zavrsni",
@@ -1830,7 +2175,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vuv-diplomski",
@@ -1838,7 +2184,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vuv-zavrsni",
@@ -1846,7 +2193,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vvg-diplomski",
@@ -1854,7 +2202,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     },
     {
       "profileId": "vvg-zavrsni",
@@ -1862,7 +2211,8 @@
       "claim": "none",
       "claimedValue": null,
       "authority": null,
-      "sourceId": null
+      "sourceId": null,
+      "quoteNamesStyle": true
     }
   ]
 }
