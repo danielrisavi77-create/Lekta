@@ -120,19 +120,3 @@
   --paper-sh: 0 2px 5px rgba(60, 50, 30, .18), 0 18px 44px rgba(60, 50, 30, .25);
   --paper-sh-sm: 0 1px 4px rgba(60, 50, 30, .15), 0 8px 22px rgba(60, 50, 30, .18);
 }
-
-
-/* Visual System v2: shared roles for the correction-desk surfaces. */
-:root {
-  --v2-display: var(--display-serif);
-  --v2-ui: var(--ui);
-  --v2-data: var(--mono);
-  --v2-paper-shadow: var(--paper-sh);
-  --v2-paper-shadow-small: var(--paper-sh-sm);
-  --v2-focus-ring: var(--focus);
-  --v2-paper-edge: var(--paper-line);
-  --v2-correction: var(--red);
-  --v2-status-pass: var(--pass);
-  --v2-status-warning: var(--warn);
-  --v2-status-blocker: var(--red-deep);
-}

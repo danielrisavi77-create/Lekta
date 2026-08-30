@@ -1,8 +1,4 @@
-import { resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
-
-const configDirectory = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
   // Vitest NE nasljeduje vite.config.ts pa build-flag mora i ovdje; u testovima su
@@ -17,7 +13,7 @@ export default defineConfig({
     // Gate MORA pasti ako se ne kolektira nijedan test (npr. loše rješavanje globa ili
     // toolchain regresija koja tiho kolektira 0): inace `npm run check` laže zeleno. Vidi AUD-46.
     passWithNoTests: false,
-    setupFiles: [resolve(configDirectory, 'tests/setup/xml-dom.ts')],
+    setupFiles: ['./tests/setup/xml-dom.ts'],
     // Paralelne sesije drze git worktreeove pod .claude/worktrees/; default exclude ih ne
     // pokriva pa bi parent `npm run check` testirao TUDJU kopiju repoa (duplo testova +
     // tudi crveni padovi). Worktree sesija svoje testove vrti iz vlastitog cwd-a.

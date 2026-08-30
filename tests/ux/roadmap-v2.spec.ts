@@ -3,13 +3,6 @@ import path from 'node:path';
 
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
-async function dismissAnalyticsConsent(page: Page) {
-  const banner = page.locator('#consentBanner');
-  if (await banner.isVisible().catch(() => false)) {
-    await banner.getByRole('button').first().click();
-  }
-}
-
 async function expectInsideFold(page: Page, selector: string, viewportHeight: number) {
   const box = await page.locator(selector).boundingBox();
   expect(box, `${selector} mora biti vidljiv`).not.toBeNull();
@@ -21,7 +14,6 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 375, height: 667 }
   test(`mobilni upload stane u prvi ekran ${viewport.width}x${viewport.height}`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await page.goto('/');
-    await dismissAnalyticsConsent(page);
     await expectInsideFold(page, '.intake-title', viewport.height);
     await expectInsideFold(page, '.intake-intro', viewport.height);
     await expectInsideFold(page, '#intakeDropzone', viewport.height);
@@ -31,7 +23,6 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 375, height: 667 }
       page.locator('#intakeFile').setInputFiles(fixture),
     ]);
     await expect(page.locator('#main-content')).toHaveAttribute('data-workspace-state', 'profile', { timeout: 90_000 });
-    await dismissAnalyticsConsent(page);
     await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '1');
     const sticky = page.locator('.lek-stepnav-1');
     await expect(sticky).toBeVisible();
@@ -45,7 +36,6 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 375, height: 667 }
 test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/');
-  await dismissAnalyticsConsent(page);
   await Promise.all([
     page.waitForURL(/\/rad\/#session=[^&]+$/),
     page.locator('#intakeFile').setInputFiles(fixture),
@@ -59,8 +49,6 @@ test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', asyn
   if (await confirm.isVisible()) await confirm.click();
   await expect(page.locator('#progressView')).toBeHidden({ timeout: 90_000 });
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
-  await page.locator('#resultCockpit [data-cockpit-advanced]').click();
-  await expect(page.locator('#resultCockpitAdvancedContent')).toBeVisible();
   await expect(page.locator('#triagePanel .finding-card').first()).toBeVisible();
   await expect(page.locator('#triagePanel .finding-card')).toHaveCount(Math.min(3, await page.locator('#triagePanel .finding-card').count()));
   await expect(page.locator('#scoreLabel')).toHaveText('Automatska tehnička ocjena');
@@ -110,7 +98,7 @@ test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', asyn
   await expect(page.locator('.metrics .metric').nth(1)).toBeHidden();
   await page.locator('#guideOpenPreview').scrollIntoViewIfNeeded();
   await expectInsideFold(page, '#guideOpenPreview', 844);
-  await expect(page.locator('[data-cockpit-header] h2')).toBeVisible();
+  await expect(page.locator('#resultTitle')).toBeVisible();
   await page.setViewportSize({ width: 1440, height: 1000 });
 
   const preview = page.locator('#guideOpenPreview');

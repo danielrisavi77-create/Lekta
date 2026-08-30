@@ -10,10 +10,8 @@ for (const pageSpec of FREE_TOOL_PAGES) {
     await expect(page.locator('main')).toHaveCount(1);
     await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.locator(pageSpec.primarySelector)).toBeVisible();
-    if (pageSpec.route !== '/') {
-      await expect(page.locator('#mobileMenuBtn')).toBeVisible();
-      await expect(page.locator('#themeBtn')).toBeVisible();
-    }
+    await expect(page.locator('#mobileMenuBtn')).toBeVisible();
+    await expect(page.locator('#themeBtn')).toBeVisible();
 
     if (pageSpec.workspaceSelector) {
       await expect(page.locator(pageSpec.workspaceSelector)).toBeVisible();
