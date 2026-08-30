@@ -111,8 +111,21 @@ for (const pageSpec of FREE_TOOL_PAGES.filter((p) => p.workspaceSelector || p.ro
   });
 }
 
-test('alati.html: hero kartica na tamnoj plohi ostaje citljiva', async ({ page }) => {
+/**
+ * OBJE TEME, ne samo zadana.
+ *
+ * Prva verzija ovog garda mjerila je samo zadanu (tamnu) temu i zato je propustila REGRESIJU koju
+ * je sama uvela: nadnaslov je bio postavljen na `--desk-muted`, token koji se s temom MIJENJA
+ * (`rgba(237,231,220,.55)` -> `#655C4B`), dok pozadina kartice `--paper-ink` ne. Izmjereno je tada
+ * 4,88:1 u tamnoj i 2,40:1 u svijetloj, dakle gore nego prije popravka.
+ *
+ * Pouka je opcenitija od jednog retka: token uzet s DRUGE strane palete moze biti ispravan u jednoj
+ * temi i pogresan u drugoj, pa gard koji tema ne zanima to po konstrukciji ne vidi.
+ */
+for (const tema of ['dark', 'light'] as const) {
+test(`alati.html: hero kartica ostaje citljiva u temi ${tema}`, async ({ page }) => {
   await page.goto('/alati.html');
+  await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), tema);
   const ratios = await page.evaluate((helpersSource) => {
     const { parse, blend, lum } = (new Function(`return (${helpersSource})()`))() as ReturnType<typeof CONTRAST_HELPERS>;
     const card = document.querySelector('.premium-tool-index__intro');
@@ -134,10 +147,14 @@ test('alati.html: hero kartica na tamnoj plohi ostaje citljiva', async ({ page }
   }, CONTRAST_HELPERS.toString());
 
   expect(ratios).not.toBeNull();
-  expect(ratios!.naslov, 'naslov hero kartice').toBeGreaterThanOrEqual(4.5);
-  expect(ratios!.tekst, 'tekst hero kartice').toBeGreaterThanOrEqual(4.5);
-  expect(ratios!.nadnaslov, 'nadnaslov hero kartice').toBeGreaterThanOrEqual(4.5);
+  // Nijedan element ne smije nedostajati: `ratio(null)` bi inace vratio 99 i tvrdnja bi prosla
+  // vakuumski da se selektor ikad preimenuje.
+  expect(ratios!.naslov, `naslov hero kartice (${tema})`).toBeLessThan(99);
+  expect(ratios!.naslov, `naslov hero kartice (${tema})`).toBeGreaterThanOrEqual(4.5);
+  expect(ratios!.tekst, `tekst hero kartice (${tema})`).toBeGreaterThanOrEqual(4.5);
+  expect(ratios!.nadnaslov, `nadnaslov hero kartice (${tema})`).toBeGreaterThanOrEqual(4.5);
 });
+}
 
 /**
  * RITAM NA MOBITELU: alat mora poceti sto ranije, a ne iza dugog uvoda.

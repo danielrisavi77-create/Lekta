@@ -393,7 +393,18 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
  * `.premium-eyebrow` je globalno `var(--paper-muted)` (#6E6656), sto je ton za SVIJETLI papir;
  * na tamnoj plohi izmjereno daje 2,79:1, ispod praga 4,5:1. Mjereno 2026-08-30.
  */
-.premium-tool-index__intro .premium-eyebrow { color: var(--desk-muted) }
+/**
+ * Nadnaslov uzima boju VLASTITE kartice, prigusenu, umjesto tokena s druge strane palete.
+ *
+ * Prva verzija je ovdje stavila `--desk-muted` i to je bila REGRESIJA U SVIJETLOJ TEMI:
+ * `--desk-muted` se mijenja s temom (`rgba(237,231,220,.55)` -> `#655C4B`), a `--paper-ink`
+ * pozadina kartice ne, pa je izmjereno 4,88:1 u tamnoj ali 2,40:1 u svijetloj temi, dakle gore
+ * nego prije popravka. Gard to nije vidio jer nije postavljao temu.
+ *
+ * `inherit` uzima `color` kartice (`var(--paper)`), isti izvor iz kojeg naslov dobiva 14,27:1, pa
+ * je odnos ispravan u OBJE teme bez pogadjanja tokena. Isto nacelo kao znak "+" u FAQ-u.
+ */
+.premium-tool-index__intro .premium-eyebrow { color: inherit; opacity: .72 }
 
 .premium-tool-index__intro h2 { max-width: 12ch; margin: 10px 0; color: inherit; font: 400 clamp(30px, 5vw, 58px)/.96 var(--display-serif) }
 .premium-tool-index__intro p { max-width: 42ch; margin: 0; color: color-mix(in srgb, var(--paper) 72%, transparent) }

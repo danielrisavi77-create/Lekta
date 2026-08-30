@@ -81,6 +81,15 @@ export function bindDownloadButton(
       downloadBlob(blob, filename);
       void trackToolEvent('tool_download');
       markOutcome(btn);
+      // Oznaka se MORA ocistiti. `animation: ... both` drzi zadnji kadar, a animacija koja puni
+      // stoji u kaskadnom podrijetlu animacija, iznad autorskih pravila: bez ovoga bi gumb nakon
+      // prvog preuzimanja TRAJNO izgubio `:hover` i `:active` (`tool-page.css` ih daje transformom
+      // i sjenom). Kopiranje je vec imalo cistac uz vracanje natpisa; preuzimanje ga nije imalo.
+      if (timer) clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        btn.removeAttribute('data-lekta-ok');
+        timer = 0;
+      }, 1600);
     } catch {
       if (timer) clearTimeout(timer);
       btn.textContent = failLabel;

@@ -177,9 +177,13 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);over
    prva kontrola je bila 575-729 px duboko, a uvod (`.lead`) je sam nosio 190 px na citatu.
    Padding hero bloka i velicina uvoda se stisnu; NISTA se ne skriva ni ne premjesta, pa se
    nijedan tok ne mijenja. `.lead` je inace page-local, ali dijeljeni sloj se ucitava POSLIJE
-   pa ovo pravilo pobjedjuje (isti razlog zbog kojeg su `.hero{padding:32px 0 2px}` u
-   citat.html i alati.html mrtvi redci koji se nikad ne primijene). */
-@media(max-width:720px){.hero{padding:26px 0 4px}.lead{font-size:15.5px;line-height:1.5}}
+   pa `.hero` pravilo pobjedjuje: `.hero{padding:32px 0 2px}` u svih SEST stranica je mrtav redak
+   koji se nikad ne primijeni, jer je specificnost jednaka a dijeljeni sloj dolazi kasnije.
+
+   ZA `.lead` TO NE VRIJEDI i prva verzija ovog pravila bila je zato mrtva: stranice imaju
+   `.hero p.lead` (0,2,1), sto tuce goli `.lead` (0,1,0) BEZ OBZIRA na redoslijed ucitavanja.
+   Kaskada pada na redoslijed tek pri JEDNAKOJ specificnosti. Zato je i ovdje `.hero p.lead`. */
+@media(max-width:720px){.hero{padding:26px 0 4px}.hero p.lead{font-size:15.5px;line-height:1.5}}
 /* KS: print na bijelom (tamni stol se ne printa) */
 @media print{body{background:#fff;color:#111}}
 /* Analitika (tool-analytics.ts): banner koristi SAMO sirove KS primitive (--paper/--paper-ink/
