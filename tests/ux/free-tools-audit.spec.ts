@@ -179,8 +179,18 @@ const PRVA_KONTROLA: Record<string, string> = {
   '/alati.html': '.tool-card',
 };
 
-/** Zateceni maksimumi na 375x667 za stranice koje pregib jos ne stignu. Smiju samo padati. */
-const RATCHET_375: Record<string, number> = { '/literatura.html': 700, '/alati.html': 850 };
+/**
+ * Zateceni maksimumi na 375x667 za stranice koje pregib jos ne stignu. Smiju samo padati.
+ *
+ * `/alati.html` je MAKNUT s popisa 2026-08-31: skrivanjem signalne kartice na uskom zaslonu (koja
+ * je doslovno ponavljala hero uvod) prva kartica alata je s 848 px pala na 609 px, dakle drzi
+ * pregib i vise joj ratchet ne treba.
+ *
+ * `/literatura.html` OSTAJE, i to je svjesna odluka a ne propust: njezin uvod nosi pet recenica
+ * podataka kojih drugdje na stranici nema, pa bi skracivanje micalo informaciju, a ne ponavljanje.
+ * 698 px pri pregibu od 667 je jedan kratak pokret prsta.
+ */
+const RATCHET_375: Record<string, number> = { '/literatura.html': 700 };
 
 async function vrhPrveKontrole(page: import('@playwright/test').Page, selector: string) {
   return page.evaluate((s) => {

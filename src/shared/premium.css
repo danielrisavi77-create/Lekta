@@ -459,6 +459,24 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
   .premium-tool-index__signal { padding: 18px }
 }
 
+@media (max-width: 640px) {
+  /**
+   * Na telefonu se signalna kartica huba SKRIVA jer DOSLOVNO ponavlja hero uvod.
+   *
+   * Uvod: "Sve radi lokalno u pregledniku, dokument ostaje na tvom uredaju."
+   * Kartica: "Bez racuna. Bez uploadanja. Svaki alat radi izravno u pregledniku..."
+   *
+   * Ista tvrdnja dvaput, jedna ispod druge, a zajedno su gurale prvu karticu alata na 848 px pri
+   * pregibu od 667 px. Mice se PONAVLJANJE, ne informacija: tvrdnja ostaje u uvodu, koji citac
+   * ekrana i dalje dobiva. Na sirem zaslonu kartica stoji uz uvod (dva stupca) i ne smeta nikome.
+   *
+   * Pravilo koje sam si postavio: na uskom zaslonu mice se duplikat, nikad jedinstven sadrzaj.
+   * Zato `literatura` NIJE dirana: njezin uvod nosi pet recenica podataka kojih drugdje nema
+   * (sto slaze, da ne mijenja citatni stil, sto izvozi), pa ostaje uz 698 px i ratchet.
+   */
+  .premium-tool-index__signal { display: none }
+}
+
 @media (max-width: 520px) {
   .premium-viz-card { padding: 15px }
   .premium-data-grid { gap: 8px }
