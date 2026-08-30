@@ -23,6 +23,30 @@ npm run check   # tsc --noEmit && vitest run && vite build
 
 Ako check pada, promjena nije gotova. Ne commitaj crveno.
 
+Gate se mjeri na IZOLIRANOM stablu, nikad na dijeljenom: `npm run check` mjeri RADNO STABLO, ne
+HEAD, pa u dijeljenom stablu mjeri i tudje necommitane izmjene i laze u oba smjera. Izmjereno
+2026-08-30: 4 pale datoteke u dijeljenom stablu, sve cetiri zelene na cistom HEAD-u.
+
+- Worktree IZVAN repozitorija + junction na node_modules; junction se stvara POSLIJE checkouta i
+  ponovno nakon svakog `checkout -f`, koji ga brise.
+- Ishod se cita iz retka `Test Files`, NIKAD iz izlaznog koda (pozadinski zadatak zavrsi s
+  "exited with code 0" i kad je vitest crven).
+- Log u vlastitu datoteku (`> gate.log 2>&1`); omotac cuva samo rep pa se izgubi KOJE su pale.
+- Stroj: 8 GB, 4 jezgre, suite 420 datoteka. Ispod ~1 GB slobodnog RAM-a ne pokrecu se testovi.
+  Nula FAIL redaka + nema sazetka + npm 1 = iscrpljen resurs, ne regresija. Kad stroj nije miran,
+  dokaz se seli na CI.
+
+## Paralelizam ide kroz IZOLACIJU, ne kroz vise pisaca
+
+Vise istovremenih sesija znaci vise IZOLIRANIH worktreeva, nikad vise pisaca u istom stablu.
+
+- Fan-out agenata je dopusten SAMO za citanje. Paralelno PISANJE u isto stablo nije dopusteno.
+- NE postoji pravilo koje na svaki prompt trosi jos agenata: vise prolaza ISTIM alatom nije
+  provjera nego slaganje. Drugo misljenje mora doci od DRUGOG alata (Codex), a netrivijalna
+  promjena u src/repair, src/citations i src/docx trazi adversarijalni prolaz prije commita.
+- Dodatni pisci mnoze klasu kvara koja je 2026-08-30 kostala 24 h: commitan artefakt (golden
+  snimka) opisivao je ponasanje ciji izvor u repou nikad nije bio commitan.
+
 ## Privatni sloj ne ide u javni bundle
 
 `data/classification.json` klasificira staze (PUBLIC/PRIVATE-IP/PROPRIETARY-DATA/
@@ -226,3 +250,15 @@ jer se u praksi zna primijeniti vise puta.
 Kad vise sesija radi u istom stablu, generator druge sesije zna upasti izmedju izmjene i commita
 i njezin rad zavrsi pod tvojom porukom. Prije commita ponovi `git diff --stat -- <putanje>`.
 Povijest se NE prepravlja dok druga sesija radi u istom stablu.
+
+Obrnut smjer je jednako opasan: COMMITAN OVISNIK uz NECOMMITANU OVISNOST. Test koji jest u repou
+trazi simbol koji postoji samo u radnom stablu, pa je grana zelena kod tebe a crvena na cistom
+checkoutu (2026-08-30, cetiri puta u jednom danu). `tsc` to ne hvata, jer `tsconfig.json` ima
+`include: ["src"]` pa se `tests/**` ne typechecka. Prije commita: `npm run orphan-scan`.
+Necommitana datoteka sama po sebi NIJE kvar; opasan je samo par u kojem je ovisnik vec commitan.
+
+Dvije provjere, dva razlicita pitanja, trebaju obje:
+`npm run orphan-scan` -> "je li grana crvena na cistom checkoutu" (sekunde).
+Cist worktree (`git worktree add --detach` + junction za `node_modules`) -> "je li gate zelen i je
+li izvedeni artefakt reproducibilan". Artefakte (`docs/generated/**`, `dist-packs/**`) regeneriraj
+SAMO ondje; izvjestaj i njegov ratchet uvijek idu u ISTI commit.

@@ -141,6 +141,51 @@ npm run check   # tsc --noEmit && vitest run && vite build
 
 Ako `check` pada, promjena nije gotova. Ne commitaj crveno.
 
+### Gdje se gate mjeri: na IZOLIRANOM stablu, nikad na dijeljenom
+
+`npm run check` mjeri RADNO STABLO, ne HEAD. Kad vise sesija dijeli isto stablo, mjeri i tudje
+necommitane izmjene, pa laze u OBA smjera: zelen gate ne dokazuje zelen HEAD, a crven gate ne
+dokazuje kvar u tvom radu.
+
+Izmjereno 2026-08-30: run u dijeljenom stablu prijavio je 4 pale datoteke, a sve cetiri prolaze na
+cistom HEAD-u. `faculty-matrix` je pao jer su druge sesije uzivo prepisivale `data/profiles/**`, pa
+se zivi izracun razisao s commitanim artefaktom; `partial-credit-scales` je pao na `testTimeout`
+od 15 s, a na mirnom stroju trazi 16,5 s.
+
+- Gate ide u worktree IZVAN repozitorija (vitest excludea samo `.claude/**`) uz junction na
+  `node_modules`. Junction se stvara POSLIJE checkouta i ponovno nakon svakog `checkout -f`, koji
+  ga brise; bez njega gate padne na "'tsc' is not recognized", sto izgleda kao kvar koda a nije.
+- Ishod se cita iz retka `Test Files`, NIKAD iz izlaznog koda. Pozadinski zadatak zavrsava s
+  `[exited with code 0]` i kad je vitest crven.
+- Log ide u VLASTITU datoteku (`> gate.log 2>&1`): omotac cuva samo rep (~62 retka), pa se izgubi
+  koje su datoteke pale, a zna se samo koliko ih je.
+
+### Stroj je granica, i to se mjeri prije pokretanja
+
+Stroj ima 8 GB RAM-a i 4 jezgre, a suite 420 test datoteka i oko 4700 testova. Uz 7 aktivnih
+sesija ostaje 400 do 600 MB slobodno i puni gate umre na OOM-u.
+
+Potpis tog pada je lako zamijeniti za nalaz: log STANE poslije zelene datoteke, bez sazetka i bez
+poruke o gresci, dok `npm` vrati 1. Nula `FAIL` redaka + nema sazetka + npm 1 znaci ISCRPLJEN
+RESURS, ne regresiju; ne pripisuj to commitu. Prije mjerenja pogledaj slobodni RAM
+(`Get-CimInstance Win32_OperatingSystem`) i broj node procesa; ispod ~1 GB slobodno nema smisla ni
+pokretati. Kad stroj nije miran, dokaz se seli na CI (cist stroj) ili se ceka.
+
+## Tvrdo pravilo: paralelizam ide kroz IZOLACIJU, ne kroz vise pisaca
+
+Vise istovremenih sesija znaci vise IZOLIRANIH worktreeva, nikad vise pisaca u istom stablu.
+
+- Fan-out agenata je dopusten SAMO za citanje (pretraga, istrazivanje, prikupljanje nalaza).
+  Paralelno PISANJE u isto radno stablo nije dopusteno.
+- NE postoji pravilo koje na svaki prompt trosi jos agenata. Razlog stoji nize u ovom vodicu i
+  izmjeren je: vise prolaza ISTIM alatom nije provjera, nego slaganje. Drugo misljenje vrijedi
+  samo ako dolazi od DRUGOG alata, dakle `/codex:review`, odnosno `/codex:adversarial-review` za
+  parser, citation i repair kod. To pravilo vec postoji i treba ga primjenjivati dosljedno.
+- Uzko grlo ovog projekta nisu ideje nego stroj i dijeljeno stablo. Dodatni pisci trose upravo
+  onaj resurs kojeg nema i mnoze klasu kvara koja je 2026-08-30 kostala 24 h: golden snimka
+  commitana iz prljavog stabla opisivala je ponasanje ciji izvor u repou nikad nije bio commitan
+  (vidi `141f9848`), a krivnja je pala na nevin commit.
+
 ## Tvrdo pravilo: bodovana vrijednost mora se slagati s verificiranom tvrdnjom
 
 Lanac dokaza (izvor + snapshot + stranica + doslovan citat + potpis) zivi u `ruleEntries`
@@ -494,6 +539,25 @@ ModSecurity vraca HTTP 418.
   izmjene i commita, pa tudji rad zavrsi pod tvojom porukom (dogodilo se 2026-08-22, 63 retka).
   Neposredno prije commita PONOVI `git diff --stat -- <putanje>` i usporedi s onim sto si mijenjao.
   Ako je vec uslo, NE prepravljaj povijest dok druga sesija radi: amend joj moze pojesti commit.
+- U istom stablu pazi i na obrnut smjer: COMMITAN OVISNIK uz NECOMMITANU OVISNOST. Test ili modul
+  koji jest u repou trazi simbol koji postoji SAMO u radnom stablu, pa je grana zelena kod tebe a
+  crvena na cistom checkoutu. Dogodilo se 2026-08-30 cetiri puta u jednom danu (`buildOutcomeLine`,
+  `dropStaleFieldRegressions`, golden snimka bez izvora, zastarjeli izvedeni artefakti). `tsc` to NE
+  hvata jer `tsconfig.json` ima `include: ["src"]`, pa se `tests/**` ne typechecka; vidi se tek u
+  vitestu, u runtimeu, na kraju punog prolaza. Prije commita pusti `npm run orphan-scan` (sekunde).
+  Necommitana datoteka SAMA PO SEBI nije kvar: opasan je samo par u kojem je ovisnik vec commitan.
+
+### Cist worktree i orphan-scan odgovaraju na RAZLICITA pitanja
+
+Trebaju oba, jedan ne zamjenjuje drugoga:
+
+- `npm run orphan-scan` -> "je li grana crvena na cistom checkoutu". Sekunde, bez worktreea.
+- cist worktree (`git worktree add --detach <scratchpad>/x HEAD` + `mklink /J` za `node_modules`) ->
+  "je li gate zelen i je li izvedeni artefakt reproducibilan iz commitanog koda". Artefakte
+  (`docs/generated/**`, `dist-packs/**`, pecene projekcije) regeneriraj ISKLJUCIVO ondje, nikad u
+  dijeljenom stablu, inace u njih ude tudji necommitan rad. HEAD se mice, pa prije commita provjeri
+  `git log <regenHEAD>..HEAD --name-only`: ako je dirnut ijedan IZVOR artefakta, baci regeneraciju i
+  ponovi. Izvjestaj i njegov ratchet uvijek idu u ISTI commit.
 
 ## Codex (drugo misljenje)
 
