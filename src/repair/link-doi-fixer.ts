@@ -13,6 +13,8 @@ export interface LinkDoiFixParams {
     start: number;
     end: number;
     anchorFingerprint: string;
+    /** Tekst odlomka; sidro otporno na zahvat koji dira samo oblikovanje. Neobavezno. */
+    anchorText?: string;
     before: string;
     replacementText?: string;
     targetUrl?: string;
@@ -45,6 +47,16 @@ function updateRelationshipTarget(rels: string, id: string, target: string): str
   });
 }
 function ensureRNamespace(xml: string): string { return /xmlns:r=["']/i.test(xml) ? xml : xml.replace(/<w:document\b([^>]*)>/i, '<w:document$1 xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'); }
+/** Vidljivi tekst odlomka, normaliziran; drugo sidro uz otisak (vidi provjeru nize). */
+function anchorTextOf(xml: string): string {
+  return [...xml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)]
+    .map((match) => match[1])
+    .join('')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function paragraphTextNodes(xml: string): Array<{ start: number; end: number; contentStart: number; contentEnd: number; text: string }> {
   return [...xml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/gi)].map((match) => ({ start: match.index ?? 0, end: (match.index ?? 0) + match[0].length, contentStart: (match.index ?? 0) + match[0].indexOf('>') + 1, contentEnd: (match.index ?? 0) + match[0].length - match[0].match(/<\/w:t>$/i)![0].length, text: decode(match[1]) }));
 }
@@ -128,7 +140,23 @@ export function linkDoiFixer(parts: DocxXmlParts, params: LinkDoiFixParams): Fix
   for (const [paragraphIndex, operations] of grouped) {
     const range = ranges[paragraphIndex - 1];
     if (!range) return noOp(parts, 'no-target');
-    if (operations.some((operation) => range.fingerprint !== operation.anchorFingerprint)) return noOp(parts, 'stale-anchor');
+    /**
+     * Sidro vrijedi uz podudaranje OTISKA ili TEKSTA odlomka.
+     *
+     * Otisak se racuna nad cijelim XML-om, pa ga promijeni i zahvat koji dira samo oblikovanje:
+     * `heading-style-fixer` dodaje `pStyle`, `final-document-inspector-fixer` brise `w:rsid*` kroz
+     * cijeli paket. IZMJERENO 2026-08-30: u punom lancu je ovaj fixer odbijao uz `stale-anchor` na
+     * 3 od 4 profila, dok je SAM prolazio. Isti kvar je istog dana potvrdjen i popravljen na
+     * `required-section-fixer`.
+     *
+     * Nije re-anchoring: odlomak se ne trazi drugdje, nego se na ISTOM indeksu dopusta uza potvrda
+     * identiteta. Prazan tekst se ne priznaje, inace bi prazan odlomak bio sidro za bilo sto.
+     */
+    const rangeText = anchorTextOf(range.xml);
+    const anchorOk = (operation: { anchorFingerprint: string; anchorText?: string }): boolean =>
+      range.fingerprint === operation.anchorFingerprint
+      || (typeof operation.anchorText === 'string' && operation.anchorText.length > 0 && operation.anchorText === rangeText);
+    if (!operations.every(anchorOk)) return noOp(parts, 'stale-anchor');
     if (PROTECTED.test(range.xml)) return noOp(parts, 'unsupported-structure');
     const sorted = [...operations].sort((a, b) => b.start - a.start);
     for (let i = 1; i < sorted.length; i++) if (sorted[i].end > sorted[i - 1].start) return noOp(parts, 'invalid-params');

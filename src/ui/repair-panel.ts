@@ -207,6 +207,14 @@ export interface LinkDoiFormDefinition {
     start: number;
     end: number;
     anchorFingerprint: string;
+    /**
+     * Tekst odlomka; DRUGO sidro uz otisak.
+     *
+     * Otisak se racuna nad cijelim XML-om odlomka, pa ga promijeni i zahvat koji dira samo
+     * oblikovanje. Izmjereno 2026-08-30: u punom lancu je `link-doi-fixer` odbijao uz
+     * `stale-anchor` na 3 od 4 profila, a s tekstualnim sidrom prolazi na 4 od 4.
+     */
+    anchorText?: string;
   }>;
   summary: string;
   buildParams: (form: LinkDoiFormDefinition) => Record<string, unknown>;

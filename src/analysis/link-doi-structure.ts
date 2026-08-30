@@ -30,6 +30,8 @@ export interface LinkOccurrence {
   status: LinkStatus;
   confidence: LinkConfidence;
   anchorFingerprint: string;
+  /** Tekst odlomka; drugo sidro, otporno na zahvat koji dira samo oblikovanje. */
+  anchorText?: string;
   evidence: string[];
   safeOperations: Array<'make-hyperlink' | 'normalize-doi' | 'remove-tracking' | 'remove-link-styling' | 'repair-spacing'>;
   requiresConfirmation: boolean;
@@ -91,6 +93,24 @@ function normalizedUrl(value: string, rules?: LinkRules): string {
   return result;
 }
 
+/**
+ * Vidljivi tekst odlomka. DRUGO sidro uz otisak.
+ *
+ * Otisak se racuna nad CIJELIM XML-om odlomka, pa ga promijeni i zahvat koji dira samo oblikovanje
+ * (`heading-style-fixer` dodaje `pStyle`, `final-document-inspector-fixer` brise `w:rsid*` kroz
+ * cijeli paket). Izmjereno 2026-08-30: u punom lancu je `link-doi-fixer` odbijao uz `stale-anchor`
+ * na 3 od 4 profila, a sam je prolazio. Isti kvar je istog dana potvrdjen i popravljen na
+ * `required-section-fixer`.
+ */
+function anchorTextOf(xml: string): string {
+  return [...xml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)]
+    .map((match) => match[1])
+    .join('')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export function analyzeLinkDoiStructure(input: {
   documentXml: string;
   documentRelsXml?: string;
@@ -142,7 +162,7 @@ export function analyzeLinkDoiStructure(input: {
       if (tracking.length) safeOperations.push('remove-tracking');
       const style = link ? (block.slice(Math.max(0, block.indexOf('<w:hyperlink', 0)), block.indexOf('</w:hyperlink>', 0) + 15).match(/<w:u\b|<w:color\b/i) ? 'styled' : 'plain') : undefined;
       if (link && style === 'styled' && input.rules?.stripVisibleUnderline) safeOperations.push('remove-link-styling');
-      occurrences.push({ id: hash(`${paragraph.index}:${candidate.start}:${candidate.raw}`), part: 'word/document.xml', paragraphIndex: paragraph.index, start: candidate.start, end: candidate.end, rawText: candidate.raw, displayedText: candidate.raw, ...(target ? { target } : {}), kind, status, confidence: candidate.broken || displayMismatch ? 'medium' : kind === 'doi' || link ? 'high' : 'high', anchorFingerprint: paragraphFingerprint(range.xml), evidence: [candidate.broken ? 'URL sadrži razmak ili prijelom' : link ? 'pronađen postojeći Word hyperlink' : 'jasan URL ili DOI u običnom tekstu', ...(tracking.length ? [`tracking parametri: ${tracking.join(', ')}`] : []), ...(target && displayMismatch ? ['prikazani tekst i cilj hyperlinka se razlikuju'] : [])], safeOperations, requiresConfirmation: candidate.broken || displayMismatch || tracking.length > 0 });
+      occurrences.push({ id: hash(`${paragraph.index}:${candidate.start}:${candidate.raw}`), part: 'word/document.xml', paragraphIndex: paragraph.index, start: candidate.start, end: candidate.end, rawText: candidate.raw, displayedText: candidate.raw, ...(target ? { target } : {}), kind, status, confidence: candidate.broken || displayMismatch ? 'medium' : kind === 'doi' || link ? 'high' : 'high', anchorFingerprint: paragraphFingerprint(range.xml), anchorText: anchorTextOf(range.xml), evidence: [candidate.broken ? 'URL sadrži razmak ili prijelom' : link ? 'pronađen postojeći Word hyperlink' : 'jasan URL ili DOI u običnom tekstu', ...(tracking.length ? [`tracking parametri: ${tracking.join(', ')}`] : []), ...(target && displayMismatch ? ['prikazani tekst i cilj hyperlinka se razlikuju'] : [])], safeOperations, requiresConfirmation: candidate.broken || displayMismatch || tracking.length > 0 });
     }
   }
   const summary = { total: occurrences.length, plainUrls: occurrences.filter((x) => x.status === 'plain-text').length, doiCandidates: occurrences.filter((x) => x.kind === 'doi').length, brokenUrls: occurrences.filter((x) => x.status === 'broken-spacing').length, trackingUrls: occurrences.filter((x) => x.status === 'tracking-parameters').length, mismatches: occurrences.filter((x) => x.status === 'display-target-mismatch').length, redirects: occurrences.filter((x) => x.status === 'redirects').length, unreachable: occurrences.filter((x) => x.status === 'unreachable').length };

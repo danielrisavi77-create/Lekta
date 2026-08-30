@@ -3968,6 +3968,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           {
             "action": "normalize-doi",
             "anchorFingerprint": "typo-b29853dc",
+            "anchorText": "Baric, K. (2018). Metodologija drustvenih istrazivanja. Rijeka: Naklada Cetvrti. doi:10.1234/abcd.2018",
             "before": "doi:10.1234/abcd.2018",
             "confirmed": true,
             "end": 102,
@@ -15591,6 +15592,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           {
             "action": "normalize-doi",
             "anchorFingerprint": "typo-b31765ae",
+            "anchorText": "Zelenko, M. (2021). Izmisljeni naslov o mjerenju... Casopis za nista, 12(3), 45-67. doi:10.1234/izmisljeno.2021",
             "before": "doi:10.1234/izmisljeno.2021",
             "confirmed": true,
             "end": 111,
@@ -15604,6 +15606,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           {
             "action": "normalize-doi",
             "anchorFingerprint": "typo-b0fbe309",
+            "anchorText": "Ancic, P. (2019). Drugi izmisljeni naslov. Drugi casopis, 5(1), 10-22. doi:10.5678/izmisljeno.2019",
             "before": "doi:10.5678/izmisljeno.2019",
             "confirmed": true,
             "end": 99,
@@ -15617,6 +15620,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           {
             "action": "normalize-doi",
             "anchorFingerprint": "typo-957d936d",
+            "anchorText": "Babic, I. (2020). Treci izmisljeni naslov s 20 % udjela. Treci casopis, 8(2), 30-41. doi:10.9012/izmisljeno.2020",
             "before": "doi:10.9012/izmisljeno.2020",
             "confirmed": true,
             "end": 112,

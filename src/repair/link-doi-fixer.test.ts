@@ -102,4 +102,52 @@ describe('link DOI fixer', () => {
     // Autorov tekst mora prezivjeti: mijenja se mehanika poveznice, ne recenica.
     expect(out.replace(/<[^>]+>/g, '')).toBe(text);
   });
+
+  /**
+   * TEKSTUALNO SIDRO (2026-08-30), isti kvar i isti lijek kao na `required-section-fixer`.
+   *
+   * Otisak se racuna nad CIJELIM XML-om odlomka, pa ga promijeni i zahvat koji dira samo
+   * oblikovanje: `heading-style-fixer` dodaje `pStyle`, `final-document-inspector-fixer` brise
+   * `w:rsid*` kroz cijeli paket. Izmjereno u punom lancu: `link-doi-fixer` je odbijao uz
+   * `stale-anchor` na 3 od 4 profila, a sam je prolazio.
+   */
+  describe('tekstualno sidro kad je oblikovanje promijenilo otisak', () => {
+    const TEXT = 'doi:10.1234/abc';
+    const plain = `<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body><w:p><w:r><w:t>${TEXT}</w:t></w:r></w:p></w:body></w:document>`;
+    const reformatted = `<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body><w:p w:rsidR="00AB12CD"><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>${TEXT}</w:t></w:r></w:p></w:body></w:document>`;
+    const partsOf = (xml: string) => ({ documentXml: xml, stylesXml: '', documentRelsXml: '<Relationships></Relationships>' });
+    const params = (anchorText?: string): LinkDoiFixParams => ({
+      version: 1,
+      operations: [{
+        id: 'doi', part: 'word/document.xml', paragraphIndex: 1, start: 0, end: TEXT.length,
+        anchorFingerprint: extractBodyParagraphs(plain)[0].fingerprint,
+        ...(anchorText === undefined ? {} : { anchorText }),
+        before: TEXT, replacementText: 'https://doi.org/10.1234/abc', targetUrl: 'https://doi.org/10.1234/abc',
+        action: 'normalize-doi', confirmed: true,
+      }],
+    });
+
+    it('BASELINE: otisak se doista razlikuje nakon promjene oblikovanja', () => {
+      expect(extractBodyParagraphs(reformatted)[0].fingerprint).not.toBe(extractBodyParagraphs(plain)[0].fingerprint);
+    });
+
+    it('tekstualno sidro spasava zahvat koji bi otisak lazno odbio', () => {
+      const result = linkDoiFixer(partsOf(reformatted), params(TEXT));
+      expect(result.reason).toBeUndefined();
+      expect(result.applied).toBe(true);
+      expect(result.parts.documentXml).toContain('w:hyperlink');
+    });
+
+    it('NEGATIVNA KONTROLA: bez tekstualnog sidra ostaje stale-anchor', () => {
+      expect(linkDoiFixer(partsOf(reformatted), params()).reason).toBe('stale-anchor');
+    });
+
+    it('NEGATIVNA KONTROLA: promijenjen TEKST i dalje daje stale-anchor', () => {
+      expect(linkDoiFixer(partsOf(reformatted), params('nesto drugo')).reason).toBe('stale-anchor');
+    });
+
+    it('prazno tekstualno sidro se ne priznaje', () => {
+      expect(linkDoiFixer(partsOf(reformatted), params('')).reason).toBe('stale-anchor');
+    });
+  });
 });

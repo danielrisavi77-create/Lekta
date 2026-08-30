@@ -31,6 +31,7 @@ const { normalizeCheckFlags } = await import('../src/profiles/profile-baseline')
 const { applyScoredAdvisory } = await import('../src/profiles/advisory-demotion');
 const { SOURCE_REGISTRY } = await import('../src/verification/verification-registry');
 const { buildViolatingDocx } = await import('../tests/helpers/violating-docx');
+const { APPLIED_AXIS_FIXER } = await import('../tests/helpers/coverage-cells');
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
@@ -125,7 +126,7 @@ const AXIS_CHECK_ID: Record<string, string> = {
  * Za njih je predvidjena slabija jacina dokaza (`applied`, vidi `tests/helpers/coverage-cells.ts`),
  * koja jos nije ozicena.
  */
-const STRUCTURAL_WITHOUT_SCORED_CHECK = new Set(['empty-paragraphs', 'croatian-typography', 'link-doi']);
+const STRUCTURAL_WITHOUT_SCORED_CHECK = new Set(['empty-paragraphs', 'croatian-typography', 'link-doi', 'revision-metadata']);
 
 /** Format stranice ima dinamican naslov (`page.size.*`), pa se prepoznaje po prefiksu. */
 function checkForAxis(checks: Array<{ id?: string | null; title?: string }>, axis: string) {
@@ -230,7 +231,25 @@ async function runProfile(profileId: string): Promise<Row> {
      * ne moze tvrditi da se ijedna provjera zbog toga prevrnula. To je tocno jacina `applied` iz
      * `tests/helpers/coverage-cells.ts`.
      */
-    const axesApplied = violated.filter((axis) => STRUCTURAL_WITHOUT_SCORED_CHECK.has(axis));
+    /**
+     * `applied` se IZVODI iz changeloga, ne iz namjere.
+     *
+     * Do 2026-08-30 je ovdje stajalo `violated.filter((axis) => STRUCTURAL_WITHOUT_SCORED_CHECK
+     * .has(axis))`, dakle os je dobivala dokaz `applied` samo zato sto je PREKRSENA i sto nema
+     * bodovanu provjeru. Komentar je tvrdio "fixer je dokumentu nesto napravio", a kod to nikad
+     * nije provjerio: 3 osi x 407 profila = 1.221 celija dokaza koji nitko nije zaradio.
+     *
+     * Da tvrdnja nije bezopasna, izmjereno je u istoj sesiji: `empty-paragraph-fixer` je na 116
+     * stvarnih dokumenata bio ponudjen a nijednom nista nije promijenio, `link-doi-fixer` je
+     * vracao `unsupported-structure` na svakom runu s `<w:rPr>`, a `croatian-typography` zna pasti
+     * na `stale-anchor`. Sve tri bi pod starim izrazom svejedno prijavile `applied`.
+     *
+     * Isti razred kao "vakuumsko zeleno": dokaz koji se ne moze ne dogoditi nije dokaz.
+     */
+    const changedFixerIds = new Set(applied.changelog.map((entry) => entry.fixerId));
+    const axesApplied = violated.filter(
+      (axis) => STRUCTURAL_WITHOUT_SCORED_CHECK.has(axis) && changedFixerIds.has(APPLIED_AXIS_FIXER[axis]),
+    );
     const axesRemaining = violated.filter(
       (axis) => !axesResolved.includes(axis) && !STRUCTURAL_WITHOUT_SCORED_CHECK.has(axis),
     );

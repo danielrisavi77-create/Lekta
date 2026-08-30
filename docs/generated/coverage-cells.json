@@ -8,12 +8,12 @@
   },
   "summary": {
     "cellCount": 12617,
-    "coveredCount": 3127,
-    "uncoveredCount": 9490,
+    "coveredCount": 3527,
+    "uncoveredCount": 9090,
     "resolvedCount": 1877,
     "byReason": {
       "profil-ne-propisuje-os": 936,
-      "univerzalna-higijena-bez-dokaza": 8518,
+      "univerzalna-higijena-bez-dokaza": 8118,
       "closed-loop-nije-rijesio": 0,
       "nema-dokaza": 36
     }
@@ -200,10 +200,10 @@
       "fixerId": "final-document-inspector-fixer",
       "status": "pokriveno",
       "evidence": {
-        "kind": "real",
+        "kind": "closed-loop",
         "strength": "applied",
-        "track": "real",
-        "artifactId": "lo-fpzg-zavrsni-neuskladjen"
+        "artifactId": "closed-loop:fpzg-politologija-zavrsni",
+        "checkIds": []
       }
     },
     {
@@ -453,8 +453,13 @@
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-novinarstvo-zavrsni-tekst",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
@@ -659,8 +664,13 @@
     {
       "profileId": "fpzg-novinarstvo-zavrsni-av",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-novinarstvo-zavrsni-av",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-av",
@@ -901,10 +911,10 @@
       "fixerId": "final-document-inspector-fixer",
       "status": "pokriveno",
       "evidence": {
-        "kind": "real",
+        "kind": "closed-loop",
         "strength": "applied",
-        "track": "real",
-        "artifactId": "word-veliki-neuredan"
+        "artifactId": "closed-loop:fpzg-politologija-diplomski",
+        "checkIds": []
       }
     },
     {
@@ -1154,8 +1164,13 @@
     {
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-nacionalna-sigurnost-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
@@ -1401,10 +1416,10 @@
       "fixerId": "final-document-inspector-fixer",
       "status": "pokriveno",
       "evidence": {
-        "kind": "real",
+        "kind": "closed-loop",
         "strength": "applied",
-        "track": "real",
-        "artifactId": "fpzg-novinarstvo-bibliografija"
+        "artifactId": "closed-loop:fpzg-novinarstvo-diplomski",
+        "checkIds": []
       }
     },
     {
@@ -1666,10 +1681,10 @@
       "fixerId": "final-document-inspector-fixer",
       "status": "pokriveno",
       "evidence": {
-        "kind": "real",
+        "kind": "closed-loop",
         "strength": "applied",
-        "track": "real",
-        "artifactId": "typografija-i-literatura"
+        "artifactId": "closed-loop:fpzg-mes-master-thesis",
+        "checkIds": []
       }
     },
     {
@@ -1924,8 +1939,13 @@
     {
       "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-specijalisticki-odnosi-s-javnoscu",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
@@ -2164,8 +2184,13 @@
     {
       "profileId": "fpzg-specijalisticki-prilagodba-eu",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-specijalisticki-prilagodba-eu",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-specijalisticki-prilagodba-eu",
@@ -2404,8 +2429,13 @@
     {
       "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-specijalisticki-sigurnosna-politika-rh",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
@@ -2644,8 +2674,13 @@
     {
       "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-specijalisticki-vanjska-politika-diplomacija",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
@@ -2879,8 +2914,13 @@
     {
       "profileId": "fpzg-doktorski-politologija",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-doktorski-politologija",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-doktorski-politologija",
@@ -3107,8 +3147,13 @@
     {
       "profileId": "fpzg-opci-akademski-rad",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzg-opci-akademski-rad",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
@@ -3369,10 +3414,10 @@
       "fixerId": "final-document-inspector-fixer",
       "status": "pokriveno",
       "evidence": {
-        "kind": "real",
+        "kind": "closed-loop",
         "strength": "applied",
-        "track": "real",
-        "artifactId": "pravo-integrirani-fusnote"
+        "artifactId": "closed-loop:pravo-integrirani-diplomski",
+        "checkIds": []
       }
     },
     {
@@ -3617,8 +3662,13 @@
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravo-javna-uprava-prijediplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
@@ -3857,8 +3907,13 @@
     {
       "profileId": "pravo-javna-uprava-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravo-javna-uprava-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-javna-uprava-diplomski",
@@ -4097,8 +4152,13 @@
     {
       "profileId": "pravo-porezni-prijediplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravo-porezni-prijediplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-porezni-prijediplomski",
@@ -4330,8 +4390,13 @@
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravo-socijalni-rad-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
@@ -4582,10 +4647,10 @@
       "fixerId": "final-document-inspector-fixer",
       "status": "pokriveno",
       "evidence": {
-        "kind": "real",
+        "kind": "closed-loop",
         "strength": "applied",
-        "track": "real",
-        "artifactId": "pravo-socijalni-rad-fusnote"
+        "artifactId": "closed-loop:pravo-socijalni-rad-diplomski",
+        "checkIds": []
       }
     },
     {
@@ -4830,8 +4895,13 @@
     {
       "profileId": "pravo-socijalna-politika-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravo-socijalna-politika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-socijalna-politika-diplomski",
@@ -5065,8 +5135,13 @@
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravo-opci-pravni-akademski-rad",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
@@ -5293,8 +5368,13 @@
     {
       "profileId": "pravo-socijalni-opci-akademski-rad",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravo-socijalni-opci-akademski-rad",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-socijalni-opci-akademski-rad",
@@ -5528,8 +5608,13 @@
     {
       "profileId": "pravo-specijalisticki-pravni-opci",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravo-specijalisticki-pravni-opci",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-specijalisticki-pravni-opci",
@@ -5763,8 +5848,13 @@
     {
       "profileId": "pravo-doktorski-pravne-znanosti",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravo-doktorski-pravne-znanosti",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-doktorski-pravne-znanosti",
@@ -5996,8 +6086,13 @@
     {
       "profileId": "pravo-socijalne-djelatnosti-specijalisticki",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravo-socijalne-djelatnosti-specijalisticki",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-socijalne-djelatnosti-specijalisticki",
@@ -6229,8 +6324,13 @@
     {
       "profileId": "pravo-socijalne-djelatnosti-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravo-socijalne-djelatnosti-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravo-socijalne-djelatnosti-doktorski",
@@ -6461,8 +6561,13 @@
     {
       "profileId": "agr-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:agr-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "agr-diplomski",
@@ -6693,8 +6798,13 @@
     {
       "profileId": "agr-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:agr-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "agr-zavrsni",
@@ -6925,8 +7035,13 @@
     {
       "profileId": "agr-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:agr-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "agr-doktorski",
@@ -7164,8 +7279,13 @@
     {
       "profileId": "efzg-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efzg-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efzg-zavrsni",
@@ -7410,8 +7530,13 @@
     {
       "profileId": "efzg-specijalisticki",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efzg-specijalisticki",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efzg-specijalisticki",
@@ -7644,8 +7769,13 @@
     {
       "profileId": "efzg-strucni-racunovodstvo",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efzg-strucni-racunovodstvo",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efzg-strucni-racunovodstvo",
@@ -7883,8 +8013,13 @@
     {
       "profileId": "efzg-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efzg-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efzg-diplomski",
@@ -8111,8 +8246,13 @@
     {
       "profileId": "fsb-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fsb-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fsb-diplomski",
@@ -8339,8 +8479,13 @@
     {
       "profileId": "fsb-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fsb-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fsb-zavrsni",
@@ -8569,10 +8714,10 @@
       "fixerId": "final-document-inspector-fixer",
       "status": "pokriveno",
       "evidence": {
-        "kind": "real",
+        "kind": "closed-loop",
         "strength": "applied",
-        "track": "real",
-        "artifactId": "fer-diplomski-puna-struktura"
+        "artifactId": "closed-loop:fer-diplomski",
+        "checkIds": []
       }
     },
     {
@@ -8805,8 +8950,13 @@
     {
       "profileId": "fer-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fer-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fer-zavrsni",
@@ -9045,8 +9195,13 @@
     {
       "profileId": "mef-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mef-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mef-diplomski",
@@ -9284,8 +9439,13 @@
     {
       "profileId": "vef-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vef-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vef-diplomski",
@@ -9523,8 +9683,13 @@
     {
       "profileId": "kif-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:kif-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "kif-diplomski",
@@ -9763,8 +9928,13 @@
     {
       "profileId": "sumfak-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:sumfak-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "sumfak-diplomski",
@@ -10003,8 +10173,13 @@
     {
       "profileId": "sumfak-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:sumfak-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "sumfak-zavrsni",
@@ -10242,8 +10417,13 @@
     {
       "profileId": "ttf-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ttf-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ttf-diplomski",
@@ -10481,8 +10661,13 @@
     {
       "profileId": "ttf-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ttf-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ttf-zavrsni",
@@ -10713,8 +10898,13 @@
     {
       "profileId": "grad-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:grad-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "grad-diplomski",
@@ -10945,8 +11135,13 @@
     {
       "profileId": "grad-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:grad-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "grad-zavrsni",
@@ -11163,8 +11358,13 @@
     {
       "profileId": "ffzg-informacijske-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-informacijske-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffzg-informacijske-zavrsni",
@@ -11402,8 +11602,13 @@
     {
       "profileId": "ffzg-filozofija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-filozofija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffzg-filozofija-diplomski",
@@ -11636,8 +11841,13 @@
     {
       "profileId": "pmf-geografija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-geografija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pmf-geografija-diplomski",
@@ -11870,8 +12080,13 @@
     {
       "profileId": "fbf-specijalisticki",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fbf-specijalisticki",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fbf-specijalisticki",
@@ -12109,8 +12324,13 @@
     {
       "profileId": "sfzg-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:sfzg-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "sfzg-diplomski",
@@ -12341,8 +12561,13 @@
     {
       "profileId": "fpz-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpz-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpz-zavrsni",
@@ -12573,8 +12798,13 @@
     {
       "profileId": "fpz-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpz-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpz-diplomski",
@@ -12784,8 +13014,13 @@
     {
       "profileId": "geof-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geof-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "geof-diplomski",
@@ -12995,8 +13230,13 @@
     {
       "profileId": "geof-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geof-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "geof-doktorski",
@@ -13241,8 +13481,13 @@
     {
       "profileId": "grf-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:grf-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "grf-zavrsni",
@@ -13466,8 +13711,13 @@
     {
       "profileId": "erf-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:erf-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "erf-diplomski",
@@ -13712,8 +13962,13 @@
     {
       "profileId": "ufzg-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ufzg-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ufzg-zavrsni",
@@ -13958,8 +14213,13 @@
     {
       "profileId": "ufzg-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ufzg-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ufzg-diplomski",
@@ -14169,8 +14429,13 @@
     {
       "profileId": "arh-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:arh-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "arh-diplomski",
@@ -14389,8 +14654,13 @@
     {
       "profileId": "fkit-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fkit-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fkit-diplomski",
@@ -14609,8 +14879,13 @@
     {
       "profileId": "fkit-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fkit-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fkit-zavrsni",
@@ -14841,8 +15116,13 @@
     {
       "profileId": "pbf-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pbf-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pbf-diplomski",
@@ -15080,8 +15360,13 @@
     {
       "profileId": "ffrz-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffrz-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffrz-diplomski",
@@ -15319,8 +15604,13 @@
     {
       "profileId": "ffrz-bakalaureatski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffrz-bakalaureatski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffrz-bakalaureatski",
@@ -15558,8 +15848,13 @@
     {
       "profileId": "fhs-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fhs-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fhs-diplomski",
@@ -15797,8 +16092,13 @@
     {
       "profileId": "fhs-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fhs-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fhs-zavrsni",
@@ -16036,8 +16336,13 @@
     {
       "profileId": "kbf-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:kbf-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "kbf-zavrsni",
@@ -16275,8 +16580,13 @@
     {
       "profileId": "kbf-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:kbf-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "kbf-diplomski",
@@ -16488,8 +16798,13 @@
     {
       "profileId": "alu-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:alu-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "alu-diplomski",
@@ -16694,8 +17009,13 @@
     {
       "profileId": "muza-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:muza-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "muza-diplomski",
@@ -16933,8 +17253,13 @@
     {
       "profileId": "ffzg-psihologija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-psihologija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffzg-psihologija-diplomski",
@@ -17167,8 +17492,13 @@
     {
       "profileId": "ffzg-sociologija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-sociologija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffzg-sociologija-diplomski",
@@ -17406,8 +17736,13 @@
     {
       "profileId": "ffzg-kroatistika-graduate",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-kroatistika-graduate",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffzg-kroatistika-graduate",
@@ -17640,8 +17975,13 @@
     {
       "profileId": "pmf-biologija-graduate",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-biologija-graduate",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pmf-biologija-graduate",
@@ -17874,8 +18214,13 @@
     {
       "profileId": "pmf-fizika-graduate",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-fizika-graduate",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pmf-fizika-graduate",
@@ -18106,8 +18451,13 @@
     {
       "profileId": "pmf-matematika-graduate",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-matematika-graduate",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pmf-matematika-graduate",
@@ -18345,8 +18695,13 @@
     {
       "profileId": "ffzg-pedagogija-graduate",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-pedagogija-graduate",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffzg-pedagogija-graduate",
@@ -18579,8 +18934,13 @@
     {
       "profileId": "ffzg-lingvistika-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-lingvistika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffzg-lingvistika-diplomski",
@@ -18820,8 +19180,13 @@
     {
       "profileId": "ffzg-povijest-umjetnosti-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffzg-povijest-umjetnosti-diplomski",
@@ -19052,8 +19417,13 @@
     {
       "profileId": "ffzg-arheologija-graduate",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-arheologija-graduate",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffzg-arheologija-graduate",
@@ -19286,8 +19656,13 @@
     {
       "profileId": "ffzg-etnologija-graduate",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-etnologija-graduate",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffzg-etnologija-graduate",
@@ -19511,8 +19886,13 @@
     {
       "profileId": "pmf-geologija-graduate",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-geologija-graduate",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pmf-geologija-graduate",
@@ -19750,8 +20130,13 @@
     {
       "profileId": "fer-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fer-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fer-doktorski",
@@ -19989,8 +20374,13 @@
     {
       "profileId": "kif-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:kif-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "kif-doktorski",
@@ -20212,8 +20602,13 @@
     {
       "profileId": "mef-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mef-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mef-doktorski",
@@ -20418,8 +20813,13 @@
     {
       "profileId": "alu-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:alu-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "alu-doktorski",
@@ -20657,8 +21057,13 @@
     {
       "profileId": "grf-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:grf-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "grf-diplomski",
@@ -20892,8 +21297,13 @@
     {
       "profileId": "arh-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:arh-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "arh-doktorski",
@@ -21127,8 +21537,13 @@
     {
       "profileId": "efzg-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efzg-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efzg-doktorski",
@@ -21362,8 +21777,13 @@
     {
       "profileId": "erf-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:erf-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "erf-doktorski",
@@ -21597,8 +22017,13 @@
     {
       "profileId": "fbf-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fbf-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fbf-doktorski",
@@ -21832,8 +22257,13 @@
     {
       "profileId": "ffrz-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffrz-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffrz-doktorski",
@@ -22067,8 +22497,13 @@
     {
       "profileId": "fhs-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fhs-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fhs-doktorski",
@@ -22302,8 +22737,13 @@
     {
       "profileId": "fkit-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fkit-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fkit-doktorski",
@@ -22537,8 +22977,13 @@
     {
       "profileId": "fsb-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fsb-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fsb-doktorski",
@@ -22772,8 +23217,13 @@
     {
       "profileId": "grad-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:grad-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "grad-doktorski",
@@ -23007,8 +23457,13 @@
     {
       "profileId": "grf-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:grf-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "grf-doktorski",
@@ -23242,8 +23697,13 @@
     {
       "profileId": "kbf-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:kbf-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "kbf-doktorski",
@@ -23477,8 +23937,13 @@
     {
       "profileId": "muza-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:muza-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "muza-doktorski",
@@ -23712,8 +24177,13 @@
     {
       "profileId": "pbf-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pbf-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pbf-doktorski",
@@ -23947,8 +24417,13 @@
     {
       "profileId": "sfzg-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:sfzg-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "sfzg-doktorski",
@@ -24182,8 +24657,13 @@
     {
       "profileId": "ttf-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ttf-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ttf-doktorski",
@@ -24417,8 +24897,13 @@
     {
       "profileId": "ufzg-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ufzg-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ufzg-doktorski",
@@ -24652,8 +25137,13 @@
     {
       "profileId": "vef-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vef-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vef-doktorski",
@@ -24884,8 +25374,13 @@
     {
       "profileId": "rgnf-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:rgnf-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "rgnf-zavrsni",
@@ -25116,8 +25611,13 @@
     {
       "profileId": "rgnf-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:rgnf-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "rgnf-diplomski",
@@ -25350,8 +25850,13 @@
     {
       "profileId": "zsem-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:zsem-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "zsem-zavrsni",
@@ -25577,8 +26082,13 @@
     {
       "profileId": "zsem-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:zsem-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "zsem-diplomski",
@@ -25804,8 +26314,13 @@
     {
       "profileId": "libertas-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:libertas-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "libertas-zavrsni",
@@ -26038,8 +26553,13 @@
     {
       "profileId": "libertas-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:libertas-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "libertas-diplomski",
@@ -26279,8 +26799,13 @@
     {
       "profileId": "effectus-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:effectus-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "effectus-zavrsni",
@@ -26520,8 +27045,13 @@
     {
       "profileId": "effectus-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:effectus-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "effectus-diplomski",
@@ -26761,8 +27291,13 @@
     {
       "profileId": "rrif-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:rrif-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "rrif-zavrsni",
@@ -27002,8 +27537,13 @@
     {
       "profileId": "pvzg-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pvzg-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pvzg-zavrsni",
@@ -27243,8 +27783,13 @@
     {
       "profileId": "pvzg-specijalisticki",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pvzg-specijalisticki",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pvzg-specijalisticki",
@@ -27470,8 +28015,13 @@
     {
       "profileId": "zvu-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:zvu-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "zvu-zavrsni",
@@ -27697,8 +28247,13 @@
     {
       "profileId": "zvu-specijalisticki",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:zvu-specijalisticki",
+        "checkIds": []
+      }
     },
     {
       "profileId": "zvu-specijalisticki",
@@ -27908,8 +28463,13 @@
     {
       "profileId": "vsite-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vsite-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vsite-zavrsni",
@@ -28119,8 +28679,13 @@
     {
       "profileId": "vsite-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vsite-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vsite-diplomski",
@@ -28360,8 +28925,13 @@
     {
       "profileId": "vkjs-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vkjs-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vkjs-zavrsni",
@@ -28601,8 +29171,13 @@
     {
       "profileId": "vkjs-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vkjs-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vkjs-diplomski",
@@ -28842,8 +29417,13 @@
     {
       "profileId": "hks-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:hks-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "hks-diplomski",
@@ -29083,8 +29663,13 @@
     {
       "profileId": "efri-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efri-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efri-zavrsni",
@@ -29324,8 +29909,13 @@
     {
       "profileId": "efri-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efri-diplomski",
@@ -29558,8 +30148,13 @@
     {
       "profileId": "pravri-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravri-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravri-zavrsni",
@@ -29792,8 +30387,13 @@
     {
       "profileId": "pravri-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravri-diplomski",
@@ -30033,8 +30633,13 @@
     {
       "profileId": "ffri-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffri-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffri-zavrsni",
@@ -30274,8 +30879,13 @@
     {
       "profileId": "ffri-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffri-diplomski",
@@ -30508,8 +31118,13 @@
     {
       "profileId": "pfri-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pfri-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pfri-zavrsni",
@@ -30742,8 +31357,13 @@
     {
       "profileId": "pfri-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pfri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pfri-diplomski",
@@ -30969,8 +31589,13 @@
     {
       "profileId": "medri-farmacija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:medri-farmacija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "medri-farmacija-diplomski",
@@ -31210,8 +31835,13 @@
     {
       "profileId": "fmtu-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fmtu-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fmtu-zavrsni",
@@ -31451,8 +32081,13 @@
     {
       "profileId": "fmtu-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fmtu-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fmtu-diplomski",
@@ -31664,8 +32299,13 @@
     {
       "profileId": "inf-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:inf-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "inf-zavrsni",
@@ -31877,8 +32517,13 @@
     {
       "profileId": "inf-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:inf-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "inf-diplomski",
@@ -32111,8 +32756,13 @@
     {
       "profileId": "pmfst-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmfst-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pmfst-zavrsni",
@@ -32345,8 +32995,13 @@
     {
       "profileId": "pmfst-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmfst-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pmfst-diplomski",
@@ -32572,8 +33227,13 @@
     {
       "profileId": "fgag-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fgag-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fgag-zavrsni",
@@ -32799,8 +33459,13 @@
     {
       "profileId": "fgag-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fgag-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fgag-diplomski",
@@ -33033,8 +33698,13 @@
     {
       "profileId": "efst-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efst-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efst-zavrsni",
@@ -33267,8 +33937,13 @@
     {
       "profileId": "efst-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efst-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efst-diplomski",
@@ -33508,8 +34183,13 @@
     {
       "profileId": "ktfst-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ktfst-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ktfst-zavrsni",
@@ -33749,8 +34429,13 @@
     {
       "profileId": "ktfst-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ktfst-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ktfst-diplomski",
@@ -33976,8 +34661,13 @@
     {
       "profileId": "pfst-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pfst-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pfst-zavrsni",
@@ -34203,8 +34893,13 @@
     {
       "profileId": "pfst-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pfst-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pfst-diplomski",
@@ -34444,8 +35139,13 @@
     {
       "profileId": "mefst-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefst-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mefst-diplomski",
@@ -34678,8 +35378,13 @@
     {
       "profileId": "ferit-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ferit-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ferit-zavrsni",
@@ -34912,8 +35617,13 @@
     {
       "profileId": "ferit-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ferit-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ferit-diplomski",
@@ -35153,8 +35863,13 @@
     {
       "profileId": "grafos-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:grafos-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "grafos-zavrsni",
@@ -35394,8 +36109,13 @@
     {
       "profileId": "grafos-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:grafos-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "grafos-diplomski",
@@ -35636,8 +36356,13 @@
     {
       "profileId": "ptfos-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ptfos-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ptfos-diplomski",
@@ -35870,8 +36595,13 @@
     {
       "profileId": "efos-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efos-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efos-zavrsni",
@@ -36104,8 +36834,13 @@
     {
       "profileId": "efos-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efos-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efos-diplomski",
@@ -36338,8 +37073,13 @@
     {
       "profileId": "pravos-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravos-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravos-zavrsni",
@@ -36572,8 +37312,13 @@
     {
       "profileId": "pravos-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravos-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravos-diplomski",
@@ -36806,8 +37551,13 @@
     {
       "profileId": "ffos-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffos-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffos-zavrsni",
@@ -37040,8 +37790,13 @@
     {
       "profileId": "ffos-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffos-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffos-diplomski",
@@ -37281,8 +38036,13 @@
     {
       "profileId": "fazos-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fazos-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fazos-zavrsni",
@@ -37522,8 +38282,13 @@
     {
       "profileId": "fazos-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fazos-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fazos-diplomski",
@@ -37763,8 +38528,13 @@
     {
       "profileId": "mefos-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefos-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mefos-zavrsni",
@@ -38004,8 +38774,13 @@
     {
       "profileId": "mefos-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mefos-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mefos-diplomski",
@@ -38238,8 +39013,13 @@
     {
       "profileId": "kemos-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:kemos-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "kemos-zavrsni",
@@ -38472,8 +39252,13 @@
     {
       "profileId": "kemos-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:kemos-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "kemos-diplomski",
@@ -38713,8 +39498,13 @@
     {
       "profileId": "unizd-turizam-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-turizam-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-turizam-zavrsni",
@@ -38954,8 +39744,13 @@
     {
       "profileId": "unizd-turizam-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-turizam-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-turizam-diplomski",
@@ -39188,8 +39983,13 @@
     {
       "profileId": "unizd-psihologija-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-psihologija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-psihologija-zavrsni",
@@ -39422,8 +40222,13 @@
     {
       "profileId": "unizd-pedagogija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-pedagogija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-pedagogija-diplomski",
@@ -39663,8 +40468,13 @@
     {
       "profileId": "unizd-povijest-umj-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-povijest-umj-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-povijest-umj-zavrsni",
@@ -39897,8 +40707,13 @@
     {
       "profileId": "fetpu-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fetpu-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fetpu-zavrsni",
@@ -40131,8 +40946,13 @@
     {
       "profileId": "fetpu-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fetpu-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fetpu-diplomski",
@@ -40365,8 +41185,13 @@
     {
       "profileId": "tfpu-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:tfpu-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "tfpu-zavrsni",
@@ -40599,8 +41424,13 @@
     {
       "profileId": "tfpu-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:tfpu-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "tfpu-diplomski",
@@ -40833,8 +41663,13 @@
     {
       "profileId": "foozpu-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:foozpu-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "foozpu-zavrsni",
@@ -41067,8 +41902,13 @@
     {
       "profileId": "foozpu-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:foozpu-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "foozpu-diplomski",
@@ -41301,8 +42141,13 @@
     {
       "profileId": "unidu-povijest-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unidu-povijest-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unidu-povijest-zavrsni",
@@ -41542,8 +42387,13 @@
     {
       "profileId": "unidu-komunikologija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unidu-komunikologija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unidu-komunikologija-diplomski",
@@ -41776,8 +42626,13 @@
     {
       "profileId": "unidu-ekonomija-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unidu-ekonomija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unidu-ekonomija-zavrsni",
@@ -42010,8 +42865,13 @@
     {
       "profileId": "unidu-ekonomija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unidu-ekonomija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unidu-ekonomija-diplomski",
@@ -42251,8 +43111,13 @@
     {
       "profileId": "unidu-umjetnost-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unidu-umjetnost-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unidu-umjetnost-diplomski",
@@ -42478,8 +43343,13 @@
     {
       "profileId": "medri-medicina-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:medri-medicina-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "medri-medicina-diplomski",
@@ -42719,8 +43589,13 @@
     {
       "profileId": "fzsri-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fzsri-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fzsri-zavrsni",
@@ -42960,8 +43835,13 @@
     {
       "profileId": "fzsri-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fzsri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fzsri-diplomski",
@@ -43180,8 +44060,13 @@
     {
       "profileId": "biotech-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:biotech-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "biotech-zavrsni",
@@ -43400,8 +44285,13 @@
     {
       "profileId": "biotech-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:biotech-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "biotech-diplomski",
@@ -43620,8 +44510,13 @@
     {
       "profileId": "fizri-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fizri-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fizri-zavrsni",
@@ -43840,8 +44735,13 @@
     {
       "profileId": "fizri-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fizri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fizri-diplomski",
@@ -44074,8 +44974,13 @@
     {
       "profileId": "ufri-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ufri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ufri-diplomski",
@@ -44309,8 +45214,13 @@
     {
       "profileId": "riteh-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:riteh-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "riteh-zavrsni",
@@ -44544,8 +45454,13 @@
     {
       "profileId": "riteh-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:riteh-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "riteh-diplomski",
@@ -44778,8 +45693,13 @@
     {
       "profileId": "kifst-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:kifst-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "kifst-diplomski",
@@ -44999,8 +45919,13 @@
     {
       "profileId": "kbfst-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:kbfst-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "kbfst-diplomski",
@@ -45233,8 +46158,13 @@
     {
       "profileId": "unin-tehnicki-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unin-tehnicki-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-tehnicki-zavrsni",
@@ -45467,8 +46397,13 @@
     {
       "profileId": "unin-tehnicki-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unin-tehnicki-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-tehnicki-diplomski",
@@ -45701,8 +46636,13 @@
     {
       "profileId": "unin-biomedicina-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unin-biomedicina-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-biomedicina-zavrsni",
@@ -45935,8 +46875,13 @@
     {
       "profileId": "unin-biomedicina-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unin-biomedicina-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-biomedicina-diplomski",
@@ -46169,8 +47114,13 @@
     {
       "profileId": "unin-drustveni-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unin-drustveni-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-drustveni-zavrsni",
@@ -46403,8 +47353,13 @@
     {
       "profileId": "unin-drustveni-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unin-drustveni-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unin-drustveni-diplomski",
@@ -46644,8 +47599,13 @@
     {
       "profileId": "veleri-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:veleri-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "veleri-zavrsni",
@@ -46885,8 +47845,13 @@
     {
       "profileId": "veleri-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:veleri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "veleri-diplomski",
@@ -47126,8 +48091,13 @@
     {
       "profileId": "vub-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vub-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vub-diplomski",
@@ -47360,8 +48330,13 @@
     {
       "profileId": "mev-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mev-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mev-zavrsni",
@@ -47580,8 +48555,13 @@
     {
       "profileId": "vvg-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vvg-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vvg-zavrsni",
@@ -47800,8 +48780,13 @@
     {
       "profileId": "vvg-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vvg-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vvg-diplomski",
@@ -48041,8 +49026,13 @@
     {
       "profileId": "vevu-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vevu-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vevu-zavrsni",
@@ -48282,8 +49272,13 @@
     {
       "profileId": "vuv-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vuv-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuv-zavrsni",
@@ -48523,8 +49518,13 @@
     {
       "profileId": "vuv-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vuv-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuv-diplomski",
@@ -48764,8 +49764,13 @@
     {
       "profileId": "veleknin-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:veleknin-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "veleknin-zavrsni",
@@ -48991,8 +49996,13 @@
     {
       "profileId": "vhzk-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vhzk-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vhzk-zavrsni",
@@ -49197,8 +50207,13 @@
     {
       "profileId": "dizajn-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:dizajn-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "dizajn-diplomski",
@@ -49403,8 +50418,13 @@
     {
       "profileId": "gradri-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:gradri-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "gradri-zavrsni",
@@ -49609,8 +50629,13 @@
     {
       "profileId": "gradri-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:gradri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "gradri-diplomski",
@@ -49851,8 +50876,13 @@
     {
       "profileId": "ffri-germanistika-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffri-germanistika-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffri-germanistika-zavrsni",
@@ -50093,8 +51123,13 @@
     {
       "profileId": "ffri-germanistika-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffri-germanistika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffri-germanistika-diplomski",
@@ -50328,8 +51363,13 @@
     {
       "profileId": "ffri-psihologija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffri-psihologija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffri-psihologija-diplomski",
@@ -50563,8 +51603,13 @@
     {
       "profileId": "ffri-povum-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffri-povum-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffri-povum-zavrsni",
@@ -50798,8 +51843,13 @@
     {
       "profileId": "ffri-povum-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffri-povum-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffri-povum-diplomski",
@@ -51040,8 +52090,13 @@
     {
       "profileId": "ffri-kulturalni-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffri-kulturalni-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffri-kulturalni-diplomski",
@@ -51275,8 +52330,13 @@
     {
       "profileId": "fpzpu-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzpu-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzpu-zavrsni",
@@ -51510,8 +52570,13 @@
     {
       "profileId": "fpzpu-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fpzpu-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fpzpu-diplomski",
@@ -51745,8 +52810,13 @@
     {
       "profileId": "ffst-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffst-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffst-zavrsni",
@@ -51980,8 +53050,13 @@
     {
       "profileId": "ffst-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffst-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffst-diplomski",
@@ -52215,8 +53290,13 @@
     {
       "profileId": "fesb-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fesb-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fesb-zavrsni",
@@ -52450,8 +53530,13 @@
     {
       "profileId": "fesb-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fesb-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fesb-diplomski",
@@ -52656,8 +53741,13 @@
     {
       "profileId": "pravst-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravst-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravst-zavrsni",
@@ -52862,8 +53952,13 @@
     {
       "profileId": "pravst-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravst-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravst-diplomski",
@@ -53096,8 +54191,13 @@
     {
       "profileId": "ffos-povijest-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffos-povijest-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffos-povijest-zavrsni",
@@ -53330,8 +54430,13 @@
     {
       "profileId": "ffos-povijest-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffos-povijest-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffos-povijest-diplomski",
@@ -53565,8 +54670,13 @@
     {
       "profileId": "ffos-psihologija-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffos-psihologija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffos-psihologija-zavrsni",
@@ -53807,8 +54917,13 @@
     {
       "profileId": "ffos-psihologija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffos-psihologija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffos-psihologija-diplomski",
@@ -54035,8 +55150,13 @@
     {
       "profileId": "ffos-informatologija-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffos-informatologija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffos-informatologija-zavrsni",
@@ -54263,8 +55383,13 @@
     {
       "profileId": "ffos-informatologija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffos-informatologija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffos-informatologija-diplomski",
@@ -54491,8 +55616,13 @@
     {
       "profileId": "ffos-germanistika-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffos-germanistika-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffos-germanistika-zavrsni",
@@ -54719,8 +55849,13 @@
     {
       "profileId": "ffos-germanistika-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffos-germanistika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffos-germanistika-diplomski",
@@ -54954,8 +56089,13 @@
     {
       "profileId": "uaos-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:uaos-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "uaos-zavrsni",
@@ -55189,8 +56329,13 @@
     {
       "profileId": "uaos-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:uaos-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "uaos-diplomski",
@@ -55431,8 +56576,13 @@
     {
       "profileId": "fdmz-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fdmz-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fdmz-diplomski",
@@ -55659,8 +56809,13 @@
     {
       "profileId": "foozos-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:foozos-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "foozos-diplomski",
@@ -55894,8 +57049,13 @@
     {
       "profileId": "kbfdj-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:kbfdj-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "kbfdj-diplomski",
@@ -56129,8 +57289,13 @@
     {
       "profileId": "biolos-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:biolos-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "biolos-zavrsni",
@@ -56364,8 +57529,13 @@
     {
       "profileId": "biolos-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:biolos-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "biolos-diplomski",
@@ -56599,8 +57769,13 @@
     {
       "profileId": "fizos-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fizos-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fizos-diplomski",
@@ -56805,8 +57980,13 @@
     {
       "profileId": "unizd-kroatistika-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-kroatistika-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-kroatistika-zavrsni",
@@ -57011,8 +58191,13 @@
     {
       "profileId": "unizd-kroatistika-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-kroatistika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-kroatistika-diplomski",
@@ -57217,8 +58402,13 @@
     {
       "profileId": "unizd-ekonomija-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-ekonomija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-ekonomija-zavrsni",
@@ -57423,8 +58613,13 @@
     {
       "profileId": "unizd-ekonomija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-ekonomija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-ekonomija-diplomski",
@@ -57658,8 +58853,13 @@
     {
       "profileId": "unizd-ekologija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-ekologija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-ekologija-diplomski",
@@ -57893,8 +59093,13 @@
     {
       "profileId": "unizd-ekologija-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-ekologija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-ekologija-zavrsni",
@@ -58135,8 +59340,13 @@
     {
       "profileId": "unizd-etnologija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-etnologija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-etnologija-diplomski",
@@ -58363,8 +59573,13 @@
     {
       "profileId": "unizd-geografija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-geografija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-geografija-diplomski",
@@ -58584,8 +59799,13 @@
     {
       "profileId": "unizd-zdravstvo-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-zdravstvo-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-zdravstvo-zavrsni",
@@ -58805,8 +60025,13 @@
     {
       "profileId": "unizd-zdravstvo-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-zdravstvo-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-zdravstvo-diplomski",
@@ -59033,8 +60258,13 @@
     {
       "profileId": "unizd-informacijske-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-informacijske-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-informacijske-zavrsni",
@@ -59261,8 +60491,13 @@
     {
       "profileId": "unizd-informacijske-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-informacijske-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-informacijske-diplomski",
@@ -59503,8 +60738,13 @@
     {
       "profileId": "unizd-arheologija-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-arheologija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-arheologija-zavrsni",
@@ -59745,8 +60985,13 @@
     {
       "profileId": "unizd-arheologija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-arheologija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-arheologija-diplomski",
@@ -59980,8 +61225,13 @@
     {
       "profileId": "unizd-klasicna-filologija-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-klasicna-filologija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-klasicna-filologija-zavrsni",
@@ -60215,8 +61465,13 @@
     {
       "profileId": "unizd-klasicna-filologija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-klasicna-filologija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-klasicna-filologija-diplomski",
@@ -60436,8 +61691,13 @@
     {
       "profileId": "unizd-filozofija-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-filozofija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-filozofija-zavrsni",
@@ -60657,8 +61917,13 @@
     {
       "profileId": "unizd-filozofija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-filozofija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-filozofija-diplomski",
@@ -60863,8 +62128,13 @@
     {
       "profileId": "unizd-anglistika-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-anglistika-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-anglistika-zavrsni",
@@ -61069,8 +62339,13 @@
     {
       "profileId": "unizd-anglistika-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-anglistika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-anglistika-diplomski",
@@ -61304,8 +62579,13 @@
     {
       "profileId": "unizd-germanistika-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-germanistika-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-germanistika-zavrsni",
@@ -61539,8 +62819,13 @@
     {
       "profileId": "unizd-germanistika-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-germanistika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-germanistika-diplomski",
@@ -61774,8 +63059,13 @@
     {
       "profileId": "unizd-hispanistika-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-hispanistika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-hispanistika-diplomski",
@@ -61995,8 +63285,13 @@
     {
       "profileId": "unizd-francuski-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-francuski-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-francuski-diplomski",
@@ -62229,8 +63524,13 @@
     {
       "profileId": "unizd-povijest-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-povijest-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-povijest-zavrsni",
@@ -62463,8 +63763,13 @@
     {
       "profileId": "unizd-povijest-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-povijest-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-povijest-diplomski",
@@ -62684,8 +63989,13 @@
     {
       "profileId": "unizd-talijanistika-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-talijanistika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-talijanistika-diplomski",
@@ -62890,8 +64200,13 @@
     {
       "profileId": "unizd-sociologija-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-sociologija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-sociologija-zavrsni",
@@ -63132,8 +64447,13 @@
     {
       "profileId": "unizd-sociologija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-sociologija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-sociologija-diplomski",
@@ -63338,8 +64658,13 @@
     {
       "profileId": "unizd-lingvistika-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-lingvistika-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-lingvistika-zavrsni",
@@ -63544,8 +64869,13 @@
     {
       "profileId": "unizd-lingvistika-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-lingvistika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-lingvistika-diplomski",
@@ -63750,8 +65080,13 @@
     {
       "profileId": "unizd-rusistika-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-rusistika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-rusistika-diplomski",
@@ -63985,8 +65320,13 @@
     {
       "profileId": "unizd-pomorski-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-pomorski-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-pomorski-zavrsni",
@@ -64220,8 +65560,13 @@
     {
       "profileId": "unizd-pomorski-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-pomorski-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-pomorski-diplomski",
@@ -64462,8 +65807,13 @@
     {
       "profileId": "unizd-ucitelji-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-ucitelji-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-ucitelji-diplomski",
@@ -64697,8 +66047,13 @@
     {
       "profileId": "unizd-psihologija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-psihologija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-psihologija-diplomski",
@@ -64939,8 +66294,13 @@
     {
       "profileId": "unizd-povijest-umj-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-povijest-umj-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-povijest-umj-diplomski",
@@ -65167,8 +66527,13 @@
     {
       "profileId": "unidu-marikultura-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unidu-marikultura-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unidu-marikultura-diplomski",
@@ -65402,8 +66767,13 @@
     {
       "profileId": "unidu-sestrinstvo-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unidu-sestrinstvo-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unidu-sestrinstvo-zavrsni",
@@ -65644,8 +67014,13 @@
     {
       "profileId": "unidu-komunikologija-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unidu-komunikologija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unidu-komunikologija-zavrsni",
@@ -65886,8 +67261,13 @@
     {
       "profileId": "unidu-umjetnost-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unidu-umjetnost-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unidu-umjetnost-zavrsni",
@@ -66092,8 +67472,13 @@
     {
       "profileId": "unidu-elektro-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unidu-elektro-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unidu-elektro-zavrsni",
@@ -66298,8 +67683,13 @@
     {
       "profileId": "unidu-elektro-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unidu-elektro-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unidu-elektro-diplomski",
@@ -66540,8 +67930,13 @@
     {
       "profileId": "vub-zavrsni-tehnicki",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vub-zavrsni-tehnicki",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vub-zavrsni-tehnicki",
@@ -66782,8 +68177,13 @@
     {
       "profileId": "vub-zavrsni-sestrinstvo",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vub-zavrsni-sestrinstvo",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vub-zavrsni-sestrinstvo",
@@ -67024,8 +68424,13 @@
     {
       "profileId": "mev-zavrsni-drustveni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mev-zavrsni-drustveni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mev-zavrsni-drustveni",
@@ -67266,8 +68671,13 @@
     {
       "profileId": "mev-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mev-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mev-diplomski",
@@ -67508,8 +68918,13 @@
     {
       "profileId": "vevu-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vevu-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vevu-diplomski",
@@ -67743,8 +69158,13 @@
     {
       "profileId": "veleknin-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:veleknin-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "veleknin-diplomski",
@@ -67971,8 +69391,13 @@
     {
       "profileId": "vus-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vus-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vus-zavrsni",
@@ -68199,8 +69624,13 @@
     {
       "profileId": "vus-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vus-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vus-diplomski",
@@ -68441,8 +69871,13 @@
     {
       "profileId": "bak-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:bak-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "bak-zavrsni",
@@ -68683,8 +70118,13 @@
     {
       "profileId": "bak-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:bak-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "bak-diplomski",
@@ -68918,8 +70358,13 @@
     {
       "profileId": "vguk-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vguk-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vguk-zavrsni",
@@ -69153,8 +70598,13 @@
     {
       "profileId": "vguk-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vguk-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vguk-diplomski",
@@ -69388,8 +70838,13 @@
     {
       "profileId": "aspira-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:aspira-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "aspira-zavrsni",
@@ -69623,8 +71078,13 @@
     {
       "profileId": "aspira-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:aspira-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "aspira-diplomski",
@@ -69829,8 +71289,13 @@
     {
       "profileId": "par-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:par-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "par-zavrsni",
@@ -70035,8 +71500,13 @@
     {
       "profileId": "par-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:par-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "par-diplomski",
@@ -70277,8 +71747,13 @@
     {
       "profileId": "vss-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vss-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vss-zavrsni",
@@ -70519,8 +71994,13 @@
     {
       "profileId": "vss-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vss-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vss-diplomski",
@@ -70739,8 +72219,13 @@
     {
       "profileId": "vuka-poslovni-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vuka-poslovni-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-poslovni-zavrsni",
@@ -70959,8 +72444,13 @@
     {
       "profileId": "vuka-poslovni-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vuka-poslovni-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-poslovni-diplomski",
@@ -71165,8 +72655,13 @@
     {
       "profileId": "vuka-strojarski-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vuka-strojarski-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-strojarski-zavrsni",
@@ -71371,8 +72866,13 @@
     {
       "profileId": "vuka-strojarski-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vuka-strojarski-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-strojarski-diplomski",
@@ -71592,8 +73092,13 @@
     {
       "profileId": "vuka-sigurnost-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vuka-sigurnost-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-sigurnost-zavrsni",
@@ -71813,8 +73318,13 @@
     {
       "profileId": "vuka-sigurnost-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vuka-sigurnost-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-sigurnost-diplomski",
@@ -72034,8 +73544,13 @@
     {
       "profileId": "vuka-prehrambena-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vuka-prehrambena-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-prehrambena-zavrsni",
@@ -72255,8 +73770,13 @@
     {
       "profileId": "vuka-lovstvo-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vuka-lovstvo-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-lovstvo-zavrsni",
@@ -72483,8 +74003,13 @@
     {
       "profileId": "unisb-sfsb-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unisb-sfsb-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unisb-sfsb-zavrsni",
@@ -72711,8 +74236,13 @@
     {
       "profileId": "unisb-sfsb-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unisb-sfsb-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unisb-sfsb-diplomski",
@@ -72939,8 +74469,13 @@
     {
       "profileId": "unisb-teho-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unisb-teho-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unisb-teho-zavrsni",
@@ -73167,8 +74702,13 @@
     {
       "profileId": "unisb-teho-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unisb-teho-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unisb-teho-diplomski",
@@ -73395,8 +74935,13 @@
     {
       "profileId": "unisb-btho-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unisb-btho-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unisb-btho-zavrsni",
@@ -73623,8 +75168,13 @@
     {
       "profileId": "unisb-btho-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unisb-btho-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unisb-btho-diplomski",
@@ -73851,8 +75401,13 @@
     {
       "profileId": "unisb-odhz-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unisb-odhz-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unisb-odhz-zavrsni",
@@ -74079,8 +75634,13 @@
     {
       "profileId": "unisb-odhz-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unisb-odhz-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unisb-odhz-diplomski",
@@ -74314,8 +75874,13 @@
     {
       "profileId": "ftrr-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ftrr-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ftrr-zavrsni",
@@ -74549,8 +76114,13 @@
     {
       "profileId": "ftrr-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ftrr-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ftrr-diplomski",
@@ -74755,8 +76325,13 @@
     {
       "profileId": "adu-gluma-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:adu-gluma-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "adu-gluma-diplomski",
@@ -74961,8 +76536,13 @@
     {
       "profileId": "adu-dramaturgija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:adu-dramaturgija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "adu-dramaturgija-diplomski",
@@ -75167,8 +76747,13 @@
     {
       "profileId": "adu-snimanje-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:adu-snimanje-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "adu-snimanje-diplomski",
@@ -75402,8 +76987,13 @@
     {
       "profileId": "adu-montaza-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:adu-montaza-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "adu-montaza-diplomski",
@@ -75608,8 +77198,13 @@
     {
       "profileId": "adu-ftv-rezija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:adu-ftv-rezija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "adu-ftv-rezija-diplomski",
@@ -75814,8 +77409,13 @@
     {
       "profileId": "adu-produkcija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:adu-produkcija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "adu-produkcija-diplomski",
@@ -76020,8 +77620,13 @@
     {
       "profileId": "adu-kazalisna-rezija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:adu-kazalisna-rezija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "adu-kazalisna-rezija-diplomski",
@@ -76226,8 +77831,13 @@
     {
       "profileId": "adu-opci-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:adu-opci-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "adu-opci-diplomski",
@@ -76439,8 +78049,13 @@
     {
       "profileId": "alu-slikarstvo-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:alu-slikarstvo-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "alu-slikarstvo-diplomski",
@@ -76659,8 +78274,13 @@
     {
       "profileId": "alu-kiparstvo-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:alu-kiparstvo-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "alu-kiparstvo-diplomski",
@@ -76865,8 +78485,13 @@
     {
       "profileId": "alu-grafika-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:alu-grafika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "alu-grafika-diplomski",
@@ -77071,8 +78696,13 @@
     {
       "profileId": "alu-novi-mediji-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:alu-novi-mediji-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "alu-novi-mediji-diplomski",
@@ -77277,8 +78907,13 @@
     {
       "profileId": "alu-nastavnicki-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:alu-nastavnicki-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "alu-nastavnicki-diplomski",
@@ -77519,8 +79154,13 @@
     {
       "profileId": "alu-konzerviranje-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:alu-konzerviranje-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "alu-konzerviranje-diplomski",
@@ -77759,8 +79399,13 @@
     {
       "profileId": "ttf-dizajn-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ttf-dizajn-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ttf-dizajn-diplomski",
@@ -77999,8 +79644,13 @@
     {
       "profileId": "ttf-dizajn-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ttf-dizajn-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ttf-dizajn-zavrsni",
@@ -78234,8 +79884,13 @@
     {
       "profileId": "pmf-geofizika-graduate",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pmf-geofizika-graduate",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pmf-geofizika-graduate",
@@ -78469,8 +80124,13 @@
     {
       "profileId": "fsb-opci-akademski-rad",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fsb-opci-akademski-rad",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fsb-opci-akademski-rad",
@@ -78704,8 +80364,13 @@
     {
       "profileId": "efst-opci-akademski-rad",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efst-opci-akademski-rad",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efst-opci-akademski-rad",
@@ -78939,8 +80604,13 @@
     {
       "profileId": "efos-opci-akademski-rad",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efos-opci-akademski-rad",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efos-opci-akademski-rad",
@@ -79174,8 +80844,13 @@
     {
       "profileId": "pravri-opci-akademski-rad",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravri-opci-akademski-rad",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravri-opci-akademski-rad",
@@ -79380,8 +81055,13 @@
     {
       "profileId": "geof-opci-akademski-rad",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:geof-opci-akademski-rad",
+        "checkIds": []
+      }
     },
     {
       "profileId": "geof-opci-akademski-rad",
@@ -79600,8 +81280,13 @@
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vuka-poslovni-opci-akademski-rad",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
@@ -79828,8 +81513,13 @@
     {
       "profileId": "foi-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:foi-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "foi-zavrsni",
@@ -80056,8 +81746,13 @@
     {
       "profileId": "foi-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:foi-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "foi-diplomski",
@@ -80284,8 +81979,13 @@
     {
       "profileId": "simet-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:simet-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "simet-zavrsni",
@@ -80519,8 +82219,13 @@
     {
       "profileId": "more-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:more-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "more-zavrsni",
@@ -80754,8 +82459,13 @@
     {
       "profileId": "more-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:more-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "more-diplomski",
@@ -80989,8 +82699,13 @@
     {
       "profileId": "forenzika-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:forenzika-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "forenzika-diplomski",
@@ -81217,8 +82932,13 @@
     {
       "profileId": "ozs-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ozs-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ozs-zavrsni",
@@ -81445,8 +83165,13 @@
     {
       "profileId": "ozs-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ozs-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ozs-diplomski",
@@ -81651,8 +83376,13 @@
     {
       "profileId": "umas-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:umas-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "umas-zavrsni",
@@ -81857,8 +83587,13 @@
     {
       "profileId": "umas-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:umas-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "umas-diplomski",
@@ -82092,8 +83827,13 @@
     {
       "profileId": "oss-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:oss-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "oss-zavrsni",
@@ -82327,8 +84067,13 @@
     {
       "profileId": "oss-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:oss-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "oss-diplomski",
@@ -82562,8 +84307,13 @@
     {
       "profileId": "kifos-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:kifos-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "kifos-zavrsni",
@@ -82797,8 +84547,13 @@
     {
       "profileId": "kifos-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:kifos-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "kifos-diplomski",
@@ -83032,8 +84787,13 @@
     {
       "profileId": "fdmri-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fdmri-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fdmri-zavrsni",
@@ -83267,8 +85027,13 @@
     {
       "profileId": "fdmri-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fdmri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fdmri-diplomski",
@@ -83502,8 +85267,13 @@
     {
       "profileId": "logri-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:logri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "logri-diplomski",
@@ -83737,8 +85507,13 @@
     {
       "profileId": "vnt-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vnt-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vnt-zavrsni",
@@ -83972,8 +85747,13 @@
     {
       "profileId": "vnt-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vnt-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vnt-diplomski",
@@ -84200,8 +85980,13 @@
     {
       "profileId": "iv-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:iv-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "iv-zavrsni",
@@ -84428,8 +86213,13 @@
     {
       "profileId": "iv-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:iv-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "iv-diplomski",
@@ -84656,8 +86446,13 @@
     {
       "profileId": "vsig-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vsig-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vsig-zavrsni",
@@ -84884,8 +86679,13 @@
     {
       "profileId": "vsig-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:vsig-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "vsig-diplomski",
@@ -85104,8 +86904,13 @@
     {
       "profileId": "arca-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:arca-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "arca-zavrsni",
@@ -85332,8 +87137,13 @@
     {
       "profileId": "securus-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:securus-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "securus-zavrsni",
@@ -85567,8 +87377,13 @@
     {
       "profileId": "evtos-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:evtos-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "evtos-zavrsni",
@@ -85802,8 +87617,13 @@
     {
       "profileId": "evtos-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:evtos-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "evtos-diplomski",
@@ -86037,8 +87857,13 @@
     {
       "profileId": "unizd-tko-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:unizd-tko-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "unizd-tko-diplomski",
@@ -86277,8 +88102,13 @@
     {
       "profileId": "ffpu-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffpu-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffpu-zavrsni",
@@ -86517,8 +88347,13 @@
     {
       "profileId": "ffpu-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffpu-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffpu-diplomski",
@@ -86757,8 +88592,13 @@
     {
       "profileId": "fipu-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fipu-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fipu-zavrsni",
@@ -86997,8 +88837,13 @@
     {
       "profileId": "mfpu-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mfpu-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mfpu-diplomski",
@@ -87237,8 +89082,13 @@
     {
       "profileId": "mapu-glazbena-pedagogija-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mapu-glazbena-pedagogija-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mapu-glazbena-pedagogija-zavrsni",
@@ -87477,8 +89327,13 @@
     {
       "profileId": "mapu-glazbena-pedagogija-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mapu-glazbena-pedagogija-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mapu-glazbena-pedagogija-diplomski",
@@ -87719,8 +89574,13 @@
     {
       "profileId": "apuri-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:apuri-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "apuri-zavrsni",
@@ -87952,8 +89812,13 @@
     {
       "profileId": "apuri-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:apuri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "apuri-diplomski",
@@ -88170,8 +90035,13 @@
     {
       "profileId": "math-uniri-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:math-uniri-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "math-uniri-zavrsni",
@@ -88388,8 +90258,13 @@
     {
       "profileId": "math-uniri-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:math-uniri-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "math-uniri-diplomski",
@@ -88620,8 +90495,13 @@
     {
       "profileId": "mathos-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mathos-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mathos-zavrsni",
@@ -88852,8 +90732,13 @@
     {
       "profileId": "mathos-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:mathos-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "mathos-diplomski",
@@ -89087,8 +90972,13 @@
     {
       "profileId": "algebra-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:algebra-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "algebra-zavrsni",
@@ -89322,8 +91212,13 @@
     {
       "profileId": "algebra-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:algebra-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "algebra-diplomski",
@@ -89557,8 +91452,13 @@
     {
       "profileId": "algebra-diplomski-odnosi-s-javnoscu",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:algebra-diplomski-odnosi-s-javnoscu",
+        "checkIds": []
+      }
     },
     {
       "profileId": "algebra-diplomski-odnosi-s-javnoscu",
@@ -89792,8 +91692,13 @@
     {
       "profileId": "algebra-specijalisticki",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:algebra-specijalisticki",
+        "checkIds": []
+      }
     },
     {
       "profileId": "algebra-specijalisticki",
@@ -90032,8 +91937,13 @@
     {
       "profileId": "fipu-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:fipu-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "fipu-diplomski",
@@ -90250,8 +92160,13 @@
     {
       "profileId": "math-uniri-diplomski-en",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:math-uniri-diplomski-en",
+        "checkIds": []
+      }
     },
     {
       "profileId": "math-uniri-diplomski-en",
@@ -90484,8 +92399,13 @@
     {
       "profileId": "zsem-zavrsni-en",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:zsem-zavrsni-en",
+        "checkIds": []
+      }
     },
     {
       "profileId": "zsem-zavrsni-en",
@@ -90719,8 +92639,13 @@
     {
       "profileId": "aspira-zavrsni-en",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:aspira-zavrsni-en",
+        "checkIds": []
+      }
     },
     {
       "profileId": "aspira-zavrsni-en",
@@ -90954,8 +92879,13 @@
     {
       "profileId": "aspira-diplomski-en",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:aspira-diplomski-en",
+        "checkIds": []
+      }
     },
     {
       "profileId": "aspira-diplomski-en",
@@ -91181,8 +93111,13 @@
     {
       "profileId": "libertas-zavrsni-en",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:libertas-zavrsni-en",
+        "checkIds": []
+      }
     },
     {
       "profileId": "libertas-zavrsni-en",
@@ -91415,8 +93350,13 @@
     {
       "profileId": "libertas-diplomski-en",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:libertas-diplomski-en",
+        "checkIds": []
+      }
     },
     {
       "profileId": "libertas-diplomski-en",
@@ -91657,8 +93597,13 @@
     {
       "profileId": "sois-ft-vojno-inzenjerstvo-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:sois-ft-vojno-inzenjerstvo-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "sois-ft-vojno-inzenjerstvo-zavrsni",
@@ -91899,8 +93844,13 @@
     {
       "profileId": "sois-ft-vojno-inzenjerstvo-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:sois-ft-vojno-inzenjerstvo-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "sois-ft-vojno-inzenjerstvo-diplomski",
@@ -92141,8 +94091,13 @@
     {
       "profileId": "sois-ft-vojno-vodjenje-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:sois-ft-vojno-vodjenje-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "sois-ft-vojno-vodjenje-zavrsni",
@@ -92383,8 +94338,13 @@
     {
       "profileId": "sois-ft-vojno-vodjenje-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:sois-ft-vojno-vodjenje-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "sois-ft-vojno-vodjenje-diplomski",
@@ -92625,8 +94585,13 @@
     {
       "profileId": "sois-ft-vojno-pomorstvo-diplomski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:sois-ft-vojno-pomorstvo-diplomski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "sois-ft-vojno-pomorstvo-diplomski",
@@ -92867,8 +94832,13 @@
     {
       "profileId": "ffri-kroatistika-zavrsni",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffri-kroatistika-zavrsni",
+        "checkIds": []
+      }
     },
     {
       "profileId": "ffri-kroatistika-zavrsni",
@@ -93101,8 +95071,13 @@
     {
       "profileId": "efos-doktorski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efos-doktorski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efos-doktorski",
@@ -93335,8 +95310,13 @@
     {
       "profileId": "efos-specijalisticki",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efos-specijalisticki",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efos-specijalisticki",
@@ -93555,8 +95535,13 @@
     {
       "profileId": "efzg-seminarski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:efzg-seminarski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "efzg-seminarski",
@@ -93789,8 +95774,13 @@
     {
       "profileId": "kif-specijalisticki",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:kif-specijalisticki",
+        "checkIds": []
+      }
     },
     {
       "profileId": "kif-specijalisticki",
@@ -94023,8 +96013,13 @@
     {
       "profileId": "pravri-specijalisticki",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:pravri-specijalisticki",
+        "checkIds": []
+      }
     },
     {
       "profileId": "pravri-specijalisticki",
@@ -94264,8 +96259,13 @@
     {
       "profileId": "effectus-seminarski",
       "fixerId": "final-document-inspector-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:effectus-seminarski",
+        "checkIds": []
+      }
     },
     {
       "profileId": "effectus-seminarski",
