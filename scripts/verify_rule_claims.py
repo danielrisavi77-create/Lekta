@@ -344,6 +344,24 @@ PREDICATE_TOKENS: dict[str, list[str]] = {
     # Njemacki i opis PAKETA su ravnopravni oblici izvora: `ffri-germanistika` uputa je na njemackom
     # ("Blocksatz"), a `ffst` citat opisuje Word predlozak ("Footer: PAGE polje"). Oboje IZRICE
     # odredbu; da rjecnik pokriva samo hrvatsku prozu, tocna tvrdnja bi ispala neuporistena.
+    # `footnote-justify` dijeli rjecnik s `justify`: odredba je ista, samo je opseg fusnota, a opseg
+    # je vec u identitetu osi. Izvor koji je iznudio unos: "prored jednostruk s obostranim
+    # poravnanjem" (biljeske na dnu stranice).
+    "footnote-justify": [
+        "obostran", "justify", "poravna", "poravnat", "blok", "obje strane", "blocksatz",
+    ],
+    # Numeriranje koje POCINJE od Uvoda. Tokeni su namjerno visesloznicni: goli "uvod" stoji u
+    # gotovo svakoj uputi, pa bi jednorjecni token palio na necemu sto o numeraciji ne govori.
+    "page-number-start-at-intro": [
+        "prva stranica je stranica uvod", "prva stranica je uvod", "od uvoda", "pocevsi od uvoda",
+        "pocinje s uvodom", "pocinje od uvoda", "uvod je prva numerirana",
+    ],
+    # Naslovnica (i njoj slicne stranice) BEZ broja. Odredba se u izvorima gotovo uvijek pise
+    # nijecno ("ne numerirati"), pa rjecnik hvata negaciju, ne potvrdu.
+    "page-number-title-suppression": [
+        "ne numerirati", "ne numerira", "bez broja stranice", "ne oznacava se brojem",
+        "ne oznacavaju se brojem", "se ne broji", "naslovna stranica se ne",
+    ],
     "justify": [
         "obostran", "justify", "poravna", "poravnat", "blok", "obje strane", "objema margina",
         "blocksatz", "w:jc=both",
@@ -479,6 +497,99 @@ def composite_tokens(check_id: str, value) -> list[list[str]]:
     return groups
 
 
+# Rjecnik za snop pravila o naslovima. Kljuc je (svojstvo, vrijednost), pa razina naslova ne
+# umnaza unose: izvor koji trazi podebljanje na tri razine to izrice jednom.
+# Vrijednost je LISTA SKUPINA: svaka skupina mora imati barem jedan pogodak. Dvije skupine za
+# velika slova nisu pedanterija nego mjerenje: izvor pise "VELIKIM PODEBLJANIM slovima", pa
+# jednorjecni token "velikim slov" promasi jer rijeci nisu susjedne. Jedan token "velikim" bi pak
+# palio i na "velikim fontom", sto o velikim slovima ne govori nista. Dvije skupine traze i pojam
+# velicine i pojam slova, pa prolazi samo ono sto stvarno govori o verzalu.
+HEADING_VOCABULARY: dict[tuple[str, object], list[list[str]]] = {
+    ("bold", True): [["podebljan", "bold", "masn", "boldan"]],
+    ("italic", True): [["kurziv", "italic", "koso", "nakosen"]],
+    ("uppercase", True): [
+        ["velik", "verzal", "uppercase", "tiskan"],
+        # VODECI RAZMAK NIJE SITNICA: goli "slov" je podniz rijeci "naslov", pa bi recenica
+        # "naslovi se pisu velikim fontom" lazno potvrdila verzal. Izmjereno kontrolom ispod.
+        [" slov", "verzal", "uppercase", "tiskan"],
+    ],
+    ("numberRequired", True): [["numerir", "broj"]],
+    ("romanLevelOneAllowed", True): [["rimsk"]],
+    # Tocka iza broja poglavlja ("2. Razrada"). Izvori to pisu i opisno i primjerom, pa se traze
+    # oba oblika; `false` se NE izvodi jer izostanak tocke izvori gotovo nikad ne izricu.
+    ("trailingDot", True): [["tocka", "tockom", "tocke", "1."]],
+    ("align", "left"): [["lijev"]],
+    ("align", "center"): [["centr", "sredin", "sredis"]],
+    ("align", "justify"): [["obostran", "justify", "poravnat", "blok"]],
+}
+
+# Koliko razina naslova: izvori to pisu i brojkom i rijecju, pa se traze oba oblika.
+HEADING_LEVEL_WORDS: dict[int, list[str]] = {
+    1: ["1", "jedn", "prv"],
+    2: ["2", "dvij", "drug"],
+    3: ["3", "tri", "trec"],
+    4: ["4", "cetiri", "cetvrt"],
+    5: ["5", "pet"],
+}
+
+
+def heading_rules_tokens(value) -> list[list[str]]:
+    """Snop pravila o naslovima -> po jedna skupina za svaku ODREDBU koju vrijednost izrice.
+
+    Dvije odluke vrijedne biljeske:
+
+    1. `false` NIJE odredba nego izostanak zahtjeva. Izvor koji o velikim slovima ne kaze nista
+       proizvodi `uppercase: false`, a od citata se tada ne moze ni traziti dokaz. Takvi listovi se
+       preskacu; ako vrijednost NEMA nijednu potvrdnu odredbu, izvod vraca prazno, sto znaci
+       NEPROVJERIVO, ne prolaz. Bez toga bi profil sa samim `false` vrijednostima prolazio vakuumski.
+    2. Nepoznato svojstvo obara cijeli izvod (deny-by-default), isto kao kod `composite_tokens`.
+       Tiho preskakanje bi znacilo da tvrdnja prolazi na dijelu koji nitko nije provjerio.
+    """
+    if not isinstance(value, dict):
+        return range_tokens(value)
+    groups: list[list[str]] = []
+    for key, leaf in value.items():
+        if key == "levels":
+            if not isinstance(leaf, dict):
+                return []
+            for _level, props in leaf.items():
+                if not isinstance(props, dict):
+                    return []
+                for prop, pv in props.items():
+                    if pv is False or pv is None:
+                        continue
+                    if prop == "size":
+                        found = range_tokens(pv)
+                        if not found:
+                            return []
+                        groups.extend(found)
+                        continue
+                    forms = HEADING_VOCABULARY.get((prop, pv))
+                    if forms is None:
+                        return []
+                    groups.extend(forms)
+            continue
+        if key == "size":
+            found = range_tokens(leaf)
+            if not found:
+                return []
+            groups.extend(found)
+            continue
+        if key == "maxLevel":
+            words = HEADING_LEVEL_WORDS.get(leaf if isinstance(leaf, int) else -1)
+            if words is None:
+                return []
+            groups.append(words)
+            continue
+        if leaf is False or leaf is None:
+            continue
+        forms = HEADING_VOCABULARY.get((key, leaf))
+        if forms is None:
+            return []
+        groups.extend(forms)
+    return groups
+
+
 def value_tokens(check_id: str, value) -> list[list[str]]:
     """Za svaki dio vrijednosti vraca DOPUSTENE zapise; svaki dio mora imati barem jedan pogodak."""
     if check_id == "paper-size":
@@ -525,7 +636,7 @@ def value_tokens(check_id: str, value) -> list[list[str]]:
             out.append([text, text[:6]] if len(text) > 6 else [text])
         return out
     if check_id == "heading-rules":
-        return range_tokens(value.get("size") if isinstance(value, dict) else value)
+        return heading_rules_tokens(value)
     if check_id == "citation-style":
         # Naziv stila ILI njegov nedvosmislen potpis. `custom` po definiciji nema potpis, pa se ne
         # izvodi mehanicki: to je oznaka "stil postoji, nije standardni".
@@ -749,6 +860,32 @@ SELFTEST: list[tuple[str, object, str, bool]] = [
     ("page-numbers", True, "Rad se uvezuje termo uvezom.", False),
     ("required-sections", ["uvod", "zakljucak"], "Rad sadrzi uvod, razradu i zakljucak.", True),
     ("required-sections", ["uvod", "sazetak"], "Rad sadrzi uvod, razradu i zakljucak.", False),
+    # --- OSI KOJE SU DO 2026-08-30 BILE BEZ IZVODA ---------------------------------------------
+    ("footnote-justify", True, "biljeske se pisu na dnu stranice, prored jednostruk s obostranim poravnanjem", True),
+    ("footnote-justify", True, "Biljeske se pisu na dnu stranice, velicine 10.", False),
+    ("page-number-start-at-intro", True, "Stranice obavezno oznaciti brojevima (prva stranica je stranica Uvod)", True),
+    ("page-number-start-at-intro", True, "Uvod treba jasno predstaviti temu rada.", False),
+    ("page-number-title-suppression", True, "naslovnu stranicu i stranice sa sadrzajem ne numerirati", True),
+    ("page-number-title-suppression", True, "Sve stranice numerirati arapskim brojevima.", False),
+    # Snop pravila o naslovima: svaka POTVRDNA odredba mora imati uporiste u citatu.
+    ("heading-rules", {"levels": {"1": {"uppercase": True, "bold": True}}},
+     "Naslov poglavlja pise se VELIKIM PODEBLJANIM slovima.", True),
+    ("heading-rules", {"levels": {"1": {"uppercase": True, "bold": True}}},
+     "Naslov poglavlja pise se velikim slovima.", False),
+    ("heading-rules", {"levels": {"2": {"italic": True}}}, "Podnaslovi se pisu kurzivom.", True),
+    # Tocno zbog ovoga su dvije skupine: "velikim fontom" govori o VELICINI, ne o verzalu.
+    ("heading-rules", {"levels": {"1": {"uppercase": True}}}, "Naslovi se pisu velikim fontom.", False),
+    ("heading-rules", {"maxLevel": 3, "numberRequired": True},
+     "Poglavlja se numeriraju do trece razine.", True),
+    ("heading-rules", {"trailingDot": True}, "Iza broja poglavlja stavlja se tocka.", True),
+    ("heading-rules", {"trailingDot": True}, "Poglavlja se numeriraju arapskim brojevima.", False),
+    ("heading-rules", {"romanLevelOneAllowed": True}, "Prva razina moze biti rimskim brojem.", True),
+    # `false` NIJE odredba: vrijednost bez ijedne potvrdne odredbe mora ostati NEPROVJERIVA.
+    ("heading-rules", {"levels": {"1": {"uppercase": False}, "2": {"uppercase": False}}},
+     "Naslov poglavlja pise se VELIKIM PODEBLJANIM slovima.", False),
+    # Nepoznato svojstvo obara izvod, ne prolazi tiho.
+    ("heading-rules", {"levels": {"1": {"nepoznatoSvojstvo": True}}},
+     "Naslovi se pisu velikim slovima i podebljano.", False),
     ("heading-rules", {"size": 14}, "Naslovi se pisu velicinom 14.", True),
     ("heading-rules", {"size": 16}, "Naslovi se pisu velicinom 14.", False),
     ("font", ["Merriweather"], "Rad treba pisati fontom Merriweather, velicine 10 pt.", True),
