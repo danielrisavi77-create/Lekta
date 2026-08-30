@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "rules": 2204,
-  "units": 1399,
+  "rules": 2218,
+  "units": 1401,
   "proposals": [
     {
       "sourceId": "adu-montaza-diplomski",
@@ -6143,7 +6143,7 @@
       "sourceId": "fazos-upute-diplomski-2024",
       "checkId": "citation-style",
       "sourcePage": "pogl. citiranje",
-      "value": "apa",
+      "value": "apa7",
       "quote": "Za citiranje u tekstu rada treba koristiti APA stil citiranja.",
       "ruleCount": 1,
       "profileIds": [
@@ -6387,7 +6387,7 @@
       "sourceId": "fazos-upute-zavrsni-2024",
       "checkId": "citation-style",
       "sourcePage": "pogl. citiranje",
-      "value": "apa",
+      "value": "apa7",
       "quote": "Za citiranje u tekstu rada treba koristiti APA stil citiranja.",
       "ruleCount": 1,
       "profileIds": [
@@ -8832,11 +8832,13 @@
         "Times New Roman"
       ],
       "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
-      "ruleCount": 1,
+      "ruleCount": 2,
       "profileIds": [
+        "ffos-povijest-zavrsni",
         "ffos-zavrsni"
       ],
       "ruleIds": [
+        "ffos-povijest-zavrsni--font",
         "ffos-zavrsni--font"
       ],
       "proposedModality": "directive",
@@ -8846,7 +8848,7 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 1,
+        "count": 2,
         "sources": [
           "mechanical"
         ]
@@ -8861,11 +8863,13 @@
       "sourcePage": "Upute za zavrsni rad (dio II)",
       "value": 12,
       "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
-      "ruleCount": 1,
+      "ruleCount": 2,
       "profileIds": [
+        "ffos-povijest-zavrsni",
         "ffos-zavrsni"
       ],
       "ruleIds": [
+        "ffos-povijest-zavrsni--font-size",
         "ffos-zavrsni--font-size"
       ],
       "proposedModality": "directive",
@@ -8875,7 +8879,7 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 1,
+        "count": 2,
         "sources": [
           "mechanical"
         ]
@@ -8890,11 +8894,13 @@
       "sourcePage": "Upute za zavrsni rad (dio II)",
       "value": 1.5,
       "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
-      "ruleCount": 1,
+      "ruleCount": 2,
       "profileIds": [
+        "ffos-povijest-zavrsni",
         "ffos-zavrsni"
       ],
       "ruleIds": [
+        "ffos-povijest-zavrsni--line-spacing",
         "ffos-zavrsni--line-spacing"
       ],
       "proposedModality": "directive",
@@ -8904,7 +8910,7 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 1,
+        "count": 2,
         "sources": [
           "mechanical"
         ]
@@ -8924,11 +8930,13 @@
         "left": 2.5
       },
       "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
-      "ruleCount": 1,
+      "ruleCount": 2,
       "profileIds": [
+        "ffos-povijest-zavrsni",
         "ffos-zavrsni"
       ],
       "ruleIds": [
+        "ffos-povijest-zavrsni--margins",
         "ffos-zavrsni--margins"
       ],
       "proposedModality": "directive",
@@ -8938,7 +8946,7 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 1,
+        "count": 2,
         "sources": [
           "mechanical"
         ]
@@ -8989,11 +8997,13 @@
       "sourcePage": "Upute za zavrsni rad (dio II)",
       "value": "A4",
       "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
-      "ruleCount": 1,
+      "ruleCount": 2,
       "profileIds": [
+        "ffos-povijest-zavrsni",
         "ffos-zavrsni"
       ],
       "ruleIds": [
+        "ffos-povijest-zavrsni--paper-size",
         "ffos-zavrsni--paper-size"
       ],
       "proposedModality": "directive",
@@ -9003,7 +9013,7 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 1,
+        "count": 2,
         "sources": [
           "mechanical"
         ]
@@ -9357,12 +9367,14 @@
         "Times New Roman"
       ],
       "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
-      "ruleCount": 1,
+      "ruleCount": 2,
       "profileIds": [
-        "ffos-diplomski"
+        "ffos-diplomski",
+        "ffos-povijest-diplomski"
       ],
       "ruleIds": [
-        "ffos-diplomski--font"
+        "ffos-diplomski--font",
+        "ffos-povijest-diplomski--font"
       ],
       "proposedModality": "directive",
       "proposedScope": "body",
@@ -9371,7 +9383,7 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 1,
+        "count": 2,
         "sources": [
           "mechanical"
         ]
@@ -9386,12 +9398,14 @@
       "sourcePage": "dio II Izgled diplomskoga rada",
       "value": 12,
       "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
-      "ruleCount": 1,
+      "ruleCount": 2,
       "profileIds": [
-        "ffos-diplomski"
+        "ffos-diplomski",
+        "ffos-povijest-diplomski"
       ],
       "ruleIds": [
-        "ffos-diplomski--font-size"
+        "ffos-diplomski--font-size",
+        "ffos-povijest-diplomski--font-size"
       ],
       "proposedModality": "directive",
       "proposedScope": "body",
@@ -9400,7 +9414,7 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 1,
+        "count": 2,
         "sources": [
           "mechanical"
         ]
@@ -9415,12 +9429,14 @@
       "sourcePage": "dio II Izgled diplomskoga rada",
       "value": 1.5,
       "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
-      "ruleCount": 1,
+      "ruleCount": 2,
       "profileIds": [
-        "ffos-diplomski"
+        "ffos-diplomski",
+        "ffos-povijest-diplomski"
       ],
       "ruleIds": [
-        "ffos-diplomski--line-spacing"
+        "ffos-diplomski--line-spacing",
+        "ffos-povijest-diplomski--line-spacing"
       ],
       "proposedModality": "directive",
       "proposedScope": "body",
@@ -9429,7 +9445,7 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 1,
+        "count": 2,
         "sources": [
           "mechanical"
         ]
@@ -9449,12 +9465,14 @@
         "left": 2.5
       },
       "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
-      "ruleCount": 1,
+      "ruleCount": 2,
       "profileIds": [
-        "ffos-diplomski"
+        "ffos-diplomski",
+        "ffos-povijest-diplomski"
       ],
       "ruleIds": [
-        "ffos-diplomski--margins"
+        "ffos-diplomski--margins",
+        "ffos-povijest-diplomski--margins"
       ],
       "proposedModality": "directive",
       "proposedScope": "whole",
@@ -9463,7 +9481,7 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 1,
+        "count": 2,
         "sources": [
           "mechanical"
         ]
@@ -9514,12 +9532,14 @@
       "sourcePage": "dio II Izgled diplomskoga rada",
       "value": "A4",
       "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
-      "ruleCount": 1,
+      "ruleCount": 2,
       "profileIds": [
-        "ffos-diplomski"
+        "ffos-diplomski",
+        "ffos-povijest-diplomski"
       ],
       "ruleIds": [
-        "ffos-diplomski--paper-size"
+        "ffos-diplomski--paper-size",
+        "ffos-povijest-diplomski--paper-size"
       ],
       "proposedModality": "directive",
       "proposedScope": "whole",
@@ -9528,7 +9548,7 @@
       ],
       "namedScopes": [],
       "writtenModality": {
-        "count": 1,
+        "count": 2,
         "sources": [
           "mechanical"
         ]
@@ -12570,7 +12590,7 @@
       "writtenModality": {
         "count": 1,
         "sources": [
-          "human"
+          "agent-read"
         ]
       },
       "resolved": true,
@@ -20024,6 +20044,39 @@
     },
     {
       "sourceId": "hks-opce-upute-diplomski-2023",
+      "checkId": "footnote-justify",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "value": true,
+      "quote": "bilješke se pišu na dnu stranice (footnote), a pismo (font) je veličine 10, prored jednostruk s obostranim poravnanjem",
+      "ruleCount": 1,
+      "profileIds": [
+        "hks-diplomski"
+      ],
+      "ruleIds": [
+        "hks-diplomski--footnote-justify"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "footnote",
+      "modalityMarks": [
+        "bare-indicative"
+      ],
+      "namedScopes": [
+        "footnote"
+      ],
+      "writtenModality": {
+        "count": 1,
+        "sources": [
+          "agent-read"
+        ]
+      },
+      "resolved": true,
+      "needsHuman": true,
+      "reasons": [
+        "recenica imenuje 'footnote', a os po naravi mjeri 'whole'"
+      ]
+    },
+    {
+      "sourceId": "hks-opce-upute-diplomski-2023",
       "checkId": "footnote-size",
       "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
       "value": [
@@ -20048,7 +20101,7 @@
       "writtenModality": {
         "count": 1,
         "sources": [
-          "human"
+          "agent-read"
         ]
       },
       "resolved": true,
@@ -20079,7 +20132,7 @@
       "writtenModality": {
         "count": 1,
         "sources": [
-          "human"
+          "agent-read"
         ]
       },
       "resolved": true,
@@ -22103,7 +22156,7 @@
       "sourceId": "kifos-upute-2024",
       "checkId": "citation-style",
       "sourcePage": "PDF str. 2",
-      "value": "apa",
+      "value": "apa7",
       "quote": "Formalno uređenje teksta treba biti sukladno APA standardima (engl. Publication Manual of the American Psychological Association, Seventh Edition, 2019).",
       "ruleCount": 2,
       "profileIds": [
@@ -22442,7 +22495,7 @@
       "sourceId": "kifst-upute-diplomski-2022",
       "checkId": "citation-style",
       "sourcePage": "Upute, citiranje",
-      "value": "apa",
+      "value": "apa7",
       "quote": "CITIRANJE I NAVOĐENJE IZVORA PO APA STANDARDU. U tekstu je moguće citirati autora na način da se i autor i godina stave u zagradu (Prezime, godina).",
       "ruleCount": 1,
       "profileIds": [
@@ -22451,11 +22504,9 @@
       "ruleIds": [
         "kifst-diplomski--citation-style"
       ],
-      "proposedModality": "directive",
+      "proposedModality": null,
       "proposedScope": "whole",
-      "modalityMarks": [
-        "bare-indicative"
-      ],
+      "modalityMarks": [],
       "namedScopes": [],
       "writtenModality": {
         "count": 1,
@@ -22464,8 +22515,10 @@
         ]
       },
       "resolved": true,
-      "needsHuman": false,
-      "reasons": []
+      "needsHuman": true,
+      "reasons": [
+        "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata"
+      ]
     },
     {
       "sourceId": "kifst-upute-diplomski-2022",
@@ -24619,7 +24672,7 @@
       "writtenModality": {
         "count": 1,
         "sources": [
-          "human"
+          "agent-read"
         ]
       },
       "resolved": true,
@@ -30648,7 +30701,52 @@
       "sourceId": "pravo-scsr-upute-zavrsni-2024",
       "checkId": "required-sections",
       "sourcePage": "str. 2-3, Struktura zavrsnog rada",
-      "value": [],
+      "value": [
+        {
+          "key": "abstract",
+          "label": "sazetak",
+          "terms": [
+            "sazetak",
+            "abstract"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "body",
+          "label": "razrada teme po poglavljima",
+          "terms": [
+            "razrada",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "bibliografija",
+            "references"
+          ]
+        }
+      ],
       "quote": "Struktura zavrsnog rada: Sazetak, Uvod, Razrada teme po poglavljima, Zakljucak, Literatura, Prilog.",
       "ruleCount": 1,
       "profileIds": [
@@ -31365,7 +31463,48 @@
       "sourceId": "pravo-upute-oblikovanje-2024",
       "checkId": "required-sections",
       "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
-      "value": [],
+      "value": [
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "uvodni dio",
+            "introduction"
+          ]
+        },
+        {
+          "key": "body",
+          "label": "sredisnji dio",
+          "terms": [
+            "sredisnji dio",
+            "razrada",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak",
+            "zakljucni dio",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis koristenih izvora i literature",
+          "terms": [
+            "izvori i literatura",
+            "popis literature",
+            "literatura",
+            "bibliografija",
+            "references"
+          ]
+        }
+      ],
       "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija).",
       "ruleCount": 3,
       "profileIds": [
@@ -32754,7 +32893,7 @@
       "sourceId": "riteh-upute-radovi-2025",
       "checkId": "citation-style",
       "sourcePage": "Upute, literatura",
-      "value": "ieee",
+      "value": "custom",
       "quote": "U tekstu se literatura navodi unutar pravokutnih zagrada [1]. Reference se navode pod rednim brojem pod kojim se pojavljuju u popisu, u uglatim zagradama (npr. [1] ili [1, 2, 3, 5]).",
       "ruleCount": 2,
       "profileIds": [
@@ -33048,7 +33187,7 @@
       "sourceId": "securus-pravilnik-zavrsni-2023",
       "checkId": "citation-style",
       "sourcePage": "Članak 17. stavak 2. i Članak 21. stavak 1.",
-      "value": "apa",
+      "value": "apa7",
       "quote": "Navodi u APA (American Psychological Association) stilu koriste se kod svakog izravnog citiranja, navođenja činjeničnog iskaza koji nije općenito poznat, s tim da je autor takvog iskaza neka određena osoba te kod parafraziranja. [...] Popis korištene literature treba navesti sukladno važećim normama i definiranim preporukama APA stila, a detalji stila dostupni su na stranici: www.apastyle.org",
       "ruleCount": 1,
       "profileIds": [
@@ -37073,7 +37212,7 @@
       "sourceId": "unin-upute-radovi-2026",
       "checkId": "citation-style",
       "sourcePage": "Upute, stilovi citiranja",
-      "value": "apa",
+      "value": "apa7",
       "quote": "American Psychological Association (tzv. APA) stil citiranja u području biomedicine. Popis literature navodi se prema APA 7 stilu.",
       "ruleCount": 2,
       "profileIds": [
@@ -37084,11 +37223,9 @@
         "unin-biomedicina-diplomski--citation-style",
         "unin-biomedicina-zavrsni--citation-style"
       ],
-      "proposedModality": "directive",
+      "proposedModality": null,
       "proposedScope": "bibliography",
-      "modalityMarks": [
-        "bare-indicative"
-      ],
+      "modalityMarks": [],
       "namedScopes": [
         "bibliography"
       ],
@@ -37101,6 +37238,7 @@
       "resolved": true,
       "needsHuman": true,
       "reasons": [
+        "nema modalnog biljega, a vrijednost se ne moze smjestiti ni u jednu recenicu citata",
         "recenica imenuje 'bibliography', a os po naravi mjeri 'whole'"
       ]
     },
@@ -41335,7 +41473,7 @@
       "sourceId": "unizd-psihologija-upute",
       "checkId": "citation-style",
       "sourcePage": "Upute, citiranje",
-      "value": "apa",
+      "value": "apa7",
       "quote": "Formalno uređenje teksta treba biti sukladno APA standardima (standardi za pisanje znanstvenih radova American Psychological Association).",
       "ruleCount": 1,
       "profileIds": [
@@ -44899,7 +45037,7 @@
       "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
       "checkId": "citation-style",
       "sourcePage": "t. 3.",
-      "value": "apa",
+      "value": "apa7",
       "quote": "Za izradu završnih/diplomskih radova na Veleučilištu kriminalistike i javne sigurnosti koristi se APA stil.",
       "ruleCount": 2,
       "profileIds": [
@@ -45457,7 +45595,7 @@
       "sourceId": "vsig-pravilnik-2023",
       "checkId": "citation-style",
       "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'NAVOĐENJE IZVORA', str. 26/41 (PDF str. 26)",
-      "value": "apa",
+      "value": "custom",
       "quote": "U ovoj uputi je sadržano samo nekoliko primjera navođenja izvora koji se najčešće koriste. Zaostale izvore možete konzultirati ovu stranicu ili priručnik Publication Manual of the American Psychological Association prema kojem su i rađene ove upute.",
       "ruleCount": 2,
       "profileIds": [
@@ -46831,7 +46969,60 @@
       "writtenModality": {
         "count": 3,
         "sources": [
-          "human"
+          "agent-read"
+        ]
+      },
+      "resolved": true,
+      "needsHuman": false,
+      "reasons": []
+    },
+    {
+      "sourceId": "vuka-poslovni-upute",
+      "checkId": "heading-rules",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "value": {
+        "levels": {
+          "1": {
+            "size": 16,
+            "bold": true,
+            "uppercase": true
+          },
+          "2": {
+            "size": 14,
+            "bold": true,
+            "uppercase": false
+          },
+          "3": {
+            "size": 12,
+            "bold": true,
+            "uppercase": false
+          }
+        }
+      },
+      "quote": "za naslove glava 16 bold te ih je potrebno pisati štampano, velikim slovima, a naslove poglavlja potrebno je pisati malim, pisanim slovima veličinom 14 bold, a potpoglavlja veličinom slova 12 bold također malim, pisanim slovima",
+      "ruleCount": 3,
+      "profileIds": [
+        "vuka-poslovni-diplomski",
+        "vuka-poslovni-opci-akademski-rad",
+        "vuka-poslovni-zavrsni"
+      ],
+      "ruleIds": [
+        "vuka-poslovni-diplomski--heading-rules",
+        "vuka-poslovni-opci-akademski-rad--heading-rules",
+        "vuka-poslovni-zavrsni--heading-rules"
+      ],
+      "proposedModality": "directive",
+      "proposedScope": "heading",
+      "modalityMarks": [
+        "directive"
+      ],
+      "namedScopes": [
+        "heading"
+      ],
+      "writtenModality": {
+        "count": 3,
+        "sources": [
+          "agent-read"
         ]
       },
       "resolved": true,
@@ -46943,7 +47134,7 @@
       "sourceId": "vuka-sigurnost-upute-2026",
       "checkId": "citation-style",
       "sourcePage": "Upute SIZ 2026",
-      "value": "ieee",
+      "value": "custom",
       "quote": "Prilikom pisanja preporuca se koristenje font-a Arial ili Times New Roman, velicina slova 12, pri cemu je prored teksta 1,5. U tekstu je obavezno citiranje literature prema redoslijedu pojavljivanja.",
       "ruleCount": 2,
       "profileIds": [
@@ -47388,7 +47579,7 @@
       "sourceId": "vvg-upute-radovi-2013",
       "checkId": "citation-style",
       "sourcePage": "Upute, citiranje",
-      "value": "ieee",
+      "value": "custom",
       "quote": "Citiranje dijela teksta iz literature u popisu, označava se na kraju citata rednim brojem literature iz popisa u uglatim zagradama.",
       "ruleCount": 2,
       "profileIds": [
