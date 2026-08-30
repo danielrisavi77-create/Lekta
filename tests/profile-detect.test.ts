@@ -8,6 +8,10 @@ import { detectContextFromText, needsProfileConfirmation, isConfidentDetection, 
 
 const UNITS: DetectUnit[] = [
   { id: 'fpzg', name: 'Fakultet političkih znanosti', institutionId: 'unizg', institutionName: 'Sveučilište u Zagrebu', programs: ['Politologija', 'Novinarstvo', 'Opći profil'] },
+  // Puni sluzbeni nazivi, kakvi doista stoje u katalogu (i kakve je stari kod preskakao).
+  { id: 'fpzgx', name: 'Fakultet političkih znanosti Zagreb', institutionId: 'unizg', institutionName: 'Sveučilište u Zagrebu', programs: ['Prijediplomski studij Politologija', 'Diplomski studij Politologija', 'Diplomski studiji Fakulteta političkih znanosti Zagreb'] },
+  { id: 'gradri', name: 'Građevinski fakultet u Rijeci', institutionId: 'uniri', institutionName: 'Sveučilište u Rijeci', programs: ['Stručni prijediplomski studij Građevinarstvo', 'Sveučilišni prijediplomski studij Građevinarstvo'] },
+  { id: 'unizdhisp', name: 'Odjel za hispanistiku', institutionId: 'unizd', institutionName: 'Sveučilište u Zadru', programs: ['Odjel za hispanistiku i iberske studije (diplomski rad, Zadar)', 'Odjel za zdravstvene studije (diplomski rad, Zadar)'] },
   { id: 'ffri', name: 'Filozofski fakultet u Rijeci', institutionId: 'uniri', institutionName: 'Sveučilište u Rijeci', programs: ['Povijest', 'Opći profil ustanove'] },
   { id: 'ffzg', name: 'Filozofski fakultet', institutionId: 'unizg', institutionName: 'Sveučilište u Zagrebu', programs: ['Filozofija'] },
 ];
@@ -53,6 +57,64 @@ describe('detectContextFromText', () => {
     const ctx = detectContextFromText(UNITS, 'Fakultet političkih znanosti, analiza dnevnih novina i portala');
     expect(ctx!.unitId).toBe('fpzg');
     expect(ctx!.program).toBeNull();
+  });
+
+  /**
+   * PUN SLUZBENI NAZIV STUDIJA. Katalog nosi "Prijediplomski studij Politologija", a stari kod je
+   * preskakao SVAKI naziv koji sadrzi rijec "studij". Izmjereno: to je bilo 513 od 726 programa
+   * (71%), a za 82 od 134 jedinice preskocilo je SVAKI program, pa te jedinice nikad nisu mogle
+   * dati pouzdanu detekciju.
+   */
+  it('prepoznaje studij iz punog sluzbenog naziva, uz drugi pravopis razine i genitiv', () => {
+    const ctx = detectContextFromText(
+      UNITS,
+      'Fakultet političkih znanosti Zagreb Preddiplomski studij Politologije Zagreb, 2026.',
+    );
+    expect(ctx!.unitId).toBe('fpzgx');
+    expect(ctx!.program).toBe('Prijediplomski studij Politologija');
+  });
+
+  it('razina razdvaja dva studija istog imena', () => {
+    const ctx = detectContextFromText(
+      UNITS,
+      'Fakultet političkih znanosti Zagreb Diplomski studij Politologije, diplomski rad.',
+    );
+    expect(ctx!.program).toBe('Diplomski studij Politologija');
+  });
+
+  it('"strucni" i "sveucilisni" studij istog imena se ne mijesaju', () => {
+    const ctx = detectContextFromText(
+      UNITS,
+      'Građevinski fakultet u Rijeci Stručni prijediplomski studij Građevinarstva.',
+    );
+    expect(ctx!.program).toBe('Stručni prijediplomski studij Građevinarstvo');
+  });
+
+  /**
+   * Naziv cija je razlikovna jezgra samo IME ustanove ne govori nista o studiju; pogodio bi svaku
+   * naslovnicu te ustanove. Izmjereno: takvi nazivi davali su 85 krivih pogodaka na 668 programa.
+   */
+  it('naziv koji je samo ime ustanove ne postaje prepoznat studij', () => {
+    const ctx = detectContextFromText(UNITS, 'Fakultet političkih znanosti Zagreb, diplomski rad.');
+    expect(ctx!.unitId).toBe('fpzgx');
+    expect(ctx!.program).toBeNull();
+  });
+
+  /**
+   * Rijec "studije" ovdje je dio naziva polja ("iberske studije"), ne oznaka razine. Rezanje po njoj
+   * ostavilo bi jezgru "diplomski rad zadar", koja pogadja SVAKI odjel te ustanove.
+   */
+  it('ne reze naziv na rijeci "studije" kad ona nije oznaka razine', () => {
+    const ctx = detectContextFromText(
+      UNITS,
+      'Odjel za hispanistiku i iberske studije (diplomski rad, Zadar)',
+    );
+    expect(ctx!.program).toBe('Odjel za hispanistiku i iberske studije (diplomski rad, Zadar)');
+  });
+
+  it('naziv jedinice se prepoznaje i u kosom padezu', () => {
+    const ctx = detectContextFromText(UNITS, 'Rad predan na Filozofskom fakultetu u Rijeci, 2026.');
+    expect(ctx!.unitId).toBe('ffri');
   });
 
   it('longest-match bira duzi naziv kad tekst sadrzi dva naziva jedinice', () => {
