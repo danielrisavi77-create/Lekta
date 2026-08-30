@@ -146,3 +146,20 @@ body {
 .reveal-ready [data-reveal] { opacity: 0; transform: translateY(16px) }
 .reveal-ready [data-reveal].reveal-in { transition: transform .45s var(--ease-out-3, ease), opacity .45s var(--ease-out-3, ease) }
 .reveal-ready [data-reveal].reveal-in { opacity: 1; transform: none }
+
+/**
+ * Izlaz za reduced-motion, na razini CSS-a.
+ *
+ * `index.html:329` je ovo pravilo imao lokalno; kad su ostala tri pravila presla u dijeljeni sloj,
+ * ono nije, pa ga je `motion.css` (kasniji, ista specificnost) gasio. Mjerenjem NIJE nastao vidljiv
+ * kvar: pod reduced-motion `setupReveal()` odmah oznaci sve vidljivim (izmjereno 0 od 39 skrivenih),
+ * a bez JS-a `.reveal-ready` uopce ne postoji pa skriveno stanje ne vrijedi (0 od 31).
+ *
+ * Vraca se kao OBRANA U DUBINU, ne kao popravak aktivnog kvara. Rupa koju pokriva je uska ali
+ * stvarna: `.reveal-ready` se dodaje pri evaluaciji modula, a `setupReveal()` tek kao treci poziv
+ * u `boot()`. Sve sto pukne izmedju (npr. `renderIcons`) ostavlja sadrzaj trajno na `opacity: 0`.
+ * Globalni prekidac gore gasi TRAJANJE animacije, nikad `opacity`, pa ne pomaze ovdje.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-ready [data-reveal] { opacity: 1; transform: none }
+}

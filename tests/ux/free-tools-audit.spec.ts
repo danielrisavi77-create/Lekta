@@ -312,3 +312,32 @@ test('reduced-motion: sve otkriveno bez skrolanja', async ({ page }) => {
   expect(opacities.length).toBeGreaterThan(0);
   expect(opacities.every((o) => o === '1'), `neotkriveno: ${opacities.join(', ')}`).toBe(true);
 });
+
+/**
+ * CSS izlaz za reduced-motion mora vrijediti i BEZ pomoci JS-a.
+ *
+ * `setupReveal()` pod reduced-motion odmah oznaci sve vidljivim, pa se kvar ne vidi dok god boot
+ * prodje do kraja. Ali `.reveal-ready` se dodaje pri evaluaciji modula, a `setupReveal()` je tek
+ * treci poziv u `boot()`: sve sto pukne izmedju ostavlja sadrzaj trajno nevidljivim.
+ *
+ * Zato se ovdje umece SVJEZ `[data-reveal]` element NAKON boota. `setupReveal` ga vise nece
+ * dotaknuti (vec je odradio prolaz), pa je jedino sto ga moze uciniti vidljivim upravo CSS pravilo.
+ * Bez `@media (prefers-reduced-motion: reduce)` bloka u `motion.css` ovaj element ostaje na 0.
+ */
+test('reduced-motion: skriveno stanje ne ovisi o tome je li setupReveal stigao', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/citat.html');
+
+  const opacity = await page.evaluate(() => {
+    const probe = document.createElement('div');
+    probe.setAttribute('data-reveal', '');
+    probe.setAttribute('data-reveal-mode', 'deferred');
+    probe.textContent = 'proba';
+    document.body.appendChild(probe);
+    const value = getComputedStyle(probe).opacity;
+    probe.remove();
+    return value;
+  });
+
+  expect(opacity, 'nov [data-reveal] pod reduced-motion mora biti vidljiv bez JS pomoci').toBe('1');
+});

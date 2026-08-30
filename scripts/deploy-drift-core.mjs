@@ -35,14 +35,22 @@ export function labelForOnlyLive(environmentLabel) {
  */
 export function configVerifyJwt(tomlText) {
   const out = new Map();
-  const re = /^\[functions\.([A-Za-z0-9_-]+)\]\s*$/gm;
+  // TOML dopusta uvlaku prije zaglavlja, navodnike oko kljuca i komentar iza njega. Prva verzija
+  // ovoga nije dopustala nista od toga, sto je davalo kvarove u OBA smjera:
+  //  - uvuceno zaglavlje `  [functions.bar]` nije prekidalo blok, pa je prethodna funkcija
+  //    NASLIJEDILA tudji `verify_jwt` i bila prijavljena kao konfigurirana iako nije. To je
+  //    lazno ZELENO i najopasniji smjer, jer gard tada sutke potvrdjuje nepostojecu postavku;
+  //  - komentar iza zastavice (`verify_jwt = false  # javni sink`) rusio je poklapanje, pa je
+  //    uredno konfigurirana funkcija izgledala kao `missing-config`. To je lazno crveno, glasno.
+  const re = /^[ 	]*\[functions\.["']?([A-Za-z0-9_-]+)["']?\][ 	]*(?:#.*)?$/gm;
   let m;
   while ((m = re.exec(tomlText)) !== null) {
     const slug = m[1];
     const rest = tomlText.slice(m.index + m[0].length);
-    // Samo do sljedeceg bloka: inace bi se pokupila vrijednost tudje funkcije.
-    const block = rest.split(/^\[/m)[0];
-    const flag = /^\s*verify_jwt\s*=\s*(true|false)\s*$/m.exec(block);
+    // Samo do sljedeceg bloka: inace bi se pokupila vrijednost tudje funkcije. Uvlaka se dopusta
+    // upravo zato da uvuceno zaglavlje PREKINE blok umjesto da ga produzi.
+    const block = rest.split(/^[ 	]*\[/m)[0];
+    const flag = /^[ 	]*verify_jwt[ 	]*=[ 	]*(true|false)[ 	]*(?:#.*)?$/m.exec(block);
     if (flag) out.set(slug, flag[1] === 'true');
   }
   return out;
@@ -61,6 +69,17 @@ export function configVerifyJwt(tomlText) {
  *  - `mismatch`: oboje kazu, ali razlicito (deploy bi promijenio autorizaciju).
  */
 export function verifyJwtDrift(configMap, live) {
+  // SENTINEL: okolina s funkcijama, a nijedna ne nosi boolean `verify_jwt`, znaci da se promijenio
+  // oblik odgovora Management APIja (preimenovano polje, druga shema). Bez ovoga bi provjera tiho
+  // pala na NULA nalaza i izgledala kao cist prolaz, sto je isti vakuum protiv kojeg klasifikacijski
+  // manifest cuva pravilom "nula mapiranih modula = pad".
+  const withBoolean = [...live.values()].filter((f) => typeof f?.verify_jwt === 'boolean').length;
+  if (live.size > 0 && withBoolean === 0) {
+    throw new Error(
+      `verifyJwtDrift: nijedna od ${live.size} deployanih funkcija ne nosi boolean verify_jwt. ` +
+      'Vjerojatno se promijenio oblik odgovora Management APIja; provjera bi inace tiho prosla prazna.',
+    );
+  }
   const findings = [];
   for (const slug of [...live.keys()].sort()) {
     const actual = live.get(slug)?.verify_jwt;

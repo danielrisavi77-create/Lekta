@@ -103,7 +103,9 @@ const RATCHET = {
    * propisuje.
    *
    * Zateceno stanje 2026-08-29 (prvo mjerenje): 95 profila. Raspodjela po vrijednosti:
-   * harvard 38, vancouver 13, apa7 13, chicago-notes 12, ieee 12, chicago-author 5, pravo-fusnote 2.
+   * harvard 38, vancouver 13, apa7 13, chicago-notes 12, custom 12, chicago-author 5,
+   * pravo-fusnote 2. (Ispravak 2026-08-31: ovdje je stajalo `ieee 12`. U artefaktu NEMA nijednog
+   * `ieee`; commit `32f869e2` ih je prebacio na `custom`. Zbroj 95 je bio tocan, oznaka nije.)
    *
    * Ovo je ISTA klasa koju je FER pilot otkrio na jednom profilu (IEEE bez izvora, ispravljeno
    * 2026-08-22), samo 95 puta. Nijedan postojeci gard je nije vidio: `scored-value-binding` mjeri

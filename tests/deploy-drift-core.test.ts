@@ -126,3 +126,50 @@ describe('stvarni config.toml pokriva svaku funkciju u repou', () => {
     expect(missing, `bez izricitog verify_jwt: ${missing.join(', ')}`).toEqual([]);
   });
 });
+
+/**
+ * Oblici TOML-a koji su prvu verziju parsera navodili na krivi odgovor.
+ *
+ * Najvazniji je prvi: TOML dopusta uvlaku prije zaglavlja, a `split(/^\[/m)` na uvuceno zaglavlje
+ * NIJE dijelio. Prethodna funkcija tada proguta tudji blok i NASLIJEDI njegov `verify_jwt`, pa
+ * bude prijavljena kao konfigurirana iako nema nijedan svoj redak. To je lazno ZELENO: gard sutke
+ * potvrdjuje postavku koja ne postoji, sto je gore od promasaja u drugom smjeru.
+ */
+describe('configVerifyJwt: oblici koji su davali krivi odgovor', () => {
+  it('UVUCENO zaglavlje prekida blok, pa se vrijednost ne nasljedjuje', () => {
+    const toml = ['[functions.prvi]', '  [functions.drugi]', '  verify_jwt = false', ''].join('\n');
+    const m = configVerifyJwt(toml);
+    // `prvi` nema svoju zastavicu i mora ostati NEPOZNAT, ne pokupiti tudju.
+    expect(m.has('prvi'), 'prvi je naslijedio tudji verify_jwt').toBe(false);
+    expect(m.get('drugi')).toBe(false);
+  });
+
+  it('komentar iza zastavice se i dalje cita', () => {
+    expect(configVerifyJwt('[functions.a]\nverify_jwt = false  # javni sink\n').get('a')).toBe(false);
+  });
+
+  it('komentar iza zaglavlja se i dalje cita', () => {
+    expect(configVerifyJwt('[functions.a] # sink\nverify_jwt = true\n').get('a')).toBe(true);
+  });
+
+  it('navodnici oko kljuca (legalan TOML) se citaju', () => {
+    expect(configVerifyJwt('[functions."moja-fn"]\nverify_jwt = true\n').get('moja-fn')).toBe(true);
+  });
+
+  it('uvucena zastavica unutar vlastitog bloka se cita', () => {
+    expect(configVerifyJwt('  [functions.a]\n    verify_jwt = false\n').get('a')).toBe(false);
+  });
+});
+
+describe('verifyJwtDrift: sentinel protiv tihog vakuuma', () => {
+  it('baca kad okolina ima funkcije a nijedna ne nosi boolean', () => {
+    // Ovakav oblik znaci promijenjen odgovor Management APIja. Bez sentinela bi provjera vratila
+    // prazan popis i izgledala kao cist prolaz.
+    const live = new Map([['a', { slug: 'a', version: 1, status: 'ACTIVE' }]]);
+    expect(() => verifyJwtDrift(new Map(), live as never)).toThrow(/boolean verify_jwt/);
+  });
+
+  it('prazna okolina NE baca (nema sto tvrditi)', () => {
+    expect(() => verifyJwtDrift(new Map(), new Map())).not.toThrow();
+  });
+});
