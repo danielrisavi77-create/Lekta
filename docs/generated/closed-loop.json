@@ -2,12 +2,13 @@
   "schemaVersion": 1,
   "profileCount": 407,
   "byOutcome": {
-    "pass": 407
+    "no-rules": 35,
+    "pass": 372
   },
   "rows": [
     {
       "profileId": "adu-dramaturgija-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -32,7 +33,7 @@
     },
     {
       "profileId": "adu-ftv-rezija-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -57,7 +58,7 @@
     },
     {
       "profileId": "adu-gluma-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -82,7 +83,7 @@
     },
     {
       "profileId": "adu-kazalisna-rezija-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -142,7 +143,7 @@
     },
     {
       "profileId": "adu-opci-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -167,7 +168,7 @@
     },
     {
       "profileId": "adu-produkcija-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -192,7 +193,7 @@
     },
     {
       "profileId": "adu-snimanje-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -227,6 +228,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -261,6 +263,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -298,6 +301,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -472,6 +476,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style"
       ],
       "requested": 5,
@@ -493,12 +498,13 @@
     },
     {
       "profileId": "alu-doktorski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style"
       ],
       "requested": 5,
@@ -518,7 +524,7 @@
     },
     {
       "profileId": "alu-grafika-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -609,7 +615,7 @@
     },
     {
       "profileId": "alu-nastavnicki-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -634,7 +640,7 @@
     },
     {
       "profileId": "alu-novi-mediji-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -697,6 +703,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style"
       ],
       "requested": 10,
@@ -765,6 +772,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "paper-size"
       ],
@@ -787,13 +795,14 @@
     },
     {
       "profileId": "arh-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "toc-field",
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style"
       ],
       "requested": 6,
@@ -1195,12 +1204,13 @@
     },
     {
       "profileId": "dizajn-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style"
       ],
       "requested": 5,
@@ -1229,6 +1239,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -1264,6 +1275,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -1299,6 +1311,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -1673,6 +1686,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -1772,6 +1786,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -1842,6 +1857,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -1876,6 +1892,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style"
       ],
       "requested": 8,
@@ -1942,6 +1959,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -1977,6 +1995,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -2116,6 +2135,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -2185,6 +2205,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -2257,6 +2278,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -2290,6 +2312,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -2325,6 +2348,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -2901,6 +2925,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -2938,6 +2963,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -3303,6 +3329,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -3338,6 +3365,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -3482,6 +3510,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -3515,6 +3544,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -3549,6 +3579,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -3582,6 +3613,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style"
       ],
       "requested": 6,
@@ -3613,6 +3645,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -3681,6 +3714,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -3715,6 +3749,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -3751,6 +3786,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -3785,6 +3821,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -3881,6 +3918,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -3951,6 +3989,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -3986,6 +4025,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -4023,6 +4063,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -4314,6 +4355,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -4347,6 +4389,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -4480,6 +4523,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -4515,6 +4559,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -4548,6 +4593,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -4582,6 +4628,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -4620,6 +4667,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -4640,7 +4688,8 @@
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
-        "revision-metadata"
+        "revision-metadata",
+        "required-section"
       ],
       "resolved": 8,
       "regressions": 0,
@@ -4659,6 +4708,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -4679,7 +4729,8 @@
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
-        "revision-metadata"
+        "revision-metadata",
+        "required-section"
       ],
       "resolved": 8,
       "regressions": 0,
@@ -4698,6 +4749,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -4718,7 +4770,8 @@
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
-        "revision-metadata"
+        "revision-metadata",
+        "required-section"
       ],
       "resolved": 8,
       "regressions": 0,
@@ -4772,6 +4825,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -4792,7 +4846,8 @@
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
-        "revision-metadata"
+        "revision-metadata",
+        "required-section"
       ],
       "resolved": 8,
       "regressions": 0,
@@ -4846,6 +4901,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -4866,7 +4922,8 @@
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
-        "revision-metadata"
+        "revision-metadata",
+        "required-section"
       ],
       "resolved": 8,
       "regressions": 0,
@@ -4885,6 +4942,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -4905,7 +4963,8 @@
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
-        "revision-metadata"
+        "revision-metadata",
+        "required-section"
       ],
       "resolved": 8,
       "regressions": 0,
@@ -4924,6 +4983,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -4944,7 +5004,8 @@
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
-        "revision-metadata"
+        "revision-metadata",
+        "required-section"
       ],
       "resolved": 8,
       "regressions": 0,
@@ -4963,6 +5024,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -4983,7 +5045,8 @@
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
-        "revision-metadata"
+        "revision-metadata",
+        "required-section"
       ],
       "resolved": 8,
       "regressions": 0,
@@ -5002,6 +5065,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -5022,7 +5086,8 @@
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
-        "revision-metadata"
+        "revision-metadata",
+        "required-section"
       ],
       "resolved": 8,
       "regressions": 0,
@@ -5041,6 +5106,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -5061,7 +5127,8 @@
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
-        "revision-metadata"
+        "revision-metadata",
+        "required-section"
       ],
       "resolved": 8,
       "regressions": 0,
@@ -5148,6 +5215,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -5251,6 +5319,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -5415,13 +5484,14 @@
     },
     {
       "profileId": "geof-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "toc-field",
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style"
       ],
       "requested": 6,
@@ -5442,13 +5512,14 @@
     },
     {
       "profileId": "geof-doktorski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "toc-field",
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style"
       ],
       "requested": 6,
@@ -5469,7 +5540,7 @@
     },
     {
       "profileId": "geof-opci-akademski-rad",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -5503,6 +5574,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -5571,6 +5643,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -5740,6 +5813,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -5811,6 +5885,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -5936,6 +6011,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -5969,6 +6045,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -6003,6 +6080,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -6073,6 +6151,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -6240,6 +6319,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -6274,6 +6354,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -6309,6 +6390,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -6342,6 +6424,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -6377,6 +6460,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -6644,6 +6728,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -6679,6 +6764,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -6716,6 +6802,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -6750,6 +6837,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "paper-size"
       ],
@@ -6808,6 +6896,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "paper-size"
       ],
@@ -6838,6 +6927,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -6871,6 +6961,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -6968,6 +7059,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -7002,6 +7094,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "paper-size"
       ],
@@ -7248,6 +7341,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -7284,6 +7378,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -7319,6 +7414,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -7345,7 +7441,7 @@
     },
     {
       "profileId": "muza-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -7414,6 +7510,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -7449,6 +7546,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -7484,6 +7582,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -7517,6 +7616,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -7551,6 +7651,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -7586,6 +7687,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -7620,6 +7722,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "paper-size"
       ],
@@ -7815,6 +7918,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -7849,6 +7953,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -7916,6 +8021,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -7950,6 +8056,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style"
       ],
       "requested": 8,
@@ -7980,6 +8087,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -8081,6 +8189,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -8117,6 +8226,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -8154,6 +8264,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -8191,6 +8302,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -8227,6 +8339,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -8263,6 +8376,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -8300,6 +8414,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -8337,6 +8452,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -8374,6 +8490,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -8410,6 +8527,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -8446,6 +8564,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -8483,6 +8602,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -8519,6 +8639,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -8744,7 +8865,7 @@
     },
     {
       "profileId": "pravst-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -8769,7 +8890,7 @@
     },
     {
       "profileId": "pravst-zavrsni",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -8910,6 +9031,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -8943,6 +9065,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -9080,6 +9203,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -9115,6 +9239,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -9184,6 +9309,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "paper-size"
       ],
@@ -9404,6 +9530,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -9441,6 +9568,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -9543,6 +9671,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -9579,6 +9708,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -9616,6 +9746,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -9687,6 +9818,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -9825,6 +9957,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -9897,6 +10030,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -9924,12 +10058,13 @@
     },
     {
       "profileId": "umas-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style"
       ],
       "requested": 5,
@@ -9949,12 +10084,13 @@
     },
     {
       "profileId": "umas-zavrsni",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style"
       ],
       "requested": 5,
@@ -10040,7 +10176,7 @@
     },
     {
       "profileId": "unidu-elektro-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -10065,7 +10201,7 @@
     },
     {
       "profileId": "unidu-elektro-zavrsni",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -10797,7 +10933,7 @@
     },
     {
       "profileId": "unizd-anglistika-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -10822,7 +10958,7 @@
     },
     {
       "profileId": "unizd-anglistika-zavrsni",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -10993,7 +11129,7 @@
     },
     {
       "profileId": "unizd-ekonomija-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -11018,7 +11154,7 @@
     },
     {
       "profileId": "unizd-ekonomija-zavrsni",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -11449,7 +11585,7 @@
     },
     {
       "profileId": "unizd-kroatistika-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -11474,7 +11610,7 @@
     },
     {
       "profileId": "unizd-kroatistika-zavrsni",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -11499,7 +11635,7 @@
     },
     {
       "profileId": "unizd-lingvistika-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -11524,7 +11660,7 @@
     },
     {
       "profileId": "unizd-lingvistika-zavrsni",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -11866,7 +12002,7 @@
     },
     {
       "profileId": "unizd-rusistika-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -11928,7 +12064,7 @@
     },
     {
       "profileId": "unizd-sociologija-zavrsni",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "empty-paragraphs",
         "croatian-typography",
@@ -11993,6 +12129,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -12197,6 +12334,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -12650,6 +12788,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -12685,6 +12824,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins",
         "paper-size"
@@ -12720,6 +12860,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -12753,6 +12894,7 @@
         "croatian-typography",
         "link-doi",
         "revision-metadata",
+        "required-section",
         "heading-style",
         "margins"
       ],
@@ -12777,7 +12919,7 @@
     },
     {
       "profileId": "vsite-diplomski",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "toc-field",
         "empty-paragraphs",
@@ -12804,7 +12946,7 @@
     },
     {
       "profileId": "vsite-zavrsni",
-      "outcome": "pass",
+      "outcome": "no-rules",
       "violated": [
         "toc-field",
         "empty-paragraphs",

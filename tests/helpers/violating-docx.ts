@@ -23,10 +23,16 @@
  * fixera. Dok generator te osi ne proizvodi, matrica pokrivenosti o njima ne moze imati dokaz:
  * izmjereno je 10.553 celije (profil x fixer) sa statusom `univerzalna-higijena-bez-dokaza`.
  *
- * NE ukljucuju se ovdje `consistency` ni `required-section`: izmjereno je da im je `params`
- * prazan po konstrukciji, pa bi ih closed-loop prijavio kao neuspjeh popravka, a rijec je o
- * stavci koja po ugovoru ceka ljudsku potvrdu. Vidi
- * `docs/superpowers/specs/2026-08-29-prazni-asistirani-fixeri.md`.
+ * NE ukljucuje se ovdje `consistency`: izmjereno je da mu je `params` prazan po konstrukciji, pa
+ * bi ga closed-loop prijavio kao neuspjeh popravka, a rijec je o stavci koja po ugovoru ceka
+ * ljudsku potvrdu. Vidi `docs/superpowers/specs/2026-08-29-prazni-asistirani-fixeri.md`.
+ *
+ * `required-section` je 2026-08-30 UKLJUCEN, jer je razlog iskljucenja bio kvar koji je u
+ * medjuvremenu popravljen: predodabir je trazio `confidence === 'high'`, a analiza nedostajucem
+ * dijelu po konstrukciji daje `medium`, pa je uvjet bio neispunjiv i `params` uvijek prazan.
+ * Uz to je fixer u punom lancu padao na `stale-anchor`. Oboje je popravljeno i izmjereno; njegova
+ * provjera `structure.sections.profile` je BODOVANA (max 7), pa os moze nositi dokaz `resolved`,
+ * a ne samo `applied`.
  */
 import { buildDocx, type DocSpec, type ParaSpec } from './docx-builder';
 import { paramsForCheck } from '../../src/ui/repair-items';
@@ -50,6 +56,11 @@ export type ViolatableCheckId = (typeof VIOLATABLE_CHECK_IDS)[number];
  *                     Univerzalna; na stvarnim FPZG radovima promijenila 14 od 74.
  * - `heading-style`   odlomci koji IZGLEDAJU kao naslovi (numeriran prefiks, podebljano, veci
  *                     font) ali nemaju Word Heading stil -> `heading-style-fixer`. Univerzalna.
+ * - `required-section` obvezni dio koji profil propisuje, a dokument ga NEMA ->
+ *                     `required-section-fixer`. Jedina os koja se krsi IZOSTANKOM: generator ne
+ *                     dodaje nista, nego imenuje ono cega nema. Zato se deklarira samo kad je
+ *                     provjereno da profil taj dio doista propisuje i da ga generirani dokument
+ *                     ne sadrzi.
  *
  * Zasto bas univerzalne: izmjereno je da su PROFILNE strukturne osi tanke (`footnoteFont` ima 50
  * profila od 407, `headingRules` 21, ostale 4 do 12), dok univerzalni fixer vrijedi za svih 407,
@@ -61,6 +72,7 @@ export const STRUCTURAL_VIOLATION_IDS = [
   'croatian-typography',
   'link-doi',
   'heading-style',
+  'revision-metadata',
 ] as const;
 export type StructuralViolationId = (typeof STRUCTURAL_VIOLATION_IDS)[number];
 
@@ -282,6 +294,48 @@ export async function buildViolatingDocx(
      * Naslov NE dobiva `styleId`, jer je upravo izostanak Heading stila ono sto se krsi: takav
      * odlomak Word ne vidi kao naslov, pa ne ulazi ni u sadrzaj ni u navigaciju.
      */
+    /**
+     * `revision-metadata`: Wordovi revizijski identifikatori (`w:rsid*`).
+     *
+     * Word ih pise u gotovo svaki odlomak, a generirani dokument ih dotad nije imao nijedan, pa
+     * `final-document-inspector-fixer` na sintetickom dokumentu NIKAD nije imao sto raditi, iako je
+     * na 74 od 74 stvarna FPZG rada promijenio dokument. Bez ove osi je matrica za njega imala 400
+     * celija bez ijednog dokaza.
+     *
+     * Ide kroz `raw`, jer su rsid-ovi ATRIBUTI odlomka, a `ParaSpec` ih ne modelira. Detektor
+     * (`src/analysis/final-document-inspector.ts`) trazi `\bw:rsid[A-Za-z]+=` i nalaz oznacava
+     * `defaultSelected: true`, pa jedan odlomak dostaje kao dokaz.
+     *
+     * Uklanjanje rsid-ova NE dira vidljivi tekst: to je cista mehanika ispod, kao i polja i sidra.
+     */
+    if (wants(structural, 'revision-metadata')) {
+      paragraphs.push({
+        raw:
+          '<w:p w:rsidR="00AB12CD" w:rsidRDefault="00AB12CD" w:rsidP="00AB12CD">' +
+          '<w:r w:rsidR="00AB12CD"><w:t xml:space="preserve">Odlomak s Wordovim revizijskim oznakama.</w:t></w:r>' +
+          '</w:p>',
+      });
+      violated.push('revision-metadata');
+    }
+
+    /**
+     * `required-section`: krsi se IZOSTANKOM, pa generator ne dodaje nista.
+     *
+     * Deklarira se samo kad profil taj dio doista propisuje I kad ga ovaj dokument nema. Bez oba
+     * uvjeta bila bi to tvrdnja bez pokrica: os koja se uvijek javi kao prekrsena je isti razred
+     * kao dokaz koji se ne moze ne dogoditi.
+     */
+    if (wants(structural, 'required-section')) {
+      const required = ((profile as { effectiveRules?: { requiredSections?: unknown }; requiredSections?: unknown } | null)?.effectiveRules?.requiredSections
+        ?? (profile as { requiredSections?: unknown } | null)?.requiredSections) as Array<{ label?: unknown }> | undefined;
+      const present = new Set(paragraphs.map((item) => String((item as { text?: unknown }).text ?? '').trim().toLowerCase()).filter(Boolean));
+      const missing = (Array.isArray(required) ? required : []).filter((entry) => {
+        const label = String(entry?.label ?? '').trim().toLowerCase();
+        return label.length > 0 && !present.has(label);
+      });
+      if (missing.length) violated.push('required-section');
+    }
+
     if (wants(structural, 'heading-style')) {
       paragraphs.push({
         ...para,

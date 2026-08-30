@@ -30,7 +30,7 @@ const { compileEffectiveRules } = await import('../src/profiles/rule-compiler');
 const { normalizeCheckFlags } = await import('../src/profiles/profile-baseline');
 const { applyScoredAdvisory } = await import('../src/profiles/advisory-demotion');
 const { SOURCE_REGISTRY } = await import('../src/verification/verification-registry');
-const { buildViolatingDocx } = await import('../tests/helpers/violating-docx');
+const { buildViolatingDocx, VIOLATABLE_CHECK_IDS } = await import('../tests/helpers/violating-docx');
 const { APPLIED_AXIS_FIXER } = await import('../tests/helpers/coverage-cells');
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -94,6 +94,12 @@ function liveProfile(profileId: string): Record<string, unknown> {
  * OSI - razlicite jedinice, pa je omjer "rijeseno/prekrseno" bio neusporediv i `pass` je znacio
  * samo "barem nesto se promijenilo". Sada se za svaku prekrsenu os gleda BAS njezina provjera.
  */
+/**
+ * Sest osi koje propisuje PROFIL. Strukturne se krse na svakom dokumentu bez obzira na profil, pa
+ * se u presudu o profilu ne smiju mijesati.
+ */
+const PROFILE_AXES: ReadonlySet<string> = new Set<string>(VIOLATABLE_CHECK_IDS);
+
 const AXIS_CHECK_ID: Record<string, string> = {
   font: 'format.font.dominant',
   'font-size': 'format.size.body',
@@ -126,7 +132,24 @@ const AXIS_CHECK_ID: Record<string, string> = {
  * Za njih je predvidjena slabija jacina dokaza (`applied`, vidi `tests/helpers/coverage-cells.ts`),
  * koja jos nije ozicena.
  */
-const STRUCTURAL_WITHOUT_SCORED_CHECK = new Set(['empty-paragraphs', 'croatian-typography', 'link-doi', 'revision-metadata']);
+/**
+ * `required-section` je ovdje iz DRUGOG razloga nego ostale cetiri, i to treba znati.
+ *
+ * Ostale nemaju bodovanu provjeru. `required-section` je IMA (`structure.sections.profile`, max 7),
+ * ali ju popravak ne moze zatvoriti, pa bi kao bodovana os trajno davala `partial`.
+ *
+ * IZMJERENO 2026-08-30 na fpzg-politologija-diplomski:
+ *   prije popravka   2/7   nedostaje 5 dijelova
+ *   poslije          4/7   nedostaju 3 (izjava o autorstvu, zakljucak, literatura)
+ *
+ * Uzrok nije fixer nego RASKORAK izmedju provjere i kandidata: provjera boduje pet obveznih
+ * dijelova, a `requiredSectionsStructure` ih kao kandidate za umetanje nudi samo dva
+ * (`abstract`, `keywords-en`). Preostala tri popravak nikad ne vidi, pa je 4/7 strop.
+ *
+ * Dok taj raskorak stoji, os nosi jacinu `applied` (fixer dokazano mijenja dokument), ne
+ * `resolved`. Kad se kandidati prosire na svih pet, os se vraca u `AXIS_CHECK_ID`.
+ */
+const STRUCTURAL_WITHOUT_SCORED_CHECK = new Set(['empty-paragraphs', 'croatian-typography', 'link-doi', 'revision-metadata', 'required-section']);
 
 /** Format stranice ima dinamican naslov (`page.size.*`), pa se prepoznaje po prefiksu. */
 function checkForAxis(checks: Array<{ id?: string | null; title?: string }>, axis: string) {
@@ -164,6 +187,11 @@ interface Row {
   requested: number;
   /** Osi koje su nakon popravka prestale kaznjavati dokument. */
   axesResolved: string[];
+  /**
+   * Osi koje propisuje PROFIL, a generator ih je prekrsio. Prazno znaci da tom profilu nijedan
+   * objavljen izvor ne propisuje nijednu od sest formatnih osi.
+   */
+  profileAxesViolated: string[];
   /** Osi koje je popravak dirao, ali im nijedna bodovana provjera ne moze potvrditi rjesenje. */
   axesApplied: string[];
   /** Osi koje su i dalje prekrsene nakon popravka. */
@@ -175,7 +203,7 @@ interface Row {
 }
 
 async function runProfile(profileId: string): Promise<Row> {
-  const base: Row = { profileId, outcome: 'error', violated: [], requested: 0, axesResolved: [], axesApplied: [], axesRemaining: [], resolved: 0, regressions: 0, textPreserved: true };
+  const base: Row = { profileId, outcome: 'error', violated: [], requested: 0, axesResolved: [], profileAxesViolated: [], axesApplied: [], axesRemaining: [], resolved: 0, regressions: 0, textPreserved: true };
   try {
     const profile = liveProfile(profileId);
     const { bytes, violated } = await buildViolatingDocx(profile, useStructural ? { structural: true } : {});
@@ -253,6 +281,7 @@ async function runProfile(profileId: string): Promise<Row> {
     const axesRemaining = violated.filter(
       (axis) => !axesResolved.includes(axis) && !STRUCTURAL_WITHOUT_SCORED_CHECK.has(axis),
     );
+    const profileAxesViolated = violated.filter((axis) => PROFILE_AXES.has(axis));
     const regressions = detectPassRegressions(before.checks ?? [], after.checks ?? []).length;
 
     const row: Row = {
@@ -268,6 +297,21 @@ async function runProfile(profileId: string): Promise<Row> {
       textPreserved: true,
     };
     if (regressions > 0) return { ...row, outcome: 'regression' };
+    /**
+     * `no-rules` se sudi po PROFILNIM osima, ne po svima.
+     *
+     * Do 2026-08-30 je uvjet glasio `!violated.length`, sto je uz strukturne osi postalo
+     * neispunjivo: one se krse na svakom dokumentu. Time je 35 profila kojima NIJEDAN objavljen
+     * izvor ne propisuje nijednu od sest formatnih osi (`data/profiles/no-rules-reasons.json`,
+     * stanje `source-not-found`) tiho preslo u `pass`.
+     *
+     * Profil koji "prolazi" zato sto mu je popravljena univerzalna higijena NIJE profil kojem je
+     * oblikovanje dokazano. Te dvije stvari u istoj brojci daju vakuumsko zeleno.
+     *
+     * Dokaz se NE gubi: `axesResolved` i `axesApplied` su vec izracunati, pa matrica pokrivenosti i
+     * dalje vidi sve sto je popravak napravio.
+     */
+    if (!profileAxesViolated.length) return { ...row, outcome: 'no-rules' };
     if (!axesResolved.length) return { ...row, outcome: 'unresolved' };
     // `partial` je vlastiti ishod, ne `pass`: profil kojem je od sest osi rijesena jedna NIJE
     // dokazan. Prvo mjerenje ih je spajalo i time precijenilo pokrivenost.

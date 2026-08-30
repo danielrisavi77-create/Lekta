@@ -17,6 +17,7 @@
 import { describe, expect, it } from 'vitest';
 import { analyzeFixture, resolveProfile } from '../src/analysis/golden-entry';
 import { applyFixers } from '../src/repair/apply-fixers';
+import { readZip } from '../src/repair/zip-codec';
 import { buildAllRepairableItems } from '../src/ui/repair-item-assembly';
 import { buildDefaultRepairRequests } from '../src/repair/default-selection';
 import { draftRuleEntriesFor } from '../src/profiles/drafts-runtime';
@@ -226,5 +227,46 @@ describe('generator krsenja: heading-style', () => {
     const after = await analyze(out.docxBytes, PROFILE_ID, profile);
     const headings = (after.documentStructure?.headings ?? []) as Array<{ text: string }>;
     expect(headings.some((h) => String(h.text).includes('Rezultati'))).toBe(true);
+  });
+});
+
+/**
+ * `revision-metadata`: Wordovi revizijski identifikatori (`w:rsid*`).
+ *
+ * Generirani dokument ih dotad nije imao nijedan, pa `final-document-inspector-fixer` na njemu
+ * NIKAD nije imao sto raditi, iako je na 74 od 74 stvarna FPZG rada promijenio dokument. Matrica
+ * je za njega imala 400 celija bez ijednog dokaza.
+ *
+ * Ova os nosi SLABIJU jacinu dokaza (`applied`): fixer dokazano mijenja paket, ali iza njega ne
+ * stoji bodovana provjera koja bi rjesenje mogla potvrditi. To se imenuje, ne izjednacava s
+ * `resolved`.
+ */
+describe('generator krsenja: revision-metadata', () => {
+  it('rsid oznake ulaze u dokument i inspektor ih ukloni bez diranja teksta', async () => {
+    const profile = resolveProfile(PROFILE_ID) as Record<string, unknown>;
+    const { bytes, violated } = await buildViolatingDocx(profile, { structural: ['revision-metadata'] });
+    expect(violated).toContain('revision-metadata');
+
+    const documentOf = async (b: Uint8Array) =>
+      new TextDecoder().decode((await readZip(b)).find((e) => e.name === 'word/document.xml')!.data);
+    const beforeXml = await documentOf(bytes);
+    // BASELINE: bez ove tvrdnje bi test prolazio i da generator nije nista dodao.
+    expect(beforeXml).toMatch(/w:rsid[A-Za-z]+=/);
+
+    const before = await analyze(bytes, PROFILE_ID, profile);
+    const item = itemsFor(before, profile, PROFILE_ID).find((i) => i.fixerId === 'final-document-inspector-fixer');
+    expect(item, 'final-document-inspector-fixer mora biti ponudjen').toBeDefined();
+
+    const out = await applyFixers(bytes, [
+      { fixerId: 'final-document-inspector-fixer', ruleId: item!.ruleId, params: item!.params },
+    ] as never);
+    expect(out.integrityFailure).toBeUndefined();
+    expect(out.changelog.length).toBeGreaterThan(0);
+
+    const afterXml = await documentOf(out.docxBytes);
+    expect(afterXml).not.toMatch(/w:rsid[A-Za-z]+=/);
+    // Vidljivi tekst mora ostati identican: uklanjanje rsid-ova je mehanika ispod, ne sadrzaj.
+    const textOf = (xml: string) => xml.replace(/<[^>]+>/g, '');
+    expect(textOf(afterXml)).toBe(textOf(beforeXml));
   });
 });

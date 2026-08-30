@@ -114,11 +114,13 @@ export function profileGatedFixers(matrix: RepairCoverageMatrix): Set<string> {
  * ne trazе, pa se nema sto ni dokazivati.
  */
 const AXIS_BY_FIXER: Record<string, string> = {
+  'final-document-inspector-fixer': 'revision-metadata',
   'toc-field-fixer': 'toc-field',
   'heading-style-fixer': 'heading-style',
   'empty-paragraph-fixer': 'empty-paragraphs',
   'croatian-typography-fixer': 'croatian-typography',
   'link-doi-fixer': 'link-doi',
+  'required-section-fixer': 'required-section',
 };
 
 /** Gradi celije za sve profile iz matrice, po jedna za svaki registriran fixer. */
@@ -129,9 +131,21 @@ const AXIS_BY_FIXER: Record<string, string> = {
  * Osi s bodovanom provjerom (`toc-field`, `heading-style`) idu kroz `axesResolved` i nose jaci dokaz.
  */
 export const APPLIED_AXIS_FIXER: Record<string, string> = {
+  // `final-document-inspector-fixer` uklanja `w:rsid*`. Bez ovog unosa izvod iz changeloga ne
+  // zna kojeg fixera traziti, pa os `revision-metadata` ostaje bez ijednog dokaza.
+  'revision-metadata': 'final-document-inspector-fixer',
   'empty-paragraphs': 'empty-paragraph-fixer',
   'croatian-typography': 'croatian-typography-fixer',
   'link-doi': 'link-doi-fixer',
+  /**
+   * `required-section` je ovdje iz DRUGOG razloga nego gornje tri.
+   *
+   * One nemaju bodovanu provjeru. Ona ju IMA (`structure.sections.profile`, max 7), ali ju popravak
+   * ne moze zatvoriti: provjera boduje pet obveznih dijelova, a analiza kao kandidate za umetanje
+   * nudi samo dva. Izmjereno 2026-08-30: 2/7 -> 4/7, strop. Dok taj raskorak stoji, os nosi
+   * `applied`; kad se kandidati prosire na svih pet, seli u `RESOLVED_AXIS_FIXER`.
+   */
+  'required-section': 'required-section-fixer',
 };
 
 /**
