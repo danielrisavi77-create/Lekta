@@ -319,13 +319,22 @@ async function importReferencesFromFile(file: File): Promise<void> {
   try { text = await file.text(); } catch { announceBulk('Datoteku nije moguće pročitati.'); return; }
   const refs = parseReferenceFile(text);
   const box = $('#bulk-entries');
+  // Isti razlog kao u `parseBulk`: uvoz datoteke ne smije progutati kartice koje je korisnik
+  // rucno prenio mostom iz "Jedan izvor". One ne dolaze iz uvezene datoteke, pa ih ponovni uvoz
+  // ne moze reproducirati; bez ovoga bi nestale bez ijedne poruke.
+  const kept = detachManualCards(box);
   box.innerHTML = '';
   $('#bulk-copy').hidden = true;
   $('#bulk-output').innerHTML = '';
   if (!refs.length) {
-    $('#bulk-generate').hidden = true;
-    { const v = $('#bulk-verify'); if (v) v.hidden = true; }
-    announceBulk('Nije prepoznata nijedna referenca. Podržani formati: BibTeX (.bib), RIS (.ris), CSL-JSON (.json).');
+    reattachManualCards(box, kept, 0);
+    const imaRucnih = kept.length > 0;
+    $('#bulk-generate').hidden = !imaRucnih;
+    { const v = $('#bulk-verify'); if (v) v.hidden = !imaRucnih; }
+    updateBulkTabCount();
+    announceBulk(imaRucnih
+      ? `Nije prepoznata nijedna referenca iz datoteke. Zadržane su ručno dodane kartice: ${kept.length}. Podržani formati: BibTeX (.bib), RIS (.ris), CSL-JSON (.json).`
+      : 'Nije prepoznata nijedna referenca. Podržani formati: BibTeX (.bib), RIS (.ris), CSL-JSON (.json).');
     return;
   }
   refs.forEach((ref, i) => {
@@ -343,9 +352,13 @@ async function importReferencesFromFile(file: File): Promise<void> {
     Object.keys(ref.fields).forEach((k) => { values[k] = (ref.fields as any)[k]; });
     renderBulkCard(fields, values);
   });
+  reattachManualCards(box, kept, refs.length);
+  updateBulkTabCount();
   $('#bulk-generate').hidden = false;
   { const v = $('#bulk-verify'); if (v) v.hidden = false; }
-  announceBulk(`Uvezeno referenci: ${refs.length}. Provjeri i dopuni polja, pa generiraj literaturu.`);
+  announceBulk(kept.length
+    ? `Uvezeno referenci: ${refs.length}, uz ${kept.length} zadržanih iz kartice Jedan izvor. Provjeri i dopuni polja, pa generiraj literaturu.`
+    : `Uvezeno referenci: ${refs.length}. Provjeri i dopuni polja, pa generiraj literaturu.`);
 }
 
 // --- Opt-in ONLINE provjera postojanja referenci (CrossRef) ---

@@ -35,6 +35,7 @@ function buildDom(): void {
       <select id="bulk-style"><option value="auto">Auto</option><option value="apa">APA</option><option value="vancouver">Vancouver</option><option value="ieee">IEEE</option><option value="chicago">Chicago</option></select>
       <textarea id="bulk-input"></textarea>
       <button id="bulk-parse"></button>
+      <input type="file" id="bulk-import">
       <div id="bulk-entries"></div>
       <button id="bulk-generate" hidden></button>
       <div id="bulk-output"></div>
@@ -271,5 +272,61 @@ describe('citat-page: migracija lekta.citat-faculty -> lekta.faculty-context (B2
     expect($('#f-faculty').value).toBe('efos');
     expect(localStorage.getItem('lekta.citat-faculty')).toBeNull();
     expect(JSON.parse(localStorage.getItem('lekta.faculty-context')!)).toEqual({ unitId: 'efos' });
+  });
+});
+
+/**
+ * Uvoz datoteke rusio je rucne kartice na ISTI nacin kao "Prepoznaj reference".
+ *
+ * `parseBulk` je popravljen ranije, `importReferencesFromFile` nije: i on radi `box.innerHTML = ''`.
+ * Razlika je vazna jer se kartica iz mosta "Jedan izvor" NE moze reproducirati ponovnim uvozom, pa
+ * je taj gubitak trajan i tih.
+ */
+describe('uvoz datoteke cuva kartice iz mosta "Jedan izvor"', () => {
+  function uvezi(sadrzaj: string, ime = 'refs.ris'): Promise<void> {
+    const input: any = document.querySelector('#bulk-import');
+    const file = new File([sadrzaj], ime, { type: 'text/plain' });
+    Object.defineProperty(input, 'files', { value: [file], configurable: true });
+    input.dispatchEvent(new Event('change'));
+    // `importReferencesFromFile` je async (cita `file.text()`); pusti mikro/makro red da se isprazni.
+    return new Promise((resolve) => setTimeout(resolve, 0));
+  }
+
+  it('rucna kartica prezivi uvoz, a uvezene se dodaju uz nju', async () => {
+    $('#bulk-input').value = '';
+    $('#bulk-parse').click();
+    setVal('#f-type', 'knjiga');
+    setVal('#f-authors', 'Kovačić, Iva');
+    setVal('#f-title', 'Rucno dodana');
+    setVal('#f-year', '2021');
+    $('#c-add-to-bulk').click();
+    expect($('#bulk-entries').querySelectorAll('.bulk-card').length).toBe(1);
+
+    await uvezi('TY  - BOOK\nTI  - Uvezena knjiga\nPY  - 2020\nER  - \n');
+
+    const cards = $('#bulk-entries').querySelectorAll('.bulk-card');
+    expect(cards.length, 'uvoz je progutao rucnu karticu').toBe(2);
+    const titles = Array.from(cards).map((c: any) => c.querySelector('input[data-key="title"]')?.value);
+    expect(titles).toContain('Rucno dodana');
+    expect(titles).toContain('Uvezena knjiga');
+  });
+
+  it('neprepoznata datoteka ne brise rucnu karticu', async () => {
+    // Cist pocetak: rucne kartice NAMJERNO prezivljavaju i "Prepoznaj reference" i uvoz, pa ih
+    // prethodni test ostavlja za sobom. Ovdje se mjeri jedna, pa se popis prvo isprazni izravno.
+    $('#bulk-entries').innerHTML = '';
+    $('#bulk-input').value = '';
+    $('#bulk-parse').click();
+    setVal('#f-type', 'knjiga');
+    setVal('#f-authors', 'Anić, Ana');
+    setVal('#f-title', 'Jedina rucna');
+    setVal('#f-year', '2022');
+    $('#c-add-to-bulk').click();
+
+    await uvezi('ovo nije ni bibtex ni ris ni csl-json', 'smece.txt');
+
+    const cards = $('#bulk-entries').querySelectorAll('.bulk-card');
+    expect(cards.length, 'prazan uvoz je obrisao rucnu karticu').toBe(1);
+    expect($('#bulk-generate').hidden, 'generiranje mora ostati moguce').toBe(false);
   });
 });
