@@ -257,3 +257,41 @@ test('potvrda ishoda se gasi pod reduced-motion', async ({ page, context }) => {
   expect(anim.name).toBe('lekta-outcome-stamp');
   expect(anim.durationMs).toBeLessThan(1);
 });
+
+/**
+ * ULAZNA KOREOGRAFIJA SMIJE DIRATI SAMO ONO ISPOD ALATA.
+ *
+ * Ovo je gard protiv tocno onog kvara zbog kojeg je `49849608` ("unify visual system") vracen isti
+ * dan: promjena je sakrila sadrzaj iza dodatnog koraka i trebala je POPUSTANJE postojecih tvrdnji
+ * da ostane zelena. Reveal skriva element dok ne dodje u vidno polje, pa bi oznaka na alatu ili
+ * njegovoj kontroli znacila da alat pri dolasku na stranicu nije ondje.
+ *
+ * Zato: nijedan `[data-reveal]` ne smije biti unutar `.tool-workspace` niti sadrzavati primarni
+ * gumb, a pod reduced-motion sve mora biti vidljivo bez ijednog skrola.
+ */
+for (const pageSpec of FREE_TOOL_PAGES.filter((p) => p.workspaceSelector)) {
+  test(`${pageSpec.name}: reveal ne dira alat ni primarnu akciju`, async ({ page }) => {
+    await page.goto(pageSpec.route);
+    const bad = await page.evaluate(([ws, primary]) => {
+      const offenders: string[] = [];
+      for (const el of document.querySelectorAll('[data-reveal]')) {
+        if (el.closest(ws as string)) offenders.push('unutar radne plohe');
+        if (el.querySelector(primary as string)) offenders.push('sadrzi primarni gumb');
+      }
+      return offenders;
+    }, [pageSpec.workspaceSelector!, pageSpec.primarySelector]);
+    expect(bad, `${pageSpec.route}: reveal je zahvatio alat`).toEqual([]);
+
+    // Alat mora biti vidljiv odmah, bez skrolanja.
+    await expect(page.locator(pageSpec.primarySelector)).toBeVisible();
+  });
+}
+
+test('reduced-motion: sve otkriveno bez skrolanja', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/citat.html');
+  const opacities = await page.evaluate(() =>
+    [...document.querySelectorAll('[data-reveal]')].map((el) => getComputedStyle(el).opacity));
+  expect(opacities.length).toBeGreaterThan(0);
+  expect(opacities.every((o) => o === '1'), `neotkriveno: ${opacities.join(', ')}`).toBe(true);
+});
