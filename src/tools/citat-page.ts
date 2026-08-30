@@ -231,13 +231,53 @@ function announceBulk(msg: string) {
   if (live) live.textContent = msg;
 }
 
+// Kartice dodane iz "Jedan izvor" (most single->bulk) nose data-origin="single". One NISU
+// izvedene iz #bulk-input pa se iz njega ne mogu rekonstruirati: ponovno prepoznavanje ih
+// zato ne brise nego CUVA i vraca iza prepoznatih. Kartice iz prethodnog prepoznavanja
+// (origin "paste") se i dalje zamjenjuju, jer ih isti tekst ponovno proizvodi.
+function detachManualCards(box: any): any[] {
+  const kept: any[] = Array.from(box.querySelectorAll('.bulk-card[data-origin="single"]'));
+  kept.forEach((c) => c.remove());
+  return kept;
+}
+
+// Vrati sacuvane rucne kartice na kraj popisa i prenumeriraj im zaglavlja (numeracija mora
+// pratiti stvaran redoslijed, inace bi dvije kartice nosile isti "Referenca 1").
+function reattachManualCards(box: any, kept: any[], startIndex: number): void {
+  kept.forEach((card, i) => {
+    const head = card.querySelector('.bulk-card-head');
+    if (head) head.textContent = `Referenca ${startIndex + i + 1} (iz kartice Jedan izvor)`;
+    box.appendChild(card);
+  });
+}
+
+// Brojka na tabu mora pratiti STVARAN broj kartica (prije ju je pisao samo most single->bulk,
+// pa je nakon prepoznavanja ostajala zastarjela).
+function updateBulkTabCount(): void {
+  const tab = $('#tab-bulk');
+  if (!tab) return;
+  const n = $('#bulk-entries')?.querySelectorAll('.bulk-card').length || 0;
+  tab.textContent = n ? `${_tabBulkBase} (${n})` : _tabBulkBase;
+}
+
 function parseBulk() {
   const refs = splitReferences($('#bulk-input').value);
   const box = $('#bulk-entries');
+  const kept = detachManualCards(box);
   box.innerHTML = '';
   $('#bulk-copy').hidden = true;
   $('#bulk-output').innerHTML = '';
-  if (!refs.length) { $('#bulk-generate').hidden = true; { const v = $('#bulk-verify'); if (v) v.hidden = true; } announceBulk('Nije prepoznata nijedna referenca.'); return; }
+  if (!refs.length) {
+    reattachManualCards(box, kept, 0);
+    const hasAny = kept.length > 0;
+    $('#bulk-generate').hidden = !hasAny;
+    { const v = $('#bulk-verify'); if (v) v.hidden = !hasAny; }
+    updateBulkTabCount();
+    announceBulk(hasAny
+      ? `U zalijepljenom tekstu nije prepoznata nijedna referenca. Ručno dodanih zadržano: ${kept.length}.`
+      : 'Nije prepoznata nijedna referenca.');
+    return;
+  }
   const style = bulkStyle();
   refs.forEach((raw: string, i: number) => {
     const p = parseReference(raw, style);
@@ -255,9 +295,12 @@ function parseBulk() {
     Object.keys(p.fields).forEach((k) => { values[k] = (p.fields as any)[k]; });
     renderBulkCard(fields, values);
   });
+  reattachManualCards(box, kept, refs.length);
   $('#bulk-generate').hidden = false;
   { const v = $('#bulk-verify'); if (v) v.hidden = false; }
-  announceBulk(`Prepoznato referenci: ${refs.length}. Provjeri i dopuni polja po unosu, pa generiraj literaturu.`);
+  updateBulkTabCount();
+  const keptNote = kept.length ? ` Ručno dodanih zadržano: ${kept.length}.` : '';
+  announceBulk(`Prepoznato referenci: ${refs.length}.${keptNote} Provjeri i dopuni polja po unosu, pa generiraj literaturu.`);
 }
 
 // --- Uvoz iz upravitelja referenci (Zotero/Mendeley): .bib / .ris / .json (CSL-JSON) ---
@@ -397,8 +440,8 @@ function bindTablistKeys() {
 
 // --- Most "Jedan izvor" -> "Cijela literatura": trenutni strukturirani unos ide kao NOVA
 // kartica u bulk tok (isti renderBulkCard/generateBulk mehanizam), bez ponovnog tipkanja.
-// Poznato ogranicenje (namjerno): "Prepoznaj reference" u bulk kartici gradi kartice ISKLJUCIVO
-// iz zalijepljenog teksta pa brise i dodane (to je njegov ugovor); title na gumbu to kaze.
+// Kartica se oznacava s data-origin="single" jer je to jedini rucni rad u popisu koji se NE
+// moze rekonstruirati iz #bulk-input; "Prepoznaj reference" ju zato cuva (v. parseBulk).
 let _addFlashTimer = 0;
 let _tabBulkBase = '';
 function addSingleToBulk() {
@@ -408,6 +451,7 @@ function addSingleToBulk() {
   const idx = box.querySelectorAll('.bulk-card').length + 1;
   const card = document.createElement('div');
   card.className = 'bulk-card';
+  card.setAttribute('data-origin', 'single');
   const head = document.createElement('div');
   head.className = 'bulk-card-head';
   head.textContent = `Referenca ${idx} (iz kartice Jedan izvor)`;
@@ -419,8 +463,7 @@ function addSingleToBulk() {
   renderBulkCard(fields, inp);
   $('#bulk-generate').hidden = false;
   { const v = $('#bulk-verify'); if (v) v.hidden = false; }
-  const tab = $('#tab-bulk');
-  if (tab) tab.textContent = `${_tabBulkBase} (${box.querySelectorAll('.bulk-card').length})`;
+  updateBulkTabCount();
   const btn = $('#c-add-to-bulk');
   if (btn) {
     if (_addFlashTimer) clearTimeout(_addFlashTimer);

@@ -44,6 +44,23 @@ describe('organizeBibliography', () => {
     ]);
   });
 
+  it('BUG: cetiri znamenke zalijepljene uz dijakriticko slovo ne sluze kao godina pri sortiranju', () => {
+    // Regresija: sortYear je koristio ASCII \b, pa je "MZOŠ1990" bio procitan kao godina 1990
+    // i lazno gurnuo taj zapis ISPRED stvarno starijeg rada istog autora. ASCII "MZOS1990" se
+    // nikad tako nije ponasao, dakle poredak je ovisio samo o dijakritiku.
+    const r = organizeBibliography('Anić, A. Zbornik MZOŠ1990 pregled.\nAnić, A. (2005). Pravi rad.');
+    expect(r.entries.map((e) => e.text)).toEqual([
+      'Anić, A. (2005). Pravi rad.',
+      'Anić, A. Zbornik MZOŠ1990 pregled.', // bez prepoznate godine -> na kraj skupine
+    ]);
+    // Negativna kontrola: prava godina i dalje sortira kronoloski.
+    const ok = organizeBibliography('Anić, A. (2005). Noviji.\nAnić, A. (1990). Stariji.');
+    expect(ok.entries.map((e) => e.text)).toEqual([
+      'Anić, A. (1990). Stariji.',
+      'Anić, A. (2005). Noviji.',
+    ]);
+  });
+
   it('ignorira vodece nabrajanje pri sortiranju', () => {
     const r = organizeBibliography('[2] Zorić, Z. (2020). Rad.\n[1] Anić, A. (2019). Rad.');
     expect(r.entries[0].text).toContain('Anić');
@@ -171,6 +188,43 @@ describe('detectIssues', () => {
     expect(detectIssues('Novosti (12.3.2021). https://x.hr/a')).toContain('provjeri treba li tvoj citatni stil datum pristupa');
     // Bare www URL bez sheme se sada prepoznaje kao mrežni izvor.
     expect(detectIssues('Zavod (2021). Podaci. www.primjer.hr/podaci')).toContain('provjeri treba li tvoj citatni stil datum pristupa');
+  });
+
+  it('BUG: naslov koji sadrzi rijec "pristup" NE gasi upozorenje o datumu pristupa', () => {
+    // Regresija: kljucna rijec se trazila BILO GDJE u zapisu, pa je posve obican hrvatski
+    // naslov ("Novi pristup analizi podataka") tiho ugasio upozorenje kod mreznog izvora
+    // koji datum pristupa uopce nema. Lazni negativ, i to na najkorisnijem mjestu.
+    expect(detectIssues('Anić, A. (2020). Novi pristup analizi podataka. https://primjer.hr/rad'))
+      .toContain('provjeri treba li tvoj citatni stil datum pristupa');
+    // Isto vrijedi i za "posjecenost"/"preuzeto" korijene u naslovu.
+    expect(detectIssues('Barić, B. (2019). Posjećenost muzeja. https://primjer.hr/muzeji'))
+      .toContain('provjeri treba li tvoj citatni stil datum pristupa');
+  });
+
+  it('marker PRIJE URL-a i dalje vrijedi (Vancouver "[cited ...]", hrvatski APA "Preuzeto s")', () => {
+    // Suzenje opsega ne smije razbiti stilove koji marker stavljaju ISPRED poveznice.
+    expect(detectIssues('Smith J. Naslov [Internet]. Zagreb: Izdavač; 2020 [cited 2021 Jan 5]. Available from: https://who.int/x'))
+      .not.toContain('provjeri treba li tvoj citatni stil datum pristupa');
+    expect(detectIssues('Anić, A. (2020). Novi pristup analizi. Preuzeto s https://primjer.hr/rad'))
+      .not.toContain('provjeri treba li tvoj citatni stil datum pristupa');
+    expect(detectIssues('Zavod (2021). Podaci. Datum pristupa: 2.7.2026. https://primjer.hr/podaci'))
+      .not.toContain('provjeri treba li tvoj citatni stil datum pristupa');
+  });
+
+  it('BUG: dijakritik uz cetiri znamenke nije godina ("MZOŠ2019" kao ni ASCII "MZOS2019")', () => {
+    // Regresija: JS \b je ASCII, pa izmedu "Š" i "2" POSTOJI granica i "MZOŠ2019" je prolazio
+    // kao godina izdanja, dok isti zapis bez dijakritika ("MZOS2019") nije. Zapis bez prave
+    // godine tako je tiho gubio upozorenje, ovisno samo o dijakritiku.
+    expect(detectIssues('Anić, A. Zbornik radova MZOŠ2019 pregled. Zagreb: Naklada.'))
+      .toContain('nema godine');
+    // Negativna kontrola: ASCII varijanta se ponasala ispravno i prije, i dalje se tako ponasa.
+    expect(detectIssues('Anić, A. Zbornik radova MZOS2019 pregled. Zagreb: Naklada.'))
+      .toContain('nema godine');
+    // Prava godina (odvojena ne-slovnim znakom) i dalje gasi upozorenje.
+    expect(detectIssues('Anić, A. (2019). Zbornik radova. Zagreb: Naklada.'))
+      .not.toContain('nema godine');
+    expect(detectIssues('Anić, A. Zbornik radova, 2019. Zagreb: Naklada.'))
+      .not.toContain('nema godine');
   });
 
   it('označava prekratak zapis', () => {

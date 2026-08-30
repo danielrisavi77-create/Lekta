@@ -203,6 +203,56 @@ describe('citat-page: izbornik fakulteta + bulk (DOM)', () => {
     $('#c-clear').click();
     expect($('#c-add-to-bulk').disabled).toBe(true);
   });
+
+  it('BUG: "Prepoznaj reference" ne baca kartice dodane iz "Jedan izvor"', () => {
+    // Regresija: parseBulk je gradio popis ISKLJUCIVO iz #bulk-input (box.innerHTML = ''), pa je
+    // svaki klik na "Prepoznaj reference" brisao i rucno dodane kartice iz mosta single->bulk.
+    // Taj se rad ne moze rekonstruirati iz zalijepljenog teksta jer u njemu nikad nije ni bio.
+    $('#bulk-entries').innerHTML = ''; // cist pocetak, bez oslanjanja na prethodne testove
+    fireChange('#bulk-style', 'auto');
+
+    $('#tab-single').click();
+    setVal('#f-type', 'knjiga');
+    setVal('#f-authors', 'Kovačić, Iva');
+    setVal('#f-title', 'Ručno dodana referenca');
+    setVal('#f-year', '2021');
+    $('#c-add-to-bulk').click();
+    expect($('#bulk-entries').querySelectorAll('.bulk-card').length).toBe(1);
+
+    // Tek SADA korisnik zalijepi popis i klikne "Prepoznaj reference".
+    $('#bulk-input').value = 'Horvat, A. (2019). Zalijepljeni naslov. Zagreb: Naklada.';
+    $('#bulk-parse').click();
+
+    const cards = $('#bulk-entries').querySelectorAll('.bulk-card');
+    expect(cards.length).toBe(2); // prepoznata + sacuvana rucna
+    const titles = Array.from(cards).map((c: any) => c.querySelector('input[data-key="title"]')?.value);
+    expect(titles).toContain('Ručno dodana referenca');
+    expect(titles.some((t) => String(t).includes('Zalijepljeni naslov'))).toBe(true);
+    // Numeracija prati stvaran redoslijed (sacuvana kartica ide iza prepoznatih).
+    expect(cards[1].querySelector('.bulk-card-head').textContent).toContain('Referenca 2');
+    expect($('#tab-bulk').textContent).toContain('(2)');
+
+    // Obje kartice zavrsavaju u generiranoj literaturi.
+    $('#bulk-generate').click();
+    expect($('#bulk-result').value).toContain('Kovačić');
+    expect($('#bulk-result').value).toContain('Zalijepljeni naslov');
+  });
+
+  it('prepoznavanje i dalje ZAMJENJUJE kartice iz prethodnog prepoznavanja (isti tekst = svjez popis)', () => {
+    // Negativna kontrola uz gornji popravak: cuva se SAMO rucni rad, ne i kartice koje isti
+    // #bulk-input ponovno proizvodi (inace bi svaki klik duplicirao popis).
+    $('#bulk-entries').innerHTML = '';
+    $('#bulk-input').value = 'Horvat, A. (2019). Prvi. Zagreb: Naklada.\n\nAnić, A. (2020). Drugi. Zagreb: Naklada.';
+    $('#bulk-parse').click();
+    expect($('#bulk-entries').querySelectorAll('.bulk-card').length).toBe(2);
+    $('#bulk-parse').click();
+    expect($('#bulk-entries').querySelectorAll('.bulk-card').length).toBe(2);
+
+    // Prazan unos i dalje ocisti popis kad u njemu nema rucnih kartica.
+    $('#bulk-input').value = '';
+    $('#bulk-parse').click();
+    expect($('#bulk-entries').querySelectorAll('.bulk-card').length).toBe(0);
+  });
 });
 
 describe('citat-page: migracija lekta.citat-faculty -> lekta.faculty-context (B2)', () => {

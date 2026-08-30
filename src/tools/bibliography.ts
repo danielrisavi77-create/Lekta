@@ -35,6 +35,14 @@ function stripLeadingMarker(text: string): string {
   return text.replace(/^\s*[[(]?\d+[\]).]?\s+/, '').replace(/^[-•*\s]+/, '');
 }
 
+// Godina objave: granica NIJE \b. U JS-u je \b ASCII, pa izmedu dijakritickog slova i znamenke
+// POSTOJI granica ("MZOŠ2019" -> "2019" prolazi kao godina), dok ista ASCII oznaka ("MZOS2019")
+// ne prolazi: isti zapis se ponasao razlicito ovisno o dijakritiku. Umjesto \b konzumiramo
+// ne-slovnu/ne-brojcanu granicu (?:^|[^\p{L}\p{N}]) uz 'u' flag; isti obrazac koji vec koriste
+// counter.ts (kratice) i citation.ts (organizacijske rijeci). Godina je GRUPA 1, ne m[0], jer
+// m[0] nosi i pojedeni granicni znak ("(2019" -> parseInt daje NaN).
+const YEAR_RE = /(?:^|[^\p{L}\p{N}])(1[89]\d{2}|20\d{2})(?![\p{L}\p{N}])/u;
+
 // Kljuc za sortiranje: makni vodece nabrajanje pa uzmi prezime (do prvog zareza).
 function sortKey(text: string): string {
   const stripped = stripLeadingMarker(text);
@@ -49,14 +57,22 @@ function sortKey(text: string): string {
 function sortYear(text: string): number {
   const urlMatch = text.match(/(https?:\/\/|www\.)/i);
   const scope = urlMatch ? text.slice(0, urlMatch.index) : text;
-  const m = scope.match(/\b(1[89]\d{2}|20\d{2})\b/);
-  return m ? parseInt(m[0], 10) : Number.POSITIVE_INFINITY;
+  const m = scope.match(YEAR_RE);
+  return m ? parseInt(m[1], 10) : Number.POSITIVE_INFINITY;
 }
 
 // Kljuc za duplikate: makni vodece nabrajanje, mala slova, sazeti razmaci, bez zavrsne interpunkcije.
 function dedupeKey(text: string): string {
   return stripLeadingMarker(text).toLowerCase().replace(/\s+/g, ' ').replace(/[\s.,;]+$/, '').trim();
 }
+
+// Markeri datuma pristupa (v. detectIssues): STRONG se traze u cijelom zapisu, WEAK samo od
+// URL-a nadalje. STRONG mora ostati PODSKUP WEAK-a (svaki STRONG oblik sadrzi neki WEAK korijen).
+// Zavrsna granica (?![\p{L}]) uz 'u' flag (isti obrazac kao counter.ts/citation.ts) je NUZNA:
+// bez nje je "Posjećenost muzeja" u naslovu sadrzavala "posjećeno" i vratila isti lazni negativ
+// zbog kojeg je suzenje i uvedeno. \b se ne koristi jer je u JS-u ASCII pa pada pred dijakritikom.
+const ACCESS_STRONG = /(?:pristupljeno|datum\s*pristupa|preuzeto|posjećeno|posjeceno|accessed|retrieved|citirano|cited)(?![\p{L}])/iu;
+const ACCESS_WEAK = /(pristup|preuzeto|posjeć|posjec|accessed|retrieved|citirano|cited)/i;
 
 export function detectIssues(text: string): string[] {
   const issues: string[] = [];
@@ -68,15 +84,24 @@ export function detectIssues(text: string): string[] {
   // "(n.d.)"/"b.g."/"bez godine" su legitimni APA/hrvatski markeri izvora bez datuma
   // (institucionalni/sivi izvori); ispravno oblikovan zapis ne smije dobiti laznu zamjerku.
   const hasNoDateMarker = /(^|[\s(\[])(n\.\s?d\.|b\.\s?g\.)|bez godine/i.test(yearScope);
-  if (!hasNoDateMarker && !/\b(1[89]\d{2}|20\d{2})\b/.test(yearScope)) {
+  if (!hasNoDateMarker && !YEAR_RE.test(yearScope)) {
     issues.push('nema godine');
   }
   const hasUrl = !!urlMatch;
   // Datum pristupa mora biti oznacen kljucnom rijeci; goli datum je najcesce datum objave,
   // pa ga ne prihvacamo kao dokaz datuma pristupa (inace lazni negativ). "citirano" je
-  // standardni hrvatski Vancouver/IEEE marker (STEM/medicina). Poznato ogranicenje: rijec se
-  // trazi bilo gdje u zapisu, pa naslov koji sadrzi "pristup" moze ugasiti upozorenje.
-  const hasAccess = /(pristup|preuzeto|posjeć|posjec|accessed|retrieved|citirano|cited)/i.test(text);
+  // standardni hrvatski Vancouver/IEEE marker (STEM/medicina).
+  // Rijec se vise NE trazi bilo gdje u zapisu: naslov koji sadrzi "pristup" ("Novi pristup
+  // analizi podataka") tiho je gasio upozorenje. Dvije razine:
+  //  - ACCESS_STRONG: glagolski/nedvosmisleni oblici koji se u naslovu prakticki ne pojavljuju.
+  //    Traze se u CIJELOM zapisu, jer ih stilovi legitimno stavljaju i PRIJE URL-a (Vancouver
+  //    "[cited ...]. Available from: URL", hrvatski APA "Preuzeto s URL").
+  //  - ACCESS_WEAK: goli korijeni koji su ujedno obicne rijeci ("pristup"). Traze se SAMO od
+  //    URL-a nadalje, gdje naslova vise nema ("... https://x.hr (pristup 2.7.2026.)").
+  // ACCESS_STRONG je podskup ACCESS_WEAK-a, pa je novi skup pogodaka podskup prijasnjeg:
+  // ovaj popravak moze upozorenje samo DODATI, nikad ukloniti.
+  const accessTail = urlMatch ? text.slice(urlMatch.index) : '';
+  const hasAccess = ACCESS_STRONG.test(text) || ACCESS_WEAK.test(accessTail);
   if (hasUrl && !hasAccess) {
     issues.push('provjeri treba li tvoj citatni stil datum pristupa');
   }
