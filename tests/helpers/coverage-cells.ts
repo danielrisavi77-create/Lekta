@@ -26,6 +26,14 @@ export interface ClosedLoopRow {
   outcome: string;
   violated: string[];
   axesResolved: string[];
+  /**
+   * Osi koje je popravak DIRAO, ali im nijedna bodovana provjera ne moze potvrditi rjesenje.
+   *
+   * Postoji zato sto `axisResolved` vraca `true` cim je `max === 0`: da su te osi ostale u
+   * `axesResolved`, svaka bi se na svakom profilu javila kao rijesena i matrica bi dobila
+   * 407 x 3 = 1221 celiju laznog dokaza.
+   */
+  axesApplied?: string[];
   axesRemaining: string[];
   regressions: number;
   textPreserved: boolean;
@@ -97,6 +105,18 @@ export function profileGatedFixers(matrix: RepairCoverageMatrix): Set<string> {
 }
 
 /** Gradi celije za sve profile iz matrice, po jedna za svaki registriran fixer. */
+/**
+ * Univerzalna os generatora -> fixer koji ju zatvara.
+ *
+ * Samo osi BEZ bodovane provjere (`STRUCTURAL_WITHOUT_SCORED_CHECK` u `scripts/run-closed-loop.mts`).
+ * Osi s bodovanom provjerom (`toc-field`, `heading-style`) idu kroz `axesResolved` i nose jaci dokaz.
+ */
+const APPLIED_AXIS_FIXER: Record<string, string> = {
+  'empty-paragraphs': 'empty-paragraph-fixer',
+  'croatian-typography': 'croatian-typography-fixer',
+  'link-doi': 'link-doi-fixer',
+};
+
 export function buildCoverageCells(
   matrix: RepairCoverageMatrix,
   closedLoop: ClosedLoopReport,
@@ -111,6 +131,9 @@ export function buildCoverageCells(
     const rows = matrix.rows.filter((row) => row.profileId === profileId);
     const loop = loopByProfile.get(profileId);
     const resolvedAxes = new Set(loop?.axesResolved ?? []);
+    const appliedFixers = new Set(
+      (loop?.axesApplied ?? []).map((axis) => APPLIED_AXIS_FIXER[axis]).filter((id): id is string => Boolean(id)),
+    );
     const samples = corpus.results.filter((result) => result.profileId === profileId);
 
     for (const fixerId of FIXER_IDS) {
@@ -129,6 +152,23 @@ export function buildCoverageCells(
             strength: 'resolved',
             artifactId: `closed-loop:${profileId}`,
             checkIds: loopCovered,
+          },
+        });
+        continue;
+      }
+
+      // 1b) Closed-loop je os prekrsio i fixer ju je DIRAO, ali nijedna bodovana provjera ne moze
+      //     potvrditi rjesenje. Slabija jacina, i to se imenuje umjesto da se izjednaci s `resolved`.
+      if (appliedFixers.has(fixerId)) {
+        cells.push({
+          profileId,
+          fixerId,
+          status: 'pokriveno',
+          evidence: {
+            kind: 'closed-loop',
+            strength: 'applied',
+            artifactId: `closed-loop:${profileId}`,
+            checkIds: [],
           },
         });
         continue;

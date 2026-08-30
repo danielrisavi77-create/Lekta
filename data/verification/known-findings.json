@@ -216,6 +216,18 @@
       "decidedBy": "Daniel Risavi (odluka u sesiji 2026-08-29)",
       "decidedAt": "2026-08-29",
       "rationale": "Vrijednost spustena s \"ieee\" na \"custom\" (citationMeta label \"Prema posebnim uputama\") u pet draft unosa i u sva tri registra. Bodovno je neutralno i to je IZMJERENO, ne pretpostavljeno: na fpzg-novinarstvo-bibliografija.docx i pmf-matematika-uskladjen.docx ieee, vancouver i custom daju istu ocjenu, isti broj bodovanih provjera i isti nazivnik, jer sve tri grane iskljucuju autor-godina provjere. Mijenja se samo tvrdnja koju alat izgovara korisniku: umjesto imenovanog medjunarodnog stila, \"prema posebnim uputama\". Brisanje polja je odbaceno iz istog razloga kao 2026-08-22: tada bi vrijedio korisnikov zatecen odabir stila."
+    },
+    {
+      "ruleIds": [
+        "(21 profil) --citation-style"
+      ],
+      "finding": "nekanonski citatni tokeni: motor ih tiho cita kao `custom` i gasi autor-godina provjere",
+      "evidence": "Vrijednost koju `citationMeta` ne poznaje pada na `custom` (`CITATION_META[id] || CITATION_META.custom`), pa je profil tvrdio APA a dobivao granu \"bez stila\": izmjereno pet bodovanih provjera i 26 bodova nazivnika manje. Presudjeno je po izvoru, ne po uzorku. kifos: izvor doslovno kaze \"Publication Manual of the American Psychological Association, Seventh Edition, 2019\". securus: \"Navodi u APA (American Psychological Association) stilu\" i \"sukladno vazecim normama ... APA stila\", bez izdanja. vsig: rijec \"APA\" u izvoru NE POSTOJI; PDF je sken (42 stranice, 0 znakova teksta), a njegov OCR o citiranju kaze samo \"Postoje vise sustava i stilova citiranja literature\". unizd-tko: \"Pri pisanju referenci koristi se prilagodjeni (autor godina, broj stranice) Chicago stil\".",
+      "alsoNoted": "Deset tvrdnji ostaje NEPRIMIJENJENO i to je namjerno: sve su `advisory`, a savjetodavna tvrdnja ne smije konfigurirati bodovanje. Citati to potvrdjuju: `foi` kaze \"FOI dopusta APA ili IEEE stil (student bira uz mentora)\", `iv` razlikuje drustvene i tehnicke znanosti, `fhs` upucuje na zasebne upute. Kod `efst-opci-akademski-rad` citat uopce ne govori o citiranju nego o fontu i proredu, sto je vec pokriveno mjerom `styleNotInQuote`.",
+      "decision": "value-corrected",
+      "decidedBy": "Daniel Risavi (odluka u sesiji 2026-08-30)",
+      "decidedAt": "2026-08-30",
+      "rationale": "Kanonizirana su 21 tvrdnja i pet registarskih vrijednosti. Dvije su CITANJE (vsig -> `custom` jer izvor stil ne spominje; unizd-tko -> `chicago-author` jer citat doslovno navodi autor-datum oblik). Ostale su TUMACENJE i tako su i zapisane: \"apa\" -> `apa7` jer motor nema token za APA bez izdanja, a `custom` bi odbacio autor-godina provjere koje izvor izricito trazi; \"autor-godina\" -> `harvard` jer izvor opisuje sustav a ne prirucnik, a `harvard` je u ovom repozitoriju token opceg autor-godina. Ostavljanje zatecenog stanja bilo je najgora opcija: profil je tvrdio jedno, a mjerio drugo."
     }
   ]
 }

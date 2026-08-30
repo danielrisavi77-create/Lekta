@@ -155,7 +155,7 @@
     {
       "ruleId": "agr-diplomski--citation-style",
       "checkId": "citation-style",
-      "value": "autor-godina",
+      "value": "harvard",
       "category": "citation",
       "label": "Stil citiranja (autor-godina)",
       "machineCheckable": false,
@@ -168,7 +168,8 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit",
-      "verifiedHash": "1d09e18e819b157f83479f5a035c1c3868fecc04a0144aa36c4dec091600c778"
+      "verifiedHash": "1d09e18e819b157f83479f5a035c1c3868fecc04a0144aa36c4dec091600c778",
+      "note": "Kanonizirano 2026-08-30. Izvor opisuje SUSTAV (autor, godina) i ne imenuje prirucnik. Motor nema token za opci autor-godina; `harvard` je u ovom repozitoriju upravo taj token (citationMeta ga oznacava \"Harvard / autor-godina\"). TUMACENJE, ne prijepis: bira se sustav koji izvor opisuje, ne prirucnik koji ne spominje."
     },
     {
       "ruleId": "agr-diplomski--required-sections",

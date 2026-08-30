@@ -134,7 +134,7 @@
       "scope": "whole",
       "modalitySource": "human",
       "checkId": "citation-style",
-      "value": "apa",
+      "value": "apa7",
       "category": "citation",
       "label": "Stil citiranja",
       "machineCheckable": false,
@@ -148,7 +148,8 @@
       "lastVerified": "2026-07-17",
       "verifiedBy": "Daniel",
       "reviewedBy": "Daniel",
-      "confirmedVia": "workflow-harvest+adversarial-verify"
+      "confirmedVia": "workflow-harvest+adversarial-verify",
+      "note": "Token ispravljen s \"apa\" (koji motor NE poznaje, pa je tiho padao na `custom` i gasio autor-godina provjere) na kanonski `apa7`, 2026-08-30."
     },
     {
       "ruleId": "securus-zavrsni--required-sections",

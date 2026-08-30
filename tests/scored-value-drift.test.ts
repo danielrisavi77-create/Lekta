@@ -55,15 +55,31 @@ const RATCHET = {
   unbacked: 82,
   /**
    * Tvrdnja nosi ljudski opis stila umjesto kanonskog tokena (`apa` umjesto `apa7`).
-   * 2026-08-29: 26 -> 23 nakon commita `32f869e2`. Spusteno u istom prolazu u kojem je nalaz pao,
-   * po doktrini iz `drift` unosa gore: nespusten ratchet nosi neradjenu zalihu.
+   * 2026-08-29: 26 -> 23 nakon commita `32f869e2`.
+   * 2026-08-30: 23 -> 2. Kanonizirano je 16 tvrdnji, svaka uz zapisan razlog: 13 x "apa" -> `apa7`
+   * (izvor imenuje APA bez izdanja; TUMACENJE, jer motor nema token za APA bez izdanja, a `custom`
+   * bi odbacio autor-godina provjere koje izvor trazi), 2 x "autor-godina" -> `harvard` (izvor
+   * opisuje SUSTAV, ne prirucnik; `harvard` je u ovom repozitoriju token opceg autor-godina), i
+   * 1 x "chicago" -> `chicago-author`, sto je CITANJE a ne tumacenje: citat glasi "prilagodjeni
+   * (autor godina, broj stranice) Chicago stil".
    */
-  'citation:non-canonical-token': 23,
+  'citation:non-canonical-token': 2,
   /**
    * Tvrdnja o stilu postoji, motor nema `recommendedCitation`, pa vrijedi korisnikov odabir.
-   * 2026-08-29: 6 -> 4, isti commit.
+   * 2026-08-29: 6 -> 4.
+   *
+   * 2026-08-30: 4 -> 10, i to je RAST KOJI ZNACI VISE VIDLJIVOSTI, ne vise kvara. Kanonizacija je
+   * sest tvrdnji prevela iz ljudskog opisa u kanonski token, pa ih ova mjera od tada uopce vidi;
+   * prije su ispadale kroz `non-canonical-token`.
+   *
+   * NIJEDNA se NE smije primijeniti i to je provjereno pojedinacno: svih deset je `advisory`, a
+   * savjetodavna tvrdnja ne smije konfigurirati bodovanje. Citati to i potvrdjuju: `foi` kaze
+   * "FOI dopusta APA ili IEEE stil (student bira uz mentora)", `iv` razlikuje drustvene i tehnicke
+   * znanosti, `fhs` upucuje na "zasebne upute u folderima". Kod `efst-opci-akademski-rad` citat
+   * uopce ne govori o citiranju nego o fontu i proredu; taj je slucaj vec pokriven mjerom
+   * `styleNotInQuote` u citation-claim-coverage.
    */
-  'citation:not-applied': 4,
+  'citation:not-applied': 10,
   /**
    * Tvrdnja i motor nose RAZLICIT kanonski token. Do 2026-08-29 ova vrsta nije imala nijedan slucaj
    * pa nije ni bila u ratchetu, sto znaci da je rasla nezapazeno.

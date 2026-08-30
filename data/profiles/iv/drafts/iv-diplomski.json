@@ -231,7 +231,7 @@
     {
       "ruleId": "iv-diplomski--citation-style",
       "checkId": "citation-style",
-      "value": "apa",
+      "value": "apa7",
       "category": "citation",
       "label": "Stil citiranja",
       "machineCheckable": false,
@@ -241,7 +241,7 @@
       "quote": "Društvene znanosti – APA stil citiranja (autor–godina) [...] Tehničke znanosti – numerički stil",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote). Kanonizirano 2026-08-30. \"apa\" NIJE token koji motor poznaje, pa je `citationMeta` tiho padao na `custom` i gasio autor-godina provjere: profil je tvrdio APA, a dobivao granu \"bez stila\". Izvor imenuje APA ali ne navodi izdanje; `apa7` je TUMACENJE, jer je sedmo izdanje vazece, a motor nema token za APA bez izdanja. Alternativa `custom` bi odbacila autor-godina provjere koje izvor izricito trazi, pa bi pogrijesila vise.",
       "verifiedHash": "591cc934a85b7ded7a1ebdfd157e7262c407c09e3444eb82a63e1babf0cf4b22"
     },
     {

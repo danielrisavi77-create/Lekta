@@ -58,10 +58,17 @@ const MAX_CONTRADICTED = 0;
  * Token kojeg motor NE POZNAJE tisi je od svega ostalog: `citationMeta` na nepoznat token pada na
  * `custom`, pa profil koji je htio APA autor-godina dobije granu "bez stila" i izgubi pet bodovanih
  * provjera i 26 bodova nazivnika (izmjereno). Zateceno: pet profila nosi `"apa"` umjesto kanonskog
- * `apa7`. Prijelaz na `apa7` je tvrdnja o IZDANJU standarda i ceka vlasnika, pa se ovdje samo drzi
- * da broj ne raste.
+ * `apa7`.
+ *
+ * ZATVORENO 2026-08-30, spusteno s 5 na 0. Svih pet je presudjeno pojedinacno, po izvoru:
+ *   kifos x2   -> `apa7`, jer izvor DOSLOVNO kaze "Publication Manual of the American
+ *                 Psychological Association, Seventh Edition, 2019";
+ *   securus    -> `apa7`, jer izvor imenuje APA i trazi "vazece norme", bez izdanja (tumacenje);
+ *   vsig x2    -> `custom`, jer u tom izvoru rijec "APA" NE POSTOJI. PDF je sken bez tekstualnog
+ *                 sloja (42 stranice, 0 znakova teksta), a njegov OCR o citiranju kaze samo
+ *                 "Postoje vise sustava i stilova citiranja literature".
  */
-const MAX_UNKNOWN_TOKEN = 5;
+const MAX_UNKNOWN_TOKEN = 0;
 
 /**
  * Tvrdnja IMENUJE stil, a njezin vlastiti citat to ime nikad ne izgovara. Takva tvrdnja je

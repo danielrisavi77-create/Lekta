@@ -161,14 +161,15 @@
       "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "agr-upute-zavrsni-2017",
-      "value": "autor-godina",
+      "value": "harvard",
       "category": "citation",
       "label": "Stil citiranja (autor-godina)",
       "machineCheckable": false,
       "sourcePage": "4. Pravila citiranja i izrada popisa literature",
       "quote": "Citiranje izvora - jedan autor / dva autora / vise autora (autor, godina)",
       "confirmedVia": "human-audit",
-      "verifiedHash": "b3ec76035faeedb729c41a046bb522e2b86dbe9f7ebdebee3ecfe7640a323781"
+      "verifiedHash": "b3ec76035faeedb729c41a046bb522e2b86dbe9f7ebdebee3ecfe7640a323781",
+      "note": "Kanonizirano 2026-08-30. Izvor opisuje SUSTAV (autor, godina) i ne imenuje prirucnik. Motor nema token za opci autor-godina; `harvard` je u ovom repozitoriju upravo taj token (citationMeta ga oznacava \"Harvard / autor-godina\"). TUMACENJE, ne prijepis: bira se sustav koji izvor opisuje, ne prirucnik koji ne spominje."
     },
     {
       "ruleId": "agr-zavrsni--required-sections",

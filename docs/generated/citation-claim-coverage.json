@@ -7,54 +7,8 @@
     "verified": 40
   },
   "contradictedCount": 0,
-  "unknownTokenCount": 5,
-  "unknownToken": [
-    {
-      "profileId": "kifos-diplomski",
-      "token": "apa",
-      "claim": "none",
-      "claimedValue": null,
-      "authority": null,
-      "sourceId": null,
-      "quoteNamesStyle": true
-    },
-    {
-      "profileId": "kifos-zavrsni",
-      "token": "apa",
-      "claim": "none",
-      "claimedValue": null,
-      "authority": null,
-      "sourceId": null,
-      "quoteNamesStyle": true
-    },
-    {
-      "profileId": "securus-zavrsni",
-      "token": "apa",
-      "claim": "none",
-      "claimedValue": null,
-      "authority": null,
-      "sourceId": null,
-      "quoteNamesStyle": true
-    },
-    {
-      "profileId": "vsig-diplomski",
-      "token": "apa",
-      "claim": "none",
-      "claimedValue": null,
-      "authority": null,
-      "sourceId": null,
-      "quoteNamesStyle": true
-    },
-    {
-      "profileId": "vsig-zavrsni",
-      "token": "apa",
-      "claim": "none",
-      "claimedValue": null,
-      "authority": null,
-      "sourceId": null,
-      "quoteNamesStyle": true
-    }
-  ],
+  "unknownTokenCount": 0,
+  "unknownToken": [],
   "styleNotInQuoteCount": 13,
   "styleNotInQuote": [
     {
@@ -177,13 +131,12 @@
   ],
   "byToken": {
     "harvard": 74,
-    "custom": 35,
-    "apa7": 31,
+    "custom": 37,
+    "apa7": 34,
     "vancouver": 25,
     "chicago-notes": 20,
     "chicago-author": 6,
     "fpzg": 13,
-    "apa": 5,
     "pravo-fusnote": 10,
     "pravo-social-author": 6
   },
@@ -1127,7 +1080,7 @@
     },
     {
       "profileId": "kifos-diplomski",
-      "token": "apa",
+      "token": "apa7",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -1136,7 +1089,7 @@
     },
     {
       "profileId": "kifos-zavrsni",
-      "token": "apa",
+      "token": "apa7",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -1541,7 +1494,7 @@
     },
     {
       "profileId": "securus-zavrsni",
-      "token": "apa",
+      "token": "apa7",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -2018,7 +1971,7 @@
     },
     {
       "profileId": "vsig-diplomski",
-      "token": "apa",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,
@@ -2027,7 +1980,7 @@
     },
     {
       "profileId": "vsig-zavrsni",
-      "token": "apa",
+      "token": "custom",
       "claim": "none",
       "claimedValue": null,
       "authority": null,

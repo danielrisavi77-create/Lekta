@@ -263,7 +263,7 @@
     {
       "ruleId": "unizd-tko-diplomski--citation-style",
       "checkId": "citation-style",
-      "value": "chicago",
+      "value": "chicago-author",
       "category": "citation",
       "label": "Stil citiranja",
       "machineCheckable": false,
@@ -273,7 +273,7 @@
       "quote": "Pri pisanju referenci koristi se prilagođeni (autor godina, broj stranice) Chicago stil (The Chicago Manual of Style).",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: opisno/optimalno u izvoru (vidi quote).",
+      "note": "Advisory: opisno/optimalno u izvoru (vidi quote). Kanonizirano 2026-08-30 iz DOSLOVNOG citata: \"prilagodjeni (autor godina, broj stranice) Chicago stil\". Zagrada s autorom i godinom je autor-datum grana Chicaga, ne biljeske, pa `chicago-author`. Ovo nije tumacenje nego citanje.",
       "verifiedHash": "ab4812a811af3968d45b0d0c046beb9405ce8a47a6256cbc27c8fc9a583db07f"
     },
     {
