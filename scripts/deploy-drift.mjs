@@ -23,6 +23,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { driftFor, labelForOnlyLive, configVerifyJwt, verifyJwtDrift } from './deploy-drift-core.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FUNCTIONS_DIR = path.join(ROOT, 'supabase', 'functions');
@@ -34,6 +35,12 @@ const ENVIRONMENTS = [
   { label: 'produkcija', ref: process.env.LEKTA_PROD_REF },
   { label: 'staging', ref: process.env.LEKTA_STAGING_REF },
 ].filter((e) => e.ref);
+
+/** Sadrzaj `supabase/config.toml`; prazan niz ako ga nema (skripta i dalje radi). */
+function configToml() {
+  const p = path.join(ROOT, 'supabase', 'config.toml');
+  return fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : '';
+}
 
 /** Imena funkcija u repou. `_shared` je biblioteka, ne funkcija. */
 function repoFunctions() {
@@ -52,14 +59,6 @@ async function deployedFunctions(ref) {
   return await res.json();
 }
 
-function driftFor(repo, deployed) {
-  const live = new Map(deployed.map((f) => [f.slug, f]));
-  const onlyRepo = repo.filter((name) => !live.has(name));
-  const onlyLive = [...live.keys()].filter((slug) => !repo.includes(slug)).sort();
-  const both = repo.filter((name) => live.has(name));
-  return { onlyRepo, onlyLive, both, live };
-}
-
 function section(label, ref, { onlyRepo, onlyLive, both, live }) {
   const lines = [`## ${label} (\`${ref}\`)`, ''];
   lines.push(`Repo: ${both.length + onlyRepo.length} funkcija. Deployano: ${live.size}.`, '');
@@ -69,7 +68,22 @@ function section(label, ref, { onlyRepo, onlyLive, both, live }) {
   } else {
     lines.push('| Funkcija | Stanje |', '| --- | --- |');
     for (const name of onlyRepo) lines.push(`| \`${name}\` | SAMO U REPOU (nije deployana) |`);
-    for (const slug of onlyLive) lines.push(`| \`${slug}\` | SAMO U PRODUKCIJI (nema je u repou) |`);
+    for (const slug of onlyLive) lines.push(`| \`${slug}\` | ${labelForOnlyLive(label)} |`);
+    lines.push('');
+  }
+
+  // Konfiguracijski raskorak: do 2026-08-30 se usporedjivalo samo POSTOJANJE funkcije, pa je
+  // funkcija bez `[functions.<slug>]` bloka izgledala uredno sve dok je prvi deploy ne zatvori.
+  const jwt = verifyJwtDrift(configVerifyJwt(configToml()), live);
+  if (jwt.length) {
+    lines.push('### Raskorak `verify_jwt` (config.toml nasuprot okolini)', '');
+    lines.push('| Funkcija | config.toml | okolina | Rizik |', '| --- | --- | --- | --- |');
+    for (const f of jwt) {
+      const risk = f.kind === 'missing-config'
+        ? 'nema bloka: CLI default je `true`, pa bi deploy zatvorio endpoint'
+        : 'deploy bi promijenio autorizaciju';
+      lines.push(`| \`${f.slug}\` | ${f.declared === null ? '(nema bloka)' : f.declared} | ${f.actual} | ${risk} |`);
+    }
     lines.push('');
   }
 
