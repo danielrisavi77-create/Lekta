@@ -1,45 +1,45 @@
 ===== [alu-pravilnik-diplomski-2014 | str. 8] =====
 3. ime i titulu mentora
-4. opis i obrazlozenje teme diplomskog rada:
+4. opis i obrazloženje teme diplomskog rada:
 
-          - uvod (maksimalno 500 znakova s praznim mjestima, velicina znaka 12 tocaka)
-          - pregled dosadasnjih umjetnickih realizacija (maksimalno 1000 znakova s praznim mjestima, velicina znaka 12
+          - uvod (maksimalno 500 znakova s praznim mjestima, veličina znaka 12 točaka)
+          - pregled dosadašnjih umjetničkih realizacija (maksimalno 1000 znakova s praznim mjestima, veličina znaka 12
 
-            tocaka)
-          - hipoteze, cilj i plan umjetnickih istrazivanja (maksimalno 1000 znakova s praznim mjestima, velicina znaka 12
+            točaka)
+          - hipoteze, cilj i plan umjetničkih istraživanja (maksimalno 1000 znakova s praznim mjestima, veličina znaka 12
 
-            tocaka)
-          - materijal i velicinu izvedbe (maksimalno 500 znakova s praznim mjestima, velicina znaka 12 tocaka)
-          - opis tehnike, postupaka i alata (maksimalno 500 znakova s praznim mjestima, velicina znaka 12 tocaka)
+            točaka)
+          - materijal i veličinu izvedbe (maksimalno 500 znakova s praznim mjestima, veličina znaka 12 točaka)
+          - opis tehnike, postupaka i alata (maksimalno 500 znakova s praznim mjestima, veličina znaka 12 točaka)
           - popis citirane literature (maksimalno 7 referenci)
-5. predvieni oblik prezentacije (samostalni rad, izlozba, ambijentacija, projekcija) (maksimalno 500 znakova s praznim
-mjestima, velicina znaka 12 tocaka)
+5. predviđeni oblik prezentacije (samostalni rad, izložba, ambijentacija, projekcija) (maksimalno 500 znakova s praznim
+mjestima, veličina znaka 12 točaka)
 
-                                                                   Clanak 43.
+                                                                   Članak 43.
 Diplomski rad koji se izvodi u plemenitom metalu ili je za njegovu realizaciju potrebna skupa tehnologija, ili na neki
-drugi nacin zahtjeva vea materijalna sredstva, ne moze se izvoditi bez suglasnosti Povjerenstva za diplomski ispit.
+drugi način zahtjeva veća materijalna sredstva, ne može se izvoditi bez suglasnosti Povjerenstva za diplomski ispit.
 
 5. Izrada diplomskog rada i pristup obrani
 
-                                                                   Clanak 44.
-Izvedba diplomskog rada zapocinje nakon odobrenja teme odstrane Povjerenstva za diplomski ispit.
+                                                                   Članak 44.
+Izvedba diplomskog rada započinje nakon odobrenja teme odstrane Povjerenstva za diplomski ispit.
 Diplomski rad izvodi se u drugom semestru diplomskog studija tijekom nastave.
 
 ===== [alu-pravilnik-diplomski-2014 | str. 18] =====
-NAZIV DIPLOMSKOG RADA I KRATKI OPIS PLANIRANOG LIKOVNOG RADA � PROBLEMA (likovna i pisana komponenta):
+NAZIV DIPLOMSKOG RADA I KRATKI OPIS PLANIRANOG LIKOVNOG RADA – PROBLEMA (likovna i pisana komponenta):
 
-u slucaju sireg opisa dodaj poseban prilog ovoj prijavi       PRIBLIZNE DIMENZIJE RADOVA (cm):
+u slučaju šireg opisa dodaj poseban prilog ovoj prijavi       PRIBLIŽNE DIMENZIJE RADOVA (cm):
 MATERIJAL IZVEDBE:                                                        (dimenzije u okvirima galerijskog formata)
 
 TEHNIKA
 
 ALATI I POSTUPCI:
 
-NACIN PREZENTACIJE:           1. IZLOZBA NA ALU                            POTPIS STUDENTA
-                              2. JAVNA IZLOZBA
+NAČIN PREZENTACIJE:           1. IZLOŽBA NA ALU                            POTPIS STUDENTA
+                              2. JAVNA IZLOŽBA
                            _  3. AMBIJENTACIJA                POTPIS MENTORA __________________________________
-NEKI DRUGI                    4. GRAFICKA MAPA                POTPIS KOMENTORA ________________________________
-OBLIK PREZENTACIJE 
+NEKI DRUGI                    4. GRAFIČKA MAPA                POTPIS KOMENTORA ________________________________
+OBLIK PREZENTACIJE →
                               5. PROJEKCIJA
                               6. ___________________________
 
@@ -52,190 +52,284 @@ DANA ________________________
                                                               2. ______________________________________
 
 ===== [alu-vodic-doktorski-2026 | str. 9] =====
-� teorijskog rada (disertacije) veeg opsega u pisanom obliku od minimalno 90 kartica
-         teksta (1 kartica od 1800 slovnih mjesta) temeljenog na umjetnickom istrazivanju u
-         poveznici s interdisciplinarnom literaturom iz podrucja teme koja se istrazuje. U
-         teorijskom radu veeg opsega doktorand/doktorandica koristi umjetnicke i znanstvene
-         metode istrazivanja te opisuje saznanja, spoznaje, ciljeve i zakljucke istrazivanja.
+– teorijskog rada (disertacije) većeg opsega u pisanom obliku od minimalno 90 kartica
+         teksta (1 kartica od 1800 slovnih mjesta) temeljenog na umjetničkom istraživanju u
+         poveznici s interdisciplinarnom literaturom iz područja teme koja se istražuje. U
+         teorijskom radu većeg opsega doktorand/doktorandica koristi umjetničke i znanstvene
+         metode istraživanja te opisuje saznanja, spoznaje, ciljeve i zaključke istraživanja.
 
 6. OBVEZE STUDIJSKOG SAVJETNIKA/SAVJETNICE, MENTORA/MENTORICE
 I DOKTORANDA/DOKTORANDICE
 
 Studijski savjetnik/savjetnica
 
-Studijski savjetnik/savjetnica je osoba zaposlena pri Akademiji u umjetnicko-nastavnom,
-znanstveno-nastavnom ili znanstvenom zvanju. Pri upisu na studij, Vijee poslijediplomskog
-doktorskog studija doktorandu/doktorandici moze dodijeliti studijskog savjetnika/savjetnicu
-koji mu pomaze tijekom studija, prati doktorandov/doktorandicin rad i postignua te zajedno s
+Studijski savjetnik/savjetnica je osoba zaposlena pri Akademiji u umjetničko-nastavnom,
+znanstveno-nastavnom ili znanstvenom zvanju. Pri upisu na studij, Vijeće poslijediplomskog
+doktorskog studija doktorandu/doktorandici može dodijeliti studijskog savjetnika/savjetnicu
+koji mu pomaže tijekom studija, prati doktorandov/doktorandičin rad i postignuća te zajedno s
+
+===== [alu-vodic-doktorski-2026 | str. 13] =====
+Ocjenjivanje
+
+Povjerenstvo za ocjenu doktorskog rada dužno je u roku od 90 dana od imenovanja i primitka
+rada za:
+
+    – uputiti vijeću doktorskog studija (DS) pisano izvješće s ocjenom doktorskog rada na
+         obrascu Sveučilišta (DR.10- Izvještaj o ocjeni doktorskog rada), temeljenog
+         pojedinačnim, pisanim mišljenjima članova povjerenstva
+
+Povjerenstvo u svom izvješću predlaže jednu od sljedećih opcija:
+    – prihvaćanje doktorskog rada s eksplicitnom izjavom o postignutom izvornom
+         umjetničkom doprinosu
+    – doradu doktorskog rada; uz obvezno obrazloženje i navođenje roka za doradu, koji ne
+         smije biti duži od 6 mjeseci, ili
+    – odbijanje doktorskoga rada; uz obvezno obrazloženje (u tom slučaju
+         doktorand/doktorandica gubi pravo stjecanja doktorata umjetnosti na tom studijskom
+         programu).
+
+Vijeće DS-a, na prvoj idućoj sjednici nakon dostave izvješća, donosi:
+    – prijedlog odluke o ocjeni rada
+    – prijedlog odluke o sastavu Povjerenstva za obranu rada
+    Navedene prijedloge upućuje Akademskom vijeću (AV) na razmatranje i donošenje
+    odluka.
+
+Obrana doktorskog rada
 
 ===== [alu-pravila-smjernice-doktorandi | str. 9] =====
 3. MENTOR(I)
 
-Prvo i najvaznije, mentori na doktorskim studijima moraju biti aktivni nastavnici i istrazivaci
-s dobrim referencama i objavljenim radovima. Postojea regulativa u Europi koja definira
+Prvo i najvažnije, mentori na doktorskim studijima moraju biti aktivni nastavnici i istraživači
+s dobrim referencama i objavljenim radovima. Postojeća regulativa u Europi koja definira
 primjerenost mentora, inzistira na tome da mentori na doktorskim studijima moraju imati
-doktorat iz odgovarajueg akademskog podrucja u kojem mentoriraju ili ekvivalentno
-priznanje prethodno postignutih znanstvenih ili umjetnickih rezultata. U mnogim se
+doktorat iz odgovarajućeg akademskog područja u kojem mentoriraju ili ekvivalentno
+priznanje prethodno postignutih znanstvenih ili umjetničkih rezultata. U mnogim se
 akademskim disciplinama pravila odabira mentora i natjecanja za ovu poziciju postavljaju
-tako da stalni clanovi vijea doktorskih studija znatno premasuju minimalne standarde. Na taj
-je nacin doktorandu zajamceno da njegovo istrazivanje mentorira aktivan i uspjesan istrazivac
-u odgovarajuem podrucju.
+tako da stalni članovi vijeća doktorskih studija znatno premašuju minimalne standarde. Na taj
+je način doktorandu zajamčeno da njegovo istraživanje mentorira aktivan i uspješan istraživač
+u odgovarajućem području.
 
-U mnogim aspektima doktorski se studij ne razlikuje od naukovanja, s mentorom koji pruza
-razumijevanje i uvid, savjetuje doktoranda; mentor podrzava ulaz doktoranda u slozeni proces
-stjecanja znanja, vjestina, novih metodologija rada koji sluze originalnom istrazivanju i
-prosirivanju granica postignua i znanja. Tijekom zadnjih nekoliko desetljea ovaj se model
+U mnogim aspektima doktorski se studij ne razlikuje od naukovanja, s mentorom koji pruža
+razumijevanje i uvid, savjetuje doktoranda; mentor podržava ulaz doktoranda u složeni proces
+stjecanja znanja, vještina, novih metodologija rada koji služe originalnom istraživanju i
+proširivanju granica postignuća i znanja. Tijekom zadnjih nekoliko desetljeća ovaj se model
 
 ===== [alu-pravila-smjernice-doktorandi | str. 15] =====
-iv. Kriterije za prijelaz sa istrazivackog MA na PhD studij
-               v. Kriterije za prijelaz na specijalisticki poslijediplomski studij sa doktorskog
-                      studija ako to kandidat zatrazi
+iv. Kriterije za prijelaz sa istraživačkog MA na PhD studij
+               v. Kriterije za prijelaz na specijalistički poslijediplomski studij sa doktorskog
+                      studija ako to kandidat zatraži
 
-Smjernice � doktorski studij s dijelom radnog vremena
-         Formalno treba definirati razliku u skolarini za doktorande s punim i djelomicnim
-         radnim vremenom, uskladiti raspored predavanja i drugih obveza koje treba drugacije
+Smjernice – doktorski studij s dijelom radnog vremena
+         Formalno treba definirati razliku u školarini za doktorande s punim i djelomičnim
+         radnim vremenom, uskladiti raspored predavanja i drugih obveza koje treba drugačije
          definirati, prilagoditi vrijeme trajanja studija i faze izrade projekta.
 
 Potpora doktorandima
-Osim redovite nastave i seminara studijski program podrazumijeva i oblikovanje istrazivacke
-zajednice na odreenom studiju koju cine doktorandi, nastavnici i mentori. Sami doktorandi
-mogu biti organizirani tako da razmjenjuju informacije i pruzaju pomo mlaim
+Osim redovite nastave i seminara studijski program podrazumijeva i oblikovanje istraživačke
+zajednice na određenom studiju koju čine doktorandi, nastavnici i mentori. Sami doktorandi
+mogu biti organizirani tako da razmjenjuju informacije i pružaju pomoć mlađim
 doktorandima, nakon upisa na studij, savjetom i dokumentacijom koju posjeduju. Sve
 informacije doktorandima trebaju biti dostupne putem web stranice.
 
                                                        15
 
 ===== [alu-pravila-smjernice-doktorandi | str. 16] =====
-Potpora doktorandu moze biti osobito dragocjena ako stvari krenu u pogresnom smjeru.
-Sveuciliste mora uvjeriti doktorande da su pravila i procedure na doktorskim studijima
-autonomni i da konflikt treba biti rijesen u ranoj fazi na razini odsjeka/fakulteta.
-Prezentaciji doktorskih istrazivanja na svim razinama jako pomaze rascisavanje svih pitanja i
+Potpora doktorandu može biti osobito dragocjena ako stvari krenu u pogrešnom smjeru.
+Sveučilište mora uvjeriti doktorande da su pravila i procedure na doktorskim studijima
+autonomni i da konflikt treba biti riješen u ranoj fazi na razini odsjeka/fakulteta.
+Prezentaciji doktorskih istraživanja na svim razinama jako pomaže raščišćavanje svih pitanja i
 problema na koje kandidat nailazi tijekom studija.
-Fakultet bi trebao doktorandima osigurati pristup Internetu, knjiznici, radnu sobu,
+Fakultet bi trebao doktorandima osigurati pristup Internetu, knjižnici, radnu sobu,
 disciplinarnu infrastrukturu, nabavu literature.
 
-Smjernice � prava, obveze, odgovornost i plaanje
-         Prava, obveze i odgovornost doktoranada istrazivaca moraju biti jasno definirane na
-         pocetku studija i objasnjene u izravnoj komunikaciji s kandidatom. To ukljucuje opa
-         mjesta kao i specificnosti u vezi sa studijskim programima i odnosi se na:
-             - Skolarinu i ostale pristojbe koje plaa sam student ili mu ih pokriva netko
+Smjernice – prava, obveze, odgovornost i plaćanje
+         Prava, obveze i odgovornost doktoranada istraživača moraju biti jasno definirane na
+         početku studija i objašnjene u izravnoj komunikaciji s kandidatom. To uključuje opća
+         mjesta kao i specifičnosti u vezi sa studijskim programima i odnosi se na:
+             - Školarinu i ostale pristojbe koje plaća sam student ili mu ih pokriva netko
                   drugi
-             - Pohaanje nastave, izvjestavanje o postignuima
-             - Pravila ponasanja i prakse
-             - Poucavanje, mentoriranje i obveze u praenju rada
-         Cilj je sveucilista da se interni iznosi skolarine u najmanju ruku izjednace s
-         nacionalnim minimumom izracunate subvencije.
+             - Pohađanje nastave, izvještavanje o postignućima
+             - Pravila ponašanja i prakse
+             - Poučavanje, mentoriranje i obveze u praćenju rada
+         Cilj je sveučilišta da se interni iznosi školarine u najmanju ruku izjednače s
+         nacionalnim minimumom izračunate subvencije.
 
 ===== [alu-pravila-smjernice-doktorandi | str. 19] =====
 bilo.
-U uvodnim radionicama naglasak treba biti stavljen na pripremu za ukljucivanje u
-profesionalno usavrsavanje doktorskih kandidata i na bitne elemente tog usavrsavanja.
-Dakako, mnoga sveucilista ve imaju takve kratke uvodne tecajeve i programe za doktorande
-istrazivace. U Europi se cesto istice potreba utvrivanja zajednickih meunarodnih standarda
-za profesionalno usavrsavanje doktoranada i s tim u vezi prevladava misljenje da kandidat
-mora imati bazicno znanje iz odreenog podrucja prije nego li se otisne u istrazivanje
-specificnog problema.
-Meutim, posebni izvori trebaju biti sredisnja tema u smislu prepoznavanja onih elemenata
-kojima bi doktorande trebali poucavati oni koji i sami o tome imaju ograniceno znanje.
-Doista, istrazivacki timovi sve cese postaju svjesni ovog problema. I zbog toga je vazno
-dodatno educirati nastavnike jer se na taj nacin podize kvaliteta doktorskog studija i prosiruje
-podrucje istrazivanja za mlade istrazivace, te jaca suradnja doktoranda s razlicitim
-istrazivackim skupinama. Glavni princip ovakvog pristupa podrazumijeva:
+U uvodnim radionicama naglasak treba biti stavljen na pripremu za uključivanje u
+profesionalno usavršavanje doktorskih kandidata i na bitne elemente tog usavršavanja.
+Dakako, mnoga sveučilišta već imaju takve kratke uvodne tečajeve i programe za doktorande
+istraživače. U Europi se često ističe potreba utvrđivanja zajedničkih međunarodnih standarda
+za profesionalno usavršavanje doktoranada i s tim u vezi prevladava mišljenje da kandidat
+mora imati bazično znanje iz određenog područja prije nego li se otisne u istraživanje
+specifičnog problema.
+Međutim, posebni izvori trebaju biti središnja tema u smislu prepoznavanja onih elemenata
+kojima bi doktorande trebali poučavati oni koji i sami o tome imaju ograničeno znanje.
+Doista, istraživački timovi sve češće postaju svjesni ovog problema. I zbog toga je važno
+dodatno educirati nastavnike jer se na taj način podiže kvaliteta doktorskog studija i proširuje
+područje istraživanja za mlade istraživače, te jača suradnja doktoranda s različitim
+istraživačkim skupinama. Glavni princip ovakvog pristupa podrazumijeva:
 
         Student prati striktno formuliran studijski program kroz dvije godine, a program
-        ukljucuje istrazivacke metode, etiku i razlicite vjestine
-        Studenta treba podrzati u istrazivanju najmanje cetiri godine a ne tri koliko je sadasnji
+        uključuje istraživačke metode, etiku i različite vještine
+        Studenta treba podržati u istraživanju najmanje četiri godine a ne tri koliko je sadašnji
         standard
 
-Takvo ulaganje u znanje i vjestine moze biti od koristi i za akademsku zajednicu ukoliko
-doktorandi nau mjesto na nekom fakultetu/akademiji. No, veina stecenih vjestina i
-iskustava donosi direktnu korist i na drugim poslovima. Obrazovanje, mentorstvo i ucinkovita
-komunikacija oblikuju vazne vjestine za sva zanimanja kojima je potrebna visoka razina
-istrazivanja kakva se stjece na ovom stupnju.
+Takvo ulaganje u znanje i vještine može biti od koristi i za akademsku zajednicu ukoliko
+doktorandi nađu mjesto na nekom fakultetu/akademiji. No, većina stečenih vještina i
+iskustava donosi direktnu korist i na drugim poslovima. Obrazovanje, mentorstvo i učinkovita
+komunikacija oblikuju važne vještine za sva zanimanja kojima je potrebna visoka razina
+istraživanja kakva se stječe na ovom stupnju.
 
 ===== [alu-pravila-smjernice-doktorandi | str. 23] =====
-doktorski studij sve vise raste Vrijeme potrebno za izradu rada i dovrsenje studija treba
-pazljivo planirati kako bi se smanjio broj neuspjesnih. Na taj nacin, sporijim studentima treba
-pomoi u dovrsavanju ili ih preusmjeriti na neki drugi za njih prikladniji program.
-U skladu s tim, relevantnom regulativom, periodicno se utvruje napredak putem formalnog
-uvida. To znaci niz odluka i preporuka u vezi sa sposobnosu doktoranda da doktorira.
-Pritom, ove mjere treba pazljivo osmisliti i primijeniti tako da one motiviraju i fokusiraju
-doktorande cime se smanjuje nepotreban stres.
+doktorski studij sve više raste Vrijeme potrebno za izradu rada i dovršenje studija treba
+pažljivo planirati kako bi se smanjio broj neuspješnih. Na taj način, sporijim studentima treba
+pomoći u dovršavanju ili ih preusmjeriti na neki drugi za njih prikladniji program.
+U skladu s tim, relevantnom regulativom, periodično se utvrđuje napredak putem formalnog
+uvida. To znači niz odluka i preporuka u vezi sa sposobnošću doktoranda da doktorira.
+Pritom, ove mjere treba pažljivo osmisliti i primijeniti tako da one motiviraju i fokusiraju
+doktorande čime se smanjuje nepotreban stres.
 
 Rana faza
-Da bi student bio potpuno svjestan dubine i sirine istrazivanja kojim e se baviti vazno je
-omoguiti mu participaciju u planiranju istrazivackog projekta. Plan rada pomaze razvoju
-projekta bez zastoja i treba ukljucivati: kljucne tocke, rokove, vrijeme za proucavanje/citanje
-prethodnih istrazivanja i referenci radi stjecanja odreenih specificnih vjestina i/ili radi
-odabira odgovarajuih metoda. Isto tako, student se mora s mentorom dogovoriti koliko e
-formalnih sastanaka odrzati, bar u prvoj godini. Na pocetku projekta mentor formalno mora
+Da bi student bio potpuno svjestan dubine i širine istraživanja kojim će se baviti važno je
+omogućiti mu participaciju u planiranju istraživačkog projekta. Plan rada pomaže razvoju
+projekta bez zastoja i treba uključivati: ključne točke, rokove, vrijeme za proučavanje/čitanje
+prethodnih istraživanja i referenci radi stjecanja određenih specifičnih vještina i/ili radi
+odabira odgovarajućih metoda. Isto tako, student se mora s mentorom dogovoriti koliko će
+formalnih sastanaka održati, bar u prvoj godini. Na početku projekta mentor formalno mora
 sastati sa studentom najmanje jednom svaka tri mjeseca. Nakon tog perioda mentor treba
-izvijestiti, u roku od nekoliko dana, je li student zavrsio prvu fazu i moze li ui u slijedee
+izvijestiti, u roku od nekoliko dana, je li student završio prvu fazu i može li ući u slijedeće
 razdoblje.
 Formalni sastanci s mentorom, koji su definirani mentorskim postupkom nadgledanja, ne
-mogu zamijeniti sastanke i odluke koje proizlaze iz meusobnog razumijevanja i one veze
-koje obicno postoje izmeu mentora i studenta u dobro postavljenom doktorskom programu.
-Meu vaznije rezultate koji proizlaze iz formalnih sastanaka, zbog kojih su oni neophodni
+mogu zamijeniti sastanke i odluke koje proizlaze iz međusobnog razumijevanja i one veze
+koje obično postoje između mentora i studenta u dobro postavljenom doktorskom programu.
+Među važnije rezultate koji proizlaze iz formalnih sastanaka, zbog kojih su oni neophodni
 ubrajamo:
 
-                  Smanjenje nejasnoa prije ulaska u slijedeu fazu
+                  Smanjenje nejasnoća prije ulaska u slijedeću fazu
 
 ===== [alu-pravila-smjernice-doktorandi | str. 24] =====
-Odabir trenutka i broj uvida u tijek projekta kao cjeline mora biti pazljivo izveden kako
-proces ne bi postao stresan, mucan ili beskoristan sa stanovista sveucilista
+Odabir trenutka i broj uvida u tijek projekta kao cjeline mora biti pažljivo izveden kako
+proces ne bi postao stresan, mučan ili beskoristan sa stanovišta sveučilišta
 fakulteta/akademije, mentora ili studenta.
-U praenju doktoranda donekle se razlikuje praksa pojedinih europskih zemalja. Ipak, u
-veini slucajeva, osim mentora koji sustavno prati rad doktoranda kroz formalne
+U praćenju doktoranda donekle se razlikuje praksa pojedinih europskih zemalja. Ipak, u
+većini slučajeva, osim mentora koji sustavno prati rad doktoranda kroz formalne
 sastanke/konzultacije i o tome vodi zapisnik, napredovanje doktoranda prati i mentorski tim
-na razini institucije, a cesto se organiziraju grupne diskusije s drugim doktorandima.
+na razini institucije, a često se organiziraju grupne diskusije s drugim doktorandima.
 
-Smjernice za srednju i visu fazu
-         Od doktoranada treba traziti da redovito prezentira radove i rezultate svog istrazivanja
+Smjernice za srednju i višu fazu
+         Od doktoranada treba tražiti da redovito prezentira radove i rezultate svog istraživanja
          pred drugim polaznicima doktorskog studija ili javno
-         Formalni oblici praenja napretka putem konzultacija u pravilnim vremenskim
-         intervalima ovise o ocjeni napretka i specificnim okolnostima. Kratka biljeska o uvidu
-         u rad nakon sastanka sa doktorandom osigurava jasnou i transparentnost koja je
+         Formalni oblici praćenja napretka putem konzultacija u pravilnim vremenskim
+         intervalima ovise o ocjeni napretka i specifičnim okolnostima. Kratka bilješka o uvidu
+         u rad nakon sastanka sa doktorandom osigurava jasnoću i transparentnost koja je
          potrebna studentu
-         ,,Mentorski tim" (kolegij) treba se suglasiti s misljenjem mentora o progresu studenta
-         prije nego sto ovaj pristupi finalnoj izradi rada, pisanju teze i prijavi obrane
+         „Mentorski tim“ (kolegij) treba se suglasiti s mišljenjem mentora o progresu studenta
+         prije nego što ovaj pristupi finalnoj izradi rada, pisanju teze i prijavi obrane
          doktorskog rada
-         Konacnu odluku o prijavi teze za obranu donosi student, ali prije toga mora dokazati
+         Konačnu odluku o prijavi teze za obranu donosi student, ali prije toga mora dokazati
          da je usvojio primjedbe i savjete mentora ili mentorskog kolegija. Tek nakon toga
-         moze pristupiti obrani.
+         može pristupiti obrani.
 
                                                        24
 
 ===== [alu-pravila-smjernice-doktorandi | str. 26] =====
 8. DISERTACIJA
 
-Uspjesno pisanje doktorske teze zahtjeva prethodno planiranje, kompleksne pripreme,
-smjernice i modele, prethodne informacije, velik broj specificnih vjestina, usredotocenost na
-detalje i odlucnost da se rad dovrsi. Poticanje moze takoer pomoi.
-Norme vezane za format doktorske teze variraju od zemlje do zemlje. Openito teza, bilo da
-je objavljena u cijelosti ili djelomicno ima neki zajednicki format u kojem prepoznatljiv dio
-cini onaj koji se odnosi na povijest, literaturu ili umjetnost koji se nalaze u podlozi same teme.
-Inace, u nekim zemljama doktorska teza moze biti skup ranije objavljenih tekstova, povezanih
-u cjelinu. Vazno je da su svi elementi vezani za format i dimenzije precizno definirani.
-U specificnom podrucju kao sto je umjetnicko ista pravila treba definirati u vezi s prakticnim
-radom. To podrazumijeva jasno definiran umjetnicki rad kao cjelovitu zamisao ostvarenu
-adekvatnim umjetnickim sredstvima i postupcima.
-Odnos izmeu prakticne i pisane komponente vitalna je i jedinstvena karakteristika doktorata
-u podrucju likovne umjetnosti. Doktorski rad se sastoji iz dva dijela: umjetnickog rada kao
-rezultata umjetnickog istrazivanja kojeg , u suradnji s mentorom, doktorand planira i
-sudjeluje u svim fazama ostvarenja javne prezentacije rada- samostalne izlozbe i pisane teze
-koja podupire umjetnicku komponentu tako da je postavlja u odgovarajui teorijski okvir ,
-kontekstualizira vlastito djelo u suvremenoj i povijesnoj umjetnickoj praksi i detaljno opisuje
+Uspješno pisanje doktorske teze zahtjeva prethodno planiranje, kompleksne pripreme,
+smjernice i modele, prethodne informacije, velik broj specifičnih vještina, usredotočenost na
+detalje i odlučnost da se rad dovrši. Poticanje može također pomoći.
+Norme vezane za format doktorske teze variraju od zemlje do zemlje. Općenito teza, bilo da
+je objavljena u cijelosti ili djelomično ima neki zajednički format u kojem prepoznatljiv dio
+čini onaj koji se odnosi na povijest, literaturu ili umjetnost koji se nalaze u podlozi same teme.
+Inače, u nekim zemljama doktorska teza može biti skup ranije objavljenih tekstova, povezanih
+u cjelinu. Važno je da su svi elementi vezani za format i dimenzije precizno definirani.
+U specifičnom području kao što je umjetničko ista pravila treba definirati u vezi s praktičnim
+radom. To podrazumijeva jasno definiran umjetnički rad kao cjelovitu zamisao ostvarenu
+adekvatnim umjetničkim sredstvima i postupcima.
+Odnos između praktične i pisane komponente vitalna je i jedinstvena karakteristika doktorata
+u području likovne umjetnosti. Doktorski rad se sastoji iz dva dijela: umjetničkog rada kao
+rezultata umjetničkog istraživanja kojeg , u suradnji s mentorom, doktorand planira i
+sudjeluje u svim fazama ostvarenja javne prezentacije rada- samostalne izložbe i pisane teze
+koja podupire umjetničku komponentu tako da je postavlja u odgovarajući teorijski okvir ,
+kontekstualizira vlastito djelo u suvremenoj i povijesnoj umjetničkoj praksi i detaljno opisuje
 uporabljene procese, inovacije i postupke . Pisana komponenta doktorskog rada mora biti na
-istoj akademskoj razini kao i prakticna..
+istoj akademskoj razini kao i praktična..
 
 Smjernice - disertacija
-         Format, maksimalna duljina i drugi atributi teze trebaju biti specificirani sveucilisnim
-         smjernicama, uz dopusteno odstupanje u specificnim disciplinama
-         Sveucilisni pravilnik/prirucnik o tezi pokriva i pitanja kao sto je pitanje plagijata i
-         korektna upotreba citata i pojasnjava vaznost eksplicitnog priznavanja doprinosa
+         Format, maksimalna duljina i drugi atributi teze trebaju biti specificirani sveučilišnim
+         smjernicama, uz dopušteno odstupanje u specifičnim disciplinama
+         Sveučilišni pravilnik/priručnik o tezi pokriva i pitanja kao što je pitanje plagijata i
+         korektna upotreba citata i pojašnjava važnost eksplicitnog priznavanja doprinosa
          drugih koji su se bavili nekom temama relevantnim za tezu
-         Potpora doktorandima tijekom izrade umjetnickog doktorata i pisanja doktorske teze
-         ukljucuje:
+         Potpora doktorandima tijekom izrade umjetničkog doktorata i pisanja doktorske teze
+         uključuje:
              - Sistematsko planiranje rada u dogovoru s prvim mentorom
 
                                                        26
+
+===== [alu-okiru-upute-2015 | str. 2] =====
+Diplomski rad se piše u formatu A-4 (sve 4 margine moraju biti 2,5 cm), Word txt u .doc
+formatu (kompatibilnom formatu), vrsta fonta: Times New Roman; veličina fonta: 12; razmak:
+1,5 redova; hrvatskim književnim jezikom u trećem licu i trpnom obliku. U bilješkama
+(fusnotama) veličina fonta je 10 i jednostruki prored (single). Strane riječi i pojmovi pišu se
+ukošeno (u kurzivu). Tekst mora biti uobličen opcijom “Justified” (razvučen između lijeve i
+desne margine). Članak 92. Pravilnika o diplomskom radu i diplomskom ispitu ALU.
+
+Pisani dio diplomskog rada - tekst, bez slikovnih, fotografskih i grafičkih priloga iznosi
+najmanje 30 kartica teksta /autorsku karticu čini 1450 slovnih mjesta, slovna mjesta sa praznim
+prostorom. Ukupan broj slovnih mjesta (dobiven računalom) podijeli se s 1450 i tako se dobije
+broj autorskih kartica.
+
+===== [alu-okiru-upute-2015 | str. 6] =====
+Student(ica) Ime i Prezime kandidata    Matični broj kandidata R-K / R-S
+
+Broj indeksa:
+
+Mentor(ica): nastavničko zvanje, znanstveno zvanje, Ime i Prezime, stručno zvanje
+Komentor(ica): nastavničko zvanje, znanstveno zvanje, Ime i Prezime, stručno zvanje
+
+Broj stranica:
+Broj fotografija:
+Broj tablica:
+Broj grafičkih priloga:
+Prilozi:
+Popis literature – Stručne reference:-
+Ključne riječi:
+Datum obrane:
+
+Povjerenstvo za diplomski ispit:
+-Nastavničko zvanje, znanstveno zvanje, Ime Prezime, stručno zvanje
+-Nastavničko zvanje, znanstveno zvanje, Ime Prezime, stručno zvanje
+-Nastavničko zvanje, znanstveno zvanje, Ime Prezime, stručno zvanje
+
+ (izv. prof. dr. sc. Ime Prezime, konzervator-restaurator)
+
+Rad je pohranjen u arhivu Akademije likovnih umjetnosti Sveučilišta u Zagrebu, Ilica 85, i na
+OKIRU, Zamenhofova 14, u Zagrebu.
+
+===== [alu-okiru-upute-2015 | str. 7] =====
+4) 1. UVOD                                                          str. 1.
+
+5) 2. IDENTIFIKACIJA MATERIJALA / STRATIGRAFSKA ANALIZA             str. ?
+
+6) 3. KONZERVATORSKO-RESTAURATORSKA ISTRAŽIVANJA
+
+7) 4. KONZERVATORSKO-RESTAURATORSKI RADOVI
+
+4.1. REZULTATI
+
+8) 5. ZAKLJUČAK
+
+9) 6. POPIS LITERATURE – (izvori, reference)
+
+10) 7. KRATKI ŽIVOTOPIS
+
+11) 8. IZJAVA O AUTORSTVU
+
+12) 9. PRILOZI
+
+9./1. IZVJEŠĆA REZULTATA ISTRAŽIVANJA
+
+9./2. FOTOGRAFSKA DOKUMENTACIJA
+
+9./3. GRAFIČKI PRILOZI

@@ -1,101 +1,4 @@
 ===== [rgnf-predlozak-2022 | str. 1] =====
-Datum obrane: datum, Rudarsko-geološko-naftni fakultet Sveučilišta u Zagrebu 00
-Datum obrane: datum, Rudarsko-geološko-naftni fakultet Sveučilišta u Zagrebu Sveučilište u Zagrebu Vrsta rada
-Rudarsko-geološko-naftni fakultet
-NASLOV RADA
-Ime i prezime
-Rad izrađen:Sveučilište u Zagrebu
-Rudarsko-geološko-naftni fakultet
-Naziv zavoda (npr. Zavod za naftno inženjerstvo)
-Pierottijeva 6, 10 000 Zagreb
-Sažetak
-Upisati sažetak. Font: Times New Roman, 10 pt. Najviše 2500 znakova ubrajajući i razmake.
-Ključne riječi:Upisati ključne riječi
-Završni rad sadrži:broj stranice, broj tablica, broj slika, broj priloga, i broj reference.
-Jezik izvornika:Hrvatski / Engleski
-Pohrana rada:Knjižnica Rudarsko-geološko-naftnog fakulteta, Pierottijeva 6, Zagreb
-Mentori:prof.dr.sc. Ime prezime 
-izv.prof.dr.sc. Ime Prezime
-Pomagao pri izradi: dr.sc. Ime Prezime
-Ime Prezime, asistent
-Ocjenjivači:prof.dr.sc. Ime prezime
-izv.prof.dr.sc. Ime Prezime
-doc.dr.sc. Ime Prezime
-
-right9439275
-Defence date: November 16, 2014, Faculty of Mining, Geology and Petroleum Engineering, University of Zagreb00
-Defence date: November 16, 2014, Faculty of Mining, Geology and Petroleum Engineering, University of ZagrebUniversity of Zagreb Master's Thesis
-Faculty of Mining, Geology and Petroleum Engineering
-THESIS TITLE
-Name and Surename
-Thesis completed at:University of Zagreb
-Faculty of Mining, Geology and Petroleum Engineering
-Department title
-Pierottijeva 6, 10 000 Zagreb
-Abstract
-Type the abstract. Font: Times New Roman, 10 pt. Maximum 2500 characters with spaces.
-OVA STRANICA POTREBNA JE PRI IZRADI DIPLOMSKOG RADA, KOD ZAVRŠNOG JE POTREBNO IZBRISATI
-Keywords:Type keywords
-Thesis contains:number pages, number tables, number figures, number appendixes, i number references.
-Original in:Croatian/English
-Archived in:Library of Faculty of Mining, Geology and Petroleum Engineering, Pierottijeva 6, Zagreb
-Supervisors: Full Professor Name Surename, PhD
-Associate Professor Name Surename, PhD
-Tech. assistance: Senior Assistant Name Surename, PhD
-Assistant Name Surename
-Reviewers:Full Professor Name Surename, PhD
-Associate Professor Name Surename, PhD
-Assistant Professor Name Surename, PhD
-
-
-
-SADRŽAJ
- TOC \o "1-4" \h \z \u 1.uvod PAGEREF _Toc100743070 \h 1
-2.izrada završnog/DIPLOMSKg rada PAGEREF _Toc100743071 \h 2
-2.1.Tekst rada i postavke stranica PAGEREF _Toc100743072 \h 2
-2.2.Umetanje slika u tekst PAGEREF _Toc100743073 \h 3
-2.3.Umetanje tablica u tekst PAGEREF _Toc100743074 \h 4
-2.4.Umetanje jednadžbi PAGEREF _Toc100743075 \h 4
-3.Automatsko generiranje sadržaja i popisa PAGEREF _Toc100743076 \h 5
-4.literaturA PAGEREF _Toc100743077 \h 6
-4.1.Citiranje u tekstu PAGEREF _Toc100743078 \h 6
-4.2.Popis literature PAGEREF _Toc100743079 \h 8
-
-===== [rgnf-predlozak-2022 | str. 1] =====
-Obvezni dijelovi u strukturi rada su redom:
-Naslovnica ili prva stranica, istovjetna koricama (1. stranica ovog predloška)
-Rješenje Povjerenstva o dodjeli teme rada (ubacuje se u rad nakon potpisivanja i ovjeravanja u Studentskoj referadi)
-Kartica sažetka i informacija o radu (za završne radove - 2. stranica ovog predloška, za diplomske radove 2. na hrvatskom i 3. stranica na engleskom jeziku)
-Sadržaj koji uključuje: (4. stranca ovog predloška)
-popis poglavlja s numeracijom stranica
-popis tablica u tekstu s numeracijom stranica
-popis slika u tekstu s numeracijom stranica
-popis priloga (grafičkih, tabličnih, tekstualnih...)
-popis korištenih oznaka i odgovarajućih SI jedinica
-Nakon toga rad u pravilu mora sadržavati iduće cjeline:
-Uvod (definiranje zadatka završnog rada,  svrha završnog rada, postupak izrade, očekivani rezultati)
-Prikaz raspoloživih literaturnih podataka (kratki prikaz rezultata ranije objavljenih znanstvenih, stručnih, završnih i diplomskih radova o srodnoj problematici)
-Teorijske osnove rada
-Opis rezultata terenskih, laboratorijskih i/ili kabinetskih istraživanja
-Analiza rezultata
-Diskusija i zaključak
-Ovo nisu nužno i nazivi poglavlja rada, već samu strukturu definira kandidat ovisno o temi rada. 
-Na kraju rada obavezan je popis literature. Stavke popisa moraju odgovarati citatima iz teksta rada (sve što se nalazi u popisu literature mora imati referencu u tekstu i obratno).
-Literatura
-Tekst rada i postavke stranica
-Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5. U ovom predlošku to je predefinirano stilom „Tekst“, koji je moguće odabrati u alatnoj traci (slika 2-1).
-Isto tako postoje predefinirani stilovi za iduće:
-Popis (poput ovoga u nastavku)
-Naziv poglavlja (1.)
-Naziv prve razine podpoglavlja (1.1.)
-Naziv druge razine podpoglavlja (1.1.1.)
-Naziv treće razine podpoglavlja (1.1.1.1.) 
-
-Slika  STYLEREF 1 \s 2 SEQ Slika \* ARABIC \s 1 1. Odabir stilova za oblikovanje
-Margine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku). 
-Umetanje slika u tekst
-
-===== [rgnf-predlozak-2022 | str. 1] =====
 gdje su: Δp- diferencijalni tlak (Pa),
 f- koeficijent otpora,
 L- duljina (m),
@@ -191,3 +94,100 @@ U slučaju da je URL poveznica duga i nepregledna potrebno je poveznicu razlomit
 URL: https:// www.uky.edu/
 
 Literatura preuzeta (download) u elektronskom obliku (PDF, DOC, ODT…) ne smatra se on-line sadržajem i citira se jednako kao i papirnati oblik, zavisno o vrsti rada.
+
+===== [rgnf-predlozak-2022 | str. 1] =====
+Datum obrane: datum, Rudarsko-geološko-naftni fakultet Sveučilišta u Zagrebu 00
+Datum obrane: datum, Rudarsko-geološko-naftni fakultet Sveučilišta u Zagrebu Sveučilište u Zagrebu Vrsta rada
+Rudarsko-geološko-naftni fakultet
+NASLOV RADA
+Ime i prezime
+Rad izrađen:Sveučilište u Zagrebu
+Rudarsko-geološko-naftni fakultet
+Naziv zavoda (npr. Zavod za naftno inženjerstvo)
+Pierottijeva 6, 10 000 Zagreb
+Sažetak
+Upisati sažetak. Font: Times New Roman, 10 pt. Najviše 2500 znakova ubrajajući i razmake.
+Ključne riječi:Upisati ključne riječi
+Završni rad sadrži:broj stranice, broj tablica, broj slika, broj priloga, i broj reference.
+Jezik izvornika:Hrvatski / Engleski
+Pohrana rada:Knjižnica Rudarsko-geološko-naftnog fakulteta, Pierottijeva 6, Zagreb
+Mentori:prof.dr.sc. Ime prezime 
+izv.prof.dr.sc. Ime Prezime
+Pomagao pri izradi: dr.sc. Ime Prezime
+Ime Prezime, asistent
+Ocjenjivači:prof.dr.sc. Ime prezime
+izv.prof.dr.sc. Ime Prezime
+doc.dr.sc. Ime Prezime
+
+right9439275
+Defence date: November 16, 2014, Faculty of Mining, Geology and Petroleum Engineering, University of Zagreb00
+Defence date: November 16, 2014, Faculty of Mining, Geology and Petroleum Engineering, University of ZagrebUniversity of Zagreb Master's Thesis
+Faculty of Mining, Geology and Petroleum Engineering
+THESIS TITLE
+Name and Surename
+Thesis completed at:University of Zagreb
+Faculty of Mining, Geology and Petroleum Engineering
+Department title
+Pierottijeva 6, 10 000 Zagreb
+Abstract
+Type the abstract. Font: Times New Roman, 10 pt. Maximum 2500 characters with spaces.
+OVA STRANICA POTREBNA JE PRI IZRADI DIPLOMSKOG RADA, KOD ZAVRŠNOG JE POTREBNO IZBRISATI
+Keywords:Type keywords
+Thesis contains:number pages, number tables, number figures, number appendixes, i number references.
+Original in:Croatian/English
+Archived in:Library of Faculty of Mining, Geology and Petroleum Engineering, Pierottijeva 6, Zagreb
+Supervisors: Full Professor Name Surename, PhD
+Associate Professor Name Surename, PhD
+Tech. assistance: Senior Assistant Name Surename, PhD
+Assistant Name Surename
+Reviewers:Full Professor Name Surename, PhD
+Associate Professor Name Surename, PhD
+Assistant Professor Name Surename, PhD
+
+
+
+SADRŽAJ
+ TOC \o "1-4" \h \z \u 1.uvod PAGEREF _Toc100743070 \h 1
+2.izrada završnog/DIPLOMSKg rada PAGEREF _Toc100743071 \h 2
+2.1.Tekst rada i postavke stranica PAGEREF _Toc100743072 \h 2
+2.2.Umetanje slika u tekst PAGEREF _Toc100743073 \h 3
+2.3.Umetanje tablica u tekst PAGEREF _Toc100743074 \h 4
+2.4.Umetanje jednadžbi PAGEREF _Toc100743075 \h 4
+3.Automatsko generiranje sadržaja i popisa PAGEREF _Toc100743076 \h 5
+4.literaturA PAGEREF _Toc100743077 \h 6
+4.1.Citiranje u tekstu PAGEREF _Toc100743078 \h 6
+4.2.Popis literature PAGEREF _Toc100743079 \h 8
+
+===== [rgnf-predlozak-2022 | str. 1] =====
+Obvezni dijelovi u strukturi rada su redom:
+Naslovnica ili prva stranica, istovjetna koricama (1. stranica ovog predloška)
+Rješenje Povjerenstva o dodjeli teme rada (ubacuje se u rad nakon potpisivanja i ovjeravanja u Studentskoj referadi)
+Kartica sažetka i informacija o radu (za završne radove - 2. stranica ovog predloška, za diplomske radove 2. na hrvatskom i 3. stranica na engleskom jeziku)
+Sadržaj koji uključuje: (4. stranca ovog predloška)
+popis poglavlja s numeracijom stranica
+popis tablica u tekstu s numeracijom stranica
+popis slika u tekstu s numeracijom stranica
+popis priloga (grafičkih, tabličnih, tekstualnih...)
+popis korištenih oznaka i odgovarajućih SI jedinica
+Nakon toga rad u pravilu mora sadržavati iduće cjeline:
+Uvod (definiranje zadatka završnog rada,  svrha završnog rada, postupak izrade, očekivani rezultati)
+Prikaz raspoloživih literaturnih podataka (kratki prikaz rezultata ranije objavljenih znanstvenih, stručnih, završnih i diplomskih radova o srodnoj problematici)
+Teorijske osnove rada
+Opis rezultata terenskih, laboratorijskih i/ili kabinetskih istraživanja
+Analiza rezultata
+Diskusija i zaključak
+Ovo nisu nužno i nazivi poglavlja rada, već samu strukturu definira kandidat ovisno o temi rada. 
+Na kraju rada obavezan je popis literature. Stavke popisa moraju odgovarati citatima iz teksta rada (sve što se nalazi u popisu literature mora imati referencu u tekstu i obratno).
+Literatura
+Tekst rada i postavke stranica
+Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5. U ovom predlošku to je predefinirano stilom „Tekst“, koji je moguće odabrati u alatnoj traci (slika 2-1).
+Isto tako postoje predefinirani stilovi za iduće:
+Popis (poput ovoga u nastavku)
+Naziv poglavlja (1.)
+Naziv prve razine podpoglavlja (1.1.)
+Naziv druge razine podpoglavlja (1.1.1.)
+Naziv treće razine podpoglavlja (1.1.1.1.) 
+
+Slika  STYLEREF 1 \s 2 SEQ Slika \* ARABIC \s 1 1. Odabir stilova za oblikovanje
+Margine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku). 
+Umetanje slika u tekst

@@ -1,123 +1,123 @@
-===== [efzg-postupak-zavrsni | str. 1] =====
-POSTUPAK PRIJAVE, IZRADE I OBRANE ZAVRSNOG RADA NA
-PREDDIPLOMSKOM SVEUCILISNOM STUDIJU
-
-Zavrsni rad je opsirniji pisani strucni rad na kraju preddiplomskog sveucilisnog studija u kojem
-student u dogovoru s mentorom obrauje tocno odreenu temu. Studenti na preddiplomskom
-studiju mogu pristupiti pisanju zavrsnog rada iz kolegija Meunarodno poslovanje. Zavrsnim radom
-student treba dokazati da je stekao kompetencije i usvojio predviene ishode ucenja iz podrucja
-studija kojeg zavrsava. Zavrsnim radom student takoer dokazuje sposobnost koristenja teorijskih i
-prakticnih znanja stecenih tijekom studija te sluzenja odgovarajuom literaturom i ekonomskom
-terminologijom.
-
-POSTUPAK PRIJAVE ZAVRSNOG RADA
-
-Student zavrsni rad prijavljuje tijekom posljednjeg semestra studija i to za vrijeme trajanja nastave
-u ljetnom semestru. Krajnji rok za prijavu zavrsnog rada je posljednji dan izvoenja nastave. Prijave
-zavrsnih radova nisu mogue u vrijeme ispitnih rokova.
-
-Postupak prijave zavrsnog rada je formaliziran i sastoji se od sljedeih koraka:
-
-1. Tema zavrsnog rada dogovara se s mentorom i treba biti povezana uz sadrzaj kolegija i podrucje
-istrazivanja mentora. Temu je mogue izabrati sa popisa predlozenih tema ili student sam predlaze
-temu nakon sto je istrazio dostupnu literaturu.
-
-2. Nakon odabira teme student sastavlja KONCEPT ZAVRSNOG RADA (obrazlozenje teme, sadrzaj
-zavrsnog rada, prijedlog koristene literature). Pri izradi koncepta studenti se upuuju na koristenje
-literature dostupne u knjiznici Ekonomskog fakulteta u Zagrebu, Nacionalnoj i sveucilisnoj knjiznici te
-elektronickim bazama podataka. Studenti koji nisu upoznati s pretrazivanjem baza podataka, upuuju
-se na koristenje usluga Knjiznicno dokumentacijskog centra. Informacije o knjiznicnim tecajevima
-dostupne su na stranici Knjiznice Ekonomskog fakulteta u Zagrebu. Temeljem pregleda literature,
-student predlaze nacin i instrument istrazivanja za potrebe provoenja primarnog istrazivanja ako
-tema rada omoguuje primarno istrazivanje.
-
-3. Student s konceptom zavrsnog rada dolazi na konzultacije mentoru kako bi dobio odobrenje za
-predlozenu temu zavrsnog rada. Ukoliko mentor smatra da odabrana tema, sadrzaj rada,
-obrazlozenje teme ili literatura nisu adekvatni, studentu se koncept vraa na prepravak ili mu se ne
-odobrava mentorstvo. Ukoliko mentor smatra da su odabrana tema, sadrzaj rada, obrazlozenje teme
-i popis literature adekvatni, student prijavljuje temu zavrsnog rada.
-
-4. Za finaliziranje prijave zavrsnog rada potrebno je mentoru dostaviti popunjenu prijavnicu za
-zavrsni rad. Mentor potpisom ovjerava prijavnicu, a prijavnica se zatim dostavlja na ovjeru procelniku
-katedre (izv. prof. dr. sc. Tomislav Bakovi, kabinet 225). Prijavnica se potom dostavlja tajnici katedre
-gi. Josipi Zuti (dv.41) kako bi se mentorstvo upisalo u ISVU sustav.
-
 ===== [efzg-postupak-zavrsni | str. 2] =====
-POSTUPAK IZRADE ZAVRSNOG RADA
+POSTUPAK IZRADE ZAVRŠNOG RADA
 
-U zavrsnom radu student samostalno istrazuje, analizira i obrauje neki slozeniji, konkretni problem
-na temelju spoznaja stecenih tijekom nastave i iz literature koju samostalno nalazi u znanstvenim i
-strucnim tiskanim i elektronickim izdanjima udzbenika, knjiga, znanstvenih i strucnih casopisa,
-zbornika radova s konferencija, zakona i drugih izvora. Pri pisanju rada potrebno je postivati
-Pravilnik o zavrsnim i seminarskim radovima na preddiplomskim sveucilisnim studijima Poslovan
+U završnom radu student samostalno istražuje, analizira i obrađuje neki složeniji, konkretni problem
+na temelju spoznaja stečenih tijekom nastave i iz literature koju samostalno nalazi u znanstvenim i
+stručnim tiskanim i elektroničkim izdanjima udžbenika, knjiga, znanstvenih i stručnih časopisa,
+zbornika radova s konferencija, zakona i drugih izvora. Pri pisanju rada potrebno je poštivati
+Pravilnik o završnim i seminarskim radovima na preddiplomskim sveučilišnim studijima Poslovan
 ekonomija i Ekonomija.
 
-Zavrsni rad se sastoji od sljedeih dijelova: naslovnica, sadrzaj, uvod, sredisnji dio rada, zakljucak,
-popis literature, popis slika, popis tablica, prilozi. Opseg zavrsnog rada ovisi o vrsti i slozenosti
-problema o kojem se pise, a u pravilu iznosi od 30 do 40 stranica teksta A4 formata (bez naslovnice,
-sadrzaja, popisa literature, popisa slika, tablica i priloga). Sve margine stranica postaviti na 2,5 cm.
-Koristiti font Times New Roman ili Arial, velicina slova 12. Tekst obostrano poravnati. Prored izmeu
+Završni rad se sastoji od sljedećih dijelova: naslovnica, sadržaj, uvod, središnji dio rada, zaključak,
+popis literature, popis slika, popis tablica, prilozi. Opseg završnog rada ovisi o vrsti i složenosti
+problema o kojem se piše, a u pravilu iznosi od 30 do 40 stranica teksta A4 formata (bez naslovnice,
+sadržaja, popisa literature, popisa slika, tablica i priloga). Sve margine stranica postaviti na 2,5 cm.
+Koristiti font Times New Roman ili Arial, veličina slova 12. Tekst obostrano poravnati. Prored između
 redaka postaviti na 1,5. Numerirati stranice rada. Naslovna stranica se ne numerira.
 
-Radovi se pisu hrvatskim knjizevnim jezikom. Tekst treba biti gramaticki i pravopisno ispravan. Ne
-koristiti prvo lice u izrazavanju nego neosobnu formulaciju. Npr. umjesto izraza ,,zakljucujem ..."
-koristiti izraz ,,moze se zakljuciti ...".
+Radovi se pišu hrvatskim književnim jezikom. Tekst treba biti gramatički i pravopisno ispravan. Ne
+koristiti prvo lice u izražavanju nego neosobnu formulaciju. Npr. umjesto izraza „zaključujem …“
+koristiti izraz „može se zaključiti …“.
 
-Tekst rada treba biti podijeljen u poglavlja i potpoglavlja. Ukljucujui uvod i zakljucak, rad moze imati
+Tekst rada treba biti podijeljen u poglavlja i potpoglavlja. Uključujući uvod i zaključak, rad može imati
 minimalno pet, a maksimalno sedam poglavlja. Uvodno poglavlje treba razdijeliti u tri potpoglavlja u
-kojima se opisuju (1) predmet rada, (2) koristene metode i izvori podataka i (3) struktura rada. Nazivi
-poglavlja trebaju biti numerirani. Svako poglavlje prve razine pocinje na novoj stranici.
+kojima se opisuju (1) predmet rada, (2) korištene metode i izvori podataka i (3) struktura rada. Nazivi
+poglavlja trebaju biti numerirani. Svako poglavlje prve razine počinje na novoj stranici.
 
-Tekst se odvaja u manje smislene odlomke. Odlomak pocinje na pocetku reda, a odlomci se odvajaju
+Tekst se odvaja u manje smislene odlomke. Odlomak počinje na početku reda, a odlomci se odvajaju
 redom razmaka. Odlomak predstavlja smisleni, tematski povezan dio teksta. Nemojte izdvajati samo
-jednu recenicu kao zasebni odlomak.
+jednu rečenicu kao zasebni odlomak.
 
-Svaku definiciju, podjelu, misao, zakljucak ili spoznaju koja sa preuzima od drugog autora treba
-ispravno citirati. Preporucuje se na tue radove upuivati harvardskim stilom navoenja literature.
-Prema harvardskom stilu navoenja literature izvor se oznacava u samom tekstu nakon preuzete
-definicije, misli ili spoznaje tako da se u zagradu pise prezime autora i godina izdavanja djela koje se
-citira, npr. (Lazibat, Brizar i Bakovi, 2007.). Ako se preuzima podjela po nekom autoru, izvor se u
-zagradama navodi prije podjele odnosno nakon interpunkcijskog znaka dvotocka. Svi izvori literature
-koji su koristeni u izradi rada trebaju biti navedeni u Popisu literature. Navoenje radova u Popisu
-literature prema harvardskom stilu razlikuje se ovisno o tome jeli rijec o clanku objavljenom u
-casopisu, knjizi, enciklopediji, web izvoru i slicno. Detaljne upute za navoenje literature objavljene
-su na web stranici knjiznice i mozete ih preuzeti OVDJE. Opseg koristenih izvora literature u radu
+Svaku definiciju, podjelu, misao, zaključak ili spoznaju koja sa preuzima od drugog autora treba
+ispravno citirati. Preporučuje se na tuđe radove upućivati harvardskim stilom navođenja literature.
+Prema harvardskom stilu navođenja literature izvor se označava u samom tekstu nakon preuzete
+definicije, misli ili spoznaje tako da se u zagradu piše prezime autora i godina izdavanja djela koje se
+citira, npr. (Lazibat, Brizar i Baković, 2007.). Ako se preuzima podjela po nekom autoru, izvor se u
+zagradama navodi prije podjele odnosno nakon interpunkcijskog znaka dvotočka. Svi izvori literature
+koji su korišteni u izradi rada trebaju biti navedeni u Popisu literature. Navođenje radova u Popisu
+literature prema harvardskom stilu razlikuje se ovisno o tome jeli riječ o članku objavljenom u
+časopisu, knjizi, enciklopediji, web izvoru i slično. Detaljne upute za navođenje literature objavljene
+su na web stranici knjižnice i možete ih preuzeti OVDJE. Opseg korištenih izvora literature u radu
 mora u potpunosti odgovarati opsegu radova navedenih u Popisu literature, i obrnuto. Nije
-dozvoljeno u Popisu literature navoditi radove koji nisu izravno koristeni u izradi rada.
+dozvoljeno u Popisu literature navoditi radove koji nisu izravno korišteni u izradi rada.
 
-Svaka tablica, slika i graf moraju imati svoj broj, naziv i izvor, te biti objasnjeni u tekstu. Iznimka su
-prikazi koji su toliko jednostavni da ne zahtijevaju objasnjenje. U tekstu mora stajati recenica koja
-upuuje na tablicu, sliku ili graf. Svi grafovi, tablice i slike moraju biti na hrvatskom jeziku. Decimalna
-mjesta odvajaju se zarezom, a ne tockom.
+Svaka tablica, slika i graf moraju imati svoj broj, naziv i izvor, te biti objašnjeni u tekstu. Iznimka su
+prikazi koji su toliko jednostavni da ne zahtijevaju objašnjenje. U tekstu mora stajati rečenica koja
+upućuje na tablicu, sliku ili graf. Svi grafovi, tablice i slike moraju biti na hrvatskom jeziku. Decimalna
+mjesta odvajaju se zarezom, a ne točkom.
 
-Rad se dostavlja na citanje mentoru maksimalno tri puta, nakon cega se rad ocjenjuje.
+Rad se dostavlja na čitanje mentoru maksimalno tri puta, nakon čega se rad ocjenjuje.
+
+===== [efzg-postupak-zavrsni | str. 1] =====
+POSTUPAK PRIJAVE, IZRADE I OBRANE ZAVRŠNOG RADA NA
+PREDDIPLOMSKOM SVEUČILIŠNOM STUDIJU
+
+Završni rad je opširniji pisani stručni rad na kraju preddiplomskog sveučilišnog studija u kojem
+student u dogovoru s mentorom obrađuje točno određenu temu. Studenti na preddiplomskom
+studiju mogu pristupiti pisanju završnog rada iz kolegija Međunarodno poslovanje. Završnim radom
+student treba dokazati da je stekao kompetencije i usvojio predviđene ishode učenja iz područja
+studija kojeg završava. Završnim radom student također dokazuje sposobnost korištenja teorijskih i
+praktičnih znanja stečenih tijekom studija te služenja odgovarajućom literaturom i ekonomskom
+terminologijom.
+
+POSTUPAK PRIJAVE ZAVRŠNOG RADA
+
+Student završni rad prijavljuje tijekom posljednjeg semestra studija i to za vrijeme trajanja nastave
+u ljetnom semestru. Krajnji rok za prijavu završnog rada je posljednji dan izvođenja nastave. Prijave
+završnih radova nisu moguće u vrijeme ispitnih rokova.
+
+Postupak prijave završnog rada je formaliziran i sastoji se od sljedećih koraka:
+
+1. Tema završnog rada dogovara se s mentorom i treba biti povezana uz sadržaj kolegija i područje
+istraživanja mentora. Temu je moguće izabrati sa popisa predloženih tema ili student sam predlaže
+temu nakon što je istražio dostupnu literaturu.
+
+2. Nakon odabira teme student sastavlja KONCEPT ZAVRŠNOG RADA (obrazloženje teme, sadržaj
+završnog rada, prijedlog korištene literature). Pri izradi koncepta studenti se upućuju na korištenje
+literature dostupne u knjižnici Ekonomskog fakulteta u Zagrebu, Nacionalnoj i sveučilišnoj knjižnici te
+elektroničkim bazama podataka. Studenti koji nisu upoznati s pretraživanjem baza podataka, upućuju
+se na korištenje usluga Knjižnično dokumentacijskog centra. Informacije o knjižničnim tečajevima
+dostupne su na stranici Knjižnice Ekonomskog fakulteta u Zagrebu. Temeljem pregleda literature,
+student predlaže način i instrument istraživanja za potrebe provođenja primarnog istraživanja ako
+tema rada omogućuje primarno istraživanje.
+
+3. Student s konceptom završnog rada dolazi na konzultacije mentoru kako bi dobio odobrenje za
+predloženu temu završnog rada. Ukoliko mentor smatra da odabrana tema, sadržaj rada,
+obrazloženje teme ili literatura nisu adekvatni, studentu se koncept vraća na prepravak ili mu se ne
+odobrava mentorstvo. Ukoliko mentor smatra da su odabrana tema, sadržaj rada, obrazloženje teme
+i popis literature adekvatni, student prijavljuje temu završnog rada.
+
+4. Za finaliziranje prijave završnog rada potrebno je mentoru dostaviti popunjenu prijavnicu za
+završni rad. Mentor potpisom ovjerava prijavnicu, a prijavnica se zatim dostavlja na ovjeru pročelniku
+katedre (izv. prof. dr. sc. Tomislav Baković, kabinet 225). Prijavnica se potom dostavlja tajnici katedre
+gđi. Josipi Žutić (dv.41) kako bi se mentorstvo upisalo u ISVU sustav.
 
 ===== [efzg-upute-diplomski-seminarski | str. 3] =====
-5. METODOLOGIJA IZRADE RADA........................................................... 5
-    5.1. Naslovna stranica................................................................................... 5
-         5.1.1. Naslovna stranica seminarskoga rada............................................. 5
+5. METODOLOGIJA IZRADE RADA……………………………………………........ 5
+    5.1. Naslovna stranica....................................................................…………... 5
+         5.1.1. Naslovna stranica seminarskoga rada..............................………...... 5
          5.1.2. Vanjska ili omotna stranica i naslovna stranica diplomskoga rada.... 6
-    5.2. Predgovor.................................................................................. 10
-    5.3. Sadrzaj..................................................................................... 10
-    5.4. Tekst....................................................................................................... 12
-         5.4.1. Uvod................................................................................................. 12
-         5.4.2. Razrada teme...................................................................................12
-         5.4.3. Zakljucak...........................................................................................13
-         5.4.4. Nacin oznacavanja dijelova rada...................................................... 14
-    5.5. Literatura................................................................................... 14
-    5.6. Popis tablica........................................................................................... 16
-    5.7. Popis ilustracija....................................................................................... 16
+    5.2. Predgovor……………………………………………………………...…….... 10
+    5.3. Sadržaj……………………………………………………………………….... 10
+    5.4. Tekst.....................................................................................…………...... 12
+         5.4.1. Uvod................................................................................…………….. 12
+         5.4.2. Razrada teme...................................................................…………….12
+         5.4.3. Zaključak.............................................................................…………..13
+         5.4.4. Način označavanja dijelova rada.....................................…………..... 14
+    5.5. Literatura…………………………………………...………………………….. 14
+    5.6. Popis tablica........................................................................…………....... 16
+    5.7. Popis ilustracija...................................................................…………........ 16
 
 ===== [efzg-upute-diplomski-seminarski | str. 4] =====
 Upute za pisanje seminarskoga i diplomskoga rada                                                           II
 
-6. POSEBNE ODREDNICE TEKSTA............................................................. 19
-    6.1. Oznake izvora podataka (biljeske ili "fusnote" / "endnote").................... 19
-    6.2. Tablice, grafikoni, crtezi, slike......................................................... 22
+6. POSEBNE ODREDNICE TEKSTA…………................………………….…........ 19
+    6.1. Oznake izvora podataka (bilješke ili “fusnote” / “endnote”).…………....... 19
+    6.2. Tablice, grafikoni, crteži, slike……………………………………...……...... 22
 
-7. TEHNICKE UPUTE ZA IZRADU RADA.................................................... 26
-    7.1. Izgled (layout) rada...................................................................... 26
-    7.2. Dodatne upute za pisanje rada........................................................ 26
+7. TEHNIČKE UPUTE ZA IZRADU RADA…………………………………...…….... 26
+    7.1. Izgled (layout) rada………………………………………………………....... 26
+    7.2. Dodatne upute za pisanje rada………………………………………........... 26
     7.3. Dodatni izvori uputa za pisanje rada......................................................... 27
 
 ===== [efzg-upute-diplomski-seminarski | str. 6] =====
@@ -127,165 +127,160 @@ Upute za pisanje seminarskoga i diplomskoga rada  2
 
 2.1. Svrha seminarskoga rada
 
-         Seminarski rad predstavlja samostalnu strucnu obradu izabrane teme.
-Izradom seminarskog rada student pokazuje teorijsko i prakticno znanje kao i
-sposobnost samostalnog sluzenja aktualnom domaom i stranom literaturom u
+         Seminarski rad predstavlja samostalnu stručnu obradu izabrane teme.
+Izradom seminarskog rada student pokazuje teorijsko i praktično znanje kao i
+sposobnost samostalnog služenja aktualnom domaćom i stranom literaturom u
 pismenoj obradi.
 
          Ciljevi su izrade seminarskoga rada:
-� prosirenje i produbljivanje znanja iz sadrzaja nastavnog programa,
-� stjecanje iskustva u pisanju strucnih radova.
+¾ proširenje i produbljivanje znanja iz sadržaja nastavnog programa,
+¾ stjecanje iskustva u pisanju stručnih radova.
 
-         Preporucljiv opseg seminarskoga rada je 10 - 15 stranica.
+         Preporučljiv opseg seminarskoga rada je 10 - 15 stranica.
 
 2.2. Svrha diplomskoga rada
 
-         Diplomski je rad samostalan strucan rad u kojemu student pod vodstvom
-nastavnika - mentora obrauje izabranu temu. Student koji je polozio ispite, izradio
-seminarske radove i izvrsio druge obveze predviene nastavnim planom i
+         Diplomski je rad samostalan stručan rad u kojemu student pod vodstvom
+nastavnika - mentora obrađuje izabranu temu. Student koji je položio ispite, izradio
+seminarske radove i izvršio druge obveze predviđene nastavnim planom i
 programom studija, izradom diplomskoga rada dokazuje sposobnost samostalnog
-rjesavanja slozenoga problema.
+rješavanja složenoga problema.
 
          Ciljevi su izrade diplomskoga rada dokazati:
-� sposobnost primjene teorijskih i prakticnih znanja stecenih tijekom studija,
-� sposobnost primjene znanstvenih metoda i instrumentarija u obradi problema i
+¾ sposobnost primjene teorijskih i praktičnih znanja stečenih tijekom studija,
+¾ sposobnost primjene znanstvenih metoda i instrumentarija u obradi problema i
 
     izradi rada,
-� sposobnost samostalnoga sluzenja odgovarajuom domaom i inozemnom
+¾ sposobnost samostalnoga služenja odgovarajućom domaćom i inozemnom
 
-    literaturom, tj. koristenje spoznaja, cinjenica i stavova objavljenih u navedenim
+    literaturom, tj. korištenje spoznaja, činjenica i stavova objavljenih u navedenim
     izvorima.
 
-         Preporucljiv opseg diplomskoga rada je 30 - 50 stranica.
+         Preporučljiv opseg diplomskoga rada je 30 - 50 stranica.
 
 ===== [efzg-upute-diplomski-seminarski | str. 7] =====
-3.1. Dogovor s nastavnikom o temi, naslovu i sadrzaju seminarskoga rada
+3.1. Dogovor s nastavnikom o temi, naslovu i sadržaju seminarskoga rada
 
-         Student izabire kolegij u okviru kojega e izraditi seminarski rad. Izabrani
-kolegij mora biti obuhvaen nastavnim planom i programom upisanoga studija,
+         Student izabire kolegij u okviru kojega će izraditi seminarski rad. Izabrani
+kolegij mora biti obuhvaćen nastavnim planom i programom upisanoga studija,
 odnosno mora biti jedan od kolegija upisanih u studentov indeks.
 
          Tema seminarskoga rada izabire se s popisa objavljenih tema ili se dogovara
-s nastavnikom. Student predlaze radni naslov i sadrzaj rada, a podrobnije ga
+s nastavnikom. Student predlaže radni naslov i sadržaj rada, a podrobnije ga
 
-odreuje u suglasnosti i nakon savjetovanja s nastavnikom. U prijedlogu radnog
+određuje u suglasnosti i nakon savjetovanja s nastavnikom. U prijedlogu radnog
 
-naslova i sadrzaja rada, student navodi i popis ve proucene literature, te druge
+naslova i sadržaja rada, student navodi i popis već proučene literature, te druge
 izvore podataka koje namjerava koristiti pri obradi teme i izradi rada. Nakon
-prihvaanja teme, nastavnik je duzan uputiti studenta u nacin obrade teme, uputiti ga
+prihvaćanja teme, nastavnik je dužan uputiti studenta u način obrade teme, uputiti ga
 na dodatnu literaturu i odrediti opseg seminarskoga rada.
 
-3.2. Dogovor s nastavnikom o temi, naslovu i sadrzaju diplomskoga rada
+3.2. Dogovor s nastavnikom o temi, naslovu i sadržaju diplomskoga rada
 
-         Diplomski rad, u pravilu, student izrauje iz kolegija znanstvenog podrucja
+         Diplomski rad, u pravilu, student izrađuje iz kolegija znanstvenog područja
 smjera studija koji je upisao.
 
-         Temu i radni naslov rada student moze izabrati s popisa objavljenih tema i
-naslova diplomskih radova. No, moze ih i sam predloziti i definirati u dogovoru s
-mentorom. U oba slucaja, potrebno je voditi racuna o predznanju i interesu studenta
-za odreeno podrucje, o raspolozivim izvorima podataka i literaturi, o dokumentaciji,
-kao i iskustvu stecenom u praksi.
+         Temu i radni naslov rada student može izabrati s popisa objavljenih tema i
+naslova diplomskih radova. No, može ih i sam predložiti i definirati u dogovoru s
+mentorom. U oba slučaja, potrebno je voditi računa o predznanju i interesu studenta
+za određeno područje, o raspoloživim izvorima podataka i literaturi, o dokumentaciji,
+kao i iskustvu stečenom u praksi.
 
-         U prijedlogu teme, radnog naslova i sadrzaja rada, student navodi i poznatu
+         U prijedlogu teme, radnog naslova i sadržaja rada, student navodi i poznatu
 mu literaturu, te druge izvore podataka koje namjerava koristiti pri obradi teme i izradi
-rada. Nakon prihvaanja teme, nastavnik je duzan uputiti studenta u nacin obrade
+rada. Nakon prihvaćanja teme, nastavnik je dužan uputiti studenta u način obrade
 teme, uputiti ga na dodatnu literaturu i odrediti opseg diplomskoga rada.
 
 ===== [efzg-upute-diplomski-seminarski | str. 9] =====
-Upute za pisanje seminarskoga i diplomskoga rada                      5
+Upute za pisanje seminarskoga i diplomskoga rada                       5
 
 5. METODOLOGIJA IZRADE RADA
 
          U skladu s izabranom temom i radnim naslovom student pristupa izradi
 seminarskoga ili diplomskoga rada. Izabrana tema i radni naslov predstavljaju
-osnovni okvir za oblikovanje sadrzaja rada.
+osnovni okvir za oblikovanje sadržaja rada.
 
-         Student prikuplja naslove knjiga i clanaka koji obrauju podrucje rada. U
-prikupljanju literature uputno je koristiti predmetni i strucni katalog u knjiznici i
-dokumentaciji. U nedostatku preporucenih izvora, student se moze sluziti kojom
-drugom dostupnom strucnom knjigom te iz nje crpiti podatke o ostalim izvorima.
+         Student prikuplja naslove knjiga i članaka koji obrađuju područje rada. U
+prikupljanju literature uputno je koristiti predmetni i stručni katalog u knjižnici i
+dokumentaciji. U nedostatku preporučenih izvora, student se može služiti kojom
+drugom dostupnom stručnom knjigom te iz nje crpiti podatke o ostalim izvorima.
 
-         Knjiznica on-line, na adresi www.kid.efzg.hr, nudi pristup bazama podataka
+         Knjižnica on-line, na adresi www.kid.efzg.hr, nudi pristup bazama podataka
 (Emerald, Ebsco Host, ProQuest, Science Direct, Link Springer, Kluwer, Engineering
 Village 2 & Compendex, ENGnetBASE, Narodne novine). Za detaljne upute o
-koristenju baza, student se treba javiti u knjiznicu Ekonomskoga fakulteta u Zagrebu.
+korištenju baza, student se treba javiti u knjižnicu Ekonomskoga fakulteta u Zagrebu.
 
-         Citanje strucne literature nuzan je preduvjet daljnjega samostalnoga rada.
-         Zavrsna struktura rada ukljucuje tocan naslov rada te oblikovanje i podjelu
-sadrzaja po glavama i poglavljima. Za svaku se glavu navode naslovi poglavlja s
-glavnim idejama, a svakome se dijelu odreuje opseg. Strukturu rada predlaze
-student, ali je konacno odreuje u dogovoru i nakon savjetovanja s mentorom.
-Ovakva raspodjela i nacin rada omoguuju sustavnost izlaganja, uvid u temeljne
-probleme i podrucja o kojima valja prikupljati dodatne podatke.
+         Čitanje stručne literature nužan je preduvjet daljnjega samostalnoga rada.
+         Završna struktura rada uključuje točan naslov rada te oblikovanje i podjelu
+sadržaja po glavama i poglavljima. Za svaku se glavu navode naslovi poglavlja s
+glavnim idejama, a svakome se dijelu određuje opseg. Strukturu rada predlaže
+student, ali je konačno određuje u dogovoru i nakon savjetovanja s mentorom.
+Ovakva raspodjela i način rada omogućuju sustavnost izlaganja, uvid u temeljne
+probleme i područja o kojima valja prikupljati dodatne podatke.
 
 5.1. Naslovna stranica
 
-         Naslovnom stranicom autor uspostavlja prvi kontakt s citateljem rada. Stoga
-treba sadrzavati osnovne podatke i biti odgovarajue oblikovana. Naslovna je
-stranica prva stranica rada i nikada se ne oznacava rednim brojem.
-
-5.1.1. Naslovna stranica seminarskoga rada
-
-         Naslovna stranica seminarskoga rada sadrzi sljedee podatke:
-� ime i prezime autora
+         Naslovnom stranicom autor uspostavlja prvi kontakt s čitateljem rada. Stoga
+treba sadržavati osnovne podatke i biti odgovarajuće oblikovana. Naslovna je
+stranica prva stranica rada i nikada se ne označava rednim brojem.
 
 ===== [efzg-upute-diplomski-seminarski | str. 15] =====
-3.2.2. Ostali ciljevi ...................................................................................... 26
+3.2.2. Ostali ciljevi ........................…..……................................................... 26
 
-4. MARKETINSKE STRATEGIJE I TAKTIKE ................................................................. 27
+4. MARKETINŠKE STRATEGIJE I TAKTIKE ...…........................................................... 27
         4.1. Proizvod .......................................................................................................... 27
-                 4.1.1. Postojei proizvodi ............................................................................. 28
-                 4.1.2. Razvoj novih proizvoda ............................................................... 30
+                 4.1.1. Postojeći proizvodi ............................................................................. 28
+                 4.1.2. Razvoj novih proizvoda ………………………………........................... 30
         4.2. Cijena .............................................................................................................. 32
         4.3. Distribucija ...................................................................................................... 34
         4.4. Promocija ....................................................................................................... 36
 
-5. ZAKLJUCAK .................................................................................................................. 38
+5. ZAKLJUČAK .................................................................................................................. 38
 
-POPIS NAVODA (CITATA) I IZVORA PODATAKA ........................................................ 45
-LITERATURA ................................................................................................... 46
-POPIS TABLICA ............................................................................................................. 48
-POPIS ILUSTRACIJA .................................................................................................... 49
-PRILOZI .......................................................................................................... 50
+POPIS NAVODA (CITATA) I IZVORA PODATAKA ……………………................................ 45
+LITERATURA ……………………………………………………………………………………… 46
+POPIS TABLICA ..................................................................................……….…………..... 48
+POPIS ILUSTRACIJA ......................................................................……………………...... 49
+PRILOZI ……………………………………………………………………………………………. 50
 
 ===== [efzg-upute-diplomski-seminarski | str. 18] =====
-5.4.4. Nacin oznacavanja dijelova rada
+5.4.4. Način označavanja dijelova rada
 
-         Najpregledniji nacin oznacavanja dijelova rada predstavlja decimalni sustav
-brojeva. Svaka se glava oznacava arapskim brojem. Prva znamenka svakoga
+         Najpregledniji način označavanja dijelova rada predstavlja decimalni sustav
+brojeva. Svaka se glava označava arapskim brojem. Prva znamenka svakoga
 poglavlja podudara se s brojem glave kojoj poglavlje pripada, a druga znamenka
-oznacava redni broj navedenoga poglavlja. Isti postupak slijedi za oznacavanje
-odjeljaka i tocaka.
+označava redni broj navedenoga poglavlja. Isti postupak slijedi za označavanje
+odjeljaka i točaka.
 
-         Dobar primjer oznacavanja vidljiv je na stranici sa sadrzajem rada (vidjeti
+         Dobar primjer označavanja vidljiv je na stranici sa sadržajem rada (vidjeti
 Primjer 4, na 11. stranici).
 
 5.5. Literatura
 
-         Popis koristene literature dolazi na stranicu rada iza zakljucka (a prije popisa
-tablica, popisa ilustracija i priloga, ako postoje). Naslov "LITERATURA" pise se
-velikim slovima centrirano na vrhu stranice. U slucaju velikoga broja izvora, pozeljno
-ih je razvrstati po skupinama, npr. strucne knjige, casopisi, statisticke i ostale
-publikacije, enciklopedije, materijali strucnih organizacija i udruzenja, neobjavljeni
+         Popis korištene literature dolazi na stranicu rada iza zaključka (a prije popisa
+tablica, popisa ilustracija i priloga, ako postoje). Naslov “LITERATURA” piše se
+velikim slovima centrirano na vrhu stranice. U slučaju velikoga broja izvora, poželjno
+ih je razvrstati po skupinama, npr. stručne knjige, časopisi, statističke i ostale
+publikacije, enciklopedije, materijali stručnih organizacija i udruženja, neobjavljeni
 materijali, novine, Internet stranice i sl.
 
-         Unutar svake skupine izvori se nizu abecednim redom (prema prezimenu
-autora, a ne postoji li autor ili urednik, prema prvoj rijeci naslova). Oznacavaju se
+         Unutar svake skupine izvori se nižu abecednim redom (prema prezimenu
+autora, a ne postoji li autor ili urednik, prema prvoj riječi naslova). Označavaju se
 arapskim brojevima.
 
          Najprije se navodi prezime autora koje se odvaja zarezom od inicijala imena.
-Titule autora nije potrebno pisati. Ako je vise autora, navode se redom koji je
-oznacen na samome djelu i odvajaju se zarezom. Nakon imena autora, ako se radi o
+Titule autora nije potrebno pisati. Ako je više autora, navode se redom koji je
+označen na samome djelu i odvajaju se zarezom. Nakon imena autora, ako se radi o
 
 ===== [efzg-upute-diplomski-seminarski | str. 20] =====
 Upute za pisanje seminarskoga i diplomskoga rada  16
 
 5.6. Popis tablica
 
-         Popis tablica slijedi nakon stranice s literaturom. Popis sadrzi redni broj i naziv
+         Popis tablica slijedi nakon stranice s literaturom. Popis sadrži redni broj i naziv
 svih tablica navedenih prema redoslijedu (broj stranice) pojavljivanja u radu.
 
-         Naslov "POPIS TABLICA", napisan velikim slovima, nalazi se na sredini
+         Naslov “POPIS TABLICA”, napisan velikim slovima, nalazi se na sredini
 stranice. Stranica se numerira arapskim brojem.
 
          Izgled stranice s popisom tablica u seminarskomu i/ili diplomskomu radu
@@ -293,5 +288,65 @@ pokazuje Primjer 13, na 17. stranici ovih uputa.
 
 5.7. Popis ilustracija
 
-         Popis ilustracija dolazi iza stranice s popisom tablica. Ilustracije obuhvaaju
-grafikone, crteze i slike.
+         Popis ilustracija dolazi iza stranice s popisom tablica. Ilustracije obuhvaćaju
+grafikone, crteže i slike.
+
+===== [efzg-upute-diplomski-seminarski | str. 23] =====
+Upute za pisanje seminarskoga i diplomskoga rada  19
+
+6. POSEBNE ODREDNICE TEKSTA
+
+6.1. Oznake izvora podataka (bilješke ili “fusnote“ / “endnote“)
+
+         Oznake izvora podataka (bilješke), preporučljivo je pisati na jedan od sljedećih
+načina, kao:
+a) “fusnote” - bilješke na donjem rubu stranice; označuju se brojevima od 1 nadalje;
+b) “endnote” - bilješke na posebnoj stranici; označuju se brojevima od 1 nadalje.
+
+         Autor koji odabere način označavanja naveden pod b) mora stranicu s
+popisom označiti naslovom “POPIS NAVODA (CITATA) I IZVORA PODATAKA”
+(vidjeti Primjer 15 na 20. stranici). Ova se stranica smješta iza zaključka, a prije
+stranice koja sadrži popis literature. Potrebno ju je navesti i označiti u sadržaju rada.
+
+         Bilješke (“fusnote” / “endnote”) koriste se kao dokumentacija:
+a) za svako cjelovito navođenje tuđih riječi u tekstu (citiranje), uz uporabu
+
+    pravopisnih znakova navođenja (navodnici “.........” );
+b) u slučaju kada se duži tekst sažima i oblikuje vlastitim riječima, pri čemu se mora
+
+    navesti izvor iz kojega potječe;
+c) za navođenje svake činjenice ili podatka koji općenito nije poznat, ali znamo tko je
+
+    autor.
+         Dakle, bilješke se rabe za svaki, u upravnom ili neupravnom govoru iznesen
+
+tuđi dio teksta, kao i za interpretaciju nečijeg rada, pri čemu se uvijek mora navesti
+izvor. Necitirani dijelovi tuđih radova smatraju se plagijatom, tj. nezakonitim
+prisvajanjem proizvoda tuđega znanstvenoga i stručnoga rada!
+
+         Pri pisanju rada na računalu, u programu postoje posebne naredbe za
+automatsko uređenje bilježaka (“fusnota” ili “endnota”).
+
+         Bilješke se navode na sličan način kao i literatura (vidjeti Poglavlje 5.5.), no
+potrebno je još na kraju navoda dodati broj stranice na kojoj se citat ili navedena
+činjenica nalaze (vidjeti Primjer 15 i Primjer 16, na 20. i 21. stranici).
+
+         Bilješke se pišu veličinom slova 10.
+
+===== [efzg-pravilnik-diplomski-2012 | str. 11] =====
+Suglasnost Vijeća diplomskog studija:
+
+1. o (potpis Voditelja diplomskog studija)
+
+U Zagrebu, (datum prijave)
+Potpis studenta
+
+Potpis mentora
+
+Prilozi:
+* SadrZaj rada
+* Obrazloženje teme
+* Popis literature
+* Potpisana izjava o akademskoj čestitosti
+
+10

@@ -8,7 +8,7 @@ Snapshot: `data/sources/vvg/vvg.pdf` (hash `5d7e28333d8c...`)
 Otvori PDF: `data/sources/vvg/vvg.pdf#page=10`
 ```
 TEMPLATE: {authors}: {title}, {publisher}, {year}.
-QUOTE   : [1] Markovi, Marko; Ivi, Ivan: Programiranje u C jeziku, Profil d.o.o, 2008.   [grep: OK]
+QUOTE   : [1] Marković, Marko; Ivić, Ivan: Programiranje u C jeziku, Profil d.o.o, 2008.   [grep: OK]
 IZVOR   : Markovi, Marko; Ivi, Ivan: Programiranje u C jeziku, Profil d.o.o, 2008.
 RENDER  : Markovi, Marko; Ivi, Ivan: Programiranje u C jeziku, Profil d.o.o, 2008.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -30,7 +30,7 @@ NAPOMENA: Izvor formalno navodi jedan opci format za knjige i clanke, ali primje
 Otvori PDF: `data/sources/vvg/vvg.pdf#page=10`
 ```
 TEMPLATE: URL: {url}, {accessed}
-QUOTE   : [<redni broj>] URL: <potpuna putanja do stranice koja je koristena u radu>, <datum   [grep: OK]
+QUOTE   : [<redni broj>] URL: <potpuna putanja do stranice koja je korištena u radu>, <datum   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Format za internetske sadrzaje za koje se ne zna autor(i) (str. 10-11): '[<redni broj>] URL: <potpuna putanja do stranice koja je koristena u radu>, <datum zadnjeg pristupa toj stranici>'. Oznaka 'URL:' pise se doslovno; redni broj je oznaka popisa. Izvor pod 'Primjer:' ne daje popunjen primjer u ekstrakciji pa je oblik prenesen iz formata bez izmisljanja (example: null). Mrezni izvor s poznatim autorom izvor formalno ne pokriva.
 ```
@@ -39,7 +39,7 @@ NAPOMENA: Format za internetske sadrzaje za koje se ne zna autor(i) (str. 10-11)
 Otvori PDF: `data/sources/vvg/vvg.pdf#page=10`
 ```
 TEMPLATE: {authors}: {title}, U: {editor} (ur.), {container}, {publisher}, {year}.
-QUOTE   : [<redni broj>] <autor(i)>: <Naslov rada>, <izdavac>, <godina izdanja>   [grep: OK]
+QUOTE   : [<redni broj>] <autor(i)>: <Naslov rada>, <izdavač>, <godina izdanja>   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor ne daje zaseban oblik za poglavlje u uredjenoj knjizi/zborniku. Predlozak je izveden iz opceg oblika za knjigu (str. 10) ubacivanjem urednika 'U: {editor} (ur.),' i naziva zbornika kao containera. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -48,7 +48,7 @@ NAPOMENA: Izvor ne daje zaseban oblik za poglavlje u uredjenoj knjizi/zborniku. 
 Otvori PDF: `data/sources/vvg/vvg.pdf#page=10`
 ```
 TEMPLATE: {authors}: {title}, {institution}, {year}.
-QUOTE   : [<redni broj>] <autor(i)>: <Naslov rada>, <izdavac>, <godina izdanja>   [grep: OK]
+QUOTE   : [<redni broj>] <autor(i)>: <Naslov rada>, <izdavač>, <godina izdanja>   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor ne obradjuje citiranje zavrsnih/diplomskih radova. Predlozak je izveden iz opceg oblika za knjigu (str. 10) zamjenom izdavaca ustanovom u kojoj je rad izradjen. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -57,7 +57,7 @@ NAPOMENA: Izvor ne obradjuje citiranje zavrsnih/diplomskih radova. Predlozak je 
 Otvori PDF: `data/sources/vvg/vvg.pdf#page=9`
 ```
 TEMPLATE: {title}, {container}[[, br. {issue}]], {year}.
-QUOTE   : ona koja je posredno utjecala na rad (npr. prirucnici, standardi).   [grep: OK]
+QUOTE   : ona koja je posredno utjecala na rad (npr. priručnici, standardi).   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor spominje standarde i prirucnike kao ostalu koristenu literaturu (str. 9) ali ne daje format za propise/pravne akte. Predlozak je izveden iz uobicajenog hrvatskog oblika (naslov, glasilo, broj, godina); broj sluzbenog glasila u {issue}. Potvrditi ili oboriti pri verifikaciji.
 ```

@@ -1,277 +1,320 @@
+===== [fazos-upute-zavrsni-2024 | str. 6] =====
+Središnji dio rada je poglavlje u kojem se pobliže sustavno istražuje tema završnog rada. U
+ovom se poglavlju sustavno razrađuje problematika rada uz pravilno navođenje izvora.
+Rezultate treba prikazati jasno, logičnim slijedom i dokumentirati ih tablicama, grafikonima i
+slikama, što mora biti označeno i potpuno opisano. U kompilacijskom/preglednom radu treba
+opsežno razraditi literaturu (što se do sada zna o navedenoj temi) i sažeti proučeni materijal.
+Ovaj dio sastoji se od više međusobno povezanih poglavlja odgovarajućih naslova u kojima su
+raščlanjeni i obrađeni pojedini dijelovi teme u logične cjeline prema ključnim aspektima. Zbog
+preglednosti poželjno je u dogovoru s mentorom uvođenje potpoglavlja (do 3 razine, npr.
+3.1.2.). Ovaj, središnji dio rada temelji se na analizi minimalno 10 izvora literature
+značajnih za dogovorenu temu rada (sveučilišni udžbenici, znanstveni i stručni radovi,
+itd.). Po mogućnosti, literaturni navodi ne bi trebali biti stariji od 10 godina. Svaka tablica,
+slika ili grafikon mora imati oznaku, broj i naslov (npr. Tablica 1. Naslov tablice). Ako je autor
+kreator rezultata, ispod tablice ili grafikona napisati: Izvor: autor. Ako su tablice ili grafikoni s
+interneta, u izvor napisati skraćeni link. Hiper-linkove isključiti. Naslov tablice piše se iznad
+tablice, lijevo poravnanje, a naslov grafikona i slike ispod, uz centrirano poravnanje. U tekstu
+rada potrebno je referiranje na tablice i ilustracije i to najbliže mjestu gdje se na njih poziva.
+Primjeri: „U Tablici 1 prikazano je….“ , ili nakon objašnjena tablice napisati: „…(Tablica 1)“.
+Spominjanje tablice u tekstu piše se s velikim početnim slovom i bez točke iza broja (npr. … u
+Tablici 1 prikazano je…), a naslov tablice piše se s točkom iza rednog broja tablice (Tablica 1.
+Prikaz prinosa kukuruza). Treba izbjegavati da poglavlje završava s tablicom bez teksta poslije,
+ali isto tako da počinje s tablicom bez pripadajućeg, uvodnog teksta. Izvori tablica, grafikona,
+slika i sl. pišu se odmah ispod tablice, slike, grafikona itd. Treba izbjegavati iste rezultate
+prikazivati i tablicom i grafikonom. Pod slikama se podrazumijevaju sheme, fotografije i sl.
+Ako su preuzete iz literature obavezno se mora navesti odgovarajući citat. Fotografija ne smije
+biti veličine veće od pola stranice. Izvori tablica, grafikona i fotografija preuzeti iz literature
+citiraju se navođenjem autora i godine, a u slučaju internetskog izvora piše se samo osnovna
+domena URL adrese, odnosno skraćeni link. Ovaj dio rada trebao bi obuhvaćati najmanje
+70% teksta završnog rada.
+Prilikom citiranja autora ili navođenja literaturnih izvora u tekstu rada treba koristiti APA
+stil citiranja:
+
+    • Navodi se prezime autora i godina u kojoj je rad objavljen. Npr. „Utvrđeno je da…
+
+                                                                                                                           4
+
+===== [fazos-upute-zavrsni-2024 | str. 9] =====
+bilježenjem uz datume prikupljanja podataka, analitičke metode - laboratorijske (aparat,
+instrument), statističke metode, korišteni softveri, itd. Dužina ovog dijela završnog rada treba
+biti takva da omogući detaljan opis provedenog istraživanja i na taj način osigura
+ponovljivost istraživanja.
+
+Rezultati i rasprava važan dio završnog rada u kojem se prikazuju dobiveni rezultati logičnim
+slijedom. U pravilu su rezultati prikazani u tablicama, grafikonima, slikama te se u tekstu
+obrazlažu. U dogovoru s mentorom mogu biti u istom poglavlju s raspravom, tj. poglavlje
+rezultati i rasprava. Tu se postignuti rezultati komentiraju i uspoređuju s rezultatima istraživanja
+drugih autora u području teme (a navedeni su u popisu literaturnih izvora), obrazlaže se ishod
+istraživanja te značenje dobivenih rezultata. Ovaj dio završnog rada treba imati najmanje 8
+literaturnih navoda (sveučilišni udžbenici, znanstveni i stručni radovi itd.). Rezultati i
+rasprava pišu se u logično organiziranim potpoglavljima unutar glavnog poglavlja Rezultati i
+rasprava. Rezultate treba dokumentirati tablicama, grafikonima i slikama, što mora biti
+označeno i potpuno opisano. Svaka tablica, slika ili grafikon mora imati oznaku, broj i naslov
+(npr. Tablica 1. Naslov tablice). Ako je autor kreator rezultata, ispod tablice ili grafikona
+napisati: Izvor: autor. Ako su tablice ili grafikoni s interneta, u izvor napisati skraćeni link.
+Hiper-linkove isključiti. Naslov tablice piše se iznad tablice, a naslov grafikona i slike ispod, uz
+centrirano poravnanje. U tekstu rada potrebno je referiranjene na tablice i ilustracije i to najbliže
+mjestu gdje se na njih poziva. Primjeri: „U Tablici 1 prikazano je….“ Ili nakon objašnjena
+tablice napisati: „…(Tablica 1)“. Treba izbjegavati da poglavlje završava s tablicom bez teksta
+poslije, ali isto tako da počinje s tablicom bez pripadajućeg, uvodnog teksta. Izvori tablica,
+grafikona, slika i sl. pišu se odmah ispod tablice, slike, grafikona itd. Treba izbjegavati iste
+rezultate prikazivati tablicom i grafikonom. Pod slikama se podrazumijevaju sheme, fotografije
+i sl. Ako su preuzete iz literature obavezno se mora navesti odgovarajući citat. Fotografija ne
+smije biti veličine veće od pola stranice. Izvori tablica, grafikona i fotografija preuzeti iz
+literature citiraju se navođenjem autora i godine, a u slučaju internetskog izvora piše se samo
+osnovna domena URL adrese. Ovaj dio rada treba participirati u ukupnom broju stranica
+završnog rada s najvećih postotkom u odnosu na druge pojedinačne dijelove završnog
+rada.
+Prilikom citiranja autora ili navođenja literaturnih izvora u tekstu rada treba koristiti APA
+
+                                                                                                                           7
+
+===== [fazos-upute-diplomski-2024 | str. 7] =====
+veličine veće od pola stranice. Izvori tablica, grafikona i fotografija preuzeti iz literature citiraju
+se navođenjem autora i godine, a u slučaju internetskog izvora piše se samo osnovna domena
+URL adrese, odnosno skraćeni link. Središnji dio rada treba obuhvaćati najmanje 70%
+teksta diplomskog rada.
+
+Prilikom citiranja autora ili navođenja literaturnih izvora u tekstu rada treba koristiti APA
+stil citiranja:
+
+    • Navodi se prezime autora i godina u kojoj je rad objavljen. Npr. „Utvrđeno je da…
+         (Hanson, 2022.)“ ili „Hanson (2022.) je utvrdio da…“
+
+    • ako se citira rad dva autora rada, treba navesti prezimena oba autora - npr. „Basso i
+         Antle (2020.) zaključili su da...“
+
+    • ako je rad djelo više autora, navodi se samo prvi autor i dopisuje kratica „sur.“ (npr.
+         Bolfe i sur., 2020.)
+
+    • ako su imena autora dio rečenice, u zagradu se piše samo godina npr. Hanson (2022.)
+         navodi ... ili Basso i Antle (2020.) utvrdili su ...
+
+    • kod citiranja internetskih izvora u tekstu treba koristiti skraćenu verziju internetske
+         adrese kako se tekst ne bi opterećivao prevelikim linkovima
+
+Zaključak je završni dio rada. U zaključku treba kratko, jasno i pregledno prikazati relevantne
+spoznaje, informacije, činjenice, postupke i stavove koji su opširnije razrađeni u središnjem
+dijelu. U zaključku se ne iznose nove spoznaje, novi podaci ili informacije. Ovdje se u pravilu
+ne navode novi izvori i ne upućuje na literaturu. U zaključku treba u pravilu odgovoriti na
+postavljene ciljeve rada i ukratko navesti što je važno u obrađenoj temi / istraživanju, koji su
+mogući pravci razvoja ili dorade obrađene teme / istraživanja. Zaključak treba biti opsega 1-
+2 stranice.
+
+Popis literature sadrži popis svih izvornika tj. znanstvenih radova, monografija, zbornika,
+knjiga, elektroničkih časopisa i jedinica s Interneta iz kojih su dijelovi citirani u radu. Svi citati
+u tekstu rada moraju biti zastupljen u Popisu literature i obrnuto. Navode se samo izvori i radovi
+koji se spominju u tekstu diplomskog rada. Ne navode se radovi koji se u radu ne citiraju niti
+oni na koje se u radu ne upućuje. Bibliografski podaci trebaju biti numerirani i poredani
+
+                                                                                                                           5
+
+===== [fazos-upute-diplomski-2024 | str. 11] =====
+diplomskog rada s najvećih postotkom u odnosu na druge pojedinačne dijelove
+diplomskog rada.
+Prilikom citiranja autora ili navođenja literaturnih izvora u tekstu rada treba koristiti APA
+sustav:
+
+    • Navodi se prezime autora i godina u kojoj je rad objavljen. Npr. „Utvrđeno je da…
+         (Hanson, 2022.)“ ili „Hanson (2022.) je utvrdio da…“
+
+    • ako se citira rad dva autora rada, treba navesti prezimena oba autora - npr. „Basso i
+         Antle (2020.) zaključili su da...“
+
+    • ako je rad djelo više autora, navodi se samo prvi autor i dopisuje kratica „sur.“ (npr.
+         Bolfe i sur., 2020.)
+
+    • ako su imena autora dio rečenice, u zagradu se piše samo godina npr. Hanson (2022.)
+         navodi ... ili Basso i Antle (2020.) utvrdili su ...
+
+    • kod citiranja internetskih izvora u tekstu treba koristiti skraćenu verziju internetske
+         adrese kako se tekst ne bi opterećivao prevelikim linkovima. Datum pristupa se u tekstu
+         ne navodi.
+
+Zaključak je završni dio rada. U zaključku treba u pravilu kratko (opsega 1-2 stranice), jasno
+i pregledno odgovoriti na postavljene ciljeve istraživanja i navesti što se istraživanjem utvrdilo
+te dati smjernice i ideje za daljnja istraživanja. U zaključku se ne iznose nove spoznaje, novi
+podaci ili informacije te se u pravilu ne navode novi izvori i ne upućuje na literaturu
+
+Popis literature sadrži popis svih izvornika tj. znanstvenih radova, monografija, zbornika,
+knjiga, elektroničkih časopisa i jedinica s Interneta iz kojih su dijelovi citirani u radu. Svi citati
+u tekstu rada moraju biti zastupljen u Popisu literature i obrnuto. Navode se samo izvori i radovi
+koji se spominju u tekstu diplomskog rada. Ne navode se radovi koji se u radu ne citiraju niti
+oni na koje se u radu ne upućuje. Bibliografski podaci trebaju biti numerirani i poredani
+abecednim redom uzevši u obzir prvo slovo prezimena prvog autora (Prilog 4). U popisu
+literature ne odvajati vrste literaturnih izvora (npr. knjige, radove u časopisima, internetske
+izvore), nego ih sve poredati zajedno abecednih redoslijedom kako je već opisano. Minimalan
+broj literaturnih navoda u diplomskom istraživačkom radu je 17.
+
+                                                                                                                           9
+
 ===== [fazos-upute-zavrsni-2024 | str. 2] =====
-3. Izgled zavrsnog rada i obrada teksta..............................................................................10
+3. Izgled završnog rada i obrada teksta..............................................................................10
 PRILOZI ..................................................................................................................................11
-  Prilog 1. Korice zavrsnog rada i prva stranica nakon korica � sveucilisni prijediplomski
+  Prilog 1. Korice završnog rada i prva stranica nakon korica – sveučilišni prijediplomski
   studij ....................................................................................................................................... 12
-  Prilog 2. Naslovna stranica s Povjerenstvom za ocjenu zavrsnog rada � sveucilisni
+  Prilog 2. Naslovna stranica s Povjerenstvom za ocjenu završnog rada – sveučilišni
   prijediplomski studij ..............................................................................................................13
-  Prilog 3. Temeljna dokumentacijska kartica � sveucilisni prijediplomski studij ..................14
-  Prilog 4. Korice zavrsnog rada i prva stranica zavrsnog rada nakon korica � strucni
+  Prilog 3. Temeljna dokumentacijska kartica – sveučilišni prijediplomski studij ..................14
+  Prilog 4. Korice završnog rada i prva stranica završnog rada nakon korica – stručni
   prijediplomski studij ..............................................................................................................15
-  Prilog 5. Naslovna stranica s Povjerenstvom za ocjenu zavrsnog rada � strucni
+  Prilog 5. Naslovna stranica s Povjerenstvom za ocjenu završnog rada – stručni
   prijediplomski studij ..............................................................................................................16
-  Prilog 6. Temeljna dokumentacijska kartica � strucni prijediplomski studij ........................17
+  Prilog 6. Temeljna dokumentacijska kartica – stručni prijediplomski studij ........................17
   Prilog 7. Primjeri citiranja ....................................................................................................18
+
+===== [fazos-upute-zavrsni-2024 | str. 3] =====
+javnoj obrani.
+
+Završni rad može biti: a) kompilacijski (pregledni) ili b) istraživački.
+
+1. Struktura završnog rada
+
+Opći (prvi) dio završnog rada čine: korice, naslovne stranice, temeljna dokumentacijska kartica
+i sadržaj, navedenim redoslijedom.
+
+Na koricama završnog rada treba navesti naziv Sveučilišta, Fakulteta, ime i prezime studenta,
+naziv studija i modula, naslov rada, vrstu rada (Završni rad) te mjesto i godinu (Prilog 1).
+Naslovna stranica treba biti identična koricama. Između naslovne stranice i korica treba biti
+jedna prazna stranica. Sljedeća stranica sadrži tekst kao na naslovnoj stranici uz navođenje
+Povjerenstva za ocjenu završnog rada s potpisom mentora (Prilog 2 – sveučilišni
+prijediplomski studij i Prilog 5 – sveučilišni stručni studij). Nakon ove stranice može biti
+stranica sa zahvalama i posvetama prema odluci Pristupnika.
+
+Temeljna dokumentacijska kartica / Basic Documentation Card (Prilog 3 - sveučilišni
+prijediplomski studij i Prilog 6 - sveučilišni stručni studij) dolazi iza naslovne stranice s
+Povjerenstvom ili iza zahvale. Temeljna dokumentacijska kartica na hrvatskom i engleskom
+jeziku trebaju biti na jednoj stranici.
+
+Temeljna dokumentacijska kartica završnog rada sadrži sljedeće podatke na hrvatskom i
+
+engleskom jeziku:
 
 ===== [fazos-upute-zavrsni-2024 | str. 4] =====
 -  ime i prezime studenta
 
--  naslov zavrsnog rada
+-  naslov završnog rada
 
--  sazetak rada i kljucne rijeci
+-  sažetak rada i ključne riječi
 
 -  broj stranica, grafikona, slika i literaturnih navoda
 
 -  datum obrane
 
--  strucno povjerenstvo za obranu
+-  stručno povjerenstvo za obranu
 
 -  mjesto pohrane rada
 
 Naslov rada treba obuhvatiti glavnu ideju rada te biti kratak (do 100 znakova s bjelinama /
-praznim mjestima), jasan, logican i jednoznacan. Iz naslova mora biti vidljiva problematika
-koja se obrauje i pripadnost biotehnickom znanstvenom podrucju, odnosno modulu iz kojeg
-se izrauje rad. Ukoliko rad obuhvaa vise razlicitih podrucja ukljuciti u clanove povjerenstva
+praznim mjestima), jasan, logičan i jednoznačan. Iz naslova mora biti vidljiva problematika
+koja se obrađuje i pripadnost biotehničkom znanstvenom području, odnosno modulu iz kojeg
+se izrađuje rad. Ukoliko rad obuhvaća više različitih područja uključiti u članove povjerenstva
 kolege koje se bave navedenom problematikom kako bi se pridonijelo kvaliteti rada.
-U naslovu je prijeko potrebno izbjegavati kratice i strane rijeci gdje postoje hrvatske
-istoznacnice. Ukoliko naslov zavrsnog rada sadrzi latinski naziv potrebno ga je pisati u kurzivu
-sukladno pravilima nomenklature (zooloska/botanicka/nomenklatura mikroorganizama).
-Kurzivom se pise ime roda, vrste i podvrste. Ime roda se uvijek pise velikim pocetnim slovom,
-a ime vrste i podvrste malim pocetnim slovom.
+U naslovu je prijeko potrebno izbjegavati kratice i strane riječi gdje postoje hrvatske
+istoznačnice. Ukoliko naslov završnog rada sadrži latinski naziv potrebno ga je pisati u kurzivu
+sukladno pravilima nomenklature (zoološka/botanička/nomenklatura mikroorganizama).
+Kurzivom se piše ime roda, vrste i podvrste. Ime roda se uvijek piše velikim početnim slovom,
+a ime vrste i podvrste malim početnim slovom.
 
-U sazetku kao sastavnom dijelu Temeljne dokumentacijske kartice (na hrvatskom i engleskom
-jeziku) je potrebno ukratko prikazati cijeli rad � opisati problem, navesti najvaznije ideje i
-ciljeve, metodologiju rada te rezultate i zakljucke, bez citata, tablica i grafova. Opseg sazetka
-je do 200 rijeci, uz navoenje osnovnih 1-2 uvodne recenice, analize podataka iz sredisnjeg
-dijela rada i 1-2 recenice zakljucka. Uz sazetak se navodi cetiri do sest kljucnih rijeci
+U sažetku kao sastavnom dijelu Temeljne dokumentacijske kartice (na hrvatskom i engleskom
+jeziku) je potrebno ukratko prikazati cijeli rad – opisati problem, navesti najvažnije ideje i
+ciljeve, metodologiju rada te rezultate i zaključke, bez citata, tablica i grafova. Opseg sažetka
+je do 200 riječi, uz navođenje osnovnih 1-2 uvodne rečenice, analize podataka iz središnjeg
+dijela rada i 1-2 rečenice zaključka. Uz sažetak se navodi četiri do šest ključnih riječi
 (keywords).
 
-Sadrzaj je kazalo naslova pojedinih poglavlja i potpoglavlja s navoenjem brojeva stranica na
-kojima zapocinju. Obavezna je decimalna numeracija potpoglavlja (npr. 1.1, 1.2), ali najvise
+Sadržaj je kazalo naslova pojedinih poglavlja i potpoglavlja s navođenjem brojeva stranica na
+kojima započinju. Obavezna je decimalna numeracija potpoglavlja (npr. 1.1, 1.2), ali najviše
 do dvije podrazine (1.2.1., 1.2.2.).
-Ako su u radu koristene kratice, na posebnoj stranici treba navesti njihov popis i objasnjenje.
-Takva stranica treba biti smjestena prije Uvoda.
+Ako su u radu korištene kratice, na posebnoj stranici treba navesti njihov popis i objašnjenje.
+Takva stranica treba biti smještena prije Uvoda.
 
                                                                                                                            2
 
 ===== [fazos-upute-zavrsni-2024 | str. 5] =====
-Opi (uvodni) dijelovi rada se ne numeriraju.
+Opći (uvodni) dijelovi rada se ne numeriraju.
 
-1.1. Struktura i sadrzaj kompilacijskog/preglednog zavrsnog rada s opisom poglavlja
+1.1. Struktura i sadržaj kompilacijskog/preglednog završnog rada s opisom poglavlja
 
-Kompilacijski/pregledni zavrsni rad ima spoznajnu vrijednost te zahtijeva iscrpno proucavanje
-i analizu relevantne literature. Koristena literatura obrauje se tako da se tekst parafrazira, tj.
-opisuje vlastitim rijecima, a po potrebi mogu se koristiti i izravni citati koji moraju biti jasno
-oznaceni navodnicima. Proucenu relevantnu literaturu potrebno je u radu izloziti organizirano
-� svojim rijecima sintetizirati spoznaje te ih kriticki obraditi.
+Kompilacijski/pregledni završni rad ima spoznajnu vrijednost te zahtijeva iscrpno proučavanje
+i analizu relevantne literature. Korištena literatura obrađuje se tako da se tekst parafrazira, tj.
+opisuje vlastitim riječima, a po potrebi mogu se koristiti i izravni citati koji moraju biti jasno
+označeni navodnicima. Proučenu relevantnu literaturu potrebno je u radu izložiti organizirano
+– svojim riječima sintetizirati spoznaje te ih kritički obraditi.
 
-Zavrsni rad (kompilacijski/pregledni) treba se sastojati od sljedeih glavnih poglavlja:
+Završni rad (kompilacijski/pregledni) treba se sastojati od sljedećih glavnih poglavlja:
 1. Uvod
-2. Sredisnji dio rada u kojem se sustavno razrauje proucavana literatura. Sredisnji dio sastoji
-se od vise meusobno povezanih poglavlja odgovarajuih naslova u kojima su rasclanjeni i
-obraeni pojedini dijelovi osnovne teme u logicne cjeline prema kljucnim aspektima i ciljevima
-sukladno definiranoj temi rada. Zbog preglednosti pozeljno je u dogovoru s mentorom uvoenje
+2. Središnji dio rada u kojem se sustavno razrađuje proučavana literatura. Središnji dio sastoji
+se od više međusobno povezanih poglavlja odgovarajućih naslova u kojima su raščlanjeni i
+obrađeni pojedini dijelovi osnovne teme u logične cjeline prema ključnim aspektima i ciljevima
+sukladno definiranoj temi rada. Zbog preglednosti poželjno je u dogovoru s mentorom uvođenje
 potpoglavlja (do 3 razine).
-3. Zakljucak
+3. Zaključak
 4. Popis literature
 
-Prilozi � neobavezan dio koji treba biti posebno izdvojen i nalaziti se na kraju zavrsnog rada.
+Prilozi – neobavezan dio koji treba biti posebno izdvojen i nalaziti se na kraju završnog rada.
 Prilozi se ne numeriraju kao poglavlja.
-Svako glavno poglavlje treba zapoceti na novoj stranici. Potpoglavlja ne dolaze na novoj
-stranici nego u produzetku teksta.
+Svako glavno poglavlje treba započeti na novoj stranici. Potpoglavlja ne dolaze na novoj
+stranici nego u produžetku teksta.
 
-U Uvodu se na jasan i jezgrovit nacin opisuje tema rada i problemi koji e biti obraivani. U
-uvodu treba opisati namjeru rada i uvesti u problem. Uvod mora odgovoriti na pitanje o cemu
-je rijec, sto se i zasto kompiliralo ili istrazivalo. Na kraju uvodnog teksta, kao posebno
-potpoglavlje, potrebno je napisati cilj/ciljeve rada. Uvod (ukljucujui cilj/ciljeve) treba biti
-opsega 1 � 2 stranice.
-
-===== [fazos-upute-zavrsni-2024 | str. 6] =====
-Sredisnji dio rada je poglavlje u kojem se poblize sustavno istrazuje tema zavrsnog rada. U
-ovom se poglavlju sustavno razrauje problematika rada uz pravilno navoenje izvora.
-Rezultate treba prikazati jasno, logicnim slijedom i dokumentirati ih tablicama, grafikonima i
-slikama, sto mora biti oznaceno i potpuno opisano. U kompilacijskom/preglednom radu treba
-opsezno razraditi literaturu (sto se do sada zna o navedenoj temi) i sazeti prouceni materijal.
-Ovaj dio sastoji se od vise meusobno povezanih poglavlja odgovarajuih naslova u kojima su
-rasclanjeni i obraeni pojedini dijelovi teme u logicne cjeline prema kljucnim aspektima. Zbog
-preglednosti pozeljno je u dogovoru s mentorom uvoenje potpoglavlja (do 3 razine, npr.
-3.1.2.). Ovaj, sredisnji dio rada temelji se na analizi minimalno 10 izvora literature
-znacajnih za dogovorenu temu rada (sveucilisni udzbenici, znanstveni i strucni radovi,
-itd.). Po mogunosti, literaturni navodi ne bi trebali biti stariji od 10 godina. Svaka tablica,
-slika ili grafikon mora imati oznaku, broj i naslov (npr. Tablica 1. Naslov tablice). Ako je autor
-kreator rezultata, ispod tablice ili grafikona napisati: Izvor: autor. Ako su tablice ili grafikoni s
-interneta, u izvor napisati skraeni link. Hiper-linkove iskljuciti. Naslov tablice pise se iznad
-tablice, lijevo poravnanje, a naslov grafikona i slike ispod, uz centrirano poravnanje. U tekstu
-rada potrebno je referiranje na tablice i ilustracije i to najblize mjestu gdje se na njih poziva.
-Primjeri: ,,U Tablici 1 prikazano je...." , ili nakon objasnjena tablice napisati: ,,...(Tablica 1)".
-Spominjanje tablice u tekstu pise se s velikim pocetnim slovom i bez tocke iza broja (npr. ... u
-Tablici 1 prikazano je...), a naslov tablice pise se s tockom iza rednog broja tablice (Tablica 1.
-Prikaz prinosa kukuruza). Treba izbjegavati da poglavlje zavrsava s tablicom bez teksta poslije,
-ali isto tako da pocinje s tablicom bez pripadajueg, uvodnog teksta. Izvori tablica, grafikona,
-slika i sl. pisu se odmah ispod tablice, slike, grafikona itd. Treba izbjegavati iste rezultate
-prikazivati i tablicom i grafikonom. Pod slikama se podrazumijevaju sheme, fotografije i sl.
-Ako su preuzete iz literature obavezno se mora navesti odgovarajui citat. Fotografija ne smije
-biti velicine vee od pola stranice. Izvori tablica, grafikona i fotografija preuzeti iz literature
-citiraju se navoenjem autora i godine, a u slucaju internetskog izvora pise se samo osnovna
-domena URL adrese, odnosno skraeni link. Ovaj dio rada trebao bi obuhvaati najmanje
-70% teksta zavrsnog rada.
-Prilikom citiranja autora ili navoenja literaturnih izvora u tekstu rada treba koristiti APA
-stil citiranja:
-
-    � Navodi se prezime autora i godina u kojoj je rad objavljen. Npr. ,,Utvreno je da...
-
-                                                                                                                           4
-
-===== [fazos-upute-zavrsni-2024 | str. 7] =====
-(Hanson, 2022.)" ili ,,Hanson (2022.) je utvrdio da..."
-    � ako se citira rad dva autora rada, treba navesti prezimena oba autora - npr. ,,Basso i
-
-         Antle (2020.) zakljucili su da..."
-    � ako je rad djelo vise autora, navodi se samo prvi autor i dopisuje kratica ,,sur." (npr.
-
-         Bolfe i sur., 2020.)
-    � ako su imena autora dio recenice, u zagradu se pise samo godina npr. Hanson (2022.)
-
-         navodi ... ili Basso i Antle (2020.) utvrdili su ...
-    � kod citiranja internetskih izvora u tekstu treba koristiti skraenu verziju internetske
-
-         adrese kako se tekst ne bi optereivalo prevelikim linkovima.
-
-Zakljucak je zavrsni dio rada. U zakljucku treba kratko jasno i pregledno prikazati relevantne
-spoznaje, informacije, cinjenice, postupke i stavove koji su opsirnije razraeni u sredisnjem
-dijelu. U zakljucku se ne iznose nove spoznaje, novi podaci ili informacije. Ovdje se u pravilu
-ne navode novi izvori i ne upuuje se na literaturu. U zakljucku treba odgovoriti na postavljene
-ciljeve rada i ukratko navesti sto je vazno u obraenoj temi/istrazivanju, koji su mogui pravci
-razvoja ili dorade obraene teme/istrazivanja. Zakljucak treba biti opsega 1-2 stranice.
-
-Popis literature sadrzi popis svih izvornika tj. znanstvenih radova, monografija, zbornika,
-knjiga, elektronickih casopisa i jedinica s Interneta iz kojih su dijelovi citirani u radu. Svi citati
-u tekstu rada moraju biti zastupljen u Popisu literature i obrnuto. Navode se samo izvori i radovi
-koji se spominju u tekstu zavrsnog rada. Ne navode se radovi koji se u radu ne citiraju niti oni
-na koje se u radu ne upuuje. Bibliografski podaci trebaju biti numerirani i poredani abecednim
-redom uzevsi u obzir prvo slovo prezimena prvog autora (Prilog 7). U popisu literature ne
-odvajati vrste literaturnih izvora (npr. knjige, radove u casopisima, internetske izvore), nego ih
-sve poredati zajedno abecednih redoslijedom kako je ve opisano. Ukupan broj literaturnih
-navoda je minimalno 15.
-
-1.2. Struktura i sadrzaj istrazivackog zavrsnog rada s opisom poglavlja
-
-Izrada istrazivackoga zavrsnog rada ukljucuje samostalan i izvorni rad koji se temelji na
-istrazivanju manjeg opsega ili njegovu dijelu koje student sam provodi, sam analizira, opisuje
-
-                                                                                                                           5
+U Uvodu se na jasan i jezgrovit način opisuje tema rada i problemi koji će biti obrađivani. U
+uvodu treba opisati namjeru rada i uvesti u problem. Uvod mora odgovoriti na pitanje o čemu
+je riječ, što se i zašto kompiliralo ili istraživalo. Na kraju uvodnog teksta, kao posebno
+potpoglavlje, potrebno je napisati cilj/ciljeve rada. Uvod (uključujući cilj/ciljeve) treba biti
+opsega 1 – 2 stranice.
 
 ===== [fazos-upute-zavrsni-2024 | str. 8] =====
-i prezentira rezultate prema uobicajenim i uvrijezenim poglavljima, uz vodstvo i savjetovanje
-mentora. Istrazivackom radu prethodi pretrazivanje i proucavanje odgovarajue literature, a
-vrlo vjerojatno i dodatno prosirenje znanja koja nisu obuhvaena nastavom na prijediplomskom
+i prezentira rezultate prema uobičajenim i uvriježenim poglavljima, uz vodstvo i savjetovanje
+mentora. Istraživačkom radu prethodi pretraživanje i proučavanje odgovarajuće literature, a
+vrlo vjerojatno i dodatno proširenje znanja koja nisu obuhvaćena nastavom na prijediplomskom
 studiju.
 
-Zavrsni rad (istrazivacki) treba se sastojati od sljedeih glavnih poglavlja:
+Završni rad (istraživački) treba se sastojati od sljedećih glavnih poglavlja:
 
-1. Uvod (s ciljevima istrazivanja)
+1. Uvod (s ciljevima istraživanja)
 2. Materijal i metode
 3. Rezultati i rasprava
-4. Zakljucak
+4. Zaključak
 5. Popis literature
 
-U Uvodu se na jasan i jezgrovit nacin opisuje tema rada i problemi koji e biti obraivani. U
-uvodu treba opisati namjeru rada i uvesti u problem. Uvod mora odgovoriti na pitanje o cemu
-je rijec, sto se i zasto istrazivalo te sto je u tome izvorno. U istrazivackom zavrsnom radu
-potrebno je u okviru uvoda i obraditi skraeni pregled literature iz predmetnog podrucja.
-Sastavni dio uvoda su ciljevi istrazivanja. Oni mogu biti ili u posljednjem pasusu uvoda ili
-odijeljeni posebnim podnaslovom u okviru Uvoda. U ciljevima istrazivanja potrebno je navesti
-(nabrojiti) sto se tocno istrazivanjima zeli utvrditi. Duzina uvoda treba biti 2-4 stranice.
+U Uvodu se na jasan i jezgrovit način opisuje tema rada i problemi koji će biti obrađivani. U
+uvodu treba opisati namjeru rada i uvesti u problem. Uvod mora odgovoriti na pitanje o čemu
+je riječ, što se i zašto istraživalo te što je u tome izvorno. U istraživačkom završnom radu
+potrebno je u okviru uvoda i obraditi skraćeni pregled literature iz predmetnog područja.
+Sastavni dio uvoda su ciljevi istraživanja. Oni mogu biti ili u posljednjem pasusu uvoda ili
+odijeljeni posebnim podnaslovom u okviru Uvoda. U ciljevima istraživanja potrebno je navesti
+(nabrojiti) što se točno istraživanjima želi utvrditi. Dužina uvoda treba biti 2-4 stranice.
 
 Materijal i metode
-Poglavlje Materijal i metode istrazivanja osiguravaju ponovljivost istrazivanja te se u njima
-detaljno navodi na cemu se (materijal) i kako (metode) istrazivalo. Postupak provedbe
-istrazivanja opisuje se kronoloski i logicnim redoslijedom. U ovom poglavlju trebaju se navesti
-izvori podataka, bilo da su to rezultati istrazivanja drugih autora, baze statistickih podataka (npr.
-Drzavni Zavod za statistiku, FAO, Eurostat, itd.), samostalno provedena anketa,
-knjigovodstveni podaci ili rezultati pokusa. Nadalje, opisuje se i definiraju: clanovi pokusa ili
-tretiranja, metode prikupljanja ankete (npr. za drustvene teme), nacin postavljanja pokusa,
+Poglavlje Materijal i metode istraživanja osiguravaju ponovljivost istraživanja te se u njima
+detaljno navodi na čemu se (materijal) i kako (metode) istraživalo. Postupak provedbe
+istraživanja opisuje se kronološki i logičnim redoslijedom. U ovom poglavlju trebaju se navesti
+izvori podataka, bilo da su to rezultati istraživanja drugih autora, baze statističkih podataka (npr.
+Državni Zavod za statistiku, FAO, Eurostat, itd.), samostalno provedena anketa,
+knjigovodstveni podaci ili rezultati pokusa. Nadalje, opisuje se i definiraju: članovi pokusa ili
+tretiranja, metode prikupljanja ankete (npr. za društvene teme), način postavljanja pokusa,
 
-===== [fazos-upute-zavrsni-2024 | str. 9] =====
-biljezenjem uz datume prikupljanja podataka, analiticke metode - laboratorijske (aparat,
-instrument), statisticke metode, koristeni softveri, itd. Duzina ovog dijela zavrsnog rada treba
-biti takva da omogui detaljan opis provedenog istrazivanja i na taj nacin osigura
-ponovljivost istrazivanja.
+===== [fazos-upute-diplomski-2024 | str. 17] =====
+Naslov rada
 
-Rezultati i rasprava vazan dio zavrsnog rada u kojem se prikazuju dobiveni rezultati logicnim
-slijedom. U pravilu su rezultati prikazani u tablicama, grafikonima, slikama te se u tekstu
-obrazlazu. U dogovoru s mentorom mogu biti u istom poglavlju s raspravom, tj. poglavlje
-rezultati i rasprava. Tu se postignuti rezultati komentiraju i usporeuju s rezultatima istrazivanja
-drugih autora u podrucju teme (a navedeni su u popisu literaturnih izvora), obrazlaze se ishod
-istrazivanja te znacenje dobivenih rezultata. Ovaj dio zavrsnog rada treba imati najmanje 8
-literaturnih navoda (sveucilisni udzbenici, znanstveni i strucni radovi itd.). Rezultati i
-rasprava pisu se u logicno organiziranim potpoglavljima unutar glavnog poglavlja Rezultati i
-rasprava. Rezultate treba dokumentirati tablicama, grafikonima i slikama, sto mora biti
-oznaceno i potpuno opisano. Svaka tablica, slika ili grafikon mora imati oznaku, broj i naslov
-(npr. Tablica 1. Naslov tablice). Ako je autor kreator rezultata, ispod tablice ili grafikona
-napisati: Izvor: autor. Ako su tablice ili grafikoni s interneta, u izvor napisati skraeni link.
-Hiper-linkove iskljuciti. Naslov tablice pise se iznad tablice, a naslov grafikona i slike ispod, uz
-centrirano poravnanje. U tekstu rada potrebno je referiranjene na tablice i ilustracije i to najblize
-mjestu gdje se na njih poziva. Primjeri: ,,U Tablici 1 prikazano je...." Ili nakon objasnjena
-tablice napisati: ,,...(Tablica 1)". Treba izbjegavati da poglavlje zavrsava s tablicom bez teksta
-poslije, ali isto tako da pocinje s tablicom bez pripadajueg, uvodnog teksta. Izvori tablica,
-grafikona, slika i sl. pisu se odmah ispod tablice, slike, grafikona itd. Treba izbjegavati iste
-rezultate prikazivati tablicom i grafikonom. Pod slikama se podrazumijevaju sheme, fotografije
-i sl. Ako su preuzete iz literature obavezno se mora navesti odgovarajui citat. Fotografija ne
-smije biti velicine vee od pola stranice. Izvori tablica, grafikona i fotografija preuzeti iz
-literature citiraju se navoenjem autora i godine, a u slucaju internetskog izvora pise se samo
-osnovna domena URL adrese. Ovaj dio rada treba participirati u ukupnom broju stranica
-zavrsnog rada s najveih postotkom u odnosu na druge pojedinacne dijelove zavrsnog
-rada.
-Prilikom citiranja autora ili navoenja literaturnih izvora u tekstu rada treba koristiti APA
+Sažetak:
 
-                                                                                                                           7
+Rad je izrađen na Fakultetu agrobiotehničkih znanosti Osijek
+Mentor:
+Komentor:
 
-===== [fazos-upute-zavrsni-2024 | str. 10] =====
-sustav:
-    � Navodi se prezime autora i godina u kojoj je rad objavljen. Npr. ,,Utvreno je da...
-         (Hanson, 2022.)" ili ,,Hanson (2022.) je utvrdio da..."
-    � ako se citira rad dva autora rada, treba navesti prezimena oba autora - npr. ,,Basso i
-         Antle (2020.) zakljucili su da..."
-    � ako je rad djelo vise autora, navodi se samo prvi autor i dopisuje kratica ,,sur." (npr.
-         Bolfe i sur., 2020.)
-    � ako su imena autora dio recenice, u zagradu se pise samo godina npr. Hanson (2022.)
-         navodi ... ili Basso i Antle (2020.) utvrdili su ...
-    � kod citiranja internetskih izvora u tekstu treba koristiti skraenu verziju internetske
-         adrese kako se tekst ne bi optereivao prevelikim linkovima. Datum pristupa se u tekstu
-         ne navodi.
+Broj stranica:
+Broj grafikona i slika:
+Broja tablica:
+Broj literaturnih navoda:
+Broj priloga:
+Jezik izvornika:
 
-Zakljucak je zavrsni dio rada. U zakljucku treba u pravilu kratko (opsega 1-2 stranice), jasno
-i pregledno odgovoriti na postavljene ciljeve istrazivanja i navesti sto se istrazivanjem utvrdilo
-te dati smjernice i ideje za daljnja istrazivanja. U zakljucku se ne iznose nove spoznaje, novi
-podaci ili informacije te se u pravilu ne navode novi izvori i ne upuuje se na literaturu.
+Ključne riječi:
 
-Popis literature sadrzi popis svih izvornika tj. znanstvenih radova, monografija, zbornika,
-knjiga, elektronickih casopisa i jedinica s Interneta iz kojih su dijelovi citirani u radu. Svi citati
-u tekstu rada moraju biti zastupljen u Popisu literature i obrnuto. Navode se samo izvori i radovi
-koji se spominju u tekstu zavrsnog rada. Ne navode se radovi koji se u radu ne citiraju niti oni
-na koje se u radu ne upuuje. Bibliografski podaci trebaju biti numerirani i poredani abecednim
-redom uzevsi u obzir prvo slovo prezimena prvog autora (Prilog 7). U popisu literature ne
-odvajati vrste literaturnih izvora (npr. knjige, radove u casopisima, internetske izvore), nego ih
-sve poredati zajedno abecednih redoslijedom kako je ve opisano. Ukupan broj literaturnih
-navoda je minimalno 12.
+Datum obrane:
 
-                                                                                                                           8
-
-===== [fazos-upute-zavrsni-2024 | str. 12] =====
-3. Izgled zavrsnog rada i obrada teksta
-
-Zavrsni rad mora imati minimalno 20 stranica, a preporuceni maksimalni broj stranica je 30.
-Numeracija stranica pocinje na stranici Uvoda i zavrsava s poglavljem Popis literature. Brojevi
-stranica ispisuju se u donjem desnom kutu.
-Rad treba pisati na papiru formata A4 (210*297 mm), s marginama 3 cm lijevo te 2,5 cm desno,
-gore i dolje, s obostranim poravnavanjem. Tekst se mora pisati samo s jedne strane lista, fontom
-Times New Roman uz razmak redova 1,5 i razmakom izmeu odlomaka 6 pt. Tekst treba
-logicno rasclaniti na odlomke.
-Tekst cijelog rada treba pisati fontom velicine 12 pt, a izuzetci su:
-
-    � na koricama i naslovnoj stranici tekst treba biti napisan slovima velicine 14 pt. Naslov
-         rada pise se podebljano i malim tiskanim slovima,
-
-    � tekst Temeljne dokumentacijske kartice font 10 i jednostruki prored,
-    � naslovi poglavlja 14 pt, podebljano, velikim tiskanim slovima, lijevo poravnanje,
+Stručno Povjerenstvo za ocjenu i obranu diplomskog rada:
+1. zvanje Ime Prezime, predsjednik/ca
+2. zvanje Ime Prezime, mentor/ica
+3. zvanje Ime Prezime, član/ica

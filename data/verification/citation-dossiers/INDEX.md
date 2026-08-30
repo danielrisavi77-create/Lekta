@@ -44,7 +44,7 @@ DIFF(dekl) = deklariran razlog (ocekivan, npr. tipfeler/artefakt izvora); grep! 
 | [pfst](pfst.md) | verified | custom-spec | 4 |  | 1 | 1 |  |  |
 | [pmf](pmf.md) | verified | custom-spec | 3 |  |  | 3 |  |  |
 | [pmfst](pmfst.md) | verified | custom-spec | 3 |  | 1 | 2 |  |  |
-| [pravo](pravo.md) | verified | custom-spec | 5 |  |  | 1 |  | 2 |
+| [pravo](pravo.md) | verified | custom-spec | 5 |  |  | 1 |  |  |
 | [pravri](pravri.md) | verified | custom-spec | 2 |  | 1 | 3 |  |  |
 | [ptfos](ptfos.md) | verified | custom-spec | 3 |  |  | 3 |  |  |
 | [pvzg](pvzg.md) | verified | style-pin | 0 |  |  | 0 |  |  |
@@ -77,6 +77,6 @@ DIFF(dekl) = deklariran razlog (ocekivan, npr. tipfeler/artefakt izvora); grep! 
 | [zsem](zsem.md) | verified | custom-spec | 3 |  |  | 3 |  |  |
 | [zvu](zvu.md) | verified | custom-spec | 2 |  |  | 4 |  |  |
 
-PROBLEM (1): pravo - nedeklariran DIFF/shema/grep, rijesi (kod verified znaci drift/regresiju).
+Nijedan spec nema nedeklariran DIFF, shema-gresku ni promasen grep.
 
 Verificirano: 71 / u pregledu (draft): 0.

@@ -8,7 +8,7 @@ Snapshot: `data/sources/fpz/fpz-upute-zavrsni-diplomski-2018.pdf` (hash `b504073
 Otvori PDF: `data/sources/fpz/fpz-upute-zavrsni-diplomski-2018.pdf#page=3`
 ```
 PIN     : izvor propisuje stil "vancouver" -> format ostaje obiteljski motor
-QUOTE   : Prilog 18. a) Primjer popisa upotrijebljene literature, inacica vankuverskog stila; kada se   [grep: OK]
+QUOTE   : Prilog 18. a) Primjer popisa upotrijebljene literature, inačica vankuverskog stila; kada se   [grep: OK]
 ```
 
 ## Verifikacija

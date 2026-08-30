@@ -19,7 +19,7 @@ NAPOMENA: Jedini knjizni primjer u ekstrakciji je tiskani rjecnik s korporativni
 Otvori PDF: `data/sources/pmf/pmf-geog-diplomski-2026.pdf#page=6`
 ```
 TEMPLATE: {authors}, {year}: {title}, {container} {volume}[[ ({issue})]], {pages}[[, DOI: {doi}]].
-QUOTE   : Klari, Z., 2016: Geographical aspects of the territorial organisation of   [grep: OK]
+QUOTE   : Klarić, Z., 2016: Geographical aspects of the territorial organisation of   [grep: OK]
 IZVOR   : Klari, Z., 2016: Geographical aspects of the territorial organisation of Croatia and comparison with other European countries, Hrvatski geografski glasnik 78 (2), 49-75, DOI: 10.21861/HGG78.02.02.
 RENDER  : Klari, Z., 2016: Geographical aspects of the territorial organisation of Croatia and comparison with other European countries, Hrvatski geografski glasnik 78 (2), 49-75, DOI: 10.21861/HGG78.02.02.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -30,7 +30,7 @@ NAPOMENA: Tab. 1: godina iza autora pa dvotocka, naslov, casopis, godiste (volum
 Otvori PDF: `data/sources/pmf/pmf-geog-diplomski-2026.pdf#page=5`
 ```
 TEMPLATE: {authors}, {year}: {title}, u: {editor} (ur.), {container}, {publisher}, {place}[[, {pages}]].
-QUOTE   : Kod urednickih knjiga, ako je knjiga izvorno pisana na hrvatskom, u zagradi iza inicijala   [grep: OK]
+QUOTE   : Kod uredničkih knjiga, ako je knjiga izvorno pisana na hrvatskom, u zagradi iza inicijala   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Ekstrakcija nema cijeli worked-example za poglavlje u urednickoj knjizi (Tab. 1 je stupcano ispremijesana i taj red nije uhvacen). Red je izveden iz oblika za clanak i knjigu (autor, godina: naslov, podaci o izdanju), a oznaka urednika iz pravila: za knjige na hrvatskom '(ur.)', za knjige na engleskom ili drugom jeziku 'ed.' odnosno 'eds.'. Veznik 'u:' nije potvrdjen izvorom. Potvrditi ili oboriti pri verifikaciji nad punom Tab. 1.
 ```
@@ -68,7 +68,7 @@ NAPOMENA: Upute ne obraduju pravne propise; za geografiju su rijedak tip izvora.
 ```
 TEMPLATE : ({authorsShort}, {year})   /  s pages: ({authorsShort}, {year}, {pages})
 RENDER   : (Lovric, 1988)   /  (Lovric, 1988, 45)
-QUOTE    : prepricani sadrzaj iz literature, npr. ,,(Chang, 2019)".   [grep: OK]
+QUOTE    : prepričani sadržaj iz literature, npr. „(Chang, 2019)“.   [grep: OK]
 NAPOMENA : Doslovni citat sa stranicom: '(Chang, 2019, 97)' (stranica odvojena ZAREZOM, ne dvotockom). Dva autora: '(Garay i Canoves, 2011)'. Tri i vise: prezime prvog + 'i dr.', npr. '(Graham i dr., 2000)', a u popisu literature SVI autori. Vise radova u kontinuitetu odvaja se tockom sa zarezom kronoloski '(Andriotis, 2002; 2006)'; ista godina dobiva slova '(Harvey, 2016a; 2016b)'; posredno citiranje preko 'prema' '(Ward 1975 prema Rianovi, 2007)'. Za institucijske dokumente i mrezne stranice u tekstu se navodi ime institucije i godina (str. 5).
 ```
 

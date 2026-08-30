@@ -14,6 +14,10 @@ const UNITS: DetectUnit[] = [
   { id: 'unizdhisp', name: 'Odjel za hispanistiku', institutionId: 'unizd', institutionName: 'Sveučilište u Zadru', programs: ['Odjel za hispanistiku i iberske studije (diplomski rad, Zadar)', 'Odjel za zdravstvene studije (diplomski rad, Zadar)'] },
   { id: 'ffri', name: 'Filozofski fakultet u Rijeci', institutionId: 'uniri', institutionName: 'Sveučilište u Rijeci', programs: ['Povijest', 'Opći profil ustanove'] },
   { id: 'ffzg', name: 'Filozofski fakultet', institutionId: 'unizg', institutionName: 'Sveučilište u Zagrebu', programs: ['Filozofija'] },
+  // Jedinice cije ime pocinje ZENSKIM pridjevom: njihov lokativ ("Muzickoj akademiji") je bio
+  // neprepoznatljiv dok `CASE_ENDINGS` nije imao nastavak `oj`.
+  { id: 'muza', name: 'Muzička akademija', institutionId: 'unizg', institutionName: 'Sveučilište u Zagrebu', programs: ['Kompozicija'] },
+  { id: 'zsem', name: 'Zagrebačka škola ekonomije i managementa', institutionId: 'zsem', institutionName: 'ZŠEM', programs: ['Ekonomija'] },
 ];
 
 describe('detectContextFromText', () => {
@@ -110,6 +114,21 @@ describe('detectContextFromText', () => {
       'Odjel za hispanistiku i iberske studije (diplomski rad, Zadar)',
     );
     expect(ctx!.program).toBe('Odjel za hispanistiku i iberske studije (diplomski rad, Zadar)');
+  });
+
+  /**
+   * ZENSKI LOKATIV. Naslovnica najcesce glasi "Rad obranjen NA Muzickoj akademiji", a ne u
+   * nominativu. Dok `CASE_ENDINGS` nije imao nastavak `oj`, cetiri jedinice (muza, zsem, umas,
+   * mapu) bile su u tom obliku posve neprepoznatljive.
+   *
+   * Promaklo je jer je raniji pokus lokativ tvorio SAMO muskim obrascem (`-om`), pa ta klasa nikad
+   * nije ni nastala. Nasao ju je neovisni verifikator vlastitim sklonidbenim generatorom.
+   */
+  it('zenski pridjev u lokativu se prepoznaje (Muzickoj, Zagrebackoj)', () => {
+    const a = detectContextFromText(UNITS, 'Diplomski rad izrađen na Muzičkoj akademiji, 2026.');
+    expect(a?.unitId).toBe('muza');
+    const b = detectContextFromText(UNITS, 'Rad obranjen na Zagrebačkoj školi ekonomije i managementa.');
+    expect(b?.unitId).toBe('zsem');
   });
 
   it('naziv jedinice se prepoznaje i u kosom padezu', () => {

@@ -2,8 +2,10 @@
  * Stanje MANIFESTA DOKAZA nad lokalnim korpusom: koliko dokumenata uopce smije brojati kao dokaz
  * na stvarnom radu (razina A), i sto tocno nedostaje ostalima.
  *
- * Read-only. Manifest se NE upisuje strojno: ocekivanje i potpis pregleda su ljudski zapis, a
- * upravo je njihovo strojno popunjavanje ono sto bi cijelu mjeru obesmislilo.
+ * Ne upisuje manifest: ocekivanje i potpis pregleda su ljudski zapis, a upravo bi ih strojno
+ * popunjavanje obesmislilo. Nije, medjutim, posve bez nuspojava: pokrenuta kroz `vite-node` povlaci
+ * vite plugin `generate-citation-tools`, koji pise u `dist/` (gitignored). Nijedna pracena datoteka
+ * se ne mijenja.
  *
  * Pokreni:  npx vite-node scripts/corpus-evidence.mts [--skeleton]
  */

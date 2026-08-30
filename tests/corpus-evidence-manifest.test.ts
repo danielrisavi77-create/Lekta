@@ -74,6 +74,31 @@ describe('manifest dokaza', () => {
     expect(manifestGaps(m)).toEqual([]);
   });
 
+  /**
+   * Rupe koje je nasao neovisni verifikator, obje iz istog razreda: usporedba je bila stroga na
+   * NIZU, ne na TRENUTKU.
+   */
+  it('sam datum bez sata nije dokaz da je ocekivanje prethodilo runu', () => {
+    const m: EvidenceManifest = { ...UREDAN, expected: { ...UREDAN.expected, recordedAt: '2026-08-30' } };
+    expect(expectationPrecedesRun(m), 'ponoc UTC bi propustila svaki run istoga dana').toBe(false);
+  });
+
+  it('redoslijed runova se cita po VREMENU, ne leksikografski', () => {
+    // Leksikografski je "2026-08-31T01:00:00Z" ispred "2026-08-30T23:00:00.000-05:00",
+    // a kronoloski je obrnuto: -05:00 run je 2026-08-31T04:00Z, dakle KASNIJI.
+    const m: EvidenceManifest = {
+      ...UREDAN,
+      expected: { ...UREDAN.expected, recordedAt: '2026-08-31T02:00:00.000Z' },
+      runs: ['2026-08-30T23:00:00.000-05:00', '2026-08-31T01:00:00Z'],
+    };
+    expect(expectationPrecedesRun(m), 'zapis je NAKON prvog stvarnog runa').toBe(false);
+  });
+
+  it('neispravan datum runa se odbija, ne preskace', () => {
+    const m: EvidenceManifest = { ...UREDAN, runs: ['nije-datum'] };
+    expect(expectationPrecedesRun(m)).toBe(false);
+  });
+
   it('ocekivanje bez potpisa nije dokaz', () => {
     const m: EvidenceManifest = { ...UREDAN, expected: { ...UREDAN.expected, recordedBy: '  ' } };
     expect(manifestGaps(m)).toContain('ocekivanje-bez-potpisa');

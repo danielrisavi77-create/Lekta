@@ -49,7 +49,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Rauni, R. (2005). Pretpostavke liberalnog razumijevanja covjeka. Zagreb: Hrvatsko",
+        "quoteRaw": "Raunić, R. (2005). Pretpostavke liberalnog razumijevanja čovjeka. Zagreb: Hrvatsko",
         "sourcePage": "str. 3",
         "note": "Shema 1 autor: 'Prezime, I. (godina). Naslov: podnaslov. Mjesto izdavaca: Izdavac.' Inicijali s tockom, tocka iza (godina). Vise autora (str. 4, primjer 'Matijevi, M., Muzi, V. i Joki, M. (2003)...'): separator ', ' i zadnji spoj ' i '. Naslovi knjiga u izvorniku su kurzivom (str. 4, 'kosi tekst'); alat radi plain text."
       },
@@ -79,7 +79,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Dweck, C.S. (1989). Motivacijski procesi kao determinante ucenja. U M. Kovacevi i N.N.",
+        "quoteRaw": "Dweck, C.S. (1989). Motivacijski procesi kao determinante učenja. U M. Kovačević i N.N.",
         "sourcePage": "str. 4",
         "note": "Shema (str. 4): 'Prezimeautora, I. (godina). Naslov poglavlja: podnaslov. U I. Prezimeurednika1 i I. Prezimeurednika2 (ur.), Naslov knjige: podnaslov (str. prva-zadnja). Mjesto izdavaca: Izdavac.' Kod urednika inicijali idu PRIJE prezimena (given-first) pa se editor upisuje kao 'I. Prezime i I. Prezime'; skracenica (ur.) S tockom. Puni primjer: '...U M. Kovacevi i N.N. Soljan (ur.), Psihologijska znanost i edukacija (str. 43-63). Zagreb: Skolske novine.'"
       },
@@ -109,7 +109,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Loncari, D. (2006). Suocavanje ucenika s akademskim i interpersonalnim stresnim",
+        "quoteRaw": "Lončarić, D. (2006). Suočavanje učenika s akademskim i interpersonalnim stresnim",
         "sourcePage": "str. 5",
         "note": "Jedini primjer clanka u ekstrakciji je online clanak s Hrcka; shema (str. 5): 'Prezime, I. (godina...). Naslov: podnaslov clanka. Naslov casopisa ili knjige. Pribavljeno DATUM, sa URL'. U ekstrakciji NEMA volumena/broja/stranica za clanak (moguce da je offline oblik izostavljen iz pdftotext izvlacenja). Grupa Pribavljeno/URL je opcionalna za tiskani clanak."
       },
@@ -136,7 +136,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Teorija izbora u skoli. Pribavljeno 01.09.2008., sa",
+        "quoteRaw": "Teorija izbora u školi. Pribavljeno 01.09.2008., sa",
         "sourcePage": "str. 5",
         "note": "Shema bez autora/datuma (str. 5): 'Naslov: podnaslov. Pribavljeno DATUM, sa URL'. Autorska varijanta (str. 5): 'Vuceti-Skrbi, A. (2008., 30. rujna). ...! Pribavljeno 01.10.2008., sa http://...' (godina moze nositi i datum objave). Napomena izvora: ostali izvori s interneta i radovi bez jasnog autorstva biljeze se kao FUSNOTE u podnozju stranice, ne u popisu literature."
       },
@@ -161,7 +161,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Prezime, I. (godina). Naslov: podnaslov. Mjesto izdavaca: Izdavac.",
+        "quoteRaw": "Prezime, I. (godina). Naslov: podnaslov. Mjesto izdavača: Izdavač.",
         "sourcePage": "str. 3",
         "note": "Izvor (ekstrakcija) NE obraduje citiranje diplomskih/zavrsnih radova kao izvora. Predlozak je izveden iz sheme za knjigu (str. 3): izdavac zamijenjen ustanovom. Bez izmisljene oznake vrste rada. Potvrditi ili oboriti pri verifikaciji."
       },
@@ -176,7 +176,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Prezime, I. (godina). Naslov: podnaslov. Mjesto izdavaca: Izdavac.",
+        "quoteRaw": "Prezime, I. (godina). Naslov: podnaslov. Mjesto izdavača: Izdavač.",
         "sourcePage": "str. 3",
         "note": "Izvor (ekstrakcija) NE obraduje pravne izvore/propise. Predlozak je izveden po analogiji s opcim autor-godina bibliografskim oblikom (naslov propisa, godina, sluzbeno glasilo, broj). Cijeli oblik je pretpostavka; potvrditi ili oboriti pri verifikaciji."
       },

@@ -1,198 +1,33 @@
-===== [mev-upute-zavrsni | str. 1] =====
-Prilog 3
-
-MEIMURSKO VELEUCILISTE U CAKOVCU
-
-          UPUTE ZA IZRADU ZAVRSNOG RADA
-NA MEIMURSKOM VELEUCILISTU U CAKOVCU
-
-Na Meimurskom veleucilistu u Cakovcu preddiplomski strucni studij te specijalisticki
-diplomski strucni studij zavrsava polaganjem svih ispita, izradom zavrsnog rada i polaganjem
-odgovarajueg zavrsnog ispita. Zavrsni rad je samostalna strucna obrada utvrene i odobrene
-teme. Izradom zavrsnog rada student treba pokazati sposobnost primjene teorijskog i
-prakticnog znanja te sposobnost samostalnog koristenja strucnom i znanstvenom literaturom u
-pismenoj obradi teme. Zavrsni rad ne mora biti izvorni rad, ali ga student mora samostalno
-izraditi. Rad se pise iz tematike podrucja studija kojeg je student pohaao.
-
-Prema Pravilniku o zavrsnom radu, zavrsnom ispitu i zavrsetku preddiplomskih strucnih studija
-i specijalistickog diplomskog strucnog studija, clanak 10., zavrsni rad mora imati najmanje 30
-stranica. Preporuceni opseg stranica je 30 do 80.
-
-Student u dogovoru s mentorom odabire nacin tehnickog oblikovanja rada i nacin citiranja
-literature, kada postoji vise mogunosti odabira. Mentor je strucna podrska studentu kod pisanja
-zavrsnog rada, ali i podrska kod tehnickog oblikovanja rada.
-
-Osnovni dijelovi zavrsnog rada su:
-
-         Naslov
-
-         Sazetak
-
-         Sadrzaj
-
-    1. Uvod
-
-    2. Cilj rada/istrazivanja
-
-    3. Materijali i metode
-
-    4. Rezultati
-
-    5. Rasprava
-
-    6. Zakljucci
-
-    7. Popis literature
-
-         Prilozi
-
-    Naslov � naslovna stranica treba sadrzavati naziv veleucilista i studija, ime i
-prezime, naslov rada, naznaku da se radi o zavrsnom radu, m jesto i godinu izdavanja
-(Dodatak 1.A). Iza naslovne stranice slijedi stranica na kojoj se uz navedeno na prvoj
-naslovnoj strani navodi i mentor rada (Dodatak 1.B), te stranica sa zahvalom onima koji su
-pomogli studentu pri izradi rada.
-
-    Sazetak � u sazetku je potrebno ukratko prikazati cijeli rad. Opseg sazetka je 300-500
-rijeci. Ispod sazetka pisu se kljucne rijeci. Preporucen broj kljucnih rijeci je od 5-7. Sazetak i
-kljucne rijeci se pisu u italic formi.
-
-===== [mev-upute-zavrsni | str. 2] =====
-Sadrzaj � sadrzaj predstavlja tematski pregled rada i daje uvid na kojim
-stranicama se nalaze pojedini dijelovi rada.
-
-1. Uvod daje osnovne podatke o podrucju istrazivanja, odnosno obicno sadrzi ope
-    teoretske pretpostavke u vezi problema koji se zeli istraziti, ukratko se izlazu
-    rezultati drugih autora, izlaze s e opis do sada provedenih istrazivanja istog ili slicnog
-    problema i opis teorija koje su formirane na temelju ranijih istrazivanja. Uvodom se
-    obuhvaa u pocetku najsire podrucje uz koje je problem vezan i kasnije se prelazi
-    na specificne probleme u vezi kojih je istrazivanje provedeno. Sve citate potrebno je
-    pravilno oznaciti (Dodatak 1.C).
-
-2. Cilj rada/istrazivanja obrazlaze zasto je autor istrazivao odabranu temu i koji je cilj
-    njegovog rada/istrazivanja. Ponekad se postavljaju i odreene hipoteze s ciljem da se
-    njihova ispravnost provjeri istrazivackim postupkom.
-
-3. Materijali i metode je poglavlje u kojem treba tocno opisati sve materijale i metode
-    koristene u radu. Ukoliko se provedeno istrazivanje odnosi na populaciju ispitanika, tada
-    metode istrazivanja obuhvaaju opis metoda izbora uzorka ispitanika ili pojava odabranih
-    za ispitivanje, zatim nacrt istrazivanja, to jest nacin provoenja pojedinih istrazivackih
-    postupaka, specificne metode kojima se ti postupci provode, kao i opis instrumentarija
-    koristenog za provoenje ispitivanja. Sredstva (razlicite ureaje) i postupke rada treba
-
-===== [mev-upute-zavrsni | str. 2] =====
-4. Rezultati su vazan dio rada. Treba prikazati samo glavne i reprezentativne rezultate te
-    odabrati ono bitno. Rezultati trebaju biti opisani na jednostavan i jasan nacin, logicnim
-    slijedom, a u pravilu ih treba potkrijepiti fotografijama, crtezima ili grafickim prikazima.
-
-5. Rasprava (Diskusija) je odjeljak koji govori o znacenju rezultata. Nije potrebno
-    ponavljati rezultate ve procijeniti koliko se oni slazu s poznatim cinjenicama i rezultatima
-    drugih autora.
-
-6. Zakljucci se izvode na osnovi provedenih istrazivanja. Sadrze vrlo kratku rekapitulaciju
-    svih rezultata, njihov znacaj kao i sugestije (preporuke) za daljnja istrazivanja koja mogu
-    jos potpunije objasniti ispitivanu pojavu.
-
-7. Literatura - na kraju rada se na posebnoj stranici navodi popis literature. Literaturu
-    koju e student koristiti u radu dogovara s mentorom. Upute o navoenju literature nalaze
-    se u Dodatak 1.D.
-
-    Prilozi sadrze protokole koristene u istrazivanju, anketne upitnike ako se radi o anketnim
-    istrazivanjima, standardizirane upute za ispitanike i slicno.
-
-TEHNICKO OBLIKOVANJE RADA
-
-         Tehnickom oblikovanju rada potrebno je posvetiti posebnu pozornost. Uredno
-i pregledno pripremljen rad olaksava citanje, a ujedno daje i uvid u sustavnost obrade teme
-rada. Rad se pise na racunalu. Uz primjeren vanjski izgled i postivanje sadrzajne strukture,
-rad mora biti korektan u gramatickom, pravopisnom i stilskom smislu.
-
-===== [mev-upute-zavrsni | str. 3] =====
-Za sve dijelove rada odgovara student. Njegova odgovornost vezana je uz tocnost
-navedenih podataka, oznacavanje citiranih dijelova tuih radova, kao i pravopisnu i
-gramaticku ispravnost.
-
-Preporuke za tehnicko oblikovanje rada
-
-    1. Rad se pise na standardnom A4 papiru. Gotov rad uvezuje se u tvrdi uvez
-    2. Ispis stranica: jednostrano.
-    3. Vrsta slova: najcese Times New Roman (ili druga u dogovoru s mentorom).
-    4. Rad se pise velicinom slova:
-
-         - font 14 � naslovna stranica
-
-         - font 14 � naslovi poglavlja
-
-         - font 12 � naslovi potpoglavlja
-
-         - font 12 � tekst rada
-
-         - font 10 � fusnote.
-
-    5. Poravnanje teksta je obostrano.
-    6. Margine trebaju iznositi 3 cm.
-    7. Prored:
-
-         - 1,5 u glavnom dijelu teksta
-         - 1 u pozivnim biljeskama, odnosno fusnotama.
-    8. Rad treba pisati u odlomcima, pri cemu je odlomke mogue odvajati na jedan od ova
-         dva nacina, dosljedno u cijelom radu:
-        - pocetak odlomka uvui 0,5 cm, ili
-        - odlomke odvojiti redom razmaka od 6 tocaka (6 pt).
-    9. Naslove i podnaslove treba od teksta rada odvojiti redom razmaka od 10 tocaka (10
-         pt).
-    10. Iza svake rijeci nalazi se jedan razmak.
-    11. Pravopisni znakovi kao sto su tocka, upitnik, usklicnik, zarez, dvotocke, tocka zarez,
-         otvorena i zatvorena zagrada, navodnici na pocetku i kraju navoda, te znak za
-         postotak pisu se zajedno s rijecju iza koje slijede (izmeu tih znakova i rijeci ne
-         stavlja se razmak). Iza odreenog znaka, a prije sljedee rijeci dolazi razmak.
-    12. Brojevi stranica navode se na desnoj strani podnozja stranice. Numeracija stranica
-
-===== [mev-upute-zavrsni | str. 3] =====
-pocinju brojati od unutarnje naslovne strane, te prva stranica nosi broj ,,1". Pisu se
-         arapskim brojevima, u istom tipu i velicini slova.
-    13. Rad treba pisati u pasivu, a ne u prvom licu jednine
-        (Npr.: ispravno bi bilo: ,,U ovom radu se zeli prikazati..." a neispravno ,,Ja sam ovim
-        radom zelio prikazati...").
-    14. Rijeci na stranom jeziku navode se u zagradama u italic formi. Npr.: (engl. Software),
-         (njem. Netzwerk).
-    15. Na svakoj strani nalazi se zaglavlje (engl. header) i podnozje (engl. footer). U
-         zaglavlju stranice pise se ime i prezime studenta koji je napisao zavrsni rad (poravnato
-         na lijevi rub) i naslov zavrsnog rada (poravnato na desni rub). U podnozju stranice
-         pise se puni naziv Veleucilista (lijevo) i broj stranice (desno). Tekst zaglavlja i
-         podnozja u punoj se sirini odvaja od tijela stranice vodoravnom crtom.
-    16. Fusnote se pisu u podnozju stranice na kojoj su spomenute, a numeriraju se arapskim
-         brojevima.
-
 ===== [mev-upute-zavrsni | str. 7] =====
 Dodatak 1.C Citiranje literature
 
-         Svaka tvrdnja, teorija ili rezultat vezan uz ispitivani problem, koristeni iz
-literature, moraju sadrzavati tocne navode o izvoru podataka. Na taj nacin svatko tko na
-temelju opisanog istrazivanja zeli istrazivati istu ili slicnu pojavu moze imati uvid u
-koristenu literaturu, kao i tocnost navedenih tvrdnji i teorija. Pri izradi rada mogu se
+         Svaka tvrdnja, teorija ili rezultat vezan uz ispitivani problem, korišteni iz
+literature, moraju sadržavati točne navode o izvoru podataka. Na taj način svatko tko na
+temelju opisanog istraživanja želi istraživati istu ili sličnu pojavu može imati uvid u
+korištenu literaturu, kao i točnost navedenih tvrdnji i teorija. Pri izradi rada mogu se
 koristiti i podaci s Interneta, no pritom je potrebno navesti punu adresu web stranice u
-popisu literature. Nacin kako se i kojim redoslijedom navode podaci u popisu citirane
-literature, ukoliko se citiraju casopisi, odnosno knjige, nalazi se nastavku teksta.
+popisu literature. Način kako se i kojim redoslijedom navode podaci u popisu citirane
+literature, ukoliko se citiraju časopisi, odnosno knjige, nalazi se nastavku teksta.
 
-         Student u dogovoru sa svojim mentorom odabire koji e nacin citiranja koristiti
-prilikom pisanja zavrsnog rada, ali je vazno da sve reference u radu budu navedene prema
-istom, odabranom nacinu citiranja.
+         Student u dogovoru sa svojim mentorom odabire koji će način citiranja koristiti
+prilikom pisanja završnog rada, ali je važno da sve reference u radu budu navedene prema
+istom, odabranom načinu citiranja.
 
     1. Harvardski stil
     Po tzv. Harvardskom sustavu u tekstu se u zagradama navodi prezime autora te godina u
-kojoj je rad objavljen, na primjer: (Creasy, 1987); ako su dva autora clanka treba navesti oba
-(Dubey i Sharma, 1990), ako je vise autora navodi se prvi pa se dopise kratica za ,,i
-suradnici" (Yang i sur., 1989). Ako je ime autora dio recenice, u zagradu se pise samo godina
+kojoj je rad objavljen, na primjer: (Creasy, 1987); ako su dva autora članka treba navesti oba
+(Dubey i Sharma, 1990), ako je više autora navodi se prvi pa se dopiše kratica za „i
+suradnici“ (Yang i sur., 1989). Ako je ime autora dio rečenice, u zagradu se piše samo godina
 npr. Olsson (1990) je utvrdio da.......
-    Popis literature na kraju rada sadrzi bibliografske reference po abecednom redu autora.
+    Popis literature na kraju rada sadrži bibliografske reference po abecednom redu autora.
     2. VanCouverski stil
-    Prilikom VanCouverskog stila citiranja koristi se numericka metoda citiranja, tj. reference
+    Prilikom VanCouverskog stila citiranja koristi se numerička metoda citiranja, tj. reference
 se u tekstu identificiraju arapskim brojevima u uglatim zagradama i to onim redom kojim
-se spominje u tekstu. Npr.: Istrazivanja provedena na populaciji.... [1] i pacijenata oboljelih
-od.... [2, 3] pokazala su da... Reference se u popisu literature nizu tim istim redoslijedom,
+se spominje u tekstu. Npr.: Istraživanja provedena na populaciji.... [1] i pacijenata oboljelih
+od.... [2, 3] pokazala su da... Reference se u popisu literature nižu tim istim redoslijedom,
 odnosno u popisu se nalazi broj u zagradi koji je naveden i u tekstu ispred citata.
 
-Dodatak 1.D Navoenje popisa literature
+Dodatak 1.D Navođenje popisa literature
 
 Knjiga, odnosno monografija:
     1. Prezime i inicijali imena autora
@@ -200,37 +35,340 @@ Knjiga, odnosno monografija:
     3. Naslov i podnaslov knjige knjige
     4. Broj izdanja (ako nije prvo)
     5. Mjesto izdavanja
-    6. Ime izdavaca
+    6. Ime izdavača
 
 Primjer 1:
-Silobrci, V. (2003). Kako sastaviti, objaviti i ocijeniti znanstveno djelo. 5. izd. Zagreb,
+Silobrčić, V. (2003). Kako sastaviti, objaviti i ocijeniti znanstveno djelo. 5. izd. Zagreb,
 Medicinska naklada.
 
 ===== [mev-upute-zavrsni | str. 8] =====
-2. Godina objave casopisa
+2. Godina objave časopisa
     3. Naslov i podnaslov rada (navodnici!)
-    4. Naslov casopisa (kurziv!)
-    5. broj sveska (volumena ili godista)
-    6. broj svesia (pojedinacnog broja)
+    4. Naslov časopisa (kurziv!)
+    5. broj sveska (volumena ili godišta)
+    6. broj svešćića (pojedinačnog broja)
     7. raspon stranica
 
 Primjer 4:
 
-Davies, E. (1997). ,,Learn by wire: managing network access to learning materials", The
+Davies, E. (1997). „Learn by wire: managing network access to learning materials“, The
 electronic library, vol. 15(3), 658-693.
 
 Literatura preuzeta s internetskih stranica:
 
     1. Prezime i inicijali imena autora (ako je poznat).
-    2. Potpuni naslov clanka (djela) � stranice.
-    3. Tocan izvor - internet adresa izvora.
-    4. Datum preuzimanja sadrzaja s interneta (u zagradi).
+    2. Potpuni naslov članka (djela) – stranice.
+    3. Točan izvor - internet adresa izvora.
+    4. Datum preuzimanja sadržaja s interneta (u zagradi).
 
 Primjer 5.
 
-Toki, M.; Proklin, M. Znacajke racunovodstvenoga informacijskog sustava poduzetnika.
+Tokić, M.; Proklin, M. Značajke računovodstvenoga informacijskog sustava poduzetnika.
 http://hrcak.srce.hr/index.php?show=clanak&id_clanak_jezik=112975 (01.09.2012.)
 
 Primjer 6.
 
 IEEE- Advancing Technology for Humanity. http://www.ieee.org/index.html (05.09.2012.)
+
+===== [mev-upute-zavrsni | str. 1] =====
+Prilog 3
+
+MEĐIMURSKO VELEUČILIŠTE U ČAKOVCU
+
+          UPUTE ZA IZRADU ZAVRŠNOG RADA
+NA MEĐIMURSKOM VELEUČILIŠTU U ČAKOVCU
+
+Na Međimurskom veleučilištu u Čakovcu preddiplomski stručni studij te specijalistički
+diplomski stručni studij završava polaganjem svih ispita, izradom završnog rada i polaganjem
+odgovarajućeg završnog ispita. Završni rad je samostalna stručna obrada utvrđene i odobrene
+teme. Izradom završnog rada student treba pokazati sposobnost primjene teorijskog i
+praktičnog znanja te sposobnost samostalnog korištenja stručnom i znanstvenom literaturom u
+pismenoj obradi teme. Završni rad ne mora biti izvorni rad, ali ga student mora samostalno
+izraditi. Rad se piše iz tematike područja studija kojeg je student pohađao.
+
+Prema Pravilniku o završnom radu, završnom ispitu i završetku preddiplomskih stručnih studija
+i specijalističkog diplomskog stručnog studija, članak 10., završni rad mora imati najmanje 30
+stranica. Preporučeni opseg stranica je 30 do 80.
+
+Student u dogovoru s mentorom odabire način tehničkog oblikovanja rada i način citiranja
+literature, kada postoji više mogućnosti odabira. Mentor je stručna podrška studentu kod pisanja
+završnog rada, ali i podrška kod tehničkog oblikovanja rada.
+
+Osnovni dijelovi završnog rada su:
+
+         Naslov
+
+         Sažetak
+
+         Sadržaj
+
+    1. Uvod
+
+    2. Cilj rada/istraživanja
+
+    3. Materijali i metode
+
+    4. Rezultati
+
+    5. Rasprava
+
+    6. Zaključci
+
+    7. Popis literature
+
+         Prilozi
+
+    Naslov – naslovna stranica treba sadržavati naziv veleučilišta i studija, ime i
+prezime, naslov rada, naznaku da se radi o završnom radu, m jesto i godinu izdavanja
+(Dodatak 1.A). Iza naslovne stranice slijedi stranica na kojoj se uz navedeno na prvoj
+naslovnoj strani navodi i mentor rada (Dodatak 1.B), te stranica sa zahvalom onima koji su
+pomogli studentu pri izradi rada.
+
+    Sažetak – u sažetku je potrebno ukratko prikazati cijeli rad. Opseg sažetka je 300-500
+riječi. Ispod sažetka pišu se ključne riječi. Preporučen broj ključnih riječi je od 5-7. Sažetak i
+ključne riječi se pišu u italic formi.
+
+===== [mev-upute-zavrsni | str. 2] =====
+Sadržaj – sadržaj predstavlja tematski pregled rada i daje uvid na kojim
+stranicama se nalaze pojedini dijelovi rada.
+
+1. Uvod daje osnovne podatke o području istraživanja, odnosno obično sadrži opće
+    teoretske pretpostavke u vezi problema koji se želi istražiti, ukratko se izlažu
+    rezultati drugih autora, izlaže s e opis do sada provedenih istraživanja istog ili sličnog
+    problema i opis teorija koje su formirane na temelju ranijih istraživanja. Uvodom se
+    obuhvaća u početku najšire područje uz koje je problem vezan i kasnije se prelazi
+    na specifične probleme u vezi kojih je istraživanje provedeno. Sve citate potrebno je
+    pravilno označiti (Dodatak 1.C).
+
+2. Cilj rada/istraživanja obrazlaže zašto je autor istraživao odabranu temu i koji je cilj
+    njegovog rada/istraživanja. Ponekad se postavljaju i određene hipoteze s ciljem da se
+    njihova ispravnost provjeri istraživačkim postupkom.
+
+3. Materijali i metode je poglavlje u kojem treba točno opisati sve materijale i metode
+    korištene u radu. Ukoliko se provedeno istraživanje odnosi na populaciju ispitanika, tada
+    metode istraživanja obuhvaćaju opis metoda izbora uzorka ispitanika ili pojava odabranih
+    za ispitivanje, zatim nacrt istraživanja, to jest način provođenja pojedinih istraživačkih
+    postupaka, specifične metode kojima se ti postupci provode, kao i opis instrumentarija
+    korištenog za provođenje ispitivanja. Sredstva (različite uređaje) i postupke rada treba
+
+===== [mev-upute-zavrsni | str. 2] =====
+4. Rezultati su važan dio rada. Treba prikazati samo glavne i reprezentativne rezultate te
+    odabrati ono bitno. Rezultati trebaju biti opisani na jednostavan i jasan način, logičnim
+    slijedom, a u pravilu ih treba potkrijepiti fotografijama, crtežima ili grafičkim prikazima.
+
+5. Rasprava (Diskusija) je odjeljak koji govori o značenju rezultata. Nije potrebno
+    ponavljati rezultate već procijeniti koliko se oni slažu s poznatim činjenicama i rezultatima
+    drugih autora.
+
+6. Zaključci se izvode na osnovi provedenih istraživanja. Sadrže vrlo kratku rekapitulaciju
+    svih rezultata, njihov značaj kao i sugestije (preporuke) za daljnja istraživanja koja mogu
+    još potpunije objasniti ispitivanu pojavu.
+
+7. Literatura - na kraju rada se na posebnoj stranici navodi popis literature. Literaturu
+    koju će student koristiti u radu dogovara s mentorom. Upute o navođenju literature nalaze
+    se u Dodatak 1.D.
+
+    Prilozi sadrže protokole korištene u istraživanju, anketne upitnike ako se radi o anketnim
+    istraživanjima, standardizirane upute za ispitanike i slično.
+
+TEHNIČKO OBLIKOVANJE RADA
+
+         Tehničkom oblikovanju rada potrebno je posvetiti posebnu pozornost. Uredno
+i pregledno pripremljen rad olakšava čitanje, a ujedno daje i uvid u sustavnost obrade teme
+rada. Rad se piše na računalu. Uz primjeren vanjski izgled i poštivanje sadržajne strukture,
+rad mora biti korektan u gramatičkom, pravopisnom i stilskom smislu.
+
+===== [mev-upute-zavrsni | str. 3] =====
+Za sve dijelove rada odgovara student. Njegova odgovornost vezana je uz točnost
+navedenih podataka, označavanje citiranih dijelova tuđih radova, kao i pravopisnu i
+gramatičku ispravnost.
+
+Preporuke za tehničko oblikovanje rada
+
+    1. Rad se piše na standardnom A4 papiru. Gotov rad uvezuje se u tvrdi uvez
+    2. Ispis stranica: jednostrano.
+    3. Vrsta slova: najčešće Times New Roman (ili druga u dogovoru s mentorom).
+    4. Rad se piše veličinom slova:
+
+         - font 14 – naslovna stranica
+
+         - font 14 – naslovi poglavlja
+
+         - font 12 – naslovi potpoglavlja
+
+         - font 12 – tekst rada
+
+         - font 10 – fusnote.
+
+    5. Poravnanje teksta je obostrano.
+    6. Margine trebaju iznositi 3 cm.
+    7. Prored:
+
+         - 1,5 u glavnom dijelu teksta
+         - 1 u pozivnim bilješkama, odnosno fusnotama.
+    8. Rad treba pisati u odlomcima, pri čemu je odlomke moguće odvajati na jedan od ova
+         dva načina, dosljedno u cijelom radu:
+        - početak odlomka uvući 0,5 cm, ili
+        - odlomke odvojiti redom razmaka od 6 točaka (6 pt).
+    9. Naslove i podnaslove treba od teksta rada odvojiti redom razmaka od 10 točaka (10
+         pt).
+    10. Iza svake riječi nalazi se jedan razmak.
+    11. Pravopisni znakovi kao što su točka, upitnik, uskličnik, zarez, dvotočke, točka zarez,
+         otvorena i zatvorena zagrada, navodnici na početku i kraju navoda, te znak za
+         postotak pišu se zajedno s riječju iza koje slijede (između tih znakova i riječi ne
+         stavlja se razmak). Iza određenog znaka, a prije sljedeće riječi dolazi razmak.
+    12. Brojevi stranica navode se na desnoj strani podnožja stranice. Numeracija stranica
+
+===== [mev-upute-zavrsni | str. 3] =====
+počinju brojati od unutarnje naslovne strane, te prva stranica nosi broj „1“. Pišu se
+         arapskim brojevima, u istom tipu i veličini slova.
+    13. Rad treba pisati u pasivu, a ne u prvom licu jednine
+        (Npr.: ispravno bi bilo: „U ovom radu se želi prikazati...“ a neispravno „Ja sam ovim
+        radom želio prikazati…“).
+    14. Riječi na stranom jeziku navode se u zagradama u italic formi. Npr.: (engl. Software),
+         (njem. Netzwerk).
+    15. Na svakoj strani nalazi se zaglavlje (engl. header) i podnožje (engl. footer). U
+         zaglavlju stranice piše se ime i prezime studenta koji je napisao završni rad (poravnato
+         na lijevi rub) i naslov završnog rada (poravnato na desni rub). U podnožju stranice
+         piše se puni naziv Veleučilišta (lijevo) i broj stranice (desno). Tekst zaglavlja i
+         podnožja u punoj se širini odvaja od tijela stranice vodoravnom crtom.
+    16. Fusnote se pišu u podnožju stranice na kojoj su spomenute, a numeriraju se arapskim
+         brojevima.
+
+===== [mev-predlozak-prilog2 | str. 5] =====
+Sažetak (14 pt, Bold) (naslov u stilu Naslov 1) (14 pt, Bold)
+
+    U sažetku treba izraziti najvažnije ideje i rezultate završnog/diplomskog rada. Sažetak je u
+opsegu od 100 - 400 riječi i smješten na početku rada prije sadržaja.
+
+    Na kraju sažetka potrebno je navesti ključne riječi rada, 5 – 7 riječi, a koje se pišu u Italic
+formi.
+
+    Sažetak i ključne riječi potrebno je prevesti na novoj stranici na engleski jezik.
+    Stranica sažetka se ne numerira.
+    Ključne riječi: završni rad, diplomski rad, predložak, citiranje, numeriranje
+
+===== [mev-predlozak-prilog2 | str. 6] =====
+Abstract (naslov u stilu Naslov 1) (14 pt, Bold) (14 pt, Bold)
+
+    The summary should express the most important ideas and results of the final/diploma
+thesis. The summary is in the range of 100 - 400 words and placed at the beginning of the paper
+before the content.
+
+    At the end of the abstract, it is necessary to indicate the key words of the paper, 5-7 words,
+which are written in Italic form.
+
+    The summary and keywords need to be translated into English on the new page.
+    The summary page is not numbered.
+    Key words: template, citation, final thesis, graduate thesis, numbering
+
+===== [mev-predlozak-prilog2 | str. 8] =====
+SADRŽAJ
+
+1. UVOD.......................................................................................................................... 1
+2. POGLAVLJA .............................................................................................................. 2
+
+  2.1. Potpoglavlja ............................................................................................................. 2
+
+      2.1.1. Podnaslov treće razine ............................................................................................................. 2
+
+  2.2. Osnovne tehničke upute za pisanje (oblikovanje) teksta ......................................... 2
+
+3. NAVOĐENJE REFERENCI....................................................................................... 4
+
+  3.1. Primjeri pisanja citata u tekstu ................................................................................. 5
+
+      3.1.1. Organizacija kao autor............................................................................................................. 6
+      3.1.2. Više radova odjednom .............................................................................................................. 6
+      3.1.3. Sekundarni citat........................................................................................................................ 6
+
+  3.2. Primjeri pisanja referenci ......................................................................................... 6
+
+      3.2.1. Članak u časopisu .................................................................................................................... 6
+      3.2.2. Članak u zborniku radova s konferencije ................................................................................. 7
+      3.2.3. Magisterij ili disertacija ........................................................................................................... 7
+      3.2.4. Novinski članak ........................................................................................................................ 7
+      3.2.5. Mrežna stranica, e-izvori.......................................................................................................... 7
+      3.2.6. Zakoni, pravila i norme ............................................................................................................ 8
+
+  3.3. Parafraziranje ........................................................................................................... 8
+
+4. TABLICE I ILUSTRACIJE (slike, grafikoni i crteži, jednadžbe) .............................. 9
+
+  4.1. Primjer označavanja tablica ..................................................................................... 9
+  4.2. Primjer označavanja slike ili crteža ....................................................................... 10
+  4.3. Navođenje jednadžbi.............................................................................................. 10
+
+      4.3.1. Navođenje jednadžbi u tekstu ..................................................................................................10
+
+  4.4. Pisanje programskog kôda ..................................................................................... 11
+
+5. ZAKLJUČAK............................................................................................................ 13
+Izjava o autorstvu................................................................................................................ 14
+Literatura ............................................................................................................................ 14
+Popis ilustracija................................................................................................................... 16
+Prilozi.................................................................................................................................. 17
+
+===== [mev-predlozak-prilog2 | str. 11] =====
+2.2. Osnovne tehničke upute za pisanje (oblikovanje) teksta (naslov u stilu Naslov 2) (12
+    pt, Bold)
+   Završni/diplomski rad mora biti oblikovan na sljedeći način:
+
+        • Format: A4
+        • Margine: 2,5 cm
+        • Font Times New Roman
+        • Veličina fonta:
+
+             o font 18 – naslov rada
+             o font 14 – naslovi poglavlja
+             o font 12 – tekst rada i naslovi potpoglavlja
+             o font 10 – fusnote
+        • Prored:
+             o 1,5 u glavnom dijelu teksta
+             o 1 u FUSNOTAMA
+        • Poravnanje reda:
+
+                                                                                                                 2
+
+===== [mev-predlozak-prilog2 | str. 13] =====
+3. NAVOĐENJE REFERENCI (naslov u stilu Naslov 1) (14 pt, Bold)
+
+    Postoji mnogo različitih stilova navođenja referenci koji su široko zastupljeni u
+akademskom pisanju. Stil autor-datum opće je poznati kao Harvardski ili APA stil. Preporuka
+je pridržavati se uvriježenih izdavačkih standarda uspostavljenih u određenim strukama
+(društvene znanosti APA, matematika AMS, fizika AIP i dr.) te odabrani model dosljedno
+primjenjivati kroz cijeli rad.
+
+    Za navođenje referenci prilikom pisanja teksta predlaže se korištenje stila autor-datum.
+                                Slika 1. Osnovni elementi harvardskog stila
+
+                                                       Izvor:
+https://www.ucg.ac.me/skladiste/blog_614986/objava_127209/fajlovi/Pi%C5%A1i%20pravil
+
+                                       no.pdf (pristup: 24.03.2023.)
+    Navođenje referenci dijeli se na:
+
+                 • citiranje odnosno navođenje izvora u okviru rada i
+                 • lista referenci – literatura je detaljna lista referenci koje su citirane u okviru
+
+                      rada i stavlja se na kraj rada (vidi na kraju predloška: literatura).
+
+                                                                                                                 4
+
+===== [mev-predlozak-prilog2 | str. 14] =====
+Autor i datum1 se navode u samom tekstu rada (ovo se naziva citiranje ili navođenje referenci
+u tekstu), a svi izvori navedeni u tekstu uključuju se u listu referenci na kraju rada.
+
+3.1. Primjeri pisanja citata u tekstu (naslov u stilu Naslov 2) (12 pt, Bold)
+        • jedan autor:
+
+    „Povećanje razine pismenosti studenata pretpostavlja znatno povećanje razina pismenosti
+njihovih profesora“ (Zelenika 2011, str.3). – broj stranice poželjno je dodati radi lakšeg praćenja
+izvora.
+
+    ili ukoliko započinjete rečenicu s imenom autora:
+    Zelenika (2011) povećanje razine pismenosti studenata definira „povećanje razine
+pismenosti studenata pretpostavlja znatno povećanje razina pismenosti njihovih profesora“
+(str.3).
+
+        • dva ili tri autora:

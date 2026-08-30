@@ -1,133 +1,83 @@
-===== [fet-naputak-radovi | str. 2] =====
-� USOP priprema sve podatke vezane za organizaciju obrane, izdavanje Potvrde
-         o stecenom akademskom nazivu, diplome i dopunske isprave o studiju.
-
-    � Nakon obrane zavrsnoga rada student je duzan rad pohraniti u Digitalnom
-         repozitoriju Sveucilista DABAR te je potrebno da rad u PDF formatu proslijedi u
-         Knjiznicu na e � mail: ester.krznaric@unipu.hr.
-
-   2. Opseg i sadrzaj zavrsnog rada
-
-Opseg zavrsnog rada je minimalno 25 stranica.
-Zavrsni rad treba biti otisnut racunalnim pisacem na papiru formata A4; font: Arial;
-velicina slova teksta 12; podrubne biljeske (fusnote) 10; prored 1,5; prored u biljesci
-1,0; margine 2,5 cm. Poglavlja se pisu fontom Arial, bold, velicina slova 14,
-potpoglavlja prve razine fontom Arial, bold, velicina slova 12; potpoglavlja druge razine
-fontom Arial, italic, velicina slova 12.
-
-        Zavrsni rad sastoji se od:
-        - prozirne folije (meki uvez)
-        - prve ili vanjske naslovne stranice
-        - druge ili unutarnje naslovne stranice
-        - potpisane izjave o akademskoj cestitosti
-        - potpisane izjave o koristenju autorskog djela
-        - sadrzaja
-        - uvoda
-        - obrade teme
-        - zakljucka
-        - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi
-        zavrsnog rada
-        - priloga (ako postoje)
-        - sazetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom
-        jeziku (obavezno nakon teksta sazetka navesti kljucne rijeci na hrvatskom i
-        engleskom jeziku).
-
-(1) Tekst zavrsnog rada mora poceti uvodom, a sadrzi jos glavna poglavlja, zakljucak,
-    popis koristene literature, priloge, popis tablica i grafikona i sazetak na hrvatskom i
-    engleskom jeziku. Naslov rada mora biti kratak i jasan i mora odrazavati sadrzaj
-    rada.
-
-(2) Uvod kree od opeg prema specificnom, tj. student kratkim pregledom opih
-    obiljezja uvodi u problematiku koju istrazuje u radu. Glavni tekst treba sadrzavati
-    podatke o rezultatima istrazivanja zadane teme. Zakljucak sadrzi jasno izrecene
-    tvrdnje.
-
-(3) Fusnote su biljeske pri dnu stranice koje se koriste za dodatna pojasnjenja
-    osnovnog teksta. U njima se biljezi ono sto je vazno za dublje razumijevanje
-    glavnog teksta, a cime se ne zeli optereivati taj isti tekst. Oznacavaju se na dnu
-
-                                                             2
-
 ===== [fet-naputak-radovi | str. 3] =====
-stranice, u kontinuitetu, kroz cijeli rad, arapskim brojevima pocevsi od 1. U slucaju
-    odabira Chicago stila referiranja koriste se i za navoenje bibliografskih izvora.
+stranice, u kontinuitetu, kroz cijeli rad, arapskim brojevima počevši od 1. U slučaju
+    odabira Chicago stila referiranja koriste se i za navođenje bibliografskih izvora.
 
-(4) Naslovi poglavlja (od Uvoda do Zakljucka) moraju biti kratki i jasni, te redom
+(4) Naslovi poglavlja (od Uvoda do Zaključka) moraju biti kratki i jasni, te redom
     numerirani arapskim brojevima.
 
 (5) Tablice, grafikoni i slike moraju imati broj, naziv i izvor podataka. Numeriraju se u
     kontinuitetu arapskim brojevima (posebno tablice, posebno grafikoni, posebno
     slike). Tablice, grafikoni i slike dolaze unutar samog teksta.
 
-(6) Za popis koristene literature (nacin citiranja) student moze koristiti Chicago ili
-    Harvard stil, te dosljedno primjenjivati odabrani stil citiranja u zavrsnom radu.
+(6) Za popis korištene literature (način citiranja) student može koristiti Chicago ili
+    Harvard stil, te dosljedno primjenjivati odabrani stil citiranja u završnom radu.
 
          DIPLOMSKI RAD
 
-Diplomski studij zavrsava pisanjem i obranom diplomskog rada
+Diplomski studij završava pisanjem i obranom diplomskog rada
 
     1. Postupak prijave diplomskog rada
 
-    � Izbor teme diplomskog rada student dogovara s mentorom do 15. travnja
-         zavrsne godine studija.
+    • Izbor teme diplomskog rada student dogovara s mentorom do 15. travnja
+         završne godine studija.
 
-    � Ispunjeni obrazac Prijave teme diplomskog rada diplomskog sveucilisnog
-         studija prihvaa mentor te ju dostavlja USOP-u na e-mail adresu ured-za-
+    • Ispunjeni obrazac Prijave teme diplomskog rada diplomskog sveučilišnog
+         studija prihvaća mentor te ju dostavlja USOP-u na e-mail adresu ured-za-
 
 ===== [fet-naputak-radovi | str. 4] =====
-2. Opseg i sadrzaj diplomskog rada
+2. Opseg i sadržaj diplomskog rada
 
 Opseg diplomskoga rada je minimalno 60 stranica.
 
-Diplomski rad treba biti otisnut racunalnim pisacem na papiru formata A4; font: Arial;
-velicina slova teksta 12; podrubne biljeske (fusnote) 10; prored 1,5; prored u biljesci
-1,0; margine 2,5 cm. Poglavlja se pisu fontom Arial, bold, velicina slova 14,
-potpoglavlja prve razine fontom Arial, bold, velicina slova 12; potpoglavlja druge razine
-fontom Arial, italic, velicina slova 12.
+Diplomski rad treba biti otisnut računalnim pisačem na papiru formata A4; font: Arial;
+veličina slova teksta 12; podrubne bilješke (fusnote) 10; prored 1,5; prored u bilješci
+1,0; margine 2,5 cm. Poglavlja se pišu fontom Arial, bold, veličina slova 14,
+potpoglavlja prve razine fontom Arial, bold, veličina slova 12; potpoglavlja druge razine
+fontom Arial, italic, veličina slova 12.
 Diplomski rad sastoji se od:
 
     - prozirne folije (meki uvez)
     - prve ili vanjske naslovne stranice
     - druge ili unutarnje naslovne stranice
-    - potpisane izjave o akademskoj cestitosti
-    - potpisane izjave o koristenju autorskog djela
-    - sadrzaja
+    - potpisane izjave o akademskoj čestitosti
+    - potpisane izjave o korištenju autorskog djela
+    - sadržaja
     - uvoda
     - obrade teme
-    - zakljucka
+    - zaključka
     - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi
 
          diplomskoga rada
     - priloga (ako postoje)
-    - sazetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom
+    - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom
 
-         jeziku (obavezno nakon teksta sazetka navesti kljucne rijeci na hrvatskom i
+         jeziku (obavezno nakon teksta sažetka navesti ključne riječi na hrvatskom i
          engleskom jeziku).
 
-(1) Tekst diplomskog rada mora poceti uvodom, a sadrzi jos glavna poglavlja,
-    zakljucak, popis koristene literature, priloge, popis tablica i grafikona i sazetak na
-    hrvatskom i engleskom jeziku. Naslov rada mora biti kratak i jasan i mora odrazavati
-    sadrzaj rada.
+(1) Tekst diplomskog rada mora početi uvodom, a sadrži još glavna poglavlja,
+    zaključak, popis korištene literature, priloge, popis tablica i grafikona i sažetak na
+    hrvatskom i engleskom jeziku. Naslov rada mora biti kratak i jasan i mora odražavati
+    sadržaj rada.
 
-(2) Uvod kree od opeg prema specificnom, tj. student kratkim pregledom opih
-    obiljezja uvodi u problematiku koju istrazuje u radu. Glavni tekst treba sadrzavati
-    podatke o rezultatima istrazivanja zadane teme. Zakljucak sadrzi jasno izrecene
+(2) Uvod kreće od općeg prema specifičnom, tj. student kratkim pregledom općih
+    obilježja uvodi u problematiku koju istražuje u radu. Glavni tekst treba sadržavati
+    podatke o rezultatima istraživanja zadane teme. Zaključak sadrži jasno izrečene
     tvrdnje.
 
-(3) Fusnote su biljeske pri dnu stranice koje se koriste za dodatna pojasnjenja
-    osnovnog teksta. U njima se biljezi ono sto je vazno za dublje razumijevanje
-    glavnog teksta, a cime se ne zeli optereivati taj isti tekst. Oznacavaju se na dnu
-    stranice, u kontinuitetu, kroz cijeli rad, arapskim brojevima pocevsi od 1. U slucaju
-    odabira Chicago stila referiranja koriste se i za navoenje bibliografskih izvora.
+(3) Fusnote su bilješke pri dnu stranice koje se koriste za dodatna pojašnjenja
+    osnovnog teksta. U njima se bilježi ono što je važno za dublje razumijevanje
+    glavnog teksta, a čime se ne želi opterećivati taj isti tekst. Označavaju se na dnu
+    stranice, u kontinuitetu, kroz cijeli rad, arapskim brojevima počevši od 1. U slučaju
+    odabira Chicago stila referiranja koriste se i za navođenje bibliografskih izvora.
 
-(4) Naslovi poglavlja (od Uvoda do Zakljucka) moraju biti kratki i jasni, te redom
+(4) Naslovi poglavlja (od Uvoda do Zaključka) moraju biti kratki i jasni, te redom
     numerirani arapskim brojevima.
 
 (5) Tablice, grafikoni i slike moraju imati broj, naziv i izvor podataka. Numeriraju se u
     kontinuitetu arapskim brojevima (posebno tablice, posebno grafikoni, posebno
     slike). Tablice, grafikoni i slike dolaze unutar samog teksta.
 
-(6) Za popis koristene literature (nacin citiranja) student moze koristiti Chicago ili
+(6) Za popis korištene literature (način citiranja) student može koristiti Chicago ili
     Harvard stil, te dosljedno primjenjivati odabrani stil citiranja u diplomskom radu.
 
                                                              4
@@ -137,22 +87,22 @@ CHICAGO STIL CITIRANJA
 
 A. Citiranje u tekstu
 
-1.) Prilikom prvog citiranja odreenog djela - u fusnoti (biljesci) treba navesti:
+1.) Prilikom prvog citiranja određenog djela - u fusnoti (bilješci) treba navesti:
 
-Inicijal imena. Prezime, Naslov djela, Mjesto izdanja, Naziv izdavaca, Godina izdanja.,
+Inicijal imena. Prezime, Naslov djela, Mjesto izdanja, Naziv izdavača, Godina izdanja.,
 broj stranice s koje se preuzima referirani dio.
 
 Primjer:
 
-V. Gorenc, Trgovacko pravo � drustva, Zagreb, Skolska knjiga, 1995., str. 50.
+V. Gorenc, Trgovačko pravo – društva, Zagreb, Školska knjiga, 1995., str. 50.
 
 2.) Ukoliko se uzastopno citira isto djelo, istog autora, s iste stranice - tada se u
 fusnoti navodi samo oznaka: loc. cit.
 
 npr. Ukoliko bi u fusnoti koja slijedi ponovno htjeli citirati isto djelo prof. Gorenca i to
-ponovno sa stranice 50., tada bi u fusnoti trebali napisati samo loc. cit. (i nista vise)
+ponovno sa stranice 50., tada bi u fusnoti trebali napisati samo loc. cit. (i ništa više)
 
-3.) Ukoliko se uzastopno citira isto djelo, istog autora, ALI s razlicite stranice, tada se
+3.) Ukoliko se uzastopno citira isto djelo, istog autora, ALI s različite stranice, tada se
 u fusnoti navodi oznaka:
 
 ibidem, str. ___
@@ -161,26 +111,26 @@ npr. Ukoliko bi u fusnoti koja slijedi ponovno htjeli citirati isto djelo prof. 
 s neke druge stranice, tada bi u fusnoti trebali napisati oznaku ibidem i br. str. s koje
 se citira, primjerice: ibidem, str. 65.
 
-4.) Ukoliko citiranje nije uzastopno (jer su u meuvremenu citirani i drugi autori) tada
-se u fusnoti navodi sljedee:
+4.) Ukoliko citiranje nije uzastopno (jer su u međuvremenu citirani i drugi autori) tada
+se u fusnoti navodi sljedeće:
 
 prezime i ime autora kojeg se citira, op. cit., str. ____
 
 npr. Ukoliko su nakon posljednjeg citiranja prof. Gorenca citirani drugi autori, ali se
-ponovno zeli citirati prof. Gorenc - tada u fusnoti treba navesti:
+ponovno želi citirati prof. Gorenc - tada u fusnoti treba navesti:
 
 V. Gorenc, op.cit., str. 150.
 
-Naime, oznaka op. cit. dolazi od lat. opus citatum , sto bi u prijevodu na hrvatski
-jezik znacilo �ve citirano djelo�. Stoga, iako oznaka op.cit. zamjenjuje naslov i
-podatke o izdavacu ve citiranog djela, ispred navedene oznake treba navesti
-prezime autora kako bi se oznacilo na koje se od vise ranije citiranih djela oznaka op.
+Naime, oznaka op. cit. dolazi od lat. opus citatum , što bi u prijevodu na hrvatski
+jezik značilo «već citirano djelo». Stoga, iako oznaka op.cit. zamjenjuje naslov i
+podatke o izdavaču već citiranog djela, ispred navedene oznake treba navesti
+prezime autora kako bi se označilo na koje se od više ranije citiranih djela oznaka op.
 cit. odnosi. Nakon oznake op. cit. navodi se broj stranice s koje se citira.
 
-5) Citati se navode unutar navodnih znakova i obicno u kurzivu. Svaki citat zavrsava s
-pripadnom fusnotnom oznakom koja se navodi iza tocke ili zareza, ali prije dvotocke
-ili oznake tocka zarez. Isto pravilo vrijedi i za parafrazirane dijelove, te kod
-oznacavanja bilo kojeg drugog elementa (slika, grafikon, dijagram, tablica itd.)
+5) Citati se navode unutar navodnih znakova i obično u kurzivu. Svaki citat završava s
+pripadnom fusnotnom oznakom koja se navodi iza točke ili zareza, ali prije dvotočke
+ili oznake točka zarez. Isto pravilo vrijedi i za parafrazirane dijelove, te kod
+označavanja bilo kojeg drugog elementa (slika, grafikon, dijagram, tablica itd.)
 preuzetog iz nekog izvora.
 
                                                              5
@@ -190,19 +140,19 @@ B. Popis literature
 
     1. Knjiga, jedan autor
 Prezime, Inicijal imena., Naslov knjige italic slovima. Izdanje knjige ako postoji, Mjesto
-izdavanja, Izdavac, godina izdanja.
+izdavanja, Izdavač, godina izdanja.
 
 Ratnagar, S., Trading Encounters: From the Euphrates to the Indus in the Bronze
 Age, New Delhi, Oxford University Press, 2004.
 
     2. Knjiga, dva do tri autora
 Prezime, Inicijal imena. i Inicijal imena. Prezime, Naslov knjige italic slovima, Izdanje
-knjige ako postoji, Mjesto izdavanja, Izdavac, godina izdanja.
+knjige ako postoji, Mjesto izdavanja, Izdavač, godina izdanja.
 
 ===== [fet-naputak-radovi | str. 8] =====
 2009, http://www.rosetta.bham.ac.uk, (pristupljeno 10. rujan 2010.).
 
-Vise informacija o Chicago stilu citiranja pogledati na:
+Više informacija o Chicago stilu citiranja pogledati na:
 http://guides.is.uwa.edu.au/c.php?g=325241&p=2177430
 
 HARVARDSKI STIL CITIRANJA
@@ -213,92 +163,39 @@ A. Citiranje u tekstu
 Kada se u tekstu referencira na rad nekog autora uz autorovo ime navedeno u tekstu
 tada se navodi prezime autora i u zagradi godina objave rada:
 U svom radu Minsky (1995.) tvrdi kako...
-Dobiveni rezultati u potpunosti su u skladu s rezultatima istrazivanja objavljenim u
+Dobiveni rezultati u potpunosti su u skladu s rezultatima istraživanja objavljenim u
 radu Einsteina (1905.).
 
     3. IMENA DVAJU AUTORA ISTOG RADA CITIRANA U TEKSTU
-U tekstu se referencira na rad dvaju autora uz navoenje imena obaju autora � u
+U tekstu se referencira na rad dvaju autora uz navođenje imena obaju autora – u
 tekstu se navede prezime obaju autora i u zagradi godina objave rada:
-U svom radu Minsky i Papert (1969.) ukazali su na ogranicenja....
+U svom radu Minsky i Papert (1969.) ukazali su na ograničenja....
 
-    4. IMENA DVAJU AUTORA RAZLICITIH RADOVA CITIRANA U ISTOJ RECENICI
-U tekstu se referencira na radove dvaju autora uz direktno navoenje imena autora u
-istoj recenici � navodi se prezime svakog autora i u zagradi godina objave rada:
+    4. IMENA DVAJU AUTORA RAZLIČITIH RADOVA CITIRANA U ISTOJ REČENICI
+U tekstu se referencira na radove dvaju autora uz direktno navođenje imena autora u
+istoj rečenici – navodi se prezime svakog autora i u zagradi godina objave rada:
 Erwin (1967.) i Willey (1968.) su dokazali da .....
 
     5. REFERENCIRANJE NA RAD
-U tekstu se referencira na rad ili dio istrazivanja, a ne navodi se direktno ime autora
+U tekstu se referencira na rad ili dio istraživanja, a ne navodi se direktno ime autora
 kao dio teksta - tada se autor i godina objave rada navode u zagradama na kraju
-recenice.
-Uobicajeni nacin prikaza ponasanja subatomskih cestica je preko tzv. Feynmanovih
+rečenice.
+Uobičajeni način prikaza ponašanja subatomskih čestica je preko tzv. Feynmanovih
 dijagrama (Feynman, 1960.).
 
-    6. ZA REFERENCIRANJE RADA KOJI IMA VISE OD DVA AUTORA NAVOENJEM
+    6. ZA REFERENCIRANJE RADA KOJI IMA VIŠE OD DVA AUTORA NAVOĐENJEM
 
 AUTORA U TEKSTU
 
-U tekstu se poziva na rad koji ima vise od dva autora, a u samom tekstu se navode
-autori � navodi se samo prezime prvog autora i iza njega ope prihvaena kratica et
-al. (skr. od lat. et alii � i ostali).
+U tekstu se poziva na rad koji ima više od dva autora, a u samom tekstu se navode
+autori – navodi se samo prezime prvog autora i iza njega opće prihvaćena kratica et
+al. (skr. od lat. et alii – i ostali).
 
 U svom radu Zadeh et al. (1975.) pokazali su kako se primjenom.....
-Ili na kraju recenice:
-Ve prije je pokazano kako se primjenom.... (Zadeh et al.,1975.).
+Ili na kraju rečenice:
+Već prije je pokazano kako se primjenom.... (Zadeh et al.,1975.).
 
     7. NEPOZNATA GODINA OBJAVE RADA
-
-===== [fet-naputak-radovi | str. 9] =====
-8. DOSLOVNO PREUZIMANJE DIJELA TEKSTA DRUGIH AUTORA
-Dio koji se doslovno preuzima navodi se unutar navodnih znakova. Primjerice za
-doslovno citiranje potrebno je navesti:
-Penrose (2007) tvrdi: ,, Klasicna teorija...".
-Cjelokupni dio koji se doslovno citira treba biti unutar navodnih znakova � nikako
-samo prva recenica u slucaju preuzimanja veeg broja recenica.
-
-Ili
-
-,,Klasicna teorija..." (Penrose, 2007.).
-
-Kod doslovnog preuzimanja moze se koristiti prosireni nacin oznacavanja referenci
-dodavanjem broja stranica kako bi se omoguilo sto lakse praenje upotrijebljenih
-izvora.
-,,Klasicna teorija..." (Penrose, 2007., str. 37).
-
-    9. VEI BROJ RADOVA ISTOG AUTORA OBJAVLJENI U RAZLICITIM GODINAMA
-U tekstu se poziva na vei broj radova istog autora koji ukazuju na istu stvar, a
-objavljeni su u razlicitim godinama � navede se ime autora i godine objave radova
-kronoloskim redom meusobno odvojene zarezom.
-Mamadani (2000, 2001) iznosi zakljucak .....
-
-    10. VEI BROJ RADOVA ISTOG AUTORA OBJAVLJENIH U ISTOJ GODINI
-U dijelu teksta poziva se na radove istog autora koji su objavljeni u istoj godini �
-
-===== [fet-naputak-radovi | str. 9] =====
-istrazivanja predlozena opet od strane Searlea (1987b).....
-
-U slucaju da radovi istog autora objavljeni u jednoj godini ukazuju na istu stvar imali
-bi:
-Searle (1990a, b) je istaknuo vise puta kako...
-
-    11. RADOVI OBJAVLJENI POD OKRILJEM RAZNIH ORGANIZACIJA
-Kada se ne navodi pojedinacni autor, odnosno autori, ve je rad objavljen od strane
-neke organizacije kao sto su tvrtke, udruge, drzavne sluzbe i institucije, nevladine
-organizacije i sl. navodi se ime organizacije i godina objave rada:
-Ministarstvo zastite okolisa, prostornog ureenja i graditeljstva (2015.) ...
-
-    12. SEKUNDARNE REFERENCE
-Pozivate se na rad ciji original (primarni izvor) niste iz bilo kojeg razloga niste mogli
-procitati, nego ste u radu drugog autora naisli na njegovu referencu - takav rad
-postaje tzv. sekundarna referenca i kao takvog ga je potrebno navesti:
-Whitehead (1912) kako je navedeno u radu Russella (1975) objasnjava...
-Ili
-Objasnjenje za ..... (Whitehead, 1912. navedeno u Russell, 1975.).
-
-    13. WEB IZVORI U TEKSTU
-Ako se citira literatura sa Interneta: navodi se autor ili naziv organizacije i godina, ako
-je to poznato, a u literaturnom popisu daje se cijela referenca.
-
-                                                             9
 
 ===== [fet-naputak-radovi | str. 10] =====
 B. Popis literature
@@ -306,7 +203,7 @@ B. Popis literature
     1. Knjiga, jedan autor
 
 PREZIME, Inicijal imena. (godina izdanja.) Naslov knjige italic slovima. Izdanje knjige
-ako postoji. Mjesto izdavanja: Izdavac.
+ako postoji. Mjesto izdavanja: Izdavač.
 
 Primjer:
 
@@ -316,7 +213,7 @@ NEVILLE, C. (2010.) The Complete Guide to Referencing and Avoiding Plagiarism.
     2. Knjiga, dva autora
 
 PREZIME, Inicijal imena. i PREZIME, Inicijal imena. (godina izdanja.) Naslov knjige
-italic slovima. Izdanje knjige ako postoji. Mjesto izdavanja: Izdavac.
+italic slovima. Izdanje knjige ako postoji. Mjesto izdavanja: Izdavač.
 
 Primjer:
 
@@ -324,69 +221,33 @@ MIDDLETON, V. T. C. i HAWKINS, R. (1998.) Sustainable Tourism: A Marketing
 Perspective. Oxford: Butterworth-Heinemann.
 
 ===== [fet-naputak-radovi | str. 11] =====
-7. Clanak s konferencije
+7. Članak s konferencije
 PREZIME, Inicijal imena. (godina izdanja.) Naslov rada. Na naziv konferencije zapisati
-italic slovima. Mjesto i datum odrzavanja konferencije. Mjesto izdanja: Izdavac. Broj
+italic slovima. Mjesto i datum održavanja konferencije. Mjesto izdanja: Izdavač. Broj
 stranica rada.
 Primjer: FISH, J. (2008.) Managing changes in the workplace. Na Professional
 Managers Conference. Blackpool, 18.-20.2.2008. Blackpool: PubM. str. 42-45.
 
-    8. Clanak u tiskanome casopisu
-PREZIME, Inicijal imena. (godina publikacije.) Naslov clanka. Naziv casopisa italic
+    8. Članak u tiskanome časopisu
+PREZIME, Inicijal imena. (godina publikacije.) Naslov članka. Naziv časopisa italic
 slovima. Broj volumena. (broj/mjesec u zagradi). str.
 Primjer:
 TEFTS, K. i BLAKSEE, S. (2000.) Did you hear the one about Boolean operators?
 Incorporating comedy into library instruction. Reference Services Review. 28 (4). str.
 369-378.
 
-    9. Clanak u online casopisu
-PREZIME, Inicijal imena. (godina publikacije.) Naslov clanka. Naziv casopisa italic
+    9. Članak u online časopisu
+PREZIME, Inicijal imena. (godina publikacije.) Naslov članka. Naziv časopisa italic
 slovima. [Online zapisati u uglatim zagradama] Broj volumena. (broj/mjesec u zagradi).
-str. Dostupno na - URL [Pristupljeno: zapisati datum kada ste pristupili clanku]
+str. Dostupno na - URL [Pristupljeno: zapisati datum kada ste pristupili članku]
 Primjer:
 WILSON, J. (1995.) Enter the cyberpunk librarian: future directions in cyberspace.
 Library Review. [Online] 44 (8). str.63-72. Dostupno na:
-http://www.emeraldinsight.com. [Pristupljeno: 30. sijecnja 2012.]
-Vise informacija o harvardskom stilu citiranja pogledati na:
+http://www.emeraldinsight.com. [Pristupljeno: 30. siječnja 2012.]
+Više informacija o harvardskom stilu citiranja pogledati na:
 http://www.staffs.ac.uk/assets/harvard_quick_guide_tcm44-47797.pdf
 
                                                             11
-
-===== [fet-naputak-radovi | str. 14] =====
-IZJAVA O AKADEMSKOJ CESTITOSTI
-
-Ja, dolje potpisani _________________________, kandidat za prvostupnika ekonomije/poslovne
-ekonomije, smjera _____________________ ovime izjavljujem da je ovaj Zavrsni rad rezultat iskljucivo
-mojega vlastitog rada, da se temelji na mojim istrazivanjima te da se oslanja na objavljenu literaturu
-kao sto to pokazuju koristene biljeske i bibliografija. Izjavljujem da niti jedan dio Zavrsnog rada nije
-napisan na nedozvoljen nacin, odnosno da je prepisan iz kojega necitiranog rada, te da ikoji dio rada
-krsi bilo cija autorska prava. Izjavljujem, takoer, da nijedan dio rada nije iskoristen za koji drugi rad
-pri bilo kojoj drugoj visokoskolskoj, znanstvenoj ili radnoj ustanovi.
-
-                                                                                                 Student
-                                                                                           ______________________
-
-U Puli, _________, ________ godine
-
-                                                            14
-
-===== [fet-naputak-radovi | str. 18] =====
-IZJAVA O AKADEMSKOJ CESTITOSTI
-
-Ja, dolje potpisani _________________________, kandidat za magistra ekonomije/poslovne
-ekonomije ovime izjavljujem da je ovaj Diplomski rad rezultat iskljucivo mojega vlastitog rada, da se
-temelji na mojim istrazivanjima te da se oslanja na objavljenu literaturu kao sto to pokazuju koristene
-biljeske i bibliografija. Izjavljujem da niti jedan dio Diplomskog rada nije napisan na nedozvoljen nacin,
-odnosno da je prepisan iz kojega necitiranog rada, te da ikoji dio rada krsi bilo cija autorska prava.
-Izjavljujem, takoer, da nijedan dio rada nije iskoristen za koji drugi rad pri bilo kojoj drugoj
-visokoskolskoj, znanstvenoj ili radnoj ustanovi.
-
-                                                                                                 Student
-                                                                                           ______________________
-
-U Puli, _________, ________ godine
-
-                                                            18
 
 ===== [fet-naputak-radovi | str. 20] =====
 Tablica 1. Chicago stil citiranja
@@ -394,13 +255,147 @@ Tablica 1. Chicago stil citiranja
 Tip publikacije               Primjer fusnote                                             Primjer reference u literaturi
 Knjiga- jedan autor
 Knjiga- dva do tri autora     1 S. Ratnagar, Trading Encounters: From the Euphrates to Ratnagar, S., Trading Encounters: From the Euphrates to the
-Kjiga- 4 i vise autora
+Kjiga- 4 i više autora
 Knjiga- nepoznat autor        the Indus in the Bronze Age, New Delhi, Oxford University Indus in the Bronze Age, New Delhi, Oxford University Press,
 Knjiga- urednici
 Knjiga- autor - organizacija  Press, 2004, str. 23.                                       2004.
 
 Poglavlje u knjizi            1 A. Blackledge i A. Creese, Multilingualism: a Critical    Blackledge, A. i A. Creese, Multilingualism: a Critical
                               Perspective, London, Continuum, 2010, str. 10.              Perspective, London, Continuum, 2010.
-Knjiga- izdanje razlicito od
+Knjiga- izdanje različito od
 prvog                         1 A. Kring, et al., Abnormal Psychology, 11. izdanje,       Kring, A. et al., Abnormal Psychology, 11. izdanje., Hoboken,
 E-knjiga                      Hoboken, NJ, John Wiley & Sons, 2010, str. 40.              NJ, John Wiley & Sons, 2010.
+
+===== [fet-naputak-radovi | str. 24] =====
+Članak        s (Fish, 2008.)                                          FISH, J. (2008.) Managing changes in the workplace. Na Professional
+konferencije      Fish (2008.) je primjetio…                           Managers Conference.
+
+                                                                       Blackpool, 18.-20.2.2008. Blackpool: PubM. str. 42-45.
+
+Članak u tiskanome (Trefts i Blaksee, 2000.)                           TEFTS, K. i BLAKSEE, S. (2000.) Did you hear the one about Boolean
+                                                                       operators?
+časopisu      Dokaz koji su podastrijeli Tefts i Blaksee (2000.)…
+                                                                       Incorporating comedy into library instruction. Reference Services
+                                                                       Review. 28 (4). str. 369-378.
+
+Članak o online (Wilson, 1995.)                                        WILSON, J. (1995.) Enter the cyberpunk librarian: future directions in
+                                                                       cyberspace. Library
+časopisu      Kao što je tvrdio Wilson (1995.)…
+                                                                       Review. [Online] 44 (8). str.63-72. Dostupno na:
+                                                                       http://www.emeraldinsight.com.
+
+                                                                       [Pristupljeno: 30. siječnja 2012.]
+
+* Ako doslovno preuzimate tekst s neke stranice, onda je potrebno svugdje nakon godine navesti i broj stranice s koje je tekst preuzet. Npr. (Middleton i
+Hawkins, 1998., str. 200.)
+
+Izvor: Staffordshire University. Harvard Reference examples [Online] Dostupno na: http://www.staffs.ac.uk/assets/harvard_referencing_examples_tcm44-
+39847.pdf [Pristupljeno: 3. studenoga 2013.]
+
+                                                                   24
+
+===== [tfpu-naputak-radovi-2025 | str. 5] =====
+10. Za popis korištene literature (način citiranja) student može koristiti Chicago ili
+     Harvard stil, te dosljedno primjenjivati odabrani stil citiranja u završnom radu.
+
+11. Uz paginaciju, tekući naslovi postavljaju se od uvoda do zaključka u zaglavlje
+     (header) u stilu:
+
+Završni /diplomski rad  Naslov rada…
+
+12. Plagiranje i citiranje te bilješke.
+    Obavezna je upotreba softvera Turnitin od strane mentora prije predaje rada
+    komisiji.
+    Plagiranje je neautorizirana uporaba ili bliska imitacija materijala drugih autora te
+    predstavljanje tih materijala kao vlastiti uradak.
+    Pri izradi završnog rada dopušteno je korištenje literature, a time i citiranja drugih.
+    Citiranjem dajemo dodatne pouzdane informacije o temi te povećavamo stručnost i
+    kredibilitet našeg uratka, omogućavamo laku provjeru točnosti i pouzdanosti
+    sadržaja uratka te izbjegavamo plagiranje i pripisujemo zasluge autoru koji ih
+    zaslužuje. U pravilu se na jednom mjestu smije citirati najviše 15 redaka tuđeg
+    teksta, pod uvjetom da se citat stavi pod navodnike i da se navede izvor na kraju
+    poglavlja u kojem je naveden citat. Citiranje unutar teksta se odnosi na kreditiranje
+    izvora citiranog ulomka u tekstu.
+    Bilješke, fusnote ili podrubnica se koristi se za objašnjavanje određenog pojma koji
+    je spomenut u tekstu a narušava kontinuitet rečenice, također ga je potrebno citirati.
+
+                                      5
+
+===== [tfpu-naputak-radovi-2025 | str. 10] =====
+CITIRANJE
+
+Stil citiranja može se odabrati ovisno o području i polju rada te mentor može odrediti ili odobriti
+stil citiranja. ((poput IEEE, ACM, Zentralblatt MAthematik, MathSciNet i slično).
+
+Preporuka je reference poredati abecednim redom autora, ili u slučaju da se planira neka
+publikacija u časopisu sukladno tome, naglasiti odluku kratkom rečenicom u tekstu ako je tako
+mentor odlučio.
+
+Kao primjer može se koristiti i Chicago stil citiranja
+
+A. Citiranje u tekstu
+
+1.) Prilikom prvog citiranja određenog djela - u fusnoti (bilješci) treba navesti:
+
+Inicijal imena. Prezime, Naslov djela, Mjesto izdanja, Naziv izdavača, Godina izdanja., broj
+stranice s koje se preuzima referirani dio, te ISBN ili ISSN broj.
+Primjer:
+
+V. Gorenc, Trgovačko pravo – društva, Zagreb, Školska knjiga, 1995., str. 50.
+
+2.) Ukoliko se uzastopno citira isto djelo, istog autora, s iste stranice - tada se u fusnoti
+navodi samo oznaka: loc. cit.
+npr. Ukoliko bi u fusnoti koja slijedi ponovno htjeli citirati isto djelo prof. Gorenca i to ponovno
+sa stranice 50., tada bi u fusnoti trebali napisati samo loc. cit. (i ništa više)
+3.) Ukoliko se uzastopno citira isto djelo, istog autora, ALI s različite stranice, tada se u
+fusnoti navodi oznaka:
+ibidem, str. ___
+
+npr. Ukoliko bi u fusnoti koja slijedi ponovno htjeli citirati isto djelo prof. Gorenca, ALI s
+neke druge stranice, tada bi u fusnoti trebali napisati oznaku ibidem i br. str. s koje se citira,
+primjerice: ibidem, str. 65.
+4.) Ukoliko citiranje nije uzastopno (jer su u međuvremenu citirani i drugi autori) tada se u
+fusnoti navodi sljedeće:
+prezime i ime autora kojeg se citira, op. cit., str. ____
+
+npr. Ukoliko su nakon posljednjeg citiranja prof. Gorenca citirani drugi autori, ali se ponovno
+želi citirati prof. Gorenc - tada u fusnoti treba navesti:
+V.Gorenc, op.cit., str. 150.
+
+                                                                                                                         10
+
+===== [tfpu-naputak-radovi-2025 | str. 11] =====
+Naime, oznaka op. cit. dolazi od lat. opus citatum , što bi u prijevodu na hrvatski jezik značilo
+«već citirano djelo». Stoga, iako oznaka op.cit. zamjenjuje naslov i podatke o izdavaču već
+citiranog djela, ispred navedene oznake treba navesti prezime autora kako bi se označilo na koje
+se od više ranije citiranih djela oznaka op. cit. odnosi. Nakon oznake op. cit. navodi se broj
+stranice s koje se citira.
+
+5) Citati se navode unutar navodnih znakova i obično u kurzivu. Svaki citat završava s
+pripadnom fusnotnom oznakom koja se navodi iza točke ili zareza, ali prije dvotočke ili oznake
+točka zarez. Isto pravilo vrijedi i za parafrazirane dijelove, te kod označavanja bilo kojeg drugog
+elementa (slika, grafikon, dijagram, tablica itd.) preuzetog iz nekog izvora.
+
+B. Popis literature
+
+    1. Knjiga, jedan autor
+
+Prezime, Inicijal imena.,Naslov knjige italic slovima. Izdanje knjige ako postoji, Mjesto
+izdavanja, Izdavač, godina izdanja.
+
+Ratnagar, S., Trading Encounters: From the Euphrates to the Indus in the Bronze Age, New
+Delhi, Oxford University Press, 2004.
+
+    2. Knjiga, dva do tri autora
+
+Prezime, Inicijal imena. i Inicijal imena. Prezime,Naslov knjige italic slovima, Izdanje knjige
+
+===== [tfpu-naputak-radovi-2025 | str. 17] =====
+Primjer:
+WILSON, J. (1995.) Enter the cyberpunk librarian: future directions in cyberspace. Library
+Review. [Online] 44 (8). str.63-72. Dostupno na: http://www.emeraldinsight.com.
+[Pristupljeno: 30. siječnja 2012.]
+Više informacija o harvardskom stilu citiranja pogledati na:
+http://www.staffs.ac.uk/assets/harvard_quick_guide_tcm44-47797.pdf
+
+                                                                                                                         17

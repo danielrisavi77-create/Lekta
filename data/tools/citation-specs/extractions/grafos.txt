@@ -1,4 +1,33 @@
 ===== [grafos-smjernice-2022 | str. 1] =====
+Nazivi slika i tablica trebaju odražavati njihov smisao i pišu se samo podaci neophodni za njihovo razumijevanje, a dodatna objašnjenja daju se u tekstu. 
+Ako se slika ili tablica preuzima iz literature, obavezno je navođenje reference. Ako se slika ili tablica preuzima iz literature u kojoj se nalaze pojmovi na stranom jeziku, značenje tih pojmova mora biti objašnjeno u tekstu i na hrvatskom jeziku.
+Slike, tablice i njihove opise potrebno je centrirati horizontalno na stranici i pozicionirati u tekstu najbliže mjestu gdje se na njih poziva.
+Oznake veličina, simbola i izraza
+U čitavom radu potrebno je upotrebljavati iste oznake za iste veličine, a njihovo objašnjenje dati nakon prve pojave u formuli.
+Fizikalne i druge veličine pišu se kosim slovima, a konstante, mjerne jedinice, matematički simboli, funkcije i operatori pišu se uspravno. Eksponenti i indeksi pišu se uspravno osim u slučaju kada predstavljaju neku veličinu (tada se pišu kosim slovima). 
+Formule se numeriraju s dva (arapska) broja, od kojih prvi broj označava broj poglavlja, a drugi redni broj formule unutar poglavlja. Formule se centriraju na sredinu stranice, a njihova numerička oznaka piše se u istom retku i poravnava uz desni rub stranice.
+
+(3.1)
+Pri pisanju rada nužno je koristiti jedinice Međunarodni sustav mjernih jedinica (SI) i one koje su u skladu sa Zakonom o mjernim jedinicama (NN 58/1993).
+Citiranje i uređivanje popisa literature
+Citiranje literature je postupak kojim se navode dokumenti i djela kojima se koristilo pri izradi rada kako bi se argumentirali stavovi, pozvalo na postojeće rezultate, osigurao uvid u izvore zbog provjere ili daljnjeg korištenja te kako bi se u konačnici izbjeglo plagiranje.
+
+Prema Pravilniku o završnim i diplomskim ispitima, pri pisanju rada najstrože je zabranjeno prepisivanje ili direktno prevođenje dijelova tuđeg teksta bez navođenja izvora, a mentor je obvezan rad pregledati licenciranim računalnim programom za provjeru izvornosti.
+
+Popis literature obuhvaća sve korištene izvore i potpune podatke o djelima koja se spominju u referencama. Popis literature se numerira arapskim brojevima u uglatim zagradama, prema redoslijedu pojavljivanja u tekstu, a svaka bibliografska jedinica mora imati sve bitne elemente kako je prikazano sljedećim primjerima:
+članak iz časopisa:
+Prezime autora, inicijali imena, naslov rada, naziv časopisa, broj časopisa (br./No.), broj sveska (sv./Vol.), str. (pp.) od – do, mjesec i godina izdanja.
+članak objavljen u zborniku konferencije:
+Prezime autora, inicijali imena, naslov članka, naziv konferencije, sv. (broj sveska), str.  (stranice) od – do, mjesto, godina izdanja.
+knjiga:
+Prezime autora, inicijali imena, naslov knjige, izdavač, mjesto, godina izdanja.
+internetski sadržaj:
+Prezime autora, inicijali imena, naslov članka, poveznica na izvor, datum pristupanja mrežnom izvoru.
+
+Zaglavlje i podnožje
+Zaglavlje i podnožje započinju s uvodnom stranicom. Tekst zaglavlja treba odvojiti crtom i pisati u jednom retku. U zaglavlju se upisuje ime i prezime pristupnika (lijevo poravnanje teksta) te naslov rada (desno poravnanje), a u podnožje s desnim poravnanjem upisuje se broj stranice.
+
+===== [grafos-smjernice-2022 | str. 1] =====
 Osijek, rujan 2022.
 
 Sadržaj
@@ -59,32 +88,3 @@ naslovi i podnaslovi trebaju biti 14 ili 16 pt, podebljano (bold), poravnati uz 
 veličina slova u tekstu (font size) treba biti 12 pt, 
 vrsta slova (font) može biti Times New Roman, Arial ili Arial Narrow,
 poravnanje teksta treba biti obostrano (justify),
-
-===== [grafos-smjernice-2022 | str. 1] =====
-Nazivi slika i tablica trebaju odražavati njihov smisao i pišu se samo podaci neophodni za njihovo razumijevanje, a dodatna objašnjenja daju se u tekstu. 
-Ako se slika ili tablica preuzima iz literature, obavezno je navođenje reference. Ako se slika ili tablica preuzima iz literature u kojoj se nalaze pojmovi na stranom jeziku, značenje tih pojmova mora biti objašnjeno u tekstu i na hrvatskom jeziku.
-Slike, tablice i njihove opise potrebno je centrirati horizontalno na stranici i pozicionirati u tekstu najbliže mjestu gdje se na njih poziva.
-Oznake veličina, simbola i izraza
-U čitavom radu potrebno je upotrebljavati iste oznake za iste veličine, a njihovo objašnjenje dati nakon prve pojave u formuli.
-Fizikalne i druge veličine pišu se kosim slovima, a konstante, mjerne jedinice, matematički simboli, funkcije i operatori pišu se uspravno. Eksponenti i indeksi pišu se uspravno osim u slučaju kada predstavljaju neku veličinu (tada se pišu kosim slovima). 
-Formule se numeriraju s dva (arapska) broja, od kojih prvi broj označava broj poglavlja, a drugi redni broj formule unutar poglavlja. Formule se centriraju na sredinu stranice, a njihova numerička oznaka piše se u istom retku i poravnava uz desni rub stranice.
-
-(3.1)
-Pri pisanju rada nužno je koristiti jedinice Međunarodni sustav mjernih jedinica (SI) i one koje su u skladu sa Zakonom o mjernim jedinicama (NN 58/1993).
-Citiranje i uređivanje popisa literature
-Citiranje literature je postupak kojim se navode dokumenti i djela kojima se koristilo pri izradi rada kako bi se argumentirali stavovi, pozvalo na postojeće rezultate, osigurao uvid u izvore zbog provjere ili daljnjeg korištenja te kako bi se u konačnici izbjeglo plagiranje.
-
-Prema Pravilniku o završnim i diplomskim ispitima, pri pisanju rada najstrože je zabranjeno prepisivanje ili direktno prevođenje dijelova tuđeg teksta bez navođenja izvora, a mentor je obvezan rad pregledati licenciranim računalnim programom za provjeru izvornosti.
-
-Popis literature obuhvaća sve korištene izvore i potpune podatke o djelima koja se spominju u referencama. Popis literature se numerira arapskim brojevima u uglatim zagradama, prema redoslijedu pojavljivanja u tekstu, a svaka bibliografska jedinica mora imati sve bitne elemente kako je prikazano sljedećim primjerima:
-članak iz časopisa:
-Prezime autora, inicijali imena, naslov rada, naziv časopisa, broj časopisa (br./No.), broj sveska (sv./Vol.), str. (pp.) od – do, mjesec i godina izdanja.
-članak objavljen u zborniku konferencije:
-Prezime autora, inicijali imena, naslov članka, naziv konferencije, sv. (broj sveska), str.  (stranice) od – do, mjesto, godina izdanja.
-knjiga:
-Prezime autora, inicijali imena, naslov knjige, izdavač, mjesto, godina izdanja.
-internetski sadržaj:
-Prezime autora, inicijali imena, naslov članka, poveznica na izvor, datum pristupanja mrežnom izvoru.
-
-Zaglavlje i podnožje
-Zaglavlje i podnožje započinju s uvodnom stranicom. Tekst zaglavlja treba odvojiti crtom i pisati u jednom retku. U zaglavlju se upisuje ime i prezime pristupnika (lijevo poravnanje teksta) te naslov rada (desno poravnanje), a u podnožje s desnim poravnanjem upisuje se broj stranice.

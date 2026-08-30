@@ -20,7 +20,7 @@
     "mode": "note-number",
     "provenance": {
       "kind": "rule-text",
-      "quoteRaw": "1. Pri prvome navoenju nekoga djela, biljeska, bez obzira je li objavljena na hrvatskom",
+      "quoteRaw": "1. Pri prvome navođenju nekoga djela, bilješka, bez obzira je li objavljena na hrvatskom",
       "sourcePage": "str. 9",
       "note": "Biljeske (fusnote) oznacavaju se od rednog broja 1 nadalje i ispisuju na dnu stranice, velicina slova 10, prored 1 (str. 8). Upute propisuju: navodenje literature dosljedno po pravilima znanstvenoga casopisa Bogoslovska smotra (str. 8); u nastavku izvora donose se upute za reference Bogoslovske smotre. Alat generira oblik PRVOG navodenja u biljesci jer izvor samo za njega donosi primjere; ponovljeno navodenje postoji u izvoru (tocka 2, str. 10) ali je sadrzaj odrezan u ekstrakciji i provjerava ga analizator, ne generator."
     }
@@ -41,7 +41,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Zeljko MARDESI, Rascjep u svetome, Zagreb, 2007.",
+        "quoteRaw": "Željko MARDEŠIĆ, Rascjep u svetome, Zagreb, 2007.",
         "sourcePage": "str. 9",
         "note": "Prvo navodenje u biljesci: Ime PREZIME (prezime verzalom), naslov, mjesto, godina; IZDAVAC SE NE NAVODI. Drugi primjer: 'Theodor SCHNITZLER, O znacenju sakramenata, Zagreb, 1998.' Vise autora: 'Angelo SCOLA � Gilfredo MARENGO � Javier P. L�PEZ, Covjek kao osoba. Teoloska antropologija, Zagreb, 2003.' (str. 9); znak izmedu autora ostecen u ekstrakciji. Prezime se unosi velikim slovima u polju autora jer authorFormat nema opciju verzala."
       },
@@ -86,7 +86,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Christoph SCH�NBORN, Finding design in nature, u: The New York Times, 7.",
+        "quoteRaw": "Christoph SCHÖNBORN, Finding design in nature, u: The New York Times, 7.",
         "sourcePage": "str. 10",
         "note": "Primjer je novinski clanak, prelomljen u izvoru: '... The New York Times, 7. VII. 2005.' Puni datum ide u polje year (bez zavrsne tocke, dodaje je predlozak). Oblik za clanak u znanstvenom casopisu (godiste, broj, raspon stranica) NIJE uhvacen ekstrakcijom; pri verifikaciji dopuniti iz uputa Bogoslovske smotre."
       },
@@ -140,7 +140,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Zeljko MARDESI, Rascjep u svetome, Zagreb, 2007.",
+        "quoteRaw": "Željko MARDEŠIĆ, Rascjep u svetome, Zagreb, 2007.",
         "sourcePage": "str. 9",
         "note": "Upute NE obraduju citiranje zavrsnih/diplomskih radova; predlozak izveden iz oblika za knjigu (koji nema izdavaca) uz dodanu ustanovu prije mjesta. Potvrditi ili oboriti pri verifikaciji."
       },
@@ -155,7 +155,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Prilikom navoenje literature potrebno je dosljedno se pridrzavati pravila o navoenju",
+        "quoteRaw": "Prilikom navođenje literature potrebno je dosljedno se pridržavati pravila o navođenju",
         "sourcePage": "str. 8",
         "note": "Ni ekstrakcija ni vidljivi dio uputa Bogoslovske smotre ne donose primjer za pravne propise ni crkvene dokumente; minimalni predlozak izveden iz reda za clanak bez autora (naslov, u: publikacija, broj, godina). Potvrditi ili oboriti pri verifikaciji."
       },

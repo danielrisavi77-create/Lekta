@@ -30,7 +30,7 @@
     },
     "provenance": {
       "kind": "worked-example",
-      "quoteRaw": "Uoceno je da su pomona sredstva neophodna za uspjesni rad (Poli, 2001).",
+      "quoteRaw": "Uočeno je da su pomoćna sredstva neophodna za uspješni rad (Polić, 2001).",
       "sourcePage": "str. 17",
       "note": "Harvardski stil, autor-godina: 'u tekstu se navodi u okruglim zagradama prezime (prvog) autora i godina izdavanja'. Narativni oblik 'Mali (1999) izvjestava'; parafraza/referenca na kraju recenice '(Poli, 2001)'. Doslovni navod ide unutar navodnih znakova ('Doli (2005) definira: ,,...'); izvor NE prikazuje broj stranice u tekstu pa withPagesTemplate nije postavljen."
     }
@@ -52,7 +52,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Bali, A., (2000), Istrazivanja, Zagreb: Najbolja stamparija.",
+        "quoteRaw": "Balić, A., (2000), Istraživanja, Zagreb: Najbolja štamparija.",
         "sourcePage": "str. 18",
         "note": "Format iz izvora: 'Autor, Inicijal imena, (godina), Naslov knjige, Izdanje (samo ako nije prvo), Mjesto izdavanja knjige: Izdavac.' Zarez iza inicijala i iza (godine); dvotocka prije izdavaca; zavrsna tocka. Volume = broj izdanja, opcionalno (samo ako nije prvo). Dva autora se spajaju s ' i ' (Poli, D. i Soli, K.); vise autora 'Zoli, J. i ost.'; urednici 'Zoli, M. i Roli, N. urednici'."
       },
@@ -82,7 +82,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Zoli, M. i Roli, N. urednici, (2011), Zbornik radova, Krapina: Izdavac d.o.o",
+        "quoteRaw": "Žolić, M. i Rolić, N. urednici, (2011), Zbornik radova, Krapina: Izdavač d.o.o",
         "sourcePage": "str. 18",
         "note": "Izvedeno iz oblika za knjigu. Ekstrakcija je odrezana na primjerima knjiga pa nema primjera poglavlja u zborniku; izvor prikazuje samo cijeli uredeni zbornik s oznakom 'urednici' iza imena urednika. Predlozak koristi kompaktni '(ur.)' i raspored 'naslov poglavlja, u: urednik, naslov zbornika' izveden iz Harvardske konvencije; uskladiti s oblikom 'urednici' pri verifikaciji."
       },
@@ -101,7 +101,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Radove u zavrsnom radu treba citirati i referencirati Harvardskim stilom (Panjkota, 2010). Osnovna je",
+        "quoteRaw": "Radove u završnom radu treba citirati i referencirati Harvardskim stilom (Panjkota, 2010). Osnovna je",
         "sourcePage": "str. 17",
         "note": "Izvor izrijekom propisuje Harvardski stil, ali u odrezanoj ekstrakciji nema primjera clanka u casopisu. Predlozak (autor, (godina), naslov, casopis, godiste(broj), stranice) izveden je iz Harvardske konvencije uz interpunkciju iz oblika za knjigu; potvrditi pri verifikaciji."
       },
@@ -119,7 +119,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "mogu se nai na: http://lib.irb.hr/web/en/how-to-cite-literature.html (pristupljeno: 9. svibnja 2022.).",
+        "quoteRaw": "mogu se naći na: http://lib.irb.hr/web/en/how-to-cite-literature.html (pristupljeno: 9. svibnja 2022.).",
         "sourcePage": "str. 17",
         "note": "Format datuma pristupa '(pristupljeno: DATUM)' evidentiran je u ovoj recenici (upucivanje na mrezni izvor). Nema punog bibliografskog primjera mreznog izvora u ekstrakciji; predlozak izveden iz oblika za knjigu + ove konvencije pristupa. Uvod 'dostupno na:' je izveden, potvrditi pri verifikaciji."
       },

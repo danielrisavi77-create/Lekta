@@ -51,7 +51,7 @@ NAPOMENA: Slika 3 (str. 12), jedini primjer mrezne stranice (ICMJE); anotira 'UR
 Otvori PDF: `data/sources/mefos/mefos-upute-radovi-2025.pdf#page=10`
 ```
 TEMPLATE: {authors}. {title} [diplomski rad].[[ {place}:]] {institution}; {year}.
-QUOTE   : adresi: http://www.nlm.nih.gov/bsd/uniform_requirements.html. Odlicne upute o pisanju   [grep: OK]
+QUOTE   : adresi: http://www.nlm.nih.gov/bsd/uniform_requirements.html. Odlične upute o pisanju   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute NE egzemplificiraju citiranje zavrsnih/diplomskih radova; oblik je izveden iz NLM (Citing Medicine / uniform requirements) konvencije za teze, na koju izvor izrijekom upucuje: Autor. Naslov [vrsta rada]. Mjesto: Ustanova; godina. Oznaka vrste rada (zavrsni rad, diplomski rad, disertacija) prilagodava se stvarnom radu. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -60,7 +60,7 @@ NAPOMENA: Upute NE egzemplificiraju citiranje zavrsnih/diplomskih radova; oblik 
 Otvori PDF: `data/sources/mefos/mefos-upute-radovi-2025.pdf#page=10`
 ```
 TEMPLATE: {title}. {container}[[ {issue}]].
-QUOTE   : Referencije cini popis literature u kojem se navode samo oni radovi koji su citirani u tekstu. Navodi   [grep: OK]
+QUOTE   : Referencije čini popis literature u kojem se navode samo oni radovi koji su citirani u tekstu. Navodi   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute pravne propise uopce ne obraduju (biomedicinski izvori); oblik (naslov propisa, sluzbeno glasilo, broj) izveden je iz opce hrvatske prakse u numerickom okruzenju, ne iz izvora. Potvrditi ili oboriti pri verifikaciji.
 ```

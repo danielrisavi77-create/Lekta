@@ -75,7 +75,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Rad se citira na sljedei nacin: svi autori, naslov rada, casopis, godina",
+        "quoteRaw": "Rad se citira na sljedeći način: svi autori, naslov rada, časopis, godina",
         "sourcePage": "str. 12",
         "note": "Upute formatirani primjer daju ISKLJUCIVO za clanak u casopisu; oblik za knjigu je izveden iz iste NPG-Vancouver numericke konvencije (autori 'Prezime II', naslov, mjesto: izdavac; godina). Izvor ga ne egzemplificira, potvrditi ili oboriti pri verifikaciji."
       },
@@ -95,7 +95,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Rad se citira na sljedei nacin: svi autori, naslov rada, casopis, godina",
+        "quoteRaw": "Rad se citira na sljedeći način: svi autori, naslov rada, časopis, godina",
         "sourcePage": "str. 12",
         "note": "Nema primjera za poglavlje u zborniku; oblik je izveden iz NPG-Vancouver konvencije (autori poglavlja, naslov, U: urednik, ur. naslov knjige, mjesto: izdavac; godina, stranice). Izvor ga ne egzemplificira, potvrditi pri verifikaciji."
       },
@@ -112,7 +112,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Rad se citira na sljedei nacin: svi autori, naslov rada, casopis, godina",
+        "quoteRaw": "Rad se citira na sljedeći način: svi autori, naslov rada, časopis, godina",
         "sourcePage": "str. 12",
         "note": "Upute ne obraduju mrezne izvore; oblik i datum pristupa su izvedeni iz Vancouver konvencije za elektronicke izvore. Izvor ga ne egzemplificira, potvrditi pri verifikaciji."
       },
@@ -129,7 +129,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Rad se citira na sljedei nacin: svi autori, naslov rada, casopis, godina",
+        "quoteRaw": "Rad se citira na sljedeći način: svi autori, naslov rada, časopis, godina",
         "sourcePage": "str. 12",
         "note": "Upute opsirno opisuju izradu zavrsnog i diplomskog rada, ali NE obraduju citiranje takvog rada kao izvora; oblik je izveden iz Vancouver konvencije za teze (naslov [tip rada], ustanova; godina). Izvor ga ne egzemplificira, potvrditi pri verifikaciji."
       },
@@ -144,7 +144,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Rad se citira na sljedei nacin: svi autori, naslov rada, casopis, godina",
+        "quoteRaw": "Rad se citira na sljedeći način: svi autori, naslov rada, časopis, godina",
         "sourcePage": "str. 12",
         "note": "Upute ne obraduju propise/pravne akte kao izvore; oblik (naslov, sluzbeno glasilo, broj) je izveden iz opce hrvatske norme, ne iz izvora. Potvrditi ili oboriti pri verifikaciji."
       },

@@ -19,7 +19,7 @@ NAPOMENA: Redoslijed izdavac pa mjesto (obratno od poglavlja, gdje je mjesto pa 
 Otvori PDF: `data/sources/pmfst/pmfst-upute-zavrsni.pdf#page=5`
 ```
 TEMPLATE: {authors} ({year}). {title}. U: {editor} (ur.) {container}. {place}, {publisher}[[, str. {pages}]].
-QUOTE   : Gaines, G., Elbr�chter, M. (1987). Heterotrophic nutrition. U: Taylor, F. J. R. (ur.) The biology of   [grep: OK]
+QUOTE   : Gaines, G., Elbrächter, M. (1987). Heterotrophic nutrition. U: Taylor, F. J. R. (ur.) The biology of   [grep: OK]
 IZVOR   : Gaines, G., Elbr�chter, M. (1987). Heterotrophic nutrition. U: Taylor, F. J. R. (ur.) The biology of the dinoflagellates. Oxford, Blackwell Scientific Publications, str. 224-268.
 RENDER  : Gaines, G., Elbr�chter, M. (1987). Heterotrophic nutrition. U: Taylor, F. J. R. (ur.) The biology of the dinoflagellates. Oxford, Blackwell Scientific Publications, str. 224-268.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -41,7 +41,7 @@ NAPOMENA: Casopis (moze i kraticom, npr. 'Dev. Biol.') pa volumen golim brojem, 
 Otvori PDF: `data/sources/pmfst/pmfst-upute-zavrsni.pdf#page=5`
 ```
 TEMPLATE: {authors}[[ ({year})]] {title}.[[ {container}.]] {url} Pristupljeno {accessed}.
-QUOTE   : NIKOLI, T. (ed.) (2012) Flora Croatica baza podataka / Flora Croatica Database. On-Line   [grep: OK]
+QUOTE   : NIKOLIĆ, T. (ed.) (2012) Flora Croatica baza podataka / Flora Croatica Database. On-Line   [grep: OK]
 IZVOR   : NIKOLI, T. (ed.) (2012) Flora Croatica baza podataka / Flora Croatica Database. On-Line URL: http://hirc.botanic.hr/fcd/ Botanicki zavod, Prirodoslovno-matematicki fakultet, Sveuciliste u Zagrebu. Pristupljeno 12. 7. 2012.
 RENDER  : NIKOLI, T. (2012) Flora Croatica baza podataka / Flora Croatica Database. http://hirc.botanic.hr/fcd/ Pristupljeno 12. 7. 2012.
 VERDIKT : DIFF (deklariran)  <-- USPOREDI ZNAK PO ZNAK
@@ -53,7 +53,7 @@ NAPOMENA: Rule-text oblik (isti odlomak, str. 5): 'Prezime i inicijali imena aut
 Otvori PDF: `data/sources/pmfst/pmfst-upute-zavrsni.pdf#page=4`
 ```
 TEMPLATE: {authors} ({year}). {title}. {institution}[[, {place}]].
-QUOTE   : Poglavlje LITERATURA sadrzi popis svih izvornika tj. znanstvenih radova, monografija,   [grep: OK]
+QUOTE   : Poglavlje LITERATURA sadrži popis svih izvornika tj. znanstvenih radova, monografija,   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute ne obraduju citiranje zavrsnih/diplomskih radova kao izvora. Predlozak je izveden iz oblika za knjigu (izdavac zamijenjen ustanovom). Oznaka vrste rada (npr. 'zavrsni rad') nije dodana jer je izvor ne potvrdjuje. Potvrditi ili oboriti pri verifikaciji.
 ```

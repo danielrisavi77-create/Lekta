@@ -53,7 +53,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Milardovi, A. (2004). Pod globalnim sesirom. Drustva i drzave u tranziciji i globalizaciji. Zagreb, CPI",
+        "quoteRaw": "Milardović, A. (2004). Pod globalnim šeširom. Društva i države u tranziciji i globalizaciji. Zagreb, CPI",
         "sourcePage": "str. 16",
         "note": "Oblik iz primjera fusnote 2: 'Prezime, I. (godina). Naslov. Mjesto, Izdavac'. Autor u obliku prezime + inicijal s tockom. Varijanta sa stranicom (fusnota 3, str. 16): 'Sria, V. (1993). Upravljanje kreativnosu, Zagreb, Skolska knjiga, str. 43' koristi zarez iza naslova umjesto tocke; ovdje je odabran oblik bez stranice (cijela knjiga). NAPOMENA: izvor ove primjere naziva dokumentarnim fusnotama i tvrdi da ih 'NE KORISTIMO', ali daje ih kao primjere formata; format popisa literature izveden je iz njih."
       },
@@ -102,7 +102,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "koristenje radova iz strucnih i znanstvenih casopisa",
+        "quoteRaw": "korištenje radova iz stručnih i znanstvenih časopisa",
         "sourcePage": "str. 2",
         "note": "Izvor preporucuje koristenje radova iz strucnih i znanstvenih casopisa, ali NE daje formatirani primjer clanka. Predlozak izveden iz oblika za knjigu (autor-godina) uz dodatak casopisa, godista, broja i raspona stranica po standardnoj autor-godina konvenciji. Potvrditi ili oboriti pri verifikaciji."
       },
@@ -119,7 +119,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "pise se naziv stranice, link na kojem je dostupan (ne duzi od tri reda) i datum",
+        "quoteRaw": "piše se naziv stranice, link na kojem je dostupan (ne duži od tri reda) i datum",
         "sourcePage": "str. 13",
         "note": "Izvor za online izvore trazi naziv stranice, link (ne duzi od tri reda) i datum posjeenosti, ali samo za izvore ispod tablica/grafickih prikaza, bez formatiranog primjera bibliografske jedinice u popisu literature. Predlozak izveden iz tih komponenti (naziv/autor, godina, link, datum pristupa). Za izvore bez autora izvor navodi naziv stranice/clanka i godinu (str. 15). Potvrditi ili oboriti pri verifikaciji."
       },
@@ -136,7 +136,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Ravli, Z. (2010). Polozaj zena u rukovodeim strukturama sluzbi jedinica lokalne i podrucne",
+        "quoteRaw": "Ravlić, Ž. (2010). Položaj žena u rukovodećim strukturama službi jedinica lokalne i područne",
         "sourcePage": "str. 13",
         "note": "Primjer izvora ispod tablice (str. 13, prelomljen preko tri retka): 'Ravli, Z. (2010). Polozaj zena ... na primjeru Viroviticko podravske zupanije, visoka skola za menadzment u turizmu i informatici u Virovitici, neobjavljeni zavrsni rad, str. 34'. Ustanova ide u polje institution; oznaka 'neobjavljeni zavrsni rad' je doslovni tekst. str. je opcionalna (koristi se za konkretan lokator, npr. u izvoru tablice)."
       },
@@ -162,7 +162,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "(cl. 83. st. 1. Zakona o radu, NN 149/09.)",
+        "quoteRaw": "(čl. 83. st. 1. Zakona o radu, NN 149/09.)",
         "sourcePage": "str. 15",
         "note": "Izvor propise navodi SAMO u tekstu: puni naziv propisa kod prvog citiranja, skracenica poslije, uz clanak/stavak u zagradi '(cl. 83. st. 1. Zakona o radu, NN 149/09.)'. Nema formatirane bibliografske jedinice propisa u popisu literature. Predlozak izveden iz in-text oblika: naziv propisa, sluzbeno glasilo (Narodne novine) i broj. Potvrditi ili oboriti pri verifikaciji."
       },

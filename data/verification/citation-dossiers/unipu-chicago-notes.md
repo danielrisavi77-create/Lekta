@@ -57,7 +57,7 @@ NAPOMENA: Naputak ne obraduje citiranje zavrsnih/diplomskih radova u Chicago sti
 Otvori PDF: `data/sources/unipu/fet-naputak-radovi.pdf#page=3`
 ```
 TEMPLATE: {title}, {container}[[, br. {issue}]], {year}.
-QUOTE   : Za popis koristene literature (nacin citiranja) student moze koristiti Chicago ili   [grep: NEMA EKSTRAKCIJE]
+QUOTE   : Za popis korištene literature (način citiranja) student može koristiti Chicago ili   [grep: NEMA EKSTRAKCIJE]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Naputak (ekonomsko-turisticki kontekst) ne obraduje navodenje propisa u Chicago stilu; predlozak je izveden iz opceg obrasca (naslov, glasilo, broj, godina). Potvrditi ili oboriti pri verifikaciji.
 ```

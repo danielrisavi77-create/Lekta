@@ -80,7 +80,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Gaines, G., Elbr�chter, M. (1987). Heterotrophic nutrition. U: Taylor, F. J. R. (ur.) The biology of",
+        "quoteRaw": "Gaines, G., Elbrächter, M. (1987). Heterotrophic nutrition. U: Taylor, F. J. R. (ur.) The biology of",
         "sourcePage": "str. 5",
         "note": "Urednik u obliku 'Prezime, I.' pa '(ur.)' S tockom, bez zareza iza '(ur.)'; kod poglavlja mjesto ide PRIJE izdavaca ('Oxford, Blackwell Scientific Publications'), obratno od knjige; stranice 'str. 224-268'. Znak � u prezimenu urednika je pdftotext artefakt (u PDF-u dijakritika)."
       },
@@ -140,7 +140,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "NIKOLI, T. (ed.) (2012) Flora Croatica baza podataka / Flora Croatica Database. On-Line",
+        "quoteRaw": "NIKOLIĆ, T. (ed.) (2012) Flora Croatica baza podataka / Flora Croatica Database. On-Line",
         "sourcePage": "str. 5",
         "note": "Rule-text oblik (isti odlomak, str. 5): 'Prezime i inicijali imena autora stranice/institucije (ako nisu poznati staviti naziv Anonymus) (datum kreiranja ili azuriranja stranice) Naslov teksta. Naslov cijele stranice. Adresa stranice. Datum pristupa.' Container = naslov cijele stranice; ako autor nije poznat, upisuje se 'Anonymus'. Bez tocke iza zagrade s godinom (za razliku od ostalih vrsta izvora)."
       },
@@ -168,7 +168,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Poglavlje LITERATURA sadrzi popis svih izvornika tj. znanstvenih radova, monografija,",
+        "quoteRaw": "Poglavlje LITERATURA sadrži popis svih izvornika tj. znanstvenih radova, monografija,",
         "sourcePage": "str. 4",
         "note": "Upute ne obraduju citiranje zavrsnih/diplomskih radova kao izvora. Predlozak je izveden iz oblika za knjigu (izdavac zamijenjen ustanovom). Oznaka vrste rada (npr. 'zavrsni rad') nije dodana jer je izvor ne potvrdjuje. Potvrditi ili oboriti pri verifikaciji."
       },

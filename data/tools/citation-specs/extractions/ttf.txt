@@ -1,71 +1,71 @@
 ===== [ttf-upute-zavrsni-diplomski | str. 2] =====
-SVEUCILISTE U ZAGREBU TEKSTILNO�TEHNOLOSKI FAKULTET UNIVERSITY OF ZAGREB FACULTY OF TEXTILE TECHNOLOGY
+▪ SVEUČILIŠTE U ZAGREBU TEKSTILNO–TEHNOLOŠKI FAKULTET UNIVERSITY OF ZAGREB FACULTY OF TEXTILE TECHNOLOGY
 
 Citiranje i referenciranje
-Obvezno je odvojiti tui tekst, spoznaje i podatke od vlastitog teksta, zakljucaka, spoznaja,
-ideja, podataka i sl. tako sto se uz preuzete informacije navodi izvor. Direktno citiranje manjih
-ili veih dijelova teksta treba izbjegavati osim ako nije nuzno. Treba teziti parafraziranju
-prilikom preuzimanja tuih ideja i informacija.
-U podrucju tehnickih znanosti treba koristiti Vancouver stil referenciranja, a u drustvenom,
-humanistickom i umjetnickom podrucju APA (7. izdanje) stil referenciranja.
-Prema Vancouver stilu referenciranja citati u tekstu oznacavaju se brojem u uglatim
-zagradama na kraju recenice (ili skupa recenica) u kojoj su koristeni. Na primjer, [1] za citiranje
-prve reference u radu. Sljedei citat bit e oznacen [2] i tako dalje redom. Oznacavanje vise
-od jedne reference: [2,3]. Oznacavanje nekoliko referenci u nizu: [4�6]. Istim redoslijedom
-reference se navode u popisu koristene literature na kraju rada.
-Prema APA (7. izdanje) stilu referenciranja citati u tekstu oznacavaju se: prezimenom autora i
+Obvezno je odvojiti tuđi tekst, spoznaje i podatke od vlastitog teksta, zaključaka, spoznaja,
+ideja, podataka i sl. tako što se uz preuzete informacije navodi izvor. Direktno citiranje manjih
+ili većih dijelova teksta treba izbjegavati osim ako nije nužno. Treba težiti parafraziranju
+prilikom preuzimanja tuđih ideja i informacija.
+U području tehničkih znanosti treba koristiti Vancouver stil referenciranja, a u društvenom,
+humanističkom i umjetničkom području APA (7. izdanje) stil referenciranja.
+Prema Vancouver stilu referenciranja citati u tekstu označavaju se brojem u uglatim
+zagradama na kraju rečenice (ili skupa rečenica) u kojoj su korišteni. Na primjer, [1] za citiranje
+prve reference u radu. Sljedeći citat bit će označen [2] i tako dalje redom. Označavanje više
+od jedne reference: [2,3]. Označavanje nekoliko referenci u nizu: [4–6]. Istim redoslijedom
+reference se navode u popisu korištene literature na kraju rada.
+Prema APA (7. izdanje) stilu referenciranja citati u tekstu označavaju se: prezimenom autora i
 godinom objave publikacije koja se citira ukoliko se radi o jednom autoru u oblim zagradama
-(Horvat, 2023), prezimenima dva autora s veznikom ,,i" i godinom za publikacije koje imaju dva
-autora u oblim zagradama (Horvat i Ivi, 2022) ili prezimenom prvog autora i oznakom ,,et al."
-ukoliko se radi o vise od dva autora i godinom objave u oblim zagradama (Horvat et al., 2024).
-Detaljnije upute o nacinu referenciranja nalaze se u predlosku za izradu zavrsnog/diplomskog
+(Horvat, 2023), prezimenima dva autora s veznikom „i“ i godinom za publikacije koje imaju dva
+autora u oblim zagradama (Horvat i Ivić, 2022) ili prezimenom prvog autora i oznakom „et al.“
+ukoliko se radi o više od dva autora i godinom objave u oblim zagradama (Horvat et al., 2024).
+Detaljnije upute o načinu referenciranja nalaze se u predlošku za izradu završnog/diplomskog
 rada u prilogu ovog dokumenta.
 
 Tablice, slike i formule
-Sve tablice i slike (grafikoni, fotografije, crtezi, sheme, dijagrami, histogrami, karte...) trebaju
-imati odgovarajui naslov i biti numerirane.
+Sve tablice i slike (grafikoni, fotografije, crteži, sheme, dijagrami, histogrami, karte...) trebaju
+imati odgovarajući naslov i biti numerirane.
 Brojevi i naslovi tablica nalaze se uvijek iznad tablica.
 Brojevi i naslovi slika nalaze se uvijek ispod slika.
-Ako ilustracija nije izvoran doprinos autora obavezno je navoenje izvora (ako je ilustracija ve
-objavljena), odnosno autora (ako ilustracija jos nije objavljena) od kojeg je preuzeta. Izvor se
+Ako ilustracija nije izvoran doprinos autora obavezno je navođenje izvora (ako je ilustracija već
+objavljena), odnosno autora (ako ilustracija još nije objavljena) od kojeg je preuzeta. Izvor se
 navodi neposredno ispod ilustracije. Kod Vancouver stila referenciranja stavlja se broj
 reference u uglatim zagradama nakon naslova. Kod APA stila referenciranja navodi se autor,
-godina i stranica publikacije iz koje je preuzeta slika ili samo naziv tvrtke u cijem je vlasnistvu
+godina i stranica publikacije iz koje je preuzeta slika ili samo naziv tvrtke u čijem je vlasništvu
 slika u oblim zagradama nakon naslova. Na popisu referenci slike i tablice se navode prema
 pravilima za oba stila u uputama i primjerima pri kraju ovog dokumenta.
-Ako je ilustracija reprodukcija umjetnickog djela, navodi se autor (ako je poznat), naslov te
-ostali podaci relevantni za pojedine umjetnicke vrste.
+Ako je ilustracija reprodukcija umjetničkog djela, navodi se autor (ako je poznat), naslov te
+ostali podaci relevantni za pojedine umjetničke vrste.
 Formule treba centrirati i numerirati (redni broj tablice postaviti uz desnu marginu).
 
 ===== [ttf-upute-zavrsni-diplomski | str. 3] =====
 projekta i sl. te zahvale.
-Nakon toga rad mora sadrzavati sazetak i kljucne rijeci na hrvatskom jeziku te sazetak i kljucne
-rijeci na engleskom jeziku na zasebnim stranicama. Pozeljno je da sazetak nema vise od 250
-rijeci te da je istaknuto tri (3) do pet (5) kljucnih rijeci. U sazetku se daje pregled cjelokupnog
-rada kroz uvod u problematiku, cilj rada, metode istrazivanja, rezultate s tumacenjem te kljucne
-pronalaske odnosno zakljucke. Kod radova pregledne naravi potrebno je izloziti problematiku
-odnosno znacaj sinteze koja se daje te zakljucke.
-Opis teme iz prijave zavrsnog/diplomskog rada ne smije biti jednak sazetku u
-zavrsnom/diplomskom radu predanom za obranu.
-Nakon sazetaka rad mora imati sadrzaj sa cjelokupnom strukturom poglavlja i potpoglavlja s
-pripadajuom numeracijom.
-Nakon sadrzaja tekst rada mora zapoceti s poglavljem ,,UVOD" u kojem se daje krai povijesni
+Nakon toga rad mora sadržavati sažetak i ključne riječi na hrvatskom jeziku te sažetak i ključne
+riječi na engleskom jeziku na zasebnim stranicama. Poželjno je da sažetak nema više od 250
+riječi te da je istaknuto tri (3) do pet (5) ključnih riječi. U sažetku se daje pregled cjelokupnog
+rada kroz uvod u problematiku, cilj rada, metode istraživanja, rezultate s tumačenjem te ključne
+pronalaske odnosno zaključke. Kod radova pregledne naravi potrebno je izložiti problematiku
+odnosno značaj sinteze koja se daje te zaključke.
+Opis teme iz prijave završnog/diplomskog rada ne smije biti jednak sažetku u
+završnom/diplomskom radu predanom za obranu.
+Nakon sažetaka rad mora imati sadržaj sa cjelokupnom strukturom poglavlja i potpoglavlja s
+pripadajućom numeracijom.
+Nakon sadržaja tekst rada mora započeti s poglavljem „UVOD“ u kojem se daje kraći povijesni
 pregled ili pozadinu kao uvod u problematiku, pregled relevantne literature s relacijom na cilj
-zavrsnog/diplomskog rada.
-Sredisnja struktura zavrsnog/diplomskog rada moze i ne mora pratiti strukturu (Materijali i
-metode; Rezultati i diskusija) predlozenu u predlosku s obzirom na narav samog rada te
+završnog/diplomskog rada.
+Središnja struktura završnog/diplomskog rada može i ne mora pratiti strukturu (Materijali i
+metode; Rezultati i diskusija) predloženu u predlošku s obzirom na narav samog rada te
 preporuku Mentora.
-Tekst rada mora zavrsiti s poglavljem ,,ZAKLJUCAK" u kojem se daje krai pregled
-cjelokupnog rada s naglaskom na znacaj zakljucaka istrazivanja ili sinteze kod rada pregledne
+Tekst rada mora završiti s poglavljem „ZAKLJUČAK“ u kojem se daje kraći pregled
+cjelokupnog rada s naglaskom na značaj zaključaka istraživanja ili sinteze kod rada pregledne
 naravi.
-Nakon zakljucka rad mora sadrzavati popis koristene literature. Literatura tj. izvori navedeni
-na popisu moraju biti istaknuti u tekstu na mjestu gdje su koristeni (citirani) za primjerice
+Nakon zaključka rad mora sadržavati popis korištene literature. Literatura tj. izvori navedeni
+na popisu moraju biti istaknuti u tekstu na mjestu gdje su korišteni (citirani) za primjerice
 preuzimanje ideje, podataka i sl. Na popisu literature ne smiju biti izvori koji nisu navedeni i u
-tekstu na odgovarajuem mjestu odnosno izvori koji nisu citirani ili koristeni za izradu rada.
+tekstu na odgovarajućem mjestu odnosno izvori koji nisu citirani ili korišteni za izradu rada.
 
 ===== [ttf-upute-zavrsni-diplomski | str. 4] =====
-SVEUCILISTE U ZAGREBU TEKSTILNO�TEHNOLOSKI FAKULTET UNIVERSITY OF ZAGREB FACULTY OF TEXTILE TECHNOLOGY
+▪ SVEUČILIŠTE U ZAGREBU TEKSTILNO–TEHNOLOŠKI FAKULTET UNIVERSITY OF ZAGREB FACULTY OF TEXTILE TECHNOLOGY
 
-Nakon popisa literature mogu se priloziti prilozi (ankete, obrasci, upute proizvoaca i sl.)
-ukoliko su koristeni te su vazni zbog koristene metodologije ili dobivenih rezultata. Mogu se
-oznaciti PRILOG A, PRILOG B, ... ili PRILOG 1, PRILOG 2, ...
+Nakon popisa literature mogu se priložiti prilozi (ankete, obrasci, upute proizvođača i sl.)
+ukoliko su korišteni te su važni zbog korištene metodologije ili dobivenih rezultata. Mogu se
+označiti PRILOG A, PRILOG B, … ili PRILOG 1, PRILOG 2, …

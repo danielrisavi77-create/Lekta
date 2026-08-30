@@ -8,7 +8,7 @@ Snapshot: `data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf` (hash `a56354fe4ac7
 Otvori PDF: `data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf#page=2`
 ```
 PIN     : izvor propisuje stil "vancouver" -> format ostaje obiteljski motor
-QUOTE   : U podrucju tehnickih znanosti treba koristiti Vancouver stil referenciranja, a u drustvenom,   [grep: OK]
+QUOTE   : U području tehničkih znanosti treba koristiti Vancouver stil referenciranja, a u društvenom,   [grep: OK]
 ```
 
 ## Verifikacija

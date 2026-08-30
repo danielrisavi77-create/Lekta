@@ -8,7 +8,7 @@ Snapshot: `data/sources/fmtu/fmtu-upute-zavrsni-2025.pdf` (hash `700b66c3100a...
 Otvori PDF: `data/sources/fmtu/fmtu-upute-zavrsni-2025.pdf#page=11`
 ```
 PIN     : izvor propisuje stil "chicago-notes" -> format ostaje obiteljski motor
-QUOTE   : bibliografske jedinice trebaju biti potpuno i ispravno iskazane (Chicago stil � Bibliografski   [grep: OK]
+QUOTE   : bibliografske jedinice trebaju biti potpuno i ispravno iskazane (Chicago stil – Bibliografski   [grep: OK]
 ```
 
 ## Verifikacija

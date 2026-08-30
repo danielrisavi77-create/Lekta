@@ -1,49 +1,137 @@
+===== [kemos-upute-radovi-2024 | str. 7] =====
+LIPANJ, 2024.
+
+UVOD
+
+Uvod sadržava osnovne podatke o predmetu istraživanja i objavljenim rezultatima dosadašnjih
+
+istraživanja te obrazlaže problem koji slijedi u radu i pretpostavku koja se pokusima ili opažanjima
+
+na terenu provjerava. Na kraju Uvoda jasno je obrazložen cilj istraživanja. Cilj istraživanja može
+
+biti i zasebno kratko poglavlje.
+
+U Uvodu se započinje s navođenjem izvora (citiranjem). Izvori se numeriraju brojevima od 1 pa
+
+naviše i stavljaju u uglate zagrade na kraju rečenice, a prije točke. U zasebnom poglavlju, na kraju
+
+rada navode se svi izvori onim redoslijedom kojim se spominju u tekstu, pr. Kemija je prirodna
+
+znanost koja proučava sastav, svojstva i promjene tvari [1]. U slučaju navođenja više referenci,
+
+brojevi svih izvora se pišu unutar istih uglatih zagrada, odvojeni zarezom bez razmaka, pr. [1,3,15].
+
+Ukoliko se u tekst uvode kratice, prvi je put potrebno navesti puni naziv na hrvatskom te potom
+
+kraticu. U zagradu se navodi puni engleski naziv (italic) ukoliko je kratica izvedena iz engleskog
+
+(ili nekog drugog jezika), pr. Oštećenja stanica mogu biti uzrokovana djelovanjem reaktivnih
+
+kisikovih vrsta, ROS (engl. reactive oxygen species).
+
+LITERATURNI PREGLED
+U ovom se poglavlju detaljno opisuje i razrađuje tema koja se obrađuje. Tekst treba biti strukturiran
+po poglavljima. Poglavlje se može sastojati od više potpoglavlja, koja trebaju biti logički
+povezana. Svako poglavlje treba smisleno nadovezivati na prethodno i biti usko povezano s
+naslovom poglavlja. Slike i tablice se brojčano označavaju. Svaka slika treba biti označena brojem
+i sadržava potpuni opis. Opis slike ili grafičkog prikaza ili sheme (grafovi i sheme su također slike)
+piše se ispod slike, a opis tablice iznad tablice. Slike i tablice se postavljaju iza teksta ili stranice
+na kojoj su prvi puta spomenuti. Ako slika ili tablica, preuzeta iz nekog izvora, sadržava strani
+tekst, taj treba zamijeniti hrvatskim prijevodom. U tom se slučaju na kraju opisa slike u zagradi
+navodi „preuzeto i prilagođeno iz: [broj izvora]“.
+
+Primjer slike:
+… „…hidrazone i N-acilhidrazone derivate piridoksala i različitih heteroaromatskih hidrazina i
+
+===== [kemos-upute-radovi-2024 | str. 10] =====
+REZULTATI I RASPRAVA
+Rezultate i raspravu može se prikazati u jednom zajedničkom poglavlju „4. Rezultati i rasprava“
+ili odvojiti u zasebna poglavlja „4. Rezultati“ i „5. Rasprava“. Rezultati trebaju biti pisani jasno,
+logičnim slijedom, a u pravilu ih valja dokumentirati fotografijama, crtežima, shemama, tablicama
+ili grafičkim prikazima. RASPRAVA je odjeljak koji objašnjava značenje rezultata i govori o tome
+jesu li istraživačke pretpostavke potvrđene. Ne treba ponavljati rezultate, nego valja procijeniti
+koliko se oni slažu s poznatim činjenicama i rezultatima drugih autora i što se iz njih može
+zaključiti te koja se nova pitanja otvaraju i što bi dalje trebalo istražiti. Ukoliko su neki rezultati
+negativni treba obrazložiti moguće razloge ili eventualne propuste.
+
+ZAKLJUČAK
+Zaključak je kratko poglavlje (ne duže od 1 stranice teksta) u kojem se navode zaključci koji su
+doneseni na osnovi provedenog istraživanja, bez navođenja literature, slika, tablica i priloga.
+
+POPIS KRATICA
+Ukoliko se u radu koristi veliki broj kratica, preporuča se nakon zaključka dodati poglavlje s
+popisom svih kratica u radu s njihovim punim nazivima na hrvatskom i u zagradi na onom jeziku
+iz kojeg je kratica izvedena. Kratice treba poredati abecednim redom.
+
+LITERATURA
+Na kraju je teksta potrebno pobrojati i napisati korištenu literatura. Djela koja su navedena u tekstu
+trebaju biti poredana numeričkim redoslijedom kojim se spominju u tekstu.
+
+===== [kemos-upute-radovi-2024 | str. 11] =====
+SVEUČILIŠTE U OSIJEKU – ODJEL ZA KEMIJU
+                                                          LIPANJ, 2024.
+
+Primjer:
+
+1. M. Martins-Costa, J. M. Anglada, J. S. Francisco M. Ruiz-López, The Aqueous Surface as
+    an Efficient Transient Stop for the Reactivity of Gaseous NO2 in Liquid Water. J. Am
+    Chem. Soc. 2020, 142, 20937–20941.
+
+2. E. Wingender, Gene Regulation in Eukaryotes, VCH, Weinheim, 1993, p. 215.
+3. Hrvatsko knjižničarsko društvo. URL: http://www.hkdrustvo.hr/ (10.11.2024.)
+
+*primjere, citata i bilješki pogledajte u posebnom prilogu – prilog 3.
+
+PRILOG
+Prilozi se dodaju na kraju ocjenskog rada (završnog odnosno diplomskog) u slučajevima kada su
+rezultati rada preopširni, pri opsežnoj fotodokumentaciji, tablicama, shemama i sl.
+
 ===== [kemos-upute-radovi-2024 | str. 2] =====
-9. Ime i prezime mentora, zvanja: npr., izv. prof. dr. sc. Martina Srajer Gajdosik te napisati
+9. Ime i prezime mentora, zvanja: npr., izv. prof. dr. sc. Martina Šrajer Gajdošik te napisati
 
          (ako postoji) ime i prezime, zvanje komentora;
-    10. Sazetak rada: sazeto iznijeti glavne rezultate i zakljucak rada u jednom odlomku koji ne
+    10. Sažetak rada: sažeto iznijeti glavne rezultate i zaključak rada u jednom odlomku koji ne
 
-         smije biti duzi od 200 rijeci;
-    11. Kljucne rijeci: navesti ispod sazetka, do 6 kljucnih rijeci, odvojene zarezom (,) ili tocka
+         smije biti duži od 200 riječi;
+    11. Ključne riječi: navesti ispod sažetka, do 6 ključnih riječi, odvojene zarezom (,) ili točka
 
-         zarezom (;) dok niz treba zavrsiti tockom (.), po mogunosti ne ponavljati rijeci iz naslova
+         zarezom (;) dok niz treba završiti točkom (.), po mogućnosti ne ponavljati riječi iz naslova
          rada;
     12. Jezik izvornika: napisati jezik na kojem je rad napisan (npr. hrvatski);
-    13. Podatke o radu: zavrsni/diplomski rad obuhvaa: a broj stranica, b broj slika, c broj
+    13. Podatke o radu: završni/diplomski rad obuhvaća: a broj stranica, b broj slika, c broj
          tablica, d broj literaturnih navoda i e broj priloga;
-    14. Rad prihvaen: napisati datum s potvrdnice tj. predaje obrasca 2.
-    15. Strucno povjerenstvo za ocjenu rada: napisati ime i prezime, zvanje
-    16. Rad je pohranjen: napisati: Knjiznica Odjela za kemiju, Kuhaceva 20, 31000 Osijek
+    14. Rad prihvaćen: napisati datum s potvrdnice tj. predaje obrasca 2.
+    15. Stručno povjerenstvo za ocjenu rada: napisati ime i prezime, zvanje
+    16. Rad je pohranjen: napisati: Knjižnica Odjela za kemiju, Kuhačeva 20, 31000 Osijek
 
                                             Repozitorij Odjela za kemiju, Osijek
 
          Zatim ide stranica (nije obavezno) sa zahvalama, posvetama i sl. (mentoru, roditeljima),
-nakon toga slijedi: sadrzaj, uvod, literaturni pregled, rezultati i rasprava, zakljucak, popis koristene
-literature (upute kako tocno navoditi literaturu i citirati: Prilog 3) te prilog.
+nakon toga slijedi: sadržaj, uvod, literaturni pregled, rezultati i rasprava, zaključak, popis korištene
+literature (upute kako točno navoditi literaturu i citirati: Prilog 3) te prilog.
 
 ===== [kemos-upute-radovi-2024 | str. 4] =====
-Rad je izraen na: Sveucilistu u Osijeku � Odjel za kemiju
+Rad je izrađen na: Sveučilištu u Osijeku – Odjel za kemiju
 Mentor: izv. prof. dr. sc. Ime i prezime
 Komentor (ako postoji): doc. dr. sc. Ime i prezime
 
-Sazetak: sazeto iznijeti glavne rezultate i zakljucak rada u jednom odlomku koji ne smije biti duzi od 200
-rijeci.
+Sažetak: sažeto iznijeti glavne rezultate i zaključak rada u jednom odlomku koji ne smije biti duži od 200
+riječi.
 
-Kljucne rijeci: navesti ispod sazetka, do 6 kljucnih rijeci, odvojene zarezom (,) ili tocka zarezom (;) dok
-niz treba zavrsiti tockom (.)
+Ključne riječi: navesti ispod sažetka, do 6 ključnih riječi, odvojene zarezom (,) ili točka zarezom (;) dok
+niz treba završiti točkom (.)
 
 Jezik izvornika: hrvatski jezik
-Zavrsni / Diplomski rad obuhvaa: a broj stranica, b broj slika, c broj tablica, d broj literaturnih navoda
+Završni / Diplomski rad obuhvaća: a broj stranica, b broj slika, c broj tablica, d broj literaturnih navoda
 i e broj priloga
-Rad prihvaen: 24. svibanja 2024. godine (datum preuzeti s obrasca 2., tj. potvrdnice)
-Strucno povjerenstvo za ocjenu rada:
+Rad prihvaćen: 24. svibanja 2024. godine (datum preuzeti s obrasca 2., tj. potvrdnice)
+Stručno povjerenstvo za ocjenu rada:
 
     1. doc. dr. sc. Ime i prezime
     2. izv. prof. dr. sc. Ime i prezime
     3. prof. dr. sc. Ime i prezime
 
-Rad je pohranjen: Knjiznica Odjela za kemiju, Kuhaceva 20, 31000 Osijek
+Rad je pohranjen: Knjižnica Odjela za kemiju, Kuhačeva 20, 31000 Osijek
                         Repozitorij Odjela za kemiju, Osijek
 
 ===== [kemos-upute-radovi-2024 | str. 5] =====
@@ -66,11 +154,29 @@ Reviewers:
     2. title, name and last name
     3. title, name and last name
 
-Thesis deposited in: Library of the Department of Chemistry, Ulica Franje Kuhaca 20, Osijek
+Thesis deposited in: Library of the Department of Chemistry, Ulica Franje Kuhača 20, Osijek
                          Repository of the Department of Chemistry, Osijek
 
 ===== [kemos-upute-radovi-2024 | str. 6] =====
-slikama (grafikoni, sheme, fotografije) i tablicama, osim ako isti nisu u prilogu rada. U slucaju
+jeziku. U pravilu su oni sadržani u temeljnoj dokumentacijskoj kartici. Prvo se piše na hrvatskom,
+
+potom na drugoj stranici/kartici tekst ide na engleskom jeziku. Svaki sažetak mora sadržavati
+
+između 100 i 200 riječi. U sažetku se ukratko navode ciljevi, hipoteze, metodologija i rezultati
+
+istraživanja. U sažetku treba izbjegavati uporabu prvog lica. Nakon sažetka u novom retku treba
+
+navesti do 6 ključnih riječi odvojenih zarezom (,) ili točka zarezom (;), a niz treba završiti točkom.
+
+SADRŽAJ
+
+Sadržaj je kazalo pojedinih naslova s navođenjem stranica. Preporučuje se decimalna numeracija
+
+poglavlja i odlomaka u poglavljima (npr. 1.1. 1.2. …). Numeriranje stranica započinje na stranici
+
+UVODA ocjenskog rada; numeriraju se sve stranice, tj. kako stranice s tekstom, tako i stranice sa
+
+slikama (grafikoni, sheme, fotografije) i tablicama, osim ako isti nisu u prilogu rada. U slučaju
 
 postojanja priloga, kao zadnja numerira se stranica na kojoj je navedeno poglavlje PRILOZI, s
 
@@ -78,126 +184,17 @@ popisom svih priloga. Sami prilozi mogu se numerirati rimskim brojevima, no ne u
 
 broj stranica rada.
 
-SADRZAJ
+SADRŽAJ
 
- 1.UVOD................................................................................................ 3
+ 1.UVOD…………………………………………………………………………………… 3
  2. LITERATURNI PREGLED ............................................................................................ 4
 
-   2.1. ........................................................................................................................... 5
-   2.2. ............................................................................................................... 6
+   2.1. ………………………................................................................................................ 5
+   2.2. ………………………………………………………................................................ 6
  3. EKSPERIMENTALNI DIO ............................................................................................ 7
-   3.1. .......................................................................................................................... 9
-   3.2. ........................................................................................................................... 11
+   3.1. …………………………............................................................................................ 9
+   3.2. ………………………................................................................................................ 11
  4. REZULTATI I RASPRAVA ......................................................................................... 15
- 5. ZAKLJUCAK .................................................................................................................. 19
+ 5. ZAKLJUČAK .................................................................................................................. 19
  6. POPIS LITERATURE ..................................................................................................... 20
  7. PRILOG ........................................................................................................................... 21
-
-===== [kemos-upute-radovi-2024 | str. 7] =====
-LIPANJ, 2024.
-
-UVOD
-
-Uvod sadrzava osnovne podatke o predmetu istrazivanja i objavljenim rezultatima dosadasnjih
-
-istrazivanja te obrazlaze problem koji slijedi u radu i pretpostavku koja se pokusima ili opazanjima
-
-na terenu provjerava. Na kraju Uvoda jasno je obrazlozen cilj istrazivanja. Cilj istrazivanja moze
-
-biti i zasebno kratko poglavlje.
-
-U Uvodu se zapocinje s navoenjem izvora (citiranjem). Izvori se numeriraju brojevima od 1 pa
-
-navise i stavljaju u uglate zagrade na kraju recenice, a prije tocke. U zasebnom poglavlju, na kraju
-
-rada navode se svi izvori onim redoslijedom kojim se spominju u tekstu, pr. Kemija je prirodna
-
-znanost koja proucava sastav, svojstva i promjene tvari [1]. U slucaju navoenja vise referenci,
-
-brojevi svih izvora se pisu unutar istih uglatih zagrada, odvojeni zarezom bez razmaka, pr. [1,3,15].
-
-Ukoliko se u tekst uvode kratice, prvi je put potrebno navesti puni naziv na hrvatskom te potom
-
-kraticu. U zagradu se navodi puni engleski naziv (italic) ukoliko je kratica izvedena iz engleskog
-
-(ili nekog drugog jezika), pr. Osteenja stanica mogu biti uzrokovana djelovanjem reaktivnih
-
-kisikovih vrsta, ROS (engl. reactive oxygen species).
-
-LITERATURNI PREGLED
-U ovom se poglavlju detaljno opisuje i razrauje tema koja se obrauje. Tekst treba biti strukturiran
-po poglavljima. Poglavlje se moze sastojati od vise potpoglavlja, koja trebaju biti logicki
-povezana. Svako poglavlje treba smisleno nadovezivati na prethodno i biti usko povezano s
-naslovom poglavlja. Slike i tablice se brojcano oznacavaju. Svaka slika treba biti oznacena brojem
-i sadrzava potpuni opis. Opis slike ili grafickog prikaza ili sheme (grafovi i sheme su takoer slike)
-pise se ispod slike, a opis tablice iznad tablice. Slike i tablice se postavljaju iza teksta ili stranice
-na kojoj su prvi puta spomenuti. Ako slika ili tablica, preuzeta iz nekog izvora, sadrzava strani
-tekst, taj treba zamijeniti hrvatskim prijevodom. U tom se slucaju na kraju opisa slike u zagradi
-navodi ,,preuzeto i prilagoeno iz: [broj izvora]".
-
-Primjer slike:
-... ,,...hidrazone i N-acilhidrazone derivate piridoksala i razlicitih heteroaromatskih hidrazina i
-
-===== [kemos-upute-radovi-2024 | str. 10] =====
-UPUTE ZA PISANJE ZAVRSNOG / DIPLOMSKOG RADA
-                                SVEUCILISTE U OSIJEKU � ODJEL ZA KEMIJU
-                                                                     LIPANJ, 2024.
-
-EKSPERIMENTALNI DIO
-
-Materijale i metode treba opisati detaljno, da citatelj moze i s�m ponoviti svaki pokus i izracun. U
-
-posve teorijskim radnjama to se poglavlje ispusta ili nadomjesta nekim drugim (npr. Teorijski dio
-
-i sl.).
-
-U uvodnom dijelu potrebno je definirati cistou koristenih kemikalija i proizvoace, sve koristene
-
-instrumente (tip instrumenta, proizvoac) kao i uvjete mjerenja. Glede kemijske nomenklature i
-
-terminologije valja se pridrzavati preporuk� IUPAC za doticnu granu kemije i njihovih hrvatskih
-
-prijevoda.
-
-===== [kemos-upute-radovi-2024 | str. 10] =====
-REZULTATI I RASPRAVA
-Rezultate i raspravu moze se prikazati u jednom zajednickom poglavlju ,,4. Rezultati i rasprava"
-ili odvojiti u zasebna poglavlja ,,4. Rezultati" i ,,5. Rasprava". Rezultati trebaju biti pisani jasno,
-logicnim slijedom, a u pravilu ih valja dokumentirati fotografijama, crtezima, shemama, tablicama
-ili grafickim prikazima. RASPRAVA je odjeljak koji objasnjava znacenje rezultata i govori o tome
-jesu li istrazivacke pretpostavke potvrene. Ne treba ponavljati rezultate, nego valja procijeniti
-koliko se oni slazu s poznatim cinjenicama i rezultatima drugih autora i sto se iz njih moze
-zakljuciti te koja se nova pitanja otvaraju i sto bi dalje trebalo istraziti. Ukoliko su neki rezultati
-negativni treba obrazloziti mogue razloge ili eventualne propuste.
-
-ZAKLJUCAK
-Zakljucak je kratko poglavlje (ne duze od 1 stranice teksta) u kojem se navode zakljucci koji su
-doneseni na osnovi provedenog istrazivanja, bez navoenja literature, slika, tablica i priloga.
-
-POPIS KRATICA
-Ukoliko se u radu koristi veliki broj kratica, preporuca se nakon zakljucka dodati poglavlje s
-popisom svih kratica u radu s njihovim punim nazivima na hrvatskom i u zagradi na onom jeziku
-iz kojeg je kratica izvedena. Kratice treba poredati abecednim redom.
-
-LITERATURA
-Na kraju je teksta potrebno pobrojati i napisati koristenu literatura. Djela koja su navedena u tekstu
-trebaju biti poredana numerickim redoslijedom kojim se spominju u tekstu.
-
-===== [kemos-upute-radovi-2024 | str. 11] =====
-SVEUCILISTE U OSIJEKU � ODJEL ZA KEMIJU
-                                                          LIPANJ, 2024.
-
-Primjer:
-
-1. M. Martins-Costa, J. M. Anglada, J. S. Francisco M. Ruiz-L�pez, The Aqueous Surface as
-    an Efficient Transient Stop for the Reactivity of Gaseous NO2 in Liquid Water. J. Am
-    Chem. Soc. 2020, 142, 20937�20941.
-
-2. E. Wingender, Gene Regulation in Eukaryotes, VCH, Weinheim, 1993, p. 215.
-3. Hrvatsko knjiznicarsko drustvo. URL: http://www.hkdrustvo.hr/ (10.11.2024.)
-
-*primjere, citata i biljeski pogledajte u posebnom prilogu � prilog 3.
-
-PRILOG
-Prilozi se dodaju na kraju ocjenskog rada (zavrsnog odnosno diplomskog) u slucajevima kada su
-rezultati rada preopsirni, pri opseznoj fotodokumentaciji, tablicama, shemama i sl.

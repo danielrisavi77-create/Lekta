@@ -20,7 +20,7 @@
     "mode": "bracket-number",
     "provenance": {
       "kind": "rule-text",
-      "quoteRaw": "prema [2]. Ukoliko se poziva na vise referenci literature, mogue je vise oznaka",
+      "quoteRaw": "prema [2]. Ukoliko se poziva na više referenci literature, moguće je više oznaka",
       "sourcePage": "str. 3",
       "note": "Na literaturu se u tekstu poziva rednim brojem u uglatoj zagradi (prema [2]); vise referenci se odvojeno zarezima stavlja u zajednicke uglate zagrade, a pri pozivanju na knjigu moze se dodati stranica, npr. [4, str.132] (t. 2.10). Brojevi se dodjeljuju redoslijedom pojavljivanja u radu (t. 2.9)."
     }
@@ -42,7 +42,7 @@
       ],
       "provenance": {
         "kind": "rule-text",
-        "quoteRaw": "[3] Inicijali imena, prezime autora, naslov knjige, izdavac, mjesto, godina izdanja.",
+        "quoteRaw": "[3] Inicijali imena, prezime autora, naslov knjige, izdavač, mjesto, godina izdanja.",
         "sourcePage": "str. 3",
         "note": "Redak u izvoru je shematski (opisna polja s doslovnom interpunkcijom), ne konkretan citat, pa je kind rule-text i nema examplea (opisni autorski blok nije provediv kroz parser autora). Redoslijed: autor (inicijali imena pa prezime), naslov, izdavac, mjesto, godina; sve odvojeno zarezima, tocka na kraju. Redni broj [3] je pozicijska oznaka u popisu literature (redoslijed pojavljivanja u radu) i nije dio predloska."
       },
@@ -78,7 +78,7 @@
       ],
       "provenance": {
         "kind": "rule-text",
-        "quoteRaw": "[1] Inicijali imena, prezime autora, naslov rada, naziv casopisa, broj casopisa",
+        "quoteRaw": "[1] Inicijali imena, prezime autora, naslov rada, naziv časopisa, broj časopisa",
         "sourcePage": "str. 3",
         "note": "Nastavak retka u izvoru: '(br./No.), broj sveska (sv./Vol.), str. (pp.) od - do, mjesec i godina izdanja.' Redak je shematski (opisna polja + objasnjenja etiketa u zagradama), ne konkretan citat, pa je kind rule-text i nema examplea; predlozak pise 'br.', 'sv.' i 'str.' bez objasnjenja. Neuobicajeno: broj casopisa (issue) dolazi PRIJE broja sveska (volume). Izvor trazi 'mjesec i godina izdanja', alat ima samo polje year."
       },
@@ -94,7 +94,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "2.9. Literaturu treba svrstati redom kojim se pojavljuje u radu i napisati na slijedei nacin:",
+        "quoteRaw": "2.9. Literaturu treba svrstati redom kojim se pojavljuje u radu i napisati na slijedeći način:",
         "sourcePage": "str. 3",
         "note": "Upute (t. 2.9) ne obraduju mrezne izvore. Predlozak je izveden iz opceg zareznog niza polja kojim izvor pise sve bibliografske jedinice; oznaka pristupa je dodana konvencija (izvor ne spominje datum pristupa, zato accessDate false). Potvrditi ili oboriti pri verifikaciji."
       },
@@ -111,7 +111,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "[3] Inicijali imena, prezime autora, naslov knjige, izdavac, mjesto, godina izdanja.",
+        "quoteRaw": "[3] Inicijali imena, prezime autora, naslov knjige, izdavač, mjesto, godina izdanja.",
         "sourcePage": "str. 3",
         "note": "Upute ne obraduju citiranje zavrsnih i diplomskih radova; predlozak je izveden iz oblika za knjigu (izdavac -> ustanova). Potvrditi pri verifikaciji."
       },

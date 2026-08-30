@@ -1,40 +1,3 @@
-===== [efri-pravilnik-zavrsni-2014 | str. 1] =====
-Sveutili5ta u Riieci
-
-                                                  I. OPCE ODREDBE
-
-                                                      Clanak 1.
-         Sveudili5ni prijediplomski studij zavr5ava izradom zavrlnog rada u skladu s ovim
-         Pravilnikom.
-
-                                                   elanak 2.
-(1) Zavr5ni rad predstavlja samostalnu strutnu obradu odredenog problema.
-t2) Zavr5nim radom student dokazuje da je na temelju znanja stedenog tijekom studija
-
-       ovladao zadanom temom, da poznaje kori5tenu znanstvenu i strutnu literaturu i
-
-        terminologiju te da je ispravno navodi.
-
-rr. sADRzAl ZAVRSNOG RADA
-
-                                                  elanak 3.
-
-t1) Obavezni dijelovi zavr5nog rada su: naslovnica, saZetak s kljudnim rijetima, sadrZaj,
-
-         uvod, glavna poglavlja, zakljudak,literatura, popis tablica, shema, grafikona (i ostalih
-
-        ilustracija), popis priloga (ako postojil i izjava, a navedeni dijelovi rada moraju se
-        navesti tim redoslijedom.
-
-(2) Izgled naslovne stranice dan je u prilogu 3. ovog Pravilnika.
-
-Irr. srrl I 0RGANTZACIIA TEKSTA ZAVRSNOG RADA
-
-                                                    elanak 4.
-t1) NASLOV mora odraZavati tematiku i svrhu rada [maksimalno 15 rijedi].
-
-(2) SAZETAK je kratki prikaz rezultata i zakljudaka istraZivanja. SaZetak mora imati
-
 ===== [efri-pravilnik-zavrsni-2014 | str. 2] =====
 (7) IZIAVA o samostalnoj izradi rada i dozvoli za objavljivanje na Internetu (Obrazac u
 
@@ -86,6 +49,43 @@ t4) Tekst zavr5nog rada moZe sadrZavati ILUSTRACIfE: tablice, grafikone, sheme,
         numeriraju s dvoznamenkastim odnosno troznamenkastim brojevima fprimjer 2.,
 
          2.7.,2.2.,2.2.1.,2.2.2. itd.), ali ne viSe od toga.
+
+===== [efri-pravilnik-zavrsni-2014 | str. 1] =====
+Sveutili5ta u Riieci
+
+                                                  I. OPCE ODREDBE
+
+                                                      Clanak 1.
+         Sveudili5ni prijediplomski studij zavr5ava izradom zavrlnog rada u skladu s ovim
+         Pravilnikom.
+
+                                                   elanak 2.
+(1) Zavr5ni rad predstavlja samostalnu strutnu obradu odredenog problema.
+t2) Zavr5nim radom student dokazuje da je na temelju znanja stedenog tijekom studija
+
+       ovladao zadanom temom, da poznaje kori5tenu znanstvenu i strutnu literaturu i
+
+        terminologiju te da je ispravno navodi.
+
+rr. sADRzAl ZAVRSNOG RADA
+
+                                                  elanak 3.
+
+t1) Obavezni dijelovi zavr5nog rada su: naslovnica, saZetak s kljudnim rijetima, sadrZaj,
+
+         uvod, glavna poglavlja, zakljudak,literatura, popis tablica, shema, grafikona (i ostalih
+
+        ilustracija), popis priloga (ako postojil i izjava, a navedeni dijelovi rada moraju se
+        navesti tim redoslijedom.
+
+(2) Izgled naslovne stranice dan je u prilogu 3. ovog Pravilnika.
+
+Irr. srrl I 0RGANTZACIIA TEKSTA ZAVRSNOG RADA
+
+                                                    elanak 4.
+t1) NASLOV mora odraZavati tematiku i svrhu rada [maksimalno 15 rijedi].
+
+(2) SAZETAK je kratki prikaz rezultata i zakljudaka istraZivanja. SaZetak mora imati
 
 ===== [efri-pravilnik-zavrsni-2014 | str. 3] =====
 i m e. p r e z i m e @ efr i. u n ir i. hr).

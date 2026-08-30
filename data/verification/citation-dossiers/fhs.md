@@ -43,7 +43,7 @@ NAPOMENA: Nastavak prelomljenog retka: 'Journal of Education, 26(1), 3-101.' She
 Otvori PDF: `data/sources/fhs/fhs-upute-diplomski-2026.pdf#page=7`
 ```
 TEMPLATE: {authors} ({year}). {title}.[[ {container}.]] {url}
-QUOTE   : Openito, sadrzaj i ureenje teksta treba biti u skladu s APA standardima za pisanje   [grep: OK]
+QUOTE   : Općenito, sadržaj i uređenje teksta treba biti u skladu s APA standardima za pisanje   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Ekstrahirani isjecci NE pokrivaju mrezne izvore (odjeljak o novinskim napisima i intervjuima je odrezan na kraju ekstrakcije). Predlozak je izveden iz opceg APA 7 oblika (autor, godina, naslov, naziv stranice, URL) na koji se upute izrijekom pozivaju; APA 7 ne trazi datum pristupa za stabilan sadrzaj pa je accessed izostavljen. Potvrditi ili oboriti pri verifikaciji.
 ```

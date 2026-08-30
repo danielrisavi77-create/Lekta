@@ -1,107 +1,56 @@
-===== [mef-pravilnik-diplomski-2023 | str. 3] =====
-izborni predmet nema pravo traziti priznavanje ekvivalenta za diplomski rad.
-
-                                                Clanak 6.
-
-(1) Mentor za diplomski rad moze biti nastavnik Medicinskog fakulteta ili
-sastavnice Sveucilista u Zagrebu, izabran u znanstveno-nastavno zvanje (radno
-mjesto ili naslovno zvanje) ili poslijedoktorand Fakulteta upisan u Upisnik
-znanstvenika Republike Hrvatske.
-(2) Mentor moze u jednoj akademskoj godini imati 3 mentorstva, a vei broj
-odobravat e prodekan za nastavu.
-(3) Mentor pomaze pristupniku pri izradi diplomskog rada objasnjavajui mu
-poblize zadatke i dajui savjete u pogledu nacina odabira i obrade materijala,
-odabira sredstava za rad, dokumentacije i literature.
-(4) Mentora imenuje Povjerenstvo.
-
-                                                Clanak 7.
-
-(1) Temu za diplomski rad odobrava Povjerenstvo na prijedlog mentora i
-studenta, te uz suglasnost procelnika Katedre ili Vijea predmeta.
-(2) Student moze jedanput promijeniti temu diplomskog rada i/ili mentora
-diplomskog rada (obrazac 09. i 10.).
-
-                                                  Clanak 8.
-
-(1) Diplomski rad obvezno se prijavljuje tijekom zimskog semestra posljednje godine
-
-===== [mef-pravilnik-diplomski-2023 | str. 25] =====
-Zakljuc ci
-        Zahvale
-        Literatura
-        Zivotopis
-
-Ako je rijec o preglednom ili struc nom radu, sadrzaj takoer mora imati sljede e
-        elemente: Sazetak
-        Summary
-        Zahvale
-        Literatura
-        Zivotopis
-
-Ostale podnaslove (koji dolaze izmeu Summary i Zahvale) odredit  e zajednic ki student i
-mentor, sukladno naravi i sadrzaju rada.
-
-Napomena: Sazetak se pise na hrvatskom i engleskom jeziku (svaki na zasebnoj stranici) i
-mora obuhva ati: Naslov rada, ime i prezime autora, tekst sazetka, kljuc ne rijec i (tri do pet
-kljuc nih rijec i); odnosno naslov rada na engleskom, ime i prezime autora, tekst (summary)
-na engleskom, te key words. Sazetak ima 200 do 400 rijec i � toc nije, najvise onoliko rijec i
-(ukljuc uju i i naslov, autora i kljuc ne rijec i) koliko uz propisani font stane na jednu stranicu.
-
-Numeriranje stranica zapoc inje s poglavljem Uvod, tako da je prva stranica Uvoda ujedno i
-
 ===== [mef-pravilnik-diplomski-2023 | str. 26] =====
-odnosno uz odgovaraju i dio teksta ako je rijec o preglednom radu.
-Vazna napomena: Ako u radu koristite ilustracije ili tablice preuzete iz publikacija drugih
-autora, ne zaboravite da su ti materijali legalno zasti eni (autorska, izdavac ka i srodna
-prava � copyright) i da ste u svakom sluc aju DUZNI navesti toc an izvor (zastita autorskih
-prava), a u ve ini sluc ajeva i prethodno pribaviti dopustenje izdavac a za koristenje tog
-materijala (zastita izdavac kih prava). Ako se materijal preuzima iz publikacija objavljenih
-prije 1930. godine, u pravilu je dovoljno samo navesti toc an izvor (u pravilu, izdavac ka
-prava vrijede 70 do 75 godina � no, uvijek je potrebno toc no provjeriti!). Nepostivanje ovih
-pravila predstavlja ozbiljan prekrsaj akademskog integriteta i Etic kog kodeksa sveuc ilista
-(kao i odgovaraju ih pravilnika Medicinskog fakulteta). Stoga je zajednic ka duznost i
-studenta i mentora da ovom pitanju pristupaju s punom odgovornos u.
+odnosno uz odgovarajuć i dio teksta ako je riječ o preglednom radu.
+Važna napomena: Ako u radu koristite ilustracije ili tablice preuzete iz publikacija drugih
+autora, ne zaboravite da su ti materijali legalno zaštić eni (autorska, izdavač ka i srodna
+prava – copyright) i da ste u svakom sluč aju DUŽNI navesti toč an izvor (zaštita autorskih
+prava), a u već ini sluč ajeva i prethodno pribaviti dopuštenje izdavač a za korištenje tog
+materijala (zaštita izdavač kih prava). Ako se materijal preuzima iz publikacija objavljenih
+prije 1930. godine, u pravilu je dovoljno samo navesti toč an izvor (u pravilu, izdavač ka
+prava vrijede 70 do 75 godina – no, uvijek je potrebno toč no provjeriti!). Nepoštivanje ovih
+pravila predstavlja ozbiljan prekršaj akademskog integriteta i Etič kog kodeksa sveuč ilišta
+(kao i odgovarajuć ih pravilnika Medicinskog fakulteta). Stoga je zajednič ka dužnost i
+studenta i mentora da ovom pitanju pristupaju s punom odgovornošć u.
 
 Dva primjera citiranja preuzetog materijala:
-Slika 1. Brodmannova citoarhitektonska mapa mozdane kore c ovjeka. Prema: Brodmann
+Slika 1. Brodmannova citoarhitektonska mapa moždane kore č ovjeka. Prema: Brodmann
 (1909), str. 78.
-Slika 2. Suvremena podjela premotoric ke mozdane kore u sedam strukturno i funkcionalno
-definiranih kortikalnih polja. Prema: Rizzolatti & Craighero (2004), str. x, uz dopustenje
-(naziv izdavac a).
-U oba sluc aja, potpuni literaturni navod (Brodmann 1909; Rizzolatti & Craighero 2004)
+Slika 2. Suvremena podjela premotorič ke moždane kore u sedam strukturno i funkcionalno
+definiranih kortikalnih polja. Prema: Rizzolatti & Craighero (2004), str. x, uz dopuštenje
+(naziv izdavač a).
+U oba sluč aja, potpuni literaturni navod (Brodmann 1909; Rizzolatti & Craighero 2004)
 mora biti naveden u popisu literature.
 
-CITIRANJE LITERATURE U TEKSTU I NACIN PISANJA U POPISU LITERATURE
+CITIRANJE LITERATURE U TEKSTU I NAČIN PISANJA U POPISU LITERATURE
 
 Sve publikacije citirane u tekstu moraju biti navedene u popisu literature. Isto tako, sve
-publikacije navedene u popisu literature moraju biti citirane na odgovaraju em mjestu u
+publikacije navedene u popisu literature moraju biti citirane na odgovarajuć em mjestu u
 tekstu. Publikacije se u tekstu citiraju tako da se navede autor-godina (za rad jednog
-autora) ili autor-autor-godina (za rad dva autora) ili autor et al.-godina (za rad tri i vise
-autora). Primjer: ,,Na vaznost ovog procesa prvi je ukazao Veliki Uc itelj (Uc itelj 1956),
-potom su to neovisno provjerili i potvrdili Sumnjalo i Kritic ar (Sumnjalo & Kritic ar 1960), a
+autora) ili autor-autor-godina (za rad dva autora) ili autor et al.-godina (za rad tri i više
+autora). Primjer: „Na važnost ovog procesa prvi je ukazao Veliki Uč itelj (Uč itelj 1956),
+potom su to neovisno provjerili i potvrdili Sumnjalo i Kritič ar (Sumnjalo & Kritič ar 1960), a
 
                                                                                                                                                     26
 
 ===== [mef-pravilnik-diplomski-2023 | str. 27] =====
-detaljna istrazivanja obavili su brojni uc enici i suradnici (Uc enik 1965; Uc enik & Suradnik
-1966; Suradnik et al. 1970, 1975, 1990)."
+detaljna istraživanja obavili su brojni uč enici i suradnici (Uč enik 1965; Uč enik & Suradnik
+1966; Suradnik et al. 1970, 1975, 1990).“
 
 Koliko literaturnih navoda treba biti u popisu literature? Onoliko koliko je razborito i
-primjereno � to jest, NAJMANJI potreban broj da bi se potpuno, jasno i precizno
-dokumentirao sadrzaj i argumentacija rada. Ovisno o vrsti i temi rada, to moze biti 10 do
-20 publikacija, a moze biti i 100 do 150 publikacija.
+primjereno – to jest, NAJMANJI potreban broj da bi se potpuno, jasno i precizno
+dokumentirao sadržaj i argumentacija rada. Ovisno o vrsti i temi rada, to može biti 10 do
+20 publikacija, a može biti i 100 do 150 publikacija.
 
-Kako se toc no pisu literaturni navodi u popisu literature? Prvo, navode se abecednim
-redom autora, pri c emu je potrebno navesti prezimena svih autora i inicijale njihovih
-imena, potom godinu objave rada, pa puni naslov rada, pa uobic ajenu skra enicu
-c asopisa, pa volumen c asopisa i poc etnu i zavrsnu stranicu rada. Vise radova istog autora
-navodi se kronoloskim redom, a vise radova istog autora iz iste godine navodi se kao:
-Autor (2010a, b, c). Ako je rijec o knjizi, navodi se autor (godina) Naslov knjige, mjesto
-izdanja, izdavac . Ako je rijec o poglavlju u knjizi, navodi se autor, godina, naslov poglavlja,
-urednici knjige, naslov knjige, mjesto izdanja, izdavac . Ako je rijec o c lanku koji je u tisku,
-ali jos nema volumen i broj stranica (advanced online access + doi), navodi se na kraju
-naziv c asopisa te doi oznaka. Ako je rijec o tekstu ili materijalu objavljenom na nekoj
-mreznoj stranici, navodi se toc na adresa mrezne stranice.
+Kako se toč no pišu literaturni navodi u popisu literature? Prvo, navode se abecednim
+redom autora, pri č emu je potrebno navesti prezimena svih autora i inicijale njihovih
+imena, potom godinu objave rada, pa puni naslov rada, pa uobič ajenu skrać enicu
+č asopisa, pa volumen č asopisa i poč etnu i završnu stranicu rada. Više radova istog autora
+navodi se kronološkim redom, a više radova istog autora iz iste godine navodi se kao:
+Autor (2010a, b, c). Ako je riječ o knjizi, navodi se autor (godina) Naslov knjige, mjesto
+izdanja, izdavač . Ako je riječ o poglavlju u knjizi, navodi se autor, godina, naslov poglavlja,
+urednici knjige, naslov knjige, mjesto izdanja, izdavač . Ako je riječ o č lanku koji je u tisku,
+ali još nema volumen i broj stranica (advanced online access + doi), navodi se na kraju
+naziv č asopisa te doi oznaka. Ako je riječ o tekstu ili materijalu objavljenom na nekoj
+mrežnoj stranici, navodi se toč na adresa mrežne stranice.
 
 Primjeri:
 
@@ -112,20 +61,71 @@ Slifka MK, Whitton JL (2000) Clinical implications of dysregulated cytokine prod
 Mol Med doi:10.1007/s001090000086
 
 OBLIK NEUVEZANOG PRIMJERKA RADA (ZA OCJENU) TE
-KONACNOG (UVEZANOG) RADA:
+KONAČNOG (UVEZANOG) RADA:
 
-C etiri primjerka gotovog neuvezanog rada te verzija rada u elektronic kom obliku dostavlja
+Č etiri primjerka gotovog neuvezanog rada te verzija rada u elektronič kom obliku dostavlja
 se Povjerenstvu na ocjenu, tiskan na papiru formata A4, pisan fontom Times New Roman
-ili Arial (velic ina fonta: 11 ili 12; prored: 1.5 ili 2, to jest 1,5 redaka ili dvostruki prored), s
+ili Arial (velič ina fonta: 11 ili 12; prored: 1.5 ili 2, to jest 1,5 redaka ili dvostruki prored), s
 ispisom na samo jednoj stranici svakog lista (dakle, u istom obliku u kojem bi se poslao rad
-na recenziju u c asopis, da recenzenti imaju prostora za biljeske i ispravke).
-Nakon sto je rad pozitivno ocijenjen i unesene su sve potrebne ispravke, pristupa se
-konac nom prijelomu teksta i uvezu. Pritom je dopusteno i pozeljno da se rad oblikuje i
-tiska kao tipic ni c lanak u znanstvenom ili struc nom c asopisu (formata A4 � dakle, dva
-stupca sirine 8 cm i izmeu njih razmak od 1 cm, a slike i tablice sirine jednog stupca ili
-cijele stranice � dakle, 8 cm ili 17 cm; margine su najmanje 2,5 cm gore, dolje, lijevo i
+na recenziju u č asopis, da recenzenti imaju prostora za bilješke i ispravke).
+Nakon što je rad pozitivno ocijenjen i unesene su sve potrebne ispravke, pristupa se
+konač nom prijelomu teksta i uvezu. Pritom je dopušteno i poželjno da se rad oblikuje i
+tiska kao tipič ni č lanak u znanstvenom ili struč nom č asopisu (formata A4 – dakle, dva
+stupca širine 8 cm i između njih razmak od 1 cm, a slike i tablice širine jednog stupca ili
+cijele stranice – dakle, 8 cm ili 17 cm; margine su najmanje 2,5 cm gore, dolje, lijevo i
 
                                                                                                                                                     28
+
+===== [mef-pravilnik-diplomski-2023 | str. 3] =====
+izborni predmet nema pravo tražiti priznavanje ekvivalenta za diplomski rad.
+
+                                                Članak 6.
+
+(1) Mentor za diplomski rad može biti nastavnik Medicinskog fakulteta ili
+sastavnice Sveučilišta u Zagrebu, izabran u znanstveno-nastavno zvanje (radno
+mjesto ili naslovno zvanje) ili poslijedoktorand Fakulteta upisan u Upisnik
+znanstvenika Republike Hrvatske.
+(2) Mentor može u jednoj akademskoj godini imati 3 mentorstva, a veći broj
+odobravat će prodekan za nastavu.
+(3) Mentor pomaže pristupniku pri izradi diplomskog rada objašnjavajući mu
+pobliže zadatke i dajući savjete u pogledu načina odabira i obrade materijala,
+odabira sredstava za rad, dokumentacije i literature.
+(4) Mentora imenuje Povjerenstvo.
+
+                                                Članak 7.
+
+(1) Temu za diplomski rad odobrava Povjerenstvo na prijedlog mentora i
+studenta, te uz suglasnost pročelnika Katedre ili Vijeća predmeta.
+(2) Student može jedanput promijeniti temu diplomskog rada i/ili mentora
+diplomskog rada (obrazac 09. i 10.).
+
+                                                  Članak 8.
+
+(1) Diplomski rad obvezno se prijavljuje tijekom zimskog semestra posljednje godine
+
+===== [mef-pravilnik-diplomski-2023 | str. 25] =====
+Zaključ ci
+        Zahvale
+        Literatura
+        Životopis
+
+Ako je riječ o preglednom ili struč nom radu, sadržaj također mora imati sljedeć e
+        elemente: Sažetak
+        Summary
+        Zahvale
+        Literatura
+        Životopis
+
+Ostale podnaslove (koji dolaze između Summary i Zahvale) odredit ć e zajednič ki student i
+mentor, sukladno naravi i sadržaju rada.
+
+Napomena: Sažetak se piše na hrvatskom i engleskom jeziku (svaki na zasebnoj stranici) i
+mora obuhvać ati: Naslov rada, ime i prezime autora, tekst sažetka, ključ ne riječ i (tri do pet
+ključ nih riječ i); odnosno naslov rada na engleskom, ime i prezime autora, tekst (summary)
+na engleskom, te key words. Sažetak ima 200 do 400 riječ i – toč nije, najviše onoliko riječ i
+(uključ ujuć i i naslov, autora i ključ ne riječ i) koliko uz propisani font stane na jednu stranicu.
+
+Numeriranje stranica započ inje s poglavljem Uvod, tako da je prva stranica Uvoda ujedno i
 
 ===== [mef-naputci-tehnicka-obrada-doktorski-2022 | str. 1] =====
 - Popis oznaka i kratica, 

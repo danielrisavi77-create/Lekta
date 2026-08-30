@@ -1,28 +1,124 @@
+===== [veleri-upute-formalni-izgled | str. 5] =====
+tako da svaki podatak koji je korišten iz pojedine knjige, članka, mrežne stranice i sl. treba biti
+prikazan na onim dijelovima završnog/diplomskog rada gdje je i korišten, i onda kada je
+parafraziran (nije doslovno citiran, već je prepričan svojim riječima) i onda kada je citiran
+(doslovni navod označen navodnicima).
+
+         Popis literature piše se bez broja poglavlja i dolazi na kraju rada (poslije zaključka).
+         Literatura se uređuje abecednim redom autora te kronološki za radove istog autora.
+         Ako se koriste različiti tipovi literature (npr. knjige, znanstveni ili stručni članci u
+časopisima i/ili zbornicima, internetske stranice i ostalo) moguće ih je grupirati prema vrstama
+(primjerice; knjige, časopisi, zbornici, internetski izvori).
+
+Primjeri za citiranje literature u radu:
+
+Izvori citata ili parafraza koji se nalaze na kraju teksta navode se u zagradi prije točke, npr.
+
+• jedan autor
+(Dujanić, 2020, 55).
+
+• u slučaju da je isti autor izdao dva naslova u istoj godini (2020a, 2020b i sl.)
+(Dujanić, 2020a, 100).
+
+• dva ili tri autora
+(Samuelson, Nordhaus, 2000, 225-227).
+
+• više autora (skupina autora, četiri i više autora)
+(Kotler et al., 2006).
+
+• dva ili više izvora
+(Samuelson, Nordhaus, 2000, 225-227; Kotler et al., 2006).
+
+• citiranje literature iz sekundarnog izvora; u popisu literature na kraju rada navodimo samo
+    autora izvora koji smo čitali (u ovom slučaju Pervin et al.)
+
+(Meddinus, Curtis, 1963. prema Pervin et al., 2008, 213).
+
+• zakonska regulativa
+Zakon o radu (NN, 93/14., 127/17.; u daljnjem tekstu: ZR ili Zakon).
+
+===== [veleri-upute-formalni-izgled | str. 6] =====
+• ako autor teksta nije poznat
+(Godišnje izvješće 2021., Ericsson Nikola Tesla Grupa, 6).
+(Kratkoročni pokazatelji industrije u 2021. – proizvodnja, proizvođačke cijene i promet
+industrije, Državni zavod za statistiku, 2022.).
+(Društveni angažman, Konzum).
+
+Primjeri za popis literature na kraju rada:
+
+Na kraju rada slijedi Popis korištene literature koju navodimo ovako (ili odabrati stil APA 6):
+    • Knjige (do tri autora)
+
+Dujanić, M., Osnove menadžmenta, Veleučilište u Rijeci, Rijeka, 2006.
+Samuelson, P. A., Nordhaus, W. D., Ekonomija, petnaesto izdanje, Mate, Zagreb, 2000.
+Tudor, G., Rijavec, M., Zarevski, P., Menadžerska učinkovitost 360 stupnjeva, M. E. P.,
+Zagreb, 2008.
+
+    • Knjige (četiri i više autora - skupina autora)
+Kotler, P. et al., Osnove marketinga, Mate, Zagreb, 2006.
+Vadjan, V. (ur.), Tehnika motornih vozila, Hrvatska obrtnička komora, Pučko otvoreno učilište,
+Zagreb, 2004.
+
+    • Rad u zborniku, poglavlje u knjizi, esej u zbirci
+Horvat, Đ., Nedović Čubarkapa, M., Učinkovitost upravljanja dobavnim lancem primjenom
+metrike, Zbornik radova, osmi međunarodni znanstveni skup Poslovna logistika u suvremenom
+menadžmentu, Ekonomski fakultet u Osijeku, Osijek, 2008., str. 15–37.
+
+    • Članak u časopisu
+Pašalić, Ž., Prometni sustavi i prometna tržišta, Suvremeni promet, vol. 29, 2009., br. 1-2, str.
+11–16.
+
+===== [veleri-upute-formalni-izgled | str. 7] =====
+• Natuknica u enciklopediji, leksikonu, rječniku
+
+Natuknica aerodinamička sila i moment, Tehnička enciklopedija, Jugoslavenski
+leksikografski zavod, Zagreb, 1963., svezak 1., str. 10–15.
+
+Anić, V., Goldstein, I., Natuknica trafostanica, Rječnik stranih riječi, drugo izdanje, Novi
+Liber, Zagreb, 2000., str. 1328.
+
+    • Članak na web-stranici (ako je poznat autor, navodi se njegovo prezime, inicijal imena,
+         naslov članka, naziv publikacije, broj i godište, web-stranica i datum pristupa)
+
+Papageorgiou, G., Modeliranje i simulacija transportnih sustava: pristup planiranja scenarija,
+Automatika, vol. 50, 2009., br. 1-2., Dostupno na:
+http://hrcak.srce.hr/index.php?show=clanak&id_clanak_jezik=59573 (8. 1. 2021.)
+
+    • Internetski izvori (ako autor teksta nije poznat)
+
+Godišnje izvješće 2021., Ericsson Nikola Tesla Grupa, dostupno na:
+https://www.ericsson.hr/documents/20181/254494/Godisnje_izvjesce_2021.pdf/f2e9ea6a-
+95ff-42bc-a5af-37615ec4b5f2 (21. 9. 2022.)
+
+Kratkoročni pokazatelji industrije u 2021. – proizvodnja, proizvođačke cijene i promet
+industrije, Državni zavod za statistiku, 2022., dostupno na:
+https://podaci.dzs.hr/media/uabozsci/si-1695-kratkoro%c4%8dni-pokazatelji-industrije-u-
+
 ===== [veleri-upute-formalni-izgled | str. 1] =====
-Veleucilista u Rijeci
+Veleučilišta u Rijeci
 
-1. Sastavni dijelovi zavrsnog/diplomskog rada
+1. Sastavni dijelovi završnog/diplomskog rada
 
-Zavrsni/diplomski rad sastoji se od:
-    - korica zavrsnog/diplomskog rada
+Završni/diplomski rad sastoji se od:
+    - korica završnog/diplomskog rada
     - druge unutarnje stranice
-    - sazetka i kljucnih rijeci
-    - sadrzaja
+    - sažetka i ključnih riječi
+    - sadržaja
     - uvoda
     - razrade teme
-    - zakljucka
-    - popisa literature i drugih izvora podataka koji su koristeni u izradi rada
-    - popisa pokrata (ako su koristene u radu)
+    - zaključka
+    - popisa literature i drugih izvora podataka koji su korišteni u izradi rada
+    - popisa pokrata (ako su korištene u radu)
     - popisa tablica, grafikona i slika (ako postoje)
     - popisa priloga (ako postoje, npr. anketa).
 
-2. Izgled korica zavrsnog/diplomskog rada, prve i druge unutarnje stranice
+2. Izgled korica završnog/diplomskog rada, prve i druge unutarnje stranice
 
-Na koricama se ispisuju sljedei podaci:
-    - Veleuciliste u Rijeci,
+Na koricama se ispisuju sljedeći podaci:
+    - Veleučilište u Rijeci,
     - ime i prezime studenta,
-    - naslov zavrsnog/diplomskog rada
-    - (zavrsni rad / diplomski rad)
+    - naslov završnog/diplomskog rada
+    - (završni rad / diplomski rad)
     - Rijeka, godina.
 
 ===== [veleri-upute-formalni-izgled | str. 2] =====
@@ -31,240 +127,124 @@ desnoj strani, sve u istoj razini. Ako rad ima i komentora njegovo se ime i prez
 
     - Rijeka, godina.
 
-3. Tehnicko ureivanje teksta zavrsnog/diplomskog rada
+3. Tehničko uređivanje teksta završnog/diplomskog rada
 
-        Zavrsni/diplomski rad pise se u A 4 formatu; tekst se pise u fontu Times New Roman
-velicine 12 tocaka, razmak 1,5 redak, poravnan s obje strane, posebno uvucen prvi redak za
-velicinu jednog tabulatora (1,25), margine od 30 mm gore, dolje i lijevo te 20 mm desno.
+        Završni/diplomski rad piše se u A 4 formatu; tekst se piše u fontu Times New Roman
+veličine 12 točaka, razmak 1,5 redak, poravnan s obje strane, posebno uvučen prvi redak za
+veličinu jednog tabulatora (1,25), margine od 30 mm gore, dolje i lijevo te 20 mm desno.
 
-        Font kojim se pise unutar tablica je Times New Roman maksimalne velicine 12 tocaka.
-        Font koji se koristi za biljeske je Times New Roman velicine 10 tocaka.
-        Razmak nakon naslova i sljedeeg odlomka je jedan razmak.
-        Naslovi poglavlja pisu se ovako:
+        Font kojim se piše unutar tablica je Times New Roman maksimalne veličine 12 točaka.
+        Font koji se koristi za bilješke je Times New Roman veličine 10 točaka.
+        Razmak nakon naslova i sljedećeg odlomka je jedan razmak.
+        Naslovi poglavlja pišu se ovako:
 
-� Naslov prve razine font Times New Roman, velicine 14, podebljano, velikim tiskanim
+• Naslov prve razine font Times New Roman, veličine 14, podebljano, velikim tiskanim
     slovima, poravnano ulijevo.
 
    Primjer: 2. PREGLED
 
-� Naslov druge razine font Times New Roman, velicine 13, podebljano, poravnano ulijevo.
+• Naslov druge razine font Times New Roman, veličine 13, podebljano, poravnano ulijevo.
     Primjer: 2.2. Popis pojmova
 
-� Naslov tree razine font Times New Roman, velicine 12, podebljano, poravnano ulijevo.
+• Naslov treće razine font Times New Roman, veličine 12, podebljano, poravnano ulijevo.
 
 ===== [veleri-upute-formalni-izgled | str. 3] =====
 Ostale numeracije u radu (stranice, slike, tablice i fusnote) obavljaju se na jednoj razini
-(ne ukljucivati u opis tablice, grafikona, slike i sl. kao brojeve potpoglavlja).
+(ne uključivati u opis tablice, grafikona, slike i sl. kao brojeve potpoglavlja).
 
-        Strane rijeci za koje ne postoji odgovarajui hrvatski naziv ili koje se nisu uvrijezile u
+        Strane riječi za koje ne postoji odgovarajući hrvatski naziv ili koje se nisu uvriježile u
 hrvatskom jeziku potrebno je u tekstu napisati kosim slovima (italic).
 
-        Rad je potrebno jezicno uskladiti s pravopisom hrvatskoga jezika.
+        Rad je potrebno jezično uskladiti s pravopisom hrvatskoga jezika.
 
-4. Sazetak rada i kljucne rijeci
+4. Sažetak rada i ključne riječi
 
-         Sazetak rada u najkraim crtama iznosi pregled, to jest sadrzaj cjelokupne izlozene
-tematike. Sazetak se pise u jednom odlomku i obuhvaa najvise 200 rijeci. Ne sadrzi pokrate.
-Na kraju sazetka navode se kljucne rijeci u radu (najvise pet kljucnih rijeci).
-
-5. Sadrzaj rada
-
-         Sadrzaj rada predstavlja brojcano-tekstualni pregled poglavlja i potpoglavlja
-zavrsnog/diplomskog rada pomou kojeg se pronalaze stranice na kojima su ta poglavlja i
-potpoglavlja napisana.
-
-         Naslov Sadrzaj pise se velikim slovima na vrhu stranice u lijevom kutu. Stranice
-Sadrzaja ne numeriraju se.
-
-6. Uvod zavrsnog/diplomskog rada
-
-         Uvod je pocetni dio rada. Uvod treba uvesti citatelja u podrucje tematike
-zavrsnoga/diplomskog rada, upoznati ga s problemom i predmetom zavrsnoga/diplomskog
-rada, svrhom i ciljevima te strukturom zavrsnoga/diplomskog rada.
-
-7. Razrada teme zavrsnog/diplomskog rada
-
-         Razrada teme zavrsnog/diplomskog rada je dio zavrsnog/diplomskog rada u kojem
-student treba razraditi zadanu temu u okviru koji je dogovoren s mentorom.
+         Sažetak rada u najkraćim crtama iznosi pregled, to jest sadržaj cjelokupne izložene
+tematike. Sažetak se piše u jednom odlomku i obuhvaća najviše 200 riječi. Ne sadrži pokrate.
+Na kraju sažetka navode se ključne riječi u radu (najviše pet ključnih riječi).
 
 ===== [veleri-upute-formalni-izgled | str. 4] =====
-Literatura se navodi u zagradama u tekstu rada, a biljeske (fusnote) su objasnidbenog
-tipa, tj. sluze za dodatna pojasnjenja osnovnog teksta, a ne kao poziv na koristenu literaturu.
-Biljeske se navode na dnu stranice u kontinuitetu kroz cijeli rad, oznacene arapskim brojevima,
-pocevsi od broja 1.
+Literatura se navodi u zagradama u tekstu rada, a bilješke (fusnote) su objasnidbenog
+tipa, tj. služe za dodatna pojašnjenja osnovnog teksta, a ne kao poziv na korištenu literaturu.
+Bilješke se navode na dnu stranice u kontinuitetu kroz cijeli rad, označene arapskim brojevima,
+počevši od broja 1.
 
-8. Zakljucak
+8. Zaključak
 
-         Zakljucak je zavrsni dio rada u kojem treba na sustavan, koncizan i jezgrovit nacin dati
-prikaz relevantnih spoznaja, informacija, cinjenica i stavova koji su opsirnije razraeni u
-prethodnim poglavljima zavrsnog/diplomskog rada. Dijelovi zakljucka formuliraju se
-kronoloski prema strukturi rada. U zakljucku se ne navode tui citati niti se iznose nove
+         Zaključak je završni dio rada u kojem treba na sustavan, koncizan i jezgrovit način dati
+prikaz relevantnih spoznaja, informacija, činjenica i stavova koji su opširnije razrađeni u
+prethodnim poglavljima završnog/diplomskog rada. Dijelovi zaključka formuliraju se
+kronološki prema strukturi rada. U zaključku se ne navode tuđi citati niti se iznose nove
 informacije.
 
-        Opseg zavrsnog/diplomskog rada na prijediplomskim studijima treba biti minimalno 30
+        Opseg završnog/diplomskog rada na prijediplomskim studijima treba biti minimalno 30
 stranica teksta bez priloga, a na diplomskim studijima minimalno 40 stranica teksta bez priloga.
-Opseg rada ukljucuje stranice od prve stranice Uvoda do zadnje stranice Zakljucka.
+Opseg rada uključuje stranice od prve stranice Uvoda do zadnje stranice Zaključka.
 
 9. Popis pokrata
 
-        U zavrsnom/diplomskog radu mogu se koristiti pokrate. Kada se u tekstu prvi put uvodi
+        U završnom/diplomskog radu mogu se koristiti pokrate. Kada se u tekstu prvi put uvodi
 neka pokrata potrebno ju je objasniti na hrvatskom jeziku i ispisati puni naziv. Dalje se u tekstu
-moze koristiti samo pokrata. Pokrate se ne navode u sazetku i kljucnim rijecima.
+može koristiti samo pokrata. Pokrate se ne navode u sažetku i ključnim riječima.
 
-        Popis svih koristenih pokrata dolazi na kraju rada bez numeriranja naslova.
+        Popis svih korištenih pokrata dolazi na kraju rada bez numeriranja naslova.
 
 10. Popis literature
 
-         Popis literature obuhvaa sve izvore koje je student koristio pri izradi rada, odnosno svi
+         Popis literature obuhvaća sve izvore koje je student koristio pri izradi rada, odnosno svi
 autori i izvori koji se spominju u tekstu rada moraju biti navedeni u popisu literature, a svi izvori
-navedeni u popisu literature moraju biti navedeni u tekstu zavrsnog/diplomskog rada.
+navedeni u popisu literature moraju biti navedeni u tekstu završnog/diplomskog rada.
 
-         Navoenje podataka o literaturi (izvorima) u tekstu zavrsnog/diplomskog rada znaci da
-zavrsni/diplomski rad treba sadrzavati podatke o izvoru, odnosno koristenoj literaturi u svakom
-svom dijelu (pritom se koristi nacin navoenja literature prikazan u daljnjem tekstu ovih uputa),
-
-===== [veleri-upute-formalni-izgled | str. 5] =====
-tako da svaki podatak koji je koristen iz pojedine knjige, clanka, mrezne stranice i sl. treba biti
-prikazan na onim dijelovima zavrsnog/diplomskog rada gdje je i koristen, i onda kada je
-parafraziran (nije doslovno citiran, ve je preprican svojim rijecima) i onda kada je citiran
-(doslovni navod oznacen navodnicima).
-
-         Popis literature pise se bez broja poglavlja i dolazi na kraju rada (poslije zakljucka).
-         Literatura se ureuje abecednim redom autora te kronoloski za radove istog autora.
-         Ako se koriste razliciti tipovi literature (npr. knjige, znanstveni ili strucni clanci u
-casopisima i/ili zbornicima, internetske stranice i ostalo) mogue ih je grupirati prema vrstama
-(primjerice; knjige, casopisi, zbornici, internetski izvori).
-
-Primjeri za citiranje literature u radu:
-
-Izvori citata ili parafraza koji se nalaze na kraju teksta navode se u zagradi prije tocke, npr.
-
-� jedan autor
-(Dujani, 2020, 55).
-
-� u slucaju da je isti autor izdao dva naslova u istoj godini (2020a, 2020b i sl.)
-(Dujani, 2020a, 100).
-
-� dva ili tri autora
-(Samuelson, Nordhaus, 2000, 225-227).
-
-� vise autora (skupina autora, cetiri i vise autora)
-(Kotler et al., 2006).
-
-� dva ili vise izvora
-(Samuelson, Nordhaus, 2000, 225-227; Kotler et al., 2006).
-
-� citiranje literature iz sekundarnog izvora; u popisu literature na kraju rada navodimo samo
-    autora izvora koji smo citali (u ovom slucaju Pervin et al.)
-
-(Meddinus, Curtis, 1963. prema Pervin et al., 2008, 213).
-
-� zakonska regulativa
-Zakon o radu (NN, 93/14., 127/17.; u daljnjem tekstu: ZR ili Zakon).
-
-===== [veleri-upute-formalni-izgled | str. 6] =====
-� ako autor teksta nije poznat
-(Godisnje izvjese 2021., Ericsson Nikola Tesla Grupa, 6).
-(Kratkorocni pokazatelji industrije u 2021. � proizvodnja, proizvoacke cijene i promet
-industrije, Drzavni zavod za statistiku, 2022.).
-(Drustveni angazman, Konzum).
-
-Primjeri za popis literature na kraju rada:
-
-Na kraju rada slijedi Popis koristene literature koju navodimo ovako (ili odabrati stil APA 6):
-    � Knjige (do tri autora)
-
-Dujani, M., Osnove menadzmenta, Veleuciliste u Rijeci, Rijeka, 2006.
-Samuelson, P. A., Nordhaus, W. D., Ekonomija, petnaesto izdanje, Mate, Zagreb, 2000.
-Tudor, G., Rijavec, M., Zarevski, P., Menadzerska ucinkovitost 360 stupnjeva, M. E. P.,
-Zagreb, 2008.
-
-    � Knjige (cetiri i vise autora - skupina autora)
-Kotler, P. et al., Osnove marketinga, Mate, Zagreb, 2006.
-Vadjan, V. (ur.), Tehnika motornih vozila, Hrvatska obrtnicka komora, Pucko otvoreno uciliste,
-Zagreb, 2004.
-
-    � Rad u zborniku, poglavlje u knjizi, esej u zbirci
-Horvat, ., Nedovi Cubarkapa, M., Ucinkovitost upravljanja dobavnim lancem primjenom
-metrike, Zbornik radova, osmi meunarodni znanstveni skup Poslovna logistika u suvremenom
-menadzmentu, Ekonomski fakultet u Osijeku, Osijek, 2008., str. 15�37.
-
-    � Clanak u casopisu
-Pasali, Z., Prometni sustavi i prometna trzista, Suvremeni promet, vol. 29, 2009., br. 1-2, str.
-11�16.
-
-===== [veleri-upute-formalni-izgled | str. 7] =====
-� Natuknica u enciklopediji, leksikonu, rjecniku
-
-Natuknica aerodinamicka sila i moment, Tehnicka enciklopedija, Jugoslavenski
-leksikografski zavod, Zagreb, 1963., svezak 1., str. 10�15.
-
-Ani, V., Goldstein, I., Natuknica trafostanica, Rjecnik stranih rijeci, drugo izdanje, Novi
-Liber, Zagreb, 2000., str. 1328.
-
-    � Clanak na web-stranici (ako je poznat autor, navodi se njegovo prezime, inicijal imena,
-         naslov clanka, naziv publikacije, broj i godiste, web-stranica i datum pristupa)
-
-Papageorgiou, G., Modeliranje i simulacija transportnih sustava: pristup planiranja scenarija,
-Automatika, vol. 50, 2009., br. 1-2., Dostupno na:
-http://hrcak.srce.hr/index.php?show=clanak&id_clanak_jezik=59573 (8. 1. 2021.)
-
-    � Internetski izvori (ako autor teksta nije poznat)
-
-Godisnje izvjese 2021., Ericsson Nikola Tesla Grupa, dostupno na:
-https://www.ericsson.hr/documents/20181/254494/Godisnje_izvjesce_2021.pdf/f2e9ea6a-
-95ff-42bc-a5af-37615ec4b5f2 (21. 9. 2022.)
-
-Kratkorocni pokazatelji industrije u 2021. � proizvodnja, proizvoacke cijene i promet
-industrije, Drzavni zavod za statistiku, 2022., dostupno na:
-https://podaci.dzs.hr/media/uabozsci/si-1695-kratkoro%c4%8dni-pokazatelji-industrije-u-
+         Navođenje podataka o literaturi (izvorima) u tekstu završnog/diplomskog rada znači da
+završni/diplomski rad treba sadržavati podatke o izvoru, odnosno korištenoj literaturi u svakom
+svom dijelu (pritom se koristi način navođenja literature prikazan u daljnjem tekstu ovih uputa),
 
 ===== [veleri-upute-formalni-izgled | str. 8] =====
-Primjer: Tablica 1. Prikaz prirasta stanovnistva za podrucje PGZ-a po mjesecima u
+Primjer: Tablica 1. Prikaz prirasta stanovništva za područje PGŽ-a po mjesecima u
 2021. godini
 
         Pored broja i naziva moraju imati izvor podataka. Izvori podataka navode se ispod
-tablica, grafikona, fotografija, shema itd. u skraenom obliku; ako je preuzeto iz odreenog
+tablica, grafikona, fotografija, shema itd. u skraćenom obliku; ako je preuzeto iz određenog
 izvora (prezime autora, godina, stranica):
 Primjer: Izvor: Novak, 2021, 25
 
-        U slucaju da je autor samostalno izradio tablicu ili grafikon, stavlja se sljedee:
-Izvor: Istrazivanje autorice, rujan 2021. Ili Izvor: Autor, rujan 2021.
+        U slučaju da je autor samostalno izradio tablicu ili grafikon, stavlja se sljedeće:
+Izvor: Istraživanje autorice, rujan 2021. Ili Izvor: Autor, rujan 2021.
 
         Ako je tablica, grafikon itd. preuzet s interneta, navode se svi podaci koji su navedeni u
 popisu literature:
-Izvor: Kratkorocni pokazatelji industrije u 2021. � proizvodnja, proizvoacke cijene i promet
-industrije, Drzavni zavod za statistiku, 2022., Dostupno na:
+Izvor: Kratkoročni pokazatelji industrije u 2021. – proizvodnja, proizvođačke cijene i promet
+industrije, Državni zavod za statistiku, 2022., Dostupno na:
 https://podaci.dzs.hr/media/uabozsci/si-1695-kratkoro%c4%8dni-pokazatelji-industrije-u-
 2021-proizvodnja_proizvo%c4%91a%c4%8dke-cijene-i-promet-industrije.pdf (21. 9. 2022.)
 
         Broj i naslov navodi se iznad tablice, grafikona, shema, fotografija i sl.
         Umetnute tablice, grafikone i sl. treba poravnati u sredinu.
         U tekstu je potrebno najaviti (netom prije ili netom kasnije) i opisati umetnuti element
-(tablicu, grafikon itd.), primjerice: ,,... kao sto je vidljivo na slici 1" ili ,,... (grafikon 1)".
-        Popisi tablica, grafikona, fotografija, slika i dr. uvrstavaju se nakon popisa literature
-svaki s pocetkom na novoj stranici. Sadrze popise tablica, grafikona, slika, redni broj te naslov
+(tablicu, grafikon itd.), primjerice: „… kao što je vidljivo na slici 1“ ili „… (grafikon 1)“.
+        Popisi tablica, grafikona, fotografija, slika i dr. uvrštavaju se nakon popisa literature
+svaki s početkom na novoj stranici. Sadrže popise tablica, grafikona, slika, redni broj te naslov
 tablice, grafikona i/ili slike, navedenih prema redoslijedu pojavljivanja uz broj stranice na kojoj
 se nalazi u radu.
 
 ===== [veleri-upute-formalni-izgled | str. 9] =====
-rada, ali pruzaju dodatne informacije). Svaki na kraju rada umetnuti prilog na vrhu pocetne
-stranice sadrzi naznaku Prilog i redni broj koji se izvodi temeljem redoslijeda spominjanja u
+rada, ali pružaju dodatne informacije). Svaki na kraju rada umetnuti prilog na vrhu početne
+stranice sadrži naznaku Prilog i redni broj koji se izvodi temeljem redoslijeda spominjanja u
 tekstu rada.
 
-        Popis priloga uvrstava se nakon popisa tablica, grafikona, fotografija, slika i sl. Sadrzi
+        Popis priloga uvrštava se nakon popisa tablica, grafikona, fotografija, slika i sl. Sadrži
 popis priloga te naslova priloga, navedenih prema redoslijedu pojavljivanja uz broj stranice na
 kojoj se nalazi u radu.
 
        Dodatak:
-       Upute za izradu automatskog sadrzaja
+       Upute za izradu automatskog sadržaja
 
-        Ovaj dio teksta sluzi kao prirucnik za izradu automatiziranog Sadrzaja, Popisa slika,
-Popisa tablica i sl. Tablica sadrzaja kreira se tako da se kod izbornika References/Reference
-odabere Table of Contents / Tablica sadrzaja i dodatno odabere Create custom Table of
-Contents / Umetni tablicu sadrzaja (slika 1).
+        Ovaj dio teksta služi kao priručnik za izradu automatiziranog Sadržaja, Popisa slika,
+Popisa tablica i sl. Tablica sadržaja kreira se tako da se kod izbornika References/Reference
+odabere Table of Contents / Tablica sadržaja i dodatno odabere Create custom Table of
+Contents / Umetni tablicu sadržaja (slika 1).
 
-                   Slika 1. Pokretanje kreiranja automatsko generiranog Sadrzaja
+                   Slika 1. Pokretanje kreiranja automatsko generiranog Sadržaja
 
                                                  Izvor: Autor
 

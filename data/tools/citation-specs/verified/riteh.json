@@ -46,7 +46,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "[1] Poor, H.: \"An Introduction to Signal Detection and Estimation\", Springer-Verlag, New York,",
+        "quoteRaw": "[1] Poor, H.: “An Introduction to Signal Detection and Estimation”, Springer-Verlag, New York,",
         "sourcePage": "str. 7",
         "note": "Autori family-first s inicijalima (Prezime, I.), vise autora odvojeno '; ', dvotocka iza autora, naslov u navodnicima. Redni broj [1] je oznaka popisa, ne dio bibliografskog retka. Vise od tri autora: prvi autor + 'i dr.' (str. 7)."
       },
@@ -74,7 +74,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Frequency Signals\", IEEE Trans. Ind. Electron., Vol. 44, No. 2, pp. 258-264, 1997.",
+        "quoteRaw": "Frequency Signals”, IEEE Trans. Ind. Electron., Vol. 44, No. 2, pp. 258-264, 1997.",
         "sourcePage": "str. 7",
         "note": "Naziv casopisa, zatim Vol. (godiste), No. (broj), pp. (raspon stranica) i godina. Worked example ne sadrzi mjesto izdavanja iako ga geneicki predlozak spominje; predlozak gradjen iskljucivo iz primjera pa je Vol./No./pp. opcionalna grupa."
       },
@@ -103,7 +103,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "[4] Ally, M.: \"Osnovne obrazovne teorije online ucenja\", s Interneta,",
+        "quoteRaw": "[4] Ally, M.: “Osnovne obrazovne teorije online učenja”, s Interneta,",
         "sourcePage": "str. 7",
         "note": "Uz internetsku adresu obvezno se navode autor citiranog materijala i tocan datum pristupa; oznaka 's Interneta' pise se doslovno prije URL-a (str. 6-7)."
       },
@@ -130,7 +130,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "[3] Williams, J.: \"Narrow-band Analyzer\", doktorska disertacija, Dept. Elect. Eng., Harvard Univ.,",
+        "quoteRaw": "[3] Williams, J.: “Narrow-band Analyzer”, doktorska disertacija, Dept. Elect. Eng., Harvard Univ.,",
         "sourcePage": "str. 7",
         "note": "Jedini primjer studentskog/kvalifikacijskog rada u izvoru je doktorska disertacija: autor, naslov u navodnicima, vrsta rada, ustanova/odsjek, mjesto, godina. Za diplomski/zavrsni oznaka vrste rada bi se mijenjala; zadrzana doslovna 'doktorska disertacija' iz primjera."
       },
@@ -160,7 +160,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "[1] Prezime1, I1.; Prezime2, I2.; Prezime3, I3.: \"Naslov knjige\", Izdavac, mjesto izdavanja, godina.",
+        "quoteRaw": "[1] Prezime1, I1.; Prezime2, I2.; Prezime3, I3.: “Naslov knjige“, Izdavač, mjesto izdavanja, godina.",
         "sourcePage": "str. 6",
         "note": "Izvor ne daje primjer poglavlja u uredjenoj knjizi/zborniku. Predlozak je izveden iz oblika za knjigu ubacivanjem urednika 'u: {editor} (ur.),' i naziva zbornika; potvrditi ili oboriti pri verifikaciji."
       },
@@ -176,7 +176,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Postoje razliciti izvori informacija, a kao literaturu je najbolje koristiti strucne knjige i",
+        "quoteRaw": "Postoje različiti izvori informacija, a kao literaturu je najbolje koristiti stručne knjige i",
         "sourcePage": "str. 7",
         "note": "Upute (tehnicki fakultet) ne obradjuju citiranje propisa/pravnih akata; izvor pokriva samo knjige, clanke i internetske izvore. Predlozak je izveden iz uobicajenog hrvatskog oblika (naslov, glasilo, broj, godina); potvrditi ili oboriti pri verifikaciji."
       },

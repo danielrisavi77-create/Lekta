@@ -8,7 +8,7 @@ Snapshot: `data/sources/unizd/unizd-turizam-upute.pdf` (hash `96d4895ec69f...`)
 Otvori PDF: `data/sources/unizd/unizd-turizam-upute.pdf#page=9`
 ```
 TEMPLATE: {authors}. {title}.[[ {volume}.]] {place}: {publisher}, {year}.[[, str. {pages}.]]
-QUOTE   : Zelenika, R. Metodologija i tehnologija izrade znanstvenog i strucnog djela. Rijeka: Ekonomski fakultet   [grep: OK]
+QUOTE   : Zelenika, R. Metodologija i tehnologija izrade znanstvenog i stručnog djela. Rijeka: Ekonomski fakultet   [grep: OK]
 IZVOR   : Zelenika, R. Metodologija i tehnologija izrade znanstvenog i strucnog djela. Rijeka: Ekonomski fakultet Sveucilista u Rijeci, 2000., str. 485.
 RENDER  : Zelenika, R. Metodologija i tehnologija izrade znanstvenog i strucnog djela. Rijeka: Ekonomski fakultet Sveucilista u Rijeci, 2000., str. 485.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -28,7 +28,7 @@ NAPOMENA: Predlozak je doslovna transkripcija sluzbene format-specifikacije za R
 Otvori PDF: `data/sources/unizd/unizd-turizam-upute.pdf#page=10`
 ```
 TEMPLATE: {authors}. {title}. {container}.[[ {issue},]][[ {year},]] {pages}.
-QUOTE   : Prezime, inicijali imena autora. Naslov i podnaslov clanka. Naslov novine. Broj pojedinacnog   [grep: OK]
+QUOTE   : Prezime, inicijali imena autora. Naslov i podnaslov članka. Naslov novine. Broj pojedinačnog   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Jedini format-spec za clanak u izvoru je NOVINSKI CLANAK (str. 10): '...Naslov novine. Broj pojedinacnog izdanja novine, datum pojedinacnog izdanja novine, stranica.' {issue}=broj izdanja, {year} nosi datum pojedinacnog izdanja (nema zasebnog placeholdera za datum), {pages}=stranica (izvor nema prefiks 'str.'). Izvor NE daje zaseban format za clanak u znanstvenom casopisu (samo ga navodi u redoslijedu popisa literature); potvrditi pri verifikaciji.
 ```
@@ -55,7 +55,7 @@ NAPOMENA: Izvor ne obraduje citiranje zavrsnih/diplomskih radova kao izvora; pre
 Otvori PDF: `data/sources/unizd/unizd-turizam-upute.pdf#page=8`
 ```
 TEMPLATE: {title}, {container}[[, br. {issue}]].
-QUOTE   : knjige, potom clanci u znanstvenim casopisima, clanci u zbornicima sa znanstvenih skupova   [grep: OK]
+QUOTE   : knjige, potom članci u znanstvenim časopisima, članci u zbornicima sa znanstvenih skupova   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor navodi propise (Narodne novine) samo kao kategoriju u redoslijedu popisa literature ('ostala literatura, npr. Narodne novine'), bez format-spec. Predlozak je izveden iz opce hrvatske konvencije za citiranje Narodnih novina (naslov, glasilo, broj). Potvrditi pri verifikaciji.
 ```

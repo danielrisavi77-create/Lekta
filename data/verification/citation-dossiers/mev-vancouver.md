@@ -8,7 +8,7 @@ Snapshot: `data/sources/mev/mev.pdf` (hash `422c25447635...`)
 Otvori PDF: `data/sources/mev/mev.pdf#page=7`
 ```
 TEMPLATE: {authors} ({year}). {title}.[[ {volume}. izd.]] {place}, {publisher}.
-QUOTE   : Silobrci, V. (2003). Kako sastaviti, objaviti i ocijeniti znanstveno djelo. 5. izd. Zagreb,   [grep: OK]
+QUOTE   : Silobrčić, V. (2003). Kako sastaviti, objaviti i ocijeniti znanstveno djelo. 5. izd. Zagreb,   [grep: OK]
 IZVOR   : Silobrci, V. (2003). Kako sastaviti, objaviti i ocijeniti znanstveno djelo. 5. izd. Zagreb, Medicinska naklada.
 RENDER  : Silobrci, V. (2003). Kako sastaviti, objaviti i ocijeniti znanstveno djelo. 5. izd. Zagreb, Medicinska naklada.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -28,7 +28,7 @@ NAPOMENA: Ekstrahirani dijelovi Dodatka 1.D pokrivaju knjigu, clanak u casopisu 
 Otvori PDF: `data/sources/mev/mev.pdf#page=8`
 ```
 TEMPLATE: {authors} ({year}). "{title}", {container}, vol. {volume}[[({issue})]], {pages}.
-QUOTE   : Davies, E. (1997). ,,Learn by wire: managing network access to learning materials", The   [grep: OK]
+QUOTE   : Davies, E. (1997). „Learn by wire: managing network access to learning materials“, The   [grep: OK]
 IZVOR   : Davies, E. (1997). "Learn by wire: managing network access to learning materials", The electronic library, vol. 15(3), 658-693.
 RENDER  : Davies, E. (1997). "Learn by wire: managing network access to learning materials", The electronic library, vol. 15(3), 658-693.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -39,7 +39,7 @@ NAPOMENA: Cijeli Primjer 4 (spojeni redci): Davies, E. (1997). ,,Learn by wire: 
 Otvori PDF: `data/sources/mev/mev.pdf#page=8`
 ```
 TEMPLATE: [[{authors} ]]{title}. {url} ({accessed})
-QUOTE   : Toki, M.; Proklin, M. Znacajke racunovodstvenoga informacijskog sustava poduzetnika.   [grep: OK]
+QUOTE   : Tokić, M.; Proklin, M. Značajke računovodstvenoga informacijskog sustava poduzetnika.   [grep: OK]
 IZVOR   : Toki, M.; Proklin, M. Znacajke racunovodstvenoga informacijskog sustava poduzetnika. http://hrcak.srce.hr/index.php?show=clanak&id_clanak_jezik=112975 (01.09.2012.)
 RENDER  : Toki, M.; Proklin, M. Znacajke racunovodstvenoga informacijskog sustava poduzetnika. http://hrcak.srce.hr/index.php?show=clanak&id_clanak_jezik=112975 (01.09.2012.)
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -50,7 +50,7 @@ NAPOMENA: Cijeli Primjer 5 (spojeni redci): Toki, M.; Proklin, M. Znacajke racun
 Otvori PDF: `data/sources/mev/mev.pdf#page=7`
 ```
 TEMPLATE: {authors} ({year}). {title}. Zavrsni rad. {place}, {institution}.
-QUOTE   : Dodatak 1.D Navoenje popisa literature   [grep: OK]
+QUOTE   : Dodatak 1.D Navođenje popisa literature   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute ne obraduju citiranje zavrsnih ili diplomskih radova. Predlozak je izveden iz oblika za knjigu: izdavac zamijenjen ustanovom, dodana oznaka vrste rada 'Zavrsni rad.'. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -59,7 +59,7 @@ NAPOMENA: Upute ne obraduju citiranje zavrsnih ili diplomskih radova. Predlozak 
 Otvori PDF: `data/sources/mev/mev.pdf#page=7`
 ```
 TEMPLATE: {title} ({year}). {container}[[, {issue}]].
-QUOTE   : Dodatak 1.D Navoenje popisa literature   [grep: OK]
+QUOTE   : Dodatak 1.D Navođenje popisa literature   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute ne obraduju citiranje propisa. Predlozak je minimalno izveden iz opceg reda natuknice Dodatka 1.D (nositelj natuknice, godina u zagradi, glasilo, broj), samo radi potpunosti alata. Potvrditi pri verifikaciji.
 ```

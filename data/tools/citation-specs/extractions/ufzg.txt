@@ -1,142 +1,169 @@
+===== [ufzg-upute-zavrsni-diplomski-2026 | str. 4] =====
+izraz/frazu staviti u kurziv.
+ Student je odgovoran za provjeru točnosti i ispravljanje pogrešaka (ako ih ima) prije konačne
+ predaje rada.
+
+  Navođenje literature te oblikovanje tablica i grafičkih prikaza (npr. slika, ilustracija) treba biti
+ usklađeno s APA stilom. Detaljnije upute za citiranje literature i oblikovanje tablica i grafičkih
+ prikaza nalaze se u prilogu 4. Iznimno, uz odobrenje mentora, moguće je i korištenje drugih
+ stilova citiranja, ali samo ako je tema rada vezana uz znanstveno polje u kojem je uvriježen drugi
+ stil citiranja. U tom slučaju, na kraju popisa literature dodaje se napomena u kojoj se navodi
+ koji je stil citiranja korišten.
+
+3. Postupak izrade završnog odnosno diplomskog rada
+
+ Postupak izrade završnog odnosno diplomskog rada odvija se sljedećim tijekom:
+
+      (1) Odabir teme i mentora - student se javlja potencijalnom mentoru s kojim dogovara
+          mentorstvo i temu završnog odnosno diplomskog rada. Tema mora iz područja studijskog
+          programa koji je student odslušao. Student u pisanom obliku mentoru predlaže temu i
+          koncept završnog odnosno diplomskog rada na najviše jednoj kartici teksta. Za stručne
+          radove koncept sadržava cilj rada i prijedlog strukture razrade teme. Za empirijske
+          radove koncept sadržava cilj i probleme istraživanja, odnosno istraživačka pitanja, te
+          kratki opis metodologije istraživanja.
+
 ===== [ufzg-upute-zavrsni-diplomski-2026 | str. 1] =====
 rada.
 
-1.1. Struktura strucnog rada
+1.1. Struktura stručnog rada
 
-Strucni rad treba sadrzavati sljedee dijelove:
+Stručni rad treba sadržavati sljedeće dijelove:
       - omotna stranica (prilog 1.)
       - naslovna stranica (prilog 2.)
-      - sazetak s kljucnim rijecima
-      - sadrzaj (popis svih poglavlja i potpoglavlja s pripadajuim rednim brojevima stranica)
+      - sažetak s ključnim riječima
+      - sadržaj (popis svih poglavlja i potpoglavlja s pripadajućim rednim brojevima stranica)
       - uvod
       - razrada teme
-      - zakljucak
+      - zaključak
       - literatura
       - prilozi
       - izjava o izvornosti rada (prilog 3.)
 
-Sazetak treba sadrzavati kratko obrazlozenje teorijskog polazista, cilj rada i zakljucak. Sazetak
-treba imati izmeu 250 i 300 rijeci, a ispod sazetka navodi se tri do pet kljucnih rijeci. Ako je rad
-pisan na hrvatskom jeziku, sazetak se pise na hrvatskom i engleskom jeziku. Ako je rad pisan na
-stranom jeziku, sazetak i kljucne rijeci moraju biti na jeziku rada, kao i na hrvatskom i engleskom
-jeziku. U tom slucaju, sazetak na hrvatskom i engleskom treba sadrzavati i naslov rada na oba
+Sažetak treba sadržavati kratko obrazloženje teorijskog polazišta, cilj rada i zaključak. Sažetak
+treba imati između 250 i 300 riječi, a ispod sažetka navodi se tri do pet ključnih riječi. Ako je rad
+pisan na hrvatskom jeziku, sažetak se piše na hrvatskom i engleskom jeziku. Ako je rad pisan na
+stranom jeziku, sažetak i ključne riječi moraju biti na jeziku rada, kao i na hrvatskom i engleskom
+jeziku. U tom slučaju, sažetak na hrvatskom i engleskom treba sadržavati i naslov rada na oba
 jezika.
 
-Uvod sazeto opisuje teorijsku podlogu rada te prikazuje dosadasnja istrazivanja i spoznaje vezane
-uz temu. Takoer, uvod objasnjava razloge za pisanje rada i jasno definira njegov cilj. Na kraju
-uvoda izlaze se struktura rada kroz kratki pregled poglavlja koja slijede.
+Uvod sažeto opisuje teorijsku podlogu rada te prikazuje dosadašnja istraživanja i spoznaje vezane
+uz temu. Također, uvod objašnjava razloge za pisanje rada i jasno definira njegov cilj. Na kraju
+uvoda izlaže se struktura rada kroz kratki pregled poglavlja koja slijede.
 
-Razrada teme sadrzi poglavlja i potpoglavlja koja sustavno analiziraju teorijske postavke i/ili
+Razrada teme sadrži poglavlja i potpoglavlja koja sustavno analiziraju teorijske postavke i/ili
 empirijske spoznaje iz relevantne literature, u skladu s postavljenim ciljevima rada.
 
 ===== [ufzg-upute-zavrsni-diplomski-2026 | str. 2] =====
-Zakljucak sumira najznacajnije dobivene spoznaje te objasnjava njihov znanstveni i/ili strucni
-doprinos. Naglasak je na povezivanju rezultata rada s njegovim ciljevima te mogunostima
-primjene stecenih saznanja u praksi.
+Zaključak sumira najznačajnije dobivene spoznaje te objašnjava njihov znanstveni i/ili stručni
+doprinos. Naglasak je na povezivanju rezultata rada s njegovim ciljevima te mogućnostima
+primjene stečenih saznanja u praksi.
 
-Literatura treba sadrzavati minimalno 20 izvora. Sustavni pregled spoznaja iz literature se
-treba temeljiti na izvornim znanstvenim ili strucnim radovima, dok se izvori poput sveucilisnih
-udzbenika ili drugih preglednih radova mogu koristiti u manjoj mjeri i to u pravilu s ciljem uvoda u
+Literatura treba sadržavati minimalno 20 izvora. Sustavni pregled spoznaja iz literature se
+treba temeljiti na izvornim znanstvenim ili stručnim radovima, dok se izvori poput sveučilišnih
+udžbenika ili drugih preglednih radova mogu koristiti u manjoj mjeri i to u pravilu s ciljem uvoda u
 temu rada.
 
 1.2. Struktura empirijskog rada
 
-Empirijski rad treba sadrzavati sljedee dijelove:
+Empirijski rad treba sadržavati sljedeće dijelove:
       - omotna stranica (prilog 1.)
       - naslovna stranica (prilog 2.)
-      - sazetak s kljucnim rijecima
-      - sadrzaj (popis svih poglavlja i potpoglavlja s pripadajuim rednim brojevima stranica)
+      - sažetak s ključnim riječima
+      - sadržaj (popis svih poglavlja i potpoglavlja s pripadajućim rednim brojevima stranica)
       - uvod
-      - cilj i problemi istrazivanja/istrazivacka pitanja
+      - cilj i problemi istraživanja/istraživačka pitanja
       - metoda
       - rezultati
       - rasprava
-      - zakljucak
+      - zaključak
       - literatura
       - prilozi
       - izjava o izvornosti rada (prilog 3.)
 
-Sazetak treba sadrzavati kratko obrazlozeno teorijsko polaziste, cilj rada. metodu istrazivanja,
-prikaz najvaznijih rezultata te zakljucke. Sazetak treba imati izmeu 250 i 300 rijeci, a ispod
-sazetka navodi se tri do pet kljucnih rijeci. Ako je rad pisan na hrvatskom jeziku, sazetak treba
-biti napisan na hrvatskom i na engleskom jeziku. Sazetak na engleskom jeziku treba sadrzavati
-i naslov rada na engleskom jeziku. Ako je rad pisan na stranom jeziku, sazetak i kljucne rijeci su
-na jeziku na kojem je rad pisan te na hrvatskom i engleskom jeziku. U tom slucaju sazetak na
-hrvatskom i sazetak na engleskom trebaju sadrzavati i naslov rada na hrvatskom odnosno
+Sažetak treba sadržavati kratko obrazloženo teorijsko polazište, cilj rada. metodu istraživanja,
+prikaz najvažnijih rezultata te zaključke. Sažetak treba imati između 250 i 300 riječi, a ispod
+sažetka navodi se tri do pet ključnih riječi. Ako je rad pisan na hrvatskom jeziku, sažetak treba
+biti napisan na hrvatskom i na engleskom jeziku. Sažetak na engleskom jeziku treba sadržavati
+i naslov rada na engleskom jeziku. Ako je rad pisan na stranom jeziku, sažetak i ključne riječi su
+na jeziku na kojem je rad pisan te na hrvatskom i engleskom jeziku. U tom slučaju sažetak na
+hrvatskom i sažetak na engleskom trebaju sadržavati i naslov rada na hrvatskom odnosno
 engleskom jeziku.
 
 ===== [ufzg-upute-zavrsni-diplomski-2026 | str. 3] =====
-Rezultati istrazivanja trebaju biti prikazani na pregledan nacin koji je strukturiran prema
-  pojedinim problemima istrazivanja.
+Rezultati istraživanja trebaju biti prikazani na pregledan način koji je strukturiran prema
+  pojedinim problemima istraživanja.
 
-  U raspravi se objasnjavaju dobiveni rezultati istrazivanja te se povezuju s teorijskim
-  spoznajama i rezultatima proslih istrazivanja. Ako to odgovara strukturi pojedinog rada,
-  rezultati i rasprava mogu biti prikazani u istom poglavlju. U tom slucaju izlaganje pojedinih
-  dijelova rezultata odmah prate pripadajua obrazlozenja.
+  U raspravi se objašnjavaju dobiveni rezultati istraživanja te se povezuju s teorijskim
+  spoznajama i rezultatima prošlih istraživanja. Ako to odgovara strukturi pojedinog rada,
+  rezultati i rasprava mogu biti prikazani u istom poglavlju. U tom slučaju izlaganje pojedinih
+  dijelova rezultata odmah prate pripadajuća obrazloženja.
 
-  U zakljucku se navode najznacajnije dobivene spoznaje te se objasnjava njihov znanstveni i/ili
-  strucni doprinos.
+  U zaključku se navode najznačajnije dobivene spoznaje te se objašnjava njihov znanstveni i/ili
+  stručni doprinos.
 
-  Literatura treba sadrzavati minimalno 30 izvora. Sustavni pregled spoznaja iz literature se
-  treba temeljiti na znanstvenim ili strucnim radovima (knjigama i clancima), dok se izvori poput
-  sveucilisnih udzbenika mogu koristiti u manjoj mjeri.
+  Literatura treba sadržavati minimalno 30 izvora. Sustavni pregled spoznaja iz literature se
+  treba temeljiti na znanstvenim ili stručnim radovima (knjigama i člancima), dok se izvori poput
+  sveučilišnih udžbenika mogu koristiti u manjoj mjeri.
 
-2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada
+2. Opseg i oblikovanje završnog odnosno diplomskog rada
 
-  Zavrsni rad treba imati izmeu 20 i 40 stranica, a diplomski rad izmeu 25 i 50 stranica, ne
-  racunajui priloge.
+  Završni rad treba imati između 20 i 40 stranica, a diplomski rad između 25 i 50 stranica, ne
+  računajući priloge.
 
-  Zavrsni i diplomski rad pise se racunalnim programom prikladnim za pisanje i obradu teksta.
-      � Velicina stranice: A4 (210 x 297 mm)
-      � Margine: 2,5 cm
-      � Font slova: Times New Roman, velicine 12 tocaka
-
-===== [ufzg-upute-zavrsni-diplomski-2026 | str. 4] =====
-izraz/frazu staviti u kurziv.
- Student je odgovoran za provjeru tocnosti i ispravljanje pogresaka (ako ih ima) prije konacne
- predaje rada.
-
-  Navoenje literature te oblikovanje tablica i grafickih prikaza (npr. slika, ilustracija) treba biti
- usklaeno s APA stilom. Detaljnije upute za citiranje literature i oblikovanje tablica i grafickih
- prikaza nalaze se u prilogu 4. Iznimno, uz odobrenje mentora, mogue je i koristenje drugih
- stilova citiranja, ali samo ako je tema rada vezana uz znanstveno polje u kojem je uvrijezen drugi
- stil citiranja. U tom slucaju, na kraju popisa literature dodaje se napomena u kojoj se navodi
- koji je stil citiranja koristen.
-
-3. Postupak izrade zavrsnog odnosno diplomskog rada
-
- Postupak izrade zavrsnog odnosno diplomskog rada odvija se sljedeim tijekom:
-
-      (1) Odabir teme i mentora - student se javlja potencijalnom mentoru s kojim dogovara
-          mentorstvo i temu zavrsnog odnosno diplomskog rada. Tema mora iz podrucja studijskog
-          programa koji je student odslusao. Student u pisanom obliku mentoru predlaze temu i
-          koncept zavrsnog odnosno diplomskog rada na najvise jednoj kartici teksta. Za strucne
-          radove koncept sadrzava cilj rada i prijedlog strukture razrade teme. Za empirijske
-          radove koncept sadrzava cilj i probleme istrazivanja, odnosno istrazivacka pitanja, te
-          kratki opis metodologije istrazivanja.
+  Završni i diplomski rad piše se računalnim programom prikladnim za pisanje i obradu teksta.
+      • Veličina stranice: A4 (210 x 297 mm)
+      • Margine: 2,5 cm
+      • Font slova: Times New Roman, veličine 12 točaka
 
 ===== [ufzg-upute-zavrsni-diplomski-2026 | str. 4] =====
-(2) Prijava teme - Student prijavljuje temu dogovorenu s mentorom putem mreznog sucelja
-          ispunjavanjem Zahtjeva za odobrenje teme zavrsnog rada odnosno Zahtjeva za
+(2) Prijava teme - Student prijavljuje temu dogovorenu s mentorom putem mrežnog sučelja
+          ispunjavanjem Zahtjeva za odobrenje teme završnog rada odnosno Zahtjeva za
           odobrenje teme diplomskog rada. Temu prvo odobrava mentor, a nakon toga se usvaja
-          na sjednici programskog odsjeka. Na sjednici programskog odsjeka mogue je dopuniti
+          na sjednici programskog odsjeka. Na sjednici programskog odsjeka moguće je dopuniti
           ili promijeniti naslov teme da odgovara studijskom programu i instituciji na kojoj se
-          izrauje. Ako je to potrebno zbog specificnosti teme, predlaze se imenovanje
+          izrađuje. Ako je to potrebno zbog specifičnosti teme, predlaže se imenovanje
           sumentora.
 
       (3) Koraci izrade rada - Student u dogovoru s mentorom (i sumentorom) detaljno
-          definira i provodi sve korake izrade zavrsnog odnosno diplomskog rada.
+          definira i provodi sve korake izrade završnog odnosno diplomskog rada.
 
-        Za strucne radove to ukljucuje:
-          a) Dogovor o postupku istrazivanja literature s obzirom na cilj
-          b) Razmatranje spoznaja iz literature i donosenje zakljucaka koji i iz njih slijede
+        Za stručne radove to uključuje:
+          a) Dogovor o postupku istraživanja literature s obzirom na cilj
+          b) Razmatranje spoznaja iz literature i donošenje zaključaka koji i iz njih slijede
 
-              uz usmjeravanje i podrsku mentora
+              uz usmjeravanje i podršku mentora
           c) Pisanje rada u skladu sa strukturom definiranom u ovim uputama.
 
-          Za empirijske radove to ukljucuje:
-          a) Definiranje metoda i nacina prikupljanja podataka (npr. promatranje, intervju,
+          Za empirijske radove to uključuje:
+          a) Definiranje metoda i načina prikupljanja podataka (npr. promatranje, intervju,
 
-              fokusne grupe, analiza sadrzaja, primjena upitnika, testova znanja, itd.) u skladu s
-              odabranim istrazivackim nacrtom (npr. (kvazi)eksperimentalno, korelacijsko,
-              akcijsko istrazivanje, studija slucaja)
+              fokusne grupe, analiza sadržaja, primjena upitnika, testova znanja, itd.) u skladu s
+              odabranim istraživačkim nacrtom (npr. (kvazi)eksperimentalno, korelacijsko,
+              akcijsko istraživanje, studija slučaja)
+
+===== [ufzg-upute-zavrsni-diplomski-2026 | str. 5] =====
+zamolba nadležnoj osobi te institucije. Zamolbu potpisuje mentor.
+
+    e) Unos podataka i prikladna analiza u odgovarajućim računalnim programima (Excel,
+        Statistica, SPSS itd.).
+
+    f) Pisanje rada u skladu sa strukturom definiranom u ovim uputama.
+
+    g) Pri pisanju rada također se trebaju poštivati etička načela. To se osobito odnosi na
+        pitanja anonimnosti i povjerljivosti podataka (npr. u radu se ne navode nazivi
+        (pred)školskih ustanova već županije u kojoj se nalazi ustanova te, ako je zbog
+        cilja istraživanja nužno, navesti radi li se o ruralnoj ili urbanoj sredini (selo, mjesto,
+        grad)). Poštivanje etičkih načela odnosi se i na pisanje rada u skladu s etičkim
+        načelima koja se odnose na ispravno korištenje i navođenje izvora korištenih pri
+        pisanju rada, te u skladu sa smjernicama za korištenje alata umjetne inteligencije.
+
+(4) Završetak izrade rada — Student šalje radnu verziju završnog odnosno diplomskog
+    rada mentoru.
+
+    a) Ako rad, prema mišljenju mentora, zadovoljava svojom kvalitetom, student
+        mentoru i sumentoru dostavlja konačnu inačicu rada u elektronskom obliku. Mentor
+        dogovara termin obrane završnog odnosno diplomskog rada koji je u vrijeme
+        ispitnih rokova.
+
+    b) Ako rad, prema mišljenju mentora, ne zadovoljava svojoj kvalitetom, student treba
+        dostaviti mentoru novu verziju rada dorađenu u skladu s uputama mentora. Ako ni

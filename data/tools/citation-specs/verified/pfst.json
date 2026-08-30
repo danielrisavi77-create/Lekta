@@ -21,7 +21,7 @@
     "mode": "bracket-number",
     "provenance": {
       "kind": "worked-example",
-      "quoteRaw": "Fraktali predstavljaju granice nove vrste skupova tocaka u kompleksnoj ravnini [7].",
+      "quoteRaw": "Fraktali predstavljaju granice nove vrste skupova točaka u kompleksnoj ravnini [7].",
       "sourcePage": "str. 15",
       "note": "Na kraju navoda ili prepricanog izvatka stavlja se oznaka (broj) literature, 'primjerice [broj reference iz koristene literature]' (str. 15). Fusnote su izrijekom zabranjene za navodjenje literature: 'VAZNO: Fusnote (engl. footnote) se ne smiju koristiti za navoenje literature.' (str. 11). Ispusteni dio izravnog citata oznacava se znakom [...] (str. 15). Numericki stil nema in-text template; broj odgovara jedinici u popisu literature."
     }
@@ -45,7 +45,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "[1] Bosnjak, I.: Telekomunikacijski promet I, Fakultet prometnih znanosti, Zagreb, 2001.",
+        "quoteRaw": "[1] Bošnjak, I.: Telekomunikacijski promet I, Fakultet prometnih znanosti, Zagreb, 2001.",
         "sourcePage": "str. 25",
         "note": "Pravilo (str. 11): najprije prezime pa inicijali imena odvojeni zarezom, naslov knjige kurzivom, ime izdavacke kuce, sjediste/mjesto izdanja, godina; vise autora odvaja se tocka-zarezom i navode se SVI redom s djela (bez et al.), npr. reference [2] i [8]. Opcionalni {volume} nosi izdanje doslovno kako ga student upise, po uzoru na referencu [2] 'Understanding poetry, 3rd ed, Holt, Rinehart and Winston, New York, 1960.'. Oznaku [n] ispred jedinice dodaje prikaz popisa (referenceMarker), nije dio retka."
       },
@@ -106,7 +106,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Za ostale izvore na odgovarajui nacin se primjenjuje nacin navoenja kao za knjige.",
+        "quoteRaw": "Za ostale izvore na odgovarajući način se primjenjuje način navođenja kao za knjige.",
         "sourcePage": "str. 12",
         "note": "Izvor nema primjer poglavlja u zborniku. Red je izveden iz oblika za knjigu po navedenom pravilu (autori pa dvotocka, naslov, izdavac, mjesto, godina); veznik 'u:' i oznaka '(ur.)' su uobicajena hrvatska konvencija koju izvor ne potvrdjuje. Potvrditi ili oboriti pri verifikaciji."
       },
@@ -177,7 +177,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Primjer: Pruzanje usluga informacijskog drustva u Hrvatskoj je ureeno Zakonom o",
+        "quoteRaw": "Primjer: Pružanje usluga informacijskog društva u Hrvatskoj je uređeno Zakonom o",
         "sourcePage": "str. 11",
         "note": "Primjer je recenica u tekstu pa je naziv u instrumentalu ('Zakonom o elektronickoj trgovini'); expected zadrzava doslovan oblik iz izvora, u nominativu bi bilo 'Zakon o elektronickoj trgovini'. Pravilo trazi puni naziv iza kojeg se u zagradi navodi kratica naziva te brojevi i godine sluzbenog glasila; Primjer kraticu ne pokazuje pa je template bez nje. Propisi citirani u tekstu u pravilu se NE navode u popisu literature; ako se navedu, idu na kraj popisa malo odvojeno."
       },

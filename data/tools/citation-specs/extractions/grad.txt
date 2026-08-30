@@ -1,4 +1,48 @@
 ===== [grad-predlozak-2024 | str. 1] =====
+Iza nje slijedi naslovnica na engleskom jeziku.
+Naslovne stranice s informacijama o mentoru/komentorima
+Obrazac 3 (s potpisom mentora)
+Obrazac 5 (s potpisom studenta)
+Obrazac 6 (s potpisom studenta)
+Zahvale (neobavezno).
+Sažetak na hrvatskom i engleskom jeziku
+Sažetak mora sadržavati maksimalno 200 riječi, sadržavati ključne riječi i omogućiti čitatelju razumijevanje cilja rada, metode, rezultate te zaključke.
+Ključne riječi na hrvatskom i engleskom jeziku
+Sadržaj
+Tekst rada (počevši s Uvodom)
+Zaključak
+Popis literature
+Navode se svi radovi koji su u radu citirani, kao i oni na koje se autor poziva. Jednako tako, u popisu ne smiju biti radovi koji nisu citirani, niti oni na koje se u radu ne upućuje.
+Uz svaku preuzetu tvrdnju potrebno je navesti njezin izvor, tj. referencu. Reference se u tekstu navode tako da se uz citirani tekst navede izvor, sukladno načinu propisanom odabranim stilom.
+Više o navođenju literature u tekstu možete pročitati u literaturi [1].
+Prilozi (neobavezno).
+Ukoliko se pri izradi rada koriste određeni prilozi (primjerice objavljeni radovi, određene ankete, obrasci i sl.), njih treba dodati na kraju rada. Mogu se označiti PRILOG A, PRILOG B… ili PRILOG 1, PRILOG 2...
+Korice kod tvrdog uveza 
+Hrbat: ime autoragodina obranevrsta rada (završni ispit/diplomski rad)
+Lijeva i desna margina: 3,0 cm
+Gornja i donja margina: 3,0 cm
+
+
+ZAKLJUČAK
+U zaključku treba sažeto rezimirati najvažnije rezultate razrade teme rada. Potrebno je sažeto opisati što je predmet rada, koje su metode, tehnike, programski alati ili aplikacije korištene u razradi rada te koje su pretpostavke dokazane, a koje opovrgnute. Sadržajno, ono što se u uvodu rada najavljuje i kasnije je obuhvaćeno u samom radu, moralo bi biti opisano u zaključnom dijelu kroz rezultate rada.
+
+
+POPIS LITERATURE
+Popis literature treba izraditi u skladu s odabranim stilom navođenja prema [1].
+[1]Cerić, A., Ivić, I: Upute za pisanje i obranu studentskih radova, Sveučilište u Zagrebu, Građevinski fakultet, 2023.
+[2]Hao, S.: I-35W Bridge Collapse, Journal of Bridge Engineering, ASCE, Vol. 15, 5, 608–614, 2010.
+[x]xxxx
+
+
+POPIS SLIKA
+ TOC \h \z \c "Slika" Slika 1: Naziv slike (Izvor: [2]) PAGEREF _Toc152324831 \h 6
+
+
+
+POPIS TABLICA
+ TOC \h \z \c "Tablica" Tablica 1: Naziv tablice (Izvor: [x]) PAGEREF _Toc152324823 \h 6
+
+===== [grad-predlozak-2024 | str. 1] =====
 SAŽETAK PAGEREF _Toc167280098 \h ii
 SUMMARY PAGEREF _Toc167280099 \h iii
 SADRŽAJ PAGEREF _Toc167280100 \h iv
@@ -80,47 +124,3 @@ Ako je tablica preuzeta iz drugog izvora, nakon navođenja naziva tablice potreb
 Primjer označavanja tablice možete vidjeti u nastavku.
 
 Tablica  SEQ Tablica \* ARABIC 1.: Naziv tablice (Izvor: [x])
-
-===== [grad-predlozak-2024 | str. 1] =====
-Iza nje slijedi naslovnica na engleskom jeziku.
-Naslovne stranice s informacijama o mentoru/komentorima
-Obrazac 3 (s potpisom mentora)
-Obrazac 5 (s potpisom studenta)
-Obrazac 6 (s potpisom studenta)
-Zahvale (neobavezno).
-Sažetak na hrvatskom i engleskom jeziku
-Sažetak mora sadržavati maksimalno 200 riječi, sadržavati ključne riječi i omogućiti čitatelju razumijevanje cilja rada, metode, rezultate te zaključke.
-Ključne riječi na hrvatskom i engleskom jeziku
-Sadržaj
-Tekst rada (počevši s Uvodom)
-Zaključak
-Popis literature
-Navode se svi radovi koji su u radu citirani, kao i oni na koje se autor poziva. Jednako tako, u popisu ne smiju biti radovi koji nisu citirani, niti oni na koje se u radu ne upućuje.
-Uz svaku preuzetu tvrdnju potrebno je navesti njezin izvor, tj. referencu. Reference se u tekstu navode tako da se uz citirani tekst navede izvor, sukladno načinu propisanom odabranim stilom.
-Više o navođenju literature u tekstu možete pročitati u literaturi [1].
-Prilozi (neobavezno).
-Ukoliko se pri izradi rada koriste određeni prilozi (primjerice objavljeni radovi, određene ankete, obrasci i sl.), njih treba dodati na kraju rada. Mogu se označiti PRILOG A, PRILOG B… ili PRILOG 1, PRILOG 2...
-Korice kod tvrdog uveza 
-Hrbat: ime autoragodina obranevrsta rada (završni ispit/diplomski rad)
-Lijeva i desna margina: 3,0 cm
-Gornja i donja margina: 3,0 cm
-
-
-ZAKLJUČAK
-U zaključku treba sažeto rezimirati najvažnije rezultate razrade teme rada. Potrebno je sažeto opisati što je predmet rada, koje su metode, tehnike, programski alati ili aplikacije korištene u razradi rada te koje su pretpostavke dokazane, a koje opovrgnute. Sadržajno, ono što se u uvodu rada najavljuje i kasnije je obuhvaćeno u samom radu, moralo bi biti opisano u zaključnom dijelu kroz rezultate rada.
-
-
-POPIS LITERATURE
-Popis literature treba izraditi u skladu s odabranim stilom navođenja prema [1].
-[1]Cerić, A., Ivić, I: Upute za pisanje i obranu studentskih radova, Sveučilište u Zagrebu, Građevinski fakultet, 2023.
-[2]Hao, S.: I-35W Bridge Collapse, Journal of Bridge Engineering, ASCE, Vol. 15, 5, 608–614, 2010.
-[x]xxxx
-
-
-POPIS SLIKA
- TOC \h \z \c "Slika" Slika 1: Naziv slike (Izvor: [2]) PAGEREF _Toc152324831 \h 6
-
-
-
-POPIS TABLICA
- TOC \h \z \c "Tablica" Tablica 1: Naziv tablice (Izvor: [x]) PAGEREF _Toc152324823 \h 6

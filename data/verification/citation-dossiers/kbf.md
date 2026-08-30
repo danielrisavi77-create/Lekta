@@ -8,7 +8,7 @@ Snapshot: `data/sources/kbf/kbf-upute-zavrsni-diplomski-2017.pdf` (hash `be12139
 Otvori PDF: `data/sources/kbf/kbf-upute-zavrsni-diplomski-2017.pdf#page=9`
 ```
 TEMPLATE: {authors}, {title}, {place}, {year}.
-QUOTE   : Zeljko MARDESI, Rascjep u svetome, Zagreb, 2007.   [grep: OK]
+QUOTE   : Željko MARDEŠIĆ, Rascjep u svetome, Zagreb, 2007.   [grep: OK]
 IZVOR   : Zeljko MARDESI, Rascjep u svetome, Zagreb, 2007.
 RENDER  : Zeljko MARDESI, Rascjep u svetome, Zagreb, 2007.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -28,7 +28,7 @@ NAPOMENA: Izvor ima kategoriju 'Knjige i zbornici radova', ali primjer za rad u 
 Otvori PDF: `data/sources/kbf/kbf-upute-zavrsni-diplomski-2017.pdf#page=10`
 ```
 TEMPLATE: {authors}, {title}, u: {container}, {year}.
-QUOTE   : Christoph SCH�NBORN, Finding design in nature, u: The New York Times, 7.   [grep: OK]
+QUOTE   : Christoph SCHÖNBORN, Finding design in nature, u: The New York Times, 7.   [grep: OK]
 IZVOR   : Christoph SCH�NBORN, Finding design in nature, u: The New York Times, 7. VII. 2005.
 RENDER  : Christoph SCH�NBORN, Finding design in nature, u: The New York Times, 7. VII. 2005.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -50,7 +50,7 @@ NAPOMENA: Pravilo iz izvora: 'Dokumenti i materijali u elektronickom obliku (u z
 Otvori PDF: `data/sources/kbf/kbf-upute-zavrsni-diplomski-2017.pdf#page=9`
 ```
 TEMPLATE: {authors}, {title}, {institution}, {place}, {year}.
-QUOTE   : Zeljko MARDESI, Rascjep u svetome, Zagreb, 2007.   [grep: OK]
+QUOTE   : Željko MARDEŠIĆ, Rascjep u svetome, Zagreb, 2007.   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute NE obraduju citiranje zavrsnih/diplomskih radova; predlozak izveden iz oblika za knjigu (koji nema izdavaca) uz dodanu ustanovu prije mjesta. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -59,7 +59,7 @@ NAPOMENA: Upute NE obraduju citiranje zavrsnih/diplomskih radova; predlozak izve
 Otvori PDF: `data/sources/kbf/kbf-upute-zavrsni-diplomski-2017.pdf#page=8`
 ```
 TEMPLATE: {title}, u: {container}[[, br. {issue}]][[, {year}]].
-QUOTE   : Prilikom navoenje literature potrebno je dosljedno se pridrzavati pravila o navoenju   [grep: OK]
+QUOTE   : Prilikom navođenje literature potrebno je dosljedno se pridržavati pravila o navođenju   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Ni ekstrakcija ni vidljivi dio uputa Bogoslovske smotre ne donose primjer za pravne propise ni crkvene dokumente; minimalni predlozak izveden iz reda za clanak bez autora (naslov, u: publikacija, broj, godina). Potvrditi ili oboriti pri verifikaciji.
 ```

@@ -8,7 +8,7 @@ Snapshot: `data/sources/ferit/ferit-upute-diplomski.pdf` (hash `d596eb1f8605...`
 Otvori PDF: `data/sources/ferit/ferit-upute-diplomski.pdf#page=3`
 ```
 TEMPLATE: {authors}, {title}, {publisher}, {place}, {year}.
-QUOTE   : [3] Inicijali imena, prezime autora, naslov knjige, izdavac, mjesto, godina izdanja.   [grep: OK]
+QUOTE   : [3] Inicijali imena, prezime autora, naslov knjige, izdavač, mjesto, godina izdanja.   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Redak u izvoru je shematski (opisna polja s doslovnom interpunkcijom), ne konkretan citat, pa je kind rule-text i nema examplea (opisni autorski blok nije provediv kroz parser autora). Redoslijed: autor (inicijali imena pa prezime), naslov, izdavac, mjesto, godina; sve odvojeno zarezima, tocka na kraju. Redni broj [3] je pozicijska oznaka u popisu literature (redoslijed pojavljivanja u radu) i nije dio predloska.
 ```
@@ -26,7 +26,7 @@ NAPOMENA: Izvor daje primjer samo za referat u zborniku konferencije: autor, nas
 Otvori PDF: `data/sources/ferit/ferit-upute-diplomski.pdf#page=3`
 ```
 TEMPLATE: {authors}, {title}, {container}[[, br. {issue}]][[, sv. {volume}]], str. {pages}, {year}.
-QUOTE   : [1] Inicijali imena, prezime autora, naslov rada, naziv casopisa, broj casopisa   [grep: OK]
+QUOTE   : [1] Inicijali imena, prezime autora, naslov rada, naziv časopisa, broj časopisa   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Nastavak retka u izvoru: '(br./No.), broj sveska (sv./Vol.), str. (pp.) od - do, mjesec i godina izdanja.' Redak je shematski (opisna polja + objasnjenja etiketa u zagradama), ne konkretan citat, pa je kind rule-text i nema examplea; predlozak pise 'br.', 'sv.' i 'str.' bez objasnjenja. Neuobicajeno: broj casopisa (issue) dolazi PRIJE broja sveska (volume). Izvor trazi 'mjesec i godina izdanja', alat ima samo polje year.
 ```
@@ -35,7 +35,7 @@ NAPOMENA: Nastavak retka u izvoru: '(br./No.), broj sveska (sv./Vol.), str. (pp.
 Otvori PDF: `data/sources/ferit/ferit-upute-diplomski.pdf#page=3`
 ```
 TEMPLATE: {authors}, {title}, {url}[[, pristupljeno {accessed}]].
-QUOTE   : 2.9. Literaturu treba svrstati redom kojim se pojavljuje u radu i napisati na slijedei nacin:   [grep: OK]
+QUOTE   : 2.9. Literaturu treba svrstati redom kojim se pojavljuje u radu i napisati na slijedeći način:   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute (t. 2.9) ne obraduju mrezne izvore. Predlozak je izveden iz opceg zareznog niza polja kojim izvor pise sve bibliografske jedinice; oznaka pristupa je dodana konvencija (izvor ne spominje datum pristupa, zato accessDate false). Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -44,7 +44,7 @@ NAPOMENA: Upute (t. 2.9) ne obraduju mrezne izvore. Predlozak je izveden iz opce
 Otvori PDF: `data/sources/ferit/ferit-upute-diplomski.pdf#page=3`
 ```
 TEMPLATE: {authors}, {title}, {institution}, {place}, {year}.
-QUOTE   : [3] Inicijali imena, prezime autora, naslov knjige, izdavac, mjesto, godina izdanja.   [grep: OK]
+QUOTE   : [3] Inicijali imena, prezime autora, naslov knjige, izdavač, mjesto, godina izdanja.   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute ne obraduju citiranje zavrsnih i diplomskih radova; predlozak je izveden iz oblika za knjigu (izdavac -> ustanova). Potvrditi pri verifikaciji.
 ```

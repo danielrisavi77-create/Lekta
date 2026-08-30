@@ -8,7 +8,7 @@ Snapshot: `data/sources/fazos/fazos-upute-zavrsni-2024.pdf` (hash `eb5b2331f173.
 Otvori PDF: `data/sources/fazos/fazos-upute-zavrsni-2024.pdf#page=6`
 ```
 PIN     : izvor propisuje stil "apa7" -> format ostaje obiteljski motor
-QUOTE   : Prilikom citiranja autora ili navoenja literaturnih izvora u tekstu rada treba koristiti APA   [grep: OK]
+QUOTE   : Prilikom citiranja autora ili navođenja literaturnih izvora u tekstu rada treba koristiti APA   [grep: OK]
 ```
 
 ## Verifikacija

@@ -17,7 +17,7 @@ NAPOMENA: Shematski obrazac s doslovnom interpunkcijom (dvotocka iza autora, god
 Otvori PDF: `data/sources/ptfos/ptfos-upute-diplomski-2020.pdf#page=11`
 ```
 TEMPLATE: {authors}: {title}. U {container}[[, str. {pages}]]. {publisher}[[, {place}]], {year}.
-QUOTE   : Pilizota V: Prerada voa i povra. U Hrvatska poljoprivreda na raskrizju, str. 156-160. Ministarstvo   [grep: OK]
+QUOTE   : Piližota V: Prerada voća i povrća. U Hrvatska poljoprivreda na raskrižju, str. 156-160. Ministarstvo   [grep: OK]
 IZVOR   : Pilizota V: Prerada voa i povra. U Hrvatska poljoprivreda na raskrizju, str. 156-160. Ministarstvo poljoprivrede i sumarstva RH, Zagreb, 1997.
 RENDER  : Pilizota V: Prerada voa i povra. U Hrvatska poljoprivreda na raskrizju, str. 156-160. Ministarstvo poljoprivrede i sumarstva RH, Zagreb, 1997.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -28,7 +28,7 @@ NAPOMENA: Puni primjer (prelomljen u ekstrakciji): 'Pilizota V: Prerada voa i po
 Otvori PDF: `data/sources/ptfos/ptfos-upute-diplomski-2020.pdf#page=11`
 ```
 TEMPLATE: {authors}: {title}. {container} {volume}:{pages}, {year}.
-QUOTE   : Mandi ML, Kenjeri D, Perl Piricki A: Intake of some minerals in healthy adult volunteers from eastern   [grep: OK]
+QUOTE   : Mandić ML, Kenjerić D, Perl Pirički A: Intake of some minerals in healthy adult volunteers from eastern   [grep: OK]
 IZVOR   : Mandi ML, Kenjeri D, Perl Piricki A: Intake of some minerals in healthy adult volunteers from eastern Croatia. International Journal of Food Sciences and Nutrition 60:77-87, 2009.
 RENDER  : Mandi ML, Kenjeri D, Perl Piricki A: Intake of some minerals in healthy adult volunteers from eastern Croatia. International Journal of Food Sciences and Nutrition 60:77-87, 2009.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -39,7 +39,7 @@ NAPOMENA: Puni primjer (prelomljen u ekstrakciji): 'Mandi ML, Kenjeri D, Perl Pi
 Otvori PDF: `data/sources/ptfos/ptfos-upute-diplomski-2020.pdf#page=6`
 ```
 TEMPLATE: {authors}: {title}. {url}[[ ({accessed})]], {year}.
-QUOTE   : Pri upotrebi mreznih izvora preporuca se pohraniti URL adresu ili citavu stranicu s koje   [grep: OK]
+QUOTE   : Pri upotrebi mrežnih izvora preporuča se pohraniti URL adresu ili čitavu stranicu s koje   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Ekstrakcija NE sadrzi obrazac za opce mrezne stranice u popisu literature (pokriva samo elektronicke casopise, koji idu pod clanak). Predlozak je izveden iz opceg reda podataka 'Prezime I: Naslov. Izvor, godina.' uz URL, jer izvor izrijekom trazi pohranu URL adrese mreznog izvora (str. 6), a in-text pravila kazu da se i publikacije s mreznog izvora citiraju autor-godina (str. 9). Opcionalni datum pristupa je dodana konvencija, izvor ga u ekstrakciji ne propisuje (zato accessDate false). Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -48,7 +48,7 @@ NAPOMENA: Ekstrakcija NE sadrzi obrazac za opce mrezne stranice u popisu literat
 Otvori PDF: `data/sources/ptfos/ptfos-upute-diplomski-2020.pdf#page=11`
 ```
 TEMPLATE: {authors}: {title}. Diplomski rad. {institution}[[, {place}]], {year}.
-QUOTE   : Mari I: Utjecaj temperature na kinetiku halogenog susenja tjestenine. Diplomski rad. Prehrambeno-   [grep: OK]
+QUOTE   : Marić I: Utjecaj temperature na kinetiku halogenog sušenja tjestenine. Diplomski rad. Prehrambeno-   [grep: OK]
 IZVOR   : Mari I: Utjecaj temperature na kinetiku halogenog susenja tjestenine. Diplomski rad. Prehrambeno-tehnoloski fakultet, Osijek, 2005.
 RENDER  : Mari I: Utjecaj temperature na kinetiku halogenog susenja tjestenine. Diplomski rad. Prehrambeno-tehnoloski fakultet, Osijek, 2005.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -59,7 +59,7 @@ NAPOMENA: Puni primjer (prelomljen u ekstrakciji na spojnici): 'Mari I: Utjecaj 
 Otvori PDF: `data/sources/ptfos/ptfos-upute-diplomski-2020.pdf#page=11`
 ```
 TEMPLATE: {authors}: {title}. [[{container} {issue}, ]]{year}.
-QUOTE   : Djela u izdanju organizacija (zakoni, pravilnici, norme, prirucnici, izvjesa, i dr.)   [grep: OK]
+QUOTE   : Djela u izdanju organizacija (zakoni, pravilnici, norme, priručnici, izvješća, i dr.)   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Ekstrakcija iz sekcije o djelima organizacija sadrzi samo podnaslov IZVJESA s pravilom 'Izvjesa i slicni dokumenti citiraju se poput knjiga.' (str. 11); obrazac za zakone, pravilnike i norme je odsjecen. Predlozak je izveden iz oblika za knjigu s organizacijom (kraticom donositelja) kao autorom, kako to rade in-text primjeri '(MZSS, 2008)' i '(HZN, 2004)' (str. 10); glasilo (npr. Narodne novine) i broj idu u container/issue. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -68,7 +68,7 @@ NAPOMENA: Ekstrakcija iz sekcije o djelima organizacija sadrzi samo podnaslov IZ
 ```
 TEMPLATE : ({authorsShort}, {year})   /  s pages: (nema)
 RENDER   : (Lovric, 1988)   /  (Lovric, 1988)
-QUOTE    : Rezultati navedenog rada su ukazali na niske razine aflatoksina (Sarkanj, 2010).   [grep: OK]
+QUOTE    : Rezultati navedenog rada su ukazali na niske razine aflatoksina (Šarkanj, 2010).   [grep: OK]
 NAPOMENA : Autor-godina u zagradi na kraju recenice. Dva autora veznikom i: '(Budzaki i Seruga, 2005)' (str. 9); vise od dva autora prvi + 'i sur.': '(Tisma i sur., 2009)' (str. 9); vise radova odvaja tocka-zarez '(Primorac, 2008; Kopjar i sur., 2009)'; isti autor ista godina dobiva slova a, b: '(Klapec, 2007a; 2007b)' (str. 10); organizacije kraticom '(WHO, 2008)', '(MZSS, 2008)' (str. 10). U tekstu bez zagrade oblik je 'Nedi-Tiban (2009)'. Izvor ne pokazuje in-text citat s brojem stranice, pa withPagesTemplate nije postavljen.
 ```
 

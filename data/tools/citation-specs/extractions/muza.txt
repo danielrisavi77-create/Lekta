@@ -1,29 +1,52 @@
-===== [muza-pravilnik-zavrsetak-2025 | str. 15] =====
-vise umjetnickih, znanstvenih ili interdisciplinarnih podrucja, polja i grana obuhvaenih studijskim
-programom. Studijskim programom moze se dodatno urediti sadrzaj diplomskog rada na
-pojedinom studiju. (Cl. st. 5. Pravilnika)
-Diplomski rad izrauje se na racunalu u skladu s predloskom za pisanje diplomskog rada
-objavljenom na mreznoj stranici Muzicke akademije.
+===== [muza-pravilnik-zavrsetak-2025 | str. 8] =====
+(7) Pročelnik odsjeka u skladu sa stavcima 1. – 6. ovoga članka određuje konačne termine
+obrane diplomskog rada, odnosno svih dijelova diplomskog ispita te vodi brigu o
+pravovremenoj rezervaciji potrebnih prostora, dostupnosti tehničke opreme i osoblja potrebnog
+za provedbu ispita, snimanje diplomskoga javnog nastupa i sl.
+(8) Pročelnik odsjeka dužan je u najkraćem roku obavijestiti prodekana za nastavu
+elektroničkom poštom (prodekan.nastava@muza.unizg.hr) o zakazanim terminima svih
+dijelova ispita iz st. 5. ovoga članka, kao i o izmjenama istih, uz navođenje sljedećih
+informacija za svaki termin:
 
-Format stranice diplomskoga rada u pravilu je A4 (210 x 297 mm), osim ako karakter grae
+             a. ime i prezime studenta, odsjek, modul
+             b. tema diplomskog rada i/ili program nastupa
+             c. ime i prezime mentora te, ako je primjenjivo, komentora, umjetničkog
+
+                  suradnika i drugih sudionika
+             d. sastav ispitnog povjerenstva
+             e. mjesto i vrijeme održavanja.
+(9) Informacije iz st. 8. ovoga članka unose se u Kalendar diplomskih ispita objavljen na
+mrežnim stranicama Akademije.
+
+===== [muza-pravilnik-zavrsetak-2025 | str. 15] =====
+više umjetničkih, znanstvenih ili interdisciplinarnih područja, polja i grana obuhvaćenih studijskim
+programom. Studijskim programom može se dodatno urediti sadržaj diplomskog rada na
+pojedinom studiju. (Čl. st. 5. Pravilnika)
+Diplomski rad izrađuje se na računalu u skladu s predloškom za pisanje diplomskog rada
+objavljenom na mrežnoj stranici Muzičke akademije.
+
+Format stranice diplomskoga rada u pravilu je A4 (210 x 297 mm), osim ako karakter građe
 iznimno ne zahtijeva neki drugi format (notni zapisi, velike ilustracije, velike tablice i sl.).
-Opseg teksta diplomskog rada racuna se u karticama, pri cemu jedna kartica teksta obuhvaa
+Opseg teksta diplomskog rada računa se u karticama, pri čemu jedna kartica teksta obuhvaća
 1800 znakova s razmacima. Minimalan opseg tijela glavnoga teksta pisanoga diplomskog rada
 za pojedine studije/odsjeke nalazi se u drugome dijelu ovoga dokumenta. Tijelo glavnoga
-teksta ne obuhvaa naslovnicu, unutarnje stranice s potpisima, zahvale, sadrzaj, popis
+teksta ne obuhvaća naslovnicu, unutarnje stranice s potpisima, zahvale, sadržaj, popis
 literature i drugih izvora, popise kratica, ilustracija, tablica i sl., kao ni priloge dodane na kraju
 rada.
-Sadrzaj, opa struktura radova, nacin oblikovanja, velicina i vrsta slova i druge tehnicke
-propozicije sadrzani su u predlosku za pisanje diplomskog rada i obavezni su za sve studente.
-Specificne znacajke rada poput nacina navoenja izvora i sl. odreuje mentor u skladu s pravilima
-struke, odnosno podrucja koje se u radu obrauje. Glavne smjernice nalaze se u predlosku.
-Osim pisanoga dijela koji se izrauje na propisanom predlosku, diplomski rad moze sadrzavati i
-dodatne materijale u virtualnom (internetski oblaci i dr.) ili cvrstom mediju (npr. tiskani i drugi
+Sadržaj, opća struktura radova, način oblikovanja, veličina i vrsta slova i druge tehničke
+propozicije sadržani su u predlošku za pisanje diplomskog rada i obavezni su za sve studente.
+Specifične značajke rada poput načina navođenja izvora i sl. određuje mentor u skladu s pravilima
+struke, odnosno područja koje se u radu obrađuje. Glavne smjernice nalaze se u predlošku.
+Osim pisanoga dijela koji se izrađuje na propisanom predlošku, diplomski rad može sadržavati i
+dodatne materijale u virtualnom (internetski oblaci i dr.) ili čvrstom mediju (npr. tiskani i drugi
 predmeti). Svi se dijelovi diplomskog rada obavezno pohranjuju u repozitoriju, a za dodatke na
-cvrstim medijima koje nije mogue priloziti uz elektronicki obrazac za predaju rada u repozitorij
-student se treba obratiti Knjiznici Muzicke akademije za daljnje upute.
-Opseg, sadrzaj i karakter diplomskih radova djelomicno je odreen studijskim programima,
-a djelomicno ovim uputama. U skladu s cl. 16. st. 3. Pravilnika, Vijea odsjeka mogu donijeti i
+čvrstim medijima koje nije moguće priložiti uz elektronički obrazac za predaju rada u repozitorij
+student se treba obratiti Knjižnici Muzičke akademije za daljnje upute.
+Opseg, sadržaj i karakter diplomskih radova djelomično je određen studijskim programima,
+a djelomično ovim uputama. U skladu s čl. 16. st. 3. Pravilnika, Vijeća odsjeka mogu donijeti i
+posebne dopune Pravilniku i studijskim programima koje će se evidentirati u ovome dokumentu.
+Studenti su dužni pridržavati se svih uputa koje su na snazi.
+Slijede posebne upute po odsjecima/studijima.
 
 ===== [muza-pravilnik-zavrsetak-2025 | str. 19] =====
 Johannes Brahms: Tri intermezza, op. 117
@@ -36,28 +59,28 @@ Clara Schumann: Koncert za klavir i orkestar u a-molu, op. 7
                                       II. Romanze. Andante non troppo con grazia
                                       III. Finale. Allegro non troppo
 
-Kataloske oznake opusa nisu uvijek ,,op."; razlikuju se za razlicite skladatelje, a za neke
-postoji i vise kataloga djela, odnosno kataloskih oznaka. Konzultirajte se s nastavnikom.
+Kataloške oznake opusa nisu uvijek „op.“; razlikuju se za različite skladatelje, a za neke
+postoji i više kataloga djela, odnosno kataloških oznaka. Konzultirajte se s nastavnikom.
 Konzultirajte i referentnu literaturu (enciklopedije, leksikoni). Kvalitetan popis oznaka opusa
-koje nisu ,,op." dostupan je i na https://roberge.mus.ulaval.ca/gdrm/03-catal.htm.
+koje nisu „op.“ dostupan je i na https://roberge.mus.ulaval.ca/gdrm/03-catal.htm.
 
 ===== [muza-pravilnik-zavrsetak-2025 | str. 20] =====
 Kod vokalnih i vokalno-instrumentalnih djela ili njihovih dijelova koji nemaju vlastiti naslov
 (npr. arija, recitativa i drugih brojeva ili dijelova opera, oratorija, kantata, misa i sl.) navode
-se pocetne rijeci ili pocetni stih (incipit) uz dodatne informacije o djelu, npr.:
+se početne riječi ili početni stih (incipit) uz dodatne informacije o djelu, npr.:
 
-Giuseppe VerdiCeleste Aida, arija Radamesa iz 1. cina opere Aida
+Giuseppe VerdiCeleste Aida, arija Radamesa iz 1. čina opere Aida
 
-Johann Sebastian Bach Du Falscher,... Nur ein Wink von seinen H�nden, recitativ i arija soprana iz VI. dijela
-                                Bozinog oratorija (Weihnachtsoratorium), BWV 248
+Johann Sebastian Bach Du Falscher,... Nur ein Wink von seinen Händen, recitativ i arija soprana iz VI. dijela
+                                Božićnog oratorija (Weihnachtsoratorium), BWV 248
 
 Pisanje imena i prezimena te titula nastavnika
 
-Kratice naziva znanstveno-nastavnih i umjetnicko-nastavnih radnih mjesta pisu se ispred imena i prezimena
+Kratice naziva znanstveno-nastavnih i umjetničko-nastavnih radnih mjesta pišu se ispred imena i prezimena
 osobe koja je zaposlena na navedenom radnome mjestu, npr.:
 
-    docent: doc. art. Mira Miri; doc. mr. art. Pero Peri
-    izvanredni profesor: izv. prof. art. Mira Miri; izv. prof. mr. art.; izv. prof. dr. art. itd.
-    redoviti profesor i redoviti profesor u trajnom izboru: prof. art. Mira Miri, prof. dr. art. itd.
-Kratice naziva nastavnih radnih mjesta pisu se iza imena i prezimena osobe koja je zaposlena na navedenom
+    docent: doc. art. Mira Mirić; doc. mr. art. Pero Perić
+    izvanredni profesor: izv. prof. art. Mira Mirić; izv. prof. mr. art.; izv. prof. dr. art. itd.
+    redoviti profesor i redoviti profesor u trajnom izboru: prof. art. Mira Mirić, prof. dr. art. itd.
+Kratice naziva nastavnih radnih mjesta pišu se iza imena i prezimena osobe koja je zaposlena na navedenom
 radnome mjestu:

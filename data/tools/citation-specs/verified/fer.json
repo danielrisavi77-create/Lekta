@@ -20,7 +20,7 @@
     "mode": "bracket-number",
     "provenance": {
       "kind": "worked-example",
-      "quoteRaw": "Ucestale pravopisne greske studenata u radovima prikazana su u [3].",
+      "quoteRaw": "Učestale pravopisne greške studenata u radovima prikazana su u [3].",
       "sourcePage": "str. 14",
       "note": "Sekcija 3.8 Pozivanje na literaturu: u tekstu se referencira brojem u uglatim zagradama; vise referenci ide zarezom unutar istih zagrada, npr. '[1,2,3,4]' (isti isjecak, str. 14). Izravno imenovanje autora u tekstu izvor dopusta samo iznimno ('Ipak, ovo izbjegavati.')."
     }
@@ -40,7 +40,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "3. izdavac (ako je poznat),",
+        "quoteRaw": "3. izdavač (ako je poznat),",
         "sourcePage": "str. 16",
         "note": "Izvor nema worked-example za knjigu; predlozak izveden iz popisa elemenata reference (str. 16): autor, naslov djela (koso), izdavac ako je poznat, godina, elementi odvojeni zarezom. Naslov je u izvorniku koso, alat radi plain text. Potvrditi pri verifikaciji."
       },
@@ -58,7 +58,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "5. stranice ,,od-od\" (ako se radi o poglavlju knjige ili zbornika radova, ili clanku nekog",
+        "quoteRaw": "5. stranice „od-od“ (ako se radi o poglavlju knjige ili zbornika radova, ili članku nekog",
         "sourcePage": "str. 16",
         "note": "Izvor propisuje stranice od-do za poglavlje knjige ili zbornika, ali ne imenuje naslov cjeline (container) ni urednike kao elemente; container je izveden i smjesten iza naslova, urednici izostavljeni. Oznaka 'str.' ispred raspona je izvedena (izvor kaze samo stranice od-od). Potvrditi pri verifikaciji."
       },
@@ -76,7 +76,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "5. stranice ,,od-od\" (ako se radi o poglavlju knjige ili zbornika radova, ili clanku nekog",
+        "quoteRaw": "5. stranice „od-od“ (ako se radi o poglavlju knjige ili zbornika radova, ili članku nekog",
         "sourcePage": "str. 16",
         "note": "Izvor trazi stranice od-do za clanak casopisa, ali casopis (container) nije eksplicitno imenovan kao element pa je izveden; volume i issue izvor uopce ne spominje pa nisu ukljuceni. Potvrditi pri verifikaciji."
       },
@@ -92,7 +92,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "2. Repozitorij predmeta Zavrsni rad, http://www.fer.unizg.hr/predmet/zavrad, 2. 7. 2013.",
+        "quoteRaw": "2. Repozitorij predmeta Završni rad, http://www.fer.unizg.hr/predmet/zavrad, 2. 7. 2013.",
         "sourcePage": "str. 16",
         "note": "Primjer iz Literature predloska; redni broj '2.' je oznaka mjesta u numeriranom popisu, ne dio jedinice. Autor izostavljen jer je nepoznat (pravilo: autor ako je poznat); primjer s autorima na istoj stranici: '5. Sandor Dembitz, Gordan Gledec, Hrvoje Miholi, Hascheck...' (puna imena, given-first, zarez). Datum je 'datum zadnje provjere adrese' i nosi vlastitu tocku; godina objave se u primjerima ne pojavljuje."
       },

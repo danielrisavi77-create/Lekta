@@ -8,7 +8,7 @@ Snapshot: `data/sources/vuv/vuv.pdf` (hash `82e65a3cb997...`)
 Otvori PDF: `data/sources/vuv/vuv.pdf#page=16`
 ```
 TEMPLATE: {authors} ({year}). {title}. {place}, {publisher}.
-QUOTE   : Milardovi, A. (2004). Pod globalnim sesirom. Drustva i drzave u tranziciji i globalizaciji. Zagreb, CPI   [grep: OK]
+QUOTE   : Milardović, A. (2004). Pod globalnim šeširom. Društva i države u tranziciji i globalizaciji. Zagreb, CPI   [grep: OK]
 IZVOR   : Milardovi, A. (2004). Pod globalnim sesirom. Drustva i drzave u tranziciji i globalizaciji. Zagreb, CPI.
 RENDER  : Milardovi, A. (2004). Pod globalnim sesirom. Drustva i drzave u tranziciji i globalizaciji. Zagreb, CPI.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -28,7 +28,7 @@ NAPOMENA: Izvor spominje zbornike i radove s konferencija kao izvore, ali NE daj
 Otvori PDF: `data/sources/vuv/vuv.pdf#page=2`
 ```
 TEMPLATE: {authors} ({year}). {title}. {container}, {volume}[[({issue})]][[, str. {pages}]].
-QUOTE   : koristenje radova iz strucnih i znanstvenih casopisa   [grep: OK]
+QUOTE   : korištenje radova iz stručnih i znanstvenih časopisa   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor preporucuje koristenje radova iz strucnih i znanstvenih casopisa, ali NE daje formatirani primjer clanka. Predlozak izveden iz oblika za knjigu (autor-godina) uz dodatak casopisa, godista, broja i raspona stranica po standardnoj autor-godina konvenciji. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -37,7 +37,7 @@ NAPOMENA: Izvor preporucuje koristenje radova iz strucnih i znanstvenih casopisa
 Otvori PDF: `data/sources/vuv/vuv.pdf#page=13`
 ```
 TEMPLATE: {authors} ({year}). {title}. Dostupno na: {url} ({accessed}).
-QUOTE   : pise se naziv stranice, link na kojem je dostupan (ne duzi od tri reda) i datum   [grep: OK]
+QUOTE   : piše se naziv stranice, link na kojem je dostupan (ne duži od tri reda) i datum   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor za online izvore trazi naziv stranice, link (ne duzi od tri reda) i datum posjeenosti, ali samo za izvore ispod tablica/grafickih prikaza, bez formatiranog primjera bibliografske jedinice u popisu literature. Predlozak izveden iz tih komponenti (naziv/autor, godina, link, datum pristupa). Za izvore bez autora izvor navodi naziv stranice/clanka i godinu (str. 15). Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -46,7 +46,7 @@ NAPOMENA: Izvor za online izvore trazi naziv stranice, link (ne duzi od tri reda
 Otvori PDF: `data/sources/vuv/vuv.pdf#page=13`
 ```
 TEMPLATE: {authors} ({year}). {title}, {institution}, neobjavljeni zavrsni rad[[, str. {pages}]].
-QUOTE   : Ravli, Z. (2010). Polozaj zena u rukovodeim strukturama sluzbi jedinica lokalne i podrucne   [grep: OK]
+QUOTE   : Ravlić, Ž. (2010). Položaj žena u rukovodećim strukturama službi jedinica lokalne i područne   [grep: OK]
 IZVOR   : Ravli, Z. (2010). Polozaj zena u rukovodeim strukturama sluzbi jedinica lokalne i podrucne (regionalne) samouprave na primjeru Viroviticko podravske zupanije, visoka skola za menadzment u turizmu i informatici u Virovitici, neobjavljeni zavrsni rad, str. 34.
 RENDER  : Ravli, Z. (2010). Polozaj zena u rukovodeim strukturama sluzbi jedinica lokalne i podrucne (regionalne) samouprave na primjeru Viroviticko podravske zupanije, visoka skola za menadzment u turizmu i informatici u Virovitici, neobjavljeni zavrsni rad, str. 34.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -57,7 +57,7 @@ NAPOMENA: Primjer izvora ispod tablice (str. 13, prelomljen preko tri retka): 'R
 Otvori PDF: `data/sources/vuv/vuv.pdf#page=15`
 ```
 TEMPLATE: {title}, {container} {issue}.
-QUOTE   : (cl. 83. st. 1. Zakona o radu, NN 149/09.)   [grep: OK]
+QUOTE   : (čl. 83. st. 1. Zakona o radu, NN 149/09.)   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor propise navodi SAMO u tekstu: puni naziv propisa kod prvog citiranja, skracenica poslije, uz clanak/stavak u zagradi '(cl. 83. st. 1. Zakona o radu, NN 149/09.)'. Nema formatirane bibliografske jedinice propisa u popisu literature. Predlozak izveden iz in-text oblika: naziv propisa, sluzbeno glasilo (Narodne novine) i broj. Potvrditi ili oboriti pri verifikaciji.
 ```

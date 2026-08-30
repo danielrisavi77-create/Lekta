@@ -31,7 +31,7 @@
     },
     "provenance": {
       "kind": "worked-example",
-      "quoteRaw": "2003). U slucaju citata navodi se i broj stranice (Bombelles, 2003:150). Ne koristi se",
+      "quoteRaw": "2003). U slučaju citata navodi se i broj stranice (Bombelles, 2003:150). Ne koristi se",
       "sourcePage": "str. 14",
       "note": "U zagradu ide prezime autora i godina '(Bombelles, 2003)'; broj stranice iza dvotocke bez razmaka '(Bombelles, 2003:150)'. Dva autora '(Bombelles i Marusi, 2004)'; vise autora prvi + 'i suradnici' '(Bombelles i suradnici, 2003)'. Izvor izricito zabranjuje ibid/op.cit. (svaka biljeska navodi se kao i prvi put)."
     }
@@ -53,7 +53,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Knjige: prezime, ime, (godina), naslov, mjesto izdavanja: ime izdavaca. Ukoliko su dva",
+        "quoteRaw": "Knjige: prezime, ime, (godina), naslov, mjesto izdavanja: ime izdavača. Ukoliko su dva",
         "sourcePage": "str. 15",
         "note": "Izvor daje eksplicitni obrazac 'prezime, ime, (godina), naslov, mjesto izdavanja: ime izdavaca.'. Prvi autor puno ime (ne inicijal). Za 2-3 autora izvor tvrdi 'prezimena i inicijale', za 4+ prvi autor + 'et al ili i suradnici' (vidi contradictions)."
       },
@@ -81,7 +81,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Casopisi: prezime, ime, (godina), \"naslov clanka\", naziv casopisa u kojem je objavljen;",
+        "quoteRaw": "Časopisi: prezime, ime, (godina), “naslov članka”, naziv časopisa u kojem je objavljen;",
         "sourcePage": "str. 15",
         "note": "Obrazac za casopis: 'prezime, ime, (godina), \"naslov clanka\", naziv casopisa u kojem je objavljen; broj, volumen, svezak, stranice.'. Naslov clanka pod navodnicima; casopis odvojen tockom sa zarezom od brojcanih podataka. Izvor nabraja i 'svezak' kojemu alat nema zaseban placeholder (vidi contradictions)."
       },
@@ -111,7 +111,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Izvori preuzeti s Internetskih stranica: prezime autora/urednika, ime, (godina), \"naslov",
+        "quoteRaw": "Izvori preuzeti s Internetskih stranica: prezime autora/urednika, ime, (godina), “naslov",
         "sourcePage": "str. 15",
         "note": "Obrazac za internetski izvor: 'prezime autora/urednika, ime, (godina), \"naslov clanka\", naslov casopisa, datum publikacije, godiste, broj stranice, internet adresa, datum posjete toj internetskoj stranici.'. Stvarni primjer iz izvora (odsjecen u ekstrakciji): 'Wells, Joseph (2007), \"What Is Your Fraud IQ?\", Journal of Accountancy, May 2007, Vol. 203, Br. 5,'. Polje 'datum publikacije' nema placeholder (vidi contradictions)."
       },
@@ -144,7 +144,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Knjige: prezime, ime, (godina), naslov, mjesto izdavanja: ime izdavaca. Ukoliko su dva",
+        "quoteRaw": "Knjige: prezime, ime, (godina), naslov, mjesto izdavanja: ime izdavača. Ukoliko su dva",
         "sourcePage": "str. 15",
         "note": "Izvor ne obraduje poglavlje u zborniku; predlozak je izveden iz oblika za knjigu dodavanjem 'U: {editor} (ur.), {container}'. Potvrditi ili oboriti pri verifikaciji."
       },
@@ -162,7 +162,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Knjige: prezime, ime, (godina), naslov, mjesto izdavanja: ime izdavaca. Ukoliko su dva",
+        "quoteRaw": "Knjige: prezime, ime, (godina), naslov, mjesto izdavanja: ime izdavača. Ukoliko su dva",
         "sourcePage": "str. 15",
         "note": "Ni diplomski ni zavrsni pravilnik ZSEM ne obraduje citiranje zavrsnih/diplomskih radova; predlozak je izveden iz oblika za knjigu (izdavac -> ustanova). Potvrditi ili oboriti pri verifikaciji."
       },

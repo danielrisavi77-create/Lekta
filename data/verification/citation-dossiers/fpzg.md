@@ -8,7 +8,7 @@ Snapshot: `data/sources/fpzg/fpzg-pravila-navodenja-citiranja-2026.pdf` (hash `5
 Otvori PDF: `data/sources/fpzg/fpzg-pravila-navodenja-citiranja-2026.pdf#page=1`
 ```
 TEMPLATE: {authors} ({year}) {title}. {place}: {publisher}.
-QUOTE   : Buchberger, Iva (2012) Kriticko misljenje. Prirucnik kritickog misljenja, slusanja, citanja i pisanja.   [grep: OK]
+QUOTE   : Buchberger, Iva (2012) Kritičko mišljenje. Priručnik kritičkog mišljenja, slušanja, čitanja i pisanja.   [grep: OK]
 IZVOR   : Buchberger, Iva (2012) Kriticko misljenje. Prirucnik kritickog misljenja, slusanja, citanja i pisanja. Rijeka: Udruga za razvoj visokog skolstva Universitas.
 RENDER  : Buchberger, Iva (2012) Kriticko misljenje. Prirucnik kritickog misljenja, slusanja, citanja i pisanja. Rijeka: Udruga za razvoj visokog skolstva Universitas.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)

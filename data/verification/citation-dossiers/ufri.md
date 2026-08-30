@@ -8,7 +8,7 @@ Snapshot: `data/sources/ufri/ufri.pdf` (hash `197d276efb3a...`)
 Otvori PDF: `data/sources/ufri/ufri.pdf#page=3`
 ```
 TEMPLATE: {authors} ({year}). {title}. {place}: {publisher}.
-QUOTE   : Rauni, R. (2005). Pretpostavke liberalnog razumijevanja covjeka. Zagreb: Hrvatsko   [grep: OK]
+QUOTE   : Raunić, R. (2005). Pretpostavke liberalnog razumijevanja čovjeka. Zagreb: Hrvatsko   [grep: OK]
 IZVOR   : Rauni, R. (2005). Pretpostavke liberalnog razumijevanja covjeka. Zagreb: Hrvatsko filozofsko drustvo.
 RENDER  : Rauni, R. (2005). Pretpostavke liberalnog razumijevanja covjeka. Zagreb: Hrvatsko filozofsko drustvo.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -19,7 +19,7 @@ NAPOMENA: Shema 1 autor: 'Prezime, I. (godina). Naslov: podnaslov. Mjesto izdava
 Otvori PDF: `data/sources/ufri/ufri.pdf#page=4`
 ```
 TEMPLATE: {authors} ({year}). {title}. U {editor} (ur.), {container}[[ (str. {pages})]]. {place}: {publisher}.
-QUOTE   : Dweck, C.S. (1989). Motivacijski procesi kao determinante ucenja. U M. Kovacevi i N.N.   [grep: OK]
+QUOTE   : Dweck, C.S. (1989). Motivacijski procesi kao determinante učenja. U M. Kovačević i N.N.   [grep: OK]
 IZVOR   : Dweck, C.S. (1989). Motivacijski procesi kao determinante ucenja. U M. Kovacevi i N.N. Soljan (ur.), Psihologijska znanost i edukacija (str. 43-63). Zagreb: Skolske novine.
 RENDER  : Dweck, C.S. (1989). Motivacijski procesi kao determinante ucenja. U M. Kovacevi i N.N. Soljan (ur.), Psihologijska znanost i edukacija (str. 43-63). Zagreb: Skolske novine.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -30,7 +30,7 @@ NAPOMENA: Shema (str. 4): 'Prezimeautora, I. (godina). Naslov poglavlja: podnasl
 Otvori PDF: `data/sources/ufri/ufri.pdf#page=5`
 ```
 TEMPLATE: {authors} ({year}). {title}. {container}.[[ Pribavljeno {accessed}, sa {url}]]
-QUOTE   : Loncari, D. (2006). Suocavanje ucenika s akademskim i interpersonalnim stresnim   [grep: OK]
+QUOTE   : Lončarić, D. (2006). Suočavanje učenika s akademskim i interpersonalnim stresnim   [grep: OK]
 IZVOR   : Loncari, D. (2006). Suocavanje ucenika s akademskim i interpersonalnim stresnim situacijama: provjera me usituacijske stabilnosti strategija suocavanja. Psihologijske teme. Pribavljeno 01.10.2008., sa http://hrcak.srce.hr/index.php?show=clanak&id_clanak_jezik=18189
 RENDER  : Loncari, D. (2006). Suocavanje ucenika s akademskim i interpersonalnim stresnim situacijama: provjera me usituacijske stabilnosti strategija suocavanja. Psihologijske teme. Pribavljeno 01.10.2008., sa http://hrcak.srce.hr/index.php?show=clanak&id_clanak_jezik=18189
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -41,7 +41,7 @@ NAPOMENA: Jedini primjer clanka u ekstrakciji je online clanak s Hrcka; shema (s
 Otvori PDF: `data/sources/ufri/ufri.pdf#page=5`
 ```
 TEMPLATE: [[{authors} ({year}). ]]{title}. Pribavljeno {accessed}, sa {url}
-QUOTE   : Teorija izbora u skoli. Pribavljeno 01.09.2008., sa   [grep: OK]
+QUOTE   : Teorija izbora u školi. Pribavljeno 01.09.2008., sa   [grep: OK]
 IZVOR   : Teorija izbora u skoli. Pribavljeno 01.09.2008., sa http://www.multilink.hr/ri-kvas/teorija.html
 RENDER  : Teorija izbora u skoli. Pribavljeno 01.09.2008., sa http://www.multilink.hr/ri-kvas/teorija.html
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -52,7 +52,7 @@ NAPOMENA: Shema bez autora/datuma (str. 5): 'Naslov: podnaslov. Pribavljeno DATU
 Otvori PDF: `data/sources/ufri/ufri.pdf#page=3`
 ```
 TEMPLATE: {authors} ({year}). {title}. {place}: {institution}.
-QUOTE   : Prezime, I. (godina). Naslov: podnaslov. Mjesto izdavaca: Izdavac.   [grep: OK]
+QUOTE   : Prezime, I. (godina). Naslov: podnaslov. Mjesto izdavača: Izdavač.   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor (ekstrakcija) NE obraduje citiranje diplomskih/zavrsnih radova kao izvora. Predlozak je izveden iz sheme za knjigu (str. 3): izdavac zamijenjen ustanovom. Bez izmisljene oznake vrste rada. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -61,7 +61,7 @@ NAPOMENA: Izvor (ekstrakcija) NE obraduje citiranje diplomskih/zavrsnih radova k
 Otvori PDF: `data/sources/ufri/ufri.pdf#page=3`
 ```
 TEMPLATE: {title} ({year}). {container}[[, {issue}]].
-QUOTE   : Prezime, I. (godina). Naslov: podnaslov. Mjesto izdavaca: Izdavac.   [grep: OK]
+QUOTE   : Prezime, I. (godina). Naslov: podnaslov. Mjesto izdavača: Izdavač.   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor (ekstrakcija) NE obraduje pravne izvore/propise. Predlozak je izveden po analogiji s opcim autor-godina bibliografskim oblikom (naslov propisa, godina, sluzbeno glasilo, broj). Cijeli oblik je pretpostavka; potvrditi ili oboriti pri verifikaciji.
 ```

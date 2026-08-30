@@ -8,7 +8,7 @@ Snapshot: `data/sources/mef/mef-pravilnik-diplomski-2023.pdf` (hash `2f1e177187c
 Otvori PDF: `data/sources/mef/mef-pravilnik-diplomski-2023.pdf#page=27`
 ```
 TEMPLATE: {authors} ({year}) {title}. {place}: {publisher}.
-QUOTE   : Autor (2010a, b, c). Ako je rijec o knjizi, navodi se autor (godina) Naslov knjige, mjesto   [grep: OK]
+QUOTE   : Autor (2010a, b, c). Ako je riječ o knjizi, navodi se autor (godina) Naslov knjige, mjesto   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Pravilo prozom (str. 27): 'autor (godina) Naslov knjige, mjesto izdanja, izdavac'. Bez potpunog worked-examplea za knjigu u ekstrakciji. Interpunkcija '{place}: {publisher}' izvedena iz primjera poglavlja na str. 28 ('Springfield: Thomas'); prozna varijanta sa zarezom ('{place}, {publisher}') je druga moguca interpretacija, potvrditi pri verifikaciji.
 ```
@@ -37,7 +37,7 @@ NAPOMENA: Jedini potpuni worked-example je clanak u tisku (advanced online acces
 Otvori PDF: `data/sources/mef/mef-pravilnik-diplomski-2023.pdf#page=27`
 ```
 TEMPLATE: {authors} ({year}) {title}. {url}
-QUOTE   : mreznoj stranici, navodi se toc na adresa mrezne stranice.   [grep: OK]
+QUOTE   : mrežnoj stranici, navodi se toč na adresa mrežne stranice.   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor izrijekom trazi samo tocnu adresu mrezne stranice; oblik 'autor (godina) naslov' izveden iz opceg autor-godina obrasca popisa literature. Datum pristupa se u izvoru NE spominje, pa accessDate ostaje iskljucen. Potvrditi pri verifikaciji.
 ```
@@ -46,7 +46,7 @@ NAPOMENA: Izvor izrijekom trazi samo tocnu adresu mrezne stranice; oblik 'autor 
 Otvori PDF: `data/sources/mef/mef-pravilnik-diplomski-2023.pdf#page=27`
 ```
 TEMPLATE: {authors} ({year}) {title}. {place}: {institution}.
-QUOTE   : Autor (2010a, b, c). Ako je rijec o knjizi, navodi se autor (godina) Naslov knjige, mjesto   [grep: OK]
+QUOTE   : Autor (2010a, b, c). Ako je riječ o knjizi, navodi se autor (godina) Naslov knjige, mjesto   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Pravilnik NE obraduje citiranje zavrsnih/diplomskih radova; predlozak izveden iz oblika za knjigu (ustanova umjesto izdavaca). Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -55,7 +55,7 @@ NAPOMENA: Pravilnik NE obraduje citiranje zavrsnih/diplomskih radova; predlozak 
 Otvori PDF: `data/sources/mef/mef-pravilnik-diplomski-2023.pdf#page=27`
 ```
 TEMPLATE: {authors} ({year}) {title}. {container}[[ {issue}]].
-QUOTE   : Kako se toc no pisu literaturni navodi u popisu literature? Prvo, navode se abecednim   [grep: OK]
+QUOTE   : Kako se toč no pišu literaturni navodi u popisu literature? Prvo, navode se abecednim   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Pravilnik NE obraduje citiranje propisa (medicinski izvori); predlozak izveden iz opceg autor-godina obrasca popisa literature (donositelj kao autor, sluzbeno glasilo kao container, broj glasila u issue). Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -64,7 +64,7 @@ NAPOMENA: Pravilnik NE obraduje citiranje propisa (medicinski izvori); predlozak
 ```
 TEMPLATE : ({authorsShort} {year})   /  s pages: (nema)
 RENDER   : (Lovric 1988)   /  (Lovric 1988)
-QUOTE    : autora). Primjer: ,,Na vaznost ovog procesa prvi je ukazao Veliki Uc itelj (Uc itelj 1956),   [grep: OK]
+QUOTE    : autora). Primjer: „Na važnost ovog procesa prvi je ukazao Veliki Uč itelj (Uč itelj 1956),   [grep: OK]
 NAPOMENA : Autor-godina BEZ zareza: '(Uc itelj 1956)'. Dva autora s '&': '(Sumnjalo & Kritic ar 1960)' (str. 26). Tri i vise autora 'et al.': 'Suradnik et al. 1970' (str. 27). Vise navoda u istoj zagradi odvaja se tockom sa zarezom: '(Uc enik 1965; Uc enik & Suradnik 1966; ...)'. Vise radova istog autora iz iste godine pise se 'Autor (2010a, b, c)' (str. 27); a/b/c sufiks je izvan dosega generatora.
 ```
 

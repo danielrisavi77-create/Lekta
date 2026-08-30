@@ -1,86 +1,4 @@
 ===== [unin-upute-radovi-2026 | str. 1] =====
-1.Uvod (stil – Naslov 1) PAGEREF _Toc219112362 \h 9
-2.Obrada zadatka (stil – Naslov 1) PAGEREF _Toc219112363 \h 10
-2.1.Potpoglavlje 1 (stil – Naslov 2) PAGEREF _Toc219112364 \h 10
-2.2.Potpoglavlje 2 (stil – Naslov 2) PAGEREF _Toc219112365 \h 10
-2.3.Potpoglavlje 3 (stil – Naslov 2) PAGEREF _Toc219112366 \h 10
-3.Praktični dio (stil – Naslov 1) PAGEREF _Toc219112367 \h 11
-3.1.Svrha i cilj istraživanja (stil – Naslov 2) PAGEREF _Toc219112368 \h 11
-3.2.Istraživačka pitanja/hipoteze (stil – Naslov 2) PAGEREF _Toc219112369 \h 11
-3.3.Metodologija istraživanja (stil – Naslov 2) PAGEREF _Toc219112370 \h 11
-4.Rezultati  (stil – Naslov 1) PAGEREF _Toc219112371 \h 12
-5.Rasprava PAGEREF _Toc219112372 \h 15
-6.Zaključak (stil – Naslov 1) PAGEREF _Toc219112373 \h 16
-7.Literatura (stil – Naslov 1) PAGEREF _Toc219112374 \h 18
-
-
-
-
-
-Uvod (stil – Naslov 1)
-Uvod završnog/diplomskog rada je obavezan. Njime počinje numeriranje stranica završnog/diplomskog rada. Uvod je početni i pristupni dio završnog/diplomskog rada koji treba čitatelja uvesti u temu rada, upoznati ga s problemom i predmetom rada, svrhom i ciljevima te strukturom završnog/diplomskog rada. U uvodu treba naznačiti što se namjerava u radu pokazati, izvore podataka kao i načine njihovog prikupljanja i obrade.
-Uvod treba biti napisan na 2-3 stranice A4 formata. U uvodu se ne iznose zaključci.
-Obrada zadatka (stil – Naslov 1)
-U obradi zadatka (teorijski dio rada) primjereno je da se cjelokupna problematika završnog/diplomskog rada sustavno rasporedi, razradi i prezentira u više međusobno povezanih cjelina (poglavlja i potpoglavlja):
-Nakon uvoda na prvim stranicama teorijskog dijela objašnjavamo osnovne pojmove. 
-U sljedećim poglavljima i potpoglavljima raspravljamo o teorijskim spoznajama na sintetičko-analitički način, čime nastojimo postići ciljeve postavljene u uvodu. Na kraju većeg poglavlja treba ukratko sažeti najvažnije nalaze.
-
-===== [unin-upute-radovi-2026 | str. 1] =====
-Empirijski/istraživački dio obavezni je dio završnog/diplomskog rada koji sadrži istraživanje. Istraživanje može biti kvalitativne, kvantitativne ili eksperimentalne prirode. 
-Empirijski/istraživački dio sadrži sljedeća potpoglavlja: 
-Svrha i cilj istraživanja (stil – Naslov 2)
-Istraživačka pitanja/hipoteze (stil – Naslov 2)
-Metodologija istraživanja (stil – Naslov 2)
-3.3.1. Opis instrumenta (stil – Naslov 3)
-3.3.2. Opis uzorka (stil – Naslov 3)
-3.3.3. Opis prikupljanja i obrade podataka (stil – Naslov 3)
-3.3.4. Etički aspekt istraživanja (stil – Naslov 3)
-
-
-Rezultati  (stil – Naslov 1)
-Kandidat/kinja u završnom/diplomskom radu može koristiti tuđe spoznaje i formulacije ili grafičke prikaze i slike preuzete iz druge literature. U tekstu rada mora biti navedena literatura uvijek kada je navođenje ili grafički prikaz preuzet ili se temelji na nekom pisanom predlošku. U tekstu se literatura navodi prema stilu citiranja za pojedina područja znanosti. 
-Kandidat/kinja u završnom/diplomskom radu koristi slike, formule i tablice. Numeriranje slika, formula i tablica izvodi se tako da prvi broj ilustracije označava cjelinu (poglavlje) kojoj ta ilustracija pripada, a drugi – redni broj ilustracije u toj cjelini (poglavlju).
-Naslov slike ili tablice piše se ispod slike odnosno tablice, a sadrži najneophodnije podatke za njezino razumijevanje. Dodatna objašnjenja treba dati u tekstu, uz povezivanje s rednim brojem slike ili tablice.
-Autori
-Vrsta 
-istraživanja
-Cilj/svrha
-Uzorak
-Zaključci
-Martins-Junior i dr. (2019)
-Presječno istraživanje
-Istražiti prepoznaju li zdravstveni djelatnici dijete koje je žrtva tjelesnog nasilja te prijavljuju li ga.
-62 zdravstvena djelatnika (27 stomatologa; 10 liječnika; 25 medicinskih sestara/tehničara)
-Glavne poteškoće u prepoznavanju i prijavljivanju tjelesnog nasilja nad djetetom u zdravstvenih djelatnika jesu manjak znanja, profesionalni nemar, uvjerenje da se slučaj nasilja neće rješavati. Postoji potreba za edukacijom o prepoznavanju i prijavljivanju nasilja nad djetetom te  njezinim uvođenjem u obavezni dio obrazovanja medicinskih sestara/tehničara.
-Napomena: navodi se ako je potrebno dodatno pojasniti oznake unutar tablice.
-Tablica 3.4.1. Naslov tablice. Izvor: inicijali imena i prezimena, godina.  
-
-Grafikon 3.4.1. Naslov grafikona. Izvor: inicijali imena i prezimena, godina.
-
-
-Sve komponente koje se pojavljuju na slikama moraju imati svoju oznaku i vrijednost (ako se preuzima iz strane literature, obavezno je prevođenje na hrvatski jezik). Osi i parametri na slikama i grafičkim prikazima moraju biti obilježene fizikalnim veličinama i mjernim jedinicama.
-Formule se obilježavaju brojevima u okrugloj zagradi uz desni rub stranice, a u tekstu se poziva na broj formule. Npr.
-E=mc2 (1)
-Slike, formule i tablice ne predstavljaju samo dodatak tekstu, nego su oni važan dio rada i obavezno se u tekstu mora pozivati na njih, navodeći njihov broj. Dijelovi programskih kodova koji se uključuju u tekst rada, moraju se umetnuti kao tekst unutar teksta ili u zaseban okvir numeriran kao slika ili neka druga sekvenca Program  SEQ Program \* ARABIC 1. Sav programski kod treba biti u stilu "Programski kod". 
-while (true) {
-echo "formatiran programski kod";
-}
-Ili, kod treba ubaciti u okvir i na njega se pozvati kao na sliku ili prilog. Ključne riječi programskog jezika koji se koristi može se istaknuti ili napisati drugom bojom. Iz nekih programskih alata moguće je iskopirati obojani i formatirani tekst i ubaciti ga u stil za programski kod. Za kod obavezno koristiti proporcionalni font poput Couriera veličine 11 točaka.
-Kandidat/kinja u završnom/diplomskom radu može koristiti kratice. Kada se prvi put u tekstu uvodi neka kratica, potrebno je ispisati puni naziv ili uz naziv na stranom jeziku u zagradi. Dalje se u tekstu može koristiti samo kratica.
-Popis svih korištenih kratica, uz ispisani puni naziv, mora se dodati na početak završnog/diplomskog rada, iza sadržaja – bez numeriranja naslova.
-Za slike koje se umeću u tekst potrebno je dodati podnatpise (engl. caption) s brojem slike koji sadrži redni broj poglavlja, opis slike i eventualni izvor. Na sliku se tada može pozivati koristeći automatizirano krosreferenciranje (Insert/Cross reference). Primjerice, na umetnutu sliku može se pozvati ovako: „ REF _Ref297406557 \h  \* MERGEFORMAT Slika 4.1. prikazuje...“
-
-Slika  STYLEREF 1 \s 4. SEQ Slika \* ARABIC \s 1 1. Planiranje kao temelj organiziranja 
-Rasprava
-Rasprava je obavezni dio završnog/diplomskog rada – istraživačke prirode. U prvom dijelu rasprave navodi se jesu li postignuti postavljeni ciljevi, odnosno je li dobiven odgovor na postavljena istraživačka pitanja/hipoteze. U daljnjim odlomcima kritički se vrednuju rezultati provedenog istraživanja i objašnjavaju uzročno-posljedično. U interpretaciji se uspoređuju podaci i rezultati dobiveni provedenim istraživanjem s podacima koji su opisani u teorijskom dijelu kao i s drugim relevantnim istraživanjima dostupnim u znanstvenim bazama podataka. Podatke je važno predstaviti objektivno – ne donositi neprimjerene zaključke niti generalizirati na temelju nereprezentativnog uzorka. Navode se ograničenja istraživanja, doprinos praksi te mogućnosti za daljnji istraživački rad. U raspravu se mogu dodati i vlastite definicije, mišljenja i stajališta. 
-Zaključak (stil – Naslov 1)
-Zaključak je završni dio rada. U zaključku treba kratko, jasno i pregledno dati prikaz relevantnih spoznaja, informacija, činjenica i stavova koji su prethodno opširnije razrađeni.
-Dijelovi, odnosno odlomci, zaključka formuliraju se prema strukturi završnog/diplomskog rada. 
-
-
-Iza zaključka, kandidat/kinja potpisuje i umeće Izjavu o akademskoj čestitosti.
-
-===== [unin-upute-radovi-2026 | str. 1] =====
 Stilovi citiranja
 Literatura (stil – Naslov 1)
 Za referenciranje se koriste standardizirani stilovi označavanja izvora informacija navedenih u radu. Ne postoji jedinstveni stil citiranja, već se oni razlikuju s obzirom na znanstveno područje ili odjel: 
@@ -253,3 +171,145 @@ Smith J, Johnson A, Williams B, Brown C, Garcia D, Martinez E, et al. Naslov knj
 Knjiga s nepoznatim autorom
 
 Publication Manual of the American Psychological Association. Washington, DC: American Psychological Association; 2020.
+
+===== [unin-upute-radovi-2026 | str. 1] =====
+To je predložio Rose (2000)…
+Predloženo je (Rose, 2000)
+
+
+
+
+
+ČLANCI
+Prezime, Inicijal(i) imena autora. (Godina izdanja). Naslov članka: podnaslov. Naslov časopisa, oznaka sveska/ volumen/ godišta (broj sveščića/broj), početna-završna stranica. 
+
+
+Navođenje u popisu literature
+Navođenje unutar teksta
+Članak u časopisu
+Prezime, Inicijal. (Godina) 'Naslov članka', naziv časopisa, sveščić (broj), broj stranice
+
+Boyd, G., Heaton, P.A., Wilkinson, R., Prosad Paul, S. (2017). Nursing management of childhood chickenpox infection. Emergency Nurse, 25(8), 32-39. 
+
+Tovey, H. (2002) 'Risk, morality, and the sociology of animals - reflections of the foot and mouth outbreak in Ireland', Irish Journal of Sociology, 11(1), pp. 23-42.
+(Boyd i sur., 2017)
+
+===== [unin-upute-radovi-2026 | str. 1] =====
+1.Uvod (stil – Naslov 1) PAGEREF _Toc219112362 \h 9
+2.Obrada zadatka (stil – Naslov 1) PAGEREF _Toc219112363 \h 10
+2.1.Potpoglavlje 1 (stil – Naslov 2) PAGEREF _Toc219112364 \h 10
+2.2.Potpoglavlje 2 (stil – Naslov 2) PAGEREF _Toc219112365 \h 10
+2.3.Potpoglavlje 3 (stil – Naslov 2) PAGEREF _Toc219112366 \h 10
+3.Praktični dio (stil – Naslov 1) PAGEREF _Toc219112367 \h 11
+3.1.Svrha i cilj istraživanja (stil – Naslov 2) PAGEREF _Toc219112368 \h 11
+3.2.Istraživačka pitanja/hipoteze (stil – Naslov 2) PAGEREF _Toc219112369 \h 11
+3.3.Metodologija istraživanja (stil – Naslov 2) PAGEREF _Toc219112370 \h 11
+4.Rezultati  (stil – Naslov 1) PAGEREF _Toc219112371 \h 12
+5.Rasprava PAGEREF _Toc219112372 \h 15
+6.Zaključak (stil – Naslov 1) PAGEREF _Toc219112373 \h 16
+7.Literatura (stil – Naslov 1) PAGEREF _Toc219112374 \h 18
+
+
+
+
+
+Uvod (stil – Naslov 1)
+Uvod završnog/diplomskog rada je obavezan. Njime počinje numeriranje stranica završnog/diplomskog rada. Uvod je početni i pristupni dio završnog/diplomskog rada koji treba čitatelja uvesti u temu rada, upoznati ga s problemom i predmetom rada, svrhom i ciljevima te strukturom završnog/diplomskog rada. U uvodu treba naznačiti što se namjerava u radu pokazati, izvore podataka kao i načine njihovog prikupljanja i obrade.
+Uvod treba biti napisan na 2-3 stranice A4 formata. U uvodu se ne iznose zaključci.
+Obrada zadatka (stil – Naslov 1)
+U obradi zadatka (teorijski dio rada) primjereno je da se cjelokupna problematika završnog/diplomskog rada sustavno rasporedi, razradi i prezentira u više međusobno povezanih cjelina (poglavlja i potpoglavlja):
+Nakon uvoda na prvim stranicama teorijskog dijela objašnjavamo osnovne pojmove. 
+U sljedećim poglavljima i potpoglavljima raspravljamo o teorijskim spoznajama na sintetičko-analitički način, čime nastojimo postići ciljeve postavljene u uvodu. Na kraju većeg poglavlja treba ukratko sažeti najvažnije nalaze.
+
+===== [unin-upute-radovi-2026 | str. 1] =====
+Empirijski/istraživački dio obavezni je dio završnog/diplomskog rada koji sadrži istraživanje. Istraživanje može biti kvalitativne, kvantitativne ili eksperimentalne prirode. 
+Empirijski/istraživački dio sadrži sljedeća potpoglavlja: 
+Svrha i cilj istraživanja (stil – Naslov 2)
+Istraživačka pitanja/hipoteze (stil – Naslov 2)
+Metodologija istraživanja (stil – Naslov 2)
+3.3.1. Opis instrumenta (stil – Naslov 3)
+3.3.2. Opis uzorka (stil – Naslov 3)
+3.3.3. Opis prikupljanja i obrade podataka (stil – Naslov 3)
+3.3.4. Etički aspekt istraživanja (stil – Naslov 3)
+
+
+Rezultati  (stil – Naslov 1)
+Kandidat/kinja u završnom/diplomskom radu može koristiti tuđe spoznaje i formulacije ili grafičke prikaze i slike preuzete iz druge literature. U tekstu rada mora biti navedena literatura uvijek kada je navođenje ili grafički prikaz preuzet ili se temelji na nekom pisanom predlošku. U tekstu se literatura navodi prema stilu citiranja za pojedina područja znanosti. 
+Kandidat/kinja u završnom/diplomskom radu koristi slike, formule i tablice. Numeriranje slika, formula i tablica izvodi se tako da prvi broj ilustracije označava cjelinu (poglavlje) kojoj ta ilustracija pripada, a drugi – redni broj ilustracije u toj cjelini (poglavlju).
+Naslov slike ili tablice piše se ispod slike odnosno tablice, a sadrži najneophodnije podatke za njezino razumijevanje. Dodatna objašnjenja treba dati u tekstu, uz povezivanje s rednim brojem slike ili tablice.
+Autori
+Vrsta 
+istraživanja
+Cilj/svrha
+Uzorak
+Zaključci
+Martins-Junior i dr. (2019)
+Presječno istraživanje
+Istražiti prepoznaju li zdravstveni djelatnici dijete koje je žrtva tjelesnog nasilja te prijavljuju li ga.
+62 zdravstvena djelatnika (27 stomatologa; 10 liječnika; 25 medicinskih sestara/tehničara)
+Glavne poteškoće u prepoznavanju i prijavljivanju tjelesnog nasilja nad djetetom u zdravstvenih djelatnika jesu manjak znanja, profesionalni nemar, uvjerenje da se slučaj nasilja neće rješavati. Postoji potreba za edukacijom o prepoznavanju i prijavljivanju nasilja nad djetetom te  njezinim uvođenjem u obavezni dio obrazovanja medicinskih sestara/tehničara.
+Napomena: navodi se ako je potrebno dodatno pojasniti oznake unutar tablice.
+Tablica 3.4.1. Naslov tablice. Izvor: inicijali imena i prezimena, godina.  
+
+Grafikon 3.4.1. Naslov grafikona. Izvor: inicijali imena i prezimena, godina.
+
+
+Sve komponente koje se pojavljuju na slikama moraju imati svoju oznaku i vrijednost (ako se preuzima iz strane literature, obavezno je prevođenje na hrvatski jezik). Osi i parametri na slikama i grafičkim prikazima moraju biti obilježene fizikalnim veličinama i mjernim jedinicama.
+Formule se obilježavaju brojevima u okrugloj zagradi uz desni rub stranice, a u tekstu se poziva na broj formule. Npr.
+E=mc2 (1)
+Slike, formule i tablice ne predstavljaju samo dodatak tekstu, nego su oni važan dio rada i obavezno se u tekstu mora pozivati na njih, navodeći njihov broj. Dijelovi programskih kodova koji se uključuju u tekst rada, moraju se umetnuti kao tekst unutar teksta ili u zaseban okvir numeriran kao slika ili neka druga sekvenca Program  SEQ Program \* ARABIC 1. Sav programski kod treba biti u stilu "Programski kod". 
+while (true) {
+echo "formatiran programski kod";
+}
+Ili, kod treba ubaciti u okvir i na njega se pozvati kao na sliku ili prilog. Ključne riječi programskog jezika koji se koristi može se istaknuti ili napisati drugom bojom. Iz nekih programskih alata moguće je iskopirati obojani i formatirani tekst i ubaciti ga u stil za programski kod. Za kod obavezno koristiti proporcionalni font poput Couriera veličine 11 točaka.
+Kandidat/kinja u završnom/diplomskom radu može koristiti kratice. Kada se prvi put u tekstu uvodi neka kratica, potrebno je ispisati puni naziv ili uz naziv na stranom jeziku u zagradi. Dalje se u tekstu može koristiti samo kratica.
+Popis svih korištenih kratica, uz ispisani puni naziv, mora se dodati na početak završnog/diplomskog rada, iza sadržaja – bez numeriranja naslova.
+Za slike koje se umeću u tekst potrebno je dodati podnatpise (engl. caption) s brojem slike koji sadrži redni broj poglavlja, opis slike i eventualni izvor. Na sliku se tada može pozivati koristeći automatizirano krosreferenciranje (Insert/Cross reference). Primjerice, na umetnutu sliku može se pozvati ovako: „ REF _Ref297406557 \h  \* MERGEFORMAT Slika 4.1. prikazuje...“
+
+Slika  STYLEREF 1 \s 4. SEQ Slika \* ARABIC \s 1 1. Planiranje kao temelj organiziranja 
+Rasprava
+Rasprava je obavezni dio završnog/diplomskog rada – istraživačke prirode. U prvom dijelu rasprave navodi se jesu li postignuti postavljeni ciljevi, odnosno je li dobiven odgovor na postavljena istraživačka pitanja/hipoteze. U daljnjim odlomcima kritički se vrednuju rezultati provedenog istraživanja i objašnjavaju uzročno-posljedično. U interpretaciji se uspoređuju podaci i rezultati dobiveni provedenim istraživanjem s podacima koji su opisani u teorijskom dijelu kao i s drugim relevantnim istraživanjima dostupnim u znanstvenim bazama podataka. Podatke je važno predstaviti objektivno – ne donositi neprimjerene zaključke niti generalizirati na temelju nereprezentativnog uzorka. Navode se ograničenja istraživanja, doprinos praksi te mogućnosti za daljnji istraživački rad. U raspravu se mogu dodati i vlastite definicije, mišljenja i stajališta. 
+Zaključak (stil – Naslov 1)
+Zaključak je završni dio rada. U zaključku treba kratko, jasno i pregledno dati prikaz relevantnih spoznaja, informacija, činjenica i stavova koji su prethodno opširnije razrađeni.
+Dijelovi, odnosno odlomci, zaključka formuliraju se prema strukturi završnog/diplomskog rada. 
+
+
+Iza zaključka, kandidat/kinja potpisuje i umeće Izjavu o akademskoj čestitosti.
+
+===== [unin-upute-radovi-2026 | str. 1] =====
+Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute:
+Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm
+Brojevi stranica: pišu se dolje, s desne strane arapskim brojevima. Uvod je prva stranica koja se numerira, a popis literature posljednja. Numeriranje od uvoda počinje brojem 1
+Font: Times New Roman, veličina 12 pt.
+Naslovi i podnaslovi:
+prvi nivo – mala tiskana slova, podebljano, veličina 16 pt (npr. 1. Uvod)
+drugi nivo – mala tiskana slova, podebljano, veličina 14 pt (npr. 3.1. Opis instrumenta)
+treći nivo – mala tiskana slova, podebljano, veličina 12 pt (npr. 2.1.1. Etički aspekti komunikacije u zdravstvu)
+četvrti nivo – mala tiskana slova, bez podebljanja, veličina 12 pt (npr. 2.1.1.1. Poštivanje autonomije bolesnika)
+naslove treba poravnati uz lijevi rub teksta
+U sadržaju se navode prvi, drugi i treći nivo naslova, četvrti nivo ne navodi se u sadržaju
+Prored: 1,5
+Poravnanje teksta: obostrano
+Tablice, grafikoni ili slike moraju biti numerirane i imati naslov te legendu kratica i znakova (ako je potrebno, u obliku napomene). Ako su tablica, grafikon, slika preuzeti iz drugih izvora, potrebno je navesti izvor ispod njih. Veličina fonta za pisanje legende te izvora tablica, grafikona i slika ispod njih je 10 pt. 
+Prilozi: svaki prilog treba imenovati i označiti brojem (npr. Prilog 1: Anketni upitnik)
+
+===== [unin-upute-radovi-2026 | str. 1] =====
+scan Prijave završnog/diplomskog rada 
+ predgovor 
+ sažetak na hrvatskom jeziku
+ sažetak na engleskom jeziku 
+ popis korištenih kratica
+ sadržaj 
+ uvod
+ teorijski dio rada
+ empirijski dio rada (ako postoji)
+ rezultati (ako postoje) 
+ rasprava (ako postoji) 
+ zaključak 
+ popis literature 
+ popis slika (ako postoji)
+ popis tablica (ako postoji) 
+ popis grafikona (ako postoji) i
+ prilozi. 
+
+Studenti su odgovorni za točnost sadržaja i jezika, stoga treba temeljito provjeriti tekst i ispraviti eventualne pogreške uz poštivanje pravopisnih pravila.

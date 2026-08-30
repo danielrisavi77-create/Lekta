@@ -8,7 +8,7 @@ Snapshot: `data/sources/ffrz/ffrz-oblikovanje-diplomski-2021.pdf` (hash `224b211
 Otvori PDF: `data/sources/ffrz/ffrz-oblikovanje-diplomski-2021.pdf#page=6`
 ```
 TEMPLATE: {authors} ({year}). {title}. {place}: {publisher}.
-QUOTE   : Jambresi, Andrija (1742). Lexicon latinum interpretatione Illyrica, Germanica, et   [grep: OK]
+QUOTE   : Jambrešić, Andrija (1742). Lexicon latinum interpretatione Illyrica, Germanica, et   [grep: OK]
 IZVOR   : Jambresi, Andrija (1742). Lexicon latinum interpretatione Illyrica, Germanica, et Hungarica locuples. Zagreb: Typis Academicis Societatis JESU, per Adalbertum Wilh. Wesseli.
 RENDER  : Jambresi, Andrija (1742). Lexicon latinum interpretatione Illyrica, Germanica, et Hungarica locuples. Zagreb: Typis Academicis Societatis JESU, per Adalbertum Wilh. Wesseli.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -19,7 +19,7 @@ NAPOMENA: Primjer je iz sekcije 4 (rjecnik citiran kao cjelina), ali slijedi opc
 Otvori PDF: `data/sources/ffrz/ffrz-oblikovanje-diplomski-2021.pdf#page=5`
 ```
 TEMPLATE: {authors} ({year}). {title}. U: {editor} (ur.), {container}. {place}: {publisher}[[, {pages}]].
-QUOTE   : objavljen ili gdje se nalazi: naslov publikacije, urednici, mjesto izdanja, izdavac, broj sveska,   [grep: OK]
+QUOTE   : objavljen ili gdje se nalazi: naslov publikacije, urednici, mjesto izdanja, izdavač, broj sveska,   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Ekstrakcija nema primjer poglavlja u zborniku (sekcije 1-3 izvora nisu u ekstrakciji). Predlozak izveden iz opceg nacela (izvor nabraja: naslov publikacije, urednici, mjesto izdanja, izdavac, stranice) i oblika za knjigu; veznik 'U:' je evidenciran u primjerima crkvenih dokumenata i enciklopedija. Oznaka (ur.) i tocan redoslijed nisu evidencirani, potvrditi pri verifikaciji.
 ```
@@ -66,7 +66,7 @@ NAPOMENA: Upute ne obraduju drzavne propise. Predlozak izveden iz opceg nacela b
 ```
 TEMPLATE : ({authorsShort}, {year})   /  s pages: ({authorsShort}, {year}, {pages})
 RENDER   : (Lovric, 1988)   /  (Lovric, 1988, 45)
-QUOTE    : voce u citiranom izvoru, primjerice: (Macan, 1997, 15-16); (Jalsenjak i Sestak, 2015, 153); (Cifrak i   [grep: OK]
+QUOTE    : voce u citiranom izvoru, primjerice: (Macan, 1997, 15-16); (Jalšenjak i Šestak, 2015, 153); (Cifrak i   [grep: OK]
 NAPOMENA : Puni primjeri iz izvora: (Macan, 1997, 15-16); (Jalsenjak i Sestak, 2015, 153); (Cifrak i dr., 2008, 32); (Jambresi, 1742, s. v. pietas). Dva autora vezuje 'i', kod tri i vise navodi se samo prvi autor s 'i dr.'. Bazni template bez stranica je izveden (svi primjeri u izvoru imaju stranicu ili s. v.); polje pages moze primiti i 's. v. natuknica'. Vise radova istog autora u istoj godini: 1998a, 1998b, 1998c.
 ```
 

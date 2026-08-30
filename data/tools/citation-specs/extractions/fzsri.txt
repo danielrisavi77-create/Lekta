@@ -1,19 +1,19 @@
 ===== [fzsri-upute-radovi-2022 | str. 2] =====
-Sadrzaj
+Sadržaj
 
 Uvod                                                         1
 
 1. PRIPREMA ZA PISANJE RADA                                  2
 
-1.1. Definiranje teme i donosenje odluke o vrsti rada        2
+1.1. Definiranje teme i donošenje odluke o vrsti rada        2
 
-1.2. Pretraga literature i izrada biljeski                   2
+1.2. Pretraga literature i izrada bilješki                   2
 
 1.3. Izrada nacrta rada                                      2
 
-2. STRUKTURA ISTRAZIVACKOG I PREGLEDNOG RADA                 3
+2. STRUKTURA ISTRAŽIVAČKOG I PREGLEDNOG RADA                 3
 
-2.1. STRUKTURA RADA S ISTRAZIVANJEM                          3
+2.1. STRUKTURA RADA S ISTRAŽIVANJEM                          3
 
 2.2. STRUKTURA PREGLEDNOG RADA                               3
 
@@ -22,25 +22,25 @@ Uvod                                                         1
 2.4. OBVEZATNI LISTOVI RADA                                  5
 
 ===== [fzsri-upute-radovi-2022 | str. 2] =====
-2.10 ISPITANICI (MATERIJALI) I METODE (rad s istrazivanjem)  7
+2.10 ISPITANICI (MATERIJALI) I METODE (rad s istraživanjem)  7
 
 2.11 METODE (pregledni rad)                                  8
 
-2.12 REZULTATI (rad s istrazivanjem)                         8
+2.12 REZULTATI (rad s istraživanjem)                         8
 
-2.13 RASPRAVA (rad s istrazivanjem)                          8
+2.13 RASPRAVA (rad s istraživanjem)                          8
 
 2.14 RAZRADA TEME (pregledni rad)                            8
 
-2.15 ZAKLJUCAK (obje vrste rada)                             8
+2.15 ZAKLJUČAK (obje vrste rada)                             8
 
 2.16 LITERATURA                                              9
 
 2.17 PRIVITCI                                                9
 
-3. TEHNICKE I STILSKE UPUTE ZA IZRADU RADA                   10
+3. TEHNIČKE I STILSKE UPUTE ZA IZRADU RADA                   10
 
-3.1. Format teksta i oznacavanje unutar teksta               10
+3.1. Format teksta i označavanje unutar teksta               10
 
 3.2. Numeriranje stranica                                    10
 
@@ -50,66 +50,66 @@ Uvod                                                         1
 
 3.5. Tablice i slike                                         11
 
-4. NAVOENJE IZVORA U TEKSTU I IZRADA POPISA LITERATURE       12
+4. NAVOĐENJE IZVORA U TEKSTU I IZRADA POPISA LITERATURE      12
 
 ===== [fzsri-upute-radovi-2022 | str. 3] =====
-dokumenata. Student u procesu izrade rada podnosi zahtjev za odobrenje nacrta istrazivanja
-Povjerenstvu za zavrsne i diplomske radove1 te na prijedlog mentora i zahtjev za odobrenje provedbe
-istrazivanja Etickom povjerenstvu za biomedicinska istrazivanja Fakulteta zdravstvenih studija
-Sveucilista u Rijeci (po potrebi i drugim institucijama). Odgovor svakoga od povjerenstava student e
-dobiti unutar 30 dana (u ove se dane ne ubrajaju dani kada Fakultet ne radi). Preporuka je zapoceti s
-pisanjem nacrta rada najkasnije pocetkom akademske godine u kojoj student planira obraniti Zavrsni
-ili diplomski rad. Vise informacija o ovim i drugim propisanim rokovima procitajte u Postupniku za
-studente i mentore (komentore) pri izradi i prijavi zavrsnih i diplomskih radova.
-       Zavrsni ili diplomski rad je samostalan rad u kojem student pod vodstvom mentora obrauje
-izabranu temu. Zavrsni ili diplomski rad treba biti istrazivacki rad te samo iznimno, uz odobrenje
-Povjerenstva za zavrsne i diplomske radove, moze biti pregledni rad. Preporuceni opseg zavrsnog rada
-je minimalno 30 stranica, a diplomskog rada 40 stranica (u propisani opseg rada ne racunaju se
-naslovna stranica, sadrzaj, popis kratica, popis literature i privitci).
-       U nastavku se nalaze upute za pripremu i izradu zavrsnog ili diplomskog rada. Na pojedinim
-mjestima naznaceno je ukoliko se upute odnose na rad s istrazivanjem ili pregledni rad.
+dokumenata. Student u procesu izrade rada podnosi zahtjev za odobrenje nacrta istraživanja
+Povjerenstvu za završne i diplomske radove1 te na prijedlog mentora i zahtjev za odobrenje provedbe
+istraživanja Etičkom povjerenstvu za biomedicinska istraživanja Fakulteta zdravstvenih studija
+Sveučilišta u Rijeci (po potrebi i drugim institucijama). Odgovor svakoga od povjerenstava student će
+dobiti unutar 30 dana (u ove se dane ne ubrajaju dani kada Fakultet ne radi). Preporuka je započeti s
+pisanjem nacrta rada najkasnije početkom akademske godine u kojoj student planira obraniti Završni
+ili diplomski rad. Više informacija o ovim i drugim propisanim rokovima pročitajte u Postupniku za
+studente i mentore (komentore) pri izradi i prijavi završnih i diplomskih radova.
+       Završni ili diplomski rad je samostalan rad u kojem student pod vodstvom mentora obrađuje
+izabranu temu. Završni ili diplomski rad treba biti istraživački rad te samo iznimno, uz odobrenje
+Povjerenstva za završne i diplomske radove, može biti pregledni rad. Preporučeni opseg završnog rada
+je minimalno 30 stranica, a diplomskog rada 40 stranica (u propisani opseg rada ne računaju se
+naslovna stranica, sadržaj, popis kratica, popis literature i privitci).
+       U nastavku se nalaze upute za pripremu i izradu završnog ili diplomskog rada. Na pojedinim
+mjestima naznačeno je ukoliko se upute odnose na rad s istraživanjem ili pregledni rad.
 
-1 Ne odnosi se na studente koji su treu godinu preddiplomskog ili drugu godinu diplomskog studija upisali prije
+1 Ne odnosi se na studente koji su treću godinu preddiplomskog ili drugu godinu diplomskog studija upisali prije
 ak. god. 2021./2022.
 
                                                                                                                            1
 
 ===== [fzsri-upute-radovi-2022 | str. 4] =====
-- odabrati temu (pozeljno je samostalno predlaganje teme), paziti da tema ne bude ni
+- odabrati temu (poželjno je samostalno predlaganje teme), paziti da tema ne bude ni
 
-preusko ni presiroko definirana (definirati u dogovoru s mentorom)
-       - donijeti odluku o vrsti rada u dogovoru s mentorom: ili rad s istrazivanjem ili pregledni rad
-       - pregledni rad je mogu uz dostavljanje Obrazlozenja mentora za pisanje preglednog rada
+preusko ni preširoko definirana (definirati u dogovoru s mentorom)
+       - donijeti odluku o vrsti rada u dogovoru s mentorom: ili rad s istraživanjem ili pregledni rad
+       - pregledni rad je moguć uz dostavljanje Obrazloženja mentora za pisanje preglednog rada
 
-Povjerenstvu za zavrsne i diplomske radove. Povjerenstvo e razmotriti obrazlozenje mentora i
-dostaviti odluku o prihvaanju nacrta istrazivanja studentu.
+Povjerenstvu za završne i diplomske radove. Povjerenstvo će razmotriti obrazloženje mentora i
+dostaviti odluku o prihvaćanju nacrta istraživanja studentu.
 
-       - za mentora: poveznica na mreznu stranicu na kojoj se nalazi obrazac Obrazlozenja mentora
+       - za mentora: poveznica na mrežnu stranicu na kojoj se nalazi obrazac Obrazloženja mentora
 za pregledni rad.
 
-1.2. Pretraga literature i izrada biljeski
-         Znanstvene radove (osim u knjiznicama) mogue je nai na Portalu hrvatskih znanstvenih i
+1.2. Pretraga literature i izrada bilješki
+         Znanstvene radove (osim u knjižnicama) moguće je naći na Portalu hrvatskih znanstvenih i
 
-strucnih casopisa Hrcak, na portalu Hrvatske znanstvene bibliografije CROSBI, na Google znalcu, na
-portalu Sveucilisne knjiznice u Rijeci, Discovery Service, na portalu PubMed, na portalu Web of
-Science, na portalu Centra za online baze podataka (preko kojeg je mogue pristupiti relevantnim
+stručnih časopisa Hrčak, na portalu Hrvatske znanstvene bibliografije CROSBI, na Google znalcu, na
+portalu Sveučilišne knjižnice u Rijeci, Discovery Service, na portalu PubMed, na portalu Web of
+Science, na portalu Centra za online baze podataka (preko kojeg je moguće pristupiti relevantnim
 bazama) i drugdje.
 
 1.3. Izrada nacrta rada
-       Za izradu nacrta rada treba koristiti Obrazac nacrta za izradu zavrsnog ili diplomskog rada s
+       Za izradu nacrta rada treba koristiti Obrazac nacrta za izradu završnog ili diplomskog rada s
 
 uputama.
-         Preliminarni popis literature i nacrt student treba poslati mentoru na pregled iskljucivo s uniri
+         Preliminarni popis literature i nacrt student treba poslati mentoru na pregled isključivo s uniri
 
 e-adrese. Nakon sugestija i prepravaka mentora, nacrt treba poslati na pregled Povjerenstvu za
-zavrsne i diplomske radove.
+završne i diplomske radove.
 
-         Student preddiplomskog studija nacrt izraen u odgovarajuem obrascu imenuje na sljedei
-nacin: Prezime studenta_Nacrt_ZR-PZDR.docx i salje na e-adresu:
+         Student preddiplomskog studija nacrt izrađen u odgovarajućem obrascu imenuje na sljedeći
+način: Prezime studenta_Nacrt_ZR-PZDR.docx i šalje na e-adresu:
 PovjerenstvoZDR.zavrsni@fzsri.uniri.hr.
 
-       Student diplomskog studija nacrt izraen u odgovarajuem obrascu imenuje na sljedei nacin:
-Prezime studenta_Nacrt_DR-PZDR.docx i salje na e-adresu:
+       Student diplomskog studija nacrt izrađen u odgovarajućem obrascu imenuje na sljedeći način:
+Prezime studenta_Nacrt_DR-PZDR.docx i šalje na e-adresu:
 PovjerenstvoZDR.diplomski@fzsri.uniri.hr
 
 ===== [fzsri-upute-radovi-2022 | str. 5] =====
@@ -123,20 +123,20 @@ PovjerenstvoZDR.diplomski@fzsri.uniri.hr
 
 5.        RASPRAVA
 
-6.        ZAKLJUCAK
+6.        ZAKLJUČAK
 
 LITERATURA
 
 PRIVITCI
 
-KRATAK ZIVOTOPIS PRISTUPNIKA
+KRATAK ŽIVOTOPIS PRISTUPNIKA
 
 2.2. STRUKTURA PREGLEDNOG RADA
-       Pregledni rad ima sljedee dijelove:
+       Pregledni rad ima sljedeće dijelove:
        NASLOVNA STRANICA NA HRVATSKOM JEZIKU
        NASLOVNA STRANICA NA ENGLESKOM JEZIKU
        OBVEZATNI LISTOVI RADA
-       SADRZAJ
+       SADRŽAJ
        POPIS KRATICA (ako je primjenjivo)
 
 ===== [fzsri-upute-radovi-2022 | str. 6] =====
@@ -148,192 +148,183 @@ KRATAK ZIVOTOPIS PRISTUPNIKA
 
 4.        RAZRADA TEME
 
-5.        ZAKLJUCAK
+5.        ZAKLJUČAK
 
 LITERATURA
 
 PRIVITCI
 
-KRATAK ZIVOTOPIS PRISTUPNIKA
+KRATAK ŽIVOTOPIS PRISTUPNIKA
 
 2.3. NASLOVNA STRANICA
 
        Na prednjoj strani ovitka treba u gornjem dijelu, centrirano i velikim slovima pisati:
-                                                       SVEUCILISTE U RIJECI
+                                                       SVEUČILIŠTE U RIJECI
 
                                               FAKULTET ZDRAVSTVENIH STUDIJA
                                                           NAZIV STUDIJA
 
 ===== [fzsri-upute-radovi-2022 | str. 8] =====
-SADRZAJ:                                                         SADRZAJ:
+SADRŽAJ:                                 SADRŽAJ:
 
-    SAZETAK                                                          SAZETAK
-       UVOD................................................          UVOD.................................................
-          Naslov potpoglavlja...................
-          Naslov potpoglavlja...................                         Naslov potpoglavlja...................
-          Naslov potpoglavlja...................                         Naslov potpoglavlja...................
-                                                                         Naslov potpoglavlja...................
-     CILJEVI I HIPOTEZE............................                CILJEVI I HIPOTEZE.............................
-     MATERIJALI I METODE.....................                      METODE..............................................
-     REZULTATI..........................................           RAZRADA TEME.................................
-     RASPRAVA..........................................            ZAKLJUCAK.........................................
-     ZAKLJUCAK.........................................            LITERATURA.......................................
-     LITERATURA........................................            PRIVITCI..............................................
-     PRIVITCI...............................................       ZIVOTOPIS..........................................
-     ZIVOTOPIS...........................................
+    SAŽETAK                                  SAŽETAK
+       UVOD…………………………………………                  UVOD………………………………………….
+          Naslov potpoglavlja……………….
+          Naslov potpoglavlja……………….             Naslov potpoglavlja……………….
+          Naslov potpoglavlja……………….             Naslov potpoglavlja……………….
+                                                 Naslov potpoglavlja……………….
+     CILJEVI I HIPOTEZE……………………….          CILJEVI I HIPOTEZE………………………..
+     MATERIJALI I METODE…………………            METODE……………………………………….
+     REZULTATI……………………………………               RAZRADA TEME……………………………
+     RASPRAVA……………………………………                ZAKLJUČAK…………………………..………
+     ZAKLJUČAK………………………………..…              LITERATURA…………………………………
+     LITERATURA…………………………….……              PRIVITCI…………………………….…………
+     PRIVITCI………………………………..………             ŽIVOTOPIS……………………………………
+     ŽIVOTOPIS…………………………………….
 
 2.6 POPIS KRATICA
-       Popis kratica treba sadrzavati sve kratice navedene u tekstu razvrstane abecednim redom.
+       Popis kratica treba sadržavati sve kratice navedene u tekstu razvrstane abecednim redom.
 
-2.7 SAZETAK
+2.7 SAŽETAK
 
-Sazetak je skraeni oblik originalnog rada koji na brz nacin uvodi citatelja u rad. Sazetak rada
+Sažetak je skraćeni oblik originalnog rada koji na brz način uvodi čitatelja u rad. Sažetak rada
 
-na hrvatskom jeziku i sazetak rada na engleskom jeziku uobicajeno ima od 200 do 250 rijeci. Ispod
-
-Sazetka navode se kljucne rijeci (ne vise od osam), prema MeSH tezaurusu .
-
-a)         Rad s istrazivanjem: Sazetak treba biti strukturiran te sadrzavati dijelove: Uvod i cilj
-
-istrazivanja, Materijali i metode, Rezultati i Zakljucak. Obicno sadrzava uvodnu recenicu i cilj
-
-istrazivanja, kratak opis materijala/ispitanika i metoda, najvaznije rezultate istrazivanja i zakljucnu
-
-recenicu.
-
-===== [fzsri-upute-radovi-2022 | str. 9] =====
-b)               Pregledni rad: Sazetak moze biti nestrukturiran te ukratko prikazuje cijeli rad
-
-navodei teorijsku osnovu, ciljeve, izvore podataka, kriterije odabira izvora, ogranicenja, zakljucke i
-
-vaznost glavnih rezultata.
-
-2.8 UVOD
-
-Uvod je pocetni dio teksta koji citatelja upoznaje s problematikom i nastoji ga za nju
-
-zainteresirati.
-
-a)               Rad s istrazivanjem: Uvod donosi osnovne podatke o podrucju istrazivanja, izlaze opis
-
-dosad provedenih istrazivanja istog ili slicnog problema i opis teorija na kojima su ta istrazivanja
-
-formirana. Obicno sadrzi osnovne teoretske pretpostavke u vezi problema pri cemu kree od najsireg
-
-podrucja uz koje je problem vezan prema specificnim problemima u vezi s temom rada. Na kraju uvoda
-
-opisuju se dosadasnja istrazivanja te potreba za istrazivanjem koje se provodi.
+na hrvatskom jeziku i sažetak rada na engleskom jeziku uobičajeno ima od 200 do 250 riječi. Ispod
 
 ===== [fzsri-upute-radovi-2022 | str. 10] =====
 2.11 METODE (pregledni rad)
        Opisati metodologiju odabira literature i analize podataka (primjerice pregledane bibliografske
 
-baze podataka, kljucne rijeci pri pretrazivanju, kriterije ukljucivanja i iskljucivanja radova, strategije i
-vremensku odrednicu pretrazivanja, broj pregledanih izvora, broj ukljucenih i iskljucenih izvora i
+baze podataka, ključne riječi pri pretraživanju, kriterije uključivanja i isključivanja radova, strategije i
+vremensku odrednicu pretraživanja, broj pregledanih izvora, broj uključenih i isključenih izvora i
 drugo).
 
-2.12 REZULTATI (rad s istrazivanjem)
-       U ovom poglavlju treba prikazati rezultate istrazivanja. Oni trebaju biti opisani na jasan nacin i
+2.12 REZULTATI (rad s istraživanjem)
+       U ovom poglavlju treba prikazati rezultate istraživanja. Oni trebaju biti opisani na jasan način i
 
-logicno pratiti slijed s obzirom na ciljeve istrazivanja. Rezultati zapocinju opisom uzorka nakon cega se
+logično pratiti slijed s obzirom na ciljeve istraživanja. Rezultati započinju opisom uzorka nakon čega se
 navode glavni rezultati (oni koji se odnose na testiranje postavljenih hipoteza), a potom sporedni
 rezultati. Navedeni rezultati su u pravilu potkrijepljeni slikama i tablicama.
 
 ===== [fzsri-upute-radovi-2022 | str. 10] =====
 2.14 RAZRADA TEME (pregledni rad)
-       Pregledni rad podrazumijeva sazet i kriticki prikaz jednog podrucja (ili jednog dijela tog
+       Pregledni rad podrazumijeva sažet i kritički prikaz jednog područja (ili jednog dijela tog
 
-podrucja). Razrada teme pritom je najznacajniji dio preglednog rada u kojem se osnovna
-tema/podrucje rasclanjuje na vei ili manji broj dijelova (poglavlja). Rijec je o sredisnjem dijelu rada.
-Svaki dio ima svoj naslov koji opisuje problematiku o kojoj se govori, a raspored poglavlja upuuje na
-uzrocno-posljedicnu povezanost elemenata rada i sustavan pristup obradi problema.
+područja). Razrada teme pritom je najznačajniji dio preglednog rada u kojem se osnovna
+tema/područje raščlanjuje na veći ili manji broj dijelova (poglavlja). Riječ je o središnjem dijelu rada.
+Svaki dio ima svoj naslov koji opisuje problematiku o kojoj se govori, a raspored poglavlja upućuje na
+uzročno-posljedičnu povezanost elemenata rada i sustavan pristup obradi problema.
 
-       Logika raspodjele poglavlja moze biti prema metodoloskim pristupima problemu, prema
+       Logika raspodjele poglavlja može biti prema metodološkim pristupima problemu, prema
 modelima/teorijama, prema tome podupiru li rezultati pretpostavku ili se od nje razlikuju, prema
-kronoloskom redoslijedu, geografskim podrucjima i prema drugim relevantnim kriterijima sukladno
-cilju istrazivanja. Informacije trebaju biti organizirane kao argumenti (rad treba biti voen temom, a
+kronološkom redoslijedu, geografskim područjima i prema drugim relevantnim kriterijima sukladno
+cilju istraživanja. Informacije trebaju biti organizirane kao argumenti (rad treba biti vođen temom, a
 ne pregledanom literaturom).
 
-2.15 ZAKLJUCAK (obje vrste rada)
+2.15 ZAKLJUČAK (obje vrste rada)
 
-a)  Rad s istrazivanjem: Zakljucak(ci) kod rada s istrazivanjem izvodi se na temelju
+a)  Rad s istraživanjem: Zaključak(ci) kod rada s istraživanjem izvodi se na temelju
 
-provedenog istrazivanja. Navode se taksativno i odgovaraju na istrazivacka pitanja (ciljeve), odnosno
+provedenog istraživanja. Navode se taksativno i odgovaraju na istraživačka pitanja (ciljeve), odnosno
 
-broj ciljeva odgovara broju zakljucaka.
+broj ciljeva odgovara broju zaključaka.
 
-                                                                                                    8
+                                                                                                     8
 
 ===== [fzsri-upute-radovi-2022 | str. 11] =====
-b)  Pregledni rad: Zakljucak kod preglednog rada podrazumijeva kratak i sustavan prikaz
+b)  Pregledni rad: Zaključak kod preglednog rada podrazumijeva kratak i sustavan prikaz
 
-glavnih spoznaja do kojih se doslo u radu, ali u novim mislima, rijecima i obliku (paziti da se ne koriste
+glavnih spoznaja do kojih se došlo u radu, ali u novim mislima, riječima i obliku (paziti da se ne koriste
 
-iste rijeci, recenice ili fraze koje su se koristile u osnovnom dijelu rada). U zakljucak se ne uvode novi
+iste riječi, rečenice ili fraze koje su se koristile u osnovnom dijelu rada). U zaključak se ne uvode novi
 
-podaci i informacije. Zakljucak mora biti poruka kojom se zaokruzuje tema opisana u radu (ne smije
+podaci i informacije. Zaključak mora biti poruka kojom se zaokružuje tema opisana u radu (ne smije
 
-sadrzajem biti identican Sazetku).
+sadržajem biti identičan Sažetku).
 
 2.16 LITERATURA
-       Literatura se navodi na kraju rada na zasebnoj stranici i ne oznacava se rednim brojem. Rijec je
+       Literatura se navodi na kraju rada na zasebnoj stranici i ne označava se rednim brojem. Riječ je
 
-o popisu svih koristenih izvora podataka (knjiga, clanaka, internetskih stranica, propisa i sl.) koristenih
-u pisanju rada. Popis koristene literature potrebno je sastaviti u skladu s Pravilima citiranja literature.
+o popisu svih korištenih izvora podataka (knjiga, članaka, internetskih stranica, propisa i sl.) korištenih
+u pisanju rada. Popis korištene literature potrebno je sastaviti u skladu s Pravilima citiranja literature.
 
-       U izradi zavrsnog ili diplomskog rada s istrazivanjem u pravilu je potrebno koristiti najmanje
+       U izradi završnog ili diplomskog rada s istraživanjem u pravilu je potrebno koristiti najmanje
 trideset izvora, a u izradi preglednog rada najmanje pedeset izvora.
 
 2.17 PRIVITCI
-       Privitci se navode na kraju teksta, iza Literature i ne oznacavaju se rednim brojem. Oni se ne
+       Privitci se navode na kraju teksta, iza Literature i ne označavaju se rednim brojem. Oni se ne
 
-oznacavaju brojkama, ve velikim slovima (primjerice Privitak A: Popis ilustracija). Privitci mogu biti
-slike, tablice, grafikoni, shematski prikazi, fotografije koristene u radu, upitnici, protokoli koristeni u
-istrazivanju i drugo. Ako je nesto od navedenog ilustrirano u tekstu rada, onda se naziva ili tablicom
+označavaju brojkama, već velikim slovima (primjerice Privitak A: Popis ilustracija). Privitci mogu biti
+slike, tablice, grafikoni, shematski prikazi, fotografije korištene u radu, upitnici, protokoli korišteni u
+istraživanju i drugo. Ako je nešto od navedenog ilustrirano u tekstu rada, onda se naziva ili tablicom
 ili slikom.
 
-       Ako u tekstu postoje ilustracije, potrebno je napraviti popis koji se prilaze se na kraju rada kao
-Privitak A: Popis ilustracija. Popis ilustracija sadrzi sve naslove ilustracija iz sredisnjeg dijela rada s
-prateim rednim brojevima i brojevima stranica na kojima se takvi sadrzaji nalaze.
+       Ako u tekstu postoje ilustracije, potrebno je napraviti popis koji se prilaže se na kraju rada kao
+Privitak A: Popis ilustracija. Popis ilustracija sadrži sve naslove ilustracija iz središnjeg dijela rada s
+pratećim rednim brojevima i brojevima stranica na kojima se takvi sadržaji nalaze.
 
-       Ako se ne prilazu privitci, u Sadrzaju ih ne treba navoditi.
-       Primjeri izrade privitaka na kraju zavrsnog ili diplomskog rada:
+       Ako se ne prilažu privitci, u Sadržaju ih ne treba navoditi.
+       Primjeri izrade privitaka na kraju završnog ili diplomskog rada:
 
 ===== [fzsri-upute-radovi-2022 | str. 12] =====
-- decimalno mjesto odvaja se iskljucivo zarezom (primjerice 567,89)
-       - razina statisticke znacajnosti (p ili P) racuna se na tri decimale (primjerice p = 0,023), a ako je
-p jako mali, pisemo p < 0,001);
-       - navodnici se u tekstovima na hrvatskom jeziku oznacavaju sljedeim znakovima: ,,rijec".
+3.3. Oblikovanje poglavlja
+       - rad mora biti podijeljen u poglavlja i potpoglavlja pri čemu se glavni naslovi trebaju pisati
+
+tiskanim i podebljanim slovima, a podnaslovi kosim slovima (kurzivom) s brojčanim označavanjem
+arapskim brojkama, pri čemu je prije naslova, a iza zadnjeg broja potrebno staviti točku, primjerice 1.
+…1.2. …1.2.1… (najviše 4 u nizu);
+
+       - tekst je potrebno pisati u odlomcima, a oni se mogu razdvajati na dva načina: početak
+odlomka je uvučen, a između odlomaka nema praznog reda (pomoću tipke Tab) ili početak odlomka
+nije uvučen, a između odlomaka je jedan red razmaka;
+
+       - podvlake se u privitcima ne koriste, ni u tekstu, ni pri navođenju mrežnih poveznica;
+       - decimalno mjesto odvaja se isključivo zarezom (primjerice 567,89)
+       - razina statističke značajnosti (p ili P) računa se na tri decimale (primjerice p = 0,023), a ako je
+p jako mali, pišemo p < 0,001);
+       - navodnici se u tekstovima na hrvatskom jeziku označavaju sljedećim znakovima: ,,riječ“.
 
 3.4. Jezik i stil pisanja
-       - tekst mora biti pisan standardnim hrvatskim jezikom prema gramatickim i pravopisnim
+       - tekst mora biti pisan standardnim hrvatskim jezikom prema gramatičkim i pravopisnim
 
 pravilima;
-       - treba izbjegavati prepisivanje, za vise detalja procitajte Smjernice za ispravno navoenje
+       - treba izbjegavati prepisivanje, za više detalja pročitajte Smjernice za ispravno navođenje
 
 izvora izbjegavanje plagiranja pri akademskom pisanju;
-       - rad je potrebno procitati i ispraviti pravopisne pogreske prije predaje na pregled;
+       - rad je potrebno pročitati i ispraviti pravopisne pogreške prije predaje na pregled;
                                                                                                                          10
 
 ===== [fzsri-upute-radovi-2022 | str. 13] =====
-- jezik treba biti neosoban, dakle treba paziti na lice kojim se pise, ne pisati u prvom i drugom
-licu jednine i mnozine (primjerice NE: U istrazivanju sam pokazao..., DA: Istrazivanje je pokazalo...);
+- stil pisanja rada mora biti ujednačen u svezi korištenja stranih ili latinskih naziva;
+       - navođenje stranih riječi se ne preporučuje, ali ako za njih ne postoji odgovarajuća hrvatska
+riječ, onda se ta riječ piše onako kako se piše u jeziku iz kojeg je preuzeta i to kosim slovima (kurzivom)
+(primjerice wellness, copyright i drugo). Ako je strana riječ identična riječi koja se koristi u hrvatskom
+jeziku, onda se ne piše kosim slovima (primjerice vena, sport i slično);
+       - latinski nazivi se pišu kosim slovima i ne sklanjaju se kod pisanja u hrvatskom tekstu;
+       - pravopisni znakovi kao što su točka, upitnik, uskličnik, zarez, dvotočke, točka zarez, znak za
+postotak i trotočka pišu se zajedno s riječju koja im prethodi (ne odvajaju se razmakom), a odvojeno
+od riječi ispred koje se nalaze; zagrade i navodnici pišu se zajedno s riječju ispred i iza koje se nalaze
+(ne odvajaju se razmakom);
+       - preporuča se koristiti jednostavan i jasan rječnik, izbjegavati složenu strukturu rečenica;
+       - jezik treba biti formalan (ne koristiti literarni i novinarski stil);
+       - jezik treba biti neosoban, dakle treba paziti na lice kojim se piše, ne pisati u prvom i drugom
+licu jednine i množine (primjerice NE: U istraživanju sam pokazao…, DA: Istraživanje je pokazalo…);
        - kad se koriste kratice, prvi put se navodi cijeli izraz s kraticom u zagradi, nema potrebe
-skraivati izraz koji se rabi samo dvaput, kratice se ne navode u naslovu i sazetku rada.
+skraćivati izraz koji se rabi samo dvaput, kratice se ne navode u naslovu i sažetku rada.
 
 3.5. Tablice i slike
-       Tablice i slike (grafikoni, sheme i sl.) moraju imati naslov (velicine fonta 12). Numeriraju se kroz
+       Tablice i slike (grafikoni, sheme i sl.) moraju imati naslov (veličine fonta 12). Numeriraju se kroz
 
 rad arapskim brojevima u onom slijedu kojim se pojavljuju za sva poglavlja rada zajedno. U pravilu se
-smjestaju odmah uz tekst u kojem se opisuju, a u tekstu je potrebno pozvati se na njih na nacin da se
+smještaju odmah uz tekst u kojem se opisuju, a u tekstu je potrebno pozvati se na njih na način da se
 navede njihov broj (primjerice: Rezultati korelacijske analize pokazali su... (Tablica 1.).
 
-       Ako je tablica ili slika preuzeta iz literature, potrebno je ispod nje navesti tocan izvor
-(primjerice: Izvor:....). Isto tako, ako je samo dio neke tablice ili slike posluzio kao osnova za izradu
-nase tablice ili slike, potrebno je navesti izvor.
+       Ako je tablica ili slika preuzeta iz literature, potrebno je ispod nje navesti točan izvor
+(primjerice: Izvor:….). Isto tako, ako je samo dio neke tablice ili slike poslužio kao osnova za izradu
+naše tablice ili slike, potrebno je navesti izvor.
 
-       Oblik slova na slikama, u tablicama i u tekstu moraju biti istovjetni te velicine slova 12, iznimno
-zbog potreba oblikovanja moze biti i manji. Isto tako, prored u naslovu tablica i slika, kao i u tablicama
+       Oblik slova na slikama, u tablicama i u tekstu moraju biti istovjetni te veličine slova 12, iznimno
+zbog potreba oblikovanja može biti i manji. Isto tako, prored u naslovu tablica i slika, kao i u tablicama
 i slikama razlikuje se od onoga u tekstu, te iznosi 1.
 
        Naslovi slika nalaze se uvijek ispod slika, a naslovi tablica nalaze se uvijek iznad tablica. Tekst u
@@ -342,19 +333,19 @@ tablicama i slikama mora biti na hrvatskom jeziku.
                                                                                                                          11
 
 ===== [fzsri-upute-radovi-2022 | str. 14] =====
-4. NAVOENJE IZVORA U TEKSTU I IZRADA POPISA LITERATURE
-       Popis literature predstavlja pregled koristene literature. Naslov ,,Literatura" pise se na vrhu
+4. NAVOĐENJE IZVORA U TEKSTU I IZRADA POPISA LITERATURE
+       Popis literature predstavlja pregled korištene literature. Naslov ,,Literatura“ piše se na vrhu
 
-stranice lijevo i ne oznacava se rednim brojem. Broj izvora literature u tekstu rada mora biti isti broju
+stranice lijevo i ne označava se rednim brojem. Broj izvora literature u tekstu rada mora biti isti broju
 izvora u popisu literature na kraju rada.
 
-       Svaka tvrdnja, teorija ili rezultat koristen iz literature moraju sadrzavati tocne navode o izvoru
-podataka unutar teksta (citatnice/referencije) i u popisu literature, neovisno o tome je li rijec o citatu
+       Svaka tvrdnja, teorija ili rezultat korišten iz literature moraju sadržavati točne navode o izvoru
+podataka unutar teksta (citatnice/referencije) i u popisu literature, neovisno o tome je li riječ o citatu
 ili parafrazi.
 
        Za ispravno citiranje koristite Pravila citiranja literature.
-       Prilikom pisanja rada preporucamo koristenje programa za upravljanje referencijama Zotero,
-koji moze posluziti za spremanje i organiziranje literature, a posebno je koristan jer znatno skrauje
+       Prilikom pisanja rada preporučamo korištenje programa za upravljanje referencijama Zotero,
+koji može poslužiti za spremanje i organiziranje literature, a posebno je koristan jer znatno skraćuje
 postupak izrade referenci.
 
                                                                                                                          12

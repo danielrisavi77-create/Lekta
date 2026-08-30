@@ -39,7 +39,7 @@ NAPOMENA: Primjer za rad u periodickom casopisu: 'Renner, G., Pongratz, K., Brau
 Otvori PDF: `data/sources/pbf/pbf-upute-diplomski-2018.pdf#page=8`
 ```
 TEMPLATE: {authors} ({year}) {title}[[. {container}]], <{url}>. Pristupljeno {accessed}.
-QUOTE   : Anonymous (2002) Sirovine i sastojci energetskih plocica, <http://www.vitamini.hr>.   [grep: OK]
+QUOTE   : Anonymous (2002) Sirovine i sastojci energetskih pločica, <http://www.vitamini.hr>.   [grep: OK]
 IZVOR   : Anonymous (2002) Sirovine i sastojci energetskih plocica, <http://www.vitamini.hr>. Pristupljeno 11 prosinca 2007.
 RENDER  : Anonymous (2002) Sirovine i sastojci energetskih plocica, <http://www.vitamini.hr>. Pristupljeno 11 prosinca 2007.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -50,7 +50,7 @@ NAPOMENA: Primjer web stranice nepoznatog autora; URL u siljastim zagradama, iza
 Otvori PDF: `data/sources/pbf/pbf-upute-diplomski-2018.pdf#page=6`
 ```
 TEMPLATE: {authors} ({year}) {title}, diplomski rad, {institution}[[, {place}]].
-QUOTE   : Literaturni navodi u poglavlju Literatura pisu se prema pravilu za pisanje referenci na kraju rada kao   [grep: OK]
+QUOTE   : Literaturni navodi u poglavlju Literatura pišu se prema pravilu za pisanje referenci na kraju rada kao   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute ne obraduju citiranje zavrsnih/diplomskih radova kao bibliografske jedinice; predlozak izveden iz oblika za knjigu (izdavac zamijenjen ustanovom, dodana oznaka vrste rada 'diplomski rad' po analogiji s '2. izd.' umetkom). Za detalje izvor upucuje na Kniewald (1993) Metodika znanstvenog rada. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -59,7 +59,7 @@ NAPOMENA: Upute ne obraduju citiranje zavrsnih/diplomskih radova kao bibliografs
 Otvori PDF: `data/sources/pbf/pbf-upute-diplomski-2018.pdf#page=7`
 ```
 TEMPLATE: {title} ({year}) {container}[[ {issue}]].
-QUOTE   : npr. Pravilnika objavljenih u sluzbenom glasilu u istoj godini (Pravilnik, 2004a; Pravilnik 2004b). Kod   [grep: OK]
+QUOTE   : npr. Pravilnika objavljenih u službenom glasilu u istoj godini (Pravilnik, 2004a; Pravilnik 2004b). Kod   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor propisuje samo citatnicu propisa u tekstu (Pravilnik, 2004a), bez primjera bibliografske jedinice. Predlozak izveden iz worked-examplea za djelo u izdanju institucije (str. 8): 'Guidelines for the preparation of bibliographies (1983) United States Department of Agriculture, Washington.' - naslov (godina) izvor, uz broj glasila u issue. Potvrditi ili oboriti pri verifikaciji.
 ```

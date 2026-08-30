@@ -27,7 +27,7 @@
     },
     "provenance": {
       "kind": "worked-example",
-      "quoteRaw": "voce u citiranom izvoru, primjerice: (Macan, 1997, 15-16); (Jalsenjak i Sestak, 2015, 153); (Cifrak i",
+      "quoteRaw": "voce u citiranom izvoru, primjerice: (Macan, 1997, 15-16); (Jalšenjak i Šestak, 2015, 153); (Cifrak i",
       "sourcePage": "str. 5",
       "note": "Puni primjeri iz izvora: (Macan, 1997, 15-16); (Jalsenjak i Sestak, 2015, 153); (Cifrak i dr., 2008, 32); (Jambresi, 1742, s. v. pietas). Dva autora vezuje 'i', kod tri i vise navodi se samo prvi autor s 'i dr.'. Bazni template bez stranica je izveden (svi primjeri u izvoru imaju stranicu ili s. v.); polje pages moze primiti i 's. v. natuknica'. Vise radova istog autora u istoj godini: 1998a, 1998b, 1998c."
     }
@@ -49,7 +49,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Jambresi, Andrija (1742). Lexicon latinum interpretatione Illyrica, Germanica, et",
+        "quoteRaw": "Jambrešić, Andrija (1742). Lexicon latinum interpretatione Illyrica, Germanica, et",
         "sourcePage": "str. 6",
         "note": "Primjer je iz sekcije 4 (rjecnik citiran kao cjelina), ali slijedi opci oblik autorske knjige: Prezime, Puno ime (godina). Naslov. Mjesto: Izdavac. Tocka iza (godina), dvotocka izmedu mjesta i izdavaca. Vise mjesta ili izdavaca odvaja se crtom s razmacima (primjer Marevi, 2000: Velika Gorica i Zagreb; Marka i Matica hrvatska). Autori se navode prezimenom i punim imenom svih autora (bez inicijala)."
       },
@@ -79,7 +79,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "objavljen ili gdje se nalazi: naslov publikacije, urednici, mjesto izdanja, izdavac, broj sveska,",
+        "quoteRaw": "objavljen ili gdje se nalazi: naslov publikacije, urednici, mjesto izdanja, izdavač, broj sveska,",
         "sourcePage": "str. 5",
         "note": "Ekstrakcija nema primjer poglavlja u zborniku (sekcije 1-3 izvora nisu u ekstrakciji). Predlozak izveden iz opceg nacela (izvor nabraja: naslov publikacije, urednici, mjesto izdanja, izdavac, stranice) i oblika za knjigu; veznik 'U:' je evidenciran u primjerima crkvenih dokumenata i enciklopedija. Oznaka (ur.) i tocan redoslijed nisu evidencirani, potvrditi pri verifikaciji."
       },

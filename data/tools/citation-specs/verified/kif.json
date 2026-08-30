@@ -27,7 +27,7 @@
     },
     "provenance": {
       "kind": "worked-example",
-      "quoteRaw": "Razliciti epidemioloski uzorci pokazuju da... (Kessler, 2003).",
+      "quoteRaw": "Različiti epidemiološki uzorci pokazuju da... (Kessler, 2003).",
       "sourcePage": "str. 16",
       "note": "Izvor daje i narativni oblik 'Kessler (2003) je otkrio da...'. Dva autora: '(Babi i Snajder, 2000)' (str. 16). Tri i vise autora: '(Cigrovski i suradnici, 2020)' (str. 17); pravilo u izvoru kaze 'navodi se prvi autor i et al', ali primjeri koriste 'i suradnici' pa nacrt slijedi primjer. withPagesTemplate je IZVEDEN: izvor pokazuje samo narativni oblik doslovnog citata s '(str. 129)' iza navodnika (str. 15, Milanovi 2013), kombinirani parenteticki oblik nije evidentiran; potvrditi pri verifikaciji."
     }
@@ -49,7 +49,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Kessler, M. (2003). Epidemioloske studije. Zagreb: Skolska knjiga.",
+        "quoteRaw": "Kessler, M. (2003). Epidemiološke studije. Zagreb: Školska knjiga.",
         "sourcePage": "str. 16",
         "note": "Knjiga s dva autora: 'Babi, V. i Snajder, V. (2000). Atletika. Zagreb: Kinezioloski fakultet.' (str. 16), autori povezani s ' i ' bez zareza. Urednicka knjiga dodaje '(ur.).' iza imena: 'Leonard, W. R. i Crawford, M. H. (ur.). (2002). ...' (str. 16); inicijali s tockom i razmakom (W. R.). Puna imena autora nisu u izvoru pa se u inputu ne izmisljaju. Naslov u izvorniku kurzivom, alat radi plain text."
       },
@@ -79,7 +79,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Toki, M. (2014). Platonova gimnastika. U I. Zagorac (ur.), O sportu drugacije",
+        "quoteRaw": "Tokić, M. (2014). Platonova gimnastika. U I. Zagorac (ur.), O sportu drugačije",
         "sourcePage": "str. 17",
         "note": "Nastavak primjera u izvoru: '(str. 25-34). Zagreb: Hrvatsko filozofsko drustvo.' Urednik se pise u obliku inicijal pa prezime (I. Zagorac) i upisuje doslovno u polje editor; 'U' bez dvotocke, '(ur.)' s tockom. Rad u zborniku skupa slijedi isti obrazac: Swalgin i sur. primjer s dva urednika 'U D. Milanovi i G. Sporis (ur.), Integrative Power of Kinesiology (str. 753-754). Zagreb: Kinezioloski fakultet Sveucilista u Zagrebu.' (str. 17)."
       },
@@ -111,7 +111,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Bezjak, R. i Ceci Erpic, S. (2021). The relationship between actual and self-per-",
+        "quoteRaw": "Bezjak, R. i Cecić Erpič, S. (2021). The relationship between actual and self-per-",
         "sourcePage": "str. 17",
         "note": "Primjer prelomljen u izvoru; cjelina: '... self-perceived physical fitness in adolescence. Kinesiology, 53(1), 37-46. https://doi.org/10.26582/k.53.1.5'. Izvor izrijekom: 'naslov casopisa i volumen se pisu u kurzivu' (alat radi plain text) i 'ako ne postoji DOI, iza broja stranice ne pise se nista' (str. 17), pa je DOI opcionalna grupa bez tocke na kraju. Popis literature za 3+ autora nije primjerom pokazan (u tekstu ide prvi autor + 'i suradnici')."
       },
@@ -141,7 +141,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "le izvore mozete konzultirati ovu stranicu ili prirucnik Publication Manual of the",
+        "quoteRaw": "le izvore možete konzultirati ovu stranicu ili priručnik Publication Manual of the",
         "sourcePage": "str. 16",
         "note": "Izvor nema primjer mrezne stranice; za ostale izvore upucuje na APA stranicu i prirucnik Publication Manual of the American Psychological Association prema kojem su upute radene. Predlozak izveden iz tog APA obrasca i iz nacina navodenja URL-a u primjeru clanka (URL na kraju, bez tocke iza). {container} je naziv stranice ili organizacije. Datum pristupa nije evidentiran u izvoru pa accessed nije ukljucen. Potvrditi pri verifikaciji."
       },
@@ -160,7 +160,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "izvedbe u futsalu (doktorska disertacija). Kinezioloski fakultet, Zagreb.",
+        "quoteRaw": "izvedbe u futsalu (doktorska disertacija). Kineziološki fakultet, Zagreb.",
         "sourcePage": "str. 17",
         "note": "Sekcija izvora: 'KAKO NAVODITI DOKTORSKE, MAGISTARSKE I DIPLOMSKE RADNJE'. Polje container nosi vrstu rada iz primjera ('doktorska disertacija'); za diplomski rad upisuje se 'diplomski rad', sto je izvedeno iz naslova sekcije jer je jedini worked-example doktorska disertacija. Izvor daje i varijantu kroz bazu Dabar: umjesto '{institution}, {place}' ide naziv repozitorija ('Repozitorij Kinezioloskog fakulteta Sveucilista u Zagrebu KIFoREP.', str. 17); nacrt koristi osnovnu varijantu."
       },
@@ -187,7 +187,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Kinezioloskom fakultetu koristi se American Psychological Association APA stil ci-",
+        "quoteRaw": "Kineziološkom fakultetu koristi se American Psychological Association APA stil ci-",
         "sourcePage": "str. 15",
         "note": "Izvor uopce ne obraduje citiranje propisa; predlozak izveden iz opceg APA obrasca (naslov na mjestu autora, godina, sluzbeno glasilo u polju container, broj u issue, npr. Narodne novine). Hrvatska prilagodba APA za propise nije evidentirana u izvoru. Potvrditi ili oboriti pri verifikaciji."
       },

@@ -75,12 +75,20 @@ describe('citatni dosjei su u koraku sa specovima', () => {
    * u njoj, pa su prepisani iz drugog dokumenta ili iz dijela koji ekstrakcija ne pokriva. Spec je
    * pritom `verified`, sto znaci da je covjek potpisao citat koji se ne moze naci na lokatoru.
    *
-   * Popis je zakljucan, a ne prazan: tako zatecena rupa ne moze utihnuti, ali ni narasti - svaki
-   * NOVI blokator rusi test. Rjesenje je zaseban zadatak (P2-5 u docs/PLAN_POTPUNA_POKRIVENOST.md),
-   * jer trazi ponovno citanje izvora, ne izmjenu generatora.
+   * ZATVORENO (2026-08-31): blokatora je NULA, pa je popis prazan. `pravo` je rijesen, i to ne
+   * prepisivanjem citata nego popravkom EKSTRAKCIJE: citat je cijelo vrijeme bio u izvoru, ali ga
+   * isjecak nije sadrzavao. Tri su kvara to zajedno uzrokovala:
+   *   - `pdftotext` bez `-enc UTF-8` brisao je hrvatska slova, pa se citat nije mogao upariti;
+   *   - kapa je radila `break` na prvom prevelikom bloku i odbacivala SVE preostale;
+   *   - prvenstvo nije poznavalo U+2212 (MINUS SIGN), kojim izvori pisu natuknice, pa ulomak koji
+   *     NOSI citat nije dobivao prednost i kapa ga je odrezala (pfri ima 60.844 znaka ulomaka na
+   *     kapu od 20.000, dakle prolazi tek trecina).
+   *
+   * Prazan popis je sada NAJSTROZI moguci: svaki blokator, i stari i nov, rusi test. Ako se ikad
+   * mora vratiti imenovani izuzetak, uz njega ide i razlog, kao sto je ovdje stajao za `pravo`.
    */
-  it('nema NOVIH blokatora; zatecen je tocno jedan i imenovan', () => {
-    expect(fresh.blockers).toEqual(['pravo']);
+  it('nema NIJEDNOG blokatora', () => {
+    expect(fresh.blockers).toEqual([]);
   });
 
   it('pokriva sve specove i nije prazan (sanity)', () => {

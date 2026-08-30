@@ -19,7 +19,7 @@ NAPOMENA: Jedini formatirani primjer u Uputama (str. 12). Puni redak (prelomljen
 Otvori PDF: `data/sources/biotech/biotech.pdf#page=12`
 ```
 TEMPLATE: {authors}. {title}. {place}: {publisher}; {year}.
-QUOTE   : Rad se citira na sljedei nacin: svi autori, naslov rada, casopis, godina   [grep: OK]
+QUOTE   : Rad se citira na sljedeći način: svi autori, naslov rada, časopis, godina   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute formatirani primjer daju ISKLJUCIVO za clanak u casopisu; oblik za knjigu je izveden iz iste NPG-Vancouver numericke konvencije (autori 'Prezime II', naslov, mjesto: izdavac; godina). Izvor ga ne egzemplificira, potvrditi ili oboriti pri verifikaciji.
 ```
@@ -28,7 +28,7 @@ NAPOMENA: Upute formatirani primjer daju ISKLJUCIVO za clanak u casopisu; oblik 
 Otvori PDF: `data/sources/biotech/biotech.pdf#page=12`
 ```
 TEMPLATE: {authors}. {title}. U: {editor}, ur. {container}. {place}: {publisher}; {year}[[. str. {pages}]].
-QUOTE   : Rad se citira na sljedei nacin: svi autori, naslov rada, casopis, godina   [grep: OK]
+QUOTE   : Rad se citira na sljedeći način: svi autori, naslov rada, časopis, godina   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Nema primjera za poglavlje u zborniku; oblik je izveden iz NPG-Vancouver konvencije (autori poglavlja, naslov, U: urednik, ur. naslov knjige, mjesto: izdavac; godina, stranice). Izvor ga ne egzemplificira, potvrditi pri verifikaciji.
 ```
@@ -37,7 +37,7 @@ NAPOMENA: Nema primjera za poglavlje u zborniku; oblik je izveden iz NPG-Vancouv
 Otvori PDF: `data/sources/biotech/biotech.pdf#page=12`
 ```
 TEMPLATE: {authors}. {title}.[[ {container}.]] Dostupno na: {url} (pristupljeno {accessed}).
-QUOTE   : Rad se citira na sljedei nacin: svi autori, naslov rada, casopis, godina   [grep: OK]
+QUOTE   : Rad se citira na sljedeći način: svi autori, naslov rada, časopis, godina   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute ne obraduju mrezne izvore; oblik i datum pristupa su izvedeni iz Vancouver konvencije za elektronicke izvore. Izvor ga ne egzemplificira, potvrditi pri verifikaciji.
 ```
@@ -46,7 +46,7 @@ NAPOMENA: Upute ne obraduju mrezne izvore; oblik i datum pristupa su izvedeni iz
 Otvori PDF: `data/sources/biotech/biotech.pdf#page=12`
 ```
 TEMPLATE: {authors}. {title} (diplomski rad). {place}: {institution}; {year}.
-QUOTE   : Rad se citira na sljedei nacin: svi autori, naslov rada, casopis, godina   [grep: OK]
+QUOTE   : Rad se citira na sljedeći način: svi autori, naslov rada, časopis, godina   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute opsirno opisuju izradu zavrsnog i diplomskog rada, ali NE obraduju citiranje takvog rada kao izvora; oblik je izveden iz Vancouver konvencije za teze (naslov [tip rada], ustanova; godina). Izvor ga ne egzemplificira, potvrditi pri verifikaciji.
 ```
@@ -55,7 +55,7 @@ NAPOMENA: Upute opsirno opisuju izradu zavrsnog i diplomskog rada, ali NE obradu
 Otvori PDF: `data/sources/biotech/biotech.pdf#page=12`
 ```
 TEMPLATE: {title}. {container}[[ {issue}]].
-QUOTE   : Rad se citira na sljedei nacin: svi autori, naslov rada, casopis, godina   [grep: OK]
+QUOTE   : Rad se citira na sljedeći način: svi autori, naslov rada, časopis, godina   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute ne obraduju propise/pravne akte kao izvore; oblik (naslov, sluzbeno glasilo, broj) je izveden iz opce hrvatske norme, ne iz izvora. Potvrditi ili oboriti pri verifikaciji.
 ```

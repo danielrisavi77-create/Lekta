@@ -1,382 +1,385 @@
-===== [unidu-povijest-upute | str. 1] =====
-1) Zavrsni rad pise se na kraju preddiplomskog studija i predstavlja samostalnu obradu odreene
-teme pod vodstvom mentora. Nacin odabira teme i mentora propisani su Pravilnikom o izradi i
-javnoj obrani zavrsnog rada na preddiplomskom studiju "Povijest Jadrana i Mediterana".
-
-2) Zavrsni rad treba imati minimalno 30 kartica teksta (kartica sadrzi 1.800 znakova s prazninama).
-Pise se koristei font Times New Roman, velicinu znakova 12 i prored 1,5. Tekst mora biti
-obostrano poravnan, a margine sa sve cetiri strane 2,5 cm.
-3) Stranice se numeriraju arapskim brojevima u donjem desnom uglu, a numeracija pocinje
-(stranica 1) od stranice na kojoj se nalazi Sadrzaj.
-
-4) Treba pisati koncizno i jasno te voditi racuna o jezicnoj ispravnosti teksta.
-
-5) Nuzno je dosljedno i besprijekorno slijediti upute za citiranje i referiranje (Upute se nalaze dalje
-u tekstu) te u svakom pogledu izbjegavati plagijat koji je kazneno djelo. Biljeske se navode kao
-fusnote i oznacavaju rednim brojevima (u MS Wordu to se obavlja automatski - Insert � Reference
-� Footnote). Ako racunalo automatski ne odredi, biljeske se pisu velicinom slova 10, s razmakom
-meu redovima 1.
-
-6) Zavrsni rad se uvezuje u tvrdi uvez i tiska u tri (3) primjerka.
-
-Sadrzaj i struktura rada:
-
-1) Zavrsni rad treba sadrzavati:
-- omot (tvrdi uvez), vanjska naslovna stranica
-- unutrasnju naslovnu stranicu na hrvatskom jeziku
-- unutrasnju naslovnu stranicu na engleskom jeziku
-- Izjava o autorstvu rada
-- sadrzaj
-
-===== [unidu-povijest-upute | str. 2] =====
-- uvod
-- tekst podijeljen u poglavlja i potpoglavlja
-- zakljucak
-- sazetak na hrvatskom jeziku s kljucnim rijecima
-- sazetak na engleskom jeziku s kljucnim rijecima
-- popis literature.
-
-2) Omot (tvrdi uvez) i naslovna stranica trebaju sadrzavati:
-- naziv sveucilista, naziv odjela i naziv studija
-- naslov zavrsnog rada
-- ime i prezime autora rada
-- titulu, ime i prezime mentora
-- titulu, ime i prezime komentora (ako postoji)
-- naznaku mjesta, mjeseca i godine
-
-Primjer za omot (tvrdi uvez)              Primjer za unutrasnju naslovnu                Primjer za unutrasnju naslovnu
-                                          stranicu na hrvatskom jeziku                  stranicu na engleskom jeziku
-
 ===== [unidu-povijest-upute | str. 3] =====
-disertacija, magistarskih radova, tekstova s Interneta i drugih izvora) bez navoenja izvora i autora
-navedenih radova (prema Uputama koje slijede dalje u tekstu). Svi dijelovi tuih radova moraju biti
-pravilno navedeni i citirani. Dijelovi tuih radova koji nisu korektno citirani smatraju se plagijatom,
-tj. nezakonitim prisvajanjem tueg znanstvenoga ili strucnog rada.
-Sukladno Zakonu o znanstvenoj djelatnosti i visokom obrazovanju (NN br. 94/2013), svi zavrsni
-radovi bit e objavljeni u digitalnom repozitoriju Sveucilista u Dubrovniku i Nacionalne i
-sveucilisne knjiznice u Zagrebu te e otkrivanje plagijata biti vrlo jednostavno. Otkrivanje plagijata
-rezultirat e propisanim zakonskim mjerama.
+disertacija, magistarskih radova, tekstova s Interneta i drugih izvora) bez navođenja izvora i autora
+navedenih radova (prema Uputama koje slijede dalje u tekstu). Svi dijelovi tuđih radova moraju biti
+pravilno navedeni i citirani. Dijelovi tuđih radova koji nisu korektno citirani smatraju se plagijatom,
+tj. nezakonitim prisvajanjem tuđeg znanstvenoga ili stručnog rada.
+Sukladno Zakonu o znanstvenoj djelatnosti i visokom obrazovanju (NN br. 94/2013), svi završni
+radovi bit će objavljeni u digitalnom repozitoriju Sveučilišta u Dubrovniku i Nacionalne i
+sveučilišne knjižnice u Zagrebu te će otkrivanje plagijata biti vrlo jednostavno. Otkrivanje plagijata
+rezultirat će propisanim zakonskim mjerama.
 
-Sukladno navedenom studenti su duzni potpisati izjavu o autorstvu rada. Izjava treba biti na stranici
-koja prethodi sadrzaju rada, izgledati kako je navedeno na sljedeem primjeru te biti vlastorucno
+Sukladno navedenom studenti su dužni potpisati izjavu o autorstvu rada. Izjava treba biti na stranici
+koja prethodi sadržaju rada, izgledati kako je navedeno na sljedećem primjeru te biti vlastoručno
 potpisana.
 
 Izjava o autorstvu rada:
 
-Ja, (upisati ime i prezime), izjavljujem da je moj zavrsni rad pod naslovom (upisati naslov)
-rezultat moga vlastitog rada, izraen pod strucnim vodstvom (upisati titulu, ime i prezime
+Ja, (upisati ime i prezime), izjavljujem da je moj završni rad pod naslovom (upisati naslov)
+rezultat moga vlastitog rada, izrađen pod stručnim vodstvom (upisati titulu, ime i prezime
 mentora i titulu, ime i prezime komentora, ako postoji), u sklopu preddiplomskog studija
-"Povijest Jadrana i Mediterana" na Sveucilistu u Dubrovniku. Ni jedan dio ovoga rada nije
-napisan na nedopusten nacin, tj. nije prepisan bez citiranja izvora podataka i ne krsi bilo cija
+“Povijest Jadrana i Mediterana” na Sveučilištu u Dubrovniku. Ni jedan dio ovoga rada nije
+napisan na nedopušten način, tj. nije prepisan bez citiranja izvora podataka i ne krši bilo čija
 autorska prava.
 
                                                           __________________________________
                                                                              Ime prezime
 
-                                                          (Upisati ime i prezime te vlastorucno
+                                                          (Upisati ime i prezime te vlastoručno
                                                           potpisati u tiskanom primjerku rada)
 
-4) Sadrzaj prikazuje strukturu rada, odnosno popis poglavlja i potpoglavlja, te oznaku broja stranice
-na kojoj pojedini dio rada pocinje. Dijelovi rada (poglavlja i potpoglavlja) oznacavaju se arapskim
+4) Sadržaj prikazuje strukturu rada, odnosno popis poglavlja i potpoglavlja, te oznaku broja stranice
+na kojoj pojedini dio rada počinje. Dijelovi rada (poglavlja i potpoglavlja) označavaju se arapskim
 rednim brojevima i to tako da glavno poglavlje ima samo jedan broj (1., 2., 3.), a da se dijelovima
-unutar glavnog poglavlja (i/ili potpoglavlja) dodaju brojevi odvojeni tockom (tako se, primjerice,
-
-===== [unidu-povijest-upute | str. 4] =====
-unutar poglavlja 1. nalaze potpoglavlja 1.1., 1.2., 1.3., 1.4., ili unutar potpoglavlja 1.2. dijelovi
-potpoglavlja 1.2.1., 1.2.2., 1.2.3. itd.).
-Primjer izgleda sadrzaja:
-
-NAPOMENA: MS Word automatski izrauje sadrzaj ako se poglavlja i potpoglavlja pravilno
-oznace stilovima (Reference  Tablica sadrzaja).
-5) U Uvodu je potrebno sazeto definirati tematiku, tj. predmet istrazivanja te naznaciti hipotezu,
-ciljeve i metodologiju rada.
-6) Kroz smisleno podijeljena i jasno strukturirana poglavlja i potpoglavlja iznose se glavna obiljezja
-teme, razrauje rasprava i donose zakljucci o odabranoj tematici.
-7) Zakljucak je sazeta rekapitulacija najvaznijih spoznaja do kojih se doslo u obradi teme.
-8) Nakon Zakljucka slijede sazeci na hrvatskom i engleskom jeziku (Summary). Pozeljan opseg
-sazetka je do 1.500 znakova, tj. pola do jedne kartice teksta (kartica sadrzi 1.800 znakova).
-
-                                                                                                                        4
-
-===== [unidu-povijest-upute | str. 5] =====
-9) Popis koristene literature nalazi se na kraju zavrsnog rada, nakon zakljucka. Pise se abecednim
-redom (prema prezimenu autora, a ne postoji li autor ili urednik, prema prvoj rijeci naslova) bez
-rednih brojeva ispred. Navode se samo ona djela koja je autor zavrsnog rada koristio pri izradi rada.
-Literatura citirana u tekstu treba biti navedena u popisu literature i obratno.
-Slike, ilustracije, tablice i grafikoni u zavrsnom radu
-Sve se ilustracije, slike, tablice, grafikoni, crtezi, zemljovidi, sheme i sl. inkorporiraju u tekst
-zavrsnog rada. Svaku sliku ili ilustraciju treba oznaciti odgovarajuim rednim brojem i naslovom.
-Naslov mora ukratko sadrzavati odgovor na pitanja sto se ilustracijom zeli pokazati a navodi se
-ispod slike/ilustracije. Osim naslova, potrebno je iza naslova u produzetku (u zagradama), naznaciti
-izvor odakle je slika/ilustracija preuzeta (vidi primjer u nastavku).
-Redni broj i naslov tablice ili grafikona navodi se iznad tablice/grafikona, dok se izvor navodi ispod
-tablice ili grafikona (vidi primjer u nastavku).
-Primjer � slika ili ilustracija:
-
-   Slika 1: Prijepis krstenja Ivana Boskovia iz matice krstenih (Acta Min. Cons. sv. 19, f. 256v.)
+unutar glavnog poglavlja (i/ili potpoglavlja) dodaju brojevi odvojeni točkom (tako se, primjerice,
 
 ===== [unidu-povijest-upute | str. 6] =====
-Primjer � tablica i grafikon:
+Primjer – tablica i grafikon:
 
-UPUTE ZA NAVOENJE BIBLIOGRAFSKIH JEDINICA U POPISU LITERATURE:
-Knjiga (bibliografska jedinica treba sadrzavati):
+UPUTE ZA NAVOĐENJE BIBLIOGRAFSKIH JEDINICA U POPISU LITERATURE:
+Knjiga (bibliografska jedinica treba sadržavati):
 1) prezime i ime autora/koautora
 2) naslov knjige (u kurzivu)
 3) mjesto izdanja
-4) izdavac
+4) izdavač
 5) godinu izdanja
 
                                                                                                                         6
 
 ===== [unidu-povijest-upute | str. 7] =====
 Primjer:
-        Vekari, Nenad. Stanovnistvo poluotoka Peljesca. Svezak 1. Dubrovnik: Zavod za povijesne
+        Vekarić, Nenad. Stanovništvo poluotoka Pelješca. Svezak 1. Dubrovnik: Zavod za povijesne
         znanosti HAZU u Dubrovniku, 1992.
 
-Rad u casopisu (bibliografska jedinica treba sadrzavati):
+Rad u časopisu (bibliografska jedinica treba sadržavati):
 1) prezime i ime autora/koautora
-2) naslov rada (�u navodnicima�)
-3) naslov casopisa (u kurzivu)
-4) godiste (volumen) + broj unutar godista (ako postoji)
+2) naslov rada (»u navodnicima«)
+3) naslov časopisa (u kurzivu)
+4) godište (volumen) + broj unutar godišta (ako postoji)
 5) godina izdanja
-6) pocetna i posljednja stranica rada
+6) početna i posljednja stranica rada
 
 Primjer:
-        Vekari, Nenad. �Sud Janjinske kapetanije.� Anali Zavoda za povijesne znanosti HAZU u
+        Vekarić, Nenad. »Sud Janjinske kapetanije.« Anali Zavoda za povijesne znanosti HAZU u
         Dubrovniku 27 (1989): 133-147.
 
-Poglavlje u knjizi ili zborniku (bibliografska jedinica treba sadrzavati):
+Poglavlje u knjizi ili zborniku (bibliografska jedinica treba sadržavati):
 1) prezime i ime autora/koautora
-2) naslov rada (�u navodnicima�)
+2) naslov rada (»u navodnicima«)
 3) naslov knjige ili zbornika (u kurzivu)
 4) urednik
 5) mjesto izdanja
-6) izdavac
+6) izdavač
 7) godina izdanja
-8) pocetna i posljednja stranica rada
+8) početna i posljednja stranica rada
 
 Primjer:
-        Marinovi, Ante. �Iz proslosti poluotoka Peljesca - Bratovstina Sv. Julijana i Martina u
-        Zuljani iz XVI stoljea.�, u: Beritiev zbornik, ur. Vjekoslav Cvitanovi. Dubrovnik:
+        Marinović, Ante. »Iz prošlosti poluotoka Pelješca - Bratovština Sv. Julijana i Martina u
+        Žuljani iz XVI stoljeća.«, u: Beritićev zbornik, ur. Vjekoslav Cvitanović. Dubrovnik:
 
 ===== [unidu-povijest-upute | str. 8] =====
-identicna i slicno. Ako su ta izdanja ista, tada nije potrebno naglasiti radi li se o tiskanom ili
-elektronickom izdanju.
+identična i slično. Ako su ta izdanja ista, tada nije potrebno naglasiti radi li se o tiskanom ili
+elektroničkom izdanju.
 
-        Za tekstove koji postoje samo u elektronickom obliku (u html formatu) i nisu pripremljeni u
-obliku koji podrazava tiskanu formu, treba oznaciti bar ime autora, naslov rada, ime elektronicke
-publikacije s uputom na mreznu stranicu i datum (mjesec i godina) pristupa.
+        Za tekstove koji postoje samo u elektroničkom obliku (u html formatu) i nisu pripremljeni u
+obliku koji podražava tiskanu formu, treba označiti bar ime autora, naslov rada, ime elektroničke
+publikacije s uputom na mrežnu stranicu i datum (mjesec i godina) pristupa.
 
 Primjer:
-        Alfani, Guido. �I padrini: patroni o parenti? Tendenzedifondo nella selezione dei parent
-        ispirituali in Europa (XV-XX secolo).� Nuevo Mundo Mundos Nuevos, Colloques 2008.
+        Alfani, Guido. »I padrini: patroni o parenti? Tendenzedifondo nella selezione dei parent
+        ispirituali in Europa (XV-XX secolo).« Nuevo Mundo Mundos Nuevos, Colloques 2008.
         Dostupno na: http://nuevomundo.revues.org/30172 (pristup: lipanj 2016).
 
-NAPOMENA: Wikipedija i slicne slobodne enciklopedije s Interneta ne preporucuju se citirati jer
-one nisu znanstvena djela nego ,,otvorene" enciklopedije koje moze pisati tko god hoe bez strucne
+NAPOMENA: Wikipedija i slične slobodne enciklopedije s Interneta ne preporučuju se citirati jer
+one nisu znanstvena djela nego „otvorene“ enciklopedije koje može pisati tko god hoće bez stručne
 recenzije i objektivnosti.
 
                                                                                                                         8
 
 ===== [unidu-povijest-upute | str. 9] =====
-UPUTE ZA CITIRANJE I REFERIRANJE U BILJESKAMA (FUSNOTAMA):
+UPUTE ZA CITIRANJE I REFERIRANJE U BILJEŠKAMA (FUSNOTAMA):
 
-1) Obicno je prvi citat jednak kao i bibliografska jedinica u popisu literature. Razlika je jedino u
-tome sto u biljesci prvo dolazi ime pa prezime, a u popisu literature je zbog abecednog reda
-obrnuto. Takoer, potrebno je navesti citirane stranice.
+1) Obično je prvi citat jednak kao i bibliografska jedinica u popisu literature. Razlika je jedino u
+tome što u bilješci prvo dolazi ime pa prezime, a u popisu literature je zbog abecednog reda
+obrnuto. Također, potrebno je navesti citirane stranice.
 
 Primjeri:
-        - knjiga (kod prvog citiranja): Nenad Vekari, Stanovnistvo poluotoka Peljesca. Svezak. 1.
+        - knjiga (kod prvog citiranja): Nenad Vekarić, Stanovništvo poluotoka Pelješca. Svezak. 1.
         Dubrovnik: Zavod za povijesne znanosti HAZU u Dubrovniku, 1992: 5.
-        - clanak (kod prvog citiranja): Nenad Vekari, �Sud Janjinske kapetanije.� Anali Zavoda za
+        - članak (kod prvog citiranja): Nenad Vekarić, »Sud Janjinske kapetanije.« Anali Zavoda za
         povijesne znanosti HAZU u Dubrovniku 27 (1989): 133.
 
-2) Kod drugog i svakog sljedeeg citata navodi se samo inicijal imena + prezime + naslov (koji
-moze biti kraen ako je predug) + broj stranice.
+2) Kod drugog i svakog sljedećeg citata navodi se samo inicijal imena + prezime + naslov (koji
+može biti kraćen ako je predug) + broj stranice.
 
 Primjeri:
-        - knjiga (svako sljedee citiranje): N. Vekari, Stanovnistvo poluotoka Peljesca. Sv. 1: 5.
-        - clanak (svako sljedee citiranje): N. Vekari, �Sud Janjinske kapetanije.�: 134.
+        - knjiga (svako sljedeće citiranje): N. Vekarić, Stanovništvo poluotoka Pelješca. Sv. 1: 5.
+        - članak (svako sljedeće citiranje): N. Vekarić, »Sud Janjinske kapetanije.«: 134.
 
-3) Ako se u biljesci citira vise radova, obicno se poredaju od starijeg prema mlaemu, tako da se
-ogleda kronologija obrade problema. Radovi se odvajaju tocka-zarezom.
+3) Ako se u bilješci citira više radova, obično se poredaju od starijeg prema mlađemu, tako da se
+ogleda kronologija obrade problema. Radovi se odvajaju točka-zarezom.
 
 Primjer:
-        - N. Vekari, �Sud Janjinske kapetanije.�: 134; N. Vekari, Stanovnistvo poluotoka
-             Peljesca. Sv. 1: 5.
+        - N. Vekarić, »Sud Janjinske kapetanije.«: 134; N. Vekarić, Stanovništvo poluotoka
+             Pelješca. Sv. 1: 5.
 
 4) Kod citiranja arhivskih vrela prvi citat je jednak kao i bibliografska jedinica + folij (ako je
-naznacen). U toj biljesci se oznacava i nacin kako e se kasnije to arhivsko vrelo citirati u kraenom
-obliku. Ako su u grai oznaceni listovi (folije), ispred brojke se stavlja f. (tj. ff. za mnozinu), te
-nakon brojke lista bez razmaka oznake ,,r" (recto) za lice, odnosno ,,v" (verso) za poleinu.
+naznačen). U toj bilješci se označava i način kako će se kasnije to arhivsko vrelo citirati u kraćenom
+obliku. Ako su u građi označeni listovi (folije), ispred brojke se stavlja f. (tj. ff. za množinu), te
+nakon brojke lista bez razmaka oznake „r“ (recto) za lice, odnosno „v“ (verso) za poleđinu.
 
 Primjer:   kod prvog citiranja: Acta Minoris Consilii (dalje: Acta Min. Cons.) ser. 5, sv. 19, f. 256v,
-        -  (Drzavni arhiv u Dubrovniku).
+        -  (Državni arhiv u Dubrovniku).
 
-                                                                                                   9
+                                                                                                     9
+
+===== [unidu-komunikologija-upute-2025 | str. 7] =====
+odlomke smisleno (sadržajno) i uredno odvojene.
+
+          Diplomski rad piše se na računalu. Uz primjerenu sadržajnu strukturu, rad mora biti
+ korektan u pravopisnom i gramatičkom smislu (koristi se standardni književni hrvatski jezik).
+
+          Tekst mora biti obrađen u nekom od tekstualnih editora (preporuča se MS Word) na
+ slijedeći način:
+
+              ▪ veličina slova u tekstu (font size) treba biti 12 točaka, dok naslovi i podnaslovi
+                   trebaju biti nešto veći (14 ili 16 točaka),
+
+              ▪ prored (line spacing) treba biti 1,5 u glavnom tekstu rada, jednostruki (1) u
+                   bilješkama (fusnotama),
+
+              ▪ vrsta slova (font) može biti Times New Roman ili Arial,
+              ▪ tekst treba biti formatiran u blok (justify) s uvučenim prvim retkom odlomka,
+              ▪ margine trebaju biti po 2,5 centimetara sa svake strane (gore/dolje, lijevo/desno),
+              ▪ stranice u radu treba označiti rednim (arapskim) brojevima. Preporučuje se da se
+
+                   brojevi stranica stavljaju u donji desni kut. Broj se ne stavlja na naslovnicu, na
+                   prvu stranicu ni na stranicu na kojoj je naveden sadržaj.
+
+          Tekst diplomskog rada treba biti ispisan na standardnom bijelom papiru A4 formata
+ (kopirni papir) i tvrdo ukoričen (u korice tamno plave ili tamno crvene boje sa zlatno ili bijelo
+ otisnutim slovima).
+
+          6. Citiranje i pozivne bilješke
+
+          Citiranje u znanstvenim i stručnim radovima služi da se čitatelj upozna s izvorima
+ kojima se autor služio pri izradi svog rada, te da se na brz i pouzdan način omogući pronalaženje
+ citiranog mjesta. Citat također omogućuje razlikovanje između studentovih misli i misli drugih
+ autora. Stoga, svako navođenje tuđih misli i ideja koje se koristi u izradi diplomskog rada treba
+ biti propisano označeno (drukčije, označava plagijat).
+
+          Pozivne bilješke se smještaju se na dno stranice (fusnote) ispod glavnog teksta i posebno
+ su označene (obično su ispisane manjim fontom od onog kojim je pisan tekst). U njima se
+ isključivo navode autorove kratke napomene vezane uz tekst ili dodatna pojašnjenja. Fusnote
+ se označavaju brojkama (u MS Wordu to se obavlja automatski).
+
+        Studenti trebaju koristiti harvardski stil citiranja literature i to u: citatima u tekstu,
+ pozivnim bilješkama ispod teksta (tzv. fusnotama) i pri navođenju korištenih izvora u popisu
+ literature. Na kraju diplomskog rada obvezno se navodi popis literature korištene pri izradi i/ili
+ citirane u diplomskom radu. Popis literature navodi se abecednim redom (prema prezimenu
+ autora). U popisu literature nije potrebno odvajati knjige od znanstvenih članaka i web izvora.
+
+        U znanstvenom i stručno pisanom radu mora se odvojiti autorov tekst od tuđeg teksta.
+Od drugog teksta se preuzimaju definicije pojmova, znanstvene činjenice, podaci, stavovi,
+informacije, ilustracije itd. ali se oni moraju jasno naznačiti citiranjem. To podrazumijeva „od
+riječi do riječi pismeno ili usmeno navođenje tuđih dijelova teksta ili riječi koji se mogu
+izvorno provjeriti“ (Zelenika, 2000, 481).
+
+===== [unidu-povijest-upute | str. 1] =====
+1) Završni rad piše se na kraju preddiplomskog studija i predstavlja samostalnu obradu određene
+teme pod vodstvom mentora. Način odabira teme i mentora propisani su Pravilnikom o izradi i
+javnoj obrani završnog rada na preddiplomskom studiju “Povijest Jadrana i Mediterana”.
+
+2) Završni rad treba imati minimalno 30 kartica teksta (kartica sadrži 1.800 znakova s prazninama).
+Piše se koristeći font Times New Roman, veličinu znakova 12 i prored 1,5. Tekst mora biti
+obostrano poravnan, a margine sa sve četiri strane 2,5 cm.
+3) Stranice se numeriraju arapskim brojevima u donjem desnom uglu, a numeracija počinje
+(stranica 1) od stranice na kojoj se nalazi Sadržaj.
+
+4) Treba pisati koncizno i jasno te voditi računa o jezičnoj ispravnosti teksta.
+
+5) Nužno je dosljedno i besprijekorno slijediti upute za citiranje i referiranje (Upute se nalaze dalje
+u tekstu) te u svakom pogledu izbjegavati plagijat koji je kazneno djelo. Bilješke se navode kao
+fusnote i označavaju rednim brojevima (u MS Wordu to se obavlja automatski - Insert – Reference
+– Footnote). Ako računalo automatski ne odredi, bilješke se pišu veličinom slova 10, s razmakom
+među redovima 1.
+
+6) Završni rad se uvezuje u tvrdi uvez i tiska u tri (3) primjerka.
+
+Sadržaj i struktura rada:
+
+1) Završni rad treba sadržavati:
+- omot (tvrdi uvez), vanjska naslovna stranica
+- unutrašnju naslovnu stranicu na hrvatskom jeziku
+- unutrašnju naslovnu stranicu na engleskom jeziku
+- Izjava o autorstvu rada
+- sadržaj
+
+===== [unidu-povijest-upute | str. 2] =====
+- uvod
+- tekst podijeljen u poglavlja i potpoglavlja
+- zaključak
+- sažetak na hrvatskom jeziku s ključnim riječima
+- sažetak na engleskom jeziku s ključnim riječima
+- popis literature.
+
+2) Omot (tvrdi uvez) i naslovna stranica trebaju sadržavati:
+- naziv sveučilišta, naziv odjela i naziv studija
+- naslov završnog rada
+- ime i prezime autora rada
+- titulu, ime i prezime mentora
+- titulu, ime i prezime komentora (ako postoji)
+- naznaku mjesta, mjeseca i godine
+
+Primjer za omot (tvrdi uvez)              Primjer za unutrašnju naslovnu                Primjer za unutrašnju naslovnu
+                                          stranicu na hrvatskom jeziku                  stranicu na engleskom jeziku
+
+===== [unidu-povijest-upute | str. 4] =====
+unutar poglavlja 1. nalaze potpoglavlja 1.1., 1.2., 1.3., 1.4., ili unutar potpoglavlja 1.2. dijelovi
+potpoglavlja 1.2.1., 1.2.2., 1.2.3. itd.).
+Primjer izgleda sadržaja:
+
+NAPOMENA: MS Word automatski izrađuje sadržaj ako se poglavlja i potpoglavlja pravilno
+označe stilovima (Reference → Tablica sadržaja).
+5) U Uvodu je potrebno sažeto definirati tematiku, tj. predmet istraživanja te naznačiti hipotezu,
+ciljeve i metodologiju rada.
+6) Kroz smisleno podijeljena i jasno strukturirana poglavlja i potpoglavlja iznose se glavna obilježja
+teme, razrađuje rasprava i donose zaključci o odabranoj tematici.
+7) Zaključak je sažeta rekapitulacija najvažnijih spoznaja do kojih se došlo u obradi teme.
+8) Nakon Zaključka slijede sažeci na hrvatskom i engleskom jeziku (Summary). Poželjan opseg
+sažetka je do 1.500 znakova, tj. pola do jedne kartice teksta (kartica sadrži 1.800 znakova).
+
+                                                                                                                        4
+
+===== [unidu-povijest-upute | str. 5] =====
+9) Popis korištene literature nalazi se na kraju završnog rada, nakon zaključka. Piše se abecednim
+redom (prema prezimenu autora, a ne postoji li autor ili urednik, prema prvoj riječi naslova) bez
+rednih brojeva ispred. Navode se samo ona djela koja je autor završnog rada koristio pri izradi rada.
+Literatura citirana u tekstu treba biti navedena u popisu literature i obratno.
+Slike, ilustracije, tablice i grafikoni u završnom radu
+Sve se ilustracije, slike, tablice, grafikoni, crteži, zemljovidi, sheme i sl. inkorporiraju u tekst
+završnog rada. Svaku sliku ili ilustraciju treba označiti odgovarajućim rednim brojem i naslovom.
+Naslov mora ukratko sadržavati odgovor na pitanja što se ilustracijom želi pokazati a navodi se
+ispod slike/ilustracije. Osim naslova, potrebno je iza naslova u produžetku (u zagradama), naznačiti
+izvor odakle je slika/ilustracija preuzeta (vidi primjer u nastavku).
+Redni broj i naslov tablice ili grafikona navodi se iznad tablice/grafikona, dok se izvor navodi ispod
+tablice ili grafikona (vidi primjer u nastavku).
+Primjer – slika ili ilustracija:
+
+   Slika 1: Prijepis krštenja Ivana Boškovića iz matice krštenih (Acta Min. Cons. sv. 19, f. 256v.)
 
 ===== [unidu-povijest-upute | str. 10] =====
-- kod sljedeeg citiranja: Acta Min. Cons. sv. 19, f. 256v.
-5) Radovi u koautorstvu - ako je vise koautora (obicno do cetiri) navesti sve (primjer: Niko
-Kapetani i Nenad Vekari), a ako ih je vise od cetiri, navesti prvoga i dodati oznaku ,,i dr."
-(primjer: Nenad Vekari i dr.).
-Upute sastavili: doc. dr. sc. Irena Ipsi i
+- kod sljedećeg citiranja: Acta Min. Cons. sv. 19, f. 256v.
+5) Radovi u koautorstvu - ako je više koautora (obično do četiri) navesti sve (primjer: Niko
+Kapetanić i Nenad Vekarić), a ako ih je više od četiri, navesti prvoga i dodati oznaku „i dr.“
+(primjer: Nenad Vekarić i dr.).
+Upute sastavili: doc. dr. sc. Irena Ipšić i
 
-                     doc. dr. sc. Marinko Mari
-Dubrovnik, ozujak 2019.
+                     doc. dr. sc. Marinko Marić
+Dubrovnik, ožujak 2019.
 
                                                                                                                       10
 
 ===== [unidu-komunikologija-upute-2025 | str. 2] =====
-Sadrzaj
+Sadržaj
 
 1. O diplomskom radu                               3
 
 2. Svrha diplomskog rada                           3
 
-3. Sadrzaj i struktura diplomskog rada             3
+3. Sadržaj i struktura diplomskog rada             3
 
 4. Opseg diplomskog rada                           6
 
-5. Tehnicko oblikovanje                            6
+5. Tehničko oblikovanje                            6
 
-6. Citiranje i pozivne biljeske                    7
+6. Citiranje i pozivne bilješke                    7
 
 7. Jezik i stil pisanja                            13
 
-8. Akademska cestitost i intelektualno vlasnistvo  13
+8. Akademska čestitost i intelektualno vlasništvo  13
 
-9. Zavrsne odredbe                                 14
+9. Završne odredbe                                 14
 
 ===== [unidu-komunikologija-upute-2025 | str. 3] =====
 1. O diplomskom radu
 
-        Diplomski rad je kvalitetan strucni rad s temom iz polja informacijsko-komunikacijske
-znanosti ili srodnih disciplina u podrucju drustvenih znanosti zastupljenih u programu studija.
-On je samostalan rad u kojemu student, nakon zavrsetka svih ispita i studijskim programom
-predvienih obveza, pod vodstvom mentora obrauje odgovarajuu temu.
+        Diplomski rad je kvalitetan stručni rad s temom iz polja informacijsko-komunikacijske
+znanosti ili srodnih disciplina u području društvenih znanosti zastupljenih u programu studija.
+On je samostalan rad u kojemu student, nakon završetka svih ispita i studijskim programom
+predviđenih obveza, pod vodstvom mentora obrađuje odgovarajuću temu.
 
-        Diplomski rad ima odgovarajuu strukturu, sadrzaj, metodologiju, rezultate istrazivanja
-i zakljucke koji pokazuju da je student ovladao osnovnim znanstvenim i strucnim
+        Diplomski rad ima odgovarajuću strukturu, sadržaj, metodologiju, rezultate istraživanja
+i zaključke koji pokazuju da je student ovladao osnovnim znanstvenim i stručnim
 kategorijalnim aparatom, da ga zna primijeniti u analizi konkretnih fenomena te da je na toj
-osnovi sposoban ponuditi argumentirana objasnjenja.
+osnovi sposoban ponuditi argumentirana objašnjenja.
 
-        Zbog toga, diplomski rad obvezatno ukljucuje uporabu znanstvenoistrazivackog
-instrumentarija i odgovarajuih strucno-metodoloskih postupaka, sustavno izlaganje teme i
-obrazlozenje rezultata istrazivanja obuhvaenog diplomskim radom.
+        Zbog toga, diplomski rad obvezatno uključuje uporabu znanstvenoistraživačkog
+instrumentarija i odgovarajućih stručno-metodoloških postupaka, sustavno izlaganje teme i
+obrazloženje rezultata istraživanja obuhvaćenog diplomskim radom.
 
-        Postupak prijave teme diplomskog rada, mentorstvo, nacin izradbe i postupak obrane
+        Postupak prijave teme diplomskog rada, mentorstvo, način izradbe i postupak obrane
 diplomskog rada propisani su Pravilima o diplomskom radu na diplomskim studijima Odjela za
-komunikologiju Sveucilista u Dubrovniku.
+komunikologiju Sveučilišta u Dubrovniku.
 
         2. Svrha diplomskog rada
 
-         Svrha diplomskog rada jest da njegovom izradom i obranom student dokaze:
+         Svrha diplomskog rada jest da njegovom izradom i obranom student dokaže:
 
-              sposobnost primjene teorijskih i prakticnih znanja stecenih tijekom studija,
-              sposobnost primjene znanstvenih i istrazivackih metoda u obradi problema,
-              samostalnost i strucno znanje u rjesavanju istrazivackih problema,
-              sposobnost koristenja znanstvenom i strucnom literaturom,
-              sposobnost jasne i argumentirane prezentacije svojeg rada i stavova pred
+             ▪ sposobnost primjene teorijskih i praktičnih znanja stečenih tijekom studija,
+             ▪ sposobnost primjene znanstvenih i istraživačkih metoda u obradi problema,
+             ▪ samostalnost i stručno znanje u rješavanju istraživačkih problema,
+             ▪ sposobnost korištenja znanstvenom i stručnom literaturom,
+             ▪ sposobnost jasne i argumentirane prezentacije svojeg rada i stavova pred
 
                   publikom.
 
-        3. Sadrzaj i struktura diplomskog rada
+        3. Sadržaj i struktura diplomskog rada
 
-         Diplomski se rad sastoji od slijedeih dijelova:
+         Diplomski se rad sastoji od slijedećih dijelova:
 
           1. korica
           2. unutarnja stranica (potkorica)
-          3. sadrzaj
+          3. sadržaj
           4. predgovor (nije obvezan)
           5. uvod
           6. tekst (podijeljen u poglavlja i podpoglavlja)
-          7. zakljucak
+          7. zaključak
           8. popis literature
           9. popis tablica, slika, prikaza i priloga (ako ih ima)
-          10. sazetka (na hrvatskom i engleskom jeziku)
+          10. sažetka (na hrvatskom i engleskom jeziku)
 
-===== [unidu-komunikologija-upute-2025 | str. 5] =====
-U glavnom dijelu teksta autor:
+===== [unidu-komunikologija-upute-2025 | str. 4] =====
+Ad. 2. Na unutarnjoj stranici (potkorici) treba stajati:
 
-              iznosi sadrzaj i glavna obiljezja teme (predmet rada/istrazivanja),
-              odreuje cilj rada (mora biti realan, jasno i specificno odreen, ne preopenito,
+Sveučilište u Dubrovniku (Times New Roman 14 pt) Odjel
+za komunikologiju (Times New Roman 14 pt)
+Naslov rada (Times New Roman 18 pt)
+Diplomski rad (Times New Roman 14 pt)
+Mentor: ime i prezime mentora (Times New Roman 14 pt) Student:
+ime i prezime studenta (Times New Roman 14 pt)
+Dubrovnik, mjesec, godina (Times New Roman 14 pt)
 
-                  mora odrazavati podrucje i predmet istrazivanja, treba odgovoriti na pitanje sto
-                  istrazivanjem zelimo postii i biti jasno oblikovan/izrecen u smislu: odrediti,
-                  procijeniti, izmjeriti, analizirati, dokazati, pokazati, istraziti...),
-              postavlja istrazivacko pitanje (pitanje na koje se trazi odgovor, zbog kojeg se
-                  pristupa istrazivanju, upuuje na to sto e se, zasto i kako u radu poduzeti),
-              odreuje teorijski okvir (obvezno ukljucuje glavne teorijske pojmove i koncepte
-                  na koje se rad oslanja te odabir literature),
-              postavlja (glavne i pomone) hipoteze rada (u obliku jednoznacnih i
-                  jednodimenzionalnih tvrdnji, sadrzaj kojih treba biti izravno povezan s
+Izgled prednje korice  Izgled potkorice (unutarnje stranice)
 
-===== [unidu-komunikologija-upute-2025 | str. 6] =====
-naputak ili preporuku za budua istrazivanja.
+        Ad. 3. Sadržaj prikazuje strukturu diplomskog rada navođenjem dijelova od kojih se rad
+sastoji, te oznaku broja stranice na kojima se pojedini dijelovi diplomskog rada nalaze.
 
-         Ad. 8
+        Dijelovi (poglavlja, podpoglavlja) diplomskog rada označavaju (arapskim) brojevima i
+decimalno (najviše do četiri jedinice), tj. tako da najviši dio ima samo jedan broj (1., 2., 3.), a
+da se dijelovima unutar njega dodaju brojevi odvojeni točkom (tako se unutar dijela 1. nalaze
+dijelovi 1.1., 1.2., 1.3., 1.4. itd., a unutar dijela 1.3. dijelovi 1.3.1., 1.3.2., 1.3.3. itd.).
 
-        Sazetak diplomskog rada je kratak prikaz teme, osnovne teze (teza), metodoloskih i/ili
-istrazivackih postupaka i rezultata diplomskog rada. Tekst sazetka ne smije biti vei od 1500
-slovnih znakova. Sazetak se prilaze na hrvatskom i na engleskom jeziku.
+===== [unidu-komunikologija-upute-zavrsni | str. 9] =====
+Citiranje propisa (zakoni, podzakonski akti itd.)
 
-        4. Opseg diplomskog rada
+Naziv zakona (Naziv službenog glasila, broj i godina objave u službenom glasilu te sve
+eventualne izmjene i dopune).
 
-        Ovisno o temi, broju i vrsti prikaza i priloga, preporuca se opseg od 50 do 70 stranica
-(od najmanje 75 000 do najvise 105 000 slovnih znakova teksta). U naznaceni opseg nisu
-ukljuceni popisi literature, tablica, slika i priloga te sazetci.
+Zakon o blagdanima, spomendanima i neradnim danima u Republici Hrvatskoj (NN 3/96,
+96/01, 13/02 i 136/02 - pročišćeni tekst, 112/05).
 
-        5. Tehnicko oblikovanje
+Mrežna stranica:
 
-===== [unidu-komunikologija-upute-2025 | str. 7] =====
-odlomke smisleno (sadrzajno) i uredno odvojene.
-
-          Diplomski rad pise se na racunalu. Uz primjerenu sadrzajnu strukturu, rad mora biti
- korektan u pravopisnom i gramatickom smislu (koristi se standardni knjizevni hrvatski jezik).
-
-          Tekst mora biti obraen u nekom od tekstualnih editora (preporuca se MS Word) na
- slijedei nacin:
-
-               velicina slova u tekstu (font size) treba biti 12 tocaka, dok naslovi i podnaslovi
-                   trebaju biti nesto vei (14 ili 16 tocaka),
-
-               prored (line spacing) treba biti 1,5 u glavnom tekstu rada, jednostruki (1) u
-                   biljeskama (fusnotama),
-
-               vrsta slova (font) moze biti Times New Roman ili Arial,
-               tekst treba biti formatiran u blok (justify) s uvucenim prvim retkom odlomka,
-               margine trebaju biti po 2,5 centimetara sa svake strane (gore/dolje, lijevo/desno),
-               stranice u radu treba oznaciti rednim (arapskim) brojevima. Preporucuje se da se
-
-                   brojevi stranica stavljaju u donji desni kut. Broj se ne stavlja na naslovnicu, na
-                   prvu stranicu ni na stranicu na kojoj je naveden sadrzaj.
-
-          Tekst diplomskog rada treba biti ispisan na standardnom bijelom papiru A4 formata
- (kopirni papir) i tvrdo ukoricen (u korice tamno plave ili tamno crvene boje sa zlatno ili bijelo
- otisnutim slovima).
-
-          6. Citiranje i pozivne biljeske
-
-          Citiranje u znanstvenim i strucnim radovima sluzi da se citatelj upozna s izvorima
- kojima se autor sluzio pri izradi svog rada, te da se na brz i pouzdan nacin omogui pronalazenje
- citiranog mjesta. Citat takoer omoguuje razlikovanje izmeu studentovih misli i misli drugih
- autora. Stoga, svako navoenje tuih misli i ideja koje se koristi u izradi diplomskog rada treba
- biti propisano oznaceno (drukcije, oznacava plagijat).
-
-          Pozivne biljeske se smjestaju se na dno stranice (fusnote) ispod glavnog teksta i posebno
- su oznacene (obicno su ispisane manjim fontom od onog kojim je pisan tekst). U njima se
- iskljucivo navode autorove kratke napomene vezane uz tekst ili dodatna pojasnjenja. Fusnote
- se oznacavaju brojkama (u MS Wordu to se obavlja automatski).
-
-        Studenti trebaju koristiti harvardski stil citiranja literature i to u: citatima u tekstu,
- pozivnim biljeskama ispod teksta (tzv. fusnotama) i pri navoenju koristenih izvora u popisu
- literature. Na kraju diplomskog rada obvezno se navodi popis literature koristene pri izradi i/ili
- citirane u diplomskom radu. Popis literature navodi se abecednim redom (prema prezimenu
- autora). U popisu literature nije potrebno odvajati knjige od znanstvenih clanaka i web izvora.
-
-        U znanstvenom i strucno pisanom radu mora se odvojiti autorov tekst od tueg teksta.
-Od drugog teksta se preuzimaju definicije pojmova, znanstvene cinjenice, podaci, stavovi,
-informacije, ilustracije itd. ali se oni moraju jasno naznaciti citiranjem. To podrazumijeva ,,od
-rijeci do rijeci pismeno ili usmeno navoenje tuih dijelova teksta ili rijeci koji se mogu
-izvorno provjeriti" (Zelenika, 2000, 481).
+     S autorom:
+Prezime, inicijal(i) autora (godina objave). Naslov. Naziv mrežne stranice. Dostupno na: URL
+(pristup: datum).

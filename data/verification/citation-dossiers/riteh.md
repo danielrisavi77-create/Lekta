@@ -8,7 +8,7 @@ Snapshot: `data/sources/riteh/riteh.pdf` (hash `017dda8a9896...`)
 Otvori PDF: `data/sources/riteh/riteh.pdf#page=7`
 ```
 TEMPLATE: {authors}: "{title}", {publisher}, {place}, {year}.
-QUOTE   : [1] Poor, H.: "An Introduction to Signal Detection and Estimation", Springer-Verlag, New York,   [grep: OK]
+QUOTE   : [1] Poor, H.: “An Introduction to Signal Detection and Estimation”, Springer-Verlag, New York,   [grep: OK]
 IZVOR   : Poor, H.: "An Introduction to Signal Detection and Estimation", Springer-Verlag, New York, 1985.
 RENDER  : Poor, H.: "An Introduction to Signal Detection and Estimation", Springer-Verlag, New York, 1985.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -19,7 +19,7 @@ NAPOMENA: Autori family-first s inicijalima (Prezime, I.), vise autora odvojeno 
 Otvori PDF: `data/sources/riteh/riteh.pdf#page=7`
 ```
 TEMPLATE: {authors}: "{title}", {container}[[, Vol. {volume}]][[, No. {issue}]][[, pp. {pages}]], {year}.
-QUOTE   : Frequency Signals", IEEE Trans. Ind. Electron., Vol. 44, No. 2, pp. 258-264, 1997.   [grep: OK]
+QUOTE   : Frequency Signals”, IEEE Trans. Ind. Electron., Vol. 44, No. 2, pp. 258-264, 1997.   [grep: OK]
 IZVOR   : Vainio, O.; Ovaska, S. J.: "Multistage Adaptive Filters for In-Phase Processing of Line-Frequency Signals", IEEE Trans. Ind. Electron., Vol. 44, No. 2, pp. 258-264, 1997.
 RENDER  : Vainio, O.; Ovaska, S. J.: "Multistage Adaptive Filters for In-Phase Processing of Line-Frequency Signals", IEEE Trans. Ind. Electron., Vol. 44, No. 2, pp. 258-264, 1997.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -30,7 +30,7 @@ NAPOMENA: Naziv casopisa, zatim Vol. (godiste), No. (broj), pp. (raspon stranica
 Otvori PDF: `data/sources/riteh/riteh.pdf#page=7`
 ```
 TEMPLATE: {authors}: "{title}", s Interneta, {url}, {accessed}.
-QUOTE   : [4] Ally, M.: "Osnovne obrazovne teorije online ucenja", s Interneta,   [grep: OK]
+QUOTE   : [4] Ally, M.: “Osnovne obrazovne teorije online učenja”, s Interneta,   [grep: OK]
 IZVOR   : Ally, M.: "Osnovne obrazovne teorije online ucenja", s Interneta, http://www.carnet.hr/casopis/38/clanci/3, 11. rujna 2006.
 RENDER  : Ally, M.: "Osnovne obrazovne teorije online ucenja", s Interneta, http://www.carnet.hr/casopis/38/clanci/3, 11. rujna 2006.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -41,7 +41,7 @@ NAPOMENA: Uz internetsku adresu obvezno se navode autor citiranog materijala i t
 Otvori PDF: `data/sources/riteh/riteh.pdf#page=7`
 ```
 TEMPLATE: {authors}: "{title}", doktorska disertacija, {institution}, {place}, {year}.
-QUOTE   : [3] Williams, J.: "Narrow-band Analyzer", doktorska disertacija, Dept. Elect. Eng., Harvard Univ.,   [grep: OK]
+QUOTE   : [3] Williams, J.: “Narrow-band Analyzer”, doktorska disertacija, Dept. Elect. Eng., Harvard Univ.,   [grep: OK]
 IZVOR   : Williams, J.: "Narrow-band Analyzer", doktorska disertacija, Dept. Elect. Eng., Harvard Univ., Cambridge, MA, 1993.
 RENDER  : Williams, J.: "Narrow-band Analyzer", doktorska disertacija, Dept. Elect. Eng., Harvard Univ., Cambridge, MA, 1993.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -52,7 +52,7 @@ NAPOMENA: Jedini primjer studentskog/kvalifikacijskog rada u izvoru je doktorska
 Otvori PDF: `data/sources/riteh/riteh.pdf#page=6`
 ```
 TEMPLATE: {authors}: "{title}", u: {editor} (ur.), {container}, {publisher}, {place}, {year}.
-QUOTE   : [1] Prezime1, I1.; Prezime2, I2.; Prezime3, I3.: "Naslov knjige", Izdavac, mjesto izdavanja, godina.   [grep: OK]
+QUOTE   : [1] Prezime1, I1.; Prezime2, I2.; Prezime3, I3.: “Naslov knjige“, Izdavač, mjesto izdavanja, godina.   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor ne daje primjer poglavlja u uredjenoj knjizi/zborniku. Predlozak je izveden iz oblika za knjigu ubacivanjem urednika 'u: {editor} (ur.),' i naziva zbornika; potvrditi ili oboriti pri verifikaciji.
 ```
@@ -61,7 +61,7 @@ NAPOMENA: Izvor ne daje primjer poglavlja u uredjenoj knjizi/zborniku. Predlozak
 Otvori PDF: `data/sources/riteh/riteh.pdf#page=7`
 ```
 TEMPLATE: {title}, {container}[[, br. {issue}]], {year}.
-QUOTE   : Postoje razliciti izvori informacija, a kao literaturu je najbolje koristiti strucne knjige i   [grep: OK]
+QUOTE   : Postoje različiti izvori informacija, a kao literaturu je najbolje koristiti stručne knjige i   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute (tehnicki fakultet) ne obradjuju citiranje propisa/pravnih akata; izvor pokriva samo knjige, clanke i internetske izvore. Predlozak je izveden iz uobicajenog hrvatskog oblika (naslov, glasilo, broj, godina); potvrditi ili oboriti pri verifikaciji.
 ```

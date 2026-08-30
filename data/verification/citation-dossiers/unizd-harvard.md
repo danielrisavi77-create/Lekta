@@ -8,7 +8,7 @@ Snapshot: `data/sources/unizd/unizd-turizam-upute.pdf` (hash `96d4895ec69f...`)
 Otvori PDF: `data/sources/unizd/unizd-turizam-upute.pdf#page=9`
 ```
 PIN     : izvor propisuje stil "harvard" -> format ostaje obiteljski motor
-QUOTE   : americki ili Harvardski sustav   [grep: OK]
+QUOTE   : američki ili Harvardski sustav   [grep: OK]
 ```
 
 ## Verifikacija

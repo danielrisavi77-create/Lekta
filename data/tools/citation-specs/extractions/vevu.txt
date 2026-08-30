@@ -1,91 +1,14 @@
-===== [vevu-upute-zavrsni | str. 4] =====
-Prilog 4/4
-
-Izjava studenta/ice o samostalnoj izradi rada, uz zahvalu za primljenu strucnu pomo
-institucijama, osobama i mentoru. Prvi odlomak Izjave je obvezan, a ostatak teksta Izjave je
-predlozak koji mozete izostaviti, izmijeniti i/ili dopuniti sukladno svojim interesima. Bez
-obzira na velicinu ovoga teksta, izjava se pise na posebnom listu na sredini stranice.
-
-                                          IZJAVA
-
-         Izjavljujem da sam zavrsni rad izradio/izradila samostalno, koristei se vlastitim
-znanjem, literaturom i provedenim istrazivanjima/eksperimentima.
-
-         U radu mi je pomagao savjetima i uputama voditelj zavrsnog rada (npr. prof. dr. sc.
-Ivan Ivi) te mu iskreno zahvaljujem...
-
-            Isto tako zahvaljujem i asistentima mr. sc. Antunu Antunoviu i mr. sc. Mariji
-Marijanovi... na pomoi u izradi i oblikovanju konacnog izgleda zavrsnog rada....
-
-         Tvrtka XYZ d.d. omoguila mi je provedbu istrazivackog/eksperimentalnog dijela
-rada (...pristup podacima o poslovanju poduzeu...) te zahvaljujem direktoru... i
-suradnicima...
-
-                                                                                  (Potpis pristupnika/ice)
-
-===== [vevu-upute-zavrsni | str. 8] =====
-istrazivanja, izvode povezanosti ili nepovezanosti, isticu iznimke. Potrebno je ukratko
-sazeti znacenje rezultata i povezati sa pitanjima iz uvoda odnosno s problemima
-istrazivanja, te procijeniti teorijske i prakticne posljedice rezultata.
-
-   ZAKLJUCAK
-
-   Sustavno, koncizno i jezgrovito izlaganje svih relevantnih spoznaja, informacija i
-stavova koji su izneseni u sredisnjem dijelu rada. Zakljucak rezimira cjelokupni rad. U
-zakljucku se ne iznose nove spoznaje, nego formuliraju ve izrecene u prethodnom dijelu
-rada. Duljina zakljucka je uobicajeno 1-2 strane, do maksimalno 10% velicine zavrsnog
-rada.
-
-   POPIS LITERATURE
-
-   Popisuje se sva koristena literatura po pravilima koja slijede u dijelu ,,citiranje
-literature"
-
-   POPIS TABLICA, SLIKA, GRAFIKONA I SLICNO
-
-   Popis je potreban ako u radu ima vise od 20 tablica, slika i/ili grafikona.
-
-   PRILOZI
-
-   Ovaj dio nije obavezan. U prilog se stavljaju tabele i slike velicine A4 formata ili vee,
-ili dokumenti i materijali koristeni pri izradi zavrsnog rada (anketni upitnici, obrasci,
-sheme i slicni dokumenti). Svaki prilog mora biti numeriran kako bi se u tekstu rada moglo
-jednoznacno upuivati na pojedini prilog.
-
-===== [vevu-upute-zavrsni | str. 10] =====
-Format rada je A4. Sve margine teksta trebaju biti 25 mm.
-Pri obradi teksta koristiti font Times New Roman.
-Naslove poglavlja pisati velikim slovima velicina fonta 14 pt Bold, naslove potpoglavlja
-malim slovima 12 pt Bold, a obican tekst 12 pt.
-Prored teksta u cijelom radu treba biti 1,5. Poravnanje teksta obostrano (justified), prvi red
-uvucen.
-Izmeu naslova i teksta treba biti 1 red prazan.
-NUMERACIJE
-Sve strane u radu pocevsi od Uvoda moraju biti numerirane. Broj strane stavlja se u
-donjem desnom kutu stranice, a numeracija pocinje od 1 za stranu na kojoj je Uvod.
-Poglavlja se numeriraju arapskim brojevima, numeracija pocinje od 1. za Uvod, a zavrsava
-posljednjim rednim brojem za Zakljucak.
-Sazetak (koji je ispred Uvoda) nema broj, kao ni Popis literature, Zivotopis i ako postoje u
-radu Prilozi i Popis tablica, slika i grafikona!
-Numeracija potpoglavlja izvodi se sa dva broja razdvojena tockom, od kojih je prvi broj
-poglavlja, a drugi redni broj potpoglavlja u poglavlju, tako da e npr. drugo potpoglavlje u
-treem poglavlju imati broj 3.2.
-Izmeu naslova poglavlja i potpoglavlja mora biti bar jedna recenica teksta, ne redati
-naslov za naslovom!
-Ako je neko poglavlje podijeljeno na potpoglavlja, mora ih biti barem dva, jer podjela u
-kojoj ima samo jedno potpoglavlje nema smisla.
-
 ===== [vevu-upute-zavrsni | str. 11] =====
 Sve oznake (broj i naslov) tabela treba postaviti direktno iznad tabele na koju se odnose,
-dok se numericke oznake i opis (naslov) slika i grafikona stavljaju direktno ispod slike ili
+dok se numeričke oznake i opis (naslov) slika i grafikona stavljaju direktno ispod slike ili
 grafikona.
 
-Slike ne okruzivati tekstom!
+Slike ne okruživati tekstom!
 
-Stavljati ih u rad samo ako su nuzne da bi pomogle u objasnjenju teksta, i obavezno ih
+Stavljati ih u rad samo ako su nužne da bi pomogle u objašnjenju teksta, i obavezno ih
 spomenuti u tekstu (kao i tabele i grafikone).
 
-Tekst u tablicama mora biti iste velicine i oblika slova kao ostali tekst.
+Tekst u tablicama mora biti iste veličine i oblika slova kao ostali tekst.
 
 CITIRANJE LITERATURE
 
@@ -93,15 +16,181 @@ Podatak o citiranoj referenci pojavljuje se u radu dva puta, prvi put u tekstu, 
 popisu literature.
 
 U tekstu rada nakon citiranog dijela u zagradi se upisuje prezime autora, godina izdanja
-izvora. Ako ima vise autora pise se prvi autor i oznaka ,,et al".
+izvora. Ako ima više autora piše se prvi autor i oznaka „et al“.
 
 Sve slike i tabele u radu moraju imati naveden izvor u zagradi na kraju naziva slike ili
-tabele. Za tabele i slike koje su djelo autora rada u zagradi napisati: ,,izrada autora".
+tabele. Za tabele i slike koje su djelo autora rada u zagradi napisati: „izrada autora“.
 
-U popisu literature navode se svi izvori koristeni u radu poredani abecednim redom,
+U popisu literature navode se svi izvori korišteni u radu poredani abecednim redom,
 numerirani arapskim brojevima.
 
 *Knjiga:
 
 Prezime, inicijal(i) autora. (godina izdavanja) Naslov: podnaslov. Podatak o izdanju.
 Mjesto
+
+===== [vevu-prilog4-diplomski | str. 1] =====
+GRAFIČKI IZGLED RADA
+
+Koristiti predloške iz ovih uputa (str.1. i 2.) koji su izrađeni u valjanom formatu.
+
+OBRADA TEKSTA
+Format rada je A4. Sve margine teksta trebaju biti 25 mm. Pri obradi teksta koristiti font Times New Roman. Naslove poglavlja pisati velikim slovima veličina fonta 14 pt Bold, naslove potpoglavlja malim slovima 12 pt Bold, a običan tekst 12 pt. Prored teksta u cijelom radu treba biti 1,5. Poravnanje teksta obostrano (justified), prvi red uvučen. Između naslova i teksta treba biti 1 red prazan.
+
+
+NUMERACIJE
+Sve strane u radu počevši od Uvoda moraju biti numerirane. Broj strane stavlja se u donjem desnom kutu stranice, a numeracija počinje od 1 za stranu na kojoj je Uvod. Poglavlja se numeriraju arapskim brojevima, numeracija počinje od 1. za Uvod, a završava posljednjim rednim brojem za Zaključak. Sažetak (koji je ispred Uvoda) nema broj, kao ni Popis literature, Životopis i ako postoje u radu Prilozi i Popis tablica, slika i grafikona!
+Numeracija potpoglavlja izvodi se sa dva broja razdvojena točkom, od kojih je prvi broj poglavlja, a drugi redni broj potpoglavlja u poglavlju, tako da će npr. drugo potpoglavlje u trećem poglavlju imati broj 3.2. Između naslova poglavlja i potpoglavlja mora biti bar jedna rečenica teksta, ne redati naslov za naslovom! Ako je neko poglavlje podijeljeno na potpoglavlja, mora ih biti barem dva, jer podjela u kojoj ima samo jedno potpoglavlje nema smisla.
+Svako novo poglavlje počinje na novoj strani, a potpoglavlja se naslanjaju na prethodni tekst (pri čemu između teksta i naslova treba biti 1 red prazan). Sve slike, grafikoni i tabele u radu moraju biti numerirane i imati naslov (koji govori o tome što prikazuje slika ili grafikon ili tabela). Numeracija slika izvodi se sa dva broja od kojih je prvi broj poglavlja
+
+u kojem se slika nalazi, a drugi broj je redni broj slike u tom poglavlju. Tako će npr. treća slika u drugom poglavlju biti „Slika 2.3.“.
+Jednako se numeriraju grafikoni i tabele. Sve oznake (broj i naslov) tabela treba postaviti direktno iznad tabele na koju se odnose, dok se numeričke oznake i opis (naslov) slika i grafikona stavljaju direktno ispod slike ili grafikona.
+Slike ne okruživati tekstom! Stavljati ih u rad samo ako su nužne da bi pomogle u objašnjenju teksta, i obavezno ih spomenuti u tekstu (kao i tabele i grafikone). Tekst u tablicama mora biti iste veličine i oblika slova kao ostali tekst.
+
+
+CITIRANJE LITERATURE
+
+Podatak o citiranoj referenci pojavljuje se u radu dva puta, prvi put u tekstu, a drugi put u popisu literature. U tekstu rada nakon citiranog dijela u zagradi se upisuje prezime autora, godina izdanja izvora. Ako ima više autora piše se prvi autor i oznaka „et al“. Sve slike i tabele u radu moraju imati naveden izvor u zagradi na kraju naziva slike ili tabele. Za tabele i slike koje su djelo autora rada u zagradi napisati: „izrada autora“.
+
+Fusnote se koriste za pojašnjenje manje relevantnih pojmova korištenih u radu te za       citiranje pravnih propisa. Kada se citira ili poziva na pravni propis u fusnoti se stavlja puni naziv službenog glasila s naznakom brojeva i godina izdanja propisa, uključujući sve njegove naknadne izmjenje i dopune (primjer: Zakon o ustanovama, Narodne novine broj 76/93, 29/97, 47/99, 35/08).
+
+Ako se rad oslanja uglavnom na jedan propis koji se više puta spominje u tekstu on se stavlja u fusnotu samo kada se prvi puta spomene. U takvim slučajevima moguće je u tekstu koristiti službene kratice zakona (primjer Zakon o općem upravnom postupku, u zagradi staviti (dalje u tekstu ZUP) i onda u nastavku koristiti navedenu kraticu).
+U popisu literature navode se svi izvori i pravni propisi korišteni u radu poredani abecednim redom, numerirani arapskim brojevima.
+
+*Knjiga:
+Prezime, inicijal(i) autora. (godina izdavanja) Naslov: podnaslov. Podatak o izdanju. Mjesto izdavanja: Nakladnik.
+kod knjiga koje imaju više autora navode se svi autori, osim ako ih je više od 6, kada se nakon prvog autora piše „et al“.
+kod knjiga koje nemaju podatak o autoru navodi se: Naslov. (godina izdavanja) urednik: Prezime i ime. Mjesto izdavanja: Nakladnik.
+*Poglavlje u knjizi:
+Prezime, inicijal imena autora. (godina izdavanja) Naslov poglavlja // Naslov knjige / Ime i prezime autora knjige. Mjesto izdavanja: Nakladnik. Početna i završna stranica.
+
+*Natuknica u enciklopediji:
+Prezime, inicijal imena autora natuknice (ako postoji). Naslov natuknice. // Naslov enciklopedije.( godina izdavanja) Mjesto izdavanja: Nakladnik. Stranica.
+
+*Zbornik radova:
+
+===== [vevu-upute-zavrsni | str. 4] =====
+Prilog 4/4
+
+Izjava studenta/ice o samostalnoj izradi rada, uz zahvalu za primljenu stručnu pomoć
+institucijama, osobama i mentoru. Prvi odlomak Izjave je obvezan, a ostatak teksta Izjave je
+predložak koji možete izostaviti, izmijeniti i/ili dopuniti sukladno svojim interesima. Bez
+obzira na veličinu ovoga teksta, izjava se piše na posebnom listu na sredini stranice.
+
+                                          IZJAVA
+
+         Izjavljujem da sam završni rad izradio/izradila samostalno, koristeći se vlastitim
+znanjem, literaturom i provedenim istraživanjima/eksperimentima.
+
+         U radu mi je pomagao savjetima i uputama voditelj završnog rada (npr. prof. dr. sc.
+Ivan Ivić) te mu iskreno zahvaljujem...
+
+            Isto tako zahvaljujem i asistentima mr. sc. Antunu Antunoviću i mr. sc. Mariji
+Marijanović… na pomoći u izradi i oblikovanju konačnog izgleda završnog rada….
+
+         Tvrtka XYZ d.d. omogućila mi je provedbu istraživačkog/eksperimentalnog dijela
+rada (…pristup podacima o poslovanju poduzeću…) te zahvaljujem direktoru… i
+suradnicima…
+
+                                                                                  (Potpis pristupnika/ice)
+
+===== [vevu-upute-zavrsni | str. 8] =====
+istraživanja, izvode povezanosti ili nepovezanosti, ističu iznimke. Potrebno je ukratko
+sažeti značenje rezultata i povezati sa pitanjima iz uvoda odnosno s problemima
+istraživanja, te procijeniti teorijske i praktične posljedice rezultata.
+
+   ZAKLJUČAK
+
+   Sustavno, koncizno i jezgrovito izlaganje svih relevantnih spoznaja, informacija i
+stavova koji su izneseni u središnjem dijelu rada. Zaključak rezimira cjelokupni rad. U
+zaključku se ne iznose nove spoznaje, nego formuliraju već izrečene u prethodnom dijelu
+rada. Duljina zaključka je uobičajeno 1-2 strane, do maksimalno 10% veličine završnog
+rada.
+
+   POPIS LITERATURE
+
+   Popisuje se sva korištena literatura po pravilima koja slijede u dijelu „citiranje
+literature“
+
+   POPIS TABLICA, SLIKA, GRAFIKONA I SLIČNO
+
+   Popis je potreban ako u radu ima više od 20 tablica, slika i/ili grafikona.
+
+   PRILOZI
+
+   Ovaj dio nije obavezan. U prilog se stavljaju tabele i slike veličine A4 formata ili veće,
+ili dokumenti i materijali korišteni pri izradi završnog rada (anketni upitnici, obrasci,
+sheme i slični dokumenti). Svaki prilog mora biti numeriran kako bi se u tekstu rada moglo
+jednoznačno upućivati na pojedini prilog.
+
+===== [vevu-upute-zavrsni | str. 10] =====
+Format rada je A4. Sve margine teksta trebaju biti 25 mm.
+Pri obradi teksta koristiti font Times New Roman.
+Naslove poglavlja pisati velikim slovima veličina fonta 14 pt Bold, naslove potpoglavlja
+malim slovima 12 pt Bold, a običan tekst 12 pt.
+Prored teksta u cijelom radu treba biti 1,5. Poravnanje teksta obostrano (justified), prvi red
+uvučen.
+Između naslova i teksta treba biti 1 red prazan.
+NUMERACIJE
+Sve strane u radu počevši od Uvoda moraju biti numerirane. Broj strane stavlja se u
+donjem desnom kutu stranice, a numeracija počinje od 1 za stranu na kojoj je Uvod.
+Poglavlja se numeriraju arapskim brojevima, numeracija počinje od 1. za Uvod, a završava
+posljednjim rednim brojem za Zaključak.
+Sažetak (koji je ispred Uvoda) nema broj, kao ni Popis literature, Životopis i ako postoje u
+radu Prilozi i Popis tablica, slika i grafikona!
+Numeracija potpoglavlja izvodi se sa dva broja razdvojena točkom, od kojih je prvi broj
+poglavlja, a drugi redni broj potpoglavlja u poglavlju, tako da će npr. drugo potpoglavlje u
+trećem poglavlju imati broj 3.2.
+Između naslova poglavlja i potpoglavlja mora biti bar jedna rečenica teksta, ne redati
+naslov za naslovom!
+Ako je neko poglavlje podijeljeno na potpoglavlja, mora ih biti barem dva, jer podjela u
+kojoj ima samo jedno potpoglavlje nema smisla.
+
+===== [vevu-prilog4-diplomski | str. 1] =====
+Izjava studenta/ice o samostalnoj izradi rada, uz zahvalu za primljenu stručnu pomoć institucijama, osobama i mentoru. Prvi odlomak Izjave je obvezan, a ostatak teksta Izjave je predložak koji možete izostaviti, izmijeniti i/ili dopuniti sukladno svojim interesima. Bez obzira na veličinu ovoga teksta, izjava se piše na posebnom listu na sredini stranice.
+
+
+
+
+
+
+
+
+I Z J A V A
+
+Izjavljujem da sam završni/diplomski rad izradio/izradila samostalno, koristeći se vlastitim znanjem, literaturom i provedenim istraživanjima/eksperimentima.
+
+U radu mi je pomagao savjetima i uputama voditelj završnog rada (npr. prof. dr. sc.
+Ivan Ivić) te mu iskreno zahvaljujem...
+
+Isto tako zahvaljujem i asistentima mr. sc. Antunu Antunoviću i mr. sc. Mariji Marijanović… na pomoći u izradi i oblikovanju konačnog izgleda završnog rada….
+
+Tvrtka XYZ d.d. omogućila mi je provedbu istraživačkog/eksperimentalnog dijela rada (…pristup podacima o poslovanju poduzeću…) te zahvaljujem direktoru… i suradnicima…
+
+(Potpis pristupnika/ice)
+
+===== [vevu-prilog4-diplomski | str. 1] =====
+Nakon teorijskog slijedi eksperimentalni dio koji sadrži detaljan opis izvedenog istraživanja, navodi način uzorkovanja i provođenja istraživanja, vremensko razdoblje, mjesto i način prikupljanja podataka i navodi načine obrade rezultata. Ukoliko se pri eksperimentalnom radu koriste uređaji potrebno ih je opisati i navesti njihove bitne karakteristike.
+U dijelu koji se naziva rezultati iznose se podaci prikupljeni eksperimentalnim radom svrstani u tablice, dijagrame i histograme, obrađeni odgovarajućom statističkom metodom. Rezultate treba napisati jasno i precizno, logičnim slijedom da ovo poglavlje bude cjelina s međusobno povezanim dijelovima. Ovo poglavlje piše se u prošlom vremenu. Tekst mora biti usklađen s tablicama i grafikonima. Nazivi tablica moraju biti cjeloviti i potpuni, razumljivi bez čitanja cjelokupnog teksta.
+Nakon poglavlja u kojem su izneseni rezultati slijedi rasprava rezultata koja se može pisati u okviru poglavlja rezultati ili kao odvojeno poglavlje. U ovom dijelu prikazuju se odnosi i načela koja proizlaze iz rezultata. Komentiraju se, ali bez ponavljanja, rezultati istraživanja, izvode povezanosti ili nepovezanosti, ističu iznimke. Potrebno je ukratko sažeti značenje rezultata i povezati sa pitanjima iz uvoda odnosno s problemima istraživanja, te procijeniti teorijske i praktične posljedice rezultata.
+
+
+
+
+
+ZAKLJUČAK
+Sustavno, koncizno i jezgrovito izlaganje svih relevantnih spoznaja, informacija i stavova koji su izneseni u središnjem dijelu rada. Zaključak rezimira cjelokupni rad. U zaključku se ne iznose nove spoznaje, nego formuliraju već izrečene u prethodnom dijelu rada. Duljina zaključka je uobičajeno 1-2 strane, do maksimalno 10% veličine završnog rada.
+
+POPIS LITERATURE
+Popisuje se sva korištena literatura po pravilima koja slijede u dijelu „citiranje literature“.
+
+
+POPIS TABLICA, SLIKA, GRAFIKONA I SLIČNO
+Popis je potreban ako u radu ima više od 20 tablica, slika i/ili grafikona.
+
+
+PRILOZI
+Ovaj dio nije obavezan. U prilog se stavljaju tabele i slike veličine A4 formata ili veće, ili dokumenti i materijali korišteni pri izradi završnog rada (anketni upitnici, obrasci, sheme i slični dokumenti). Svaki prilog mora biti numeriran kako bi se u tekstu rada moglo jednoznačno upućivati na pojedini prilog.
+
+ŽIVOTOPIS
+Podaci o autoru završnog/diplomskog rada. Piše se u obliku skraćenog europass obrasca.

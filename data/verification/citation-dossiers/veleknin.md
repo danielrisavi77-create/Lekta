@@ -8,7 +8,7 @@ Snapshot: `data/sources/veleknin/veleknin.pdf` (hash `e383dfbd3d6a...`)
 Otvori PDF: `data/sources/veleknin/veleknin.pdf#page=12`
 ```
 TEMPLATE: {authors} ({year}): {title}. {publisher}, {place}.
-QUOTE   : Rupi, V. (2009): Zastita zdravlja domaih zivotinja 1. Unutrasnje i kirurske bolesti i zahvati.   [grep: OK]
+QUOTE   : Rupić, V. (2009): Zaštita zdravlja domaćih životinja 1. Unutrašnje i kirurške bolesti i zahvati.   [grep: OK]
 IZVOR   : Rupi, V. (2009): Zastita zdravlja domaih zivotinja 1. Unutrasnje i kirurske bolesti i zahvati. Hrvatska mljekarska udruga, Zagreb.
 RENDER  : Rupi, V. (2009): Zastita zdravlja domaih zivotinja 1. Unutrasnje i kirurske bolesti i zahvati. Hrvatska mljekarska udruga, Zagreb.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -30,7 +30,7 @@ NAPOMENA: Cijeli primjer (spojena tri retka), sekcija 'Mrezni izvori': Wood, B. 
 Otvori PDF: `data/sources/veleknin/veleknin.pdf#page=12`
 ```
 TEMPLATE: {authors} ({year}): {title}. {container}[[, {volume}]][[({issue})]][[: {pages}]].
-QUOTE   : U popisu literature navode se svi izvori (knjige, znanstveni i strucni clanci, pravilnici i ostalo)   [grep: OK]
+QUOTE   : U popisu literature navode se svi izvori (knjige, znanstveni i stručni članci, pravilnici i ostalo)   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Sekcija 6.2 popis literature izricito imenuje 'znanstvene i strucne clanke' kao vrstu izvora, ali NE daje formatirani primjer clanka (ekstrakcija sadrzi samo primjer knjige i mreznog izvora). Predlozak je izveden iz oblika za knjigu (autor, (godina):, naslov.) prosiren nazivom casopisa, sveskom, brojem i rasponom stranica po opcem hrvatskom prirodoznanstvenom obicaju. Interpunkciju (zarez/dvotocka oko volumena i stranica) potvrditi ili oboriti pri verifikaciji.
 ```
@@ -57,7 +57,7 @@ NAPOMENA: Upute NE obraduju citiranje zavrsnih/diplomskih radova kao izvora (dok
 Otvori PDF: `data/sources/veleknin/veleknin.pdf#page=12`
 ```
 TEMPLATE: {title} ({year}): {container}[[, {issue}]].
-QUOTE   : U popisu literature navode se svi izvori (knjige, znanstveni i strucni clanci, pravilnici i ostalo)   [grep: OK]
+QUOTE   : U popisu literature navode se svi izvori (knjige, znanstveni i stručni članci, pravilnici i ostalo)   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Popis literature imenuje 'pravilnike' kao vrstu izvora, ali bibliografski oblik propisa nije prikazan (u tekstu se propisi navode samo in-text: 'Pravilnik ... (NN 01/13)' i '(Anonymus, 2013)', str. 12). Predlozak je minimalno izveden iz opceg autor-godina reda natuknice (naslov propisa, godina u zagradi s dvotockom, glasilo, broj). Potvrditi pri verifikaciji.
 ```

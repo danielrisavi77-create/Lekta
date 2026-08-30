@@ -1,9 +1,9 @@
 ===== [mefst-uputa-diplomski-2021 | str. 1] =====
 7. Prva stranica ........................................................................................................................... 6
 8. Druga stranica ........................................................................................................................ 6
-9. Trea stranica ......................................................................................................................... 6
+9. Treća stranica ......................................................................................................................... 6
 10. Naslovi odjeljaka diplomskoga rada .................................................................................... 7
-11. CILJ ISTRAZIVANJA ........................................................................................................ 7
+11. CILJ ISTRAŽIVANJA ........................................................................................................ 7
 12. MATERIJALI I METODE (ISPITANICI I POSTUPCI) .................................................... 7
 13. Tablice .................................................................................................................................. 8
 
@@ -16,218 +16,241 @@
    Publikacije ............................................................................................................................ 12
    Knjiga ................................................................................................................................... 15
    Poglavlje knjige .................................................................................................................... 15
-   Pocetna stanica, Homepage .................................................................................................. 15
+   Početna stanica, Homepage .................................................................................................. 15
    Dio web stranice ................................................................................................................... 15
    Disertacije............................................................................................................................. 16
-16. Sazetak ............................................................................................................................... 16
+16. Sažetak ............................................................................................................................... 16
 17. Summary ............................................................................................................................ 16
-18. Zivotopis............................................................................................................................. 17
-Zavrsne biljeske........................................................................................................................ 17
+18. Životopis............................................................................................................................. 17
+Završne bilješke........................................................................................................................ 17
+
+===== [mefst-uputa-diplomski-2021 | str. 13] =====
+Slika 1. Napišite naziv slike ovdje a) naziv prikaza i b) naziv prikaza
+                     Podatci su prikazani kao ….
+                     * statistički test (ako je primjenjivo)
+
+15. Literatura (reference)
+Literatura se navodi Vancouver stilom kako je prikazano. Literatura bi trebala poglavito biti
+novijeg datuma i visoke kvalitete dokaza. Reference se numeriraju redoslijedom kojim se
+pojavljuju u tekstu, a u tekstu se navode na kraju svake rečenice, prije točke u zagradama ().
+Kada se citira više referenci zajedno navode se s razmakom kao (1, 2) ili (1-3) za uzastopno
+navođenje referenci 1, 2 i 3. Ako navodite referencu direktno u tekstu, navodi se prezime prvog
+autora i dopisuje se „i suradnici“ (npr. U istraživanju Tonkića i sur…) te se također navodi
+brojka reference u zagradi na kraju rečenice. Reference se navode u uvodu, dijelovima
+materijala i metoda i u diskusiji rada. Pri navođenju literature, brojka stoji na 0 cm, uvlaka
+teksta se postavlja na 0,8 cm, a brojku slijedi tab koji staje na 0,8 cm (Right click>Adjust List
+Indents).
+
+Publikacije
+Koristite sljedeći poredak (primjer naveden za publikaciju s dva autora):
+prezime prvog autora – razmak – inicijal imena prvog autora – zarez – razmak – prezime drugog
+autora – razmak – inicijal imena drugog autora – točka – razmak – naziv publikacije u Sentence
+case – točka – razmak – skraćeni naziv časopisa bez točaka – točka – razmak – godina – točka-
+zarez – svezak pisan arapskom brojkom – dvotočka – paginacija kraćena, povezana spojnicom
+(kratka crta) – točka
+Napomene:
+
+     korištene crtice su samo za prikaz, ne nalaze se u konačnom obliku navedene reference;
+     sveščić, broj u zagradi pored sveska se ne navodi
+     kada broj stranica nije dostupan, paginaciju može zamijeniti broj rada npr. 120456 ili
+
+         e3440.
+     kraćena paginacija znači da se 175-185 piše kao 175-85.
+     Često se u naslovima pojedinih članaka početna slova riječi nalaze navedena velikim
+
+         početnim slovom te je tada potrebno to ispraviti prema hrvatskom jeziku i pisanju riječi.
+         Primjer (Pubmed): Zivkovic PM, Matetic A, Tadin Hadjina I, Rusic D, Vilovic M, Supe-
+         Domic D i sur. Serum Catestatin Levels and Arterial Stiffness Parameters Are Increased
+         in Patients with Inflammatory Bowel Disease. J Clin Med. 2020;9:628.
+
+===== [mefst-uputa-diplomski-2021 | str. 16] =====
+Primjer u konačnom formatu
+Blaxter PS, Farnsworth TP. Social health and class inequalities. U: Carter C, Peel JR, urednici.
+Equalities and inequalities in health. Drugo izdanje. London: Academic Press;
+1976. str. 165-78.
+
+Prezime1 I1, Prezime2 I2. Naslov poglavlja. U: Autorknjigeprezime1 I1, Autorknjigeprezime2
+I2, urednici. Naslov knjige. Izdanje. Mjesto: Izdavač; godina. str. kratka paginacija.
+
+Web stranica
+Početna stanica, Homepage
+Primjer u konačnom formatu
+Diabetes Australia. Diabetes globally [Internet]. Canberra ACT: Diabetes Australia; 2012
+[citirano 5. studenog 2012.]. Dostupno na: http://www.diabetesaustralia.com.au/en/
+Understanding-Diabetes/DiabetesGlobally/
+
+Autor/naziv organizacije. Naslov stranice [Internet]. Mjesto izdavanja: Izdavač; godina
+publiciranja [citirano DD mjesec GGGG]. Dostupno na: url bez hyperlinka
+- desni klik > remove hyperlink
+
+Dio web stranice
+Primjer u konačnom formatu
+Australian Medical Association [Internet]. Barton ACT: AMA; c1995-2012. Junior doctors and
+medical students call for urgent solution to medical training crisis; 2012 [citirano 5. studenog
+2012]. Dostupno na: https://ama.com.au/media/junior-doctors -and-medical-students-call-
+urgentsolution-medical-training-crisis
+
+Naslov stranice početne stranice, homepage [Internet]. Mjesto izdavanja: Izdavač; godina
+publiciranja. Naslov dijela stranice [citirano DD mjesec GGGG]. Dostupno na: url bez
+hyperlinka
+
+                                                                                                               15
 
 ===== [mefst-uputa-diplomski-2021 | str. 5] =====
-Za liste koristite isti stil grafickih oznaka (engl. bulleta) u cijelom radu, preporucuje se
-         onaj koristen u ovim uputama
+ Za liste koristite isti stil grafičkih oznaka (engl. bulleta) u cijelom radu, preporučuje se
+         onaj korišten u ovim uputama
 
-     Kada se navodi numerirana lista, navode se arapske brojke s tockom (1.), na kraju
-         navoda tocka-zarez (;), a na kraju posljednjeg navoda tocka (.)
+     Kada se navodi numerirana lista, navode se arapske brojke s točkom (1.), na kraju
+         navoda točka-zarez (;), a na kraju posljednjeg navoda točka (.)
 
-     U listama se graficka oznaka (engl. bullet) ili brojka postavlja na 0,63 cm, uvlaka teksta
+     U listama se grafička oznaka (engl. bullet) ili brojka postavlja na 0,63 cm, uvlaka teksta
          (text indent) na 1,27 cm, a bulet ili brojku slijedi tab na 1,27 cm (napomena: ovo se ne
          odnosi na odjeljak literatura)
 
-     Izbjegavajte lomljenje listi na vise stranica
-     Redne brojeve u tekstu pisati slovima/rijecima kada je to mogue
+     Izbjegavajte lomljenje listi na više stranica
+     Redne brojeve u tekstu pisati slovima/riječima kada je to moguće
 
 3. Numeriranje stranica
-     Arapske brojke
-     Dno stranice, desno poravnato (Insert>Footer>Page Number>Bottom of Page)
-     Numeriranje pocinje od naslovne stranice UVOD (ali ista nije numerirana!)
-     Broj stranice ne bi trebao biti napisan na naslovnim stranicama odjeljaka; kako bi se
+     Arapske brojke
+     Dno stranice, desno poravnato (Insert>Footer>Page Number>Bottom of Page)
+     Numeriranje počinje od naslovne stranice UVOD (ali ista nije numerirana!)
+     Broj stranice ne bi trebao biti napisan na naslovnim stranicama odjeljaka; kako bi se
          ovo izbjeglo koristite section break prije i nakon stranice, odnosno teksta na stranici
          (Layout>Breaks>Section Breaks>Next Page), uklonite poveznicu footera na prethodno
-         remove footer's link to previous, napravite isto na sljedeoj stranici, potom izbriste
+         remove footer’s link to previous, napravite isto na sljedećoj stranici, potom izbrište
 
 ===== [mefst-uputa-diplomski-2021 | str. 7] =====
-Koristite zarez (,) za razdvajanje decimalnih brojeva, npr. 1,25 g
-     Kada u tekstu navodite datum, napisite naziv mjeseca, alternativno se koristi oblik D.
+ Koristite zarez (,) za razdvajanje decimalnih brojeva, npr. 1,25 g
+     Kada u tekstu navodite datum, napišite naziv mjeseca, alternativno se koristi oblik D.
          M. GGGG. (bez 0, npr. 1. 2. 1991.)
-     latinske i engleske nazive pisite kurzivom
-     kratica za engleski je engl. kurziv, npr. FDA od engl. Food and Drug Administration
+     latinske i engleske nazive pišite kurzivom
+     kratica za engleski je engl. kurziv, npr. FDA od engl. Food and Drug Administration
 
 7. Prva stranica
-     Prva stranica diplomskog rada je identicna naslovnoj stranici
+     Prva stranica diplomskog rada je identična naslovnoj stranici
 
 8. Druga stranica
-SADRZAJ
-(Times New Roman, velicina 12, Masno otisnuto, lijevo poravnato)
+SADRŽAJ
+(Times New Roman, veličina 12, Masno otisnuto, lijevo poravnato)
 (u Microsoft Word pod References>Table of Contents)
 
-     Naslovi odjeljaka pisani VELIKIM SLOVIMA (engl. UPPERCASE), podnaslovi
-         odjeljaka Prvo slovo recenice veliko (engl. Sentence case), Times New Roman, font
-         velicina 12
+     Naslovi odjeljaka pisani VELIKIM SLOVIMA (engl. UPPERCASE), podnaslovi
+         odjeljaka Prvo slovo rečenice veliko (engl. Sentence case), Times New Roman, font
+         veličina 12
 
-     Podnaslove odjeljaka definirati brojkama, 1.1., 1.2., 1.3. itd.
-     Dodatna uvlaka za svaku novu razinu
-     Koristite ...... kao vodeu crtu (tab leader)
-     Brojke poravnati desno
+     Podnaslove odjeljaka definirati brojkama, 1.1., 1.2., 1.3. itd.
+     Dodatna uvlaka za svaku novu razinu
+     Koristite …… kao vodeću crtu (tab leader)
+     Brojke poravnati desno
 
-9. Trea stranica
+9. Treća stranica
 ZAHVALA
 
 ===== [mefst-uputa-diplomski-2021 | str. 8] =====
-Pisana kurzivom, Font Times New Roman, velicina 12, prored 1,5, uvlaka gdje je
+ Pisana kurzivom, Font Times New Roman, veličina 12, prored 1,5, uvlaka gdje je
          prikladna, poravnanje po volji
 
 10. Naslovi odjeljaka diplomskoga rada
-ZAHVALA
-POPIS KRATICA
+ZAHVALA†
+POPIS KRATICA‡
 1. UVOD
-2. CILJ ISTRAZIVANJA
-3. MATERIJALI I METODE�
+2. CILJ ISTRAŽIVANJA
+3. MATERIJALI I METODE§
 4. REZULTATI
 5. RASPRAVA
-6. ZAKLJUCCI
+6. ZAKLJUČCI
 7. LITERATURA
-8. SAZETAK
+8. SAŽETAK
 9. SUMMARY
-10. ZIVOTOPIS
-11. DODATAK
+10. ŽIVOTOPIS
+11. DODATAK†
 
- neobvezno
- neobvezno, ako je primjenjivo navesti:
+† neobvezno
+‡ neobvezno, ako je primjenjivo navesti:
 POPIS KRATICA (prije UVODA)
-Popis kratica pisati koristei crticu na sljedei nacin:
-KRATICA � tumacenje
-KRATICA2 � tumacenje2
-� zamijeniti s ISPITANICI I POSTUPCI kada je prikladno
+Popis kratica pisati koristeći crticu na sljedeći način:
+KRATICA – tumačenje
+KRATICA2 – tumačenje2
+§ zamijeniti s ISPITANICI I POSTUPCI kada je prikladno
 
 ===== [mefst-uputa-diplomski-2021 | str. 9] =====
 povjerenstva ustanove u kojoj se izvode (npr. KBC Split ili MEFST - obrasci i e-adresa na
 koju se dostavljaju su dostupni na poveznici
 http://www.mefst.unist.hr/fakultet/povjerenstva/eticko-povjerenstvo-653/653)
-U posljednjem odlomku trebalo bi opisati statisticke metode. Navedite naziv koristenog
-statistickog programa, odnosno paketa Ime, verzija (Proizvoac, Grad, Drzava) i opisite prikaz
-podataka. Navedite koristeni statisticki test i postavite statisticku znacajnost na P  0,05.
+U posljednjem odlomku trebalo bi opisati statističke metode. Navedite naziv korištenog
+statističkog programa, odnosno paketa Ime, verzija (Proizvođač, Grad, Država) i opišite prikaz
+podataka. Navedite korišteni statistički test i postavite statističku značajnost na P ˂ 0,05.
 
 13. Tablice
 Podatci trebaju biti prikazani u tekstu, tablici ili na slikama.
-Svaka tablica trebala bi sadrzavati dovoljno podataka da moze stajati samostalno (npr.
-tumacenje kratica i koristene statisticke testove u fusnotama).
-Na tablice se treba pozvati u tekstu, kao sastavni dio recenice, npr.... prikazano u Tablici 1...
-ili u zagradi, npr. ... prevalencija XY je bila vea u ispitivanoj skupini u usporedbi s kontrolnom
+Svaka tablica trebala bi sadržavati dovoljno podataka da može stajati samostalno (npr.
+tumačenje kratica i korištene statističke testove u fusnotama).
+Na tablice se treba pozvati u tekstu, kao sastavni dio rečenice, npr.… prikazano u Tablici 1…
+ili u zagradi, npr. … prevalencija XY je bila veća u ispitivanoj skupini u usporedbi s kontrolnom
 skupinom (Tablica 1).
 Tablice se numeriraju arapskim brojkama redoslijedom kojim se pojavljuju u tekstu.
-Kada je to mogue, tablice se umeu neposredno nakon odjeljka u kojem se pozivate na njih.
-Ipak, izbjegavajte lomljenje tablica na vise stranica (kako bi se ovo izbjeglo dozvoljeno je
-prilagoditi velicinu fonta u tablici i prored namjestiti na 1). Redovi tablica se nikako ne smiju
+Kada je to moguće, tablice se umeću neposredno nakon odjeljka u kojem se pozivate na njih.
+Ipak, izbjegavajte lomljenje tablica na više stranica (kako bi se ovo izbjeglo dozvoljeno je
+prilagoditi veličinu fonta u tablici i prored namjestiti na 1). Redovi tablica se nikako ne smiju
 lomiti na dvije stranice.
 Pri prezentaciji tablice u diplomskom radu potrebno je da svaka tablica ima naslov poravnat s
 lijevim rubom tablice, tablica i broj trebaju biti masno otisnuti, poravnati lijevo, slijedi razmak
 pa naziv tablice (vidi primjer).
 
 ===== [mefst-uputa-diplomski-2021 | str. 11] =====
-hi-kvadrat test
-a lipoproteini visoke gustoe od engl. high-density lipoprotein cholesterol
+† hi-kvadrat test
+a lipoproteini visoke gustoće od engl. high-density lipoprotein cholesterol
 b glikirani hemoglobin, vrijednosti iznad 6,5%
 c opstrukcijska apneja tijekom spavanja od engl. obstructive sleep apnea
 
-Napomena: Prikazana tablica je samo u svrhu primjera, prikazani parametri nuzno ne slijede
-logican slijed jer su mnogi izostavljeni.
+Napomena: Prikazana tablica je samo u svrhu primjera, prikazani parametri nužno ne slijede
+logičan slijed jer su mnogi izostavljeni.
 
 14. Slike
 Podatci trebaju biti prikazani u tekstu, tablici ili na slikama.
-Svaka slika bi trebala sadrzavati dovoljno podataka da moze stajati samostalno (npr. tumacenje
-kratica i koristene statisticke testove u opisu slike, navedeno ispod slike kao fusnota).
-Na slike se treba pozvati u tekstu, kao sastavni dio recenice, npr. ... prikazano na Slici 1... ili
-u zagradi, npr. ... prevalencija XY je bila vea u ispitivanoj skupini u usporedbi s kontrolnom
-skupinom (Slika 1). Ako prezentirate vise podataka u jednoj kombiniranoj slici, pozovite se na
+Svaka slika bi trebala sadržavati dovoljno podataka da može stajati samostalno (npr. tumačenje
+kratica i korištene statističke testove u opisu slike, navedeno ispod slike kao fusnota).
+Na slike se treba pozvati u tekstu, kao sastavni dio rečenice, npr. … prikazano na Slici 1… ili
+u zagradi, npr. … prevalencija XY je bila veća u ispitivanoj skupini u usporedbi s kontrolnom
+skupinom (Slika 1). Ako prezentirate više podataka u jednoj kombiniranoj slici, pozovite se na
 to u tekstu kako pripada npr. na Slici 1A.
 Slike se numeriraju arapskim brojkama redoslijedom kojim se pojavljuju u tekstu.
 
                                                                                                                10
 
-===== [mefst-uputa-diplomski-2021 | str. 13] =====
-Slika 1. Napisite naziv slike ovdje a) naziv prikaza i b) naziv prikaza
-                     Podatci su prikazani kao ....
-                     * statisticki test (ako je primjenjivo)
+===== [mefst-uputa-diplomski-2021 | str. 12] =====
+Kada je to moguće, slike se umeću neposredno nakon odjeljka u kojem se pozivate na njih.
+Ipak, treba se izbjeći lomljenje slike na više stranica.
+Pri prikazu slike u diplomskom radu, naziv slike treba stajati ispod slike, slike su numerirane
+arapskim brojkama redoslijedom kojim se pojavljuju u tekstu i pisane masno otisnuto
+(poravnato lijevo), nakon čega slijedi razmak i naziv slike (vidi primjer).
+Kada je moguće, centrirajte sliku. Naziv i opis slike trebaju biti poravnati s lijevim rubom slike
+kada je to moguće.
 
-15. Literatura (reference)
-Literatura se navodi Vancouver stilom kako je prikazano. Literatura bi trebala poglavito biti
-novijeg datuma i visoke kvalitete dokaza. Reference se numeriraju redoslijedom kojim se
-pojavljuju u tekstu, a u tekstu se navode na kraju svake recenice, prije tocke u zagradama ().
-Kada se citira vise referenci zajedno navode se s razmakom kao (1, 2) ili (1-3) za uzastopno
-navoenje referenci 1, 2 i 3. Ako navodite referencu direktno u tekstu, navodi se prezime prvog
-autora i dopisuje se ,,i suradnici" (npr. U istrazivanju Tonkia i sur...) te se takoer navodi
-brojka reference u zagradi na kraju recenice. Reference se navode u uvodu, dijelovima
-materijala i metoda i u diskusiji rada. Pri navoenju literature, brojka stoji na 0 cm, uvlaka
-teksta se postavlja na 0,8 cm, a brojku slijedi tab koji staje na 0,8 cm (Right click>Adjust List
-Indents).
+     Navedite način prikaza podataka i statistički test u opisu slike kada je primjenjivo
+     P vrijednost može biti navedena u opisu slike ili na slici; za navođenje P vrijednosti i
 
-Publikacije
-Koristite sljedei poredak (primjer naveden za publikaciju s dva autora):
-prezime prvog autora � razmak � inicijal imena prvog autora � zarez � razmak � prezime drugog
-autora � razmak � inicijal imena drugog autora � tocka � razmak � naziv publikacije u Sentence
-case � tocka � razmak � skraeni naziv casopisa bez tocaka � tocka � razmak � godina � tocka-
-zarez � svezak pisan arapskom brojkom � dvotocka � paginacija kraena, povezana spojnicom
-(kratka crta) � tocka
-Napomene:
+         korištenih statističkih testova koristite simbole u sljedećem redoslijedu *, †, ‡, §, ǁ, ¶,
+         **, ††, ‡‡, §§, … i pišite ih u eksponentu (engl. superscript)
+     Navedite mjerene jedinice na nazivu osi kada je to prikladno
+     Uvijek kada je moguće koristite font Arial na slici
+     Navedite IZVOR: u opisu slike kada je primjenjivo
+Primjer slike
 
-     koristene crtice su samo za prikaz, ne nalaze se u konacnom obliku navedene reference;
-     svesci, broj u zagradi pored sveska se ne navodi
-     kada broj stranica nije dostupan, paginaciju moze zamijeniti broj rada npr. 120456 ili
+                                              r = - 0,390 P = 0,048*
 
-         e3440.
-     kraena paginacija znaci da se 175-185 pise kao 175-85.
-     Cesto se u naslovima pojedinih clanaka pocetna slova rijeci nalaze navedena velikim
-
-         pocetnim slovom te je tada potrebno to ispraviti prema hrvatskom jeziku i pisanju rijeci.
-         Primjer (Pubmed): Zivkovic PM, Matetic A, Tadin Hadjina I, Rusic D, Vilovic M, Supe-
-         Domic D i sur. Serum Catestatin Levels and Arterial Stiffness Parameters Are Increased
-         in Patients with Inflammatory Bowel Disease. J Clin Med. 2020;9:628.
-
-===== [mefst-uputa-diplomski-2021 | str. 16] =====
-Primjer u konacnom formatu
-Blaxter PS, Farnsworth TP. Social health and class inequalities. U: Carter C, Peel JR, urednici.
-Equalities and inequalities in health. Drugo izdanje. London: Academic Press;
-1976. str. 165-78.
-
-Prezime1 I1, Prezime2 I2. Naslov poglavlja. U: Autorknjigeprezime1 I1, Autorknjigeprezime2
-I2, urednici. Naslov knjige. Izdanje. Mjesto: Izdavac; godina. str. kratka paginacija.
-
-Web stranica
-Pocetna stanica, Homepage
-Primjer u konacnom formatu
-Diabetes Australia. Diabetes globally [Internet]. Canberra ACT: Diabetes Australia; 2012
-[citirano 5. studenog 2012.]. Dostupno na: http://www.diabetesaustralia.com.au/en/
-Understanding-Diabetes/DiabetesGlobally/
-
-Autor/naziv organizacije. Naslov stranice [Internet]. Mjesto izdavanja: Izdavac; godina
-publiciranja [citirano DD mjesec GGGG]. Dostupno na: url bez hyperlinka
-- desni klik > remove hyperlink
-
-Dio web stranice
-Primjer u konacnom formatu
-Australian Medical Association [Internet]. Barton ACT: AMA; c1995-2012. Junior doctors and
-medical students call for urgent solution to medical training crisis; 2012 [citirano 5. studenog
-2012]. Dostupno na: https://ama.com.au/media/junior-doctors -and-medical-students-call-
-urgentsolution-medical-training-crisis
-
-Naslov stranice pocetne stranice, homepage [Internet]. Mjesto izdavanja: Izdavac; godina
-publiciranja. Naslov dijela stranice [citirano DD mjesec GGGG]. Dostupno na: url bez
-hyperlinka
-
-                                                                                                               15
+                                    A
 
 ===== [mefst-uputa-diplomski-2021 | str. 18] =====
-18. Zivotopis
-Zivotopis ne treba prelaziti vise od jedne stranice pisano stilom diplomskog rada (font Times
-New Roman, velicina 12, prored 1,5). Zivotopis treba ukljucivati osobne podatke, obrazovanje
+18. Životopis
+Životopis ne treba prelaziti više od jedne stranice pisano stilom diplomskog rada (font Times
+New Roman, veličina 12, prored 1,5). Životopis treba uključivati osobne podatke, obrazovanje
 i druge aktivnosti i znanja (npr. strani jezik). U pdf verziji diplomskoga rada koja se tiska na
-elektronicki medij (npr. CD) za repozitorij Knjiznice izostavite zivotopis.
-Zavrsne biljeske
-Savjetujemo da prije ispisa diplomskog rada sacuvate dokument u pdf obliku kako bi se format
-zadrzao u onom obliku u kojem ste ga poslozili. Obranjeni diplomski radovi dostupni su na
-poveznici https://repozitorij.mefst.unist.hr/ (objavljeni diplomski radovi mozda nisu u
+elektronički medij (npr. CD) za repozitorij Knjižnice izostavite životopis.
+Završne bilješke
+Savjetujemo da prije ispisa diplomskog rada sačuvate dokument u pdf obliku kako bi se format
+zadržao u onom obliku u kojem ste ga posložili. Obranjeni diplomski radovi dostupni su na
+poveznici https://repozitorij.mefst.unist.hr/ (objavljeni diplomski radovi možda nisu u
 potpunosti podudarni s ovim smjernicama).
 
                                                                                                                17

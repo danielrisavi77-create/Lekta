@@ -8,7 +8,7 @@ Snapshot: `data/sources/pfst/pfst-upute-ocjenski-2022.pdf` (hash `a0cff8bd6cc0..
 Otvori PDF: `data/sources/pfst/pfst-upute-ocjenski-2022.pdf#page=25`
 ```
 TEMPLATE: {authors}: {title}[[, {volume}]], {publisher}, {place}, {year}.
-QUOTE   : [1] Bosnjak, I.: Telekomunikacijski promet I, Fakultet prometnih znanosti, Zagreb, 2001.   [grep: OK]
+QUOTE   : [1] Bošnjak, I.: Telekomunikacijski promet I, Fakultet prometnih znanosti, Zagreb, 2001.   [grep: OK]
 IZVOR   : Bosnjak, I.: Telekomunikacijski promet I, Fakultet prometnih znanosti, Zagreb, 2001.
 RENDER  : Bosnjak, I.: Telekomunikacijski promet I, Fakultet prometnih znanosti, Zagreb, 2001.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -30,7 +30,7 @@ NAPOMENA: Pravilo (str. 11): prezime, inicijali imena, naslov rada (italic), nas
 Otvori PDF: `data/sources/pfst/pfst-upute-ocjenski-2022.pdf#page=12`
 ```
 TEMPLATE: {authors}: {title}, u: {editor} (ur.), {container}, {publisher}, {place}, {year}[[, str. {pages}]].
-QUOTE   : Za ostale izvore na odgovarajui nacin se primjenjuje nacin navoenja kao za knjige.   [grep: OK]
+QUOTE   : Za ostale izvore na odgovarajući način se primjenjuje način navođenja kao za knjige.   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor nema primjer poglavlja u zborniku. Red je izveden iz oblika za knjigu po navedenom pravilu (autori pa dvotocka, naslov, izdavac, mjesto, godina); veznik 'u:' i oznaka '(ur.)' su uobicajena hrvatska konvencija koju izvor ne potvrdjuje. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -62,7 +62,7 @@ NAPOMENA: Pravilo (str. 11) izjednacava disertacije i magistarske radove s knjig
 Otvori PDF: `data/sources/pfst/pfst-upute-ocjenski-2022.pdf#page=11`
 ```
 TEMPLATE: {title} ({container}, br. {issue}).
-QUOTE   : Primjer: Pruzanje usluga informacijskog drustva u Hrvatskoj je ureeno Zakonom o   [grep: OK]
+QUOTE   : Primjer: Pružanje usluga informacijskog društva u Hrvatskoj je uređeno Zakonom o   [grep: OK]
 IZVOR   : Zakonom o elektronickoj trgovini (Narodne novine, br. 173/2003, 67/2008, 36/2009 i 130/2011).
 RENDER  : Zakonom o elektronickoj trgovini (Narodne novine, br. 173/2003, 67/2008, 36/2009 i 130/2011).
 VERDIKT : MATCH (uz dijakriticku normalizaciju)

@@ -1,301 +1,333 @@
 ===== [fmtu-upute-zavrsni-2025 | str. 2] =====
-8.2. Izjava o autorstvu rada i javnoj objavi obranjenog zavrsnog rada              14
+8.2. Izjava o autorstvu rada i javnoj objavi obranjenog završnog rada               14
 
-8.3. Sazetak (i kljucne rijeci)                                                    14
+8.3. Sažetak (i ključne riječi)                                                     14
 
-8.4. Sadrzaj                                                                       15
+8.4. Sadržaj                                                                        15
 
-8.5. Uvod                                                                          15
+8.5. Uvod                                                                           15
 
-8.6. Osnovni tekst                                                                 16
+8.6. Osnovni tekst                                                                  16
 
-8.7. Zakljucak                                                                     17
+8.7. Zaključak                                                                      17
 
-8.8. Bibliografija ili Reference                                                   17
+8.8. Bibliografija ili Reference                                                    17
 
-8.8.1. Chicago stil � Bibliografski sustav i Autor-datum sustav (primjeri)         18
+8.8.1. Chicago stil – Bibliografski sustav i Autor-datum sustav (primjeri)          18
 
-8.8.2. Koristenje latinskih izraza (kratica) kod skraenog citiranja u fusnotama    24
+8.8.2. Korištenje latinskih izraza (kratica) kod skraćenog citiranja u fusnotama    24
 
-8.9. Popis ilustracija                                                             25
+8.9. Popis ilustracija                                                              25
 
-8.10. Prilozi                                                                      26
+8.10. Prilozi                                                                       26
+
+===== [fmtu-upute-zavrsni-2025 | str. 11] =====
+Upute za prijavu, izradu, predaju i obranu završnog rada na sveučilišnom prijediplomskom studiju.
+                                                    Fakultet za menadžment u turizmu i ugostiteljstvu Opatija
+
+       bibliografske jedinice trebaju biti potpuno i ispravno iskazane (Chicago stil – Bibliografski
+       sustav citiranja ili Autor-datum sustav citiranja) u završnom radu;8
+
+    • Student je obvezan tehnički urediti i oblikovati rad prema Predlošku za završni rad
+         dostupan na mrežnoj stranici Fakulteta (https://fthm.uniri.hr/studenti/upute-obrasci-i-
+
+          odluke/upute/).
+
+7. Tehničke i stilske upute za izradu rada
+
+U nastavku Uputa date su kratke i sažete informacije i naputci u svezi formata rada, pisanja
+naslova, teksta i različitih označavanja unutar teksta, o jeziku, stilu, ilustracijama i formulama.
+Forma rada, oblikovanje teksta u radu, naslova, podnaslova, odlomaka fusnota, tablica i slika
+prikazani su na Predlošku za završni rad9 koji je dostupan na mrežnoj stranici Fakulteta
+(https://fthm.uniri.hr/studenti/upute-obrasci-i-odluke/upute/).
+
+7.1. Format, tekst, naslovi
+
+    • Rad treba biti napisan u programu za obradu teksta MS Word;
+    • Tekst treba biti pisan u formatu papira standardne veličine (A4, 210×297 mm), sa
+
+         slobodnim rubnicima od 2,5 cm;
+    • Tekst u radu treba pisati pismom veličine 12 tipografskih točaka, vrstom slova – Times New
+
+         Roman;
+    • Tekst treba biti obostrano poravnat (engl. Justify), imati prored 1,5 (engl. Line spacing);
+    • Tekst je potrebno pisati u odlomcima. Prvi odlomak ispod naslova treba poravnati po
+
+         lijevom rubu tijela teksta, a svaki drugi odlomak uvući 0,5. Između odlomaka nema praznog
+         reda (nema razmaka). Svi odlomci trebaju biti obostrano poravnati;
+    • Podvlake (engl. underline) se ne koriste u tekstu, kao ni pri navođenju mrežnih poveznica;
+
+    8 U Bibliografiji ili Referencama (popisu korištene literature) ne mogu biti navedene bibliografske jedinice koje nisu citirane ili
+navedene u tekstu rada.
+
+    9 Predložak za završni rad u Word formatu student može preuzeti, mijenjati tekst, te ga pohraniti kao vlastiti dokument.
+Predložak može koristiti na način da se preko teksta u dokumentu (XXXX…) upisuje vlastiti tekst. Ukoliko se zbog unosa vlastitog
+teksta promijene ili pomaknu pojedini dijelovi, student može provjeriti tehničko oblikovanje i ispravne pozicije elemenata rada u
+Predlošku u PDF formatu, te prema tomu izvršiti potrebne korekcije.
+
+                                                                                                                                                            9
+
+===== [fmtu-upute-zavrsni-2025 | str. 21] =====
+Upute za prijavu, izradu, predaju i obranu završnog rada na sveučilišnom prijediplomskom studiju.
+                                                    Fakultet za menadžment u turizmu i ugostiteljstvu Opatija
+
+prema abecednim redu prezimena prvog autora kojega se navodi. U slučaju, kada postoji više
+radova istog autora, potrebno je bibliografske jedinice toga autora poredati kronološkim
+redoslijedom. Ukoliko bibliografska jedinica iz prvog retka prelazi u drugi redak, tada se taj novi
+redak uvlači za 0,5.
+
+Bibliografija ili Reference se smještaju nakon Zaključka na zasebnoj stranici. Bibliografija ili
+Reference (kao naslov) se ne označava (numerira) brojem, a stranice se paginiraju (numeriraju,
+označavaju arapskim brojevima).
+
+Broj relevantnih bibliografskih jedinica iskazanih u Bibliografiji ili Referencama ukazuje na
+kvalitetu obrade teme i provedenog istraživanja.
+
+Primjer oblikovanja Bibliografije nalazi se na Predlošku za završni rad koji je dostupan na mrežnoj
+stranici Fakulteta (https://fthm.uniri.hr/studenti/upute-obrasci-i-odluke/upute/).
+
+8.8.1. Chicago stil – Bibliografski sustav i Autor-datum sustav (primjeri)
+
+Prilikom navođenja bibliografskih jedinica u Chicago stilu – bibliografskom sustavu ili autor-
+datum sustavu, vrlo je važno dosljedno poštivati pravila koja se odnose na redoslijed navođenja
+pojedinih glavnih elemenata opisa, stil fonta, te interpunkcijske znakove. Chicago stil citiranja
+razlikuje zapisivanje izvora referenci u tekstu i način navođenja bibliografskih izvora u popisu
+literature (Bibliografiji ili Referencama).
+
+Primjer navođenja citata u tekstu u Chicago stilu:
+
+• Bibliografski sustav:
+
+    U tekstu rada označen je u navodnicima dio teksta koji je doslovno preuzet (citiran) iz knjige Tajne tržišta kapitala, autora
+    Belak i Alijanović Barać, npr.
+
+   … … … „označuju tip ulagatelja koji nemaju vlastitu strategiju ulaganja.“1
+
+    Citirani izvor se upisuje u fusnoti na sljedeći način:
+                       ----------------
+                         1 Belak i Alijanović Barać, Tajne tržišta kapitala, 5.
+
+• Autor-datum sustav:
+
+      U tekstu rada označen je u navodnicima dio teksta koji je doslovno preuzet (citiran) iz knjige Tajne tržišta kapitala, autora
+      Belak i Alijanović Barać .
+      Citirani izvor se pripaja tekstu (uključuje, inkorporira), odnosno upisuje prije ili nakon citiranog dijela teksta na neke od
+      navedenih načina:
+
+        … „označuju tip ulagatelja koji nemaju vlastitu strategiju ulaganja“ (Belak i Alijanović Barać 2008, 5).
+
+     ili
+
+                                                                                                                                                          19
+
+===== [fmtu-upute-diplomski-2025 | str. 2] =====
+8.2. Izjava o autorstvu rada i o javnoj objavi obranjenog diplomskog rada             14
+
+8.3. Sažetak (i ključne riječi)                                                       14
+
+8.4. Sadržaj                                                                          15
+
+8.5. Uvod                                                                             15
+
+8.6. Osnovni tekst                                                                    16
+
+8.7. Zaključak                                                                        17
+
+8.8. Bibliografija ili Reference                                                      18
+
+8.8.1. Chicago stil – Bibliografski sustav i Autor-datum sustav (primjeri)            19
+
+8.8.2. Korištenje latinskih izraza (kratica) kod skraćenog citiranja u fusnotama      25
+
+8.9. Popis ilustracija                                                                26
+
+8.10. Prilozi                                                                         27
+
+===== [fmtu-upute-diplomski-2025 | str. 11] =====
+Upute za prijavu, izradu, predaju i obranu diplomskog rada na sveučilišnom diplomskom studiju.
+                                                    Fakultet za menadžment u turizmu i ugostiteljstvu Opatija
+
+       bibliografske jedinice trebaju biti potpuno i ispravno iskazane (Chicago stil – Bibliografski
+       sustav citiranja ili Autor-datum sustav citiranja) u diplomskom radu;9
+   • Student je obvezan tehnički urediti i oblikovati rad prema Predlošku za diplomski rad
+       dostupan na mrežnoj stranici Fakulteta (https://fthm.uniri.hr/studenti/upute-obrasci-i-
+       odluke/upute/).
+
+    9 U Bibliografiji ili Referencama (popisu korištene literature) ne mogu biti navedene bibliografske jedinice koje nisu citirane ili
+navedene u tekstu rada.
+
+                                                                                                                                                            9
+
+===== [fmtu-upute-diplomski-2025 | str. 22] =====
+Upute za prijavu, izradu, predaju i obranu diplomskog rada na sveučilišnom diplomskom studiju.
+                                                    Fakultet za menadžment u turizmu i ugostiteljstvu Opatija
+
+8.8.1. Chicago stil – Bibliografski sustav i Autor-datum sustav (primjeri)
+
+Prilikom navođenja bibliografskih jedinica u Chicago stilu – bibliografskom sustavu ili autor-
+datum sustavu, vrlo je važno dosljedno poštivati pravila koja se odnose na redoslijed navođenja
+pojedinih glavnih elemenata opisa, stil fonta, te interpunkcijske znakove. Chicago stil citiranja
+razlikuje zapisivanje izvora referenci u tekstu i način navođenja bibliografskih izvora u popisu
+literature (Bibliografiji ili Referencama).
+
+Primjer navođenja citata u tekstu u Chicago stilu:
+• Bibliografski sustav:
+
+    U tekstu rada označen je u navodnicima dio teksta koji je doslovno preuzet (citiran) iz knjige Tajne tržišta kapitala, autora
+    Belak i Alijanović Barać, npr.
+
+   … … … „označuju tip ulagatelja koji nemaju vlastitu strategiju ulaganja.“1
+
+    Citirani izvor se upisuje u fusnoti na sljedeći način:
+                       ----------------
+                         1 Belak i Alijanović Barać, Tajne tržišta kapitala, 5.
+
+• Autor-datum sustav:
+
+      U tekstu rada označen je u navodnicima dio teksta koji je doslovno preuzet (citiran) iz knjige Tajne tržišta kapitala, autora
+      Belak i Alijanović Barać .
+      Citirani izvor se pripaja tekstu (uključuje, inkorporira), odnosno upisuje prije ili nakon citiranog dijela teksta na neke od
+      navedenih načina:
+
+        … „označuju tip ulagatelja koji nemaju vlastitu strategiju ulaganja“ (Belak i Alijanović Barać 2008, 5).
+
+     ili
+
+         …, prema Belak i Alijanović Barać „označuju tip ulagatelja koji nemaju vlastitu strategiju ulaganja“
+
+          (2008, 5).
+
+Sve korištene i citirane izvore koji su navedeni prethodno u tekstu rada, potrebno je cjelovito
+iskazati i u popisu, na kraju rada – u Bibligrafiji (ukoliko se koristi bibliografski sustav), ili u
+Referencama (ukoliko se koristi autor-datum sustav).
+
+U nastavku se navode primjeri bibliografskih jedinica koji se najčešće koriste, te su prikazani za
+oba sustava citiranja u Chicago stilu.26
+
+    26 Više primjera navođenja bibliografskih vidjeti u: Zoran Ivanović. Metodologija znanstvenog istraživanja. Kastav: SAIVA, 2011.
+                                                                                                                                                          20
 
 ===== [fmtu-upute-zavrsni-2025 | str. 8] =====
-Upute za prijavu, izradu, predaju i obranu zavrsnog rada na sveucilisnom prijediplomskom studiju.
-                                                    Fakultet za menadzment u turizmu i ugostiteljstvu Opatija
+Upute za prijavu, izradu, predaju i obranu završnog rada na sveučilišnom prijediplomskom studiju.
+                                                    Fakultet za menadžment u turizmu i ugostiteljstvu Opatija
 
-Promociju (svecano urucenje diploma) organizira Fakultet. Vrijeme odrzavanja promocije se
-(nakon svih termina utvrenih za obrane radova) objavljuje na mreznoj stranici Fakulteta.
+Promociju (svečano uručenje diploma) organizira Fakultet. Vrijeme održavanja promocije se
+(nakon svih termina utvrđenih za obrane radova) objavljuje na mrežnoj stranici Fakulteta.
 
-                            II. Izrada zavrsnog rada
+                            II. Izrada završnog rada
 
 5. Priprema za pisanje rada
 
-Tema rada mora imati uporiste u dostupnoj domaoj i stranoj literaturi, a broj koristenih
-relevantnih bibliografskih jedinica ukazuje na kvalitetu obrade i istrazivanja teme pisanog rada.
-Student prije samog pisanja rada mora pretraziti i prouciti literaturu odabrane teme2 u dogovoru
-s mentorom, te pritom biljeziti podatke o koristenom izvoru, biljeziti svoje osobne misli i kriticka
-promisljanja, stavove i cinjenice ispisati ili parafrazirati, ili pak rezimirati procitan tekst.
-Literaturu, osim u knjiznicama, student moze pretrazivati i pronai na sljedeim predlozenim
+Tema rada mora imati uporište u dostupnoj domaćoj i stranoj literaturi, a broj korištenih
+relevantnih bibliografskih jedinica ukazuje na kvalitetu obrade i istraživanja teme pisanog rada.
+Student prije samog pisanja rada mora pretražiti i proučiti literaturu odabrane teme2 u dogovoru
+s mentorom, te pritom bilježiti podatke o korištenom izvoru, bilježiti svoje osobne misli i kritička
+promišljanja, stavove i činjenice ispisati ili parafrazirati, ili pak rezimirati pročitan tekst.
+Literaturu, osim u knjižnicama, student može pretraživati i pronaći na sljedećim predloženim
 portalima (bazama podataka i drugim informacijskim izvorima):
 
-     � Portal elektronickih izvora za hrvatsku akademsku i znanstvenu zajednicu, http://baze.nsk.hr/,
-     � Discovery Service, http://www.svkri.uniri.hr/,
-     � Portal znanstvenih casopisa Republike Hrvatske, http://hrcak.srce.hr/,
-     � Hrvatska znanstvena bibliografija, https://bib.irb.hr/,
-     � PERO, http://lib.irb.hr/utility/pero/,
-     � Google znalac, http://scholar.google.hr/,
-     � ResearchGate, https://www.researchgate.net/,
-     � ostale ponuene baze podataka Knjiznice FMTU-a, https://fthm.uniri.hr/zivotfmtu/knjiznica/katalozi-i-
+     • Portal elektroničkih izvora za hrvatsku akademsku i znanstvenu zajednicu, http://baze.nsk.hr/,
+     • Discovery Service, http://www.svkri.uniri.hr/,
+     • Portal znanstvenih časopisa Republike Hrvatske, http://hrcak.srce.hr/,
+     • Hrvatska znanstvena bibliografija, https://bib.irb.hr/,
+     • PERO, http://lib.irb.hr/utility/pero/,
+     • Google znalac, http://scholar.google.hr/,
+     • ResearchGate, https://www.researchgate.net/,
+     • ostale ponuđene baze podataka Knjižnice FMTU-a, https://fthm.uniri.hr/zivotfmtu/knjiznica/katalozi-i-
 
           baze-podataka/.
 
-    2 Proucavanje i pretrazivanje dostupne literature preporuca se i u pocetnoj fazi promisljanja odabira teme. Mentor moze ve
-kod prijave teme, zatraziti od studenta da dostavi prijedlog (koncept) sadrzaja i popis dostupne literature koju e koristiti u radu.
-Takoer, mentor moze raspraviti sa studentom sto je predmet istrazivanja, sto je istrazivacko pitanje, sto se zeli postii
-istrazivanjem i obradom teme, koji su ciljevi, koje e dostupne relevantne informacije i podatke koristiti, koje e metode koristiti
-u istrazivackom postupku. Prema metodoloskom pristupu obradi teme, razlikovati e se kvantitativna (odgovaraju na pitanje
-koliko, primjenom relevantnih kvantitativnih metoda � matematicko-statistickih metoda i dr.), kvalitativna (odgovaraju na pitanja
-zasto, kada, kakvo je sto, gdje, primjenuju se prikladne metode koje omoguuju cjelovito opisivanje pojava), ili pak kombinirana
-istrazivanja (koja ukljucuju primjenu i kvantitativnih i kvalitativnih metoda).
+    2 Proučavanje i pretraživanje dostupne literature preporuča se i u početnoj fazi promišljanja odabira teme. Mentor može već
+kod prijave teme, zatražiti od studenta da dostavi prijedlog (koncept) sadržaja i popis dostupne literature koju će koristiti u radu.
+Također, mentor može raspraviti sa studentom što je predmet istraživanja, što je istraživačko pitanje, što se želi postići
+istraživanjem i obradom teme, koji su ciljevi, koje će dostupne relevantne informacije i podatke koristiti, koje će metode koristiti
+u istraživačkom postupku. Prema metodološkom pristupu obradi teme, razlikovati će se kvantitativna (odgovaraju na pitanje
+koliko, primjenom relevantnih kvantitativnih metoda – matematičko-statističkih metoda i dr.), kvalitativna (odgovaraju na pitanja
+zašto, kada, kakvo je što, gdje, primjenuju se prikladne metode koje omogućuju cjelovito opisivanje pojava), ili pak kombinirana
+istraživanja (koja uključuju primjenu i kvantitativnih i kvalitativnih metoda).
 
                                                                                                                                                             6
 
 ===== [fmtu-upute-zavrsni-2025 | str. 9] =====
-Upute za prijavu, izradu, predaju i obranu zavrsnog rada na sveucilisnom prijediplomskom studiju.
-                                                    Fakultet za menadzment u turizmu i ugostiteljstvu Opatija
+Upute za prijavu, izradu, predaju i obranu završnog rada na sveučilišnom prijediplomskom studiju.
+                                                    Fakultet za menadžment u turizmu i ugostiteljstvu Opatija
 
-Na sluzbenim stranicama knjiznice Fakulteta (https://fthm.uniri.hr/zivotfmtu/knjiznica/) student moze
-pronai razne korisne informacije potrebne za pristup, pretrazivanje baza i pronalazenje
+Na službenim stranicama knjižnice Fakulteta (https://fthm.uniri.hr/zivotfmtu/knjiznica/) student može
+pronaći razne korisne informacije potrebne za pristup, pretraživanje baza i pronalaženje
 literature:
 
-     � Upute za spajanje putem Shibboleth,
-     � Online baze podataka - prirucnik za pretrazivanje,
-     � Baze podataka dostupne na Sveucilistu u Rijeci,
-     � Ebsco Discovery Service knjiznicni sustavu Sveucilista u Rijeci,
-     � Video upute o nacinu pristupa bazama i tehnikama trazenja.
+     • Upute za spajanje putem Shibboleth,
+     • Online baze podataka - priručnik za pretraživanje,
+     • Baze podataka dostupne na Sveučilištu u Rijeci,
+     • Ebsco Discovery Service knjižnični sustavu Sveučilišta u Rijeci,
+     • Video upute o načinu pristupa bazama i tehnikama traženja.
 
-   Prema podacima koje student prikupljanja radi provedbe istrazivanja i obrade teme,
-razlikovati e se teorijska istrazivanja (u kojima se pojave, stvari, procesi i sl. proucavaju i spoznaju
-temeljem relevantnih tuih misljenja, iskustava i zakljucaka) i empirijska (vlastito provedeno
-istrazivanje) u dogovoru s mentorom. Podaci koji se prikupljaju u svrhu istrazivanja i obrade
+   Prema podacima koje student prikupljanja radi provedbe istraživanja i obrade teme,
+razlikovati će se teorijska istraživanja (u kojima se pojave, stvari, procesi i sl. proučavaju i spoznaju
+temeljem relevantnih tuđih mišljenja, iskustava i zaključaka) i empirijska (vlastito provedeno
+istraživanje) u dogovoru s mentorom. Podaci koji se prikupljaju u svrhu istraživanja i obrade
 moraju biti pouzdani.
 
 ===== [fmtu-upute-zavrsni-2025 | str. 9] =====
-� Drzavni zavod za statistiku,
-     � Ekonomski institut Zagreb,
-     � Institut za turizam,
-     � Ministarstvo turizma,
-     � Ministarstvo financija,
-     � Hrvatska narodna banka,
-     � Hrvatska gospodarska komora,
-     � Zagrebacka burza,
-     � Statisticki ured Europskih zemalja Eurostat,
-     � WTO - World Tourism Organisation,
-     � WTTC -World Travel & Tourism Council.
+• Državni zavod za statistiku,
+     • Ekonomski institut Zagreb,
+     • Institut za turizam,
+     • Ministarstvo turizma,
+     • Ministarstvo financija,
+     • Hrvatska narodna banka,
+     • Hrvatska gospodarska komora,
+     • Zagrebačka burza,
+     • Statistički ured Europskih zemalja Eurostat,
+     • WTO - World Tourism Organisation,
+     • WTTC -World Travel & Tourism Council.
 
-Student izrauje idejni nacrt (koncept) rada. Student, uporedo s proucavanjem literature o temi
-rada, pripremanjem, sreivanjem i razvrstavanjem biljezaka, postupno priprema i strukturu (idejni
-nacrt, koncept, preliminarni sadrzaj) pisanog rada. Sama struktura pisanog rada ovisit e o temi,
-karakteru i opsegu istrazivanja. S prijedlogom idejnog nacrta rada i preliminarnog popisa literature
-student upoznaje mentora kako bi mentor dobio siru sliku o planiranim fazama istrazivanja teme,
-te kako bi dao svoje eventualne primjedbe i korekcije prije zapocinjanja pisanja rada.
+Student izrađuje idejni nacrt (koncept) rada. Student, uporedo s proučavanjem literature o temi
+rada, pripremanjem, sređivanjem i razvrstavanjem bilježaka, postupno priprema i strukturu (idejni
+nacrt, koncept, preliminarni sadržaj) pisanog rada. Sama struktura pisanog rada ovisit će o temi,
+karakteru i opsegu istraživanja. S prijedlogom idejnog nacrta rada i preliminarnog popisa literature
+student upoznaje mentora kako bi mentor dobio širu sliku o planiranim fazama istraživanja teme,
+te kako bi dao svoje eventualne primjedbe i korekcije prije započinjanja pisanja rada.
 
     3 Wikipedia nije pouzdan izvor informacija!
                                                                                                                                                             7
 
 ===== [fmtu-upute-zavrsni-2025 | str. 10] =====
-Upute za prijavu, izradu, predaju i obranu zavrsnog rada na sveucilisnom prijediplomskom studiju.
-                                                    Fakultet za menadzment u turizmu i ugostiteljstvu Opatija
+Upute za prijavu, izradu, predaju i obranu završnog rada na sveučilišnom prijediplomskom studiju.
+                                                    Fakultet za menadžment u turizmu i ugostiteljstvu Opatija
 
-6. Ope napomene i smjernice za izradu rada
+6. Opće napomene i smjernice za izradu rada
 
-Ope napomene o izradi rada i obvezama studenta:
-   � Rad se pise i brani na hrvatskom jeziku. Iznimno, rad se moze pisati i braniti na stranom
-       jeziku uz obveznu izradu sazetka rada na hrvatskom jeziku. Student koji zeli pisati rad na
+Opće napomene o izradi rada i obvezama studenta:
+   • Rad se piše i brani na hrvatskom jeziku. Iznimno, rad se može pisati i braniti na stranom
+       jeziku uz obveznu izradu sažetka rada na hrvatskom jeziku. Student koji želi pisati rad na
        stranom jeziku, uz prethodno odobrenje mentora, podnosi pismeni zahtjev prodekanu za
        nastavu;
-   � Opseg zavrsnog rada je 50 000�70 000 znakova4 bez razmaka,
+   • Opseg završnog rada je 50 000–70 000 znakova4 bez razmaka,
 
-Prilikom brojanja znakova u zavrsnom radu, treba iskljuciti tekstne okvire, fusnote i krajnje biljeske (eng.
-textboxes, footnotes and endnotes). To e osigurati usklaenost broja znakova u Wordu i Turnitinu, jer
+Prilikom brojanja znakova u završnom radu, treba isključiti tekstne okvire, fusnote i krajnje bilješke (eng.
+textboxes, footnotes and endnotes). To će osigurati usklađenost broja znakova u Wordu i Turnitinu, jer
 Turnitin ne broji te dijelove teksta.
 
-   � Naslov rada5 pise se na hrvatskom i engleskom jeziku;
+   • Naslov rada5 piše se na hrvatskom i engleskom jeziku;
 
-   � Student je obvezan napisati tekst koji je jasan, koncizan, potpun, stilski i jezicno, gramaticki
-       korektan i ispravan, bez pravopisnih pogresaka;6
+   • Student je obvezan napisati tekst koji je jasan, koncizan, potpun, stilski i jezično, gramatički
+       korektan i ispravan, bez pravopisnih pogrešaka;6
 
-   � Rad mora sadrzavati: Naslovnicu (unutarnju i vanjsku), Izjavu o autorstvu i o javnoj objavi
-       rada, Sazetak (i kljucne rijeci), Sadrzaj, Uvod, Osnovni tekst (s pripadajuim poglavljima i
-       potpoglavljima), Zakljucak, Bibliografiju ili Reference, Ilustracije (popis tablica i slika, ukoliko
+   • Rad mora sadržavati: Naslovnicu (unutarnju i vanjsku), Izjavu o autorstvu i o javnoj objavi
+       rada, Sažetak (i ključne riječi), Sadržaj, Uvod, Osnovni tekst (s pripadajućim poglavljima i
+       potpoglavljima), Zaključak, Bibliografiju ili Reference, Ilustracije (popis tablica i slika, ukoliko
        postoje u tekstu);
 
-   � Student je obvezan citirati preuzete dijelove tueg djela (misli, cinjenice, ideje, zakljucke,
-       ilustracije i sl.) uz precizno navoenje bibliografskog izvora;7 Koristene i citirane
+   • Student je obvezan citirati preuzete dijelove tuđeg djela (misli, činjenice, ideje, zaključke,
+       ilustracije i sl.) uz precizno navođenje bibliografskog izvora;7 Korištene i citirane
 
-    4 Broj znakova u radu se mogu provjeriti u programu MS Word s opcijom ,,Word Count" (nalazi se pod Review). Potrebno je
-pozicionirati kursor na tekst, istovremeno pritisnuti na tipkovnici Ctrl i A (kako bi se oznacio cijeli tekst zavrsnog rada), kliknuti na
-opciju ,,Word Count" (pod Review) i provjeriti opseg zavrsnog rada (pod ,,Characters - no space").
+    4 Broj znakova u radu se mogu provjeriti u programu MS Word s opcijom „Word Count“ (nalazi se pod Review). Potrebno je
+pozicionirati kursor na tekst, istovremeno pritisnuti na tipkovnici Ctrl i A (kako bi se označio cijeli tekst završnog rada), kliknuti na
+opciju „Word Count“ (pod Review) i provjeriti opseg završnog rada (pod „Characters - no space“).
 
-    5 U naslovu rada treba izbjegavati pisanje skraenica, kao i u sazetku, te je pozeljno koristiti pune nazive.
-    6 Student treba pisati rad primjerenim jezikom i stilom koji podrazumijeva postivanje pravopisnih, gramatickih i stilskih pravila.
-    7 Prepoznatljivi dijelovi, kao i preuzeti dijelovi tueg rada, ukoliko u radu nisu jasno naznaceni (citirani) i nemaju navedenog
-autora i njegovo djelo, smatraju se intelektualnom kraom (plagijatom) autora koji ga je prisvojio.
+    5 U naslovu rada treba izbjegavati pisanje skraćenica, kao i u sažetku, te je poželjno koristiti pune nazive.
+    6 Student treba pisati rad primjerenim jezikom i stilom koji podrazumijeva poštivanje pravopisnih, gramatičkih i stilskih pravila.
+    7 Prepoznatljivi dijelovi, kao i preuzeti dijelovi tuđeg rada, ukoliko u radu nisu jasno naznačeni (citirani) i nemaju navedenog
+autora i njegovo djelo, smatraju se intelektualnom krađom (plagijatom) autora koji ga je prisvojio.
 
                                                                                                                                                             8
-
-===== [fmtu-upute-zavrsni-2025 | str. 11] =====
-Upute za prijavu, izradu, predaju i obranu zavrsnog rada na sveucilisnom prijediplomskom studiju.
-                                                    Fakultet za menadzment u turizmu i ugostiteljstvu Opatija
-
-       bibliografske jedinice trebaju biti potpuno i ispravno iskazane (Chicago stil � Bibliografski
-       sustav citiranja ili Autor-datum sustav citiranja) u zavrsnom radu;8
-
-    � Student je obvezan tehnicki urediti i oblikovati rad prema Predlosku za zavrsni rad
-         dostupan na mreznoj stranici Fakulteta (https://fthm.uniri.hr/studenti/upute-obrasci-i-
-
-          odluke/upute/).
-
-7. Tehnicke i stilske upute za izradu rada
-
-U nastavku Uputa date su kratke i sazete informacije i naputci u svezi formata rada, pisanja
-naslova, teksta i razlicitih oznacavanja unutar teksta, o jeziku, stilu, ilustracijama i formulama.
-Forma rada, oblikovanje teksta u radu, naslova, podnaslova, odlomaka fusnota, tablica i slika
-prikazani su na Predlosku za zavrsni rad9 koji je dostupan na mreznoj stranici Fakulteta
-(https://fthm.uniri.hr/studenti/upute-obrasci-i-odluke/upute/).
-
-7.1. Format, tekst, naslovi
-
-    � Rad treba biti napisan u programu za obradu teksta MS Word;
-    � Tekst treba biti pisan u formatu papira standardne velicine (A4, 210�297 mm), sa
-
-         slobodnim rubnicima od 2,5 cm;
-    � Tekst u radu treba pisati pismom velicine 12 tipografskih tocaka, vrstom slova � Times New
-
-         Roman;
-    � Tekst treba biti obostrano poravnat (engl. Justify), imati prored 1,5 (engl. Line spacing);
-    � Tekst je potrebno pisati u odlomcima. Prvi odlomak ispod naslova treba poravnati po
-
-         lijevom rubu tijela teksta, a svaki drugi odlomak uvui 0,5. Izmeu odlomaka nema praznog
-         reda (nema razmaka). Svi odlomci trebaju biti obostrano poravnati;
-    � Podvlake (engl. underline) se ne koriste u tekstu, kao ni pri navoenju mreznih poveznica;
-
-    8 U Bibliografiji ili Referencama (popisu koristene literature) ne mogu biti navedene bibliografske jedinice koje nisu citirane ili
-navedene u tekstu rada.
-
-    9 Predlozak za zavrsni rad u Word formatu student moze preuzeti, mijenjati tekst, te ga pohraniti kao vlastiti dokument.
-Predlozak moze koristiti na nacin da se preko teksta u dokumentu (XXXX...) upisuje vlastiti tekst. Ukoliko se zbog unosa vlastitog
-teksta promijene ili pomaknu pojedini dijelovi, student moze provjeriti tehnicko oblikovanje i ispravne pozicije elemenata rada u
-Predlosku u PDF formatu, te prema tomu izvrsiti potrebne korekcije.
-
-                                                                                                                                                            9
-
-===== [fmtu-upute-zavrsni-2025 | str. 12] =====
-Upute za prijavu, izradu, predaju i obranu zavrsnog rada na sveucilisnom prijediplomskom studiju.
-                                                    Fakultet za menadzment u turizmu i ugostiteljstvu Opatija
-
-    � Nabrajanja u tekstu oznacavaju se arapskim brojkama ili grafickim oznakama (eng. bullets);
-
-    � Biljeske (fusnote) koje se koriste za komentare, dopunu teksta ili za skraeno navoenje
-        bibliografskih jedinica citiranih u radu ispisuju se na dnu stranice, oznacavaju se od rednog
-        broja 1 i nadalje do kraja rada, pismom velicine 10 tipografskih tocaka, vrstom slova � Times
-        New Roman. Prvi red svake fusnote treba uvui za 0,5, obostrano poravnati i pisati bez
-        proreda;
-
-    � Sve stranice od Uvoda do kraja rada se numeriraju (paginiraju) � oznacavaju arapskim
-         brojevima (pocevsi od 1, u dnu stranice, desno, pismom velicine 9 tipografskih tocaka,
-         vrstom slova � Times New Roman). Stranice koje prethode Uvodu (naslovnice, Sazetak,
-         Izjava, Sadrzaj) se ne numeriraju10 � oznacavaju brojevima;
-
-    � Naslovi koji se ne numeriraju -- Uvod, Zakljucak, Bibliografija ili Reference, Popis ilustracija
-         i Prilozi (ako postoje), treba pisati pisanim slovima, pismom velicine 16 tipografskih tocaka,
-         vrstom slova � Times New Roman, podebljano (engl. bold), poravnato po lijevom rubu
-         tijela teksta; zapocinju na zasebnoj stranici;
-
-    � Naslovi prve razine u osnovnom tekstu, odnosno naslovi glavnih poglavlja (koji se
-         numeriraju, npr. 1. ), treba pisati pisanim slovima, pismom velicine 16 tipografskih tocaka,
-         vrstom slova � Times New Roman, podebljano (engl. bold), poravnato po lijevom rubu
-         tijela teksta; zapocinju za zasebnoj stranici;
-
-    � Naslovi druge razine u osnovnom tekstu, odnosno naslovi potpoglavlja (koji se numeriraju,
-         npr. 1.1.), treba pisati pisanim slovima, pismom velicine 14 tipografskih tocaka, vrstom
-         slova � Times New Roman, podebljano (engl. bold), poravnato po lijevom rubu tijela teksta;
-
-===== [fmtu-upute-zavrsni-2025 | str. 14] =====
-Upute za prijavu, izradu, predaju i obranu zavrsnog rada na sveucilisnom prijediplomskom studiju.
-                                                    Fakultet za menadzment u turizmu i ugostiteljstvu Opatija
-
-    � Svaka ilustracija, osim rednog broja i naslova, mora imati biljesku o izvoru. Potrebno je
-        naznaciti Izvor i upisati bibliografske podatke izvora iz kojega je ilustracija preuzeta. Ukoliko
-        je samo dio ilustracije posluzio kao temelj za izradu autorove vlastite ilustracije, takoer je
-        potrebno navesti izvor (npr. Izvor: izrada autora prema ...), isto kao i naznaciti izvor (npr.
-        Izvor: izrada autora) ako je ilustracija u potpunosti autorov vlastiti rad;
-
-    � U pravilu se ilustracije smjestaju odmah uz tekst na kojeg se odnose, odnosno najcese iza
-        dijela u tekstu gdje se prvi puta spominju ili opisuju;
-
-    � Ilustracije se odvajaju od gornjeg i donjeg teksta izmeu kojega je smjestena jednim
-        proredom (razmakom). Objekt ilustracije, ukljucujui njezin naslov, izvor i dr. potrebno je
-        centrirati;
-
-    � Ilustracija koja se preuzima iz literature u kojoj se nalaze pojmovi na stranom jeziku,
-        potrebno je znacenje tih pojmova objasniti u tekstu i prevesti na hrvatski jezik;
-
-    � U opisu ilustracija naznacuju se samo podaci koji su nuzni za razumijevanje, a dodatna
-        objasnjenja daju se u tekstu povezanom s ilustracijom;
-
-    � Tablice: Naslov tablice se pise iznad tablice. Naslov mora biti sazeto i jasno definiran, te
-        mora upuivati na sto se podaci u tablici odnose. Ispred naslova upisuje se redni broj (npr.
-        Tablica 1. Dolasci turista u Hrvatsku u 2020.). Ukoliko su potrebna dodatna pojasnjenja ona
-        se naznacuju u Napomenama ispod objekta tablice. Tablicu u tekstu, odnosno podatke iz
-        tablice potrebno je objasniti i interpretirati. Pocetak poglavlja kao i zavrsetak poglavlja ne
-        bi trebalo zapoceti ili zavrsavati tablicom, ve opisom, objasnjenjem i/ili interpretacijom,
-        ili se pak poglavlje moze zavrsiti prijelaznom recenicom koja upuuje na informacije o temi
-        koja e se u narednom poglavlju obraditi. Potrebno je naznaciti Izvor (iz kojega je tablica u
-        potpunosti ili samo djelomicno preuzeta, te upisati bibliografske podatke izvora, te u slucaju
-        kada je tablica (npr. rezultati izracuna) u potpunosti autorov rad (npr. Izvor: izrada autora);
-
-    � Slike: U radovima se najcese koriste graficki prikazi, odnosno razlicite vrste grafikona
-        (stupci, linijski dijagrami i strukturni krug ili polukrug). Kao i u slucaju tablica, svaka se vrsta
-        slike mora objasniti i interpretirati, te poglavlje ne bi trebalo njome zapoceti niti zavrsiti,
-        ve opisom, objasnjenjem i interpretacijom. Naslov se pise ispod objekta. Naslov mora biti
-        sazeto i jasno definiran. Ispred naslova upisuje se redni broj (npr. Grafikon 1. Financijski
-        pokazatelji likvidnosti). Ova vrsta ilustracija moze imati i Legendu (kojom se pojasnjavaju
-        objekti na slici ili sl.). Potrebno je naznaciti Izvor (iz kojega je ilustracija u potpunosti ili samo
-        djelomicno preuzeta, te upisati bibliografske podatke izvora, te u slucaju kada je ilustracija
-        u potpunosti autorov rad (npr. Izvor: izrada autora).
-
-7.4. Formule
-
-    � Za unos formula potrebno je koristiti funkciju u Wordu � Equation Editor; te koristiti
-        Meunarodni sustav mjernih jedinica (SI);
-
-                                                                                                                                                          12
-
-===== [fmtu-upute-zavrsni-2025 | str. 16] =====
-8. Tehnicki dijelovi rada
-
-Osnovni dijelovi rada (koji se u nastavku Uputa pojedinacno navode i opisuju) su:
-
-    1. Naslovnica (vanjska omotna stranica i unutarnja),
-    2. Izjava o autorstvu rada i o javnoj objavi obranjenog zavrsnog rada,
-    3. Sazetak (i kljucne rijeci),
-    4. Sadrzaj,
-    5. Uvod,
-    6. Osnovni tekst (razrada teme po poglavljima),
-    7. Zakljucak,
-    8. Bibliografija ili Reference (ovisno o stilu navoenja),
-    9. Popis ilustracija (ako postoje),
-    10. Prilozi (ako postoje).
-
-8.1. Naslovnica
-
-Naslovnice rada (vanjska i unutarnja) sadrze istaknute najvaznije informacije o autoru rada
-(studentu), instituciji autora rada (sveucilistu, fakultetu, studiju, smjeru), vrsti rada, predmetu,
-mentoru, mjestu i vremenu izrade rada.
-Na vanjskoj (omotnoj) naslovnici rada naznacuje se (osnovne informacije):
-
-    � naziv i sjediste sveucilista,
-    � naziv i sjediste fakulteta,

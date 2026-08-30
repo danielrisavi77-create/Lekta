@@ -27,7 +27,7 @@
     },
     "provenance": {
       "kind": "worked-example",
-      "quoteRaw": "BLACK (2021.) opazio je da s porastom tjelesne mase raste i rizik za pojavu bolesti krvozilnog",
+      "quoteRaw": "BLACK (2021.) opazio je da s porastom tjelesne mase raste i rizik za pojavu bolesti krvožilnog",
       "sourcePage": "str. 10",
       "note": "Autor-godina; prezime autora VELIKIM slovima. Narativni oblik 'BLACK (2021.)' i zagradni oblik 'Opazeno je ... (BLACK, 2021.).'; template koristi zagradni oblik. Dva autora 'BLACK i BROWN (2022.)' (twoJoiner ' i '); tri i vise 'BLACK i sur.' (etAlAfter 3, etAlText 'i sur.'). Vise izvora u zagradi odvaja se tockom sa zarezom kronoloskim redom (str. 11): '(BLACK, 2021.; BLACK i BROWN, 2022.; BLACK i sur., 2023.)'. Isti autor ista godina dobiva mala slova '2021.a; 2021.b'. Godina nosi tocku za rad na hrvatskom, bez tocke za rad na engleskom (str. 10)."
     }
@@ -113,7 +113,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "- brojcane podatke: godina izdanja knjige ili casopisa, volumen, broj i stranica clanka",
+        "quoteRaw": "- brojčane podatke: godina izdanja knjige ili časopisa, volumen, broj i stranica članka",
         "sourcePage": "str. 10",
         "note": "Izvedeno. Ekstrakcija sadrzi naslov 'Rad u casopisu:' (str. 11), ali je konkretni primjer izrezan na kraju datoteke, pa nema worked-example retka. Predlozak je izveden iz opceg pravila o brojcanim podacima (godina, volumen, broj, stranica clanka; str. 10) i stila knjige (VELIKO prezime, godina u zagradi + dvotocka). Casopis se u tekstu navodi 'prema Uputstvu za pisanje clanka u Veterinarskom arhivu' (str. 7). Potvrditi tocnu interpunkciju pri verifikaciji iz punog izvora."
       },
@@ -178,7 +178,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Zakon o drzavnoj potpori u poljoprivredi, ribarstvu i sumarstvu (Narodne novine, br. 87/02).",
+        "quoteRaw": "Zakon o državnoj potpori u poljoprivredi, ribarstvu i šumarstvu (Narodne novine, br. 87/02).",
         "sourcePage": "str. 11",
         "note": "Naslov propisa, zatim u zagradi glasilo i broj s oznakom 'br.'. U tekstu se propis navodi kraticom '(NN 87/2002.)', a u popisu literature punim oblikom '(Narodne novine, br. 87/02)'. Bez autora/donositelja u primjeru popisa (razlika od FPZG koji navodi donositelja)."
       },

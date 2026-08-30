@@ -8,7 +8,7 @@ Snapshot: `data/sources/vkjs/vkjs-upute-zavrsni-diplomski-2024.pdf` (hash `63038
 Otvori PDF: `data/sources/vkjs/vkjs-upute-zavrsni-diplomski-2024.pdf#page=11`
 ```
 TEMPLATE: {authors} ({year}). {title}. {place}: {publisher}.
-QUOTE   : Kod koristenja knjiga kao izvora za zavrsne i diplomske radove za knjigu je osim autora   [grep: OK]
+QUOTE   : Kod korištenja knjiga kao izvora za završne i diplomske radove za knjigu je osim autora   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvedeno iz opisnog pravila za knjige (str. 11): osim autora (ili urednika ako autor nije poznat), naslova i godine objave potrebno je navesti i mjesto izdavanja te izdavaca; za knjige izdane u Hrvatskoj dovoljno je mjesto. Worked-example za knjigu je u ekstrakciji odsjecen (str. 11 zavrsava na 'Knjiga s jednim autorom Primjer'). Predlozak slijedi standardni APA oblik 'Prezime, I. (godina). Naslov. Mjesto: Izdavac.'; elementi odvojeni tockom (pravilo 6, str. 7); naslov knjige u izvorniku kurzivom. Potvrditi mjesto:izdavac interpunkciju pri verifikaciji.
 ```
@@ -17,7 +17,7 @@ NAPOMENA: Izvedeno iz opisnog pravila za knjige (str. 11): osim autora (ili ured
 Otvori PDF: `data/sources/vkjs/vkjs-upute-zavrsni-diplomski-2024.pdf#page=9`
 ```
 TEMPLATE: {authors} ({year}). {title}. U: {editor} (ur.), {container}[[ (str. {pages})]]. {place}: {publisher}.
-QUOTE   : navoenjem imena autora (ili urednika) i godinom publikacije.   [grep: OK]
+QUOTE   : navođenjem imena autora (ili urednika) i godinom publikacije.   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor spominje urednika kao nositelja natuknice (str. 9) ali NEMA worked-example za poglavlje u zborniku/knjizi. Predlozak 'U: {editor} (ur.), {container} (str. {pages}). {place}: {publisher}.' izveden je iz standardne APA konvencije i iz knjiznog oblika ovog izvora; potvrditi veznik ('U:'), oblik urednika (Prezime, I.) i skracenicu '(ur.)' pri verifikaciji.
 ```
@@ -48,7 +48,7 @@ NAPOMENA: Mrezni/organizacijski izvor: Autor. (godina). Naslov. Preuzeto s URL (
 Otvori PDF: `data/sources/vkjs/vkjs-upute-zavrsni-diplomski-2024.pdf#page=7`
 ```
 TEMPLATE: {authors} ({year}). {title} (zavrsni rad). {place}: {institution}.
-QUOTE   : zavrsnih/diplomskih radova na Veleucilistu kriminalistike i javne sigurnosti koristi se APA stil.   [grep: OK]
+QUOTE   : završnih/diplomskih radova na Veleučilištu kriminalistike i javne sigurnosti koristi se APA stil.   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor NE daje worked-example za citiranje zavrsnog/diplomskog rada. Cijeli dokument propisuje APA stil (str. 7). Predlozak izveden iz standardnog APA oblika za neobjavljene radove 'Prezime, I. (godina). Naslov (zavrsni rad). Mjesto: Ustanova.'; potvrditi tocan naziv vrste rada i interpunkciju pri verifikaciji.
 ```

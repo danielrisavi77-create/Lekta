@@ -1,21 +1,21 @@
 ===== [ffri-pravilnik-zavrsni-2023 | str. 1] =====
 rodnom identitetu.
 
-2. Zavrsni rad
+2. Završni rad
 
-                clanak 2.
+                 članak 2.
 
-(1) Zavrsni rad je strucna obrada utvreneteme.
-(2) student je duzan samostalno izraditizavrsni rad.
-(3) lzradom zavrsnoga rada student dokazuje posjedovanje kompetencija i postizanje ishoda ucenja pri
-rjesavanju problema iz strucnih i znanstvenih podrucja koja su bila sadrzaj njegova studija, sposobnost
-primjene teorijskog i prakticnog znanja stecenog tijekom studija te dokazuje da je sposoban samostalno
-se sluziti aktualnom strucnom i znanstvenom literaturom u pisanoj obradi teme.
+(1) Završni rad je stručna obrada utvrđeneteme.
+(2) student je dužan samostalno izraditizavršni rad.
+(3) lzradom završnoga rada student dokazuje posjedovanje kompetencija i postizanje ishoda učenja pri
+rješavanju problema iz stručnih i znanstvenih područja koja su bila sadržaj njegova studija, sposobnost
+primjene teorijskog i praktičnog znanja stečenog tijekom studija te dokazuje da je sposoban samostalno
+se služiti aktualnom stručnom i znanstvenom literaturom u pisanoj obradi teme.
 
-                clanak 3.
+                 članak 3.
 
-(1) Ako je student tijekom prijediplomskog studija izradio seminarski rad na temelju kojeg se moze
-izraditizavrsnirad, mora podnijetipisanizahtjev nastavniku kod kojeg je seminarskirad izraen.
+(1) Ako je student tijekom prijediplomskog studija izradio seminarski rad na temelju kojeg se može
+izraditizavršnirad, mora podnijetipisanizahtjev nastavniku kod kojeg je seminarskirad izrađen.
 
                                                                       1
 
@@ -27,155 +27,343 @@ Fakultet),
 - vanjski suradnici Fakulteta birani u naslovne nastavnike (docente, izvanredne profesore, redovite
 profesore, redovite profesore u trajnom izboru),
 - nastavnici na nastavnim radnim mjestima na Fakultetu ako imaju doktorat znanosti,
-- zaposlenici Fakulteta na suradnickim radnim mjestima ako imaju doktorat znanosti.
-(2) lznimno, a ovisno o temi zavrsnog rada, Vijee odsjeka moze imenovati komentorom strucnjaka iz
+- zaposlenici Fakulteta na suradničkim radnim mjestima ako imaju doktorat znanosti.
+(2) lznimno, a ovisno o temi završnog rada, Vijeće odsjeka može imenovati komentorom stručnjaka iz
 
 prakse.
 
-(3) Mentor i komentor duzni su uputiti studenta na literaturu, nacin prikupljanja i obrade podataka i
+(3) Mentor i komentor dužni su uputiti studenta na literaturu, način prikupljanja i obrade podataka i
 pomagati mu savjetima i smjernicama.
 
 4. PovjerensWo
 
-                        clanak 5.
+                        članak 5.
 
-(1) Povjerenstvo cinenajmanje triclana koijzadovoljavaju uvjete za mentora odnosno komentora iz cl
+(1) Povjerenstvo činenajmanje tričlana koijzadovoljavaju uvjete za mentora odnosno komentora iz čl
 4. ovog Pravilnika, a od kojih je jedan predsjednik.
-(2) Mentor je jedan od clanova Povjerenstva, ali ne moZe biti predsjednik Povjerenstva.
-(3) Komentor moze bitijedan od clanova Povjerenstva, ali ne moze bitipredsjednik Povjerenstva.
+(2) Mentor je jedan od članova Povjerenstva, ali ne moŽe biti predsjednik Povjerenstva.
+(3) Komentor može bitijedan od članova Povjerenstva, ali ne može bitipredsjednik Povjerenstva.
 
-5. Tema zavrsnoga rada
+5. Tema završnoga rada
 
 ===== [ffri-pravilnik-zavrsni-2023 | str. 3] =====
-5. oblikovanje zavrsnoga rada
+5. oblikovanje završnoga rada
 
-                                                           clanak 8.
+                                                           članak 8.
 
-(L) Zavrsnirad otisnut je na papiru A4 formata (2ro x 297 mm|.
+(L) Završnirad otisnut je na papiru A4 formata (2ro x 297 mm|.
 (2) Oblikovanje teksta mora biti kako slijedi:
 
    o Margine: 2,5 cm
    o Font:Times New Roman
-   o Velicina:1'2pt, za fusnote 10pt
+   o Veličina:1'2pt, za fusnote 10pt
    o Prored: 1,5
    o Poravnanje:obostrano
-   o obrojcavanje stranica: u podnozju, desno, pocevsiod Uvoda
+   o obrojčavanje stranica: u podnožju, desno, počevšiod Uvoda
 
-(3) ocekivani opseg teksta zavrsnoga rada iznosi u pravilu od 20 do 30 stranica, ne ukljucujuikorice.
-Ako mentor procijeni da zavrsni rad moze imati manje ili vise stranica od navedenoga, onda to
-potvrujesvojim potpisom na obrascu za prijovu zovrsnoga rada.
-(a) Rad mora biti napisan standardnim hrvatskim jezikom, bez pravopisnih i gramatickih pogresaka.
+(3) očekivani opseg teksta završnoga rada iznosi u pravilu od 20 do 30 stranica, ne uključujućikorice.
+Ako mentor procijeni da završni rad može imati manje ili više stranica od navedenoga, onda to
+potvrđujesvojim potpisom na obrascu za prijovu zovršnoga rada.
+(a) Rad mora biti napisan standardnim hrvatskim jezikom, bez pravopisnih i gramatičkih pogrešaka.
 
-                                                           clanak 9.
+                                                           članak 9.
 
-(1) Zavrsni rad moze se pisati na stranom jeziku, ako je to odreenostudijskim programom.
+(1) Završni rad može se pisati na stranom jeziku, ako je to određenostudijskim programom.
 
 ===== [ffri-pravilnik-zavrsni-2023 | str. 4] =====
 .  Mjesto idatum izrade rada
 
-4. l4ava o autorstvu (vlastorucno potpisana)
+4. l4ava o autorstvu (vlastoručno potpisana)
 
-5. Sadrzaj
+5. Sadržaj
 
 6. Uvod
 
 7. Glavni dio - razrada teme
 
-8. Zakljucak
+8. Zaključak
 
 9. Popis literature
 
-           10. Sazetak i kljucne rijeci
+           10. Sažetak i ključne riječi
 
-         11". Prilozi (npr. slikovnigraficki, zvucnizapisi isl')
-(2) osim formalnih elemenata i stavka 1. ovog clanka, Vijee odsjeka moze donijeti dodatne upute za
+         11". Prilozi (npr. slikovnigrafički, zvučnizapisi isl')
+(2) osim formalnih elemenata i stavka 1. ovog članka, Vijeće odsjeka može donijeti dodatne upute za
 
-izradu zavrsnoga rada.
+izradu završnoga rada.
 
-7. Prihvaanje zavrsnoga rada
+7. Prihvaćanje završnoga rada
 
-                                  clanak 11.
+                                  članak 11.
 
 ===== [ffri-pravilnik-diplomski-2023 | str. 2] =====
-(3) lzradom i obranom diplomskoga rada student dokazuje sposobnost primjene teorijskih i prakticnih
-znanja stecenih tijekom studija, sposobnost primjene znanstvenih metoda u obradi teme, sposobnost
-samostalnog sluzenja aktualnom domaom i stranom literaturom u pisanojobradi teme te sposobnost
-samostalnog rjesavanja slozenih zadataka i problema.
-(4) Tema diplomskoga rada odobrava se iz podrucja nastavnoga programa diplomskoga studija i/ili
-znanstvenog podrucja rada nastavnika.
-(5)Tema diplomskoga rada moze biti i interdiciplinarna.
+(3) lzradom i obranom diplomskoga rada student dokazuje sposobnost primjene teorijskih i praktičnih
+znanja stečenih tijekom studija, sposobnost primjene znanstvenih metoda u obradi teme, sposobnost
+samostalnog služenja aktualnom domaćom i stranom literaturom u pisanojobradi teme te sposobnost
+samostalnog rješavanja složenih zadataka i problema.
+(4) Tema diplomskoga rada odobrava se iz područja nastavnoga programa diplomskoga studija i/ili
+znanstvenog područja rada nastavnika.
+(5)Tema diplomskoga rada može biti i interdiciplinarna.
 
 lll. Odabir iprijava teme diplomskoga rada
-                                                            clanak 4.
+                                                            članak 4.
 
-(1) Popis tema nalazi se na oglasnoj ploci i/ili mreznim stranicama odsjeka/katedre.
-(2) lzmjene i dopune popisa tema mentori predlazu najkasnije do sredine prosinca tekue akademske
-godine na Vijeu odsjeka/katedre.
+(1) Popis tema nalazi se na oglasnoj ploči i/ili mrežnim stranicama odsjeka/katedre.
+(2) lzmjene i dopune popisa tema mentori predlažu najkasnije do sredine prosinca tekuće akademske
+godine na Vijeću odsjeka/katedre.
 
 ===== [ffri-pravilnik-diplomski-2023 | str. 3] =====
-(2) lznimno, a ovisno o temi diplomskoga rada, Vijee odsjeka/katedre moze imenovati komentorom
-strucnjaka iz prakse.
-(3) Mentor i komentor upuuju studenta na literaturu, nacin prikupljanja iobrade podataka i pomagati
+(2) lznimno, a ovisno o temi diplomskoga rada, Vijeće odsjeka/katedre može imenovati komentorom
+stručnjaka iz prakse.
+(3) Mentor i komentor upućuju studenta na literaturu, način prikupljanja iobrade podataka i pomagati
 mu savjetima i smjernicama.
-(4) student izraujediplomski rad uz konzultacije s mentorom/komentorom.
+(4) student izrađujediplomski rad uz konzultacije s mentorom/komentorom.
 
-(5) Radnu verziju diplomskoga rada koju je mentor odobrio dostavlja clanovima Povjerenstva u
+(5) Radnu verziju diplomskoga rada koju je mentor odobrio dostavlja članovima Povjerenstva u
 
-elektronickom obliku.
+elektroničkom obliku.
 
 V. Povjerenstvo
 
-                                                               c|anak 8.
+                                                               č|anak 8.
 
-(L) Povjerenstvo cine najmanje tri clana koji zadovoljavaju uvjete za mentora odnosno komentora iz cl.
+(L) Povjerenstvo čine najmanje tri člana koji zadovoljavaju uvjete za mentora odnosno komentora iz čl.
 
 ===== [ffri-pravilnik-diplomski-2023 | str. 4] =====
-clanak 11
+članak 11
 
 (1) Diplomski rad otisnut je na papiru 44 formata (2tO x 291 mm).
 (2) Oblikovanje teksta mora biti kako slijedi:
 
    o Margine: 2,5 cm
    o Font:Times New Roman
-   o Velicina: I2pt, za fusnote 10pt
+   o Veličina: I2pt, za fusnote 10pt
    o Prored: 1,5
    o Poravnanje:obostrano
-   o obrojcavanje stranica: u podnozju, desno, pocevsiod Uvoda
+   o obrojčavanje stranica: u podnožju, desno, počevšiod Uvoda
 
-(3) opseg teksta diplomskoga rada u pravilu iznosi izmeu30 i60 stranica ne racunajui sazetak, sadrzaj,
+(3) opseg teksta diplomskoga rada u pravilu iznosi između30 i60 stranica ne računajući sažetak, sadržaj,
 popis literature i priloge.
-(a) Rad mora biti napisan standardnim hrvatskim jezikom, bez pravopisnih i gramatickih pogresaka.
+(a) Rad mora biti napisan standardnim hrvatskim jezikom, bez pravopisnih i gramatičkih pogrešaka.
 
-                                                        clanak t2.
+                                                        članak t2.
 
-(1) Diplomski rad moze se pisati na stranom jeziku, ako je to odreenostudijskim programom'
-(2)Ako studijskim programom nije odreenopisanje diplomskoga rada na stranom jeziku, student koji
-zeli pisati na stranom jeziku duzan je podnijeti pisani zahtjev Vijeu odsjeka.
-(3) Ako je Vijee odsjeka odobrilo pisanje rada na stranom jeziku odluku u pisanom obliku dostavlja
-studentskoj sluzbi prije prijave diplomskoga rada'
+(1) Diplomski rad može se pisati na stranom jeziku, ako je to određenostudijskim programom'
+(2)Ako studijskim programom nije određenopisanje diplomskoga rada na stranom jeziku, student koji
+želi pisati na stranom jeziku dužan je podnijeti pisani zahtjev Vijeću odsjeka.
+(3) Ako je Vijeće odsjeka odobrilo pisanje rada na stranom jeziku odluku u pisanom obliku dostavlja
+studentskoj službi prije prijave diplomskoga rada'
 
-                                                           clanak 13.
+                                                           članak 13.
 
 ===== [ffri-pravilnik-diplomski-2023 | str. 5] =====
-4' lzjava o autorstvu (vlastorucno potpisana)
+4' lzjava o autorstvu (vlastoručno potpisana)
 
-            5. Sadrzaj
-           6. Sazetak i kljucne rijeci i (na hrvatskom jeziku odnosno na jeziku na kojem se diplomski rad
+            5. Sadržaj
+           6. Sažetak i ključne riječi i (na hrvatskom jeziku odnosno na jeziku na kojem se diplomski rad
 
-              pise te na engleskom jeziku)
+              piše te na engleskom jeziku)
             7. Uvod
           8. Glavnidio
-            9. Zakljucak
+            9. Zaključak
           10. Popis literature
-          11. Prilozi (npr. slikovni graficki, zvucni zapisi i sl.)
-(2) osim formalnih elemenata i stavka 1. ovog clanka, Vijee odsjeka moze donijeti dodatne upute za
+          11. Prilozi (npr. slikovni grafički, zvučni zapisi i sl.)
+(2) osim formalnih elemenata i stavka 1. ovog članka, Vijeće odsjeka može donijeti dodatne upute za
 izradu diplomskoga rada u skladu s ovim Pravilnikom.
 
 Vlll. Prijava diplomskoga rada
 
-                                clanak 14.
+                                članak 14.
 
-(1) Ako diplomski rad po misljenju mentora zadovoljava svojom kvalitetom i opsegom, mentor
+(1) Ako diplomski rad po mišljenju mentora zadovoljava svojom kvalitetom i opsegom, mentor
 
-provjerava izvornost rada te ispunjava i potpisuje lzvjese o provedenoj provjeri izvornosti studentskog
+provjerava izvornost rada te ispunjava i potpisuje lzvješće o provedenoj provjeri izvornosti studentskog
 roda.
+
+===== [ffri-germanistika-leitfaden-2018 | str. 3] =====
+3.2 Aufbau und Gliederung der schriftlichen Arbeit.................................................................16
+   3.3 Weitere Hinweise für die Erstellung von schriftlichen Arbeiten ........................................ 17
+   3.4 Abgabemodalitäten für Seminararbeiten.............................................................................17
+   3.5 Wichtige Hinweise zur Anfertigung der Bachelor-Arbeiten...............................................18
+   3.6 Abgabemodalitäten für Bachelor- und Master-Arbeiten.....................................................20
+   3.7 Formale Gestaltung von Seminar-, Bachelor- und Master-Arbeiten .................................. 20
+   3.8 Weitere Hinweise für die formale Gestaltung von schriftlichen Arbeiten .......................... 22
+   3.9 Bewertungskriterien für schriftliche Arbeiten.....................................................................23
+4 Referate und Präsentationen ....................................................................................................... 25
+   4.1 Hinweise zur Erstellung von Referaten und Präsentationen ............................................... 25
+   4.2 Bewertungskriterien für Referate und Präsentationen.........................................................27
+5 Quellenverzeichnis ..................................................................................................................... 29
+   5.1 Literatur ............................................................................................................................... 29
+   5.2 Internetquellen.....................................................................................................................29
+Anhang ............................................................................................................................................... 30
+
+                                                                                                                                                 3
+
+===== [ffri-germanistika-leitfaden-2018 | str. 6] =====
+2 Grundlagen des wissenschaftlichen Arbeitens
+
+Die Arbeit mit verschiedenen Quellen, mit Sekundärliteratur und die Verwendung von wörtlichen
+und inhaltlichen Zitaten ist ein wesentlicher Bestandteil der wissenschaftlichen Arbeit. Sie hat zum
+Ziel, nachvollziehbare, wissenschaftlich fundierte Aussagen zu treffen und eigene wissenschaftliche
+Texte oder Präsentationen in einen belegbaren Forschungskontext einzuordnen.
+
+Für die Verwendung von Quellen und Zitaten gibt es in der Wissenschaft bestimmte Regeln, die
+eingehalten werden müssen, um den wissenschaftlichen Anspruch zu erfüllen. Diese Regeln werden
+im Folgenden erläutert. Dabei gibt es sowohl inhaltliche als auch formale Vorgaben. Die formalen
+Vorgaben beziehen sich zum einen auf die Verwendung von Zitaten im eigenen wissenschaftlichen
+Text, d. h. es wird gezeigt, wie wörtliche und inhaltliche Zitate im Text kenntlich gemacht werden
+und wie die Quellen angegeben werden müssen. Zum anderen werden die Quellen, aus denen die
+Zitate für die eigene wissenschaftliche Arbeit stammen, im Quellenverzeichnis am Ende einer Arbeit
+aufgeführt. Auch hierzu gibt es formale Vorgaben, die befolgt werden müssen.
+
+Nachdem auf die Sanktionierung von Plagiaten (2.1) hingewiesen wurde, werden die wichtigsten
+Regeln für die Verwendung von Zitaten (2.2) und die Regeln für die Veränderung von Zitaten (2.3)
+auch auf inhaltlicher Ebene aufgeführt. Die Vorgaben zu Quellenangaben und Literaturverweisen
+werden in den Kapiteln Quellenangaben im Text (2.4) und Bibliographie (2.6) vorgestellt. Außerdem
+wird kurz auf die Funktion und den Nutzen von Fußnoten eingegangen (2.5).
+
+2.1 Hinweis zum Plagiat in wissenschaftlichen Arbeiten
+Als Plagiat gilt, wenn Textpassagen, Inhalte, Forschungsergebnisse oder Ideen anderer Verfasser oder
+Verfasserin übernommen werden, ohne diese kenntlich zu machen. Das heißt, das Anführen eines
+fremden Textes ohne Quellenangabe gilt als intellektueller Diebstahl und wird sanktioniert.
+
+2.2 Regeln für die Verwendung von Zitaten
+1. Aussagen sollten nicht in ihrem Sinn entstellt, verfälscht oder verkürzt werden!
+2. Zitate (wörtliche und inhaltliche) müssen immer eindeutig kenntlich gemacht werden und mit
+
+===== [ffri-germanistika-leitfaden-2018 | str. 8] =====
+Bsp. Zitat mit Anpassung:
+        Sittig (Sittig 2008: 79) sagt, dass Sie „[…] Zitate also auch ändern [dürfen], wenn Sie die
+        Änderungen markieren und dabei den ursprünglichen Sinn des Zitats unangetastet lassen.“
+
+Ergänzungen
+In manchen Fällen müssen Zitate ergänzt werden, z. B. durch Worterklärungen oder die Herstellung
+von Bezügen. In diesem Fall wird die Ergänzung in eckige Klammern [ ] hinter das Bezugswort
+gesetzt und mit dem Hinweis d. Verf. gekennzeichnet. Damit wird ausgedrückt, dass die Ergänzung
+nicht vom Autor des Zitats, sondern vom Verfasser der jeweiligen vorliegenden Arbeit vorgenommen
+wurde.
+
+Bsp.:
+Der Autor bemerkt, dass „[…] sie [die Literatur; d. Verf.] nicht unabhängig vom gesellschaftlichen
+Kontext betrachtet werden kann.“ (Exam 2010: 25)
+
+Fehler im zitierten Text
+Auch Fehler aus dem Original müssen übernommen werden! Um kenntlich zu machen, dass der
+Fehler bereits im Original vorkommt, wird hinter das fehlerhafte Wort in eckigen Klammern ein sic:
+[sic!] gesetzt. Das bedeutet (lat.) „so“ und markiert den Fehler im Original. Es müssen jedoch nicht
+alle Abweichungen von der heutigen Rechtschreibung – gerade bei historischen Texten und Texten,
+die einheitlich nach der alten Rechtschreibung geschrieben wurden – kenntlich gemacht werden.
+
+Fremdsprachige Zitate
+Zitate aus englischer oder kroatischer Sekundärliteratur müssen in den Seminar- und
+Abschlussarbeiten des Germanistik-Studiums nicht in die deutsche Sprache übertragen werden,
+sondern können im fremdsprachigen Original angeführt werden. Werden Zitate aber übersetzt, so
+erscheint im Fließtext das Original, in einer Fußnote die Übersetzung mit Hinweis auf die
+Übersetzerin/ den Übersetzer [übersetzt durch N.N.]. Bei mehreren Übersetzungen wird, statt jedes
+
+                                                                                                                                                 8
+
+===== [ffri-germanistika-leitfaden-2018 | str. 9] =====
+Gegenteil“ (Schäfer 2010: 82). Damit gilt für den Schreibenden, dass er Sätze miteinander in
+        Beziehung setzen muss.
+
+        Beispiel inhaltliches Zitat:
+        Auch die Gestaltung eines Textes auf syntaktischer Ebene spielt eine wichtige Rolle. Ein Text
+        besteht also nicht nur aus einer Ansammlung isolierter Sätze (vgl. Schäfer 2010: 82). Damit
+        gilt für den Schreibenden, dass er Sätze miteinander in Beziehung setzen muss.
+        oder:
+        Auch die Gestaltung eines Textes auf syntaktischer Ebene spielt eine wichtige Rolle. Laut
+        Schäfer und Heinrich (2010: 82) bestehe ein Text nicht nur aus einer Ansammlung isolierter
+        Sätze. Damit gilt für den Schreibenden, dass er Sätze miteinander in Beziehung setzen muss.
+
+2. Bei Literaturquellen im Text müssen Seitenzahlen immer angegeben werden (im Unterschied zu
+    Quellenangaben im Literaturverzeichnis, hier nur in speziellen Fällen wie z. B. bei
+    Zeitschriftenartikeln).
+
+3. Autoren- und Herausgebernamen werden sowohl im Text als auch in den Quellenangaben normal
+    geschrieben, d. h. ohne Großbuchstaben, Kapitälchen oder andere Hervorhebungen, z. B. Jeßing,
+    Schäfer.
+
+4. Wörtliche Zitate im Text, die kürzer sind als drei Zeilen, werden durch Anführungszeichen
+    kenntlich gemacht.
+        Bsp.:
+        Neben den formalen Standards und Techniken zur Erstellung einer Seminararbeit gibt es auch
+
+                                                                                                                                                 9
+
+===== [ffri-germanistika-leitfaden-2018 | str. 10] =====
+noch eine weitere wichtige Voraussetzung für die wissenschaftliche Auseinandersetzung mit
+        Literatur. „Die intensivste Beschäftigung mit einem literarischen Gegenstand setzt die Lust
+        am Text voraus.“ (Jeßing 2009: 8)
+
+5. Wörtliche Zitate im Text, die länger sind als drei Zeilen, sind wie folgt vom Text abzusetzen:
+             o Ein normaler Absatz (eine Leerzeile) wird vor und hinter das Zitat eingefügt.
+             o Der Zeilenabstand wird hier auf 1,0 gesetzt.
+             o Das Zitat wird zudem rechts und links um jeweils 1 cm eingezogen, zusätzlich zu den
+                  normalen Seitenrändern; Textausrichtung: Blocksatz.
+
+        Bsp.:
+     Laut Jeßing besteht eine besonders wichtige Funktion für die Auseinandersetzung mit Literatur
+     in schriftlichen wissenschaftlichen Arbeiten in der Lektüre:
+
+       „Die gründliche, analytische und deutende Lektüre und Wiederlektüre eines literarischen
+       Textes ist eine spannende, individuell sinnstiftende und persönlich bereichernde,
+       lebendige kulturelle Praxis. Spannender noch, wenn die eigene Lektüre mit anderen
+       Verstehensmöglichkeiten in einen produktiven Dialog tritt: […].“ (Jeßing 2008: 8)
+
+6. Inhaltliche Zitate werden weder kursiv geschrieben, noch mit Anführungszeichen versehen. Die
+    Quelle ist aber mit dem Verweis „vgl.“ zu nennen.
+        Bsp.:
+        Jeßing betont, dass auch der Austausch über die Lektüre im Seminar eine wichtige Funktion
+        erfülle (vgl. Jeßing 2008: 8).
+
+7. Ein Zitat im Zitat wird beim wörtlichen Zitieren durch einfache Anführungszeichen
+    gekennzeichnet.
+        Bsp.:
+        „Das ‚Gesetz dessen, was gesagt werden kann’, jenes System, das die ‚Aussagbarkeit’
+        von Aussagen festlegt und es ihnen gestattet ‚fortzubestehen und zugleich sich
+        regelmäßig zu modifizieren’ bezeichnet Foucault als Archiv.“ (Sexl 2004: 260)
+
+     Das Zitat im Zitat stammt von M. Foucault und wird (zusätzlich zur Quelle aus der Sie zitiert
+     haben, hier: Sexl 2004) im Literaturverzeichnis wie folgt angegeben: Foucault, Michel (1981):
+     Archäologie des Wissens. Frankfurt am Main: Suhrkamp.
+
+                                                                                                                                               10
+
+===== [ffri-germanistika-leitfaden-2018 | str. 11] =====
+8. Die üblichen Abkürzungen für Zitate und Quellenangaben sollten an den entsprechenden Stellen
+    verwendet werden (s. Anhang).
+
+9. Quellenangabe im Text bei Monografien mehrerer Autoren
+     Bei Verweisen auf Literaturquellen, die von mehr als zwei Autoren verfasst wurden, wird nur
+     der erste Autor (so wie im Originalwerk auf der Titelseite genannt) im Kurzverweis mit dem
+     Zusatz et al. angegeben. Im Literatur- bzw. Quellenverzeichnis werden alle Autoren genannt.
+
+        Bsp. für Bünting, Karl-Dieter, Axel Bitterlich und Ulrike Pospiech (2000): Schreiben im
+        Studium: mit Erfolg. Ein Leitfaden. Berlin: Cornelsen.
+        „Das Literaturverzeichnis gehört an den Schluss jeder wissenschaftlichen Arbeit.“ (Bünting
+        et al. 2000: 84)
+
+10. Angaben für zitierte Textabschnitte, die sich über zwei oder mehrere Seiten erstrecken:
+        Bsp.:
+        Bei wörtlichen Zitaten: „Im Rahmen einer Arbeit können Zitate an unterschiedlichen Stellen
+        eingesetzt werden.“ (Bünting 2000: 81-82)
+        Bei inhaltlichen Zitaten: Bünting betont, dass die Argumentation verschiedene wichtige
+        Funktionen in der Seminararbeit erfülle (vgl. Bünting 2000: 113-114).
+
+11. Bei mehreren Veröffentlichungen des Autors im gleichen Jahr:
+        „…“ (Nohlen/Schultze 2002a: 56)
+        „…“ (Nohlen/Schultze 2002b: 40)
+
+    Wichtig! Die Quellenangaben im Literaturverzeichnis müssen in diesem Fall ebenfalls mit
+    Buchstaben angegeben werden (siehe Kapitel 2.3)
+
+12. Angaben im Text bei Internetquellen
+    Verweise auf Internetquellen im Text sind wie folgt zu gestalten:
+    (Nachname des Autors oder des Herausgebers (falls nicht vorhanden: Titel des Internetauftritts):
+    Letzter Abruf: Datum)
+        Bsp.:
+        Die Tulpe ist eine „im Frühjahr blühende Pflanze mit meist aufrecht auf einem hohen Stängel
+        sitzender, großer, kelchförmiger Blüte“ (Dudenredaktion: 22.02.2018).
+
+                                                                                                                                               11

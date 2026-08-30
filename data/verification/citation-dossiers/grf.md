@@ -17,7 +17,7 @@ NAPOMENA: Primjer izvora pod 'za knjige' zapravo prikazuje prilog u uredjenoj kn
 Otvori PDF: `data/sources/grf/grf-upute-zavrsni.pdf#page=5`
 ```
 TEMPLATE: {authors}, {title}, u {container}, ({editor}, ur.), {place}, {year}.[[ {pages}.]]
-QUOTE   : 1. D. Babi, D. Jureci, A.Tomas, Interakcije u doradnom procesu kao rezultat   [grep: OK]
+QUOTE   : 1. D. Babić, D. Jurečić, A.Tomaš, Interakcije u doradnom procesu kao rezultat   [grep: OK]
 IZVOR   : D. Babi, D. Jureci, A. Tomas, Interakcije u doradnom procesu kao rezultat plastificiranja digitalno otisnutih araka, u DAAAM International Scientific Book, (B. Katalini, ur.), Vienna, 2006. 1-8.
 RENDER  : D. Babi, D. Jureci, A. Tomas, Interakcije u doradnom procesu kao rezultat plastificiranja digitalno otisnutih araka, u DAAAM International Scientific Book, (B. Katalini, ur.), Vienna, 2006. 1-8.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -28,7 +28,7 @@ NAPOMENA: Cijeli primjer (spojeni redci): D. Babi, D. Jureci, A.Tomas, Interakci
 Otvori PDF: `data/sources/grf/grf-upute-zavrsni.pdf#page=5`
 ```
 TEMPLATE: {authors}, {container}, {volume} ({year}), {pages}.
-QUOTE   : 3. V.D. Stankovi, M. Gojo, Surf. Coat. Technol., 81 (1996), 225-232.   [grep: OK]
+QUOTE   : 3. V.D. Stanković, M. Gojo, Surf. Coat. Technol., 81 (1996), 225-232.   [grep: OK]
 IZVOR   : V.D. Stankovi, M. Gojo, Surf. Coat. Technol., 81 (1996), 225-232.
 RENDER  : V.D. Stankovi, M. Gojo, Surf. Coat. Technol., 81 (1996), 225-232.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -50,7 +50,7 @@ NAPOMENA: Izvor uz primjer daje i pravilo: 'po redoslijedu citiranja navesti web
 Otvori PDF: `data/sources/grf/grf-upute-zavrsni.pdf#page=6`
 ```
 TEMPLATE: {authors}, {title}, diplomski rad, {institution}, {place}, {year}.
-QUOTE   : 5. P. Pavici, Utjecaj gume na okolis, doktorska disertacija, (odnosno magistarski rad,   [grep: OK]
+QUOTE   : 5. P. Pavičić, Utjecaj gume na okoliš, doktorska disertacija, (odnosno magistarski rad,   [grep: OK]
 IZVOR   : P. Pavici, Utjecaj gume na okolis, diplomski rad, Graficki fakultet Sveucilista u Zagrebu, Zagreb, 1999.
 RENDER  : P. Pavici, Utjecaj gume na okolis, diplomski rad, Graficki fakultet Sveucilista u Zagrebu, Zagreb, 1999.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -61,7 +61,7 @@ NAPOMENA: Primjer izvora je doktorska disertacija: P. Pavici, Utjecaj gume na ok
 Otvori PDF: `data/sources/grf/grf-upute-zavrsni.pdf#page=6`
 ```
 TEMPLATE: {title}, {container}, {issue}.
-QUOTE   : U literaturu se ne uvrstavaju skripta, biljeske s predavanja, upute proizvoaca, pro-   [grep: OK]
+QUOTE   : U literaturu se ne uvrštavaju skripta, bilješke s predavanja, upute proizvođača, pro-   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor IZRICITO ISKLJUCUJE pravilnike i propise iz popisa literature ('U literaturu se ne uvrstavaju ... pravilnici i propisi'). Predlozak (naslov, glasilo, broj) je minimalno izveden po uzoru na zarezom odvojene natuknice izvora, samo radi potpunosti alata; na stranici alata navesti da GRF propise ne uvrstava u literaturu. Potvrditi pri verifikaciji.
 ```

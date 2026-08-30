@@ -8,7 +8,7 @@ Snapshot: `data/sources/kif/kif-upute-diplomski-zavrsni.pdf` (hash `aa87190f7f1f
 Otvori PDF: `data/sources/kif/kif-upute-diplomski-zavrsni.pdf#page=16`
 ```
 TEMPLATE: {authors} ({year}). {title}. {place}: {publisher}.
-QUOTE   : Kessler, M. (2003). Epidemioloske studije. Zagreb: Skolska knjiga.   [grep: OK]
+QUOTE   : Kessler, M. (2003). Epidemiološke studije. Zagreb: Školska knjiga.   [grep: OK]
 IZVOR   : Kessler, M. (2003). Epidemioloske studije. Zagreb: Skolska knjiga.
 RENDER  : Kessler, M. (2003). Epidemioloske studije. Zagreb: Skolska knjiga.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -19,7 +19,7 @@ NAPOMENA: Knjiga s dva autora: 'Babi, V. i Snajder, V. (2000). Atletika. Zagreb:
 Otvori PDF: `data/sources/kif/kif-upute-diplomski-zavrsni.pdf#page=17`
 ```
 TEMPLATE: {authors} ({year}). {title}. U {editor} (ur.), {container}[[ (str. {pages})]]. {place}: {publisher}.
-QUOTE   : Toki, M. (2014). Platonova gimnastika. U I. Zagorac (ur.), O sportu drugacije   [grep: OK]
+QUOTE   : Tokić, M. (2014). Platonova gimnastika. U I. Zagorac (ur.), O sportu drugačije   [grep: OK]
 IZVOR   : Toki, M. (2014). Platonova gimnastika. U I. Zagorac (ur.), O sportu drugacije (str. 25-34). Zagreb: Hrvatsko filozofsko drustvo.
 RENDER  : Toki, M. (2014). Platonova gimnastika. U I. Zagorac (ur.), O sportu drugacije (str. 25-34). Zagreb: Hrvatsko filozofsko drustvo.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -30,7 +30,7 @@ NAPOMENA: Nastavak primjera u izvoru: '(str. 25-34). Zagreb: Hrvatsko filozofsko
 Otvori PDF: `data/sources/kif/kif-upute-diplomski-zavrsni.pdf#page=17`
 ```
 TEMPLATE: {authors} ({year}). {title}. {container}, {volume}[[({issue})]], {pages}.[[ {doiUrl}]]
-QUOTE   : Bezjak, R. i Ceci Erpic, S. (2021). The relationship between actual and self-per-   [grep: OK]
+QUOTE   : Bezjak, R. i Cecić Erpič, S. (2021). The relationship between actual and self-per-   [grep: OK]
 IZVOR   : Bezjak, R. i Ceci Erpic, S. (2021). The relationship between actual and self-perceived physical fitness in adolescence. Kinesiology, 53(1), 37-46. https://doi.org/10.26582/k.53.1.5
 RENDER  : Bezjak, R. i Ceci Erpic, S. (2021). The relationship between actual and self-perceived physical fitness in adolescence. Kinesiology, 53(1), 37-46. https://doi.org/10.26582/k.53.1.5
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -41,7 +41,7 @@ NAPOMENA: Primjer prelomljen u izvoru; cjelina: '... self-perceived physical fit
 Otvori PDF: `data/sources/kif/kif-upute-diplomski-zavrsni.pdf#page=16`
 ```
 TEMPLATE: {authors} ({year}). {title}.[[ {container}.]] {url}
-QUOTE   : le izvore mozete konzultirati ovu stranicu ili prirucnik Publication Manual of the   [grep: OK]
+QUOTE   : le izvore možete konzultirati ovu stranicu ili priručnik Publication Manual of the   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor nema primjer mrezne stranice; za ostale izvore upucuje na APA stranicu i prirucnik Publication Manual of the American Psychological Association prema kojem su upute radene. Predlozak izveden iz tog APA obrasca i iz nacina navodenja URL-a u primjeru clanka (URL na kraju, bez tocke iza). {container} je naziv stranice ili organizacije. Datum pristupa nije evidentiran u izvoru pa accessed nije ukljucen. Potvrditi pri verifikaciji.
 ```
@@ -50,7 +50,7 @@ NAPOMENA: Izvor nema primjer mrezne stranice; za ostale izvore upucuje na APA st
 Otvori PDF: `data/sources/kif/kif-upute-diplomski-zavrsni.pdf#page=17`
 ```
 TEMPLATE: {authors} ({year}). {title} ({container}). {institution}, {place}.
-QUOTE   : izvedbe u futsalu (doktorska disertacija). Kinezioloski fakultet, Zagreb.   [grep: OK]
+QUOTE   : izvedbe u futsalu (doktorska disertacija). Kineziološki fakultet, Zagreb.   [grep: OK]
 IZVOR   : Nemci, T. (2019). Oblikovanje i vrednovanje notacijskog sustava za analizu izvedbe u futsalu (doktorska disertacija). Kinezioloski fakultet, Zagreb.
 RENDER  : Nemci, T. (2019). Oblikovanje i vrednovanje notacijskog sustava za analizu izvedbe u futsalu (doktorska disertacija). Kinezioloski fakultet, Zagreb.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -61,7 +61,7 @@ NAPOMENA: Sekcija izvora: 'KAKO NAVODITI DOKTORSKE, MAGISTARSKE I DIPLOMSKE RADN
 Otvori PDF: `data/sources/kif/kif-upute-diplomski-zavrsni.pdf#page=15`
 ```
 TEMPLATE: {title} ({year}). {container}[[, {issue}]].
-QUOTE   : Kinezioloskom fakultetu koristi se American Psychological Association APA stil ci-   [grep: OK]
+QUOTE   : Kineziološkom fakultetu koristi se American Psychological Association APA stil ci-   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor uopce ne obraduje citiranje propisa; predlozak izveden iz opceg APA obrasca (naslov na mjestu autora, godina, sluzbeno glasilo u polju container, broj u issue, npr. Narodne novine). Hrvatska prilagodba APA za propise nije evidentirana u izvoru. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -70,7 +70,7 @@ NAPOMENA: Izvor uopce ne obraduje citiranje propisa; predlozak izveden iz opceg 
 ```
 TEMPLATE : ({authorsShort}, {year})   /  s pages: ({authorsShort}, {year}, str. {pages})
 RENDER   : (Lovric, 1988)   /  (Lovric, 1988, str. 45)
-QUOTE    : Razliciti epidemioloski uzorci pokazuju da... (Kessler, 2003).   [grep: OK]
+QUOTE    : Različiti epidemiološki uzorci pokazuju da... (Kessler, 2003).   [grep: OK]
 NAPOMENA : Izvor daje i narativni oblik 'Kessler (2003) je otkrio da...'. Dva autora: '(Babi i Snajder, 2000)' (str. 16). Tri i vise autora: '(Cigrovski i suradnici, 2020)' (str. 17); pravilo u izvoru kaze 'navodi se prvi autor i et al', ali primjeri koriste 'i suradnici' pa nacrt slijedi primjer. withPagesTemplate je IZVEDEN: izvor pokazuje samo narativni oblik doslovnog citata s '(str. 129)' iza navodnika (str. 15, Milanovi 2013), kombinirani parenteticki oblik nije evidentiran; potvrditi pri verifikaciji.
 ```
 

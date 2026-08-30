@@ -189,7 +189,59 @@ function main() {
     (byFac[m[1]] ??= []).push(src);
   }
 
-  const targets = only.length ? only : Object.keys(byFac).sort();
+  /**
+ * Citati koje VERIFICIRAN citatni spec tog fakulteta navodi. Isjecak nastaje keyword-prozorom, a
+ * prozor ne zna nista o vec verificiranim tvrdnjama, pa citat na kojem spec pociva zna ispasti iz
+ * isjecka cim se prozor ili poredak pomakne.
+ */
+function citedQuotesFor(fac) {
+  const dir = path.join(ROOT, 'data/tools/citation-specs/verified');
+  let files;
+  try { files = fs.readdirSync(dir); } catch { return []; }
+  const out = new Set();
+  for (const name of files) {
+    if (!name.endsWith('.json')) continue;
+    const base = name.slice(0, -5);
+    if (base !== fac && !base.startsWith(`${fac}-`)) continue;
+    let spec;
+    try { spec = JSON.parse(fs.readFileSync(path.join(dir, name), 'utf-8')); } catch { continue; }
+    const walk = (node) => {
+      if (!node || typeof node !== 'object') return;
+      if (!Array.isArray(node) && typeof node.quoteRaw === 'string' && node.quoteRaw.length > 25) {
+        out.add(node.quoteRaw);
+      }
+      for (const v of Object.values(node)) walk(v);
+    };
+    walk(spec);
+  }
+  return [...out];
+}
+
+const LOSSY_FOLD = { 'č': 'c', 'Č': 'C', 'š': 's', 'Š': 'S', 'ž': 'z', 'Ž': 'Z' };
+
+/**
+ * Normalizacija za usporedbu citata s izvorom. Podnosi tri poznata raskoraka:
+ *  - oznaka stavke: minus i crtice (U+2212, U+2010..U+2015) -> ASCII '-'. Ovo je kljucni redak:
+ *    spec pise "- Bernstein" s ASCII crticom, a izvor "− Bernstein" s MINUS SIGNom, i to je JEDINA
+ *    razlika u cijelom citatu. Bez ovoga ulomak koji nosi citat ne dobije prvenstvo, kapa ga odreze
+ *    (pfri ima 60.844 znaka ulomaka na kapu od 20.000, prolazi tek trecina) i kvar je TIH.
+ *  - navodnici i apostrofi: tipografski i obrnuti -> ASCII.
+ *  - ISPALO SLOVO: stariji `pdftotext` bez `-enc UTF-8` presloyio je c/s/z s kvackom u ASCII, a c s
+ *    kvackom i d s crtom izbrisao bez traga. Citati u specovima su time osteceni, izvor vise nije,
+ *    pa se OBJE strane presavijaju na isti skelet.
+ */
+function normForMatch(s) {
+  return String(s || '')
+    .replace(/[\u2010-\u2015\u2212]/g, '-')
+    .replace(/[\u2018\u2019\u02bc\u2032`]/g, "'")
+    .replace(/[\u201c\u201d\u201e\u2033]/g, '"')
+    .replace(/[ćĆđĐ]/g, '')
+    .replace(/[čČšŠžŽ]/g, (m) => LOSSY_FOLD[m] ?? m)
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+const targets = only.length ? only : Object.keys(byFac).sort();
   fs.mkdirSync(OUT_DIR, { recursive: true });
 
   const index = [];
@@ -200,6 +252,7 @@ function main() {
       continue;
     }
     const snippets = [];
+    const pagesById = {};
     const srcMeta = [];
     const needsOcr = [];
     for (const src of sources) {
@@ -210,13 +263,43 @@ function main() {
       if (pages === 'legacy-doc') { needsOcr.push(`${src.id} (.doc binarni format)`); continue; }
       if (!pages) { needsOcr.push(`${src.id} (tekst se ne moze izvuci)`); continue; }
       const takeAll = src.kind === 'citation-style';
+      pagesById[src.id] = pages;
       const snips = windowedSnippets(pages, takeAll);
       for (const s of snips) snippets.push({ sourceId: src.id, page: s.page, text: s.text });
       srcMeta.push({ sourceId: src.id, kind: src.kind, pages: pages.length, snippets: snips.length });
     }
 
-    // slozeni tekst, cap MAX_CHARS (citation-style blokovi imaju prioritet jer su prvi u nizu)
+    // ISJECAK MORA SADRZAVATI ONO STO VERIFICIRAN SPEC CITIRA. Prvenstvo se racuna nad ISTOM
+    // normalizacijom kojom bi se citat i trazio; ako usporedba zakaze, zakazu OBA testa, pa
+    // dovlacenje ne moze biti sigurnosna mreza prvenstvu (izmjereno: dovuceno=0 u svakoj varijanti
+    // s losom normalizacijom).
+    const citedNorm = citedQuotesFor(fac).map(normForMatch).filter(Boolean);
+    for (const s of snippets) {
+      const t = normForMatch(s.text);
+      s.cited = citedNorm.some((q) => t.includes(q));
+    }
+    // DOVLACENJE: citat kojega nema ni u jednom ulomku trazi se po stranicama izvora. Nije mreza
+    // prvenstvu (dijeli s njim istu usporedbu, pa kad ona zakaze zakazu oba), nego pokriva slucaj
+    // kad keyword-prozor to mjesto uopce nije zahvatio. Izmjereno: opali dva puta na 122 fakulteta.
+    for (let i = 0; i < citedNorm.length; i++) {
+      if (snippets.some((s) => s.cited && normForMatch(s.text).includes(citedNorm[i]))) continue;
+      let done = false;
+      for (const [sourceId, pages] of Object.entries(pagesById)) {
+        for (let p = 0; p < pages.length && !done; p++) {
+          const lines = String(pages[p]?.text ?? '').split('\n');
+          const hit = lines.findIndex((_, li) =>
+            normForMatch(lines.slice(li, li + WINDOW).join(' ')).includes(citedNorm[i]));
+          if (hit < 0) continue;
+          const a = Math.max(0, hit - 2);
+          const b = Math.min(lines.length - 1, hit + WINDOW + 2);
+          snippets.push({ sourceId, page: pages[p]?.page ?? p + 1, text: lines.slice(a, b + 1).join('\n'), cited: true });
+          done = true;
+        }
+        if (done) break;
+      }
+    }
     snippets.sort((a, b) => {
+      if (a.cited !== b.cited) return a.cited ? -1 : 1;
       const ak = sources.find((s) => s.id === a.sourceId)?.kind === 'citation-style' ? 0 : 1;
       const bk = sources.find((s) => s.id === b.sourceId)?.kind === 'citation-style' ? 0 : 1;
       return ak - bk;
@@ -224,7 +307,9 @@ function main() {
     let text = '';
     for (const s of snippets) {
       const block = `\n\n===== [${s.sourceId} | str. ${s.page}] =====\n${s.text.trim()}`;
-      if (text.length + block.length > MAX_CHARS && text.length > 0) break;
+      // PRESKOCI prevelik blok, ne odustani od ostatka: stari `break` je na prvom bloku koji ne
+      // stane odbacivao SVE preostale, pa je isjecak ostajao ispod granice a sadrzaj se gubio.
+      if (text.length + block.length > MAX_CHARS && text.length > 0) continue;
       text += block;
     }
     text = text.trim();

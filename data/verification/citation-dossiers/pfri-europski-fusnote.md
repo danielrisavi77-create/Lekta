@@ -8,7 +8,7 @@ Snapshot: `data/sources/pfri/pfri-upute-zavrsni-2025.pdf` (hash `2b6ab8d65a52...
 Otvori PDF: `data/sources/pfri/pfri-upute-zavrsni-2025.pdf#page=19`
 ```
 TEMPLATE: {authors}: {title}[[, {volume}]], {publisher}, {place}, {year}.
-QUOTE   : U literaturi, pisalo bi Zugaj, M.: Osnove znanstvenog i strucnog rada, Zagreb,   [grep: OK]
+QUOTE   : U literaturi, pisalo bi Žugaj, M.: Osnove znanstvenog i stručnog rada, Zagreb,   [grep: OK]
 IZVOR   : Zugaj, M.: Osnove znanstvenog i strucnog rada, Zagreb, Samobor, 1989.
 RENDER  : Zugaj, M.: Osnove znanstvenog i strucnog rada, Zagreb, Samobor, 1989.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -19,7 +19,7 @@ NAPOMENA: Primjer je u ekstrakciji prelomljen ('Samobor, 1989.' u sljedecem retk
 Otvori PDF: `data/sources/pfri/pfri-upute-zavrsni-2025.pdf#page=20`
 ```
 TEMPLATE: {authors}: {title}, u: {container}, {publisher}, {place}, {year}.
-QUOTE   : spominju u referencama. Popis literature mora biti potpun, tocan, svaka bibliografska jedinica   [grep: OK]
+QUOTE   : spominju u referencama. Popis literature mora biti potpun, točan, svaka bibliografska jedinica   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor nema primjer poglavlja ili zbornika u Europskom sustavu (primjeri poglavlja 4.5.2 nisu zahvaceni ekstrakcijom); predlozak izveden iz oblika za knjigu uz izvedenu oznaku 'u:' ispred naslova cjeline. Urednik nije evidentiran u isjeccima pa nije ukljucen. Potvrditi pri verifikaciji.
 ```
@@ -37,7 +37,7 @@ NAPOMENA: Primjeri clanka u Europskom sustavu nisu zahvaceni ekstrakcijom (isjec
 Otvori PDF: `data/sources/pfri/pfri-upute-zavrsni-2025.pdf#page=19`
 ```
 TEMPLATE: [[{authors}: ]]{title}[[, {year}]], online: {url} ({accessed})
-QUOTE   : Koristeni izvori sadrze sve podatke o referenciranom djelu kao sto je navedeno u   [grep: OK]
+QUOTE   : Korišteni izvori sadrže sve podatke o referenciranom djelu kao što je navedeno u   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Europski dio izvora ne pokazuje mrezne izvore; oznaka 'online: URL (datum pristupa)' preuzeta iz Harvardskog dijela istog dokumenta (str. 22-23, gdje jedinica zavrsava bez tocke iza zagrade), redoslijed autor-naslov iz oblika za knjigu. Potvrditi pri verifikaciji.
 ```
@@ -46,7 +46,7 @@ NAPOMENA: Europski dio izvora ne pokazuje mrezne izvore; oznaka 'online: URL (da
 Otvori PDF: `data/sources/pfri/pfri-upute-zavrsni-2025.pdf#page=17`
 ```
 TEMPLATE: {authors}: {title}, {institution}, {place}, {year}.
-QUOTE   : bibliografskih jedinica (knjiga, clanaka, zbornika radova, pravilnika, rjecnika...)   [grep: OK]
+QUOTE   : bibliografskih jedinica (knjiga, članaka, zbornika radova, pravilnika, rječnika...)   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Zavrsni i diplomski radovi nisu medju vrstama koje izvor obraduje; predlozak izveden iz oblika za knjigu (izdavac zamijenjen ustanovom). Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -55,7 +55,7 @@ NAPOMENA: Zavrsni i diplomski radovi nisu medju vrstama koje izvor obraduje; pre
 Otvori PDF: `data/sources/pfri/pfri-upute-zavrsni-2025.pdf#page=20`
 ```
 TEMPLATE: {title}, {container}[[, {issue}]], {year}.
-QUOTE   : bibliografskih jedinica (knjiga, clanaka, pravilnika, rjecnika...).   [grep: OK]
+QUOTE   : bibliografskih jedinica (knjiga, članaka, pravilnika, rječnika...).   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Pravilnici su izrijekom dopustena bibliografska jedinica, ali izvor ne daje format za propise; naslov kao prvi element (bez autora) izveden iz Harvardskog dijela istog dokumenta (str. 22), rep container-broj-godina po analogiji s oblikom za knjigu. Broj sluzbenog glasila u {issue}. Potvrditi ili oboriti pri verifikaciji.
 ```

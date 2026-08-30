@@ -20,7 +20,7 @@
     "mode": "note-number",
     "provenance": {
       "kind": "rule-text",
-      "quoteRaw": "Izvori za citirane, sazete ili parafrazirane misli nekog drugog autora navode se u fusnotama na",
+      "quoteRaw": "Izvori za citirane, sažete ili parafrazirane misli nekog drugog autora navode se u fusnotama na",
       "sourcePage": "str. 4",
       "note": "U tekstu je oznaka fusnote (iza navodnika, odnosno iza interpunkcijskog znaka); alat generira BIBLIOGRAFSKI oblik iz popisa literature. Popis literature pise se abecednim redom prema prezimenu (prvog) autora bez rednih brojeva (str. 5). Za rad vise autora navode se SVI autori punim imenima, oblik 'i dr.' (et al.) se ne koristi (str. 5), pa su etAl polja namjerno izostavljena."
     }
@@ -42,7 +42,7 @@
       ],
       "provenance": {
         "kind": "rule-text",
-        "quoteRaw": "Prezime, Ime [autora], Naslov knjige, Izdavac, Mjesto izdavanja, godina izdavanja.",
+        "quoteRaw": "Prezime, Ime [autora], Naslov knjige, Izdavač, Mjesto izdavanja, godina izdavanja.",
         "sourcePage": "str. 5",
         "note": "Izvor daje shematski redak (bez konkretne instance) pa je kind rule-text; example je zadrzan jer je shematski redak ovdje bez ostecenih glifova i renderer ga tocno reproducira. Uglata anotacija [autora] izostavljena iz examplea. Fusnotno prvo navodenje ima drugi oblik (Ime Prezime, ..., str. xxx; str. 4) i izvan je dosega generatora."
       },
@@ -73,7 +73,7 @@
       ],
       "provenance": {
         "kind": "rule-text",
-        "quoteRaw": "Prezime, Ime [autora], ,,Naslov rada/poglavlja iz zbornika/knjige\", u: Prezime, Ime",
+        "quoteRaw": "Prezime, Ime [autora], „Naslov rada/poglavlja iz zbornika/knjige“, u: Prezime, Ime",
         "sourcePage": "str. 5",
         "note": "Nastavak prelomljenog retka u izvoru: '[urednika/autora] (ur.), Naslov zbornika/knjige, Izdavac, Mjesto izdavanja, godina izdavanja, str. xxx�xxx [raspon stranica rada].' Urednik se upisuje u obliku Prezime, Ime; skracenica (ur.) s tockom. Redak je shematski i navodnici su u ekstrakciji osteceni (,, i \") pa je kind rule-text bez examplea; predlozak koristi prave hrvatske navodnike „ i ” (ASCII ,, bi pojeo tidy cleanup), stvarne glifove potvrditi u PDF-u pri verifikaciji."
       },
@@ -92,7 +92,7 @@
       ],
       "provenance": {
         "kind": "rule-text",
-        "quoteRaw": "Prezime, Ime [autora], ,,Naslov rada\", Naslov casopisa, XX (X) [godiste casopisa (svezak/broj",
+        "quoteRaw": "Prezime, Ime [autora], „Naslov rada“, Naslov časopisa, XX (X) [godište časopisa (svezak/broj",
         "sourcePage": "str. 5",
         "note": "Nastavak prelomljenog retka u izvoru: 'casopisa)], godina izdavanja, str. xxx�xxx [raspon stranica rada].' XX (X) znaci godiste casopisa (svezak/broj casopisa): volume ide prije zagrade, issue u zagradu. Redak je shematski i navodnici su u ekstrakciji osteceni pa je kind rule-text bez examplea; predlozak koristi prave hrvatske navodnike „ i ”, potvrditi glifove u PDF-u."
       },
@@ -109,7 +109,7 @@
       ],
       "provenance": {
         "kind": "rule-text",
-        "quoteRaw": "Prezime, Ime [autora], ,,Naslov teksta\", internetska adresa (pristup: [datum pristupa]).",
+        "quoteRaw": "Prezime, Ime [autora], „Naslov teksta“, internetska adresa (pristup: [datum pristupa]).",
         "sourcePage": "str. 5",
         "note": "Vrijedi za tekstove s internetskih stranica koji nisu objavljeni u znanstvenim casopisima; clanci koji postoje u casopisu citiraju se kao clanak. Redak je shematski i navodnici su u ekstrakciji osteceni pa je kind rule-text bez examplea; predlozak koristi prave hrvatske navodnike „ i ”, potvrditi glifove u PDF-u."
       },
@@ -127,7 +127,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Prezime, Ime [autora], Naslov knjige, Izdavac, Mjesto izdavanja, godina izdavanja.",
+        "quoteRaw": "Prezime, Ime [autora], Naslov knjige, Izdavač, Mjesto izdavanja, godina izdavanja.",
         "sourcePage": "str. 5",
         "note": "Upute Odsjeka za filozofiju NE obraduju citiranje zavrsnih/diplomskih radova; predlozak je izveden iz oblika za knjigu (izdavac -> ustanova). Potvrditi ili oboriti pri verifikaciji."
       },
@@ -142,7 +142,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Prezime, Ime [autora], ,,Naslov rada\", Naslov casopisa, XX (X) [godiste casopisa (svezak/broj",
+        "quoteRaw": "Prezime, Ime [autora], „Naslov rada“, Naslov časopisa, XX (X) [godište časopisa (svezak/broj",
         "sourcePage": "str. 5",
         "note": "Upute NE obraduju citiranje propisa/pravnih izvora; minimalni predlozak izveden iz opceg reda za clanak bez autora (naslov, publikacija, broj, godina). Potvrditi ili oboriti pri verifikaciji."
       },

@@ -42,7 +42,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "U literaturi, pisalo bi Zugaj, M.: Osnove znanstvenog i strucnog rada, Zagreb,",
+        "quoteRaw": "U literaturi, pisalo bi Žugaj, M.: Osnove znanstvenog i stručnog rada, Zagreb,",
         "sourcePage": "str. 19",
         "note": "Primjer je u ekstrakciji prelomljen ('Samobor, 1989.' u sljedecem retku), spojen u expected. Raspodjela 'Zagreb, Samobor' na izdavaca i mjesto je pretpostavljena prema redoslijedu izdavac-mjesto-godina iz jedinice u predgovoru (str. 3: 'Zelenika, R.: Metodologija i tehnologija izrade znanstvenog i strucnog djela, 5. izmijenjeno i dopunjeno izdanje, Ekonomski fakultet Sveucilista u Rijeci, Rijeka, 2011.'); potvrditi pri verifikaciji. Broj izdanja unosi se cijeli u polje volume. Naslov je u izvorniku vjerojatno kurzivom, alat radi plain text."
       },
@@ -71,7 +71,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "spominju u referencama. Popis literature mora biti potpun, tocan, svaka bibliografska jedinica",
+        "quoteRaw": "spominju u referencama. Popis literature mora biti potpun, točan, svaka bibliografska jedinica",
         "sourcePage": "str. 20",
         "note": "Izvor nema primjer poglavlja ili zbornika u Europskom sustavu (primjeri poglavlja 4.5.2 nisu zahvaceni ekstrakcijom); predlozak izveden iz oblika za knjigu uz izvedenu oznaku 'u:' ispred naslova cjeline. Urednik nije evidentiran u isjeccima pa nije ukljucen. Potvrditi pri verifikaciji."
       },
@@ -104,7 +104,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Koristeni izvori sadrze sve podatke o referenciranom djelu kao sto je navedeno u",
+        "quoteRaw": "Korišteni izvori sadrže sve podatke o referenciranom djelu kao što je navedeno u",
         "sourcePage": "str. 19",
         "note": "Europski dio izvora ne pokazuje mrezne izvore; oznaka 'online: URL (datum pristupa)' preuzeta iz Harvardskog dijela istog dokumenta (str. 22-23, gdje jedinica zavrsava bez tocke iza zagrade), redoslijed autor-naslov iz oblika za knjigu. Potvrditi pri verifikaciji."
       },
@@ -121,7 +121,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "bibliografskih jedinica (knjiga, clanaka, zbornika radova, pravilnika, rjecnika...)",
+        "quoteRaw": "bibliografskih jedinica (knjiga, članaka, zbornika radova, pravilnika, rječnika...)",
         "sourcePage": "str. 17",
         "note": "Zavrsni i diplomski radovi nisu medju vrstama koje izvor obraduje; predlozak izveden iz oblika za knjigu (izdavac zamijenjen ustanovom). Potvrditi ili oboriti pri verifikaciji."
       },
@@ -137,7 +137,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "bibliografskih jedinica (knjiga, clanaka, pravilnika, rjecnika...).",
+        "quoteRaw": "bibliografskih jedinica (knjiga, članaka, pravilnika, rječnika...).",
         "sourcePage": "str. 20",
         "note": "Pravilnici su izrijekom dopustena bibliografska jedinica, ali izvor ne daje format za propise; naslov kao prvi element (bez autora) izveden iz Harvardskog dijela istog dokumenta (str. 22), rep container-broj-godina po analogiji s oblikom za knjigu. Broj sluzbenog glasila u {issue}. Potvrditi ili oboriti pri verifikaciji."
       },

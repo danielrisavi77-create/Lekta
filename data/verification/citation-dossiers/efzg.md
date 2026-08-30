@@ -8,7 +8,7 @@ Snapshot: `data/sources/efzg/efzg-postupak-zavrsni.pdf` (hash `0807863ff289...`)
 Otvori PDF: `data/sources/efzg/efzg-postupak-zavrsni.pdf#page=2`
 ```
 PIN     : izvor propisuje stil "harvard" -> format ostaje obiteljski motor
-QUOTE   : ispravno citirati. Preporucuje se na tue radove upuivati harvardskim stilom navoenja literature.   [grep: OK]
+QUOTE   : ispravno citirati. Preporučuje se na tuđe radove upućivati harvardskim stilom navođenja literature.   [grep: OK]
 ```
 
 ## Verifikacija

@@ -8,7 +8,7 @@ Snapshot: `data/sources/pfri/pfri-upute-zavrsni-2025.pdf` (hash `2b6ab8d65a52...
 Otvori PDF: `data/sources/pfri/pfri-upute-zavrsni-2025.pdf#page=21`
 ```
 TEMPLATE: {authors} {year}, {title}[[, {volume}]], {publisher}, {place}.
-QUOTE   : [4] Zelenika, R. 2000, Metodologija i tehnologija izrade znanstvenog i strucnog djela, 4.   [grep: OK]
+QUOTE   : [4] Zelenika, R. 2000, Metodologija i tehnologija izrade znanstvenog i stručnog djela, 4.   [grep: OK]
 IZVOR   : Zelenika, R. 2000, Metodologija i tehnologija izrade znanstvenog i strucnog djela, 4. izmijenjeno i dopunjeno izdanje, Ekonomski fakultet Sveucilista u Rijeci, Rijeka.
 RENDER  : Zelenika, R. 2000, Metodologija i tehnologija izrade znanstvenog i strucnog djela, 4. izmijenjeno i dopunjeno izdanje, Ekonomski fakultet Sveucilista u Rijeci, Rijeka.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -19,7 +19,7 @@ NAPOMENA: Popis literature numerira se arapskim brojevima u uglatim zagradama pr
 Otvori PDF: `data/sources/pfri/pfri-upute-zavrsni-2025.pdf#page=22`
 ```
 TEMPLATE: {authors} {year}, '{title}', {container}[[, {publisher}]][[, vol. {volume}]][[, no. {issue}]][[, p. {pages}]][[, online: {url} ({accessed})]].
-QUOTE   : - Huffman, L. M. 1996, 'Processing whey protein for use as a food ingredient', Food   [grep: OK]
+QUOTE   : − Huffman, L. M. 1996, 'Processing whey protein for use as a food ingredient', Food   [grep: OK]
 IZVOR   : Huffman, L. M. 1996, 'Processing whey protein for use as a food ingredient', Food Technology, Food Institute, vol. 50, no. 2, p. 49-52.
 RENDER  : Huffman, L. M. 1996, 'Processing whey protein for use as a food ingredient', Food Technology, Food Institute, vol. 50, no. 2, p. 49-52.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -30,7 +30,7 @@ NAPOMENA: Redoslijed elemenata po popisu na str. 22: prezime autora i inicijal i
 Otvori PDF: `data/sources/pfri/pfri-upute-zavrsni-2025.pdf#page=22`
 ```
 TEMPLATE: {authors} {year}, {title} in {container}, ed. {editor}, {publisher}, {place}.
-QUOTE   : - Bernstein, D. 1995, Transportation planning in The Civil Engineering Handbook, ed.   [grep: OK]
+QUOTE   : − Bernstein, D. 1995, Transportation planning in The Civil Engineering Handbook, ed.   [grep: OK]
 IZVOR   : Bernstein, D. 1995, Transportation planning in The Civil Engineering Handbook, ed. W.F.Chen, CRC Press, Boca Raton.
 RENDER  : Bernstein, D. 1995, Transportation planning in The Civil Engineering Handbook, ed. W.F.Chen, CRC Press, Boca Raton.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -41,7 +41,7 @@ NAPOMENA: Jedini primjer poglavlja u knjizi (str. 22); veznik 'in' i oznaka 'ed.
 Otvori PDF: `data/sources/pfri/pfri-upute-zavrsni-2025.pdf#page=23`
 ```
 TEMPLATE: [[{authors} ]]{title}, {year}, online: {url} ({accessed})
-QUOTE   : - Proizvodnja kemikalija, kemijskih proizvoda i proizvoda od gume, 2007, online:   [grep: OK]
+QUOTE   : − Proizvodnja kemikalija, kemijskih proizvoda i proizvoda od gume, 2007, online:   [grep: OK]
 IZVOR   : Proizvodnja kemikalija, kemijskih proizvoda i proizvoda od gume, 2007, online: http://hgk.biznet.hr/hgk/ileovi/10677.pdf (24.3.2007.)
 RENDER  : Proizvodnja kemikalija, kemijskih proizvoda i proizvoda od gume, 2007, online: http://hgk.biznet.hr/hgk/ileovi/10677.pdf (24.3.2007.)
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -52,7 +52,7 @@ NAPOMENA: Worked example bez autora: naslov je prvi element citiranja kad autor 
 Otvori PDF: `data/sources/pfri/pfri-upute-zavrsni-2025.pdf#page=21`
 ```
 TEMPLATE: {authors} {year}, {title}, {institution}, {place}.
-QUOTE   : Prilikom koristenja vazno je postivati redoslijed unosenja podataka, paziti na velika i   [grep: OK]
+QUOTE   : Prilikom korištenja važno je poštivati redoslijed unošenja podataka, paziti na velika i   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute ne obraduju citiranje zavrsnih/diplomskih radova; predlozak izveden iz oblika za knjigu ([4] Zelenika, str. 21) uz izdavaca zamijenjenog ustanovom. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -61,7 +61,7 @@ NAPOMENA: Upute ne obraduju citiranje zavrsnih/diplomskih radova; predlozak izve
 Otvori PDF: `data/sources/pfri/pfri-upute-zavrsni-2025.pdf#page=20`
 ```
 TEMPLATE: {title}, {year}, {container}[[, {issue}]].
-QUOTE   : bibliografskih jedinica (knjiga, clanaka, pravilnika, rjecnika...).   [grep: OK]
+QUOTE   : bibliografskih jedinica (knjiga, članaka, pravilnika, rječnika...).   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute spominju pravilnike kao dopustene bibliografske jedinice, ali ne daju format za propise; predlozak izveden iz pravila da je bez autora naslov prvi element citiranja i iz reda naslov-godina-izvor u primjeru The CCH Macquarie dictionary of business (str. 22). Broj sluzbenog glasila u {issue}. Potvrditi ili oboriti pri verifikaciji.
 ```

@@ -48,7 +48,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Rupi, V. (2009): Zastita zdravlja domaih zivotinja 1. Unutrasnje i kirurske bolesti i zahvati.",
+        "quoteRaw": "Rupić, V. (2009): Zaštita zdravlja domaćih životinja 1. Unutrašnje i kirurške bolesti i zahvati.",
         "sourcePage": "str. 12",
         "note": "Cijeli primjer (spojena dva retka), sekcija 6.2 'Knjige - jedan autor': Rupi, V. (2009): Zastita zdravlja domaih zivotinja 1. Unutrasnje i kirurske bolesti i zahvati. Hrvatska mljekarska udruga, Zagreb. Prezime pa inicijal(i) imena, godina u zagradi iza koje ide DVOTOCKA, naslov s tockom, zatim izdavac, ZAREZ, mjesto, tocka. Dijakritika ostecena od pdftotext-a ('Rupi' = Rupic, 'domaih' = domacih)."
       },
@@ -102,7 +102,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "U popisu literature navode se svi izvori (knjige, znanstveni i strucni clanci, pravilnici i ostalo)",
+        "quoteRaw": "U popisu literature navode se svi izvori (knjige, znanstveni i stručni članci, pravilnici i ostalo)",
         "sourcePage": "str. 12",
         "note": "Sekcija 6.2 popis literature izricito imenuje 'znanstvene i strucne clanke' kao vrstu izvora, ali NE daje formatirani primjer clanka (ekstrakcija sadrzi samo primjer knjige i mreznog izvora). Predlozak je izveden iz oblika za knjigu (autor, (godina):, naslov.) prosiren nazivom casopisa, sveskom, brojem i rasponom stranica po opcem hrvatskom prirodoznanstvenom obicaju. Interpunkciju (zarez/dvotocka oko volumena i stranica) potvrditi ili oboriti pri verifikaciji."
       },
@@ -156,7 +156,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "U popisu literature navode se svi izvori (knjige, znanstveni i strucni clanci, pravilnici i ostalo)",
+        "quoteRaw": "U popisu literature navode se svi izvori (knjige, znanstveni i stručni članci, pravilnici i ostalo)",
         "sourcePage": "str. 12",
         "note": "Popis literature imenuje 'pravilnike' kao vrstu izvora, ali bibliografski oblik propisa nije prikazan (u tekstu se propisi navode samo in-text: 'Pravilnik ... (NN 01/13)' i '(Anonymus, 2013)', str. 12). Predlozak je minimalno izveden iz opceg autor-godina reda natuknice (naslov propisa, godina u zagradi s dvotockom, glasilo, broj). Potvrditi pri verifikaciji."
       },

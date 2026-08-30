@@ -8,7 +8,7 @@ Snapshot: `data/sources/sfzg/sfzg-naputak-diplomski-2024.pdf` (hash `830c7620b5a
 Otvori PDF: `data/sources/sfzg/sfzg-naputak-diplomski-2024.pdf#page=9`
 ```
 PIN     : izvor propisuje stil "vancouver" -> format ostaje obiteljski motor
-QUOTE   : prema International Committee of Medical Journal Editors � ICMJE (ranije Vancouverski stil).   [grep: OK]
+QUOTE   : prema International Committee of Medical Journal Editors – ICMJE (ranije Vancouverski stil).   [grep: OK]
 ```
 
 ## Verifikacija

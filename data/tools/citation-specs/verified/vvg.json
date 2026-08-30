@@ -24,7 +24,7 @@
     "mode": "bracket-number",
     "provenance": {
       "kind": "rule-text",
-      "quoteRaw": "popisu, oznacava se na kraju citata rednim brojem literature iz popisa u uglatim zagradama.",
+      "quoteRaw": "popisu, označava se na kraju citata rednim brojem literature iz popisa u uglatim zagradama.",
       "sourcePage": "str. 9",
       "note": "U tekstu se izvor oznacava rednim brojem literature u uglatim zagradama, npr. [1] (str. 9: 'Reference se navode pod rednim brojem pod kojim se pojavljuju u popisu, u uglatim zagradama'). Numericki stil pa nema in-text template. Popis se numerira po redoslijedu pojavljivanja u tekstu (str. 9: prva referenca u tekstu je na prvom mjestu popisa), zato bibliography.sort=appearance, a redni broj [n] dodjeljuje generator popisa (referenceMarker)."
     }
@@ -47,7 +47,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "[1] Markovi, Marko; Ivi, Ivan: Programiranje u C jeziku, Profil d.o.o, 2008.",
+        "quoteRaw": "[1] Marković, Marko; Ivić, Ivan: Programiranje u C jeziku, Profil d.o.o, 2008.",
         "sourcePage": "str. 10",
         "note": "Opci format str. 10: '[<redni broj>] <autor(i)>: <Naslov rada>, <izdavac>, <godina izdanja>'. Autori family-first ('Prezime, Ime'), vise autora odvojeno '; ', dvotocka iza autora, bez mjesta izdavanja (u primjeru [3] 'Skolska knjiga Zagreb' cijelo ide u polje izdavaca). Redni broj [1] je oznaka popisa (referenceMarker), ne dio bibliografskog retka. Vise od tri autora: prvi autor + ', i dr.' (str. 10, primjer [3] 'Grgi, Marko, i dr.: Komunikacijski sustavi, Skolska knjiga Zagreb, 2012.'; 'et al' za literaturu na stranom jeziku). Izvor dopusta i inicijale imena (primjer [2] 'Markovi, M; Ivi, I')."
       },
@@ -102,7 +102,7 @@
       ],
       "provenance": {
         "kind": "rule-text",
-        "quoteRaw": "[<redni broj>] URL: <potpuna putanja do stranice koja je koristena u radu>, <datum",
+        "quoteRaw": "[<redni broj>] URL: <potpuna putanja do stranice koja je korištena u radu>, <datum",
         "sourcePage": "str. 10",
         "note": "Format za internetske sadrzaje za koje se ne zna autor(i) (str. 10-11): '[<redni broj>] URL: <potpuna putanja do stranice koja je koristena u radu>, <datum zadnjeg pristupa toj stranici>'. Oznaka 'URL:' pise se doslovno; redni broj je oznaka popisa. Izvor pod 'Primjer:' ne daje popunjen primjer u ekstrakciji pa je oblik prenesen iz formata bez izmisljanja (example: null). Mrezni izvor s poznatim autorom izvor formalno ne pokriva."
       },
@@ -121,7 +121,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "[<redni broj>] <autor(i)>: <Naslov rada>, <izdavac>, <godina izdanja>",
+        "quoteRaw": "[<redni broj>] <autor(i)>: <Naslov rada>, <izdavač>, <godina izdanja>",
         "sourcePage": "str. 10",
         "note": "Izvor ne daje zaseban oblik za poglavlje u uredjenoj knjizi/zborniku. Predlozak je izveden iz opceg oblika za knjigu (str. 10) ubacivanjem urednika 'U: {editor} (ur.),' i naziva zbornika kao containera. Potvrditi ili oboriti pri verifikaciji."
       },
@@ -138,7 +138,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "[<redni broj>] <autor(i)>: <Naslov rada>, <izdavac>, <godina izdanja>",
+        "quoteRaw": "[<redni broj>] <autor(i)>: <Naslov rada>, <izdavač>, <godina izdanja>",
         "sourcePage": "str. 10",
         "note": "Izvor ne obradjuje citiranje zavrsnih/diplomskih radova. Predlozak je izveden iz opceg oblika za knjigu (str. 10) zamjenom izdavaca ustanovom u kojoj je rad izradjen. Potvrditi ili oboriti pri verifikaciji."
       },
@@ -154,7 +154,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "ona koja je posredno utjecala na rad (npr. prirucnici, standardi).",
+        "quoteRaw": "ona koja je posredno utjecala na rad (npr. priručnici, standardi).",
         "sourcePage": "str. 9",
         "note": "Izvor spominje standarde i prirucnike kao ostalu koristenu literaturu (str. 9) ali ne daje format za propise/pravne akte. Predlozak je izveden iz uobicajenog hrvatskog oblika (naslov, glasilo, broj, godina); broj sluzbenog glasila u {issue}. Potvrditi ili oboriti pri verifikaciji."
       },

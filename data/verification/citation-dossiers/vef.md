@@ -30,7 +30,7 @@ NAPOMENA: Prvi autor invertiran (Prezime, inicijali), sljedeci autor inicijali p
 Otvori PDF: `data/sources/vef/vef-naputak-diplomski-2024.pdf#page=10`
 ```
 TEMPLATE: {authors} ({year}): {title}. {container} {volume}[[({issue})]], {pages}.
-QUOTE   : - brojcane podatke: godina izdanja knjige ili casopisa, volumen, broj i stranica clanka   [grep: OK]
+QUOTE   : - brojčane podatke: godina izdanja knjige ili časopisa, volumen, broj i stranica članka   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvedeno. Ekstrakcija sadrzi naslov 'Rad u casopisu:' (str. 11), ali je konkretni primjer izrezan na kraju datoteke, pa nema worked-example retka. Predlozak je izveden iz opceg pravila o brojcanim podacima (godina, volumen, broj, stranica clanka; str. 10) i stila knjige (VELIKO prezime, godina u zagradi + dvotocka). Casopis se u tekstu navodi 'prema Uputstvu za pisanje clanka u Veterinarskom arhivu' (str. 7). Potvrditi tocnu interpunkciju pri verifikaciji iz punog izvora.
 ```
@@ -60,7 +60,7 @@ NAPOMENA: Izvedeno. Naputak opisuje kako se pise diplomski rad, ali NE daje prim
 Otvori PDF: `data/sources/vef/vef-naputak-diplomski-2024.pdf#page=11`
 ```
 TEMPLATE: {title} ({container}, br. {issue}).
-QUOTE   : Zakon o drzavnoj potpori u poljoprivredi, ribarstvu i sumarstvu (Narodne novine, br. 87/02).   [grep: OK]
+QUOTE   : Zakon o državnoj potpori u poljoprivredi, ribarstvu i šumarstvu (Narodne novine, br. 87/02).   [grep: OK]
 IZVOR   : Zakon o drzavnoj potpori u poljoprivredi, ribarstvu i sumarstvu (Narodne novine, br. 87/02).
 RENDER  : Zakon o drzavnoj potpori u poljoprivredi, ribarstvu i sumarstvu (Narodne novine, br. 87/02).
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -71,7 +71,7 @@ NAPOMENA: Naslov propisa, zatim u zagradi glasilo i broj s oznakom 'br.'. U teks
 ```
 TEMPLATE : ({authorsShort}, {year})   /  s pages: (nema)
 RENDER   : (Lovric, 1988)   /  (Lovric, 1988)
-QUOTE    : BLACK (2021.) opazio je da s porastom tjelesne mase raste i rizik za pojavu bolesti krvozilnog   [grep: OK]
+QUOTE    : BLACK (2021.) opazio je da s porastom tjelesne mase raste i rizik za pojavu bolesti krvožilnog   [grep: OK]
 NAPOMENA : Autor-godina; prezime autora VELIKIM slovima. Narativni oblik 'BLACK (2021.)' i zagradni oblik 'Opazeno je ... (BLACK, 2021.).'; template koristi zagradni oblik. Dva autora 'BLACK i BROWN (2022.)' (twoJoiner ' i '); tri i vise 'BLACK i sur.' (etAlAfter 3, etAlText 'i sur.'). Vise izvora u zagradi odvaja se tockom sa zarezom kronoloskim redom (str. 11): '(BLACK, 2021.; BLACK i BROWN, 2022.; BLACK i sur., 2023.)'. Isti autor ista godina dobiva mala slova '2021.a; 2021.b'. Godina nosi tocku za rad na hrvatskom, bez tocke za rad na engleskom (str. 10).
 ```
 

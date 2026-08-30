@@ -29,27 +29,27 @@ Mentor/sumentor/komentor (titula, ime i prezime)
 Osijek, godina
 
 ===== [ffos-pravilnik-radovi | str. 2] =====
-Clanak 2.
+Članak 2.
 
-(1) Student preddiplomskog sveucilisnog studija zavrsava studij polaganjem svih ispita te
-izradom zavrsnog rada. Student dvopredmetnog studija izrauje zavrsni rad samo iz jednog
+(1) Student preddiplomskog sveučilišnog studija završava studij polaganjem svih ispita te
+izradom završnog rada. Student dvopredmetnog studija izrađuje završni rad samo iz jednog
 studija prema vlastitom odabiru.
-(2) Student diplomskog sveucilisnog studija zavrsava studij polaganjem svih ispita, izradom
-diplomskog rada i polaganjem diplomskog ispita. Student dvopredmetnog studija izrauje
-diplomski rad i polaze diplomski ispit samo iz jednog studija prema vlastitom odabiru.
-(3) Zavrsni i diplomski rad mora biti samostalno izraen od strane studenta.
-(4) Izradom zavrsnog odnosno diplomskog rada student treba pokazati sposobnost primjene
-teorijskog i prakticnog znanja, sposobnost samostalnog sluzenja strucnom i znanstvenom
-literaturom te sposobnost uspjesnog rjesavanja zadataka na razini akademskog naziva stecenog
+(2) Student diplomskog sveučilišnog studija završava studij polaganjem svih ispita, izradom
+diplomskog rada i polaganjem diplomskog ispita. Student dvopredmetnog studija izrađuje
+diplomski rad i polaže diplomski ispit samo iz jednog studija prema vlastitom odabiru.
+(3) Završni i diplomski rad mora biti samostalno izrađen od strane studenta.
+(4) Izradom završnog odnosno diplomskog rada student treba pokazati sposobnost primjene
+teorijskog i praktičnog znanja, sposobnost samostalnog služenja stručnom i znanstvenom
+literaturom te sposobnost uspješnog rješavanja zadataka na razini akademskog naziva stečenog
 diplomom.
 
-                                                   Clanak 3.
+                                                   Članak 3.
 
-(1) Ako je student tijekom preddiplomskog studija izradio jedan ili vise radova koji po svojem
-sadrzaju i opsegu odgovaraju zavrsnom radu, mentor moze predlozene radove priznati kao
-zavrsni rad.
-(2) Ako je student tijekom diplomskog studija izradio jedan ili vise radova koji po svojem
-sadrzaju i opsegu odgovaraju diplomskom radu, mentor moze predlozene radove priznati kao
+(1) Ako je student tijekom preddiplomskog studija izradio jedan ili više radova koji po svojem
+sadržaju i opsegu odgovaraju završnom radu, mentor može predložene radove priznati kao
+završni rad.
+(2) Ako je student tijekom diplomskog studija izradio jedan ili više radova koji po svojem
+sadržaju i opsegu odgovaraju diplomskom radu, mentor može predložene radove priznati kao
 diplomski rad.
 
                                                                                                                   2
@@ -57,69 +57,69 @@ diplomski rad.
 ===== [ffos-pravilnik-radovi | str. 3] =====
 II. MENTORI
 
-                                                   Clanak 4.
+                                                   Članak 4.
 
-(1) Mentori zavrsnih i diplomskih radova mogu biti djelatnici ili vanjski suradnici Fakulteta koji
-sudjeluju u izvoenju predmeta ili u znanstveno-istrazivackom radu uz koji je vezana tema rada,
+(1) Mentori završnih i diplomskih radova mogu biti djelatnici ili vanjski suradnici Fakulteta koji
+sudjeluju u izvođenju predmeta ili u znanstveno-istraživačkom radu uz koji je vezana tema rada,
 a koji su u znanstveno-nastavnom zvanju.
-(2) Pored mentora studentu se moze imenovati i sumentor. Sumentor moze biti nastavnik izabran
-u znanstveno-nastavno zvanje ili suradnik izabran u suradnicko zvanje poslijedoktoranda na
+(2) Pored mentora studentu se može imenovati i sumentor. Sumentor može biti nastavnik izabran
+u znanstveno-nastavno zvanje ili suradnik izabran u suradničko zvanje poslijedoktoranda na
 predmetu uz koji je vezana tema rada.
-(3) Mentor i sumentor duzni su uputiti studenta u metodologiju izrade zavrsnog/diplomskog rada,
-nacin prikupljanja i obrade podataka, literaturu, tijekom izrade zavrsnog/diplomskog rada svojim
-strucnim savjetima i smjernicama pomagati studentu u pisanju te pripremiti studenta za obranu
+(3) Mentor i sumentor dužni su uputiti studenta u metodologiju izrade završnog/diplomskog rada,
+način prikupljanja i obrade podataka, literaturu, tijekom izrade završnog/diplomskog rada svojim
+stručnim savjetima i smjernicama pomagati studentu u pisanju te pripremiti studenta za obranu
 diplomskog rada.
 
 III. PRIJAVA I ODOBRAVANJE TEME
 
-                                                   Clanak 5.
+                                                   Članak 5.
 
-(1) Nastavnici koji mogu biti mentori zavrsnih i diplomskih radova duzni su najkasnije do 20.
-veljace tekue akademske godine unijeti prijedloge naslova tema u za to predvienu mreznu
+(1) Nastavnici koji mogu biti mentori završnih i diplomskih radova dužni su najkasnije do 20.
+veljače tekuće akademske godine unijeti prijedloge naslova tema u za to predviđenu mrežnu
 aplikaciju.
-(2) Voditelj odsjeka, samostalne katedre ili studija obvezan je na mreznim stranicama najkasnije
-do kraja veljace tekue akademske godine utvrditi naslove tema koje studenti mogu odabrati.
+(2) Voditelj odsjeka, samostalne katedre ili studija obvezan je na mrežnim stranicama najkasnije
+do kraja veljače tekuće akademske godine utvrditi naslove tema koje studenti mogu odabrati.
 
 ===== [ffos-pravilnik-radovi | str. 8] =====
-Upute za izradu zavrsnoga rada
+Upute za izradu završnoga rada
 
-I. Osnovne cjeline zavrsnoga rada
-Zavrsni rad treba sadrzavati sljedee cjeline: sazetak i kljucne rijeci na jeziku na kojem je rad
-napisan, uvod, glavni dio i literaturu, i to navedenim redoslijedom. Zavrsni rad moze sadrzavati
-dodatne sazetke i kljucne rijeci na jeziku na kojem nije napisan rad.
-U sazetku treba u 1015 redaka opisati sadrzaj zavrsnoga rada. U uvodu treba sazeto opisati
-zadatak zavrsnoga rada te navesti sadrzaj pojedinih poglavlja zavrsnoga rada. Glavni dio rada
-treba podijeliti u poglavlja i tocke koje cine odreenu logicku cjelinu. Prilozi se obrojcavaju i
-izdvajaju u posebno poglavlje. Pri navoenju slika, tablica i ostalih podataka preuzetih iz
+I. Osnovne cjeline završnoga rada
+Završni rad treba sadržavati sljedeće cjeline: sažetak i ključne riječi na jeziku na kojem je rad
+napisan, uvod, glavni dio i literaturu, i to navedenim redoslijedom. Završni rad može sadržavati
+dodatne sažetke i ključne riječi na jeziku na kojem nije napisan rad.
+U sažetku treba u 10˗15 redaka opisati sadržaj završnoga rada. U uvodu treba sažeto opisati
+zadatak završnoga rada te navesti sadržaj pojedinih poglavlja završnoga rada. Glavni dio rada
+treba podijeliti u poglavlja i točke koje čine određenu logičku cjelinu. Prilozi se obrojčavaju i
+izdvajaju u posebno poglavlje. Pri navođenju slika, tablica i ostalih podataka preuzetih iz
 literature potrebno je citirati upotrijebljenu literaturu.
 
-II. Izgled zavrsnoga rada
-- Zavrsni rad mora biti pisan u racunalnom programu za obradu teksta (npr. Microsoft Word,
+II. Izgled završnoga rada
+- Završni rad mora biti pisan u računalnom programu za obradu teksta (npr. Microsoft Word,
 Open Office Writer i sl.).
-- Velicina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedee velicine: lijeva 25 mm,
+- Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm,
 desna 20 mm, gornja i donja po 25 mm.
-- Rad treba pisati fontom Times New Roman velicine 12 tocaka uz prored 1,5.
-- Slike, tablice i slicne sustave treba brojcano oznaciti. Kratak opis slike stavlja se neposredno
+- Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.
+- Slike, tablice i slične sustave treba brojčano označiti. Kratak opis slike stavlja se neposredno
 ispod slike, a kratak opis tablice iznad tablice.
 - Upotrijebljenu literaturu treba popisati abecednim redom, i to u skladu s pravilima
-odgovarajuega stila citiranja u struci, odnosno prema uputama mentora.
+odgovarajućega stila citiranja u struci, odnosno prema uputama mentora.
 - Na literaturu, slike, tablice i ostale sustave u tekstu poziva se u skladu s pravilima
-odgovarajuega stila citiranja u struci, odnosno prema uputama mentora.
-- Na prvoj stranici zavrsnoga rada treba navesti naziv sveucilista, fakulteta i puni naziv
-jednopredmetnog ili dvopredmetnog studija, ime i prezime studenta, naslov zavrsnoga rada,
-naziv vrste rada ispod naslova (zavrsni rad), titulu, ime i prezime mentora/sumentora te mjesto i
-godinu nastanka rada. Preporucuje se da podaci na prvoj stranici budu napisani fontom Times
-New Roman, slovima velicine 14 tocaka, a da naslov zavrsnoga rada bude napisan slovima
-velicine 16 tocaka.
-- Na drugoj stranici zavrsnog rada treba navesti naziv sveucilista, fakulteta, odsjeka ili
+odgovarajućega stila citiranja u struci, odnosno prema uputama mentora.
+- Na prvoj stranici završnoga rada treba navesti naziv sveučilišta, fakulteta i puni naziv
+jednopredmetnog ili dvopredmetnog studija, ime i prezime studenta, naslov završnoga rada,
+naziv vrste rada ispod naslova (završni rad), titulu, ime i prezime mentora/sumentora te mjesto i
+godinu nastanka rada. Preporučuje se da podaci na prvoj stranici budu napisani fontom Times
+New Roman, slovima veličine 14 točaka, a da naslov završnoga rada bude napisan slovima
+veličine 16 točaka.
+- Na drugoj stranici završnog rada treba navesti naziv sveučilišta, fakulteta, odsjeka ili
 samostalne katedre i puni naziv jednopredmetnog ili dvopredmetnog studija, ime i prezime
-studenta, naslov zavrsnog rada, naziv vrste rada, znanstveno podrucje, polje i granu iz koje je
-zavrsni rad pisan, titulu, ime i prezime mentora/sumentora te mjesto i godinu nastanka rada.
-Preporucuje se da podaci na drugoj stranici budu napisani fontom Times New Roman, slovima
-velicine 14 tocaka, a da naslov zavrsnoga rada bude napisan slovima velicine 16 tocaka.
-- Na cetvrtoj stranici zavrsnoga rada treba biti sazetak od 250 rijeci i 3 do 5 kljucnih rijeci (sve
+studenta, naslov završnog rada, naziv vrste rada, znanstveno područje, polje i granu iz koje je
+završni rad pisan, titulu, ime i prezime mentora/sumentora te mjesto i godinu nastanka rada.
+Preporučuje se da podaci na drugoj stranici budu napisani fontom Times New Roman, slovima
+veličine 14 točaka, a da naslov završnoga rada bude napisan slovima veličine 16 točaka.
+- Na četvrtoj stranici završnoga rada treba biti sažetak od 250 riječi i 3 do 5 ključnih riječi (sve
 na jeziku rada), i to navedenim redoslijedom.
-- Zavrsni rad treba imati izmeu 15 i 20 stranica ne racunajui sazetak, sadrzaj, popis literature
+- Završni rad treba imati između 15 i 20 stranica ne računajući sažetak, sadržaj, popis literature
 i priloge.
 
                                                                                                                   8
@@ -128,60 +128,60 @@ i priloge.
 Upute za izradu diplomskoga rada
 
 I. Osnovne cjeline diplomskoga rada
-Diplomski rad treba sadrzavati sljedee cjeline: sazetak i kljucne rijeci na jeziku na kojem je rad
-napisan, uvod, glavni dio i literaturu, i to navedenim redoslijedom. Diplomski rad moze
-sadrzavati dodatne sazetke i kljucne rijeci na jeziku na kojem nije napisan rad.
-U sazetku treba u 1015 redaka opisati sadrzaj diplomskoga rada. U uvodu treba sazeto opisati
-zadatak diplomskoga rada te navesti sadrzaj pojedinih poglavlja diplomskoga rada. Glavni dio
-rada treba podijeliti u poglavlja i tocke koje cine odreenu logicku cjelinu. Prilozi se obrojcavaju
-i izdvajaju u posebno poglavlje. Pri navoenju slika, tablica i ostalih podataka preuzetih iz
+Diplomski rad treba sadržavati sljedeće cjeline: sažetak i ključne riječi na jeziku na kojem je rad
+napisan, uvod, glavni dio i literaturu, i to navedenim redoslijedom. Diplomski rad može
+sadržavati dodatne sažetke i ključne riječi na jeziku na kojem nije napisan rad.
+U sažetku treba u 10˗15 redaka opisati sadržaj diplomskoga rada. U uvodu treba sažeto opisati
+zadatak diplomskoga rada te navesti sadržaj pojedinih poglavlja diplomskoga rada. Glavni dio
+rada treba podijeliti u poglavlja i točke koje čine određenu logičku cjelinu. Prilozi se obrojčavaju
+i izdvajaju u posebno poglavlje. Pri navođenju slika, tablica i ostalih podataka preuzetih iz
 literature potrebno je citirati upotrijebljenu literaturu.
 
 II. Izgled diplomskoga rada
-    - Diplomski rad mora biti pisan u racunalnom programu za obradu teksta (npr. Microsoft
+    - Diplomski rad mora biti pisan u računalnom programu za obradu teksta (npr. Microsoft
     Word, Open Office Writer i sl.).
-    - Velicina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedee velicine: lijeva 25 mm,
+    - Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm,
     desna 20 mm, gornja i donja po 25 mm.
-    - Rad treba pisati fontom Times New Roman velicine 12 tocaka uz prored 1,5.
-    - Slike, tablice i slicne sustave treba brojcano oznaciti. Kratak opis slike stavlja se neposredno
+    - Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.
+    - Slike, tablice i slične sustave treba brojčano označiti. Kratak opis slike stavlja se neposredno
     ispod slike, a kratak opis tablice iznad tablice.
     - Upotrijebljenu literaturu treba popisati abecednim redom, i to u skladu s pravilima
-    odgovarajuega stila citiranja u struci, odnosno prema uputama mentora.
+    odgovarajućega stila citiranja u struci, odnosno prema uputama mentora.
     - Na literaturu, slike, tablice i ostale sustave u tekstu poziva se u skladu s pravilima
-    odgovarajuega stila citiranja u struci, odnosno prema uputama mentora.
-    - Na prvoj stranici diplomskoga rada treba navesti naziv sveucilista, fakulteta i puni naziv
+    odgovarajućega stila citiranja u struci, odnosno prema uputama mentora.
+    - Na prvoj stranici diplomskoga rada treba navesti naziv sveučilišta, fakulteta i puni naziv
     jednopredmetnog ili dvopredmetnog studija, ime i prezime studenta, naslov diplomskoga
     rada, naziv vrste rada ispod naslova (diplomski rad), titulu, ime i prezime mentora/sumentora
-    te mjesto i godinu nastanka rada. Preporucuje se da podaci na prvoj stranici budu napisani
-    fontom Times New Roman, slovima velicine 14 tocaka, a da naslov diplomskoga rada bude
-    napisan slovima velicine 16 tocaka.
-    - Na drugoj stranici diplomskog rada treba navesti naziv sveucilista, fakulteta, odsjeka ili
+    te mjesto i godinu nastanka rada. Preporučuje se da podaci na prvoj stranici budu napisani
+    fontom Times New Roman, slovima veličine 14 točaka, a da naslov diplomskoga rada bude
+    napisan slovima veličine 16 točaka.
+    - Na drugoj stranici diplomskog rada treba navesti naziv sveučilišta, fakulteta, odsjeka ili
     samostalne katedre i puni naziv jednopredmetnog ili dvopredmetnog studija, ime i prezime
-    studenta, naslov diplomskog rada, naziv vrste rada, znanstveno podrucje, polje i granu iz
+    studenta, naslov diplomskog rada, naziv vrste rada, znanstveno područje, polje i granu iz
     koje je diplomski rad pisan, titulu, ime i prezime mentora/sumentora te mjesto i godinu
-    nastanka rada. Preporucuje se da podaci na drugoj stranici budu napisani fontom Times New
-    Roman, slovima velicine 14 tocaka, a da naslov diplomskoga rada bude napisan slovima
-    velicine 16 tocaka.
-    - Na cetvrtoj stranici diplomskoga rada treba biti sazetak od 250 rijeci i 3 do 5 kljucnih rijeci
+    nastanka rada. Preporučuje se da podaci na drugoj stranici budu napisani fontom Times New
+    Roman, slovima veličine 14 točaka, a da naslov diplomskoga rada bude napisan slovima
+    veličine 16 točaka.
+    - Na četvrtoj stranici diplomskoga rada treba biti sažetak od 250 riječi i 3 do 5 ključnih riječi
     (sve na jeziku rada), i to navedenim redoslijedom.
-    - Diplomski rad treba imati izmeu 30 i 50 stranica ne racunajui sazetak, sadrzaj, popis
+    - Diplomski rad treba imati između 30 i 50 stranica ne računajući sažetak, sadržaj, popis
     literature i priloge.
 
                                                                                                                 10
 
 ===== [ffos-pravilnik-radovi | str. 12] =====
-Prilog: Izjava o akademskoj cestitosti i o suglasnosti za javno objavljivanje
-Obveza je studenta da donju Izjavu vlastorucno potpise i umetne kao treu stranicu zavrsnoga,
+Prilog: Izjava o akademskoj čestitosti i o suglasnosti za javno objavljivanje
+Obveza je studenta da donju Izjavu vlastoručno potpiše i umetne kao treću stranicu završnoga,
 odnosno diplomskog rada.
 
                                                    IZJAVA
-Izjavljujem s punom materijalnom i moralnom odgovornosu da sam ovaj rad samostalno
-napisao/napisala te da u njemu nema kopiranih ili prepisanih dijelova teksta tuih radova, a da
-nisu oznaceni kao citati s navoenjem izvora odakle su preneseni.
-Svojim vlastorucnim potpisom potvrujem da sam suglasan/suglasna da Filozofski fakultet u
-Osijeku trajno pohrani i javno objavi ovaj moj rad u internetskoj bazi zavrsnih i diplomskih
-radova knjiznice Filozofskog fakulteta u Osijeku, knjiznice Sveucilista Josipa Jurja
-Strossmayera u Osijeku i Nacionalne i sveucilisne knjiznice u Zagrebu.
+Izjavljujem s punom materijalnom i moralnom odgovornošću da sam ovaj rad samostalno
+napisao/napisala te da u njemu nema kopiranih ili prepisanih dijelova teksta tuđih radova, a da
+nisu označeni kao citati s navođenjem izvora odakle su preneseni.
+Svojim vlastoručnim potpisom potvrđujem da sam suglasan/suglasna da Filozofski fakultet u
+Osijeku trajno pohrani i javno objavi ovaj moj rad u internetskoj bazi završnih i diplomskih
+radova knjižnice Filozofskog fakulteta u Osijeku, knjižnice Sveučilišta Josipa Jurja
+Strossmayera u Osijeku i Nacionalne i sveučilišne knjižnice u Zagrebu.
 
 U Osijeku, __________________
 
@@ -189,3 +189,122 @@ U Osijeku, __________________
                                                               Ime i prezime studenta, JMBAG
 
                                                                                                                12
+
+===== [ffos-psihologija-zavrsni-2014 | str. 1] =====
+Upute za izradu završnog rada
+
+I. Izgled završnog rada
+- Završni rad treba sadržavati sljedeće cjeline: sažetak i ključne riječi na jeziku na kojem je rad
+
+    napisan, uvod, glavni dio i literaturu, i to navedenim redoslijedom.
+- Završni rad mora biti pisan u računalnom programu za obradu teksta (npr. Microsoft Word,
+
+    Open Office Writer i sl.).
+- Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm,
+
+    desna 20 mm, gornja i donja po 25 mm.
+- Rad treba pisati fontom Times New Roman, veličine 12pt uz prored 1,5.
+- Završni rad treba imati između 15 i 20 stranica ne računajući sažetak, sadržaj, popis literature
+
+    i priloge.
+II. Osnovne cjeline završnog rada
+Naslovna stranica
+
+         Na prvoj stranici završnoga rada treba navesti naziv sveučilišta, fakulteta i studija, ime i
+prezime studenta, naslov završnoga rada, naziv vrste rada ispod naslova (završni rad), titulu, ime
+i prezime mentora te mjesto i godinu nastanka rada. Preporučuje se da podatci na prvoj stranici
+budu napisani fontom Times New Roman, slovima veličine 14 točaka, a da naslov završnoga
+rada bude napisan slovima veličine 16 točaka. Naslovna stranica nije numerirana.
+
+                                                                                                                                          1
+
+===== [ffos-psihologija-zavrsni-2014 | str. 2] =====
+Druga stranica
+Sadržaj, stranica nije numerirana
+
+Treća stranica
+         Sadržava naslov, sažetak, ključne riječi na jeziku rada, bez oznake broja stranice. U
+
+sažetku treba u 200 - 250 riječi opisati sadržaj završnog rada. Treba navesti 3-5 ključnih riječi.
+
+Rad
+         U uvodu treba sažeto opisati zadatak završnog rada te navesti sadržaj pojedinih poglavlja
+
+završnog rada. Glavni dio rada treba podijeliti u poglavlja i točke koje čine određenu logičku
+cjelinu. Prilozi se obrojčavaju i izdvajaju u posebno poglavlje. Pri navođenju slika, tablica i ostalih
+podataka preuzetih iz literature potrebno je citirati upotrijebljenu literaturu.
+
+         Formalno uređenje teksta treba biti sukladno APA standardima, 6. izdanje (standardi za
+pisanje znanstvenih radova American Psychological Association). U knjižnici Fakulteta postoji
+fotokopija priručnika za takvo uređenje teksta, no s obzirom da APA-in priručnik ima 400 stranica
+i niz detalja za koje je malo vjerojatno da će ih studenti biti u prilici koristiti, priredili smo kratak
+sažetak uputa. Za sve nejasnoće i specifičnosti treba konzultirati spomenuti priručnik.
+
+                                                                                                                                            2
+
+===== [ffos-psihologija-zavrsni-2014 | str. 3] =====
+Slike, tablice i slične sustave treba obrojčati. Kratak opis slika i tablica stavlja se
+  neposredno iznad slike/tablice.
+
+           Upotrijebljenu literaturu treba popisati u skladu s APA standardima 6. izdanje.
+
+  Popis referenci (na kraju teksta)
+         Redoslijed referenci treba pisati abecednim redom bez rednih brojeva, prema prezimenu
+
+prvog autora. Drugi, treći itd. Red reference se uvlači (vidjeti ispod). Ukoliko isti autor ima više
+referenci, prvo se pišu one koje su novijeg datuma. Dolje su navedeni primjeri iz najčešće
+upotrebljavanih kategorija referenci. Isticanje nekih informacija treba činiti italic stilom (kosa
+slova). Ovi primjeri mogu poslužiti kao ogled kako valja isticati pojedine vrste informacija.
+
+  a) Izvorni znanstveni članci u časopisu
+  Bujas, Z. (1987). Vremenske konstante podražljivosti osjetnih sistema. Primijenjena
+
+           psihologija, 8, 3-23.
+  Ellermeier, W. i Westphal, W. (1991). On the «absoluteness» of category and magnitude
+
+            scales of pain. Perception & Psychophysics, 49(2), 159-166.
+
+  Dakle, piše se:
+  Prezime autora, inicijal imena, u zagradi godina izdavanja. Naslov rada. Naslov časopisa,
+
+===== [ffos-psihologija-zavrsni-2014 | str. 4] =====
+Bujas, Z. (1971). Psihofizika nekad i danas. U Kongresni odbor (Ur.), Psihološke rasprave.
+
+         Izvještaj s IV. kongresa psihologa SFRJ (str. 16-29). Bled: Društvo psihologov
+         Slovenije.
+Algom, D. (1992). Psychophysical Analysis of Pain: A Functional Perspective. U
+        H.G.Geissler, S.W. Link & J.T. Townsend (Eds), Cognition, information
+        processing, and psychophysics: basic issues (str. 267-291). Hillsdale: Lawrence
+        Erlbaum Associates, Publishers.
+
+Dakle, piše se:
+Prezime autora, inicijal imena, u zagradi godina izdavanja. Naslov članka ili poglavlja u knjizi.
+Urednik(ici) ukoliko postoje (Ur. ili Eds.), naslov knjige ili zbornika, stranice teksta koji se
+citira. Grad izdavanja: izdavač.
+
+e) Tekst na Web stranicama
+U novije vrijeme sve je češći slučaj navođenja podataka koji se nalaze ili se mogu naći putem
+Interneta. Pri takvom navođenju potrebno je dati što precizniju informaciju kako o samom
+tekstu tako i o adresi na kojoj se može naći.
+
+Šverko, B., Ur. (2000). Vodič kroz zanimanja - elektroničko izdanje: prilozi vrednovanju
+         profesionalnog usmjeravanja putem Interneta, preuzeto 20. 06. 2007. s
+         http://knjiznice.ffzg.hr/info.html#psiho.
+
+Dakle, piše se:
+Prezime autora (ovdje urednika), inicijal imena, u zagradi godina izdavanja. Naslov teksta.
+
+                                                                                                                                         4
+
+===== [ffos-psihologija-diplomski-2015 | str. 5] =====
+5
+                                                       UPUTE ZA OBLIKOVANJE DIPLOMSKOG RADA
+
+                                                                                      ODSJEK ZA PSIHOLOGIJU
+                                                       FILOZOFSKI FAKULTET SVEUČILIŠTA U OSIJEKU
+                               Kratke upute za oblikovanje teksta diplomskog rada
+       Na Slici 4 prikazan je način 1) oblikovanja naslova i podnaslova u tekstu rada te 2)
+       navođenja referenci unutar teksta.
+                      •
+
+Slika 4. Način oblikovanja naslova i podnaslova te navođenja referenci unutar teksta.

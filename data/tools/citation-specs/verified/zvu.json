@@ -46,7 +46,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Grozdek ovCci G, aekMc Z. Neurofacilitacijska fizioterapija. Zagreb: Zdravstveno eistul;cv",
+        "quoteRaw": "Grozdek ovćČči G, aekMč Z. Neurofacilitacijska fizioterapija. Zagreb: Zdravstveno eištul;čv",
         "sourcePage": "str. 15",
         "note": "Recept (str. 15): 'Prezime autora Inicijal imena autora. Naslov knjige. Izdanje. Mjesto izdavanja: Izdavac; godina.' Vancouver oblik autora: prezime + razmak + spojeni inicijali bez tocaka ('Grozdek Covic G, Macek Z'), autori odvojeni zarezom. Broj izdanja (kad nije prvo) ide u polje volume ('2. izdanje'); u primjeru izdanja nema. PDF je izmijesao slova u dijakritickim rijecima: 'ovCci'=Covic, 'aekMc'=Macek, 'eistul;cv'=veleuciliste; expected je rekonstruiran (izdavac je sam ZVU, Zdravstveno veleuciliste)."
       },
@@ -122,7 +122,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Literatura koristena prilikom izrade rada navodi se na",
+        "quoteRaw": "Literatura korištena prilikom izrade rada navodi se na",
         "sourcePage": "str. 15",
         "note": "Prilog 3 (Navodjenje popisa literature) prikazuje samo tri oblika natuknice: knjiga, clanak u casopisu i clanak u zborniku/knjizi radova konferencije. Mrezni (internetski) izvor NIJE prikazan pa je predlozak izveden iz uobicajenog Vancouver web oblika (naslov, dostupno na: URL, datum pristupa u zagradi); autor je opcionalan. Potvrditi ili oboriti pri verifikaciji."
       },
@@ -139,7 +139,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Zavrsni rad je samostalni pisani rad studenta u kojem student pod vodstvom mentora",
+        "quoteRaw": "Završni rad je samostalni pisani rad studenta u kojem student pod vodstvom mentora",
         "sourcePage": "str. 2",
         "note": "Prilog 3 ne prikazuje kako se zavrsni/diplomski rad NAVODI kao izvor u popisu literature (obuhvaca knjigu, clanak, zbornik). Predlozak je izveden iz oblika za knjigu: izdavac zamijenjen ustanovom, dodana oznaka vrste rada '[zavrsni rad]'. Potvrditi ili oboriti pri verifikaciji."
       },
@@ -154,7 +154,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "U popisu literature redom koji su citirani navode se svi u radu koristeni izvori. Ne navode se",
+        "quoteRaw": "U popisu literature redom koji su citirani navode se svi u radu korišteni izvori. Ne navode se",
         "sourcePage": "str. 4",
         "note": "Izvor ne obradjuje citiranje propisa/pravnih akata (Prilog 3 pokriva knjigu, clanak i zbornik). Predlozak je minimalno izveden radi potpunosti alata (naslov, glasilo, broj). Potvrditi ili oboriti pri verifikaciji."
       },

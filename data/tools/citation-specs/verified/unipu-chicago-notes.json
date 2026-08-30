@@ -25,7 +25,7 @@
     "mode": "note-number",
     "provenance": {
       "kind": "rule-text",
-      "quoteRaw": "1.) Prilikom prvog citiranja odreenog djela - u fusnoti (biljesci) treba navesti:",
+      "quoteRaw": "1.) Prilikom prvog citiranja određenog djela - u fusnoti (bilješci) treba navesti:",
       "sourcePage": "str. 5",
       "note": "Chicago se u ovom Naputku vodi kao fusnotni (biljeske pri dnu stranice, numerirane arapskim brojevima u kontinuitetu). Prvo navodenje u fusnoti je 'Inicijal imena. Prezime, Naslov, Mjesto, Izdavac, Godina., str. N' (given-first, primjer str. 5: V. Gorenc, Trgovacko pravo - drustva, Zagreb, Skolska knjiga, 1995., str. 50.). Ponovljena navodenja (loc. cit., ibidem, op. cit.) su izvan dosega generatora. Alat generira BIBLIOGRAFSKI oblik za popis literature (prezime-inicijal, invertiran prvi autor)."
     }
@@ -153,7 +153,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Za popis koristene literature (nacin citiranja) student moze koristiti Chicago ili",
+        "quoteRaw": "Za popis korištene literature (način citiranja) student može koristiti Chicago ili",
         "sourcePage": "str. 3",
         "note": "Naputak (ekonomsko-turisticki kontekst) ne obraduje navodenje propisa u Chicago stilu; predlozak je izveden iz opceg obrasca (naslov, glasilo, broj, godina). Potvrditi ili oboriti pri verifikaciji."
       },

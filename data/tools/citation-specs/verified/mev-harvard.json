@@ -26,7 +26,7 @@
     },
     "provenance": {
       "kind": "worked-example",
-      "quoteRaw": "kojoj je rad objavljen, na primjer: (Creasy, 1987); ako su dva autora clanka treba navesti oba",
+      "quoteRaw": "kojoj je rad objavljen, na primjer: (Creasy, 1987); ako su dva autora članka treba navesti oba",
       "sourcePage": "str. 7",
       "note": "Dodatak 1.C, tocka 1. Harvardski stil. Dva autora '(Dubey i Sharma, 1990)', tri i vise prvi autor + kratica za 'i suradnici' '(Yang i sur., 1989)'. Narativni oblik: 'Olsson (1990) je utvrdio da...' (samo godina u zagradi kad je ime dio recenice). Oblik s brojem stranice nije prikazan u izvoru pa withPagesTemplate nije definiran. Sort popisa: 'Popis literature na kraju rada sadrzi bibliografske reference po abecednom redu autora.' (str. 7)."
     }
@@ -48,7 +48,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Silobrci, V. (2003). Kako sastaviti, objaviti i ocijeniti znanstveno djelo. 5. izd. Zagreb,",
+        "quoteRaw": "Silobrčić, V. (2003). Kako sastaviti, objaviti i ocijeniti znanstveno djelo. 5. izd. Zagreb,",
         "sourcePage": "str. 7",
         "note": "Cijeli Primjer 1 (spojeni redci): Silobrci, V. (2003). Kako sastaviti, objaviti i ocijeniti znanstveno djelo. 5. izd. Zagreb, Medicinska naklada. Redoslijed propisan popisom u Dodatku 1.D: prezime i inicijali, (godina), naslov i podnaslov, broj izdanja (ako nije prvo), mjesto izdavanja, ime izdavaca. Broj izdanja ide u polje volume (5 -> '5. izd.'). Mjesto i izdavac odvojeni su ZAREZOM, ne dvotockom."
       },
@@ -98,7 +98,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Davies, E. (1997). ,,Learn by wire: managing network access to learning materials\", The",
+        "quoteRaw": "Davies, E. (1997). „Learn by wire: managing network access to learning materials“, The",
         "sourcePage": "str. 8",
         "note": "Cijeli Primjer 4 (spojeni redci): Davies, E. (1997). ,,Learn by wire: managing network access to learning materials\", The electronic library, vol. 15(3), 658-693. Propisani redoslijed (str. 8): godina objave, naslov rada (navodnici!), naslov casopisa (kurziv!), broj sveska (volumena), broj pojedinacnog broja, raspon stranica. Hrvatski donji navodnik iz PDF-a (u ekstrakciji ,,) zamijenjen je ASCII navodnikom, kurziv casopisa alat ne reproducira."
       },
@@ -126,7 +126,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Toki, M.; Proklin, M. Znacajke racunovodstvenoga informacijskog sustava poduzetnika.",
+        "quoteRaw": "Tokić, M.; Proklin, M. Značajke računovodstvenoga informacijskog sustava poduzetnika.",
         "sourcePage": "str. 8",
         "note": "Cijeli Primjer 5 (spojeni redci): Toki, M.; Proklin, M. Znacajke racunovodstvenoga informacijskog sustava poduzetnika. http://hrcak.srce.hr/index.php?show=clanak&id_clanak_jezik=112975 (01.09.2012.). Primjer 6 bez autora: IEEE- Advancing Technology for Humanity. http://www.ieee.org/index.html (05.09.2012.), pa je autor opcionalan ('ako je poznat'). Godina objave se ne navodi; datum preuzimanja s interneta u zagradi na kraju. Vise autora odvaja se tockom sa zarezom."
       },
@@ -153,7 +153,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Dodatak 1.D Navoenje popisa literature",
+        "quoteRaw": "Dodatak 1.D Navođenje popisa literature",
         "sourcePage": "str. 7",
         "note": "Upute ne obraduju citiranje zavrsnih ili diplomskih radova. Predlozak je izveden iz oblika za knjigu: izdavac zamijenjen ustanovom, dodana oznaka vrste rada 'Zavrsni rad.'. Potvrditi ili oboriti pri verifikaciji."
       },
@@ -169,7 +169,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Dodatak 1.D Navoenje popisa literature",
+        "quoteRaw": "Dodatak 1.D Navođenje popisa literature",
         "sourcePage": "str. 7",
         "note": "Upute ne obraduju citiranje propisa. Predlozak je minimalno izveden iz opceg autor-godina reda natuknice (nositelj natuknice, godina u zagradi, glasilo, broj), samo radi potpunosti alata. Potvrditi pri verifikaciji."
       },

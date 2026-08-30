@@ -1,216 +1,40 @@
-===== [ptfos-upute-diplomski-2020 | str. 2] =====
-Prije pripreme rada........................................................................................... 1
-       Osnovni dijelovi rada....................................................................................... 1
-       Uvodni dio.......................................................................................................... 1
-       Osnovni dio........................................................................................................ 2
-       Izgled rada......................................................................................................... 4
-       Stil pisanja.......................................................................................................... 4
-       Oblikovanje teksta.............................................................................................. 4
-       Slike, tablice, formule, mjerne jedinice............................................................... 5
-       Strucna terminologija.......................................................................................... 5
-       Nabrajanje.......................................................................................................... 6
-       Poglavlja i naslovi............................................................................................... 6
-       Zaglavlje i podnozje............................................................................................ 6
-       Biljeske............................................................................................................... 7
-       Literaturni citati................................................................................................... 7
-
-          Citiranje u tekstu rada............................................................................................... 7
-          Citiranje u popisu literature....................................................................................... 8
-       Nakon pripreme rada........................................................................................ 11
-       Literatura............................................................................................................ 12
-
-Napomena za koristenje digitalne inacice Uputa: plavo obojan tekst ukljucuje poveznicu na internetsko
-mjesto.
-
-                                                                                                                                                                                              1
-
-===== [ptfos-upute-diplomski-2020 | str. 3] =====
-PTFOS  Upute za pisanje, ocjenu i obranu diplomskih radova
-
-Sto je diplomski rad?
-
-Diplomski rad je samostalni strucni rad u kojem student/ica pod vodstvom mentora obrauje izabranu
-temu. Studenti, koji su polozili ispite i izvrsili druge obveze sadrzane u nastavnom planu i programu studija,
-izradom diplomskog rada dokazuju sposobnost samostalnog rjesavanja zadatka iz podrucja struke, a pri
-tome rabe znanja i vjestine stecene tijekom studija, koja ukljucuju instrumentalne i druge istrazivacke
-metode, te interpretiraju i usporeuju rezultate s literaturnim podacima. Teorijski ili prakticni istrazivacki
-dio kojeg student/ica obrauje u diplomskom radu ne mora biti izvorni rad.
-
-Prije pripreme rada
-
-Student/ica izabire temu diplomskog rada u dogovoru s mentorom tijekom zavrsne godine studija. Tema
-diplomskog rada bi, u pravilu, trebala biti vezana za neki od predmeta koje je student slusao tijekom
-studiranja. Prijava teme diplomskog rada Odboru za zavrsne i diplomske ispite, odabir clanova
-Povjerenstva za ocjenu i obranu diplomskog rada i diplomskog ispita (u daljnjem tekstu Povjerenstvo),
-prijava i oglasavanje datuma obrane te ispunjavanje odgovarajuih obrazaca, u nadleznosti su mentora.
-Dodatne informacije mogu se pronai u Pravilniku o zavrsnim i diplomskim ispitima.
-
-Osnovni dijelovi rada
-
-===== [ptfos-upute-diplomski-2020 | str. 4] =====
-PTFOS  Upute za pisanje, ocjenu i obranu diplomskih radova
-
-Svaki od dolje narednih uvodnih dijelova diplomskog rada oznacenih rimskim brojevima (I. � VI.) potrebno
-je pisati na posebnoj stranici. Ove se stranice mogu numerirati rimskim brojevima (desno dolje).
-
-I. NASLOVNA STRANICA
-Tekst naslovne stranice identican je onom na koricama.
-
-II. TEMELJNA DOKUMENTACIJSKA KARTICA
-Temeljna dokumentacijska kartica sadrzi osnovne bibliografske podatke, te sazetak i kljucne rijeci.
-Sazetak ukljucuje osnovne zadatke, metode rada i zakljucke u maksimalno 200 rijeci, a pise se u jednom
-odlomku. Poslije sazetka valja navesti do pet kljucnih rijeci, odvojenih zarezom.
-
-III. BASIC DOCUMENTATION CARD
-Ova stranica sadrzi sve podatke iz temeljne dokumentacijske kartice prevedene na engleski jezik.
-
-IV. ZAHVALA
-Zahvala ne mora biti ukljucena u uvodni dio diplomskog rada, a ako je napisana, smjestena je pri dnu
-stranice.
-
-V. SADRZAJ
-Ova stranica sadrzi naslove poglavlja i potpoglavlja s brojevima stranica na kojima se nalaze.
-
-===== [ptfos-upute-diplomski-2020 | str. 4] =====
-Numeracija stranica pocinje od osnovnog dijela.
-Osnovni dio diplomskog rada treba sadrzavati sljedea poglavlja:
-1. Uvod
-2. Teorijski dio
-3. Eksperimentalni dio
-
-   3.1. Zadatak
-   3.2. Materijali i metode
-4. Rezultati
-5. Rasprava
-6. Zakljucci
-7. Literatura
-8. Prilozi (po potrebi)
-
-                                                                                                                                                                                              2
-
-===== [ptfos-upute-diplomski-2020 | str. 5] =====
-Uvod i teorijski dio mogu predstavljati najvise treinu opsega rada.
-
-3. EKSPERIMENTALNI DIO
-3.1. ZADATAK
-U ovom potpoglavlju trebaju se definirati zadaci rada.
-
-3.2. MATERIJALI I METODE
-Ovo potpoglavlje sadrzi detaljan opis materijala i metoda kojima je provedeno istrazivanje. Navode se svi
-osnovni podaci za uporabljene materijale i/ili uzorke (proizvoaca, uvjete dobivanja, cuvanja, i sl.).
-Alternativno, poglavlje je mogue nazvati ,,Ispitanici i metode" ili drukcije, u dogovoru s mentorom, ovisno
-o pojedinostima samog istrazivanja.
-Opis metodologije ukljucuje pojedinosti novoprimijenjenih metoda i postupaka (po mogunosti ukljuciti
-sheme, slike, i sl., koje e eventualno zainteresiranom citatelju pomoi u ponavljanju eksperimenta), dok
-koristene i etablirane tehnike mogu biti opisane uz manje pojedinosti navoenjem literaturnog izvora.
-Treba opisati i nacin obrade podataka i provedenu statisticku analizu.
-
-4. REZULTATI
-Rezultati istrazivanja trebaju biti jasni. U tu svrhu valja odabrati najprikladniji nacin prikazivanja (tablice,
-grafovi, jednadzbe...).
-Iste rezultate ne treba prikazivati i tablicama i slikama.
-
-5. RASPRAVA
-U ovom se poglavlju tumace dobiveni rezultati, usporeuju s rezultatima drugih autora u jednakim ili slicnim
-pokusima (slazu li se ili odstupaju i eventualne razloge) i izvode zakljucci. Svi oblici prikazivanja rezultata
-(tablice, dijagrami, slike...) moraju biti spomenuti i komentirani u raspravi. U tekstu treba izbjegavati
-ponavljanje konkretnih vrijednosti ve navedenih (tablicno ili drukcije) u poglavlju Rezultati.
-
 ===== [ptfos-upute-diplomski-2020 | str. 6] =====
 PTFOS  Upute za pisanje, ocjenu i obranu diplomskih radova
 
 7. LITERATURA
 
-Ovo poglavlje ukljucuje popis koristenih bibliografskih referenci. Literaturni citati moraju biti iz pouzdanih
-znanstvenih izvora. Ovo se narocito odnosi na informacije s interneta cija poveana dostupnost cesto nije
-popraena zadovoljavajuom kvalitetom izvora. Koristenje takvih referenci treba ograniciti na znanstvene
-radove iz dostupnih baza te druge clanke iza kojih stoje respektabilne znanstveno-istrazivacke
-organizacije, pojedinci, drzavne i meunarodne ustanove ili organizacije. Detaljan opis postupaka kojima
-se moze doi do cjelovite verzije rada te popis i poveznice na najrelevantnije baze dostupan je na
-stranicama Knjiznice PTF-a. Tijekom pisanja diplomskog rada treba odmah pravilno evidentirati izvor
-literaturnih citata. Pri upotrebi mreznih izvora preporuca se pohraniti URL adresu ili citavu stranicu s koje
+Ovo poglavlje uključuje popis korištenih bibliografskih referenci. Literaturni citati moraju biti iz pouzdanih
+znanstvenih izvora. Ovo se naročito odnosi na informacije s interneta čija povećana dostupnost često nije
+popraćena zadovoljavajućom kvalitetom izvora. Korištenje takvih referenci treba ograničiti na znanstvene
+radove iz dostupnih baza te druge članke iza kojih stoje respektabilne znanstveno-istraživačke
+organizacije, pojedinci, državne i međunarodne ustanove ili organizacije. Detaljan opis postupaka kojima
+se može doći do cjelovite verzije rada te popis i poveznice na najrelevantnije baze dostupan je na
+stranicama Knjižnice PTF-a. Tijekom pisanja diplomskog rada treba odmah pravilno evidentirati izvor
+literaturnih citata. Pri upotrebi mrežnih izvora preporuča se pohraniti URL adresu ili čitavu stranicu s koje
 se uzima materijal.
 
 8. PRILOZI
 
-Fotografije, sheme, kromatogrami, obrasci i slicni materijali mogu biti prilozeni u ovom poglavlju samo ako
-su nuzni za razumijevanje metodologije ili rezultata. Svi prilozi imaju naslove i numeriraju se (npr. ,,Prilog
-2 Naslov priloga") kako bi se u tekstu rada moglo upuivati na pojedini prilog. Stranice s prilozima treba
+Fotografije, sheme, kromatogrami, obrasci i slični materijali mogu biti priloženi u ovom poglavlju samo ako
+su nužni za razumijevanje metodologije ili rezultata. Svi prilozi imaju naslove i numeriraju se (npr. „Prilog
+2 Naslov priloga“) kako bi se u tekstu rada moglo upućivati na pojedini prilog. Stranice s prilozima treba
 numerirati.
 
 Izgled rada
 
 Rad treba pisati na papiru formata A4, s marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje) i
 
-===== [ptfos-upute-diplomski-2020 | str. 7] =====
-tekst u tablicama i slikama: 10 ili 11 pt (po potrebi i manji ovisno o fontu), jednostruki prored,
-           poravnanje prema potrebi.
-
-Osnovni nacin naglasavanja teksta su podebljana i kosa slova, dok podcrtavanje i druge nacine isticanja
-teksta treba izbjegavati.
-
-Slike, tablice, formule, mjerne jedinice
-
-Sve slike i tablice trebaju biti sastavljene i opisane tako da budu razumljive i bez citanja teksta. Pod slikama
-se podrazumijevaju grafovi, mape, sheme, fotografije i sl. Naslov tablice pise se iznad same tablice, a
-naslov slike ispod slike. Svaka ilustracija mora imati oznaku (Tablica, Slika), broj i naslov (npr. ,,Tablica 7
-Naslov tablice", ,,Slika 5 Naslov slike"). Naslovi slika i tablica preuzetih iz strucne literature moraju biti
-popraeni odgovarajuim literaturnim citatom, a tekst slika i tablica preveden na hrvatski jezik ako je rijec
-o izvoru na stranom jeziku.
-
-Napomena: vrlo cesto, online servisi (poput Wikipedije) sadrze ilustracije ciji autori su se odrekli autorskih prava. Slike su
-                                                       oznacene dolje prikazanim ili slicnim simbolima (click ovdje za objasnjenje). U tom
-                                                       slucaju citiranje autora nije nuzno. Sto ne znaci da korisnik ne moze zahvaliti
-                                                       konkretnom ili anonimnom autoru u Zahvali ili, npr., malom donacijom Wikipediji.
-
-Dimenzije tablica i slika ne smiju prelaziti rub margina, a na stranici se centriraju vodoravno. Ako su
-potrebna dodatna pojasnjenja tablice, pisu se ispod tablice, dok se dodatna objasnjenja slike pisu ispod
-naziva slike, fontom manje velicine (vidi primjere u Predlosku diplomskog rada). Tablice i slike se pri
-spominjanju u tekstu oznacavaju podebljanim fontom i velikim prvim slovom (npr. ,,Rezultati analiza...
-navedeni su u Tablici 1 ..." ili ,,Slika 5 prikazuje korelaciju temperature i udjela...").
-Ako se navode formule (matematicke, kemijske...), potrebno ih je numerirati brojem u zagradi, a u tekstu
-se poziva na broj formule (npr. ,,Prema formuli (1) vidljivo je..."). Broj formule treba pisati s desne strane
-formule u zagradi, a formula se moze uvui tabulatorom ili postaviti u sredinu stranice. Nacin pisanja
-oznaka fizikalnih velicina, njihovih vrijednosti i mjernih jedinica u formulama i tekstu diplomskog rada
-detaljno je opisan u Pravilima za pisanje formula i mjernih jedinica. Kroz cijeli diplomski rad se
-
-===== [ptfos-upute-diplomski-2020 | str. 8] =====
-Pri nabrajanju svaka stavka se pise malim pocetnim slovom. Na kraju svake stavke potrebno je staviti
-zarez ili tocka-zarez, a na kraju recenice tocku, npr.:
-Homogenizacijom se postize:
-
-     poveanje viskoznosti i poboljsanje konzistencije fermentiranog proizvoda,
-     poboljsanje teksture grusa i smanjenje sinereze,
-     puniji okus proizvoda i bjelja boja i
-     poboljsanje probavljivosti proizvoda (Tratnik, 1998).
-
-Poglavlja i naslovi
-
-Tekst osnovnog dijela diplomskog rada (osim uvoda, zakljucaka i popisa literature) treba smisleno podijeliti
-u manje cjeline � poglavlja/potpoglavlja. Poglavlja se numeriraju arapskim rednim brojevima, tako da
-poglavlja najvise razine imaju samo jedan broj, a niza poglavlja (potpoglavlja) sadrze i broj viseg poglavlja.
-Poglavlje ne moze imati samo jednu podcjelinu. U tom se slucaju tekst moze odvojiti podnaslovom, koji
-se ne numerira, ili se mora uvesti jos jedna podcjelina, npr.:
-
-1. UVOD                               1. UVOD                   1. UVOD
-2. TEORIJSKI DIO                      2. TEORIJSKI DIO          2. TEORIJSKI DIO
-
-   2.1. Naslov poglavlja                 2.1. Naslov poglavlja     2.1. Naslov poglavlja
-          2.1.1. Naslov potpoglavlja            Podnaslov                 2.1.1. Naslov potpoglavlja
-                                                                          2.1.2. Naslov potpoglavlja
-   2.2. Naslov poglavlja                 2.2. Naslov poglavlja
-
 ===== [ptfos-upute-diplomski-2020 | str. 9] =====
 PTFOS  Upute za pisanje, ocjenu i obranu diplomskih radova
 
-jednom retku. U zaglavlju stranice se upisuje broj i naslov poglavlja. U podnozju stranice, s desnim
-poravnanjem, upisuje se tekui broj stranice.
+jednom retku. U zaglavlju stranice se upisuje broj i naslov poglavlja. U podnožju stranice, s desnim
+poravnanjem, upisuje se tekući broj stranice.
 
-Biljeske
+Bilješke
 
-Biljeske (fusnote) se mogu koristiti za poblize objasnjavanje odreenih pojmova i sl. u tekstu. Navode se
+Bilješke (fusnote) se mogu koristiti za pobliže objašnjavanje određenih pojmova i sl. u tekstu. Navode se
 na dnu stranice (manjim slovima) i numeriraju arapskim brojevima u neprekidnom nizu kroz cijeli tekst
-diplomskog rada. Biljeske predstavljaju recenice � dakle pocinju velikim slovom, a zavrsavaju tockom.
+diplomskog rada. Bilješke predstavljaju rečenice – dakle počinju velikim slovom, a završavaju točkom.
 
 Literaturni citati
 
@@ -219,81 +43,89 @@ citati iz popisa moraju biti navedeni u tekstu.
 
                             Citiranje u tekstu rada
 
-Osnovno nacelo je citiranje autora, bilo da je rijec o jednoj osobi, grupi osoba ili organizaciji.
-Citiranje jedne ili vise osoba
-Neovisno vrsti rada (clanak u casopisu, knjizi, publikaciji s mreznog izvora, itd.), uz prezime autora se
+Osnovno načelo je citiranje autora, bilo da je riječ o jednoj osobi, grupi osoba ili organizaciji.
+Citiranje jedne ili više osoba
+Neovisno vrsti rada (članak u časopisu, knjizi, publikaciji s mrežnog izvora, itd.), uz prezime autora se
 navodi godina objave rada u zagradi, npr.:
 
-           Iz preglednog rada autorice Nedi-Tiban (2009) vidljivo je...
+           Iz preglednog rada autorice Nedić-Tiban (2009) vidljivo je…
 
-Kada se u tekstu poziva na rad ili dio istrazivanja (ne navodi se izravno ime autora kao dio teksta), tada
-se prezime autora i godina objave rada navode u zagradi na kraju recenice, npr.:
+Kada se u tekstu poziva na rad ili dio istraživanja (ne navodi se izravno ime autora kao dio teksta), tada
+se prezime autora i godina objave rada navode u zagradi na kraju rečenice, npr.:
 
-           Rezultati navedenog rada su ukazali na niske razine aflatoksina (Sarkanj, 2010).
+           Rezultati navedenog rada su ukazali na niske razine aflatoksina (Šarkanj, 2010).
 
-Ako se radi o radu dva autora, navode se prezimena oba autora koja se odvajaju veznikom ,,i", npr.:
-           Budzaki i Seruga (2005) navode da...
+Ako se radi o radu dva autora, navode se prezimena oba autora koja se odvajaju veznikom „i“, npr.:
+           Budžaki i Šeruga (2005) navode da…
 
-           Koeficijent prijenosa topline se koristi kada... (Budzaki i Seruga, 2005).
+           Koeficijent prijenosa topline se koristi kada… (Budžaki i Šeruga, 2005).
 
-Kada se poziva na rad koji ima vise od dva autora, navodi se samo prezime prvog autora i iza njega kratica
-i sur. (u tekstu na engleskom jeziku opeprihvaena kratica je et al., skraeno od lat. et alii � i ostali), npr.:
+Kada se poziva na rad koji ima više od dva autora, navodi se samo prezime prvog autora i iza njega kratica
+i sur. (u tekstu na engleskom jeziku općeprihvaćena kratica je et al., skraćeno od lat. et alii – i ostali), npr.:
 
-           Planini i sur. (2009) te drugi autori (Tisma i sur., 2009) navode potrebu za...
+           Planinić i sur. (2009) te drugi autori (Tišma i sur., 2009) navode potrebu za…
 
-Citiranje vise clanaka ukljucuje odvajanje znakom tocka-zarez (;), npr.:
+Citiranje više članaka uključuje odvajanje znakom točka-zarez (;), npr.:
            Istodobno, nekoliko studija (Primorac, 2008; Kopjar i sur., 2009) utvrdilo je...
 
-Kada se u tekstu poziva na dva ili vise radova istog autora koji su objavljeni u razlicitim godinama, navode
-se prezime autora i godine objave rada kronoloskim redom meusobno odvojene tocka-zarezom, npr.:
+Kada se u tekstu poziva na dva ili više radova istog autora koji su objavljeni u različitim godinama, navode
+se prezime autora i godine objave rada kronološkim redom međusobno odvojene točka-zarezom, npr.:
 
-           Mandi (2004; 2008; 2009) je ustvrdila...
+           Mandić (2004; 2008; 2009) je ustvrdila…
 
        7
 
 ===== [ptfos-upute-diplomski-2020 | str. 10] =====
 PTFOS  Upute za pisanje, ocjenu i obranu diplomskih radova
 
-           Posljednjih nekoliko godina se istice... (Jakobek i sur., 2004; 2007).
+           Posljednjih nekoliko godina se ističe… (Jakobek i sur., 2004; 2007).
 
 Ako se u tekstu poziva na radove istog autora koji su objavljeni u istoj godini, svakom radu se dodaje malo
 slovo a, b, c itd. iza godine, npr.:
 
-           Caci-Kenjeri i sur. (2009a; 2009b) su odredili...
+           Čačić-Kenjerić i sur. (2009a; 2009b) su odredili…
 
-           Rezultati istrazivanja su pokazali... (Klapec, 2007a; 2007b).
+           Rezultati istraživanja su pokazali… (Klapec, 2007a; 2007b).
 
 Citiranje organizacija i institucija
-Ako je rad objavila organizacija poput tvrtke, udruge, drzavne sluzbe i institucije, nevladine organizacije, i
+Ako je rad objavila organizacija poput tvrtke, udruge, državne službe i institucije, nevladine organizacije, i
 sl., navodi se kratica organizacije i godina objave rada, npr.:
 
-           Podaci Svjetske zdravstvene organizacije (WHO, 2008) pokazuju da...
+           Podaci Svjetske zdravstvene organizacije (WHO, 2008) pokazuju da…
 
-Pri pozivanju na pravilnike, norme, izvjesa, i sl., takoer se navodi autor djela. Npr.:
-           ... veina uzoraka ne zadovoljava uvjete Pravilnika o toksinima, metalima, metaloidima
-           te drugim stetnim tvarima koje se mogu nalaziti u hrani (MZSS, 2008).
+Pri pozivanju na pravilnike, norme, izvješća, i sl., također se navodi autor djela. Npr.:
+           … većina uzoraka ne zadovoljava uvjete Pravilnika o toksinima, metalima, metaloidima
+           te drugim štetnim tvarima koje se mogu nalaziti u hrani (MZSS, 2008).
 
-           ...prema zahtjevima norme HRN EN ISO/IEC 17025 (HZN, 2004) za...
+           …prema zahtjevima norme HRN EN ISO/IEC 17025 (HZN, 2004) za…
 
-Ukoliko je rijec o vise radova iste organizacije objavljenim u istoj ili razlicitim godinama, primijenjuju se
+Ukoliko je riječ o više radova iste organizacije objavljenim u istoj ili različitim godinama, primijenjuju se
 gore navedena pravila za citiranje osoba.
 
                         Citiranje u popisu literature
 
-Popis literature podrazumijeva abecedni popis citiranih izvora. Svaki literaturni citat pise se u jednom
-odlomku, s jednostrukim proredom, razmakom izmeu odlomaka 12 pt i viseom uvlakom 1,25 cm (izgled
-popisa literature prikazan je u Predlosku diplomskog rada).
+Popis literature podrazumijeva abecedni popis citiranih izvora. Svaki literaturni citat piše se u jednom
+odlomku, s jednostrukim proredom, razmakom između odlomaka 12 pt i visećom uvlakom 1,25 cm (izgled
+popisa literature prikazan je u Predlošku diplomskog rada).
 
-Mjesto izdavanja publikacije nije nuzno navoditi u slucaju velikih meunarodnih izdavackih kua budui da
-one danas cesto izdaju knjige istovremeno na vise razlicitih lokacija sirom svijeta.
+Mjesto izdavanja publikacije nije nužno navoditi u slučaju velikih međunarodnih izdavačkih kuća budući da
+one danas često izdaju knjige istovremeno na više različitih lokacija širom svijeta.
 
 Knjiga ili skripta
 
-Redoslijed navoenja podataka je sljedei:
+Redoslijed navođenja podataka je sljedeći:
 
 Prezime I: Naslov knjige ili skripte. Nakladnik, mjesto izdanja, godina izdanja.
 
 ili
+
+Akronim organizacije, pun naziv organizacije: Naslov knjige ili skripte. Nakladnik, mjesto izdanja, godina
+         izdanja.
+
+Kovačević D: Sirovine prehrambene industrije (meso i riba). Prehrambeno-tehnološki fakultet, Osijek,
+         2004.
+
+       8
 
 ===== [ptfos-upute-diplomski-2020 | str. 11] =====
 education. Palgrave Macmillan, 2004.
@@ -303,22 +135,22 @@ Poglavlje u knjizi i enciklopedijska natuknica
 Prezime I: Naslov poglavlja ili natuknice. U Naslov knjige ili enciklopedije, raspon stranica (str. od-do).
          Nakladnik, mjesto izdanja, godina izdanja.
 
-Pilizota V: Prerada voa i povra. U Hrvatska poljoprivreda na raskrizju, str. 156-160. Ministarstvo
-         poljoprivrede i sumarstva RH, Zagreb, 1997.
+Piližota V: Prerada voća i povrća. U Hrvatska poljoprivreda na raskrižju, str. 156-160. Ministarstvo
+         poljoprivrede i šumarstva RH, Zagreb, 1997.
 
-Znanstveni i strucni radovi objavljeni u casopisu
+Znanstveni i stručni radovi objavljeni u časopisu
 
-Pri citiranju radova objavljenih u periodickim casopisima treba pisati puni naziv casopisa. Kratice i puni
-nazivi znanstvenih casopisa mogu se pronai na sljedeoj adresi (Web of Science, Thomson Scientific):
+Pri citiranju radova objavljenih u periodičkim časopisima treba pisati puni naziv časopisa. Kratice i puni
+nazivi znanstvenih časopisa mogu se pronaći na sljedećoj adresi (Web of Science, Thomson Scientific):
 http://library.caltech.edu/reference/abbreviations.
-Prezime I: Naslov rada. Puni Naslov Casopisa volumen:raspon stranica, godina izdanja.
-Mandi ML, Kenjeri D, Perl Piricki A: Intake of some minerals in healthy adult volunteers from eastern
+Prezime I: Naslov rada. Puni Naslov Časopisa volumen:raspon stranica, godina izdanja.
+Mandić ML, Kenjerić D, Perl Pirički A: Intake of some minerals in healthy adult volunteers from eastern
 
          Croatia. International Journal of Food Sciences and Nutrition 60:77-87, 2009.
 
-Clanci iz elektronickih casopisa (tj. onih koji postoje iskljucivo u digitalnom obliku) citiraju se ovako:
+Članci iz elektroničkih časopisa (tj. onih koji postoje isključivo u digitalnom obliku) citiraju se ovako:
 
-Prezime I: Naslov rada. Puni Naslov Casopisa volumen:broj clanka, godina izdanja.
+Prezime I: Naslov rada. Puni Naslov Časopisa volumen:broj članka, godina izdanja.
 Traka M, Gasper AV, Melchini A: Broccoli consumption interacts with GSTM1 to perturb oncogenic
 
          signalling pathways in the prostate. PLoS ONE 3:e2568, 2008.
@@ -328,20 +160,197 @@ Radovi objavljeni u zborniku skupa
 Prezime I: Naslov rada. U Naslov zbornika ili skupa, raspon stranica (str. od-do). Nakladnik, mjesto izdanja,
          godina izdanja.
 
-Jug D, Jug I, Ugarci-Hardi Z, Sabo M: Effect of reduced tillage on wheat rheological properties. U
+Jug D, Jug I, Ugarčić-Hardi Ž, Sabo M: Effect of reduced tillage on wheat rheological properties. U
 
 ===== [ptfos-upute-diplomski-2020 | str. 11] =====
 Kvalifikacijski radovi (diplomski rad, magistarski rad, disertacija)
 
 Prezime I: Naslov rada. Vrsta rada. Naziv institucije, mjesto izdanja, godina izdanja.
-Mari I: Utjecaj temperature na kinetiku halogenog susenja tjestenine. Diplomski rad. Prehrambeno-
+Marić I: Utjecaj temperature na kinetiku halogenog sušenja tjestenine. Diplomski rad. Prehrambeno-
 
-         tehnoloski fakultet, Osijek, 2005.
+         tehnološki fakultet, Osijek, 2005.
 
-Djela u izdanju organizacija (zakoni, pravilnici, norme, prirucnici, izvjesa, i dr.)
+Djela u izdanju organizacija (zakoni, pravilnici, norme, priručnici, izvješća, i dr.)
 
-IZVJESA
+IZVJEŠĆA
 
-Izvjesa i slicni dokumenti citiraju se poput knjiga.
+Izvješća i slični dokumenti citiraju se poput knjiga.
 
                                                                                                                                                                                               9
+
+===== [ptfos-upute-diplomski-2020 | str. 2] =====
+Prije pripreme rada........................................................................................... 1
+       Osnovni dijelovi rada....................................................................................... 1
+       Uvodni dio.......................................................................................................... 1
+       Osnovni dio........................................................................................................ 2
+       Izgled rada......................................................................................................... 4
+       Stil pisanja.......................................................................................................... 4
+       Oblikovanje teksta.............................................................................................. 4
+       Slike, tablice, formule, mjerne jedinice............................................................... 5
+       Stručna terminologija.......................................................................................... 5
+       Nabrajanje.......................................................................................................... 6
+       Poglavlja i naslovi............................................................................................... 6
+       Zaglavlje i podnožje............................................................................................ 6
+       Bilješke............................................................................................................... 7
+       Literaturni citati................................................................................................... 7
+
+          Citiranje u tekstu rada............................................................................................... 7
+          Citiranje u popisu literature....................................................................................... 8
+       Nakon pripreme rada........................................................................................ 11
+       Literatura............................................................................................................ 12
+
+Napomena za korištenje digitalne inačice Uputa: plavo obojan tekst uključuje poveznicu na internetsko
+mjesto.
+
+                                                                                                                                                                                              1
+
+===== [ptfos-upute-diplomski-2020 | str. 3] =====
+PTFOS  Upute za pisanje, ocjenu i obranu diplomskih radova
+
+Što je diplomski rad?
+
+Diplomski rad je samostalni stručni rad u kojem student/ica pod vodstvom mentora obrađuje izabranu
+temu. Studenti, koji su položili ispite i izvršili druge obveze sadržane u nastavnom planu i programu studija,
+izradom diplomskog rada dokazuju sposobnost samostalnog rješavanja zadatka iz područja struke, a pri
+tome rabe znanja i vještine stečene tijekom studija, koja uključuju instrumentalne i druge istraživačke
+metode, te interpretiraju i uspoređuju rezultate s literaturnim podacima. Teorijski ili praktični istraživački
+dio kojeg student/ica obrađuje u diplomskom radu ne mora biti izvorni rad.
+
+Prije pripreme rada
+
+Student/ica izabire temu diplomskog rada u dogovoru s mentorom tijekom završne godine studija. Tema
+diplomskog rada bi, u pravilu, trebala biti vezana za neki od predmeta koje je student slušao tijekom
+studiranja. Prijava teme diplomskog rada Odboru za završne i diplomske ispite, odabir članova
+Povjerenstva za ocjenu i obranu diplomskog rada i diplomskog ispita (u daljnjem tekstu Povjerenstvo),
+prijava i oglašavanje datuma obrane te ispunjavanje odgovarajućih obrazaca, u nadležnosti su mentora.
+Dodatne informacije mogu se pronaći u Pravilniku o završnim i diplomskim ispitima.
+
+Osnovni dijelovi rada
+
+===== [ptfos-upute-diplomski-2020 | str. 4] =====
+PTFOS  Upute za pisanje, ocjenu i obranu diplomskih radova
+
+Svaki od dolje narednih uvodnih dijelova diplomskog rada označenih rimskim brojevima (I. – VI.) potrebno
+je pisati na posebnoj stranici. Ove se stranice mogu numerirati rimskim brojevima (desno dolje).
+
+I. NASLOVNA STRANICA
+Tekst naslovne stranice identičan je onom na koricama.
+
+II. TEMELJNA DOKUMENTACIJSKA KARTICA
+Temeljna dokumentacijska kartica sadrži osnovne bibliografske podatke, te sažetak i ključne riječi.
+Sažetak uključuje osnovne zadatke, metode rada i zaključke u maksimalno 200 riječi, a piše se u jednom
+odlomku. Poslije sažetka valja navesti do pet ključnih riječi, odvojenih zarezom.
+
+III. BASIC DOCUMENTATION CARD
+Ova stranica sadrži sve podatke iz temeljne dokumentacijske kartice prevedene na engleski jezik.
+
+IV. ZAHVALA
+Zahvala ne mora biti uključena u uvodni dio diplomskog rada, a ako je napisana, smještena je pri dnu
+stranice.
+
+V. SADRŽAJ
+Ova stranica sadrži naslove poglavlja i potpoglavlja s brojevima stranica na kojima se nalaze.
+
+===== [ptfos-upute-diplomski-2020 | str. 4] =====
+Numeracija stranica počinje od osnovnog dijela.
+Osnovni dio diplomskog rada treba sadržavati sljedeća poglavlja:
+1. Uvod
+2. Teorijski dio
+3. Eksperimentalni dio
+
+   3.1. Zadatak
+   3.2. Materijali i metode
+4. Rezultati
+5. Rasprava
+6. Zaključci
+7. Literatura
+8. Prilozi (po potrebi)
+
+                                                                                                                                                                                              2
+
+===== [ptfos-upute-diplomski-2020 | str. 5] =====
+3. EKSPERIMENTALNI DIO
+3.1. ZADATAK
+U ovom potpoglavlju trebaju se definirati zadaci rada.
+
+3.2. MATERIJALI I METODE
+Ovo potpoglavlje sadrži detaljan opis materijala i metoda kojima je provedeno istraživanje. Navode se svi
+osnovni podaci za uporabljene materijale i/ili uzorke (proizvođača, uvjete dobivanja, čuvanja, i sl.).
+Alternativno, poglavlje je moguće nazvati „Ispitanici i metode“ ili drukčije, u dogovoru s mentorom, ovisno
+o pojedinostima samog istraživanja.
+Opis metodologije uključuje pojedinosti novoprimijenjenih metoda i postupaka (po mogućnosti uključiti
+sheme, slike, i sl., koje će eventualno zainteresiranom čitatelju pomoći u ponavljanju eksperimenta), dok
+korištene i etablirane tehnike mogu biti opisane uz manje pojedinosti navođenjem literaturnog izvora.
+Treba opisati i način obrade podataka i provedenu statističku analizu.
+
+4. REZULTATI
+Rezultati istraživanja trebaju biti jasni. U tu svrhu valja odabrati najprikladniji način prikazivanja (tablice,
+grafovi, jednadžbe…).
+Iste rezultate ne treba prikazivati i tablicama i slikama.
+
+5. RASPRAVA
+U ovom se poglavlju tumače dobiveni rezultati, uspoređuju s rezultatima drugih autora u jednakim ili sličnim
+pokusima (slažu li se ili odstupaju i eventualne razloge) i izvode zaključci. Svi oblici prikazivanja rezultata
+(tablice, dijagrami, slike…) moraju biti spomenuti i komentirani u raspravi. U tekstu treba izbjegavati
+ponavljanje konkretnih vrijednosti već navedenih (tablično ili drukčije) u poglavlju Rezultati.
+
+===== [ptfos-upute-diplomski-2020 | str. 7] =====
+▪ tekst u tablicama i slikama: 10 ili 11 pt (po potrebi i manji ovisno o fontu), jednostruki prored,
+           poravnanje prema potrebi.
+
+Osnovni način naglašavanja teksta su podebljana i kosa slova, dok podcrtavanje i druge načine isticanja
+teksta treba izbjegavati.
+
+Slike, tablice, formule, mjerne jedinice
+
+Sve slike i tablice trebaju biti sastavljene i opisane tako da budu razumljive i bez čitanja teksta. Pod slikama
+se podrazumijevaju grafovi, mape, sheme, fotografije i sl. Naslov tablice piše se iznad same tablice, a
+naslov slike ispod slike. Svaka ilustracija mora imati oznaku (Tablica, Slika), broj i naslov (npr. „Tablica 7
+Naslov tablice“, „Slika 5 Naslov slike“). Naslovi slika i tablica preuzetih iz stručne literature moraju biti
+popraćeni odgovarajućim literaturnim citatom, a tekst slika i tablica preveden na hrvatski jezik ako je riječ
+o izvoru na stranom jeziku.
+
+Napomena: vrlo često, online servisi (poput Wikipedije) sadrže ilustracije čiji autori su se odrekli autorskih prava. Slike su
+                                                       označene dolje prikazanim ili sličnim simbolima (click ovdje za objašnjenje). U tom
+                                                       slučaju citiranje autora nije nužno. Što ne znači da korisnik ne može zahvaliti
+                                                       konkretnom ili anonimnom autoru u Zahvali ili, npr., malom donacijom Wikipediji.
+
+Dimenzije tablica i slika ne smiju prelaziti rub margina, a na stranici se centriraju vodoravno. Ako su
+potrebna dodatna pojašnjenja tablice, pišu se ispod tablice, dok se dodatna objašnjenja slike pišu ispod
+naziva slike, fontom manje veličine (vidi primjere u Predlošku diplomskog rada). Tablice i slike se pri
+spominjanju u tekstu označavaju podebljanim fontom i velikim prvim slovom (npr. „Rezultati analiza…
+navedeni su u Tablici 1 …“ ili „Slika 5 prikazuje korelaciju temperature i udjela...“).
+Ako se navode formule (matematičke, kemijske…), potrebno ih je numerirati brojem u zagradi, a u tekstu
+se poziva na broj formule (npr. „Prema formuli (1) vidljivo je…“). Broj formule treba pisati s desne strane
+formule u zagradi, a formula se može uvući tabulatorom ili postaviti u sredinu stranice. Način pisanja
+oznaka fizikalnih veličina, njihovih vrijednosti i mjernih jedinica u formulama i tekstu diplomskog rada
+detaljno je opisan u Pravilima za pisanje formula i mjernih jedinica. Kroz cijeli diplomski rad se
+upotrebljavaju iste oznake za iste veličine i u pravilu treba koristiti samo zakonite mjerne jedinice prema
+važećem Pravilniku o mjernim jedinicama. Primjeri navođenja formula i mjernih jedinica dani su i u
+Predlošku diplomskog rada.
+Numeriranje tablica, slika i formula u diplomskom radu počinje od teorijskoga dijela i nastavlja se do kraja
+rada.
+
+Stručna terminologija
+
+Glede kemijske nomenklature i terminologije nužno je pridržavanje preporuka IUPAC-a: Nomenklatura
+anorganskih spojeva.
+Nomenklatura organskih spojeva je na raspolaganju u knjižnici PTF-a:
+
+       5
+
+===== [ptfos-upute-diplomski-2020 | str. 14] =====
+PTFOS  Upute za pisanje, ocjenu i obranu diplomskih radova
+
+Literatura
+
+Belak S: Uvod u znanost. Visoka škola za turistički menadžment, Šibenik, 2005.
+Prehrambeno-biotehnološki fakultet: Uputstva za izradbu diplomskog rada. PBF, Zagreb
+
+         http://www.pbf.unizg.hr/hr/content/download/793/9738/file/uputstva_diplomski.pdf [10.11.2019]
+Prehrambeno-tehnološki fakultet: Upute za pisanje diplomskog rada. PTF, Osijek, 2001.
+Zelenika R: Metodologija i tehnologija izrade znanstvenog i stručnog djela. Ekonomski fakultet, Rijeka,
+
+         2000.
+
+       12

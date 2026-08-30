@@ -1,88 +1,20 @@
-===== [mefos-upute-radovi-2025 | str. 1] =====
-Ove upute sastavljene su na temelju Pravilnika o zavrsnim i diplomskim ispitima Medicinskog
-fakulteta Osijek i 5. izdanja udzbenika "Uvod u znanstveni rad u medicini", autora Marusi M. i
-suradnika (Medicinska naklada, Zagreb, 2013.).
-
-Osnovna je svrha uputa pristupnicima opisati i obrazloziti pravila kojih se obvezatno i u potpunosti
-moraju pridrzavati tijekom izrade i oblikovanja zavrsnih i diplomskih radova.
-
-IZRADA I OBLIKOVANJE ZAVRSNOG/DIPLOMSKOG RADA
-
-Zavrsni/diplomski rad tiska se na papiru standardne velicine (A4, 210 x 297 mm) sa slobodnim
-rubnicima od 2,5 cm, a u proredu 1,5. Za ispis treba rabiti pismo velicine 12 tipografskih tocaka
-vrste Times New Roman s obvezatnom potporom svih hrvatskih znakova. Tekst mora biti
-obostrano poravnat, osim referencija. Sve stranice teksta moraju biti numerirane, tj. oznacene
-brojevima. Tekst mora biti pisan znanstvenim stilom jezika studija po svim gramatickim i
-pravopisnim pravilima, u suprotnome e rad biti vraen bez obzira na kvalitetu sadrzaja
-rada.
-
-Studentskoj sluzbi studija upuuje se rad u elektronickom obliku iskljucivo u pdf (prema engl.
-portable document format) formatu zajedno sa svi ostalim popratnim dokumentima
-(https://www.mefos.unios.hr/index.php/hr/studenti/zavrsetak-studija).
-
-Ocjene sva tri clana Povjerenstva za ocjenu rada predaju se elektronickim putem na adresu
-ozzid@mefos.hr ili osobno studentskoj sluzbi. U slucaju da je rad u meuvremenu mijenjan,
-potrebno je dostaviti i novu inacicu rada u elektronickom obliku.
-
-===== [mefos-upute-radovi-2025 | str. 5] =====
-Uvoenje kratica u tekstu rada
-Kratice se u tekstu rada potpuno objasnjavaju samo pri prvom koristenju kratice. Za kratice koje
-su pokrata izraza na hrvatskom jeziku, prvo se napise puni hrvatski tekst iza kojega slijedi kratica
-u zagradi, npr. "Svjetska zdravstvena organizacija (SZO)", a u daljnjem tekstu se moze koristiti
-samo kratica.
-Za kratice koje su pokrata izraza na stranom jeziku takoer se prvo pise puni hrvatski prijevod,
-nakon cega se u zagradi navodi kratica izraza na stranom jeziku te puni tekst izraza na stranom
-jeziku koji se pise ukoseno, npr. "Svjetska zdravstvena organizacija (WHO, prema engl. World
-Health Organization)".
-
-Kratice u tablicama i na slikama
-Sve kratice koje se koriste u tablici moraju biti objasnjene u podbiljeskama tablice neovisno o tome
-je li kratica ve koristena u tekstu ili nekoj od prethodnih tablica. Sve kratice koje se koriste na
-slici moraju biti objasnjene u opisu slike neovisno o tome je li kratica ve koristena u tekstu ili
-nekoj od prethodnih slika.
-
-Nakon toga, po zelji pristupnika, mogu se navesti i popisi tablica i slika, svaki zapocet na novoj
-stranici. Popisi tablica i slika, ako se navode, trebaju sadrzavati natpis, broj i naslov tablice/slike te
-brojeve stranica na kojima se nalaze.
-
-Stranice sadrzaja, popisa kratica, tablica i slika numeriraju se rimskim brojevima. Prva
-stranica uvoda prva je stranica numerirana arapskim brojevima koji slijede do kraja rada, tj. do
-naslovne stranice priloga (ako ih ima). Bojevi stranica pisu se u desnom donjem kutu stranice, ako
-je rad tiskan jednostrano, odnosno donjem vanjskom kutu stranice rada koji je tiskan dvostrano.
-
 ===== [mefos-upute-radovi-2025 | str. 6] =====
-9. Summary (naslov rada, sazetak i kljucne rijeci na engleskom jeziku)
-   10. Literatura (referencije)
-   11. Zivotopis
-   12. Prilozi.
-
-Svako poglavlje treba zapoceti na novoj stranici. Poglavlja mogu biti podijeljena na potpoglavlja
-do dvije podrazine, ona ne zapocinju na novoj stranici. Potpoglavlja se unutar iste razine
-numeriraju na nacin da se broju prethodne razine numeracije doda redni broj potpoglavlja, kako je
-prikazano u sljedeem primjeru:
-
-        .........................................
-        3. Ispitanici i metode -> poglavlje
-        3.1. Ustroj studije -> podpoglavlje, prvi nivo
-        3.2. Ispitanici -> podpoglavlje, prvi nivo
-
-===== [mefos-upute-radovi-2025 | str. 6] =====
-4. Dijelovi znanstvenog i strucnog istrazivackog rada
+4. Dijelovi znanstvenog i stručnog istraživačkog rada
 
 4.1. Uvod
 
-U ovom je dijelu rada potrebno prikazati osnovne spoznaje o podrucju o kojemu pristupnik pise
-rad, predmetu istrazivanja i objavljenim rezultatima dosadasnjih istrazivanja te obrazloziti problem koji
-slijedi u radu. Udzbenicku grau u uvodnom dijelu treba svesti na minimum koji je neophodan da bi se
-mogao shvatiti problem koji se u radu istrazuje. Uvod ne smije prelaziti jednu cetvrtinu od
+U ovom je dijelu rada potrebno prikazati osnovne spoznaje o području o kojemu pristupnik piše
+rad, predmetu istraživanja i objavljenim rezultatima dosadašnjih istraživanja te obrazložiti problem koji
+slijedi u radu. Udžbeničku građu u uvodnom dijelu treba svesti na minimum koji je neophodan da bi se
+mogao shvatiti problem koji se u radu istražuje. Uvod ne smije prelaziti jednu četvrtinu od
 ukupnog broja stranica teksta rada (od uvoda do priloga).
 
-Svaku tvrdnju koja nije vlastita mora se potkrijepiti odgovarajuim navodom. U podrucju
+Svaku tvrdnju koja nije vlastita mora se potkrijepiti odgovarajućim navodom. U području
 biomedicine i zdravstva u pravilu se navodi iz literature citiraju Vancouverskim stilom, tj. prema
-redoslijedu pojavljivanja (literaturni navod koji se prvi navodi u tekstu oznacuje se brojem 1,
-sljedei navod oznacuje se brojem 2 itd., pri cemu isti literaturni navod zadrzava isti broj u cijelom
-tekstu rada), a u tekstu se navode brojem u zagradi kao sastavni dio recenice na koju se odnosi.
-Iza broja referencije tocka se ne stavlja.
+redoslijedu pojavljivanja (literaturni navod koji se prvi navodi u tekstu označuje se brojem 1,
+sljedeći navod označuje se brojem 2 itd., pri čemu isti literaturni navod zadržava isti broj u cijelom
+tekstu rada), a u tekstu se navode brojem u zagradi kao sastavni dio rečenice na koju se odnosi.
+Iza broja referencije točka se ne stavlja.
 
 Primjeri pisanja navoda u tekstu:
 
@@ -90,149 +22,41 @@ Primjeri pisanja navoda u tekstu:
 
                                                                                                                    6
 
-===== [mefos-upute-radovi-2025 | str. 7] =====
-U radu koji je znanstveni ciljevi trebaju biti voeni postavljenom hipotezom te oblikovani u svrhu
-njezinog potvrivanja ili opovrgavanja.
-
-Pri pisanju ciljeva trebati imati na umu da iz njih trebaju logicno slijediti metodologija istrazivanja,
-rezultati i zakljucci.
-
-4.4. Materijal i metode (Ispitanici i metode)
-
-U ovom je dijelu potrebno detaljno opisati sve elemente metodologije istrazivanja.
-
-4.4.1. Ustroj studije
-Opisati vrstu studije. Dobro poznate vrste studija (npr. presjecna studija) nije potrebno podrobno
-opisivati, ve samo citirati odgovarajuu literaturu. Nove oblike studija treba iscrpno opisati
-navodei koje su skupine ukljucene u istrazivanje, kako su oblikovane, na koji su nacin odabrani
-clanovi pojedinih skupina i sl.
-
-Posebno pojasniti sve dodatne cimbenike studije, primjerice kriterije za ukljucivanje/iskljucivanje
-ispitanika u studiju, postupak randomizacije, maskiranje itd.
-
-4.4.2. Ispitanici (Materijal)
-Opisati tko su ispitanici, iz kojih se populacija i kako uzorkuju, kako je i kada uzorak oblikovan i
-zasto, postoji li kontrolna skupina i tko je sacinjava, odnosno sto cini materijal istrazivanja, kako i
-kada je prikupljen i sl.
-
-                                                                                                                   7
-
-===== [mefos-upute-radovi-2025 | str. 8] =====
-4.4.3. Metode
-Opisati pokazatelje (varijable) koje se analiziraju. Opisati na koji su nacin prikupljeni podatci
-(mjerenje, upitnik, anketa i sl.) i kojim su metodama obavljena mjerenja i druga opazanja.
-
-Svi temeljni postupci rada moraju u ovoj cjelini biti navedeni te dostatno protumaceni i
-obrazlozeni. Standardni postupci navode se samo imenom i odgovarajuim citatom; manje poznati
-postupci trebaju biti popraeni kraim opisom i literaturnim navodom objavljenog rada u kojemu
-su detaljno objasnjeni.
-
-4.4.4. Statisticke metode
-Opisati osnovne osobine i mjerne ljestvice prikupljenih podataka. Navesti koji su se odnosi meu
-podatcima istrazivali zajedno sa statistickim postupcima koji su se u tu svrhu upotrijebili.
-
-Opepoznati i jednostavni statisticki postupci (kao npr. postupci opisne statistike, Studentov t-test
-i sl.) navode se samo imenom i citatom ope statisticke literature. Manje uvrijezene i slozene
-statisticke postupke treba opisati uz pozivanje na literaturu gdje su detaljno opisani.
-
-Navesti kojim je postupcima izvrsena provjera ispunjavaju li prikupljeni podatci pretpostavke za
-koristenje primijenjenih statistickih postupaka te koji su se postupci rabili u slucaju da prikupljeni
-podatci nisu ispunjavali trazene pretpostavke.
-Potrebno je navesti koji se racunalni program rabio za obradu podataka. Ako se za obradu podataka
-rabio neki od racunalnih programa za obradu podataka dostupnih na trzistu, treba navesti naziv
-programa iza kojeg se u zagradi navodi inacica, proizvoac, te mjesto i drzava proizvodnje.
-
-Primjer navoenja racunalnog programa koristenog za statisticku analizu podataka:
----------------------------------------------------------------------------------------------------------------------
-Za statisticku obradu podataka rabljen je program SPSS for Windows (inacica 13.0, SPSS Inc.,
-Chicago, IL, SAD).
----------------------------------------------------------------------------------------------------------------------
-
-Izvorne i vlastite racunalne programe koji su koristeni u obradi podataka treba navesti nazivom,
-inacicom, imenom autora, gradom i drzavom autora, a detaljan opis programa (za vlastite programe
-i ispis programskog koda) dati u privitku (za vlastite programe i u digitalnom obliku na nekom od
-medija za pohranu npr. USB).
-
-Takoer je potrebno navesti razinu znacajnosti koja se koristila za ocjenu znacajnosti dobivenih
-rezultata te postupke za ocuvanje odabrane razine znacajnosti u slucajevima visestrukog testiranja.
-
-4.5. Rezultati
-
-===== [mefos-upute-radovi-2025 | str. 9] =====
-prepricavati u tekstu, nego samo navesti najvazniji (najzanimljiviji) nalaz, a za detalje uputiti
-citatelja na tablicu u kojoj su oni prikazani. Svaka tablica i slika mora biti razumljiva i bez citanja
-dodatnog teksta (v. odjeljak 4.12 Tablice, grafikoni, slike).
-
-4.6. Rasprava
-
-Bit rasprave kriticki je osvrt na dobivene rezultate. U Raspravi se vlastiti rezultati usporeuju s
-drugim nalazima te raspravljaju teorijske i prakticne posljedice provedenog istrazivanja, tj. kako
-se dobiveni rezultati uklapaju u sire podrucje opisano na pocetku Uvoda.
-
-4.7. Zakljucak
-
-U ovome se dijelu rada trebaju kratko, sazeto i jasno iznijeti zakljucci koji proizlaze iz dobivenih
-rezultata. Zakljucci se navode taksativno, nakon kratkog uvodnog teksta kao sto je npr.:
-"Na temelju provedenog istrazivanja i dobivenih rezultata mogu se izvesti sljedei zakljucci:
-
-    1. ...
-    2. ...
-    3. ..."
-
-Treba voditi racuna da se meu zakljuccima nau odgovori na postavljene ciljeve.
-
-===== [mefos-upute-radovi-2025 | str. 9] =====
-Sve se kljucne rijeci upisuju u jednom odlomku. Pomone se kljucne rijeci od glavnih odvajaju
-zarezom, a kljucne se rijeci meusobno odvajaju tockom sa zarezom. Navode se abecednim redom.
-
-Kljucne rijeci trebaju najbolje odraziti ciljeve istrazivanja te veim dijelom trebaju biti zastupljene
-ili prepoznatljive u naslovu rada.
-
-Na stranici sazetka na engleskom jeziku, a prije samog sazetka, navodi se naslov rada na engleskom
-jeziku. Sazetak na engleskom jeziku moze biti nesto dulji, ali ne vise od 350 rijeci. Nakon sazetka
-na engleskom jeziku navode se kljucne rijeci na engleskom jeziku.
-
-U sazetku se o rezultatima raspravlja istodobno s njihovim navoenjem.
-
-4.9. Literatura (referencije)
-
-                                                                                                                   9
-
 ===== [mefos-upute-radovi-2025 | str. 10] =====
-Referencije cini popis literature u kojem se navode samo oni radovi koji su citirani u tekstu. Navodi
-moraju biti sto je mogue novijeg datuma objave, pri cemu je najmanje 1/3 citiranih radova
-objavljena u pet godina koje prethode istrazivanju prikazanom u zavrsnom/diplomskom radu.
-Literatura se obvezatno navodi Vancouverskim stilom, pa se referencije nizu redoslijedom
+Referencije čini popis literature u kojem se navode samo oni radovi koji su citirani u tekstu. Navodi
+moraju biti što je moguće novijeg datuma objave, pri čemu je najmanje 1/3 citiranih radova
+objavljena u pet godina koje prethode istraživanju prikazanom u završnom/diplomskom radu.
+Literatura se obvezatno navodi Vancouverskim stilom, pa se referencije nižu redoslijedom
 pojavljivanja u tekstu.
 
-Vancouverski stil pisanja referencija tocno propisuje sve podatke koje referencija treba sadrzavati,
-njihov redoslijed, te nacin pisanja i odjeljivanja pojedinih podataka. Iscrpne upute (na engleskom
-jeziku) s primjerima pisanja referencija za razlicite literaturne izvore pristupnici mogu nai na
-adresi: http://www.nlm.nih.gov/bsd/uniform_requirements.html. Odlicne upute o pisanju
-referencija na hrvatskom jeziku pristupnici mogu pronai u svakom broju Lijecnickog vjesnika
-(napomena: u tekstu rada treba citate navoditi brojevnim oznakama u zagradi, kako je ve receno
-u tocki 4.1, a ne brojevima u eksponentu kako to radi Lijecnicki vjesnik) ili Medicinskog vjesnika
+Vancouverski stil pisanja referencija točno propisuje sve podatke koje referencija treba sadržavati,
+njihov redoslijed, te način pisanja i odjeljivanja pojedinih podataka. Iscrpne upute (na engleskom
+jeziku) s primjerima pisanja referencija za različite literaturne izvore pristupnici mogu naći na
+adresi: http://www.nlm.nih.gov/bsd/uniform_requirements.html. Odlične upute o pisanju
+referencija na hrvatskom jeziku pristupnici mogu pronaći u svakom broju Liječničkog vjesnika
+(napomena: u tekstu rada treba citate navoditi brojevnim oznakama u zagradi, kako je već rečeno
+u točki 4.1, a ne brojevima u eksponentu kako to radi Liječnički vjesnik) ili Medicinskog vjesnika
 (https://hrcak.srce.hr/upute/upute_autorima_Medicinski_vjesnik.pdf).
 
-Nazivi casopisa skrauju se na nacin kako je to ucinjeno u indeksnoj publikaciji Index Medicus, tj.
-kako se skrauju nazivi casopisa koji se nalaze u bibliografskoj bazi Medline, a koja je besplatno
-javno dostupna u mreznom sustavu PubMed. Kratice naziva casopisa dostupne su na adresi
+Nazivi časopisa skraćuju se na način kako je to učinjeno u indeksnoj publikaciji Index Medicus, tj.
+kako se skraćuju nazivi časopisa koji se nalaze u bibliografskoj bazi Medline, a koja je besplatno
+javno dostupna u mrežnom sustavu PubMed. Kratice naziva časopisa dostupne su na adresi
 http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=Journals.
 
-Navode se imena samo prvih sest autora, a ako ih ima vise, iza sestoga stavlja se zarez i oznaka "i
+Navode se imena samo prvih šest autora, a ako ih ima više, iza šestoga stavlja se zarez i oznaka "i
 sur.".
 
-Pri navoenju referencije obvezatno navesti stranice clanaka objavljenog u casopisu obvezatno.
+Pri navođenju referencije obvezatno navesti stranice članaka objavljenog u časopisu obvezatno.
 Stranice u knjigama u pravilu se navode, no ne moraju u prigodama kada se tekst odnosi na
 cjelokupno izdanje te knjige.
 
-Referencije zavrsavaju tockom.
+Referencije završavaju točkom.
 
-Primjeri navoenja najcese rabljenih literaturnih izvora:
+Primjeri navođenja najčešće rabljenih literaturnih izvora:
 ---------------------------------------------------------------------------------------------------------------------
-Clanak u casopisu (do 6 autora):
+Članak u časopisu (do 6 autora):
 
-Ferraioli D, Buenerd A, Marchiol� P, Constantini S, Venturini PL, Mathevet P. Early invasive
+Ferraioli D, Buenerd A, Marchiolè P, Constantini S, Venturini PL, Mathevet P. Early invasive
 cervical cancer during pregnancy: different therapeutic options to preserve fertility. Int J Gynecol
 Cancer. 2012;22(5):842-9. doi: 10.1097/IGC.0b013e31824ff142.
 
@@ -245,10 +69,10 @@ BMJ. 2009 Jan 7;338:a2752. doi: 10.1136/bmj.a2752
 ===== [mefos-upute-radovi-2025 | str. 11] =====
 Bibliografske sastavnice:
 
-  Slika 1. Bibliografske sastavnice referencije za clanak u casopisu sa sest i manje autora (sliku
-                                        izradila K. Miskovi Spoljari)
+  Slika 1. Bibliografske sastavnice referencije za članak u časopisu sa šest i manje autora (sliku
+                                        izradila K. Mišković Špoljarić)
 
-Clanak u casopisu (vise od 6 autora):
+Članak u časopisu (više od 6 autora):
 
 Wager E, Woolley K, Adshead V, Cairns A, Fullam J, Gonzalez J, Grant T, Tortell S. Awareness
 and enforcement of guidelines for publishing industry-sponsored medical research among
@@ -267,7 +91,7 @@ Murray PR, Rosenthal KS, Kobayashi GS, Pfaller MA. Medical microbiology.
 
                                             Godina izdanja
 
-                                  Izdavac
+                                  Izdavač
                   Mjesto izdanja
 
        Izdanje
@@ -296,57 +120,235 @@ Datum pristupa stranici
  Slika 3. Bibliografske sastavnice referencije za stranicu na internetu (sliku izradila V. Ilakovac)
 ---------------------------------------------------------------------------------------------------------------------
 
-URL adresa stranice pise se normalnim tekstom u crnoj boji i bez podvlake.
+URL adresa stranice piše se normalnim tekstom u crnoj boji i bez podvlake.
 
-4.10. Zivotopis
+4.10. Životopis
 
-Zivotopis se pise strukturirano, a ne kao slobodan literarni tekst te mora biti napisan sazeto,
-organizirano, pregledno i sustavno. Uobicajeni dijelovi zivotopisa su: opi podatci, adresa,
-zaposlenje, skolovanje, akademski naslovi, nagrade, clanstva, strucne aktivnosti i publikacije, a po
-potrebi i adrese za preporuke. Primjer strukturiranog zivotopisa vidjeti u knjizi "Uvod u znanstveni
-rad u medicini" autora Marusi M. i suradnika (Medicinska naklada, Zagreb 2013., 5. izd., str.
+Životopis se piše strukturirano, a ne kao slobodan literarni tekst te mora biti napisan sažeto,
+organizirano, pregledno i sustavno. Uobičajeni dijelovi životopisa su: opći podatci, adresa,
+zaposlenje, školovanje, akademski naslovi, nagrade, članstva, stručne aktivnosti i publikacije, a po
+potrebi i adrese za preporuke. Primjer strukturiranog životopisa vidjeti u knjizi "Uvod u znanstveni
+rad u medicini" autora Marušić M. i suradnika (Medicinska naklada, Zagreb 2013., 5. izd., str.
 180).
 
+===== [mefos-upute-radovi-2025 | str. 1] =====
+Ove upute sastavljene su na temelju Pravilnika o završnim i diplomskim ispitima Medicinskog
+fakulteta Osijek i 5. izdanja udžbenika "Uvod u znanstveni rad u medicini", autora Marušić M. i
+suradnika (Medicinska naklada, Zagreb, 2013.).
+
+Osnovna je svrha uputa pristupnicima opisati i obrazložiti pravila kojih se obvezatno i u potpunosti
+moraju pridržavati tijekom izrade i oblikovanja završnih i diplomskih radova.
+
+IZRADA I OBLIKOVANJE ZAVRŠNOG/DIPLOMSKOG RADA
+
+Završni/diplomski rad tiska se na papiru standardne veličine (A4, 210 x 297 mm) sa slobodnim
+rubnicima od 2,5 cm, a u proredu 1,5. Za ispis treba rabiti pismo veličine 12 tipografskih točaka
+vrste Times New Roman s obvezatnom potporom svih hrvatskih znakova. Tekst mora biti
+obostrano poravnat, osim referencija. Sve stranice teksta moraju biti numerirane, tj. označene
+brojevima. Tekst mora biti pisan znanstvenim stilom jezika studija po svim gramatičkim i
+pravopisnim pravilima, u suprotnome će rad biti vraćen bez obzira na kvalitetu sadržaja
+rada.
+
+Studentskoj službi studija upućuje se rad u elektroničkom obliku isključivo u pdf (prema engl.
+portable document format) formatu zajedno sa svi ostalim popratnim dokumentima
+(https://www.mefos.unios.hr/index.php/hr/studenti/zavrsetak-studija).
+
+Ocjene sva tri člana Povjerenstva za ocjenu rada predaju se elektroničkim putem na adresu
+ozzid@mefos.hr ili osobno studentskoj službi. U slučaju da je rad u međuvremenu mijenjan,
+potrebno je dostaviti i novu inačicu rada u elektroničkom obliku.
+
+===== [mefos-upute-radovi-2025 | str. 5] =====
+Uvođenje kratica u tekstu rada
+Kratice se u tekstu rada potpuno objašnjavaju samo pri prvom korištenju kratice. Za kratice koje
+su pokrata izraza na hrvatskom jeziku, prvo se napiše puni hrvatski tekst iza kojega slijedi kratica
+u zagradi, npr. “Svjetska zdravstvena organizacija (SZO)”, a u daljnjem tekstu se može koristiti
+samo kratica.
+Za kratice koje su pokrata izraza na stranom jeziku također se prvo piše puni hrvatski prijevod,
+nakon čega se u zagradi navodi kratica izraza na stranom jeziku te puni tekst izraza na stranom
+jeziku koji se piše ukošeno, npr. “Svjetska zdravstvena organizacija (WHO, prema engl. World
+Health Organization)”.
+
+Kratice u tablicama i na slikama
+Sve kratice koje se koriste u tablici moraju biti objašnjene u podbilješkama tablice neovisno o tome
+je li kratica već korištena u tekstu ili nekoj od prethodnih tablica. Sve kratice koje se koriste na
+slici moraju biti objašnjene u opisu slike neovisno o tome je li kratica već korištena u tekstu ili
+nekoj od prethodnih slika.
+
+Nakon toga, po želji pristupnika, mogu se navesti i popisi tablica i slika, svaki započet na novoj
+stranici. Popisi tablica i slika, ako se navode, trebaju sadržavati natpis, broj i naslov tablice/slike te
+brojeve stranica na kojima se nalaze.
+
+Stranice sadržaja, popisa kratica, tablica i slika numeriraju se rimskim brojevima. Prva
+stranica uvoda prva je stranica numerirana arapskim brojevima koji slijede do kraja rada, tj. do
+naslovne stranice priloga (ako ih ima). Bojevi stranica pišu se u desnom donjem kutu stranice, ako
+je rad tiskan jednostrano, odnosno donjem vanjskom kutu stranice rada koji je tiskan dvostrano.
+
+===== [mefos-upute-radovi-2025 | str. 6] =====
+9. Summary (naslov rada, sažetak i ključne riječi na engleskom jeziku)
+   10. Literatura (referencije)
+   11. Životopis
+   12. Prilozi.
+
+Svako poglavlje treba započeti na novoj stranici. Poglavlja mogu biti podijeljena na potpoglavlja
+do dvije podrazine, ona ne započinju na novoj stranici. Potpoglavlja se unutar iste razine
+numeriraju na način da se broju prethodne razine numeracije doda redni broj potpoglavlja, kako je
+prikazano u sljedećem primjeru:
+
+        .........................................
+        3. Ispitanici i metode -> poglavlje
+        3.1. Ustroj studije -> podpoglavlje, prvi nivo
+        3.2. Ispitanici -> podpoglavlje, prvi nivo
+
+===== [mefos-upute-radovi-2025 | str. 7] =====
+U radu koji je znanstveni ciljevi trebaju biti vođeni postavljenom hipotezom te oblikovani u svrhu
+njezinog potvrđivanja ili opovrgavanja.
+
+Pri pisanju ciljeva trebati imati na umu da iz njih trebaju logično slijediti metodologija istraživanja,
+rezultati i zaključci.
+
+4.4. Materijal i metode (Ispitanici i metode)
+
+U ovom je dijelu potrebno detaljno opisati sve elemente metodologije istraživanja.
+
+4.4.1. Ustroj studije
+Opisati vrstu studije. Dobro poznate vrste studija (npr. presječna studija) nije potrebno podrobno
+opisivati, već samo citirati odgovarajuću literaturu. Nove oblike studija treba iscrpno opisati
+navodeći koje su skupine uključene u istraživanje, kako su oblikovane, na koji su način odabrani
+članovi pojedinih skupina i sl.
+
+Posebno pojasniti sve dodatne čimbenike studije, primjerice kriterije za uključivanje/isključivanje
+ispitanika u studiju, postupak randomizacije, maskiranje itd.
+
+4.4.2. Ispitanici (Materijal)
+Opisati tko su ispitanici, iz kojih se populacija i kako uzorkuju, kako je i kada uzorak oblikovan i
+zašto, postoji li kontrolna skupina i tko je sačinjava, odnosno što čini materijal istraživanja, kako i
+kada je prikupljen i sl.
+
+                                                                                                                   7
+
+===== [mefos-upute-radovi-2025 | str. 8] =====
+4.4.3. Metode
+Opisati pokazatelje (varijable) koje se analiziraju. Opisati na koji su način prikupljeni podatci
+(mjerenje, upitnik, anketa i sl.) i kojim su metodama obavljena mjerenja i druga opažanja.
+
+Svi temeljni postupci rada moraju u ovoj cjelini biti navedeni te dostatno protumačeni i
+obrazloženi. Standardni postupci navode se samo imenom i odgovarajućim citatom; manje poznati
+postupci trebaju biti popraćeni kraćim opisom i literaturnim navodom objavljenog rada u kojemu
+su detaljno objašnjeni.
+
+4.4.4. Statističke metode
+Opisati osnovne osobine i mjerne ljestvice prikupljenih podataka. Navesti koji su se odnosi među
+podatcima istraživali zajedno sa statističkim postupcima koji su se u tu svrhu upotrijebili.
+
+Općepoznati i jednostavni statistički postupci (kao npr. postupci opisne statistike, Studentov t-test
+i sl.) navode se samo imenom i citatom opće statističke literature. Manje uvriježene i složene
+statističke postupke treba opisati uz pozivanje na literaturu gdje su detaljno opisani.
+
+Navesti kojim je postupcima izvršena provjera ispunjavaju li prikupljeni podatci pretpostavke za
+korištenje primijenjenih statističkih postupaka te koji su se postupci rabili u slučaju da prikupljeni
+podatci nisu ispunjavali tražene pretpostavke.
+Potrebno je navesti koji se računalni program rabio za obradu podataka. Ako se za obradu podataka
+rabio neki od računalnih programa za obradu podataka dostupnih na tržištu, treba navesti naziv
+programa iza kojeg se u zagradi navodi inačica, proizvođač, te mjesto i država proizvodnje.
+
+Primjer navođenja računalnog programa korištenog za statističku analizu podataka:
+---------------------------------------------------------------------------------------------------------------------
+Za statističku obradu podataka rabljen je program SPSS for Windows (inačica 13.0, SPSS Inc.,
+Chicago, IL, SAD).
+---------------------------------------------------------------------------------------------------------------------
+
+Izvorne i vlastite računalne programe koji su korišteni u obradi podataka treba navesti nazivom,
+inačicom, imenom autora, gradom i državom autora, a detaljan opis programa (za vlastite programe
+i ispis programskog koda) dati u privitku (za vlastite programe i u digitalnom obliku na nekom od
+medija za pohranu npr. USB).
+
+Također je potrebno navesti razinu značajnosti koja se koristila za ocjenu značajnosti dobivenih
+rezultata te postupke za očuvanje odabrane razine značajnosti u slučajevima višestrukog testiranja.
+
+4.5. Rezultati
+
+===== [mefos-upute-radovi-2025 | str. 9] =====
+prepričavati u tekstu, nego samo navesti najvažniji (najzanimljiviji) nalaz, a za detalje uputiti
+čitatelja na tablicu u kojoj su oni prikazani. Svaka tablica i slika mora biti razumljiva i bez čitanja
+dodatnog teksta (v. odjeljak 4.12 Tablice, grafikoni, slike).
+
+4.6. Rasprava
+
+Bit rasprave kritički je osvrt na dobivene rezultate. U Raspravi se vlastiti rezultati uspoređuju s
+drugim nalazima te raspravljaju teorijske i praktične posljedice provedenog istraživanja, tj. kako
+se dobiveni rezultati uklapaju u šire područje opisano na početku Uvoda.
+
+4.7. Zaključak
+
+U ovome se dijelu rada trebaju kratko, sažeto i jasno iznijeti zaključci koji proizlaze iz dobivenih
+rezultata. Zaključci se navode taksativno, nakon kratkog uvodnog teksta kao što je npr.:
+"Na temelju provedenog istraživanja i dobivenih rezultata mogu se izvesti sljedeći zaključci:
+
+    1. ...
+    2. ...
+    3. ...“
+
+Treba voditi računa da se među zaključcima nađu odgovori na postavljene ciljeve.
+
+===== [mefos-upute-radovi-2025 | str. 9] =====
+http://www.nlm.nih.gov/mesh/MBrowser.html.
+
+Sve se ključne riječi upisuju u jednom odlomku. Pomoćne se ključne riječi od glavnih odvajaju
+zarezom, a ključne se riječi međusobno odvajaju točkom sa zarezom. Navode se abecednim redom.
+
+Ključne riječi trebaju najbolje odraziti ciljeve istraživanja te većim dijelom trebaju biti zastupljene
+ili prepoznatljive u naslovu rada.
+
+Na stranici sažetka na engleskom jeziku, a prije samog sažetka, navodi se naslov rada na engleskom
+jeziku. Sažetak na engleskom jeziku može biti nešto dulji, ali ne više od 350 riječi. Nakon sažetka
+na engleskom jeziku navode se ključne riječi na engleskom jeziku.
+
+U sažetku se o rezultatima raspravlja istodobno s njihovim navođenjem.
+
+4.9. Literatura (referencije)
+
+                                                                                                                   9
+
 ===== [mefos-upute-radovi-2025 | str. 13] =====
-format A4. Prilozi mogu biti obostrano ispisani. Sadrzaj priloga mora biti u potpunosti vidljiv,
-stoga treba obratiti paznju da desni slobodni rubnik priloga bude najmanje 2,5 cm. Stranice s
+format A4. Prilozi mogu biti obostrano ispisani. Sadržaj priloga mora biti u potpunosti vidljiv,
+stoga treba obratiti pažnju da desni slobodni rubnik priloga bude najmanje 2,5 cm. Stranice s
 rednim brojem i naslovom (opisom) pojedinih priloga i sami prilozi se ne numeriraju.
 
-Prilozi nemaju smisao ako se na njih nigdje u tekstu rada ne upuuje.
+Prilozi nemaju smisao ako se na njih nigdje u tekstu rada ne upućuje.
 
 4.12. Tablice, grafikoni, slike
 
 Tablice, grafikoni i slike ne stavljaju se na posebne stranice, nego se uklapaju u tekst rada.
 Opisuju se natpisom, brojem i naslovom.
 
-Uz tablice se stavlja natpis "Tablica", a uz grafikone i slike (fotografije, crtezi i sl.) natpis "Slika".
+Uz tablice se stavlja natpis "Tablica", a uz grafikone i slike (fotografije, crteži i sl.) natpis "Slika".
 Tablice i slike numeriraju se arapskim brojevima odvojeno (posebno se numeriraju tablice, a
 posebno slike) i jedinstveno u cijelom radu.
 
 Opisi tablica nalaze se uvijek iznad tijela tablice, a opisi slika ispod tijela slika.
 
-I slike i tablice moraju biti objasnjene i jasne same za sebe, pa se u njima ne smiju rabiti kratice i
-oznake koje na istom mjestu, tj. u njima samima ili odmah ispod (za tablice), nisu i tumacene. Za
-oznacavanje biljezaka u tablicama rabe se sljedei znakovi (u navedenom redoslijedu):
-*,,,�,||,�,**,,, itd.
+I slike i tablice moraju biti objašnjene i jasne same za sebe, pa se u njima ne smiju rabiti kratice i
+oznake koje na istom mjestu, tj. u njima samima ili odmah ispod (za tablice), nisu i tumačene. Za
+označavanje bilježaka u tablicama rabe se sljedeći znakovi (u navedenom redoslijedu):
+*,†,‡,§,||,¶,**,††,‡‡, itd.
 
 ===== [mefos-upute-radovi-2025 | str. 13] =====
-Ako ne postoji nacin ureivanja koji bi omoguio prikaz tablice na jednoj stranici i nuzno je da se
-tablica nastavlja na sljedeoj stranici, potrebno je na sljedeoj stranici na kojoj se tablica nastavlja
+Ako ne postoji način uređivanja koji bi omogućio prikaz tablice na jednoj stranici i nužno je da se
+tablica nastavlja na sljedećoj stranici, potrebno je na sljedećoj stranici na kojoj se tablica nastavlja
 ponoviti zaglavni redak tablice.
 
-Slike (fotografije, crteze, sheme i sl.) koje je autor rada samostalno izradio moraju u opisu imati
-navedeno da je izvor slike autor, kao npr. "izvor: fotografirao autor/autorica rada" ili "izvor:
-izradio/la autor/autorica rada".
+Slike (fotografije, crteže, sheme i sl.) koje je autor rada samostalno izradio moraju u opisu imati
+navedeno da je izvor slike autor, kao npr. “izvor: fotografirao autor/autorica rada” ili “izvor:
+izradio/la autor/autorica rada”.
 
-Tablice i slike koje nisu vlastite i preuzete su iz drugih izvora (knjige, clanci i sl.) moraju imati
-prethodno pribavljeno dopustenje autora ili izdavaca, odnosno nositelja autorskih prava koje se
-predaje zajedno s ostalom dokumentacijom uz gotovi rad studentskoj sluzbi studija. Preuzete
+Tablice i slike koje nisu vlastite i preuzete su iz drugih izvora (knjige, članci i sl.) moraju imati
+prethodno pribavljeno dopuštenje autora ili izdavača, odnosno nositelja autorskih prava koje se
+predaje zajedno s ostalom dokumentacijom uz gotovi rad studentskoj službi studija. Preuzete
 tablice i slike potrebno je prevesti na hrvatski jezik te u opisu tako pribavljenih slike i tablica mora
-stajati: "Pribavljeno i preraeno iz (#broj reference#) uz dozvolu autora". Izuzetak su slike pod
-Creative Commons (CC) licencom, za koju je takoer potrebno navesti potrebne podatke prema
-vrsti CC licence. Detalji o vrstama CC licenci i nacinu navoenja izvora dostupni su na poveznici:
+stajati: “Pribavljeno i prerađeno iz (#broj reference#) uz dozvolu autora”. Izuzetak su slike pod
+Creative Commons (CC) licencom, za koju je također potrebno navesti potrebne podatke prema
+vrsti CC licence. Detalji o vrstama CC licenci i načinu navođenja izvora dostupni su na poveznici:
 https://foter.com/blog/how-to-attribute-creative-commons-photos/. Obvezno je navesti izvor
-pribavljene tablice /slike u popis referencija zadovoljavajui uvjet navoenja prema redoslijedu
+pribavljene tablice /slike u popis referencija zadovoljavajući uvjet navođenja prema redoslijedu
 
                                                                                                                    13

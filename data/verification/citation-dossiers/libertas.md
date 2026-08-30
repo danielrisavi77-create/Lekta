@@ -8,7 +8,7 @@ Snapshot: `data/sources/libertas/libertas-pravilnik-diplomski-2024.pdf` (hash `3
 Otvori PDF: `data/sources/libertas/libertas-pravilnik-diplomski-2024.pdf#page=4`
 ```
 PIN     : izvor propisuje stil "harvard" -> format ostaje obiteljski motor
-QUOTE   : Za citiranje se preporuca koristiti americki (harvardski) stil koji je detaljnije opisan u prilogu   [grep: OK]
+QUOTE   : Za citiranje se preporuča koristiti američki (harvardski) stil koji je detaljnije opisan u prilogu   [grep: OK]
 ```
 
 ## Verifikacija

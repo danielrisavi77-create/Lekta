@@ -1,92 +1,92 @@
 ===== [pravos-upute-radovi | str. 1] =====
-2. Naslovna stranica na engleskom jeziku (prva stranica � korice rada);
+2. Naslovna stranica na engleskom jeziku (prva stranica – korice rada);
 
     3. Naslovna stranica (druga stranica);
 
-         Druga naslovna stranica (poslije korica rada) takoer nema numeraciju te mora
-         sadrzavati: naziv sveucilista, fakulteta i studija, ime i prezime studenta, naslov rada,
+         Druga naslovna stranica (poslije korica rada) također nema numeraciju te mora
+         sadržavati: naziv sveučilišta, fakulteta i studija, ime i prezime studenta, naslov rada,
          naziv vrste rada, kolegij iz kojega je pisan rad, JMBAG studenta (autora rada),
          akademsku titulu, ime i prezime mentora, mjesto i godinu nastanka rada.
 
-    4. Sazetak i kljucne rijeci na hrvatskom;
+    4. Sažetak i ključne riječi na hrvatskom;
 
-         Sazetak i kljucne rijeci se navode na posebnoj stranici koja se ne numerira. Sazetak
-         treba imati do 1800 znakova. U sazetku se ne citira i treba ukratko navesti predmet rada,
-         metode kojima se sluzilo i zakljucke do kojih se doslo. Ispod sazetka potrebno je navesti
-         do pet kljucnih rijeci. Sazetak nije dio rada, zato se ne obrojcava kao poglavlje.
+         Sažetak i ključne riječi se navode na posebnoj stranici koja se ne numerira. Sažetak
+         treba imati do 1800 znakova. U sažetku se ne citira i treba ukratko navesti predmet rada,
+         metode kojima se služilo i zaključke do kojih se došlo. Ispod sažetka potrebno je navesti
+         do pet ključnih riječi. Sažetak nije dio rada, zato se ne obrojčava kao poglavlje.
 
-    5. Sazetak i kljucne rijeci na engleskom;
+    5. Sažetak i ključne riječi na engleskom;
 
-    6. Sadrzaj;
+    6. Sadržaj;
 
          Na posebnoj nenumeriranoj stranici navodi se popis naslova svih poglavlja i
-         potpoglavlja u radu, kao i brojeve pocetnih stranica svakog poglavlja, slovima velicine
-         12 tocaka.
+         potpoglavlja u radu, kao i brojeve početnih stranica svakog poglavlja, slovima veličine
+         12 točaka.
 
     7. Uvod
 
 ===== [pravos-upute-radovi | str. 2] =====
-U sredisnjem dijelu rada detaljno se analizira tema podijeljena na nekoliko cjelina.
-    Student u dogovoru s mentorom razrauje strukturu svoga rada
+U središnjem dijelu rada detaljno se analizira tema podijeljena na nekoliko cjelina.
+    Student u dogovoru s mentorom razrađuje strukturu svoga rada
 
-9. Zakljucak;
+9. Zaključak;
 
-    U zakljucku se iznose rezultati do kojih se doslo u obradi teme. U zakljucku se mogu
-    istai najvaznije konstatacije glavnog dijela rada. Zakljucak po pravilu ne sadrzi tabele,
-    ilustracije, ne uvrstavaju se citati niti fusnote.
+    U zaključku se iznose rezultati do kojih se došlo u obradi teme. U zaključku se mogu
+    istaći najvažnije konstatacije glavnog dijela rada. Zaključak po pravilu ne sadrži tabele,
+    ilustracije, ne uvrštavaju se citati niti fusnote.
 
 10. Literatura;
 
-    Citirati svu koristenu literaturu, kako za tekst tako i za slike, tablice, grafikone i sl.
-    Posebno je vazan dio rada jer se iz njega vidi koliko se i koja literatura koristila
-    prilikom izrade rada te koliko se udubilo u istrazivacki problem. Popis koristene
-    literature navodi se na novoj stranici, odmah iza zakljucka diplomskog/zavrsnog rada.
-    Citiranjem postujemo druge autore koje citiramo i parafriziramo kao i njihova autorska
+    Citirati svu korištenu literaturu, kako za tekst tako i za slike, tablice, grafikone i sl.
+    Posebno je važan dio rada jer se iz njega vidi koliko se i koja literatura koristila
+    prilikom izrade rada te koliko se udubilo u istraživački problem. Popis korištene
+    literature navodi se na novoj stranici, odmah iza zaključka diplomskog/završnog rada.
+    Citiranjem poštujemo druge autore koje citiramo i parafriziramo kao i njihova autorska
     prava. Slijedom toga potpisuje se i Izjava o izvornosti rada, koja je prilog ovim
-    uputama. Svaki se citat mora moi provjeriti. Citati omoguavaju citatelju da sam
-    potrazi dodatne informacije uz pomo biljeski, kao i uz pomo popisa literature na kraju
-    rada. Popis se navodi abecednim redom. Popis koristenih Internet stranica ne svrstavati
-    u kategoriju literatura ve pod posebnim podnaslovom "web izvori". Postoje razlicita
-    pravila i praksa u pogledu navoenja izvora koristenih u radu. Za pisanje samoga rada
-    te primjeri citiranja i navoenja literature preporucuje se knjiga: Luli, Mira:
+    uputama. Svaki se citat mora moći provjeriti. Citati omogućavaju čitatelju da sam
+    potraži dodatne informacije uz pomoć bilješki, kao i uz pomoć popisa literature na kraju
+    rada. Popis se navodi abecednim redom. Popis korištenih Internet stranica ne svrstavati
+    u kategoriju literatura već pod posebnim podnaslovom "web izvori". Postoje različita
+    pravila i praksa u pogledu navođenja izvora korištenih u radu. Za pisanje samoga rada
+    te primjeri citiranja i navođenja literature preporučuje se knjiga: Lulić, Mira:
     Akademsko pisanje za studente prava, Pravni fakultet, Osijek, 2014. Knjiga je dostupna
-    u Knjiznici te Skriptarnici Fakulteta.
+    u Knjižnici te Skriptarnici Fakulteta.
 
 11. Prilozi
 
-    U priloge ubrajamo koristene fotografije, graficke prikaze, tablice i tome sl. Na kraju
+    U priloge ubrajamo korištene fotografije, grafičke prikaze, tablice i tome sl. Na kraju
     rada navodi se numerirani popis priloga.
 
 ===== [pravos-upute-radovi | str. 6] =====
-II. Tekst diplomskoga/zavrsnoga rada
+II. Tekst diplomskoga/završnoga rada
 
-    � Diplomski rad mora biti pisan u racunalnom programu za obradu teksta (npr. Microsoft
+    • Diplomski rad mora biti pisan u računalnom programu za obradu teksta (npr. Microsoft
          Word, Open Office Writer i sl.).
 
-    � Velicina stranice A4 (210x297 mm). Rubnice (margine) trebaju biti sljedee velicine:
+    • Veličina stranice A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine:
          lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm.
 
-    � Rad treba pisati fontom Times New Roman velicine 12 tocaka uz prored 1,5.
-    � Upotrijebljenu literaturu treba popisati abecednim redom, i to u skladu s pravilima
+    • Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.
+    • Upotrijebljenu literaturu treba popisati abecednim redom, i to u skladu s pravilima
 
-         odgovarajuega stila citiranja u struci odnosno prema uputama mentora i preporucenom
-         knjigom, Luli, Mira: Akademsko pisanje za studente prava, Pravni fakultet, Osijek,
+         odgovarajućega stila citiranja u struci odnosno prema uputama mentora i preporučenom
+         knjigom, Lulić, Mira: Akademsko pisanje za studente prava, Pravni fakultet, Osijek,
          2014.
-    � Diplomski/zavrsni rad treba imati najmanje 20 stranica ne racunajui naslovnu stranicu,
-         sazetak, sadrzaj, popis literature i priloge.
-    � Rad treba biti napisan standardnim hrvatskim jezikom, bez pravopisnih, gramatickih i
-         tiskarskih pogresaka. U njemu se koristi strucna terminologija usvojena tijekom studija.
-    � Rad je potrebno pisati u treem licu i pasivu, izbjegavajui osobni stil pisanja, posebice
-         prvo lice jednine i mnozine, te zargonizme. Svi citati navode se na hrvatskom jeziku
-         bez obzira na izvornik, osim ako mentor izricito ne trazi drugacije.
+    • Diplomski/završni rad treba imati najmanje 20 stranica ne računajući naslovnu stranicu,
+         sažetak, sadržaj, popis literature i priloge.
+    • Rad treba biti napisan standardnim hrvatskim jezikom, bez pravopisnih, gramatičkih i
+         tiskarskih pogrešaka. U njemu se koristi stručna terminologija usvojena tijekom studija.
+    • Rad je potrebno pisati u trećem licu i pasivu, izbjegavajući osobni stil pisanja, posebice
+         prvo lice jednine i množine, te žargonizme. Svi citati navode se na hrvatskom jeziku
+         bez obzira na izvornik, osim ako mentor izričito ne traži drugačije.
 
-III. Nacin postupanja s gotovim diplomskim/zavrsnim radom
+III. Način postupanja s gotovim diplomskim/završnim radom
 
-    � Diplomski rad dostaviti u Studentsku referadu u dva (2) primjerka (u mekom uvezu).
+    • Diplomski rad dostaviti u Studentsku referadu u dva (2) primjerka (u mekom uvezu).
          Potpisanu Izjavu o izvornosti rada i suglasnosti za pohranu te javnu obranu rada (na
          obrascu br. 6) uvezati u oba primjerka predanog rada kao posljednju stranicu rada.
 
-    � Elektronicku verziju rada u dva primjerka (na CD/DVD-u), i to u .pdf i .doc (Word)
-         formatu u papirnatom omotu priloziti na zadnje korice oba uvezana primjerka rada
+    • Elektroničku verziju rada u dva primjerka (na CD/DVD-u), i to u .pdf i .doc (Word)
+         formatu u papirnatom omotu priložiti na zadnje korice oba uvezana primjerka rada
 
-    � Potpisanu izjavu o izvornosti rada i suglasnosti za pohranu te javnu obranu rada (na
+    • Potpisanu izjavu o izvornosti rada i suglasnosti za pohranu te javnu obranu rada (na

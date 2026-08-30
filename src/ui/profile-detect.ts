@@ -48,7 +48,11 @@ const WORK_TYPE_RULES: [string, RegExp][] = [
  */
 const CASE_ENDINGS = [
   'ovima', 'evima', 'ijama', 'ima', 'ama', 'oga', 'ome', 'omu', 'ega', 'emu',
-  'ih', 'im', 'og', 'om', 'em', 'um', 'ju', 'a', 'e', 'i', 'o', 'u',
+  // `oj` je zenski pridjev u dativu i lokativu ("Muzickoj akademiji", "Zagrebackoj skoli").
+  // Bez njega su cetiri jedinice bile neprepoznatljive u najcescoj recenici naslovnice
+  // ("Rad obranjen NA Muzickoj akademiji"): muza, zsem, umas, mapu. Promaklo je jer je raniji
+  // pokus lokativ tvorio samo muskim obrascem (`-om`), pa ta klasa nikad nije ni nastala.
+  'oj', 'ih', 'im', 'og', 'om', 'em', 'um', 'ju', 'a', 'e', 'i', 'o', 'u',
 ];
 
 /** Najkraci korijen koji jos nosi znacenje; ispod toga se razliciti nazivi pocinju spajati. */

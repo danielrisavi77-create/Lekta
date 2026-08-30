@@ -1,28 +1,4 @@
 ===== [medri-naputak-diplomski-farmacija-2025 | str. 1] =====
-OPĆE NAPOMENE 
-Diplomski rad samostalna je akademska obrada utvrđene teme, kojom student pokazuje da je sposoban samostalno i sukladno struci primijeniti naučene vještine i usvojena znanja tijekom studija, napisati rad te ga javno obraniti pred imenovanim stručnim povjerenstvom. Diplomski rad je napravljen uz nadzor mentora u kojem student obrađuje određenu stručnu ili znanstvenu problematiku u dogovoru s mentorom. Može biti izrađen kao eksperimentalni ili pregledni rad. U eksperimentalnom diplomskom radu student temeljem rezultata provedenih ispitivanja (pokusi ili ankete) potvrđuje ili opovrgava postavljenu hipotezu istraživanja, dok u preglednom diplomskom radu daje sustavan pregled relevantnih spoznaja iz literature o temi istraživanja. Izradom i obranom diplomskog rada student potvrđuje svoje kompetencije, odnosno pokazuje da je sposoban samostalno provesti i zaokružiti određeno zadano istraživanje. Time dokazuje da je sposoban primjenjivati znanja stečena tijekom studija te samostalno rješavati zadatke u svojoj struci.
-
-ADMINISTRATIVNI POSTUPAK 
-Studenti koji su upisali 4. godinu studija Farmacija trebaju do kraja svibnja tekuće godine obaviti razgovor s potencijalnim mentorom s kojim dogovaraju temu diplomskog rada. Nakon toga student popunjava, a izabrani mentor potpisuje Obrazac 1 PRIJAVA TEME DIPLOMSKOG RADA (obrazac je dostupan na mrežnim stranicama Fakulteta) te ga dostavlja u pisarnicu fakulteta u periodu od 1. 10. - 31. 10. tekuće godine. Voditelj studija odobrava prijavljene teme diplomskog rada i objavljuje popis odobrenih tema na mrežnoj stranici do 28. 11. tekuće akademske godine. Mentor i komentor mogu biti samo nastavnici u znanstveno-nastavnom zvanju (docent, izvanredni profesor, redoviti profesor, profesor emeritus). Prema Odluci Fakultetskog vijeća od 8. prosinca 2020., u izradi diplomskog rada, uz imenovanog mentora, može se iznimno imenovati komentor u suradničkom zvanju i na radnom mjestu viši asistent s akademskim stupnjem doktora znanosti, koji je upisan u Upisnik znanstvenika Republike Hrvatske. 
-
-
-Mentor daje suglasnost za daljnji postupak ocjene i obrane rada, te se imenuje tročlano Povjerenstvo za ocjenu i obranu rada (Obrazac 2 – SUGLASNOST MENTORA O ZAVRŠETKU DIPLOMSKOG RADA). U slučaju da student ima mentora i komentora, tada se imenuje četveročlano povjerenstvo. Članovi Povjerenstva moraju biti u znanstveno-nastavnom zvanju. Mentor može biti član Povjerenstva, ali ne i njegov predsjednik.
-
-Praktični dio diplomskog rada, koji uključuje provođenje odgovarajućih istraživanja kod eksperimentalnog diplomskog rada, odnosno prikupljanje i obradu literaturnih izvora kod preglednog diplomskog rada, mora biti završen do upućivanja studenta na Stručno osposobljavanje (10. semestar studija Farmacija), o čemu mentor izdaje odgovarajuće uvjerenje  (POTVRDNICA O IZVEDENOM PRAKTIČNOM DIJELU DIPLOMSKOG RADA). Provedba istraživanja u određenim slučajevima zahtijeva etičku provjeru, te odluku o potrebi procjene etičkog povjerenstva donosi mentor.
-
-Mentor je obvezan u ISVU sustav unijeti podatke za svakog studenta. Podatci se mogu unijeti nakon što se otvori rok za obranu rada. Za otvaranje roka treba poslati zahtjev na mail teo.brusic@medri.uniri.hr. Naziv teme na hrvatskom i engleskom jeziku mora biti ISTI na Obrascu 1 i u ISVU sustavu. Teme se unose u ISVU sustav isključivo velikim tiskanim slovima. Pravovremeni upis podataka u ISVU sustav je važan jer inače student neće moći pohraniti rad u repozitorij Medicinskog fakulteta u Rijeci – Dabar. Upute za unos tema diplomskog rada u ISVU sustav nalaze se na mrežnim stranicama fakulteta
-https://medri.uniri.hr/fakultet/propisi-i-dokumenti/medicinski-fakultet/.
-
-Nakon što je diplomski rad završen i napisan, te je student izvršio sve obveze propisane PRAVILNIKOM O STUDIJIMA I STUDIRANJU NA SVEUČILIŠTU U RIJECI, MEDICINSKOM FAKULTETU, pokreće se postupak obrane diplomskog rada.
-
-
-
-
-Studenti moraju 10 radnih dana prije obrane diplomskog rada u Službu za studentske poslove i međunarodnu suradnju dostaviti:
- ispunjeni Obrazac 2 - SUGLASNOST MENTORA O ZAVRŠETKU DIPLOMSKOG RADA
-Nepoštivanje navedenih termina, odnosno obrasci predani nakon predviđenih rokova neće se uzimati u razmatranje. Student može pristupiti obrani diplomskog rada isključivo nakon što je položio sve ispite studijskog programa, te ukoliko ima dostavljenu SUGLASNOST MENTORA O ZAVRŠETKU DIPLOMSKOG RADA.
-
-===== [medri-naputak-diplomski-farmacija-2025 | str. 1] =====
 Obvezne stranice diplomskog rada 
 Na sljedećoj, drugoj stranici, ponavlja se sadržaj ovitka rada (v. gore). 
 Treća stranica rada sadrži sljedeće podatke: 
@@ -160,38 +136,105 @@ Ako se u radu koriste ilustracije ili tablice preuzete iz publikacija drugih aut
 
 Manji broj jednostavnih matematičkih jednadžbi uklapa se u tekst rada. Ako se u radu prikazuje veći broj složenijih jednadžbi, one se unutar teksta izdvajaju u zasebne retke i numeriraju brojem bez posebnog daljnjeg označavanja.
 
-===== [medri-naputak-diplomski-2026 | str. 2] =====
-1) Studenti koji su upisali studijski program Sveucilisni integrirani prijediplomski i
-diplomski studija Medicina zavrsavaju studij pisanjem diplomskog rada i polaganjem
-diplomskog ispita.
-2) Studenti koji su u akademskoj 2025./2026. godini upisali zavrsnu godinu Sveucilisnog
-integriranog prijediplomskog i diplomskog studija Medicina oslobaaju se javne obrane
-diplomskog rada, a rad podlijeze samo ocjeni Povjerenstva (Odluka Fakultetskog vijea od
-15.11.2016.).
-3) Student zavrsne godine studija izabire temu diplomskog rada u dogovoru s
-izabranim mentorom i popunjava u elektronskom obliku obrazac za prijavu teme (Obrazac
-1) uz obveznu suglasnost mentora i procelnika katedre. Naslov teme diplomskog rada se
-prijavljuje na hrvatskom i engleskom jeziku do 15.12.2025. i predaje se u Pisarnicu fakulteta.
-Student popunjava podatke za prijavu Diplomskog rada putem poveznice i QR koda. U
-prijavi je potrebno ucitati skenirani Obrazac 1.
+===== [medri-naputak-diplomski-2026 | str. 9] =====
+Diplomski rad i diplomski ispit 2025./2026.
 
-DIPLOMSKI RAD - prijava 2025 � Fill out form
+Referenca na kraju rada donosi niz podataka koji precizno opisuju korišteno autorsko djelo:
+        - podaci o autorstvu: autori djela, urednici, prevoditelji, ilustratori
+        - podaci o naslovu i podnaslovu članka, knjige, časopisa, mrežne stranice,
+          istraživanja
+        - podaci o izdanju, mjestu izdanja, mediju
+        - brojčani podaci: godina izdanja knjige ili časopisa, volumen, broj i stranica članka
+           u časopisu, datum zadnjeg ažuriranja i citiranja mrežne stranice
+        - lokacijski podaci: mrežna stranica i DOI
 
-4) Mentor moze biti samo nastavnik u znanstveno-nastavnom zvanju, a prema Odluci
-Fakultetskog vijea od 08.12.2020. u izradi diplomskog rada, uz imenovanog mentora, moze
-se iznimno imenovati i komentor u suradnickom zvanju i na radnom mjestu visi asistent s
-akademskim stupnjem doktora znanosti, koji je upisan u Upisnik znanstvenika Republike
-Hrvatske.
-5) Prodekan za nastavu odobrava prijavljene teme diplomskog rada i objavljuje popis
-odobrenih tema na platformi Merlin i putem INP aplikacije MedRi do 31.01.2026.
+Pravila i primjeri navođenja najčešće korištenih djela:
+KNJIGA
 
-                                                             2
+    - tiskana:
+Šolić F, Žauhar G. Fizika za medicinare. 2. izd. Rijeka: Medicinski fakultet Sveučilišta u Rijeci;
+2013.
+Križan Z. Kompendij anatomije čovjeka. 3. izd. 3. dio, Pregled građe grudi, trbuha, zdjelice,
+noge i ruke: za studente opće medicine i stomatologije. Zagreb: Školska knjiga; 1997.
+
+    - elektronička, dostupna na Internetu:
+Patrias K, author; Wendling D, editor. Citing Medicine: The NLM Style Guide for Authors,
+Editors, and Publishers [Internet]. 2nd edition. Bethesda (MD): National Library of Medicine
+(US); 2007- [ažurirano 2.10.2015.; citirano 4.11.2018.] Dostupno na:
+https://www.ncbi.nlm.nih.gov/books/NBK7256/
+
+    - poglavlje / rad u zborniku
+Kone BC. Metabolic basis of solute transport. U: Brenner BM, Rector FC, eds. Brenner and
+Rector‘s the kidney. 8th ed. Vol. 1. Philadelphia: Saunders Elsevier; c2008. p. 130-55.
+Christensen S, Oppacher F. An analysis of Koza's computational effort statistic for genetic
+programming. U: Foster JA, Lutton E, Miller J, Ryan C, Tettamanzi AG, editors. Genetic
+programming. EuroGP 2002: Proceedings of the 5th European Conference on Genetic
+Programming; 2002 Apr 3-5; Kinsdale, Ireland. Berlin: Springer; 2002. p. 182-91.
+
+                                                             9
+
+===== [medri-naputak-diplomski-2026 | str. 10] =====
+Diplomski rad i diplomski ispit 2025./2026.
+
+ČLANAK:
+    - u tiskanom časopisu
+
+Sigelman CK, Schoenrock CJ, Spanhel CL, Hromas SG, Winer JL, Budd EC, et al. Surveying
+mentally retarded persons: responsiveness and response validity in three samples. Am J
+Ment Defic. 1980; 84(5): 479-86.
+
+    - u elektroničkom časopisu, dostupnom na Internetu
+Halpern SD, Ubel PA, Caplan AL. Solid-organ transplantation in HIV-infected patients. N
+Engl J Med [Internet]. 26.7.2002. [citirano 4.11.2018.]; 2002;347(4):284-7. Dostupno na:
+https://www.nejm.org/doi/full/10.1056/NEJMsb020632
+
+    - u bazi podataka:
+Kuohung W, Hornstein MD. Overview of infertility. U: UpToDate, Barbieri RL ed. UpToDate
+[Internet]. Waltham, MA: UpToDate; 2018 [citirano 4.11.2018.] Dostupno na:
+https://www.uptodate.com
+
+MREŽNA STRANICA:
+Cancer-Pain.org [Internet]. New York: Association of Cancer Online Resources, Inc.; c2000-
+01 [ažurirano 16.5.2002.; citirano 9.7.2002.]. Dostupno na: http://www.cancer- pain.org/
+
+Više primjera za navođenje literature možete potražiti u knjizi Citing Medicine, na poveznici
+https://www.ncbi.nlm.nih.gov/books/NBK7256/
+U slučaju dodatnih pitanja oko navođenja korištenih izvora znanja u diplomskom radu
+možete se obratiti u Knjižnicu za biomedicinu i zdravstvo kbz@medri.uniri.hr
+
+Životopis treba biti napisan u trećem licu jednine s najviše 200 riječi.
+
+                                                            10
+
+===== [medri-naputak-diplomski-farmacija-2025 | str. 1] =====
+OPĆE NAPOMENE 
+Diplomski rad samostalna je akademska obrada utvrđene teme, kojom student pokazuje da je sposoban samostalno i sukladno struci primijeniti naučene vještine i usvojena znanja tijekom studija, napisati rad te ga javno obraniti pred imenovanim stručnim povjerenstvom. Diplomski rad je napravljen uz nadzor mentora u kojem student obrađuje određenu stručnu ili znanstvenu problematiku u dogovoru s mentorom. Može biti izrađen kao eksperimentalni ili pregledni rad. U eksperimentalnom diplomskom radu student temeljem rezultata provedenih ispitivanja (pokusi ili ankete) potvrđuje ili opovrgava postavljenu hipotezu istraživanja, dok u preglednom diplomskom radu daje sustavan pregled relevantnih spoznaja iz literature o temi istraživanja. Izradom i obranom diplomskog rada student potvrđuje svoje kompetencije, odnosno pokazuje da je sposoban samostalno provesti i zaokružiti određeno zadano istraživanje. Time dokazuje da je sposoban primjenjivati znanja stečena tijekom studija te samostalno rješavati zadatke u svojoj struci.
+
+ADMINISTRATIVNI POSTUPAK 
+Studenti koji su upisali 4. godinu studija Farmacija trebaju do kraja svibnja tekuće godine obaviti razgovor s potencijalnim mentorom s kojim dogovaraju temu diplomskog rada. Nakon toga student popunjava, a izabrani mentor potpisuje Obrazac 1 PRIJAVA TEME DIPLOMSKOG RADA (obrazac je dostupan na mrežnim stranicama Fakulteta) te ga dostavlja u pisarnicu fakulteta u periodu od 1. 10. - 31. 10. tekuće godine. Voditelj studija odobrava prijavljene teme diplomskog rada i objavljuje popis odobrenih tema na mrežnoj stranici do 28. 11. tekuće akademske godine. Mentor i komentor mogu biti samo nastavnici u znanstveno-nastavnom zvanju (docent, izvanredni profesor, redoviti profesor, profesor emeritus). Prema Odluci Fakultetskog vijeća od 8. prosinca 2020., u izradi diplomskog rada, uz imenovanog mentora, može se iznimno imenovati komentor u suradničkom zvanju i na radnom mjestu viši asistent s akademskim stupnjem doktora znanosti, koji je upisan u Upisnik znanstvenika Republike Hrvatske. 
+
+
+Mentor daje suglasnost za daljnji postupak ocjene i obrane rada, te se imenuje tročlano Povjerenstvo za ocjenu i obranu rada (Obrazac 2 – SUGLASNOST MENTORA O ZAVRŠETKU DIPLOMSKOG RADA). U slučaju da student ima mentora i komentora, tada se imenuje četveročlano povjerenstvo. Članovi Povjerenstva moraju biti u znanstveno-nastavnom zvanju. Mentor može biti član Povjerenstva, ali ne i njegov predsjednik.
+
+Praktični dio diplomskog rada, koji uključuje provođenje odgovarajućih istraživanja kod eksperimentalnog diplomskog rada, odnosno prikupljanje i obradu literaturnih izvora kod preglednog diplomskog rada, mora biti završen do upućivanja studenta na Stručno osposobljavanje (10. semestar studija Farmacija), o čemu mentor izdaje odgovarajuće uvjerenje  (POTVRDNICA O IZVEDENOM PRAKTIČNOM DIJELU DIPLOMSKOG RADA). Provedba istraživanja u određenim slučajevima zahtijeva etičku provjeru, te odluku o potrebi procjene etičkog povjerenstva donosi mentor.
+
+Mentor je obvezan u ISVU sustav unijeti podatke za svakog studenta. Podatci se mogu unijeti nakon što se otvori rok za obranu rada. Za otvaranje roka treba poslati zahtjev na mail teo.brusic@medri.uniri.hr. Naziv teme na hrvatskom i engleskom jeziku mora biti ISTI na Obrascu 1 i u ISVU sustavu. Teme se unose u ISVU sustav isključivo velikim tiskanim slovima. Pravovremeni upis podataka u ISVU sustav je važan jer inače student neće moći pohraniti rad u repozitorij Medicinskog fakulteta u Rijeci – Dabar. Upute za unos tema diplomskog rada u ISVU sustav nalaze se na mrežnim stranicama fakulteta
+https://medri.uniri.hr/fakultet/propisi-i-dokumenti/medicinski-fakultet/.
+
+Nakon što je diplomski rad završen i napisan, te je student izvršio sve obveze propisane PRAVILNIKOM O STUDIJIMA I STUDIRANJU NA SVEUČILIŠTU U RIJECI, MEDICINSKOM FAKULTETU, pokreće se postupak obrane diplomskog rada.
+
+
+
+
+Studenti moraju 10 radnih dana prije obrane diplomskog rada u Službu za studentske poslove i međunarodnu suradnju dostaviti:
+ ispunjeni Obrazac 2 - SUGLASNOST MENTORA O ZAVRŠETKU DIPLOMSKOG RADA
+Nepoštivanje navedenih termina, odnosno obrasci predani nakon predviđenih rokova neće se uzimati u razmatranje. Student može pristupiti obrani diplomskog rada isključivo nakon što je položio sve ispite studijskog programa, te ukoliko ima dostavljenu SUGLASNOST MENTORA O ZAVRŠETKU DIPLOMSKOG RADA.
 
 ===== [medri-naputak-diplomski-2026 | str. 6] =====
 Diplomski rad i diplomski ispit 2025./2026.
 Obvezne stranice diplomskog rada
-Na sljedeoj, drugoj stranici ponavlja se sadrzaj ovitka rada (v. gore).
-Trea stranica rada sadrzi sljedee podatke:
+Na sljedećoj, drugoj stranici ponavlja se sadržaj ovitka rada (v. gore).
+Treća stranica rada sadrži sljedeće podatke:
 Mentor rada: (Ime i prezime mentora, akademska titula i znanstveno- nastavno zvanje)
 Diplomski rad ocjenjen je dana ________________ u/na ________________________________
 _________________________________________ pred povjerenstvom u sastavu:
@@ -199,25 +242,25 @@ _________________________________________ pred povjerenstvom u sastavu:
 2. _________________________________________
 3. _________________________________________
 
-Rad sadrzi ______stranica, _____ slika, _____ tablica, ______literaturnih navoda.
+Rad sadrži ______stranica, _____ slika, _____ tablica, ______literaturnih navoda.
 
 Neobvezni listovi
-Cetvrta stranica je fakultativna i na njoj se moze pisati proslov, posveta ili zahvala.
-Proslov treba sadrzavati podatke vazne za istrazivanje, primjerice naziv i oznaku projekta u
-okviru kojeg je istrazivanje provedeno.
+Četvrta stranica je fakultativna i na njoj se može pisati proslov, posveta ili zahvala.
+Proslov treba sadržavati podatke važne za istraživanje, primjerice naziv i oznaku projekta u
+okviru kojeg je istraživanje provedeno.
 
-Sadrzaj rada
-Sadrzaj diplomskog rada navodi poglavlja i podpoglavlja uz stranice na kojima isti zapocinju.
+Sadržaj rada
+Sadržaj diplomskog rada navodi poglavlja i podpoglavlja uz stranice na kojima isti započinju.
 
-Popis skraenica i akronima
-Potrebno je navesti sve pojmove za koje e se u radu koristiti skraenice. U naslovu rada ne
-smiju se rabiti skraenice osim ako njihovo znacenje nije ope poznato.
+Popis skraćenica i akronima
+Potrebno je navesti sve pojmove za koje će se u radu koristiti skraćenice. U naslovu rada ne
+smiju se rabiti skraćenice osim ako njihovo značenje nije opće poznato.
 
 ===== [medri-naputak-diplomski-2026 | str. 7] =====
 Diplomski rad i diplomski ispit 2025./2026.
 
-Sadrzaj diplomskog rada
-Tijelo diplomskog rada sastoji se od didakticki razraenih poglavlja.
+Sadržaj diplomskog rada
+Tijelo diplomskog rada sastoji se od didaktički razrađenih poglavlja.
 
 Prikaz sastavnica diplomskog rada
 Pregledni rad:
@@ -226,24 +269,24 @@ Uvod
 Svrha rada
 Pregled literature na zadanu temu
 Rasprava
-Zakljucci
-Sazetak
+Zaključci
+Sažetak
 Summary
 Literatura
-Zivotopis
+Životopis
 
-Strucni rad:
+Stručni rad:
 Preliminarne stranice
 Uvod
 Svrha rada
 Ispitanici i postupci (Materijali i postupci)
 Rezultati
 Rasprava
-Zakljucak ili Zakljucci
-Sazetak
+Zaključak ili Zaključci
+Sažetak
 Summary
 Literatura
-Zivotopis
+Životopis
 
                                                              7
 
@@ -255,70 +298,33 @@ Uvod svrha rada
 Ispitanici i postupci (Materijali i postupci)
 Rezultati
 Rasprava
-Zakljucak ili Zakljucci
-Sazetak
+Zaključak ili Zaključci
+Sažetak
 Summary
 Literatura
-Zivotopis
+Životopis
 
-Sazetak se nalazi iza zakljucka i ukratko (na jednoj stranici, najvise 250 rijeci) prikazuje
-najbitnije u diplomskom radu. Ispod sazetka navode se kljucne rijeci.
-Summary se nalazi iza hrvatskog sazetka, a prijevod je sazetka na engleski jezik.
+Sažetak se nalazi iza zaključka i ukratko (na jednoj stranici, najviše 250 riječi) prikazuje
+najbitnije u diplomskom radu. Ispod sažetka navode se ključne riječi.
+Summary se nalazi iza hrvatskog sažetka, a prijevod je sažetka na engleski jezik.
 
-Literatura se nalazi iza engleskog sazetka, a navodi se literatura koju je autor rabio tijekom
+Literatura se nalazi iza engleskog sažetka, a navodi se literatura koju je autor rabio tijekom
 izrade diplomskog rada.
-Prilikom pisanja rada koristimo se razlicitim izvorima znanja (clanci, knjige, mrezne stranice,
-pravni propisi, ...) koje nazivamo literatura (reference, referencije). To su autorska djela. U
-radu je potrebno navesti koju literaturu/koje reference smo koristili. Koristenje tuih djela
-bez njihovog navoenja smatra se plagiranjem i kaznjivo je.
-Koristene reference u radu navodimo:
+Prilikom pisanja rada koristimo se različitim izvorima znanja (članci, knjige, mrežne stranice,
+pravni propisi, …) koje nazivamo literatura (reference, referencije). To su autorska djela. U
+radu je potrebno navesti koju literaturu/koje reference smo koristili. Korištenje tuđih djela
+bez njihovog navođenja smatra se plagiranjem i kažnjivo je.
+Korištene reference u radu navodimo:
 
-        - prilikom doslovnog navoenja ili parafraziranja tueg teksta;
+        - prilikom doslovnog navođenja ili parafraziranja tuđeg teksta;
         - pri preuzimanju slika, tablica i ostalog vizualnog materijala;
-        - u popisu koristene literature na kraju rada.
+        - u popisu korištene literature na kraju rada.
 
-Postoji vise stilova navoenja i citiranja literature ovisno o predmetnom podrucju, casopisu
-ili ustanovi u kojoj se pise rad. U podrucju biomedicine i zdravstva najcesi je Vancouverski
-stil koji se koristi i na nasem fakultetu.
-Znacajka ovog stila je navoenje referenci redoslijedom pojavljivanja u radu. Broj koristene
-reference se navodi u okrugloj zagradi (1), moze se navesti i prezime autora Harrison (5),
-istovremeno s moze pozvati i na vise djela brojna istrazivanja (8-10, 15, 17).
+Postoji više stilova navođenja i citiranja literature ovisno o predmetnom području, časopisu
+ili ustanovi u kojoj se piše rad. U području biomedicine i zdravstva najčešći je Vancouverski
+stil koji se koristi i na našem fakultetu.
+Značajka ovog stila je navođenje referenci redoslijedom pojavljivanja u radu. Broj korištene
+reference se navodi u okrugloj zagradi (1), može se navesti i prezime autora Harrison (5),
+istovremeno s može pozvati i na više djela brojna istraživanja (8-10, 15, 17).
 
                                                              8
-
-===== [medri-naputak-diplomski-2026 | str. 9] =====
-Diplomski rad i diplomski ispit 2025./2026.
-
-Referenca na kraju rada donosi niz podataka koji precizno opisuju koristeno autorsko djelo:
-        - podaci o autorstvu: autori djela, urednici, prevoditelji, ilustratori
-        - podaci o naslovu i podnaslovu clanka, knjige, casopisa, mrezne stranice,
-          istrazivanja
-        - podaci o izdanju, mjestu izdanja, mediju
-        - brojcani podaci: godina izdanja knjige ili casopisa, volumen, broj i stranica clanka
-           u casopisu, datum zadnjeg azuriranja i citiranja mrezne stranice
-        - lokacijski podaci: mrezna stranica i DOI
-
-Pravila i primjeri navoenja najcese koristenih djela:
-KNJIGA
-
-    - tiskana:
-Soli F, Zauhar G. Fizika za medicinare. 2. izd. Rijeka: Medicinski fakultet Sveucilista u Rijeci;
-2013.
-Krizan Z. Kompendij anatomije covjeka. 3. izd. 3. dio, Pregled grae grudi, trbuha, zdjelice,
-noge i ruke: za studente ope medicine i stomatologije. Zagreb: Skolska knjiga; 1997.
-
-    - elektronicka, dostupna na Internetu:
-Patrias K, author; Wendling D, editor. Citing Medicine: The NLM Style Guide for Authors,
-Editors, and Publishers [Internet]. 2nd edition. Bethesda (MD): National Library of Medicine
-(US); 2007- [azurirano 2.10.2015.; citirano 4.11.2018.] Dostupno na:
-https://www.ncbi.nlm.nih.gov/books/NBK7256/
-
-    - poglavlje / rad u zborniku
-Kone BC. Metabolic basis of solute transport. U: Brenner BM, Rector FC, eds. Brenner and
-Rector`s the kidney. 8th ed. Vol. 1. Philadelphia: Saunders Elsevier; c2008. p. 130-55.
-Christensen S, Oppacher F. An analysis of Koza's computational effort statistic for genetic
-programming. U: Foster JA, Lutton E, Miller J, Ryan C, Tettamanzi AG, editors. Genetic
-programming. EuroGP 2002: Proceedings of the 5th European Conference on Genetic
-Programming; 2002 Apr 3-5; Kinsdale, Ireland. Berlin: Springer; 2002. p. 182-91.
-
-                                                             9

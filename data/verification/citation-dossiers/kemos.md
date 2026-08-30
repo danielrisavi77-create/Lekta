@@ -19,7 +19,7 @@ NAPOMENA: Redni broj '2.' je pozicijska oznaka popisa literature i nije dio pred
 Otvori PDF: `data/sources/kemos/kemos-upute-radovi-2024.pdf#page=11`
 ```
 TEMPLATE: {authors}, {title}, u: {container}, {publisher}, {place}, {year}[[, p. {pages}]].
-QUOTE   : *primjere, citata i biljeski pogledajte u posebnom prilogu � prilog 3.   [grep: OK]
+QUOTE   : *primjere, citata i bilješki pogledajte u posebnom prilogu – prilog 3.   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Ekstrakcija ne sadrzi primjer za poglavlje u knjizi ili zborniku (puni primjeri su u Prilogu 3 uputa, koji nije u ekstrakciji). Predlozak je izveden iz oblika za knjigu: naslov poglavlja, zatim 'u:' i naslov knjige, pa izdavac, mjesto, godina. Urednika izvor nigdje ne prikazuje pa ga predlozak nema. Potvrditi prema Prilogu 3 pri verifikaciji.
 ```
@@ -28,7 +28,7 @@ NAPOMENA: Ekstrakcija ne sadrzi primjer za poglavlje u knjizi ili zborniku (puni
 Otvori PDF: `data/sources/kemos/kemos-upute-radovi-2024.pdf#page=11`
 ```
 TEMPLATE: {authors}, {title}. {container} {year}, {volume}, {pages}.
-QUOTE   : 1. M. Martins-Costa, J. M. Anglada, J. S. Francisco M. Ruiz-L�pez, The Aqueous Surface as   [grep: OK]
+QUOTE   : 1. M. Martins-Costa, J. M. Anglada, J. S. Francisco M. Ruiz-López, The Aqueous Surface as   [grep: OK]
 IZVOR   : M. Martins-Costa, J. M. Anglada, J. S. Francisco M. Ruiz-L�pez, The Aqueous Surface as an Efficient Transient Stop for the Reactivity of Gaseous NO2 in Liquid Water. J. Am Chem. Soc. 2020, 142, 20937�20941.
 RENDER  : M. Martins-Costa, J. M. Anglada, J. S. Francisco, M. Ruiz-L�pez, The Aqueous Surface as an Efficient Transient Stop for the Reactivity of Gaseous NO2 in Liquid Water. J. Am Chem. Soc. 2020, 142, 20937�20941.
 VERDIKT : DIFF (deklariran)  <-- USPOREDI ZNAK PO ZNAK
@@ -40,7 +40,7 @@ NAPOMENA: Nastavak prelomljenih redaka u izvoru: 'an Efficient Transient Stop fo
 Otvori PDF: `data/sources/kemos/kemos-upute-radovi-2024.pdf#page=11`
 ```
 TEMPLATE: {title}. URL: {url} ({accessed})
-QUOTE   : 3. Hrvatsko knjiznicarsko drustvo. URL: http://www.hkdrustvo.hr/ (10.11.2024.)   [grep: OK]
+QUOTE   : 3. Hrvatsko knjižničarsko društvo. URL: http://www.hkdrustvo.hr/ (10.11.2024.)   [grep: OK]
 IZVOR   : Hrvatsko knjiznicarsko drustvo. URL: http://www.hkdrustvo.hr/ (10.11.2024.)
 RENDER  : Hrvatsko knjiznicarsko drustvo. URL: http://www.hkdrustvo.hr/ (10.11.2024.)
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -51,7 +51,7 @@ NAPOMENA: Redni broj '3.' je pozicijska oznaka popisa i nije dio predloska. Prim
 Otvori PDF: `data/sources/kemos/kemos-upute-radovi-2024.pdf#page=10`
 ```
 TEMPLATE: {authors}, {title}, {institution}, {place}, {year}.
-QUOTE   : Na kraju je teksta potrebno pobrojati i napisati koristenu literatura. Djela koja su navedena u tekstu   [grep: OK]
+QUOTE   : Na kraju je teksta potrebno pobrojati i napisati korištenu literatura. Djela koja su navedena u tekstu   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute ne obraduju citiranje zavrsnih i diplomskih radova; predlozak je izveden iz oblika za knjigu (izdavac zamijenjen ustanovom). Potvrditi ili oboriti pri verifikaciji, po mogucnosti prema Prilogu 3.
 ```
@@ -60,7 +60,7 @@ NAPOMENA: Upute ne obraduju citiranje zavrsnih i diplomskih radova; predlozak je
 Otvori PDF: `data/sources/kemos/kemos-upute-radovi-2024.pdf#page=11`
 ```
 TEMPLATE: {title}, {container}, br. {issue}.
-QUOTE   : *primjere, citata i biljeski pogledajte u posebnom prilogu � prilog 3.   [grep: OK]
+QUOTE   : *primjere, citata i bilješki pogledajte u posebnom prilogu – prilog 3.   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor (prirodoslovne upute Odjela za kemiju) nigdje ne obraduje pravne propise. Predlozak je izveden iz opceg zareznog niza polja kojim izvor pise bibliografske jedinice, uz uobicajeno navodenje sluzbenog glasila s brojem. Potvrditi ili oboriti pri verifikaciji.
 ```

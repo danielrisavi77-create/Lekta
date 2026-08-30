@@ -8,7 +8,7 @@ Snapshot: `data/sources/vhzk/vhzk.pdf` (hash `2c3b183451b7...`)
 Otvori PDF: `data/sources/vhzk/vhzk.pdf#page=18`
 ```
 TEMPLATE: {authors}, ({year}), {title}[[, {volume}]], {place}: {publisher}.
-QUOTE   : Bali, A., (2000), Istrazivanja, Zagreb: Najbolja stamparija.   [grep: OK]
+QUOTE   : Balić, A., (2000), Istraživanja, Zagreb: Najbolja štamparija.   [grep: OK]
 IZVOR   : Bali, A., (2000), Istrazivanja, Zagreb: Najbolja stamparija.
 RENDER  : Bali, A., (2000), Istrazivanja, Zagreb: Najbolja stamparija.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -19,7 +19,7 @@ NAPOMENA: Format iz izvora: 'Autor, Inicijal imena, (godina), Naslov knjige, Izd
 Otvori PDF: `data/sources/vhzk/vhzk.pdf#page=18`
 ```
 TEMPLATE: {authors}, ({year}), {title}, u: {editor} (ur.), {container}[[, {volume}]], {place}: {publisher}.
-QUOTE   : Zoli, M. i Roli, N. urednici, (2011), Zbornik radova, Krapina: Izdavac d.o.o   [grep: OK]
+QUOTE   : Žolić, M. i Rolić, N. urednici, (2011), Zbornik radova, Krapina: Izdavač d.o.o   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvedeno iz oblika za knjigu. Ekstrakcija je odrezana na primjerima knjiga pa nema primjera poglavlja u zborniku; izvor prikazuje samo cijeli uredeni zbornik s oznakom 'urednici' iza imena urednika. Predlozak koristi kompaktni '(ur.)' i raspored 'naslov poglavlja, u: urednik, naslov zbornika' izveden iz Harvardske konvencije; uskladiti s oblikom 'urednici' pri verifikaciji.
 ```
@@ -28,7 +28,7 @@ NAPOMENA: Izvedeno iz oblika za knjigu. Ekstrakcija je odrezana na primjerima kn
 Otvori PDF: `data/sources/vhzk/vhzk.pdf#page=17`
 ```
 TEMPLATE: {authors}, ({year}), {title}, {container}, {volume}[[({issue})]][[, str. {pages}]].
-QUOTE   : Radove u zavrsnom radu treba citirati i referencirati Harvardskim stilom (Panjkota, 2010). Osnovna je   [grep: OK]
+QUOTE   : Radove u završnom radu treba citirati i referencirati Harvardskim stilom (Panjkota, 2010). Osnovna je   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor izrijekom propisuje Harvardski stil, ali u odrezanoj ekstrakciji nema primjera clanka u casopisu. Predlozak (autor, (godina), naslov, casopis, godiste(broj), stranice) izveden je iz Harvardske konvencije uz interpunkciju iz oblika za knjigu; potvrditi pri verifikaciji.
 ```
@@ -37,7 +37,7 @@ NAPOMENA: Izvor izrijekom propisuje Harvardski stil, ali u odrezanoj ekstrakciji
 Otvori PDF: `data/sources/vhzk/vhzk.pdf#page=17`
 ```
 TEMPLATE: {authors}, ({year}), {title}, dostupno na: {url} (pristupljeno: {accessed}).
-QUOTE   : mogu se nai na: http://lib.irb.hr/web/en/how-to-cite-literature.html (pristupljeno: 9. svibnja 2022.).   [grep: OK]
+QUOTE   : mogu se naći na: http://lib.irb.hr/web/en/how-to-cite-literature.html (pristupljeno: 9. svibnja 2022.).   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Format datuma pristupa '(pristupljeno: DATUM)' evidentiran je u ovoj recenici (upucivanje na mrezni izvor). Nema punog bibliografskog primjera mreznog izvora u ekstrakciji; predlozak izveden iz oblika za knjigu + ove konvencije pristupa. Uvod 'dostupno na:' je izveden, potvrditi pri verifikaciji.
 ```
@@ -64,7 +64,7 @@ NAPOMENA: Zakoni se u izvoru pojavljuju samo kao navodi u tekstu (naziv zakona +
 ```
 TEMPLATE : ({authorsShort}, {year})   /  s pages: (nema)
 RENDER   : (Lovric, 1988)   /  (Lovric, 1988)
-QUOTE    : Uoceno je da su pomona sredstva neophodna za uspjesni rad (Poli, 2001).   [grep: OK]
+QUOTE    : Uočeno je da su pomoćna sredstva neophodna za uspješni rad (Polić, 2001).   [grep: OK]
 NAPOMENA : Harvardski stil, autor-godina: 'u tekstu se navodi u okruglim zagradama prezime (prvog) autora i godina izdavanja'. Narativni oblik 'Mali (1999) izvjestava'; parafraza/referenca na kraju recenice '(Poli, 2001)'. Doslovni navod ide unutar navodnih znakova ('Doli (2005) definira: ,,...'); izvor NE prikazuje broj stranice u tekstu pa withPagesTemplate nije postavljen.
 ```
 

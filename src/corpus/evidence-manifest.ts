@@ -18,6 +18,12 @@
  *      sto je alat javio. Bez toga se ne zna je li "prosao" znacilo "tocan" ili "nije se srusio".
  *
  * Manifest NE ocjenjuje sadrzaj rada i ne dira dokument: on biljezi ocekivanje i ljudsku presudu.
+ *
+ * STO OVAJ MODUL JOS NE RADI, da se ne bi krivo citalo: `countsAsRealDocxProof` NIJE ozicen ni na
+ * jedna vrata. Citaju ga samo vlastiti test, jedna mutacija u `tests/gate-mutations.test.ts` i
+ * izvjestajna skripta `scripts/corpus-evidence.mts`. Nijedan harness zasad ne odbija run zbog
+ * manifesta: modul MJERI, ne provodi. Provedba je zaseban zahvat i vlasnikova odluka, jer bi u
+ * zatecenom stanju odbila sva 246 dokumenta.
  */
 
 /** Ishod usporedbe onoga sto je covjek ocekivao i onoga sto je alat javio. */
@@ -78,9 +84,20 @@ const isNonEmpty = (v: unknown): v is string => typeof v === 'string' && v.trim(
 export function expectationPrecedesRun(manifest: EvidenceManifest): boolean {
   const recorded = manifest.expected?.recordedAt;
   if (!isNonEmpty(recorded)) return false;
-  const runs = (manifest.runs ?? []).filter(isNonEmpty).sort();
+  // Sam DATUM ("2026-08-30") razrjesava se na ponoc UTC, pa bi svaki run istoga dana prosao kao
+  // "poslije zapisa". Ocekivanje mora nositi TRENUTAK, inace se ne moze tvrditi da je prethodilo.
+  if (!/\d{2}:\d{2}/.test(recorded)) return false;
+  const at = Date.parse(recorded);
+  if (Number.isNaN(at)) return false;
+  // Sortiranje po VREMENU, ne leksikografski: uz razlicite vremenske zone leksikografski prvi niz
+  // nije kronoloski prvi run, pa bi manifest sa zapisom NAKON stvarnog prvog runa prosao kao dokaz.
+  const runs = (manifest.runs ?? [])
+    .filter(isNonEmpty)
+    .map((r) => Date.parse(r))
+    .filter((t) => !Number.isNaN(t));
+  if (runs.length !== (manifest.runs ?? []).filter(isNonEmpty).length) return false;
   if (!runs.length) return true;
-  return new Date(recorded).getTime() < new Date(runs[0]).getTime();
+  return at < Math.min(...runs);
 }
 
 /** Svi razlozi zbog kojih dokument ne vrijedi kao dokaz; prazan popis znaci da vrijedi. */

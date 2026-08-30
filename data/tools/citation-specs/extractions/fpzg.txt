@@ -1,139 +1,240 @@
 ===== [fpzg-pravila-navodenja-citiranja | str. 1] =====
-PRAVILA NAVOENJA BIBLIOGRAFSKIH JEDINICA I CITATNICA
-                      NA FAKULTETU POLITICKIH ZNANOSTI
+PRAVILA NAVOĐENJA BIBLIOGRAFSKIH JEDINICA I CITATNICA
+                      NA FAKULTETU POLITIČKIH ZNANOSTI
 
-(NAPOMENA: Strelica i svi podaci iza nje ne navode se u bibliografskoj jedinici. Strelica sluzi kao
- uputa citatelju/ici kako treba izgledati unutartekstna citatnica pripadajue bibliografske jedinice.)
+(NAPOMENA: Strelica i svi podaci iza nje ne navode se u bibliografskoj jedinici. Strelica služi kao
+ uputa čitatelju/ici kako treba izgledati unutartekstna citatnica pripadajuće bibliografske jedinice.)
 
                                                        KNJIGE
 
 knjige s 1 autorom/icom:
 Becker, Howard S. (2007) Writing for social scientists: how to start and finish your thesis, book, or
 
-          article.1 Chicago i London: The University of Chicago Press.  (Becker, 2007)
-Buchberger, Iva (2012) Kriticko misljenje. Prirucnik kritickog misljenja, slusanja, citanja i pisanja.
+          article.1 Chicago i London: The University of Chicago Press. → (Becker, 2007)
+Buchberger, Iva (2012) Kritičko mišljenje. Priručnik kritičkog mišljenja, slušanja, čitanja i pisanja.
 
-          Rijeka: Udruga za razvoj visokog skolstva Universitas.  (Buchberger, 2012)
-Orai Toli, Dubravka (2011) Akademsko pismo: strategije i tehnike klasicne retorike za suvremene
+          Rijeka: Udruga za razvoj visokog školstva Universitas. → (Buchberger, 2012)
+Oraić Tolić, Dubravka (2011) Akademsko pismo: strategije i tehnike klasične retorike za suvremene
 
-          studentice i studente. Zagreb: Ljevak.  (Orai Toli, 2011)
+          studentice i studente. Zagreb: Ljevak. → (Oraić Tolić, 2011)
 knjige s 2 autora/ica:
-Ani, Vladimir i Sili, Josip (2001) Pravopis hrvatskoga jezika. Zagreb: Skolska knjiga i Novi Liber.
+Anić, Vladimir i Silić, Josip (2001) Pravopis hrvatskoga jezika. Zagreb: Školska knjiga i Novi Liber.
 
-           (Ani i Sili, 2001)
-knjige s 3 i vise autora/ica:
-Babi, Stjepan i dr. (2008) Hrvatski skolski pravopis. Zagreb: Skolska knjiga.  (Babi i dr, 2008)2
-Burnham, Peter i dr. (2006) Metode istrazivanja politike. Zagreb: Fakultet politickih znanosti. 
+          → (Anić i Silić, 2001)
+knjige s 3 i više autora/ica:
+Babić, Stjepan i dr. (2008) Hrvatski školski pravopis. Zagreb: Školska knjiga. → (Babić i dr, 2008)2
+Burnham, Peter i dr. (2006) Metode istraživanja politike. Zagreb: Fakultet političkih znanosti. →
 
           (Burnham i dr, 2006)
 
                                                      ZBORNICI
 
 poglavlje s 1 autorom /icom u zborniku s 1 urednikom/icom:
-Petak, Zdravko (2001) Proracunska politika Sabora. U: Kasapovi, Mirjana (ur) Hrvatska politika
+Petak, Zdravko (2001) Proračunska politika Sabora. U: Kasapović, Mirjana (ur) Hrvatska politika
 
-          1990.-2000. (str. 101-131). Zagreb: Fakultet politickih znanosti.  (Petak, 2001)
+          1990.-2000. (str. 101-131). Zagreb: Fakultet političkih znanosti. → (Petak, 2001)
 
-1 Naslove tekstova uvijek navoditi identicno kako stoje u originalu: razdvajanje naslova i podnaslova tockom,
-    dvotockom ili crticom kako stoje u originalu, velika ili mala slova kako stoje u originalu � bez obzira na izvorni jezik
+1 Naslove tekstova uvijek navoditi identično kako stoje u originalu: razdvajanje naslova i podnaslova točkom,
+    dvotočkom ili crticom kako stoje u originalu, velika ili mala slova kako stoje u originalu – bez obzira na izvorni jezik
     i pravopisna pravila tog jezika.
 
-2 Pravilo ekonomicnosti posebno je vazno primjenjivati u slucajevima tzv. grupiranja interpunkcijskih znakova. Na
-    konkretnom se primjeru vide dvije situacije navoenja skraenice i drugi: i dr. kada iza skraenice dolazi razmak, ali
-    i dr, kada iza skraenice dolazi zarez. U prvom scenariju zadrzavamo tocku, u drugom ju brisemo.
+2 Pravilo ekonomičnosti posebno je važno primjenjivati u slučajevima tzv. grupiranja interpunkcijskih znakova. Na
+    konkretnom se primjeru vide dvije situacije navođenja skraćenice i drugi: i dr. kada iza skraćenice dolazi razmak, ali
+    i dr, kada iza skraćenice dolazi zarez. U prvom scenariju zadržavamo točku, u drugom ju brišemo.
                                                                                                                                   1
+
+===== [fpzg-pravila-navodenja-citiranja | str. 5] =====
+Zagrebu. http://www.fpzg.unizg.hr/studiji/diplomski/politologija Pristupljeno 3. veljače
+          2013. → (Fpzg.unizg.hr, 2013b)
+Hjp.novi-liber.hr (2013) Hrvatski jezični portal. http://hjp.novi-liber.hr/ Pristupljeno 5. veljače 2013.
+          → (Hjp.novi-liber.hr, 2013)
+Kgz.hr (2013) Knjižnice Grada Zagreba. http://www.kgz.hr/ Pristupljeno 5. veljače 2013. → (Kgz.hr,
+          2013)
+Nsk.hr (2013) Nacionalna i sveučilišna knjižnica u Zagrebu. http://www.nsk.hr/ Pristupljeno 14.
+          veljače 2013. → (Nsk.hr, 2013)
+
+                                NEOBJAVLJENI AKADEMSKI RADOVI
+
+diplomski i magistarski radovi:
+Zgurić, Borna (2009) Diplomacija nedržavnih aktera: studija slučaja Carter Centra (neobjavljen
+
+          diplomski rad). Zagreb: Fakultet političkih znanosti. → (Zgurić, 2009)
+doktorske disertacije:
+Picula, Boško (2012) Intrakonfliktni izbori na Bliskom istoku: demokratsko konstituiranje vlasti
+
+          unutar oružanih sukoba u Afganistanu, Iraku i Palestinskoj samoupravi (neobjavljena
+          doktorska disertacija). Zagreb: Fakultet političkih znanosti. → (Picula, 2012)
+
+                                            AUDIOVIZUALNI IZVORI
+
+film:
+Spielberg, Steven i Chricton, Michael (1993) Jurassic Park. Universal City: Universal Studios. →
+
+          (Spielberg i Chricton, 1993)10
+televizijska serija:
+Percival, Daniel i Spotnitz, Frank (2016) Travelers. U: Spotnitz, Frank (pr) The Man in the High
+
+          Castle (s. 2, e. 3). Santa Monica: Amazon Studios. → (Percival i Spotnitz, 2016)11
+glazbeni spot:
+
+10 Bibliografska jedinica za film izrađuje se prema sljedećem predlošku: Prezime, ime redatelja i prezime, ime scenarist
+    (godina prikazivanja) Naslov filma. Sjedište medijske kuće: Studio.
+
+11 Bibliografska jedinica za televizijsku seriju izrađuje se prema sljedećem predlošku: Prezime, ime redatelja i/ili
+    prezime, ime scenarista (godina prikazivanja) Naslov epizode. U: Prezime, ime izvršnog producenta (pr) Naslov serije
+    (s. br, e. br). Sjedište medijske kuće: Medijska kuća.
+                                                                                                                                  5
+
+===== [fpzg-upute-akademski-radovi | str. 26] =====
+LITERATURA
+
+Anić, Vladimir i Silić, Josip (2001) Pravopis hrvatskoga jezika. Zagreb: Školska knjiga i
+        Novi Liber.
+
+Babić, Stjepan i dr. (2008) Hrvatski školski pravopis. Zagreb: Školska knjiga.
+Badurina, Lada i dr. (2008) Hrvatski pravopis. Zagreb: Matica hrvatska.
+Becker, Howard S. (2007) Writing for social scientists: how to start and finish your thesis,
+
+        book, or article. Chicago, London: The University of Chicago Press.
+Buchberger, Iva (2012) Kritičko mišljenje. Priručnik kritičkog mišljenja, slušanja, čitanja i
+
+        pisanja. Rijeka: Udruga za razvoj visokog školstva Universitas.
+Burnham, Peter i dr. (2006) Metode istraživanja politike. Zagreb: Fakultet političkih znanosti.
+Dunleavy, Patrick (2005) Kako napisati disertaciju. Kako planirati, skicirati, pisati i dovršiti
+
+        doktorsku disertaciju. Zagreb: Fakultet političkih znanosti.
+Gačić, Milica (2012) Pisanje i objavljivanje znanstvenih i stručnih radova. Zagreb: Školska
+
+        knjiga.
+Marsh, David i Stoker, Gerry (ur) (2005) Teorije i metode političke znanosti. Zagreb:
+
+===== [fpzg-upute-akademski-radovi | str. 33] =====
+PRILOG 3
+
+       PRAVILA NAVOĐENJA BIBLIOGRAFSKIH JEDINICA13 I CITATNICA
+                           NA FAKULTETU POLITIČKIH ZNANOSTI
+
+                                                   KNJIGE
+
+knjige s 1 autorom/icom:
+Becker, Howard S. (2007) Writing for social scientists: how to start and finish your thesis,
+
+          book, or article. Chicago i London: The University of Chicago Press. → (Becker,
+          2007)
+Buchberger, Iva (2012) Kritičko mišljenje. Priručnik kritičkog mišljenja, slušanja, čitanja i
+          pisanja. Rijeka: Udruga za razvoj visokog školstva Universitas. → (Buchberger,
+          2012)
+Oraić Tolić, Dubravka (2011) Akademsko pismo: strategije i tehnike klasične retorike za
+          suvremene studentice i studente. Zagreb: Ljevak. → (Oraić Tolić, 2011)
+knjige s 2 autora/ica:
+Anić, Vladimir i Silić, Josip (2001) Pravopis hrvatskoga jezika. Zagreb: Školska knjiga i
+          Novi Liber. → (Anić i Silić, 2001)
+knjige s 3 i više autora/ica:
+Babić, Stjepan i dr. (2008) Hrvatski školski pravopis. Zagreb: Školska knjiga. → (Babić i dr,
+          2008)14
+Burnham, Peter i dr. (2006) Metode istraživanja politike. Zagreb: Fakultet političkih znanosti.
+          → (Burnham i dr, 2006)
+
+13 Naslove tekstova treba uvijek navoditi identično kako stoje u originalu: razdvajanje naslova i podnaslova
+točkom, dvotočkom ili crticom kako stoje u originalu, velika ili mala slova kako stoje u originalu – bez obzira na
+izvorni jezik i pravopisna pravila tog jezika.
+14 Pravilo ekonomičnosti posebno je važno primjenjivati u slučajevima tzv. grupiranja interpunkcijskih znakova.
+Na konkretnom se primjeru vide dvije situacije navođenja skraćenice i drugi: i dr. kada iza skraćenice dolazi
+razmak, ali i dr, kada iza skraćenice dolazi zarez. U prvom scenariju zadržavamo točku, u drugom ju brišemo.
+
+                                                                                                               33
 
 ===== [fpzg-pravila-navodenja-citiranja | str. 2] =====
 poglavlje s 2 autora/ica u zborniku s 2 urednika/icom:
-Marsh, David i Stoker, Gerry (2005) Zakljucak. U: Marsh, David i Stoker, Gerry (ur) Teorije i metode
+Marsh, David i Stoker, Gerry (2005) Zaključak. U: Marsh, David i Stoker, Gerry (ur) Teorije i metode
 
-          politicke znanosti (str. 305-311). Zagreb: Fakultet politickih znanosti.  (Marsh i Stoker,
+          političke znanosti (str. 305-311). Zagreb: Fakultet političkih znanosti. → (Marsh i Stoker,
           2005)
 knjige s 2 urednika/ice:3
-Marsh, David i Stoker, Gerry (ur) (2005) Teorije i metode politicke znanosti. Zagreb: Fakultet
-          politickih znanosti.  (Marsh i Stoker, 2005)4
+Marsh, David i Stoker, Gerry (ur) (2005) Teorije i metode političke znanosti. Zagreb: Fakultet
+          političkih znanosti. → (Marsh i Stoker, 2005)4
 
-                                                      CLANCI
+                                                      ČLANCI
 
-clanak u casopisu:
-Prpi, Ivan (2001) Napomena o shvaanju suverena u Ustavu Republike Hrvatske. Politicka misao
+članak u časopisu:
+Prpić, Ivan (2001) Napomena o shvaćanju suverena u Ustavu Republike Hrvatske. Politička misao
 
-          38(1): 5-11.  (Prpi, 2001)
-clanak iz novina:5
-Mari, Jagoda (2015) Psihijatar i kirurg dovode u sabornicu nacelnike i profesore. Novi list
+          38(1): 5-11. → (Prpić, 2001)
+članak iz novina:5
+Marić, Jagoda (2015) Psihijatar i kirurg dovode u sabornicu načelnike i profesore. Novi list
 
-          69(22.256): 3. 10. studenoga.  (Mari, 2015)
-clanak iz online casopisa:6
-Bejakovi, Predrag (2007) Vaznost i financiranje obrazovanja odraslih i cjelozivotnog ucenja u
+          69(22.256): 3. 10. studenoga. → (Marić, 2015)
+članak iz online časopisa:6
+Bejaković, Predrag (2007) Važnost i financiranje obrazovanja odraslih i cjeloživotnog učenja u
 
-          odabranim zemljama. Politicko obrazovanje 3(1-2): 31-55. http://www.
-          politologija.hr/casopis.php?kateg=5&sub=12 Pristupljeno 15. sijecnja 2013.  (Bejakovi,
+          odabranim zemljama. Političko obrazovanje 3(1-2): 31-55. http://www.
+          politologija.hr/casopis.php?kateg=5&sub=12 Pristupljeno 15. siječnja 2013. → (Bejaković,
           2007)
-Ziljak, Tihomir i Salaj, Berto (2007) Programi graanskog obrazovanja i osposobljavanja u
-          nevladinim organizacijama u Republici Hrvatskoj (rezultati istrazivanja 2005.-2007).
-          Politicko obrazovanje 3(1-2): 1-30. http://www.politologija.hr/casopis.php?kateg=5&
-          sub=12 Pristupljeno 15. sijecnja 2013.  (Ziljak i Salaj, 2007)
+Žiljak, Tihomir i Šalaj, Berto (2007) Programi građanskog obrazovanja i osposobljavanja u
+          nevladinim organizacijama u Republici Hrvatskoj (rezultati istraživanja 2005.-2007).
+          Političko obrazovanje 3(1-2): 1-30. http://www.politologija.hr/casopis.php?kateg=5&
+          sub=12 Pristupljeno 15. siječnja 2013. → (Žiljak i Šalaj, 2007)
 
-3 Knjige s 3 i vise urednika navoditi po istoj logici kao i knjige s 3 i vise autora. Nakon prezimena, imena prvog
-    urednika/ce umetnuti skraenicu i dr. nakon cega skraenica (ur).
+3 Knjige s 3 i više urednika navoditi po istoj logici kao i knjige s 3 i više autora. Nakon prezimena, imena prvog
+    urednika/ce umetnuti skraćenicu i dr. nakon čega skraćenica (ur).
 
-4 Budui da se u citatnici ne navodi skraenica (ur), mora se paziti na redoslijed bibliografskih jedinica u popisu
-    literature. Usporediti s prethodnom bibliografskom jedinicom � u slucaju da obje navodimo u popisu literature tada bi
-    u prvoj iza godine dodali slovo b (Zakljucak je u abecednom nizu iza Teorije), a drugoj a. Time se postize razlikovanje
-    citatnica i pravilan niz navoenja bibliografskih jedinica u popisu literature.
+4 Budući da se u citatnici ne navodi skraćenica (ur), mora se paziti na redoslijed bibliografskih jedinica u popisu
+    literature. Usporediti s prethodnom bibliografskom jedinicom – u slučaju da obje navodimo u popisu literature tada bi
+    u prvoj iza godine dodali slovo b (Zaključak je u abecednom nizu iza Teorije), a drugoj a. Time se postiže razlikovanje
+    citatnica i pravilan niz navođenja bibliografskih jedinica u popisu literature.
 
-5 Kod navoenja clanaka iz novina dostupnih u tiskanom obliku treba navesti i godiste novina, kao i stranice na kojima
-    se clanak nalazi, analogno clancima u znanstvenim casopisima.
+5 Kod navođenja članaka iz novina dostupnih u tiskanom obliku treba navesti i godište novina, kao i stranice na kojima
+    se članak nalazi, analogno člancima u znanstvenim časopisima.
 
-6 Pravila navoenja mreznih novina i casopisa odnose se samo na ona izdanja koja ne postoje i u tiskanom obliku. Ako
-    izdanje postoji i u tiskanom i u online obliku tada primat ima tiskani oblik, tj. tradicionalan oblik navoenja
-    bibliografske jedinice. Takoer, godine se odnose na godine objave teksta � ako je taj podatak nedostupan tek tada se
+6 Pravila navođenja mrežnih novina i časopisa odnose se samo na ona izdanja koja ne postoje i u tiskanom obliku. Ako
+    izdanje postoji i u tiskanom i u online obliku tada primat ima tiskani oblik, tj. tradicionalan oblik navođenja
+    bibliografske jedinice. Također, godine se odnose na godine objave teksta – ako je taj podatak nedostupan tek tada se
     odnose na godinu pristupa tekstu.
 
                                                                                                                                   2
 
 ===== [fpzg-pravila-navodenja-citiranja | str. 3] =====
-clanak iz online novina:
-Alac, Zvonko (2015) Kraljica fajrunta: HDZ-u donijela Most tortu od 1.5 milijardi kuna. Index.hr 9.
+članak iz online novina:
+Alač, Zvonko (2015) Kraljica fajrunta: HDZ-u donijela Most tortu od 1.5 milijardi kuna. Index.hr 9.
 
           studenoga. http://www.index.hr/vijesti/clanak/kraljica-fajrunta-hdzu-donijela-most-tortu-od
-          -15-milijardi-kuna/854675.aspx Pristupljeno 10. studenoga 2015.  (Alac, 2015)
+          -15-milijardi-kuna/854675.aspx Pristupljeno 10. studenoga 2015. → (Alač, 2015)
 
                                                   PRAVNI AKTI
 
-iz sluzbenog glasila:
-Hrvatski sabor (2011) Zakon o Vladi Republike Hrvatske. Narodne novine 150.  (Hrvatski sabor,
+iz službenog glasila:
+Hrvatski sabor (2011) Zakon o Vladi Republike Hrvatske. Narodne novine 150. → (Hrvatski sabor,
 
           2015)
-preuzeti s mreznih stranica:7
-FPZG (Fakultet politickih znanosti) (2006) Statut Fakulteta politickih znanosti Sveucilista u Zagrebu.
+preuzeti s mrežnih stranica:7
+FPZG (Fakultet političkih znanosti) (2006) Statut Fakulteta političkih znanosti Sveučilišta u Zagrebu.
 
           http://www.fpzg.unizg.hr/_download/repository/STATUT_fpzg_veljaca_2007.pdf
-          Pristupljeno 27. rujna 2015.  (FPZG, 2015)
-MVEP (Ministarstvo vanjskih i europskih poslova) (2015) Strateski plan Ministarstva vanjskih i
+          Pristupljeno 27. rujna 2015. → (FPZG, 2015)
+MVEP (Ministarstvo vanjskih i europskih poslova) (2015) Strateški plan Ministarstva vanjskih i
           europskih poslova za razdoblje 2016.-2018. http://www.mvep.hr/files/file/
-          dokumenti/150717-strateski-plan-mvep-2016-2018.pdf Pristupljeno 27. rujna 2015. 
+          dokumenti/150717-strateski-plan-mvep-2016-2018.pdf Pristupljeno 27. rujna 2015. →
           (MVEP, 2015)
-Ustavni sud (2015) Ocjena propisa: U-I-1397/2015, ocjena i rjesenje. http://sljeme.
+Ustavni sud (2015) Ocjena propisa: U-I-1397/2015, ocjena i rješenje. http://sljeme.
           usud.hr/usud/praksaw.nsf/Novosti/C12570D30061CE54C1257ECA00521E9F?OpenDocu
-          ment/ Pristupljeno 27. rujna 2015.  (Ustavni sud, 2015)
+          ment/ Pristupljeno 27. rujna 2015. → (Ustavni sud, 2015)
 
-                   OSTALI DOKUMENTI PREUZETI S MREZNIH STRANICA
+                   OSTALI DOKUMENTI PREUZETI S MREŽNIH STRANICA
 
 individualni autori/ce:
-Aastrup, Jesper (2005) Change in Networks � a Critical Realist Interpretation.
+Aastrup, Jesper (2005) Change in Networks – a Critical Realist Interpretation.
 
-          http://www.impgroup.org/uploads/papers/27.pdf. Pristupljeno 30. rujna 2010.  (Aastrup,
+          http://www.impgroup.org/uploads/papers/27.pdf. Pristupljeno 30. rujna 2010. → (Aastrup,
 
-7 Svi korporativni autori (institucije/organizacije koje figuriraju kao individualni autori) ciji je naziv 3 i vise rijeci
-    trebaju se skraivati kako bi se kratica koristila u citatnici. Pritom se prvenstveno treba voditi sluzbenom skraenicom
-    (moze se iscitati iz dokumenata institucije, a ponekad i iz domena mreznih stranica � vidjeti FPZG). Tek ukoliko takva
-    sluzbena skraenica ne postoji onda se samostalno generira � i to na nacin da se uzimaju prva slova glavnih rijeci bez
-    veznika. Nije potrebno navoditi skraenicu drzave, na pr. RH. Strani se nazivi kroatiziraju (vidjeti primjer s
-    Konzervativnom strankom u kategoriji ostalih dokumenata preuzetih s mreznih stranica) osim ukoliko se radi o nazivu
-    institucije/organizacije koji ne moze biti sveden na do 2 rijeci. U tom slucaju koristi se sluzbena skraenica na
-    izvornom jeziku. Iza skraenice u zagradi navodi se tocan naziv institucije u trenutku kada je konzultirana (na pr.
-    ministarstva mijenjaju nazive) na izvornom jeziku. Pritom se nazivi transliteriraju u latinicno pismo ako za time postoji
+7 Svi korporativni autori (institucije/organizacije koje figuriraju kao individualni autori) čiji je naziv 3 i više riječi
+    trebaju se skraćivati kako bi se kratica koristila u citatnici. Pritom se prvenstveno treba voditi službenom skraćenicom
+    (može se iščitati iz dokumenata institucije, a ponekad i iz domena mrežnih stranica – vidjeti FPZG). Tek ukoliko takva
+    službena skraćenica ne postoji onda se samostalno generira – i to na način da se uzimaju prva slova glavnih riječi bez
+    veznika. Nije potrebno navoditi skraćenicu države, na pr. RH. Strani se nazivi kroatiziraju (vidjeti primjer s
+    Konzervativnom strankom u kategoriji ostalih dokumenata preuzetih s mrežnih stranica) osim ukoliko se radi o nazivu
+    institucije/organizacije koji ne može biti sveden na do 2 riječi. U tom slučaju koristi se službena skraćenica na
+    izvornom jeziku. Iza skraćenice u zagradi navodi se točan naziv institucije u trenutku kada je konzultirana (na pr.
+    ministarstva mijenjaju nazive) na izvornom jeziku. Pritom se nazivi transliteriraju u latinično pismo ako za time postoji
     potreba.
 
                                                                                                                                   3
@@ -144,115 +245,73 @@ Marcussen, Martin i Olsen, Hans Peter (2005) Bridging a Structural Hole in Gover
 
           Analysis. Working Papers of the Centre for Democratic Network Governance. Working
           Paper 2005: 2. http://magenta.ruc.dk/upload/application/pdf/72ef7bed/Working_
-          Paper_2005_2.pdf Pristupljeno 7. listopada 2010.  (Marcussen i Olsen, 2005)
-Kenis, Patrick i Raab, J�rg (2003) Wanted: A Good Network Theory of Policy Making. Rad izlozen
+          Paper_2005_2.pdf Pristupljeno 7. listopada 2010. → (Marcussen i Olsen, 2005)
+Kenis, Patrick i Raab, Jörg (2003) Wanted: A Good Network Theory of Policy Making. Rad izložen
           na 7th National Public Management Conference. Washington 9-10. listopada 2003.
           http://www.pmranet.org/conferences/georgetownpapers/Kenis.pdf Pristupljeno 17. rujna
-          2009.  (Kenis i Raab, 2003)
+          2009. → (Kenis i Raab, 2003)
 korporativni autori/ce:
-FPZG (Fakultet politickih znanosti) (2015) Upute za pisanje akademskih radova na Fakultetu
-          politickih znanosti. https://www.fpzg.unizg.hr/_download/repository/Upute_za_pisanje_
-          akademskih_radova.pdf Pristupljeno 1. rujna 2015.  (FPZG, 2015)
-GONG (Graani organizirano nadgledaju glasanje) (2015) Vodic kroz izbore za vijea i predstavnike
+FPZG (Fakultet političkih znanosti) (2015) Upute za pisanje akademskih radova na Fakultetu
+          političkih znanosti. https://www.fpzg.unizg.hr/_download/repository/Upute_za_pisanje_
+          akademskih_radova.pdf Pristupljeno 1. rujna 2015. → (FPZG, 2015)
+GONG (Građani organizirano nadgledaju glasanje) (2015) Vodič kroz izbore za vijeća i predstavnike
           nacionalnih manjina 31. 5. 2015. http://www.gong.hr/media/uploads/gong
-          _letak_manjine_15.pdf Pristupljeno 27. rujna 2015.  (GONG, 2015)
+          _letak_manjine_15.pdf Pristupljeno 27. rujna 2015. → (GONG, 2015)
 Konzervativna stranka (Conservative and Unionist Party)8 (2015) The Conservative Party Manifesto
           2015: Strong Leadership, A Clear Economic Plan, A Brighter, More Secure Future.
           https://s3-eu-west-1.amazonaws.com/manifesto2015/ConservativeManifesto2015 .pdf
-          Pristupljeno 1. svibnja 2015.  (Konzervativna stranka, 2015)
+          Pristupljeno 1. svibnja 2015. → (Konzervativna stranka, 2015)
 
-                                   GENERICKE MREZNE STRANICE9
+                                   GENERIČKE MREŽNE STRANICE9
 
 Bbc.com (2015) Election 2015 Results. http://www.bbc.com/news/election/2015/results/ Pristupljeno
-          9. svibnja 2015.  (Bbc.com, 2015)
+          9. svibnja 2015. → (Bbc.com, 2015)
 
-Fpzg.unizg.hr (2013a) Diplomski studij novinarstva Fakulteta politickih znanosti Sveucilista u
-          Zagrebu. http://www.fpzg.unizg.hr/studiji/diplomski/novinarstvo Pristupljeno 3. veljace
-          2013.  (Fpzg.unizg.hr, 2013a)
+Fpzg.unizg.hr (2013a) Diplomski studij novinarstva Fakulteta političkih znanosti Sveučilišta u
+          Zagrebu. http://www.fpzg.unizg.hr/studiji/diplomski/novinarstvo Pristupljeno 3. veljače
+          2013. → (Fpzg.unizg.hr, 2013a)
 
-Fpzg.unizg.hr (2013b) Diplomski studij politologije Fakulteta politickih znanosti Sveucilista u
+Fpzg.unizg.hr (2013b) Diplomski studij politologije Fakulteta političkih znanosti Sveučilišta u
 
 8 Izrada popisa literature i citatnica ima svoja pravila koja ne slijede slijepo pravopisna pravila hrvatskog jezika (vidjeti
-    i koristenje tocaka iza godina ili kratica). Pojednostavljivanje, izbjegavanje gomilanja interpunkcija, ekonomicnost �
-    to su vodilje u izradi. Stoga se i kurziv koristi umjereno, u slucajevima naslova knjiga, casopisa i novina, no ne i za
-    oznacavanje stranih rijeci/naziva. No, strane rijeci u tekstu moraju se oznacavati kurzivom.
+    i korištenje točaka iza godina ili kratica). Pojednostavljivanje, izbjegavanje gomilanja interpunkcija, ekonomičnost –
+    to su vodilje u izradi. Stoga se i kurziv koristi umjereno, u slučajevima naslova knjiga, časopisa i novina, no ne i za
+    označavanje stranih riječi/naziva. No, strane riječi u tekstu moraju se označavati kurzivom.
 
-9 Naslov bibliografske jedinice je naziv gledane stranice: na pr. naslovne mrezne stranice u primjeru Nsk.hr ili Kgz.hr,
+9 Naslov bibliografske jedinice je naziv gledane stranice: na pr. naslovne mrežne stranice u primjeru Nsk.hr ili Kgz.hr,
     ali i rubrike unutar stranice u primjeru Fpzg.unizg.hr.
 
                                                                                                                                   4
 
-===== [fpzg-pravila-navodenja-citiranja | str. 5] =====
-Zagrebu. http://www.fpzg.unizg.hr/studiji/diplomski/politologija Pristupljeno 3. veljace
-          2013.  (Fpzg.unizg.hr, 2013b)
-Hjp.novi-liber.hr (2013) Hrvatski jezicni portal. http://hjp.novi-liber.hr/ Pristupljeno 5. veljace 2013.
-           (Hjp.novi-liber.hr, 2013)
-Kgz.hr (2013) Knjiznice Grada Zagreba. http://www.kgz.hr/ Pristupljeno 5. veljace 2013.  (Kgz.hr,
-          2013)
-Nsk.hr (2013) Nacionalna i sveucilisna knjiznica u Zagrebu. http://www.nsk.hr/ Pristupljeno 14.
-          veljace 2013.  (Nsk.hr, 2013)
-
-                                NEOBJAVLJENI AKADEMSKI RADOVI
-
-diplomski i magistarski radovi:
-Zguri, Borna (2009) Diplomacija nedrzavnih aktera: studija slucaja Carter Centra (neobjavljen
-
-          diplomski rad). Zagreb: Fakultet politickih znanosti.  (Zguri, 2009)
-doktorske disertacije:
-Picula, Bosko (2012) Intrakonfliktni izbori na Bliskom istoku: demokratsko konstituiranje vlasti
-
-          unutar oruzanih sukoba u Afganistanu, Iraku i Palestinskoj samoupravi (neobjavljena
-          doktorska disertacija). Zagreb: Fakultet politickih znanosti.  (Picula, 2012)
-
-                                            AUDIOVIZUALNI IZVORI
-
-film:
-Spielberg, Steven i Chricton, Michael (1993) Jurassic Park. Universal City: Universal Studios. 
-
-          (Spielberg i Chricton, 1993)10
-televizijska serija:
-Percival, Daniel i Spotnitz, Frank (2016) Travelers. U: Spotnitz, Frank (pr) The Man in the High
-
-          Castle (s. 2, e. 3). Santa Monica: Amazon Studios.  (Percival i Spotnitz, 2016)11
-glazbeni spot:
-
-10 Bibliografska jedinica za film izrauje se prema sljedeem predlosku: Prezime, ime redatelja i prezime, ime scenarist
-    (godina prikazivanja) Naslov filma. Sjediste medijske kue: Studio.
-
-11 Bibliografska jedinica za televizijsku seriju izrauje se prema sljedeem predlosku: Prezime, ime redatelja i/ili
-    prezime, ime scenarista (godina prikazivanja) Naslov epizode. U: Prezime, ime izvrsnog producenta (pr) Naslov serije
-    (s. br, e. br). Sjediste medijske kue: Medijska kua.
-                                                                                                                                  5
-
 ===== [fpzg-pravila-navodenja-citiranja | str. 6] =====
-2Pac i Outlaws (1999) Still I Rise (CD). Santa Monica: Interscope Records.  (2Pac i Outlaws,
+2Pac i Outlaws (1999) Still I Rise (CD). Santa Monica: Interscope Records. → (2Pac i Outlaws,
           1999)12
 
                                                  SIROVI PODACI
 
 intervju:
-Puhovski, Zarko (2017) Osobni intervju. Zagreb: Provedeno 8. ozujka.  (Puhovski, 2017)13
-Intervju 1 (2016) Polustrukturirani intervju s visokopozicioniranom sluzbenicom Ministarstva
+Puhovski, Žarko (2017) Osobni intervju. Zagreb: Provedeno 8. ožujka. → (Puhovski, 2017)13
+Intervju 1 (2016) Polustrukturirani intervju s visokopozicioniranom službenicom Ministarstva
 
-          financija. Zagreb: Provedeno 9. rujna.  (Intervju 1, 2016)14
+          financija. Zagreb: Provedeno 9. rujna. → (Intervju 1, 2016)14
 baze podataka:
-Sirini, Daniela i dr. (2016) Naslovnice Vecernjeg lista od prosinca 1989. do prosinca 2015. (baza
+Širinić, Daniela i dr. (2016) Naslovnice Večernjeg lista od prosinca 1989. do prosinca 2015. (baza
 
-          podataka). Zagreb: Centar za empirijska politoloska istrazivanja, Fakultet politickih
-          znanosti. http://cepis.hr/baze-podataka/masovni-mediji/ Pristupljeno 6. ozujka 2017. 
-          (Sirini i dr, 2016)15
+          podataka). Zagreb: Centar za empirijska politološka istraživanja, Fakultet političkih
+          znanosti. http://cepis.hr/baze-podataka/masovni-mediji/ Pristupljeno 6. ožujka 2017. →
+          (Širinić i dr, 2016)15
 
-12 Bibliografska jedinica za glazbeni spot izrauje se prema sljedeem predlosku: Ime izvoaca (godina objavljivanja)
-    Naslov albuma (oblik nosaca zvuka). Sjediste medijske kue: Medijska kua.
+12 Bibliografska jedinica za glazbeni spot izrađuje se prema sljedećem predlošku: Ime izvođača (godina objavljivanja)
+    Naslov albuma (oblik nosača zvuka). Sjedište medijske kuće: Medijska kuća.
 
-13 Bibliografska jedinica za provedeni intervju izrauje se prema sljedeem predlosku: Prezime, ime intervjuirane osobe
-    (godina provoenja) Oblik intervjua. Mjesto provedbe: Provedeno datum.
+13 Bibliografska jedinica za provedeni intervju izrađuje se prema sljedećem predlošku: Prezime, ime intervjuirane osobe
+    (godina provođenja) Oblik intervjua. Mjesto provedbe: Provedeno datum.
 
-14 Ponekad se zbog zastite identiteta treba ne navesti ime i prezime intervjuirane osobe. U tom slucaju pise se Intervju
-    1, Intervju 2, Intervju 3 itd., te se u opisu intervjua navodi neka funkcija ili znacajka osobe kako bi se pokazala njena
-    relevantnost za intervjuiranje, bez preciznih detalja kako bi se sacuvala tajnost identiteta intervjuirane osobe.
+14 Ponekad se zbog zaštite identiteta treba ne navesti ime i prezime intervjuirane osobe. U tom slučaju piše se Intervju
+    1, Intervju 2, Intervju 3 itd., te se u opisu intervjua navodi neka funkcija ili značajka osobe kako bi se pokazala njena
+    relevantnost za intervjuiranje, bez preciznih detalja kako bi se sačuvala tajnost identiteta intervjuirane osobe.
 
-15 Bibliografska jedinica za bazu podataka izrauje se prema sljedeem predlosku: Prezime i ime istrazivaca (godina)
+15 Bibliografska jedinica za bazu podataka izrađuje se prema sljedećem predlošku: Prezime i ime istraživača (godina)
     Naslov baze podataka (baza podataka). Mjesto nastanka: Organizacija koja je proizvela bazu. Link. Pristupljeno
     datum.
                                                                                                                                   6
@@ -260,30 +319,28 @@ Sirini, Daniela i dr. (2016) Naslovnice Vecernjeg lista od prosinca 1989. do pro
 ===== [fpzg-pravila-navodenja-citiranja | str. 7] =====
 
 
-===== [fpzg-upute-akademski-radovi | str. 2] =====
-STRUKTURA RADA ............................................................................................................9
-OSNOVNI TEKST...............................................................................................................10
+===== [fpzg-upute-akademski-radovi | str. 7] =====
+Nužni elementi pretprijave diplomskog, odnosno prijave završnog specijalističkog rada
 
-   Uvod ................................................................................................................................10
-   Tijelo teksta......................................................................................................................11
-   Zakljucak .......................................................................................................................... 13
-FORMAT I OPREMA RADA..............................................................................................15
-   Format rada ......................................................................................................................15
-   Jezicno-pravopisna razina rada .........................................................................................15
-   Korice rada .......................................................................................................................15
-   Sadrzaj rada ......................................................................................................................17
-   Popis ilustracija ................................................................................................................17
-   Popis literature..................................................................................................................18
-   Prilozi ............................................................................................................................... 18
-   Sazetak i kljucne rijeci......................................................................................................19
-PRAVILA CITIRANJA .......................................................................................................19
-   Citiranje, parafraziranje i sazimanje ..................................................................................19
-   Citatnice ...........................................................................................................................21
-   Fusnote ............................................................................................................................. 22
-   Bibliografske jedinice .......................................................................................................23
-   Plagiranje .........................................................................................................................25
-LITERATURA ..................................................................................................................... 26
-   Internetske stranice ...........................................................................................................26
-PRILOZI ..............................................................................................................................28
+1. naslov rada   sažeti oblik teme rada
+                 (prijedlog naslova rada na hrvatskom i engleskom jeziku)*
 
-                                                                                                                 2
+2. obrazloženje  područje, tema, znanstveni problem, istraživačko pitanje,
+
+                 teza, cilj i plan istraživanja, te metodologija (oko 500 riječi)
+
+3. sadržaj       struktura rada kroz pregled naslova osnovnih poglavlja
+
+4. popis polazišne literature najmanje pet izvora
+
+5. jezik rada*   prijedlog jezika pisanja i obrane rada – hrvatski ili engleski, s
+
+                 obrazloženjem uporabe stranog jezika
+
+*Odnosi se samo na završni specijalistički rad.
+
+Elementi (pret)prijave diplomskog i završnog specijalističkog rada
+
+Pretprijava diplomskog, odnosno prijava završnog specijalističkog rada treba sadržavati
+temeljne elemente svake znanstvene, odnosno akademske proze. To je prije svega naslov rada
+kao najvidljiviji i najčitaniji dio znanstvenog teksta (Silobrčić, 2003: 36). Naslov je prva i

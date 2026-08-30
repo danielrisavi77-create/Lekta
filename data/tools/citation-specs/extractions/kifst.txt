@@ -1,83 +1,104 @@
-===== [kifst-upute-diplomski-2022 | str. 2] =====
-Poravnati brojeve stranica jedne ispod drugih na slijedei nacin:
-numerirati pod 1. UVOD; napraviti jedan razmak �space-; kliknuti na Tabulatoru na npr. 14
-
-cm                     jednim lijevim klikom i postaviti slijedee:
-
-Na svaki slijedei navod u sadrzaju nakon naslova i podnaslova pritisniti TAB
-
-te e se automatski napraviti linija za postavljanje brojke stranice.
-
-    4. OSTALE CJELINE RADA
-Znastveno-istrazivacka tema:
-Uvod, Dosadasnja istrazivanja, Cilj, Problemi i hipoteze, Metodologija rada, Rezultati i
-Rasprava, Zakljucak te popis literature (Literatura) i drugih izvora podataka koji su koristeni u
-izradi zavrsnog rada i to navedenim redoslijedom.
-Strucna tema:
-Uvod, Tema � Podnsaslov1, Podnaslov 2, ..., Zakljucak te popis literature (Literatura) i
-drugih izvora podataka koji su koristeni u izradi zavrsnog rada i to navedenim redoslijedom.
-
-===== [kifst-upute-diplomski-2022 | str. 3] =====
-o Svaki pojedini naslov rada mora ii na novu stranicu, podnaslovi mogu poceti na pola
-    stranice
-
-o Odlomke ne treba uvlaciti ve ih odvojiti s jednom praznom linijom
-o Isticanje nekih informacija treba ciniti italic stilom (kosa slova), a ne bold ili podcrtano
-o Slike se numeriraju od 1. pa na dalje u cijelom radu, te isto tako se posebno numeriraju
-
-    Grafikoni i Tablice. Slike, tablice i slicne sustave treba obrojcati. Kratak opis slike ili
-    grafikona stavlja se ispod slike odnosno grafikona, a opis tablice stavlja se neposredno
-    iznad tablice. U tekstu kad se pozivate na slike, grafikone i tablice, treba stajati (Slika 1.)
-    ili u Tablici 2., ili na Grafikonu 3
-
-                     NAVOENJE LITERATURE
-
-Literatura u tekstu
-
 ===== [kifst-upute-diplomski-2022 | str. 4] =====
-o U tekstu je mogue citirati autora na nacin da se i autor i godina stave u zagradu (Prezime,
+o U tekstu je moguće citirati autora na način da se i autor i godina stave u zagradu (Prezime,
     godina) ili tako da se prvo navede prezime autora, a godina stavi u zagrade Prezime (godina).
 
-    Npr. Posljedicno ta mjerenja mogu pomoi u identifikaciji talenata (Carter, 1985) ili
-    Grgantov, Kati i Jankovi (2006) su imali za cilj utvrditi...
+    Npr. Posljedično ta mjerenja mogu pomoći u identifikaciji talenata (Carter, 1985) ili
+    Grgantov, Katić i Janković (2006) su imali za cilj utvrditi...
 
-o Kada se navodi istrazivanje do dva autora, uvijek se navode prezime/prezimena
-    autora. Ukoliko se u tekstu spominje istrazivanje veeg broja autora (od 3do 5) onda
-    kod prvog navoenja treba napisati prezimena svih autora, a u sljedeim navoenjima
+o Kada se navodi istraživanje do dva autora, uvijek se navode prezime/prezimena
+    autora. Ukoliko se u tekstu spominje istraživanje većeg broja autora (od 3do 5) onda
+    kod prvog navođenja treba napisati prezimena svih autora, a u sljedećim navođenjima
     samo prvog autora te dodatak i sur. Primjerice, prvi put: (Buss, Salovey, Schmitt i
-    Miller, 2005), a svaki sljedei put: (Buss i sur., 2005).
+    Miller, 2005), a svaki sljedeći put: (Buss i sur., 2005).
 
-o Ukoliko ima vise od pet autora onda se i pri prvom, a i pri kasnijim navoenjima
+o Ukoliko ima više od pet autora onda se i pri prvom, a i pri kasnijim navođenjima
     navodi samo prezime prvog autora i sur. (prezime prvog autora i sur., godina).
 
 o Pri doslovnom prepisivanju dijela teksta (citiranja), citat treba staviti u navodnike i
-    napisati na kojoj stranici izvornika se nalazi. Npr.: "Proces komunikacije sadrzi pet
+    napisati na kojoj stranici izvornika se nalazi. Npr.: "Proces komunikacije sadrži pet
     temeljnih elemenata. To su: komunikator, poruka, sredstvo komunikacije, primatelj
-    poruke i povratna informacija (feedback)" (Miljkovi, 2009, str.197).
+    poruke i povratna informacija (feedback)“ (Miljković, 2009, str.197).
 
 o Osnovno je pravilo da svako spominjanje autora u tekstu mora biti navedeno u popisu
-    literature na kraju rada. Vrijedi i obrnuto, sve sto se nalazi u popisu literature mora biti
+    literature na kraju rada. Vrijedi i obrnuto, sve što se nalazi u popisu literature mora biti
     spomenuto u samom radu.
 
 ===== [kifst-upute-diplomski-2022 | str. 5] =====
 Literatura na kraju teksta
 
-Redoslijed referenci u popisu koristene literature treba pisati abecednim redom prema
+Redoslijed referenci u popisu korištene literature treba pisati abecednim redom prema
 prezimenu prvog autora.
 
-1) Znanstveni clanci u casopisu
+1) Znanstveni članci u časopisu
 
-Pausi, J., Cavala, M., Kati, R. (2006). Relations of the Morphological Characteristic Latent
+Paušić, J., Čavala, M., Katić, R. (2006). Relations of the Morphological Characteristic Latent
 Structure and Body Posture Indicators in Children Aged Seven to Nine Years. Collegium
 Antropologicum, 30 (3), 621-627.
 
 2) Knjige
-Pinel, J. (2001). Bioloska psihologija. Jastrebarsko: Naklada Slap.
+Pinel, J. (2001). Biološka psihologija. Jastrebarsko: Naklada Slap.
 3) Doktorske disertacije, magistarski/diplomski radovi
-Pausi, J. (2007). Konstrukcija i vrednovanje mjernih postupaka za procijenu tjelesnog
+Paušić, J. (2007). Konstrukcija i vrednovanje mjernih postupaka za procijenu tjelesnog
+
+===== [kifst-upute-diplomski-2022 | str. 14] =====
+5. LITERATURA
+
+CITIRANJE I NAVOĐENJE IZVORA PO APA STANDARDU
+
+    1. Electronic reference formats recommended by the American Psychological
+         Association. (19.11.1999). Washington, DC: American Psychological Association.
+         Postavljeno 3.5.2000 sa http://www.apa.org/webref.html.
+
+    2. Meyer, A.S., Bock, K. (1992a). The tip of the tongue phenomenon: Blocking or partial
+         activation? [on-line]. Memory and cognition, 20, 715-726. Sažetak iz: DIALOG
+         Datoteka: PsycINFO: 80-16351
+
+    3. Meyer, A.S., Bock, K. (1992b). The tip-of-the-tongue phenomenon: Blocking or
+         partial activation? [CD-ROM]. Memory & Cognition, 20, 715-716. Sažetak iz:
+         SilverPlater Datoteka: PsycLIT: 80-16351
+
+    4. Paušić, J., Kosinac, Z., Pažanin, R. (2005). Procjena pouzdanosti i valjanosti mjernog
+         instrumenta Skoliozometra za valorizaciju pokazatelja tjelesnog držanja. U D. Sekulić,
+         B. Maleš, Đ. Miletić (ur.), Zbornik radova Međunarodno znanstveno-stručnog
+
+===== [kifst-upute-diplomski-2022 | str. 2] =====
+Poravnati brojeve stranica jedne ispod drugih na slijedeći način:
+numerirati pod 1. UVOD; napraviti jedan razmak –space-; kliknuti na Tabulatoru na npr. 14
+
+cm                     jednim lijevim klikom i postaviti slijedeće:
+
+Na svaki slijedeći navod u sadržaju nakon naslova i podnaslova pritisniti TAB
+
+te će se automatski napraviti linija za postavljanje brojke stranice.
+
+    4. OSTALE CJELINE RADA
+Znastveno-istraživačka tema:
+Uvod, Dosadašnja istraživanja, Cilj, Problemi i hipoteze, Metodologija rada, Rezultati i
+Rasprava, Zaključak te popis literature (Literatura) i drugih izvora podataka koji su korišteni u
+izradi završnog rada i to navedenim redoslijedom.
+Stručna tema:
+Uvod, Tema – Podnsaslov1, Podnaslov 2, …, Zaključak te popis literature (Literatura) i
+drugih izvora podataka koji su korišteni u izradi završnog rada i to navedenim redoslijedom.
+
+===== [kifst-upute-diplomski-2022 | str. 3] =====
+o Svaki pojedini naslov rada mora ići na novu stranicu, podnaslovi mogu početi na pola
+    stranice
+
+o Odlomke ne treba uvlačiti već ih odvojiti s jednom praznom linijom
+o Isticanje nekih informacija treba činiti italic stilom (kosa slova), a ne bold ili podcrtano
+o Slike se numeriraju od 1. pa na dalje u cijelom radu, te isto tako se posebno numeriraju
+
+    Grafikoni i Tablice. Slike, tablice i slične sustave treba obrojčati. Kratak opis slike ili
+    grafikona stavlja se ispod slike odnosno grafikona, a opis tablice stavlja se neposredno
+    iznad tablice. U tekstu kad se pozivate na slike, grafikone i tablice, treba stajati (Slika 1.)
+    ili u Tablici 2., ili na Grafikonu 3
+
+                     NAVOĐENJE LITERATURE
+
+Literatura u tekstu
 
 ===== [kifst-upute-diplomski-2022 | str. 7] =====
-Sadrzaj
+Sadržaj
 
 1. UVOD................................................................................................................ 4
 2. CILJ RADA....................................................................................................... 5
@@ -85,26 +106,5 @@ Sadrzaj
 
   3.1. Podnaslov 1 ................................................................................................. 6
   3.2 Podnaslov 2 ................................................................................................. 7
-4. ZAKLJUCAK ................................................................................................... 8
+4. ZAKLJUČAK ................................................................................................... 8
 5. LITERATURA .................................................................................................. 9
-
-===== [kifst-upute-diplomski-2022 | str. 14] =====
-5. LITERATURA
-
-CITIRANJE I NAVOENJE IZVORA PO APA STANDARDU
-
-    1. Electronic reference formats recommended by the American Psychological
-         Association. (19.11.1999). Washington, DC: American Psychological Association.
-         Postavljeno 3.5.2000 sa http://www.apa.org/webref.html.
-
-    2. Meyer, A.S., Bock, K. (1992a). The tip of the tongue phenomenon: Blocking or partial
-         activation? [on-line]. Memory and cognition, 20, 715-726. Sazetak iz: DIALOG
-         Datoteka: PsycINFO: 80-16351
-
-    3. Meyer, A.S., Bock, K. (1992b). The tip-of-the-tongue phenomenon: Blocking or
-         partial activation? [CD-ROM]. Memory & Cognition, 20, 715-716. Sazetak iz:
-         SilverPlater Datoteka: PsycLIT: 80-16351
-
-    4. Pausi, J., Kosinac, Z., Pazanin, R. (2005). Procjena pouzdanosti i valjanosti mjernog
-         instrumenta Skoliozometra za valorizaciju pokazatelja tjelesnog drzanja. U D. Sekuli,
-         B. Males, . Mileti (ur.), Zbornik radova Meunarodno znanstveno-strucnog

@@ -8,7 +8,7 @@ Snapshot: `data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf` (hash `a56354fe4ac7
 Otvori PDF: `data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf#page=2`
 ```
 PIN     : izvor propisuje stil "apa7" -> format ostaje obiteljski motor
-QUOTE   : humanistickom i umjetnickom podrucju APA (7. izdanje) stil referenciranja.   [grep: OK]
+QUOTE   : humanističkom i umjetničkom području APA (7. izdanje) stil referenciranja.   [grep: OK]
 ```
 
 ## Verifikacija

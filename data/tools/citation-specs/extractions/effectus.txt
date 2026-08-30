@@ -1,80 +1,80 @@
 ===== [effectus-pravilnik-2023 | str. 2] =====
-(1) Strucni kratki studij i strucni prijediplomski studij zavrsavaju polaganjem ispita,
-         izvrsenjem drugih studijskih obveza te izradom i obranom zavrsnog rada.
+(1) Stručni kratki studij i stručni prijediplomski studij završavaju polaganjem ispita,
+         izvršenjem drugih studijskih obveza te izradom i obranom završnog rada.
 
-    (2) Strucni diplomski studij zavrsava polaganjem ispita, izvrsenjem drugih studijskih
+    (2) Stručni diplomski studij završava polaganjem ispita, izvršenjem drugih studijskih
          obveza te izradom i obranom diplomskog rada.
 
-                                                   Clanak 3.
+                                                   Članak 3.
 
-    (1) Pisani zavrsni rad i diplomski rad je samostalni pisani rad studenta te predstavlja
-         samostalnu strucnu obradu odreenog problema strucne prirode.
+    (1) Pisani završni rad i diplomski rad je samostalni pisani rad studenta te predstavlja
+         samostalnu stručnu obradu određenog problema stručne prirode.
 
-    (2) Pisanim zavrsnim i diplomskim radom student dokazuje da je na temelju znanja
-         stecenog tijekom studija i na temelju koristene literature ovladao zadanom temom,
-         da je temu obradio metodama, da poznaje koristenu strucnu literaturu i da je
-         ispravno navodi te da vlada strucnom terminologijom. U pisanom zavrsnom i
-         diplomskom radu treba doi do izrazaja sposobnost samostalnog razmisljanja
-         studenta, kao i sposobnost donosenja prosudbi, zakljucaka ili prijedloga za rjesavanje
+    (2) Pisanim završnim i diplomskim radom student dokazuje da je na temelju znanja
+         stečenog tijekom studija i na temelju korištene literature ovladao zadanom temom,
+         da je temu obradio metodama, da poznaje korištenu stručnu literaturu i da je
+         ispravno navodi te da vlada stručnom terminologijom. U pisanom završnom i
+         diplomskom radu treba doći do izražaja sposobnost samostalnog razmišljanja
+         studenta, kao i sposobnost donošenja prosudbi, zaključaka ili prijedloga za rješavanje
          postavljenog problema.
 
-    (3) Svrha zavrsnog i diplomskog rada je potvrivanje studentovog poznavanja temeljnih
-         podrucja struke iz nastavnih predmeta studijskog programa, studentove sposobnosti i
-         samostalnosti u obradi problema iz struke koja je predmet studija, uz koristenje
-         literature, empirijskih istrazivanja, racunske i analiticke obrade, znanja i iskustva
-         strucnjaka iz prakse te svih ostalih izvora neophodnih za izradu rada.
+    (3) Svrha završnog i diplomskog rada je potvrđivanje studentovog poznavanja temeljnih
+         područja struke iz nastavnih predmeta studijskog programa, studentove sposobnosti i
+         samostalnosti u obradi problema iz struke koja je predmet studija, uz korištenje
+         literature, empirijskih istraživanja, računske i analitičke obrade, znanja i iskustva
+         stručnjaka iz prakse te svih ostalih izvora neophodnih za izradu rada.
 
     (4) Izradom rada student treba dokazati:
-             � Sposobnost za samostalno istrazivanje i rjesavanje slozenijih prakticnih
-                  problema iz podrucja svoje specijalizacije,
-             � Sposobnost samostalne primjene stecenih teorijskih i prakticnih znanja,
-                  sposobnost njihova povezivanja kao i sposobnost ispravnog koristenja
-                  istrazivackih metoda,
+             • Sposobnost za samostalno istraživanje i rješavanje složenijih praktičnih
+                  problema iz područja svoje specijalizacije,
+             • Sposobnost samostalne primjene stečenih teorijskih i praktičnih znanja,
+                  sposobnost njihova povezivanja kao i sposobnost ispravnog korištenja
+                  istraživačkih metoda,
 
 ===== [effectus-pravilnik-2023 | str. 6] =====
-(2) Ukoliko student ne diplomira u predvienom roku student je obvezan ponoviti proces
-    prijave i obrane zavrsnog rada.
+(2) Ukoliko student ne diplomira u predviđenom roku student je obvezan ponoviti proces
+    prijave i obrane završnog rada.
 
-Izrada pisanog zavrsnog i diplomskog rada
+Izrada pisanog završnog i diplomskog rada
 
-                                                  Clanak 14.
+                                                  Članak 14.
 
-(1) Zadatak zavrsnog i diplomskog rada mora biti takav da ga student moze izraditi u
-    vremenu koje odgovara predvienim ECTS bodovima (1 ECTS = 30 radnih sati).
+(1) Zadatak završnog i diplomskog rada mora biti takav da ga student može izraditi u
+    vremenu koje odgovara predviđenim ECTS bodovima (1 ECTS = 30 radnih sati).
 
-(2) Student samostalno izrauje rad s pravom i obvezom redovitih konzultacija s mentorom,
-    uz koristenje udzbenika i druge literature, misljenja strucnjaka iz prakse i ostalih
-    dostupnih informacija te izvodi zahtijevane preinake i dorade postujui pri tom odredbe
+(2) Student samostalno izrađuje rad s pravom i obvezom redovitih konzultacija s mentorom,
+    uz korištenje udžbenika i druge literature, mišljenja stručnjaka iz prakse i ostalih
+    dostupnih informacija te izvodi zahtijevane preinake i dorade poštujući pri tom odredbe
     ovog Pravilnika.
 
-(3) Student oblikuje rad u konceptu sa svim pripadajuim dijelovima. Koncept se daje
-    mentoru na uvid i pregled. Student je duzan postupiti prema uputama i primjedbama
-    mentora. Ako student ne postupi po naputcima i primjedbama mentora, rad se vraa
+(3) Student oblikuje rad u konceptu sa svim pripadajućim dijelovima. Koncept se daje
+    mentoru na uvid i pregled. Student je dužan postupiti prema uputama i primjedbama
+    mentora. Ako student ne postupi po naputcima i primjedbama mentora, rad se vraća
     studentu na doradu.
 
-(4) Mentor je duzan pregledati koncept rada i vratiti ga studentu najkasnije za dva tjedna od
+(4) Mentor je dužan pregledati koncept rada i vratiti ga studentu najkasnije za dva tjedna od
      primitka.
 
-Duznosti mentora i suradnja sa studentom
-                                                  Clanak 15.
+Dužnosti mentora i suradnja sa studentom
+                                                  Članak 15.
 
-(1) Tijekom izrade rada student je duzan izvjesivati i konzultirati mentora, a narocito u
-    razdoblju idejne zamisli rjesenja, glavne zamisli rjesenja i realizacije rada. Izvjesivanje i
+(1) Tijekom izrade rada student je dužan izvješćivati i konzultirati mentora, a naročito u
+    razdoblju idejne zamisli rješenja, glavne zamisli rješenja i realizacije rada. Izvješćivanje i
     konzultiranje obavlja se u terminima redovnih konzultacija ili putem e-mail komunikacije.
 
-(2) Mentor je obvezan pratiti rad studenta, pomagati mu savjetima i upuivanjem na
-    literaturu, a moze zahtijevati doradu, izmjenu, odnosno dopunu rada. Student je duzan
+(2) Mentor je obvezan pratiti rad studenta, pomagati mu savjetima i upućivanjem na
+    literaturu, a može zahtijevati doradu, izmjenu, odnosno dopunu rada. Student je dužan
     postupiti prema uputama i primjedbama mentora.
 
-Predaja zavrsnog i diplomskog rada
+Predaja završnog i diplomskog rada
 
-                                                  Clanak 16.
-(1) Student moze predati rad samo ako je polozio sve propisane ispite unutar upisanog
+                                                  Članak 16.
+(1) Student može predati rad samo ako je položio sve propisane ispite unutar upisanog
 
-    studijskog programa, ispunio druge studentske uvjete i ako je ispunio sve druge utvrene
+    studijskog programa, ispunio druge studentske uvjete i ako je ispunio sve druge utvrđene
     ili ugovorene studentske obveze prema EFFECTUS-u.
-(2) Student ucitava rad u sustav digitalne referade u podsustavu za prijavu zavrsnog i
-    diplomskog rada samo ukoliko je prethodno dobio misljenje mentora da rad zadovoljava
+(2) Student učitava rad u sustav digitalne referade u podsustavu za prijavu završnog i
+    diplomskog rada samo ukoliko je prethodno dobio mišljenje mentora da rad zadovoljava
     kvalitetom i opsegom.
 
 ===== [effectus-pravilnik-2023 | str. 14] =====
@@ -85,15 +85,15 @@ Predaja zavrsnog i diplomskog rada
    5.2. Unutarnja stranica......................................................................................................................... 7
    5.3. Predgovor ..................................................................................................................................... 7
    5.4. Obrazac prijava teme..................................................................................................................... 7
-   5.5. Sazetak / Abstract......................................................................................................................... 8
-   5.6. Sadrzaj.......................................................................................................................................... 8
+   5.5. Sažetak / Abstract......................................................................................................................... 8
+   5.6. Sadržaj.......................................................................................................................................... 8
    5.7. Uvodni dio.................................................................................................................................... 8
    5.8. Obrada teme (tekst rada) .............................................................................................................. 8
 
      5.8.1. Citiranje literature.................................................................................................................. 9
       5.8.2. Izvori slika, shema i tablica................................................................................................. 10
       5.8.3. Kratice ................................................................................................................................. 11
-   5.9. Zakljucak.................................................................................................................................... 11
+   5.9. Zaključak.................................................................................................................................... 11
    5.10. Popis kratica ............................................................................................................................. 11
    5.11. Popis slika, tablica, shema, prilozi i sl...................................................................................... 11
    5.12. Popis literature.......................................................................................................................... 12
@@ -101,122 +101,126 @@ Predaja zavrsnog i diplomskog rada
 PRILOZI: .............................................................................................................................................. 13
    Primjer 1: Naslovna (vanjska) stranica seminarskog rada................................................................. 14
    Primjer 2: Unutarnja stranica naslovnice seminarskog rada ............................................................. 15
-   Primjer 3: Vanjska stranica naslovnice zavrsnog rada ...................................................................... 16
-   Primjer 4: Unutarnja stranica naslovnice zavrsnog rada ................................................................... 17
-   Primjer 5: Vanjska stranica naslovnice specijalistickog diplomskog rada....................................... 18
-   Primjer 6: Unutarnja stranica naslovnice specijalistickog diplomskog rada ..................................... 19
-  Primjer 7: Tema i opis zadatka zavrsnog rada sa zahtjevom za odobrenje i potvrdom o prihvaanju
+   Primjer 3: Vanjska stranica naslovnice završnog rada ...................................................................... 16
+   Primjer 4: Unutarnja stranica naslovnice završnog rada ................................................................... 17
+   Primjer 5: Vanjska stranica naslovnice specijalističkog diplomskog rada....................................... 18
+   Primjer 6: Unutarnja stranica naslovnice specijalističkog diplomskog rada ..................................... 19
+  Primjer 7: Tema i opis zadatka završnog rada sa zahtjevom za odobrenje i potvrdom o prihvaćanju
    ........................................................................................................................................................... 20
-   Primjer 8: Mentorska suglasnost, prijava i obrazlozenje teme diplomskog rada sa zahtjevom za
-   odobrenje i potvrdom o prihvaanju teme.........................................................................................
+   Primjer 8: Mentorska suglasnost, prijava i obrazloženje teme diplomskog rada sa zahtjevom za
+   odobrenje i potvrdom o prihvaćanju teme.........................................................................................
+   22
+   Primjer 9: Naslov i navođenje izvora slike........................................................................................ 24
+   Primjer 10: Naslov i navođenje izvora tablice .................................................................................. 25
+   Primjer 11: Potvrda o lekturi-sadržaj................................................................................................. 26
 
 ===== [effectus-pravilnik-2023 | str. 15] =====
-pisanja seminarskog rada je usvajanje znanja i vjestina istrazivanja odreene teme ili podrucja,
-savladavanje i prosirenje znanja iz sadrzaja nastavnog programa, stjecanje iskustva u akademskom i
-strucnom izrazavanju te stjecanje prakse pisanja strucnih radova, kako bi studenti lakse i
-kvalitetnije napisali zavrsni, odnosno diplomski rad. Pisanje rada pokazuje poznavanje strucne
-terminologije, odnosa meu pojavama koje se unutar odreenog predmeta izucavaju,
-razumijevanje podrucja koje se obrauje te sposobnost studenta da izlozi odreenu
-problematiku, analizira zadanu temu i istu komentira u skladu s pravilima i obicajima struke. Tema
-mora obraena do adekvatne razine granularnosti.
+pisanja seminarskog rada je usvajanje znanja i vještina istraživanja određene teme ili područja,
+savladavanje i proširenje znanja iz sadržaja nastavnog programa, stjecanje iskustva u akademskom i
+stručnom izražavanju te stjecanje prakse pisanja stručnih radova, kako bi studenti lakše i
+kvalitetnije napisali završni, odnosno diplomski rad. Pisanje rada pokazuje poznavanje stručne
+terminologije, odnosa među pojavama koje se unutar određenog predmeta izučavaju,
+razumijevanje područja koje se obrađuje te sposobnost studenta da izloži određenu
+problematiku, analizira zadanu temu i istu komentira u skladu s pravilima i običajima struke. Tema
+mora obrađena do adekvatne razine granularnosti.
 
-Izrada zavrsnog odnosno diplomskog rada je obaveza svakog studenta, a pokazuje sposobnost
-studenta da samostalno, uz vodstvo mentora obradi odabranu temu. Izradom zavrsnog odnosno
-diplomskog rada student dokazuje da je tijekom studija stekao sposobnost da primjeni stecena znanja
+Izrada završnog odnosno diplomskog rada je obaveza svakog studenta, a pokazuje sposobnost
+studenta da samostalno, uz vodstvo mentora obradi odabranu temu. Izradom završnog odnosno
+diplomskog rada student dokazuje da je tijekom studija stekao sposobnost da primjeni stečena znanja
 i znanstvene metode, da prikupi i obradi relevantnu literaturu te da temeljem literature obradi
-odreenu temu i kriticki se osvrne na spoznaje koje se na tu temu odnose.
+određenu temu i kritički se osvrne na spoznaje koje se na tu temu odnose.
 
-Seminarski, zavrsni i diplomski rad predstavljaju samostalno djelo studenta, a ne prepisivanje
-razlicitih odlomaka ili veih cjelina razlicitih autora. To znaci da doprinos studenta u tekstu mora biti
-minimalno 50%, a tekst drugih autora mora biti jasno naznacen, o cemu se vise govori u poglavlju 5.8.
+Seminarski, završni i diplomski rad predstavljaju samostalno djelo studenta, a ne prepisivanje
+različitih odlomaka ili većih cjelina različitih autora. To znači da doprinos studenta u tekstu mora biti
+minimalno 50%, a tekst drugih autora mora biti jasno naznačen, o čemu se više govori u poglavlju 5.8.
 
-2. Odabir teme seminarskog, zavrsnog i diplomskog rada
+2. Odabir teme seminarskog, završnog i diplomskog rada
 
-Student temu seminarskog, zavrsnog i diplomskog rada moze odabrati na dva nacina. Prvi nacin je da
+Student temu seminarskog, završnog i diplomskog rada može odabrati na dva načina. Prvi način je da
 
-student odabere jednu od predlozenih tema koje predlaze nastavnik, nositelj predmeta. Drugi nacin je
+student odabere jednu od predloženih tema koje predlaže nastavnik, nositelj predmeta. Drugi način je
 
 ===== [effectus-pravilnik-2023 | str. 16] =====
-precizno odreen posebnim pravilnikom i sastoji se od vise koraka.
+precizno određen posebnim pravilnikom i sastoji se od više koraka.
 
-2.1. Rokovi predaje seminarskog, zavrsnog i diplomskog rada
+2.1. Rokovi predaje seminarskog, završnog i diplomskog rada
 
-Rok predaje seminarskog rada nastavnik moze odrediti unaprijed ili moze sa studentom dogovoriti
+Rok predaje seminarskog rada nastavnik može odrediti unaprijed ili može sa studentom dogovoriti
 rok predaje seminarskog rada individualno za svaki rad.
 
-Rokovi vezani uz izradu i predaju zavrsnog odnosno diplomskog rada definirani su posebnim
-pravilnikom i usklauju se s mentorom.
+Rokovi vezani uz izradu i predaju završnog odnosno diplomskog rada definirani su posebnim
+pravilnikom i usklađuju se s mentorom.
 
-2.2. Pocetak pisanja seminarskog, zavrsnog i diplomskog rada
+2.2. Početak pisanja seminarskog, završnog i diplomskog rada
 
-Pocetak pisanja rada zapocinje prikupljanjem relevantne literature (knjige, zbornici, clanci,
+Početak pisanja rada započinje prikupljanjem relevantne literature (knjige, zbornici, članci,
 Internet izvori i sl.). Prikupljanje i odabir literature sastavni je dio izrade rada i pokazuje sposobnost
-studenta da istrazi dostupnu i identificira relevantnu literaturu te da unutar odabranih
-izvora odabere informacije koje smatra vaznima za navedenu temu.
+studenta da istraži dostupnu i identificira relevantnu literaturu te da unutar odabranih
+izvora odabere informacije koje smatra važnima za navedenu temu.
 
 Za pisanje seminarskog rada potrebno je koristiti minimalno pet izvora, od toga najmanje dvije knjige.
 
-Za pisanje zavrsnog odnosno diplomskog rada potrebno je obraditi svu relevantnu i dostupnu
-literaturu. Pozeljno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski
+Za pisanje završnog odnosno diplomskog rada potrebno je obraditi svu relevantnu i dostupnu
+literaturu. Poželjno je koristiti i literaturu na stranim jezicima, ukoliko ista nije prevedena na hrvatski
 jezik.
 
-Prije pocetka pisanja student e prouciti literaturu koju je prikupio, zatim osmisliti strukturu
-samog teksta rada i tek tada zapoceti s pisanjem rada. Prije pocetka pisanja student se treba
-konzultirati s mentorom, koji prema potrebi moze predloziti korekcije u strukturi teksta rada.
+Prije početka pisanja student će proučiti literaturu koju je prikupio, zatim osmisliti strukturu
+samog teksta rada i tek tada započeti s pisanjem rada. Prije početka pisanja student se treba
+konzultirati s mentorom, koji prema potrebi može predložiti korekcije u strukturi teksta rada.
 
-Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih cinjenica te kriticki
-osvrt studenta na te cinjenice. Pored teorijskog dijela, s obzirom na vrstu studija, pozeljno je da rad
-sadrzi i prakticni dio, npr. istrazivanje, analizu odreenog poduzea, prikaz poslovnog slucaja, pravnog
-problema ili situacije i slicno.
+Svaki rad se sastoji od teorijskog dijela, koji treba predstavljati sintezu relevantnih činjenica te kritički
+osvrt studenta na te činjenice. Pored teorijskog dijela, s obzirom na vrstu studija, poželjno je da rad
+sadrži i praktični dio, npr. istraživanje, analizu određenog poduzeća, prikaz poslovnog slučaja, pravnog
+problema ili situacije i slično.
 
-3. Tehnicki detalji
+3. Tehnički detalji
 
-Rad se pise na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti
-napisan na racunalu i ispisan na racunalnom pisacu. Tekst se pocinje pisati na vrhu, a ne na sredini
+Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane. Rad treba biti
+napisan na računalu i ispisan na računalnom pisaču. Tekst se počinje pisati na vrhu, a ne na sredini
 
 ===== [effectus-pravilnik-2023 | str. 16] =====
 poglavlja nema razmaka.
 
-Sluzbeni Font EFFECTUS-a koji se mora koristiti je Times New Roman velicine slova 12pt.
+Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.
 
-Tekst je potrebno poravnati s obje strane (General Alignement � Justify), razmak izmeu redaka treba
-biti 1,15, a razmak iza svakog odlomka 6pt. Pocetak odlomka nije uvucen. Formatiranje
+Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba
+biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen. Formatiranje
 odlomka prikazano je na slici 1.
 
 Opseg seminarskog rada mora iznositi 10-20 stranica.
 
-Opseg zavrsnog rada mora iznositi 35-50 stranica (od uvoda do zakljucka; u ovaj opseg ne uracunava
+Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava
 
-se  naslovna  stranica,  sadrzaj                      i  popis                           literature).
+se  naslovna  stranica,  sadržaj                      i  popis                           literature).
 
 ===== [effectus-pravilnik-2023 | str. 17] =====
-Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zakljucka; u ovaj opseg ne
-uracunava se naslovna stranica, sadrzaj i popis literature).
+Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne
+uračunava se naslovna stranica, sadržaj i popis literature).
 
 Slika 1: Formatiranje odlomka
 
-Tekst mora biti jasan, gramaticki i pravopisno ispravan. U pisanju je potrebno posebno obratiti paznju
-na pravilo prema kojem izmeu teksta i znaka interpunkcije nema razmaka, ve razmak dolazi
-iza znaka interpunkcije; iznimka moze biti crtica (-): ako izmeu rijeci i tog znaka nema razmaka, znaci
-da se radi o jednoj rijeci.
+Tekst mora biti jasan, gramatički i pravopisno ispravan. U pisanju je potrebno posebno obratiti pažnju
+na pravilo prema kojem između teksta i znaka interpunkcije nema razmaka, već razmak dolazi
+iza znaka interpunkcije; iznimka može biti crtica (-): ako između riječi i tog znaka nema razmaka, znači
+da se radi o jednoj riječi.
 
 4. Stil pisanja
 
-Rad se uobicajeno pise u treem licu, a izbjegava se da autor spominje sam sebe (npr. ,,Prema
-mojem misljenju" i sl.) Ukoliko autor zeli istaknuti svoje misljenje, upotrebljava navod kao sto
+Rad se uobičajeno piše u trećem licu, a izbjegava se da autor spominje sam sebe (npr. „Prema
+mojem mišljenju“ i sl.) Ukoliko autor želi istaknuti svoje mišljenje, upotrebljava navod kao što
 
 ===== [effectus-pravilnik-2023 | str. 18] =====
 Obrazac prijava teme                   Neobavezno     Neobavezno      Neobavezno
-Sazetak                                Neobavezno      Obavezno         Obavezno
+Sažetak                                Neobavezno      Obavezno         Obavezno
 Abstract                               Neobavezno      Obavezno         Obavezno
-Sadrzaj                                Neobavezno      Obavezno         Obavezno
+Sadržaj                                Neobavezno      Obavezno         Obavezno
 Content                                 Obavezno       Obavezno         Obavezno
 Uvodni dio                             Neobavezno      Obavezno         Obavezno
 Obrada teme (tekst rada)                Obavezno       Obavezno         Obavezno
-Zakljucak                               Obavezno       Obavezno         Obavezno
-Izjava o akademskoj cestitosti          Obavezno       Obavezno         Obavezno
+Zaključak                               Obavezno       Obavezno         Obavezno
+Izjava o akademskoj čestitosti          Obavezno       Obavezno         Obavezno
 Popis kratica i akronima               Neobavezno      Obavezno         Obavezno
-(ukoliko su koristeni u radu)          Neobavezno     Neobavezno
+(ukoliko su korišteni u radu)          Neobavezno     Neobavezno
 Popis slika, tablica i grafikona                                      Neobavezno
 Popis literature i drugih               Obavezno       Obavezno
 izvora podataka                         Obavezno       Obavezno         Obavezno
@@ -227,61 +231,83 @@ Prilozi                                Neobavezno      Obavezno
 
 5.1. Korice
 
-Na naslovnoj stranici treba pisati sljedee:
+Na naslovnoj stranici treba pisati sljedeće:
 
 naziv institucije,
 
-===== [effectus-pravilnik-2023 | str. 19] =====
-mjesto, mjesec i godina predaje rada.
-
-Izgled (unutarnje) naslovne stranice seminarskog rada prikazan je u prilogu 2.
-
-Izgled (unutarnje) naslovne stranice zavrsnog rada prikazan je u prilogu 4, a primjer izgleda
-(unutarnje) naslovne stranice za diplomski rad u prilogu 6.
-
-5.3. Predgovor
-
-Predgovor nije obvezatan dio sadrzaja rada. Student ga moze, ali i ne mora uvrstiti u strukturu rada.
-Predgovor je mjesto na kojem student, ukoliko za to osjea potrebu, izrazava neke osobne
-poruke citateljima zavrsnoga odnosno diplomskog rada ili osobama koje su mu znacajnije pomagale u
-izradi zavrsnog rada. Najcese su to poruke kao sto su:
-
-     � temeljni poticaji za izbor teme rada
-
-     � poteskoe i ogranicenja koja su mu stajala na putu izrade rada
-
-     � izrazi zahvalnosti onima koji su mu na osobit nacin pomogli ili pridonijeli uspjesnoj realizaciji
-         rada itd.
-
-Predgovor treba pisati uctivo, jezgrovito, bez pateticnosti i suvisnog naglasavanja stanovitih cinjenica
-te vlastitih zasluga. Sadrzaj predgovora ne bi trebao biti duzi od jedne stranice.
-
 ===== [effectus-pravilnik-2023 | str. 20] =====
-Sadrzaj predstavlja tematski sazetak rada, sastoji se od naslova i stranica svih poglavlja. Naslov
- SADRZAJ pise se velikim slovima centrirano na vrhu stranice. Stranica sadrzaja oznacava se rimskim
- brojem I, a moze ostati i neoznacena.
-
- U zavrsnom i diplomskom radu, sadrzaj osim na hrvatskom, mora biti napisan i na engleskom jeziku.
-
- Najpregledniji nacin za oznacavanje dijelova rada predstavlja decimalni sustav brojeva. Svaka sa glava
- oznacava arapskim brojem. Prva znamenka svakog poglavlja podudara se s brojem glave kojoj
- poglavlje pripada, a druga oznacava redni broj navedenog poglavlja.
+Najpregledniji način za označavanje dijelova rada predstavlja decimalni sustav brojeva. Svaka sa glava
+ označava arapskim brojem. Prva znamenka svakog poglavlja podudara se s brojem glave kojoj
+ poglavlje pripada, a druga označava redni broj navedenog poglavlja.
 
  5.7. Uvodni dio
 
- Uvod je pocetni i pristupni dio rada kojim autor treba citatelja uvesti u podrucje i tematiku
- rada, upoznati ga s problematikom i predmetom koji se obrauje u radu, svrhom i ciljevima te
- strukturom rada. U uvodu treba naznaciti izvore podataka i nacine njihovog prikupljanja i obrade. U
- uvodu se ne iznose zakljucci. Ne smije biti krai od 2/3 stranice i duzi od jedne stranice.
+ Uvod je početni i pristupni dio rada kojim autor treba čitatelja uvesti u područje i tematiku
+ rada, upoznati ga s problematikom i predmetom koji se obrađuje u radu, svrhom i ciljevima te
+ strukturom rada. U uvodu treba naznačiti izvore podataka i načine njihovog prikupljanja i obrade. U
+ uvodu se ne iznose zaključci. Ne smije biti kraći od 2/3 stranice i duži od jedne stranice.
 
- Nije uobicajeno da uvod sadrzi definicije, citate, slike, tablice i slicno, ve predstavlja
+ Nije uobičajeno da uvod sadrži definicije, citate, slike, tablice i slično, već predstavlja
  samostalni uradak studenta.
 
- Stranice se pocinju numerirati od uvoda, odnosno stranica uvoda je ujedno i prva stranica
- kojom zapocinje numeriranje. Rijec UVOD pise se velikim slovima i oznacava arapskim brojem 1.
+ Stranice se počinju numerirati od uvoda, odnosno stranica uvoda je ujedno i prva stranica
+ kojom započinje numeriranje. Riječ UVOD piše se velikim slovima i označava arapskim brojem 1.
 
 5.8. Obrada teme (tekst rada)
 
- Tekst rada obuhvaa razradu rada i predstavlja sredisnji i najopsezniji dio rada. U njemu se
- teme izlazu po glavama, poglavljima, odnosno tematskim cjelinama. Sadrzaj u tijelu teksta mora biti
- logicki rasporeen.
+ Tekst rada obuhvaća razradu rada i predstavlja središnji i najopsežniji dio rada. U njemu se
+ teme izlažu po glavama, poglavljima, odnosno tematskim cjelinama. Sadržaj u tijelu teksta mora biti
+ logički raspoređen.
+
+===== [effectus-pravilnik-2023 | str. 22] =====
+(6) Internet izvori: Autor, naslov rada, godina, točan link, datum pristupa web stranici. Ukoliko bilo
+    koji od elemenata autor, naslov rada ili godina nije naznačen na web stranici, tada se navodi točan
+    link i datum pristupa stranici.
+
+Marcelić, S. (2010) Plagijat u hrvatskoj akademskoj zajednici: (ne)uspješna borba i
+moguća  rješenja,  http://www.iro.hr/hr/javne-politike-visokog-
+obrazovanja/kolumna/plagijat-u-hrvatskoj-akademskoj- zajednici/, pristup: 01.02.2012.
+
+    Knowledge Management, http://www.nwlink.com/~donclark/knowledge/km.html,
+    pristup: 01.02.2012.
+
+Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word
+dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert
+Footnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju
+brojčanim redoslijedom.
+
+U citiranju je obavezno potrebno navesti broj stranice na kojoj se nalazi citat, dok se u popisu
+literature navodi samo djelo, bez brojeva stranica.
+
+===== [effectus-pravilnik-2023 | str. 23] =====
+5.8.2. Izvori slika, shema i tablica
+
+Student u radu može koristiti slike, formule i tablice. One ne predstavljaju samo dodatak tekstu već
+predstavljaju važan dio rada i obvezno se u tekstu mora pozivati na njih navodeći njihov
+
+broj. Izvori slika, shema i tablica prikazuju se na sljedeći način:
+
+Iznad slike/sheme/tablice navodi se broj slike/sheme/tablice i njezin naslov. Izvor iz kojeg je preuzeta
+navodi se ispod slike/sheme/tablice. Ukoliko je slika vlastiti rad autora, izvor se ne navodi. Dodatna
+objašnjenja mogu se dati u tekstu uz povezivanje s rednim brojem slike ili tablice.
+
+Način naslovljavanja i navođenja izvora prikazan je u primjerima 9 i 10 u prilozima ovih Uputa.
+
+Slike, sheme i tablice numeriraju se arapskim brojevima, a numeriranje počinje brojem 1 (npr. tablica
+1, tablica 2, tablica 3, tablica X,…).
+
+Formule se obilježavaju brojevima u okrugloj zagradi, a u tekstu se treba pozvati na redni broj
+formule.
+
+Popis slika, tablica i formula dodaje se na kraju završnog rada, iza zaključka.
+
+5.8.3. Kratice
+
+Student u radu može koristiti kratice.
+
+===== [effectus-pravilnik-2023 | str. 34] =====
+Primjer 9: Naslov i navođenje izvora slike
+
+Slika 1: Strategija marketinškog spleta
+
+Izvor: Kotler, Ph. i Keller, K.L. (2006) Upravljanje marketingom, dvanaesto izdanje, Mate, Zagreb, str. 19

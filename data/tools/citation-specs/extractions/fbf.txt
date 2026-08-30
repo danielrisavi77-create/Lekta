@@ -1,109 +1,109 @@
 ===== [fbf-upute-spec-2014 | str. 2] =====
-Naslov rada najsazetije opisuje ciljeve i ocekivani doprinos rada i treba biti lektoriran.
+Naslov rada najsažetije opisuje ciljeve i očekivani doprinos rada i treba biti lektoriran.
 
-1. Kljucne rijeci
+1. Ključne riječi
 
-Potrebno je navesti 3-7 kljucnih rijeci koje najbolje odrazavaju ciljeve i ocekivani
-doprinos rada. Kljucne rijeci trebaju biti napisane abecednim redom na hrvatskom
+Potrebno je navesti 3-7 ključnih riječi koje najbolje odražavaju ciljeve i očekivani
+doprinos rada. Ključne riječi trebaju biti napisane abecednim redom na hrvatskom
 jeziku, a odmah potom i na engleskom jeziku.
 
 2. Prikaz problema
 
-Opisati ukratko problematiku koja se predlaze za ispitivanje. Navesti jesu li takva
-ispitivanja ve provedena, kada, gdje i tko ih je nacinio, koje su razlike u odnosu na ovo
-ispitivanje, zasto je vazna takva vrst istrazivanja. Svi se navodi iz literature citiraju
-Vancouverskim stilom, tj. prema redoslijedu pojavljivanja, a u tekstu obrazlozenja teme
+Opisati ukratko problematiku koja se predlaže za ispitivanje. Navesti jesu li takva
+ispitivanja već provedena, kada, gdje i tko ih je načinio, koje su razlike u odnosu na ovo
+ispitivanje, zašto je važna takva vrst istraživanja. Svi se navodi iz literature citiraju
+Vancouverskim stilom, tj. prema redoslijedu pojavljivanja, a u tekstu obrazloženja teme
 navode se brojem u zagradi (1).
 
 3. Cilj ispitivanja
 
-Kratko, navesti cilj ili ciljeve ispitivanja, odnosno strucno-znanstvenu hipotezu
+Kratko, navesti cilj ili ciljeve ispitivanja, odnosno stručno-znanstvenu hipotezu
 ispitivanja.
 
 4. Materijal/ispitanici i metode
 4.1. Materijal (Ispitanici)
 
-Opisati ocekivani plan rada, s naglaskom na opisu materijala i/ili ispitanika koji e se
-obraivati � tko su ispitanici, koliko je velik uzorak ispitanika, kako su ispitanici
+Opisati očekivani plan rada, s naglaskom na opisu materijala i/ili ispitanika koji će se
+obrađivati – tko su ispitanici, koliko je velik uzorak ispitanika, kako su ispitanici
 odabrani za ispitivanje, u kojem uzorku se izvode mjerenja i kako i kada je prikupljen, da
-li postoji i tko cini kontrolnu skupinu, i sl.
+li postoji i tko čini kontrolnu skupinu, i sl.
 
 4.2. Metode
-Odrediti i opisati pokazatelje koji e se mjeriti u tijeku ispitivanja te metode kojima e se
-ta ispitivanja naciniti.. Svi postupci u ispitivanju moraju biti navedeni, protumaceni,
-obrazlozeni ili popraeni literaturnim navodom objavljenog rada u kojem su detaljno
-objasnjeni. Mjerni sustavi, ureaji i pomona sredstva moraju biti jasno navedeni
-nazivom (proizvoacem, gradom i drzavom proizvodnje u zagradi iza naziva).
+Odrediti i opisati pokazatelje koji će se mjeriti u tijeku ispitivanja te metode kojima će se
+ta ispitivanja načiniti.. Svi postupci u ispitivanju moraju biti navedeni, protumačeni,
+obrazloženi ili popraćeni literaturnim navodom objavljenog rada u kojem su detaljno
+objašnjeni. Mjerni sustavi, uređaji i pomoćna sredstva moraju biti jasno navedeni
+nazivom (proizvođačem, gradom i državom proizvodnje u zagradi iza naziva).
 
 ===== [fbf-upute-spec-2014 | str. 3] =====
 mjerodavnim dokumentima.
 
-b) Na eksperimentalnim zivotinjama
-U prijavi je potrebno napisati da li e istrazivanje biti u skladu s vazeim zakonskim
-propisima te bioetickim standardima o provoenju pokusa na eksperimentalnim
-zivotinjama, odnosno izbjegavanjem nepotrebnih pokusa i patnje eksperimentalnih
-zivotinja.
+b) Na eksperimentalnim životinjama
+U prijavi je potrebno napisati da li će istraživanje biti u skladu s važećim zakonskim
+propisima te bioetičkim standardima o provođenju pokusa na eksperimentalnim
+životinjama, odnosno izbjegavanjem nepotrebnih pokusa i patnje eksperimentalnih
+životinja.
 
-4.3. Statisticka obrada podataka
+4.3. Statistička obrada podataka
 
-Kratko opisati kako e se prikupljati podaci, kojih e biti osobina i mjernih ljestvica,
-kojim statistickim postupcima e biti analizirani i zasto. Statisticke postupke treba
-opisati i citirati izvornim radovima te navesti ocekivanu uporabu racunalnih programa
+Kratko opisati kako će se prikupljati podaci, kojih će biti osobina i mjernih ljestvica,
+kojim statističkim postupcima će biti analizirani i zašto. Statističke postupke treba
+opisati i citirati izvornim radovima te navesti očekivanu uporabu računalnih programa
 za obradu podataka.
 
-5. Ocekivani doprinos
+5. Očekivani doprinos
 
-Jasno i kratko napisati sto se ocekuje kao izvorni doprinos ovog ispitivanja, odnosno
-strucno-znanstvenu opravdanost ispitivanja.
+Jasno i kratko napisati što se očekuje kao izvorni doprinos ovog ispitivanja, odnosno
+stručno-znanstvenu opravdanost ispitivanja.
 
 6. Referencije/literatura
 
-Popis literature cine precizno navedene literaturne reference, temeljem kojih je
-osmisljeno ispitivanje, i prijedlog teme rada. Literatura se navodi Vancouverskim stilom,
-a u popisu slijede redosljedom pojavljivanja u tekstu (najvise do 30 literaturnih navoda,
-sto novijeg datuma objave). Ako izvor koji se navodi ima do sest autora, onda se navode
-svi autori, a ako ima sedam i vise autora, onda se navode prva tri autora i popis
-zakljucuje s "i sur."
+Popis literature čine precizno navedene literaturne reference, temeljem kojih je
+osmišljeno ispitivanje, i prijedlog teme rada. Literatura se navodi Vancouverskim stilom,
+a u popisu slijede redosljedom pojavljivanja u tekstu (najviše do 30 literaturnih navoda,
+što novijeg datuma objave). Ako izvor koji se navodi ima do šest autora, onda se navode
+svi autori, a ako ima sedam i više autora, onda se navode prva tri autora i popis
+zaključuje s "i sur."
 
-Primjeri navoenja najcese rabljenih literaturnih izvora:
+Primjeri navođenja najčešće rabljenih literaturnih izvora:
 -----------------------------------------------------------------------------------------------------------------
-Clanak u casopisu:
+Članak u časopisu:
 Marusteri M, Bacarea V.Comparing groups for statistical differences:How to chose the
 right statistical test. Biochem Med 2010;20:15-32.
 
-Poglavlje u urednickoj knjizi:
+Poglavlje u uredničkoj knjizi:
 O Donnell VB. Eicosanoid-Based Signaling. U: Jacob K, Winyard PG, ur. Redox Signaling
 and Regulation in Biology and Medicine. Wiley-VCH Verlag GmbH and Co KgaA,
 2009;229-44.
 
 ===== [fbf-upute-spec-2014 | str. 6] =====
-Prva stranica Uvoda i pregleda podrucja istrazivanja prva je stranica numerirana
-arapskim brojevima, koji slijede do kraja rada (bez obzira na sadrzaj stranica i jednako u
+Prva stranica Uvoda i pregleda područja istraživanja prva je stranica numerirana
+arapskim brojevima, koji slijede do kraja rada (bez obzira na sadržaj stranica i jednako u
 sredini donjeg dijela stranice).
 
 Obvezatni dijelovi rada koji slijede su:
-    a) Eksperimentalni specijalisticki rad:
-        1. Uvod i pregled podrucja istrazivanja
-        2. Cilj istrazivanja
+    a) Eksperimentalni specijalistički rad:
+        1. Uvod i pregled područja istraživanja
+        2. Cilj istraživanja
         3. Materijal i metode (ili: Ispitanici i metode)
         4. Rezultati
         5. Rasprava
-        6. Zakljucak (ili: Zakljucci) i
+        6. Zaključak (ili: Zaključci) i
         7. Referencije (ili Literatura)
-        8. Zivotopis
+        8. Životopis
 
-    b) Teorijski specijalisticki rad:
-        1. Uvod i pregled podrucja istrazivanja
-        2. Cilj istrazivanja
+    b) Teorijski specijalistički rad:
+        1. Uvod i pregled područja istraživanja
+        2. Cilj istraživanja
         3. Materijal i metode - Sustavni pregled saznanja o temi (podijeljen u
-             odgovarajua poglavlja)
+             odgovarajuća poglavlja)
         4. Rasprava
-        5. Zakljucak (ili: Zakljucci) i
+        5. Zaključak (ili: Zaključci) i
         6. Referencije (ili Literatura)
-        7. Zivotopis
+        7. Životopis
 
-Svako navedeno poglavlje rada treba zapoceti na novoj stranici. Iza literature se prema
-potrebi stavljaju stranice s abecednim Popisom skraenica koje su upotrebljavane u
+Svako navedeno poglavlje rada treba započeti na novoj stranici. Iza literature se prema
+potrebi stavljaju stranice s abecednim Popisom skraćenica koje su upotrebljavane u
 radu. U radu se navode samo objavljeni podaci, a izvori podataka koji nisu objavljeni
 navode se u tekstu (u zagradi).
 

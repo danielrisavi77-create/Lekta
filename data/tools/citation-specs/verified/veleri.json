@@ -53,7 +53,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Dujani, M., Osnove menadzmenta, Veleuciliste u Rijeci, Rijeka, 2006.",
+        "quoteRaw": "Dujanić, M., Osnove menadžmenta, Veleučilište u Rijeci, Rijeka, 2006.",
         "sourcePage": "str. 6",
         "note": "Oblik: Prezime, I., Naslov, Izdavac, Mjesto, Godina. Prezime + inicijal(i), autori odvojeni zarezom bez 'i' (npr. 'Tudor, G., Rijavec, M., Zarevski, P.'). Cetiri i vise autora skracuje se na 'Kotler, P. et al.' (authorFormat etAlAfter 3). Izdanje (npr. 'petnaesto izdanje', 'drugo izdanje') upisuje se u polje volume i ide iza naslova (primjeri Samuelson i Ani u izvoru)."
       },
@@ -82,7 +82,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Horvat, ., Nedovi Cubarkapa, M., Ucinkovitost upravljanja dobavnim lancem primjenom",
+        "quoteRaw": "Horvat, Đ., Nedović Čubarkapa, M., Učinkovitost upravljanja dobavnim lancem primjenom",
         "sourcePage": "str. 6",
         "note": "Kategorija 'Rad u zborniku, poglavlje u knjizi, esej u zbirci'. Oblik: Autori, Naslov priloga, Container (npr. 'Zbornik radova, ... znanstveni skup ...'), Izdavac, Mjesto, Godina., str. X-Y. Primjer nema urednika, pa template ne nosi editor polje. NAPOMENA: prvom autoru je inicijal izgubljen u pdftotext ekstrakciji (izvor: 'Horvat, .') i dijakritika je ostecena ('meunarodni' = medunarodni); pri verifikaciji vratiti protiv PDF-a."
       },
@@ -112,7 +112,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Pasali, Z., Prometni sustavi i prometna trzista, Suvremeni promet, vol. 29, 2009., br. 1-2, str.",
+        "quoteRaw": "Pašalić, Ž., Prometni sustavi i prometna tržišta, Suvremeni promet, vol. 29, 2009., br. 1-2, str.",
         "sourcePage": "str. 6",
         "note": "Oblik: Autor, Naslov clanka, Casopis, vol. X, Godina., br. Y, str. A-B. Godina stoji izmedju godista (vol.) i broja (br.)."
       },
@@ -171,7 +171,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Na kraju rada slijedi Popis koristene literature koju navodimo ovako (ili odabrati stil APA 6):",
+        "quoteRaw": "Na kraju rada slijedi Popis korištene literature koju navodimo ovako (ili odabrati stil APA 6):",
         "sourcePage": "str. 6",
         "note": "Upute NE daju primjer citiranja zavrsnog/diplomskog rada kao IZVORA u popisu literature. Predlozak je izveden iz opceg oblika za knjigu (izdavac -> ustanova): Prezime, I., Naslov, Ustanova, Mjesto, Godina. Potvrditi ili oboriti pri verifikaciji."
       },

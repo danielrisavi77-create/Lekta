@@ -8,7 +8,7 @@ Snapshot: `data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf
 Otvori PDF: `data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf#page=5`
 ```
 TEMPLATE: {authors}, {title}[[, {volume}. izdanje]], {publisher}, {place}, {year}.
-QUOTE   : Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveucilista u Zagrebu,   [grep: OK]
+QUOTE   : Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveučilišta u Zagrebu,   [grep: OK]
 IZVOR   : Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveucilista u Zagrebu, Zagreb, 2022.
 RENDER  : Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveucilista u Zagrebu, Zagreb, 2022.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -19,7 +19,7 @@ NAPOMENA: Bibliografski (popis literature) oblik BEZ stranica: 'U popisu literat
 Otvori PDF: `data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf#page=6`
 ```
 TEMPLATE: {authors}, {title}, {container}[[, vol. {volume}]][[, br. {issue}]], {year}.[[, str. {pages}.]]
-QUOTE   : Apostolova Marsavelski, M., O problemu porijekla rimske hipoteke, Zbornik Pravnog fakulteta   [grep: OK]
+QUOTE   : Apostolova Maršavelski, M., O problemu porijekla rimske hipoteke, Zbornik Pravnog fakulteta   [grep: OK]
 IZVOR   : Apostolova Marsavelski, M., O problemu porijekla rimske hipoteke, Zbornik Pravnog fakulteta u Zagrebu, vol. 24, br. 1, 1974., str. 345-361.
 RENDER  : Apostolova Marsavelski, M., O problemu porijekla rimske hipoteke, Zbornik Pravnog fakulteta u Zagrebu, vol. 24, br. 1, 1974., str. 345-361.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -41,7 +41,7 @@ NAPOMENA: Urednici se odvajaju tockom sa zarezom i upisuju u obliku 'Prezime, I.
 Otvori PDF: `data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf#page=8`
 ```
 TEMPLATE: {authors}, {title}[[, {container}]][[, {year}.]], dostupno na: {url} ({accessed}).
-QUOTE   : Primjer: Koske, I.; Naru, F.; Beiter, P.; Wanner, I., Regulatory Management Practices in OECD   [grep: NIJE NADJEN u ekstrakciji!]
+QUOTE   : Primjer: Koske, I.; Naru, F.; Beiter, P.; Wanner, I., Regulatory Management Practices in OECD   [grep: OK]
 IZVOR   : De Stefano, V.; Aloisi, A., European legal framework for digital labour platforms, Publication Office of the European Union, Luxembourg, 2018., dostupno na: https://publications.jrc.ec.europa.eu/repository/handle/JRC112243 (29. rujna 2022.).
 RENDER  : De Stefano, V.; Aloisi, A., European legal framework for digital labour platforms, Publication Office of the European Union, Luxembourg, 2018., dostupno na: https://publications.jrc.ec.europa.eu/repository/handle/JRC112243 (29. rujna 2022.).
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -52,7 +52,7 @@ NAPOMENA: Oblik: autori, naslov, (naziv stranice/publikacije), godina, dostupno 
 Otvori PDF: `data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf#page=8`
 ```
 TEMPLATE: {title}[[ (dalje u tekstu: {institution})]], {container}[[, br. {issue}]].
-QUOTE   : Primjer za navoenje zakona u biljesci: Zakon o obveznim odnosima (dalje u tekstu: ZOO),   [grep: NIJE NADJEN u ekstrakciji!]
+QUOTE   : Primjer za navođenje zakona u bilješci: Zakon o obveznim odnosima (dalje u tekstu: ZOO),   [grep: OK]
 IZVOR   : Zakon o obveznim odnosima (dalje u tekstu: ZOO), Narodne novine, br. 35/05, 41/08, 125/11, 78/15, 29/18, 126/21.
 RENDER  : Zakon o obveznim odnosima (dalje u tekstu: ZOO), Narodne novine, br. 35/05, 41/08, 125/11, 78/15, 29/18, 126/21.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -63,7 +63,7 @@ NAPOMENA: Uvedena kratica zakona ide u polje institution (opcionalno); brojevi s
 Otvori PDF: `data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf#page=5`
 ```
 TEMPLATE: {authors}, {title}, {institution}, {place}, {year}.
-QUOTE   : Prezime autora, prvo slovo imena autora s tockom, naslov djela (u kurzivu), broj izdanja (ako   [grep: OK]
+QUOTE   : Prezime autora, prvo slovo imena autora s točkom, naslov djela (u kurzivu), broj izdanja (ako   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute NE obraduju citiranje zavrsnih/diplomskih radova; predlozak je izveden iz opceg oblika za knjigu (izdavac -> ustanova). Potvrditi ili oboriti pri verifikaciji.
 ```

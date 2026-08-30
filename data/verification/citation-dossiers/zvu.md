@@ -8,7 +8,7 @@ Snapshot: `data/sources/zvu/zvu-pravilnik-zavrsni-2015.pdf` (hash `4f171b8ed92a.
 Otvori PDF: `data/sources/zvu/zvu-pravilnik-zavrsni-2015.pdf#page=15`
 ```
 TEMPLATE: {authors}. {title}.[[ {volume}. izdanje.]] {place}: {publisher}; {year}.
-QUOTE   : Grozdek ovCci G, aekMc Z. Neurofacilitacijska fizioterapija. Zagreb: Zdravstveno eistul;cv   [grep: OK]
+QUOTE   : Grozdek ovćČči G, aekMč Z. Neurofacilitacijska fizioterapija. Zagreb: Zdravstveno eištul;čv   [grep: OK]
 IZVOR   : Grozdek Covic G, Macek Z. Neurofacilitacijska fizioterapija. Zagreb: Zdravstveno veleuciliste; 2011.
 RENDER  : Grozdek Covic G, Macek Z. Neurofacilitacijska fizioterapija. Zagreb: Zdravstveno veleuciliste; 2011.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -39,7 +39,7 @@ NAPOMENA: Izvor daje EKSPLICITAN recept za clanak u knjizi/zborniku radova konfe
 Otvori PDF: `data/sources/zvu/zvu-pravilnik-zavrsni-2015.pdf#page=15`
 ```
 TEMPLATE: [[{authors}. ]]{title}. Dostupno na: {url}[[ ({accessed})]].
-QUOTE   : Literatura koristena prilikom izrade rada navodi se na   [grep: OK]
+QUOTE   : Literatura korištena prilikom izrade rada navodi se na   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Prilog 3 (Navodjenje popisa literature) prikazuje samo tri oblika natuknice: knjiga, clanak u casopisu i clanak u zborniku/knjizi radova konferencije. Mrezni (internetski) izvor NIJE prikazan pa je predlozak izveden iz uobicajenog Vancouver web oblika (naslov, dostupno na: URL, datum pristupa u zagradi); autor je opcionalan. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -48,7 +48,7 @@ NAPOMENA: Prilog 3 (Navodjenje popisa literature) prikazuje samo tri oblika natu
 Otvori PDF: `data/sources/zvu/zvu-pravilnik-zavrsni-2015.pdf#page=2`
 ```
 TEMPLATE: {authors}. {title} [zavrsni rad].[[ {place}:]] {institution}; {year}.
-QUOTE   : Zavrsni rad je samostalni pisani rad studenta u kojem student pod vodstvom mentora   [grep: OK]
+QUOTE   : Završni rad je samostalni pisani rad studenta u kojem student pod vodstvom mentora   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Prilog 3 ne prikazuje kako se zavrsni/diplomski rad NAVODI kao izvor u popisu literature (obuhvaca knjigu, clanak, zbornik). Predlozak je izveden iz oblika za knjigu: izdavac zamijenjen ustanovom, dodana oznaka vrste rada '[zavrsni rad]'. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -57,7 +57,7 @@ NAPOMENA: Prilog 3 ne prikazuje kako se zavrsni/diplomski rad NAVODI kao izvor u
 Otvori PDF: `data/sources/zvu/zvu-pravilnik-zavrsni-2015.pdf#page=4`
 ```
 TEMPLATE: {title}. {container}[[, {issue}]].
-QUOTE   : U popisu literature redom koji su citirani navode se svi u radu koristeni izvori. Ne navode se   [grep: OK]
+QUOTE   : U popisu literature redom koji su citirani navode se svi u radu korišteni izvori. Ne navode se   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor ne obradjuje citiranje propisa/pravnih akata (Prilog 3 pokriva knjigu, clanak i zbornik). Predlozak je minimalno izveden radi potpunosti alata (naslov, glasilo, broj). Potvrditi ili oboriti pri verifikaciji.
 ```

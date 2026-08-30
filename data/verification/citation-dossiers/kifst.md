@@ -8,7 +8,7 @@ Snapshot: `data/sources/kifst/kifst.pdf` (hash `3e8c1c64d65d...`)
 Otvori PDF: `data/sources/kifst/kifst.pdf#page=5`
 ```
 TEMPLATE: {authors} ({year}). {title}. {place}: {publisher}.
-QUOTE   : Pinel, J. (2001). Bioloska psihologija. Jastrebarsko: Naklada Slap.   [grep: OK]
+QUOTE   : Pinel, J. (2001). Biološka psihologija. Jastrebarsko: Naklada Slap.   [grep: OK]
 IZVOR   : Pinel, J. (2001). Bioloska psihologija. Jastrebarsko: Naklada Slap.
 RENDER  : Pinel, J. (2001). Bioloska psihologija. Jastrebarsko: Naklada Slap.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -19,7 +19,7 @@ NAPOMENA: Autor-godina s tockom iza zagrade godine, zatim naslov, pa mjesto izda
 Otvori PDF: `data/sources/kifst/kifst.pdf#page=5`
 ```
 TEMPLATE: {authors} ({year}). {title}. {container}, {volume}[[ ({issue})]], {pages}.
-QUOTE   : Pausi, J., Cavala, M., Kati, R. (2006). Relations of the Morphological Characteristic Latent   [grep: OK]
+QUOTE   : Paušić, J., Čavala, M., Katić, R. (2006). Relations of the Morphological Characteristic Latent   [grep: OK]
 IZVOR   : Pausi, J., Cavala, M., Kati, R. (2006). Relations of the Morphological Characteristic Latent Structure and Body Posture Indicators in Children Aged Seven to Nine Years. Collegium Antropologicum, 30 (3), 621-627.
 RENDER  : Pausi, J., Cavala, M., Kati, R. (2006). Relations of the Morphological Characteristic Latent Structure and Body Posture Indicators in Children Aged Seven to Nine Years. Collegium Antropologicum, 30 (3), 621-627.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -30,7 +30,7 @@ NAPOMENA: Puni primjer (spojeni prelomljeni retci): 'Pausi, J., Cavala, M., Kati
 Otvori PDF: `data/sources/kifst/kifst.pdf#page=14`
 ```
 TEMPLATE: {authors} ({year}). {title}. U {editor} (ur.), {container}[[ (str. {pages})]].[[ {place}: {publisher}.]]
-QUOTE   : B. Males, . Mileti (ur.), Zbornik radova Meunarodno znanstveno-strucnog   [grep: OK]
+QUOTE   : B. Maleš, Đ. Miletić (ur.), Zbornik radova Međunarodno znanstveno-stručnog   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Primjer rada u zborniku (str. 14, primjer 4: 'Pausi, J., Kosinac, Z., Pazanin, R. (2005). Procjena pouzdanosti i valjanosti mjernog instrumenta Skoliozometra... U D. Sekuli, B. Males, . Mileti (ur.), Zbornik radova...') odrezan je u ekstrakciji nakon naziva zbornika. Potvrdjen je pocetak: autori, godina, naslov rada, 'U' bez dvotocke, urednici u obliku 'I. Prezime' (given-first, upisuju se doslovno u polje editor), '(ur.),', naziv zbornika. Zavrsetak (stranice, mjesto, izdavac) IZVEDEN po analogiji s oblikom knjige iz istog izvora; potvrditi ili oboriti pri verifikaciji.
 ```
@@ -48,7 +48,7 @@ NAPOMENA: Jedini mrezni primjer u izvoru je elektronicki dokument BEZ osobnog au
 Otvori PDF: `data/sources/kifst/kifst.pdf#page=5`
 ```
 TEMPLATE: {authors} ({year}). {title} (diplomski rad). {place}: {institution}.
-QUOTE   : Pausi, J. (2007). Konstrukcija i vrednovanje mjernih postupaka za procijenu tjelesnog   [grep: OK]
+QUOTE   : Paušić, J. (2007). Konstrukcija i vrednovanje mjernih postupaka za procijenu tjelesnog   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor ima rubriku '3) Doktorske disertacije, magistarski/diplomski radovi' s primjerom koji je u ekstrakciji odrezan nakon pocetka naslova. Potvrdjen je pocetak (autor, godina u zagradi s tockom, naslov); oznaka vrste rada u zagradi i 'mjesto: ustanova' zavrsetak IZVEDENI po analogiji s oblikom knjige iz istog izvora (izdavac zamijenjen ustanovom). Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -57,7 +57,7 @@ NAPOMENA: Izvor ima rubriku '3) Doktorske disertacije, magistarski/diplomski rad
 Otvori PDF: `data/sources/kifst/kifst.pdf#page=5`
 ```
 TEMPLATE: {title} ({year}). {container}[[, {issue}]].[[ {url}]]
-QUOTE   : Redoslijed referenci u popisu koristene literature treba pisati abecednim redom prema   [grep: OK]
+QUOTE   : Redoslijed referenci u popisu korištene literature treba pisati abecednim redom prema   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor uopce ne obraduje citiranje propisa (kinezioloske upute, nema pravnih izvora u primjerima). Predlozak izveden iz opceg autor-godina obrasca izvora: naslov propisa na mjestu autora, godina, glasilo (npr. Narodne novine) u polju container, broj u issue. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -66,7 +66,7 @@ NAPOMENA: Izvor uopce ne obraduje citiranje propisa (kinezioloske upute, nema pr
 ```
 TEMPLATE : ({authorsShort}, {year})   /  s pages: ({authorsShort}, {year}, str. {pages})
 RENDER   : (Lovric, 1988)   /  (Lovric, 1988, str. 45)
-QUOTE    : Npr. Posljedicno ta mjerenja mogu pomoi u identifikaciji talenata (Carter, 1985) ili   [grep: OK]
+QUOTE    : Npr. Posljedično ta mjerenja mogu pomoći u identifikaciji talenata (Carter, 1985) ili   [grep: OK]
 NAPOMENA : Izvor daje oba oblika: (Prezime, godina) i narativni Prezime (godina), npr. 'Grgantov, Kati i Jankovi (2006) su imali za cilj utvrditi...'. Pravila: do 2 autora uvijek svi; 3 do 5 autora prvi put svi, npr. '(Buss, Salovey, Schmitt i Miller, 2005)', svaki sljedeci put '(Buss i sur., 2005)'; vise od 5 autora uvijek samo prvi + 'i sur.'. Alat generira skraceni oblik (etAlAfter 3), puni prvi navod za 3 do 5 autora dokumentiran je ovdje i u contradictions. withPagesTemplate iz primjera doslovnog citata '(Miljkovi, 2009, str.197)' na str. 4; u ekstrakciji 'str.197' bez razmaka, razmak dodan kao vjerojatni artefakt izvlacenja teksta, potvrditi pri verifikaciji. twoJoiner ' i ' izveden iz troautorskog narativnog primjera, primjer za tocno 2 autora nije naveden.
 ```
 

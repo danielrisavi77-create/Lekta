@@ -8,7 +8,7 @@ Snapshot: `data/sources/ffzg/ffzg-filoz-diplomski-2019.pdf` (hash `ba222ed21e3a.
 Otvori PDF: `data/sources/ffzg/ffzg-filoz-diplomski-2019.pdf#page=5`
 ```
 TEMPLATE: {authors}, {title}, {publisher}, {place}, {year}.
-QUOTE   : Prezime, Ime [autora], Naslov knjige, Izdavac, Mjesto izdavanja, godina izdavanja.   [grep: OK]
+QUOTE   : Prezime, Ime [autora], Naslov knjige, Izdavač, Mjesto izdavanja, godina izdavanja.   [grep: OK]
 IZVOR   : Prezime, Ime, Naslov knjige, Izdavac, Mjesto izdavanja, godina izdavanja.
 RENDER  : Prezime, Ime, Naslov knjige, Izdavac, Mjesto izdavanja, godina izdavanja.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -19,7 +19,7 @@ NAPOMENA: Izvor daje shematski redak (bez konkretne instance) pa je kind rule-te
 Otvori PDF: `data/sources/ffzg/ffzg-filoz-diplomski-2019.pdf#page=5`
 ```
 TEMPLATE: {authors}, „{title}”, u: {editor} (ur.), {container}, {publisher}, {place}, {year}, str. {pages}.
-QUOTE   : Prezime, Ime [autora], ,,Naslov rada/poglavlja iz zbornika/knjige", u: Prezime, Ime   [grep: OK]
+QUOTE   : Prezime, Ime [autora], „Naslov rada/poglavlja iz zbornika/knjige“, u: Prezime, Ime   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Nastavak prelomljenog retka u izvoru: '[urednika/autora] (ur.), Naslov zbornika/knjige, Izdavac, Mjesto izdavanja, godina izdavanja, str. xxx�xxx [raspon stranica rada].' Urednik se upisuje u obliku Prezime, Ime; skracenica (ur.) s tockom. Redak je shematski i navodnici su u ekstrakciji osteceni (,, i ") pa je kind rule-text bez examplea; predlozak koristi prave hrvatske navodnike „ i ” (ASCII ,, bi pojeo tidy cleanup), stvarne glifove potvrditi u PDF-u pri verifikaciji.
 ```
@@ -28,7 +28,7 @@ NAPOMENA: Nastavak prelomljenog retka u izvoru: '[urednika/autora] (ur.), Naslov
 Otvori PDF: `data/sources/ffzg/ffzg-filoz-diplomski-2019.pdf#page=5`
 ```
 TEMPLATE: {authors}, „{title}”, {container}, {volume}[[ ({issue})]], {year}, str. {pages}.
-QUOTE   : Prezime, Ime [autora], ,,Naslov rada", Naslov casopisa, XX (X) [godiste casopisa (svezak/broj   [grep: OK]
+QUOTE   : Prezime, Ime [autora], „Naslov rada“, Naslov časopisa, XX (X) [godište časopisa (svezak/broj   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Nastavak prelomljenog retka u izvoru: 'casopisa)], godina izdavanja, str. xxx�xxx [raspon stranica rada].' XX (X) znaci godiste casopisa (svezak/broj casopisa): volume ide prije zagrade, issue u zagradu. Redak je shematski i navodnici su u ekstrakciji osteceni pa je kind rule-text bez examplea; predlozak koristi prave hrvatske navodnike „ i ”, potvrditi glifove u PDF-u.
 ```
@@ -37,7 +37,7 @@ NAPOMENA: Nastavak prelomljenog retka u izvoru: 'casopisa)], godina izdavanja, s
 Otvori PDF: `data/sources/ffzg/ffzg-filoz-diplomski-2019.pdf#page=5`
 ```
 TEMPLATE: {authors}, „{title}”, {url} (pristup: {accessed}).
-QUOTE   : Prezime, Ime [autora], ,,Naslov teksta", internetska adresa (pristup: [datum pristupa]).   [grep: OK]
+QUOTE   : Prezime, Ime [autora], „Naslov teksta“, internetska adresa (pristup: [datum pristupa]).   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Vrijedi za tekstove s internetskih stranica koji nisu objavljeni u znanstvenim casopisima; clanci koji postoje u casopisu citiraju se kao clanak. Redak je shematski i navodnici su u ekstrakciji osteceni pa je kind rule-text bez examplea; predlozak koristi prave hrvatske navodnike „ i ”, potvrditi glifove u PDF-u.
 ```
@@ -46,7 +46,7 @@ NAPOMENA: Vrijedi za tekstove s internetskih stranica koji nisu objavljeni u zna
 Otvori PDF: `data/sources/ffzg/ffzg-filoz-diplomski-2019.pdf#page=5`
 ```
 TEMPLATE: {authors}, {title}, {institution}, {place}, {year}.
-QUOTE   : Prezime, Ime [autora], Naslov knjige, Izdavac, Mjesto izdavanja, godina izdavanja.   [grep: OK]
+QUOTE   : Prezime, Ime [autora], Naslov knjige, Izdavač, Mjesto izdavanja, godina izdavanja.   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute Odsjeka za filozofiju NE obraduju citiranje zavrsnih/diplomskih radova; predlozak je izveden iz oblika za knjigu (izdavac -> ustanova). Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -55,7 +55,7 @@ NAPOMENA: Upute Odsjeka za filozofiju NE obraduju citiranje zavrsnih/diplomskih 
 Otvori PDF: `data/sources/ffzg/ffzg-filoz-diplomski-2019.pdf#page=5`
 ```
 TEMPLATE: {title}, {container}[[, {issue}]][[, {year}]].
-QUOTE   : Prezime, Ime [autora], ,,Naslov rada", Naslov casopisa, XX (X) [godiste casopisa (svezak/broj   [grep: OK]
+QUOTE   : Prezime, Ime [autora], „Naslov rada“, Naslov časopisa, XX (X) [godište časopisa (svezak/broj   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute NE obraduju citiranje propisa/pravnih izvora; minimalni predlozak izveden iz opceg reda za clanak bez autora (naslov, publikacija, broj, godina). Potvrditi ili oboriti pri verifikaciji.
 ```

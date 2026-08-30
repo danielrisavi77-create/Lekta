@@ -8,7 +8,7 @@ Snapshot: `data/sources/unidu/unidu-povijest-upute.pdf` (hash `be4bc778e16b...`)
 Otvori PDF: `data/sources/unidu/unidu-povijest-upute.pdf#page=7`
 ```
 TEMPLATE: {authors}. {title}. {place}: {publisher}, {year}.
-QUOTE   : Vekari, Nenad. Stanovnistvo poluotoka Peljesca. Svezak 1. Dubrovnik: Zavod za povijesne   [grep: OK]
+QUOTE   : Vekarić, Nenad. Stanovništvo poluotoka Pelješca. Svezak 1. Dubrovnik: Zavod za povijesne   [grep: OK]
 IZVOR   : Vekari, Nenad. Stanovnistvo poluotoka Peljesca. Svezak 1. Dubrovnik: Zavod za povijesne znanosti HAZU u Dubrovniku, 1992.
 RENDER  : Vekari, Nenad. Stanovnistvo poluotoka Peljesca. Svezak 1. Dubrovnik: Zavod za povijesne znanosti HAZU u Dubrovniku, 1992.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -19,7 +19,7 @@ NAPOMENA: Polja iz izvora (str. 6): prezime i ime autora/koautora, naslov knjige
 Otvori PDF: `data/sources/unidu/unidu-povijest-upute.pdf#page=7`
 ```
 TEMPLATE: {authors}. „{title}.“ {container} {volume} ({year}): {pages}.
-QUOTE   : Vekari, Nenad. �Sud Janjinske kapetanije.� Anali Zavoda za povijesne znanosti HAZU u   [grep: OK]
+QUOTE   : Vekarić, Nenad. »Sud Janjinske kapetanije.« Anali Zavoda za povijesne znanosti HAZU u   [grep: OK]
 IZVOR   : Vekari, Nenad. „Sud Janjinske kapetanije.“ Anali Zavoda za povijesne znanosti HAZU u Dubrovniku 27 (1989): 133-147.
 RENDER  : Vekari, Nenad. „Sud Janjinske kapetanije.“ Anali Zavoda za povijesne znanosti HAZU u Dubrovniku 27 (1989): 133-147.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -30,7 +30,7 @@ NAPOMENA: Polja iz izvora (str. 7): prezime i ime, naslov rada (u navodnicima), 
 Otvori PDF: `data/sources/unidu/unidu-povijest-upute.pdf#page=7`
 ```
 TEMPLATE: {authors}. „{title}.“ u: {container}, ur. {editor}. {place}: {publisher}, {year}[[: {pages}]].
-QUOTE   : Zuljani iz XVI stoljea.�, u: Beritiev zbornik, ur. Vjekoslav Cvitanovi. Dubrovnik:   [grep: OK]
+QUOTE   : Žuljani iz XVI stoljeća.«, u: Beritićev zbornik, ur. Vjekoslav Cvitanović. Dubrovnik:   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor daje eksplicitan popis polja (str. 7): prezime i ime, naslov rada (u navodnicima), naslov knjige/zbornika (u kurzivu), urednik, mjesto, izdavac, godina, pocetna i posljednja stranica. Primjer (Marinovi, Ante...) prelomljen je na granici str. 7/8 pa nedostaju izdavac, godina i stranice; expected se ne moze vjerno dovrsiti, zato derived. Urednik u primjeru je u obliku ime-prezime ('ur. Vjekoslav Cvitanovi'), ne invertiran. Predlozak izveden iz popisa polja + knjiga/clanak obrasca.
 ```
@@ -39,7 +39,7 @@ NAPOMENA: Izvor daje eksplicitan popis polja (str. 7): prezime i ime, naslov rad
 Otvori PDF: `data/sources/unidu/unidu-povijest-upute.pdf#page=8`
 ```
 TEMPLATE: {authors}. „{title}.“ {container}[[ {year}]]. Dostupno na: {url} (pristup: {accessed}).
-QUOTE   : Alfani, Guido. �I padrini: patroni o parenti? Tendenzedifondo nella selezione dei parent   [grep: OK]
+QUOTE   : Alfani, Guido. »I padrini: patroni o parenti? Tendenzedifondo nella selezione dei parent   [grep: OK]
 IZVOR   : Alfani, Guido. „I padrini: patroni o parenti? Tendenzedifondo nella selezione dei parent ispirituali in Europa (XV-XX secolo).“ Nuevo Mundo Mundos Nuevos, Colloques 2008. Dostupno na: http://nuevomundo.revues.org/30172 (pristup: lipanj 2016).
 RENDER  : Alfani, Guido. „I padrini: patroni o parenti? Tendenzedifondo nella selezione dei parent ispirituali in Europa (XV-XX secolo).“ Nuevo Mundo Mundos Nuevos, Colloques 2008. Dostupno na: http://nuevomundo.revues.org/30172 (pristup: lipanj 2016).
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -50,7 +50,7 @@ NAPOMENA: Za tekstove samo u elektronickom obliku izvor trazi bar ime autora, na
 Otvori PDF: `data/sources/unidu/unidu-povijest-upute.pdf#page=6`
 ```
 TEMPLATE: {authors}. {title}. {place}: {institution}, {year}.
-QUOTE   : Knjiga (bibliografska jedinica treba sadrzavati):   [grep: OK]
+QUOTE   : Knjiga (bibliografska jedinica treba sadržavati):   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Ove upute ne propisuju format citiranja zavrsnih/diplomskih radova ni disertacija (spominju se samo u kontekstu plagijata, str. 3). Predlozak izveden iz obrasca za knjigu (str. 6): izdavac zamijenjen ustanovom. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -59,7 +59,7 @@ NAPOMENA: Ove upute ne propisuju format citiranja zavrsnih/diplomskih radova ni 
 Otvori PDF: `data/sources/unidu/unidu-povijest-upute.pdf#page=3`
 ```
 TEMPLATE: {title}, {container} br. {issue}.
-QUOTE   : Sukladno Zakonu o znanstvenoj djelatnosti i visokom obrazovanju (NN br. 94/2013), svi zavrsni   [grep: OK]
+QUOTE   : Sukladno Zakonu o znanstvenoj djelatnosti i visokom obrazovanju (NN br. 94/2013), svi završni   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Upute ne propisuju bibliografski format za propise/zakone u citatnom dijelu. Jedina opazena upotreba je unutartekstna 'Zakon o... (NN br. 94/2013)' (str. 3). Predlozak izveden iz te unutartekstne forme (kratica NN razrijesena u Narodne novine); potvrditi pri verifikaciji.
 ```

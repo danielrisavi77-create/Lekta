@@ -50,7 +50,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Kod koristenja knjiga kao izvora za zavrsne i diplomske radove za knjigu je osim autora",
+        "quoteRaw": "Kod korištenja knjiga kao izvora za završne i diplomske radove za knjigu je osim autora",
         "sourcePage": "str. 11",
         "note": "Izvedeno iz opisnog pravila za knjige (str. 11): osim autora (ili urednika ako autor nije poznat), naslova i godine objave potrebno je navesti i mjesto izdavanja te izdavaca; za knjige izdane u Hrvatskoj dovoljno je mjesto. Worked-example za knjigu je u ekstrakciji odsjecen (str. 11 zavrsava na 'Knjiga s jednim autorom Primjer'). Predlozak slijedi standardni APA oblik 'Prezime, I. (godina). Naslov. Mjesto: Izdavac.'; elementi odvojeni tockom (pravilo 6, str. 7); naslov knjige u izvorniku kurzivom. Potvrditi mjesto:izdavac interpunkciju pri verifikaciji."
       },
@@ -70,7 +70,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "navoenjem imena autora (ili urednika) i godinom publikacije.",
+        "quoteRaw": "navođenjem imena autora (ili urednika) i godinom publikacije.",
         "sourcePage": "str. 9",
         "note": "Izvor spominje urednika kao nositelja natuknice (str. 9) ali NEMA worked-example za poglavlje u zborniku/knjizi. Predlozak 'U: {editor} (ur.), {container} (str. {pages}). {place}: {publisher}.' izveden je iz standardne APA konvencije i iz knjiznog oblika ovog izvora; potvrditi veznik ('U:'), oblik urednika (Prezime, I.) i skracenicu '(ur.)' pri verifikaciji."
       },
@@ -145,7 +145,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "zavrsnih/diplomskih radova na Veleucilistu kriminalistike i javne sigurnosti koristi se APA stil.",
+        "quoteRaw": "završnih/diplomskih radova na Veleučilištu kriminalistike i javne sigurnosti koristi se APA stil.",
         "sourcePage": "str. 7",
         "note": "Izvor NE daje worked-example za citiranje zavrsnog/diplomskog rada. Cijeli dokument propisuje APA stil (str. 7). Predlozak izveden iz standardnog APA oblika za neobjavljene radove 'Prezime, I. (godina). Naslov (zavrsni rad). Mjesto: Ustanova.'; potvrditi tocan naziv vrste rada i interpunkciju pri verifikaciji."
       },

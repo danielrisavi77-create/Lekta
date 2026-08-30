@@ -1,79 +1,61 @@
 ===== [pmfst-upute-zavrsni | str. 1] =====
+jednostrano, a stranice trebaju biti numerirane u donjem desnom kutu.
+
+1. Korice: ispisuje se naziv sveučilišta, fakulteta i odjela, ime i prezime studenta, naslov rada,
+vrsta rada (Završni rad), mjesto i godina (Prilog 1). Primjerak rada koji se predaje na ocjenu
+Povjerenstvu ne uvezuje se, ali mora biti u tiskanom obliku.
+2. Naslovna stranica sadrži isti tekst kao korice:
+3. Stranica s iskazom: «Ovaj rad, izrađen u ... , pod vodstvom (navesti mentora)… , predan je
+na ocjenu Odjelu za biologiju/Odjelu za kemiju Prirodoslovno-matematičkog fakulteta Sveučilišta
+u Splitu radi stjecanja zvanja prvostupnik/prvostupnica biologije i kemije. Popis akademskih
 naziva i kratica nalazi se u Narodnim novinama 107/2007.
 4. Stranica sa zahvalama, posvetama i sl. (ova stranica nije neophodna) zahvala mentoru,
 roditeljima,...)
-5. SADRZAJ je kazalo pojedinih naslova (poglavlja) s navoenjem stranica. Poglavlja se
-oznacavaju cijelim brojevima (npr.1. 2. 3. 4...), dok podpoglavlja i odlomci se mogu oznacavati
-decimalnim brojevima (npr. 1.1. 1.1.1, 1.2., 1.2.1. ...).
-6. Prvih pet gore navedenih stranica oznacava se rimskim brojevima.
+5. SADRŽAJ je kazalo pojedinih naslova (poglavlja) s navođenjem stranica. Poglavlja se
+označavaju cijelim brojevima (npr.1. 2. 3. 4...), dok podpoglavlja i odlomci se mogu označavati
+decimalnim brojevima (npr. 1.1. 1.1.1, 1.2., 1.2.1. …).
+6. Prvih pet gore navedenih stranica označava se rimskim brojevima.
 
-Zavrsni rad se sastoji od cetiri poglavlja:
+Završni rad se sastoji od četiri poglavlja:
          1. UVOD
          2. RAZRADA TEME
-         3. SAZETAK
+         3. SAŽETAK
          4. LITERATURA
 
-Brojcano oznacavanje stranica arapskim brojevima zapocinje od stranice UVODA (str.1)
-zavrsnog rada; oznacavaju se sve stranice u svim poglavljima, tj. kako stranice s tekstom, tako i
-
-===== [pmfst-upute-zavrsni | str. 2] =====
-stranice sa slikama (napomena: u slike ubrajamo: grafikone, sheme, fotografije, slike,
-dijagrami, histogrami, karte..) i tablicama, osim ako isti nisu u prilogu rada. U slucaju postojanja
-priloga, kao zadnja, oznacava se arapskim brojem stranica na kojoj je navedeno poglavlje
-PRILOZI, s popisom svih priloga (prilog 1., prilog 2...) na toj stranici. Sami prilozi (npr. prilog 1..)
-se oznacavaju rimskim brojevima, koji se nastavljaju na rimski broj SADRZAJA (npr. sadrzaj je
-bio rimski broj V, onda prilog 1. e biti stranica VI...).
-
-Minimalan broj stranica od uvoda do kraja literature je 20, a maksimalan broj je 40
-stranica.
-
-1. UVOD sadrzi osnovne podatke o temi i problematici koja se obrauje, o objavljenim
-rezultatima dosadasnjih istrazivanja iz literature vezano za definiranu temu. Objasnjavaju se
-pojmovi vazni za razumijevanje problema. Uvodni dio moze imati vise glavnih naslova i
-podnaslova (1.1. glavni naslov; 1.1.1. podnaslov...). Na kraju Uvoda treba jasno obrazloziti cilj
-rada.
-U uvodu se navode rezultati i spoznaje drugih autora koji su predhodno obraivali i objavili
-radove iz toga podrucja (u zagradi treba citirati autora/e i godinu; vidjeti pod Primjeri citiranja
-literarture u tekstu). U uvodnom dijelu kao i u razradi u sklopu teksta mogu se stavljati ilustracije
-(grafikoni, fotografije, slike, dijagrami, histogrami, karte), koje predhodno moraju biti spomenuti
-u tekstu odnosno u recenici (npr. vrsta Ilirski kozlinac je endemicna biljka (slika1), a pripada
-odreenom zivotnom obliku (slika 2). Broj slike i opis slike idu ispod slike. U zagradama iza
-opisa slike treba navesti izvor odakle smo preuzeli sliku.
-
-Slika 1. Biljka ilirski kozlinac Astragalus monspessulanus L. ssp. illyricus (Bernhardt) Chater
-(izvor: M. Rusci).
+Brojčano označavanje stranica arapskim brojevima započinje od stranice UVODA (str.1)
+završnog rada; označavaju se sve stranice u svim poglavljima, tj. kako stranice s tekstom, tako i
 
 ===== [pmfst-upute-zavrsni | str. 4] =====
-naslov se oznacava: 2.1. Porodica Usnace. Ako u okviru ovog naslova ima vise podnaslova
-(podpoglavlja) onda ih se oznacava kao: 2.1.1. Morfoloska obiljezja porodice Usnace, 2.1.2.
-itd. Drugi glavni naslov u okviru razrade oznacava se kao 2.2. npr. 2.2. Ekoloska i morfoloska
-svojstva vrste Lavanda....Na isti nacin kao i u uvodnom dijelu navode se autori koji su citirani
-u ovom dijelu rada. Slike i tablice nastavljaju se brojcano oznacavati kao u uvodnom dijelu
+naslov se označava: 2.1. Porodica Usnače. Ako u okviru ovog naslova ima više podnaslova
+(podpoglavlja) onda ih se označava kao: 2.1.1. Morfološka obilježja porodice Usnače, 2.1.2.
+itd. Drugi glavni naslov u okviru razrade označava se kao 2.2. npr. 2.2. Ekološka i morfološka
+svojstva vrste Lavanda….Na isti način kao i u uvodnom dijelu navode se autori koji su citirani
+u ovom dijelu rada. Slike i tablice nastavljaju se brojčano označavati kao u uvodnom dijelu
 (brojevi slika i tablica nastavljaju se na uvodni dio).
 
-3. SAZETAK
+3. SAŽETAK
 
-Kratki prikaz citavog rada ukljucivsi uvod i razradu, s najvaznijim cinjenicama (do 200 rijeci i
-znakova), bez navoenja literature, slika, tablica i priloga.
+Kratki prikaz čitavog rada uključivši uvod i razradu, s najvažnijim činjenicama (do 200 riječi i
+znakova), bez navođenja literature, slika, tablica i priloga.
 
 4. LITERATURA
 
-Poglavlje LITERATURA sadrzi popis svih izvornika tj. znanstvenih radova, monografija,
+Poglavlje LITERATURA sadrži popis svih izvornika tj. znanstvenih radova, monografija,
 zbornika ili drugih izvora koji se spominju u radu. Svaki citat u tekstu mora biti zastupljen u
-popisu literature i obrnuto. Bibliografske reference se navode abecednim redom uzevsi u obzir
-pocetno slovo prezimena prvoga autora. Interpunkcija, odnosno nacin citiranja literature, u
-popisu literature mora biti ujednacen (vidi dolje navedene primjere).
-PRILOZI � mogu se (po potrebi) dodati na kraju zavrsnog rada, u slucajevima kada je previse
-razlicitih vrsta slika i tablica u prethodnim poglavljima rada.
+popisu literature i obrnuto. Bibliografske reference se navode abecednim redom uzevši u obzir
+početno slovo prezimena prvoga autora. Interpunkcija, odnosno način citiranja literature, u
+popisu literature mora biti ujednačen (vidi dolje navedene primjere).
+PRILOZI – mogu se (po potrebi) dodati na kraju završnog rada, u slučajevima kada je previše
+različitih vrsta slika i tablica u prethodnim poglavljima rada.
 
 PRIMJERI CITIRANJA LITERATURE U TEKSTU
 U tekstu rada navodi se prezime autora te godina u kojoj je rad objavljen, na primjer: (Holland,
-2000). Kada su dva autora, treba navesti oba, npr.: (Hughes i Kaufman, 2002), a ako je vise
+2000). Kada su dva autora, treba navesti oba, npr.: (Hughes i Kaufman, 2002), a ako je više
 autora, navodi se prvi autor te dopisuje i suradnici (Graham i sur., 1993). Ako su imena autora
-dio recenice, u zagradu se pise samo godina npr. ,,Hughes i Kaufman (2002) su utvrdili da ...".
+dio rečenice, u zagradu se piše samo godina npr. „Hughes i Kaufman (2002) su utvrdili da ...“.
 
 PRIMJERI CITIRANJA U POPISU LITERATURE
-Rad u casopisu
+Rad u časopisu
 McGinnis, W., Krumlauf, R. (1992). Homeobox genes and axial pattering. Cell 68: 283-302.
 Teillet, A.M., Kalcheim, K., LeDurain, N.M. (1987). Formation oft he dorsal root ganglia int he
 avian embryo: Segmental origin and migratory behavior of neural crest progenitorcells. Dev.
@@ -83,89 +65,71 @@ Stearns, S. C. (1992). The evolution of life histories. Oxford University Press,
 
 ===== [pmfst-upute-zavrsni | str. 5] =====
 Poglavlje u knjizi:
-Gaines, G., Elbr�chter, M. (1987). Heterotrophic nutrition. U: Taylor, F. J. R. (ur.) The biology of
+Gaines, G., Elbrächter, M. (1987). Heterotrophic nutrition. U: Taylor, F. J. R. (ur.) The biology of
 the dinoflagellates. Oxford, Blackwell Scientific Publications, str. 224-268.
 
-Ukoliko su u radu uporabljene manje uobicajene kratice, na posebnoj stranici treba navesti
-njihov popis i objasnjenje. Takva stranica treba biti smjestena prije Uvoda (na pocetku rada) i
-brojcano se ne oznacava.
+Ukoliko su u radu uporabljene manje uobičajene kratice, na posebnoj stranici treba navesti
+njihov popis i objašnjenje. Takva stranica treba biti smještena prije Uvoda (na početku rada) i
+brojčano se ne označava.
 
-Mrezna stranica
-Mrezna (internetska) stranica se citira tako da se navedu slijedei podatci (ako su poznati):
+Mrežna stranica
+Mrežna (internetska) stranica se citira tako da se navedu slijedeći podatci (ako su poznati):
 Prezime i inicijali imena autora stranice/institucije (ako nisu poznati staviti naziv Anonymus)
-(datum kreiranja ili azuriranja stranice) Naslov teksta. Naslov cijele stranice. Adresa stranice.
+(datum kreiranja ili ažuriranja stranice) Naslov teksta. Naslov cijele stranice. Adresa stranice.
 Datum pristupa.
 Primjerice:
-NIKOLI, T. (ed.) (2012) Flora Croatica baza podataka / Flora Croatica Database. On-Line
-URL: http://hirc.botanic.hr/fcd/ Botanicki zavod, Prirodoslovno-matematicki fakultet, Sveuciliste u
+NIKOLIĆ, T. (ed.) (2012) Flora Croatica baza podataka / Flora Croatica Database. On-Line
+URL: http://hirc.botanic.hr/fcd/ Botanički zavod, Prirodoslovno-matematički fakultet, Sveučilište u
 Zagrebu. Pristupljeno 12. 7. 2012.
 
-Internetska stranica se automatski podvuce crtom i oznaci plavom bojom.
+Internetska stranica se automatski podvuče crtom i označi plavom bojom.
 
 ===== [pmfst-upute-diplomski | str. 1] =====
-2. Naslovna stranica sadrzi isti tekst kao korice (Prilog 1).
-3. Stranica s iskazom: �Ovaj rad, izraen u ... , pod vodstvom ... , predan je na ocjenu Odjelu za
-biologiju/Odjelu za kemiju Prirodoslovno-matematickog fakulteta Sveucilista u Splitu radi stjecanja
-zvanja ... (npr. magistar/magistra edukacije biologije i kemije ili prvostupnik/prvostupnica biologije i
-kemije)�. Popis akademskih naziva i kratica nalazi se u Narodnim novinama 107/2007.
+2. Naslovna stranica sadrži isti tekst kao korice (Prilog 1).
+3. Stranica s iskazom: «Ovaj rad, izrađen u ... , pod vodstvom … , predan je na ocjenu Odjelu za
+biologiju/Odjelu za kemiju Prirodoslovno-matematičkog fakulteta Sveučilišta u Splitu radi stjecanja
+zvanja … (npr. magistar/magistra edukacije biologije i kemije ili prvostupnik/prvostupnica biologije i
+kemije)». Popis akademskih naziva i kratica nalazi se u Narodnim novinama 107/2007.
 4. Stranica sa zahvalama, posvetama i sl.
-5. TEMELJNA DOKUMENTACIJSKA KARTICA pise se prema Prilogu 2. na jednoj stranici, a
-sadrzi: 1. Naziv fakulteta i odjela (kao na naslovnoj stranici), 2. Oznaku � Diplomski rad, 3. Naslov
-diplomskog rada, 4. Ime i prezime studenta 5. Sazetak rada napisan jasno tako da se razumije cilj
-rada i osnovni problem koji je istrazen; navesti osnovne metode rada i objekt istrazivanja; sazeto
-iznijeti glavne rezultate i zakljucak rada. Sazetak se pise u jednom odlomku i ne smije biti duzi od 150
-rijeci. 6. Kljucne rijeci navesti ispod i ne ponavljati rijeci iz naslova rada, 7. Podatke o radu (broj
+5. TEMELJNA DOKUMENTACIJSKA KARTICA piše se prema Prilogu 2. na jednoj stranici, a
+sadrži: 1. Naziv fakulteta i odjela (kao na naslovnoj stranici), 2. Oznaku – Diplomski rad, 3. Naslov
+diplomskog rada, 4. Ime i prezime studenta 5. Sažetak rada napisan jasno tako da se razumije cilj
+rada i osnovni problem koji je istražen; navesti osnovne metode rada i objekt istraživanja; sažeto
+iznijeti glavne rezultate i zaključak rada. Sažetak se piše u jednom odlomku i ne smije biti duži od 150
+riječi. 6. Ključne riječi navesti ispod i ne ponavljati riječi iz naslova rada, 7. Podatke o radu (broj
 stranica, broj slika i tablica, broj literaturnih navoda, jezik izvornika), 8. Ime voditelja, suvoditelja ili
-pomonog voditelja (ako ih je bilo), imena ocjenjivaca (povjerenstva za diplomski ispit), 9. Datum
-sastanka Povjerenstva za diplomske radove na kojem je prihvaen diplomski rad.
-6. BASIC DOCUMENTATION CARD isti podatci kao �Temeljna dokumentacijska kartica� na
+pomoćnog voditelja (ako ih je bilo), imena ocjenjivača (povjerenstva za diplomski ispit), 9. Datum
+sastanka Povjerenstva za diplomske radove na kojem je prihvaćen diplomski rad.
+6. BASIC DOCUMENTATION CARD isti podatci kao «Temeljna dokumentacijska kartica» na
 engleskome jeziku (Prilog 3).
 Napomena:
-Imena voditelja i ocjenitelja rada pisu se: Dr. sc. Pero Peri, doc. (izv. prof., red. prof.), a na
-engleskom: Dr. Pero Peri, Asst. Prof. (Assoc. Prof., Prof.). Ukoliko postoji suvoditelj (engl.
-Cosupervisor) i/ili pomoni voditelj (engl. Assistant Supervisor), navesti i njih u karticama.
-
-===== [pmfst-upute-diplomski | str. 2] =====
-je podijeljeno na vise podpoglavlja, a jasnoi pridonose pregledne sheme, crtezi ili snimci.
-PODRUCJE ISTRAZIVANJA se opisuje ukoliko su provedena i terenska istrazivanja.
-
-3. REZULTATI su najvazniji dio rada. Treba prikazati samo glavne i reprezentativne rezultate te
-odabrati ono bitno. Rezultati neka budu opisani jasno, logicnim slijedom, a u pravilu ih valja
-dokumentirati fotografijama, crtezima, tablicama ili grafickim prikazima. Svaka slika oznacena je
-brojem i sadrzava potpuni opis. Opis slike (podrazumijeva: slike, fotografije, sheme, grafikoni,
-histogrami, dijagrami) pise se ispod slike (Prilog 4), a opis tablice iznad tablice (Prilog 4). Slike i
-tablice trebaju biti same po sebi razumljive odnosno i bez citanja glavnog teksta, a najcese se
-postavljaju iza teksta ili stranice na kojoj su prvi puta spomenuti. Ako ilustracija nije izvoran doprinos
-autora obavezno je navoenje izvora odnosno autora od kojeg je preuzeta. Izvor se navodi
-neposredno ispod ilustracije. U ovom se poglavlju ne usporeuju rezultati istrazivanja s dosadasnjim
-spoznajama, pa uglavnom nema ni citiranja drugih autora.
-
-4. RASPRAVA je poglavlje koje govori o znacenju rezultata i o tome jesu li istrazivacke pretpostavke
-potvrene. Ne treba ponavljati rezultate, nego valja procijeniti koliko se oni slazu s poznatim
+Imena voditelja i ocjenitelja rada pišu se: Dr. sc. Pero Perić, doc. (izv. prof., red. prof.), a na
+engleskom: Dr. Pero Perić, Asst. Prof. (Assoc. Prof., Prof.). Ukoliko postoji suvoditelj (engl.
+Cosupervisor) i/ili pomoćni voditelj (engl. Assistant Supervisor), navesti i njih u karticama.
 
 ===== [pmfst-upute-diplomski | str. 3] =====
-cinjenicama i rezultatima drugih autora i sto se iz njih moze zakljuciti, te koja se nova pitanja otvaraju i
-sto bi dalje trebalo istraziti. Ukoliko su neki rezultati negativni treba obrazloziti mogue razloge ili
+činjenicama i rezultatima drugih autora i što se iz njih može zaključiti, te koja se nova pitanja otvaraju i
+što bi dalje trebalo istražiti. Ukoliko su neki rezultati negativni treba obrazložiti moguće razloge ili
 eventualne propuste. U ovom dijelu rada navode se autori te slike, tablice ili prilozi.
-5. ZAKLJUCAK je kratko poglavlje u kojem se navode zakljucci koji su doneseni na temelju
-provedenog istrazivanja.
+5. ZAKLJUČAK je kratko poglavlje u kojem se navode zaključci koji su doneseni na temelju
+provedenog istraživanja.
 
-6. Poglavlje LITERATURA sadrzi popis svih izvornika tj. znanstvenih radova, monografija, zbornika ili
+6. Poglavlje LITERATURA sadrži popis svih izvornika tj. znanstvenih radova, monografija, zbornika ili
 drugih izvora koji se spominju u radu. Svaki citat u tekstu mora biti zastupljen u popisu literature i
-obrnuto. Bibliografske reference se navode abecednim redom uzevsi u obzir pocetno slovo prezimena
-prvoga autora. Interpunkcija, odnosno nacin citiranja literature, u popisu literature mora biti ujednacen
+obrnuto. Bibliografske reference se navode abecednim redom uzevši u obzir početno slovo prezimena
+prvoga autora. Interpunkcija, odnosno način citiranja literature, u popisu literature mora biti ujednačen
 (vidi dolje navedene primjere).
-PRILOZI � dodaju se na kraju diplomskog rada, u slucajevima kada su rezultati rada preopsirni i ako
-su zastupljeni s veim brojem razlicitih vrsta slika i tablica.
+PRILOZI – dodaju se na kraju diplomskog rada, u slučajevima kada su rezultati rada preopširni i ako
+su zastupljeni s većim brojem različitih vrsta slika i tablica.
 
 PRIMJERI CITIRANJA LITERATURE U TEKSTU
 U tekstu rada navodi se prezime autora te godina u kojoj je rad objavljen, na primjer: (Holland, 2000).
-Kada su dva autora, treba navesti oba, npr.: (Hughes i Kaufman, 2002), a ako je vise autora, navodi
-se prvi autor te dopisuje i suradnici (Graham i sur., 1993). Ako su imena autora dio recenice, u
-zagradu se pise samo godina npr. ,,Hughes i Kaufman (2002) su utvrdili da ...".
+Kada su dva autora, treba navesti oba, npr.: (Hughes i Kaufman, 2002), a ako je više autora, navodi
+se prvi autor te dopisuje i suradnici (Graham i sur., 1993). Ako su imena autora dio rečenice, u
+zagradu se piše samo godina npr. „Hughes i Kaufman (2002) su utvrdili da ...“.
 
 PRIMJERI CITIRANJA U POPISU LITERATURE
-Rad u casopisu
+Rad u časopisu
 McGinnis, W., Krumlauf, R. (1992). Homeobox genes and axial pattering. Cell 68: 283-302.
 
 Teillet, A.M., Kalcheim, K., LeDurain, N.M. (1987). Formation oft he dorsal root ganglia int he avian
@@ -176,38 +140,100 @@ Knjiga:
 Stearns, S. C. (1992). The evolution of life histories. Oxford University Press, Oxford.
 
 Poglavlje u knjizi:
-Gaines, G., Elbr�chter, M. (1987). Heterotrophic nutrition. U: Taylor, F. J. R. (ur.) The biology of the
+Gaines, G., Elbrächter, M. (1987). Heterotrophic nutrition. U: Taylor, F. J. R. (ur.) The biology of the
 dinoflagellates. Oxford, Blackwell Scientific Publications, str. 224-268.
-Ukoliko su u radu uporabljene manje uobicajene kratice, na posebnoj stranici treba navesti njihov
+Ukoliko su u radu uporabljene manje uobičajene kratice, na posebnoj stranici treba navesti njihov
+
+===== [pmfst-upute-zavrsni | str. 2] =====
+stranice sa slikama (napomena: u slike ubrajamo: grafikone, sheme, fotografije, slike,
+dijagrami, histogrami, karte..) i tablicama, osim ako isti nisu u prilogu rada. U slučaju postojanja
+priloga, kao zadnja, označava se arapskim brojem stranica na kojoj je navedeno poglavlje
+PRILOZI, s popisom svih priloga (prilog 1., prilog 2...) na toj stranici. Sami prilozi (npr. prilog 1..)
+se označavaju rimskim brojevima, koji se nastavljaju na rimski broj SADRŽAJA (npr. sadržaj je
+bio rimski broj V, onda prilog 1. će biti stranica VI...).
+
+Minimalan broj stranica od uvoda do kraja literature je 20, a maksimalan broj je 40
+stranica.
+
+1. UVOD sadrži osnovne podatke o temi i problematici koja se obrađuje, o objavljenim
+rezultatima dosadašnjih istraživanja iz literature vezano za definiranu temu. Objašnjavaju se
+pojmovi važni za razumijevanje problema. Uvodni dio može imati više glavnih naslova i
+podnaslova (1.1. glavni naslov; 1.1.1. podnaslov...). Na kraju Uvoda treba jasno obrazložiti cilj
+rada.
+U uvodu se navode rezultati i spoznaje drugih autora koji su predhodno obrađivali i objavili
+radove iz toga područja (u zagradi treba citirati autora/e i godinu; vidjeti pod Primjeri citiranja
+literarture u tekstu). U uvodnom dijelu kao i u razradi u sklopu teksta mogu se stavljati ilustracije
+(grafikoni, fotografije, slike, dijagrami, histogrami, karte), koje predhodno moraju biti spomenuti
+u tekstu odnosno u rečenici (npr. vrsta Ilirski kozlinac je endemična biljka (slika1), a pripada
+određenom životnom obliku (slika 2). Broj slike i opis slike idu ispod slike. U zagradama iza
+opisa slike treba navesti izvor odakle smo preuzeli sliku.
+
+Slika 1. Biljka ilirski kozlinac Astragalus monspessulanus L. ssp. illyricus (Bernhardt) Chater
+(izvor: M. Ruščić).
+
+===== [pmfst-upute-diplomski | str. 2] =====
+7. SADRŽAJ je kazalo pojedinih naslova s navođenjem stranica. Poglavlja se označavaju cijelim
+brojevima (npr.1. 2. 3. 4. 5...), dok se podpoglavlja i odlomci mogu označavati decimalnim brojevima
+(npr. 1.1. 1.2. …).
+
+Prvih sedam gore navedenih stranica označava se rimskim brojevima.
+
+Brojčano označavanje stranica arapskim brojevima započinje od stranice UVODA (str.1) diplomskog
+rada; označavaju se sve stranice u svim poglavljima, tj. kako stranice s tekstom, tako i stranice sa
+slikama (grafikoni, sheme, fotografije, slike, dijagrami, histogrami) i tablicama, osim ako isti nisu u
+prilogu rada. U slučaju postojanja priloga, kao zadnja, označava se arapskim brojem stranica na kojoj
+je navedeno poglavlje PRILOZI, s popisom svih priloga (prilog 1., prilog 2...).na toj stranici. Sami prilozi
+(npr. prilog 1..) označavaju se rimskim brojevima, koji se nastavljaju na rimski broj SADRŽAJA (npr.
+sadržaj je bio rimski broj VII, onda prilog 1. će biti stranica VIII...).
+
+===== [pmfst-upute-diplomski | str. 2] =====
+(različite uređaje) i postupke rada valja opisati razumljivo tako da i drugi mogu ponoviti pokuse. Treba
+objasniti statističke metode ili računalne programe koji su primijenjeni. Zbog preglednosti ovo poglavlje
+je podijeljeno na više podpoglavlja, a jasnoći pridonose pregledne sheme, crteži ili snimci.
+PODRUČJE ISTRAŽIVANJA se opisuje ukoliko su provedena i terenska istraživanja.
+
+3. REZULTATI su najvažniji dio rada. Treba prikazati samo glavne i reprezentativne rezultate te
+odabrati ono bitno. Rezultati neka budu opisani jasno, logičnim slijedom, a u pravilu ih valja
+dokumentirati fotografijama, crtežima, tablicama ili grafičkim prikazima. Svaka slika označena je
+brojem i sadržava potpuni opis. Opis slike (podrazumijeva: slike, fotografije, sheme, grafikoni,
+histogrami, dijagrami) piše se ispod slike (Prilog 4), a opis tablice iznad tablice (Prilog 4). Slike i
+tablice trebaju biti same po sebi razumljive odnosno i bez čitanja glavnog teksta, a najčešće se
+postavljaju iza teksta ili stranice na kojoj su prvi puta spomenuti. Ako ilustracija nije izvoran doprinos
+autora obavezno je navođenje izvora odnosno autora od kojeg je preuzeta. Izvor se navodi
+neposredno ispod ilustracije. U ovom se poglavlju ne uspoređuju rezultati istraživanja s dosadašnjim
+spoznajama, pa uglavnom nema ni citiranja drugih autora.
+
+4. RASPRAVA je poglavlje koje govori o značenju rezultata i o tome jesu li istraživačke pretpostavke
+potvrđene. Ne treba ponavljati rezultate, nego valja procijeniti koliko se oni slažu s poznatim
 
 ===== [pmfst-upute-diplomski | str. 4] =====
-Mrezna stranica
-Mrezna (internetska) stranica se citira tako da se navedu slijedei podatci (ako su poznati): Prezime i
+Mrežna stranica
+Mrežna (internetska) stranica se citira tako da se navedu slijedeći podatci (ako su poznati): Prezime i
 inicijali imena autora stranice/institucije (ako nisu poznati staviti naziv Anonymus) (datum kreiranja ili
-azuriranja stranice) Naslov teksta. Naslov cijele stranice. Adresa stranice. Datum pristupa. Primjerice:
-NIKOLI, T. (ed.) (2010) Flora Croatica baza podataka / Flora Croatica Database. On-Line URL:
-http://hirc.botanic.hr/fcd/ Botanicki zavod, Prirodoslovno-matematicki fakultet, Sveuciliste u Zagrebu.
+ažuriranja stranice) Naslov teksta. Naslov cijele stranice. Adresa stranice. Datum pristupa. Primjerice:
+NIKOLIĆ, T. (ed.) (2010) Flora Croatica baza podataka / Flora Croatica Database. On-Line URL:
+http://hirc.botanic.hr/fcd/ Botanički zavod, Prirodoslovno-matematički fakultet, Sveučilište u Zagrebu.
 Pristupljeno 04. 7. 2012.
 
-Internetska stranica se podvuce crtom i oznaci plavom bojom.
+Internetska stranica se podvuče crtom i označi plavom bojom.
 
 ===== [pmfst-upute-diplomski | str. 6] =====
-Sveuciliste u Splitu                Diplomski rad        University of Split               Graduation Thesis
-Prirodoslovno-matematicki fakultet                       Faculty of Science
-Odjel za biologiju                                       Department of Biology
+Sveučilište u Splitu                Diplomski rad  University of Split               Graduation Thesis
+Prirodoslovno-matematički fakultet                 Faculty of Science
+Odjel za biologiju                                 Department of Biology
 
-                         NASLOV RADA                                               THESIS TITLE
+                         NASLOV RADA                                         THESIS TITLE
 
-                           Ime i prezime                                        Name and Surname
-                    Teslina 12, 21 000 Split                                  Teslina 12, 21 000 Split
+                           Ime i prezime                                  Name and Surname
+                    Teslina 12, 21 000 Split                            Teslina 12, 21 000 Split
 
-Tekst sazetka (do 150 rijeci)                            Text oft he summary
+Tekst sažetka (do 150 riječi)                      Text oft he summary
 
-(... stranica, ... slika, ... tablica, ... literaturnih  (... pages, ... figures, ... tables, ... references, original
-navoda, jezik izvornika: ....)                                                           in: ...).
+(… stranica, … slika, … tablica, … literaturnih    (… pages, … figures, … tables, … references, original
+navoda, jezik izvornika: ….)                                                       in: …).
 
-Kljucne rijeci: ( do 7)                                  Key words:
-Voditelj: (ime, prezime, zvanje)                         Supervisor:
-Ocjenitelji: (ime, prezime, zvanje)                      Reviewers:
-Rad prihvaen: (datum sastanka Povjerenstva na            Thesis accepted:
-kojem je rad prihvaen)
+Ključne riječi: ( do 7)                            Key words:
+Voditelj: (ime, prezime, zvanje)                   Supervisor:
+Ocjenitelji: (ime, prezime, zvanje)                Reviewers:
+Rad prihvaćen: (datum sastanka Povjerenstva na     Thesis accepted:
+kojem je rad prihvaćen)

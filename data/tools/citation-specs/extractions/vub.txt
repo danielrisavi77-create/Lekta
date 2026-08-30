@@ -1,5 +1,55 @@
+===== [vub-upute-diplomski-2025 | str. 13] =====
+Opća pravila pisanja:
+
+ Rasprava se temelji na interpretaciji rezultata, a ne na njihovom ponavljanju.
+
+ Svaki rezultat treba biti povezan s relevantnom literaturom (domaćom i međunarodnom).
+
+ Potrebno je ukazati na podudarnosti i razlike s prethodnim istraživanjima te objasniti
+moguće razloge odstupanja.
+
+ Stil pisanja mora biti akademski, jasan, argumentiran i kritički, uz izbjegavanje
+subjektivnih izraza poput „smatram“ ili „po mom mišljenju“.
+
+ Rasprava se piše u sadašnjem vremenu kada se govori o općim spoznajama i literaturi, a u
+prošlom vremenu kad se odnosi na provedeno istraživanje.
+
+Struktura poglavlja „Rasprava“
+
+a) Uvod u raspravu
+
+     Kratko podsjetiti na cilj istraživanja i najvažnije nalaze bez ponavljanja cijelog
+         poglavlja „Rezultati“.
+
+         Primjer:
+
+Ovim istraživanjem ispitana je povezanost razine zdravstvene pismenosti i samoučinkovitosti
+kod odraslih korisnika patronažne skrbi.
+
+Dobiveni rezultati ukazali su na umjerenu povezanost navedenih varijabli.
+
+b) Usporedba s drugim istraživanjima
+
+     Analizirati kako se rezultati slažu ili razlikuju od rezultata drugih autora.
+     Ako postoje razlike, objasniti ih kroz metodološke, kontekstualne ili kulturne
+
+         čimbenike.
+     Citirati relevantne studije koristeći odgovarajući citatni stil (npr. Vancouver).
+
+Primjer:
+
+Slične rezultate dobili su Novak i suradnici (22), koji su također utvrdili da viša razina
+zdravstvene pismenosti povećava samostalnost pacijenata u praćenju kronične bolesti.
+Međutim, u istraživanju Petrović (23) takva povezanost nije potvrđena, što se može objasniti
+manjim uzorkom i kraćim razdobljem promatranja.
+
+c) Značenje i implikacije rezultata
+
+     Objasniti što rezultati znače za praksu sestrinstva, javno zdravstvo ili edukaciju.
+     Ukazati na mogućnosti primjene nalaza u poboljšanju sestrinske skrbi, edukacijskih
+
 ===== [vub-upute-diplomski-2025 | str. 3] =====
-Sadrzaj
+Sadržaj
 
 1. VRSTE DIPLOMSKOG RADA .................................................................................................... 4
 2. STRUKTURA DIPLOMSKOG RADA ......................................................................................... 6
@@ -10,11 +60,11 @@ Sadrzaj
    3. Materijal, metode, ispitanici........................................................................................................ 8
    4. Rezultati .................................................................................................................................... 10
    5. Rasprava....................................................................................................................................12
-   6. Zakljucak................................................................................................................................... 15
+   6. Zaključak................................................................................................................................... 15
    7. Literatura...................................................................................................................................17
    8. Oznake i kratice ........................................................................................................................ 19
-   9. Sazetak ...................................................................................................................................... 19
-   10. Sazetak na engleskom jeziku (Abstract) ................................................................................... 21
+   9. Sažetak ...................................................................................................................................... 19
+   10. Sažetak na engleskom jeziku (Abstract) ................................................................................... 21
    11. Prilozi ........................................................................................................................................ 22
 4. OBRADA TEKSTA ..................................................................................................................... 23
 5. PROCEDURE VEZANE ZA IZRADU I PREDAJU DIPLOMSKOG RADA ........................... 30
@@ -27,50 +77,50 @@ intervencijama ili percepcijama organizacije rada ili
 
                         pacijenata.                        edukacije.
 
-Istrazivacko pitanje /  Jasno postavljena istrazivacka Moze imati cilj ili problem,
+Istraživačko pitanje /  Jasno postavljena istraživačka Može imati cilj ili problem,
        hipoteza
-                        pitanja i/ili hipoteze.            ali ne mora ukljucivati
+                        pitanja i/ili hipoteze.            ali ne mora uključivati
 
                                                            hipotezu.
 
 Metodologija            Strogo znanstvena:                 Opisna ili evaluacijska:
                         kvantitativna (anketa,             analiza literature, prikaz
-                        eksperiment), kvalitativna         slucaja, opis dobre prakse,
+                        eksperiment), kvalitativna         slučaja, opis dobre prakse,
                         (intervju, fenomenologija) ili     usporedba protokola.
-                        mjesovita.
+                        mješovita.
 
 Vrsta podataka          Prikupljeni primarni podaci od     Sekundarni podaci ili
                         sudionika (npr. pacijenata,        iskustva iz prakse,
                         sestara).                          statistike, smjernice.
 
-                           Statisticka analiza, kodiranje  Deskriptivna analiza,
-Analiza podataka kvalitativnih podataka.                   tablicni prikazi, sazeci i
+                           Statistička analiza, kodiranje  Deskriptivna analiza,
+Analiza podataka kvalitativnih podataka.                   tablični prikazi, sažeci i
                                                            interpretacije.
 
 ===== [vub-upute-diplomski-2025 | str. 6] =====
 5. Tekst rada. Napisan prema uputama u 3. poglavlju ovog dokumenta (Obvezni dijelovi
-diplomskog rada). Rad treba sadrzavati sve elemente navedene u Poglavlju 3.
+diplomskog rada). Rad treba sadržavati sve elemente navedene u Poglavlju 3.
 
-6. Odobrenje za provoenje istrazivanja etickog povjerenstva ustanove u kojoj se ono
+6. Odobrenje za provođenje istraživanja etičkog povjerenstva ustanove u kojoj se ono
 provodi. Ako je odobrenje izdano u papirnatom obliku, potrebno ga je skenirati i umetnuti u
 rad.
 
-7. Izjava o autorstvu. Izjava kojom student svojim potpisom jamci da je rad izradio
-samostalno, postujui nacela akademske cestitosti. Ovaj obrazac sastavni je dio predloska
-diplomskog rada Veleucilista u Bjelovaru. Potpisanu izjavu treba skenirati i uklopiti u digitalnu
+7. Izjava o autorstvu. Izjava kojom student svojim potpisom jamči da je rad izradio
+samostalno, poštujući načela akademske čestitosti. Ovaj obrazac sastavni je dio predloška
+diplomskog rada Veleučilišta u Bjelovaru. Potpisanu izjavu treba skenirati i uklopiti u digitalnu
 verziju rada (pdf) ili ju digitalno potpisati.
-Autori su odgovorni za originalnost i autorstvo svojeg rukopisa. Prevoenje recenica ili
-ulomaka bez adekvatnog citiranja izvora takoer se smatra plagiranjem. Autor mora biti
+Autori su odgovorni za originalnost i autorstvo svojeg rukopisa. Prevođenje rečenica ili
+ulomaka bez adekvatnog citiranja izvora također se smatra plagiranjem. Autor mora biti
 upoznat s izvorom literature kojeg navodi. Zabranjeno je navoditi bilo kakve izvore ako ih
-autor nije procitao. Gotovi diplomski radovi e biti analizirani softverom za detektiranje
+autor nije pročitao. Gotovi diplomski radovi će biti analizirani softverom za detektiranje
 plagiranja (Turnitin).
 
 8. Suglasnost za javnu objavu diplomskog rada u nacionalnom repozitoriju. Ovaj obrazac
-sastavni je dio predloska diplomskog rada Veleucilista u Bjelovaru. Potpisanu suglasnost treba
+sastavni je dio predloška diplomskog rada Veleučilišta u Bjelovaru. Potpisanu suglasnost treba
 skenirati i uklopiti u digitalnu verziju rada (pdf) ili ju digitalno potpisati.
 
 Napomena: DR obrazac, Izjava o autorstvu i Suglasnost za javnu objavu diplomskog rada u
-radu se ne obrojcavaju i ne navode u tablici sadrzaja.
+radu se ne obrojčavaju i ne navode u tablici sadržaja.
 
                                                                                                                           6
 
@@ -83,303 +133,244 @@ radu se ne obrojcavaju i ne navode u tablici sadrzaja.
 
 Uvod je prvo poglavlje diplomskog rada i numerira se brojem 1. Duljinu i strukturu Uvoda
 (potpoglavlja i manje cjeline s naslovima) student/ica dogovara s mentorom. Uvod ne smije
-biti krai od 10 % niti dulji od 20 % samog diplomskog rada, racunajui u broju stranica od
-pocetka Uvoda do kraja Zakljucka.
+biti kraći od 10 % niti dulji od 20 % samog diplomskog rada, računajući u broju stranica od
+početka Uvoda do kraja Zaključka.
 
-Uvod objasnjava razloge provedbe istrazivanja opisanih u radu citiranjem odgovarajue
-literature i razlaganjem problema strucnom citateljstvu.
+Uvod objašnjava razloge provedbe istraživanja opisanih u radu citiranjem odgovarajuće
+literature i razlaganjem problema stručnom čitateljstvu.
 
 U uvodu je potrebno:
-1) odrediti svrhu istrazivanja - definirati problem, tj. zadatak ili pitanje koje se obrauje u
-okviru teme rada, istaknuti vaznost aktualnosti problema, te definirati pripadnu hipotezu ili
-pretpostavku problema koja e se u radu dokazati ili opovrgnuti;
+1) odrediti svrhu istraživanja - definirati problem, tj. zadatak ili pitanje koje se obrađuje u
+okviru teme rada, istaknuti važnost aktualnosti problema, te definirati pripadnu hipotezu ili
+pretpostavku problema koja će se u radu dokazati ili opovrgnuti;
 2) definirati pojmove koji su potrebni za daljnje razumijevanje rada, uz adekvatnu uporabu
 literaturnih izvora;
-3) naciniti krai literaturni pregled o dosadasnjim istrazivanjima i spoznajama o podrucju
-istrazivanja, temi i problemu � kreui se od najsireg relevantnog podrucja prema specificnim
+3) načiniti kraći literaturni pregled o dosadašnjim istraživanjima i spoznajama o području
+istraživanja, temi i problemu – krećući se od najšireg relevantnog područja prema specifičnim
 problemima u vezi s temom i problemom rada.
-Pri tome je cilj dati pregled recentnih i kvalitetnih istrazivanja i drugih relevantnih izvora iz
-podrucja akademske literature. Internetski izvori mogu ciniti najvise jednu cetvrtinu (25 %)
-svih koristenih izvora u cijelom radu. Udzbenicku grau u uvodnome dijelu treba svesti na
-minimum koji je neophodan da bi se mogao shvatiti problem koji se u radu istrazuje.
+Pri tome je cilj dati pregled recentnih i kvalitetnih istraživanja i drugih relevantnih izvora iz
+područja akademske literature. Internetski izvori mogu činiti najviše jednu četvrtinu (25 %)
+svih korištenih izvora u cijelom radu. Udžbeničku građu u uvodnome dijelu treba svesti na
+minimum koji je neophodan da bi se mogao shvatiti problem koji se u radu istražuje.
 
    2. Cilj rada
 
 Potrebno je ukratko objasniti koji su ciljevi rada u skladu s ciljem definiranim na obrascu DR-
 001.
 
-Opi cilj diplomskog rada treba jasno izraziti sto se zeli postii istrazivanjem u cjelini.
-On predstavlja glavni smjer i svrhu istrazivanja te je usmjeren na siru znanstvenu i/ili
-strucnu korist za podrucje sestrinstva.
+Opći cilj diplomskog rada treba jasno izraziti što se želi postići istraživanjem u cjelini.
+On predstavlja glavni smjer i svrhu istraživanja te je usmjeren na širu znanstvenu i/ili
+stručnu korist za područje sestrinstva.
+
+===== [vub-upute-diplomski-2025 | str. 8] =====
+Analizirati povezanost zdravstvene pismenosti i pridržavanja preporučenih zdravstvenih ponašanja.
+
+Uobičajene pogreške koje treba izbjeći
+
+     Pisanje ciljeva u obliku zadatka ili aktivnosti („provesti anketu“, „napraviti analizu“)
+         umjesto istraživačkog cilja.
+
+     Preopćenite ili nejasne formulacije („istražiti problem“, „opisati situaciju“).
+     Miješanje ciljeva i hipoteza – hipoteze su tvrdnje koje se testiraju, dok su ciljevi
+
+         orijentiri istraživanja.
+     Navođenje prevelikog broja ciljeva koji se realno ne mogu obuhvatiti u okviru
+
+         diplomskog rada.
+
+U raspravi i zaključku autor se vraća na ciljeve te ocjenjuje u kojoj su mjeri ostvareni kroz
+provedeno istraživanje.
+
+   3. Materijal, metode, ispitanici
+
+Poglavlje Materijal, metode, ispitanici (ili Metodologija istraživanja) opisuje kako je
+provedeno istraživanje, na kojem uzorku i kojim postupcima.
+Njegova je svrha omogućiti da drugi istraživači mogu ponoviti studiju prema navedenim
+informacijama.
 
 ===== [vub-upute-diplomski-2025 | str. 12] =====
-Nedosljednost u prikazu postotaka i decimalnih mjesta.
+Rezultati istraživanja prikazani su prema postavljenim ciljevima.
+U istraživanju je sudjelovalo 120 ispitanika, od čega je 65 % bilo ženskog spola, prosječne
+dobi 42,3 ± 10,2 godine.
+Većina ispitanika (72 %) imala je završenu višu ili visoku stručnu spremu.
+Analizom χ²-testa utvrđena je statistički značajna povezanost između razine obrazovanja i
+učestalosti provođenja zdravstveno-edukativnih aktivnosti (p = 0,031).
 
-Poglavlje Rezultati mora biti tocno, pregledno i znanstveno utemeljeno, jer predstavlja srz
-istrazivanja.
-Jasna prezentacija rezultata temelj je kvalitetne rasprave i vjerodostojnih zakljucaka.
+Česte pogreške koje valja izbjeći:
+
+ Miješanje rezultata i rasprave (npr. tumačenje zašto su rezultati takvi).
+
+ Navođenje sirovih podataka bez sažetka ili statističke obrade.
+
+ Nedostatak numeracije tablica i grafikona.
+
+ Nedosljednost u prikazu postotaka i decimalnih mjesta.
+
+Poglavlje Rezultati mora biti točno, pregledno i znanstveno utemeljeno, jer predstavlja srž
+istraživanja.
+Jasna prezentacija rezultata temelj je kvalitetne rasprave i vjerodostojnih zaključaka.
 
    5. Rasprava
 
-Poglavlje Rasprava ima za cilj interpretirati i objasniti rezultate istrazivanja u kontekstu
-postojeih znanstvenih spoznaja.
-Dok poglavlje Rezultati prikazuje sto je otkriveno, poglavlje Rasprava objasnjava sto ti
-rezultati znace i kako se uklapaju u ranija istrazivanja.
+Poglavlje Rasprava ima za cilj interpretirati i objasniti rezultate istraživanja u kontekstu
+postojećih znanstvenih spoznaja.
+Dok poglavlje Rezultati prikazuje što je otkriveno, poglavlje Rasprava objašnjava što ti
+rezultati znače i kako se uklapaju u ranija istraživanja.
 
-Rasprava pokazuje sposobnost studenta da kriticki analizira, povezuje i interpretira
-nalaze, sto je kljucna komponenta znanstvenog rada.
+Rasprava pokazuje sposobnost studenta da kritički analizira, povezuje i interpretira
+nalaze, što je ključna komponenta znanstvenog rada.
 
                                                                                                                         12
 
-===== [vub-upute-diplomski-2025 | str. 13] =====
-Opa pravila pisanja:
-
- Rasprava se temelji na interpretaciji rezultata, a ne na njihovom ponavljanju.
-
- Svaki rezultat treba biti povezan s relevantnom literaturom (domaom i meunarodnom).
-
- Potrebno je ukazati na podudarnosti i razlike s prethodnim istrazivanjima te objasniti
-mogue razloge odstupanja.
-
- Stil pisanja mora biti akademski, jasan, argumentiran i kriticki, uz izbjegavanje
-subjektivnih izraza poput ,,smatram" ili ,,po mom misljenju".
-
- Rasprava se pise u sadasnjem vremenu kada se govori o opim spoznajama i literaturi, a u
-proslom vremenu kad se odnosi na provedeno istrazivanje.
-
-Struktura poglavlja ,,Rasprava"
-
-a) Uvod u raspravu
-
-     Kratko podsjetiti na cilj istrazivanja i najvaznije nalaze bez ponavljanja cijelog
-         poglavlja ,,Rezultati".
-
-         Primjer:
-
-Ovim istrazivanjem ispitana je povezanost razine zdravstvene pismenosti i samoucinkovitosti
-kod odraslih korisnika patronazne skrbi.
-
-Dobiveni rezultati ukazali su na umjerenu povezanost navedenih varijabli.
-
-b) Usporedba s drugim istrazivanjima
-
-     Analizirati kako se rezultati slazu ili razlikuju od rezultata drugih autora.
-     Ako postoje razlike, objasniti ih kroz metodoloske, kontekstualne ili kulturne
-
-         cimbenike.
-     Citirati relevantne studije koristei odgovarajui citatni stil (npr. Vancouver).
-
-Primjer:
-
-Slicne rezultate dobili su Novak i suradnici (22), koji su takoer utvrdili da visa razina
-zdravstvene pismenosti poveava samostalnost pacijenata u praenju kronicne bolesti.
-Meutim, u istrazivanju Petrovi (23) takva povezanost nije potvrena, sto se moze objasniti
-manjim uzorkom i kraim razdobljem promatranja.
-
-c) Znacenje i implikacije rezultata
-
-     Objasniti sto rezultati znace za praksu sestrinstva, javno zdravstvo ili edukaciju.
-     Ukazati na mogunosti primjene nalaza u poboljsanju sestrinske skrbi, edukacijskih
-
 ===== [vub-upute-diplomski-2025 | str. 14] =====
-Preporucuje se provedba istrazivanja na veem uzorku ispitanika te ukljucivanje kvalitativnih
+Preporučuje se provedba istraživanja na većem uzorku ispitanika te uključivanje kvalitativnih
 metoda radi dubljeg razumijevanja iskustava pacijenata.
 
 Stil i jezik rasprave:
 
- Koristiti znanstveni stil, izbjegavati izraze emocionalnog ili osobnog karaktera.
+ Koristiti znanstveni stil, izbjegavati izraze emocionalnog ili osobnog karaktera.
 
- Povezivati odlomke logicnim prijelazima (Slicno su utvrdili..., Suprotno tome..., Rezultati
-ovog istrazivanja dopunjuju...).
+ Povezivati odlomke logičnim prijelazima (Slično su utvrdili..., Suprotno tome..., Rezultati
+ovog istraživanja dopunjuju...).
 
- Navoditi podatke iz rezultata samo kao potporu interpretaciji.
+ Navoditi podatke iz rezultata samo kao potporu interpretaciji.
 
- Sve tvrdnje trebaju biti potkrijepljene literaturom.
+ Sve tvrdnje trebaju biti potkrijepljene literaturom.
 
 Primjer formulacije:
 
-Dobiveni rezultati upuuju na povezanost izmeu stupnja obrazovanja i razine zdravstvene
-pismenosti, sto je u skladu s rezultatima istrazivanja Markovi i suradnika (2021).
+Dobiveni rezultati upućuju na povezanost između stupnja obrazovanja i razine zdravstvene
+pismenosti, što je u skladu s rezultatima istraživanja Marković i suradnika (2021).
 
-Ovakvi nalazi potvruju vaznost edukacijskih intervencija medicinskih sestara u radu s
-pacijentima nize razine obrazovanja.
+Ovakvi nalazi potvrđuju važnost edukacijskih intervencija medicinskih sestara u radu s
+pacijentima niže razine obrazovanja.
 
-Meutim, budua istrazivanja trebala bi ukljuciti vei uzorak i kvalitativne metode radi dubljeg
+Međutim, buduća istraživanja trebala bi uključiti veći uzorak i kvalitativne metode radi dubljeg
 razumijevanja stavova ispitanika.
 
 ===== [vub-upute-diplomski-2025 | str. 15] =====
-Ponovno iznosenje svih rezultata umjesto njihove interpretacije.
- Navoenje literaturnih izvora bez povezivanja s vlastitim rezultatima.
- Pretjerano osobni ton (izrazi poput ,,autor smatra").
- Nedostatak kritickog osvrta � samo opis, bez tumacenja.
- Izostanak ogranicenja istrazivanja.
-Poglavlje Rasprava pokazuje sposobnost studenta da poveze vlastite rezultate s teorijom i
+ Ponovno iznošenje svih rezultata umjesto njihove interpretacije.
+ Navođenje literaturnih izvora bez povezivanja s vlastitim rezultatima.
+ Pretjerano osobni ton (izrazi poput „autor smatra“).
+ Nedostatak kritičkog osvrta – samo opis, bez tumačenja.
+ Izostanak ograničenja istraživanja.
+Poglavlje Rasprava pokazuje sposobnost studenta da poveže vlastite rezultate s teorijom i
 praksom sestrinstva.
-Kvalitetno napisana rasprava razlikuje deskriptivan rad od pravog znanstvenog istrazivanja te
+Kvalitetno napisana rasprava razlikuje deskriptivan rad od pravog znanstvenog istraživanja te
 daje radu njegovu znanstvenu vrijednost i primjenjivost u praksi.
 
-   6. Zakljucak
+   6. Zaključak
 
-Poglavlje Zakljucak predstavlja zavrsni i najvazniji dio znanstvenog rada.
-Njegova je svrha sazeti glavne nalaze istrazivanja, istaknuti njihovu vaznost i doprinos
+Poglavlje Zaključak predstavlja završni i najvažniji dio znanstvenog rada.
+Njegova je svrha sažeti glavne nalaze istraživanja, istaknuti njihovu važnost i doprinos
 znanosti i praksi sestrinstva te jasno odgovoriti na postavljene ciljeve i/ili hipoteze.
-Zakljucak mora biti kratak, jasan i sadrzajno usklaen s poglavljima Uvod, Ciljevi i
+Zaključak mora biti kratak, jasan i sadržajno usklađen s poglavljima Uvod, Ciljevi i
 Rasprava.
-U njemu se ne uvode novi podaci, tablice ili reference, nego se sintetiziraju ve prikazani
+U njemu se ne uvode novi podaci, tablice ili reference, nego se sintetiziraju već prikazani
 rezultati.
-Opa pravila pisanja:
- Zakljucak treba sadrzavati 3 do 5 odlomaka, ukupne duljine 1-2 stranice teksta.
- Pise se u proslom vremenu (jer se odnosi na provedeno istrazivanje) i objektivnim
+Opća pravila pisanja:
+ Zaključak treba sadržavati 3 do 5 odlomaka, ukupne duljine 1-2 stranice teksta.
+ Piše se u prošlom vremenu (jer se odnosi na provedeno istraživanje) i objektivnim
 tonom.
- Stil treba biti koncizan i akademski, bez ponavljanja cijelih odlomaka iz rasprave.
- Svaka recenica u zakljucku treba imati informacijsku vrijednost � izbjegavati openite
-izraze poput ,,Rad je bio zanimljiv" ili ,,Tema je aktualna".
-Preporucena struktura zakljucka:
-a) Uvodni dio � podsjetnik na cilj istrazivanja
-Kratko podsjetiti citatelja na osnovni cilj rada i podrucje istrazivanja.
-
-                                                                                                                        15
+ Stil treba biti koncizan i akademski, bez ponavljanja cijelih odlomaka iz rasprave.
+ Svaka rečenica u zaključku treba imati informacijsku vrijednost – izbjegavati općenite
+izraze poput „Rad je bio zanimljiv“ ili „Tema je aktualna“.
+Preporučena struktura zaključka:
+a) Uvodni dio – podsjetnik na cilj istraživanja
+Kratko podsjetiti čitatelja na osnovni cilj rada i područje istraživanja.
 
 ===== [vub-upute-diplomski-2025 | str. 16] =====
-Primjer:
-Dobiveni rezultati ukazuju na potrebu jacanja edukacijskih programa usmjerenih na
-poveanje zdravstvene pismenosti odraslih osoba.
-Budua istrazivanja trebala bi ukljuciti vei uzorak ispitanika i kvalitativne metode kako bi se
-dublje razumjeli faktori koji utjecu na samoucinkovitost pacijenata.
-
-Stil i ton pisanja:
-
-     Koristi znanstveni i objektivan ton � izbjegavaj izraze poput ,,Autor smatra" ili ,,Po
-         mom misljenju".
-
-     Recenice neka budu jasne, sazete i povezane logicnim prijelazima.
-     Zakljucak treba citatelju ostaviti dojam zaokruzenosti i jasnoe istrazivanja.
-     Mogue je zavrsiti rad kratkom recenicom koja naglasava doprinos istrazivanja.
+ Zaključak treba čitatelju ostaviti dojam zaokruženosti i jasnoće istraživanja.
+     Moguće je završiti rad kratkom rečenicom koja naglašava doprinos istraživanja.
 
 Primjer:
-Ovim istrazivanjem doprinosi se boljem razumijevanju uloge medicinske sestre u promicanju
-zdravstvene pismenosti i osnazivanju pacijenata u samostalnom upravljanju kronicnim
+Ovim istraživanjem doprinosi se boljem razumijevanju uloge medicinske sestre u promicanju
+zdravstvene pismenosti i osnaživanju pacijenata u samostalnom upravljanju kroničnim
 bolestima.
 
-Ceste pogreske koje treba izbjei:
+Česte pogreške koje treba izbjeći:
 
- Ponavljanje cijelih odlomaka iz poglavlja Rasprava.
+ Ponavljanje cijelih odlomaka iz poglavlja Rasprava.
 
- Uvoenje novih podataka, analiza ili citata.
+ Uvođenje novih podataka, analiza ili citata.
 
- Pretjerano opisivanje metodologije (to je dio poglavlja Materijali i metode).
+ Pretjerano opisivanje metodologije (to je dio poglavlja Materijali i metode).
 
- Preopeniti zakljucci bez izravne veze s ciljevima istrazivanja.
+ Preopćeniti zaključci bez izravne veze s ciljevima istraživanja.
 
                                                                                                                         16
 
 ===== [vub-upute-diplomski-2025 | str. 17] =====
-samoucinkovitosu u praenju kronicne bolesti.
-Dobiveni nalazi potvruju vaznost kontinuirane edukacije i uloge medicinskih sestara u
-unaprjeenju zdravstvenog ponasanja pacijenata.
-Istrazivanje je doprinijelo boljem razumijevanju cimbenika koji utjecu na brigu o zdravlju te
-moze posluziti kao temelj za budue studije u podrucju sestrinstva i javnog zdravstva.
+samoučinkovitošću u praćenju kronične bolesti.
+Dobiveni nalazi potvrđuju važnost kontinuirane edukacije i uloge medicinskih sestara u
+unaprjeđenju zdravstvenog ponašanja pacijenata.
+Istraživanje je doprinijelo boljem razumijevanju čimbenika koji utječu na brigu o zdravlju te
+može poslužiti kao temelj za buduće studije u području sestrinstva i javnog zdravstva.
 
-Poglavlje Zakljucak mora odrazavati sintezu cjelokupnog istrazivackog procesa � od ciljeva
-i rezultata do prakticne primjene i preporuka.
+Poglavlje Zaključak mora odražavati sintezu cjelokupnog istraživačkog procesa – od ciljeva
+i rezultata do praktične primjene i preporuka.
 
-Kvalitetan zakljucak ostavlja dojam znanstvene zaokruzenosti i jasnoe te naglasava doprinos
-diplomskog rada znanstvenoj i strucnoj zajednici.
+Kvalitetan zaključak ostavlja dojam znanstvene zaokruženosti i jasnoće te naglašava doprinos
+diplomskog rada znanstvenoj i stručnoj zajednici.
 
    7. Literatura
 
-Literatura se u popisu literature navodi na sljedei nacin:
+Literatura se u popisu literature navodi na sljedeći način:
 
-� autorska knjiga: Prezime i inicijal(i) imena autora. Naslov: podnaslov, izdanje (samo ako
-je navedeno na publikaciji � npr. 2. izd., 4th ed. i sl.). Mjesto izdavanja: izdavac; Godina
+– autorska knjiga: Prezime i inicijal(i) imena autora. Naslov: podnaslov, izdanje (samo ako
+je navedeno na publikaciji – npr. 2. izd., 4th ed. i sl.). Mjesto izdavanja: izdavač; Godina
 izdavanja/objave.
 Primjer:
-1. Luki A. Fiziologija za visoke zdravstvene skole. Bjelovar: Visoka tehnicka skola u
+1. Lukić A. Fiziologija za visoke zdravstvene škole. Bjelovar: Visoka tehnička škola u
 Bjelovaru; 2015.
 
-� urednicka knjiga: Prezime i inicijal(i) imena urednika. Naslov: podnaslov, izdanje (samo
-ako je navedeno na publikaciji � npr. 2. izd., 4th ed. i sl.). Mjesto izdavanja: izdavac; Godina
+– urednička knjiga: Prezime i inicijal(i) imena urednika. Naslov: podnaslov, izdanje (samo
+ako je navedeno na publikaciji – npr. 2. izd., 4th ed. i sl.). Mjesto izdavanja: izdavač; Godina
 izdavanja/objave.
 Primjer:
 
 ===== [vub-upute-diplomski-2025 | str. 19] =====
-CARNet � Croatian Academic And Research Network (Hrvatska akademska i istrazivacka
-                mreza)
+VUB – Veleučilište u Bjelovaru
 
-HAZU � Hrvatska akademija znanosti i umjetnosti
-HRT � Hrvatska radiotelevizija
-NSK � Nacionalna i sveucilisna knjiznica
-VUB � Veleuciliste u Bjelovaru
+   9. Sažetak
 
-   9. Sazetak
+Sažetak je kratak, sažet i samostalan prikaz cjelokupnog diplomskog rada.
+Njegova je svrha omogućiti čitatelju da brzo stekne uvid u temu, cilj, metodologiju, glavne
+rezultate i zaključke istraživanja, bez potrebe da čita cijeli rad.
 
-Sazetak je kratak, sazet i samostalan prikaz cjelokupnog diplomskog rada.
-Njegova je svrha omoguiti citatelju da brzo stekne uvid u temu, cilj, metodologiju, glavne
-rezultate i zakljucke istrazivanja, bez potrebe da cita cijeli rad.
+Opća pravila pisanja:
 
-Opa pravila pisanja:
+     Sažetak treba biti jasan, strukturiran i samostalan tekst.
+     Duljina sažetka obično iznosi do 250 riječi (najviše 1 kartica teksta).
+     Piše se u jednom odlomku, bez podnaslova, tablica, slika ili referenci.
+     Koristi se prošlo vrijeme za opis provedbe i rezultata istraživanja, a sadašnje
 
-     Sazetak treba biti jasan, strukturiran i samostalan tekst.
-     Duljina sazetka obicno iznosi do 250 rijeci (najvise 1 kartica teksta).
-     Pise se u jednom odlomku, bez podnaslova, tablica, slika ili referenci.
-     Koristi se proslo vrijeme za opis provedbe i rezultata istrazivanja, a sadasnje
-
-         vrijeme za openite tvrdnje.
+         vrijeme za općenite tvrdnje.
 
                                                                                                                         19
 
 ===== [vub-upute-diplomski-2025 | str. 21] =====
-Kljucne rijeci na engleskom odvajaju se zarezima, bez tocke na kraju.
-     Kljucne rijeci na engleskom u radu se ne numeriraju, nego samo navode ispod
+ Ključne riječi na engleskom odvajaju se zarezima, bez točke na kraju.
+     Ključne riječi na engleskom u radu se ne numeriraju, nego samo navode ispod
 
-         sazetka na engleskom.
+         sažetka na engleskom.
 
 Primjer:
 Keywords: health literacy, self-efficacy, community care, nursing practice
 
-Stil pisanja sazetka i preporuke
+Stil pisanja sažetka i preporuke
 
-     Izbjegavati openite izraze poput "U radu se govori o..." ili "Ovaj rad prikazuje..."
-     Nema navoenja literature, tablica, slika ni kratica koje nisu prethodno objasnjene.
-     Sazetak mora biti samostalan i razumljiv citatelju koji ne cita cijeli rad.
-     Preporucuje se da mentor pregleda sazetak prije konacne predaje.
+     Izbjegavati općenite izraze poput “U radu se govori o…” ili “Ovaj rad prikazuje…”
+     Nema navođenja literature, tablica, slika ni kratica koje nisu prethodno objašnjene.
+     Sažetak mora biti samostalan i razumljiv čitatelju koji ne čita cijeli rad.
+     Preporučuje se da mentor pregleda sažetak prije konačne predaje.
 
-Primjer oblikovanog sazetka:
+Primjer oblikovanog sažetka:
 
-Sazetak:
+Sažetak:
 
-Cilj istrazivanja bio je ispitati povezanost zdravstvene pismenosti i samoucinkovitosti kod
-odraslih korisnika patronazne skrbi.
+Cilj istraživanja bio je ispitati povezanost zdravstvene pismenosti i samoučinkovitosti kod
+odraslih korisnika patronažne skrbi.
 
-Istrazivanje je provedeno kao presjecna studija na uzorku od 120 ispitanika pomou
+Istraživanje je provedeno kao presječna studija na uzorku od 120 ispitanika pomoću
 strukturiranog anketnog upitnika.
-
-===== [vub-upute-diplomski-2025 | str. 24] =====
-neposredno ispod slike (slika se potpisuje), a oznaka i opis tablice iznad tablice
-         (tablica se natpisuje). Opis slike/tablice pise se normalnim tekstom, ne masno
-         otisnutim, niti u kurzivu.
-
-     Velicina fonta za opis slike/tablice jest 12 pt (Times New Roman).
-     Slike/tablice i njihove naslove potrebno je centrirati na stranici, a iza naslova
-
-         slike/tablice treba ostaviti jedan prazan red.
-     Slike i tablice u tekst treba uklopiti najblize mjestu gdje se na njih poziva (primjer
-
-         pozivanja na sliku/tablicu u tekstu: Na slici/tablici 3.2. prikazano je... ili:
-         Slika/tablica 3.2. prikazuje... i sl.
-     Ukoliko je slika preuzeta iz literature, iza opisa je potrebno pozvati se na izvor na
-         isti nacin kako se poziva i na izvor u tekstu, odnosno iza opisa slike u obloj zagradi
-         treba navesti broj reference (npr. Slika 2.3. Zagaivaci zraka (2)). Vidjeti potpoglavlje
-         ovog dokumenta 3.4. Citiranje i navoenje literature.
-     Uz pozivanje na izvor slike iza njezina opisa (kako je opisano u prethodnoj tocki), na
-         njezin se izvor trebate pozvati i u tekstu kada o njoj govorite (npr. Na slici 2.3.
-         prikazani su najcesi zagaivaci zraka (5)...).
-     Slika/tablica u tekstu se poziva na sljedei nacin: Na slici 2.1. prikazano je... / Iz
-         tablice 3.2. vidi se da... i sl. Ukoliko se u zagradi zeli naznaciti slika na koju se tekst
-         odnosi: ...(Sl. 2.1.)...
-     Treba izbjegavati velike tablice koje se prelamaju na dvije ili vise stranica. Manje
-         tablice, koji nisu vee od jedne stranice, uvijek treba postaviti na jednu stranicu.
-         Slike/tablice i njihovi naslovi moraju biti na istoj stranici.
-     Primjer potpisivanja slike:
-
-                                                                                                                        24

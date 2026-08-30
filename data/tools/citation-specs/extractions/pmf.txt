@@ -1,171 +1,103 @@
-===== [pmf-geog-upute-diplomski-2026 | str. 1] =====
-Prirodoslovno-matematickom fakultetu, Geografskom odsjeku (u daljnjem tekstu:
-Pravilnik).
-
-IZBOR TEME
-� Student kontaktira nastavnika po vlastitom izboru radi dogovora o mentorstvu diplomskog
-
-    rada najkasnije do sredine sijecnja zavrsne godine studija. Izradu diplomskog rada moze
-    voditi jedan nastavnik ili dva nastavnika s ciljem komentorstva (cl. 3., st. 3. i 4. Pravilnika)
-    (dalje u tekstu: nastavnik/mentor u jednini).
-� Temu moze predloziti student ili nastavnik (ili oba nastavnika), a student moze izabrati temu
-    izmeu ponuenih tema koje sastavlja pojedini nastavnik.
-� Student dostavlja mentoru prijedlog teme koji sadrzi: radni naslov, koncept (sadrzaj) rada,
-    literaturu i izvore podataka koje namjerava koristiti u izradi diplomskog rada. Naslov mora
-    biti precizan; sto krai, ali i sto informativniji. Tema ne smije biti ista ili slicna kao teme drugih
-    ocjenskih radova na Geografskom odsjeku u posljednjih pet godina.
-� Nakon sto nastavnik prihvati naslov rada, sadrzaj rada, prijedlog literature i ostale pojedinosti
-    pokree se postupak prijave teme.
-
-POSTUPAK PRIJAVE TEME DIPLOMSKOG RADA
-� Student u dogovoru s nastavnikom prijavljuje temu diplomskog rada najkasnije do kraja
-
-    zimskog semestra zavrsne godine studija (cl. 2., st. 5. Pravilnika), odnosno do sjednice
-    Povjerenstva za nastavu koja prethodi sjednici Vijea Geografskog odsjeka u veljaci na kojoj
-    se prihvaa tema.
-
-                                                                                                                  1
-
-===== [pmf-geog-upute-diplomski-2026 | str. 3] =====
-� Pocetne stranice do ukljucivo Sadrzaja (ili Predgovora) ne numeriraju se. Numeracija
-
-    zapocinje od Uvoda koji nosi arapski broj 1.
-
-b) Struktura rada
-� Navedeni dijelovi koji slijede su obvezni dijelovi strukture diplomskog rada, a ne naslovi
-
-    poglavlja.
-� Uvod: sazeto definirati objekt, prostorni i vremenski obuhvat teme istrazivanja. U zasebnom
-
-    odlomku jasno iskazati polazne hipoteze i cilj istrazivanja. Prva stranica Uvoda nosi arapski
-    broj 1.
-� Pregled dosadasnjih istrazivanja i literature: aktualan pregled znanja (znanstvenih i
-    strucnih radova) o uzem podrucju rada.
-� Teorijski pristup: pristup istrazivanju s teorijskog aspekta na temelju procitane literature,
-    logicno strukturiran po poglavljima relevantnim za rad.
-� Metode istrazivanja: metode prikupljanja i analize podataka; izvori podataka.
-� Rezultati: Iznose se rezultati vlastitog rada, praeni objasnjenima te tablicnim i grafickim
-    prilozima. Ovaj se dio moze podijeliti u vise logickih cjelina (poglavlja). Usporedba s
-    rezultatima drugih autora (iz literature) pise se u Raspravi.
-� Rasprava: Kriticka usporedba rezultata vlastitog rada i spoznaja iz literature.
-� Zakljucak: Sazeta sinteza najvaznijih spoznaja u radu. Zakljucak sadrzi najvaznija rjesenja
-    postavljenog problema te osvrt na ispunjenost ciljeva i hipoteza definiranih u Uvodu.
-    Zakljucak nije sazetak rada i nije isto sto i Izvadak koji se pise u Temeljnoj dokumentacijskoj
-    kartici.
-� Literatura i izvori: Pise se na kraju rada, ali ne numerira se kao poglavlje.
-
-c) Prilozi
-� Ovdje se navode Popis slika i Popis tablica te svi drugi razliciti (dodatni) tablicni, graficki ili
-
-    kartografski prilozi. Uz naziv svake slike i tablice navedene u Popisu slika i Popisu tablica
-    navodi se stranica rada na kojoj se nalazi slika ili tablica.
-� Na Sveucilisnom diplomskom studiju Geografija; modul: nastavnicki te Sveucilisnom
-    integriranom prijediplomskom i diplomskom studiju Geografija i povijest; modul: nastavnicki
-    sastavni dio priloga je i metodicka priprema za nastavni sat geografije (Prilog 3).
-
-Nacin pisanja
-� Tekst treba biti napisan knjizevnim hrvatskim jezikom, jasno, sazeto, jezicno ispravan, pisan
-
 ===== [pmf-geog-upute-diplomski-2026 | str. 4] =====
-kandidata na jezicnu lekturu teksta (prije nego se rad preda na ocjenu).
+kandidata na jezičnu lekturu teksta (prije nego se rad preda na ocjenu).
 
-� Pojmovi koji imaju kratice pri prvom pojavljivanju navode se u potpunosti, a u zagradi se
-    navodi kratica. Nakon toga se kod iduih koristenja moze koristiti samo kratica.
+• Pojmovi koji imaju kratice pri prvom pojavljivanju navode se u potpunosti, a u zagradi se
+    navodi kratica. Nakon toga se kod idućih korištenja može koristiti samo kratica.
 
-� Posebnu pozornost potrebno je posvetiti nacinu citiranja, pravilima izrade i oznacavanja
-    tablicnih, grafickih i kartografskih priloga te navoenja izvora podataka koji su posluzili za
+• Posebnu pozornost potrebno je posvetiti načinu citiranja, pravilima izrade i označavanja
+    tabličnih, grafičkih i kartografskih priloga te navođenja izvora podataka koji su poslužili za
     njihovu izradu.
 
 Slike i tablice
 
-� Slikama se nazivaju svi oblici grafickih prikaza (dijagrami, karte, fotografije, skice i dr.).
+• Slikama se nazivaju svi oblici grafičkih prikaza (dijagrami, karte, fotografije, skice i dr.).
 
-� Tablice i slike trebaju biti sto sadrzajnije i potpunije. Svaka tablica ili slika treba biti citljiva i
-    izvan konteksta. Iste podatke u pravilu se ne prikazuje i pomou tablice i pomou slike.
+• Tablice i slike trebaju biti što sadržajnije i potpunije. Svaka tablica ili slika treba biti čitljiva i
+    izvan konteksta. Iste podatke u pravilu se ne prikazuje i pomoću tablice i pomoću slike.
 
-� Treba izbjegavati preuzimanje (kopiranje, skeniranje) gotovih grafickih i tablicnih prikaza
+• Treba izbjegavati preuzimanje (kopiranje, skeniranje) gotovih grafičkih i tabličnih prikaza
     drugih autora.
 
-� Naslovi slika ili tablica moraju davati odgovore na pitanja ,,sto, gdje i kada" (sto = objekt koji
+• Naslovi slika ili tablica moraju davati odgovore na pitanja „što, gdje i kada“ (što = objekt koji
     je prikazan, gdje = prostorni obuhvat/okvir, kada = vremenski period ili trenutak). Ispred
-    naslova tablica/slika pisu se redni brojevi u skraenom obliku (npr. Sl. 1. Naslov slike; Tab.
-    1. Naslov tablice). Naslovi tablica pisu se iznad tablica, a naslovi slika ispod slika.
+    naslova tablica/slika pišu se redni brojevi u skraćenom obliku (npr. Sl. 1. Naslov slike; Tab.
+    1. Naslov tablice). Naslovi tablica pišu se iznad tablica, a naslovi slika ispod slika.
 
-� Ispod slika i tablica pise se izvor u skraenom obliku (vidjeti tablicu kod citiranja). Izvor se
-    odnosi na podatke na temelju kojih je izraena slika ili tablica. Ne pise se da je sliku ili tablicu
+• Ispod slika i tablica piše se izvor u skraćenom obliku (vidjeti tablicu kod citiranja). Izvor se
+    odnosi na podatke na temelju kojih je izrađena slika ili tablica. Ne piše se da je sliku ili tablicu
     izradio autor (student), nego se pretpostavlja da je autorsko djelo jer se nalazi u diplomskom
-    radu studenta. U slucajevima preuzimanja gotovih tablica ili grafickih priloga potrebno je
+    radu studenta. U slučajevima preuzimanja gotovih tablica ili grafičkih priloga potrebno je
     navesti da je prilog preuzet i navesti izvor.
 
-� Pri pozivanju na odreenu tablicu ili sliku u tekstu u zagradi se pise skraena oznaka malim
-    pocetnim slovom (npr. tab. 1 ili sl. 1). Sve slike i tablice trebaju biti najavljene u tekstu, u
+• Pri pozivanju na određenu tablicu ili sliku u tekstu u zagradi se piše skraćena oznaka malim
+    početnim slovom (npr. tab. 1 ili sl. 1). Sve slike i tablice trebaju biti najavljene u tekstu, u
     pravilu prije samog priloga.
 
 Citiranje
 
-� Literatura se citira prema harvardskom sustavu.
+• Literatura se citira prema harvardskom sustavu.
 
-� Koristena literatura citira se unutar teksta tako da se navede prezime autora i godina
-    objavljivanja (odvojena zarezom) na kraju recenice ili dijela recenice koji predstavlja
-    prepricani sadrzaj iz literature, npr. ,,(Chang, 2019)".
+• Korištena literatura citira se unutar teksta tako da se navede prezime autora i godina
+    objavljivanja (odvojena zarezom) na kraju rečenice ili dijela rečenice koji predstavlja
+    prepričani sadržaj iz literature, npr. „(Chang, 2019)“.
 
-� U slucaju preuzimanja doslovnog citata iz literature, preuzeti dio oznacava se navodnim
+• U slučaju preuzimanja doslovnog citata iz literature, preuzeti dio označava se navodnim
     znakovima te se uz referencu navodi i stranica rada (odvojena zarezom) iz koje je citat preuzet,
-    npr. ,,(Chang, 2019, 97)".
+    npr. „(Chang, 2019, 97)“.
 
-� Ako citirana referenca ima dva autora, navode se oba prezimena autora i godina, npr. ,,(Garay
-    i C�noves, 2011)"
+• Ako citirana referenca ima dva autora, navode se oba prezimena autora i godina, npr. „(Garay
+    i Cànoves, 2011)”
 
-� Ako citirana referenca ima tri i vise autora, u tekstu se navode prezime prvog autora i kratica
-    ,,i dr.", npr. ,,(Graham i dr., 2000)". U popisu literature navode se svi autori rada.
+• Ako citirana referenca ima tri i više autora, u tekstu se navode prezime prvog autora i kratica
+    „i dr.”, npr. „(Graham i dr., 2000)“. U popisu literature navode se svi autori rada.
 
-� Ako se citira vise clanaka jednog autora ili iste grupe autora, prezime se navodi samo jednom,
-    a godine objave radova navode se kronoloski i odvajaju znakom tocka-zarez, npr. ,,(Andriotis,
-    2002; 2006)".
+• Ako se citira više članaka jednog autora ili iste grupe autora, prezime se navodi samo jednom,
+    a godine objave radova navode se kronološki i odvajaju znakom točka-zarez, npr. „(Andriotis,
+    2002; 2006)“.
 
-� Ako se citira vise radova jednog autora ili iste grupe autora iz iste godine izdanja, uz godinu
+• Ako se citira više radova jednog autora ili iste grupe autora iz iste godine izdanja, uz godinu
 
                                                                                                                   4
 
 ===== [pmf-geog-upute-diplomski-2026 | str. 5] =====
-se navode i slova po abecednom redu, npr. ,,(Harvey, 2016a; 2016b)".
-� Kada se navodi vise radova u kontinuitetu, upotrebljava se znak tocka-zarez. Radovi se
+se navode i slova po abecednom redu, npr. „(Harvey, 2016a; 2016b)“.
+• Kada se navodi više radova u kontinuitetu, upotrebljava se znak točka-zarez. Radovi se
 
-    navode kronoloski, npr. ,,(Russo i Van der Borg, 2008; Williams, 2009; Klari, 2016)".
-� U slucaju kada se u tekstu navodi referenca koja se nije koristila neposredno, ve se preuzima
+    navode kronološki, npr. „(Russo i Van der Borg, 2008; Williams, 2009; Klarić, 2016)“.
+• U slučaju kada se u tekstu navodi referenca koja se nije koristila neposredno, već se preuzima
 
     od autora posrednika koji ju citira, prvo se navodi prezime i godina izvorne reference, a autor
-    iz cijeg je teksta preuzeta (dakle koja se citala) nakon rijeci ,,prema", npr. ,,(Ward 1975 prema
-    Rianovi, 2007)". U popisu literature navodi se samo ona bibliografska jedinica koja se
-    koristila neposredno (u ovom slucaju: Rianovi, 2007).
-� Svi literaturni navodi i izvori citirani u tekstu te ispod slika i tablica trebaju biti navedeni
+    iz čijeg je teksta preuzeta (dakle koja se čitala) nakon riječi „prema“, npr. „(Ward 1975 prema
+    Riđanović, 2007)“. U popisu literature navodi se samo ona bibliografska jedinica koja se
+    koristila neposredno (u ovom slučaju: Riđanović, 2007).
+• Svi literaturni navodi i izvori citirani u tekstu te ispod slika i tablica trebaju biti navedeni
     na kraju rada u poglavlju Literatura i izvori (ili u odvojenim poglavljima Literatura i Izvori).
     Navode se samo one bibliografske jedinice i izvori koji su citirani u diplomskom radu. Svaka
-    referenca koja se citira u tekstu treba se navesti u popisu literature i izvora, ali i obratno � u
+    referenca koja se citira u tekstu treba se navesti u popisu literature i izvora, ali i obratno – u
     popisu literature i izvora ne smije se nalaziti neka referenca koja se u radu ne citira.
-� Literaturni navodi u popisu literature trebaju biti poredani abecednim redom autora i
-    kronoloskim redom za radove istog autora. Radovi koje je autor napisao sam dolaze ispred
+• Literaturni navodi u popisu literature trebaju biti poredani abecednim redom autora i
+    kronološkim redom za radove istog autora. Radovi koje je autor napisao sam dolaze ispred
     radova koje je autor napisao u koautorstvu. Radovi dvaju istih autora dolaze ispred radova
     triju autora itd.
-� Velika i mala slova u nazivu clanaka, casopisa, knjiga i zbornika radova na engleskom jeziku
-    trebaju biti navedena na isti nacin kao u izvornim publikacijama.
-� Kod urednickih knjiga, ako je knjiga izvorno pisana na hrvatskom, u zagradi iza inicijala
-    urednika pise se ,,ur.". Ako je knjiga izvorno pisana na engleskom ili drugom jeziku, iza
-    inicijala imena urednika pise se ,,ed." (ako se radi o jednom uredniku) ili ,,eds." (ako se radi o
-    dva ili vise urednika).
-� Nazivi knjiga, zbornika, casopisa i publikacija pisu se u kurzivu. Ako publikacija ima DOI,
+• Velika i mala slova u nazivu članaka, časopisa, knjiga i zbornika radova na engleskom jeziku
+    trebaju biti navedena na isti način kao u izvornim publikacijama.
+• Kod uredničkih knjiga, ako je knjiga izvorno pisana na hrvatskom, u zagradi iza inicijala
+    urednika piše se „ur.“. Ako je knjiga izvorno pisana na engleskom ili drugom jeziku, iza
+    inicijala imena urednika piše se „ed.“ (ako se radi o jednom uredniku) ili „eds.“ (ako se radi o
+    dva ili više urednika).
+• Nazivi knjiga, zbornika, časopisa i publikacija pišu se u kurzivu. Ako publikacija ima DOI,
     treba ga navesti na kraju reference u popisu literature.
-� Prilikom citiranja dokumenata ili internetskih stranica pojedinih internetskih portala,
-    institucija i slicno unutar teksta, navodi se ime institucije ili tvrtke i godina objave.
-� Kod internetskih izvora u popisu literature i izvora puna referenca mora sadrzavati ime
-    institucije, tvrtke ili izdavaca, godinu objave (ako je dostupna), puni naziv publikacije,
-    internetski izvor (link) i datum ucitavanja. Internetski izvori navode objavljeni na engleskom
+• Prilikom citiranja dokumenata ili internetskih stranica pojedinih internetskih portala,
+    institucija i slično unutar teksta, navodi se ime institucije ili tvrtke i godina objave.
+• Kod internetskih izvora u popisu literature i izvora puna referenca mora sadržavati ime
+    institucije, tvrtke ili izdavača, godinu objave (ako je dostupna), puni naziv publikacije,
+    internetski izvor (link) i datum učitavanja. Internetski izvori navode objavljeni na engleskom
     ili drugom jeziku ne prevode se na hrvatski.
-� Sve reference radova i izvora citirane u tekstu trebaju se navesti u popisu literature i izvora.
-    U popisu se navode samo one bibliografske jedinice i izvori koje je kandidat sam procitao,
+• Sve reference radova i izvora citirane u tekstu trebaju se navesti u popisu literature i izvora.
+    U popisu se navode samo one bibliografske jedinice i izvori koje je kandidat sam pročitao,
     odnosno koristio. U tekstu ne smije biti referenci na radove i izvore koje nisu navedene u
     popisu literature i izvora.
-� Detaljni prikaz razlicitih vrsta referenci (ukljucujui interpunkcijske znakove) prikazana je u
+• Detaljni prikaz različitih vrsta referenci (uključujući interpunkcijske znakove) prikazana je u
     tablici.
 
                                                                                                                   5
@@ -173,139 +105,219 @@ se navode i slova po abecednom redu, npr. ,,(Harvey, 2016a; 2016b)".
 ===== [pmf-geog-upute-diplomski-2026 | str. 6] =====
 Tab. 1. Primjeri citiranja referenci u ocjenskom radu
 
-    VRSTA          CITIRANJE       CITIRANJE                CITIRANJE U POPISU LITERATURE I IZVORA
-REFERENCE           U TEKSTU           ISPOD
-                                                   Klari, Z., 2016: Geographical aspects of the territorial organisation of
-Clanak u           (Klari, 2016)     PRILOGA       Croatia and comparison with other European countries, Hrvatski
-casopisu s                                         geografski glasnik 78 (2), 49-75, DOI: 10.21861/HGG78.02.02.
-jednim                 (Garay i     Klari (2016)
-autorom               C�noves,                     Broj 78 oznacuje godiste (volumen) casopisa, (2) broj sveska unutar
-                                       Garay i     godista, 49-75 paginaciju rada u svesku, a DOI:
-Clanak u                2011)         C�noves      10.21861/HGG78.02.02 oznacuje DOI rada.
-casopisu s dva     (Radeva i dr.,       (2011)     Garay, L., C�noves, G., 2011: Life Cycles, Stages and Tourism
-autora                              Radeva i dr.   History. The Catalonia (Spain) Experience, Annals of Tourism
-Clanak u                2018)           (2018)     Research 38 (2), 651-671.
-casopisu s tri                                     Radeva, K., Nikolova, N., Gera, M., 2018: Assessment of hydro-
-autora             (Winde, 2015)   Winde (2015)    meteorological drought in the Danube Plain, Bulgaria, Hrvatski
+    VRSTA          CITIRANJE        CITIRANJE                CITIRANJE U POPISU LITERATURE I IZVORA
+REFERENCE           U TEKSTU            ISPOD
+                                                    Klarić, Z., 2016: Geographical aspects of the territorial organisation of
+Članak u           (Klarić, 2016)     PRILOGA       Croatia and comparison with other European countries, Hrvatski
+časopisu s                                          geografski glasnik 78 (2), 49-75, DOI: 10.21861/HGG78.02.02.
+jednim                 (Garay i      Klarić (2016)
+autorom               Cànoves,                      Broj 78 označuje godište (volumen) časopisa, (2) broj sveska unutar
+                                        Garay i     godišta, 49-75 paginaciju rada u svesku, a DOI:
+Članak u                2011)          Cànoves      10.21861/HGG78.02.02 označuje DOI rada.
+časopisu s dva     (Radeva i dr.,        (2011)     Garay, L., Cànoves, G., 2011: Life Cycles, Stages and Tourism
+autora                               Radeva i dr.   History. The Catalonia (Spain) Experience, Annals of Tourism
+Članak u                2018)            (2018)     Research 38 (2), 651-671.
+časopisu s tri                                      Radeva, K., Nikolova, N., Gera, M., 2018: Assessment of hydro-
+autora             (Winde, 2015)    Winde (2015)    meteorological drought in the Danube Plain, Bulgaria, Hrvatski
 
 ===== [pmf-geog-upute-diplomski-2026 | str. 7] =====
 Referenca u  (Longman,  Longman  Longman, 2013: Longman Dictionary of Contemporary English (New
 tiskanom        2003)    (2003)  Edition), Pearson Education Limited, Harlow.
-rjecniku
+rječniku
 Referenca u  (Longman,  Longman  Longman, 2018: Longman Dictionary of Contemporary English
-rjecniku na     2013)    (2013)  Online, https://www.ldoceonline.com/ (13. 12. 2018.)
+rječniku na     2013)    (2013)  Online, https://www.ldoceonline.com/ (13. 12. 2018.)
 internetu
 
 Opseg i forma rada
 
-� Optimalni opseg diplomskog rada je oko 50 stranica. Jedna stranica u radu treba odgovarati
-    standardnoj velicini ,,kartice", tj. sadrzavati oko 1800 znakova.
+• Optimalni opseg diplomskog rada je oko 50 stranica. Jedna stranica u radu treba odgovarati
+    standardnoj veličini „kartice“, tj. sadržavati oko 1800 znakova.
 
-� Rad se pise fontom Times New Roman, velicina 12 tocaka, s proredom od 1,5 redaka.
-    Velicina pozivnih biljeski je 10 tocaka. Kod slika, tablica, dijagrama i drugih priloga moze se
-    koristiti drugaciji font i velicina slova.
+• Rad se piše fontom Times New Roman, veličina 12 točaka, s proredom od 1,5 redaka.
+    Veličina pozivnih bilješki je 10 točaka. Kod slika, tablica, dijagrama i drugih priloga može se
+    koristiti drugačiji font i veličina slova.
 
-� Naslovi poglavlja pisu se podebljanim velikim tiskanim slovima (bold), velicine 12 tocaka
-    (npr. METODE RADA). Naslovi potpoglavlja pisu se malim podebljanim slovima, velicine
-    12 tocaka (npr. Prostorni obuhvat istrazivanja).
+• Naslovi poglavlja pišu se podebljanim velikim tiskanim slovima (bold), veličine 12 točaka
+    (npr. METODE RADA). Naslovi potpoglavlja pišu se malim podebljanim slovima, veličine
+    12 točaka (npr. Prostorni obuhvat istraživanja).
 
-� Rad treba oblikovati kao dokument formata A4. Margine trebaju biti 2,5 cm.
+• Rad treba oblikovati kao dokument formata A4. Margine trebaju biti 2,5 cm.
 
-� Rad se predaje u digitalnom obliku. Verzije rada za mentora i povjerenstvo predaje se u
-    formatu MS Word. Konacna verzija rada prije obrane i nakon obrane predaje se u formatu
-    PDF pod nazivom Ime Prezime � Diplomski rad i godina.
+• Rad se predaje u digitalnom obliku. Verzije rada za mentora i povjerenstvo predaje se u
+    formatu MS Word. Konačna verzija rada prije obrane i nakon obrane predaje se u formatu
+    PDF pod nazivom Ime Prezime – Diplomski rad i godina.
+
+===== [pmf-geog-upute-diplomski-2026 | str. 1] =====
+Prirodoslovno-matematičkom fakultetu, Geografskom odsjeku (u daljnjem tekstu:
+Pravilnik).
+
+IZBOR TEME
+• Student kontaktira nastavnika po vlastitom izboru radi dogovora o mentorstvu diplomskog
+
+    rada najkasnije do sredine siječnja završne godine studija. Izradu diplomskog rada može
+    voditi jedan nastavnik ili dva nastavnika s ciljem komentorstva (čl. 3., st. 3. i 4. Pravilnika)
+    (dalje u tekstu: nastavnik/mentor u jednini).
+• Temu može predložiti student ili nastavnik (ili oba nastavnika), a student može izabrati temu
+    između ponuđenih tema koje sastavlja pojedini nastavnik.
+• Student dostavlja mentoru prijedlog teme koji sadrži: radni naslov, koncept (sadržaj) rada,
+    literaturu i izvore podataka koje namjerava koristiti u izradi diplomskog rada. Naslov mora
+    biti precizan; što kraći, ali i što informativniji. Tema ne smije biti ista ili slična kao teme drugih
+    ocjenskih radova na Geografskom odsjeku u posljednjih pet godina.
+• Nakon što nastavnik prihvati naslov rada, sadržaj rada, prijedlog literature i ostale pojedinosti
+    pokreće se postupak prijave teme.
+
+POSTUPAK PRIJAVE TEME DIPLOMSKOG RADA
+• Student u dogovoru s nastavnikom prijavljuje temu diplomskog rada najkasnije do kraja
+
+    zimskog semestra završne godine studija (čl. 2., st. 5. Pravilnika), odnosno do sjednice
+    Povjerenstva za nastavu koja prethodi sjednici Vijeća Geografskog odsjeka u veljači na kojoj
+    se prihvaća tema.
+
+                                                                                                                  1
+
+===== [pmf-geog-upute-diplomski-2026 | str. 3] =====
+• Početne stranice do uključivo Sadržaja (ili Predgovora) ne numeriraju se. Numeracija
+
+    započinje od Uvoda koji nosi arapski broj 1.
+
+b) Struktura rada
+• Navedeni dijelovi koji slijede su obvezni dijelovi strukture diplomskog rada, a ne naslovi
+
+    poglavlja.
+• Uvod: sažeto definirati objekt, prostorni i vremenski obuhvat teme istraživanja. U zasebnom
+
+    odlomku jasno iskazati polazne hipoteze i cilj istraživanja. Prva stranica Uvoda nosi arapski
+    broj 1.
+• Pregled dosadašnjih istraživanja i literature: aktualan pregled znanja (znanstvenih i
+    stručnih radova) o užem području rada.
+• Teorijski pristup: pristup istraživanju s teorijskog aspekta na temelju pročitane literature,
+    logično strukturiran po poglavljima relevantnim za rad.
+• Metode istraživanja: metode prikupljanja i analize podataka; izvori podataka.
+• Rezultati: Iznose se rezultati vlastitog rada, praćeni objašnjenima te tabličnim i grafičkim
+    prilozima. Ovaj se dio može podijeliti u više logičkih cjelina (poglavlja). Usporedba s
+    rezultatima drugih autora (iz literature) piše se u Raspravi.
+• Rasprava: Kritička usporedba rezultata vlastitog rada i spoznaja iz literature.
+• Zaključak: Sažeta sinteza najvažnijih spoznaja u radu. Zaključak sadrži najvažnija rješenja
+    postavljenog problema te osvrt na ispunjenost ciljeva i hipoteza definiranih u Uvodu.
+    Zaključak nije sažetak rada i nije isto što i Izvadak koji se piše u Temeljnoj dokumentacijskoj
+    kartici.
+• Literatura i izvori: Piše se na kraju rada, ali ne numerira se kao poglavlje.
+
+c) Prilozi
+• Ovdje se navode Popis slika i Popis tablica te svi drugi različiti (dodatni) tablični, grafički ili
+
+    kartografski prilozi. Uz naziv svake slike i tablice navedene u Popisu slika i Popisu tablica
+    navodi se stranica rada na kojoj se nalazi slika ili tablica.
+• Na Sveučilišnom diplomskom studiju Geografija; modul: nastavnički te Sveučilišnom
+    integriranom prijediplomskom i diplomskom studiju Geografija i povijest; modul: nastavnički
+    sastavni dio priloga je i metodička priprema za nastavni sat geografije (Prilog 3).
+
+Način pisanja
+• Tekst treba biti napisan književnim hrvatskim jezikom, jasno, sažeto, jezično ispravan, pisan
 
 ===== [pmf-geog-pravilnik-2026 | str. 2] =====
-Clanak 5.
+Članak 5.
 
-(1) Program i opseg zavrsnog/diplomskog rada mora biti takav da se zavrsni/diplomski rad moze
+(1) Program i opseg završnog/diplomskog rada mora biti takav da se završni/diplomski rad može
 
-    zavrsiti u vremenu koje odgovara optereenju od onoliko ECTS bodova koliko nose kolegiji
-    Zavrsni ispit, Diplomski seminar II (geografija) ili Diplomska radionica II (povijest) s obranom
+    završiti u vremenu koje odgovara opterećenju od onoliko ECTS bodova koliko nose kolegiji
+    Završni ispit, Diplomski seminar II (geografija) ili Diplomska radionica II (povijest) s obranom
     rada i Diplomski rad s obranom.
 
-(2) Plagiranje dijela ili cijeloga zavrsnog/diplomskog rada predstavlja tesku stegovnu povredu
+(2) Plagiranje dijela ili cijeloga završnog/diplomskog rada predstavlja tešku stegovnu povredu
 
     sukladno posebnom aktu o stegovnoj odgovornosti studenata PMF-a.
 
-(3) U svrhu istrazivanja teme zavrsnog/diplomskog rada, prikupljanja literature, izvora i sl. mogue
+(3) U svrhu istraživanja teme završnog/diplomskog rada, prikupljanja literature, izvora i sl. moguće
 
-    je ograniceno koristenje alata umjetne inteligencije, ali svako koristenje takvih alata mora biti
-    jasno naznaceno u radu. U poglavlju o metodologiji ili na drugom odgovarajuem mjestu u radu
-    potrebno je detaljno opisati nacin njihovog koristenja (naziv 1 vrsta alata, postavljeni upit 1 sl.).
+    je ograničeno korištenje alata umjetne inteligencije, ali svako korištenje takvih alata mora biti
+    jasno naznačeno u radu. U poglavlju o metodologiji ili na drugom odgovarajućem mjestu u radu
+    potrebno je detaljno opisati način njihovog korištenja (naziv 1 vrsta alata, postavljeni upit 1 sl.).
     Svaka upotreba umjetne inteligencije u radu treba biti jasno i transparentno navedena.
 
-(4) Pisanje teksta rada, prepricavanje i generiranje sazetka dijela teksta pomou alata umjetne
+(4) Pisanje teksta rada, prepričavanje i generiranje sažetka dijela teksta pomoću alata umjetne
 
-    inteligencije nije dopusteno. Takoer, nije dopusteno predstavljanje slika, karata, tablica 1
-    multimedijskih sadrzaja generiranih od strane umjetne inteligencije kao vlastiti sadrzaj.
-    Neprihvatljivo je predstavljati sadrzaj generiran od strane umjetne inteligencije kao vlastito
+    inteligencije nije dopušteno. Također, nije dopušteno predstavljanje slika, karata, tablica 1
+    multimedijskih sadržaja generiranih od strane umjetne inteligencije kao vlastiti sadržaj.
+    Neprihvatljivo je predstavljati sadržaj generiran od strane umjetne inteligencije kao vlastito
     autorsko djelo.
 
 ===== [pmf-biol-upute-diplomski-2026 | str. 1] =====
-UPUTE ZA PRIJAVU I IZRADU DIPLOMSKOG RADA TE
-                   DIPLOMSKI ISPIT NA BIOLOSKOM ODSJEKU
-
-     Diplomski studij zavrsava izradom diplomskog rada i polaganjem diplomskog ispita. Mentori trebaju
-voditi racuna da diplomski zadatak bude takav da provedba istrazivanja i pisanje rada te zavrsetak rada
-budu mogui kroz jedan semestar, a iznimno kroz dva semestra.
-
-     Prije odabira teme i pocetka izrade diplomskog rada vazno je pazljivo procitati ove upute te prilikom
-izrade diplomskog rada slijediti osnovna pravila pisanja znanstvenog rada. Ove upute izraene su na
-temelju Pravilnika o preddiplomskim i diplomskim studijima na Prirodoslovno-matematickom fakultetu
-Sveucilista u Zagrebu i odluka Vijea Bioloskog odsjeka.
-
-     Pojmovi koji se koriste u ovim uputama, a imaju rodni znacaj, obuhvaaju na jednak nacin muski i
-zenski rod bez obzira jesu li izvorno koristeni u muskom ili zenskom rodu.
-
-     U slucaju nedoumica oko pojmova i procesa koji nisu jasno objasnjeni u ovim Uputama, studenti i
-mentori su slobodni posavjetovati se s clanovima Povjerenstva za diplomske radove (u daljnjem tekstu
-Povjerenstvo). To se posebice preporucuje u slucajevima pitanja o prihvatljivosti same teme diplomskog
-rada ili odabiru odgovarajueg mentora.
+mentori su slobodni posavjetovati se s članovima Povjerenstva za diplomske radove (u daljnjem tekstu
+Povjerenstvo). To se posebice preporučuje u slučajevima pitanja o prihvatljivosti same teme diplomskog
+rada ili odabiru odgovarajućeg mentora.
 
      U tekstu ovih uputa pojedini izrazi su zamijenjeni kraticama:
-     IPDBK - integrirani preddiplomski i diplomski sveucilisni studij Biologija i kemija; smjer: nastavnicki
-     ZOOK - diplomski studij Znanosti o okolisu
-     BO � Bioloski odsjek
-     KO � Kemijski odsjek
+     IPDBK - integrirani preddiplomski i diplomski sveučilišni studij Biologija i kemija; smjer: nastavnički
+     ZOOK - diplomski studij Znanosti o okolišu
+     BO – Biološki odsjek
+     KO – Kemijski odsjek
 
                        1. IZBOR TEME I MENTORA DIPLOMSKOG RADA
 
-    Temu diplomskog rada student izabire prema svojim preferencijama, ali i realnim mogunostima
+    Temu diplomskog rada student izabire prema svojim preferencijama, ali i realnim mogućnostima
 izrade diplomskog rada na BO.
 
-    Studenti su duzni kontaktirati potencijalnog mentora diplomskog rada najkasnije tijekom 3. ili 4.
-semestra sveucilisnog diplomskog studija, odnosno tijekom 9. ili 10. semestra IPDBK te s njime raspraviti
-mogunost izrade diplomskog rada unutar odreenog podrucja/teme i dogovoriti plan provedbe
-istrazivanja. Ukoliko mentor nije nastavnik BO student treba svakako prije pocetka izrade rada ili prijave
-teme kontaktirati nastavnika komentora na BO, a uvijek se o svakoj potencijalnoj temi ili mentorstvu moze
+    Studenti su dužni kontaktirati potencijalnog mentora diplomskog rada najkasnije tijekom 3. ili 4.
+semestra sveučilišnog diplomskog studija, odnosno tijekom 9. ili 10. semestra IPDBK te s njime raspraviti
+mogućnost izrade diplomskog rada unutar određenog područja/teme i dogovoriti plan provedbe
+istraživanja. Ukoliko mentor nije nastavnik BO student treba svakako prije početka izrade rada ili prijave
+teme kontaktirati nastavnika komentora na BO, a uvijek se o svakoj potencijalnoj temi ili mentorstvu može
 konzultirati i s Povjerenstvom.
 
                                                                                                                               1
 
 ===== [pmf-biol-upute-diplomski-2026 | str. 4] =====
 Student prijavljuje temu diplomskog rada Povjerenstvu tijekom 3. ili 4. semestra diplomskog
-sveucilisnog studija, odnosno tijekom 9. ili 10 semestra studija IPDBK. Za prijavu teme student ne treba
-poloziti sve ispite.
+sveučilišnog studija, odnosno tijekom 9. ili 10 semestra studija IPDBK. Za prijavu teme student ne treba
+položiti sve ispite.
 
-    Preporucljivo je temu prijaviti na pocetku izrade diplomskog rada, jer je mogue da e Povjerenstvo
-imati prijedloge za doradu teme, odnosno prijedloge za izradu diplomskog rada, kao i da e tema nee biti
-prihvaena. Nije mogue na istu sjednicu Povjerenstva predati prijavu teme diplomskog rada i napisani
+    Preporučljivo je temu prijaviti na početku izrade diplomskog rada, jer je moguće da će Povjerenstvo
+imati prijedloge za doradu teme, odnosno prijedloge za izradu diplomskog rada, kao i da će tema neće biti
+prihvaćena. Nije moguće na istu sjednicu Povjerenstva predati prijavu teme diplomskog rada i napisani
 diplomski rad.
 
-    Vazno! Kvaliteta, znanstveni integritet, te usuglasenost sadrzaja i metodologije prikupljanja podataka
+    Važno! Kvaliteta, znanstveni integritet, te usuglašenost sadržaja i metodologije prikupljanja podataka
 diplomskog rada sa zakonodavstvom i pravilnicima odgovornost su mentora i komentora, ne Povjerenstva
-za diplomski rad. Mentor ili komentor koji je nastavnik BO duzan se je informirati u legislativnoj
-literaturi, pravilnicima i uputama nadleznih tijela koje su dozvole etickih povjerenstava ili drugih
-tijela potrebne za predlozeno istrazivanje, te provjeriti jesu li iste ishoene i je li istrazivanje
-planirano, a kasnije i odraeno u skladu s istima.
+za diplomski rad. Mentor ili komentor koji je nastavnik BO dužan se je informirati u legislativnoj
+literaturi, pravilnicima i uputama nadležnih tijela koje su dozvole etičkih povjerenstava ili drugih
+tijela potrebne za predloženo istraživanje, te provjeriti jesu li iste ishođene i je li istraživanje
+planirano, a kasnije i odrađeno u skladu s istima.
 
     Nakon dogovora oko teme diplomskog rada s mentorom (i komentorom), potrebno je Povjerenstvu
-predati sljedee dokumente:
+predati sljedeće dokumente:
 
-1) Molba za prijavu teme diplomskog rada (dostupna na mreznim stranicama BO)
-    Naslov teme treba biti treba biti sazet i jasan, a iz njega treba biti vidljiva problematika rada. Treba
-    izbjegavati zapocinjanje naslova s rijecima: analiza, ispitivanje i sl. U naslovu treba izbjegavati kratice.
-    Ukoliko naslov diplomskog rada sadrzi latinsko ime vrste potrebno ga je pisati u kurzivu slijedei
-    pravila zoologijske/botanicke/bakterijske/virusne nomenklature. Imena autora vrste stavljaju se u
-    naslov samo ukoliko je to vazno za pravilno taksonomsko odreivanje.
+1) Molba za prijavu teme diplomskog rada (dostupna na mrežnim stranicama BO)
+    Naslov teme treba biti treba biti sažet i jasan, a iz njega treba biti vidljiva problematika rada. Treba
+    izbjegavati započinjanje naslova s riječima: analiza, ispitivanje i sl. U naslovu treba izbjegavati kratice.
+    Ukoliko naslov diplomskog rada sadrži latinsko ime vrste potrebno ga je pisati u kurzivu slijedeći
+    pravila zoologijske/botaničke/bakterijske/virusne nomenklature. Imena autora vrste stavljaju se u
+    naslov samo ukoliko je to važno za pravilno taksonomsko određivanje.
+
+===== [pmf-biol-upute-diplomski-2026 | str. 8] =====
+ilustriranom formatu koji se nalazi na mrežnim stranicama BO te mora sadržavati sljedeće podatke:
+         • Naziv fakulteta i odsjeka – isto kao na naslovnoj stranici
+         • Vrsta ocjenskog rada – „Diplomski rad“
+         • Naslov diplomskog rada
+         • Ime i prezime studenta
+         • Adresa BO – institucija na koju se rad predaje radi ocjene i obrane
+         • Sažetak rada – treba biti jasno i precizno napisan te sadržavati osnovne informacije o problemu
+             koji je istražen, ciljeve rada, ukratko navedenu osnovnu metodologiju te sažeto iznijete glavne
+             rezultate i zaključak rada. Sažetak se piše u jednom odlomku i ne smije biti duži od 200 riječi.
+             Ne preporuča se upotreba kratica, a ukoliko su neophodne treba ih objasniti.
+         • Ključne riječi – od 3 do 6 pojmova, navode se ispod sažetka, treba izbjegavati ponavljanje riječi
+             iz naslova
+         • Podatci o radu – broj stranica, broj slika i tablica, broj literaturnih navoda, jezik
+         • Navod gdje je rad pohranjen
+         • Ime i prezime mentora (te komentora), kao i imena i prezimena ocjenjivača (Povjerenstvo za
+             diplomski ispit). Uz imena i prezimena navode se titule mentora i ocjenjivača (npr. prof. dr. sc.
+
+                                                                                                                              8
+
+===== [pmf-geol-upute-diplomski-2024 | str. 3] =====
+Zahvale
+Ova stranica može biti:
+
+   stranica sa zahvalom (zahvala nije obvezna),
+   odabranim citatom,
+   ili slično.

@@ -20,7 +20,7 @@
     "mode": "note-number",
     "provenance": {
       "kind": "rule-text",
-      "quoteRaw": "Pozivne biljeske (fusnote) pisu se sitnim slovima kronoloski, rednim arapskim brojevima od",
+      "quoteRaw": "Pozivne bilješke (fusnote) pišu se sitnim slovima kronološki, rednim arapskim brojevima od",
       "sourcePage": "str. 9",
       "note": "Europski sustav = citiranje ispod teksta (fusnote); u tekstu stoji redni arapski broj biljeske, a bibliografska jedinica ide u podnozje. Alat generira bibliografski oblik za popis literature (Literatura), koji se slaze abecedno po prezimenu autora."
     }
@@ -42,7 +42,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Zelenika, R. Metodologija i tehnologija izrade znanstvenog i strucnog djela. Rijeka: Ekonomski fakultet",
+        "quoteRaw": "Zelenika, R. Metodologija i tehnologija izrade znanstvenog i stručnog djela. Rijeka: Ekonomski fakultet",
         "sourcePage": "str. 9",
         "note": "Jedini gotovi primjer u izvoru (fusnota br. 1); fusnotni oblik ukljucuje broj stranice (str. 485). Za popis literature stranica se izostavlja pa je {pages} opcionalan. Format-spec knjige (str. 9): 'Prezime, inicijal(i) imena autora. Naslov: podnaslov. Podatak o izdanju. Mjesto izdavanja: Nakladnik, godina izdavanja.' Broj izdanja ide u {volume} (opcionalno)."
       },
@@ -90,7 +90,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Prezime, inicijali imena autora. Naslov i podnaslov clanka. Naslov novine. Broj pojedinacnog",
+        "quoteRaw": "Prezime, inicijali imena autora. Naslov i podnaslov članka. Naslov novine. Broj pojedinačnog",
         "sourcePage": "str. 10",
         "note": "Jedini format-spec za clanak u izvoru je NOVINSKI CLANAK (str. 10): '...Naslov novine. Broj pojedinacnog izdanja novine, datum pojedinacnog izdanja novine, stranica.' {issue}=broj izdanja, {year} nosi datum pojedinacnog izdanja (nema zasebnog placeholdera za datum), {pages}=stranica (izvor nema prefiks 'str.'). Izvor NE daje zaseban format za clanak u znanstvenom casopisu (samo ga navodi u redoslijedu popisa literature); potvrditi pri verifikaciji."
       },
@@ -140,7 +140,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "knjige, potom clanci u znanstvenim casopisima, clanci u zbornicima sa znanstvenih skupova",
+        "quoteRaw": "knjige, potom članci u znanstvenim časopisima, članci u zbornicima sa znanstvenih skupova",
         "sourcePage": "str. 8",
         "note": "Izvor navodi propise (Narodne novine) samo kao kategoriju u redoslijedu popisa literature ('ostala literatura, npr. Narodne novine'), bez format-spec. Predlozak je izveden iz opce hrvatske konvencije za citiranje Narodnih novina (naslov, glasilo, broj). Potvrditi pri verifikaciji."
       },

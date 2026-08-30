@@ -1,322 +1,361 @@
-===== [pravo-upute-oblikovanje-2024 | str. 3] =====
-2. SADRZAJ
-
-Nakon naslovne stranice treba biti stranica sa sadrzajem.
-Sadrzaj je potrebno automatski generirati u programu (MS Word) u kojem se pise rad � izbornik
-Reference, Tablica sadrzaja � dodati odreeni oblik sadrzaja. Za automatsko ubacivanje tablice
-sadrzaja potrebno je da naslovi budu odgovarajue oznaceni (pod izbornikom Polazno � izabrati
-naslove odgovarajue razine).
-Prije predaje rada sadrzaj treba urediti tako da bude napisan istim fontom i velicinom fonta kao
-i glavni tekst (Times New Roman, 12).
-U istom redu s naslovima trebaju biti navedene stranice na kojima pocinju odgovarajua
-poglavlja.
-
-    3. NASLOVI
-
-    Svaki naslov mora biti numeriran u skladu sa svojom razinom.
-    o naslov 1. razine � 1.: font 12, TISKANA SLOVA
-    o naslov 2. razine � 1.1.: font 12, podebljano (bold)
-
-===== [pravo-upute-oblikovanje-2024 | str. 4] =====
-4. OBLIKOVANJE I UREENJE TEKSTA
-
-Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio.
-Na kraju rada treba biti popis koristenih izvora i literature (bibliografija).
-
-Glavni tekst
-    - font: Times New Roman
-    - velicina fonta: 12
-    - prored: 1,5 (razmak 0 i prije i poslije)
-    - poravnanje s obiju strana (justified)
-
-Biljeske (fusnote)
-    - font: Times New Roman
-    - velicina fonta: 10
-    - prored: 1 (razmak 0 i prije i poslije)
-    - poravnanje s obiju strana (justified)
-
-Svaka biljeska mora zapoceti velikim pocetnim slovom i zavrsiti tockom.
-
-Izvori i literatura u bibliografiji se navode u istom obliku kao i kada se prvi put spominju u
-biljesci (fusnoti), ali bez naznake stranice za knjige, dok se za clanke navode prva i zadnja
-stranica na kojima se rad nalazi (npr. str. 21�43). U popisu literature bibliografske jedinice
-navode se abecednim redom prema prezimenu (prvog) autora.
-Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti
-automatski umetnut broj stranice.
-Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najcese u zaglavlju �
-engl. header ili podnozju � engl. footer) rada nisu preporucljivi kao oprema rada, osim ako je
-rijec o duzim radovima.
-Tekst se moze istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili
-podcrtanim tekstom.
-
-Latinske rijeci i tekstovi na latinskom pisu se u kurzivu.
-
 ===== [pravo-upute-oblikovanje-2024 | str. 5] =====
-Rijeci na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u
+Riječi na stranim jezicima (engleski, francuski i sl.) mogu se pisati ili u kurzivu ili u
 navodnicima, ovisno o kontekstu. U navodnike svakako treba stavljati navode (citate) iz drugih
-radova. U navodnike se preporucuje stavljati i zakonske odredbe na stranim jezicima te strane
+radova. U navodnike se preporučuje stavljati i zakonske odredbe na stranim jezicima te strane
 pravne termine. Navode (citate) na hrvatskom jeziku dovoljno je staviti u navodnike, bez
 kurziva.
 
-Brojke koje oznacavaju biljeske nikada nisu ukosene i stavljaju se ispred zareza ili, ako su na
-kraju recenice, dolaze iza tocke. Treba paziti da se ne ukosi i interpunkcija iza rijeci, sintagme
-ili recenice koju se zeli istaknuti, npr. umjesto (... zagrade.) treba pisati ovako: (... zagrade.).
+Brojke koje označavaju bilješke nikada nisu ukošene i stavljaju se ispred zareza ili, ako su na
+kraju rečenice, dolaze iza točke. Treba paziti da se ne ukosi i interpunkcija iza riječi, sintagme
+ili rečenice koju se želi istaknuti, npr. umjesto (… zagrade.) treba pisati ovako: (… zagrade.).
 
-    5. NAVOENJE BIBLIOGRAFSKIH PODATAKA (CITIRANJE) U BILJESKAMA
+    5. NAVOĐENJE BIBLIOGRAFSKIH PODATAKA (CITIRANJE) U BILJEŠKAMA
          (FUSNOTAMA) I U POPISU LITERATURE
 
-Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju
-biti numerirane. Biljeske se ubacuju automatski preko izbornika Reference (References) i opcije
+Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju
+biti numerirane. Bilješke se ubacuju automatski preko izbornika Reference (References) i opcije
 Umetni fusnotu (Insert footnote).
 
 6.1. Bibliografski podatci kada se djelo navodi prvi put u radu
 
 [knjige]
 
-Prezime autora, prvo slovo imena autora s tockom, naslov djela (u kurzivu), broj izdanja (ako
-je vei broj izdanja koja se meusobno razlikuju te je vazno navesti o kojem je izdanju rijec),
-izdavac, mjesto izdanja, godina izdanja, kratica str. i broj stranice te na kraju tocka (ako se
-upuuje na vise stranica koje slijede, dodaje se iza broja ,,i sl." � npr. str. 55 i sl.).
-Primjer: Horvat, M., Rimsko pravo, Pravni fakultet Sveucilista u Zagrebu, Zagreb, 1998., str.
+Prezime autora, prvo slovo imena autora s točkom, naslov djela (u kurzivu), broj izdanja (ako
+je veći broj izdanja koja se međusobno razlikuju te je važno navesti o kojem je izdanju riječ),
+izdavač, mjesto izdanja, godina izdanja, kratica str. i broj stranice te na kraju točka (ako se
+upućuje na više stranica koje slijede, dodaje se iza broja „i sl.“ – npr. str. 55 i sl.).
+Primjer: Horvat, M., Rimsko pravo, Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 1998., str.
 55.
-Primjer za vise autora: Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet
-Sveucilista u Zagrebu, Zagreb, 2022., str. 55�65.
+Primjer za više autora: Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet
+Sveučilišta u Zagrebu, Zagreb, 2022., str. 55–65.
 
-Uobicajeno je da se prilikom prvog navoenja napisu svi autori ako njihov broj nije vei od pet.
-Ako jest, moze se navesti samo prvoga i dodati latinsku kraticu et al. (i drugi).
+Uobičajeno je da se prilikom prvog navođenja napišu svi autori ako njihov broj nije veći od pet.
+Ako jest, može se navesti samo prvoga i dodati latinsku kraticu et al. (i drugi).
 
-U popisu literature ne navode se stranice, nego se pise samo ovako:
+U popisu literature ne navode se stranice, nego se piše samo ovako:
 
 ===== [pravo-upute-oblikovanje-2024 | str. 6] =====
-Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveucilista u Zagrebu,
+Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveučilišta u Zagrebu,
 Zagreb, 2022.
 
-[clanci objavljeni u casopisima]
+[članci objavljeni u časopisima]
 
-Prezime autora, prvo slovo imena autora, naslov clanka (u kurzivu), maticna publikacija, broj
-(ako je unutar odreene godine izdano vise brojeva; uobicajeno je naznaceno u casopisu) i
-svezak (volumen � godiste) maticne publikacije, godina izdanja maticne publikacije, str. i broj
-stranice te na kraju tocka.
-Primjer: Apostolova Marsavelski, M., O problemu porijekla rimske hipoteke, Zbornik Pravnog
+Prezime autora, prvo slovo imena autora, naslov članka (u kurzivu), matična publikacija, broj
+(ako je unutar određene godine izdano više brojeva; uobičajeno je naznačeno u časopisu) i
+svezak (volumen – godište) matične publikacije, godina izdanja matične publikacije, str. i broj
+stranice te na kraju točka.
+Primjer: Apostolova Maršavelski, M., O problemu porijekla rimske hipoteke, Zbornik Pravnog
 fakulteta u Zagrebu, vol. 24, br. 1, 1974., str. 351 i sl.
 
-U popisu literature navode se prva i zadnja stranica clanka, npr.
-Apostolova Marsavelski, M., O problemu porijekla rimske hipoteke, Zbornik Pravnog fakulteta
-u Zagrebu, vol. 24, br. 1, 1974., str. 345�361.
+U popisu literature navode se prva i zadnja stranica članka, npr.
+Apostolova Maršavelski, M., O problemu porijekla rimske hipoteke, Zbornik Pravnog fakulteta
+u Zagrebu, vol. 24, br. 1, 1974., str. 345–361.
 
-Napomena: iza broja stranice ne stavlja se tocka osim ako je to kraj recenice ili biljeske.
+Napomena: iza broja stranice ne stavlja se točka osim ako je to kraj rečenice ili bilješke.
 
-[clanci objavljeni u urednickim knjigama ili zbornicima radova]
+[članci objavljeni u uredničkim knjigama ili zbornicima radova]
 
-Prezime autora, prvo slovo imena autora, naslov clanka (u kurzivu), u: prezime, prvo slovo
-imena urednika (ako ih je vise, razdvajaju se tockom sa zarezom), skraena naznaka urednika
-(ur.), naslov knjige ili zbornika (u kurzivu), izdavac, mjesto izdanja, godina izdanja, str. i broj
-stranice te na kraju tocka.
+Prezime autora, prvo slovo imena autora, naslov članka (u kurzivu), u: prezime, prvo slovo
+imena urednika (ako ih je više, razdvajaju se točkom sa zarezom), skraćena naznaka urednika
+(ur.), naslov knjige ili zbornika (u kurzivu), izdavač, mjesto izdanja, godina izdanja, str. i broj
+stranice te na kraju točka.
 Primjer: Petrak, M., The Byzantine Emperor in Medieval Dalmatian Exultets, u: Slootjes, D.;
 Verhoeven, M. (ur.), Byzantium in Dialogue with the Mediterranean: History and Heritage,
 Brill, Leiden, 2019., str. 49.
 
-U popisu literature navode se prva i zadnja stranica clanka, npr.
+U popisu literature navode se prva i zadnja stranica članka, npr.
 Petrak, M., The Byzantine Emperor in Medieval Dalmatian Exultets, u: Slootjes, D.;
 Verhoeven, M. (ur.), Byzantium in Dialogue with the Mediterranean: History and Heritage,
-Brill, Leiden, 2019., str. 47�66.
+Brill, Leiden, 2019., str. 47–66.
+
+===== [pravo-upute-oblikovanje-2024 | str. 8] =====
+Nazivi akata ne pišu se kurzivom. Treba pisati pune nazive službenih listova, a ne kratice.
+Ako se određeni akt (zakon) navodi na više mjesta u radu, korisno je na prvom mjestu uvesti
+(općeprihvaćenu) kraticu kako ne bi bilo potrebno svaki put pisati puni naziv. Kratica se može
+uvesti tako da se u zagradi navede sljedeći tekst: (dalje u tekstu: ). Taj tekst može biti dodan ili
+u samom tekstu ili u bilješci. U tekstu se uobičajeno piše samo puni naziv zakona uz možebitnu
+naznaku godine donošenja, dok se u bilješci daju puni podatci o objavi zakona – Narodne
+novine, i svi brojevi od prvog izdanja zakona do posljednjeg broja izdanja zakona o izmjeni i
+dopuni tog zakona. Ako je korišteno više verzija zakona, odnosno izmjena i dopuna, onda se
+svaki pojedinačno navodi u bilješci na odgovarajućem mjestu te se uvodi posebna (ustaljena)
+kratica ako se pojedini od njih rabi više puta, no ako se spominje samo jedanput, nije potrebna
+kratica.
+
+Primjer za navođenje zakona u bilješci: Zakon o obveznim odnosima (dalje u tekstu: ZOO),
+Narodne novine, br. 35/05, 41/08, 125/11, 78/15, 29/18, 126/21.
+Ako su u radu navedeni i stari ZOO iz 1978. i novi iz 2005. godine, onda je u zagradi potrebno
+navesti o kojem je zakonu riječ, npr. ZOO 78 ili ZOO iz 1978.
 
 ===== [pravo-upute-oblikovanje-2024 | str. 7] =====
-Za komentar zakona koji ima vei broj autora, ali je naveden i urednik (glavni ili opi redaktor)
+[mrežni izvori]
+
+Mogući su različiti oblici mrežnih izvora, od članaka objavljenih samo na mrežnim stranicama,
+novinskih članaka i blogova do međunarodnih konvencija i drugih dokumenata. Ako je riječ o
+članku koji je objavljen u časopisu iako je dostupan i na internetu, nije potrebno navoditi
+mrežnu poveznicu (web-adresu) na kojoj se nalazi, već su dovoljni podatci koji se navode za
+članke objavljene u časopisima.
+Za članke poznatog autora objavljene samo na mrežnim stranicama, na blogovima, u mrežnim
+izdanjima dnevnih glasila (novinama; posebno stranima) navode se sljedeći podatci: prezime
+autora, prvo slovo imena autora, naslov članka (u kurzivu), naziv mrežne stranice, bloga ili
+mrežnog glasila, datum objave priloga, dostupno na: mrežna adresa te u zagradi datum pristupa
+adresi.
+Primjer: Koske, I.; Naru, F.; Beiter, P.; Wanner, I., Regulatory Management Practices in OECD
+Countries, Economics Department Working Papers No. 1296, 2016., dostupno na:
+https://www.oecd-ilibrary.org/docserver/5jm0qwm7825h-
+
+===== [pravo-upute-oblikovanje-2024 | str. 1] =====
+UPUTE ZA OBLIKOVANJE I UREĐENJE TEKSTA I NAVOĐENJE IZVORA
+                           U I DIPLOMSKIM I ZAVRŠNIM RADOVIMA
+
+                  NA PRAVNOM FAKULTETU SVEUČILIŠTA U ZAGREBU
+
+(Preuzeto: Curry - Sumner, Ian [et al.], Istraživačke vještine, s engleskoga preveo i prilagodio
+               Luka Burazin, Zagreb: Sveučilište u Zagrebu Pravni fakultet, 2023.)
+
+Ako student/ica nije dobio/la drugačije upute od mentora, ove upute se preporučuju koristiti za
+oblikovanje i uređenje teksta i navođenje izvora u diplomskim i završnim radovima.
+
+    1. NASLOVNA STRANICA
+
+Na naslovnoj stranici trebaju biti navedeni:
+        1. naslov rada (u sredini)
+        2. autor rada (u sredini iznad naslova i uz jedan red razmaka)
+        3. naznaka Pravni fakultet Sveučilišta u Zagrebu i katedra (na vrhu u sredini u dva
+             reda)
+        4. naznaka mentora (u sredini ispod naslova i jednog reda razmaka; titule se pišu
+             malim početnim slovom ispred imena ako je riječ o osobama koje imaju doktorat
+             znanosti i razmacima nakon točaka)
+        5. naznaka mjesta i godine izrade rada (na dnu stranice u sredini: Zagreb, 2023.).
+
+===== [pravo-upute-oblikovanje-2024 | str. 3] =====
+2. SADRŽAJ
+
+Nakon naslovne stranice treba biti stranica sa sadržajem.
+Sadržaj je potrebno automatski generirati u programu (MS Word) u kojem se piše rad – izbornik
+Reference, Tablica sadržaja – dodati određeni oblik sadržaja. Za automatsko ubacivanje tablice
+sadržaja potrebno je da naslovi budu odgovarajuće označeni (pod izbornikom Polazno – izabrati
+naslove odgovarajuće razine).
+Prije predaje rada sadržaj treba urediti tako da bude napisan istim fontom i veličinom fonta kao
+i glavni tekst (Times New Roman, 12).
+U istom redu s naslovima trebaju biti navedene stranice na kojima počinju odgovarajuća
+poglavlja.
+
+    3. NASLOVI
+
+    Svaki naslov mora biti numeriran u skladu sa svojom razinom.
+    o naslov 1. razine – 1.: font 12, TISKANA SLOVA
+    o naslov 2. razine – 1.1.: font 12, podebljano (bold)
+
+===== [pravo-upute-oblikovanje-2024 | str. 4] =====
+4. OBLIKOVANJE I UREĐENJE TEKSTA
+
+Rad mora imati uvodni dio, središnji dio (s više poglavlja i/ili potpoglavlja) te zaključni dio.
+Na kraju rada treba biti popis korištenih izvora i literature (bibliografija).
+
+Glavni tekst
+    - font: Times New Roman
+    - veličina fonta: 12
+    - prored: 1,5 (razmak 0 i prije i poslije)
+    - poravnanje s obiju strana (justified)
+
+Bilješke (fusnote)
+    - font: Times New Roman
+    - veličina fonta: 10
+    - prored: 1 (razmak 0 i prije i poslije)
+    - poravnanje s obiju strana (justified)
+
+Svaka bilješka mora započeti velikim početnim slovom i završiti točkom.
+
+Izvori i literatura u bibliografiji se navode u istom obliku kao i kada se prvi put spominju u
+bilješci (fusnoti), ali bez naznake stranice za knjige, dok se za članke navode prva i zadnja
+stranica na kojima se rad nalazi (npr. str. 21–43). U popisu literature bibliografske jedinice
+navode se abecednim redom prema prezimenu (prvog) autora.
+Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti
+automatski umetnut broj stranice.
+Ostali dodatci poput naslova rada ili imena autora na svakoj stranici (najčešće u zaglavlju –
+engl. header ili podnožju – engl. footer) rada nisu preporučljivi kao oprema rada, osim ako je
+riječ o dužim radovima.
+Tekst se može istaknuti kurzivom (italikom). Ne bi se trebalo koristiti podebljanim ili
+podcrtanim tekstom.
+
+Latinske riječi i tekstovi na latinskom pišu se u kurzivu.
+
+===== [pravo-upute-oblikovanje-2024 | str. 7] =====
+Za komentar zakona koji ima veći broj autora, ali je naveden i urednik (glavni ili opći redaktor)
 komentara dostatno je u bibliografiji navesti samo urednika, uz naznaku u zagradi (ur., gl. red.
-ili op. red., u skladu s terminom koji se rabi u djelu), ali bi u samom radu kod prvog navoenja
+ili op. red., u skladu s terminom koji se rabi u djelu), ali bi u samom radu kod prvog navođenja
 trebalo navesti tko je autor dijela komentara na koji se navod odnosi, ako je to vidljivo i jasno
-naznaceno.
+naznačeno.
 Primjer: Gorenc, V. (op. red.), Komentar Zakona o obveznim odnosima, Narodne novine,
 Zagreb, 2014.
 
 [natuknica iz enciklopedije]
 
 Prezime autora, prvo slovo imena autora, naslov natuknice (u kurzivu), u: prezime, prvo slovo
-imena urednika (ako ih je vise, razdvajaju se tockom sa zarezom), skraena naznaka urednika
-(ur.), naslov enciklopedije, volumen (moze se rabiti kao kratica za oznaku volumena Vol. ili
+imena urednika (ako ih je više, razdvajaju se točkom sa zarezom), skraćena naznaka urednika
+(ur.), naslov enciklopedije, volumen (može se rabiti kao kratica za oznaku volumena Vol. ili
 kratica koja je navedena na samoj enciklopediji prema jeziku na kojem je enciklopedija
+napisana), izdavač, mjesto izdanja, godina izdanja, str. i broj stranice te na kraju točka.
+
+===== [pravo-upute-oblikovanje-2024 | str. 9] =====
+Kod ponovljenog navođenja odredaba zakona nikad se ne navodi op. cit. u bilj. XY, nego samo
+uvedena kratica zakona, primjerice: Čl. 15. ZOO-a.
+Kratice zakona treba deklinirati, npr. ZOO-a, ZKP-u.
+
+Za europske uredbe i smjernice preporučuje se sljedeći način navođenja:
+Uredba (EU) 2016/679 Europskog parlamenta i Vijeća od 27. travnja 2016. o zaštiti pojedinaca
+u vezi s obradom osobnih podataka i o slobodnom kretanju takvih podataka te o stavljanju izvan
+snage Direktive 95/46/EZ (Opća uredba o zaštiti osobnih podataka), SL L 119/1, 4. 5. 2016.
+
+Za međunarodne dokumente koji nisu objavljeni u Narodnim novinama navode se izdavač,
+
+naslov dokumenta i eventualni dodatni podatci, uz mrežnu poveznicu i datum pristupa izvoru:
+
+European Commission, Proposal for a Directive of the European Parliament and of the Council
+
+on improving working conditions in platform work, Brussels, 9.12.2021., COM(2021) 762
 
 ===== [pravo-upute-oblikovanje-2024 | str. 10] =====
-bi trebalo pokusati pronai izvor na koji se upuuje u konzultiranom djelu, ali ako je on
-nedostupan, iznimno se i samo ako je odreena tvrdnja iz tog izvora vazna za rad, na njega
-moze posredno uputiti. Posredno upuivanje, meutim, treba izbjegavati kada je god to mogue.
-Ako bi ga se ipak rabilo, u tom slucaju mora biti dodana naznaka ,,nedostupno djelo, navedeno
-prema:" uz navoenje djela i stranice prema kojima je navedeno, na primjer:
+bi trebalo pokušati pronaći izvor na koji se upućuje u konzultiranom djelu, ali ako je on
+nedostupan, iznimno se i samo ako je određena tvrdnja iz tog izvora važna za rad, na njega
+može posredno uputiti. Posredno upućivanje, međutim, treba izbjegavati kada je god to moguće.
+Ako bi ga se ipak rabilo, u tom slučaju mora biti dodana naznaka „nedostupno djelo, navedeno
+prema:” uz navođenje djela i stranice prema kojima je navedeno, na primjer:
 Johnston, D., The Roman Law of Trusts, Oxford University Press, Oxford, 1988., str. 3
 (nedostupno djelo, navedeno prema: Jakab, E., Inheritance, u: Du Plessis, P.; Ando, C.; Tuori,
 K. (ur.), The Oxford Handbook of Roman Law and Society, Oxford University Press, Oxford,
 2016., str. 504).
 
-6.2. Bibliografski podatci kod ponovljenog navoenja
+6.2. Bibliografski podatci kod ponovljenog navođenja
 
-[knjige i clanci]
+[knjige i članci]
 
-Prezime autora, prvo slovo imena autora, potom slijedi skraenica op. cit. koja oznacava
-latinsku kraticu za opus citatum (hrv. = navedeno djelo) te se navodi u kojoj je biljesci
+Prezime autora, prvo slovo imena autora, potom slijedi skraćenica op. cit. koja označava
+latinsku kraticu za opus citatum (hrv. = navedeno djelo) te se navodi u kojoj je bilješci
 spomenuto djelo prvi put navedeno, a na kraju se navodi stranica na koju se navod odnosi.
 Primjer: Horvat, M., op. cit. u bilj. 3, str. 65.
-Mogue je i krae bez inicijala imena, no potrebno je tako dosljedno navoditi u cijelom radu:
+Moguće je i kraće bez inicijala imena, no potrebno je tako dosljedno navoditi u cijelom radu:
 Horvat, op. cit. u bilj. 3, str. 65.
 
-Ako je u istoj biljesci prvi put navedeno vise djela istog autora, npr. Horvat, M., Rimsko pravo,
-Pravni fakultet Sveucilista u Zagrebu, Zagreb, 1998., str. 55; id. [od idem, isti], Bona fides u
+Ako je u istoj bilješci prvi put navedeno više djela istog autora, npr. Horvat, M., Rimsko pravo,
+Pravni fakultet Sveučilišta u Zagrebu, Zagreb, 1998., str. 55; id. [od idem, isti], Bona fides u
 razvoju rimskoga obveznoga prava, naklada autora, Zagreb, 1939., str. 45, tada se u
-ponovljenom navodu, ispred op. cit. u bilj. X, dodatno navodi i skraeni naslov, uobicajeno
-prve dvije rijeci.
-Primjer: Horvat, M., Bona fides..., op. cit. u bilj. 3, str. 46.
+ponovljenom navodu, ispred op. cit. u bilj. X, dodatno navodi i skraćeni naslov, uobičajeno
+prve dvije riječi.
+Primjer: Horvat, M., Bona fides…, op. cit. u bilj. 3, str. 46.
+
+Ako je veći broj autora (u pravilu više od tri autora) određenog djela, u ponovnom se navođenju
+ne navode svi autori, nego samo podatci za prvog autora te latinska kratica et al. (i drugi):
+Prvo navođenje: Alinčić, M.; Hrabar, D.; Jakovac-Lozić, D.; Korać, A., Obiteljsko pravo,
+Narodne novine, Zagreb, 2007., str. 156.
+Ponovno navođenje: Alinčić et al., op. cit. u bilj. 10, str. 157.
 
 ===== [pravo-upute-oblikovanje-2024 | str. 11] =====
-Ako se biljeske koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid. (skraenica
-od latinske rijeci ibidem (hrv.= na istom mjestu)). Nije potrebno navoditi broj stranice ako se
-upuuje na istu stranicu kao i u prethodnoj biljesci. Ako se upuuje na drugu stranicu, tada se
+Ako se bilješke koje slijede jedna iza druge odnose na isto djelo, rabi se oznaka ibid. (skraćenica
+od latinske riječi ibidem (hrv.= na istom mjestu)). Nije potrebno navoditi broj stranice ako se
+upućuje na istu stranicu kao i u prethodnoj bilješci. Ako se upućuje na drugu stranicu, tada se
 mora navesti i ta druga stranica: Ibid., str. i broj stranice.
-Ibid. se pise velikim pocetnim slovom ako je na pocetku biljeske ili recenice.
+Ibid. se piše velikim početnim slovom ako je na početku bilješke ili rečenice.
 Primjer:
 6) Horvat, M., op. cit. u bilj. 3, str. 65.
 7) Ibid., str. 74.
 8) Ibid.
-(uputa se odnosi na str. 74 kao u prethodnoj biljesci pa se stoga ne pise broj stranice)
-9) Navedena se tvrdnja susree i kod Horvata, ibid., str. 75.
+(uputa se odnosi na str. 74 kao u prethodnoj bilješci pa se stoga ne piše broj stranice)
+9) Navedena se tvrdnja susreće i kod Horvata, ibid., str. 75.
 
-6.3. Uvoenje literature u biljeskama
+6.3. Uvođenje literature u bilješkama
 
-Literatura se u biljeskama uvodi sljedeim kraticama na hrvatskom jeziku ili latinskom jeziku:
+Literatura se u bilješkama uvodi sljedećim kraticama na hrvatskom jeziku ili latinskom jeziku:
 Usp. (Cf.)
 Vidi: (V.)
-Opsirnije: (Amplius).
+Opširnije: (Amplius).
 
-===== [pravo-pravilnik-studiji-2026 | str. 3] =====
-koji izvode nastavu
+===== [pravo-scsr-upute-diplomski-2021 | str. 2] =====
+Diplomski rad student brani pred tročlanim povjerenstvom u kojem je mentor
+predsjednik povjerenstva. Članovi povjerenstva trebaju dobiti na uvid diplomski rad prije obrane
+i dati studentu svoje sugestije vezano uz eventualne izmjene i dopune u radnji.
 
-    b) vrsta nastave (npr. predavanja, seminari, vjezbe, konzultacije, terenska praksa,
-         prakticna nastava i sl.) i nacin izvoenja nastave (s fizickom prisutnosu, na
-         daljinu, istodobno s fizickom prisutnosu i na daljinu)
+   Nakon obrane diplomskog rada student/ica u studentsku službu na e-adresu zavrsetak-
+studija@pravo.hr dostavlja:
 
-    c) jezik i mjesto izvoenja nastave
-    d) semestar i satnica izvoenja nastave
+   a) diplomski rad u pdf formatu
+   b) diplomski rad u word formatu
+   c) poseban word dokument sa slijedećim podacima o radu:
 
-    e) nacin polaganja ispita i ispunjavanja studijskih obveza
-    f) ispitni rokovi
+       i.) Sažetak rada – citirani dio sažetka iz diplomskog rada (do 20 rečenica najviše) - na
+       hrvatskom i engleskom jeziku
+       ii.) Ključne riječi – obvezno navesti ključne riječi za koje se smatra da kao pojmovi opisuju
+       temeljni sadržaj rada (od 6 do 8 ključnih riječi) - na hrvatskom i engleskom jeziku
 
-    g) ispitna literatura i
-    h) ostale vazne obavijesti o izvoenju nastave.
+Elektronsku verziju rada student/ica treba imenovati na slijedeći način: Ime i prezime
 
-(4) Ispitna literatura za pojedini kolegij i ispit mora biti usklaena s opsegom
-    studijskog programa i takvog opsega da je savladiva studentu u tjednom radnom
-    optereenju predvienom opim propisima Fakulteta i Sveucilista.
+studenta/ice_diplomski rad_godina predaje diplomskog rada) (npr. Marko Ivic_ diplomski rad
 
-(5) Izvedbeni plan studija objavljuje se prije upisa na studij odnosno prije upisa
-    akademske godine na vidljivom i lako dostupnom mjestu na mreznoj stranici
-    Fakulteta.
+2022). Printana verzija rada se ne predaje.
 
-(6) Iznimno, izvedbeni plan studija moze se zbog opravdanih razloga mijenjati
-    tijekom akademske godine u skladu sa stavkom 2. i 5. ovog clanka.
+Ostale upute vezano uz obveze studenata i mentora nakon obrane diplomskog rada nalaze se
 
-                                             Clanak 5.
-                                   Provedbeni dokumenti
+na  mrežnoj  stranici:                             https://www.pravo.unizg.hr/sc-
 
-===== [pravo-pravilnik-studiji-2026 | str. 5] =====
-nastave.
+sr/studiji/diplomski/nakon_obrane_diplomskog_rada
 
-(9) Student u izvanrednom statusu studira u sklopu pune nastavne satnice i upisuje u
-    pravilu 30 do 60 ECTS bodova u akademskoj godini u skladu s izvedbenim planom
-    nastave.
+Opseg rada i etički standardi istraživanja
+          Ukupna duljina diplomskog rada treba biti od min. 30 do max. 60 stranica teksta. U taj
 
-(10)  Za izvanredne studente Fakultet moze donijeti posebni izvedbeni plan s
+  opseg uključeni su svi prilozi u tekstu (tablice, popis literature), ali ne i prilozi koje dolaze
+  kao dodaci izvan teksta (primjerak korištenog instrumentarija i slično). Rad treba biti pisan
+  jednostavnim, jasnim i konciznim stilom, te gramatički i pravopisno korektan.
+  Prema vrsti i metodama koje koristi, diplomski rad može biti:
+  ▪ empirijski rad: kvalitativno istraživanje ili kvantitativno istraživanje,
+  ▪ teorijski rad.
+  Studenti koji će provoditi empirijsko istraživanje u kojima se podaci za potrebe istraživanja
+  neposredno prikupljaju od djece ili osoba iz posebno ranjivih skupina (npr. osoba kojima je
+  oduzeta poslovna sposobnost) prije provođenja istraživanja trebaju dobiti odobrenje Etičkog
+  povjerenstva da je istraživanje planirano sukladno etičkim standardima za provedbu
+  istraživanja. U tu svrhu potrebno je da studenti prirede nacrt istraživanja koji treba sadržavati
 
-prilagoenom nastavnom satnicom. Prilagoena nastavna satnica mora iznositi
+                                                                                                                  2
 
-najmanje 50% fonda sati pune nastavne satnice.
+===== [pravo-scsr-upute-diplomski-2021 | str. 4] =====
+politike.
+4. Zaključak
 
-(11)  Student u redovitom i izvanrednom statusu prilikom upisa studija sklapa
+    ▪ Zaključak je sinteza svih relevantnih spoznaja, informacija, stavova i teorija iznesenih
+         u radu izložena na sustavan i koncizan način. U zaključku se ne iznose nove spoznaje,
+         informacije, i podaci već se on formulira temeljem prethodno iznesenih spoznaja.
 
-ugovor o studiranju kojim se poblize ureuju prava i obveze ugovornih strana
+5. Literatura
+   ▪ U poglavlju Literatura, nalazi se popis korištene literature koji je numeriran i uređen
+        po abecedi.
 
-tijekom studija ukljucujui i nacin financiranja studija.
+6. Prilog (ako postoji)
+   ▪ Prilozi se numeriraju i stavljaju na kraju rada (npr. Prilog 1, Prilog 2 itd.). Numeriranje
+        je nužno kako bi se u tekstu rada moglo upućivati na pojedini prilog (npr. Prilog 1).
 
-(12)  Gostujui student je student u redovitom ili izvanrednom statusu drugog
+Struktura empirijskog diplomskog rada
 
-ucilista koji upisuje dijelove studijskog programa na Fakultetu u skladu s
+1. Sažetak
+    ▪ Potrebno je napisati sažetak na hrvatskom i engleskom jeziku na način naveden niže
+         u tekstu.
+    ▪ Sažetak treba sadržavati osnovnu svrhu i cilj istraživanja, primijenjenu
+         metodologiju, dobivene rezultate i najvažnije zaključke.
 
-posebnim ugovorom s drugim ucilistem o priznavanju ECTS bodova.
+2. Uvod
+     ▪ Uvod treba sadržavati osnovne podatke o predmetu istraživanja i objavljenim
+        rezultatima dosadašnjih istraživanja te obrazlaže problem koji slijedi u radu i hipoteze
+        koje se provjeravaju. U uvodu trebaju biti obrazloženi i literaturom potkrepljeni
+        temelji za postavljene afirmativne hipoteze.
+     ▪ Ukazuje na teorijski i praktični značaj obrade izabrane tematike.
 
-(13)  Prava i obveze gosta studenta, nacin podmirivanja troskova njegova studija
+3. Cilj, problemi i hipoteze istraživanja
+     ▪ U ovom poglavlju potrebno je navesti opći cilj istraživanja te, u slučaju kvantitativnog
+        istraživanja, specifične probleme istraživanja, kao i hipoteze analogno postavljene
+        prema problemima. U slučaju kvalitativnog istraživanja, ovdje je uz cilj istraživanja
+        potrebno navesti i istraživačka pitanja.
 
-===== [pravo-pravilnik-studiji-2026 | str. 5] =====
-Prestanak statusa studenta
-
-(1) Status studenta prestaje:
-    a) zavrsetkom studija
-    b) ispisom sa studija
-    c) iskljucenjem sa studija u skladu s pravilima o stegovnoj odgovornosti
-         studenata
-    d) ako student ne zavrsi studij u roku dvostruko duljem od trajanja studija.
-
-(2) Na zahtjev studenta koji se ispisao sa studija izdaje se ispisnica s naznakom
-    vremena studiranja, ukupno stecenim ECTS bodovima te popisom polozenih ispita
-    s pripadajuim ECTS bodovima i postignutim ocjenama. O ispisu sa studija unosi
-    se biljeska u ISVU.
-
-===== [pravo-pravilnik-studiji-2026 | str. 18] =====
-(2) Nastavnik ima pravo provjeravati i vrednovati ishode ucenja u svakom obliku
-    nastave.
-
-(3) Pravila polaganja ispita i vrednovanja znanja kao i ostale pojedinosti znacajne za
-    provoenje ispita moraju biti u skladu s izvedbenim planom studija i opim aktima
-    Fakulteta.
-
-(4) Informacije o nacinu provjere i vrednovanja ishoda ucenja moraju biti dostupne
-    na mreznoj stranici katedre i u sustavu za e-ucenje prije pocetka semestra u kojem
-    se izvodi kolegij.
-
-(5) Ispit se polaze na temelju literature predviene izvedbenim planom kolegija.
-(6) Ako je izvedbenim planom za odreenu akademsku godinu utvrena nova ispitna
-
-    literatura, ispit se prema toj literaturi polaze nakon zavrsetka predavanja
-    temeljem gradiva koje je obraeno u toj literaturi.
-
-                                            Clanak 34.
-
-(1) Student polaze ispit iz svih kolegija koje je upisao prema utvrenom studijskom
-    programu i izvedbenom planu studija.
-
-(2) Student moze polagati ispit i iz kolegija koji je upisan kao neobavezan kolegij.
-(3) Student moze pristupiti polaganju ispita iz odreenog kolegija ako je odslusao
-
-    predavanja, ispunio sve predviene obveze te u propisanom roku i na propisani
-    nacin podnio prijavu za polaganje ispita.
-(4) Prilikom izlaska na ispit student je na trazenje nastavnika obvezan predociti
-
-===== [pravo-zavrsni-diplomski-postupak | str. 1] =====
-"Kolačići, poznati i kao "cookies", su male tekstualne datoteke koje web stranice pohranjuju na vašuređaj prilikom posjete.                    
-
-
-                    Njihova uloga je poboljšati vaše iskustvo pregledavanja omogućavajući web stranicama da pamte vaše postavke, poput jezika ili preferencija, te pružaju bolje korisničko iskustvo.                    
-
-
-                    Ove stranice koriste različite vrste kolačića. Neke kolačiće postavljaju usluge trećih strana koje se prikazuju na našim stranicama.                    
-
-
-                    Vašu suglasnost za Izjavu o kolačićima na našim internetskim stranicama možete u bilo kojem trenutku promijeniti ili povući.                    
-
-
-                    EU zakonodavstvo, posebno Opća uredba o zaštiti podataka (GDPR), zahtijeva da korisnici dobiju informacije i daju pristanak prije korištenja kolačića te imaju mogućnost upravljanja postavkama privatnosti.                    
-
-
-                    Više informacija o kolačićima možete pronaći                    ovdje.
-
-===== [pravo-zavrsni-diplomski-postupak | str. 1] =====
-Za vrijeme trajanja obnova zgrada Fakulteta na adresi Ćirilometodska 4 i Nazorova 51, uredi nastavnika i stručnih službi privremeno su smješteni na drugim lokacijama. Detaljne informacije nalaze se  ovdje.
-
-		
-	  
-	      
-    
-      
-        
-          
-            Pravni fakultet © 2023 - 2026. All rights reserved. | Made by papar.hr
+4. Metoda
+    ▪ To je dio rada u kojemu student navodi kako je koristio odabranu metodologiju i
+         istraživačke tehnike. U ovom dijelu rada trebaju biti sadržani podaci o uzorku,
 
 ===== [pravo-studij-integrirani-pravo | str. 1] =====
 Cybersecurity and Cybecrime
@@ -344,59 +383,3 @@ Development of European Integration and Institutions
 
 
 Development of International Law
-
-===== [pravo-studij-integrirani-pravo | str. 1] =====
-Odluka o sudjelovanju u troškovima ECTS bodova završnog odnosno diplomskog rada
-
-																	
-																
-															
-																													
-																
-																	Predodabir mentora
-																
-																
-																	
-																		Predodabir mentora postupak je u kojem studenti iskazuju svoje preferencije za izbor mentora za izradu diplomskog rada.
-
-Postupak se provodi putem online obrasca u sustavu LimeSurvey.
-
-Predodabir mentora ispunjavaju isključivo studenti završne godine studija koji još nemaju dodijeljenog mentora iz ranijih akademskih godina.
-
-U obrascu studenti navode do 10 željenih nastavnika prema redoslijedu preferencija (1 – najpoželjniji izbor, 10 – najmanje poželjan izbor).
-
-Raspodjela mentora provodi se na temelju iskazanih preferencija studenata, raspoloživosti nastavnika te važećih pravila studija i Pravilnika o studijima i studiranju.
-
-Predodabir mentora predstavlja iskaz interesa studenata te ne predstavlja automatsko pravo na dodjelu određenog mentora.
-
-Postupak predodabira mentora u pravilu se provodi tijekom studenoga.
-
-Detaljne upute, rokovi i poveznica na obrazac studentima se dostavljaju putem službene studentske elektroničke pošte.
-
-&nbsp;
-
-===== [pravo-studij-integrirani-pravo | str. 1] =====
-Dabar razvija i održava Sveučilišni računski centar (Srce) u suradnji s partnerskim ustanovama iz akademske i istraživačke zajednice i u suradnji s Nacionalnom i sveučilišnom knjižnicom u Zagrebu. Pregled pohranjenih diplomskih i završnih radova u Repozitoriju Dabra Pravnog fakulteta u Zagrebu dostupan je studentima i djelatnicima uz prijavu putem AAI@EduHr identiteta. Trenutno su javno dostupni opis i kratak sažetak radova, a od 1. svibnja 2022. godine bit će javno dostupni svi diplomski/završni radovi u pdf obliku.
-
-																	
-																
-															
-																													
-																
-																	Upute za izradu diplomskog rada
-																
-																
-																	
-																		
-Upute za oblikovanje i uređenje teksta i navođenje izvora
-
-																	
-																
-															
-																													
-																
-																	Postupak nakon obrane
-																
-																
-																	
-																		Nakon obrane diplomskog rada:

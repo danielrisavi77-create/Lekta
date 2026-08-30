@@ -1,56 +1,6 @@
-===== [ufri-upute-diplomski-2024 | str. 1] =====
-1. Uvod: sadrzi predmet (problem) istrazivanja, razloge odabira teme, cilj rada te metode
-koristene u izradi rada. Preporuca se da uvod ne sadrzi vise od jedne stranice teksta.
-
-2. Tekstualna razrada diplomskog rada: pise se prema Sadrzaju. Opisuju se, objasnjavaju i izlazu
-relevantne cinjenice, iznose se i komentiraju stavovi drugih autora, dokazuje se radna hipoteza (argumenti i
-protuargumenti) i obrazlazu postignuti rezultati. Preporuca se da tekstualna razrada diplomskog rada ne
-bude manja od 60 niti vea od 80 stranica.
-
-3. Zakljucak: zavrsni dio diplomskog rada koji sadrzi sintezu najvaznijih stavova, spoznaja
-ili drugih rezultata iznijetim u radu.
-
-4. Literatura: upute za pisanje su u nastavku teksta; popis mora biti numeriran, a reference
-poredane abecedno, po prezimenu prvog autora.
-
-Prilozi
-
-Sve sto se nije moglo uklopiti u osnovne dijelove rada: vee tablice, slike, primjeri, protokoli, upitnici, price
-i tekstovi vezani uz temu, popratne folije.
-
-Popis elektronskih priloga
-Prezentacije, programi, igre, audio i video zapisi, slike i fotografije.
-
-                      Struktura rada koji ukljucuje empirijsko istrazivanje
-
-===== [ufri-upute-diplomski-2024 | str. 2] =====
-Tablice i slike
-
-Naslovi tablica nalaze se iznad tablica i pocinju s oznakom i numeracijom: Tablica 1:, Tablica 2:, Tablica
-X:. Iza numeracije i dvotocke slijedi naslov tablice. U tekstu se tablice referiraju takvim pocetnim
-oznakama ("Kao sto se vidi iz Tablice 3, ........").
-
-Naslovi slika (grafovi, dijagrami, crtezi, fotografije) nalaze se iznad slike i pocinju s oznakom i numeracijom: Slika 1:,
-Slika 2:, Slika X:. Iza numeracije i dvotocke slijedi naslov slike. U tekstu se slike referiraju takvim pocetnim oznakama
-("Kao sto se vidi iz Slike 3, ........").
-
-                                    Navo enje izvora u tekstu rada
-
-         Izvori se ne oznacavaju numeriranim biljeskama na dnu stranice ili na kraju teksta,
-ve u samom tekstu, navodei u zagradama prezime autora i godinu izdanja. Tim informacijama se
-dodaje i broj stranica, ukoliko se radi o citatu i preuzimanju slike ili tablice. U slucaju da izvor ima
-vise od tri autora u tekstu navodite prezime prvog autora i dodajete "i suradnici". U slucaju da za
-odre enu parafrazu, opis ili tvrdnju zelite navesti vise izvora, izvore razdvojite oznakom ";".
-
-         Niti jedna recenica ili odjeljak vaseg rada ne moze biti preuzet iz drugog izvora bez navo enja
-izvora. Tu e tekstove mozete ukljuciti u svoj rad na dva nacina: kao citate ili parafraze. Tako er morate
-razlikovati izravno navo enje (autorov rad ste koristili kao izvor i navesti ete ga u popisu koristene
-literature) i posredno navo enje (koristili ste sekundarnu publikaciju poput udzbenika u kojoj se navodi
-autorov rad, a u popisu koristene literature navest ete samo sekundarnu publikaciju).
-
 ===== [ufri-upute-diplomski-2024 | str. 3] =====
 A. IZRAVNO NAVO ENJE (rad autora kojeg citirate koristili ste pri izradi seminara i
-navesti ete ga u popisu koristene literature):
+navesti ćete ga u popisu korištene literature):
 
 Jedan autor:
 Shema: parafraze (Prezime, 1999) citata (Prezime, 1999: 13-15)
@@ -58,87 +8,87 @@ Shema: parafraze (Prezime, 1999) citata (Prezime, 1999: 13-15)
 Dva autora:
 Shema: parafraze (Prezime1 i Prezime2, 1999)
 
-Vise od dva autora:
+Više od dva autora:
 Shema: citata (Prezime1 i sur., 1999:12)
 
-Istovremeno navo enje vise izvora (abecedni redoslijed navo enja izvora):
+Istovremeno navo enje više izvora (abecedni redoslijed navo enja izvora):
 Shema: parafraza ili integrativni opis iz tri izvora (Prezime1, 1999; Prezime2 i Prezime3,
 2000; Prezime4 i sur., 2001)
 
-B. POSREDNO NAVO ENJE (koristili ste sekundarnu publikaciju poput udzbenika u kojoj
-se navodi autorov rad, a u popisu koristene literature navest ete samo sekundarnu publikaciju
-- udzbenik).
+B. POSREDNO NAVO ENJE (koristili ste sekundarnu publikaciju poput udžbenika u kojoj
+se navodi autorov rad, a u popisu korištene literature navest ćete samo sekundarnu publikaciju
+- udžbenik).
 
 Jedan autor:
-Shema: parafraze (PrezimeAutora, godina autorovog rada, prema PrezimeAutoraUdzbenika,
-godina izdanja udzbenika).
+Shema: parafraze (PrezimeAutora, godina autorovog rada, prema PrezimeAutoraUdžbenika,
+godina izdanja udžbenika).
 Primjer:
 
-U knjizi Gorana Milasa "Istrazivacke metode u psihologiji i drugim drustvenim znanostima" objavljenoj u
-Nakladi Slap 2005. godine na stranici 79 autor knjige parafrazirao je zakljucak R. C. Calfeea objavljen
-1985. godine u knjizi Experimental methods in psychology (New York: Holt). Ukoliko zelite parafrazirati
-taj dio knjige, koristit ete ovakvu oznaku izvora u tekstu svog rada (uocite koristenje rijeci "prema"):
+U knjizi Gorana Milasa "Istraživačke metode u psihologiji i drugim društvenim znanostima" objavljenoj u
+Nakladi Slap 2005. godine na stranici 79 autor knjige parafrazirao je zaključak R. C. Calfeea objavljen
+1985. godine u knjizi Experimental methods in psychology (New York: Holt). Ukoliko želite parafrazirati
+taj dio knjige, koristit ćete ovakvu oznaku izvora u tekstu svog rada (uočite korištenje riječi "prema"):
 
-Ukoliko zelite napisati dobro osmisljen rad, neki autori (Calfee, 1985, prema Milas, 2005) preporucuju
-da istrazivacki problem izlozite ve u prvom odjeljku, zajedno s razlozima njegova izucavanja.
+Ukoliko želite napisati dobro osmišljen rad, neki autori (Calfee, 1985, prema Milas, 2005) preporučuju
+da istraživački problem izložite već u prvom odjeljku, zajedno s razlozima njegova izučavanja.
 
-Nakon toga, u popis koristene literature navodite samo knjigu od Milasa koju ste zbilja
-koristili. Ukoliko tekst iz Milasove knjige doslovno prepisete, morate ga staviti pod navodne
+Nakon toga, u popis korištene literature navodite samo knjigu od Milasa koju ste zbilja
+koristili. Ukoliko tekst iz Milasove knjige doslovno prepišete, morate ga staviti pod navodne
 znakove i u oznaci izvora dodati podatak o stranici knjige (Calfee, 1985, prema Milas,
-2005:79). Posredno navo enje u situacijama veeg broja autora provodi se po analogiji
+2005:79). Posredno navo enje u situacijama većeg broja autora provodi se po analogiji
 prethodnih primjera.
 
                                                LITERATURA
 
 KNJIGE KOJE IMAJU AUTORA:
-Shema � 1 autor:
-Prezime, I. (godina). Naslov: podnaslov. Mjesto izdavaca: Izdavac.
+Shema – 1 autor:
+Prezime, I. (godina). Naslov: podnaslov. Mjesto izdavača: Izdavač.
 Primjer:
-Rauni, R. (2005). Pretpostavke liberalnog razumijevanja covjeka. Zagreb: Hrvatsko
-filozofsko drustvo.
+Raunić, R. (2005). Pretpostavke liberalnog razumijevanja čovjeka. Zagreb: Hrvatsko
+filozofsko društvo.
 
-Shema � vise autora:
+Shema – više autora:
 
 ===== [ufri-upute-diplomski-2024 | str. 4] =====
-Prezime1, I., Prezime2, I. i Prezime3, I. (godina). Naslov: podnaslov. Mjesto izdavaca: Izdavac.
+Prezime1, I., Prezime2, I. i Prezime3, I. (godina). Naslov: podnaslov. Mjesto izdavača: Izdavač.
 Primjer:
-Matijevi, M., Muzi, V. i Joki, M. (2003). Istrazivati i objaviti: elementi metodoloske
+Matijević, M., Mužić, V. i Jokić, M. (2003). Istraživati i objaviti: elementi metodološke
 pismenosti u pedagogiji. Zagreb: HPKZ.
 
 KNJIGE KOJE IMAJU GLAVNOG UREDNIKA:
-Cesta odlika takvih knjiga jest da svako poglavlje ima drugog autora. Ukoliko u popis literature zelite
-navesti cijelu knjigu ili dio kojeg su napisali urednici (a ne pojedino poglavlje) koristit ete ovakav
+Česta odlika takvih knjiga jest da svako poglavlje ima drugog autora. Ukoliko u popis literature želite
+navesti cijelu knjigu ili dio kojeg su napisali urednici (a ne pojedino poglavlje) koristit ćete ovakav
 oblik reference:
 
-Shema � vise urednika:
-Prezime1, I. i Prezime2, I. (ur.). (godina). Naslov: podnaslov. Mjesto izdavaca: Izdavac.
+Shema – više urednika:
+Prezime1, I. i Prezime2, I. (ur.). (godina). Naslov: podnaslov. Mjesto izdavača: Izdavač.
 Primjer:
-Kovacevi, M. i Soljan, N.N. (ur.). (1989). Psihologijska znanost i edukacija. Zagreb: Skolske
+Kovačević, M. i Šoljan, N.N. (ur.). (1989). Psihologijska znanost i edukacija. Zagreb: Školske
 novine.
 
 KNJIGE KOJE IMAJU GLAVNOG UREDNIKA I OZNAKU VOLUMENA:
 U navedenom primjeru iste urednice uredile su sva tri volumena koji imaju iste naslove.
-Ucestalije je da razliciti volumeni koji cesto imaju i razlicite naslove, imaju i razlicite urednike.
+Učestalije je da različiti volumeni koji često imaju i različite naslove, imaju i različite urednike.
 
-Shema � vise urednika:
-Prezime1, I. i Prezime2, I. (ur.). (godina). Naslov: podnaslov (Vol. x.). Mjesto izdavaca: Izdavac.
+Shema – više urednika:
+Prezime1, I. i Prezime2, I. (ur.). (godina). Naslov: podnaslov (Vol. x.). Mjesto izdavača: Izdavač.
 Primjer:
 
-Uzelac, V. i Vujici, L. (ur.). (1989). Cjelozivotno ucenje za odrzivi razvoj (Vol. 1.-3.). Rijeka: Uciteljski
+Uzelac, V. i Vujičić, L. (ur.). (1989). Cjeloživotno učenje za održivi razvoj (Vol. 1.-3.). Rijeka: Učiteljski
 fakultet.
 
 POGLAVLJE U KNJIZI KOJA IMA UREDNIKA:
-Ukoliko ste koristili odre eno poglavlje koje je napisao autor, a ne urednik knjige, koristit ete ovakav
-oblik reference (obratite paznju na kosi tekst, redoslijed inicijala koji kod urednika ide prije prezimena
+Ukoliko ste koristili odre eno poglavlje koje je napisao autor, a ne urednik knjige, koristit ćete ovakav
+oblik reference (obratite pažnju na kosi tekst, redoslijed inicijala koji kod urednika ide prije prezimena
 i navo enje stranica):
 
-Shema � jedan autor, vise urednika:
+Shema – jedan autor, više urednika:
 Prezimeautora, I. (godina). Naslov poglavlja: podnaslov. U I. Prezimeurednika1 i I.
 Prezimeurednika2 (ur.), Naslov knjige: podnaslov (str. prva.str.poglavlja-
-zadnja.str.poglavlja). Mjesto izdavaca: Izdavac.
+zadnja.str.poglavlja). Mjesto izdavača: Izdavač.
 Primjer:
-Dweck, C.S. (1989). Motivacijski procesi kao determinante ucenja. U M. Kovacevi i N.N.
-Soljan (ur.), Psihologijska znanost i edukacija (str. 43-63). Zagreb: Skolske novine.
+Dweck, C.S. (1989). Motivacijski procesi kao determinante učenja. U M. Kovačević i N.N.
+Šoljan (ur.), Psihologijska znanost i edukacija (str. 43-63). Zagreb: Školske novine.
 
 POGLAVLJE U KNJIZI KOJA IMA UREDNIKA I OZNAKU VOLUMENA:
 Shema:
@@ -146,28 +96,78 @@ Shema:
 ===== [ufri-upute-diplomski-2024 | str. 5] =====
 Shema:
 
-Prezime, I. (godina, uz godinu objave i datum ako je dostupan). Naslov: podnaslov clanka. Naslov
+Prezime, I. (godina, uz godinu objave i datum ako je dostupan). Naslov: podnaslov članka. Naslov
 
-casopisa ili knjige. Pribavljeno 01.01.2001., sa http://potpuna.www.adresa.tog.teksta Primjer:
+časopisa ili knjige. Pribavljeno 01.01.2001., sa http://potpuna.www.adresa.tog.teksta Primjer:
 
-Loncari, D. (2006). Suocavanje ucenika s akademskim i interpersonalnim stresnim
-situacijama: provjera me usituacijske stabilnosti strategija suocavanja. Psihologijske teme.
+Lončarić, D. (2006). Suočavanje učenika s akademskim i interpersonalnim stresnim
+situacijama: provjera me usituacijske stabilnosti strategija suočavanja. Psihologijske teme.
 
 Pribavljeno 01.10.2008., sa
 http://hrcak.srce.hr/index.php?show=clanak&id_clanak_jezik=18189
 
-Ostali izvori s interneta biljeze se kao reference u podnozju stranice (fus-nota) ili ispod
+Ostali izvori s interneta bilježe se kao reference u podnožju stranice (fus-nota) ili ispod
 slika. Primjer:
 
-Vuceti-Skrbi, A. (2008., 30. rujna). Cudo u Medicinskoj skoli u Zadru: smanjili izostanke ucenika
-za 4000 skolskih sati! Pribavljeno 01.10.2008., sa
+Vučetić-Škrbić, A. (2008., 30. rujna). Čudo u Medicinskoj školi u Zadru: smanjili izostanke učenika
+za 4000 školskih sati! Pribavljeno 01.10.2008., sa
 http://www.slobodnadalmacija.hr/Zadar/tabid/73/articleType/ArticleView/articleId/24322/Def
 ault.aspx
 
 Radovi bez jasne naznake autorstva i datuma objave tako er se navode samo kao referenca u
-podnozju stranice.
+podnožju stranice.
 Shema:
 Naslov: podnaslov. Pribavljeno 01.01.2001., sa
 http://potpuna.www.adresa.tog.teksta Primjer:
-Teorija izbora u skoli. Pribavljeno 01.09.2008., sa
+Teorija izbora u školi. Pribavljeno 01.09.2008., sa
 http://www.multilink.hr/ri-kvas/teorija.html
+
+===== [ufri-upute-diplomski-2024 | str. 1] =====
+1. Uvod: sadrži predmet (problem) istraživanja, razloge odabira teme, cilj rada te metode
+korištene u izradi rada. Preporuča se da uvod ne sadrži više od jedne stranice teksta.
+
+2. Tekstualna razrada diplomskog rada: piše se prema Sadržaju. Opisuju se, objašnjavaju i izlažu
+relevantne činjenice, iznose se i komentiraju stavovi drugih autora, dokazuje se radna hipoteza (argumenti i
+protuargumenti) i obrazlažu postignuti rezultati. Preporuča se da tekstualna razrada diplomskog rada ne
+bude manja od 60 niti veća od 80 stranica.
+
+3. Zaključak: završni dio diplomskog rada koji sadrži sintezu najvažnijih stavova, spoznaja
+ili drugih rezultata iznijetim u radu.
+
+4. Literatura: upute za pisanje su u nastavku teksta; popis mora biti numeriran, a reference
+poredane abecedno, po prezimenu prvog autora.
+
+Prilozi
+
+Sve što se nije moglo uklopiti u osnovne dijelove rada: veće tablice, slike, primjeri, protokoli, upitnici, priče
+i tekstovi vezani uz temu, popratne folije.
+
+Popis elektronskih priloga
+Prezentacije, programi, igre, audio i video zapisi, slike i fotografije.
+
+                      Struktura rada koji uključuje empirijsko istraživanje
+
+===== [ufri-upute-diplomski-2024 | str. 2] =====
+Tablice i slike
+
+Naslovi tablica nalaze se iznad tablica i počinju s oznakom i numeracijom: Tablica 1:, Tablica 2:, Tablica
+X:. Iza numeracije i dvotočke slijedi naslov tablice. U tekstu se tablice referiraju takvim početnim
+oznakama ("Kao što se vidi iz Tablice 3, ........").
+
+Naslovi slika (grafovi, dijagrami, crteži, fotografije) nalaze se iznad slike i počinju s oznakom i numeracijom: Slika 1:,
+Slika 2:, Slika X:. Iza numeracije i dvotočke slijedi naslov slike. U tekstu se slike referiraju takvim početnim oznakama
+("Kao što se vidi iz Slike 3, ........").
+
+                                    Navo enje izvora u tekstu rada
+
+         Izvori se ne označavaju numeriranim bilješkama na dnu stranice ili na kraju teksta,
+već u samom tekstu, navodeći u zagradama prezime autora i godinu izdanja. Tim informacijama se
+dodaje i broj stranica, ukoliko se radi o citatu i preuzimanju slike ili tablice. U slučaju da izvor ima
+više od tri autora u tekstu navodite prezime prvog autora i dodajete "i suradnici". U slučaju da za
+odre enu parafrazu, opis ili tvrdnju želite navesti više izvora, izvore razdvojite oznakom ";".
+
+         Niti jedna rečenica ili odjeljak vašeg rada ne može biti preuzet iz drugog izvora bez navo enja
+izvora. Tu e tekstove možete uključiti u svoj rad na dva načina: kao citate ili parafraze. Tako er morate
+razlikovati izravno navo enje (autorov rad ste koristili kao izvor i navesti ćete ga u popisu korištene
+literature) i posredno navo enje (koristili ste sekundarnu publikaciju poput udžbenika u kojoj se navodi
+autorov rad, a u popisu korištene literature navest ćete samo sekundarnu publikaciju).

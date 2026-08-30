@@ -20,7 +20,7 @@
     "mode": "bracket-number",
     "provenance": {
       "kind": "rule-text",
-      "quoteRaw": "koji su citirani ili na koje se poziva u radu. Literatura se obiljezava rednim brojem po",
+      "quoteRaw": "koji su citirani ili na koje se poziva u radu. Literatura se obilježava rednim brojem po",
       "sourcePage": "str. 5",
       "note": "Literatura se numerira po redoslijedu citiranja; u tekstu se 'na kraju citata ili prepricanog izvatka stavlja oznaka za biljesku koja se citira u literaturi' (str. 6). Tocan graficki oblik oznake (uglata zagrada, superskript) NIJE prikazan u ekstrakciji; bracket-number odabran u skladu s priorom ieee, potvrditi pri verifikaciji."
     }
@@ -60,7 +60,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "1. D. Babi, D. Jureci, A.Tomas, Interakcije u doradnom procesu kao rezultat",
+        "quoteRaw": "1. D. Babić, D. Jurečić, A.Tomaš, Interakcije u doradnom procesu kao rezultat",
         "sourcePage": "str. 5",
         "note": "Cijeli primjer (spojeni redci): D. Babi, D. Jureci, A.Tomas, Interakcije u doradnom procesu kao rezultat plastificiranja digitalno otisnutih araka, u DAAAM International Scientific Book, (B. Katalini, ur.), Vienna, 2006. 1-8. U ekstrakciji iza naslova stoji zaostali zavrsni navodnik (araka\") pa je naslov priloga u izvorniku vjerojatno pod navodnicima, otvoreni navodnik izgubljen u ekstrakciji; predlozak radi bez navodnika, potvrditi pri verifikaciji. Vodeci redni broj (1.) je numeracija popisa, ne dio natuknice. U expected je rekonstruiran razmak 'A. Tomas' (ekstrakcija ima 'A.Tomas'; svi ostali autori u istom popisu imaju razmak iza inicijala pa je gubitak razmaka pdftotext artefakt); potvrditi u PDF-u."
       },
@@ -90,7 +90,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "3. V.D. Stankovi, M. Gojo, Surf. Coat. Technol., 81 (1996), 225-232.",
+        "quoteRaw": "3. V.D. Stanković, M. Gojo, Surf. Coat. Technol., 81 (1996), 225-232.",
         "sourcePage": "str. 5",
         "note": "Casopisni oblik NE sadrzi naslov clanka; naziv casopisa je u primjeru kracen (Surf. Coat. Technol.). Oblik: autori, casopis, godiste (godina), stranice. Vodeci redni broj (3.) je numeracija popisa, ne dio natuknice."
       },
@@ -140,7 +140,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "5. P. Pavici, Utjecaj gume na okolis, doktorska disertacija, (odnosno magistarski rad,",
+        "quoteRaw": "5. P. Pavičić, Utjecaj gume na okoliš, doktorska disertacija, (odnosno magistarski rad,",
         "sourcePage": "str. 6",
         "note": "Primjer izvora je doktorska disertacija: P. Pavici, Utjecaj gume na okolis, doktorska disertacija, Graficki fakultet Sveucilista u Zagrebu, Zagreb, 1999. Izvor izricito dopusta zamjenu oznake vrste rada ('odnosno magistarski rad, diplomski rad'); alat koristi varijantu 'diplomski rad' kao default. Vodeci redni broj (5.) je numeracija popisa, ne dio natuknice."
       },
@@ -166,7 +166,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "U literaturu se ne uvrstavaju skripta, biljeske s predavanja, upute proizvoaca, pro-",
+        "quoteRaw": "U literaturu se ne uvrštavaju skripta, bilješke s predavanja, upute proizvođača, pro-",
         "sourcePage": "str. 6",
         "note": "Izvor IZRICITO ISKLJUCUJE pravilnike i propise iz popisa literature ('U literaturu se ne uvrstavaju ... pravilnici i propisi'). Predlozak (naslov, glasilo, broj) je minimalno izveden po uzoru na zarezom odvojene natuknice izvora, samo radi potpunosti alata; na stranici alata navesti da GRF propise ne uvrstava u literaturu. Potvrditi pri verifikaciji."
       },

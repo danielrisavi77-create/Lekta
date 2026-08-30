@@ -8,7 +8,7 @@ Snapshot: `data/sources/pravri/pravri-upute-radovi-2023.pdf` (hash `1943a0cbb283
 Otvori PDF: `data/sources/pravri/pravri-upute-radovi-2023.pdf#page=18`
 ```
 TEMPLATE: {authors}, {title}[[, {volume}. izd.]], {place}, {publisher}, {year}.
-QUOTE   : Petranovi, Anamari, Obligationes iuris romani: breviarum, Rijeka, Pravni fakultet Sveucilista,   [grep: OK]
+QUOTE   : Petranović, Anamari, Obligationes iuris romani: breviarum, Rijeka, Pravni fakultet Sveučilišta,   [grep: OK]
 IZVOR   : Petranovi, Anamari, Obligationes iuris romani: breviarum, Rijeka, Pravni fakultet Sveucilista, 2010.
 RENDER  : Petranovi, Anamari, Obligationes iuris romani: breviarum, Rijeka, Pravni fakultet Sveucilista, 2010.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -19,7 +19,7 @@ NAPOMENA: Poglavlje 6.1.1: autor (prezime, ime), naslov (podnaslov iza dvotocja)
 Otvori PDF: `data/sources/pravri/pravri-upute-radovi-2023.pdf#page=20`
 ```
 TEMPLATE: {authors}, {title}, {container}[[, vol. {volume}]][[, br. {issue}]]({year})[[, str. {pages}]]
-QUOTE   : Zuni Kovacevi, Natasa, Gadzo, Stjepan, Institut zakonskog poreznog jamstva nakon novele   [grep: OK]
+QUOTE   : Žunić Kovačević, Nataša, Gadžo, Stjepan, Institut zakonskog poreznog jamstva nakon novele   [grep: OK]
 IZVOR   : Zuni Kovacevi, Natasa, Gadzo, Stjepan, Institut zakonskog poreznog jamstva nakon novele Opeg poreznog zakona 2012: proboj pravne osobnosti trgovackih drustava u slucaju zloporabe prava, Zbornik Pravnog fakulteta Sveucilista u Rijeci, vol. 34, br. 1(2013), str. 393-416
 RENDER  : Zuni Kovacevi, Natasa, Gadzo, Stjepan, Institut zakonskog poreznog jamstva nakon novele Opeg poreznog zakona 2012: proboj pravne osobnosti trgovackih drustava u slucaju zloporabe prava, Zbornik Pravnog fakulteta Sveucilista u Rijeci, vol. 34, br. 1(2013), str. 393-416
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
@@ -42,7 +42,7 @@ NAPOMENA: Poglavlje 6.2.1 (Clanak ili poglavlje u knjizi): autori, naslov poglav
 Otvori PDF: `data/sources/pravri/pravri-upute-radovi-2023.pdf#page=20`
 ```
 TEMPLATE: {authors}, {title}[[, {container}]][[, {year}]], {url} ({accessed}).
-QUOTE   : Isto se pravilo primjenjuje kod citiranje clanka u casopisu (podatci o autoru (prezime, ime ili   [grep: OK]
+QUOTE   : Isto se pravilo primjenjuje kod citiranje članka u časopisu (podatci o autoru (prezime, ime ili   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Poglavlje 6.2.2 (Clanak s interneta) propisuje ista polja kao clanak 'uz dodatne podatke o mreznoj stranici i datumu pregleda casopisa', ali sam PRIMJER nije u ekstrahiranim stranicama. Predlozak je izveden: lanac zarezima u stilu izvora + URL i datum pregleda u zagradi; tocnu interpunkciju URL-a i datuma potvrditi pri verifikaciji protiv PDF-a.
 ```
@@ -60,7 +60,7 @@ NAPOMENA: Upute ne obraduju citiranje zavrsnih/diplomskih radova kao izvora. Pre
 Otvori PDF: `data/sources/pravri/pravri-upute-radovi-2023.pdf#page=17`
 ```
 TEMPLATE: {title}, {container}[[, br. {issue}]][[, str. {pages}]].
-QUOTE   : Uredba Vijea (EZ) br. 2001/2003 od 27. studenog 2003 o nadleznosti, priznavanju i ovrsi   [grep: OK]
+QUOTE   : Uredba Vijeća (EZ) br. 2001/2003 od 27. studenog 2003 o nadležnosti, priznavanju i ovrsi   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Ekstrakcija sadrzi samo EU primjere propisa (5.9.2: naslov akta, sluzbeno glasilo 'SL L 338, 23.12.2003., str. 1.-29.'); poglavlja 5.9.1 i 6.3 (Hrvatski pravni propisi) nisu u ekstrahiranim stranicama. Predlozak je izveden iz strukture EU primjera (naslov, glasilo, broj, stranice) prilagodjene navodu iz Narodnih novina; potvrditi protiv PDF-a pri verifikaciji.
 ```

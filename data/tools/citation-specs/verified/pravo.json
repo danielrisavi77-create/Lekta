@@ -24,7 +24,7 @@
     "mode": "note-number",
     "provenance": {
       "kind": "rule-text",
-      "quoteRaw": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju",
+      "quoteRaw": "Bibliografski podatci o korištenim izvorima navode se u bilješkama (fusnotama) koje moraju",
       "sourcePage": "str. 5",
       "note": "U tekstu je broj biljeske; alat generira BIBLIOGRAFSKI oblik (popis literature, bez str. za knjige, s punim rasponom za clanke). Ponovljena navodenja (op. cit., ibid., id.) su izvan dosega generatora, provjerava ih analizator."
     }
@@ -46,7 +46,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveucilista u Zagrebu,",
+        "quoteRaw": "Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveučilišta u Zagrebu,",
         "sourcePage": "str. 5-6",
         "note": "Bibliografski (popis literature) oblik BEZ stranica: 'U popisu literature ne navode se stranice'. Broj izdanja ide u polje volume (17 -> '17. izdanje'). Vise autora odvaja se tockom sa zarezom."
       },
@@ -75,7 +75,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Apostolova Marsavelski, M., O problemu porijekla rimske hipoteke, Zbornik Pravnog fakulteta",
+        "quoteRaw": "Apostolova Maršavelski, M., O problemu porijekla rimske hipoteke, Zbornik Pravnog fakulteta",
         "sourcePage": "str. 6",
         "note": "U popisu literature navode se prva i zadnja stranica clanka (str. 345-361); iza broja stranice ne stavlja se tocka osim na kraju biljeske/recenice."
       },
@@ -164,7 +164,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Primjer za navoenje zakona u biljesci: Zakon o obveznim odnosima (dalje u tekstu: ZOO),",
+        "quoteRaw": "Primjer za navođenje zakona u bilješci: Zakon o obveznim odnosima (dalje u tekstu: ZOO),",
         "sourcePage": "str. 8-9",
         "note": "Uvedena kratica zakona ide u polje institution (opcionalno); brojevi svih izmjena u issue (npr. 35/05, 41/08). Kod ponovljenog navodenja koristi se kratica (Cl. 15. ZOO-a), nikad op. cit."
       },
@@ -190,7 +190,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Prezime autora, prvo slovo imena autora s tockom, naslov djela (u kurzivu), broj izdanja (ako",
+        "quoteRaw": "Prezime autora, prvo slovo imena autora s točkom, naslov djela (u kurzivu), broj izdanja (ako",
         "sourcePage": "str. 5",
         "note": "Upute NE obraduju citiranje zavrsnih/diplomskih radova; predlozak je izveden iz opceg oblika za knjigu (izdavac -> ustanova). Potvrditi ili oboriti pri verifikaciji."
       },

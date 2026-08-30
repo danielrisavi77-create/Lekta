@@ -8,7 +8,7 @@ Snapshot: `data/sources/vub/vub.pdf` (hash `bd6702cb3ca7...`)
 Otvori PDF: `data/sources/vub/vub.pdf#page=13`
 ```
 PIN     : izvor propisuje stil "vancouver" -> format ostaje obiteljski motor
-QUOTE   : Citirati relevantne studije koristei odgovarajui citatni stil (npr. Vancouver).   [grep: OK]
+QUOTE   : Citirati relevantne studije koristeći odgovarajući citatni stil (npr. Vancouver).   [grep: OK]
 ```
 
 ## Verifikacija

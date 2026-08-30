@@ -30,7 +30,7 @@ NAPOMENA: Puni redak (prelomljen u ekstrakciji): 'O Donnell VB. Eicosanoid-Based
 Otvori PDF: `data/sources/fbf/fbf-upute-spec-2014.pdf#page=3`
 ```
 TEMPLATE: {authors}. {title}.[[ {place}:]] {publisher}, {year}.
-QUOTE   : osmisljeno ispitivanje, i prijedlog teme rada. Literatura se navodi Vancouverskim stilom,   [grep: OK]
+QUOTE   : osmišljeno ispitivanje, i prijedlog teme rada. Literatura se navodi Vancouverskim stilom,   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor nema primjer za samostalnu knjigu; oblik je izveden iz primjera poglavlja u urednickoj knjizi na str. 3 (izdavac pa zarez pa godina, bez obveznog mjesta izdanja) uz opcionalno mjesto prema opcoj Vancouver konvenciji. Potvrditi ili oboriti pri verifikaciji.
 ```
@@ -39,7 +39,7 @@ NAPOMENA: Izvor nema primjer za samostalnu knjigu; oblik je izveden iz primjera 
 Otvori PDF: `data/sources/fbf/fbf-upute-spec-2014.pdf#page=3`
 ```
 TEMPLATE: {authors}. {title}.[[ {container}.]] Dostupno na: {url} (pristupljeno {accessed}).
-QUOTE   : osmisljeno ispitivanje, i prijedlog teme rada. Literatura se navodi Vancouverskim stilom,   [grep: OK]
+QUOTE   : osmišljeno ispitivanje, i prijedlog teme rada. Literatura se navodi Vancouverskim stilom,   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor ne obraduje mrezne izvore; oblik i datum pristupa izvedeni su iz Vancouver konvencije za elektronicke izvore s hrvatskom lokalizacijom (Dostupno na, pristupljeno). Izvor ga ne egzemplificira, potvrditi pri verifikaciji.
 ```
@@ -48,7 +48,7 @@ NAPOMENA: Izvor ne obraduje mrezne izvore; oblik i datum pristupa izvedeni su iz
 Otvori PDF: `data/sources/fbf/fbf-upute-spec-2014.pdf#page=3`
 ```
 TEMPLATE: {authors}. {title} (diplomski rad).[[ {place}:]] {institution}, {year}.
-QUOTE   : osmisljeno ispitivanje, i prijedlog teme rada. Literatura se navodi Vancouverskim stilom,   [grep: OK]
+QUOTE   : osmišljeno ispitivanje, i prijedlog teme rada. Literatura se navodi Vancouverskim stilom,   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor ne obraduje citiranje zavrsnih, diplomskih ni specijalistickih radova kao izvora; oblik je izveden iz izvedenog oblika za knjigu (ustanova umjesto izdavaca) po Vancouver konvenciji za teze. Oznaka vrste rada (diplomski, specijalisticki, doktorski) prilagodava se stvarnom radu. Potvrditi pri verifikaciji.
 ```
@@ -57,7 +57,7 @@ NAPOMENA: Izvor ne obraduje citiranje zavrsnih, diplomskih ni specijalistickih r
 Otvori PDF: `data/sources/fbf/fbf-upute-spec-2014.pdf#page=3`
 ```
 TEMPLATE: {title}. {container}[[ {issue}]].
-QUOTE   : osmisljeno ispitivanje, i prijedlog teme rada. Literatura se navodi Vancouverskim stilom,   [grep: OK]
+QUOTE   : osmišljeno ispitivanje, i prijedlog teme rada. Literatura se navodi Vancouverskim stilom,   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor ne obraduje propise ni pravne akte kao izvore; oblik (naslov, sluzbeno glasilo, broj) izveden je iz opce hrvatske prakse u Vancouver okruzenju, ne iz izvora. Potvrditi ili oboriti pri verifikaciji.
 ```

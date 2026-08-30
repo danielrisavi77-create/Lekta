@@ -1,113 +1,202 @@
+===== [kbf-upute-zavrsni-diplomski-2017 | str. 8] =====
+4.5. Tehničke upute za oblikovanje teksta
+
+1. Osnovne upute
+Prilikom oblikovanja teksta potrebno je slijediti upute navedene u nastavku:
+
+     Margine trebaju biti sljedeće: 3,5 cm s lijeve strane te 2,5 cm s desne strane, gore
+         i dolje.
+
+     Oblik slova treba biti jednak u cijelome tekstu (Times New Roman).
+     Veličina slova u glavnome tekst je 12, prored 1,5.
+     Veličina slova u bilješkama je 10, prored 1.
+     Bilješke se označavaju od rednog broja 1 pa nadalje i ispisuju se na dnu svake
+
+         stranice.
+     Stranice trebaju biti označene rednim brojem (dolje desno), pri čemu se prva
+
+         brojčana oznaka stavlja na prvu stranicu Uvoda.
+     Numeriraju se sve stranice (osim Sadržaja i stranica koje mu prethode), tj. kako
+
+         stranice s tekstom, tako i stranice sa slikama (grafikoni, sheme) i tablicama,
+         ukoliko već nisu uklopljeni u tekst.
+     Tekst je potrebno pisati s obostranim poravnanjem.
+     Naslovi i podnaslovi unutar teksta trebaju stajati samostalno u retku te biti
+         napisani na sljedeći način:
+
+              Uvod i Zaključak: podebljano, bez numeracije
+              Glavni naslovi: 1. podebljano
+              Podnaslovi: 1.1. kurziv, ne podebljano
+              Podnaslovi unutar podnaslova: 1.1.1. obično
+     Glavni tekst treba biti podijeljen u poglavlja i potpoglavlja. Preporučuje se
+         decimalna numeracija poglavlja i odlomaka u poglavljima (npr. 1., 1.1., 1.1.1.).
+     Naslovi Uvod, Zaključak i Literatura ne označavaju se brojčanom oznakom.
+     Tekst je potrebno pisati u odlomcima (odlomci se mogu razdvajati na dva načina:
+         ili tako da je početak odlomka uvučen, a između odlomka nema praznog reda, ili
+         tako da početak odlomka nije uvučen, a između odlomaka je razmak (6 pt).
+
+2. Upute za oblikovanje tablica i slika
+Tablice i slike (grafovi, sheme i sl.) trebaju biti označene dvobrojčano i imati naslov. Prva
+brojka označava redni broj poglavlja, a druga redni broj tablice ili slike u tom poglavlju
+(npr. prva tablica u trećem poglavlju označava se „Tablica 3.1.;). Tablice i slike potrebno
+je označiti po kategorijama, što znači da se slike označavaju posebno a tablice posebno.
+Tablice i slike nalaze se u onom dijelu teksta u koji i sadržajno pripadaju te se u te se u
+tekstu potrebno pozvati na njih na način da se navede njihov broj, (npr. Tablica 3.1.). Ako
+je tablica ili slika preuzeta iz literature, potrebno je ispod nje navesti točan izvor (npr.
+Izvor:…).
+
+3. Upute za navođenje literature
+Prilikom navođenje literature potrebno je dosljedno se pridržavati pravila o navođenju
+literature prema uputama znanstvenoga časopisa Bogoslovska smotra (http://hrcak.
+srce.hr/bogoslovska-smotra).
+U završnim/diplomskim radovima iz područja povijesti potrebno je dosljedno se
+pridržavati uputa znanstvenog časopisa Croatica christiana periodica (http://hrcak.
+srce.hr/ccp).
+U nastavku se donose upute za reference Bogoslovske smotre.
+
+                                                                                                                   8
+
+===== [kbf-upute-zavrsni-diplomski-2017 | str. 9] =====
+1. Pri prvome navođenju nekoga djela, bilješka, bez obzira je li objavljena na hrvatskom
+ili nekom od stranih jezika, treba ovako izgledati:
+
+Knjige i zbornici radova:
+
+Osoba kao autor:
+     Željko MARDEŠIĆ, Rascjep u svetome, Zagreb, 2007.
+     Theodor SCHNITZLER, O značenju sakramenata, Zagreb, 1998.
+
+Više osoba kao autori:
+     Angelo SCOLA – Gilfredo MARENGO – Javier P. LÓPEZ, Čovjek kao osoba.
+         Teološka antropologija, Zagreb, 2003.
+
+===== [kbf-upute-zavrsni-diplomski-2017 | str. 10] =====
+ Christoph SCHÖNBORN, Finding design in nature, u: The New York Times, 7.
+         VII. 2005.
+
+Dokumenti i materijali u elektroničkom obliku (u zagradama treba navesti datum
+nastanka [iza naslova] i datum viđenja dokumenta [na kraju]):
+
+     Walter KASPER, Informazioni, riflessioni e valutazioni del momento
+         attuale del dialogo ecumenico (23. XI. 2007.), u:
+
+     http://www.vatican.va/roman_curia/pontifical_councils/chrstuni/card-kasper-
+         docs/rc_pc_chrstuni_doc_20071123_dialogo-ecumenico_it.html (15. I. 2008.).
+
+2. Pri ponovnome navođenju nekoga djela bilješka treba ovako izgledati:
+
+                                                                                                                 10
+
 ===== [kbf-upute-zavrsni-diplomski-2017 | str. 3] =====
 www.kbf.unizg.hr/studenti-i-studiranje/preddiplomski-i-diplomski-studij/tezarij).
 
          1. Svrha pisanja rada
 
-Zavrsni i diplomski rad pisani su radovi koji imaju znacajke i formu znanstvenog rada.
+Završni i diplomski rad pisani su radovi koji imaju značajke i formu znanstvenog rada.
 
-         1.1. Svrha pisanja zavrsnoga rada
+         1.1. Svrha pisanja završnoga rada
 
-Preddiplomski studij zavrsava polaganjem svih ispita i izvrsenjem svih ostalih studijskih
-obveza predvienih studijskim programom, izradom zavrsnoga rada, polaganjem
-zavrsnoga ispita u skladu sa studijskim programom.
-Zavrsni rad po svom sadrzaju mora pokazati studentovo razumijevanje teme, njegovu
-sposobnost samostalnog koristenja literature i primjene znanstvene metodologije.
+Preddiplomski studij završava polaganjem svih ispita i izvršenjem svih ostalih studijskih
+obveza predviđenih studijskim programom, izradom završnoga rada, polaganjem
+završnoga ispita u skladu sa studijskim programom.
+Završni rad po svom sadržaju mora pokazati studentovo razumijevanje teme, njegovu
+sposobnost samostalnog korištenja literature i primjene znanstvene metodologije.
 Student je obvezan napisati rad koji je rezultat vlastitog rada. Ako se sumnja ili se utvrdi
-plagijat ili bilo koja aktivnost koja dovodi u pitanje autorstvo zavrsnoga rada, pokrenut
-e se mjere u skladu s aktima i Etickim kodeksom Fakulteta.
+plagijat ili bilo koja aktivnost koja dovodi u pitanje autorstvo završnoga rada, pokrenut
+će se mjere u skladu s aktima i Etičkim kodeksom Fakulteta.
 
          1.2. Svrha pisanja diplomskoga rada
 
-Diplomski studij zavrsava polaganjem svih ispita i izvrsenjem ostalih studijskih obveza
-predvienih studijskim programom, te pisanjem diplomskog rada i polaganjem zavrsnog
+Diplomski studij završava polaganjem svih ispita i izvršenjem ostalih studijskih obveza
+predviđenih studijskim programom, te pisanjem diplomskog rada i polaganjem završnog
 ispita u skladu sa studijskim programom.
-Diplomski rad po svom sadrzaju mora pokazati studentovo poznavanje teme, sposobnost
-samostalnog istrazivanja, analiziranja objavljenih i neobjavljenih izvora, izbora i
-koristenja relevantne literature i primjene znanstvene metodologije.
+Diplomski rad po svom sadržaju mora pokazati studentovo poznavanje teme, sposobnost
+samostalnog istraživanja, analiziranja objavljenih i neobjavljenih izvora, izbora i
+korištenja relevantne literature i primjene znanstvene metodologije.
 Student je obvezan napisati rad koji je rezultat vlastitog rada. Ako se sumnja ili se utvrdi
 plagijat ili bilo koja aktivnost koja dovodi u pitanje autorstvo diplomskog rada, pokrenut
-e se mjere u skladu s aktima i Etickim kodeksom Fakulteta.
+će se mjere u skladu s aktima i Etičkim kodeksom Fakulteta.
 
          2. Izbor teme
 
-         2.1. Izbor teme zavrsnoga rada
+         2.1. Izbor teme završnoga rada
 
-Student za izradu zavrsnoga rada tijekom 5. semestra izabire mentora, kojemu predlaze
-temu zavrsnoga rada i prijavljuje ga u studentskoj sluzbi na obrascu prijave (vidi Prilog
+Student za izradu završnoga rada tijekom 5. semestra izabire mentora, kojemu predlaže
+temu završnoga rada i prijavljuje ga u studentskoj službi na obrascu prijave (vidi Prilog
 1).
-Nastavnik moze biti mentor ako je izabran u znanstveno-nastavno zvanje. Mentor ima
+Nastavnik može biti mentor ako je izabran u znanstveno-nastavno zvanje. Mentor ima
 
 ===== [kbf-upute-zavrsni-diplomski-2017 | str. 4] =====
-Temu rada student moze izabrati s popisa objavljenih tema i naslova zavrsnih radova
-(gdje takav popis postoji), no moze ih i sam predloziti i definirati u dogovoru s mentorom.
-U oba slucaja, potrebno je voditi racuna o predznanju i interesu studenta za odreeno
-podrucje, o raspolozivoj literaturi na hrvatskom i na drugim jezicima.
+Temu rada student može izabrati s popisa objavljenih tema i naslova završnih radova
+(gdje takav popis postoji), no može ih i sam predložiti i definirati u dogovoru s mentorom.
+U oba slučaja, potrebno je voditi računa o predznanju i interesu studenta za određeno
+područje, o raspoloživoj literaturi na hrvatskom i na drugim jezicima.
 U prijedlogu teme i radnog naslova student navodi i poznatu mu literaturu kojom se
-namjerava sluziti pri izradi rada. Nakon prihvaanja teme, mentor je obvezan redovito se
+namjerava služiti pri izradi rada. Nakon prihvaćanja teme, mentor je obvezan redovito se
 sastajati sa studentom, pratiti njegov rad te ga savjetovati (mentorski rad) u izradi rada.
 
          2.2. Izbor teme diplomskoga rada
 
-Student za izradu diplomskog rada tijekom 9. semestra izabire mentora, kojemu predlaze
-temu diplomskoga rada i prijavljuje ga u studentskoj sluzbi na obrascu prijave (vidi Prilog
+Student za izradu diplomskog rada tijekom 9. semestra izabire mentora, kojemu predlaže
+temu diplomskoga rada i prijavljuje ga u studentskoj službi na obrascu prijave (vidi Prilog
 1).
-Nastavnik moze biti mentor ako je izabran u znanstveno-nastavno zvanje. Mentor ima
-pravo predloziti i komentora u izradi diplomskog rada. Komentori mogu biti nastavnici u
-znanstveno-nastavnom zvanju, znanstvenom zvanju ili suradnickom zvanju
-poslijedoktoranda. Ocjenu zavrsnog rada daje mentor.
+Nastavnik može biti mentor ako je izabran u znanstveno-nastavno zvanje. Mentor ima
+pravo predložiti i komentora u izradi diplomskog rada. Komentori mogu biti nastavnici u
+znanstveno-nastavnom zvanju, znanstvenom zvanju ili suradničkom zvanju
+poslijedoktoranda. Ocjenu završnog rada daje mentor.
 Mentor i komentor prema potrebi mogu biti i vanjski suradnici. Ako je mentor vanjski
-suradnik, u slucaju kada se radi o temi izvan filozofsko-teoloskog ili katehetskog
-podrucja, potrebno je imenovati i komentora s Fakulteta.
+suradnik, u slučaju kada se radi o temi izvan filozofsko-teološkog ili katehetskog
+područja, potrebno je imenovati i komentora s Fakulteta.
 Tema diplomskog rada odobrava se iz nastavnih kolegija unutar studijskog programa.
-Temu rada student moze izabrati s popisa objavljenih tema i naslova diplomskih radova
-(gdje takav popis postoji), no moze ih i sam predloziti i definirati u dogovoru s mentorom.
-U oba slucaja, potrebno je voditi racuna o predznanju i interesu studenta za odreeno
-podrucje, o raspolozivoj literaturi na hrvatskom i na drugim jezicima.
+Temu rada student može izabrati s popisa objavljenih tema i naslova diplomskih radova
+(gdje takav popis postoji), no može ih i sam predložiti i definirati u dogovoru s mentorom.
+U oba slučaja, potrebno je voditi računa o predznanju i interesu studenta za određeno
+područje, o raspoloživoj literaturi na hrvatskom i na drugim jezicima.
 U prijedlogu teme i radnog naslova student navodi i poznatu mu literaturu kojom se
-namjerava sluziti pri izradi rada. Nakon prihvaanja teme, mentor je obvezan redovito se
+namjerava služiti pri izradi rada. Nakon prihvaćanja teme, mentor je obvezan redovito se
 sastajati sa studentom, pratiti njegov rad te ga savjetovati (mentorski rad) u izradi rada.
 
          3. Prijava, predaja i obrana rada
 
-         3.1. Prijava, predaja i obrana zavrsnoga rada
+         3.1. Prijava, predaja i obrana završnoga rada
 
-Po svom opsegu zavrsni rad mora imati najmanje 25 kartica (kartica = 1800 slovnih
+Po svom opsegu završni rad mora imati najmanje 25 kartica (kartica = 1800 slovnih
 mjesta: znakova s prazninama).
-Zavrsni se rad predaje u studentsku sluzbu u tiskanom obliku u dva primjerka, od kojih
+Završni se rad predaje u studentsku službu u tiskanom obliku u dva primjerka, od kojih
 jedan tvrdo uvezan i jedan spiralno uvezan.
-Ocjenu zavrsnog rada daje mentor (vidi Prilog 2). Student ocijenjen ocjenom nedovoljan
+Ocjenu završnog rada daje mentor (vidi Prilog 2). Student ocijenjen ocjenom nedovoljan
 
 ===== [kbf-upute-zavrsni-diplomski-2017 | str. 5] =====
 4. Metodologija izrade rada
 
-U skladu s izabranom temom i radnim naslovom student pristupa izradi zavrsnoga ili
+U skladu s izabranom temom i radnim naslovom student pristupa izradi završnoga ili
 diplomskoga rada.
 
-4.1. Linkovi knjiznica i znanstvenih portala
+4.1. Linkovi knjižnica i znanstvenih portala
 
-Student konzultira leksikone, rjecnike, prikuplja naslove knjiga i clanaka koji obrauju
-podrucje rada. U prikupljanju literature uputno je sluziti se knjiznicnim katalozima,
+Student konzultira leksikone, rječnike, prikuplja naslove knjiga i članaka koji obrađuju
+područje rada. U prikupljanju literature uputno je služiti se knjižničnim katalozima,
 bazama podataka.
-Katalog Knjiznice Katolickoga bogoslovnog fakulteta: http://kbf-test.zaki.com.hr
-Repozitorij Katolickoga bogoslovnog fakulteta Sveucilista u Zagrebu: https://
+Katalog Knjižnice Katoličkoga bogoslovnog fakulteta: http://kbf-test.zaki.com.hr
+Repozitorij Katoličkoga bogoslovnog fakulteta Sveučilišta u Zagrebu: https://
 repozitorij,kbf.unizg.hr/
-Katalog Nacionalne i sveucilisne knjiznice: http://katalog.nsk.hr
-Portal elektronickih izvora za hrvatsku akademsku i znanstvenu zajednicu: http://
+Katalog Nacionalne i sveučilišne knjižnice: http://katalog.nsk.hr
+Portal elektroničkih izvora za hrvatsku akademsku i znanstvenu zajednicu: http://
 katalog.nsk.hr
-Portal znanstvenih casopisa Republike Hrvatske: http://hrcak.srce.hr/
+Portal znanstvenih časopisa Republike Hrvatske: http://hrcak.srce.hr/
 Google znalac: https://scholar.google.hr/
-Pero � Elektronicki casopisi s cjelovitim tekstom dostupni hrvatskoj akademskoj i
+Pero – Elektronički časopisi s cjelovitim tekstom dostupni hrvatskoj akademskoj i
 znanstvenoj zajednici: http://lib.irb.hr/utility/pero/
-Casopisi otvorenog pristupa: https://doaj.org/
+Časopisi otvorenog pristupa: https://doaj.org/
 Hrvatska znanstvena bibliografija: https://bib.irb.hr/
 Hrvatska enciklopedija: http://www.enciklopedija.hr/
-Proleksis � Opa i nacionalna online encikopedija: http://proleksis.lzmk.hr/
-Hrvatski jezicni portal: http://hjp.znanje.hr
+Proleksis – Opća i nacionalna online encikopedija: http://proleksis.lzmk.hr/
+Hrvatski jezični portal: http://hjp.znanje.hr
 
-4.2. Baze podataka pretplaene na nacionalnoj razini � dostupne za
-    pretrazivanje � humanisticko podrucje
+4.2. Baze podataka pretplaćene na nacionalnoj razini – dostupne za
+    pretraživanje – humanističko područje
 
-        POSLUZITELJ BAZE                      NAZIV BAZE PODATAKA
+        POSLUŽITELJ BAZE                      NAZIV BAZE PODATAKA
               PODATAKA
                                     Scopus
 ELSEVIR                             Academic Search Complete
@@ -118,14 +207,14 @@ JSTOR                               PsycARTICLES
 Springer Nature                     Arts & Sciences I-VII
 Cambrige University Press           Springer Journals
                                     Cambridge Journals Online
-Clarivate Analytics (bivsi Thomson  Web of Science Core Subscription: Sciences
+Clarivate Analytics (bivši Thomson  Web of Science Core Subscription: Sciences
 Reuters)                            Citation Index Expanded (SCIE)
                                     Social Sciences Citation Index Expanded
 Proquest                            (SSCIE)
                                     Arts & Humanities Citation Index (A&HCI)
                                     Current Contents (CC)
                                     Emerging Sources Citation Index (ESCI)
-                                    ProQuest Dissertations & Theses Global �
+                                    ProQuest Dissertations & Theses Global –
                                     baza podataka doktorskih disertacija
 
                                                                                 5
@@ -133,66 +222,66 @@ Proquest                            (SSCIE)
 ===== [kbf-upute-zavrsni-diplomski-2017 | str. 6] =====
 4.3. Struktura rada
 
-Osnovni dio zavrsnog/diplomskog rada cine uvod, razrada teme po poglavljima i
-zakljucak, s prateim znanstvenim aparatom. Ostali dijelovi zavrsnog/diplomskog rada
-jesu: sadrzaj, sazetak na hrvatskom i drugom jeziku, kljucne rijeci na hrvatskom i drugom
-jeziku, literatura te razliciti prilozi.
+Osnovni dio završnog/diplomskog rada čine uvod, razrada teme po poglavljima i
+zaključak, s pratećim znanstvenim aparatom. Ostali dijelovi završnog/diplomskog rada
+jesu: sadržaj, sažetak na hrvatskom i drugom jeziku, ključne riječi na hrvatskom i drugom
+jeziku, literatura te različiti prilozi.
 
-    1. Sazetak
-Potrebno je napisati Sazetak na hrvatskom i na drugom jeziku.
-Sazetak treba sadrzavati osnovni cilj, glavne rezultate i najvaznije zakljucke rada. Uz
-sazetak potrebno je navesti 3 do 5 kljucnih rijeci, na hrvatskom i na drugom jeziku. Opseg
-Sazetka iznosi do 1000 znakova.
-Drugi jezik moze biti engleski, njemacki, talijanski, francuski ili spanjolski.
+    1. Sažetak
+Potrebno je napisati Sažetak na hrvatskom i na drugom jeziku.
+Sažetak treba sadržavati osnovni cilj, glavne rezultate i najvažnije zaključke rada. Uz
+sažetak potrebno je navesti 3 do 5 ključnih riječi, na hrvatskom i na drugom jeziku. Opseg
+Sažetka iznosi do 1000 znakova.
+Drugi jezik može biti engleski, njemački, talijanski, francuski ili španjolski.
 
     2. Uvod
-U Uvodu se zapocinje od opeg prema specificnom, tj. student kratkim pregledom uvodi
-u temu koju e istrazivati te naglasava vaznost izabrane teme te zasto je izabrao tu temu.
-U Uvodu valja ukratko sazeti o cemu e sve u radu biti rijec, odnosno potrebno je dati
+U Uvodu se započinje od općeg prema specifičnom, tj. student kratkim pregledom uvodi
+u temu koju će istraživati te naglašava važnost izabrane teme te zašto je izabrao tu temu.
+U Uvodu valja ukratko sažeti o čemu će sve u radu biti riječ, odnosno potrebno je dati
 
 ===== [kbf-upute-zavrsni-diplomski-2017 | str. 6] =====
 3. Razrada teme po poglavljima
-Razrada teme predstavlja osnovicu cjelokupnoga rada. Potrebno je analiticki iznijeti
-najznacajnije znanstvene i strucne cinjenice, spoznaje, stavove, podatke i informacije o
-zadanoj temi/problemu kojim se rad bavi. Razrada teme trebala bi biti vise istrazivacka i
-analiticka, a manje deskriptivna.
+Razrada teme predstavlja osnovicu cjelokupnoga rada. Potrebno je analitički iznijeti
+najznačajnije znanstvene i stručne činjenice, spoznaje, stavove, podatke i informacije o
+zadanoj temi/problemu kojim se rad bavi. Razrada teme trebala bi biti više istraživačka i
+analitička, a manje deskriptivna.
 
-    4. Zakljucak
-Zakljucak predstavlja sintezu svih relevantnih spoznaja, podataka, stavova i teorija
-iznesenih u radu. Vazno je napomenuti da se u Zakljucku ne iznose nove spoznaje i
-podatci nego se on pise na temelju prethodno iznesenih spoznaja (u poglavljima).
+    4. Zaključak
+Zaključak predstavlja sintezu svih relevantnih spoznaja, podataka, stavova i teorija
+iznesenih u radu. Važno je napomenuti da se u Zaključku ne iznose nove spoznaje i
+podatci nego se on piše na temelju prethodno iznesenih spoznaja (u poglavljima).
 
     5. Literatura (Izvori i literatura)
-U poglavlju Literatura donosi se popis koristene literature, numeriran i ureen po
-abecedi. Literatura se navodi po abecednom redu prezimena autora. Ako se koristi vise
-radova istog autora oni se nabrajaju kronoloskim redom od starijih prema novijima.
-Dokumente je, meutim, potrebno sloziti kronoloski.
-Ako je rijec o zavrsnom / diplomskom radu u kojemu se koriste izvori (osobito ako se rad
-pise iz povijesnog podrucja), naslov poglavlja e glasiti Izvori i literatura.
+U poglavlju Literatura donosi se popis korištene literature, numeriran i uređen po
+abecedi. Literatura se navodi po abecednom redu prezimena autora. Ako se koristi više
+radova istog autora oni se nabrajaju kronološkim redom od starijih prema novijima.
+Dokumente je, međutim, potrebno složiti kronološki.
+Ako je riječ o završnom / diplomskom radu u kojemu se koriste izvori (osobito ako se rad
+piše iz povijesnog područja), naslov poglavlja će glasiti Izvori i literatura.
 
     6. Prilog (ako postoji)
 Prilozi se numeriraju i stavljaju na kraju rada (npr. Prilog 1, Prilog 2 itd.). Numeriranje
-je nuzno kako bi se u tekstu rada moglo upuivati na pojedini prilog (npr. vidi Prilog 1).
+je nužno kako bi se u tekstu rada moglo upućivati na pojedini prilog (npr. vidi Prilog 1).
 
-         4.4. Formalni izgled zavrsnoga/diplomskoga rada
+         4.4. Formalni izgled završnoga/diplomskoga rada
 
-Naslovnica � korice
-Svi elementi korica rada pisu se velikim slovima tipa Times New Roman, velicine slova
-14 (naslov) ili 12 (svi ostali elementi); trebaju biti centrirani i oznacenim podebljanim
+Naslovnica – korice
+Svi elementi korica rada pišu se velikim slovima tipa Times New Roman, veličine slova
+14 (naslov) ili 12 (svi ostali elementi); trebaju biti centrirani i označenim podebljanim
 slovima (bold) (vidi Prilog 3).
 
 ===== [kbf-upute-zavrsni-diplomski-2017 | str. 7] =====
 stranice.
-Sadrzaj donosi sve naslove i podnaslove rada te brojeve stranica na kojima se nalaze
-naslovi i podnaslovi. Potrebno je navesti naslove poglavlja i potpoglavlja s brojcanom
-oznakom te s brojem stranice na kojoj zapocinju.
+Sadržaj donosi sve naslove i podnaslove rada te brojeve stranica na kojima se nalaze
+naslovi i podnaslovi. Potrebno je navesti naslove poglavlja i potpoglavlja s brojčanom
+oznakom te s brojem stranice na kojoj započinju.
 
 Uvod
-Numeracija stranica zapocinje na stranici Uvoda.
+Numeracija stranica započinje na stranici Uvoda.
 
 Razrada teme po poglavljima
 
-Zakljucak
+Zaključak
 
 Literatura (Izvori i literatura)
 
@@ -200,112 +289,66 @@ Prilozi
 
                                                                                                                    7
 
-===== [kbf-upute-zavrsni-diplomski-2017 | str. 8] =====
-4.5. Tehnicke upute za oblikovanje teksta
-
-1. Osnovne upute
-Prilikom oblikovanja teksta potrebno je slijediti upute navedene u nastavku:
-
-     Margine trebaju biti sljedee: 3,5 cm s lijeve strane te 2,5 cm s desne strane, gore
-         i dolje.
-
-     Oblik slova treba biti jednak u cijelome tekstu (Times New Roman).
-     Velicina slova u glavnome tekst je 12, prored 1,5.
-     Velicina slova u biljeskama je 10, prored 1.
-     Biljeske se oznacavaju od rednog broja 1 pa nadalje i ispisuju se na dnu svake
-
-         stranice.
-     Stranice trebaju biti oznacene rednim brojem (dolje desno), pri cemu se prva
-
-         brojcana oznaka stavlja na prvu stranicu Uvoda.
-     Numeriraju se sve stranice (osim Sadrzaja i stranica koje mu prethode), tj. kako
-
-         stranice s tekstom, tako i stranice sa slikama (grafikoni, sheme) i tablicama,
-         ukoliko ve nisu uklopljeni u tekst.
-     Tekst je potrebno pisati s obostranim poravnanjem.
-     Naslovi i podnaslovi unutar teksta trebaju stajati samostalno u retku te biti
-         napisani na sljedei nacin:
-
-              Uvod i Zakljucak: podebljano, bez numeracije
-              Glavni naslovi: 1. podebljano
-              Podnaslovi: 1.1. kurziv, ne podebljano
-              Podnaslovi unutar podnaslova: 1.1.1. obicno
-     Glavni tekst treba biti podijeljen u poglavlja i potpoglavlja. Preporucuje se
-         decimalna numeracija poglavlja i odlomaka u poglavljima (npr. 1., 1.1., 1.1.1.).
-     Naslovi Uvod, Zakljucak i Literatura ne oznacavaju se brojcanom oznakom.
-     Tekst je potrebno pisati u odlomcima (odlomci se mogu razdvajati na dva nacina:
-         ili tako da je pocetak odlomka uvucen, a izmeu odlomka nema praznog reda, ili
-         tako da pocetak odlomka nije uvucen, a izmeu odlomaka je razmak (6 pt).
-
-2. Upute za oblikovanje tablica i slika
-Tablice i slike (grafovi, sheme i sl.) trebaju biti oznacene dvobrojcano i imati naslov. Prva
-brojka oznacava redni broj poglavlja, a druga redni broj tablice ili slike u tom poglavlju
-(npr. prva tablica u treem poglavlju oznacava se ,,Tablica 3.1.;). Tablice i slike potrebno
-je oznaciti po kategorijama, sto znaci da se slike oznacavaju posebno a tablice posebno.
-Tablice i slike nalaze se u onom dijelu teksta u koji i sadrzajno pripadaju te se u te se u
-tekstu potrebno pozvati na njih na nacin da se navede njihov broj, (npr. Tablica 3.1.). Ako
-je tablica ili slika preuzeta iz literature, potrebno je ispod nje navesti tocan izvor (npr.
-Izvor:...).
-
-3. Upute za navoenje literature
-Prilikom navoenje literature potrebno je dosljedno se pridrzavati pravila o navoenju
-literature prema uputama znanstvenoga casopisa Bogoslovska smotra (http://hrcak.
-srce.hr/bogoslovska-smotra).
-U zavrsnim/diplomskim radovima iz podrucja povijesti potrebno je dosljedno se
-pridrzavati uputa znanstvenog casopisa Croatica christiana periodica (http://hrcak.
-srce.hr/ccp).
-U nastavku se donose upute za reference Bogoslovske smotre.
-
-                                                                                                                   8
-
-===== [kbf-upute-zavrsni-diplomski-2017 | str. 9] =====
-1. Pri prvome navoenju nekoga djela, biljeska, bez obzira je li objavljena na hrvatskom
-ili nekom od stranih jezika, treba ovako izgledati:
-
-Knjige i zbornici radova:
-
-Osoba kao autor:
-     Zeljko MARDESI, Rascjep u svetome, Zagreb, 2007.
-     Theodor SCHNITZLER, O znacenju sakramenata, Zagreb, 1998.
-
-Vise osoba kao autori:
-     Angelo SCOLA � Gilfredo MARENGO � Javier P. L�PEZ, Covjek kao osoba.
-         Teoloska antropologija, Zagreb, 2003.
-
 ===== [kbf-upute-zavrsni-diplomski-2017 | str. 10] =====
-Christoph SCH�NBORN, Finding design in nature, u: The New York Times, 7.
-         VII. 2005.
+ COMITATO PREPARATORIO DEL CONVEGNO ECCLESIALE 1985, In
+         forza della riconciliazione, u: Il Regno – Documenti, 29 (1984.) 19, 610.
 
-Dokumenti i materijali u elektronickom obliku (u zagradama treba navesti datum
-nastanka [iza naslova] i datum vienja dokumenta [na kraju]):
+Članci u zbornicima:
 
-     Walter KASPER, Informazioni, riflessioni e valutazioni del momento
-         attuale del dialogo ecumenico (23. XI. 2007.), u:
+     Stipe TADIĆ, Temeljna obilježja pokreta, zajednica i udruga, u: VIJEĆE ZA
+         LAIKE HRVATSKE BISKUPSKE KONFERENCIJE, Mogućnosti
+         organiziranog djelovanja vjernika laika u Hrvatskoj, Đ. Hranić (ur.), Zagreb,
+         2002., 719-726.
 
-     http://www.vatican.va/roman_curia/pontifical_councils/chrstuni/card-kasper-
-         docs/rc_pc_chrstuni_doc_20071123_dialogo-ecumenico_it.html (15. I. 2008.).
+Dokumenti crkvenoga učiteljstva (pri prvom se spominjanju navode u bilješci sa svim
+potrebnim informacijama, uključujući i datum kada je dokument objavljen u izvorniku, a
+u sljedećim se navođenjima piše kraticom unutar teksta):
 
-2. Pri ponovnome navoenju nekoga djela biljeska treba ovako izgledati:
+     PRVI VATIKANSKI KONCIL, Dei Filius. Dogmatska konstitucija o katoličkoj
+         vjeri (24. IV. 1870.), u: Heinrich DENZINGER – Peter HÜNERMANN, Zbirka
+         sažetaka vjerovanja, definicija i izjava o vjeri i ćudoređu, Đakovo, 2002. (dalje:
+         DH).
 
-                                                                                                                 10
+     DRUGI VATIKANSKI KONCIL, Lumen gentium. Dogmatska konstitucija o
+         Crkvi (21. XI. 1964.), br. 8, u: Dokumenti, Zagreb, 41986. (dalje: LG).
+
+     IVAN PAVAO II., Christifideles laici – Vjernici laici. Apostolska pobudnica o
+         pozivu i poslanju laika u Crkvi i u svijetu (30. XII. 1988.), Zagreb, 1990., br. 29
+         (dalje: CL).
+
+===== [kbf-upute-zavrsni-diplomski-2017 | str. 11] =====
+ kada se isti autor navodi u prvoj sljedećoj bilješci ponovno se navodi ime
+    i prezime autora (ne piše se: „ISTI“)
+
+ kada se isto djelo navodi u nekoliko uzastopnih bilježaka, piše se Isto. Riječ
+    Isto piše se kurzivom bez obzira navodi li se knjigu ili članak
+
+ kada je navođenje već navedenog djela prekinuto navođenjem drugih
+    bilježaka, ne piše se uz autora kratica „nav. dj.“, nego ime i prezime autora
+    i glavni naslov djela (kod članaka obično; kod knjiga u kurzivu); npr:
+          Vjekoslav BAJSIĆ, Granična pitanja religije i znanosti, 17.
+          Siniša ZRINŠČAK – Gordan ČRPIĆ – Stjepan KUŠAR, Vjerovanje i
+             religioznost, 233.
+
+                                                                                                            11
 
 ===== [kbf-upute-zavrsni-diplomski-2017 | str. 16] =====
-KATOLICKI BOGOSLOVNI FAKULTET
+KATOLIČKI BOGOSLOVNI FAKULTET
 
-IZJAVA O AUTORSTVU ZAVRSNOGA/DIPLOMSKOGA RADA
+IZJAVA O AUTORSTVU ZAVRŠNOGA/DIPLOMSKOGA RADA
 
-                                                                   (izaberite odgovarajuu rijec s obzirom na vrstu svojega rada)
+                                                                   (izaberite odgovarajuću riječ s obzirom na vrstu svojega rada)
 
-Izjavljujem da je moj zavrsni/diplomski rad ___________________________________________
+Izjavljujem da je moj završni/diplomski rad ___________________________________________
 
-                                                                                    (napisite naslov svojega rada)
+                                                                                    (napišite naslov svojega rada)
 
-izvorni rezultat mojeg rada te da su svi koristeni izvori, kako objavljeni tako i neobjavljeni,
+izvorni rezultat mojeg rada te da su svi korišteni izvori, kako objavljeni tako i neobjavljeni,
 
 primjereno citirani ili parafrazirani te navedeni u popisu literature na kraju rada.
 
 U Zagrebu, ________________________                ______________________________________
 
-                                 (datum i godina)                       (vlastorucni potpis studenta/studentice)
+                                 (datum i godina)                       (vlastoručni potpis studenta/studentice)
 
                                                    16

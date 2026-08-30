@@ -224,3 +224,53 @@ Sveučilište Josipa Jurja Strossmayera u Osijeku (14 pt.) Ekonomski fakultet u 
 
 
 (5 proreda 1,5 14pt.)
+
+===== [efos-upute-studentski-2023 | str. 1] =====
+(do 500 znakova)
+
+
+
+
+
+
+
+
+Broj stranica:
+Broj slika:
+Broj tablica:
+Broj literaturnih navoda:
+Jezik izvornika:
+Ključne riječi:
+
+Datum obrane:
+
+Stručno povjerenstvo za obranu:
+1.
+2.
+3.
+4. (zamjena)
+
+===== [efos-upute-studentski-2023 | str. 1] =====
+(maximum 500 characters)
+
+
+
+
+
+
+
+
+Number of pages:
+Number of figures:
+Number of tables:
+Number of references:
+Original in:
+Key words:
+
+Date of the thesis defense:
+
+Reviewers:
+1.
+2.
+3.
+4. (substitute)

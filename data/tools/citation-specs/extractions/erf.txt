@@ -1,61 +1,115 @@
+===== [erf-hrri-upute-autorima | str. 1] =====
+title of the submitted manuscript;
+full list of authors (order agreed upon);
+statement of compliance with ethical standards;
+confirmation that the manuscript is not under review or consideration by another journal.
+
+Manuscript Structure
+
+Authors upload two documents: 1. Manuscript containing: a. Title page, b. English version of the paper (Croatian optional), and 2. Cover Letter.
+All metadata must be removed from the Word document (Properties).
+Title Page: title of the paper, abstract (200–300 words), keywords
+The abstract must include: research problem and aim, participant sample, instruments and methods, main results, and implications.
+Mandatory statements (to be included on the title page or in a separate section before the references): Conflict of Interest Statement (“The authors declare that there is no conflict of interest,” or a description of any existing conflict); Funding Statement (specify the source of financial support or state that no funding was received); Ethics Approval Statement; Data Availability Statement (publicly available or available upon request).
+Structure of Empirical Papers: Introduction – Aim / Research questions / Hypotheses – Methods – Results and Discussion – Conclusion – Acknowledgements – References.
+If the Acknowledgements contain identifying information, they must be uploaded separately.
+
+Technical Formatting
+
+Format: MS Word (.docx)
+Font: Calibri, 11 pt
+Spacing: 1.5
+Margins: 2.5 cm
+Pages: numbered
+Footnotes: used sparingly
+No headers
+
+Tables and Figures (APA 7)
+
+Insert tables and figures in the text at the point of first mention.
+Tables: number in bold (e.g., Table 1), title on the following line in italics, only horizontal lines are visible – no vertical lines
+Figures (charts, drawings, diagrams): number in bold (e.g., Figure 1), title below the figure, in italics
+Tables and figures must be understandable in black-and-white print
+
+Referencing (APA 7)
+
+The journal uses the APA 7th edition referencing style (see  http://www.apastyle.org/)
+In-text citations must correspond exactly to the reference list.
+In-text citation examples:
+
+Author (year): Jandrić Nišević (2010)…
+(Author, year): (Jandrić Nišević, 2010).
+1–2 authors: list both surnames throughout
+3+ authors: first author + “et al.”
+
+
+Reference List: alphabetical order by first author’s surname. Chronological order for multiple works by same author; use a/b for same-year publications
+DOI must be included when available.
+
+Examples
+
+Bašić, J., Ferić, M., & Kranželić, V. (2001). Od primarne prevencije do ranih intervencija. Edukacijsko-rehabilitacijski fakultet.
+Adani, S., & Cepanec, M. (2019). Sex differences in early communication development: behavioural and neurobiological indicators of more vulnerable communication system development in boys. Croatian Medical Journal, 60(2), 141–149. https://doi.org/10.3325/cmj.2019.60.141
+Arapović, D. (2003). Djeca s govorno-jezičnim teškoćama u osnovnoj školi. In D. Pavličević-Franić & M. Kovačević (Eds.), Komunikacijska kompetencija u višejezičnoj sredini II (pp. 87–93). Naklada Slap.
+
 ===== [erf-upute-diplomski | str. 1] =====
-A) Istrazivacki rad
-      Istrazivacki rad1 treba sadrzavati sljedea poglavlja:
-      Sazetak2 i kljucne rijeci na hrvatskom jeziku
-      Sazetak i kljucne rijeci na engleskom jeziku
-      Sadrzaj
-       1. Uvod (teorijska podloga, dosadasnje spoznaje)
-       2. Problem istrazivanja (ciljevi, problem, hipoteze)
-       3. Metode istrazivanja (uzorak, opis varijabli, opis ispitnog materijala/opis istrazivackog
-            instrumentarija, nacin provoenja istrazivanja, metode obrade podataka)
-       4. Rezultati istrazivanja i rasprava
-       5. Zakljucak
+A) Istraživački rad
+      Istraživački rad1 treba sadržavati sljedeća poglavlja:
+      Sažetak2 i ključne riječi na hrvatskom jeziku
+      Sažetak i ključne riječi na engleskom jeziku
+      Sadržaj
+       1. Uvod (teorijska podloga, dosadašnje spoznaje)
+       2. Problem istraživanja (ciljevi, problem, hipoteze)
+       3. Metode istraživanja (uzorak, opis varijabli, opis ispitnog materijala/opis istraživačkog
+            instrumentarija, način provođenja istraživanja, metode obrade podataka)
+       4. Rezultati istraživanja i rasprava
+       5. Zaključak
        6. Literatura
             Prilozi
 
-Preporucen broj koristene literature: 20-30 referenci
+Preporučen broj korištene literature: 20-30 referenci
 
-1 Za svako istrazivanje koje se provodi u svrhu izrade diplomskog rada koje ukljucuje osobe u svojstvu
-  sudionika/ispitanika, treba pribaviti potvrdu/misljenje o usklaenosti istrazivanja s etickim nacelima za provoenje
-  istrazivanja. Potvrda / misljenje je sastavni dio istrazivacke dokumentacije.
-  Mentor donosi odluku o potrebi trazenja misljenja Etickog povjerenstva ERF-a o usklaenosti nacrta istrazivanja s
-  etickim nacelima. (vidi Upute za trazenje misljenja EP).
-  Ako se nacrt istrazivanja ne upuuje Etickom povjerenstvu, mentor potpisuje Potvrdu o usklaenosti nacrta istrazivanja
-  s etickim nacelima za provoenje istrazivanja (dostupna na mreznoj stranici ERF-a).
+1 Za svako istraživanje koje se provodi u svrhu izrade diplomskog rada koje uključuje osobe u svojstvu
+  sudionika/ispitanika, treba pribaviti potvrdu/mišljenje o usklađenosti istraživanja s etičkim načelima za provođenje
+  istraživanja. Potvrda / mišljenje je sastavni dio istraživačke dokumentacije.
+  Mentor donosi odluku o potrebi traženja mišljenja Etičkog povjerenstva ERF-a o usklađenosti nacrta istraživanja s
+  etičkim načelima. (vidi Upute za traženje mišljenja EP).
+  Ako se nacrt istraživanja ne upućuje Etičkom povjerenstvu, mentor potpisuje Potvrdu o usklađenosti nacrta istraživanja
+  s etičkim načelima za provođenje istraživanja (dostupna na mrežnoj stranici ERF-a).
 
-2 Vidi upute za pisanje sazetka.
+2 Vidi upute za pisanje sažetka.
 
 ===== [erf-upute-diplomski | str. 2] =====
 B) Pregledni rad
-      Pregledni rad treba sadrzavati sljedea poglavlja:
-      Sazetak3 i kljucne rijeci na hrvatskom jeziku
-      Sazetak i kljucne rijeci na engleskom jeziku
-      Sadrzaj
+      Pregledni rad treba sadržavati sljedeća poglavlja:
+      Sažetak3 i ključne riječi na hrvatskom jeziku
+      Sažetak i ključne riječi na engleskom jeziku
+      Sadržaj
        1. Uvod
-       2. Problemska pitanja (pitanja na koja se zeli odgovoriti)
-       3. Pregled dosadasnjih spoznaja (iz podrucja teme rada)
-       4. Zakljucak
+       2. Problemska pitanja (pitanja na koja se želi odgovoriti)
+       3. Pregled dosadašnjih spoznaja (iz područja teme rada)
+       4. Zaključak
        5. Literatura
             Prilozi
-      Preporucen broj koristene literature: 30-40 referenci
+      Preporučen broj korištene literature: 30-40 referenci
 
-3 vidi upute za pisanje sazetka
+3 vidi upute za pisanje sažetka
 
 ===== [erf-upute-diplomski | str. 3] =====
-Preporucen broj stranica: 40-50
+Preporučen broj stranica: 40-50
 Font: 12 pt, Times New Roman, prored 1.5
-Citiranje literature: po propozicijama casopisa Hrvatska revija za rehabilitacijska istrazivanja ili
-casopisa Kriminologija i socijalna integracija.
+Citiranje literature: po propozicijama časopisa Hrvatska revija za rehabilitacijska istraživanja ili
+časopisa Kriminologija i socijalna integracija.
 Na prvoj stranici rada treba pisati:
 
-     1. naziv Sveucilista
+     1. naziv Sveučilišta
      2. naziv Fakulteta
-     3. ,,Diplomski rad"
+     3. „Diplomski rad“
      4. naslov rada
      5. ime i prezime studenta
      6. mjesto, mjesec i godina obrane
 Na drugoj stranici rada treba pisati:
-     1. naziv Sveucilista
+     1. naziv Sveučilišta
      2. naziv Fakulteta
 
 ===== [erf-hrri-upute-autorima | str. 1] =====
@@ -114,57 +168,3 @@ Authors are responsible for the quality and linguistic accuracy of the translati
 Submission of Manuscripts
 
 Manuscripts must be submitted exclusively online via the journal’s website:
-
-===== [erf-hrri-upute-autorima | str. 1] =====
-title of the submitted manuscript;
-full list of authors (order agreed upon);
-statement of compliance with ethical standards;
-confirmation that the manuscript is not under review or consideration by another journal.
-
-Manuscript Structure
-
-Authors upload two documents: 1. Manuscript containing: a. Title page, b. English version of the paper (Croatian optional), and 2. Cover Letter.
-All metadata must be removed from the Word document (Properties).
-Title Page: title of the paper, abstract (200–300 words), keywords
-The abstract must include: research problem and aim, participant sample, instruments and methods, main results, and implications.
-Mandatory statements (to be included on the title page or in a separate section before the references): Conflict of Interest Statement (“The authors declare that there is no conflict of interest,” or a description of any existing conflict); Funding Statement (specify the source of financial support or state that no funding was received); Ethics Approval Statement; Data Availability Statement (publicly available or available upon request).
-Structure of Empirical Papers: Introduction – Aim / Research questions / Hypotheses – Methods – Results and Discussion – Conclusion – Acknowledgements – References.
-If the Acknowledgements contain identifying information, they must be uploaded separately.
-
-Technical Formatting
-
-Format: MS Word (.docx)
-Font: Calibri, 11 pt
-Spacing: 1.5
-Margins: 2.5 cm
-Pages: numbered
-Footnotes: used sparingly
-No headers
-
-Tables and Figures (APA 7)
-
-Insert tables and figures in the text at the point of first mention.
-Tables: number in bold (e.g., Table 1), title on the following line in italics, only horizontal lines are visible – no vertical lines
-Figures (charts, drawings, diagrams): number in bold (e.g., Figure 1), title below the figure, in italics
-Tables and figures must be understandable in black-and-white print
-
-Referencing (APA 7)
-
-The journal uses the APA 7th edition referencing style (see  http://www.apastyle.org/)
-In-text citations must correspond exactly to the reference list.
-In-text citation examples:
-
-Author (year): Jandrić Nišević (2010)…
-(Author, year): (Jandrić Nišević, 2010).
-1–2 authors: list both surnames throughout
-3+ authors: first author + “et al.”
-
-
-Reference List: alphabetical order by first author’s surname. Chronological order for multiple works by same author; use a/b for same-year publications
-DOI must be included when available.
-
-Examples
-
-Bašić, J., Ferić, M., & Kranželić, V. (2001). Od primarne prevencije do ranih intervencija. Edukacijsko-rehabilitacijski fakultet.
-Adani, S., & Cepanec, M. (2019). Sex differences in early communication development: behavioural and neurobiological indicators of more vulnerable communication system development in boys. Croatian Medical Journal, 60(2), 141–149. https://doi.org/10.3325/cmj.2019.60.141
-Arapović, D. (2003). Djeca s govorno-jezičnim teškoćama u osnovnoj školi. In D. Pavličević-Franić & M. Kovačević (Eds.), Komunikacijska kompetencija u višejezičnoj sredini II (pp. 87–93). Naklada Slap.

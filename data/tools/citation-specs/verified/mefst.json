@@ -24,7 +24,7 @@
     "mode": "paren-number",
     "provenance": {
       "kind": "rule-text",
-      "quoteRaw": "Kada se citira vise referenci zajedno navode se s razmakom kao (1, 2) ili (1-3) za uzastopno",
+      "quoteRaw": "Kada se citira više referenci zajedno navode se s razmakom kao (1, 2) ili (1-3) za uzastopno",
       "sourcePage": "str. 13",
       "note": "Izvor stil imenuje: 'Literatura se navodi Vancouver stilom kako je prikazano.' (ista stranica). Broj reference u OKRUGLOJ zagradi na kraju recenice, prije tocke; vise referenci s razmakom '(1, 2)' ili rasponom '(1-3)'. Narativno navodenje: prezime prvog autora + 'i suradnici' (npr. 'U istrazivanju Tonkia i sur...') uz brojku reference u zagradi na kraju recenice. Numericki stil nema in-text predlozak."
     }

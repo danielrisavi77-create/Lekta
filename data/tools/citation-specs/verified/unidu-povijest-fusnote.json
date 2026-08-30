@@ -24,7 +24,7 @@
     "mode": "note-number",
     "provenance": {
       "kind": "rule-text",
-      "quoteRaw": "UPUTE ZA CITIRANJE I REFERIRANJE U BILJESKAMA (FUSNOTAMA):",
+      "quoteRaw": "UPUTE ZA CITIRANJE I REFERIRANJE U BILJEŠKAMA (FUSNOTAMA):",
       "sourcePage": "str. 9",
       "note": "Biljeske se navode kao fusnote i oznacavaju rednim brojevima (str. 1). Prvo citiranje jednako je bibliografskoj jedinici uz obrnut redoslijed ime-prezime i navedene stranice; drugo i svako sljedee: inicijal imena + prezime + (kraeni) naslov + stranica (str. 9). Alat generira BIBLIOGRAFSKI oblik za popis literature (prezime-ime, abecedno); op. cit./ibid. i skraeni oblici izvan su dosega generatora."
     }
@@ -46,7 +46,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Vekari, Nenad. Stanovnistvo poluotoka Peljesca. Svezak 1. Dubrovnik: Zavod za povijesne",
+        "quoteRaw": "Vekarić, Nenad. Stanovništvo poluotoka Pelješca. Svezak 1. Dubrovnik: Zavod za povijesne",
         "sourcePage": "str. 7",
         "note": "Polja iz izvora (str. 6): prezime i ime autora/koautora, naslov knjige (u kurzivu), mjesto izdanja, izdavac, godina izdanja. U popisu literature prezime pa ime; alat radi plain text (kurziv se ne reproducira). 'Svezak 1' je dio naslova u primjeru."
       },
@@ -75,7 +75,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Vekari, Nenad. �Sud Janjinske kapetanije.� Anali Zavoda za povijesne znanosti HAZU u",
+        "quoteRaw": "Vekarić, Nenad. »Sud Janjinske kapetanije.« Anali Zavoda za povijesne znanosti HAZU u",
         "sourcePage": "str. 7",
         "note": "Polja iz izvora (str. 7): prezime i ime, naslov rada (u navodnicima), naslov casopisa (u kurzivu), godiste (volumen) + broj unutar godista (ako postoji), godina, pocetna i posljednja stranica. Navodnike (korumpirani glif '�' u ekstrakciji) rekonstruiram kao „ “. Broj unutar godista (issue) nije eksemplificiran pa nije u predlosku."
       },
@@ -106,7 +106,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Zuljani iz XVI stoljea.�, u: Beritiev zbornik, ur. Vjekoslav Cvitanovi. Dubrovnik:",
+        "quoteRaw": "Žuljani iz XVI stoljeća.«, u: Beritićev zbornik, ur. Vjekoslav Cvitanović. Dubrovnik:",
         "sourcePage": "str. 7",
         "note": "Izvor daje eksplicitan popis polja (str. 7): prezime i ime, naslov rada (u navodnicima), naslov knjige/zbornika (u kurzivu), urednik, mjesto, izdavac, godina, pocetna i posljednja stranica. Primjer (Marinovi, Ante...) prelomljen je na granici str. 7/8 pa nedostaju izdavac, godina i stranice; expected se ne moze vjerno dovrsiti, zato derived. Urednik u primjeru je u obliku ime-prezime ('ur. Vjekoslav Cvitanovi'), ne invertiran. Predlozak izveden iz popisa polja + knjiga/clanak obrasca."
       },
@@ -124,7 +124,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "Alfani, Guido. �I padrini: patroni o parenti? Tendenzedifondo nella selezione dei parent",
+        "quoteRaw": "Alfani, Guido. »I padrini: patroni o parenti? Tendenzedifondo nella selezione dei parent",
         "sourcePage": "str. 8",
         "note": "Za tekstove samo u elektronickom obliku izvor trazi bar ime autora, naslov rada, ime elektronicke publikacije s uputom na mreznu stranicu i datum (mjesec i godina) pristupa (str. 8). Prelomljene retke (171-173) spojio sam doslovno, zajedno s pdftotext lomovima rijeci ('Tendenzedifondo', 'parent ispirituali'). Navodnike '�' rekonstruiram kao „ “."
       },
@@ -153,7 +153,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Knjiga (bibliografska jedinica treba sadrzavati):",
+        "quoteRaw": "Knjiga (bibliografska jedinica treba sadržavati):",
         "sourcePage": "str. 6",
         "note": "Ove upute ne propisuju format citiranja zavrsnih/diplomskih radova ni disertacija (spominju se samo u kontekstu plagijata, str. 3). Predlozak izveden iz obrasca za knjigu (str. 6): izdavac zamijenjen ustanovom. Potvrditi ili oboriti pri verifikaciji."
       },
@@ -169,7 +169,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Sukladno Zakonu o znanstvenoj djelatnosti i visokom obrazovanju (NN br. 94/2013), svi zavrsni",
+        "quoteRaw": "Sukladno Zakonu o znanstvenoj djelatnosti i visokom obrazovanju (NN br. 94/2013), svi završni",
         "sourcePage": "str. 3",
         "note": "Upute ne propisuju bibliografski format za propise/zakone u citatnom dijelu. Jedina opazena upotreba je unutartekstna 'Zakon o... (NN br. 94/2013)' (str. 3). Predlozak izveden iz te unutartekstne forme (kratica NN razrijesena u Narodne novine); potvrditi pri verifikaciji."
       },

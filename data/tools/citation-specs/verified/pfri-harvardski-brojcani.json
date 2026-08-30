@@ -20,7 +20,7 @@
     "mode": "bracket-number",
     "provenance": {
       "kind": "worked-example",
-      "quoteRaw": "Ako se poziva na samo jednu bibliografsku jedinicu pise se [1. p. 9], ako je njih vise, a",
+      "quoteRaw": "Ako se poziva na samo jednu bibliografsku jedinicu piše se [1. p. 9], ako je njih više, a",
       "sourcePage": "str. 19",
       "note": "U tekstu brojcana oznaka u uglatoj zagradi: jedna jedinica sa stranicom '[1. p. 9]', vise jedinica bez stranice '[1, 2, 6]', uzastopne jedinice '[1-5]' (sve str. 19). Numericki mod nema template; oblik sa stranicom unutar zagrade provjerava covjek pri verifikaciji."
     }
@@ -44,7 +44,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "[4] Zelenika, R. 2000, Metodologija i tehnologija izrade znanstvenog i strucnog djela, 4.",
+        "quoteRaw": "[4] Zelenika, R. 2000, Metodologija i tehnologija izrade znanstvenog i stručnog djela, 4.",
         "sourcePage": "str. 21",
         "note": "Popis literature numerira se arapskim brojevima u uglatim zagradama prema redoslijedu pojavljivanja u tekstu (str. 20); redni broj [n] je oznaka mjesta u popisu (referenceMarker), ne dio jedinice. Primjer [4] je u ekstrakciji prelomljen u dva retka, spojen u expected. Broj izdanja unosi se cijeli u polje volume ('4. izmijenjeno i dopunjeno izdanje'; kod [5] McTaggart '2nd ed'). Naslov je u izvorniku kurzivom, alat radi plain text. Korporativni autor se pise punim imenom (primjer [2] Australian Government Publishing Service, str. 20)."
       },
@@ -73,7 +73,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "- Huffman, L. M. 1996, 'Processing whey protein for use as a food ingredient', Food",
+        "quoteRaw": "− Huffman, L. M. 1996, 'Processing whey protein for use as a food ingredient', Food",
         "sourcePage": "str. 22",
         "note": "Redoslijed elemenata po popisu na str. 22: prezime autora i inicijal imena, godina izdanja, naslov clanka u jednostrukim navodnicima, naziv casopisa (kurziv), izdavac casopisa, broj casopisa, stranice. Primjer [1] na str. 20 je isti clanak bez izdavaca pa je {publisher} opcionalan. Clanak s interneta (Daniel, str. 22) dodaje 'online: URL (datum)' na kraju. Primjer je u ekstrakciji prelomljen, spojen u expected. Novinski clanak (Simpson, str. 22) i zbornik radova (Bohrer, str. 21 i 22) slijede isti obrazac s publikacijom kao containerom."
       },
@@ -106,7 +106,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "- Bernstein, D. 1995, Transportation planning in The Civil Engineering Handbook, ed.",
+        "quoteRaw": "− Bernstein, D. 1995, Transportation planning in The Civil Engineering Handbook, ed.",
         "sourcePage": "str. 22",
         "note": "Jedini primjer poglavlja u knjizi (str. 22); veznik 'in' i oznaka 'ed.' doslovno iz primjera (engleski uzorak iz AGPS prirucnika). Urednik se unosi doslovno (u primjeru 'W.F.Chen'). Stranice poglavlja primjer ne navodi. Primjer je u ekstrakciji prelomljen, spojen u expected. Naslov knjige je u izvorniku kurzivom, alat radi plain text."
       },
@@ -135,7 +135,7 @@
       ],
       "provenance": {
         "kind": "worked-example",
-        "quoteRaw": "- Proizvodnja kemikalija, kemijskih proizvoda i proizvoda od gume, 2007, online:",
+        "quoteRaw": "− Proizvodnja kemikalija, kemijskih proizvoda i proizvoda od gume, 2007, online:",
         "sourcePage": "str. 23",
         "note": "Worked example bez autora: naslov je prvi element citiranja kad autor nije naveden (str. 23). Mrezni izvor S autorom u izvoru slijedi opci red autor, godina, naslov (Daniel, str. 22), sto ovaj predlozak ne reproducira; potvrditi ili podijeliti pri verifikaciji. Jedinica u izvoru zavrsava bez tocke iza zagrade s datumom pristupa. Primjer je u ekstrakciji prelomljen, spojen u expected."
       },
@@ -161,7 +161,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "Prilikom koristenja vazno je postivati redoslijed unosenja podataka, paziti na velika i",
+        "quoteRaw": "Prilikom korištenja važno je poštivati redoslijed unošenja podataka, paziti na velika i",
         "sourcePage": "str. 21",
         "note": "Upute ne obraduju citiranje zavrsnih/diplomskih radova; predlozak izveden iz oblika za knjigu ([4] Zelenika, str. 21) uz izdavaca zamijenjenog ustanovom. Potvrditi ili oboriti pri verifikaciji."
       },
@@ -177,7 +177,7 @@
       ],
       "provenance": {
         "kind": "derived",
-        "quoteRaw": "bibliografskih jedinica (knjiga, clanaka, pravilnika, rjecnika...).",
+        "quoteRaw": "bibliografskih jedinica (knjiga, članaka, pravilnika, rječnika...).",
         "sourcePage": "str. 20",
         "note": "Upute spominju pravilnike kao dopustene bibliografske jedinice, ali ne daju format za propise; predlozak izveden iz pravila da je bez autora naslov prvi element citiranja i iz reda naslov-godina-izvor u primjeru The CCH Macquarie dictionary of business (str. 22). Broj sluzbenog glasila u {issue}. Potvrditi ili oboriti pri verifikaciji."
       },

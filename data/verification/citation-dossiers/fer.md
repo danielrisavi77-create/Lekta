@@ -8,7 +8,7 @@ Snapshot: `data/sources/fer/fer-upute-diplomski-zemris.pdf` (hash `853f096a6496.
 Otvori PDF: `data/sources/fer/fer-upute-diplomski-zemris.pdf#page=16`
 ```
 TEMPLATE: {authors}, {title}[[, {publisher}]], {year}.
-QUOTE   : 3. izdavac (ako je poznat),   [grep: OK]
+QUOTE   : 3. izdavač (ako je poznat),   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor nema worked-example za knjigu; predlozak izveden iz popisa elemenata reference (str. 16): autor, naslov djela (koso), izdavac ako je poznat, godina, elementi odvojeni zarezom. Naslov je u izvorniku koso, alat radi plain text. Potvrditi pri verifikaciji.
 ```
@@ -17,7 +17,7 @@ NAPOMENA: Izvor nema worked-example za knjigu; predlozak izveden iz popisa eleme
 Otvori PDF: `data/sources/fer/fer-upute-diplomski-zemris.pdf#page=16`
 ```
 TEMPLATE: {authors}, {title}, {container}[[, {publisher}]], str. {pages}, {year}.
-QUOTE   : 5. stranice ,,od-od" (ako se radi o poglavlju knjige ili zbornika radova, ili clanku nekog   [grep: OK]
+QUOTE   : 5. stranice „od-od“ (ako se radi o poglavlju knjige ili zbornika radova, ili članku nekog   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor propisuje stranice od-do za poglavlje knjige ili zbornika, ali ne imenuje naslov cjeline (container) ni urednike kao elemente; container je izveden i smjesten iza naslova, urednici izostavljeni. Oznaka 'str.' ispred raspona je izvedena (izvor kaze samo stranice od-od). Potvrditi pri verifikaciji.
 ```
@@ -26,7 +26,7 @@ NAPOMENA: Izvor propisuje stranice od-do za poglavlje knjige ili zbornika, ali n
 Otvori PDF: `data/sources/fer/fer-upute-diplomski-zemris.pdf#page=16`
 ```
 TEMPLATE: {authors}, {title}, {container}, str. {pages}, {year}.
-QUOTE   : 5. stranice ,,od-od" (ako se radi o poglavlju knjige ili zbornika radova, ili clanku nekog   [grep: OK]
+QUOTE   : 5. stranice „od-od“ (ako se radi o poglavlju knjige ili zbornika radova, ili članku nekog   [grep: OK]
 IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)
 NAPOMENA: Izvor trazi stranice od-do za clanak casopisa, ali casopis (container) nije eksplicitno imenovan kao element pa je izveden; volume i issue izvor uopce ne spominje pa nisu ukljuceni. Potvrditi pri verifikaciji.
 ```
@@ -35,7 +35,7 @@ NAPOMENA: Izvor trazi stranice od-do za clanak casopisa, ali casopis (container)
 Otvori PDF: `data/sources/fer/fer-upute-diplomski-zemris.pdf#page=16`
 ```
 TEMPLATE: [[{authors}, ]]{title}, {url}, {accessed}
-QUOTE   : 2. Repozitorij predmeta Zavrsni rad, http://www.fer.unizg.hr/predmet/zavrad, 2. 7. 2013.   [grep: OK]
+QUOTE   : 2. Repozitorij predmeta Završni rad, http://www.fer.unizg.hr/predmet/zavrad, 2. 7. 2013.   [grep: OK]
 IZVOR   : Repozitorij predmeta Zavrsni rad, http://www.fer.unizg.hr/predmet/zavrad, 2. 7. 2013.
 RENDER  : Repozitorij predmeta Zavrsni rad, http://www.fer.unizg.hr/predmet/zavrad, 2. 7. 2013.
 VERDIKT : MATCH (uz dijakriticku normalizaciju)
