@@ -138,3 +138,57 @@ test('alati.html: hero kartica na tamnoj plohi ostaje citljiva', async ({ page }
   expect(ratios!.tekst, 'tekst hero kartice').toBeGreaterThanOrEqual(4.5);
   expect(ratios!.nadnaslov, 'nadnaslov hero kartice').toBeGreaterThanOrEqual(4.5);
 });
+
+/**
+ * RITAM NA MOBITELU: alat mora poceti sto ranije, a ne iza dugog uvoda.
+ *
+ * Izmjereno 2026-08-30 (prije zahvata -> poslije), prva INTERAKTIVNA kontrola alata:
+ *   390x844: citat 590->558, kartice 575->550, naslovnica 669->639, literatura 709->677,
+ *            izjava 602->576, alati 897->817. Svih sest sada iznad pregiba (prije jedan ispod).
+ *   375x667: isti pomaci; cetiri od sest iznad pregiba.
+ *
+ * POSTENO O GRANICI: na 375x667 `literatura` (698) i `alati` (848) OSTAJU ispod pregiba i to se
+ * stilom vise ne da rijesiti. Na 667 px visine zbroj je topbar 67 + hero ~282 + dvije uvodne
+ * kartice 427; da prva kartica alata stane, morao bi NESTATI sadrzaj, a to je produktna odluka
+ * (sto se na telefonu uopce pokazuje prije alata), ne pitanje CSS-a. Zato ratchet: te dvije smiju
+ * samo padati, nikad rasti.
+ */
+const PRVA_KONTROLA: Record<string, string> = {
+  '/citat.html': '#f-faculty',
+  '/kartice.html': '#kt-input',
+  '/naslovnica.html': '#tp-institution',
+  '/literatura.html': '#lit-input',
+  '/izjava.html': '#st-author',
+  '/alati.html': '.tool-card',
+};
+
+/** Zateceni maksimumi na 375x667 za stranice koje pregib jos ne stignu. Smiju samo padati. */
+const RATCHET_375: Record<string, number> = { '/literatura.html': 700, '/alati.html': 850 };
+
+async function vrhPrveKontrole(page: import('@playwright/test').Page, selector: string) {
+  return page.evaluate((s) => {
+    const el = document.querySelector(s);
+    if (!el) return null;
+    return Math.round(el.getBoundingClientRect().top + window.scrollY);
+  }, selector);
+}
+
+for (const [route, selector] of Object.entries(PRVA_KONTROLA)) {
+  test(`${route}: alat pocinje iznad pregiba na 390x844`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(route);
+    const top = await vrhPrveKontrole(page, selector);
+    expect(top, `prva kontrola na ${route}`).not.toBeNull();
+    expect(top!, `prva kontrola na ${route} mora biti iznad 844 px`).toBeLessThan(844);
+  });
+
+  test(`${route}: ritam na 375x667 ne smije nazadovati`, async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto(route);
+    const top = await vrhPrveKontrole(page, selector);
+    expect(top).not.toBeNull();
+    // Stranice koje stignu pregib drze pregib; preostale dvije drze zatecenu mjeru.
+    const limit = RATCHET_375[route] ?? 667;
+    expect(top!, `prva kontrola na ${route} (granica ${limit} px)`).toBeLessThanOrEqual(limit);
+  });
+}

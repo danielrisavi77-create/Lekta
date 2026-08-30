@@ -407,6 +407,22 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
   .premium-tool-index { grid-template-columns: 1fr }
 }
 
+@media (max-width: 720px) {
+  /**
+   * Na uskom zaslonu `.premium-tool-index` pada u JEDAN stupac (820px pravilo gore), pa dvije
+   * kartice sa `min-height: 240px` slozene jedna na drugu pojedu ~480px prije prve kartice alata.
+   * Izmjereno 2026-08-30: prva `.tool-card` na 897 px (390x844) i 928 px (375x667), dakle ispod
+   * pregiba na OBA uobicajena telefona. Visina se ovdje prepusta sadrzaju; padding ostaje.
+   */
+  .premium-tool-index__intro,
+  .premium-tool-index__signal { min-height: 0 }
+  /* Kartice su VEZANE SADRZAJEM, ne min-visinom: izmjereno 238 + 220 px na 375x667. Naslov i
+     unutarnji razmak se zato na telefonu stisnu; tekst ostaje cijel, nista se ne skriva. */
+  .premium-tool-index__intro { padding: 20px }
+  .premium-tool-index__intro h2 { font-size: 26px }
+  .premium-tool-index__signal { padding: 18px }
+}
+
 @media (max-width: 520px) {
   .premium-viz-card { padding: 15px }
   .premium-data-grid { gap: 8px }
