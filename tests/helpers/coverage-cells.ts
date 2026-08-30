@@ -104,6 +104,23 @@ export function profileGatedFixers(matrix: RepairCoverageMatrix): Set<string> {
   return new Set(matrix.rows.map((row) => row.fixerId));
 }
 
+/**
+ * Fixer -> os generatora koja ga pokrece. Obrat `APPLIED_AXIS_FIXER` i `RESOLVED_AXIS_FIXER`.
+ *
+ * Sluzi za ISTINITU dijagnozu nepokrivene celije. `loop.violated` je pouzdan signal jer generator
+ * krsi os SAMO kad ju profil propisuje: `toc-field` se dodaje iskljucivo uz `requireToc === true`
+ * (83 profila od 407). Bez ovoga je preostalih 325 celija `toc-field-fixera` nosilo dijagnozu
+ * "univerzalna higijena bez dokaza", a tocna je "profil ne propisuje os": ti profili sadrzaj uopce
+ * ne trazе, pa se nema sto ni dokazivati.
+ */
+const AXIS_BY_FIXER: Record<string, string> = {
+  'toc-field-fixer': 'toc-field',
+  'heading-style-fixer': 'heading-style',
+  'empty-paragraph-fixer': 'empty-paragraphs',
+  'croatian-typography-fixer': 'croatian-typography',
+  'link-doi-fixer': 'link-doi',
+};
+
 /** Gradi celije za sve profile iz matrice, po jedna za svaki registriran fixer. */
 /**
  * Univerzalna os generatora -> fixer koji ju zatvara.
@@ -111,10 +128,28 @@ export function profileGatedFixers(matrix: RepairCoverageMatrix): Set<string> {
  * Samo osi BEZ bodovane provjere (`STRUCTURAL_WITHOUT_SCORED_CHECK` u `scripts/run-closed-loop.mts`).
  * Osi s bodovanom provjerom (`toc-field`, `heading-style`) idu kroz `axesResolved` i nose jaci dokaz.
  */
-const APPLIED_AXIS_FIXER: Record<string, string> = {
+export const APPLIED_AXIS_FIXER: Record<string, string> = {
   'empty-paragraphs': 'empty-paragraph-fixer',
   'croatian-typography': 'croatian-typography-fixer',
   'link-doi': 'link-doi-fixer',
+};
+
+/**
+ * Univerzalna os S bodovanom provjerom -> fixer koji ju zatvara.
+ *
+ * Zasto postoji odvojeno od `loopCovered`: taj put uparuje `axesResolved` s `checkId`-jevima iz
+ * REDAKA MATRICE, a matrica ima redak samo ondje gdje profil propisuje pravilo. Univerzalni fixer
+ * takvih redaka nema, pa mu je `checkIds` prazan i dokaz propada iako je os stvarno rijesena.
+ *
+ * IZMJERENO 2026-08-30: closed-loop rjesava `heading-style` na svih 407 profila, a matrica je
+ * `heading-style-fixer` svejedno vodila kao `univerzalna-higijena-bez-dokaza` na svih 407.
+ *
+ * Jacina je `resolved`, ne `applied`: iza ovih osi stoji bodovana provjera koja se doista prevrnula
+ * (`toc.present` max 5, `structure.heading.word-styles` max 4).
+ */
+const RESOLVED_AXIS_FIXER: Record<string, string> = {
+  'toc-field': 'toc-field-fixer',
+  'heading-style': 'heading-style-fixer',
 };
 
 export function buildCoverageCells(
@@ -131,6 +166,9 @@ export function buildCoverageCells(
     const rows = matrix.rows.filter((row) => row.profileId === profileId);
     const loop = loopByProfile.get(profileId);
     const resolvedAxes = new Set(loop?.axesResolved ?? []);
+    const resolvedUniversalFixers = new Set(
+      [...resolvedAxes].map((axis) => RESOLVED_AXIS_FIXER[axis]).filter((id): id is string => Boolean(id)),
+    );
     const appliedFixers = new Set(
       (loop?.axesApplied ?? []).map((axis) => APPLIED_AXIS_FIXER[axis]).filter((id): id is string => Boolean(id)),
     );
@@ -152,6 +190,23 @@ export function buildCoverageCells(
             strength: 'resolved',
             artifactId: `closed-loop:${profileId}`,
             checkIds: loopCovered,
+          },
+        });
+        continue;
+      }
+
+      // 1a) Univerzalna os s bodovanom provjerom: matrica za nju nema redaka, pa se dokaz mora
+      //     pripisati po OSI, a ne po `checkId`-jevima iz redaka.
+      if (resolvedUniversalFixers.has(fixerId)) {
+        cells.push({
+          profileId,
+          fixerId,
+          status: 'pokriveno',
+          evidence: {
+            kind: 'closed-loop',
+            strength: 'resolved',
+            artifactId: `closed-loop:${profileId}`,
+            checkIds: [],
           },
         });
         continue;
@@ -198,7 +253,7 @@ export function buildCoverageCells(
         profileId,
         fixerId,
         status: 'nepokriveno',
-        reason: uncoveredReason(fixerRows.length, gated.has(fixerId), loop),
+        reason: uncoveredReason(fixerRows.length, gated.has(fixerId), loop, fixerId),
       });
     }
   }
@@ -206,7 +261,17 @@ export function buildCoverageCells(
   return { cells, summary: summarize(cells) };
 }
 
-function uncoveredReason(ruleCount: number, isGated: boolean, loop: ClosedLoopRow | undefined): UncoveredReason {
+function uncoveredReason(
+  ruleCount: number,
+  isGated: boolean,
+  loop: ClosedLoopRow | undefined,
+  fixerId: string,
+): UncoveredReason {
+  // Os koju generator NIJE prekrsio za ovaj profil nije "bez dokaza" nego neprimjenjiva: generator
+  // krsi samo ono sto profil propisuje. Bez ove grane je 325 celija `toc-field-fixera` (407 minus
+  // 83 profila s `requireToc`) nosilo krivu dijagnozu.
+  const axis = AXIS_BY_FIXER[fixerId];
+  if (axis && loop && !loop.violated.includes(axis)) return 'profil-ne-propisuje-os';
   if (ruleCount === 0) return isGated ? 'profil-ne-propisuje-os' : 'univerzalna-higijena-bez-dokaza';
   // Profil os propisuje. Je li ju closed-loop pokusao i nije uspio, ili ju nikad nije dotaknuo?
   if (loop && loop.axesRemaining.length > 0) return 'closed-loop-nije-rijesio';
