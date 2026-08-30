@@ -53,6 +53,7 @@
     "verify:word": "powershell -ExecutionPolicy Bypass -File scripts/word-verify/check.ps1",
     "verify:word:worst": "powershell -ExecutionPolicy Bypass -File scripts/word-verify/check-worst-case.ps1",
     "deploy-drift": "node scripts/deploy-drift.mjs",
+    "orphan-scan": "node scripts/orphan-scan.mjs",
     "migration-identity": "node scripts/migration-identity.mjs",
     "gen-profile-rules-server": "vite-node scripts/gen-profile-rules-server.mts",
     "repair-recipe": "vite-node scripts/generate-repair-recipe.mts && vite-node scripts/gen-profile-rules-server.mts",
