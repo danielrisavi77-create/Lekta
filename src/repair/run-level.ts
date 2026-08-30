@@ -64,7 +64,8 @@ export interface RunLevelOptions {
    * bilo tretirano kao "stilizirani odlomak, preskoci" i deep ciscenje fusnota
    * bi bilo trajni no-op.
    */
-  allowedStyleId?: string;
+  /** Jedan id ili popis; odlomak bez `w:pStyle` je uvijek dozvoljen. */
+  allowedStyleId?: string | readonly string[];
 }
 
 export interface RunLevelResult {
@@ -166,9 +167,20 @@ function maskProtectedBlocks(paragraph: string): { masked: string; restore: (s: 
 }
 
 /** Ima li odlomak w:pStyle razlicit od dozvoljenog cilja (takve preskacemo). */
-function hasNonTargetStyle(paragraph: string, allowedStyleId: string): boolean {
+/**
+ * Odlomak bez `w:pStyle` je UVIJEK dozvoljen (cita zadani stil). Odlomak s `w:pStyle` prolazi samo
+ * ako je taj stil na popisu dozvoljenih.
+ *
+ * Popis (a ne jedan id) postoji jer tijelo rada ne mora biti u zadanom stilu: LibreOffice ga stavlja
+ * u `BodyText`, hrvatski Word u `Standardno`, a tekst zalijepljen s weba u `NormalWeb`. Dok je ovdje
+ * stajao jedan doslovni id, deep ciscenje je takav odlomak PRESKAKALO u cijelosti, pa je izravno
+ * oblikovanje ostajalo i popravak se vizualno nije vidio.
+ */
+function hasNonTargetStyle(paragraph: string, allowedStyleId: string | readonly string[]): boolean {
   const m = paragraph.match(/<w:pStyle\b[^>]*w:val="([^"]*)"/);
-  return !!m && m[1] !== allowedStyleId;
+  if (!m) return false;
+  const allowed = typeof allowedStyleId === 'string' ? [allowedStyleId] : allowedStyleId;
+  return !allowed.includes(m[1]);
 }
 
 /** Ukloni imenovane atribute s taga; vrati '' ako tag ostane bez atributa. */

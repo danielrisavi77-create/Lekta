@@ -9,6 +9,8 @@ import {
   patchMargins,
   patchPaperSize,
   patchDefaultFont,
+  resolveBodyParagraphStyleId,
+  resolveDefaultParagraphStyleId,
   patchDefaultSpacing,
   patchDefaultParagraphSpacing,
   patchDefaultAlignment,
@@ -257,6 +259,20 @@ function normalStyleConflictsSize(stylesXml: string, targetHalfPoints: number): 
   return !!m && Number(m[1]) !== targetHalfPoints;
 }
 
+/**
+ * Stilovi koje deep ciscenje smije dirati: zadani paragraf stil i, kad postoji, stil kojim je
+ * tijelo rada STVARNO oblikovano.
+ *
+ * Odlomak s bilo kojim drugim `w:pStyle` ostaje netaknut (naslovi, natpisi, citati). Bez stila
+ * tijela na popisu deep je preskakao CIJELI odlomak, pa je izravno oblikovanje ostajalo i popravak
+ * se vizualno nije vidio, iako je stil bio ispravljen. Izmjereno na izlazu pravog LibreOfficea:
+ * 59 odlomaka je zadrzalo `w:line="240"` (jednostruki prored) i nakon popravka na 1,5.
+ */
+function deepAllowedStyles(stylesXml: string, bodyStyleId: string | null): readonly string[] {
+  const defaultStyleId = resolveDefaultParagraphStyleId(stylesXml);
+  return bodyStyleId && bodyStyleId !== defaultStyleId ? [defaultStyleId, bodyStyleId] : [defaultStyleId];
+}
+
 // === Fixeri ===
 
 export function marginsFixer(
@@ -294,10 +310,14 @@ export function fontFixer(
   parts: DocxXmlParts,
   update: { fontName?: string; fontSizePt?: number; deep?: boolean },
 ): FixerOutput {
+  // Stil kojim je tijelo STVARNO oblikovano: bez njega popravak upise cilj u docDefaults i u
+  // zadani stil, a stil tijela (`BodyText`, `NormalWeb`, `Standardno`) ih nadjaca, pa dokument
+  // ostane nepromijenjen dok changelog tvrdi da je font promijenjen.
+  const bodyStyleId = resolveBodyParagraphStyleId(parts.documentXml, parts.stylesXml);
   const result = patchDefaultFont(parts.stylesXml, {
     fontName: update.fontName,
     sizeHalfPoints: update.fontSizePt !== undefined ? ptToHalfPoints(update.fontSizePt) : undefined,
-  });
+  }, bodyStyleId);
 
   let base: FixerOutput;
   if (!result.applied) {
@@ -344,6 +364,7 @@ export function fontFixer(
     ? {
         stripFontName: fontOk,
         stripFontSizeNearHalfPoints: sizeOk ? sizeTarget : undefined,
+        allowedStyleId: deepAllowedStyles(parts.stylesXml, bodyStyleId),
       }
     : null;
   const deep =
@@ -354,7 +375,9 @@ export function fontFixer(
 }
 
 export function lineSpacingFixer(parts: DocxXmlParts, multiplier: number, deep = false): FixerOutput {
-  const result = patchDefaultSpacing(parts.stylesXml, multiplierToTwips(multiplier), 'auto');
+  const bodyStyleId = resolveBodyParagraphStyleId(parts.documentXml, parts.stylesXml);
+  const allowedStyleId = deepAllowedStyles(parts.stylesXml, bodyStyleId);
+  const result = patchDefaultSpacing(parts.stylesXml, multiplierToTwips(multiplier), 'auto', bodyStyleId);
   const base: FixerOutput = !result.applied
     ? NO_OP(parts, reasonFromPatch(result))
     : {
@@ -368,7 +391,7 @@ export function lineSpacingFixer(parts: DocxXmlParts, multiplier: number, deep =
   // bi skidanje direct proreda vratilo dokument na Word default, ne na cilj.
   const deepResult =
     deep && result.found['w:line'] === true
-      ? stripDirectFormatting(parts.documentXml, { stripLineSpacing: true })
+      ? stripDirectFormatting(parts.documentXml, { stripLineSpacing: true, allowedStyleId })
       : null;
   return combineDeep(base, parts, deepResult);
 }
@@ -385,7 +408,9 @@ export function alignmentFixer(
   val: 'left' | 'right' | 'center' | 'both',
   deep = false,
 ): FixerOutput {
-  const result = patchDefaultAlignment(parts.stylesXml, val);
+  const bodyStyleId = resolveBodyParagraphStyleId(parts.documentXml, parts.stylesXml);
+  const allowedStyleId = deepAllowedStyles(parts.stylesXml, bodyStyleId);
+  const result = patchDefaultAlignment(parts.stylesXml, val, bodyStyleId);
   const base: FixerOutput = !result.applied
     ? NO_OP(parts, reasonFromPatch(result))
     : {
@@ -400,7 +425,7 @@ export function alignmentFixer(
   // stil ima w:jc (result.found), inace nema jamstva ciljanog poravnanja.
   const deepResult =
     deep && val === 'both' && result.found['w:val'] === true
-      ? stripDirectFormatting(parts.documentXml, { stripLeftJustify: true })
+      ? stripDirectFormatting(parts.documentXml, { stripLeftJustify: true, allowedStyleId })
       : null;
   return combineDeep(base, parts, deepResult);
 }

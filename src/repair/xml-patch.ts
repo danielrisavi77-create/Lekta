@@ -413,6 +413,7 @@ function withContainer(
 export function patchDefaultFont(
   stylesXml: string,
   update: { fontName?: string; sizeHalfPoints?: number },
+  bodyStyleId?: string | null,
 ): PatchResult {
   const before: Record<string, string> = {};
   const after: Record<string, string> = {};
@@ -512,6 +513,29 @@ export function patchDefaultFont(
     }
   }
 
+  // 4. Stil kojim je tijelo STVARNO oblikovano, kad to nije zadani stil (vidi
+  //    `resolveBodyParagraphStyleId`). Bez ovoga popravak upise cilj u docDefaults i u zadani stil,
+  //    a `BodyText`/`NormalWeb` ih nadjaca, pa se nista ne promijeni dok changelog tvrdi suprotno.
+  if (bodyStyleId && bodyStyleId !== resolveDefaultParagraphStyleId(xml)) {
+    const bodyStyle = findStyleBlock(xml, bodyStyleId);
+    // Dira se SAMO stil koji sam definira run-svojstva; ako ih ne definira, vec nasljedjuje cilj.
+    if (bodyStyle && /<w:rPr\b/.test(maskElement(bodyStyle.block, 'w:pPr'))) {
+      const res = withContainer(bodyStyle.block, 'w:rPr', CT_STYLE_ORDER, ['w:pPr', 'w:rPr'], rPrTransform);
+      if (res.changed) {
+        if (update.fontName !== undefined && before.fontName === undefined) {
+          before.fontName = res.before['w:ascii'] ?? '';
+          after.fontName = update.fontName;
+        }
+        if (update.sizeHalfPoints !== undefined && before.sizeHalfPoints === undefined) {
+          before.sizeHalfPoints = res.before['w:val'] ?? '';
+          after.sizeHalfPoints = String(update.sizeHalfPoints);
+        }
+        xml = xml.slice(0, bodyStyle.start) + res.inner + xml.slice(bodyStyle.end);
+        changed = true;
+      }
+    }
+  }
+
   if (!changed) return { ...NO_OP, xml: stylesXml, found: foundAttrs };
   return { xml, applied: true, before, after, found: foundAttrs };
 }
@@ -592,15 +616,94 @@ export function resolveDefaultParagraphStyleId(stylesXml: string): string {
 // postoji doslovno pod tim styleId-em (findStyleByIdOrName prvo uvijek proba TOCAN id).
 const DEFAULT_PARAGRAPH_NAME_RE = /^\s*(?:normal|standard)\s*$/i;
 
+/**
+ * Stilovi koji NISU tijelo rada, pa ih "dominantni stil tijela" nikad ne smije izabrati.
+ * Naslovi se uz to prepoznaju i po `w:outlineLvl` (vidi `styleHasOutlineLevel`), jer se
+ * vlastita imena stilova razlikuju po jeziku i po alatu.
+ */
+const NON_BODY_STYLE_RE =
+  /^(?:heading|naslov|caption|opis|toc|contents|sadr|index|kazalo|header|footer|zaglavlje|podno|title|subtitle|quote|citat|footnote|endnote|bibliograf|literatur)/i;
+
+/** Ima li stil `w:outlineLvl` (dakle ponasa se kao naslov, bez obzira na ime). */
+function styleHasOutlineLevel(stylesXml: string, styleId: string): boolean {
+  const block = findStyleBlock(stylesXml, styleId);
+  return !!block && /<w:outlineLvl\b/.test(block.block);
+}
+
+/** Udio teksta koji dominantni stil tijela mora nositi da bi ga se uopce diralo. */
+const BODY_STYLE_MIN_SHARE = 0.2;
+
+/**
+ * Stil kojim je STVARNO oblikovano tijelo rada, kad to NIJE zadani paragraf stil.
+ *
+ * Zasto postoji: fixeri fonta, velicine, proreda i poravnanja rasudjuju o zadanom paragraf stilu
+ * (`resolveDefaultParagraphStyleId`) i o `docDefaults`. To je tocno dok tijelo rada koristi zadani
+ * stil. Kad ga ne koristi, stil tijela NADJACAVA oboje, pa popravak upise ciljanu vrijednost na
+ * mjesto koje nijedan odlomak tijela ne cita: dokument se vizualno ne promijeni, provjera i dalje
+ * pada, a changelog svejedno prijavi izmjenu. To nije tihi no-op nego LAZNA TVRDNJA prema korisniku.
+ *
+ * Izmjereno 2026-08-23 na `lo-fpzg-zavrsni-neuskladjen.docx` (izlaz pravog LibreOfficea): tijelo je
+ * u stilu `BodyText`, popravak je `docDefaults` doveo na Times New Roman 12, `BodyText` je ostao
+ * Arial 11, `format.font.dominant` je ostao 1/8, a changelog je tvrdio "Font: Arial -> Times New
+ * Roman". Isti obrazac postoji i u stvarnim Word radovima (`NormalWeb` za tekst zalijepljen s weba,
+ * `Standardno` u hrvatskom Wordu).
+ *
+ * Bira se stil s najvise TEKSTA (isti kriterij kao `dominantFont` u analizi, koja tezinu racuna po
+ * duljini teksta), a ne s najvise odlomaka: inace bi desetak praznih odlomaka nadglasalo tijelo.
+ * Vraca `null` kad tijelo vec koristi zadani stil ili kad nijedan kandidat ne nosi barem
+ * `BODY_STYLE_MIN_SHARE` teksta, jer tada nema sto nadjacavati.
+ */
+export function resolveBodyParagraphStyleId(documentXml: string, stylesXml: string): string | null {
+  const defaultId = resolveDefaultParagraphStyleId(stylesXml);
+  const weights = new Map<string, number>();
+  let total = 0;
+
+  // `<w:p\b` namjerno NE hvata `<w:pPr` (iza `p` slijedi `P`, oba su rijec-znakovi pa granice nema).
+  const paragraphRe = /<w:p\b[^>]*(?:\/>|>([\s\S]*?)<\/w:p>)/g;
+  let match: RegExpExecArray | null;
+  while ((match = paragraphRe.exec(documentXml)) !== null) {
+    const inner = match[1];
+    if (!inner) continue;
+    let text = '';
+    const textRe = /<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g;
+    let t: RegExpExecArray | null;
+    while ((t = textRe.exec(inner)) !== null) text += t[1];
+    const weight = text.trim().length;
+    if (!weight) continue;
+    total += weight;
+
+    const pPr = /<w:pPr\b[^>]*>([\s\S]*?)<\/w:pPr>/.exec(inner);
+    const styleId = pPr ? /<w:pStyle\b[^>]*w:val="([^"]*)"/.exec(pPr[1])?.[1] ?? null : null;
+    // Bez pStyle odlomak vec cita zadani stil; taj put je pokriven i ne treba mu nista.
+    if (!styleId || styleId === defaultId) continue;
+    if (NON_BODY_STYLE_RE.test(styleId)) continue;
+    if (styleHasOutlineLevel(stylesXml, styleId)) continue;
+    weights.set(styleId, (weights.get(styleId) ?? 0) + weight);
+  }
+
+  if (!total) return null;
+  let best: string | null = null;
+  let bestWeight = 0;
+  for (const [styleId, weight] of weights) {
+    if (weight > bestWeight) {
+      best = styleId;
+      bestWeight = weight;
+    }
+  }
+  return best && bestWeight / total >= BODY_STYLE_MIN_SHARE ? best : null;
+}
+
 export function patchDefaultSpacing(
   stylesXml: string,
   lineTwips: number,
   lineRule = 'auto',
+  bodyStyleId?: string | null,
 ): PatchResult {
-  return patchNormalParagraphProps(stylesXml, resolveDefaultParagraphStyleId(stylesXml), 'w:spacing', {
-    'w:line': String(lineTwips),
-    'w:lineRule': lineRule,
-  }, DEFAULT_PARAGRAPH_NAME_RE);
+  const attrs = { 'w:line': String(lineTwips), 'w:lineRule': lineRule };
+  return alsoPatchBodyStyle(
+    patchNormalParagraphProps(stylesXml, resolveDefaultParagraphStyleId(stylesXml), 'w:spacing', attrs, DEFAULT_PARAGRAPH_NAME_RE),
+    stylesXml, bodyStyleId, 'w:spacing', attrs,
+  );
 }
 
 export function patchDefaultParagraphSpacing(
@@ -1284,12 +1387,55 @@ export function patchFootnoteTypography(
   return { xml: stylesXml.slice(0, found.start) + block + stylesXml.slice(found.end), applied: true, before, after, found: foundAttrs };
 }
 
-export function patchDefaultAlignment(stylesXml: string, val: string): PatchResult {
+export function patchDefaultAlignment(stylesXml: string, val: string, bodyStyleId?: string | null): PatchResult {
   // Word izostavlja w:jc kad je poravnanje lijevo (zadano), pa je ovo najcesci slucaj u kojem se
   // element mora STVORITI, a ne samo promijeniti.
-  return patchNormalParagraphProps(
-    stylesXml, resolveDefaultParagraphStyleId(stylesXml), 'w:jc', { 'w:val': val }, DEFAULT_PARAGRAPH_NAME_RE,
+  return alsoPatchBodyStyle(
+    patchNormalParagraphProps(
+      stylesXml, resolveDefaultParagraphStyleId(stylesXml), 'w:jc', { 'w:val': val }, DEFAULT_PARAGRAPH_NAME_RE,
+    ),
+    stylesXml, bodyStyleId, 'w:jc', { 'w:val': val },
   );
+}
+
+/**
+ * Primijeni ISTI zahvat i na stil kojim je tijelo stvarno oblikovano (vidi
+ * `resolveBodyParagraphStyleId`), pa ciljana vrijednost ne zavrsi na mjestu koje nijedan odlomak
+ * tijela ne cita.
+ *
+ * Rezultat prvog (zadanog) zahvata se ZADRZAVA kao izvor `before`/`after` oznaka kad je uspio, jer
+ * te oznake vidi korisnik u changelogu. Kad zadani zahvat nije uspio a ovaj jest, oznake dolaze
+ * odavde: popravak se stvarno dogodio, samo na drugom stilu.
+ */
+function alsoPatchBodyStyle(
+  first: PatchResult,
+  originalStylesXml: string,
+  bodyStyleId: string | null | undefined,
+  element: string,
+  attrs: Record<string, string>,
+): PatchResult {
+  const xml = first.applied ? first.xml : originalStylesXml;
+  if (!bodyStyleId || bodyStyleId === resolveDefaultParagraphStyleId(xml)) return first;
+  const block = findStyleBlock(xml, bodyStyleId);
+  if (!block) return first;
+  /**
+   * Svojstvo se UPISUJE i kad ga stil tijela nema, umjesto da se racuna na nasljedjivanje.
+   *
+   * Razlog je mjerljiv, ne stilski: `readPPr` (`src/docx/parser.ts`) vraca `align: null` kad
+   * `w:jc` ne postoji, a `merge` je `Object.assign`, pa stil koji ima `w:pPr` bez `w:jc`
+   * PREPISE naslijedjenu vrijednost s null. Izmjereno na izlazu pravog LibreOfficea: `BodyText`
+   * je `basedOn Normal`, popravak je `Normal` doveo na obostrano, a analiza je i dalje citala
+   * "default" jer je `BodyText` imao `w:pPr` (samo s proredom) i time pobrisao naslijedjeno.
+   * Word i sam pise `w:jc` izricito, pa ovo nije nista neobicno za dokument.
+   */
+  const second = patchNormalParagraphProps(xml, bodyStyleId, element, attrs);
+  if (!second.applied) return first;
+  return {
+    ...second,
+    before: first.applied ? first.before : second.before,
+    after: first.applied ? first.after : second.after,
+    found: { ...second.found, ...first.found },
+  };
 }
 
 // === Numeriranje stranica po sekcijama (documentXml, w:pgNumType u w:sectPr) ===
