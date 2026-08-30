@@ -57,10 +57,30 @@ export default defineConfig({
       testIgnore: [/roadmap-v2\.spec\.ts/, /repair-panel\.spec\.ts/],
     },
   ],
+  /**
+   * Dizanje posluzitelja traje MNOGO duze na hladno nego na toplo, pa je 120 s bila granica koja
+   * povremeno pada bez ijednog stvarnog kvara.
+   *
+   * Izmjereno 2026-08-30 na ovom stroju:
+   *  - toplo (Viteov predmemorijski cache ovisnosti vec postoji): prvi HTTP 200 nakon 6 s;
+   *  - hladno: `vite` javi "ready" tek nakon 41,5 s, a optimizacija ovisnosti se nastavlja i
+   *    POSLIJE toga, pa prvi zahtjev jos ceka prevodjenje ulaza. Uz opterecen stroj (paralelni
+   *    vitest ili drugi build) probe je presao 120 s i cijeli run je pao s
+   *    "Timed out waiting from config.webServer", iako je posluzitelj bio ispravan.
+   *
+   * CI je UVIJEK hladan (`reuseExistingServer` je ondje false), dakle najgori slucaj je ondje
+   * pravilo, ne iznimka. Granica se zato dize na 300 s. To NE skriva kvar: ako se posluzitelj
+   * doista ne digne, run i dalje pada, samo nakon mjere koja odgovara stvarnom hladnom startu.
+   *
+   * Zaseban, jos nerijesen nalaz (`docs/audit/FREE_TOOLS_VISUAL_UX_AUDIT_2026-08-06.md:22`):
+   * ovdje stoji `npm run dev`, a taj isti audit biljezi da je suite zapravo vrtjen protiv
+   * `vite preview`. Prelazak na preview trazi build prije UX gatea (`ux-gate` u `check.yml` je
+   * zaseban job bez `dist/`), pa je to promjena CI-ja i ostaje odvojena odluka.
+   */
   webServer: {
     command: 'npm run dev -- --host 127.0.0.1 --port 4173',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
+    timeout: 300_000,
   },
 });
