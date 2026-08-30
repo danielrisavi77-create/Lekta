@@ -25,13 +25,29 @@ export interface DetectedContext {
 
 // Vrsta rada iz normaliziranog teksta (bez dijakritike, bez razmaka). Redoslijed je specificnost:
 // doktorski/disertacija prije diplomskog, itd.
+// SKLONIDBA, ne doslovan oblik. `normalize` mice razmake, pa je "diplomski rad" -> "diplomskirad",
+// ali naslovnice gotovo uvijek pisu u genitivu: "u svrhu izrade diplomskog rada" -> "diplomskograda".
+// Stari uzorak `diplomskirad` takav tekst NIJE hvatao. Izmjereno na stvarnom korpusu: od 198 radova
+// bez profila vrsta rada je bila prepoznata na 14, a jedinica na 89.
 const WORK_TYPE_RULES: [string, RegExp][] = [
   ['doctoral', /doktorsk|disertacij/],
-  ['specialist', /specijalisticki/],
-  ['graduate', /diplomskirad/],
-  ['final', /zavrsnirad/],
-  ['seminar', /seminarskirad/],
+  ['specialist', /specijalistick/],
+  ['graduate', /diplomsk\w{0,3}rad/],
+  ['final', /zavrsn\w{0,3}rad/],
+  ['seminar', /seminarsk\w{0,3}rad/],
 ];
+
+/**
+ * Korijen naziva studija, za usporedbu neovisnu o padezu. Katalog nosi nominativ ("Politologija"),
+ * a naslovnica genitiv ("studij Politologije"), pa doslovna usporedba promasi tocan pogodak.
+ *
+ * Rezanje je namjerno plitko (najvise tri znaka, i nikad ispod sest): dulje rezanje spaja razlicite
+ * studije u isti korijen, a duljina sest je isti prag koji vec cuva nazive jedinica od lazno
+ * pozitivnog pogotka. Sudare i dalje rjesava longest-match, kao i prije.
+ */
+function programStem(key: string): string {
+  return key.length > 8 ? key.slice(0, Math.max(6, key.length - 3)) : key;
+}
 
 /**
  * Heuristicki pogodi (institucija, fakultet, studij, vrsta rada) iz teksta dokumenta preko SVIH
@@ -61,7 +77,9 @@ export function detectContextFromText(units: DetectUnit[], rawText: string): Det
   for (const p of unit.programs || []) {
     if (/^Opći/.test(p) || /studij/i.test(p)) continue;
     const key = normalize(p);
-    if (key.length >= 5 && key.length > pbest && n.includes(key)) {
+    if (key.length < 5) continue;
+    const stem = programStem(key);
+    if (key.length > pbest && (n.includes(key) || n.includes(stem))) {
       program = p;
       pbest = key.length;
     }

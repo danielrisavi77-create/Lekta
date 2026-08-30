@@ -22,6 +22,39 @@ describe('detectContextFromText', () => {
     expect(ctx!.program).toBe('Povijest');
   });
 
+  /**
+   * SKLONIDBA. Katalog nosi nominativ ("Politologija"), a naslovnica gotovo uvijek genitiv
+   * ("Preddiplomski studij Politologije"). Doslovna usporedba je takav tekst promasivala.
+   *
+   * Mjereno na stvarnom korpusu od 198 radova bez dodijeljenog profila: JEDINICA je bila
+   * prepoznata na 89, a program samo na 7. Kako `isConfidentDetection` trazi program, 82
+   * upotrebljive detekcije su se bacale.
+   */
+  it('program se prepoznaje i u genitivu, ne samo u nominativu', () => {
+    const ctx = detectContextFromText(
+      UNITS,
+      'Sveučilište u Zagrebu Fakultet političkih znanosti Preddiplomski studij Politologije Zagreb, lipanj 2026.',
+    );
+    expect(ctx!.unitId).toBe('fpzg');
+    expect(ctx!.program).toBe('Politologija');
+  });
+
+  it('vrsta rada se prepoznaje u genitivu ("izrade diplomskog rada")', () => {
+    const ctx = detectContextFromText(
+      UNITS,
+      'Fakultet političkih znanosti. Ova anketa provodi se u svrhu izrade diplomskog rada.',
+    );
+    expect(ctx!.unitId).toBe('fpzg');
+    expect(ctx!.workType).toBe('graduate');
+  });
+
+  it('korijen programa ne pogadja nesrodan pojam', () => {
+    // "Novinarstvo" -> korijen "novinar"; tekst o novinama ne smije proglasiti studij novinarstva.
+    const ctx = detectContextFromText(UNITS, 'Fakultet političkih znanosti, analiza dnevnih novina i portala');
+    expect(ctx!.unitId).toBe('fpzg');
+    expect(ctx!.program).toBeNull();
+  });
+
   it('longest-match bira duzi naziv kad tekst sadrzi dva naziva jedinice', () => {
     // Tekst sadrzi i "Filozofski fakultet" (ffzg) i "Filozofski fakultet u Rijeci" (ffri, duzi).
     const ctx = detectContextFromText(UNITS, 'Filozofski fakultet u Rijeci, zavrsni rad');
