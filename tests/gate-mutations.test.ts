@@ -22,6 +22,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { countsAsRealDocxProof, type EvidenceManifest } from '../src/corpus/evidence-manifest';
+import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
@@ -120,6 +121,12 @@ function manifestWithRecordedAt(recordedAt: string): EvidenceManifest {
   };
 }
 
+/** Zbroj `citedBackfilled` iz INDEX.json; `force` podmece vrijednost i vjezba mutaciju. */
+function backfillTotal(force?: number): number {
+  const rows = extractionIndex as unknown as Array<{ citedBackfilled?: number }>;
+  return rows.reduce((a, r) => a + (force ?? r.citedBackfilled ?? 0), 0);
+}
+
 const MUTATIONS: Mutation[] = [
   // --- sekcija 6 VERIFICATION_PIPELINE.md: bodovano pravilo ne smije lagati o izvoru -------------
   {
@@ -192,6 +199,14 @@ const MUTATIONS: Mutation[] = [
         (f) => f.kind === 'drift',
       ),
     cleanBefore: () => findScoredValueFindings(profileWith(goodEntry()), SOURCES).length === 0,
+  },
+  // --- mehanizam mora OPALITI, ne samo postojati ------------------------------------------------
+  {
+    id: 'mehanizam/mrtav-kod-s-brojacem-na-nuli',
+    imitates:
+      'dovlacenje citata koje je citalo "[object Object]" i nista nije radilo, dok se nizvodna mjera popravljala iz drugog razloga',
+    caught: () => backfillTotal(0) === 0,
+    cleanBefore: () => backfillTotal() > 0,
   },
   // --- manifest dokaza: run bez ljudskog ocekivanja NIJE dokaz na stvarnom radu ----------------
   {

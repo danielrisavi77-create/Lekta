@@ -281,6 +281,7 @@ const targets = only.length ? only : Object.keys(byFac).sort();
     // DOVLACENJE: citat kojega nema ni u jednom ulomku trazi se po stranicama izvora. Nije mreza
     // prvenstvu (dijeli s njim istu usporedbu, pa kad ona zakaze zakazu oba), nego pokriva slucaj
     // kad keyword-prozor to mjesto uopce nije zahvatio. Izmjereno: opali dva puta na 122 fakulteta.
+    let backfilled = 0;
     for (let i = 0; i < citedNorm.length; i++) {
       if (snippets.some((s) => s.cited && normForMatch(s.text).includes(citedNorm[i]))) continue;
       let done = false;
@@ -293,6 +294,7 @@ const targets = only.length ? only : Object.keys(byFac).sort();
           const a = Math.max(0, hit - 2);
           const b = Math.min(lines.length - 1, hit + WINDOW + 2);
           snippets.push({ sourceId, page: pages[p]?.page ?? p + 1, text: lines.slice(a, b + 1).join('\n'), cited: true });
+          backfilled++;
           done = true;
         }
         if (done) break;
@@ -330,6 +332,10 @@ const targets = only.length ? only : Object.keys(byFac).sort();
       sources: srcMeta,
       needsOcr,
       chars: text.length,
+      // MEHANIZAM MORA IMATI VLASTITI BROJAC. Bez njega je dovlacenje jednom vec bilo mrtav kod,
+      // a nizvodna mjera se svejedno popravljala (iz drugog razloga), pa je izgledalo da radi.
+      citedQuotes: citedNorm.length,
+      citedBackfilled: backfilled,
       ...cls,
       priorTokens: prior,
       contradictions,

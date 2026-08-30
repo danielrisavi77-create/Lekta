@@ -198,6 +198,36 @@ TUMACENJU, ne na prijepisu; opovrgavajuci prolaz je nasao krivo pripisan opseg n
   uzorak. Svako ublazavanje ide covjeku.
 - Gard `tests/claim-fields.test.ts`: vokabular, ugovor strojnog upisa, ratchet koji smije samo padati.
 
+## Tvrdo pravilo: mjera koja se popravi ne dokazuje da tvoj zahvat radi
+
+Dva su nacina da zeleno bude lazno, i oba su izmjerena na vlastitom radu 2026-08-31.
+
+**1. MEHANIZAM MORA IMATI VLASTITI BROJAC.** Nizvodna mjera nije dokaz da tvoj zahvat radi: ona se
+moze popraviti iz drugog razloga. Dovlacenje citata u `extract-citation-sections.mjs` citalo je
+`String(pages[p])` nad objektom `{page, text}`, dakle pretrazivalo doslovno `"[object Object]"`, i
+nije radilo NISTA. Blokatori su u istom prolazu pali s 8 na 5, pa je izgledalo da mehanizam radi;
+popravak je zapravo dolazio od PRVENSTVA, drugog mehanizma u istoj izmjeni.
+
+Zato svaki dodan mehanizam nosi brojac koji se zapisuje u artefakt (`citedBackfilled` u
+`extractions/INDEX.json`), a gard tvrdi da je RAZLICIT OD NULE. Brojac na nuli znaci mrtav kod, ma
+sto nizvodna mjera pokazivala. Gard: `tests/citation-extraction-mechanism.test.ts`, mutacija
+`mehanizam/mrtav-kod-s-brojacem-na-nuli`.
+
+**2. GENERATOR ULAZA JE I SAM NEPROVJEREN dok mu ne dokazes da proizvodi oblik koji tvrdis da
+pokrivas.** Prolaz kroz N slucajeva vrijedi samo za oblike koje je generator STVARNO stvorio. Sweep
+nad detekcijom naslovnice davao je 402/402 i bio lazno zelen: lokativ je tvorio samo muskim
+obrascem (`-om`), pa klasa "zenski pridjev u lokativu" (`Muzickoj akademiji`) u testu nikad nije ni
+nastala. U stvarnosti je rusila cetiri jedinice; neovisni verifikator s vlastitim generatorom dobio
+je 398/402.
+
+Ovo NIJE isto sto i "gard bez dokaza da grize": ondje se dokazuje da GARD reagira, ovdje da
+GENERATOR proizvodi trazeni oblik. Repo se oslanja na sweepove (konformnost, korpus, rutiranje
+profila, detekcija), gdje ta razlika odlucuje je li mjerenje istinito.
+
+Posljedica za rad: kad brojka ostane ista a mehanizam se promijenio, provjeri IDENTITET, ne zbroj.
+Popis blokatora citatnih dosjea zato je imenovan, a ne prebrojan: 2026-08-31 je broj ostao 1 dok je
+`pravo` otisao a `pfri` dosao, i samo je imenovani popis to uhvatio.
+
 ## Tvrdo pravilo: gard bez dokaza da grize ne racuna se
 
 Svaki verifikacijski gard mora imati MUTACIJU u `tests/gate-mutations.test.ts`: podmetnut poznat kvar
