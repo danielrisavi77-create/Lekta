@@ -36,8 +36,9 @@ function committedSource(path) {
 
 const repo = {
   /**
-   * Commitane datoteke koje simbol spominju. `-w` trazi CIJELU rijec, inace bi `sortBy` pogodio
-   * `sortByName`. Pretraga ide po `HEAD`, ne po radnom stablu: pitanje je sto vidi cist checkout.
+   * PREDFILTAR: commitane datoteke koje simbol spominju bilo gdje. `-w` trazi CIJELU rijec, inace
+   * bi `sortBy` pogodio `sortByName`. Pretraga ide po `HEAD`, ne po radnom stablu: pitanje je sto
+   * vidi cist checkout. Presudu donosi `importedNames` u jezgri, jer spominjanje nije uporaba.
    */
   referencesAtHead(symbol) {
     try {
@@ -49,6 +50,11 @@ const repo = {
       // git grep vraca 1 kad nema pogodaka; to je uredan ishod, ne greska.
       return [];
     }
+  },
+
+  /** Commitani sadrzaj datoteke; prazan niz kad je u HEAD-u nema. */
+  sourceAtHead(path) {
+    return committedSource(path);
   },
 };
 

@@ -58,6 +58,48 @@ export function newlyExported(workingSource, committedSource) {
 }
 
 /**
+ * Imena koja modul stvarno UVOZI iz drugih modula.
+ *
+ * ZASTO POSTOJI: prva verzija skenera brojala je tekstualnu POJAVU imena i zbog toga je odmah
+ * proizvela lazan nalaz, i to na najgorem mjestu. `tests/orphan-scan.test.ts` drzi imena
+ * `looksLikeBibliographyEntry` i `looksLikeTitlePageLabel` kao NIZOVE u sintetickoj fixturi bas onog
+ * testa koji tvrdi da skener mora sutjeti na tom slucaju. Commitanjem vlastitog testa skener je sam
+ * sebi proizveo "ovisnika" i prijavio crveno na primjeru odabranom kao dokaz da zna sutjeti.
+ * (Nasla ga je druga sesija, 2026-08-30.)
+ *
+ * Pokrivena su tri oblika, jer sva tri u ovom repozitoriju stvarno postoje:
+ *   import { a, b as c } from '...'                    imenovani uvoz (oba jutrosnja kvara)
+ *   export { a } from '...'                            ponovni izvoz
+ *   const { a, b: c } = await import('...')            npr. scripts/run-closed-loop.mts
+ *
+ * Vraca IZVORNO ime (ono koje modul mora izvoziti), ne lokalni alias: kod `import { a as b }` modul
+ * mora izvoziti `a`, pa se biljezi `a`.
+ *
+ * POZNATA GRANICA, imenovana namjerno: uvoz preko imenskog prostora (`import * as m` pa `m.X`) se NE
+ * hvata, pa takav slucaj skener propusta. To je svjestan izbor u korist tocnosti: lazan nalaz tjera
+ * ljude da popravljaju kvar kojeg nema, a propusten nalaz i dalje hvata gate na cistom worktreeu.
+ * Skener je brz predfiltar prije commita, nikad zamjena za taj gate.
+ */
+export function importedNames(source) {
+  const names = new Set();
+  const izClauzule = (tekst) => {
+    for (const dio of tekst.split(',')) {
+      const t = dio.trim().replace(/^type\s+/, '');
+      if (!t) continue;
+      // `a as b` i `a: b` -> izvorno ime je `a`.
+      names.add(t.split(/\s+as\s+|:/)[0].trim());
+    }
+  };
+
+  for (const m of source.matchAll(/\bimport\s[^;]*?\{([\s\S]*?)\}\s*from\s*['"]/g)) izClauzule(m[1]);
+  for (const m of source.matchAll(/\bexport\s*\{([\s\S]*?)\}\s*from\s*['"]/g)) izClauzule(m[1]);
+  for (const m of source.matchAll(/\b(?:const|let|var)\s*\{([\s\S]*?)\}\s*=\s*(?:await\s+)?(?:import|require)\s*\(/g)) izClauzule(m[1]);
+
+  names.delete('');
+  return names;
+}
+
+/**
  * Presuda: koji od tih novih simbola RUSE granu na cistom checkoutu.
  *
  * Kriterij je namjerno uzak i to je cijela poanta. Necommitana datoteka SAMA PO SEBI nije kvar:
@@ -65,14 +107,19 @@ export function newlyExported(workingSource, committedSource) {
  * exporta, a nije rusio nista, jer su izvor, njegov test i dokumentacija putovali kao necommitana
  * TROJKA. Prijaviti to kao nalaz znacilo bi tjerati nekoga da popravlja kvar kojeg nema.
  *
- * `repo.referencesAtHead(symbol)` vraca commitane datoteke koje simbol spominju; datoteka iz koje
- * simbol potjece se izuzima, jer u HEAD-u stoji njezina STARA verzija i sama sebe ne dokazuje.
+ * `repo.referencesAtHead(symbol)` je samo PREDFILTAR (brz `git grep` po tekstu); presudu donosi
+ * `importedNames` nad commitanim sadrzajem te datoteke, pa spominjanje imena u nizu, komentaru ili
+ * fixturi ne vrijedi kao ovisnost. Datoteka iz koje simbol potjece se izuzima, jer u HEAD-u stoji
+ * njezina STARA verzija i sama sebe ne dokazuje.
  */
 export function findOrphans(candidates, repo) {
   const nalazi = [];
   for (const { file, symbols } of candidates) {
     for (const symbol of symbols) {
-      const referencedBy = repo.referencesAtHead(symbol).filter((path) => path !== file);
+      const referencedBy = repo
+        .referencesAtHead(symbol)
+        .filter((path) => path !== file)
+        .filter((path) => importedNames(repo.sourceAtHead(path)).has(symbol));
       if (referencedBy.length) nalazi.push({ file, symbol, referencedBy });
     }
   }

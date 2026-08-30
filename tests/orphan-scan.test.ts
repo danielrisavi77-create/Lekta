@@ -13,11 +13,19 @@
  * vristi na sve.
  */
 import { describe, it, expect } from 'vitest';
-import { parseExports, newlyExported, findOrphans, formatReport } from '../scripts/orphan-scan-core.mjs';
+import { parseExports, newlyExported, findOrphans, formatReport, importedNames } from '../scripts/orphan-scan-core.mjs';
 
-/** Lazan repozitorij: koje commitane datoteke spominju koji simbol. */
-const repoOf = (mapa: Record<string, string[]>) => ({
-  referencesAtHead: (symbol: string) => mapa[symbol] ?? [],
+/**
+ * Lazan repozitorij: staza -> COMMITANI sadrzaj.
+ *
+ * `referencesAtHead` namjerno radi po tekstu, tocno kao `git grep` u skripti, pa testovi vjezbaju i
+ * predfiltar i presudu. Da vraca vec profiltrirane pogotke, lazni nalaz koji je ovaj skener imao ne
+ * bi se mogao reproducirati.
+ */
+const repoOf = (files: Record<string, string>) => ({
+  referencesAtHead: (symbol: string) =>
+    Object.keys(files).filter((path) => new RegExp(`\\b${symbol}\\b`).test(files[path])),
+  sourceAtHead: (path: string) => files[path] ?? '',
 });
 
 describe('orphan-scan: parseExports', () => {
@@ -51,12 +59,34 @@ describe('orphan-scan: newlyExported', () => {
   });
 });
 
+describe('orphan-scan: importedNames', () => {
+  it('hvata imenovani uvoz, ponovni izvoz i destrukturirani dinamicki uvoz', () => {
+    const izvor = [
+      "import { buildOutcomeLine, druga as lokalna } from '../src/ui/repair-panel';",
+      "export { trece } from './x';",
+      "const { buildViolatingDocx, VIOLATABLE_CHECK_IDS } = await import('../tests/helpers/violating-docx');",
+    ].join('\n');
+    expect([...importedNames(izvor)].sort()).toEqual(
+      ['VIOLATABLE_CHECK_IDS', 'buildOutcomeLine', 'buildViolatingDocx', 'druga', 'trece'].sort(),
+    );
+  });
+
+  it('uvoz preko vise redaka nije iznimka', () => {
+    expect([...importedNames("import {\n  a,\n  b,\n} from './m';")].sort()).toEqual(['a', 'b']);
+  });
+
+  it('ime u nizu ili komentaru NIJE uvoz', () => {
+    const izvor = ["const s = ['looksLikeBibliographyEntry'];", '// vidi buildOutcomeLine'].join('\n');
+    expect([...importedNames(izvor)]).toEqual([]);
+  });
+});
+
 describe('orphan-scan: presuda', () => {
   /** MUTACIJA 1: stvarni kvar iz `141f9848`, `tests/repair-outcome.test.ts`. */
-  it('prijavljuje buildOutcomeLine kad ga commitani test trazi', () => {
+  it('prijavljuje buildOutcomeLine kad ga commitani test UVOZI', () => {
     const nalazi = findOrphans(
       [{ file: 'src/ui/repair-panel.ts', symbols: ['buildOutcomeLine'] }],
-      repoOf({ buildOutcomeLine: ['tests/repair-outcome.test.ts'] }),
+      repoOf({ 'tests/repair-outcome.test.ts': "import { buildOutcomeLine } from '../src/ui/repair-panel';" }),
     );
     expect(nalazi).toEqual([
       { file: 'src/ui/repair-panel.ts', symbol: 'buildOutcomeLine', referencedBy: ['tests/repair-outcome.test.ts'] },
@@ -64,24 +94,45 @@ describe('orphan-scan: presuda', () => {
   });
 
   /** MUTACIJA 2: stvarni kvar iz `141f9848`, `tests/real-corpus/harness.ts`. */
-  it('prijavljuje dropStaleFieldRegressions kad ga commitani harness trazi', () => {
+  it('prijavljuje dropStaleFieldRegressions kad ga commitani harness UVOZI', () => {
     const nalazi = findOrphans(
       [{ file: 'src/analysis/repair-regression.ts', symbols: ['dropStaleFieldRegressions'] }],
-      repoOf({ dropStaleFieldRegressions: ['tests/real-corpus/harness.ts'] }),
+      repoOf({
+        'tests/real-corpus/harness.ts':
+          "import { detectPassRegressions, dropStaleFieldRegressions } from '../../src/analysis/repair-regression';",
+      }),
     );
     expect(nalazi).toHaveLength(1);
     expect(nalazi[0].referencedBy).toEqual(['tests/real-corpus/harness.ts']);
   });
 
   /**
-   * BASELINE, i ujedno najvazniji negativan slucaj: `src/analysis/heading-structure.ts` je isti dan
-   * imao 131 nov redak i dva nova exporta, a nije rusio nista, jer su izvor, njegov test i
-   * dokumentacija putovali kao necommitana TROJKA. Skener koji bi to prijavio tjerao bi ljude da
-   * popravljaju kvar kojeg nema.
+   * MUTACIJA 3, i ujedno LAZAN NALAZ koji je ovaj skener stvarno imao (nasla ga druga sesija
+   * 2026-08-30, odmah nakon `c60943cc`): `tests/orphan-scan.test.ts` drzi ta dva imena kao NIZOVE u
+   * sintetickoj fixturi, a prva verzija je tekstualnu pojavu brojala kao ovisnost. Skener je tako
+   * commitanjem VLASTITOG testa sam sebi proizveo ovisnika i prijavio crveno na primjeru odabranom
+   * kao dokaz da zna sutjeti.
+   */
+  it('spominjanje imena u fixturi NIJE ovisnost', () => {
+    const nalazi = findOrphans(
+      [{ file: 'src/analysis/heading-structure.ts', symbols: ['looksLikeBibliographyEntry', 'looksLikeTitlePageLabel'] }],
+      repoOf({
+        'tests/orphan-scan.test.ts': [
+          "import { findOrphans } from '../scripts/orphan-scan-core.mjs';",
+          "const symbols = ['looksLikeBibliographyEntry', 'looksLikeTitlePageLabel'];",
+        ].join('\n'),
+      }),
+    );
+    expect(nalazi).toEqual([]);
+  });
+
+  /**
+   * BASELINE: `src/analysis/heading-structure.ts` je isti dan imao 131 nov redak i dva nova exporta,
+   * a nije rusio nista, jer su izvor, njegov test i dokumentacija putovali kao necommitana TROJKA.
    */
   it('suti kad nijedna commitana datoteka ne trazi nov simbol', () => {
     const nalazi = findOrphans(
-      [{ file: 'src/analysis/heading-structure.ts', symbols: ['looksLikeBibliographyEntry', 'looksLikeTitlePageLabel'] }],
+      [{ file: 'src/analysis/heading-structure.ts', symbols: ['looksLikeBibliographyEntry'] }],
       repoOf({}),
     );
     expect(nalazi).toEqual([]);
@@ -91,7 +142,7 @@ describe('orphan-scan: presuda', () => {
   it('izuzima datoteku iz koje simbol potjece', () => {
     const nalazi = findOrphans(
       [{ file: 'src/ui/repair-panel.ts', symbols: ['buildOutcomeLine'] }],
-      repoOf({ buildOutcomeLine: ['src/ui/repair-panel.ts'] }),
+      repoOf({ 'src/ui/repair-panel.ts': "import { buildOutcomeLine } from './negdje';" }),
     );
     expect(nalazi).toEqual([]);
   });
