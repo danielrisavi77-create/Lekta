@@ -48,6 +48,8 @@ export type ViolatableCheckId = (typeof VIOLATABLE_CHECK_IDS)[number];
  *                     od 74 stvarna FPZG rada.
  * - `link-doi`        goli DOI bez kanonskog oblika i bez hiperveze -> `link-doi-fixer`.
  *                     Univerzalna; na stvarnim FPZG radovima promijenila 14 od 74.
+ * - `heading-style`   odlomci koji IZGLEDAJU kao naslovi (numeriran prefiks, podebljano, veci
+ *                     font) ali nemaju Word Heading stil -> `heading-style-fixer`. Univerzalna.
  *
  * Zasto bas univerzalne: izmjereno je da su PROFILNE strukturne osi tanke (`footnoteFont` ima 50
  * profila od 407, `headingRules` 21, ostale 4 do 12), dok univerzalni fixer vrijedi za svih 407,
@@ -58,6 +60,7 @@ export const STRUCTURAL_VIOLATION_IDS = [
   'empty-paragraphs',
   'croatian-typography',
   'link-doi',
+  'heading-style',
 ] as const;
 export type StructuralViolationId = (typeof STRUCTURAL_VIOLATION_IDS)[number];
 
@@ -216,8 +219,31 @@ export async function buildViolatingDocx(
      * zapise na goli Enter. Dva uzastopna, jer jedan prazan odlomak izmedju odlomaka nije nalaz
      * nego uobicajen razmak; nalaz je nakupina.
      */
+    /**
+     * `empty-paragraphs`: dva NIZA praznih odlomaka usred pristojno dugog tijela rada.
+     *
+     * Oblik nije proizvoljan, nego izveden iz dva ugovora koja se sudaraju:
+     *
+     *   nalaz opali tek kad prazni odlomci cine >=18% dokumenta,
+     *   a `empty-paragraph-fixer` NAMJERNO zadrzava po jedan razmak iz svakog niza.
+     *
+     * IZMJERENO 2026-08-30 na prijasnjem obliku (dva prazna odlomka, tijelo od cetiri): prije
+     * popravka 2 od 6 (33%), poslije 1 od 5 (20%), dakle i dalje iznad praga, pa se petlja nikad
+     * nije zatvarala. Uz sve osi je bilo jos gore: 2 od 12 (17%) znaci da se fixer ne bi ni
+     * ponudio, pa je test prolazio samo dok je dokument slucajno bio prave velicine.
+     *
+     * Tijelo se zato produljuje: jedan zaostao razmak u dovoljno dugom radu pada ispod praga, sto
+     * je i realnije od cetiri odlomka. Prag se NE mijenja; mijenja se dokument, jer je prag bio
+     * tocan a dokument nereprezentativan.
+     */
     if (wants(structural, 'empty-paragraphs')) {
-      paragraphs.push({ empty: true }, { empty: true }, { ...para, text: 'Zakljucni odlomak tijela rada.' });
+      for (let i = 1; i <= 6; i += 1) {
+        paragraphs.push({ ...para, text: `Odlomak tijela rada broj ${i}, dovoljne duljine da dokument bude reprezentativan.` });
+      }
+      paragraphs.push({ empty: true }, { empty: true }, { empty: true });
+      paragraphs.push({ ...para, text: 'Odlomak izmedju dva niza praznih odlomaka.' });
+      paragraphs.push({ empty: true }, { empty: true }, { empty: true });
+      paragraphs.push({ ...para, text: 'Zakljucni odlomak tijela rada.' });
       violated.push('empty-paragraphs');
     }
 
@@ -243,6 +269,28 @@ export async function buildViolatingDocx(
     if (wants(structural, 'link-doi')) {
       paragraphs.push({ ...para, text: 'Izvor je dostupan pod doi:10.1234/lekta.2026.001 u repozitoriju.' });
       violated.push('link-doi');
+    }
+
+    /**
+     * `heading-style`: rucno oblikovan naslov bez Word Heading stila.
+     *
+     * Bodovanje kandidata (`src/analysis/heading-structure.ts`) trazi 7 bodova za `high`, a `high`
+     * je uvjet za `selectedByDefault`. Ovdje se skuplja 11: numeriran prefiks (+5), kratak odlomak
+     * (+2), vecina teksta podebljana (+2) i font veci od dominantnog (+2). Rezerva je namjerna, da
+     * os ne postane osjetljiva na sitnu promjenu praga.
+     *
+     * Naslov NE dobiva `styleId`, jer je upravo izostanak Heading stila ono sto se krsi: takav
+     * odlomak Word ne vidi kao naslov, pa ne ulazi ni u sadrzaj ni u navigaciju.
+     */
+    if (wants(structural, 'heading-style')) {
+      paragraphs.push({
+        ...para,
+        text: '3. Rezultati istrazivanja',
+        bold: true,
+        sizePt: (sizeTarget ?? 12) + 2,
+      });
+      paragraphs.push({ ...para, text: 'Odlomak tijela ispod rucno oblikovanog naslova.' });
+      violated.push('heading-style');
     }
   }
 

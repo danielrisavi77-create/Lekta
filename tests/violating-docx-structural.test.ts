@@ -82,9 +82,23 @@ describe('generator krsenja: strukturne osi', () => {
     expect(after.details?.hasTocField).toBe(true);
   });
 
-  it('empty-paragraphs: prazni odlomci ulaze u nalaz i popravak ih uklanja', async () => {
+  /**
+   * OBJE KONFIGURACIJE, i to je srz tvrdnje.
+   *
+   * Krhkost je bila upravo u tome da os radi u jednoj konfiguraciji a ne u drugoj. Nalaz opali tek
+   * kad prazni odlomci cine >=18% dokumenta, a `empty-paragraph-fixer` NAMJERNO zadrzava po jedan
+   * razmak iz svakog niza. Prijasnji oblik (dva prazna odlomka, tijelo od cetiri) davao je
+   * izolirano 33% -> 20%, dakle i dalje iznad praga, a uz sve osi 17%, dakle ispod praga pa se
+   * fixer ne bi ni ponudio. Test je prolazio samo dok je dokument slucajno bio prave velicine.
+   *
+   * Zato se mjeri i sama os i puni skup: jedna konfiguracija ne dokazuje drugu.
+   */
+  it.each([
+    ['sama os', ['empty-paragraphs'] as const],
+    ['sve strukturne osi', true as const],
+  ])('empty-paragraphs (%s): nalaz opali, popravak ga zatvori', async (_label, structural) => {
     const profile = resolveProfile(PROFILE_ID) as Record<string, unknown>;
-    const { bytes, violated } = await buildViolatingDocx(profile, { structural: true });
+    const { bytes, violated } = await buildViolatingDocx(profile, { structural: structural as never });
     expect(violated).toContain('empty-paragraphs');
 
     const before = await analyze(bytes, PROFILE_ID, profile);
@@ -171,5 +185,46 @@ describe('matchKeys: nijedan mrtav kljuc bez izricite iznimke', () => {
 
   it('popis iznimaka se ne smije siriti u tisini', () => {
     expect([...BEZ_IJEDNOG_ZIVOG_KLJUCA].sort()).toEqual(['consistency-fixer', 'final-document-inspector-fixer']);
+  });
+});
+
+/**
+ * `heading-style`: rucno oblikovan naslov bez Word Heading stila.
+ *
+ * Ova os je mjerljiva, za razliku od `consistency` i `final-document-inspector`, koji nemaju
+ * nijedan ziv `matchKey`: `heading-style-fixer` gadja provjere "Uporaba Word stilova naslova" i
+ * "Hijerarhija naslova", pa se njegov ucinak moze pripisati rijesenoj provjeri.
+ */
+describe('generator krsenja: heading-style', () => {
+  it('rucno oblikovan naslov ulazi u nalaz i fixer mu daje Heading stil', async () => {
+    const profile = resolveProfile(PROFILE_ID) as Record<string, unknown>;
+    const { bytes, violated } = await buildViolatingDocx(profile, { structural: ['heading-style'] });
+    expect(violated).toContain('heading-style');
+
+    const before = await analyze(bytes, PROFILE_ID, profile);
+    const candidates = (before.details as any)?.headingStructure?.candidates ?? [];
+    const target = candidates.find((c: any) => String(c.text).startsWith('3. Rezultati'));
+    expect(target, 'rucno oblikovan naslov mora biti prepoznat kao kandidat').toBeDefined();
+    // Prag za predodabir je `score >= 7`; generator cilja 11, pa tvrdnja drzi i rezervu.
+    expect(target.confidence).toBe('high');
+    expect(target.selectedByDefault).toBe(true);
+
+    const item = itemsFor(before, profile, PROFILE_ID).find((i) => i.fixerId === 'heading-style-fixer');
+    expect(item, 'heading-style-fixer mora biti ponudjen').toBeDefined();
+    const targets = (item!.params as any)?.targets ?? [];
+    expect(targets.length, 'params.targets ne smije biti prazan').toBeGreaterThan(0);
+    // Sidro protiv zastarjele mete mora biti poslano, inace ga INDEX_SHIFTING fixer tiho premjesti.
+    expect(targets.every((t: any) => typeof t.anchorText === 'string' && t.anchorText.length)).toBe(true);
+
+    const out = await applyFixers(bytes, [
+      { fixerId: 'heading-style-fixer', ruleId: item!.ruleId, params: item!.params },
+    ] as never);
+    expect(out.integrityFailure).toBeUndefined();
+    expect(out.changelog.length).toBeGreaterThan(0);
+
+    // Petlja se zatvara nad ponovnom ANALIZOM, ne nad XML-om: naslov mora postati pravi naslov.
+    const after = await analyze(out.docxBytes, PROFILE_ID, profile);
+    const headings = (after.documentStructure?.headings ?? []) as Array<{ text: string }>;
+    expect(headings.some((h) => String(h.text).includes('Rezultati'))).toBe(true);
   });
 });
