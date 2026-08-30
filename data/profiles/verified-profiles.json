@@ -4643,6 +4643,10 @@
       {
         "title": "Sveučilišni diplomski studij Socijalni rad – postupak obrane",
         "url": "https://www.pravo.unizg.hr/studiji/diplomski-studiji/sveucilisni-diplomski-studij-socijalni-rad/"
+      },
+      {
+        "title": "Upute za izradu diplomskog rada iz socijalnih djelatnosti - Socijalni rad i socijalna politika",
+        "url": "https://www.pravo.unizg.hr/wp-content/uploads/2023/02/Upute_za_izradu_diplomskog_rada_2021-22_1.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -4951,6 +4955,10 @@
       {
         "title": "Sveučilišni diplomski studij Socijalni rad – postupak obrane",
         "url": "https://www.pravo.unizg.hr/studiji/diplomski-studiji/sveucilisni-diplomski-studij-socijalni-rad/"
+      },
+      {
+        "title": "Upute za izradu diplomskog rada iz socijalnih djelatnosti - Socijalni rad i socijalna politika",
+        "url": "https://www.pravo.unizg.hr/wp-content/uploads/2023/02/Upute_za_izradu_diplomskog_rada_2021-22_1.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -7100,7 +7108,13 @@
       "Diplomski rad treba imati propisane cjeline: naslovnica, sažetak, sadržaj, uvod, poglavlja sredisnjeg dijela, zaključak, popis literature, popis slika, popis tablica, prilozi, životopis (imperativ).",
       "Opseg u pravilu iznosi 40 do 60 stranica teksta A4 formata, a citiranje po sustavu autor-godina (harvardski ili APA) formulirano je kao preporuka (advisory)."
     ],
-    "note": "NADOGRADJEN 2026-07-03: prebacen s advisory Uputa 2003 na noviji IMPERATIVNI Pravilnik o izradi pisanih radova na diplomskim studijima (EFZG, pročišćeni tekst, ozujak 2012). Tehničko oblikovanje je scored: 'Margine stranica trebaju biti 2,5 cm sa svih strana ... Prored teksta treba biti 1,5, poravnanje na obje strane, tipografija Times New Roman ili Arial, veličina slova 12.' Struktura ('treba imati sljedeće dijelove') je scored. Opseg 40-60 str ('u pravilu'), A4 i citatni stil ('Preporučuje se ... autor-godina, harvardskim ili APA stilom') su advisory; efektivni stil je autor-godina (harvard) pa je citation 100. Skenirani izvor, doslovni citati OCR-om (scripts/ocr_pdf.py). Scored pravila su owner-bulk-approval i cekaju ljudski audit (scripts/approve-profile.mjs efzg-diplomski)."
+    "note": "NADOGRADJEN 2026-07-03: prebacen s advisory Uputa 2003 na noviji IMPERATIVNI Pravilnik o izradi pisanih radova na diplomskim studijima (EFZG, pročišćeni tekst, ozujak 2012). Tehničko oblikovanje je scored: 'Margine stranica trebaju biti 2,5 cm sa svih strana ... Prored teksta treba biti 1,5, poravnanje na obje strane, tipografija Times New Roman ili Arial, veličina slova 12.' Struktura ('treba imati sljedeće dijelove') je scored. Opseg 40-60 str ('u pravilu'), A4 i citatni stil ('Preporučuje se ... autor-godina, harvardskim ili APA stilom') su advisory; efektivni stil je autor-godina (harvard) pa je citation 100. Skenirani izvor, doslovni citati OCR-om (scripts/ocr_pdf.py). Scored pravila su owner-bulk-approval i cekaju ljudski audit (scripts/approve-profile.mjs efzg-diplomski).",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi pisanih radova na diplomskim studijima (Ekonomski fakultet u Zagrebu, 2012, procisceni tekst)",
+        "url": "https://www.efzg.unizg.hr/UserDocsImages//pravni_okvir/pravlinki_diplomski2012.pdf"
+      }
+    ]
   },
   {
     "id": "fsb-diplomski",
@@ -7889,7 +7903,17 @@
       "Opseg znanstveno-istraživačkog diplomskog rada ne smije biti manji od 4000 riječi (15 kartica), a strucnog od 6000 riječi (25 kartica) (imperativ).",
       "Struktura se granata: eksperimentalni diplomski rad (Uvod, Ciljevi i hipoteze, Metode, Rezultati, Rasprava, Zaključak, Literatura, Prilozi) i teorijski/strucni (Uvod, Razrada teme, Zaključak, Literatura, Prilozi)."
     ],
-    "note": "Sveučilišni integrirani prijediplomski i diplomski studij Kineziologija te stručni diplomski studij Izobrazba trenera; diplomski i specijalistički diplomski rad. Tehničko oblikovanje je u Uputama imperativno ('radi se oblikovanje prema sljedeim uputama') pa je scored. Obostrano poravnanje potvreno izvorom i vozi se kroz rules.checkJustify (checkId 'justify' nije u COMPILED_CHECK_IDS pa nije zaseban scored ruleEntry). word-count postavljen na univerzalni minimum 4000 riječi (znanstveni diplomski); stručni ima visi prag 6000 riječi pa je varijanta za ljudski pregled. Required-sections su advisory zbog granate strukture. A4 i opseg u stranicama izvor ne navodi pa su izostavljeni."
+    "note": "Sveučilišni integrirani prijediplomski i diplomski studij Kineziologija te stručni diplomski studij Izobrazba trenera; diplomski i specijalistički diplomski rad. Tehničko oblikovanje je u Uputama imperativno ('radi se oblikovanje prema sljedeim uputama') pa je scored. Obostrano poravnanje potvreno izvorom i vozi se kroz rules.checkJustify (checkId 'justify' nije u COMPILED_CHECK_IDS pa nije zaseban scored ruleEntry). word-count postavljen na univerzalni minimum 4000 riječi (znanstveni diplomski); stručni ima visi prag 6000 riječi pa je varijanta za ljudski pregled. Required-sections su advisory zbog granate strukture. A4 i opseg u stranicama izvor ne navodi pa su izostavljeni.",
+    "sources": [
+      {
+        "title": "Prilog 1. Upute za oblikovanje diplomskog rada (Kinezioloski fakultet Sveucilista u Zagrebu)",
+        "url": "https://www.kif.unizg.hr/_download/repository/Upute_-_diplomski_rad%5B1%5D.pdf"
+      },
+      {
+        "title": "Upute za izradu diplomskog/specijalistickog diplomskog rada (Kinezioloski fakultet Sveucilista u Zagrebu, 2023)",
+        "url": "https://www.kif.unizg.hr/_download/repository/Kinezioloski-upute-diplomskizavrsni-rad.pdf"
+      }
+    ]
   },
   {
     "id": "sumfak-diplomski",
@@ -9777,6 +9801,10 @@
       {
         "title": "Upute za prijavu, izradbu i obranu zavrsnog i diplomskog rada (FPZ, 2018)",
         "url": "http://static.fpz.hr/assets/datoteke/Upute-za-izradu-zavrsnog-i-diplomskog-rada.pdf"
+      },
+      {
+        "title": "Upute za prijavu, izradu i obranu zavrsnog i diplomskog rada (Fakultet prometnih znanosti, 2026, azurirano 5.3.2026)",
+        "url": "https://www.fpz.unizg.hr/file/688510c810f19a8a9eead0c69e01a3c7.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -9953,6 +9981,10 @@
       {
         "title": "Upute za prijavu, izradbu i obranu zavrsnog i diplomskog rada (FPZ, 2018)",
         "url": "http://static.fpz.hr/assets/datoteke/Upute-za-izradu-zavrsnog-i-diplomskog-rada.pdf"
+      },
+      {
+        "title": "Upute za prijavu, izradu i obranu zavrsnog i diplomskog rada (Fakultet prometnih znanosti, 2026, azurirano 5.3.2026)",
+        "url": "https://www.fpz.unizg.hr/file/688510c810f19a8a9eead0c69e01a3c7.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -18148,6 +18180,10 @@
       {
         "title": "Pravilnik o zavrsnom radu (FFRI, 2023)",
         "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)",
+        "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -25323,6 +25359,10 @@
       {
         "title": "Pravilnik o zavrsnom i diplomskom radu (Veleuciliste u Rijeci, 4.3.2025)",
         "url": "https://www.veleri.hr/sites/default/files/2025-11/1._Pravilnik_o_zavrsnom_i_diplomskom_radu.pdf"
+      },
+      {
+        "title": "Upute za formalni izgled završnog i diplomskog rada Veleučilišta u Rijeci",
+        "url": "https://www.veleri.hr/sites/default/files/2023-01/upute-za-formalni-izgled-zavrsnog-i-diplomskog-rada-veleucilista-u-rijeci_0_0.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -25451,6 +25491,10 @@
       {
         "title": "Pravilnik o zavrsnom i diplomskom radu (Veleuciliste u Rijeci, 4.3.2025)",
         "url": "https://www.veleri.hr/sites/default/files/2025-11/1._Pravilnik_o_zavrsnom_i_diplomskom_radu.pdf"
+      },
+      {
+        "title": "Upute za formalni izgled završnog i diplomskog rada Veleučilišta u Rijeci",
+        "url": "https://www.veleri.hr/sites/default/files/2023-01/upute-za-formalni-izgled-zavrsnog-i-diplomskog-rada-veleucilista-u-rijeci_0_0.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -25635,6 +25679,10 @@
       {
         "title": "Prilog 2 - Predlozak za pisanje zavrsnog rada, tehnicki i interdisciplinarni tehnicki studiji (MEV)",
         "url": "https://www.mev.hr/wp-content/uploads/2025/06/Predlozak-za-pisanje-zavrsnog-rada-tehnicki-interdisciplinarni-tehnicki-studiji.dotx"
+      },
+      {
+        "title": "Upute za izradu završnog rada (Međimursko veleučilište u Čakovcu, Prilog 3)",
+        "url": "https://www.mev.hr/wp-content/uploads/2013/12/Prilog-3-Upute-za-izradu-zavr%C5%A1nog-rada.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -25942,6 +25990,10 @@
       {
         "title": "Prilog 4 - Upute za izradu zavrsnog/diplomskog rada (Veleuciliste Lavoslav Ruzicka u Vukovaru)",
         "url": "https://www.vevu.hr/wp-content/uploads/2023/02/P-r-i-l-o-g-4-UPUTE.docx"
+      },
+      {
+        "title": "Prilog 4 - Upute za izradu završnog rada (Veleučilište Lavoslav Ružička u Vukovaru)",
+        "url": "http://www.vevu.hr/uploads/50Prilog-4-Upute-za-izradu-zavrsnog-rada.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -26280,6 +26332,10 @@
       {
         "title": "Upute za izradu zavrsnog/diplomskog rada (Veleuciliste Marko Marulic u Kninu, sijecanj 2024)",
         "url": "https://www.veleknin.hr/wp-content/uploads/2024/02/Upute-za-za-izradu-zavrsnog-ili-diplomskog-rada.doc"
+      },
+      {
+        "title": "Upute za izradu i obranu završnog rada (Veleučilište Marko Marulić u Kninu, 2020)",
+        "url": "https://www.veleknin.hr/wp-content/uploads/2023/12/uputezaizraduiobranuzavrnograda.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -27127,6 +27183,14 @@
       {
         "title": "Pravilnik o zavrsnom radu (FFRI, 2023)",
         "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf"
+      },
+      {
+        "title": "Upute za izradu zavrsnog/diplomskog rada (Odsjek za povijest umjetnosti, FFRI)",
+        "url": "https://ffri.uniri.hr/files/dokumentiodsjeka/PU/Upute-zavrsni.pdf (zavrsni) / Upute-diplomski.pdf (diplomski)"
+      },
+      {
+        "title": "Pravilnik o zavrsnom radu (FFRI, izmjena, na snazi od 6.2.2026)",
+        "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2026.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -27240,6 +27304,10 @@
       {
         "title": "Pravilnik o diplomskom radu (FFRI, 2023)",
         "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_diplomskom_radu-2023.pdf"
+      },
+      {
+        "title": "Upute za izradu zavrsnog/diplomskog rada (Odsjek za povijest umjetnosti, FFRI)",
+        "url": "https://ffri.uniri.hr/files/dokumentiodsjeka/PU/Upute-zavrsni.pdf (zavrsni) / Upute-diplomski.pdf (diplomski)"
       }
     ],
     "sourceHierarchy": [
@@ -27463,6 +27531,10 @@
       {
         "title": "Upute za pisanje zavrsnih i diplomskih radova (Znanost o moru, Fakultet prirodnih znanosti u Puli)",
         "url": "https://www.unipu.hr/fileadmin/datoteke/Znanost_o_moru/Vazni_dokumenti/Upute_za_pisanje_zavrsnih_i_diplomskih_radova_ZOM.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom radu i zavrsnom koncertu na (pred)diplomskim sveucilisnim i strucnim studijima, procisceni tekst 30.9.2019 (Sveuciliste Jurja Dobrile u Puli)",
+        "url": "https://www.unipu.hr/_download/repository/2019-09-30-Pravilnik_o_zavrsnom_radu-zavrsnom_koncertu-procisceni_tekst.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -27571,6 +27643,10 @@
       {
         "title": "Upute za pisanje zavrsnih i diplomskih radova (Znanost o moru, Fakultet prirodnih znanosti u Puli)",
         "url": "https://www.unipu.hr/fileadmin/datoteke/Znanost_o_moru/Vazni_dokumenti/Upute_za_pisanje_zavrsnih_i_diplomskih_radova_ZOM.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom radu i zavrsnom koncertu na (pred)diplomskim sveucilisnim i strucnim studijima, procisceni tekst 30.9.2019 (Sveuciliste Jurja Dobrile u Puli)",
+        "url": "https://www.unipu.hr/_download/repository/2019-09-30-Pravilnik_o_zavrsnom_radu-zavrsnom_koncertu-procisceni_tekst.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -27679,6 +27755,10 @@
       {
         "title": "Upute za pisanje zavrsnoga/diplomskoga rada (Filozofski fakultet u Splitu)",
         "url": "https://www.ffst.unist.hr/_download/repository/UPUTE%20ZA%20PISANJE%20ZAVRSNOGA-DIPLOMSKOGA%20RADA%20-%20final.docx"
+      },
+      {
+        "title": "Predlozak zavrsnoga/diplomskoga rada, final (Filozofski fakultet u Splitu)",
+        "url": "https://www.ffst.unist.hr/_download/repository/PREDLOZAK%20ZAVRSNOGA-DIPLOMSKOGA%20RADA%20-%20final.docx"
       }
     ],
     "sourceHierarchy": [
@@ -27781,6 +27861,10 @@
       {
         "title": "Upute za pisanje zavrsnoga/diplomskoga rada (Filozofski fakultet u Splitu)",
         "url": "https://www.ffst.unist.hr/_download/repository/UPUTE%20ZA%20PISANJE%20ZAVRSNOGA-DIPLOMSKOGA%20RADA%20-%20final.docx"
+      },
+      {
+        "title": "Predlozak zavrsnoga/diplomskoga rada, final (Filozofski fakultet u Splitu)",
+        "url": "https://www.ffst.unist.hr/_download/repository/PREDLOZAK%20ZAVRSNOGA-DIPLOMSKOGA%20RADA%20-%20final.docx"
       }
     ],
     "sourceHierarchy": [
@@ -27883,6 +27967,10 @@
       {
         "title": "Pravilnik o izradi i obrani zavrsnog rada na prediplomskim studijima (FESB, 2019)",
         "url": "https://data.fesb.unist.hr/public/documents/general_curriculum/1_Pravilnik%20o%20izradi%20i%20obrani%20zavr%C5%A1nog%20rada%20na%20prediplomskim%20studijama_2019-04-17.pdf"
+      },
+      {
+        "title": "Upute za pisanje zavrsnog rada (FESB, u sklopu Dokumentacije za izradu zavrsnih radova)",
+        "url": "https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_zavrsnih_radova.zip (Upute za pisanje zavrsnog rada.doc)"
       }
     ],
     "sourceHierarchy": [
@@ -27940,6 +28028,10 @@
       {
         "title": "Pravilnik o izradi i obrani diplomskog rada (FESB, 2013)",
         "url": "https://data.fesb.unist.hr/public/documents/general_curriculum/4_Pravilnik%20o%20izradi%20i%20obrani%20diplomskog%20rad_2013-03-29.pdf"
+      },
+      {
+        "title": "Upute za pisanje diplomskog rada (FESB, u sklopu Dokumentacije za izradu diplomskih radova)",
+        "url": "https://data.fesb.unist.hr/public/documents/merlin/Dokumentacija_za_izradu_diplomskih_radova.zip (Upute za pisanje diplomskog rada.doc)"
       }
     ],
     "sourceHierarchy": [
@@ -28814,6 +28906,10 @@
       {
         "title": "Pravilnik o zavrsnim i diplomskim radovima i ispitu (FFOS)",
         "url": "https://www.ffos.unios.hr/wp-content/uploads/2022/03/Pravilnik-o-zavrsnim-i-diplomskim-radovima-i-ispitu.pdf"
+      },
+      {
+        "title": "Upute za izradu zavrsnih/diplomskih radova, srpanj 2025 (Odsjek za njemacki jezik i knjizevnost, FFOS)",
+        "url": "https://www.ffos.unios.hr/wp-content/uploads/2025/07/upute-za-izradu-zavrsnih-radova-germanistika_srpanj-2025.pdf (zavrsni) / .../upute-za-izradu-diplomskih-radova-germanistika_srpanj-2025.pdf (diplomski)"
       }
     ],
     "sourceHierarchy": [
@@ -28928,6 +29024,10 @@
       {
         "title": "Upute za izradu diplomskoga rada (FFOS)",
         "url": "https://www.ffos.unios.hr/download/upute-za-izradu-diplomskoga-rada.docx"
+      },
+      {
+        "title": "Upute za izradu zavrsnih/diplomskih radova, srpanj 2025 (Odsjek za njemacki jezik i knjizevnost, FFOS)",
+        "url": "https://www.ffos.unios.hr/wp-content/uploads/2025/07/upute-za-izradu-zavrsnih-radova-germanistika_srpanj-2025.pdf (zavrsni) / .../upute-za-izradu-diplomskih-radova-germanistika_srpanj-2025.pdf (diplomski)"
       }
     ],
     "sourceHierarchy": [
@@ -29036,6 +29136,10 @@
       {
         "title": "Pravilnik o zavrsnim i diplomskim radovima i ispitima (Akademija za umjetnost i kulturu u Osijeku, veljaca 2024)",
         "url": "http://www.uaos.unios.hr/wp-content/uploads/2024/04/Pravilnik-o-zavr%C5%A1nim-i-diplomskim-radovima-i-ispitima-2024.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnim i diplomskim radovima i ispitima, procisceni tekst srpanj 2026 (Akademija za umjetnost i kulturu u Osijeku)",
+        "url": "https://www.uaos.unios.hr/wp-content/uploads/2026/07/Pravilnik-o-zavrs%CC%8Cnim-i-diplomskim-radovima-i-ispitima-srpanj-26.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -29141,6 +29245,10 @@
       {
         "title": "Pravilnik o zavrsnim i diplomskim radovima i ispitima (Akademija za umjetnost i kulturu u Osijeku, veljaca 2024)",
         "url": "http://www.uaos.unios.hr/wp-content/uploads/2024/04/Pravilnik-o-zavr%C5%A1nim-i-diplomskim-radovima-i-ispitima-2024.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnim i diplomskim radovima i ispitima, procisceni tekst srpanj 2026 (Akademija za umjetnost i kulturu u Osijeku)",
+        "url": "https://www.uaos.unios.hr/wp-content/uploads/2026/07/Pravilnik-o-zavrs%CC%8Cnim-i-diplomskim-radovima-i-ispitima-srpanj-26.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -30227,6 +30335,10 @@
       {
         "title": "Kratki vodic kroz citiranje i referenciranje (Harvard; delegirano iz Uputa EAA)",
         "url": "https://www.unizd.hr/Portals/45/Citiranje%20i%20referenciranje.pdf"
+      },
+      {
+        "title": "Upute za pisanje zavrsnog/diplomskog rada (Odjel za ekologiju, agronomiju i akvakulturu, Sveuciliste u Zadru)",
+        "url": "https://eaa.unizd.hr LinkClick (dva zasebna dokumenta: diplomski + zavrsni)"
       }
     ],
     "sourceHierarchy": [
@@ -30325,6 +30437,10 @@
       {
         "title": "Prilog 2: Upute za pisanje diplomskog rada (Odjel za ekologiju, agronomiju i akvakulturu)",
         "url": "https://www.unizd.hr/Portals/1/upute%20diplomski_1.pdf"
+      },
+      {
+        "title": "Upute za pisanje zavrsnog/diplomskog rada (Odjel za ekologiju, agronomiju i akvakulturu, Sveuciliste u Zadru)",
+        "url": "https://eaa.unizd.hr LinkClick (dva zasebna dokumenta: diplomski + zavrsni)"
       }
     ],
     "sourceHierarchy": [
@@ -30608,6 +30724,10 @@
       {
         "title": "Pravilnik o izradi i obrani zavrsnog rada, preddiplomski studij Sestrinstvo (Odjel za zdravstvene studije, 2022)",
         "url": "https://www.unizd.hr/Portals/23/doc/aaaa2022-23/2022_Pravilnik%20o%20izradi%20%20i%20obrani%20zavrsnog%20rada.pdf"
+      },
+      {
+        "title": "Pravilnik o izradi i obrani zavrsnog/diplomskog rada, 30.9.2022 (Odjel za zdravstvene studije, Sveuciliste u Zadru)",
+        "url": "https://www.unizd.hr/Portals/23/doc/aaaa2022-23/ (zavrsni i diplomski, zasebni PDF-ovi)"
       }
     ],
     "sourceHierarchy": [
@@ -30695,6 +30815,10 @@
       {
         "title": "Pravilnik o izradi i obrani diplomskog rada, diplomski studij Sestrinstvo (Odjel za zdravstvene studije, 2022)",
         "url": "https://www.unizd.hr/Portals/23/doc/aaaa2022-23/2022_Pravilnik%20o%20izradi%20i%20obrani%20diplomskog%20rada.pdf"
+      },
+      {
+        "title": "Pravilnik o izradi i obrani zavrsnog/diplomskog rada, 30.9.2022 (Odjel za zdravstvene studije, Sveuciliste u Zadru)",
+        "url": "https://www.unizd.hr/Portals/23/doc/aaaa2022-23/ (zavrsni i diplomski, zasebni PDF-ovi)"
       }
     ],
     "sourceHierarchy": [
@@ -30787,6 +30911,10 @@
       {
         "title": "Upute za citiranje (Odjel za informacijske znanosti)",
         "url": "https://iz.unizd.hr/Portals/70/docs_novi_web_1/2_docs/citiranje/Upute_za_Citiranje_FINAL_za_objavu_na_webu.pdf"
+      },
+      {
+        "title": "Upute za pisanje i oblikovanje diplomskog/zavrsnog rada, 24.1.2020 (Odjel za informacijske znanosti i tehnologije, Sveuciliste u Zadru)",
+        "url": "https://iz.unizd.hr/Portals/70/docs_novi_web_1/2_docs/upute%20za%20radove/ (dva zasebna dokumenta)"
       }
     ],
     "sourceHierarchy": [
@@ -30881,6 +31009,10 @@
       {
         "title": "Upute za citiranje (Odjel za informacijske znanosti)",
         "url": "https://iz.unizd.hr/Portals/70/docs_novi_web_1/2_docs/citiranje/Upute_za_Citiranje_FINAL_za_objavu_na_webu.pdf"
+      },
+      {
+        "title": "Upute za pisanje i oblikovanje diplomskog/zavrsnog rada, 24.1.2020 (Odjel za informacijske znanosti i tehnologije, Sveuciliste u Zadru)",
+        "url": "https://iz.unizd.hr/Portals/70/docs_novi_web_1/2_docs/upute%20za%20radove/ (dva zasebna dokumenta)"
       }
     ],
     "sourceHierarchy": [
@@ -30977,6 +31109,10 @@
       {
         "title": "Pravilnik o zavrsnom radu na preddiplomskom studiju arheologije (2016)",
         "url": "https://www.unizd.hr/Portals/2/doc/PRAVILNIK_O_ZAVRSNOM_RADU_Arheologija.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom/diplomskom radu, listopad 2016 (Odjel za arheologiju, Sveuciliste u Zadru)",
+        "url": "https://www.unizd.hr/Portals/2/doc/PRAVILNIK_O_ZAVRSNOM_RADU_Arheologija.pdf (zavrsni) / arheologija.unizd.hr .../PRAVILNIK - dIPLOMSKI rad_1.pdf (diplomski)"
       }
     ],
     "sourceHierarchy": [
@@ -31074,6 +31210,10 @@
       {
         "title": "Pravilnik o zavrsnom radu na preddiplomskom studiju arheologije (2016)",
         "url": "https://www.unizd.hr/Portals/2/doc/PRAVILNIK_O_ZAVRSNOM_RADU_Arheologija.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom/diplomskom radu, listopad 2016 (Odjel za arheologiju, diplomski primjerak)",
+        "url": "https://arheologija.unizd.hr/.../PRAVILNIK - dIPLOMSKI rad_1.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -31450,6 +31590,10 @@
       {
         "title": "Upute za izradu zavrsnog rada (Odjel za filozofiju, Zadar)",
         "url": "https://filozofija.unizd.hr/novosti/upute-za-izradu-zavrsnog-rada"
+      },
+      {
+        "title": "Preporuke Strucnog vijeca Odjela za filozofiju o izgledu i opsegu diplomskog rada",
+        "url": "https://filozofija.unizd.hr/novosti/upute-za-izradu-diplomskog-rada"
       }
     ],
     "sourceHierarchy": [
@@ -31707,6 +31851,10 @@
       {
         "title": "Pravilnik o izradi diplomskog rada (Odjel za germanistiku, 2017)",
         "url": "https://germanistika.unizd.hr/Portals/9/zdoc/Diplomski%20rad%20Pravilnik-%202017.pdf"
+      },
+      {
+        "title": "Pravilnik o izradi zavrsnog rada na dvopredmetnom preddiplomskom studiju njemackog jezika i knjizevnosti",
+        "url": "https://germanistika.unizd.hr/Portals/9/zdoc/Pravilnik_%20Zavrsni%20rad_2020.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -31901,6 +32049,10 @@
       {
         "title": "Upute za izradu diplomskog rada, Diplomski studij hispanistike (2022/23)",
         "url": "https://www.unizd.hr/Portals/72/ZAVR%C5%A0NI%20I%20DIPLOMSKI/Upute_za_izradu_diplomskog_rada_2022-23-izmjena.pdf"
+      },
+      {
+        "title": "Upute za izradu diplomskog rada (Hispanistika i iberski studiji)",
+        "url": "https://his.unizd.hr/Portals/72/ZAVR%C5%A0NI%20I%20DIPLOMSKI/Upute%20za%20izradu%20diplomskog%20rada%202022-23-izmjena.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -32088,6 +32240,10 @@
       {
         "title": "Upute za pisanje diplomskog rada (Odjel za povijest, 2012)",
         "url": "https://povijest.unizd.hr/Portals/3/Dokumenti/10_DIPLOMSKI_Diplomski_rad_Upute_za_pisanje_2012__1_.pdf"
+      },
+      {
+        "title": "Upute za pisanje zavrsnog/diplomskog rada",
+        "url": "https://povijest.unizd.hr/Portals/3/Dokumenti/05_PREDDIPLOMSKI_Zavrsni%20rad_Upute_za_pisanje_2012%20(1).pdf (zavrsni) / 10_DIPLOMSKI_... (diplomski)"
       }
     ],
     "sourceHierarchy": [
@@ -32184,6 +32340,10 @@
       {
         "title": "Upute za pisanje diplomskog rada (Odjel za povijest, 2012)",
         "url": "https://povijest.unizd.hr/Portals/3/Dokumenti/10_DIPLOMSKI_Diplomski_rad_Upute_za_pisanje_2012__1_.pdf"
+      },
+      {
+        "title": "Upute za pisanje diplomskog rada",
+        "url": "https://povijest.unizd.hr/Portals/3/Dokumenti/10_DIPLOMSKI_Diplomski%20rad_Upute_za_pisanje_2012%20(1).pdf"
       }
     ],
     "sourceHierarchy": [
@@ -32459,6 +32619,10 @@
       {
         "title": "Upute za prijavu diplomskog rada (Odjel za sociologiju, administrativne)",
         "url": "https://sociologija.unizd.hr/Portals/13/Diplomski%2020%2021%20VBarada_1.docx"
+      },
+      {
+        "title": "Upute za prijavu i izradu diplomskoga rada",
+        "url": "https://www.unizd.hr/Portals/13/NASTAVNI_MATERIJALI/Upute%20DipR%202014%20cultsoc.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -32771,7 +32935,12 @@
     },
     "facts": [],
     "note": "Odjel ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na odjelnim stranicama). Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
-    "sources": [],
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnog rada (Pomorski odjel, Sveuciliste u Zadru)",
+        "url": "https://pomorskiodjel.unizd.hr/Portals/1/Upute%20zavrsni_1.pdf"
+      }
+    ],
     "sourceHierarchy": [],
     "ruleAuthority": "generic",
     "normativeScope": [],
@@ -32860,7 +33029,12 @@
     },
     "facts": [],
     "note": "Odjel ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na odjelnim stranicama). Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
-    "sources": [],
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnog/diplomskog rada (Pomorski odjel, Sveuciliste u Zadru)",
+        "url": "https://pomorskiodjel.unizd.hr/Portals/1/upute%20diplomski_2.pdf (diplomski) / Upute%20zavrsni_1.pdf (zavrsni)"
+      }
+    ],
     "sourceHierarchy": [],
     "ruleAuthority": "generic",
     "normativeScope": [],
@@ -32949,7 +33123,12 @@
     },
     "facts": [],
     "note": "Odjel ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na odjelnim stranicama). Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
-    "sources": [],
+    "sources": [
+      {
+        "title": "Pravila i upute o izradi diplomskog rada, 2018 (Odjel za izobrazbu ucitelja i odgojitelja, Zadar)",
+        "url": "https://iuo.unizd.hr/Portals/50/Pravila%20i%20upute%20o%20izradi%20diplomskog%20rada_1.docx"
+      }
+    ],
     "sourceHierarchy": [],
     "ruleAuthority": "generic",
     "normativeScope": [],
@@ -33251,6 +33430,10 @@
       {
         "title": "Upute za pisanje diplomskog rada na diplomskom studiju Marikultura (Odjel za akvakulturu, Dubrovnik)",
         "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=2123"
+      },
+      {
+        "title": "Upute za pisanje diplomskog rada na diplomskom studiju Marikultura",
+        "url": "https://www.unidu.hr/index.php?p=download&id=2123"
       }
     ],
     "normativeScope": [
@@ -33358,6 +33541,10 @@
       {
         "title": "Upute za pisanje zavrsnog rada na strucnom prijediplomskom studiju Sestrinstvo (Odjel za zdravstvene studije, Dubrovnik)",
         "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=7407"
+      },
+      {
+        "title": "Upute za pisanje zavrsnog rada na strucnom prijediplomskom studiju Sestrinstvo",
+        "url": "https://www.unidu.hr (Odjel za zdravstvene studije, dokument .docx)"
       }
     ],
     "normativeScope": [
@@ -33466,6 +33653,10 @@
       {
         "title": "Upute za izradu projekta prijediplomskog studija (Fakultet za medije i odnose s javnoscu, Dubrovnik, 2025)",
         "url": "https://www.unidu.hr/wp-content/uploads/2026/02/Upute_za_izradu_projekata_prijediplomskog_rada-Fakulteta-za-medije-i-odnose-s-javnoscu.pdf"
+      },
+      {
+        "title": "Upute za izradu projekta prijediplomskog studija (Komunikologija)",
+        "url": "https://www.unidu.hr (Fakultet za medije i odnose s javnoscu, veljaca 2025)"
       }
     ],
     "normativeScope": [
@@ -33525,6 +33716,10 @@
       {
         "title": "Naputak za oblikovanje i opremu zavrsnog rada (Odjel za umjetnost i restauraciju, Dubrovnik)",
         "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=55544"
+      },
+      {
+        "title": "Naputak za oblikovanje i opremu zavrsnog rada (Odjel za umjetnost i restauraciju)",
+        "url": "https://www.unidu.hr/index.php?p=download&id=55544"
       }
     ],
     "normativeScope": [
@@ -33666,6 +33861,10 @@
       {
         "title": "Predlozak za ocjenske radove (Fakultet elektrotehnike i primijenjenog racunarstva, Dubrovnik)",
         "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=25910"
+      },
+      {
+        "title": "Upute za izradbu diplomskoga rada na studijima Odjela za elektrotehniku i racunarstvo",
+        "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=2307"
       }
     ],
     "normativeScope": [
@@ -33775,6 +33974,10 @@
       {
         "title": "Upute za pisanje zavrsnog rada, Mehatronika i Racunarstvo (Veleuciliste u Bjelovaru, srpanj 2025)",
         "url": "https://vub.hr/wp-content/uploads/2025/07/upute_za_pisanje_zavrsnog_rada-meh_rac_072025.docx"
+      },
+      {
+        "title": "Upute za izradu zavrsnog rada (Mehatronika / Racunarstvo)",
+        "url": "https://www.vub.hr (Veleuciliste u Bjelovaru, strucni prijediplomski studij)"
       }
     ],
     "sourceHierarchy": [
@@ -33886,6 +34089,10 @@
       {
         "title": "Upute za pisanje zavrsnog rada, Sestrinstvo (Veleuciliste u Bjelovaru, srpanj 2025)",
         "url": "https://vub.hr/wp-content/uploads/2025/07/Upute_za_pisanje_zavrsnog_rada-ses_072025.doc"
+      },
+      {
+        "title": "Upute za izradu zavrsnog rada (Sestrinstvo)",
+        "url": "https://www.vub.hr (Veleuciliste u Bjelovaru, strucni prijediplomski studij, .doc)"
       }
     ],
     "sourceHierarchy": [
@@ -34002,6 +34209,10 @@
       {
         "title": "Prilog 2 - Predlozak za pisanje zavrsnog/diplomskog rada, drustveni studiji MTS (MEV)",
         "url": "https://www.mev.hr/wp-content/uploads/2025/06/Predlozak-za-pisanje-zavrsnog-diplomskog-rada-drustveni-studiji-MTS.dotx"
+      },
+      {
+        "title": "Prilog 2 - Predlozak za pisanje rada",
+        "url": "https://www.mev.hr/wp-content/uploads/2023/10/Prilog-2-Predlozak-za-pisanje-rada.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -34120,6 +34331,10 @@
       {
         "title": "Prilog 2 - Predlozak za pisanje zavrsnog/diplomskog rada, drustveni studiji MTS (MEV)",
         "url": "https://www.mev.hr/wp-content/uploads/2025/06/Predlozak-za-pisanje-zavrsnog-diplomskog-rada-drustveni-studiji-MTS.dotx"
+      },
+      {
+        "title": "Prilog 2 - Predlozak za pisanje rada",
+        "url": "https://www.mev.hr/wp-content/uploads/2023/10/Prilog-2-Predlozak-za-pisanje-rada.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -34232,6 +34447,10 @@
       {
         "title": "Prilog 4 - Upute za izradu zavrsnog/diplomskog rada (Veleuciliste Lavoslav Ruzicka u Vukovaru)",
         "url": "https://www.vevu.hr/wp-content/uploads/2023/02/P-r-i-l-o-g-4-UPUTE.docx"
+      },
+      {
+        "title": "Prilog 4 - Upute za izradu diplomskog rada",
+        "url": "https://www.vevu.hr (Veleuciliste \"Lavoslav Ruzicka\" u Vukovaru)"
       }
     ],
     "sourceHierarchy": [
@@ -34327,6 +34546,10 @@
       {
         "title": "Upute za izradu zavrsnog/diplomskog rada (Veleuciliste Marko Marulic u Kninu, sijecanj 2024)",
         "url": "https://www.veleknin.hr/wp-content/uploads/2024/02/Upute-za-za-izradu-zavrsnog-ili-diplomskog-rada.doc"
+      },
+      {
+        "title": "Upute za izradu zavrsnog/diplomskog rada",
+        "url": "https://www.veleknin.hr (Veleuciliste \"Marko Marulic\" u Kninu, .doc)"
       }
     ],
     "sourceHierarchy": [
@@ -34435,6 +34658,10 @@
       {
         "title": "Pravilnik o zavrsnom i diplomskom radu s Prilogom I: Upute za izradu (Veleuciliste u Sibeniku, 2023)",
         "url": "https://vus.hr/_download/repository/Pravilnik%20o%20zavr%C5%A1nom%20i%20diplomskom%20radu[2].pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu (Veleuciliste u Sibeniku, 2023)",
+        "url": "https://www.vus.hr/_download/repository/Pravilnik%20o%20zavr%C5%A1nom%20i%20diplomskom%20radu%5B3%5D.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -34526,6 +34753,10 @@
       {
         "title": "Pravilnik o zavrsnom i diplomskom radu s Prilogom I: Upute za izradu (Veleuciliste u Sibeniku, 2023)",
         "url": "https://vus.hr/_download/repository/Pravilnik%20o%20zavr%C5%A1nom%20i%20diplomskom%20radu[2].pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu (Veleuciliste u Sibeniku, 2023)",
+        "url": "https://www.vus.hr/_download/repository/Pravilnik%20o%20zavr%C5%A1nom%20i%20diplomskom%20radu%5B3%5D.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -35236,7 +35467,12 @@
     },
     "facts": [],
     "note": "Institucija ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na vss.hr) pa je citat custom. Format-pravila su OPĆI hrvatski akademski baseline, NISU institucijski propis (institucija ne objavljuje javnu uputu o oblikovanju); koristi upute mentora.",
-    "sources": [],
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog rada (Veleuciliste studija sigurnosti, lipanj 2023)",
+        "url": "https://www.ssbm.ch/dokument/Upute%20za%20izradu%20zavrsnog%20rada.pdf?_t=1699439120"
+      }
+    ],
     "sourceHierarchy": [],
     "ruleAuthority": "generic",
     "normativeScope": [],
@@ -35311,7 +35547,12 @@
     },
     "facts": [],
     "note": "Institucija ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na vss.hr) pa je citat custom. Format-pravila su OPĆI hrvatski akademski baseline, NISU institucijski propis (institucija ne objavljuje javnu uputu o oblikovanju); koristi upute mentora.",
-    "sources": [],
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog rada (Veleuciliste studija sigurnosti, lipanj 2023)",
+        "url": "https://www.ssbm.ch/dokument/Upute%20za%20izradu%20zavrsnog%20rada.pdf?_t=1699439120"
+      }
+    ],
     "sourceHierarchy": [],
     "ruleAuthority": "generic",
     "normativeScope": [],
@@ -36918,6 +37159,10 @@
       {
         "title": "Pravilnik o zavrsnom/diplomskom radu, prociscen tekst (FTRR Pozega, srpanj 2024)",
         "url": "https://www.ftrr.hr/images/Dokumenti/propisi/2024/08-01/pravilnik-o-zavrnom-diplomskom-radu.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu, prociscen tekst 2024 (FTRR Pozega)",
+        "url": "https://ftrr.hr/images/Dokumenti/propisi/2024/08-01/pravilnik-o-zavrnom-diplomskom-radu.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -37015,6 +37260,10 @@
       {
         "title": "Pravilnik o zavrsnom/diplomskom radu, prociscen tekst (FTRR Pozega, srpanj 2024)",
         "url": "https://www.ftrr.hr/images/Dokumenti/propisi/2024/08-01/pravilnik-o-zavrnom-diplomskom-radu.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu, prociscen tekst 2024 (FTRR Pozega)",
+        "url": "https://ftrr.hr/images/Dokumenti/propisi/2024/08-01/pravilnik-o-zavrnom-diplomskom-radu.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -37570,6 +37819,10 @@
       {
         "title": "Pravilnik Odsjeka produkcije (ADU, pročišćeni tekst 2017)",
         "url": "https://web.archive.org/web/20240501153414/http://masterwww.adu.hr/wp-content/uploads/2017/04/PRO%C4%8CI%C5%A0%C4%86ENI-TEKST-PRAVILNIKA-ODSJEKA-PRODUKCIJE-2017.doc"
+      },
+      {
+        "title": "Prociscen tekst Pravilnika o izvodjenju nastave i ispitima na Odsjeku produkcije (2017)",
+        "url": "https://masterwww.adu.hr/wp-content/uploads/2017/04/PRO%C4%8CI%C5%A0%C4%86ENI-TEKST-PRAVILNIKA-ODSJEKA-PRODUKCIJE-2017.doc"
       }
     ],
     "sourceHierarchy": [
@@ -37848,6 +38101,10 @@
       {
         "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, lipanj 2014)",
         "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
+      },
+      {
+        "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, 2014)",
+        "url": "https://www.alu.unizg.hr//alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -37946,6 +38203,10 @@
       {
         "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, lipanj 2014)",
         "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
+      },
+      {
+        "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, 2014)",
+        "url": "https://www.alu.unizg.hr//alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -38040,6 +38301,10 @@
       {
         "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, lipanj 2014)",
         "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
+      },
+      {
+        "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, 2014)",
+        "url": "https://www.alu.unizg.hr//alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -38334,6 +38599,10 @@
       {
         "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, lipanj 2014)",
         "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
+      },
+      {
+        "title": "Upute za izradu pisanog dijela diplomskog rada (Odsjek za konzerviranje i restauriranje umjetnina, ALU Zagreb, svibanj 2015)",
+        "url": "https://www.alu.unizg.hr/alu/cms/upload/orku/dipl/Upute_za_izradu_pisanog_dijela_diplomskog_rada_OKIRU_2015.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -38732,6 +39001,10 @@
       {
         "title": "Pravilnik o diplomskom radu i diplomskom ispitu na Geofizičkom odsjeku PMF-a",
         "url": "https://www.pmf.unizg.hr/_download/repository/Pravilnik_o_diplomskom_radu_i_diplomskom_ispitu_na_Geofizickom_odsjeku_PMF-a%5B1%5D.pdf"
+      },
+      {
+        "title": "Diplomski_template_Word_2020 (Geofizicki odsjek, PMF Zagreb)",
+        "url": "https://www.pmf.unizg.hr/_download/repository/Diplomski_template_Word_2020%5B1%5D.docx"
       }
     ],
     "sourceHierarchy": [
@@ -39321,6 +39594,10 @@
       {
         "title": "Predlozak za pisanje zavrsnog/diplomskog rada (DOCX)",
         "url": "https://radovi.foi.hr/build/files/Predlozak_za_pisanje_zavsnog-diplomskog_rada.docx"
+      },
+      {
+        "title": "Preporuke citiranja i referenciranja primjenom stila referenciranja APA",
+        "url": "https://radovi.foi.hr/build/files/Preporuke_citiranja_i_referenciranja_primjenom_stila_referenciranja_APA.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -39431,6 +39708,10 @@
       {
         "title": "Predlozak za pisanje zavrsnog/diplomskog rada (DOCX)",
         "url": "https://radovi.foi.hr/build/files/Predlozak_za_pisanje_zavsnog-diplomskog_rada.docx"
+      },
+      {
+        "title": "Preporuke citiranja i referenciranja primjenom stila referenciranja APA",
+        "url": "https://radovi.foi.hr/build/files/Preporuke_citiranja_i_referenciranja_primjenom_stila_referenciranja_APA.pdf"
       }
     ],
     "sourceHierarchy": [
@@ -40751,6 +41032,10 @@
       },
       {
         "title": "Naputak o izradi i oblikovanju diplomskog rada (Fakultet dentalne medicine Rijeka)",
+        "url": "https://fdmri.uniri.hr/"
+      },
+      {
+        "title": "Naputak o izradi i oblikovanju zavrsnog rada (Fakultet dentalne medicine Rijeka)",
         "url": "https://fdmri.uniri.hr/"
       }
     ],
@@ -42994,6 +43279,10 @@
       {
         "title": "Pravilnik o zavrsnim radovima s Uputama za izradu zavrsnog rada (FPMI Osijek, 23.02.2026.)",
         "url": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Pravilnik-o-zavrsnim-radovima-veljaca-2026.pdf"
+      },
+      {
+        "title": "Predlozak zavrsnog rada (LaTeX, Prilog 1 Pravilnika o zavrsnim radovima, Odjel za matematiku Osijek, ozujak 2026)",
+        "url": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Predlozak_zavrsni_rad.rar"
       }
     ],
     "sourceHierarchy": [
@@ -43092,6 +43381,10 @@
       {
         "title": "Pravilnik o diplomskim radovima s Uputama za izradu diplomskog rada (FPMI Osijek, 30.10.2023.)",
         "url": "https://www.mathos.unios.hr/wp-content/uploads/2023/11/Pravilnik_o_diplomskim_radovima_-_potpisano.pdf"
+      },
+      {
+        "title": "Predlozak diplomskog rada (LaTeX, Prilog 1 Pravilnika o diplomskim radovima, Odjel za matematiku Osijek, ozujak 2026)",
+        "url": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Predlozak_diplomski_rad.rar"
       }
     ],
     "sourceHierarchy": [
@@ -43140,6 +43433,14 @@
       {
         "title": "Book of Regulations on the Final, Graduation or Specialist Thesis and the Final Exam (Sveuciliste Algebra Bernays, 20.02.2026., sluzbena engleska inacica)",
         "url": "https://www.algebra.hr/sveuciliste/referada/dokumenti/"
+      },
+      {
+        "title": "Pravilnik o zavrsnom, diplomskom odnosno specijalistickom radu i zavrsnom ispitu (Sveuciliste Algebra Bernays, 20.02.2026.)",
+        "url": "https://www.algebra.hr/sveuciliste/wp-content/uploads/2024/04/Pravilnik-o-zavrsnom-diplomskom-odnosno-specijalistickom-radu-i-zavrsnom-ispitu_20.02.2026-1.pdf"
+      },
+      {
+        "title": "Predlozak diplomskog rada (Visoko uciliste Algebra, 2017, arhivirano preko Wayback Machine)",
+        "url": "https://web.archive.org/web/20211210005533/https://www.algebra.hr/visoko-uciliste/wp-content/uploads/sites/2/2017/11/Diplomski-rad_predlozak.docx"
       }
     ],
     "sourceHierarchy": [
@@ -43190,6 +43491,14 @@
       {
         "title": "Book of Regulations on the Final, Graduation or Specialist Thesis and the Final Exam (Sveuciliste Algebra Bernays, 20.02.2026., sluzbena engleska inacica)",
         "url": "https://www.algebra.hr/sveuciliste/referada/dokumenti/"
+      },
+      {
+        "title": "Pravilnik o zavrsnom, diplomskom odnosno specijalistickom radu i zavrsnom ispitu (Sveuciliste Algebra Bernays, 20.02.2026.)",
+        "url": "https://www.algebra.hr/sveuciliste/wp-content/uploads/2024/04/Pravilnik-o-zavrsnom-diplomskom-odnosno-specijalistickom-radu-i-zavrsnom-ispitu_20.02.2026-1.pdf"
+      },
+      {
+        "title": "Predlozak diplomskog rada (Visoko uciliste Algebra, 2017, arhivirano preko Wayback Machine)",
+        "url": "https://web.archive.org/web/20211210005533/https://www.algebra.hr/visoko-uciliste/wp-content/uploads/sites/2/2017/11/Diplomski-rad_predlozak.docx"
       }
     ],
     "sourceHierarchy": [
@@ -43235,6 +43544,14 @@
       {
         "title": "Book of Regulations on the Final, Graduation or Specialist Thesis and the Final Exam (Sveuciliste Algebra Bernays, 20.02.2026., sluzbena engleska inacica)",
         "url": "https://www.algebra.hr/sveuciliste/referada/dokumenti/"
+      },
+      {
+        "title": "Pravilnik o zavrsnom, diplomskom odnosno specijalistickom radu i zavrsnom ispitu (Sveuciliste Algebra Bernays, 20.02.2026.)",
+        "url": "https://www.algebra.hr/sveuciliste/wp-content/uploads/2024/04/Pravilnik-o-zavrsnom-diplomskom-odnosno-specijalistickom-radu-i-zavrsnom-ispitu_20.02.2026-1.pdf"
+      },
+      {
+        "title": "Predlozak diplomskog rada (Visoko uciliste Algebra, 2017, arhivirano preko Wayback Machine)",
+        "url": "https://web.archive.org/web/20211210005533/https://www.algebra.hr/visoko-uciliste/wp-content/uploads/sites/2/2017/11/Diplomski-rad_predlozak.docx"
       }
     ],
     "sourceHierarchy": [
@@ -43279,6 +43596,14 @@
       {
         "title": "Book of Regulations on the Final, Graduation or Specialist Thesis and the Final Exam (Sveuciliste Algebra Bernays, 20.02.2026., sluzbena engleska inacica)",
         "url": "https://www.algebra.hr/sveuciliste/referada/dokumenti/"
+      },
+      {
+        "title": "Pravilnik o zavrsnom, diplomskom odnosno specijalistickom radu i zavrsnom ispitu (Sveuciliste Algebra Bernays, 20.02.2026.)",
+        "url": "https://www.algebra.hr/sveuciliste/wp-content/uploads/2024/04/Pravilnik-o-zavrsnom-diplomskom-odnosno-specijalistickom-radu-i-zavrsnom-ispitu_20.02.2026-1.pdf"
+      },
+      {
+        "title": "Predlozak diplomskog rada (Visoko uciliste Algebra, 2017, arhivirano preko Wayback Machine)",
+        "url": "https://web.archive.org/web/20211210005533/https://www.algebra.hr/visoko-uciliste/wp-content/uploads/sites/2/2017/11/Diplomski-rad_predlozak.docx"
       }
     ],
     "sourceHierarchy": [
