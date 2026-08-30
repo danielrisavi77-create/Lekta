@@ -7803,10 +7803,10 @@
       "program": "derived",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -7820,9 +7820,7 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 1
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
@@ -12737,8 +12735,8 @@
       "manual-only": 53
     },
     "byProof": {
-      "real-docx-pass": 0,
-      "synthetic-pass": 346,
+      "real-docx-pass": 1,
+      "synthetic-pass": 345,
       "review": 1,
       "not-run": 89
     },
@@ -12771,8 +12769,8 @@
       "unknown": 3
     },
     "byClaim": {
-      "A": 0,
-      "B": 338,
+      "A": 1,
+      "B": 337,
       "C": 8,
       "D": 42,
       "E": 48

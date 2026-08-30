@@ -2889,7 +2889,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "fpzg-novinarstvo-bibliografija.docx": {
     "__kombinirano": {
-      "applied": 9,
+      "applied": 10,
       "changelog": [
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
@@ -2922,6 +2922,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "bibliografija usklađena prema potvrđenom planu",
           "before": "5 bibliografskih zapisa",
+        },
+        {
+          "after": "1 strukturnih dijelova umetnuto",
+          "before": "1 nedostajućih dijelova",
         },
         {
           "after": "7 elemenata naslovnice složeno prema službenom profilu, naslovnica bez broja stranice",
@@ -2979,7 +2983,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "consistency-fixer-rule",
         "link-doi-fixer-rule",
         "citation-bibliography-sync-fixer-rule",
-        "required-section-fixer-rule",
         "empty-paragraph-fixer-rule",
       ],
     },
@@ -4066,19 +4069,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "required-section-fixer": {
-      "applied": false,
-      "changelog": [],
-      "markers": null,
-      "noOpBitIdentican": true,
-      "params": {
-        "sections": [],
-        "version": 1,
-      },
-      "skipped": [
-        "required-section-fixer-rule",
-      ],
-    },
-    "required-section-fixer(potvrdjeno)": {
       "applied": true,
       "changelog": [
         {
@@ -4141,6 +4131,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
             "id": "required-5e9c95f8",
             "insertionAnchor": {
               "anchorFingerprint": "typo-ad535933",
+              "anchorText": "Sazetak",
               "paragraphIndex": 10,
               "position": "after",
             },
@@ -4743,7 +4734,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "before": "Font: Arial, Veličina: 11 pt",
         },
         {
-          "after": "Prored: 1,50x prored",
+          "after": "Prored: 1,50x prored; izravno formatiranje uklonjeno u 59 odlomaka",
           "before": "Prored: 1,00x prored",
         },
         {
@@ -4762,7 +4753,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "markers": {
         "directFormatting": {
           "directLeftJc": 0,
-          "directLine": 59,
+          "directLine": 0,
           "runFonts": 0,
           "runSz": 0,
         },
@@ -5549,14 +5540,14 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "applied": true,
       "changelog": [
         {
-          "after": "Prored: 1,50x prored",
+          "after": "Prored: 1,50x prored; izravno formatiranje uklonjeno u 59 odlomaka",
           "before": "Prored: 1,00x prored",
         },
       ],
       "markers": {
         "directFormatting": {
           "directLeftJc": 0,
-          "directLine": 59,
+          "directLine": 0,
           "runFonts": 0,
           "runSz": 0,
         },
@@ -5844,7 +5835,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "lo-fpzg-zavrsni-uskladjen.docx": {
     "__kombinirano": {
-      "applied": 4,
+      "applied": 5,
       "changelog": [
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
@@ -5853,6 +5844,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Margine: donja 2,50 cm",
           "before": "Margine: donja 3,49 cm",
+        },
+        {
+          "after": "izravno formatiranje uklonjeno u 107 odlomaka",
+          "before": "Izravno formatiranje u tekstu",
         },
         {
           "after": "Primijenjeno 2 potvrđenih operacija nad Word sekcijama",
@@ -5866,7 +5861,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "markers": {
         "directFormatting": {
           "directLeftJc": 0,
-          "directLine": 120,
+          "directLine": 13,
           "runFonts": 0,
           "runSz": 0,
         },
@@ -5912,7 +5907,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "paper-size-fixer-rule",
         "font-fixer-rule",
-        "line-spacing-fixer-rule",
         "alignment-fixer-rule",
         "heading-style-fixer-rule",
         "consistency-fixer-rule",
@@ -6434,17 +6428,65 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       ],
     },
     "line-spacing-fixer(deep)": {
-      "applied": false,
-      "changelog": [],
-      "markers": null,
-      "noOpBitIdentican": true,
+      "applied": true,
+      "changelog": [
+        {
+          "after": "izravno formatiranje uklonjeno u 107 odlomaka",
+          "before": "Izravno formatiranje u tekstu",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 13,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Times New Roman",
+          "hAnsi": "Times New Roman",
+          "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 1,
+          "parts": [
+            {
+              "hasPage": true,
+              "name": "word/footer1.xml",
+            },
+          ],
+        },
+        "normal": {
+          "jc": "both",
+          "line": "360",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1976",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": {
+              "fmt": "decimal",
+              "start": null,
+            },
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
       "params": {
         "deep": true,
         "multiplier": 1.5,
       },
-      "skipped": [
-        "line-spacing-fixer-rule",
-      ],
+      "skipped": [],
     },
     "link-doi-fixer": {
       "params": "nema-stavke-za-ovaj-dokument",
@@ -11360,7 +11402,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "synthetic-libreoffice-standard-default.docx": {
     "__kombinirano": {
-      "applied": 4,
+      "applied": 5,
       "changelog": [
         {
           "after": "Font: Times New Roman, Veličina: 12 pt",
@@ -11377,6 +11419,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Primijenjeno 2 potvrđenih operacija nad Word sekcijama",
           "before": "2 operacija nad sekcijama nije primijenjeno",
+        },
+        {
+          "after": "2 strukturnih dijelova umetnuto",
+          "before": "2 nedostajućih dijelova",
         },
       ],
       "markers": {
@@ -11423,7 +11469,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "margins-fixer-rule",
         "paper-size-fixer-rule",
-        "required-section-fixer-rule",
         "empty-paragraph-fixer-rule",
       ],
     },
@@ -11837,19 +11882,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "required-section-fixer": {
-      "applied": false,
-      "changelog": [],
-      "markers": null,
-      "noOpBitIdentican": true,
-      "params": {
-        "sections": [],
-        "version": 1,
-      },
-      "skipped": [
-        "required-section-fixer-rule",
-      ],
-    },
-    "required-section-fixer(potvrdjeno)": {
       "applied": true,
       "changelog": [
         {
@@ -11904,6 +11936,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
             "id": "required-12408c2f",
             "insertionAnchor": {
               "anchorFingerprint": "typo-ab0a0834",
+              "anchorText": "Uvod",
               "paragraphIndex": 1,
               "position": "before",
             },
@@ -11917,6 +11950,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
             "id": "required-5e9c95f8",
             "insertionAnchor": {
               "anchorFingerprint": "typo-ab0a0834",
+              "anchorText": "Uvod",
               "paragraphIndex": 1,
               "position": "before",
             },
@@ -14647,7 +14681,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "typografija-i-literatura.docx": {
     "__kombinirano": {
-      "applied": 10,
+      "applied": 11,
       "changelog": [
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
@@ -14688,6 +14722,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "bibliografija usklađena prema potvrđenom planu",
           "before": "3 bibliografskih zapisa",
+        },
+        {
+          "after": "2 strukturnih dijelova umetnuto",
+          "before": "2 nedostajućih dijelova",
         },
       ],
       "markers": {
@@ -14734,7 +14772,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "consistency-fixer-rule",
         "link-doi-fixer-rule",
-        "required-section-fixer-rule",
         "empty-paragraph-fixer-rule",
       ],
     },
@@ -15713,19 +15750,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "required-section-fixer": {
-      "applied": false,
-      "changelog": [],
-      "markers": null,
-      "noOpBitIdentican": true,
-      "params": {
-        "sections": [],
-        "version": 1,
-      },
-      "skipped": [
-        "required-section-fixer-rule",
-      ],
-    },
-    "required-section-fixer(potvrdjeno)": {
       "applied": true,
       "changelog": [
         {
@@ -15780,6 +15804,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
             "id": "required-12408c2f",
             "insertionAnchor": {
               "anchorFingerprint": "typo-7982510d",
+              "anchorText": "Uvod",
               "paragraphIndex": 1,
               "position": "before",
             },
@@ -15793,6 +15818,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
             "id": "required-5e9c95f8",
             "insertionAnchor": {
               "anchorFingerprint": "typo-7982510d",
+              "anchorText": "Uvod",
               "paragraphIndex": 1,
               "position": "before",
             },
@@ -15899,7 +15925,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "word-veliki-neuredan.docx": {
     "__kombinirano": {
-      "applied": 9,
+      "applied": 10,
       "changelog": [
         {
           "after": "Polja označena za osvježavanje pri otvaranju",
@@ -15932,6 +15958,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Potvrđene stavke obrađene u novoj čistoj kopiji",
           "before": "Skriveni, revizijski i privatni podaci u DOCX paketu",
+        },
+        {
+          "after": "2 strukturnih dijelova umetnuto",
+          "before": "2 nedostajućih dijelova",
         },
         {
           "after": "Umetnuto automatsko TOC polje (Word ga osvježi pri otvaranju); ručno upisane stavke sadržaja ispod možeš obrisati",
@@ -16035,7 +16065,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "section-surgery-fixer-rule",
         "consistency-fixer-rule",
         "table-figure-rescue-fixer-rule",
-        "required-section-fixer-rule",
         "empty-paragraph-fixer-rule",
         "title-page-fixer-rule",
       ],
@@ -17648,19 +17677,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "required-section-fixer": {
-      "applied": false,
-      "changelog": [],
-      "markers": null,
-      "noOpBitIdentican": true,
-      "params": {
-        "sections": [],
-        "version": 1,
-      },
-      "skipped": [
-        "required-section-fixer-rule",
-      ],
-    },
-    "required-section-fixer(potvrdjeno)": {
       "applied": true,
       "changelog": [
         {
@@ -17770,6 +17786,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
             "id": "required-12408c2f",
             "insertionAnchor": {
               "anchorFingerprint": "typo-cb1a46e4",
+              "anchorText": "Odlomak 14 poglavlja Uvod. Dijakriticki znakovi cscdz moraju prezivjeti popravak neizmijenjeni.",
               "paragraphIndex": 22,
               "position": "before",
             },
@@ -17783,6 +17800,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
             "id": "required-5e9c95f8",
             "insertionAnchor": {
               "anchorFingerprint": "typo-cb1a46e4",
+              "anchorText": "Odlomak 14 poglavlja Uvod. Dijakriticki znakovi cscdz moraju prezivjeti popravak neizmijenjeni.",
               "paragraphIndex": 22,
               "position": "before",
             },

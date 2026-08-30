@@ -108,7 +108,7 @@
       "documentId": "fer-diplomski-prazni-odlomci",
       "fileName": "fer-diplomski-prazni-odlomci.docx",
       "profileId": "fer-diplomski",
-      "outcome": "review",
+      "outcome": "no-op",
       "before": {
         "checkCount": 19,
         "passCount": 12,
@@ -130,9 +130,17 @@
         "consistency-fixer"
       ],
       "changedFixerIds": [],
-      "targetedCheckCount": 6,
-      "targetedResolvedCount": 2,
-      "targetedUnresolvedCount": 4,
+      "targetedCheckCount": 0,
+      "targetedResolvedCount": 0,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "assistedUnresolvedCount": 0,
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 3,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost"
+      ],
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -141,7 +149,6 @@
       "integrityFailure": null,
       "manualReviewRequired": true,
       "manualReviewReasons": [
-        "ciljani-check-nije-u-potpunosti-riješen",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
@@ -177,9 +184,22 @@
         "field-integrity-fixer",
         "final-document-inspector-fixer"
       ],
-      "targetedCheckCount": 14,
-      "targetedResolvedCount": 2,
-      "targetedUnresolvedCount": 12,
+      "targetedCheckCount": 0,
+      "targetedResolvedCount": 0,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "assistedUnresolvedCount": 0,
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 3,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -189,7 +209,6 @@
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "ciljani-check-nije-u-potpunosti-riješen",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
@@ -198,7 +217,7 @@
       "documentId": "fer-diplomski-uskladjen",
       "fileName": "fer-diplomski-uskladjen.docx",
       "profileId": "fer-diplomski",
-      "outcome": "review",
+      "outcome": "no-op",
       "before": {
         "checkCount": 19,
         "passCount": 12,
@@ -220,9 +239,17 @@
         "consistency-fixer"
       ],
       "changedFixerIds": [],
-      "targetedCheckCount": 6,
-      "targetedResolvedCount": 2,
-      "targetedUnresolvedCount": 4,
+      "targetedCheckCount": 0,
+      "targetedResolvedCount": 0,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "assistedUnresolvedCount": 0,
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 3,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost"
+      ],
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -231,7 +258,6 @@
       "integrityFailure": null,
       "manualReviewRequired": true,
       "manualReviewReasons": [
-        "ciljani-check-nije-u-potpunosti-riješen",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
@@ -261,9 +287,17 @@
       "changedFixerIds": [
         "toc-field-fixer"
       ],
-      "targetedCheckCount": 2,
+      "targetedCheckCount": 0,
       "targetedResolvedCount": 0,
-      "targetedUnresolvedCount": 2,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "assistedUnresolvedCount": 0,
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 3,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost"
+      ],
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -273,7 +307,6 @@
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "ciljani-check-nije-u-potpunosti-riješen",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
@@ -291,7 +324,7 @@
       "after": {
         "checkCount": 35,
         "passCount": 19,
-        "score": 85
+        "score": 86
       },
       "beforeEntryCount": 8,
       "afterEntryCount": 8,
@@ -314,11 +347,25 @@
         "alignment-fixer",
         "section-surgery-fixer",
         "final-document-inspector-fixer",
-        "bibliography-repair-fixer"
+        "bibliography-repair-fixer",
+        "required-section-fixer"
       ],
-      "targetedCheckCount": 23,
-      "targetedResolvedCount": 6,
-      "targetedUnresolvedCount": 17,
+      "targetedCheckCount": 6,
+      "targetedResolvedCount": 2,
+      "targetedUnresolvedCount": 4,
+      "autoUnresolvedCount": 1,
+      "assistedUnresolvedCount": 3,
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 4,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -345,8 +392,8 @@
       },
       "after": {
         "checkCount": 19,
-        "passCount": 9,
-        "score": 62
+        "passCount": 10,
+        "score": 72
       },
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
@@ -357,12 +404,18 @@
         "paper-size-fixer"
       ],
       "changedFixerIds": [
+        "font-fixer",
         "margins-fixer",
         "paper-size-fixer"
       ],
       "targetedCheckCount": 3,
-      "targetedResolvedCount": 1,
-      "targetedUnresolvedCount": 2,
+      "targetedResolvedCount": 2,
+      "targetedUnresolvedCount": 1,
+      "autoUnresolvedCount": 1,
+      "assistedUnresolvedCount": 0,
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 4,
+      "unmappedMatchKeys": [],
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -380,7 +433,7 @@
       "documentId": "lo-fpzg-zavrsni-neuskladjen",
       "fileName": "lo-fpzg-zavrsni-neuskladjen.docx",
       "profileId": "fpzg-politologija-zavrsni",
-      "outcome": "review",
+      "outcome": "pass",
       "before": {
         "checkCount": 34,
         "passCount": 17,
@@ -388,8 +441,8 @@
       },
       "after": {
         "checkCount": 34,
-        "passCount": 18,
-        "score": 75
+        "passCount": 22,
+        "score": 90
       },
       "beforeEntryCount": 12,
       "afterEntryCount": 12,
@@ -414,9 +467,22 @@
         "section-surgery-fixer",
         "final-document-inspector-fixer"
       ],
-      "targetedCheckCount": 20,
+      "targetedCheckCount": 4,
       "targetedResolvedCount": 4,
-      "targetedUnresolvedCount": 16,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "assistedUnresolvedCount": 0,
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 5,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -426,7 +492,6 @@
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "ciljani-check-nije-u-potpunosti-riješen",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
@@ -462,9 +527,22 @@
         "section-surgery-fixer",
         "final-document-inspector-fixer"
       ],
-      "targetedCheckCount": 18,
-      "targetedResolvedCount": 6,
-      "targetedUnresolvedCount": 12,
+      "targetedCheckCount": 0,
+      "targetedResolvedCount": 0,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "assistedUnresolvedCount": 0,
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 0,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -474,7 +552,6 @@
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "ciljani-check-nije-u-potpunosti-riješen",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
@@ -506,9 +583,17 @@
         "section-insert-fixer",
         "toc-field-fixer"
       ],
-      "targetedCheckCount": 4,
+      "targetedCheckCount": 0,
       "targetedResolvedCount": 0,
-      "targetedUnresolvedCount": 4,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "assistedUnresolvedCount": 0,
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 2,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost"
+      ],
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -518,7 +603,6 @@
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "ciljani-check-nije-u-potpunosti-riješen",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
@@ -550,9 +634,17 @@
       "changedFixerIds": [
         "toc-field-fixer"
       ],
-      "targetedCheckCount": 4,
+      "targetedCheckCount": 0,
       "targetedResolvedCount": 0,
-      "targetedUnresolvedCount": 4,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "assistedUnresolvedCount": 0,
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 1,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost"
+      ],
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -562,7 +654,6 @@
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "ciljani-check-nije-u-potpunosti-riješen",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
@@ -595,9 +686,17 @@
       "changedFixerIds": [
         "toc-field-fixer"
       ],
-      "targetedCheckCount": 8,
+      "targetedCheckCount": 0,
       "targetedResolvedCount": 0,
-      "targetedUnresolvedCount": 8,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "assistedUnresolvedCount": 0,
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 1,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost"
+      ],
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -607,7 +706,6 @@
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "ciljani-check-nije-u-potpunosti-riješen",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
@@ -652,9 +750,22 @@
         "heading-case-fixer",
         "final-document-inspector-fixer"
       ],
-      "targetedCheckCount": 17,
-      "targetedResolvedCount": 5,
-      "targetedUnresolvedCount": 12,
+      "targetedCheckCount": 6,
+      "targetedResolvedCount": 4,
+      "targetedUnresolvedCount": 2,
+      "autoUnresolvedCount": 2,
+      "assistedUnresolvedCount": 0,
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 4,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -673,7 +784,7 @@
       "documentId": "pravo-socijalni-rad-fusnote",
       "fileName": "pravo-socijalni-rad-fusnote.docx",
       "profileId": "pravo-socijalni-rad-diplomski",
-      "outcome": "review",
+      "outcome": "pass",
       "before": {
         "checkCount": 38,
         "passCount": 18,
@@ -706,9 +817,22 @@
         "heading-format-fixer",
         "final-document-inspector-fixer"
       ],
-      "targetedCheckCount": 17,
-      "targetedResolvedCount": 6,
-      "targetedUnresolvedCount": 11,
+      "targetedCheckCount": 5,
+      "targetedResolvedCount": 5,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "assistedUnresolvedCount": 0,
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 6,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -718,7 +842,6 @@
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "ciljani-check-nije-u-potpunosti-riješen",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
@@ -748,9 +871,17 @@
       "changedFixerIds": [
         "toc-field-fixer"
       ],
-      "targetedCheckCount": 2,
+      "targetedCheckCount": 0,
       "targetedResolvedCount": 0,
-      "targetedUnresolvedCount": 2,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "assistedUnresolvedCount": 0,
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 2,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost"
+      ],
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -760,7 +891,6 @@
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "ciljani-check-nije-u-potpunosti-riješen",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
@@ -778,7 +908,7 @@
       "after": {
         "checkCount": 33,
         "passCount": 18,
-        "score": 81
+        "score": 83
       },
       "beforeEntryCount": 12,
       "afterEntryCount": 12,
@@ -806,11 +936,25 @@
         "alignment-fixer",
         "section-surgery-fixer",
         "final-document-inspector-fixer",
-        "bibliography-repair-fixer"
+        "bibliography-repair-fixer",
+        "required-section-fixer"
       ],
-      "targetedCheckCount": 25,
-      "targetedResolvedCount": 7,
-      "targetedUnresolvedCount": 18,
+      "targetedCheckCount": 7,
+      "targetedResolvedCount": 4,
+      "targetedUnresolvedCount": 3,
+      "autoUnresolvedCount": 1,
+      "assistedUnresolvedCount": 2,
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 6,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -838,7 +982,7 @@
       "after": {
         "checkCount": 35,
         "passCount": 19,
-        "score": 83
+        "score": 85
       },
       "beforeEntryCount": 21,
       "afterEntryCount": 21,
@@ -862,11 +1006,25 @@
         "paper-size-fixer",
         "alignment-fixer",
         "final-document-inspector-fixer",
+        "required-section-fixer",
         "toc-field-fixer"
       ],
-      "targetedCheckCount": 18,
-      "targetedResolvedCount": 5,
-      "targetedUnresolvedCount": 13,
+      "targetedCheckCount": 5,
+      "targetedResolvedCount": 4,
+      "targetedUnresolvedCount": 1,
+      "autoUnresolvedCount": 0,
+      "assistedUnresolvedCount": 1,
+      "awaitingConfirmationCount": 0,
+      "manualOnlyCount": 9,
+      "unmappedMatchKeys": [
+        "Consistency Engine",
+        "Dosljednost",
+        "Komentari",
+        "Metapodaci",
+        "Praćenje promjena",
+        "Skriveni tekst",
+        "Word polja"
+      ],
       "passRegressionCount": 0,
       "outputReadable": true,
       "packageWellFormed": true,
@@ -884,13 +1042,19 @@
   ],
   "summary": {
     "documentCount": 16,
-    "passCount": 0,
-    "reviewCount": 16,
+    "passCount": 2,
+    "reviewCount": 12,
     "failCount": 0,
     "integrityFailureCount": 0,
-    "noOpCount": 0,
+    "noOpCount": 2,
     "changedDocumentCount": 14,
     "manualReviewCount": 16,
-    "passRegressionCount": 0
+    "passRegressionCount": 0,
+    "targetedCheckCount": 36,
+    "targetedResolvedCount": 25,
+    "autoUnresolvedCount": 5,
+    "assistedUnresolvedCount": 6,
+    "awaitingConfirmationCount": 0,
+    "manualOnlyCount": 56
   }
 }
