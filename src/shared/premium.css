@@ -151,6 +151,22 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
 .premium-paper-stack {
   position: relative;
   isolation: isolate;
+  /**
+   * Boja listova MORA pratiti povrsinu kartice pod kojom leze.
+   *
+   * `isolation: isolate` cini element vlastitim stacking kontekstom, pa `z-index: -1`
+   * pseudo-elementi NE padaju iza njegove pozadine nego se crtaju IZNAD nje. Na svijetloj
+   * kartici to se ne vidi jer su list i kartica iste boje pa viri samo rub, i upravo zato je
+   * kvar mogao dugo stajati. Na TAMNOJ kartici svijetli list prekrije pozadinu i tekst ostane
+   * na krivoj podlozi.
+   *
+   * Izmjereno 2026-08-30 na `alati.html`: naslov `rgb(247,243,232)` zavrsio je na listu
+   * `rgb(239,233,217)`, dakle oko 1,05:1 umjesto 4,5:1. Cijela hero kartica huba bila je
+   * prakticki prazna ploha.
+   */
+  --stack-sheet: var(--paper-2);
+  --stack-sheet-top: color-mix(in srgb, var(--paper) 84%, var(--paper-2));
+  --stack-sheet-line: var(--paper-line);
 }
 
 .premium-paper-stack::before,
@@ -159,8 +175,8 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
   position: absolute;
   inset: 10px 8px -8px;
   z-index: -1;
-  background: var(--paper-2);
-  border: 1px solid var(--paper-line);
+  background: var(--stack-sheet);
+  border: 1px solid var(--stack-sheet-line);
   box-shadow: var(--premium-depth-1);
   transform: rotate(-1.2deg);
 }
@@ -168,7 +184,7 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
 .premium-paper-stack::after {
   inset: 5px 4px -4px;
   transform: rotate(.7deg);
-  background: color-mix(in srgb, var(--paper) 84%, var(--paper-2));
+  background: var(--stack-sheet-top);
 }
 
 .premium-paper-stack > * {
@@ -333,6 +349,11 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
 }
 
 .premium-tool-index__intro {
+  /* Tamna kartica: gornji list je TOCNO boja kartice, pa je kontrast teksta identican
+     namjeravanom; donji je nijansu svjetliji samo da se rub hrpe i dalje nazire. */
+  --stack-sheet: color-mix(in srgb, var(--paper-ink) 80%, var(--paper));
+  --stack-sheet-top: var(--paper-ink);
+  --stack-sheet-line: color-mix(in srgb, var(--paper-ink) 55%, var(--paper));
   display: grid;
   align-content: center;
   min-height: 240px;
@@ -341,6 +362,13 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
   color: var(--paper);
   box-shadow: var(--premium-depth-2);
 }
+
+/**
+ * Nadnaslov na TAMNOJ kartici mora uzeti desk-mutirani ton, ne paper-mutirani.
+ * `.premium-eyebrow` je globalno `var(--paper-muted)` (#6E6656), sto je ton za SVIJETLI papir;
+ * na tamnoj plohi izmjereno daje 2,79:1, ispod praga 4,5:1. Mjereno 2026-08-30.
+ */
+.premium-tool-index__intro .premium-eyebrow { color: var(--desk-muted) }
 
 .premium-tool-index__intro h2 { max-width: 12ch; margin: 10px 0; color: inherit; font: 400 clamp(30px, 5vw, 58px)/.96 var(--display-serif) }
 .premium-tool-index__intro p { max-width: 42ch; margin: 0; color: color-mix(in srgb, var(--paper) 72%, transparent) }
