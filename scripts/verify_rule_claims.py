@@ -376,6 +376,47 @@ PREDICATE_TOKENS: dict[str, list[str]] = {
 }
 
 
+# NEGATIVNA odredba na predikatnoj osi. Postoji jer je predikatni izvod dosad IGNORIRAO vrijednost:
+# tvrdnja `justify: false` i tvrdnja `justify: true` prolazile su na ISTOM citatu. Nije hipoteza -
+# u podacima stoji tocno jedna takva tvrdnja, `justify: false` s citatom "tekst se pise lijevo
+# poravnato", koju je stari izvod potvrdjivao tokenom "poravnat", i istim bi tokenom potvrdio i
+# suprotnu tvrdnju. Isti razred greske kao `paper-size` izvod koji je ignorirao vrijednost i uvijek
+# trazio A4.
+PREDICATE_NEGATIVE_TOKENS: dict[str, list[str]] = {
+    "justify": ["lijevo poravnat", "poravnat ulijevo", "poravnanje ulijevo", "poravnato ulijevo"],
+    "toc": ["bez sadrzaja", "sadrzaj nije obavezan", "ne mora sadrzavati sadrzaj"],
+    "page-numbers": ["ne numerirati", "bez numeracije", "stranice se ne numeriraju"],
+}
+
+
+def predicate_negative_hit(check_id: str, quote: str) -> bool:
+    low = fold(squash(quote))
+    return any(token in low for token in PREDICATE_NEGATIVE_TOKENS.get(check_id, []))
+
+
+def predicate_verdict(check_id: str, value, quote: str) -> bool | str:
+    """Presuda na predikatnoj osi koja GLEDA vrijednost. Vraca True, False ili 'unsupported'.
+
+    Tri pravila, sva tri iz istog nalaza:
+      1. Potvrdna tvrdnja (`true`) NE prolazi ako citat izrice suprotnu odredbu. Bez toga
+         "tekst se pise lijevo poravnato" potvrdjuje `justify: true`, jer token "poravnat" pogadja
+         i lijevo poravnanje.
+      2. Nijecna tvrdnja (`false`) trazi NEGATIVAN dokaz, ne izostanak pozitivnog. Izostanak je
+         odsutnost dokaza, a tvrdnja kaze da odredba postoji i glasi suprotno.
+      3. Os bez negativnog rjecnika ostaje NEPROVJERIVA za nijecnu tvrdnju, umjesto da tiho prodje.
+         `unsupported` je odsutnost dokaza, `False` je dokaz odsutnosti; mijesati ih znaci trositi
+         ljudsku paznju na sum.
+    """
+    negative = predicate_negative_hit(check_id, quote)
+    if value is False or value == 0:
+        if not PREDICATE_NEGATIVE_TOKENS.get(check_id):
+            return "unsupported"
+        return negative
+    if negative:
+        return False
+    return predicate_hit(check_id, quote)
+
+
 def predicate_hit(check_id: str, quote: str) -> bool:
     """Izrice li citat tu odredbu uopce. Namjerno grubo: dokazuje da se recenica bavi tom osi.
 
@@ -610,6 +651,12 @@ def value_tokens(check_id: str, value) -> list[list[str]]:
         return groups or [["A4", "A-4", "A 4"]]
     if check_id == "font":
         return [[str(v)] for v in (value if isinstance(value, list) else [value])]
+    if check_id == "footnote-font":
+        # Do 2026-08-30 je ova os bila PREDIKATNA, pa je tvrdnja o imenu fonta prolazila na pukom
+        # spomenu fusnote: citat "biljeske se pisu na dnu stranice" potvrdjivao je bilo koje ime.
+        # Sada se trazi i IME iz vrijednosti i kontekst fusnote, dakle oboje, kao dvije skupine.
+        names = [[str(v)] for v in (value if isinstance(value, list) else [value])]
+        return names + [["fusnot", "biljesk", "podnozj"]]
     if check_id in ("font-size", "line-spacing", "footnote-size", "footnote-spacing"):
         # ISPRAVAK 2026-08-22: prije se za listu gledao SAMO `value[0]`, pa drugi clan dopustenog
         # skupa ("11 ili 12") nikad nije bio usidren. Sada je dovoljno da se pojavi BILO KOJI clan:
@@ -692,12 +739,20 @@ def verify(claim: dict) -> dict:
     groups = value_tokens(check_id, value)
     derivable: bool | str
     if not groups:
-        if predicate_hit(check_id, quote):
+        if check_id in PREDICATE_TOKENS:
             # Predikatna os: citat izrice odredbu iako u njoj nema broja koji bi se usporedio.
-            derivable = True
-        elif check_id in PREDICATE_TOKENS:
-            derivable = False
-            reasons.append(f"citat ne izrice odredbu o '{check_id}' (nijedan prepoznat pojam)")
+            # Presuda GLEDA vrijednost: potvrdna tvrdnja pada na suprotnoj odredbi, a nijecna trazi
+            # negativan dokaz, ne izostanak pozitivnog.
+            derivable = predicate_verdict(check_id, value, quote)
+            if derivable is False:
+                if predicate_negative_hit(check_id, quote):
+                    reasons.append(f"citat izrice SUPROTNU odredbu o '{check_id}' od tvrdnje")
+                else:
+                    reasons.append(f"citat ne izrice odredbu o '{check_id}' (nijedan prepoznat pojam)")
+            elif derivable == "unsupported":
+                reasons.append(
+                    f"nijecna tvrdnja o '{check_id}' nema negativan rjecnik (NEPROVJERIVO, ne pad)"
+                )
         else:
             derivable = "unsupported"
             reasons.append(f"za checkId '{check_id}' nema pravila izvoda (NEPROVJERIVO, ne pad)")
@@ -744,6 +799,20 @@ SELFTEST: list[tuple[str, object, str, bool]] = [
     # --- PREDIKATNE OSI: rjecnik mora pokriti kako izvori STVARNO pisu -------------------------
     # Sve tri "grize" kontrole su prepisane iz izvora koji su prosireni rjecnik iznudili: mjerenje je
     # 60 tvrdnji proglasilo neuporistenima, a uzorak od 6 pokazao da su 3 promasaj RJECNIKA.
+    # --- PREDIKATNE OSI MORAJU GLEDATI VRIJEDNOST ----------------------------------------------
+    # Zivi slucaj iz podataka: jedina tvrdnja `justify: false` ima citat "tekst se pise lijevo
+    # poravnato". Stari izvod ju je potvrdjivao tokenom "poravnat", i ISTIM bi tokenom potvrdio i
+    # suprotnu tvrdnju. Cetiri kontrole zakivaju obje strane.
+    ("justify", False, "tekst se pise lijevo poravnato", True),
+    ("justify", True, "tekst se pise lijevo poravnato", False),
+    ("justify", True, "tekst je obostrano poravnat", True),
+    ("justify", False, "tekst je obostrano poravnat", False),
+    # Os bez negativnog rjecnika za nijecnu tvrdnju ostaje NEPROVJERIVA, ne prolazi tiho.
+    ("footnote-justify", False, "biljeske se pisu obostrano poravnato", "unsupported"),
+    # `footnote-font` vise nije predikatna: trazi se IME iz vrijednosti I kontekst fusnote.
+    ("footnote-font", ["Times New Roman"], "Biljeske na dnu stranice pisu se fontom Times New Roman.", True),
+    ("footnote-font", ["Times New Roman"], "Biljeske se pisu na dnu stranice, velicine 10.", False),
+    ("footnote-font", ["Times New Roman"], "Rad se pise fontom Times New Roman.", False),
     ("justify", True, "Margine su standardne, a tekst poravnat s obje strane.", True),
     # --- IMENOVAN CITATNI STIL: ime, ne puka zagrada -------------------------------------------
     ("citation-style", "ieee", "Literatura se navodi prema IEEE standardu.", True),
@@ -904,7 +973,7 @@ def selftest() -> int:
             lowered = squash(quote).lower()
             got = all(any(form.lower() in lowered for form in g) for g in groups)
         else:
-            got = predicate_hit(check_id, quote)
+            got = predicate_verdict(check_id, value, quote)
         if got != expected:
             failures += 1
             print(f"  PROMASAJ [{check_id}] ocekivano izvod={expected}, dobiveno={got}: {quote[:70]}")
