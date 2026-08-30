@@ -76,3 +76,82 @@ describe('parseXml: odbijanje DTD-a (billion laughs)', () => {
     expect(doc.getElementsByTagName('Pages')[0]?.textContent).toBe('5');
   });
 });
+
+/**
+ * Ulaz koji je motivirao nadogradnju `@xmldom/xmldom` 0.9.10 -> 0.9.12.
+ *
+ * VAZNO: meta su tocno one ranjivosti koje su dosezive iz `DOMParser.parseFromString` uz ZADANE
+ * opcije, dakle onako kako ih Lekta stvarno zove. To su popravci iz 0.9.12, ne 0.9.11:
+ *
+ *  - GHSA-965w-775f-mr7g: kvadratna MEMORIJA na duboko/ponovljeno imenovanom prostoru. DOCX je
+ *    gusto namespacean (w:, r:, wp:, a:), pa je to doslovno oblik ulaza koji alat prima.
+ *  - GHSA-8344-3jmq-59r6: deduplikacija atributa O(M^2); neprijateljski broj duplih atributa
+ *    zaglavi parsiranje.
+ *  - GHSA-93r5-fhx6-vmg9: oporavak od neispravnog ulaza kvadratan umjesto linearan (skeniranje
+ *    imena zaustavlja se na ugnijezdjenom `<`).
+ *
+ * 0.9.11 popravlja SAMO serijalizator uz `{ requireWellFormed: true }` (GHSA-w2rr-34g9-rvrj,
+ * GHSA-4w3w-2rp5-g8jm), sto je put koji ovaj repozitorij ne koristi. Zaustavljanje na 0.9.11 ne bi
+ * zatvorilo nijedan od tri gornja kvara.
+ *
+ * MJERI SE VRIJEME, NE ISHOD. `parseXml` odbija samo DTD i `parsererror`, a xmldom na neispravnom
+ * XML-u uredno vraca dokument (isto upozorenje stoji u CLAUDE.md). Tvrdnja "baca" bila bi lazno
+ * zelena; kvadratno ponasanje obara tvrdnja "zavrsi u ogranicenom vremenu".
+ *
+ * DOKAZ DA GARD GRIZE (izmjereno 2026-08-30, ne pretpostavljeno): uz `@xmldom/xmldom` vracen na
+ * 0.9.10 tvrdnja o namespaceovima PADA na 8207 ms protiv granice od 5000 ms; na 0.9.12 prolazi.
+ *
+ * POSTENO O OPSEGU: od pet tvrdnji ovdje SAMO ta jedna stvarno razlikuje 0.9.10 od 0.9.12 pri ovim
+ * velicinama. Preostale cetiri prolaze na OBJE verzije i stoje kao regresijski prag za ubuduce
+ * (duplikati atributa, oporavak od neispravnog imena, ostecen PI), ne kao dokaz ovog popravka.
+ * Tko im pojaca velicine, neka ponovno izmjeri obje verzije prije nego tvrdi da grizu.
+ */
+describe('@xmldom/xmldom: neprijateljski ulaz zavrsava u ogranicenom vremenu', () => {
+  const BUDGET_MS = 5000;
+
+  function elapsed(run: () => void): number {
+    const started = Date.now();
+    try {
+      run();
+    } catch {
+      // Odbijanje je uredan ishod; mjeri se iskljucivo vrijeme do zavrsetka.
+    }
+    return Date.now() - started;
+  }
+
+  it('KONTROLA: benigni dokument usporedive velicine je daleko unutar granice', () => {
+    // Bez kontrole granica ne znaci nista: spor stroj bi obarao i posve zdrav parser.
+    const benign = `<r>${'<c>tekst</c>'.repeat(3000)}</r>`;
+    const ms = elapsed(() => parseXml(benign, 'test'));
+    expect(ms, `benigni dokument trajao ${ms} ms`).toBeLessThan(BUDGET_MS);
+  });
+
+  it('duboko ponovljen namespace ne trosi kvadratnu memoriju (GHSA-965w-775f-mr7g)', () => {
+    // Svaki element deklarira VLASTITI prefiks: prije popravka se mapa prefiksa kopirala za svaki.
+    const depth = 3000;
+    const open = Array.from({ length: depth }, (_, i) => `<p${i}:e xmlns:p${i}="urn:x${i}">`).join('');
+    const close = Array.from({ length: depth }, (_, i) => `</p${depth - 1 - i}:e>`).join('');
+    const ms = elapsed(() => parseXml(`${open}${close}`, 'test'));
+    expect(ms, `${depth} ugnijezdjenih namespace deklaracija trajalo ${ms} ms`).toBeLessThan(BUDGET_MS);
+  });
+
+  it('neprijateljski broj duplih atributa ne zaglavi parsiranje (GHSA-8344-3jmq-59r6)', () => {
+    const attrs = Array.from({ length: 5000 }, () => 'a="1"').join(' ');
+    const ms = elapsed(() => parseXml(`<r ${attrs}/>`, 'test'));
+    expect(ms, `5000 duplih atributa trajalo ${ms} ms`).toBeLessThan(BUDGET_MS);
+  });
+
+  it('oporavak od neispravnog imena je linearan (GHSA-93r5-fhx6-vmg9)', () => {
+    // Skeniranje imena mora stati na ugnijezdjenom `<`, inace backtracka kvadratno.
+    const hostile = `<${'a'.repeat(40_000)}<b>x</b>`;
+    const ms = elapsed(() => parseXml(hostile, 'test'));
+    expect(ms, `neispravno ime od 40k znakova trajalo ${ms} ms`).toBeLessThan(BUDGET_MS);
+  });
+
+  it('ostecena processing instruction i nevaljana imena zavrsavaju', () => {
+    for (const bad of [`<?${'a'.repeat(20_000)}`, '<1neispravno>x</1neispravno>', '<a<b>x</a<b>']) {
+      const ms = elapsed(() => parseXml(bad, 'test'));
+      expect(ms, `ulaz (${bad.slice(0, 12)}) trajao ${ms} ms`).toBeLessThan(BUDGET_MS);
+    }
+  });
+});
