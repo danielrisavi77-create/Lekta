@@ -96,7 +96,7 @@ export function tocFieldWillRefresh(result: unknown): boolean {
     ?.details?.fieldIntegrity?.fields;
   if (!Array.isArray(fields)) return false;
   const toc = fields.filter((field) => field.kind === 'toc');
-  return toc.length > 0 && toc.some((field) => field.dirty === true || field.status === 'stale');
+  return toc.some((field) => field.dirty === true || field.status === 'stale');
 }
 
 /**

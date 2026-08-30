@@ -292,5 +292,3 @@ function boot(): void { setupDesk(); setupSections(); setupVideo(); setupResolve
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
 else boot();
-
-export {};
