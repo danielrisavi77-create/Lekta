@@ -22,7 +22,7 @@ installXmlDomParser(true);
 const { analyzeFixture, resolveProfile } = await import('../src/analysis/golden-entry');
 const { applyFixers } = await import('../src/repair/apply-fixers');
 const { buildDefaultRepairRequests } = await import('../src/repair/default-selection');
-const { buildRepairableItems } = await import('../src/ui/repair-items');
+const { buildAllRepairableItems } = await import('../src/ui/repair-item-assembly');
 const { DEEP_CAPABLE } = await import('../src/ui/repair-panel');
 const { detectPassRegressions } = await import('../src/analysis/repair-regression');
 const { draftRuleEntriesFor, VERIFIED_PROFILES_WITH_DRAFTS } = await import('../src/profiles/drafts-runtime');
@@ -34,6 +34,18 @@ const { buildViolatingDocx } = await import('../tests/helpers/violating-docx');
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+/**
+ * Strukturne osi su od 2026-08-30 UKLJUCENE po zadanom, odlukom vlasnika; `--no-structural`
+ * reproducira staro mjerenje radi usporedbe.
+ *
+ * Zasto je odluka trebala: bez njih je closed-loop krsio samo sest profilnih osi, pa su profili
+ * "prolazili" na osima koje nikad nisu bile izvrsene. Izmjereno na uzorku od 25 profila,
+ * ukljucivanje daje 6 `pass` umjesto 24, i tih 18 pada na `toc-field` ili `heading-style`, dakle
+ * na BODOVANE provjere koje su dotad bile nevidljive.
+ *
+ * Pad brojke `pass` zato NIJE regresija proizvoda nego prestanak vakuumskog zelenog.
+ */
+const useStructural = !process.argv.includes('--no-structural');
 const limitFlag = process.argv.indexOf('--limit');
 const limit = limitFlag > -1 ? Number(process.argv[limitFlag + 1]) : Infinity;
 
@@ -87,7 +99,33 @@ const AXIS_CHECK_ID: Record<string, string> = {
   'line-spacing': 'format.spacing.body',
   justify: 'format.justify.body',
   margins: 'page.margins',
+  // Strukturne osi (samo uz `--structural`). Ovdje smiju stajati ISKLJUCIVO osi cija je provjera
+  // BODOVANA; obrazlozenje je u `STRUCTURAL_WITHOUT_SCORED_CHECK` nize.
+  'toc-field': 'toc.present',
+  'heading-style': 'structure.heading.word-styles',
 };
+
+/**
+ * Strukturne osi koje NEMAJU bodovanu provjeru, pa ne smiju proizvoditi dokaz `resolved`.
+ *
+ * IZMJERENO 2026-08-30 na fpzg-politologija-diplomski:
+ *
+ *   toc-field            toc.present                     max 5   BODOVANA
+ *   heading-style        structure.heading.word-styles   max 4   BODOVANA
+ *   empty-paragraphs     element.empty-paragraphs        max 0   informativna
+ *   croatian-typography  format.typography.consistency   max 0   informativna
+ *   link-doi             nema provjere                     -     nema
+ *
+ * Zasto je to zamka a ne sitnica: `axisResolved` vraca `true` cim je `max === 0` (nebodovana
+ * provjera ne moze kaznjavati). Da su te tri osi naivno ozicene, svaka bi se na SVAKOM profilu
+ * odmah javila kao rijesena i matrica bi dobila 407 x 3 = 1221 celiju laznog dokaza. To je isti
+ * razred kao "vakuumsko zeleno" iz hijerarhije naslova.
+ *
+ * Te osi i dalje vrijede u generatoru i u vlastitim testovima; samo ne mogu nositi `resolved`.
+ * Za njih je predvidjena slabija jacina dokaza (`applied`, vidi `tests/helpers/coverage-cells.ts`),
+ * koja jos nije ozicena.
+ */
+const STRUCTURAL_WITHOUT_SCORED_CHECK = new Set(['empty-paragraphs', 'croatian-typography', 'link-doi']);
 
 /** Format stranice ima dinamican naslov (`page.size.*`), pa se prepoznaje po prefiksu. */
 function checkForAxis(checks: Array<{ id?: string | null; title?: string }>, axis: string) {
@@ -125,6 +163,8 @@ interface Row {
   requested: number;
   /** Osi koje su nakon popravka prestale kaznjavati dokument. */
   axesResolved: string[];
+  /** Osi koje je popravak dirao, ali im nijedna bodovana provjera ne moze potvrditi rjesenje. */
+  axesApplied: string[];
   /** Osi koje su i dalje prekrsene nakon popravka. */
   axesRemaining: string[];
   resolved: number;
@@ -134,14 +174,29 @@ interface Row {
 }
 
 async function runProfile(profileId: string): Promise<Row> {
-  const base: Row = { profileId, outcome: 'error', violated: [], requested: 0, axesResolved: [], axesRemaining: [], resolved: 0, regressions: 0, textPreserved: true };
+  const base: Row = { profileId, outcome: 'error', violated: [], requested: 0, axesResolved: [], axesApplied: [], axesRemaining: [], resolved: 0, regressions: 0, textPreserved: true };
   try {
     const profile = liveProfile(profileId);
-    const { bytes, violated } = await buildViolatingDocx(profile);
+    const { bytes, violated } = await buildViolatingDocx(profile, useStructural ? { structural: true } : {});
     if (!violated.length) return { ...base, outcome: 'no-rules' };
 
     const before = await analyzeFixture(new File([bytes], `${profileId}.docx`, { type: DOCX_MIME }), { profileId, profile });
-    const items = buildRepairableItems(before.checks ?? [], profile, draftRuleEntriesFor(profileId));
+    /**
+     * ISTI sklop koji koristi sucelje, ne samo profilna grana.
+     *
+     * `buildRepairableItems` gradi SAMO stavke izvedene iz pravila profila; univerzalne
+     * (`toc-field`, `heading-style`, `empty-paragraph`, `croatian-typography`, `link-doi`,
+     * `required-section`...) dolaze iz `buildAllRepairableItems`, koji zove i sucelje.
+     *
+     * IZMJERENO 2026-08-30: dok je stajao uzi sklop, closed-loop je za
+     * `fpzg-politologija-diplomski` slao 5 zahtjeva, a `toc-field` i `heading-style` su ostajali
+     * NERIJESENI na 322 od 322 profila, jer im fixer nikad nije ni bio ponudjen. S punim sklopom
+     * isti profil salje 10 zahtjeva i provjera `structure.heading.word-styles` ide 2/4 -> 4/4.
+     *
+     * Isti razred kao napomena uz `buildDefaultRepairRequests`: harness koji ne ide kroz produkcijski
+     * sklop mjeri tok koji nitko ne izvodi.
+     */
+    const items = buildAllRepairableItems({ result: before, profile, entries: draftRuleEntriesFor(profileId) });
     const requests = buildDefaultRepairRequests(items as never).map((request) =>
       DEEP_CAPABLE.has(request.fixerId) ? { ...request, params: { ...request.params, deep: true } } : request,
     );
@@ -158,8 +213,27 @@ async function runProfile(profileId: string): Promise<Row> {
     );
 
     const afterChecks = (after.checks ?? []) as Array<{ id?: string | null; title?: string; earned?: number; max?: number }>;
-    const axesResolved = violated.filter((axis) => axisResolved(checkForAxis(afterChecks, axis)));
-    const axesRemaining = violated.filter((axis) => !axesResolved.includes(axis));
+    // Os bez bodovane provjere ne moze biti `resolved`: `axisResolved` bi ju zbog `max === 0`
+    // proglasio rijesenom bez ijednog dokaza.
+    const axesResolved = violated.filter(
+      (axis) => !STRUCTURAL_WITHOUT_SCORED_CHECK.has(axis) && axisResolved(checkForAxis(afterChecks, axis)),
+    );
+    /**
+     * Osi bez bodovane provjere IZLAZE iz presude, ne samo iz `axesResolved`.
+     *
+     * IZMJERENO 2026-08-30 na istih 25 profila: dok su sjedile u `axesRemaining`, svaki je profil
+     * postajao `partial` (24 `pass` -> 0 `pass`, 24 `partial`). To nije mjerenje nego konstantan
+     * pomak: os koju nijedna provjera ne moze proglasiti rijesenom trajno obara presudu, pa razlika
+     * medju profilima nestaje.
+     *
+     * Prijavljuju se odvojeno, kao `axesApplied`: fixer je dokumentu nesto napravio, ali artefakt
+     * ne moze tvrditi da se ijedna provjera zbog toga prevrnula. To je tocno jacina `applied` iz
+     * `tests/helpers/coverage-cells.ts`.
+     */
+    const axesApplied = violated.filter((axis) => STRUCTURAL_WITHOUT_SCORED_CHECK.has(axis));
+    const axesRemaining = violated.filter(
+      (axis) => !axesResolved.includes(axis) && !STRUCTURAL_WITHOUT_SCORED_CHECK.has(axis),
+    );
     const regressions = detectPassRegressions(before.checks ?? [], after.checks ?? []).length;
 
     const row: Row = {
@@ -169,6 +243,7 @@ async function runProfile(profileId: string): Promise<Row> {
       requested: requests.length,
       axesResolved,
       axesRemaining,
+      axesApplied,
       resolved: axesResolved.length,
       regressions,
       textPreserved: true,
