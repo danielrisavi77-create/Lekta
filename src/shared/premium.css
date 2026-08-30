@@ -148,6 +148,31 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
   box-shadow: var(--premium-depth-3);
 }
 
+/**
+ * Potvrda ishoda: kratki "pecat" na gumbu koji je upravo obavio posao (kopiranje ili preuzimanje).
+ *
+ * Zasto: do 2026-08-30 se pri uspjehu mijenjao SAMO tekst gumba ("Kopirano ✓") i `aria-live`
+ * status, pa se na ekranu nista nije pomaknulo. Ovo je jedini trenutak koji svih pet alata dijele,
+ * i jedini u kojem korisnik doista nesto dobije.
+ *
+ * Namjerno BEZ promjene boje: zelena i zuta su u ovom sustavu rezervirane za nalaze provjere
+ * (`design-system.css`), a crvena je korektorski akcent. Potvrda je zato materijalna, ne bojena:
+ * gumb se lagano utisne pa slegne, uz kratko podizanje dubine. Isti recnik trajanja i easinga kao
+ * ostatak sustava (`--dur-3`, `--ease-pop`).
+ *
+ * Reduced-motion ne treba iznimku ovdje: globalni prekidac u `motion.css` gasi svaku animaciju.
+ */
+@keyframes lekta-outcome-stamp {
+  0% { transform: scale(1); box-shadow: var(--premium-depth-1) }
+  22% { transform: scale(.965); box-shadow: none }
+  58% { transform: scale(1.012); box-shadow: var(--premium-depth-3) }
+  100% { transform: scale(1); box-shadow: var(--premium-depth-2) }
+}
+
+[data-lekta-ok] {
+  animation: lekta-outcome-stamp var(--dur-3, .5s) var(--ease-pop, cubic-bezier(.34, 1.4, .5, 1)) both;
+}
+
 .premium-paper-stack {
   position: relative;
   isolation: isolate;

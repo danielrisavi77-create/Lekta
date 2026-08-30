@@ -80,6 +80,7 @@ export function bindDownloadButton(
       if (!blob) return;
       downloadBlob(blob, filename);
       void trackToolEvent('tool_download');
+      markOutcome(btn);
     } catch {
       if (timer) clearTimeout(timer);
       btn.textContent = failLabel;
@@ -120,6 +121,23 @@ function isCoarsePointer(): boolean {
  * brzi dvoklik NE zaglavi gumb na privremenom tekstu. Bez Clipboard API-ja pokazuje uputu
  * (failLabel). Prazan getText() ne radi nista (gumb je i inace onemogucen kad nema sadrzaja).
  */
+/**
+ * Kratka vizualna potvrda ishoda na samom gumbu.
+ *
+ * Do 2026-08-30 je jedina potvrda bila zamjena teksta ("Kopirano ✓") i `aria-live` status, dakle
+ * nista se nije POMAKNULO. Oznaka je atribut, a ne klasa, da stil ostane u CSS-u i da ga globalni
+ * reduced-motion prekidac (`motion.css`) ugasi bez ijedne iznimke ovdje.
+ *
+ * Atribut se prvo mice pa vraca uz prisilni reflow: bez toga ponovni klik unutar `holdMs` ne bi
+ * ponovno pokrenuo animaciju, a upravo je dvoklik slucaj koji `tests/tool-ui.test.ts` vec cuva.
+ */
+function markOutcome(btn: any): void {
+  if (!btn || typeof btn.removeAttribute !== 'function') return;
+  btn.removeAttribute('data-lekta-ok');
+  void btn.offsetWidth;
+  btn.setAttribute('data-lekta-ok', '');
+}
+
 export function bindCopyButton(
   btn: any,
   getText: () => string,
@@ -147,9 +165,13 @@ export function bindCopyButton(
     btn.textContent = ok ? okLabel : failLabel;
     // Vizualna potvrda je na gumbu; citac ekrana je dobiva preko aria-live statusa kad je predan.
     if (opts.statusEl) opts.statusEl.textContent = ok ? okStatus : failStatus;
-    if (ok) void trackToolEvent('tool_copy');
+    if (ok) {
+      void trackToolEvent('tool_copy');
+      markOutcome(btn);
+    }
     timer = window.setTimeout(() => {
       btn.textContent = original;
+      btn.removeAttribute('data-lekta-ok');
       timer = 0;
     }, holdMs);
   });

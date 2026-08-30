@@ -192,3 +192,68 @@ for (const [route, selector] of Object.entries(PRVA_KONTROLA)) {
     expect(top!, `prva kontrola na ${route} (granica ${limit} px)`).toBeLessThanOrEqual(limit);
   });
 }
+
+/**
+ * PRVI TEST KOJI ALAT STVARNO KORISTI.
+ *
+ * Do 2026-08-30 nijedna browser tvrdnja nije KLIKNULA nijedan primarni gumb: `#copyBtn`,
+ * `#kt-copy`, `#tp-print`, `#lit-copy` i `#st-print` provjeravali su se samo kao VIDLJIVI. Cijela
+ * jezgra je gusto pokrivena jedinicnim testovima, ali nista nije dokazivalo da sklopljeni proizvod
+ * radi u pregledniku: bez upisa, bez citanja izlaza, bez preuzimanja.
+ *
+ * Ovdje se mjeri lanac od tipkanja do potvrde ishoda, ukljucujuci vizualnu potvrdu
+ * (`data-lekta-ok`), koja je dodana jer se pri uspjehu dotad mijenjao samo tekst gumba.
+ */
+test('kartice: upis mijenja brojke, a kopiranje daje vidljivu potvrdu', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto('/kartice.html');
+
+  // Brojke krecu od nule i kopiranje je onemoguceno dok nema sto kopirati.
+  await expect(page.locator('#m-words')).toHaveText('0');
+  await expect(page.locator('#kt-copy')).toBeDisabled();
+
+  await page.locator('#kt-input').fill('Ovo je kratak test brojaca kartica.');
+
+  // Sest rijeci, deterministicno; jezgra je pokrivena jedinicnim testom, ovdje se dokazuje da je
+  // uopce OZICENA na sucelje.
+  await expect(page.locator('#m-words')).toHaveText('6');
+  await expect(page.locator('#m-chars')).not.toHaveText('0');
+  await expect(page.locator('#kt-copy')).toBeEnabled();
+
+  await page.locator('#kt-copy').click();
+
+  // Tri neovisna dokaza ishoda: natpis, `aria-live` status i vizualna potvrda.
+  await expect(page.locator('#kt-copy')).toHaveText(/Kopirano/);
+  await expect(page.locator('#kt-copy')).toHaveAttribute('data-lekta-ok', '');
+  await expect(page.locator('#kt-copy-status')).not.toBeEmpty();
+});
+
+test('citat: ispunjena polja daju citat, a gumb se otkljucava', async ({ page }) => {
+  await page.goto('/citat.html');
+
+  await page.locator('#f-authors').fill('Ivić, Ivan');
+  await page.locator('#f-title').fill('Naslov probnog djela');
+  await page.locator('#f-year').fill('2024');
+
+  // Izlaz mora sadrzavati ono sto je upisano; tocan oblik po stilu pokriva `tests/citation.test.ts`.
+  await expect(page.locator('#out-intext')).toContainText('Ivić');
+  await expect(page.locator('#copyBtn')).toBeEnabled();
+});
+
+test('potvrda ishoda se gasi pod reduced-motion', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/kartice.html');
+  await page.locator('#kt-input').fill('Proba.');
+  await page.locator('#kt-copy').click();
+
+  const anim = await page.evaluate(() => {
+    const cs = getComputedStyle(document.querySelector('#kt-copy')!);
+    return { name: cs.animationName, durationMs: parseFloat(cs.animationDuration) * 1000 };
+  });
+
+  // Pravilo je i dalje pridruzeno (potvrda ostaje kao stanje), ali TRAJANJE mora biti nemjerljivo:
+  // globalni prekidac u `motion.css` gasi svaku animaciju, pa ovdje nema vlastite iznimke.
+  expect(anim.name).toBe('lekta-outcome-stamp');
+  expect(anim.durationMs).toBeLessThan(1);
+});
