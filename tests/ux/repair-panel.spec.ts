@@ -30,6 +30,8 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
   const confirm = page.locator('[data-confirm-profile]');
   if (await confirm.isVisible().catch(() => false)) await confirm.click();
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
+  await page.locator('#resultCockpit [data-cockpit-advanced]').click();
+  await expect(page.locator('#resultCockpitAdvancedContent')).toBeVisible();
   await page.locator('#resultDetailsToggle').click();
   await page.locator('#tabbtn-submission').click();
 }

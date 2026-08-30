@@ -135,3 +135,47 @@
     transform: none;
   }
 }
+
+
+/* Visual System v2 archive mode. */
+.my-work-page {
+  padding-top: clamp(44px, 7vw, 78px);
+  color: var(--desk-ink);
+}
+
+.my-work-intro h1,
+.my-work-paper h2 {
+  font-family: var(--display-serif);
+}
+
+.my-work-intro h1 {
+  letter-spacing: -.055em;
+}
+
+.my-work-paper {
+  border-radius: 2px;
+  border-color: var(--paper-line);
+  background:
+    linear-gradient(125deg, color-mix(in srgb, var(--paper-2) 58%, transparent), transparent 48%),
+    var(--paper);
+  color: var(--paper-ink);
+  box-shadow: 12px 14px 0 color-mix(in srgb, var(--red) 17%, var(--paper-2)), var(--paper-sh);
+}
+
+.my-work-paper::before {
+  font-family: var(--mono);
+  color: var(--red-deep);
+}
+
+.my-work-stamp {
+  border-width: 1px;
+  color: var(--red-deep);
+  font-family: var(--mono);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .my-work-paper,
+  .my-work-stamp {
+    transform: none;
+  }
+}

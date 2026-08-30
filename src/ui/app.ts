@@ -1162,7 +1162,7 @@ function renderTriage(r: any){
 }
 function refreshFindingViews(r: any){renderTriage(r)}
 function resultsCockpitEnabled(){return resultRendererFor(runtimeDocument())==='cockpit'}
-const RESULTS_COCKPIT_ADVANCED_IDS=['repairEntry','resultGuide','triagePanel','networkProof','nextSteps','fullReportBanner','waitlistBar','resultDetails'];
+const RESULTS_COCKPIT_ADVANCED_IDS=['repairEntry','resultGuide','triagePanel','networkProof','nextSteps','fullReportBanner','waitlistBar','resultTrust','resultDetails'];
 function ensureResultsCockpitAdvancedShell(): HTMLElement|null{
   const mount=$('#resultCockpit') as HTMLElement|null;
   if(!mount)return null;
@@ -1190,7 +1190,6 @@ function setResultsCockpitAdvanced(open:boolean){
   if(shell)shell.dataset.open=String(open);
   const toggle=$('#resultCockpit [data-cockpit-advanced]') as HTMLElement|null;
   toggle?.setAttribute('aria-expanded',String(open));
-  if(open){revealResultDetails();revealDetails()}
 }
 function handleResultsCockpitAction(r:any,action:ResultsCockpitAction){
   if(action.kind==='preview-location'){
@@ -1199,6 +1198,8 @@ function handleResultsCockpitAction(r:any,action:ResultsCockpitAction){
   }
   if(action.kind==='open-findings'){
     setResultsCockpitAdvanced(true);
+    revealResultDetails();
+    revealDetails();
     openTab('issues');
     return;
   }

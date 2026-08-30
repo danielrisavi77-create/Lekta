@@ -6,7 +6,7 @@ export type FreeToolPage = {
 };
 
 export const FREE_TOOL_PAGES: FreeToolPage[] = [
-  { route: '/index.html', name: 'naslovnica proizvoda', primarySelector: '#dropzone' },
+  { route: '/', name: 'naslovnica proizvoda', primarySelector: '#intakeDropzone' },
   { route: '/alati.html', name: 'alati', primarySelector: '.tool-card[href="citat.html"]' },
   { route: '/citat.html', name: 'citat', primarySelector: '#copyBtn', workspaceSelector: '.tool-workspace' },
   { route: '/kartice.html', name: 'kartice', primarySelector: '#kt-copy', workspaceSelector: '.tool-workspace' },

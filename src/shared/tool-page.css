@@ -231,3 +231,103 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);over
 .tools-grid .tool-go{margin-top:auto;display:inline-flex;align-items:center;gap:6px;padding-top:10px}
 .icon-btn,.lampa-btn{min-width:44px;min-height:44px}
 @media(max-width:640px){.tools-grid .tool-card{min-height:0}}
+
+
+/* Visual System v2 tools mode. */
+.tool-workspace,
+.tools-grid {
+  font-family: var(--ui);
+}
+
+.tool-workspace > .card,
+.tool-workspace .out-panel > .card,
+.tools-grid .tool-card {
+  border-radius: 2px;
+  border-color: var(--paper-line);
+  box-shadow: var(--paper-sh);
+}
+
+.tool-workspace > .card {
+  background:
+    linear-gradient(125deg, color-mix(in srgb, var(--paper-2) 58%, transparent), transparent 44%),
+    var(--paper);
+}
+
+.tool-workspace .out-panel > .card {
+  background: var(--paper);
+}
+
+.tool-workspace > .card > h2,
+.tool-workspace .out-panel > .card > h2,
+.tools-grid .tool-card h2,
+.tools-grid .tool-card h3 {
+  font-family: var(--display-serif);
+  font-weight: 500;
+  letter-spacing: -.035em;
+}
+
+.tool-workspace input,
+.tool-workspace select,
+.tool-workspace textarea {
+  border-radius: 2px;
+  border-color: var(--paper-line);
+  background: color-mix(in srgb, var(--paper) 84%, var(--paper-2));
+}
+
+.tool-workspace .btn,
+.tool-workspace button,
+.tools-grid .tool-go {
+  min-height: 44px;
+  border-radius: 2px;
+}
+
+.tools-grid {
+  gap: 0;
+  border-top: 1px solid var(--desk-line);
+}
+
+.tools-grid .tool-card {
+  min-height: 220px;
+  padding: 24px;
+  border-width: 0 1px 1px 0;
+  background: var(--paper);
+}
+
+.tools-grid .tool-card:nth-child(3n + 2) {
+  transform: translateY(18px);
+}
+
+.tools-grid .tool-card:nth-child(3n) {
+  transform: translateY(5px);
+}
+
+.tools-grid .tool-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--red);
+  box-shadow: 8px 10px 0 color-mix(in srgb, var(--red) 20%, transparent);
+}
+
+.tools-grid .tool-go {
+  color: var(--red-deep);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 640px) {
+  .tools-grid .tool-card {
+    min-height: 0;
+  }
+
+  .tools-grid .tool-card:nth-child(3n + 2),
+  .tools-grid .tool-card:nth-child(3n) {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tools-grid .tool-card,
+  .tools-grid .tool-card:hover {
+    transform: none;
+    transition: none;
+  }
+}

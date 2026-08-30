@@ -281,3 +281,90 @@ a { color: inherit; }
   [data-route-directory-group] { border-color: CanvasText; background: Canvas; color: CanvasText; }
   :focus-visible { outline: 3px solid Highlight; outline-offset: 3px; }
 }
+
+
+/* Visual System v2 route chrome. Keep the existing route variables as compatibility
+   aliases while making the shared desk and paper system the single visual source. */
+:root {
+  --route-bg: var(--desk);
+  --route-surface: var(--desk-2);
+  --route-paper: var(--paper);
+  --route-ink: var(--desk-ink);
+  --route-muted: var(--desk-muted);
+  --route-line: var(--desk-line);
+  --route-red: var(--red);
+  --route-green: var(--pass);
+  --route-primary-bg: var(--paper);
+  --route-primary-fg: var(--paper-ink);
+  --route-shadow: var(--paper-sh);
+  font-family: var(--ui);
+}
+
+:root[data-theme="light"] {
+  --route-bg: #dfd8c6;
+  --route-surface: #ebe4d4;
+  --route-paper: #fffaf0;
+  --route-ink: #29231d;
+  --route-muted: #6e6656;
+  --route-line: #c9bda8;
+  --route-red: #a5382e;
+  --route-green: #2d6749;
+  --route-primary-bg: #29231d;
+  --route-primary-fg: #fffaf0;
+}
+
+.route-header,
+.intake-topbar {
+  font-family: var(--ui);
+  background: color-mix(in srgb, var(--route-bg) 96%, transparent);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.route-brand,
+.intake-brand {
+  font-family: var(--display-serif);
+  font-weight: 600;
+}
+
+.route-links a,
+.intake-my-work,
+.route-button,
+.route-icon-button {
+  border-radius: 2px;
+  font-family: var(--ui);
+}
+
+.route-links a,
+.intake-my-work,
+.route-icon-button,
+.route-button {
+  min-height: 44px;
+}
+
+.route-button {
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--route-red) 78%, transparent);
+}
+
+.route-button--primary {
+  box-shadow: 4px 4px 0 var(--route-red);
+}
+
+.route-shell :is(a, button):focus-visible,
+.intake-topbar :is(a, button):focus-visible {
+  outline: 2px solid var(--route-red);
+  outline-offset: 4px;
+  box-shadow: var(--v2-focus-ring);
+}
+
+.route-shell :is(a, button):hover,
+.intake-topbar :is(a, button):hover {
+  transition: color .16s var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-shell :is(a, button),
+  .intake-topbar :is(a, button) {
+    transition: none;
+  }
+}

@@ -23,3 +23,398 @@
 .cockpit-dna{display:grid;gap:.9rem;padding:1.2rem 1.25rem;border:1px solid var(--cockpit-line);border-radius:1rem;background:rgba(255,255,255,.42)}.cockpit-dna__track{display:grid;grid-template-columns:repeat(auto-fit,minmax(7rem,1fr));gap:.4rem;position:relative}.cockpit-dna__track::before{content:'';position:absolute;top:1.05rem;left:1rem;right:1rem;border-top:1px solid var(--cockpit-line)}.cockpit-dna__segment{position:relative;z-index:1;display:grid;justify-items:center;gap:.35rem;min-width:0;padding:0;border:0;color:var(--cockpit-ink);background:transparent;font:inherit;text-align:center}.cockpit-dna__segment strong{font-size:.75rem}.cockpit-dna__segment>span:last-child{overflow:hidden;max-width:100%;color:var(--cockpit-muted);font-size:.65rem;text-overflow:ellipsis;white-space:nowrap}.cockpit-dna__node{width:.75rem;height:.75rem;border:2px solid var(--cockpit-green);border-radius:50%;background:var(--cockpit-paper);box-shadow:0 0 0 .25rem var(--cockpit-paper)}button.cockpit-dna__segment{cursor:pointer}button.cockpit-dna__segment:hover .cockpit-dna__node,button.cockpit-dna__segment:focus-visible .cockpit-dna__node{background:var(--cockpit-green)}.cockpit-dna__hint,.cockpit-dna--unavailable p{margin:0;color:var(--cockpit-muted);font-size:.75rem}.cockpit-actions{display:flex;flex-wrap:wrap;gap:.65rem;padding:.2rem 0}.cockpit-actions .button{flex:1 1 10rem;min-height:2.65rem}.cockpit-actions__count{display:inline-grid;place-items:center;min-width:1.3rem;height:1.3rem;margin-left:.25rem;border-radius:999px;background:rgba(255,255,255,.35);font-size:.7rem}
 @media(max-width:680px){.cockpit-header{display:grid}.cockpit-header__status{justify-self:start}.cockpit-score__metrics{gap:.25rem}.cockpit-dna{padding:1rem}.cockpit-dna__track{grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}.cockpit-dna__track::before{display:none}.cockpit-actions{display:grid}.cockpit-actions .button{width:100%}}
 /* Korektorski stol: jasna informacijska hijerarhija + taktilni papirni sloj. */
+
+
+/* Visual System v2 Results Cockpit: status first, findings second, detail on demand. */
+.result-cockpit {
+  --cockpit-paper: var(--paper);
+  --cockpit-ink: var(--paper-ink);
+  --cockpit-muted: var(--paper-muted);
+  --cockpit-line: var(--paper-line);
+  --cockpit-red: var(--red-deep);
+  --cockpit-green: var(--pass);
+  --cockpit-amber: var(--warn);
+  gap: clamp(1.4rem, 3vw, 2.2rem);
+  font-family: var(--ui);
+}
+
+.cockpit-header {
+  align-items: end;
+  padding: 0 0 1rem;
+  border-bottom: 2px solid var(--cockpit-ink);
+}
+
+.cockpit-header h2,
+.cockpit-hero h2,
+.cockpit-section-heading h2,
+.cockpit-finding h3,
+.cockpit-dna h2 {
+  font-family: var(--display-serif);
+  font-weight: 500;
+}
+
+.cockpit-header h2 {
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  letter-spacing: -.035em;
+}
+
+.cockpit-header p {
+  font-family: var(--ui);
+  font-size: .76rem;
+}
+
+.cockpit-header__status {
+  padding: .5rem .7rem;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.cockpit-hero {
+  position: relative;
+  grid-template-columns: minmax(12rem, .74fr) minmax(0, 1.26fr);
+  gap: clamp(1.2rem, 3.2vw, 3rem);
+  align-items: center;
+  padding: clamp(1.2rem, 3.2vw, 2.6rem);
+  border-radius: 2px;
+  border-color: var(--cockpit-line);
+  background:
+    linear-gradient(120deg, color-mix(in srgb, var(--paper-2) 72%, transparent), transparent 44%),
+    var(--cockpit-paper);
+  box-shadow: var(--paper-sh);
+  overflow: clip;
+}
+
+.cockpit-hero::after {
+  content: "";
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  bottom: 13px;
+  height: 2px;
+  background: color-mix(in srgb, var(--cockpit-red) 72%, transparent);
+  transform: rotate(-.2deg);
+  pointer-events: none;
+}
+
+.cockpit-hero__copy {
+  position: relative;
+  z-index: 1;
+  padding: .3rem 0 1rem;
+}
+
+.cockpit-hero__copy h2 {
+  max-width: 20ch;
+  font-size: clamp(1.8rem, 4.7vw, 3.35rem);
+  line-height: .98;
+  letter-spacing: -.06em;
+}
+
+.cockpit-hero__copy p {
+  max-width: 35rem;
+  margin-top: 1rem;
+  color: var(--cockpit-muted);
+  font-family: var(--display-serif);
+  font-size: clamp(.98rem, 1.7vw, 1.18rem);
+  line-height: 1.45;
+}
+
+.cockpit-kicker {
+  color: var(--cockpit-red);
+  font-family: var(--mono);
+  font-size: .66rem;
+  letter-spacing: .14em;
+}
+
+.cockpit-score--halo {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  padding: 0;
+}
+
+.readiness-halo {
+  width: min(15rem, 100%);
+}
+
+.readiness-halo__core {
+  width: 8.3rem;
+  height: 8.3rem;
+  border-radius: 2px;
+  background: var(--cockpit-paper);
+  box-shadow: 6px 7px 0 color-mix(in srgb, var(--cockpit-red) 22%, transparent);
+}
+
+.readiness-halo__core strong {
+  font-family: var(--mono);
+  font-size: clamp(2.6rem, 5vw, 3.5rem);
+  font-weight: 500;
+}
+
+.readiness-halo__core span,
+.readiness-halo__status,
+.cockpit-score__metric span,
+.cockpit-score__fact {
+  font-family: var(--mono);
+}
+
+.readiness-halo__status {
+  border-radius: 2px;
+  color: var(--cockpit-ink);
+  font-size: .62rem;
+  letter-spacing: .12em;
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--cockpit-red) 38%, transparent);
+}
+
+.cockpit-score__metrics {
+  gap: .5rem;
+}
+
+.cockpit-score__metric {
+  border-radius: 2px;
+  background: var(--paper-2);
+}
+
+.cockpit-score__metric strong {
+  font-family: var(--mono);
+  font-weight: 500;
+}
+
+.cockpit-primary {
+  position: relative;
+  z-index: 2;
+  justify-self: end;
+  align-self: end;
+  min-height: 2.9rem;
+  border-radius: 2px;
+  background: var(--cockpit-red);
+  color: var(--on-red);
+  box-shadow: 4px 4px 0 var(--cockpit-ink);
+  font-family: var(--ui);
+  font-weight: 750;
+}
+
+.cockpit-primary:hover,
+.cockpit-primary:focus-visible {
+  background: var(--red);
+  box-shadow: 5px 5px 0 var(--cockpit-ink);
+}
+
+.cockpit-priority {
+  gap: 1rem;
+}
+
+.cockpit-section-heading {
+  align-items: end;
+  padding: 0 0 .65rem;
+  border-bottom: 1px solid var(--cockpit-ink);
+}
+
+.cockpit-section-heading h2 {
+  font-size: clamp(1.35rem, 2.8vw, 1.9rem);
+  letter-spacing: -.04em;
+}
+
+.cockpit-finding {
+  grid-template-columns: 2.7rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: clamp(1rem, 2.4vw, 1.45rem);
+  border-radius: 2px;
+  border-color: var(--cockpit-line);
+  background: var(--cockpit-paper);
+  box-shadow: 4px 5px 0 color-mix(in srgb, var(--cockpit-ink) 10%, transparent);
+}
+
+.cockpit-finding--error {
+  border-left-width: 5px;
+}
+
+.cockpit-finding__index {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  color: var(--cockpit-red);
+}
+
+.cockpit-finding h3 {
+  font-size: clamp(1.08rem, 2vw, 1.35rem);
+  letter-spacing: -.025em;
+}
+
+.cockpit-finding__meta {
+  font-family: var(--mono);
+  font-size: .64rem;
+}
+
+.cockpit-finding__answer {
+  grid-template-columns: minmax(6rem, 7.5rem) minmax(0, 1fr);
+  gap: 1rem;
+  padding-top: .55rem;
+  border-top: 1px solid color-mix(in srgb, var(--cockpit-line) 75%, transparent);
+}
+
+.cockpit-finding__answer strong {
+  font-family: var(--mono);
+  font-size: .62rem;
+  letter-spacing: .08em;
+}
+
+.cockpit-finding__answer p {
+  font-family: var(--ui);
+  font-size: .92rem;
+}
+
+.cockpit-finding__evidence {
+  border-radius: 0;
+  background: var(--paper-2);
+}
+
+.cockpit-finding__source {
+  color: var(--cockpit-red);
+  font-family: var(--mono);
+  font-size: .72rem;
+}
+
+.result-cockpit .button {
+  min-height: 2.75rem;
+  border-radius: 2px;
+  font-family: var(--ui);
+}
+
+.cockpit-finding__actions {
+  gap: .65rem;
+}
+
+.cockpit-finding__actions .button-secondary {
+  border-color: var(--cockpit-line);
+  background: transparent;
+}
+
+.cockpit-advanced-toggle {
+  border-radius: 2px;
+  border-color: var(--cockpit-line);
+  background: var(--paper-2);
+  font-family: var(--ui);
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--cockpit-ink) 12%, transparent);
+}
+
+.cockpit-advanced-toggle:hover,
+.cockpit-advanced-toggle:focus-visible {
+  border-color: var(--cockpit-red);
+}
+
+.cockpit-categories,
+.cockpit-dna {
+  padding-top: .4rem;
+}
+
+.cockpit-category,
+.cockpit-dna {
+  border-radius: 2px;
+  border-color: var(--cockpit-line);
+  background: color-mix(in srgb, var(--paper) 72%, var(--paper-2));
+}
+
+.cockpit-category__head,
+.cockpit-dna__segment strong {
+  font-family: var(--ui);
+}
+
+.cockpit-category__bar,
+.cockpit-score__bar {
+  border-radius: 0;
+}
+
+.cockpit-dna {
+  box-shadow: 3px 4px 0 color-mix(in srgb, var(--cockpit-ink) 9%, transparent);
+}
+
+.cockpit-actions {
+  align-items: stretch;
+  gap: .7rem;
+  padding-top: .4rem;
+  border-top: 1px solid var(--cockpit-line);
+}
+
+.cockpit-actions .button {
+  border-radius: 2px;
+}
+
+.cockpit-actions .button-primary {
+  background: var(--cockpit-ink);
+  color: var(--cockpit-paper);
+  box-shadow: 3px 3px 0 var(--cockpit-red);
+}
+
+.cockpit-actions .button-primary:hover {
+  background: var(--cockpit-red);
+  color: var(--on-red);
+}
+
+@media (max-width: 840px) {
+  .cockpit-hero {
+    grid-template-columns: minmax(10rem, .65fr) minmax(0, 1.35fr);
+  }
+}
+
+@media (max-width: 680px) {
+  .cockpit-header {
+    align-items: start;
+  }
+
+  .cockpit-hero {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .cockpit-hero__copy {
+    padding-bottom: 0;
+  }
+
+  .cockpit-hero__copy h2 {
+    max-width: none;
+    font-size: clamp(2rem, 12vw, 3.2rem);
+  }
+
+  .cockpit-score--halo {
+    width: min(16rem, 100%);
+    margin-inline: auto;
+  }
+
+  .cockpit-primary {
+    justify-self: stretch;
+    width: 100%;
+  }
+
+  .cockpit-finding {
+    grid-template-columns: 1fr;
+    gap: .6rem;
+    box-shadow: 3px 4px 0 color-mix(in srgb, var(--cockpit-ink) 10%, transparent);
+  }
+
+  .cockpit-finding__index {
+    font-size: .72rem;
+  }
+
+  .cockpit-finding__answer {
+    grid-template-columns: 1fr;
+    gap: .2rem;
+  }
+
+  .cockpit-actions {
+    display: grid;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cockpit-hero::after,
+  .result-cockpit *,
+  .result-cockpit *::before,
+  .result-cockpit *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
