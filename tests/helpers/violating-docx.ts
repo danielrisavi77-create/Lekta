@@ -73,6 +73,7 @@ export const STRUCTURAL_VIOLATION_IDS = [
   'link-doi',
   'heading-style',
   'revision-metadata',
+  'element-caption',
 ] as const;
 export type StructuralViolationId = (typeof STRUCTURAL_VIOLATION_IDS)[number];
 
@@ -334,6 +335,35 @@ export async function buildViolatingDocx(
         return label.length > 0 && !present.has(label);
       });
       if (missing.length) violated.push('required-section');
+    }
+
+    /**
+     * `element-caption`: tablica s RUCNO prepisanim natpisom i unakrsnom uputom.
+     *
+     * Aktivira DVA fixera koji su dotad bili nedostizni: `element-caption-fixer` (natpis se veze na
+     * element umjesto da broj bude prepisan rukom) i `table-figure-rescue-fixer` (geometrija
+     * tablice). Oba su TRAJNE preporuke, jer `element-caption-rules` i `table-figure-rescue-rules`
+     * nema nijedan od 407 profila, pa se dokaz za njih dobiva samo kroz prolaz preporuka.
+     *
+     * IZMJERENO 2026-08-31 zasto bas ovakav dokument: sama tablica daje
+     * `elementCaptionRepairableItem` odgovor `no-target`; treba joj natpis koji ima sto pretvoriti u
+     * polje. S natpisom oba fixera vracaju changelog 1.
+     *
+     * Ide kroz `raw`, jer `ParaSpec` ne modelira tablicu. Zahvati su geometrijski i vezni, pa
+     * prolaze test vidljivog teksta: broj u natpisu ostaje isti, mijenja se to sto ga generira Word.
+     */
+    if (wants(structural, 'element-caption')) {
+      const cell = (text: string) =>
+        `<w:tc><w:tcPr><w:tcW w:w="2000" w:type="dxa"/></w:tcPr><w:p><w:r><w:t>${text}</w:t></w:r></w:p></w:tc>`;
+      paragraphs.push({
+        raw:
+          '<w:tbl><w:tblPr><w:tblW w:w="4000" w:type="dxa"/></w:tblPr>' +
+          `<w:tr>${cell('Godina')}${cell('Udio')}</w:tr>` +
+          `<w:tr>${cell('2020')}${cell('12%')}</w:tr></w:tbl>`,
+      });
+      paragraphs.push({ ...para, text: 'Tablica 1. Udio po godinama' });
+      paragraphs.push({ ...para, text: 'Kao sto pokazuje Tablica 1, udio raste.' });
+      violated.push('element-caption');
     }
 
     if (wants(structural, 'heading-style')) {

@@ -34,6 +34,16 @@ export interface ClosedLoopRow {
    * 407 x 3 = 1221 celiju laznog dokaza.
    */
   axesApplied?: string[];
+  /**
+   * Fixeri koji su TRAJNE preporuke i koje je zaseban prolaz dokazano primijenio.
+   *
+   * `element-caption-fixer` i `table-figure-rescue-fixer` nemaju svoje pravilo ni u jednom od 407
+   * profila, pa se nude kao preporuka (`violated: false`). Glavni prolaz ih zato ne moze dokazati:
+   * `buildAllRepairableItems` ih bez `includeNonViolated` uopce ne gradi, a
+   * `buildDefaultRepairRequests` ih ne bi ni poslao. Bez ovog polja im je 814 celija (2 x 407) bilo
+   * strukturno nedostizno.
+   */
+  recommendationsApplied?: string[];
   axesRemaining: string[];
   regressions: number;
   textPreserved: boolean;
@@ -229,6 +239,24 @@ export function buildCoverageCells(
       // 1b) Closed-loop je os prekrsio i fixer ju je DIRAO, ali nijedna bodovana provjera ne moze
       //     potvrditi rjesenje. Slabija jacina, i to se imenuje umjesto da se izjednaci s `resolved`.
       if (appliedFixers.has(fixerId)) {
+        cells.push({
+          profileId,
+          fixerId,
+          status: 'pokriveno',
+          evidence: {
+            kind: 'closed-loop',
+            strength: 'applied',
+            artifactId: `closed-loop:${profileId}`,
+            checkIds: [],
+          },
+        });
+        continue;
+      }
+
+      // 1c) Preporuka koju je korisnik mogao oznaciti, i koja je u zasebnom prolazu dokazano
+      //     promijenila dokument. Jacina je `applied`: iza preporuke po definiciji ne stoji bodovana
+      //     provjera, jer preporuka ne smije pomicati ocjenu.
+      if ((loop?.recommendationsApplied ?? []).includes(fixerId)) {
         cells.push({
           profileId,
           fixerId,

@@ -149,7 +149,17 @@ const AXIS_CHECK_ID: Record<string, string> = {
  * Dok taj raskorak stoji, os nosi jacinu `applied` (fixer dokazano mijenja dokument), ne
  * `resolved`. Kad se kandidati prosire na svih pet, os se vraca u `AXIS_CHECK_ID`.
  */
-const STRUCTURAL_WITHOUT_SCORED_CHECK = new Set(['empty-paragraphs', 'croatian-typography', 'link-doi', 'revision-metadata', 'required-section']);
+const STRUCTURAL_WITHOUT_SCORED_CHECK = new Set([
+  'empty-paragraphs',
+  'croatian-typography',
+  'link-doi',
+  'revision-metadata',
+  'required-section',
+  // `element-caption` opisuje STANJE dokumenta (tablica s rucno prepisanim natpisom), a dokaz
+  // za nju dolazi iz prolaza PREPORUKA, ne iz bodovane provjere. Da ostane u presudi, svaki bi
+  // profil trajno bio `partial`, sto je konstantan pomak a ne mjerenje.
+  'element-caption',
+]);
 
 /** Format stranice ima dinamican naslov (`page.size.*`), pa se prepoznaje po prefiksu. */
 function checkForAxis(checks: Array<{ id?: string | null; title?: string }>, axis: string) {
@@ -188,6 +198,20 @@ interface Row {
   /** Osi koje su nakon popravka prestale kaznjavati dokument. */
   axesResolved: string[];
   /**
+   * Fixeri koji su TRAJNE preporuke (`recommended: true`, `violated: false`) i koji su u zasebnom
+   * prolazu dokazano promijenili dokument bez pada integriteta.
+   *
+   * Zasto zaseban prolaz: `buildAllRepairableItems` preporuke uopce NE GRADI bez
+   * `includeNonViolated`, a `buildDefaultRepairRequests` ih ne bi ni poslao, jer filtrira
+   * `violated !== false`. Dva neovisna filtra znace da `element-caption-fixer` i
+   * `table-figure-rescue-fixer` (kojima pravilo nema nijedan od 407 profila) u glavnom prolazu ne
+   * mogu dobiti dokaz, koliko god dokument bio prikladan.
+   *
+   * Ovo NIJE isto pitanje kao glavni prolaz. Glavni pita "sto se dogodi kad korisnik klikne
+   * Popravi"; ovaj pita "ako korisnik OZNACI preporuku, radi li ona". Zato ne ulazi u presudu.
+   */
+  recommendationsApplied: string[];
+  /**
    * Osi koje propisuje PROFIL, a generator ih je prekrsio. Prazno znaci da tom profilu nijedan
    * objavljen izvor ne propisuje nijednu od sest formatnih osi.
    */
@@ -203,7 +227,7 @@ interface Row {
 }
 
 async function runProfile(profileId: string): Promise<Row> {
-  const base: Row = { profileId, outcome: 'error', violated: [], requested: 0, axesResolved: [], profileAxesViolated: [], axesApplied: [], axesRemaining: [], resolved: 0, regressions: 0, textPreserved: true };
+  const base: Row = { profileId, outcome: 'error', violated: [], requested: 0, axesResolved: [], recommendationsApplied: [], profileAxesViolated: [], axesApplied: [], axesRemaining: [], resolved: 0, regressions: 0, textPreserved: true };
   try {
     const profile = liveProfile(profileId);
     const { bytes, violated } = await buildViolatingDocx(profile, useStructural ? { structural: true } : {});
@@ -232,6 +256,29 @@ async function runProfile(profileId: string): Promise<Row> {
     if (!requests.length) return { ...base, outcome: 'no-repair', violated };
 
     const applied = await applyFixers(bytes, requests);
+
+    /**
+     * DRUGI PROLAZ: preporuke, svaka zasebno i nad IZVORNIM bajtovima.
+     *
+     * Zasebno, jer preporuke nisu skup koji korisnik nuzno oznaci zajedno, pa bi ih zajednicki
+     * prolaz medjusobno maskirao. Nad izvornim bajtovima, jer ovo mjeri sto preporuka radi sama,
+     * a ne sto radi nakon glavnog popravka.
+     */
+    const recommended = buildAllRepairableItems({
+      result: before,
+      profile,
+      entries: draftRuleEntriesFor(profileId),
+      includeNonViolated: true,
+    } as never).filter((item: { recommended?: boolean }) => item.recommended === true);
+    const recommendationsApplied: string[] = [];
+    for (const item of recommended as Array<{ fixerId: string; ruleId: string; params?: unknown }>) {
+      try {
+        const out = await applyFixers(bytes, [{ fixerId: item.fixerId, ruleId: item.ruleId, params: item.params }] as never);
+        if (out.changelog.length > 0 && !out.integrityFailure) recommendationsApplied.push(item.fixerId);
+      } catch {
+        // Preporuka koja baci ne smije oboriti mjerenje glavnog prolaza; izostanak je sam po sebi nalaz.
+      }
+    }
     if (applied.integrityFailure) {
       return { ...base, outcome: 'error', violated, requested: requests.length, note: 'integrityFailure' };
     }
@@ -292,6 +339,8 @@ async function runProfile(profileId: string): Promise<Row> {
       axesResolved,
       axesRemaining,
       axesApplied,
+      recommendationsApplied: [...new Set(recommendationsApplied)].sort(),
+      profileAxesViolated,
       resolved: axesResolved.length,
       regressions,
       textPreserved: true,
