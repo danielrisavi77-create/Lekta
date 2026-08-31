@@ -108,9 +108,12 @@ klijent slozi iz profila (paramsForCheck u src/ui/repair-items.ts).
   spremljeno; promasaj u korpusu NIKAD nije dokaz da izvor ne postoji.
 - Popravljeni paket ima CETIRI razine dokaza (docs/REAL_CORPUS_TESTING.md, Tier model).
   npm run check je samo Tier 0 (src/repair/package-integrity.ts) i NE otvara dokument
-  nijednim stvarnim uredivacem. Prije deploya motora rucno: npm run verify:strict-open
-  (python-docx) i npm run verify:word / verify:word:worst / verify:word:toc (Word COM,
+  nijednim stvarnim uredivacem. Prije deploya motora rucno: npm run verify:strict-open:repaired
+  (Tier 1) i npm run verify:word / verify:word:worst / verify:word:toc (Word COM,
   OpenAndRepair=false).
+  PAZI: `npm run verify:strict-open` (bez `:repaired`) otvara ULAZNE fixture i o popravku ne govori
+  nista, jer popravak u njoj nikad nije pozvan. Dokaz motora je `:repaired`, koji korpus prvo
+  POPRAVI pa lxml-om otvori IZLAZE. CI radi oboje; zamka je samo u rucnom receptu.
   Oracle POSTOJI u scripts/word-verify/, ne gradi ga ispocetka. KLJUC: @xmldom/xmldom ne
   baca i ne stvara parsererror na neispravnom XML-u, pa provjera preko parseXml daje lazno
   zeleno (dokaz: tests/repair-package-integrity.test.ts).

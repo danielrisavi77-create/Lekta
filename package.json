@@ -50,6 +50,7 @@
     "check:full": "npm run check && npm run check:edge && npm run test:slow",
     "release:check": "node scripts/release-check.mjs",
     "verify:strict-open": "python scripts/verify-docx/strict-open.py tests/fixtures/docx",
+    "verify:strict-open:repaired": "npm run repair-real-corpus:review && python scripts/verify-docx/strict-open.py .artifacts/lekta-real-corpus-review",
     "verify:word": "powershell -ExecutionPolicy Bypass -File scripts/word-verify/check.ps1",
     "verify:word:worst": "powershell -ExecutionPolicy Bypass -File scripts/word-verify/check-worst-case.ps1",
     "deploy-drift": "node scripts/deploy-drift.mjs",

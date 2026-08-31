@@ -431,8 +431,16 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
 - Popravljeni paket se dokazuje u CETIRI razine (`docs/REAL_CORPUS_TESTING.md`, Tier model).
   `npm run check` je samo Tier 0 (vlastiti strogi skener `src/repair/package-integrity.ts`) i NE
   otvara dokument nijednim stvarnim uredivacem. Prije deploya repair motora rucno pokreni i
-  `npm run verify:strict-open` (python-docx) te `npm run verify:word` / `verify:word:worst`
-  (Word COM, `OpenAndRepair=false`, Windows). Oracle POSTOJI u `scripts/word-verify/`, ne gradi ga
+  `npm run verify:strict-open:repaired` (Tier 1) te `npm run verify:word` / `verify:word:worst`
+  (Word COM, `OpenAndRepair=false`, Windows).
+  PAZI KOJU TIER 1 NAREDBU ZOVES: `npm run verify:strict-open` otvara ULAZNE fixture i o popravku ne
+  govori nista, jer popravak u njoj nikad nije pozvan; njegov prolaz "19/19" znaci samo da su nasi
+  fixturi valjani paketi. Dokaz motora je `verify:strict-open:repaired`, koji korpus prvo POPRAVI pa
+  lxml-om otvori IZLAZE. CI (`docx-strict-open.yml`) radi oboje i tako je i imenovano; zamka je samo
+  u rucnom receptu. Prazan skup je pritom crveno, ne tiho zeleno (`strict-open.py` to izricito
+  provjerava). Izmjereno 2026-08-30: 16 dokumenata, 14 promijenjenih i svih 14 provjereno lxml-om;
+  preostala 2 su `no-op` s nula promijenjenih fixera, dakle izlaz im je jednak ulazu.
+  Oracle POSTOJI u `scripts/word-verify/`, ne gradi ga
   ispocetka. KLJUC: `@xmldom/xmldom` ne baca i ne stvara `parsererror` na neispravnom XML-u, pa
   provjera oslonjena na `parseXml` daje lazno zeleno (dokaz: `tests/repair-package-integrity.test.ts`).
   DRUGI oblik istog lazno zelenog: kad vrata integriteta ODBIJU isporuku, `applyFixers` vraca
