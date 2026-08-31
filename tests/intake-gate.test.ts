@@ -3,7 +3,7 @@
  * (premalo, nije ZIP, korupcija, makronaredbe, bez glavnog dijela, prazno), sumnjivo
  * se samo oznacava (pred-run potvrda u UI-ju), pravi radovi prolaze cisto.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
   inspectDocxIntake,
   postRunSuspicion,
@@ -114,12 +114,45 @@ describe('inspectDocxIntake: sumnjivo i cisto', () => {
     const file = buildDocxFile({ paragraphs: bulkyParas() }, 'rad.docx', [appXml(5000)]);
     const v = await inspectDocxIntake(file);
     expect(v).toMatchObject({ kind: 'ok', suspicious: false });
+    if (v.kind === 'ok') {
+      expect(v.capability).toMatchObject({
+        canAnalyze: true,
+        canRepair: true,
+        repairBlocker: null,
+      });
+      expect(v.capability?.entryCount).toBeGreaterThan(0);
+      expect(v.capability?.totalDeclaredBytes).toBeGreaterThan(0);
+    }
   });
 
   it('bez app.xml -> ok, nije sumnjiv (null ne gnjavi)', async () => {
     const v = await inspectDocxIntake(buildDocxFile({ paragraphs: bulkyParas() }, 'bez-app.docx'));
     expect(v).toMatchObject({ kind: 'ok', suspicious: false });
     if (v.kind === 'ok') expect(v.quickStats).toBeNull();
+  });
+
+  it('neočekivanu internu grešku propušta bez izmišljene capability procjene', async () => {
+    // Fail-open grana: datoteka prolazi, ali capability OSTAJE null (procjena nije napravljena).
+    // console.warn se namjerno CUVA: to je jedini trag da je gate propustio neispravnu datoteku,
+    // a ime datoteke se ni ovdje ne logira (u zapis ide samo greska).
+    const warning = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const broken = {
+      name: 'necitljiv.docx',
+      size: MIN_DOCX_BYTES,
+      slice: () => ({ arrayBuffer: async () => { throw new Error('read failed'); } }),
+    } as unknown as File;
+
+    try {
+      await expect(inspectDocxIntake(broken)).resolves.toMatchObject({
+        kind: 'ok',
+        capability: null,
+      });
+      expect(warning).toHaveBeenCalledTimes(1);
+      const logged = warning.mock.calls[0].map((arg) => String(arg)).join(' ');
+      expect(logged).not.toContain('necitljiv.docx');
+    } finally {
+      warning.mockRestore();
+    }
   });
 
   it('prag sumnjivosti je granican: Words=SUSPICIOUS_WORDS_MAX nije sumnjiv', async () => {

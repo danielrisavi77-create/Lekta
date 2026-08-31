@@ -12,6 +12,7 @@
  */
 import { ZipReader, MAX_SCAN_PARAGRAPHS } from './parser';
 import { parseAppStats, type DocxQuickStats } from './quick-stats';
+import { docxCapability, type DocxCapability } from '../repair/docx-budget';
 
 /** Ispod ove velicine datoteka sigurno nije pravi rad: najmanji stvarni .docx pisaci
  *  (Word ~11 KB, LibreOffice/Google Docs ~5-6 KB) daju vise; sinteticki minimalac ~2 KB
@@ -47,10 +48,13 @@ export interface IntakeOk {
   quickStats: DocxQuickStats | null;
   suspicious: boolean;
   suspicionReason: string | null;
+  /** Sto se s paketom realno moze (analiza, popravak), izvedeno iz central directoryja jos na
+   *  intakeu. `null` znaci da procjena NIJE napravljena (fail-open grana), nikad da je paket los. */
+  capability: DocxCapability | null;
 }
 export type IntakeVerdict = IntakeOk | IntakeReject;
 
-const OK_CLEAN: IntakeOk = { kind: 'ok', quickStats: null, suspicious: false, suspicionReason: null };
+const OK_CLEAN: IntakeOk = { kind: 'ok', quickStats: null, suspicious: false, suspicionReason: null, capability: null };
 
 function reject(code: IntakeRejectCode, message: string): IntakeReject {
   return { kind: 'reject', code, message };
@@ -83,6 +87,15 @@ export async function inspectDocxIntake(file: File): Promise<IntakeVerdict> {
       return reject('corrupt', 'Datoteka je oštećena ili nije valjan .docx. Ponovno je izvezi iz Worda (Spremi kao .docx).');
     }
     const names = zip.names();
+
+    // 3b) Sto se s paketom moze: analiza i, VAZNIJE, popravak. Racuna se iz vec procitanog
+    // central directoryja (bez ijedne skupe operacije) pa sucelje moze biti posteno prije
+    // nego korisnik potvrdi slanje na popravak.
+    const capability = docxCapability({
+      fileBytes: file.size,
+      entryCount: zip.entryCount(),
+      totalDeclaredBytes: zip.declaredUncompressedTotal(),
+    });
 
     // 4) Makronaredbe: vbaProject.bin (i preimenovani .docm). Nista se ne izvrsava lokalno,
     // ali dokument s makronaredbama nije standardni rad i ne zelimo ga dalje obradjivati.
@@ -137,10 +150,11 @@ export async function inspectDocxIntake(file: File): Promise<IntakeVerdict> {
         quickStats,
         suspicious: true,
         suspicionReason: `Word za ovaj dokument bilježi samo ${quickStats.words} riječi`,
+        capability,
       };
     }
 
-    return { kind: 'ok', quickStats, suspicious: false, suspicionReason: null };
+    return { kind: 'ok', quickStats, suspicious: false, suspicionReason: null, capability };
   } catch (e) {
     // Fail-open: gate nikad ne smije lazno blokirati pravi rad zbog vlastite greske.
     console.warn('intake-gate: neočekivana greška, datoteka se propušta:', e);
