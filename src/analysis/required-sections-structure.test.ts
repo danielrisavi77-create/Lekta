@@ -189,31 +189,72 @@ describe('numeracija naslova: oba smjera', () => {
   });
 
   /**
-   * PORAZENO PONASANJE JE UGRADJENO U TEST, pa vakuumskost postaje nemoguca.
+   * PORAZENE IZVEDBE SU UGRADJENE U TEST, sa svojim protuprimjerom.
    *
    * Osam testova u ovom radu prolazilo je i s vracenom produkcijskom izmjenom, a pet ih je
    * napisano bas dok se taj razred lovio. Uzrok je uvijek isti: tvrdnja opisuje ISHOD, pa ju moze
    * zadovoljiti i kod koji do njega dolazi slucajno.
    *
-   * Ovdje se stara izvedba racuna U TESTU i tvrdi se da je KRIVA. Ako je netko vrati u produkciju,
-   * ove tvrdnje padaju bez ijedne rucne mutacije, i to bez diranja datoteka na disku (ugovor
-   * `tests/gate-mutations.test.ts`, tocka 1).
+   * SAM UGRADJENI PRIJEPIS NE PRIKIVA NISTA, i to treba reci naglas: on je lokalna konstanta ovog
+   * testa i ne mijenja se kad se promijeni produkcija. Prikiva PAR: prijepis pokazuje sto bi stara
+   * izvedba dala, a druga tvrdnja u istom `it` pita PRODUKCIJU za isti ulaz. Vraceni stari kod pada
+   * na toj drugoj tvrdnji.
+   *
+   * Zato su ovdje OBJE porazene izvedbe, ne samo prva. Do 2026-08-31 je stajala samo prva, uz
+   * tvrdnju da je time povratak nemoguc; izmjereno je da nije. Druga izvedba (rimski broj trazi
+   * interpunkciju) prolazi kroz oba tadasnja slucaja netaknuta, jer `2.1 Sazetak` skida i ona, a
+   * `Ili prilozi` ni ona ne guta. Nju je hvatala samo tablica oblika iznad, posredno.
    */
-  describe('stara izvedba je ugradjena i dokazano kriva', () => {
+  describe('porazene izvedbe su ugradjene i dokazano krive', () => {
     /** Prva izvedba: strip nad VEC normaliziranim tekstom, rimska grana bez obavezne interpunkcije. */
     const staraIzvedba = (raw: string): string =>
       raw.toLocaleLowerCase('hr-HR').normalize('NFD').replace(/[̀-ͯ]/g, '')
         .replace(/[^\p{L}\p{N}]+/gu, ' ').trim().replace(/\s+/g, ' ')
         .replace(/^(?:[0-9]+(?:[.][0-9]+)*|[ivxlcdm]+)[.)]?\s+/i, '').trim();
 
-    it('stara izvedba NE bi skinula viserazinsku numeraciju', () => {
+    /**
+     * DRUGA izvedba (stanje na `40c5185d^`): strip ide nad SIROVIM tekstom, sto je ispravno, ali
+     * rimska grana trazi interpunkciju, a slova i prefiks "Poglavlje" nema uopce. Zbog toga je
+     * `I UVOD`, standardni hrvatski oblik, prestao biti prepoznat.
+     */
+    const drugaIzvedba = (raw: string): string =>
+      // `normalize` je prepisan DOSLOVNO s `40c5185d^` (ukljucujuci zamjenu crtica i sazimanje
+      // razmaka). Nevjeran prijepis bio bi ista mana koju ovaj blok popravlja.
+      raw.replace(/^(?:[0-9]+(?:[.][0-9]+)*[.)]?|[IVXLCDM]+[.)])\s+/i, '')
+        .toLocaleLowerCase('hr-HR').normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .replace(/[–—]/g, '-')
+        .replace(/[^\p{L}\p{N}]+/gu, ' ').trim().replace(/\s+/g, ' ');
+
+    it('prva izvedba NE bi skinula viserazinsku numeraciju', () => {
       expect(staraIzvedba('2.1 Sažetak')).toBe('1 sazetak');
       expect(missingRequiredSectionLabels(['2.1 Sažetak'], req)).toEqual([]);
     });
 
-    it('stara izvedba BI progutala obicnu rijec kao rimski broj', () => {
+    it('prva izvedba BI progutala obicnu rijec kao rimski broj', () => {
       expect(staraIzvedba('Ili prilozi')).toBe('prilozi');
       expect(missingRequiredSectionLabels(['Ili prilozi'], prilozi)).toEqual(['Prilozi']);
+    });
+
+    /**
+     * Tri razlicita nacina na koja druga izvedba promasi, svaki uz svoju granu koju nije imala.
+     * Bez ovoga povratak na nju ne bi pao ni na jednoj tvrdnji ovog bloka.
+     */
+    it.each([
+      ['I Sažetak', 'i sazetak'], // rimski broj bez interpunkcije
+      ['A. Sažetak', 'a sazetak'], // slovna grana nije postojala
+      ['Poglavlje 2. Sažetak', 'poglavlje 2 sazetak'], // prefiks nije postojao
+    ])('druga izvedba ne bi prepoznala %s', (heading, ostatak) => {
+      expect(drugaIzvedba(heading)).toBe(ostatak);
+      expect(missingRequiredSectionLabels([heading], req)).toEqual([]);
+    });
+
+    /**
+     * BASELINE: druga izvedba nije kriva u svemu, inace bi gornje tvrdnje mogle prolaziti i da je
+     * prijepis obicno pokvaren. Na oblicima koje je imala, daje ISTO sto i produkcija.
+     */
+    it('druga izvedba je na brojcanoj numeraciji jednaka produkciji', () => {
+      expect(drugaIzvedba('2.1 Sažetak')).toBe('sazetak');
+      expect(missingRequiredSectionLabels(['2.1 Sažetak'], req)).toEqual([]);
     });
   });
 });
