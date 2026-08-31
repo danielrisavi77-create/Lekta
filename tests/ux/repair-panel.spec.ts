@@ -26,7 +26,14 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
   const confirm = page.locator('[data-confirm-profile]');
   if (await confirm.isVisible().catch(() => false)) await confirm.click();
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
-  await page.locator('#resultDetailsToggle').click();
+  // Redizajn "Results Cockpit" seli SVE iza `#resultCockpit` u sklopljeni blok "Napredna
+  // provjera" (`ensureResultsCockpitAdvancedShell`), pa su ondje i kartice i stari tabovi.
+  // Otvara se onako kako to radi korisnik; bez toga `#tabbtn-submission` ima visinu 0 i klik
+  // ceka do timeouta, sto izgleda kao spor stroj a nije.
+  await page.locator('#resultCockpit [data-cockpit-action="open-findings"]').click();
+  // `#resultDetailsToggle` se NE pritisce: "Pregledaj nalaze" vec poziva `revealResultDetails()`,
+  // pa bi ga ovaj klik ZATVORIO (izmjereno na desktop-flow: tab s 45 px padne na 0 px).
+  await expect(page.locator('#tabbtn-submission')).toBeVisible();
   await page.locator('#tabbtn-submission').click();
 }
 
