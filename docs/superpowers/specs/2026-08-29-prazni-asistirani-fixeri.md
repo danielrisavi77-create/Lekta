@@ -445,38 +445,57 @@ tisini. Negativna kontrola izvedena: vracanjem mrtvih kljuceva gard pada i imenu
 
 ---
 
-## Otvoreno: `required-section` pada na rucnom sadrzaju (nasla Wordova fixtura)
+## ZATVORENO: `required-section` na rucnom sadrzaju (nalaz istinit, dijagnoza kriva)
 
-Nije popravljeno. Zapisano ovdje jer je sesija koja je fixturu napravila u medjuvremenu
-restartala, pa poruka nije mogla biti dostavljena.
+Nalaz iz `770cc2b2` reproduciran je i zatvoren 2026-08-31, bisekcijom nad samom fixturom u
+izoliranom worktreeu. Popravio ga je `6ee596a5` ("tabulator je razmak"), dakle ISTI commit koji je
+fixturu i commitao.
 
-**Nalaz.** `tests/fixtures/docx-word/manual-toc.docx` (rucni sadrzaj, pravi Word) obara
-`required-section-fixer` uz `stale-anchor`. Stabilno u tri prolaza.
-
-| kako je pokrenut | ishod |
+| commit | puni lanac (11 fixera, `fpzg-politologija-diplomski`) |
 |---|---|
-| sam | PRIMIJENJEN |
-| bilo kojih 7 od 8 fixera | PRIMIJENJEN |
-| svih 8 | `stale-anchor`, changelog 11 |
+| `6ee596a5^` (= `770cc2b2`) | `{"required-section-rules":"stale-anchor"}`, RS izostaje iz changeloga |
+| `6ee596a5` | `{}`, RS u changelogu |
 
-**Sto se vidi u izlazu.** Sidro je `paragraphIndex 2`, `anchorText "1 uvod 1"`. Nakon punog lanca
-odlomci su:
+Negativna kontrola izvedena uz svako mjerenje: kad se zahtjev za `required-section` uopce NE
+posalje, changelog ga nema i nema razloga preskakanja. Detektor dakle razlikuje "primijenjen" od
+"nije ni trazen", pa `RS=1` nije vakuumsko zeleno.
 
-```
-0  "Sadrzaj"
-1  "Sadrzaj se azurira u Wordu: kartica Reference > Azuriraj tablicu..."   <- UMETNUTO
-2  "1. Uvod 1"
-```
+### Obje tvrdnje zapisane dijagnoze su bile netocne
 
-`toc-field-fixer` umece uputu i time sve pomice za jedan, pa sidro s indeksa 2 gadja umetnuti
-odlomak. Po `INDEX_SHIFTING_ORDER` bi `required-section` (3) trebao ici PRIJE `toc-fielda` (5), pa
-je red prvo mjesto koje treba provjeriti.
+**1. Nije to bio `toc-field-fixer`.** Tvrdilo se da on umetne odlomak i time pomakne sidro.
+Ne moze: `INDEX_SHIFTING_ORDER` daje `required-section` 3 a `toc-field` 5, pa required-section ide
+PRVI. Changelog to i pokazuje, na oba commita: `required-section-rules` stoji ispred
+`toc-field-universal`.
 
-**Sto NIJE objasnjeno.** Zasto uklanjanje BILO KOJEG fixera popravlja ishod. Da je uzrok samo
-umetanje iz `toc-fielda`, uklanjanje npr. `font-fixera` ne bi smjelo pomoci. Dok se to ne razumije,
-svaka hipoteza o uzroku je nepotpuna.
+**2. Nije pomagalo uklanjanje "bilo kojeg" fixera.** Izmjereno leave-one-out nad svih deset
+preostalih, na commitu na kojem kvar postoji:
 
-**Zasto je vazno.** Rucni sadrzaj je cest oblik u stvarnim radovima, a ovo je treci put da isti
-razred (sidro protiv pomaka indeksa) proizvede kvar. Prva dva su popravljena; ovaj je nadjen tek
-kad je u korpus usao dokument koji je napisao pravi Word.
+| izbacen fixer | ishod |
+|---|---|
+| `croatian-typography-fixer` | RS primijenjen, nula razloga |
+| ostalih devet, svaki posebno | `stale-anchor` |
 
+Tocno JEDAN fixer mijenja ishod, i to onaj koji je `ANCHOR_SENSITIVE`, ide prvi u fazi 0 i
+prepisuje bas odlomak na koji sidro pokazuje. Uzrok je time isti koji `6ee596a5` imenuje: sidro
+nastaje iz teksta ANALIZE (gdje je `<w:tab/>` znak tabulatora), a provjeravalo se protiv izvlakaca
+koji cita samo `<w:t>`. Na `1.<w:tab/>Uvod` tekst se nije podudarao, broj pojava je bio 0, i
+verdikt je `zastarjelo`.
+
+### Zasto je nalaz uopce izgledao nerazumljivo
+
+Fixtura `manual-toc.docx` u trenutku pisanja nalaza NIJE bila commitana: `git ls-tree 770cc2b2`
+je nema, usla je tek u `6ee596a5`. Dijagnoza je dakle radjena nad datotekom koja je postojala samo
+u dijeljenom radnom stablu, dok se kod oko nje istovremeno mijenjao. Isti razred zbog kojeg vodic
+sada trazi izolirani worktree; ovo mu je konkretan trosak.
+
+### Gard postoji i dokazano grize
+
+`tests/word-authored-anchors.test.ts` nabraja `tests/fixtures/docx-word/**` i trazi nula
+`stale-anchor`. Fixtura je sada commitana, pa je slucaj prikovan. Da gard grize ne tvrdi se na
+rijec: na `6ee596a5^` isti lanac nad istom fixturom daje `stale-anchor`, tocno ono sto test
+zabranjuje.
+
+**Sto ostaje otvoreno iz ovog razreda.** Sudar "anchor-osjetljiv fixer prepise odlomak na koji se
+netko drugi sidri" nije rijesen nego samo prosao: ovdje je normalizacija teksta ucinila sidro
+otpornim. Pravo rjesenje je i dalje ono zapisano uz `INSERTS_BUT_ANCHOR_BOUND`, vlasnistvo nad
+odlomkom ili ponovni izracun sidara izmedju faza, ne redoslijed.
