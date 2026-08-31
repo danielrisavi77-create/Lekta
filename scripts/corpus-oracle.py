@@ -136,22 +136,29 @@ def measure(path):
     # odstupanje. Ispravno je razrijesiti lanac: izravno -> stil odlomka (uz base_style) -> docDefaults.
     doc_default = _doc_default_size(d)
     doc_default_sp = _doc_default_spacing(d)
+    # TEZINA JE KOLICINA TEKSTA, ne broj odlomaka. "Dominantno oblikovanje tijela" znaci ono koje
+    # nosi vecinu teksta; kratak naslov ne smije nadglasati puni odlomak. Prvi prolaz je brojao
+    # odlomke i zato na corpus-0085 prijavio prored 1,0: 46 kratkih odlomaka (prosjecno 147 znakova)
+    # nadglasalo je 38 dugih (prosjecno 582), iako je omjer TEKSTA 22.106 prema 6.785 u korist 1,5.
     for p in d.paragraphs:
-        if not p.text.strip():
+        text = p.text.strip()
+        if not text:
             continue
+        weight = len(text)
         sp = effective_spacing(p, doc_default_sp)
         if sp is not None:
-            spacings[sp] += 1
+            spacings[sp] += weight
         for r in p.runs:
+            rw = len(r.text) or 1
             if r.font.name:
-                fonts[r.font.name] += 1
+                fonts[r.font.name] += rw
             es = effective_size(p, r, doc_default)
             if es is not None:
-                sizes[es] += 1
+                sizes[es] += rw
         if not p.runs:
             es = effective_size(p, None, doc_default)
             if es is not None:
-                sizes[es] += 1
+                sizes[es] += weight
     body_xml = d.element.body.xml
     # Broj stranice zna stajati u footeru PRVE ili PARNE stranice, i u zaglavlju, ne samo u zadanom
     # footeru. Prvi prolaz je gledao samo `s.footer` i zato lazno prijavljivao izostanak (izmjereno na
