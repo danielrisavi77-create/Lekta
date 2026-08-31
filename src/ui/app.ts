@@ -47,6 +47,7 @@ import { resultReadiness, repairCeiling } from './result-readiness';
 import { renderProgressScan } from './progress-scan';
 import { buildVisualResultModel } from './results/visual-result-model';
 import { renderResultsCockpit, resultRendererFor, type ResultsCockpitAction } from './results/results-cockpit';
+import { buildDocumentDnaModel } from './results/document-dna-model';
 import { detectPassRegressions, dropStaleFieldRegressions, tocFieldWillRefresh } from '../analysis/repair-regression';
 import { summarizeRepairOutcome, describeRepairOutcome, type RepairOutcome } from '../repair/repair-outcome';
 import { scoringChangeNote } from './scoring-change-note';
@@ -1053,6 +1054,20 @@ function renderResultsCockpitForResult(r: any){
     return;
   }
   const advancedOpen=shell?.dataset.open==='true';
+  // DNA rada cita STVARNE mjere: ukupan broj odlomaka dolazi iz measurements (racunat PRIJE
+  // skracivanja pregleda), a doseg skoka iz zadnjeg odlomka koji je u pregledu ostao. Bez te
+  // razlike traka bi tvrdila da se moze skociti u dio rada koji uopce nije ucitan.
+  const _m=r?.details?.measurements,_pv=r?.preview;
+  const _pvParas=Array.isArray(_pv?.paragraphs)?_pv.paragraphs:[];
+  const _dnaReadiness=resultReadiness(Array.isArray(r?.issues)?r.issues:[],{profileStatus:r?.profileStatus??null,ruleAuthority:r?.details?.ruleAuthority??null});
+  const _dna=buildDocumentDnaModel({
+    totalParagraphs:Number(_m?.counts?.paragraphs)||0,
+    lastPreviewedParagraph:_pvParas.length?(Number(_pvParas[_pvParas.length-1]?.index)||null):null,
+    previewTruncated:_pv?.truncated===true,
+    headings:Array.isArray(_m?.structure?.headings)?_m.structure.headings:[],
+    findings:Array.isArray(r?.details?.triage?.findings)?r.details.triage.findings:[],
+    provisional:_dnaReadiness.authoritative!==true,
+  });
   const model=buildVisualResultModel({
     ...r,
     capabilities:{preview:true,repair:!r?.demo,exactEvidence:false},
@@ -1063,6 +1078,7 @@ function renderResultsCockpitForResult(r: any){
   });
   renderResultsCockpit(mount,model,{
     repairAvailable:!r?.demo,
+    documentDna:_dna,
     advancedOpen,
     onAction:(action)=>handleResultsCockpitAction(r,action),
     onAdvancedToggle:(open)=>setResultsCockpitAdvanced(open),

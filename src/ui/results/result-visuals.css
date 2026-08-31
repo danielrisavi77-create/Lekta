@@ -647,3 +647,112 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
   .halo__arc { --draw: 1; }
   .cockpit-category__bar > span { transform: scaleX(1); }
 }
+
+/* ---- DNA rada: gdje su nalazi -----------------------------------------------
+   Traka je pravokutna, pa je grid, ne SVG (SVG bi odnio nativni focus i disabled).
+   Visina stupca je GUSTOCA nalaza u tom dijelu rada, odnos unutar dokumenta, nikad
+   usporedba medju dokumentima. Boja je najteza ozbiljnost u tom rasponu. */
+
+.cockpit-dna { display: grid; gap: .7rem; }
+
+.dna__track {
+  display: grid;
+  grid-template-columns: repeat(var(--dna-buckets, 24), minmax(0, 1fr));
+  align-items: end;
+  gap: 2px;
+  height: 4.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--ck-line);
+}
+.dna__slot { display: flex; align-items: flex-end; height: 100%; min-width: 0; }
+
+.dna__bar {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+/* Prazna kanta zadrzava tanku crticu: dokument se cita kao ravnalo pune duljine,
+   a ne kao niz rupa. Bez toga prazan rad izgleda kao pokvarena traka. */
+.dna__bar > i {
+  display: block;
+  width: 100%;
+  height: calc(3px + var(--dna-h, 0) * (100% - 3px));
+  min-height: 3px;
+  border-radius: 1px 1px 0 0;
+  background: var(--ck-line);
+  transform-origin: bottom center;
+  transform: scaleY(0);
+  transition: transform .55s var(--ck-ease), background-color .2s var(--ck-ease);
+  transition-delay: calc(760ms + var(--dna-i, 0) * 12ms);
+}
+[data-entered] .dna__bar > i { transform: scaleY(1); }
+.dna__bar[data-dna-severity='error'] > i { background: var(--ck-red); }
+.dna__bar[data-dna-severity='warning'] > i { background: var(--ck-amber); }
+.dna__bar[data-dna-severity='info'] > i { background: var(--ck-blue); }
+@media (hover: hover) { .dna__bar:not([disabled]):hover > i { filter: brightness(1.25); } }
+.dna__bar:focus-visible { outline: none; box-shadow: var(--focus); }
+.dna__bar[disabled] { cursor: not-allowed; }
+.dna__bar[disabled] > i { opacity: .35; background-image: repeating-linear-gradient(45deg, transparent 0 3px, rgba(0, 0, 0, .18) 3px 5px); }
+
+.dna__scale {
+  display: flex;
+  justify-content: space-between;
+  color: var(--ck-muted);
+  font-family: var(--mono, monospace);
+  font-size: .62rem;
+}
+
+/* Nalazi za cijeli rad: prugasta traka preko cijele sirine, jer je "svugdje" istina.
+   Nikad se ne rasipaju po kantama, to bi im izmislilo mjesto. */
+.dna__wide {
+  display: grid;
+  gap: .1rem;
+  padding: .55rem .7rem;
+  border: 1px solid var(--ck-line);
+  border-radius: var(--radius, 2px);
+  background-image: repeating-linear-gradient(45deg, transparent 0 6px, color-mix(in srgb, var(--ck-ink) 5%, transparent) 6px 12px);
+  color: var(--ck-ink);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+.dna__wide:hover { border-color: var(--ck-ink); }
+.dna__wide:focus-visible { outline: none; box-shadow: var(--focus); }
+.dna__wide-label { font-size: .85rem; }
+.dna__wide small { color: var(--ck-muted); font-size: .74rem; }
+
+.dna__footnotes { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
+.dna__rail-label {
+  color: var(--ck-muted);
+  font-family: var(--mono, monospace);
+  font-size: .62rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.dna__chip {
+  padding: .2rem .45rem;
+  border: 1px solid var(--ck-line);
+  border-radius: var(--radius-pill, 999px);
+  background: none;
+  color: var(--ck-muted);
+  cursor: pointer;
+  font-family: var(--mono, monospace);
+  font-size: .68rem;
+}
+.dna__chip[data-dna-severity='error'] { border-color: var(--ck-red); color: var(--ck-red-text); }
+.dna__chip[data-dna-severity='warning'] { border-color: var(--ck-amber); color: #8A5D14; }
+.dna__chip:focus-visible { outline: none; box-shadow: var(--focus); }
+
+.dna__note { margin: 0; color: var(--ck-muted); font-size: .76rem; line-height: 1.5; }
+[data-dna-provisional='true'] .dna__track { border-bottom-style: dashed; }
+
+@media (prefers-reduced-motion: reduce) {
+  .dna__bar > i { transform: scaleY(1); transition: none; }
+}

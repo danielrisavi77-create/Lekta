@@ -3,6 +3,8 @@ import type { VisualFindingModel, VisualResultModel } from './visual-result-mode
 import { categorySummaryHtml } from './category-summary';
 import { priorityFindingsHtml } from './priority-findings';
 import { readinessHaloHtml } from './technical-compliance-halo';
+import { bindDocumentDna, documentDnaHtml } from './document-dna';
+import type { DocumentDnaModel } from './document-dna-model';
 import { escapeHtml } from '../../utils/helpers';
 
 export type ResultsRenderer = 'legacy' | 'cockpit';
@@ -19,6 +21,8 @@ export type ResultsCockpitAction =
 
 export interface ResultsCockpitOptions {
   repairAvailable: boolean;
+  /** DNA rada. Izostavljen kad rezultat nema mjerene odlomke; sekcija se tada ne crta. */
+  documentDna?: DocumentDnaModel;
   advancedOpen?: boolean;
   onAction?: (action: ResultsCockpitAction) => void;
   onAdvancedToggle?: (open: boolean) => void;
@@ -90,7 +94,9 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     action ? ' data-finding-id="' + escapeHtml(action.findingId) + '"' : '', '>', primaryButtonLabel(action), '</button></div>',
     readinessHaloHtml(model.score, model.signals, haloStatus, status.tone), '</div>',
     '<section class="cockpit-priority" aria-labelledby="cockpitPriorityTitle"><div class="cockpit-section-heading"><span class="cockpit-kicker">Prvo pogledajte</span><h2 id="cockpitPriorityTitle">Najva\u017Eniji nalazi</h2></div>',
-    priorityFindingsHtml(model.findings.top, options.repairAvailable), '</section>', categorySummaryHtml(model.categories),
+    priorityFindingsHtml(model.findings.top, options.repairAvailable), '</section>',
+    options.documentDna ? documentDnaHtml(options.documentDna) : '',
+    categorySummaryHtml(model.categories),
     actionRowHtml(model, options.repairAvailable),
     '<button type="button" class="cockpit-advanced-toggle" data-cockpit-action="advanced" data-cockpit-advanced aria-expanded="', advancedOpen ? 'true' : 'false', '"><span>Napredna provjera</span><span aria-hidden="true">&#65291;</span></button>',
   ].join('');
@@ -101,6 +107,9 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
   const raf = mount.ownerDocument.defaultView?.requestAnimationFrame;
   if (typeof raf === 'function') raf(() => { mount.dataset.entered = 'true'; });
   else mount.dataset.entered = 'true';
+
+  // DNA salje iste akcije kao kartice nalaza, pa ljuska ne mora znati odakle je klik dosao.
+  bindDocumentDna(mount, (action) => options.onAction?.(action));
 
   mount.querySelector<HTMLButtonElement>('[data-cockpit-primary]')?.addEventListener('click', () => {
     if (action) options.onAction?.(action);
