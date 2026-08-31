@@ -46,14 +46,19 @@ export default defineConfig({
       name: 'mobile-chromium',
       use: { ...devices['Pixel 5'] },
       /**
-       * OTVOREN NALAZ, namjerno izuzet umjesto tiho ugasen: pod stvarnom mobilnom emulacijom
-       * (isMobile + hasTouch) klik na "Nastavi na profil" u sticky navigaciji ne prolazi ni u 120 s,
-       * pa `roadmap-v2.spec.ts` ovdje pada. Na desktop Chromeu isti test prolazi.
+       * ZATVOREN 2026-08-31. Ovdje je stajalo da klik na "Nastavi na profil" pod `isMobile` +
+       * `hasTouch` ne prolazi ni u 120 s, pa je `roadmap-v2.spec.ts` bio izuzet. Vise nije ni
+       * izuzet ni crven.
        *
-       * To NIJE greska testa nego upravo ono na sto audit cilja (TEST-12): mobilni audit je dosad
-       * bio provjera vidljivosti i nije dokazivao da se sucelje da koristiti prstom. Popravak je
-       * UX posao (dodirna meta ili preklapanje sticky trake), ne remedijacija, pa se ne rjesava
-       * usput. Ostalih 40 mobilnih provjera se vrti i od danas stvarno stiti.
+       * Kvar NIJE bio dodirna meta nego OKOMITI PRORACUN na niskom zaslonu: `#browseBtn`
+       * zavrsava tocno na 667, pa je dropzone prelazio prvi ekran za svojih 14 px donjeg
+       * paddinga i 1 px ruba (448..682). Uz to stavka `.wizard-grid` ima zadani `min-width:auto`,
+       * pa stupac nije mogao ispod svoje min-content sirine: dropzone 378 px na zaslonu od 375,
+       * a `body` ima `overflow-x:clip` pa se visak tiho REZAO. Oboje popravljeno u `index.html`
+       * (commit `e86da45e`), pod `(max-width:720px) and (max-height:720px)`.
+       *
+       * Zasto se dugo cinilo kao kradja dodira: Pixel 5 je visok 851 px, pa se na njemu nista od
+       * toga ne vidi. Pada samo slucaj 375x667 unutar tog istog projekta.
        */
       /**
        * `repair-panel.spec.ts` tvrdo postavlja viewport 1440x1000, pa pod mobilnim projektom
