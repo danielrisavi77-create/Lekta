@@ -12,11 +12,11 @@
     "uncoveredCount": 7848,
     "resolvedCount": 1877,
     "byReason": {
-      "profil-ne-propisuje-os": 6492,
-      "univerzalna-higijena-bez-dokaza": 99,
+      "profil-ne-propisuje-os": 6106,
+      "univerzalna-higijena-bez-dokaza": 78,
       "closed-loop-nije-rijesio": 0,
       "nema-dokaza": 36,
-      "ceka-ljudski-odabir": 407,
+      "ceka-ljudski-odabir": 814,
       "trazi-ulaz-izvan-dokumenta": 814
     }
   },
@@ -194,7 +194,7 @@
       "profileId": "fpzg-politologija-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpzg-politologija-zavrsni",
@@ -464,7 +464,7 @@
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
@@ -695,7 +695,7 @@
       "profileId": "fpzg-novinarstvo-zavrsni-av",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-av",
@@ -955,7 +955,7 @@
       "profileId": "fpzg-politologija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpzg-politologija-diplomski",
@@ -1220,7 +1220,7 @@
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
@@ -1490,7 +1490,7 @@
       "profileId": "fpzg-novinarstvo-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpzg-novinarstvo-diplomski",
@@ -1765,7 +1765,7 @@
       "profileId": "fpzg-mes-master-thesis",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpzg-mes-master-thesis",
@@ -2035,7 +2035,7 @@
       "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
@@ -2300,7 +2300,7 @@
       "profileId": "fpzg-specijalisticki-prilagodba-eu",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpzg-specijalisticki-prilagodba-eu",
@@ -2565,7 +2565,7 @@
       "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
@@ -2830,7 +2830,7 @@
       "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
@@ -3090,7 +3090,7 @@
       "profileId": "fpzg-doktorski-politologija",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpzg-doktorski-politologija",
@@ -3338,7 +3338,7 @@
       "profileId": "fpzg-opci-akademski-rad",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
@@ -3618,7 +3618,7 @@
       "profileId": "pravo-integrirani-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravo-integrirani-diplomski",
@@ -3878,7 +3878,7 @@
       "profileId": "pravo-javna-uprava-prijediplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
@@ -4138,7 +4138,7 @@
       "profileId": "pravo-javna-uprava-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravo-javna-uprava-diplomski",
@@ -4398,7 +4398,7 @@
       "profileId": "pravo-porezni-prijediplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravo-porezni-prijediplomski",
@@ -4651,7 +4651,7 @@
       "profileId": "pravo-socijalni-rad-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
@@ -4921,7 +4921,7 @@
       "profileId": "pravo-socijalni-rad-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
@@ -5181,7 +5181,7 @@
       "profileId": "pravo-socijalna-politika-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravo-socijalna-politika-diplomski",
@@ -5436,7 +5436,7 @@
       "profileId": "pravo-opci-pravni-akademski-rad",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
@@ -5684,7 +5684,7 @@
       "profileId": "pravo-socijalni-opci-akademski-rad",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravo-socijalni-opci-akademski-rad",
@@ -5939,7 +5939,7 @@
       "profileId": "pravo-specijalisticki-pravni-opci",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravo-specijalisticki-pravni-opci",
@@ -6194,7 +6194,7 @@
       "profileId": "pravo-doktorski-pravne-znanosti",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravo-doktorski-pravne-znanosti",
@@ -6447,7 +6447,7 @@
       "profileId": "pravo-socijalne-djelatnosti-specijalisticki",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravo-socijalne-djelatnosti-specijalisticki",
@@ -6700,7 +6700,7 @@
       "profileId": "pravo-socijalne-djelatnosti-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravo-socijalne-djelatnosti-doktorski",
@@ -6952,7 +6952,7 @@
       "profileId": "agr-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "agr-diplomski",
@@ -7204,7 +7204,7 @@
       "profileId": "agr-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "agr-zavrsni",
@@ -7456,7 +7456,7 @@
       "profileId": "agr-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "agr-doktorski",
@@ -7715,7 +7715,7 @@
       "profileId": "efzg-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "efzg-zavrsni",
@@ -7981,7 +7981,7 @@
       "profileId": "efzg-specijalisticki",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "efzg-specijalisticki",
@@ -8235,7 +8235,7 @@
       "profileId": "efzg-strucni-racunovodstvo",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "efzg-strucni-racunovodstvo",
@@ -8494,7 +8494,7 @@
       "profileId": "efzg-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "efzg-diplomski",
@@ -8742,7 +8742,7 @@
       "profileId": "fsb-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fsb-diplomski",
@@ -8990,7 +8990,7 @@
       "profileId": "fsb-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fsb-zavrsni",
@@ -9238,7 +9238,7 @@
       "profileId": "fer-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fer-diplomski",
@@ -9486,7 +9486,7 @@
       "profileId": "fer-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fer-zavrsni",
@@ -9746,7 +9746,7 @@
       "profileId": "mef-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "mef-diplomski",
@@ -10005,7 +10005,7 @@
       "profileId": "vef-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vef-diplomski",
@@ -10264,7 +10264,7 @@
       "profileId": "kif-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "kif-diplomski",
@@ -10524,7 +10524,7 @@
       "profileId": "sumfak-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "sumfak-diplomski",
@@ -10784,7 +10784,7 @@
       "profileId": "sumfak-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "sumfak-zavrsni",
@@ -11043,7 +11043,7 @@
       "profileId": "ttf-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ttf-diplomski",
@@ -11302,7 +11302,7 @@
       "profileId": "ttf-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ttf-zavrsni",
@@ -11554,7 +11554,7 @@
       "profileId": "grad-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "grad-diplomski",
@@ -11806,7 +11806,7 @@
       "profileId": "grad-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "grad-zavrsni",
@@ -12044,7 +12044,7 @@
       "profileId": "ffzg-informacijske-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffzg-informacijske-zavrsni",
@@ -12303,7 +12303,7 @@
       "profileId": "ffzg-filozofija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffzg-filozofija-diplomski",
@@ -12557,7 +12557,7 @@
       "profileId": "pmf-geografija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pmf-geografija-diplomski",
@@ -12811,7 +12811,7 @@
       "profileId": "fbf-specijalisticki",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fbf-specijalisticki",
@@ -13070,7 +13070,7 @@
       "profileId": "sfzg-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "sfzg-diplomski",
@@ -13322,7 +13322,7 @@
       "profileId": "fpz-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpz-zavrsni",
@@ -13574,7 +13574,7 @@
       "profileId": "fpz-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpz-diplomski",
@@ -13805,7 +13805,7 @@
       "profileId": "geof-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "geof-diplomski",
@@ -14036,7 +14036,7 @@
       "profileId": "geof-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "geof-doktorski",
@@ -14302,7 +14302,7 @@
       "profileId": "grf-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "grf-zavrsni",
@@ -14547,7 +14547,7 @@
       "profileId": "erf-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "erf-diplomski",
@@ -14813,7 +14813,7 @@
       "profileId": "ufzg-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ufzg-zavrsni",
@@ -15079,7 +15079,7 @@
       "profileId": "ufzg-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ufzg-diplomski",
@@ -15310,7 +15310,7 @@
       "profileId": "arh-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "arh-diplomski",
@@ -15550,7 +15550,7 @@
       "profileId": "fkit-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fkit-diplomski",
@@ -15790,7 +15790,7 @@
       "profileId": "fkit-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fkit-zavrsni",
@@ -16042,7 +16042,7 @@
       "profileId": "pbf-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pbf-diplomski",
@@ -16301,7 +16301,7 @@
       "profileId": "ffrz-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffrz-diplomski",
@@ -16560,7 +16560,7 @@
       "profileId": "ffrz-bakalaureatski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffrz-bakalaureatski",
@@ -16819,7 +16819,7 @@
       "profileId": "fhs-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fhs-diplomski",
@@ -17078,7 +17078,7 @@
       "profileId": "fhs-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fhs-zavrsni",
@@ -17337,7 +17337,7 @@
       "profileId": "kbf-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "kbf-zavrsni",
@@ -17596,7 +17596,7 @@
       "profileId": "kbf-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "kbf-diplomski",
@@ -17829,7 +17829,7 @@
       "profileId": "alu-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "alu-diplomski",
@@ -18055,7 +18055,7 @@
       "profileId": "muza-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "muza-diplomski",
@@ -18314,7 +18314,7 @@
       "profileId": "ffzg-psihologija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffzg-psihologija-diplomski",
@@ -18568,7 +18568,7 @@
       "profileId": "ffzg-sociologija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffzg-sociologija-diplomski",
@@ -18832,7 +18832,7 @@
       "profileId": "ffzg-kroatistika-graduate",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffzg-kroatistika-graduate",
@@ -19086,7 +19086,7 @@
       "profileId": "pmf-biologija-graduate",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pmf-biologija-graduate",
@@ -19340,7 +19340,7 @@
       "profileId": "pmf-fizika-graduate",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pmf-fizika-graduate",
@@ -19592,7 +19592,7 @@
       "profileId": "pmf-matematika-graduate",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pmf-matematika-graduate",
@@ -19851,7 +19851,7 @@
       "profileId": "ffzg-pedagogija-graduate",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffzg-pedagogija-graduate",
@@ -20104,269 +20104,269 @@
     {
       "profileId": "ffzg-lingvistika-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "fixerId": "legal-footnote-repair-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "fixerId": "final-document-inspector-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-lingvistika-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "fixerId": "table-figure-rescue-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-lingvistika-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "fixerId": "section-surgery-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "fixerId": "field-integrity-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-lingvistika-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "fixerId": "croatian-typography-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-lingvistika-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "fixerId": "consistency-fixer",
+      "status": "nepokriveno",
+      "reason": "ceka-ljudski-odabir"
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "fixerId": "required-section-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "fixerId": "link-doi-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-lingvistika-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "fixerId": "submission-metadata-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "margins-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
+        "checkIds": [
+          "margins"
+        ]
+      }
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "paper-size-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
+        "checkIds": [
+          "paper-size"
+        ]
+      }
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "font-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
+        "checkIds": [
+          "font"
+        ]
+      }
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "line-spacing-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
+        "checkIds": [
+          "line-spacing"
+        ]
+      }
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "alignment-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
+        "checkIds": [
+          "justify"
+        ]
+      }
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "paragraph-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "page-numbering-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "footer-page-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "section-insert-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "empty-paragraph-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "footnote-spacing-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "page-number-alignment-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "toc-field-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "heading-format-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "heading-style-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "resolved",
+        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "title-page-fixer",
+      "status": "nepokriveno",
+      "reason": "trazi-ulaz-izvan-dokumenta"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "footnote-typography-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "heading-case-fixer",
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "element-caption-fixer",
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "closed-loop",
+        "strength": "applied",
+        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
+        "checkIds": []
+      }
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "fixerId": "bibliography-repair-fixer",
       "status": "nepokriveno",
       "reason": "univerzalna-higijena-bez-dokaza"
     },
     {
-      "profileId": "ffzg-lingvistika-diplomski",
-      "fixerId": "legal-footnote-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "ffzg-lingvistika-diplomski",
-      "fixerId": "final-document-inspector-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:ffzg-lingvistika-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "ffzg-lingvistika-diplomski",
-      "fixerId": "table-figure-rescue-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:ffzg-lingvistika-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "ffzg-lingvistika-diplomski",
-      "fixerId": "section-surgery-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "ffzg-lingvistika-diplomski",
-      "fixerId": "field-integrity-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:ffzg-lingvistika-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "ffzg-lingvistika-diplomski",
-      "fixerId": "croatian-typography-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:ffzg-lingvistika-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "ffzg-lingvistika-diplomski",
-      "fixerId": "consistency-fixer",
-      "status": "nepokriveno",
-      "reason": "ceka-ljudski-odabir"
-    },
-    {
-      "profileId": "ffzg-lingvistika-diplomski",
-      "fixerId": "required-section-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "ffzg-lingvistika-diplomski",
-      "fixerId": "link-doi-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:ffzg-lingvistika-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "ffzg-lingvistika-diplomski",
-      "fixerId": "submission-metadata-fixer",
-      "status": "nepokriveno",
-      "reason": "trazi-ulaz-izvan-dokumenta"
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "margins-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
-        "checkIds": [
-          "margins"
-        ]
-      }
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "paper-size-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
-        "checkIds": [
-          "paper-size"
-        ]
-      }
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "font-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
-        "checkIds": [
-          "font"
-        ]
-      }
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "line-spacing-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
-        "checkIds": [
-          "line-spacing"
-        ]
-      }
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "alignment-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
-        "checkIds": [
-          "justify"
-        ]
-      }
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "paragraph-spacing-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "page-numbering-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "footer-page-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "section-insert-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "empty-paragraph-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "footnote-spacing-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "page-number-alignment-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "toc-field-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "heading-format-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "heading-style-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "resolved",
-        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "title-page-fixer",
-      "status": "nepokriveno",
-      "reason": "trazi-ulaz-izvan-dokumenta"
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "footnote-typography-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "heading-case-fixer",
-      "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "element-caption-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "closed-loop",
-        "strength": "applied",
-        "artifactId": "closed-loop:ffzg-povijest-umjetnosti-diplomski",
-        "checkIds": []
-      }
-    },
-    {
-      "profileId": "ffzg-povijest-umjetnosti-diplomski",
-      "fixerId": "bibliography-repair-fixer",
-      "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
-    },
-    {
       "profileId": "ffzg-povijest-umjetnosti-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffzg-povijest-umjetnosti-diplomski",
@@ -20628,7 +20628,7 @@
       "profileId": "ffzg-arheologija-graduate",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffzg-arheologija-graduate",
@@ -20887,7 +20887,7 @@
       "profileId": "ffzg-etnologija-graduate",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffzg-etnologija-graduate",
@@ -21132,7 +21132,7 @@
       "profileId": "pmf-geologija-graduate",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pmf-geologija-graduate",
@@ -21391,7 +21391,7 @@
       "profileId": "fer-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fer-doktorski",
@@ -21650,7 +21650,7 @@
       "profileId": "kif-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "kif-doktorski",
@@ -21893,7 +21893,7 @@
       "profileId": "mef-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "mef-doktorski",
@@ -22119,7 +22119,7 @@
       "profileId": "alu-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "alu-doktorski",
@@ -22378,7 +22378,7 @@
       "profileId": "grf-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "grf-diplomski",
@@ -22633,7 +22633,7 @@
       "profileId": "arh-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "arh-doktorski",
@@ -22888,7 +22888,7 @@
       "profileId": "efzg-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "efzg-doktorski",
@@ -23143,7 +23143,7 @@
       "profileId": "erf-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "erf-doktorski",
@@ -23398,7 +23398,7 @@
       "profileId": "fbf-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fbf-doktorski",
@@ -23653,7 +23653,7 @@
       "profileId": "ffrz-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffrz-doktorski",
@@ -23908,7 +23908,7 @@
       "profileId": "fhs-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fhs-doktorski",
@@ -24163,7 +24163,7 @@
       "profileId": "fkit-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fkit-doktorski",
@@ -24418,7 +24418,7 @@
       "profileId": "fsb-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fsb-doktorski",
@@ -24673,7 +24673,7 @@
       "profileId": "grad-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "grad-doktorski",
@@ -24928,7 +24928,7 @@
       "profileId": "grf-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "grf-doktorski",
@@ -25183,7 +25183,7 @@
       "profileId": "kbf-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "kbf-doktorski",
@@ -25438,7 +25438,7 @@
       "profileId": "muza-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "muza-doktorski",
@@ -25693,7 +25693,7 @@
       "profileId": "pbf-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pbf-doktorski",
@@ -25948,7 +25948,7 @@
       "profileId": "sfzg-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "sfzg-doktorski",
@@ -26203,7 +26203,7 @@
       "profileId": "ttf-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ttf-doktorski",
@@ -26458,7 +26458,7 @@
       "profileId": "ufzg-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ufzg-doktorski",
@@ -26713,7 +26713,7 @@
       "profileId": "vef-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vef-doktorski",
@@ -26965,7 +26965,7 @@
       "profileId": "rgnf-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "rgnf-zavrsni",
@@ -27217,7 +27217,7 @@
       "profileId": "rgnf-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "rgnf-diplomski",
@@ -27471,7 +27471,7 @@
       "profileId": "zsem-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "zsem-zavrsni",
@@ -27718,7 +27718,7 @@
       "profileId": "zsem-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "zsem-diplomski",
@@ -27965,7 +27965,7 @@
       "profileId": "libertas-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "libertas-zavrsni",
@@ -28219,7 +28219,7 @@
       "profileId": "libertas-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "libertas-diplomski",
@@ -28480,7 +28480,7 @@
       "profileId": "effectus-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "effectus-zavrsni",
@@ -28741,7 +28741,7 @@
       "profileId": "effectus-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "effectus-diplomski",
@@ -29002,7 +29002,7 @@
       "profileId": "rrif-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "rrif-zavrsni",
@@ -29263,7 +29263,7 @@
       "profileId": "pvzg-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pvzg-zavrsni",
@@ -29524,7 +29524,7 @@
       "profileId": "pvzg-specijalisticki",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pvzg-specijalisticki",
@@ -29771,7 +29771,7 @@
       "profileId": "zvu-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "zvu-zavrsni",
@@ -30018,7 +30018,7 @@
       "profileId": "zvu-specijalisticki",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "zvu-specijalisticki",
@@ -30249,7 +30249,7 @@
       "profileId": "vsite-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vsite-zavrsni",
@@ -30480,7 +30480,7 @@
       "profileId": "vsite-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vsite-diplomski",
@@ -30741,7 +30741,7 @@
       "profileId": "vkjs-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vkjs-zavrsni",
@@ -31002,7 +31002,7 @@
       "profileId": "vkjs-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vkjs-diplomski",
@@ -31263,7 +31263,7 @@
       "profileId": "hks-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "hks-diplomski",
@@ -31524,7 +31524,7 @@
       "profileId": "efri-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "efri-zavrsni",
@@ -31785,7 +31785,7 @@
       "profileId": "efri-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "efri-diplomski",
@@ -32039,7 +32039,7 @@
       "profileId": "pravri-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravri-zavrsni",
@@ -32293,7 +32293,7 @@
       "profileId": "pravri-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravri-diplomski",
@@ -32554,7 +32554,7 @@
       "profileId": "ffri-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffri-zavrsni",
@@ -32815,7 +32815,7 @@
       "profileId": "ffri-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffri-diplomski",
@@ -33069,7 +33069,7 @@
       "profileId": "pfri-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pfri-zavrsni",
@@ -33323,7 +33323,7 @@
       "profileId": "pfri-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pfri-diplomski",
@@ -33570,7 +33570,7 @@
       "profileId": "medri-farmacija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "medri-farmacija-diplomski",
@@ -33831,7 +33831,7 @@
       "profileId": "fmtu-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fmtu-zavrsni",
@@ -34092,7 +34092,7 @@
       "profileId": "fmtu-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fmtu-diplomski",
@@ -34325,7 +34325,7 @@
       "profileId": "inf-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "inf-zavrsni",
@@ -34558,7 +34558,7 @@
       "profileId": "inf-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "inf-diplomski",
@@ -34812,7 +34812,7 @@
       "profileId": "pmfst-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pmfst-zavrsni",
@@ -35066,7 +35066,7 @@
       "profileId": "pmfst-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pmfst-diplomski",
@@ -35313,7 +35313,7 @@
       "profileId": "fgag-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fgag-zavrsni",
@@ -35560,7 +35560,7 @@
       "profileId": "fgag-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fgag-diplomski",
@@ -35814,7 +35814,7 @@
       "profileId": "efst-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "efst-zavrsni",
@@ -36068,7 +36068,7 @@
       "profileId": "efst-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "efst-diplomski",
@@ -36329,7 +36329,7 @@
       "profileId": "ktfst-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ktfst-zavrsni",
@@ -36590,7 +36590,7 @@
       "profileId": "ktfst-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ktfst-diplomski",
@@ -36837,7 +36837,7 @@
       "profileId": "pfst-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pfst-zavrsni",
@@ -37084,7 +37084,7 @@
       "profileId": "pfst-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pfst-diplomski",
@@ -37345,7 +37345,7 @@
       "profileId": "mefst-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "mefst-diplomski",
@@ -37599,7 +37599,7 @@
       "profileId": "ferit-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ferit-zavrsni",
@@ -37853,7 +37853,7 @@
       "profileId": "ferit-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ferit-diplomski",
@@ -38114,7 +38114,7 @@
       "profileId": "grafos-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "grafos-zavrsni",
@@ -38375,7 +38375,7 @@
       "profileId": "grafos-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "grafos-diplomski",
@@ -38637,7 +38637,7 @@
       "profileId": "ptfos-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ptfos-diplomski",
@@ -38891,7 +38891,7 @@
       "profileId": "efos-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "efos-zavrsni",
@@ -39145,7 +39145,7 @@
       "profileId": "efos-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "efos-diplomski",
@@ -39399,7 +39399,7 @@
       "profileId": "pravos-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravos-zavrsni",
@@ -39653,7 +39653,7 @@
       "profileId": "pravos-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravos-diplomski",
@@ -39907,7 +39907,7 @@
       "profileId": "ffos-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffos-zavrsni",
@@ -40161,7 +40161,7 @@
       "profileId": "ffos-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffos-diplomski",
@@ -40422,7 +40422,7 @@
       "profileId": "fazos-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fazos-zavrsni",
@@ -40683,7 +40683,7 @@
       "profileId": "fazos-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fazos-diplomski",
@@ -40944,7 +40944,7 @@
       "profileId": "mefos-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "mefos-zavrsni",
@@ -41205,7 +41205,7 @@
       "profileId": "mefos-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "mefos-diplomski",
@@ -41459,7 +41459,7 @@
       "profileId": "kemos-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "kemos-zavrsni",
@@ -41713,7 +41713,7 @@
       "profileId": "kemos-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "kemos-diplomski",
@@ -41974,7 +41974,7 @@
       "profileId": "unizd-turizam-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-turizam-zavrsni",
@@ -42245,7 +42245,7 @@
       "profileId": "unizd-turizam-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-turizam-diplomski",
@@ -42504,7 +42504,7 @@
       "profileId": "unizd-psihologija-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-psihologija-zavrsni",
@@ -42763,7 +42763,7 @@
       "profileId": "unizd-pedagogija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-pedagogija-diplomski",
@@ -43034,7 +43034,7 @@
       "profileId": "unizd-povijest-umj-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-povijest-umj-zavrsni",
@@ -43293,7 +43293,7 @@
       "profileId": "fetpu-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fetpu-zavrsni",
@@ -43547,7 +43547,7 @@
       "profileId": "fetpu-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fetpu-diplomski",
@@ -43801,7 +43801,7 @@
       "profileId": "tfpu-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "tfpu-zavrsni",
@@ -44055,7 +44055,7 @@
       "profileId": "tfpu-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "tfpu-diplomski",
@@ -44309,7 +44309,7 @@
       "profileId": "foozpu-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "foozpu-zavrsni",
@@ -44563,7 +44563,7 @@
       "profileId": "foozpu-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "foozpu-diplomski",
@@ -44817,7 +44817,7 @@
       "profileId": "unidu-povijest-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unidu-povijest-zavrsni",
@@ -45078,7 +45078,7 @@
       "profileId": "unidu-komunikologija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unidu-komunikologija-diplomski",
@@ -45332,7 +45332,7 @@
       "profileId": "unidu-ekonomija-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unidu-ekonomija-zavrsni",
@@ -45586,7 +45586,7 @@
       "profileId": "unidu-ekonomija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unidu-ekonomija-diplomski",
@@ -45847,7 +45847,7 @@
       "profileId": "unidu-umjetnost-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unidu-umjetnost-diplomski",
@@ -46094,7 +46094,7 @@
       "profileId": "medri-medicina-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "medri-medicina-diplomski",
@@ -46355,7 +46355,7 @@
       "profileId": "fzsri-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fzsri-zavrsni",
@@ -46616,7 +46616,7 @@
       "profileId": "fzsri-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fzsri-diplomski",
@@ -46856,7 +46856,7 @@
       "profileId": "biotech-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "biotech-zavrsni",
@@ -47096,7 +47096,7 @@
       "profileId": "biotech-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "biotech-diplomski",
@@ -47336,7 +47336,7 @@
       "profileId": "fizri-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fizri-zavrsni",
@@ -47576,7 +47576,7 @@
       "profileId": "fizri-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fizri-diplomski",
@@ -47830,7 +47830,7 @@
       "profileId": "ufri-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ufri-diplomski",
@@ -48085,7 +48085,7 @@
       "profileId": "riteh-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "riteh-zavrsni",
@@ -48340,7 +48340,7 @@
       "profileId": "riteh-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "riteh-diplomski",
@@ -48594,7 +48594,7 @@
       "profileId": "kifst-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "kifst-diplomski",
@@ -48835,7 +48835,7 @@
       "profileId": "kbfst-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "kbfst-diplomski",
@@ -49089,7 +49089,7 @@
       "profileId": "unin-tehnicki-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unin-tehnicki-zavrsni",
@@ -49343,7 +49343,7 @@
       "profileId": "unin-tehnicki-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unin-tehnicki-diplomski",
@@ -49597,7 +49597,7 @@
       "profileId": "unin-biomedicina-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unin-biomedicina-zavrsni",
@@ -49851,7 +49851,7 @@
       "profileId": "unin-biomedicina-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unin-biomedicina-diplomski",
@@ -50105,7 +50105,7 @@
       "profileId": "unin-drustveni-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unin-drustveni-zavrsni",
@@ -50359,7 +50359,7 @@
       "profileId": "unin-drustveni-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unin-drustveni-diplomski",
@@ -50620,7 +50620,7 @@
       "profileId": "veleri-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "veleri-zavrsni",
@@ -50881,7 +50881,7 @@
       "profileId": "veleri-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "veleri-diplomski",
@@ -51142,7 +51142,7 @@
       "profileId": "vub-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vub-diplomski",
@@ -51396,7 +51396,7 @@
       "profileId": "mev-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "mev-zavrsni",
@@ -51636,7 +51636,7 @@
       "profileId": "vvg-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vvg-zavrsni",
@@ -51876,7 +51876,7 @@
       "profileId": "vvg-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vvg-diplomski",
@@ -52137,7 +52137,7 @@
       "profileId": "vevu-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vevu-zavrsni",
@@ -52398,7 +52398,7 @@
       "profileId": "vuv-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vuv-zavrsni",
@@ -52659,7 +52659,7 @@
       "profileId": "vuv-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vuv-diplomski",
@@ -52920,7 +52920,7 @@
       "profileId": "veleknin-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "veleknin-zavrsni",
@@ -53167,7 +53167,7 @@
       "profileId": "vhzk-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vhzk-zavrsni",
@@ -53393,7 +53393,7 @@
       "profileId": "dizajn-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "dizajn-diplomski",
@@ -53619,7 +53619,7 @@
       "profileId": "gradri-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "gradri-zavrsni",
@@ -53845,7 +53845,7 @@
       "profileId": "gradri-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "gradri-diplomski",
@@ -54107,7 +54107,7 @@
       "profileId": "ffri-germanistika-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffri-germanistika-zavrsni",
@@ -54369,7 +54369,7 @@
       "profileId": "ffri-germanistika-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffri-germanistika-diplomski",
@@ -54624,7 +54624,7 @@
       "profileId": "ffri-psihologija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffri-psihologija-diplomski",
@@ -54889,7 +54889,7 @@
       "profileId": "ffri-povum-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffri-povum-zavrsni",
@@ -55144,7 +55144,7 @@
       "profileId": "ffri-povum-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffri-povum-diplomski",
@@ -55406,7 +55406,7 @@
       "profileId": "ffri-kulturalni-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffri-kulturalni-diplomski",
@@ -55671,7 +55671,7 @@
       "profileId": "fpzpu-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpzpu-zavrsni",
@@ -55926,7 +55926,7 @@
       "profileId": "fpzpu-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fpzpu-diplomski",
@@ -56181,7 +56181,7 @@
       "profileId": "ffst-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffst-zavrsni",
@@ -56436,7 +56436,7 @@
       "profileId": "ffst-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffst-diplomski",
@@ -56691,7 +56691,7 @@
       "profileId": "fesb-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fesb-zavrsni",
@@ -56946,7 +56946,7 @@
       "profileId": "fesb-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fesb-diplomski",
@@ -57172,7 +57172,7 @@
       "profileId": "pravst-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravst-zavrsni",
@@ -57398,7 +57398,7 @@
       "profileId": "pravst-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravst-diplomski",
@@ -57652,7 +57652,7 @@
       "profileId": "ffos-povijest-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffos-povijest-zavrsni",
@@ -57906,7 +57906,7 @@
       "profileId": "ffos-povijest-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffos-povijest-diplomski",
@@ -58161,7 +58161,7 @@
       "profileId": "ffos-psihologija-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffos-psihologija-zavrsni",
@@ -58423,7 +58423,7 @@
       "profileId": "ffos-psihologija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffos-psihologija-diplomski",
@@ -58671,7 +58671,7 @@
       "profileId": "ffos-informatologija-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffos-informatologija-zavrsni",
@@ -58919,7 +58919,7 @@
       "profileId": "ffos-informatologija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffos-informatologija-diplomski",
@@ -59167,7 +59167,7 @@
       "profileId": "ffos-germanistika-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffos-germanistika-zavrsni",
@@ -59415,7 +59415,7 @@
       "profileId": "ffos-germanistika-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffos-germanistika-diplomski",
@@ -59670,7 +59670,7 @@
       "profileId": "uaos-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "uaos-zavrsni",
@@ -59925,7 +59925,7 @@
       "profileId": "uaos-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "uaos-diplomski",
@@ -60187,7 +60187,7 @@
       "profileId": "fdmz-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fdmz-diplomski",
@@ -60435,7 +60435,7 @@
       "profileId": "foozos-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "foozos-diplomski",
@@ -60690,7 +60690,7 @@
       "profileId": "kbfdj-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "kbfdj-diplomski",
@@ -60945,7 +60945,7 @@
       "profileId": "biolos-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "biolos-zavrsni",
@@ -61200,7 +61200,7 @@
       "profileId": "biolos-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "biolos-diplomski",
@@ -61455,7 +61455,7 @@
       "profileId": "fizos-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fizos-diplomski",
@@ -61681,7 +61681,7 @@
       "profileId": "unizd-kroatistika-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-kroatistika-zavrsni",
@@ -61907,7 +61907,7 @@
       "profileId": "unizd-kroatistika-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-kroatistika-diplomski",
@@ -62133,7 +62133,7 @@
       "profileId": "unizd-ekonomija-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-ekonomija-zavrsni",
@@ -62359,7 +62359,7 @@
       "profileId": "unizd-ekonomija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-ekonomija-diplomski",
@@ -62614,7 +62614,7 @@
       "profileId": "unizd-ekologija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-ekologija-diplomski",
@@ -62869,7 +62869,7 @@
       "profileId": "unizd-ekologija-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-ekologija-zavrsni",
@@ -63141,7 +63141,7 @@
       "profileId": "unizd-etnologija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-etnologija-diplomski",
@@ -63389,7 +63389,7 @@
       "profileId": "unizd-geografija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-geografija-diplomski",
@@ -63630,7 +63630,7 @@
       "profileId": "unizd-zdravstvo-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-zdravstvo-zavrsni",
@@ -63876,7 +63876,7 @@
       "profileId": "unizd-zdravstvo-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-zdravstvo-diplomski",
@@ -64124,7 +64124,7 @@
       "profileId": "unizd-informacijske-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-informacijske-zavrsni",
@@ -64372,7 +64372,7 @@
       "profileId": "unizd-informacijske-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-informacijske-diplomski",
@@ -64634,7 +64634,7 @@
       "profileId": "unizd-arheologija-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-arheologija-zavrsni",
@@ -64896,7 +64896,7 @@
       "profileId": "unizd-arheologija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-arheologija-diplomski",
@@ -65151,7 +65151,7 @@
       "profileId": "unizd-klasicna-filologija-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-klasicna-filologija-zavrsni",
@@ -65406,7 +65406,7 @@
       "profileId": "unizd-klasicna-filologija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-klasicna-filologija-diplomski",
@@ -65647,7 +65647,7 @@
       "profileId": "unizd-filozofija-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-filozofija-zavrsni",
@@ -65888,7 +65888,7 @@
       "profileId": "unizd-filozofija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-filozofija-diplomski",
@@ -66114,7 +66114,7 @@
       "profileId": "unizd-anglistika-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-anglistika-zavrsni",
@@ -66340,7 +66340,7 @@
       "profileId": "unizd-anglistika-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-anglistika-diplomski",
@@ -66595,7 +66595,7 @@
       "profileId": "unizd-germanistika-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-germanistika-zavrsni",
@@ -66850,7 +66850,7 @@
       "profileId": "unizd-germanistika-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-germanistika-diplomski",
@@ -67105,7 +67105,7 @@
       "profileId": "unizd-hispanistika-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-hispanistika-diplomski",
@@ -67346,7 +67346,7 @@
       "profileId": "unizd-francuski-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-francuski-diplomski",
@@ -67600,7 +67600,7 @@
       "profileId": "unizd-povijest-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-povijest-zavrsni",
@@ -67854,7 +67854,7 @@
       "profileId": "unizd-povijest-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-povijest-diplomski",
@@ -68095,7 +68095,7 @@
       "profileId": "unizd-talijanistika-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-talijanistika-diplomski",
@@ -68321,7 +68321,7 @@
       "profileId": "unizd-sociologija-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-sociologija-zavrsni",
@@ -68583,7 +68583,7 @@
       "profileId": "unizd-sociologija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-sociologija-diplomski",
@@ -68809,7 +68809,7 @@
       "profileId": "unizd-lingvistika-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-lingvistika-zavrsni",
@@ -69035,7 +69035,7 @@
       "profileId": "unizd-lingvistika-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-lingvistika-diplomski",
@@ -69261,7 +69261,7 @@
       "profileId": "unizd-rusistika-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-rusistika-diplomski",
@@ -69516,7 +69516,7 @@
       "profileId": "unizd-pomorski-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-pomorski-zavrsni",
@@ -69771,7 +69771,7 @@
       "profileId": "unizd-pomorski-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-pomorski-diplomski",
@@ -70033,7 +70033,7 @@
       "profileId": "unizd-ucitelji-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-ucitelji-diplomski",
@@ -70288,7 +70288,7 @@
       "profileId": "unizd-psihologija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-psihologija-diplomski",
@@ -70550,7 +70550,7 @@
       "profileId": "unizd-povijest-umj-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-povijest-umj-diplomski",
@@ -70803,7 +70803,7 @@
       "profileId": "unidu-marikultura-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unidu-marikultura-diplomski",
@@ -71058,7 +71058,7 @@
       "profileId": "unidu-sestrinstvo-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unidu-sestrinstvo-zavrsni",
@@ -71320,7 +71320,7 @@
       "profileId": "unidu-komunikologija-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unidu-komunikologija-zavrsni",
@@ -71582,7 +71582,7 @@
       "profileId": "unidu-umjetnost-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unidu-umjetnost-zavrsni",
@@ -71808,7 +71808,7 @@
       "profileId": "unidu-elektro-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unidu-elektro-zavrsni",
@@ -72034,7 +72034,7 @@
       "profileId": "unidu-elektro-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unidu-elektro-diplomski",
@@ -72296,7 +72296,7 @@
       "profileId": "vub-zavrsni-tehnicki",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vub-zavrsni-tehnicki",
@@ -72558,7 +72558,7 @@
       "profileId": "vub-zavrsni-sestrinstvo",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vub-zavrsni-sestrinstvo",
@@ -72820,7 +72820,7 @@
       "profileId": "mev-zavrsni-drustveni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "mev-zavrsni-drustveni",
@@ -73082,7 +73082,7 @@
       "profileId": "mev-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "mev-diplomski",
@@ -73344,7 +73344,7 @@
       "profileId": "vevu-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vevu-diplomski",
@@ -73599,7 +73599,7 @@
       "profileId": "veleknin-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "veleknin-diplomski",
@@ -73847,7 +73847,7 @@
       "profileId": "vus-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vus-zavrsni",
@@ -74095,7 +74095,7 @@
       "profileId": "vus-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vus-diplomski",
@@ -74357,7 +74357,7 @@
       "profileId": "bak-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "bak-zavrsni",
@@ -74619,7 +74619,7 @@
       "profileId": "bak-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "bak-diplomski",
@@ -74874,7 +74874,7 @@
       "profileId": "vguk-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vguk-zavrsni",
@@ -75129,7 +75129,7 @@
       "profileId": "vguk-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vguk-diplomski",
@@ -75384,7 +75384,7 @@
       "profileId": "aspira-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "aspira-zavrsni",
@@ -75639,7 +75639,7 @@
       "profileId": "aspira-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "aspira-diplomski",
@@ -75865,7 +75865,7 @@
       "profileId": "par-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "par-zavrsni",
@@ -76091,7 +76091,7 @@
       "profileId": "par-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "par-diplomski",
@@ -76353,7 +76353,7 @@
       "profileId": "vss-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vss-zavrsni",
@@ -76615,7 +76615,7 @@
       "profileId": "vss-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vss-diplomski",
@@ -76855,7 +76855,7 @@
       "profileId": "vuka-poslovni-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vuka-poslovni-zavrsni",
@@ -77095,7 +77095,7 @@
       "profileId": "vuka-poslovni-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vuka-poslovni-diplomski",
@@ -77321,7 +77321,7 @@
       "profileId": "vuka-strojarski-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vuka-strojarski-zavrsni",
@@ -77547,7 +77547,7 @@
       "profileId": "vuka-strojarski-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vuka-strojarski-diplomski",
@@ -77788,7 +77788,7 @@
       "profileId": "vuka-sigurnost-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vuka-sigurnost-zavrsni",
@@ -78029,7 +78029,7 @@
       "profileId": "vuka-sigurnost-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vuka-sigurnost-diplomski",
@@ -78270,7 +78270,7 @@
       "profileId": "vuka-prehrambena-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vuka-prehrambena-zavrsni",
@@ -78511,7 +78511,7 @@
       "profileId": "vuka-lovstvo-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vuka-lovstvo-zavrsni",
@@ -78759,7 +78759,7 @@
       "profileId": "unisb-sfsb-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unisb-sfsb-zavrsni",
@@ -79007,7 +79007,7 @@
       "profileId": "unisb-sfsb-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unisb-sfsb-diplomski",
@@ -79255,7 +79255,7 @@
       "profileId": "unisb-teho-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unisb-teho-zavrsni",
@@ -79503,7 +79503,7 @@
       "profileId": "unisb-teho-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unisb-teho-diplomski",
@@ -79751,7 +79751,7 @@
       "profileId": "unisb-btho-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unisb-btho-zavrsni",
@@ -79999,7 +79999,7 @@
       "profileId": "unisb-btho-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unisb-btho-diplomski",
@@ -80247,7 +80247,7 @@
       "profileId": "unisb-odhz-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unisb-odhz-zavrsni",
@@ -80495,7 +80495,7 @@
       "profileId": "unisb-odhz-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unisb-odhz-diplomski",
@@ -80750,7 +80750,7 @@
       "profileId": "ftrr-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ftrr-zavrsni",
@@ -81005,7 +81005,7 @@
       "profileId": "ftrr-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ftrr-diplomski",
@@ -81231,7 +81231,7 @@
       "profileId": "adu-gluma-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "adu-gluma-diplomski",
@@ -81457,7 +81457,7 @@
       "profileId": "adu-dramaturgija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "adu-dramaturgija-diplomski",
@@ -81683,7 +81683,7 @@
       "profileId": "adu-snimanje-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "adu-snimanje-diplomski",
@@ -81938,7 +81938,7 @@
       "profileId": "adu-montaza-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "adu-montaza-diplomski",
@@ -82164,7 +82164,7 @@
       "profileId": "adu-ftv-rezija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "adu-ftv-rezija-diplomski",
@@ -82390,7 +82390,7 @@
       "profileId": "adu-produkcija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "adu-produkcija-diplomski",
@@ -82616,7 +82616,7 @@
       "profileId": "adu-kazalisna-rezija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "adu-kazalisna-rezija-diplomski",
@@ -82842,7 +82842,7 @@
       "profileId": "adu-opci-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "adu-opci-diplomski",
@@ -83075,7 +83075,7 @@
       "profileId": "alu-slikarstvo-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "alu-slikarstvo-diplomski",
@@ -83315,7 +83315,7 @@
       "profileId": "alu-kiparstvo-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "alu-kiparstvo-diplomski",
@@ -83541,7 +83541,7 @@
       "profileId": "alu-grafika-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "alu-grafika-diplomski",
@@ -83767,7 +83767,7 @@
       "profileId": "alu-novi-mediji-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "alu-novi-mediji-diplomski",
@@ -83993,7 +83993,7 @@
       "profileId": "alu-nastavnicki-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "alu-nastavnicki-diplomski",
@@ -84255,7 +84255,7 @@
       "profileId": "alu-konzerviranje-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "alu-konzerviranje-diplomski",
@@ -84515,7 +84515,7 @@
       "profileId": "ttf-dizajn-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ttf-dizajn-diplomski",
@@ -84775,7 +84775,7 @@
       "profileId": "ttf-dizajn-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ttf-dizajn-zavrsni",
@@ -85030,7 +85030,7 @@
       "profileId": "pmf-geofizika-graduate",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pmf-geofizika-graduate",
@@ -85285,7 +85285,7 @@
       "profileId": "fsb-opci-akademski-rad",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fsb-opci-akademski-rad",
@@ -85540,7 +85540,7 @@
       "profileId": "efst-opci-akademski-rad",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "efst-opci-akademski-rad",
@@ -85795,7 +85795,7 @@
       "profileId": "efos-opci-akademski-rad",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "efos-opci-akademski-rad",
@@ -86050,7 +86050,7 @@
       "profileId": "pravri-opci-akademski-rad",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravri-opci-akademski-rad",
@@ -86276,7 +86276,7 @@
       "profileId": "geof-opci-akademski-rad",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "geof-opci-akademski-rad",
@@ -86516,7 +86516,7 @@
       "profileId": "vuka-poslovni-opci-akademski-rad",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
@@ -86764,7 +86764,7 @@
       "profileId": "foi-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "foi-zavrsni",
@@ -87012,7 +87012,7 @@
       "profileId": "foi-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "foi-diplomski",
@@ -87260,7 +87260,7 @@
       "profileId": "simet-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "simet-zavrsni",
@@ -87515,7 +87515,7 @@
       "profileId": "more-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "more-zavrsni",
@@ -87770,7 +87770,7 @@
       "profileId": "more-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "more-diplomski",
@@ -88025,7 +88025,7 @@
       "profileId": "forenzika-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "forenzika-diplomski",
@@ -88273,7 +88273,7 @@
       "profileId": "ozs-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ozs-zavrsni",
@@ -88521,7 +88521,7 @@
       "profileId": "ozs-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ozs-diplomski",
@@ -88747,7 +88747,7 @@
       "profileId": "umas-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "umas-zavrsni",
@@ -88973,7 +88973,7 @@
       "profileId": "umas-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "umas-diplomski",
@@ -89228,7 +89228,7 @@
       "profileId": "oss-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "oss-zavrsni",
@@ -89483,7 +89483,7 @@
       "profileId": "oss-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "oss-diplomski",
@@ -89738,7 +89738,7 @@
       "profileId": "kifos-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "kifos-zavrsni",
@@ -89993,7 +89993,7 @@
       "profileId": "kifos-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "kifos-diplomski",
@@ -90248,7 +90248,7 @@
       "profileId": "fdmri-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fdmri-zavrsni",
@@ -90503,7 +90503,7 @@
       "profileId": "fdmri-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fdmri-diplomski",
@@ -90758,7 +90758,7 @@
       "profileId": "logri-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "logri-diplomski",
@@ -91013,7 +91013,7 @@
       "profileId": "vnt-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vnt-zavrsni",
@@ -91268,7 +91268,7 @@
       "profileId": "vnt-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vnt-diplomski",
@@ -91516,7 +91516,7 @@
       "profileId": "iv-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "iv-zavrsni",
@@ -91764,7 +91764,7 @@
       "profileId": "iv-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "iv-diplomski",
@@ -92012,7 +92012,7 @@
       "profileId": "vsig-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vsig-zavrsni",
@@ -92260,7 +92260,7 @@
       "profileId": "vsig-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "vsig-diplomski",
@@ -92500,7 +92500,7 @@
       "profileId": "arca-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "arca-zavrsni",
@@ -92748,7 +92748,7 @@
       "profileId": "securus-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "securus-zavrsni",
@@ -93003,7 +93003,7 @@
       "profileId": "evtos-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "evtos-zavrsni",
@@ -93258,7 +93258,7 @@
       "profileId": "evtos-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "evtos-diplomski",
@@ -93513,7 +93513,7 @@
       "profileId": "unizd-tko-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "unizd-tko-diplomski",
@@ -93783,7 +93783,7 @@
       "profileId": "ffpu-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffpu-zavrsni",
@@ -94043,7 +94043,7 @@
       "profileId": "ffpu-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffpu-diplomski",
@@ -94303,7 +94303,7 @@
       "profileId": "fipu-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fipu-zavrsni",
@@ -94563,7 +94563,7 @@
       "profileId": "mfpu-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "mfpu-diplomski",
@@ -94823,7 +94823,7 @@
       "profileId": "mapu-glazbena-pedagogija-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "mapu-glazbena-pedagogija-zavrsni",
@@ -95083,7 +95083,7 @@
       "profileId": "mapu-glazbena-pedagogija-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "mapu-glazbena-pedagogija-diplomski",
@@ -95345,7 +95345,7 @@
       "profileId": "apuri-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "apuri-zavrsni",
@@ -95598,7 +95598,7 @@
       "profileId": "apuri-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "apuri-diplomski",
@@ -95836,7 +95836,7 @@
       "profileId": "math-uniri-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "math-uniri-zavrsni",
@@ -96074,7 +96074,7 @@
       "profileId": "math-uniri-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "math-uniri-diplomski",
@@ -96326,7 +96326,7 @@
       "profileId": "mathos-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "mathos-zavrsni",
@@ -96578,7 +96578,7 @@
       "profileId": "mathos-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "mathos-diplomski",
@@ -96833,7 +96833,7 @@
       "profileId": "algebra-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "algebra-zavrsni",
@@ -97088,7 +97088,7 @@
       "profileId": "algebra-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "algebra-diplomski",
@@ -97343,7 +97343,7 @@
       "profileId": "algebra-diplomski-odnosi-s-javnoscu",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "algebra-diplomski-odnosi-s-javnoscu",
@@ -97598,7 +97598,7 @@
       "profileId": "algebra-specijalisticki",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "algebra-specijalisticki",
@@ -97858,7 +97858,7 @@
       "profileId": "fipu-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "fipu-diplomski",
@@ -98096,7 +98096,7 @@
       "profileId": "math-uniri-diplomski-en",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "math-uniri-diplomski-en",
@@ -98350,7 +98350,7 @@
       "profileId": "zsem-zavrsni-en",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "zsem-zavrsni-en",
@@ -98605,7 +98605,7 @@
       "profileId": "aspira-zavrsni-en",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "aspira-zavrsni-en",
@@ -98860,7 +98860,7 @@
       "profileId": "aspira-diplomski-en",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "aspira-diplomski-en",
@@ -99107,7 +99107,7 @@
       "profileId": "libertas-zavrsni-en",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "libertas-zavrsni-en",
@@ -99361,7 +99361,7 @@
       "profileId": "libertas-diplomski-en",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "libertas-diplomski-en",
@@ -99623,7 +99623,7 @@
       "profileId": "sois-ft-vojno-inzenjerstvo-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "sois-ft-vojno-inzenjerstvo-zavrsni",
@@ -99885,7 +99885,7 @@
       "profileId": "sois-ft-vojno-inzenjerstvo-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "sois-ft-vojno-inzenjerstvo-diplomski",
@@ -100147,7 +100147,7 @@
       "profileId": "sois-ft-vojno-vodjenje-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "sois-ft-vojno-vodjenje-zavrsni",
@@ -100409,7 +100409,7 @@
       "profileId": "sois-ft-vojno-vodjenje-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "sois-ft-vojno-vodjenje-diplomski",
@@ -100671,7 +100671,7 @@
       "profileId": "sois-ft-vojno-pomorstvo-diplomski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "sois-ft-vojno-pomorstvo-diplomski",
@@ -100933,7 +100933,7 @@
       "profileId": "ffri-kroatistika-zavrsni",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "ffri-kroatistika-zavrsni",
@@ -101187,7 +101187,7 @@
       "profileId": "efos-doktorski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "efos-doktorski",
@@ -101441,7 +101441,7 @@
       "profileId": "efos-specijalisticki",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "efos-specijalisticki",
@@ -101681,7 +101681,7 @@
       "profileId": "efzg-seminarski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "efzg-seminarski",
@@ -101935,7 +101935,7 @@
       "profileId": "kif-specijalisticki",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "kif-specijalisticki",
@@ -102189,7 +102189,7 @@
       "profileId": "pravri-specijalisticki",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "pravri-specijalisticki",
@@ -102450,7 +102450,7 @@
       "profileId": "effectus-seminarski",
       "fixerId": "citation-bibliography-sync-fixer",
       "status": "nepokriveno",
-      "reason": "profil-ne-propisuje-os"
+      "reason": "ceka-ljudski-odabir"
     },
     {
       "profileId": "effectus-seminarski",

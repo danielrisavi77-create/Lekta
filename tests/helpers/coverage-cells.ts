@@ -250,7 +250,13 @@ function hasAssistedRule(profileId: string, checkId: string): boolean {
   );
 }
 
-const UNDECIDABLE_FIXERS: ReadonlySet<string> = new Set(['consistency-fixer']);
+const UNDECIDABLE_FIXERS: ReadonlySet<string> = new Set([
+  'consistency-fixer',
+  // Isti obrazac, izmjeren 2026-08-31: graditelj sve odabire gradi s tvrdim `selected: false`,
+  // pa su `params` prazni po konstrukciji (`{citations: [], entries: [], mappings: []}`) i na
+  // dokumentu koji ima i citate i popis literature i nesklad medju njima.
+  'citation-bibliography-sync-fixer',
+]);
 
 /**
  * Fixeri kojima generirani dokument ne moze dati ulaz, pa im dokaz nije stvar generatora.
@@ -294,6 +300,12 @@ export const APPLIED_AXIS_FIXER: Record<string, string> = {
    * `applied`; kad se kandidati prosire na svih pet, seli u `RESOLVED_AXIS_FIXER`.
    */
   'required-section': 'required-section-fixer',
+  /**
+   * Nedostajao je do 2026-08-31 (treci krug pregleda): os je bila u
+   * `STRUCTURAL_WITHOUT_SCORED_CHECK`, ali bez unosa ovdje, pa je `changedFixerIds.has(undefined)`
+   * uvijek bio `false` i os NIKAD nije mogla zaraditi dokaz `applied`.
+   */
+  'element-caption': 'element-caption-fixer',
 };
 
 /**
