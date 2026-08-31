@@ -511,8 +511,10 @@ ${robots ? `<meta name="robots" content="${robots}">` : ''}
 <style>${PAGE_STYLE}</style>
 </head>
 <body>
-<div class="lekta-brand"><a href="/">Lekta</a><span>Besplatna tehnička provjera</span></div>
+<header class="lekta-brand"><a href="/">Lekta</a><span>Besplatna tehnička provjera</span></header>
+<main>
 ${bodyHtml}
+</main>
 ${(extraScripts || []).map((src) => `<script src="${escapeHtml(src)}"></script>`).join('')}
 </body>
 </html>
