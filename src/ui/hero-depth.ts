@@ -252,4 +252,3 @@ function createDustLayer(atmos: HTMLElement): DustHandle | null {
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup);
 else setup();
 
-export {};

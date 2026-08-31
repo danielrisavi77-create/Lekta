@@ -54,7 +54,11 @@ describe('progress scan', () => {
   });
 
   it('neispravan ulaz ne izmislja napredak', () => {
-    for (const bad of [Number.NaN, -50, Number.POSITIVE_INFINITY * 0]) {
+    // `Number.POSITIVE_INFINITY * 0` je bio NaN, dakle DUPLIKAT prvog slucaja: treca stavka
+    // nije mjerila nista novo. `phaseStates` sve ne-konacne vrijednosti svodi na 0
+    // (`Number.isFinite(pct) ? ... : 0`), pa su oba beskonacna ulaza stvarni, razliciti
+    // slucajevi te grane.
+    for (const bad of [Number.NaN, -50, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY]) {
       expect(phaseStates(bad)).toEqual(Array(SCAN_PHASES.length).fill('pending'));
     }
     // Prekoracenje se stisce na 100, ne omota u nulu.
