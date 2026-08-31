@@ -167,7 +167,7 @@ const AXIS_BY_FIXER: Record<string, string> = {
  * Ne ide kroz `loop.violated` kao `toc-field`, jer generator te osi uopce ne krsi, pa bi signal
  * uvijek bio prazan i dijagnoza bi bila tocna iz krivog razloga.
  */
-const PROFILE_GATE: Record<string, (profile: Record<string, unknown>) => boolean> = {
+export const PROFILE_GATE: Record<string, (profile: Record<string, unknown>) => boolean> = {
   'paragraph-spacing-fixer': (p) => p?.checkParagraphSpacingZero === true,
   'page-numbering-fixer': (p) => p?.checkPageNumberStartAtIntro === true,
   'footnote-spacing-fixer': (p) => p?.checkFootnoteParagraphSpacingZero === true,
@@ -226,7 +226,7 @@ const PROFILE_GATE: Record<string, (profile: Record<string, unknown>) => boolean
  * `checkId`-jevi su izvuceni iz koda (`grep "checkId === "`), ne prepisani po sjecanju: prvi
  * pokusaj je koristio `legal-footnote-rules`, imena koje u kodu ne postoji, i dao lazno tocnu nulu.
  */
-const ASSISTED_RULE_GATE: Record<string, string> = {
+export const ASSISTED_RULE_GATE: Record<string, string> = {
   'bibliography-repair-fixer': 'bibliography-rules',
   'citation-bibliography-sync-fixer': 'citation-sync-rules',
   'section-surgery-fixer': 'section-surgery-rules',
@@ -478,7 +478,25 @@ function uncoveredReason(
   // 83 profila s `requireToc`) nosilo krivu dijagnozu.
   const axis = AXIS_BY_FIXER[fixerId];
   if (axis && loop && !loop.violated.includes(axis)) return 'profil-ne-propisuje-os';
-  if (ruleCount === 0) return isGated ? 'profil-ne-propisuje-os' : 'univerzalna-higijena-bez-dokaza';
+  /**
+   * KAPIJA KOJU JE PROFIL PROSAO ZNACI DA OS PROPISUJE, pa dijagnoza ne smije glasiti "univerzalna
+   * higijena". Do 2026-08-31 je glasila, i to za SVIH 78 preostalih takvih celija.
+   *
+   * Uzrok je bio `isGated`, koji ne znaci "ovaj profil propisuje os" nego "fixer se uopce pojavljuje
+   * u `repair-coverage` matrici". Ta matrica ima redke za samo SEST fixera (font, line-spacing,
+   * margins, paper-size, alignment, footnote-typography; 1751 redak), pa je za preostalih 25
+   * `ruleCount === 0` uvijek istina, `isGated` uvijek `false`, i svaka takva celija je padala na
+   * blagu oznaku. Izmjereno: svih 10 pogodjenih fixera prolazi kroz `PROFILE_GATE` ili
+   * `ASSISTED_RULE_GATE`, dakle svih 78 celija ima profil koji os DOISTA propisuje.
+   *
+   * Razlika nije kozmeticka: "univerzalna higijena bez dokaza" zvuci kao rub, a `nema-dokaza` je
+   * rupa u pokrivenosti bas ondje gdje fakultet nesto propisuje.
+   */
+  const kapijaProsla = Boolean((gate && profile) || (ruleCheckId && profileId));
+  if (ruleCount === 0) {
+    if (isGated) return 'profil-ne-propisuje-os';
+    return kapijaProsla ? 'nema-dokaza' : 'univerzalna-higijena-bez-dokaza';
+  }
   // Profil os propisuje. Je li ju closed-loop pokusao i nije uspio, ili ju nikad nije dotaknuo?
   if (loop && loop.axesRemaining.length > 0) return 'closed-loop-nije-rijesio';
   return 'nema-dokaza';
