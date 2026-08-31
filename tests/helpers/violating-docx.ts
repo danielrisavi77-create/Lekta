@@ -36,7 +36,7 @@
  */
 import { buildDocx, type DocSpec, type ParaSpec } from './docx-builder';
 import { paramsForCheck } from '../../src/ui/repair-items';
-import { isHeadingLikeText, missingRequiredSectionLabels, type RequiredSectionProfileEntry, type RequiredSectionRules } from '../../src/analysis/required-sections-structure';
+import { isHeadingParagraph, missingRequiredSectionLabels, type RequiredSectionProfileEntry, type RequiredSectionRules } from '../../src/analysis/required-sections-structure';
 
 /** Osi koje profilna grana popravka pokriva; sve ostalo ovaj generator namjerno ne dira. */
 export const VIOLATABLE_CHECK_IDS = ['font', 'font-size', 'line-spacing', 'justify', 'margins', 'paper-size'] as const;
@@ -343,9 +343,19 @@ export async function buildViolatingDocx(
       // ISTA populacija koju gleda analiza: ona filtrira kroz `isHeading`, pa i ovdje idu samo
       // odlomci koji se po tekstu mogu smatrati naslovom. Bez toga su dva pozivatelja iste
       // funkcije davala suprotne presude nad istim dokumentom.
+      /**
+       * SVE TRI grane koje analiza koristi, ne samo tekstualna.
+       *
+       * `isHeading` je disjunkcija (razina naslova ILI stil naslova ILI tekstualna heuristika).
+       * Prva izvedba je zrcalila samo trecu, pa je naslov sa stilom `Heading1` koji je dug ili
+       * zavrsava tockom analiza brojala kao postojeci, a generator kao nedostajuci.
+       */
       const headingTexts = paragraphs
-        .map((item) => String((item as { text?: unknown }).text ?? ''))
-        .filter((text) => isHeadingLikeText(text));
+        .filter((item) => isHeadingParagraph({
+          text: String((item as { text?: unknown }).text ?? ''),
+          styleId: (item as { styleId?: string }).styleId,
+        }))
+        .map((item) => String((item as { text?: unknown }).text ?? ''));
       if (missingRequiredSectionLabels(headingTexts, required, sectionRules).length) violated.push('required-section');
     }
 

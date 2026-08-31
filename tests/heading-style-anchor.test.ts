@@ -140,9 +140,20 @@ describe('heading-style-fixer: sidro protiv zastarjele mete', () => {
     }] as never);
     expect(out.skippedReasons['heading-structure-universal']).toBeUndefined();
     expect(out.changelog.length, 'jedinstven naslov mora proci unatoc dvojbenom susjedu').toBeGreaterThan(0);
-    // Dvojbena meta se PRESKACE, pa celija tablice ostaje netaknuta.
+
+    /**
+     * PRESKAKANJE MORA OSTAVITI TRAG. Bez ovoga je test prolazio i kad bi se dvojbene mete
+     * PRIMIJENILE (neovisni pregled je to dokazao mutacijom `dvojbeno` -> `uredu`), jer je jedina
+     * tvrdnja bila da tablica postoji, a heading-style tablice ionako ne uklanja.
+     */
+    expect(out.changelog[0].afterLabel, 'preskocena meta mora biti prijavljena').toContain('preskočeno');
+
     const doc = await documentOf(out.docxBytes);
-    expect(doc).toContain('<w:tbl>');
+    // Dvojbena meta se PRESKACE: celija tablice ne smije dobiti stil naslova.
+    const cell = doc.slice(doc.indexOf('<w:tbl>'));
+    expect(cell).not.toContain('pStyle');
+    // A jedinstvena meta ga MORA dobiti.
+    expect(doc.slice(0, doc.indexOf('<w:tbl>'))).toContain('pStyle');
   });
 
   /**

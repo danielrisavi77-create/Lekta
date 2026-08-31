@@ -558,10 +558,27 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
         return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'stale-anchor' as const };
       }
       const freshTargets = targets.filter((target) => verdictFor(target) === 'uredu');
+      const ambiguous = targets.length - freshTargets.length;
       const applicable = freshTargets.map(({ anchorText: _anchorText, ...target }) => target);
-      return applicable.length
-        ? headingStyleFixer(parts, applicable, { pageBreakLevels, numbering })
-        : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
+      if (!applicable.length) {
+        /**
+         * Kad su SVE mete dvojbene, krivnja nije na zahtjevu nego na dokumentu, pa se ne javlja
+         * `invalid-params`. Prva izvedba je to mijesala i optuzivala poziv za stanje dokumenta.
+         */
+        return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: ambiguous ? 'unsupported-structure' as const : 'invalid-params' as const };
+      }
+      const applied = headingStyleFixer(parts, applicable, { pageBreakLevels, numbering });
+      /**
+       * DJELOMICNA primjena ostavlja TRAG, i to je bila zadnja rupa ovog razreda.
+       *
+       * Preskocene dvojbene mete su se dotad gubile bez ijednog zapisa uz `applied: true`, sto je
+       * doslovno ono sto je commit d23fb923 osudio kod istog fixera: "dokument izgleda popravljeno".
+       * Broj ide u natpis, jer je to jedini kanal koji `FixerOutput` nudi po pozivu, a korisnik ga
+       * vidi u changelogu.
+       */
+      return ambiguous && applied.applied
+        ? { ...applied, afterLabel: `${applied.afterLabel}; ${ambiguous} preskočeno zbog ponovljenog teksta` }
+        : applied;
     }
     case 'title-page-fixer': {
       const p = params as { paragraphCount?: unknown; lines?: unknown; ensureTitlePageNoNumber?: unknown; marginsCm?: unknown };

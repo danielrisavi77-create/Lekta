@@ -109,6 +109,28 @@ export function isHeadingLikeText(text: string): boolean {
   return trimmed.length > 0 && trimmed.length < 100 && !/[.!?]$/.test(trimmed);
 }
 
+/** Je li `styleId` Wordov stil naslova (`Heading1`, `Naslov2`, ...)? */
+export function isHeadingStyleId(styleId: string | undefined): boolean {
+  return typeof styleId === 'string' && /^(?:Heading|Naslov)[1-9]$/i.test(styleId.trim());
+}
+
+/**
+ * SVE TRI grane po kojima analiza odlomak smatra naslovom, izrazene i za pozivatelja bez XML-a.
+ *
+ * `isHeading` je DISJUNKCIJA: razina naslova, stil naslova, ili tekstualna heuristika. Prva
+ * izvedba dijeljene populacije zrcalila je samo trecu granu, pa je tvrdnja "populacija je
+ * izjednacena" bila netocna na isti nacin kao ranija tvrdnja "jedan izvor istine".
+ *
+ * IZMJERENO 2026-08-31 (treci krug pregleda): naslov sa stilom `Heading1`, dug 127 znakova i sa
+ * zavrsnom tockom, analiza proglasava naslovom (`present: true`), a tekstualna heuristika ga
+ * odbija; generator je isti dokument prijavljivao kao da dio NEDOSTAJE.
+ */
+export function isHeadingParagraph(input: { text: string; styleId?: string; headingLevel?: number | null }): boolean {
+  if (typeof input.headingLevel === 'number' && input.headingLevel >= 1) return true;
+  if (isHeadingStyleId(input.styleId)) return true;
+  return isHeadingLikeText(input.text);
+}
+
 function hash(value: string): string {
   let h = 2166136261;
   for (let i = 0; i < value.length; i++) { h ^= value.charCodeAt(i); h = Math.imul(h, 16777619); }
@@ -127,8 +149,9 @@ function kindForKey(value: string): RequiredSectionKind | undefined {
 }
 
 function isHeading(xml: string, paragraph: ParagraphLike): boolean {
-  if (paragraph.headingLevel && paragraph.headingLevel >= 1) return true;
-  return /<w:pStyle\b[^>]*w:val=["'](?:Heading|Naslov)[1-9]["']/i.test(xml) || (paragraph.text.trim().length > 0 && paragraph.text.trim().length < 100 && !/[.!?]$/.test(paragraph.text.trim()));
+  // Stil se ovdje cita iz XML-a, ostale dvije grane dijele se s pozivateljima bez XML-a.
+  const styleId = xml.match(/<w:pStyle\b[^>]*w:val=["']((?:Heading|Naslov)[1-9])["']/i)?.[1];
+  return isHeadingParagraph({ text: paragraph.text, styleId, headingLevel: paragraph.headingLevel ?? null });
 }
 
 /**

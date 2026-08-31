@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { analyzeRequiredSectionsStructure, missingRequiredSectionLabels } from './required-sections-structure';
+import { analyzeRequiredSectionsStructure, isHeadingParagraph, missingRequiredSectionLabels } from './required-sections-structure';
 
 const doc = (body: string) => `<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}<w:sectPr/></w:body></w:document>`;
 const p = (text: string, style = 'Heading1') => `<w:p><w:pPr><w:pStyle w:val="${style}"/></w:pPr><w:r><w:t>${text}</w:t></w:r></w:p>`;
@@ -215,5 +215,54 @@ describe('numeracija naslova: oba smjera', () => {
       expect(staraIzvedba('Ili prilozi')).toBe('prilozi');
       expect(missingRequiredSectionLabels(['Ili prilozi'], prilozi)).toEqual(['Prilozi']);
     });
+  });
+});
+
+/**
+ * F6 (2026-08-31, treci krug): tvrdnja "populacija je izjednacena" bila je NETOCNA na isti nacin
+ * kao ranija "jedan izvor istine".
+ *
+ * `isHeading` je DISJUNKCIJA triju uvjeta, a dijeljena funkcija je zrcalila samo trecu granu.
+ * IZMJERENO: naslov sa stilom `Heading1`, dug 127 znakova i sa zavrsnom tockom, analiza broji kao
+ * naslov (`present: true`), a tekstualna heuristika ga odbija. Generator je isti dokument
+ * prijavljivao kao da dio NEDOSTAJE, sto vodi u umetanje duplikata.
+ */
+describe('isHeadingParagraph: sve tri grane, ne samo tekstualna', () => {
+  const dug = 'Sažetak ovoga rada obuhvaća pregled literature, metodologiju i glavne nalaze istraživanja provedenoga tijekom akademske godine.';
+
+  it('BASELINE: sam tekst takvog naslova NE prolazi tekstualnu heuristiku', () => {
+    expect(dug.length).toBeGreaterThan(100);
+    expect(isHeadingParagraph({ text: dug })).toBe(false);
+  });
+
+  it('stil naslova ga cini naslovom', () => {
+    expect(isHeadingParagraph({ text: dug, styleId: 'Heading1' })).toBe(true);
+    expect(isHeadingParagraph({ text: dug, styleId: 'Naslov2' })).toBe(true);
+  });
+
+  it('razina naslova ga cini naslovom', () => {
+    expect(isHeadingParagraph({ text: dug, headingLevel: 1 })).toBe(true);
+  });
+
+  it('obican stil ga ne cini naslovom', () => {
+    expect(isHeadingParagraph({ text: dug, styleId: 'Normal' })).toBe(false);
+  });
+
+  /**
+   * Zajednicka funkcija mora dati ISTU presudu kao analiza nad istim dokumentom; bez ove tvrdnje
+   * bi se dvije strane opet mogle razici a da to nitko ne primijeti.
+   */
+  it('daje istu presudu kao analiza nad istim dokumentom', () => {
+    const xml = doc(`${p(dug, 'Heading1')}${p('Uvod')}`);
+    const result = analyzeRequiredSectionsStructure({
+      documentXml: xml,
+      paragraphs: [{ index: 1, text: dug, headingLevel: 1 }, { index: 2, text: 'Uvod', headingLevel: 1 }],
+      profileRequiredSections: [{ key: 'summary-hr', label: 'Sažetak' }],
+    });
+    expect(result.candidates.find((x) => x.kind === 'summary-hr')?.present).toBe(true);
+    const heading = [{ text: dug, styleId: 'Heading1' }, { text: 'Uvod' }]
+      .filter((x) => isHeadingParagraph(x))
+      .map((x) => x.text);
+    expect(missingRequiredSectionLabels(heading, [{ key: 'summary-hr', label: 'Sažetak' } as never])).toEqual([]);
   });
 });
