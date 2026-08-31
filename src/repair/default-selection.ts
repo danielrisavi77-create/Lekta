@@ -77,8 +77,14 @@ export function defaultSelectedItems<T extends DefaultSelectableItem>(items: rea
  */
 const WORK_CARRIERS: Record<string, (params: Record<string, unknown>) => boolean> = {
   'consistency-fixer': (params) => Array.isArray(params.replacements) && params.replacements.length > 0,
+  /**
+   * `manualToc` i `bookmarks` su dodani 2026-08-31 (treci krug pregleda): prva izvedba je
+   * nabrajala samo `fields` i `settings`, pa je korisnik koji odabere zamjenu RUCNOG SADRZAJA a
+   * nijedno polje dobivao izvjestaj "ceka covjeka" iako se popravak izvodi. Opce pravilo je taj
+   * slucaj tocno klasificiralo; suzavanje ga je pokvarilo.
+   */
   'field-integrity-fixer': (params) =>
-    (Array.isArray(params.fields) && params.fields.length > 0)
+    ['fields', 'manualToc', 'bookmarks'].some((key) => Array.isArray(params[key]) && (params[key] as unknown[]).length > 0)
     || hasTruthySetting(params.settings),
   /**
    * Dodan u drugom krugu pregleda: propustio sam ga iako sam ga u obrazlozenju F7 sam naveo kao
@@ -87,7 +93,7 @@ const WORK_CARRIERS: Record<string, (params: Record<string, unknown>) => boolean
    * popravlja bila prijavljena kao "ceka covjeka".
    */
   'final-document-inspector-fixer': (params) =>
-    ['revisions', 'comments', 'metadata', 'hiddenText'].some((key) => Array.isArray(params[key]) && (params[key] as unknown[]).length > 0)
+    ['revisions', 'comments', 'metadata', 'hiddenText', 'customXml'].some((key) => Array.isArray(params[key]) && (params[key] as unknown[]).length > 0)
     || hasTruthySetting(params.settings),
 };
 
@@ -102,9 +108,15 @@ const WORK_CARRIERS: Record<string, (params: Record<string, unknown>) => boolean
  * proizveo razilazenje.
  */
 
-/** Ima li objekt postavki ijednu upaljenu vrijednost? */
+/**
+ * Ima li objekt postavki ijednu upaljenu vrijednost?
+ *
+ * Trazi se STROGO `true`, ne bilo sto istinito: fixeri te zastavice citaju usporedbom `=== true`
+ * (npr. `field-integrity-fixer` nad `settings.updateFieldsOnOpen`), pa bi npr. niz `"false"` ovdje
+ * prosao kao posao a ondje bio odbijen. Nalaz treceg kruga pregleda.
+ */
 function hasTruthySetting(settings: unknown): boolean {
-  return Boolean(settings && typeof settings === 'object' && Object.values(settings as Record<string, unknown>).some(Boolean));
+  return Boolean(settings && typeof settings === 'object' && Object.values(settings as Record<string, unknown>).some((value) => value === true));
 }
 
 export function hasActionableParams(params: Record<string, unknown> | null | undefined, fixerId?: string): boolean {

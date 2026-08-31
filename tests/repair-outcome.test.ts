@@ -264,6 +264,52 @@ describe('summarizeRepairOutcome: cekanje potvrde nije jaz', () => {
     expect(out.awaitingConfirmation).toEqual(['page.margins']);
   });
 
+
+  /**
+   * TRECI KRUG PREGLEDA (2026-08-31): suzavanje na per-fixer ocitanje ISPUSTILO je kljuceve koje
+   * je opce pravilo tocno klasificiralo. Popravak koji je uzi od pravila koje zamjenjuje je
+   * nazadak, pa se ovdje pribijaju bas ti ispusteni oblici.
+   */
+  it.each([
+    ['manualToc', { version: 1, fields: [], manualToc: [{ id: 'm' }] }],
+    ['bookmarks', { version: 1, fields: [], bookmarks: [{ id: 'b' }] }],
+  ])('field-integrity: %s je STVARAN zahvat, ne cekanje', (_label, params) => {
+    const out = summarizeRepairOutcome({
+      before: failing,
+      after: failing,
+      selected: [{ matchKeys: ['Margine dokumenta'], fixerId: 'field-integrity-fixer', requiresConfirmation: true, params }],
+    });
+    expect(out.assistedUnresolved).toEqual(['page.margins']);
+  });
+
+  it('final-document-inspector: `customXml` je STVARAN zahvat', () => {
+    const out = summarizeRepairOutcome({
+      before: failing,
+      after: failing,
+      selected: [{
+        matchKeys: ['Margine dokumenta'], fixerId: 'final-document-inspector-fixer', requiresConfirmation: true,
+        params: { version: 1, revisions: [], comments: [], metadata: [], hiddenText: [], customXml: [{ part: 'x' }] },
+      }],
+    });
+    expect(out.assistedUnresolved).toEqual(['page.margins']);
+  });
+
+  /**
+   * Postavke se citaju STROGO: fixeri usporedjuju `=== true`, pa istinita vrijednost koja nije
+   * `true` (npr. niz `"false"`) ovdje ne smije proci kao posao.
+   */
+  it('postavka koja nije doslovno `true` nije zahvat', () => {
+    const out = summarizeRepairOutcome({
+      before: failing,
+      after: failing,
+      selected: [{
+        matchKeys: ['Margine dokumenta'], fixerId: 'field-integrity-fixer', requiresConfirmation: true,
+        params: { version: 1, fields: [], settings: { updateFieldsOnOpen: 'false' } },
+      }],
+    });
+    expect(out.awaitingConfirmation).toEqual(['page.margins']);
+  });
+
   it('prazan params objekt NIJE cekanje: empty-paragraph-fixer salje {} i uredno radi', () => {
     const out = summarizeRepairOutcome({
       before: failing,

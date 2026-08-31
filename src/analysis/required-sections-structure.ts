@@ -139,9 +139,19 @@ function isHeading(xml: string, paragraph: ParagraphLike): boolean {
  * 1. Strip ide nad SIROVIM tekstom, prije `normalize`. `normalize` brise svu interpunkciju, pa su
  *    u prvoj izvedbi `[.]` i `[.)]` bili MRTVI: `2.1 Sazetak` je postajao `2 1 sazetak`, skidalo
  *    se samo `2 `, i ostajalo `1 sazetak`. Viserazinska numeracija je i dalje davala duplikat.
- * 2. Rimska grana ZAHTIJEVA interpunkciju. Bez nje `[ivxlcdm]+` pogada obicne rijeci: izmjereno
- *    je da su `Vidi prilog 3`, `Ili prilozi` i `Civil appendices` proglasavali `Prilozi`
- *    POSTOJECIM. To je obrnut i gori kvar: dio koji doista nedostaje nikad se ne bi ponudio.
+ * 2. Rimska grana trazi VELIKA SLOVA, ne interpunkciju. Bez ikakvog uvjeta `[ivxlcdm]+` pogada
+ *    obicne rijeci (`Vidi prilog 3`, `Ili prilozi`, `Civil appendices` proglasavali su `Prilozi`
+ *    POSTOJECIM: dio koji nedostaje nikad se ne bi ponudio). Ali zahtjev za interpunkcijom, kako
+ *    je stajalo u drugom krugu, bio je REGRESIJA: `I UVOD` i `II PREGLED LITERATURE`, standardni
+ *    hrvatski oblik naslova, prestali su se prepoznavati i davali DUPLIKAT.
+ *
+ *    Razlikovni kriterij je velicina slova: rimski broj u naslovu pise se velikim (`I`, `II`,
+ *    `IV`), a obicna rijec nije (`Ili`, `Vidi`, `Cl.`, `Div.`). Zastavica `/i` je zato uklonjena,
+ *    cime se uvjet dobiva bez dodatne provjere. Dodani su i oblici koje je pregled nabrojao:
+ *    slovna oznaka (`A.`, `B.`) i rijec ispred broja (`Poglavlje 2.`).
+ *
+ *    PRESTROGO skidanje je sigurniji smjer od preslobodnog: `matchesAlias` provjerava I neskraceni
+ *    tekst, pa krivo skidanje moze samo DODATI podudaranje, dok propusteno skidanje ga uklanja.
  *
  * IZMJERENO 2026-08-31, prvi krug: dokument s naslovom `1. SAZETAK` uz propisanu
  * oznaku `Sazetak` normalizira se u `1 sazetak`, sto nije ni jednako `sazetak` ni pocinje s
@@ -150,7 +160,7 @@ function isHeading(xml: string, paragraph: ParagraphLike): boolean {
  * doslovno.
  */
 function normalizedWithoutLeadingNumber(raw: string): string {
-  return normalize(raw.replace(/^(?:[0-9]+(?:[.][0-9]+)*[.)]?|[IVXLCDM]+[.)])\s+/i, ''));
+  return normalize(raw.replace(/^(?:(?:Poglavlje|POGLAVLJE|Chapter|CHAPTER|Dio|DIO|Part|PART)\s+)?(?:[0-9]+(?:[.][0-9]+)*[.)]?|[IVXLCDM]+[.)]?|[A-ZČĆŽŠĐ][.)])\s+/, ''));
 }
 
 function defaultOrder(profile: RequiredSectionProfileEntry[] | undefined): RequiredSectionKind[] {

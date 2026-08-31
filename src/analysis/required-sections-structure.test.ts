@@ -160,14 +160,24 @@ describe('numeracija naslova: oba smjera', () => {
   const req = [{ key: 'summary-hr', label: 'Sažetak' } as never];
   const prilozi = [{ key: 'appendices', label: 'Prilozi' } as never];
 
-  it.each([['1. Sažetak'], ['2.1 Sažetak'], ['3.2.1 Sažetak'], ['IV. Sažetak'], ['2) Sažetak']])(
-    'numeriran naslov %s se prepoznaje kao postojeci',
-    (heading) => {
-      expect(missingRequiredSectionLabels([heading], req)).toEqual([]);
-    },
-  );
+  /**
+   * Svih devet oblika koje je treci krug pregleda nabrojao. `I Sazetak` i `II SAZETAK` su bili
+   * REGRESIJA iz drugog kruga: zahtjev za interpunkcijom uz rimski broj slomio je standardni
+   * hrvatski oblik naslova. Razlikovni kriterij je velicina slova, ne interpunkcija.
+   */
+  it.each([
+    ['1. Sažetak'], ['2.1 Sažetak'], ['3.2.1 Sažetak'], ['2) Sažetak'],
+    ['IV. Sažetak'], ['I Sažetak'], ['II SAŽETAK'],
+    ['A. Sažetak'], ['C. Sažetak'], ['Poglavlje 2. Sažetak'],
+  ])('numeriran naslov %s se prepoznaje kao postojeci', (heading) => {
+    expect(missingRequiredSectionLabels([heading], req)).toEqual([]);
+  });
 
-  it.each([['Vidi prilog 3'], ['Ili prilozi'], ['Civil appendices']])(
+  /**
+   * Suprotan smjer, i ovdje je tisina opasnija: dio koji doista nedostaje nikad se ne bi ponudio.
+   * `Cl.` je `Cl.` (clanak) bez dijakritike, sto je u pravnom korpusu ovog proizvoda ocekivano.
+   */
+  it.each([['Vidi prilog 3'], ['Ili prilozi'], ['Civil appendices'], ['Cl. prilozi'], ['Div. prilozi']])(
     'obicna recenica %s NE smije proglasiti dio postojecim',
     (line) => {
       expect(missingRequiredSectionLabels([line], prilozi)).toEqual(['Prilozi']);
