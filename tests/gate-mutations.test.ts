@@ -38,6 +38,8 @@ import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { checkSourceHashes } from '../scripts/verify-source-hashes.mjs';
 import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/profile-schema';
 import { sidecarAdmitted } from './real-corpus/corpus-track';
+import { assertAxisEvidenceWiring, AXIS_SIGNAL } from './helpers/closed-loop-wiring';
+import { APPLIED_AXIS_FIXER } from './helpers/coverage-cells';
 
 const SOURCES = SOURCE_REGISTRY as SourceEntry[];
 const NOW = '2026-06-30';
@@ -602,6 +604,60 @@ const MUTATIONS: Mutation[] = [
         SOURCES,
       ).citationStyle.length === 0,
   },
+  /**
+   * Gard nad ozicenjem dokaza po osi. Do 2026-08-31 nije imao mutaciju, a uz to se nije izvodio ni
+   * u jednom gateu: stajao je kao kod na vrhu `scripts/run-closed-loop.mts`, a CI posao koji se
+   * ZOVE `closed-loop` pokrece `npm run test:slow`, koji tu skriptu nikad ne dotakne.
+   */
+  {
+    id: 'dokaz-po-osi/os-bez-signala-tiho-pada-na-changelog',
+    imitates:
+      'strukturna os udje u skup a zaboravi se signal, pa zauvijek nosi dokaz koji znaci samo ' +
+      '"fixer se javio". Tocno se to dogodilo s `element-caption` i `field-integrity`, koje su bez ' +
+      'ijednog spomena padale na slabije changelog pravilo',
+    caught: () => {
+      try {
+        assertAxisEvidenceWiring(['os-koje-nema']);
+        return false;
+      } catch (e) {
+        return (e as Error).message.includes('AXIS_SIGNAL');
+      }
+    },
+    cleanBefore: () => {
+      // Baseline: stvarno ozicenje mora proci, inace gard "hvata" tako sto vristi na sve.
+      try {
+        assertAxisEvidenceWiring();
+        return true;
+      } catch {
+        return false;
+      }
+    },
+  },
+  {
+    id: 'dokaz-po-osi/os-bez-fixera-nikad-ne-zaradi-applied',
+    imitates:
+      'os ima signal ali nema unos u APPLIED_AXIS_FIXER, pa je `changedFixerIds.has(undefined)` ' +
+      'uvijek `false` i os nikad ne moze zaraditi dokaz `applied`. Prva izvedba garda provjeravala ' +
+      'je samo prvu mapu i time promasila bas os zbog koje je nastala',
+    caught: () => {
+      try {
+        // Signal postoji (stvarna mapa), fixer ne: gard mora gledati OBJE mape.
+        assertAxisEvidenceWiring(['empty-paragraphs'], AXIS_SIGNAL, {});
+        return false;
+      } catch (e) {
+        return (e as Error).message.includes('APPLIED_AXIS_FIXER');
+      }
+    },
+    cleanBefore: () => {
+      // Baseline: ista os uz OBJE stvarne mape mora proci, pa tvrdnja gore govori o fixeru.
+      try {
+        assertAxisEvidenceWiring(['empty-paragraphs'], AXIS_SIGNAL, APPLIED_AXIS_FIXER);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+  },
 ];
 
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
@@ -623,7 +679,7 @@ describe('mutacijsko testiranje: garda stvarno grizu', () => {
   it('N od N mutacija uhvaceno, i broj mutacija ne smije pasti', () => {
     const caught = MUTATIONS.filter((m) => m.cleanBefore() && m.caught());
     expect(caught).toHaveLength(MUTATIONS.length);
-    expect(MUTATIONS.length).toBeGreaterThanOrEqual(35);
+    expect(MUTATIONS.length).toBeGreaterThanOrEqual(40);
   });
 
   /**
