@@ -26,10 +26,15 @@
   --desk: #191512;
   --desk-2: #211C17;
   --desk-ink: #EDE7DC;
-  /* Podignuto 2026-08-31 (.55 -> .82, .32 -> .60): na tamnom stolu su davali 2,03:1 i 2,58:1.
-     Iste vrijednosti stoje u inline tokenima `index.html`; drze se u paru, inace se tamna
-     polovica palete razidje po dvije datoteke. */
-  --desk-muted: rgba(237, 231, 220, .82);
+  /* Podignuto 2026-08-31 (.55 -> .72, .32 -> .60): na tamnom stolu su davali 2,03:1 i 2,58:1.
+     `.72` je izabran umjesto `.82` jer `.82` digne sekundarni tekst pretjerano: omjer prema
+     `--desk-ink` padne s 2,82:1 na 1,45:1, dakle hijerarhija se spljosti. `.72` prolazi
+     (7,83:1 sam, 5,98:1 kroz prigusenje `.85`) i cuva razliku.
+
+     PAR S `index.html` NIJE AUTOMATSKI: prvi pokusaj je spustio samo `index.html` na `.72` i
+     ostavio ovdje `.82`, pa su se razisli DRUGI PUT u istom danu. Kad mijenjas ovaj token,
+     mijenjaj obje datoteke u istom potezu. */
+  --desk-muted: rgba(237, 231, 220, .72);
   --desk-faint: rgba(237, 231, 220, .60);
   --desk-line: rgba(237, 231, 220, .14);
   --paper: #F7F3E8;

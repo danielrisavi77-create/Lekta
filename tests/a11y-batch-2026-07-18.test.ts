@@ -63,7 +63,7 @@ function token(ime: string, tema: 'dark' | 'light'): string {
   if (granica < 0) throw new Error('design-system.css nema [data-theme="light"] blok');
   const blok = tema === 'dark' ? css.slice(0, granica) : css.slice(granica);
   // Zadnja deklaracija u bloku pobjedjuje, kao u kaskadi.
-  const svi = [...blok.matchAll(new RegExp(`--${ime}\s*:\s*([^;]+);`, 'g'))];
+  const svi = [...blok.matchAll(new RegExp(`--${ime}\\s*:\\s*([^;]+);`, 'g'))];
   if (!svi.length) throw new Error(`token --${ime} nije nadjen u temi ${tema}`);
   return svi[svi.length - 1][1].trim();
 }

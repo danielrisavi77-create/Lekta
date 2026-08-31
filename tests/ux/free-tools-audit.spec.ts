@@ -36,7 +36,10 @@ for (const pageSpec of FREE_TOOL_PAGES) {
       // JOS NEZATVOREN posao (izmjereno na 375x667: `label` na `#fileInput`, `nested-interactive`
       // na `#dropzone`, `heading-order`, i kontrast u demo prikazu), pa se ne smije predstaviti
       // kao pokrivena ovim testom. Zabiljezeno, ne presuceno.
-      testInfo.skip(testInfo.project.name !== 'chromium', 'mjeri se samo na sirokom viewportu');
+      // POZITIVAN oblik: gasi se tocno MOBILNI projekt. Negativan (`name !== 'chromium'`) bi pri
+      // preimenovanju projekta ili dodavanju firefoxa/webkita tiho ugasio SVE i ostavio zelen
+      // prazan run.
+      testInfo.skip(!!testInfo.project.use.isMobile, 'mjeri se samo na sirokom viewportu');
       await page.setViewportSize({ width: 1440, height: 1000 });
       await page.goto(pageSpec.route);
       await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), tema);
@@ -538,6 +541,10 @@ test('traka o privoli ne krade dodir na primarni CTA (mobitel)', async ({ page }
     return {
       visinaTrake: Math.round(ban.height),
       visinaGumba: Math.round(btn.height),
+      // Test SAM podmece stanje `has-file`, pa mora potvrditi da je sukob dvaju `fixed` slojeva
+      // uopce nastao. Bez ovoga bi preimenovana klasa ili obrisano `:has()` pravilo znacilo da
+      // test mjeri nesto sasvim drugo.
+      navPolozaj: getComputedStyle(nav).position,
       preklop: Math.round(ban.bottom) > Math.round(nav.getBoundingClientRect().top),
       naGumbu: !pogodak ? 'nista'
         : (pogodak.closest('#consentBanner') ? 'traka' : (pogodak.closest('.lek-stepnav-1') ? 'gumb' : 'drugo')),
@@ -547,6 +554,7 @@ test('traka o privoli ne krade dodir na primarni CTA (mobitel)', async ({ page }
   // Netrivijalnost: oba sloja moraju stvarno postojati i imati visinu, inace tvrdnje prolaze prazno.
   expect(m.visinaTrake, 'traka mora biti vidljiva').toBeGreaterThan(40);
   expect(m.visinaGumba, 'sticky CTA mora biti vidljiv').toBeGreaterThan(20);
+  expect(m.navPolozaj, 'sticky navigacija mora stvarno biti fixed').toBe('fixed');
 
   expect(m.preklop, 'traka se preklapa sa sticky navigacijom').toBe(false);
   expect(m.naGumbu, 'na sredini CTA mora biti sam CTA').toBe('gumb');

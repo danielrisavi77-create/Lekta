@@ -347,8 +347,9 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 
    Rezerva se vezuje na `:not(.hidden)`, jer se traka skriva bas tom klasom, pa praznina nestaje
    cim je privola rijesena. */
-body:has(.consent-banner:not(.hidden)){padding-bottom:104px}
-@media(max-width:720px){body:has(.consent-banner:not(.hidden)){padding-bottom:206px}}
+@media screen{body:has(.consent-banner:not(.hidden)){padding-bottom:104px}}
+@media screen and (max-width:720px){body:has(.consent-banner:not(.hidden)){padding-bottom:206px}}
+@media print{.consent-banner{display:none}}
 
 /* v2.3 signature: "spremno" pecat (crvena margina kroz rezultat umirovljena; crvena = samo nalazi) */
 .result-view{position:relative}
