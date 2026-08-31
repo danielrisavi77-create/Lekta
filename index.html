@@ -1667,13 +1667,21 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
   #wizardView[data-step="1"]:has(#dropzone.has-file) .lek-stepnav-1{position:fixed;left:0;right:0;bottom:0;z-index:80;margin:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--paper) 96%,transparent);border-top:1px solid var(--paper-line);box-shadow:0 -8px 24px rgba(31,25,19,.14)}
   #wizardView[data-step="1"]:has(#dropzone.has-file) .lek-stepnav-1 .btn{width:100%;min-height:48px;font-size:16px}
   body:has(#wizardView[data-step="1"] #dropzone.has-file){padding-bottom:calc(70px + env(safe-area-inset-bottom))}
-  /* Sticky navigacija je `fixed` UNUTAR `.analyzer-wrap`, koji ima `transform` i time joj je
-     containing block, pa joj polozaj NE ovisi o visini viewporta. Traka je usidrena na sam
-     viewport. Nikakva konstanta zato ne moze vrijediti na svim visinama: izmjereno pri sirini
-     393 px, odmak od 150 px cist je samo oko visine 727 px, a na 850 i 900 px daje preklop od
-     70 px. Umjesto pogadjanja konstante, traka se u tom stanju veze uz VRH, gdje sudara nema
-     ni na jednoj visini. */
-  body:has(#wizardView[data-step="1"] #dropzone.has-file) .consent-banner{top:12px;bottom:auto}
+  /* DVA `fixed` SLOJA SE NE MOGU RAZMAKNUTI POZICIONIRANJEM, pa se jedan gasi.
+
+     Sticky navigacija je `fixed` UNUTAR `.analyzer-wrap`, koji ima `transform` i time joj je
+     containing block, pa PUTUJE s dokumentom: njezin pojas presijeca cijeli viewport kako se
+     skrola. Zbog toga nijedna fiksna pozicija trake ne pomaze, i to je izmjereno dvaput.
+     Odmak od 150 px uz dno bio je cist samo oko visine 727 px (na 900 px preklop 70 px).
+     Vezanje uz VRH bilo je jos gore: traka je ondje pokrivala `.topbar`, dakle i
+     `#mobileMenuBtn`, koji je ispod 720 px JEDINA navigacija, a kradja CTA se samo preselila
+     na skrolane polozaje (od sy oko 400).
+
+     Dok traka stoji, navigacija se zato vraca U TOK. Time sudar nestaje po konstrukciji, na
+     svakoj visini i svakom skrolu, a CTA ostaje dostupan skrolanjem. Cim je privola rijesena,
+     sticky ponasanje se vraca. */
+  body:has(.consent-banner:not(.hidden)) #wizardView[data-step="1"]:has(#dropzone.has-file) .lek-stepnav-1{position:static;padding:0;background:none;border-top:0;box-shadow:none}
+  body:has(#wizardView[data-step="1"] #dropzone.has-file):has(.consent-banner:not(.hidden)){padding-bottom:calc(206px + env(safe-area-inset-bottom))}
   .field :is(input,select,textarea),.advanced-summary,.advanced-body,.profile-note{font-size:16px}
   .finding-card{padding:14px}
   .finding-card h4{font-size:20px}

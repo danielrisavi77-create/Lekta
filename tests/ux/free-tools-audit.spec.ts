@@ -525,43 +525,74 @@ for (const t of TRAKE) {
  * viewporta. Bas zato tvrdnja mjeri PREKLOP i POGODAK, ne sam broj: ako konstanta odluta, gard
  * padne.
  */
-for (const visina of [667, 727, 900]) {
-  test(`traka o privoli ne krade dodir na primarni CTA (mobitel, 393x${visina})`, async ({ page }) => {
-    await page.setViewportSize({ width: 393, height: visina });
+/**
+ * Traka o privoli je na mobitelu KRALA dodir na primarni CTA lijevka (klik je istjecao nakon 4 s).
+ * Isti kvar je bio zapisan kao otvoren u `playwright.config.ts`, zbog njega `roadmap-v2.spec.ts`
+ * stoji u `testIgnore`, ali mu uzrok dotad nije bio izmjeren.
+ *
+ * UZROK: sticky navigacija je `fixed` UNUTAR `.analyzer-wrap`, koji ima `transform` i time joj je
+ * containing block, pa PUTUJE s dokumentom i njezin pojas presijeca cijeli viewport. Dva `fixed`
+ * sloja se zato ne mogu razmaknuti nikakvim pozicioniranjem, i to je izmjereno dvaput: odmak uz dno
+ * bio je cist samo oko jedne visine, a vezanje trake uz vrh je pokrilo `.topbar` (dakle
+ * `#mobileMenuBtn`, JEDINU navigaciju ispod 720 px) i samo preselilo kradju na skrolane polozaje.
+ *
+ * Rjesenje je gasenje jednog sloja: dok traka stoji, navigacija se vraca U TOK.
+ *
+ * STO SE OVDJE TVRDI, a sto ne: ne tvrdi se da CTA nikad nije prekriven. U toku, na niskim
+ * zaslonima, pri vrhu stranice traka moze lezati preko njega. Tvrdi se ono sto je stvarna steta
+ * bila: da navigacija nije suparnicki `fixed` sloj, da traka NIKAD ne krade `.topbar`, i da je CTA
+ * DOSTIZAN skrolanjem. `page.click` se namjerno NE koristi kao dokaz: Playwright prije klika sam
+ * doskrola element, pa prolazi i kad je zaklonjen, dakle ne bi grizao.
+ */
+for (const [sirina, visina] of [[360, 667], [393, 727], [393, 900], [430, 844]] as const) {
+  test(`traka o privoli ne blokira navigaciju ni CTA (mobitel ${sirina}x${visina})`, async ({ page }) => {
+    await page.setViewportSize({ width: sirina, height: visina });
     await page.goto('/index.html');
     await page.waitForSelector('#consentBanner:not(.hidden)');
-    // STVARNA datoteka, ne podmetnuta klasa. Prva verzija ovog testa dodavala je `has-file` rukom,
-    // a ta klasa NE prikazuje `#selectedFile` ni ne skriva `#dropEmpty`, pa je analizator bio druge
-    // visine i test je mjerio raspored koji nijedan korisnik ne vidi: uz pravu datoteku preklop je
-    // bio 70 px, uz podmetnutu klasu nula. To je razred "generator ulaza je i sam neprovjeren".
+    // STVARNA datoteka, ne podmetnuta klasa: `has-file` ne prikazuje `#selectedFile` ni ne skriva
+    // `#dropEmpty`, pa daje raspored koji nijedan korisnik ne vidi (izmjereno: preklop 0 umjesto 70 px).
     await page.setInputFiles('#fileInput', 'tests/fixtures/docx/fer-diplomski-puna-struktura.docx');
     await page.waitForSelector('.lek-stepnav-1 .btn', { state: 'visible' });
-    await page.waitForTimeout(400);
+    await page.waitForTimeout(300);
 
-    const m = await page.evaluate(() => {
-      const ban = document.querySelector('#consentBanner')!.getBoundingClientRect();
-      const nav = document.querySelector('.lek-stepnav-1')!;
-      const navR = nav.getBoundingClientRect();
-      const btn = nav.querySelector('.btn')!.getBoundingClientRect();
-      const pogodak = document.elementFromPoint(btn.left + btn.width / 2, btn.top + btn.height / 2);
-      return {
-        visinaTrake: Math.round(ban.height),
-        visinaGumba: Math.round(btn.height),
-        navPolozaj: getComputedStyle(nav).position,
-        // Pozitivno = slojevi se preklapaju.
-        preklop: Math.round(Math.min(ban.bottom, navR.bottom) - Math.max(ban.top, navR.top)),
-        trakaIznadRuba: Math.round(ban.top) < 0,
-        trakaNaGumbu: !!pogodak?.closest('#consentBanner'),
-      };
-    });
+    const mjere: Array<{ sy: number; navPos: string; cta: string; meni: string; tema: string }> = [];
+    for (const sy of [0, 150, 300, 450, 600, 900]) {
+      await page.evaluate((y) => window.scrollTo(0, y), sy);
+      await page.waitForTimeout(120);
+      mjere.push(await page.evaluate((y) => {
+        const nav = document.querySelector('.lek-stepnav-1');
+        const pogodak = (el: Element | null) => {
+          if (!el) return 'nema';
+          const r = el.getBoundingClientRect();
+          if (r.width === 0 || r.bottom < 0 || r.top > window.innerHeight) return 'izvan';
+          const e = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+          return e ? (e.closest('#consentBanner') ? 'traka' : 'ok') : 'null';
+        };
+        return {
+          sy: y,
+          navPos: nav ? getComputedStyle(nav).position : 'nema',
+          cta: pogodak(nav?.querySelector('.btn') ?? null),
+          meni: pogodak(document.querySelector('#mobileMenuBtn')),
+          tema: pogodak(document.querySelector('#themeBtn')),
+        };
+      }, sy));
+    }
 
-    // Netrivijalnost: oba sloja moraju postojati i stanje se mora stvarno uspostaviti.
-    expect(m.visinaTrake, 'traka mora biti vidljiva').toBeGreaterThan(40);
-    expect(m.visinaGumba, 'sticky CTA mora biti vidljiv').toBeGreaterThan(20);
-    expect(m.navPolozaj, 'sticky navigacija mora stvarno biti fixed').toBe('fixed');
+    // Netrivijalnost: stanje se mora stvarno uspostaviti, inace sve tvrdnje ispod prolaze prazno.
+    expect(mjere.length).toBe(6);
+    expect(mjere.every((m) => m.navPos !== 'nema'), 'sticky navigacija mora postojati').toBe(true);
 
-    expect(m.preklop, 'traka se preklapa sa sticky navigacijom').toBeLessThanOrEqual(0);
-    expect(m.trakaIznadRuba, 'traka je odletjela iznad gornjeg ruba').toBe(false);
-    expect(m.trakaNaGumbu, 'traka presrece dodir nad CTA').toBe(false);
+    // MEHANIZAM: dok traka stoji, navigacija NE SMIJE biti suparnicki `fixed` sloj.
+    expect(mjere.map((m) => m.navPos).filter((v, i, a) => a.indexOf(v) === i))
+      .toEqual(['static']);
+
+    // Traka nikad ne smije ukrasti `.topbar`: ispod 720 px je `#mobileMenuBtn` jedina navigacija.
+    const ukradenaNav = mjere.filter((m) => m.meni === 'traka' || m.tema === 'traka');
+    expect(ukradenaNav, `traka krade navigaciju na ${JSON.stringify(ukradenaNav)}`).toEqual([]);
+
+    // CTA mora biti DOSTIZAN: barem jedan polozaj skrola na kojem ga nista ne zaklanja.
+    const dostizan = mjere.filter((m) => m.cta === 'ok');
+    expect(dostizan.length, `CTA nedostizan na svim polozajima: ${JSON.stringify(mjere)}`)
+      .toBeGreaterThan(0);
   });
 }
