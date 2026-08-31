@@ -18,6 +18,7 @@ import {
   buildProfileRulesArtifact,
   selectServedProfileFields,
   type ProfileRulesServerArtifact,
+  type SourceIndex,
 } from '../src/profiles/profile-rules-contract';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore .mjs moduli bez deklaracija; tsconfig include je samo src
@@ -36,11 +37,57 @@ const verified = JSON.parse(
 const repairMap = JSON.parse(
   readFileSync(resolve(ROOT, 'data', 'profiles', 'repair-map.json'), 'utf8'),
 ) as Record<string, unknown[]>;
+// Registar izvora nosi jedini identitet izvora (`id`); profilni `sources` niz ima samo naslov i URL.
+// Bez njega ponovni izracun ne bi imao `source` na unosima, pa bi drift test lazno pao.
+const registry = JSON.parse(
+  readFileSync(resolve(ROOT, 'data', 'sources', 'source-registry.json'), 'utf8'),
+) as Array<{ id?: unknown; title?: unknown; url?: unknown }>;
+const sourceIndex: SourceIndex = {};
+for (const row of registry) {
+  if (typeof row?.id !== 'string' || typeof row.title !== 'string' || typeof row.url !== 'string') continue;
+  sourceIndex[row.id] = { title: row.title, url: row.url };
+}
 
 describe('profile-rules serverski artefakt', () => {
   it('commitani artefakt === ponovni izracun iz izvora (drift)', () => {
-    const rebuilt = buildProfileRulesArtifact(verified, repairMap, sha256Hex);
+    const rebuilt = buildProfileRulesArtifact(verified, repairMap, sha256Hex, sourceIndex);
     expect(artifactText.trimEnd()).toBe(JSON.stringify(rebuilt));
+  });
+
+  /**
+   * VEZA IZVOR-PRAVILO. Citat bez razrijesenog izvora je tvrdnja bez uporista: sucelje bi
+   * prikazalo doslovan navod a ne bi moglo reci iz kojeg dokumenta dolazi. Izmjereno pri
+   * uvodjenju: 91 unos s citatom, svih 91 razrijesivo iz registra.
+   */
+  it('svaki unos s doslovnim citatom ima razrijesen izvor (naslov i URL)', () => {
+    const quoted: string[] = [];
+    const unresolved: string[] = [];
+    for (const [id, entry] of Object.entries(artifact.profiles)) {
+      for (const raw of entry.repairEntries) {
+        const e = raw as { quote?: unknown; sourceId?: unknown; source?: { title?: unknown; url?: unknown } };
+        if (typeof e.quote !== 'string' || !e.quote.trim()) continue;
+        quoted.push(`${id}:${String(e.sourceId)}`);
+        if (typeof e.source?.title !== 'string' || typeof e.source?.url !== 'string') {
+          unresolved.push(`${id}:${String(e.sourceId)}`);
+        }
+      }
+    }
+    expect(quoted.length, 'nijedan citat nije pronadjen, mjerenje je vakuumsko').toBeGreaterThan(50);
+    expect(unresolved, 'citati bez razrijesenog izvora').toEqual([]);
+  });
+
+  /**
+   * Registar uz naslov i URL drzi i `snapshotHash`, koji je PRIRODNI KANARINAC iz
+   * klasifikacijskog manifesta. Iz njega ovim putem izlaze samo naslov, URL i id.
+   */
+  it('razrijeseni izvor ne iznosi provenijenciju iz registra', () => {
+    for (const [id, entry] of Object.entries(artifact.profiles)) {
+      for (const raw of entry.repairEntries) {
+        const src = (raw as { source?: Record<string, unknown> }).source;
+        if (!src) continue;
+        expect(Object.keys(src).sort(), `${id}: izvor nosi visak polja`).toEqual(['id', 'title', 'url']);
+      }
+    }
   });
 
   it('svaki profil iz izvora istine je isporucen, i nijedan visak', () => {
@@ -60,13 +107,24 @@ describe('profile-rules serverski artefakt', () => {
   });
 
   it('repairEntries prate repair-map (svaki profil s mapom nosi svoje unose)', () => {
+    // Isporuka od 2026-08-31 dodaje razrijesen `source` (naslov i URL iz registra izvora).
+    // Invarijanta se time NE popusta: nakon skidanja tog jednog polja unos mora biti
+    // BAJT-JEDNAK zapisu iz repair-mape, pa nikakva druga izmjena ne moze proci nezapazeno.
     let withEntries = 0;
+    let attached = 0;
     for (const [id, entry] of Object.entries(artifact.profiles)) {
       const expected = Array.isArray(repairMap[id]) ? repairMap[id] : [];
-      expect(entry.repairEntries).toEqual(expected);
+      const stripped = entry.repairEntries.map((raw) => {
+        if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return raw;
+        const { source, ...rest } = raw as Record<string, unknown>;
+        if (source) attached += 1;
+        return rest;
+      });
+      expect(stripped, `${id}: serirani unosi odlutali od repair-mape`).toEqual(expected);
       if (entry.repairEntries.length > 0) withEntries += 1;
     }
     expect(withEntries).toBeGreaterThan(300);
+    expect(attached, 'nijedan izvor nije prikacen, veza je mrtva').toBeGreaterThan(50);
   });
 
   it('artefakt ne sadrzi never-marker kljuceve ni kanarince iz manifesta', () => {
