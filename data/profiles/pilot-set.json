@@ -115,8 +115,9 @@
     {
       "profileId": "grf-diplomski",
       "unitId": "grf",
-      "claim": "B",
+      "claim": "A",
       "realDocuments": 1,
+      "realPass": 1,
       "reason": "Kandidat za tehnicki fakultet u pilotu. Jedan uzorak, i nosi `ieee` token koji T3 provjerava."
     },
     {
