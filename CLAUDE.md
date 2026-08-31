@@ -186,6 +186,48 @@ Vise istovremenih sesija znaci vise IZOLIRANIH worktreeva, nikad vise pisaca u i
   commitana iz prljavog stabla opisivala je ponasanje ciji izvor u repou nikad nije bio commitan
   (vidi `141f9848`), a krivnja je pala na nevin commit.
 
+### Izmjereno 2026-08-31: pravilo koje ovisi o pamcenju nije zastita
+
+Osam zivih sesija u istom stablu proizvelo je istoga dana TRI stete:
+
+    1  `git add <putanje> && git commit`  commitao je CIJELI indeks, ne navedene putanje:
+                                          21 tudja staged datoteka otisla je pod tudju poruku
+                                          (`cae64ef5`)
+    2  generator fixtura                  jedan prolaz izbrisao je NETRACKANU fixturu druge
+                                          sesije; netrackanu datoteku nista ne vraca. Dvije
+                                          fixture koje su bile commitane (`6ee596a5`) prezivjele
+                                          su isti prolaz netaknute
+    3  spor o autorstvu                   dvije sesije tvrdile su isti rad
+
+Treca nema tehnicko rjesenje NAKON sto se dogodi: dijeli se stablo, povijest, git identitet
+(`Daniel`) i reflog, pa nijedan git dokaz ne razlikuje tko je izvrsio naredbu. Prve dvije se
+poprave, treca ne.
+
+**Uredivacka sesija ide u VLASTITI `git worktree`.** Tada dvije sesije fizicki ne mogu pisati istu
+datoteku, a susret se dogadja pri mergeu, gdje ga git vidi i prijavi. Harness ima `EnterWorktree`;
+`worktree.baseRef: "head"` je vec postavljen. Zajednicko stablo ostaje samo za ono sto NE pise:
+citanje, mjerenje, pregled.
+
+**Gard, jer se na pamcenje ne racuna.** `PreToolUse` hook nad Bashem odbija tri naredbe koje su
+gornje stete i napravile: `git commit` bez `--only`, `git add -A`/`.`/`-u`, i `git commit --amend`.
+Izvrsava ga HARNESS, ne model, pa se ne zaobilazi zaboravom. Skripta stoji IZVAN repozitorija
+(`~/.claude/hooks/lekta-git-guard.mjs`), jer `.claude/hooks/` nije gitignoriran pa bi ondje bila
+netrackana datoteka, dakle tocno ono sto steta 2 opisuje. Ozicenje je u
+`.claude/settings.local.json`.
+
+Gard stiti od GRESKE, ne od odluke; sve tri stete bile su greske. Ako ti zatreba oblik koji odbija,
+javi tocnu naredbu i procijeni je li gard prestrog, nemoj ga zaobilaziti.
+
+Pri pisanju samog garda pojavio se isti razred kvara koji lovi: prva izvedba gradila je regex iz
+NIZA, escape se izgubio, `\s` je postao slovo `s`, i gard je izgledao ispravno a nije grizao
+nijedan od sedam blokirajucih slucajeva. Regexi su zato DOSLOVNI, a pokriveno je 12 slucajeva
+(pet dopustenih, sedam blokiranih).
+
+**Prakticna napomena o mirovanju:** uvjet "cekamo da sve sesije stanu" je nedostizan, jer nove
+dolaze brze nego sto stare zavrsavaju (izmjereno: cetiri nove u pet minuta). Zahvat nad dijeljenim
+stablom radi se u kratkom NAJAVLJENOM prozoru, a prije njega se izmjeri da pogodjene putanje nemaju
+zive izmjene (`git diff` prema indeksu prazan).
+
 ## Tvrdo pravilo: bodovana vrijednost mora se slagati s verificiranom tvrdnjom
 
 Lanac dokaza (izvor + snapshot + stranica + doslovan citat + potpis) zivi u `ruleEntries`

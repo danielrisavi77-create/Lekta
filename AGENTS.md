@@ -47,6 +47,23 @@ Vise istovremenih sesija znaci vise IZOLIRANIH worktreeva, nikad vise pisaca u i
 - Dodatni pisci mnoze klasu kvara koja je 2026-08-30 kostala 24 h: commitan artefakt (golden
   snimka) opisivao je ponasanje ciji izvor u repou nikad nije bio commitan.
 
+IZMJERENO 2026-08-31: osam zivih sesija u istom stablu proizvelo je istoga dana tri stete.
+(1) `git add <putanje> && git commit` commitao je CIJELI indeks: 21 tudja datoteka pod tudjom
+porukom (`cae64ef5`). (2) Jedan prolaz generatora fixtura izbrisao je NETRACKANU fixturu druge
+sesije; netrackanu datoteku nista ne vraca, dok su commitane (`6ee596a5`) prezivjele netaknute.
+(3) Dvije sesije tvrdile su isti rad, a to se NE MOZE razrijesiti: dijeli se stablo, povijest,
+git identitet i reflog, pa nijedan git dokaz ne razlikuje tko je izvrsio naredbu.
+
+- UREDIVACKA sesija ide u VLASTITI `git worktree` (`EnterWorktree`; `worktree.baseRef: "head"` je
+  postavljen). Zajednicko stablo samo za ono sto NE pise: citanje, mjerenje, pregled.
+- GARD: `PreToolUse` hook nad Bashem odbija `git commit` bez `--only`, `git add -A`/`.`/`-u` i
+  `git commit --amend`. Izvrsava ga HARNESS, ne model. Skripta je IZVAN repozitorija
+  (`~/.claude/hooks/lekta-git-guard.mjs`), jer `.claude/hooks/` nije gitignoriran. Stiti od
+  GRESKE, ne od odluke; zatreba li ti oblik koji odbija, javi naredbu umjesto da ga zaobidjes.
+- Zahvat nad dijeljenim stablom ide u kratkom NAJAVLJENOM prozoru, uz prethodnu provjeru da
+  pogodjene putanje nemaju zive izmjene. Cekanje da "sve sesije stanu" je nedostizno: izmjereno je
+  cetiri nove sesije u pet minuta.
+
 ## Privatni sloj ne ide u javni bundle
 
 `data/classification.json` klasificira staze (PUBLIC/PRIVATE-IP/PROPRIETARY-DATA/
