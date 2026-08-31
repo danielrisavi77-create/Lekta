@@ -596,3 +596,33 @@ for (const [sirina, visina] of [[360, 667], [393, 727], [393, 900], [430, 844]] 
       .toBeGreaterThan(0);
   });
 }
+
+/**
+ * `/404.html` NIJE u `FREE_TOOL_PAGES` i nikad nije bila skenirana, a imala je 6 `serious`
+ * nalaza kontrasta. Uzrok je token koji se okrece s temom nad podlogom koja se NE okrece: u temi
+ * "korektorski stol" panel ostaje svijetli papir (#F7F3E8) dok `--brand` prelazi na #E4573D,
+ * boju za TAMNU podlogu, sto daje 3,3:1 pri 14,7 px.
+ *
+ * Mjere se SVA TRI stanja teme, jer stranica ima tri odvojena bloka tokena i kvar je bio samo u
+ * trecem: zadano svijetlo, `prefers-color-scheme: dark`, i izricit `data-theme="dark"`. Skeniranje
+ * samo zatecenog stanja bi ga promasilo, sto je i bio razlog zasto je prezivio.
+ */
+for (const [ime, dataTheme, scheme] of [
+  ['zadano', null, 'light'],
+  ['prefers-color-scheme dark', null, 'dark'],
+  ['data-theme dark', 'dark', 'light'],
+] as const) {
+  test(`404: nema critical, serious ni moderate a11y krsenja (${ime})`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme: scheme });
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.goto('/404.html');
+    if (dataTheme) await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), dataTheme);
+
+    const results = await new AxeBuilder({ page }).analyze();
+    // Netrivijalnost: axe mora stvarno imati sto mjeriti na ovoj stranici.
+    expect(results.passes.length, 'axe mora imati ijedno zadovoljeno pravilo').toBeGreaterThan(0);
+    const nalazi = results.violations.filter((v) =>
+      v.impact === 'critical' || v.impact === 'serious' || v.impact === 'moderate');
+    expect(nalazi, nalazi.map((v) => `${v.impact}:${v.id}(${v.nodes.length})`).join(', ')).toEqual([]);
+  });
+}

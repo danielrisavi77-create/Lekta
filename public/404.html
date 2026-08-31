@@ -111,7 +111,11 @@
     margin: 0 0 0.75rem;
   }
   nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1.2rem; justify-content: center; }
-  nav a { color: var(--brand); text-decoration: none; font-size: 0.92rem; font-weight: 650; }
+  /* `--brand-2`, ne `--brand`: u temi "korektorski stol" panel ostaje SVIJETLI papir
+     (#F7F3E8) dok `--brand` prelazi na svijetlu crvenu (#E4573D) namijenjenu TAMNOJ podlozi.
+     Ta kombinacija daje 3,3:1 pri 14,7 px, ispod AA praga 4,5. `--brand-2` je tamnija
+     varijanta i definirana je u sva tri bloka tokena, pa radi u svakoj temi. */
+  nav a { color: var(--brand-2); text-decoration: none; font-size: 0.92rem; font-weight: 650; }
   nav a:hover { text-decoration: underline; }
   a:focus-visible, .cta:focus-visible, .brand:focus-visible {
     outline: none;
