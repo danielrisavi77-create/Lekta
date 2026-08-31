@@ -1,4 +1,5 @@
 import { extractBodyParagraphs, xmlEncode } from '../analysis/typography-structure.ts';
+import { anchorTextOfXml as anchorTextOf, normalizeAnchorText } from './anchor-text';
 import type { RequiredSectionKind } from '../analysis/required-sections-structure.ts';
 import {
   ensureHeadingNumbering,
@@ -78,22 +79,6 @@ function hasExistingLabel(documentXml: string, label: string): boolean {
   });
 }
 
-/**
- * Vidljivi tekst odlomka, normaliziran (entiteti razrijeseni, razmaci sazeti).
- *
- * DRUGO sidro uz otisak. Otisak se racuna nad cijelim XML-om odlomka, pa ga promijeni svaki zahvat
- * koji dira samo oblikovanje: `heading-style-fixer` dodaje `pStyle`, a `final-document-inspector-fixer`
- * brise `w:rsid*` atribute kroz cijeli paket. Odlomak je pritom i dalje isti odlomak.
- */
-function anchorTextOf(xml: string): string {
-  return [...xml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)]
-    .map((match) => match[1])
-    .join('')
-    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
 export function requiredSectionFixer(parts: DocxXmlParts, params: RequiredSectionFixParams): FixerOutput {
   if (!params || params.version !== 1 || !Array.isArray(params.sections) || params.sections.length > 50) return noOp(parts, 'invalid-params');
   const ids = new Set<string>();
@@ -145,9 +130,9 @@ export function requiredSectionFixer(parts: DocxXmlParts, params: RequiredSectio
      */
     const anchorText = section.insertionAnchor.anchorText;
     const anchorTextUnique = typeof anchorText === 'string' && anchorText.length > 0
-      && textOccurrencesOf(anchorText) === 1;
+      && textOccurrencesOf(normalizeAnchorText(anchorText)) === 1;
     const fingerprintOk = Boolean(range) && range.fingerprint === section.insertionAnchor.anchorFingerprint;
-    const textOk = Boolean(range) && anchorTextUnique && anchorTextOf(range.xml) === anchorText;
+    const textOk = Boolean(range) && anchorTextUnique && anchorTextOf(range.xml) === normalizeAnchorText(anchorText ?? '');
     if (!range || (!fingerprintOk && !textOk)) return { section, range: undefined, error: 'stale-anchor' as const };
     if (PROTECTED.test(range.xml)) return { section, range, error: 'unsupported-structure' as const };
     return { section, range };

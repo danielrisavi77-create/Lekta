@@ -3968,7 +3968,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           {
             "action": "normalize-doi",
             "anchorFingerprint": "typo-b29853dc",
-            "anchorText": "Baric, K. (2018). Metodologija drustvenih istrazivanja. Rijeka: Naklada Cetvrti. doi:10.1234/abcd.2018",
+            "anchorText": "baric k 2018 metodologija drustvenih istrazivanja rijeka naklada cetvrti doi 10 1234 abcd 2018",
             "before": "doi:10.1234/abcd.2018",
             "confirmed": true,
             "end": 102,
@@ -4132,7 +4132,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
             "id": "required-5e9c95f8",
             "insertionAnchor": {
               "anchorFingerprint": "typo-ad535933",
-              "anchorText": "Sazetak",
+              "anchorText": "sazetak",
               "paragraphIndex": 10,
               "position": "after",
             },
@@ -11937,7 +11937,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
             "id": "required-12408c2f",
             "insertionAnchor": {
               "anchorFingerprint": "typo-ab0a0834",
-              "anchorText": "Uvod",
+              "anchorText": "uvod",
               "paragraphIndex": 1,
               "position": "before",
             },
@@ -11951,7 +11951,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
             "id": "required-5e9c95f8",
             "insertionAnchor": {
               "anchorFingerprint": "typo-ab0a0834",
-              "anchorText": "Uvod",
+              "anchorText": "uvod",
               "paragraphIndex": 1,
               "position": "before",
             },
@@ -15592,7 +15592,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           {
             "action": "normalize-doi",
             "anchorFingerprint": "typo-b31765ae",
-            "anchorText": "Zelenko, M. (2021). Izmisljeni naslov o mjerenju... Casopis za nista, 12(3), 45-67. doi:10.1234/izmisljeno.2021",
+            "anchorText": "zelenko m 2021 izmisljeni naslov o mjerenju casopis za nista 12 3 45 67 doi 10 1234 izmisljeno 2021",
             "before": "doi:10.1234/izmisljeno.2021",
             "confirmed": true,
             "end": 111,
@@ -15606,7 +15606,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           {
             "action": "normalize-doi",
             "anchorFingerprint": "typo-b0fbe309",
-            "anchorText": "Ancic, P. (2019). Drugi izmisljeni naslov. Drugi casopis, 5(1), 10-22. doi:10.5678/izmisljeno.2019",
+            "anchorText": "ancic p 2019 drugi izmisljeni naslov drugi casopis 5 1 10 22 doi 10 5678 izmisljeno 2019",
             "before": "doi:10.5678/izmisljeno.2019",
             "confirmed": true,
             "end": 99,
@@ -15620,7 +15620,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           {
             "action": "normalize-doi",
             "anchorFingerprint": "typo-957d936d",
-            "anchorText": "Babic, I. (2020). Treci izmisljeni naslov s 20 % udjela. Treci casopis, 8(2), 30-41. doi:10.9012/izmisljeno.2020",
+            "anchorText": "babic i 2020 treci izmisljeni naslov s 20 udjela treci casopis 8 2 30 41 doi 10 9012 izmisljeno 2020",
             "before": "doi:10.9012/izmisljeno.2020",
             "confirmed": true,
             "end": 112,
@@ -15808,7 +15808,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
             "id": "required-12408c2f",
             "insertionAnchor": {
               "anchorFingerprint": "typo-7982510d",
-              "anchorText": "Uvod",
+              "anchorText": "uvod",
               "paragraphIndex": 1,
               "position": "before",
             },
@@ -15822,7 +15822,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
             "id": "required-5e9c95f8",
             "insertionAnchor": {
               "anchorFingerprint": "typo-7982510d",
-              "anchorText": "Uvod",
+              "anchorText": "uvod",
               "paragraphIndex": 1,
               "position": "before",
             },
@@ -17790,7 +17790,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
             "id": "required-12408c2f",
             "insertionAnchor": {
               "anchorFingerprint": "typo-cb1a46e4",
-              "anchorText": "Odlomak 14 poglavlja Uvod. Dijakriticki znakovi cscdz moraju prezivjeti popravak neizmijenjeni.",
+              "anchorText": "odlomak 14 poglavlja uvod dijakriticki znakovi cscdz moraju prezivjeti popravak neizmijenjeni",
               "paragraphIndex": 22,
               "position": "before",
             },
@@ -17804,7 +17804,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
             "id": "required-5e9c95f8",
             "insertionAnchor": {
               "anchorFingerprint": "typo-cb1a46e4",
-              "anchorText": "Odlomak 14 poglavlja Uvod. Dijakriticki znakovi cscdz moraju prezivjeti popravak neizmijenjeni.",
+              "anchorText": "odlomak 14 poglavlja uvod dijakriticki znakovi cscdz moraju prezivjeti popravak neizmijenjeni",
               "paragraphIndex": 22,
               "position": "before",
             },

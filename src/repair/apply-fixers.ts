@@ -5,6 +5,7 @@
 // vrati novi docx gdje su svi ostali zip entryji (slike, headeri, footeri, theme) neizmijenjeni.
 
 import { readZip, writeZip, type ZipEntry } from './zip-codec.ts';
+import { normalizeAnchorText } from './anchor-text';
 import {
   marginsFixer,
   paperSizeFixer,
@@ -993,17 +994,6 @@ function paragraphTextsForAnchors(documentXml: string): string[] {
 }
 
 /** Usporedba sidra je otporna na razmake i XML entitete, ali ne i na promjenu sadrzaja. */
-function normalizeAnchorText(value: string): string {
-  return value
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;|&apos;/g, "'")
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
 export async function applyFixers(
   docxBytes: Uint8Array,
   requests: FixerRequest[],

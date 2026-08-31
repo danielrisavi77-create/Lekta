@@ -144,4 +144,56 @@ describe('heading-style-fixer: sidro protiv zastarjele mete', () => {
     const doc = await documentOf(out.docxBytes);
     expect(doc).toContain('<w:tbl>');
   });
+
+  /**
+   * TRECI KRUG PREGLEDA (2026-08-31): moj rad na sidrima uveo je REGRESIJU u proizvod.
+   *
+   * Sidro nastaje iz teksta ANALIZE (`src/docx/parser.ts`), koji za `<w:tab/>` emitira `	` i za
+   * `<w:br/>` emitira `
+`; provjerava se protiv `paragraphTextsForAnchors`, koji cita SAMO
+   * `<w:t>`. Dva neovisno pisana izvlakaca teksta razilaze se na dokumentu koji Word svakodnevno
+   * proizvodi, pa je `1.<w:tab/>UVOD` (standardni zapis rucno numeriranog naslova) obarao CIJELI
+   * zahtjev. Bez sidra je isti dokument prolazio: popravak je radio prije mojih izmjena.
+   *
+   * Isti kvar dizao je i `croatian-typography-fixer`, koji je `ANCHOR_SENSITIVE` pa radi PRIJE
+   * ovoga i mijenja crtice i navodnike u naslovima.
+   *
+   * Zasto fixture korpus to nije uhvatio: nijedna od 19 fixtura nema `<w:tab/>` ni u jednom
+   * odlomku. Korpus po konstrukciji nije mogao sadrzavati ovaj kvar.
+   */
+  describe('sidro prezivljava razliku izmedju dvaju izvlakaca teksta', () => {
+    const enc3 = new TextEncoder();
+    const build = async (paragraphXml: string) => writeZip([
+      { name: '[Content_Types].xml', data: enc3.encode('<Types></Types>') },
+      { name: 'word/_rels/document.xml.rels', data: enc3.encode('<Relationships></Relationships>') },
+      { name: 'word/document.xml', data: enc3.encode('<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>' + para('Uvodni odlomak.') + paragraphXml + '</w:body></w:document>') },
+      { name: 'word/styles.xml', data: enc3.encode('<w:styles><w:style w:type="paragraph" w:styleId="Normal"><w:name w:val="Normal"/></w:style></w:styles>') },
+    ]);
+    const run = async (bytes: Uint8Array, anchorText: string) => applyFixers(bytes, [{
+      ruleId: 'heading-structure-universal',
+      fixerId: 'heading-style-fixer' as const,
+      params: { targets: [{ paragraphIndex: 2, level: 1, anchorText }] },
+    }] as never);
+
+    it('tabulator u naslovu ne obara zahtjev', async () => {
+      const bytes = await build('<w:p><w:r><w:t>1.</w:t></w:r><w:r><w:tab/></w:r><w:r><w:t>UVOD</w:t></w:r></w:p>');
+      const out = await run(bytes, '1.	UVOD');
+      expect(out.skippedReasons['heading-structure-universal']).toBeUndefined();
+      expect(out.changelog.length).toBeGreaterThan(0);
+    });
+
+    it('promijenjena crtica (tipografski popravak prije ovoga) ne obara zahtjev', async () => {
+      const bytes = await build(para('Uvod – ciljevi rada'));
+      const out = await run(bytes, 'Uvod - ciljevi rada');
+      expect(out.skippedReasons['heading-structure-universal']).toBeUndefined();
+      expect(out.changelog.length).toBeGreaterThan(0);
+    });
+
+    it('NEGATIVNA KONTROLA: promijenjena RIJEC i dalje obara zahtjev', async () => {
+      const bytes = await build(para('Zakljucak'));
+      const out = await run(bytes, 'Uvod');
+      expect(out.skippedReasons['heading-structure-universal']).toBe('stale-anchor');
+      expect(out.changelog).toEqual([]);
+    });
+  });
 });

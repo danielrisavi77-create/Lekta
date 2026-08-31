@@ -222,6 +222,16 @@ for (const axis of STRUCTURAL_WITHOUT_SCORED_CHECK) {
   if (!(axis in AXIS_SIGNAL)) {
     throw new Error(`Os '${axis}' nema unos u AXIS_SIGNAL. Dodaj mjerljiv signal ili izricit 'undefined' uz obrazlozenje.`);
   }
+  /**
+   * I DRUGA mapa, jer je prva izvedba ovog garda provjeravala samo `AXIS_SIGNAL` i time promasila
+   * bas os zbog koje je nastala: `element-caption` je bio u skupu ali bez unosa u
+   * `APPLIED_AXIS_FIXER`, pa je `changedFixerIds.has(undefined)` uvijek bio `false` i os nikad
+   * nije mogla zaraditi dokaz. Gard koji provjerava jedno polje pored onoga koje se koristi nije
+   * gard.
+   */
+  if (!APPLIED_AXIS_FIXER[axis]) {
+    throw new Error(`Os '${axis}' nema fixer u APPLIED_AXIS_FIXER, pa nikad ne moze zaraditi dokaz 'applied'.`);
+  }
 }
 
 /** Format stranice ima dinamican naslov (`page.size.*`), pa se prepoznaje po prefiksu. */

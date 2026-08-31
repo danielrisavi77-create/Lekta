@@ -1,4 +1,5 @@
 import { extractBodyParagraphs, paragraphFingerprint, xmlDecode } from './typography-structure.ts';
+import { anchorTextOfXml as anchorTextOf } from '../repair/anchor-text';
 
 export type LinkKind = 'url' | 'doi' | 'email' | 'unknown';
 export type LinkStatus = 'plain-text' | 'hyperlink-ok' | 'broken-spacing' | 'invalid-format' | 'redirects' | 'unreachable' | 'display-target-mismatch' | 'tracking-parameters' | 'canonical-candidate' | 'unsupported';
@@ -91,24 +92,6 @@ function normalizedUrl(value: string, rules?: LinkRules): string {
     result = url.toString();
   } catch { /* invalid or broken URL remains a diagnostic */ }
   return result;
-}
-
-/**
- * Vidljivi tekst odlomka. DRUGO sidro uz otisak.
- *
- * Otisak se racuna nad CIJELIM XML-om odlomka, pa ga promijeni i zahvat koji dira samo oblikovanje
- * (`heading-style-fixer` dodaje `pStyle`, `final-document-inspector-fixer` brise `w:rsid*` kroz
- * cijeli paket). Izmjereno 2026-08-30: u punom lancu je `link-doi-fixer` odbijao uz `stale-anchor`
- * na 3 od 4 profila, a sam je prolazio. Isti kvar je istog dana potvrdjen i popravljen na
- * `required-section-fixer`.
- */
-function anchorTextOf(xml: string): string {
-  return [...xml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)]
-    .map((match) => match[1])
-    .join('')
-    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
-    .replace(/\s+/g, ' ')
-    .trim();
 }
 
 export function analyzeLinkDoiStructure(input: {

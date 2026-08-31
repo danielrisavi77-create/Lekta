@@ -1,5 +1,6 @@
 import { extractBodyParagraphs, xmlDecode, xmlEncode } from '../analysis/typography-structure.ts';
 import type { DocxXmlParts, FixerOutput } from './fixers.ts';
+import { anchorTextOfXml as anchorTextOf, normalizeAnchorText } from './anchor-text.ts';
 
 export type LinkDoiAction = 'make-hyperlink' | 'normalize-doi' | 'repair-spacing' | 'remove-tracking' | 'replace-canonical-url' | 'remove-link-styling';
 
@@ -47,16 +48,6 @@ function updateRelationshipTarget(rels: string, id: string, target: string): str
   });
 }
 function ensureRNamespace(xml: string): string { return /xmlns:r=["']/i.test(xml) ? xml : xml.replace(/<w:document\b([^>]*)>/i, '<w:document$1 xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'); }
-/** Vidljivi tekst odlomka, normaliziran; drugo sidro uz otisak (vidi provjeru nize). */
-function anchorTextOf(xml: string): string {
-  return [...xml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)]
-    .map((match) => match[1])
-    .join('')
-    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
 function paragraphTextNodes(xml: string): Array<{ start: number; end: number; contentStart: number; contentEnd: number; text: string }> {
   return [...xml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/gi)].map((match) => ({ start: match.index ?? 0, end: (match.index ?? 0) + match[0].length, contentStart: (match.index ?? 0) + match[0].indexOf('>') + 1, contentEnd: (match.index ?? 0) + match[0].length - match[0].match(/<\/w:t>$/i)![0].length, text: decode(match[1]) }));
 }
@@ -184,7 +175,7 @@ export function linkDoiFixer(parts: DocxXmlParts, params: LinkDoiFixParams): Fix
      */
     const anchorOk = (operation: { anchorFingerprint: string; anchorText?: string }): boolean =>
       range.fingerprint === operation.anchorFingerprint
-      || (typeof operation.anchorText === 'string' && operation.anchorText.length > 0 && operation.anchorText === rangeText && textOccurrencesOf(rangeText) === 1);
+      || (typeof operation.anchorText === 'string' && normalizeAnchorText(operation.anchorText).length > 0 && normalizeAnchorText(operation.anchorText) === rangeText && textOccurrencesOf(rangeText) === 1);
     if (!operations.every(anchorOk)) return noOp(parts, 'stale-anchor');
     if (PROTECTED.test(range.xml)) return noOp(parts, 'unsupported-structure');
     /**

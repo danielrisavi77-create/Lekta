@@ -1,4 +1,5 @@
 import { extractBodyParagraphs } from './typography-structure.ts';
+import { anchorTextOfXml } from '../repair/anchor-text';
 
 export type RequiredSectionKind =
   | 'summary-hr'
@@ -175,23 +176,14 @@ function labelAliases(kind: RequiredSectionKind, rules?: RequiredSectionRules, p
  * `stale-anchor`, dok je SAM primjenjivao 5 od 7. Tekst oba ta zahvata prezivi, pa je pouzdaniji
  * pokazatelj "je li ovo jos uvijek isti odlomak".
  */
-function paragraphTextOf(xml: string): string {
-  return [...xml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)]
-    .map((match) => match[1])
-    .join('')
-    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
 function findAnchor(index: number, paragraphs: ParagraphLike[], ranges: ReturnType<typeof extractBodyParagraphs>, existing: number[]): RequiredSectionCandidate['insertionAnchor'] | undefined {
   const next = existing.find((x) => x > index);
-  if (next !== undefined && ranges[next - 1]) return { paragraphIndex: next, anchorFingerprint: ranges[next - 1].fingerprint, anchorText: paragraphTextOf(ranges[next - 1].xml), position: 'before' };
+  if (next !== undefined && ranges[next - 1]) return { paragraphIndex: next, anchorFingerprint: ranges[next - 1].fingerprint, anchorText: anchorTextOfXml(ranges[next - 1].xml), position: 'before' };
   const previous = [...existing].reverse().find((x) => x < index);
-  if (previous !== undefined && ranges[previous - 1]) return { paragraphIndex: previous, anchorFingerprint: ranges[previous - 1].fingerprint, anchorText: paragraphTextOf(ranges[previous - 1].xml), position: 'after' };
+  if (previous !== undefined && ranges[previous - 1]) return { paragraphIndex: previous, anchorFingerprint: ranges[previous - 1].fingerprint, anchorText: anchorTextOfXml(ranges[previous - 1].xml), position: 'after' };
   const fallback = paragraphs.find((p) => p.index >= index) ?? paragraphs.at(-1);
   const range = fallback ? ranges[fallback.index - 1] : undefined;
-  return range ? { paragraphIndex: fallback!.index, anchorFingerprint: range.fingerprint, anchorText: paragraphTextOf(range.xml), position: fallback!.index >= index ? 'before' : 'after' } : undefined;
+  return range ? { paragraphIndex: fallback!.index, anchorFingerprint: range.fingerprint, anchorText: anchorTextOfXml(range.xml), position: fallback!.index >= index ? 'before' : 'after' } : undefined;
 }
 
 /**
