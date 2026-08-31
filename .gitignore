@@ -71,6 +71,7 @@ vite.dev-preflight.config.mts
 # Edge function bundlovi (build artefakt za MCP deploy; source je u supabase/functions/**)
 .tmp-edge-bundles/
 .tmp-word-verify/
+.tmp-word-corpus/
 
 # Local Netlify folder
 .netlify
