@@ -17,6 +17,57 @@ const MB = 1024 * 1024;
 /** Najveci .docx koji se prima na BILO KOJEM koraku (analiza i popravak dijele ovu granicu). */
 export const DOCX_MAX_UPLOAD_BYTES = 20 * MB;
 
+/**
+ * Gornja granica uploada PRILAGODJENA UREDJAJU (BL-P0-05-7: OOM na slabom mobitelu).
+ *
+ * Zivi ovdje, uz zajednicku tvrdu granicu, a ne u `src/analysis/memory-budget.ts`, jer je
+ * potrebna vec na INTAKEU: minimalni ulazni put mora znati odbiti prevelik dokument bez
+ * povlacenja cijelog analitickog grafa (`src/analysis/**`) u pocetni bundle.
+ * `src/analysis/memory-budget.ts` ju re-exporta, pa postojeci pozivatelji ostaju netaknuti.
+ *
+ * Granice:
+ *  - vrlo slab uredaj (deviceMemory <= 2 GB): 12 MB,
+ *  - mobilni (coarse pointer ILI deviceMemory <= 4 GB): 20 MB,
+ *  - ostalo (desktop): DOCX_MAX_UPLOAD_BYTES.
+ * deviceMemory je gruba, zaokruzena vrijednost (ili nedostupna); coarsePointer hvata dodir.
+ * Obje vrijednosti citaju pozivatelji (navigator.deviceMemory, matchMedia('(pointer:coarse)'))
+ * i prosljedjuju ih ovamo, pa je funkcija cista i jedinicno testabilna.
+ *
+ * Desktop granica je spustena s 50 MB na zajednicki DOCX_MAX_UPLOAD_BYTES: analiza vise ne smije
+ * primiti dokument koji popravak zatim odbija. Rad od 21-50 MB se time vise ne analizira, sto je
+ * namjerno: bolje odbiti odmah nego nakon privole.
+ *
+ * MOBILNA GRANA SE NE KRATI u `return sharedCapBytes`, iako su te dvije vrijednosti DANAS
+ * jednake (obje 20 MB). Kracenje bi tiho vezalo mobilnu granicu za zajednicku: podizanje
+ * `DOCX_MAX_UPLOAD_BYTES` na 30 MB dalo bi mobitelu 30 MB, sto je upravo OOM koji ovaj proracun
+ * sprjecava.
+ *
+ * ZAJEDNICKA GRANICA JE PARAMETAR, i to je jedini razlog zasto ovaj potpis postoji.
+ *
+ * Dok je bila zakucana na `DOCX_MAX_UPLOAD_BYTES`, brisanje mobilne grane bilo je NEVIDLJIVO:
+ * adversarijalni prolaz 2026-08-31 je skratio funkciju i svih 11 testova ovog proracuna, plus
+ * intake-gate i gate-mutations, ostalo je zeleno (69 prolaza). Odluka da se grana zadrzi bila je
+ * time proza, ne gard. S parametrom se ista tablica moze provrtjeti uz PODIGNUTU zajednicku
+ * granicu, gdje se skraceni oblik razilazi i test pocrveni (tests/memory-budget.test.ts).
+ *
+ * Zivi kod NE poziva ovu funkciju izravno nego `uploadCapBytes` ispod, koja uvijek prosljedjuje
+ * pravu, zajednicku granicu.
+ */
+export function uploadCapBytesForSharedCap(
+  sharedCapBytes: number,
+  opts: { deviceMemory?: number | null; coarsePointer?: boolean } = {},
+): number {
+  const dm = typeof opts.deviceMemory === 'number' && opts.deviceMemory > 0 ? opts.deviceMemory : null;
+  if (dm !== null && dm <= 2) return 12 * MB;
+  if (opts.coarsePointer || (dm !== null && dm <= 4)) return 20 * MB;
+  return sharedCapBytes;
+}
+
+/** Granica uploada za ovaj uredaj, uz STVARNU zajednicku granicu. Ovo zove aplikacija. */
+export function uploadCapBytes(opts: { deviceMemory?: number | null; coarsePointer?: boolean } = {}): number {
+  return uploadCapBytesForSharedCap(DOCX_MAX_UPLOAD_BYTES, opts);
+}
+
 /** Najveci ukupan dekomprimirani sadrzaj paketa (zip-bomba guard u zip-codecu). */
 export const DOCX_MAX_TOTAL_DECOMPRESSED_BYTES = 64 * MB;
 

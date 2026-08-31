@@ -9,27 +9,16 @@
  * pozivatelji (src/ui/app.ts) i prosljedjuju vrijednosti ovamo, pa je logika jedinicno testabilna.
  */
 
-import { DOCX_MAX_UPLOAD_BYTES } from '../repair/docx-budget';
-
 const MB = 1024 * 1024;
 
 /**
- * Gornja granica velicine uploada ovisno o uredaju:
- *  - vrlo slab uredaj (deviceMemory <= 2 GB): 12 MB,
- *  - mobilni (coarse pointer ili deviceMemory <= 4 GB): 20 MB,
- *  - ostalo (desktop): DOCX_MAX_UPLOAD_BYTES (20 MB).
- * deviceMemory je gruba, zaokruzena vrijednost (ili nedostupna); coarsePointer hvata dodir.
- *
- * Desktop granica je spustena s 50 MB na zajednicki DOCX_MAX_UPLOAD_BYTES: analiza vise ne
- * smije primiti dokument koji popravak zatim odbija (vidi src/repair/docx-budget.ts). Rad od
- * 21-50 MB se time vise ne analizira, sto je namjerno: bolje odbiti odmah nego nakon privole.
+ * `uploadCapBytes` VISE NE ZIVI OVDJE nego u `src/repair/docx-budget.ts`, uz zajednicku tvrdu
+ * granicu `DOCX_MAX_UPLOAD_BYTES`. Razlog je granica bundlea, ne stil: minimalni intake put mora
+ * moci odbiti prevelik dokument bez povlacenja cijelog analitickog grafa. Re-export cuva
+ * postojeci API analizatora (`src/ui/app.ts` i dalje uvozi odavde), pa nijedan pozivatelj ne
+ * mora znati za selidbu.
  */
-export function uploadCapBytes(opts: { deviceMemory?: number | null; coarsePointer?: boolean } = {}): number {
-  const dm = typeof opts.deviceMemory === 'number' && opts.deviceMemory > 0 ? opts.deviceMemory : null;
-  if (dm !== null && dm <= 2) return 12 * MB;
-  if (opts.coarsePointer || (dm !== null && dm <= 4)) return 20 * MB;
-  return DOCX_MAX_UPLOAD_BYTES;
-}
+export { uploadCapBytes } from '../repair/docx-budget';
 
 /**
  * Dekompresijski budzet PO ZAPISU koji se salje ZipReaderu na slabom uredaju:

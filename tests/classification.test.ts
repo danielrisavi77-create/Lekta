@@ -83,6 +83,8 @@ describe('klasifikacijski manifest', () => {
     expect(verdict('data/generated/repair-params-by-profile.json')).toBe('SECURITY-SENSITIVE/forbidden');
     expect(verdict('src/profiles/drafts-runtime.ts')).toBe('PRIVATE-IP/forbidden');
     expect(verdict('src/verification/scored-value-binding.ts')).toBe('PRIVATE-IP/forbidden');
+    // Build sloj nikad u bundle: isti razred kao recipe.ts i golden-entry.ts (revizija 2026-08-31).
+    expect(verdict('src/build/bundle-entry-graph.ts')).toBe('PRIVATE-IP/forbidden');
     expect(verdict('data/tools/citation-specs/extractions/bilo-sto.json')).toBe('PROPRIETARY-DATA/forbidden');
     // javne projekcije (trajne) i B3 flip bulk artefakata (2026-08-23)
     expect(verdict('data/profiles/verified-profiles-index.json')).toBe('PUBLIC/allowed');
@@ -90,6 +92,14 @@ describe('klasifikacijski manifest', () => {
     expect(verdict('data/profiles/repair-map.json')).toBe('PROPRIETARY-DATA/forbidden');
     expect(verdict('src/ui/app.ts')).toBe('PUBLIC/allowed');
     expect(verdict('data/tools/citation-specs/verified/fpzg.json')).toBe('PUBLIC/allowed');
+    // Javni direktorij ruta: jedini podatkovni JSON u src/ koji ide pregledniku (route shell).
+    // Presuda SAMA po sebi ovdje ne bi bila ratchet: `src/**` je vec PUBLIC/allowed, pa bi brisanje
+    // izricitog pravila proslo nezapazeno (izmjereno 2026-08-31). Zato se tvrdi i POSTOJANJE pravila.
+    expect(verdict('src/routes/shared/public-route-directory.json')).toBe('PUBLIC/allowed');
+    expect(
+      manifest.rules.some((r) => r.pattern === 'src/routes/shared/public-route-directory.json'),
+      'izricito pravilo za javni direktorij ruta je nestalo iz manifesta',
+    ).toBe(true);
   });
 
   it('matcher semantika: ** preko segmenata, * unutar segmenta, zadnje pravilo vrijedi', () => {

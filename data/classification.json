@@ -88,7 +88,9 @@
     { "pattern": "src/profiles/advisory-demotion.ts", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Racunski put demotije (drift artefakt + published-rules); zivi app cita pecenu advisory-map." },
     { "pattern": "src/analysis/golden-entry.ts", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Eager heavy merge za golden/conformance; test i build sloj." },
     { "pattern": "src/repair/recipe.ts", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Build/docs sloj recepta (CLAUDE.md: NIJE u bundleu)." },
-    { "pattern": "src/repair/param-authority.ts", "class": "SECURITY-SENSITIVE", "bundle": "forbidden", "note": "Serverski autoritet ciljanih vrijednosti; uvozi ga Edge funkcija repair-docx." }
+    { "pattern": "src/repair/param-authority.ts", "class": "SECURITY-SENSITIVE", "bundle": "forbidden", "note": "Serverski autoritet ciljanih vrijednosti; uvozi ga Edge funkcija repair-docx." },
+    { "pattern": "src/build/bundle-entry-graph.ts", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Build sloj: mjera budzeta ulaza za bundleSizeGuard u vite.config.ts. Uvoze ga samo vite.config.ts i njegov test, nikad app kod, pa u Rollup grafu nema sto traziti; isti razred kao src/repair/recipe.ts i src/analysis/golden-entry.ts. Nije stvar tajnosti nego pripadnosti bundleu." },
+    { "pattern": "src/routes/shared/public-route-directory.json", "class": "PUBLIC", "bundle": "allowed", "note": "Javni direktorij ruta (natpisi, opisi i root-relative putanje javnih stranica). Jedini PODATAK u src/ koji route shell isporucuje pregledniku, pa dobiva izricitu presudu umjesto oslanjanja na src/** catch-all. Postojanje odredista NIJE stvar manifesta: cuva ga tests/public-route-directory.test.ts." }
   ],
   "canaries": [
     {

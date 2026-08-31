@@ -1,0 +1,51 @@
+{
+  "napomena": "Javni direktorij ruta. release=core je JEDINO sto se prikazuje; sve ostalo je zapisana namjera i filtrira se. Odrediste smije prijeci u core TEK kad ruta stvarno postoji u ovom repozitoriju (provjerava tests/public-route-directory.test.ts, sekcija postojanja).",
+  "groups": [
+    {
+      "id": "your-work",
+      "label": "Tvoj rad",
+      "destinations": [
+        { "id": "intake", "label": "Nova provjera", "href": "/", "description": "Učitaj Word dokument i pokreni novu lokalnu provjeru.", "release": "core" },
+        { "id": "my-work", "label": "Moji radovi", "href": "/moji-radovi/", "description": "Otvori osobni prostor za lokalni rad i pristup računu.", "release": "personal-space" },
+        { "id": "account-repairs", "label": "Prijava i spremljeni popravci", "href": "/moji-radovi/#racun", "description": "Prijavi se i upravljaj popravcima spremljenima na računu.", "release": "personal-space" }
+      ]
+    },
+    {
+      "id": "rules-trust",
+      "label": "Pravila i povjerenje",
+      "destinations": [
+        { "id": "learn-more", "label": "Kako radi", "href": "/saznaj-vise/#how", "description": "Pogledaj tijek provjere i granice lokalne obrade.", "release": "content-hub" },
+        { "id": "checks", "label": "Što se provjerava", "href": "/saznaj-vise/#checks", "description": "Saznaj koje dijelove forme Lekta može provjeriti.", "release": "content-hub" },
+        { "id": "trust-proof", "label": "Metodologija i dokazi", "href": "/saznaj-vise/#trust-proof", "description": "Pogledaj kako nastaju pravila, mjerenja i dokazi.", "release": "content-hub" },
+        { "id": "faculty-rules", "label": "Pravila po fakultetu", "href": "/fakulteti/", "description": "Pronađi dostupna pravila za fakultet i vrstu rada.", "release": "core" },
+        { "id": "coverage", "label": "Pokrivenost profila", "href": "/pokrivenost.html", "description": "Provjeri status pokrivenosti dostupnih profila.", "release": "core" },
+        { "id": "document-processing", "label": "Privatnost obrade", "href": "/obrada-dokumenata.html", "description": "Saznaj što ostaje lokalno, a kada dokument ide na server.", "release": "core" }
+      ]
+    },
+    {
+      "id": "free-tools",
+      "label": "Besplatni alati",
+      "destinations": [
+        { "id": "tools", "label": "Svi alati", "href": "/alati.html", "description": "Otvori sve besplatne alate za pripremu akademskog rada.", "release": "core" },
+        { "id": "citation-generator", "label": "Citat generator", "href": "/citat.html", "description": "Složi citat prema odabranom stilu i vrsti izvora.", "release": "core" },
+        { "id": "citation-literature-check", "label": "Provjera citata i literature", "href": "/citati-i-literatura.html", "description": "Usporedi citate u tekstu s popisom literature.", "release": "core" },
+        { "id": "card-counter", "label": "Brojač kartica", "href": "/kartice.html", "description": "Izračunaj kartice iz broja znakova ili riječi.", "release": "core" },
+        { "id": "title-page", "label": "Naslovnica", "href": "/naslovnica.html", "description": "Pripremi naslovnicu prema dostupnim podacima i predlošcima.", "release": "core" },
+        { "id": "literature", "label": "Literatura", "href": "/literatura.html", "description": "Uredi i provjeri bibliografske zapise.", "release": "core" },
+        { "id": "originality-statement", "label": "Izjava o izvornosti", "href": "/izjava.html", "description": "Pripremi izjavu o izvornosti bez slanja podataka.", "release": "core" }
+      ]
+    },
+    {
+      "id": "proof-help",
+      "label": "Dokazi i pomoć",
+      "destinations": [
+        { "id": "comparison", "label": "Usporedba", "href": "/landing_usporedba.html", "description": "Usporedi Lektu s drugim načinima provjere rada.", "release": "core" },
+        { "id": "benchmark", "label": "Benchmark", "href": "/landing_benchmark.html", "description": "Pogledaj mjerljive rezultate javnog benchmarka.", "release": "core" },
+        { "id": "pricing", "label": "Paketi", "href": "/saznaj-vise/#pricing", "description": "Pregledaj dostupne pakete i što svaki uključuje.", "release": "content-hub" },
+        { "id": "faq", "label": "Česta pitanja", "href": "/saznaj-vise/#faq", "description": "Pronađi kratke odgovore na česta pitanja.", "release": "content-hub" },
+        { "id": "guarantee", "label": "Garancija", "href": "/garancija.html", "description": "Pročitaj uvjete garancije i granice pokrivenosti.", "release": "core" },
+        { "id": "terms-refund", "label": "Uvjeti i povrat", "href": "/uvjeti-koristenja.html", "description": "Pročitaj uvjete korištenja, otkaza i povrata.", "release": "core" }
+      ]
+    }
+  ]
+}

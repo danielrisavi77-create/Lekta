@@ -5,6 +5,7 @@ import { existsSync, statSync, createReadStream, readFileSync, writeFileSync } f
 import { stripDevOnly } from './scripts/strip-dev-only.mjs';
 import { resolveDevTools } from './scripts/dev-console.mjs';
 import { classificationGuard } from './scripts/security/classification-guard.mjs';
+import { describeEntryGraph, measureEntryGraphBytes, type BundleLike } from './src/build/bundle-entry-graph';
 
 // Vite dev i preview posluzuju HTML kao 'text/html' bez charseta i oslanjaju se na
 // <meta charset="utf-8"> u dokumentu. Ovaj mali plugin eksplicitno dodaje
@@ -236,11 +237,31 @@ function bundleSizeGuard(devTools: boolean) {
    * da entry ne pocne opet rasti. Ne podizi ovaj broj bez mjerenja i biljeske zasto; guard koji se
    * podigne svaki put kad zasmeta je isto sto i guard koji nije registriran.
    */
+  /**
+   * 2026-08-31: MJERI SE CIJELI STATICKI GRAF ULAZA, ne vise samo vlastiti kod entry chunka.
+   *
+   * Stara mjera je bila `Buffer.byteLength(indexEntry.code)`. Cim bi DRUGI HTML ulaz staticki
+   * uveo isti modul, Rollup bi zajednicki dio hoistao u zajednicki chunk, entry bi se urusio u
+   * stub, a guard bi prolazio zauvijek mjereci nista. Mjerenje sada ide kroz `chunk.imports`
+   * tranzitivno (src/build/bundle-entry-graph.ts, cista funkcija + tests/bundle-size-guard.test.ts).
+   *
+   * Izmjereno na wt/temelji, PRIJE ijedne promjene grafa: entry sam 665.976 B (650 KB), cijeli
+   * staticki graf 815.148 B (796 KB) kroz 15 chunkova. Guard je dakle vec mjerio 82% stvarnog
+   * troska. Budzet je OSTAO 960 KB (rezerva 164 KB); nije podignut i ne smije se podici bez
+   * mjerenja i biljeske.
+   *
+   * Tocni bajtovi driftaju nekoliko stotina B izmedju stabala (hashirana imena i sadrzaj chunkova);
+   * na stablu spajanja izmjereno je 815.115 B. Omjer i presuda se time ne mijenjaju, pa ove brojke
+   * citaj kao red velicine iz konkretnog mjerenja, ne kao invarijantu.
+   *
+   * Dinamicki uvozi se namjerno ne broje: lazy chunkovi (analiza, popravak, predlosci) ne ulaze
+   * u prvi paint, pa bi njihovo brojanje ponistilo smisao code-splita.
+   */
   const INDEX_ENTRY_BUDGET = 960 * 1024;
   return {
     name: 'lekta-bundle-size-guard',
     apply: 'build' as const,
-    generateBundle(_opts: unknown, bundle: Record<string, { type: string }>) {
+    generateBundle(_opts: unknown, bundle: BundleLike) {
       if (devTools) return;
       const chunks = Object.values(bundle).filter(
         (o): o is { type: 'chunk'; fileName: string; name: string; isEntry: boolean; code: string } =>
@@ -265,16 +286,24 @@ function bundleSizeGuard(devTools: boolean) {
           );
         }
       }
-      const indexEntry = chunks.find((c) => c.isEntry && c.name === 'index');
-      if (indexEntry) {
-        const bytes = Buffer.byteLength(indexEntry.code);
-        if (bytes > INDEX_ENTRY_BUDGET) {
-          throw new Error(
-            `[bundle-guard] glavni index chunk je ${Math.round(bytes / 1024)} KB, preko budzeta ` +
-            `${Math.round(INDEX_ENTRY_BUDGET / 1024)} KB. Vjerojatno je nesto tesko uslo u entry ` +
-            '(heavy profili ili nova velika ovisnost); code-splitaj ili svjesno podigni budzet.',
-          );
-        }
+      // SENTINEL: entry koji se ne moze naci znaci da guard mjeri NISTA. Do 2026-08-31 se
+      // `if (indexEntry)` tiho preskakao, pa bi preimenovan ili maknut ulaz ugasio provjeru bez
+      // ijednog traga. Nula izmjerenih chunkova je pad, ne cist prolaz (isti obrazac kao
+      // klasifikacijski guard).
+      const measured = measureEntryGraphBytes(bundle, 'index');
+      if (!measured) {
+        throw new Error(
+          "[bundle-guard] entry chunk 'index' ne postoji u bundleu, pa se budzet nije mogao izmjeriti. " +
+          'Provjeri rollupOptions.input u vite.config.ts; guard bez entryja bi prolazio vakuumski.',
+        );
+      }
+      if (measured.totalBytes > INDEX_ENTRY_BUDGET) {
+        throw new Error(
+          `[bundle-guard] pocetni staticki graf ulaza index je ${Math.round(measured.totalBytes / 1024)} KB, ` +
+          `preko budzeta ${Math.round(INDEX_ENTRY_BUDGET / 1024)} KB. ${describeEntryGraph(measured)}. ` +
+          'Vjerojatno je nesto tesko uslo u entry (heavy profili ili nova velika ovisnost); ' +
+          'code-splitaj (dinamicki uvoz) ili svjesno podigni budzet uz mjerenje i biljesku.',
+        );
       }
     },
   };
