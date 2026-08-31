@@ -1,17 +1,24 @@
 /**
- * Sintaksa svake `.mjs` skripte u `scripts/`.
+ * Sintaksa svake `.mjs` skripte u `scripts/`, mjerena BAS ONIM parserom koji te skripte izvodi.
  *
- * ZASTO POSTOJI: 2026-08-31 je komentar dodan unutar template literala (`PAGE_STYLE` u
- * `generate-faculty-pages.mjs`) sadrzavao backtickove, koji literal PREKIDAJU. Datoteka je time
- * postala sintaksno neispravna, `node --check` je padao, a `npm run check` to NIJE vidio jer
- * `tsconfig.json` ima `include: ["src"]`, pa se `scripts/**` ne provjerava nicim.
+ * ISPRAVAK VLASTITE TVRDNJE (2026-08-31): prva verzija ovog zaglavlja tvrdila je da `npm run check`
+ * kvar "NIJE vidio jer se `scripts/**` ne provjerava nicim". TO JE BILO NETOCNO. `oxlint` je u
+ * gateu od `9c0b9d46` (2026-08-24), dakle tjedan dana prije, i `check` pocinje bas njime. Izmjereno
+ * naknadno: uz vracen backtick oxlint prijavi `generate-faculty-pages.mjs:462:73`. Kvar mi je
+ * promakao jer sam vrtio `tsc`, `vitest` i `vite build` ODVOJENO, a nikad sam `check`.
  *
- * Cijena je bila deploy, ne test: `netlify.toml` ulancava korake s `&&`, pa bi pao cijeli build,
- * nula generiranih fakultetskih stranica, a `verify-deploy-dist.mjs` se ne bi ni izvrsio. Kvar je
- * pritom bio nevidljiv u svakom lokalnom prolazu jer nijedan test tu skriptu ne uvozi.
+ * ZASTO GARD SVEJEDNO OSTAJE: `node --check` i oxlint NISU isti parser i mjerljivo se razilaze.
+ * `scripts/workflows/*.mjs` su tijela workflow skripti s `return` na najvisoj razini: `node --check`
+ * ih odbija ("Illegal return statement"), oxlint ih prihvaca (0 errora). Deploy izvodi
+ * `node scripts/...`, pa je Nodeov parser mjerodavan za pitanje "hoce li se ovo uopce pokrenuti".
  *
- * Ovo je najjeftiniji dio backloga 7 iz CLAUDE.md (ukljucivanje `scripts/` i `tests/` u tsconfig):
- * ne tipizira nista, ali hvata bas onaj razred koji je do deploya i doveo.
+ * Ovaj gard zato NE dijeli posao s oxlintom nego mjeri drugu stvar: Nodeovu modulnu semantiku.
+ * `.mts` i `.ts` namjerno NISU ovdje: njih oxlint stvarno pokriva (provjereno podmetnutim kvarom u
+ * `corpus-ingest.mts` -> `error: Unexpected token`), a TypeScript 7 vise ne izlaze klasicni
+ * compiler API (`ts.ScriptTarget` je `undefined`), pa bi vlastiti parser bio i suvisan i nemoguc.
+ *
+ * Cijena propusta je bila deploy, ne test: `netlify.toml` ulancava korake s `&&`, pa pad jedne
+ * skripte znaci nula generiranih stranica i `verify-deploy-dist.mjs` koji se nikad ne izvrsi.
  */
 import { describe, it, expect } from 'vitest';
 import { execFileSync } from 'node:child_process';
