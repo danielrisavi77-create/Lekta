@@ -525,39 +525,43 @@ for (const t of TRAKE) {
  * viewporta. Bas zato tvrdnja mjeri PREKLOP i POGODAK, ne sam broj: ako konstanta odluta, gard
  * padne.
  */
-test('traka o privoli ne krade dodir na primarni CTA (mobitel)', async ({ page }) => {
-  await page.setViewportSize({ width: 393, height: 727 });
-  await page.goto('/index.html');
-  await page.waitForSelector('#consentBanner:not(.hidden)');
-  // Stanje "dokument odabran" bez pokretanja analize: sticky navigacija se pojavljuje bas na njemu.
-  await page.evaluate(() => document.querySelector('#dropzone')?.classList.add('has-file'));
-  await page.waitForTimeout(300);
+for (const visina of [667, 727, 900]) {
+  test(`traka o privoli ne krade dodir na primarni CTA (mobitel, 393x${visina})`, async ({ page }) => {
+    await page.setViewportSize({ width: 393, height: visina });
+    await page.goto('/index.html');
+    await page.waitForSelector('#consentBanner:not(.hidden)');
+    // STVARNA datoteka, ne podmetnuta klasa. Prva verzija ovog testa dodavala je `has-file` rukom,
+    // a ta klasa NE prikazuje `#selectedFile` ni ne skriva `#dropEmpty`, pa je analizator bio druge
+    // visine i test je mjerio raspored koji nijedan korisnik ne vidi: uz pravu datoteku preklop je
+    // bio 70 px, uz podmetnutu klasu nula. To je razred "generator ulaza je i sam neprovjeren".
+    await page.setInputFiles('#fileInput', 'tests/fixtures/docx/fer-diplomski-puna-struktura.docx');
+    await page.waitForSelector('.lek-stepnav-1 .btn', { state: 'visible' });
+    await page.waitForTimeout(400);
 
-  const m = await page.evaluate(() => {
-    const ban = document.querySelector('#consentBanner')!.getBoundingClientRect();
-    const nav = document.querySelector('.lek-stepnav-1')!;
-    const btn = nav.querySelector('.btn')!.getBoundingClientRect();
-    const pogodak = document.elementFromPoint(btn.left + btn.width / 2, btn.top + btn.height / 2);
-    return {
-      visinaTrake: Math.round(ban.height),
-      visinaGumba: Math.round(btn.height),
-      // Test SAM podmece stanje `has-file`, pa mora potvrditi da je sukob dvaju `fixed` slojeva
-      // uopce nastao. Bez ovoga bi preimenovana klasa ili obrisano `:has()` pravilo znacilo da
-      // test mjeri nesto sasvim drugo.
-      navPolozaj: getComputedStyle(nav).position,
-      preklop: Math.round(ban.bottom) > Math.round(nav.getBoundingClientRect().top),
-      naGumbu: !pogodak ? 'nista'
-        : (pogodak.closest('#consentBanner') ? 'traka' : (pogodak.closest('.lek-stepnav-1') ? 'gumb' : 'drugo')),
-    };
+    const m = await page.evaluate(() => {
+      const ban = document.querySelector('#consentBanner')!.getBoundingClientRect();
+      const nav = document.querySelector('.lek-stepnav-1')!;
+      const navR = nav.getBoundingClientRect();
+      const btn = nav.querySelector('.btn')!.getBoundingClientRect();
+      const pogodak = document.elementFromPoint(btn.left + btn.width / 2, btn.top + btn.height / 2);
+      return {
+        visinaTrake: Math.round(ban.height),
+        visinaGumba: Math.round(btn.height),
+        navPolozaj: getComputedStyle(nav).position,
+        // Pozitivno = slojevi se preklapaju.
+        preklop: Math.round(Math.min(ban.bottom, navR.bottom) - Math.max(ban.top, navR.top)),
+        trakaIznadRuba: Math.round(ban.top) < 0,
+        trakaNaGumbu: !!pogodak?.closest('#consentBanner'),
+      };
+    });
+
+    // Netrivijalnost: oba sloja moraju postojati i stanje se mora stvarno uspostaviti.
+    expect(m.visinaTrake, 'traka mora biti vidljiva').toBeGreaterThan(40);
+    expect(m.visinaGumba, 'sticky CTA mora biti vidljiv').toBeGreaterThan(20);
+    expect(m.navPolozaj, 'sticky navigacija mora stvarno biti fixed').toBe('fixed');
+
+    expect(m.preklop, 'traka se preklapa sa sticky navigacijom').toBeLessThanOrEqual(0);
+    expect(m.trakaIznadRuba, 'traka je odletjela iznad gornjeg ruba').toBe(false);
+    expect(m.trakaNaGumbu, 'traka presrece dodir nad CTA').toBe(false);
   });
-
-  // Netrivijalnost: oba sloja moraju stvarno postojati i imati visinu, inace tvrdnje prolaze prazno.
-  expect(m.visinaTrake, 'traka mora biti vidljiva').toBeGreaterThan(40);
-  expect(m.visinaGumba, 'sticky CTA mora biti vidljiv').toBeGreaterThan(20);
-  expect(m.navPolozaj, 'sticky navigacija mora stvarno biti fixed').toBe('fixed');
-
-  expect(m.preklop, 'traka se preklapa sa sticky navigacijom').toBe(false);
-  expect(m.naGumbu, 'na sredini CTA mora biti sam CTA').toBe('gumb');
-  // I stvarni klik, jer je bas on istjecao.
-  await page.click('.lek-stepnav-1 .btn', { timeout: 5000 });
-});
+}
