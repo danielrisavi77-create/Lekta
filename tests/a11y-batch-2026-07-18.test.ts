@@ -286,3 +286,50 @@ describe('izjava: #st-hint debounce (AUD a11y #Izjava-hint)', () => {
     expect(ts).toContain('function scheduleHint(');
   });
 });
+
+/**
+ * ODABRANO STANJE NA "KOREKTORSKOM STOLU" (2026-08-31).
+ *
+ * `.ks-di[aria-pressed="true"] .ks-di-t` i `.ks-step[aria-pressed="true"] .ks-step-t` koristili su
+ * BRAND crvenu (`--red`). Na svijetlom stolu to je 3,76:1 pri 18 px, dakle ISPOD AA praga 4,5.
+ *
+ * ZASTO OVAJ GARD MORA POSTOJATI IAKO AXE VEC SKENIRA `index.html` U OBJE TEME: axe za bas te
+ * cvorove vraca `incomplete`, ne `violation`, jer im je podloga gradijent (`messageKey: bgGradient`).
+ * Nalaz zato NIKAD ne ulazi u zbroj koji `free-tools-audit.spec.ts` provjerava, i "nula krsenja" je
+ * u svijetloj temi djelomicno vakuumska. Kontrast se ovdje zato RACUNA, a ne trazi od axea.
+ *
+ * Tokeni se citaju iz `index.html`, jer stol ondje ima vlastiti inline blok (`html:root` za tamnu,
+ * `html:root[data-theme="light"]` za svijetlu), odvojen od `design-system.css`.
+ */
+describe('korektorski stol: odabrano stanje prolazi AA u obje teme', () => {
+  const html = read('index.html');
+
+  function inlineToken(ime: string, tema: 'dark' | 'light'): string {
+    const granica = html.indexOf('html:root[data-theme="light"]');
+    expect(granica, 'index.html mora imati svijetli blok tokena').toBeGreaterThan(0);
+    const blok = tema === 'dark' ? html.slice(0, granica) : html.slice(granica);
+    const svi = [...blok.matchAll(new RegExp(`--${ime}\s*:\s*([^;]+);`, 'g'))];
+    expect(svi.length, `token --${ime} (${tema}) nije nadjen`).toBeGreaterThan(0);
+    return svi[svi.length - 1][1].trim();
+  }
+
+  it('odabrana stavka koristi --red-on-desk, ne brand --red', () => {
+    // Prikovano na tocan selektor: brand crvena je ondje bila pad, i ne smije se vratiti.
+    expect(html).toContain('.ks-di[aria-pressed="true"] .ks-di-t{color:var(--red-on-desk)}');
+    expect(html).toContain('.ks-step[aria-pressed="true"] .ks-step-t{color:var(--red-on-desk)}');
+  });
+
+  it('--red-on-desk na --desk prolazi AA (>=4.5:1) u obje teme', () => {
+    for (const tema of ['dark', 'light'] as const) {
+      const fg = inlineToken('red-on-desk', tema);
+      const bg = inlineToken('desk', tema);
+      expect(fg, `--red-on-desk (${tema})`).toMatch(/^(#|rgba?\()/);
+      expect(contrast(fg, hexToRgb(bg)), `${tema}: ${fg} na ${bg}`).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  it('brand --red NE bi prosao na svijetlom stolu (dokumentira zasto je token potreban)', () => {
+    expect(contrast(inlineToken('red', 'light'), hexToRgb(inlineToken('desk', 'light'))))
+      .toBeLessThan(4.5);
+  });
+});
