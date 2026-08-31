@@ -19,6 +19,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { corsHeadersFor } from '../_shared/cors.ts';
 import { hashClientIpSalted } from '../_shared/hash-ip.ts';
 import { runCorpusCheck, corpusConfigFromEnv } from '../_shared/corpus-check.ts';
+import { readTextBounded } from '../_shared/read-body.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -48,9 +49,6 @@ Deno.serve(async (req: Request) => {
     if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
     if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
-    const clen = Number(req.headers.get('content-length') ?? '0');
-    if (clen && clen > MAX_BODY_BYTES) return json({ error: 'payload_too_large' }, 413);
-
     // 1. auth: isti obrazac kao repair-docx. Bez identiteta nema rate-limita, pa nema ni endpointa.
     const authHeader = req.headers.get('Authorization') ?? '';
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
@@ -60,25 +58,37 @@ Deno.serve(async (req: Request) => {
 
     // 2. tijelo: { references: [{ title, year }] }. Sve ostalo se ignorira (runCorpusCheck ionako
     //    cita samo ta dva polja), pa buduci klijent ne moze slucajno protrljati vise podataka.
+    //    Tijelo se cita s TVRDOM granicom (audit P1-04). Dosad se granica oslanjala na
+    //    `content-length`, sto je tvrdnja klijenta: bez zaglavlja (chunked) granice nije ni bilo,
+    //    pa je `req.json()` citao koliko god posiljatelj posalje. Vidi _shared/read-body.ts.
+    const raw = await readTextBounded(req, MAX_BODY_BYTES);
+    if (!raw.ok) return json({ error: 'payload_too_large' }, 413);
     let body: any = null;
-    try { body = await req.json(); } catch { return json({ error: 'bad_request' }, 400); }
+    try { body = JSON.parse(raw.text); } catch { return json({ error: 'bad_request' }, 400); }
     const references = Array.isArray(body?.references) ? body.references : null;
     if (!references || !references.length) return json({ error: 'bad_request' }, 400);
 
-    // 3. rate-limit: ATOMSKI (claim_ip_rate_slot, 0022) pa paralelni pozivi ne mogu proci kroz
-    //    stale COUNT. Drugi argument je IDENTITET za dani scope: uuid korisnika za per-user scope,
-    //    soljeni hash IP-ja za per-IP scope. Ugovor RPC-a: true = dopusteno, sve ostalo = odbijeno.
-    //    Korisnicki cap ide PRVI, da dijeljeni IP ne bude okrivljen za tudju potrosnju.
-    const { data: userOk } = await admin.rpc('claim_ip_rate_slot', {
-      p_scope: 'source_check_user', p_ip_hash: user.id, p_daily_cap: USER_DAILY_CAP,
-    });
-    if (userOk !== true) return json({ error: 'rate_limited', reason: 'user' }, 429);
-
+    // 3. rate-limit: ATOMSKI I SVE-ILI-NISTA (claim_two_rate_slots, 0096).
+    //
+    //    Dvije kvote se trose zajedno: jedna po korisniku, jedna po IP-u. Do audita P1-05 su se
+    //    uzimale dvama odvojenim pozivima, korisnicka prva, BEZ vracanja prve ako druga padne.
+    //    Korisnik iza zasicenog dijeljenog izlaza (dom, knjiznica, fakultetski NAT) tako je gubio
+    //    vlastitu dnevnu kvotu na provjeru koja nikad nije izvrsena. Kvota mora mjeriti obavljen
+    //    posao, pa se sada ili uzmu oba slota ili nijedan.
+    //
+    //    Drugi argument svakog para je IDENTITET za taj scope: uuid korisnika za per-user,
+    //    soljeni hash IP-ja za per-IP. Ugovor RPC-a: 'ok' | 'denied_a' (korisnik) | 'denied_b' (IP).
     const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
-    const { data: ipOk } = await admin.rpc('claim_ip_rate_slot', {
-      p_scope: 'source_check_ip', p_ip_hash: ipHash, p_daily_cap: IP_DAILY_CAP,
+    const { data: slots } = await admin.rpc('claim_two_rate_slots', {
+      p_scope_a: 'source_check_user', p_hash_a: user.id, p_cap_a: USER_DAILY_CAP,
+      p_scope_b: 'source_check_ip', p_hash_b: ipHash, p_cap_b: IP_DAILY_CAP,
     });
-    if (ipOk !== true) return json({ error: 'rate_limited', reason: 'ip' }, 429);
+    if (slots !== 'ok') {
+      // Nepoznat odgovor (RPC nedostupan, migracija nije primijenjena) tretiramo kao odbijanje:
+      // rate-limit koji tiho otpadne nije rate-limit.
+      const reason = slots === 'denied_b' ? 'ip' : 'user';
+      return json({ error: 'rate_limited', reason }, 429);
+    }
 
     // 4. provjera. Fail-open po ugovoru: greska ili istekao budzet daju null, sto klijent cita kao
     //    "provjera nije dostupna", NIKAD kao "izvor ne postoji". Isti modul koji zove repair-docx.

@@ -28,9 +28,15 @@ export interface RepairJob {
   changesCount: number | null;
   resultPath: string;
   createdAt: string;
+  /**
+   * Brisanje je zapoceto pa jos nije dovrseno (audit P1-10, migracija 0098). Takav posao NE SMIJE
+   * se nuditi za preuzimanje: blobovi su vec uklonjeni ili se uklanjaju, pa bi potpisani URL vodio
+   * u nista. `cleanup-orphan-repairs` ga dovrsi.
+   */
+  deleting: boolean;
 }
 
-const JOB_SELECT = 'id,work_type,label,status,original_bytes,result_bytes,changes_count,result_path,created_at';
+const JOB_SELECT = 'id,work_type,label,status,original_bytes,result_bytes,changes_count,result_path,created_at,deleting_at';
 
 function num(v: unknown): number | null {
   return v == null ? null : Number(v);
@@ -48,6 +54,7 @@ export function mapRepairJobRow(row: Record<string, unknown>): RepairJob {
     changesCount: num(row.changes_count),
     resultPath: String(row.result_path ?? ''),
     createdAt: String(row.created_at ?? ''),
+    deleting: row.deleting_at != null && row.deleting_at !== '',
   };
 }
 

@@ -1,0 +1,83 @@
+# Smoke nad SQL-om koji brani kvote i pristup (audit P1-05).
+#
+# Zaseban od `Academic Suite DB` namjerno: onaj posao ima `if:` vezan uz JEDNU granu
+# (`architecture/lekta-katedra-foundation-v0.1`), pa se na svim ostalim PR-ovima prijavljuje kao
+# `skipped`. Provjera koja se na tvom PR-u preskoci ne stiti tvoj PR.
+#
+# Ovdje se vrti plpgsql logika koju vitest ne moze dokazati jer ne postoji izvan baze: atomicnost,
+# row lock i kompenzacija. Smoke datoteke same zovu `\i supabase/migrations/...`, pa testiraju
+# STVARNU migraciju, ne svoju kopiju.
+name: db-smoke
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+jobs:
+  db-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          # BEZ lozinke, namjerno. Ovo je posluzitelj koji zivi nekoliko minuta u izoliranom
+          # kontejneru CI posla, dostupan je samo tom poslu i baca se zajedno s njim, pa doslovna
+          # lozinka u datoteci ne bi nista stitila. A doslovna vrijednost u repozitoriju je nesto
+          # sto skeneri tajni uredno prijave, i s pravom: gate koji se utisa na "pa to je samo
+          # test" prestane gristi i kad nije test. `trust` je dokumentiran nacin sluzbene postgres
+          # slike za bacive baze, pa nema sto ni postaviti ni prijaviti.
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      PGHOST: 127.0.0.1
+      PGPORT: 5432
+      PGUSER: postgres
+      PGDATABASE: postgres
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: PostgreSQL verzija
+        run: psql --version
+
+      # Prvo se dokazuje da provjera GRIZE, pa tek onda da migracija prolazi. Bez ovog koraka
+      # zeleni smoke ne razlikuje "kompenzacija radi" od "smoke ne mjeri kompenzaciju".
+      - name: Mutacija mora srusiti smoke (dokaz da gate grize)
+        run: bash scripts/rate-slots-mutation-check.sh
+
+      - name: Rate-limit slotovi (P1-05)
+        run: psql -v ON_ERROR_STOP=1 -f scripts/rate-slots-smoke.sql
+
+      - name: Garancijski dokaz (P1-09)
+        run: psql -v ON_ERROR_STOP=1 -f scripts/guarantee-evidence-smoke.sql
+
+      - name: Stanje brisanja popravka (P1-10)
+        run: psql -v ON_ERROR_STOP=1 -f scripts/repair-deletion-smoke.sql
+
+      - name: Ciscenje anonimnih racuna (P1-11)
+        run: psql -v ON_ERROR_STOP=1 -f scripts/anon-purge-smoke.sql
+
+      - name: Outbox bonus obveza (P1-07)
+        run: psql -v ON_ERROR_STOP=1 -f scripts/bonus-outbox-smoke.sql
+
+      - name: Sabirnica klijentskih gresaka (P1-28)
+        run: psql -v ON_ERROR_STOP=1 -f scripts/client-errors-smoke.sql

@@ -146,8 +146,11 @@ export async function verifyEmailOtp(
  * vlastiti dokument, sto se kosi s objavljenom politikom ("dok ih sam ne obrise"). Anonimna
  * sesija daje sve to, a ne trazi ni e-mail (pa je i manje osobnih podataka nego prije).
  *
- * Sesija zivi u istom storeu kao e-mail sesija; korisnik je kasnije moze nadograditi na
- * e-mail bez gubitka popravaka (isti `user_id`).
+ * Sesija zivi u istom storeu kao e-mail sesija. Nadogradnja na e-mail UZ ISTI `user_id` radi se
+ * kroz `linkEmailToAnonymous` + `confirmEmailLink` (audit P0-07), NIKAD kroz `requestEmailOtp`:
+ * OTP s `create_user: true` napravi NOV racun s NOVIM uuid-om, pa bi svi popravci ostali na
+ * napustenom anonimnom identitetu. Do 2026-08-24 je ovaj komentar to obecavao, a tok nije
+ * postojao; sve sto je sucelje nudilo bilo je upravo ono OTP-a koje identitet gubi.
  */
 export async function signInAnonymously(
   cfg: AuthConfig,
@@ -233,6 +236,118 @@ export async function setPassword(
       return { ok: false, message: `postavljanje lozinke nije uspjelo (${res.status})` };
     }
     return { ok: true };
+  } catch (e) {
+    return { ok: false, message: e instanceof Error ? e.message : 'mrežna greška' };
+  }
+}
+
+/**
+ * Ishod povezivanja e-maila s VEC postojecom (anonimnom) sesijom.
+ *
+ * `email_taken` je zaseban ishod, ne generic greska: to je jedini slucaj u kojem korisnik ima
+ * stvaran izbor (prijaviti se na postojeci racun i svjesno napustiti anonimne popravke), pa mu
+ * sucelje mora reci upravo to, a ne "nesto nije uspjelo".
+ */
+export type LinkEmailResult =
+  | { ok: true; pendingConfirmation: true }
+  | { ok: false; reason: 'email_taken' | 'not_anonymous' | 'unauthorized' | 'config' | 'invalid_email' | 'network'; message: string };
+
+/**
+ * POVEZI e-mail s tekucom anonimnom sesijom, ZADRZAVAJUCI isti `user_id` (audit P0-07).
+ *
+ * Zasto ovo, a ne OTP. `requestEmailOtp` salje `create_user: true` na `/auth/v1/otp`, sto za
+ * nepoznat e-mail radi NOV racun. Anonimni korisnik koji se tako "prijavi" zavrsi na drugom
+ * uuid-u, a njegovi popravci ostaju vezani uz stari: RLS ih vise ne pusta, Storage prefiks se ne
+ * poklapa, "Moji popravci" je prazan. U produkciji svih 18 repair poslova pripada anonimnim
+ * racunima, pa bi to pogodilo bas svakoga tko se odluci prijaviti.
+ *
+ * GoTrue mehanizam je `PUT /auth/v1/user` s tijelom `{ email }` i Authorization zaglavljem
+ * ANONIMNE sesije. Racun ostaje isti; GoTrue posalje potvrdu na novi e-mail, a veza se dovrsi
+ * tek u `confirmEmailLink`. Do potvrde korisnik i dalje radi pod anonimnim identitetom, sto je
+ * ispravno: nepotvrdjen e-mail ne smije dati pristup nicemu.
+ */
+export async function linkEmailToAnonymous(
+  cfg: AuthConfig,
+  accessToken: string,
+  email: string,
+  fetchImpl: typeof fetch = fetch,
+  redirectTo?: string,
+): Promise<LinkEmailResult> {
+  if (!cfg.supabaseUrl || !cfg.anonKey) return { ok: false, reason: 'config', message: 'auth nije konfiguriran' };
+  if (!accessToken) return { ok: false, reason: 'unauthorized', message: 'nedostaje prijava' };
+  const clean = email.trim();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(clean)) {
+    return { ok: false, reason: 'invalid_email', message: 'neispravan e-mail' };
+  }
+  try {
+    const res = await fetchImpl(`${trimUrl(cfg.supabaseUrl)}/auth/v1/user`, {
+      method: 'PUT',
+      headers: { ...authHeaders(cfg), Authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({ email: clean, ...(redirectTo ? { redirect_to: redirectTo } : {}) }),
+    });
+    if (res.ok) return { ok: true, pendingConfirmation: true };
+    if (res.status === 401 || res.status === 403) {
+      return { ok: false, reason: 'unauthorized', message: 'sesija je istekla, pokušaj ponovno' };
+    }
+    // 422 = e-mail vec pripada drugom racunu. Sudar se NE rjesava tiho (ni preuzimanjem tudjeg
+    // racuna ni odustajanjem bez rijeci): korisnik mora znati da bi prijavom na taj racun
+    // napustio popravke s ovog uredjaja.
+    if (res.status === 422) {
+      const body = (await res.json().catch(() => ({}))) as Record<string, unknown>;
+      // Gleda se OBOJE: GoTrue nosi strojni razlog u `error_code`, a ljudski opis u `msg`, i
+      // nije zajamceno u kojem od njih stoji trag o anonimnosti. `??` bi provjerio samo prvi.
+      const code = `${String(body.error_code ?? '')} ${String(body.msg ?? '')}`;
+      if (/anonymous|manual_linking/i.test(code)) {
+        return { ok: false, reason: 'not_anonymous', message: 'ovaj račun već ima e-mail' };
+      }
+      return { ok: false, reason: 'email_taken', message: 'taj e-mail već ima račun' };
+    }
+    return { ok: false, reason: 'network', message: `povezivanje e-maila nije uspjelo (${res.status})` };
+  } catch (e) {
+    return { ok: false, reason: 'network', message: e instanceof Error ? e.message : 'mrežna greška' };
+  }
+}
+
+/**
+ * Dovrsi povezivanje kodom iz e-maila i vrati NADOGRADJENU sesiju (audit P0-07).
+ *
+ * Tip je `email_change`, ne `email`: `email` je obican OTP za prijavu i vratio bi (ili napravio)
+ * DRUGI racun. `email_change` dovrsava promjenu nad postojecim korisnikom, pa `user.id` u
+ * odgovoru mora biti isti kao prije.
+ *
+ * Pozivatelj je duzan provjeriti bas to, preko `expectedUserId`. Provjera je ovdje, a ne samo u
+ * sucelju, jer je tiha zamjena identiteta upravo kvar koji se popravlja: bolje je odbiti sesiju
+ * nego je spremiti i pustiti korisnika da misli da su mu popravci sacuvani.
+ */
+export async function confirmEmailLink(
+  cfg: AuthConfig,
+  email: string,
+  token: string,
+  expectedUserId: string,
+  fetchImpl: typeof fetch = fetch,
+  now: number = Date.now(),
+): Promise<SessionResult> {
+  if (!cfg.supabaseUrl || !cfg.anonKey) return { ok: false, message: 'auth nije konfiguriran' };
+  const code = token.trim();
+  if (!code) return { ok: false, message: 'unesi kod iz e-maila' };
+  try {
+    const res = await fetchImpl(`${trimUrl(cfg.supabaseUrl)}/auth/v1/verify`, {
+      method: 'POST',
+      headers: authHeaders(cfg),
+      body: JSON.stringify({ type: 'email_change', email: email.trim(), token: code }),
+    });
+    if (!res.ok) {
+      if (res.status === 401 || res.status === 403) return { ok: false, message: 'kod nije točan ili je istekao' };
+      return { ok: false, message: `potvrda nije uspjela (${res.status})` };
+    }
+    const session = parseTokenResponse(await res.json().catch(() => ({})), now);
+    if (!session) return { ok: false, message: 'nevaljan odgovor poslužitelja' };
+    // TVRDA PROVJERA IDENTITETA. Ako je uuid drugi, veza nije napravljena nego je nastao nov
+    // racun, sto je tocno kvar P0-07. Takvu sesiju NE vracamo kao uspjeh.
+    if (expectedUserId && session.userId && session.userId !== expectedUserId) {
+      return { ok: false, message: 'povezivanje nije zadržalo isti račun', fatal: true };
+    }
+    return { ok: true, session };
   } catch (e) {
     return { ok: false, message: e instanceof Error ? e.message : 'mrežna greška' };
   }

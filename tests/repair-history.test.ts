@@ -29,7 +29,26 @@ describe('mapRepairJobRow', () => {
       id: 'j1', workType: 'diplomski', label: 'Moj rad', status: 'done',
       originalBytes: 1000, resultBytes: 900, changesCount: 5,
       resultPath: 'u1/j1/fixed.docx', createdAt: '2026-07-19T10:00:00Z',
+      deleting: false,
     });
+  });
+
+  /**
+   * Audit P1-10 (migracija 0098). Posao kojem je brisanje zapoceto pa prekinuto pokazuje na
+   * blobove kojih vise nema, pa ga sucelje NE SMIJE nuditi za preuzimanje.
+   */
+  it('deleting_at oznacava posao u brisanju', () => {
+    const job = mapRepairJobRow({
+      id: 'j2', result_path: 'p', created_at: 't', deleting_at: '2026-08-23T10:00:00Z',
+    });
+    expect(job.deleting).toBe(true);
+  });
+
+  it('bez deleting_at posao je zdrav', () => {
+    expect(mapRepairJobRow({ id: 'j3', result_path: 'p', created_at: 't' }).deleting).toBe(false);
+    expect(mapRepairJobRow({ id: 'j4', result_path: 'p', created_at: 't', deleting_at: null }).deleting).toBe(false);
+    // Prazan string je PostgREST-ov nacin da kaze "nista", ne valjan trenutak.
+    expect(mapRepairJobRow({ id: 'j5', result_path: 'p', created_at: 't', deleting_at: '' }).deleting).toBe(false);
   });
   it('null brojevi ostaju null', () => {
     const job = mapRepairJobRow({ id: 'j', result_path: 'p', created_at: 't' });
@@ -99,7 +118,10 @@ describe('deleteRepairJob', () => {
     let seen: RequestInit | undefined;
     const out = await deleteRepairJob(config, 'jwt', 'j1', async (_u, init) => { seen = init; return res(200, { ok: true, jobId: 'j1' }); });
     expect(out).toEqual({ ok: true });
-    expect((seen?.headers as Record<string, string>).Authorization).toBe('Bearer jwt');
+    // Prvo dokazi da je zahtjev POSLAN: bez ovoga `seen?.headers` kratko spoji na
+    // undefined i test pukne TypeErrorom umjesto da padne na tvrdnji (oxlint P1-20).
+    expect(seen).toBeTruthy();
+    expect((seen!.headers as Record<string, string>).Authorization).toBe('Bearer jwt');
     expect(JSON.parse(String(seen?.body))).toEqual({ jobId: 'j1' });
   });
   it('404 -> ok:false s razlogom', async () => {
