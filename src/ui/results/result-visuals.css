@@ -1,0 +1,649 @@
+/* Results Cockpit: vizualni sloj (Korektorski stol).
+ *
+ * TEMELJNA ODLUKA: rezultat JE papir. Cockpit zivi unutar `.analyzer-wrap`, koji je vec
+ * papirnata ploha (--paper) s tintom (--paper-ink), pa se ovdje ne crta nikakva vlastita
+ * kartica ni tamna ploha. Sve je tinta na papiru, kao ispravak koji korektor vrati.
+ *
+ * IZUZETAK JE JEDAN I NAMJERAN: mjerac spremnosti sjedi u TAMNOM cipu. To nije ukras nego
+ * citat samog sebe: u herou stoji identican tamni cip "LEKTA · NALAZ 71/100" na papiru. Isti
+ * uredaj na istom mjestu vezuje ulaz i rezultat u jedan proizvod. Lekta je stroj na tudjem
+ * papiru; sve sto stroj kaze nosi taj tamni okvir, i nista drugo.
+ *
+ * BOJA NOSI PRESUDU, ne ocjenu. Ton dolazi iz `resultReadiness` (ista presuda koja pise
+ * naslov), pa vanjski prsten vise ne moze biti zelen dok pise "Nije spremno".
+ *
+ * Sve animirano je transform/opacity/stroke (nijedno layout svojstvo, Vercel WIG). Ulaz je
+ * JEDAN orkestriran trenutak preko [data-entered]; prefers-reduced-motion gasi cijeli stagger,
+ * a zavrsno stanje ostaje tocno.
+ */
+
+/* Registriran broj: bez ovoga se duljina luka ne moze animirati (custom property se inace
+   interpolira kao neprozirni niz). Registracija je lokalna i ne dira globalni motion sloj. */
+@property --draw {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 1;
+}
+
+.result-cockpit {
+  --ck-ink: var(--paper-ink, #26221B);
+  --ck-muted: var(--paper-muted, #6E6656);
+  --ck-line: var(--paper-line, #DCD4BF);
+  --ck-red: var(--red-deep, #C4372E);
+  --ck-red-text: var(--red-on-soft, #A62B23);
+  --ck-amber: var(--warn, #C98A2E);
+  --ck-green: var(--pass, #2E8B5F);
+  --ck-green-text: var(--ok-on-soft, #176243);
+  --ck-blue: var(--scan, #4A6CF0);
+  --ck-ease: var(--ease, cubic-bezier(.22, 1, .36, 1));
+
+  display: grid;
+  gap: 2rem;
+  /* `.analyzer-wrap` nema vlastiti padding (izmjereno: 0px), pa bi izvjestaj inace lezao
+     nalijepljen na rub papira. Papir ima margine; ovo su one. */
+  padding: clamp(1.5rem, 3vw, 2.75rem) clamp(1.25rem, 3.2vw, 3rem);
+  color: var(--ck-ink);
+  font-family: var(--ui, system-ui, sans-serif);
+}
+.result-cockpit.hidden { display: none; }
+
+/* ---- Zajednicki ulazni pokret ---------------------------------------------
+   Svaki blok nosi --i (redni broj u sekvenci). Jedan razred na korijenu pokrece sve. */
+.result-cockpit [data-cockpit-header],
+.result-cockpit .cockpit-hero__copy,
+.result-cockpit .cockpit-score,
+.result-cockpit .cockpit-primary,
+.result-cockpit .cockpit-section-heading,
+.result-cockpit .cockpit-finding,
+.result-cockpit .cockpit-categories,
+.result-cockpit .cockpit-actions,
+.result-cockpit .cockpit-advanced-toggle {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.result-cockpit[data-entered] [data-cockpit-header],
+.result-cockpit[data-entered] .cockpit-hero__copy,
+.result-cockpit[data-entered] .cockpit-score,
+.result-cockpit[data-entered] .cockpit-primary,
+.result-cockpit[data-entered] .cockpit-section-heading,
+.result-cockpit[data-entered] .cockpit-finding,
+.result-cockpit[data-entered] .cockpit-categories,
+.result-cockpit[data-entered] .cockpit-actions,
+.result-cockpit[data-entered] .cockpit-advanced-toggle {
+  opacity: 1;
+  transform: none;
+  transition: opacity .5s var(--ck-ease), transform .5s var(--ck-ease);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.result-cockpit [data-cockpit-header] { --i: 0; }
+.result-cockpit .cockpit-hero__copy { --i: 1; }
+.result-cockpit .cockpit-score { --i: 2; }
+.result-cockpit .cockpit-primary { --i: 4; }
+.result-cockpit .cockpit-priority .cockpit-section-heading { --i: 5; }
+.result-cockpit .cockpit-finding:nth-child(1) { --i: 6; }
+.result-cockpit .cockpit-finding:nth-child(2) { --i: 7; }
+.result-cockpit .cockpit-finding:nth-child(3) { --i: 8; }
+.result-cockpit .cockpit-categories { --i: 9; }
+.result-cockpit .cockpit-actions { --i: 10; }
+.result-cockpit .cockpit-advanced-toggle { --i: 11; }
+
+/* ---- Zaglavlje -------------------------------------------------------------- */
+
+.cockpit-kicker {
+  display: block;
+  color: var(--ck-muted);
+  font-family: var(--mono, monospace);
+  font-size: .68rem;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.cockpit-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: .9rem;
+  border-bottom: 1px solid var(--ck-line);
+}
+.cockpit-header h2 {
+  margin: .25rem 0 .15rem;
+  font-family: var(--display-serif, Georgia, serif);
+  font-size: clamp(1.25rem, 2.4vw, 1.7rem);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -.01em;
+}
+.cockpit-header p { margin: 0; color: var(--ck-muted); font-size: .82rem; }
+.cockpit-header__status {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .3rem .6rem;
+  border: 1px solid var(--ck-line);
+  border-radius: var(--radius-pill, 999px);
+  color: var(--ck-muted);
+  font-size: .74rem;
+  white-space: nowrap;
+}
+.cockpit-header__status--confirmed {
+  border-color: color-mix(in srgb, var(--ck-green) 40%, transparent);
+  color: var(--ck-green-text);
+}
+
+/* ---- Presuda + mjerac ------------------------------------------------------- */
+
+/* Dva stupca, dva retka: presuda i poziv jedno ispod drugoga u lijevom stupcu, a mjerac
+   preko oba retka desno. S jednim retkom je poziv padao ISPOD mjeraca, pa je izmedju teksta
+   i gumba zjapilo tristotinjak piksela praznine (visina cipa). */
+.cockpit-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+.cockpit-hero__lead { display: grid; justify-items: start; gap: 1.6rem; }
+.cockpit-hero__copy h2 {
+  margin: .5rem 0 .55rem;
+  max-width: 18ch;
+  font-family: var(--display-serif, Georgia, serif);
+  font-size: clamp(1.9rem, 4.4vw, 3.1rem);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -.022em;
+}
+.cockpit-hero__copy p {
+  margin: 0;
+  max-width: 46ch;
+  color: var(--ck-muted);
+  font-size: .95rem;
+  line-height: 1.55;
+}
+/* Presuda boja samo PRVU rijec naslova bila bi trik; umjesto toga tanki korektorski potez
+   uz rub kopije nosi ton. Isti jezik kao crvena olovka u herou. */
+.cockpit-hero__copy { border-left: 2px solid var(--ck-line); padding-left: clamp(.9rem, 1.6vw, 1.4rem); }
+.result-cockpit--blocked .cockpit-hero__copy { border-left-color: var(--ck-red); }
+.result-cockpit--needs-work .cockpit-hero__copy { border-left-color: var(--ck-amber); }
+.result-cockpit--manual-review .cockpit-hero__copy { border-left-color: var(--ck-blue); }
+.result-cockpit--clear .cockpit-hero__copy { border-left-color: var(--ck-green); }
+
+/* Tamni cip: jedini "stroj" na papiru, isti uredaj kao hero score kartica. */
+.cockpit-score {
+  display: grid;
+  justify-items: center;
+  gap: .85rem;
+  padding: 1.4rem 1.5rem 1.2rem;
+  min-width: 15.5rem;
+  border-radius: var(--radius, 2px);
+  background: linear-gradient(180deg, var(--desk-2, #211C17) 0%, var(--desk, #191512) 100%);
+  color: var(--desk-ink, #EDE7DC);
+  box-shadow: var(--paper-sh-sm, 0 10px 28px rgba(0, 0, 0, .4));
+}
+.cockpit-score__label { display: none; }
+
+.readiness-halo {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 10.5rem;
+  height: 10.5rem;
+}
+.halo__svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.halo__track {
+  fill: none;
+  stroke: rgba(237, 231, 220, .10);
+  stroke-width: 9;
+}
+.halo__track--inner { stroke-width: 7; }
+.halo__arc {
+  fill: none;
+  stroke-width: 9;
+  stroke-linecap: butt;
+  --draw: 0;
+  stroke-dasharray:
+    calc(var(--arc-len) * var(--draw) * 1px)
+    calc((var(--arc-c) - var(--arc-len) * var(--draw)) * 1px);
+  stroke-dashoffset: calc(var(--arc-off) * 1px);
+}
+[data-entered] .halo__arc {
+  --draw: 1;
+  transition: --draw .95s var(--ck-ease);
+  transition-delay: calc(280ms + var(--arc-i, 0) * 90ms);
+}
+.halo__arc--blockers, .halo__arc--warnings, .halo__arc--informational { stroke-width: 7; }
+.halo__arc--blockers { stroke: var(--red, #E4573D); --arc-i: 1; }
+.halo__arc--warnings { stroke: var(--ck-amber); --arc-i: 2; }
+.halo__arc--informational { stroke: var(--ck-blue); --arc-i: 3; }
+
+/* Vanjski prsten nosi PRESUDU, ne ocjenu. */
+.halo__arc--scored { stroke: var(--ck-green); }
+[data-halo-tone='blocked'] .halo__arc--scored { stroke: var(--red, #E4573D); }
+[data-halo-tone='needs-work'] .halo__arc--scored { stroke: var(--ck-amber); }
+[data-halo-tone='manual-review'] .halo__arc--scored { stroke: var(--ck-blue); }
+
+.readiness-halo__core {
+  display: grid;
+  justify-items: center;
+  line-height: 1;
+  text-align: center;
+}
+.halo__value {
+  font-family: var(--mono, monospace);
+  font-size: 2.6rem;
+  font-weight: 600;
+  letter-spacing: -.03em;
+  font-variant-numeric: tabular-nums;
+}
+.halo__value--none { font-size: 2.1rem; }
+.halo__max {
+  margin-top: .3rem;
+  color: rgba(237, 231, 220, .5);
+  font-family: var(--mono, monospace);
+  font-size: .68rem;
+  letter-spacing: .06em;
+}
+.readiness-halo__status {
+  position: absolute;
+  bottom: -.35rem;
+  padding: .22rem .6rem;
+  border-radius: var(--radius-pill, 999px);
+  background: var(--desk, #191512);
+  box-shadow: 0 0 0 1px rgba(237, 231, 220, .16);
+  font-family: var(--mono, monospace);
+  font-size: .61rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+[data-halo-tone='blocked'] .readiness-halo__status { color: var(--red, #E4573D); }
+[data-halo-tone='needs-work'] .readiness-halo__status { color: var(--ck-amber); }
+[data-halo-tone='manual-review'] .readiness-halo__status { color: var(--ck-blue); }
+[data-halo-tone='clear'] .readiness-halo__status { color: var(--ck-green); }
+
+.cockpit-score__metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .5rem;
+  width: 100%;
+  margin-top: .5rem;
+}
+.cockpit-score__metric {
+  display: grid;
+  justify-items: center;
+  gap: .1rem;
+  text-align: center;
+}
+.cockpit-score__metric strong {
+  font-family: var(--mono, monospace);
+  font-size: 1.15rem;
+  font-variant-numeric: tabular-nums;
+}
+/* Brojka je gore, a rijec ispod: ponovljena znamenka u opisu ("1" pa "1 blokator") cita se
+   kao dva razlicita podatka. Opis zato nosi samo imenicu, a puna fraza zivi u .cockpit-sr
+   za citace ekrana (jednom, u jednom dahu). */
+.cockpit-score__metric span {
+  color: rgba(237, 231, 220, .55);
+  font-size: .63rem;
+  line-height: 1.25;
+}
+.cockpit-sr {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.cockpit-score__metric--blocked strong { color: var(--red, #E4573D); }
+.cockpit-score__metric--warning strong { color: var(--ck-amber); }
+.cockpit-score__metric--safe strong { color: var(--ck-green); }
+
+.cockpit-score__reason {
+  margin: 0;
+  max-width: 24ch;
+  color: rgba(237, 231, 220, .45);
+  font-size: .68rem;
+  line-height: 1.45;
+  text-align: center;
+}
+.cockpit-score--unscored .halo__arc--scored { display: none; }
+
+.cockpit-primary { justify-self: start; }
+
+/* ---- Gumbi ------------------------------------------------------------------
+   Cockpit koristi vlastite `.button` razrede, koje globalni sloj (btn/btn-primary) NE pokriva:
+   dok ovo nije postojalo, gumbi su bili goli preglednicki `<button>` i rastezali se preko
+   cijelog retka. Ostro kao list papira (radius 2px), bez sjene, ton nosi granica. */
+.result-cockpit .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  padding: .55rem .95rem;
+  border: 1px solid var(--ck-ink);
+  border-radius: var(--radius, 2px);
+  background: none;
+  color: var(--ck-ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: .84rem;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color .2s var(--ck-ease), color .2s var(--ck-ease), border-color .2s var(--ck-ease), transform .2s var(--ck-ease);
+}
+.result-cockpit .button:hover { transform: translateY(-1px); }
+.result-cockpit .button:active { transform: translateY(0); }
+.result-cockpit .button:focus-visible { outline: none; box-shadow: var(--focus); }
+.result-cockpit .button[disabled] { opacity: .38; cursor: not-allowed; transform: none; }
+
+.result-cockpit .button-primary {
+  border-color: var(--ck-ink);
+  background: var(--ck-ink);
+  color: var(--paper, #F7F3E8);
+}
+.result-cockpit .button-primary:hover { background: #000; border-color: #000; }
+.result-cockpit .button-secondary:hover { background: color-mix(in srgb, var(--ck-ink) 8%, transparent); }
+.result-cockpit .button-quiet {
+  padding: .4rem .6rem;
+  border-color: transparent;
+  color: var(--ck-muted);
+  font-size: .78rem;
+}
+.result-cockpit .button-quiet:hover { border-color: var(--ck-line); color: var(--ck-ink); }
+
+/* Glavni poziv u presudi nosi ton presude: crveno kad blokira, zeleno kad je cisto. */
+.result-cockpit--blocked .cockpit-primary { background: var(--ck-red); border-color: var(--ck-red); color: #fff; }
+.result-cockpit--blocked .cockpit-primary:hover { background: #A62B23; border-color: #A62B23; }
+.result-cockpit--clear .cockpit-primary { background: var(--ck-green-text); border-color: var(--ck-green-text); color: #fff; }
+
+/* ---- Naslovi sekcija -------------------------------------------------------- */
+
+/* Nadnaslov stoji IZNAD naslova, ne odgurnut na suprotni kraj retka. Kad je bio na desnom
+   rubu, na sirokom zaslonu se od naslova odvojio metar praznine i citao se kao zaseban,
+   nepovezan podatak. */
+.cockpit-section-heading {
+  display: grid;
+  gap: .15rem;
+  margin-bottom: 1rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--ck-line);
+}
+.cockpit-section-heading h2 {
+  margin: 0;
+  font-family: var(--display-serif, Georgia, serif);
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: -.01em;
+}
+
+/* ---- Nalazi ----------------------------------------------------------------- */
+
+.cockpit-priority { display: grid; }
+.cockpit-priority__list { display: grid; gap: .7rem; }
+
+.cockpit-finding {
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr);
+  gap: 0 .5rem;
+  padding: 1rem 1.1rem 1rem .4rem;
+  border: 1px solid var(--ck-line);
+  border-left: 3px solid var(--ck-line);
+  border-radius: var(--radius, 2px);
+  background: color-mix(in srgb, var(--paper, #F7F3E8) 55%, white);
+  transition: box-shadow .28s var(--ck-ease), transform .28s var(--ck-ease), border-color .28s var(--ck-ease);
+}
+.cockpit-finding--error { border-left-color: var(--ck-red); }
+.cockpit-finding--warning { border-left-color: var(--ck-amber); }
+.cockpit-finding--info { border-left-color: var(--ck-blue); }
+.cockpit-finding--confirmed, .cockpit-finding--ignored { opacity: .62; }
+@media (hover: hover) {
+  .cockpit-finding:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(38, 34, 27, .10);
+    border-color: color-mix(in srgb, var(--ck-ink) 22%, transparent);
+  }
+}
+
+/* Redni broj stoji u MARGINI, kao korektorova oznaka uz rub, ne u tijelu kartice. */
+.cockpit-finding__index {
+  color: var(--ck-muted);
+  font-family: var(--mono, monospace);
+  font-size: .74rem;
+  text-align: right;
+  padding-top: .12rem;
+}
+.cockpit-finding__body { display: grid; gap: .45rem; min-width: 0; }
+.cockpit-finding__meta {
+  display: flex;
+  gap: .5rem;
+  color: var(--ck-muted);
+  font-family: var(--mono, monospace);
+  font-size: .62rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.cockpit-finding--error .cockpit-finding__meta span:first-child { color: var(--ck-red-text); }
+.cockpit-finding--warning .cockpit-finding__meta span:first-child { color: #8A5D14; }
+.cockpit-finding__body h3 {
+  margin: 0;
+  font-family: var(--display-serif, Georgia, serif);
+  font-size: 1.08rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+.cockpit-finding__answer {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: .3rem .7rem;
+  align-items: baseline;
+}
+.cockpit-finding__answer strong {
+  color: var(--ck-muted);
+  font-family: var(--mono, monospace);
+  font-size: .62rem;
+  font-weight: 500;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+.cockpit-finding__answer p { margin: 0; font-size: .88rem; line-height: 1.5; }
+
+.cockpit-finding__location {
+  justify-self: start;
+  margin: .1rem 0 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ck-muted);
+  font: inherit;
+  font-size: .78rem;
+  text-align: left;
+}
+button.cockpit-finding__location {
+  color: var(--ck-blue);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
+
+.cockpit-finding__evidence { margin-top: .15rem; font-size: .8rem; }
+.cockpit-finding__evidence summary {
+  color: var(--ck-muted);
+  cursor: pointer;
+  font-family: var(--mono, monospace);
+  font-size: .66rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.cockpit-finding__evidence p {
+  margin: .5rem 0 .3rem;
+  padding-left: .8rem;
+  border-left: 2px solid var(--ck-line);
+  font-family: var(--ink-serif, Georgia, serif);
+  font-size: .86rem;
+  line-height: 1.5;
+}
+.cockpit-finding__evidence small { color: var(--ck-muted); font-size: .72rem; }
+.cockpit-finding__source { color: var(--ck-blue); font-size: .78rem; justify-self: start; }
+
+.cockpit-finding__actions { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .35rem; }
+
+/* [hidden] MORA pobijediti display:grid. Bez ovog retka obrazac za zanemarivanje stoji
+   otvoren na svakoj kartici od prvog kadra, jer je `display` iz razreda jaci od atributa. */
+.cockpit-ignore-form { display: grid; gap: .45rem; width: 100%; margin-top: .35rem; }
+.cockpit-ignore-form[hidden] { display: none !important; }
+.cockpit-ignore-form label { display: grid; gap: .3rem; color: var(--ck-muted); font-size: .76rem; }
+.cockpit-ignore-form input {
+  padding: .45rem .55rem;
+  border: 1px solid var(--ck-line);
+  border-radius: var(--radius, 2px);
+  background: #fff;
+  color: var(--ck-ink);
+  font: inherit;
+  font-size: .85rem;
+}
+
+.cockpit-empty {
+  padding: 1.6rem;
+  border: 1px dashed var(--ck-line);
+  border-radius: var(--radius, 2px);
+  color: var(--ck-muted);
+  font-size: .9rem;
+  text-align: center;
+}
+
+/* ---- Sazetak kategorija: mjerna traka --------------------------------------- */
+
+.cockpit-category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 1.1rem;
+}
+.cockpit-category { display: grid; gap: .4rem; }
+.cockpit-category__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .5rem;
+}
+.cockpit-category__head strong { font-size: .85rem; font-weight: 500; }
+.cockpit-category__head span {
+  color: var(--ck-muted);
+  font-family: var(--mono, monospace);
+  font-size: .78rem;
+  font-variant-numeric: tabular-nums;
+}
+.cockpit-category__bar {
+  position: relative;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--ck-line);
+  overflow: hidden;
+}
+.cockpit-category__bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ck-ink);
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform .8s var(--ck-ease);
+  transition-delay: calc(650ms + var(--i, 0) * 60ms);
+}
+[data-entered] .cockpit-category__bar > span { transform: scaleX(1); }
+.cockpit-category small { color: var(--ck-muted); font-family: var(--mono, monospace); font-size: .68rem; }
+
+/* ---- Akcije + prekidac napredne provjere ------------------------------------ */
+
+.cockpit-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.cockpit-actions .button { flex: 0 1 auto; min-height: 2.7rem; }
+.cockpit-actions__count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  margin-left: .4rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 14%, transparent);
+  font-family: var(--mono, monospace);
+  font-size: .7rem;
+}
+
+.cockpit-advanced-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: .85rem 1rem;
+  border: 1px dashed var(--ck-line);
+  border-radius: var(--radius, 2px);
+  background: none;
+  color: var(--ck-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: .85rem;
+  transition: border-color .25s var(--ck-ease), color .25s var(--ck-ease);
+}
+.cockpit-advanced-toggle:hover { border-color: var(--ck-ink); color: var(--ck-ink); }
+
+.cockpit-authority {
+  display: flex;
+  gap: .6rem;
+  align-items: flex-start;
+  color: var(--ck-muted);
+  font-size: .82rem;
+}
+.cockpit-authority__mark { color: var(--ck-green); }
+.cockpit-authority p { margin: .1rem 0 0; }
+
+/* ---- Napredna provjera (zatecen ekran, sklopljen) --------------------------- */
+
+.result-cockpit-advanced-shell { display: grid; gap: .75rem; margin-top: 1.75rem; }
+.result-cockpit-advanced-head { display: none; }
+.result-renderer-v1 .result-cockpit-advanced-head {
+  display: grid;
+  gap: .2rem;
+  padding-top: .5rem;
+}
+.result-renderer-v1 .result-cockpit-advanced-head strong { color: var(--paper-ink, #26221B); font-weight: 500; }
+.result-renderer-v1 .result-cockpit-advanced-head p { margin: 0; color: var(--paper-muted, #6E6656); font-size: .82rem; }
+.result-cockpit-advanced-content[hidden] { display: none !important; }
+
+/* ---- Uzak zaslon ------------------------------------------------------------ */
+
+@media (max-width: 780px) {
+  .result-cockpit { padding: 1.25rem 1rem; gap: 1.5rem; }
+  .cockpit-hero { grid-template-columns: minmax(0, 1fr); }
+  .cockpit-hero__lead { justify-items: stretch; }
+  .cockpit-hero .cockpit-score { justify-self: stretch; min-width: 0; }
+  .cockpit-hero .cockpit-primary { justify-self: stretch; }
+  .cockpit-finding { grid-template-columns: 1.9rem minmax(0, 1fr); padding-right: .8rem; }
+  .cockpit-finding__answer { grid-template-columns: minmax(0, 1fr); gap: .1rem; }
+  .cockpit-actions .button { flex: 1 1 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .result-cockpit *,
+  .result-cockpit *::before,
+  .result-cockpit *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  .result-cockpit [data-cockpit-header],
+  .result-cockpit .cockpit-hero__copy,
+  .result-cockpit .cockpit-score,
+  .result-cockpit .cockpit-primary,
+  .result-cockpit .cockpit-section-heading,
+  .result-cockpit .cockpit-finding,
+  .result-cockpit .cockpit-categories,
+  .result-cockpit .cockpit-actions,
+  .result-cockpit .cockpit-advanced-toggle { opacity: 1; transform: none; }
+  .halo__arc { --draw: 1; }
+  .cockpit-category__bar > span { transform: scaleX(1); }
+}

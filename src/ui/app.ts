@@ -44,7 +44,10 @@ import { profileClaimFor, claimSentence } from './profile-claim';
 import { buildFindingViewModels, findingCardHtml, topFindings, type FindingSessionState, type FindingViewModel } from './finding-view-model';
 import { collectAllPreviewFlags } from '../preview/preview-anchors';
 import { resultReadiness, repairCeiling } from './result-readiness';
-import { detectPassRegressions } from '../analysis/repair-regression';
+import { renderProgressScan } from './progress-scan';
+import { buildVisualResultModel } from './results/visual-result-model';
+import { renderResultsCockpit, resultRendererFor, type ResultsCockpitAction } from './results/results-cockpit';
+import { detectPassRegressions, dropStaleFieldRegressions, tocFieldWillRefresh } from '../analysis/repair-regression';
 import { summarizeRepairOutcome, describeRepairOutcome, type RepairOutcome } from '../repair/repair-outcome';
 import { scoringChangeNote } from './scoring-change-note';
 import { startNetworkProbe, networkProofMessage, type NetworkProbe } from './network-proof';
@@ -662,7 +665,11 @@ function renderAnalyzeSummary(p: any){const el=$('#analyzeProfile');if(!el)retur
 function renderDocGateConfirm(v: any){const el=$('#analyzeProfile');if(!el)return;el.innerHTML=`<div class="ap-warn"><p>Ovo ne izgleda kao završni ili diplomski rad${v&&v.suspicionReason?` (${escapeHtml(v.suspicionReason)})`:''}. Svejedno analiziraj?</p><div class="ap-actions"><button class="btn btn-primary btn-sm" type="button" data-confirm-docgate>Svejedno analiziraj</button><button class="btn btn-secondary btn-sm" type="button" data-change-docfile>Učitaj drugu datoteku</button></div></div>`;window.__lektaIcons?.()}
 const LEGAL_SOURCE_LABELS: any={book:'Knjige',article:'Članci u časopisima',chapter:'Poglavlja / zbornici',commentary:'Komentari zakona',web:'Mrežni izvori',law:'Hrvatski propisi',euAct:'Pravni akti EU',international:'Međunarodni dokumenti',domesticCase:'Hrvatska sudska praksa',echrCase:'ESLJP',cjeuCase:'Sud EU',secondary:'Posredno citiranje',opcit:'op. cit.',ibid:'Ibid.',other:'Ostalo'};
 /* analyzeDocx i auditni helperi zive u src/analysis/analyze-docx.ts (split monolita) */
-function progress(p: any,msg: any){$('#progressBar').style.width=p+'%';$('#progressPercent').textContent=p+'%';$('#progressMessage').textContent=msg}
+function progress(p: any,msg: any){$('#progressBar').style.width=p+'%';$('#progressPercent').textContent=p+'%';$('#progressMessage').textContent=msg;
+  // Rendgen (progress-scan.ts) se hrani ISTIM stvarnim postotkom; nema vlastiti tajmer,
+  // pa ne moze prikazati napredak koji se nije dogodio. Poruka za aria-live ostaje iznad.
+  renderProgressScan(Number(p));
+}
 
 // PDF preflight je izvucen u tipiziran modul src/pdf/pdf-preflight.ts (cist, testiran, uz
 // S5 granicu skeniranja); ovdje ostaje tanki I/O omotac koji cita bajtove datoteke.
@@ -924,8 +931,109 @@ function renderTriage(r: any){
   renderPhaseTwoResultViews(r);
   syncPremiumResultVisuals(r);
   window.__lektaIcons?.();
+  renderResultsCockpitForResult(r);
 }
 function refreshFindingViews(r: any){renderTriage(r)}
+
+/* Results Cockpit (vizualni sloj v2). Cockpit je PROJEKCIJA postojeceg rezultata: ne zove
+   analizu, ne izvodi nove nalaze i ne smije prikazati nista sto rezultat ne nosi. Zatecen
+   ekran rezultata ostaje netaknut i seli se, sa svim svojim zicama, u sklopljenu "Naprednu
+   provjeru" ispod. `?resultRenderer=legacy` vraca stari raspored 1:1. */
+function resultsCockpitEnabled(){return resultRendererFor(document)==='cockpit'}
+/* Seli SVE sto u #resultView stoji iza #resultCockpit-a. Namjerno NIJE popis ID-jeva: takav
+   popis tiho ostavi sirocad (score ring, izbornik preuzimanja, "Nova provjera") vidljivom ili,
+   jos gore, sakrivenom CSS-om bez ijednog nacina da se do nje dodje. Navigacija i demo traka
+   ostaju IZNAD cockpita, pa se ne sele. Premjestanje cvora cuva vec vezane listenere. */
+function ensureResultsCockpitAdvancedShell(): HTMLElement|null{
+  const mount=$('#resultCockpit') as HTMLElement|null;
+  if(!mount)return null;
+  const existing=$('#resultCockpitAdvanced') as HTMLElement|null;
+  if(existing)return existing;
+  const shell=document.createElement('section');
+  shell.id='resultCockpitAdvanced';
+  shell.className='result-cockpit-advanced-shell';
+  shell.setAttribute('aria-label','Napredna provjera');
+  shell.innerHTML='<div class="result-cockpit-advanced-head"><strong>Napredna provjera</strong><p>Puni popis nalaza, bodovanje, plan ispravaka i dodatne provjere ostaju ovdje, nepromijenjeni.</p></div><div class="result-cockpit-advanced-content" id="resultCockpitAdvancedContent" data-cockpit-advanced-content></div>';
+  const moved: Element[]=[];
+  for(let node=mount.nextElementSibling;node;node=node.nextElementSibling)moved.push(node);
+  mount.insertAdjacentElement('afterend',shell);
+  const content=shell.querySelector<HTMLElement>('[data-cockpit-advanced-content]');
+  if(content)for(const node of moved)content.appendChild(node);
+  return shell;
+}
+function setResultsCockpitAdvanced(open:boolean){
+  const shell=$('#resultCockpitAdvanced') as HTMLElement|null;
+  const content=$('#resultCockpitAdvancedContent') as HTMLElement|null;
+  if(!content)return;
+  content.hidden=!open;
+  if(shell)shell.dataset.open=String(open);
+  ($('#resultCockpit [data-cockpit-advanced]') as HTMLElement|null)?.setAttribute('aria-expanded',String(open));
+  if(open){revealResultDetails();revealDetails()}
+}
+function handleResultsCockpitAction(r: any,action: ResultsCockpitAction){
+  if(action.kind==='preview-location'){
+    if(Number.isInteger(action.paragraphIndex)&&action.paragraphIndex>=0)void openPreviewAt(action.paragraphIndex,action.footnoteId);
+    return;
+  }
+  if(action.kind==='open-findings'){setResultsCockpitAdvanced(true);openTab('issues');$('#issuesList')?.scrollIntoView({behavior:'smooth',block:'start'});return}
+  if(action.kind==='simulate-repair'||action.kind==='repair-safe'){scrollToRepairPanel(r);return}
+  const finding=findingsFor(r).find(x=>x.id===action.findingId);
+  if(!finding)return;
+  if(action.kind==='preview'){
+    void trackEvent('finding_opened',{category:finding.category});
+    if(finding.scope.kind==='anchor')void openPreviewAt(finding.scope.paragraphIndex,finding.scope.footnoteId);
+    return;
+  }
+  if(action.kind==='repair'){void trackEvent('finding_opened',{category:finding.category});scrollToRepairPanel(r,finding);return}
+  if(action.kind==='confirm'){
+    findingStates.set(finding.id,{status:'confirmed'});
+    void trackEvent('finding_resolved',{category:finding.category,manual:true});
+    toast('Nalaz je označen kao ručno provjeren. Automatska ocjena se nije promijenila.');
+    refreshFindingViews(r);
+    return;
+  }
+  if(action.kind==='ignore'){
+    findingStates.set(finding.id,{status:'ignored',ignoredReason:action.reason});
+    void trackEvent('finding_ignored',{category:finding.category});
+    toast('Nalaz je zanemaren i uklonjen iz tri najvažnija koraka. Automatska ocjena se nije promijenila.');
+    refreshFindingViews(r);
+    return;
+  }
+  findingStates.delete(finding.id);
+  toast('Nalaz je vraćen u otvorene stavke.');
+  refreshFindingViews(r);
+}
+function renderResultsCockpitForResult(r: any){
+  const mount=$('#resultCockpit') as HTMLElement|null,resultView=$('#resultView') as HTMLElement|null;
+  if(!mount||!resultView)return;
+  const enabled=resultsCockpitEnabled();
+  resultView.classList.toggle('result-renderer-v1',enabled);
+  const shell=ensureResultsCockpitAdvancedShell();
+  const content=shell?.querySelector<HTMLElement>('[data-cockpit-advanced-content]');
+  if(!enabled){
+    mount.className='hidden';mount.innerHTML='';
+    if(content)content.hidden=false;
+    if(shell)shell.dataset.open='false';
+    return;
+  }
+  const advancedOpen=shell?.dataset.open==='true';
+  const model=buildVisualResultModel({
+    ...r,
+    capabilities:{preview:true,repair:!r?.demo,exactEvidence:false},
+  },{
+    states:findingStates,
+    repairItems:[...repairPanelItems,...repairPanelTextItems],
+    ruleEntries:analyzedProfile?.ruleEntries,
+  });
+  renderResultsCockpit(mount,model,{
+    repairAvailable:!r?.demo,
+    advancedOpen,
+    onAction:(action)=>handleResultsCockpitAction(r,action),
+    onAdvancedToggle:(open)=>setResultsCockpitAdvanced(open),
+  });
+  setResultsCockpitAdvanced(advancedOpen);
+  window.__lektaIcons?.();
+}
 
 // Faza 2: jedan put kroz nalaze. Prioriteti ostaju gore, a puni popis zivi na
 // jednom mjestu. Ogranicenja alata ostaju dostupna, ali nisu "problemi rada".
@@ -1545,7 +1653,7 @@ async function renderRepairSection(r: any){
  // readZip, dakle upravo ono lazno obecanje koje je zastita trebala ukloniti.
  if(!renderRepairCapabilityBlock(mount,r)){repairPanelNode=mount.firstElementChild;repairPanelForResult=r;return}
  if(repairServerConfigured()){renderServerRepairPanel(mount,r,items,file,textItems);repairPanelNode=mount.firstElementChild;repairPanelForResult=r;return}
- renderRepairPanel({items,getDocxBytes:async()=>new Uint8Array(await file.arrayBuffer()),originalFileName:r.file?.name||'rad.docx',mountEl:mount,beforeScore:{score:r.score,categories:r.categories,checks:r.checks},fieldRenderEndpoint:String(productionConfig?.fieldRenderEndpoint||'').trim(),getAccessToken:async()=>String(await resolveAccessToken()||''),reanalyze:async(bytes: Uint8Array)=>{const f=new File([bytes as Uint8Array<ArrayBuffer>],r.file?.name||'rad.docx',{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});return res?{score:res.score,categories:res.categories,checks:res.checks}:null}});
+ renderRepairPanel({items,getDocxBytes:async()=>new Uint8Array(await file.arrayBuffer()),originalFileName:r.file?.name||'rad.docx',mountEl:mount,beforeScore:{score:r.score,categories:r.categories,checks:r.checks},fieldRenderEndpoint:String(productionConfig?.fieldRenderEndpoint||'').trim(),getAccessToken:async()=>String(await resolveAccessToken()||''),reanalyze:async(bytes: Uint8Array)=>{const f=new File([bytes as Uint8Array<ArrayBuffer>],r.file?.name||'rad.docx',{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});return res?{score:res.score,categories:res.categories,checks:res.checks,tocFieldWillRefresh:tocFieldWillRefresh(res)}:null}});
  // Zapamti stvarni cvor placenog panela za ocuvanje kroz re-render checkliste.
  repairPanelNode=mount.firstElementChild; repairPanelForResult=r;
  } finally {
@@ -1553,7 +1661,7 @@ async function renderRepairSection(r: any){
   // se prvi put zove SINKRONO odmah nakon poziva ove funkcije (renderResult), dok je mount jos prazan
   // -> #repairEntry ostajao trajno skriven i kad panel ispod stvarno ima sadrzaj. try/finally hvata
   // SVAKI izlaz iz ove funkcije (i rane return-ove kad nema stavki, gdje ponovni izracun ostaje no-op).
-  if(r===currentResult) renderRepairCta(r);
+  if(r===currentResult){renderRepairCta(r);renderResultsCockpitForResult(r);}
  }
 }
 
@@ -1844,7 +1952,8 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
       // ne ponistava nego se PREMJESTA prioritet: izvornik postaje glavni gumb, a popravljeni pada
       // na sporedni (zicanje odmah ispod). Prije je popravljeni ostajao vizualno glavni CTA i kad
       // je ponovna analiza upravo dokazala da je nesto srusio.
-      const regressions=(r.checks&&res.checks)?detectPassRegressions(r.checks,res.checks):[];
+      // Ustajalo TOC polje nije steta: Word ga regenerira pri otvaranju (dropStaleFieldRegressions).
+      const regressions=(r.checks&&res.checks)?dropStaleFieldRegressions(detectPassRegressions(r.checks,res.checks),res):[];
       // ISHOD: koliko je od CILJANOG stvarno razrijeseno. Isti izracun koji koristi lokalni panel
       // (src/repair/repair-outcome.ts); prije je serverski put znao samo broj izmjena i deltu
       // ocjene, pa je dokument s dvije od sest razrijesenih ciljanih provjera izgledao dovrseno.

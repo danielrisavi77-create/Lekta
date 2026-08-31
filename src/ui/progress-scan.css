@@ -1,0 +1,149 @@
+/* Progres analize: RENDGEN DOKUMENTA.
+   Dosad je ovdje stajao genericki spinner, sto je bio najslabiji trenutak cijelog proizvoda:
+   jedini kadar u kojem korisnik ceka, a ne vidi nista o svom radu.
+
+   Ideja je ista koja nosi hero: LAMPA I SKENER SU ISTI SNOP. Dokument lezi kao snop listova
+   na stolu, a plava ravnina skena putuje kroz njega. Kad prode kroz sloj, taj list je procitan.
+
+   POSTENJE: ravnina se pomice po STVARNOM postotku iz analize (onProgress u analyze-docx.ts,
+   osam pravih faza), nikad po tajmeru. Popis faza je isti taj popis. Broj listova u snopu je
+   GRAFIKA, ne broj stranica rada: taj podatak u ovom trenutku jos ne postoji, pa se ne tvrdi
+   (nigdje ne pise "N stranica"). */
+
+.progress-view[data-scan] .spinner { display: none; }
+.progress-view[data-scan] > h3 { margin-bottom: .35rem; }
+
+.pscan {
+  --pscan-pct: 0;
+  display: grid;
+  gap: 1.4rem;
+  justify-items: center;
+  margin: 1.5rem auto .25rem;
+  max-width: 460px;
+}
+
+/* ---- Snop listova u 3D ----------------------------------------------------- */
+
+/* Stol pod lampom, i ovdje: panel progresa je svijetla kartica, pa bi papirnati snop na njoj
+   izgubio rub i citao se kao siva mrlja. Tamna ploha vraca kontrast I dosljednost s heroom
+   (isti stol, isto svjetlo), umjesto da rendgen lebdi u praznini. */
+.pscan__stage {
+  position: relative;
+  perspective: 900px;
+  width: 100%;
+  height: 236px;
+  display: grid;
+  place-items: center;
+  border-radius: 3px;
+  background:
+    radial-gradient(62% 52% at 62% 8%, rgba(255, 226, 172, .16) 0%, transparent 72%),
+    linear-gradient(180deg, #221D18 0%, #17130F 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+  overflow: hidden;
+  /* Rubovi se gase u panel: bez ovoga tamna ploha izgleda kao ubaceni video, a ne kao
+     pogled na stol. Maska je isto svjetlo koje pada, samo obrnuto. */
+  -webkit-mask-image: radial-gradient(120% 108% at 50% 46%, #000 58%, transparent 100%);
+  mask-image: radial-gradient(120% 108% at 50% 46%, #000 58%, transparent 100%);
+}
+.pscan__stack {
+  position: relative;
+  width: 132px;
+  height: 176px;
+  transform-style: preserve-3d;
+  /* Snop gledan ukoso odozgo: dovoljno da se vide RUBOVI listova, tj. debljina dokumenta. */
+  transform: rotateX(56deg) rotateZ(-14deg) translateZ(-40px);
+}
+.pscan__sheet {
+  position: absolute;
+  inset: 0;
+  background: var(--paper, #F7F3E8);
+  border: 1px solid rgba(0, 0, 0, .16);
+  border-radius: 1px;
+  transform: translateZ(calc(var(--i) * 7px));
+  /* Listovi dublje u snopu su tamniji: svjetlo lampe do njih ne dopire. */
+  filter: brightness(calc(.52 + var(--i) * .04));
+}
+/* Redci teksta na gornjem listu, da snop citljivo bude DOKUMENT a ne bijela kocka. */
+.pscan__sheet--top {
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0 9px,
+      rgba(38, 34, 27, .30) 9px 10px,
+      transparent 10px 16px
+    ),
+    var(--paper, #F7F3E8);
+  background-clip: content-box, border-box;
+  padding: 16px 14px;
+}
+
+/* Ravnina skena: putuje kroz snop po stvarnom postotku. */
+.pscan__plane {
+  position: absolute;
+  inset: -12px;
+  border: 1px solid color-mix(in srgb, var(--scan, #4A6CF0) 85%, white);
+  background: color-mix(in srgb, var(--scan, #4A6CF0) 22%, transparent);
+  box-shadow:
+    0 0 26px color-mix(in srgb, var(--scan, #4A6CF0) 55%, transparent),
+    inset 0 0 18px color-mix(in srgb, var(--scan, #4A6CF0) 35%, transparent);
+  transform: translateZ(calc(var(--pscan-pct) * 0.84px));
+  transition: transform .45s cubic-bezier(.22, 1, .36, 1);
+}
+
+/* ---- Popis faza ------------------------------------------------------------ */
+
+/* Popis je BLOK poravnat lijevo, pa centriran kao cjelina. Naslijedeno centriranje panela
+   inace svaki redak lomi na svoju sirinu, pa oznake stanja pobjegnu u zub. */
+.pscan__phases {
+  display: grid;
+  gap: .32rem;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: .74rem;
+  letter-spacing: .01em;
+}
+.pscan__phase {
+  display: grid;
+  grid-template-columns: .95rem 1fr;
+  align-items: baseline;
+  gap: .55rem;
+  color: var(--muted, #8A8171);
+  opacity: .45;
+  transition: opacity .35s ease, color .35s ease;
+}
+.pscan__phase::before {
+  content: '\25CB';           /* prazan krug: jos nije na redu */
+  color: currentColor;
+}
+.pscan__phase[data-state='active'] {
+  opacity: 1;
+  color: var(--text, #EDE7DC);
+}
+.pscan__phase[data-state='active']::before {
+  content: '\25CF';           /* pun krug: upravo traje */
+  color: var(--scan, #4A6CF0);
+  animation: pscan-pulse 1.15s ease-in-out infinite;
+}
+.pscan__phase[data-state='done'] { opacity: .9; color: var(--muted, #8A8171); }
+.pscan__phase[data-state='done']::before {
+  content: '\2713';           /* kvacica: gotovo */
+  color: var(--ok, #2E8B5F);
+  animation: none;
+}
+@keyframes pscan-pulse { 50% { opacity: .35; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .pscan__plane { transition: none; }
+  .pscan__phase[data-state='active']::before { animation: none; }
+}
+
+@media (max-width: 520px) {
+  .pscan__stage { height: 170px; }
+  .pscan__stack { width: 108px; height: 144px; }
+  .pscan__phases { font-size: .7rem; }
+}

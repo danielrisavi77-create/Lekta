@@ -28,7 +28,10 @@ function setup(): void {
     const measure = () => {
       const w = root.clientWidth;
       const s = Math.min(1, w / STAGE_W);
-      stage.style.transform = `scale(${s})`;
+      // Fit-scale ide u NEOVISNO svojstvo `scale`, ne u `transform`: `transform` na .hd-stage
+      // je rezerviran za naginjanje scene iz hero-depth.ts. Oba se komponiraju (translate,
+      // rotate, scale, pa transform) i dijele isti transform-origin, pa je kadar identican.
+      stage.style.scale = String(s);
       root.style.height = `${Math.round(STAGE_H * s)}px`;
     };
     new ResizeObserver(measure).observe(root);

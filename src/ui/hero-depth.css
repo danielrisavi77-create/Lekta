@@ -1,0 +1,115 @@
+/* Hero: sloj dubine i atmosfere (Korektorski stol).
+   Ideja koja drzi cijeli hero: LAMPA I SKENER SU ISTI SNOP. Lampa nije ukras nego izvor
+   svjetla; papir lezi u njemu, prasina pluta u njemu, a plavi sken iz hero-demo.ts je taj
+   isti snop kad Lekta cita. Zato se sve ovdje vezuje na jednu tocku svjetla (--lamp-x/y).
+
+   Ugovor prema hero-demo.ts: taj modul animira `transform` na .hd-back/.hd-sheet/.hd-postit/
+   .hd-score (WAAPI, fill:forwards). Dubina se zato NIKAD ne pise u `transform` nego u
+   ZASEBNO CSS svojstvo `translate`, koje se komponira prije transforma i ne otima mu se.
+   Naginjanje scene ide na .hd-stage, cijim transformom upravlja iskljucivo hero-depth.ts.
+
+   Sve animirano je transform/opacity/filter (bez layout svojstava, Vercel WIG).
+   Bez pokreta: prefers-reduced-motion gasi rAF, naginjanje i prasinu; staticni kadar ostaje. */
+
+.lek-paper-cover { position: relative; }
+
+/* Snop lampe: mekani stozac iz gornjeg desnog kuta prema papiru. Zivi IZA papira. */
+.hero-atmos {
+  position: absolute;
+  z-index: 0;
+  inset: -8% -6% -12%;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  /* Neaktivan dok se ne montira: bez FOUC bljeska svjetla prije prvog kadra. */
+  opacity: 0;
+  transition: opacity .9s var(--ease, cubic-bezier(.22, 1, .36, 1));
+}
+.hero-atmos[data-ready] { opacity: 1; }
+
+/* Boja snopa je ovdje DOSLOVNA, ne preko `--lamp`: taj token je vec pecen na alpha .15
+   za tanke obrube, pa bi snop kroz color-mix ispao na ~4% i bio nevidljiv (izmjereno).
+   Dva sloja: siroka topla aura + uzi vrely jezgra, da svjetlo ima pad, ne ravnu mrlju. */
+.hero-atmos__beam {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      42% 34% at var(--lamp-x, 78%) var(--lamp-y, 6%),
+      rgba(255, 226, 172, .30) 0%,
+      rgba(255, 214, 150, .10) 46%,
+      transparent 78%
+    ),
+    radial-gradient(
+      78% 62% at var(--lamp-x, 78%) var(--lamp-y, 6%),
+      rgba(255, 206, 138, .12) 0%,
+      transparent 70%
+    );
+}
+
+/* Prasina u snopu (WebGL). Kad WebGL nije dostupan, canvas se uopce ne umece pa
+   ostaje samo gradijentni snop iznad: degradacija je tiha i izgleda namjerno. */
+.hero-atmos__dust {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: screen;
+}
+
+/* Danje svjetlo: stol nije pod lampom pa je snop gotovo ugasen, a prasina nevidljiva.
+   Bez ovoga svijetla tema dobije prljavu zutu mrlju preko papira. */
+[data-theme='light'] .hero-atmos { opacity: .3; }
+[data-theme='light'] .hero-atmos__dust { display: none; }
+
+/* ---- 3D dubina pozornice -------------------------------------------------- */
+
+/* Paralaksu radi POMICANJE OCISTA (perspective-origin), ne rotacija scene. Razlog je
+   izmjeren: .hd-stage ima transform-origin: top center (traži ga fit-scale iz hero-demo.ts),
+   pa i mali rotateY ondje zavrti dno pozornice za desetke piksela i izbaci karticu nalaza
+   iz stupca. Pomak ocista daje pravu dubinsku paralaksu (slojevi se razmicu razmjerno svom
+   Z-u) uz nula pomaka layouta. Rotacija ostaje, ali samo kao natruha. */
+.hero-demo {
+  perspective: 1150px;
+  perspective-origin: var(--po-x, 50%) var(--po-y, 42%);
+}
+.hd-stage { transform-style: preserve-3d; }
+
+/* Slojevi u dubini. `translate` je NEOVISNO svojstvo: WAAPI iz hero-demo.ts i dalje
+   slobodno animira `transform` istih elemenata.
+   Z je namjerno plitak: pri perspektivi 1150px svaki piksel Z-a uvecava sloj za ~0,09%,
+   pa je 34px vec vidljiva dubina, a 62px je karticu nalaza guralo preko ruba stupca. */
+.hd-back { translate: 0 0 -28px; }
+.hd-sheet { translate: 0 0 0; }
+.hd-a, .hd-f, .hd-a3line { translate: 0 0 9px; }
+.hd-scan { translate: 0 0 6px; }
+.hd-postit { translate: 0 0 22px; }
+.hd-score { translate: 0 0 34px; }
+
+/* Sjena papira prati lampu: kad se snop pomakne, sjena pada na suprotnu stranu.
+   --sh-x/--sh-y racuna hero-depth.ts iz polozaja svjetla. */
+.hd-sheet {
+  box-shadow:
+    calc(var(--sh-x, -8px) * 1) calc(var(--sh-y, 14px) * 1) 42px rgba(0, 0, 0, .5),
+    calc(var(--sh-x, -8px) * .35) calc(var(--sh-y, 14px) * .35) 10px rgba(0, 0, 0, .35);
+}
+.hd-back {
+  box-shadow: calc(var(--sh-x, -8px) * .7) calc(var(--sh-y, 14px) * .7) 26px rgba(0, 0, 0, .42);
+}
+
+/* ---- Crvena olovka ISPISUJE podcrtu --------------------------------------- */
+
+/* Podcrta ispod "spreman" nije crtez nego POTEZ: nacrta se slijeva nadesno, jednom,
+   brzinom ruke. Bazno stanje (bez JS-a) je gotova podcrta, pa se nista ne gubi. */
+.h1-crta svg path { stroke-dasharray: var(--crta-len, none); }
+.h1-crta[data-draw] svg path {
+  stroke-dashoffset: var(--crta-len);
+  animation: crta-draw .62s cubic-bezier(.65, 0, .35, 1) .45s forwards;
+}
+@keyframes crta-draw { to { stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-atmos__beam { transition: none; }
+  .h1-crta[data-draw] svg path { animation: none; stroke-dashoffset: 0; }
+  .hd-stage { will-change: auto; }
+}
