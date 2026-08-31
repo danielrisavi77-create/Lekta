@@ -16,6 +16,7 @@
  * lijep, sto je obrazac na kojem je ovaj projekt vec izgorio.
  */
 import { resolveProfile } from '../../src/analysis/golden-entry';
+import { draftRuleEntriesFor } from '../../src/profiles/drafts-runtime';
 import { FIXER_IDS, type FixerId } from '../../src/repair/apply-fixers';
 import type { RepairCoverageMatrix } from './repair-coverage';
 import type { RealCorpusReport } from '../real-corpus/harness';
@@ -185,6 +186,44 @@ const PROFILE_GATE: Record<string, (profile: Record<string, unknown>) => boolean
  * Svaki njegov odabir se gradi s tvrdim `selected: false`. Nijedna os generatora to ne mijenja, pa
  * bi celija koja o njemu tvrdi "nedostaje dokaz" bila trajno neispunjiva tvrdnja.
  */
+/**
+ * Fixer -> `checkId` asistiranog pravila bez kojeg radi TVRDI `return []`.
+ *
+ * Ovi se, za razliku od `element-caption` i `table-figure-rescue`, NE nude ni kao preporuka: bez
+ * unosa s izvorom, stranicom i doslovnim citatom graditelj odmah izlazi. Za profil bez tog unosa
+ * celija dakle nije rupa u dokazu nego tocna tvrdnja.
+ *
+ * IZMJERENO 2026-08-31 nad `draftRuleEntriesFor` za svih 407 profila, uz uvjet koji graditelji
+ * doista traze (status `verified` ili `advisory`, plus `sourceId`, `sourcePage` i `quote`):
+ *
+ *   bibliography-rules            22
+ *   citation-sync-rules           21
+ *   section-surgery-rules         22
+ *   legal-footnote-repair-rules    0
+ *
+ * `checkId`-jevi su izvuceni iz koda (`grep "checkId === "`), ne prepisani po sjecanju: prvi
+ * pokusaj je koristio `legal-footnote-rules`, imena koje u kodu ne postoji, i dao lazno tocnu nulu.
+ */
+const ASSISTED_RULE_GATE: Record<string, string> = {
+  'bibliography-repair-fixer': 'bibliography-rules',
+  'citation-bibliography-sync-fixer': 'citation-sync-rules',
+  'section-surgery-fixer': 'section-surgery-rules',
+  'legal-footnote-repair-fixer': 'legal-footnote-repair-rules',
+};
+
+/** Isti uvjet koji graditelji u `src/ui/repair-items.ts` primjenjuju na `profile.ruleEntries`. */
+function hasAssistedRule(profileId: string, checkId: string): boolean {
+  const entries = (draftRuleEntriesFor(profileId) ?? []) as Array<Record<string, unknown>>;
+  return entries.some(
+    (entry) =>
+      entry?.checkId === checkId &&
+      (entry?.status === 'verified' || entry?.status === 'advisory') &&
+      Boolean(entry?.sourceId) &&
+      Boolean(entry?.sourcePage) &&
+      Boolean(entry?.quote),
+  );
+}
+
 const UNDECIDABLE_FIXERS: ReadonlySet<string> = new Set(['consistency-fixer']);
 
 /** Gradi celije za sve profile iz matrice, po jedna za svaki registriran fixer. */
@@ -351,7 +390,7 @@ export function buildCoverageCells(
         profileId,
         fixerId,
         status: 'nepokriveno',
-        reason: uncoveredReason(fixerRows.length, gated.has(fixerId), loop, fixerId, resolved),
+        reason: uncoveredReason(fixerRows.length, gated.has(fixerId), loop, fixerId, resolved, profileId),
       });
     }
   }
@@ -365,12 +404,17 @@ function uncoveredReason(
   loop: ClosedLoopRow | undefined,
   fixerId: string,
   profile: Record<string, unknown> | null,
+  profileId: string,
 ): UncoveredReason {
   // Alat kojem je zadani odabir prazan po konstrukciji: nijedna os ga ne moze dokazati.
   if (UNDECIDABLE_FIXERS.has(fixerId)) return 'ceka-ljudski-odabir';
   // Profil koji os ne propisuje: fixer se za njega uopce ne nudi, pa se nema sto dokazivati.
   const gate = PROFILE_GATE[fixerId];
   if (gate && profile && !gate(profile)) return 'profil-ne-propisuje-os';
+  // Asistirano pravilo bez kojeg graditelj radi tvrdi `return []`: bez njega se fixer ne nudi
+  // ni kao preporuka, pa se za taj profil nema sto dokazivati.
+  const ruleCheckId = ASSISTED_RULE_GATE[fixerId];
+  if (ruleCheckId && profileId && !hasAssistedRule(profileId, ruleCheckId)) return 'profil-ne-propisuje-os';
   // Os koju generator NIJE prekrsio za ovaj profil nije "bez dokaza" nego neprimjenjiva: generator
   // krsi samo ono sto profil propisuje. Bez ove grane je 325 celija `toc-field-fixera` (407 minus
   // 83 profila s `requireToc`) nosilo krivu dijagnozu.
