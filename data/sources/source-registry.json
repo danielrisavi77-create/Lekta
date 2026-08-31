@@ -289,8 +289,8 @@
     "snapshotPath": "data/sources/efzg/efzg-upute-diplomski-seminarski.pdf",
     "snapshotHash": "a9144962b6935e040a6138550d51e606917884f8f1b3c216bef6fc212e3f5eda",
     "validityClass": "stable",
-    "lastChecked": "2026-07-02",
-    "note": "Opce fakultetske Upute za seminarski i diplomski rad (Zagreb, veljaca 2003). Odjeljak 7.1. Izgled (layout) rada je uveden s 'preporucuje se sljedee' (font 12, prored 1.5, margine 2,54), a opseg diplomskog rada je 'Preporucljiv opseg ... 30 - 50 stranica' -> sve advisory. Nema imperativnog tehnickog oblikovanja pa nema scored pravila iz ovog izvora."
+    "lastChecked": "2026-08-31",
+    "note": "Opce fakultetske Upute za seminarski i diplomski rad (Zagreb, veljaca 2003). Odjeljak 7.1. Izgled (layout) rada je uveden s 'preporucuje se sljedee' (font 12, prored 1.5, margine 2,54), a opseg diplomskog rada je 'Preporucljiv opseg ... 30 - 50 stranica' -> sve advisory. Nema imperativnog tehnickog oblikovanja pa nema scored pravila iz ovog izvora. PROVJERENO 2026-08-31 ima li novije upute: postoji stranica \"Upute za pisanje seminarskih, zavrsnih i diplomskih radova\" s drukcijim vrijednostima (Times New Roman 12, prored 1.5, margine 2,5 i seminarski 15-20 stranica), ALI ona je pod navigacijom Katedre > Informatika > Prof. dr. sc. Mirjana Pejic Bach > Obavijesti studentima, dakle OSOBNA stranica jedne nastavnice. Po hijerarhiji izvora (osobna < katedra < faculty-wide) NE nadjacava ovaj opci fakultetski dokument i NIJE preuzeta. Da jest, tiho bi promijenila margine s 2,54 na 2,5 i opseg s 10-15 na 15-20 stranica, i to na temelju uputa jednog kolegija. Novija FAKULTETSKA uputa za seminarski rad nije pronadjena."
   },
   {
     "id": "efzg-pravilnik-diplomski-2012",
