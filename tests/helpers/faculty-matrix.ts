@@ -143,12 +143,22 @@ function reasonsForProfile(
 
 /** Zbroj celija za jedan podskup; isti oblik kao ukupni sazetak, da se brojke mogu usporediti. */
 function summarizeCells(cells: CoverageCellReport['cells']): CoverageCellReport['summary'] {
-  const byReason = {
+  /**
+   * Bez `as` casta, i to namjerno.
+   *
+   * Cast je 2026-08-31 sakrio nedostajuci kljuc: dodavanjem razloga `ceka-ljudski-odabir` ovaj je
+   * inicijalizator ostao bez njega, pa je `byReason[cell.reason] += 1` racunao `undefined + 1`,
+   * dakle NaN, koji u JSON-u izlazi kao `null`. Uhvatio ga je tek drift test matrice.
+   *
+   * S anotacijom tipa umjesto casta, isti propust je greska pri prevodjenju, a ne tiha NaN.
+   */
+  const byReason: CoverageCellReport['summary']['byReason'] = {
     'profil-ne-propisuje-os': 0,
     'univerzalna-higijena-bez-dokaza': 0,
     'closed-loop-nije-rijesio': 0,
     'nema-dokaza': 0,
-  } as CoverageCellReport['summary']['byReason'];
+    'ceka-ljudski-odabir': 0,
+  };
   let covered = 0;
   let resolved = 0;
   for (const cell of cells) {

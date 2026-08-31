@@ -15,6 +15,7 @@
  * `nepokriveno`: treci status bi postao izlaz za nuzdu kojim se matrica isprazni a broj ostane
  * lijep, sto je obrazac na kojem je ovaj projekt vec izgorio.
  */
+import { resolveProfile } from '../../src/analysis/golden-entry';
 import { FIXER_IDS, type FixerId } from '../../src/repair/apply-fixers';
 import type { RepairCoverageMatrix } from './repair-coverage';
 import type { RealCorpusReport } from '../real-corpus/harness';
@@ -85,7 +86,13 @@ export type UncoveredReason =
   /** Profil os propisuje, closed-loop ju je pokusao popraviti i nije uspio. Stvaran jaz motora. */
   | 'closed-loop-nije-rijesio'
   /** Profil os propisuje, ali je nijedno mjerenje jos nije dotaklo. */
-  | 'nema-dokaza';
+  | 'nema-dokaza'
+  /**
+   * Fixer ne moze dobiti dokaz ni na jednom dokumentu, jer mu je zadani odabir prazan PO
+   * KONSTRUKCIJI. To NIJE rupa u mjerenju nego svojstvo alata, pa se imenuje umjesto da trajno
+   * stoji kao dug koji se nikad ne moze zatvoriti.
+   */
+  | 'ceka-ljudski-odabir';
 
 export type CoverageCell =
   | { profileId: string; fixerId: FixerId; status: 'pokriveno'; evidence: CellEvidence }
@@ -132,6 +139,53 @@ const AXIS_BY_FIXER: Record<string, string> = {
   'link-doi-fixer': 'link-doi',
   'required-section-fixer': 'required-section',
 };
+
+/**
+ * Fixer -> uvjet profila bez kojeg se UOPCE ne nudi.
+ *
+ * Predikati ZRCALE uvjete iz `src/ui/repair-items.ts`; nisu procjena. Redom:
+ *   paragraph-spacing     `profile?.checkParagraphSpacingZero !== true` -> return []
+ *   page-numbering        `profile?.checkPageNumberStartAtIntro !== true` -> return []
+ *   footnote-spacing      `profile?.checkFootnoteParagraphSpacingZero !== true` -> return []
+ *   footnote-typography   ni `footnoteFont[0]` ni pozitivan `footnoteSize` -> return []
+ *   heading-format        `!profile?.headingRules` -> return []
+ *   heading-case          nijedna razina nema `uppercase === true` -> return []
+ *
+ * Zasto: celija za profil koji os NE propisuje nije rupa u dokazu nego tocna tvrdnja, isto kao kod
+ * `toc-field`. Izmjereno 2026-08-31: `checkParagraphSpacingZero` ima 4 profila od 407,
+ * `checkPageNumberStartAtIntro` 4, `checkFootnoteParagraphSpacingZero` 4, `headingRules` 21,
+ * `uppercase` 12, `footnoteFont/Size` 50. Bez ovoga je oko 2.100 celija tvrdilo da im nedostaje
+ * dokaz, a njihovim profilima se nema sto ni dokazivati.
+ *
+ * Ne ide kroz `loop.violated` kao `toc-field`, jer generator te osi uopce ne krsi, pa bi signal
+ * uvijek bio prazan i dijagnoza bi bila tocna iz krivog razloga.
+ */
+const PROFILE_GATE: Record<string, (profile: Record<string, unknown>) => boolean> = {
+  'paragraph-spacing-fixer': (p) => p?.checkParagraphSpacingZero === true,
+  'page-numbering-fixer': (p) => p?.checkPageNumberStartAtIntro === true,
+  'footnote-spacing-fixer': (p) => p?.checkFootnoteParagraphSpacingZero === true,
+  'footnote-typography-fixer': (p) => {
+    const fonts = p?.footnoteFont;
+    const size = Number(p?.footnoteSize);
+    return (Array.isArray(fonts) && typeof fonts[0] === 'string') || (Number.isFinite(size) && size > 0);
+  },
+  'heading-format-fixer': (p) => Boolean(p?.headingRules) && typeof p.headingRules === 'object',
+  'heading-case-fixer': (p) => {
+    const levels = (p?.headingRules as { levels?: Record<string, { uppercase?: unknown }> } | undefined)?.levels;
+    if (!levels || typeof levels !== 'object') return false;
+    return Object.values(levels).some((level) => level?.uppercase === true);
+  },
+};
+
+/**
+ * Fixeri koji ne mogu dobiti dokaz ni na jednom dokumentu, jer im je zadani odabir prazan PO
+ * KONSTRUKCIJI, a Lekta ne smije pogadjati koji je oblik tocan.
+ *
+ * IZMJERENO na 116 stvarnih dokumenata: `consistency-fixer` je ponudjen 110 puta i promijenio 0.
+ * Svaki njegov odabir se gradi s tvrdim `selected: false`. Nijedna os generatora to ne mijenja, pa
+ * bi celija koja o njemu tvrdi "nedostaje dokaz" bila trajno neispunjiva tvrdnja.
+ */
+const UNDECIDABLE_FIXERS: ReadonlySet<string> = new Set(['consistency-fixer']);
 
 /** Gradi celije za sve profile iz matrice, po jedna za svaki registriran fixer. */
 /**
@@ -190,6 +244,8 @@ export function buildCoverageCells(
     const rows = matrix.rows.filter((row) => row.profileId === profileId);
     const loop = loopByProfile.get(profileId);
     const resolvedAxes = new Set(loop?.axesResolved ?? []);
+    // Pravila profila trebaju samo za dijagnozu NEPOKRIVENE celije, pa se citaju jednom po profilu.
+    const resolved = resolveProfile(profileId) as Record<string, unknown> | null;
     const resolvedUniversalFixers = new Set(
       [...resolvedAxes].map((axis) => RESOLVED_AXIS_FIXER[axis]).filter((id): id is string => Boolean(id)),
     );
@@ -295,7 +351,7 @@ export function buildCoverageCells(
         profileId,
         fixerId,
         status: 'nepokriveno',
-        reason: uncoveredReason(fixerRows.length, gated.has(fixerId), loop, fixerId),
+        reason: uncoveredReason(fixerRows.length, gated.has(fixerId), loop, fixerId, resolved),
       });
     }
   }
@@ -308,7 +364,13 @@ function uncoveredReason(
   isGated: boolean,
   loop: ClosedLoopRow | undefined,
   fixerId: string,
+  profile: Record<string, unknown> | null,
 ): UncoveredReason {
+  // Alat kojem je zadani odabir prazan po konstrukciji: nijedna os ga ne moze dokazati.
+  if (UNDECIDABLE_FIXERS.has(fixerId)) return 'ceka-ljudski-odabir';
+  // Profil koji os ne propisuje: fixer se za njega uopce ne nudi, pa se nema sto dokazivati.
+  const gate = PROFILE_GATE[fixerId];
+  if (gate && profile && !gate(profile)) return 'profil-ne-propisuje-os';
   // Os koju generator NIJE prekrsio za ovaj profil nije "bez dokaza" nego neprimjenjiva: generator
   // krsi samo ono sto profil propisuje. Bez ove grane je 325 celija `toc-field-fixera` (407 minus
   // 83 profila s `requireToc`) nosilo krivu dijagnozu.
@@ -326,6 +388,7 @@ function summarize(cells: CoverageCell[]): CoverageCellReport['summary'] {
     'univerzalna-higijena-bez-dokaza': 0,
     'closed-loop-nije-rijesio': 0,
     'nema-dokaza': 0,
+    'ceka-ljudski-odabir': 0,
   };
   let covered = 0;
   let resolved = 0;
