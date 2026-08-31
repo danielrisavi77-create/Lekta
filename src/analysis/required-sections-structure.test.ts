@@ -266,3 +266,88 @@ describe('isHeadingParagraph: sve tri grane, ne samo tekstualna', () => {
     expect(missingRequiredSectionLabels(heading, [{ key: 'summary-hr', label: 'Sažetak' } as never])).toEqual([]);
   });
 });
+
+/**
+ * F10 (2026-08-31, treci krug): DVA indeksna prostora za sidra obveznih dijelova.
+ *
+ * `extractBodyParagraphs` vraca samo body-level odlomke, dok `paragraphs` iz analize broji SVE
+ * `<w:p>`, ukljucujuci celije tablica. Kod ih je indeksirao istim brojem, pa su se od PRVE TABLICE
+ * nadalje razilazili.
+ *
+ * IZMJERENO na dokumentu s jednom dvocelijskom tablicom: `extractBodyParagraphs` daje 3 odlomka,
+ * analiza 5; naslov `Uvod` je `ranges[1]` ali mu je `p.index` 4.
+ *
+ * Zasto je kvar TIH: sidro se samo-potvrdjuje, jer i analiza i fixer citaju isti krivi raspon, pa
+ * se obvezni naslov umetne na krivo mjesto bez ijednog upozorenja.
+ */
+describe('sidra obveznih dijelova: jedan indeksni prostor', () => {
+  const withTable = doc(
+    `${p('Naslov rada')}`
+    + '<w:tbl><w:tr><w:tc>' + p('Celija A') + '</w:tc><w:tc>' + p('Celija B') + '</w:tc></w:tr></w:tbl>'
+    + `${p('Uvod')}${p('Tijelo rada.')}`,
+  );
+  /** Indeksi kakve daje analiza: broji SVE odlomke, pa su celije 2 i 3. */
+  const paragraphs = [
+    { index: 1, text: 'Naslov rada' },
+    { index: 2, text: 'Celija A' },
+    { index: 3, text: 'Celija B' },
+    { index: 4, text: 'Uvod', headingLevel: 1 },
+    { index: 5, text: 'Tijelo rada.' },
+  ];
+
+  it('sidro pokazuje na odlomak koji doista nosi taj tekst', () => {
+    const result = analyzeRequiredSectionsStructure({
+      documentXml: withTable,
+      paragraphs,
+      profileRequiredSections: [{ key: 'abstract', label: 'Abstract' }],
+    });
+    const candidate = result.candidates.find((x) => x.kind === 'abstract');
+    expect(candidate?.present, 'Abstract doista nedostaje').toBe(false);
+    const anchor = candidate?.insertionAnchor;
+    expect(anchor, 'mora postojati sidro za umetanje').toBeDefined();
+
+    /**
+     * SRZ TVRDNJE: sidreni tekst mora odgovarati odlomku na TOM indeksu prema analizi.
+     * Prije popravka se racunao iz `ranges[index - 1]`, dakle iz drugog odlomka, i tvrdnja je
+     * padala jer je sidro nosilo tekst celije tablice ili susjednog odlomka.
+     */
+    const ocekivano = paragraphs.find((x) => x.index === anchor!.paragraphIndex)?.text ?? '';
+    expect(anchor!.anchorText).toBe(
+      ocekivano.toLocaleLowerCase('hr-HR').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim(),
+    );
+  });
+
+  it('naslov iza tablice se i dalje prepoznaje kao naslov', () => {
+    const result = analyzeRequiredSectionsStructure({
+      documentXml: withTable,
+      paragraphs,
+      profileRequiredSections: [{ key: 'introduction', label: 'Uvod' }, { key: 'abstract', label: 'Abstract' }],
+    });
+    // Bez ispravnog indeksa `isHeading` gleda XML drugog odlomka i naslov iza tablice se izgubi.
+    expect(result.candidates.some((x) => x.kind === 'abstract')).toBe(true);
+  });
+
+  /**
+   * Sidro bez teksta se ne proizvodi. Word na kraju dokumenta cesto ostavlja prazan odlomak, a
+   * zadnja mogucnost je dosad bila bas "zadnji odlomak", pa je sidro izlazilo s `anchorText: ""`.
+   * Prazno sidro je po ugovoru neupotrebljivo (odgovaralo bi svakom praznom odlomku), pa je fixer
+   * odustajao. IZMJERENO na dvije Wordove fixture: `paragraphIndex 11` i `10`, oba prazna.
+   */
+  it('zadnja mogucnost preskace prazne odlomke', () => {
+    const xml = doc(`${p('Uvod')}${p('Tijelo rada.')}<w:p/><w:p/>`);
+    const result = analyzeRequiredSectionsStructure({
+      documentXml: xml,
+      paragraphs: [
+        { index: 1, text: 'Uvod', headingLevel: 1 },
+        { index: 2, text: 'Tijelo rada.' },
+        { index: 3, text: '' },
+        { index: 4, text: '' },
+      ],
+      profileRequiredSections: [{ key: 'appendices', label: 'Prilozi' }],
+    });
+    const anchor = result.candidates.find((x) => x.kind === 'appendices')?.insertionAnchor;
+    expect(anchor, 'sidro mora postojati').toBeDefined();
+    expect(anchor!.anchorText, 'sidro ne smije biti prazno').not.toBe('');
+    expect(anchor!.paragraphIndex, 'ne smije pokazivati na prazan odlomak').toBeLessThan(3);
+  });
+});

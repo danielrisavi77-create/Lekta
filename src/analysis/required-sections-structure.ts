@@ -209,13 +209,64 @@ function labelAliases(kind: RequiredSectionKind, rules?: RequiredSectionRules, p
  * `stale-anchor`, dok je SAM primjenjivao 5 od 7. Tekst oba ta zahvata prezivi, pa je pouzdaniji
  * pokazatelj "je li ovo jos uvijek isti odlomak".
  */
-function findAnchor(index: number, paragraphs: ParagraphLike[], ranges: ReturnType<typeof extractBodyParagraphs>, existing: number[]): RequiredSectionCandidate['insertionAnchor'] | undefined {
+/**
+ * `paragraphIndex` iz analize -> raspon odlomka. JEDAN indeksni prostor umjesto dva.
+ *
+ * `extractBodyParagraphs` vraca SAMO body-level odlomke, dok `paragraphs` iz analize broji SVE
+ * `<w:p>`, ukljucujuci celije tablica. Kod je te dvije liste indeksirao istim brojem
+ * (`ranges[p.index - 1]`), pa se od PRVE TABLICE nadalje razilaze.
+ *
+ * IZMJERENO 2026-08-31 (treci krug pregleda) na dokumentu s jednom dvocelijskom tablicom:
+ *   extractBodyParagraphs  3 odlomka  ("Naslov rada", "Uvod", "Tijelo rada.")
+ *   analiza                5 odlomaka (izmedju njih i "Celija A", "Celija B")
+ * Naslov "Uvod" je `ranges[1]`, ali mu je `p.index` 4.
+ *
+ * Zasto je to tiho: `isHeading` tada gleda XML DRUGOG odlomka, a `findAnchor` racuna otisak i
+ * sidreni tekst iz krivog odlomka. Sidro se pritom SAMO-POTVRDJUJE, jer obje strane citaju isti
+ * krivi raspon, pa se obvezni naslov umetne na krivo mjesto BEZ ijednog upozorenja. To je umetanje
+ * vidljivog teksta u studentov rad, dakle najosjetljivija granica alata.
+ *
+ * Indeks se izvodi iz same pozicije: raspon nosi `start`, pa je njegov redni broj medju svim
+ * `<w:p>` tocno onaj koji analiza koristi. Pozivatelj se ne mijenja.
+ */
+export function rangesByParagraphIndex(
+  documentXml: string,
+  ranges: ReturnType<typeof extractBodyParagraphs>,
+): Map<number, ReturnType<typeof extractBodyParagraphs>[number]> {
+  const opens = [...documentXml.matchAll(/<w:p\b[^>]*>/g)].map((match) => match.index ?? 0);
+  const byIndex = new Map<number, ReturnType<typeof extractBodyParagraphs>[number]>();
+  let cursor = 0;
+  for (const range of ranges) {
+    while (cursor < opens.length && opens[cursor] < range.start) cursor += 1;
+    byIndex.set(cursor + 1, range);
+  }
+  return byIndex;
+}
+
+function findAnchor(index: number, paragraphs: ParagraphLike[], byIndex: Map<number, ReturnType<typeof extractBodyParagraphs>[number]>, existing: number[]): RequiredSectionCandidate['insertionAnchor'] | undefined {
   const next = existing.find((x) => x > index);
-  if (next !== undefined && ranges[next - 1]) return { paragraphIndex: next, anchorFingerprint: ranges[next - 1].fingerprint, anchorText: anchorTextOfXml(ranges[next - 1].xml), position: 'before' };
+  const nextRange = next === undefined ? undefined : byIndex.get(next);
+  if (next !== undefined && nextRange) return { paragraphIndex: next, anchorFingerprint: nextRange.fingerprint, anchorText: anchorTextOfXml(nextRange.xml), position: 'before' };
   const previous = [...existing].reverse().find((x) => x < index);
-  if (previous !== undefined && ranges[previous - 1]) return { paragraphIndex: previous, anchorFingerprint: ranges[previous - 1].fingerprint, anchorText: anchorTextOfXml(ranges[previous - 1].xml), position: 'after' };
-  const fallback = paragraphs.find((p) => p.index >= index) ?? paragraphs.at(-1);
-  const range = fallback ? ranges[fallback.index - 1] : undefined;
+  const prevRange = previous === undefined ? undefined : byIndex.get(previous);
+  if (previous !== undefined && prevRange) return { paragraphIndex: previous, anchorFingerprint: prevRange.fingerprint, anchorText: anchorTextOfXml(prevRange.xml), position: 'after' };
+  /**
+   * Sidro bez teksta se NE proizvodi.
+   *
+   * Zadnja mogucnost je dosad bila "prvi odlomak od `index` nadalje, inace zadnji u dokumentu", a
+   * to je u pravim Wordovim dokumentima cesto PRAZAN odlomak (Word ih ostavlja na kraju). Prazno
+   * sidro je po ugovoru neupotrebljivo: `required-section-fixer` i `link-doi-fixer` ga odbijaju,
+   * jer bi odgovaralo svakom praznom odlomku. Rezultat je bio da fixer odustane
+   * (`unsupported-structure` sam, `stale-anchor` u lancu) na dokumentima s tablicom.
+   *
+   * IZMJERENO 2026-08-31 na dvije Wordove fixture: sidro `paragraphIndex 11` odnosno `10`, u oba
+   * slucaja `anchorText: ""`.
+   */
+  const hasText = (candidate: ParagraphLike): boolean => anchorTextOfXml(byIndex.get(candidate.index)?.xml ?? '').length > 0;
+  const forward = paragraphs.find((p) => p.index >= index && hasText(p));
+  const backward = [...paragraphs].reverse().find((p) => hasText(p));
+  const fallback = forward ?? backward;
+  const range = fallback ? byIndex.get(fallback.index) : undefined;
   return range ? { paragraphIndex: fallback!.index, anchorFingerprint: range.fingerprint, anchorText: anchorTextOfXml(range.xml), position: fallback!.index >= index ? 'before' : 'after' } : undefined;
 }
 
@@ -264,7 +315,8 @@ export function analyzeRequiredSectionsStructure(input: {
   const paragraphs = input.paragraphs.filter((p) => Number.isInteger(p.index)).map((p) => ({ ...p, text: String(p.text ?? '') }));
   const profileMap = new Map((input.profileRequiredSections ?? []).map((x) => [kindForKey(x.key ?? x.label) ?? kindForKey(x.label), x]));
   const order = input.rules?.order?.length ? input.rules.order : defaultOrder(input.profileRequiredSections);
-  const headings = paragraphs.filter((p) => isHeading(ranges[p.index - 1]?.xml ?? '', p));
+  const byIndex = rangesByParagraphIndex(input.documentXml, ranges);
+  const headings = paragraphs.filter((p) => isHeading(byIndex.get(p.index)?.xml ?? '', p));
   const foundKinds = new Map<RequiredSectionKind, number>();
   const warnings: string[] = [];
   const skipped: RequiredSectionsStructure['skipped'] = [];
@@ -294,7 +346,7 @@ export function analyzeRequiredSectionsStructure(input: {
     const candidateWarnings: string[] = [];
     if (!present) {
       const anchorIndex = kind === 'appendices' ? (paragraphs.at(-1)?.index ?? 1) : (foundKinds.get(order.find((x) => order.indexOf(x) > order.indexOf(kind)) ?? kind) ?? paragraphs.find((p) => /\b(?:uvod|introduction)\b/i.test(normalize(p.text)))?.index ?? paragraphs.at(-1)?.index ?? 1);
-      insertionAnchor = findAnchor(anchorIndex, paragraphs, ranges, existingIndices);
+      insertionAnchor = findAnchor(anchorIndex, paragraphs, byIndex, existingIndices);
       if (!insertionAnchor) { confidence = 'low'; candidateWarnings.push('nije pronađeno sigurno body-level sidro za umetanje'); }
       /**
        * Upozorenje se pise UGRADJENOM oznakom (`BUILTIN[kind].label`), a ovdje je `label`

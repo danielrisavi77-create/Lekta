@@ -1,5 +1,6 @@
 import { extractBodyParagraphs, xmlEncode } from '../analysis/typography-structure.ts';
 import { anchorTextOfXml as anchorTextOf, normalizeAnchorText } from './anchor-text';
+import { rangesByParagraphIndex } from '../analysis/required-sections-structure';
 import type { RequiredSectionKind } from '../analysis/required-sections-structure.ts';
 import {
   ensureHeadingNumbering,
@@ -105,9 +106,15 @@ export function requiredSectionFixer(parts: DocxXmlParts, params: RequiredSectio
     }
     return textCounts.get(text) ?? 0;
   };
+  const byIndex = rangesByParagraphIndex(parts.documentXml, ranges);
   const validated = params.sections.map((section) => {
     if (hasExistingLabel(parts.documentXml, section.label)) return { section, range: undefined };
-    const range = ranges[section.insertionAnchor.paragraphIndex - 1];
+    /**
+     * ISTI indeksni prostor koji koristi analiza. `ranges` sadrzi samo body-level odlomke, a
+     * `paragraphIndex` broji SVE `<w:p>` (i celije tablica), pa je izravno indeksiranje od prve
+     * tablice nadalje gadjalo drugi odlomak. Vidi `rangesByParagraphIndex`.
+     */
+    const range = byIndex.get(section.insertionAnchor.paragraphIndex);
     /**
      * Sidro vrijedi ako se poklapa OTISAK ili, kad ga zahvat nad oblikovanjem promijeni, TEKST.
      *
@@ -131,9 +138,10 @@ export function requiredSectionFixer(parts: DocxXmlParts, params: RequiredSectio
     const anchorText = section.insertionAnchor.anchorText;
     const anchorTextUnique = typeof anchorText === 'string' && anchorText.length > 0
       && textOccurrencesOf(normalizeAnchorText(anchorText)) === 1;
-    const fingerprintOk = Boolean(range) && range.fingerprint === section.insertionAnchor.anchorFingerprint;
-    const textOk = Boolean(range) && anchorTextUnique && anchorTextOf(range.xml) === normalizeAnchorText(anchorText ?? '');
-    if (!range || (!fingerprintOk && !textOk)) return { section, range: undefined, error: 'stale-anchor' as const };
+    if (!range) return { section, range: undefined, error: 'stale-anchor' as const };
+    const fingerprintOk = range.fingerprint === section.insertionAnchor.anchorFingerprint;
+    const textOk = anchorTextUnique && anchorTextOf(range.xml) === normalizeAnchorText(anchorText ?? '');
+    if (!fingerprintOk && !textOk) return { section, range: undefined, error: 'stale-anchor' as const };
     if (PROTECTED.test(range.xml)) return { section, range, error: 'unsupported-structure' as const };
     return { section, range };
   });
