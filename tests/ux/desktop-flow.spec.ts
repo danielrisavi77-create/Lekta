@@ -29,8 +29,14 @@ test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', asyn
   if (await confirm.isVisible()) await confirm.click();
   await expect(page.locator('#progressView')).toBeHidden({ timeout: 90_000 });
   await expect(page.locator('#resultView')).toBeVisible({ timeout: 90_000 });
-  await expect(page.locator('#triagePanel .finding-card').first()).toBeVisible();
-  await expect(page.locator('#triagePanel .finding-card')).toHaveCount(Math.min(3, await page.locator('#triagePanel .finding-card').count()));
+  // NALAZI ZIVE U COCKPITU, NE VISE U `#triagePanel`. Redizajn "Results Cockpit" seli SVE
+  // sto stoji iza `#resultCockpit` u sklopljeni blok "Napredna provjera"
+  // (`ensureResultsCockpitAdvancedShell`), pa je stari `#triagePanel` ondje zavrsio s visinom 0.
+  // Izmjereno na cistom masteru: panel postoji i ima 3 kartice, ali mu je predak `display:none`,
+  // dok cockpit prikazuje iste nalaze kao `article.cockpit-finding` (7 elemenata s nalazom,
+  // svi s ne-nultom kutijom). Dakle korisnik nista ne gubi; tvrdnja je gadjala nadidjen element.
+  await expect(page.locator('#resultCockpit article.cockpit-finding').first()).toBeVisible();
+  await expect(await page.locator('#resultCockpit article.cockpit-finding').count()).toBeGreaterThan(0);
   await expect(page.locator('#scoreLabel')).toHaveText('Automatska tehnička ocjena');
   await expect(page.locator('#resultReadiness')).toContainText('Nije spremno za predaju');
   await expect(page.locator('#resultReadiness')).toContainText('Tehnička ocjena ne potvrđuje spremnost za predaju');
@@ -38,6 +44,15 @@ test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', asyn
   await expect(page.locator('#resultReadiness')).toContainText('u dokumentu');
   await expect(page.locator('#resultGuide')).toContainText('Što prvo napraviti');
   await expect(page.locator('#tabbtn-action')).toBeHidden();
+
+  // OD OVDJE SE MJERI "NAPREDNA PROVJERA", KOJA JE SKLOPLJENA. Redizajn cockpita seli SVE sto
+  // stoji iza `#resultCockpit` u taj blok, pa `#resultTrust`, `#repairEntry`, `#orderFromResult`
+  // i kartice s nalazima ondje imaju visinu 0 dok se ne otvori. Test zato radi ono sto radi i
+  // korisnik: pritisne "Pregledaj nalaze". Bez toga tvrdnje ispod ne padaju zbog sadrzaja nego
+  // zbog sklopljenog pretka, sto je krivi razlog i krivi nalaz.
+  await page.locator('#resultCockpit [data-cockpit-action="open-findings"]').click();
+  await expect(page.locator('#resultTrust')).toBeVisible();
+
   await expect(page.locator('#resultTrust')).toContainText('Pravila i granice ove provjere');
   await page.locator('#resultTrust').locator('summary').click();
   await expect(page.locator('#resultTrust')).toContainText('Ocjena uključuje');
@@ -49,23 +64,33 @@ test('desktop zadržava brz prijelaz, rezultat i puni faksimil alatni red', asyn
   // vise nalaza iste tezine prvi NIJE tvrdnja proizvoda: priorityRank izjednacuje sve 'error'
   // nalaze, a remi lomi puki redoslijed emitiranja iz analize. Vezanje na .first() zato je lomilo
   // gate cim bi analiza legitimno dodala jos jedan kriticni nalaz (ovdje: dokument nema ni sadrzaj).
-  await expect(page.locator('#triagePanel')).toContainText('Nisu pronađeni automatski brojevi stranica');
-  const firstFinding = page.locator('#triagePanel .finding-card').first();
+  await expect(page.locator('#resultCockpit')).toContainText('Nisu pronađeni automatski brojevi stranica');
+  const firstFinding = page.locator('#resultCockpit article.cockpit-finding').first();
   const findingId = await firstFinding.getAttribute('data-finding-id');
   expect(findingId, 'kartica nalaza mora nositi stabilan data-finding-id').toBeTruthy();
-  const card = page.locator(`#triagePanel .finding-card[data-finding-id="${findingId}"]`);
-  await card.getByRole('button', { name: 'Označi ručno provjereno' }).click();
-  await expect(card).toContainText('Ručna potvrda ne mijenja automatsku ocjenu');
+  const card = page.locator(`#resultCockpit article.cockpit-finding[data-finding-id="${findingId}"]`);
+  await card.getByRole('button', { name: 'Označi kao provjereno' }).click();
+  // POSTENJE RUCNE POTVRDE. Stara kartica je taj tekst nosila TRAJNO; cockpit ga isporucuje kao
+  // prolazan toast (`handleResultsCockpitAction`). Tvrdnja se zato seli na toast, ne ispusta:
+  // korisnik koji nalaz oznaci provjerenim mora vidjeti da mu se automatska ocjena NIJE promijenila.
+  await expect(page.locator('.toast')).toContainText('Automatska ocjena se nije promijenila');
+  // Stanje se u cockpitu cita iz same radnje, a ne iz natpisa "Otvoreno": nakon potvrde nudi se
+  // ponistavanje, nakon ponistavanja opet potvrda.
+  await expect(card.getByRole('button', { name: 'Poništi ručnu potvrdu' })).toBeVisible();
   await card.getByRole('button', { name: 'Poništi ručnu potvrdu' }).click();
-  await expect(card).toContainText('Otvoreno');
-  await expect(page.locator('#triagePanel')).not.toContainText('Kontekst profila');
+  await expect(card.getByRole('button', { name: 'Označi kao provjereno' })).toBeVisible();
+  await expect(page.locator('#resultCockpit')).not.toContainText('Kontekst profila');
   // repairEndpoint je LIVE po defaultu (DEFAULT_PRODUCTION_CONFIG u app.ts), pa je copy server-side
   // varijanta (RE-34: gejtano na repairServerConfigured()), ne stari lokalni-only tekst.
   await expect(page.locator('#repairEntry')).toContainText('Automatski popravak');
   await expect(page.locator('#repairEntry')).toContainText('Dokument se pritom šalje na server radi popravka');
   await expect(page.locator('#orderFromResult')).toContainText('Ručna obrada uz privolu');
 
-  await page.locator('#resultDetailsToggle').click();
+  // `#resultDetailsToggle` se OVDJE VISE NE PRITISCE. "Pregledaj nalaze" iznad vec poziva
+  // `revealResultDetails()`, pa je detaljni dio otvoren; stari klik ga je od tada ZATVARAO.
+  // Izmjereno: nakon open-findings `#resultCockpitAdvancedContent` ima 4739 px i `#tabbtn-issues`
+  // 45 px, a nakon tog klika 1899 px odnosno 0 px. Tvrdnja je zato bila lazno crvena.
+  await expect(page.locator('#tabbtn-issues')).toBeVisible();
   await page.locator('#tabbtn-issues').click();
   await expect(page.locator('#issueFilters')).toContainText('Problemi dokumenta');
   await expect(page.locator('#issueFilters')).toContainText('Ograničenja analize');
