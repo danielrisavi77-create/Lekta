@@ -79,8 +79,33 @@ const WORK_CARRIERS: Record<string, (params: Record<string, unknown>) => boolean
   'consistency-fixer': (params) => Array.isArray(params.replacements) && params.replacements.length > 0,
   'field-integrity-fixer': (params) =>
     (Array.isArray(params.fields) && params.fields.length > 0)
-    || Boolean(params.settings && typeof params.settings === 'object' && Object.values(params.settings as Record<string, unknown>).some(Boolean)),
+    || hasTruthySetting(params.settings),
+  /**
+   * Dodan u drugom krugu pregleda: propustio sam ga iako sam ga u obrazlozenju F7 sam naveo kao
+   * najjaci primjer. Graditelj UVIJEK emitira `revisions/comments/metadata/hiddenText`, a fixer
+   * radi posao i iskljucivo iz `settings` (npr. `removeRevisionIds`), pa je stavka koja doista
+   * popravlja bila prijavljena kao "ceka covjeka".
+   */
+  'final-document-inspector-fixer': (params) =>
+    ['revisions', 'comments', 'metadata', 'hiddenText'].some((key) => Array.isArray(params[key]) && (params[key] as unknown[]).length > 0)
+    || hasTruthySetting(params.settings),
 };
+
+/**
+ * POZNATA GRANICA, imenovana umjesto da se pogadja.
+ *
+ * `citation-bibliography-sync-fixer` (samo `mappings`) i `legal-footnote-repair-fixer` (samo
+ * `bibliographyLinks`) rano odustaju iako im nizovi nisu prazni, pa ih opce pravilo krivo
+ * proglasava akcijskima. Ovdje NEMAJU unos jer se to iz parametara ne moze utvrditi: obojici se
+ * stvarne operacije IZVODE iznutra iz citata i zapisa, a ne postoje kao kljuc. Unos bi znacio
+ * prepisivanje logike fixera u ovaj modul, sto je upravo obrazac koji je drugdje u ovom radu
+ * proizveo razilazenje.
+ */
+
+/** Ima li objekt postavki ijednu upaljenu vrijednost? */
+function hasTruthySetting(settings: unknown): boolean {
+  return Boolean(settings && typeof settings === 'object' && Object.values(settings as Record<string, unknown>).some(Boolean));
+}
 
 export function hasActionableParams(params: Record<string, unknown> | null | undefined, fixerId?: string): boolean {
   if (!params) return true;

@@ -111,13 +111,29 @@ describe('missingRequiredSectionLabels: jedan izvor istine za generator i analiz
     expect(missingRequiredSectionLabels(['Uvod'], [{ label: 'Zahvala' } as never])).toEqual([]);
   });
 
+  /**
+   * Prva izvedba je koristila `Summary`, sto je VEC ugradjeni alias za `summary-hr`, pa je test
+   * prolazio i bez citanja `terms` (drugi krug pregleda dokazao mutacijom). Uzima se izmisljena
+   * oznaka koju nijedan ugradjeni alias ne pokriva.
+   */
   it('prepoznaje dio preko `terms`/`aliases`, ne samo preko oznake', () => {
-    expect(missingRequiredSectionLabels(['Summary'], [{ key: 'summary-hr', label: 'Sažetak', terms: ['Summary'] } as never])).toEqual([]);
+    const izmisljeno = 'Uvodni pregled rada';
+    // Kontrola: bez `terms` se taj naslov NE prepoznaje.
+    expect(missingRequiredSectionLabels([izmisljeno], [{ key: 'summary-hr', label: 'Sažetak' } as never])).toEqual(['Sažetak']);
+    expect(missingRequiredSectionLabels([izmisljeno], [{ key: 'summary-hr', label: 'Sažetak', terms: [izmisljeno] } as never])).toEqual([]);
   });
 
+  /**
+   * Prva izvedba je koristila `SAZETAK RADA`, koji zbog prefiksnog podudaranja pogadja ugradjeni
+   * alias `sazetak `, pa je test prolazio i bez citanja `rules.labels`. Uzima se oznaka koju
+   * nijedan ugradjeni alias ne pokriva.
+   */
   it('prepoznaje dio uz pregazenu oznaku iz `rules.labels`', () => {
-    const rules = { labels: { 'summary-hr': 'SAŽETAK RADA' } } as never;
-    expect(missingRequiredSectionLabels(['SAŽETAK RADA'], [{ key: 'summary-hr', label: 'Sažetak' } as never], rules)).toEqual([]);
+    const pregazeno = 'Kratki pregled';
+    const rules = { labels: { 'summary-hr': pregazeno } } as never;
+    // Kontrola: bez pregazene oznake se taj naslov NE prepoznaje.
+    expect(missingRequiredSectionLabels([pregazeno], [{ key: 'summary-hr', label: 'Sažetak' } as never])).toEqual(['Sažetak']);
+    expect(missingRequiredSectionLabels([pregazeno], [{ key: 'summary-hr', label: 'Sažetak' } as never], rules)).toEqual([]);
   });
 
   it('NEGATIVNA KONTROLA: dio kojeg doista nema se prijavljuje', () => {
@@ -126,5 +142,68 @@ describe('missingRequiredSectionLabels: jedan izvor istine za generator i analiz
 
   it('numeriran naslov se i ovdje priznaje kao postojeci', () => {
     expect(missingRequiredSectionLabels(['1. Abstract'], [{ key: 'abstract', label: 'Abstract' } as never])).toEqual([]);
+  });
+});
+
+/**
+ * DRUGI KRUG PREGLEDA (2026-08-31): moja prva izvedba `withoutLeadingNumber` imala je DVA kvara,
+ * oba izmjerena nad stvarnim ulazom.
+ *
+ * 1. `normalize` brise interpunkciju PRIJE stripa, pa su `[.]` i `[.)]` bili mrtvi:
+ *    `2.1 Sazetak` -> `2 1 sazetak` -> skida se samo `2 ` -> `1 sazetak`. Viserazinska numeracija
+ *    je i dalje davala DUPLIKAT naslova.
+ * 2. Rimska grana bez obavezne interpunkcije gutala je obicne rijeci, pa su `Vidi prilog 3`,
+ *    `Ili prilozi` i `Civil appendices` proglasavali `Prilozi` POSTOJECIM. To je obrnut i gori
+ *    kvar: dio koji doista nedostaje nikad se ne bi ponudio.
+ */
+describe('numeracija naslova: oba smjera', () => {
+  const req = [{ key: 'summary-hr', label: 'Sažetak' } as never];
+  const prilozi = [{ key: 'appendices', label: 'Prilozi' } as never];
+
+  it.each([['1. Sažetak'], ['2.1 Sažetak'], ['3.2.1 Sažetak'], ['IV. Sažetak'], ['2) Sažetak']])(
+    'numeriran naslov %s se prepoznaje kao postojeci',
+    (heading) => {
+      expect(missingRequiredSectionLabels([heading], req)).toEqual([]);
+    },
+  );
+
+  it.each([['Vidi prilog 3'], ['Ili prilozi'], ['Civil appendices']])(
+    'obicna recenica %s NE smije proglasiti dio postojecim',
+    (line) => {
+      expect(missingRequiredSectionLabels([line], prilozi)).toEqual(['Prilozi']);
+    },
+  );
+
+  it('dva podudaranja su DVOJBA, ne nalaz (ista presuda kao u analizi)', () => {
+    expect(missingRequiredSectionLabels(['Sažetak', 'Sažetak rada'], req)).toEqual(['Sažetak']);
+  });
+
+  /**
+   * PORAZENO PONASANJE JE UGRADJENO U TEST, pa vakuumskost postaje nemoguca.
+   *
+   * Osam testova u ovom radu prolazilo je i s vracenom produkcijskom izmjenom, a pet ih je
+   * napisano bas dok se taj razred lovio. Uzrok je uvijek isti: tvrdnja opisuje ISHOD, pa ju moze
+   * zadovoljiti i kod koji do njega dolazi slucajno.
+   *
+   * Ovdje se stara izvedba racuna U TESTU i tvrdi se da je KRIVA. Ako je netko vrati u produkciju,
+   * ove tvrdnje padaju bez ijedne rucne mutacije, i to bez diranja datoteka na disku (ugovor
+   * `tests/gate-mutations.test.ts`, tocka 1).
+   */
+  describe('stara izvedba je ugradjena i dokazano kriva', () => {
+    /** Prva izvedba: strip nad VEC normaliziranim tekstom, rimska grana bez obavezne interpunkcije. */
+    const staraIzvedba = (raw: string): string =>
+      raw.toLocaleLowerCase('hr-HR').normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .replace(/[^\p{L}\p{N}]+/gu, ' ').trim().replace(/\s+/g, ' ')
+        .replace(/^(?:[0-9]+(?:[.][0-9]+)*|[ivxlcdm]+)[.)]?\s+/i, '').trim();
+
+    it('stara izvedba NE bi skinula viserazinsku numeraciju', () => {
+      expect(staraIzvedba('2.1 Sažetak')).toBe('1 sazetak');
+      expect(missingRequiredSectionLabels(['2.1 Sažetak'], req)).toEqual([]);
+    });
+
+    it('stara izvedba BI progutala obicnu rijec kao rimski broj', () => {
+      expect(staraIzvedba('Ili prilozi')).toBe('prilozi');
+      expect(missingRequiredSectionLabels(['Ili prilozi'], prilozi)).toEqual(['Prilozi']);
+    });
   });
 });

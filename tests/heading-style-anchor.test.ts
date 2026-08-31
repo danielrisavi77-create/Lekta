@@ -106,4 +106,42 @@ describe('heading-style-fixer: sidro protiv zastarjele mete', () => {
     expect(out.skippedReasons['heading-structure-universal']).toBe('stale-anchor');
     expect(await documentOf(out.docxBytes)).toBe(DOCUMENT_XML);
   });
+
+  /**
+   * DRUGI KRUG PREGLEDA (2026-08-31): moj F6 popravak je bio pretvrd.
+   *
+   * `paragraphTextsForAnchors` broji SVAKI `<w:p>`, ukljucujuci celije tablica, dok `link-doi` i
+   * `required-section` gledaju samo body-level odlomke. Uz obaranje cijelog zahtjeva to je znacilo
+   * da jedna celija tablice s istim tekstom kao naslov gasi popravak SVIH naslova u dokumentu.
+   * Izmjereno na fixture korpusu: 1 od 19 datoteka, a taj je korpus siromasan tablicama.
+   *
+   * Nejedinstveno sidro sada je DVOJBA (meta se preskace), a ne zastarjelost (koja obara sve).
+   */
+  it('celija tablice s istim tekstom ne gasi popravak ostalih naslova', async () => {
+    const enc2 = new TextEncoder();
+    const withTable =
+      '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>' +
+      para('Uvodni odlomak.') + para('Metodologija') + para('Rezultati') +
+      '<w:tbl><w:tr><w:tc>' + para('Metodologija') + '</w:tc></w:tr></w:tbl>' +
+      '</w:body></w:document>';
+    const bytes = await writeZip([
+      { name: '[Content_Types].xml', data: enc2.encode('<Types></Types>') },
+      { name: 'word/_rels/document.xml.rels', data: enc2.encode('<Relationships></Relationships>') },
+      { name: 'word/document.xml', data: enc2.encode(withTable) },
+      { name: 'word/styles.xml', data: enc2.encode('<w:styles><w:style w:type="paragraph" w:styleId="Normal"><w:name w:val="Normal"/></w:style></w:styles>') },
+    ]);
+    const out = await applyFixers(bytes, [{
+      ruleId: 'heading-structure-universal',
+      fixerId: 'heading-style-fixer' as const,
+      params: { targets: [
+        { paragraphIndex: 2, level: 1, anchorText: 'Metodologija' },
+        { paragraphIndex: 3, level: 1, anchorText: 'Rezultati' },
+      ] },
+    }] as never);
+    expect(out.skippedReasons['heading-structure-universal']).toBeUndefined();
+    expect(out.changelog.length, 'jedinstven naslov mora proci unatoc dvojbenom susjedu').toBeGreaterThan(0);
+    // Dvojbena meta se PRESKACE, pa celija tablice ostaje netaknuta.
+    const doc = await documentOf(out.docxBytes);
+    expect(doc).toContain('<w:tbl>');
+  });
 });

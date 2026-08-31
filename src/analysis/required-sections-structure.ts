@@ -79,6 +79,35 @@ function normalize(value: string): string {
   return value.toLocaleLowerCase('hr-HR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[\u2013\u2014]/g, '-').replace(/[^\p{L}\p{N}]+/gu, ' ').trim().replace(/\s+/g, ' ');
 }
 
+/**
+ * JEDINI matcher naslova prema aliasima. Koriste ga i analiza i `missingRequiredSectionLabels`.
+ *
+ * Postoji jer je prva izvedba "jednog izvora istine" bila neistinita: izraz je bio PREPISAN na dva
+ * mjesta, a analiza pomocnu funkciju nikad nije ni zvala. Dva prepisa se onda mogu razici a da to
+ * nitko ne primijeti, sto je i bio izvorni kvar.
+ *
+ * Prima SIROV tekst, jer skidanje numeracije mora vidjeti interpunkciju (vidi
+ * `normalizedWithoutLeadingNumber`).
+ */
+function matchesAlias(rawText: string, normalizedAliases: readonly string[]): boolean {
+  const text = normalize(rawText);
+  const bare = normalizedWithoutLeadingNumber(rawText);
+  return normalizedAliases.some((alias) => text === alias || text.startsWith(`${alias} `) || bare === alias || bare.startsWith(`${alias} `));
+}
+
+/**
+ * Gruba procjena "je li ovo naslov" iz SAMOG TEKSTA, bez XML-a.
+ *
+ * Zrcali tekstualnu granu `isHeading`, da pozivatelj koji nema XML (generator krsenja) hrani
+ * `missingRequiredSectionLabels` istom populacijom kao analiza. Bez toga su dva pozivatelja
+ * davala suprotne presude nad istim dokumentom: dugi odlomak koji POCINJE rijecju `Sazetak`
+ * analiza ne broji kao naslov, a generator jest.
+ */
+export function isHeadingLikeText(text: string): boolean {
+  const trimmed = text.trim();
+  return trimmed.length > 0 && trimmed.length < 100 && !/[.!?]$/.test(trimmed);
+}
+
 function hash(value: string): string {
   let h = 2166136261;
   for (let i = 0; i < value.length; i++) { h ^= value.charCodeAt(i); h = Math.imul(h, 16777619); }
@@ -104,14 +133,23 @@ function isHeading(xml: string, paragraph: ParagraphLike): boolean {
 /**
  * Naslov bez vodece numeracije ("1.", "1.2", "2)", "IV.").
  *
- * IZMJERENO 2026-08-31, nalaz neovisnog pregleda: dokument s naslovom `1. SAZETAK` uz propisanu
+ * DVIJE ISPRAVKE 2026-08-31 (drugi krug pregleda), obje na mojoj prvoj izvedbi:
+ *
+ * 1. Strip ide nad SIROVIM tekstom, prije `normalize`. `normalize` brise svu interpunkciju, pa su
+ *    u prvoj izvedbi `[.]` i `[.)]` bili MRTVI: `2.1 Sazetak` je postajao `2 1 sazetak`, skidalo
+ *    se samo `2 `, i ostajalo `1 sazetak`. Viserazinska numeracija je i dalje davala duplikat.
+ * 2. Rimska grana ZAHTIJEVA interpunkciju. Bez nje `[ivxlcdm]+` pogada obicne rijeci: izmjereno
+ *    je da su `Vidi prilog 3`, `Ili prilozi` i `Civil appendices` proglasavali `Prilozi`
+ *    POSTOJECIM. To je obrnut i gori kvar: dio koji doista nedostaje nikad se ne bi ponudio.
+ *
+ * IZMJERENO 2026-08-31, prvi krug: dokument s naslovom `1. SAZETAK` uz propisanu
  * oznaku `Sazetak` normalizira se u `1 sazetak`, sto nije ni jednako `sazetak` ni pocinje s
  * `sazetak `. Dio je time proglasen NEDOSTAJUCIM, a popravak je umetao DUPLIKAT naslova u rad
  * koji ga vec ima. `hasExistingLabel` u fixeru to ne spasava, jer usporedjuje cijeli odlomak
  * doslovno.
  */
-function withoutLeadingNumber(text: string): string {
-  return text.replace(/^(?:[0-9]+(?:[.][0-9]+)*|[ivxlcdm]+)[.)]?\s+/i, '').trim();
+function normalizedWithoutLeadingNumber(raw: string): string {
+  return normalize(raw.replace(/^(?:[0-9]+(?:[.][0-9]+)*[.)]?|[IVXLCDM]+[.)])\s+/i, ''));
 }
 
 function defaultOrder(profile: RequiredSectionProfileEntry[] | undefined): RequiredSectionKind[] {
@@ -179,16 +217,13 @@ export function missingRequiredSectionLabels(
     const kind = kindForKey(entry.key ?? entry.label);
     if (kind && !profileMap.has(kind)) profileMap.set(kind, entry);
   }
-  const normalizedHeadings = headingTexts.map((text) => normalize(text));
   const missing: string[] = [];
   for (const kind of defaultOrder(profileRequiredSections)) {
     const { label, aliases } = labelAliases(kind, rules, profileMap.get(kind));
     const normalized = aliases.map(normalize);
-    const found = normalizedHeadings.some((text) => {
-      const bare = withoutLeadingNumber(text);
-      return normalized.some((alias) => text === alias || text.startsWith(`${alias} `) || bare === alias || bare.startsWith(`${alias} `));
-    });
-    if (!found) missing.push(label);
+    // Ista presuda kao u analizi: dva ili vise podudaranja NIJE nalaz, nego dvojba.
+    const found = headingTexts.filter((text) => matchesAlias(text, normalized)).length;
+    if (found !== 1) missing.push(label);
   }
   return missing;
 }
@@ -211,11 +246,7 @@ export function analyzeRequiredSectionsStructure(input: {
   for (const kind of order) {
     const { aliases } = labelAliases(kind, input.rules, profileMap.get(kind));
     const normalized = aliases.map(normalize);
-    const matches = headings.filter((p) => {
-      const text = normalize(p.text);
-      const bare = withoutLeadingNumber(text);
-      return normalized.some((a) => text === a || text.startsWith(`${a} `) || bare === a || bare.startsWith(`${a} `));
-    });
+    const matches = headings.filter((p) => matchesAlias(p.text, normalized));
     if (matches.length === 1) foundKinds.set(kind, matches[0].index);
     else if (matches.length > 1) warnings.push(`${BUILTIN[kind].label}: pronađeno je više mogućih naslova`);
   }

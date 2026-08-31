@@ -228,6 +228,42 @@ describe('summarizeRepairOutcome: cekanje potvrde nije jaz', () => {
     expect(out.awaitingConfirmation).toEqual([]);
   });
 
+
+  /**
+   * DRUGI KRUG PREGLEDA (2026-08-31): `WORK_CARRIERS` je propustio bas fixer koji sam u
+   * obrazlozenju F7 naveo kao najjaci primjer. Graditelj mu UVIJEK emitira cetiri niza, a fixer
+   * radi posao i iskljucivo iz `settings`, pa je stavka koja doista popravlja bila prijavljena kao
+   * "ceka covjeka".
+   */
+  it('final-document-inspector: prazni nizovi uz djelatan `settings` su STVARAN zahvat', () => {
+    const out = summarizeRepairOutcome({
+      before: failing,
+      after: failing,
+      selected: [{
+        matchKeys: ['Margine dokumenta'],
+        fixerId: 'final-document-inspector-fixer',
+        requiresConfirmation: true,
+        params: { version: 1, revisions: [], comments: [], metadata: [], hiddenText: [], settings: { removeRevisionIds: true } },
+      }],
+    });
+    expect(out.assistedUnresolved).toEqual(['page.margins']);
+    expect(out.awaitingConfirmation).toEqual([]);
+  });
+
+  it('final-document-inspector: prazni nizovi BEZ postavki su cekanje', () => {
+    const out = summarizeRepairOutcome({
+      before: failing,
+      after: failing,
+      selected: [{
+        matchKeys: ['Margine dokumenta'],
+        fixerId: 'final-document-inspector-fixer',
+        requiresConfirmation: true,
+        params: { version: 1, revisions: [], comments: [], metadata: [], hiddenText: [], settings: { removeRevisionIds: false } },
+      }],
+    });
+    expect(out.awaitingConfirmation).toEqual(['page.margins']);
+  });
+
   it('prazan params objekt NIJE cekanje: empty-paragraph-fixer salje {} i uredno radi', () => {
     const out = summarizeRepairOutcome({
       before: failing,

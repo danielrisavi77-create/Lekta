@@ -137,6 +137,24 @@ export function linkDoiFixer(parts: DocxXmlParts, params: LinkDoiFixParams): Fix
   if (!pending.length) return noOp(parts, 'already-ok');
   const grouped = new Map<number, LinkDoiFixParams['operations']>();
   for (const operation of pending) { const list = grouped.get(operation.paragraphIndex) ?? []; list.push(operation); grouped.set(operation.paragraphIndex, list); }
+  /**
+   * Mapa se gradi JEDNOM i LIJENO.
+   *
+   * Prva izvedba je prebrojavala sve odlomke UNUTAR petlje i bezuvjetno, pa je trosak bio
+   * O(skupina x odlomaka) i placao se i kad se tekstualno sidro nikad ne konzultira. Izmjereno na
+   * dokumentu od 2000 odlomaka i 40 operacija: oko 1 sekunde, i uz ispravne otiske.
+   */
+  let textCounts: Map<string, number> | undefined;
+  const textOccurrencesOf = (text: string): number => {
+    if (!textCounts) {
+      textCounts = new Map<string, number>();
+      for (const candidate of ranges) {
+        const key = anchorTextOf(candidate.xml);
+        if (key) textCounts.set(key, (textCounts.get(key) ?? 0) + 1);
+      }
+    }
+    return textCounts.get(text) ?? 0;
+  };
   for (const [paragraphIndex, operations] of grouped) {
     const range = ranges[paragraphIndex - 1];
     if (!range) return noOp(parts, 'no-target');
@@ -164,10 +182,9 @@ export function linkDoiFixer(parts: DocxXmlParts, params: LinkDoiFixParams): Fix
      * Ponovljeni tekst nije rubni slucaj: `element-caption-fixer` sam generira "Izvor: Izrada
      * autora" ispod svake tablice. Kod dvojbe se vraca `stale-anchor`, sto je glasno i sigurno.
      */
-    const textOccurrences = ranges.reduce((count, candidate) => count + (anchorTextOf(candidate.xml) === rangeText ? 1 : 0), 0);
     const anchorOk = (operation: { anchorFingerprint: string; anchorText?: string }): boolean =>
       range.fingerprint === operation.anchorFingerprint
-      || (typeof operation.anchorText === 'string' && operation.anchorText.length > 0 && operation.anchorText === rangeText && textOccurrences === 1);
+      || (typeof operation.anchorText === 'string' && operation.anchorText.length > 0 && operation.anchorText === rangeText && textOccurrencesOf(rangeText) === 1);
     if (!operations.every(anchorOk)) return noOp(parts, 'stale-anchor');
     if (PROTECTED.test(range.xml)) return noOp(parts, 'unsupported-structure');
     /**

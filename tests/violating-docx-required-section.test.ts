@@ -67,10 +67,18 @@ describe('generator krsenja: required-section', () => {
      * Ovdje profil PROPISUJE dio koji dokument VEC IMA (`Uvod` generator uvijek pise), pa se
      * mjeri bas presence-polovica.
      */
+    /**
+     * Kljuc mora biti KIND koji analiza poznaje, inace `defaultOrder` bude prazan i presence-petlja
+     * se nikad ne izvede. Prva izvedba ovog testa koristila je `introduction`, koji `kindForKey`
+     * ne prepoznaje, pa je drugi krug pregleda mutacijom dokazao da tvrdnja i dalje ne grize.
+     * Zato se uzima STVARAN kind (`summary-hr`) uz oznaku koju generirani dokument doista sadrzi
+     * (`Uvod`; oznaka ulazi u aliase preko `labelAliases`). Sprega kind/oznaka je namjerno
+     * neobicna, jer se mjeri iskljucivo presence-grana, a ne semantika sazetka.
+     */
     const propisujePostojece = {
       ...profile,
-      requiredSections: [{ key: 'introduction', label: 'Uvod' }],
-      effectiveRules: { ...((profile.effectiveRules as Record<string, unknown>) ?? {}), requiredSections: [{ key: 'introduction', label: 'Uvod' }] },
+      requiredSections: [{ key: 'summary-hr', label: 'Uvod' }],
+      effectiveRules: { ...((profile.effectiveRules as Record<string, unknown>) ?? {}), requiredSections: [{ key: 'summary-hr', label: 'Uvod' }] },
     };
     const { violated: postoji } = await buildViolatingDocx(propisujePostojece, { structural: ['required-section'] });
     expect(postoji, 'dio koji dokument vec ima ne smije se prijaviti kao prekrsen').not.toContain('required-section');

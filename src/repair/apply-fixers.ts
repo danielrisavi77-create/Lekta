@@ -517,7 +517,6 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
        * nepromijenjen, pa se ugovor fixera ne siri zbog provjere koja je stvar poziva.
        */
       const paragraphTexts = paragraphTextsForAnchors(parts.documentXml);
-      const anchoredCount = targets.filter((target) => target.anchorText !== undefined).length;
       /**
        * Sidro je valjano samo uz NEPRAZAN i JEDINSTVEN tekst.
        *
@@ -530,27 +529,34 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
         const key = normalizeAnchorText(text);
         if (key) textCounts.set(key, (textCounts.get(key) ?? 0) + 1);
       }
-      const freshTargets = targets.filter((target) => {
-        if (target.anchorText === undefined) return true;
-        const wanted = normalizeAnchorText(target.anchorText);
-        // Prazno sidro se ne priznaje: odgovaralo bi svakom praznom odlomku. Provjera je
-        // NAMJERNO suvisna, jer `textCounts` prazne kljuceve ionako ne pohranjuje; stoji izricito
-        // da ponasanje ne ovisi o toj internoj odluci ako se mapa jednom promijeni.
-        if (!wanted || textCounts.get(wanted) !== 1) return false;
-        return normalizeAnchorText(paragraphTexts[target.paragraphIndex - 1] ?? '') === wanted;
-      });
       /**
-       * DJELOMICAN promasaj se ne guta.
+       * TRI ISHODA, jer se dva razlicita kvara vise ne mijesaju u jedan.
        *
-       * Do 2026-08-31 se primjenjivao prezivjeli podskup uz `applied: true` i bez ikakva traga o
-       * odbacenima: uz 12 meta i pomak indeksa (npr. `field-integrity-fixer` sazme rucni sadrzaj u
-       * polje) jedna meta moze prezivjeti slucajno, a jedanaest nestati, i to se prijavi kao uspjeh.
-       * `link-doi` i `required-section` u istoj situaciji odustaju u cijelosti; ovdje se sada radi
-       * isto, jer je djelomicno oblikovanje naslova gore od nijednog: dokument izgleda popravljeno.
+       *   `zastarjelo`  sidrenog teksta na tom indeksu (ili igdje) vise nema -> obara CIJELI
+       *                 zahtjev, jer bi primjena sletjela na krivi odlomak.
+       *   `dvojbeno`    tekst se u dokumentu ponavlja -> o toj meti se ne moze odluciti, pa se
+       *                 PRESKACE; ostale mete nisu krive i prolaze.
+       *   `uredu`       jedinstven tekst, i stoji tocno na svojem indeksu.
+       *
+       * Prva izvedba je dvojbeno slala u `zastarjelo` i uz to obarala cijeli zahtjev, pa je
+       * IZMJERENO da jedna celija tablice s istim tekstom kao naslov gasi popravak SVIH naslova u
+       * dokumentu (1 od 19 fixtura, a taj je korpus siromasan tablicama). Jedinstven tekst na
+       * DRUGOM indeksu takodjer je zastarjelo: slijediti ga znacilo bi re-anchoring, koji je u
+       * projektu izricito odbacen.
        */
-      if (anchoredCount > 0 && freshTargets.length < anchoredCount) {
+      const verdictFor = (target: { paragraphIndex: number; anchorText?: string }): 'uredu' | 'dvojbeno' | 'zastarjelo' => {
+        if (target.anchorText === undefined) return 'uredu';
+        const wanted = normalizeAnchorText(target.anchorText);
+        if (!wanted) return 'zastarjelo';
+        const count = textCounts.get(wanted) ?? 0;
+        if (count === 0) return 'zastarjelo';
+        if (count > 1) return 'dvojbeno';
+        return normalizeAnchorText(paragraphTexts[target.paragraphIndex - 1] ?? '') === wanted ? 'uredu' : 'zastarjelo';
+      };
+      if (targets.some((target) => verdictFor(target) === 'zastarjelo')) {
         return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'stale-anchor' as const };
       }
+      const freshTargets = targets.filter((target) => verdictFor(target) === 'uredu');
       const applicable = freshTargets.map(({ anchorText: _anchorText, ...target }) => target);
       return applicable.length
         ? headingStyleFixer(parts, applicable, { pageBreakLevels, numbering })

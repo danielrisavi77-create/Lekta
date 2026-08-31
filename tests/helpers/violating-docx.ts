@@ -36,7 +36,7 @@
  */
 import { buildDocx, type DocSpec, type ParaSpec } from './docx-builder';
 import { paramsForCheck } from '../../src/ui/repair-items';
-import { missingRequiredSectionLabels, type RequiredSectionProfileEntry, type RequiredSectionRules } from '../../src/analysis/required-sections-structure';
+import { isHeadingLikeText, missingRequiredSectionLabels, type RequiredSectionProfileEntry, type RequiredSectionRules } from '../../src/analysis/required-sections-structure';
 
 /** Osi koje profilna grana popravka pokriva; sve ostalo ovaj generator namjerno ne dira. */
 export const VIOLATABLE_CHECK_IDS = ['font', 'font-size', 'line-spacing', 'justify', 'margins', 'paper-size'] as const;
@@ -340,7 +340,12 @@ export async function buildViolatingDocx(
       const rules = (profile as { effectiveRules?: { requiredSections?: unknown; requiredSectionRules?: unknown }; requiredSections?: unknown; requiredSectionRules?: unknown } | null);
       const required = (rules?.effectiveRules?.requiredSections ?? rules?.requiredSections) as RequiredSectionProfileEntry[] | undefined;
       const sectionRules = (rules?.effectiveRules?.requiredSectionRules ?? rules?.requiredSectionRules) as RequiredSectionRules | undefined;
-      const headingTexts = paragraphs.map((item) => String((item as { text?: unknown }).text ?? '')).filter(Boolean);
+      // ISTA populacija koju gleda analiza: ona filtrira kroz `isHeading`, pa i ovdje idu samo
+      // odlomci koji se po tekstu mogu smatrati naslovom. Bez toga su dva pozivatelja iste
+      // funkcije davala suprotne presude nad istim dokumentom.
+      const headingTexts = paragraphs
+        .map((item) => String((item as { text?: unknown }).text ?? ''))
+        .filter((text) => isHeadingLikeText(text));
       if (missingRequiredSectionLabels(headingTexts, required, sectionRules).length) violated.push('required-section');
     }
 

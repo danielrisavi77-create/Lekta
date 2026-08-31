@@ -157,8 +157,16 @@ const AXIS_SIGNAL: Record<string, ((result: AnalysisLike) => number) | undefined
    */
   'link-doi': (r) => (r?.details?.linkDoiStructure?.occurrences ?? []).filter((o) => (o?.safeOperations ?? []).length > 0).length,
   'required-section': (r) => (r?.details?.requiredSectionsStructure?.candidates ?? []).filter((c) => !c.present).length,
-  // `revision-metadata` nema brojku rsid-ova u analizi; ostaje na changelog pravilu.
-  'revision-metadata': undefined,
+  /**
+   * Osi BEZ mjerljivog signala. Moraju stajati izricito, s `undefined`, jer ih provjera nize
+   * zahtijeva; izostavljena os bi tiho pala na slabije changelog pravilo.
+   *
+   * Prva izvedba je imala samo `revision-metadata` i tvrdila da je time sve imenovano, a
+   * `element-caption` i `field-integrity` su bez ijednog spomena padali na to pravilo.
+   */
+  'revision-metadata': undefined, // analiza ne broji `w:rsid*`
+  'element-caption': undefined, // dokaz dolazi iz prolaza preporuka, ne iz brojke u analizi
+  'field-integrity': undefined, // upisuje `w:dirty="true"`; nijedna brojka se time ne mijenja
 };
 
 type AnalysisLike = {
@@ -202,6 +210,19 @@ const STRUCTURAL_WITHOUT_SCORED_CHECK = new Set([
   // postoji i ima status `ok`; dokaz je dakle `applied`, ne `resolved`.
   'field-integrity',
 ]);
+
+/**
+ * Nijedna os ne smije TIHO pasti na slabije pravilo.
+ *
+ * Bez ove provjere je dovoljno dodati os u skup i zaboraviti signal, pa ona zauvijek nosi dokaz
+ * koji znaci samo "fixer se javio". Tocno se to i dogodilo s `element-caption` i `field-integrity`.
+ * Izostavljanje je od sada greska pri pokretanju, a ne tiha degradacija.
+ */
+for (const axis of STRUCTURAL_WITHOUT_SCORED_CHECK) {
+  if (!(axis in AXIS_SIGNAL)) {
+    throw new Error(`Os '${axis}' nema unos u AXIS_SIGNAL. Dodaj mjerljiv signal ili izricit 'undefined' uz obrazlozenje.`);
+  }
+}
 
 /** Format stranice ima dinamican naslov (`page.size.*`), pa se prepoznaje po prefiksu. */
 function checkForAxis(checks: Array<{ id?: string | null; title?: string }>, axis: string) {
@@ -368,6 +389,13 @@ async function runProfile(profileId: string): Promise<Row> {
       if (!STRUCTURAL_WITHOUT_SCORED_CHECK.has(axis)) return false;
       if (!changedFixerIds.has(APPLIED_AXIS_FIXER[axis])) return false;
       const signal = AXIS_SIGNAL[axis];
+      /**
+       * POZNATA GRANICA, imenovana: svi fixeri idu u JEDNOM pozivu `applyFixers`, pa signal osi
+       * moze pasti i zbog tudjeg zahvata. Repozitorij sam dokumentira jedan takav par (RE-55):
+       * `bibliography-repair-fixer` kanonizira `doi:` u `https://doi.org/`, cime spusta signal
+       * `link-doi` bez ijednog zahvata tog fixera. Izolacija bi trazila zaseban poziv po osi, sto
+       * je promjena harnessa, ne ovog izraza.
+       */
       if (!signal) return true;
       // Dokaz trazi da je signal te osi doista PAO; jednak broj znaci da se nista nije rijesilo.
       return signal(after as AnalysisLike) < signal(before as AnalysisLike);

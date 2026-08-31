@@ -105,6 +105,21 @@ export function requiredSectionFixer(parts: DocxXmlParts, params: RequiredSectio
   }
   if (!params.sections.length) return noOp(parts, 'no-target');
   const ranges = extractBodyParagraphs(parts.documentXml);
+  /**
+   * Mapa se gradi JEDNOM i LIJENO: prebrojavanje po sekciji bilo bi O(sekcija x odlomaka), a
+   * placalo bi se i kad otisak odgovara pa se tekstualno sidro nikad ne konzultira.
+   */
+  let textCounts: Map<string, number> | undefined;
+  const textOccurrencesOf = (text: string): number => {
+    if (!textCounts) {
+      textCounts = new Map<string, number>();
+      for (const candidate of ranges) {
+        const key = anchorTextOf(candidate.xml);
+        if (key) textCounts.set(key, (textCounts.get(key) ?? 0) + 1);
+      }
+    }
+    return textCounts.get(text) ?? 0;
+  };
   const validated = params.sections.map((section) => {
     if (hasExistingLabel(parts.documentXml, section.label)) return { section, range: undefined };
     const range = ranges[section.insertionAnchor.paragraphIndex - 1];
@@ -130,7 +145,7 @@ export function requiredSectionFixer(parts: DocxXmlParts, params: RequiredSectio
      */
     const anchorText = section.insertionAnchor.anchorText;
     const anchorTextUnique = typeof anchorText === 'string' && anchorText.length > 0
-      && ranges.reduce((count, candidate) => count + (anchorTextOf(candidate.xml) === anchorText ? 1 : 0), 0) === 1;
+      && textOccurrencesOf(anchorText) === 1;
     const fingerprintOk = Boolean(range) && range.fingerprint === section.insertionAnchor.anchorFingerprint;
     const textOk = Boolean(range) && anchorTextUnique && anchorTextOf(range.xml) === anchorText;
     if (!range || (!fingerprintOk && !textOk)) return { section, range: undefined, error: 'stale-anchor' as const };
