@@ -270,3 +270,47 @@ describe('generator krsenja: revision-metadata', () => {
     expect(textOf(afterXml)).toBe(textOf(beforeXml));
   });
 });
+
+/**
+ * `field-integrity`: Wordovo polje (PAGE) i `word/settings.xml`.
+ *
+ * Fixer na stvarnim radovima mijenja 46 od 54 dokumenta, a na generiranom nije mogao NISTA, jer
+ * generator nije pisao ni polja ni `settings.xml`. Drugo je vaznije nego zvuci: fixer na kraju
+ * zahvata trazi `word/settings.xml` da upise `w:updateFields`, a bez njega vraca `no-target` za
+ * CIJELI zahtjev, ukljucujuci polja koja je vec uspjesno oznacio.
+ */
+describe('generator krsenja: field-integrity', () => {
+  it('polje ulazi u nalaz i fixer mu upise dirty', async () => {
+    const profile = resolveProfile(PROFILE_ID) as Record<string, unknown>;
+    const { bytes, violated } = await buildViolatingDocx(profile, { structural: ['field-integrity'] });
+    expect(violated).toContain('field-integrity');
+
+    const names = (await readZip(bytes)).map((entry) => entry.name);
+    // BASELINE: bez `settings.xml` fixer odbaci cijeli zahvat, pa bi test prolazio vakuumski.
+    expect(names).toContain('word/settings.xml');
+
+    const before = await analyze(bytes, PROFILE_ID, profile);
+    const fields = ((before.details as any)?.fieldIntegrity?.fields ?? []) as unknown[];
+    expect(fields.length, 'analiza mora prepoznati barem jedno Word polje').toBeGreaterThan(0);
+
+    const item = itemsFor(before, profile, PROFILE_ID).find((i) => i.fixerId === 'field-integrity-fixer');
+    expect(item, 'field-integrity-fixer mora biti ponudjen').toBeDefined();
+
+    const out = await applyFixers(bytes, [
+      { fixerId: 'field-integrity-fixer', ruleId: item!.ruleId, params: item!.params },
+    ] as never);
+    expect(out.integrityFailure).toBeUndefined();
+    expect(out.changelog.length).toBeGreaterThan(0);
+
+    const after = new TextDecoder().decode(
+      (await readZip(out.docxBytes)).find((entry) => entry.name === 'word/document.xml')!.data,
+    );
+    expect(after).toContain('w:dirty="true"');
+    // Vidljivi tekst ostaje isti: `dirty` je uputa Wordu da polje osvjezi, ne izmjena sadrzaja.
+    const textOf = (xml: string) => xml.replace(/<[^>]+>/g, '');
+    const beforeXml = new TextDecoder().decode(
+      (await readZip(bytes)).find((entry) => entry.name === 'word/document.xml')!.data,
+    );
+    expect(textOf(after)).toBe(textOf(beforeXml));
+  });
+});

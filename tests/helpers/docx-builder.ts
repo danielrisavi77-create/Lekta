@@ -57,6 +57,18 @@ export interface DocSpec {
    *  "Nije pronadjena nijedna Word fusnota" iako biljeske postoje. */
   endnotes?: (string | FootnoteSpec)[];
   footer?: FooterSpec; // podnožje s brojem stranice na ZAVRŠNOJ sekciji (dokument-level sectPr)
+  /**
+   * Emitira `word/settings.xml`. OPT-IN, pa je izlaz za postojece specove BAJT-IDENTICAN.
+   *
+   * Zasto postoji: `field-integrity-fixer` na kraju zahvata trazi `word/settings.xml` da upise
+   * `w:updateFields`, a bez njega vraca `no-target` za CIJELI zahtjev, ukljucujuci polja koja je
+   * vec uspjesno oznacio. Word taj dio pise u svaki dokument, pa ga stvarni radovi uvijek imaju
+   * (provjereno: `fer-diplomski-puna-struktura.docx` ima, ovaj graditelj nije imao).
+   *
+   * IZMJERENO 2026-08-31: bez njega je `field-integrity-fixer` na generiranom dokumentu bio
+   * nedostizan, sto je 400 celija matrice pokrivenosti drzalo bez dokaza.
+   */
+  settings?: true;
   pageNumberStart?: number; // w:pgNumType w:start na završnoj sekciji (npr. glavni tekst numeriran od 1)
 }
 
@@ -171,7 +183,7 @@ const STYLES_XML =
   `<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/></w:style>` +
   `</w:styles>`;
 
-function contentTypesXml(hasFootnotes: boolean, hasFooter = false, hasEndnotes = false): string {
+function contentTypesXml(hasFootnotes: boolean, hasFooter = false, hasEndnotes = false, hasSettings = false): string {
   return (
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
     `<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">` +
@@ -179,6 +191,9 @@ function contentTypesXml(hasFootnotes: boolean, hasFooter = false, hasEndnotes =
     `<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>` +
     `<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>` +
     `<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>` +
+    (hasSettings
+      ? `<Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/>`
+      : '') +
     (hasFootnotes
       ? `<Override PartName="/word/footnotes.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml"/>`
       : '') +
@@ -332,12 +347,26 @@ export function buildDocx(spec: DocSpec, extraFiles: ZipFileSpec[] = []): Uint8A
   const hasFootnotes = !!spec.footnotes?.length;
   const hasEndnotes = !!spec.endnotes?.length;
   const hasFooter = !!spec.footer;
+  const hasSettings = spec.settings === true;
   const files = [
-    { name: '[Content_Types].xml', data: enc.encode(contentTypesXml(hasFootnotes, hasFooter, hasEndnotes)) },
+    { name: '[Content_Types].xml', data: enc.encode(contentTypesXml(hasFootnotes, hasFooter, hasEndnotes, hasSettings)) },
     { name: '_rels/.rels', data: enc.encode(RELS) },
     { name: 'word/document.xml', data: enc.encode(documentXml(spec)) },
     { name: 'word/styles.xml', data: enc.encode(spec.stylesXml ?? STYLES_XML) },
   ];
+  /**
+   * Minimalan `word/settings.xml`. Word ga pise u svaki dokument, a `field-integrity-fixer` ga
+   * TRAZI: bez njega vraca `no-target` za cijeli zahtjev, i to NAKON sto je polja vec oznacio.
+   */
+  if (hasSettings) {
+    files.push({
+      name: 'word/settings.xml',
+      data: enc.encode(
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"/>',
+      ),
+    });
+  }
   if (hasFootnotes) files.push({ name: 'word/footnotes.xml', data: enc.encode(footnotesXml(spec.footnotes!)) });
   if (hasEndnotes) files.push({ name: 'word/endnotes.xml', data: enc.encode(endnotesXml(spec.endnotes!)) });
   if (hasFooter) {

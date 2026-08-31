@@ -159,6 +159,10 @@ const STRUCTURAL_WITHOUT_SCORED_CHECK = new Set([
   // za nju dolazi iz prolaza PREPORUKA, ne iz bodovane provjere. Da ostane u presudi, svaki bi
   // profil trajno bio `partial`, sto je konstantan pomak a ne mjerenje.
   'element-caption',
+  // `field-integrity-fixer` upisuje `w:dirty="true"`, uputu Wordu da polje osvjezi pri
+  // otvaranju. Nijedna bodovana provjera se time ne prevrne, jer polje i prije i poslije
+  // postoji i ima status `ok`; dokaz je dakle `applied`, ne `resolved`.
+  'field-integrity',
 ]);
 
 /** Format stranice ima dinamican naslov (`page.size.*`), pa se prepoznaje po prefiksu. */

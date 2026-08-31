@@ -74,6 +74,7 @@ export const STRUCTURAL_VIOLATION_IDS = [
   'heading-style',
   'revision-metadata',
   'element-caption',
+  'field-integrity',
 ] as const;
 export type StructuralViolationId = (typeof STRUCTURAL_VIOLATION_IDS)[number];
 
@@ -366,6 +367,27 @@ export async function buildViolatingDocx(
       violated.push('element-caption');
     }
 
+    /**
+     * `field-integrity`: Wordovo polje (PAGE) u tijelu rada.
+     *
+     * `field-integrity-fixer` na stvarnim radovima mijenja 46 od 54 dokumenta, a na generiranom
+     * nije mogao NISTA, jer generator nije pisao polja. Uz polje mu `analyzeFieldIntegrity` daje
+     * metu i fixer joj upise `w:dirty="true"`, cime Word polje osvjezi pri otvaranju.
+     *
+     * OVA OS TRAZI I `settings: true` NA SPECU, i to nije kozmetika: fixer na kraju zahvata trazi
+     * `word/settings.xml` da upise `w:updateFields`, a bez njega vraca `no-target` za CIJELI
+     * zahtjev, ukljucujuci polja koja je vec uspjesno oznacio. Izmjereno A/B na istom dokumentu:
+     * bez `settings.xml` changelog 0 uz `no-target`, s njim changelog 1.
+     */
+    if (wants(structural, 'field-integrity')) {
+      paragraphs.push({
+        raw:
+          '<w:p><w:r><w:t xml:space="preserve">Stranica </w:t></w:r>' +
+          '<w:fldSimple w:instr=" PAGE "><w:r><w:t>1</w:t></w:r></w:fldSimple></w:p>',
+      });
+      violated.push('field-integrity');
+    }
+
     if (wants(structural, 'heading-style')) {
       paragraphs.push({
         ...para,
@@ -378,7 +400,12 @@ export async function buildViolatingDocx(
     }
   }
 
-  const spec: DocSpec = { stylesXml, paragraphs };
+  /**
+   * `settings: true` ide uz strukturne osi, jer ga `field-integrity-fixer` trazi (vidi os
+   * `field-integrity`). Word ga pise u svaki dokument, pa je i realnije; ostaje OPT-IN da izlaz
+   * bez strukturnih osi ostane bajt-identican.
+   */
+  const spec: DocSpec = { stylesXml, paragraphs, ...(structural ? { settings: true as const } : {}) };
 
   if (marginsTarget) {
     // Margine pomaknute za 1 cm od ciljanih, u smjeru koji nikad ne izlazi iz razumnog raspona.
