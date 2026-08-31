@@ -443,3 +443,40 @@ vise ne sumi.
 pogadja stvarnu provjeru, uz izricit popis te dvije iznimke i tvrdnju da se popis NE SMIJE siriti u
 tisini. Negativna kontrola izvedena: vracanjem mrtvih kljuceva gard pada i imenuje krivca.
 
+---
+
+## Otvoreno: `required-section` pada na rucnom sadrzaju (nasla Wordova fixtura)
+
+Nije popravljeno. Zapisano ovdje jer je sesija koja je fixturu napravila u medjuvremenu
+restartala, pa poruka nije mogla biti dostavljena.
+
+**Nalaz.** `tests/fixtures/docx-word/manual-toc.docx` (rucni sadrzaj, pravi Word) obara
+`required-section-fixer` uz `stale-anchor`. Stabilno u tri prolaza.
+
+| kako je pokrenut | ishod |
+|---|---|
+| sam | PRIMIJENJEN |
+| bilo kojih 7 od 8 fixera | PRIMIJENJEN |
+| svih 8 | `stale-anchor`, changelog 11 |
+
+**Sto se vidi u izlazu.** Sidro je `paragraphIndex 2`, `anchorText "1 uvod 1"`. Nakon punog lanca
+odlomci su:
+
+```
+0  "Sadrzaj"
+1  "Sadrzaj se azurira u Wordu: kartica Reference > Azuriraj tablicu..."   <- UMETNUTO
+2  "1. Uvod 1"
+```
+
+`toc-field-fixer` umece uputu i time sve pomice za jedan, pa sidro s indeksa 2 gadja umetnuti
+odlomak. Po `INDEX_SHIFTING_ORDER` bi `required-section` (3) trebao ici PRIJE `toc-fielda` (5), pa
+je red prvo mjesto koje treba provjeriti.
+
+**Sto NIJE objasnjeno.** Zasto uklanjanje BILO KOJEG fixera popravlja ishod. Da je uzrok samo
+umetanje iz `toc-fielda`, uklanjanje npr. `font-fixera` ne bi smjelo pomoci. Dok se to ne razumije,
+svaka hipoteza o uzroku je nepotpuna.
+
+**Zasto je vazno.** Rucni sadrzaj je cest oblik u stvarnim radovima, a ovo je treci put da isti
+razred (sidro protiv pomaka indeksa) proizvede kvar. Prva dva su popravljena; ovaj je nadjen tek
+kad je u korpus usao dokument koji je napisao pravi Word.
+
