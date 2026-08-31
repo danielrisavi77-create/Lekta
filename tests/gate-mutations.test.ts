@@ -21,7 +21,7 @@
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
 import { describe, it, expect } from 'vitest';
-import { countsAsRealDocxProof, type EvidenceManifest } from '../src/corpus/evidence-manifest';
+import { countsAsRealDocxProof, type EvidenceManifest, type ProofMethod } from '../src/corpus/evidence-manifest';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -107,6 +107,13 @@ interface Mutation {
   caught: () => boolean;
   cleanBefore: () => boolean;
 }
+
+/** Potpisana metoda: dva neovisna orakula. Bez nje nijedan dokument nije dokaz, i to je namjerno. */
+const PROOF_METHOD: ProofMethod = {
+  signedBy: 'Daniel',
+  signedAt: '2026-08-31T08:00:00.000Z',
+  oracles: ['scripts/corpus-oracle.py (python-docx)', 'scripts/word-verify (Word COM)'],
+};
 
 /** Uredan manifest dokaza, uz podesiv trenutak zapisa ocekivanja (run je uvijek u 10:00). */
 function manifestWithRecordedAt(recordedAt: string): EvidenceManifest {
@@ -213,17 +220,17 @@ const MUTATIONS: Mutation[] = [
     id: 'dokaz/ocekivanje-zapisano-nakon-runa',
     imitates:
       'dokument koji je "prosao" na stvarnom radu, a ocekivanje je zapisano tek nakon runa, pa se s alatom nije moglo ni ne sloziti',
-    caught: () => !countsAsRealDocxProof(manifestWithRecordedAt('2026-08-30T12:00:00.000Z')),
-    cleanBefore: () => countsAsRealDocxProof(manifestWithRecordedAt('2026-08-30T09:00:00.000Z')),
+    caught: () => !countsAsRealDocxProof(manifestWithRecordedAt('2026-08-30T12:00:00.000Z'), PROOF_METHOD),
+    cleanBefore: () => countsAsRealDocxProof(manifestWithRecordedAt('2026-08-30T09:00:00.000Z'), PROOF_METHOD),
   },
   {
     id: 'dokaz/pregled-bez-potpisa',
     imitates: 'razina A bez ijednog covjeka koji je dokument otvorio i potpisao da se slaze s onim sto alat javlja',
     caught: () => {
       const m = manifestWithRecordedAt('2026-08-30T09:00:00.000Z');
-      return !countsAsRealDocxProof({ ...m, visualReview: { ...m.visualReview, reviewedBy: '' } });
+      return !countsAsRealDocxProof({ ...m, visualReview: { ...m.visualReview, reviewedBy: '' } }, PROOF_METHOD);
     },
-    cleanBefore: () => countsAsRealDocxProof(manifestWithRecordedAt('2026-08-30T09:00:00.000Z')),
+    cleanBefore: () => countsAsRealDocxProof(manifestWithRecordedAt('2026-08-30T09:00:00.000Z'), PROOF_METHOD),
   },
   {
     id: 'vezanje/tvrdnja-se-ne-primjenjuje',

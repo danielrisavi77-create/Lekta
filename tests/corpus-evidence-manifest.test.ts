@@ -9,10 +9,19 @@ import { describe, it, expect } from 'vitest';
 import {
   countsAsRealDocxProof,
   manifestGaps,
+  proofMethodGaps,
   expectationPrecedesRun,
   compareExpectedToActual,
   type EvidenceManifest,
+  type ProofMethod,
 } from '../src/corpus/evidence-manifest';
+
+/** Potpisana metoda: dva neovisna orakula i ljudski potpis, jednom za sve dokumente. */
+const METODA: ProofMethod = {
+  signedBy: 'Daniel',
+  signedAt: '2026-08-31T08:00:00.000Z',
+  oracles: ['scripts/corpus-oracle.py (python-docx)', 'scripts/word-verify (Word COM)'],
+};
 
 /** Uredan manifest: ocekivanje zapisano PRIJE runa, potpisano, uz potpisan vizualni pregled. */
 const UREDAN: EvidenceManifest = {
@@ -29,16 +38,23 @@ const UREDAN: EvidenceManifest = {
   runs: ['2026-08-30T10:00:00.000Z'],
 };
 
+/** Isti dokument, ali provjeru renderiranog zatvara STROJ, bez ijednog ljudskog potpisa po dokumentu. */
+const STROJNI: EvidenceManifest = {
+  expected: UREDAN.expected,
+  runs: UREDAN.runs,
+  renderOracle: { tool: 'word-com', ranAt: '2026-08-30T11:30:00.000Z', opened: true, matches: true },
+};
+
 describe('manifest dokaza', () => {
   it('uredan manifest nema nijednu rupu i vrijedi kao dokaz', () => {
     expect(manifestGaps(UREDAN)).toEqual([]);
-    expect(countsAsRealDocxProof(UREDAN)).toBe(true);
+    expect(countsAsRealDocxProof(UREDAN, METODA)).toBe(true);
   });
 
   it('bez ocekivanja nije dokaz', () => {
     const m: EvidenceManifest = { ...UREDAN, expected: undefined };
     expect(manifestGaps(m)).toContain('nema-ocekivanja');
-    expect(countsAsRealDocxProof(m)).toBe(false);
+    expect(countsAsRealDocxProof(m, METODA)).toBe(false);
   });
 
   it('prazan popis ocekivanja se cita kao da ga nema', () => {
@@ -57,7 +73,7 @@ describe('manifest dokaza', () => {
     };
     expect(expectationPrecedesRun(m)).toBe(false);
     expect(manifestGaps(m)).toContain('ocekivanje-zapisano-nakon-runa');
-    expect(countsAsRealDocxProof(m)).toBe(false);
+    expect(countsAsRealDocxProof(m, METODA)).toBe(false);
   });
 
   it('isti trenutak zapisa i runa se odbija (usporedba je stroga)', () => {
@@ -106,8 +122,8 @@ describe('manifest dokaza', () => {
 
   it('bez vizualnog pregleda nije dokaz', () => {
     const m: EvidenceManifest = { ...UREDAN, visualReview: undefined };
-    expect(manifestGaps(m)).toContain('nema-vizualnog-pregleda');
-    expect(countsAsRealDocxProof(m)).toBe(false);
+    expect(manifestGaps(m)).toContain('nema-provjere-renderiranog');
+    expect(countsAsRealDocxProof(m, METODA)).toBe(false);
   });
 
   it('pregled bez potpisa nije dokaz', () => {
@@ -121,7 +137,7 @@ describe('manifest dokaza', () => {
       visualReview: { ...UREDAN.visualReview, verdict: 'odstupa-neobjasnjeno' },
     };
     expect(manifestGaps(m)).toContain('pregled-odstupa-neobjasnjeno');
-    expect(countsAsRealDocxProof(m)).toBe(false);
+    expect(countsAsRealDocxProof(m, METODA)).toBe(false);
   });
 
   it('objasnjeno odstupanje JEST dokaz: razlika je poznata, ne skrivena', () => {
@@ -130,7 +146,53 @@ describe('manifest dokaza', () => {
       visualReview: { ...UREDAN.visualReview, verdict: 'odstupa-objasnjeno', note: 'alat broji naslovnicu' },
     };
     expect(manifestGaps(m)).toEqual([]);
-    expect(countsAsRealDocxProof(m)).toBe(true);
+    expect(countsAsRealDocxProof(m, METODA)).toBe(true);
+  });
+});
+
+describe('treci orakul zamjenjuje ljudsko oko, ali ne i potpis metode', () => {
+  /**
+   * SRZ PREDIZAJNA. Pitanje "poklapa li se ono sto se vidi s izmjerenim" je MJERENJE drugim alatom,
+   * ne prosudba. Trazenje ljudskog potpisa po dokumentu znacilo je 48 potpisa za nesto sto Word
+   * preko COM-a odgovara ponovljivo.
+   */
+  it('strojna provjera renderiranog vrijedi kao dokaz, bez ijednog potpisa po dokumentu', () => {
+    expect(manifestGaps(STROJNI)).toEqual([]);
+    expect(countsAsRealDocxProof(STROJNI, METODA)).toBe(true);
+  });
+
+  it('render orakul koji dokument NIJE otvorio nije dokaz', () => {
+    const m: EvidenceManifest = { ...STROJNI, renderOracle: { ...STROJNI.renderOracle, opened: false } };
+    expect(manifestGaps(m)).toContain('render-orakul-nije-otvorio');
+  });
+
+  it('render orakul koji se NE slaze nije dokaz', () => {
+    const m: EvidenceManifest = { ...STROJNI, renderOracle: { ...STROJNI.renderOracle, matches: false } };
+    expect(manifestGaps(m)).toContain('render-orakul-se-ne-slaze');
+  });
+
+  it('render orakul bez imena alata se ne racuna (ne zna se tko je mjerio)', () => {
+    const m: EvidenceManifest = { ...STROJNI, renderOracle: { opened: true, matches: true } };
+    expect(manifestGaps(m)).toContain('nema-provjere-renderiranog');
+  });
+});
+
+describe('potpis metode', () => {
+  it('bez potpisane metode nijedan dokument nije dokaz, ma kako uredan bio', () => {
+    expect(manifestGaps(STROJNI)).toEqual([]);
+    expect(countsAsRealDocxProof(STROJNI, null), 'dokument je uredan, ali metoda nije potpisana').toBe(false);
+    expect(proofMethodGaps(null)).toContain('metoda-nije-potpisana');
+  });
+
+  /** Jedan alat koji sam sebe potvrdjuje nije unakrsna provjera; trazi se najmanje dva orakula. */
+  it('jedan orakul nije unakrsna provjera', () => {
+    const m: ProofMethod = { ...METODA, oracles: ['scripts/corpus-oracle.py'] };
+    expect(proofMethodGaps(m)).toContain('premalo-orakula');
+    expect(countsAsRealDocxProof(STROJNI, m)).toBe(false);
+  });
+
+  it('potpisana metoda s dva orakula je uredna', () => {
+    expect(proofMethodGaps(METODA)).toEqual([]);
   });
 });
 

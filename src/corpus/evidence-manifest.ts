@@ -44,6 +44,42 @@ export interface ExpectedFinding {
   because?: string;
 }
 
+/**
+ * Sto je RENDERIRANI dokument pokazao. Ovo je treci orakul i on zatvara jedinu rupu koju
+ * `expected` i Lekta zajedno ne vide: obje strane citaju OOXML, pa ako Word RENDERIRA drukcije nego
+ * sto XML sugerira (nasljedjivanje stilova, tematski fontovi, `w:szCs`, postavke kompatibilnosti),
+ * mogu se sloziti i obje biti u krivu o tome sto student stvarno vidi.
+ *
+ * ZASTO OVO ZAMJENJUJE LJUDSKO OKO. Pitanje "poklapa li se ono sto se vidi s onim sto smo izmjerili"
+ * nije stvar prosudbe nego mjerenja, samo drugim alatom. Word preko COM-a (`scripts/word-verify/`)
+ * na njega odgovara, i to ponovljivo. Covjek ostaje nuzan za nesto drugo: za potpis METODE, jednom,
+ * ne za svaki dokument.
+ */
+export interface RenderOracle {
+  /** Koji alat je renderirao; mora biti razlicit od Lekte i od `expected` orakula. */
+  tool?: string;
+  ranAt?: string;
+  /** Je li se dokument uopce otvorio bez popravka (Word: OpenAndRepair=false). */
+  opened?: boolean;
+  /** Poklapaju li se renderirane vrijednosti s izmjerenima. */
+  matches?: boolean;
+  note?: string;
+}
+
+/**
+ * Potpis METODE, ne dokumenta. Razina A je javna tvrdnja prema fakultetima ("dokazano na stvarnom
+ * studentskom radu"), pa netko mora stati iza toga da je metoda dovoljna. To je prosudba o RIZIKU,
+ * ne mjerenje, i zato je jedina stvar koja ostaje covjeku. Potpisuje se JEDNOM za metodu, a ne
+ * cetrdeset puta za cetrdeset dokumenata.
+ */
+export interface ProofMethod {
+  signedBy?: string;
+  signedAt?: string;
+  /** Popis neovisnih implementacija koje se moraju sloziti. Manje od dvije nije unakrsna provjera. */
+  oracles?: string[];
+  note?: string;
+}
+
 export interface EvidenceManifest {
   expected?: {
     findings?: ExpectedFinding[];
@@ -60,6 +96,8 @@ export interface EvidenceManifest {
   };
   /** ISO datumi pokretanja harnessa nad ovim dokumentom, najstariji prvi. */
   runs?: string[];
+  /** Treci orakul: sto je pokazao RENDERIRANI dokument. Zamjenjuje ljudsko oko za to pitanje. */
+  renderOracle?: RenderOracle;
 }
 
 /** Razlog zbog kojeg dokument JOS NE vrijedi kao dokaz. Prazan popis znaci da vrijedi. */
@@ -68,9 +106,14 @@ export type ManifestGap =
   | 'ocekivanje-bez-datuma'
   | 'ocekivanje-bez-potpisa'
   | 'ocekivanje-zapisano-nakon-runa'
-  | 'nema-vizualnog-pregleda'
+  | 'nema-provjere-renderiranog'
+  | 'render-orakul-nije-otvorio'
+  | 'render-orakul-se-ne-slaze'
   | 'pregled-bez-potpisa'
   | 'pregled-odstupa-neobjasnjeno';
+
+/** Rupe u POTPISU METODE; odvojene od dokumenta, jer se metoda potpisuje jednom za sve. */
+export type MethodGap = 'metoda-nije-potpisana' | 'metoda-bez-potpisnika' | 'premalo-orakula';
 
 const isNonEmpty = (v: unknown): v is string => typeof v === 'string' && v.trim().length > 0;
 
@@ -111,11 +154,37 @@ export function manifestGaps(manifest: EvidenceManifest): ManifestGap[] {
     else if (!expectationPrecedesRun(manifest)) gaps.push('ocekivanje-zapisano-nakon-runa');
     if (!isNonEmpty(expected.recordedBy)) gaps.push('ocekivanje-bez-potpisa');
   }
+  // PITANJE "poklapa li se ono sto se vidi s izmjerenim" smije zatvoriti ILI stroj ILI covjek.
+  // Ranije je trazilo iskljucivo covjeka, i to je bila greska u dizajnu: tjeralo je potpis po
+  // dokumentu (48 puta) za nesto sto je mjerenje, samo drugim alatom.
+  const render = manifest.renderOracle;
   const review = manifest.visualReview;
-  if (!review || !isNonEmpty(review.verdict)) gaps.push('nema-vizualnog-pregleda');
-  else {
-    if (!isNonEmpty(review.reviewedBy)) gaps.push('pregled-bez-potpisa');
-    if (review.verdict === 'odstupa-neobjasnjeno') gaps.push('pregled-odstupa-neobjasnjeno');
+  const hasRender = Boolean(render && isNonEmpty(render.tool));
+  const hasReview = Boolean(review && isNonEmpty(review.verdict));
+
+  if (!hasRender && !hasReview) gaps.push('nema-provjere-renderiranog');
+  if (hasRender) {
+    if (render!.opened === false) gaps.push('render-orakul-nije-otvorio');
+    if (render!.matches !== true) gaps.push('render-orakul-se-ne-slaze');
+  }
+  if (hasReview) {
+    if (!isNonEmpty(review!.reviewedBy)) gaps.push('pregled-bez-potpisa');
+    if (review!.verdict === 'odstupa-neobjasnjeno') gaps.push('pregled-odstupa-neobjasnjeno');
+  }
+  return gaps;
+}
+
+/**
+ * Je li METODA potpisana. Trazi se najmanje DVA orakula: jedan alat koji sam sebe potvrdjuje nije
+ * unakrsna provjera, sto je ovaj repozitorij vec izmjerio (FER pilot: 7/7 doslovnih citata, 4 od 5
+ * tvrdnji oboreno).
+ */
+export function proofMethodGaps(method: ProofMethod | null | undefined): MethodGap[] {
+  const gaps: MethodGap[] = [];
+  if (!method || !isNonEmpty(method.signedAt)) gaps.push('metoda-nije-potpisana');
+  if (!method || !isNonEmpty(method.signedBy)) gaps.push('metoda-bez-potpisnika');
+  if (!method || !Array.isArray(method.oracles) || method.oracles.filter(isNonEmpty).length < 2) {
+    gaps.push('premalo-orakula');
   }
   return gaps;
 }
@@ -126,8 +195,11 @@ export function manifestGaps(manifest: EvidenceManifest): ManifestGap[] {
  * Deny-by-default: sve sto nije uredno je NIJE dokaz. Dokument bez manifesta se time ne odbacuje iz
  * korpusa, samo ne broji kao dokaz; mjerenje strukture i intake granica na njemu i dalje vrijedi.
  */
-export function countsAsRealDocxProof(manifest: EvidenceManifest): boolean {
-  return manifestGaps(manifest).length === 0;
+export function countsAsRealDocxProof(
+  manifest: EvidenceManifest,
+  method?: ProofMethod | null,
+): boolean {
+  return manifestGaps(manifest).length === 0 && proofMethodGaps(method).length === 0;
 }
 
 /**

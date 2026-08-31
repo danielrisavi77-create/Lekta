@@ -1,0 +1,25 @@
+{
+  "note": "POTPIS METODE, ne dokumenta. Razina A je javna tvrdnja prema fakultetima ('dokazano na stvarnom studentskom radu'), pa netko mora stati iza toga da je metoda dovoljna. To je prosudba o RIZIKU, ne mjerenje, i zato je jedina stvar koja ostaje covjeku. Potpisuje se JEDNOM za metodu, a ne za svaki dokument. Dok su `signedBy` i `signedAt` prazni, NIJEDAN dokument ne vrijedi kao dokaz, ma kako uredan bio.",
+  "signedBy": "",
+  "signedAt": "",
+  "oracles": [
+    "scripts/corpus-oracle.py (python-docx): mjeri dokument neovisnom implementacijom i proizvodi ocekivanje PRIJE pokretanja",
+    "src/analysis (Lekta): mjerenje koje se provjerava",
+    "scripts/word-verify (Word COM): odgovara na pitanje sto korisnik STVARNO vidi, jer prve dvije obje citaju OOXML i mogu dijeliti istu sljepocu"
+  ],
+  "method": [
+    "1. Orakul izmjeri dokument i zapise ocekivanje, s vremenom, PRIJE ijednog pokretanja.",
+    "2. Lekta analizira isti dokument; neslaganja se imenuju po provjeri, ne broje.",
+    "3. Word otvori dokument uz OpenAndRepair=false i potvrdi da se renderirano poklapa s izmjerenim.",
+    "4. Dokument vrijedi kao dokaz tek kad sva tri koraka prodju I kad je ova metoda potpisana."
+  ],
+  "izmjerenoPriUvodjenju": {
+    "datum": "2026-08-31",
+    "dokumenata": 48,
+    "provjera": 201,
+    "slaganja": 201,
+    "neslaganja": 0,
+    "odTogaOcekivanihPadova": 28,
+    "napomena": "Suglasnost nije prazna: orakul predvidja 28 krsenja na 20 od 48 dokumenata i Lekta se slaze sa svima. Sva cetiri popravka do tog ishoda bila su u ORAKULU, nijedan u Lekti."
+  }
+}
