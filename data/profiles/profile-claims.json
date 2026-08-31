@@ -10,10 +10,10 @@
   },
   "counts": {
     "E": 41,
-    "B": 323,
+    "B": 322,
     "D": 37,
     "C": 8,
-    "A": 1
+    "A": 2
   },
   "byProfile": {
     "adu-dramaturgija-diplomski": "E",
@@ -186,7 +186,7 @@
     "gradri-zavrsni": "D",
     "grafos-diplomski": "B",
     "grafos-zavrsni": "B",
-    "grf-diplomski": "B",
+    "grf-diplomski": "A",
     "grf-doktorski": "B",
     "grf-zavrsni": "B",
     "hks-diplomski": "B",
