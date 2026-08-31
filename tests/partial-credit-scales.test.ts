@@ -81,7 +81,10 @@ describe('Elementi naslovne stranice: kazna skalira s brojem stavki kojih nema',
     const prazna = await titleCheck(['Naslov rada']);
     expect(skoroPotpuna.earned).toBeGreaterThan(prazna.earned);
     expect(prazna.earned).toBeGreaterThanOrEqual(1);
-  });
+    // Izricit rok, jer test vrti DVIJE pune analize dokumenta od 11.000 rijeci. Sam traje oko 10 s,
+    // ali pod punim `vitest run` naraste preko 18 s i probije zadanih 15 s. To je bilo LAZNO CRVENO:
+    // tvrdnja je bila tocna, gate je pao na opterecenju. Rok ne popusta nijednu tvrdnju.
+  }, 60_000);
 
   it('potpuna naslovnica ima pune bodove', async () => {
     const c = await titleCheck(['Sveučilište u Zagrebu', 'Fakultet političkih znanosti', 'Zagreb, 2026.']);
@@ -89,5 +92,5 @@ describe('Elementi naslovne stranice: kazna skalira s brojem stavki kojih nema',
     // Kad profil trazi jos koji element, potpunost se ne moze jamciti iz teksta; tada vrijedi samo
     // da je rezultat bolji od prazne naslovnice, sto tvrdi test iznad.
     expect(c.earned).toBeGreaterThan(1);
-  });
+  }, 60_000);
 });

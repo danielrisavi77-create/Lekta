@@ -155,7 +155,10 @@ describe('createCheckout (klijent, injektabilan fetch)', () => {
       seen = init;
       return res(200, { checkoutUrl: 'x' });
     });
-    expect((seen?.headers as Record<string, string>).Authorization).toBe('Bearer jwt-token');
+    // Prvo dokazi da je zahtjev POSLAN: bez ovoga `seen?.headers` kratko spoji na
+    // undefined i test pukne TypeErrorom umjesto da padne na tvrdnji (oxlint P1-20).
+    expect(seen).toBeTruthy();
+    expect((seen!.headers as Record<string, string>).Authorization).toBe('Bearer jwt-token');
     expect(JSON.parse(String(seen?.body))).toEqual({ productId: 'slot_diplomski', referralCode: 'REF' });
   });
   it('401 -> unauthorized, 403 -> forbidden, 404 -> not_found', async () => {

@@ -1,0 +1,98 @@
+# Kriticni put u FIREFOXU I WEBKITU (audit P1-18).
+#
+# Release matrica je do sada bila samo Chromium (desktop + mobilna emulacija), pa su upload
+# .docx-a, Web Worker, blob download i modal/focus na Safariju i Firefoxu bili nepokriveni. Ovdje
+# se vrti SAMO kriticni put, ne cijela suite: cilj je dokazati da se do rezultata moze doci u
+# svakom pregledniku.
+#
+# PRVI STVARNI PROLAZ (2026-08-24, commit 84d6f7b): 8 proslo, dva nalaza.
+#
+#   1. `desktop zadrzava brz prijelaz` padao je na mobile-webkitu (`data-step` "1" umjesto "2").
+#      To je bila GRESKA U RASPOREDU PROJEKATA, ne kvar proizvoda: desktop i mobilni tok se stvarno
+#      razlikuju (desktop nakon uploada skace na korak 2, mobilni ostaje na 1). Desktop tok je
+#      zato odvojen u `desktop-flow.spec.ts` i vise ga mobilni projekti ne vrte.
+#
+#   2. OTVOREN NALAZ, FIREFOX: isti test je na Firefoxu FLAKY. Klik na `#stepToAnalyze` ponekad ne
+#      prebaci s koraka 2 na 3 (`data-step` ostaje "2"), a iz drugog pokusaja prolazi. VIDJENO
+#      DVAPUT, na 84d6f7b i na d8c85b4, dakle nije jednokratno.
+#
+#      ISPRAVAK RANIJE BILJESKE (2026-08-24). Prvo je ovdje pisalo da je rukovatelj sinkroni niz u
+#      kojem bi iznimka iz `updateProfile()` progutala `setWizardStep`. TO JE NETOCNO i nije smjelo
+#      ostati zapisano: `updateProfile` je `async` i poziva se BEZ `await`, pa njegovo odbijanje ne
+#      moze sinkrono prekinuti sljedeci redak. Kriva dijagnoza u repozitoriju je gora od nikakve,
+#      jer sljedecega salje u slijepu ulicu.
+#
+#      STO JE STVARNO UTVRDJENO CITANJEM:
+#        - Jedina asinkrona karika izmedju klika i `data-step` je `setWizardStep(3,true)` ->
+#          `withViewTransition` -> `document.startViewTransition(() => mutate())`. Grana bez te
+#          API-je zove `mutate()` SINKRONO, pa je Firefox nekad bio imun; danas Firefox tu API-ju
+#          ima, pa ide asinkronom granom kao i Chromium.
+#        - NIJE utrka od jednog okvira: test cheka preko `expect(...).toHaveAttribute`, koji se
+#          ponavlja do isteka. Znaci da `data-step` u tim prolazima NIKAD ne stigne do "3".
+#        - Vodeca hipoteza je PREKLAPANJE tranzicija: `setFile` je vec pozvao `setWizardStep(2,true)`,
+#          a `updateProfile()` u pozadini prerenderira profil. Nova `startViewTransition` preskace
+#          prethodnu, pa je moguce da update callback jednog poziva ne dodje na red.
+#
+#      NIJE POPRAVLJENO i to je namjerno. Popravak bi dirao `withViewTransition`, dakle animaciju za
+#      SVE preglednike, na temelju hipoteze koju u ovoj okolini nije moguce odvrtjeti (proxy
+#      zabranjuje Playwrightov download host, pa se Firefox ne moze instalirati). Nagadjanje nad
+#      dijeljenim kodom je gore od poznatog, zapisanog i vidljivog nalaza.
+#
+#      SLJEDECI KORAK za onoga tko ima Firefox: `npx playwright install firefox`, pa
+#      `npm run test:ux:browsers -- --project=firefox --repeat-each=10`, i u tragu (`trace.zip` je
+#      artefakt ovog posla) provjeriti je li update callback tranzicije uopce pozvan.
+#
+# ZASTO ZASEBNO OD check.yml, A NE ODMAH U GATEU. Ovi preglednici jos nijednom nisu odvrtjeli ovu
+# suite. Staviti ih odmah u obavezne provjere znacilo bi blokirati svaki PR necim sto nitko nije
+# vidio kako se ponasa, a prvi crveni rezultat bi se onda rjesavao pod pritiskom. Ovako je nalaz
+# vidljiv i mjerljiv.
+#
+# KRITERIJ ZA PROMAKNUCE, ispravljen: NIJE "prvi zeleni prolaz". Taj kriterij je bio prekratak i
+# mjerenje ga je oborilo, jer je Firefox nalaz iz tocke 2 vidjen DVAPUT. Gard koji je povremeno
+# crven bez kvara u proizvodu je gori od nijednog: nauci ljude da crveno ignoriraju. Uvjet je zato
+# da nalaz iz tocke 2 bude zatvoren (popravljen ili dokazano nepostojeci), pa tek onda niz uzastopnih
+# zelenih prolaza; tada se ovaj posao spaja u check.yml ili dodaje u required checks.
+name: browser-matrix
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+jobs:
+  browser-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Node 24
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Instaliraj ovisnosti
+        run: npm ci
+
+      - name: Instaliraj Firefox i WebKit
+        run: npx playwright install --with-deps firefox webkit
+
+      - name: Kriticni put u Firefoxu i WebKitu
+        run: npm run test:ux:browsers
+
+      - name: Trag pri padu
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: browser-matrix-trace
+          path: test-results/
+          if-no-files-found: ignore

@@ -43,13 +43,28 @@ Deno.serve(async (req: Request) => {
       .eq('id', jobId).eq('user_id', user.id).maybeSingle();
     if (!jobRow) return json({ error: 'not_found' }, 404); // vec obrisano ili nije korisnikovo
 
-    // 4. Ukloni BLOB-ove PA tek onda redak, i SAMO ako je uklanjanje uspjelo. storage.remove vraca
+    // 4. ZAPISI NAMJERU prije nego dira igdje drugdje (audit P1-10, migracija 0098).
+    //
+    //    Poredak "blobovi pa redak" je namjeran i ostaje: dok redak postoji, postoje i putanje, pa
+    //    je ponovni pokusaj moguc. Ono sto taj poredak sam po sebi ne pokriva je PREKID izmedju dva
+    //    koraka (blobovi otisli, redak ostao): korisnik tada trajno vidi posao koji se ne da
+    //    preuzeti, a nista taj raskorak ne primjecuje.
+    //
+    //    Zato se namjera biljezi prva. Prekid nakon nje ostavlja redak OZNACEN kao "u brisanju",
+    //    sto sucelje ne nudi za preuzimanje, a `cleanup-orphan-repairs` dovrsi.
+    const { error: markErr } = await admin
+      .from('repair_jobs').update({ deleting_at: new Date().toISOString() })
+      .eq('id', jobId).eq('user_id', user.id);
+    if (markErr) { console.error('[delete-repair-job] mark', markErr); return json({ error: 'delete_failed' }, 500); }
+
+    // 5. Ukloni BLOB-ove PA tek onda redak, i SAMO ako je uklanjanje uspjelo. storage.remove vraca
     //    {error} (ne baca), pa gresku moramo eksplicitno provjeriti; ako BLOB nije uklonjen, NE brisemo
     //    redak (inace posao nestane iz "Moji popravci" a dokument ostane pohranjen, bez moguceg retryja).
-    //    Redak je jedini pokazivac na putanje BLOB-a, pa retry ostaje moguc dok redak postoji.
     const paths = [ (jobRow as any).original_path, (jobRow as any).result_path ].filter(Boolean);
     if (paths.length) {
       const { error: rmErr } = await admin.storage.from('repair').remove(paths);
+      // Oznaka NAMJERNO ostaje postavljena: posao je na putu van, a cron ce ga dovrsiti. Vracanje
+      // oznake ovdje bi posao vratilo u "preuzmi" stanje iako mu blobovi mozda vise ne postoje.
       if (rmErr) { console.error('[delete-repair-job] storage.remove', rmErr); return json({ error: 'blob_delete_failed' }, 502); }
     }
     const { error: delErr } = await admin

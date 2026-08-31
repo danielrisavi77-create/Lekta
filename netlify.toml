@@ -31,3 +31,16 @@
   # Generator citata pece kanonske URL-ove i sitemap iz ove domene (BEZ zavrsne kose crte,
   # inace bi ${ORIGIN}/alati/... dalo dvostruki //). Ziva domena je Netlify subdomena.
   LEKTA_SITE_ORIGIN = "https://lektahr.netlify.app"
+  # DOKAZ O PROVJERAMA JE OBAVEZAN (audit P0-03).
+  #
+  # `scripts/verify-deploy-dist.mjs` provjerava `docs/generated/RELEASE_PROOF.json` i bez ove
+  # zastavice na nalaz samo UPOZORI, pa se moglo deployati bez ijednog dokaza da su Tier 1
+  # (python-docx) i Tier 2 (pravi Word) uopce izvedeni. `npm run check` je samo Tier 0 i ne otvara
+  # dokument nijednim stvarnim uredivacem.
+  #
+  # POSLJEDICA KOJU TREBA ZNATI: od trenutka kad ovo udje u master, produkcijski build PADA dok
+  # dokaz ne bude potpun, vezan uz ono sto se gradi, nastao nad cistim stablom i mladji od
+  # LEKTA_PROOF_MAX_AGE_DAYS (zadano 14). Popravak je `npm run release:check` pa commit dokaza.
+  # To je namjera gatea, ne nuspojava: zastario dokaz je opasniji od nikakvog jer izgleda kao
+  # potvrda za kod koji nitko nije provjerio.
+  LEKTA_REQUIRE_RELEASE_PROOF = "1"
