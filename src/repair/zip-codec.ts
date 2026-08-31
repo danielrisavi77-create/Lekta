@@ -378,7 +378,24 @@ export async function writeZip(entries: ZipEntry[]): Promise<Uint8Array> {
         method: raw.compressionMethod,
         dosTime: raw.dosTime,
         dosDate: raw.dosDate,
-        flags: raw.generalPurposeFlag,
+        /**
+         * Bit 3 (`0x0008`) se BRISE, ostale zastavice se cuvaju.
+         *
+         * Taj bit znaci "data descriptor slijedi iza podataka", a ovaj pisac ga NIKAD ne pise:
+         * CRC i obje velicine idu u lokalno zaglavlje (vidi `fileWriter` nize). Prenosenjem bita
+         * izlaz je tvrdio da deskriptor postoji, a njega nije bilo.
+         *
+         * IZMJERENO 2026-08-31 Tier 2 oracleom (`npm run verify:word:corpus`): `lo-fpzg-zavrsni-*`
+         * se nakon popravka NIJE otvarao u Wordu, dok se izvornik otvara. Ta dva paketa pise
+         * LibreOffice, koji upisuje `0x0808` (bit 11 UTF-8 ime + bit 3), a svi ostali fixturei
+         * imaju `0x0000`, pa je kvar godinama pogadjao samo LibreOffice dokumente.
+         *
+         * Tier 0 i Tier 1 ga ne vide: python `zipfile` i `lxml` citaju tolerantno, jer su CRC i
+         * velicine ionako u zaglavlju. Word je strog i paket odbija.
+         *
+         * Bit 11 (`0x0800`, UTF-8 ime) se NAMJERNO cuva: on je i dalje istinit.
+         */
+        flags: raw.generalPurposeFlag & ~0x0008,
         internalAttrs: raw.internalAttrs,
         externalAttrs: raw.externalAttrs,
         versionMadeBy: raw.versionMadeBy,
