@@ -78,10 +78,19 @@ export interface RealCorpusResult {
   /** Ciljano automatskim fixerom (bez potvrde) i dalje pada: stvarni jaz motora. */
   autoUnresolvedCount: number;
   /**
+   * IMENA tih provjera, ne samo broj. Brojka skriva identitet: popis blokatora citatnih dosjea
+   * ostao je 2026-08-31 na 1 dok je jedan otisao a drugi dosao, i samo ga je imenovan popis
+   * uhvatio (CLAUDE.md, "provjeri IDENTITET, ne zbroj"). Iza broja 5 ovdje se krilo pet
+   * neimenovanih kvarova popravka na stvarnim radovima.
+   */
+  autoUnresolvedChecks: string[];
+  /**
    * Ciljano asistiranom stavkom (u sucelju trazi potvrdu) i dalje pada. Harness ju je PRIMIJENIO,
    * pa je ovo stvaran jaz asistiranog fixera, ne "alat ceka korisnika".
    */
   assistedUnresolvedCount: number;
+  /** IMENA asistiranih provjera koje su i nakon primjene ostale crvene. */
+  assistedUnresolvedChecks: string[];
   /**
    * Ciljano stavkom koja trazi potvrdu, ali joj je zadani odabir prazan, pa fixer NIJE imao sto
    * primijeniti. Odvojeno od `assistedUnresolvedCount`, jer to nije jaz motora nego cekanje
@@ -138,6 +147,8 @@ export interface RealCorpusReport {
     targetedCheckCount: number;
     targetedResolvedCount: number;
     autoUnresolvedCount: number;
+    /** Unija imena kroz cijeli korpus, sortirana: koje provjere popravak NE rjesava nigdje. */
+    autoUnresolvedChecks: string[];
     assistedUnresolvedCount: number;
     awaitingConfirmationCount: number;
     manualOnlyCount: number;
@@ -210,7 +221,9 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     targetedResolvedCount: 0,
     targetedUnresolvedCount: 0,
     autoUnresolvedCount: 0,
+    autoUnresolvedChecks: [] as string[],
     assistedUnresolvedCount: 0,
+    assistedUnresolvedChecks: [] as string[],
     awaitingConfirmationCount: 0,
     manualOnlyCount: 0,
     unmappedMatchKeys: [] as string[],
@@ -343,7 +356,9 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
       targetedResolvedCount: outcome.resolved.length,
       targetedUnresolvedCount: unresolved,
       autoUnresolvedCount: outcome.autoUnresolved.length,
+      autoUnresolvedChecks: outcome.autoUnresolved,
       assistedUnresolvedCount: outcome.assistedUnresolved.length,
+      assistedUnresolvedChecks: outcome.assistedUnresolved,
       awaitingConfirmationCount: outcome.awaitingConfirmation.length,
       manualOnlyCount: outcome.manualOnly.length,
       unmappedMatchKeys: outcome.unmappedMatchKeys,
@@ -421,6 +436,7 @@ export async function runRealCorpus(
       targetedCheckCount: results.reduce((total, result) => total + result.targetedCheckCount, 0),
       targetedResolvedCount: results.reduce((total, result) => total + result.targetedResolvedCount, 0),
       autoUnresolvedCount: results.reduce((total, result) => total + result.autoUnresolvedCount, 0),
+      autoUnresolvedChecks: [...new Set(results.flatMap((result) => result.autoUnresolvedChecks))].sort(),
       assistedUnresolvedCount: results.reduce((total, result) => total + result.assistedUnresolvedCount, 0),
       awaitingConfirmationCount: results.reduce((total, result) => total + result.awaitingConfirmationCount, 0),
       manualOnlyCount: results.reduce((total, result) => total + result.manualOnlyCount, 0),

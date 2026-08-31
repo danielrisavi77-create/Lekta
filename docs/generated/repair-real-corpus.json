@@ -134,7 +134,9 @@
       "targetedResolvedCount": 0,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
       "manualOnlyCount": 3,
       "unmappedMatchKeys": [
@@ -188,7 +190,9 @@
       "targetedResolvedCount": 0,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
       "manualOnlyCount": 3,
       "unmappedMatchKeys": [
@@ -243,7 +247,9 @@
       "targetedResolvedCount": 0,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
       "manualOnlyCount": 3,
       "unmappedMatchKeys": [
@@ -291,7 +297,9 @@
       "targetedResolvedCount": 0,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
       "manualOnlyCount": 3,
       "unmappedMatchKeys": [
@@ -354,7 +362,15 @@
       "targetedResolvedCount": 2,
       "targetedUnresolvedCount": 4,
       "autoUnresolvedCount": 1,
+      "autoUnresolvedChecks": [
+        "format.justify.body"
+      ],
       "assistedUnresolvedCount": 3,
+      "assistedUnresolvedChecks": [
+        "citation.author-year.missing-reference",
+        "reference.uncited",
+        "structure.sections.profile"
+      ],
       "awaitingConfirmationCount": 0,
       "manualOnlyCount": 4,
       "unmappedMatchKeys": [
@@ -412,7 +428,11 @@
       "targetedResolvedCount": 2,
       "targetedUnresolvedCount": 1,
       "autoUnresolvedCount": 1,
+      "autoUnresolvedChecks": [
+        "format.size.body"
+      ],
       "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
       "manualOnlyCount": 4,
       "unmappedMatchKeys": [],
@@ -471,7 +491,9 @@
       "targetedResolvedCount": 4,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
       "manualOnlyCount": 5,
       "unmappedMatchKeys": [
@@ -531,7 +553,9 @@
       "targetedResolvedCount": 0,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
       "manualOnlyCount": 0,
       "unmappedMatchKeys": [
@@ -587,7 +611,9 @@
       "targetedResolvedCount": 0,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
       "manualOnlyCount": 2,
       "unmappedMatchKeys": [
@@ -638,7 +664,9 @@
       "targetedResolvedCount": 0,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
       "manualOnlyCount": 1,
       "unmappedMatchKeys": [
@@ -690,7 +718,9 @@
       "targetedResolvedCount": 0,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
       "manualOnlyCount": 1,
       "unmappedMatchKeys": [
@@ -754,7 +784,12 @@
       "targetedResolvedCount": 4,
       "targetedUnresolvedCount": 2,
       "autoUnresolvedCount": 2,
+      "autoUnresolvedChecks": [
+        "footnote.format",
+        "format.justify.body"
+      ],
       "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
       "manualOnlyCount": 4,
       "unmappedMatchKeys": [
@@ -821,7 +856,9 @@
       "targetedResolvedCount": 5,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
       "manualOnlyCount": 6,
       "unmappedMatchKeys": [
@@ -875,7 +912,9 @@
       "targetedResolvedCount": 0,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
+      "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
       "manualOnlyCount": 2,
       "unmappedMatchKeys": [
@@ -943,7 +982,14 @@
       "targetedResolvedCount": 4,
       "targetedUnresolvedCount": 3,
       "autoUnresolvedCount": 1,
+      "autoUnresolvedChecks": [
+        "page.numbers.present"
+      ],
       "assistedUnresolvedCount": 2,
+      "assistedUnresolvedChecks": [
+        "reference.uncited",
+        "structure.sections.profile"
+      ],
       "awaitingConfirmationCount": 0,
       "manualOnlyCount": 6,
       "unmappedMatchKeys": [
@@ -1013,7 +1059,11 @@
       "targetedResolvedCount": 4,
       "targetedUnresolvedCount": 1,
       "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 1,
+      "assistedUnresolvedChecks": [
+        "structure.sections.profile"
+      ],
       "awaitingConfirmationCount": 0,
       "manualOnlyCount": 9,
       "unmappedMatchKeys": [
@@ -1053,6 +1103,12 @@
     "targetedCheckCount": 36,
     "targetedResolvedCount": 25,
     "autoUnresolvedCount": 5,
+    "autoUnresolvedChecks": [
+      "footnote.format",
+      "format.justify.body",
+      "format.size.body",
+      "page.numbers.present"
+    ],
     "assistedUnresolvedCount": 6,
     "awaitingConfirmationCount": 0,
     "manualOnlyCount": 56
