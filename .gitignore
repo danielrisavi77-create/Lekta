@@ -83,3 +83,9 @@ vite.dev-preflight.config.mts
 tests/fixtures/docx-local/
 docs/generated/repair-real-corpus.local.json
 docs/generated/coverage-cells.local.json
+
+# Git worktreeovi paralelnih sesija koji stoje u KORIJENU repozitorija (ne pod
+# .claude/worktrees/). Nisu dio izvora ovog stabla, a dok nisu ignorirani zagaduju alate
+# koji hodaju stablom: oxlint je na njima nalazio errore i rusio `npm run check`, a vitest
+# je kolektirao njihove test datoteke (mjereno: 810 umjesto 410).
+visual-system-v2/

@@ -13,5 +13,5 @@
     "no-unused-vars": "off",
     "no-unused-expressions": "off"
   },
-  "ignorePatterns": ["dist/**", "dist-packs/**", "node_modules/**", "data/**", "docs/**", "public/**"]
+  "ignorePatterns": ["dist/**", "dist-packs/**", "node_modules/**", "data/**", "docs/**", "public/**", ".claude/**", "visual-system-v2/**"]
 }
