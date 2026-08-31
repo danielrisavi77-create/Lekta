@@ -12,8 +12,8 @@
     "uncoveredCount": 8248,
     "resolvedCount": 1877,
     "byReason": {
-      "profil-ne-propisuje-os": 5923,
-      "univerzalna-higijena-bez-dokaza": 1068,
+      "profil-ne-propisuje-os": 6326,
+      "univerzalna-higijena-bez-dokaza": 665,
       "closed-loop-nije-rijesio": 0,
       "nema-dokaza": 36,
       "ceka-ljudski-odabir": 407,
@@ -102,7 +102,7 @@
       "profileId": "fpzg-politologija-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpzg-politologija-zavrsni",
@@ -372,7 +372,7 @@
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
@@ -603,7 +603,7 @@
       "profileId": "fpzg-novinarstvo-zavrsni-av",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-av",
@@ -853,7 +853,7 @@
       "profileId": "fpzg-politologija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpzg-politologija-diplomski",
@@ -1118,7 +1118,7 @@
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
@@ -1378,7 +1378,7 @@
       "profileId": "fpzg-novinarstvo-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpzg-novinarstvo-diplomski",
@@ -1653,7 +1653,7 @@
       "profileId": "fpzg-mes-master-thesis",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpzg-mes-master-thesis",
@@ -1928,7 +1928,7 @@
       "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
@@ -2188,7 +2188,7 @@
       "profileId": "fpzg-specijalisticki-prilagodba-eu",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpzg-specijalisticki-prilagodba-eu",
@@ -2448,7 +2448,7 @@
       "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
@@ -2708,7 +2708,7 @@
       "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
@@ -2968,7 +2968,7 @@
       "profileId": "fpzg-doktorski-politologija",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpzg-doktorski-politologija",
@@ -3211,7 +3211,7 @@
       "profileId": "fpzg-opci-akademski-rad",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
@@ -3461,7 +3461,7 @@
       "profileId": "pravo-integrirani-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravo-integrirani-diplomski",
@@ -3741,7 +3741,7 @@
       "profileId": "pravo-javna-uprava-prijediplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
@@ -3996,7 +3996,7 @@
       "profileId": "pravo-javna-uprava-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravo-javna-uprava-diplomski",
@@ -4251,7 +4251,7 @@
       "profileId": "pravo-porezni-prijediplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravo-porezni-prijediplomski",
@@ -5279,7 +5279,7 @@
       "profileId": "pravo-opci-pravni-akademski-rad",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
@@ -5522,7 +5522,7 @@
       "profileId": "pravo-socijalni-opci-akademski-rad",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravo-socijalni-opci-akademski-rad",
@@ -5772,7 +5772,7 @@
       "profileId": "pravo-specijalisticki-pravni-opci",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravo-specijalisticki-pravni-opci",
@@ -6022,7 +6022,7 @@
       "profileId": "pravo-doktorski-pravne-znanosti",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravo-doktorski-pravne-znanosti",
@@ -6265,7 +6265,7 @@
       "profileId": "pravo-socijalne-djelatnosti-specijalisticki",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravo-socijalne-djelatnosti-specijalisticki",
@@ -6513,7 +6513,7 @@
       "profileId": "pravo-socijalne-djelatnosti-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravo-socijalne-djelatnosti-doktorski",
@@ -6760,7 +6760,7 @@
       "profileId": "agr-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "agr-diplomski",
@@ -7007,7 +7007,7 @@
       "profileId": "agr-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "agr-zavrsni",
@@ -7254,7 +7254,7 @@
       "profileId": "agr-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "agr-doktorski",
@@ -7508,7 +7508,7 @@
       "profileId": "efzg-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efzg-zavrsni",
@@ -7769,7 +7769,7 @@
       "profileId": "efzg-specijalisticki",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efzg-specijalisticki",
@@ -8023,7 +8023,7 @@
       "profileId": "efzg-strucni-racunovodstvo",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efzg-strucni-racunovodstvo",
@@ -8272,7 +8272,7 @@
       "profileId": "efzg-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efzg-diplomski",
@@ -8520,7 +8520,7 @@
       "profileId": "fsb-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fsb-diplomski",
@@ -8763,7 +8763,7 @@
       "profileId": "fsb-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fsb-zavrsni",
@@ -9006,7 +9006,7 @@
       "profileId": "fer-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fer-diplomski",
@@ -9254,7 +9254,7 @@
       "profileId": "fer-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fer-zavrsni",
@@ -9504,7 +9504,7 @@
       "profileId": "mef-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "mef-diplomski",
@@ -9758,7 +9758,7 @@
       "profileId": "vef-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vef-diplomski",
@@ -10012,7 +10012,7 @@
       "profileId": "kif-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "kif-diplomski",
@@ -10267,7 +10267,7 @@
       "profileId": "sumfak-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "sumfak-diplomski",
@@ -10522,7 +10522,7 @@
       "profileId": "sumfak-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "sumfak-zavrsni",
@@ -10776,7 +10776,7 @@
       "profileId": "ttf-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ttf-diplomski",
@@ -11030,7 +11030,7 @@
       "profileId": "ttf-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ttf-zavrsni",
@@ -11277,7 +11277,7 @@
       "profileId": "grad-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "grad-diplomski",
@@ -11524,7 +11524,7 @@
       "profileId": "grad-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "grad-zavrsni",
@@ -11757,7 +11757,7 @@
       "profileId": "ffzg-informacijske-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffzg-informacijske-zavrsni",
@@ -12011,7 +12011,7 @@
       "profileId": "ffzg-filozofija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffzg-filozofija-diplomski",
@@ -12265,7 +12265,7 @@
       "profileId": "pmf-geografija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pmf-geografija-diplomski",
@@ -12514,7 +12514,7 @@
       "profileId": "fbf-specijalisticki",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fbf-specijalisticki",
@@ -12763,7 +12763,7 @@
       "profileId": "sfzg-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "sfzg-diplomski",
@@ -13010,7 +13010,7 @@
       "profileId": "fpz-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpz-zavrsni",
@@ -13257,7 +13257,7 @@
       "profileId": "fpz-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpz-diplomski",
@@ -13483,7 +13483,7 @@
       "profileId": "geof-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "geof-diplomski",
@@ -13709,7 +13709,7 @@
       "profileId": "geof-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "geof-doktorski",
@@ -13970,7 +13970,7 @@
       "profileId": "grf-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "grf-zavrsni",
@@ -14210,7 +14210,7 @@
       "profileId": "erf-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "erf-diplomski",
@@ -14471,7 +14471,7 @@
       "profileId": "ufzg-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ufzg-zavrsni",
@@ -14732,7 +14732,7 @@
       "profileId": "ufzg-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ufzg-diplomski",
@@ -14958,7 +14958,7 @@
       "profileId": "arh-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "arh-diplomski",
@@ -15198,7 +15198,7 @@
       "profileId": "fkit-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fkit-diplomski",
@@ -15433,7 +15433,7 @@
       "profileId": "fkit-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fkit-zavrsni",
@@ -15675,7 +15675,7 @@
       "profileId": "pbf-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pbf-diplomski",
@@ -15929,7 +15929,7 @@
       "profileId": "ffrz-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffrz-diplomski",
@@ -16183,7 +16183,7 @@
       "profileId": "ffrz-bakalaureatski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffrz-bakalaureatski",
@@ -16437,7 +16437,7 @@
       "profileId": "fhs-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fhs-diplomski",
@@ -16691,7 +16691,7 @@
       "profileId": "fhs-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fhs-zavrsni",
@@ -16945,7 +16945,7 @@
       "profileId": "kbf-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "kbf-zavrsni",
@@ -17199,7 +17199,7 @@
       "profileId": "kbf-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "kbf-diplomski",
@@ -17432,7 +17432,7 @@
       "profileId": "alu-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "alu-diplomski",
@@ -17653,7 +17653,7 @@
       "profileId": "muza-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "muza-diplomski",
@@ -17902,7 +17902,7 @@
       "profileId": "ffzg-psihologija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffzg-psihologija-diplomski",
@@ -18156,7 +18156,7 @@
       "profileId": "ffzg-sociologija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffzg-sociologija-diplomski",
@@ -18410,7 +18410,7 @@
       "profileId": "ffzg-kroatistika-graduate",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffzg-kroatistika-graduate",
@@ -18664,7 +18664,7 @@
       "profileId": "pmf-biologija-graduate",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pmf-biologija-graduate",
@@ -18913,7 +18913,7 @@
       "profileId": "pmf-fizika-graduate",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pmf-fizika-graduate",
@@ -19155,7 +19155,7 @@
       "profileId": "pmf-matematika-graduate",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pmf-matematika-graduate",
@@ -19409,7 +19409,7 @@
       "profileId": "ffzg-pedagogija-graduate",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffzg-pedagogija-graduate",
@@ -19663,7 +19663,7 @@
       "profileId": "ffzg-lingvistika-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffzg-lingvistika-diplomski",
@@ -19919,7 +19919,7 @@
       "profileId": "ffzg-povijest-umjetnosti-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffzg-povijest-umjetnosti-diplomski",
@@ -20171,7 +20171,7 @@
       "profileId": "ffzg-arheologija-graduate",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffzg-arheologija-graduate",
@@ -20430,7 +20430,7 @@
       "profileId": "ffzg-etnologija-graduate",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffzg-etnologija-graduate",
@@ -20665,7 +20665,7 @@
       "profileId": "pmf-geologija-graduate",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pmf-geologija-graduate",
@@ -20919,7 +20919,7 @@
       "profileId": "fer-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fer-doktorski",
@@ -21173,7 +21173,7 @@
       "profileId": "kif-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "kif-doktorski",
@@ -21637,7 +21637,7 @@
       "profileId": "alu-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "alu-doktorski",
@@ -21886,7 +21886,7 @@
       "profileId": "grf-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "grf-diplomski",
@@ -22141,7 +22141,7 @@
       "profileId": "arh-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "arh-doktorski",
@@ -22391,7 +22391,7 @@
       "profileId": "efzg-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efzg-doktorski",
@@ -22641,7 +22641,7 @@
       "profileId": "erf-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "erf-doktorski",
@@ -22891,7 +22891,7 @@
       "profileId": "fbf-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fbf-doktorski",
@@ -23141,7 +23141,7 @@
       "profileId": "ffrz-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffrz-doktorski",
@@ -23391,7 +23391,7 @@
       "profileId": "fhs-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fhs-doktorski",
@@ -23641,7 +23641,7 @@
       "profileId": "fkit-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fkit-doktorski",
@@ -23891,7 +23891,7 @@
       "profileId": "fsb-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fsb-doktorski",
@@ -24141,7 +24141,7 @@
       "profileId": "grad-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "grad-doktorski",
@@ -24391,7 +24391,7 @@
       "profileId": "grf-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "grf-doktorski",
@@ -24641,7 +24641,7 @@
       "profileId": "kbf-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "kbf-doktorski",
@@ -24891,7 +24891,7 @@
       "profileId": "muza-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "muza-doktorski",
@@ -25141,7 +25141,7 @@
       "profileId": "pbf-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pbf-doktorski",
@@ -25391,7 +25391,7 @@
       "profileId": "sfzg-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "sfzg-doktorski",
@@ -25641,7 +25641,7 @@
       "profileId": "ttf-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ttf-doktorski",
@@ -25891,7 +25891,7 @@
       "profileId": "ufzg-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ufzg-doktorski",
@@ -26141,7 +26141,7 @@
       "profileId": "vef-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vef-doktorski",
@@ -26383,7 +26383,7 @@
       "profileId": "rgnf-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "rgnf-zavrsni",
@@ -26630,7 +26630,7 @@
       "profileId": "rgnf-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "rgnf-diplomski",
@@ -26884,7 +26884,7 @@
       "profileId": "zsem-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "zsem-zavrsni",
@@ -27126,7 +27126,7 @@
       "profileId": "zsem-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "zsem-diplomski",
@@ -27368,7 +27368,7 @@
       "profileId": "libertas-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "libertas-zavrsni",
@@ -27617,7 +27617,7 @@
       "profileId": "libertas-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "libertas-diplomski",
@@ -27873,7 +27873,7 @@
       "profileId": "effectus-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "effectus-zavrsni",
@@ -28129,7 +28129,7 @@
       "profileId": "effectus-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "effectus-diplomski",
@@ -28385,7 +28385,7 @@
       "profileId": "rrif-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "rrif-zavrsni",
@@ -28641,7 +28641,7 @@
       "profileId": "pvzg-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pvzg-zavrsni",
@@ -28897,7 +28897,7 @@
       "profileId": "pvzg-specijalisticki",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pvzg-specijalisticki",
@@ -29139,7 +29139,7 @@
       "profileId": "zvu-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "zvu-zavrsni",
@@ -29381,7 +29381,7 @@
       "profileId": "zvu-specijalisticki",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "zvu-specijalisticki",
@@ -29602,7 +29602,7 @@
       "profileId": "vsite-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vsite-zavrsni",
@@ -29828,7 +29828,7 @@
       "profileId": "vsite-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vsite-diplomski",
@@ -30089,7 +30089,7 @@
       "profileId": "vkjs-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vkjs-zavrsni",
@@ -30345,7 +30345,7 @@
       "profileId": "vkjs-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vkjs-diplomski",
@@ -30601,7 +30601,7 @@
       "profileId": "hks-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "hks-diplomski",
@@ -30857,7 +30857,7 @@
       "profileId": "efri-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efri-zavrsni",
@@ -31113,7 +31113,7 @@
       "profileId": "efri-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efri-diplomski",
@@ -31362,7 +31362,7 @@
       "profileId": "pravri-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravri-zavrsni",
@@ -31611,7 +31611,7 @@
       "profileId": "pravri-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravri-diplomski",
@@ -31867,7 +31867,7 @@
       "profileId": "ffri-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffri-zavrsni",
@@ -32123,7 +32123,7 @@
       "profileId": "ffri-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffri-diplomski",
@@ -32372,7 +32372,7 @@
       "profileId": "pfri-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pfri-zavrsni",
@@ -32621,7 +32621,7 @@
       "profileId": "pfri-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pfri-diplomski",
@@ -32863,7 +32863,7 @@
       "profileId": "medri-farmacija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "medri-farmacija-diplomski",
@@ -33119,7 +33119,7 @@
       "profileId": "fmtu-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fmtu-zavrsni",
@@ -33375,7 +33375,7 @@
       "profileId": "fmtu-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fmtu-diplomski",
@@ -33603,7 +33603,7 @@
       "profileId": "inf-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "inf-zavrsni",
@@ -33831,7 +33831,7 @@
       "profileId": "inf-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "inf-diplomski",
@@ -34080,7 +34080,7 @@
       "profileId": "pmfst-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pmfst-zavrsni",
@@ -34329,7 +34329,7 @@
       "profileId": "pmfst-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pmfst-diplomski",
@@ -34571,7 +34571,7 @@
       "profileId": "fgag-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fgag-zavrsni",
@@ -34813,7 +34813,7 @@
       "profileId": "fgag-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fgag-diplomski",
@@ -35062,7 +35062,7 @@
       "profileId": "efst-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efst-zavrsni",
@@ -35311,7 +35311,7 @@
       "profileId": "efst-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efst-diplomski",
@@ -35567,7 +35567,7 @@
       "profileId": "ktfst-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ktfst-zavrsni",
@@ -35823,7 +35823,7 @@
       "profileId": "ktfst-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ktfst-diplomski",
@@ -36065,7 +36065,7 @@
       "profileId": "pfst-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pfst-zavrsni",
@@ -36307,7 +36307,7 @@
       "profileId": "pfst-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pfst-diplomski",
@@ -36563,7 +36563,7 @@
       "profileId": "mefst-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "mefst-diplomski",
@@ -36812,7 +36812,7 @@
       "profileId": "ferit-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ferit-zavrsni",
@@ -37061,7 +37061,7 @@
       "profileId": "ferit-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ferit-diplomski",
@@ -37317,7 +37317,7 @@
       "profileId": "grafos-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "grafos-zavrsni",
@@ -37573,7 +37573,7 @@
       "profileId": "grafos-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "grafos-diplomski",
@@ -37830,7 +37830,7 @@
       "profileId": "ptfos-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ptfos-diplomski",
@@ -38079,7 +38079,7 @@
       "profileId": "efos-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efos-zavrsni",
@@ -38328,7 +38328,7 @@
       "profileId": "efos-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efos-diplomski",
@@ -38577,7 +38577,7 @@
       "profileId": "pravos-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravos-zavrsni",
@@ -38826,7 +38826,7 @@
       "profileId": "pravos-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravos-diplomski",
@@ -39075,7 +39075,7 @@
       "profileId": "ffos-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffos-zavrsni",
@@ -39324,7 +39324,7 @@
       "profileId": "ffos-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffos-diplomski",
@@ -39580,7 +39580,7 @@
       "profileId": "fazos-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fazos-zavrsni",
@@ -39836,7 +39836,7 @@
       "profileId": "fazos-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fazos-diplomski",
@@ -40092,7 +40092,7 @@
       "profileId": "mefos-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "mefos-zavrsni",
@@ -40348,7 +40348,7 @@
       "profileId": "mefos-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "mefos-diplomski",
@@ -40597,7 +40597,7 @@
       "profileId": "kemos-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "kemos-zavrsni",
@@ -40846,7 +40846,7 @@
       "profileId": "kemos-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "kemos-diplomski",
@@ -41102,7 +41102,7 @@
       "profileId": "unizd-turizam-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-turizam-zavrsni",
@@ -41368,7 +41368,7 @@
       "profileId": "unizd-turizam-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-turizam-diplomski",
@@ -41622,7 +41622,7 @@
       "profileId": "unizd-psihologija-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-psihologija-zavrsni",
@@ -41876,7 +41876,7 @@
       "profileId": "unizd-pedagogija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-pedagogija-diplomski",
@@ -42142,7 +42142,7 @@
       "profileId": "unizd-povijest-umj-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-povijest-umj-zavrsni",
@@ -42396,7 +42396,7 @@
       "profileId": "fetpu-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fetpu-zavrsni",
@@ -42645,7 +42645,7 @@
       "profileId": "fetpu-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fetpu-diplomski",
@@ -42894,7 +42894,7 @@
       "profileId": "tfpu-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "tfpu-zavrsni",
@@ -43143,7 +43143,7 @@
       "profileId": "tfpu-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "tfpu-diplomski",
@@ -43392,7 +43392,7 @@
       "profileId": "foozpu-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "foozpu-zavrsni",
@@ -43641,7 +43641,7 @@
       "profileId": "foozpu-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "foozpu-diplomski",
@@ -43890,7 +43890,7 @@
       "profileId": "unidu-povijest-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unidu-povijest-zavrsni",
@@ -44146,7 +44146,7 @@
       "profileId": "unidu-komunikologija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unidu-komunikologija-diplomski",
@@ -44395,7 +44395,7 @@
       "profileId": "unidu-ekonomija-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unidu-ekonomija-zavrsni",
@@ -44644,7 +44644,7 @@
       "profileId": "unidu-ekonomija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unidu-ekonomija-diplomski",
@@ -44900,7 +44900,7 @@
       "profileId": "unidu-umjetnost-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unidu-umjetnost-diplomski",
@@ -45142,7 +45142,7 @@
       "profileId": "medri-medicina-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "medri-medicina-diplomski",
@@ -45398,7 +45398,7 @@
       "profileId": "fzsri-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fzsri-zavrsni",
@@ -45654,7 +45654,7 @@
       "profileId": "fzsri-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fzsri-diplomski",
@@ -45889,7 +45889,7 @@
       "profileId": "biotech-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "biotech-zavrsni",
@@ -46124,7 +46124,7 @@
       "profileId": "biotech-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "biotech-diplomski",
@@ -46359,7 +46359,7 @@
       "profileId": "fizri-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fizri-zavrsni",
@@ -46594,7 +46594,7 @@
       "profileId": "fizri-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fizri-diplomski",
@@ -46843,7 +46843,7 @@
       "profileId": "ufri-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ufri-diplomski",
@@ -47093,7 +47093,7 @@
       "profileId": "riteh-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "riteh-zavrsni",
@@ -47343,7 +47343,7 @@
       "profileId": "riteh-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "riteh-diplomski",
@@ -47592,7 +47592,7 @@
       "profileId": "kifst-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "kifst-diplomski",
@@ -47828,7 +47828,7 @@
       "profileId": "kbfst-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "kbfst-diplomski",
@@ -48077,7 +48077,7 @@
       "profileId": "unin-tehnicki-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unin-tehnicki-zavrsni",
@@ -48326,7 +48326,7 @@
       "profileId": "unin-tehnicki-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unin-tehnicki-diplomski",
@@ -48575,7 +48575,7 @@
       "profileId": "unin-biomedicina-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unin-biomedicina-zavrsni",
@@ -48824,7 +48824,7 @@
       "profileId": "unin-biomedicina-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unin-biomedicina-diplomski",
@@ -49073,7 +49073,7 @@
       "profileId": "unin-drustveni-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unin-drustveni-zavrsni",
@@ -49322,7 +49322,7 @@
       "profileId": "unin-drustveni-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unin-drustveni-diplomski",
@@ -49578,7 +49578,7 @@
       "profileId": "veleri-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "veleri-zavrsni",
@@ -49834,7 +49834,7 @@
       "profileId": "veleri-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "veleri-diplomski",
@@ -50090,7 +50090,7 @@
       "profileId": "vub-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vub-diplomski",
@@ -50339,7 +50339,7 @@
       "profileId": "mev-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "mev-zavrsni",
@@ -50574,7 +50574,7 @@
       "profileId": "vvg-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vvg-zavrsni",
@@ -50809,7 +50809,7 @@
       "profileId": "vvg-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vvg-diplomski",
@@ -51065,7 +51065,7 @@
       "profileId": "vevu-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vevu-zavrsni",
@@ -51321,7 +51321,7 @@
       "profileId": "vuv-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vuv-zavrsni",
@@ -51577,7 +51577,7 @@
       "profileId": "vuv-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vuv-diplomski",
@@ -51833,7 +51833,7 @@
       "profileId": "veleknin-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "veleknin-zavrsni",
@@ -52075,7 +52075,7 @@
       "profileId": "vhzk-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vhzk-zavrsni",
@@ -52296,7 +52296,7 @@
       "profileId": "dizajn-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "dizajn-diplomski",
@@ -52517,7 +52517,7 @@
       "profileId": "gradri-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "gradri-zavrsni",
@@ -52738,7 +52738,7 @@
       "profileId": "gradri-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "gradri-diplomski",
@@ -52995,7 +52995,7 @@
       "profileId": "ffri-germanistika-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffri-germanistika-zavrsni",
@@ -53252,7 +53252,7 @@
       "profileId": "ffri-germanistika-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffri-germanistika-diplomski",
@@ -53502,7 +53502,7 @@
       "profileId": "ffri-psihologija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffri-psihologija-diplomski",
@@ -53762,7 +53762,7 @@
       "profileId": "ffri-povum-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffri-povum-zavrsni",
@@ -54012,7 +54012,7 @@
       "profileId": "ffri-povum-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffri-povum-diplomski",
@@ -54269,7 +54269,7 @@
       "profileId": "ffri-kulturalni-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffri-kulturalni-diplomski",
@@ -54529,7 +54529,7 @@
       "profileId": "fpzpu-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpzpu-zavrsni",
@@ -54779,7 +54779,7 @@
       "profileId": "fpzpu-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fpzpu-diplomski",
@@ -55029,7 +55029,7 @@
       "profileId": "ffst-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffst-zavrsni",
@@ -55279,7 +55279,7 @@
       "profileId": "ffst-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffst-diplomski",
@@ -55529,7 +55529,7 @@
       "profileId": "fesb-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fesb-zavrsni",
@@ -55779,7 +55779,7 @@
       "profileId": "fesb-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fesb-diplomski",
@@ -56000,7 +56000,7 @@
       "profileId": "pravst-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravst-zavrsni",
@@ -56221,7 +56221,7 @@
       "profileId": "pravst-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravst-diplomski",
@@ -56470,7 +56470,7 @@
       "profileId": "ffos-povijest-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffos-povijest-zavrsni",
@@ -56719,7 +56719,7 @@
       "profileId": "ffos-povijest-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffos-povijest-diplomski",
@@ -56969,7 +56969,7 @@
       "profileId": "ffos-psihologija-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffos-psihologija-zavrsni",
@@ -57226,7 +57226,7 @@
       "profileId": "ffos-psihologija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffos-psihologija-diplomski",
@@ -57469,7 +57469,7 @@
       "profileId": "ffos-informatologija-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffos-informatologija-zavrsni",
@@ -57712,7 +57712,7 @@
       "profileId": "ffos-informatologija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffos-informatologija-diplomski",
@@ -57955,7 +57955,7 @@
       "profileId": "ffos-germanistika-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffos-germanistika-zavrsni",
@@ -58198,7 +58198,7 @@
       "profileId": "ffos-germanistika-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffos-germanistika-diplomski",
@@ -58448,7 +58448,7 @@
       "profileId": "uaos-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "uaos-zavrsni",
@@ -58698,7 +58698,7 @@
       "profileId": "uaos-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "uaos-diplomski",
@@ -58955,7 +58955,7 @@
       "profileId": "fdmz-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fdmz-diplomski",
@@ -59198,7 +59198,7 @@
       "profileId": "foozos-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "foozos-diplomski",
@@ -59448,7 +59448,7 @@
       "profileId": "kbfdj-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "kbfdj-diplomski",
@@ -59698,7 +59698,7 @@
       "profileId": "biolos-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "biolos-zavrsni",
@@ -59948,7 +59948,7 @@
       "profileId": "biolos-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "biolos-diplomski",
@@ -60198,7 +60198,7 @@
       "profileId": "fizos-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fizos-diplomski",
@@ -60419,7 +60419,7 @@
       "profileId": "unizd-kroatistika-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-kroatistika-zavrsni",
@@ -60640,7 +60640,7 @@
       "profileId": "unizd-kroatistika-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-kroatistika-diplomski",
@@ -60861,7 +60861,7 @@
       "profileId": "unizd-ekonomija-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-ekonomija-zavrsni",
@@ -61082,7 +61082,7 @@
       "profileId": "unizd-ekonomija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-ekonomija-diplomski",
@@ -61332,7 +61332,7 @@
       "profileId": "unizd-ekologija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-ekologija-diplomski",
@@ -61582,7 +61582,7 @@
       "profileId": "unizd-ekologija-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-ekologija-zavrsni",
@@ -61849,7 +61849,7 @@
       "profileId": "unizd-etnologija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-etnologija-diplomski",
@@ -62092,7 +62092,7 @@
       "profileId": "unizd-geografija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-geografija-diplomski",
@@ -62328,7 +62328,7 @@
       "profileId": "unizd-zdravstvo-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-zdravstvo-zavrsni",
@@ -62569,7 +62569,7 @@
       "profileId": "unizd-zdravstvo-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-zdravstvo-diplomski",
@@ -62812,7 +62812,7 @@
       "profileId": "unizd-informacijske-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-informacijske-zavrsni",
@@ -63055,7 +63055,7 @@
       "profileId": "unizd-informacijske-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-informacijske-diplomski",
@@ -63312,7 +63312,7 @@
       "profileId": "unizd-arheologija-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-arheologija-zavrsni",
@@ -63569,7 +63569,7 @@
       "profileId": "unizd-arheologija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-arheologija-diplomski",
@@ -63819,7 +63819,7 @@
       "profileId": "unizd-klasicna-filologija-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-klasicna-filologija-zavrsni",
@@ -64069,7 +64069,7 @@
       "profileId": "unizd-klasicna-filologija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-klasicna-filologija-diplomski",
@@ -64305,7 +64305,7 @@
       "profileId": "unizd-filozofija-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-filozofija-zavrsni",
@@ -64541,7 +64541,7 @@
       "profileId": "unizd-filozofija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-filozofija-diplomski",
@@ -64762,7 +64762,7 @@
       "profileId": "unizd-anglistika-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-anglistika-zavrsni",
@@ -64983,7 +64983,7 @@
       "profileId": "unizd-anglistika-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-anglistika-diplomski",
@@ -65233,7 +65233,7 @@
       "profileId": "unizd-germanistika-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-germanistika-zavrsni",
@@ -65483,7 +65483,7 @@
       "profileId": "unizd-germanistika-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-germanistika-diplomski",
@@ -65733,7 +65733,7 @@
       "profileId": "unizd-hispanistika-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-hispanistika-diplomski",
@@ -65969,7 +65969,7 @@
       "profileId": "unizd-francuski-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-francuski-diplomski",
@@ -66218,7 +66218,7 @@
       "profileId": "unizd-povijest-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-povijest-zavrsni",
@@ -66467,7 +66467,7 @@
       "profileId": "unizd-povijest-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-povijest-diplomski",
@@ -66703,7 +66703,7 @@
       "profileId": "unizd-talijanistika-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-talijanistika-diplomski",
@@ -66924,7 +66924,7 @@
       "profileId": "unizd-sociologija-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-sociologija-zavrsni",
@@ -67181,7 +67181,7 @@
       "profileId": "unizd-sociologija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-sociologija-diplomski",
@@ -67402,7 +67402,7 @@
       "profileId": "unizd-lingvistika-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-lingvistika-zavrsni",
@@ -67623,7 +67623,7 @@
       "profileId": "unizd-lingvistika-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-lingvistika-diplomski",
@@ -67844,7 +67844,7 @@
       "profileId": "unizd-rusistika-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-rusistika-diplomski",
@@ -68094,7 +68094,7 @@
       "profileId": "unizd-pomorski-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-pomorski-zavrsni",
@@ -68344,7 +68344,7 @@
       "profileId": "unizd-pomorski-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-pomorski-diplomski",
@@ -68601,7 +68601,7 @@
       "profileId": "unizd-ucitelji-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-ucitelji-diplomski",
@@ -68851,7 +68851,7 @@
       "profileId": "unizd-psihologija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-psihologija-diplomski",
@@ -69108,7 +69108,7 @@
       "profileId": "unizd-povijest-umj-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-povijest-umj-diplomski",
@@ -69356,7 +69356,7 @@
       "profileId": "unidu-marikultura-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unidu-marikultura-diplomski",
@@ -69606,7 +69606,7 @@
       "profileId": "unidu-sestrinstvo-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unidu-sestrinstvo-zavrsni",
@@ -69863,7 +69863,7 @@
       "profileId": "unidu-komunikologija-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unidu-komunikologija-zavrsni",
@@ -70120,7 +70120,7 @@
       "profileId": "unidu-umjetnost-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unidu-umjetnost-zavrsni",
@@ -70341,7 +70341,7 @@
       "profileId": "unidu-elektro-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unidu-elektro-zavrsni",
@@ -70562,7 +70562,7 @@
       "profileId": "unidu-elektro-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unidu-elektro-diplomski",
@@ -70819,7 +70819,7 @@
       "profileId": "vub-zavrsni-tehnicki",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vub-zavrsni-tehnicki",
@@ -71076,7 +71076,7 @@
       "profileId": "vub-zavrsni-sestrinstvo",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vub-zavrsni-sestrinstvo",
@@ -71333,7 +71333,7 @@
       "profileId": "mev-zavrsni-drustveni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "mev-zavrsni-drustveni",
@@ -71590,7 +71590,7 @@
       "profileId": "mev-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "mev-diplomski",
@@ -71847,7 +71847,7 @@
       "profileId": "vevu-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vevu-diplomski",
@@ -72097,7 +72097,7 @@
       "profileId": "veleknin-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "veleknin-diplomski",
@@ -72340,7 +72340,7 @@
       "profileId": "vus-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vus-zavrsni",
@@ -72583,7 +72583,7 @@
       "profileId": "vus-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vus-diplomski",
@@ -72840,7 +72840,7 @@
       "profileId": "bak-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "bak-zavrsni",
@@ -73097,7 +73097,7 @@
       "profileId": "bak-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "bak-diplomski",
@@ -73347,7 +73347,7 @@
       "profileId": "vguk-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vguk-zavrsni",
@@ -73597,7 +73597,7 @@
       "profileId": "vguk-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vguk-diplomski",
@@ -73847,7 +73847,7 @@
       "profileId": "aspira-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "aspira-zavrsni",
@@ -74097,7 +74097,7 @@
       "profileId": "aspira-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "aspira-diplomski",
@@ -74318,7 +74318,7 @@
       "profileId": "par-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "par-zavrsni",
@@ -74539,7 +74539,7 @@
       "profileId": "par-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "par-diplomski",
@@ -74796,7 +74796,7 @@
       "profileId": "vss-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vss-zavrsni",
@@ -75053,7 +75053,7 @@
       "profileId": "vss-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vss-diplomski",
@@ -75288,7 +75288,7 @@
       "profileId": "vuka-poslovni-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vuka-poslovni-zavrsni",
@@ -75523,7 +75523,7 @@
       "profileId": "vuka-poslovni-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vuka-poslovni-diplomski",
@@ -75744,7 +75744,7 @@
       "profileId": "vuka-strojarski-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vuka-strojarski-zavrsni",
@@ -75965,7 +75965,7 @@
       "profileId": "vuka-strojarski-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vuka-strojarski-diplomski",
@@ -76201,7 +76201,7 @@
       "profileId": "vuka-sigurnost-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vuka-sigurnost-zavrsni",
@@ -76437,7 +76437,7 @@
       "profileId": "vuka-sigurnost-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vuka-sigurnost-diplomski",
@@ -76673,7 +76673,7 @@
       "profileId": "vuka-prehrambena-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vuka-prehrambena-zavrsni",
@@ -76909,7 +76909,7 @@
       "profileId": "vuka-lovstvo-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vuka-lovstvo-zavrsni",
@@ -77152,7 +77152,7 @@
       "profileId": "unisb-sfsb-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unisb-sfsb-zavrsni",
@@ -77395,7 +77395,7 @@
       "profileId": "unisb-sfsb-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unisb-sfsb-diplomski",
@@ -77638,7 +77638,7 @@
       "profileId": "unisb-teho-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unisb-teho-zavrsni",
@@ -77881,7 +77881,7 @@
       "profileId": "unisb-teho-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unisb-teho-diplomski",
@@ -78124,7 +78124,7 @@
       "profileId": "unisb-btho-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unisb-btho-zavrsni",
@@ -78367,7 +78367,7 @@
       "profileId": "unisb-btho-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unisb-btho-diplomski",
@@ -78610,7 +78610,7 @@
       "profileId": "unisb-odhz-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unisb-odhz-zavrsni",
@@ -78853,7 +78853,7 @@
       "profileId": "unisb-odhz-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unisb-odhz-diplomski",
@@ -79103,7 +79103,7 @@
       "profileId": "ftrr-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ftrr-zavrsni",
@@ -79353,7 +79353,7 @@
       "profileId": "ftrr-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ftrr-diplomski",
@@ -79574,7 +79574,7 @@
       "profileId": "adu-gluma-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "adu-gluma-diplomski",
@@ -79795,7 +79795,7 @@
       "profileId": "adu-dramaturgija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "adu-dramaturgija-diplomski",
@@ -80016,7 +80016,7 @@
       "profileId": "adu-snimanje-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "adu-snimanje-diplomski",
@@ -80266,7 +80266,7 @@
       "profileId": "adu-montaza-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "adu-montaza-diplomski",
@@ -80487,7 +80487,7 @@
       "profileId": "adu-ftv-rezija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "adu-ftv-rezija-diplomski",
@@ -80708,7 +80708,7 @@
       "profileId": "adu-produkcija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "adu-produkcija-diplomski",
@@ -80929,7 +80929,7 @@
       "profileId": "adu-kazalisna-rezija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "adu-kazalisna-rezija-diplomski",
@@ -81150,7 +81150,7 @@
       "profileId": "adu-opci-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "adu-opci-diplomski",
@@ -81378,7 +81378,7 @@
       "profileId": "alu-slikarstvo-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "alu-slikarstvo-diplomski",
@@ -81613,7 +81613,7 @@
       "profileId": "alu-kiparstvo-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "alu-kiparstvo-diplomski",
@@ -81834,7 +81834,7 @@
       "profileId": "alu-grafika-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "alu-grafika-diplomski",
@@ -82055,7 +82055,7 @@
       "profileId": "alu-novi-mediji-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "alu-novi-mediji-diplomski",
@@ -82276,7 +82276,7 @@
       "profileId": "alu-nastavnicki-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "alu-nastavnicki-diplomski",
@@ -82533,7 +82533,7 @@
       "profileId": "alu-konzerviranje-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "alu-konzerviranje-diplomski",
@@ -82783,7 +82783,7 @@
       "profileId": "ttf-dizajn-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ttf-dizajn-diplomski",
@@ -83038,7 +83038,7 @@
       "profileId": "ttf-dizajn-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ttf-dizajn-zavrsni",
@@ -83293,7 +83293,7 @@
       "profileId": "pmf-geofizika-graduate",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pmf-geofizika-graduate",
@@ -83543,7 +83543,7 @@
       "profileId": "fsb-opci-akademski-rad",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fsb-opci-akademski-rad",
@@ -83793,7 +83793,7 @@
       "profileId": "efst-opci-akademski-rad",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efst-opci-akademski-rad",
@@ -84043,7 +84043,7 @@
       "profileId": "efos-opci-akademski-rad",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efos-opci-akademski-rad",
@@ -84293,7 +84293,7 @@
       "profileId": "pravri-opci-akademski-rad",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravri-opci-akademski-rad",
@@ -84514,7 +84514,7 @@
       "profileId": "geof-opci-akademski-rad",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "geof-opci-akademski-rad",
@@ -84749,7 +84749,7 @@
       "profileId": "vuka-poslovni-opci-akademski-rad",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vuka-poslovni-opci-akademski-rad",
@@ -84992,7 +84992,7 @@
       "profileId": "foi-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "foi-zavrsni",
@@ -85235,7 +85235,7 @@
       "profileId": "foi-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "foi-diplomski",
@@ -85478,7 +85478,7 @@
       "profileId": "simet-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "simet-zavrsni",
@@ -85728,7 +85728,7 @@
       "profileId": "more-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "more-zavrsni",
@@ -85978,7 +85978,7 @@
       "profileId": "more-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "more-diplomski",
@@ -86228,7 +86228,7 @@
       "profileId": "forenzika-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "forenzika-diplomski",
@@ -86471,7 +86471,7 @@
       "profileId": "ozs-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ozs-zavrsni",
@@ -86714,7 +86714,7 @@
       "profileId": "ozs-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ozs-diplomski",
@@ -86935,7 +86935,7 @@
       "profileId": "umas-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "umas-zavrsni",
@@ -87156,7 +87156,7 @@
       "profileId": "umas-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "umas-diplomski",
@@ -87406,7 +87406,7 @@
       "profileId": "oss-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "oss-zavrsni",
@@ -87656,7 +87656,7 @@
       "profileId": "oss-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "oss-diplomski",
@@ -87906,7 +87906,7 @@
       "profileId": "kifos-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "kifos-zavrsni",
@@ -88156,7 +88156,7 @@
       "profileId": "kifos-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "kifos-diplomski",
@@ -88406,7 +88406,7 @@
       "profileId": "fdmri-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fdmri-zavrsni",
@@ -88656,7 +88656,7 @@
       "profileId": "fdmri-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fdmri-diplomski",
@@ -88906,7 +88906,7 @@
       "profileId": "logri-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "logri-diplomski",
@@ -89156,7 +89156,7 @@
       "profileId": "vnt-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vnt-zavrsni",
@@ -89406,7 +89406,7 @@
       "profileId": "vnt-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vnt-diplomski",
@@ -89649,7 +89649,7 @@
       "profileId": "iv-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "iv-zavrsni",
@@ -89892,7 +89892,7 @@
       "profileId": "iv-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "iv-diplomski",
@@ -90135,7 +90135,7 @@
       "profileId": "vsig-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vsig-zavrsni",
@@ -90378,7 +90378,7 @@
       "profileId": "vsig-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "vsig-diplomski",
@@ -90613,7 +90613,7 @@
       "profileId": "arca-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "arca-zavrsni",
@@ -90856,7 +90856,7 @@
       "profileId": "securus-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "securus-zavrsni",
@@ -91106,7 +91106,7 @@
       "profileId": "evtos-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "evtos-zavrsni",
@@ -91356,7 +91356,7 @@
       "profileId": "evtos-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "evtos-diplomski",
@@ -91606,7 +91606,7 @@
       "profileId": "unizd-tko-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "unizd-tko-diplomski",
@@ -91866,7 +91866,7 @@
       "profileId": "ffpu-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffpu-zavrsni",
@@ -92121,7 +92121,7 @@
       "profileId": "ffpu-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffpu-diplomski",
@@ -92376,7 +92376,7 @@
       "profileId": "fipu-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fipu-zavrsni",
@@ -92631,7 +92631,7 @@
       "profileId": "mfpu-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "mfpu-diplomski",
@@ -92886,7 +92886,7 @@
       "profileId": "mapu-glazbena-pedagogija-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "mapu-glazbena-pedagogija-zavrsni",
@@ -93141,7 +93141,7 @@
       "profileId": "mapu-glazbena-pedagogija-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "mapu-glazbena-pedagogija-diplomski",
@@ -93403,7 +93403,7 @@
       "profileId": "apuri-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "apuri-zavrsni",
@@ -93646,7 +93646,7 @@
       "profileId": "apuri-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "apuri-diplomski",
@@ -93879,7 +93879,7 @@
       "profileId": "math-uniri-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "math-uniri-zavrsni",
@@ -94112,7 +94112,7 @@
       "profileId": "math-uniri-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "math-uniri-diplomski",
@@ -94359,7 +94359,7 @@
       "profileId": "mathos-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "mathos-zavrsni",
@@ -94606,7 +94606,7 @@
       "profileId": "mathos-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "mathos-diplomski",
@@ -94861,7 +94861,7 @@
       "profileId": "algebra-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "algebra-zavrsni",
@@ -95111,7 +95111,7 @@
       "profileId": "algebra-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "algebra-diplomski",
@@ -95361,7 +95361,7 @@
       "profileId": "algebra-diplomski-odnosi-s-javnoscu",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "algebra-diplomski-odnosi-s-javnoscu",
@@ -95611,7 +95611,7 @@
       "profileId": "algebra-specijalisticki",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "algebra-specijalisticki",
@@ -95861,7 +95861,7 @@
       "profileId": "fipu-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "fipu-diplomski",
@@ -96094,7 +96094,7 @@
       "profileId": "math-uniri-diplomski-en",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "math-uniri-diplomski-en",
@@ -96348,7 +96348,7 @@
       "profileId": "zsem-zavrsni-en",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "zsem-zavrsni-en",
@@ -96598,7 +96598,7 @@
       "profileId": "aspira-zavrsni-en",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "aspira-zavrsni-en",
@@ -96848,7 +96848,7 @@
       "profileId": "aspira-diplomski-en",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "aspira-diplomski-en",
@@ -97090,7 +97090,7 @@
       "profileId": "libertas-zavrsni-en",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "libertas-zavrsni-en",
@@ -97339,7 +97339,7 @@
       "profileId": "libertas-diplomski-en",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "libertas-diplomski-en",
@@ -97596,7 +97596,7 @@
       "profileId": "sois-ft-vojno-inzenjerstvo-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "sois-ft-vojno-inzenjerstvo-zavrsni",
@@ -97853,7 +97853,7 @@
       "profileId": "sois-ft-vojno-inzenjerstvo-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "sois-ft-vojno-inzenjerstvo-diplomski",
@@ -98110,7 +98110,7 @@
       "profileId": "sois-ft-vojno-vodjenje-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "sois-ft-vojno-vodjenje-zavrsni",
@@ -98367,7 +98367,7 @@
       "profileId": "sois-ft-vojno-vodjenje-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "sois-ft-vojno-vodjenje-diplomski",
@@ -98624,7 +98624,7 @@
       "profileId": "sois-ft-vojno-pomorstvo-diplomski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "sois-ft-vojno-pomorstvo-diplomski",
@@ -98881,7 +98881,7 @@
       "profileId": "ffri-kroatistika-zavrsni",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "ffri-kroatistika-zavrsni",
@@ -99130,7 +99130,7 @@
       "profileId": "efos-doktorski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efos-doktorski",
@@ -99379,7 +99379,7 @@
       "profileId": "efos-specijalisticki",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efos-specijalisticki",
@@ -99614,7 +99614,7 @@
       "profileId": "efzg-seminarski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "efzg-seminarski",
@@ -99863,7 +99863,7 @@
       "profileId": "kif-specijalisticki",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "kif-specijalisticki",
@@ -100112,7 +100112,7 @@
       "profileId": "pravri-specijalisticki",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravri-specijalisticki",
@@ -100368,7 +100368,7 @@
       "profileId": "effectus-seminarski",
       "fixerId": "section-insert-fixer",
       "status": "nepokriveno",
-      "reason": "univerzalna-higijena-bez-dokaza"
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "effectus-seminarski",

@@ -182,6 +182,14 @@ const PROFILE_GATE: Record<string, (profile: Record<string, unknown>) => boolean
    * dokaz zato prati istu zastavicu kao `page-numbering-fixer`.
    */
   'footer-page-fixer': (p) => p?.checkPageNumberStartAtIntro === true,
+  /**
+   * `section-insert-fixer` nudi `introSectionRepairableItem`, koji uz feature zastavicu
+   * (`SECTION_INSERT_LIVE`, danas upaljena) trazi i `profile?.checkPageNumberStartAtIntro !== true
+   * -> return []`. Dakle TRECI fixer koji visi o istoj zastavici, uz `page-numbering` i
+   * `footer-page`. Provjereno mjerenjem: na profilu bez te zastavice stavka se ne pojavljuje ni uz
+   * `includeNonViolated`, iako dokument ima tocno jednu sekciju, sto je drugi njegov uvjet.
+   */
+  'section-insert-fixer': (p) => p?.checkPageNumberStartAtIntro === true,
   // `pageNumberAlignment` ima 3 profila od 407 (`if (!profile?.pageNumberAlignment) return []`).
   'page-number-alignment-fixer': (p) => Boolean(p?.pageNumberAlignment),
   'heading-case-fixer': (p) => {
