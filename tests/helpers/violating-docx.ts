@@ -36,6 +36,7 @@
  */
 import { buildDocx, type DocSpec, type ParaSpec } from './docx-builder';
 import { paramsForCheck } from '../../src/ui/repair-items';
+import { missingRequiredSectionLabels, type RequiredSectionProfileEntry, type RequiredSectionRules } from '../../src/analysis/required-sections-structure';
 
 /** Osi koje profilna grana popravka pokriva; sve ostalo ovaj generator namjerno ne dira. */
 export const VIOLATABLE_CHECK_IDS = ['font', 'font-size', 'line-spacing', 'justify', 'margins', 'paper-size'] as const;
@@ -328,14 +329,19 @@ export async function buildViolatingDocx(
      * kao dokaz koji se ne moze ne dogoditi.
      */
     if (wants(structural, 'required-section')) {
-      const required = ((profile as { effectiveRules?: { requiredSections?: unknown }; requiredSections?: unknown } | null)?.effectiveRules?.requiredSections
-        ?? (profile as { requiredSections?: unknown } | null)?.requiredSections) as Array<{ label?: unknown }> | undefined;
-      const present = new Set(paragraphs.map((item) => String((item as { text?: unknown }).text ?? '').trim().toLowerCase()).filter(Boolean));
-      const missing = (Array.isArray(required) ? required : []).filter((entry) => {
-        const label = String(entry?.label ?? '').trim().toLowerCase();
-        return label.length > 0 && !present.has(label);
-      });
-      if (missing.length) violated.push('required-section');
+      /**
+       * Ista logika koju izvodi ANALIZA (`missingRequiredSectionLabels`), a ne vlastita usporedba.
+       *
+       * Do 2026-08-31 je ovdje stajala doslovna jednakost cijelog odlomka, pa je os prijavljivala
+       * prekrsaj i kad dio postoji: nije se filtriralo `required: false`, oznaka se nije mapirala u
+       * `kind`, zanemarivali su se `terms`/`aliases` i oznaka pregazena preko `rules.labels`.
+       * Jedan izvor istine uklanja sva cetiri smjera razilazenja odjednom.
+       */
+      const rules = (profile as { effectiveRules?: { requiredSections?: unknown; requiredSectionRules?: unknown }; requiredSections?: unknown; requiredSectionRules?: unknown } | null);
+      const required = (rules?.effectiveRules?.requiredSections ?? rules?.requiredSections) as RequiredSectionProfileEntry[] | undefined;
+      const sectionRules = (rules?.effectiveRules?.requiredSectionRules ?? rules?.requiredSectionRules) as RequiredSectionRules | undefined;
+      const headingTexts = paragraphs.map((item) => String((item as { text?: unknown }).text ?? '')).filter(Boolean);
+      if (missingRequiredSectionLabels(headingTexts, required, sectionRules).length) violated.push('required-section');
     }
 
     /**

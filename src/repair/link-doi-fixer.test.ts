@@ -242,4 +242,53 @@ describe('link DOI fixer', () => {
       expect(result.parts.documentXml).toBe(doc(LINE));
     });
   });
+
+  /**
+   * F9 (2026-08-31), nalaz neovisnog pregleda: dvije operacije nad ISTIM nalazom obarale su cijeli
+   * popravak. Graditelj emitira po jednu operaciju za svaki `safeOperation`, a sve dijele
+   * `start`/`end` svojega nalaza; provjera preklapanja (`end > start`) je za identicne raspone bila
+   * uvijek istinita, pa je vracala `invalid-params` i gasila SVE poveznice u dokumentu, ne samo tu.
+   */
+  describe('ista meta nije preklapanje', () => {
+    const TEXT = 'Vidi doi:10.1/a i drugi doi:10.2/b u popisu.';
+    const xml =
+      '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>' +
+      `<w:p><w:r><w:t>${TEXT}</w:t></w:r></w:p>` +
+      '</w:body></w:document>';
+    const partsOf = () => ({ documentXml: xml, stylesXml: '', documentRelsXml: '<Relationships></Relationships>' });
+    const at = (needle: string) => ({ start: TEXT.indexOf(needle), end: TEXT.indexOf(needle) + needle.length });
+    const build = (id: string, needle: string, action: 'make-hyperlink' | 'remove-tracking') => {
+      const { start, end } = at(needle);
+      return {
+        id, part: 'word/document.xml' as const, paragraphIndex: 1, start, end,
+        anchorFingerprint: extractBodyParagraphs(xml)[0].fingerprint, before: needle,
+        replacementText: `https://doi.org/${needle.replace('doi:', '')}`,
+        targetUrl: `https://doi.org/${needle.replace('doi:', '')}`,
+        action, confirmed: true as const,
+      };
+    };
+
+    it('dvije operacije nad istim nalazom ne obaraju ostale poveznice', () => {
+      const params: LinkDoiFixParams = {
+        version: 1,
+        operations: [
+          build('a1', 'doi:10.1/a', 'make-hyperlink'),
+          build('a2', 'doi:10.1/a', 'remove-tracking'),
+          build('b1', 'doi:10.2/b', 'make-hyperlink'),
+        ],
+      };
+      const result = linkDoiFixer(partsOf(), params);
+      expect(result.reason, 'ista meta se rjesava zauzimanjem, ne odbacivanjem cijelog zahtjeva').not.toBe('invalid-params');
+      expect(result.applied).toBe(true);
+    });
+
+    it('NEGATIVNA KONTROLA: stvarno DJELOMICNO preklapanje se i dalje odbija', () => {
+      const first = build('x', 'doi:10.1/a', 'make-hyperlink');
+      const params: LinkDoiFixParams = {
+        version: 1,
+        operations: [first, { ...first, id: 'y', start: first.start + 2, end: first.end + 2 }],
+      };
+      expect(linkDoiFixer(partsOf(), params).reason).toBe('invalid-params');
+    });
+  });
 });

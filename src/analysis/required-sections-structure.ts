@@ -156,6 +156,43 @@ function findAnchor(index: number, paragraphs: ParagraphLike[], ranges: ReturnTy
   return range ? { paragraphIndex: fallback!.index, anchorFingerprint: range.fingerprint, anchorText: paragraphTextOf(range.xml), position: fallback!.index >= index ? 'before' : 'after' } : undefined;
 }
 
+/**
+ * Propisani dijelovi kojih NEMA medju zadanim naslovima.
+ *
+ * Postoji da bi generator krsenja i analiza koristili ISTU logiku. Do 2026-08-31 je generator imao
+ * vlastitu usporedbu (doslovna jednakost cijelog odlomka), pa je os `required-section` prijavljivao
+ * i kad dio postoji. Neovisni pregled je nabrojao cetiri smjera razilazenja: nije se filtriralo
+ * `required: false`, oznaka se nije mapirala u `kind` (pa su prolazile i oznake koje analiza ne
+ * poznaje), zanemarivali su se `terms`/`aliases`, i ignorirala se oznaka pregazena preko
+ * `rules.labels`. Rezultat je bila os koja PREKOMJERNO prijavljuje prekrsaj prema putu koji
+ * proizvod stvarno izvodi.
+ *
+ * Vraca oznake radi dijagnostike; pozivatelju je obicno dovoljna duljina.
+ */
+export function missingRequiredSectionLabels(
+  headingTexts: readonly string[],
+  profileRequiredSections: RequiredSectionProfileEntry[] | undefined,
+  rules?: RequiredSectionRules,
+): string[] {
+  const profileMap = new Map<RequiredSectionKind, RequiredSectionProfileEntry>();
+  for (const entry of profileRequiredSections ?? []) {
+    const kind = kindForKey(entry.key ?? entry.label);
+    if (kind && !profileMap.has(kind)) profileMap.set(kind, entry);
+  }
+  const normalizedHeadings = headingTexts.map((text) => normalize(text));
+  const missing: string[] = [];
+  for (const kind of defaultOrder(profileRequiredSections)) {
+    const { label, aliases } = labelAliases(kind, rules, profileMap.get(kind));
+    const normalized = aliases.map(normalize);
+    const found = normalizedHeadings.some((text) => {
+      const bare = withoutLeadingNumber(text);
+      return normalized.some((alias) => text === alias || text.startsWith(`${alias} `) || bare === alias || bare.startsWith(`${alias} `));
+    });
+    if (!found) missing.push(label);
+  }
+  return missing;
+}
+
 export function analyzeRequiredSectionsStructure(input: {
   documentXml: string;
   paragraphs: ParagraphLike[];

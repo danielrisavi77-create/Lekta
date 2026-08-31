@@ -170,8 +170,26 @@ export function linkDoiFixer(parts: DocxXmlParts, params: LinkDoiFixParams): Fix
       || (typeof operation.anchorText === 'string' && operation.anchorText.length > 0 && operation.anchorText === rangeText && textOccurrences === 1);
     if (!operations.every(anchorOk)) return noOp(parts, 'stale-anchor');
     if (PROTECTED.test(range.xml)) return noOp(parts, 'unsupported-structure');
+    /**
+     * Odbija se PREKLAPANJE, ne ista meta.
+     *
+     * Graditelj emitira po jednu operaciju za svaki `safeOperation`, a sve dijele `start`/`end`
+     * svojega nalaza: URL s tracking parametrima dobiva `make-hyperlink` + `remove-tracking`,
+     * URL s prijelomom `make-hyperlink` + `repair-spacing`. Sucelje ih nudi kao dva neovisna,
+     * smislena izbora.
+     *
+     * Do 2026-08-31 je uvjet `end > start` za identicne raspone bio UVIJEK istinit, pa je takav
+     * par vracao `invalid-params` i time obarao CIJELI popravak, ukljucujuci sve ostale poveznice
+     * u dokumentu. Ista meta se rjesava zauzimanjem (`claimedRanges`): prva prolazi, ostale se
+     * preskacu bez traga.
+     */
     const sorted = [...operations].sort((a, b) => b.start - a.start);
-    for (let i = 1; i < sorted.length; i++) if (sorted[i].end > sorted[i - 1].start) return noOp(parts, 'invalid-params');
+    for (let i = 1; i < sorted.length; i++) {
+      const current = sorted[i];
+      const previous = sorted[i - 1];
+      if (current.start === previous.start && current.end === previous.end) continue;
+      if (current.end > previous.start) return noOp(parts, 'invalid-params');
+    }
   }
   let documentXml = parts.documentXml;
   let rels = parts.documentRelsXml ?? parts.packageXmlParts?.['word/_rels/document.xml.rels'] ?? '';
@@ -237,8 +255,10 @@ export function linkDoiFixer(parts: DocxXmlParts, params: LinkDoiFixParams): Fix
       const visible = operation.replacementText ?? oldText;
       if (parent?.id) {
         const nextRun = runWithText(partsOfRun.rPr, `${beforeText}${visible}${afterText}`);
-        replacement = paragraphXml.slice(parent.start, run.start) + nextRun + paragraphXml.slice(run.end, parent.end);
-        replacements.push({ start: range.start + parent.start, end: range.start + parent.end, value: paragraphXml.slice(parent.start, run.start) + nextRun + paragraphXml.slice(run.end, parent.end) });
+        // Jedan izraz, jednom: isti sadrzaj se prije racunao dvaput (jednom u `replacement`, koji
+        // se potom nikad nije koristio), pa je izgledalo kao da ta grana ima dva razlicita ishoda.
+        const withinParent = paragraphXml.slice(parent.start, run.start) + nextRun + paragraphXml.slice(run.end, parent.end);
+        replacements.push({ start: range.start + parent.start, end: range.start + parent.end, value: withinParent });
         continue;
       }
       const targetRun = runWithText(partsOfRun.rPr, visible);

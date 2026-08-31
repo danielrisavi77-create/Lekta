@@ -133,6 +133,44 @@ const AXIS_CHECK_ID: Record<string, string> = {
  * koja jos nije ozicena.
  */
 /**
+ * Mjerljiv signal osi: koliko je njezinih nalaza jos u dokumentu.
+ *
+ * Sluzi da `applied` bude MJEREN, a ne samoiskaz fixera. Changelog dokazuje samo "neki fixer s tim
+ * id-em vratio je `applied: true`", a `apply-fixers` taj zapis gura na temelju zastavice, bez
+ * usporedbe bajtova. Najjasniji protuprimjer je `final-document-inspector-fixer`, koji `changed`
+ * postavlja iz sest neovisnih grana (revizije, `updateFields`, rsid-ovi, customXml, metapodaci),
+ * pa bi os `revision-metadata` mogla dobiti dokaz uz NULA uklonjenih rsid-ova.
+ *
+ * `undefined` znaci da analiza za tu os ne nudi brojku. Takva os ostaje na slabijem, changelog
+ * pravilu i to se ovdje IMENUJE umjesto da se presuti.
+ */
+const AXIS_SIGNAL: Record<string, ((result: AnalysisLike) => number) | undefined> = {
+  'empty-paragraphs': (r) => Number(r?.details?.measurements?.structure?.emptyParagraphs ?? 0),
+  'croatian-typography': (r) => Number(r?.details?.typographyStructure?.summary?.total ?? 0),
+  /**
+   * Broji PREOSTALI POSAO, ne broj nalaza.
+   *
+   * IZMJERENO 2026-08-31: popravak ne uklanja nalaz nego mu mijenja stanje
+   * (`status: plain-text -> hyperlink-ok`, `safeOperations: 1 -> 0`), pa je ukupan broj nalaza
+   * NEPROMIJENJEN i os bi lazno ispala neprimijenjena. Signal je zato broj nalaza koji jos imaju
+   * sto popraviti.
+   */
+  'link-doi': (r) => (r?.details?.linkDoiStructure?.occurrences ?? []).filter((o) => (o?.safeOperations ?? []).length > 0).length,
+  'required-section': (r) => (r?.details?.requiredSectionsStructure?.candidates ?? []).filter((c) => !c.present).length,
+  // `revision-metadata` nema brojku rsid-ova u analizi; ostaje na changelog pravilu.
+  'revision-metadata': undefined,
+};
+
+type AnalysisLike = {
+  details?: {
+    measurements?: { structure?: { emptyParagraphs?: unknown } };
+    typographyStructure?: { summary?: { total?: unknown } };
+    linkDoiStructure?: { occurrences?: Array<{ safeOperations?: unknown[] }> };
+    requiredSectionsStructure?: { candidates?: Array<{ present?: boolean }> };
+  };
+};
+
+/**
  * `required-section` je ovdje iz DRUGOG razloga nego ostale cetiri, i to treba znati.
  *
  * Ostale nemaju bodovanu provjeru. `required-section` je IMA (`structure.sections.profile`, max 7),
@@ -326,9 +364,14 @@ async function runProfile(profileId: string): Promise<Row> {
      * Isti razred kao "vakuumsko zeleno": dokaz koji se ne moze ne dogoditi nije dokaz.
      */
     const changedFixerIds = new Set(applied.changelog.map((entry) => entry.fixerId));
-    const axesApplied = violated.filter(
-      (axis) => STRUCTURAL_WITHOUT_SCORED_CHECK.has(axis) && changedFixerIds.has(APPLIED_AXIS_FIXER[axis]),
-    );
+    const axesApplied = violated.filter((axis) => {
+      if (!STRUCTURAL_WITHOUT_SCORED_CHECK.has(axis)) return false;
+      if (!changedFixerIds.has(APPLIED_AXIS_FIXER[axis])) return false;
+      const signal = AXIS_SIGNAL[axis];
+      if (!signal) return true;
+      // Dokaz trazi da je signal te osi doista PAO; jednak broj znaci da se nista nije rijesilo.
+      return signal(after as AnalysisLike) < signal(before as AnalysisLike);
+    });
     const axesRemaining = violated.filter(
       (axis) => !axesResolved.includes(axis) && !STRUCTURAL_WITHOUT_SCORED_CHECK.has(axis),
     );

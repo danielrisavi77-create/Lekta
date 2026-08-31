@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { analyzeRequiredSectionsStructure } from './required-sections-structure';
+import { analyzeRequiredSectionsStructure, missingRequiredSectionLabels } from './required-sections-structure';
 
 const doc = (body: string) => `<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}<w:sectPr/></w:body></w:document>`;
 const p = (text: string, style = 'Heading1') => `<w:p><w:pPr><w:pStyle w:val="${style}"/></w:pPr><w:r><w:t>${text}</w:t></w:r></w:p>`;
@@ -93,5 +93,38 @@ describe('required sections structure', () => {
     const result = analyzeRequiredSectionsStructure({ documentXml: doc(p('Uvod')), paragraphs: [{ index: 1, text: 'Uvod', headingLevel: 1 }], rules: { order: ['originality-statement'], labels: { 'originality-statement': 'Izjava' }, contentPolicy: { 'originality-statement': 'verified-statement' }, statementText: { 'originality-statement': 'Službeni tekst.' } } });
     expect(result.candidates[0].verifiedStatement).toBe('Službeni tekst.');
     expect(result.candidates[0].contentPolicy).toBe('verified-statement');
+  });
+});
+
+/**
+ * F8 (2026-08-31), nalaz neovisnog pregleda: generator krsenja imao je VLASTITU usporedbu
+ * (doslovna jednakost cijelog odlomka), pa je os `required-section` prijavljivao prekrsaj i kad
+ * dio postoji. Nabrojana su cetiri smjera razilazenja; ovdje su sva cetiri prikovana nad
+ * ZAJEDNICKOM funkcijom koju od sada koriste i analiza i generator.
+ */
+describe('missingRequiredSectionLabels: jedan izvor istine za generator i analizu', () => {
+  it('preskace dio oznacen s `required: false`', () => {
+    expect(missingRequiredSectionLabels(['Uvod'], [{ key: 'abstract', label: 'Abstract', required: false } as never])).toEqual([]);
+  });
+
+  it('preskace oznaku koju analiza ne poznaje kao `kind`', () => {
+    expect(missingRequiredSectionLabels(['Uvod'], [{ label: 'Zahvala' } as never])).toEqual([]);
+  });
+
+  it('prepoznaje dio preko `terms`/`aliases`, ne samo preko oznake', () => {
+    expect(missingRequiredSectionLabels(['Summary'], [{ key: 'summary-hr', label: 'Sažetak', terms: ['Summary'] } as never])).toEqual([]);
+  });
+
+  it('prepoznaje dio uz pregazenu oznaku iz `rules.labels`', () => {
+    const rules = { labels: { 'summary-hr': 'SAŽETAK RADA' } } as never;
+    expect(missingRequiredSectionLabels(['SAŽETAK RADA'], [{ key: 'summary-hr', label: 'Sažetak' } as never], rules)).toEqual([]);
+  });
+
+  it('NEGATIVNA KONTROLA: dio kojeg doista nema se prijavljuje', () => {
+    expect(missingRequiredSectionLabels(['Uvod'], [{ key: 'abstract', label: 'Abstract' } as never])).toEqual(['Abstract']);
+  });
+
+  it('numeriran naslov se i ovdje priznaje kao postojeci', () => {
+    expect(missingRequiredSectionLabels(['1. Abstract'], [{ key: 'abstract', label: 'Abstract' } as never])).toEqual([]);
   });
 });
