@@ -611,6 +611,21 @@ ModSecurity vraca HTTP 418.
   izmjene i commita, pa tudji rad zavrsi pod tvojom porukom (dogodilo se 2026-08-22, 63 retka).
   Neposredno prije commita PONOVI `git diff --stat -- <putanje>` i usporedi s onim sto si mijenjao.
   Ako je vec uslo, NE prepravljaj povijest dok druga sesija radi: amend joj moze pojesti commit.
+- TA JEDNA NAREDBA NIJE DOVOLJNA. `git diff` usporedjuje RADNO STABLO s INDEKSOM, a `git commit`
+  uzima ono sto je u INDEKSU za tvoje putanje. Kad je stablo IZA HEAD-a (tudji merge je vec usao,
+  a tvoje stablo jos drzi staru stranu) ili kad druga sesija ima nesto stagirano, ta dva pogleda
+  se razilaze. Zato uz nju ide i:
+
+      git diff --cached --stat -- <putanje>
+
+  Izmjereno 2026-08-31, dva puta u istom danu. Prvi put je `git diff -- package.json` pokazao JEDAN
+  dodan redak, a `--cached` je glasio `3 10`: commit je pregazio spojeni `package.json` i izbacio
+  `oxlint` iz `check` te sest skripti. Drugi put je `git diff -- CLAUDE.md AGENTS.md` pokazao NULA
+  razlike, dok je `--cached` prijavio 46 OBRISANIH redaka tvrdih pravila, stagiranih iz druge
+  sesije; da je izostao, to bi brisanje otislo u commit pod tudjom porukom.
+- Koristi `git commit --only <putanje>`, ne `git add <putanje> && git commit`. Drugi oblik commita
+  CIJELI indeks, pa povuce sve sto je druga sesija stagirala. Dogodilo se 2026-08-30: commit od 11
+  datoteka odnio je 32, od cega 21 tudju.
 - U istom stablu pazi i na obrnut smjer: COMMITAN OVISNIK uz NECOMMITANU OVISNOST. Test ili modul
   koji jest u repou trazi simbol koji postoji SAMO u radnom stablu, pa je grana zelena kod tebe a
   crvena na cistom checkoutu. Dogodilo se 2026-08-30 cetiri puta u jednom danu (`buildOutcomeLine`,

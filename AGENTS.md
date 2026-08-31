@@ -303,6 +303,18 @@ Kad vise sesija radi u istom stablu, generator druge sesije zna upasti izmedju i
 i njezin rad zavrsi pod tvojom porukom. Prije commita ponovi `git diff --stat -- <putanje>`.
 Povijest se NE prepravlja dok druga sesija radi u istom stablu.
 
+Ta jedna naredba NIJE dovoljna. `git diff` usporedjuje radno stablo s INDEKSOM, a `git commit`
+uzima ono sto je u INDEKSU. Kad je stablo iza HEAD-a (tudji merge je usao, stablo drzi staru
+stranu) ili kad druga sesija ima nesto stagirano, ta se dva pogleda razilaze, pa uz nju ide i
+`git diff --cached --stat -- <putanje>`. Izmjereno 2026-08-31 dva puta: jednom je `git diff`
+pokazao jedan dodan redak dok je `--cached` glasio `3 10` (commit je izbacio `oxlint` iz `check` i
+sest skripti iz `package.json`), drugi put je `git diff` pokazao NULA razlike dok je `--cached`
+prijavio 46 obrisanih redaka tvrdih pravila iz oba vodica.
+
+Commitaj s `git commit --only <putanje>`, ne `git add <putanje> && git commit`: drugi oblik commita
+CIJELI indeks i povuce sve sto je druga sesija stagirala (2026-08-30: commit od 11 datoteka odnio
+je 32, od cega 21 tudju).
+
 Obrnut smjer je jednako opasan: COMMITAN OVISNIK uz NECOMMITANU OVISNOST. Test koji jest u repou
 trazi simbol koji postoji samo u radnom stablu, pa je grana zelena kod tebe a crvena na cistom
 checkoutu (2026-08-30, cetiri puta u jednom danu). `tsc` to ne hvata, jer `tsconfig.json` ima
