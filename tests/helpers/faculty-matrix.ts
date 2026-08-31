@@ -158,6 +158,7 @@ function summarizeCells(cells: CoverageCellReport['cells']): CoverageCellReport[
     'closed-loop-nije-rijesio': 0,
     'nema-dokaza': 0,
     'ceka-ljudski-odabir': 0,
+    'trazi-ulaz-izvan-dokumenta': 0,
   };
   let covered = 0;
   let resolved = 0;

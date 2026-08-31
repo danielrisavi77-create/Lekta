@@ -93,7 +93,12 @@ export type UncoveredReason =
    * KONSTRUKCIJI. To NIJE rupa u mjerenju nego svojstvo alata, pa se imenuje umjesto da trajno
    * stoji kao dug koji se nikad ne moze zatvoriti.
    */
-  | 'ceka-ljudski-odabir';
+  | 'ceka-ljudski-odabir'
+  /**
+   * Fixer trazi ulaz koji generirani dokument NE MOZE dati: drugu datoteku za usporedbu, ili
+   * odabir predloska koji je korak u sucelju. Nije rupa u mjerenju nego granica mjerenja.
+   */
+  | 'trazi-ulaz-izvan-dokumenta';
 
 export type CoverageCell =
   | { profileId: string; fixerId: FixerId; status: 'pokriveno'; evidence: CellEvidence }
@@ -171,6 +176,14 @@ const PROFILE_GATE: Record<string, (profile: Record<string, unknown>) => boolean
     return (Array.isArray(fonts) && typeof fonts[0] === 'string') || (Number.isFinite(size) && size > 0);
   },
   'heading-format-fixer': (p) => Boolean(p?.headingRules) && typeof p.headingRules === 'object',
+  /**
+   * `footer-page-fixer` NIKAD nije samostalna stavka: `src/repair/repair-pricing.ts` to izricito
+   * kaze i drzi mu tezinu na 0, jer se uvijek primjenjuje skriveno uz numeriranje stranica. Njegov
+   * dokaz zato prati istu zastavicu kao `page-numbering-fixer`.
+   */
+  'footer-page-fixer': (p) => p?.checkPageNumberStartAtIntro === true,
+  // `pageNumberAlignment` ima 3 profila od 407 (`if (!profile?.pageNumberAlignment) return []`).
+  'page-number-alignment-fixer': (p) => Boolean(p?.pageNumberAlignment),
   'heading-case-fixer': (p) => {
     const levels = (p?.headingRules as { levels?: Record<string, { uppercase?: unknown }> } | undefined)?.levels;
     if (!levels || typeof levels !== 'object') return false;
@@ -225,6 +238,24 @@ function hasAssistedRule(profileId: string, checkId: string): boolean {
 }
 
 const UNDECIDABLE_FIXERS: ReadonlySet<string> = new Set(['consistency-fixer']);
+
+/**
+ * Fixeri kojima generirani dokument ne moze dati ulaz, pa im dokaz nije stvar generatora.
+ *
+ * `submission-metadata-fixer` usporedjuje metapodatke DOCX-a s DRUGOM datotekom (PDF); jedan
+ * dokument po definiciji ne moze dati nesuglasje, pa `structure.issues` ostaje prazan.
+ *
+ * `title-page-fixer` se gradi samo uz predlozak naslovnice, a njegov odabir je korak u SUCELJU:
+ * `tests/real-corpus/harness.ts` zato predaje `titleTemplate: null` uz izricitu napomenu, a
+ * closed-loop ga ne prosljedjuje uopce.
+ *
+ * Oboje je granica mjerenja, ne dug. Celija koja o njima tvrdi "nedostaje dokaz" trazila bi dokaz
+ * koji se u ovom harnessu ne moze proizvesti ni u jednom scenariju.
+ */
+const OUT_OF_DOCUMENT_FIXERS: ReadonlySet<string> = new Set([
+  'submission-metadata-fixer',
+  'title-page-fixer',
+]);
 
 /** Gradi celije za sve profile iz matrice, po jedna za svaki registriran fixer. */
 /**
@@ -408,6 +439,7 @@ function uncoveredReason(
 ): UncoveredReason {
   // Alat kojem je zadani odabir prazan po konstrukciji: nijedna os ga ne moze dokazati.
   if (UNDECIDABLE_FIXERS.has(fixerId)) return 'ceka-ljudski-odabir';
+  if (OUT_OF_DOCUMENT_FIXERS.has(fixerId)) return 'trazi-ulaz-izvan-dokumenta';
   // Profil koji os ne propisuje: fixer se za njega uopce ne nudi, pa se nema sto dokazivati.
   const gate = PROFILE_GATE[fixerId];
   if (gate && profile && !gate(profile)) return 'profil-ne-propisuje-os';
@@ -433,6 +465,7 @@ function summarize(cells: CoverageCell[]): CoverageCellReport['summary'] {
     'closed-loop-nije-rijesio': 0,
     'nema-dokaza': 0,
     'ceka-ljudski-odabir': 0,
+    'trazi-ulaz-izvan-dokumenta': 0,
   };
   let covered = 0;
   let resolved = 0;
