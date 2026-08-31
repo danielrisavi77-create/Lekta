@@ -330,3 +330,45 @@ describe('uvoz datoteke cuva kartice iz mosta "Jedan izvor"', () => {
     expect($('#bulk-generate').hidden, 'generiranje mora ostati moguce').toBe(false);
   });
 });
+
+/**
+ * "Prepoznaj reference" ne smije obrisati ni UVEZENE kartice.
+ *
+ * Prvi popravak je cuvao samo kartice iz mosta "Jedan izvor" (`data-origin="single"`), pa je uvoz
+ * datoteke i dalje nestajao pri sljedecem parsiranju. Kriterij je sada "podrijetlo postoji", jer
+ * uvezena kartica jednako tako NE postoji u textarei i ne moze se rekonstruirati.
+ */
+describe('parsiranje cuva i uvezene kartice', () => {
+  function uvezi(sadrzaj: string, ime = 'refs.ris'): Promise<void> {
+    const input: any = document.querySelector('#bulk-import');
+    const file = new File([sadrzaj], ime, { type: 'text/plain' });
+    Object.defineProperty(input, 'files', { value: [file], configurable: true });
+    input.dispatchEvent(new Event('change'));
+    return new Promise((resolve) => setTimeout(resolve, 0));
+  }
+
+  it('uvezena kartica prezivi "Prepoznaj reference" nad praznim unosom', async () => {
+    $('#bulk-entries').innerHTML = '';
+    $('#bulk-input').value = '';
+    await uvezi('TY  - BOOK\nTI  - Uvezena preko RIS-a\nPY  - 2019\nER  - \n');
+    expect($('#bulk-entries').querySelectorAll('.bulk-card').length).toBe(1);
+
+    $('#bulk-parse').click();
+
+    const cards = $('#bulk-entries').querySelectorAll('.bulk-card');
+    expect(cards.length, 'parsiranje je obrisalo uvezenu karticu').toBe(1);
+    expect(cards[0].querySelector('input[data-key="title"]').value).toBe('Uvezena preko RIS-a');
+  });
+
+  it('kartice iz PRETHODNOG parsiranja se i dalje zamjenjuju (negativna kontrola)', () => {
+    $('#bulk-entries').innerHTML = '';
+    $('#bulk-input').value = 'Prezime, I. (2020). Prvi naslov. Zagreb: Izdavac.';
+    $('#bulk-parse').click();
+    expect($('#bulk-entries').querySelectorAll('.bulk-card').length).toBe(1);
+
+    $('#bulk-input').value = '';
+    $('#bulk-parse').click();
+    // Bez podrijetla: isti tekst bi ih ponovno proizveo, pa spajanje ne bi imalo smisla.
+    expect($('#bulk-entries').querySelectorAll('.bulk-card').length).toBe(0);
+  });
+});

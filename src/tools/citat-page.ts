@@ -235,8 +235,17 @@ function announceBulk(msg: string) {
 // izvedene iz #bulk-input pa se iz njega ne mogu rekonstruirati: ponovno prepoznavanje ih
 // zato ne brise nego CUVA i vraca iza prepoznatih. Kartice iz prethodnog prepoznavanja
 // (origin "paste") se i dalje zamjenjuju, jer ih isti tekst ponovno proizvodi.
+/**
+ * Odvoji kartice koje se NE MOGU rekonstruirati iz `#bulk-input`.
+ *
+ * Kriterij je namjerno "podrijetlo postoji", ne "podrijetlo je `single`". Prva verzija je gledala
+ * samo most iz "Jedan izvor", pa je "Prepoznaj reference" i dalje brisao UVEZENE kartice: one ne
+ * nose tekst u textarei nego dolaze iz datoteke, dakle jednako su nepovratne, a nisu imale oznaku.
+ * Kartice iz prethodnog parsiranja nemaju `data-origin` i smiju se zamijeniti, jer ih isti tekst
+ * ponovno proizvede.
+ */
 function detachManualCards(box: any): any[] {
-  const kept: any[] = Array.from(box.querySelectorAll('.bulk-card[data-origin="single"]'));
+  const kept: any[] = Array.from(box.querySelectorAll('.bulk-card[data-origin]'));
   kept.forEach((c) => c.remove());
   return kept;
 }
@@ -246,7 +255,8 @@ function detachManualCards(box: any): any[] {
 function reattachManualCards(box: any, kept: any[], startIndex: number): void {
   kept.forEach((card, i) => {
     const head = card.querySelector('.bulk-card-head');
-    if (head) head.textContent = `Referenca ${startIndex + i + 1} (iz kartice Jedan izvor)`;
+    const izvor = card.getAttribute('data-origin') === 'import' ? 'uvezeno' : 'iz kartice Jedan izvor';
+    if (head) head.textContent = `Referenca ${startIndex + i + 1} (${izvor})`;
     box.appendChild(card);
   });
 }
@@ -340,6 +350,9 @@ async function importReferencesFromFile(file: File): Promise<void> {
   refs.forEach((ref, i) => {
     const card = document.createElement('div');
     card.className = 'bulk-card';
+    // Oznaka podrijetla: uvezena kartica se ne moze rekonstruirati iz textaree, pa ju sljedeci
+    // "Prepoznaj reference" ne smije obrisati.
+    card.setAttribute('data-origin', 'import');
     const head = document.createElement('div');
     head.className = 'bulk-card-head';
     head.textContent = `Referenca ${i + 1} (uvezeno, ${ref.source})`;

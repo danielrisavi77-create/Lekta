@@ -92,6 +92,11 @@ export function bindDownloadButton(
       }, 1600);
     } catch {
       if (timer) clearTimeout(timer);
+      // Oznaka se mice i OVDJE. Uspjeh i neuspjeh dijele isti `timer`, pa neuspjelo preuzimanje
+      // unutar 1600 ms nakon uspjelog ponisti tudji cistac: `data-lekta-ok` bi ostao zauvijek i
+      // vratio bas onaj kvar zbog kojeg je cistac dodan (`animation: both` trajno nadglasa
+      // `:hover`/`:active`).
+      btn.removeAttribute('data-lekta-ok');
       btn.textContent = failLabel;
       if (opts.statusEl && opts.failStatus) {
         opts.statusEl.className = 'out-hint warn';
@@ -157,7 +162,7 @@ export function bindCopyButton(
   const coarse = isCoarsePointer();
   const failLabel = opts.failLabel ?? (coarse ? 'Odaberi i kopiraj ručno' : 'Označi pa Ctrl+C');
   const holdMs = opts.holdMs ?? 1600;
-  // Bez imenice specificne za jedan alat: zadani okStatus je zajednicki za svih 6 poziva
+  // Bez imenice specificne za jedan alat: zadani okStatus je zajednicki za sve pozive
   // bindCopyButton (citat, izjava, kartice, literatura, naslovnica, bulk-literatura), ne samo
   // za kartice.html ciji gumb doista kopira "sazetak". Poziv koji tocno zna sto kopira moze
   // proslijediti opts.okStatus.

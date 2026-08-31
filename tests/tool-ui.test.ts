@@ -226,3 +226,50 @@ describe('bindDownloadButton', () => {
     expect(trackToolEvent).not.toHaveBeenCalled();
   });
 });
+
+/**
+ * Vizualna potvrda ishoda (`data-lekta-ok`) na PREUZIMANJU.
+ *
+ * Dosad ju je pokrivala samo jedna Playwright tvrdnja, i to nad gumbom za KOPIRANJE. Putanja
+ * preuzimanja nije imala nijednu, pa su i postavljanje i ciscenje oznake bili neprovjereni; upravo
+ * je izostanak ciscenja ondje bio kvar koji je gumbu trajno oduzimao `:hover` i `:active`
+ * (`animation: ... both` drzi zadnji kadar u kaskadnom podrijetlu animacija, iznad autorskih
+ * pravila).
+ */
+describe('bindDownloadButton: oznaka ishoda', () => {
+  it('uspjeh postavi oznaku, pa ju cistac makne', () => {
+    vi.useFakeTimers();
+    const btn = makeBtn('Preuzmi .docx');
+    vi.stubGlobal('URL', { createObjectURL: () => 'blob:x', revokeObjectURL: () => {} });
+    bindDownloadButton(btn, () => new Blob(['x']), 'test.docx');
+
+    btn.click();
+    expect(btn.hasAttribute('data-lekta-ok'), 'oznaka nije postavljena').toBe(true);
+
+    vi.advanceTimersByTime(1700);
+    expect(btn.hasAttribute('data-lekta-ok'), 'oznaka nije ocistena').toBe(false);
+    vi.useRealTimers();
+  });
+
+  it('neuspjeh NAKON uspjeha ne smije ostaviti oznaku zauvijek', () => {
+    // Uspjeh i neuspjeh dijele isti `timer`. Neuspjeh unutar 1600 ms ponisti tudji cistac, pa je
+    // bez izricitog brisanja u `catch` grani oznaka ostajala trajno.
+    vi.useFakeTimers();
+    const btn = makeBtn('Preuzmi .docx');
+    vi.stubGlobal('URL', { createObjectURL: () => 'blob:x', revokeObjectURL: () => {} });
+    let padni = false;
+    bindDownloadButton(btn, () => { if (padni) throw new Error('bum'); return new Blob(['x']); }, 'test.docx');
+
+    btn.click();
+    expect(btn.hasAttribute('data-lekta-ok')).toBe(true);
+
+    padni = true;
+    vi.advanceTimersByTime(200);
+    btn.click();
+
+    expect(btn.hasAttribute('data-lekta-ok'), 'oznaka je prezivjela neuspjeh').toBe(false);
+    vi.advanceTimersByTime(3000);
+    expect(btn.hasAttribute('data-lekta-ok')).toBe(false);
+    vi.useRealTimers();
+  });
+});

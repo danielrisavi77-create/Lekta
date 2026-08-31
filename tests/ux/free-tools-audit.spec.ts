@@ -106,8 +106,10 @@ for (const pageSpec of FREE_TOOL_PAGES.filter((p) => p.workspaceSelector || p.ro
       return (hi + 0.05) / (lo + 0.05);
     }, CONTRAST_HELPERS.toString());
 
-    if (ratio === null) test.skip(true, 'stranica nema FAQ blok');
-    expect(ratio, `kontrast "+" na ${pageSpec.route}`).toBeGreaterThanOrEqual(4.5);
+    // Nestao FAQ blok je PAD, ne preskok: sve stranice ga danas imaju, pa bi `skip` pretvorio
+    // uklonjenu afordanciju u tihu sutnju umjesto u nalaz.
+    expect(ratio, `${pageSpec.route} nema .faq details summary`).not.toBeNull();
+    expect(ratio!, `kontrast "+" na ${pageSpec.route}`).toBeGreaterThanOrEqual(4.5);
   });
 }
 
@@ -134,7 +136,13 @@ test(`alati.html: hero kartica ostaje citljiva u temi ${tema}`, async ({ page })
     const bg = parse(getComputedStyle(card, '::after').backgroundColor);
     const ratio = (el: Element | null) => {
       if (!el) return 99;
-      const fg = parse(getComputedStyle(el).color);
+      const cs = getComputedStyle(el);
+      const fg = parse(cs.color);
+      // Prigusenje moze doci iz alfe U BOJI ili iz `opacity` ELEMENTA. Nadnaslov koristi ovo
+      // drugo (`color: inherit; opacity: .72`), pa je mjerenje bez ovoga slijepo za mehanizam
+      // koji popravak zapravo koristi: pokazivalo bi 14,27 umjesto 8,03, i jednako 14,27 da
+      // netko spusti opacity na 0,25 (stvarnih 2,18).
+      fg.a *= parseFloat(cs.opacity || '1');
       const mixed = blend(fg, bg);
       const [hi, lo] = [lum(mixed), lum(bg)].sort((a, b) => b - a);
       return (hi + 0.05) / (lo + 0.05);
@@ -149,10 +157,13 @@ test(`alati.html: hero kartica ostaje citljiva u temi ${tema}`, async ({ page })
   expect(ratios).not.toBeNull();
   // Nijedan element ne smije nedostajati: `ratio(null)` bi inace vratio 99 i tvrdnja bi prosla
   // vakuumski da se selektor ikad preimenuje.
-  expect(ratios!.naslov, `naslov hero kartice (${tema})`).toBeLessThan(99);
-  expect(ratios!.naslov, `naslov hero kartice (${tema})`).toBeGreaterThanOrEqual(4.5);
-  expect(ratios!.tekst, `tekst hero kartice (${tema})`).toBeGreaterThanOrEqual(4.5);
-  expect(ratios!.nadnaslov, `nadnaslov hero kartice (${tema})`).toBeGreaterThanOrEqual(4.5);
+  // Gornja granica ide na SVA TRI: `ratio(null)` vraca 99, pa bi preimenovan selektor inace
+  // prosao tvrdnju. Prva verzija je to imala samo na naslovu, dakle bas nadnaslov (element zbog
+  // kojeg ovaj gard postoji) ostao je pokriven sentinelom.
+  for (const [ime, vrijednost] of Object.entries(ratios!)) {
+    expect(vrijednost, `${ime} hero kartice (${tema}) - element nedostaje?`).toBeLessThan(99);
+    expect(vrijednost, `${ime} hero kartice (${tema})`).toBeGreaterThanOrEqual(4.5);
+  }
 });
 }
 
@@ -301,13 +312,17 @@ for (const pageSpec of FREE_TOOL_PAGES.filter((p) => p.workspaceSelector)) {
     await page.goto(pageSpec.route);
     const bad = await page.evaluate(([ws, primary]) => {
       const offenders: string[] = [];
-      for (const el of document.querySelectorAll('[data-reveal]')) {
+      const all = document.querySelectorAll('[data-reveal]');
+      for (const el of all) {
         if (el.closest(ws as string)) offenders.push('unutar radne plohe');
         if (el.querySelector(primary as string)) offenders.push('sadrzi primarni gumb');
       }
-      return offenders;
+      return { offenders, ukupno: all.length };
     }, [pageSpec.workspaceSelector!, pageSpec.primarySelector]);
-    expect(bad, `${pageSpec.route}: reveal je zahvatio alat`).toEqual([]);
+    expect(bad.offenders, `${pageSpec.route}: reveal je zahvatio alat`).toEqual([]);
+    // Bez ovoga tvrdnja prolazi VAKUUMSKI kad `[data-reveal]` uopce nema: prazan skup nema
+    // prekrsitelja, pa bi potpuno vracanje znacajke izgledalo kao uredan prolaz.
+    expect(bad.ukupno, `${pageSpec.route}: nijedan [data-reveal], gard nema sto cuvati`).toBeGreaterThan(0);
 
     // Alat mora biti vidljiv odmah, bez skrolanja.
     await expect(page.locator(pageSpec.primarySelector)).toBeVisible();
@@ -338,7 +353,7 @@ test('reduced-motion: skriveno stanje ne ovisi o tome je li setupReveal stigao',
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/citat.html');
 
-  const opacity = await page.evaluate(() => {
+  const rezultat = await page.evaluate(() => {
     const probe = document.createElement('div');
     probe.setAttribute('data-reveal', '');
     probe.setAttribute('data-reveal-mode', 'deferred');
@@ -346,8 +361,11 @@ test('reduced-motion: skriveno stanje ne ovisi o tome je li setupReveal stigao',
     document.body.appendChild(probe);
     const value = getComputedStyle(probe).opacity;
     probe.remove();
-    return value;
+    return { opacity: value, revealReady: document.documentElement.classList.contains('reveal-ready') };
   });
 
-  expect(opacity, 'nov [data-reveal] pod reduced-motion mora biti vidljiv bez JS pomoci').toBe('1');
+  // Bez ove tvrdnje mjerenje je dvosmisleno: `1` znaci i "pravilo za reduced-motion radi" i
+  // "`.reveal-ready` uopce nema pa skriveno stanje ne vrijedi". Tek uz nju proba mjeri pravilo.
+  expect(rezultat.revealReady, '.reveal-ready nije postavljen, proba ne bi nista dokazala').toBe(true);
+  expect(rezultat.opacity, 'nov [data-reveal] pod reduced-motion mora biti vidljiv bez JS pomoci').toBe('1');
 });

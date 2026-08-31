@@ -96,8 +96,14 @@ a{color:inherit}:focus-visible{outline:2px solid var(--brand);outline-offset:2px
    `--muted` se na alatima razrjesava u DESK ton (rgba(237,231,220,.55)) dok FAQ lezi na
    PAPIRU, pa je "+" bio svijetlo na svijetlom: izmjereno 2026-08-30 na svih pet alata
    1,06:1 (hub je bio ispravan, 5,12:1). Uz `currentColor` afordancija je tocna u svakom
-   kontekstu, i na papiru i na stolu, bez pogadjanja tokena. */
-.faq summary::after{content:"+";font-size:20px;font-weight:400;color:currentColor;opacity:.72;line-height:1}
+   kontekstu, i na papiru i na stolu, bez pogadjanja tokena.
+
+   PRIGUSENJE JE U BOJI, NE U `opacity`. Prva verzija je koristila `opacity: .72`, a to je ZASEBNO
+   svojstvo: `index.html` ima vlastiti `#faq .faq summary::after` koji postavlja `color` ali ne i
+   `opacity`, pa je moje prigusenje ondje ostajalo i spustalo kontrast s 5,12:1 na 2,95:1, ispod
+   praga 3:1 za negrafcki element. `color-mix` drzi prigusenje unutar iste deklaracije, pa
+   specificnije stranicno pravilo pobjedjuje cijelo i nista ne curi. */
+.faq summary::after{content:"+";font-size:20px;font-weight:400;color:color-mix(in srgb,currentColor 72%,transparent);line-height:1}
 @media(prefers-reduced-motion:reduce){.btn{transition:none}}
 footer{padding:30px 0;border-top:1px solid var(--line)}
 .footer-inner{display:flex;align-items:center;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:13px}
@@ -177,8 +183,10 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);over
    prva kontrola je bila 575-729 px duboko, a uvod (`.lead`) je sam nosio 190 px na citatu.
    Padding hero bloka i velicina uvoda se stisnu; NISTA se ne skriva ni ne premjesta, pa se
    nijedan tok ne mijenja. `.lead` je inace page-local, ali dijeljeni sloj se ucitava POSLIJE
-   pa `.hero` pravilo pobjedjuje: `.hero{padding:32px 0 2px}` u svih SEST stranica je mrtav redak
-   koji se nikad ne primijeni, jer je specificnost jednaka a dijeljeni sloj dolazi kasnije.
+   pa `.hero` pravilo pobjedjuje: `.hero{padding:32px 0 2px}` u svih SEST stranica gubi ISPOD 720 px,
+   jer je specificnost jednaka a dijeljeni sloj dolazi kasnije. TOCAN OPSEG: stranicno pravilo stoji
+   u `@media(max-width:820px)`, ovo u `@media(max-width:720px)`, pa u pojasu 721-820 px stranicno
+   JEST jedino koje vrijedi i nije mrtvo. Ranija formulacija "nikad se ne primijeni" bila je presiroka.
 
    ZA `.lead` TO NE VRIJEDI i prva verzija ovog pravila bila je zato mrtva: stranice imaju
    `.hero p.lead` (0,2,1), sto tuce goli `.lead` (0,1,0) BEZ OBZIRA na redoslijed ucitavanja.

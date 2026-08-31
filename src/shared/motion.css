@@ -140,8 +140,8 @@ body {
  * vidljiv. Prijelaz je samo na ulazu (`.reveal-in`), ne na baznom skrivanju, inace bi dodavanje
  * `.reveal-ready` samo po sebi animiralo cijelu stranicu.
  *
- * Reduced-motion ne treba iznimku: globalni prekidac gore gasi trajanje, a `setupReveal` uz
- * `prefersReduced()` ionako odmah oznaci sve vidljivim.
+ * ISPRAVAK: ovdje je stajalo da reduced-motion ne treba iznimku. NE STOJI: globalni prekidac gasi
+ * TRAJANJE, nikad `opacity`, a `setupReveal` pomaze samo ako se izvrsi. Iznimka je zato nize.
  */
 .reveal-ready [data-reveal] { opacity: 0; transform: translateY(16px) }
 .reveal-ready [data-reveal].reveal-in { transition: transform .45s var(--ease-out-3, ease), opacity .45s var(--ease-out-3, ease) }

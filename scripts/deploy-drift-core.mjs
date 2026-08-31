@@ -83,7 +83,13 @@ export function verifyJwtDrift(configMap, live) {
   const findings = [];
   for (const slug of [...live.keys()].sort()) {
     const actual = live.get(slug)?.verify_jwt;
-    if (typeof actual !== 'boolean') continue;
+    if (typeof actual !== 'boolean') {
+      // Ranije `continue`, dakle tiho preskakanje. Sentinel iznad hvata samo POTPUN izostanak
+      // polja; djelomicna promjena sheme bi ga prosla, a svaki slug bez booleana bi nestao iz
+      // izvjestaja kao da je uredan. Sada se imenuje.
+      findings.push({ slug, kind: 'unknown-live', declared: configMap.get(slug) ?? null, actual: null });
+      continue;
+    }
     const declared = configMap.get(slug);
     if (declared === undefined) {
       findings.push({ slug, kind: 'missing-config', declared: null, actual });
