@@ -1652,6 +1652,19 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
   #dropzone .btn{min-height:46px;font-size:16px}
   #wizardView[data-step="1"]:has(#dropzone.has-file) .lek-stepnav-1{position:fixed;left:0;right:0;bottom:0;z-index:80;margin:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--paper) 96%,transparent);border-top:1px solid var(--paper-line);box-shadow:0 -8px 24px rgba(31,25,19,.14)}
   #wizardView[data-step="1"]:has(#dropzone.has-file) .lek-stepnav-1 .btn{width:100%;min-height:48px;font-size:16px}
+  /* PRIVOLA NE SMIJE POKRIVATI GLAVNU RADNJU (audit P0-05).
+     Dva su fiksna bara uz dno: ovaj (z-index 80) i banner privole (position:fixed, z-index 240).
+     Banner pobjeduje i pokrije gumb "Nastavi na profil", pa tap pogodi banner i tok stane prije
+     analize, bez ijedne poruke. Mjereno na Pixel 5 / 375x667: banner je visok 169px, cetvrtina
+     ekrana, i presijeca donju polovicu gumba, pa hit-test u sredistu gumba pogadja banner.
+     Playwright je to prijavljivao doslovno ("#consentBanner intercepts pointer events"), i zbog
+     toga je mobilni test bio IZUZET umjesto popravljen.
+     Ne rjesava se z-indexom (bar bi i dalje lezao PREKO bannera, samo obrnuto), nego odmakom:
+     dok je banner gore, bar se digne tocno iznad njega. Visina dolazi iz --consent-h koju app.ts
+     MJERI, jer ovisi o duljini teksta i sirini; konstanta bi bila kriva cim se copy promijeni. */
+  body.has-consent-banner #wizardView[data-step="1"]:has(#dropzone.has-file) .lek-stepnav-1{
+    bottom:calc(var(--consent-h,0px) + 12px)
+  }
   body:has(#wizardView[data-step="1"] #dropzone.has-file){padding-bottom:calc(70px + env(safe-area-inset-bottom))}
   .field :is(input,select,textarea),.advanced-summary,.advanced-body,.profile-note{font-size:16px}
   .finding-card{padding:14px}

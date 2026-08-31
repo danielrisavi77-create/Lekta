@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   parseTokenResponse, isExpired, requestEmailOtp, verifyEmailOtp,
   refreshSession, getValidAccessToken, signInAnonymously, signInWithPassword, setPassword,
+  linkEmailToAnonymous, confirmEmailLink,
   type Session, type SessionStore,
 } from '../src/auth/session';
 
@@ -227,5 +228,128 @@ describe('signInAnonymously', () => {
 
   it('e-mail sesija NIJE oznacena kao anonimna', () => {
     expect(parseTokenResponse(tokenBody, 0)!.isAnonymous).toBe(false);
+  });
+});
+
+/**
+ * Audit P0-07. `signInAnonymously` je u komentaru obecavao nadogradnju na e-mail "bez gubitka
+ * popravaka (isti user_id)", a jedini tok koji je sucelje nudilo bio je `requestEmailOtp` s
+ * `create_user: true`, sto za nepoznat e-mail radi NOV racun s NOVIM uuid-om. Svih 18 repair
+ * poslova u produkciji pripada anonimnim racunima, pa je to pogadjalo svakoga tko se prijavi.
+ *
+ * Ovi testovi zato prvo drze MEHANIZAM (koji endpoint, koji tip, ciji token), jer se upravo na
+ * tome kvar dogodio, a tek onda sretan slucaj.
+ */
+describe('linkEmailToAnonymous (P0-07)', () => {
+  it('gadja PUT /auth/v1/user s TOKENOM ANONIMNE SESIJE, ne /otp', async () => {
+    let seenUrl = '', seenInit: RequestInit | null = null;
+    const out = await linkEmailToAnonymous(
+      CFG, 'anon-jwt', 'a@b.hr',
+      fetchOnce(res(200, {}), (u, i) => { seenUrl = u; seenInit = i; }),
+    );
+    expect(out).toEqual({ ok: true, pendingConfirmation: true });
+    expect(seenUrl).toBe('https://proj.supabase.co/auth/v1/user');
+    expect(seenInit!.method).toBe('PUT');
+    // Kljucno: identitet dolazi iz ANONIMNE sesije, pa GoTrue mijenja POSTOJECEG korisnika.
+    expect((seenInit!.headers as Record<string, string>).Authorization).toBe('Bearer anon-jwt');
+    const body = JSON.parse(String(seenInit!.body));
+    expect(body.email).toBe('a@b.hr');
+    // Ne smije nositi create_user: to je ono sto pravi nov racun.
+    expect(body.create_user).toBeUndefined();
+  });
+
+  it('bez tokena ne pokusava nista (nema identiteta koji bi se povezao)', async () => {
+    let called = false;
+    const out = await linkEmailToAnonymous(
+      CFG, '', 'a@b.hr',
+      (async () => { called = true; return res(200); }) as unknown as typeof fetch,
+    );
+    expect(out).toEqual({ ok: false, reason: 'unauthorized', message: 'nedostaje prijava' });
+    expect(called).toBe(false);
+  });
+
+  it('odbija neispravan e-mail prije mreze', async () => {
+    let called = false;
+    const out = await linkEmailToAnonymous(
+      CFG, 'anon-jwt', 'nije-email',
+      (async () => { called = true; return res(200); }) as unknown as typeof fetch,
+    );
+    expect(out.ok).toBe(false);
+    if (!out.ok) expect(out.reason).toBe('invalid_email');
+    expect(called).toBe(false);
+  });
+
+  it('zauzet e-mail je VLASTIT ishod, ne generic greska', async () => {
+    const out = await linkEmailToAnonymous(
+      CFG, 'anon-jwt', 'a@b.hr',
+      fetchOnce(res(422, { error_code: 'email_exists', msg: 'Email address already registered' })),
+    );
+    expect(out.ok).toBe(false);
+    if (!out.ok) expect(out.reason).toBe('email_taken');
+  });
+
+  it('racun koji vise nije anoniman se razlikuje od zauzetog e-maila', async () => {
+    const out = await linkEmailToAnonymous(
+      CFG, 'jwt', 'a@b.hr',
+      fetchOnce(res(422, { error_code: 'manual_linking_disabled', msg: 'anonymous user required' })),
+    );
+    expect(out.ok).toBe(false);
+    if (!out.ok) expect(out.reason).toBe('not_anonymous');
+  });
+
+  it('istekla sesija se javlja kao unauthorized, ne kao mrezna greska', async () => {
+    const out = await linkEmailToAnonymous(CFG, 'stari-jwt', 'a@b.hr', fetchOnce(res(401)));
+    expect(out.ok).toBe(false);
+    if (!out.ok) expect(out.reason).toBe('unauthorized');
+  });
+});
+
+describe('confirmEmailLink (P0-07)', () => {
+  it('koristi tip email_change, ne email (email bi vratio DRUGI racun)', async () => {
+    let seenInit: RequestInit | null = null;
+    const out = await confirmEmailLink(
+      CFG, 'a@b.hr', '123456', 'user-1',
+      fetchOnce(res(200, tokenBody), (_u, i) => { seenInit = i; }), 1_000_000,
+    );
+    expect(out.ok).toBe(true);
+    expect(JSON.parse(String(seenInit!.body)).type).toBe('email_change');
+  });
+
+  it('zadrzava ISTI user_id i donosi e-mail na racun', async () => {
+    const out = await confirmEmailLink(
+      CFG, 'a@b.hr', '123456', 'user-1', fetchOnce(res(200, tokenBody)), 1_000_000,
+    );
+    expect(out.ok).toBe(true);
+    if (out.ok) {
+      expect(out.session.userId).toBe('user-1');
+      expect(out.session.email).toBe('a@b.hr');
+    }
+  });
+
+  it('ODBIJA sesiju s drugim uuid-om, umjesto da je tiho spremi', async () => {
+    // Ovo je tocno kvar P0-07: korisnik bi mislio da su popravci sacuvani, a bio bi na
+    // napustenom racunu. Radije odbijamo nego da lazemo.
+    const drugi = { ...tokenBody, user: { id: 'user-DRUGI', email: 'a@b.hr' } };
+    const out = await confirmEmailLink(
+      CFG, 'a@b.hr', '123456', 'user-1', fetchOnce(res(200, drugi)), 1_000_000,
+    );
+    expect(out.ok).toBe(false);
+    if (!out.ok) expect(out.message).toMatch(/isti račun/);
+  });
+
+  it('prazan kod ne ide na mrezu', async () => {
+    let called = false;
+    const out = await confirmEmailLink(
+      CFG, 'a@b.hr', '  ', 'user-1',
+      (async () => { called = true; return res(200); }) as unknown as typeof fetch,
+    );
+    expect(out.ok).toBe(false);
+    expect(called).toBe(false);
+  });
+
+  it('netocan kod se javlja razumljivo', async () => {
+    const out = await confirmEmailLink(CFG, 'a@b.hr', '000000', 'user-1', fetchOnce(res(401)));
+    expect(out.ok).toBe(false);
+    if (!out.ok) expect(out.message).toMatch(/nije točan/);
   });
 });

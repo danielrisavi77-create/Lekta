@@ -187,9 +187,12 @@ describe('uploadRepair', () => {
       seen = init;
       return res(200, { docxBase64: b64([1]) });
     });
-    expect((seen?.headers as Record<string, string>).Authorization).toBe('Bearer jwt-token');
+    // Prvo dokazi da je zahtjev POSLAN: bez ovoga `seen?.headers` kratko spoji na undefined i
+    // test pukne TypeErrorom umjesto da padne na tvrdnji (oxlint P1-20).
+    expect(seen).toBeTruthy();
+    expect((seen!.headers as Record<string, string>).Authorization).toBe('Bearer jwt-token');
     // FormData ne smije imati rucno postavljen content-type (boundary postavlja runtime).
-    expect((seen?.headers as Record<string, string>)['content-type']).toBeUndefined();
+    expect((seen!.headers as Record<string, string>)['content-type']).toBeUndefined();
     const body = seen?.body as FormData;
     expect(body).toBeInstanceOf(FormData);
     const sentMeta = JSON.parse(String(body.get('meta')));
