@@ -1,6 +1,6 @@
 import { extractBodyParagraphs, xmlEncode } from '../analysis/typography-structure.ts';
-import { anchorTextOfXml as anchorTextOf, normalizeAnchorText } from './anchor-text';
-import { rangesByParagraphIndex } from '../analysis/required-sections-structure';
+import { anchorTextOfXml as anchorTextOf, normalizeAnchorText } from './anchor-text.ts';
+import { rangesByParagraphIndex } from '../analysis/required-sections-structure.ts';
 import type { RequiredSectionKind } from '../analysis/required-sections-structure.ts';
 import {
   ensureHeadingNumbering,

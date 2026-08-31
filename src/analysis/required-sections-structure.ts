@@ -1,5 +1,5 @@
 import { extractBodyParagraphs } from './typography-structure.ts';
-import { anchorTextOfXml } from '../repair/anchor-text';
+import { anchorTextOfXml } from '../repair/anchor-text.ts';
 
 export type RequiredSectionKind =
   | 'summary-hr'

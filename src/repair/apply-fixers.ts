@@ -5,7 +5,7 @@
 // vrati novi docx gdje su svi ostali zip entryji (slike, headeri, footeri, theme) neizmijenjeni.
 
 import { readZip, writeZip, type ZipEntry } from './zip-codec.ts';
-import { normalizeAnchorText } from './anchor-text';
+import { normalizeAnchorText } from './anchor-text.ts';
 import {
   marginsFixer,
   paperSizeFixer,
