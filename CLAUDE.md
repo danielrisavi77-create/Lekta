@@ -623,3 +623,42 @@ je neovisno drugo misljenje drugog modela.
    matrica i QA dijagnostika bez regresija, check zelen.
 6. (Proizvodna odluka, kad zatreba naplata) pravi backend za narudžbe i plaćanje
    (Supabase), umjesto klijentskog JSON-a i Netlify forme.
+7. Uključi `scripts/` i `tests/` u `tsconfig.json` (`include` je danas samo `["src"]`, pa se ta
+   dva direktorija NE typechekaju u `npm run check`). Odgođeno 2026-08-30 odlukom vlasnika, uz
+   izmjerene brojke; nije "kad stigne" nego "ne dok se ne može u jednom potezu".
+
+   RUPA JE STVARNA I VEĆ JE KOŠTALA: `profileAxesViolated` je u `3dfab779` bio deklariran kao
+   obavezan u tipu `Row`, izračunat, a nikad upisan u izlazni objekt, i ništa to nije prijavilo.
+   Uključivanje bi zatvorilo i razred zbog kojeg postoji `npm run orphan-scan`: oba kvara koja su ga
+   iznjedrila (`buildOutcomeLine`, `dropStaleFieldRegressions`) su IMENOVANI uvozi, dakle TS2305.
+
+   Izmjereno 2026-08-30 privremenim tsconfigom koji nasljeđuje pravi (`include: [src, scripts,
+   tests]`, uz `types: ['node', 'vite/client']`; bez `node` mjerenje daje 235 lažnih `TS2591 Cannot
+   find name 'node:fs'`, dakle krivi alat daje krivi broj):
+
+     126 grešaka ukupno, NULA u `src/`   (produkcijski kod je tipski čist)
+      27  nedostaje obavezno svojstvo (TS2741/TS2739)   <- jedini opasan razred
+      20  Uint8Array -> BlobPart (TS2322)               artefakt novijeg TS-a, radi u izvođenju
+      44  implicitni any, 23 neiskorišteno              kozmetika
+
+   ZAŠTO NIJE MALI COMMIT, iako 21 od 27 opasnih dolazi iz JEDNOG krivog tipa: `ParaSpec` u
+   `tests/helpers/docx-builder.ts` ima `text: string` kao obavezno, dok su `empty?: true` i
+   `raw?: string` u istom tipu dokumentirani kao oblici koji "zanemaruju sva ostala polja". Tip
+   proturječi vlastitom komentaru i pozivatelji su u pravu. Ali ispravan popravak (razlikovana unija
+   `ParaTextSpec | ParaEmptySpec | ParaRawSpec`) je izmjeren i vraćen: TS2741 pada 27 -> 6, a UKUPNO
+   raste 132 -> 235, dakle +103 nove greške u 69 datoteka, zgusnute u `tests/corpus/catalog/*`, koji
+   `ParaSpec` objekte gradi programski i čita `p.text` izravno. Ta dva posla zato idu ZAJEDNO:
+   uključivanje bez popravka `ParaSpec`-a ne prolazi, a popravak bez uključivanja nema garda koji bi
+   ga držao.
+
+   NE POPRAVLJAJ `text?: string`: time tip počinje primati `{}`, graditelj tiho emitira prazan
+   odlomak, i 21 greška se zamijeni za tip koji više ništa ne tvrdi (isti razred kao `axisResolved`
+   koji vraća `true` čim je `max === 0`). Traži se unija, uz negativan test da `{}` NE prolazi
+   tipski (`@ts-expect-error`). Da unija odgovara stvarnosti vidi se već danas: `isBodyPara` u
+   `tests/corpus/catalog/atomic.ts` ručno sužava s `!p.raw && !p.empty && typeof p.text === 'string'`.
+
+   Dva sitna duga nađena usput, oba unutar ovog zadatka: `TOC_FIELD_PARA` nosi istovremeno `text: ''`
+   i `raw:` (mrtvo polje), a `'required-section'` nije u `STRUCTURAL_VIOLATION_IDS` iako ga commitani
+   `tests/violating-docx-required-section.test.ts` koristi (tri greške koje danas ništa ne prijavljuje).
+
+   DoD: `include` proširen, `npm run check` zelen, `ParaSpec` unija s negativnim testom.
