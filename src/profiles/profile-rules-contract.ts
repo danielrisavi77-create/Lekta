@@ -59,17 +59,57 @@ export function selectServedProfileFields(full: Record<string, unknown>): Record
 }
 
 /**
+ * Veza IZVOR-PRAVILO. `ruleEntry.sourceId` upucuje na zapis u `data/sources/source-registry.json`,
+ * ali profilni `sources` niz nosi samo `{title, url}` BEZ identiteta, pa se to dvoje dosad nije
+ * dalo spojiti: sucelje je imalo doslovan citat i stranicu, a nije moglo pouzdano reci IZ KOJEG
+ * dokumenta dolaze. Izmjereno prije zahvata: 91 unos s citatom, svih 91 sa `sourceId` koji registar
+ * poznaje, dakle veza nije bila slomljena nego samo nije bila prenesena.
+ *
+ * Prenosi se ISKLJUCIVO `title` i `url`. Registar uz njih drzi i `snapshotHash`, `snapshotPath`,
+ * `fetchedAt` i `validityClass`; `snapshotHash` je PRIRODNI KANARINAC iz klasifikacijskog manifesta
+ * i ne smije izaci ovim putem, a ostalo je provenijencija koja korisniku ne govori nista.
+ */
+export interface ServedSourceRef {
+  id: string;
+  title: string;
+  url: string;
+}
+
+/** Indeks registra izvora: id -> {title, url}. Gradi ga pozivatelj (generator). */
+export type SourceIndex = Record<string, { title: string; url: string }>;
+
+/**
+ * Prikaci razrijesen izvor na unos koji ima `sourceId`. Nepoznat `sourceId` se NE pogadja i ne
+ * izmislja: unos ostaje bez `source`, pa `acceptedEvidence` na klijentu takav dokaz odbaci.
+ */
+export function attachSourceRefs(entries: unknown[], index: SourceIndex | undefined): unknown[] {
+  if (!index) return entries;
+  return entries.map((entry) => {
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return entry;
+    const row = entry as Record<string, unknown>;
+    const sourceId = typeof row.sourceId === 'string' ? row.sourceId : '';
+    const hit = sourceId ? index[sourceId] : undefined;
+    if (!hit) return entry;
+    const source: ServedSourceRef = { id: sourceId, title: hit.title, url: hit.url };
+    return { ...row, source };
+  });
+}
+
+/**
  * Slozi cijeli serverski artefakt iz izvora istine i repair mape. Deterministicki:
  * profili se obraduju sortirano po id-u, pa isti ulaz daje bajt-isti izlaz (drift
  * test usporeduje commitani artefakt s ponovnim izracunom).
  * @param verifiedProfiles  sadrzaj data/profiles/verified-profiles.json
  * @param repairMap         sadrzaj data/profiles/repair-map.json (id -> entries[])
  * @param sha256Hex         injektirana hash funkcija (node:crypto ili Deno crypto)
+ * @param sourceIndex       id -> {title, url} iz data/sources/source-registry.json; kad izostane,
+ *                          unosi ostaju bez `source` i artefakt je identican starom
  */
 export function buildProfileRulesArtifact(
   verifiedProfiles: Array<Record<string, unknown>>,
   repairMap: Record<string, unknown[]>,
   sha256Hex: (input: string) => string,
+  sourceIndex?: SourceIndex,
 ): ProfileRulesServerArtifact {
   const profiles: Record<string, ProfileRulesServedEntry> = {};
   const sorted = [...verifiedProfiles].sort((a, b) => String(a.id).localeCompare(String(b.id)));
@@ -78,7 +118,7 @@ export function buildProfileRulesArtifact(
     const id = String(full.id ?? '');
     if (!id) throw new Error('[profile-rules-contract] profil bez id polja u izvoru istine');
     const profile = selectServedProfileFields(full);
-    const repairEntries = Array.isArray(repairMap[id]) ? repairMap[id] : [];
+    const repairEntries = attachSourceRefs(Array.isArray(repairMap[id]) ? repairMap[id] : [], sourceIndex);
     const etag = sha256Hex(JSON.stringify({ v: PROFILE_RULES_CONTRACT_V, profile, repairEntries }));
     profiles[id] = { etag, profile, repairEntries };
     etagLines.push(`${id}:${etag}`);

@@ -64,6 +64,60 @@ describe('stripDirectFormatting: velicina (threshold 3 hp = ± 1,5 pt)', () => {
   });
 });
 
+/**
+ * DOMINANTNA velicina tijela izvan tolerancije.
+ *
+ * Izmjereno 2026-08-31 na `grf-diplomski-neuskladjen`: `docDefaults` je vec 24 (12 pt), nijedan
+ * stil ne deklarira velicinu, a tijelo nosi izravni `w:sz="28"` (14 pt). Razlika je 4 half-pointa,
+ * dakle izvan tolerancije od 3, pa `font-fixer` nije imao sto uciniti i javio je `already-ok` dok je
+ * `format.size.body` i dalje padao.
+ */
+describe('stripDirectFormatting: dominantna velicina tijela', () => {
+  const tijelo = (sz: string, tekst: string) => p(run(`<w:sz w:val="${sz}"/>`, tekst));
+
+  it('BASELINE: bez opt-ina se ponasa kao prije, dominanta izvan tolerancije ostaje', () => {
+    const xml = '<w:body>' + tijelo('28', 'dugacko tijelo rada koje nosi vecinu teksta') + '</w:body>';
+    const r = stripDirectFormatting(xml, { stripFontSizeNearHalfPoints: 24 });
+    expect(r.applied).toBe(false);
+    expect(r.xml).toBe(xml);
+  });
+
+  it('uz opt-in brise dominantnu velicinu, a manjinsku ostavlja', () => {
+    const xml =
+      '<w:body>' +
+      tijelo('28', 'dugacko tijelo rada koje nosi vecinu teksta u dokumentu') +
+      tijelo('28', 'jos jedan dugacak odlomak tijela rada s dosta znakova') +
+      tijelo('20', 'potpis') +
+      '</w:body>';
+    const r = stripDirectFormatting(xml, { stripFontSizeNearHalfPoints: 24, stripDominantBodySize: true });
+    expect(r.applied).toBe(true);
+    expect(r.xml).not.toContain('w:val="28"'); // dominanta pala
+    expect(r.xml).toContain('<w:sz w:val="20"/>'); // manjinski potpis netaknut
+  });
+
+  it('tezina je DULJINA TEKSTA, ne broj pojava', () => {
+    // Tri kratka runa na 20 hp naspram jednog dugackog na 28: po broju pojava dominanta bi bila 20,
+    // po duljini teksta je 28. Analiza mjeri po duljini, pa se i ovdje mjeri tako.
+    const xml =
+      '<w:body>' +
+      tijelo('20', 'a') +
+      tijelo('20', 'b') +
+      tijelo('20', 'c') +
+      tijelo('28', 'ovo je dugacak odlomak tijela rada koji nosi daleko najvise znakova u dokumentu') +
+      '</w:body>';
+    const r = stripDirectFormatting(xml, { stripFontSizeNearHalfPoints: 24, stripDominantBodySize: true });
+    expect(r.xml).not.toContain('w:val="28"');
+    expect(r.xml).toContain('<w:sz w:val="20"/>');
+  });
+
+  it('dominanta koja je VEC u toleranciji ne pokrece nista dodatno', () => {
+    const xml = '<w:body>' + tijelo('22', 'tijelo 11 pt, unutar tolerancije uz cilj 12 pt') + '</w:body>';
+    const r = stripDirectFormatting(xml, { stripFontSizeNearHalfPoints: 24, stripDominantBodySize: true });
+    expect(r.applied).toBe(true); // pada pod postojecu toleranciju, ne pod dominantu
+    expect(r.xml).not.toContain('w:sz');
+  });
+});
+
 describe('stripDirectFormatting: prored', () => {
   it('uklanja w:line/w:lineRule samo kad je lineRule auto; before/after ostaju', () => {
     const xml =

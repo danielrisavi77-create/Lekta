@@ -50,6 +50,16 @@ export interface RunLevelOptions {
   stripFontName?: boolean;
   /** Ukloni w:sz/w:szCs override-e blizu ciljane velicine (half-points). */
   stripFontSizeNearHalfPoints?: number;
+  /**
+   * Uz toleranciju, ukloni i DOMINANTNU izravnu velicinu tijela kad se razlikuje od cilja.
+   * Opt-in, pa fusnote i prored rade nepromijenjeno. Vidi `dominantDirectRunSize`.
+   */
+  stripDominantBodySize?: boolean;
+  /**
+   * TOCNA vrijednost za brisanje, izvedena iz dominante. Postavlja je `stripDirectFormatting`
+   * sam; pozivatelj je ne salje, jer se mora racunati nad podobnim odlomcima ovog prolaza.
+   */
+  stripFontSizeExactHalfPoints?: number;
   /** Ukloni w:line/w:lineRule (samo lineRule auto) iz w:pPr/w:spacing. */
   stripLineSpacing?: boolean;
   /** Ukloni w:before/w:after (kad su eksplicitno ne-"0") iz w:pPr/w:spacing. */
@@ -218,13 +228,17 @@ function stripRunProps(rPr: string, opts: RunLevelOptions): { out: string; chang
 
   if (opts.stripFontSizeNearHalfPoints !== undefined) {
     const target = opts.stripFontSizeNearHalfPoints;
+    const exact = opts.stripFontSizeExactHalfPoints;
     // SAMO w:sz: analiza mjeri dominantnu velicinu iz w:sz, a docDefaults w:szCs
     // se nikad ne patcha (nema backstopa) pa bi njegovo brisanje regresiralo
     // velicinu complex-script znakova (arapski/hebrejski) na naslijedjeno.
     // Prazan element podnosi i prosireni oblik <w:sz w:val="22"></w:sz>.
     out = out.replace(/<w:sz\b[^>]*w:val="([^"]*)"[^>]*?(?:\/>|><\/w:sz>)/g, (tag, val) => {
       const n = Number(val);
-      if (!Number.isFinite(n) || Math.abs(n - target) > SIZE_TOLERANCE_HALF_POINTS) return tag;
+      if (!Number.isFinite(n)) return tag;
+      // Blizu cilja (tolerancija) ILI tocno dominantna velicina tijela (vidi dominantDirectRunSize).
+      const uTolerancji = Math.abs(n - target) <= SIZE_TOLERANCE_HALF_POINTS;
+      if (!uTolerancji && n !== exact) return tag;
       changed = true;
       return '';
     });
@@ -316,6 +330,53 @@ function stripParagraphProps(pPr: string, opts: RunLevelOptions): { out: string;
  * Vraca novi document.xml i brojace za changelog; applied=false znaci da
  * nista nije pronadjeno za uklanjanje (fail-safe, dokument netaknut).
  */
+const PARAGRAPH_RE = /<w:p(?:\s[^>]*[^/>])?>[\s\S]*?<\/w:p>/g;
+
+/**
+ * Dominantna IZRAVNA velicina runa u odlomcima koje ovaj modul uopce smije dirati.
+ *
+ * ZASTO POSTOJI: `SIZE_TOLERANCE_HALF_POINTS` brise samo override blizu cilja, pa tijelo koje je
+ * za vise od 1,5 pt vece od propisanog nikad nije bilo popravljeno. Izmjereno 2026-08-31 na
+ * `grf-diplomski-neuskladjen`: `docDefaults` je vec 24 (12 pt), nijedan stil ne deklarira velicinu,
+ * a tijelo nosi izravni `w:sz="28"` (14 pt). Razlika je 4 half-pointa, dakle izvan tolerancije, pa
+ * je `font-fixer` javio `already-ok` dok je `format.size.body` i dalje padao.
+ *
+ * Kriterij je zato promijenjen, a ne prag: brise se ono sto je DOMINANTNO, jer je to po definiciji
+ * vrijednost zbog koje provjera pada. Manjinske velicine (potpisi 10 pt, naslovi) ostaju netaknute
+ * upravo zato sto nisu dominantne, sto je ista zastita koju je tolerancija htjela dati, samo
+ * mjerena umjesto pogodjena.
+ *
+ * Tezina je DULJINA TEKSTA runa, ne broj pojava, jer analiza dominantnu velicinu mjeri isto tako
+ * (`m.body.size`); brojanje pojava bi dalo drugu dominantu na dokumentu s mnogo kratkih runova.
+ * Prolazi se kroz ISTI filtar podobnosti kao i samo ciscenje (`shouldSkipParagraph`), inace bi
+ * dominanta mogla doci s naslovnice koju ciscenje ionako ne dira.
+ */
+function dominantDirectRunSize(documentXml: string, skip: (paragraph: string, offset: number) => boolean): number | null {
+  const weights = new Map<number, number>();
+  for (const match of documentXml.matchAll(PARAGRAPH_RE)) {
+    const paragraph = match[0];
+    if (skip(paragraph, match.index ?? 0)) continue;
+    for (const run of paragraph.matchAll(/<w:r(?:\s[^>]*)?>[\s\S]*?<\/w:r>/g)) {
+      const size = /<w:sz\b[^>]*w:val="(\d+)"/.exec(run[0]);
+      if (!size) continue;
+      const text = [...run[0].matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)].map((t) => t[1]).join('');
+      const weight = text.trim().length;
+      if (!weight) continue;
+      const value = Number(size[1]);
+      weights.set(value, (weights.get(value) ?? 0) + weight);
+    }
+  }
+  let best: number | null = null;
+  let bestWeight = 0;
+  for (const [value, weight] of weights) {
+    if (weight > bestWeight) {
+      best = value;
+      bestWeight = weight;
+    }
+  }
+  return best;
+}
+
 export function stripDirectFormatting(documentXml: string, opts: RunLevelOptions): RunLevelResult {
   const txbx = balancedRanges(documentXml, 'w:txbxContent');
   const tables = balancedRanges(documentXml, 'w:tbl');
@@ -325,6 +386,34 @@ export function stripDirectFormatting(documentXml: string, opts: RunLevelOptions
   const sdt = balancedRanges(documentXml, 'w:sdt');
   let paragraphsTouched = 0;
   let runsTouched = 0;
+
+  /**
+   * Podobnost odlomka, izdvojena da je PREDPROLAZ (dominantna velicina) i samo ciscenje NE mogu
+   * racunati razlicito. Dva mjesta koja isto pravilo pisu dvaput su u ovom repozitoriju vec
+   * proizvela tihi raskorak (golden naspram panela), pa ovdje postoji jedan izvor.
+   */
+  const shouldSkipParagraph = (paragraph: string, offset: number): boolean => {
+    if (insideRanges(offset, txbx)) return true; // tekstualni okvir
+    if (insideRanges(offset, sdt)) return true; // sdt (naslovnica/kontrola)
+    if (paragraph.includes('<w:txbxContent')) return true;
+    const open = (paragraph.match(/<w:sdt\b/g) || []).length;
+    const close = (paragraph.match(/<\/w:sdt>/g) || []).length;
+    if (open !== close) return true;
+    return hasNonTargetStyle(maskProtectedBlocks(paragraph).masked, opts.allowedStyleId ?? 'Normal');
+  };
+
+  /**
+   * Dominantna izravna velicina koja se razlikuje od cilja: dodatna, TOCNA meta brisanja uz
+   * postojecu toleranciju. Racuna se samo kad pozivatelj to izricito trazi, pa ostali fixeri
+   * (fusnote, prored) rade nepromijenjeno.
+   */
+  const exactSize = (() => {
+    const target = opts.stripFontSizeNearHalfPoints;
+    if (!opts.stripDominantBodySize || target === undefined) return undefined;
+    const dominant = dominantDirectRunSize(documentXml, shouldSkipParagraph);
+    if (dominant === null) return undefined;
+    return Math.abs(dominant - target) > SIZE_TOLERANCE_HALF_POINTS ? dominant : undefined;
+  })();
 
   // Otvarajuci tag NE smije biti samozatvarajuci (<w:p/> ili <w:p attrs/>):
   // inace bi match progutao sve do </w:p> SLJEDECEG odlomka i obradio dva kao
@@ -358,9 +447,11 @@ export function stripDirectFormatting(documentXml: string, opts: RunLevelOptions
     // U tablicama se prored i poravnanje NE diraju (jednostruki prored i
     // lijevo poravnanje u celijama su norma); font/velicina prolaze.
     const inTable = insideRanges(offset, tables);
+    const withExact: RunLevelOptions =
+      exactSize === undefined ? opts : { ...opts, stripFontSizeExactHalfPoints: exactSize };
     const paraOpts: RunLevelOptions = inTable
-      ? { ...opts, stripLineSpacing: false, stripParagraphSpacing: false, stripLeftJustify: false }
-      : opts;
+      ? { ...withExact, stripLineSpacing: false, stripParagraphSpacing: false, stripLeftJustify: false }
+      : withExact;
 
     let out = masked;
     let paragraphChanged = false;

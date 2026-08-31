@@ -4387,7 +4387,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "directLeftJc": 6,
           "directLine": 0,
           "runFonts": 0,
-          "runSz": 6,
+          "runSz": 0,
         },
         "docDefaults": {
           "ascii": "Times New Roman",
@@ -4485,7 +4485,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "directLeftJc": 6,
           "directLine": 0,
           "runFonts": 0,
-          "runSz": 6,
+          "runSz": 0,
         },
         "docDefaults": {
           "ascii": "Times New Roman",

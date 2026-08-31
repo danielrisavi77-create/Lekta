@@ -364,6 +364,10 @@ export function fontFixer(
     ? {
         stripFontName: fontOk,
         stripFontSizeNearHalfPoints: sizeOk ? sizeTarget : undefined,
+        // Tijelo koje je za vise od tolerancije vece od propisanog inace nikad nije popravljeno:
+        // `grf-diplomski-neuskladjen` je imao docDefaults 24 (12 pt) i izravni w:sz 28 (14 pt), pa
+        // je `font-fixer` javljao `already-ok` dok je `format.size.body` i dalje padao.
+        stripDominantBodySize: sizeOk,
         allowedStyleId: deepAllowedStyles(parts.stylesXml, bodyStyleId),
       }
     : null;
