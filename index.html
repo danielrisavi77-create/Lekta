@@ -1682,6 +1682,15 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
      sticky ponasanje se vraca. */
   body:has(.consent-banner:not(.hidden)) #wizardView[data-step="1"]:has(#dropzone.has-file) .lek-stepnav-1{position:static;padding:0;background:none;border-top:0;box-shadow:none}
   body:has(#wizardView[data-step="1"] #dropzone.has-file):has(.consent-banner:not(.hidden)){padding-bottom:calc(206px + env(safe-area-inset-bottom))}
+  /* Stavka grida ima zadani `min-width:auto`, pa stupac ne moze ispod svoje min-content sirine.
+     Izmjereno na 375x667: stupac je trazio 374 px u spremniku od 335, sadrzaj je isao do 406, i
+     preglednik je ODZUMIRAO cijelu stranicu (izgled 375x667 -> 406x723). Posljedica je bila da
+     primarni CTA zavrsi ISPOD vidljivog pregiba, a tvrdnja o pregibu je padala.
+     Kvar je tih jer se nakon odzumiranja VISE NISTA ne prelijeva (406 od 406), pa ga trazenje
+     vodoravnog prelijevanja ne nalazi. `max-width` na redu s datotekom sprjecava da dugo ime
+     iscuri iz dropzonea (izmjereno 348 px u okviru od 311). */
+  .wizard-grid>*{min-width:0}
+  .selected-file{max-width:100%}
   .field :is(input,select,textarea),.advanced-summary,.advanced-body,.profile-note{font-size:16px}
   .finding-card{padding:14px}
   .finding-card h4{font-size:20px}
@@ -1714,6 +1723,10 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
   .guide-cta .btn,.guide-cta .guide-more{width:100%;margin:0;min-height:46px}
   .repair-entry{padding:14px}
 }
+/* NIZAK zaslon (375x667 i slicni): izmjereno je da `#browseBtn` zavrsava TOCNO na 667, pa
+   dropzone prelazi pregib za svojih 14 px donjeg paddinga i 1 px ruba. Ovdje se vraca ~30 px
+   okomitog daha, bez diranja izgleda na visim zaslonima. */
+@media(max-width:720px) and (max-height:720px){#wizardView{padding-top:4px}#dropzone{padding:10px 12px}#dropzone h3{margin-top:4px;font-size:19px}#dropzone p{margin:6px 0 10px}}
 @media print{.lek-col-proof,.lek-bridge,.lek-paper-cover,.lek-stepnav-result{display:none!important}.lek-top-grid{display:block!important}}
 </style>
 </head>
