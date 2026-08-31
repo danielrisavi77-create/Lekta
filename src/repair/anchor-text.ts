@@ -33,8 +33,24 @@ export function normalizeAnchorText(value: string): string {
     .trim();
 }
 
-/** Normalizirani vidljivi tekst odlomka iz njegova XML-a. */
+/**
+ * Normalizirani vidljivi tekst odlomka iz njegova XML-a.
+ *
+ * `<w:tab/>`, `<w:br/>` i `<w:cr/>` emitiraju RAZMAK, ne nista. To je druga polovica istog kvara
+ * kao normalizacija iznad: bez nje sidro puca cim netko tabulator pretvori u pravi razmak.
+ *
+ * IZMJERENO 2026-08-31 na fixturi `manual-toc.docx` (rucni sadrzaj, najcesci rizicni oblik u
+ * stvarnim radovima): `croatian-typography-fixer` kategorijom `text-tabs` zamjenjuje `<w:tab/>`
+ * razmakom unutar `<w:t>`. Izvlacenje koje cita samo `<w:t>` daje prije `1 uvod1`, a poslije
+ * `1 uvod 1`; sidro se razilazi iako se odlomak sadrzajno nije promijenio, i
+ * `required-section-fixer` je padao na `stale-anchor`.
+ *
+ * Time se izjednacava i s `src/docx/parser.ts`, koji za te elemente emitira tabulator odnosno
+ * prijelom retka: normalizacija oba oblika svodi na razmak.
+ */
 export function anchorTextOfXml(paragraphXml: string): string {
-  const joined = [...paragraphXml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)].map((match) => match[1]).join('');
+  const joined = [...paragraphXml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>|<w:(?:tab|br|cr)\b[^>]*\/?>/g)]
+    .map((match) => (match[1] === undefined ? ' ' : match[1]))
+    .join('');
   return normalizeAnchorText(joined);
 }
