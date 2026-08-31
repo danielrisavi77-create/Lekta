@@ -26,8 +26,11 @@
   --desk: #191512;
   --desk-2: #211C17;
   --desk-ink: #EDE7DC;
-  --desk-muted: rgba(237, 231, 220, .55);
-  --desk-faint: rgba(237, 231, 220, .32);
+  /* Podignuto 2026-08-31 (.55 -> .82, .32 -> .60): na tamnom stolu su davali 2,03:1 i 2,58:1.
+     Iste vrijednosti stoje u inline tokenima `index.html`; drze se u paru, inace se tamna
+     polovica palete razidje po dvije datoteke. */
+  --desk-muted: rgba(237, 231, 220, .82);
+  --desk-faint: rgba(237, 231, 220, .60);
   --desk-line: rgba(237, 231, 220, .14);
   --paper: #F7F3E8;
   --paper-2: #EFE9D9;
@@ -38,8 +41,10 @@
   --red-deep: #C4372E;
   --red-soft: rgba(196, 55, 46, .12);
   --on-red: #1A1512;
-  --pass: #2E8B5F;
-  --pass-soft: rgba(46, 139, 95, .14);
+  /* Posvijetljeno s #2E8B5F: na tamnom stolu je davalo 4,30:1, a 20 px normalne tezine NIJE
+     "veliki tekst" (prag je 24 px), pa je trazeno 4,5. Sada 5,11:1. */
+  --pass: #34996A;
+  --pass-soft: rgba(52, 153, 106, .14);
   /* Tekst NA soft podlogama (badge/chip na papiru): --pass/--red-deep na alpha-blendanoj
      soft pozadini mjere 3.9-4.1:1 (ispod WCAG AA 4.5:1 za mali tekst), pa badge tekst koristi
      ove tamnije parove. Jedna vrijednost za obje teme (papir se malo mijenja): izmjereno
@@ -100,7 +105,10 @@
   --desk: #DFD8C6;
   --desk-2: #D6CEB9;
   --desk-ink: #26221B;
-  --desk-muted: #655C4B;
+  /* Zatamnjen s #655C4B 2026-08-31: prema `--desk-2` (#D6CEB9) je davao 4,20:1, ispod praga 4,5.
+     Prema svjetlijem `--desk` je prolazio (4,64:1), pa je bas tamnija podloga bila mjerodavna.
+     Ista vrijednost stoji i u inline tokenima `index.html`; drze se u paru. */
+  --desk-muted: #5F5645;
   --desk-faint: #98917E;
   --desk-line: rgba(38, 34, 27, .16);
   --paper: #FDFBF3;

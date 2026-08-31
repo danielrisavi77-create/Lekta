@@ -251,6 +251,10 @@ body:has(main[data-premium-surface="analyzer"]) .local-badge svg {
   box-shadow: var(--premium-depth-1);
 }
 
+/* Naslov kartice smije biti h2 ili h3: razina se bira po HIJERARHIJI stranice (axe
+   `heading-order`), a ne po zeljenom izgledu. Na `landing_benchmark.html` kartice stoje
+   izravno pod `h1`, pa je h3 ondje preskakao razinu. Izgled je isti za obje razine. */
+.premium-viz-card h2,
 .premium-viz-card h3 {
   margin: 0;
   color: var(--paper-ink);

@@ -192,6 +192,25 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);over
    `.hero p.lead` (0,2,1), sto tuce goli `.lead` (0,1,0) BEZ OBZIRA na redoslijed ucitavanja.
    Kaskada pada na redoslijed tek pri JEDNAKOJ specificnosti. Zato je i ovdje `.hero p.lead`. */
 @media(max-width:720px){.hero{padding:26px 0 4px}.hero p.lead{font-size:15.5px;line-height:1.5}}
+/* Dok banner stoji, stranica mora REZERVIRATI prostor ispod sebe. Banner je `position:fixed`
+   uz `bottom:18px` i izmjerenih 125 px visine na telefonu, a `body` nije imao nikakav donji
+   razmak: sadrzaj na samom dnu skrola zato je trajno lezao ispod njega, sve dok korisnik ne
+   odluci o privoli. To je potkopavalo i rad na pregibu: prva KONTROLA alata je iznad pregiba,
+   ali je primarna AKCIJA na dnu ostajala zaklonjena kad se do nje dodje.
+   `:has()` se u ovom repozitoriju vec koristi (vidi `index.html` sticky traku).
+
+   ISKLJUCIVO ZA EKRAN. U ispisu rezerva nije prostor nego POTROSENA VISINA LISTA: izmjereno na
+   `naslovnica.html`, cijom je ugovoru tocno jedna stranica, 96 px rezerve gura sadrzaj na drugu
+   stranicu cim list naraste (pri +800 px sadrzaja: 1 stranica bez trake, 2 s njom). Danas ne
+   okine jer stvarna naslovnica ima ~432 px zalihe, ali granica je bila tiha.
+   Sama traka se u ispisu i ne treba pojaviti, pa se ondje gasi. */
+@media screen{
+  body:has(.lekta-consent-banner.is-visible){padding-bottom:96px}
+}
+@media screen and (max-width:720px){
+  body:has(.lekta-consent-banner.is-visible){padding-bottom:164px}
+}
+@media print{.lekta-consent-banner{display:none}}
 /* KS: print na bijelom (tamni stol se ne printa) */
 @media print{body{background:#fff;color:#111}}
 /* Analitika (tool-analytics.ts): banner koristi SAMO sirove KS primitive (--paper/--paper-ink/

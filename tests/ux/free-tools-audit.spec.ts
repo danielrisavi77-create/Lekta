@@ -18,17 +18,48 @@ for (const pageSpec of FREE_TOOL_PAGES) {
     }
   });
 
-  test(`${pageSpec.name}: nema critical ili serious accessibility kršenja`, async ({ page }) => {
-    await page.setViewportSize({ width: 1440, height: 1000 });
-    await page.goto(pageSpec.route);
+  /**
+   * Prag je 2026-08-31 spusten sa `serious` na `moderate` i prosiren na OBJE teme.
+   *
+   * Oboje je moglo tek nakon mjerenja: dotad je `index.html` imao 19 `serious` nalaza (sitni
+   * natpisi u prikazu "korektorskog stola", najgori 1,35:1), a mjerila se samo zatecena tema, pa
+   * je citava svijetla polovica palete bila NEPROVJERENA. Nakon popravka tokena je zbroj po svih
+   * 10 stranica i obje teme NULA, pa ratchet nije potreban: prag je izravno 0.
+   *
+   * Tema se postavlja atributom jer je to isti prekidac koji koristi proizvod; `prefers-color-scheme`
+   * bi mjerio put koji korisnikov odabir teme nadglasa.
+   */
+  for (const tema of ['dark', 'light'] as const) {
+    test(`${pageSpec.name}: nema critical, serious ni moderate a11y kršenja (tema ${tema})`, async ({ page }, testInfo) => {
+      // Ovaj skup tvrdo postavlja SIROK viewport, pa bi ga mobilni projekt vrtio s IDENTICNIM
+      // mjerenjem: 20 prolaza umjesto 10, bez ijedne nove informacije. Mobilna a11y je zaseban i
+      // JOS NEZATVOREN posao (izmjereno na 375x667: `label` na `#fileInput`, `nested-interactive`
+      // na `#dropzone`, `heading-order`, i kontrast u demo prikazu), pa se ne smije predstaviti
+      // kao pokrivena ovim testom. Zabiljezeno, ne presuceno.
+      testInfo.skip(testInfo.project.name !== 'chromium', 'mjeri se samo na sirokom viewportu');
+      await page.setViewportSize({ width: 1440, height: 1000 });
+      await page.goto(pageSpec.route);
+      await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), tema);
 
-    const results = await new AxeBuilder({ page }).analyze();
-    const seriousViolations = results.violations.filter((violation) =>
-      violation.impact === 'critical' || violation.impact === 'serious',
-    );
+      // Tema se mora POTVRDITI, ne pretpostaviti: `ui-boot.ts` postavlja `data-theme` samo kad ga
+      // nema, pa bi buduca promjena tog uvjeta tiho vratila mjerenje na jednu temu, a tvrdnja bi i
+      // dalje glasila "obje".
+      expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe(tema);
 
-    expect(seriousViolations, seriousViolations.map((violation) => violation.id).join(', ')).toEqual([]);
-  });
+      const results = await new AxeBuilder({ page }).analyze();
+      // Netrivijalnost: axe mora stvarno biti pokrenut nad stranicom s pravilima, inace bi
+      // prazan `violations` prosao i nad praznim dokumentom.
+      expect(results.passes.length, 'axe mora imati ijedno zadovoljeno pravilo').toBeGreaterThan(0);
+
+      const nalazi = results.violations.filter((violation) =>
+        violation.impact === 'critical' || violation.impact === 'serious' || violation.impact === 'moderate',
+      );
+      expect(
+        nalazi,
+        nalazi.map((v) => `${v.impact}:${v.id}(${v.nodes.length})`).join(', '),
+      ).toEqual([]);
+    });
+  }
 }
 
 test('premium motion poštuje reduced-motion način rada', async ({ page }) => {
@@ -368,4 +399,157 @@ test('reduced-motion: skriveno stanje ne ovisi o tome je li setupReveal stigao',
   // "`.reveal-ready` uopce nema pa skriveno stanje ne vrijedi". Tek uz nju proba mjeri pravilo.
   expect(rezultat.revealReady, '.reveal-ready nije postavljen, proba ne bi nista dokazala').toBe(true);
   expect(rezultat.opacity, 'nov [data-reveal] pod reduced-motion mora biti vidljiv bez JS pomoci').toBe('1');
+});
+
+/**
+ * Traka o privoli je `position: fixed` uz dno i visoka je 125 px na mobitelu. Do 2026-08-31 `body`
+ * NIJE imao rezerviran prostor ispod nje, pa je sadrzaj na dnu stranice stajao POD trakom sve dok
+ * korisnik ne odluci o privoli. Izmjereno na `/citat.html` pri 375x667: zadnja poveznica podnozja
+ * zavrsava na 647 px, a traka pocinje na 524 px, dakle poveznica se ne moze ni vidjeti ni kliknuti.
+ *
+ * To potkopava upravo rad na pregibu iznad: prva KONTROLA jest iznad pregiba, ali je primarna
+ * RADNJA na dnu i dalje zaklonjena kad se do nje dodje.
+ *
+ * Mjeri se pogodkom (`elementFromPoint`), ne samo geometrijom: geometrija ne bi vidjela da traka
+ * hvata dodir preko `z-index`a, a upravo je taj oblik kvara vec potvrdjen na `index.html`.
+ *
+ * NAPOMENA O MJERENJU: padding se mora postaviti PRIJE skrolanja i pustiti da se izvede raspored.
+ * Postavljanje i skrolanje u istom `evaluate` mjeri stari `scrollHeight`, pa stranica ne stigne do
+ * dna i tvrdnja lazno padne.
+ */
+/**
+ * Dvije NEZAVISNE implementacije trake, pa se obje mjere:
+ *  - alati dobivaju `.lekta-consent-banner` iz `tool-analytics.ts`;
+ *  - naslovnica ima VLASTITU `#consentBanner`, pisanu rucno u `index.html`.
+ * Prvi popravak je pokrio samo alate, pa je najvaznija stranica ostala zaklonjena; zato par.
+ *
+ * Mjere se i OBA praga: ispod 720 px vrijedi mobilna rezerva, iznad desktopska. Bez sirokog
+ * viewporta bi se desktopska grana mogla obrisati a suite bi ostao zelen.
+ */
+const TRAKE = [
+  { ruta: '/citat.html', vidljiva: '.lekta-consent-banner.is-visible', traka: '.lekta-consent-banner', odbij: '.lekta-consent-banner [data-consent="deny"]' },
+  { ruta: '/index.html', vidljiva: '#consentBanner:not(.hidden)', traka: '#consentBanner', odbij: '#analyticsDecline' },
+];
+const SIRINE = [
+  { ime: 'usko 375x667', width: 375, height: 667 },
+  { ime: 'siroko 1440x900', width: 1440, height: 900 },
+];
+
+for (const t of TRAKE) {
+  for (const v of SIRINE) {
+    test(`traka o privoli ne zaklanja dno stranice (${t.ruta}, ${v.ime})`, async ({ page }) => {
+      await page.setViewportSize({ width: v.width, height: v.height });
+      await page.goto(t.ruta);
+      await page.waitForSelector(t.vidljiva);
+
+      // Stranica skrola GLATKO, pa jedan `scrollTo` ne stigne do dna (izmjereno: 3433 od 4683 px).
+      // Skrola se dok se polozaj ne umiri, inace tvrdnja mjeri sredinu stranice i lazno padne.
+      let zadnjiY = -1;
+      for (let i = 0; i < 14; i++) {
+        await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+        await page.waitForTimeout(250);
+        const sad = await page.evaluate(() => Math.round(window.scrollY));
+        if (sad === zadnjiY) break;
+        zadnjiY = sad;
+      }
+      const naDnu = await page.evaluate(() => {
+        const de = document.documentElement;
+        return Math.round(window.scrollY) >= Math.round(de.scrollHeight - de.clientHeight) - 2;
+      });
+      expect(naDnu, 'mjerenje mora doci do dna stranice').toBe(true);
+
+      const m = await page.evaluate((sel) => {
+        const banner = document.querySelector(sel)!.getBoundingClientRect();
+        const linkovi = [...document.querySelectorAll('footer a')];
+        const zadnji = linkovi[linkovi.length - 1].getBoundingClientRect();
+        const pogodak = document.elementFromPoint(zadnji.left + zadnji.width / 2, zadnji.top + zadnji.height / 2);
+        return {
+          rezerva: parseFloat(getComputedStyle(document.body).paddingBottom),
+          visinaTrake: Math.round(banner.height),
+          odmakOdDna: Math.round(window.innerHeight - banner.bottom),
+          zaklonjena: Math.round(zadnji.bottom) > Math.round(banner.top),
+          // `!!pogodak?.closest(...)` je za `null` davao `false`, dakle tvrdnja bi prosla i kad
+          // pogodak ne bi bio NISTA (poveznica izvan vidnog polja). Zato ishod od tri stanja.
+          pogodakNad: !pogodak ? 'nista'
+            : (pogodak.closest(sel) ? 'traka' : (pogodak.closest('footer a') ? 'poveznica' : pogodak.tagName)),
+          brojLinkova: linkovi.length,
+        };
+      }, t.traka);
+
+      // Netrivijalnost: bez podnozja i bez vidljive trake tvrdnje ispod prolaze vakuumski.
+      expect(m.brojLinkova, 'podnozje mora imati poveznice').toBeGreaterThan(0);
+      expect(m.visinaTrake, 'traka mora biti vidljiva').toBeGreaterThan(40);
+
+      // Traka ima i vlastiti odmak od dna (`bottom:18px`), pa rezerva mora pokriti oboje.
+      expect(m.rezerva, 'rezerva mora pokriti visinu trake i njezin odmak od dna')
+        .toBeGreaterThanOrEqual(m.visinaTrake + m.odmakOdDna);
+      expect(m.zaklonjena, 'zadnja poveznica podnozja zalazi pod traku').toBe(false);
+      expect(m.pogodakNad, 'na mjestu zadnje poveznice mora biti bas ona').toBe('poveznica');
+    });
+  }
+}
+
+for (const t of TRAKE) {
+  test(`rezerva za traku nestaje kad je privola rijesena (${t.ruta})`, async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto(t.ruta);
+    await page.waitForSelector(t.vidljiva);
+    const prije = await page.evaluate(() => parseFloat(getComputedStyle(document.body).paddingBottom));
+    expect(prije, 'rezerva mora postojati dok traka stoji').toBeGreaterThan(0);
+
+    await page.click(t.odbij);
+    await page.waitForTimeout(400);
+    const poslije = await page.evaluate(() => parseFloat(getComputedStyle(document.body).paddingBottom));
+    expect(poslije, 'rezerva mora nestati nakon odluke').toBe(0);
+  });
+}
+
+/**
+ * Traka o privoli je na mobitelu KRALA dodir na primarni CTA lijevka.
+ *
+ * Izmjereno (Pixel 5, `#wizardView[data-step="1"]` uz odabran dokument): traka je `fixed`
+ * `z-index:240`, sticky navigacija `fixed` `z-index:80`, pa je `elementFromPoint` nad gumbom
+ * "Nastavi na profil" vracao TRAKU, a `page.click` je istjecao nakon 4 s. Isti kvar je vec bio
+ * zapisan kao otvoren u `playwright.config.ts` (zbog njega je `roadmap-v2.spec.ts` pod mobilnim
+ * projektom u `testIgnore`), samo mu uzrok dotad nije bio izmjeren.
+ *
+ * REZERVA GA NE RJESAVA i to je bila prva pogresna pretpostavka: `padding` ne razdvaja dva `fixed`
+ * sloja. Uz to je specificnije wizard pravilo (2,2,1) gasilo rezervu trake (0,2,1) bez obzira na
+ * redoslijed. Traka se zato PODIZE iznad navigacije.
+ *
+ * Odmak je konstanta, jer se sticky navigacija pozicionira unutar pretka koji joj je containing
+ * block (njezin `bottom:0` pada na 665 px pri viewportu od 727 px), pa se ne moze izvesti iz
+ * viewporta. Bas zato tvrdnja mjeri PREKLOP i POGODAK, ne sam broj: ako konstanta odluta, gard
+ * padne.
+ */
+test('traka o privoli ne krade dodir na primarni CTA (mobitel)', async ({ page }) => {
+  await page.setViewportSize({ width: 393, height: 727 });
+  await page.goto('/index.html');
+  await page.waitForSelector('#consentBanner:not(.hidden)');
+  // Stanje "dokument odabran" bez pokretanja analize: sticky navigacija se pojavljuje bas na njemu.
+  await page.evaluate(() => document.querySelector('#dropzone')?.classList.add('has-file'));
+  await page.waitForTimeout(300);
+
+  const m = await page.evaluate(() => {
+    const ban = document.querySelector('#consentBanner')!.getBoundingClientRect();
+    const nav = document.querySelector('.lek-stepnav-1')!;
+    const btn = nav.querySelector('.btn')!.getBoundingClientRect();
+    const pogodak = document.elementFromPoint(btn.left + btn.width / 2, btn.top + btn.height / 2);
+    return {
+      visinaTrake: Math.round(ban.height),
+      visinaGumba: Math.round(btn.height),
+      preklop: Math.round(ban.bottom) > Math.round(nav.getBoundingClientRect().top),
+      naGumbu: !pogodak ? 'nista'
+        : (pogodak.closest('#consentBanner') ? 'traka' : (pogodak.closest('.lek-stepnav-1') ? 'gumb' : 'drugo')),
+    };
+  });
+
+  // Netrivijalnost: oba sloja moraju stvarno postojati i imati visinu, inace tvrdnje prolaze prazno.
+  expect(m.visinaTrake, 'traka mora biti vidljiva').toBeGreaterThan(40);
+  expect(m.visinaGumba, 'sticky CTA mora biti vidljiv').toBeGreaterThan(20);
+
+  expect(m.preklop, 'traka se preklapa sa sticky navigacijom').toBe(false);
+  expect(m.naGumbu, 'na sredini CTA mora biti sam CTA').toBe('gumb');
+  // I stvarni klik, jer je bas on istjecao.
+  await page.click('.lek-stepnav-1 .btn', { timeout: 5000 });
 });

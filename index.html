@@ -337,6 +337,19 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
    backdrop-filter na .topbar cini topbar containing blockom za fixed potomke (sheet bi se sabio u traku),
    pa se pri otvorenom izborniku gasi; top je 66px jer je KS nav 66px visok. */
 @media(max-width:1160px){.mobile-nav.open{display:flex;flex-direction:column;gap:2px;position:fixed;left:0;right:0;top:66px;bottom:0;overflow:auto;background:var(--bg);padding:18px 22px 26px;z-index:29}.mobile-nav a:not(.btn){padding:15px 6px;color:var(--text);text-decoration:none;font-family:var(--ui);font-weight:600;font-size:19px;border-bottom:1px solid var(--line);min-height:44px;display:flex;align-items:center}.mobile-nav .btn{margin-top:16px;width:100%;min-height:48px}body:has(.mobile-nav.open){overflow:hidden}.topbar:has(.mobile-nav.open){background:var(--bg);border-bottom-color:var(--line);backdrop-filter:none;-webkit-backdrop-filter:none;transition:none}}
+/* Traka o privoli je `position:fixed` uz dno (`z-index:240`), pa je do 2026-08-31 stajala PREKO
+   dna stranice sve dok korisnik ne odluci o privoli. Izmjereno na 375x667: traka je 170 px visoka,
+   a `body` nije imao nikakvu rezervu.
+
+   Ovo je VLASTITA traka naslovnice (`#consentBanner`), odvojena implementacija od one koju alatima
+   ubacuje `tool-analytics.ts` (`.lekta-consent-banner`). Prvi popravak je pokrio samo alate, pa je
+   bas najvaznija stranica ostala bez njega; drze se u paru.
+
+   Rezerva se vezuje na `:not(.hidden)`, jer se traka skriva bas tom klasom, pa praznina nestaje
+   cim je privola rijesena. */
+body:has(.consent-banner:not(.hidden)){padding-bottom:104px}
+@media(max-width:720px){body:has(.consent-banner:not(.hidden)){padding-bottom:206px}}
+
 /* v2.3 signature: "spremno" pecat (crvena margina kroz rezultat umirovljena; crvena = samo nalazi) */
 .result-view{position:relative}
 .full-report-banner{margin:16px 20px 0;padding:14px 16px;border:1px solid var(--ok);background:var(--ok-soft);border-radius:14px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
@@ -718,10 +731,10 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
    iskljucivo za nalaze provjere. Radna lampa je default (korektorski.ts postavi data-theme="dark"
    kad nema spremljene teme); data-theme="light" je "danje svjetlo". */
 html:root{
-  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;--desk-muted:rgba(237,231,220,.55);--desk-faint:rgba(237,231,220,.32);--desk-line:rgba(237,231,220,.14);
+  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;--desk-muted:rgba(237,231,220,.72);--desk-faint:rgba(237,231,220,.60);--desk-line:rgba(237,231,220,.14);
   --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
-  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;
-  --pass:#2E8B5F;--pass-soft:rgba(46,139,95,.14);
+  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;--red-on-desk:#FF7A5C;
+  --pass:#34996A;--pass-soft:rgba(52,153,106,.14);
   --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
   --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
   --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
@@ -745,9 +758,9 @@ html:root{
   --focus:0 0 0 2px var(--paper),0 0 0 4px var(--scan);
 }
 html:root[data-theme="light"]{
-  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;--desk-muted:#655C4B;--desk-faint:#98917E;--desk-line:rgba(38,34,27,.16);
+  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;--desk-muted:#5F5645;--desk-faint:#98917E;--desk-line:rgba(38,34,27,.16);
   --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
-  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;
+  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-desk:#A62B23;
   --pass:#1E7F4F;--pass-soft:rgba(30,127,79,.12);
   --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
   --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
@@ -1277,10 +1290,10 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 #how{padding:88px 0 96px}
 .ks-kako{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:start}
 .ks-steps{display:grid;align-content:start}
-.ks-step{text-align:left;border:0;border-top:1px solid var(--desk-line);border-radius:0;padding:24px 4px;display:grid;grid-template-columns:56px 1fr;gap:14px;opacity:.45;transition:opacity .3s;background:none;color:var(--desk-ink);cursor:pointer;width:100%}
-.ks-step[aria-pressed="true"]{opacity:1}
-.ks-step:hover{opacity:.85;background:none}
-.ks-step-no{font:500 11px var(--sans);letter-spacing:.1em;color:var(--red);padding-top:7px}
+.ks-step{text-align:left;border:0;border-top:1px solid var(--desk-line);border-radius:0;padding:24px 4px;display:grid;grid-template-columns:56px 1fr;gap:14px;opacity:.85;transition:opacity .3s;background:none;color:var(--desk-ink);cursor:pointer;width:100%}
+.ks-step[aria-pressed="true"]{opacity:1}.ks-step[aria-pressed="true"] .ks-step-t{color:var(--red)}
+.ks-step:hover{opacity:.95;background:none}
+.ks-step-no{font:500 11px var(--sans);letter-spacing:.1em;color:var(--red-on-desk);padding-top:7px}
 .ks-step-t{display:block;font-family:var(--display-serif);font-size:27px;letter-spacing:-.01em}
 .ks-step-d{display:block;font-family:var(--display-serif);font-size:15px;line-height:1.65;color:var(--desk-muted);margin-top:8px}
 .ks-step-hint{border-top:1px solid var(--desk-line);padding:20px 4px 0;font-family:var(--font-hand);font-size:22px;color:var(--red);transform:rotate(-1deg);font-weight:500}
@@ -1320,10 +1333,10 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .ks-doc-h{font-family:var(--display-serif);font-weight:400;font-size:30px;letter-spacing:-.01em;margin:0 0 12px}
 .ks-doc-p{margin:0 0 22px;font-family:var(--display-serif);font-size:15px;line-height:1.7;color:var(--desk-muted)}
 .ks-doc-list{display:grid}
-.ks-di{text-align:left;border:0;border-top:1px solid var(--desk-line);border-radius:0;padding:17px 4px;display:grid;grid-template-columns:36px 1fr auto;gap:12px;align-items:baseline;background:none;color:var(--desk-ink);opacity:.5;transition:opacity .25s;cursor:pointer;width:100%}
+.ks-di{text-align:left;border:0;border-top:1px solid var(--desk-line);border-radius:0;padding:17px 4px;display:grid;grid-template-columns:36px 1fr auto;gap:12px;align-items:baseline;background:none;color:var(--desk-ink);opacity:.85;transition:opacity .25s;cursor:pointer;width:100%}
 .ks-di[aria-pressed="true"]{opacity:1}
-.ks-di:hover{opacity:.85;background:none}
-.ks-di-no{font:500 10.5px var(--sans);letter-spacing:.1em;color:var(--red)}
+.ks-di:hover{opacity:.95;background:none}
+.ks-di-no{font:500 10.5px var(--sans);letter-spacing:.1em;color:var(--red-on-desk)}
 .ks-di-t{font-family:var(--display-serif);font-size:18px}
 .ks-di[aria-pressed="true"] .ks-di-t{color:var(--red)}
 .ks-di-s{font:500 10px var(--sans);letter-spacing:.1em;color:var(--desk-faint);text-transform:uppercase}
@@ -1381,15 +1394,15 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .ks-priv-r2{position:absolute;top:44px;right:28px;font:500 9.5px var(--sans);letter-spacing:.12em;text-transform:uppercase;text-align:right}
 .ks-priv[data-mode="auto"] .ks-priv-r2::after{content:"● Ništa ne stiže";color:var(--desk-faint)}
 .ks-priv[data-mode="manual"] .ks-priv-r2::after{content:"● Samo naručeni dokument";color:var(--warn)}
-.ks-priv-server{position:absolute;right:44px;bottom:44px;width:74px;opacity:.35;transition:opacity .3s}
-.ks-priv[data-mode="manual"] .ks-priv-server{opacity:1}
+.ks-priv-server{position:absolute;right:44px;bottom:44px;width:74px;opacity:1}
+.ks-priv-server i{opacity:.5;transition:opacity .3s}.ks-priv[data-mode="manual"] .ks-priv-server i{opacity:1}
 .ks-priv-server i{display:flex;align-items:center;gap:4px;padding:0 7px;border:1.5px solid var(--desk-muted);height:22px;margin-bottom:5px}
 .ks-priv-server i::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--desk-faint)}
 .ks-priv[data-mode="manual"] .ks-priv-server i::before{background:var(--pass)}
 .ks-priv-server i::after{content:"";flex:1;height:2px;background:var(--desk-line)}
-.ks-priv-server span{display:block;font:500 8px var(--sans);letter-spacing:.14em;color:var(--desk-faint);text-align:center;margin-top:6px;text-transform:uppercase}
+.ks-priv-server span{display:block;font:500 8px var(--sans);letter-spacing:.14em;color:var(--desk-muted);text-align:center;margin-top:6px;text-transform:uppercase}
 .ks-priv-granica{position:absolute;left:50%;top:0;bottom:0;width:0;border-left:3px dashed var(--red);transform:translateX(-1.5px)}
-.ks-priv-glabel{position:absolute;left:50%;top:22px;transform:translateX(-50%) rotate(-2deg);background:var(--red);color:#F7F3E8;font:600 9px var(--sans);letter-spacing:.2em;padding:6px 11px;white-space:nowrap;text-transform:uppercase}
+.ks-priv-glabel{position:absolute;left:50%;top:22px;transform:translateX(-50%) rotate(-2deg);background:var(--red-deep);color:#F7F3E8;font:600 9px var(--sans);letter-spacing:.2em;padding:6px 11px;white-space:nowrap;text-transform:uppercase}
 .ks-priv-rampa{position:absolute;left:50%;top:calc(50% - 6px);width:86px;height:5px;background:repeating-linear-gradient(45deg,var(--red),var(--red) 8px,#F7F3E8 8px,#F7F3E8 16px);transform-origin:left center;animation:ksPrivGate 6s var(--ease) infinite;box-shadow:0 2px 8px rgba(0,0,0,.35);display:none}
 .ks-priv-rampa-os{position:absolute;left:calc(50% - 4px);top:calc(50% - 8px);width:9px;height:9px;border-radius:50%;background:var(--red);display:none}
 .ks-priv[data-mode="manual"] .ks-priv-rampa,.ks-priv[data-mode="manual"] .ks-priv-rampa-os{display:block}
@@ -1652,20 +1665,9 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
   #dropzone .btn{min-height:46px;font-size:16px}
   #wizardView[data-step="1"]:has(#dropzone.has-file) .lek-stepnav-1{position:fixed;left:0;right:0;bottom:0;z-index:80;margin:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--paper) 96%,transparent);border-top:1px solid var(--paper-line);box-shadow:0 -8px 24px rgba(31,25,19,.14)}
   #wizardView[data-step="1"]:has(#dropzone.has-file) .lek-stepnav-1 .btn{width:100%;min-height:48px;font-size:16px}
-  /* PRIVOLA NE SMIJE POKRIVATI GLAVNU RADNJU (audit P0-05).
-     Dva su fiksna bara uz dno: ovaj (z-index 80) i banner privole (position:fixed, z-index 240).
-     Banner pobjeduje i pokrije gumb "Nastavi na profil", pa tap pogodi banner i tok stane prije
-     analize, bez ijedne poruke. Mjereno na Pixel 5 / 375x667: banner je visok 169px, cetvrtina
-     ekrana, i presijeca donju polovicu gumba, pa hit-test u sredistu gumba pogadja banner.
-     Playwright je to prijavljivao doslovno ("#consentBanner intercepts pointer events"), i zbog
-     toga je mobilni test bio IZUZET umjesto popravljen.
-     Ne rjesava se z-indexom (bar bi i dalje lezao PREKO bannera, samo obrnuto), nego odmakom:
-     dok je banner gore, bar se digne tocno iznad njega. Visina dolazi iz --consent-h koju app.ts
-     MJERI, jer ovisi o duljini teksta i sirini; konstanta bi bila kriva cim se copy promijeni. */
-  body.has-consent-banner #wizardView[data-step="1"]:has(#dropzone.has-file) .lek-stepnav-1{
-    bottom:calc(var(--consent-h,0px) + 12px)
-  }
   body:has(#wizardView[data-step="1"] #dropzone.has-file){padding-bottom:calc(70px + env(safe-area-inset-bottom))}
+  body:has(#wizardView[data-step="1"] #dropzone.has-file) .consent-banner{bottom:calc(150px + env(safe-area-inset-bottom))}
+  body:has(#wizardView[data-step="1"] #dropzone.has-file):has(.consent-banner:not(.hidden)){padding-bottom:calc(346px + env(safe-area-inset-bottom))}
   .field :is(input,select,textarea),.advanced-summary,.advanced-body,.profile-note{font-size:16px}
   .finding-card{padding:14px}
   .finding-card h4{font-size:20px}
@@ -2085,7 +2087,7 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 <div class="modal-backdrop hidden" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle"><div class="modal"><div class="modal-head"><h3 id="authTitle">Prijava e-mailom</h3><button class="modal-close" id="closeAuth" aria-label="Zatvori"><i data-lucide="x"></i></button></div><div class="modal-body"><p class="history-privacy">Za kupnju paketa i puni izvještaj potrebna je kratka prijava e-mailom. Šaljemo jednokratni kod, bez lozinke.</p><div class="field"><label for="authEmail">E-mail</label><input class="input" id="authEmail" type="email" autocomplete="email" inputmode="email" maxlength="180" placeholder="ime@primjer.hr"></div><div class="field hidden" id="authCodeField"><label for="authCode">Kod iz e-maila</label><input class="input" id="authCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="Šesteroznamenkasti kod"></div><div class="order-status hidden" id="authStatus" role="status" aria-live="polite"></div><div class="modal-actions"><button class="btn btn-secondary hidden" id="authChangeEmail" type="button">Promijeni e-mail</button><button class="btn btn-primary" id="authSubmit" type="button">Pošalji kod</button></div></div></div></div>
 <div class="modal-backdrop hidden" id="guaranteeModal" role="dialog" aria-modal="true" aria-labelledby="guaranteeTitle"><div class="modal"><div class="modal-head"><h3 id="guaranteeTitle">Garancijski zahtjev (T2/T3)</h3><button class="modal-close" id="closeGuarantee" aria-label="Zatvori"><i data-lucide="x"></i></button></div><div class="modal-body"><p class="history-privacy"><strong>Što garancija pokriva:</strong> točnost verificiranih, bodovanih pravila. Ako je referada vratila rad zbog pravila koje je puni izvještaj označio prolaznim, vrijedi povrat i besplatan ručni popravak. Garancija se ne odnosi na prihvaćanje rada, ocjenu ni sadržaj; Lekta nije službena potvrda fakulteta. Zahtjev se podnosi unutar 30 dana od vezivanja izvještaja, a odluku donosi čovjek nakon pregleda, s odgovorom u roku od 5 radnih dana. Detalji su u <a class="legal-open" data-legal="guarantee" href="/garancija.html">garancijskim uvjetima</a>.</p><div class="field"><label for="guaranteeRule">Sporno pravilo (označeno prolaznim)</label><select class="input" id="guaranteeRule"></select></div><div class="field"><label for="guaranteeEvidence">Dokaz (opis povrata i poveznica na dopis ili e-mail referade)</label><textarea class="input" id="guaranteeEvidence" rows="4" maxlength="1500" placeholder="Npr. referada je 12. 7. vratila rad uz obrazloženje da margine nisu 2,5 cm; poveznica na sken dopisa."></textarea></div><div class="order-status hidden" id="guaranteeStatus" role="status" aria-live="polite"></div><div class="modal-actions"><button class="btn btn-primary" id="guaranteeSubmit" type="button">Pošalji zahtjev</button></div></div></div></div>
 <form name="lekta-orders" method="POST" data-netlify="true" netlify-honeypot="bot-field" enctype="multipart/form-data" class="hidden" aria-hidden="true"><input type="hidden" name="form-name" value="lekta-orders"><p class="honeypot"><label>Ne ispunjavaj: <input name="bot-field"></label></p><input name="order_id"><input name="name"><input name="email"><input name="package"><input name="deadline"><input name="notes"><input name="profile"><input name="fingerprint"><input name="marketing_consent"><input name="terms_version"><input name="document" type="file"></form>
-<div class="consent-banner hidden" id="consentBanner"><p><strong>Dobrovoljna anonimna analitika.</strong> Osnovne funkcije i lokalna analiza rade bez marketinških kolačića. Možeš dopustiti slanje anonimnih događaja korištenja kada je takav endpoint konfiguriran.</p><div class="consent-actions"><button class="btn btn-secondary btn-sm" id="analyticsDecline">Samo nužno</button><button class="btn btn-primary btn-sm" id="analyticsAccept">Dopusti analitiku</button></div></div>
+<div class="consent-banner hidden" id="consentBanner" role="region" aria-label="Postavke privole za analitiku"><p><strong>Dobrovoljna anonimna analitika.</strong> Osnovne funkcije i lokalna analiza rade bez marketinških kolačića. Možeš dopustiti slanje anonimnih događaja korištenja kada je takav endpoint konfiguriran.</p><div class="consent-actions"><button class="btn btn-secondary btn-sm" id="analyticsDecline">Samo nužno</button><button class="btn btn-primary btn-sm" id="analyticsAccept">Dopusti analitiku</button></div></div>
 <div class="toast-wrap" id="toastWrap" role="status" aria-live="polite" aria-atomic="false"></div>
 <script type="module" src="/src/main.ts"></script>
 </body>

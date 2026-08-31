@@ -49,6 +49,25 @@ function contrast(fgStr: string, bg: [number, number, number]): number {
 const DARK = { desk: hexToRgb('#191512'), paper: hexToRgb('#F7F3E8') };
 const LIGHT = { desk: hexToRgb('#DFD8C6'), paper: hexToRgb('#FDFBF3') };
 
+/**
+ * Vrijednost tokena CITANA IZ CSS-a, nikad prepisana u test.
+ *
+ * Do 2026-08-31 su tvrdnje ispod nosile doslovne vrijednosti (`#655C4B`, `rgba(237,231,220,.32)`).
+ * Kad su se tokeni promijenili, testovi su ostali ZELENI jer su i dalje mjerili konstante kojih u
+ * repozitoriju vise nema: gard je dokazivao nesto o mrtvom nizu, a ne o zivom tokenu. To je isti
+ * razred kao "gard bez dokaza da grize" iz CLAUDE.md, samo tise, jer nista ne pada.
+ */
+function token(ime: string, tema: 'dark' | 'light'): string {
+  const css = read('src/shared/design-system.css');
+  const granica = css.indexOf('[data-theme="light"]');
+  if (granica < 0) throw new Error('design-system.css nema [data-theme="light"] blok');
+  const blok = tema === 'dark' ? css.slice(0, granica) : css.slice(granica);
+  // Zadnja deklaracija u bloku pobjedjuje, kao u kaskadi.
+  const svi = [...blok.matchAll(new RegExp(`--${ime}\s*:\s*([^;]+);`, 'g'))];
+  if (!svi.length) throw new Error(`token --${ime} nije nadjen u temi ${tema}`);
+  return svi[svi.length - 1][1].trim();
+}
+
 describe('WCAG kontrast: eyebrow (AUD a11y #1/#3/#5/#9)', () => {
   const css = read('src/shared/tool-page.css');
 
@@ -58,14 +77,41 @@ describe('WCAG kontrast: eyebrow (AUD a11y #1/#3/#5/#9)', () => {
   });
 
   it('--desk-muted na --desk pozadini prolazi AA (>=4.5:1) u obje teme', () => {
-    // rgba(237,231,220,.55) dark / #655C4B light (design-system.css)
-    expect(contrast('rgba(237,231,220,.55)', DARK.desk)).toBeGreaterThanOrEqual(4.5);
-    expect(contrast('#655C4B', LIGHT.desk)).toBeGreaterThanOrEqual(4.5);
+    const tamna = token('desk-muted', 'dark');
+    const svijetla = token('desk-muted', 'light');
+    // Netrivijalnost: da citanje tokena ne vrati prazan niz koji bi se tiho ponasao kao crna.
+    expect(tamna, 'tamni --desk-muted').toMatch(/^(#|rgba?\()/);
+    expect(svijetla, 'svijetli --desk-muted').toMatch(/^(#|rgba?\()/);
+    expect(contrast(tamna, DARK.desk), `tamna tema, ${tamna}`).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(svijetla, LIGHT.desk), `svijetla tema, ${svijetla}`).toBeGreaterThanOrEqual(4.5);
   });
 
-  it('--desk-faint i dalje NE bi prosao (dokumentira zasto je promjena bila nuzna)', () => {
-    expect(contrast('rgba(237,231,220,.32)', DARK.desk)).toBeLessThan(4.5);
-    expect(contrast('#98917E', LIGHT.desk)).toBeLessThan(4.5);
+  it('--desk-muted prolazi AA i na tamnijem --desk-2 (ondje je bio pad, ne na --desk)', () => {
+    // Ovo je razlika koja je 2026-08-31 promakla: `#655C4B` je na `--desk` (#DFD8C6) davao 4,64:1
+    // i prolazio, a na `--desk-2` (#D6CEB9) 4,20:1 i padao. Mjerodavna je TAMNIJA podloga.
+    const svijetla = token('desk-muted', 'light');
+    expect(contrast(svijetla, hexToRgb('#D6CEB9')), `svijetla tema na --desk-2, ${svijetla}`)
+      .toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('--desk-faint u tamnoj temi prolazi AA (podignut s .32 na .60)', () => {
+    const tamna = token('desk-faint', 'dark');
+    expect(contrast(tamna, DARK.desk), `tamna tema, ${tamna}`).toBeGreaterThanOrEqual(4.5);
+  });
+
+  /**
+   * Svijetli `--desk-faint` NE prolazi AA ni na `--desk` (2,21:1) ni na `--paper` (3,03:1), i to je
+   * svjesno zabiljezeno stanje, ne previd. Tvrdnja zato ne postavlja prag na boju nego PRIKIVA
+   * DOSEG: token se koristi samo u `index.html`, cija se oba stanja teme mjere u pregledniku
+   * (`tests/ux/free-tools-audit.spec.ts`, axe, prag `moderate`, obje teme, nula nalaza).
+   *
+   * Cim ga uzme jos koja stranica, ovaj gard pada i trazi ili jacu vrijednost ili mjerenje ondje.
+   */
+  it('svijetli --desk-faint ostaje ogranicen na index.html, gdje ga mjeri preglednik', () => {
+    const korisnici = PAGES.filter((f) => read(f).includes('var(--desk-faint)'));
+    expect(korisnici).toEqual(['index.html']);
+    const svijetla = token('desk-faint', 'light');
+    expect(contrast(svijetla, LIGHT.desk)).toBeLessThan(4.5);
   });
 });
 

@@ -513,8 +513,10 @@ ${canonical ? `<meta property="og:url" content="${canonical}">` : ''}
 <link rel="stylesheet" href="/alati/citation-style.css">
 </head>
 <body>
-<div class="lekta-brand"><a href="${SITE_ORIGIN}">Lekta</a><span>Besplatan alat, bez registracije</span></div>
+<header class="lekta-brand"><a href="${SITE_ORIGIN}">Lekta</a><span>Besplatan alat, bez registracije</span></header>
+<main>
 ${bodyHtml}
+</main>
 <script type="application/json" id="lekta-tool-config">${configJs}</script>
 <script src="/alati/citation-tool.js"></script>
 </body>
@@ -1017,7 +1019,8 @@ function buildCharCounterHtml() {
 </style>
 </head>
 <body>
-<div class="lekta-brand"><a href="${SITE_ORIGIN}">Lekta</a><span>Besplatan alat, bez registracije</span></div>
+<header class="lekta-brand"><a href="${SITE_ORIGIN}">Lekta</a><span>Besplatan alat, bez registracije</span></header>
+<main>
 <h1>Brojač kartica</h1>
 <p class="lekta-tool-meta">1 kartica = 1800 znakova (uključujući razmake), standardna jedinica za akademske i lektorske radove.</p>
 <textarea id="text-input" placeholder="Zalijepi svoj tekst ovdje..."></textarea>
@@ -1027,6 +1030,7 @@ function buildCharCounterHtml() {
   <span>Riječi: <strong id="word-count">0</strong></span>
 </div>
 ${ctaHtml(`${SITE_ORIGIN}/alati/citati/index.html`, 'Generator citata po fakultetu')}
+</main>
 <script src="/alati/brojac-kartica.js"></script>
 </body>
 </html>

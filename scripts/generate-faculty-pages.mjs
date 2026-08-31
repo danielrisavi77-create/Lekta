@@ -459,6 +459,13 @@ const PAGE_STYLE = `
   .coverage-unknown { font-size: 0.82rem; color: var(--paper-muted); }
   .lekta-consent-banner { display: none; position: fixed; left: 18px; right: 18px; bottom: 18px; z-index: 240; margin: auto; max-width: 760px; padding: 1rem 1.1rem; border: 1px solid var(--paper-line); border-radius: 2px; background: var(--paper); color: var(--paper-ink); box-shadow: var(--paper-sh); align-items: center; justify-content: space-between; gap: 1rem; }
   .lekta-consent-banner.is-visible { display: flex; }
+  /* Rezerva prostora ispod trake o privoli. Ove stranice ne ucitavaju `tool-page.css`, nego
+     nose VLASTITU kopiju ovog stila, pa ih popravak ondje nije dosegao i dno je ostajalo
+     zaklonjeno na cijelom `/fakulteti/**` skupu. Samo za ekran: u ispisu bi rezerva trosila
+     visinu lista, a sama traka se ne treba ni ispisati. */
+  @media screen { body:has(.lekta-consent-banner.is-visible) { padding-bottom: 96px; } }
+  @media screen and (max-width: 720px) { body:has(.lekta-consent-banner.is-visible) { padding-bottom: 164px; } }
+  @media print { .lekta-consent-banner { display: none; } }
   .lekta-consent-banner p { margin: 0; font-size: 0.78rem; color: var(--paper-muted); max-width: 480px; }
   .lekta-consent-actions { display: flex; gap: 0.5rem; flex: 0 0 auto; }
   .lekta-consent-actions button { border: 0; border-radius: 2px; padding: 0.55rem 0.8rem; font: 600 0.78rem system-ui, sans-serif; cursor: pointer; white-space: nowrap; }
