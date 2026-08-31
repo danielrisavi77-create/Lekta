@@ -126,6 +126,10 @@ describe('VisualResultModel', () => {
       url: 'https://example.test/upute',
       quote: 'Margine su propisane u pravilniku.',
       page: 12,
+      // `pageLabel` nosi DOSLOVNU formulaciju izvora o mjestu, jer `sourcePage` u pravilima nije
+      // broj nego slobodan tekst ("str. 9 (odjeljak 2.4 ...)"). Ovdje ga ulaz ne daje, pa je null.
+      // Numericki `page` ostaje strogo cuvan testom ispod; ovo je dodatak, ne popustanje.
+      pageLabel: null,
     });
     expect(margins?.source?.exact).toBe(true);
     expect(margins?.expected).toBe('Lijeva margina 3 cm.');

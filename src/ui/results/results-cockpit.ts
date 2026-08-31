@@ -5,6 +5,8 @@ import { priorityFindingsHtml } from './priority-findings';
 import { readinessHaloHtml } from './technical-compliance-halo';
 import { bindDocumentDna, documentDnaHtml } from './document-dna';
 import type { DocumentDnaModel } from './document-dna-model';
+import { repairOutlookHtml } from './repair-outlook-view';
+import type { RepairOutlookModel } from './repair-outlook';
 import { escapeHtml } from '../../utils/helpers';
 
 export type ResultsRenderer = 'legacy' | 'cockpit';
@@ -23,6 +25,8 @@ export interface ResultsCockpitOptions {
   repairAvailable: boolean;
   /** DNA rada. Izostavljen kad rezultat nema mjerene odlomke; sekcija se tada ne crta. */
   documentDna?: DocumentDnaModel;
+  /** Sto automatika moze prije nego se pokrene. Izostavljen kad popravak nije dostupan. */
+  repairOutlook?: RepairOutlookModel;
   advancedOpen?: boolean;
   onAction?: (action: ResultsCockpitAction) => void;
   onAdvancedToggle?: (open: boolean) => void;
@@ -96,6 +100,7 @@ export function renderResultsCockpit(mount: HTMLElement, model: VisualResultMode
     '<section class="cockpit-priority" aria-labelledby="cockpitPriorityTitle"><div class="cockpit-section-heading"><span class="cockpit-kicker">Prvo pogledajte</span><h2 id="cockpitPriorityTitle">Najva\u017Eniji nalazi</h2></div>',
     priorityFindingsHtml(model.findings.top, options.repairAvailable), '</section>',
     options.documentDna ? documentDnaHtml(options.documentDna) : '',
+    options.repairOutlook ? repairOutlookHtml(options.repairOutlook) : '',
     categorySummaryHtml(model.categories),
     actionRowHtml(model, options.repairAvailable),
     '<button type="button" class="cockpit-advanced-toggle" data-cockpit-action="advanced" data-cockpit-advanced aria-expanded="', advancedOpen ? 'true' : 'false', '"><span>Napredna provjera</span><span aria-hidden="true">&#65291;</span></button>',

@@ -756,3 +756,58 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 @media (prefers-reduced-motion: reduce) {
   .dna__bar > i { transform: scaleY(1); transition: none; }
 }
+
+/* ---- Prije popravka: sto automatika moze ------------------------------------
+   Strop se prikazuje kao GRANICA, ne kao ishod. Procijenjene ocjene nakon odabranih
+   popravaka nema i ne smije je biti; jedini dokaz ishoda je ponovna analiza. */
+
+.cockpit-outlook { display: grid; gap: .75rem; }
+
+.outlook__tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: .6rem;
+}
+.outlook__tile {
+  display: grid;
+  gap: .1rem;
+  padding: .7rem .8rem;
+  border: 1px solid var(--ck-line);
+  border-left-width: 3px;
+  border-radius: var(--radius, 2px);
+}
+.outlook__tile strong {
+  font-family: var(--mono, monospace);
+  font-size: 1.35rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.outlook__tile span { color: var(--ck-muted); font-size: .74rem; line-height: 1.3; }
+.outlook__tile--auto { border-left-color: var(--ck-green); }
+.outlook__tile--assisted { border-left-color: var(--ck-blue); }
+.outlook__tile--manual { border-left-color: var(--ck-amber); }
+
+.outlook__ceiling { margin: 0; font-size: .88rem; line-height: 1.55; }
+.outlook__ceiling strong { font-family: var(--mono, monospace); font-variant-numeric: tabular-nums; }
+
+.outlook__manual {
+  display: grid;
+  gap: .35rem;
+  padding: .75rem .85rem;
+  border: 1px dashed var(--ck-line);
+  border-radius: var(--radius, 2px);
+}
+.outlook__manual ul { margin: 0; padding: 0; list-style: none; display: grid; gap: .25rem; }
+.outlook__manual li {
+  display: flex;
+  justify-content: space-between;
+  gap: .8rem;
+  font-size: .85rem;
+}
+.outlook__manual li span {
+  color: var(--ck-amber);
+  font-family: var(--mono, monospace);
+  font-variant-numeric: tabular-nums;
+}
+
+.outlook__note { margin: 0; color: var(--ck-muted); font-size: .78rem; line-height: 1.5; }

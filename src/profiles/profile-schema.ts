@@ -45,6 +45,13 @@ export interface RuleEntry {
   machineCheckable?: boolean;
   authority?: RuleAuthorityLevel;
   sourceId?: string | null;
+  /**
+   * Razrijesen izvor: `{id, title, url}` iz `data/sources/source-registry.json`, prikacen pri
+   * pecenju servenog artefakta (`buildProfileRulesArtifact`). Postoji SAMO kad je `sourceId`
+   * poznat registru; nepoznat se ne pogadja. Registar uz to drzi `snapshotHash` i ostalu
+   * provenijenciju, koja ovim putem NE izlazi.
+   */
+  source?: { id: string; title: string; url: string } | null;
   sourcePage?: string | null;
   quote?: string | null;
   status?: RuleStatus;

@@ -51,6 +51,8 @@ export interface VisualExactEvidenceInput {
   url?: string;
   quote?: string;
   page?: number | null;
+  /** Doslovna formulacija izvora o mjestu, npr. "str. 9 (odjeljak 2.4)". Vidi VisualExactEvidence. */
+  pageLabel?: string | null;
   expected?: string;
 }
 
@@ -61,6 +63,13 @@ export interface VisualExactEvidence {
   url: string;
   quote: string;
   page: number | null;
+  /**
+   * Doslovna formulacija izvora o mjestu. Postoji jer `sourcePage` u pravilima NIJE broj nego
+   * slobodan tekst ("str. 9 (odjeljak 2.4 Quellenangaben im Text, tocke 1 i 2)"). Parsiranje u
+   * cijeli broj izgubilo bi odjeljak, a izmisljanje broja je zabranjeno; zato se navodi kako
+   * izvor sam pise. `page` ostaje strogo numericki i nepromijenjen za pozivatelje koji ga imaju.
+   */
+  pageLabel: string | null;
 }
 
 export interface VisualFindingCapabilities {
@@ -217,8 +226,9 @@ function acceptedEvidence(candidate: VisualExactEvidenceInput | undefined): { ev
   const quote = trimString(candidate.quote);
   if (!sourceId || !title || !url || !quote) return null;
   const expected = trimString(candidate.expected);
+  const pageLabel = trimString(candidate.pageLabel);
   return {
-    evidence: { verified: true, sourceId, title, url, quote, page: candidate.page },
+    evidence: { verified: true, sourceId, title, url, quote, page: candidate.page, pageLabel: pageLabel ?? null },
     ...(expected ? { expected } : {}),
   };
 }
