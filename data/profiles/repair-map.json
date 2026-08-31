@@ -2201,6 +2201,19 @@
       },
       "sourcePage": "Metodologija izrade rada, Izgled rada",
       "lastVerified": "2026-08-01"
+    },
+    {
+      "ruleId": "efzg-seminarski--footnote-size",
+      "checkId": "footnote-size",
+      "label": "Velicina fusnote (preporuka)",
+      "status": "advisory",
+      "fixerId": "footnote-typography-fixer",
+      "recommended": true,
+      "value": [
+        10
+      ],
+      "sourcePage": "Metodologija izrade rada, Izgled rada",
+      "lastVerified": "2026-08-01"
     }
   ],
   "efzg-specijalisticki": [

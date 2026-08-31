@@ -77,7 +77,9 @@
       "lastVerified": "2026-08-01",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
-      "verifiedHash": "a9144962b6935e040a6138550d51e606917884f8f1b3c216bef6fc212e3f5eda"
+      "verifiedHash": "a9144962b6935e040a6138550d51e606917884f8f1b3c216bef6fc212e3f5eda",
+      "recommendedFixerId": "footnote-typography-fixer",
+      "note": "Preporuceni popravak dodan 2026-08-31: motor VEC ima `footnoteTypographyFixer` koji prima `fontSizePt`, ali ga ova tvrdnja nije dosezala jer joj nedostajao `recommendedFixerId`. Ostaje `advisory`: izvor vrijednost uvodi rijecima \"preporucuje se sljedece\", pa se ne boduje."
     },
     {
       "ruleId": "efzg-seminarski--page-count",

@@ -28,7 +28,7 @@ pravilo nije vezano uz potvrdjen izvor - ne nagadja se.
 - profila: **407**
 - s popravkom po UPUTI FAKULTETA: **373**
 - samo univerzalna higijena (prazni odlomci), bez potvrdjenih tehnickih pravila: **34**
-- ukupno stavki recepta: **2736**
+- ukupno stavki recepta: **2737**
 
 Sto se NE popravlja automatski: sadrzaj, argument, citati i literatura (osim provjere
 postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
@@ -693,6 +693,7 @@ postojanja izvora), numeriranje naslova i svaka odluka koja je autorska.
 |---|---|---|---|---|
 | Prored (preporuka) | `line-spacing-fixer` | prored 1,5 | [Upute za pisanje seminarskoga i diplomskoga rada (Ekonomski fakultet u Zagrebu, 2003)](https://www.efzg.unizg.hr/UserDocsImages/dokumenti/efzg_diplomski_seminarski_upute.pdf?vel=216027) | Metodologija izrade rada, Izgled rada |
 | Margine (preporuka) | `margins-fixer` | 2,54 / 2,54 / 2,54 / 2,54 cm (gore/desno/dolje/lijevo) | [Upute za pisanje seminarskoga i diplomskoga rada (Ekonomski fakultet u Zagrebu, 2003)](https://www.efzg.unizg.hr/UserDocsImages/dokumenti/efzg_diplomski_seminarski_upute.pdf?vel=216027) | Metodologija izrade rada, Izgled rada |
+| Velicina fusnote (preporuka) | `footnote-typography-fixer` | 10 pt | [Upute za pisanje seminarskoga i diplomskoga rada (Ekonomski fakultet u Zagrebu, 2003)](https://www.efzg.unizg.hr/UserDocsImages/dokumenti/efzg_diplomski_seminarski_upute.pdf?vel=216027) | Metodologija izrade rada, Izgled rada |
 | Usklađivanje predajnog paketa | `submission-metadata-fixer` | potvrđene DOCX metapodatke između Worda, PDF-a i obrasca<br><sub>Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni.</sub> |  |  |
 | Prazni odlomci | `empty-paragraph-fixer` | uklanjanje viska praznih odlomaka<br><sub>Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka.</sub> |  |  |
 

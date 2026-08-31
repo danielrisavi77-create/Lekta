@@ -97,6 +97,12 @@ function paramsFromValue(checkId: string, value: unknown): Record<string, unknow
       return Array.isArray(value) && value[0] != null ? { fontSizePt: value[0] } : null;
     case 'line-spacing':
       return typeof value === 'number' ? { multiplier: value } : null;
+    case 'footnote-size': {
+      // Vrijednost dolazi u DVA oblika: `[10]` na 46 tvrdnji i goli `10` na njih 9. Oba su valjana
+      // zapisa iste odredbe, pa se oba prihvacaju umjesto da se jedan tiho ignorira.
+      const n = Array.isArray(value) ? value[0] : value;
+      return typeof n === 'number' && n > 0 ? { fontSizePt: n } : null;
+    }
     case 'justify':
       return value === true ? { val: 'both' } : value === false ? { val: 'left' } : null;
     case 'paper-size': {

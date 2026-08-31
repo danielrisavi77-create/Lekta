@@ -611,3 +611,36 @@ describe('requiredSectionsRepairableItem: predodabir nedostajucih dijelova', () 
     expect(items).toEqual([]);
   });
 });
+
+/**
+ * Velicina fusnote kao PREPORUKA. Motor je fixer imao cijelo vrijeme (`footnoteTypographyFixer`
+ * prima `fontSizePt`), ali ga tvrdnja nije dosezala: nedostajao joj je `recommendedFixerId`, pa
+ * nijedan od 368 profila u `repair-map.json` nije nudio taj popravak. Klasican mrtav mehanizam:
+ * kod postoji, ponuda ne.
+ */
+describe('velicina fusnote: vrijednost dolazi u dva oblika i oba moraju raditi', () => {
+  const params = (value: unknown) => {
+    // PECENI oblik: projekcija (`gen-profile-runtime-maps`) pretvara `recommendedFixerId` u
+    // `fixerId` + `recommended: true`. Test namjerno koristi taj oblik, jer ga runtime i cita.
+    const entries = [{
+      ruleId: 'x--footnote-size', checkId: 'footnote-size', status: 'advisory',
+      sourceId: 'izvor', sourcePage: 'str. 1', quote: 'preporucuje se velicina slova 10',
+      value, fixerId: 'footnote-typography-fixer', recommended: true,
+    }];
+    const items = buildRepairableItems([], {}, entries as any);
+    return items.find((i) => String(i.ruleId).includes('footnote-size'))?.params;
+  };
+
+  it('niz [10] daje fontSizePt 10', () => {
+    expect(params([10])).toMatchObject({ fontSizePt: 10 });
+  });
+
+  it('goli broj 10 daje isto (46 tvrdnji nosi niz, 9 goli broj)', () => {
+    expect(params(10)).toMatchObject({ fontSizePt: 10 });
+  });
+
+  it('besmislena vrijednost ne proizvodi ponudu', () => {
+    expect(params(0)).toBeUndefined();
+    expect(params('deset')).toBeUndefined();
+  });
+});

@@ -1615,7 +1615,7 @@
     },
     {
       "profileId": "efzg-seminarski",
-      "offeredOptionCount": 2
+      "offeredOptionCount": 3
     },
     {
       "profileId": "kif-specijalisticki",
@@ -15504,6 +15504,14 @@
       "recommended": true
     },
     {
+      "profileId": "efzg-seminarski",
+      "ruleId": "efzg-seminarski--footnote-size",
+      "fixerId": "footnote-typography-fixer",
+      "checkId": "footnote-size",
+      "templateId": "footnotes-legal-citations",
+      "recommended": true
+    },
+    {
       "profileId": "kif-specijalisticki",
       "ruleId": "kif-specijalisticki--font",
       "fixerId": "font-fixer",
@@ -16007,14 +16015,14 @@
   ],
   "summary": {
     "profileCount": 407,
-    "profileOptionCount": 1750,
-    "rowCount": 1750,
-    "fixerCount": 5,
+    "profileOptionCount": 1751,
+    "rowCount": 1751,
+    "fixerCount": 6,
     "registeredFixerCount": 31,
     "profileFixerCount": 5,
     "uiAssistedFixerCount": 25,
     "dispatchOnlyFixerCount": 1,
     "templateCount": 8,
-    "usedTemplateCount": 1
+    "usedTemplateCount": 2
   }
 }

@@ -5650,6 +5650,25 @@
         "lastVerified": "2026-08-01"
       },
       {
+        "ruleId": "efzg-seminarski--footnote-size",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Velicina fusnote (preporuka)",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        },
+        "recommended": true,
+        "source": {
+          "id": "efzg-upute-diplomski-seminarski",
+          "title": "Upute za pisanje seminarskoga i diplomskoga rada (Ekonomski fakultet u Zagrebu, 2003)",
+          "url": "https://www.efzg.unizg.hr/UserDocsImages/dokumenti/efzg_diplomski_seminarski_upute.pdf?vel=216027"
+        },
+        "sourcePage": "Metodologija izrade rada, Izgled rada",
+        "authority": "official-recommended-mentor-priority",
+        "lastVerified": "2026-08-01"
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
