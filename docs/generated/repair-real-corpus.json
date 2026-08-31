@@ -400,7 +400,7 @@
       "documentId": "grf-diplomski-neuskladjen",
       "fileName": "grf-diplomski-neuskladjen.docx",
       "profileId": "grf-diplomski",
-      "outcome": "review",
+      "outcome": "pass",
       "before": {
         "checkCount": 19,
         "passCount": 7,
@@ -408,8 +408,8 @@
       },
       "after": {
         "checkCount": 19,
-        "passCount": 10,
-        "score": 72
+        "passCount": 11,
+        "score": 80
       },
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
@@ -425,12 +425,10 @@
         "paper-size-fixer"
       ],
       "targetedCheckCount": 3,
-      "targetedResolvedCount": 2,
-      "targetedUnresolvedCount": 1,
-      "autoUnresolvedCount": 1,
-      "autoUnresolvedChecks": [
-        "format.size.body"
-      ],
+      "targetedResolvedCount": 3,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
       "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
@@ -444,8 +442,7 @@
       "integrityFailure": null,
       "manualReviewRequired": true,
       "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "ciljani-check-nije-u-potpunosti-riješen"
+        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu"
       ],
       "error": null
     },
@@ -1092,8 +1089,8 @@
   ],
   "summary": {
     "documentCount": 16,
-    "passCount": 2,
-    "reviewCount": 12,
+    "passCount": 3,
+    "reviewCount": 11,
     "failCount": 0,
     "integrityFailureCount": 0,
     "noOpCount": 2,
@@ -1101,12 +1098,11 @@
     "manualReviewCount": 16,
     "passRegressionCount": 0,
     "targetedCheckCount": 36,
-    "targetedResolvedCount": 25,
-    "autoUnresolvedCount": 5,
+    "targetedResolvedCount": 26,
+    "autoUnresolvedCount": 4,
     "autoUnresolvedChecks": [
       "footnote.format",
       "format.justify.body",
-      "format.size.body",
       "page.numbers.present"
     ],
     "assistedUnresolvedCount": 6,
