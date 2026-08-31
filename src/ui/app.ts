@@ -48,6 +48,7 @@ import { renderProgressScan } from './progress-scan';
 import { buildVisualResultModel } from './results/visual-result-model';
 import { renderResultsCockpit, resultRendererFor, type ResultsCockpitAction } from './results/results-cockpit';
 import { buildDocumentDnaModel } from './results/document-dna-model';
+import { profileStatusForEvent } from './profile-status-event';
 import { detectPassRegressions, dropStaleFieldRegressions, tocFieldWillRefresh } from '../analysis/repair-regression';
 import { summarizeRepairOutcome, describeRepairOutcome, type RepairOutcome } from '../repair/repair-outcome';
 import { scoringChangeNote } from './scoring-change-note';
@@ -265,7 +266,7 @@ function bind(){
  $('#resultBackDoc')&&($('#resultBackDoc').onclick=()=>{backToWizardFromResult(1);try{$('#dropzone')?.focus({preventScroll:true})}catch(e: any){}});$('#resultBackProfile')&&($('#resultBackProfile').onclick=()=>{backToWizardFromResult(2);try{$('#institutionSelect')?.focus({preventScroll:true})}catch(e: any){}});
  $('#paperCoverBtn')&&($('#paperCoverBtn').onclick=()=>revealAnalyzerForm(true));$('#uploadCtaBtn')&&($('#uploadCtaBtn').onclick=()=>revealAnalyzerForm(true));$('#paperCover')?.addEventListener('dragenter',()=>revealAnalyzerForm(false));document.addEventListener('click',(e: any)=>{if(e.target.closest('a[href="#analyzer"]'))revealAnalyzerForm(false)});
  $('#stepToProfile')?.addEventListener('click',()=>{void trackEvent('profile_step_opened',{})});
- $('#stepToAnalyze')?.addEventListener('click',()=>{const p=currentProfile().p;void trackEvent('profile_completed',{profileStatus:p.statusKey||'generic'})});
+ $('#stepToAnalyze')?.addEventListener('click',()=>{void trackEvent('profile_completed',{profileStatus:profileStatusForEvent(()=>currentProfile().p)})}); // `currentProfile()` BACA kad pravila nisu ucitana; ovaj je listener bio sinkron i bez garda, pa je dogadjaj tiho nestajao dok je carobnjak isao dalje (korak mijenja DRUGI listener).
  $('#profileNote')?.addEventListener('click',(e: any)=>{if(e.target.closest('[data-profile-change]')){$('#institutionSelect')?.focus();$('#institutionSelect')?.scrollIntoView({behavior:'smooth',block:'center'})}});
  // #issueFilters onclick se ozicuje unutar renderPhaseTwoResultViews (jedini pisac popisa
  // nalaza), ne ovdje: prije analize nema sto filtrirati, a nakon prve analize taj kasniji
