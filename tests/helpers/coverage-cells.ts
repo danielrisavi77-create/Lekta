@@ -231,6 +231,10 @@ const ASSISTED_RULE_GATE: Record<string, string> = {
   'citation-bibliography-sync-fixer': 'citation-sync-rules',
   'section-surgery-fixer': 'section-surgery-rules',
   'legal-footnote-repair-fixer': 'legal-footnote-repair-rules',
+  // `requiredSectionsRepairableItem` isto radi tvrdi `if (!ruleEntry) return []`. Taj unos ima 21
+  // profil od 407, pa ostalima stavka nikad nije ni ponudjena; provjereno na uzorku od pet profila
+  // iz nepokrivenog skupa, gdje se u punom lancu ne pojavi nijednom.
+  'required-section-fixer': 'required-section-rules',
 };
 
 /** Isti uvjet koji graditelji u `src/ui/repair-items.ts` primjenjuju na `profile.ruleEntries`. */
