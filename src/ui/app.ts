@@ -49,6 +49,9 @@ import { buildVisualResultModel } from './results/visual-result-model';
 import { renderResultsCockpit, resultRendererFor, type ResultsCockpitAction } from './results/results-cockpit';
 import { buildDocumentDnaModel } from './results/document-dna-model';
 import { profileStatusForEvent } from './profile-status-event';
+import { buildExactEvidence } from './results/exact-evidence';
+import { buildRepairOutlook } from './results/repair-outlook';
+import { buildDefaultRepairRequests } from '../repair/default-selection';
 import { detectPassRegressions, dropStaleFieldRegressions, tocFieldWillRefresh } from '../analysis/repair-regression';
 import { summarizeRepairOutcome, describeRepairOutcome, type RepairOutcome } from '../repair/repair-outcome';
 import { scoringChangeNote } from './scoring-change-note';
@@ -1069,10 +1072,22 @@ function renderResultsCockpitForResult(r: any){
     findings:Array.isArray(r?.details?.triage?.findings)?r.details.triage.findings:[],
     provisional:_dnaReadiness.authoritative!==true,
   });
+  // Dokazna lupa: mapa `issueKey -> doslovan navod iz sluzbene upute`. Prazna je kad pravila
+  // nisu ucitana ili nijedno nema citat, i tada se sucelje ponasa tocno kao prije.
+  const _evidence=buildExactEvidence(r?.checks,r?.issues,analyzedProfile?.ruleEntries);
+  // Prije popravka: samo determinisicko. Predodabir se cita kroz `buildDefaultRepairRequests`,
+  // dakle kroz TOCNO onaj put koji se izvodi kad korisnik samo klikne Popravi; brojanje po
+  // vlastitom kriteriju mjerilo bi tok koji nitko ne izvodi.
+  const _outlook=r?.demo?undefined:buildRepairOutlook(
+    r?.checks,
+    typeof r?.score==='number'?r.score:null,
+    buildDefaultRepairRequests([...repairPanelItems,...repairPanelTextItems]).length,
+  );
   const model=buildVisualResultModel({
     ...r,
-    capabilities:{preview:true,repair:!r?.demo,exactEvidence:false},
+    capabilities:{preview:true,repair:!r?.demo,exactEvidence:Object.keys(_evidence).length>0},
   },{
+    exactEvidence:_evidence,
     states:findingStates,
     repairItems:[...repairPanelItems,...repairPanelTextItems],
     ruleEntries:analyzedProfile?.ruleEntries,
@@ -1080,6 +1095,7 @@ function renderResultsCockpitForResult(r: any){
   renderResultsCockpit(mount,model,{
     repairAvailable:!r?.demo,
     documentDna:_dna,
+    repairOutlook:_outlook,
     advancedOpen,
     onAction:(action)=>handleResultsCockpitAction(r,action),
     onAdvancedToggle:(open)=>setResultsCockpitAdvanced(open),

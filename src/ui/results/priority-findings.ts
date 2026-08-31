@@ -47,7 +47,7 @@ export function priorityFindingHtml(finding: VisualFindingModel, repairAvailable
   const action = findingAction(finding, repairAvailable);
   const measured = finding.measured ? '<div class="cockpit-finding__answer"><strong>Izmjereno</strong><p>' + escapeHtml(finding.measured) + '</p></div>' : '';
   const expected = finding.expected ? '<div class="cockpit-finding__answer"><strong>O\u010Dekivano</strong><p>' + escapeHtml(finding.expected) + '</p></div>' : '';
-  const evidence = finding.exactEvidence ? '<details class="cockpit-finding__evidence"><summary>Dokaz iz izvora</summary><p>' + escapeHtml(finding.exactEvidence.quote) + '</p><small>' + escapeHtml(finding.exactEvidence.title) + (finding.exactEvidence.page != null ? ', str. ' + finding.exactEvidence.page : '') + '</small></details>' : '';
+  const evidence = finding.exactEvidence ? '<details class="cockpit-finding__evidence"><summary>Dokaz iz izvora</summary><p>' + escapeHtml(finding.exactEvidence.quote) + '</p><small>' + escapeHtml(finding.exactEvidence.title) + (finding.exactEvidence.pageLabel ? ', ' + finding.exactEvidence.pageLabel : finding.exactEvidence.page != null ? ', str. ' + finding.exactEvidence.page : '') + '</small></details>' : '';
   const source = finding.source?.exact && finding.exactEvidence ? '<a class="cockpit-finding__source" href="' + escapeHtml(finding.exactEvidence.url) + '" target="_blank" rel="noopener">Otvori izvor</a>' : '';
   return [
     '<article class="cockpit-finding cockpit-finding--', escapeHtml(finding.severity), ' cockpit-finding--', escapeHtml(finding.status), '" data-cockpit-finding data-cockpit-priority-card data-finding-id="', escapeHtml(finding.id), '">',
