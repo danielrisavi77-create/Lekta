@@ -66,4 +66,44 @@ describe('heading-style-fixer: sidro protiv zastarjele mete', () => {
     expect(out.changelog.length).toBeGreaterThan(0);
     expect(out.skippedReasons['heading-structure-universal']).toBeUndefined();
   });
+
+  /**
+   * F6 (2026-08-31), nalaz neovisnog pregleda: djelomican promasaj sidra se gutao.
+   *
+   * Primjenjivao se prezivjeli podskup uz `applied: true`, bez ikakva traga o odbacenima. Uz 12
+   * meta i pomak indeksa jedna moze prezivjeti slucajno, a jedanaest nestati, i to se prijavi kao
+   * uspjeh. Djelomicno oblikovanje naslova gore je od nijednog, jer dokument IZGLEDA popravljeno.
+   *
+   * Drugi dio istog nalaza: prazno sidro je odgovaralo svakom praznom odlomku.
+   */
+  it('jedna zastarjela meta obara CIJELI zahtjev, ne samo sebe', async () => {
+    const bytes = await docx();
+    const out = await applyFixers(bytes, [{
+      ruleId: 'heading-structure-universal',
+      fixerId: 'heading-style-fixer' as const,
+      params: { targets: [
+        { paragraphIndex: 2, level: 1, anchorText: 'Metodologija' },
+        { paragraphIndex: 3, level: 1, anchorText: 'Ovoga naslova nema u dokumentu' },
+      ] },
+    }] as never);
+    expect(out.skippedReasons['heading-structure-universal']).toBe('stale-anchor');
+    expect(out.changelog).toEqual([]);
+    expect(await documentOf(out.docxBytes)).toBe(DOCUMENT_XML);
+  });
+
+  /**
+   * Ovu tvrdnju danas drzi mapa jedinstvenosti (prazan kljuc se u nju ne upisuje), a ne izricita
+   * provjera `!wanted`; mutacija te provjere zato NE obara ovaj test. Ostaje jer je tvrdnja o
+   * PONASANJU, ne o izvedbi: prazno sidro ne smije nikad nista pogoditi.
+   */
+  it('prazno sidro se ne priznaje kao podudaranje', async () => {
+    const bytes = await docx();
+    const out = await applyFixers(bytes, [{
+      ruleId: 'heading-structure-universal',
+      fixerId: 'heading-style-fixer' as const,
+      params: { targets: [{ paragraphIndex: 2, level: 1, anchorText: '' }] },
+    }] as never);
+    expect(out.skippedReasons['heading-structure-universal']).toBe('stale-anchor');
+    expect(await documentOf(out.docxBytes)).toBe(DOCUMENT_XML);
+  });
 });

@@ -36,6 +36,8 @@ export interface OutcomeItemLike {
    * "nije imalo sto primijeniti"; kad ih pozivatelj ne prosljedi, ponasanje je kao prije.
    */
   params?: Record<string, unknown>;
+  /** Potreban da `hasActionableParams` zna kad opce pravilo ne vrijedi (vidi WORK_CARRIERS). */
+  fixerId?: string;
 }
 
 export type RepairOutcomeKind =
@@ -134,7 +136,7 @@ export function summarizeRepairOutcome(input: {
 
   for (const item of input.selected) {
     // Stavka koja trazi potvrdu, a nema nijedan odabran zahvat, nije primijenjena nego CEKA.
-    const waiting = item.requiresConfirmation === true && !hasActionableParams(item.params);
+    const waiting = item.requiresConfirmation === true && !hasActionableParams(item.params, item.fixerId);
     for (const title of item.matchKeys ?? []) {
       const id = stableCheckId(title);
       if (!id) {

@@ -518,12 +518,37 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
        */
       const paragraphTexts = paragraphTextsForAnchors(parts.documentXml);
       const anchoredCount = targets.filter((target) => target.anchorText !== undefined).length;
+      /**
+       * Sidro je valjano samo uz NEPRAZAN i JEDINSTVEN tekst.
+       *
+       * Prazan tekst bi inace odgovarao svakom praznom odlomku, a ponovljen tekst bi uz pomak
+       * indeksa (npr. `field-integrity-fixer` sazme rucni sadrzaj u polje, pomak od desetak
+       * odlomaka) tiho prihvatio KRIVI odlomak. Oba su gora od glasnog `stale-anchor`.
+       */
+      const textCounts = new Map<string, number>();
+      for (const text of paragraphTexts) {
+        const key = normalizeAnchorText(text);
+        if (key) textCounts.set(key, (textCounts.get(key) ?? 0) + 1);
+      }
       const freshTargets = targets.filter((target) => {
         if (target.anchorText === undefined) return true;
-        return normalizeAnchorText(paragraphTexts[target.paragraphIndex - 1] ?? '') === normalizeAnchorText(target.anchorText);
+        const wanted = normalizeAnchorText(target.anchorText);
+        // Prazno sidro se ne priznaje: odgovaralo bi svakom praznom odlomku. Provjera je
+        // NAMJERNO suvisna, jer `textCounts` prazne kljuceve ionako ne pohranjuje; stoji izricito
+        // da ponasanje ne ovisi o toj internoj odluci ako se mapa jednom promijeni.
+        if (!wanted || textCounts.get(wanted) !== 1) return false;
+        return normalizeAnchorText(paragraphTexts[target.paragraphIndex - 1] ?? '') === wanted;
       });
-      // Sve mete su bile usidrene i nijedna vise ne stoji: to je zastarjelo sidro, ne prazan zahtjev.
-      if (anchoredCount > 0 && freshTargets.length === 0) {
+      /**
+       * DJELOMICAN promasaj se ne guta.
+       *
+       * Do 2026-08-31 se primjenjivao prezivjeli podskup uz `applied: true` i bez ikakva traga o
+       * odbacenima: uz 12 meta i pomak indeksa (npr. `field-integrity-fixer` sazme rucni sadrzaj u
+       * polje) jedna meta moze prezivjeti slucajno, a jedanaest nestati, i to se prijavi kao uspjeh.
+       * `link-doi` i `required-section` u istoj situaciji odustaju u cijelosti; ovdje se sada radi
+       * isto, jer je djelomicno oblikovanje naslova gore od nijednog: dokument izgleda popravljeno.
+       */
+      if (anchoredCount > 0 && freshTargets.length < anchoredCount) {
         return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'stale-anchor' as const };
       }
       const applicable = freshTargets.map(({ anchorText: _anchorText, ...target }) => target);

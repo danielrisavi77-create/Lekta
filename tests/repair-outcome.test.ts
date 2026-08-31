@@ -191,11 +191,41 @@ describe('summarizeRepairOutcome: cekanje potvrde nije jaz', () => {
     const out = summarizeRepairOutcome({
       before: failing,
       after: failing,
-      selected: [{ matchKeys: ['Margine dokumenta'], requiresConfirmation: true, params: { version: 1, groups: [{ id: 'g' }], replacements: [] } }],
+      selected: [{ matchKeys: ['Margine dokumenta'], requiresConfirmation: true, params: { version: 1, groups: [{ id: 'g' }], replacements: [{ id: 'r' }] } }],
     });
     expect(out.assistedUnresolved).toEqual(['page.margins']);
     expect(out.awaitingConfirmation).toEqual([]);
     expect(out.targeted).toEqual(['page.margins']);
+  });
+
+
+  /**
+   * F5 (2026-08-31), nalaz neovisnog pregleda: opce pravilo je krivo u OBA smjera, a prethodna
+   * izvedba ovog testa pribijala je krivu klasifikaciju kao ispravnu.
+   *
+   * `consistency-fixer` s NEPRAZNIM `groups` i praznim `replacements` vraca `no-target`, dakle
+   * ceka covjeka; opce pravilo ga je proglasavalo akcijskim jer je jedan niz neprazan.
+   * `field-integrity-fixer` radi posao iz `settings.updateFieldsOnOpen` i kad je `fields` prazan;
+   * opce pravilo ga je proglasavalo praznim.
+   */
+  it('consistency: neprazni `groups` uz prazne `replacements` su CEKANJE, ne jaz', () => {
+    const out = summarizeRepairOutcome({
+      before: failing,
+      after: failing,
+      selected: [{ matchKeys: ['Margine dokumenta'], fixerId: 'consistency-fixer', requiresConfirmation: true, params: { version: 1, groups: [{ id: 'g' }], replacements: [] } }],
+    });
+    expect(out.awaitingConfirmation).toEqual(['page.margins']);
+    expect(out.assistedUnresolved).toEqual([]);
+  });
+
+  it('field-integrity: prazan `fields` uz djelatan `settings` je STVARAN zahvat, ne cekanje', () => {
+    const out = summarizeRepairOutcome({
+      before: failing,
+      after: failing,
+      selected: [{ matchKeys: ['Margine dokumenta'], fixerId: 'field-integrity-fixer', requiresConfirmation: true, params: { version: 1, fields: [], settings: { updateFieldsOnOpen: true } } }],
+    });
+    expect(out.assistedUnresolved).toEqual(['page.margins']);
+    expect(out.awaitingConfirmation).toEqual([]);
   });
 
   it('prazan params objekt NIJE cekanje: empty-paragraph-fixer salje {} i uredno radi', () => {

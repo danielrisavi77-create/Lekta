@@ -40,6 +40,48 @@ describe('required sections structure', () => {
     }
   });
 
+
+  /**
+   * F3 (2026-08-31), nalaz neovisnog pregleda: popravak je umetao DUPLIKAT naslova.
+   *
+   * (a) Numerirani naslov `1. SAZETAK` normalizira se u `1 sazetak`, sto nije ni jednako `sazetak`
+   *     ni pocinje s `sazetak `, pa je dio proglasen nedostajucim iako postoji.
+   * (b) Zastita od dvosmislenosti usporedjivala je EFEKTIVNU oznaku s upozorenjem pisanim
+   *     UGRADJENOM, pa kod pregazene oznake nikad nije opalila: analiza nadje dva moguca naslova,
+   *     a alat svejedno predodabere umetanje treceg.
+   *
+   * Oboje je moglo umetnuti vidljivi tekst u studentov rad, sto je najosjetljivija granica alata.
+   */
+  it('numeriran naslov se prepoznaje kao POSTOJECI dio', () => {
+    const xml = doc(`${p('1. SAŽETAK')}${p('Uvod')}`);
+    const result = analyzeRequiredSectionsStructure({
+      documentXml: xml,
+      paragraphs: [{ index: 1, text: '1. SAŽETAK', headingLevel: 1 }, { index: 2, text: 'Uvod', headingLevel: 1 }],
+      profileRequiredSections: [{ key: 'summary-hr', label: 'Sažetak' }],
+    });
+    const candidate = result.candidates.find((x) => x.kind === 'summary-hr');
+    expect(candidate?.present, 'numeriran naslov je i dalje taj naslov').toBe(true);
+    // Posljedica koja je i bila kvar: nedostajuci dio bi se predodabrao za umetanje.
+    expect(candidate?.insertionAnchor).toBeUndefined();
+  });
+
+  it('pregazena oznaka ne smije ugasiti zastitu od dvosmislenosti', () => {
+    const xml = doc(`${p('Sažetak')}${p('Sažetak 3')}${p('Uvod')}`);
+    const result = analyzeRequiredSectionsStructure({
+      documentXml: xml,
+      paragraphs: [
+        { index: 1, text: 'Sažetak', headingLevel: 1 },
+        { index: 2, text: 'Sažetak 3', headingLevel: 1 },
+        { index: 3, text: 'Uvod', headingLevel: 1 },
+      ],
+      profileRequiredSections: [{ key: 'summary-hr', label: 'Sažetak' }],
+      rules: { labels: { 'summary-hr': 'SAŽETAK RADA' } } as never,
+    });
+    const candidate = result.candidates.find((x) => x.kind === 'summary-hr');
+    expect(candidate?.confidence, 'dva moguca naslova moraju spustiti pouzdanost na low').toBe('low');
+    expect(candidate?.insertionAnchor, 'bez sidra nema predodabira, pa ni umetanja duplikata').toBeUndefined();
+  });
+
   it('ne duplicira alias Keywords', () => {
     const xml = doc(`${p('Keywords')}${p('Uvod')}`);
     const result = analyzeRequiredSectionsStructure({ documentXml: xml, paragraphs: [{ index: 1, text: 'Keywords', headingLevel: 1 }, { index: 2, text: 'Uvod', headingLevel: 1 }], profileRequiredSections: [{ key: 'keywords-en', label: 'Keywords' }] });

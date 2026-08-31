@@ -153,9 +153,21 @@ export function linkDoiFixer(parts: DocxXmlParts, params: LinkDoiFixParams): Fix
      * identiteta. Prazan tekst se ne priznaje, inace bi prazan odlomak bio sidro za bilo sto.
      */
     const rangeText = anchorTextOf(range.xml);
+    /**
+     * TEKSTUALNO SIDRO VRIJEDI SAMO AKO JE TEKST JEDINSTVEN U DOKUMENTU.
+     *
+     * Bez toga se lazno ODBIJANJE zamijeni tihim lazno PRIHVACANJEM, sto je gore. Indekse u istoj
+     * fazi pomicu i `element-caption-fixer` (umece natpise, sortira PRIJE ovoga) i
+     * `field-integrity-fixer` (sazme rucni sadrzaj u polje). Ako tada indeks N pokazuje na DRUGI
+     * odlomak koji nosi ISTI tekst, sidro bi ga prihvatilo i zahvat bi sletio na krivo mjesto.
+     *
+     * Ponovljeni tekst nije rubni slucaj: `element-caption-fixer` sam generira "Izvor: Izrada
+     * autora" ispod svake tablice. Kod dvojbe se vraca `stale-anchor`, sto je glasno i sigurno.
+     */
+    const textOccurrences = ranges.reduce((count, candidate) => count + (anchorTextOf(candidate.xml) === rangeText ? 1 : 0), 0);
     const anchorOk = (operation: { anchorFingerprint: string; anchorText?: string }): boolean =>
       range.fingerprint === operation.anchorFingerprint
-      || (typeof operation.anchorText === 'string' && operation.anchorText.length > 0 && operation.anchorText === rangeText);
+      || (typeof operation.anchorText === 'string' && operation.anchorText.length > 0 && operation.anchorText === rangeText && textOccurrences === 1);
     if (!operations.every(anchorOk)) return noOp(parts, 'stale-anchor');
     if (PROTECTED.test(range.xml)) return noOp(parts, 'unsupported-structure');
     const sorted = [...operations].sort((a, b) => b.start - a.start);
@@ -199,6 +211,23 @@ export function linkDoiFixer(parts: DocxXmlParts, params: LinkDoiFixParams): Fix
     const afterText = partsOfRun.text.slice(localEnd);
     if (oldText !== operation.before) return noOp(parts, 'stale-anchor');
     const parent = findHyperlinkParent(paragraphXml, run);
+    /**
+     * Zauzimanje ide PRIJE ijedne mutacije, i to je srz popravka.
+     *
+     * Do 2026-08-31 je provjera stajala na KRAJU tijela petlje, a `updateRelationshipTarget` i
+     * `addRelationship` iznad nje. Operacija koja se potom preskoci vec je promijenila `rels`.
+     * IZMJERENO: dvije `make-hyperlink` operacije nad istim runom dale su `applied: true` uz natpis
+     * "2 poveznica", JEDNU hipervezu u dokumentu i VISAK relacije `rId2` koju nista ne referencira.
+     * U varijanti s postojecom hipervezom isti put prepise `Target` tudje relacije, pa poveznica A
+     * pokazuje na URL B: tiho i krivo, dok paket ostaje valjan i Word ga uredno otvara.
+     *
+     * Jedinica iskljucivosti je HIPERVEZA kad postoji, inace run: svaka operacija unutar iste
+     * hiperveze moze izazvati prepisivanje cijelog njezinog raspona, pa dvije takve nikad ne smiju
+     * proci zajedno.
+     */
+    const claimKey = parent ? range.start + parent.start : range.start + run.start;
+    if (claimedRanges.has(claimKey)) continue;
+    claimedRanges.add(claimKey);
     if (parent?.id && operation.targetUrl && ['normalize-doi', 'remove-tracking', 'replace-canonical-url'].includes(operation.action)) rels = updateRelationshipTarget(rels, parent.id, operation.targetUrl);
     let replacement: string;
     if (operation.action === 'remove-link-styling') replacement = stripLinkStyle(run.xml);
@@ -209,8 +238,6 @@ export function linkDoiFixer(parts: DocxXmlParts, params: LinkDoiFixParams): Fix
       if (parent?.id) {
         const nextRun = runWithText(partsOfRun.rPr, `${beforeText}${visible}${afterText}`);
         replacement = paragraphXml.slice(parent.start, run.start) + nextRun + paragraphXml.slice(run.end, parent.end);
-        if (claimedRanges.has(range.start + parent.start)) continue;
-        claimedRanges.add(range.start + parent.start);
         replacements.push({ start: range.start + parent.start, end: range.start + parent.end, value: paragraphXml.slice(parent.start, run.start) + nextRun + paragraphXml.slice(run.end, parent.end) });
         continue;
       }
@@ -221,8 +248,6 @@ export function linkDoiFixer(parts: DocxXmlParts, params: LinkDoiFixParams): Fix
       const visible = operation.replacementText ?? oldText;
       replacement = runWithText(partsOfRun.rPr, `${beforeText}${visible}${afterText}`);
     }
-    if (claimedRanges.has(range.start + run.start)) continue;
-    claimedRanges.add(range.start + run.start);
     replacements.push({ start: range.start + run.start, end: range.start + run.end, value: replacement });
   }
   // Sve operacije su pale na vec preuzet raspon: nista se nije primijenilo, pa se to i kaze.
@@ -230,5 +255,5 @@ export function linkDoiFixer(parts: DocxXmlParts, params: LinkDoiFixParams): Fix
   for (const replacement of replacements.sort((a, b) => b.start - a.start)) documentXml = documentXml.slice(0, replacement.start) + replacement.value + documentXml.slice(replacement.end);
   const packageXmlParts = { ...(parts.packageXmlParts ?? {}) };
   const nextParts: DocxXmlParts = { ...parts, documentXml: ensureRNamespace(documentXml), documentRelsXml: rels, packageXmlParts: { ...packageXmlParts, 'word/_rels/document.xml.rels': rels } };
-  return { parts: nextParts, applied: true, beforeLabel: `${pending.length} poveznica`, afterLabel: 'poveznice i DOI-ji normalizirani' };
+  return { parts: nextParts, applied: true, beforeLabel: `${replacements.length} poveznica`, afterLabel: 'poveznice i DOI-ji normalizirani' };
 }

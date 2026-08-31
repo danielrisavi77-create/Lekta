@@ -56,6 +56,24 @@ describe('generator krsenja: required-section', () => {
     };
     const { violated: bez } = await buildViolatingDocx(bezPravila, { structural: ['required-section'] });
     expect(bez).not.toContain('required-section');
+
+    /**
+     * DRUGA POLOVICA UVJETA, koja je do 2026-08-31 bila NEPOKRIVENA.
+     *
+     * Neovisni pregled je mutacijom dokazao da je gard prolazio i kad se `!present.has(label)`
+     * ukloni: gornja kontrola koristi prazan popis pravila, pa vjezba samo granu "profil nista ne
+     * propisuje". Tvrdnja u zaglavlju datoteke ("provjeriti OBA uvjeta") time nije bila istinita.
+     *
+     * Ovdje profil PROPISUJE dio koji dokument VEC IMA (`Uvod` generator uvijek pise), pa se
+     * mjeri bas presence-polovica.
+     */
+    const propisujePostojece = {
+      ...profile,
+      requiredSections: [{ key: 'introduction', label: 'Uvod' }],
+      effectiveRules: { ...((profile.effectiveRules as Record<string, unknown>) ?? {}), requiredSections: [{ key: 'introduction', label: 'Uvod' }] },
+    };
+    const { violated: postoji } = await buildViolatingDocx(propisujePostojece, { structural: ['required-section'] });
+    expect(postoji, 'dio koji dokument vec ima ne smije se prijaviti kao prekrsen').not.toContain('required-section');
   });
 
   it('popravak umece nedostajuce dijelove i podize bodovanu provjeru', async () => {

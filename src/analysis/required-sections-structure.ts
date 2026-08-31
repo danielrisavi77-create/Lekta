@@ -101,6 +101,19 @@ function isHeading(xml: string, paragraph: ParagraphLike): boolean {
   return /<w:pStyle\b[^>]*w:val=["'](?:Heading|Naslov)[1-9]["']/i.test(xml) || (paragraph.text.trim().length > 0 && paragraph.text.trim().length < 100 && !/[.!?]$/.test(paragraph.text.trim()));
 }
 
+/**
+ * Naslov bez vodece numeracije ("1.", "1.2", "2)", "IV.").
+ *
+ * IZMJERENO 2026-08-31, nalaz neovisnog pregleda: dokument s naslovom `1. SAZETAK` uz propisanu
+ * oznaku `Sazetak` normalizira se u `1 sazetak`, sto nije ni jednako `sazetak` ni pocinje s
+ * `sazetak `. Dio je time proglasen NEDOSTAJUCIM, a popravak je umetao DUPLIKAT naslova u rad
+ * koji ga vec ima. `hasExistingLabel` u fixeru to ne spasava, jer usporedjuje cijeli odlomak
+ * doslovno.
+ */
+function withoutLeadingNumber(text: string): string {
+  return text.replace(/^(?:[0-9]+(?:[.][0-9]+)*|[ivxlcdm]+)[.)]?\s+/i, '').trim();
+}
+
 function defaultOrder(profile: RequiredSectionProfileEntry[] | undefined): RequiredSectionKind[] {
   const fromProfile = (profile ?? []).filter((x) => x.required !== false).map((x) => kindForKey(x.key ?? x.label)).filter((x): x is RequiredSectionKind => !!x);
   return [...new Set(fromProfile)];
@@ -161,7 +174,11 @@ export function analyzeRequiredSectionsStructure(input: {
   for (const kind of order) {
     const { aliases } = labelAliases(kind, input.rules, profileMap.get(kind));
     const normalized = aliases.map(normalize);
-    const matches = headings.filter((p) => normalized.some((a) => normalize(p.text) === a || normalize(p.text).startsWith(`${a} `)));
+    const matches = headings.filter((p) => {
+      const text = normalize(p.text);
+      const bare = withoutLeadingNumber(text);
+      return normalized.some((a) => text === a || text.startsWith(`${a} `) || bare === a || bare.startsWith(`${a} `));
+    });
     if (matches.length === 1) foundKinds.set(kind, matches[0].index);
     else if (matches.length > 1) warnings.push(`${BUILTIN[kind].label}: pronađeno je više mogućih naslova`);
   }
@@ -186,7 +203,14 @@ export function analyzeRequiredSectionsStructure(input: {
       const anchorIndex = kind === 'appendices' ? (paragraphs.at(-1)?.index ?? 1) : (foundKinds.get(order.find((x) => order.indexOf(x) > order.indexOf(kind)) ?? kind) ?? paragraphs.find((p) => /\b(?:uvod|introduction)\b/i.test(normalize(p.text)))?.index ?? paragraphs.at(-1)?.index ?? 1);
       insertionAnchor = findAnchor(anchorIndex, paragraphs, ranges, existingIndices);
       if (!insertionAnchor) { confidence = 'low'; candidateWarnings.push('nije pronađeno sigurno body-level sidro za umetanje'); }
-      if (warnings.some((w) => w.startsWith(label))) { confidence = 'low'; insertionAnchor = undefined; candidateWarnings.push('više mogućih sidara'); }
+      /**
+       * Upozorenje se pise UGRADJENOM oznakom (`BUILTIN[kind].label`), a ovdje je `label`
+       * EFEKTIVNA (profil ju smije pregaziti preko `rules.labels`). Kad se razlikuju, zastita od
+       * dvosmislenosti nikad ne bi opalila: analiza je nasla dva moguca naslova, a alat bi
+       * svejedno predodabrao umetanje treceg. Zato se provjeravaju obje.
+       */
+      const builtinLabel = BUILTIN[kind].label;
+      if (warnings.some((w) => w.startsWith(label) || w.startsWith(builtinLabel))) { confidence = 'low'; insertionAnchor = undefined; candidateWarnings.push('više mogućih sidara'); }
     }
     candidates.push({ id: hash(`${kind}:${label}`), kind, label, aliases, confidence, present, ...(insertionAnchor ? { insertionAnchor } : {}), headingLevel, ...(styleId ? { styleId } : {}), numbered, contentPolicy, ...(verifiedStatement ? { verifiedStatement } : {}), evidence, warnings: candidateWarnings });
   }

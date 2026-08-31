@@ -120,9 +120,19 @@ export function requiredSectionFixer(parts: DocxXmlParts, params: RequiredSectio
      * dopusta druga, uza potvrda identiteta. Prazan tekst se ne priznaje kao podudaranje, inace bi
      * svaki prazan odlomak prolazio kao sidro za bilo sto.
      */
+    /**
+     * TEKSTUALNO SIDRO VRIJEDI SAMO AKO JE TEKST JEDINSTVEN U DOKUMENTU.
+     *
+     * Inace se lazno ODBIJANJE zamjenjuje tihim lazno PRIHVACANJEM. Indekse prije ovoga pomicu
+     * `bibliography-repair-fixer` (uklanja duplikate, red 0) i `citation-bibliography-sync-fixer`
+     * (dodaje zapise, red 1), pa indeks N moze pokazivati na DRUGI odlomak s istim tekstom.
+     * Ponovljeni tekst nije rubni slucaj (npr. "Izvor: Izrada autora" ispod svake tablice).
+     */
     const anchorText = section.insertionAnchor.anchorText;
+    const anchorTextUnique = typeof anchorText === 'string' && anchorText.length > 0
+      && ranges.reduce((count, candidate) => count + (anchorTextOf(candidate.xml) === anchorText ? 1 : 0), 0) === 1;
     const fingerprintOk = Boolean(range) && range.fingerprint === section.insertionAnchor.anchorFingerprint;
-    const textOk = Boolean(range) && typeof anchorText === 'string' && anchorText.length > 0 && anchorTextOf(range.xml) === anchorText;
+    const textOk = Boolean(range) && anchorTextUnique && anchorTextOf(range.xml) === anchorText;
     if (!range || (!fingerprintOk && !textOk)) return { section, range: undefined, error: 'stale-anchor' as const };
     if (PROTECTED.test(range.xml)) return { section, range, error: 'unsupported-structure' as const };
     return { section, range };

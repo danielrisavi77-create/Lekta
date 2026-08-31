@@ -150,4 +150,96 @@ describe('link DOI fixer', () => {
       expect(linkDoiFixer(partsOf(reformatted), params('')).reason).toBe('stale-anchor');
     });
   });
+
+  /**
+   * REGRESIJA (2026-08-31), nadjena neovisnim adversarijalnim pregledom.
+   *
+   * Gard `claimedRanges` je isprva stajao na KRAJU tijela petlje, a `updateRelationshipTarget` i
+   * `addRelationship` iznad njega. Operacija koja se potom preskoci vec je promijenila `rels`:
+   *
+   *   dvije `make-hyperlink` nad istim runom -> `applied: true`, natpis "2 poveznica",
+   *   JEDNA hiperveza u dokumentu i VISAK relacije koju nista ne referencira;
+   *   uz postojecu hipervezu isti put prepise `Target` tudje relacije, pa poveznica A
+   *   pokazuje na URL B. Paket ostaje valjan, Word ga otvara, korisnik ne dobije nikakav signal.
+   *
+   * Zato se tvrdi TROJE: nema viska relacija, broj hiperveza odgovara broju relacija, i natpis ne
+   * prijavljuje vise popravaka nego sto ih je izvedeno.
+   */
+  it('preskocena operacija ne smije ostaviti trag u relacijama ni napuhati natpis', () => {
+    const text = 'doi:10.1/a i doi:10.2/b';
+    const xml =
+      '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>' +
+      `<w:p><w:r><w:rPr><w:sz w:val="24"/></w:rPr><w:t>${text}</w:t></w:r></w:p>` +
+      '</w:body></w:document>';
+    const localParts = { documentXml: xml, stylesXml: '', documentRelsXml: '<Relationships></Relationships>' };
+    const anchor = extractBodyParagraphs(xml)[0];
+    const op = (id: string, start: number, end: number, url: string) => ({
+      id, part: 'word/document.xml' as const, paragraphIndex: 1, start, end,
+      anchorFingerprint: anchor.fingerprint, before: text.slice(start, end),
+      replacementText: url, targetUrl: url, action: 'make-hyperlink' as const, confirmed: true as const,
+    });
+    const params: LinkDoiFixParams = {
+      version: 1,
+      operations: [op('a', 0, 10, 'https://doi.org/10.1/a'), op('b', 13, 23, 'https://doi.org/10.2/b')],
+    };
+    const result = linkDoiFixer(localParts, params);
+    expect(result.applied).toBe(true);
+
+    const hyperlinks = (result.parts.documentXml.match(/<w:hyperlink\b/g) ?? []).length;
+    const relations = [...(result.parts.documentRelsXml ?? '').matchAll(/<Relationship\b/g)].length;
+    // BASELINE: zahvat je doista nesto napravio, inace bi tvrdnje nize prolazile nad no-opom.
+    expect(hyperlinks).toBeGreaterThan(0);
+    expect(relations, 'svaka relacija mora imati svoju hipervezu').toBe(hyperlinks);
+    expect(result.beforeLabel, 'natpis ne smije tvrditi vise popravaka nego sto ih je izvedeno').toBe(`${hyperlinks} poveznica`);
+    /**
+     * PRESKOCENA operacija ne smije ostaviti nikakav trag: ni relaciju, ni izmijenjen tekst.
+     * (Primijenjena ga smije promijeniti; kanonizacija DOI-ja je jedno od dopustenih izuzeca.)
+     */
+    expect(result.parts.documentXml).toContain('doi:10.2/b');
+    expect(result.parts.documentRelsXml).not.toContain('10.2/b');
+  });
+
+  /**
+   * F2 (2026-08-31), nalaz neovisnog pregleda: tekstualno sidro je lazno ODBIJANJE zamijenilo
+   * tihim lazno PRIHVACANJEM.
+   *
+   * Indekse u istoj fazi pomicu `element-caption-fixer` (umece natpise, sortira PRIJE ovoga) i
+   * `field-integrity-fixer` (sazme rucni sadrzaj u polje). Ako tada indeks N pokazuje na DRUGI
+   * odlomak s ISTIM tekstom, staro sidro bi ga prihvatilo i zahvat bi sletio na krivo mjesto.
+   * Ponovljeni tekst nije rubni slucaj: `element-caption-fixer` sam generira "Izvor: Izrada
+   * autora" ispod svake tablice.
+   *
+   * Zato tekstualno sidro vrijedi SAMO uz jedinstven tekst; inace se vraca glasan `stale-anchor`.
+   */
+  describe('tekstualno sidro trazi JEDINSTVEN tekst', () => {
+    const LINE = 'Izvor: doi:10.1/a';
+    const doc = (drugi: string) =>
+      '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>' +
+      `<w:p w:rsidR="00AA"><w:r><w:t>${LINE}</w:t></w:r></w:p>` +
+      `<w:p><w:r><w:t>${drugi}</w:t></w:r></w:p>` +
+      '</w:body></w:document>';
+    const partsOf = (xml: string) => ({ documentXml: xml, stylesXml: '', documentRelsXml: '<Relationships></Relationships>' });
+    /** Otisak je NAMJERNO tudji, pa o ishodu odlucuje iskljucivo tekstualno sidro. */
+    const params = (): LinkDoiFixParams => ({
+      version: 1,
+      operations: [{
+        id: 'doi', part: 'word/document.xml', paragraphIndex: 1, start: 7, end: LINE.length,
+        anchorFingerprint: 'zastarjelo', anchorText: LINE,
+        before: 'doi:10.1/a', replacementText: 'https://doi.org/10.1/a', targetUrl: 'https://doi.org/10.1/a',
+        action: 'normalize-doi', confirmed: true,
+      }],
+    });
+
+    it('JEDINSTVEN tekst: sidro vrijedi i zahvat prolazi', () => {
+      const result = linkDoiFixer(partsOf(doc('Neki drugi odlomak.')), params());
+      expect(result.reason).toBeUndefined();
+      expect(result.applied).toBe(true);
+    });
+
+    it('PONOVLJEN tekst: sidro se odbija umjesto da sleti na krivi odlomak', () => {
+      const result = linkDoiFixer(partsOf(doc(LINE)), params());
+      expect(result.reason).toBe('stale-anchor');
+      expect(result.parts.documentXml).toBe(doc(LINE));
+    });
+  });
 });

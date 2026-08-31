@@ -62,8 +62,30 @@ export function defaultSelectedItems<T extends DefaultSelectableItem>(items: rea
  * Pravilo: ako `params` nema NIJEDAN niz, zahtjev je akcijski (npr. `empty-paragraph-fixer` ima
  * `params: {}` i uredno radi). Ako nizova ima, barem jedan mora biti neprazan.
  */
-export function hasActionableParams(params: Record<string, unknown> | null | undefined): boolean {
+/**
+ * Fixeri kod kojih je opce pravilo DOKAZANO krivo, pa nose vlastito ocitanje.
+ *
+ * Popis je namjerno kratak i sadrzi samo izmjerene slucajeve (neovisni pregled 2026-08-31);
+ * ostali ostaju na opcem pravilu, jer nagadjanje o njima ne bi bilo bolje od heuristike.
+ *
+ *   consistency-fixer      `groups` mogu biti NEPRAZNI a `replacements` prazni, i tada fixer
+ *                          vraca `no-target` (consistency-fixer.ts, provjera duljine zamjena).
+ *                          Nastaje kad varijante postoje samo izvan `word/document.xml` ili nemaju
+ *                          `start`/`end`, pa ih graditelj odbaci iz `replacements` a `groups` ostanu.
+ *   field-integrity-fixer  `fields` moze biti PRAZAN a posao stvaran, jer `settings.updateFieldsOnOpen`
+ *                          sam po sebi mijenja `word/settings.xml`.
+ */
+const WORK_CARRIERS: Record<string, (params: Record<string, unknown>) => boolean> = {
+  'consistency-fixer': (params) => Array.isArray(params.replacements) && params.replacements.length > 0,
+  'field-integrity-fixer': (params) =>
+    (Array.isArray(params.fields) && params.fields.length > 0)
+    || Boolean(params.settings && typeof params.settings === 'object' && Object.values(params.settings as Record<string, unknown>).some(Boolean)),
+};
+
+export function hasActionableParams(params: Record<string, unknown> | null | undefined, fixerId?: string): boolean {
   if (!params) return true;
+  const carrier = fixerId ? WORK_CARRIERS[fixerId] : undefined;
+  if (carrier) return carrier(params);
   const arrays = Object.values(params).filter((value): value is unknown[] => Array.isArray(value));
   if (!arrays.length) return true;
   return arrays.some((value) => value.length > 0);
