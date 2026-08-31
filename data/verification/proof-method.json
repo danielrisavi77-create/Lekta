@@ -1,7 +1,7 @@
 {
   "note": "POTPIS METODE, ne dokumenta. Razina A je javna tvrdnja prema fakultetima ('dokazano na stvarnom studentskom radu'), pa netko mora stati iza toga da je metoda dovoljna. To je prosudba o RIZIKU, ne mjerenje, i zato je jedina stvar koja ostaje covjeku. Potpisuje se JEDNOM za metodu, a ne za svaki dokument. Dok su `signedBy` i `signedAt` prazni, NIJEDAN dokument ne vrijedi kao dokaz, ma kako uredan bio.",
-  "signedBy": "",
-  "signedAt": "",
+  "signedBy": "Daniel Risavi",
+  "signedAt": "2026-08-31T08:36:01.000Z",
   "oracles": [
     "scripts/corpus-oracle.py (python-docx): mjeri dokument neovisnom implementacijom i proizvodi ocekivanje PRIJE pokretanja",
     "src/analysis (Lekta): mjerenje koje se provjerava",
@@ -21,5 +21,6 @@
     "neslaganja": 0,
     "odTogaOcekivanihPadova": 28,
     "napomena": "Suglasnost nije prazna: orakul predvidja 28 krsenja na 20 od 48 dokumenata i Lekta se slaze sa svima. Sva cetiri popravka do tog ishoda bila su u ORAKULU, nijedan u Lekti."
-  }
+  },
+  "signatureNote": "Vlasnik je pregledao metodu i izricito naložio upis (\"pogledao sam, mozes upisati umjesto mene\"); tekst je unio asistent po tom nalogu. Potpis je vlasnikov, unos je asistentov, i to je ovdje zapisano da se poslije ne cita kao da je stroj sam sebi odobrio metodu."
 }
