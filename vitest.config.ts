@@ -20,7 +20,12 @@ export default defineConfig({
     // testove kolektirao i svih 342 test datoteke te druge grane. To nije samo dvostruko vrijeme
     // nego LAZNO CRVENO (tudji padovi pod nasim gateom) i OOM (`MarkCompactCollector`) na punom
     // prolazu. Worktree svoje testove vrti iz vlastitog cwd-a.
-    exclude: ['**/node_modules/**', '**/dist/**', '**/.claude/**', '**/visual-system-v2/**', '**/tests/conformance/**', '**/tests/ux/**'],
+    // `.artifacts/` je gitignorirano radno smetliste (sonde, privremene skripte, jednokratni
+    // mjerni testovi). Vitest ga je svejedno kolektirao, pa je `npm run check` padao na tudjim
+    // nedovrsenim sondama: izmjereno 2026-08-31, `.artifacts/probe/rss-mutated.test.ts` je bio
+    // jedan od dva pada punog gatea. Isti razred kao `visual-system-v2/` iznad: LAZNO CRVENO iz
+    // koda koji nije nicija odgovornost u ovom stablu, i koji git ionako ne prati.
+    exclude: ['**/node_modules/**', '**/dist/**', '**/.claude/**', '**/visual-system-v2/**', '**/.artifacts/**', '**/tests/conformance/**', '**/tests/ux/**'],
     // Vitestov default je 5000 ms, sto je mjera za obican jedinicni test. Velik dio ovog
     // paketa gradi, raspakirava i parsira STVARNE .docx pakete (zip + OOXML + puna analiza),
     // pa takav test redovno traje 3-5 s i sam po sebi je zdrav. Uz 5000 ms nekoliko ih je

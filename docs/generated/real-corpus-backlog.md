@@ -50,7 +50,7 @@ Ukupno profila bez uzorka: **395/407**.
 - **efzg-strucni-racunovodstvo** — 6 ponudjenih opcija
 - **efzg-zavrsni** — 6 ponudjenih opcija
 - **efzg-doktorski** — 5 ponudjenih opcija
-- **efzg-seminarski** — 2 ponudjenih opcija
+- **efzg-seminarski** — 3 ponudjenih opcija
 
 ## Fakultet agrobiotehničkih znanosti Osijek (fazos)
 

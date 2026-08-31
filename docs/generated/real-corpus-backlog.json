@@ -1900,6 +1900,12 @@
       "offeredOptionCount": 3
     },
     {
+      "profileId": "efzg-seminarski",
+      "unitId": "efzg",
+      "facultyLabel": "Ekonomski fakultet",
+      "offeredOptionCount": 3
+    },
+    {
       "profileId": "erf-diplomski",
       "unitId": "erf",
       "facultyLabel": "Edukacijsko-rehabilitacijski fakultet",
@@ -2041,12 +2047,6 @@
       "profileId": "arca-zavrsni",
       "unitId": "arca",
       "facultyLabel": "Veleučilište Arca (Split)",
-      "offeredOptionCount": 2
-    },
-    {
-      "profileId": "efzg-seminarski",
-      "unitId": "efzg",
-      "facultyLabel": "Ekonomski fakultet",
       "offeredOptionCount": 2
     },
     {
