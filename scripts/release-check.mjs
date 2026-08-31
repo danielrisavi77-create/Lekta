@@ -41,7 +41,10 @@ const TIERS = [
   { id: 'conformance', label: 'Tier 0: conformance matrica', cmd: 'npm run conformance', required: true },
   { id: 'slow', label: 'Tier 0: spori repair testovi', cmd: 'npm run test:slow', required: true },
   { id: 'ux', label: 'Tier 0: Playwright UX', cmd: 'npm run test:ux', required: true },
-  { id: 'strict-open', label: 'Tier 1: python-docx strict open', cmd: 'npm run verify:strict-open', required: true },
+  // POPRAVLJENE pakete, ne ulazne fixture: `verify:strict-open` (bez `:repaired`) otvara
+  // `tests/fixtures/docx`, dakle ULAZE, i popravak u njoj nikad nije pozvan. Do 2026-08-30 je
+  // RELEASE_PROOF biljezio bas tu, slabiju provjeru kao "Tier 1: pass".
+  { id: 'strict-open', label: 'Tier 1: lxml nad POPRAVLJENIM paketima', cmd: 'npm run verify:strict-open:repaired', required: true },
   { id: 'word', label: 'Tier 2: pravi Microsoft Word', cmd: 'npm run verify:word', required: true, windowsOnly: true },
   { id: 'word-worst', label: 'Tier 2: Word, najgori slucaj', cmd: 'npm run verify:word:worst', required: true, windowsOnly: true },
   // Faza C zastite baze pravila: mrezna enumeracija profile-rules endpointa. Trazi

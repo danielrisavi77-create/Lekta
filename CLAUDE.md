@@ -440,6 +440,11 @@ podatak (`data/profiles/**`), nikad kao tekst upute.
   u rucnom receptu. Prazan skup je pritom crveno, ne tiho zeleno (`strict-open.py` to izricito
   provjerava). Izmjereno 2026-08-30: 16 dokumenata, 14 promijenjenih i svih 14 provjereno lxml-om;
   preostala 2 su `no-op` s nula promijenjenih fixera, dakle izlaz im je jednak ulazu.
+  TREBA LI TIER 2 UOPCE PONOVO: `npm run tier2-freshness`. Cita commit iz
+  `docs/generated/RELEASE_PROOF.json` i javi je li se `src/repair/` promijenio od tada; preskocena
+  Windows razina i dokaz snimljen nad prljavim stablom NISU prolaz. Ne uvodi vlastiti dnevnik, nego
+  cita postojeci. Izmjereno pri uvodjenju 2026-08-30: zapisani dokaz je stajao na `75904ef3`
+  (2026-08-23), a od tada je palo 8 commita nad motorom, i nista to nije reklo.
   Oracle POSTOJI u `scripts/word-verify/`, ne gradi ga
   ispocetka. KLJUC: `@xmldom/xmldom` ne baca i ne stvara `parsererror` na neispravnom XML-u, pa
   provjera oslonjena na `parseXml` daje lazno zeleno (dokaz: `tests/repair-package-integrity.test.ts`).

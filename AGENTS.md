@@ -114,6 +114,8 @@ klijent slozi iz profila (paramsForCheck u src/ui/repair-items.ts).
   PAZI: `npm run verify:strict-open` (bez `:repaired`) otvara ULAZNE fixture i o popravku ne govori
   nista, jer popravak u njoj nikad nije pozvan. Dokaz motora je `:repaired`, koji korpus prvo
   POPRAVI pa lxml-om otvori IZLAZE. CI radi oboje; zamka je samo u rucnom receptu.
+  Treba li Tier 2 ponovo: `npm run tier2-freshness` (cita commit iz RELEASE_PROOF.json i javi je li
+  se `src/repair/` promijenio od tada; preskocena Windows razina NIJE prolaz).
   Oracle POSTOJI u scripts/word-verify/, ne gradi ga ispocetka. KLJUC: @xmldom/xmldom ne
   baca i ne stvara parsererror na neispravnom XML-u, pa provjera preko parseXml daje lazno
   zeleno (dokaz: tests/repair-package-integrity.test.ts).
