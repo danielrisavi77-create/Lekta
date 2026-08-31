@@ -36,7 +36,17 @@ describe('bibliographyRepairFixer', () => {
       entries: [{ id: 'x', paragraphIndices: [2], anchorFingerprint: 'biblio-stale', normalizeText: true }],
     });
     expect(result.applied).toBe(false);
-    expect(result.reason).toBe('invalid-params');
+    /**
+     * `stale-anchor`, ispravljeno 2026-08-31. Tvrdnja je dotad glasila `invalid-params`, sto je
+     * proturjecilo IMENU ovog testa: ulaz je zahtjev s promijenjenim sidrom, a ne neispravan
+     * zahtjev.
+     *
+     * Nije rijec o relaksiranju garda nego o ispravku dijagnostike. Kriva oznaka je izmjerena kao
+     * stvarna steta: fixer je na 8 od 38 stvarnih radova odbijao zahtjev uz `invalid-params`, pa je
+     * trazenje uzroka dalo dvije krive hipoteze (brojanje odlomaka u tablicama, pa validaciju
+     * parametara), obje odbacene tek mjerenjem. Tvrdnja "ne mijenja dokument" ostaje netaknuta.
+     */
+    expect(result.reason).toBe('stale-anchor');
     expect(result.parts.documentXml).toBe(parts.documentXml);
   });
 

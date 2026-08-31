@@ -176,7 +176,19 @@ export function bibliographyRepairFixer(parts: DocxXmlParts, params: Bibliograph
     // sličan sadržaj, kako bi druga primjena vratila `already-ok` bez slabljenja
     // zaštite od zastarjelog anchora.
     const alreadyReplaced = !target.remove && target.replacementText !== undefined && currentText === expectedText;
-    if (!anchorMatches && !alreadyReplaced) return NO_OP(parts, 'invalid-params');
+    /**
+     * `stale-anchor`, ne `invalid-params`.
+     *
+     * Ova grana se okida kad se otisak odlomka NE poklapa s poslanim, dakle kad se dokument
+     * pomaknuo ispod recepta. To je definicija zastarjelog sidra; `invalid-params` znaci da je
+     * zahtjev sam po sebi neispravan, sto ovdje nije istina i salje na krivi trag.
+     *
+     * IZMJERENO 2026-08-31: fixer je na 8 od 38 stvarnih studentskih radova odbijao zahtjev uz
+     * `invalid-params`, a uzrok je bio tocno ovo. Kriva oznaka je pri trazenju uzroka dala dvije
+     * krive hipoteze (brojanje odlomaka u tablicama, pa validacija parametara), obje odbacene tek
+     * mjerenjem. Reason je dijagnostika, pa mora biti tocan.
+     */
+    if (!anchorMatches && !alreadyReplaced) return NO_OP(parts, 'stale-anchor');
     byId.set(target.id, { target, range, block });
   }
   if (params.order?.length) {
