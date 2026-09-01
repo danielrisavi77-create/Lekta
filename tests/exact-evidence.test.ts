@@ -76,15 +76,19 @@ describe('dokazna lupa: proizvodjac dokaza', () => {
   });
 
   /**
-   * ZNANA RUPA, odgodjena odlukom vlasnika 2026-09-01. `checkId` na nalazu izvodi se iz naslova
-   * provjere (`stableCheckId` -> npr. `margins`), a `checkId` na pravilu je autorski i zivi u
-   * DRUGOM imenskom prostoru (`citation-sync-rules`, `bibliography-rules`, ...). Most je
-   * `AUTHORED_RULE_EQUIVALENTS`, rucno kuriran, danas cetiri unosa i nijedan ne pokriva sest
-   * tipova koji nose citate. Posljedica: u produkciji ovaj proizvodjac zasad vraca prazno.
-   * Most se NE smije pogadjati: kriv par znaci navod iz sluzbene upute uz nalaz koji taj navod
-   * ne opravdava, sto je najgori kvar za funkciju ciji je smisao povjerenje.
+   * MOST MEDJU IMENSKIM PROSTORIMA, uspostavljen 2026-09-01. `checkId` na nalazu zivi u
+   * prostoru dimenzija (`margins`), a na pravilu u autorskom (`citation-sync-rules`). Spaja ih
+   * `RULE_EQUIVALENTS_BY_REGISTRY_ID` po STABILNOM registarskom id-u provjere; svaki par je
+   * izveden iz `value` pravila, koji strojno imenuje osi koje pravilo uredjuje.
+   *
+   * Ovaj slucaj ostaje PRAZAN i mora ostati: `citation-sync-rules` uredjuje sinkronizaciju
+   * citata i popisa literature, a nalaz govori o marginama. Most nije "spoji sto se da", nego
+   * popis izvedenih parova; kriv par znaci navod iz sluzbene upute uz nalaz koji taj navod ne
+   * opravdava, sto je najgori kvar za funkciju ciji je smisao povjerenje.
+   *
+   * Parove i njihovu izvedivost cuva `tests/rule-evidence-bridge.test.ts`.
    */
-  it('imenski prostori se JOS ne poklapaju, i to je zapisano a ne skriveno', () => {
+  it('pravilo koje ne uredjuje ovu os NE dobiva nalaz, makar most postoji', () => {
     const pravilo = entry({ ruleId: 'p--citation-sync-rules', checkId: 'citation-sync-rules' });
     expect(buildExactEvidence([check], [issue], [pravilo])).toEqual({});
   });

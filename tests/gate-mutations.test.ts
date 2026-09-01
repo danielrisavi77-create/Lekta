@@ -27,6 +27,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import { findScoredValueFindings, sameRuleValue } from '../src/verification/scored-value-binding';
+import { buildExactEvidence } from '../src/ui/results/exact-evidence';
 import { buildScoredValueDrift } from '../src/verification/scored-value-drift';
 import { computeCoverageCell } from '../src/verification/coverage-report';
 import { collectCompileDiagnostics, compileEffectiveRules } from '../src/profiles/rule-compiler';
@@ -134,6 +135,21 @@ function manifestWithRecordedAt(recordedAt: string): EvidenceManifest {
 function backfillTotal(force?: number): number {
   const rows = extractionIndex as unknown as Array<{ citedBackfilled?: number }>;
   return rows.reduce((a, r) => a + (force ?? r.citedBackfilled ?? 0), 0);
+}
+
+/**
+ * DOKAZNA LUPA: nalaz + pravilo, za mutaciju mosta medju imenskim prostorima.
+ * `checkId` na nalazu zivi u prostoru dimenzija, na pravilu u autorskom (`*-rules`).
+ */
+function evidenceFor(ruleCheckId: string, checkId: string, title: string, category: string): number {
+  const issue = { severity: 'warning', category, title, detail: '', where: 'x' } as never;
+  const check = { id: checkId, category, title, status: 'warn', earned: 0, max: 4, detail: '', issue, scored: true } as never;
+  const entry = {
+    ruleId: `mut--${ruleCheckId}`, checkId: ruleCheckId, sourceId: 's', status: 'verified',
+    quote: 'Doslovan navod iz sluzbene upute.', sourcePage: 'str. 1',
+    source: { id: 's', title: 'Upute', url: 'https://example.test/u.pdf' },
+  } as never;
+  return Object.keys(buildExactEvidence([check], [issue], [entry])).length;
 }
 
 const MUTATIONS: Mutation[] = [
@@ -658,8 +674,20 @@ const MUTATIONS: Mutation[] = [
       }
     },
   },
+  {
+    id: 'lupa/navod-s-krive-osi',
+    imitates:
+      'dokazna lupa koja uz nalaz stavi citat pravila koje tu os ne uredjuje. Most medju imenskim ' +
+      'prostorima je rucno kuriran popis, pa je najlaksi nacin da pokvari povjerenje upravo ' +
+      'prevelika darezljivost: navod iz sluzbene upute uz nalaz koji taj navod ne opravdava',
+    // `bibliography-rules` uredjuje abecedni poredak popisa literature; nalaz govori o shemi
+    // numeriranja stranica. Dokaz se NE smije zalijepiti.
+    caught: () => evidenceFor('bibliography-rules', 'page.numbers.scheme', 'Shema numeriranja stranica', 'formatting') === 0,
+    // Baseline: pravilo koje TU os stvarno uredjuje mora dati dokaz, inace tvrdnja gore prolazi
+    // samo zato sto lupa ne radi nista.
+    cleanBefore: () => evidenceFor('section-surgery-rules', 'page.numbers.scheme', 'Shema numeriranja stranica', 'formatting') === 1,
+  },
 ];
-
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
   it.each(MUTATIONS.map((m) => [m.id, m] as const))('%s', (_id, mutation) => {
     expect(mutation.cleanBefore(), `baseline nije cist, pa tvrdnja nije o mutaciji (${mutation.imitates})`).toBe(true);

@@ -28,6 +28,61 @@ const AUTHORED_RULE_EQUIVALENTS: Record<string, string[]> = {
   'page-number-alignment': ['page-numbers'],
 };
 
+/**
+ * MOST IZMEDJU DVA IMENSKA PROSTORA, kljucan na STABILNOM registarskom id-u.
+ *
+ * Vecina autorskih pravila nosi `checkId` u prostoru dimenzija (`font`, `margins`,
+ * `line-spacing`), pa se s nalazom spaja izravnom jednakoscu i most im ne treba. Sest
+ * pravila zivi u vlastitom prostoru (`*-rules`) jer opisuju SNOP odredbi, a ne jednu
+ * dimenziju. Upravo ta pravila nose doslovan navod: od 91 serviranog unosa s citatom,
+ * svih 91 je jedan od tih sest tipova. Bez mosta dokazna lupa je u produkciji prazna.
+ *
+ * KLJUC JE REGISTARSKI ID (`citation.author-year.missing-reference`), ne rezultat
+ * `stableCheckId`. Za ove provjere `stableCheckId` pada na `engine:<kategorija>:<slug
+ * hrvatskog naslova>`, pa bi most ovisio o tekstu naslova; preimenovanje naslova tiho bi ga
+ * raskopcalo. To je tocno kvar koji `stableCheckId` inace izbjegava time sto ide kroz
+ * registar, pa ga ovdje ne uvodimo natrag.
+ *
+ * SVAKI PAR JE IZVEDEN IZ `value` PRAVILA, ne iz citanja proze. `value` je strojno citljiv
+ * i imenuje osi koje pravilo uredjuje:
+ *
+ *   bibliography-rules      {sort:"alphabetical", authorYearSuffixes:true}
+ *                           -> reference.alphabetical, citation.author-year.suffix
+ *   citation-sync-rules     {mode:"author-year"}, label "Sinkronizacija citata i
+ *                           bibliografije" -> oba smjera te sinkronizacije
+ *   section-surgery-rules   {frontMatter:{numbering:"roman",
+ *                           removePageNumberFromTitlePage:true},
+ *                           mainMatter:{numbering:"decimal", startAt:1}}
+ *                           -> shema, izuzeta naslovnica, pocetak numeriranja
+ *   required-section-rules  {order:["originality-statement","summary-hr","keywords-hr"]}
+ *                           -> dijelovi koje propisuje verificirani profil
+ *   element-caption-rules   {labels:{...}, captionPosition:{...}, sourceRequired:true}
+ *                           -> naslovi tablica i slika te izvor ispod njih
+ *
+ * `table-figure-rescue-rules` NAMJERNO NEDOSTAJE. Njegov `value` je
+ * `{table:{align:"center"}, figure:{align:"center"}}`, dakle poravnanje, a motor poravnanje
+ * tablica i slika ne mjeri nijednom provjerom. Njegov citat spominje i legende, pa bi ga bilo
+ * lako zakvaciti na naslove tablica; to bi znacilo navod ciji ENKODIRAN propis govori o
+ * necemu drugom. Dok provjera poravnanja ne postoji, to pravilo ostaje bez nalaza.
+ */
+const RULE_EQUIVALENTS_BY_REGISTRY_ID: Record<string, string[]> = {
+  'reference.alphabetical': ['bibliography-rules'],
+  'citation.author-year.suffix': ['bibliography-rules'],
+  'citation.author-year.missing-reference': ['citation-sync-rules'],
+  'reference.uncited': ['citation-sync-rules'],
+  'page.numbers.scheme': ['section-surgery-rules'],
+  'page.numbers.title-suppressed': ['section-surgery-rules'],
+  'page.numbers.start': ['section-surgery-rules'],
+  'structure.sections.profile': ['required-section-rules'],
+  'element.table.caption': ['element-caption-rules'],
+  'element.figure.caption': ['element-caption-rules'],
+  'element.source': ['element-caption-rules'],
+};
+
+/** Citljiv izvoz za gardove: par (registarski id, autorska pravila). */
+export const RULE_BRIDGE_BY_REGISTRY_ID: Readonly<Record<string, readonly string[]>> =
+  RULE_EQUIVALENTS_BY_REGISTRY_ID;
+
 function slug(value: string): string {
   return String(value || '')
     .replace(/[Đđ]/g, 'd')
@@ -77,14 +132,28 @@ function issueSignature(issue: Pick<Issue, 'category' | 'title' | 'where'>): str
   return `${issue.category}\u001f${issue.title}\u001f${issue.where || ''}`;
 }
 
-function checkIdForIssue(issue: Issue, checks: Check[]): string {
+/**
+ * Nalaz nosi DVA identiteta i oba su potrebna. `checkId` je prostor dimenzija i ostaje kljuc
+ * `issueKey`-ja; `registryId` je stabilan identitet provjere i sluzi ISKLJUCIVO mostu.
+ */
+function identityForIssue(issue: Issue, checks: Check[]): { checkId: string; registryId: string } {
   const signature = issueSignature(issue);
   const parent = checks.find(check => check.issue && issueSignature(check.issue) === signature);
-  return parent ? stableCheckId(parent.category, parent.title) : stableCheckId(issue.category, issue.title);
+  const source = parent || issue;
+  const declared = typeof (parent as Check | undefined)?.id === 'string' ? String((parent as Check).id).trim() : '';
+  return {
+    checkId: stableCheckId(source.category, source.title),
+    // Provjera nosi stabilan `id` od 2026-08-16; naslov je fallback za jos neregistrirane.
+    registryId: declared || registryCheckId(String(source.title || '').trim()) || '',
+  };
 }
 
-function preferredRuleEntry(checkId: string, entries: RuleEntry[]): RuleEntry | undefined {
-  const authoredIds = [checkId, ...(AUTHORED_RULE_EQUIVALENTS[checkId] || [])];
+function preferredRuleEntry(checkId: string, registryId: string, entries: RuleEntry[]): RuleEntry | undefined {
+  const authoredIds = [
+    checkId,
+    ...(AUTHORED_RULE_EQUIVALENTS[checkId] || []),
+    ...(RULE_EQUIVALENTS_BY_REGISTRY_ID[registryId] || []),
+  ];
   const candidates = entries.filter(entry => entry.checkId && authoredIds.includes(entry.checkId));
   if (!candidates.length) return undefined;
   return [...candidates].sort((a, b) => {
@@ -125,8 +194,8 @@ export function identifyFindings(
   ruleEntries: RuleEntry[] = [],
 ): StableFindingIdentity[] {
   const withBase = issues.map(issue => {
-    const checkId = checkIdForIssue(issue, checks);
-    const rule = preferredRuleEntry(checkId, ruleEntries);
+    const { checkId, registryId } = identityForIssue(issue, checks);
+    const rule = preferredRuleEntry(checkId, registryId, ruleEntries);
     const ruleId = rule?.ruleId || null;
     const isRuntimeChild = Boolean(rule?.checkId && rule.checkId !== checkId);
     const base = ruleId
