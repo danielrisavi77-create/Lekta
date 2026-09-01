@@ -1025,7 +1025,26 @@ export function fieldIntegrityRepairableItem(result: any): RepairableItem[] {
     settings: { updateFieldsOnOpen: true as const },
     ...(current.manualTocCandidates.some((candidate) => candidate.selected) ? { manualToc: current.manualTocCandidates.filter((candidate) => candidate.selected).map((candidate) => ({ startParagraphIndex: candidate.startParagraphIndex, endParagraphIndex: candidate.endParagraphIndex, anchorFingerprint: candidate.anchorFingerprint, action: 'replace-with-live-toc' as const, confirmed: true as const })) } : {}),
   });
-  return [{ ruleId: 'field-integrity-assisted', fixerId: 'field-integrity-fixer', label: 'Field Integrity', params: form.buildParams(form), violated: true, requiresConfirmation: false, confirmationText: 'Izradit će se nova XML-popravljena kopija. Originalni dokument ostaje nepromijenjen; konačni brojevi stranica ovise o Wordu ili LibreOffice renderu.', fieldIntegrityForm: form, matchKeys: ['Brojevi stranica'] }];
+  /**
+   * BEZ `matchKeys`, i to je nalaz a ne propust.
+   *
+   * Do 2026-09-01 je stavka polagala pravo na `Brojevi stranica` (`page.numbers.present`), provjeru
+   * koju NE MOZE zadovoljiti ni u jednom od dva moguca stanja: kad PAGE polje postoji, provjera vec
+   * prolazi pa nema sto popravljati; kad ga nema, ovaj fixer ga ne moze stvoriti, jer samo oznacava
+   * POSTOJECA polja za osvjezavanje. Izmjereno na `typografija-i-literatura`: `pageFields` su
+   * `false` i prije i poslije popravka, a harness je to brojao kao "automatski fixer se primijenio i
+   * nije rijesio".
+   *
+   * `Brojevi stranica u sadrzaju` (`toc.page-numbers`) nije zamjena, iako se cini bliskim: ucinak
+   * ovog fixera vidi se tek NAKON sto Word osvjezi polja, a analiza cita SPREMLJENI XML, ne Wordov
+   * ponovni ispis. Tvrdnja bi bila jednako neistinita, samo na drugoj provjeri.
+   *
+   * `cae64ef5` je s ove stavke uklonio mrtvi kljuc `Sadrzaj` (pravi naslov je `Sadrzaj dokumenta`) i
+   * zadrzao `Brojevi stranica`, dakle bas onaj koji je ziv ali krivi. Isti obrazac kao
+   * `final-document-inspector-fixer`, koji `matchKeys` uopce nema: ucinak postoji, ali ga nijedna
+   * nasa provjera ne mjeri, pa se ta sutnja imenuje umjesto da se pokrije pogodjenim kljucem.
+   */
+  return [{ ruleId: 'field-integrity-assisted', fixerId: 'field-integrity-fixer', label: 'Field Integrity', params: form.buildParams(form), violated: true, requiresConfirmation: false, confirmationText: 'Izradit će se nova XML-popravljena kopija. Originalni dokument ostaje nepromijenjen; konačni brojevi stranica ovise o Wordu ili LibreOffice renderu.', fieldIntegrityForm: form }];
 }
 
 export function tableFigureRescueRepairableItem(result: any, profile: any): RepairableItem[] {

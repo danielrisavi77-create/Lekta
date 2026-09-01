@@ -975,20 +975,18 @@
         "bibliography-repair-fixer",
         "required-section-fixer"
       ],
-      "targetedCheckCount": 7,
+      "targetedCheckCount": 6,
       "targetedResolvedCount": 4,
-      "targetedUnresolvedCount": 3,
-      "autoUnresolvedCount": 1,
-      "autoUnresolvedChecks": [
-        "page.numbers.present"
-      ],
+      "targetedUnresolvedCount": 2,
+      "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 2,
       "assistedUnresolvedChecks": [
         "reference.uncited",
         "structure.sections.profile"
       ],
       "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 6,
+      "manualOnlyCount": 7,
       "unmappedMatchKeys": [
         "Consistency Engine",
         "Dosljednost",
@@ -1097,16 +1095,15 @@
     "changedDocumentCount": 14,
     "manualReviewCount": 16,
     "passRegressionCount": 0,
-    "targetedCheckCount": 36,
+    "targetedCheckCount": 35,
     "targetedResolvedCount": 26,
-    "autoUnresolvedCount": 4,
+    "autoUnresolvedCount": 3,
     "autoUnresolvedChecks": [
       "footnote.format",
-      "format.justify.body",
-      "page.numbers.present"
+      "format.justify.body"
     ],
     "assistedUnresolvedCount": 6,
     "awaitingConfirmationCount": 0,
-    "manualOnlyCount": 56
+    "manualOnlyCount": 57
   }
 }

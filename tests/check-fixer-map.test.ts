@@ -143,7 +143,12 @@ describe('repair-items: matchKeys moraju biti naslovi koje analiza stvarno emiti
   }));
 
   it('mjerenje je netrivijalno (inace bi prazan popis "prosao")', () => {
-    expect(literalArrays.length).toBeGreaterThanOrEqual(15);
+    // 15 -> 14 svjesno, 2026-09-01: `field-integrity` je ostao BEZ `matchKeys`, jer je jedini koji
+    // je imao (`Brojevi stranica`) bio ziv ali krivi. Taj fixer oznacava POSTOJECA polja za
+    // osvjezavanje; PAGE polje kojeg nema ne moze stvoriti, pa provjeru ne moze zadovoljiti ni u
+    // jednom stanju. Prag pada za tocno jedan i samo zato; svako daljnje spustanje mora imati
+    // vlastito obrazlozenje, inace ovaj gard prestaje biti gard.
+    expect(literalArrays.length).toBeGreaterThanOrEqual(14);
     expect(literalArrays.every((a) => a.keys.length > 0)).toBe(true);
     // Kontrola u DRUGOM smjeru: vecina kljuceva JEST registrirana, pa gard ne "hvata" tako sto
     // odbija sve. Bez ove tvrdnje bi i pokvaren `stableCheckId` (uvijek null) izgledao kao nalaz.
