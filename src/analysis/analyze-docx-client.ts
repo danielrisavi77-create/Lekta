@@ -156,6 +156,34 @@ function analyzeInWorker(file: File, profile: any, settings: any, onProgress: an
   });
 }
 
+/**
+ * BILJEG PUTANJE (T10). Analiza ima dvije izvedbe koje NISU isti kod: worker koristi
+ * @xmldom/xmldom, a inline fallback nativni preglednicki DOMParser. Do sada se nije dalo
+ * utvrditi ni KOJA je putanja odradila analizu, ni koliko se cesto pada na drugu: pad je bio
+ * gol `console.warn`, bez ijednog brojaca.
+ *
+ * Biljeg ne nosi NISTA iz dokumenta, samo ime putanje i broj padova. Postoji da bi tvrdnja o
+ * parnosti mogla dokazati da nije vakuumska: test koji obje putanje mjeri mora vidjeti da su
+ * doista bile RAZLICITE, inace bi "isti rezultat" znacio samo da je dvaput trcao isti kod.
+ */
+export type AnalysisPath = 'worker' | 'inline';
+let lastAnalysisPath: AnalysisPath | null = null;
+let inlineFallbackCount = 0;
+
+function markAnalysisPath(path: AnalysisPath): void {
+  lastAnalysisPath = path;
+  if (path === 'inline') inlineFallbackCount += 1;
+  try {
+    (globalThis as any).__lektaAnalysisPath = path;
+    (globalThis as any).__lektaInlineFallbacks = inlineFallbackCount;
+  } catch { /* okruzenje bez globalThis zapisa; biljeg je dijagnostika, ne ugovor */ }
+}
+
+/** Koja je putanja odradila zadnju analizu (dijagnostika; null prije prve). */
+export function lastUsedAnalysisPath(): AnalysisPath | null { return lastAnalysisPath; }
+/** Koliko je puta analiza pala na inline granu u ovoj sesiji. */
+export function inlineFallbackTotal(): number { return inlineFallbackCount; }
+
 /** Postavke analize koje se prosljedjuju do analyzeDocx (i kroz worker protokol). */
 export interface AnalyzeOptions { skipFinalDelay?: boolean }
 
@@ -177,6 +205,7 @@ export async function analyzeDocxOffThread(file: File, profile: any, settings: a
       // Obje strane su omotavale isti return: grana obogacuje rezultat strukturom naslova,
       // master ga hvata za povratak u Katedru. Redoslijed je bitan, ne proizvoljan: Katedra
       // mora vidjeti KONACAN rezultat, pa obogacivanje ide prvo.
+      markAnalysisPath('worker');
       return finalizeAnalysisForIntegrations(attachHeadingStructure(result, profile?.headingRules || {}), profile, settings);
     } catch (e) {
       if (!(e instanceof WorkerInfraError)) throw e;
@@ -189,6 +218,7 @@ export async function analyzeDocxOffThread(file: File, profile: any, settings: a
   // Napomena (AUD-08): inline put koristi nativni preglednicki DOMParser, dok worker i golden
   // korpus koriste @xmldom/xmldom. Ovo je rijedak fallback (nema/slomljen worker), pa se svjesno
   // prihvaca moguca sitna razlika u parsiranju umjesto globalnog override-a DOMParsera na glavnoj niti.
+  markAnalysisPath('inline');
   const { analyzeDocx } = await import('./analyze-docx');
   const result = await analyzeDocx(file, profile, settings, onProgress, options);
   return finalizeAnalysisForIntegrations(attachHeadingStructure(result, profile?.headingRules || {}), profile, settings);
