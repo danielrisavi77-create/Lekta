@@ -8,14 +8,14 @@
   },
   "summary": {
     "cellCount": 12617,
-    "coveredCount": 4769,
-    "uncoveredCount": 7848,
+    "coveredCount": 4770,
+    "uncoveredCount": 7847,
     "resolvedCount": 1877,
     "byReason": {
       "profil-ne-propisuje-os": 6106,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 114,
+      "nema-dokaza": 113,
       "ceka-ljudski-odabir": 814,
       "trazi-ulaz-izvan-dokumenta": 814
     }
@@ -3487,8 +3487,13 @@
     {
       "profileId": "pravo-integrirani-diplomski",
       "fixerId": "paragraph-spacing-fixer",
-      "status": "nepokriveno",
-      "reason": "nema-dokaza"
+      "status": "pokriveno",
+      "evidence": {
+        "kind": "real",
+        "strength": "applied",
+        "track": "real",
+        "artifactId": "pravo-integrirani-fusnote"
+      }
     },
     {
       "profileId": "pravo-integrirani-diplomski",
