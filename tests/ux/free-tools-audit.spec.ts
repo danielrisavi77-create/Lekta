@@ -49,6 +49,15 @@ for (const pageSpec of FREE_TOOL_PAGES) {
       // dalje glasila "obje".
       expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe(tema);
 
+      // ANIMACIJE SE GASE PRIJE MJERENJA, inace gate nije determinističan. Izmjereno 2026-09-01:
+      // `.ks-priv-dokp b` je `#2B579A` na bijelom (uredno), ali element FADEA (`ksPrivCross`), pa
+      // axe zna uhvatiti kadar u kojem je boja izracunata kao `#dcdede` na `#f8f5eb`, dakle 1,23:1.
+      // Isti test je u jednom prolazu bio zelen, a u sljedecem crven, bez ijedne izmjene koda.
+      // Gasenjem animacija mjeri se MIRNO stanje, koje je ujedno ono sto vidi korisnik s
+      // `prefers-reduced-motion`. Stvarna krsenja u mirnom stanju i dalje padaju.
+      await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' });
+      await page.waitForTimeout(120);
+
       const results = await new AxeBuilder({ page }).analyze();
       // Netrivijalnost: axe mora stvarno biti pokrenut nad stranicom s pravilima, inace bi
       // prazan `violations` prosao i nad praznim dokumentom.
@@ -624,5 +633,48 @@ for (const [ime, dataTheme, scheme] of [
     const nalazi = results.violations.filter((v) =>
       v.impact === 'critical' || v.impact === 'serious' || v.impact === 'moderate');
     expect(nalazi, nalazi.map((v) => `${v.impact}:${v.id}(${v.nodes.length})`).join(', ')).toEqual([]);
+  });
+}
+
+/**
+ * MJERENJE IZA SLIJEPE TOCKE AXEA.
+ *
+ * `body` na naslovnici nosi ukrasnu `radial-gradient` teksturu papira. axe za svaki element nad
+ * gradijentom vraca `incomplete` (`messageKey: bgGradient`), NE `violation`, jer efektivnu podlogu
+ * ne moze razrijesiti. Posljedica je bila da obicni axe prolaz u svijetloj temi mjeri samo POLOVICU
+ * stranice: 163 `incomplete` naspram 163 `pass`, dakle 50 % cvorova nikad nije provjereno, a
+ * tvrdnja "nula krsenja" bila je istinita kako je mjerena i istovremeno poluslijepa.
+ *
+ * Izmjereno 2026-09-01: kad se tekstura neutralizira, axe odjednom vidi 23 STVARNA kontrastna
+ * krsenja u svijetloj temi (svijetli `--desk-faint` 2,2:1, `--pass` 3,51:1, brand `--red` ondje
+ * gdje ide `--red-on-desk`, i prigusenje `.85` koje svaki token spusti ispod praga). Sva su
+ * popravljena; ovaj gard postoji da se ne vrate neprimijeceno.
+ *
+ * OGRANICENJE, izricito: mjeri se protiv OSNOVNE boje teksture, ne protiv njezinih najtamnijih
+ * tocaka. Tockice su `rgba(69,58,45,.14)` nad `#DFD8C6`, pa lokalno mogu potamniti podlogu do
+ * `#C9C2B1`; tekst tocno na tocki bio bi do ~0,9 omjera losiji. Kontrast nad teksturom je i u
+ * WCAG-u dvosmislen (zato axe i odustaje), pa ovaj gard NE tvrdi da ga pokriva.
+ */
+for (const tema of ['light', 'dark'] as const) {
+  test(`naslovnica: iza gradijenta nema skrivenih kontrastnih krsenja (tema ${tema})`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.goto('/index.html');
+    await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), tema);
+    // Neutralizacija teksture je JEDINI nacin da axe uopce izmjeri ove cvorove.
+    await page.addStyleTag({ content: 'body{background-image:none!important}' });
+    await page.waitForTimeout(300);
+
+    const r = await new AxeBuilder({ page }).analyze();
+    const mjereno = r.passes.filter((x) => x.id === 'color-contrast')
+      .reduce((a, x) => a + x.nodes.length, 0);
+    // NETRIVIJALNOST: bez ovoga bi gard prosao i da tekstura ostane, kad axe ne mjeri gotovo nista.
+    // Zatecено (s teksturom) u svijetloj temi je bilo 163; prag je postavljen znatno iznad toga.
+    expect(mjereno, `axe mora izmjeriti bitno vise cvorova nego s teksturom (${mjereno})`)
+      .toBeGreaterThan(220);
+
+    const nalazi = r.violations.filter((v) => v.id === 'color-contrast');
+    const opis = nalazi.flatMap((v) => v.nodes.map((n) =>
+      (n.failureSummary || '').replace(/\s+/g, ' ').match(/contrast of [\d.]+[^)]*\)/)?.[0] ?? n.target.join(' ')));
+    expect(opis, opis.slice(0, 6).join(' | ')).toEqual([]);
   });
 }

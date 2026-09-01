@@ -114,7 +114,11 @@
      Prema svjetlijem `--desk` je prolazio (4,64:1), pa je bas tamnija podloga bila mjerodavna.
      Ista vrijednost stoji i u inline tokenima `index.html`; drze se u paru. */
   --desk-muted: #5F5645;
-  --desk-faint: #98917E;
+  /* Zatamnjen s #98917E 2026-09-01: na svijetlom stolu je davao 2,2:1 pri 10-11 px. Na svijetloj
+     podlozi svaka boja koja prolazi AA mora biti tamna, pa se "faint" i "muted" nuzno priblize
+     (4,61 naspram 4,62); to je posljedica kontrasta, ne propust. Ista vrijednost stoji u inline
+     tokenima `index.html`; TREĆI put danas su se razisle, pa: mijenjaj obje u istom potezu. */
+  --desk-faint: #665D4D;
   --desk-line: rgba(38, 34, 27, .16);
   --paper: #FDFBF3;
   --paper-2: #F3EEDF;
@@ -123,7 +127,9 @@
   --red-deep: #A62B23;
   --red-soft: rgba(196, 55, 46, .1);
   --on-red: #F7F3E8;
-  --pass: #1E7F4F;
+  /* Zatamnjena s #1E7F4F 2026-09-01: na svijetlom stolu 3,51:1 pri 20 px, a 20 px normalne
+     tezine NIJE "veliki tekst" (prag je 24 px). Sada 4,91:1. Par s `index.html`. */
+  --pass: #17663F;
   --pass-soft: rgba(30, 127, 79, .12);
   --warn: #B77416;
   --warn-soft: rgba(183, 116, 22, .14);

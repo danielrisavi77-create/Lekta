@@ -759,10 +759,10 @@ html:root{
   --focus:0 0 0 2px var(--paper),0 0 0 4px var(--scan);
 }
 html:root[data-theme="light"]{
-  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;--desk-muted:#5F5645;--desk-faint:#98917E;--desk-line:rgba(38,34,27,.16);
+  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;--desk-muted:#5F5645;--desk-faint:#665D4D;--desk-line:rgba(38,34,27,.16);
   --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
   --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;--red-on-desk:#A62B23;
-  --pass:#1E7F4F;--pass-soft:rgba(30,127,79,.12);
+  --pass:#17663F;--pass-soft:rgba(23,102,63,.12);
   --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
   --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
   --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
@@ -955,7 +955,7 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .local-badge{display:inline-flex;align-items:center;gap:8px;margin-top:4px;border:1px dashed var(--desk-line);border-radius:0;background:none;padding:8px 13px;font-family:var(--display-serif);font-style:italic;font-size:13px;color:var(--pass)}
 .local-badge svg{width:13px;height:13px}
 .footer-col{display:grid;gap:9px;justify-items:start}
-.footer-col-h{font-family:var(--font-hand);font-size:22px;font-weight:600;color:var(--red);transform:rotate(-1.5deg);display:inline-block;margin-bottom:8px;letter-spacing:0;text-transform:none}
+.footer-col-h{font-family:var(--font-hand);font-size:22px;font-weight:600;color:var(--red-on-desk);transform:rotate(-1.5deg);display:inline-block;margin-bottom:8px;letter-spacing:0;text-transform:none}
 .footer-col a,.footer-col .footer-link-btn{font-family:var(--display-serif);font-size:15px;color:var(--desk-muted);background:none;border:none;padding:0;cursor:pointer;text-align:left}
 .footer-col a:hover,.footer-col .footer-link-btn:hover{color:var(--desk-ink)}
 .footer-bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:44px;padding-top:20px;border-top:1px solid var(--desk-line);font-family:var(--sans);font-size:10px;letter-spacing:.1em;color:var(--desk-faint);text-transform:uppercase}
@@ -1297,7 +1297,7 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .ks-step-no{font:500 11px var(--sans);letter-spacing:.1em;color:var(--red-on-desk);padding-top:7px}
 .ks-step-t{display:block;font-family:var(--display-serif);font-size:27px;letter-spacing:-.01em}
 .ks-step-d{display:block;font-family:var(--display-serif);font-size:15px;line-height:1.65;color:var(--desk-muted);margin-top:8px}
-.ks-step-hint{border-top:1px solid var(--desk-line);padding:20px 4px 0;font-family:var(--font-hand);font-size:22px;color:var(--red);transform:rotate(-1deg);font-weight:500}
+.ks-step-hint{border-top:1px solid var(--desk-line);padding:20px 4px 0;font-family:var(--font-hand);font-size:22px;color:var(--red-on-desk);transform:rotate(-1deg);font-weight:500}
 .ks-prozor{position:sticky;top:96px;background:var(--paper);color:var(--paper-ink);box-shadow:var(--paper-sh);transform:rotate(.4deg)}
 .ks-prozor-bar{height:46px;border-bottom:1.5px solid var(--paper-ink);display:flex;align-items:center;justify-content:space-between;padding:0 18px;font:600 10px var(--sans);letter-spacing:.16em;color:var(--paper-muted);text-transform:uppercase}
 .ks-prozor-live{color:var(--pass)}
@@ -1339,7 +1339,7 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .ks-di:hover{opacity:.95;background:none}
 .ks-di-no{font:500 10.5px var(--sans);letter-spacing:.1em;color:var(--red-on-desk)}
 .ks-di-t{font-family:var(--display-serif);font-size:18px}
-.ks-di[aria-pressed="true"] .ks-di-t{color:var(--red-on-desk)}
+.ks-di[aria-pressed="true"] .ks-di-t{color:var(--red-on-desk)}/* Prigusenje `.85` na SVIJETLOM stolu spusta svaki token ispod praga (izmjereno: #A62B23 -> #af453b 3,95:1, #5F5645 -> #726a58 3,77:1, #665D4D -> #786f5f 3,48:1); ni `.92` ne pomaze (3,92:1). U svijetloj temi zato prigusenja nema, a stanje nosi BOJA, koja ondje vec postoji. U tamnoj temi `.85` prolazi i ostaje. */html:root[data-theme="light"] .ks-step,html:root[data-theme="light"] .ks-di{opacity:1}html:root[data-theme="light"] .ks-step:hover,html:root[data-theme="light"] .ks-di:hover{opacity:1}
 .ks-di-s{font:500 10px var(--sans);letter-spacing:.1em;color:var(--desk-faint);text-transform:uppercase}
 .ks-doc-sticky{position:sticky;top:96px}
 .ks-doc-paper{position:relative;background:var(--paper);color:var(--paper-ink);box-shadow:var(--paper-sh);transform:rotate(-.5deg);padding:48px 210px 44px 52px;min-height:560px;font-family:var(--font-doc)}
@@ -1376,7 +1376,7 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .ks-priv-btn i{width:8px;height:8px;border-radius:50%;background:var(--desk-faint)}
 .ks-priv-btn[aria-pressed="true"]{border-color:var(--red);background:color-mix(in srgb,var(--red) 14%,transparent);color:var(--desk-ink)}
 .ks-priv-btn[aria-pressed="true"] i{background:var(--pass)}
-.ks-priv-hint{font-family:var(--font-hand);font-size:22px;color:var(--red);transform:rotate(-1.5deg);font-weight:500}
+.ks-priv-hint{font-family:var(--font-hand);font-size:22px;color:var(--red-on-desk);transform:rotate(-1.5deg);font-weight:500}
 .ks-priv-scena{position:relative;min-height:420px;box-shadow:var(--paper-sh);overflow:hidden;display:grid;grid-template-columns:1fr 1fr}
 .ks-priv-lijevo{position:relative;background:var(--paper);min-height:420px}
 .ks-priv-lijevo::before{content:"";position:absolute;inset:14px;border:1px dashed var(--paper-line);pointer-events:none}
