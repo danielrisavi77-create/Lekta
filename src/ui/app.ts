@@ -89,7 +89,25 @@ import { analyzeCrossFileSubmission, crossFileFingerprint } from '../analysis/cr
 import { activeDocumentProgress, describeProgress } from '../history/progress';
 import './referral-share-section.css';
 declare global { interface Window { __lektaIcons?: any; __lektaAnimate?: any; __lektaReveal?: any; } }
-const $=(s: string,r: any=document): any=>r.querySelector(s), $$=(s: string,r: any=document): any[]=>[...r.querySelectorAll(s)];
+/**
+ * GRANICA ANALIZATORA.
+ *
+ * Do sada je modul bio vezan uz globalni `document` i montirao se sam, na dnu datoteke. Da bi
+ * analizator mogao ziviti na vlastitoj ruti (`/rad/`), treba mu ULAZ koji se poziva izvana i
+ * IZLAZ koji se da ugasiti. Ovaj korak uvodi samo taj oblik; ozicenje ostaje nepromijenjeno,
+ * pa je dokaz ispravnosti to da svi postojeci testovi prolaze BEZ IJEDNE IZMJENE.
+ *
+ * `runtimeDocument()` pada natrag na globalni `document`, pa svih ~600 poziva `$()` radi kao
+ * prije. Bez tog fallbacka ovaj bi korak trazio izmjenu na svakom od njih odjednom.
+ */
+let _runtimeDocument: Document|null=null;
+let _analyzerMounted=false;
+const _mountedDocuments=new WeakSet<Document>();
+const _mountAbortControllers=new WeakMap<Document,AbortController>();
+function runtimeDocument(): Document{return _runtimeDocument??document}
+export function isAnalyzerMounted(doc: Document=document): boolean{return _runtimeDocument===doc&&_analyzerMounted}
+
+const $=(s: string,r: any=runtimeDocument()): any=>r.querySelector(s), $$=(s: string,r: any=runtimeDocument()): any[]=>[...r.querySelectorAll(s)];
 let selectedDocx: any=null,selectedPdf: any=null,selectedMetadataDocx: any=null,selectedAvFile: any=null,currentPdfAudit: any=null,currentMetadataAudit: any=null,currentResult: any=null;
 let _repairClientPromise: Promise<typeof import('../report/repair-client')>|null=null;
 function loadRepairClient(){return _repairClientPromise??=import('../report/repair-client')}
@@ -241,7 +259,12 @@ function coverageSnapshot(){const rows=INSTITUTIONAL_COVERAGE_MATRIX.programs.ma
 // coverageSnapshot ostaje jer ga koriste QA konzola (runRegistryDiagnostics) i profileManifest.
 
 function toast(msg: any){const n=document.createElement('div');n.className='toast';n.textContent=msg;$('#toastWrap').append(n);setTimeout(()=>n.remove(),3500)}
-function init(){
+/**
+ * NASLIJEDJENO OZICENJE cijele landing stranice. Tijelo je namjerno ostalo isto; jedina dva
+ * mjesta koja su se promijenila su ona koja su se OSLANJALA na globalni doseg: tema se pise u
+ * proslijedjeni dokument, a odgodjeni demo provjerava je li montaza u medjuvremenu ugasena.
+ */
+function initLegacy(doc: Document,signal: AbortSignal){
  $('#checkGrid').innerHTML=CHECK_ITEMS.map(([i,t,d])=>`<article class="check-card" data-reveal><span class="check-icon">${i}</span><h3>${t}</h3><p>${d}</p></article>`).join('');window.__lektaReveal?.();
  productionConfig=loadProductionConfig();wireProfileRulesProvider();captureReferralCode();installErrorTracking();initCatalog();void ensureRetailCatalog();restorePreferences();applyFacultyContext();syncProfileContext();applyUnitFromUrl();updateRepairHistoryButton();if(adminMode){location.replace('/admin.html');return}
  $('#pricingGrid').innerHTML=PRICING_TIERS.map(p=>{const soon=p.id!=='free'&&!paidOffersLive();const badge=soon?'<span class="popular soon">USKORO</span>':(p.featured?'<span class="popular">PREPORUČENO</span>':'');const cta=soon?`<button class="btn btn-secondary" type="button" disabled aria-disabled="true">Uskoro</button>`:(p.cta.order?`<button class="btn btn-secondary order-btn" data-package="${p.cta.order}">${p.cta.label}</button>`:`<a class="btn ${p.featured?'btn-primary':'btn-secondary'}" href="${p.cta.href}">${p.cta.label}</a>`);return`<article class="price-card ${p.featured?'featured':''}${soon?' soon':''}">${badge}<h3>${p.name}</h3><div class="price">${p.price}</div><p>${p.desc}</p><ul class="features">${p.features.map(x=>`<li>${x}</li>`).join('')}</ul>${cta}</article>`}).join('');
@@ -250,8 +273,8 @@ function init(){
  // Cjenik copy: dok su placene tarife "Uskoro" (soft-launch), staticni HTML nosi besplatnu poruku;
  // kad naplata proradi (paidOffersLive), vrati se placeni jamstveni/disclaimer copy s payment info.
  if(paidOffersLive()){const _gn=$('#guaranteeNote');if(_gn)_gn.innerHTML='✓ <strong>Jamstvo pokrivenosti:</strong> za profile označene kao potvrđeni, dakle ne za generičke ni savjetodavne, ako ti referada vrati rad zbog pravila koje je Lekta označila ispravnim, vraćamo novac i besplatno ručno popravimo. Prijava u roku od 30 dana od kupnje, uz dokaz i sporno pravilo. Jamčimo točnost provjere prema pravilniku, a ne ocjenu, prihvaćanje rada ni izvornost teksta (nije provjera plagijata).';const _pd=$('#pricingDisclaimer');if(_pd)_pd.textContent='Usluga provjerava oblikovanje, strukturu, opseg i citatnu tehniku prema dostupnim pravilima. Nije provjera plagijata ni sličnosti teksta (nije Turnitin) i ne jamči prihvaćanje rada, ocjenu, akademsku kvalitetu sadržaja ni odluku mentora ili povjerenstva. Plaćanje se provodi na sigurnoj stranici konfiguriranog payment providera.'}
- let theme=null;try{theme=localStorage.getItem('lekta.theme')}catch(e: any){}if(theme)document.documentElement.dataset.theme=theme;
- if(location.search.includes('demo=1'))setTimeout(runDemo,300);
+ let theme=null;try{theme=localStorage.getItem('lekta.theme')}catch(e: any){}if(theme)doc.documentElement.dataset.theme=theme;
+ if(location.search.includes('demo=1'))setTimeout(()=>{if(!signal.aborted)runDemo()},300);
  void trackEvent('landing_view');
 }
 function bind(){
@@ -2198,4 +2221,61 @@ function resetAnalyzer(){currentResult=null;analyzedProfile=null;if(preflightPan
 function downloadResult(){if(!currentResult)return;if(paywallGateActive()){const t=buildTeaser(currentResult,{sampleSize:TEASER_SAMPLE});downloadBlob(JSON.stringify({watermark:true,note:'Besplatni sažetak s vodenim žigom. Puni podaci su dio serverski potvrđenog izvještaja.',file:currentResult.file,profile:currentResult.profile,generatedAt:currentResult.generatedAt,appVersion:currentResult.appVersion,teaser:t},null,2),'application/json',`Lekta-sazetak-${currentResult.file.name.replace(/\.docx$/i,'')}.json`);trackEvent('report_downloaded',{source:'json-teaser',profileId:currentResult.details?.profileDefinitionId||''});return}const exportResult=structuredClone(currentResult);delete exportResult.preview;exportResult.submission=submissionAssessment(currentResult);exportResult.details.pdfPreflight=currentPdfAudit;exportResult.details.metadataDocument=currentMetadataAudit;if(!recipeUnlocked())stripRecipeForExport(exportResult);downloadBlob(JSON.stringify(exportResult,null,2),'application/json',`Lekta-izvjestaj-${currentResult.file.name.replace(/\.docx$/i,'')}.json`);trackEvent('report_downloaded',{source:'json',profileId:currentResult.details?.profileDefinitionId||''})}
 function openOrder(id='format',brief?: any){if(!paidOffersLive()){toast('Ručno uređivanje bit će uskoro dostupno. Za rani upit: '+(productionConfig.contactEmail||'kontakt uskoro'));return}$$('input[name="package"]').forEach(r=>r.checked=r.value===id);clearOrderStatus();$('#orderConsent').checked=false;renderProductionState();updateOrderFileMeta();const _notes=$('#orderNotes');if(brief&&_notes&&!_notes.value.trim())_notes.value=brief;$('#orderModal').classList.remove('hidden');trapModal($('#orderModal'));trackEvent('order_opened',{package:id,provider:productionConfig.paymentProvider});setTimeout(()=>$('#orderName').focus(),50)}function closeOrder(){$('#orderModal').classList.add('hidden');releaseModal($('#orderModal'))}
 async function submitOrder(){const name=$('#orderName').value.trim(),email=$('#orderEmail').value.trim(),pkg=$('input[name="package"]:checked')?.value,file=selectedOrderFile(),consent=$('#orderConsent').checked;if(!name||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('Upiši ime i valjanu e-mail adresu.');return}if(!consent){toast('Za slanje narudžbe potrebno je prihvatiti uvjete i obavijest o privatnosti.');return}if(file&&(!file.name.toLowerCase().endsWith('.docx')||file.size>productionConfig.uploadMaxBytes)){setOrderStatus('error',`Dokument mora biti .docx i ne smije biti veći od ${Math.round(productionConfig.uploadMaxBytes/1024/1024)} MB. Narudžbu možeš poslati bez datoteke i naknadno dogovoriti drugi siguran kanal.`);return}await ensureProfileRules(currentDefinitionId());const orderId=makeOrderId(),profile=currentProfile().p,order={orderId,createdAt:new Date().toISOString(),customer:{name,email},package:PACKAGES.find(p=>p.id===pkg),deadline:$('#orderDeadline').value||null,notes:$('#orderNotes').value.trim(),marketingConsent:$('#orderMarketing').checked,termsVersion:TERMS_VERSION,document:file?{name:file.name,size:file.size,type:file.type}:null,analysis:currentResult?{file:currentResult.file.name,score:currentResult.score,profile:currentResult.profile,profileStatus:currentResult.profileStatus,fingerprint:currentResult.profileFingerprint||null,selection:currentResult.selection}:null,requestedProfile:profile.selection,status:'PENDING'};trackEvent('order_submit_attempt',{package:pkg,profileId:profile.definitionId||profile.id,workType:profile.selection.workType,provider:productionConfig.paymentProvider});const button=$('#submitOrder');button.disabled=true;button.textContent='Šaljem…';setOrderStatus('pending','Pripremam sigurnu predaju narudžbe…');try{if(!productionStatus().active){order.status='LOCAL_DRAFT';downloadBlob(JSON.stringify(order,null,2),'application/json',`Lekta-narudzba-${orderId}.json`);saveOrderReceipt(order);setOrderStatus('success',`<strong>Testni zapis je izrađen.</strong> Narudžba ${escapeHtml(orderId)} nije poslana niti je dokument prenesen. Preuzeta je lokalna JSON datoteka za provjeru integracije.`);toast('Testna narudžba spremljena je lokalno.');return}const fd=new FormData();fd.append('form-name','lekta-orders');fd.append('order_id',orderId);fd.append('name',name);fd.append('email',email);fd.append('package',pkg);fd.append('deadline',order.deadline||'');fd.append('notes',order.notes);fd.append('profile',JSON.stringify(order.requestedProfile));fd.append('fingerprint',order.analysis?.fingerprint||'');fd.append('marketing_consent',String(order.marketingConsent));fd.append('terms_version',TERMS_VERSION);if(file)fd.append('document',file,file.name);const response=await fetch(productionConfig.orderEndpoint,{method:'POST',body:fd,headers:{Accept:'application/json, text/plain, */*'}});if(!response.ok)throw new Error(`HTTP ${response.status}`);order.status='RECEIVED';saveOrderReceipt(order);const payBase=productionConfig.paymentLinks?.[pkg]||'',payUrl=buildPaymentUrl(payBase,email,orderId,pkg),payment=payUrl?`<div class="payment-action"><a class="btn btn-primary btn-sm" id="paymentContinue" href="${escapeHtml(safeHref(payUrl))}" target="_blank" rel="noopener">Nastavi na sigurno plaćanje →</a></div>`:`<div class="payment-action"><strong>Plaćanje još nije povezano.</strong> Potvrda i upute bit će poslane na navedeni e-mail.</div>`;setOrderStatus('success',`<strong>Narudžba ${escapeHtml(orderId)} je zaprimljena.</strong> ${file?'Dokument je uključen u sigurnu predaju.':'Narudžba je zaprimljena bez dokumenta.'}${payment}`);trackEvent('order_submitted',{package:pkg,profileId:profile.definitionId||profile.id,provider:productionConfig.paymentProvider});setTimeout(()=>{const a=$('#paymentContinue');if(a)a.onclick=()=>trackEvent('payment_redirect',{package:pkg,provider:productionConfig.paymentProvider})},0)}catch(err: any){order.status='FAILED';setOrderStatus('error',`Narudžbu nije bilo moguće poslati (${escapeHtml(err.message||'mrežna pogreška')}). Dokument nije označen kao zaprimljen. Pokušaj ponovno ili kontaktiraj ${escapeHtml(productionConfig.contactEmail||'podršku nakon konfiguracije kontakta')}.`)}finally{button.disabled=false;button.textContent='Pošalji narudžbu'}}
-if (typeof document !== 'undefined' && document.getElementById('analyzer')) init();
+/**
+ * ZATECENA STRANICA nosi svih pet korijena koje `initLegacy` bezuvjetno dohvaca (`$('#checkGrid')
+ * .innerHTML` i slicno). Trazi se SVIH pet, ne bilo koji: na stranici s dijelom njih legacy
+ * ozicenje bacilo bi na prvom koji nedostaje.
+ */
+const LEGACY_PAGE_IDS=['checkGrid','pricingGrid','orderModal','historyModal','legalModal'] as const;
+function hasLegacyPage(doc: Document): boolean{return LEGACY_PAGE_IDS.every(id=>!!doc.getElementById(id))}
+
+/**
+ * ULAZ. Idempotentan po dokumentu i podnosi tocno jedan aktivni Document.
+ *
+ * OTROVANA REGISTRACIJA: modul se ucitava PRIJE nego ruta ispise svoj DOM, pa poziv nad
+ * stranicom bez korijena ne smije potrositi mjesto u registru. Da ga potrosi, kasniji izricit
+ * poziv tiho bi izasao na idempotentnom returnu i ruta bi ostala bez ijednog ozicenja, bez
+ * greske i bez traga. Zato se registrira SAMO stvarno obavljena montaza.
+ */
+export function initAnalyzerApp(doc: Document=document): void{
+ if(_mountedDocuments.has(doc))return;
+ if(_runtimeDocument&&_runtimeDocument!==doc)throw new Error('Analizator podrzava samo jedan aktivni Document.');
+ if(!hasLegacyPage(doc))return;
+ const previousDocument=_runtimeDocument;
+ // AbortController se uzima iz PROSLIJEDJENOG dokumenta (odvojeno stablo ili iframe ima svoj),
+ // uz globalni fallback za dokument bez pogleda (document.implementation.createHTMLDocument).
+ const Controller=doc.defaultView?.AbortController??globalThis.AbortController;
+ const controller=new Controller();
+ _runtimeDocument=doc;
+ _mountAbortControllers.set(doc,controller);
+ try{
+  initLegacy(doc,controller.signal);
+  _analyzerMounted=true;
+  _mountedDocuments.add(doc);
+ }catch(error){
+  // Neuspjela montaza ne smije ostaviti pola stanja: sljedeci poziv mora moci pokusati ponovno.
+  controller.abort();
+  _mountAbortControllers.delete(doc);
+  _analyzerMounted=false;_runtimeDocument=previousDocument;
+  throw error;
+ }
+}
+
+/**
+ * IZLAZ. Prekida signal montaze i oslobadja registar, pa se isti dokument moze montirati ponovno.
+ *
+ * OPSEG JE OGRANICEN I TO SE OVDJE KAZE NAGLAS: `bind()` svoje slusace jos registrira BEZ
+ * signala, pa ih ovaj poziv ne skida. Prekid signala danas gasi samo ono sto je na njega vezano
+ * (odgodjeni demo). Vezanje ostalih slusaca ide uz razlaganje `bind()`, kad `/rad/` postoji da
+ * to zatrazi. Gard koji tu granicu mjeri: `tests/analyzer-boundary.test.ts`.
+ */
+export function disposeAnalyzerApp(doc: Document=document): void{
+ const controller=_mountAbortControllers.get(doc);
+ if(!controller)return;
+ controller.abort();
+ _mountAbortControllers.delete(doc);
+ _mountedDocuments.delete(doc);
+ if(_runtimeDocument===doc){_runtimeDocument=null;_analyzerMounted=false}
+}
+
+if (typeof document !== 'undefined' && document.getElementById('analyzer')) initAnalyzerApp(document);
