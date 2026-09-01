@@ -61,11 +61,15 @@ export default defineConfig({
        * toga ne vidi. Pada samo slucaj 375x667 unutar tog istog projekta.
        */
       /**
-       * `repair-panel.spec.ts` tvrdo postavlja viewport 1440x1000, pa pod mobilnim projektom
-       * izvodi ISTI desktop scenarij drugi put: nula mobilne pokrivenosti, dvostruk trosak. A
-       * trosak nije zanemariv, jer svaki njegov test pokrece punu analizu stvarnog `.docx`-a.
+       * `repair-panel.spec.ts` VISE nije izuzet (UX-02, 2026-09-01). Tvrdi viewport 1440x1000 je
+       * maknut, pa velicinu daje projekt, a trosak vise nije argument: dijeljena analiza ga drzi
+       * na JEDNOJ po projektu. Prvi mobilni prolaz odmah je nasao stvaran kvar (odzumiranje
+       * stranice na ~52 % zbog `min-width:auto` u ljusci napredne provjere), sto je i bila
+       * poanta: popravak je placeni dio proizvoda i nije imao nijednu mobilnu provjeru.
+       *
+       * `desktop-flow.spec.ts` ostaje izuzet: on je tvrdo desktop scenarij.
        */
-      testIgnore: [/repair-panel\.spec\.ts/, /desktop-flow\.spec\.ts/],
+      testIgnore: [/desktop-flow\.spec\.ts/],
     },
     /**
      * FIREFOX I WEBKIT (audit P1-18). Do sada je release matrica bila samo Chromium (desktop +

@@ -7,7 +7,9 @@ import path from 'node:path';
 const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.docx');
 
 async function analyzeAndOpenSubmissionTab(page: Page) {
-  await page.setViewportSize({ width: 1440, height: 1000 });
+  // NEMA tvrdog viewporta: velicinu daje projekt (Desktop Chrome ili Pixel 5). Dok je ovdje
+  // stajalo 1440x1000, mobilni projekt je izvodio ISTI desktop scenarij drugi put, pa popravak,
+  // dakle placeni dio proizvoda, nije imao nijednu mobilnu provjeru (UX-02).
   // Bez ovoga `setWizardStep(3, true)` ide kroz View Transition, pa `#analyzeBtn` fizicki putuje
   // dok Playwright provjerava akcijabilnost ("element is not stable"). Klik se tada odgadja, a
   // analiza u medjuvremenu krene i gumb postane disabled + skriven, pa isti locator ceka do
@@ -16,8 +18,17 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
   // analyzer-hero-demo i free-tools-audit specovi.
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-  await page.locator('#uploadCtaBtn').click();
+  const uploadCta = page.locator('#uploadCtaBtn');
+  if (await uploadCta.isVisible().catch(() => false)) await uploadCta.click();
   await page.locator('#fileInput').setInputFiles(fixture);
+  // Tok se razlikuje po sirini i to NIJE detalj testa: na uskom zaslonu carobnjak staje na koraku
+  // 1 uz sticky CTA "Nastavi na profil", dok desktop odmah skoci na korak 2. Zato se ovdje ne
+  // pretpostavlja korak nego se procita.
+  const wizard = page.locator('#wizardView');
+  if ((await wizard.getAttribute('data-step')) === '1') {
+    await page.locator('#stepToProfile').click();
+  }
+  await expect(wizard).toHaveAttribute('data-step', '2');
   await page.locator('#stepToAnalyze').click();
   // Korak 3 mora biti u DOM-u prije klika (isti barijerni obrazac kao roadmap-v2.spec.ts).
   await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '3');
@@ -41,8 +52,9 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
  * JEDNA analiza za sve cetiri tvrdnje.
  *
  * Dosad je svaki test pokretao punu analizu stvarnog `.docx`-a, dakle cetiri puta isto stanje.
- * Uz mobilni projekt (koji je sada iskljucen, vidi `playwright.config.ts`) to je bilo osam analiza
- * za jedan jedini prikaz panela. Pod usporednim radnicima nad DEV posluziteljem to je i palo:
+ * Uz mobilni projekt to je bilo osam analiza za jedan jedini prikaz panela; upravo je taj trosak
+ * bio razlog izuzeca. Dijeljena analiza ga rusi na JEDNU po projektu, dakle dvije ukupno, pa
+ * izuzece vise nema cime stajati i mobilna pokrivenost popravka se moze vratiti. Pod usporednim radnicima nad DEV posluziteljem to je i palo:
  * `#resultView` nije stigao unutar 90 s, bez ijedne navigacije, greske u konzoli ili pada workera,
  * dakle nije bio kvar nego natjecanje za isti stroj.
  *
@@ -55,6 +67,12 @@ test.describe.configure({ mode: 'serial' });
 let page: Page;
 
 test.beforeAll(async ({ browser }) => {
+  // Kuka radi PUNU analizu stvarnog `.docx`-a za sve cetiri tvrdnje, pa nasljedjenih 120 s nije
+  // njezina mjera nego mjera jednog testa. Pod mobilnom emulacijom i opterecenim strojem to je
+  // izmjereno prelazilo granicu: isti kod prosao je 4/4 u 2,0 min na mirnom stroju, a padao na
+  // "beforeAll hook timeout" uz 20 tudjih node procesa. Rok se dize samo POSTAVLJANJU; nijedna
+  // tvrdnja se ne mijenja i nijedan test ne dobiva vise vremena.
+  test.setTimeout(300_000);
   page = await browser.newPage();
   await analyzeAndOpenSubmissionTab(page);
 });

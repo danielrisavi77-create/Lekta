@@ -605,6 +605,12 @@ button.cockpit-finding__location:hover { text-decoration-thickness: 2px; }
 /* ---- Napredna provjera (zatecen ekran, sklopljen) --------------------------- */
 
 .result-cockpit-advanced-shell { display: grid; gap: .75rem; margin-top: 1.75rem; }
+/* Stavka grida ima zadani `min-width: auto`, pa ne moze ispod svoje min-content sirine.
+   Izmjereno na Pixelu 5: sadrzaj napredne provjere trazio je 710 px u spremniku od 353, pa je
+   preglednik ODZUMIRAO cijelu stranicu (393x727 -> 752x1392, dakle na ~52 %). Posljedica nije
+   bila samo sitan tekst nego promasene dodirne mete: klik na "Prilagodi popravke" nije
+   prolazio ni u 120 s. Isti razred kao `.wizard-grid > *`. */
+.result-cockpit-advanced-shell > * { min-width: 0; }
 .result-cockpit-advanced-head { display: none; }
 .result-renderer-v1 .result-cockpit-advanced-head {
   display: grid;
