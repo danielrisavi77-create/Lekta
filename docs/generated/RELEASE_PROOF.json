@@ -1,59 +1,67 @@
 {
-  "commit": "75904ef347fececb6212196c504b927b7c694a64",
+  "commit": "a73f60f1423fd50ab96e67764ed8693331f75b83",
   "dirtyWorkingTree": false,
-  "createdAt": "2026-08-23T05:48:51.912Z",
+  "createdAt": "2026-09-01T01:09:06.051Z",
   "platform": "win32",
   "partial": false,
-  "complete": true,
-  "missingRequired": [],
+  "complete": false,
+  "missingRequired": [
+    "extraction"
+  ],
   "results": [
     {
       "id": "check",
       "label": "Tier 0: tsc + vitest + build",
       "status": "pass",
-      "durationMs": 1372416
+      "durationMs": 1239585
     },
     {
       "id": "edge",
       "label": "Tier 0: deno typecheck Edge funkcija",
       "status": "pass",
-      "durationMs": 9408
+      "durationMs": 177523
     },
     {
       "id": "conformance",
       "label": "Tier 0: conformance matrica",
       "status": "pass",
-      "durationMs": 185466
+      "durationMs": 221836
     },
     {
       "id": "slow",
       "label": "Tier 0: spori repair testovi",
       "status": "pass",
-      "durationMs": 233229
+      "durationMs": 246550
     },
     {
       "id": "ux",
       "label": "Tier 0: Playwright UX",
       "status": "pass",
-      "durationMs": 567296
+      "durationMs": 1377707
     },
     {
       "id": "strict-open",
-      "label": "Tier 1: python-docx strict open",
+      "label": "Tier 1: lxml nad POPRAVLJENIM paketima",
       "status": "pass",
-      "durationMs": 3734
+      "durationMs": 84511
     },
     {
       "id": "word",
       "label": "Tier 2: pravi Microsoft Word",
       "status": "pass",
-      "durationMs": 116078
+      "durationMs": 629610
     },
     {
       "id": "word-worst",
       "label": "Tier 2: Word, najgori slucaj",
       "status": "pass",
-      "durationMs": 55247
+      "durationMs": 215176
+    },
+    {
+      "id": "extraction",
+      "label": "Tier 2: extraction probe (staging)",
+      "status": "unavailable",
+      "reason": "missing-env:LEKTA_STAGING_ORIGIN"
     }
   ]
 }
