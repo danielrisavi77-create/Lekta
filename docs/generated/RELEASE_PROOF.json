@@ -1,7 +1,7 @@
 {
-  "commit": "a73f60f1423fd50ab96e67764ed8693331f75b83",
+  "commit": "ab2a108421821aead0b29580484eed3873be8860",
   "dirtyWorkingTree": false,
-  "createdAt": "2026-09-01T01:09:06.051Z",
+  "createdAt": "2026-09-01T03:39:15.565Z",
   "platform": "win32",
   "partial": false,
   "complete": false,
@@ -13,49 +13,49 @@
       "id": "check",
       "label": "Tier 0: tsc + vitest + build",
       "status": "pass",
-      "durationMs": 1239585
+      "durationMs": 1363947
     },
     {
       "id": "edge",
       "label": "Tier 0: deno typecheck Edge funkcija",
       "status": "pass",
-      "durationMs": 177523
+      "durationMs": 11535
     },
     {
       "id": "conformance",
       "label": "Tier 0: conformance matrica",
       "status": "pass",
-      "durationMs": 221836
+      "durationMs": 171426
     },
     {
       "id": "slow",
       "label": "Tier 0: spori repair testovi",
       "status": "pass",
-      "durationMs": 246550
+      "durationMs": 222422
     },
     {
       "id": "ux",
       "label": "Tier 0: Playwright UX",
       "status": "pass",
-      "durationMs": 1377707
+      "durationMs": 1074017
     },
     {
       "id": "strict-open",
       "label": "Tier 1: lxml nad POPRAVLJENIM paketima",
       "status": "pass",
-      "durationMs": 84511
+      "durationMs": 70265
     },
     {
       "id": "word",
       "label": "Tier 2: pravi Microsoft Word",
       "status": "pass",
-      "durationMs": 629610
+      "durationMs": 166746
     },
     {
       "id": "word-worst",
       "label": "Tier 2: Word, najgori slucaj",
       "status": "pass",
-      "durationMs": 215176
+      "durationMs": 126362
     },
     {
       "id": "extraction",
