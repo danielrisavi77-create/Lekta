@@ -30,9 +30,13 @@ describe('prijava pogresne provjere: modal umjesto window.prompt', () => {
     expect(app).toMatch(/function submitReport\(\)\{[\s\S]*?trackEvent\('wrong_check_reported'/);
   });
 
+  // Oblik ozicenja je promijenjen s `$('#id').onclick` na `ctl('#id').onclick`, jer nezasticena
+  // dodjela rusi montazu na stranici koja taj element nema, pa je tanka ruta bila nemoguca.
+  // Tvrdnja je ista (ovi gumbi SU ozicani), samo gadja aktualni oblik; da je ostavljena na starom,
+  // istrunula bi u zeleno dokazujuci nesto o obliku koji vise ne postoji.
   it('gumbi modala su ozicani u bind()', () => {
     for (const id of ['closeReport', 'cancelReport', 'submitReport']) {
-      expect(app).toContain(`$('#${id}').onclick`);
+      expect(app).toContain(`ctl('#${id}').onclick`);
     }
   });
 

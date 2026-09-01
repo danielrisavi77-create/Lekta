@@ -22,7 +22,9 @@ describe('prazan tab Spremnost za predaju: CTA', () => {
     const m = app.match(/\[data-open-phase\]'\);if\(ph\)\{([^}]*(?:\{[^}]*\}[^}]*)*)\}\}/);
     expect(m, 'delegirani handler za data-open-phase postoji').toBeTruthy();
     const body = m![1];
-    expect(body).toContain("$('#wizardView').classList.remove('hidden')");
+    // Oblik je dobio opcionalni lanac (`?.`), jer nezasticeno citanje rusi montazu na stranici
+    // koja taj element nema. Tvrdnja je ista, i susjedna vec koristi isti oblik za #submissionPhase.
+    expect(body).toContain("$('#wizardView')?.classList.remove('hidden')");
     expect(body).toContain('.advanced-options');
     expect(body).toContain("$('#submissionPhase')?.focus()");
   });
