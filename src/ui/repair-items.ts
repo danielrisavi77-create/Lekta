@@ -1283,6 +1283,10 @@ export function footnoteTypographyRepairableItem(checks: AnalyzedCheck[], profil
   if (fontName !== undefined) params.fontName = fontName;
   if (fontSizePt !== undefined) params.fontSizePt = fontSizePt;
   if (profile?.footnoteJustify === true) params.alignJustify = true;
+  // Bez `deep` popravak samo patcha stil `FootnoteText`, a izravni `w:rFonts`/`w:sz` u runovima
+  // fusnota ga nadjacaju: izmjereno na `pravo-integrirani-fusnote`, gdje su fusnote ostale
+  // Calibri 9 pt dok je changelog tvrdio Times New Roman 10 pt (vidi footnoteTypographyFixer).
+  params.deep = true;
   return [
     {
       ruleId: 'footnote-typography-universal',

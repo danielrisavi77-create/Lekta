@@ -609,12 +609,14 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
         : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
     }
     case 'footnote-typography-fixer': {
-      const p = params as { fontName?: unknown; fontSizePt?: unknown; alignJustify?: unknown };
+      const p = params as { fontName?: unknown; fontSizePt?: unknown; alignJustify?: unknown; deep?: unknown };
       const fontName = typeof p.fontName === 'string' && p.fontName.trim() !== '' ? p.fontName : undefined;
       const fontSizePt = isFiniteNumber(p.fontSizePt) ? p.fontSizePt : undefined;
       const alignJustify = typeof p.alignJustify === 'boolean' ? p.alignJustify : undefined;
+      // `deep` je neobavezan: stariji klijenti i pecene projekcije bez njega rade kao prije.
+      const deep = p.deep === true;
       return fontName !== undefined || fontSizePt !== undefined || alignJustify !== undefined
-        ? footnoteTypographyFixer(parts, { fontName, fontSizePt, alignJustify })
+        ? footnoteTypographyFixer(parts, { fontName, fontSizePt, alignJustify, deep })
         : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
     }
     case 'heading-case-fixer': {

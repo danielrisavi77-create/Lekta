@@ -1003,6 +1003,66 @@ describe('applyFixers golden round-trip', () => {
       expect(newStyles).toContain('w:ascii="Arial"');
       expect(newStyles).toContain('w:val="20"'); // izvorna velicina netaknuta
     });
+
+    /**
+     * IZRAVNO oblikovanje u fusnotama nadjacava stil, pa je bez `deep` popravak tvrdio promjenu
+     * koje nije bilo. Izmjereno 2026-09-01 na `pravo-integrirani-fusnote`: fusnote su i nakon
+     * popravka ostale Calibri 9 pt, dok je changelog javljao "Times New Roman, 10 pt".
+     */
+    const fusnoteZip = async (rPrFusnote: string) => {
+      const enc = new TextEncoder();
+      return writeZip([
+        { name: 'word/document.xml', data: enc.encode('<?xml version="1.0"?><w:document><w:body><w:p/></w:body></w:document>') },
+        {
+          name: 'word/styles.xml',
+          data: enc.encode(
+            '<?xml version="1.0"?><w:styles><w:style w:type="paragraph" w:styleId="FootnoteText">' +
+              '<w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="18"/></w:rPr></w:style></w:styles>',
+          ),
+        },
+        {
+          name: 'word/footnotes.xml',
+          data: enc.encode(
+            '<?xml version="1.0"?><w:footnotes><w:footnote w:id="1"><w:p>' +
+              '<w:pPr><w:pStyle w:val="FootnoteText"/></w:pPr>' +
+              `<w:r><w:rPr>${rPrFusnote}</w:rPr><w:t>tekst fusnote</w:t></w:r>` +
+              '</w:p></w:footnote></w:footnotes>',
+          ),
+        },
+      ]);
+    };
+    const fusnoteXml = async (docx: Uint8Array) =>
+      new TextDecoder().decode((await readZip(docx)).find((e) => e.name === 'word/footnotes.xml')!.data);
+    const IZRAVNO = '<w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="18"/>';
+
+    it('BASELINE: bez `deep` izravno oblikovanje fusnota ostaje (zateceno ponasanje)', async () => {
+      const result = await applyFixers(await fusnoteZip(IZRAVNO), [
+        { ruleId: 'r1', fixerId: 'footnote-typography-fixer', params: { fontName: 'Times New Roman', fontSizePt: 10 } },
+      ]);
+      const foot = await fusnoteXml(result.docxBytes);
+      expect(foot).toContain('w:ascii="Calibri"');
+      expect(foot).toContain('<w:sz w:val="18"/>');
+    });
+
+    it('uz `deep` izravni font i velicina u fusnotama nestaju, pa stil dolazi do izrazaja', async () => {
+      const result = await applyFixers(await fusnoteZip(IZRAVNO), [
+        { ruleId: 'r1', fixerId: 'footnote-typography-fixer', params: { fontName: 'Times New Roman', fontSizePt: 10, deep: true } },
+      ]);
+      const foot = await fusnoteXml(result.docxBytes);
+      expect(foot).not.toContain('w:ascii="Calibri"');
+      expect(foot).not.toContain('<w:sz w:val="18"/>');
+      expect(foot).toContain('tekst fusnote'); // tekst netaknut
+      expect(result.changelog.some((c) => c.afterLabel.includes('(fusnote)'))).toBe(true);
+    });
+
+    it('`deep` ne dira bold/italic ni druga run-svojstva', async () => {
+      const result = await applyFixers(await fusnoteZip(`${IZRAVNO}<w:b/><w:i/>`), [
+        { ruleId: 'r1', fixerId: 'footnote-typography-fixer', params: { fontName: 'Times New Roman', fontSizePt: 10, deep: true } },
+      ]);
+      const foot = await fusnoteXml(result.docxBytes);
+      expect(foot).toContain('<w:b/>');
+      expect(foot).toContain('<w:i/>');
+    });
   });
 
   // RE-26: applyFixers samu sebe u komentaru zove "fail-safe", ali runFixer se dosad pozivao BEZ
