@@ -1640,7 +1640,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -1868,7 +1869,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -2031,7 +2033,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -2421,7 +2424,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -2554,7 +2558,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -2687,7 +2692,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -2820,7 +2826,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -10010,7 +10017,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -10155,7 +10163,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -10462,7 +10471,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -10616,7 +10626,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -10770,7 +10781,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -10924,7 +10936,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -11057,7 +11070,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -11190,7 +11204,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -14069,7 +14084,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -14214,7 +14230,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -17730,7 +17747,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -17866,7 +17884,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -20397,7 +20416,8 @@
         "target": "10 pt",
         "params": {
           "fontSizePt": 10,
-          "alignJustify": true
+          "alignJustify": true,
+          "deep": true
         }
       },
       {
@@ -21370,7 +21390,8 @@
         "target": "Times New Roman, 10 pt",
         "params": {
           "fontName": "Times New Roman",
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -23406,7 +23427,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -23551,7 +23573,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -24946,7 +24969,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -25082,7 +25106,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -25236,7 +25261,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -25372,7 +25398,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -28153,7 +28180,8 @@
         "target": "Times New Roman, 10 pt",
         "params": {
           "fontName": "Times New Roman",
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -28332,7 +28360,8 @@
         "params": {
           "fontName": "Times New Roman",
           "fontSizePt": 10,
-          "alignJustify": true
+          "alignJustify": true,
+          "deep": true
         }
       },
       {
@@ -28533,7 +28562,8 @@
         "params": {
           "fontName": "Times New Roman",
           "fontSizePt": 10,
-          "alignJustify": true
+          "alignJustify": true,
+          "deep": true
         }
       },
       {
@@ -28734,7 +28764,8 @@
         "params": {
           "fontName": "Times New Roman",
           "fontSizePt": 10,
-          "alignJustify": true
+          "alignJustify": true,
+          "deep": true
         }
       },
       {
@@ -28892,7 +28923,8 @@
         "params": {
           "fontName": "Times New Roman",
           "fontSizePt": 10,
-          "alignJustify": true
+          "alignJustify": true,
+          "deep": true
         }
       },
       {
@@ -29071,7 +29103,8 @@
         "params": {
           "fontName": "Times New Roman",
           "fontSizePt": 10,
-          "alignJustify": true
+          "alignJustify": true,
+          "deep": true
         }
       },
       {
@@ -29295,7 +29328,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -29872,7 +29906,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -30215,7 +30250,8 @@
         "target": "Times New Roman, 10 pt",
         "params": {
           "fontName": "Times New Roman",
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -39584,7 +39620,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -39720,7 +39757,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -40190,7 +40228,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -40325,7 +40364,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -40944,7 +40984,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -41352,7 +41393,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -41790,7 +41832,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -43327,7 +43370,8 @@
         "target": "Times New Roman, 10 pt",
         "params": {
           "fontName": "Times New Roman",
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -43482,7 +43526,8 @@
         "target": "Times New Roman, 10 pt",
         "params": {
           "fontName": "Times New Roman",
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -45875,7 +45920,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -45994,7 +46040,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -46111,7 +46158,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -46815,7 +46863,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
@@ -46969,7 +47018,8 @@
         "scope": "profil",
         "target": "10 pt",
         "params": {
-          "fontSizePt": 10
+          "fontSizePt": 10,
+          "deep": true
         }
       },
       {
