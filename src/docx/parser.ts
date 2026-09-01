@@ -253,6 +253,36 @@ export function parseStyles(xml: any): any {
     if (styleType === 'paragraph' && attr(s, 'w:default') === '1') defaultParagraphStyleId = id;
     styles.set(id, { id, name: attr(direct(s, 'w:name'), 'w:val') || id, basedOn: attr(direct(s, 'w:basedOn'), 'w:val') || null, type: attr(s, 'w:type') || '', r: readRPr(direct(s, 'w:rPr')), p: readPPr(direct(s, 'w:pPr')) });
   }
+  /**
+   * FALLBACK PO IMENU kad nijedan stil ne nosi `w:default="1"`.
+   *
+   * Do 2026-09-01 je zadani paragraf stil bio ISKLJUCIVO onaj sa zastavicom. Dokument bez nje je
+   * time za analizu ostajao bez ijednog nasljedivog paragraf stila, pa su odlomci bez `w:pStyle`
+   * dobivali `align`, `line`, `before` i `after` = null. Poravnanje takvih odlomaka zavrsavalo je u
+   * kanti `'default'`, koja nikad nije `both`, pa `format.justify.body` nije mogao proci NI NAKON
+   * ispravnog popravka.
+   *
+   * Presudio je Word, ne citanje sheme: u popravljenom `fpzg-novinarstvo-bibliografija` (stil
+   * `Normal` doveden na `w:jc="both"`, odlomci bez vlastitog `w:jc`) `Paragraph.Alignment` za
+   * odlomke 19, 20 i 21 vraca wdAlignParagraphJustify. Word dakle `Normal` PRIMJENJUJE i bez
+   * zastavice; stroga izvedba je bila nasa, ne njegova.
+   *
+   * Nije rijec o rubnom slucaju nase fixture: zastavice nema 14 od 19 commitanih fixtura, medju
+   * njima STVARNI LibreOffice izlaz (`lo-fpzg-zavrsni-*`) i `mef-doktorski-disertacija`.
+   *
+   * Isti fallback popravak ima odavno (`resolveDefaultParagraphStyleId` u `src/repair/xml-patch.ts`,
+   * `DEFAULT_PARAGRAPH_NAME_RE`), pa je analiza dosad citala drugi stil od onoga koji popravak pise.
+   */
+  if (!defaultParagraphStyleId) {
+    for (const [id, s] of styles) {
+      if (s.type !== 'paragraph') continue;
+      if (/^\s*(?:normal|standard|standardno)\s*$/i.test(id) || /^\s*(?:normal|standard|standardno)\s*$/i.test(s.name)) {
+        defaultParagraphStyleId = id;
+        break;
+      }
+    }
+  }
+
   const cache = new Map<string, any>();
   function resolve(id: string | null, seen = new Set<string>()): any {
     if (!id || !styles.has(id)) return { r: {}, p: {}, name: id || '' };

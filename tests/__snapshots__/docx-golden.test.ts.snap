@@ -260,7 +260,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "formatting",
-        "detail": "default",
+        "detail": "left",
         "earned": 4,
         "max": 4,
         "status": "pass",
@@ -910,10 +910,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "formatting",
-        "detail": "Nije moguće utvrditi: Word ne zapisuje prored kad je ostavljen na zadanoj vrijednosti, pa ga nije moguće izmjeriti.",
-        "earned": 0,
-        "max": 0,
-        "status": "unmeasurable",
+        "detail": "1.08",
+        "earned": 1,
+        "max": 6,
+        "status": "fail",
         "title": "Prored osnovnog teksta",
       },
       {
@@ -926,7 +926,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "formatting",
-        "detail": "default",
+        "detail": "left",
         "earned": 2,
         "max": 4,
         "status": "warn",
@@ -1204,6 +1204,13 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "formatting",
+        "detail": "Dominantni prored je 1.08, a očekuje se 1.5.",
+        "severity": "error",
+        "title": "Prored nije usklađen s profilom",
+        "where": "",
+      },
+      {
+        "category": "formatting",
         "detail": "Odabrani profil očekuje obostrano poravnanje odlomaka.",
         "severity": "warning",
         "title": "Osnovni tekst nije dominantno obostrano poravnat",
@@ -1283,7 +1290,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "FPZG · diplomsko Novinarstvo · diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 72,
+    "score": 70,
     "stats": {
       "characters": 885,
       "citations": 4,
@@ -1292,7 +1299,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       "dominantFootnoteSize": null,
       "dominantFootnoteSpacing": null,
       "dominantSize": "11",
-      "dominantSpacing": null,
+      "dominantSpacing": "1.0791666666666666",
       "endnotes": 0,
       "footnoteMarkers": 0,
       "footnoteWords": 0,
@@ -2937,10 +2944,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "formatting",
-        "detail": "Nije moguće utvrditi: Word ne zapisuje prored kad je ostavljen na zadanoj vrijednosti, pa ga nije moguće izmjeriti.",
-        "earned": 0,
-        "max": 0,
-        "status": "unmeasurable",
+        "detail": "1.08",
+        "earned": 1,
+        "max": 6,
+        "status": "fail",
         "title": "Prored osnovnog teksta",
       },
       {
@@ -2977,10 +2984,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "formatting",
-        "detail": "Razmak prije/poslije nije izričito zapisan u analiziranim stilovima; nema bodovnog kažnjavanja",
-        "earned": 3,
+        "detail": "9 od 9 provjerljivih odlomaka odstupa (100%)",
+        "earned": 1.2,
         "max": 3,
-        "status": "pass",
+        "status": "warn",
         "title": "Razmak prije i poslije odlomka",
       },
       {
@@ -3280,6 +3287,13 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "formatting",
+        "detail": "Dominantni prored je 1.08, a očekuje se 1.5.",
+        "severity": "error",
+        "title": "Prored nije usklađen s profilom",
+        "where": "",
+      },
+      {
+        "category": "formatting",
         "detail": "Odabrani profil očekuje obostrano poravnanje odlomaka.",
         "severity": "warning",
         "title": "Osnovni tekst nije dominantno obostrano poravnat",
@@ -3291,6 +3305,13 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "severity": "warning",
         "title": "Fusnote odstupaju od pravnog profila",
         "where": "Fusnote",
+      },
+      {
+        "category": "formatting",
+        "detail": "odlomak 1: prije ? pt / poslije 8 pt; odlomak 3: prije ? pt / poslije 8 pt; odlomak 5: prije ? pt / poslije 8 pt; odlomak 7: prije ? pt / poslije 8 pt; odlomak 11: prije ? pt / poslije 8 pt; odlomak 13: prije ? pt / poslije 8 pt; odlomak 14: prije ? pt / poslije 8 pt; odlomak 16: prije ? pt / poslije 8 pt",
+        "severity": "warning",
+        "title": "Razmak prije i poslije odlomka nije postavljen na 0",
+        "where": "Razmak prije i poslije odlomka",
       },
       {
         "category": "formatting",
@@ -3338,7 +3359,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Pravni fakultet · integrirani studij Pravo · diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 80,
+    "score": 76,
     "stats": {
       "characters": 460,
       "citations": 3,
@@ -3347,7 +3368,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       "dominantFootnoteSize": "9",
       "dominantFootnoteSpacing": "1.15",
       "dominantSize": "11",
-      "dominantSpacing": null,
+      "dominantSpacing": "1.0791666666666666",
       "endnotes": 0,
       "footnoteMarkers": 3,
       "footnoteWords": 21,
@@ -3385,10 +3406,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "formatting",
-        "detail": "Nije moguće utvrditi: Word ne zapisuje prored kad je ostavljen na zadanoj vrijednosti, pa ga nije moguće izmjeriti.",
-        "earned": 0,
-        "max": 0,
-        "status": "unmeasurable",
+        "detail": "1.08",
+        "earned": 1,
+        "max": 6,
+        "status": "fail",
         "title": "Prored osnovnog teksta",
       },
       {
@@ -3709,6 +3730,13 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "where": "",
       },
       {
+        "category": "formatting",
+        "detail": "Dominantni prored je 1.08, a očekuje se 1.5.",
+        "severity": "error",
+        "title": "Prored nije usklađen s profilom",
+        "where": "",
+      },
+      {
         "category": "structure",
         "detail": "odlomak 10: 1. Uvod; odlomak 12: 2. Razrada; odlomak 15: 3. Zakljucak",
         "severity": "warning",
@@ -3782,7 +3810,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "profile": "Pravni fakultet · Sveučilišni diplomski studij Socijalni rad · diplomski rad",
     "profileFingerprint": null,
     "profileStatus": "verified",
-    "score": 70,
+    "score": 68,
     "stats": {
       "characters": 442,
       "citations": 0,
@@ -3791,7 +3819,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       "dominantFootnoteSize": "9",
       "dominantFootnoteSpacing": "1.15",
       "dominantSize": "11",
-      "dominantSpacing": null,
+      "dominantSpacing": "1.0791666666666666",
       "endnotes": 0,
       "footnoteMarkers": 3,
       "footnoteWords": 21,

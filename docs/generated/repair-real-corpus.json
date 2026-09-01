@@ -327,18 +327,19 @@
       "before": {
         "checkCount": 35,
         "passCount": 15,
-        "score": 72
+        "score": 70
       },
       "after": {
         "checkCount": 35,
-        "passCount": 19,
-        "score": 86
+        "passCount": 21,
+        "score": 88
       },
       "beforeEntryCount": 8,
       "afterEntryCount": 8,
       "droppedEntryCount": 0,
       "offeredFixerIds": [
         "font-fixer",
+        "line-spacing-fixer",
         "alignment-fixer",
         "bibliography-repair-fixer",
         "citation-bibliography-sync-fixer",
@@ -352,19 +353,18 @@
       "changedFixerIds": [
         "field-integrity-fixer",
         "font-fixer",
+        "line-spacing-fixer",
         "alignment-fixer",
         "section-surgery-fixer",
         "final-document-inspector-fixer",
         "bibliography-repair-fixer",
         "required-section-fixer"
       ],
-      "targetedCheckCount": 6,
-      "targetedResolvedCount": 2,
-      "targetedUnresolvedCount": 4,
-      "autoUnresolvedCount": 1,
-      "autoUnresolvedChecks": [
-        "format.justify.body"
-      ],
+      "targetedCheckCount": 7,
+      "targetedResolvedCount": 4,
+      "targetedUnresolvedCount": 3,
+      "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 3,
       "assistedUnresolvedChecks": [
         "citation.author-year.missing-reference",
@@ -744,21 +744,23 @@
       "outcome": "review",
       "before": {
         "checkCount": 42,
-        "passCount": 20,
-        "score": 80
+        "passCount": 19,
+        "score": 76
       },
       "after": {
         "checkCount": 42,
-        "passCount": 24,
-        "score": 90
+        "passCount": 26,
+        "score": 92
       },
       "beforeEntryCount": 9,
       "afterEntryCount": 9,
       "droppedEntryCount": 0,
       "offeredFixerIds": [
         "font-fixer",
+        "line-spacing-fixer",
         "margins-fixer",
         "alignment-fixer",
+        "paragraph-spacing-fixer",
         "footnote-spacing-fixer",
         "heading-format-fixer",
         "footnote-typography-fixer",
@@ -770,20 +772,21 @@
       "changedFixerIds": [
         "field-integrity-fixer",
         "font-fixer",
+        "line-spacing-fixer",
         "alignment-fixer",
+        "paragraph-spacing-fixer",
         "footnote-spacing-fixer",
         "heading-format-fixer",
         "footnote-typography-fixer",
         "heading-case-fixer",
         "final-document-inspector-fixer"
       ],
-      "targetedCheckCount": 6,
-      "targetedResolvedCount": 4,
-      "targetedUnresolvedCount": 2,
-      "autoUnresolvedCount": 2,
+      "targetedCheckCount": 8,
+      "targetedResolvedCount": 7,
+      "targetedUnresolvedCount": 1,
+      "autoUnresolvedCount": 1,
       "autoUnresolvedChecks": [
-        "footnote.format",
-        "format.justify.body"
+        "footnote.format"
       ],
       "assistedUnresolvedCount": 0,
       "assistedUnresolvedChecks": [],
@@ -820,18 +823,19 @@
       "before": {
         "checkCount": 38,
         "passCount": 18,
-        "score": 70
+        "score": 68
       },
       "after": {
         "checkCount": 38,
-        "passCount": 23,
-        "score": 87
+        "passCount": 24,
+        "score": 88
       },
       "beforeEntryCount": 9,
       "afterEntryCount": 9,
       "droppedEntryCount": 0,
       "offeredFixerIds": [
         "font-fixer",
+        "line-spacing-fixer",
         "margins-fixer",
         "paper-size-fixer",
         "page-number-alignment-fixer",
@@ -844,13 +848,14 @@
       "changedFixerIds": [
         "field-integrity-fixer",
         "font-fixer",
+        "line-spacing-fixer",
         "margins-fixer",
         "page-number-alignment-fixer",
         "heading-format-fixer",
         "final-document-inspector-fixer"
       ],
-      "targetedCheckCount": 5,
-      "targetedResolvedCount": 5,
+      "targetedCheckCount": 6,
+      "targetedResolvedCount": 6,
       "targetedUnresolvedCount": 0,
       "autoUnresolvedCount": 0,
       "autoUnresolvedChecks": [],
@@ -1095,12 +1100,11 @@
     "changedDocumentCount": 14,
     "manualReviewCount": 16,
     "passRegressionCount": 0,
-    "targetedCheckCount": 35,
-    "targetedResolvedCount": 26,
-    "autoUnresolvedCount": 3,
+    "targetedCheckCount": 39,
+    "targetedResolvedCount": 32,
+    "autoUnresolvedCount": 1,
     "autoUnresolvedChecks": [
-      "footnote.format",
-      "format.justify.body"
+      "footnote.format"
     ],
     "assistedUnresolvedCount": 6,
     "awaitingConfirmationCount": 0,
