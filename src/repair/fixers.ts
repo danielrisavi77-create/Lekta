@@ -717,16 +717,16 @@ export function titlePageFixer(parts: DocxXmlParts, target: TitlePageRepairTarge
  */
 export function footnoteTypographyFixer(
   parts: DocxXmlParts,
-  update: { fontName?: string; fontSizePt?: number; alignJustify?: boolean },
+  update: { fontName?: string; fontSizePt?: number; alignJustify?: boolean; deep?: boolean },
 ): FixerOutput {
   // Bez fusnota u dokumentu nema sto oblikovati (isti gard kao footnoteSpacingFixer).
   if (parts.footnotesXml === undefined) return NO_OP(parts, 'unsupported-structure');
+  const sizeTarget = update.fontSizePt !== undefined ? ptToHalfPoints(update.fontSizePt) : undefined;
   const result = patchFootnoteTypography(parts.stylesXml, {
     fontName: update.fontName,
-    sizeHalfPoints: update.fontSizePt !== undefined ? ptToHalfPoints(update.fontSizePt) : undefined,
+    sizeHalfPoints: sizeTarget,
     alignJustify: update.alignJustify,
   });
-  if (!result.applied) return NO_OP(parts, reasonFromPatch(result));
 
   const label = (side: Record<string, string>): string => {
     const bits: string[] = [];
@@ -735,12 +735,54 @@ export function footnoteTypographyFixer(
     if (side['poravnanje'] !== undefined) bits.push(side['poravnanje'] === 'both' ? 'obostrano' : (side['poravnanje'] || UNSET_LABEL));
     return bits.join(', ');
   };
-  return {
-    parts: { ...parts, stylesXml: result.xml },
-    applied: true,
-    beforeLabel: `Fusnote: ${label(result.before)}`,
-    afterLabel: `Fusnote: ${label(result.after)}`,
-  };
+  const base: FixerOutput = !result.applied
+    ? NO_OP(parts, reasonFromPatch(result))
+    : {
+        parts: { ...parts, stylesXml: result.xml },
+        applied: true,
+        beforeLabel: `Fusnote: ${label(result.before)}`,
+        afterLabel: `Fusnote: ${label(result.after)}`,
+      };
+
+  /**
+   * DEEP CISCENJE FUSNOTA, dodano 2026-09-01.
+   *
+   * Do tada ga ovaj fixer NIJE imao, za razliku od `footnoteSpacingFixer`, pa je patchao stil
+   * `FootnoteText` dok su runovi fusnota nosili IZRAVNI `w:rFonts` i `w:sz` koji ga nadjacavaju.
+   * Izmjereno na `pravo-integrirani-fusnote`: fusnote su i nakon popravka ostale Calibri 9 pt, a
+   * changelog je tvrdio "font Calibri, 9 pt -> Times New Roman, 10 pt". Provjera `footnote.format`
+   * je ostajala crvena, a korisnik je dobio neistinitu tvrdnju.
+   *
+   * BACKSTOP: `patchFootnoteTypography` koristi `upsertChild`, koji dijete STVARA ako ga nema, pa
+   * stil nakon uspjesnog patcha sigurno nosi cilj. Kad patch nije nista promijenio, stil ga je vec
+   * imao. Jedini slucaj bez backstopa je nepostojeci `FootnoteText` stil, a njega patch prepoznaje
+   * tako sto vrati PRAZAN `found` (ostale grane ga pune iz zahtjeva). Zato se deep vezao uz
+   * postojanje stila, ne uz `applied`: ciscenje mora raditi i kad je stil vec bio ispravan, jer je
+   * upravo tada izravno formatiranje jedini uzrok pada.
+   *
+   * Velicinu pokriva postojeca tolerancija (`SIZE_TOLERANCE_HALF_POINTS`): izmjereno 9 pt naspram
+   * cilja 10 pt je 2 half-pointa razlike. `stripDominantBodySize` se ovdje NE ukljucuje, jer za nj
+   * nema izmjerene potrebe, a sirio bi ponasanje bez dokaza.
+   */
+  const styleExists = Object.keys(result.found ?? {}).length > 0;
+  const deepResult =
+    update.deep && styleExists
+      ? stripDirectFormatting(parts.footnotesXml, {
+          stripFontName: update.fontName !== undefined,
+          stripFontSizeNearHalfPoints: sizeTarget,
+          allowedStyleId: 'FootnoteText',
+        })
+      : null;
+
+  // Isti rucni spoj kao u footnoteSpacingFixer: `combineDeep` spaja u documentXml, a ovdje se cisti
+  // zaseban zip dio (`footnotesXml`).
+  if (!deepResult || !deepResult.applied) return base;
+  const mergedParts: DocxXmlParts = { ...(base.applied ? base.parts : parts), footnotesXml: deepResult.xml };
+  const deepNote = `izravno formatiranje uklonjeno u ${deepResult.paragraphsTouched} odlomaka (fusnote)`;
+  if (!base.applied) {
+    return { parts: mergedParts, applied: true, beforeLabel: 'Izravno formatiranje u fusnotama', afterLabel: deepNote };
+  }
+  return { parts: mergedParts, applied: true, beforeLabel: base.beforeLabel, afterLabel: `${base.afterLabel}; ${deepNote}` };
 }
 
 // Numeriranje stranica po sekcijama: rimski na prednjim listovima, arapski od Uvoda
