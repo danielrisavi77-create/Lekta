@@ -43,7 +43,14 @@ async function analiziraj(page: Page, bezWorkera: boolean): Promise<Ishod> {
   // Bez ovoga `setWizardStep(3, true)` ide kroz View Transition pa gumb fizicki putuje dok
   // Playwright provjerava akcijabilnost (isti razlog kao u repair-panel.spec.ts).
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/');
+  // `domcontentloaded`, ne zadani `load`: IZMJERENO na produkcijskom buildu (`vite preview`) da u
+  // WebKitu `load` ne okine ni u 90 s, dok ga Chromium okine za 2,9 s. Nije rijec o fontovima
+  // (nula odbijenih zahtjeva), ni o dev posluzitelju, ni o `<video>` elementu (provjereno
+  // uklanjanjem). Resource Timing pritom prijavljuje NULA nedovrsenih resursa, pa uzrok ostaje
+  // neimenovan. Korisnika ne dira, jer nijedan modul ne ceka na `load` (boot ide na
+  // `DOMContentLoaded`, 3,7 s u WebKitu); dira samo alat, i objasnjava raniji istek
+  // `page.goto` u `mobile-webkit` projektu.
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
 
   if (bezWorkera) {
     expect(await page.evaluate(() => typeof Worker), 'Worker mora doista biti ugasen').toBe('undefined');
