@@ -58,6 +58,17 @@ jobs:
       - name: Build gate (oxlint + tsc + edge + vitest + vite build)
         run: npm run check
 
+      # Typecheck Edge funkcija NE dira lockfile (`check-edge.mjs` svakom pozivu Dena predaje
+      # `--no-lock`), pa tranzitivni graf koji esm.sh posluzuje nitko nije provjeravao:
+      # `deno.lock` je imao JEDAN `remote` unos, a stvarni graf ima 11 (cijelo stablo supabase
+      # klijenta plus iceberg-js i tslib). Ovaj korak ih zakljucava i provjerava otiske.
+      #
+      # `--selftest` je dio koraka, ne ukras: izmjereno je da `deno check --frozen` NE prijavi
+      # podmetnut otisak (vraca 0 i uz praznu predmemoriju), pa bi gard oslonjen na njega bio
+      # dekorativan. Selftest nad kopijom locka dokazuje da ovaj poziv doista pada.
+      - name: Edge lock (tranzitivni graf + dokaz da gard grize)
+        run: node scripts/check-edge-lock.mjs --selftest
+
       # Faza A zastite baze pravila: post-build sken dist artefakata na kanarince i
       # never-markere privatnog sloja (drafts evidence, ledger, source-registry).
       # Vitest sloj (tests/classification.test.ts) cuva manifest i izvore; vite plugin

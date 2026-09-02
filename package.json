@@ -103,7 +103,8 @@
     "seed-declarations": "vite-node scripts/seed-declarations.mts",
     "lint": "oxlint",
     "post-deploy-smoke": "node scripts/post-deploy-smoke.mjs",
-    "post-deploy-smoke:self-test": "node scripts/post-deploy-smoke.mjs --self-test"
+    "post-deploy-smoke:self-test": "node scripts/post-deploy-smoke.mjs --self-test",
+    "check:edge-lock": "node scripts/check-edge-lock.mjs"
   },
   "overrides": {
     "nanoid": "^3.3.18"
