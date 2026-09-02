@@ -1,5 +1,23 @@
 import { defineConfig, devices } from '@playwright/test';
 
+/**
+ * PORT JE PODESIV, jer je fiksni port u ovom repozitoriju izvor KRIVIH MJERENJA, ne samo gnjavaze.
+ *
+ * Vise sesija radi nad istim stablom i vrti `test:ux` istovremeno. Uz `reuseExistingServer: !CI`
+ * druga sesija ne pokrece svoj posluzitelj nego se zakaci na TUDJI, koji sluzi TUDJE stablo, pa
+ * testovi zelene ili crvene nad kodom koji se ne dokazuje. Uz `CI=1` ne reusea, ali onda padne na
+ * zauzet port.
+ *
+ * Izmjereno 2026-09-01: izolirani `release:check` dvaput nije mogao ni krenuti, jednom 4 h
+ * (cekajuci mirovanje), jednom 90 min (cekajuci bas ovaj port), dok je RAM cijelo vrijeme bio
+ * slobodan (2,3 GB). Uzrok nije bio stroj nego jedan dijeljeni broj.
+ *
+ * `LEKTA_UX_PORT` daje svakoj sesiji vlastiti posluzitelj. Bez varijable je 4173, pa se ni CI ni
+ * postojeci recepti ne mijenjaju.
+ */
+const UX_PORT = process.env.LEKTA_UX_PORT ?? '4173';
+const UX_ORIGIN = `http://127.0.0.1:${UX_PORT}`;
+
 export default defineConfig({
   testDir: './tests/ux',
   timeout: 120_000,
@@ -20,7 +38,7 @@ export default defineConfig({
   failOnFlakyTests: !!process.env.CI,
   reporter: process.env.CI ? 'github' : 'list',
   use: {
-    baseURL: 'http://127.0.0.1:4173',
+    baseURL: UX_ORIGIN,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
@@ -110,8 +128,8 @@ export default defineConfig({
    * zaseban job bez `dist/`), pa je to promjena CI-ja i ostaje odvojena odluka.
    */
   webServer: {
-    command: 'npm run dev -- --host 127.0.0.1 --port 4173',
-    url: 'http://127.0.0.1:4173',
+    command: `npm run dev -- --host 127.0.0.1 --port ${UX_PORT}`,
+    url: UX_ORIGIN,
     reuseExistingServer: !process.env.CI,
     timeout: 300_000,
   },
