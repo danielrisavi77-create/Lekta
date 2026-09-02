@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { openWorkspace, type StorageAvailability } from '../src/routes/workspace/bootstrap';
+import { openWorkspace, persistAcceptedDocument, restoreDocument, type StorageAvailability } from '../src/routes/workspace/bootstrap';
 import { sessionFragment } from '../src/session/local-document-session';
 import type { LocalDocumentSessionStore, LocalDocumentSessionV1 } from '../src/session/local-document-session';
 
@@ -94,5 +94,103 @@ describe('otvaranje radne povrsine', () => {
     };
     await openWorkspace(sessionFragment(ID), { kind: 'available', store });
     expect(calls).toEqual(['deleteExpired', 'get']);
+  });
+});
+
+/* ------------------------------------------------------------------------------------- *
+ * ZAPIS I OBNOVA
+ * ------------------------------------------------------------------------------------- */
+
+/** Najmanji verdikt koji sanitizer prihvaca; `capability: null` je dopusteno stanje. */
+const OK_VERDICT = { kind: 'ok', suspicious: false, suspicionReason: null, capability: null, quickStats: null };
+const docxFile = () => new File([new Uint8Array([80, 75, 3, 4, 9, 9])], 'rad.docx');
+
+function trackingStore(over: Partial<LocalDocumentSessionStore> = {}) {
+  const calls: string[] = [];
+  const store: LocalDocumentSessionStore = {
+    async put() { calls.push('put'); },
+    async get() { return null; },
+    async update() { return null as never; },
+    async list() { return []; },
+    async delete() { calls.push('delete'); },
+    async deleteExpired() { return 0; },
+    ...over,
+  };
+  return { store, calls };
+}
+
+describe('zapis prihvacenog dokumenta', () => {
+  it('BEZ POHRANE se preskace, uz poruku, i to nije greska', async () => {
+    const out = await persistAcceptedDocument(docxFile(), OK_VERDICT, unavailable);
+    expect(out.kind).toBe('skipped');
+    if (out.kind === 'skipped') expect(out.notice).toMatch(/ostaje samo u ovoj kartici/i);
+  });
+
+  it('uspjesan zapis vraca id i fragment', async () => {
+    const { store } = trackingStore();
+    const out = await persistAcceptedDocument(docxFile(), OK_VERDICT, { kind: 'available', store });
+    expect(out.kind).toBe('persisted');
+    if (out.kind === 'persisted') {
+      expect(out.sessionId.length).toBeGreaterThan(10);
+      expect(out.fragment).toContain(out.sessionId);
+    }
+  });
+
+  it('PRETHODNA SESIJA SE BRISE TEK NAKON uspjesnog zapisa nove', async () => {
+    // Obrnut redoslijed znaci prozor u kojem stara vise ne postoji a nova jos nije zapisana;
+    // prekid u tom trenutku gubi oboje.
+    const { store, calls } = trackingStore();
+    await persistAcceptedDocument(docxFile(), OK_VERDICT, { kind: 'available', store }, 'stara-sesija');
+    expect(calls).toEqual(['put', 'delete']);
+  });
+
+  it('neuspjelo brisanje pretecene NE obara zapis koji je upravo uspio', async () => {
+    // Zaostala sesija je smece koje istekne samo; izgubljen zapis je izgubljen rad.
+    const { store } = trackingStore({ async delete() { throw new Error('nema'); } });
+    const out = await persistAcceptedDocument(docxFile(), OK_VERDICT, { kind: 'available', store }, 'stara');
+    expect(out.kind).toBe('persisted');
+  });
+
+  it('kvar pohrane vraca `failed` s porukom, ne baca', async () => {
+    const { store } = trackingStore({ async put() { throw new Error('puna pohrana'); } });
+    const out = await persistAcceptedDocument(docxFile(), OK_VERDICT, { kind: 'available', store });
+    expect(out.kind).toBe('failed');
+    if (out.kind === 'failed') expect(out.notice).toMatch(/nije uspjelo spremiti/i);
+  });
+
+  it('neispravan verdikt ne stvara sesiju nego uredno pada', async () => {
+    const { store, calls } = trackingStore();
+    const out = await persistAcceptedDocument(docxFile(), { kind: 'reject' }, { kind: 'available', store });
+    expect(out.kind).toBe('failed');
+    expect(calls).toEqual([]);
+  });
+});
+
+describe('obnova dokumenta', () => {
+  const session = {
+    document: { name: 'rad.docx', type: '', lastModified: 0, bytes: new Uint8Array([1, 2, 3]).buffer },
+  } as unknown as Parameters<typeof restoreDocument>[0];
+
+  it('prihvacen dokument znaci obnovljen rad', async () => {
+    const out = await restoreDocument(session, async () => ({ kind: 'accepted' }));
+    expect(out.kind).toBe('loaded');
+  });
+
+  it('SPREMLJEN VERDIKT NIJE DOKAZ: odbijanje pri ponovnom prijemu se postuje', async () => {
+    // Granice i pravila su se mogli promijeniti od zapisa. Vjerovati zapisanom verdiktu znacilo
+    // bi vratiti dokument koji analizator vise ne prima, i to bez ijedne poruke.
+    const out = await restoreDocument(session, async () => ({ kind: 'rejected' }));
+    expect(out.kind).toBe('refused');
+    if (out.kind === 'refused') expect(out.notice).toMatch(/ne prolazi provjeru/i);
+  });
+
+  it('pretecen dokument se takodjer ne racuna kao obnovljen', async () => {
+    const out = await restoreDocument(session, async () => ({ kind: 'superseded' }));
+    expect(out.kind).toBe('refused');
+  });
+
+  it('greska pri ucitavanju ne rusi rutu', async () => {
+    const out = await restoreDocument(session, async () => { throw new Error('pukao prijem'); });
+    expect(out.kind).toBe('refused');
   });
 });

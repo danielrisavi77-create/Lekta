@@ -2,7 +2,10 @@ import {
   initialContext, transition, canLinkSession,
   type WorkspaceContext,
 } from './workspace-state';
-import { parseSessionFragment, type LocalDocumentSessionStore } from '../../session/local-document-session';
+import {
+  parseSessionFragment, sessionFragment, createLocalDocumentSession, fileFromLocalDocumentSession,
+  type LocalDocumentSessionStore, type LocalDocumentSessionV1,
+} from '../../session/local-document-session';
 
 /**
  * BOOTSTRAP RADNE POVRSINE (`/rad/`), bez DOM-a i bez montaze.
@@ -40,6 +43,8 @@ export interface RestoreOutcome {
   notice: string | null;
   /** Smije li se sesija ponuditi kao poveznica. Nikad `true` bez stvarnog zapisa. */
   offerLink: boolean;
+  /** Pronadjena sesija, da je pozivatelj moze vratiti u analizator. `null` kad je nema. */
+  session: LocalDocumentSessionV1 | null;
 }
 
 const NOTICE_NO_STORAGE =
@@ -65,23 +70,95 @@ export async function openWorkspace(
   if (storage.kind === 'unavailable') {
     // Rad ostaje u kartici. Fragment se NE cisti: korisnik ga moze imati u povijesti, a brisanje
     // bi izgledalo kao da smo nesto obrisali. Poveznica se ipak ne nudi.
-    return { context: initialContext(false), notice: NOTICE_NO_STORAGE, offerLink: false };
+    return { context: initialContext(false), notice: NOTICE_NO_STORAGE, offerLink: false, session: null };
   }
 
   let context = initialContext(Boolean(sessionId));
-  if (!sessionId) return { context, notice: null, offerLink: false };
+  if (!sessionId) return { context, notice: null, offerLink: false, session: null };
 
   try {
     // Istekle se brisu PRIJE dohvata: sesija starija od roka ne smije se vratiti ni slucajno.
     await storage.store.deleteExpired(now);
     const session = await storage.store.get(sessionId, now);
     if (!session) {
-      return { context: transition(context, 'restoreEmpty'), notice: NOTICE_SESSION_GONE, offerLink: false };
+      return { context: transition(context, 'restoreEmpty'), notice: NOTICE_SESSION_GONE, offerLink: false, session: null };
     }
     context = transition(context, 'restoreFound');
-    return { context, notice: null, offerLink: canLinkSession(context) };
+    return { context, notice: null, offerLink: canLinkSession(context), session };
   } catch {
     // Kvar pohrane nije kvar rada: korisnik nastavlja ispocetka, uz jasnu poruku.
-    return { context: transition(context, 'restoreFailed'), notice: NOTICE_SESSION_GONE, offerLink: false };
+    return { context: transition(context, 'restoreFailed'), notice: NOTICE_SESSION_GONE, offerLink: false, session: null };
+  }
+}
+
+
+/* ---------------------------------------------------------------------------------------- *
+ * ZAPIS I OBNOVA
+ * ---------------------------------------------------------------------------------------- */
+
+export type PersistOutcome =
+  | { kind: 'persisted'; sessionId: string; fragment: string }
+  | { kind: 'skipped'; notice: string }
+  | { kind: 'failed'; notice: string };
+
+const NOTICE_PERSIST_FAILED =
+  'Rad nije uspjelo spremiti lokalno, pa ostaje samo u ovoj kartici. '
+  + 'Analiza radi normalno, ali osvjezavanje stranice znaci ponovno ucitavanje dokumenta.';
+
+/**
+ * Zapisi prihvacen dokument u lokalnu sesiju.
+ *
+ * ZOVE SE TEK NA `accepted`, nikad na odabir datoteke. Zapis pogodjen prerano dao bi sesiju s
+ * dokumentom koji je intake gate poslije odbio, pa bi se obnova raspala na dokumentu koji
+ * analizator ne prima.
+ *
+ * PRETHODNA SESIJA SE BRISE TEK NAKON uspjesnog zapisa nove. Obrnut redoslijed znaci prozor u
+ * kojem stara vise ne postoji a nova jos nije zapisana; prekid u tom trenutku gubi oboje.
+ */
+export async function persistAcceptedDocument(
+  file: File,
+  verdict: unknown,
+  storage: StorageAvailability,
+  previousSessionId: string | null = null,
+): Promise<PersistOutcome> {
+  if (storage.kind === 'unavailable') return { kind: 'skipped', notice: NOTICE_NO_STORAGE };
+  try {
+    const session = await createLocalDocumentSession(file, verdict as never);
+    await storage.store.put(session);
+    if (previousSessionId && previousSessionId !== session.id) {
+      // Brisanje pretecene sesije NE SMIJE oboriti zapis koji je upravo uspio: zaostala sesija
+      // je smece koje istekne sama od sebe, a izgubljen zapis je izgubljen rad.
+      try { await storage.store.delete(previousSessionId); } catch { /* zaostalo, istice samo */ }
+    }
+    return { kind: 'persisted', sessionId: session.id, fragment: sessionFragment(session.id) };
+  } catch {
+    return { kind: 'failed', notice: NOTICE_PERSIST_FAILED };
+  }
+}
+
+export type RestoreDocumentOutcome =
+  | { kind: 'loaded' }
+  | { kind: 'refused'; notice: string };
+
+const NOTICE_RESTORE_REFUSED =
+  'Spremljeni dokument vise ne prolazi provjeru pri ucitavanju, pa nije vracen. Ucitaj ga ponovno.';
+
+/**
+ * Vrati dokument iz sesije u analizator.
+ *
+ * SPREMLJEN VERDIKT JE SAMO PREDMEMORIJA: dokument se PONOVNO propusta kroz prijem, jer su se
+ * granice i pravila mogli promijeniti od zapisa. Zato ova funkcija prima `load` i postuje njegov
+ * ishod umjesto da vjeruje zapisanom.
+ */
+export async function restoreDocument(
+  session: LocalDocumentSessionV1,
+  load: (file: File) => Promise<{ kind: string }>,
+): Promise<RestoreDocumentOutcome> {
+  try {
+    const admission = await load(fileFromLocalDocumentSession(session));
+    if (admission.kind === 'accepted') return { kind: 'loaded' };
+    return { kind: 'refused', notice: NOTICE_RESTORE_REFUSED };
+  } catch {
+    return { kind: 'refused', notice: NOTICE_RESTORE_REFUSED };
   }
 }

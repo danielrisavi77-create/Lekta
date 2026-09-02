@@ -1,17 +1,17 @@
-import { initAnalyzerApp } from '../../ui/app';
-import { openWorkspace, type StorageAvailability } from './bootstrap';
+import { initAnalyzerApp, loadAnalyzerDocument, subscribeAnalyzerDocumentAccepted } from '../../ui/app';
+import { openWorkspace, persistAcceptedDocument, restoreDocument, type StorageAvailability } from './bootstrap';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import '../../shared/ui-boot';
 
 /**
  * ULAZ RUTE `/rad/`. Tanak namjerno: sve odluke su u `bootstrap.ts`, koji je cist i testabilan
- * bez preglednika. Ovdje ostaje samo dodir DOM-a i montaza.
+ * bez preglednika. Ovdje ostaje samo dodir DOM-a, montaza i povijest preglednika.
  */
 
 function detectStorage(): StorageAvailability {
   // `indexedDB` moze POSTOJATI a bacati pri otvaranju (privatni prozor, blokirani podaci
-  // stranice). Sama prisutnost objekta zato nije dokaz dostupnosti; stvarni kvar hvata
-  // `openWorkspace`, koji svaki poziv pohrane drzi u `try`.
+  // stranice). Sama prisutnost objekta zato nije dokaz dostupnosti; stvarni kvar hvataju
+  // `openWorkspace` i `persistAcceptedDocument`, koji svaki poziv pohrane drze u `try`.
   try {
     const factory = globalThis.indexedDB;
     if (!factory) return { kind: 'unavailable', reason: 'indexedDB nije dostupan' };
@@ -34,9 +34,34 @@ async function start(): Promise<void> {
   // upotrebljivosti uz pohranu bilo bi tocno obrnuto od ugovora o degradaciji.
   initAnalyzerApp(document);
 
-  const outcome = await openWorkspace(location.hash, detectStorage());
+  const storage = detectStorage();
+  let sessionId: string | null = null;
+
+  // ZAPIS: tek kad je dokument STVARNO prihvacen. Pretplata se postavlja PRIJE obnove, jer i
+  // obnovljen dokument prolazi kroz prijem pa i on zavrsi ovdje.
+  subscribeAnalyzerDocumentAccepted((event) => {
+    void (async () => {
+      const out = await persistAcceptedDocument(event.file, event.verdict, storage, sessionId);
+      if (out.kind !== 'persisted') { showStatus(out.notice); return; }
+      sessionId = out.sessionId;
+      // `replaceState`, ne `pushState`: zapis sesije nije korisnikova navigacija, pa ne smije
+      // dodati korak u povijest kroz koji se "natrag" vraca na praznu radnu povrsinu.
+      history.replaceState(history.state, '', location.pathname + location.search + out.fragment);
+      showStatus(null);
+    })();
+  });
+
+  const outcome = await openWorkspace(location.hash, storage);
   showStatus(outcome.notice);
   document.documentElement.dataset.workspaceState = outcome.context.state;
+
+  if (outcome.session) {
+    sessionId = outcome.session.id;
+    // Spremljen verdikt je samo predmemorija: dokument ide PONOVNO kroz prijem, pa se odbijanje
+    // postuje umjesto da se vjeruje zapisu.
+    const restored = await restoreDocument(outcome.session, loadAnalyzerDocument);
+    if (restored.kind === 'refused') showStatus(restored.notice);
+  }
 }
 
 void start();
