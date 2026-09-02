@@ -100,18 +100,24 @@ describe('WCAG kontrast: eyebrow (AUD a11y #1/#3/#5/#9)', () => {
   });
 
   /**
-   * Svijetli `--desk-faint` NE prolazi AA ni na `--desk` (2,21:1) ni na `--paper` (3,03:1), i to je
-   * svjesno zabiljezeno stanje, ne previd. Tvrdnja zato ne postavlja prag na boju nego PRIKIVA
-   * DOSEG: token se koristi samo u `index.html`, cija se oba stanja teme mjere u pregledniku
-   * (`tests/ux/free-tools-audit.spec.ts`, axe, prag `moderate`, obje teme, nula nalaza).
+   * PREMISA OVE TVRDNJE SE PROMIJENILA 2026-09-01, pa je i tvrdnja obrnuta.
    *
-   * Cim ga uzme jos koja stranica, ovaj gard pada i trazi ili jacu vrijednost ili mjerenje ondje.
+   * Ranije je svijetli `--desk-faint` bio `#98917E` i NIJE prolazio AA (2,21:1), pa je gard umjesto
+   * praga prikivao DOSEG (samo `index.html`). U meduvremenu je token zatamnjen jer je mjerenje iza
+   * axeove slijepe tocke pokazalo 23 stvarna krsenja u svijetloj temi.
+   *
+   * PRVI POKUSAJ (#665D4D) BIO JE POLOVICAN i ovaj gard ga je uhvatio: prolazi na `--desk` (4,56)
+   * ali PADA na `--desk-2` (4,13). Mjerodavna je TAMNIJA podloga, sto je vec zapisano uz
+   * `--desk-muted` i sto sam pritom ponovio kao gresku. Vrijednost je zato izjednacena s
+   * `--desk-muted`: na svijetloj podlozi AA jednostavno ne ostavlja prostora za zaseban "faint"
+   * stupanj, i to je posljedica kontrasta, ne propust.
    */
-  it('svijetli --desk-faint ostaje ogranicen na index.html, gdje ga mjeri preglednik', () => {
-    const korisnici = PAGES.filter((f) => read(f).includes('var(--desk-faint)'));
-    expect(korisnici).toEqual(['index.html']);
+  it('svijetli --desk-faint prolazi AA na OBJE svijetle podloge', () => {
     const svijetla = token('desk-faint', 'light');
-    expect(contrast(svijetla, LIGHT.desk)).toBeLessThan(4.5);
+    expect(svijetla, 'svijetli --desk-faint').toMatch(/^(#|rgba?\()/);
+    expect(contrast(svijetla, LIGHT.desk), `na --desk, ${svijetla}`).toBeGreaterThanOrEqual(4.5);
+    // Tamnija podloga je mjerodavna: ondje je prvi pokusaj pao.
+    expect(contrast(svijetla, hexToRgb('#D6CEB9')), `na --desk-2, ${svijetla}`).toBeGreaterThanOrEqual(4.5);
   });
 });
 

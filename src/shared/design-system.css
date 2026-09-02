@@ -118,7 +118,7 @@
      podlozi svaka boja koja prolazi AA mora biti tamna, pa se "faint" i "muted" nuzno priblize
      (4,61 naspram 4,62); to je posljedica kontrasta, ne propust. Ista vrijednost stoji u inline
      tokenima `index.html`; TREĆI put danas su se razisle, pa: mijenjaj obje u istom potezu. */
-  --desk-faint: #665D4D;
+  --desk-faint: #5F5645;
   --desk-line: rgba(38, 34, 27, .16);
   --paper: #FDFBF3;
   --paper-2: #F3EEDF;
