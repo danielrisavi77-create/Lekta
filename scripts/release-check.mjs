@@ -36,8 +36,21 @@ const OUT = path.join(ROOT, 'docs', 'generated', 'RELEASE_PROOF.json');
  * se NE biljeze kao prolaz.
  */
 const TIERS = [
-  { id: 'check', label: 'Tier 0: tsc + vitest + build', cmd: 'npm run check', required: true },
-  { id: 'edge', label: 'Tier 0: deno typecheck Edge funkcija', cmd: 'npm run check:edge', required: true },
+  // `check` od 2026-09-01 ukljucuje `check:edge` (deno typecheck Edge funkcija), pa zasebne
+  // `edge` razine vise nema: bila bi drugi prolaz ISTIM alatom, dakle slaganje a ne provjera,
+  // uz 34 s cijene. Dokaz o Edge kodu nije nestao nego je usao u razinu ispod.
+  { id: 'check', label: 'Tier 0: oxlint + tsc + edge (deno) + vitest + build', cmd: 'npm run check', required: true },
+  // Svjezina pecenih projekcija: SCREENING, pa `required: false`, i to je izmjereno a ne pretpostavljeno.
+  // Prva regeneracija po uputi ovog detektora (2026-09-01) pokazala je da su sve TRI prijavljene
+  // projekcije dale BAJT-IDENTICAN sadrzaj: signal gleda redoslijed commita, ne izlaz, pa pogodak
+  // znaci "potvrdi regeneracijom", nikad "pokvareno". Kao `required: true` bio bi gard koji vristi
+  // na sve i blokirao bi izdanje zbog commita koji izlaz nisu ni dirnuli.
+  // Ostaje u dokazu jer signal NIJE prazan: sest slucajeva od 2026-08-31 bilo je stvarno ustajalo
+  // (`REPAIR_RECIPE.md` je imao `deep` na 50 mjesta manje). Vidljiv je u RELEASE_PROOF.json, ali
+  // ne obara `complete`. U `npm run check` ne ide nikako: ondje bi svaki dodir `src/repair/`
+  // trazio regeneraciju od desetak minuta. Trazi punu povijest, koju release-check ima jer se
+  // vrti lokalno, ne na plitkom CI checkoutu.
+  { id: 'projections', label: 'Tier 0: svjezina pecenih projekcija (screening)', cmd: 'npm run projection-freshness', required: false },
   { id: 'conformance', label: 'Tier 0: conformance matrica', cmd: 'npm run conformance', required: true },
   { id: 'slow', label: 'Tier 0: spori repair testovi', cmd: 'npm run test:slow', required: true },
   { id: 'ux', label: 'Tier 0: Playwright UX', cmd: 'npm run test:ux', required: true },

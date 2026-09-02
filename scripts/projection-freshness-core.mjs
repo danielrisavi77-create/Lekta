@@ -20,6 +20,17 @@
 // NE UVODI NOV DNEVNIK: redoslijed vec postoji u gitu. Pita se samo je li ijedan IZVOR commitan
 // POSLIJE zadnjeg commita nad PROJEKCIJOM. Isti nacin na koji radi `tier2-freshness`.
 //
+// STO OVA PRESUDA JEST, izmjereno 2026-09-01: SCREENING, ne nalaz. Detektor gleda REDOSLIJED
+// COMMITA, ne sadrzaj, pa odgovara na "je li se moglo pokvariti", nikad na "je li pokvareno".
+// Prva regeneracija po njegovoj uputi to je i dokazala: sve TRI prijavljene projekcije
+// (`closed-loop` 15 commita, `real-corpus` 2, `real-corpus-backlog` 3) regenerirale su se u
+// BAJT-IDENTICAN sadrzaj. Commiti nad `src/repair/` naprosto nisu dirnuli ono sto ulazi u izlaz.
+//
+// Zato ovo NIJE tvrdi gard. Gard koji je 3/3 lazno pozitivan je "gard koji vristi na sve", a takav
+// se po projektnom pravilu ne racuna kao provjera. Pogodak znaci "potvrdi regeneracijom", i tek
+// razlika u sadrzaju je nalaz. Da signal nije prazan, pokazuje sest izvornih slucajeva gore: ondje
+// se sadrzaj STVARNO razlikovao (`REPAIR_RECIPE.md` je imao `deep` na 50 mjesta manje).
+//
 // STO OVO NIJE: nije regeneracija. Ulancano pecenje svih projekcija traje preko 40 minuta, pa ga
 // nitko ne bi pokretao; detekcija traje sekunde i moze stajati u gateu. Presuda je uvijek
 // "regeneriraj X", nikad "X je pokvaren".
@@ -94,7 +105,9 @@ export function projectionFreshness(id, artifactSha, sourceCommits, regenerate) 
 
 /** Ljudski citljiv redak po projekciji. */
 export function formatProjection(verdict) {
-  const oznaka = verdict.status === 'ustajalo' ? 'USTAJALO' : verdict.status === 'svjeze' ? 'svjeze  ' : 'nepoznato';
+  // Rijec PROVJERI, ne USTAJALO: presuda je screening po redoslijedu commita, a izmjereno je da
+  // pogodak u 3 od 3 slucaja nije znacio razliku u sadrzaju.
+  const oznaka = verdict.status === 'ustajalo' ? 'PROVJERI' : verdict.status === 'svjeze' ? 'svjeze  ' : 'nepoznato';
   const rep = verdict.status === 'ustajalo' ? `  -> ${verdict.regenerate}` : '';
   return `  ${oznaka}  ${verdict.id.padEnd(20)} ${verdict.reason}${rep}`;
 }

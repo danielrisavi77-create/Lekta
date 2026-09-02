@@ -51,5 +51,10 @@ for (const v of verdicts) {
   if (v.commits.length > 3) console.log(`             ... i jos ${v.commits.length - 3}`);
 }
 const code = exitCodeFor(verdicts);
-console.log(code === 0 ? 'sve projekcije prate svoj izvor.' : 'BAREM JEDNA projekcija je ustajala; naredbe za osvjezavanje su gore.');
+if (code === 0) {
+  console.log('sve projekcije prate svoj izvor.');
+} else {
+  console.log('BAREM JEDNA projekcija je MOGLA ostati ustajala (mjeri se redoslijed commita, ne sadrzaj).');
+  console.log('Potvrdi regeneracijom: tek RAZLIKA u sadrzaju je nalaz. Naredbe su gore.');
+}
 process.exit(code);
