@@ -108,6 +108,90 @@ const _mountAbortControllers=new WeakMap<Document,AbortController>();
 function runtimeDocument(): Document{return _runtimeDocument??document}
 export function isAnalyzerMounted(doc: Document=document): boolean{return _runtimeDocument===doc&&_analyzerMounted}
 
+/**
+ * ISHOD PRIJEMA DOKUMENTA. Ruta radne povrsine mora znati KADA je dokument stvarno prihvacen, da
+ * bi ga tada zapisala u lokalnu sesiju. Bez toga bi zapis morao pogadjati trenutak, a pogodjen
+ * prerano znaci sesiju s dokumentom koji je intake gate poslije odbio.
+ *
+ * TRI ISHODA, jer dva ne bi bila istinita: `superseded` nije ni prihvacanje ni odbijanje nego
+ * "korisnik je u medjuvremenu odabrao drugu datoteku". Bez njega bi `loadAnalyzerDocument` na
+ * zamijenjenoj datoteci visio zauvijek, jer terminalni dogadjaj nikad ne bi stigao.
+ */
+export type AnalyzerDocumentSettled =
+  | { kind: 'accepted'; file: File; verdict: unknown }
+  | { kind: 'rejected'; file: File; message: string }
+  | { kind: 'superseded'; file: File };
+
+type SettledListener = (event: AnalyzerDocumentSettled) => void;
+const _documentSettledListeners = new Set<SettledListener>();
+
+/** Vraca funkciju za odjavu. Dvostruka odjava je bezopasna. */
+export function subscribeAnalyzerDocumentSettled(listener: SettledListener): () => void {
+  _documentSettledListeners.add(listener);
+  return () => { _documentSettledListeners.delete(listener); };
+}
+
+/** Uze sucelje za pozivatelje koje zanima samo prihvacanje (npr. zapis sesije). */
+export function subscribeAnalyzerDocumentAccepted(
+  listener: (event: { file: File; verdict: unknown }) => void,
+): () => void {
+  return subscribeAnalyzerDocumentSettled((event) => {
+    if (event.kind === 'accepted') listener({ file: event.file, verdict: event.verdict });
+  });
+}
+
+/**
+ * PROGRAMSKI ULAZ DOKUMENTA. Do sada je dokument mogao uci samo kroz korisnikov klik ili drop,
+ * pa obnova sesije nije imala cime vratiti rad u analizator.
+ *
+ * Obecanje se rjesava iz DOGADJAJA, ne iz `_intake.promise`. Razlog je utrka: `admitFile` svoj
+ * promise upisuje TEK nakon `await import(...)`, pa bi citanje odmah nakon `setFile` uhvatilo
+ * promise PRETHODNE datoteke i vratilo tudji ishod.
+ *
+ * SPREMLJEN VERDIKT NIJE DOKAZ: obnovljen dokument prolazi intake gate PONOVNO, jer su se
+ * granice i pravila u medjuvremenu mogli promijeniti.
+ */
+export type AnalyzerDocumentAdmission =
+  | { kind: 'accepted'; verdict: unknown }
+  | { kind: 'rejected'; message: string }
+  | { kind: 'superseded' };
+
+export function loadAnalyzerDocument(file: File): Promise<AnalyzerDocumentAdmission> {
+  return new Promise((resolve) => {
+    let done = false;
+    const settle = (result: AnalyzerDocumentAdmission): void => {
+      if (done) return;
+      done = true; off(); resolve(result);
+    };
+    const off = subscribeAnalyzerDocumentSettled((event) => {
+      // Ishod DRUGE datoteke nije nas: korisnik je mozda odabrao svoju dok je obnova tekla.
+      if (event.file !== file) return;
+      settle(event.kind === 'accepted' ? { kind: 'accepted', verdict: event.verdict }
+        : event.kind === 'rejected' ? { kind: 'rejected', message: event.message }
+        : { kind: 'superseded' });
+    });
+    setFile(file);
+    // SIGURNOSNA MREZA. `setFile` sinkrono odbijanje sada EMITIRA, pa ga hvata pretplata iznad
+    // i ova grana ne opali. Ostaje jer bi svaki novi sinkroni izlaz bez dogadjaja inace ostavio
+    // obecanje da visi zauvijek, a to se ne prijavljuje kao greska nego kao vjecna "obnova".
+    if (selectedDocx !== file) {
+      settle({ kind: 'rejected', message: String($('#dropError')?.textContent || 'Dokument nije prihvacen.') });
+    }
+  });
+}
+
+function emitAnalyzerDocumentSettled(event: AnalyzerDocumentSettled): void {
+  // Kopija skupa. NE zato sto bi odjava tijekom obavijesti preskocila one iza: JS `Set` to
+  // podnosi. Kopija cuva od suprotnog: pretplatnik DODAN tijekom obavijesti inace dobiva
+  // TAJ ISTI dogadjaj, pa bi zapis sesije koji se pretplati kao reakcija na prijem odmah
+  // vidio dogadjaj koji je prethodio njegovoj pretplati.
+  for (const listener of [..._documentSettledListeners]) {
+    // Greska pretplatnika NE smije srusiti prijem dokumenta: korisnikov rad je vazniji od
+    // nase telemetrije ili zapisa sesije.
+    try { listener(event); } catch (error) { console.warn('Pretplatnik na ishod prijema je pukao:', error); }
+  }
+}
+
 const $=(s: string,r: any=runtimeDocument()): any=>r.querySelector(s), $$=(s: string,r: any=runtimeDocument()): any[]=>[...r.querySelectorAll(s)];
 /**
  * ELEMENT ILI PRAZAN OBJEKT. Dodjela rukovatelja (`onclick`, `onchange`) na nepostojeci element
@@ -269,7 +353,15 @@ function coverageSnapshot(){const rows=INSTITUTIONAL_COVERAGE_MATRIX.programs.ma
 // render funkcije (initCoverageMatrix/renderCoverageMatrix/reset/download) obrisane.
 // coverageSnapshot ostaje jer ga koriste QA konzola (runRegistryDiagnostics) i profileManifest.
 
-function toast(msg: any){const n=document.createElement('div');n.className='toast';n.textContent=msg;$('#toastWrap').append(n);setTimeout(()=>n.remove(),3500)}
+/**
+ * Poruka korisniku. NIKAD ne rusi pozivatelja: `#toastWrap` je izvan radne povrsine, pa ga tanka
+ * ruta moze nemati. Izmjereno pri uvodjenju programskog ulaza dokumenta: bez ove ograde je svako
+ * ODBIJANJE dokumenta na `/rad/` rusilo prijem, dakle bas put kojim se javlja greska.
+ *
+ * Dokument se uzima iz `runtimeDocument()`, ne globalni: cvor stvoren u tudjem dokumentu ne bi se
+ * dao umetnuti u ovaj.
+ */
+function toast(msg: any){const doc=runtimeDocument(),wrap=$('#toastWrap');if(!wrap)return;const n=doc.createElement('div');n.className='toast';n.textContent=msg;wrap.append(n);setTimeout(()=>n.remove(),3500)}
 /**
  * NASLIJEDJENO OZICENJE cijele landing stranice. Tijelo je namjerno ostalo isto; jedina dva
  * mjesta koja su se promijenila su ona koja su se OSLANJALA na globalni doseg: tema se pise u
@@ -331,7 +423,7 @@ function backToWizardFromResult(step: any){withViewTransition(()=>{$('#resultVie
 function setFile(file: any){
   if(file!==selectedDocx)findingStates.clear();
   const err=$('#dropError'),clearErr=()=>{if(err){err.textContent='';err.classList.add('hidden')}$('#dropzone').classList.remove('has-error')};
- const _cap=effectiveUploadCap();if(file&&(!file.name.toLowerCase().endsWith('.docx')||file.size>_cap)){const tooBig=file.size>_cap,isDoc=/\.doc$/i.test(file.name),isMacroExt=/\.(docm|dotm)$/i.test(file.name),msg=tooBig?`Dokument je veći od ${Math.round(_cap/1024/1024)} MB${isLikelyMobile()?' (na mobitelu je granica niža radi memorije; za velike dokumente otvori na računalu)':''}.`:isMacroExt?'Dokumenti s makronaredbama (.docm i .dotm) nisu podržani. U Wordu spremi rad kao .docx bez makronaredbi.':isDoc?'Stariji .doc format nije podržan. U Wordu odaberi Datoteka pa Spremi kao i odaberi .docx.':'Odaberi Word dokument u .docx formatu.';$('#fileInput').value='';if(err){err.textContent=msg;err.classList.remove('hidden')}$('#dropzone').classList.add('has-error');toast(msg);return}
+ const _cap=effectiveUploadCap();if(file&&(!file.name.toLowerCase().endsWith('.docx')||file.size>_cap)){const tooBig=file.size>_cap,isDoc=/\.doc$/i.test(file.name),isMacroExt=/\.(docm|dotm)$/i.test(file.name),msg=tooBig?`Dokument je veći od ${Math.round(_cap/1024/1024)} MB${isLikelyMobile()?' (na mobitelu je granica niža radi memorije; za velike dokumente otvori na računalu)':''}.`:isMacroExt?'Dokumenti s makronaredbama (.docm i .dotm) nisu podržani. U Wordu spremi rad kao .docx bez makronaredbi.':isDoc?'Stariji .doc format nije podržan. U Wordu odaberi Datoteka pa Spremi kao i odaberi .docx.':'Odaberi Word dokument u .docx formatu.';$('#fileInput').value='';if(err){err.textContent=msg;err.classList.remove('hidden')}$('#dropzone').classList.add('has-error');toast(msg);emitAnalyzerDocumentSettled({kind:'rejected',file,message:String(msg||'')});return}
  clearErr();$('#detectBadge')?.classList.add('hidden');
  selectedDocx=file||null;$('#dropEmpty').classList.toggle('hidden',!!file);$('#selectedFile').classList.toggle('hidden',!file);$('#dropzone').classList.toggle('has-file',!!file);$('#analyzeBtn').disabled=!file;$('#demoBtn')?.classList.toggle('hidden',!!file);setWizardStep(file&&!usesCompactUploadFlow()?2:1,!!file);
  if(file){$('#selectedName').textContent=file.name;$('#selectedMeta').textContent=`${(file.size/1024/1024).toFixed(2)} MB · spremno za lokalnu analizu`;void trackEvent('file_selected',{sizeBucket:file.size<1024*1024?'under_1mb':file.size<5*1024*1024?'1_5mb':'over_5mb'});updateQuickStats(file);updateProfile();void admitFile(file)}else{$('#fileInput').value='';invalidateSpeculative()}
@@ -344,18 +436,21 @@ function setFile(file: any){
 async function admitFile(file: any){
  const token=++_intakeToken;
  const { inspectDocxIntake }=await import('../docx/intake-gate');
- if(token!==_intakeToken||selectedDocx!==file)return;
+ if(token!==_intakeToken||selectedDocx!==file){emitAnalyzerDocumentSettled({kind:'superseded',file});return}
  const promise=inspectDocxIntake(file);
  _intake={file,promise,verdict:null,confirmedSuspicious:false};
  const v=await promise;
- if(token!==_intakeToken||selectedDocx!==file)return;
+ if(token!==_intakeToken||selectedDocx!==file){emitAnalyzerDocumentSettled({kind:'superseded',file});return}
  _intake.verdict=v;
  if(v.kind==='reject'){
   setFile(null);
   const err=$('#dropError');if(err){err.textContent=v.message;err.classList.remove('hidden')}
   $('#dropzone')?.classList.add('has-error');toast(v.message);
+  emitAnalyzerDocumentSettled({kind:'rejected',file,message:String(v.message||'')});
   return;
  }
+ // Prihvaceno: verdikt je poznat i dokument je jos aktualan. Tek sada smije nastati sesija.
+ emitAnalyzerDocumentSettled({kind:'accepted',file,verdict:v});
  // Spekulativna analiza svjesno krece i za SUMNJIV dokument (gate blokira samo klik na
  // Analiziraj do potvrde); kod potvrde se spekulativni rezultat normalno posvaja pa je
  // potvrda prakticki besplatna.
