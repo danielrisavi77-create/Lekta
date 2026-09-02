@@ -438,6 +438,7 @@ export default defineConfig(({ command }) => {
   const siteOrigin = (process.env.LEKTA_SITE_ORIGIN || 'https://lektahr.netlify.app').replace(/\/+$/, '');
   const input: Record<string, string> = {
     index: resolve(__dirname, 'index.html'),
+    rad: resolve(__dirname, 'rad', 'index.html'),
     demo: resolve(__dirname, 'demo.html'),
     usporedba: resolve(__dirname, 'landing_usporedba.html'),
     benchmark: resolve(__dirname, 'landing_benchmark.html'),
