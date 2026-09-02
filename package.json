@@ -47,6 +47,7 @@
     "test:slow": "vitest run --config vitest.slow.config.ts",
     "conformance": "vitest run --config vitest.conformance.config.ts",
     "check": "oxlint && tsc --noEmit && npm run check:edge && vitest run && vite build",
+    "master-ci": "node scripts/master-ci-status.mjs",
     "check:edge": "node scripts/check-edge.mjs",
     "smoke:db": "psql -v ON_ERROR_STOP=1 -f scripts/rate-slots-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/guarantee-evidence-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/repair-deletion-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/anon-purge-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/bonus-outbox-smoke.sql && psql -v ON_ERROR_STOP=1 -f scripts/client-errors-smoke.sql",
     "smoke:db:mutation": "bash scripts/rate-slots-mutation-check.sh",
