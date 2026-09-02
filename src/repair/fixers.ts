@@ -36,6 +36,7 @@ import {
   ensureHeadingStyles,
   markTocFieldsDirty,
   patchFootnoteTypography,
+  patchFootnoteTextLineSpacing,
   type HeadingFormatSpec,
   type HeadingParagraphTarget,
   ensureHeadingNumbering,
@@ -717,7 +718,7 @@ export function titlePageFixer(parts: DocxXmlParts, target: TitlePageRepairTarge
  */
 export function footnoteTypographyFixer(
   parts: DocxXmlParts,
-  update: { fontName?: string; fontSizePt?: number; alignJustify?: boolean; deep?: boolean },
+  update: { fontName?: string; fontSizePt?: number; alignJustify?: boolean; lineSpacing?: number; deep?: boolean },
 ): FixerOutput {
   // Bez fusnota u dokumentu nema sto oblikovati (isti gard kao footnoteSpacingFixer).
   if (parts.footnotesXml === undefined) return NO_OP(parts, 'unsupported-structure');
@@ -728,20 +729,40 @@ export function footnoteTypographyFixer(
     alignJustify: update.alignJustify,
   });
 
-  const label = (side: Record<string, string>): string => {
+  /**
+   * PROROD je cetvrta grana iste provjere, i do 2026-09-01 jedina bez ijednog puta popravka.
+   *
+   * "Oblikovanje fusnota" boduje `ffOk && fsOk && fspOk && faOk` kao JEDNU provjeru od 6 bodova.
+   * Font, velicinu i poravnanje pise `patchFootnoteTypography`, a prored nije pisao nitko:
+   * `patchFootnoteTextSpacing` dira iskljucivo `w:before`/`w:after`. Profil ga pritom propisuje
+   * (21 profil, svi `pravo-*`), pa je provjera na njima bila nepopravljiva.
+   *
+   * Lanca se NAD VEC ISPRAVLJENIM stilovima, ne nad ulaznima, inace bi drugi patch pregazio prvi.
+   */
+  const stylesAfterTypography = result.applied ? result.xml : parts.stylesXml;
+  const spacing =
+    update.lineSpacing !== undefined
+      ? patchFootnoteTextLineSpacing(stylesAfterTypography, multiplierToTwips(update.lineSpacing), 'auto')
+      : null;
+
+  const label = (side: Record<string, string>, spacingSide?: Record<string, string>): string => {
     const bits: string[] = [];
     if (side['font'] !== undefined) bits.push(`font ${side['font'] || UNSET_LABEL}`);
     if (side['velicina'] !== undefined) bits.push(`${side['velicina'] ? `${Number(side['velicina']) / 2} pt` : UNSET_LABEL}`);
     if (side['poravnanje'] !== undefined) bits.push(side['poravnanje'] === 'both' ? 'obostrano' : (side['poravnanje'] || UNSET_LABEL));
+    if (spacingSide && spacingSide['w:line'] !== undefined) bits.push(twipsToMultiplierLabel(spacingSide['w:line']));
     return bits.join(', ');
   };
-  const base: FixerOutput = !result.applied
-    ? NO_OP(parts, reasonFromPatch(result))
+
+  const anyApplied = result.applied || (spacing?.applied ?? false);
+  const patchedStyles = spacing?.applied ? spacing.xml : stylesAfterTypography;
+  const base: FixerOutput = !anyApplied
+    ? NO_OP(parts, reasonFromPatch({ found: { ...(result.found ?? {}), ...(spacing?.found ?? {}) } }))
     : {
-        parts: { ...parts, stylesXml: result.xml },
+        parts: { ...parts, stylesXml: patchedStyles },
         applied: true,
-        beforeLabel: `Fusnote: ${label(result.before)}`,
-        afterLabel: `Fusnote: ${label(result.after)}`,
+        beforeLabel: `Fusnote: ${label(result.before, spacing?.before)}`,
+        afterLabel: `Fusnote: ${label(result.after, spacing?.after)}`,
       };
 
   /**
@@ -764,12 +785,26 @@ export function footnoteTypographyFixer(
    * cilja 10 pt je 2 half-pointa razlike. `stripDominantBodySize` se ovdje NE ukljucuje, jer za nj
    * nema izmjerene potrebe, a sirio bi ponasanje bez dokaza.
    */
-  const styleExists = Object.keys(result.found ?? {}).length > 0;
+  /**
+   * Vrata deepa gledaju OBA patcha, ne samo tipografski.
+   *
+   * `patchFootnoteTypography` puni `found` iz ZAHTJEVA (font/velicina/poravnanje), pa je kod
+   * zahtjeva koji nosi SAMO prored taj objekt prazan i deep nikad ne bi krenuo. Izmjereno pri
+   * uvodjenju proreda: izravni `w:line` u odlomku fusnote ostajao je netaknut i nadjacavao ispravno
+   * popravljen stil, dakle tocno kvar zbog kojeg deep i postoji.
+   */
+  const styleExists =
+    Object.keys(result.found ?? {}).length > 0 || (spacing?.applied ?? false) || Object.keys(spacing?.found ?? {}).length > 0;
   const deepResult =
     update.deep && styleExists
       ? stripDirectFormatting(parts.footnotesXml, {
           stripFontName: update.fontName !== undefined,
           stripFontSizeNearHalfPoints: sizeTarget,
+          // Prored fusnota: bez ovoga stil nosi cilj, a izravni `w:line` u odlomku fusnote ga
+          // nadjaca, pa bi grana `fspOk` pala i nakon uspjesnog patcha stila. Isti odnos kao
+          // font/velicina iznad. Uvjetovano ciljem, jer bez njega skidanje proreda vraca fusnote
+          // na naslijedjeno, ne na propisano.
+          stripLineSpacing: update.lineSpacing !== undefined,
           allowedStyleId: 'FootnoteText',
         })
       : null;

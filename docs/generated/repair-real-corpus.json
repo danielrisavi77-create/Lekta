@@ -741,7 +741,7 @@
       "documentId": "pravo-integrirani-fusnote",
       "fileName": "pravo-integrirani-fusnote.docx",
       "profileId": "pravo-integrirani-diplomski",
-      "outcome": "review",
+      "outcome": "pass",
       "before": {
         "checkCount": 42,
         "passCount": 19,
@@ -749,8 +749,8 @@
       },
       "after": {
         "checkCount": 42,
-        "passCount": 26,
-        "score": 92
+        "passCount": 27,
+        "score": 94
       },
       "beforeEntryCount": 9,
       "afterEntryCount": 9,
@@ -782,12 +782,10 @@
         "final-document-inspector-fixer"
       ],
       "targetedCheckCount": 8,
-      "targetedResolvedCount": 7,
-      "targetedUnresolvedCount": 1,
-      "autoUnresolvedCount": 1,
-      "autoUnresolvedChecks": [
-        "footnote.format"
-      ],
+      "targetedResolvedCount": 8,
+      "targetedUnresolvedCount": 0,
+      "autoUnresolvedCount": 0,
+      "autoUnresolvedChecks": [],
       "assistedUnresolvedCount": 0,
       "assistedUnresolvedChecks": [],
       "awaitingConfirmationCount": 0,
@@ -810,7 +808,6 @@
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "ciljani-check-nije-u-potpunosti-riješen",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
@@ -1092,8 +1089,8 @@
   ],
   "summary": {
     "documentCount": 16,
-    "passCount": 3,
-    "reviewCount": 11,
+    "passCount": 4,
+    "reviewCount": 10,
     "failCount": 0,
     "integrityFailureCount": 0,
     "noOpCount": 2,
@@ -1101,11 +1098,9 @@
     "manualReviewCount": 16,
     "passRegressionCount": 0,
     "targetedCheckCount": 39,
-    "targetedResolvedCount": 32,
-    "autoUnresolvedCount": 1,
-    "autoUnresolvedChecks": [
-      "footnote.format"
-    ],
+    "targetedResolvedCount": 33,
+    "autoUnresolvedCount": 0,
+    "autoUnresolvedChecks": [],
     "assistedUnresolvedCount": 6,
     "awaitingConfirmationCount": 0,
     "manualOnlyCount": 57

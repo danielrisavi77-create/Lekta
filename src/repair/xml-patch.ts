@@ -932,6 +932,29 @@ export function patchFootnoteTextSpacing(
 }
 
 /**
+ * PROROD fusnota u stilu `FootnoteText`.
+ *
+ * Odvojeno od `patchFootnoteTextSpacing`, koji pise ISKLJUCIVO `w:before`/`w:after`. Prored je
+ * cetvrta grana provjere "Oblikovanje fusnota" (`footFmtOk = ffOk && fsOk && fspOk && faOk`) i
+ * jedina koja do 2026-09-01 nije imala NIJEDAN put popravka: 21 profil ga propisuje (svi `pravo-*`,
+ * dakle bas oni koji fusnote najvise koriste), provjera ga boduje, a nijedna stavka ga nije slala i
+ * nijedan patch ga nije pisao. Provjera je time bila nepopravljiva na tim profilima.
+ *
+ * Ista konvencija kao tijelo rada: `w:line` u dvjestocetrdesetinama (240 = jednostruko) uz
+ * `w:lineRule="auto"`, vidi `multiplierToTwips` u `fixers.ts`.
+ */
+export function patchFootnoteTextLineSpacing(
+  stylesXml: string,
+  lineTwips: number,
+  lineRule = 'auto',
+): PatchResult {
+  return patchNormalParagraphProps(stylesXml, 'FootnoteText', 'w:spacing', {
+    'w:line': String(lineTwips),
+    'w:lineRule': lineRule,
+  }, FOOTNOTE_TEXT_NAME_RE);
+}
+
+/**
  * Nadji stil po styleId, a ako ga nema, po lokaliziranom imenu (`w:name`). Wordovi ugradjeni
  * styleId-evi su stabilni i neovisni o jeziku ("Heading1", "FootnoteText"), ali dokumenti iz
  * LibreOfficea i starijih verzija znaju imati vlastite ("Naslov1"), pa ime sluzi kao rezerva.

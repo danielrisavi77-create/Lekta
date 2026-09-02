@@ -1296,11 +1296,23 @@ export function footnoteTypographyRepairableItem(checks: AnalyzedCheck[], profil
   const size = Number(profile?.footnoteSize);
   const fontName = Array.isArray(fonts) && typeof fonts[0] === 'string' ? String(fonts[0]) : undefined;
   const fontSizePt = Number.isFinite(size) && size > 0 ? size : undefined;
-  if (fontName === undefined && fontSizePt === undefined) return [];
+  /**
+   * PROROD FUSNOTA je cetvrta grana iste provjere, i do 2026-09-01 se nije slao nikome.
+   *
+   * "Oblikovanje fusnota" boduje font, velicinu, prored i poravnanje kao JEDNU provjeru
+   * (`footFmtOk = ffOk && fsOk && fspOk && faOk`). Profil prored propisuje kroz `footnoteSpacing`
+   * (21 profil, svi `pravo-*`, dakle bas oni koji fusnote najvise koriste), ali ga ova stavka nije
+   * citala, pa je grana `fspOk` na tim profilima bila nepopravljiva ma sto korisnik odabrao.
+   * Izmjereno na `pravo-integrirani-fusnote`: profil trazi 1,0, dokument ima 1,15.
+   */
+  const spacing = Number(profile?.footnoteSpacing);
+  const lineSpacing = Number.isFinite(spacing) && spacing > 0 ? spacing : undefined;
+  if (fontName === undefined && fontSizePt === undefined && lineSpacing === undefined) return [];
 
   const params: Record<string, unknown> = {};
   if (fontName !== undefined) params.fontName = fontName;
   if (fontSizePt !== undefined) params.fontSizePt = fontSizePt;
+  if (lineSpacing !== undefined) params.lineSpacing = lineSpacing;
   if (profile?.footnoteJustify === true) params.alignJustify = true;
   // Bez `deep` popravak samo patcha stil `FootnoteText`, a izravni `w:rFonts`/`w:sz` u runovima
   // fusnota ga nadjacaju: izmjereno na `pravo-integrirani-fusnote`, gdje su fusnote ostale

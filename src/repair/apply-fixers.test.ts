@@ -1063,6 +1063,73 @@ describe('applyFixers golden round-trip', () => {
       expect(foot).toContain('<w:b/>');
       expect(foot).toContain('<w:i/>');
     });
+
+    /**
+     * PROROD FUSNOTA: cetvrta grana provjere "Oblikovanje fusnota", do 2026-09-01 bez ijednog puta
+     * popravka. Profil ga propisuje kroz `footnoteSpacing` (21 profil, svi `pravo-*`), provjera ga
+     * boduje kroz `fspOk`, a nijedna stavka ga nije slala i nijedan patch ga nije pisao:
+     * `patchFootnoteTextSpacing` dira samo `w:before`/`w:after`. Izmjereno na
+     * `pravo-integrirani-fusnote`: profil trazi 1,0, dokument ima 1,15.
+     */
+    const fusnoteSProredom = async () => {
+      const enc = new TextEncoder();
+      return writeZip([
+        { name: 'word/document.xml', data: enc.encode('<?xml version="1.0"?><w:document><w:body><w:p/></w:body></w:document>') },
+        {
+          name: 'word/styles.xml',
+          data: enc.encode(
+            '<?xml version="1.0"?><w:styles><w:style w:type="paragraph" w:styleId="FootnoteText">' +
+              '<w:pPr><w:spacing w:line="276" w:lineRule="auto"/></w:pPr>' +
+              '<w:rPr><w:sz w:val="18"/></w:rPr></w:style></w:styles>',
+          ),
+        },
+        {
+          name: 'word/footnotes.xml',
+          data: enc.encode(
+            '<?xml version="1.0"?><w:footnotes><w:footnote w:id="1"><w:p>' +
+              '<w:pPr><w:pStyle w:val="FootnoteText"/><w:spacing w:line="276" w:lineRule="auto"/></w:pPr>' +
+              '<w:r><w:t>tekst fusnote</w:t></w:r></w:p></w:footnote></w:footnotes>',
+          ),
+        },
+      ]);
+    };
+    const stilXml = async (docx: Uint8Array) =>
+      new TextDecoder().decode((await readZip(docx)).find((e) => e.name === 'word/styles.xml')!.data);
+
+    it('BASELINE: bez `lineSpacing` prored stila fusnota ostaje netaknut', async () => {
+      const result = await applyFixers(await fusnoteSProredom(), [
+        { ruleId: 'r1', fixerId: 'footnote-typography-fixer', params: { fontSizePt: 10, deep: true } },
+      ]);
+      expect(await stilXml(result.docxBytes)).toContain('w:line="276"');
+    });
+
+    it('`lineSpacing` upisuje prored u stil FootnoteText (mnozitelj -> 240-tine)', async () => {
+      const result = await applyFixers(await fusnoteSProredom(), [
+        { ruleId: 'r1', fixerId: 'footnote-typography-fixer', params: { lineSpacing: 1 } },
+      ]);
+      const stil = await stilXml(result.docxBytes);
+      expect(stil).toContain('w:line="240"');
+      expect(stil).not.toContain('w:line="276"');
+      expect(result.changelog.some((c) => c.afterLabel.includes('1,00x prored'))).toBe(true);
+    });
+
+    it('uz `deep` nestaje i IZRAVNI prored u odlomku fusnote, inace bi nadjacao stil', async () => {
+      const result = await applyFixers(await fusnoteSProredom(), [
+        { ruleId: 'r1', fixerId: 'footnote-typography-fixer', params: { lineSpacing: 1, deep: true } },
+      ]);
+      const foot = await fusnoteXml(result.docxBytes);
+      expect(foot).not.toContain('w:line="276"');
+      expect(foot).toContain('tekst fusnote'); // tekst netaknut
+    });
+
+    it('nevaljan mnozitelj se odbacuje, stil ostaje netaknut', async () => {
+      for (const lineSpacing of [0, -1, 99, 'abc']) {
+        const result = await applyFixers(await fusnoteSProredom(), [
+          { ruleId: 'r1', fixerId: 'footnote-typography-fixer', params: { lineSpacing } },
+        ]);
+        expect(await stilXml(result.docxBytes), `mnozitelj ${lineSpacing}`).toContain('w:line="276"');
+      }
+    });
   });
 
   // RE-26: applyFixers samu sebe u komentaru zove "fail-safe", ali runFixer se dosad pozivao BEZ

@@ -1641,6 +1641,7 @@
         "target": "10 pt",
         "params": {
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "deep": true
         }
       },
@@ -10018,6 +10019,7 @@
         "target": "10 pt",
         "params": {
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "deep": true
         }
       },
@@ -10164,6 +10166,7 @@
         "target": "10 pt",
         "params": {
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "deep": true
         }
       },
@@ -14085,6 +14088,7 @@
         "target": "10 pt",
         "params": {
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "deep": true
         }
       },
@@ -14231,6 +14235,7 @@
         "target": "10 pt",
         "params": {
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "deep": true
         }
       },
@@ -17748,6 +17753,7 @@
         "target": "10 pt",
         "params": {
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "deep": true
         }
       },
@@ -17885,6 +17891,7 @@
         "target": "10 pt",
         "params": {
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "deep": true
         }
       },
@@ -20416,6 +20423,7 @@
         "target": "10 pt",
         "params": {
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "alignJustify": true,
           "deep": true
         }
@@ -23428,6 +23436,7 @@
         "target": "10 pt",
         "params": {
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "deep": true
         }
       },
@@ -23574,6 +23583,7 @@
         "target": "10 pt",
         "params": {
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "deep": true
         }
       },
@@ -25399,6 +25409,7 @@
         "target": "10 pt",
         "params": {
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "deep": true
         }
       },
@@ -28181,6 +28192,7 @@
         "params": {
           "fontName": "Times New Roman",
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "deep": true
         }
       },
@@ -28360,6 +28372,7 @@
         "params": {
           "fontName": "Times New Roman",
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "alignJustify": true,
           "deep": true
         }
@@ -28562,6 +28575,7 @@
         "params": {
           "fontName": "Times New Roman",
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "alignJustify": true,
           "deep": true
         }
@@ -28764,6 +28778,7 @@
         "params": {
           "fontName": "Times New Roman",
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "alignJustify": true,
           "deep": true
         }
@@ -28923,6 +28938,7 @@
         "params": {
           "fontName": "Times New Roman",
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "alignJustify": true,
           "deep": true
         }
@@ -29103,6 +29119,7 @@
         "params": {
           "fontName": "Times New Roman",
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "alignJustify": true,
           "deep": true
         }
@@ -30251,6 +30268,7 @@
         "params": {
           "fontName": "Times New Roman",
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "deep": true
         }
       },
@@ -40985,6 +41003,7 @@
         "target": "10 pt",
         "params": {
           "fontSizePt": 10,
+          "lineSpacing": 1.5,
           "deep": true
         }
       },
@@ -41394,6 +41413,7 @@
         "target": "10 pt",
         "params": {
           "fontSizePt": 10,
+          "lineSpacing": 1.5,
           "deep": true
         }
       },
@@ -41833,6 +41853,7 @@
         "target": "10 pt",
         "params": {
           "fontSizePt": 10,
+          "lineSpacing": 1,
           "deep": true
         }
       },
