@@ -18878,8 +18878,8 @@
       "automaticTestSummary": {
         "profileCoveragePassCount": 13,
         "profileCoverageFailCount": 0,
-        "realCorpusPassCount": 1,
-        "realCorpusReviewCount": 1,
+        "realCorpusPassCount": 2,
+        "realCorpusReviewCount": 0,
         "realCorpusNoOpCount": 0,
         "realCorpusFailCount": 0,
         "syntheticClosedLoopPassCount": 13,
@@ -18900,7 +18900,6 @@
         }
       },
       "manualReviewReasons": [
-        "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
         "nema-stvarnog-docx-uzorka",
         "stvarni-docx-trazi-rucni-pregled"
       ],
@@ -18935,7 +18934,7 @@
           "realDocxSampleCount": 1,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "review",
+            "realCorpus": "pass",
             "syntheticClosedLoop": "pass"
           },
           "closedLoopAxesRemaining": [],
@@ -18954,10 +18953,9 @@
             }
           },
           "realCorpusOutcomes": {
-            "review": 1
+            "pass": 1
           },
           "manualReviewReasons": [
-            "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
             "stvarni-docx-trazi-rucni-pregled"
           ]
         },
@@ -30392,8 +30390,8 @@
     "facultiesWithoutRealDocx": 123,
     "profilesWithoutRealDocx": 395,
     "profileCoverageFailCount": 0,
-    "realCorpusPassCount": 3,
-    "realCorpusReviewCount": 11,
+    "realCorpusPassCount": 4,
+    "realCorpusReviewCount": 10,
     "realCorpusNoOpCount": 2,
     "realCorpusFailCount": 0,
     "syntheticClosedLoopPassCount": 372,
