@@ -347,3 +347,12 @@ Dvije provjere, dva razlicita pitanja, trebaju obje:
 Cist worktree (`git worktree add --detach` + junction za `node_modules`) -> "je li gate zelen i je
 li izvedeni artefakt reproducibilan". Artefakte (`docs/generated/**`, `dist-packs/**`) regeneriraj
 SAMO ondje; izvjestaj i njegov ratchet uvijek idu u ISTI commit.
+
+Ustajala projekcija: SCREENING i PRESUDA su dva alata.
+`npm run projection-freshness` -> "je li se MOGLO pokvariti" (redoslijed commita, sekunde).
+Izmjereno 3/3 lazno pozitivno, pa je u `release:check` `required: false` i NIJE u `npm run check`.
+`npm run projection-verify` -> "je li se STVARNO pokvarilo" (regeneracija u izoliranom worktreeu pa
+usporedba bajtova, desetak minuta po projekciji; `--all`, `--only <id>`). Tek razlika u SADRZAJU je
+nalaz. `git status` nije mjerodavan: prijavio je sest izmijenjenih datoteka kojima je sadrzaj bio
+jednak commitanom (generator prepise s drugim zavrsecima redaka), pa se `samo-eol` razlikuje od
+`sadrzaj`. Novu projekciju dodaj u `PROJECTIONS` u `scripts/projection-freshness-core.mjs`.

@@ -695,6 +695,31 @@ Trebaju oba, jedan ne zamjenjuje drugoga:
   `git log <regenHEAD>..HEAD --name-only`: ako je dirnut ijedan IZVOR artefakta, baci regeneraciju i
   ponovi. Izvjestaj i njegov ratchet uvijek idu u ISTI commit.
 
+### Ustajala projekcija: SCREENING i PRESUDA su dva alata, ne jedan
+
+Pecena projekcija (`docs/generated/**`, `docs/REPAIR_RECIPE.md`, `data/generated/**`) zna zaostati za
+izvorom iz kojeg se izvodi. To se 2026-08-31/09-01 dogodilo SEST puta u jednom danu i svaki put je
+palo na SLJEDECU sesiju: zeleno koje ne znaci ono sto tvrdi, pa netko trosi cist worktree
+dokazujuci da kvar nije njegov.
+
+Postoje dva alata i namjerno se ne preklapaju:
+
+- `npm run projection-freshness` -> "je li se MOGLO pokvariti". Cita redoslijed commita (izvor
+  commitan poslije artefakta), traje sekunde. SCREENING: izmjereno je da je 3 od 3 puta pogodio a
+  sadrzaj bio identican, pa pogodak znaci "potvrdi", nikad "pokvareno". Zato je u `release:check`
+  namjerno `required: false` i NIJE u `npm run check`.
+- `npm run projection-verify` -> "je li se STVARNO pokvarilo". Regenerira u izoliranom worktreeu pa
+  usporedi bajtove; desetak minuta po projekciji. Bez argumenata provjerava samo ono sto je
+  screening prijavio (`--all`, `--only <id>` zaobilaze suzavanje). Tek RAZLIKA U SADRZAJU je nalaz.
+
+`git status` NIJE mjerodavan za ovo pitanje i zato ga nijedan od ta dva alata ne koristi: u
+regeneracijskom worktreeu je prijavio sest izmijenjenih datoteka kojima je sadrzaj bio jednak
+commitanom. Generator prepise datoteku s drugim zavrsecima redaka i git to prikaze kao izmjenu.
+`projection-verify` zato razlikuje `samo-eol` od `sadrzaj`; prvo nije nalaz, ali se i ne presucuje.
+
+Novu ulancanu projekciju dodaj u `PROJECTIONS` (`scripts/projection-freshness-core.mjs`), inace joj
+drift nitko ne vidi.
+
 ## Codex (drugo misljenje)
 
 Instaliran je Codex plugin (codex@openai-codex). Podjela uloga: Claude Code je
