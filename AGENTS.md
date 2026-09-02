@@ -18,10 +18,14 @@ supabase/functions). Ovo NIJE Next.js projekt.
 Svaka promjena mora prije commita proci:
 
 ```bash
-npm run check   # tsc --noEmit && vitest run && vite build
+npm run check   # oxlint && tsc --noEmit && check:edge && vitest run && vite build
 ```
 
 Ako check pada, promjena nije gotova. Ne commitaj crveno.
+
+Gate TRAZI DENO: od 2026-09-01 ukljucuje `check:edge` (`deno check` nad `supabase/functions/**`,
+serverski kod za novac, tudje dokumente i pravo pristupa; tsconfig `include: ["src"]` ga ne vidi).
+Bez Dena korak PADA, ne preskace se.
 
 Gate se mjeri na IZOLIRANOM stablu, nikad na dijeljenom: `npm run check` mjeri RADNO STABLO, ne
 HEAD, pa u dijeljenom stablu mjeri i tudje necommitane izmjene i laze u oba smjera. Izmjereno

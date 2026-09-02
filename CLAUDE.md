@@ -136,10 +136,17 @@ jer se u praksi zna primijeniti vise puta.
 Svaka promjena mora proći prije commita:
 
 ```bash
-npm run check   # tsc --noEmit && vitest run && vite build
+npm run check   # oxlint && tsc --noEmit && check:edge && vitest run && vite build
 ```
 
 Ako `check` pada, promjena nije gotova. Ne commitaj crveno.
+
+Gate TRAZI DENO, jer od 2026-09-01 ukljucuje `check:edge` (`deno check` nad
+`supabase/functions/**`). Ondje zivi serverski kod koji barata novcem, tudjim dokumentima i
+pravom pristupa, a `tsconfig.json` ima `include: ["src"]` pa ga tsc po konstrukciji ne vidi.
+Bez Dena korak PADA umjesto da se tiho preskoci, i to je namjerno: provjera koja se tiho
+preskoci jednaka je provjeri koje nema. Prije toga je rupa bila samo lokalna (CI ga je vrtio
+kao zaseban korak, i to samo na Node 20), pa se greska u Edge kodu vidjela tek nakon pusha.
 
 ### Gdje se gate mjeri: na IZOLIRANOM stablu, nikad na dijeljenom
 
