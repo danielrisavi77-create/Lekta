@@ -17,6 +17,16 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
   // uklanja tranziciju u korijenu umjesto da je test ceka na srecu. Isti obrazac vec koriste
   // analyzer-hero-demo i free-tools-audit specovi.
   await page.emulateMedia({ reducedMotion: 'reduce' });
+  // `reducedMotion` gasi CSS animacije, ali NE gasi `scrollIntoView({behavior:'smooth'})`,
+  // koji je JS. `open-findings` nize bas to poziva, pa stranica klizi dok Playwright ceka da
+  // se `#tabbtn-submission` umiri: element se razrijesi, ali nikad nije "stable", i klik se
+  // ponavlja do isteka kuke. Izmjereno pod `mobile-chromium`: 300 s bez ijednog klika, dok je
+  // isti kod na desktopu prolazio jer se klizanje stigne dovrsiti.
+  await page.addInitScript(() => {
+    const st = document.createElement('style');
+    st.textContent = 'html,body,*{scroll-behavior:auto!important}';
+    document.documentElement.appendChild(st);
+  });
   await page.goto('/');
   const uploadCta = page.locator('#uploadCtaBtn');
   if (await uploadCta.isVisible().catch(() => false)) await uploadCta.click();
