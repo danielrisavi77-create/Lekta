@@ -42,10 +42,20 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: npm
 
+      # supabase/functions/** je Deno kod izvan tsconfig.json include-a. Od 2026-09-01 je
+      # `check:edge` DIO `npm run check`, pa Deno treba OBJEMA granama matrice, prije gatea.
+      # Ranije je stajao kao zaseban korak samo na Node 20, pa je lokalni gate tu rupu imao
+      # otvorenu: serverski kod koji barata novcem, tudjim dokumentima i pravom pristupa
+      # provjeravao se tek nakon pusha.
+      - name: Deno setup (Edge typecheck je dio gatea)
+        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
+        with:
+          deno-version: v2.x
+
       - name: Instaliraj ovisnosti
         run: npm ci
 
-      - name: Build gate (tsc + vitest + vite build)
+      - name: Build gate (oxlint + tsc + edge + vitest + vite build)
         run: npm run check
 
       # Faza A zastite baze pravila: post-build sken dist artefakata na kanarince i
@@ -55,20 +65,6 @@ jobs:
       # EMITIRANE datoteke nakon vite builda, ukljucujuci dist-packs/.
       - name: Klasifikacijski sken dist artefakata
         run: node scripts/verify-dist-classification.mjs
-
-      # supabase/functions/** je Deno kod izvan tsconfig.json include-a, pa ga `npm run check`
-      # NIKAD nije provjeravao (audit TEST-01). Ondje zivi serverski kod koji barata novcem,
-      # tudjim dokumentima i pravom pristupa, dakle najgore moguce mjesto za rupu u provjeri.
-      # Vrti se samo na jednoj Node verziji: rezultat ne ovisi o Nodeu nego o Denu.
-      - name: Deno setup (za Edge typecheck)
-        if: matrix.node == 20
-        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
-        with:
-          deno-version: v2.x
-
-      - name: Edge typecheck (deno check nad supabase/functions)
-        if: matrix.node == 20
-        run: npm run check:edge
 
   ux-gate:
     runs-on: ubuntu-latest
