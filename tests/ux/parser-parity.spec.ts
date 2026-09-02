@@ -91,7 +91,10 @@ async function analiziraj(page: Page, bezWorkera: boolean): Promise<Ishod> {
 }
 
 test('inline fallback daje isti rezultat kao worker (nativni DOMParser vs xmldom)', async ({ browser }) => {
-  test.setTimeout(600_000);
+  // Proracun vremena je podesiv, jer nije isti u svim motorima: Chromium ovdje odradi obje
+  // analize za oko 3 min, dok WebKit na opterecenom stroju ne stigne ni u 10. Zadano ostaje
+  // 600 s; mjerenje sporijeg motora se pokrece s `LEKTA_PARITY_TIMEOUT_MS`.
+  test.setTimeout(Number(process.env.LEKTA_PARITY_TIMEOUT_MS ?? 600_000));
 
   const sWorkerom = await browser.newPage();
   const a = await analiziraj(sWorkerom, false);
