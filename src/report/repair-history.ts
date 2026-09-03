@@ -9,14 +9,9 @@
  * preko delete-repair-job Edge (service role brise Storage BLOB + redak).
  */
 
-export interface RepairHistoryConfig {
-  /** Supabase projekt URL (za PostgREST + Storage sign). */
-  supabaseUrl: string;
-  /** Supabase anon kljuc (apikey gate; RLS + user JWT rade autorizaciju). */
-  anonKey: string;
-  /** URL delete-repair-job Edge Functiona; prazno znaci brisanje nije konfigurirano. */
-  deleteEndpoint: string;
-}
+export type { RepairHistoryConfig } from './repair-history-config';
+export { repairHistoryConfigFrom } from './repair-history-config';
+import type { RepairHistoryConfig } from './repair-history-config';
 
 export interface RepairJob {
   id: string;

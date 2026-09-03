@@ -6,8 +6,8 @@
       "label": "Tvoj rad",
       "destinations": [
         { "id": "intake", "label": "Nova provjera", "href": "/", "description": "Učitaj Word dokument i pokreni novu lokalnu provjeru.", "release": "core" },
-        { "id": "my-work", "label": "Moji radovi", "href": "/moji-radovi/", "description": "Otvori osobni prostor za lokalni rad i pristup računu.", "release": "personal-space" },
-        { "id": "account-repairs", "label": "Prijava i spremljeni popravci", "href": "/moji-radovi/#racun", "description": "Prijavi se i upravljaj popravcima spremljenima na računu.", "release": "personal-space" }
+        { "id": "my-work", "label": "Moji radovi", "href": "/moji-radovi/", "description": "Otvori osobni prostor za lokalni rad i pristup računu.", "release": "core" },
+        { "id": "account-repairs", "label": "Prijava i spremljeni popravci", "href": "/moji-radovi/#racun", "description": "Prijavi se i upravljaj popravcima spremljenima na računu.", "release": "core" }
       ]
     },
     {
