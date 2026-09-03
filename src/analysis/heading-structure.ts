@@ -131,6 +131,56 @@ function runStats(paragraph: HeadingStructureParagraph): { boldShare: number; ma
  */
 const TOC_ENTRY_TAIL = /\t[.\s…]*\d+\s*$/;
 
+/**
+ * Numeriran ZAPIS LITERATURE nije naslov.
+ *
+ * `REF_SECTION` iznad hvata samo NASLOV popisa ("Literatura"), ne i pojedine zapise. Zapis pocinje
+ * brojem kao i poglavlje ("8. ..."), a `MAX_TEXT_LENGTH` je 180 znakova, pa je vecina zapisa
+ * prolazila kao kandidat za naslov, i to `selectedByDefault`.
+ *
+ * Izmjereno 2026-08-23 na stvarnom radu (`local-37-zavrsni`): kandidat p355 je bio
+ * "8. Lezaic A. Komunikacija u zdravstvenom timu. Ses...", a popravak je jednom zapisu literature
+ * doista upisao `Heading1`. Posljedica nije kozmeticka: takav "naslov" ulazi u sadrzaj (TOC) i u
+ * hijerarhiju naslova, dakle kvari upravo ono sto popravak treba srediti.
+ *
+ * Uvjet je namjerno KUMULATIVAN i uzak, da ne pojede stvaran naslov: mora biti numeriran, dug
+ * najmanje 40 znakova, i nositi potpis bibliografije (inicijali autora tipa "Prezime A." ili
+ * "Prezime AB,", DOI, URL, raspon stranica, ili godina uz volumen).
+ */
+const BIB_AUTHOR_INITIALS = /\p{Lu}\p{L}+\s+\p{Lu}{1,3}[.,]/u;
+const BIB_SIGNAL = /(?:doi\s*:|https?:\/\/|\bpp?\.\s*\d|\b\d{4}\s*[;:]\s*\d|\(\d{4}\))/i;
+
+/**
+ * NASLOVNICKA OZNAKA nije naslov poglavlja.
+ *
+ * "ZAVRSNI RAD" na naslovnici je oznaka vrste rada, a ne dio strukture dokumenta. Detektor ju je
+ * prepoznavao kao naslov visoke pouzdanosti (velika slova, veci font, kratka) i predodabirao, pa
+ * je popravak upisivao `Heading1` i oznaka bi zavrsila u SADRZAJU rada.
+ *
+ * Izmjereno 2026-08-23 na stvarnom radu (`corpus-0221`): jedini predodabrani kandidat bio je
+ * p12 "ZAVRSNI RAD". Isto vrijedi za oznake uloga ("Student:", "Mentor:") i za "Akademska godina".
+ *
+ * Uvjet je poklapanje CIJELOG odlomka, pa naslov poglavlja koji tu rijec samo sadrzi
+ * ("Diplomski rad kao zanr") ostaje kandidat.
+ */
+const TITLE_PAGE_LABEL =
+  /^(?:(?:zavrsn\w*|diplomsk\w*|seminarsk\w*|doktorsk\w*|specijalistick\w*|magistarsk\w*|strucn\w*)\s+rad\w*|disertacij\w*|student\w*|mentor\w*|komentor\w*|kandidat\w*|akademska\s+godina|jmbag|oib)\s*:?\s*$/;
+
+/** Presavij dijakritiku; `d` se ne rastavlja NFD-om pa ide izricito. */
+function foldDiacritics(text: string): string {
+  return text.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[đĐ]/g, 'd').toLowerCase();
+}
+
+export function looksLikeTitlePageLabel(text: string): boolean {
+  return TITLE_PAGE_LABEL.test(foldDiacritics(text).trim());
+}
+
+export function looksLikeBibliographyEntry(text: string): boolean {
+  if (text.length < 40) return false;
+  if (!/^\d{1,3}\.\s/.test(text)) return false;
+  return BIB_AUTHOR_INITIALS.test(text) || BIB_SIGNAL.test(text);
+}
+
 function isExcluded(paragraph: HeadingStructureParagraph): boolean {
   const raw = String(paragraph.text ?? '');
   const text = normalizedText(raw);
@@ -139,6 +189,8 @@ function isExcluded(paragraph: HeadingStructureParagraph): boolean {
   if (TOC_STYLE.test(String(paragraph.styleName ?? paragraph.styleId ?? ''))) return true;
   if (CAPTION_PREFIX.test(text) || LIST_PREFIX.test(text)) return true;
   if (REF_SECTION.test(text)) return true;
+  if (looksLikeBibliographyEntry(text)) return true;
+  if (looksLikeTitlePageLabel(text)) return true;
   if (TOC_ENTRY_TAIL.test(raw)) return true;
   return false;
 }
@@ -227,6 +279,49 @@ function inferUnnumberedLevels(candidates: HeadingCandidate[], paragraphs: Headi
   }
 }
 
+/**
+ * Spusti predlozene razine tako da nijedan PREDLOZENI naslov ne preskace razinu.
+ *
+ * `inferUnnumberedLevels` razinu izvodi iz RANGA velicine fonta, neovisno o susjedima: naslov s
+ * trecom najvecom velicinom dobiva razinu 3 i kad mu je prethodnik razina 1. Popravak je takav
+ * prijedlog doslovno upisivao u dokument, pa je `structure.heading.hierarchy` padao IZ prolaza u
+ * upozorenje. Izmjereno 2026-08-23 na dva stvarna rada: `corpus-0147` (6/6 -> 5/6, skok na
+ * "IZJAVA O AKADEMSKOJ CESTITOSTI" koja je dobila razinu 3 iza razine 1) i `corpus-0221`
+ * (isti obrazac). Kod je pritom SAM upozoravao `skipped-level`, a svejedno predlagao skok.
+ *
+ * Postojeci Word naslovi se NE diraju (popravak ih ne restilizira), ali daju kontekst: oni
+ * pomicu `previous`, pa se prijedlog spusta u odnosu na stvarno stanje dokumenta.
+ *
+ * Spusta se samo NADOLJE (`Math.min`): predlozena razina nikad ne raste, pa se ne moze dogoditi
+ * da popravak naslov podigne u vazniji nego sto je autor htio.
+ */
+function normalizeProposedLevels(candidates: HeadingCandidate[], existing: HeadingCandidate[]): void {
+  /**
+   * Racuna se SAMO nad naslovima koji ce stvarno postojati u popravljenom dokumentu: postojeci
+   * Word naslovi plus kandidati koji su predodabrani. Neodabran kandidat se ne stilizira, pa ga
+   * provjera hijerarhije nikad ne vidi; da ga se ukljuci u hod, drzao bi `previous` visoko i
+   * spustanje se ne bi dogodilo (izmjereno: p6/p7 na razini 2 i 3 nisu bili odabrani, a "pokrivali"
+   * su skok s razine 1 na razinu 3 na odlomku 12).
+   */
+  const ordered = [...existing, ...candidates.filter((candidate) => candidate.selectedByDefault)]
+    .sort((a, b) => a.paragraphIndex - b.paragraphIndex);
+  let previous = 0;
+  for (const current of ordered) {
+    /**
+     * NUMERIRANI naslov se ne dira: njegovu razinu je objavio autor vlastitom numeracijom
+     * ("1.1.1" je treca razina), pa bi spustanje na drugu razinu proturjecilo tekstu koji pise u
+     * dokumentu. Takav preskok ostaje i dalje prijavljen kao `skipped-level` upozorenje.
+     * Spusta se samo razina koju smo MI izveli iz velicine fonta (`inferUnnumberedLevels`).
+     */
+    const inferred = !current.existingHeading && !current.numbered;
+    if (inferred && current.proposedLevel > previous + 1) {
+      current.proposedLevel = Math.max(1, previous + 1);
+      current.evidence.push('razina spustena da ne preskace hijerarhiju');
+    }
+    previous = current.proposedLevel;
+  }
+}
+
 function warningsFor(candidates: HeadingCandidate[], existing: HeadingCandidate[]): HeadingStructureWarning[] {
   const ordered = [...existing, ...candidates].sort((a, b) => a.paragraphIndex - b.paragraphIndex);
   const warnings: HeadingStructureWarning[] = [];
@@ -255,14 +350,40 @@ export function detectHeadingStructure(
   paragraphs: HeadingStructureParagraph[],
   rules: HeadingStructureRules = {},
 ): HeadingStructureResult {
-  const bodySizes: number[] = paragraphs
-    .filter((paragraph) => paragraph.headingLevel == null && !isExcluded(paragraph))
-    .flatMap((paragraph) =>
-      (paragraph.runs ?? [])
-        .map((run) => run.size)
-        .filter((size): size is number => typeof size === 'number'),
-    );
-  const bodySize = bodySizes.length ? bodySizes.sort((a, b) => a - b)[Math.floor(bodySizes.length / 2)] : null;
+  /**
+   * Osnovna velicina teksta, tezinski po DULJINI TEKSTA (isti kriterij kojim analiza racuna
+   * `dominantFont`), a ne medijan po broju runova.
+   *
+   * Zasto: naslov je najcesce JEDAN run, a odlomak tijela ih ima vise, pa je medijan po runovima
+   * davao naslovima tezinu nesrazmjernu kolicini teksta. Kad bi popravak ostilizirao naslove, oni
+   * bi ispali iz ovog uzorka (`headingLevel != null`), osnovna velicina bi pala za tocku, i
+   * odlomak koji je prije bio ispod praga odjednom bi postao kandidat. Posljedica je bila povratna
+   * sprega: DRUGI prolaz istog recepta opet mijenja dokument, pa korisnik koji dvaput klikne
+   * Popravi dobiva dva razlicita dokumenta (izmjereno na `local-37-zavrsni`: 1. prolaz 6 izmjena,
+   * 2. prolaz jos 1, 3. prolaz cist). Pojedinacni fixeri su pritom SVI idempotentni; kvar je bio
+   * u interakciji detekcije i popravka.
+   *
+   * Tezina po duljini teksta je stabilna: nekoliko ostiliziranih naslova nosi zanemariv udio
+   * teksta, pa mod ostaje isti prije i poslije popravka.
+   */
+  const sizeWeights = new Map<number, number>();
+  for (const paragraph of paragraphs) {
+    if (paragraph.headingLevel != null || isExcluded(paragraph)) continue;
+    for (const run of paragraph.runs ?? []) {
+      if (typeof run.size !== 'number') continue;
+      const weight = String(run.text ?? '').trim().length;
+      if (!weight) continue;
+      sizeWeights.set(run.size, (sizeWeights.get(run.size) ?? 0) + weight);
+    }
+  }
+  let bodySize: number | null = null;
+  let bestWeight = 0;
+  for (const [size, weight] of [...sizeWeights.entries()].sort((a, b) => a[0] - b[0])) {
+    if (weight > bestWeight) {
+      bodySize = size;
+      bestWeight = weight;
+    }
+  }
   const maxLevel = Math.max(1, Math.min(9, Number(rules.maxLevel) || 3));
   const existing = paragraphs
     .filter((paragraph) => paragraph.headingLevel != null)
@@ -289,6 +410,8 @@ export function detectHeadingStructure(
     existingHeading: true,
     selectedByDefault: true,
   }));
+  // Normalizacija ide PRIJE upozorenja, pa upozorenja opisuju ono sto ce popravak stvarno upisati.
+  normalizeProposedLevels(candidates, existingCandidates);
   const warnings = warningsFor(candidates, existingCandidates);
   return {
     candidates,
