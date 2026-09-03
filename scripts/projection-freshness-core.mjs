@@ -115,6 +115,12 @@ export function formatProjection(verdict) {
   // regeneraciju. Ulancano pecenje traje preko 40 minuta i po ovom uzorku bi ih vecinom potrosilo
   // na proizvodnju istih bajtova.
   //
+  // Najjaci argument protiv automatskog pecenja nije cijena nego ISHOD: poslusna regeneracija zna
+  // proizvesti zeleno koje znaci MANJE provjere. Izmjereno 2026-08-24 na `scored-quote-audit.json`
+  // (vidi CLAUDE.md): CI je javio da je artefakt ustajao, a artefakt je bio ISPRAVAN i citac je
+  // zakazao. Regeneracija bi ozelenila CI, izbacila 193 bodovana pravila iz revizije i obrisala
+  // CETIRI stvarna nalaza. Automatika bi taj potez izvela bez da ga itko vidi.
+  //
   // OGRADA, jer je omjer jedna tocka na krivulji: 4 od 4 dokazuje da screening PRETJERUJE, ne da
   // je suvisan. Dok ne padne pogodak koji JEST razlika u sadrzaju, ne zna se ni koliko bi
   // automatika ustedjela ni koliko bi propustila. Prvi takav pogodak vrijedi zabiljeziti OVDJE,
