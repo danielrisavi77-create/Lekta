@@ -737,6 +737,31 @@ commitanom. Generator prepise datoteku s drugim zavrsecima redaka i git to prika
 Novu ulancanu projekciju dodaj u `PROJECTIONS` (`scripts/projection-freshness-core.mjs`), inace joj
 drift nitko ne vidi.
 
+### Gard koji cita datoteku s diska mora normalizirati CR
+
+Repo ima `core.autocrlf`, pa ISTA datoteka iz ISTOG commita ima dvije velicine na disku, ovisno samo
+o tome kako je stablo materijalizirano. Izmjereno 2026-09-03 na `src/ui/app.ts`, commit `54bb11e3`:
+
+    svjez `git worktree add`   368572 B   CR 2361, LF 2361   (CRLF)
+    dijeljeno radno stablo     366211 B   CR    0, LF 2361   (LF)
+    blob u gitu                366211 B
+
+Razlika je TOCNO broj redaka. Gard koji usporedjuje sirove bajtove zato mjeri KONFIGURACIJU GITA, ne
+sadrzaj repozitorija, i pada nasumicno po strojevima.
+
+Klasa je istog dana ugrizla DVA neovisna garda: `ui-module-budget` (`statSync().size`, CI zelen a
+svjez Windows worktree crven) i gard divergencije `rad/index.html` (diff u kojem obje strane izgledaju
+identicno). Potpis je oba puta isti: mjerenje koje izgleda uvjerljivo a mjeri stroj.
+
+Posljedica je gora od obicnog laznog crvenog, jer je asimetricna: kaznjava mjerenje u IZOLIRANOM
+stablu, koje ovaj vodic propisuje, a nagradjuje mjerenje u dijeljenom, koje odbija.
+
+- Mjerodavna referenca je BLOB, dakle ono sto mjeri CI: normaliziraj CR prije usporedbe velicine ili
+  sadrzaja.
+- Ne radi to regexom gradjenim kroz alat: escape se zna izgubiti (poznat razred u ovom repozitoriju,
+  vidi gard nad `git commit`). Brojanje bajtova (`b !== 0x0d`) nema tu zamku.
+- Pravilo vrijedi za TEKST. Za binarne fixture (`.docx`, slike) je sirova velicina ispravna mjera.
+
 ## Codex (drugo misljenje)
 
 Instaliran je Codex plugin (codex@openai-codex). Podjela uloga: Claude Code je

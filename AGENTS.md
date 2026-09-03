@@ -362,3 +362,12 @@ usporedba bajtova, desetak minuta po projekciji; `--all`, `--only <id>`). Tek ra
 nalaz. `git status` nije mjerodavan: prijavio je sest izmijenjenih datoteka kojima je sadrzaj bio
 jednak commitanom (generator prepise s drugim zavrsecima redaka), pa se `samo-eol` razlikuje od
 `sadrzaj`. Novu projekciju dodaj u `PROJECTIONS` u `scripts/projection-freshness-core.mjs`.
+
+Gard koji cita datoteku s diska mora NORMALIZIRATI CR. Repo ima `core.autocrlf`, pa ista datoteka iz
+istog commita ima dvije velicine: svjez `git worktree add` daje CRLF (`app.ts` 368572 B), dijeljeno
+stablo i blob LF (366211 B), a razlika je tocno broj redaka. Sirova usporedba tako mjeri
+konfiguraciju gita, ne sadrzaj, i pada nasumicno po strojevima. Izmjereno 2026-09-03; klasa je istog
+dana ugrizla dva neovisna garda (`ui-module-budget`, divergencija `rad/index.html`), a posljedica je
+asimetricna: kaznjava mjerenje u IZOLIRANOM stablu, koje vodic propisuje. Mjerodavna referenca je
+blob, dakle ono sto mjeri CI. Normaliziraj brojanjem bajtova (`b !== 0x0d`), ne regexom gradjenim
+kroz alat (escape se zna izgubiti). Za binarne fixture je sirova velicina ispravna.
