@@ -75,7 +75,27 @@ describe('registar programa: struktura', () => {
 
 describe('uskladjivanje programa i profila', () => {
   it('commitani izvjestaj === svjezi izracun (inace: npm run reconcile-programs)', () => {
-    expect(fresh).toEqual(baked as unknown as typeof fresh);
+    // PROVENIJENCIJA SE IZUZIMA IZ USPOREDBE, i to je ispravak a ne ublazavanje.
+    //
+    // `92268dfc` je uveo zajednicki zig (`withProvenance`), pa generator artefaktu dodaje
+    // `generatedAt`, `generatedFromCommit` i `generator`. Svjez izracun ih po konstrukciji nema,
+    // jer ih ne dodaje `reconcilePrograms` nego generator oko njega. Od tog commita usporedba
+    // CIJELOG objekta nije mogla proci ni na jednom stanju repozitorija, a poruka je citatelja
+    // slala na `npm run reconcile-programs`, sto ne pomaze: regeneracija mijenja samo vrijeme i
+    // hash, dakle bas ona polja koja razliku i cine.
+    //
+    // Izmjereno 2026-09-04 nakon regeneracije: svih pet sadrzajnih polja (`schemaVersion`,
+    // `programs`, `profiles`, `unitsWithoutPrograms`, `summary`) je BAJT-IDENTICNO. Drifta nije ni
+    // bilo; gard je mjerio vlastiti zig.
+    const { generatedAt, generatedFromCommit, generator, ...sadrzaj } = baked as unknown as
+      typeof fresh & { generatedAt: unknown; generatedFromCommit: unknown; generator: unknown };
+    expect(fresh).toEqual(sadrzaj);
+
+    // Izuzece ne smije znaciti da zig smije NESTATI: tada bi artefakt izgubio provenijenciju a
+    // gard bi i dalje bio zelen, sto je gore od pocetnog stanja.
+    expect(typeof generatedAt, 'artefakt je ostao bez ziga vremena').toBe('string');
+    expect(typeof generatedFromCommit, 'artefakt je ostao bez ziga commita').toBe('string');
+    expect(generator, 'artefakt je ostao bez imena generatora').toBe('npm run reconcile-programs');
   });
 
   it('svaki profil je tocno u jednom stanju, i zbroj se slaze', () => {
