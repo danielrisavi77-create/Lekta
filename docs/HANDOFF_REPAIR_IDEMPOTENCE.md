@@ -36,11 +36,29 @@ IZMJERENO NAKON POPRAVKA (druga sesija, izoliran worktree na pushanom `46d6fa63`
 neidempotentnosti vise ne postoji, pa odjeljak "Sto padovi NISU" nize opisuje stanje koje se vise ne
 moze reproducirati.
 
-O RAZRJESENJU 21,3 %: ne usporedjuj ga izravno s ranijih 39,8 %. Nazivnici su razliciti (94 naspram
-133 ciljanih provjera) jer je i skup dopustenih dokumenata razlicit (45 naspram 54). Hipoteza koju
-NITKO NIJE PROVJERIO, pa je ne uzimaj kao nalaz: devet sintetickih fixtura koje su ispale iz skupa
-mogle su biti lakse za popravak od stvarnih radova i time dizati raniji postotak. Tko to zeli
-utvrditi, mora izmjeriti oba skupa nad ISTIM kodom.
+O RAZRJESENJU 21,3 %: ne usporedjuj ga izravno s ranijih 39,8 %, ali razlog vise nije hipoteza nego
+je IZMJEREN. Druga sesija je oba skupa pustila nad ISTIM kodom (`46d6fa63`), isti lokalni korpus od
+38 radova, jedina razlika devet sidecara privremeno vracenih u dopusteni skup (izmjena je zivjela
+samo u worktreeu za bacanje i nikad nije commitana):
+
+    populacija 45, samo stvarni radovi      20/94  = 21,3 %
+    populacija 54, uz devet sintetickih     53/133 = 39,8 %
+    tih devet sintetickih, sami za sebe     33/39  = 84,6 %
+
+**Razlika je stopostotno populacija, nula posto proizvod.** `21,3 %` NIJE losiji proizvod nego
+posteniji uzorak: sinteticke fixture rjesavaju se cetiri puta lakse od stvarnih radova, pa su ranije
+dizale prosjek.
+
+Potvrduje to i drugi kut: padovi i regresije ostaju 4 i 4 u OBJE populacije. Tih devet dokumenata ne
+doprinosi nijednom padu, dakle bili su cist dobitak za postotak i nista drugo.
+
+Time se zatvara i ranija nedoumica iz ove sesije: `84,6 %` koji pokazuje COMMITANI artefakt
+(`repair-real-corpus.json`, bez `--local`) upravo je `33/39`, dakle razrjesenje SINTETICKOG podskupa.
+Nije rijec o boljem popravku nego o lakšem uzorku.
+
+NIZVODNA PROVJERA: `39,8` se pojavljuje ISKLJUCIVO u ovom dokumentu. Nema ga ni u jednom podatkovnom
+artefaktu, ni u jednoj HTML stranici, ni u `data/`, pa se nijedna javna tvrdnja nije oslanjala na
+napuhan broj.
 
 **OSTAJE OTVORENO: pass-regresije, 4 komada, razred `structure.heading.hierarchy`.** Taj zahvat ih
 nije dirao. Njih polovi necommitani rad na `normalizeProposedLevels` u
