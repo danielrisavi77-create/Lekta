@@ -11,7 +11,7 @@
  * Ledger je JOIN sloj: ako neki ulaz zastari, past ce NJEGOV gard (coverage-report,
  * faculty-matrix, repair-coverage, verification-worklist), ne ovaj.
  */
-import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+import { readFileSync, mkdirSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import {
@@ -48,7 +48,15 @@ const inputs: LedgerInputs = {
   closedLoop: readJson<{ rows: NonNullable<LedgerInputs['closedLoop']> }>('docs/generated/closed-loop.json').rows,
 };
 
-const ledger = buildCompletionLedger(inputs);
+// Ovjera mjerenja nad stvarnim radovima. Datoteka je neobavezna: bez nje ledger radi kao i prije,
+// a razina `A` ostaje prazna. Nepotpisanu ovjeru `provenProfiles` sam odbija, pa je ovdje nema potrebe
+// filtrirati.
+const ovjeraPut = join(root, 'data', 'verification', 'real-corpus-attestation.json');
+const corpusAttestation = existsSync(ovjeraPut)
+  ? (JSON.parse(readFileSync(ovjeraPut, 'utf8')) as Parameters<typeof buildCompletionLedger>[0]['corpusAttestation'])
+  : null;
+
+const ledger = buildCompletionLedger({ ...inputs, corpusAttestation });
 
 mkdirSync(join(root, 'docs', 'generated'), { recursive: true });
 writeFileSync(

@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "corpusFingerprint": "476c8339587b6082db25bd3f762c3ba9",
+  "measuredAt": "2026-09-03T19:01:43.947Z",
+  "measuredFromCommit": "1d818838390b24fdfaa7a3545d6ad48f6792641c",
+  "oracles": [
+    "scripts/repair-real-corpus.mts (harness + detectPassRegressions)"
+  ],
+  "signedBy": null,
+  "signedAt": null,
+  "entries": [
+    {
+      "profileId": "fer-diplomski",
+      "workType": "unknown",
+      "documentCount": 2,
+      "cleanCount": 2,
+      "regressedChecks": []
+    },
+    {
+      "profileId": "ffzg-filozofija-diplomski",
+      "workType": "unknown",
+      "documentCount": 1,
+      "cleanCount": 1,
+      "regressedChecks": []
+    },
+    {
+      "profileId": "fpzg-opci-akademski-rad",
+      "workType": "unknown",
+      "documentCount": 16,
+      "cleanCount": 14,
+      "regressedChecks": []
+    },
+    {
+      "profileId": "fpzg-politologija-diplomski",
+      "workType": "unknown",
+      "documentCount": 12,
+      "cleanCount": 7,
+      "regressedChecks": [
+        "structure.heading.hierarchy"
+      ]
+    },
+    {
+      "profileId": "fpzg-politologija-zavrsni",
+      "workType": "unknown",
+      "documentCount": 10,
+      "cleanCount": 6,
+      "regressedChecks": [
+        "structure.heading.hierarchy"
+      ]
+    },
+    {
+      "profileId": "mef-doktorski",
+      "workType": "unknown",
+      "documentCount": 1,
+      "cleanCount": 1,
+      "regressedChecks": []
+    },
+    {
+      "profileId": "pmf-matematika-graduate",
+      "workType": "unknown",
+      "documentCount": 2,
+      "cleanCount": 2,
+      "regressedChecks": []
+    },
+    {
+      "profileId": "ttf-diplomski",
+      "workType": "unknown",
+      "documentCount": 1,
+      "cleanCount": 1,
+      "regressedChecks": []
+    }
+  ]
+}
