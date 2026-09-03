@@ -27,7 +27,7 @@ import { fetchProfileRulesWithRetry } from '../report/profile-rules-client';
 // Advisory demotion i repair stavke citaju se iz PECENIH mapa (performance-01/02): drafts (~1,3 MB)
 // i source-registry (152 KB) vise NISU u glavnom entry chunku. Izvor istine ostaje u draftovima;
 // mape pece scripts/gen-profile-runtime-maps.mts, drift hvata tests/profile-runtime-maps.test.ts.
-import { repairEntriesFor } from '../profiles/profile-runtime-maps';
+import { evidenceEntriesFor, repairEntriesFor } from '../profiles/profile-runtime-maps';
 import { composeAnalysisProfile, isLightBaseline } from '../profiles/compose-profile';
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
 import { attachSelectSearch } from './select-search';
@@ -1203,7 +1203,16 @@ function renderResultsCockpitForResult(r: any){
   });
   // Dokazna lupa: mapa `issueKey -> doslovan navod iz sluzbene upute`. Prazna je kad pravila
   // nisu ucitana ili nijedno nema citat, i tada se sucelje ponasa tocno kao prije.
-  const _evidence=buildExactEvidence(r?.checks,r?.issues,analyzedProfile?.ruleEntries);
+  // DVA IZVORA DOKAZA, namjerno spojena ovdje a ne uzvodno. `ruleEntries` na profilu nose citate
+  // iz repair-mape, a `evidenceEntriesFor` one iz autorskih draftova; dolaze razlicitim putem i
+  // pune se u razlicitim trenucima, pa bi oslanjanje na jedan od njih tiho izgubilo drugi.
+  // Id se cita iz REZULTATA, ne iz DOM-a: odabir se u medjuvremenu mogao promijeniti, a dokaz
+  // mora pripadati profilu po kojem je rad ZAISTA mjeren.
+  const _evidence=buildExactEvidence(
+    r?.checks,
+    r?.issues,
+    [...(analyzedProfile?.ruleEntries||[]), ...evidenceEntriesFor(r?.details?.profileDefinitionId)],
+  );
   // Prije popravka: samo determinisicko. Predodabir se cita kroz `buildDefaultRepairRequests`,
   // dakle kroz TOCNO onaj put koji se izvodi kad korisnik samo klikne Popravi; brojanje po
   // vlastitom kriteriju mjerilo bi tok koji nitko ne izvodi.

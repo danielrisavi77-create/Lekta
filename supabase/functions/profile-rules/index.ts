@@ -22,7 +22,15 @@
 // slot: revalidacija je jeftina po bajtovima ali enumeracija preko nje ne smije biti
 // besplatna. Posteno u planu: skrejper s rotirajucim IP-ovima kroz dane i dalje moze
 // izvuci profile; obrana dize CIJENU bulk ekstrakcije, vrijednosti pravila su ionako
-// namjerno javne na SEO stranicama. Evidence (drafts/ledger) NIKAD nije u artefaktu.
+// namjerno javne na SEO stranicama.
+//
+// DOKAZI: odredba "evidence (drafts/ledger) NIKAD nije u artefaktu" vrijedila je do 2026-09-03,
+// kad ju je vlasnik izricito promijenio, nakon iznesenih brojki i protuargumenata. Artefakt sada
+// nosi i doslovne navode iz sluzbenih uputa, po profilu (76 od 407 profila, 687 unosa, prosjecno
+// 1,6 kB po profilu). NE nosi ledger, potpise verifikatora ni kanarince: projekcija u
+// `src/profiles/evidence-projection.ts` gradi NOV objekt sa sest poznatih polja, pa novo polje u
+// draftu ne moze procuriti samo od sebe. Cap iznad time postaje vazniji, jer je nagrada za
+// bulk ekstrakciju veca nego prije.
 //
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';

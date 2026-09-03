@@ -14,6 +14,8 @@
  * dolaze iz repair-map.json u ISTOM zapisu (jedan RTT, jedan rate-limit bucket).
  */
 
+import type { ServedEvidenceEntry } from './evidence-projection.ts';
+
 export const PROFILE_RULES_CONTRACT_V = 1 as const;
 
 /** Polja heavy profila koja se klijentu NE isporucuju. */
@@ -24,6 +26,12 @@ export interface ProfileRulesServedEntry {
   etag: string;
   profile: Record<string, unknown>;
   repairEntries: unknown[];
+  /**
+   * Doslovni navodi iz sluzbenih uputa za pravila OVOG profila. Izostaje kad profil nema nijedan
+   * potpun dokaz; prazan niz bi izgledao kao "provjereno pa nema dokaza", a istina je "nije bilo
+   * sto isporuciti". Projekcija je uska i ide iskljucivo kroz `evidence-projection.ts`.
+   */
+  evidenceEntries?: ServedEvidenceEntry[];
 }
 
 /** Peceni serverski artefakt (data/generated/profile-rules-server.json). */
@@ -110,6 +118,7 @@ export function buildProfileRulesArtifact(
   repairMap: Record<string, unknown[]>,
   sha256Hex: (input: string) => string,
   sourceIndex?: SourceIndex,
+  evidenceIndex?: Record<string, ServedEvidenceEntry[]>,
 ): ProfileRulesServerArtifact {
   const profiles: Record<string, ProfileRulesServedEntry> = {};
   const sorted = [...verifiedProfiles].sort((a, b) => String(a.id).localeCompare(String(b.id)));
@@ -119,8 +128,14 @@ export function buildProfileRulesArtifact(
     if (!id) throw new Error('[profile-rules-contract] profil bez id polja u izvoru istine');
     const profile = selectServedProfileFields(full);
     const repairEntries = attachSourceRefs(Array.isArray(repairMap[id]) ? repairMap[id] : [], sourceIndex);
-    const etag = sha256Hex(JSON.stringify({ v: PROFILE_RULES_CONTRACT_V, profile, repairEntries }));
-    profiles[id] = { etag, profile, repairEntries };
+    const evidenceEntries = evidenceIndex?.[id];
+    // Dokaz ULAZI u etag. Bez toga bi klijent s vazecim etagom dobio 304 i zadrzao STARI dokaz uz
+    // nova pravila, sto je gore od izostanka dokaza: navod bi se prikazivao uz pravilo koje ga
+    // vise ne propisuje.
+    const etag = sha256Hex(JSON.stringify({ v: PROFILE_RULES_CONTRACT_V, profile, repairEntries, evidenceEntries: evidenceEntries ?? null }));
+    profiles[id] = evidenceEntries?.length
+      ? { etag, profile, repairEntries, evidenceEntries }
+      : { etag, profile, repairEntries };
     etagLines.push(`${id}:${etag}`);
   }
   const datasetVersion = sha256Hex(etagLines.join('\n'));

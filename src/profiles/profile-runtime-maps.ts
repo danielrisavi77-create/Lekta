@@ -37,6 +37,22 @@ let _repairMapReady: Promise<void> | null = null;
 const _primedRepair = new Map<string, RuleEntry[]>();
 
 /** Upisi repair unose jednog profila (poziva ensureProfileRules nakon dohvata). */
+/**
+ * DOKAZI ZA PROFIL, primljeni uz pravila. Drze se ODVOJENO od repair unosa jer imaju drukciji
+ * zivotni vijek i drukcije posljedice: repair unos vodi zahvat u dokument, dokaz samo objasnjava
+ * odakle pravilo dolazi. Mijesanje bi znacilo da izostanak dokaza izgleda kao izostanak pravila.
+ */
+const _primedEvidence = new Map<string, RuleEntry[]>();
+
+export function primeEvidenceEntries(id: string, entries: unknown[]): void {
+  _primedEvidence.set(id, (Array.isArray(entries) ? entries : []) as unknown as RuleEntry[]);
+}
+
+/** Dokazi za profil; prazno kad ih profil nema ili pravila jos nisu dohvacena. */
+export function evidenceEntriesFor(id: string | null | undefined): RuleEntry[] {
+  return (id && _primedEvidence.get(id)) || [];
+}
+
 export function primeRepairEntries(id: string, entries: unknown[]): void {
   // Slim zapisi nose samo polja koja buildRepairableItems cita; double-cast kao i bulk mapa.
   _primedRepair.set(id, (Array.isArray(entries) ? entries : []) as unknown as RuleEntry[]);

@@ -5,7 +5,7 @@
  * src/main.ts da cita odavde je zaseban korak (uz faithfulness test).
  */
 import rawIndex from '../../data/profiles/verified-profiles-index.json';
-import { primeRepairEntries } from './profile-runtime-maps';
+import { primeRepairEntries, primeEvidenceEntries } from './profile-runtime-maps';
 import rawLegal from '../../data/profiles/legal-departments.json';
 import rawAuthority from '../../data/profiles/profile-authority.json';
 import rawBase from '../../data/profiles/base-profiles.json';
@@ -51,7 +51,7 @@ export const VERIFIED_PROFILE_REGISTRY = rawIndex as unknown as VerifiedProfile[
  * a stanje nije 'loaded', a na 'failed' se POSTENO degradira na opcu provjeru.
  */
 export type ProfileRulesProviderResult =
-  | { kind: 'ok'; profile: Record<string, unknown>; repairEntries: unknown[] }
+  | { kind: 'ok'; profile: Record<string, unknown>; repairEntries: unknown[]; evidenceEntries?: unknown[] }
   | { kind: 'failed'; reason: string };
 export type ProfileRulesProvider = (profileId: string) => Promise<ProfileRulesProviderResult>;
 
@@ -121,6 +121,9 @@ export function ensureProfileRules(profileId: string | null | undefined): Promis
         const entry = findVerifiedProfile(id);
         if (entry) Object.assign(entry, res.profile);
         primeRepairEntries(id, res.repairEntries);
+        // Dokazi su NEOBAVEZNI u odgovoru: stariji deploy ih nema, a profil bez dokaza ih ne
+        // salje. Prazno je uredno stanje, ne kvar; sucelje tada jednostavno nema `<details>`.
+        primeEvidenceEntries(id, Array.isArray(res.evidenceEntries) ? res.evidenceEntries : []);
         _states.set(id, 'loaded');
       } else {
         _states.set(id, 'failed');

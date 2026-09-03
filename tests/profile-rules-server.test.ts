@@ -12,8 +12,9 @@
  */
 import { describe, it, expect } from 'vitest';
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { readFileSync, globSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { buildEvidenceIndex } from '../src/profiles/evidence-projection';
 import {
   buildProfileRulesArtifact,
   selectServedProfileFields,
@@ -47,10 +48,17 @@ for (const row of registry) {
   if (typeof row?.id !== 'string' || typeof row.title !== 'string' || typeof row.url !== 'string') continue;
   sourceIndex[row.id] = { title: row.title, url: row.url };
 }
+// Dokazi se citaju iz ISTIH draftova kao u generatoru. Kad bi test gradio bez njih, drift bi
+// prijavio razliku koje nema i tjerao na regeneraciju koja bi dokaze IZBRISALA iz artefakta.
+const draftFiles = globSync('data/profiles/*/drafts/*.json', { cwd: ROOT })
+  .sort()
+  .map((rel) => JSON.parse(readFileSync(resolve(ROOT, rel), 'utf8')) as Record<string, unknown>);
+const evidenceIndex = buildEvidenceIndex(draftFiles, sourceIndex);
+
 
 describe('profile-rules serverski artefakt', () => {
   it('commitani artefakt === ponovni izracun iz izvora (drift)', () => {
-    const rebuilt = buildProfileRulesArtifact(verified, repairMap, sha256Hex, sourceIndex);
+    const rebuilt = buildProfileRulesArtifact(verified, repairMap, sha256Hex, sourceIndex, evidenceIndex);
     expect(artifactText.trimEnd()).toBe(JSON.stringify(rebuilt));
   });
 

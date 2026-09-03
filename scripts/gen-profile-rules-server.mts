@@ -14,6 +14,8 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildProfileRulesArtifact, type SourceIndex } from '../src/profiles/profile-rules-contract';
+import { buildEvidenceIndex } from '../src/profiles/evidence-projection';
+import { globSync } from 'node:fs';
 
 const ROOT = resolve(fileURLToPath(new URL('.', import.meta.url)), '..');
 const sha256Hex = (input: string) => createHash('sha256').update(input, 'utf8').digest('hex');
@@ -37,7 +39,14 @@ for (const row of registry) {
   sourceIndex[row.id] = { title: row.title, url: row.url };
 }
 
-const artifact = buildProfileRulesArtifact(verified, repairMap, sha256Hex, sourceIndex);
+// DOKAZI iz autorskih draftova. Ucitavaju se ovdje, a projiciraju u `evidence-projection.ts`,
+// koji propusta tocno sest polja; draft nosi i potpise verifikatora i kanarince, koji NE izlaze.
+const draftFiles = globSync('data/profiles/*/drafts/*.json', { cwd: ROOT })
+  .sort()
+  .map((rel) => JSON.parse(readFileSync(resolve(ROOT, rel), 'utf8')) as Record<string, unknown>);
+const evidenceIndex = buildEvidenceIndex(draftFiles, sourceIndex);
+
+const artifact = buildProfileRulesArtifact(verified, repairMap, sha256Hex, sourceIndex, evidenceIndex);
 
 const outPath = resolve(ROOT, 'data', 'generated', 'profile-rules-server.json');
 writeFileSync(outPath, `${JSON.stringify(artifact)}\n`, 'utf8');
