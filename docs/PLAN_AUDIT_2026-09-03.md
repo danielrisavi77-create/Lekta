@@ -10,7 +10,7 @@
 | T2 SCOPE-01 | ljestvica dokaza nigdje u UI-ju; pilot skupina ne postoji | `src/ui/profile-claim.ts` postoji; `data/profiles/pilot-set.json` postoji | **ZASTARJELO, uglavnom gotovo** |
 | T3 RULE-01 | 26 profila nosi `ieee` | **0 profila** | **ZASTARJELO, gotovo** |
 | T4 RULE-02 | 2625 pravila, 84,6 % s punim setom; 403 bez modaliteta | **1906 pravila, 86,3 % (1645)**; 261 bez modaliteta, 12 bez `verifiedHash`, 6 bez `sourcePage` | brojke druge, smjer isti; **`academicYear` je i dalje 0 %** (1906 od 1906) |
-| T5 RULE-03 | u CI-ju je samo `verify:claims:selftest` | isto: jedina pojava je `rule-claims.yml:58` | **STOJI** |
+| T5 RULE-03 | u CI-ju je samo `verify:claims:selftest` | tocno, ali zavaravajuce: `verify:claims` je alat PO DATOTECI (trazi `<claims.json>`), a korpusnu provjeru radi `audit_scored_quotes.py`, koji JEST u CI-ju: **1943 revidirana, 0 nalaza, 0 neprovjerivih**. Selftest pokriva **24 osi, 83 negativne kontrole, 0 promasaja**, ukljucujuci sve koje je plan naveo kao nepokrivene | **ZASTARJELO, zatvoreno** |
 | T6 EVID | `.env.corpus` nosi zivi `service_role` kljuc | **stoji**: 3 pojave, datoteka NIJE u gitu (samo lokalno) | **STOJI, P0 za vlasnika** |
 | T7 UX | mobilni CTA nedostupan, 2 izuzeca | zatvoreno; ostaje WebKit, blokiran brzinom stroja | **gotovo (moje)** |
 | T8 a11y | axe samo u pocetnom stanju | zatvoreno; 8 krsenja imenovano i pod ratchetom | **gotovo (moje)** |
