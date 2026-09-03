@@ -124,7 +124,10 @@ function authorityChip(item: {
 function zoneHeading(title: string, explanation: string): HTMLLIElement {
   const li = document.createElement('li');
   li.className = 'lekta-repair-ledger-zone';
-  li.setAttribute('role', 'presentation');
+  // BEZ `role="presentation"`. Ta uloga izbacuje `<li>` iz semantike liste, pa `<ol>` dobiva
+  // dijete koje nije stavka i axe pravilo `list` pada (izmjereno 2026-09-03, ebeaf624). Vizualno
+  // se nista ne mijenja jer `.lekta-repair-ledger-list` ima `list-style: none`, dakle oznake
+  // stavki ionako nema; citac ekrana sada naslov zone cita kao dio liste, sto i jest.
   const strong = document.createElement('strong');
   strong.textContent = title;
   const small = document.createElement('small');
@@ -181,9 +184,15 @@ export function renderRepairLedgerModal<T extends PriceSliderItem>(opts: PriceSl
   modal.className = 'modal';
   modal.setAttribute('role', 'dialog');
   modal.setAttribute('aria-modal', 'true');
+  modal.setAttribute('aria-labelledby', 'lekta-repair-ledger-title');
   const head = document.createElement('div');
   head.className = 'modal-head';
   const title = document.createElement('h3');
+  // Naslov je i PRISTUPACNO IME dijaloga. Bez ove veze `role="dialog"` nema imena i citac ekrana
+  // ga najavi kao goli "dialog" (axe `aria-dialog-name`, izmjereno 2026-09-03, ebeaf624). Id je
+  // fiksan jer stari modal ove vrste uklanja gornji `querySelectorAll(...).remove()`, pa dva
+  // istovremeno ne postoje.
+  title.id = 'lekta-repair-ledger-title';
   title.textContent = 'Prilagodi popravke';
   const closeBtn = document.createElement('button');
   closeBtn.type = 'button';

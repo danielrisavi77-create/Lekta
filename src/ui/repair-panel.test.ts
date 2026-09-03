@@ -686,3 +686,58 @@ describe('renderRepairPanel: ledger+modal (uvijek, bez obzira na mix stavki)', (
     expect(backdrop.classList.contains('hidden')).toBe(true);
   });
 });
+
+/**
+ * Dva axe krsenja iz prvog mjerenja stvarnih stanja proizvoda (`ebeaf624`, T8), oba u ledger
+ * modalu: `aria-dialog-name` i `list`. Gard stoji ovdje, a ne samo u Playwright specu, jer je
+ * jedinicno mjerenje jeftino i pada odmah, dok axe setnja trazi punu analizu stvarnog .docx-a.
+ */
+describe('renderRepairPanel: pristupacnost ledger modala (axe T8)', () => {
+  it('dijalog ima pristupacno ime, vezano na svoj vlastiti naslov', () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      items: [item({ ruleId: 'a', label: 'Prored', violated: true })],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+    });
+    const ledger = openLedger(mountEl);
+    const dialog = ledger.querySelector<HTMLElement>('[role="dialog"]')!;
+    const id = dialog.getAttribute('aria-labelledby');
+    expect(id, 'dialog bez aria-labelledby je goli "dialog" za citac ekrana').toBeTruthy();
+    const naslov = ledger.querySelector<HTMLElement>(`#${id}`);
+    expect(naslov, 'aria-labelledby mora pokazivati na cvor KOJI POSTOJI').toBeTruthy();
+    expect(naslov!.textContent?.trim()).toBeTruthy();
+  });
+
+  it('uredjena lista sadrzi samo prave stavke, bez role="presentation"', () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      // Zone se prikazuju SAMO kad postoje obje vrste (`showZones` u repair-price-slider.ts:
+      // `safeCount > 0 && advancedCount > 0`), a granica je `requiresConfirmation`. Bez naprednog
+      // clana zoneHeading se ne bi ni pozvao i tvrdnja bi prosla vakuumski nad listom bez zona;
+      // prva verzija ovog testa je upravo tako i pala, sto je i bio smisao provjere ispod.
+      items: [
+        item({ ruleId: 'a', fixerId: 'line-spacing-fixer', label: 'Prored', violated: true }),
+        item({
+          ruleId: 'b',
+          fixerId: 'section-insert-fixer',
+          label: 'Prijelom sekcije',
+          violated: true,
+          requiresConfirmation: true,
+        } as Partial<RepairableItem>),
+      ],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+    });
+    const ledger = openLedger(mountEl);
+    const lista = ledger.querySelector<HTMLElement>('.lekta-repair-ledger-list')!;
+    expect(lista.querySelectorAll('.lekta-repair-ledger-zone').length, 'naslov zone se mora pojaviti').toBeGreaterThan(0);
+    // axe `list`: <ol> smije imati samo djecu sa semantikom stavke. role="presentation" je skida.
+    expect(lista.querySelectorAll('[role="presentation"]').length).toBe(0);
+    for (const dijete of Array.from(lista.children)) {
+      expect(dijete.tagName, 'svako dijete <ol> mora biti <li>').toBe('LI');
+    }
+  });
+});
