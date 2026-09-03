@@ -199,12 +199,28 @@ export function parseXml(s: string, label = 'XML'): Document {
 export function readRPr(rPr: any): any {
   if (!rPr) return {};
   const out: any = {}, fonts = direct(rPr, 'w:rFonts'), sz = direct(rPr, 'w:sz'), b = direct(rPr, 'w:b'), i = direct(rPr, 'w:i');
-  const font = attr(fonts, 'w:ascii') || attr(fonts, 'w:hAnsi') || attr(fonts, 'w:cs');
+  // LATINICU ODREDJUJU SAMO w:ascii I w:hAnsi.
+  //
+  // `w:rFonts` nosi cetiri nezavisna atributa, svaki za svoje pismo: `w:ascii`/`w:hAnsi` za
+  // latinicu, `w:eastAsia` za istocnoazijska pisma, `w:cs` za slozena (arapsko, hebrejsko) i to
+  // samo za runove koji su takvi. Lanac je do 2026-09-03 zavrsavao s `|| w:cs`, pa je run koji ima
+  // SAMO `w:cs` dobivao taj font kao font tijela rada. Word u istom slucaju latinicu iscrtava
+  // fontom iz stila, jer `w:cs` na latinicni tekst ne utjece.
+  //
+  // IZMJERENO na stvarnom radu (`local-04-zavrsni`): 57% teksta nosi tocno
+  // `<w:rFonts w:eastAsia="Book Antiqua" w:cs="Book Antiqua"/>`. Nakon popravka fonta Word taj
+  // dokument iscrtava kao 100% Times New Roman (COM, `Range.Font.Name`), a analiza je javljala
+  // `fail` uz "Book Antiqua (57%)". Besplatna provjera je time obarala rad koji pravilo POSTUJE, a
+  // popravak je tu os prikazivao kao automatski nerijesenu iako je vec bila rijesena.
+  // Pogodjeno 6 od 38 stvarnih radova; 0 od 19 golden fixtura ima takav run.
+  const font = attr(fonts, 'w:ascii') || attr(fonts, 'w:hAnsi');
   if (font) out.font = font;
   // Dokument u zadanoj Wordovoj temi (npr. Calibri) nema eksplicitni w:ascii, samo
   // w:asciiTheme (minorHAnsi/majorHAnsi). Zapamti temu da je analyzeDocx razrijesi iz
   // theme1.xml; bez toga font ostaje null i provjera fonta lazno prolazi. Vidi AUD-04.
-  else { const ft = attr(fonts, 'w:asciiTheme') || attr(fonts, 'w:hAnsiTheme') || attr(fonts, 'w:cstheme'); if (ft) out.fontTheme = ft; }
+  // `w:cstheme` je iz istog razloga izostavljen kao i `w:cs`: on imenuje temu SLOZENIH pisama
+  // (`minorBidi`), pa bi na latinicnom tekstu bio ista pogresna atribucija.
+  else { const ft = attr(fonts, 'w:asciiTheme') || attr(fonts, 'w:hAnsiTheme'); if (ft) out.fontTheme = ft; }
   if (sz && attr(sz, 'w:val') != null) out.size = Number(attr(sz, 'w:val')) / 2;
   if (b) out.bold = !['0', 'false', 'off'].includes(String(attr(b, 'w:val') || '1').toLowerCase());
   if (i) out.italic = !['0', 'false', 'off'].includes(String(attr(i, 'w:val') || '1').toLowerCase());
