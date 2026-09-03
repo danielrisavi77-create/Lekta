@@ -4,7 +4,7 @@ import {
   buildDocumentDnaModel,
   type DnaFindingInput,
   type DocumentDnaInput,
-} from '../src/ui/results/document-dna-model';
+} from '../src/results/document-dna-model';
 
 function input(over: Partial<DocumentDnaInput> = {}): DocumentDnaInput {
   return {

@@ -48,7 +48,7 @@ import { resultReadiness, repairCeiling } from './result-readiness';
 import { renderProgressScan } from './progress-scan';
 import { buildVisualResultModel } from './results/visual-result-model';
 import { renderResultsCockpit, resultRendererFor, type ResultsCockpitAction } from './results/results-cockpit';
-import { buildDocumentDnaModel } from './results/document-dna-model';
+import { buildDocumentDnaModel } from '../results/document-dna-model';
 import { profileStatusForEvent } from './profile-status-event';
 import { buildExactEvidence } from './results/exact-evidence';
 import { buildRepairOutlook } from './results/repair-outlook';
@@ -108,37 +108,9 @@ const _mountAbortControllers=new WeakMap<Document,AbortController>();
 function runtimeDocument(): Document{return _runtimeDocument??document}
 export function isAnalyzerMounted(doc: Document=document): boolean{return _runtimeDocument===doc&&_analyzerMounted}
 
-/**
- * ISHOD PRIJEMA DOKUMENTA. Ruta radne povrsine mora znati KADA je dokument stvarno prihvacen, da
- * bi ga tada zapisala u lokalnu sesiju. Bez toga bi zapis morao pogadjati trenutak, a pogodjen
- * prerano znaci sesiju s dokumentom koji je intake gate poslije odbio.
- *
- * TRI ISHODA, jer dva ne bi bila istinita: `superseded` nije ni prihvacanje ni odbijanje nego
- * "korisnik je u medjuvremenu odabrao drugu datoteku". Bez njega bi `loadAnalyzerDocument` na
- * zamijenjenoj datoteci visio zauvijek, jer terminalni dogadjaj nikad ne bi stigao.
- */
-export type AnalyzerDocumentSettled =
-  | { kind: 'accepted'; file: File; verdict: unknown }
-  | { kind: 'rejected'; file: File; message: string }
-  | { kind: 'superseded'; file: File };
-
-type SettledListener = (event: AnalyzerDocumentSettled) => void;
-const _documentSettledListeners = new Set<SettledListener>();
-
-/** Vraca funkciju za odjavu. Dvostruka odjava je bezopasna. */
-export function subscribeAnalyzerDocumentSettled(listener: SettledListener): () => void {
-  _documentSettledListeners.add(listener);
-  return () => { _documentSettledListeners.delete(listener); };
-}
-
-/** Uze sucelje za pozivatelje koje zanima samo prihvacanje (npr. zapis sesije). */
-export function subscribeAnalyzerDocumentAccepted(
-  listener: (event: { file: File; verdict: unknown }) => void,
-): () => void {
-  return subscribeAnalyzerDocumentSettled((event) => {
-    if (event.kind === 'accepted') listener({ file: event.file, verdict: event.verdict });
-  });
-}
+// Dogadjaji o ishodu prijema dokumenta zive u vlastitom modulu: cisti su (bez DOM-a i bez
+// modulskog stanja analizatora) i `app.ts` je pod ratchetom koji trazi da se SMANJUJE.
+export { subscribeAnalyzerDocumentSettled, subscribeAnalyzerDocumentAccepted } from './analyzer-document-events';
 
 /**
  * PROGRAMSKI ULAZ DOKUMENTA. Do sada je dokument mogao uci samo kroz korisnikov klik ili drop,
@@ -180,17 +152,8 @@ export function loadAnalyzerDocument(file: File): Promise<AnalyzerDocumentAdmiss
   });
 }
 
-function emitAnalyzerDocumentSettled(event: AnalyzerDocumentSettled): void {
-  // Kopija skupa. NE zato sto bi odjava tijekom obavijesti preskocila one iza: JS `Set` to
-  // podnosi. Kopija cuva od suprotnog: pretplatnik DODAN tijekom obavijesti inace dobiva
-  // TAJ ISTI dogadjaj, pa bi zapis sesije koji se pretplati kao reakcija na prijem odmah
-  // vidio dogadjaj koji je prethodio njegovoj pretplati.
-  for (const listener of [..._documentSettledListeners]) {
-    // Greska pretplatnika NE smije srusiti prijem dokumenta: korisnikov rad je vazniji od
-    // nase telemetrije ili zapisa sesije.
-    try { listener(event); } catch (error) { console.warn('Pretplatnik na ishod prijema je pukao:', error); }
-  }
-}
+import { emitAnalyzerDocumentSettled, subscribeAnalyzerDocumentSettled } from './analyzer-document-events';
+
 
 const $=(s: string,r: any=runtimeDocument()): any=>r.querySelector(s), $$=(s: string,r: any=runtimeDocument()): any[]=>[...r.querySelectorAll(s)];
 /**

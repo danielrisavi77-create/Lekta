@@ -1,6 +1,6 @@
 import { escapeHtml } from '../../utils/helpers';
 import { pluralHr } from './technical-compliance-halo';
-import type { DnaBucket, DocumentDnaModel } from './document-dna-model';
+import type { DnaBucket, DocumentDnaModel } from '../../results/document-dna-model';
 
 /**
  * DNA rada: prikaz. Model je u `document-dna-model.ts` i cist je; ovdje je samo crtanje.
