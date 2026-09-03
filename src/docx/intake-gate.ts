@@ -128,7 +128,12 @@ export async function inspectDocxIntake(file: File): Promise<IntakeVerdict> {
         while (paraRe.exec(docXml)) if (++paraCount > MAX_SCAN_PARAGRAPHS) { overCap = true; break; }
         if (!overCap) {
           let alnum = 0;
-          const textRe = /<w:t[^>]*>([^<]*)</g;
+          // Otvarac mora biti STROG: `<w:t[^>]*>` matchira i `<w:tab/>`, `<w:tbl>`, `<w:tc>`,
+          // `<w:tr>`, jer `[^>]*` pojede ostatak imena. Uz `/g` takav match potrosi i `<` koji
+          // zapocinje pravi `<w:t>`, pa tekst iza tabulatora tiho ispadne iz brojanja i dokument
+          // s tekstom bude odbijen kao prazan (izmjereno 2026-09-03; nijedan fixture nema
+          // `<w:tab/>`, pa je kvar bio latentan u testovima a dostizan korisnicima).
+          const textRe = /<w:t(?:\s[^>]*)?>([^<]*)</g;
           let m: RegExpExecArray | null;
           while ((m = textRe.exec(docXml)) && alnum < 10) {
             alnum += (m[1].match(/[\p{L}\p{N}]/gu) || []).length;
