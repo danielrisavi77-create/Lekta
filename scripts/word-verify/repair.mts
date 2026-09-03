@@ -43,7 +43,12 @@ const REQUESTS: FixerRequest[] = [
     },
   },
   // Fusnote: Times New Roman 10 pt, obostrano.
-  { ruleId: 'fusnote-tipografija', fixerId: 'footnote-typography-fixer', params: { fontName: 'Times New Roman', fontSizePt: 10, alignJustify: true } },
+  // `lineSpacing` i `deep` NISU kozmetika popisa nego pokrivenost oracla: bez njih Word provjera
+  // vrti UZI skup od onoga sto sucelje stvarno salje, pa grana proreda fusnota (uvedena
+  // 2026-09-03) ne bi bila dotaknuta. Izmjereno pri uvodjenju: `FootnoteText` je u popravljenom
+  // paketu ostajao na `w:line="276"` iako je popravak radio, jer ga ovaj popis nikad nije zatrazio.
+  // Isti razred kao harness koji je gradio stavke uzim graditeljem od panela.
+  { ruleId: 'fusnote-tipografija', fixerId: 'footnote-typography-fixer', params: { fontName: 'Times New Roman', fontSizePt: 10, alignJustify: true, lineSpacing: 1, deep: true } },
   // Zahvat u TEKST: u produkciji ide samo uz izricitu privolu po stavci. Ovdje je ukljucen da
   // provjera dokaze i da radi i da ne dira nista osim naslova trazene razine.
   { ruleId: 'velika-slova-naslova', fixerId: 'heading-case-fixer', params: { levels: [1] } },
