@@ -6,6 +6,7 @@ import {
 import { initialContext, type WorkspaceContext } from './workspace-state';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import '../../shared/ui-boot';
+import '../../shared/page.css';  // stil stranice; bez njega je ruta goli HTML
 
 /**
  * ULAZ RUTE `/rad/`. Tanak namjerno: sve odluke su u `bootstrap.ts`, koji je cist i testabilan
