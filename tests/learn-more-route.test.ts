@@ -66,6 +66,31 @@ describe('ruta /saznaj-vise/', () => {
     expect(eol(STRANICA.match(re)?.[0] ?? '')).toBe(eol(INDEX.match(re)?.[0] ?? ''));
   });
 
+  it('NIJEDNO sidro nije mrtvo: odrediste postoji NA TOJ stranici', () => {
+    // Ovo je nalaz, ne pretpostavka. Prva izvedba rute isporucila je PET mrtvih sidara
+    // (cetiri `#analyzer`, jedan `#top`): tekst je doslovno preuzet s `/`, gdje ta odredista
+    // postoje, a ovdje po konstrukciji ne postoje, jer ruta NEMA radnu povrsinu.
+    //
+    // Tvrdnja o devet sekcija je pritom bila zelena. Selidba je bila potpuna, a stranica ipak
+    // pokvarena: cetiri glavna poziva na akciju nisu radila nista. Zato se sidro provjerava
+    // POSTOJANJEM ODREDISTA, nikad oblikom; oblik je tocan i kod mrtve poveznice.
+    const ids = new Set(Array.from(STRANICA.matchAll(/[\s]id="([^"]+)"/g), (m) => m[1]));
+    const mrtva = Array.from(new Set(Array.from(STRANICA.matchAll(/href="#([^"]+)"/g), (m) => m[1])))
+      .filter((h) => !ids.has(h));
+    expect(mrtva, 'sidro bez odredista na ovoj stranici').toEqual([]);
+  });
+
+  it('sidra koja vode na alat idu na `/`, jer alat ovdje ne zivi', () => {
+    expect(STRANICA).toContain('href="/#analyzer"');
+    expect(STRANICA).not.toMatch(/href="#analyzer"/);
+  });
+
+  it('nosi i ZAVRSNI poziv na akciju, koji popis imena ne moze vidjeti', () => {
+    // Deseta sekcija landinga NEMA `id`, pa je popis od devet imena po konstrukciji promasuje.
+    // Zamalo je ostala na `/` i nestala pri rezanju: sadrzaj bez imena nema tko prijaviti.
+    expect(STRANICA).toContain('ks-final');
+  });
+
   it('canonical ide kroz produkcijski origin', () => {
     expect(STRANICA).toContain('<link rel="canonical" href="https://lektahr.netlify.app/saznaj-vise/">');
   });
