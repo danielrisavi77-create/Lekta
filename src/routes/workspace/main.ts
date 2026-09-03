@@ -1,5 +1,9 @@
 import { initAnalyzerApp, loadAnalyzerDocument, subscribeAnalyzerDocumentAccepted } from '../../ui/app';
-import { openWorkspace, persistAcceptedDocument, restoreDocument, type StorageAvailability } from './bootstrap';
+import {
+  openWorkspace, persistAcceptedDocument, restoreDocument, afterDocumentAccepted, afterPersist,
+  type StorageAvailability,
+} from './bootstrap';
+import { initialContext, type WorkspaceContext } from './workspace-state';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import '../../shared/ui-boot';
 
@@ -36,12 +40,21 @@ async function start(): Promise<void> {
 
   const storage = detectStorage();
   let sessionId: string | null = null;
+  // Stanje se DRZI i osvjezava. Zapisano jednom pri ucitavanju, tvrdilo bi `empty` i nakon sto
+  // korisnik ucita dokument; ustajala tvrdnja o stanju gora je od nikakve, jer je netko procita.
+  let context: WorkspaceContext = initialContext(false);
+  const showState = (next: WorkspaceContext): void => {
+    context = next;
+    document.documentElement.dataset.workspaceState = context.state;
+  };
 
   // ZAPIS: tek kad je dokument STVARNO prihvacen. Pretplata se postavlja PRIJE obnove, jer i
   // obnovljen dokument prolazi kroz prijem pa i on zavrsi ovdje.
   subscribeAnalyzerDocumentAccepted((event) => {
+    showState(afterDocumentAccepted(context));
     void (async () => {
       const out = await persistAcceptedDocument(event.file, event.verdict, storage, sessionId);
+      showState(afterPersist(context, out.kind === 'persisted'));
       if (out.kind !== 'persisted') { showStatus(out.notice); return; }
       sessionId = out.sessionId;
       // `replaceState`, ne `pushState`: zapis sesije nije korisnikova navigacija, pa ne smije
@@ -53,7 +66,7 @@ async function start(): Promise<void> {
 
   const outcome = await openWorkspace(location.hash, storage);
   showStatus(outcome.notice);
-  document.documentElement.dataset.workspaceState = outcome.context.state;
+  showState(outcome.context);
 
   if (outcome.session) {
     sessionId = outcome.session.id;

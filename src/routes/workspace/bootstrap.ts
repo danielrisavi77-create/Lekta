@@ -162,3 +162,22 @@ export async function restoreDocument(
     return { kind: 'refused', notice: NOTICE_RESTORE_REFUSED };
   }
 }
+
+
+/**
+ * PRIJELAZ NA PRIHVACEN DOKUMENT, kao JEDAN korak prema van.
+ *
+ * Stroj stanja trazi dva dogadjaja (ponuda pa prihvacanje), a prijem javlja samo ishod. Ovdje se
+ * ta dva spajaju, i to s razlikom koju stroj trazi: prvi dokument je PONUDA, svaki sljedeci je
+ * ZAMJENA. Kriva rijec znaci odbijen prijelaz i stanje koje ostane na starom, dakle atribut koji
+ * tvrdi `empty` dok dokument postoji.
+ */
+export function afterDocumentAccepted(context: WorkspaceContext): WorkspaceContext {
+  const opened = transition(context, context.state === 'empty' ? 'documentOffered' : 'documentReplaced');
+  return transition(opened, 'documentAccepted');
+}
+
+/** Prijelaz nakon pokusaja zapisa sesije; neuspjeh vodi dalje, samo bez poveznice. */
+export function afterPersist(context: WorkspaceContext, persisted: boolean): WorkspaceContext {
+  return transition(context, persisted ? 'sessionPersisted' : 'sessionPersistFailed');
+}

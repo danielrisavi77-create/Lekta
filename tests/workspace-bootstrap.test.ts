@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { openWorkspace, persistAcceptedDocument, restoreDocument, type StorageAvailability } from '../src/routes/workspace/bootstrap';
+import { openWorkspace, persistAcceptedDocument, restoreDocument, afterDocumentAccepted, afterPersist, type StorageAvailability } from '../src/routes/workspace/bootstrap';
+import { initialContext } from '../src/routes/workspace/workspace-state';
 import { sessionFragment } from '../src/session/local-document-session';
 import type { LocalDocumentSessionStore, LocalDocumentSessionV1 } from '../src/session/local-document-session';
 
@@ -192,5 +193,46 @@ describe('obnova dokumenta', () => {
   it('greska pri ucitavanju ne rusi rutu', async () => {
     const out = await restoreDocument(session, async () => { throw new Error('pukao prijem'); });
     expect(out.kind).toBe('refused');
+  });
+});
+
+
+describe('stanje prati stvarne dogadjaje', () => {
+  it('PRVI dokument je ponuda, pa se stanje makne s `empty`', () => {
+    // Bez ovoga atribut tvrdi `empty` dok dokument postoji, a netko ga procita i povjeruje.
+    const out = afterDocumentAccepted(initialContext(false));
+    expect(out.state).toBe('sessionReady');
+    expect(out.rejected).toBeNull();
+  });
+
+  it('SLJEDECI dokument je ZAMJENA, ne ponuda', () => {
+    // Iz `profile` stroj ne prihvaca `documentOffered`; kriva rijec znaci ODBIJEN prijelaz i
+    // stanje koje ostane na starom, dakle tocno onaj tihi kvar koji ovo popravlja.
+    const prvi = afterPersist(afterDocumentAccepted(initialContext(false)), true);
+    expect(prvi.state).toBe('profile');
+    const drugi = afterDocumentAccepted(prvi);
+    expect(drugi.state).toBe('sessionReady');
+    expect(drugi.rejected).toBeNull();
+  });
+
+  it('zamjena dokumenta ponistava zapis prethodne sesije', () => {
+    const prvi = afterPersist(afterDocumentAccepted(initialContext(false)), true);
+    expect(prvi.sessionPersisted).toBe(true);
+    expect(afterDocumentAccepted(prvi).sessionPersisted).toBe(false);
+  });
+
+  it('neuspjeh zapisa vodi dalje, ali bez poveznice', () => {
+    const out = afterPersist(afterDocumentAccepted(initialContext(false)), false);
+    expect(out.state).toBe('profile');
+    expect(out.sessionPersisted).toBe(false);
+  });
+
+  it('obnovljena sesija prihvaca dokument bez odbijenog prijelaza', () => {
+    // Obnova zavrsi u `sessionReady`, a obnovljen dokument prolazi kroz prijem pa opet stize
+    // ovamo. Bez grane za zamjenu, taj prijelaz bi bio odbijen.
+    const obnovljen = { ...initialContext(true), state: 'sessionReady' as const };
+    const out = afterDocumentAccepted(obnovljen);
+    expect(out.rejected).toBeNull();
+    expect(out.state).toBe('sessionReady');
   });
 });
