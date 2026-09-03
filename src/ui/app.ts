@@ -37,7 +37,6 @@ import { renderView } from './wizard-view';
 import { INSTITUTIONAL_COVERAGE_MATRIX, COVERAGE_STATUS_META, CORPUS_STATS } from '../coverage/coverage-loader';
 import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../submission/submission-loader';
 import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-toggle';
-import { DEPLOYMENT_CONFIG } from '../config/deployment';
 import { readFacultyContext } from '../tools/faculty-context';
 import { findUpcomingDeadline } from '../submission/deadline-registry';
 import { renderRepairPanel, renderConfirmation, advancedFormFor } from './repair-panel';
@@ -72,6 +71,14 @@ import '../preflight/preflight-panel.css';
 const FPZG_SUBMISSION_CALENDAR: any = _FPZG_CAL;
 import { WORK_TYPE_LABELS, CHECK_ITEMS } from '../config/config-loader';
 import { STORAGE_KEYS, safeStorageGet, safeStorageSet } from '../shared/browser-storage';
+import * as purePr from '../config/production-config';
+import { DEFAULT_PRODUCTION_CONFIG, loadProductionConfig } from '../config/production-config';
+// Tanki omotaci nad `config/production-config`: cista logika je ondje, a ovdje se dodaje SAMO
+// tekuca konfiguracija. Imena su ista pa su sva pozivna mjesta netaknuta.
+function productionStatus(){return purePr.productionStatus(productionConfig)}
+function reportEndpointConfigured(){return purePr.reportEndpointConfigured(productionConfig)}
+function checkoutConfigured(){return purePr.checkoutConfigured(productionConfig)}
+function paidOffersLive(){return purePr.paidOffersLive(productionConfig)}
 import { PRICING_TIERS } from '../config/pricing-tiers';
 // (R3) zajednicka normalizacija check* zastavica, dijeli se s golden resolveProfile
 import { analyzeDocxOffThread, cancelActiveAnalysis, isAnalysisCancelled } from '../analysis/analyze-docx-client';
@@ -237,7 +244,6 @@ const adminMode=params.get('admin')==='1'&&setupAllowed();
 // uvjeta i odbija sve ostalo (audit A26-08). Dok je zivio samo u pregledniku, zapis
 // privole nije bio dokaz nego prepricavanje klijenta.
 const CHECKOUT_CONSENT_TEXT=canonicalConsentText(TERMS_VERSION)||'';
-const DEFAULT_PRODUCTION_CONFIG={enabled:false,submissionMode:'netlify-form',orderEndpoint:'/',paymentProvider:'lemonsqueezy',paymentLinks:{format:'',panic:'',premium:''},businessName:'Lekta',contactEmail:'lekta.kontakt@gmail.com',privacyController:'',retentionDays:30,uploadMaxBytes:8*1024*1024,analyticsEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('analytics-event'),serverAnalytics:'netlify-optional',reportEndpoint:'',fieldRenderEndpoint:'',repairEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('repair-docx'),profileRulesEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('profile-rules'),checkoutEndpoint:'',guaranteeEndpoint:'',supabaseUrl:DEPLOYMENT_CONFIG.supabaseUrl,supabaseAnonKey:DEPLOYMENT_CONFIG.supabaseAnonKey,waitlistEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('faculty-request'),referralEndpoint:'',errorEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('client-error'),preflightStartEndpoint:'',preflightResultEndpoint:'',preflightMaxUploadMb:30,adminStatsEndpoint:DEPLOYMENT_CONFIG.functionEndpoint('admin-stats')};
 // Error tracking (P0 8-1): globalni handleri. Ako je errorEndpoint konfiguriran, salje SANITIZIRAN
 // tehnicki kontekst (poruka, skraceni stack, verzija, path) na kolektor (npr. Sentry tunnel same-
 // origin ili /functions/v1/log-error). Bez endpointa: samo console.error (Supabase/hosting logovi).
@@ -492,13 +498,10 @@ function optionExists(select: any,value: any){return !!select&&[...select.option
 function setOptionIfExists(select: any,value: any){if(value!=null&&optionExists(select,value))select.value=value}
 function savePreferences(){const p={institution:$('#institutionSelect')?.value,unit:$('#unitSelect')?.value,program:$('#programSelect')?.value,workType:$('#workType')?.value,variant:$('#workVariant')?.value,department:$('#departmentSelect')?.value,methodology:$('#methodologySelect')?.value,citation:$('#citationStyle')?.value,language:$('#docLanguage')?.value,strictness:$('#strictness')?.value,submissionPhase:$('#submissionPhase')?.value,fpzgCohort:$('#fpzgCohort')?.value,fpzgDeadline:$('#fpzgDeadline')?.value,mentorOverride:!!$('#mentorOverride')?.checked,customFont:$('#customFont')?.value,customSize:$('#customSize')?.value,customSpacing:$('#customSpacing')?.value,customMargin:$('#customMargin')?.value};safeStorageSet(STORAGE_KEYS.preferences,p)}
 function restorePreferences(){const p=safeStorageGet(STORAGE_KEYS.preferences);if(!p)return;setOptionIfExists($('#institutionSelect'),p.institution);populateUnits();setOptionIfExists($('#unitSelect'),p.unit);populatePrograms();setOptionIfExists($('#programSelect'),p.program);setOptionIfExists($('#workType'),p.workType);populateVariants();setOptionIfExists($('#workVariant'),p.variant);populateDepartments();setOptionIfExists($('#departmentSelect'),p.department);populateMethodology();setOptionIfExists($('#methodologySelect'),p.methodology);setOptionIfExists($('#citationStyle'),p.citation);setOptionIfExists($('#docLanguage'),p.language);setOptionIfExists($('#strictness'),p.strictness);setOptionIfExists($('#submissionPhase'),p.submissionPhase);updateSubmissionContextFields();setOptionIfExists($('#fpzgCohort'),p.fpzgCohort);populateFpzgDeadlineOptions();setOptionIfExists($('#fpzgDeadline'),p.fpzgDeadline);$('#mentorOverride').checked=!!p.mentorOverride;$('#customSettings').classList.toggle('hidden',!p.mentorOverride);if(p.customFont)$('#customFont').value=p.customFont;if(p.customSize)$('#customSize').value=p.customSize;if(p.customSpacing)$('#customSpacing').value=p.customSpacing;if(p.customMargin)$('#customMargin').value=p.customMargin;_profileConfirmed=true}
-function loadProductionConfig(){const saved=safeStorageGet(STORAGE_KEYS.production,{});return{...structuredClone(DEFAULT_PRODUCTION_CONFIG),...(saved||{}),paymentLinks:{...DEFAULT_PRODUCTION_CONFIG.paymentLinks,...(saved?.paymentLinks||{})}}}
-function productionStatus(){const links=Object.values(productionConfig?.paymentLinks||{}).filter(Boolean).length,endpoint=String(productionConfig?.orderEndpoint||'').trim();return{active:!!productionConfig?.enabled&&!!endpoint,links,endpoint,provider:productionConfig?.paymentProvider||'lemonsqueezy'}}
 // Jesu li placene ponude uzivo (digitalni puni izvjestaj ILI rucno uredjivanje)? Besplatni
 // soft-launch: nista nije konfigurirano pa su placene tarife "Uskoro", a narudzba se ne otvara
 // (openOrder to gata), dok besplatna analiza radi normalno. Kad se konfigurira endpoint/checkout,
 // puni tijek se vraca bez daljnjih izmjena.
-function paidOffersLive(){return reportEndpointConfigured()||checkoutConfigured()||productionStatus().active}
 function renderProductionState(){const el=$('#productionState');if(!el)return;const st=productionStatus(),max=Math.round((productionConfig.uploadMaxBytes||0)/1024/1024);el.className=`production-state ${st.active?'ready':'warn'}`;el.innerHTML=st.active?`<strong>Produkcijska predaja je aktivna</strong><span class="provider-pill">${escapeHtml(st.provider)}</span> Obrazac se šalje na konfigurirani endpoint. Dokument do ${max} MB može biti uključen u narudžbu.${st.links?` Dostupna su ${st.links} payment linka.`:' Payment linkovi još nisu uneseni.'}`:`<strong>Testni fallback: slanje nije aktivirano</strong>Narudžba će se spremiti kao lokalni JSON bez prijenosa dokumenta. Otvori aplikaciju s <code>?setup=1</code> za testiranje ili uredi <code>DEFAULT_PRODUCTION_CONFIG</code> prije objave.`}
 function selectedOrderFile(){return $('#orderDocument')?.files?.[0]||selectedDocx||null}
 function updateOrderFileMeta(){const f=selectedOrderFile(),el=$('#orderFileMeta'),max=Math.round((productionConfig.uploadMaxBytes||0)/1024/1024);if(!el)return;el.textContent=f?`${f.name} · ${(f.size/1024/1024).toFixed(2)} MB · ${f.size<=(productionConfig.uploadMaxBytes||0)?'spremno za slanje':'preveliko za konfigurirani kanal'}`:`Nije odabran dokument. Možeš poslati narudžbu bez datoteke i naknadno dogovoriti siguran kanal. Najviše ${max} MB.`}
@@ -1528,7 +1531,6 @@ function runRegistryDiagnostics(){const rows: any[]=[],add=(level: any,title: an
 function openQa(){const rows=runRegistryDiagnostics(),pass=rows.filter(x=>x.level==='pass').length,warn=rows.filter(x=>x.level==='warn').length,fail=rows.filter(x=>x.level==='fail').length,cov=coverageSnapshot().counts;$('#qaResults').innerHTML=`<div class="qa-summary"><div class="qa-stat"><span>PROGRAMI</span><b>${cov.total}</b></div><div class="qa-stat"><span>SPREMNO</span><b>${cov.ready}</b></div><div class="qa-stat"><span>PROFILI</span><b>${VERIFIED_PROFILE_REGISTRY.length}</b></div><div class="qa-stat"><span>UPOZORENJA</span><b>${warn}</b></div><div class="qa-stat"><span>POGREŠKE</span><b>${fail}</b></div></div><div class="qa-list">${rows.map(x=>`<div class="qa-row ${x.level}"><span>${x.level==='pass'?'<i data-lucide="check-circle"></i>':x.level==='fail'?'<i data-lucide="alert-circle"></i>':'<i data-lucide="alert-triangle"></i>'}</span><div><strong>${escapeHtml(x.title)}</strong><p>${escapeHtml(x.detail)}</p></div></div>`).join('')}</div><p class="profile-note"><strong>Rezultat:</strong> ${pass} prolaznih provjera, ${warn} upozorenja i ${fail} blokirajućih pogrešaka. QA konzola provjerava strukturu registra, ne sadržaj službenih dokumenata.</p>`;window.__lektaIcons?.();$('#qaModal').classList.remove('hidden');trapModal($('#qaModal'))}
 function closeQa(){$('#qaModal')?.classList.add('hidden');releaseModal($('#qaModal'))}
 function downloadProfileManifest(){downloadBlob(JSON.stringify(profileManifest(),null,2),'application/json',`Lekta-profile-manifest-v${APP_VERSION}.json`)}
-function reportEndpointConfigured(){return!!String(productionConfig?.reportEndpoint||'').trim()}
 // Server-side repair (WS-3): eksplicitni opt-in (kao reportEndpoint), NE derivira se iz supabaseUrl,
 // da soft-launch (prazan repairEndpoint) zadrzi lokalni besplatni popravak. Kad je postavljen,
 // placeni popravak ide na server (upload -> repair-docx -> gotov docx).
@@ -1645,7 +1647,6 @@ function authSessionActive(){const s=authStore.load();return authConfigured()&&s
 function afterAuthChange(){renderAuthEntry();if(currentResult)renderSubmissionChecklist(currentResult)}
 function authLogout(){authStore.save(null);toast('Odjavljen/a si.');trackEvent('auth_signed_out',{});afterAuthChange()}
 function renderAuthEntry(){const s=authSessionActive();$$('[data-auth-entry]').forEach((b: any)=>{if(!authConfigured()){b.classList.add('hidden');return}b.classList.remove('hidden');if(s){b.textContent='Odjava';b.title=`Prijavljen/a: ${s.email}`;b.onclick=authLogout}else{b.textContent='Prijava';b.title='Prijava e-mailom (kod)';b.onclick=()=>openAuth(afterAuthChange)}})}
-function checkoutConfigured(){return!!String(productionConfig?.checkoutEndpoint||'').trim()}
 // Garancijski zahtjev (file-guarantee-claim Edge Function). Pokriva TOCNOST verificiranih
 // bodovanih pravila (T2/T3, 30 dana od vezivanja), NE prihvacanje rada; odluka je rucna.
 // "Dokaz" se u ovoj verziji salje kao tekstualni opis/poveznica u evidencePath (bez
