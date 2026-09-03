@@ -17,3 +17,14 @@ src/audits/hr-dict/hr_HR.dic -text
 # izmjenu naletjelo je najmanje tri sesije u jednom danu, a jedna je zamalo commitala "osvjezene"
 # golden snimke, sto je nad datotekama koje su ovdje jedini dokaz zatecenog ponasanja skupo.
 *.snap text eol=lf
+
+# Generirani artefakti. Pisu ih alati s LF, a `core.autocrlf` ih na checkoutu pretvara u CRLF, pa
+# svaka regeneracija u svjezem worktreeu ostavi datoteke koje `git status` prijavljuje kao
+# izmijenjene iako su bajt-identicne commitanima. Izmjereno 2026-09-03/04: na tu prividnu izmjenu
+# naletjelo se najmanje sest puta u jednom danu, tri puta nad golden snimkama i tri nad ovima
+# (faculty-matrix, completion-ledger, real-corpus-backlog).
+#
+# Pravilo NISTA ne prekonvertira: sva 23 commitana artefakta su u gitu vec LF (provjereno).
+# Mijenja se iskljucivo ono sto checkout upisuje na disk.
+docs/generated/** text eol=lf
+data/generated/** text eol=lf
