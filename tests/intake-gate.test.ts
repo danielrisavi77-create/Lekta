@@ -177,3 +177,42 @@ describe('postRunSuspicion', () => {
     expect(postRunSuspicion(undefined)).toBeNull();
   });
 });
+
+/**
+ * Tekst iza `<w:tab/>` ne smije nestati iz brojanja.
+ *
+ * Izmjereno 2026-09-03. `textRe` je bio `/<w:t[^>]*>([^<]*)</g`. Otvarac `<w:t[^>]*>` matchira i
+ * `<w:tab/>`, jer `[^>]*` pojede `ab/`. Uz `/g` taj match potrosi i `<` koji ZAPOCINJE pravi
+ * `<w:t>`, pa sljedeci pokusaj krece iza njega i tekst se vise ne moze uhvatiti:
+ *
+ *     <w:r><w:tab/><w:t>Sadrzaj</w:t></w:r>   ->   izvuceno: []   (ocekivano: ["Sadrzaj"])
+ *
+ * Posljedica je tvrdi `reject('empty')` nad dokumentom koji IMA tekst, dakle suprotno namjeni ovog
+ * gatea, koji odbija samo nedvosmisleno prazan dokument.
+ *
+ * Zasto ga nijedan postojeci test nije uhvatio: u svih 19 fixtura u `tests/fixtures/docx/` ima
+ * TOCNO NULA pojava `<w:tab/>` (mjereno i usko i siroko). Korpus u tome nije reprezentativan za
+ * prave Wordove radove, gdje je tabulator na pocetku runa uobicajen (sadrzaj, numerirani naslovi).
+ * Kvar je zato bio latentan u testovima, a dostizan korisnicima.
+ */
+describe('intake gate: tabulator ne smije pojesti tekst', () => {
+  const tabRun = (tekst: string) =>
+    `<w:p><w:r><w:tab/><w:t xml:space="preserve">${tekst}</w:t></w:r></w:p>`;
+  const TEKST = 'Ovaj rad istražuje utjecaj metode na rezultat mjerenja i donosi zaključke.';
+  // Isti kostur kao test "skoro-prazan" iznad: 2000 praznih odlomaka nosi velicinu preko
+  // MIN_DOCX_BYTES, pa je JEDINI nositelj teksta onaj zadnji odlomak. Razliku izmedju ova dva
+  // slucaja pravi iskljucivo `<w:tab/>` ispred njega.
+  const kostur = () => Array.from({ length: 2000 }, () => ({ text: '', empty: true as const }));
+
+  it('dokument ciji je tekst iza tabulatora NIJE prazan', async () => {
+    const paragraphs: ParaSpec[] = [...kostur(), { raw: tabRun(TEKST) }];
+    const v = await inspectDocxIntake(buildDocxFile({ paragraphs }, 'tab-tekst.docx'));
+    expect(v.kind, 'dokument ima tekst, ne smije biti odbijen kao prazan').toBe('ok');
+  });
+
+  it('isti tekst bez tabulatora prolazi (kontrola)', async () => {
+    const paragraphs: ParaSpec[] = [...kostur(), { text: TEKST }];
+    const v = await inspectDocxIntake(buildDocxFile({ paragraphs }, 'bez-taba.docx'));
+    expect(v.kind).toBe('ok');
+  });
+});

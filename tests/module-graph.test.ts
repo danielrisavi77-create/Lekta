@@ -19,8 +19,15 @@ import { describe, expect, it } from 'vitest';
  * fixer -> `fixers.ts`, i upravo su ona navela na zakljucak da repair jezgra ima problem koji se
  * "ne popravlja usput jer je golden-zasticena". U izvodjenju ondje ciklusa NEMA nijednog.
  *
- * Jedini stvaran je `legal-content.ts <-> terms-version.ts`, i on se gubio medju sesnaest prividnih.
- * Gard koji broji 17 umjesto 1 ne cuva nista: nov stvaran ciklus tone u sumu.
+ * KOMENTARI SE NE BROJE. Ostatak nakon izuzeca type-only bridova bio je jedan jedini "ciklus",
+ * `legal-content.ts <-> terms-version.ts`, i ni on nije postojao: `terms-version.ts` nema NIJEDAN
+ * uvoz (osam redaka), a detektor je uhvatio `from '../legal/legal-content.ts'` napisano unutar
+ * `//` komentara koji objasnjava da ga legal-content re-exporta. Regex nad sirovim tekstom ne zna
+ * razliku izmedju koda i proze o kodu.
+ *
+ * Uklanjanje komentara gubi TOCNO JEDAN brid (531 -> 530) i obara ciklus 1 -> 0, dakle ne reze
+ * nijedan stvaran uvoz. Brisu se blok komentari i CIJELI redci koji pocinju s `//`; zavrsni komentar
+ * iza koda se NE dira, jer bi rezanje od `//` do kraja retka pojelo i `'https://...'` u nizu.
  *
  * Mjesoviti `import { type X, Y }` se NE izuzima: takav uvoz nosi i vrijednost, pa brid ostaje.
  */
@@ -35,10 +42,17 @@ const KORIJEN = path.resolve(__dirname, '..');
  *   17 -> 1, isti dan. TO NIJE NAPREDAK NEGO ISPRAVAK MJERE: nijedan ciklus nije razrijesen, nego
  *   je prestalo brojanje bridova koje TypeScript brise. Sesnaest od sedamnaest bilo je type-only,
  *   ukljucujuci svih trinaest u repair jezgri i onaj sedamnaesti nad hijerarhijom naslova.
+ *   1 -> 0, isti dan, istim povodom: zadnji preostali nije bio uvoz nego RECENICA O UVOZU, napisana
+ *   u `//` komentaru. Nula ovdje znaci da `src/` u izvodjenju nema nijedan kruzni uvoz, a NE da ih
+ *   gard vise ne trazi; prvi stvarni pada odmah, jer prag je egzaktan.
  *
  * Svako sljedece dizanje trazi isti oblik: koji ciklus, odakle, i zasto se ne popravlja odmah.
  */
-const MAX_CIKLUSA = 1;
+const MAX_CIKLUSA = 0;
+
+/** Blok komentari i CIJELI `//` redci. Zavrsni komentar iza koda ostaje (vidi zaglavlje). */
+const BLOK_KOMENTAR = /\/\*[\s\S]*?\*\//g;
+const REDAK_KOMENTAR = /^[ \t]*\/\/.*$/gm;
 
 /**
  * Cijele `import type` / `export type` naredbe. Namjerno se brise CIJELA naredba, a ne samo rijec
@@ -77,7 +91,10 @@ function nadjiCikluse(): { ciklusi: string[]; graf: Map<string, string[]> } {
 
   const graf = new Map<string, string[]>();
   for (const f of datoteke) {
-    const t = fs.readFileSync(path.join(KORIJEN, f), 'utf8').replace(TYPE_ONLY, '');
+    const t = fs.readFileSync(path.join(KORIJEN, f), 'utf8')
+      .replace(BLOK_KOMENTAR, '')
+      .replace(REDAK_KOMENTAR, '')
+      .replace(TYPE_ONLY, '');
     const veze = new Set<string>();
     for (const m of t.matchAll(/(?:from|import)\s*\(?\s*['"]([^'"]+)['"]/g)) {
       const c = razrijesi(f, m[1]);
@@ -122,8 +139,25 @@ describe('graf modula u src/', () => {
     ).toBe(MAX_CIKLUSA);
   });
 
+  /** Oblik, ne broj. Uz nula ciklusa petlja je prazna i to je uredu: tvrdnja pazi na ISPIS kad se
+   *  ciklus pojavi, a da se pojavio, prethodna dva testa bi vec pala. */
   it('ciklusi su IMENOVANI, ne samo prebrojani', () => {
     for (const c of ciklusi) expect(c).toContain(' -> ');
+  });
+
+  /**
+   * Gard nad izuzecem KOMENTARA. Uvoz napisan u komentaru je upravo ono sto je godinama pravilo
+   * lazan ciklus (`terms-version.ts` nema nijedan uvoz, a gard je tvrdio da ih ima).
+   */
+  it('uvoz napisan u komentaru se ne broji, a pravi kod se broji', () => {
+    const ocisti = (s: string) => s
+      .replace(new RegExp(BLOK_KOMENTAR.source, 'g'), '')
+      .replace(new RegExp(REDAK_KOMENTAR.source, 'gm'), '');
+    expect(ocisti("// vidi `from './x'` u drugom modulu"), 'redak-komentar mora nestati').not.toContain('./x');
+    expect(ocisti("/* from './x' */"), 'blok-komentar mora nestati').not.toContain('./x');
+    // NEGATIVNE KONTROLE: pravi kod ostaje, i zavrsni komentar ne smije pojesti redak koda.
+    expect(ocisti("import { a } from './x';"), 'pravi uvoz mora ostati').toContain('./x');
+    expect(ocisti("import { a } from './x'; // napomena"), 'kod ispred komentara mora ostati').toContain('./x');
   });
 
   /**

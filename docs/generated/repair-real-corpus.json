@@ -90,6 +90,7 @@
         "Dosljednost"
       ],
       "passRegressionCount": 0,
+      "passRegressionChecks": [],
       "outputReadable": true,
       "packageWellFormed": true,
       "malformedParts": [],
@@ -141,6 +142,7 @@
         "Dosljednost"
       ],
       "passRegressionCount": 0,
+      "passRegressionChecks": [],
       "outputReadable": true,
       "packageWellFormed": true,
       "malformedParts": [],
@@ -191,6 +193,7 @@
         "Dosljednost"
       ],
       "passRegressionCount": 0,
+      "passRegressionChecks": [],
       "outputReadable": true,
       "packageWellFormed": true,
       "malformedParts": [],
@@ -244,6 +247,7 @@
         "Dosljednost"
       ],
       "passRegressionCount": 0,
+      "passRegressionChecks": [],
       "outputReadable": true,
       "packageWellFormed": true,
       "malformedParts": [],
@@ -297,6 +301,7 @@
         "Dosljednost"
       ],
       "passRegressionCount": 0,
+      "passRegressionChecks": [],
       "outputReadable": true,
       "packageWellFormed": true,
       "malformedParts": [],
@@ -351,6 +356,7 @@
         "Dosljednost"
       ],
       "passRegressionCount": 0,
+      "passRegressionChecks": [],
       "outputReadable": true,
       "packageWellFormed": true,
       "malformedParts": [],
@@ -402,6 +408,7 @@
         "Dosljednost"
       ],
       "passRegressionCount": 0,
+      "passRegressionChecks": [],
       "outputReadable": true,
       "packageWellFormed": true,
       "malformedParts": [],
@@ -425,6 +432,7 @@
     "changedDocumentCount": 5,
     "manualReviewCount": 7,
     "passRegressionCount": 0,
+    "passRegressionChecks": [],
     "targetedCheckCount": 0,
     "targetedResolvedCount": 0,
     "autoUnresolvedCount": 0,
