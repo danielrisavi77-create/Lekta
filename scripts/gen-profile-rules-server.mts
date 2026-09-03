@@ -15,7 +15,7 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildProfileRulesArtifact, type SourceIndex } from '../src/profiles/profile-rules-contract';
 import { buildEvidenceIndex } from '../src/profiles/evidence-projection';
-import { globSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 
 const ROOT = resolve(fileURLToPath(new URL('.', import.meta.url)), '..');
 const sha256Hex = (input: string) => createHash('sha256').update(input, 'utf8').digest('hex');
@@ -41,8 +41,26 @@ for (const row of registry) {
 
 // DOKAZI iz autorskih draftova. Ucitavaju se ovdje, a projiciraju u `evidence-projection.ts`,
 // koji propusta tocno sest polja; draft nosi i potpise verifikatora i kanarince, koji NE izlaze.
-const draftFiles = globSync('data/profiles/*/drafts/*.json', { cwd: ROOT })
-  .sort()
+/**
+ * Popis autorskih draftova, bez `globSync`: taj API trazi Node 22+, a CI vrti i Node 20, pa je
+ * korak ondje padao dok je lokalno bio zelen. Obilazak je namjerno DOSLOVAN i ponovljen i u
+ * generatoru i u drift testu: da ga dijele, greska u obilasku bila bi ista na obje strane i drift
+ * je ne bi vidio. Putanje su s kosom crtom i sortirane, pa je redoslijed jednak na svim platformama.
+ */
+function draftPaths(root: string): string[] {
+  const base = resolve(root, 'data', 'profiles');
+  const out: string[] = [];
+  for (const unit of readdirSync(base, { withFileTypes: true })) {
+    if (!unit.isDirectory()) continue;
+    const dir = resolve(base, unit.name, 'drafts');
+    if (!existsSync(dir)) continue;
+    for (const f of readdirSync(dir)) if (f.endsWith('.json')) out.push(`data/profiles/${unit.name}/drafts/${f}`);
+  }
+  if (out.length === 0) throw new Error('nijedan draft nije nadjen; prazan skup nije prolaz');
+  return out.sort();
+}
+
+const draftFiles = draftPaths(ROOT)
   .map((rel) => JSON.parse(readFileSync(resolve(ROOT, rel), 'utf8')) as Record<string, unknown>);
 const evidenceIndex = buildEvidenceIndex(draftFiles, sourceIndex);
 

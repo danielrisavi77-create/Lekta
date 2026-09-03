@@ -304,7 +304,7 @@
       ],
       "domain": "analiza",
       "impactIfDown": "pravila profila se ne dohvacaju; analiza pada na opcu provjeru",
-      "deployedProduction": true,
+      "deployedProduction": null,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -436,7 +436,7 @@
       "reason": null
     }
   ],
-  "generatedAt": "2026-09-03T17:35:15.440Z",
-  "generatedFromCommit": "6fa30bfc6b6bec92b5f76ef415f4e5a1e1507c38",
+  "generatedAt": "2026-09-03T18:32:23.832Z",
+  "generatedFromCommit": "696fee2a5416f49316cd02a687bd9d23965e761e",
   "generator": "npm run deploy-manifest"
 }
