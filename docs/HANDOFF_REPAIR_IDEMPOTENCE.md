@@ -58,18 +58,27 @@ su 4.
 ### NAZIVNIK NIJE STABILAN IZMEDJU SESIJA (razjasnjeno mjerenjem)
 
 Moj prolaz je prijavio 54 dokumenta, njihov 45. Uzrok NIJE u harnessu: `discoverRealCorpus` uzima
-SVAKI `.docx` koji ima pratitelja i prodje `sidecarAdmitted`, bez uzorkovanja i bez granice
-(provjereno: 38 `.docx`, nijedan bez pratitelja, `_mapping` je mapa a ne dokument). Commitani skup
-je 7 u oba prolaza, dakle 38 + 7 = 45 je cijeli sadrzaj direktorija.
+SVAKI `.docx` koji ima pratitelja i prodje `sidecarAdmitted`, bez uzorkovanja i bez granice.
 
-Iz toga slijedi da je u trenutku mog prolaza lokalnih radova bilo 47, a danas ih je 38: devet je
-uklonjeno. Tko i kada se ne moze utvrditi, jer je `tests/fixtures/docx-local/` gitignoriran pa nema
-povijesti.
+NIJE NESTAO NIJEDAN RAD. Prva verzija ovog odjeljka tvrdila je da je iz gitignoriranog direktorija
+uklonjeno devet radova. To je bilo netocno i opasno, jer bi poslalo sljedecu sesiju u potragu za
+devet izgubljenih studentskih radova. Aritmetika (provjerena neovisno):
 
-PRAKTICNA POSLJEDICA: brojevi padova i regresija usporedivi su samo unutar ISTOG prolaza ili izmedju
-prolaza pokrenutih blizu u vremenu nad istim direktorijem. Usporedba dvaju stanja koda mora se
-izvesti jedno za drugim nad istim sadrzajem korpusa; inace mjeri i promjenu korpusa. Prije svakog
-zakljucka procitaj `documentCount` iz artefakta koji drzis u ruci, ne iz ovog dokumenta.
+    commitanih fixtura              19
+    oznaceno `synthetic` SADA       12   ->  dopusteno  7    7 + 38 = 45
+    oznaceno `synthetic` PRIJE       3   ->  dopusteno 16   16 + 38 = 54
+    lokalnih `.docx`                38   u OBA prolaza
+
+Promijenila se dakle populacija DOPUSTENIH commitanih fixtura, jer su im pratitelji u meduvremenu
+oznaceni kao sinteticki (`da442a8e`, `c9491a8b`). To je bilo ispravno: ti dokumenti NISU studentski
+radovi. Posljedica za moje brojke je da je moj skup od 54 ukljucivao devet sintetickih dokumenata
+koji ne bi smjeli brojati kao stvarni radovi; njihov skup od 45 je cisci.
+
+PRAKTICNA POSLJEDICA, sada s tocnim razlogom: nazivnik nije konstanta i moze se promijeniti BEZ
+IJEDNE promjene dokumenata, jer pripadnost skupu odredjuju SIDECARI, a njih ureduju druge sesije.
+Dva stanja koda usporediva su samo ako su mjerena nad istim skupom DOPUSTENIH dokumenata, ne samo
+nad istim direktorijem. Prije svakog zakljucka procitaj `documentCount` iz artefakta koji drzis u
+ruci, ne iz ovog dokumenta.
 
 ## Kako reproducirati (obavezno prije bilo kakvog zahvata)
 
