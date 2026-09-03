@@ -10,7 +10,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "operacije",
+      "impactIfDown": "vlasnicki pregled ostaje bez brojki; korisnika ne dira",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -25,7 +27,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "analitika",
+      "impactIfDown": "gubi se telemetrija; proizvod radi normalno",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -44,7 +48,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "popravak",
+      "impactIfDown": "osirotjeli blobovi se gomilaju; tiho, vidi se tek na racunu",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -59,7 +65,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "operacije",
+      "impactIfDown": "greske u pregledniku prestaju stizati; kvarovi postaju nevidljivi",
+      "deployedProduction": null,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -77,7 +85,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "naplata",
+      "impactIfDown": "nitko ne moze platiti",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -90,7 +100,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "popravak",
+      "impactIfDown": "korisnik ne moze obrisati svoj dokument; GDPR obveza",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -104,7 +116,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "rast",
+      "impactIfDown": "gubi se lista cekanja za nepokrivene fakultete",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -121,7 +135,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "popravak",
+      "impactIfDown": "polja i sadrzaj se ne osvjezavaju; popravak je nepotpun",
+      "deployedProduction": false,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -134,7 +150,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "naplata",
+      "impactIfDown": "jamstvo se ne moze ostvariti; obveza prema kupcu",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -149,7 +167,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "naplata",
+      "impactIfDown": "placeni izvjestaj se ne isporucuje",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -163,7 +183,9 @@
         "SUPABASE_ANON_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "operacije",
+      "impactIfDown": "vanjski nadzor slijep; ne vidi se da je ista drugo palo",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -186,7 +208,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "popravak",
+      "impactIfDown": "nema serverske provjere paketa prije isporuke",
+      "deployedProduction": false,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -202,7 +226,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "integracija",
+      "impactIfDown": "jednosmjerni izvoz prema Katedri staje",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -216,7 +242,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "analiza",
+      "impactIfDown": "provjera prije predaje ne vraca rezultat",
+      "deployedProduction": false,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -237,7 +265,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "analiza",
+      "impactIfDown": "provjera prije predaje se ne moze pokrenuti",
+      "deployedProduction": false,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -252,7 +282,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "naplata",
+      "impactIfDown": "obveze nakon kupnje se ne izvrsavaju; kupac je platio a nije dobio",
+      "deployedProduction": null,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -270,7 +302,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "analiza",
+      "impactIfDown": "pravila profila se ne dohvacaju; analiza pada na opcu provjeru",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -283,7 +317,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "integracija",
+      "impactIfDown": "handoff prema Katedri ne biljezi ishod",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -298,7 +334,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "rast",
+      "impactIfDown": "preporuke se ne priznaju",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -321,7 +359,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "popravak",
+      "impactIfDown": "PLACENI popravak ne radi; glavni proizvod stoji",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -339,7 +379,9 @@
         "SUPABASE_URL",
         "UNSUB_PUBLIC_URL"
       ],
-      "owner": null,
+      "domain": "rokovi",
+      "impactIfDown": "podsjetnici na rokove se ne salju",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -355,7 +397,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "analiza",
+      "impactIfDown": "provjera postojanja izvora ne radi; placeni dodatak",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -368,7 +412,9 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "rokovi",
+      "impactIfDown": "odjava s podsjetnika ne radi; pravna obveza",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -383,12 +429,14 @@
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_URL"
       ],
-      "owner": null,
+      "domain": "naplata",
+      "impactIfDown": "placanja se ne knjize; kupac plati a ne dobije pravo",
+      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     }
   ],
-  "generatedAt": "2026-09-03T00:42:01.313Z",
-  "generatedFromCommit": "24a2de62b14698d991157b44e8693e7d4ebc5bea",
+  "generatedAt": "2026-09-03T17:35:15.440Z",
+  "generatedFromCommit": "6fa30bfc6b6bec92b5f76ef415f4e5a1e1507c38",
   "generator": "npm run deploy-manifest"
 }

@@ -36,6 +36,60 @@ function tajneU(dir) {
   return [...nadjene].sort();
 }
 
+/**
+ * DOMENA I POSLJEDICA PADA, autorski upisano a NE izvedeno iz koda.
+ *
+ * Ovo je jedini dio manifesta koji nije mjeren, i zato stoji odvojeno, s izricitom oznakom
+ * `authored`. Izveden je iz zaglavlja svake funkcije, ali je svrstavanje procjena, ne cinjenica;
+ * tko ga mijenja, mijenja tudju prosudbu, ne mjerenje.
+ *
+ * `owner` je u ovom projektu jedna osoba, pa polje ne razlikuje ljude nego odgovara na pitanje
+ * KOGA se tice kad padne: to je domena. Zato je vrijednost domene, a ne ime.
+ */
+const DOMENA = {
+  'admin-stats': ['operacije', 'vlasnicki pregled ostaje bez brojki; korisnika ne dira'],
+  'analytics-event': ['analitika', 'gubi se telemetrija; proizvod radi normalno'],
+  'cleanup-orphan-repairs': ['popravak', 'osirotjeli blobovi se gomilaju; tiho, vidi se tek na racunu'],
+  'client-error': ['operacije', 'greske u pregledniku prestaju stizati; kvarovi postaju nevidljivi'],
+  'create-checkout': ['naplata', 'nitko ne moze platiti'],
+  'delete-repair-job': ['popravak', 'korisnik ne moze obrisati svoj dokument; GDPR obveza'],
+  'faculty-request': ['rast', 'gubi se lista cekanja za nepokrivene fakultete'],
+  'field-render': ['popravak', 'polja i sadrzaj se ne osvjezavaju; popravak je nepotpun'],
+  'file-guarantee-claim': ['naplata', 'jamstvo se ne moze ostvariti; obveza prema kupcu'],
+  'generate-report': ['naplata', 'placeni izvjestaj se ne isporucuje'],
+  'health': ['operacije', 'vanjski nadzor slijep; ne vidi se da je ista drugo palo'],
+  'integrity-check': ['popravak', 'nema serverske provjere paketa prije isporuke'],
+  'katedra-agent-worker': ['integracija', 'jednosmjerni izvoz prema Katedri staje'],
+  'preflight-result': ['analiza', 'provjera prije predaje ne vraca rezultat'],
+  'preflight-start': ['analiza', 'provjera prije predaje se ne moze pokrenuti'],
+  'process-bonus-outbox': ['naplata', 'obveze nakon kupnje se ne izvrsavaju; kupac je platio a nije dobio'],
+  'profile-rules': ['analiza', 'pravila profila se ne dohvacaju; analiza pada na opcu provjeru'],
+  'record-completion-check': ['integracija', 'handoff prema Katedri ne biljezi ishod'],
+  'redeem-referral-signup': ['rast', 'preporuke se ne priznaju'],
+  'repair-docx': ['popravak', 'PLACENI popravak ne radi; glavni proizvod stoji'],
+  'send-reminders': ['rokovi', 'podsjetnici na rokove se ne salju'],
+  'source-check': ['analiza', 'provjera postojanja izvora ne radi; placeni dodatak'],
+  'unsubscribe-reminder': ['rokovi', 'odjava s podsjetnika ne radi; pravna obveza'],
+  'webhook-mor': ['naplata', 'placanja se ne knjize; kupac plati a ne dobije pravo'],
+};
+
+/**
+ * Stanje deploya, PROCITANO iz `docs/generated/DEPLOY_DRIFT.md`, ne pretpostavljeno.
+ *
+ * Vazna razlika koju je mjerenje otkrilo: izvjestaj poznaje 22 funkcije, a repozitorij ih ima 24.
+ * `client-error` i `process-bonus-outbox` u njemu NE POSTOJE, pa njihovo stanje nije "nije
+ * deployano" nego NEPOZNATO. Te dvije razlike se ne smiju stopiti: prva je odluka, druga je rupa
+ * u izvjestaju.
+ */
+function stanjeDeploya() {
+  const p = path.join(ROOT, 'docs', 'generated', 'DEPLOY_DRIFT.md');
+  if (!fs.existsSync(p)) return { poznato: new Set(), deployane: new Set() };
+  const md = fs.readFileSync(p, 'utf8');
+  const samoRepo = new Set([...md.matchAll(/`([a-z0-9-]+)` \| SAMO U REPOU/g)].map((m) => m[1]));
+  const deployane = new Set([...md.matchAll(/`([a-z0-9-]+)` \| \d+ \| ACTIVE/g)].map((m) => m[1]));
+  return { poznato: new Set([...samoRepo, ...deployane]), deployane };
+}
+
 export function izracunajManifest() {
   const toml = fs.readFileSync(path.join(ROOT, 'supabase', 'config.toml'), 'utf8');
   const jwtPoFunkciji = new Map();
@@ -44,6 +98,7 @@ export function izracunajManifest() {
     jwtPoFunkciji.set(m[1], v ? v[1] === 'true' : null);
   }
 
+  const deploy = stanjeDeploya();
   const imena = fs.readdirSync(FUNKCIJE, { withFileTypes: true })
     .filter((d) => d.isDirectory() && !d.name.startsWith('_'))
     .map((d) => d.name)
@@ -57,8 +112,11 @@ export function izracunajManifest() {
       verifyJwt: jwtPoFunkciji.has(ime) ? jwtPoFunkciji.get(ime) : null,
       declaredInConfig: jwtPoFunkciji.has(ime),
       requiredSecrets: tajneU(path.join(FUNKCIJE, ime)),
+      domain: (DOMENA[ime] ?? [null])[0],
+      impactIfDown: (DOMENA[ime] ?? [null, null])[1],
+      /** `true` deployano, `false` samo u repou, `null` izvjestaj tu funkciju NE POZNAJE. */
+      deployedProduction: deploy.poznato.has(ime) ? deploy.deployane.has(ime) : null,
       // Odluka, ne cinjenica. Prazno znaci "jos nije odluceno", i to je istinit zapis.
-      owner: null,
       intentionalExclusion: null,
       reason: null,
     })),

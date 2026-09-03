@@ -16,8 +16,26 @@ import { izracunajManifest } from '../scripts/generate-deploy-manifest.mjs';
  */
 const svjez = izracunajManifest() as unknown as typeof manifest;
 
-/** Zatecено 2026-09-03: nijedna funkcija nema upisanog vlasnika. Broj smije samo padati. */
-const MAX_BEZ_VLASNIKA = 24;
+/**
+ * `owner` JE UKLONJEN, svjesno, i to je promjena dizajna a ne propust.
+ *
+ * U projektu s jednim vlasnikom to polje ne razlikuje nikoga: 24 puta upisano isto ime nosi nula
+ * informacije, a ratchet nad njim bi mjerio popunjenost umjesto korisnosti. Pitanje na koje
+ * manifest treba odgovoriti nije TKO je vlasnik nego KOGA se tice kad padne, a to je domena i
+ * posljedica pada.
+ *
+ * Zamku sam pritom sam napravio i zato je ovdje imenujem: kad sam polje maknuo iz generatora,
+ * stara tvrdnja `f.owner === null` postala je `undefined === null`, dakle FALSE za svih 24, pa je
+ * ratchet javio "0 bez vlasnika" i prosao VAKUUMSKI. Zeleno je znacilo da polja nema, a citalo se
+ * kao da je posao gotov.
+ */
+const OCEKIVANE_DOMENE = ['analitika', 'analiza', 'integracija', 'naplata', 'operacije', 'popravak', 'rast', 'rokovi'];
+
+/**
+ * Funkcije koje izvjestaj o driftu UOPCE NE POZNAJE, pa im stanje nije "nije deployano" nego
+ * nepoznato. Izmjereno: izvjestaj zna za 22 funkcije, repozitorij ih ima 24.
+ */
+const NEPOZNAT_DEPLOY = ['client-error', 'process-bonus-outbox'];
 
 describe('deploy manifest', () => {
   it('commitani manifest se slaze sa svjezim izvodom iz koda', () => {
@@ -49,9 +67,18 @@ describe('deploy manifest', () => {
     }
   });
 
-  it('ratchet: broj funkcija bez upisanog vlasnika smije samo padati', () => {
-    const bez = manifest.functions.filter((f) => f.owner === null).length;
-    expect(bez).toBeLessThanOrEqual(MAX_BEZ_VLASNIKA);
+  it('svaka funkcija ima domenu i posljedicu pada, imenovane a ne prazne', () => {
+    for (const f of manifest.functions) {
+      expect(OCEKIVANE_DOMENE, `${f.function} ima nepoznatu domenu: ${f.domain}`).toContain(f.domain);
+      expect((f.impactIfDown ?? '').length, `${f.function} nema opisanu posljedicu pada`).toBeGreaterThan(20);
+    }
+  });
+
+  it('stanje deploya razlikuje "nije deployano" od "ne znamo"', () => {
+    const nepoznati = manifest.functions.filter((f) => f.deployedProduction === null).map((f) => f.function).sort();
+    expect(nepoznati, 'skup funkcija koje izvjestaj o driftu ne poznaje se promijenio').toEqual(NEPOZNAT_DEPLOY);
+    const deployane = manifest.functions.filter((f) => f.deployedProduction === true).length;
+    expect(deployane, 'deployanih u produkciji').toBe(18);
   });
 
   /**
