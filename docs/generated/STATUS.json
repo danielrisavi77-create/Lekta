@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "nazivnici": {
+    "registriranihProfila": 407,
+    "ledgerRedaka": 436,
+    "ledgerJedinstvenihProfila": 410,
+    "objasnjenje": "Redaka je vise od profila jer profil s vise vrsta rada nosi po redak za svaku. Jedinstvenih profila u ledgeru je vise nego u registru jer ledger biljezi i retke koji nisu registrirani profili; oni su izdvojeni u `anomalije`."
+  },
+  "anomalije": {
+    "rutaBezProfila": [
+      {
+        "unitId": "fpzg",
+        "workType": "final",
+        "programIds": [
+          "fpzg-ba-vvu"
+        ]
+      },
+      {
+        "unitId": "fpzg",
+        "workType": "graduate",
+        "programIds": [
+          "fpzg-joint-se"
+        ]
+      },
+      {
+        "unitId": "pravo",
+        "workType": "graduate",
+        "programIds": [
+          "pravo-joint-repic"
+        ]
+      }
+    ],
+    "profilBezJedinice": [
+      "radno-socijalno-pravo",
+      "sociologija",
+      "trgovacko-pravo"
+    ],
+    "uLedgeruNeURegistru": [
+      "radno-socijalno-pravo",
+      "sociologija",
+      "trgovacko-pravo"
+    ]
+  },
+  "generatedAt": "2026-09-03T00:05:49.341Z",
+  "generatedFromCommit": "0f81bf57ec683e426fcd6d2bef43bf785a2b53d6",
+  "generator": "npm run status"
+}
