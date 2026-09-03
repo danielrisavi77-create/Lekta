@@ -32,7 +32,6 @@
     {
       "profileId": "fpzg-politologija-zavrsni",
       "unitId": "fpzg",
-      "claim": "B",
       "realDocuments": 26,
       "realPass": 2,
       "ready": false,
@@ -44,7 +43,6 @@
     {
       "profileId": "fpzg-politologija-diplomski",
       "unitId": "fpzg",
-      "claim": "B",
       "realDocuments": 24,
       "realPass": 0,
       "ready": false,
@@ -57,7 +55,6 @@
     {
       "profileId": "fpzg-opci-akademski-rad",
       "unitId": "fpzg",
-      "claim": "B",
       "realDocuments": 22,
       "realPass": 0,
       "ready": false,
@@ -70,7 +67,6 @@
     {
       "profileId": "efzg-zavrsni",
       "unitId": "efzg",
-      "claim": "B",
       "realDocuments": 5,
       "realPass": 0,
       "ready": false,
@@ -84,7 +80,6 @@
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
       "unitId": "pravo",
-      "claim": "B",
       "realDocuments": 3,
       "realPass": 0,
       "ready": false,
@@ -98,7 +93,6 @@
     {
       "profileId": "pravo-integrirani-diplomski",
       "unitId": "pravo",
-      "claim": "B",
       "realDocuments": 2,
       "realPass": 1,
       "ready": false,
@@ -113,28 +107,24 @@
     {
       "profileId": "fpzg-novinarstvo-diplomski",
       "unitId": "fpzg",
-      "claim": "B",
       "realDocuments": 1,
       "reason": "Vlasnik ga je trazio u prvom valu, ali ima jedan uzorak. Ulazi cim korpus naraste."
     },
     {
       "profileId": "ffzg-filozofija-diplomski",
       "unitId": "ffzg",
-      "claim": "B",
       "realDocuments": 1,
       "reason": "FFZG iz vlasnikova popisa; jedan uzorak."
     },
     {
       "profileId": "pmf-matematika-graduate",
       "unitId": "pmf",
-      "claim": "B",
       "realDocuments": 2,
       "reason": "PMF iz vlasnikova popisa; dva uzorka. Nosi i `ieee` citatni token koji T3 jos provjerava."
     },
     {
       "profileId": "grf-diplomski",
       "unitId": "grf",
-      "claim": "B",
       "realDocuments": 1,
       "realPass": 1,
       "reason": "Kandidat za tehnicki fakultet u pilotu. Jedan uzorak, i nosi `ieee` token koji T3 provjerava."
@@ -142,7 +132,6 @@
     {
       "profileId": "ttf-diplomski",
       "unitId": "ttf",
-      "claim": "B",
       "realDocuments": 1,
       "reason": "Drugi kandidat za tehnicki fakultet; jedan uzorak."
     }
@@ -151,14 +140,12 @@
     {
       "profileId": "fer-diplomski",
       "unitId": "fer",
-      "claim": "E",
       "realDocuments": 3,
       "reason": "Dva neovisna razloga. Autoritet izvora je `general` (osobna stranica nastavnika na ZEMRIS-u), sto je ispod razine katedre. I razina dokaza je E: profil nema bodovanih pravila iz sluzbenog izvora, pa promocija ne bi imala sto tvrditi. Vlasnik ga je izricito izuzeo iz prvog vala."
     },
     {
       "profileId": "efzg-seminarski",
       "unitId": "efzg",
-      "claim": "E",
       "realDocuments": 8,
       "reason": "Ima osam stvarnih radova, ali razinu dokaza E: nema bodovanih pravila iz sluzbenog izvora. Broj uzoraka ne nadoknaduje nepostojanje pravila, pa profil ne ulazi u pilot dok se izvor ne nade."
     }
