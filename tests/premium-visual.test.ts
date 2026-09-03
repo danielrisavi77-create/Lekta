@@ -50,12 +50,38 @@ describe('Lekta premium visual system', () => {
   });
 
   it('writes progress without inventing values outside the source range', () => {
+    // Vrijednost se i dalje ne izmislja izvan raspona; to je izvorna namjera ovog testa i ostaje.
     const node = document.createElement('div');
+    node.setAttribute('role', 'progressbar');
     setProgressValue(node, 73, 100);
     expect(node.style.getPropertyValue('--viz-value')).toBe('73');
     expect(node.getAttribute('aria-valuenow')).toBe('73');
     setProgressValue(node, 120, 100);
     expect(node.style.getPropertyValue('--viz-value')).toBe('100');
     expect(node.getAttribute('aria-valuenow')).toBe('100');
+  });
+
+  it('bez uloge NE pise aria-value*, jer ondje nisu dopusteni', () => {
+    // Izmjereno axeom nad zivom stranicom 2026-09-03: `[data-premium-progress]` su `<i>` bez
+    // uloge, a `<i>` nema implicitnu ulogu koja bi `aria-value*` dopustala. Cetiri cvora, jedan
+    // korijen. Vizualni dio (`--viz-value`) ostaje, jer traka je i dalje traka.
+    const node = document.createElement('i');
+    setProgressValue(node, 73, 100);
+    expect(node.style.getPropertyValue('--viz-value')).toBe('73');
+    for (const attr of ['aria-valuemin', 'aria-valuemax', 'aria-valuenow']) {
+      expect(node.getAttribute(attr), attr).toBeNull();
+    }
+  });
+
+  it('atributi se BRISU kad cvor izgubi ulogu, ne samo preskacu', () => {
+    // Cvor je mogao nositi ulogu u ranijem renderu; preskakanje bi ostavilo staru vrijednost i
+    // uz nju krivi broj, sto je gore od izostanka.
+    const node = document.createElement('i');
+    node.setAttribute('role', 'progressbar');
+    setProgressValue(node, 73, 100);
+    expect(node.getAttribute('aria-valuenow')).toBe('73');
+    node.removeAttribute('role');
+    setProgressValue(node, 80, 100);
+    expect(node.getAttribute('aria-valuenow')).toBeNull();
   });
 });

@@ -19,9 +19,23 @@ export function setProgressValue(node: HTMLElement, value: number, max = 100): n
   const percent = clampPercent((value / safeMax) * 100);
   const normalized = String(Math.round(percent * 100) / 100);
   node.style.setProperty('--viz-value', normalized);
-  node.setAttribute('aria-valuemin', '0');
-  node.setAttribute('aria-valuemax', String(safeMax));
-  node.setAttribute('aria-valuenow', String(Math.min(safeMax, Math.max(0, value))));
+
+  // `aria-value*` SMIJU samo na ulozi koja ih poznaje. Postavljeni na `<i>` bez uloge nisu
+  // dopusteni (axe `aria-allowed-attr`), a bas takve trake crta `[data-premium-progress]` u
+  // `index.html`: cetiri cvora, jedan korijen. Izmjereno 2026-09-03 axeom nad zivom stranicom.
+  //
+  // ZASTO SE NE DODAJE `role="progressbar"` umjesto toga: vrijednost je vec u tekstu POKRAJ trake
+  // (`<b>0%</b>` u istom `.premium-bar`), pa bi progressbar isti podatak najavio dvaput. Traka je
+  // ukras uz broj, ne zamjena za njega.
+  const role = node.getAttribute('role');
+  if (role === 'progressbar' || role === 'meter') {
+    node.setAttribute('aria-valuemin', '0');
+    node.setAttribute('aria-valuemax', String(safeMax));
+    node.setAttribute('aria-valuenow', String(Math.min(safeMax, Math.max(0, value))));
+  } else {
+    // Brisu se, a ne samo preskacu: cvor je mogao nositi ulogu u ranijem renderu.
+    for (const attr of ['aria-valuemin', 'aria-valuemax', 'aria-valuenow']) node.removeAttribute(attr);
+  }
   return percent;
 }
 
