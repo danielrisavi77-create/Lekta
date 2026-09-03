@@ -71,6 +71,7 @@ import './repair-panel.css';
 import '../preflight/preflight-panel.css';
 const FPZG_SUBMISSION_CALENDAR: any = _FPZG_CAL;
 import { WORK_TYPE_LABELS, CHECK_ITEMS } from '../config/config-loader';
+import { PRICING_TIERS } from '../config/pricing-tiers';
 // (R3) zajednicka normalizacija check* zastavica, dijeli se s golden resolveProfile
 import { analyzeDocxOffThread, cancelActiveAnalysis, isAnalysisCancelled } from '../analysis/analyze-docx-client';
 import { uploadCapBytes, decompressionBudgetBytes } from '../analysis/memory-budget';
@@ -270,11 +271,7 @@ let lastProfileContext='';let _profileConfirmed=false;
 // Ponuda ima tri tiera: besplatna automatska provjera (teaser), puni izvjestaj po
 // vrsti rada (otkljucava se u rezultatu), i rucno uredivanje (ljudski servis preko
 // obrasca narudzbe). Ovo je izvor istine za landing sekciju Paketi.
-const PRICING_TIERS=[
- {id:'free',name:'Besplatna provjera',price:'0 €',desc:'Automatski audit dokumenta, lokalno u pregledniku.',features:['Ocjena i pregled po kategorijama','Popis mogućih problema i napomena','Bez registracije, dokument ostaje na uređaju'],cta:{href:'#analyzer',label:'Provjeri besplatno'}},
- {id:'perwork',name:'Provjera po radu',price:'od 3,99 €',featured:true,desc:'Puno objašnjenje i automatski popravak, cijena prema vrsti rada.',features:['Sve iz besplatne provjere','Puni izvještaj: objašnjenje svakog nalaza, ne samo ocjena','Automatski popravak dijelova koje odabereš (koliko platiš, toliko popravaka)','Tehnička provjera spremnosti (oblikovanje, struktura, citiranje) i preflight PDF-a','Diplomski i doktorski: 14 dana ponovnih provjera nakon ispravka, uključeno','Seminarski 3,99 · Završni 5,99 · Diplomski 9,99 · Doktorski 24,99 €'],cta:{href:'#analyzer',label:'Provjeri rad'}},
- {id:'manual',name:'Ručno uređivanje',price:'od 39 €',desc:'Ljudska obrada dokumenta kad ti treba gotov rezultat.',features:['Tehničko oblikovanje Word dokumenta','Provjera citatnica i literature','Revizija i prioritetna obrada'],cta:{order:'format',label:'Naruči uređivanje'}}
-];
+// PRICING_TIERS zive u `config/pricing-tiers` (vidi ondje zasto).
 // Rucni paketi za obrazac narudzbe (ljudska usluga). Automatizirana provjera je gore
 // u PRICING_TIERS i ne prolazi kroz ovaj obrazac.
 /**
