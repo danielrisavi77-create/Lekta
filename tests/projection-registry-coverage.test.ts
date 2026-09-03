@@ -49,7 +49,6 @@ function registeredScripts(): Set<string> {
  */
 const NEREGISTRIRANE_RATCHET = [
   'citation-dossiers',
-  'reconcile-programs',
   'repair-gap',
   'scored-value-drift',
   'worklist',
@@ -82,7 +81,7 @@ describe('pokrivenost registra projekcija', () => {
 
   /** Ratchet koji raste nije ratchet. Brojka je zakovana da ga nitko ne "prosiri" u prolazu. */
   it('ratchet ne smije rasti', () => {
-    expect(NEREGISTRIRANE_RATCHET.length).toBeLessThanOrEqual(5);
+    expect(NEREGISTRIRANE_RATCHET.length).toBeLessThanOrEqual(4);
     expect(NEPOSTOJECE_RATCHET.length).toBe(0);
   });
 

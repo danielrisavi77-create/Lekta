@@ -92,6 +92,25 @@ export const PROJECTIONS = [
     regenerate: 'npm run completion-ledger',
   },
   {
+    // Registriran 2026-09-04, prvi s ratcheta od pet neregistriranih. Izvori su UTVRDJENI citanjem
+    // samog generatora i dvaju ucitavaca koje uvozi, ne pretpostavljeni: kriv popis izvora daje
+    // laznu sigurnost, sto je gore od neregistrirane projekcije.
+    id: 'reconcile-programs',
+    artifacts: ['docs/generated/program-reconcile.json'],
+    sources: [
+      'data/programs/program-registry.json',
+      'data/catalog/zagreb-catalog.json',
+      'data/profiles/verified-profiles-heavy.json',
+      'data/profiles',
+      'src/programs/reconcile.ts',
+      'src/programs/program-schema.ts',
+      'src/profiles/drafts-runtime.ts',
+      'src/catalog/catalog-loader.ts',
+      'scripts/reconcile-programs.mts',
+    ],
+    regenerate: 'npm run reconcile-programs',
+  },
+  {
     id: 'repair-recipe',
     artifacts: ['docs/REPAIR_RECIPE.md', 'data/generated/repair-params-by-profile.json'],
     sources: ['src/repair', 'src/ui/repair-items.ts', 'data/profiles'],
