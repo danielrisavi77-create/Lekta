@@ -21,6 +21,10 @@
  *  3. Mutacija imenuje STVARAN kvar koji imitira, ne izmisljen.
  */
 import { describe, it, expect } from 'vitest';
+import {
+  SVA_STANJA, SVI_DOGADAJI, transition,
+  type WizardEvent, type WizardState,
+} from '../src/ui/wizard-machine';
 import { countsAsRealDocxProof, type EvidenceManifest, type ProofMethod } from '../src/corpus/evidence-manifest';
 import extractionIndex from '../data/tools/citation-specs/extractions/INDEX.json';
 import { readFileSync } from 'node:fs';
@@ -686,6 +690,29 @@ const MUTATIONS: Mutation[] = [
     // Baseline: pravilo koje TU os stvarno uredjuje mora dati dokaz, inace tvrdnja gore prolazi
     // samo zato sto lupa ne radi nista.
     cleanBefore: () => evidenceFor('section-surgery-rules', 'page.numbers.scheme', 'Shema numeriranja stranica', 'formatting') === 1,
+  },
+  /**
+   * T16 korak B2. Bez ove mutacije `transition` bi mogao biti `switch` koji za nepoznat par vrati
+   * ZATECENO stanje, suite bi ostao zelen, a stroj ne bi tvrdio nista: nedopusten prijelaz ne bi
+   * bio greska nego samo jos jedan upis. Tocno tako `app.ts` radi danas, sa 97 rucnih dodira
+   * `hidden` i bez ijedne tablice prijelaza.
+   */
+  {
+    id: 'stroj/nedozvoljen-prijelaz-tiho-prolazi',
+    imitates:
+      'stroj stanja napisan kao `switch` koji nepoznat par stanje/dogadaj propusta umjesto da ga ' +
+      'odbije, pa preskakanje koraka (dokument -> analiza) izgleda kao dopusten prijelaz',
+    caught: () => {
+      const popustljiv = (st: WizardState, dg: WizardEvent): WizardState => transition(st, dg) ?? st;
+      let dopusteni = 0;
+      for (const st of SVA_STANJA) for (const dg of SVI_DOGADAJI) if (popustljiv(st, dg) !== null) dopusteni += 1;
+      return dopusteni === SVA_STANJA.length * SVI_DOGADAJI.length;
+    },
+    cleanBefore: () => {
+      let dopusteni = 0;
+      for (const st of SVA_STANJA) for (const dg of SVI_DOGADAJI) if (transition(st, dg) !== null) dopusteni += 1;
+      return dopusteni === 9 && transition('dokument', 'pokreni-analizu') === null;
+    },
   },
 ];
 describe('mutacijsko testiranje: garda stvarno grizu', () => {
