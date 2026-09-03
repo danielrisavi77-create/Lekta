@@ -120,7 +120,7 @@ function authorityChip(item: {
   return chip;
 }
 
-/** Naslov zone u ledgeru (nije stavka: `role=presentation` da ga citac ekrana ne broji kao izbor). */
+/** Naslov zone u ledgeru: stavka liste koja NIJE izbor (nema kontrole), vidi biljesku ispod. */
 function zoneHeading(title: string, explanation: string): HTMLLIElement {
   const li = document.createElement('li');
   li.className = 'lekta-repair-ledger-zone';

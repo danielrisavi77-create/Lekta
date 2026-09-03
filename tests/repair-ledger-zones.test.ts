@@ -67,10 +67,19 @@ describe('ledger: dvije zone umjesto ravnog popisa', () => {
     expect(openLedger([advanced('Sadržaj')]).querySelectorAll('.lekta-repair-ledger-zone')).toHaveLength(0);
   });
 
-  it('naslov zone nije izbor (role=presentation), da ga citac ekrana ne broji kao stavku', () => {
+  it('naslov zone NIJE izbor, ali JEST stavka liste', () => {
+    // Tvrdnja je 2026-09-03 obrnuta u prvom dijelu, i to je ispravak a ne popustanje. Ranije se
+    // trazio `role="presentation"`, ali ta uloga izbacuje `<li>` iz semantike liste, pa `<ol>`
+    // dobiva dijete koje nije stavka i axe pravilo `list` pada (`ebeaf624`). Izvor je popravljen
+    // (`a16470bc`), a ova je tvrdnja ostala iza njega i tvrdila suprotno od koda.
+    //
+    // NAMJERA GARDA JE OCUVANA i nosi je druga tvrdnja: naslov zone ne smije sadrzavati nijednu
+    // kontrolu, dakle citac ekrana ga cita kao tekst u listi, a ne kao nesto sto se bira.
     const ledger = openLedger([safe('Font'), advanced('Sadržaj')]);
-    for (const zone of ledger.querySelectorAll('.lekta-repair-ledger-zone')) {
-      expect(zone.getAttribute('role')).toBe('presentation');
+    const zones = ledger.querySelectorAll('.lekta-repair-ledger-zone');
+    expect(zones.length, 'bez zona bi obje tvrdnje prosle vakuumski').toBeGreaterThan(0);
+    for (const zone of zones) {
+      expect(zone.getAttribute('role')).toBeNull();
       expect(zone.querySelector('input,button')).toBeNull();
     }
   });
