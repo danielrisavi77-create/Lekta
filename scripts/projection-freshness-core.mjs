@@ -46,7 +46,7 @@ export const PROJECTIONS = [
     id: 'closed-loop',
     artifacts: ['docs/generated/closed-loop.json'],
     sources: ['src/repair', 'src/analysis', 'tests/helpers/violating-docx.ts', 'scripts/run-closed-loop.mts'],
-    regenerate: 'npx vite-node scripts/run-closed-loop.mts',
+    regenerate: 'npm run closed-loop',
   },
   {
     id: 'real-corpus',
@@ -70,6 +70,26 @@ export const PROJECTIONS = [
     artifacts: ['docs/generated/real-corpus-backlog.json', 'docs/generated/real-corpus-backlog.md'],
     sources: ['docs/generated/faculty-matrix.json', 'scripts/generate-real-corpus-backlog.mts'],
     regenerate: 'npx vite-node scripts/generate-real-corpus-backlog.mts',
+  },
+  {
+    // Dodan 2026-09-03, nakon sto je izostao i to se odmah osvetilo: popravak `faculty-matrix`
+    // ucinio je ledger ustajalim, a nijedan screening to nije vidio jer projekcija nije bila
+    // registrirana. Upravo slucaj na koji vodic upozorava.
+    id: 'completion-ledger',
+    artifacts: ['docs/generated/completion-ledger.json'],
+    sources: [
+      'docs/generated/faculty-matrix.json',
+      'docs/generated/repair-coverage.json',
+      'docs/generated/closed-loop.json',
+      'data/coverage/scored-coverage.json',
+      'data/programs/program-registry.json',
+      'data/title-pages/templates-index.json',
+      'data/tools/citation-specs/verified-index.json',
+      'data/declarations/declarations.json',
+      'src/verification',
+      'scripts/generate-completion-ledger.mts',
+    ],
+    regenerate: 'npm run completion-ledger',
   },
   {
     id: 'repair-recipe',

@@ -61,9 +61,16 @@ describe('svjezina pecenih projekcija', () => {
    * Popis mora pokrivati SVIH sest izmjerenih driftova. Bez ove tvrdnje bi netko mogao ukloniti
    * ulaz i time uciniti da drift te projekcije opet nitko ne vidi.
    */
-  it('popis pokriva sve projekcije koje su danas zaostale', () => {
+  it('popis pokriva sve projekcije koje su danas zaostale, ukljucujuci naknadno registrirane', () => {
     const ids = PROJECTIONS.map((p: { id: string }) => p.id).sort();
-    expect(ids).toEqual(['closed-loop', 'faculty-matrix', 'real-corpus', 'real-corpus-backlog', 'repair-recipe']);
+    expect(ids).toEqual([
+      'closed-loop',
+      'completion-ledger',
+      'faculty-matrix',
+      'real-corpus',
+      'real-corpus-backlog',
+      'repair-recipe',
+    ]);
     for (const p of PROJECTIONS as Array<{ artifacts: string[]; sources: string[]; regenerate: string }>) {
       expect(p.artifacts.length, 'svaka projekcija mora imati artefakt').toBeGreaterThan(0);
       expect(p.sources.length, 'svaka projekcija mora imati izvor').toBeGreaterThan(0);
