@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { pageStyles } from './helpers/page-styles';
 
 /**
  * KONTRAST PRIGUSENOG TEKSTA NA TONIRANIM POVRSINAMA.
@@ -22,7 +21,7 @@ import { resolve } from 'node:path';
  * korisnik nikad ne vidi.
  */
 
-const INDEX = readFileSync(resolve(__dirname, '..', 'index.html'), 'utf8');
+const INDEX = pageStyles();
 
 type Rgb = readonly [number, number, number];
 
