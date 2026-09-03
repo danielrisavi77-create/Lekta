@@ -66,6 +66,12 @@ git identitet i reflog, pa nijedan git dokaz ne razlikuje tko je izvrsio naredbu
 
 - UREDIVACKA sesija ide u VLASTITI `git worktree` (`EnterWorktree`; `worktree.baseRef: "head"` je
   postavljen). Zajednicko stablo samo za ono sto NE pise: citanje, mjerenje, pregled.
+- NE IMENUJ sesiju kojoj commit nisi provjerio. Spor (3) nema rjesenje poslije, ali ima prevenciju
+  prije: 2026-09-03 je jedna sesija dvaput pripisala rad krivoj sesiji, oba puta onoj s kojom je
+  RAZGOVARALA a ne onoj koja ga je izvela (svi commitamo kao `Daniel`, pa ime sugovornika popuni
+  prazninu). Drugi put je pritom ponisten tudji rad, a objasnjenje otislo krivoj adresi, pa strana
+  koje se tice nije ni znala. Pisi "autor tog commita" kad ime ne mozes potkrijepiti, i javi
+  ispravak i kad je pripis POHVALAN: pohvala krivoj adresi zavarava jednako kao primjedba.
 - GARD: `PreToolUse` hook nad Bashem odbija `git commit` bez `--only`, `git add -A`/`.`/`-u` i
   `git commit --amend`. Izvrsava ga HARNESS, ne model. Skripta je IZVAN repozitorija
   (`~/.claude/hooks/lekta-git-guard.mjs`), jer `.claude/hooks/` nije gitignoriran. Stiti od

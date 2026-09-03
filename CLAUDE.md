@@ -227,6 +227,17 @@ Treca nema tehnicko rjesenje NAKON sto se dogodi: dijeli se stablo, povijest, gi
 (`Daniel`) i reflog, pa nijedan git dokaz ne razlikuje tko je izvrsio naredbu. Prve dvije se
 poprave, treca ne.
 
+**Ne imenuj sesiju kojoj commit nisi provjerio.** Spor iz retka 3 nema rjesenje POSLIJE, ali ima
+jeftinu prevenciju PRIJE. Izmjereno 2026-09-03: jedna sesija je istoga dana dvaput pripisala rad
+krivoj sesiji, i oba puta onoj s kojom je o toj temi RAZGOVARALA, a ne onoj koja ga je izvela. Ime
+sugovornika popuni prazninu koju git ne moze popuniti, jer svi commitamo kao `Daniel`.
+
+Steta nije samo kozmeticka: drugi put je ponisten tudji rad, a objasnjenje je otislo sesiji koja ga
+nije napisala, pa strana koje se tice za to nije ni znala. U poruci drugoj sesiji zato pisi "autor
+tog commita", osim ako ime mozes potkrijepiti. Najcesce ne mozes, sto je razlog vise da ga ne
+izmisljas. Ako ti netko pripise tudji rad, javi ispravak i kad je pripis pohvalan: pohvala krivoj
+adresi jednako zavarava kao i primjedba.
+
 **Uredivacka sesija ide u VLASTITI `git worktree`.** Tada dvije sesije fizicki ne mogu pisati istu
 datoteku, a susret se dogadja pri mergeu, gdje ga git vidi i prijavi. Harness ima `EnterWorktree`;
 `worktree.baseRef: "head"` je vec postavljen. Zajednicko stablo ostaje samo za ono sto NE pise:
