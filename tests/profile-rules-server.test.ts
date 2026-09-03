@@ -12,7 +12,8 @@
  */
 import { describe, it, expect } from 'vitest';
 import { createHash } from 'node:crypto';
-import { readFileSync, existsSync, readdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { draftFilePaths } from '../scripts/draft-files';
 import { resolve } from 'node:path';
 import { buildEvidenceIndex } from '../src/profiles/evidence-projection';
 import {
@@ -50,26 +51,7 @@ for (const row of registry) {
 }
 // Dokazi se citaju iz ISTIH draftova kao u generatoru. Kad bi test gradio bez njih, drift bi
 // prijavio razliku koje nema i tjerao na regeneraciju koja bi dokaze IZBRISALA iz artefakta.
-/**
- * Popis autorskih draftova, bez `globSync`: taj API trazi Node 22+, a CI vrti i Node 20, pa je
- * korak ondje padao dok je lokalno bio zelen. Obilazak je namjerno DOSLOVAN i ponovljen i u
- * generatoru i u drift testu: da ga dijele, greska u obilasku bila bi ista na obje strane i drift
- * je ne bi vidio. Putanje su s kosom crtom i sortirane, pa je redoslijed jednak na svim platformama.
- */
-function draftPaths(root: string): string[] {
-  const base = resolve(root, 'data', 'profiles');
-  const out: string[] = [];
-  for (const unit of readdirSync(base, { withFileTypes: true })) {
-    if (!unit.isDirectory()) continue;
-    const dir = resolve(base, unit.name, 'drafts');
-    if (!existsSync(dir)) continue;
-    for (const f of readdirSync(dir)) if (f.endsWith('.json')) out.push(`data/profiles/${unit.name}/drafts/${f}`);
-  }
-  if (out.length === 0) throw new Error('nijedan draft nije nadjen; prazan skup nije prolaz');
-  return out.sort();
-}
-
-const draftFiles = draftPaths(ROOT)
+const draftFiles = draftFilePaths(ROOT)
   .map((rel) => JSON.parse(readFileSync(resolve(ROOT, rel), 'utf8')) as Record<string, unknown>);
 const evidenceIndex = buildEvidenceIndex(draftFiles, sourceIndex);
 

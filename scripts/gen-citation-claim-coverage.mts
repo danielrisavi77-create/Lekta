@@ -18,6 +18,7 @@
  * Gard:     tests/citation-claim-coverage.test.ts (drift + ratchet koji smije samo padati)
  */
 import { readFileSync, readdirSync, existsSync, writeFileSync } from 'node:fs';
+import { withProvenance } from './lib/provenance.mjs';
 import { CITATION_TOKENS } from '../src/citations/citation-meta';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -152,7 +153,7 @@ const artifact = {
 
 writeFileSync(
   join(root, 'docs/generated/citation-claim-coverage.json'),
-  JSON.stringify(artifact, null, 2) + '\n',
+  JSON.stringify(withProvenance(artifact, 'npm run citation-claim-coverage'), null, 2) + '\n',
 );
 console.log(
   `citation-claim-coverage.json: ${rows.length} profila (` +

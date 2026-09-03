@@ -9,6 +9,7 @@
  * imena podatak s kojim se ne moze raditi.
  */
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+import { withProvenance } from './lib/provenance.mjs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import {
@@ -46,7 +47,7 @@ const report = reconcilePrograms(
 mkdirSync(join(root, 'docs', 'generated'), { recursive: true });
 writeFileSync(
   join(root, 'docs', 'generated', 'program-reconcile.json'),
-  JSON.stringify(report, null, 2) + '\n',
+  JSON.stringify(withProvenance(report, 'npm run reconcile-programs'), null, 2) + '\n',
 );
 
 const s = report.summary;

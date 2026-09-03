@@ -1,6 +1,72 @@
-# Handoff: popravak je regresirao na stvarnim radovima (9 padova, 2 pass-regresije)
+# Handoff: regresija popravka na stvarnim radovima
+
+> STANJE: neidempotentnost je ZATVORENA (`6fa30bfc`, izmjereno na `46d6fa63`). SVAKI preostali
+> pad je sada regresija: 4 komada, razred
+> `structure.heading.hierarchy`. Detalji odmah ispod; sve nize od odjeljka "Sto padovi NISU"
+> opisuje stanje PRIJE tog popravka.
 
 Stanje na dan 2026-09-03. Mjereno, ne procijenjeno. Sve brojke se reproduciraju naredbom nize.
+
+## STATUS 2026-09-03 (kasnije isti dan): NEIDEMPOTENTNOST JE ZATVORENA
+
+Razred zbog kojeg ovaj dokument postoji je RIJESEN. Prijavila druga sesija, commit `6fa30bfc`
+"duboko ciscenje velicine nije bilo fiksna tocka, pa je prvi klik ostavljao 57 posto posla".
+
+    neidempotentnih   7  ->  0
+    fail             11  ->  4
+    pass-regresija    4  ->  4   (NEPROMIJENJENO)
+
+Uzrok je bio `dominantDirectRunSize`: preskakao je runove bez `w:sz`, pa je vlastiti ucinak uklanjao
+iz vlastitog ulaza; drugi prolaz je zato nalazio novu dominantu i opet pisao.
+
+IZMJERENO NAKON POPRAVKA (druga sesija, izoliran worktree na pushanom `46d6fa63`, junctioni na
+`node_modules` i `tests/fixtures/docx-local`, `documentCount` potvrdjen prije svega ostalog):
+
+    dokumenata        45
+    padova             4      (bilo 11)
+    neidempotentnih    0      (bilo 7)
+    pass-regresija     4      nepromijenjeno
+    integritet         0
+    razrjesenje       20/94 = 21,3 %
+
+    sve cetiri regresije su `structure.heading.hierarchy`:
+    local-13-zavrsni, local-27-zavrsni, local-33-diplomski, local-36-diplomski
+
+**NAJVAZNIJA POSLJEDICA: poslije `6fa30bfc` je SVAKI preostali pad regresija.** Razred
+neidempotentnosti vise ne postoji, pa odjeljak "Sto padovi NISU" nize opisuje stanje koje se vise ne
+moze reproducirati.
+
+O RAZRJESENJU 21,3 %: ne usporedjuj ga izravno s ranijih 39,8 %, ali razlog vise nije hipoteza nego
+je IZMJEREN. Druga sesija je oba skupa pustila nad ISTIM kodom (`46d6fa63`), isti lokalni korpus od
+38 radova, jedina razlika devet sidecara privremeno vracenih u dopusteni skup (izmjena je zivjela
+samo u worktreeu za bacanje i nikad nije commitana):
+
+    populacija 45, samo stvarni radovi      20/94  = 21,3 %
+    populacija 54, uz devet sintetickih     53/133 = 39,8 %
+    tih devet sintetickih, sami za sebe     33/39  = 84,6 %
+
+**Razlika je stopostotno populacija, nula posto proizvod.** `21,3 %` NIJE losiji proizvod nego
+posteniji uzorak: sinteticke fixture rjesavaju se cetiri puta lakse od stvarnih radova, pa su ranije
+dizale prosjek.
+
+Potvrduje to i drugi kut: padovi i regresije ostaju 4 i 4 u OBJE populacije. Tih devet dokumenata ne
+doprinosi nijednom padu, dakle bili su cist dobitak za postotak i nista drugo.
+
+Time se zatvara i ranija nedoumica iz ove sesije: `84,6 %` koji pokazuje COMMITANI artefakt
+(`repair-real-corpus.json`, bez `--local`) upravo je `33/39`, dakle razrjesenje SINTETICKOG podskupa.
+Nije rijec o boljem popravku nego o lakšem uzorku.
+
+NIZVODNA PROVJERA: `39,8` se pojavljuje ISKLJUCIVO u ovom dokumentu. Nema ga ni u jednom podatkovnom
+artefaktu, ni u jednoj HTML stranici, ni u `data/`, pa se nijedna javna tvrdnja nije oslanjala na
+napuhan broj.
+
+**OSTAJE OTVORENO: pass-regresije, 4 komada, razred `structure.heading.hierarchy`.** Taj zahvat ih
+nije dirao. Njih polovi necommitani rad na `normalizeProposedLevels` u
+`src/analysis/heading-structure.ts` (4 -> 2), opisan nize; dok je necommitan, ne postoji ni za koga
+osim za svog autora.
+
+Sve ispod ovog odjeljka opisuje stanje PRIJE `6fa30bfc` i ostaje kao zapis puta, ne kao tekuci
+nalaz.
 
 ## Sazetak u jednoj recenici
 
@@ -21,6 +87,64 @@ da je uzrok u commitanom kodu; dio razlike moze doci iz tudjeg necommitanog rada
 Ovo je ista zamka pred kojom ovaj vodic drugdje upozorava, i upao sam u nju sam. Prvi korak zato NIJE
 "vjeruj ovim brojkama" nego: **ponovi mjerenje na CISTOM, fiksnom commitu u izoliranom worktreeu.**
 Ako se brojke razlikuju, ta je razlika sama po sebi nalaz.
+
+### RAZRIJESENO 2026-09-03: necommitani rad je POMAGAO, commitani kod je GORI
+
+Druga sesija je izmjerila oba stanja nad istim korpusom (45 dokumenata, 38 lokalnih + 7 commitanih),
+uz HEAD prikovan na `29828b46` i izoliran worktree:
+
+    CIST HEAD (bez necommitane zastite)   fail 11   pass-regresija 4
+    STABLO (s necommitanom zastitom)      fail  9   pass-regresija 2
+
+Dakle necommitani rad na `normalizeProposedLevels` u `src/analysis/heading-structure.ts` UKLANJA dva
+pada i dvije regresije; sve cetiri su ista provjera, `structure.heading.hierarchy`.
+
+**Posljedica za ovaj handoff: regresija u COMMITANOM kodu je VECA nego sto sam prijavio, ne manja.**
+Moje brojke (9 i 2) izmjerene su sa ukljucenim tudjim popravkom. Bez njega je 11 i 4. Pretpostavio
+sam da necommitani rad brojke kvari; kvario ih je u suprotnom smjeru.
+
+Sto se tocno dogodilo po dokumentu:
+
+    rijeseno   local-33-diplomski   fpzg-politologija-diplomski   77->78
+               local-36-diplomski   fpzg-politologija-diplomski   82->84
+    ostaje     local-13-zavrsni     fpzg-politologija-zavrsni     81->82
+               local-27-zavrsni     fpzg-politologija-zavrsni     82->87
+
+SMIJE SE TVRDITI SAMO OVO: zastita uklanja obje `-diplomski` regresije i nijednu `-zavrsni`.
+
+NE SMIJE SE TVRDITI da je profil uzrok, iako obrazac na to vuce. Treca sesija je to oborila
+mjerenjem: ista dva profila imaju 16 dokumenata koji uopce ne regresiraju, pa profil ne moze biti
+uvjet. Prva verzija ovog odjeljka je pisala da podjela "pokazuje gdje gledati, u razliku medju
+profilima"; to je bilo prejako i ovdje je ublazeno, jer bi inace sljedeca sesija trazila razliku
+koja nije uzrok.
+
+Korelacija je odbacena mjerenjem: `heading-style-fixer` je promijenio 27 dokumenata, a regresirala
+su 4.
+
+### NAZIVNIK NIJE STABILAN IZMEDJU SESIJA (razjasnjeno mjerenjem)
+
+Moj prolaz je prijavio 54 dokumenta, njihov 45. Uzrok NIJE u harnessu: `discoverRealCorpus` uzima
+SVAKI `.docx` koji ima pratitelja i prodje `sidecarAdmitted`, bez uzorkovanja i bez granice.
+
+NIJE NESTAO NIJEDAN RAD. Prva verzija ovog odjeljka tvrdila je da je iz gitignoriranog direktorija
+uklonjeno devet radova. To je bilo netocno i opasno, jer bi poslalo sljedecu sesiju u potragu za
+devet izgubljenih studentskih radova. Aritmetika (provjerena neovisno):
+
+    commitanih fixtura              19
+    oznaceno `synthetic` SADA       12   ->  dopusteno  7    7 + 38 = 45
+    oznaceno `synthetic` PRIJE       3   ->  dopusteno 16   16 + 38 = 54
+    lokalnih `.docx`                38   u OBA prolaza
+
+Promijenila se dakle populacija DOPUSTENIH commitanih fixtura, jer su im pratitelji u meduvremenu
+oznaceni kao sinteticki (`da442a8e`, `c9491a8b`). To je bilo ispravno: ti dokumenti NISU studentski
+radovi. Posljedica za moje brojke je da je moj skup od 54 ukljucivao devet sintetickih dokumenata
+koji ne bi smjeli brojati kao stvarni radovi; njihov skup od 45 je cisci.
+
+PRAKTICNA POSLJEDICA, sada s tocnim razlogom: nazivnik nije konstanta i moze se promijeniti BEZ
+IJEDNE promjene dokumenata, jer pripadnost skupu odredjuju SIDECARI, a njih ureduju druge sesije.
+Dva stanja koda usporediva su samo ako su mjerena nad istim skupom DOPUSTENIH dokumenata, ne samo
+nad istim direktorijem. Prije svakog zakljucka procitaj `documentCount` iz artefakta koji drzis u
+ruci, ne iz ovog dokumenta.
 
 ## Kako reproducirati (obavezno prije bilo kakvog zahvata)
 

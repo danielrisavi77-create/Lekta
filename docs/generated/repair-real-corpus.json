@@ -3,7 +3,9 @@
   "scope": {
     "root": "tests/fixtures/docx",
     "excludesSynthetic": true,
-    "contentStored": false
+    "contentStored": false,
+    "targetedCheckCount": 0,
+    "measuresRepairEffectiveness": false
   },
   "manifest": [
     {

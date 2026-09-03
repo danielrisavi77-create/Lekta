@@ -583,6 +583,27 @@ const MUTATIONS: Mutation[] = [
       !sidecarAdmitted({ profileId: 'fpzg-politologija-zavrsni', synthetic: true }),
   },
   {
+    id: 'korpus/prazan-izvjestaj-tvrdi-da-mjeri',
+    imitates:
+      'commitani korpusni izvjestaj tvrdi `measuresRepairEffectiveness: true` uz NULA ciljanih ' +
+      'provjera. Izmjereno 2026-09-03: nakon oznacavanja devet sidecara kao `synthetic` u ' +
+      'commitanom skupu je ostalo 7 fixtura i 0 ciljanih provjera, pa su `failCount 0` i ' +
+      '`passRegressionCount 0` u `tests/real-corpus.test.ts` postali VAKUUMSKI istiniti. ' +
+      'Isti kod nad stvarnim radovima daje 94 ciljane provjere, 4 pada i 4 regresije, i upravo ' +
+      'zato je regresija popravka danima stajala neprimijecena: commitani gard je po konstrukciji ' +
+      'ne moze vidjeti, a njegovo zeleno se cita kao potvrda zdravlja',
+    caught: () => {
+      const lazan = { targetedCheckCount: 0, measuresRepairEffectiveness: true };
+      return lazan.measuresRepairEffectiveness !== lazan.targetedCheckCount > 0;
+    },
+    // Baseline: posten prazan izvjestaj (nula provjera, oznaka `false`) NE smije se prijaviti,
+    // inace bi gard vristao na zateceno i tocno stanje.
+    cleanBefore: () => {
+      const posten = { targetedCheckCount: 0, measuresRepairEffectiveness: false };
+      return posten.measuresRepairEffectiveness === posten.targetedCheckCount > 0;
+    },
+  },
+  {
     id: 'korpus/nepoznata-traka-tumaci-se-kao-real',
     imitates:
       'tipfeler ili nova traka u sidecaru (`converted-v2`, `koncertirano`) protumaci se kao `real` ' +

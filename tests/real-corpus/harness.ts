@@ -151,7 +151,28 @@ export interface RealCorpusResult {
 
 export interface RealCorpusReport {
   schemaVersion: 1;
-  scope: { root: string; excludesSynthetic: true; contentStored: false; localDocumentCount?: number };
+  scope: {
+    root: string;
+    excludesSynthetic: true;
+    contentStored: false;
+    localDocumentCount?: number;
+    /**
+     * Zbroj CILJANIH provjera nad cijelim skupom, i izricita tvrdnja mjeri li ovaj izvjestaj uopce
+     * ucinkovitost popravka.
+     *
+     * Zasto postoji, izmjereno 2026-09-03: commitani korpus (7 dopustenih fixtura nakon oznacavanja
+     * devet sidecara kao `synthetic`) ima NULA ciljanih provjera. Njegove tvrdnje `failCount 0`,
+     * `passRegressionCount 0` i `integrityFailureCount 0` su time VAKUUMSKI istinite: nema sto pasti.
+     * Isti kod nad stvarnim radovima daje 94 ciljane provjere, 4 pada i 4 regresije.
+     *
+     * Posljedica nije akademska. Jedina mjera koju CI vrti po konstrukciji ne moze vidjeti regresiju
+     * popravka, pa je ona danima stajala neprimijecena; nije je nitko propustio pogledati, nego
+     * commitani gard nije sposoban je vidjeti. Zato izvjestaj to sada kaze o sebi, umjesto da
+     * nula padova izgleda kao potvrda zdravlja.
+     */
+    targetedCheckCount: number;
+    measuresRepairEffectiveness: boolean;
+  };
   manifest: RealCorpusManifestEntry[];
   results: RealCorpusResult[];
   summary: {
@@ -464,6 +485,8 @@ export async function runRealCorpus(
       excludesSynthetic: true,
       contentStored: false,
       ...(localCount ? { localDocumentCount: localCount } : {}),
+      targetedCheckCount: results.reduce((total, result) => total + result.targetedCheckCount, 0),
+      measuresRepairEffectiveness: results.some((result) => result.targetedCheckCount > 0),
     },
     // Serijalizira se REPO-RELATIVNA putanja; apsolutna bi izvjestaj vezala uz jedan stroj.
     manifest: manifest.map((entry) => ({ ...entry, ...(entry.root ? { root: repoRelative(entry.root) } : {}) })),

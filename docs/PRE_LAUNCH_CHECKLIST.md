@@ -15,6 +15,12 @@ Pravila rada vrijede iz CLAUDE.md (build gate, mali commitovi). Kontekst proizvo
 > [docs/roadmap/LAUNCH_CHECKLIST.md](roadmap/LAUNCH_CHECKLIST.md). P0 oznake ovdje (po sekciji) i
 > P0-0x sheme u AUDIT_MASTER.md su zasebne i ne preslikavaju se 1:1.
 
+> STANJE 2026-09-03: od 45 stavki nijedna nije bila oznacena. Prolazom kroz repozitorij oznacene su
+> CETIRI, i to samo one za koje postoji GARD ili TEST, nikad "postoji u kodu". Jedna od njih (XSS u
+> izvezenom izvjestaju, P0) do tog dana nije imala nijedan test, pa je test napisan prije oznake.
+> Ostalih 41 ostaje neoznaceno: dio trazi vlasnika (pravni subjekt, MoR, rucni test na uredjaju),
+> dio trazi rad koji jos nije napravljen.
+
 ## Launch gate (sve mora biti zeleno)
 
 - [ ] Svi P0 iz sekcija 1 do 7 označeni i provjereni.
@@ -71,28 +77,32 @@ Pravila rada vrijede iz CLAUDE.md (build gate, mali commitovi). Kontekst proizvo
 
 - [ ] (P0) **Graciozan pad na lošem ulazu.** Korumpirana, zaštićena, prazna ili nepodržana datoteka daje jasnu poruku, ne crash.
   - Acceptance: za svaki rubni ulaz aplikacija ostaje funkcionalna i pokaže razumljivu grešku.
-- [ ] (P0) **Limit veličine datoteke.** Postoji gornja granica veličine s jasnom porukom.
+- [x] (P0) **Limit veličine datoteke.** Postoji gornja granica veličine s jasnom porukom.
   - Acceptance: prevelika datoteka se odbija prije parsiranja, bez rušenja memorije na mobitelu.
+  - DOKAZ: `src/repair/docx-budget.ts` je JEDAN izvor granica (22 mjesta), a `src/docx/intake-gate.ts` odbija prije parsiranja. Pokriveno i `tests/parser-security.test.ts` (dekompresijska bomba, lazljiva bomba).
 - [ ] (P1) **Raznolikost izvora u golden skupu.** Fixturi uključuju LibreOffice, Google Docs export, Pages, stari .doc, tracked changes, komentare i neažurirana polja.
   - Acceptance: golden testovi pokrivaju te slučajeve; ponašanje stabilno ili svjesno re-snapshotano.
 
 ## 5. Sigurnost
 
-- [ ] (P0) **XSS u izvezenom izvještaju.** Svaki korisnički izveden string (naslovi, imena, citati iz dokumenta) je escapan u standalone HTML izvještaju.
+- [x] (P0) **XSS u izvezenom izvještaju.** Svaki korisnički izveden string (naslovi, imena, citati iz dokumenta) je escapan u standalone HTML izvještaju.
   - Acceptance: test s dokumentom čiji naslov sadrži `<script>` i `"` daje sigurno escapan izvještaj.
+  - DOKAZ 2026-09-03: `tests/report-xss.test.ts`. Do tada NIJE postojao nijedan test: `buildStandaloneReport` se nije uvozio nigdje. Put je bio ispravan (28 `escapeHtml` na 51 interpolaciju), ali "izgleda ispravno" nije dokaz. Test tvrdi i da tekst OSTAJE, escapan, jer bi inace prosao i izvjestaj koji sadrzaj tiho izbaci.
 - [ ] (P0) **Verifikacija webhook potpisa.** MoR webhook prihvaća samo zahtjeve s valjanim potpisom providera.
   - Acceptance: lažni webhook bez ispravnog potpisa je odbijen i ne kreira entitlement.
 - [ ] (P0) **RLS testiran.** Korisnik A ne može čitati ni koristiti entitlemente, slotove ni logove korisnika B.
   - Acceptance: test pokušaja pristupa tuđim retcima vraća prazno ili odbija.
 - [ ] (P0) **Validacija ulaza u Edge Function.** Netrusted payload (struktura, rezultat, workType) se validira i limitira po veličini.
   - Acceptance: maliciozan ili predimenzioniran payload je odbijen, ne ruši funkciju.
-- [ ] (P1) **Tajne i ključevi.** Service role ključ i tajne nisu u klijentu; samo anon ključ na klijentu.
+- [x] (P1) **Tajne i ključevi.** Service role ključ i tajne nisu u klijentu; samo anon ključ na klijentu.
   - Acceptance: bundle klijenta ne sadrži service role ključ ni MoR tajne.
+  - DOKAZ: `scripts/verify-dist-classification.mjs` skenira `dist/` nakon builda, a `data/classification.json` je deny-by-default uz vite plugin koji obara build. Negativne kontrole dokazane.
 
 ## 6. Preglednik i mobitel (mobitel je primaran)
 
-- [ ] (P0) **Feature detection ključnih API-ja.** DecompressionStream, DOMParser i File API provjereni; bez njih jasna poruka umjesto tihog kvara.
+- [x] (P0) **Feature detection ključnih API-ja.** DecompressionStream, DOMParser i File API provjereni; bez njih jasna poruka umjesto tihog kvara.
   - Acceptance: na pregledniku bez podrške korisnik dobije razumljivu poruku, ne bijeli ekran.
+  - DOKAZ: `browserSupportsDocxAnalysis` u `src/ui/app.ts` (3 mjesta); bez podrske korisnik dobije poruku u `#dropError`, ne bijeli ekran.
 - [ ] (P0) **Mobilni smoke test.** Pun tijek (upload, rezultat, kupnja, izvještaj) radi na mobilnom Safariju i Chromeu.
   - Acceptance: prošao ručni test na stvarnom mobilnom uređaju.
 - [ ] (P1) **Memorija na velikim dokumentima.** Veliki docx na telefonu ne ruši tab.

@@ -12,7 +12,6 @@
       ],
       "domain": "operacije",
       "impactIfDown": "vlasnicki pregled ostaje bez brojki; korisnika ne dira",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -29,7 +28,6 @@
       ],
       "domain": "analitika",
       "impactIfDown": "gubi se telemetrija; proizvod radi normalno",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -50,7 +48,6 @@
       ],
       "domain": "popravak",
       "impactIfDown": "osirotjeli blobovi se gomilaju; tiho, vidi se tek na racunu",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -67,7 +64,6 @@
       ],
       "domain": "operacije",
       "impactIfDown": "greske u pregledniku prestaju stizati; kvarovi postaju nevidljivi",
-      "deployedProduction": null,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -87,7 +83,6 @@
       ],
       "domain": "naplata",
       "impactIfDown": "nitko ne moze platiti",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -102,7 +97,6 @@
       ],
       "domain": "popravak",
       "impactIfDown": "korisnik ne moze obrisati svoj dokument; GDPR obveza",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -118,7 +112,6 @@
       ],
       "domain": "rast",
       "impactIfDown": "gubi se lista cekanja za nepokrivene fakultete",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -137,7 +130,6 @@
       ],
       "domain": "popravak",
       "impactIfDown": "polja i sadrzaj se ne osvjezavaju; popravak je nepotpun",
-      "deployedProduction": false,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -152,7 +144,6 @@
       ],
       "domain": "naplata",
       "impactIfDown": "jamstvo se ne moze ostvariti; obveza prema kupcu",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -169,7 +160,6 @@
       ],
       "domain": "naplata",
       "impactIfDown": "placeni izvjestaj se ne isporucuje",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -185,7 +175,6 @@
       ],
       "domain": "operacije",
       "impactIfDown": "vanjski nadzor slijep; ne vidi se da je ista drugo palo",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -210,7 +199,6 @@
       ],
       "domain": "popravak",
       "impactIfDown": "nema serverske provjere paketa prije isporuke",
-      "deployedProduction": false,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -228,7 +216,6 @@
       ],
       "domain": "integracija",
       "impactIfDown": "jednosmjerni izvoz prema Katedri staje",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -244,7 +231,6 @@
       ],
       "domain": "analiza",
       "impactIfDown": "provjera prije predaje ne vraca rezultat",
-      "deployedProduction": false,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -267,7 +253,6 @@
       ],
       "domain": "analiza",
       "impactIfDown": "provjera prije predaje se ne moze pokrenuti",
-      "deployedProduction": false,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -284,7 +269,6 @@
       ],
       "domain": "naplata",
       "impactIfDown": "obveze nakon kupnje se ne izvrsavaju; kupac je platio a nije dobio",
-      "deployedProduction": null,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -304,7 +288,6 @@
       ],
       "domain": "analiza",
       "impactIfDown": "pravila profila se ne dohvacaju; analiza pada na opcu provjeru",
-      "deployedProduction": null,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -319,7 +302,6 @@
       ],
       "domain": "integracija",
       "impactIfDown": "handoff prema Katedri ne biljezi ishod",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -336,7 +318,6 @@
       ],
       "domain": "rast",
       "impactIfDown": "preporuke se ne priznaju",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -361,7 +342,6 @@
       ],
       "domain": "popravak",
       "impactIfDown": "PLACENI popravak ne radi; glavni proizvod stoji",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -381,7 +361,6 @@
       ],
       "domain": "rokovi",
       "impactIfDown": "podsjetnici na rokove se ne salju",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -399,7 +378,6 @@
       ],
       "domain": "analiza",
       "impactIfDown": "provjera postojanja izvora ne radi; placeni dodatak",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -414,7 +392,6 @@
       ],
       "domain": "rokovi",
       "impactIfDown": "odjava s podsjetnika ne radi; pravna obveza",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     },
@@ -431,12 +408,11 @@
       ],
       "domain": "naplata",
       "impactIfDown": "placanja se ne knjize; kupac plati a ne dobije pravo",
-      "deployedProduction": true,
       "intentionalExclusion": null,
       "reason": null
     }
   ],
-  "generatedAt": "2026-09-03T18:32:23.832Z",
-  "generatedFromCommit": "696fee2a5416f49316cd02a687bd9d23965e761e",
+  "generatedAt": "2026-09-03T18:28:00.094Z",
+  "generatedFromCommit": "3fefb47cbb3b5756c506d3ecf1e7fb6c2a79dcf0",
   "generator": "npm run deploy-manifest"
 }

@@ -3036,5 +3036,8 @@
       "unclaimed-by-program": 6
     },
     "upisnikSynced": false
-  }
+  },
+  "generatedAt": "2026-09-03T18:12:43.554Z",
+  "generatedFromCommit": "fef95ad136cc6062214a03b3a22d3fd2f88eb31d",
+  "generator": "npm run reconcile-programs"
 }
