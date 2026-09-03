@@ -1,3 +1,5 @@
 {
-  "profileId": "grf-diplomski"
+  "profileId": "grf-diplomski",
+  "synthetic": true,
+  "note": "generirano, nije studentski rad; utvrdjeno mjerenjem sadrzaja 2026-09-03: 6 odlomaka i 387 znakova u word/document.xml, dok najmanji stvaran rad u korpusu ima 127 odlomaka i 46 923 znaka. Sidecar dotad nije imao ni zastavicu ni biljesku, pa je dokument prolazio kao stvaran i nosio tvrdnju A (\"dokazano na stvarnom radu\")."
 }

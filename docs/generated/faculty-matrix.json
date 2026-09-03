@@ -12860,15 +12860,16 @@
         "margins-fixer",
         "paper-size-fixer"
       ],
-      "realDocxSampleCount": 1,
+      "realDocxSampleCount": 0,
       "profilesWithoutRealDocx": [
         "grf-zavrsni",
+        "grf-diplomski",
         "grf-doktorski"
       ],
       "automaticTestSummary": {
         "profileCoveragePassCount": 3,
         "profileCoverageFailCount": 0,
-        "realCorpusPassCount": 1,
+        "realCorpusPassCount": 0,
         "realCorpusReviewCount": 0,
         "realCorpusNoOpCount": 0,
         "realCorpusFailCount": 0,
@@ -12890,8 +12891,7 @@
         }
       },
       "manualReviewReasons": [
-        "nema-stvarnog-docx-uzorka",
-        "stvarni-docx-trazi-rucni-pregled"
+        "nema-stvarnog-docx-uzorka"
       ],
       "profiles": [
         {
@@ -12980,10 +12980,10 @@
           "templateIds": [
             "basic-text-styles"
           ],
-          "realDocxSampleCount": 1,
+          "realDocxSampleCount": 0,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "pass",
+            "realCorpus": "not-run",
             "syntheticClosedLoop": "pass"
           },
           "closedLoopAxesRemaining": [],
@@ -13001,11 +13001,9 @@
               "trazi-ulaz-izvan-dokumenta": 2
             }
           },
-          "realCorpusOutcomes": {
-            "pass": 1
-          },
+          "realCorpusOutcomes": {},
           "manualReviewReasons": [
-            "stvarni-docx-trazi-rucni-pregled"
+            "nema-stvarnog-docx-uzorka"
           ]
         },
         {
@@ -30371,12 +30369,12 @@
     "profileCount": 407,
     "offeredOptionCount": 1751,
     "mappedOptionCount": 1751,
-    "realDocxSampleCount": 8,
-    "facultiesWithRealDocx": 6,
-    "facultiesWithoutRealDocx": 125,
-    "profilesWithoutRealDocx": 401,
+    "realDocxSampleCount": 7,
+    "facultiesWithRealDocx": 5,
+    "facultiesWithoutRealDocx": 126,
+    "profilesWithoutRealDocx": 402,
     "profileCoverageFailCount": 0,
-    "realCorpusPassCount": 1,
+    "realCorpusPassCount": 0,
     "realCorpusReviewCount": 5,
     "realCorpusNoOpCount": 2,
     "realCorpusFailCount": 0,

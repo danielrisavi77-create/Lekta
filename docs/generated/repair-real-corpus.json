@@ -25,12 +25,6 @@
       "root": "tests/fixtures/docx"
     },
     {
-      "documentId": "grf-diplomski-neuskladjen",
-      "fileName": "grf-diplomski-neuskladjen.docx",
-      "profileId": "grf-diplomski",
-      "root": "tests/fixtures/docx"
-    },
-    {
       "documentId": "mef-doktorski-disertacija",
       "fileName": "mef-doktorski-disertacija.docx",
       "profileId": "mef-doktorski",
@@ -206,56 +200,6 @@
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
-      ],
-      "error": null
-    },
-    {
-      "documentId": "grf-diplomski-neuskladjen",
-      "fileName": "grf-diplomski-neuskladjen.docx",
-      "profileId": "grf-diplomski",
-      "outcome": "pass",
-      "before": {
-        "checkCount": 19,
-        "passCount": 7,
-        "score": 51
-      },
-      "after": {
-        "checkCount": 19,
-        "passCount": 11,
-        "score": 80
-      },
-      "beforeEntryCount": 4,
-      "afterEntryCount": 4,
-      "droppedEntryCount": 0,
-      "offeredFixerIds": [
-        "font-fixer",
-        "margins-fixer",
-        "paper-size-fixer"
-      ],
-      "changedFixerIds": [
-        "font-fixer",
-        "margins-fixer",
-        "paper-size-fixer"
-      ],
-      "targetedCheckCount": 3,
-      "targetedResolvedCount": 3,
-      "targetedUnresolvedCount": 0,
-      "autoUnresolvedCount": 0,
-      "autoUnresolvedChecks": [],
-      "assistedUnresolvedCount": 0,
-      "assistedUnresolvedChecks": [],
-      "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 4,
-      "unmappedMatchKeys": [],
-      "passRegressionCount": 0,
-      "outputReadable": true,
-      "packageWellFormed": true,
-      "malformedParts": [],
-      "secondPassNoOp": true,
-      "integrityFailure": null,
-      "manualReviewRequired": true,
-      "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu"
       ],
       "error": null
     },
@@ -472,21 +416,21 @@
     }
   ],
   "summary": {
-    "documentCount": 8,
-    "passCount": 1,
+    "documentCount": 7,
+    "passCount": 0,
     "reviewCount": 5,
     "failCount": 0,
     "integrityFailureCount": 0,
     "noOpCount": 2,
-    "changedDocumentCount": 6,
-    "manualReviewCount": 8,
+    "changedDocumentCount": 5,
+    "manualReviewCount": 7,
     "passRegressionCount": 0,
-    "targetedCheckCount": 3,
-    "targetedResolvedCount": 3,
+    "targetedCheckCount": 0,
+    "targetedResolvedCount": 0,
     "autoUnresolvedCount": 0,
     "autoUnresolvedChecks": [],
     "assistedUnresolvedCount": 0,
     "awaitingConfirmationCount": 0,
-    "manualOnlyCount": 19
+    "manualOnlyCount": 15
   }
 }

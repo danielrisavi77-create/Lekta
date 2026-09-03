@@ -2,7 +2,7 @@
 
 > Profili bez ijednog stvarnog DOCX uzorka za real-corpus testiranje, rangirani silazno po broju ponudjenih repair opcija (offeredOptionCount) - gdje bi sljedeci stvarni uzorak najvise vrijedio. Izvor: docs/generated/faculty-matrix.json (`npm run repair-faculty-matrix`).
 
-Ukupno profila bez uzorka: **401/407**.
+Ukupno profila bez uzorka: **402/407**.
 
 ## Sveučilište Algebra Bernays (algebra)
 
@@ -116,6 +116,7 @@ Ukupno profila bez uzorka: **401/407**.
 ## Grafički fakultet (grf)
 
 - **grf-zavrsni** — 6 ponudjenih opcija
+- **grf-diplomski** — 5 ponudjenih opcija
 - **grf-doktorski** — 5 ponudjenih opcija
 
 ## Hrvatsko katoličko sveučilište (hks)

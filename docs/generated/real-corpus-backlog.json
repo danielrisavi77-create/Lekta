@@ -1,7 +1,7 @@
 {
   "generatedFrom": "docs/generated/faculty-matrix.json",
   "totalProfiles": 407,
-  "profilesWithoutSample": 401,
+  "profilesWithoutSample": 402,
   "entries": [
     {
       "profileId": "algebra-diplomski",
@@ -1003,6 +1003,12 @@
       "profileId": "grad-zavrsni",
       "unitId": "grad",
       "facultyLabel": "Građevinski fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "grf-diplomski",
+      "unitId": "grf",
+      "facultyLabel": "Grafički fakultet",
       "offeredOptionCount": 5
     },
     {

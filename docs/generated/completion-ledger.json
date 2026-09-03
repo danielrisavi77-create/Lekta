@@ -5258,10 +5258,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "real-docx-pass",
+      "proof": "synthetic-pass",
       "assets": "generic",
-      "claim": "A",
-      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
+      "claim": "B",
+      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -5273,9 +5273,11 @@
         "bulkPending": 0,
         "offeredRepairOptions": 5,
         "facultySpecificRepairOptions": 5,
-        "realDocxSamples": 1
+        "realDocxSamples": 0
       },
-      "blockedReasons": []
+      "blockedReasons": [
+        "nema dokaza na stvarnom studentskom radu"
+      ]
     },
     {
       "profileId": "grf-doktorski",
@@ -12735,8 +12737,8 @@
       "manual-only": 53
     },
     "byProof": {
-      "real-docx-pass": 2,
-      "synthetic-pass": 386,
+      "real-docx-pass": 1,
+      "synthetic-pass": 387,
       "review": 0,
       "not-run": 48
     },
@@ -12769,8 +12771,8 @@
       "unknown": 3
     },
     "byClaim": {
-      "A": 1,
-      "B": 337,
+      "A": 0,
+      "B": 338,
       "C": 8,
       "D": 42,
       "E": 48
