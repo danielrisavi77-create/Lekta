@@ -826,6 +826,31 @@ devet radova koji nikad nisu nestali.
 - Artefakt je gitignoriran i SVAKI prolaz ga prepise, pa snimku sacuvaj izvan repozitorija prije
   novog mjerenja. Mjerenje koje nitko nije sacuvao postoji samo kao recenica u porukama.
 
+### Podatke parsiraj, ne greppaj, i ne vjeruj provjeri koja je djelomicno pukla
+
+Izmjereno 2026-09-03, na provjeri koja je provjeravala drugu provjeru.
+
+Trebalo je utvrditi je li skup DOPUSTENIH dokumenata bio isti na tri mjerne tocke. Prvi pokusaj je
+brojao sidecare greppanjem `"synthetic": true` i vratio `dopusteno=8` na dvije od tri tocke, sto bi
+znacilo da se populacija mijenjala i da usporedba stanja koda ne vrijedi. Bilo je krivo iz DVA
+razloga odjednom:
+
+- `"synthetic":true` BEZ razmaka je jednako legitiman JSON, a obrazac s razmakom ga ne vidi. Provjera
+  time tiho vrati manji skup, i to izgleda kao nalaz.
+- Petlja je usput pala s `Permission denied`, ali je pad prosao kroz cjevovod i mjerenje je svejedno
+  ispisalo broj.
+
+Ponovljeno parsiranjem JSON-a (`JSON.parse` nad `git show`) dalo je 19 sidecara, 12 `synthetic`, 7
+dopustenih na SVE tri tocke, dakle populacija se nije mijenjala i usporedba vrijedi.
+
+- Podatke u ovom repozitoriju parsiraj kao JSON. Sidecari, profili i generirani artefakti pisu se
+  raznim alatima i razmaci, redoslijed kljuceva i zavrseci redaka nisu ugovor.
+- Provjera koja djelomicno pukne pa ipak vrati broj gora je od one koja padne: pad se primijeti,
+  krivi broj se koristi. Ako korak u cjevovodu moze pasti, neka obori mjerenje.
+- Uhvaceno je iskljucivo zato sto se `8` nije poklapalo s ranije izmjerenim `localDocumentCount: 38`,
+  dakle nepoklapanjem DVIJU brojki, a ne sumnjom u metodu. Obje strane su pritom bile vlastite
+  provjere iste sesije.
+
 ## Codex (drugo misljenje)
 
 Instaliran je Codex plugin (codex@openai-codex). Podjela uloga: Claude Code je
