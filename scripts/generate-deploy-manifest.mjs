@@ -74,21 +74,19 @@ const DOMENA = {
 };
 
 /**
- * Stanje deploya, PROCITANO iz `docs/generated/DEPLOY_DRIFT.md`, ne pretpostavljeno.
+ * STANJE DEPLOYA NAMJERNO NIJE OVDJE.
  *
- * Vazna razlika koju je mjerenje otkrilo: izvjestaj poznaje 22 funkcije, a repozitorij ih ima 24.
- * `client-error` i `process-bonus-outbox` u njemu NE POSTOJE, pa njihovo stanje nije "nije
- * deployano" nego NEPOZNATO. Te dvije razlike se ne smiju stopiti: prva je odluka, druga je rupa
- * u izvjestaju.
+ * Prva izvedba ga je citala iz `docs/generated/DEPLOY_DRIFT.md` i time vezala manifest za artefakt
+ * koji se mijenja neovisno o repozitoriju. Posljedica je bila izmjerena i kostala je crven CI: moja
+ * commitana verzija bila je izvedena iz RADNE kopije tog izvjestaja (22 funkcije), a CI je imao
+ * commitanu (21), pa se deep-equal razisao. Kad sam to popravio, palo je lokalno, jer je radna kopija
+ * i dalje bila novija. Zrcalna slika iste greske.
+ *
+ * Manifest zato drzi ono sto repozitorij DEKLARIRA (koje funkcije postoje, kako su zasticene, koje
+ * tajne trebaju, koga se tice kad padnu). Kakvo je okruzenje trenutacno je zaseban podatak i za njega
+ * vec postoji `npm run deploy-drift`. Mijesanje to dvoje daje artefakt koji je crven ovisno o tome
+ * tko ga gleda.
  */
-function stanjeDeploya() {
-  const p = path.join(ROOT, 'docs', 'generated', 'DEPLOY_DRIFT.md');
-  if (!fs.existsSync(p)) return { poznato: new Set(), deployane: new Set() };
-  const md = fs.readFileSync(p, 'utf8');
-  const samoRepo = new Set([...md.matchAll(/`([a-z0-9-]+)` \| SAMO U REPOU/g)].map((m) => m[1]));
-  const deployane = new Set([...md.matchAll(/`([a-z0-9-]+)` \| \d+ \| ACTIVE/g)].map((m) => m[1]));
-  return { poznato: new Set([...samoRepo, ...deployane]), deployane };
-}
 
 export function izracunajManifest() {
   const toml = fs.readFileSync(path.join(ROOT, 'supabase', 'config.toml'), 'utf8');
@@ -98,7 +96,6 @@ export function izracunajManifest() {
     jwtPoFunkciji.set(m[1], v ? v[1] === 'true' : null);
   }
 
-  const deploy = stanjeDeploya();
   const imena = fs.readdirSync(FUNKCIJE, { withFileTypes: true })
     .filter((d) => d.isDirectory() && !d.name.startsWith('_'))
     .map((d) => d.name)
@@ -114,8 +111,6 @@ export function izracunajManifest() {
       requiredSecrets: tajneU(path.join(FUNKCIJE, ime)),
       domain: (DOMENA[ime] ?? [null])[0],
       impactIfDown: (DOMENA[ime] ?? [null, null])[1],
-      /** `true` deployano, `false` samo u repou, `null` izvjestaj tu funkciju NE POZNAJE. */
-      deployedProduction: deploy.poznato.has(ime) ? deploy.deployane.has(ime) : null,
       // Odluka, ne cinjenica. Prazno znaci "jos nije odluceno", i to je istinit zapis.
       intentionalExclusion: null,
       reason: null,
