@@ -71,6 +71,7 @@ import './repair-panel.css';
 import '../preflight/preflight-panel.css';
 const FPZG_SUBMISSION_CALENDAR: any = _FPZG_CAL;
 import { WORK_TYPE_LABELS, CHECK_ITEMS } from '../config/config-loader';
+import { STORAGE_KEYS, safeStorageGet, safeStorageSet } from '../shared/browser-storage';
 import { PRICING_TIERS } from '../config/pricing-tiers';
 // (R3) zajednicka normalizacija check* zastavica, dijeli se s golden resolveProfile
 import { analyzeDocxOffThread, cancelActiveAnalysis, isAnalysisCancelled } from '../analysis/analyze-docx-client';
@@ -216,8 +217,6 @@ let repairPanelNode: any=null, repairPanelForResult: any=null;
 // od onoga sto je korisnik stvarno vidi).
 let repairPanelItems: any[]=[], repairPanelTextItems: any[]=[];
 let preflightPanel: PreflightPanel|null=null, preflightPanelForResult: any=null;
-const STORAGE_KEYS={preferences:'lekta.preferences.v2',history:'lekta.history.v2',production:'lekta.production.v2.1',submission:'lekta.submission.v2.2.2',analyticsConsent:'lekta.analytics-consent.v1',orders:'lekta.orders.v1',waitlist:'lekta.waitlist.v1'};/* jednokratna migracija starih lokalnih podataka na lekta.* (sigurno, bez gubitka) */(function migrateLegacyStorage(){try{var MIG: any={'thesisready.preferences.v2':'lekta.preferences.v2','thesisready.history.v2':'lekta.history.v2','thesisready.production.v2.1':'lekta.production.v2.1','thesisready.submission.v2.2.2':'lekta.submission.v2.2.2','thesisready.analytics-consent.v1':'lekta.analytics-consent.v1','thesisready.orders.v1':'lekta.orders.v1','thesisready.theme':'lekta.theme'};for(var o in MIG){var nk=MIG[o],ov=localStorage.getItem(o);if(ov!==null&&localStorage.getItem(nk)===null)localStorage.setItem(nk,ov);localStorage.removeItem(o);}}catch(e: any){}})();
-const SESSION_MEMORY=new Map();
 /* WORK_TYPE_LABELS i CHECK_ITEMS se uvoze iz config-loader (data/work-type-labels.json, data/checks) */
 const VALID_WORK_TYPES=new Set(Object.keys(WORK_TYPE_LABELS));
 const VALID_CITATION_IDS=new Set(['fpzg','pravo-fusnote','pravo-social-author','apa7','harvard','chicago-author','chicago-notes','mla9','vancouver','ieee','custom']);
@@ -489,8 +488,6 @@ function updatePackageUi(){
  const notes: any={document:'Analizira se samo sadržaj i oblikovanje Word dokumenta.',before:'Provjeravaju se konačni dokument, PDF, ciljani godišnji rok i obveze prije obrane.',after:'Provjeravaju se datoteke i obveze koje slijede nakon obrane.',full:'Provjerava se cijeli paket prije i nakon obrane, uključujući godišnji rok.'};if($('#submissionPhaseNote'))$('#submissionPhaseNote').textContent=notes[phase];
 }
 
-function safeStorageGet(key: any,fallback: any=null){try{const raw=localStorage.getItem(key);if(raw)return JSON.parse(raw)}catch(e: any){}return SESSION_MEMORY.has(key)?structuredClone(SESSION_MEMORY.get(key)):fallback}
-function safeStorageSet(key: any,value: any){SESSION_MEMORY.set(key,structuredClone(value));try{localStorage.setItem(key,JSON.stringify(value));return true}catch(e: any){return false}}
 function optionExists(select: any,value: any){return !!select&&[...select.options].some(o=>o.value===value)}
 function setOptionIfExists(select: any,value: any){if(value!=null&&optionExists(select,value))select.value=value}
 function savePreferences(){const p={institution:$('#institutionSelect')?.value,unit:$('#unitSelect')?.value,program:$('#programSelect')?.value,workType:$('#workType')?.value,variant:$('#workVariant')?.value,department:$('#departmentSelect')?.value,methodology:$('#methodologySelect')?.value,citation:$('#citationStyle')?.value,language:$('#docLanguage')?.value,strictness:$('#strictness')?.value,submissionPhase:$('#submissionPhase')?.value,fpzgCohort:$('#fpzgCohort')?.value,fpzgDeadline:$('#fpzgDeadline')?.value,mentorOverride:!!$('#mentorOverride')?.checked,customFont:$('#customFont')?.value,customSize:$('#customSize')?.value,customSpacing:$('#customSpacing')?.value,customMargin:$('#customMargin')?.value};safeStorageSet(STORAGE_KEYS.preferences,p)}
