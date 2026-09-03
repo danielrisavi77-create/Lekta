@@ -82,12 +82,12 @@
     {
       "profileId": "pravo-integrirani-diplomski",
       "unitId": "pravo",
-      "claim": "B",
+      "claim": "A",
       "realDocuments": 2,
-      "realPass": 0,
+      "realPass": 1,
       "ready": false,
-      "blockers": ["manje od 10 stvarnih dokumenata", "nijedan stvarni dokument nije `pass`", "nema zapisa o vizualnom pregledu"],
-      "reason": "Jedini pravni profil sa statusom `verified` i stvarnim uzorcima."
+      "blockers": ["manje od 10 stvarnih dokumenata", "nema zapisa o vizualnom pregledu"],
+      "reason": "Jedini pravni profil sa statusom `verified` i stvarnim uzorcima. Cinjenice uskladjene s korpusom 2026-09-03: `pravo-integrirani-fusnote.docx` ima `outcome: pass` (76 -> 94), pa je blokator `nijedan stvarni dokument nije pass` uklonjen kao netocan, a `claim` je snimka ledgera koji ima dokaz. PRESUDA NIJE MIJENJANA: `ready` ostaje `false` zbog preostala dva blokatora. Napomena uz `realDocuments`: commitani korpus za ovaj profil nosi JEDAN dokument, a ovdje stoji 2; brojka je ostavljena kakvu je upisao potpisnik."
     }
   ],
   "wave2": [
