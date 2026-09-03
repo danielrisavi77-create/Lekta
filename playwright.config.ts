@@ -97,13 +97,18 @@ export default defineConfig({
      * Vrte SAMO kriticni put (`roadmap-v2`), ne cijelu suite: cilj je dokazati da se do rezultata
      * moze doci u svakom pregledniku, ne udvostruciti sve provjere u tri preglednika.
      *
+     * `parser-parity` je dodan 2026-09-03, nakon prvog zelenog prolaza u OBA motora, po pravilu
+     * koje ova matrica sama propisuje. Izmjereno na mirnom stroju: WebKit 2,7 i 2,3 min (dva
+     * uzastopna prolaza), Firefox 1,6 min. Raniji istek od 600 s bio je opterecenje stroja, ne
+     * kvar: ista provjera je uz 25 tudjih node procesa padala, a uz jedan prolazi.
+     *
      * NISU u `npm run test:ux` niti u `check.yml` gateu. Razlog je posten: ovi preglednici jos
      * nijednom nisu odvrtjeli ovu suite, pa bi ih odmah proglasiti blokirajucima znacilo pustiti
      * u gate nesto sto nitko nije vidio kako se ponasa. Vrte se u zasebnom `browser-matrix`
      * workflowu, vidljivo; u obavezne provjere se PROMICU tek nakon prvog zelenog prolaza.
      */
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] }, testMatch: /(roadmap-v2|desktop-flow)\.spec\.ts/ },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] }, testMatch: /(roadmap-v2|desktop-flow)\.spec\.ts/ },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] }, testMatch: /(roadmap-v2|desktop-flow|parser-parity)\.spec\.ts/ },
+    { name: 'webkit', use: { ...devices['Desktop Safari'] }, testMatch: /(roadmap-v2|desktop-flow|parser-parity)\.spec\.ts/ },
     { name: 'mobile-webkit', use: { ...devices['iPhone 13'] },
       testMatch: /(roadmap-v2|mobile-critical-path)\.spec\.ts/ },
   ],
