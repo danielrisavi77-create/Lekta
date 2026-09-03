@@ -8,6 +8,20 @@ Popravak je od 2026-08-30 postao BOLJI po razrjesenju (29,8 % -> 39,8 %) i po
 `autoUnresolved` (14 -> 2), ali je istovremeno dobio **9 padova i 2 pass-regresije**, kojih je
 prije bilo NULA, i te dvije nule su u ovom repozitoriju tvrda granica.
 
+## OGRANICENJE MOG MJERENJA (procitaj prije nego brojkama pripises uzrok)
+
+Brojke nize su izmjerene u DIJELJENOM radnom stablu, koje je u tom trenutku imalo 9 necommitanih
+datoteka, medju njima `src/analysis/heading-structure.ts` i njezin test. To je produkcijski kod na
+putanji koju popravak koristi (struktura obveznih dijelova).
+
+Posljedica: **9 padova i 2 pass-regresije SU stvarni, ali NISU pripisivi nijednom commitu.** Mjerenje
+opisuje stablo, ne HEAD. Usporedba "0 padova 30.8. -> 9 danas" zato pokazuje SMJER, ali ne dokazuje
+da je uzrok u commitanom kodu; dio razlike moze doci iz tudjeg necommitanog rada.
+
+Ovo je ista zamka pred kojom ovaj vodic drugdje upozorava, i upao sam u nju sam. Prvi korak zato NIJE
+"vjeruj ovim brojkama" nego: **ponovi mjerenje na CISTOM, fiksnom commitu u izoliranom worktreeu.**
+Ako se brojke razlikuju, ta je razlika sama po sebi nalaz.
+
 ## Kako reproducirati (obavezno prije bilo kakvog zahvata)
 
     LEKTA_LOCAL_CORPUS=1 npx vite-node scripts/repair-real-corpus.mts
