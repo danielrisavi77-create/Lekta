@@ -62,9 +62,14 @@ describe('ruta /rad/', () => {
     }
   });
 
-  it('je bitno manja od zatecene stranice, pa nije klon', () => {
-    // Prethodni pokusaj je zalijepio 1862 retka. Omjer je gruba mjera, ali hvata bas taj potez.
-    expect(RAD.length).toBeLessThan(INDEX.length * 0.25);
+  it('nema nijednu landing sekciju, pa nije klon', () => {
+    // RANIJE je ovdje stajao omjer velicina (`RAD < INDEX * 0.25`). Ta je mjera prestala vrijediti
+    // kad je 203 KB inline CSS-a izdvojeno iz `index.html`: omjer je dotad mjerio CSS, ne markup,
+    // pa je "nije klon" prolazilo iz krivog razloga. Sada se mjeri ono sto tvrdnja imenuje.
+    for (const sekcija of ['privatnost', 'trust-proof', 'video', 'how', 'podcrta', 'provjere-popis', 'pricing', 'alati-sekcija', 'faq']) {
+      expect(RAD, `landing sekcija ${sekcija} ne pripada radnoj povrsini`).not.toContain(`id="${sekcija}"`);
+    }
+    expect(RAD.length).toBeLessThan(INDEX.length);
   });
 
   it('nosi radnu povrsinu, i to BAJT-IDENTICNU izvoru', () => {
@@ -99,6 +104,26 @@ describe('ruta /rad/', () => {
   it('ulaz rute je modul radnog prostora, ne stari bootstrap', () => {
     expect(RAD).toContain('src="/src/routes/workspace/main.ts"');
     expect(RAD).not.toContain('/src/main.ts');
+  });
+
+  it('RUTA IMA STIL: ulaz uvozi stil stranice', () => {
+    // Izmjereno 2026-09-03: ruta je bila NESTILIZIRANA. Montirala se, primala dokument i prolazila
+    // svaki test, a izgledala je kao goli HTML, jer je stil zivio kao inline `<style>` u
+    // `index.html` i nije imao odakle doci. Nijedan test to nije hvatao: svi su mjerili ponasanje,
+    // nijedan izgled.
+    //
+    // Provjerava se UVOZ u ulazu, ne izlaz builda: izlaz trazi `vite build`, a ovo pada u sekundi
+    // i imenuje uzrok umjesto simptoma.
+    const entry = readFileSync(resolve(ROOT, 'src', 'routes', 'workspace', 'main.ts'), 'utf8');
+    expect(entry, 'ruta bi bila goli HTML').toContain("shared/page.css");
+  });
+
+  it('stil je ZAJEDNICKI s index.html, ne kopija', () => {
+    // Dvije kopije istog stila razisle bi se isto kao dvije kopije markupa. Oba ulaza uvoze ISTU
+    // datoteku, pa razilazenje nije moguce.
+    const root = readFileSync(resolve(ROOT, 'src', 'main.ts'), 'utf8');
+    expect(root).toContain("shared/page.css");
+    expect(INDEX, 'stil se vratio u inline blok').not.toContain('<style');
   });
 
   it('ima podrucje za posten status, i ono je skriveno dok nema sto reci', () => {
