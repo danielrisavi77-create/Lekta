@@ -10,10 +10,10 @@
   },
   "counts": {
     "E": 41,
-    "B": 322,
+    "B": 321,
     "D": 37,
     "C": 8,
-    "A": 2
+    "A": 3
   },
   "byProfile": {
     "adu-dramaturgija-diplomski": "E",
@@ -257,7 +257,7 @@
     "pmfst-diplomski": "B",
     "pmfst-zavrsni": "B",
     "pravo-doktorski-pravne-znanosti": "B",
-    "pravo-integrirani-diplomski": "B",
+    "pravo-integrirani-diplomski": "A",
     "pravo-javna-uprava-diplomski": "B",
     "pravo-javna-uprava-prijediplomski": "B",
     "pravo-opci-pravni-akademski-rad": "B",
