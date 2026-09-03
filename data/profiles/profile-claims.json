@@ -10,10 +10,10 @@
   },
   "counts": {
     "E": 41,
-    "B": 319,
+    "B": 317,
     "D": 37,
     "C": 8,
-    "A": 5
+    "A": 7
   },
   "byProfile": {
     "adu-dramaturgija-diplomski": "E",
@@ -160,8 +160,8 @@
     "fpzg-novinarstvo-zavrsni-av": "D",
     "fpzg-novinarstvo-zavrsni-tekst": "B",
     "fpzg-opci-akademski-rad": "A",
-    "fpzg-politologija-diplomski": "B",
-    "fpzg-politologija-zavrsni": "B",
+    "fpzg-politologija-diplomski": "A",
+    "fpzg-politologija-zavrsni": "A",
     "fpzg-specijalisticki-odnosi-s-javnoscu": "B",
     "fpzg-specijalisticki-prilagodba-eu": "B",
     "fpzg-specijalisticki-sigurnosna-politika-rh": "B",
