@@ -22,6 +22,40 @@ Ovo je ista zamka pred kojom ovaj vodic drugdje upozorava, i upao sam u nju sam.
 "vjeruj ovim brojkama" nego: **ponovi mjerenje na CISTOM, fiksnom commitu u izoliranom worktreeu.**
 Ako se brojke razlikuju, ta je razlika sama po sebi nalaz.
 
+### RAZRIJESENO 2026-09-03: necommitani rad je POMAGAO, commitani kod je GORI
+
+Druga sesija je izmjerila oba stanja nad istim korpusom (45 dokumenata, 38 lokalnih + 7 commitanih),
+uz HEAD prikovan na `29828b46` i izoliran worktree:
+
+    CIST HEAD (bez necommitane zastite)   fail 11   pass-regresija 4
+    STABLO (s necommitanom zastitom)      fail  9   pass-regresija 2
+
+Dakle necommitani rad na `normalizeProposedLevels` u `src/analysis/heading-structure.ts` UKLANJA dva
+pada i dvije regresije; sve cetiri su ista provjera, `structure.heading.hierarchy`.
+
+**Posljedica za ovaj handoff: regresija u COMMITANOM kodu je VECA nego sto sam prijavio, ne manja.**
+Moje brojke (9 i 2) izmjerene su sa ukljucenim tudjim popravkom. Bez njega je 11 i 4. Pretpostavio
+sam da necommitani rad brojke kvari; kvario ih je u suprotnom smjeru.
+
+Podjela je pritom CISTA po profilu, i to je najkorisniji trag koji ovaj dokument ima:
+
+    rijeseno   local-33-diplomski   fpzg-politologija-diplomski   77->78
+               local-36-diplomski   fpzg-politologija-diplomski   82->84
+    ostaje     local-13-zavrsni     fpzg-politologija-zavrsni     81->82
+               local-27-zavrsni     fpzg-politologija-zavrsni     82->87
+
+Zastita rjesava OBA `-diplomski` i NIJEDAN `-zavrsni`. Da je podjela nasumicna, znacila bi samo
+"djelomicno radi"; ovako pokazuje gdje gledati: razlika izmedju ta dva profila u onome sto ulazi u
+`inferUnnumberedLevels` i `normalizeProposedLevels`.
+
+Korelacija je odbacena mjerenjem: `heading-style-fixer` je promijenio 27 dokumenata, a regresirala
+su 4.
+
+NAPOMENA O NAZIVNIKU: moj prolaz je prijavio 54 dokumenta, njihov 45. Artefakt je u meduvremenu
+prepisan njihovim mjerenjem, pa se moj broj vise ne moze provjeriti s diska. Brojevi padova (9) i
+regresija (2) se poklapaju, nazivnik ne. Prije zakljucaka provjeri `documentCount` u artefaktu koji
+drzis u ruci.
+
 ## Kako reproducirati (obavezno prije bilo kakvog zahvata)
 
     LEKTA_LOCAL_CORPUS=1 npx vite-node scripts/repair-real-corpus.mts
