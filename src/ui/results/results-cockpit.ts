@@ -4,7 +4,7 @@ import { categorySummaryHtml } from './category-summary';
 import { priorityFindingsHtml } from './priority-findings';
 import { readinessHaloHtml } from './technical-compliance-halo';
 import { bindDocumentDna, documentDnaHtml } from './document-dna';
-import type { DocumentDnaModel } from './document-dna-model';
+import type { DocumentDnaModel } from '../../results/document-dna-model';
 import { repairOutlookHtml } from './repair-outlook-view';
 import type { RepairOutlookModel } from './repair-outlook';
 import { escapeHtml } from '../../utils/helpers';
