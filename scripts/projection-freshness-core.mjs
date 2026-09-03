@@ -106,7 +106,14 @@ export function projectionFreshness(id, artifactSha, sourceCommits, regenerate) 
 /** Ljudski citljiv redak po projekciji. */
 export function formatProjection(verdict) {
   // Rijec PROVJERI, ne USTAJALO: presuda je screening po redoslijedu commita, a izmjereno je da
-  // pogodak u 3 od 3 slucaja nije znacio razliku u sadrzaju.
+  // pogodak u 4 od 4 slucaja nije znacio razliku u sadrzaju.
+  //
+  // Cetvrti je izmjeren 2026-09-03: `real-corpus-backlog` je bio prijavljen zbog cetiri commita
+  // nad `faculty-matrix.json`, a regeneracija u cistom worktreeu dala je BAJT-IDENTICAN sadrzaj
+  // (`git diff --numstat` prazan). Vrijedi zabiljeziti smjer omjera: sto je vise pogodaka bez
+  // razlike, to je jaci argument da ovo OSTANE screening, a ne da se pretvori u automatsku
+  // regeneraciju. Ulancano pecenje traje preko 40 minuta i po ovom uzorku bi ih vecinom potrosilo
+  // na proizvodnju istih bajtova.
   const oznaka = verdict.status === 'ustajalo' ? 'PROVJERI' : verdict.status === 'svjeze' ? 'svjeze  ' : 'nepoznato';
   const rep = verdict.status === 'ustajalo' ? `  -> ${verdict.regenerate}` : '';
   return `  ${oznaka}  ${verdict.id.padEnd(20)} ${verdict.reason}${rep}`;
