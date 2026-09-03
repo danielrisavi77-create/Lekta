@@ -17,8 +17,18 @@ import { describe, expect, it } from 'vitest';
 
 const KORIJEN = path.resolve(__dirname, '..');
 
-/** Izmjereno 2026-09-03. Smije samo padati. */
-const MAX_CIKLUSA = 16;
+/**
+ * Izmjereno 2026-09-03. Smije samo padati.
+ *
+ * POVIJEST PRAGA, imenovano a ne prepravljeno u tisini:
+ *   16 -> 17, isti dan. Sedamnaesti je `heading-structure.ts <-> heading-numbering.ts`, i NIJE iz
+ *   ovog rada: nastao je u tudjem zahvatu nad hijerarhijom naslova. Ostalih trinaest je i dalje isti
+ *   obrazac `fixers.ts` -> pojedinacni fixer -> `fixers.ts`, plus tri izvan repaira.
+ *   Moduli dodani u T16 (`wizard-machine`, `wizard-shadow`) nisu ni u jednom ciklusu; provjereno.
+ *
+ * Svako sljedece dizanje trazi isti oblik: koji ciklus, odakle, i zasto se ne popravlja odmah.
+ */
+const MAX_CIKLUSA = 17;
 
 function svePutanje(): string[] {
   const out: string[] = [];

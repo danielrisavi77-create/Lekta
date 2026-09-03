@@ -32,6 +32,7 @@ import { composeAnalysisProfile, isLightBaseline } from '../profiles/compose-pro
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
 import { attachSelectSearch } from './select-search';
 import { workTypesForSelection, defaultWorkTypeForProgram, citationForDefinition, isCitationLocked, languageForDefinition, isLanguageLocked, visibleProgramsForUnit, eligibleDefinitionsFor, resolveDefinition } from './work-selection';
+import { oziciSjenu } from './wizard-shadow';
 import { INSTITUTIONAL_COVERAGE_MATRIX, COVERAGE_STATUS_META, CORPUS_STATS } from '../coverage/coverage-loader';
 import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../submission/submission-loader';
 import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-toggle';
@@ -336,6 +337,9 @@ function initLegacy(doc: Document,signal: AbortSignal){
  ctl('#pricingGrid').innerHTML=PRICING_TIERS.map(p=>{const soon=p.id!=='free'&&!paidOffersLive();const badge=soon?'<span class="popular soon">USKORO</span>':(p.featured?'<span class="popular">PREPORUČENO</span>':'');const cta=soon?`<button class="btn btn-secondary" type="button" disabled aria-disabled="true">Uskoro</button>`:(p.cta.order?`<button class="btn btn-secondary order-btn" data-package="${p.cta.order}">${p.cta.label}</button>`:`<a class="btn ${p.featured?'btn-primary':'btn-secondary'}" href="${p.cta.href}">${p.cta.label}</a>`);return`<article class="price-card ${p.featured?'featured':''}${soon?' soon':''}">${badge}<h3>${p.name}</h3><div class="price">${p.price}</div><p>${p.desc}</p><ul class="features">${p.features.map(x=>`<li>${x}</li>`).join('')}</ul>${cta}</article>`}).join('');
  ctl('#packagePicks').innerHTML=PACKAGES.map(p=>`<label class="package-pick"><span><input type="radio" name="package" value="${p.id}" ${p.id==='format'?'checked':''}><strong>${p.name} · ${p.price} €</strong><small>${p.desc}</small></span></label>`).join('');
  bind();updateProfile();updateHistoryBadge();updatePackageUi();if(__DEV_TOOLS__)$('#qaBtn')?.classList.toggle('hidden',!qaMode);renderConsentBanner();renderHeroCoverage();wireNoFaculty();if(!paidOffersLive())$('#orderFromResult')?.classList.add('hidden');renderAuthEntry();
+ // T16 B3: stroj stanja vozi se u SJENI, samo u dev buildu. Ne pise u DOM i ne mijenja tok;
+ // prijavljuje kad se `viewFor` razidje sa stvarnim prikazom, prije nego itko dira pisca.
+ if(__DEV_TOOLS__)oziciSjenu(doc);
  // Cjenik copy: dok su placene tarife "Uskoro" (soft-launch), staticni HTML nosi besplatnu poruku;
  // kad naplata proradi (paidOffersLive), vrati se placeni jamstveni/disclaimer copy s payment info.
  if(paidOffersLive()){const _gn=$('#guaranteeNote');if(_gn)_gn.innerHTML='✓ <strong>Jamstvo pokrivenosti:</strong> za profile označene kao potvrđeni, dakle ne za generičke ni savjetodavne, ako ti referada vrati rad zbog pravila koje je Lekta označila ispravnim, vraćamo novac i besplatno ručno popravimo. Prijava u roku od 30 dana od kupnje, uz dokaz i sporno pravilo. Jamčimo točnost provjere prema pravilniku, a ne ocjenu, prihvaćanje rada ni izvornost teksta (nije provjera plagijata).';const _pd=$('#pricingDisclaimer');if(_pd)_pd.textContent='Usluga provjerava oblikovanje, strukturu, opseg i citatnu tehniku prema dostupnim pravilima. Nije provjera plagijata ni sličnosti teksta (nije Turnitin) i ne jamči prihvaćanje rada, ocjenu, akademsku kvalitetu sadržaja ni odluku mentora ili povjerenstva. Plaćanje se provodi na sigurnoj stranici konfiguriranog payment providera.'}
