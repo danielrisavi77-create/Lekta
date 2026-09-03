@@ -1,67 +1,65 @@
 {
-  "commit": "ab2a108421821aead0b29580484eed3873be8860",
+  "commit": "13003a885730fc141aaf05b06a3ea0df22c0bbd7",
   "dirtyWorkingTree": false,
-  "createdAt": "2026-09-01T03:39:15.565Z",
+  "createdAt": "2026-09-03T01:25:02.678Z",
   "platform": "win32",
   "partial": false,
-  "complete": false,
-  "missingRequired": [
-    "extraction"
-  ],
+  "complete": true,
+  "missingRequired": [],
   "results": [
     {
       "id": "check",
-      "label": "Tier 0: tsc + vitest + build",
+      "label": "Tier 0: oxlint + tsc + edge (deno) + vitest + build",
       "status": "pass",
-      "durationMs": 1363947
+      "durationMs": 1633684
     },
     {
-      "id": "edge",
-      "label": "Tier 0: deno typecheck Edge funkcija",
-      "status": "pass",
-      "durationMs": 11535
+      "id": "projections",
+      "label": "Tier 0: svjezina pecenih projekcija (screening)",
+      "status": "fail",
+      "durationMs": 13307
     },
     {
       "id": "conformance",
       "label": "Tier 0: conformance matrica",
       "status": "pass",
-      "durationMs": 171426
+      "durationMs": 170270
     },
     {
       "id": "slow",
       "label": "Tier 0: spori repair testovi",
       "status": "pass",
-      "durationMs": 222422
+      "durationMs": 229182
     },
     {
       "id": "ux",
       "label": "Tier 0: Playwright UX",
       "status": "pass",
-      "durationMs": 1074017
+      "durationMs": 1298165
     },
     {
       "id": "strict-open",
       "label": "Tier 1: lxml nad POPRAVLJENIM paketima",
       "status": "pass",
-      "durationMs": 70265
+      "durationMs": 143636
     },
     {
       "id": "word",
       "label": "Tier 2: pravi Microsoft Word",
       "status": "pass",
-      "durationMs": 166746
+      "durationMs": 912267
     },
     {
       "id": "word-worst",
       "label": "Tier 2: Word, najgori slucaj",
       "status": "pass",
-      "durationMs": 126362
+      "durationMs": 778982
     },
     {
       "id": "extraction",
       "label": "Tier 2: extraction probe (staging)",
-      "status": "unavailable",
-      "reason": "missing-env:LEKTA_STAGING_ORIGIN"
+      "status": "pass",
+      "durationMs": 27453
     }
   ]
 }
