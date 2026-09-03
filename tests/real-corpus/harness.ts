@@ -106,6 +106,14 @@ export interface RealCorpusResult {
    */
   unmappedMatchKeys: string[];
   passRegressionCount: number;
+  /**
+   * IMENA regresiranih provjera, ne samo broj. `detectPassRegressions` vraca listu s identitetom, a
+   * harness je do 2026-09-03 odmah radio `.length` i imena bacao. Posljedica je izmjerena: artefakt
+   * kaze da su DVIJE provjere regresirale, a koje, ne zna nitko bez ponovnog prolaza kroz 54 stvarna
+   * rada. Isti zapis vec imenuje `autoUnresolvedChecks` i `assistedUnresolvedChecks`; ovo samo
+   * dosljedno primjenjuje pravilo "imenovano, ne prebrojano".
+   */
+  passRegressionChecks: string[];
   outputReadable: boolean;
   /**
    * Faza A2 (RE-47 klasa): je li SVAKI XML/rels dio popravljenog paketa well-formed.
@@ -144,6 +152,8 @@ export interface RealCorpusReport {
     changedDocumentCount: number;
     manualReviewCount: number;
     passRegressionCount: number;
+    /** Unija imena kroz cijeli korpus: KOJE provjere popravak igdje obara iz `pass`. */
+    passRegressionChecks: string[];
     targetedCheckCount: number;
     targetedResolvedCount: number;
     autoUnresolvedCount: number;
@@ -228,6 +238,7 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     manualOnlyCount: 0,
     unmappedMatchKeys: [] as string[],
     passRegressionCount: 0,
+    passRegressionChecks: [] as string[],
     outputReadable: false,
     packageWellFormed: false,
     malformedParts: [] as string[],
@@ -287,10 +298,11 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     // Ista funkcija koju koristi produkcija (kljuca po stabilnom id-u, fallback naslov),
     // umjesto vlastite kopije logike koja je znala izracunati isto na svoj nacin.
     // Ustajalo TOC polje nije steta: Word ga regenerira pri otvaranju (vidi dropStaleFieldRegressions).
-    const regressions = dropStaleFieldRegressions(
+    const regressionList = dropStaleFieldRegressions(
       detectPassRegressions(before.checks ?? [], after.checks ?? []),
       after,
-    ).length;
+    );
+    const regressions = regressionList.length;
     const second = await applyFixers(applied.docxBytes, requests);
     const secondPassNoOp = second.changelog.length === 0 && second.docxBytes === applied.docxBytes;
     const changed = applied.changelog.length > 0;
@@ -363,6 +375,7 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
       manualOnlyCount: outcome.manualOnly.length,
       unmappedMatchKeys: outcome.unmappedMatchKeys,
       passRegressionCount: regressions,
+      passRegressionChecks: regressionList.map((r) => r.id ?? r.title).sort(),
       outputReadable,
       packageWellFormed: malformedParts.length === 0,
       malformedParts,
@@ -433,6 +446,7 @@ export async function runRealCorpus(
       changedDocumentCount: results.filter((result) => result.changedFixerIds.length > 0).length,
       manualReviewCount: results.filter((result) => result.manualReviewRequired).length,
       passRegressionCount: results.reduce((total, result) => total + result.passRegressionCount, 0),
+      passRegressionChecks: [...new Set(results.flatMap((result) => result.passRegressionChecks))].sort(),
       targetedCheckCount: results.reduce((total, result) => total + result.targetedCheckCount, 0),
       targetedResolvedCount: results.reduce((total, result) => total + result.targetedResolvedCount, 0),
       autoUnresolvedCount: results.reduce((total, result) => total + result.autoUnresolvedCount, 0),
