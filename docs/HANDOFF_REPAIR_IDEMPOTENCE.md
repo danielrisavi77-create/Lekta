@@ -37,24 +37,39 @@ pada i dvije regresije; sve cetiri su ista provjera, `structure.heading.hierarch
 Moje brojke (9 i 2) izmjerene su sa ukljucenim tudjim popravkom. Bez njega je 11 i 4. Pretpostavio
 sam da necommitani rad brojke kvari; kvario ih je u suprotnom smjeru.
 
-Podjela je pritom CISTA po profilu, i to je najkorisniji trag koji ovaj dokument ima:
+Sto se tocno dogodilo po dokumentu:
 
     rijeseno   local-33-diplomski   fpzg-politologija-diplomski   77->78
                local-36-diplomski   fpzg-politologija-diplomski   82->84
     ostaje     local-13-zavrsni     fpzg-politologija-zavrsni     81->82
                local-27-zavrsni     fpzg-politologija-zavrsni     82->87
 
-Zastita rjesava OBA `-diplomski` i NIJEDAN `-zavrsni`. Da je podjela nasumicna, znacila bi samo
-"djelomicno radi"; ovako pokazuje gdje gledati: razlika izmedju ta dva profila u onome sto ulazi u
-`inferUnnumberedLevels` i `normalizeProposedLevels`.
+SMIJE SE TVRDITI SAMO OVO: zastita uklanja obje `-diplomski` regresije i nijednu `-zavrsni`.
+
+NE SMIJE SE TVRDITI da je profil uzrok, iako obrazac na to vuce. Treca sesija je to oborila
+mjerenjem: ista dva profila imaju 16 dokumenata koji uopce ne regresiraju, pa profil ne moze biti
+uvjet. Prva verzija ovog odjeljka je pisala da podjela "pokazuje gdje gledati, u razliku medju
+profilima"; to je bilo prejako i ovdje je ublazeno, jer bi inace sljedeca sesija trazila razliku
+koja nije uzrok.
 
 Korelacija je odbacena mjerenjem: `heading-style-fixer` je promijenio 27 dokumenata, a regresirala
 su 4.
 
-NAPOMENA O NAZIVNIKU: moj prolaz je prijavio 54 dokumenta, njihov 45. Artefakt je u meduvremenu
-prepisan njihovim mjerenjem, pa se moj broj vise ne moze provjeriti s diska. Brojevi padova (9) i
-regresija (2) se poklapaju, nazivnik ne. Prije zakljucaka provjeri `documentCount` u artefaktu koji
-drzis u ruci.
+### NAZIVNIK NIJE STABILAN IZMEDJU SESIJA (razjasnjeno mjerenjem)
+
+Moj prolaz je prijavio 54 dokumenta, njihov 45. Uzrok NIJE u harnessu: `discoverRealCorpus` uzima
+SVAKI `.docx` koji ima pratitelja i prodje `sidecarAdmitted`, bez uzorkovanja i bez granice
+(provjereno: 38 `.docx`, nijedan bez pratitelja, `_mapping` je mapa a ne dokument). Commitani skup
+je 7 u oba prolaza, dakle 38 + 7 = 45 je cijeli sadrzaj direktorija.
+
+Iz toga slijedi da je u trenutku mog prolaza lokalnih radova bilo 47, a danas ih je 38: devet je
+uklonjeno. Tko i kada se ne moze utvrditi, jer je `tests/fixtures/docx-local/` gitignoriran pa nema
+povijesti.
+
+PRAKTICNA POSLJEDICA: brojevi padova i regresija usporedivi su samo unutar ISTOG prolaza ili izmedju
+prolaza pokrenutih blizu u vremenu nad istim direktorijem. Usporedba dvaju stanja koda mora se
+izvesti jedno za drugim nad istim sadrzajem korpusa; inace mjeri i promjenu korpusa. Prije svakog
+zakljucka procitaj `documentCount` iz artefakta koji drzis u ruci, ne iz ovog dokumenta.
 
 ## Kako reproducirati (obavezno prije bilo kakvog zahvata)
 
