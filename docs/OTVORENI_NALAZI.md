@@ -11,7 +11,7 @@ Sastavljeno 2026-09-03. Svaka stavka nosi kako je utvrdjena, da se ne mora ponav
 
 Grana je 60+ commita ispred zelenog mastera i CI joj je CRVEN. Merge bi upravo sada porusio master.
 
-### A1. `globSync` trazi Node 22, a `engines` deklarira `>=20`  (POTVRDJENO)
+### A1. `globSync` trazi Node 22, a `engines` deklarira `>=20`  (ZATVORENO `1d818838`)
 
     scripts/gen-profile-rules-server.mts:18   import { globSync } from 'node:fs'
     tests/profile-rules-server.test.ts:15     isto
@@ -19,8 +19,12 @@ Grana je 60+ commita ispred zelenog mastera i CI joj je CRVEN. Merge bi upravo s
 `node:fs.globSync` postoji od Node 22. `package.json` kaze `{"node":">=20"}`, a CI vrti matricu 20 i
 24, pa grana 20 pada. Lokalno se ne vidi jer je stroj na Node 24: klasicno "radi kod mene".
 
-Popravak je izbor, ne mehanika: ili zamjena za `fast-glob`/rucni obilazak, ili podizanje `engines` na
-`>=22` uz izmjenu CI matrice. Drugo je krace ali suzava podrzane verzije.
+RIJESENO zamjenom za zajednicki obilazak (`scripts/draft-files.mts`), ne podizanjem `engines`:
+podizanje bi suzilo podrzane verzije, sto je proizvodna odluka a ne cistka. Popis staza je
+usporedjen izravno s `globSync` (338 datoteka, isti redoslijed, identican), pecena projekcija je
+nakon regeneracije BAJT-IDENTICNA, test 8/8. Gard nad obilaskom je `tests/draft-files.test.ts`
+(`7061c480`); zadnja tvrdnja prebrojava draftove NEOVISNIM putem, jer dijeljeni obilazak drift
+test po konstrukciji ne moze provjeriti. Pretrazeni su i ostali Node 22+ API-ji: nijedan.
 
 ### A2. Dvije pass-regresije `structure.heading.hierarchy`  (IZMJERENO)
 
@@ -49,14 +53,29 @@ tri testa jos greppaju `index.html`: `scoring-change-note`, `contrast-tinted-sur
 `a11y-batch-2026-07-18`. Provjereno je da novi CSS sadrzi sve sto testovi traze, dakle testovi gledaju
 krivu datoteku; nije kvar proizvoda.
 
-### A4. `tests/deploy-manifest.test.ts:43` deep-equal raskorak (24 stavke)
+### A4. `tests/deploy-manifest.test.ts:43` deep-equal raskorak (24 stavke)  (ZATVORENO)
 
-Vjerojatno ustajao artefakt uz `a7ea8dcf`. Nije potvrdjeno.
+Test PROLAZI na `7061c480`. Zatvoreno tudjim zahvatom: `deployedProduction` za `profile-rules`
+povucen na `null` uz obrazlozenje "izvjestaj ovu funkciju ne poznaje", sto NIJE isto sto i
+"nije deployano" i bas bi se ta razlika poslije citala krivo.
 
-### A5. UX gate: tri pada kontrasta u pravom pregledniku
+### A5. UX gate: tri pada kontrasta  (NE REPRODUCIRA SE na `7061c480`)
 
-Izmjereni omjeri 1.23 (`#e1e5e7` na `#fdfcf5`), 1.5 i 2.25 na naslovnici. Nije utvrdjeno je li
-posljedica izdvajanja stila ili commita `a173d231` / `b2aa1abe`.
+Prijavljeni omjeri 1.23 (`#e1e5e7` na `#fdfcf5`), 1.5 i 2.25 na naslovnici, iz CI anotacija na
+starijem stanju grane. Na vrhu origina ne padaju:
+
+    tests/ux/a11y-states.spec.ts        chromium          1 prosao
+    tests/ux/free-tools-audit.spec.ts   chromium         76 prosao
+    oba spec-a                          mobile-chromium  56 proslo, 21 preskoceno, 0 palo
+
+To su JEDINA dva mjesta gdje se `color-contrast` mjeri; naslovnicu pokriva `free-tools-audit`.
+Preskoceni pod mobilnim odgovaraju dokumentiranom namjernom izostavljanju axea.
+
+NE zatvaram kao popravljeno, jer nije utvrdjeno je li kvar uklonjen ili ga na ovom stanju nikad
+nije ni bilo. Boje iz nalaza NE postoje kao literali nigdje u repou, ni prije ni poslije
+`29828b46`, i nisu tokeni; gotovo sigurno su rezultat alfa-mijesanja koje axe racuna tek u
+pregledniku, pa se pripis krivcu staticki ne moze izvesti. Ako se ponovi, treba prolaz PRIJE i
+POSLIJE `29828b46` nad istim spec-om.
 
 ---
 
