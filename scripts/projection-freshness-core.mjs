@@ -114,6 +114,11 @@ export function formatProjection(verdict) {
   // razlike, to je jaci argument da ovo OSTANE screening, a ne da se pretvori u automatsku
   // regeneraciju. Ulancano pecenje traje preko 40 minuta i po ovom uzorku bi ih vecinom potrosilo
   // na proizvodnju istih bajtova.
+  //
+  // OGRADA, jer je omjer jedna tocka na krivulji: 4 od 4 dokazuje da screening PRETJERUJE, ne da
+  // je suvisan. Dok ne padne pogodak koji JEST razlika u sadrzaju, ne zna se ni koliko bi
+  // automatika ustedjela ni koliko bi propustila. Prvi takav pogodak vrijedi zabiljeziti OVDJE,
+  // jer tek on daje drugu tocku i cini odluku o ulancanju mjerljivom umjesto nacelnom.
   const oznaka = verdict.status === 'ustajalo' ? 'PROVJERI' : verdict.status === 'svjeze' ? 'svjeze  ' : 'nepoznato';
   const rep = verdict.status === 'ustajalo' ? `  -> ${verdict.regenerate}` : '';
   return `  ${oznaka}  ${verdict.id.padEnd(20)} ${verdict.reason}${rep}`;
