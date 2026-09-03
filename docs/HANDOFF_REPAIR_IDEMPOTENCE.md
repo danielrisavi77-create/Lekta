@@ -1,6 +1,35 @@
-# Handoff: popravak je regresirao na stvarnim radovima (9 padova, 2 pass-regresije)
+# Handoff: regresija popravka na stvarnim radovima
+
+> STANJE: neidempotentnost je ZATVORENA (`6fa30bfc`). Otvorene su jos 4 pass-regresije razreda
+> `structure.heading.hierarchy`. Detalji odmah ispod; sve nize od odjeljka "Sto padovi NISU"
+> opisuje stanje PRIJE tog popravka.
 
 Stanje na dan 2026-09-03. Mjereno, ne procijenjeno. Sve brojke se reproduciraju naredbom nize.
+
+## STATUS 2026-09-03 (kasnije isti dan): NEIDEMPOTENTNOST JE ZATVORENA
+
+Razred zbog kojeg ovaj dokument postoji je RIJESEN. Prijavila druga sesija, commit `6fa30bfc`
+"duboko ciscenje velicine nije bilo fiksna tocka, pa je prvi klik ostavljao 57 posto posla".
+
+    neidempotentnih   7  ->  0
+    fail             11  ->  4
+    pass-regresija    4  ->  4   (NEPROMIJENJENO)
+
+Uzrok je bio `dominantDirectRunSize`: preskakao je runove bez `w:sz`, pa je vlastiti ucinak uklanjao
+iz vlastitog ulaza; drugi prolaz je zato nalazio novu dominantu i opet pisao.
+
+STO SAM PROVJERIO, a sto NE: commit `6fa30bfc` postoji i njegova poruka odgovara opisu (fiksna
+tocka). Brojke poslije popravka NISAM mogao potvrditi s diska, jer `repair-real-corpus.local.json`
+u trenutku pisanja jos pokazuje stanje PRIJE popravka (45 dokumenata, fail 9, pass-regresija 2).
+Tko nastavlja, neka prvo regenerira artefakt.
+
+**OSTAJE OTVORENO: pass-regresije, 4 komada, razred `structure.heading.hierarchy`.** Taj zahvat ih
+nije dirao. Njih polovi necommitani rad na `normalizeProposedLevels` u
+`src/analysis/heading-structure.ts` (4 -> 2), opisan nize; dok je necommitan, ne postoji ni za koga
+osim za svog autora.
+
+Sve ispod ovog odjeljka opisuje stanje PRIJE `6fa30bfc` i ostaje kao zapis puta, ne kao tekuci
+nalaz.
 
 ## Sazetak u jednoj recenici
 
