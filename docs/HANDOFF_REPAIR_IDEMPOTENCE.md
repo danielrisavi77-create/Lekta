@@ -22,6 +22,64 @@ Ovo je ista zamka pred kojom ovaj vodic drugdje upozorava, i upao sam u nju sam.
 "vjeruj ovim brojkama" nego: **ponovi mjerenje na CISTOM, fiksnom commitu u izoliranom worktreeu.**
 Ako se brojke razlikuju, ta je razlika sama po sebi nalaz.
 
+### RAZRIJESENO 2026-09-03: necommitani rad je POMAGAO, commitani kod je GORI
+
+Druga sesija je izmjerila oba stanja nad istim korpusom (45 dokumenata, 38 lokalnih + 7 commitanih),
+uz HEAD prikovan na `29828b46` i izoliran worktree:
+
+    CIST HEAD (bez necommitane zastite)   fail 11   pass-regresija 4
+    STABLO (s necommitanom zastitom)      fail  9   pass-regresija 2
+
+Dakle necommitani rad na `normalizeProposedLevels` u `src/analysis/heading-structure.ts` UKLANJA dva
+pada i dvije regresije; sve cetiri su ista provjera, `structure.heading.hierarchy`.
+
+**Posljedica za ovaj handoff: regresija u COMMITANOM kodu je VECA nego sto sam prijavio, ne manja.**
+Moje brojke (9 i 2) izmjerene su sa ukljucenim tudjim popravkom. Bez njega je 11 i 4. Pretpostavio
+sam da necommitani rad brojke kvari; kvario ih je u suprotnom smjeru.
+
+Sto se tocno dogodilo po dokumentu:
+
+    rijeseno   local-33-diplomski   fpzg-politologija-diplomski   77->78
+               local-36-diplomski   fpzg-politologija-diplomski   82->84
+    ostaje     local-13-zavrsni     fpzg-politologija-zavrsni     81->82
+               local-27-zavrsni     fpzg-politologija-zavrsni     82->87
+
+SMIJE SE TVRDITI SAMO OVO: zastita uklanja obje `-diplomski` regresije i nijednu `-zavrsni`.
+
+NE SMIJE SE TVRDITI da je profil uzrok, iako obrazac na to vuce. Treca sesija je to oborila
+mjerenjem: ista dva profila imaju 16 dokumenata koji uopce ne regresiraju, pa profil ne moze biti
+uvjet. Prva verzija ovog odjeljka je pisala da podjela "pokazuje gdje gledati, u razliku medju
+profilima"; to je bilo prejako i ovdje je ublazeno, jer bi inace sljedeca sesija trazila razliku
+koja nije uzrok.
+
+Korelacija je odbacena mjerenjem: `heading-style-fixer` je promijenio 27 dokumenata, a regresirala
+su 4.
+
+### NAZIVNIK NIJE STABILAN IZMEDJU SESIJA (razjasnjeno mjerenjem)
+
+Moj prolaz je prijavio 54 dokumenta, njihov 45. Uzrok NIJE u harnessu: `discoverRealCorpus` uzima
+SVAKI `.docx` koji ima pratitelja i prodje `sidecarAdmitted`, bez uzorkovanja i bez granice.
+
+NIJE NESTAO NIJEDAN RAD. Prva verzija ovog odjeljka tvrdila je da je iz gitignoriranog direktorija
+uklonjeno devet radova. To je bilo netocno i opasno, jer bi poslalo sljedecu sesiju u potragu za
+devet izgubljenih studentskih radova. Aritmetika (provjerena neovisno):
+
+    commitanih fixtura              19
+    oznaceno `synthetic` SADA       12   ->  dopusteno  7    7 + 38 = 45
+    oznaceno `synthetic` PRIJE       3   ->  dopusteno 16   16 + 38 = 54
+    lokalnih `.docx`                38   u OBA prolaza
+
+Promijenila se dakle populacija DOPUSTENIH commitanih fixtura, jer su im pratitelji u meduvremenu
+oznaceni kao sinteticki (`da442a8e`, `c9491a8b`). To je bilo ispravno: ti dokumenti NISU studentski
+radovi. Posljedica za moje brojke je da je moj skup od 54 ukljucivao devet sintetickih dokumenata
+koji ne bi smjeli brojati kao stvarni radovi; njihov skup od 45 je cisci.
+
+PRAKTICNA POSLJEDICA, sada s tocnim razlogom: nazivnik nije konstanta i moze se promijeniti BEZ
+IJEDNE promjene dokumenata, jer pripadnost skupu odredjuju SIDECARI, a njih ureduju druge sesije.
+Dva stanja koda usporediva su samo ako su mjerena nad istim skupom DOPUSTENIH dokumenata, ne samo
+nad istim direktorijem. Prije svakog zakljucka procitaj `documentCount` iz artefakta koji drzis u
+ruci, ne iz ovog dokumenta.
+
 ## Kako reproducirati (obavezno prije bilo kakvog zahvata)
 
     LEKTA_LOCAL_CORPUS=1 npx vite-node scripts/repair-real-corpus.mts
