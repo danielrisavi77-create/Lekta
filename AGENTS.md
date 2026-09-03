@@ -266,6 +266,22 @@ Posljedica za rad: kad brojka ostane ista a mehanizam se promijenio, provjeri ID
 Popis blokatora citatnih dosjea zato je imenovan, a ne prebrojan: 2026-08-31 je broj ostao 1 dok je
 `pravo` otisao a `pfri` dosao, i samo je imenovani popis to uhvatio.
 
+**3. GARD KOJI ZAHVAT PRIMIJENI JEDNOM ne moze vidjeti ugovor koji vrijedi samo na PRVU primjenu.**
+Idempotencija trazi DVA prolaza i tvrdnju da je drugi no-op. Izmjereno 2026-09-03: tri testa pisana
+bas da dokazu zastitu "brise dominantnu velicinu, manjinsku ostavlja" bila su jednoprolazna, pa
+nijedan nije vidio da zastita pada na drugi klik. Nisu bili slabi nego su mjerili krivi BROJ PROLAZA.
+
+**4. MJERA NAD POPULACIJOM KOJU SAM MIJENJAS ne moze konvergirati**, jer si uklanjas vlastiti ucinak
+iz vlastitog ulaza. `dominantDirectRunSize` je racunao samo runove koji JOS nose `w:sz`; cim prvi
+prolaz skine dominantu, tijelo prijedje na nasljedjivanje i nestane iz nazivnika, pa manjina postane
+"dominanta". Kaskada: 2461, 431, 2838, 7, 28 runova, uz 57 posto neuklonjenih velicina nakon PRVOG
+klika i changelog koji tvrdi suprotno (popravak `6fa30bfc`). Isti razred istog dana: graf modula je
+brojao `import type` i uvoze iz KOMENTARA, pa javljao 17 ciklusa kojih je stvarnih bilo nula.
+
+**Postojeca invarijanta NIJE pokrivenost.** `repair-golden` idempotenciju vec tvrdi, ali samo nad
+svojim skupom zahtjeva i oblicima fixtura; kroz gornji kvar bio je zelen i prije i poslije popravka.
+To je instanca pravila 2: invarijanta postoji, ali nijedan ulaz nema oblik koji je obara.
+
 ## Tvrdo pravilo: gard bez dokaza da grize ne racuna se
 
 Svaki verifikacijski gard mora imati MUTACIJU u `tests/gate-mutations.test.ts`: podmetnut poznat kvar

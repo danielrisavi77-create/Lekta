@@ -371,6 +371,32 @@ Posljedica za rad: kad brojka ostane ista a mehanizam se promijenio, provjeri ID
 Popis blokatora citatnih dosjea zato je imenovan, a ne prebrojan: 2026-08-31 je broj ostao 1 dok je
 `pravo` otisao a `pfri` dosao, i samo je imenovani popis to uhvatio.
 
+**3. GARD KOJI ZAHVAT PRIMIJENI JEDNOM ne moze vidjeti ugovor koji vrijedi samo na PRVU primjenu.**
+Idempotencija se ne dokazuje jednim prolazom, nego dvama i tvrdnjom da je drugi no-op.
+
+Izmjereno 2026-09-03 na `dominantDirectRunSize`: autor je napisao TRI testa da dokaze zastitu
+"brise dominantnu velicinu, manjinsku ostavlja", i sva tri su bila jednoprolazna, pa nijedan nije ni
+mogao vidjeti da zastita vrijedi samo na prvi klik. Na drugi klik manjinski potpis od 10 pt postane
+dominanta medju preostalima i nestane. Testovi nisu bili slabi nego su mjerili KRIVI BROJ PROLAZA;
+ista bi rupa postojala uz bilo koju vrijednost i bilo koji prag.
+
+**4. MJERA NAD POPULACIJOM KOJU SAM MIJENJAS ne moze konvergirati**, jer si uklanjas vlastiti ucinak
+iz vlastitog ulaza. `dominantDirectRunSize` je dominantu racunao samo medju runovima koji JOS nose
+`w:sz`; cim prvi prolaz skine stvarnu dominantu, tijelo prijedje na nasljedjivanje iz stila i nestane
+iz nazivnika, pa jucerasnja manjina postane "dominanta". Kaskada na stvarnom radu: 2461, 431, 2838,
+7, 28 runova, pet prolaza do mirovanja, uz 57 posto neuklonjenih velicina nakon PRVOG klika i
+changelog koji tvrdi da su uklonjene. Popravak (`6fa30bfc`): u nazivnik ulazi i tekst koji vrijednost
+NASLJEDJUJE.
+
+Isti razred, druga domena, isti dan: gard nad grafom modula brojao je `import type` bridove i uvoze
+napisane u KOMENTARIMA, pa je javljao 17 ciklusa kojih je stvarnih bilo nula (`2a137026`, `6bb28616`).
+
+**Postojeca invarijanta NIJE pokrivenost.** `repair-golden` idempotenciju vec tvrdi, ali samo nad
+vlastitim skupom zahtjeva i oblicima koje fixturi imaju; kroz gornji kvar je bio zelen i prije i
+poslije popravka, bez izmjene snimke. To je instanca pravila 2 gore: invarijanta postoji, ali nijedan
+ulaz nema oblik koji je obara. "Postoji test idempotencije" zato nije odgovor na pitanje pokriva li
+tvoju granu.
+
 ## Tvrdo pravilo: gard bez dokaza da grize ne racuna se
 
 Svaki verifikacijski gard mora imati MUTACIJU u `tests/gate-mutations.test.ts`: podmetnut poznat kvar
