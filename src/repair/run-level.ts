@@ -353,15 +353,34 @@ const PARAGRAPH_RE = /<w:p(?:\s[^>]*[^/>])?>[\s\S]*?<\/w:p>/g;
  */
 function dominantDirectRunSize(documentXml: string, skip: (paragraph: string, offset: number) => boolean): number | null {
   const weights = new Map<number, number>();
+  /**
+   * Tezina teksta koji NEMA izravnu velicinu, dakle nasljedjuje je iz stila.
+   *
+   * Do 2026-09-03 se takav tekst preskakao, pa se dominanta racunala samo medju runovima koji jos
+   * nose `w:sz`. Posljedica je bila da zahvat NIJE fiksna tocka: cim prvi prolaz skine stvarnu
+   * dominantu, tijelo prijedje na nasljedjivanje i postane nevidljivo racunu, a jucerasnja
+   * MANJINA postane "dominanta" i sljedeci prolaz je obrise.
+   *
+   * Izmjereno na stvarnom radu (`local-04-zavrsni`, 5767 izravnih velicina): uzastopni prolazi
+   * skidali su 2461, 431, 2838, 7 pa 28 runova, dakle pet prolaza do mirovanja, a nakon prvog
+   * klika ostajalo je 57 posto izravnih velicina uz changelog koji tvrdi da su uklonjene.
+   *
+   * Gore od neidempotentnosti: time je propadala i zastita koju ovaj kriterij obecava. Potpis od
+   * 10 pt prezivi prvi klik, a na drugi postane dominanta medju preostalima i nestane.
+   */
+  let inheritedWeight = 0;
   for (const match of documentXml.matchAll(PARAGRAPH_RE)) {
     const paragraph = match[0];
     if (skip(paragraph, match.index ?? 0)) continue;
     for (const run of paragraph.matchAll(/<w:r(?:\s[^>]*)?>[\s\S]*?<\/w:r>/g)) {
-      const size = /<w:sz\b[^>]*w:val="(\d+)"/.exec(run[0]);
-      if (!size) continue;
       const text = [...run[0].matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)].map((t) => t[1]).join('');
       const weight = text.trim().length;
       if (!weight) continue;
+      const size = /<w:sz\b[^>]*w:val="(\d+)"/.exec(run[0]);
+      if (!size) {
+        inheritedWeight += weight;
+        continue;
+      }
       const value = Number(size[1]);
       weights.set(value, (weights.get(value) ?? 0) + weight);
     }
@@ -374,7 +393,9 @@ function dominantDirectRunSize(documentXml: string, skip: (paragraph: string, of
       bestWeight = weight;
     }
   }
-  return best;
+  // Dominanta mora nadjacati i NASLIJEDJENI tekst, ne samo ostale izravne velicine. Bez toga je
+  // "dominantno" samo "najcesce medju preostalima", sto je nakon prvog prolaza uvijek netko.
+  return bestWeight > inheritedWeight ? best : null;
 }
 
 export function stripDirectFormatting(documentXml: string, opts: RunLevelOptions): RunLevelResult {
