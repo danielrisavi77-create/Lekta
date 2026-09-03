@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "corpusFingerprint": "476c8339587b6082db25bd3f762c3ba9",
-  "measuredAt": "2026-09-03T21:50:42.796Z",
-  "measuredFromCommit": "1e3bb30308012623cda54de2532f162bf1649514",
+  "measuredAt": "2026-09-03T23:04:26.992Z",
+  "measuredFromCommit": "bff502f2516fab8fe61dfe1060ad3722cad9b349",
   "oracles": [
     "scripts/repair-real-corpus.mts (harness + detectPassRegressions)"
   ],
@@ -28,26 +28,22 @@
       "profileId": "fpzg-opci-akademski-rad",
       "workType": "unknown",
       "documentCount": 16,
-      "cleanCount": 14,
+      "cleanCount": 16,
       "regressedChecks": []
     },
     {
       "profileId": "fpzg-politologija-diplomski",
       "workType": "unknown",
       "documentCount": 12,
-      "cleanCount": 7,
-      "regressedChecks": [
-        "structure.heading.hierarchy"
-      ]
+      "cleanCount": 12,
+      "regressedChecks": []
     },
     {
       "profileId": "fpzg-politologija-zavrsni",
       "workType": "unknown",
       "documentCount": 10,
-      "cleanCount": 6,
-      "regressedChecks": [
-        "structure.heading.hierarchy"
-      ]
+      "cleanCount": 10,
+      "regressedChecks": []
     },
     {
       "profileId": "mef-doktorski",
