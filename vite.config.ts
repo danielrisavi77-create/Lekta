@@ -440,6 +440,7 @@ export default defineConfig(({ command }) => {
     index: resolve(__dirname, 'index.html'),
     rad: resolve(__dirname, 'rad', 'index.html'),
     saznajVise: resolve(__dirname, 'saznaj-vise', 'index.html'),
+    mojiRadovi: resolve(__dirname, 'moji-radovi', 'index.html'),
     demo: resolve(__dirname, 'demo.html'),
     usporedba: resolve(__dirname, 'landing_usporedba.html'),
     benchmark: resolve(__dirname, 'landing_benchmark.html'),

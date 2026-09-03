@@ -33,8 +33,8 @@ const expectedDirectory = {
       id: 'your-work', label: 'Tvoj rad',
       destinations: [
         { id: 'intake', label: 'Nova provjera', href: '/', description: 'Učitaj Word dokument i pokreni novu lokalnu provjeru.', release: 'core' },
-        { id: 'my-work', label: 'Moji radovi', href: '/moji-radovi/', description: 'Otvori osobni prostor za lokalni rad i pristup računu.', release: 'personal-space' },
-        { id: 'account-repairs', label: 'Prijava i spremljeni popravci', href: '/moji-radovi/#racun', description: 'Prijavi se i upravljaj popravcima spremljenima na računu.', release: 'personal-space' },
+        { id: 'my-work', label: 'Moji radovi', href: '/moji-radovi/', description: 'Otvori osobni prostor za lokalni rad i pristup računu.', release: 'core' },
+        { id: 'account-repairs', label: 'Prijava i spremljeni popravci', href: '/moji-radovi/#racun', description: 'Prijavi se i upravljaj popravcima spremljenima na računu.', release: 'core' },
       ],
     },
     {
@@ -99,12 +99,15 @@ describe('public route directory', () => {
     // 2026-09-03: pet odredista (learn-more, checks, trust-proof, pricing, faq) preslo je u `core`,
     // jer je ruta `/saznaj-vise/` stvarno nastala i sekcije su na njoj. Ostaju samo ona koja jos
     // nemaju rutu.
-    expect(allRoutes.filter((destination) => destination.release !== 'core').map((destination) => destination.id)).toEqual([
-      'my-work',
-      'account-repairs',
-    ]);
+    // 2026-09-04: popis je PRAZAN, jer je i `/moji-radovi/` nastala.
+    //
+    // Prazan popis je opasan oblik: `toEqual([])` prolazi i kad direktorij nema NIJEDNO odrediste,
+    // dakle vakuumski. Zato se uz njega izricito tvrdi da odredista postoje i da su sva objavljena.
+    // Novo odrediste bez rute mora se vratiti u ovaj popis.
+    expect(allRoutes.length, 'prazan direktorij nije prolaz').toBeGreaterThan(20);
+    expect(allRoutes.filter((destination) => destination.release !== 'core').map((destination) => destination.id)).toEqual([]);
+    expect(releasedIds.length).toBe(allRoutes.length);
     for (const id of ['my-work', 'account-repairs']) {
-      expect(releasedIds, id).not.toContain(id);
       expect(isPublicRouteId(id), id).toBe(true);
     }
     expect(isPublicRouteId('not-a-public-route')).toBe(false);
@@ -287,7 +290,7 @@ describe('public route directory: postojanje odredista', () => {
 
     // Prazan skup bi "prosao" bez ijedne provjere; broj objavljenih odredista se tvrdi izrijekom.
     // 15 -> 20 (2026-09-03): pet odredista `/saznaj-vise/#...` je objavljeno jer ruta postoji.
-    expect(released.length).toBe(20);
+    expect(released.length).toBe(22);  // 15 -> 20 (`/saznaj-vise/`) -> 22 (`/moji-radovi/`)
     expect(missing, `objavljena odredista bez dokaza o postojanju: ${missing.join(', ')}`).toEqual([]);
   });
 
@@ -304,7 +307,7 @@ describe('public route directory: postojanje odredista', () => {
     expect(broken, `objavljeni fragmenti bez sidra: ${broken.join(', ')}`).toEqual([]);
   });
 
-  it('NEOBJAVLJENA odredista: ruta ne postoji, i to je jedini razlog zasto se ne prikazuju', () => {
+  it('SVAKO odrediste ima rutu, pa nijedno vise nije zapisana namjera', () => {
     // Ovo je obrazlozenje presude, ne ukras.
     //
     // PROMJENA 2026-09-03: `/saznaj-vise/` je do tada bila zapisana namjera, a sekcije su zivjele
@@ -314,8 +317,12 @@ describe('public route directory: postojanje odredista', () => {
       const hub = readFileSync(resolve(ROOT, 'saznaj-vise', 'index.html'), 'utf8');
       expect(hub.includes(`id="${anchor}"`), `/saznaj-vise/ nema sidro #${anchor}`).toBe(true);
     }
-    for (const href of ['/moji-radovi/']) {
-      expect(routeEvidence(href), `ruta ${href} je u medjuvremenu nastala; prebaci odredista u core`).toBeNull();
+    // Do 2026-09-04 je ovdje stajalo obrnuto: da `/moji-radovi/` NE postoji i da je to razlog
+    // skrivanja. Ruta je napravljena, pa tvrdnja mijenja smjer umjesto da se obrise.
+    const mojiRadovi = readFileSync(resolve(ROOT, 'moji-radovi', 'index.html'), 'utf8');
+    expect(mojiRadovi.includes('id="racun"'), '/moji-radovi/ nema sidro #racun').toBe(true);
+    for (const href of ['/saznaj-vise/', '/moji-radovi/']) {
+      expect(routeEvidence(href), `ruta ${href} nema dokaz o postojanju`).not.toBeNull();
     }
 
     const unreleased = allPublicRouteGroups

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moji radovi · Lekta</title>
+<meta name="description" content="Radovi koje si otvorio na ovom uredaju i popravci spremljeni na racunu.">
+<link rel="canonical" href="https://lektahr.netlify.app/moji-radovi/">
+<meta name="robots" content="noindex,follow">
+<script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Šalje li se moj rad na internet?","acceptedAnswer":{"@type":"Answer","text":"Ne šalje se. Rad ostaje na tvom uređaju sve dok mu ti ne kažeš drugačije. Besplatna automatska provjera oblikovanja je potpuno lokalna i ne napušta uređaj; analiza ne koristi umjetnu inteligenciju ni jezične modele, nego pravilima utemeljen softver koji lokalno čita strukturu dokumenta. Dokument se na poslužitelj šalje samo uz tvoju izričitu privolu i samo za usluge koje to traže: ručnu obradu, Provjeru prije predaje te plaćeni automatski popravak. Provjera prije predaje briše datoteku odmah nakon analize; plaćeni automatski popravak čuva izvorni i ispravljeni dokument dok ih sam ne obrišeš u Moji popravci."}},{"@type":"Question","name":"Može li aplikacija automatski ispraviti cijeli Word dokument?","acceptedAnswer":{"@type":"Answer","text":"Ne cijeli dokument, nego odabrane tehničke elemente. Uz plan ispravaka Lekta automatski popravlja oblikovanje (margine, format papira, font, prored, poravnanje, razmake) te strukturu: numeriranje stranica i sekcije, polja sadržaja, oblikovanje naslova po razinama, naslovnicu, natpise tablica i slika, poredak i oblik popisa literature te usklađivanje citata s literaturom. Opseg ovisi o profilu tvog fakulteta i o složenosti dokumenta: na stvarnim radovima dio nalaza ostane za ručnu izmjenu, a izvještaj ti točno kaže koji. Popravlja se FORMA, nikad sadržaj: rečenice, argumentacija i tvoje tvrdnje ostaju netaknute. Popravljeni dokument se prije preuzimanja ponovno provjeri, a ako je neki popravak srušio provjeru koja je prije prolazila, preporučujemo izvorni dokument. Svaki rezultat treba tvoj završni pregled."}},{"@type":"Question","name":"Što ako nakon ispravka nešto još fali?","acceptedAnswer":{"@type":"Answer","text":"Puna kupnja diplomskog i doktorskog rada uključuje 14 dana ponovnih provjera nakon ispravka (7 dana za seminarski i završni): učitaj ispravljenu verziju koliko god puta treba unutar tog roka, bez nove kupnje."}},{"@type":"Question","name":"Provjerava li Lekta plagijat ili sličnost teksta?","acceptedAnswer":{"@type":"Answer","text":"Ne. Lekta provjerava oblikovanje, strukturu, opseg i citiranje prema pravilima fakulteta, ali ne uspoređuje tekst s drugim izvorima i nije zamjena za Turnitin ni druge alate za provjeru izvornosti. Provjeru izvornosti provodi fakultet."}},{"@type":"Question","name":"Je li rezultat službena potvrda fakulteta?","acceptedAnswer":{"@type":"Answer","text":"Nije. Rezultat je pomoćna tehnička provjera prema odabranom profilu. Uvijek vrijede aktualne službene upute fakulteta, studija, kolegija i mentora."}},{"@type":"Question","name":"Zašto je moj fakultet označen kao generički profil?","acceptedAnswer":{"@type":"Answer","text":"Ustanova je dostupna za odabir, ali posebna pravila još nisu povezana s provjerenim službenim izvorom. Aplikacija zato radi opći tehnički audit i dopušta unos posebnih uputa mentora, bez tvrdnje da je dokument službeno usklađen."}},{"@type":"Question","name":"Zašto neka citatnica možda nije prepoznata?","acceptedAnswer":{"@type":"Answer","text":"Citatni stilovi imaju brojne varijante, a Word tekst može sadržavati polja, fusnote i posebne znakove. Aplikacija označava moguće probleme, ali rezultat treba provjeriti u kontekstu rada."}}]}</script>
+</head>
+<body>
+<nav class="shell nav" aria-label="Glavna navigacija">
+    <a class="logo" href="/"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
+    <div class="nav-links"><a href="/saznaj-vise/#how">Kako radi</a><a href="/saznaj-vise/#video">Video</a><a href="/saznaj-vise/#podcrta">Što provjerava</a><div class="nav-tools"><button class="nav-tools-btn" type="button" aria-expanded="false">Alati <span class="caret" aria-hidden="true">&#9662;</span></button><div class="nav-tools-menu"><a href="alati.html">Svi alati</a><a href="citat.html">Citat generator</a><a href="kartice.html">Brojač kartica</a><a href="naslovnica.html">Naslovnica</a><a href="literatura.html">Sređivanje literature</a><a href="izjava.html">Izjava o izvornosti</a></div></div><a href="/fakulteti/">Po fakultetu</a><a href="landing_usporedba.html">Usporedba</a><a href="landing_benchmark.html">Benchmark</a><a href="/saznaj-vise/#pricing">Paketi</a><a href="/saznaj-vise/#faq">Pitanja</a></div>
+    <button class="btn btn-ghost btn-sm hidden" id="authEntry" data-auth-entry type="button">Prijava</button>
+    <a class="btn btn-primary btn-sm" href="/#analyzer">Provjeri rad</a>
+    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i><span class="lampa-txt">Lampa</span></button>
+    <button class="icon-btn mobile-menu" id="mobileMenuBtn" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
+  </nav>
+<main id="moji-radovi">
+<section class="section" id="lokalni-rad">
+  <div class="shell">
+    <div class="ks-sec-head">
+      <div class="ks-sec-k">na ovom uređaju</div>
+      <h1>Moji radovi</h1>
+      <p class="ks-sec-sub">Dokumenti koje si otvorio ostaju u pregledniku, na ovom uređaju. Ne šalju se nikamo i nestaju sami nakon 24 sata.</p>
+    </div>
+    <div id="localWork" class="mw-list" aria-live="polite" aria-busy="true">
+      <p class="mw-note">Čitam lokalnu pohranu&hellip;</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="racun">
+  <div class="shell">
+    <div class="ks-sec-head">
+      <div class="ks-sec-k">račun</div>
+      <h2>Prijava i spremljeni popravci</h2>
+      <p class="ks-sec-sub">Popravci koje si platio spremaju se na račun, pa ih možeš preuzeti i s drugog uređaja.</p>
+    </div>
+    <div id="accountWork" class="mw-list" aria-live="polite" aria-busy="true">
+      <p class="mw-note">Provjeravam prijavu&hellip;</p>
+    </div>
+  </div>
+</section>
+</main>
+<script type="module" src="/src/routes/my-work/main.ts"></script>
+</body>
+</html>

@@ -71,6 +71,7 @@ import '../preflight/preflight-panel.css';
 const FPZG_SUBMISSION_CALENDAR: any = _FPZG_CAL;
 import { WORK_TYPE_LABELS } from '../config/config-loader';
 import { STORAGE_KEYS, safeStorageGet, safeStorageSet } from '../shared/browser-storage';
+import { repairHistoryConfigFrom } from '../report/repair-history-config';
 import * as purePr from '../config/production-config';
 import { DEFAULT_PRODUCTION_CONFIG, loadProductionConfig } from '../config/production-config';
 // Tanki omotaci nad `config/production-config`: cista logika je ondje, a ovdje se dodaje SAMO
@@ -584,7 +585,7 @@ function handleHistoryAction(e: any){const profileId=e.target.closest('[data-his
 // WS-6 "Moji popravci": povijest SERVER-side popravaka vezana uz racun (retencija do brisanja).
 // Gumb je vidljiv samo kad je repair server konfiguriran. Lista/download(signed URL)/brisanje(erasure)
 // preko testirane src/report/repair-history.ts. RLS select-own: server vraca samo korisnikove poslove.
-function repairHistoryConfig(){const url=String(productionConfig?.supabaseUrl||'').trim();return{supabaseUrl:url,anonKey:String(productionConfig?.supabaseAnonKey||'').trim(),deleteEndpoint:url?url.replace(/\/+$/,'')+'/functions/v1/delete-repair-job':''}}
+function repairHistoryConfig(){return repairHistoryConfigFrom(productionConfig)}
 function updateRepairHistoryButton(){const b=$('#repairHistoryBtn');if(b)b.classList.toggle('hidden',!repairServerConfigured())}
 // Ime preuzete datoteke iz naslova rada: svi popravci su se prije zvali "popravljeno.docx", pa se u
 // mapi preuzimanja nisu razlikovali. Znakovi koje datotecni sustavi odbijaju se uklanjaju.
@@ -1574,7 +1575,7 @@ let _paywallViewedFor: any=null;
 // na currentResult), ne jednom po pozivu, inace bi jedan prikaz rezultata umjetno napuhao broj.
 function paywallLockHtml(what: any){if(currentResult&&_paywallViewedFor!==currentResult){_paywallViewedFor=currentResult;void trackEvent('paywall_viewed')}const wt=toReportWorkType(currentResult?.settings?.workType||'final'),tier=tierFor(wt),price=tier?(livePriceEur(tier.workType)??tier.priceEur):null,ob=checkoutConfigured()?doObraneProduct(wt):null;return`<div class="lock-panel"><i data-lucide="lock" aria-hidden="true"></i><div><strong>${escapeHtml(what)}</strong><p>Dio punog izvještaja: serverski potvrđen, bez vodenog žiga${tier?`, ${escapeHtml(tier.label.toLowerCase())} ${eurLabel(price)}`:''}${tier?`, uz ${tier.windowDays} dana besplatnih ponovnih provjera istog rada nakon ispravka`:', uz besplatne ponovne provjere istog rada unutar prozora'}. Pri otključavanju se poslužitelju šalju parsirana struktura i rezultat analize; sam dokument ostaje na uređaju.</p><button class="btn btn-primary btn-sm" type="button" data-unlock-cta>Otključaj puni izvještaj</button>${ob?` <button class="btn btn-secondary btn-sm" type="button" data-buy-obrana="${escapeHtml(wt)}">Do obrane: ${ob.slotWindowDays} dana ponovnih provjera · ${eurLabel(ob.priceEur)}</button>`:''}</div></div>`}
 function wireLockCtas(){$$('[data-unlock-cta]').forEach(b=>{b.onclick=handleUnlockReport});$$('[data-buy-obrana]').forEach(b=>{b.onclick=()=>startReportCheckout(b.dataset.buyObrana,'do_obrane')});window.__lektaIcons?.()}
-const SESSION_KEY='lekta.session';
+const SESSION_KEY=STORAGE_KEYS.session;
 const authStore={load:()=>safeStorageGet(SESSION_KEY,null),save:(s: any)=>safeStorageSet(SESSION_KEY,s)};
 function authConfig(){return{supabaseUrl:String(productionConfig?.supabaseUrl||'').trim(),anonKey:String(productionConfig?.supabaseAnonKey||'').trim()}}
 function authConfigured(){const c=authConfig();return!!(c.supabaseUrl&&c.anonKey)}
