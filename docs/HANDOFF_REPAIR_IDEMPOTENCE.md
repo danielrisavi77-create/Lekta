@@ -1,6 +1,7 @@
 # Handoff: regresija popravka na stvarnim radovima
 
-> STANJE: neidempotentnost je ZATVORENA (`6fa30bfc`). Otvorene su jos 4 pass-regresije razreda
+> STANJE: neidempotentnost je ZATVORENA (`6fa30bfc`, izmjereno na `46d6fa63`). SVAKI preostali
+> pad je sada regresija: 4 komada, razred
 > `structure.heading.hierarchy`. Detalji odmah ispod; sve nize od odjeljka "Sto padovi NISU"
 > opisuje stanje PRIJE tog popravka.
 
@@ -18,10 +19,28 @@ Razred zbog kojeg ovaj dokument postoji je RIJESEN. Prijavila druga sesija, comm
 Uzrok je bio `dominantDirectRunSize`: preskakao je runove bez `w:sz`, pa je vlastiti ucinak uklanjao
 iz vlastitog ulaza; drugi prolaz je zato nalazio novu dominantu i opet pisao.
 
-STO SAM PROVJERIO, a sto NE: commit `6fa30bfc` postoji i njegova poruka odgovara opisu (fiksna
-tocka). Brojke poslije popravka NISAM mogao potvrditi s diska, jer `repair-real-corpus.local.json`
-u trenutku pisanja jos pokazuje stanje PRIJE popravka (45 dokumenata, fail 9, pass-regresija 2).
-Tko nastavlja, neka prvo regenerira artefakt.
+IZMJERENO NAKON POPRAVKA (druga sesija, izoliran worktree na pushanom `46d6fa63`, junctioni na
+`node_modules` i `tests/fixtures/docx-local`, `documentCount` potvrdjen prije svega ostalog):
+
+    dokumenata        45
+    padova             4      (bilo 11)
+    neidempotentnih    0      (bilo 7)
+    pass-regresija     4      nepromijenjeno
+    integritet         0
+    razrjesenje       20/94 = 21,3 %
+
+    sve cetiri regresije su `structure.heading.hierarchy`:
+    local-13-zavrsni, local-27-zavrsni, local-33-diplomski, local-36-diplomski
+
+**NAJVAZNIJA POSLJEDICA: poslije `6fa30bfc` je SVAKI preostali pad regresija.** Razred
+neidempotentnosti vise ne postoji, pa odjeljak "Sto padovi NISU" nize opisuje stanje koje se vise ne
+moze reproducirati.
+
+O RAZRJESENJU 21,3 %: ne usporedjuj ga izravno s ranijih 39,8 %. Nazivnici su razliciti (94 naspram
+133 ciljanih provjera) jer je i skup dopustenih dokumenata razlicit (45 naspram 54). Hipoteza koju
+NITKO NIJE PROVJERIO, pa je ne uzimaj kao nalaz: devet sintetickih fixtura koje su ispale iz skupa
+mogle su biti lakse za popravak od stvarnih radova i time dizati raniji postotak. Tko to zeli
+utvrditi, mora izmjeriti oba skupa nad ISTIM kodom.
 
 **OSTAJE OTVORENO: pass-regresije, 4 komada, razred `structure.heading.hierarchy`.** Taj zahvat ih
 nije dirao. Njih polovi necommitani rad na `normalizeProposedLevels` u
