@@ -148,6 +148,23 @@ Bez Dena korak PADA umjesto da se tiho preskoci, i to je namjerno: provjera koja
 preskoci jednaka je provjeri koje nema. Prije toga je rupa bila samo lokalna (CI ga je vrtio
 kao zaseban korak, i to samo na Node 20), pa se greska u Edge kodu vidjela tek nakon pusha.
 
+### Je li MASTER zelen: `npm run master-ci`
+
+Lokalni gate ne odgovara na to pitanje. On mjeri tvoje radno stablo, a master zna biti crven
+danima a da to nitko ne vidi: 2026-09-02 su CETIRI uzastopna master commita bila crvena
+(`1f12c0be`, `5fd8c84b`, `f22eb616`, `8bb158a6`), a otkrila ih je sesija koja je mjerila nesto
+drugo. Provjeri to PRIJE nego se osloni na master (grananje, merge, dokaz).
+
+TRI ishoda, i to je cijela poanta: `0` zeleno, `1` CRVENO (uz broj UZASTOPNIH padova, koji je
+vazniji od zadnjeg), `2` NE ZNAM. "Ne znam" nikad ne izlazi kao zeleno.
+
+Alat NE koristi `gh`. Izmjereno 2026-09-03: `gh` je poceo visiti na svakoj podnaredbi,
+ukljucujuci `gh auth status`, i jedan poziv se nije vratio ni nakon 439 s, dok je `api.github.com`
+istovremeno odgovarao za 0,32 s. Zove se API izravno (repozitorij je javan, autentikacija ne
+treba), sto traje ~1,8 s. Ako alat mijenjas: izlaz mora ici preko `process.exitCode`, jer
+`process.exit()` uz zivu `fetch` uticnicu rusi Node na Windowsu i vraca 127, cime ugovor o tri
+koda pukne bas kad gard treba biti pouzdan.
+
 ### Gdje se gate mjeri: na IZOLIRANOM stablu, nikad na dijeljenom
 
 `npm run check` mjeri RADNO STABLO, ne HEAD. Kad vise sesija dijeli isto stablo, mjeri i tudje
