@@ -1,6 +1,7 @@
 import { buildHeadingNumberingPlan } from './heading-numbering';
 import type { HeadingNumberingPlan } from './heading-numbering';
 import { analyzeParagraphFormatting } from './paragraph-structure';
+import { normalizeAnchorText } from '../repair/anchor-text';
 
 /**
  * Lokalna, deterministička procjena naslova koji nemaju Word Heading stil.
@@ -295,7 +296,28 @@ function inferUnnumberedLevels(candidates: HeadingCandidate[], paragraphs: Headi
  * Spusta se samo NADOLJE (`Math.min`): predlozena razina nikad ne raste, pa se ne moze dogoditi
  * da popravak naslov podigne u vazniji nego sto je autor htio.
  */
-function normalizeProposedLevels(candidates: HeadingCandidate[], existing: HeadingCandidate[]): void {
+/**
+ * Tekstovi koji se u dokumentu pojavljuju VISE OD JEDNOM, normalizirani isto kao sidra popravka.
+ *
+ * Racuna se nad SVIM odlomcima, ne samo nad kandidatima, jer je uvjet popravka isti: dvojbeno je
+ * sidro cijem se tekstu igdje u dokumentu nadje dvojnik, ukljucujuci celiju tablice.
+ */
+function ambiguousAnchorTexts(paragraphs: HeadingStructureParagraph[]): ReadonlySet<string> {
+  const counts = new Map<string, number>();
+  for (const paragraph of paragraphs) {
+    const key = normalizeAnchorText(paragraph.text ?? '');
+    if (key) counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+  const repeated = new Set<string>();
+  for (const [key, count] of counts) if (count > 1) repeated.add(key);
+  return repeated;
+}
+
+function normalizeProposedLevels(
+  candidates: HeadingCandidate[],
+  existing: HeadingCandidate[],
+  ambiguousAnchors: ReadonlySet<string>,
+): void {
   /**
    * Racuna se SAMO nad naslovima koji ce stvarno postojati u popravljenom dokumentu: postojeci
    * Word naslovi plus kandidati koji su predodabrani. Neodabran kandidat se ne stilizira, pa ga
@@ -303,8 +325,32 @@ function normalizeProposedLevels(candidates: HeadingCandidate[], existing: Headi
    * spustanje se ne bi dogodilo (izmjereno: p6/p7 na razini 2 i 3 nisu bili odabrani, a "pokrivali"
    * su skok s razine 1 na razinu 3 na odlomku 12).
    */
-  const ordered = [...existing, ...candidates.filter((candidate) => candidate.selectedByDefault)]
-    .sort((a, b) => a.paragraphIndex - b.paragraphIndex);
+  /**
+   * Kandidat s DVOJBENIM SIDROM ne ulazi u hod, jer ga popravak nece ni upisati.
+   *
+   * `apply-fixers.ts` (`verdictFor`) preskace metu ciji se normalizirani tekst u dokumentu
+   * pojavljuje vise od jednom, jer bi se uz pomak indeksa moglo sletjeti na krivi odlomak. Takav
+   * kandidat je dosad svejedno drzao `previous` visoko, pa se sljedeci naslov nije spustao, a
+   * onda ga fixer ne bi upisao: prvi STVARNO upisani naslov ostajao je razina 2. Provjera
+   * hijerarhije krece od razine 0, pa je vodeci naslov razine 2 sam po sebi preskok.
+   *
+   * Izmjereno 2026-09-03 na dva stvarna rada, oba `fpzg-politologija-zavrsni`, oba
+   * `structure.heading.hierarchy` iz `pass` u `warn` NAKON popravka:
+   *   local-13   p12 i p40 (naslov rada dvaput) drzali razinu 1, a changelog javlja
+   *              "4 pretvoreno, 2 preskoceno zbog ponovljenog teksta"; prvi upisani bio je p53
+   *              (IZJAVA) razine 2.
+   *   local-27   p1 i p33 (naziv ustanove dvaput); prvi upisani bio je p65 (SAZETAK) razine 2.
+   *
+   * Isti razred kao pravilo 4 u CLAUDE.md: mjera se racunala nad populacijom koja nije ona na
+   * koju zahvat djeluje. Normalizacija se namjerno uzima IZ popravka
+   * (`src/repair/anchor-text.ts`), a ne kopira, jer su se tri kopije te logike vec jednom razisle.
+   */
+  const ordered = [
+    ...existing,
+    ...candidates.filter(
+      (candidate) => candidate.selectedByDefault && !ambiguousAnchors.has(normalizeAnchorText(candidate.text)),
+    ),
+  ].sort((a, b) => a.paragraphIndex - b.paragraphIndex);
   let previous = 0;
   for (const current of ordered) {
     /**
@@ -411,7 +457,7 @@ export function detectHeadingStructure(
     selectedByDefault: true,
   }));
   // Normalizacija ide PRIJE upozorenja, pa upozorenja opisuju ono sto ce popravak stvarno upisati.
-  normalizeProposedLevels(candidates, existingCandidates);
+  normalizeProposedLevels(candidates, existingCandidates, ambiguousAnchorTexts(paragraphs));
   const warnings = warningsFor(candidates, existingCandidates);
   return {
     candidates,

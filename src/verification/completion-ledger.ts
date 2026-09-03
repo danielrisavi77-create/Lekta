@@ -19,6 +19,7 @@
  * fakulteta, pa su posteno `derived`.
  */
 import type { WorkType } from '../profiles/profile-schema';
+import { provenProfiles, type CorpusAttestation } from './real-corpus-attestation';
 
 /** Odakle znamo da program postoji: `official` = sluzbeni Upisnik (jos nedostupno, faza P1). */
 export type ProgramAxis = 'official' | 'derived' | 'missing' | 'unsupported';
@@ -184,6 +185,8 @@ export interface ClosedLoopInput {
 }
 
 export interface LedgerInputs {
+  /** Potpisana ovjera mjerenja nad stvarnim radovima; bez potpisa se ne priznaje. */
+  corpusAttestation?: CorpusAttestation | null;
   /**
    * Autoritativan popis profila. Ledger se NE smije voditi po `faculties` (fakultetskoj matrici):
    * ona pokriva 407 verificiranih profila, ali NE i 3 katedarska profila iz
@@ -280,6 +283,20 @@ function emptyCount<K extends string>(keys: readonly K[]): Record<K, number> {
 
 /** Gradi ledger iz vec generiranih artefakata. Cista funkcija: bez fs, bez mreze, bez vremena. */
 export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
+  /**
+   * OVJERA DOKAZA NAD STVARNIM RADOVIMA (`inputs.corpusAttestation`).
+   *
+   * Razina `A` je dosad bila nedostizna po konstrukciji: trazila je dokaz na stvarnom radu, a
+   * priznavala samo COMMITANE uzorke, dok je stvarni korpus gitignoriran jer su to tudji studentski
+   * radovi. Ovjera zatvara tu rupu: u repozitorij ulazi POTPISANA tvrdnja o mjerenju, nikad gradja.
+   *
+   * GRANULARNOST JE PO PROFILU, ne po vrsti rada, i to je imenovano ogranicenje: artefakt mjerenja
+   * ne biljezi vrstu rada, pa se dokaz primjenjuje na sve retke tog profila. Isti oblik ustupka vec
+   * postoji za citatne specove ("granularnost je danas FAKULTETSKA").
+   */
+  const dokazani = new Set(
+    [...provenProfiles(inputs.corpusAttestation)].map((k) => k.split('::')[0]),
+  );
   const coverageByProfile = new Map(inputs.coverageCells.map((c) => [c.profileId, c]));
   const bulkByProfile = new Map(inputs.worklistRows.map((r) => [r.profileId, r.bulk]));
 
@@ -368,7 +385,7 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
        */
       const loop = closedLoopByProfile.get(profile.profileId);
       const proof: ProofAxis =
-        profile.automaticTests.realCorpus === 'pass'
+        profile.automaticTests.realCorpus === 'pass' || dokazani.has(profile.profileId)
           ? 'real-docx-pass'
           : loop === 'pass' || profile.automaticTests.syntheticClosedLoop === 'pass'
             ? 'synthetic-pass'
