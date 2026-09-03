@@ -111,18 +111,6 @@
       "gates": []
     },
     {
-      "profileId": "ffos-povijest-diplomski",
-      "kind": "no-scored-rules",
-      "scoredCheckIds": [],
-      "gates": []
-    },
-    {
-      "profileId": "ffos-povijest-zavrsni",
-      "kind": "no-scored-rules",
-      "scoredCheckIds": [],
-      "gates": []
-    },
-    {
       "profileId": "geof-opci-akademski-rad",
       "kind": "no-scored-rules",
       "scoredCheckIds": [],
@@ -202,6 +190,18 @@
     },
     {
       "profileId": "unizd-sociologija-zavrsni",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "vuka-strojarski-diplomski",
+      "kind": "no-scored-rules",
+      "scoredCheckIds": [],
+      "gates": []
+    },
+    {
+      "profileId": "vuka-strojarski-zavrsni",
       "kind": "no-scored-rules",
       "scoredCheckIds": [],
       "gates": []
@@ -293,5 +293,8 @@
     "not-repairable-by-nature": 5,
     "rule-shape-unusable": 5,
     "total": 40
-  }
+  },
+  "generatedAt": "2026-09-03T18:10:58.015Z",
+  "generatedFromCommit": "fef95ad136cc6062214a03b3a22d3fd2f88eb31d",
+  "generator": "npm run repair-gap"
 }
