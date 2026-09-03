@@ -799,6 +799,40 @@ stablu, koje ovaj vodic propisuje, a nagradjuje mjerenje u dijeljenom, koje odbi
   vidi gard nad `git commit`). Brojanje bajtova (`b !== 0x0d`) nema tu zamku.
 - Pravilo vrijedi za TEKST. Za binarne fixture (`.docx`, slike) je sirova velicina ispravna mjera.
 
+### Pogled koji izgleda kao dokaz, a odgovara na drugo pitanje
+
+Isti dan, 2026-09-03, tri sesije su nasjele na tri razlicita pogleda koji su tocni za ono sto mjere,
+a citani su kao odgovor na pitanje koje ne mjere. Alat nije bio u krivu; citanje je bilo.
+
+    `git status` kaze          je li datoteka DIRNUTA
+    citali smo ga kao          je li SADRZAJ drukciji
+
+    `git log origin..HEAD`     sto jos nije na originu
+    citali smo ga kao          tko je ovo NAPISAO
+
+**Fantomska izmjena.** Uredis datoteku u glavnom stablu, a commitas je iz izoliranog worktreea. U
+glavnom stablu ostane ` M` iako je sadrzaj JEDNAK commitanom, jer se razlikuju samo zavrseci
+redaka. Sljedeca sesija to vidi kao tudji zivi rad: jedna je zbog toga cijeli merge preselila u
+izolirani worktree da ne pregazi nesto cega nije ni bilo, i vlasniku prijavila kao cinjenicu da
+tamo netko radi.
+
+    Ocisti izvorno stablo (`git checkout -- <putanja>`) cim si commitao iz drugog.
+
+Inace ostavljas datoteku koja moze i zavarati i biti pokupljena u tudji commit. Nalaz je sesije koja
+ga je i stvorila i poslije dijagnosticirala; vrijedi zapisati oba smjera, jer onaj tko tako radi ne
+vidi da je nesto ostavio, a onaj tko naidje ne moze iz `git status` razlikovati fantom od rada.
+
+**Lazno autorstvo.** U worktreeu koji je mergeao lokalnu granu, `git log origin..HEAD` nabraja i
+TUDJE jos nepushane commite. Sesija je tako u dobroj vjeri preuzela tudji commit kao svoj i javila
+da ga popravlja, dok ga je autor vec bio popravio, i to temeljitije. Autorstvo se u ovom
+repozitoriju ne izvodi iz povijesti (svi commitamo kao `Daniel`) nego iz SADRZAJA commita: tko
+objasnjava namjeru iznutra, detaljima koje citatelj ne moze znati.
+
+**Razlika prema CR pravilu iznad nije stilska.** Ondje gard mjeri krivu velicinu i pada nasumicno.
+Ovdje mjerenje uspije i vrati tocan broj, pa nema signala da je pitanje bilo krivo. Zato se ne
+rjesava opreznijim citanjem nego drugim pogledom: za sadrzaj usporedi sadrzaj uz normalizaciju CR,
+za autorstvo trazi potvrdu autora.
+
 ### Nazivnik korpusa nije konstanta, i mijenja se bez ijedne promjene dokumenata
 
 Mjere nad stvarnim korpusom (`LEKTA_LOCAL_CORPUS=1`) imaju nazivnik koji odredjuju SIDECARI, ne
