@@ -1136,6 +1136,14 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .result-readiness{display:grid;gap:3px;margin:0 0 14px;padding:10px 12px;border-left:3px solid var(--paper-muted);background:var(--paper-2);font:500 13px/1.45 var(--sans);color:var(--paper-muted)}
 .result-readiness strong{font:800 13px/1.3 var(--sans);color:var(--paper-ink)}
 .result-readiness--blocked{border-left-color:var(--red-deep);background:var(--red-soft)}
+/* KONTRAST NA CRVENO TONIRANOJ PODLOZI. `--red-soft` je PROZIRAN sloj (alfa .12) preko
+   `--paper`, pa daje #f1dcd2, tamniju podlogu od svih ostalih toniranih stanja. Prigusen tekst
+   (`--paper-muted` #6E6656) ondje daje 4,30 i pada AA, dok na `--paper` (5,12) i `--paper-2`
+   (4,69) prolazi. Izmjereno axeom nad zivom stranicom 2026-09-03.
+   Popravlja se PODLOGA-SPECIFICNO, ne globalno: `--paper-muted` ima 89 upotreba i prolazi
+   posvuda osim ovdje, a snizavanje alfe `--red-soft` (17 upotreba) oslabilo bi upozoravajuci
+   ton zbog dva cvora. Lokalni tamniji ton daje 4,73 i ne dira nijednu drugu povrsinu. */
+.result-readiness--blocked,.gate-hero.blocked{--paper-muted:#67604F}
 .result-readiness--needs-work{border-left-color:#9a6a08;background:#fff8e8}
 .result-readiness--manual-review{border-left-color:var(--scan);background:#f2f7ff}
 .result-readiness--clear{border-left-color:var(--pass);background:var(--pass-soft)}
