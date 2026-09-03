@@ -773,6 +773,33 @@ stablu, koje ovaj vodic propisuje, a nagradjuje mjerenje u dijeljenom, koje odbi
   vidi gard nad `git commit`). Brojanje bajtova (`b !== 0x0d`) nema tu zamku.
 - Pravilo vrijedi za TEKST. Za binarne fixture (`.docx`, slike) je sirova velicina ispravna mjera.
 
+### Nazivnik korpusa nije konstanta, i mijenja se bez ijedne promjene dokumenata
+
+Mjere nad stvarnim korpusom (`LEKTA_LOCAL_CORPUS=1`) imaju nazivnik koji odredjuju SIDECARI, ne
+direktorij. `sidecarAdmitted` iskljucuje dokument kad mu sidecar ima `synthetic: true`, a sidecare
+ureduju druge sesije. Populacija se time mijenja dok datoteke stoje netaknute.
+
+Izmjereno 2026-09-03, kroz tri sesije i jedan krivi zakljucak:
+
+    13:18   mjerenje daje 54 dokumenta      16 dopustenih commitanih + 38 lokalnih
+    13:43   oznaceno 8 sidecara
+    14:23   oznacen jos 1
+    poslije mjerenje daje 45 dokumenata      7 dopustenih commitanih + 38 lokalnih
+
+Lokalni direktorij je u oba mjerenja imao ISTIH 38 radova. Razliku je napravilo oznacavanje.
+
+ZASTO JE TO VAZNO: pad s 54 na 45 je prirodno pripisati gubitku podataka, i to se i dogodilo. Jedna
+sesija je zakljucila da je lokalni korpus pao s 47 na 38, druga je taj uzrok u dobroj vjeri unijela
+u handoff, a trece je mjerenje pokazalo da 47 aritmeticki ne prolazi (uz tadasnjih 16 commitanih
+dalo bi 63). Bez te provjere bi u dokumentu ostala uputa koja sljedecu sesiju salje u potragu za
+devet radova koji nikad nisu nestali.
+
+- Usporedivost dvaju stanja koda trazi isti skup DOPUSTENIH dokumenata, ne isti direktorij.
+- Prije usporedbe usporedi `documentCount` I `scope.localDocumentCount`; razlika u prvom uz jednak
+  drugi znaci da su se mijenjali sidecari, a ne korpus.
+- Artefakt je gitignoriran i SVAKI prolaz ga prepise, pa snimku sacuvaj izvan repozitorija prije
+  novog mjerenja. Mjerenje koje nitko nije sacuvao postoji samo kao recenica u porukama.
+
 ## Codex (drugo misljenje)
 
 Instaliran je Codex plugin (codex@openai-codex). Podjela uloga: Claude Code je

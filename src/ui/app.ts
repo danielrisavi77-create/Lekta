@@ -78,6 +78,7 @@ import { uploadCapBytes, decompressionBudgetBytes } from '../analysis/memory-bud
 import { detectContextFromText, needsProfileConfirmation, isConfidentDetection } from './profile-detect';
 import { citationMeta } from '../citations/citation-meta';
 import { APP_VERSION } from '../config/app-version';
+import { createTelemetry } from './telemetry';
 import { buildErrorReport, makeIncidentId } from '../report/error-redaction';
 import { SOCIAL_METHOD_REGISTRY, SOCIAL_METHOD_SOURCE } from '../methodology/methodology-loader';
 import { cellCoverage, detectWaitlist } from '../waitlist/waitlist-detect';
@@ -264,6 +265,10 @@ function installErrorTracking(){const send=(kind: any,message: any,stack: any,fe
  const blob=new Blob([JSON.stringify(payload)],{type:'application/json'});try{if(!(navigator.sendBeacon&&navigator.sendBeacon(ep,blob)))void fetch(ep,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true})}catch(e: any){}}catch(e: any){}};try{window.addEventListener('error',(e: any)=>send('error',e?.message||'error',e?.error?.stack));window.addEventListener('unhandledrejection',(e: any)=>{const r=e?.reason;send('unhandledrejection',r?.message||String(r||'rejection'),r?.stack)})}catch(e: any){}}
 /* FPZG_SUBMISSION_CALENDAR se uvozi iz submission-loader (data/submission/fpzg-calendar.json) */
 let productionConfig: any=null;
+// T16 B5: telemetrija zivi u `./telemetry`. Destrukturiranje POD ISTIM IMENOM ostavlja svih 49
+// pozivnih mjesta bajt identicnima. Ovisnosti se citaju LIJENO, jer se `productionConfig`
+// mijenja tri puta u izvodjenju, a privola u bilo kojem trenutku.
+const { trackEvent }=createTelemetry({config:()=>productionConfig,consent:()=>safeStorageGet(STORAGE_KEYS.analyticsConsent)});
 let lastProfileContext='';let _profileConfirmed=false;
 /* ZAGREB_CATALOG se sada uvozi iz catalog-loader (data/catalog/zagreb-catalog.json) */
 /* INSTITUTIONAL_COVERAGE_MATRIX i COVERAGE_STATUS_META se uvoze iz coverage-loader (data/coverage) */
@@ -503,8 +508,6 @@ function updateOrderFileMeta(){const f=selectedOrderFile(),el=$('#orderFileMeta'
 function makeOrderId(){return`TR-${new Date().toISOString().slice(0,10).replaceAll('-','')}-${Math.random().toString(36).slice(2,8).toUpperCase()}`}
 function setOrderStatus(type: any,html?: any){const el=$('#orderStatus');el.className=`order-status ${type}`;el.innerHTML=html;el.classList.remove('hidden')}
 function clearOrderStatus(){$('#orderStatus')?.classList.add('hidden');if($('#orderStatus'))$('#orderStatus').innerHTML=''}
-function sanitizeEventData(data: any){const allowed: any={};for(const[k,v]of Object.entries(data||{})){if(['event','package','profileId','workType','scoreBand','provider','source','total','found','missing','flagged','checked','profileStatus','pick','sizeBucket','category','issueCount','kind','manual','count','score','demo','method','product','ruleId','changes','stored','ms'].includes(k)&&['string','number','boolean'].includes(typeof v))allowed[k]=v}return allowed}
-async function trackEvent(event: any,data: any={}){if(!productionConfig?.analyticsEndpoint||safeStorageGet(STORAGE_KEYS.analyticsConsent)!=='granted')return false;try{await fetch(productionConfig.analyticsEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event,version:APP_VERSION,path:location.pathname||'/',timestamp:new Date().toISOString(),...sanitizeEventData(data)}),keepalive:true});return true}catch(e: any){return false}}
 // PRIVOLA NE SMIJE ZAROBITI SADRZAJ ISPOD SEBE (audit P0-05).
 //
 // Banner je `position:fixed` uz dno. Na uskom i niskom zaslonu (mjereno: Pixel 5, 375x667) prelazi

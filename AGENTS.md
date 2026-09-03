@@ -377,3 +377,12 @@ dana ugrizla dva neovisna garda (`ui-module-budget`, divergencija `rad/index.htm
 asimetricna: kaznjava mjerenje u IZOLIRANOM stablu, koje vodic propisuje. Mjerodavna referenca je
 blob, dakle ono sto mjeri CI. Normaliziraj brojanjem bajtova (`b !== 0x0d`), ne regexom gradjenim
 kroz alat (escape se zna izgubiti). Za binarne fixture je sirova velicina ispravna.
+
+Nazivnik korpusa nije konstanta. Mjere nad stvarnim korpusom (`LEKTA_LOCAL_CORPUS=1`) imaju
+populaciju koju odredjuju SIDECARI (`synthetic: true` iskljucuje dokument), a njih ureduju druge
+sesije, pa se nazivnik mijenja bez ijedne promjene datoteka. Izmjereno 2026-09-03: 54 dokumenta u
+13:18 (16 dopustenih commitanih + 38 lokalnih), 45 poslije oznacavanja devet sidecara (7 + 38), uz
+ISTIH 38 lokalnih radova. Pad je jedna sesija pripisala gubitku podataka i to je u dobroj vjeri
+uslo u handoff; aritmetika to obara. Usporedivost trazi isti skup DOPUSTENIH dokumenata, ne isti
+direktorij: usporedi `documentCount` I `scope.localDocumentCount`. Artefakt je gitignoriran i svaki
+prolaz ga prepise, pa snimku cuvaj izvan repozitorija.

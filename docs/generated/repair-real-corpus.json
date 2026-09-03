@@ -100,7 +100,8 @@
       "manualReviewReasons": [
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
-      "error": null
+      "error": null,
+      "statusChanges": []
     },
     {
       "documentId": "fer-diplomski-uskladjen",
@@ -152,7 +153,8 @@
       "manualReviewReasons": [
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
-      "error": null
+      "error": null,
+      "statusChanges": []
     },
     {
       "documentId": "ffzg-filozofija-diplomski",
@@ -204,7 +206,10 @@
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
-      "error": null
+      "error": null,
+      "statusChanges": [
+        "toc.present:fail->pass"
+      ]
     },
     {
       "documentId": "mef-doktorski-disertacija",
@@ -258,7 +263,10 @@
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
-      "error": null
+      "error": null,
+      "statusChanges": [
+        "toc.present:fail->pass"
+      ]
     },
     {
       "documentId": "pmf-matematika-uskladjen",
@@ -312,7 +320,10 @@
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
-      "error": null
+      "error": null,
+      "statusChanges": [
+        "toc.present:fail->pass"
+      ]
     },
     {
       "documentId": "pmf-matematika-zasticeni-odlomci",
@@ -367,7 +378,10 @@
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
-      "error": null
+      "error": null,
+      "statusChanges": [
+        "toc.present:fail->pass"
+      ]
     },
     {
       "documentId": "ttf-diplomski-arial",
@@ -419,7 +433,10 @@
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
-      "error": null
+      "error": null,
+      "statusChanges": [
+        "toc.present:fail->pass"
+      ]
     }
   ],
   "summary": {

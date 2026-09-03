@@ -110,6 +110,45 @@ describe('stripDirectFormatting: dominantna velicina tijela', () => {
     expect(r.xml).toContain('<w:sz w:val="20"/>');
   });
 
+  /**
+   * FIKSNA TOCKA. Do 2026-09-03 zahvat NIJE bio idempotentan: dominanta se racunala samo medju
+   * runovima koji jos nose `w:sz`, pa je nakon prvog prolaza tijelo preslo na nasljedjivanje i
+   * postalo nevidljivo racunu, a jucerasnja manjina postala "dominanta".
+   *
+   * Izmjereno na stvarnom radu (`local-04-zavrsni`, 5767 izravnih velicina): pet uzastopnih
+   * prolaza (2461, 431, 2838, 7, 28 runova) do mirovanja, a korisniku je nakon PRVOG klika
+   * ostajalo 57 posto izravnih velicina uz changelog koji tvrdi da su uklonjene.
+   */
+  it('drugi prolaz je no-op: zahvat je fiksna tocka', () => {
+    const xml =
+      '<w:body>' +
+      tijelo('28', 'dugacko tijelo rada koje nosi vecinu teksta u dokumentu') +
+      tijelo('28', 'jos jedan dugacak odlomak tijela rada s dosta znakova') +
+      tijelo('20', 'potpis') +
+      '</w:body>';
+    const opts = { stripFontSizeNearHalfPoints: 24, stripDominantBodySize: true } as const;
+    const prvi = stripDirectFormatting(xml, opts);
+    // Netrivijalnost: bez ovoga bi tvrdnja ispod prosla i nad ulazom koji nema sto mijenjati.
+    expect(prvi.applied, 'prvi prolaz mora nesto skinuti, inace je test vakuumski').toBe(true);
+    const drugi = stripDirectFormatting(prvi.xml, opts);
+    expect(drugi.applied, 'drugi prolaz jos mijenja: zahvat nije fiksna tocka').toBe(false);
+    expect(drugi.xml).toBe(prvi.xml);
+  });
+
+  it('manjinska velicina prezivi i DRUGI prolaz, ne samo prvi', () => {
+    const xml =
+      '<w:body>' +
+      tijelo('28', 'dugacko tijelo rada koje nosi vecinu teksta u dokumentu') +
+      tijelo('28', 'jos jedan dugacak odlomak tijela rada s dosta znakova') +
+      tijelo('20', 'potpis') +
+      '</w:body>';
+    const opts = { stripFontSizeNearHalfPoints: 24, stripDominantBodySize: true } as const;
+    const dvaput = stripDirectFormatting(stripDirectFormatting(xml, opts).xml, opts);
+    // Zastita koju kriterij obecava vrijedila je samo do prvog klika: na drugi je potpis postajao
+    // dominanta medju preostalima i nestajao.
+    expect(dvaput.xml).toContain('<w:sz w:val="20"/>');
+  });
+
   it('dominanta koja je VEC u toleranciji ne pokrece nista dodatno', () => {
     const xml = '<w:body>' + tijelo('22', 'tijelo 11 pt, unutar tolerancije uz cilj 12 pt') + '</w:body>';
     const r = stripDirectFormatting(xml, { stripFontSizeNearHalfPoints: 24, stripDominantBodySize: true });

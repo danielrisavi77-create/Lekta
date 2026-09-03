@@ -59,6 +59,19 @@ export interface RealCorpusResult {
   profileId: string;
   outcome: 'pass' | 'review' | 'fail' | 'no-op';
   before: { checkCount: number; passCount: number; score: number | null };
+  /**
+   * SVE provjere kojima se status promijenio, u obliku `id:prije->poslije`.
+   *
+   * ZASTO OPCENITO, a ne samo regresije. `passRegressionChecks` (dodano ranije) imenuje sto je
+   * ispalo iz `pass`, ali ne kaze koliki je NAZIVNIK: koliko je dokumenata tu provjeru uopce imalo
+   * bodovanu i koliko ih je zadrzalo. Bez toga se stopa racuna nad krivom populacijom. Izmjereno:
+   * `structure.heading.hierarchy` regresira na 4 dokumenta, ali je izlozenih 25, a ne 43
+   * promijenjena, jer je za 16 profila ta provjera `informational` (max 0) pa ne moze ni pasti.
+   *
+   * Biljezi se SAMO promjena, ne cijelo stanje: nepromijenjene provjere su vecina i samo bi
+   * napuhale artefakt.
+   */
+  statusChanges: string[];
   after: { checkCount: number; passCount: number; score: number | null } | null;
   beforeEntryCount: number;
   afterEntryCount: number;
@@ -192,6 +205,24 @@ export function discoverRealCorpus(root = REAL_CORPUS_ROOT): RealCorpusManifestE
         { documentId: fileName.replace(/\.docx$/i, ''), fileName, profileId: metadata.profileId as string, root },
       ];
     });
+}
+
+/**
+ * Provjere kojima se status promijenio, kao `id:prije->poslije`. Identitet je `id`, ne naslov:
+ * naslov je hrvatski i prezentacijski, pa bi se usporedba lomila na svakoj promjeni copyja.
+ */
+function statusChangesOf(
+  before: Array<{ id?: string; status?: string }>,
+  after: Array<{ id?: string; status?: string }>,
+): string[] {
+  const prije = new Map(before.filter((c) => c.id).map((c) => [c.id as string, c.status ?? '?']));
+  const out: string[] = [];
+  for (const c of after) {
+    if (!c.id) continue;
+    const p = prije.get(c.id);
+    if (p !== undefined && p !== (c.status ?? '?')) out.push(`${c.id}:${p}->${c.status ?? '?'}`);
+  }
+  return out.sort();
 }
 
 function checkPassCount(checks: Array<{ status?: string }>): number {
@@ -358,6 +389,7 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
               ? 'review'
               : 'no-op',
       before: { checkCount: before.checks?.length ?? 0, passCount: checkPassCount(before.checks ?? []), score: scoreOf(before) },
+      statusChanges: statusChangesOf(before.checks ?? [], after.checks ?? []),
       after: { checkCount: after.checks?.length ?? 0, passCount: checkPassCount(after.checks ?? []), score: scoreOf(after) },
       beforeEntryCount: beforeEntries.length,
       afterEntryCount: afterEntries.length,

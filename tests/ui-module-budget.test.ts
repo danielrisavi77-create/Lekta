@@ -60,7 +60,11 @@ function tsDatoteke(rel: string): string[] {
 }
 
 /** Izmjereno 2026-09-03. Brojke se SPUSTAJU kako kod izlazi iz `app.ts`, nikad ne dizu. */
-const BUDZET_APP = 359 * 1024;
+/**
+ * Povijest: 359 -> 357 (T16 B5, telemetrija izasla u `src/ui/telemetry.ts`).
+ * Spusta se na IZMJERENU vrijednost svaki put kad kod izadje, nikad se ne dize.
+ */
+const BUDZET_APP = 357 * 1024;
 const BUDZET_UI_UKUPNO = 821 * 1024;
 const MAX_HIDDEN_DODIRA = 97;
 
