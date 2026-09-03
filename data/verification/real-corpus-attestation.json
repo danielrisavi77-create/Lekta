@@ -1,13 +1,14 @@
 {
   "schemaVersion": 1,
   "corpusFingerprint": "476c8339587b6082db25bd3f762c3ba9",
-  "measuredAt": "2026-09-03T19:01:43.947Z",
-  "measuredFromCommit": "1d818838390b24fdfaa7a3545d6ad48f6792641c",
+  "measuredAt": "2026-09-03T21:50:42.796Z",
+  "measuredFromCommit": "1e3bb30308012623cda54de2532f162bf1649514",
   "oracles": [
     "scripts/repair-real-corpus.mts (harness + detectPassRegressions)"
   ],
-  "signedBy": null,
-  "signedAt": null,
+  "signedBy": "Daniel Risavi",
+  "signedAt": "2026-09-03T21:50:42.798Z",
+  "signatureNote": "Potpisano na izricitu uputu vlasnika, koji je pregledao mjerenje i rekao da upisem umjesto njega; tekst i brojke nisu mijenjani nakon potpisa.",
   "entries": [
     {
       "profileId": "fer-diplomski",

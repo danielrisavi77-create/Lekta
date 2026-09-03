@@ -24,6 +24,12 @@ const potpis = (() => {
   const i = args.indexOf('--sign');
   return i >= 0 ? args[i + 1] : null;
 })();
+// Biljeska uz potpis. Postoji zato sto potpis moze biti unesen po necijoj UPUTI, a ne vlastitom
+// rukom; tko poslije cita mora vidjeti razliku, inace potpis tvrdi vise nego sto se dogodilo.
+const biljeska = (() => {
+  const i = args.indexOf('--note');
+  return i >= 0 ? args[i + 1] : null;
+})();
 
 if (!fs.existsSync(ULAZ)) {
   console.error(`[ovjera] FAIL: nema ${ULAZ}. Pokreni mjerenje s LEKTA_LOCAL_CORPUS=1.`);
@@ -70,6 +76,7 @@ const ovjera = {
   // Potpis se NE nasljedjuje kad se korpus promijeni: tada je rijec o drugom mjerenju.
   signedBy: potpis ?? (postojeca && postojeca.corpusFingerprint === otisak ? postojeca.signedBy : null),
   signedAt: potpis ? new Date().toISOString() : (postojeca && postojeca.corpusFingerprint === otisak ? postojeca.signedAt : null),
+  signatureNote: biljeska ?? (postojeca && postojeca.corpusFingerprint === otisak ? postojeca.signatureNote ?? null : null),
   entries: [...poProfilu.values()]
     .map((e) => ({ ...e, regressedChecks: [...e.regressedChecks].sort() }))
     .sort((a, b) => (a.profileId + a.workType).localeCompare(b.profileId + b.workType)),

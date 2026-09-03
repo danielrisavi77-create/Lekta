@@ -53,7 +53,15 @@ const inputs: LedgerInputs = {
   closedLoop: readJson<{ rows: NonNullable<LedgerInputs['closedLoop']> }>('docs/generated/closed-loop.json').rows,
 };
 
-const fresh = buildCompletionLedger(inputs);
+/**
+ * Ovjera se MORA ucitati isto kao u generatoru, inace svjezi izracun nema dokaz koji commitani ima i
+ * drift test pada na razlici koja nije regresija. Tocno taj razred kvara (artefakt ovisi o ulazu koji
+ * test ne daje) danas je vec jednom obojio CI crvenim.
+ */
+const corpusAttestation = readJson<Parameters<typeof buildCompletionLedger>[0]['corpusAttestation']>(
+  'data/verification/real-corpus-attestation.json',
+);
+const fresh = buildCompletionLedger({ ...inputs, corpusAttestation });
 
 describe('completion ledger: drift', () => {
   it('commitani izlaz === svjezi izracun (inace: npm run completion-ledger)', () => {
