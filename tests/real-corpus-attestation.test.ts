@@ -49,6 +49,22 @@ describe('ovjera: kad NE vrijedi', () => {
     expect(provenProfiles(bez).size, 'nepotpisana ovjera ne smije dokazati nijedan profil').toBe(0);
   });
 
+  it('POTPIS STARIJI OD MJERENJA ne vrijedi, jer ovjerava brojke koje jos nisu postojale', () => {
+    // Izmjereno 2026-09-04 na stvarnoj ovjeri: potpis 21:50, mjerenje 23:04. Datoteka je tvrdila da
+    // je covjek ovjerio brojke koje u trenutku potpisa nisu postojale. Nijedna dotadasnja provjera
+    // to nije vidjela, jer su sve gledale POSTOJI li potpis, nikad sto pokriva.
+    const unatrag = { ...OSNOVA, signedAt: '2026-09-03T21:50:42.798Z', measuredAt: '2026-09-03T23:04:26.992Z' };
+    expect(attestationProblems(unatrag)).toContain('potpis je stariji od mjerenja koje pokriva');
+    expect(provenProfiles(unatrag).size, 'ovjera s potpisom unatrag ne smije dokazati nijedan profil').toBe(0);
+  });
+
+  it('potpis ISTOVREMEN s mjerenjem vrijedi, jer granica ne smije biti stroza nego sto tvrdi', () => {
+    // Bez ove tvrdnje bi se `<` i `<=` mogli zamijeniti a da to nitko ne primijeti; ovjera potpisana
+    // u istoj milisekundi je uredna.
+    const isti = { ...OSNOVA, signedAt: '2026-09-03T23:04:26.992Z', measuredAt: '2026-09-03T23:04:26.992Z' };
+    expect(attestationProblems(isti)).not.toContain('potpis je stariji od mjerenja koje pokriva');
+  });
+
   it('bez navedenih alata mjerenja ne vrijedi', () => {
     expect(provenProfiles({ ...OSNOVA, oracles: [] }).size).toBe(0);
   });
