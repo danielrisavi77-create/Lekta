@@ -69,7 +69,7 @@ export const PROJECTIONS = [
     id: 'real-corpus-backlog',
     artifacts: ['docs/generated/real-corpus-backlog.json', 'docs/generated/real-corpus-backlog.md'],
     sources: ['docs/generated/faculty-matrix.json', 'scripts/generate-real-corpus-backlog.mts'],
-    regenerate: 'npx vite-node scripts/generate-real-corpus-backlog.mts',
+    regenerate: 'npm run repair-real-corpus-backlog',
   },
   {
     // Dodan 2026-09-03, nakon sto je izostao i to se odmah osvetilo: popravak `faculty-matrix`

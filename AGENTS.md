@@ -394,6 +394,18 @@ asimetricna: kaznjava mjerenje u IZOLIRANOM stablu, koje vodic propisuje. Mjerod
 blob, dakle ono sto mjeri CI. Normaliziraj brojanjem bajtova (`b !== 0x0d`), ne regexom gradjenim
 kroz alat (escape se zna izgubiti). Za binarne fixture je sirova velicina ispravna.
 
+Pogled koji izgleda kao dokaz zna odgovarati na drugo pitanje. `git status` kaze je li datoteka
+DIRNUTA, a citamo ga kao je li SADRZAJ drukciji; `git log origin..HEAD` kaze sto jos nije na
+originu, a citamo ga kao tko je ovo NAPISAO. Izmjereno 2026-09-03, tri sesije u istom danu.
+FANTOMSKA IZMJENA: uredis datoteku u glavnom stablu a commitas iz izoliranog worktreea, pa u
+glavnom ostane ` M` uz sadrzaj JEDNAK commitanom (razlikuju se samo zavrseci redaka); druga sesija
+to procita kao tudji zivi rad. Ocisti izvorno stablo (`git checkout -- <putanja>`) cim si commitao
+iz drugog, inace datoteka moze i zavarati i biti pokupljena u tudji commit. LAZNO AUTORSTVO: u
+worktreeu koji je mergeao lokalnu granu `git log origin..HEAD` nabraja i TUDJE nepushane commite,
+pa je sesija preuzela tudji commit kao svoj. Autorstvo se ne izvodi iz povijesti (svi commitamo kao
+`Daniel`) nego iz SADRZAJA commita, ili se trazi potvrda autora. Za razliku od CR pravila iznad,
+ovdje mjerenje USPIJE i vrati tocan broj, pa nema signala da je pitanje bilo krivo.
+
 Nazivnik korpusa nije konstanta. Mjere nad stvarnim korpusom (`LEKTA_LOCAL_CORPUS=1`) imaju
 populaciju koju odredjuju SIDECARI (`synthetic: true` iskljucuje dokument), a njih ureduju druge
 sesije, pa se nazivnik mijenja bez ijedne promjene datoteka. Izmjereno 2026-09-03: 54 dokumenta u
