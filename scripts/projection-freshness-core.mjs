@@ -148,6 +148,38 @@ export const PROJECTIONS = [
     regenerate: 'npm run scored-value-drift',
   },
   {
+    // Zadnje dvije s ratcheta, 2026-09-04. Obje pisu DIREKTORIJ markdowna (21 odnosno 72 datoteke),
+    // pa im je izlaz izmjeren pokretanjem, ne procitan iz koda: staza se u generatoru gradi
+    // dinamicki. `projection-verify` zato od 2026-09-04 zna citati i direktorij.
+    id: 'worklist',
+    artifacts: ['data/verification/dossiers'],
+    sources: [
+      'data/sources/source-registry.json',
+      'data/verification/ledger.json',
+      'data/profiles',
+      'src/verification/worklist.ts',
+      'src/verification/verification-registry.ts',
+      'src/profiles/drafts-runtime.ts',
+      'scripts/verification-worklist.mts',
+    ],
+    regenerate: 'npm run worklist',
+  },
+  {
+    id: 'citation-dossiers',
+    artifacts: ['data/verification/citation-dossiers'],
+    sources: [
+      'data/sources/source-registry.json',
+      'data/verification/ledger.json',
+      'data/profiles',
+      'data/tools/citation-specs',
+      'src/verification/citation-dossier.ts',
+      'src/verification/verification-registry.ts',
+      'src/citations/citation-spec.ts',
+      'scripts/citation-spec-dossier.mts',
+    ],
+    regenerate: 'npm run citation-dossiers',
+  },
+  {
     id: 'repair-recipe',
     artifacts: ['docs/REPAIR_RECIPE.md', 'data/generated/repair-params-by-profile.json'],
     sources: ['src/repair', 'src/ui/repair-items.ts', 'data/profiles'],

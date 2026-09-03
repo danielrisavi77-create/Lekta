@@ -15,6 +15,36 @@
 // pravilo ovog repozitorija i vec je jednom kostalo dan posla.
 import { execFileSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
+
+/**
+ * Sadrzaj jednog artefakta, gdje artefakt smije biti DATOTEKA ili DIREKTORIJ.
+ *
+ * Dvije projekcije (`worklist`, `citation-dossiers`) ne pisu jednu datoteku nego 21 odnosno 72
+ * markdowna u direktorij, pa se njihov izlaz ne moze procitati iz koda nego samo izmjeriti. Za
+ * direktorij se gradi kanonski niz `staza
+---
+sadrzaj`, sortiran po stazi, pa dodana ili
+ * uklonjena datoteka izlazi kao sadrzajna razlika, kako i treba.
+ */
+function citajArtefakt(abs) {
+  if (!fs.existsSync(abs)) return null;
+  if (!fs.statSync(abs).isDirectory()) return fs.readFileSync(abs, 'utf8');
+  // Razdjelnici se grade bez escapea: obrazac koji ih pise kroz alat danas je vise puta izgubio
+  // backslash i prelomio niz preko dva retka.
+  const NL = String.fromCharCode(10);
+  const dijelovi = [];
+  const hodaj = (dir, prefiks) => {
+    const unosi = fs.readdirSync(dir, { withFileTypes: true }).sort((x, y) => x.name.localeCompare(y.name));
+    for (const d of unosi) {
+      const p = path.join(dir, d.name);
+      const rel = prefiks ? prefiks + '/' + d.name : d.name;
+      if (d.isDirectory()) hodaj(p, rel);
+      else dijelovi.push(rel + NL + '---' + NL + fs.readFileSync(p, 'utf8'));
+    }
+  };
+  hodaj(abs, '');
+  return dijelovi.join(NL + '=====' + NL);
+}
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -72,8 +102,7 @@ try {
     // Bajtovi PRIJE: cist checkout HEAD-a, dakle upravo ono sto je commitano.
     const before = new Map();
     for (const rel of proj.artifacts) {
-      const abs = path.join(wt, rel);
-      before.set(rel, fs.existsSync(abs) ? fs.readFileSync(abs, 'utf8') : null);
+      before.set(rel, citajArtefakt(path.join(wt, rel)));
     }
 
     const started = Date.now();
@@ -85,11 +114,11 @@ try {
         const tail = (run.stderr || run.stdout || '').trim().split('\n').slice(-3).join(' | ');
         return { path: rel, status: 'neprovjereno', reason: `regeneracija pala (exit ${run.status}): ${tail.slice(0, 160)}` };
       }
-      const abs = path.join(wt, rel);
-      if (!fs.existsSync(abs)) return { path: rel, status: 'neprovjereno', reason: 'artefakt ne postoji nakon regeneracije' };
+      const after = citajArtefakt(path.join(wt, rel));
+      if (after === null) return { path: rel, status: 'neprovjereno', reason: 'artefakt ne postoji nakon regeneracije' };
       const b = before.get(rel);
       if (b === null) return { path: rel, status: 'neprovjereno', reason: 'artefakt nije bio commitan' };
-      return { path: rel, status: classifyArtifact(b, fs.readFileSync(abs, 'utf8')) };
+      return { path: rel, status: classifyArtifact(b, after) };
     });
 
     const v = projectionVerdict(proj.id, artifacts);
