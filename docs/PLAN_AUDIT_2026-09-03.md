@@ -19,7 +19,7 @@
 | T11 REL | dokaz ima 8 razina; env varijable nedokumentirane | **9 razina, 8 prolazi**; obje varijable dokumentirane; jedina prepreka `LEKTA_STAGING_ORIGIN` | **ZASTARJELO; ceka vlasnika** |
 | T12 OPS | 3 funkcije bez `verify_jwt`; manifest ne postoji | **sve 24 deklarirane**; manifest sada postoji | **ZASTARJELO + dovrseno (moje)** |
 | T13 OBS | `errorEndpoint: ''`; 45 kucica neoznaceno | `errorEndpoint` vise ne postoji u toj formi (2 datoteke ga spominju); **45 kucica i dalje 0 oznaceno** | djelomicno zastarjelo; checklist **STOJI** |
-| T14 COMMERCE | `packages.json` u runtimeu; 20 proizvoda bez `mor_product_id` | `packages.json` i dalje uvezen (1 datoteka); `mor_product_id` se ne spominje ni u jednoj migraciji | **STOJI** |
+| T14 COMMERCE | `packages.json` u runtimeu; 20 proizvoda bez `mor_product_id` | runtime dio je RIJESEN i izmjeren: izvoz `PACKAGES` nema nijednog potrosaca (`app.ts` ima vlastiti niz), oznacen je kao mrtav uz audit CODE-08, i **tree-shaking ga doista izbacuje** (`Instant audit` i `Premium audit` ne postoje u `dist/`). Ostaje baza: `mor_product_id` se ne spominje ni u jednoj migraciji | **djelomicno zastarjelo; ostatak je vlasnikov (baza)** |
 | T15 REPAIR | `readSet`/`writeSet`/`MutationPlan` -> 0 pogodaka | **1 datoteka** ih ima | **zapoceto** |
 | T16 app.ts | 334 KB / 1977 redaka; 28 dodira `hidden` | **358 KB / 2389 redaka; 97 dodira** | **POGORSANO**, ne popravljeno |
 | T17 docs | CP1252 korupcija u 3 dokumenta; 0/16 artefakata s metapodacima | korupcije **nema**; `STATUS.json` sada postoji i prvi je s provenijencijom; ostala 21 i dalje bez | djelomicno zastarjelo, djelomicno **dovrseno (moje)** |
