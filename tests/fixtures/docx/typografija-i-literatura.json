@@ -1,4 +1,5 @@
 {
   "profileId": "fpzg-mes-master-thesis",
-  "note": "generirano PRAVIM Wordom, izmisljeni autori/naslovi/DOI-jevi, NIJE studentski rad; jedini fixture u kojem se croatian-typography i link-doi sudaraju nad ISTIM odlomcima (tipografske greske unutar zapisa literature). Izvor: scripts/word-verify/make-typo-biblio-case.ps1"
+  "note": "generirano PRAVIM Wordom, izmisljeni autori/naslovi/DOI-jevi, NIJE studentski rad; jedini fixture u kojem se croatian-typography i link-doi sudaraju nad ISTIM odlomcima (tipografske greske unutar zapisa literature). Izvor: scripts/word-verify/make-typo-biblio-case.ps1",
+  "synthetic": true
 }

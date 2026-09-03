@@ -13,12 +13,6 @@
       "root": "tests/fixtures/docx"
     },
     {
-      "documentId": "fer-diplomski-puna-struktura",
-      "fileName": "fer-diplomski-puna-struktura.docx",
-      "profileId": "fer-diplomski",
-      "root": "tests/fixtures/docx"
-    },
-    {
       "documentId": "fer-diplomski-uskladjen",
       "fileName": "fer-diplomski-uskladjen.docx",
       "profileId": "fer-diplomski",
@@ -31,27 +25,9 @@
       "root": "tests/fixtures/docx"
     },
     {
-      "documentId": "fpzg-novinarstvo-bibliografija",
-      "fileName": "fpzg-novinarstvo-bibliografija.docx",
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "root": "tests/fixtures/docx"
-    },
-    {
       "documentId": "grf-diplomski-neuskladjen",
       "fileName": "grf-diplomski-neuskladjen.docx",
       "profileId": "grf-diplomski",
-      "root": "tests/fixtures/docx"
-    },
-    {
-      "documentId": "lo-fpzg-zavrsni-neuskladjen",
-      "fileName": "lo-fpzg-zavrsni-neuskladjen.docx",
-      "profileId": "fpzg-politologija-zavrsni",
-      "root": "tests/fixtures/docx"
-    },
-    {
-      "documentId": "lo-fpzg-zavrsni-uskladjen",
-      "fileName": "lo-fpzg-zavrsni-uskladjen.docx",
-      "profileId": "fpzg-politologija-zavrsni",
       "root": "tests/fixtures/docx"
     },
     {
@@ -73,33 +49,9 @@
       "root": "tests/fixtures/docx"
     },
     {
-      "documentId": "pravo-integrirani-fusnote",
-      "fileName": "pravo-integrirani-fusnote.docx",
-      "profileId": "pravo-integrirani-diplomski",
-      "root": "tests/fixtures/docx"
-    },
-    {
-      "documentId": "pravo-socijalni-rad-fusnote",
-      "fileName": "pravo-socijalni-rad-fusnote.docx",
-      "profileId": "pravo-socijalni-rad-diplomski",
-      "root": "tests/fixtures/docx"
-    },
-    {
       "documentId": "ttf-diplomski-arial",
       "fileName": "ttf-diplomski-arial.docx",
       "profileId": "ttf-diplomski",
-      "root": "tests/fixtures/docx"
-    },
-    {
-      "documentId": "typografija-i-literatura",
-      "fileName": "typografija-i-literatura.docx",
-      "profileId": "fpzg-mes-master-thesis",
-      "root": "tests/fixtures/docx"
-    },
-    {
-      "documentId": "word-veliki-neuredan",
-      "fileName": "word-veliki-neuredan.docx",
-      "profileId": "fpzg-politologija-diplomski",
       "root": "tests/fixtures/docx"
     }
   ],
@@ -151,68 +103,6 @@
       "integrityFailure": null,
       "manualReviewRequired": true,
       "manualReviewReasons": [
-        "postoji-asistirana-stavka-koja-traži-potvrdu"
-      ],
-      "error": null
-    },
-    {
-      "documentId": "fer-diplomski-puna-struktura",
-      "fileName": "fer-diplomski-puna-struktura.docx",
-      "profileId": "fer-diplomski",
-      "outcome": "review",
-      "before": {
-        "checkCount": 19,
-        "passCount": 12,
-        "score": 78
-      },
-      "after": {
-        "checkCount": 19,
-        "passCount": 12,
-        "score": 78
-      },
-      "beforeEntryCount": 14,
-      "afterEntryCount": 14,
-      "droppedEntryCount": 0,
-      "offeredFixerIds": [
-        "paper-size-fixer",
-        "font-fixer",
-        "line-spacing-fixer",
-        "margins-fixer",
-        "final-document-inspector-fixer",
-        "field-integrity-fixer",
-        "consistency-fixer"
-      ],
-      "changedFixerIds": [
-        "field-integrity-fixer",
-        "final-document-inspector-fixer"
-      ],
-      "targetedCheckCount": 0,
-      "targetedResolvedCount": 0,
-      "targetedUnresolvedCount": 0,
-      "autoUnresolvedCount": 0,
-      "autoUnresolvedChecks": [],
-      "assistedUnresolvedCount": 0,
-      "assistedUnresolvedChecks": [],
-      "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 3,
-      "unmappedMatchKeys": [
-        "Consistency Engine",
-        "Dosljednost",
-        "Komentari",
-        "Metapodaci",
-        "Praćenje promjena",
-        "Skriveni tekst",
-        "Word polja"
-      ],
-      "passRegressionCount": 0,
-      "outputReadable": true,
-      "packageWellFormed": true,
-      "malformedParts": [],
-      "secondPassNoOp": true,
-      "integrityFailure": null,
-      "manualReviewRequired": true,
-      "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
@@ -320,83 +210,6 @@
       "error": null
     },
     {
-      "documentId": "fpzg-novinarstvo-bibliografija",
-      "fileName": "fpzg-novinarstvo-bibliografija.docx",
-      "profileId": "fpzg-novinarstvo-diplomski",
-      "outcome": "review",
-      "before": {
-        "checkCount": 35,
-        "passCount": 15,
-        "score": 70
-      },
-      "after": {
-        "checkCount": 35,
-        "passCount": 21,
-        "score": 88
-      },
-      "beforeEntryCount": 8,
-      "afterEntryCount": 8,
-      "droppedEntryCount": 0,
-      "offeredFixerIds": [
-        "font-fixer",
-        "line-spacing-fixer",
-        "alignment-fixer",
-        "bibliography-repair-fixer",
-        "citation-bibliography-sync-fixer",
-        "final-document-inspector-fixer",
-        "field-integrity-fixer",
-        "consistency-fixer",
-        "section-surgery-fixer",
-        "required-section-fixer",
-        "link-doi-fixer"
-      ],
-      "changedFixerIds": [
-        "field-integrity-fixer",
-        "font-fixer",
-        "line-spacing-fixer",
-        "alignment-fixer",
-        "section-surgery-fixer",
-        "final-document-inspector-fixer",
-        "bibliography-repair-fixer",
-        "required-section-fixer"
-      ],
-      "targetedCheckCount": 7,
-      "targetedResolvedCount": 4,
-      "targetedUnresolvedCount": 3,
-      "autoUnresolvedCount": 0,
-      "autoUnresolvedChecks": [],
-      "assistedUnresolvedCount": 3,
-      "assistedUnresolvedChecks": [
-        "citation.author-year.missing-reference",
-        "reference.uncited",
-        "structure.sections.profile"
-      ],
-      "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 4,
-      "unmappedMatchKeys": [
-        "Consistency Engine",
-        "Dosljednost",
-        "Komentari",
-        "Metapodaci",
-        "Praćenje promjena",
-        "Skriveni tekst",
-        "Word polja"
-      ],
-      "passRegressionCount": 0,
-      "outputReadable": true,
-      "packageWellFormed": true,
-      "malformedParts": [],
-      "secondPassNoOp": true,
-      "integrityFailure": null,
-      "manualReviewRequired": true,
-      "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "ciljani-check-nije-u-potpunosti-riješen",
-        "postoji-asistirana-stavka-koja-traži-potvrdu"
-      ],
-      "error": null
-    },
-    {
       "documentId": "grf-diplomski-neuskladjen",
       "fileName": "grf-diplomski-neuskladjen.docx",
       "profileId": "grf-diplomski",
@@ -443,137 +256,6 @@
       "manualReviewRequired": true,
       "manualReviewReasons": [
         "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu"
-      ],
-      "error": null
-    },
-    {
-      "documentId": "lo-fpzg-zavrsni-neuskladjen",
-      "fileName": "lo-fpzg-zavrsni-neuskladjen.docx",
-      "profileId": "fpzg-politologija-zavrsni",
-      "outcome": "pass",
-      "before": {
-        "checkCount": 34,
-        "passCount": 17,
-        "score": 73
-      },
-      "after": {
-        "checkCount": 34,
-        "passCount": 22,
-        "score": 90
-      },
-      "beforeEntryCount": 12,
-      "afterEntryCount": 12,
-      "droppedEntryCount": 0,
-      "offeredFixerIds": [
-        "font-fixer",
-        "line-spacing-fixer",
-        "paper-size-fixer",
-        "alignment-fixer",
-        "bibliography-repair-fixer",
-        "final-document-inspector-fixer",
-        "field-integrity-fixer",
-        "consistency-fixer",
-        "section-surgery-fixer"
-      ],
-      "changedFixerIds": [
-        "field-integrity-fixer",
-        "font-fixer",
-        "line-spacing-fixer",
-        "paper-size-fixer",
-        "alignment-fixer",
-        "section-surgery-fixer",
-        "final-document-inspector-fixer"
-      ],
-      "targetedCheckCount": 4,
-      "targetedResolvedCount": 4,
-      "targetedUnresolvedCount": 0,
-      "autoUnresolvedCount": 0,
-      "autoUnresolvedChecks": [],
-      "assistedUnresolvedCount": 0,
-      "assistedUnresolvedChecks": [],
-      "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 5,
-      "unmappedMatchKeys": [
-        "Consistency Engine",
-        "Dosljednost",
-        "Komentari",
-        "Metapodaci",
-        "Praćenje promjena",
-        "Skriveni tekst",
-        "Word polja"
-      ],
-      "passRegressionCount": 0,
-      "outputReadable": true,
-      "packageWellFormed": true,
-      "malformedParts": [],
-      "secondPassNoOp": true,
-      "integrityFailure": null,
-      "manualReviewRequired": true,
-      "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "postoji-asistirana-stavka-koja-traži-potvrdu"
-      ],
-      "error": null
-    },
-    {
-      "documentId": "lo-fpzg-zavrsni-uskladjen",
-      "fileName": "lo-fpzg-zavrsni-uskladjen.docx",
-      "profileId": "fpzg-politologija-zavrsni",
-      "outcome": "review",
-      "before": {
-        "checkCount": 34,
-        "passCount": 26,
-        "score": 100
-      },
-      "after": {
-        "checkCount": 34,
-        "passCount": 26,
-        "score": 100
-      },
-      "beforeEntryCount": 12,
-      "afterEntryCount": 12,
-      "droppedEntryCount": 0,
-      "offeredFixerIds": [
-        "heading-style-fixer",
-        "bibliography-repair-fixer",
-        "final-document-inspector-fixer",
-        "field-integrity-fixer",
-        "consistency-fixer",
-        "section-surgery-fixer"
-      ],
-      "changedFixerIds": [
-        "field-integrity-fixer",
-        "section-surgery-fixer",
-        "final-document-inspector-fixer"
-      ],
-      "targetedCheckCount": 0,
-      "targetedResolvedCount": 0,
-      "targetedUnresolvedCount": 0,
-      "autoUnresolvedCount": 0,
-      "autoUnresolvedChecks": [],
-      "assistedUnresolvedCount": 0,
-      "assistedUnresolvedChecks": [],
-      "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 0,
-      "unmappedMatchKeys": [
-        "Consistency Engine",
-        "Dosljednost",
-        "Komentari",
-        "Metapodaci",
-        "Praćenje promjena",
-        "Skriveni tekst",
-        "Word polja"
-      ],
-      "passRegressionCount": 0,
-      "outputReadable": true,
-      "packageWellFormed": true,
-      "malformedParts": [],
-      "secondPassNoOp": true,
-      "integrityFailure": null,
-      "manualReviewRequired": true,
-      "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
     },
@@ -738,151 +420,6 @@
       "error": null
     },
     {
-      "documentId": "pravo-integrirani-fusnote",
-      "fileName": "pravo-integrirani-fusnote.docx",
-      "profileId": "pravo-integrirani-diplomski",
-      "outcome": "pass",
-      "before": {
-        "checkCount": 42,
-        "passCount": 19,
-        "score": 76
-      },
-      "after": {
-        "checkCount": 42,
-        "passCount": 27,
-        "score": 94
-      },
-      "beforeEntryCount": 9,
-      "afterEntryCount": 9,
-      "droppedEntryCount": 0,
-      "offeredFixerIds": [
-        "font-fixer",
-        "line-spacing-fixer",
-        "margins-fixer",
-        "alignment-fixer",
-        "paragraph-spacing-fixer",
-        "footnote-spacing-fixer",
-        "heading-format-fixer",
-        "footnote-typography-fixer",
-        "heading-case-fixer",
-        "final-document-inspector-fixer",
-        "field-integrity-fixer",
-        "consistency-fixer"
-      ],
-      "changedFixerIds": [
-        "field-integrity-fixer",
-        "font-fixer",
-        "line-spacing-fixer",
-        "alignment-fixer",
-        "paragraph-spacing-fixer",
-        "footnote-spacing-fixer",
-        "heading-format-fixer",
-        "footnote-typography-fixer",
-        "heading-case-fixer",
-        "final-document-inspector-fixer"
-      ],
-      "targetedCheckCount": 8,
-      "targetedResolvedCount": 8,
-      "targetedUnresolvedCount": 0,
-      "autoUnresolvedCount": 0,
-      "autoUnresolvedChecks": [],
-      "assistedUnresolvedCount": 0,
-      "assistedUnresolvedChecks": [],
-      "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 4,
-      "unmappedMatchKeys": [
-        "Consistency Engine",
-        "Dosljednost",
-        "Komentari",
-        "Metapodaci",
-        "Praćenje promjena",
-        "Skriveni tekst",
-        "Word polja"
-      ],
-      "passRegressionCount": 0,
-      "outputReadable": true,
-      "packageWellFormed": true,
-      "malformedParts": [],
-      "secondPassNoOp": true,
-      "integrityFailure": null,
-      "manualReviewRequired": true,
-      "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "postoji-asistirana-stavka-koja-traži-potvrdu"
-      ],
-      "error": null
-    },
-    {
-      "documentId": "pravo-socijalni-rad-fusnote",
-      "fileName": "pravo-socijalni-rad-fusnote.docx",
-      "profileId": "pravo-socijalni-rad-diplomski",
-      "outcome": "pass",
-      "before": {
-        "checkCount": 38,
-        "passCount": 18,
-        "score": 68
-      },
-      "after": {
-        "checkCount": 38,
-        "passCount": 24,
-        "score": 88
-      },
-      "beforeEntryCount": 9,
-      "afterEntryCount": 9,
-      "droppedEntryCount": 0,
-      "offeredFixerIds": [
-        "font-fixer",
-        "line-spacing-fixer",
-        "margins-fixer",
-        "paper-size-fixer",
-        "page-number-alignment-fixer",
-        "section-insert-fixer",
-        "heading-format-fixer",
-        "final-document-inspector-fixer",
-        "field-integrity-fixer",
-        "consistency-fixer"
-      ],
-      "changedFixerIds": [
-        "field-integrity-fixer",
-        "font-fixer",
-        "line-spacing-fixer",
-        "margins-fixer",
-        "page-number-alignment-fixer",
-        "heading-format-fixer",
-        "final-document-inspector-fixer"
-      ],
-      "targetedCheckCount": 6,
-      "targetedResolvedCount": 6,
-      "targetedUnresolvedCount": 0,
-      "autoUnresolvedCount": 0,
-      "autoUnresolvedChecks": [],
-      "assistedUnresolvedCount": 0,
-      "assistedUnresolvedChecks": [],
-      "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 6,
-      "unmappedMatchKeys": [
-        "Consistency Engine",
-        "Dosljednost",
-        "Komentari",
-        "Metapodaci",
-        "Praćenje promjena",
-        "Skriveni tekst",
-        "Word polja"
-      ],
-      "passRegressionCount": 0,
-      "outputReadable": true,
-      "packageWellFormed": true,
-      "malformedParts": [],
-      "secondPassNoOp": true,
-      "integrityFailure": null,
-      "manualReviewRequired": true,
-      "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "postoji-asistirana-stavka-koja-traži-potvrdu"
-      ],
-      "error": null
-    },
-    {
       "documentId": "ttf-diplomski-arial",
       "fileName": "ttf-diplomski-arial.docx",
       "profileId": "ttf-diplomski",
@@ -932,177 +469,24 @@
         "postoji-asistirana-stavka-koja-traži-potvrdu"
       ],
       "error": null
-    },
-    {
-      "documentId": "typografija-i-literatura",
-      "fileName": "typografija-i-literatura.docx",
-      "profileId": "fpzg-mes-master-thesis",
-      "outcome": "review",
-      "before": {
-        "checkCount": 33,
-        "passCount": 12,
-        "score": 62
-      },
-      "after": {
-        "checkCount": 33,
-        "passCount": 18,
-        "score": 83
-      },
-      "beforeEntryCount": 12,
-      "afterEntryCount": 12,
-      "droppedEntryCount": 0,
-      "offeredFixerIds": [
-        "font-fixer",
-        "line-spacing-fixer",
-        "paper-size-fixer",
-        "alignment-fixer",
-        "bibliography-repair-fixer",
-        "final-document-inspector-fixer",
-        "field-integrity-fixer",
-        "croatian-typography-fixer",
-        "consistency-fixer",
-        "section-surgery-fixer",
-        "required-section-fixer",
-        "link-doi-fixer"
-      ],
-      "changedFixerIds": [
-        "field-integrity-fixer",
-        "croatian-typography-fixer",
-        "font-fixer",
-        "line-spacing-fixer",
-        "paper-size-fixer",
-        "alignment-fixer",
-        "section-surgery-fixer",
-        "final-document-inspector-fixer",
-        "bibliography-repair-fixer",
-        "required-section-fixer"
-      ],
-      "targetedCheckCount": 6,
-      "targetedResolvedCount": 4,
-      "targetedUnresolvedCount": 2,
-      "autoUnresolvedCount": 0,
-      "autoUnresolvedChecks": [],
-      "assistedUnresolvedCount": 2,
-      "assistedUnresolvedChecks": [
-        "reference.uncited",
-        "structure.sections.profile"
-      ],
-      "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 7,
-      "unmappedMatchKeys": [
-        "Consistency Engine",
-        "Dosljednost",
-        "Komentari",
-        "Metapodaci",
-        "Praćenje promjena",
-        "Skriveni tekst",
-        "Word polja"
-      ],
-      "passRegressionCount": 0,
-      "outputReadable": true,
-      "packageWellFormed": true,
-      "malformedParts": [],
-      "secondPassNoOp": true,
-      "integrityFailure": null,
-      "manualReviewRequired": true,
-      "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "ciljani-check-nije-u-potpunosti-riješen",
-        "postoji-asistirana-stavka-koja-traži-potvrdu"
-      ],
-      "error": null
-    },
-    {
-      "documentId": "word-veliki-neuredan",
-      "fileName": "word-veliki-neuredan.docx",
-      "profileId": "fpzg-politologija-diplomski",
-      "outcome": "review",
-      "before": {
-        "checkCount": 35,
-        "passCount": 13,
-        "score": 64
-      },
-      "after": {
-        "checkCount": 35,
-        "passCount": 19,
-        "score": 85
-      },
-      "beforeEntryCount": 21,
-      "afterEntryCount": 21,
-      "droppedEntryCount": 0,
-      "offeredFixerIds": [
-        "font-fixer",
-        "line-spacing-fixer",
-        "paper-size-fixer",
-        "alignment-fixer",
-        "toc-field-fixer",
-        "final-document-inspector-fixer",
-        "field-integrity-fixer",
-        "consistency-fixer",
-        "section-surgery-fixer",
-        "required-section-fixer"
-      ],
-      "changedFixerIds": [
-        "field-integrity-fixer",
-        "font-fixer",
-        "line-spacing-fixer",
-        "paper-size-fixer",
-        "alignment-fixer",
-        "final-document-inspector-fixer",
-        "required-section-fixer",
-        "toc-field-fixer"
-      ],
-      "targetedCheckCount": 5,
-      "targetedResolvedCount": 4,
-      "targetedUnresolvedCount": 1,
-      "autoUnresolvedCount": 0,
-      "autoUnresolvedChecks": [],
-      "assistedUnresolvedCount": 1,
-      "assistedUnresolvedChecks": [
-        "structure.sections.profile"
-      ],
-      "awaitingConfirmationCount": 0,
-      "manualOnlyCount": 9,
-      "unmappedMatchKeys": [
-        "Consistency Engine",
-        "Dosljednost",
-        "Komentari",
-        "Metapodaci",
-        "Praćenje promjena",
-        "Skriveni tekst",
-        "Word polja"
-      ],
-      "passRegressionCount": 0,
-      "outputReadable": true,
-      "packageWellFormed": true,
-      "malformedParts": [],
-      "secondPassNoOp": true,
-      "integrityFailure": null,
-      "manualReviewRequired": true,
-      "manualReviewReasons": [
-        "vizualno-provjeriti-promjene-u-Wordu-ili-LibreOfficeu",
-        "ciljani-check-nije-u-potpunosti-riješen",
-        "postoji-asistirana-stavka-koja-traži-potvrdu"
-      ],
-      "error": null
     }
   ],
   "summary": {
-    "documentCount": 16,
-    "passCount": 4,
-    "reviewCount": 10,
+    "documentCount": 8,
+    "passCount": 1,
+    "reviewCount": 5,
     "failCount": 0,
     "integrityFailureCount": 0,
     "noOpCount": 2,
-    "changedDocumentCount": 14,
-    "manualReviewCount": 16,
+    "changedDocumentCount": 6,
+    "manualReviewCount": 8,
     "passRegressionCount": 0,
-    "targetedCheckCount": 39,
-    "targetedResolvedCount": 33,
+    "targetedCheckCount": 3,
+    "targetedResolvedCount": 3,
     "autoUnresolvedCount": 0,
     "autoUnresolvedChecks": [],
-    "assistedUnresolvedCount": 6,
+    "assistedUnresolvedCount": 0,
     "awaitingConfirmationCount": 0,
-    "manualOnlyCount": 57
+    "manualOnlyCount": 19
   }
 }

@@ -36,7 +36,9 @@
       "realDocuments": 26,
       "realPass": 2,
       "ready": false,
-      "blockers": ["nema zapisa o vizualnom pregledu (uvjet za razinu A)"],
+      "blockers": [
+        "nema zapisa o vizualnom pregledu (uvjet za razinu A)"
+      ],
       "reason": "Najbolje pokriven profil u korpusu i jedini s vise od jednog stvarnog prolaza."
     },
     {
@@ -46,7 +48,10 @@
       "realDocuments": 24,
       "realPass": 0,
       "ready": false,
-      "blockers": ["nijedan stvarni dokument nije `pass`", "nema zapisa o vizualnom pregledu"],
+      "blockers": [
+        "nijedan stvarni dokument nije `pass`",
+        "nema zapisa o vizualnom pregledu"
+      ],
       "reason": "Isti odsjek i isti izvor pravila kao zavrsni, druga vrsta rada."
     },
     {
@@ -56,7 +61,10 @@
       "realDocuments": 22,
       "realPass": 0,
       "ready": false,
-      "blockers": ["nijedan stvarni dokument nije `pass`", "nema zapisa o vizualnom pregledu"],
+      "blockers": [
+        "nijedan stvarni dokument nije `pass`",
+        "nema zapisa o vizualnom pregledu"
+      ],
       "reason": "Krovni FPZG profil; hvata radove koje detekcija ne uspije svrstati u odsjek."
     },
     {
@@ -66,7 +74,11 @@
       "realDocuments": 5,
       "realPass": 0,
       "ready": false,
-      "blockers": ["manje od 10 stvarnih dokumenata", "nijedan stvarni dokument nije `pass`", "nema zapisa o vizualnom pregledu"],
+      "blockers": [
+        "manje od 10 stvarnih dokumenata",
+        "nijedan stvarni dokument nije `pass`",
+        "nema zapisa o vizualnom pregledu"
+      ],
       "reason": "Druga ustanova osim FPZG-a s vise od jednog uzorka; potrebna za tvrdnju da pilot nije jedan fakultet."
     },
     {
@@ -76,17 +88,24 @@
       "realDocuments": 3,
       "realPass": 0,
       "ready": false,
-      "blockers": ["manje od 10 stvarnih dokumenata", "nijedan stvarni dokument nije `pass`", "nema zapisa o vizualnom pregledu"],
+      "blockers": [
+        "manje od 10 stvarnih dokumenata",
+        "nijedan stvarni dokument nije `pass`",
+        "nema zapisa o vizualnom pregledu"
+      ],
       "reason": "Pravni fakultet ima vlastiti citatni model (fusnote), pa pokriva put koji FPZG i EFZG ne diraju."
     },
     {
       "profileId": "pravo-integrirani-diplomski",
       "unitId": "pravo",
-      "claim": "A",
+      "claim": "B",
       "realDocuments": 2,
       "realPass": 1,
       "ready": false,
-      "blockers": ["manje od 10 stvarnih dokumenata", "nema zapisa o vizualnom pregledu"],
+      "blockers": [
+        "manje od 10 stvarnih dokumenata",
+        "nema zapisa o vizualnom pregledu"
+      ],
       "reason": "Jedini pravni profil sa statusom `verified` i stvarnim uzorcima. Cinjenice uskladjene s korpusom 2026-09-03: `pravo-integrirani-fusnote.docx` ima `outcome: pass` (76 -> 94), pa je blokator `nijedan stvarni dokument nije pass` uklonjen kao netocan, a `claim` je snimka ledgera koji ima dokaz. PRESUDA NIJE MIJENJANA: `ready` ostaje `false` zbog preostala dva blokatora. Napomena uz `realDocuments`: commitani korpus za ovaj profil nosi JEDAN dokument, a ovdje stoji 2; brojka je ostavljena kakvu je upisao potpisnik."
     }
   ],

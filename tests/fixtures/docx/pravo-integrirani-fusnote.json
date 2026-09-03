@@ -1,4 +1,5 @@
 {
   "profileId": "pravo-integrirani-diplomski",
-  "note": "generirano, anonimno, nije studentski rad; razmaci u fusnotama namjerno neispravni"
+  "note": "generirano, anonimno, nije studentski rad; razmaci u fusnotama namjerno neispravni",
+  "synthetic": true
 }

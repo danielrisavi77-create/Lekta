@@ -1,4 +1,5 @@
 {
   "profileId": "fer-diplomski",
-  "note": "generirano, anonimno, nije studentski rad; kompozitna struktura za pokrivenost fixera"
+  "note": "generirano, anonimno, nije studentski rad; kompozitna struktura za pokrivenost fixera",
+  "synthetic": true
 }

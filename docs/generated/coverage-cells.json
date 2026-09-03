@@ -8,14 +8,14 @@
   },
   "summary": {
     "cellCount": 12617,
-    "coveredCount": 4770,
-    "uncoveredCount": 7847,
+    "coveredCount": 4758,
+    "uncoveredCount": 7859,
     "resolvedCount": 1877,
     "byReason": {
-      "profil-ne-propisuje-os": 6106,
+      "profil-ne-propisuje-os": 6107,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 113,
+      "nema-dokaza": 124,
       "ceka-ljudski-odabir": 814,
       "trazi-ulaz-izvan-dokumenta": 814
     }
@@ -227,13 +227,8 @@
     {
       "profileId": "fpzg-politologija-zavrsni",
       "fixerId": "section-surgery-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "real",
-        "strength": "applied",
-        "track": "real",
-        "artifactId": "lo-fpzg-zavrsni-neuskladjen"
-      }
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
     },
     {
       "profileId": "fpzg-politologija-zavrsni",
@@ -1478,13 +1473,8 @@
     {
       "profileId": "fpzg-novinarstvo-diplomski",
       "fixerId": "bibliography-repair-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "real",
-        "strength": "applied",
-        "track": "real",
-        "artifactId": "fpzg-novinarstvo-bibliografija"
-      }
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
     },
     {
       "profileId": "fpzg-novinarstvo-diplomski",
@@ -1523,13 +1513,8 @@
     {
       "profileId": "fpzg-novinarstvo-diplomski",
       "fixerId": "section-surgery-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "real",
-        "strength": "applied",
-        "track": "real",
-        "artifactId": "fpzg-novinarstvo-bibliografija"
-      }
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
     },
     {
       "profileId": "fpzg-novinarstvo-diplomski",
@@ -1753,13 +1738,8 @@
     {
       "profileId": "fpzg-mes-master-thesis",
       "fixerId": "bibliography-repair-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "real",
-        "strength": "applied",
-        "track": "real",
-        "artifactId": "typografija-i-literatura"
-      }
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
     },
     {
       "profileId": "fpzg-mes-master-thesis",
@@ -1798,13 +1778,8 @@
     {
       "profileId": "fpzg-mes-master-thesis",
       "fixerId": "section-surgery-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "real",
-        "strength": "applied",
-        "track": "real",
-        "artifactId": "typografija-i-literatura"
-      }
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
     },
     {
       "profileId": "fpzg-mes-master-thesis",
@@ -3487,13 +3462,8 @@
     {
       "profileId": "pravo-integrirani-diplomski",
       "fixerId": "paragraph-spacing-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "real",
-        "strength": "applied",
-        "track": "real",
-        "artifactId": "pravo-integrirani-fusnote"
-      }
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
     },
     {
       "profileId": "pravo-integrirani-diplomski",
@@ -3527,13 +3497,8 @@
     {
       "profileId": "pravo-integrirani-diplomski",
       "fixerId": "footnote-spacing-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "real",
-        "strength": "applied",
-        "track": "real",
-        "artifactId": "pravo-integrirani-fusnote"
-      }
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
     },
     {
       "profileId": "pravo-integrirani-diplomski",
@@ -3555,13 +3520,8 @@
     {
       "profileId": "pravo-integrirani-diplomski",
       "fixerId": "heading-format-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "real",
-        "strength": "applied",
-        "track": "real",
-        "artifactId": "pravo-integrirani-fusnote"
-      }
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
     },
     {
       "profileId": "pravo-integrirani-diplomski",
@@ -3583,24 +3543,14 @@
     {
       "profileId": "pravo-integrirani-diplomski",
       "fixerId": "footnote-typography-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "real",
-        "strength": "applied",
-        "track": "real",
-        "artifactId": "pravo-integrirani-fusnote"
-      }
+      "status": "nepokriveno",
+      "reason": "profil-ne-propisuje-os"
     },
     {
       "profileId": "pravo-integrirani-diplomski",
       "fixerId": "heading-case-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "real",
-        "strength": "applied",
-        "track": "real",
-        "artifactId": "pravo-integrirani-fusnote"
-      }
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
     },
     {
       "profileId": "pravo-integrirani-diplomski",
@@ -4846,13 +4796,8 @@
     {
       "profileId": "pravo-socijalni-rad-diplomski",
       "fixerId": "page-number-alignment-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "real",
-        "strength": "applied",
-        "track": "real",
-        "artifactId": "pravo-socijalni-rad-fusnote"
-      }
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
@@ -4868,13 +4813,8 @@
     {
       "profileId": "pravo-socijalni-rad-diplomski",
       "fixerId": "heading-format-fixer",
-      "status": "pokriveno",
-      "evidence": {
-        "kind": "real",
-        "strength": "applied",
-        "track": "real",
-        "artifactId": "pravo-socijalni-rad-fusnote"
-      }
+      "status": "nepokriveno",
+      "reason": "nema-dokaza"
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",

@@ -5279,7 +5279,7 @@
         "margins-fixer",
         "paper-size-fixer"
       ],
-      "realDocxSampleCount": 3,
+      "realDocxSampleCount": 2,
       "profilesWithoutRealDocx": [
         "fer-zavrsni",
         "fer-doktorski"
@@ -5288,7 +5288,7 @@
         "profileCoveragePassCount": 3,
         "profileCoverageFailCount": 0,
         "realCorpusPassCount": 0,
-        "realCorpusReviewCount": 1,
+        "realCorpusReviewCount": 0,
         "realCorpusNoOpCount": 2,
         "realCorpusFailCount": 0,
         "syntheticClosedLoopPassCount": 3,
@@ -5340,10 +5340,10 @@
           "templateIds": [
             "basic-text-styles"
           ],
-          "realDocxSampleCount": 3,
+          "realDocxSampleCount": 2,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "review",
+            "realCorpus": "pass",
             "syntheticClosedLoop": "pass"
           },
           "closedLoopAxesRemaining": [],
@@ -5362,8 +5362,7 @@
             }
           },
           "realCorpusOutcomes": {
-            "no-op": 2,
-            "review": 1
+            "no-op": 2
           },
           "manualReviewReasons": [
             "stvarni-docx-trazi-rucni-pregled"
@@ -10553,11 +10552,15 @@
         "margins-fixer",
         "paper-size-fixer"
       ],
-      "realDocxSampleCount": 5,
+      "realDocxSampleCount": 0,
       "profilesWithoutRealDocx": [
+        "fpzg-politologija-zavrsni",
         "fpzg-novinarstvo-zavrsni-tekst",
         "fpzg-novinarstvo-zavrsni-av",
+        "fpzg-politologija-diplomski",
         "fpzg-nacionalna-sigurnost-diplomski",
+        "fpzg-novinarstvo-diplomski",
+        "fpzg-mes-master-thesis",
         "fpzg-specijalisticki-odnosi-s-javnoscu",
         "fpzg-specijalisticki-prilagodba-eu",
         "fpzg-specijalisticki-sigurnosna-politika-rh",
@@ -10568,8 +10571,8 @@
       "automaticTestSummary": {
         "profileCoveragePassCount": 13,
         "profileCoverageFailCount": 0,
-        "realCorpusPassCount": 1,
-        "realCorpusReviewCount": 4,
+        "realCorpusPassCount": 0,
+        "realCorpusReviewCount": 0,
         "realCorpusNoOpCount": 0,
         "realCorpusFailCount": 0,
         "syntheticClosedLoopPassCount": 13,
@@ -10577,22 +10580,20 @@
       },
       "cellSummary": {
         "cellCount": 403,
-        "coveredCount": 176,
-        "uncoveredCount": 227,
+        "coveredCount": 171,
+        "uncoveredCount": 232,
         "resolvedCount": 70,
         "byReason": {
           "profil-ne-propisuje-os": 158,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 17,
+          "nema-dokaza": 22,
           "ceka-ljudski-odabir": 26,
           "trazi-ulaz-izvan-dokumenta": 26
         }
       },
       "manualReviewReasons": [
-        "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
-        "nema-stvarnog-docx-uzorka",
-        "stvarni-docx-trazi-rucni-pregled"
+        "nema-stvarnog-docx-uzorka"
       ],
       "profiles": [
         {
@@ -10622,33 +10623,30 @@
           "templateIds": [
             "basic-text-styles"
           ],
-          "realDocxSampleCount": 2,
+          "realDocxSampleCount": 0,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "review",
+            "realCorpus": "not-run",
             "syntheticClosedLoop": "pass"
           },
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 15,
-            "uncoveredCount": 16,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
             "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 11,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 1,
+              "nema-dokaza": 2,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
           },
-          "realCorpusOutcomes": {
-            "pass": 1,
-            "review": 1
-          },
+          "realCorpusOutcomes": {},
           "manualReviewReasons": [
-            "stvarni-docx-trazi-rucni-pregled"
+            "nema-stvarnog-docx-uzorka"
           ]
         },
         {
@@ -10771,10 +10769,10 @@
           "templateIds": [
             "basic-text-styles"
           ],
-          "realDocxSampleCount": 1,
+          "realDocxSampleCount": 0,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "review",
+            "realCorpus": "not-run",
             "syntheticClosedLoop": "pass"
           },
           "closedLoopAxesRemaining": [],
@@ -10792,12 +10790,9 @@
               "trazi-ulaz-izvan-dokumenta": 2
             }
           },
-          "realCorpusOutcomes": {
-            "review": 1
-          },
+          "realCorpusOutcomes": {},
           "manualReviewReasons": [
-            "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
-            "stvarni-docx-trazi-rucni-pregled"
+            "nema-stvarnog-docx-uzorka"
           ]
         },
         {
@@ -10880,33 +10875,30 @@
           "templateIds": [
             "basic-text-styles"
           ],
-          "realDocxSampleCount": 1,
+          "realDocxSampleCount": 0,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "review",
+            "realCorpus": "not-run",
             "syntheticClosedLoop": "pass"
           },
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 16,
-            "uncoveredCount": 15,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
             "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 11,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 0,
+              "nema-dokaza": 2,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
           },
-          "realCorpusOutcomes": {
-            "review": 1
-          },
+          "realCorpusOutcomes": {},
           "manualReviewReasons": [
-            "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
-            "stvarni-docx-trazi-rucni-pregled"
+            "nema-stvarnog-docx-uzorka"
           ]
         },
         {
@@ -10936,33 +10928,30 @@
           "templateIds": [
             "basic-text-styles"
           ],
-          "realDocxSampleCount": 1,
+          "realDocxSampleCount": 0,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "review",
+            "realCorpus": "not-run",
             "syntheticClosedLoop": "pass"
           },
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 16,
-            "uncoveredCount": 15,
+            "coveredCount": 14,
+            "uncoveredCount": 17,
             "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 11,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 0,
+              "nema-dokaza": 2,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
           },
-          "realCorpusOutcomes": {
-            "review": 1
-          },
+          "realCorpusOutcomes": {},
           "manualReviewReasons": [
-            "ciljani-check-na-stvarnom-docx-u-nije-u-potpunosti-rijesen",
-            "stvarni-docx-trazi-rucni-pregled"
+            "nema-stvarnog-docx-uzorka"
           ]
         },
         {
@@ -18861,12 +18850,14 @@
         "margins-fixer",
         "paper-size-fixer"
       ],
-      "realDocxSampleCount": 2,
+      "realDocxSampleCount": 0,
       "profilesWithoutRealDocx": [
+        "pravo-integrirani-diplomski",
         "pravo-javna-uprava-prijediplomski",
         "pravo-javna-uprava-diplomski",
         "pravo-porezni-prijediplomski",
         "pravo-socijalni-rad-zavrsni",
+        "pravo-socijalni-rad-diplomski",
         "pravo-socijalna-politika-diplomski",
         "pravo-opci-pravni-akademski-rad",
         "pravo-socijalni-opci-akademski-rad",
@@ -18878,7 +18869,7 @@
       "automaticTestSummary": {
         "profileCoveragePassCount": 13,
         "profileCoverageFailCount": 0,
-        "realCorpusPassCount": 2,
+        "realCorpusPassCount": 0,
         "realCorpusReviewCount": 0,
         "realCorpusNoOpCount": 0,
         "realCorpusFailCount": 0,
@@ -18887,21 +18878,20 @@
       },
       "cellSummary": {
         "cellCount": 403,
-        "coveredCount": 168,
-        "uncoveredCount": 235,
+        "coveredCount": 161,
+        "uncoveredCount": 242,
         "resolvedCount": 70,
         "byReason": {
-          "profil-ne-propisuje-os": 154,
+          "profil-ne-propisuje-os": 155,
           "univerzalna-higijena-bez-dokaza": 0,
           "closed-loop-nije-rijesio": 0,
-          "nema-dokaza": 29,
+          "nema-dokaza": 35,
           "ceka-ljudski-odabir": 26,
           "trazi-ulaz-izvan-dokumenta": 26
         }
       },
       "manualReviewReasons": [
-        "nema-stvarnog-docx-uzorka",
-        "stvarni-docx-trazi-rucni-pregled"
+        "nema-stvarnog-docx-uzorka"
       ],
       "profiles": [
         {
@@ -18931,32 +18921,30 @@
           "templateIds": [
             "basic-text-styles"
           ],
-          "realDocxSampleCount": 1,
+          "realDocxSampleCount": 0,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "pass",
+            "realCorpus": "not-run",
             "syntheticClosedLoop": "pass"
           },
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 18,
-            "uncoveredCount": 13,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
             "resolvedCount": 6,
             "byReason": {
-              "profil-ne-propisuje-os": 9,
+              "profil-ne-propisuje-os": 10,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 0,
+              "nema-dokaza": 4,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
           },
-          "realCorpusOutcomes": {
-            "pass": 1
-          },
+          "realCorpusOutcomes": {},
           "manualReviewReasons": [
-            "stvarni-docx-trazi-rucni-pregled"
+            "nema-stvarnog-docx-uzorka"
           ]
         },
         {
@@ -19200,32 +19188,30 @@
           "templateIds": [
             "basic-text-styles"
           ],
-          "realDocxSampleCount": 1,
+          "realDocxSampleCount": 0,
           "automaticTests": {
             "profileCoverage": "pass",
-            "realCorpus": "pass",
+            "realCorpus": "not-run",
             "syntheticClosedLoop": "pass"
           },
           "closedLoopAxesRemaining": [],
           "cellSummary": {
             "cellCount": 31,
-            "coveredCount": 15,
-            "uncoveredCount": 16,
+            "coveredCount": 13,
+            "uncoveredCount": 18,
             "resolvedCount": 6,
             "byReason": {
               "profil-ne-propisuje-os": 8,
               "univerzalna-higijena-bez-dokaza": 0,
               "closed-loop-nije-rijesio": 0,
-              "nema-dokaza": 4,
+              "nema-dokaza": 6,
               "ceka-ljudski-odabir": 2,
               "trazi-ulaz-izvan-dokumenta": 2
             }
           },
-          "realCorpusOutcomes": {
-            "pass": 1
-          },
+          "realCorpusOutcomes": {},
           "manualReviewReasons": [
-            "stvarni-docx-trazi-rucni-pregled"
+            "nema-stvarnog-docx-uzorka"
           ]
         },
         {
@@ -30385,32 +30371,32 @@
     "profileCount": 407,
     "offeredOptionCount": 1751,
     "mappedOptionCount": 1751,
-    "realDocxSampleCount": 16,
-    "facultiesWithRealDocx": 8,
-    "facultiesWithoutRealDocx": 123,
-    "profilesWithoutRealDocx": 395,
+    "realDocxSampleCount": 8,
+    "facultiesWithRealDocx": 6,
+    "facultiesWithoutRealDocx": 125,
+    "profilesWithoutRealDocx": 401,
     "profileCoverageFailCount": 0,
-    "realCorpusPassCount": 4,
-    "realCorpusReviewCount": 10,
+    "realCorpusPassCount": 1,
+    "realCorpusReviewCount": 5,
     "realCorpusNoOpCount": 2,
     "realCorpusFailCount": 0,
     "syntheticClosedLoopPassCount": 372,
     "syntheticClosedLoopNotRunCount": 0,
     "cellCount": 12617,
-    "coveredCellCount": 4770,
-    "uncoveredCellCount": 7847,
+    "coveredCellCount": 4758,
+    "uncoveredCellCount": 7859,
     "resolvedCellCount": 1877
   },
   "cellSummary": {
     "cellCount": 12617,
-    "coveredCount": 4770,
-    "uncoveredCount": 7847,
+    "coveredCount": 4758,
+    "uncoveredCount": 7859,
     "resolvedCount": 1877,
     "byReason": {
-      "profil-ne-propisuje-os": 6106,
+      "profil-ne-propisuje-os": 6107,
       "univerzalna-higijena-bez-dokaza": 0,
       "closed-loop-nije-rijesio": 0,
-      "nema-dokaza": 113,
+      "nema-dokaza": 124,
       "ceka-ljudski-odabir": 814,
       "trazi-ulaz-izvan-dokumenta": 814
     }

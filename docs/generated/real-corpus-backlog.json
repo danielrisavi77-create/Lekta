@@ -1,7 +1,7 @@
 {
   "generatedFrom": "docs/generated/faculty-matrix.json",
   "totalProfiles": 407,
-  "profilesWithoutSample": 395,
+  "profilesWithoutSample": 401,
   "entries": [
     {
       "profileId": "algebra-diplomski",
@@ -269,6 +269,12 @@
     },
     {
       "profileId": "pravo-socijalna-politika-diplomski",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 6
+    },
+    {
+      "profileId": "pravo-socijalni-rad-diplomski",
       "unitId": "pravo",
       "facultyLabel": "Pravni fakultet",
       "offeredOptionCount": 6
@@ -886,13 +892,37 @@
       "offeredOptionCount": 5
     },
     {
+      "profileId": "fpzg-mes-master-thesis",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
       "unitId": "fpzg",
       "facultyLabel": "Fakultet političkih znanosti",
       "offeredOptionCount": 5
     },
     {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fpzg-politologija-diplomski",
+      "unitId": "fpzg",
+      "facultyLabel": "Fakultet političkih znanosti",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "fpzg-politologija-zavrsni",
       "unitId": "fpzg",
       "facultyLabel": "Fakultet političkih znanosti",
       "offeredOptionCount": 5
@@ -1187,6 +1217,12 @@
     },
     {
       "profileId": "pravo-doktorski-pravne-znanosti",
+      "unitId": "pravo",
+      "facultyLabel": "Pravni fakultet",
+      "offeredOptionCount": 5
+    },
+    {
+      "profileId": "pravo-integrirani-diplomski",
       "unitId": "pravo",
       "facultyLabel": "Pravni fakultet",
       "offeredOptionCount": 5

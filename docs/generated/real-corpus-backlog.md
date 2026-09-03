@@ -2,7 +2,7 @@
 
 > Profili bez ijednog stvarnog DOCX uzorka za real-corpus testiranje, rangirani silazno po broju ponudjenih repair opcija (offeredOptionCount) - gdje bi sljedeci stvarni uzorak najvise vrijedio. Izvor: docs/generated/faculty-matrix.json (`npm run repair-faculty-matrix`).
 
-Ukupno profila bez uzorka: **395/407**.
+Ukupno profila bez uzorka: **401/407**.
 
 ## Sveučilište Algebra Bernays (algebra)
 
@@ -153,7 +153,9 @@ Ukupno profila bez uzorka: **395/407**.
 ## Pravni fakultet (pravo)
 
 - **pravo-socijalna-politika-diplomski** — 6 ponudjenih opcija
+- **pravo-socijalni-rad-diplomski** — 6 ponudjenih opcija
 - **pravo-doktorski-pravne-znanosti** — 5 ponudjenih opcija
+- **pravo-integrirani-diplomski** — 5 ponudjenih opcija
 - **pravo-javna-uprava-diplomski** — 5 ponudjenih opcija
 - **pravo-javna-uprava-prijediplomski** — 5 ponudjenih opcija
 - **pravo-opci-pravni-akademski-rad** — 5 ponudjenih opcija
@@ -424,8 +426,12 @@ Ukupno profila bez uzorka: **395/407**.
 ## Fakultet političkih znanosti (fpzg)
 
 - **fpzg-doktorski-politologija** — 5 ponudjenih opcija
+- **fpzg-mes-master-thesis** — 5 ponudjenih opcija
 - **fpzg-nacionalna-sigurnost-diplomski** — 5 ponudjenih opcija
+- **fpzg-novinarstvo-diplomski** — 5 ponudjenih opcija
 - **fpzg-novinarstvo-zavrsni-tekst** — 5 ponudjenih opcija
+- **fpzg-politologija-diplomski** — 5 ponudjenih opcija
+- **fpzg-politologija-zavrsni** — 5 ponudjenih opcija
 - **fpzg-specijalisticki-odnosi-s-javnoscu** — 5 ponudjenih opcija
 - **fpzg-specijalisticki-prilagodba-eu** — 5 ponudjenih opcija
 - **fpzg-specijalisticki-sigurnosna-politika-rh** — 5 ponudjenih opcija

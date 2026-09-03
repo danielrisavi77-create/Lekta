@@ -10,10 +10,10 @@
   },
   "counts": {
     "E": 41,
-    "B": 321,
+    "B": 323,
     "D": 37,
     "C": 8,
-    "A": 3
+    "A": 1
   },
   "byProfile": {
     "adu-dramaturgija-diplomski": "E",
@@ -257,7 +257,7 @@
     "pmfst-diplomski": "B",
     "pmfst-zavrsni": "B",
     "pravo-doktorski-pravne-znanosti": "B",
-    "pravo-integrirani-diplomski": "A",
+    "pravo-integrirani-diplomski": "B",
     "pravo-javna-uprava-diplomski": "B",
     "pravo-javna-uprava-prijediplomski": "B",
     "pravo-opci-pravni-akademski-rad": "B",
@@ -266,7 +266,7 @@
     "pravo-socijalne-djelatnosti-doktorski": "B",
     "pravo-socijalne-djelatnosti-specijalisticki": "B",
     "pravo-socijalni-opci-akademski-rad": "B",
-    "pravo-socijalni-rad-diplomski": "A",
+    "pravo-socijalni-rad-diplomski": "B",
     "pravo-socijalni-rad-zavrsni": "B",
     "pravo-specijalisticki-pravni-opci": "B",
     "pravos-diplomski": "B",

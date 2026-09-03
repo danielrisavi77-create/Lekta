@@ -1,4 +1,5 @@
 {
   "profileId": "fpzg-politologija-zavrsni",
-  "note": "generirano PRAVIM LibreOfficeom (uskladjen); izmisljen tekst, NIJE studentski rad. Izvor: scripts/corpus-gen/libreoffice.mjs --scenario lo-fpzg-zavrsni-uskladjen"
+  "note": "generirano PRAVIM LibreOfficeom (uskladjen); izmisljen tekst, NIJE studentski rad. Izvor: scripts/corpus-gen/libreoffice.mjs --scenario lo-fpzg-zavrsni-uskladjen",
+  "synthetic": true
 }
