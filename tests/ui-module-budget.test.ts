@@ -18,8 +18,32 @@ import { describe, expect, it } from 'vitest';
 const KORIJEN = path.resolve(__dirname, '..');
 const POPUST = 8 * 1024; // koliko datoteka smije biti ispod budzeta prije nego se trazi spustanje
 
+/**
+ * Velicina se mjeri NAD NORMALIZIRANIM sadrzajem, ne `statSync().size`.
+ *
+ * Zasto, izmjereno 2026-09-03 na `54bb11e3`: ista datoteka iz ISTOG commita ima dvije velicine,
+ * ovisno samo o tome kako je radno stablo materijalizirano.
+ *
+ *     svjez `git worktree add`   368572 B   (CRLF: 2361 CR + 2361 LF)
+ *     dijeljeno radno stablo     366211 B   (LF:      0 CR + 2361 LF)
+ *     blob u gitu                366211 B
+ *
+ * Razlika je TOCNO broj redaka (2361 B za app.ts), jer `core.autocrlf` pri checkoutu dopisuje CR.
+ * Posljedica nije kozmeticka: CI (Linux, LF) mjeri 366211 i prolazi, a isti commit u svjezem
+ * worktreeu na Windowsu mjeri 368572 i PADA. Gard je time davao lazno crveno bas onima koji
+ * slijede uputu iz vodica da se gate mjeri u izoliranom stablu, i dvije sesije su na toj razlici
+ * potrosile jedan krug rasprave (jedna je tvrdila da je posao gotov, druga da nije, obje tocno za
+ * svoje stablo).
+ *
+ * Budzeti su kalibrirani na LF vrijednosti (CI je zelen), pa normalizacija ne mijenja nijedan prag.
+ */
 function bajtova(rel: string): number {
-  return fs.statSync(path.join(KORIJEN, rel)).size;
+  // CR bajtovi se ODBACUJU, umjesto regexa nad tekstom: escape u regexu gradjenom kroz alat zna
+  // se izgubiti (poznat razred kvara u ovom repozitoriju), a brojanje bajtova nema tu zamku.
+  const sirovo = fs.readFileSync(path.join(KORIJEN, rel));
+  let n = 0;
+  for (const b of sirovo) if (b !== 0x0d) n += 1;
+  return n;
 }
 
 function tsDatoteke(rel: string): string[] {
