@@ -402,3 +402,11 @@ ISTIH 38 lokalnih radova. Pad je jedna sesija pripisala gubitku podataka i to je
 uslo u handoff; aritmetika to obara. Usporedivost trazi isti skup DOPUSTENIH dokumenata, ne isti
 direktorij: usporedi `documentCount` I `scope.localDocumentCount`. Artefakt je gitignoriran i svaki
 prolaz ga prepise, pa snimku cuvaj izvan repozitorija.
+
+Podatke PARSIRAJ kao JSON, ne greppaj. Izmjereno 2026-09-03: brojanje sidecara obrascem
+`"synthetic": true` promasilo je legitiman zapis `"synthetic":true` bez razmaka i vratilo manji skup
+koji izgleda kao nalaz (`dopusteno=8` umjesto 7), uz petlju koja je usput pala s `Permission denied`
+a mjerenje je svejedno ispisalo broj. `JSON.parse` nad `git show` dao je tocno: 19 sidecara, 12
+synthetic, 7 dopustenih na sve tri tocke. Razmaci, redoslijed kljuceva i zavrseci redaka NISU ugovor.
+Provjera koja djelomicno pukne pa vrati broj gora je od one koja padne. Uhvaceno je nepoklapanjem
+dviju vlastitih brojki, ne sumnjom u metodu.

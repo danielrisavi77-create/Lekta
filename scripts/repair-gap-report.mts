@@ -7,6 +7,7 @@
  * Logika je u src/programs/repair-gap.ts (cista funkcija, dijeljena s tests/repair-gap.test.ts).
  */
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+import { withProvenance } from './lib/provenance.mjs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import {
@@ -50,7 +51,7 @@ const inputs: RepairGapInput[] = profiles
 const report = buildRepairGapReport(inputs);
 
 mkdirSync(join(root, 'docs', 'generated'), { recursive: true });
-writeFileSync(join(root, 'docs', 'generated', 'repair-gap.json'), JSON.stringify(report, null, 2) + '\n');
+writeFileSync(join(root, 'docs', 'generated', 'repair-gap.json'), JSON.stringify(withProvenance(report, 'npm run repair-gap'), null, 2) + '\n');
 
 const LABEL: Record<string, string> = {
   'no-scored-rules': 'nema bodovanih pravila (posljedica P2-2/P2-3, ne zaseban kvar)',

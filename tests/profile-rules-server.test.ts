@@ -12,7 +12,8 @@
  */
 import { describe, it, expect } from 'vitest';
 import { createHash } from 'node:crypto';
-import { readFileSync, globSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { draftFilePaths } from '../scripts/draft-files';
 import { resolve } from 'node:path';
 import { buildEvidenceIndex } from '../src/profiles/evidence-projection';
 import {
@@ -50,8 +51,7 @@ for (const row of registry) {
 }
 // Dokazi se citaju iz ISTIH draftova kao u generatoru. Kad bi test gradio bez njih, drift bi
 // prijavio razliku koje nema i tjerao na regeneraciju koja bi dokaze IZBRISALA iz artefakta.
-const draftFiles = globSync('data/profiles/*/drafts/*.json', { cwd: ROOT })
-  .sort()
+const draftFiles = draftFilePaths(ROOT)
   .map((rel) => JSON.parse(readFileSync(resolve(ROOT, rel), 'utf8')) as Record<string, unknown>);
 const evidenceIndex = buildEvidenceIndex(draftFiles, sourceIndex);
 

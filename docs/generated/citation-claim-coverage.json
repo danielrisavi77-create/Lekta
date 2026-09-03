@@ -2167,5 +2167,8 @@
       "sourceId": null,
       "quoteNamesStyle": true
     }
-  ]
+  ],
+  "generatedAt": "2026-09-03T18:13:08.779Z",
+  "generatedFromCommit": "fef95ad136cc6062214a03b3a22d3fd2f88eb31d",
+  "generator": "npm run citation-claim-coverage"
 }

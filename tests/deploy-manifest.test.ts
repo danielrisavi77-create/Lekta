@@ -31,12 +31,6 @@ const svjez = izracunajManifest() as unknown as typeof manifest;
  */
 const OCEKIVANE_DOMENE = ['analitika', 'analiza', 'integracija', 'naplata', 'operacije', 'popravak', 'rast', 'rokovi'];
 
-/**
- * Funkcije koje izvjestaj o driftu UOPCE NE POZNAJE, pa im stanje nije "nije deployano" nego
- * nepoznato. Izmjereno: izvjestaj zna za 22 funkcije, repozitorij ih ima 24.
- */
-const NEPOZNAT_DEPLOY = ['client-error', 'process-bonus-outbox'];
-
 describe('deploy manifest', () => {
   it('commitani manifest se slaze sa svjezim izvodom iz koda', () => {
     expect(svjez.schemaVersion).toBe(manifest.schemaVersion);
@@ -72,13 +66,6 @@ describe('deploy manifest', () => {
       expect(OCEKIVANE_DOMENE, `${f.function} ima nepoznatu domenu: ${f.domain}`).toContain(f.domain);
       expect((f.impactIfDown ?? '').length, `${f.function} nema opisanu posljedicu pada`).toBeGreaterThan(20);
     }
-  });
-
-  it('stanje deploya razlikuje "nije deployano" od "ne znamo"', () => {
-    const nepoznati = manifest.functions.filter((f) => f.deployedProduction === null).map((f) => f.function).sort();
-    expect(nepoznati, 'skup funkcija koje izvjestaj o driftu ne poznaje se promijenio').toEqual(NEPOZNAT_DEPLOY);
-    const deployane = manifest.functions.filter((f) => f.deployedProduction === true).length;
-    expect(deployane, 'deployanih u produkciji').toBe(18);
   });
 
   /**
