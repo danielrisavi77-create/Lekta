@@ -55,8 +55,12 @@ const NEREGISTRIRANE_RATCHET = [
   'worklist',
 ];
 
-/** Hint koji imenuje nepostojecu skriptu salje citatelja u prazno. Zatecено: jedan. */
-const NEPOSTOJECE_RATCHET = ['repair-real-corpus-backlog'];
+/**
+ * Hint koji imenuje nepostojecu skriptu salje citatelja u prazno. Zateceno 2026-09-03: jedan
+ * (`repair-real-corpus-backlog`); zatvoren dodavanjem te skripte, pa je popis PRAZAN i ratchet
+ * ga smije samo takvim i drzati.
+ */
+const NEPOSTOJECE_RATCHET: string[] = [];
 
 describe('pokrivenost registra projekcija', () => {
   it('svaki drift hint imenuje npm skriptu koja postoji', () => {
@@ -79,7 +83,7 @@ describe('pokrivenost registra projekcija', () => {
   /** Ratchet koji raste nije ratchet. Brojka je zakovana da ga nitko ne "prosiri" u prolazu. */
   it('ratchet ne smije rasti', () => {
     expect(NEREGISTRIRANE_RATCHET.length).toBeLessThanOrEqual(5);
-    expect(NEPOSTOJECE_RATCHET.length).toBeLessThanOrEqual(1);
+    expect(NEPOSTOJECE_RATCHET.length).toBe(0);
   });
 
   /** Negativna kontrola: detektor mora vidjeti registraciju koja POSTOJI. */
