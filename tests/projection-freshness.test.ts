@@ -64,12 +64,17 @@ describe('svjezina pecenih projekcija', () => {
   it('popis pokriva sve projekcije koje su danas zaostale, ukljucujuci naknadno registrirane', () => {
     const ids = PROJECTIONS.map((p: { id: string }) => p.id).sort();
     expect(ids).toEqual([
+      'citation-dossiers',
       'closed-loop',
       'completion-ledger',
       'faculty-matrix',
       'real-corpus',
       'real-corpus-backlog',
+      'reconcile-programs',
+      'repair-gap',
       'repair-recipe',
+      'scored-value-drift',
+      'worklist',
     ]);
     for (const p of PROJECTIONS as Array<{ artifacts: string[]; sources: string[]; regenerate: string }>) {
       expect(p.artifacts.length, 'svaka projekcija mora imati artefakt').toBeGreaterThan(0);

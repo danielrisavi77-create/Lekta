@@ -25,14 +25,52 @@ export function normalizeEol(text) {
 }
 
 /**
+ * Polja koja generator upisuje pri SVAKOM pokretanju, neovisno o sadrzaju.
+ *
+ * `scripts/lib/provenance.mjs` dodaje `generatedAt: new Date().toISOString()` i
+ * `generatedFromCommit`. Artefakt koji ih nosi po konstrukciji NIKAD ne moze biti bajt-identican
+ * nakon regeneracije, pa bi ga usporedba bajtova uvijek prijavila kao raskorak.
+ *
+ * Izmjereno 2026-09-04, na prvoj presudi nad novoregistriranom projekcijom
+ * (`docs/generated/program-reconcile.json`): alat je javio RASKORAK, a razlika je bila iskljucivo
+ * vremenska oznaka. Da to nije provjereno, registracija bi u alat ugradila trajno lazno crveno, i to
+ * bas na projekcijama koje provenijenciju nose jer im je stalo do sljedivosti.
+ */
+const PROVENIJENCIJA = ['generatedAt', 'generatedFromCommit'];
+
+/** Vraca JSON bez volatilnih polja, ili `null` ako tekst nije JSON objekt. */
+function bezProvenijencije(text) {
+  let parsed;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    return null;
+  }
+  if (parsed === null || typeof parsed !== 'object' || Array.isArray(parsed)) return null;
+  const kopija = { ...parsed };
+  let dirnuto = false;
+  for (const k of PROVENIJENCIJA) {
+    if (k in kopija) {
+      delete kopija[k];
+      dirnuto = true;
+    }
+  }
+  return dirnuto ? JSON.stringify(kopija) : null;
+}
+
+/**
  * Presuda za JEDAN artefakt, iz sadrzaja prije i poslije regeneracije.
  *
- * Tri ishoda, namjerno razdvojena: `samo-eol` NIJE nalaz (ne mijenja znacenje), ali se ni ne
- * preslucava u `identican`, jer bi inace tiho objasnio zasto `git status` vristi a nista ne valja.
+ * Cetiri ishoda, namjerno razdvojena. `samo-eol` i `samo-provenijencija` NISU nalaz (ne mijenjaju
+ * znacenje), ali se ni ne preslucavaju u `identican`, jer bi inace tiho objasnili zasto `git status`
+ * vristi a nista ne valja, odnosno zasto se artefakt "mijenja" pri svakom pokretanju.
  */
 export function classifyArtifact(before, after) {
   if (before === after) return 'identican';
   if (normalizeEol(before) === normalizeEol(after)) return 'samo-eol';
+  const a = bezProvenijencije(before);
+  const b = bezProvenijencije(after);
+  if (a !== null && b !== null && a === b) return 'samo-provenijencija';
   return 'sadrzaj';
 }
 
@@ -51,9 +89,13 @@ export function projectionVerdict(id, artifacts) {
   if (drifted.length) {
     return { id, status: 'raskorak', drifted, reason: `${drifted.length} artefakt(a) se sadrzajno razlikuje` };
   }
+  const provOnly = artifacts.filter((a) => a.status === 'samo-provenijencija').map((a) => a.path);
   const eolOnly = artifacts.filter((a) => a.status === 'samo-eol').map((a) => a.path);
-  if (eolOnly.length) {
-    return { id, status: 'cisto', drifted: [], reason: `identicno (${eolOnly.length} razlika samo u zavrsecima redaka)` };
+  if (provOnly.length || eolOnly.length) {
+    const dijelovi = [];
+    if (provOnly.length) dijelovi.push(`${provOnly.length} samo u provenijenciji`);
+    if (eolOnly.length) dijelovi.push(`${eolOnly.length} samo u zavrsecima redaka`);
+    return { id, status: 'cisto', drifted: [], reason: `identicno (${dijelovi.join(', ')})` };
   }
   return { id, status: 'cisto', drifted: [], reason: 'regeneracija dala bajt-identican sadrzaj' };
 }

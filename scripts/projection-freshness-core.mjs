@@ -92,6 +92,94 @@ export const PROJECTIONS = [
     regenerate: 'npm run completion-ledger',
   },
   {
+    // Registriran 2026-09-04, prvi s ratcheta od pet neregistriranih. Izvori su UTVRDJENI citanjem
+    // samog generatora i dvaju ucitavaca koje uvozi, ne pretpostavljeni: kriv popis izvora daje
+    // laznu sigurnost, sto je gore od neregistrirane projekcije.
+    id: 'reconcile-programs',
+    artifacts: ['docs/generated/program-reconcile.json'],
+    sources: [
+      'data/programs/program-registry.json',
+      'data/catalog/zagreb-catalog.json',
+      'data/profiles/verified-profiles-heavy.json',
+      'data/profiles',
+      'src/programs/reconcile.ts',
+      'src/programs/program-schema.ts',
+      'src/profiles/drafts-runtime.ts',
+      'src/catalog/catalog-loader.ts',
+      'scripts/reconcile-programs.mts',
+    ],
+    regenerate: 'npm run reconcile-programs',
+  },
+  {
+    // Druga s ratcheta, registrirana 2026-09-04. Izvori utvrdjeni citanjem generatora i modula koje
+    // uvozi; `repair-coverage.json` se cita IZRAVNO, pa je i sam ulancana projekcija ove.
+    id: 'repair-gap',
+    artifacts: ['docs/generated/repair-gap.json'],
+    sources: [
+      'docs/generated/repair-coverage.json',
+      'data/sources/source-registry.json',
+      'data/verification/ledger.json',
+      'data/profiles',
+      'src/programs/repair-gap.ts',
+      'src/verification/published-rules.ts',
+      'src/verification/verification-registry.ts',
+      'src/profiles/drafts-runtime.ts',
+      'scripts/repair-gap-report.mts',
+    ],
+    regenerate: 'npm run repair-gap',
+  },
+  {
+    // Treca s ratcheta, 2026-09-04. Racun stoji na tvrdnjama iz draftova i na `rules` zrcalu, pa su
+    // izvori i podaci i moduli koji ih tumace; `scored-value-binding` je jezgra usporedbe.
+    id: 'scored-value-drift',
+    artifacts: ['data/verification/scored-value-drift.json'],
+    sources: [
+      'data/sources/source-registry.json',
+      'data/verification/ledger.json',
+      'data/profiles',
+      'src/verification/scored-value-drift.ts',
+      'src/verification/scored-value-binding.ts',
+      'src/verification/published-rules.ts',
+      'src/verification/verification-registry.ts',
+      'src/profiles/advisory-demotion.ts',
+      'src/profiles/drafts-runtime.ts',
+      'scripts/generate-scored-value-drift.mts',
+    ],
+    regenerate: 'npm run scored-value-drift',
+  },
+  {
+    // Zadnje dvije s ratcheta, 2026-09-04. Obje pisu DIREKTORIJ markdowna (21 odnosno 72 datoteke),
+    // pa im je izlaz izmjeren pokretanjem, ne procitan iz koda: staza se u generatoru gradi
+    // dinamicki. `projection-verify` zato od 2026-09-04 zna citati i direktorij.
+    id: 'worklist',
+    artifacts: ['data/verification/dossiers'],
+    sources: [
+      'data/sources/source-registry.json',
+      'data/verification/ledger.json',
+      'data/profiles',
+      'src/verification/worklist.ts',
+      'src/verification/verification-registry.ts',
+      'src/profiles/drafts-runtime.ts',
+      'scripts/verification-worklist.mts',
+    ],
+    regenerate: 'npm run worklist',
+  },
+  {
+    id: 'citation-dossiers',
+    artifacts: ['data/verification/citation-dossiers'],
+    sources: [
+      'data/sources/source-registry.json',
+      'data/verification/ledger.json',
+      'data/profiles',
+      'data/tools/citation-specs',
+      'src/verification/citation-dossier.ts',
+      'src/verification/verification-registry.ts',
+      'src/citations/citation-spec.ts',
+      'scripts/citation-spec-dossier.mts',
+    ],
+    regenerate: 'npm run citation-dossiers',
+  },
+  {
     id: 'repair-recipe',
     artifacts: ['docs/REPAIR_RECIPE.md', 'data/generated/repair-params-by-profile.json'],
     sources: ['src/repair', 'src/ui/repair-items.ts', 'data/profiles'],

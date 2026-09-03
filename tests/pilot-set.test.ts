@@ -19,7 +19,6 @@ import registry from '../data/profiles/verified-profiles.json';
 interface Entry {
   profileId: string;
   unitId: string;
-  claim: string;
   realDocuments?: number;
   realPass?: number;
   ready?: boolean;
@@ -38,6 +37,8 @@ const set = pilot as unknown as {
 
 // Artefakt po profilu nosi SAMO slovo razine; tekst zivi jednom, u polju `ladder`.
 const byProfile = (claims as unknown as { byProfile: Record<string, string> }).byProfile;
+/** Razina dokaza dolazi ISKLJUCIVO iz ledgera; pilot je vise ne pohranjuje. */
+const claimOf = (e: Entry): string => byProfile[e.profileId] ?? '';
 const registryIds = new Set((registry as Array<{ id: string }>).map((p) => p.id));
 const all = [...set.wave1, ...set.wave2, ...set.excluded];
 
@@ -54,11 +55,29 @@ describe('pilot-set.json: slaganje s izvorima', () => {
     expect(nepostojeci).toEqual([]);
   });
 
-  it('zapisana razina dokaza je identicna ledgeru', () => {
-    const raskorak = all
-      .filter((e) => byProfile[e.profileId] !== e.claim)
-      .map((e) => `${e.profileId}: pilot=${e.claim} ledger=${byProfile[e.profileId]}`);
-    expect(raskorak).toEqual([]);
+  /**
+   * Razina dokaza se IZVODI iz ledgera, ne upisuje u ovu datoteku.
+   *
+   * Do 2026-09-04 je svaki unos nosio vlastiti `claim`, koji je bio kopija `profile-claims.json`.
+   * Kopija se raziđe cim se generirana strana pomakne, a osvjeziti je moze samo covjek koji se
+   * sjeti; jednom se to i dogodilo i oborilo gate. Sada raskoraka NEMA JER GA NEMA GDJE BITI, pa je
+   * jedino sto se moze pokvariti profil kojeg ledger uopce ne poznaje.
+   *
+   * Isto nacelo koje ova datoteka vec primjenjuje na `ready` ("izvodi se, ne upisuje").
+   */
+  it('svaki profil iz pilota postoji u ledgeru, pa se razina moze izvesti', () => {
+    const nepoznati = all.filter((e) => !(e.profileId in byProfile)).map((e) => e.profileId);
+    expect(nepoznati, 'bez zapisa u ledgeru razina se ne moze izvesti').toEqual([]);
+  });
+
+  /**
+   * NEGATIVNA KONTROLA: bez nje bi tvrdnja iznad prolazila i da detektor ne gleda nista, jer je
+   * ocekivani rezultat prazan popis. Podmece se profil kojeg ledger ne poznaje.
+   */
+  it('detektor prijavi profil kojeg ledger ne poznaje', () => {
+    const podmetnut = [...all, { profileId: 'ne-postoji-u-ledgeru', unitId: 'x', reason: 'kontrola' } as Entry];
+    const nepoznati = podmetnut.filter((e) => !(e.profileId in byProfile)).map((e) => e.profileId);
+    expect(nepoznati).toEqual(['ne-postoji-u-ledgeru']);
   });
 
   it('profil je u tocno jednom popisu', () => {
@@ -66,9 +85,9 @@ describe('pilot-set.json: slaganje s izvorima', () => {
     expect(ids.length).toBe(new Set(ids).size);
   });
 
-  it('svaki zapis nosi razlog, a izuzeti profili i razinu', () => {
+  it('svaki zapis nosi razlog, a izuzeti profili imaju razinu u ledgeru', () => {
     for (const e of all) expect(e.reason.length, e.profileId).toBeGreaterThan(20);
-    for (const e of set.excluded) expect(e.claim, e.profileId).toBeTruthy();
+    for (const e of set.excluded) expect(claimOf(e), e.profileId).toBeTruthy();
   });
 
   it('odluka je potpisana i datirana', () => {
@@ -80,7 +99,7 @@ describe('pilot-set.json: slaganje s izvorima', () => {
 describe('pilot-set.json: `ready` se izvodi, ne upisuje', () => {
   /** Ista pravila kao `criteria` u datoteci; jedini izvor istine za zastavicu. */
   function derivedReady(e: Entry): boolean {
-    if (!meetsMinClaim(e.claim, set.criteria.minClaim)) return false;
+    if (!meetsMinClaim(claimOf(e), set.criteria.minClaim)) return false;
     if ((e.realDocuments ?? 0) < set.criteria.minRealDocuments) return false;
     if ((e.realPass ?? 0) < set.criteria.minRealPass) return false;
     // Razina A trazi vizualni pregled, a njegov zapis jos ne postoji ni za jedan profil.

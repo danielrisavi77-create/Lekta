@@ -33,6 +33,29 @@ describe('sadrzajna presuda o projekcijama', () => {
     expect(classifyArtifact('a\rb', 'a\nb')).toBe('samo-eol');
   });
 
+  /**
+   * Artefakt s provenijencijom se pri svakom pokretanju mijenja, jer `withProvenance` upisuje
+   * `generatedAt` i `generatedFromCommit`. Bez ovog ishoda bi presuda nad takvom projekcijom bila
+   * TRAJNO crvena, sto je izmjereno 2026-09-04 na `program-reconcile.json`.
+   */
+  it('razlika samo u provenijenciji NIJE sadrzajna', () => {
+    const a = JSON.stringify({ schemaVersion: 1, x: 5, generatedAt: '2026-09-04T10:00:00.000Z', generatedFromCommit: 'aaa' });
+    const b = JSON.stringify({ schemaVersion: 1, x: 5, generatedAt: '2026-09-04T11:22:33.000Z', generatedFromCommit: 'bbb' });
+    expect(classifyArtifact(a, b)).toBe('samo-provenijencija');
+  });
+
+  /** NEGATIVNA KONTROLA: promjena UZ provenijenciju mora ostati sadrzajna. */
+  it('sadrzajna razlika se ne skriva iza provenijencije', () => {
+    const a = JSON.stringify({ x: 5, generatedAt: '2026-09-04T10:00:00.000Z' });
+    const b = JSON.stringify({ x: 6, generatedAt: '2026-09-04T11:00:00.000Z' });
+    expect(classifyArtifact(a, b)).toBe('sadrzaj');
+  });
+
+  /** Artefakt BEZ provenijencije ne smije dobiti to izuzece; inace bi svaki JSON prosao blaze. */
+  it('JSON bez provenijencije se i dalje mjeri po sadrzaju', () => {
+    expect(classifyArtifact(JSON.stringify({ x: 1 }), JSON.stringify({ x: 2 }))).toBe('sadrzaj');
+  });
+
   it('stvarna razlika u znakovima JEST sadrzajna', () => {
     expect(classifyArtifact('deep: 5\n', 'deep: 50\n')).toBe('sadrzaj');
   });

@@ -28,3 +28,6 @@ src/audits/hr-dict/hr_HR.dic -text
 # Mijenja se iskljucivo ono sto checkout upisuje na disk.
 docs/generated/** text eol=lf
 data/generated/** text eol=lf
+# Isti razred: dosjei verifikacije (120 datoteka) pise generator s LF. Blobovi su vec LF,
+# provjereno po datoteci, pa pravilo nista ne prekonvertira.
+data/verification/** text eol=lf
