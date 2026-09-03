@@ -111,6 +111,43 @@ export const PROJECTIONS = [
     regenerate: 'npm run reconcile-programs',
   },
   {
+    // Druga s ratcheta, registrirana 2026-09-04. Izvori utvrdjeni citanjem generatora i modula koje
+    // uvozi; `repair-coverage.json` se cita IZRAVNO, pa je i sam ulancana projekcija ove.
+    id: 'repair-gap',
+    artifacts: ['docs/generated/repair-gap.json'],
+    sources: [
+      'docs/generated/repair-coverage.json',
+      'data/sources/source-registry.json',
+      'data/verification/ledger.json',
+      'data/profiles',
+      'src/programs/repair-gap.ts',
+      'src/verification/published-rules.ts',
+      'src/verification/verification-registry.ts',
+      'src/profiles/drafts-runtime.ts',
+      'scripts/repair-gap-report.mts',
+    ],
+    regenerate: 'npm run repair-gap',
+  },
+  {
+    // Treca s ratcheta, 2026-09-04. Racun stoji na tvrdnjama iz draftova i na `rules` zrcalu, pa su
+    // izvori i podaci i moduli koji ih tumace; `scored-value-binding` je jezgra usporedbe.
+    id: 'scored-value-drift',
+    artifacts: ['data/verification/scored-value-drift.json'],
+    sources: [
+      'data/sources/source-registry.json',
+      'data/verification/ledger.json',
+      'data/profiles',
+      'src/verification/scored-value-drift.ts',
+      'src/verification/scored-value-binding.ts',
+      'src/verification/published-rules.ts',
+      'src/verification/verification-registry.ts',
+      'src/profiles/advisory-demotion.ts',
+      'src/profiles/drafts-runtime.ts',
+      'scripts/generate-scored-value-drift.mts',
+    ],
+    regenerate: 'npm run scored-value-drift',
+  },
+  {
     id: 'repair-recipe',
     artifacts: ['docs/REPAIR_RECIPE.md', 'data/generated/repair-params-by-profile.json'],
     sources: ['src/repair', 'src/ui/repair-items.ts', 'data/profiles'],

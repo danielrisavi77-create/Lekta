@@ -70,7 +70,9 @@ describe('svjezina pecenih projekcija', () => {
       'real-corpus',
       'real-corpus-backlog',
       'reconcile-programs',
+      'repair-gap',
       'repair-recipe',
+      'scored-value-drift',
     ]);
     for (const p of PROJECTIONS as Array<{ artifacts: string[]; sources: string[]; regenerate: string }>) {
       expect(p.artifacts.length, 'svaka projekcija mora imati artefakt').toBeGreaterThan(0);
