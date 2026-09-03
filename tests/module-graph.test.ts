@@ -9,26 +9,43 @@ import { describe, expect, it } from 'vitest';
  * tek u pregledniku, i to obicno kao "nesto je undefined" daleko od uzroka. Zato mu treba vlastita
  * mjera, a ne nada da ce ga netko primijetiti.
  *
- * ZATECENO 2026-09-03: 16 kruznih putanja, gotovo sve po istom obrascu, `fixers.ts` uvozi
- * pojedinacni fixer koji uvozi natrag `fixers.ts`. To se NE popravlja usput, jer dira repair
- * jezgru koja je golden-zasticena. Ratchet zato stoji na zatecenom broju: novi ciklus pada odmah,
- * a broj smije samo padati.
+ * MJERI SE SAMO ONO STO POSTOJI U IZVODJENJU. `import type` i `export type` TypeScript BRISE pri
+ * prevodjenju, pa takav brid ne moze proizvesti kvar zbog kojeg ovaj gard postoji: nema modula koji
+ * se izvodi, nema `undefined` u pregledniku. Brojati ih znaci mjeriti nesto drugo od onoga sto se
+ * tvrdi.
+ *
+ * ZASTO JE TO VAZNO, izmjereno 2026-09-03: dok su se type-only bridovi brojali, gard je javljao 17
+ * ciklusa, od kojih je STVARAN bio jedan. Trinaest prividnih bilo je `fixers.ts` -> pojedinacni
+ * fixer -> `fixers.ts`, i upravo su ona navela na zakljucak da repair jezgra ima problem koji se
+ * "ne popravlja usput jer je golden-zasticena". U izvodjenju ondje ciklusa NEMA nijednog.
+ *
+ * Jedini stvaran je `legal-content.ts <-> terms-version.ts`, i on se gubio medju sesnaest prividnih.
+ * Gard koji broji 17 umjesto 1 ne cuva nista: nov stvaran ciklus tone u sumu.
+ *
+ * Mjesoviti `import { type X, Y }` se NE izuzima: takav uvoz nosi i vrijednost, pa brid ostaje.
  */
 
 const KORIJEN = path.resolve(__dirname, '..');
 
 /**
- * Izmjereno 2026-09-03. Smije samo padati.
+ * Izmjereno 2026-09-03 nad grafom BEZ type-only bridova. Smije samo padati.
  *
  * POVIJEST PRAGA, imenovano a ne prepravljeno u tisini:
- *   16 -> 17, isti dan. Sedamnaesti je `heading-structure.ts <-> heading-numbering.ts`, i NIJE iz
- *   ovog rada: nastao je u tudjem zahvatu nad hijerarhijom naslova. Ostalih trinaest je i dalje isti
- *   obrazac `fixers.ts` -> pojedinacni fixer -> `fixers.ts`, plus tri izvan repaira.
- *   Moduli dodani u T16 (`wizard-machine`, `wizard-shadow`) nisu ni u jednom ciklusu; provjereno.
+ *   16 -> 17, isti dan, zbog `heading-structure.ts <-> heading-numbering.ts`.
+ *   17 -> 1, isti dan. TO NIJE NAPREDAK NEGO ISPRAVAK MJERE: nijedan ciklus nije razrijesen, nego
+ *   je prestalo brojanje bridova koje TypeScript brise. Sesnaest od sedamnaest bilo je type-only,
+ *   ukljucujuci svih trinaest u repair jezgri i onaj sedamnaesti nad hijerarhijom naslova.
  *
  * Svako sljedece dizanje trazi isti oblik: koji ciklus, odakle, i zasto se ne popravlja odmah.
  */
-const MAX_CIKLUSA = 17;
+const MAX_CIKLUSA = 1;
+
+/**
+ * Cijele `import type` / `export type` naredbe. Namjerno se brise CIJELA naredba, a ne samo rijec
+ * `type`: ostatak bi i dalje nosio `from '...'` i brid bi prezivio, pa bi izuzece izgledalo kao da
+ * radi a ne bi radilo.
+ */
+const TYPE_ONLY = /^[ \t]*(?:import|export)[ \t]+type[ \t][\s\S]*?from[ \t]*['"][^'"]+['"][ \t]*;?/gm;
 
 function svePutanje(): string[] {
   const out: string[] = [];
@@ -45,7 +62,7 @@ function svePutanje(): string[] {
   return out;
 }
 
-function nadjiCikluse(): string[] {
+function nadjiCikluse(): { ciklusi: string[]; graf: Map<string, string[]> } {
   const datoteke = svePutanje();
   const skup = new Set(datoteke);
   const razrijesi = (od: string, spec: string): string | null => {
@@ -60,7 +77,7 @@ function nadjiCikluse(): string[] {
 
   const graf = new Map<string, string[]>();
   for (const f of datoteke) {
-    const t = fs.readFileSync(path.join(KORIJEN, f), 'utf8');
+    const t = fs.readFileSync(path.join(KORIJEN, f), 'utf8').replace(TYPE_ONLY, '');
     const veze = new Set<string>();
     for (const m of t.matchAll(/(?:from|import)\s*\(?\s*['"]([^'"]+)['"]/g)) {
       const c = razrijesi(f, m[1]);
@@ -80,11 +97,11 @@ function nadjiCikluse(): string[] {
     stanje.set(n, 2);
   };
   for (const f of datoteke) if (!stanje.has(f)) dfs(f, [f]);
-  return [...new Set(ciklusi)];
+  return { ciklusi: [...new Set(ciklusi)], graf };
 }
 
 describe('graf modula u src/', () => {
-  const ciklusi = nadjiCikluse();
+  const { ciklusi, graf } = nadjiCikluse();
 
   it('mjerenje nije vakuumsko: graf je stvarno prosetan', () => {
     expect(svePutanje().length, 'nula datoteka znaci da setac ne radi').toBeGreaterThan(200);
@@ -94,14 +111,35 @@ describe('graf modula u src/', () => {
     expect(ciklusi.length, `kruzne putanje:\n${ciklusi.slice(0, 10).join('\n')}`).toBeLessThanOrEqual(MAX_CIKLUSA);
   });
 
+  /**
+   * Bilo je `> MAX_CIKLUSA - 4`, sto je uz prag 17 imalo smisla, a uz prag 1 znaci `> -3`, dakle
+   * uvijek istina. Egzaktna jednakost je jedini oblik koji uz mali prag jos nesto tvrdi.
+   */
   it('kad ih se popravi, ratchet se MORA spustiti', () => {
     expect(
       ciklusi.length,
       `ciklusa je sada ${ciklusi.length}, a prag ${MAX_CIKLUSA}. Spusti MAX_CIKLUSA na izmjerenu vrijednost.`,
-    ).toBeGreaterThan(MAX_CIKLUSA - 4);
+    ).toBe(MAX_CIKLUSA);
   });
 
   it('ciklusi su IMENOVANI, ne samo prebrojani', () => {
     for (const c of ciklusi) expect(c).toContain(' -> ');
+  });
+
+  /**
+   * Gard nad IZUZECEM type-only bridova. Bez njega bi netko vratio njihovo brojanje, broj bi skocio
+   * sa 1 na 17, a jedini simptom bio bi crven ratchet daleko od uzroka. Radi nad sintetickim
+   * nizovima, pa ne ovisi o tome kako je izvor danas napisan.
+   */
+  it('type-only uvozi se izuzimaju, a mjesoviti NE', () => {
+    const strip = (s: string) => s.replace(new RegExp(TYPE_ONLY.source, 'gm'), '');
+    expect(strip("import type { A } from './x';").trim(), 'import type mora nestati').toBe('');
+    expect(strip("export type { A } from './x';").trim(), 'export type mora nestati').toBe('');
+    // NEGATIVNE KONTROLE: ovi nose vrijednost, pa brid MORA ostati.
+    expect(strip("import { type A, b } from './x';"), 'mjesoviti uvoz nosi vrijednost').toContain('./x');
+    expect(strip("import { a } from './x';"), 'obicni uvoz mora ostati').toContain('./x');
+    // Mjerenje ne smije ostati bez bridova: izuzece cisti sum, ne graf.
+    const bridova = [...graf.values()].reduce((n, v) => n + v.length, 0);
+    expect(bridova, 'izuzece je pojelo graf').toBeGreaterThan(200);
   });
 });
