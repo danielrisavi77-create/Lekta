@@ -91,14 +91,22 @@ describe('route shell', () => {
       'free-tools',
       'proof-help',
     ]);
-    // Neobjavljena odredista (ruta jos ne postoji) NE SMIJU se pojaviti ni jednom: link na
-    // /saznaj-vise/ ili /moji-radovi/ danas vodi u 404.
-    for (const unreleased of ['account-repairs', 'my-work', 'learn-more', 'checks', 'trust-proof', 'pricing', 'faq']) {
+    // Neobjavljena odredista (ruta jos ne postoji) NE SMIJU se pojaviti ni jednom, jer bi link
+    // vodio u 404.
+    //
+    // PROMJENA 2026-09-03: `/saznaj-vise/` je nastala i nosi landing sekcije, pa pet odredista
+    // (learn-more, checks, trust-proof, pricing, faq) VISE NIJE neobjavljeno i mora se prikazati.
+    // `/moji-radovi/` je jos samo zapisana namjera i ostaje skriveno.
+    for (const unreleased of ['account-repairs', 'my-work']) {
       expect(document.querySelector(`[data-route-destination="${unreleased}"]`), unreleased).toBeNull();
     }
-    expect([...document.querySelectorAll<HTMLAnchorElement>('[data-route-destination]')]
+    const hubLinks = [...document.querySelectorAll<HTMLAnchorElement>('[data-route-destination]')]
       .map((link) => link.getAttribute('href'))
-      .filter((href) => href !== null && (href.startsWith('/saznaj-vise/') || href.startsWith('/moji-radovi/')))).toEqual([]);
+      .filter((href): href is string => href !== null);
+    // Ruta koja postoji SMIJE se linkati; ruta koja ne postoji ne smije. Tvrdnja se time ne
+    // ublazava nego seli s imena rute na njezino postojanje.
+    expect(hubLinks.filter((href) => href.startsWith('/moji-radovi/'))).toEqual([]);
+    expect(hubLinks.filter((href) => href.startsWith('/saznaj-vise/')).length).toBe(5);
   });
 
   it('panel sprema promjenu teme kao raw vrijednost kompatibilnu s prepaint skriptom', () => {
