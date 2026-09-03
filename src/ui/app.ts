@@ -69,7 +69,7 @@ import { headingCaseSuggestions } from '../repair/heading-case';
 import './repair-panel.css';
 import '../preflight/preflight-panel.css';
 const FPZG_SUBMISSION_CALENDAR: any = _FPZG_CAL;
-import { WORK_TYPE_LABELS, CHECK_ITEMS } from '../config/config-loader';
+import { WORK_TYPE_LABELS } from '../config/config-loader';
 import { STORAGE_KEYS, safeStorageGet, safeStorageSet } from '../shared/browser-storage';
 import * as purePr from '../config/production-config';
 import { DEFAULT_PRODUCTION_CONFIG, loadProductionConfig } from '../config/production-config';
@@ -79,7 +79,6 @@ function productionStatus(){return purePr.productionStatus(productionConfig)}
 function reportEndpointConfigured(){return purePr.reportEndpointConfigured(productionConfig)}
 function checkoutConfigured(){return purePr.checkoutConfigured(productionConfig)}
 function paidOffersLive(){return purePr.paidOffersLive(productionConfig)}
-import { PRICING_TIERS } from '../config/pricing-tiers';
 // (R3) zajednicka normalizacija check* zastavica, dijeli se s golden resolveProfile
 import { analyzeDocxOffThread, cancelActiveAnalysis, isAnalysisCancelled } from '../analysis/analyze-docx-client';
 import { uploadCapBytes, decompressionBudgetBytes } from '../analysis/memory-budget';
@@ -224,7 +223,10 @@ let repairPanelNode: any=null, repairPanelForResult: any=null;
 // od onoga sto je korisnik stvarno vidi).
 let repairPanelItems: any[]=[], repairPanelTextItems: any[]=[];
 let preflightPanel: PreflightPanel|null=null, preflightPanelForResult: any=null;
-/* WORK_TYPE_LABELS i CHECK_ITEMS se uvoze iz config-loader (data/work-type-labels.json, data/checks) */
+/* WORK_TYPE_LABELS se uvozi iz config-loader (data/work-type-labels.json).
+   CHECK_ITEMS i PRICING_TIERS vise nisu ovdje: popis provjera i cjenik zive na `/saznaj-vise/`,
+   koji ih sam prikazuje (`src/routes/learn-more/main.ts`). Analizator ih je crtao u elemente
+   kojih na `/` od 2026-09-03 nema, pa je to bio mrtav kod s drugom kopijom istog prikaza. */
 const VALID_WORK_TYPES=new Set(Object.keys(WORK_TYPE_LABELS));
 const VALID_CITATION_IDS=new Set(['fpzg','pravo-fusnote','pravo-social-author','apa7','harvard','chicago-author','chicago-notes','mla9','vancouver','ieee','custom']);
 const params=new URLSearchParams(location.search),qaMode=__DEV_TOOLS__&&params.get('qa')==='1';
@@ -340,9 +342,7 @@ function toast(msg: any){const doc=runtimeDocument(),wrap=$('#toastWrap');if(!wr
  * proslijedjeni dokument, a odgodjeni demo provjerava je li montaza u medjuvremenu ugasena.
  */
 function initLegacy(doc: Document,signal: AbortSignal){
- ctl('#checkGrid').innerHTML=CHECK_ITEMS.map(([i,t,d])=>`<article class="check-card" data-reveal><span class="check-icon">${i}</span><h3>${t}</h3><p>${d}</p></article>`).join('');window.__lektaReveal?.();
  productionConfig=loadProductionConfig();wireProfileRulesProvider();captureReferralCode();installErrorTracking();initCatalog();void ensureRetailCatalog();restorePreferences();applyFacultyContext();syncProfileContext();applyUnitFromUrl();updateRepairHistoryButton();if(adminMode){location.replace('/admin.html');return}
- ctl('#pricingGrid').innerHTML=PRICING_TIERS.map(p=>{const soon=p.id!=='free'&&!paidOffersLive();const badge=soon?'<span class="popular soon">USKORO</span>':(p.featured?'<span class="popular">PREPORUČENO</span>':'');const cta=soon?`<button class="btn btn-secondary" type="button" disabled aria-disabled="true">Uskoro</button>`:(p.cta.order?`<button class="btn btn-secondary order-btn" data-package="${p.cta.order}">${p.cta.label}</button>`:`<a class="btn ${p.featured?'btn-primary':'btn-secondary'}" href="${p.cta.href}">${p.cta.label}</a>`);return`<article class="price-card ${p.featured?'featured':''}${soon?' soon':''}">${badge}<h3>${p.name}</h3><div class="price">${p.price}</div><p>${p.desc}</p><ul class="features">${p.features.map(x=>`<li>${x}</li>`).join('')}</ul>${cta}</article>`}).join('');
  ctl('#packagePicks').innerHTML=PACKAGES.map(p=>`<label class="package-pick"><span><input type="radio" name="package" value="${p.id}" ${p.id==='format'?'checked':''}><strong>${p.name} · ${p.price} €</strong><small>${p.desc}</small></span></label>`).join('');
  bind();updateProfile();updateHistoryBadge();updatePackageUi();if(__DEV_TOOLS__)$('#qaBtn')?.classList.toggle('hidden',!qaMode);renderConsentBanner();renderHeroCoverage();wireNoFaculty();if(!paidOffersLive())$('#orderFromResult')?.classList.add('hidden');renderAuthEntry();
  // T16 B3: stroj stanja vozi se u SJENI, samo u dev buildu. Ne pise u DOM i ne mijenja tok;

@@ -95,11 +95,14 @@ describe('ruta /saznaj-vise/', () => {
     expect(STRANICA).toContain('<link rel="canonical" href="https://lektahr.netlify.app/saznaj-vise/">');
   });
 
-  it('oblik kartice cjenika ostaje isti kao u analizatoru', () => {
-    // Dvije kopije istog prikaza razisle bi se. Dok obje postoje, razlika se mjeri a ne pamti.
+  it('cjenik i popis provjera imaju TOCNO JEDNOG vlasnika', () => {
+    // Prva izvedba je trazila da oba prikaza budu ista, jer su postojale dvije kopije. Kopije vise
+    // nema: `/` je ostalo bez tih sekcija, pa je crtanje u `app.ts` postalo mrtav kod i uklonjeno.
+    // Jedan vlasnik je jaca tvrdnja od dvije uskladjene kopije, jer se razilazenje ne moze dogoditi.
     for (const marker of ['price-card', 'popular soon', 'features']) {
       expect(ULAZ, marker).toContain(marker);
-      expect(APP, marker).toContain(marker);
     }
+    expect(APP, 'analizator vise ne crta cjenik').not.toContain("ctl('#pricingGrid')");
+    expect(APP, 'analizator vise ne crta popis provjera').not.toContain("ctl('#checkGrid')");
   });
 });
