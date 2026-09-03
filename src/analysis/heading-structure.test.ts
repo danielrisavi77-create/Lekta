@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { detectHeadingStructure, looksLikeBibliographyEntry, looksLikeTitlePageLabel } from './heading-structure';
+import { normalizeAnchorText } from '../repair/anchor-text';
 
 const run = (text: string, props: Record<string, unknown> = {}) => ({ text, runs: [{ text, ...props }] });
 
@@ -199,5 +200,86 @@ describe('detectHeadingStructure: naslovnicka oznaka', () => {
       { index: 3, ...run('Obican odlomak rada koji nije naslov i dovoljno je dug.', { size: 12 }) },
     ], { maxLevel: 3 });
     expect(result.candidates.map((c) => c.paragraphIndex)).toEqual([2]);
+  });
+});
+
+/**
+ * DVOJBENO SIDRO NE DRZI RAZINU.
+ *
+ * `apply-fixers.ts` (`verdictFor`) preskace metu ciji se normalizirani tekst u dokumentu
+ * pojavljuje vise od jednom. Takav kandidat je ipak ulazio u hod `normalizeProposedLevels`, pa je
+ * drzao `previous` visoko i sljedeci naslov se nije spustao. Fixer ga onda ne upise, i prvi
+ * STVARNO upisani naslov ostane razina 2.
+ *
+ * VAZNO ZA OBLIK TESTA: provjera hijerarhije krece od razine 0, pa je vodeci naslov razine 2 sam
+ * po sebi preskok. Test koji krece od "prvog naslova" umjesto od nule mjeri 0 skokova i lazno je
+ * zelen; upravo se to dogodilo pri prvoj dijagnozi.
+ *
+ * Izmjereno 2026-09-03 na `local-13-zavrsni` i `local-27-zavrsni`.
+ */
+describe('detectHeadingStructure: dvojbeno sidro', () => {
+  const bigTitle = { bold: true, size: 20 };
+  const small = { bold: true, size: 13 };
+  const kljuc = (t: string) => normalizeAnchorText(t);
+
+  /** Ono sto ce popravak STVARNO upisati: odabrani kandidati jedinstvenog teksta. */
+  const upisani = (result: { candidates: Array<{ text: string; proposedLevel: number; paragraphIndex: number; selectedByDefault: boolean }> }, svi: Array<{ text: string }>) => {
+    const broj = new Map<string, number>();
+    for (const p of svi) { const k = kljuc(p.text); if (k) broj.set(k, (broj.get(k) ?? 0) + 1); }
+    return result.candidates
+      .filter((c) => c.selectedByDefault && (broj.get(kljuc(c.text)) ?? 0) === 1)
+      .sort((a, b) => a.paragraphIndex - b.paragraphIndex);
+  };
+
+  it('ponovljen naslov ne drzi razinu, pa prvi upisan naslov nije razina 2', () => {
+    const doc = [
+      { index: 1, ...run('NASLOV RADA', bigTitle) },
+      { index: 2, ...run('NASLOV RADA', bigTitle) },
+      { index: 3, ...run('IZJAVA O AKADEMSKOJ CESTITOSTI', small) },
+      { index: 4, ...run('Obican odlomak rada koji nije naslov i dovoljno je dug.', { size: 12 }) },
+    ];
+    const upis = upisani(detectHeadingStructure(doc, { maxLevel: 3 }), doc);
+    expect(upis.length, 'test je bezvrijedan ako popravak nema sto upisati').toBeGreaterThan(0);
+    // Hijerarhija se mjeri OD NULE, kao u src/scoring/evaluate/structure.ts.
+    let prethodna = 0;
+    for (const c of upis) {
+      expect(c.proposedLevel, `skok s ${prethodna} na ${c.proposedLevel} (p${c.paragraphIndex})`).toBeLessThanOrEqual(prethodna + 1);
+      prethodna = c.proposedLevel;
+    }
+  });
+
+  it('dvojnik izvan kandidata (celija tablice) takodjer cini sidro dvojbenim', () => {
+    const doc = [
+      { index: 1, ...run('NASLOV RADA', bigTitle) },
+      { index: 2, ...run('NASLOV RADA', bigTitle), cell: { table: 1 } },
+      { index: 3, ...run('IZJAVA O AKADEMSKOJ CESTITOSTI', small) },
+      { index: 4, ...run('Obican odlomak rada koji nije naslov i dovoljno je dug.', { size: 12 }) },
+    ];
+    const upis = upisani(detectHeadingStructure(doc, { maxLevel: 3 }), doc);
+    expect(upis.length).toBeGreaterThan(0);
+    expect(upis[0].proposedLevel, 'prvi upisani naslov mora biti razina 1').toBe(1);
+  });
+
+  it('NEGATIVNA KONTROLA: jedinstven naslov I DALJE drzi razinu (ne spusta se sve)', () => {
+    const doc = [
+      { index: 1, ...run('NASLOV RADA', bigTitle) },
+      { index: 2, ...run('IZJAVA O AKADEMSKOJ CESTITOSTI', small) },
+      { index: 3, ...run('Obican odlomak rada koji nije naslov i dovoljno je dug.', { size: 12 }) },
+    ];
+    const upis = upisani(detectHeadingStructure(doc, { maxLevel: 3 }), doc);
+    const izjava = upis.find((c) => c.paragraphIndex === 2);
+    expect(izjava?.proposedLevel, 'iza upisanog naslova razine 1 ostaje razina 2').toBe(2);
+  });
+
+  it('NEGATIVNA KONTROLA: samom dvojniku se razina NE mijenja, samo je izvan hoda', () => {
+    const doc = [
+      { index: 1, ...run('NASLOV RADA', bigTitle) },
+      { index: 2, ...run('NASLOV RADA', bigTitle) },
+      { index: 3, ...run('Obican odlomak rada koji nije naslov i dovoljno je dug.', { size: 12 }) },
+    ];
+    const result = detectHeadingStructure(doc, { maxLevel: 3 });
+    for (const c of result.candidates.filter((x) => x.paragraphIndex <= 2)) {
+      expect(c.proposedLevel, 'dvojnik zadrzava svoju razinu').toBe(1);
+    }
   });
 });
