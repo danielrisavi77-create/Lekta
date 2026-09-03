@@ -71,13 +71,13 @@ import './repair-panel.css';
 import '../preflight/preflight-panel.css';
 const FPZG_SUBMISSION_CALENDAR: any = _FPZG_CAL;
 import { WORK_TYPE_LABELS, CHECK_ITEMS } from '../config/config-loader';
+import { PRICING_TIERS } from '../config/pricing-tiers';
 // (R3) zajednicka normalizacija check* zastavica, dijeli se s golden resolveProfile
 import { analyzeDocxOffThread, cancelActiveAnalysis, isAnalysisCancelled } from '../analysis/analyze-docx-client';
 import { uploadCapBytes, decompressionBudgetBytes } from '../analysis/memory-budget';
 import { detectContextFromText, needsProfileConfirmation, isConfidentDetection } from './profile-detect';
 import { citationMeta } from '../citations/citation-meta';
 import { APP_VERSION } from '../config/app-version';
-import { createTelemetry } from './telemetry';
 import { buildErrorReport, makeIncidentId } from '../report/error-redaction';
 import { SOCIAL_METHOD_REGISTRY, SOCIAL_METHOD_SOURCE } from '../methodology/methodology-loader';
 import { cellCoverage, detectWaitlist } from '../waitlist/waitlist-detect';
@@ -264,10 +264,6 @@ function installErrorTracking(){const send=(kind: any,message: any,stack: any,fe
  const blob=new Blob([JSON.stringify(payload)],{type:'application/json'});try{if(!(navigator.sendBeacon&&navigator.sendBeacon(ep,blob)))void fetch(ep,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true})}catch(e: any){}}catch(e: any){}};try{window.addEventListener('error',(e: any)=>send('error',e?.message||'error',e?.error?.stack));window.addEventListener('unhandledrejection',(e: any)=>{const r=e?.reason;send('unhandledrejection',r?.message||String(r||'rejection'),r?.stack)})}catch(e: any){}}
 /* FPZG_SUBMISSION_CALENDAR se uvozi iz submission-loader (data/submission/fpzg-calendar.json) */
 let productionConfig: any=null;
-// T16 B5: telemetrija zivi u `./telemetry`. Destrukturiranje POD ISTIM IMENOM ostavlja svih 49
-// pozivnih mjesta bajt identicnima. Ovisnosti se citaju LIJENO, jer se `productionConfig`
-// mijenja tri puta u izvodjenju, a privola u bilo kojem trenutku.
-const { trackEvent }=createTelemetry({config:()=>productionConfig,consent:()=>safeStorageGet(STORAGE_KEYS.analyticsConsent)});
 let lastProfileContext='';let _profileConfirmed=false;
 /* ZAGREB_CATALOG se sada uvozi iz catalog-loader (data/catalog/zagreb-catalog.json) */
 /* INSTITUTIONAL_COVERAGE_MATRIX i COVERAGE_STATUS_META se uvoze iz coverage-loader (data/coverage) */
@@ -275,11 +271,7 @@ let lastProfileContext='';let _profileConfirmed=false;
 // Ponuda ima tri tiera: besplatna automatska provjera (teaser), puni izvjestaj po
 // vrsti rada (otkljucava se u rezultatu), i rucno uredivanje (ljudski servis preko
 // obrasca narudzbe). Ovo je izvor istine za landing sekciju Paketi.
-const PRICING_TIERS=[
- {id:'free',name:'Besplatna provjera',price:'0 €',desc:'Automatski audit dokumenta, lokalno u pregledniku.',features:['Ocjena i pregled po kategorijama','Popis mogućih problema i napomena','Bez registracije, dokument ostaje na uređaju'],cta:{href:'#analyzer',label:'Provjeri besplatno'}},
- {id:'perwork',name:'Provjera po radu',price:'od 3,99 €',featured:true,desc:'Puno objašnjenje i automatski popravak, cijena prema vrsti rada.',features:['Sve iz besplatne provjere','Puni izvještaj: objašnjenje svakog nalaza, ne samo ocjena','Automatski popravak dijelova koje odabereš (koliko platiš, toliko popravaka)','Tehnička provjera spremnosti (oblikovanje, struktura, citiranje) i preflight PDF-a','Diplomski i doktorski: 14 dana ponovnih provjera nakon ispravka, uključeno','Seminarski 3,99 · Završni 5,99 · Diplomski 9,99 · Doktorski 24,99 €'],cta:{href:'#analyzer',label:'Provjeri rad'}},
- {id:'manual',name:'Ručno uređivanje',price:'od 39 €',desc:'Ljudska obrada dokumenta kad ti treba gotov rezultat.',features:['Tehničko oblikovanje Word dokumenta','Provjera citatnica i literature','Revizija i prioritetna obrada'],cta:{order:'format',label:'Naruči uređivanje'}}
-];
+// PRICING_TIERS zive u `config/pricing-tiers` (vidi ondje zasto).
 // Rucni paketi za obrazac narudzbe (ljudska usluga). Automatizirana provjera je gore
 // u PRICING_TIERS i ne prolazi kroz ovaj obrazac.
 /**
@@ -511,6 +503,8 @@ function updateOrderFileMeta(){const f=selectedOrderFile(),el=$('#orderFileMeta'
 function makeOrderId(){return`TR-${new Date().toISOString().slice(0,10).replaceAll('-','')}-${Math.random().toString(36).slice(2,8).toUpperCase()}`}
 function setOrderStatus(type: any,html?: any){const el=$('#orderStatus');el.className=`order-status ${type}`;el.innerHTML=html;el.classList.remove('hidden')}
 function clearOrderStatus(){$('#orderStatus')?.classList.add('hidden');if($('#orderStatus'))$('#orderStatus').innerHTML=''}
+function sanitizeEventData(data: any){const allowed: any={};for(const[k,v]of Object.entries(data||{})){if(['event','package','profileId','workType','scoreBand','provider','source','total','found','missing','flagged','checked','profileStatus','pick','sizeBucket','category','issueCount','kind','manual','count','score','demo','method','product','ruleId','changes','stored','ms'].includes(k)&&['string','number','boolean'].includes(typeof v))allowed[k]=v}return allowed}
+async function trackEvent(event: any,data: any={}){if(!productionConfig?.analyticsEndpoint||safeStorageGet(STORAGE_KEYS.analyticsConsent)!=='granted')return false;try{await fetch(productionConfig.analyticsEndpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event,version:APP_VERSION,path:location.pathname||'/',timestamp:new Date().toISOString(),...sanitizeEventData(data)}),keepalive:true});return true}catch(e: any){return false}}
 // PRIVOLA NE SMIJE ZAROBITI SADRZAJ ISPOD SEBE (audit P0-05).
 //
 // Banner je `position:fixed` uz dno. Na uskom i niskom zaslonu (mjereno: Pixel 5, 375x667) prelazi
