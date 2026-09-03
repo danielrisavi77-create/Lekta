@@ -107,7 +107,8 @@
     "post-deploy-smoke": "node scripts/post-deploy-smoke.mjs",
     "post-deploy-smoke:self-test": "node scripts/post-deploy-smoke.mjs --self-test",
     "check:edge-lock": "node scripts/check-edge-lock.mjs",
-    "status": "node scripts/generate-status.mjs"
+    "status": "node scripts/generate-status.mjs",
+    "deploy-manifest": "node scripts/generate-deploy-manifest.mjs"
   },
   "overrides": {
     "nanoid": "^3.3.18"

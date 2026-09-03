@@ -1,0 +1,394 @@
+{
+  "schemaVersion": 1,
+  "functions": [
+    {
+      "function": "admin-stats",
+      "verifyJwt": true,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "analytics-event",
+      "verifyJwt": false,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "ANALYTICS_DAILY_CAP_IP",
+        "IP_HASH_SALT",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "cleanup-orphan-repairs",
+      "verifyJwt": false,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ANON_PURGE_APPLY",
+        "ANON_PURGE_BATCH",
+        "ANON_PURGE_DAYS",
+        "REPAIR_ANON_RETENTION_DAYS",
+        "REPAIR_CLEANUP_CRON_SECRET",
+        "REPAIR_CLEANUP_GRACE_MINUTES",
+        "REPAIR_STUCK_DELETE_GRACE_MINUTES",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "client-error",
+      "verifyJwt": false,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "CLIENT_ERROR_DAILY_CAP_IP",
+        "IP_HASH_SALT",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "create-checkout",
+      "verifyJwt": true,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "CHECKOUT_DAILY_CAP",
+        "CHECKOUT_REDIRECT_URL",
+        "LEMONSQUEEZY_API_KEY",
+        "LEMONSQUEEZY_STORE_ID",
+        "SUPABASE_ANON_KEY",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "delete-repair-job",
+      "verifyJwt": true,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "faculty-request",
+      "verifyJwt": false,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "IP_HASH_SALT",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "field-render",
+      "verifyJwt": true,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "FIELD_RENDER_MAX_BYTES",
+        "FIELD_RENDER_TIMEOUT_MS",
+        "FIELD_RENDER_WORKER_TOKEN",
+        "FIELD_RENDER_WORKER_URL",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "file-guarantee-claim",
+      "verifyJwt": true,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "generate-report",
+      "verifyJwt": true,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "DAILY_CAP",
+        "IP_HASH_SALT",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "health",
+      "verifyJwt": false,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "LEKTA_COMMIT",
+        "LEKTA_RELEASE",
+        "SUPABASE_ANON_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "integrity-check",
+      "verifyJwt": true,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "AI_DETECTOR_API_KEY",
+        "AI_DETECTOR_API_URL",
+        "ALLOWED_ORIGIN",
+        "EMBEDDING_API_KEY",
+        "EMBEDDING_API_URL",
+        "INTEGRITY_FULL_DAILY_CAP",
+        "INTEGRITY_FULL_DAILY_CAP_IP",
+        "INTEGRITY_PROVIDER_TIMEOUT_MS",
+        "INTEGRITY_TEASER_DAILY_CAP",
+        "INTEGRITY_TEASER_DAILY_CAP_IP",
+        "IP_HASH_SALT",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "katedra-agent-worker",
+      "verifyJwt": true,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "KATEDRA_AGENT_WORKER_BATCH",
+        "KATEDRA_AGENT_WORKER_CRON_SECRET",
+        "KATEDRA_AGENT_WORKER_TOKEN",
+        "KATEDRA_WORKER_APP_URL",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "preflight-result",
+      "verifyJwt": true,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "PREFLIGHT_REQUIRE_ENTITLEMENT",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "preflight-start",
+      "verifyJwt": true,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "IP_HASH_SALT",
+        "PREFLIGHT_DAILY_CAP_IP",
+        "PREFLIGHT_DAILY_CAP_USER",
+        "PREFLIGHT_DISABLED",
+        "PREFLIGHT_MAX_REFS",
+        "PREFLIGHT_MAX_UPLOAD_MB",
+        "PREFLIGHT_SERVICE_URL",
+        "PREFLIGHT_UPLOAD_SECRET",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "process-bonus-outbox",
+      "verifyJwt": false,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "BONUS_OUTBOX_BATCH",
+        "BONUS_OUTBOX_CRON_SECRET",
+        "BONUS_OUTBOX_MAX_ATTEMPTS",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "profile-rules",
+      "verifyJwt": false,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "IP_HASH_SALT",
+        "PROFILE_RULES_DISABLED",
+        "PROFILE_RULES_IP_DAILY_CAP",
+        "PROFILE_RULES_REQUIRE_AUTH",
+        "PROFILE_RULES_USER_DAILY_CAP",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "record-completion-check",
+      "verifyJwt": false,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "redeem-referral-signup",
+      "verifyJwt": true,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "IP_HASH_SALT",
+        "SUPABASE_ANON_KEY",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "repair-docx",
+      "verifyJwt": true,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "DAILY_CAP",
+        "IP_HASH_SALT",
+        "REPAIR_DISABLED",
+        "REPAIR_FREE_DAILY_CAP",
+        "REPAIR_FREE_IP_DAILY_CAP",
+        "REPAIR_FREE_MODE",
+        "REPAIR_MAX_CONCURRENT",
+        "REPAIR_MAX_DOCX_BYTES",
+        "REPAIR_SLOT_LEASE_SECONDS",
+        "REPAIR_STORAGE_DAILY_CAP",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "send-reminders",
+      "verifyJwt": false,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "APP_BASE_URL",
+        "REMINDER_CRON_SECRET",
+        "REMINDER_FROM_EMAIL",
+        "REMINDER_UNSUB_SECRET",
+        "RESEND_API_KEY",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL",
+        "UNSUB_PUBLIC_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "source-check",
+      "verifyJwt": true,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "IP_HASH_SALT",
+        "SOURCE_CHECK_IP_DAILY_CAP",
+        "SOURCE_CHECK_USER_DAILY_CAP",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "unsubscribe-reminder",
+      "verifyJwt": false,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "REMINDER_UNSUB_SECRET",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    },
+    {
+      "function": "webhook-mor",
+      "verifyJwt": false,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "LS_ALLOW_TEST_MODE",
+        "LS_STORE_ID",
+        "MOR_WEBHOOK_SECRET",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "owner": null,
+      "intentionalExclusion": null,
+      "reason": null
+    }
+  ],
+  "generatedAt": "2026-09-03T00:42:01.313Z",
+  "generatedFromCommit": "24a2de62b14698d991157b44e8693e7d4ebc5bea",
+  "generator": "npm run deploy-manifest"
+}
