@@ -3166,6 +3166,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "entries": [
           {
             "anchorFingerprint": "biblio-b756d489",
+            "anchorText": "vukovic m 2020 mediji i javna sfera zagreb naklada prvi",
             "id": "bibliography-19",
             "normalizeText": true,
             "paragraphIndices": [
@@ -3174,6 +3175,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchorFingerprint": "biblio-5bc89d90",
+            "anchorText": "antic i 2021 digitalno novinarstvo zagreb naklada drugi",
             "id": "bibliography-20",
             "normalizeText": true,
             "paragraphIndices": [
@@ -3182,6 +3184,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchorFingerprint": "biblio-f00121d6",
+            "anchorText": "antic i 2021 mrezni mediji i publika split naklada treci",
             "id": "bibliography-21",
             "normalizeText": true,
             "paragraphIndices": [
@@ -3190,6 +3193,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchorFingerprint": "biblio-553c3be7",
+            "anchorText": "baric k 2018 metodologija drustvenih istrazivanja rijeka naklada cetvrti doi 10 1234 abcd 2018",
             "hyperlink": "doi",
             "id": "bibliography-22",
             "normalizeText": true,
@@ -3199,6 +3203,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchorFingerprint": "biblio-8c28db72",
+            "anchorText": "vukovic m 2020 mediji i javna sfera zagreb naklada prvi",
             "id": "bibliography-23",
             "normalizeText": true,
             "paragraphIndices": [
@@ -4933,6 +4938,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "entries": [
           {
             "anchorFingerprint": "biblio-bb655a88",
+            "anchorText": "anić a 2019 uvod u analizu javnih politika zagreb naklada prva",
             "id": "bibliography-67",
             "normalizeText": true,
             "paragraphIndices": [
@@ -4941,6 +4947,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchorFingerprint": "biblio-0ed76aa9",
+            "anchorText": "barić b 2020 metodologija drustvenih istrazivanja split druga naklada",
             "id": "bibliography-68",
             "normalizeText": true,
             "paragraphIndices": [
@@ -4949,6 +4956,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchorFingerprint": "biblio-99576115",
+            "anchorText": "cvitan c 2021 institucije i postupci odlucivanja rijeka treca naklada",
             "id": "bibliography-69",
             "normalizeText": true,
             "paragraphIndices": [
@@ -4957,6 +4965,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchorFingerprint": "biblio-15d5907c",
+            "anchorText": "dukić d 2018 usporedna analiza upravnih sustava osijek cetvrta naklada",
             "id": "bibliography-70",
             "normalizeText": true,
             "paragraphIndices": [
@@ -4965,6 +4974,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchorFingerprint": "biblio-5e8d7130",
+            "anchorText": "erceg e 2022 kvalitativni pristupi u politologiji zadar peta naklada",
             "id": "bibliography-71",
             "normalizeText": true,
             "paragraphIndices": [
@@ -4973,6 +4983,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchorFingerprint": "biblio-5c75d9a4",
+            "anchorText": "fabijanić f 2017 javne politike i evaluacija ucinaka pula sesta naklada",
             "id": "bibliography-72",
             "normalizeText": true,
             "paragraphIndices": [
@@ -5949,6 +5960,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "entries": [
           {
             "anchorFingerprint": "biblio-e4b79697",
+            "anchorText": "anić a 2019 uvod u analizu javnih politika zagreb naklada prva",
             "id": "bibliography-134",
             "normalizeText": true,
             "paragraphIndices": [
@@ -5957,6 +5969,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchorFingerprint": "biblio-e501b85e",
+            "anchorText": "barić b 2020 metodologija drustvenih istrazivanja split druga naklada",
             "id": "bibliography-135",
             "normalizeText": true,
             "paragraphIndices": [
@@ -5965,6 +5978,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchorFingerprint": "biblio-0e4cc552",
+            "anchorText": "cvitan c 2021 institucije i postupci odlucivanja rijeka treca naklada",
             "id": "bibliography-136",
             "normalizeText": true,
             "paragraphIndices": [
@@ -5973,6 +5987,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchorFingerprint": "biblio-a8dbf5c8",
+            "anchorText": "dukić d 2018 usporedna analiza upravnih sustava osijek cetvrta naklada",
             "id": "bibliography-137",
             "normalizeText": true,
             "paragraphIndices": [
@@ -5981,6 +5996,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchorFingerprint": "biblio-b54eccb6",
+            "anchorText": "erceg e 2022 kvalitativni pristupi u politologiji zadar peta naklada",
             "id": "bibliography-138",
             "normalizeText": true,
             "paragraphIndices": [
@@ -5989,6 +6005,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchorFingerprint": "biblio-5ef102a4",
+            "anchorText": "fabijanić f 2017 javne politike i evaluacija ucinaka pula sesta naklada",
             "id": "bibliography-139",
             "normalizeText": true,
             "paragraphIndices": [
@@ -14937,6 +14954,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "entries": [
           {
             "anchorFingerprint": "biblio-38053fbb",
+            "anchorText": "zelenko m 2021 izmisljeni naslov o mjerenju casopis za nista 12 3 45 67 doi 10 1234 izmisljeno 2021",
             "hyperlink": "doi",
             "id": "bibliography-4",
             "normalizeText": true,
@@ -14946,6 +14964,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchorFingerprint": "biblio-5d7102bf",
+            "anchorText": "ancic p 2019 drugi izmisljeni naslov drugi casopis 5 1 10 22 doi 10 5678 izmisljeno 2019",
             "hyperlink": "doi",
             "id": "bibliography-5",
             "normalizeText": true,
@@ -14955,6 +14974,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
           {
             "anchorFingerprint": "biblio-35ea0aff",
+            "anchorText": "babic i 2020 treci izmisljeni naslov s 20 udjela treci casopis 8 2 30 41 doi 10 9012 izmisljeno 2020",
             "hyperlink": "doi",
             "id": "bibliography-6",
             "normalizeText": true,
