@@ -1,4 +1,4 @@
-/**
+﻿/**
  * RE-55: dva fixera koja pisu po ISTOM odlomku, a nisu oba u strukturnoj fazi.
  *
  * applyFixers rasporeduje zahtjeve u dvije faze (RE-46): prvo oni koji NE mijenjaju broj
@@ -29,7 +29,7 @@ import { repairEntriesFor , ensureRepairMapHeavy } from '../src/profiles/profile
 // repair-map je lijen; ucitaj ga prije prvog repairEntriesFor u ovom modulu.
 await ensureRepairMapHeavy();
 import { bibliographyRepairableItem, linkDoiRepairableItem } from '../src/ui/repair-items';
-import { applyFixers, type FixerRequest } from '../src/repair/apply-fixers';
+import { applyFixers, withoutOverlappingLinkDoiOperations, type FixerRequest } from '../src/repair/apply-fixers';
 import { readZip } from '../src/repair/zip-codec';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -98,4 +98,64 @@ describe('RE-55: link-doi i bibliografija pisu po istom odlomku', () => {
     expect(documentXml).toContain('https://doi.org/10.1234/abcd.2018');
     expect(documentXml).toContain('<w:hyperlink');
   }, 30000);
+
+});
+
+/**
+ * VLASNISTVO SE MORA PREPOZNATI PO TEKSTU, JER SE INDEKSI NE MOGU USPOREDJIVATI.
+ *
+ * Testovi iznad prolaze i bez ovoga, jer u toj fixturi obje strane daju ISTE indekse. Na stvarnim
+ * dokumentima ne daju: `link-doi-structure.ts:109` indeksira preko `extractBodyParagraphs`, a
+ * bibliografija preko parserovih odlomaka. Izmjereno 2026-09-04 na `local-06-diplomski`:
+ *
+ *     link-doi salje indekse          204, 205, 207 ... 240
+ *     link-doi STVARNO mijenja        519, 520, 522 ... 555     (konstantan pomak 315)
+ *     literatura posjeduje            519..559
+ *     filtar prijavi preklapanje      0                          (stvarnih: 22 od 22)
+ *
+ * Posljedica je bila upravo ona koju zaglavlje ove datoteke opisuje kao rijesenu: bibliografija se
+ * TIHO ne popravi, a sucelje javi uspjeh jer je link-doi prosao. Pogadjalo je 4 od 38 stvarnih
+ * radova, a 0 od 7 commitanih.
+ *
+ * ZASTO UNIT TEST, a ne jos jedan prolaz kroz `applyFixers`: pokusaj da se razmak PODMETNE
+ * pomicanjem indeksa u zahtjevu ne reproducira kvar, jer tada ni `link-doi` ne nadje svoju metu pa
+ * bibliografiji nema sto pokvariti. Takav test prolazi i na neispravnom kodu, dakle mjeri nista.
+ * Ugovor koji je stvarno promijenjen je filtar, pa se on i provjerava izravno.
+ */
+describe('withoutOverlappingLinkDoiOperations: vlasnistvo po tekstu', () => {
+  const TEKST = 'atkinson adele i messy flore anne 2012 measuring financial literacy';
+  const zahtjevi = (opIndex: number): FixerRequest[] => [
+    {
+      fixerId: 'bibliography-repair-fixer' as FixerRequest['fixerId'],
+      ruleId: 'bib',
+      params: { version: 1, entries: [{ id: 'bibliography-519', paragraphIndices: [519], anchorFingerprint: 'biblio-x', anchorText: TEKST }] },
+    },
+    {
+      fixerId: 'link-doi-fixer' as FixerRequest['fixerId'],
+      ruleId: 'doi',
+      params: { version: 1, operations: [{ id: 'op', paragraphIndex: opIndex, anchorText: TEKST, action: 'normalize-doi' }] },
+    },
+  ];
+  const preostaleOperacije = (out: FixerRequest[]) =>
+    ((out.find((r) => r.fixerId === 'link-doi-fixer')!.params as { operations: unknown[] }).operations).length;
+
+  it('GRIZE: operacija se izbacuje i kad indeks dolazi iz druge osnove', () => {
+    // 204 je indeks iz link-doi osnove; literatura isti odlomak zove 519. Tekst je isti.
+    expect(preostaleOperacije(withoutOverlappingLinkDoiOperations(zahtjevi(204)))).toBe(0);
+  });
+
+  it('i dalje se izbacuje kad se indeksi SLUCAJNO poklapaju (zatecÐµÐ½Ð¾ ponasanje)', () => {
+    expect(preostaleOperacije(withoutOverlappingLinkDoiOperations(zahtjevi(519)))).toBe(0);
+  });
+
+  it('NE VRISTI: operacija nad tudjim odlomkom ostaje', () => {
+    const drugi = zahtjevi(204);
+    (drugi[1].params as { operations: Array<Record<string, unknown>> }).operations[0].anchorText = 'neki posve drugi odlomak tijela rada';
+    expect(preostaleOperacije(withoutOverlappingLinkDoiOperations(drugi))).toBe(1);
+  });
+
+  it('BASELINE: bez bibliografije se ne dira nista', () => {
+    const samoDoi = zahtjevi(204).filter((r) => r.fixerId === 'link-doi-fixer');
+    expect(preostaleOperacije(withoutOverlappingLinkDoiOperations(samoDoi))).toBe(1);
+  });
 });

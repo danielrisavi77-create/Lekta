@@ -11,6 +11,7 @@ import type { RuleEntry } from '../profiles/profile-schema';
 import type { Issue } from '../scoring/checks';
 import type { SectionNumberingTarget } from '../repair/xml-patch';
 import { CHECK_TITLES, PAPER_SIZE_TITLE_PREFIX, dimensionForCheckId } from '../analysis/check-fixer-map';
+import { normalizeAnchorText } from '../repair/anchor-text';
 import type { HeadingCandidate, HeadingStructureWarning } from '../analysis/heading-structure';
 import { headingNumberingRules } from '../analysis/heading-numbering';
 import type { HeadingNumberingPlan } from '../analysis/heading-numbering';
@@ -1213,10 +1214,24 @@ export function bibliographyRepairableItem(result: any, profile: any): Repairabl
     const chosen = current.entries.filter((entry) => entry.selected).flatMap((entry) => {
       const original = originalById.get(entry.id);
       if (!original) return [];
+      /**
+       * `anchorText` sluzi ISKLJUCIVO da motor prepozna koje odlomke literatura posjeduje, bez
+       * usporedbe sirovih indeksa. Indeksi se ne smiju usporedjivati jer dvije strane broje
+       * odlomke po razlicitim osnovama: `link-doi-structure.ts` preko `extractBodyParagraphs`,
+       * literatura preko parserovih odlomaka. Izmjereno na `local-06-diplomski`: link-doi salje
+       * 204..240, a stvarno mijenja 519..555 (konstantan pomak 315), pa je
+       * `withoutOverlappingLinkDoiOperations` prijavljivao NULA preklapanja dok ih je bilo 22 od 22.
+       *
+       * Posljedica je bila da se popravak literature TIHO ne dogodi na 4 od 38 stvarnih radova, uz
+       * poruku o uspjehu. Ne salje se nista sto server vec nema: popravak ionako prima cijeli
+       * dokument, a `link-doi` isti podatak salje odavno.
+       */
+      const anchorText = normalizeAnchorText(String(original.rawText ?? ''));
       return [{
         id: entry.id,
         paragraphIndices: original.paragraphIndices,
         anchorFingerprint: original.anchorFingerprint,
+        ...(anchorText ? { anchorText } : {}),
         ...(entry.remove ? { remove: true } : {}),
         ...(entry.replacementText !== undefined && entry.replacementText !== entry.rawText ? { replacementText: entry.replacementText } : {}),
         normalizeText: true,
