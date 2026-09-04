@@ -668,9 +668,23 @@ for (const tema of ['light', 'dark'] as const) {
     const mjereno = r.passes.filter((x) => x.id === 'color-contrast')
       .reduce((a, x) => a + x.nodes.length, 0);
     // NETRIVIJALNOST: bez ovoga bi gard prosao i da tekstura ostane, kad axe ne mjeri gotovo nista.
-    // Zatecено (s teksturom) u svijetloj temi je bilo 163; prag je postavljen znatno iznad toga.
+    //
+    // PRAG PREKALIBRIRAN 2026-09-04, jer je stranica legitimno postala manja: `/` je izgubilo deset
+    // landing sekcija (85 -> 52,5 KB), koje sada zive na `/saznaj-vise/`. Stari prag (220) bio je
+    // kalibriran na stari landing i postao je NEDOSTIZAN, pa je gard padao bez ijednog kontrastnog
+    // krsenja. To nije regresija pristupacnosti nego gard cija je pretpostavka istekla.
+    //
+    // Izmjereno na novoj stranici (chromium, 1440x1000), oba stanja:
+    //
+    //     tema    s teksturom   neutralizirano   krsenja
+    //     light        65            102            0
+    //     dark        102            102            0
+    //
+    // Prag 90 razdvaja tocno ono zbog cega gard postoji: u svijetloj temi neneutralizirana tekstura
+    // daje 65, a neutralizirana 102. U TAMNOJ temi tekstura axe uopce ne ometa (102 u oba stanja),
+    // pa ondje prag radi samo kao provjera da stranica nije ostala prazna.
     expect(mjereno, `axe mora izmjeriti bitno vise cvorova nego s teksturom (${mjereno})`)
-      .toBeGreaterThan(220);
+      .toBeGreaterThan(90);
 
     const nalazi = r.violations.filter((v) => v.id === 'color-contrast');
     const opis = nalazi.flatMap((v) => v.nodes.map((n) =>
