@@ -106,3 +106,31 @@ strop za E redke se **imenuje** u ljestvici.
 
 **Posteno ocekivanje ostaje isto:** 26 je gornja granica iz postojecih radova. Dalje pomicu samo
 skupina "podaci" (oko 95 redaka izlazi iz blokatora, ali ostaje na B) i kanal A.
+
+## 8. Prosirenje korpusa 2026-09-05
+
+Vlasnik: radovi su u Downloads, napravljena je posebna mapa `Desktop/Lekta-korpus` (izvan repozitorija, jer ingest
+odbija odrediste unutar njega). Izvedeno istog dana:
+
+| korak | broj |
+|---|---|
+| docx u Downloads / odabrano za korpus | 368 / 195 |
+| ingest (pseudonimizacija, zapis o dopustenju `local-testing`): prihvaceno / bez profila / vacuous | 195 / 80 / 6 |
+| dedupe po klasterima verzija (Jaccard >= 0,8 nad tijelom): predstavnika / odbacenih verzija | 58 / 57 |
+| lokalni korpus prije / poslije (plus 7 commitanih) | 38 / 88 |
+| mjerenje nad `ea15e9ce`: pass / review / fail / regresija | 7 / 86 / 0 / 0 |
+| ovjerenih parova jedinica x vrsta rada | 10 -> 16 |
+| redaka na A | 26 -> **34** |
+| profila na A u mapi tvrdnji | 24 -> 28 |
+
+- "Posteno ocekivanje" iz sekcije 7 (26 kao gornja granica iz postojecih radova) time je pomaknuto: granica su
+  bili radovi koje sesije nisu imale, ne dokaz.
+- Harness je na 15 novih radova javljao `fail` bez integriteta i regresije: prazan `word/comments.xml` iz
+  ne-Wordovih alata koji `final-document-inspector-fixer` ukloni i prijavi kroz `removedPackageParts`, a mjera je
+  deklarirano uklanjanje brojala kao izgubljen zapis. Popravljeno u `ea15e9ce` (`removedByFixers` imenovano,
+  `droppedEntryCount` broji samo neprijavljeno, test s negativnom kontrolom). Prije popravka: fail 15.
+- Pseudonimizacija: `vacuous` na 6 od 195, ne 76 od 246 kao u sekciji 3; stara brojka je iz doba prije heuristike
+  naslovnice. Preostalih 6 je rucni pogled po sidecaru, ne novi mehanizam.
+- 80 radova bez profila su vecinom seminari i eseji cija naslovnica imenuje program ("diplomski studij"), a ne
+  vrstu rada; sirenje detektora na golu rijec "diplomski" oznacilo bi ih kao diplomske radove. Treba odluka o
+  mapiranju eseja i seminara na vrste rada, pa tek onda detektor.

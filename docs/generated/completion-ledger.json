@@ -1705,7 +1705,7 @@
       "program": "missing",
       "rules": "advisory-only",
       "repair": "universal-hygiene",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
       "claim": "E",
       "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
@@ -1793,10 +1793,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
@@ -1810,9 +1810,7 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "erf-diplomski",
@@ -3722,10 +3720,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "generic",
@@ -3739,9 +3737,7 @@
         "facultySpecificRepairOptions": 3,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "fkit-doktorski",
@@ -7484,10 +7480,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -7501,9 +7497,7 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
@@ -7513,10 +7507,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -7530,9 +7524,7 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
@@ -7542,10 +7534,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -7559,9 +7551,7 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "pravo-porezni-prijediplomski",
@@ -7691,10 +7681,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -7708,9 +7698,7 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "pravo-socijalni-opci-akademski-rad",
@@ -7720,10 +7708,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -7737,9 +7725,7 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "pravo-socijalni-opci-akademski-rad",
@@ -7749,10 +7735,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "reused",
         "citation": "exact-official",
@@ -7766,9 +7752,7 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
@@ -12730,8 +12714,8 @@
       "manual-only": 53
     },
     "byProof": {
-      "real-docx-pass": 29,
-      "synthetic-pass": 359,
+      "real-docx-pass": 38,
+      "synthetic-pass": 350,
       "review": 0,
       "not-run": 48
     },
@@ -12764,8 +12748,8 @@
       "unknown": 3
     },
     "byClaim": {
-      "A": 26,
-      "B": 312,
+      "A": 34,
+      "B": 304,
       "C": 8,
       "D": 42,
       "E": 48
