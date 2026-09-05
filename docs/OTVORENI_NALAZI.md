@@ -188,8 +188,46 @@ sudi po PRVOM autoru iz `extractReferences`: "United Nations General Assembly, .
 analizi). Svedeno na jedan: `sortKey` na zapisu = kljuc provjere; popravak i analiza sortiraju po
 njemu. Dokaz: sa starim kljucem fixera provjera nakon popravka pada (inverzija na #21), s novim prolazi.
 
-Preostaje JEDAN stale-anchor na cijelom korpusu: `heading-structure-universal` na `local-01-diplomski`.
-Nije mjeren; tko ga uzme, isti postupak (sonda zapis po zapis) je u ovom nalazu.
+ZADNJI stale-anchor na korpusu (`heading-structure-universal`, `local-01-diplomski`) ZATVOREN
+2026-09-05, isti korijen peti put: `paragraphTextsForAnchors` u `apply-fixers.ts` citao je SAMO
+`<w:t>`, pa je naslov s rucnim prijelomom retka (`<w:br/>` izmedju "Tipovi testova" i "Za potrebe")
+davao "testovaZa" dok analiza daje "testova za"; sidro se ne nalazi nigdje, meta je `zastarjelo`, i
+1 od 18 meta gasi popravak svih 18 naslova, i kad fixer radi SAM. Zajednicki izvlakac
+`anchorTextOfXml` (tab/br/cr -> razmak) vec je sluzio drugim sidrima; ovo je bila zaboravljena kopija.
+Sada ga koristi i ovo mjesto. Gard: `tests/heading-style-anchor.test.ts` (naslov s `<w:br/>` mora se
+stilizirati; pada na `<w:t>`-only citanju). `stale-anchor` u prvom krugu na 38 stvarnih radova: 1 -> 0.
+
+Popravak sidra je odmah otkrio sto je sidro skrivalo: medju 18 predodabranih kandidata na local-01 bila
+su dva fragmenta specifikacije ("4 vCPU,", "16 GB RAM,"; numerirani prefiks + kratkoca = score 7 i 8)
+i naslov zalijepljen s tijelom preko `<w:br/>` (p634). Upisani, dizali su "moguca preskakanja" 4 -> 5 i
+pretvarali tijelo rada u Heading3. Zato `heading-structure.ts` sada kaznjava kandidata koji zavrsava
+zarezom/tocka-zarezom (-6) i iskljucuje odlomak s 40+ znakova iza prijeloma retka. Na local-01:
+9 pravih naslova upisano, skokova 4 (kao prije). Gard s mutacijom u `heading-structure.test.ts`.
+
+NAZIVNIK: gornje brojke (38 radova, 17/397 zapisa, 9 -> 1 -> 0) vrijede za populaciju `docx-local` do
+2026-09-05 14:30. Tada je narasla na 88 (58 novih `corpus-*`, 8 starih zamijenjeno novijim verzijama,
+30 ostaje; popis u `Desktop/Lekta-korpus/dedupe-2026-09-05.json`). Na NOVOJ populaciji dokaz je A/B
+na istom commitu s kontrolom bez izmjena: 94 od 95 dokumenata identicni po ishodu, delti i skupu
+fixera; jedini razlicit je local-01 (+heading-style-fixer, isti dobitak); stale-anchor istom sondom
+kontrola 4 -> 3.
+
+### B7. Tri stale-anchora na NOVOJ populaciji (IMENOVANO, nitko ne drzi)
+
+Zateceni na 88 radova i neovisni o B6 (kontrola bez B6 ih ima jednako):
+
+    corpus-0052-91298a   heading-structure-universal   sidro "FINAL THESIS" je jedinstveno ali stoji na p100,
+                                                       a zahtjev kaze p65: 70 od prvih 100 <w:p su u tablicama
+                                                       ili okvirima, analiza ih preskace, fixer broji sve.
+                                                       Isti razred kao B6 prva klasa (dvije osnove indeksa);
+                                                       re-anchoring je izricito odbacen, pa se resenje mora
+                                                       traziti u zajednickoj enumeraciji, ne u praceenju teksta.
+    corpus-0008-dd3c34   link-doi-repair-assisted      sam daje `unsupported-structure`, stale-anchor tek u
+                                                       bateriji: neki fixer prije njega prepise sidreni odlomak.
+    corpus-0011-19124f   link-doi-repair-assisted      sam prolazi (sidra nadjena, ali na indeksu +2), stale
+                                                       tek u bateriji; isti obrazac kao 0008.
+
+Uz njih: 15 `fail` s `droppedEntryCount: 1` na novim radovima nije regresija (final-document-inspector
+uredno uklanja prazan `word/comments.xml`); popravak harnessa je `ea15e9ce` na grani druge sesije.
 
 ---
 

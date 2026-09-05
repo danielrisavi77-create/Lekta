@@ -193,6 +193,19 @@ function isExcluded(paragraph: HeadingStructureParagraph): boolean {
   if (looksLikeBibliographyEntry(text)) return true;
   if (looksLikeTitlePageLabel(text)) return true;
   if (TOC_ENTRY_TAIL.test(raw)) return true;
+  /**
+   * NASLOV ZALIJEPLJEN S TIJELOM preko rucnog prijeloma retka nije kandidat.
+   *
+   * Parser `<w:br/>` emitira kao `\n`. Odlomak "3.6.1.3 Tipovi testova\nZa potrebe kvantitativne
+   * analize definirani su ..." je JEDAN odlomak: naslov, prijelom, pa recenice tijela. Popravak
+   * stilizira cijeli odlomak, pa bi tijelo rada postalo Heading3 i uslo u sadrzaj.
+   *
+   * Izmjereno 2026-09-05 na `local-01-diplomski` (p634): kandidat je imao score 7 i bio predodabran,
+   * jer numerirani prefiks (+5) i "kratak odlomak" (+2) ne vide sto stoji iza prijeloma. Do tada ga je
+   * skrivalo neispravno sidro (citanje samo `<w:t>`); cim je sidro popravljeno, naslov bi se upisao.
+   * Prag od 40 znakova iza prijeloma pusta pravi dvoredni naslov ("Analiza\nsustava").
+   */
+  if (/\n[\s\S]{40,}/.test(raw)) return true;
   return false;
 }
 
@@ -238,6 +251,15 @@ function candidateFor(
     evidence.push('velika slova');
   }
   if (/[.!?]$/.test(text) && !number) score -= 2;
+  /**
+   * FRAGMENT POPISA nije naslov. "4 vCPU," i "16 GB RAM," su stavke specifikacije, a numerirani prefiks
+   * (+5) i kratkoca (+2) su ih dizali na score 7 i 8, dakle `high` i predodabrano; popravak bi ih
+   * upisao kao Heading1 i time stvorio skok u hijerarhiji (izmjereno 2026-09-05, `local-01-diplomski`,
+   * p622/p623: "4 moguca preskakanja" -> "5"). Naslov ne zavrsava zarezom ni tocka-zarezom, pa je
+   * kazna veca od dobitka za prefiks: takav odlomak ostaje vidljiv kao slab kandidat, ali se ne
+   * predodabire.
+   */
+  if (/[,;]$/.test(text)) score -= 6;
   if (text.split(/\s+/).length > 24) score -= 2;
 
   if (score < 4) return null;
