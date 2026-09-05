@@ -172,9 +172,18 @@ export interface RealCorpusReport {
      */
     targetedCheckCount: number;
     measuresRepairEffectiveness: boolean;
+    detectsRepairRegression: boolean;
   };
   manifest: RealCorpusManifestEntry[];
   results: RealCorpusResult[];
+  /**
+   * Ishod nad dokumentima koje `sidecarAdmitted` iskljucuje. NIJEDAN potrosac tvrdnji ovo ne cita:
+   * `buildCoverageCells` uzima iskljucivo `results`, pa lanac korpus -> matrica -> ledger -> tvrdnje
+   * ostaje netaknut. Sluzi iskljucivo detekciji regresije popravka, koju je commitani korpus izgubio
+   * kad je devet sidecara oznaceno sintetickima (39 ciljanih provjera -> 0).
+   */
+  syntheticResults: RealCorpusResult[];
+  syntheticSummary: RealCorpusReport['summary'];
   summary: {
     documentCount: number;
     passCount: number;
@@ -201,6 +210,46 @@ export interface RealCorpusReport {
 
 function sidecarPath(root: string, fileName: string): string {
   return join(root, fileName.replace(/\.docx$/i, '.json'));
+}
+
+/**
+ * Dokumenti koje `sidecarAdmitted` ISKLJUCUJE (`synthetic: true`), a koji imaju valjan sidecar.
+ *
+ * Zasto uopce postoje u mjerenju, izmjereno 2026-09-05: oznacavanje devet sidecara kao sintetickih
+ * ucinilo je TVRDNJU postenom (`A` = dokazano na stvarnom radu), ali je istovremeno srusilo
+ * DETEKCIJU REGRESIJE: commitani korpus je s 39 ciljanih provjera pao na 0, pa su mu `failCount 0` i
+ * `passRegressionCount 0` postali vakuumski istiniti.
+ *
+ * To su dvije razlicite svrhe koje su dijelile jednu zastavicu. Sinteticki dokument NE MOZE
+ * potkrijepiti tvrdnju o stvarnom radu, ali savrseno dobro otkriva da je popravak regresirao.
+ *
+ * Zato se ovdje otkrivaju odvojeno i njihov ishod ide u `syntheticResults`, sestrinski kljuc koji
+ * NIJEDAN potrosac tvrdnji ne cita: `buildCoverageCells` uzima iskljucivo `results`, pa lanac
+ * korpus -> matrica -> ledger -> tvrdnje ostaje netaknut. Granica je time sacuvana, a CI je vratio
+ * ono sto je izgubio.
+ */
+export function discoverExcludedCorpus(root = REAL_CORPUS_ROOT): RealCorpusManifestEntry[] {
+  let files: string[];
+  try {
+    files = readdirSync(root);
+  } catch {
+    return [];
+  }
+  return files
+    .filter((f) => f.toLowerCase().endsWith('.docx'))
+    .sort()
+    .flatMap((fileName) => {
+      let metadata: CorpusSidecar = {};
+      try {
+        metadata = JSON.parse(readFileSync(sidecarPath(root, fileName), 'utf8')) as CorpusSidecar;
+      } catch {
+        return [];
+      }
+      if (sidecarAdmitted(metadata) || !metadata.profileId) return [];
+      return [
+        { documentId: fileName.replace(/\.docx$/i, ''), fileName, profileId: metadata.profileId as string, root },
+      ];
+    });
 }
 
 export function discoverRealCorpus(root = REAL_CORPUS_ROOT): RealCorpusManifestEntry[] {
@@ -460,6 +509,29 @@ function repoRelative(absolute: string): string {
   return relative(join(HERE, '..', '..'), absolute).split(sep).join('/');
 }
 
+/** Sazetak nad BILO KOJIM skupom rezultata; dijele ga dopusteni i iskljuceni korpus. */
+function summarizeResults(results: RealCorpusResult[]): RealCorpusReport['summary'] {
+  return {
+    documentCount: results.length,
+    passCount: results.filter((result) => result.outcome === 'pass').length,
+    reviewCount: results.filter((result) => result.outcome === 'review').length,
+    failCount: results.filter((result) => result.outcome === 'fail').length,
+    integrityFailureCount: results.filter((result) => result.integrityFailure !== null).length,
+    noOpCount: results.filter((result) => result.outcome === 'no-op').length,
+    changedDocumentCount: results.filter((result) => result.changedFixerIds.length > 0).length,
+    manualReviewCount: results.filter((result) => result.manualReviewRequired).length,
+    passRegressionCount: results.reduce((total, result) => total + result.passRegressionCount, 0),
+    passRegressionChecks: [...new Set(results.flatMap((result) => result.passRegressionChecks))].sort(),
+    targetedCheckCount: results.reduce((total, result) => total + result.targetedCheckCount, 0),
+    targetedResolvedCount: results.reduce((total, result) => total + result.targetedResolvedCount, 0),
+    autoUnresolvedCount: results.reduce((total, result) => total + result.autoUnresolvedCount, 0),
+    autoUnresolvedChecks: [...new Set(results.flatMap((result) => result.autoUnresolvedChecks))].sort(),
+    assistedUnresolvedCount: results.reduce((total, result) => total + result.assistedUnresolvedCount, 0),
+    awaitingConfirmationCount: results.reduce((total, result) => total + result.awaitingConfirmationCount, 0),
+    manualOnlyCount: results.reduce((total, result) => total + result.manualOnlyCount, 0),
+  };
+}
+
 export async function runRealCorpus(
   root = REAL_CORPUS_ROOT,
   options: { outputDir?: string; includeLocal?: boolean } = {},
@@ -474,6 +546,12 @@ export async function runRealCorpus(
   ];
   if (options.outputDir) mkdirSync(options.outputDir, { recursive: true });
   const results = await Promise.all(manifest.map((entry) => runOne(entry, entry.root ?? root, options.outputDir)));
+  // Iskljuceni (sinteticki) idu ZASEBNO i bez `outputDir`: sluze detekciji regresije, ne dokazu.
+  const excluded = [
+    ...discoverExcludedCorpus(root),
+    ...(options.includeLocal ? discoverExcludedCorpus(LOCAL_CORPUS_ROOT) : []),
+  ];
+  const syntheticResults = await Promise.all(excluded.map((entry) => runOne(entry, entry.root ?? root)));
   const localCount = options.includeLocal
     ? discoverRealCorpus(LOCAL_CORPUS_ROOT).length +
       (EXTERNAL_CORPUS_ROOT ? discoverRealCorpus(EXTERNAL_CORPUS_ROOT).length : 0)
@@ -487,28 +565,22 @@ export async function runRealCorpus(
       ...(localCount ? { localDocumentCount: localCount } : {}),
       targetedCheckCount: results.reduce((total, result) => total + result.targetedCheckCount, 0),
       measuresRepairEffectiveness: results.some((result) => result.targetedCheckCount > 0),
+      /**
+       * Moze li ovaj izvjestaj UOPCE otkriti regresiju popravka, bez obzira na to smije li njome
+       * potkrijepiti tvrdnju. Racuna se nad OBA skupa: sinteticki dokument ne dokazuje nista o
+       * stvarnom radu, ali savrseno dobro pokazuje da je popravak prestao raditi.
+       *
+       * Do 2026-09-05 su te dvije stvari dijelile jednu zastavicu, pa je postenije oznacavanje
+       * sidecara usput oslijepilo CI: 39 ciljanih provjera palo je na 0.
+       */
+      detectsRepairRegression:
+        results.some((r) => r.targetedCheckCount > 0) || syntheticResults.some((r) => r.targetedCheckCount > 0),
     },
     // Serijalizira se REPO-RELATIVNA putanja; apsolutna bi izvjestaj vezala uz jedan stroj.
     manifest: manifest.map((entry) => ({ ...entry, ...(entry.root ? { root: repoRelative(entry.root) } : {}) })),
     results,
-    summary: {
-      documentCount: results.length,
-      passCount: results.filter((result) => result.outcome === 'pass').length,
-      reviewCount: results.filter((result) => result.outcome === 'review').length,
-      failCount: results.filter((result) => result.outcome === 'fail').length,
-      integrityFailureCount: results.filter((result) => result.integrityFailure !== null).length,
-      noOpCount: results.filter((result) => result.outcome === 'no-op').length,
-      changedDocumentCount: results.filter((result) => result.changedFixerIds.length > 0).length,
-      manualReviewCount: results.filter((result) => result.manualReviewRequired).length,
-      passRegressionCount: results.reduce((total, result) => total + result.passRegressionCount, 0),
-      passRegressionChecks: [...new Set(results.flatMap((result) => result.passRegressionChecks))].sort(),
-      targetedCheckCount: results.reduce((total, result) => total + result.targetedCheckCount, 0),
-      targetedResolvedCount: results.reduce((total, result) => total + result.targetedResolvedCount, 0),
-      autoUnresolvedCount: results.reduce((total, result) => total + result.autoUnresolvedCount, 0),
-      autoUnresolvedChecks: [...new Set(results.flatMap((result) => result.autoUnresolvedChecks))].sort(),
-      assistedUnresolvedCount: results.reduce((total, result) => total + result.assistedUnresolvedCount, 0),
-      awaitingConfirmationCount: results.reduce((total, result) => total + result.awaitingConfirmationCount, 0),
-      manualOnlyCount: results.reduce((total, result) => total + result.manualOnlyCount, 0),
-    },
+    summary: summarizeResults(results),
+    syntheticResults,
+    syntheticSummary: summarizeResults(syntheticResults),
   };
 }
