@@ -526,7 +526,20 @@ function syncConsentBannerInset(){const b=$('#consentBanner');if(!b)return;const
   document.body.style.setProperty('--consent-h',`${h}px`);
   document.body.classList.toggle('has-consent-banner',!skriven);
   document.body.style.paddingBottom=skriven?'':`${h+34}px`}catch(e: any){}}
-function renderConsentBanner(force=false){const b=$('#consentBanner');if(!b)return;const configured=!!productionConfig?.analyticsEndpoint,choice=safeStorageGet(STORAGE_KEYS.analyticsConsent);b.classList.toggle('hidden',!configured||(!force&&!!choice));syncConsentBannerInset()}
+/* REZERVA SE MJERI ZIVO, ne jednom. Izmjereno 2026-09-05 na `/rad/` (1440x900): traka je pri prvom
+   racunu bila visoka 55 px, pa je rezerva ispala 89; do trenutka kad je korisnik vidi narasla je na
+   75 px uz vlastiti odmak od 18, dakle treba 93. Razliku od 20 px platila je zadnja poveznica u
+   podnozju, koju traka prekrije. Visina ovisi o duljini teksta, sirini i UCITANIM FONTOVIMA, a ti
+   stizu POSLIJE prvog racuna; zato promjenu prati `ResizeObserver` umjesto da se pogadja konstanta.
+   Isti razlog zbog kojeg visina ionako ide u varijablu, a ne u fiksnu vrijednost u stilu. */
+let _consentRO: ResizeObserver|null=null;
+function watchConsentBannerInset(){
+ const b=$('#consentBanner');
+ if(!b||_consentRO||typeof ResizeObserver!=='function')return;
+ _consentRO=new ResizeObserver(()=>syncConsentBannerInset());
+ _consentRO.observe(b);
+}
+function renderConsentBanner(force=false){const b=$('#consentBanner');if(!b)return;watchConsentBannerInset();const configured=!!productionConfig?.analyticsEndpoint,choice=safeStorageGet(STORAGE_KEYS.analyticsConsent);b.classList.toggle('hidden',!configured||(!force&&!!choice));syncConsentBannerInset()}
 function setAnalyticsConsent(value: any){safeStorageSet(STORAGE_KEYS.analyticsConsent,value);$('#consentBanner')?.classList.add('hidden');syncConsentBannerInset();toast(value==='granted'?'Anonimna analitika je dopuštena.':'Ostat će aktivne samo nužne lokalne postavke.')}
 function openPrivacySettings(){if(productionConfig?.analyticsEndpoint){renderConsentBanner(true)}else openLegal('privacy')}
 /* Pravni HTML je potreban samo pri otvaranju modala. Verzija uvjeta ostaje mali staticki

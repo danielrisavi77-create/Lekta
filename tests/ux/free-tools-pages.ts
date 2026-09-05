@@ -6,7 +6,9 @@ export type FreeToolPage = {
 };
 
 export const FREE_TOOL_PAGES: FreeToolPage[] = [
-  { route: '/index.html', name: 'naslovnica proizvoda', primarySelector: '#dropzone' },
+  // Rez naslovnice 2026-09-05: `/` je cisti ulaz, pa je primarna akcija papir za ucitavanje
+  // (`#intakeDropzone`), a ne analizatorov `#dropzone`, koji je preselio na `/rad/`.
+  { route: '/index.html', name: 'naslovnica proizvoda', primarySelector: '#intakeDropzone' },
   { route: '/alati.html', name: 'alati', primarySelector: '.tool-card[href="citat.html"]' },
   { route: '/citat.html', name: 'citat', primarySelector: '#copyBtn', workspaceSelector: '.tool-workspace' },
   { route: '/kartice.html', name: 'kartice', primarySelector: '#kt-copy', workspaceSelector: '.tool-workspace' },
