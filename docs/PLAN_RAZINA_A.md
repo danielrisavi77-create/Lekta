@@ -1,0 +1,82 @@
+# Plan: svi profili na razini dokaza A
+
+> Izmjereno 2026-09-05 nad `docs/generated/completion-ledger.json` (436 redaka, 407 profila, 131
+> jedinica) i `data/verification/real-corpus-attestation.json` (45 stvarnih radova, 8 profila).
+> Stanje: **A 9, B 329, C 8, D 42, E 48.**
+
+## 1. Gdje je zid, brojkama
+
+Razina A trazi DVOJE: bodovana pravila iz sluzbenog izvora i dokaz na stvarnom radu. Tri su skupine
+koje nisu na A, i **ne rjesavaju se istim alatom**:
+
+| skupina | redaka | sto ih drzi | vrsta posla |
+|---|---|---|---|
+| **samo dokaz** | **329** | jedini blokator: "nema dokaza na stvarnom studentskom radu"; pravila verificirana, popravak ponudjen | **nabava dokumenata** |
+| podaci | ~95 | staging pravila (26), nijedna repair opcija (24), pravila nebodovana (19), samo opca higijena (18), ceka audit (8), izvan matrice (8), bez jedinice (8) | rad sesija nad `data/**` |
+| bez izvora | 48 (E) | nijedno bodovano pravilo iz sluzbenog izvora | **strop**: fakultet nije objavio pravila |
+
+Prva skupina je 75 % zida i **nije problem koda**. Stvarne radove ima 6 jedinica od 131 (fer, ffzg,
+fpzg, mef, pmf, ttf). Preostalih **112 jedinica nema nijedan stvarni rad.**
+
+## 2. Odluka 1: granularnost dokaza (vlasnik)
+
+Koliko radova jos treba nabaviti da 329 redaka dodje na A ovisi o tome sto jedan rad dokazuje:
+
+| granularnost | jos radova | udje ODMAH iz postojecih 45 | postenje |
+|---|---|---|---|
+| po profilu | **317** | 0 | najstroze; nista se ne pretpostavlja |
+| po jedinica x vrsta rada | **231** | 17 | FER diplomski dokazuje FER-ove diplomske profile; pravila se po vrsti rada stvarno razlikuju, po katedri unutar iste vrste rijetko |
+| po jedinici | **112** | 27 | jedan rad po fakultetu; **pretjeruje**, jer diplomski rad ne dokazuje doktorski, kojem su pravila druga |
+
+Preporuka: **jedinica x vrsta rada**. Isti ustupak repozitorij vec ima za citatne specove
+("granularnost je danas FAKULTETSKA"), a ne prelazi granicu vrste rada, gdje se pravila doista mijenjaju.
+Trosak: 231 rad umjesto 317, i 17 redaka koji ulaze odmah.
+
+Tehnicki preduvjet: `real-corpus-attestation.ts` kljuca po `profileId::workType`, ali artefakt mjerenja
+ne biljezi `workType`. Prvi korak je da harness upise vrstu rada uz svaki dokument; tek onda se
+granularnost moze promijeniti bez pogadjanja.
+
+## 3. Odluka 2: odakle radovi (vlasnik), po skali
+
+| kanal | doseg | sto treba | stanje |
+|---|---|---|---|
+| **A. privola u proizvodu** | jedini koji doseze 112 jedinica; raste s uporabom | opt-in pri popravku (smijem li anonimiziranu kopiju zadrzati za testiranje), pseudonimizacija, rok cuvanja, tekst u privatnosti | `repair-docx` **vec ima** consent gate s `consent_version`; `src/corpus/pseudonymize.ts` i `scripts/corpus-ingest.mts` **vec postoje** |
+| B. fakultetska partnerstva | visoka kvaliteta, spor | pilot fakultet daje anonimizirane uzorke; poklapa se s B2B strategijom | pilot skup postoji (`pilot-set.json`) |
+| C. javni repozitoriji | malen: repozitoriji drze PDF, popravku treba .docx | harvest infrastruktura postoji za PDF | niska iskoristivost |
+| D. vlasnikova mreza | ne skalira | tako je nastalo danasnjih 38 | iscrpljeno na 6 jedinica |
+
+Samo kanal A moze zatvoriti zid. Ali trazi tri stvari koje kod ne odlucuje: GDPR temelj (privola je
+dovoljna, ali tekst i rok cuvanja su pravni), pseudonimizaciju koja ne ostavlja tragove (postojeci alat
+je na 76 od 246 radova bio *vacuous*, dakle nije prepoznao nijedan pojam; to treba popraviti PRIJE
+prvog prikupljenog rada), i odluku da se to uopce radi.
+
+## 4. Sto sesije mogu odmah, bez ijedne odluke
+
+Skupina "podaci" (~95 redaka) je rad nad `data/**`, mjerljiv postojecim gardovima:
+
+1. **26 bez staging pravila**: `npm run gen-profile-rules-server` + deploy; dio je vec u T11/T12.
+2. **24 bez ijedne repair opcije**: provjeriti zasto `repair-map` nema unos; vjerojatno pravila bez
+   `autoFixable`. Presedan: `footnote-size` je 52 profila dobilo istim potezom.
+3. **19 nebodovanih**: izvor ili verifikacija; ide kroz `npm run verify:claims` po profilu.
+4. **8 cekaju audit**: ljudski, ali malen.
+5. **Harness upisuje `workType`**: preduvjet za odluku 1.
+
+## 5. Strop koji treba izgovoriti
+
+48 redaka na E nema nijedno bodovano pravilo jer fakultet nije objavio nista sto se da citirati.
+Oni **ne mogu** na A ni s tisucu radova. Ljestvica bi to trebala reci ("A nedostizna: nema sluzbenog
+izvora") umjesto da ih prikazuje kao zaostatak. Inace brojka "svi na A" nikad nece biti 100 % i nitko
+nece znati je li to kvar ili cinjenica.
+
+## 6. Redoslijed koji pomice brojku
+
+1. Harness biljezi `workType` (sesija, jedan dan).
+2. Odluka o granularnosti (vlasnik). Uz "jedinica x vrsta": **A 9 -> 26** iz postojecih radova.
+3. Skupina "podaci", redom 2, 1, 3, 4 (sesije, nekoliko dana): oko 95 redaka izlazi iz svojih
+   blokatora, ali ostaju na B dok nema dokaza.
+4. Kanal A: pravni tekst i popravak pseudonimizacije (vlasnik + sesija), pa opt-in u `repair-docx`.
+   Od tog trenutka brojka raste s uporabom, a ne s rucnim radom.
+5. Strop izgovoren u ljestvici za 48 redaka na E.
+
+**Posteno ocekivanje:** bez kanala A, gornja granica je oko 26 profila na A uz sve sto sesije mogu
+same. Sve iznad toga ovisi o odluci da proizvod smije, uz privolu, zadrzati anonimizirane radove.
