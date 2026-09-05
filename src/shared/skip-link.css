@@ -9,7 +9,10 @@
   border-radius: 12px;
   background: var(--accent, #33407e);
   color: #fff;
-  font: 700 0.95rem/1.2 var(--font-sans, "Inter Variable", system-ui, sans-serif);
+  /* `--sans`, ne `--ui`: admin ima vlastiti sustav tokena (ne nasljeduje design-system.css) i
+     definira `--sans`, ali ne i `--ui`. Do 2026-09-05 je ovdje stajao `--font-sans`, token koji
+     NE POSTOJI, pa je fallback uvijek hvatao "Inter Variable", obitelj koju nista ne ucitava. */
+  font: 700 0.95rem/1.2 var(--sans, system-ui, sans-serif);
   text-decoration: none;
   box-shadow: 0 10px 24px rgba(20, 24, 45, 0.28);
   transform: translateY(-180%);

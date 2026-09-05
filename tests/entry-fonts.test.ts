@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { collectStaticGraph, packageImports } from './helpers/module-graph';
@@ -117,17 +117,26 @@ export function provjeriGlasove({ cssTekstovi, html, ucitane }: Ulaz): { nalazi:
   const obitelji = new Set<string>();
   for (const css of cssTekstovi) {
     for (const { selektor, tijelo } of pravila(css)) {
-      if (!mozePogoditi(selektor)) continue;
       for (const m of tijelo.matchAll(/(?:^|[;{\s])font(?:-family)?\s*:\s*([^;}]+)/g)) {
         const vrijednost = m[1];
         // `var(--x)` bez fallbacka i `var(--x, fallback)`: oba nose ime tokena.
         const ref = vrijednost.match(/var\(\s*(--[\w-]+)\s*(?:,([^)]*))?\)/);
         if (!ref) continue;
         const definicije = tokeni.get(ref[1]);
+        // NEPOZNAT TOKEN SE PRIJAVLJUJE UVIJEK, i za selektor koji podudaranje ne vidi.
+        //
+        // Podudaranje selektora zna biti prekratko: `.skip-link` element UBACUJE JavaScript, pa ga
+        // u HTML-u nema i provjera ga preskoci. Tocno ondje je do 2026-09-05 zivio `--font-sans`,
+        // token koji ne postoji (zove se `--sans`), pa je fallback na SVIH 14 ruta hvatao "Inter
+        // Variable", obitelj koju nista ne ucitava. Nepostojeci token je kvar bez obzira na to
+        // koga selektor pogadja: vrijednost tada bira fallback, dakle slucaj, a ne autor.
         if (definicije === undefined) {
           nalazi.push({ vrsta: 'nepoznat-token', selektor, detalj: `${ref[1]} nije definiran nigdje u listovima ulaza` });
           continue;
         }
+        // Obitelj se provjerava samo ako selektor uopce moze pogoditi stranicu: pravilo koje se
+        // nikad ne primijeni ne crta nista, pa bi prijava bila lazna uzbuna.
+        if (!mozePogoditi(selektor)) continue;
         for (const prva of new Set(definicije.flatMap((d) => razrijesi(d)))) {
           obitelji.add(prva);
           if (SUSTAVNE.has(prva.toLowerCase())) continue;
@@ -207,6 +216,103 @@ describe('glasovi ulaza /', () => {
     expect(moduli.filter((p) => p.includes('caveat'))).toEqual([]);
   });
 
+  // --- CIJELI PROIZVOD, NE SAMO ULAZ ---------------------------------------------------------
+
+  /** Svaka obitelj za koju IJEDAN modul u `src/` uvozi `@fontsource` paket. */
+  function sveUcitaneObitelji(): Set<string> {
+    const ucitane = new Set<string>();
+    const hodaj = (dir: string): string[] => readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+      const p = resolve(dir, e.name);
+      return e.isDirectory() ? hodaj(p) : [p];
+    });
+    for (const p of hodaj(resolve(ROOT, 'src'))) {
+      if (!/\.(ts|tsx|mts)$/.test(p)) continue;
+      for (const m of readFileSync(p, 'utf8').matchAll(/from\s+['"](@fontsource[^'"]+)['"]|import\s+['"](@fontsource[^'"]+)['"]/g)) {
+        const obitelj = obiteljIzPaketa(m[1] || m[2]);
+        if (obitelj) ucitane.add(obitelj);
+      }
+    }
+    return ucitane;
+  }
+
+  /**
+   * PRVA obitelj u vrijednosti, dakle ona koja se stvarno crta kad je ucitana. Sto dolazi IZA nje
+   * su fallbackovi i smiju imenovati bilo sto (`"Inter Tight Variable","Inter Tight",system-ui` je
+   * ispravno napisan stack, ne kvar). Provjeravanje svih imena davalo je lazne nalaze upravo na
+   * takvim stackovima.
+   */
+  function prvaObitelj(vrijednost: string): string | null {
+    // Funkcijski pozivi ispadaju PRIJE dijeljenja po zarezu, inace `clamp(30px,5vw,60px)` pukne na
+    // svom vlastitom zarezu i "clamp(30px" postane ime obitelji. Petlja radi zbog ugnijezdjenih.
+    let ocisceno = vrijednost;
+    for (let i = 0; i < 5; i += 1) {
+      const sljedece = ocisceno.replace(/[\w-]+\([^()]*\)/g, ' ');
+      if (sljedece === ocisceno) break;
+      ocisceno = sljedece;
+    }
+    const bezVar = ocisceno.replace(/!\s*important/gi, ' ').trim();
+    if (!bezVar) return null;
+    const prvi = bezVar.split(',')[0].trim();
+    const uNavodnicima = prvi.match(/["']([^"']+)["']\s*$/);
+    if (uNavodnicima) return uNavodnicima[1];
+    // Kratica `font:` nosi i velicinu i tezinu; obitelj je ono sto ostane na kraju.
+    const rijeci = prvi.split(/\s+/).filter(Boolean);
+    // Kosa crta hvata ostatak visine retka (`clamp(...)/1.3` ostavi `/1.3` kad funkcija ispadne).
+    const odbaci = /^([/\d.]|italic$|oblique$|normal$|bold$|bolder$|lighter$|small-caps$|inherit$|initial$|unset$|revert$)/i;
+    const rep: string[] = [];
+    for (let i = rijeci.length - 1; i >= 0; i -= 1) {
+      if (odbaci.test(rijeci[i])) break;
+      rep.unshift(rijeci[i]);
+    }
+    return rep.length ? rep.join(' ') : null;
+  }
+
+  /** Komentari NISU podaci: `--ink-serif:` u proznom komentaru davao je "Word" i "list papira". */
+  const bezKomentara = (css: string): string => css.replace(/\/\*[\s\S]*?\*\//g, ' ');
+
+  /** Cisti dio globalnog garda, izdvojen da se moze mutirati sintetskim ulazom. */
+  function imenaBezFonta(listovi: Array<{ ime: string; css: string }>, ucitane: Set<string>): string[] {
+    const nalazi: string[] = [];
+    for (const { ime: kratko, css: sirovo } of listovi) {
+      const css = bezKomentara(sirovo);
+      const provjeri = (vrijednost: string, oznaka: string): void => {
+        const ime = prvaObitelj(vrijednost);
+        if (!ime || SUSTAVNE.has(ime.toLowerCase()) || ucitane.has(ime)) return;
+        nalazi.push(`${kratko}: ${oznaka}"${ime}"`);
+      };
+      for (const { tijelo } of pravila(css)) {
+        for (const m of tijelo.matchAll(/(?:^|[;{\s])font(?:-family)?\s*:\s*([^;}]+)/g)) provjeri(m[1], '');
+      }
+      // Tokeni nose imena obitelji i kad nisu unutar `font:` deklaracije.
+      for (const m of css.matchAll(/--[\w-]*(?:serif|sans|mono|font|ui)[\w-]*\s*:\s*([^;}]+)/g)) provjeri(m[1], 'token -> ');
+    }
+    return [...new Set(nalazi)].sort();
+  }
+
+  it('NIJEDAN list u src/ ne imenuje obitelj koju nijedan modul ne ucitava', () => {
+    // Ovo je siri gard od gornjih: ne pita "sto ulaz crta" nego "postoji li ime bez fonta IGDJE".
+    // Izmjereno 2026-09-05 u pregledniku, po svih 15 ruta, prije popravka:
+    //   "Inter Variable"  na 14 ruta  (skip-link, token `--font-sans` ne postoji)
+    //   "Inter Tight" i "Newsreader" na demo.html (nevarijabilna imena; paketi registriraju
+    //                                              "Inter Tight Variable" i "Newsreader Variable")
+    //   "Caveat"          na demo.html (obitelj uklonjena iz proizvoda)
+    //   goli `monospace`  na citat.html (`<code>` bez ijednog pravila -> UA Courier New)
+    // Nijedan od njih nije bio na ulazu, pa ih guard nad `/` po konstrukciji nije mogao vidjeti.
+    const ucitane = sveUcitaneObitelji();
+    expect(ucitane.size, 'nula ucitanih obitelji znaci da citanje paketa ne radi, ne da ih nema').toBeGreaterThan(2);
+
+    const hodaj = (dir: string): string[] => readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+      const p = resolve(dir, e.name);
+      return e.isDirectory() ? hodaj(p) : [p];
+    });
+    const listovi = hodaj(resolve(ROOT, 'src')).filter((x) => x.endsWith('.css'))
+      .map((p) => ({ ime: p.split(/[\\/]/).slice(-2).join('/'), css: readFileSync(p, 'utf8') }));
+    expect(listovi.length, 'nula listova znaci da obilazak ne radi, ne da su cisti').toBeGreaterThan(5);
+
+    const nalazi = imenaBezFonta(listovi, ucitane);
+    expect(nalazi, 'ime bez ijednog @font-face je uvijek kvar: preglednik tiho uzme sljedecu obitelj').toEqual([]);
+  });
+
   // --- NEGATIVNE KONTROLE: gard bez dokaza da grize ne racuna se -----------------------------
 
   const OSNOVA: Ulaz = {
@@ -264,6 +370,47 @@ describe('glasovi ulaza /', () => {
       expect(nalazi.map((n) => n.vrsta)).toEqual(['obitelj-bez-fonta']);
       expect(nalazi[0].detalj).toContain('Caveat');
     }
+  });
+
+  // --- MUTACIJE GLOBALNOG GARDA: po jedna za svaki kvar koji je stvarno nasao 2026-09-05 -----
+
+  const UCITANE = new Set(['Inter Tight Variable', 'Newsreader Variable', 'IBM Plex Mono']);
+  const globalno = (css: string): string[] => imenaBezFonta([{ ime: 'x.css', css }], UCITANE);
+
+  it('kontrola: ispravno napisan stack je cist, ukljucujuci fallbackove i kraticu `font:`', () => {
+    expect(globalno(':root{--ui:"Inter Tight Variable","Inter Tight",system-ui,sans-serif}'
+      + '.a{font-family:var(--ui)}'
+      + '.b{font:italic 500 clamp(.84rem,1.7vw,.98rem)/1.3 "Newsreader Variable",Georgia,serif}'
+      + '.c{font:600 10px/1 var(--ui) !important}'
+      + '.d{font-family:inherit}'
+      + 'code{font-family:"IBM Plex Mono",ui-monospace,monospace}')).toEqual([]);
+  });
+
+  it('mutacija: nevarijabilno ime uz varijabilni paket (kvar s demo.html)', () => {
+    // `@fontsource-variable/newsreader` registrira "Newsreader Variable"; golo "Newsreader" nije
+    // ucitano nigdje, pa je cijela demo stranica padala na Georgiju.
+    expect(globalno('.a{font:500 25px Newsreader,Georgia,serif}')).toEqual(['x.css: "Newsreader"']);
+  });
+
+  it('mutacija: token cije ime nije ucitano (kvar sa skip-linkom)', () => {
+    expect(globalno(':root{--font-x:"Inter Variable",system-ui}')).toEqual(['x.css: token -> "Inter Variable"']);
+  });
+
+  it('mutacija: uklonjena obitelj se vraca kroz bilo koji list (Caveat)', () => {
+    expect(globalno('.hand{font:500 24px Caveat,cursive}')).toEqual(['x.css: "Caveat"']);
+  });
+
+  it('kontrola: komentar nije podatak', () => {
+    // Prva izvedba je citala i prozu: `--ink-serif:` u komentaru davao je "Word" i "list papira".
+    expect(globalno('/* --ink-serif: zrcali Word, a --font-doc glumi "tudeg rada" */'
+      + ':root{--ink-serif:"Newsreader Variable",serif}')).toEqual([]);
+  });
+
+  it('kontrola: prazan skup listova ne smije proci kao cist nalaz', () => {
+    // Sam `imenaBezFonta` nad nicim vraca prazno; zato tvrdnja o broju listova stoji U TESTU, ne
+    // ovdje. Ova kontrola cuva da se ta razlika ne izgubi pri refaktoru.
+    expect(imenaBezFonta([], UCITANE)).toEqual([]);
+    expect(globalno('.a{font-family:Caveat}')).toHaveLength(1);
   });
 
   it('kontrola: selektor koji NE moze pogoditi ulaz se ne prijavljuje', () => {

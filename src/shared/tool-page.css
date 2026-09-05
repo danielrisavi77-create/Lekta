@@ -278,3 +278,9 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);over
 .tools-grid .tool-go{margin-top:auto;display:inline-flex;align-items:center;gap:6px;padding-top:10px}
 .icon-btn,.lampa-btn{min-width:44px;min-height:44px}
 @media(max-width:640px){.tools-grid .tool-card{min-height:0}}
+
+/* `<code>` nije imao nijedno pravilo, pa je padao na UA monospace (Courier New na Windowsu) i na
+   alat-stranici stajao pokraj IBM Plex Mono kao treci glas. Izmjereno 2026-09-05 na citat.html:
+   3 cvora. Stranica koja `--mono` ne ucitava svejedno zavrsi na `ui-monospace`, sto je tocno ono
+   sto je i prije bilo, pa ovo nigdje ne moze biti nazadak. */
+code,kbd,samp{font-family:var(--mono)}
