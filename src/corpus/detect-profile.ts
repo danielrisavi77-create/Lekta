@@ -30,6 +30,8 @@
 /** Odakle je vrsta rada procitana: naslovnica, prve stranice iza nje (izjava, sazetak) ili ime datoteke. */
 export type WorkTypeSource = 'front' | 'lead' | 'file-name';
 
+import { detectUnitFromCatalog } from './detect-unit';
+
 export interface DetectedCorpusProfile {
   profileId: string;
   unitId: string;
@@ -134,8 +136,14 @@ export function detectWorkType(front: string, opts: DetectOptions = {}): string 
   return detectWorkTypeWithSource(front, opts)?.workType ?? null;
 }
 
+/**
+ * Ustanova: KATALOG prvi (svih 134 jedinice, s razrjesavanjem generickih imena po sveucilistu; `detect-unit.ts`),
+ * rucni zagrebacki popis kao rezerva. Do 2026-09-05 postojao je samo popis od 25 imena, pa je 28 od 32 radova
+ * s ustanova koje korpus nema prolazilo kao "bez ustanove". Nad 172 vec prepoznatih radova katalog daje ISTU
+ * jedinicu za svaki (izmjereno pri uvodjenju).
+ */
 export function detectUnit(front: string): string | null {
-  return UNIT_PATTERNS.find(([re]) => re.test(front))?.[1] ?? null;
+  return detectUnitFromCatalog(front)?.unitId ?? UNIT_PATTERNS.find(([re]) => re.test(front))?.[1] ?? null;
 }
 
 export function detectCorpusProfile(
