@@ -86,10 +86,25 @@ export const PROJECTIONS = [
       'data/title-pages/templates-index.json',
       'data/tools/citation-specs/verified-index.json',
       'data/declarations/declarations.json',
+      // Od 2026-09-05 ledger cita i ovjeru dokaza na stvarnim radovima (generate-completion-ledger.mts).
+      'data/verification/real-corpus-attestation.json',
       'src/verification',
       'scripts/generate-completion-ledger.mts',
     ],
     regenerate: 'npm run completion-ledger',
+  },
+  {
+    // Registriran 2026-09-05, nakon sto je puni gate na cistom worktreeu pao tocno na njegova dva drift
+    // testa: mapa je kasnila za ledgerom, a detektor registra ju nije vidio jer hint nije nosio oblik
+    // `inace: npm run ...`. Izvori su utvrdjeni citanjem generatora: cita ledger i uvozi CLAIM_LADDER.
+    id: 'profile-claims',
+    artifacts: ['data/profiles/profile-claims.json'],
+    sources: [
+      'docs/generated/completion-ledger.json',
+      'src/verification/completion-ledger.ts',
+      'scripts/gen-profile-claims.mts',
+    ],
+    regenerate: 'npm run gen-profile-claims',
   },
   {
     // Registriran 2026-09-04, prvi s ratcheta od pet neregistriranih. Izvori su UTVRDJENI citanjem

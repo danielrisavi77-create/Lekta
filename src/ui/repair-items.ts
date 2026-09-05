@@ -1186,10 +1186,16 @@ export function bibliographyRepairableItem(result: any, profile: any): Repairabl
   for (const group of Array.isArray(structure.duplicateGroups) ? structure.duplicateGroups : []) {
     for (const id of Array.isArray(group) ? group.slice(1) : []) exactDuplicateIds.add(String(id));
   }
+  /**
+   * Zapis koji se proteze kroz VISE odlomaka ne nudi se za popravak. Fixer cita i prepisuje tocno jedan
+   * odlomak, pa bi prepisivanje samo prvog udvostrucilo ostatak zapisa; do 2026-09-05 su takvi zapisi
+   * nosili indeks samo prvog odlomka i obarali cijeli popravak literature uz `stale-anchor`.
+   */
+  const jednoodlomacan = (entry: any) => !Array.isArray(entry.paragraphIndices) || entry.paragraphIndices.length === 1;
   const selectedEntries = entries.map((entry: any) => ({
-    id: String(entry.id), rawText: String(entry.rawText || ''), confidence: entry.confidence, selected: true,
+    id: String(entry.id), rawText: String(entry.rawText || ''), confidence: entry.confidence, selected: jednoodlomacan(entry),
     ...(exactDuplicateIds.has(String(entry.id)) ? { remove: true } : {}),
-    evidence: Array.isArray(entry.evidence) ? entry.evidence.map(String) : [],
+    evidence: [...(Array.isArray(entry.evidence) ? entry.evidence.map(String) : []), ...(jednoodlomacan(entry) ? [] : ['zapis se proteže kroz više odlomaka; popravlja se ručno'])],
   }));
   const suffixes = rules.authorYearSuffixes === true
     ? (Array.isArray(structure.authorYearGroups) ? structure.authorYearGroups : []).flatMap((group: any) => (group.entryIds || []).map((id: string, index: number) => ({ entryId: String(id), suffix: String(group.suffixes?.[index] || String.fromCharCode(97 + index)), selected: true })))
@@ -1213,7 +1219,8 @@ export function bibliographyRepairableItem(result: any, profile: any): Repairabl
     const originalById = new Map<string, any>(entries.map((entry: any) => [String(entry.id), entry]));
     const chosen = current.entries.filter((entry) => entry.selected).flatMap((entry) => {
       const original = originalById.get(entry.id);
-      if (!original) return [];
+      // Ista brana kao pri predodabiru, jer korisnik moze rucno oznaciti i visodlomacan zapis.
+      if (!original || !jednoodlomacan(original)) return [];
       /**
        * `anchorText` sluzi ISKLJUCIVO da motor prepozna koje odlomke literatura posjeduje, bez
        * usporedbe sirovih indeksa. Indeksi se ne smiju usporedjivati jer dvije strane broje
@@ -1240,7 +1247,9 @@ export function bibliographyRepairableItem(result: any, profile: any): Repairabl
     });
     const selectedIds = new Set(current.entries.filter((entry) => entry.selected).map((entry) => entry.id));
     const order = rules.sort === 'alphabetical'
-      ? entries.slice().filter((entry: any) => selectedIds.has(String(entry.id))).sort((a: any, b: any) => String(a.fields?.authors || a.rawText).localeCompare(String(b.fields?.authors || b.rawText), 'hr')).map((entry: any) => String(entry.id))
+      // Kljuc MORA biti isti kao u bodovanoj provjeri "Abecedni poredak literature" (`sortKey`, prvi
+      // autor); `fields.authors || rawText` je fixeru davao redoslijed koji je provjera odmah obarala.
+      ? entries.slice().filter((entry: any) => selectedIds.has(String(entry.id))).sort((a: any, b: any) => String(a.sortKey || a.fields?.authors || a.rawText).localeCompare(String(b.sortKey || b.fields?.authors || b.rawText), 'hr')).map((entry: any) => String(entry.id))
       : undefined;
     return {
       version: 1,

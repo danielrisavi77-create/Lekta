@@ -1,67 +1,111 @@
 {
   "schemaVersion": 1,
   "corpusFingerprint": "476c8339587b6082db25bd3f762c3ba9",
-  "measuredAt": "2026-09-03T23:04:26.992Z",
-  "measuredFromCommit": "bff502f2516fab8fe61dfe1060ad3722cad9b349",
+  "measuredAt": "2026-09-05T11:32:02.830Z",
+  "measuredFromCommit": "6b50b437152dcbdd198c44ecfe8501d0176d3073",
   "oracles": [
     "scripts/repair-real-corpus.mts (harness + detectPassRegressions)"
   ],
   "signedBy": "Daniel Risavi",
-  "signedAt": "2026-09-03T23:31:46.353Z",
-  "signatureNote": "Potpisano na izricitu uputu vlasnika. VAZNO O NASTANKU: vlasnik je pregledao mjerenje od 2026-09-03T21:50 i tada dao uputu; mjerenje koje ova ovjera sada nosi izvedeno je POSLIJE toga (measuredAt 2026-09-03T23:04, nakon sto je zatvorena regresija structure.heading.hierarchy) i vlasnik ga NIJE zasebno pregledao, nego je izricito rekao da se potpis osvjezi. Prethodni potpis je bio stariji od mjerenja koje pokriva (74 min), sto je i bio razlog za ovaj upis.",
+  "signedAt": "2026-09-05T11:32:56.930Z",
+  "signatureNote": "Potpisano na izricitu uputu vlasnika (2026-09-03: potpisi umjesto mene; 2026-09-05: push odobren). Mjerenje ponovljeno nad vrhom grane nakon tudjeg popravka literature (4f9ba2ea), jer dokaz mora biti o kodu koji se isporucuje; isti korpus od 45 radova, unosi po paru jedinica x vrsta rada. Vrijeme i commit mjerenja citaju se iz artefakta mjerenja. Potpis je stavljen NAKON mjerenja.",
   "entries": [
     {
-      "profileId": "fer-diplomski",
-      "workType": "unknown",
+      "unitId": "fer",
+      "workType": "graduate",
+      "profileIds": [
+        "fer-diplomski"
+      ],
       "documentCount": 2,
       "cleanCount": 2,
       "regressedChecks": []
     },
     {
-      "profileId": "ffzg-filozofija-diplomski",
-      "workType": "unknown",
+      "unitId": "ffzg",
+      "workType": "graduate",
+      "profileIds": [
+        "ffzg-filozofija-diplomski"
+      ],
       "documentCount": 1,
       "cleanCount": 1,
       "regressedChecks": []
     },
     {
-      "profileId": "fpzg-opci-akademski-rad",
-      "workType": "unknown",
+      "unitId": "fpzg",
+      "workType": "article",
+      "profileIds": [
+        "fpzg-opci-akademski-rad"
+      ],
       "documentCount": 16,
       "cleanCount": 16,
       "regressedChecks": []
     },
     {
-      "profileId": "fpzg-politologija-diplomski",
-      "workType": "unknown",
-      "documentCount": 12,
-      "cleanCount": 12,
-      "regressedChecks": []
-    },
-    {
-      "profileId": "fpzg-politologija-zavrsni",
-      "workType": "unknown",
+      "unitId": "fpzg",
+      "workType": "final",
+      "profileIds": [
+        "fpzg-politologija-zavrsni"
+      ],
       "documentCount": 10,
       "cleanCount": 10,
       "regressedChecks": []
     },
     {
-      "profileId": "mef-doktorski",
-      "workType": "unknown",
+      "unitId": "fpzg",
+      "workType": "graduate",
+      "profileIds": [
+        "fpzg-politologija-diplomski"
+      ],
+      "documentCount": 12,
+      "cleanCount": 12,
+      "regressedChecks": []
+    },
+    {
+      "unitId": "fpzg",
+      "workType": "project",
+      "profileIds": [
+        "fpzg-opci-akademski-rad"
+      ],
+      "documentCount": 16,
+      "cleanCount": 16,
+      "regressedChecks": []
+    },
+    {
+      "unitId": "fpzg",
+      "workType": "seminar",
+      "profileIds": [
+        "fpzg-opci-akademski-rad"
+      ],
+      "documentCount": 16,
+      "cleanCount": 16,
+      "regressedChecks": []
+    },
+    {
+      "unitId": "mef",
+      "workType": "doctoral",
+      "profileIds": [
+        "mef-doktorski"
+      ],
       "documentCount": 1,
       "cleanCount": 1,
       "regressedChecks": []
     },
     {
-      "profileId": "pmf-matematika-graduate",
-      "workType": "unknown",
+      "unitId": "pmf",
+      "workType": "graduate",
+      "profileIds": [
+        "pmf-matematika-graduate"
+      ],
       "documentCount": 2,
       "cleanCount": 2,
       "regressedChecks": []
     },
     {
-      "profileId": "ttf-diplomski",
-      "workType": "unknown",
+      "unitId": "ttf",
+      "workType": "graduate",
+      "profileIds": [
+        "ttf-diplomski"
+      ],
       "documentCount": 1,
       "cleanCount": 1,
       "regressedChecks": []

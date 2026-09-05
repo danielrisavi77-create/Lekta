@@ -1,10 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { attestationProblems, provenProfiles, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
+import { attestationProblems, provenUnitWorkTypes, type CorpusAttestation } from '../src/verification/real-corpus-attestation';
 
 /**
- * Gard nad ovjerom dokaza na stvarnim radovima.
+ * Gard nad ovjerom dokaza na stvarnim radovima. Granularnost je JEDINICA x VRSTA RADA (odluka
+ * vlasnika 2026-09-05); `profileIds` biljezi iz kojih je profila dokaz stvarno dosao.
  *
  * Ovjera postoji da razina `A` prestane biti nedostizna po konstrukciji: dokaz nastaje nad tudjim
  * studentskim radovima, koji ne smiju u repozitorij, pa u njega ulazi POTPISANA tvrdnja o mjerenju.
@@ -21,24 +22,24 @@ const OSNOVA: CorpusAttestation = {
   signedBy: 'Netko',
   signedAt: '2026-09-03T00:00:00.000Z',
   entries: [
-    { profileId: 'p-cist', workType: 'graduate', documentCount: 3, cleanCount: 3, regressedChecks: [] },
-    { profileId: 'p-regresija', workType: 'graduate', documentCount: 3, cleanCount: 2, regressedChecks: ['structure.heading.hierarchy'] },
-    { profileId: 'p-prazan', workType: 'graduate', documentCount: 0, cleanCount: 0, regressedChecks: [] },
+    { unitId: 'u-cist', workType: 'graduate', profileIds: ['p-cist'], documentCount: 3, cleanCount: 3, regressedChecks: [] },
+    { unitId: 'u-regresija', workType: 'graduate', profileIds: ['p-regresija'], documentCount: 3, cleanCount: 2, regressedChecks: ['structure.heading.hierarchy'] },
+    { unitId: 'u-prazan', workType: 'graduate', profileIds: ['p-prazan'], documentCount: 0, cleanCount: 0, regressedChecks: [] },
   ],
 };
 
 describe('ovjera: sto se priznaje kao dokaz', () => {
   it('potpisana ovjera dokazuje samo profile bez regresije i s barem jednim cistim radom', () => {
-    const d = provenProfiles(OSNOVA);
-    expect([...d]).toEqual(['p-cist::graduate']);
+    const d = provenUnitWorkTypes(OSNOVA);
+    expect([...d]).toEqual(['u-cist::graduate']);
   });
 
   it('regresija ponistava dokaz, jer mjerenje koje nadje regresiju NIJE dokaz da popravak radi', () => {
-    expect(provenProfiles(OSNOVA).has('p-regresija::graduate')).toBe(false);
+    expect(provenUnitWorkTypes(OSNOVA).has('u-regresija::graduate')).toBe(false);
   });
 
   it('mjerenje nad nula dokumenata nije dokaz', () => {
-    expect(provenProfiles(OSNOVA).has('p-prazan::graduate')).toBe(false);
+    expect(provenUnitWorkTypes(OSNOVA).has('u-prazan::graduate')).toBe(false);
   });
 });
 
@@ -46,7 +47,7 @@ describe('ovjera: kad NE vrijedi', () => {
   it('bez potpisa ne vrijedi nista, ma koliko cistih mjerenja imala', () => {
     const bez = { ...OSNOVA, signedBy: null, signedAt: null };
     expect(attestationProblems(bez)).toContain('nije potpisana');
-    expect(provenProfiles(bez).size, 'nepotpisana ovjera ne smije dokazati nijedan profil').toBe(0);
+    expect(provenUnitWorkTypes(bez).size, 'nepotpisana ovjera ne smije dokazati nijedan profil').toBe(0);
   });
 
   it('POTPIS STARIJI OD MJERENJA ne vrijedi, jer ovjerava brojke koje jos nisu postojale', () => {
@@ -55,7 +56,18 @@ describe('ovjera: kad NE vrijedi', () => {
     // to nije vidjela, jer su sve gledale POSTOJI li potpis, nikad sto pokriva.
     const unatrag = { ...OSNOVA, signedAt: '2026-09-03T21:50:42.798Z', measuredAt: '2026-09-03T23:04:26.992Z' };
     expect(attestationProblems(unatrag)).toContain('potpis je stariji od mjerenja koje pokriva');
-    expect(provenProfiles(unatrag).size, 'ovjera s potpisom unatrag ne smije dokazati nijedan profil').toBe(0);
+    expect(provenUnitWorkTypes(unatrag).size, 'ovjera s potpisom unatrag ne smije dokazati nijedan profil').toBe(0);
+  });
+
+  it('ovjera BEZ VREMENA MJERENJA ne vrijedi, jer potpis onda ne pokriva nista odredjeno', () => {
+    // Bez `measuredAt` gard "potpis stariji od mjerenja" nema sto usporediti i tiho prolazi; zato je
+    // odsutnost sama po sebi problem. Neparsabilan niz je isti slucaj u drugom ruhu.
+    for (const measuredAt of ['', 'jucer'] as const) {
+      const bez = { ...OSNOVA, measuredAt };
+      expect(attestationProblems(bez)).toContain('nema vremena mjerenja');
+      expect(provenUnitWorkTypes(bez).size, `measuredAt=${JSON.stringify(measuredAt)}`).toBe(0);
+    }
+    expect(attestationProblems(OSNOVA)).not.toContain('nema vremena mjerenja');
   });
 
   it('potpis ISTOVREMEN s mjerenjem vrijedi, jer granica ne smije biti stroza nego sto tvrdi', () => {
@@ -66,17 +78,17 @@ describe('ovjera: kad NE vrijedi', () => {
   });
 
   it('bez navedenih alata mjerenja ne vrijedi', () => {
-    expect(provenProfiles({ ...OSNOVA, oracles: [] }).size).toBe(0);
+    expect(provenUnitWorkTypes({ ...OSNOVA, oracles: [] }).size).toBe(0);
   });
 
   it('bez otiska korpusa ili commita ne vrijedi', () => {
-    expect(provenProfiles({ ...OSNOVA, corpusFingerprint: '' }).size).toBe(0);
-    expect(provenProfiles({ ...OSNOVA, measuredFromCommit: null }).size).toBe(0);
+    expect(provenUnitWorkTypes({ ...OSNOVA, corpusFingerprint: '' }).size).toBe(0);
+    expect(provenUnitWorkTypes({ ...OSNOVA, measuredFromCommit: null }).size).toBe(0);
   });
 
   it('ovjere koje nema nije isto sto i prazna ovjera', () => {
     expect(attestationProblems(null)).toEqual(['ovjere nema']);
-    expect(provenProfiles(null).size).toBe(0);
+    expect(provenUnitWorkTypes(null).size).toBe(0);
   });
 });
 
@@ -96,12 +108,12 @@ describe('ovjera u repozitoriju', () => {
    * potpisana tvrdnja koja bi dokazala profil unatoc nadjenoj regresiji.
    */
   it('gard stvarno grize', () => {
-    const cisto = provenProfiles(OSNOVA);
+    const cisto = provenUnitWorkTypes(OSNOVA);
     expect(cisto.size, 'baseline je izmjeren, ne pretpostavljen').toBe(1);
     const mutiran: CorpusAttestation = {
       ...OSNOVA,
-      entries: OSNOVA.entries.map((e) => (e.profileId === 'p-regresija' ? { ...e, regressedChecks: [] } : e)),
+      entries: OSNOVA.entries.map((e) => (e.unitId === 'u-regresija' ? { ...e, regressedChecks: [] } : e)),
     };
-    expect(provenProfiles(mutiran).size, 'uklonjena regresija mora promijeniti ishod').toBe(2);
+    expect(provenUnitWorkTypes(mutiran).size, 'uklonjena regresija mora promijeniti ishod').toBe(2);
   });
 });

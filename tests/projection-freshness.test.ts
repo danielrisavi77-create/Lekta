@@ -68,6 +68,7 @@ describe('svjezina pecenih projekcija', () => {
       'closed-loop',
       'completion-ledger',
       'faculty-matrix',
+      'profile-claims',
       'real-corpus',
       'real-corpus-backlog',
       'reconcile-programs',
@@ -89,5 +90,7 @@ describe('svjezina pecenih projekcija', () => {
     expect(byId['faculty-matrix'].sources).toContain('docs/generated/closed-loop.json');
     expect(byId['faculty-matrix'].sources).toContain('docs/generated/repair-real-corpus.json');
     expect(byId['real-corpus-backlog'].sources).toContain('docs/generated/faculty-matrix.json');
+    expect(byId['profile-claims'].sources).toContain('docs/generated/completion-ledger.json');
+    expect(byId['completion-ledger'].sources).toContain('data/verification/real-corpus-attestation.json');
   });
 });

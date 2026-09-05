@@ -20,10 +20,23 @@
  * je netko pokrenuo skriptu.
  */
 
-/** Jedan mjereni profil: brojke iz prolaza, bez ijednog podatka o dokumentima. */
+/**
+ * Jedna mjerena skupina, bez ijednog podatka o dokumentima.
+ *
+ * GRANULARNOST JE JEDINICA x VRSTA RADA, odlukom vlasnika 2026-09-05. Rad mjeren nad profilom
+ * dokazuje popravak za sve profile ISTE jedinice i ISTE vrste rada: pravila se po vrsti rada stvarno
+ * razlikuju (diplomski ne dokazuje doktorski), a po katedri unutar iste vrste rijetko. Isti ustupak
+ * repozitorij vec ima za citatne specove ("granularnost je danas FAKULTETSKA"). Izmjereno pri odluci:
+ * po profilu bi trebalo jos 317 radova, po jedinici x vrsti 231, po jedinici 112.
+ *
+ * `profileIds` biljezi iz kojih je profila dokaz stvarno dosao, da se sirenje na jedinicu vidi, a ne
+ * skriva.
+ */
 export interface CorpusAttestationEntry {
-  profileId: string;
+  unitId: string;
   workType: string;
+  /** Profili cije su dokumente mjerene; sirenje na ostale profile jedinice je izvedeno, ne mjereno. */
+  profileIds: string[];
   /** Koliko je stvarnih radova uslo u mjerenje za ovaj profil. */
   documentCount: number;
   /** Koliko ih je zavrsilo bez pada isporuke i bez pass-regresije. */
@@ -57,6 +70,9 @@ export function attestationProblems(a: CorpusAttestation | null | undefined): st
   if (!Array.isArray(a.oracles) || a.oracles.length === 0) p.push('nema navedenih alata mjerenja');
   if (!a.corpusFingerprint) p.push('nema otiska korpusa');
   if (!a.measuredFromCommit) p.push('nema commita nad kojim je mjereno');
+  // Vrijeme mjerenja je ono sto potpis pokriva; bez njega gard "potpis stariji od mjerenja" nema sto
+  // usporediti i tiho prolazi. Do 2026-09-05 ga je skripta izmisljala (`new Date()` pri pisanju ovjere).
+  if (!a.measuredAt || !Number.isFinite(Date.parse(a.measuredAt))) p.push('nema vremena mjerenja');
   if (!Array.isArray(a.entries) || a.entries.length === 0) p.push('nema nijednog mjerenog profila');
 
   // POTPIS NE SMIJE BITI STARIJI OD MJERENJA KOJE POKRIVA.
@@ -80,20 +96,17 @@ export function attestationProblems(a: CorpusAttestation | null | undefined): st
 }
 
 /**
- * Profili kojima ovjera daje dokaz na stvarnom radu.
+ * Parovi `unitId::workType` kojima ovjera daje dokaz na stvarnom radu.
  *
- * Kljuc je `profileId::workType`, jer isti profil moze biti mjeren za jednu vrstu rada a ne za drugu,
- * i spajanje bi dokaz prosirilo na nesto sto nije mjereno.
- *
- * Profil ulazi SAMO ako je barem jedan rad zavrsio cisto I nijedna provjera nije regresirala. Mjerenje
+ * Par ulazi SAMO ako je barem jedan rad zavrsio cisto I nijedna provjera nije regresirala. Mjerenje
  * koje je naslo regresiju nije dokaz da popravak radi; ono je dokaz da ne radi.
  */
-export function provenProfiles(a: CorpusAttestation | null | undefined): Set<string> {
+export function provenUnitWorkTypes(a: CorpusAttestation | null | undefined): Set<string> {
   if (attestationProblems(a).length > 0) return new Set();
   const out = new Set<string>();
   for (const e of a!.entries) {
     if (e.documentCount > 0 && e.cleanCount > 0 && e.regressedChecks.length === 0) {
-      out.add(`${e.profileId}::${e.workType}`);
+      out.add(`${e.unitId}::${e.workType}`);
     }
   }
   return out;

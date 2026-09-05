@@ -40,7 +40,9 @@ function expectedByProfile(): Record<string, ClaimLevel> {
 
 describe('profile-claims.json: drift prema ledgeru', () => {
   it('pecena mapa je identicna izracunu iz ledgera', () => {
-    expect(art.byProfile).toEqual(expectedByProfile());
+    // Hint u obliku `inace: npm run ...` je ono sto detektor registra projekcija cita
+    // (tests/projection-registry-coverage.test.ts); bez njega je ova projekcija bila nevidljiva.
+    expect(art.byProfile, 'inace: npm run gen-profile-claims').toEqual(expectedByProfile());
   });
 
   it('ljestvica u artefaktu je identicna CLAIM_LADDER', () => {

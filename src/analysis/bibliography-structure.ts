@@ -10,6 +10,15 @@ export interface BibliographyEntry {
   paragraphIndices: number[];
   anchorFingerprint: string;
   rawText: string;
+  /**
+   * Kljuc po kojem provjera "Abecedni poredak literature" (analyze-docx) SUDI: prvi autor iz
+   * `extractReferences`, malim slovima, prazan kad zapis nema autora. Popravak MORA sortirati po istom
+   * kljucu, inace fixer upise redoslijed koji provjera odmah proglasi neabecednim. Izmjereno 2026-09-05
+   * na `local-36-diplomski`: fixer je sortirao po cijelom nizu (`fields.authors || rawText`), gdje `hr`
+   * kolacija zanemaruje zarez, pa je "United Nations General Assembly, ..." otisao ispred
+   * "United Nations, ...", a provjera (koja gleda samo "United Nations") pala je iz pass u warn.
+   */
+  sortKey?: string;
   fields: Partial<CitationInput>;
   sourceType: CitationInput['type'];
   confidence: BibliographyConfidence;
@@ -54,13 +63,6 @@ function firstAuthor(fields: Partial<CitationInput>, fallback: string): string {
   return normalize(parsed.split(',')[0] || parsed).trim();
 }
 
-/** Isto parsanje kao firstAuthor(), ali BEZ normalize() - hrvatska kolacija (localeCompare 'hr')
- * treba ocuvane dijakritike (c/c/s/z/dj), inace pada na obican ASCII poredak. */
-function firstAuthorSortKey(fields: Partial<CitationInput>, fallback: string): string {
-  const parsed = String(fields.authors || fallback).split(/[;\n]/)[0] || '';
-  return (parsed.split(',')[0] || parsed).trim().toLowerCase();
-}
-
 function canonical(text: string): string {
   return normalize(text)
     .replace(/\b(?:https?:\/\/|www\.)\S+/gi, (url) => url.replace(/[.,;:]+$/, ''))
@@ -102,7 +104,15 @@ export function analyzeBibliographyStructure(
   const entries: BibliographyEntry[] = [];
 
   for (const reference of refData.entries) {
-    const paragraphIndices = [Number(reference.p)].filter((n) => Number.isInteger(n) && n > 0);
+    /**
+     * SVI odlomci koje zapis obuhvaca, ne samo prvi. Sidro nize hashira `rawText`, a on je spoj tih
+     * odlomaka; do 2026-09-05 je uz spojeni tekst isao indeks SAMO prvog, pa fixer (koji cita jedan
+     * odlomak) nije mogao potvrditi sidro ni nad netaknutim dokumentom. Fixer prima iskljucivo zapise s
+     * jednim odlomkom (`paragraphIndices.length === 1`), a visodlomacne sucelje ne nudi za popravak,
+     * jer bi prepisivanje samo prvog odlomka udvostrucilo ostatak.
+     */
+    const merged = Array.isArray((reference as { ps?: unknown }).ps) ? ((reference as { ps: unknown[] }).ps).map(Number) : [Number(reference.p)];
+    const paragraphIndices = merged.filter((n) => Number.isInteger(n) && n > 0);
     const rawText = String(reference.text || '').trim();
     const parsed = parseReference(rawText, 'auto');
     const fields = parsed.fields || {};
@@ -115,6 +125,7 @@ export function analyzeBibliographyStructure(
       paragraphIndices,
       anchorFingerprint: bibliographyAnchorFingerprint(paragraphIndices, rawText),
       rawText,
+      sortKey: String(reference.author || '').trim().toLowerCase(),
       fields,
       sourceType: parsed.type,
       confidence: quality.value,
@@ -138,7 +149,8 @@ export function analyzeBibliographyStructure(
       entryIds: group.map((entry) => entry.id),
       suffixes: group.map((_entry, index) => String.fromCharCode(97 + index)),
     }));
-  const order = entries.map((entry) => firstAuthorSortKey(entry.fields, '') || canonical(entry.rawText));
+  // Isti kljuc kao bodovana provjera (vidi `sortKey`); do 2026-09-05 su tri mjesta imala tri kljuca.
+  const order = entries.map((entry) => entry.sortKey || canonical(entry.rawText));
   const sorted = [...order].sort((a, b) => a.localeCompare(b, language === 'en' ? 'en' : 'hr'));
   const alphabetical = { expected: order.every((value, index) => value === sorted[index]), order };
   const missingFromBibliography = citations
