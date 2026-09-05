@@ -10,10 +10,10 @@
   },
   "counts": {
     "E": 41,
-    "B": 297,
+    "B": 293,
     "D": 37,
     "C": 8,
-    "A": 27
+    "A": 31
   },
   "byProfile": {
     "adu-dramaturgija-diplomski": "E",
@@ -189,7 +189,7 @@
     "grf-diplomski": "B",
     "grf-doktorski": "B",
     "grf-zavrsni": "B",
-    "hks-diplomski": "B",
+    "hks-diplomski": "A",
     "inf-diplomski": "B",
     "inf-zavrsni": "B",
     "iv-diplomski": "B",
@@ -209,8 +209,8 @@
     "kifst-diplomski": "B",
     "ktfst-diplomski": "B",
     "ktfst-zavrsni": "B",
-    "libertas-diplomski": "B",
-    "libertas-diplomski-en": "B",
+    "libertas-diplomski": "A",
+    "libertas-diplomski-en": "A",
     "libertas-zavrsni": "B",
     "libertas-zavrsni-en": "B",
     "logri-diplomski": "B",
@@ -425,6 +425,6 @@
     "zsem-zavrsni": "B",
     "zsem-zavrsni-en": "B",
     "zvu-specijalisticki": "B",
-    "zvu-zavrsni": "B"
+    "zvu-zavrsni": "A"
   }
 }

@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "corpusFingerprint": "4a113e922475d3e6279bfa25bfb33a28",
-  "measuredAt": "2026-09-05T15:59:05.685Z",
-  "measuredFromCommit": "cf5fe841789d454af4087dd9ec51bf8510bc52d0",
+  "corpusFingerprint": "d49f371f4beb57e52b28756b421b0c1d",
+  "measuredAt": "2026-09-05T17:58:06.244Z",
+  "measuredFromCommit": "91df26d64218a48c180a84e7a3ca4e477f72a258",
   "oracles": [
     "scripts/repair-real-corpus.mts (harness + detectPassRegressions)"
   ],
   "signedBy": "Daniel Risavi",
-  "signedAt": "2026-09-05T15:59:50.083Z",
-  "signatureNote": "Potpisano na izricitu uputu vlasnika (2026-09-03: potpisi umjesto mene; 2026-09-05: izvedi ti to, idemo to rijesiti). Treci val korpusa: vrsta rada s naslovnice, uz REZERVE iza nje (izjava o izvornosti i sazetak u prvim stranicama, pa ime datoteke), esej kao seminar, rad kolegija; pseudonimizacija prosirena (uloge nositelj/voditelj, ime velikim slovima iza uloge) i rucno potvrdjeni pojmovi iz zapisa uz dopustenje; tri FKIT dokumenta koji nisu radovi iskljuceni oznakom track not-a-thesis. Radovi iz Desktop/Lekta-korpus ingesta uz zapis o dopustenju (local-testing), verzije istog rada svedene na jednog predstavnika. Broj radova i parova je u ovoj ovjeri; vrijeme i commit mjerenja citaju se iz artefakta mjerenja. Potpis je stavljen NAKON mjerenja.",
+  "signedAt": "2026-09-05T17:59:15.444Z",
+  "signatureNote": "Potpisano na izricitu uputu vlasnika (2026-09-03: potpisi umjesto mene; 2026-09-05: izvedi ti to, idemo na fakultete koji korpus nemaju). Cetvrti val korpusa: ustanova s naslovnice iz kataloga (134 jedinice; genericka imena razrjesava sveuciliste, najranije ime pobjedjuje), pa su usli radovi s ustanova koje korpus nije imao (HKS, Zdravstveno veleuciliste, Libertas); id dokumenta u ingestu je od ovog vala iz sadrzaja izvorne datoteke, pa su svi corpus-* id-jevi novi, a skup radova ponovno izgradjen istim pravilima dedupea (verzije istog rada svedene na jednog predstavnika). Radovi iz Desktop/Lekta-korpus ingesta uz zapis o dopustenju (local-testing), pseudonimizirani, uz rucno potvrdjene pojmove. Broj radova i parova je u ovoj ovjeri; vrijeme i commit mjerenja citaju se iz artefakta mjerenja. Potpis je stavljen NAKON mjerenja.",
   "entries": [
     {
       "unitId": "efzg",
@@ -76,8 +76,8 @@
       "profileIds": [
         "fpzg-politologija-diplomski"
       ],
-      "documentCount": 32,
-      "cleanCount": 32,
+      "documentCount": 31,
+      "cleanCount": 31,
       "regressedChecks": []
     },
     {
@@ -98,6 +98,26 @@
       ],
       "documentCount": 47,
       "cleanCount": 47,
+      "regressedChecks": []
+    },
+    {
+      "unitId": "hks",
+      "workType": "graduate",
+      "profileIds": [
+        "hks-diplomski"
+      ],
+      "documentCount": 4,
+      "cleanCount": 4,
+      "regressedChecks": []
+    },
+    {
+      "unitId": "libertas",
+      "workType": "graduate",
+      "profileIds": [
+        "libertas-diplomski"
+      ],
+      "documentCount": 2,
+      "cleanCount": 2,
       "regressedChecks": []
     },
     {
@@ -158,6 +178,16 @@
       ],
       "documentCount": 1,
       "cleanCount": 1,
+      "regressedChecks": []
+    },
+    {
+      "unitId": "zvu",
+      "workType": "final",
+      "profileIds": [
+        "zvu-zavrsni"
+      ],
+      "documentCount": 2,
+      "cleanCount": 2,
       "regressedChecks": []
     }
   ]
