@@ -1,7 +1,7 @@
 # Intake-first arhitektura Lekte i Korektorski stol
 
-Datum: 2026-08-22  
-Status: dizajn odobren u razgovoru, čeka pregled zapisane specifikacije
+Datum: 2026-08-22
+Status: odobren za izradu implementacijskog plana
 
 ## 1. Sažetak odluke
 
@@ -16,7 +16,7 @@ Konačne javne rute su:
 | `/saznaj-vise/` | Objašnjenje proizvoda, metodologije, privatnosti i mogućnosti |
 | `/moji-radovi/` | Prijava, povijest provjera i povijest popravaka |
 
-Rad se prvo izrađuje kao izolirani demo. Trenutačna javna stranica ostaje netaknuta dok demo, funkcionalna integracija i svi sigurnosni i izvedbeni kriteriji ne budu odobreni.
+Rad se izrađuje izravno kao stvarna produkcijska funkcionalnost, bez mock rezultata i zasebne demo faze. Implementacija se razvija na production-candidate grani i provjerava kroz stvarni deploy preview. Trenutačna objavljena verzija ostaje netaknuta do atomskog cutovera.
 
 Nova arhitektura ne mijenja analitičku logiku, pravila fakulteta, parser, citation engine ili repair engine. Ona mijenja način na koji se postojeće mogućnosti učitavaju, grupiraju i objašnjavaju korisniku.
 
@@ -58,7 +58,7 @@ Sve ostalo ostaje dostupno, ali ulazi u kontekstualne ili napredne slojeve.
 - Ne dodaje se generiranje ili prepravljanje sadržaja studentskog rada.
 - Ne uvodi se novi frontend framework, WebGL ili teška biblioteka samo radi dojma.
 - Ne uklanja se funkcija zato što nije dio početnog prikaza.
-- Ne mijenja se javna početna stranica prije odobrenja demo i beta faze.
+- Ne mijenja se objavljena početna stranica prije zelenih gateova, pregleda stvarnog production candidatea i odobrenog cutovera.
 
 ## 4. Temeljna UX načela
 
@@ -590,33 +590,48 @@ Video, velike slike i dekorativni asseti ostaju na `/saznaj-vise/` ili se učita
 
 Svaka implementacijska cjelina mora završiti zelenim `npm run check`. Parser, audit i citation engine ne mijenjaju se bez golden testa koji prvo dokazuje postojeće ponašanje. Produkcijski output dodatno mora proći postojeću provjeru generiranih pravnih stranica i deploy artefakata.
 
-## 18. Demo-first uvođenje
+## 18. Produkcijsko uvođenje s rollbackom
 
-### Faza A: izolirani vizualni demo
+Ovo nije demo tok. Svaka faza koristi stvarne postojeće module, stvarne lokalne rezultate i stvarne sigurnosne granice. Rizik se kontrolira Gitom, deploy previewom i atomskim cutoverom, ne mock podacima.
 
-- Koristi zaseban demo entry bez izmjene javnog `/`.
-- Prikazuje upload, profil, transparentnu analizu, rezultate, mobilni tok i napredni sloj.
-- Koristi jasno označene demo podatke kada rezultat nije stvarna analiza.
-- Omogućuje provjeru hijerarhije, taktilnih interakcija i količine sadržaja.
+### Faza 0: zeleni baseline i povratna točka
 
-### Faza B: funkcionalna beta ruta
+- Prije redizajna završavaju se ili odvajaju trenutačne nepovezane izmjene.
+- `npm run check` mora biti zelen na točnoj reviziji koja predstavlja postojeći live proizvod.
+- Revizija se označava anotiranim Git tagom `pre-intake-first-live-YYYY-MM-DD`.
+- Bilježi se identifikator trenutačnog objavljenog Netlify deploya i provjerava mogućnost vraćanja tog deploya.
+- Ne izrađuje se ručna kopija repozitorija niti trajni duplikat stare aplikacije.
 
-- Povezuje novu arhitekturu s postojećim intakeom, profilima i lokalnom analizom.
-- Dodaje lokalnu sesiju i stvarne route entryje iza nepromoviranog beta URL-a.
-- U ovoj fazi trenutačna javna stranica i dalje ostaje glavni proizvod.
+### Faza A: stvarni production candidate
 
-### Faza C: potpuna paritetnost
+- Otvara se zasebna feature grana ili worktree iz zelenog baselinea.
+- Implementiraju se konačni Vite MPA ulazi `/`, `/rad/`, `/saznaj-vise/` i `/moji-radovi/`.
+- Od prvog funkcionalnog presjeka koriste se stvarni intake, profil i lokalna analiza.
+- Nema mock rezultata, demo scorea ili paralelne poslovne logike.
+- Trenutačni produkcijski deploy ostaje nepromijenjen dok se candidate razvija.
 
-- Prenose se repair, predaja, izvori, povijest, izvoz i ostale funkcije.
-- Zatvara se registar paritetnosti.
+### Faza B: potpuna funkcionalna i sigurnosna paritetnost
+
+- Povezuju se repair, predaja, izvori, povijest, izvoz, naplata i ostale postojeće funkcije.
+- Zatvara se registar paritetnosti iz odjeljka 10.
 - Provode se sigurnosni, pristupačni, mobilni i izvedbeni gateovi.
+- Pravna stranica i privacy copy ažuriraju se za 24-satnu lokalnu IndexedDB sesiju prije produkcije.
 
-### Faza D: kontrolirani cutover
+### Faza C: pregled stvarnog deploy previewa
 
-- Tek nakon korisničkog odobrenja i zelenih gateova novi minimalni intake postaje `/`.
-- Postojeći landing prelazi na `/saznaj-vise/`.
-- Stari tok ostaje kratko dostupan kao povratna mogućnost tijekom provjere produkcije.
-- Nakon stabilizacije uklanjaju se samo dokazano neaktivni duplikati, nikada funkcije bez zamjene.
+- Production-candidate grana objavljuje se kao Netlify deploy preview s punim stvarnim tokom.
+- Na desktopu, tabletu i mobitelu provjeravaju se upload, profil, analiza, nalazi, napredni sloj, repair i predaja.
+- Uspoređuje se funkcionalna matrica s trenutačnim live proizvodom.
+- Cutover se ne odobrava uz sigurnosni, funkcionalni, accessibility ili izvedbeni regresijski nalaz.
+
+### Faza D: atomski cutover i rollback prozor
+
+- Jedan kontrolirani merge mijenja javni `/` na minimalni intake i seli postojeći landing sadržaj na `/saznaj-vise/`.
+- Prije objave bilježi se novi deploy ID i ponovno potvrđuje dostupnost prethodnog deploya.
+- Nakon objave izvodi se kratki produkcijski smoke test ključnih ruta i lokalne analize.
+- Ako postoje kritična funkcionalna, sigurnosna ili UX odstupanja, odmah se vraća prethodni Netlify deploy. Git tag ostaje nepromjenjiva kodna povratna točka.
+- Rollback ne pokušava migrirati novu lokalnu IndexedDB sesiju u staru aplikaciju. Stara verzija ignorira nepoznatu bazu, a korisnik po potrebi ponovno učitava dokument.
+- Nakon odobrenog stabilizacijskog razdoblja uklanjaju se samo dokazano neaktivni duplikati, nikada funkcije bez zamjene.
 
 ## 19. Konačni kriterij uspjeha
 
@@ -641,6 +656,8 @@ Redizajn je uspješan kada:
 - Glavna akcija je dinamična i uvijek jedna.
 - Sve postojeće funkcije ostaju dostupne kroz kontekstualne ili napredne slojeve.
 - Sve postojeće sigurnosne zaštite ostaju tvrde konstante.
-- Uvođenje je demo-first i ne mijenja glavnu stranicu prije odobrenja.
+- Implementira se stvarni production candidate, bez demo podataka.
+- Objavljeni proizvod ostaje na zelenom baselineu do atomskog cutovera.
+- Povratak je osiguran Git tagom i prethodnim Netlify deployom, ne kopijom koda.
 
-Ovo je krovna arhitektonska specifikacija. Opseg je namjerno podijeljen na demo, funkcionalnu betu, paritetnost i cutover kako se sigurnost i kvaliteta ne bi pokušale riješiti jednim velikim zahvatom. Nakon korisničkog pregleda sljedeći implementacijski plan obuhvaća samo Fazu A, izolirani demo. Svaka kasnija faza dobiva vlastiti plan i vlastiti approval gate.
+Ovo je krovna arhitektonska specifikacija. Implementacijski plan razlaže produkcijski candidate na male, testirane i reverzibilne cjeline, ali sve cjeline vode izravno prema konačnoj live arhitekturi. Deploy i cutover ostaju zasebno odobrene operacije, ne podrazumijevaju se samom implementacijom.
