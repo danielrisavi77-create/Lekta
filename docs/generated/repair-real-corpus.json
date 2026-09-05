@@ -487,6 +487,7 @@
       "beforeEntryCount": 14,
       "afterEntryCount": 14,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "paper-size-fixer",
         "font-fixer",
@@ -551,6 +552,7 @@
       "beforeEntryCount": 8,
       "afterEntryCount": 8,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "font-fixer",
         "line-spacing-fixer",
@@ -637,6 +639,7 @@
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "font-fixer",
         "margins-fixer",
@@ -694,6 +697,7 @@
       "beforeEntryCount": 12,
       "afterEntryCount": 12,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "font-fixer",
         "line-spacing-fixer",
@@ -771,6 +775,7 @@
       "beforeEntryCount": 12,
       "afterEntryCount": 12,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "heading-style-fixer",
         "bibliography-repair-fixer",
@@ -835,6 +840,7 @@
       "beforeEntryCount": 9,
       "afterEntryCount": 9,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "font-fixer",
         "line-spacing-fixer",
@@ -921,6 +927,7 @@
       "beforeEntryCount": 9,
       "afterEntryCount": 9,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "font-fixer",
         "line-spacing-fixer",
@@ -1000,6 +1007,7 @@
       "beforeEntryCount": 5,
       "afterEntryCount": 5,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "paper-size-fixer",
         "font-fixer",
@@ -1048,6 +1056,7 @@
       "beforeEntryCount": 5,
       "afterEntryCount": 5,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "margins-fixer",
         "heading-format-fixer",
@@ -1104,6 +1113,7 @@
       "beforeEntryCount": 5,
       "afterEntryCount": 5,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "font-fixer",
         "line-spacing-fixer",
@@ -1169,6 +1179,7 @@
       "beforeEntryCount": 12,
       "afterEntryCount": 12,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "font-fixer",
         "line-spacing-fixer",
@@ -1257,6 +1268,7 @@
       "beforeEntryCount": 21,
       "afterEntryCount": 21,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "font-fixer",
         "line-spacing-fixer",
