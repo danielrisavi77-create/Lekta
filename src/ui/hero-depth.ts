@@ -151,7 +151,12 @@ function setup(): void {
   const host = document.getElementById('paperCover');
   const demo = document.querySelector<HTMLElement>('.hero-demo');
   const stage = document.querySelector<HTMLElement>('.hd-stage');
-  if (!host || !demo) return;
+  // PRAZAN STOL POD LAMPOM (2026-09-05): sloj se montira i BEZ demo dokumenta. Do tada je
+  // `if (!host || !demo) return;` tiho gasio cijeli sloj cim nema demo scene, pa bi cisti ulaz `/`
+  // (papir za ucitavanje kao jedini predmet) ostao bez snopa, prasine i sjena. Sjena i paralaksa
+  // pisu se na demo kad postoji, inace na sam host (papir); nagib pozornice ostaje opcionalan.
+  if (!host) return;
+  const lit: HTMLElement = demo ?? host;
 
   const atmos = document.createElement('div');
   atmos.className = 'hero-atmos';
@@ -172,11 +177,11 @@ function setup(): void {
     // Sjena je suprotna od svjetla: sto je lampa dalje udesno, to papir baca sjenu vise ulijevo.
     const sx = (0.5 - lightX) * 2 * SHADOW_REACH_PX;
     const sy = (0.5 - lightY) * 2 * SHADOW_REACH_PX + 10;
-    demo.style.setProperty('--sh-x', `${sx.toFixed(1)}px`);
-    demo.style.setProperty('--sh-y', `${sy.toFixed(1)}px`);
+    lit.style.setProperty('--sh-x', `${sx.toFixed(1)}px`);
+    lit.style.setProperty('--sh-y', `${sy.toFixed(1)}px`);
     // Paralaksa ide kroz ociste: slojevi se razmicu razmjerno svojoj dubini, a layout miruje.
-    demo.style.setProperty('--po-x', `${(50 + (lightX - 0.5) * 44).toFixed(1)}%`);
-    demo.style.setProperty('--po-y', `${(42 + (lightY - 0.5) * 30).toFixed(1)}%`);
+    lit.style.setProperty('--po-x', `${(50 + (lightX - 0.5) * 44).toFixed(1)}%`);
+    lit.style.setProperty('--po-y', `${(42 + (lightY - 0.5) * 30).toFixed(1)}%`);
     if (stage) {
       // Natruha nagiba PREMA svjetlu. Drzi se malenom: transform-origin je `top center`
       // (traži ga fit-scale), pa svaki stupanj ovdje zavrti dno pozornice.

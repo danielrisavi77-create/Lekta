@@ -27,6 +27,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -56,6 +57,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -85,6 +87,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -114,6 +117,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -172,6 +176,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -230,6 +235,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -462,6 +468,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -607,6 +614,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -636,6 +644,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -1714,6 +1723,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -2149,6 +2159,7 @@
         "realDocxSamples": 2
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -2207,6 +2218,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -2497,6 +2509,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -2526,6 +2539,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -3146,10 +3160,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3163,9 +3177,7 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "ffzg-etnologija-graduate",
@@ -3175,10 +3187,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3192,9 +3204,7 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "ffzg-filozofija-diplomski",
@@ -3260,10 +3270,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3277,9 +3287,7 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "ffzg-lingvistika-diplomski",
@@ -3289,10 +3297,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3306,9 +3314,7 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "ffzg-pedagogija-graduate",
@@ -3318,10 +3324,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3335,9 +3341,7 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "ffzg-povijest-umjetnosti-diplomski",
@@ -3347,10 +3351,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3364,9 +3368,7 @@
         "facultySpecificRepairOptions": 6,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "ffzg-psihologija-diplomski",
@@ -3376,10 +3378,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3393,9 +3395,7 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "ffzg-sociologija-diplomski",
@@ -3405,10 +3405,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -3422,9 +3422,7 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "fgag-diplomski",
@@ -3945,6 +3943,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -4134,10 +4133,10 @@
       "program": "derived",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "exact-official",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -4151,9 +4150,7 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
@@ -4165,10 +4162,10 @@
       "program": "derived",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "exact-official",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -4182,9 +4179,7 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "fpzg-novinarstvo-diplomski",
@@ -4196,10 +4191,10 @@
       "program": "derived",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "exact-official",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -4213,9 +4208,7 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-av",
@@ -4227,7 +4220,7 @@
       "program": "derived",
       "rules": "verified",
       "repair": "manual-only",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "exact-derived",
       "claim": "D",
       "claimLabel": "provjerava prema sluzbenim uputama; automatski popravak pokriva samo opcu higijenu dokumenta",
@@ -4258,10 +4251,10 @@
       "program": "derived",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "exact-derived",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
@@ -4275,9 +4268,7 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
@@ -4626,6 +4617,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -4684,6 +4676,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -4713,6 +4706,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -4742,6 +4736,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -4771,6 +4766,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -4974,6 +4970,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -5003,6 +5000,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -5032,6 +5030,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -6656,6 +6655,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -7137,10 +7137,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -7154,9 +7154,7 @@
         "facultySpecificRepairOptions": 4,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "pmf-fizika-graduate",
@@ -7166,10 +7164,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -7183,9 +7181,7 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "pmf-geofizika-graduate",
@@ -7195,7 +7191,7 @@
       "program": "missing",
       "rules": "advisory-only",
       "repair": "universal-hygiene",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
       "claim": "E",
       "claimLabel": "nema bodovanih pravila iz sluzbenog izvora",
@@ -7213,6 +7209,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -7224,10 +7221,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -7241,9 +7238,7 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "pmf-geologija-graduate",
@@ -7253,10 +7248,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-official",
         "citation": "exact-official",
@@ -7270,9 +7265,7 @@
         "facultySpecificRepairOptions": 3,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "pmf-matematika-graduate",
@@ -8127,6 +8120,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -8156,6 +8150,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -9051,10 +9046,10 @@
       "program": "missing",
       "rules": "verified",
       "repair": "faculty-specific",
-      "proof": "synthetic-pass",
+      "proof": "real-docx-pass",
       "assets": "generic",
-      "claim": "B",
-      "claimLabel": "provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)",
+      "claim": "A",
+      "claimLabel": "provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu",
       "assetDetail": {
         "titlePage": "exact-derived",
         "citation": "exact-official",
@@ -9068,9 +9063,7 @@
         "facultySpecificRepairOptions": 5,
         "realDocxSamples": 0
       },
-      "blockedReasons": [
-        "nema dokaza na stvarnom studentskom radu"
-      ]
+      "blockedReasons": []
     },
     {
       "profileId": "ttf-dizajn-zavrsni",
@@ -9504,6 +9497,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -9649,6 +9643,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -10142,6 +10137,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -10171,6 +10167,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -10316,6 +10313,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -10345,6 +10343,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -10403,6 +10402,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -10432,6 +10432,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -10461,6 +10462,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -10722,6 +10724,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -10751,6 +10754,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -10780,6 +10784,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -10809,6 +10814,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -11099,6 +11105,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -11157,6 +11164,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "nema staging pravila za profil"
       ]
     },
@@ -11186,6 +11194,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -12346,6 +12355,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -12375,6 +12385,7 @@
         "realDocxSamples": 0
       },
       "blockedReasons": [
+        "strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova",
         "pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)"
       ]
     },
@@ -12719,8 +12730,8 @@
       "manual-only": 53
     },
     "byProof": {
-      "real-docx-pass": 10,
-      "synthetic-pass": 378,
+      "real-docx-pass": 29,
+      "synthetic-pass": 359,
       "review": 0,
       "not-run": 48
     },
@@ -12753,8 +12764,8 @@
       "unknown": 3
     },
     "byClaim": {
-      "A": 9,
-      "B": 329,
+      "A": 26,
+      "B": 312,
       "C": 8,
       "D": 42,
       "E": 48

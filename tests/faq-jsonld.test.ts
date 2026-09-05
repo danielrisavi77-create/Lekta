@@ -1,5 +1,10 @@
 /**
- * Cuva sinkronizaciju vidljivog FAQ-a (<div class="faq">) i FAQPage JSON-LD mirrora u index.html.
+ * Cuva sinkronizaciju vidljivog FAQ-a (<div class="faq">) i FAQPage JSON-LD mirrora.
+ *
+ * STRANICA SE PROMIJENILA 2026-09-03: FAQ vise ne zivi na `/`, nego na `/saznaj-vise/`, jer je `/`
+ * postalo iskljucivo mjesto za ucitavanje dokumenta. Strukturirani podaci moraju stajati NA ISTOJ
+ * stranici kao vidljiv sadrzaj koji opisuju; JSON-LD koji tvrdi FAQ kojeg na toj stranici nema nije
+ * samo crven test nego pogresan zapis prema trazilici.
  * Ako se pitanje doda u vidljivi FAQ a ne u strukturirane podatke (ili obrnuto), Google rich
  * results prikazuju zastarjeli set - ovaj test to hvata prije deploya. Konkretan povod: honesty
  * pitanje "nije provjera plagijata" bilo je u vidljivom FAQ-u, ali ne i u JSON-LD-u.
@@ -43,7 +48,7 @@ function overclaims(htmlText: string): string[] {
 }
 
 describe('FAQ JSON-LD mirror', () => {
-  const html = readFileSync(join(root, 'index.html'), 'utf8');
+  const html = readFileSync(join(root, 'saznaj-vise', 'index.html'), 'utf8');
 
   // Vidljivi FAQ: <div class="faq"> ... </div> (bez ugnijezdjenih divova, pa non-greedy do prvog </div>)
   const faqBlock = html.match(/<div class="faq">([\s\S]*?)<\/div>/);

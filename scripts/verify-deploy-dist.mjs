@@ -21,10 +21,15 @@ const fail = (msg) => { console.error(`[verify-deploy-dist] FAIL: ${msg}`); proc
 
 if (!fs.existsSync(DIST)) fail('dist/ ne postoji');
 
-// 1. index.html bez dev alata
+// 1. HTML bez dev alata. Do reza naslovnice (2026-09-05) je setup modal i QA konzola nosio SAMO
+//    index.html; sada zive na /rad/, pa se provjerava svaka stranica koja ih uopce moze imati.
+//    Provjera koja gleda samo `dist/index.html` bila bi zelena na praznoj stranici, dakle vakuumska.
 const index = fs.readFileSync(path.join(DIST, 'index.html'), 'utf8');
-for (const banned of ['setupModal', 'qaModal', 'qaBtn', 'Produkcijska konfiguracija', 'QA konzola']) {
-  if (index.includes(banned)) fail(`dist/index.html sadrzi "${banned}" (dev-only strip nije odradio)`);
+for (const page of ['index.html', path.join('rad', 'index.html')]) {
+  const html = fs.readFileSync(path.join(DIST, page), 'utf8');
+  for (const banned of ['setupModal', 'qaModal', 'qaBtn', 'Produkcijska konfiguracija', 'QA konzola']) {
+    if (html.includes(banned)) fail(`dist/${page} sadrzi "${banned}" (dev-only strip nije odradio)`);
+  }
 }
 
 // 2. JS bundle bez setup/QA koda (tree-shake pod __DEV_TOOLS__=false)

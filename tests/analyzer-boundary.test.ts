@@ -25,7 +25,7 @@ import { resolve } from 'node:path';
  * testa zamislio, a ovaj mjeri ono sto ruta doista dobiva.
  */
 
-const INDEX = readFileSync(resolve(__dirname, '..', 'index.html'), 'utf8');
+const INDEX = readFileSync(resolve(__dirname, '..', 'rad', 'index.html'), 'utf8');
 
 function emptyDoc(): Document {
   return document.implementation.createHTMLDocument('t');

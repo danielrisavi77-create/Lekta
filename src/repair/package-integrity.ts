@@ -250,7 +250,7 @@ export function comparePackages(before: readonly PackageEntryLike[], after: read
  * dijelova), a upravo tu XML skener ne pomaze jer je svaki pojedini dio ispravan.
  */
 export interface PackageStructureIssue {
-  kind: 'content-type-missing' | 'dangling-relationship';
+  kind: 'content-type-missing' | 'dangling-relationship' | 'schema-invalid-content';
   part: string;
   detail: string;
 }
@@ -344,7 +344,55 @@ export function checkRelationshipTargets(entries: readonly PackageEntryLike[]): 
   return issues;
 }
 
-/** Obje strukturne provjere odjednom. */
+/**
+ * TRECA KLASA: dio je dobro OBLIKOVAN XML i paket je ispravan OPC, ali sadrzaj krsi SHEMU.
+ *
+ * Zasto postoji, izmjereno 2026-09-03: `croatian-typography-fixer` je definicije tab-stopova
+ * (`<w:pPr><w:tabs><w:tab w:val="right" .../></w:tabs>`) zamjenjivao tekstom i proizvodio
+ * `<w:tabs><w:t xml:space="preserve"> </w:t></w:tabs>`. Word je takav dokument ODBIJAO otvoriti
+ * ("error processing the XML file, Part: /word/document.xml"), a pogodjeno je 6 od 38 stvarnih
+ * studentskih radova nakon zadanog popravka.
+ *
+ * Nijedna postojeca razina to nije vidjela, i to je pravi nalaz:
+ *   Tier 0 `scanXmlWellFormed`  prolazi (XML JEST dobro oblikovan), `integrityFailure` je bio `null`
+ *   Tier 0 OPC provjere         prolaze (tipovi i relacije su netaknuti)
+ *   Tier 1 `lxml strict-open`   prolazi (isto pitanje, drugi alat)
+ *   Tier 2 Word                 JEDINI odbija
+ * Kvar je do korisnika putovao kroz sve automatske gardove, pa je zaustavlja tek covjek koji
+ * dokument ne moze otvoriti.
+ *
+ * OVO NIJE VALIDATOR SHEME i ne pretvara se da jest. Provjerava JEDAN izmjeren razred: da u
+ * `<w:tabs>` ne zavrsi nista osim definicija tab-stopova. Sire tvrdnje (puni `wml.xsd`) su drugi
+ * posao; lazno siroko ime bi ovdje bilo gore od uskog, jer bi sugeriralo pokrivenost koje nema.
+ *
+ * Pozivatelj (`apply-fixers`) usporedjuje stanje PRIJE i POSLIJE i javlja samo NOVE probleme, pa
+ * ulazni dokument koji vec krsi shemu ne blokira popravak.
+ */
+const SCHEMA_SCANNED_PARTS = /^word\/(document\d*\.xml|footnotes\.xml|endnotes\.xml|header\d*\.xml|footer\d*\.xml)$/i;
+
+export function checkSchemaInvalidContent(entries: readonly PackageEntryLike[]): PackageStructureIssue[] {
+  const issues: PackageStructureIssue[] = [];
+  for (const entry of entries) {
+    if (!SCHEMA_SCANNED_PARTS.test(normalizePart(entry.name))) continue;
+    const xml = partText(entry);
+    for (const match of xml.matchAll(/<w:tabs\b[^>]*>([\s\S]*?)<\/w:tabs>/g)) {
+      const inner = match[1] ?? '';
+      // Unutar <w:tabs> po shemi smiju stajati samo <w:tab .../> elementi (CT_TabStop).
+      const strani = inner.replace(/<w:tab\b[^>]*\/>/g, '').trim();
+      if (!strani) continue;
+      const oznaka = /<([A-Za-z_:][-\w:.]*)/.exec(strani)?.[1] ?? '(tekst)';
+      issues.push({
+        kind: 'schema-invalid-content',
+        part: entry.name,
+        detail: `<w:tabs> sadrzi <${oznaka}>, a smije sadrzavati samo definicije tab-stopova (Word odbija otvoriti takav dokument)`,
+      });
+      break; // jedan nalaz po dijelu je dovoljan; popis se inace napuni istim kvarom
+    }
+  }
+  return issues;
+}
+
+/** Sve strukturne provjere odjednom. */
 export function checkPackageStructure(entries: readonly PackageEntryLike[]): PackageStructureIssue[] {
-  return [...checkContentTypes(entries), ...checkRelationshipTargets(entries)];
+  return [...checkContentTypes(entries), ...checkRelationshipTargets(entries), ...checkSchemaInvalidContent(entries)];
 }

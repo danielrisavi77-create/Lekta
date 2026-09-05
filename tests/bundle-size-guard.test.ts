@@ -9,6 +9,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import {
+  checkEntryBudgets,
   describeEntryGraph,
   measureEntryGraphBytes,
   type BundleLike,
@@ -173,5 +174,46 @@ describe('describeEntryGraph', () => {
     expect(summary).toContain('3 KB');
     expect(summary).toContain('2 chunk(ova)');
     expect(summary).not.toContain('neizmjereni');
+  });
+});
+
+describe('checkEntryBudgets: budzet po ulazu', () => {
+  // Dva ulaza, jedan lagan i jedan tezak, dijele zajednicki chunk. Graf `index` = 1 + 4 KB, graf
+  // `rad` = 1 + 4 + 600 KB. Brojke su odabrane da mutacije ispod razlikuju "prolazi" od "pada".
+  const bundle: BundleLike = {
+    'assets/index-aaa.js': chunk({ name: 'index', isEntry: true, code: 'i'.repeat(1024), imports: ['assets/shared-bbb.js'] }),
+    'assets/rad-ccc.js': chunk({ name: 'rad', isEntry: true, code: 'r'.repeat(1024), imports: ['assets/shared-bbb.js', 'assets/app-ddd.js'] }),
+    'assets/shared-bbb.js': chunk({ name: 'shared', code: 's'.repeat(4 * 1024) }),
+    'assets/app-ddd.js': chunk({ name: 'app', code: 'a'.repeat(600 * 1024) }),
+  };
+
+  it('BASELINE: oba ulaza unutar budzeta daju prazan popis', () => {
+    expect(checkEntryBudgets(bundle, { index: 8 * 1024, rad: 960 * 1024 })).toEqual([]);
+  });
+
+  it('MUTACIJA: teski ulaz preko budzeta se IMENUJE, laki ostaje cist', () => {
+    // Ovo je cijeli razlog promjene: do 2026-09-05 bi guard s jednim imenom (`index`) ovdje prosao,
+    // jer je `index` lagan, a `rad` nitko ne bi izmjerio.
+    const problems = checkEntryBudgets(bundle, { index: 8 * 1024, rad: 512 * 1024 });
+    expect(problems.map((p) => [p.entryName, p.kind])).toEqual([['rad', 'over-budget']]);
+    expect(problems[0].measuredBytes).toBe(bytes('r'.repeat(1024) + 's'.repeat(4 * 1024) + 'a'.repeat(600 * 1024)));
+    expect(problems[0].detail).toContain('preko budzeta 512 KB');
+  });
+
+  it('MUTACIJA: ulaz kojeg nema u bundleu je pad, ne tihi preskok', () => {
+    const problems = checkEntryBudgets(bundle, { index: 8 * 1024, saznajVise: 128 * 1024 });
+    expect(problems.map((p) => [p.entryName, p.kind])).toEqual([['saznajVise', 'missing-entry']]);
+    expect(problems[0].measuredBytes).toBeNull();
+  });
+
+  it('MUTACIJA: prazna mapa budzeta BACA, jer bi inace guard prolazio vakuumski', () => {
+    expect(() => checkEntryBudgets(bundle, {})).toThrow(/vakuumski/);
+  });
+
+  it('laki ulaz preko SVOG malog budzeta pada iako je daleko ispod velikog', () => {
+    // Regresija koju budzet po ulazu hvata a jedan globalni ne: 5 KB je nista za analizator, a za
+    // cisti ulaz je to 60 posto vise nego sto smije.
+    const problems = checkEntryBudgets(bundle, { index: 4 * 1024, rad: 960 * 1024 });
+    expect(problems.map((p) => p.entryName)).toEqual(['index']);
   });
 });

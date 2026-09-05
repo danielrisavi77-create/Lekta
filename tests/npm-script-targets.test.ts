@@ -38,12 +38,14 @@ const tracked = new Set(
 );
 
 /**
- * Zateceno 2026-09-05: JEDNA. Popis smije samo PADATI.
+ * PRAZAN od 2026-09-05, dakle tvrdnja je bezuvjetna: nijedna npm skripta ne smije gadjati
+ * necommitanu datoteku.
  *
- * `scripts/corpus-gen/libreoffice.mjs` je dio necommitanog rada na generatoru korpusa; commitanje je
- * u tijeku u drugoj sesiji. Kad slegne, ovaj popis ide na prazan i tvrdnja postaje bezuvjetna.
+ * Zateceno stanje bila je jedna (`scripts/corpus-gen/libreoffice.mjs`, generator korpusa), koju je
+ * druga sesija commitala u `90e8e2ed`. Izuzece je uklonjeno ISTOG TRENUTKA kad je prestalo vrijediti,
+ * jer izuzece za kvar kojeg vise nema propusta sljedeci s istim imenom.
  */
-const NECOMMITANE_RATCHET = ['scripts/corpus-gen/libreoffice.mjs'];
+const NECOMMITANE_RATCHET: string[] = [];
 
 function missing(): string[] {
   const out: string[] = [];
@@ -71,7 +73,7 @@ describe('npm skripte gadjaju commitane datoteke', () => {
   });
 
   it('ratchet ne smije rasti', () => {
-    expect(NECOMMITANE_RATCHET.length).toBeLessThanOrEqual(1);
+    expect(NECOMMITANE_RATCHET.length).toBe(0);
   });
 
   /*

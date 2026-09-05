@@ -139,12 +139,47 @@ export function extractBodyParagraphs(documentXml: string): BodyParagraphRange[]
   return paragraphs;
 }
 
+/**
+ * Rasponi `<w:tabs>` blokova (definicije tab-stopova). `w:tabs` se po shemi ne ugnjezduje, pa je
+ * plosno trazenje dovoljno. Sluzi kao DRUGA brana uz pravilo "tabulator nema atribute": ulazni
+ * dokument koji vec sam po sebi krsi shemu (`<w:tab/>` bez atributa unutar `<w:tabs>`) inace bi
+ * prosao kroz prvu.
+ */
+function tabStopRanges(paragraphXml: string): Array<[number, number]> {
+  const ranges: Array<[number, number]> = [];
+  for (const match of paragraphXml.matchAll(/<w:tabs\b[^>]*>[\s\S]*?<\/w:tabs>/g)) {
+    const start = match.index ?? 0;
+    ranges.push([start, start + match[0].length]);
+  }
+  return ranges;
+}
+
 export function editableNodes(paragraphXml: string): EditableXmlNode[] {
   const nodes: EditableXmlNode[] = [];
-  const re = /<w:t\b[^>]*>[\s\S]*?<\/w:t>|<w:tab\b[^>]*\/>|<w:br\b[^>]*\/>/g;
+  /**
+   * TABULATOR U RUNU NEMA ATRIBUTE; DEFINICIJA TAB-STOPA IH UVIJEK IMA.
+   *
+   * Ista oznaka `w:tab` nosi dva nesrodna znacenja (OOXML):
+   *   `<w:r><w:tab/></w:r>`                                 tabulator u tekstu, tip CT_Empty
+   *   `<w:pPr><w:tabs><w:tab w:val="right" .../></w:tabs>`  tab-stop, tip CT_TabStop (`w:val` obavezan)
+   *
+   * Uzorak je bio `<w:tab\b[^>]*\/>` nad CIJELIM XML-om odlomka, dakle i nad `<w:pPr>`, pa je
+   * hvatao oba. Pozivatelj (`croatian-typography-fixer`, kategorija `text-tabs`) urediv cvor
+   * zamjenjuje s `<w:t>`, cime je nastajalo `<w:tabs><w:t> </w:t></w:tabs>`. To je dobro
+   * OBLIKOVAN, ali shemom NEVALJAN XML.
+   *
+   * IZMJERENO 2026-09-03 (Word 14.0, `OpenAndRepair=false`): takav paket Word odbija otvoriti, uz
+   * "error processing the XML file, Part: /word/document.xml". Nakon ZADANOG popravka pogodjeno je
+   * 6 od 38 stvarnih studentskih radova, a 0 od 7 commitanih fixtura. Ni `package-integrity`
+   * (`integrityFailure` je bio `null` na svih 6) ni Tier 1 (`lxml`) ga ne vide: paket je dobro
+   * oblikovan, pa ga hvata tek shema, odnosno Word.
+   */
+  const re = /<w:t\b[^>]*>[\s\S]*?<\/w:t>|<w:tab\s*\/>|<w:br\b[^>]*\/>/g;
+  const stopRanges = tabStopRanges(paragraphXml);
   let match: RegExpExecArray | null;
   while ((match = re.exec(paragraphXml))) {
     const xml = match[0];
+    if (stopRanges.some(([start, end]) => match!.index >= start && match!.index < end)) continue;
     if (/^<w:t\b/i.test(xml)) {
       const inner = xml.match(/^<w:t\b[^>]*>([\s\S]*?)<\/w:t>$/i)?.[1] ?? '';
       nodes.push({ kind: 'text', start: match.index, end: match.index + xml.length, xml, text: xmlDecode(inner) });

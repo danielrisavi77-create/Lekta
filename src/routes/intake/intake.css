@@ -1,0 +1,33 @@
+/* ULAZ `/`: list papira na praznom stolu pod lampom.
+   Tokeni su iz page.css (isti identitet "Korektorski stol" kao ostatak stranice); ovdje je samo
+   oblik samog papira. Bez url() slika, bez beskonacnih animacija; reduced-motion gasi pomake. */
+
+.intake-main{position:relative}
+.intake-stage{padding-top:clamp(28px,7vh,72px);padding-bottom:clamp(28px,6vh,56px)}
+.intake-desk{position:relative;width:min(720px,100%);margin:0 auto;padding:clamp(10px,2.5vw,20px)}
+.intake-paper{position:relative;display:grid;justify-items:center;gap:14px;min-height:clamp(300px,44vh,380px);padding:clamp(28px,6vw,52px) clamp(20px,5vw,44px);text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--paper-sh);cursor:pointer;outline:none;transform:rotate(-.3deg);transition:transform .18s var(--ease-out,ease),box-shadow .18s var(--ease-out,ease),border-color .18s var(--ease-out,ease)}
+.intake-paper::after{content:"";position:absolute;inset:14px -6px -10px 8px;z-index:-1;border:1px solid var(--line);border-radius:12px;background:var(--panel);opacity:.55;transform:rotate(1.1deg)}
+.intake-paper:hover,.intake-paper:focus-visible,.intake-paper.is-dragging{transform:rotate(0) translateY(-3px);border-color:var(--brand);box-shadow:var(--paper-sh),0 0 0 4px color-mix(in srgb,var(--brand) 18%,transparent)}
+.intake-paper:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
+.intake-mark{width:64px;height:64px;border:2px solid var(--brand);border-radius:50%;display:grid;place-items:center;transform:rotate(-8deg)}
+.intake-mark::after{content:"";width:30px;height:14px;border-left:3px solid var(--brand);border-bottom:3px solid var(--brand);transform:rotate(-45deg) translate(2px,-3px)}
+.intake-title{margin:0;max-width:18ch;font-size:clamp(1.6rem,4.2vw,2.5rem);line-height:1.08;letter-spacing:-.02em;text-wrap:balance}
+.intake-lead{margin:0;max-width:52ch;color:var(--muted);text-wrap:balance}
+.intake-file-name{min-height:22px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700;color:var(--ok,var(--text))}
+.intake-cta{pointer-events:none}
+.intake-file-input{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.intake-meta,.intake-status,.intake-error,.intake-continue,.intake-links{max-width:62ch;margin:14px auto 0;text-align:center}
+.intake-meta{color:var(--muted);font-size:.9rem}
+.intake-status{min-height:1.4em;font-weight:600}
+.intake-error{width:fit-content;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:var(--red-soft);color:var(--red-on-desk,var(--text))}
+.intake-memory-action{display:block;margin:12px auto 0}
+.intake-continue{color:var(--muted)}
+.intake-links{display:flex;justify-content:center;gap:8px 18px;flex-wrap:wrap;color:var(--muted);font-weight:600}
+/* Traka s brojkama: signal povjerenja ispod stola, iz pecenog JSON-a. */
+.intake-stats{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 22px;margin:0 auto;padding:10px 16px 18px;color:var(--muted);font-size:.92rem}
+.intake-stats b{color:var(--text);font-variant-numeric:tabular-nums}
+.intake-stats-note{flex-basis:100%;text-align:center;font-size:.82rem}
+.intake-stage[data-intake-state="checking"] .intake-paper,.intake-stage[data-intake-state="saving"] .intake-paper{cursor:progress}
+.intake-stage.intake-leaving .intake-paper{transform:translateY(-8px) scale(.99);opacity:.88}
+@media (max-width:600px){.intake-paper{min-height:280px;padding:28px 18px}.intake-title{font-size:1.5rem}}
+@media (prefers-reduced-motion:reduce){.intake-paper,.intake-stage.intake-leaving .intake-paper{transition:none;transform:none}}

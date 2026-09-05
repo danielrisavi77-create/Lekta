@@ -1721,3 +1721,12 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
    okomitog daha, bez diranja izgleda na visim zaslonima. */
 @media(max-width:720px) and (max-height:720px){#wizardView{padding-top:4px}#dropzone{padding:10px 12px}#dropzone h3{margin-top:4px;font-size:19px}#dropzone p{margin:6px 0 10px}}
 @media print{.lek-col-proof,.lek-bridge,.lek-paper-cover,.lek-stepnav-result{display:none!important}.lek-top-grid{display:block!important}}
+
+/* `/moji-radovi/`: popis lokalnih radova i popravaka na racunu.
+   Namjerno malo pravila: oblik kartice nasljeduje postojeci jezik stranice, a ne uvodi novi. */
+.mw-list{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.mw-note{color:var(--muted);margin:0 0 12px;max-width:62ch}
+.mw-item{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.mw-item-name{font-weight:600;color:var(--text);text-decoration:none}
+a.mw-item-name:hover{text-decoration:underline}
+.mw-item-meta{color:var(--muted);font-size:.86rem}

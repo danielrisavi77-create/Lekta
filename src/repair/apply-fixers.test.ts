@@ -978,6 +978,24 @@ describe('applyFixers golden round-trip', () => {
       const dec = new TextDecoder();
       const newFooter = dec.decode(newEntries.find((e) => e.name === 'word/footer1.xml')!.data);
       expect(newFooter).not.toContain('w:val="bogus"');
+      /**
+       * Gola negativna tvrdnja iznad prolazi i kad se fixer NIKAD nije izvrsio: "bogus" u izvornom
+       * podnozju ionako ne postoji, pa vrijedi i nad neizmijenjenim ulazom. A kad vrata integriteta
+       * odbiju isporuku, `applyFixers` vraca ULAZNE bajtove uz prazan changelog.
+       *
+       * Ugovor je pritom DRUKCIJI od onoga koji sugerira naslov ovog describe bloka. Ovaj fixer
+       * NIJE no-op na nevaljanu vrijednost: `apply-fixers.ts` ju tretira kao NEPOSLANU, pa vrijedi
+       * fixerov vlastiti default (`right`), uz obrazlozenje da je to jedina vrijednost koju ijedan
+       * stvaran profil trazi. Susjedni `alignment-fixer` se ponasa drukcije (preskace), i ta je
+       * razlika namjerna.
+       *
+       * Tvrdnja zato opisuje STVARNO ponasanje: nevaljana vrijednost ne prolazi doslovno, ali
+       * zahvat se dogodi i zavrsi na zadanoj vrijednosti. Da je ostala samo negativna, promjena
+       * defaulta ili tiho gasenje fixera prosli bi neopazeno.
+       */
+      expect(result.skipped).toEqual([]);
+      expect(newFooter).toContain('w:val="right"');
+      expect(result.changelog.map((c) => c.afterLabel)).toEqual(['Poravnanje broja stranice: desno']);
     });
 
     it('footnote-typography-fixer s nevaljanim (non-finite) fontSizePt: velicina se preskace (fixer dira FootnoteText STIL u styles.xml, footnotes.xml je samo gate)', async () => {
@@ -1100,6 +1118,11 @@ describe('applyFixers golden round-trip', () => {
       const result = await applyFixers(await fusnoteSProredom(), [
         { ruleId: 'r1', fixerId: 'footnote-typography-fixer', params: { fontSizePt: 10, deep: true } },
       ]);
+      // Fixer se MORA izvrsiti, inace tvrdnja ispod ne razlikuje "prored je namjerno ostavljen" od
+      // "fixer se nikad nije izvrsio". Kad vrata integriteta odbiju isporuku, `applyFixers` vraca
+      // ULAZNE bajtove uz prazan changelog, pa bi baseline prosao bas kad proizvod ne radi.
+      expect(result.integrityFailure).toBeUndefined();
+      expect(result.changelog.length, 'fixer nije nista napravio, pa baseline ne mjeri nista').toBeGreaterThan(0);
       expect(await stilXml(result.docxBytes)).toContain('w:line="276"');
     });
 
@@ -1122,13 +1145,34 @@ describe('applyFixers golden round-trip', () => {
       expect(foot).toContain('tekst fusnote'); // tekst netaknut
     });
 
+    /**
+     * Tvrdnja "izvorni prored je prezivio" vrijedi i nad NEIZMIJENJENIM ulazom, pa sama po sebi ne
+     * razlikuje "mnozitelj je odbacen" od "fixer se nikad nije izvrsio". Uz nju zato ide i
+     * mehanizam: zahtjev mora zavrsiti u `skipped`, a ne tiho nestati.
+     */
     it('nevaljan mnozitelj se odbacuje, stil ostaje netaknut', async () => {
       for (const lineSpacing of [0, -1, 99, 'abc']) {
         const result = await applyFixers(await fusnoteSProredom(), [
           { ruleId: 'r1', fixerId: 'footnote-typography-fixer', params: { lineSpacing } },
         ]);
         expect(await stilXml(result.docxBytes), `mnozitelj ${lineSpacing}`).toContain('w:line="276"');
+        expect(result.changelog, `mnozitelj ${lineSpacing}`).toHaveLength(0);
+        expect(result.skipped, `mnozitelj ${lineSpacing}`).toEqual(['r1']);
       }
+    });
+
+    /**
+     * POZITIVNA KONTROLA uz test iznad: isti poziv s VALJANIM mnoziteljem mora promijeniti stil.
+     * Bez nje bi cijeli gornji blok prolazio i da je fixer mrtav, jer sve njegove tvrdnje govore
+     * sto se NIJE dogodilo.
+     */
+    it('KONTROLA: valjan mnozitelj u istom pozivu doista mijenja stil', async () => {
+      const result = await applyFixers(await fusnoteSProredom(), [
+        { ruleId: 'r1', fixerId: 'footnote-typography-fixer', params: { lineSpacing: 2 } },
+      ]);
+      expect(result.skipped).toEqual([]);
+      expect(result.changelog.length).toBeGreaterThan(0);
+      expect(await stilXml(result.docxBytes)).toContain('w:line="480"');
     });
   });
 

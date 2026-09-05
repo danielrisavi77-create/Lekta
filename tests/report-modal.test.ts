@@ -10,7 +10,7 @@ import { dirname, join } from 'node:path';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const app = readFileSync(join(root, 'src', 'ui', 'app.ts'), 'utf8');
-const html = readFileSync(join(root, 'index.html'), 'utf8');
+const html = readFileSync(join(root, 'rad', 'index.html'), 'utf8');
 
 describe('prijava pogresne provjere: modal umjesto window.prompt', () => {
   it('app.ts vise NE koristi window.prompt', () => {

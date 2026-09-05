@@ -16,7 +16,7 @@ const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.d
  * ovdje pada.
  */
 test('mobilni kriticni put: upload, profil, analiza, rezultat', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/rad/');
   await page.locator('#fileInput').setInputFiles(fixture);
   await expect(page.locator('#wizardView')).toHaveAttribute('data-step', '1');
 

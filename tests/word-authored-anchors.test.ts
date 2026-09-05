@@ -25,6 +25,8 @@ import { applyFixers } from '../src/repair/apply-fixers';
 import { buildAllRepairableItems } from '../src/ui/repair-item-assembly';
 import { buildDefaultRepairRequests } from '../src/repair/default-selection';
 import { draftRuleEntriesFor } from '../src/profiles/drafts-runtime';
+import { readZip } from '../src/repair/zip-codec';
+import { checkSchemaInvalidContent } from '../src/repair/package-integrity';
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 const PROFILE_ID = 'fpzg-politologija-diplomski';
@@ -79,5 +81,65 @@ describe('sidra nad dokumentima koje je napisao pravi Word', () => {
     const text = JSON.stringify(after.details ?? {});
     // Oba ponovljena natpisa moraju prezivjeti: nijedan se ne smije izgubiti ni udvostruciti.
     expect((text.match(/Izvor: Izrada autora/g) ?? []).length).toBeGreaterThanOrEqual(2);
+  });
+});
+
+/**
+ * DVA OBLIKA KOJE WORD PISE SAM, A NAS GRADITELJ FIXTURA NIKAD.
+ *
+ * Oba su 2026-09-03 bila ziv kvar u proizvodu, oba su nadjena tek na stvarnim radovima, i oba su
+ * bila nevidljiva cijelom commitanom korpusu (0 od 7 radova i 0 od 19 golden fixtura):
+ *
+ *   1. `<w:pPr><w:tabs><w:tab w:val="right" w:leader="dot" .../></w:tabs>`, potpisna linija.
+ *      `croatian-typography-fixer` ju je zamjenjivao tekstom i proizvodio `<w:tabs><w:t> </w:t>`,
+ *      sto Word ODBIJA otvoriti. Pogadjalo je 6 od 38 stvarnih radova.
+ *   2. `<w:rFonts w:cs="..."/>` bez `w:ascii` i `w:hAnsi`. Analiza je font SLOZENIH pisama
+ *      pripisivala latinici, pa je obarala radove koji pravilo postuju. Na jednom stvarnom radu
+ *      57% teksta.
+ *
+ * Fixturu pise pravi Word (`scripts/word-verify/make-tabstop-fixture.ps1`) i ne sadrzi nicij
+ * studentski tekst. Tvrdnje nize namjerno pocinju BASELINE provjerom da fixtura doista nosi oba
+ * oblika: bez nje bi ostale prolazile vakuumski nad dokumentom koji nema sto slomiti.
+ */
+describe('tabstop-and-cs-fonts: oblici koje sinteticki korpus nema', () => {
+  const dokument = async () => {
+    const bytes = load('tabstop-and-cs-fonts.docx');
+    const profile = resolveProfile(PROFILE_ID) as Record<string, unknown>;
+    const before = await analyzeFixture(new File([bytes], 't.docx', { type: DOCX_MIME }), { profileId: PROFILE_ID, profile } as never);
+    const items = buildAllRepairableItems({ result: before, profile, entries: draftRuleEntriesFor(PROFILE_ID) } as never);
+    const out = await applyFixers(bytes, buildDefaultRepairRequests(items as never) as never);
+    return { bytes, before, out };
+  };
+  const documentXml = async (bytes: Uint8Array) =>
+    new TextDecoder().decode((await readZip(bytes)).find((e) => e.name === 'word/document.xml')!.data);
+
+  it('BASELINE: fixtura doista nosi oba oblika (inace tvrdnje nize ne mjere nista)', async () => {
+    const xml = await documentXml(load('tabstop-and-cs-fonts.docx'));
+    const tabStops = xml.match(/<w:tab w:val="[^"]*"[^>]*\/>/g) ?? [];
+    expect(tabStops.length, 'nema definicija tab-stopova').toBeGreaterThanOrEqual(3);
+    expect(xml, 'nema tockastog vodica, a to je oblik s potpisne linije').toContain('w:leader="dot"');
+    const csOnly = (xml.match(/<w:rFonts\b[^>]*\/>/g) ?? []).filter(
+      (tag) => !/w:(ascii|hAnsi)(Theme)?="/.test(tag) && /w:(cs|eastAsia)="/.test(tag),
+    );
+    expect(csOnly.length, 'nema runova s fontom samo za slozena pisma').toBeGreaterThanOrEqual(10);
+  });
+
+  it('popravak ne pretvara definiciju tab-stopa u tekst, pa paket ostaje otvoriv', async () => {
+    const { out } = await dokument();
+    expect(out.changelog.length, 'popravak mora imati sto raditi').toBeGreaterThan(0);
+    const xml = await documentXml(out.docxBytes);
+    for (const blok of xml.match(/<w:tabs\b[^>]*>[\s\S]*?<\/w:tabs>/g) ?? []) {
+      // `<w:t` je prefiks od `<w:tab`, pa granica imena mora biti dio tvrdnje.
+      expect(blok, 'tekst je zavrsio u definiciji tab-stopova').not.toMatch(/<w:t(?![A-Za-z])/);
+    }
+    expect(checkSchemaInvalidContent(await readZip(out.docxBytes))).toEqual([]);
+  });
+
+  it('font slozenih pisama ne pripisuje se latinici', async () => {
+    const { before } = await dokument();
+    const check = (before.checks ?? []).find((c: { id?: string }) => c.id === 'format.font.dominant');
+    expect(check, 'provjera dominantnog fonta nije pronadjena').toBeTruthy();
+    expect(check.detail, 'w:cs je procitan kao font tijela rada').not.toContain('Book Antiqua');
+    expect(check.detail).toContain('Times New Roman');
   });
 });

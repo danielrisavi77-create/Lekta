@@ -21,7 +21,7 @@ import { resolve } from 'node:path';
 
 const ROOT = resolve(__dirname, '..');
 const APP = readFileSync(resolve(ROOT, 'src', 'ui', 'app.ts'), 'utf8');
-const INDEX = readFileSync(resolve(ROOT, 'index.html'), 'utf8');
+const INDEX = readFileSync(resolve(ROOT, 'rad', 'index.html'), 'utf8');
 
 /** Tijelo `initLegacy` + `bind`: sve sto se izvodi pri montazi zatecene stranice. */
 function wiringSource(): string {

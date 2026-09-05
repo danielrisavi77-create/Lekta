@@ -22,9 +22,11 @@ import { computeWorklist } from '../src/verification/worklist';
 import {
   buildCompletionLedger,
   CLAIM_LADDER,
+  STROP_RAZINE_A,
   type LedgerInputs,
   type CompletionLedger,
 } from '../src/verification/completion-ledger';
+import { provenUnitWorkTypes } from '../src/verification/real-corpus-attestation';
 import baked from '../docs/generated/completion-ledger.json';
 import type { ThesisProfile, SourceEntry } from '../src/profiles/profile-schema';
 
@@ -104,6 +106,36 @@ describe('completion ledger: nijedan redak ne tvrdi vise nego sto dokazuje', () 
     for (const row of fresh.rows) {
       if (row.claim === 'E') expect(row.evidence.scoredTotal).toBe(0);
       if (row.evidence.scoredTotal > 0) expect(row.claim).not.toBe('E');
+    }
+  });
+
+  it('strop razine A je imenovan, prvi, na SVAKOM E retku profila i ni na jednom drugom retku', () => {
+    // E = redci bez bodovanog pravila iz sluzbenog izvora + programi bez profila. Strop nose samo prvi:
+    // program bez profila nije strop nego prazno mjesto, i vec ima vlastiti doslovni razlog.
+    const eProfila = fresh.rows.filter((r) => r.claim === 'E' && r.profileId !== null);
+    expect(eProfila.length).toBeGreaterThan(0);
+    for (const row of eProfila) expect(row.blockedReasons[0]).toBe(STROP_RAZINE_A);
+    for (const row of fresh.rows) {
+      if (row.claim !== 'E') expect(row.blockedReasons).not.toContain(STROP_RAZINE_A);
+    }
+  });
+
+  it('ovjera na stvarnim radovima dize SAMO par jedinica x vrsta rada, nikad cijeli profil', () => {
+    // Odluka vlasnika 2026-09-05: dokaz vrijedi za (jedinica, vrsta rada). Isti profil moze biti A za
+    // diplomski a B za doktorski. Mjera: bez ovjere ledger ima manje A; s ovjerom se smije promijeniti
+    // iskljucivo redak ciji je par ovjeren, i to samo prema gore.
+    const bezOvjere = buildCompletionLedger({ ...inputs, corpusAttestation: null });
+    const dokazani = provenUnitWorkTypes(corpusAttestation);
+    expect(dokazani.size).toBeGreaterThan(0);
+    const aPrije = bezOvjere.rows.filter((r) => r.claim === 'A').length;
+    const aPoslije = fresh.rows.filter((r) => r.claim === 'A').length;
+    expect(aPoslije).toBeGreaterThan(aPrije);
+    for (const row of fresh.rows) {
+      const prije = bezOvjere.rows.find((r) => r.profileId === row.profileId && r.workType === row.workType);
+      expect(prije).toBeDefined();
+      const par = `${row.unitId}::${row.workType}`;
+      if (!dokazani.has(par)) expect(row.claim).toBe(prije!.claim);
+      if (row.claim === 'A' && prije!.claim !== 'A') expect(dokazani.has(par)).toBe(true);
     }
   });
 

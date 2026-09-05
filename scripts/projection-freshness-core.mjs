@@ -43,6 +43,20 @@
  */
 export const PROJECTIONS = [
   {
+    // Pecene brojke trake na `/` (rez naslovnice 2026-09-05): cisti ulaz ne smije vuci registar
+    // profila ni katalog, pa brojke pece generator istom formulom koju je naslovnica racunala zivo.
+    id: 'site-stats',
+    artifacts: ['data/coverage/site-stats.json'],
+    sources: [
+      'data/profiles/verified-profiles-index.json',
+      'data/catalog/zagreb-catalog.json',
+      'data/coverage/corpus-stats.json',
+      'src/coverage/site-stats.ts',
+      'scripts/gen-site-stats.mts',
+    ],
+    regenerate: 'npm run gen-site-stats',
+  },
+  {
     id: 'closed-loop',
     artifacts: ['docs/generated/closed-loop.json'],
     sources: ['src/repair', 'src/analysis', 'tests/helpers/violating-docx.ts', 'scripts/run-closed-loop.mts'],
@@ -86,10 +100,25 @@ export const PROJECTIONS = [
       'data/title-pages/templates-index.json',
       'data/tools/citation-specs/verified-index.json',
       'data/declarations/declarations.json',
+      // Od 2026-09-05 ledger cita i ovjeru dokaza na stvarnim radovima (generate-completion-ledger.mts).
+      'data/verification/real-corpus-attestation.json',
       'src/verification',
       'scripts/generate-completion-ledger.mts',
     ],
     regenerate: 'npm run completion-ledger',
+  },
+  {
+    // Registriran 2026-09-05, nakon sto je puni gate na cistom worktreeu pao tocno na njegova dva drift
+    // testa: mapa je kasnila za ledgerom, a detektor registra ju nije vidio jer hint nije nosio oblik
+    // `inace: npm run ...`. Izvori su utvrdjeni citanjem generatora: cita ledger i uvozi CLAIM_LADDER.
+    id: 'profile-claims',
+    artifacts: ['data/profiles/profile-claims.json'],
+    sources: [
+      'docs/generated/completion-ledger.json',
+      'src/verification/completion-ledger.ts',
+      'scripts/gen-profile-claims.mts',
+    ],
+    regenerate: 'npm run gen-profile-claims',
   },
   {
     // Registriran 2026-09-04, prvi s ratcheta od pet neregistriranih. Izvori su UTVRDJENI citanjem

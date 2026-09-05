@@ -19,7 +19,7 @@
  * fakulteta, pa su posteno `derived`.
  */
 import type { WorkType } from '../profiles/profile-schema';
-import { provenProfiles, type CorpusAttestation } from './real-corpus-attestation';
+import { provenUnitWorkTypes, type CorpusAttestation } from './real-corpus-attestation';
 
 /** Odakle znamo da program postoji: `official` = sluzbeni Upisnik (jos nedostupno, faza P1). */
 export type ProgramAxis = 'official' | 'derived' | 'missing' | 'unsupported';
@@ -40,6 +40,9 @@ export type ClaimLevel = 'A' | 'B' | 'C' | 'D' | 'E';
  * rupu. Ta rupa blokira GLOBALNU tvrdnju ("svaki rad u Hrvatskoj"), sto ledger biljezi zasebno
  * kroz `programGap` i `nationalClaimBlockers`, a ne kroz degradaciju svakog pojedinog profila.
  */
+/** Blokator koji NIJE zadatak nego strop: nema sluzbenog bodovanog pravila, pa nema sto dokazati. */
+export const STROP_RAZINE_A = 'strop: bez bodovanog pravila iz sluzbenog izvora razina A nije dostizna nijednim brojem radova';
+
 export const CLAIM_LADDER: Record<ClaimLevel, string> = {
   A: 'provjereno i popravljano prema sluzbenim uputama, dokazano na stvarnom radu',
   B: 'provjerava i popravlja prema sluzbenim uputama (dokazano na generiranom dokumentu)',
@@ -248,9 +251,17 @@ function deriveClaim(
 ): { claim: ClaimLevel; blockedReasons: string[] } {
   const reasons: string[] = [];
 
-  if (rules === 'none') return { claim: 'E', blockedReasons: ['nema staging pravila za profil'] };
+  // STROP, IMENOVAN (odluka vlasnika 2026-09-05). Bez bodovanog pravila iz sluzbenog izvora razina A
+  // nije dostizna nijednim brojem stvarnih radova: nema pravila koje bi popravak dokazao. Do sada su
+  // ove dvije grane stajale uz iste blokatore kao redci koji samo CEKAJU rad, pa se iz brojke
+  // "svi na A" nije dalo vidjeti je li ostatak kvar ili cinjenica o izvoru. Razlog se zato izgovara,
+  // prvi, i test ga cita doslovno (`STROP_RAZINE_A`).
+  if (rules === 'none') return { claim: 'E', blockedReasons: [STROP_RAZINE_A, 'nema staging pravila za profil'] };
   if (rules === 'advisory-only') {
-    return { claim: 'E', blockedReasons: ['pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)'] };
+    return {
+      claim: 'E',
+      blockedReasons: [STROP_RAZINE_A, 'pravila postoje, ali nijedno nije bodovano (izvor ili verifikacija nedostaju)'],
+    };
   }
 
   if (repair !== 'faculty-specific') {
@@ -290,13 +301,11 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
    * priznavala samo COMMITANE uzorke, dok je stvarni korpus gitignoriran jer su to tudji studentski
    * radovi. Ovjera zatvara tu rupu: u repozitorij ulazi POTPISANA tvrdnja o mjerenju, nikad gradja.
    *
-   * GRANULARNOST JE PO PROFILU, ne po vrsti rada, i to je imenovano ogranicenje: artefakt mjerenja
-   * ne biljezi vrstu rada, pa se dokaz primjenjuje na sve retke tog profila. Isti oblik ustupka vec
-   * postoji za citatne specove ("granularnost je danas FAKULTETSKA").
+   * GRANULARNOST JE JEDINICA x VRSTA RADA, odlukom vlasnika 2026-09-05: rad mjeren nad jednim profilom
+   * dokazuje popravak za sve profile iste jedinice i iste vrste rada, jer se pravila mijenjaju po vrsti
+   * rada a ne po katedri. Isti ustupak vec postoji za citatne specove.
    */
-  const dokazani = new Set(
-    [...provenProfiles(inputs.corpusAttestation)].map((k) => k.split('::')[0]),
-  );
+  const dokazani = provenUnitWorkTypes(inputs.corpusAttestation);
   const coverageByProfile = new Map(inputs.coverageCells.map((c) => [c.profileId, c]));
   const bulkByProfile = new Map(inputs.worklistRows.map((r) => [r.profileId, r.bulk]));
 
@@ -384,8 +393,10 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
        * `review` - popravak je nesto napravio, ali ishod trazi ljudski pogled.
        */
       const loop = closedLoopByProfile.get(profile.profileId);
-      const proof: ProofAxis =
-        profile.automaticTests.realCorpus === 'pass' || dokazani.has(profile.profileId)
+      // Dokaz ovisi o VRSTI RADA, jer ovjera dokazuje par jedinica x vrsta: isti profil moze imati
+      // dokaz za diplomski a ne za doktorski. Zato funkcija, a ne konstanta izracunata jednom po profilu.
+      const proofFor = (workType: string | null): ProofAxis =>
+        profile.automaticTests.realCorpus === 'pass' || dokazani.has(`${faculty.unitId}::${workType}`)
           ? 'real-docx-pass'
           : loop === 'pass' || profile.automaticTests.syntheticClosedLoop === 'pass'
             ? 'synthetic-pass'
@@ -424,6 +435,7 @@ export function buildCompletionLedger(inputs: LedgerInputs): CompletionLedger {
           ? 'exact-official'
           : 'generic';
 
+        const proof = proofFor(workType);
         const { claim, blockedReasons } = deriveClaim(rules, repair, proof);
         if (!matrix) {
           blockedReasons.push('profil nije u fakultetskoj matrici, pa za njega nema automatskih testova');

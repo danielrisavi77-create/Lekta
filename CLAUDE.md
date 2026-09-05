@@ -158,10 +158,16 @@ drugo. Provjeri to PRIJE nego se osloni na master (grananje, merge, dokaz).
 TRI ishoda, i to je cijela poanta: `0` zeleno, `1` CRVENO (uz broj UZASTOPNIH padova, koji je
 vazniji od zadnjeg), `2` NE ZNAM. "Ne znam" nikad ne izlazi kao zeleno.
 
-Alat NE koristi `gh`. Izmjereno 2026-09-03: `gh` je poceo visiti na svakoj podnaredbi,
-ukljucujuci `gh auth status`, i jedan poziv se nije vratio ni nakon 439 s, dok je `api.github.com`
-istovremeno odgovarao za 0,32 s. Zove se API izravno (repozitorij je javan, autentikacija ne
-treba), sto traje ~1,8 s. Ako alat mijenjas: izlaz mora ici preko `process.exitCode`, jer
+Alat NE koristi `gh`, i to je odluka o OVISNOSTI, ne o stanju alata. Izmjereno 2026-09-03: `gh`
+je visio na svakoj podnaredbi, ukljucujuci `gh auth status`, jedan poziv se nije vratio ni nakon
+439 s, dok je `api.github.com` istovremeno odgovarao za 0,32 s. Izmjereno 2026-09-04: isti `gh`
+na istom stroju vraca `gh auth status` za 0,3 s, a `gh run view --log-failed` radi i s njim su
+istog dana procitana dva CI loga koja API bez autentikacije ne daje (gitleaks nalaz, rule-claims).
+Dakle vjesanje je bilo PROLAZNO, a gard koji mora biti pouzdan ne smije ovisiti o alatu koji zna
+biti neprolazan; zato master-ci ostaje na izravnom API-ju (repozitorij je javan, autentikacija ne
+treba, ~1,8 s). Za RUCNO citanje logova `gh` je ispravan alat: probaj ga s kratkim rokom
+(`timeout 25 gh auth status`) umjesto da ga izbjegavas po sjecanju na jucerasnje mjerenje.
+Ako alat mijenjas: izlaz mora ici preko `process.exitCode`, jer
 `process.exit()` uz zivu `fetch` uticnicu rusi Node na Windowsu i vraca 127, cime ugovor o tri
 koda pukne bas kad gard treba biti pouzdan.
 

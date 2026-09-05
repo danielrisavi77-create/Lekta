@@ -5,7 +5,7 @@ import { existsSync, statSync, createReadStream, readFileSync, writeFileSync } f
 import { stripDevOnly } from './scripts/strip-dev-only.mjs';
 import { resolveDevTools } from './scripts/dev-console.mjs';
 import { classificationGuard } from './scripts/security/classification-guard.mjs';
-import { describeEntryGraph, measureEntryGraphBytes, type BundleLike } from './src/build/bundle-entry-graph';
+import { checkEntryBudgets, type BundleLike } from './src/build/bundle-entry-graph';
 
 // Vite dev i preview posluzuju HTML kao 'text/html' bez charseta i oslanjaju se na
 // <meta charset="utf-8"> u dokumentu. Ovaj mali plugin eksplicitno dodaje
@@ -257,7 +257,30 @@ function bundleSizeGuard(devTools: boolean) {
    * Dinamicki uvozi se namjerno ne broje: lazy chunkovi (analiza, popravak, predlosci) ne ulaze
    * u prvi paint, pa bi njihovo brojanje ponistilo smisao code-splita.
    */
-  const INDEX_ENTRY_BUDGET = 960 * 1024;
+  /**
+   * BUDZET PO ULAZU (2026-09-05). Do tada je guard mjerio SAMO `index`; cim `/` postane cisti ulaz za
+   * dokument, taj ulaz mjeri ~8 KB i prolazi zauvijek, a analizator (ulaz `rad`) ostaje bez ijedne
+   * mjere. Brojke su iz stvarnog builda toga dana, zaokruzene navise kao red velicine:
+   *
+   *     rad         analizator, app chunk 687 KB raw               -> 960 KB (stari budzet, ista mjera)
+   *     index       do reza isti graf kao rad; poslije ~25 KB       -> 960 KB, spusta se u rezu
+   *     saznajVise  ui-boot + page.css, 21 KB raw                   -> 128 KB
+   *     mojiRadovi  ui-boot + session store + history, 30 KB raw    -> 128 KB
+   *
+   * mojiRadovi je do istog dana staticki vukao 740 KB hunspell wasm chunka, ne zato sto ga uvozi nego
+   * zato sto je rolldown svoje runtime pomocnike smjestio u taj chunk (vidi advancedChunks nize).
+   * Budzet od 128 KB je ono sto tu regresiju cini VIDLJIVOM: da je budzet bio 960 KB, prosla bi.
+   */
+  const ENTRY_BUDGETS: Readonly<Record<string, number>> = {
+    rad: 960 * 1024,
+    // REZ NASLOVNICE (2026-09-05): `/` je cisti ulaz za dokument. Izmjereno na prvom buildu poslije
+    // reza: entry 6 KB + ui-boot + hero-depth + IndexedDB store, intake gate lijen. Budzet je
+    // namjerno tijesan: povratak analizatora na `/` (uvoz `src/ui/app.ts`) dodaje 687 KB i pada
+    // odmah, sto je cijela poanta ulaza koji ne vuce nista.
+    index: 160 * 1024,
+    saznajVise: 128 * 1024,
+    mojiRadovi: 128 * 1024,
+  };
   return {
     name: 'lekta-bundle-size-guard',
     apply: 'build' as const,
@@ -290,18 +313,12 @@ function bundleSizeGuard(devTools: boolean) {
       // `if (indexEntry)` tiho preskakao, pa bi preimenovan ili maknut ulaz ugasio provjeru bez
       // ijednog traga. Nula izmjerenih chunkova je pad, ne cist prolaz (isti obrazac kao
       // klasifikacijski guard).
-      const measured = measureEntryGraphBytes(bundle, 'index');
-      if (!measured) {
+      const problems = checkEntryBudgets(bundle, ENTRY_BUDGETS);
+      if (problems.length > 0) {
         throw new Error(
-          "[bundle-guard] entry chunk 'index' ne postoji u bundleu, pa se budzet nije mogao izmjeriti. " +
-          'Provjeri rollupOptions.input u vite.config.ts; guard bez entryja bi prolazio vakuumski.',
-        );
-      }
-      if (measured.totalBytes > INDEX_ENTRY_BUDGET) {
-        throw new Error(
-          `[bundle-guard] pocetni staticki graf ulaza index je ${Math.round(measured.totalBytes / 1024)} KB, ` +
-          `preko budzeta ${Math.round(INDEX_ENTRY_BUDGET / 1024)} KB. ${describeEntryGraph(measured)}. ` +
-          'Vjerojatno je nesto tesko uslo u entry (heavy profili ili nova velika ovisnost); ' +
+          '[bundle-guard] ' + problems.map((p) => p.detail).join(' | ') + '. ' +
+          'Nedostajuci ulaz: provjeri rollupOptions.input (guard bez entryja bi prolazio vakuumski). ' +
+          'Preko budzeta: nesto tesko je uslo u pocetni graf (heavy profili, wasm, nova velika ovisnost); ' +
           'code-splitaj (dinamicki uvoz) ili svjesno podigni budzet uz mjerenje i biljesku.',
         );
       }
@@ -439,6 +456,8 @@ export default defineConfig(({ command }) => {
   const input: Record<string, string> = {
     index: resolve(__dirname, 'index.html'),
     rad: resolve(__dirname, 'rad', 'index.html'),
+    saznajVise: resolve(__dirname, 'saznaj-vise', 'index.html'),
+    mojiRadovi: resolve(__dirname, 'moji-radovi', 'index.html'),
     demo: resolve(__dirname, 'demo.html'),
     usporedba: resolve(__dirname, 'landing_usporedba.html'),
     benchmark: resolve(__dirname, 'landing_benchmark.html'),
@@ -495,7 +514,23 @@ export default defineConfig(({ command }) => {
     // mobitelu. Pravi lijek je performance-01/02 (maknuti podatke iz runtime grafa), ne stringify.
     build: {
       target: 'es2022',
-      rollupOptions: { input },
+      rollupOptions: {
+        input,
+        output: {
+          /**
+           * HUNSPELL U VLASTITOM CHUNKU (2026-09-05). Izmjereno: rolldown je svoje runtime pomocnike
+           * (`__export`/`__toESM`, izvezeni kao `t`) smjestio u chunk hunspell-asmova `dist/esm/index.js`
+           * (740 KB raw, 290 KB gzip). Svaki modul koji treba taj pomocnik, a `auth/session.ts` i
+           * `report/repair-history.ts` ga trebaju iako u izvoru nemaju NIJEDAN uvoz, staticki je vukao
+           * cijeli wasm: `/moji-radovi/` i `admin.html` preloadali su 290 KB koje nikad ne izvrse.
+           * Grupa s visokim prioritetom drzi hunspell odvojeno, pa pomocnici zavrse u malom chunku.
+           * Dokaz je budzet ulaza `mojiRadovi` (128 KB) u bundleSizeGuard, koji bez ove grupe pada.
+           */
+          advancedChunks: {
+            groups: [{ name: 'hunspell', test: /hunspell-asm/, priority: 100 }],
+          },
+        },
+      },
     },
   };
 });

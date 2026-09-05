@@ -147,9 +147,20 @@ jobs:
           ]
           # Harvestirani sluzbeni izvori (HTML snapshoti) mogu nositi benigne eyJ/base64 blobove.
           # Lockfile nosi integritetske hasheve, ne aplikacijske tajne.
+          #
+          # `deno.lock` dodan 2026-09-04. Blok `remote` preslikava JAVNI URL modula u SHA-256 tog
+          # modula; `generic-api-key` zagrize na 64 heksadecimalna znaka uz kljuc koji sadrzi "auth"
+          # (`https://esm.sh/@supabase/auth-js@.../auth-js.mjs`). Nema vjerodajnice i nema sto
+          # rotirati. Provjereno u samoj datoteci, ne po tudjoj rijeci.
+          #
+          # PUTANJA, a ne fingerprint, i to je ista odluka kao za `package-lock.json`: svaki sljedeci
+          # lock donosi nove hasheve, pa bi fingerprint iz `.gitleaksignore` pao vec pri prvom
+          # osvjezavanju ovisnosti. Politika "literal, ne putanja" iz allowlista IZNAD vrijedi za
+          # fixture literale; za lockfileove je odluka vec bila donesena i zapisana ovdje.
           paths = [
           '''data/sources/.*\.html$''',
           '''(^|/)package-lock\.json$''',
+          '''(^|/)deno\.lock$''',
           ]
           GITLEAKS_TOML
           cat "$RUNNER_TEMP/gitleaks.toml"

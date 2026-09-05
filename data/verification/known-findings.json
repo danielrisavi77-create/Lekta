@@ -182,6 +182,19 @@
     },
     {
       "ruleIds": [
+        "fazos-diplomski--citation-style",
+        "fazos-zavrsni--citation-style"
+      ],
+      "finding": "vrijednost pravila lezi u parafrazi",
+      "evidence": "fazos-upute-diplomski-2024.pdf i fazos-upute-zavrsni-2024.pdf, doslovno: \"Za citiranje u tekstu rada treba koristiti APA stil citiranja.\" Bodovana vrijednost je \"apa7\". Citat JEST doslovan (najdulje sidro revizije je cijela recenica), samo je token PRECIZNIJI od citata: izvor kaze APA, token nosi broj izdanja 7 kojeg izvor ne spominje.",
+      "alsoNoted": "Ista kategorija nalaza kao unizd-pomorski-zavrsni--font, ali DRUGI razlog: ondje je vrijednost svjestan ispravak tipfelera u izvoru, ovdje je dodan broj izdanja. Presuda zato ne stoji na tom presedanu nego na tri mjerenja u obrazlozenju. Razmotren je i token \"custom\" (\"Prema posebnim uputama\", kao kod IEEE presude 2026-08-29), i odbacen: ondje izvori nisu imenovali stil, a ovdje izvor APA imenuje, pa bi \"custom\" tvrdio MANJE od izvora.",
+      "decision": "left-scored",
+      "decidedBy": "Daniel Risavi (odluka u sesiji 2026-09-05, na preporuku sesije uz tri mjerenja)",
+      "decidedAt": "2026-09-05",
+      "rationale": "Tri mjerenja, sva tri nad kodom a ne nad izvorom: (1) goli token \"apa\" NE POSTOJI u bodovanju, VALID_CITATION_IDS ima samo apa7 (uz harvard, chicago-*, mla9, vancouver, ieee, custom i fakultetske), pa izbor nije \"apa7 ili apa\" nego \"apa7 ili bez bodovanja\"; (2) motor NE RAZLIKUJE izdanja, \"apa6\" se ne pojavljuje nigdje u src/, pa student koji slijedi starije izdanje nije kaznjen po izdanju; (3) citation-meta za apa7 nosi mode author-year, dakle mjeri se oblik autor-godina, ne specificnost 7. izdanja. Oznaka tvrdi vise nego izvor, ponasanje ne. Demotiranje bi fazos profilima ugasilo jedinu bodovanu os citiranja koju izvor izricito propisuje."
+    },
+    {
+      "ruleIds": [
         "ferit-diplomski--citation-style",
         "ferit-zavrsni--citation-style",
         "fsb-diplomski--citation-style",

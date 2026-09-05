@@ -80,3 +80,29 @@ nece znati je li to kvar ili cinjenica.
 
 **Posteno ocekivanje:** bez kanala A, gornja granica je oko 26 profila na A uz sve sto sesije mogu
 same. Sve iznad toga ovisi o odluci da proizvod smije, uz privolu, zadrzati anonimizirane radove.
+
+## 7. Izvedeno 2026-09-05
+
+Odluke vlasnika: granularnost dokaza = **jedinica x vrsta rada**; kanal A (privola) ide u pripremu;
+strop za E redke se **imenuje** u ljestvici.
+
+| sto | prije | poslije |
+|---|---|---|
+| redaka na A | 9 | **26** (24 profila) |
+| redaka na B | 329 | 312 |
+| E s imenovanim stropom | 0 | 45 od 48 (ostala 3 su programi bez profila, s vlastitim razlogom) |
+| mjerenje | 45 radova, commit `bff502f2` | 45 radova, ponovljeno nad `b0071c86`: pass 1, review 42, fail 0, regresija 0 |
+
+- Ovjera (`data/verification/real-corpus-attestation.json`) sada nosi unose po paru
+  `(unitId, workType)` s popisom `profileIds` iz kojih dokaz dolazi; `provenUnitWorkTypes` je jedini
+  ulaz u ledger, a redak dobiva A samo ako je NJEGOV par ovjeren (test: bez ovjere manje A, s ovjerom
+  se mijenja iskljucivo ovjereni par).
+- `measuredAt` i `measuredFromCommit` citaju se iz artefakta mjerenja (`withProvenance` u
+  `scripts/repair-real-corpus.mts`), ne iz trenutka pisanja ovjere; artefakt bez provenijencije ovjera
+  ODBIJA, a `attestationProblems` javlja `nema vremena mjerenja`. Do tada je `measuredAt` govorio kad je
+  ovjera napisana, pa gard "potpis stariji od mjerenja" nije usporedjivao mjerenje ni s jedne strane.
+- Strop je konstanta `STROP_RAZINE_A` u `completion-ledger.ts`, prva u `blockedReasons` obiju E grana
+  (`none`, `advisory-only`); test tvrdi da stoji na svakom E retku profila i ni na jednom drugom.
+
+**Posteno ocekivanje ostaje isto:** 26 je gornja granica iz postojecih radova. Dalje pomicu samo
+skupina "podaci" (oko 95 redaka izlazi iz blokatora, ali ostaje na B) i kanal A.

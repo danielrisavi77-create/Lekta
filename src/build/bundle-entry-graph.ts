@@ -122,6 +122,54 @@ export function measureEntryGraphBytes(bundle: BundleLike, entryName: string): E
   };
 }
 
+/**
+ * BUDZET PO ULAZU, ne po jednom imenu.
+ *
+ * Do 2026-09-05 je guard mjerio iskljucivo ulaz `index`. Kad `/` postane cisti ulaz za dokument
+ * (~8 KB), taj ulaz prolazi zauvijek, a jedini teski ulaz (`rad`, koji nosi analizator) nitko ne
+ * mjeri: regresija od pola megabajta ostala bi nevidljiva uz zelen guard. Zato budzet nosi SVAKI
+ * imenovani ulaz, i svaki koji nedostaje u bundleu je pad, ne tihi preskok (isti sentinel kao prije).
+ *
+ * Vraca popis problema; prazan popis znaci prolaz. Cista funkcija, pa se mutacije mjere bez builda.
+ */
+export interface EntryBudgetProblem {
+  entryName: string;
+  kind: 'missing-entry' | 'over-budget';
+  measuredBytes: number | null;
+  budgetBytes: number;
+  detail: string;
+}
+
+export function checkEntryBudgets(
+  bundle: BundleLike,
+  budgets: Readonly<Record<string, number>>,
+): EntryBudgetProblem[] {
+  const names = Object.keys(budgets);
+  if (names.length === 0) {
+    throw new Error('[bundle-guard] prazna mapa budzeta: guard bez ijednog ulaza bi prolazio vakuumski.');
+  }
+  const problems: EntryBudgetProblem[] = [];
+  for (const entryName of names) {
+    const budgetBytes = budgets[entryName];
+    const measured = measureEntryGraphBytes(bundle, entryName);
+    if (!measured) {
+      problems.push({
+        entryName, kind: 'missing-entry', measuredBytes: null, budgetBytes,
+        detail: `entry chunk '${entryName}' ne postoji u bundleu, pa se budzet nije mogao izmjeriti`,
+      });
+      continue;
+    }
+    if (measured.totalBytes > budgetBytes) {
+      problems.push({
+        entryName, kind: 'over-budget', measuredBytes: measured.totalBytes, budgetBytes,
+        detail: `pocetni staticki graf ulaza ${entryName} je ${Math.round(measured.totalBytes / 1024)} KB, `
+          + `preko budzeta ${Math.round(budgetBytes / 1024)} KB. ${describeEntryGraph(measured)}`,
+      });
+    }
+  }
+  return problems;
+}
+
 /** Citljiv sazetak mjerenja za poruku o padu builda (bez skrivanja nepotpunosti). */
 export function describeEntryGraph(measurement: EntryGraphMeasurement): string {
   const kb = (bytes: number): string => `${Math.round(bytes / 1024)} KB`;

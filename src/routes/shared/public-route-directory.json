@@ -6,17 +6,17 @@
       "label": "Tvoj rad",
       "destinations": [
         { "id": "intake", "label": "Nova provjera", "href": "/", "description": "Učitaj Word dokument i pokreni novu lokalnu provjeru.", "release": "core" },
-        { "id": "my-work", "label": "Moji radovi", "href": "/moji-radovi/", "description": "Otvori osobni prostor za lokalni rad i pristup računu.", "release": "personal-space" },
-        { "id": "account-repairs", "label": "Prijava i spremljeni popravci", "href": "/moji-radovi/#racun", "description": "Prijavi se i upravljaj popravcima spremljenima na računu.", "release": "personal-space" }
+        { "id": "my-work", "label": "Moji radovi", "href": "/moji-radovi/", "description": "Otvori osobni prostor za lokalni rad i pristup računu.", "release": "core" },
+        { "id": "account-repairs", "label": "Prijava i spremljeni popravci", "href": "/moji-radovi/#racun", "description": "Prijavi se i upravljaj popravcima spremljenima na računu.", "release": "core" }
       ]
     },
     {
       "id": "rules-trust",
       "label": "Pravila i povjerenje",
       "destinations": [
-        { "id": "learn-more", "label": "Kako radi", "href": "/saznaj-vise/#how", "description": "Pogledaj tijek provjere i granice lokalne obrade.", "release": "content-hub" },
-        { "id": "checks", "label": "Što se provjerava", "href": "/saznaj-vise/#checks", "description": "Saznaj koje dijelove forme Lekta može provjeriti.", "release": "content-hub" },
-        { "id": "trust-proof", "label": "Metodologija i dokazi", "href": "/saznaj-vise/#trust-proof", "description": "Pogledaj kako nastaju pravila, mjerenja i dokazi.", "release": "content-hub" },
+        { "id": "learn-more", "label": "Kako radi", "href": "/saznaj-vise/#how", "description": "Pogledaj tijek provjere i granice lokalne obrade.", "release": "core" },
+        { "id": "checks", "label": "Što se provjerava", "href": "/saznaj-vise/#checks", "description": "Saznaj koje dijelove forme Lekta može provjeriti.", "release": "core" },
+        { "id": "trust-proof", "label": "Metodologija i dokazi", "href": "/saznaj-vise/#trust-proof", "description": "Pogledaj kako nastaju pravila, mjerenja i dokazi.", "release": "core" },
         { "id": "faculty-rules", "label": "Pravila po fakultetu", "href": "/fakulteti/", "description": "Pronađi dostupna pravila za fakultet i vrstu rada.", "release": "core" },
         { "id": "coverage", "label": "Pokrivenost profila", "href": "/pokrivenost.html", "description": "Provjeri status pokrivenosti dostupnih profila.", "release": "core" },
         { "id": "document-processing", "label": "Privatnost obrade", "href": "/obrada-dokumenata.html", "description": "Saznaj što ostaje lokalno, a kada dokument ide na server.", "release": "core" }
@@ -41,8 +41,8 @@
       "destinations": [
         { "id": "comparison", "label": "Usporedba", "href": "/landing_usporedba.html", "description": "Usporedi Lektu s drugim načinima provjere rada.", "release": "core" },
         { "id": "benchmark", "label": "Benchmark", "href": "/landing_benchmark.html", "description": "Pogledaj mjerljive rezultate javnog benchmarka.", "release": "core" },
-        { "id": "pricing", "label": "Paketi", "href": "/saznaj-vise/#pricing", "description": "Pregledaj dostupne pakete i što svaki uključuje.", "release": "content-hub" },
-        { "id": "faq", "label": "Česta pitanja", "href": "/saznaj-vise/#faq", "description": "Pronađi kratke odgovore na česta pitanja.", "release": "content-hub" },
+        { "id": "pricing", "label": "Paketi", "href": "/saznaj-vise/#pricing", "description": "Pregledaj dostupne pakete i što svaki uključuje.", "release": "core" },
+        { "id": "faq", "label": "Česta pitanja", "href": "/saznaj-vise/#faq", "description": "Pronađi kratke odgovore na česta pitanja.", "release": "core" },
         { "id": "guarantee", "label": "Garancija", "href": "/garancija.html", "description": "Pročitaj uvjete garancije i granice pokrivenosti.", "release": "core" },
         { "id": "terms-refund", "label": "Uvjeti i povrat", "href": "/uvjeti-koristenja.html", "description": "Pročitaj uvjete korištenja, otkaza i povrata.", "release": "core" }
       ]

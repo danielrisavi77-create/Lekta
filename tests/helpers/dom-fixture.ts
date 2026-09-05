@@ -12,7 +12,7 @@ import path from 'node:path';
  * Skripte se NE prenose: happy-dom bi ih pokusao izvrsiti, a modul se ionako uvozi rucno.
  */
 export function ubaciStranicu(): void {
-  const put = path.resolve(__dirname, '..', '..', 'index.html');
+  const put = path.resolve(__dirname, '..', '..', 'rad', 'index.html');
   const html = fs.readFileSync(put, 'utf8');
   const m = /<body[^>]*>([\s\S]*)<\/body>/i.exec(html);
   if (!m) throw new Error('index.html nema <body>; fixtura ne moze nastati');

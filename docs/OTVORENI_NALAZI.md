@@ -116,6 +116,81 @@ trazi da se za svaku utvrde IZVORI; kriv popis izvora daje laznu sigurnost, pa s
 Poruka trazi `npm run repair-real-corpus-backlog`; ta skripta ne postoji. Citatelja salje u prazno.
 Drzi ga ratchet od jednog u istom testu.
 
+### B6. Popravak literature tiho izostane na stvarnim radovima  (PRVA KLASA ZATVORENA, druga otvorena)
+
+`bibliography-repair-fixer` vrati `stale-anchor` i popravak literature se NE dogodi, dok sucelje
+javlja uspjeh jer su ostali fixeri prosli. To je doslovno posljedica koju
+`tests/repair-anchor-collision.test.ts` u svom zaglavlju opisuje kao RIJESENU.
+
+    lokalni korpus (38 stvarnih radova)   13 ima barem jedan stale-anchor u PRVOM krugu
+        12x  bibliography-repair-assisted
+         1x  heading-structure-universal      (local-01-diplomski)
+         1x  link-doi-repair-assisted         (local-15-rad)
+    commitani korpus (7 sintetickih)       0
+
+Od tih 12, bisekcijom po fixeru:
+
+    4   sudar s `link-doi-fixer`   local-06-diplomski, local-07-diplomski, local-17-rad, local-35-zavrsni
+    8   sidro nevaljano i kad fixer radi SAM, bez ijednog drugog zahtjeva
+        local-15-rad, local-27-zavrsni, local-28-rad, local-31-zavrsni,
+        local-32-diplomski, local-33-diplomski, local-34-diplomski, local-36-diplomski
+
+**Zasto zastita ne grize (prva klasa).** `withoutOverlappingLinkDoiOperations`
+(`src/repair/apply-fixers.ts:263`) izbacuje link-doi operacije nad odlomcima koje literatura
+posjeduje, usporedbom SIROVIH indeksa. Ali dvije strane broje odlomke po razlicitim osnovama, pa
+usporedba nikad nista ne izbaci. Izmjereno na `local-06-diplomski`:
+
+    link-doi operacije, indeksi iz zahtjeva   204, 205, 207, ... 240
+    odlomci koje link-doi STVARNO promijeni   519, 520, 522, ... 555     (konstantan pomak 315)
+    literatura posjeduje                      519..559
+    filtar prijavi preklapanje                0        <- a stvarno preklapanje je 22 od 22
+
+Osnove su najmanje tri: `link-doi-structure.ts:109` indeksira preko `extractBodyParagraphs`,
+literatura preko parserovih odlomaka, a `paragraphTextsForAnchors` preko trece enumeracije
+(1199 odlomaka naspram 1198 kod brojanja parova `<w:p>...</w:p>`).
+
+**PRVA KLASA JE ZATVORENA.** Usporedba je premjestena s indeksa na TEKST: bibliografski zapis sada
+nosi normaliziran `anchorText` (`src/ui/repair-items.ts`), a filtar usporedjuje tekst s tekstom uz
+ZADRZANU indeksnu provjeru, pa stariji klijenti rade nepromijenjeno. Ne salje se nista sto server
+vec nema (popravak ionako prima cijeli dokument, a `link-doi` isti podatak salje odavno).
+
+    stale-anchor na stvarnim radovima   13 -> 9 radova
+    od toga bibliography-repair         12 -> 8
+    link-doi-repair                      1 -> 0
+    korpus                              pad 0, regresija 0, neidempotentnih 0, bodovi 29 -> 30 radova bolje
+
+Gard je UNIT test nad samim filtrom (`tests/repair-anchor-collision.test.ts`), s dokazom da grize:
+uz vracanje na usporedbu samo po indeksu pada tocno tvrdnja "GRIZE", uz baseline i negativnu
+kontrolu koje ostaju zelene. Pokusaj da se razmak podmetne POMICANJEM indeksa kroz `applyFixers` je
+odbacen jer ne reproducira kvar: tada ni link-doi ne nadje metu, pa test prolazi i na neispravnom
+kodu.
+
+**DRUGA KLASA (8 radova) JE ZATVORENA 2026-09-05.** Sidro nije valjalo ni nad netaknutim dokumentom
+jer `extractReferences` lijepi svaki odlomak koji ne izgleda kao nov zapis na prethodni (rucno
+oblikovane podnaslove popisa, "[n]" zapise, cijele zavrsne dijelove rada), a indeks ostaje prvi:
+sidro je hashirano nad tekstom koji NE pripada odlomku na koji indeks pokazuje. Sonda zapis po zapis:
+17 od 397 zapisa, u svih 17 fixerov tekst je prefiks analizinog; tabulator 0 od 17 (ta hipoteza je
+oborena).
+
+    raskorak sidra na 8 radova      17 -> 0
+    stale-anchor u prvom krugu       9 -> 1   (ostaje heading-structure-universal na local-01)
+    bibliography-repair              8 -> 0
+
+Popravak u tri sloja (`author-year.ts` ne lijepi podnaslove i zavrsne dijelove, `bibliography-structure.ts`
+nosi sve obuhvacene odlomke, `repair-items.ts` ne nudi visodlomacne zapise), gard s mutacijom u
+`src/analysis/bibliography-structure.test.ts`.
+
+Cim je literatura opet radila, otkrio se i CETVRTI kvar istog korijena, dotad nedostizan: na
+`local-36-diplomski` je `reference.alphabetical` pao iz pass u warn NAKON popravka, jer je fixer
+sortirao po cijelom nizu (`fields.authors || rawText`, gdje `hr` kolacija zanemaruje zarez) a provjera
+sudi po PRVOM autoru iz `extractReferences`: "United Nations General Assembly, ..." je otisao ispred
+"United Nations, ...". Tri mjesta su imala tri kljuca (provjera, fixer, `alphabetical.expected` u
+analizi). Svedeno na jedan: `sortKey` na zapisu = kljuc provjere; popravak i analiza sortiraju po
+njemu. Dokaz: sa starim kljucem fixera provjera nakon popravka pada (inverzija na #21), s novim prolazi.
+
+Preostaje JEDAN stale-anchor na cijelom korpusu: `heading-structure-universal` na `local-01-diplomski`.
+Nije mjeren; tko ga uzme, isti postupak (sonda zapis po zapis) je u ovom nalazu.
+
 ---
 
 ## C. Komercijalno, izvan koda

@@ -17,7 +17,7 @@ import { resolve } from 'node:path';
  * neprovjeren dok mu ne dokazes da proizvodi oblik koji tvrdis da pokrivas.
  */
 
-const INDEX = readFileSync(resolve(__dirname, '..', 'index.html'), 'utf8');
+const INDEX = readFileSync(resolve(__dirname, '..', 'rad', 'index.html'), 'utf8');
 
 /** Samo radna povrsina iz stvarnog `index.html`, bez ijedne druge skupine. */
 function workspaceOnlyDocument(): Document {

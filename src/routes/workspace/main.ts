@@ -5,8 +5,16 @@ import {
 } from './bootstrap';
 import { initialContext, type WorkspaceContext } from './workspace-state';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
+import { fileFromLocalDocumentSession } from '../../session/local-document-session';
 import '../../shared/ui-boot';
 import '../../shared/page.css';  // stil stranice; bez njega je ruta goli HTML
+// Paritet s bivsom naslovnicom (2026-09-05): Katedra dolazni kontekst i CTA nakon nalaza, te demo
+// scena i sloj dubine radne povrsine. Do reza su zivjeli samo u `src/main.ts`, pa je `/rad/` imao
+// staticnu, neanimiranu demo scenu i nije razumio `?workType=`/`#handoff=` s Katedre.
+import '../../integration/katedra-entry';
+import '../../integration/katedra-result-cta';
+import '../../ui/hero-demo';
+import '../../ui/hero-depth';
 
 /**
  * ULAZ RUTE `/rad/`. Tanak namjerno: sve odluke su u `bootstrap.ts`, koji je cist i testabilan
@@ -49,10 +57,23 @@ async function start(): Promise<void> {
     document.documentElement.dataset.workspaceState = context.state;
   };
 
+  // OBNOVLJEN DOKUMENT SE NE ZAPISUJE PONOVNO. Do 2026-09-05 je i on prolazio kroz zapis, pa je
+  // svako otvaranje `/rad/#session=X` stvaralo NOVU sesiju Y i brisalo X: poveznica iz
+  // `/moji-radovi/` i tiha poveznica "nastavi" na `/` vrijedile su tocno jedno otvaranje, a
+  // zatim su vodile u "sesija vise ne postoji". Dokument koji je dosao iz pohrane vec IMA sesiju;
+  // zapis pripada samo dokumentu koji je korisnik sam ubacio.
+  let restoredFile: File | null = null;
+
   // ZAPIS: tek kad je dokument STVARNO prihvacen. Pretplata se postavlja PRIJE obnove, jer i
-  // obnovljen dokument prolazi kroz prijem pa i on zavrsi ovdje.
+  // obnovljen dokument prolazi kroz prijem (odbijanje se postuje), ali se on ovdje prepozna i
+  // preskoci.
   subscribeAnalyzerDocumentAccepted((event) => {
     showState(afterDocumentAccepted(context));
+    if (restoredFile !== null && event.file === restoredFile) {
+      showState(afterPersist(context, true));
+      showStatus(null);
+      return;
+    }
     void (async () => {
       const out = await persistAcceptedDocument(event.file, event.verdict, storage, sessionId);
       showState(afterPersist(context, out.kind === 'persisted'));
@@ -73,7 +94,10 @@ async function start(): Promise<void> {
     sessionId = outcome.session.id;
     // Spremljen verdikt je samo predmemorija: dokument ide PONOVNO kroz prijem, pa se odbijanje
     // postuje umjesto da se vjeruje zapisu.
-    const restored = await restoreDocument(outcome.session, loadAnalyzerDocument);
+    // Isti `File` objekt koji ulazi u prijem pamti se PRIJE poziva, jer pretplata iznad gleda
+    // identitet objekta, ne ime ili velicinu (dva razlicita ubacivanja iste datoteke su dva rada).
+    restoredFile = fileFromLocalDocumentSession(outcome.session);
+    const restored = await restoreDocument(outcome.session, () => loadAnalyzerDocument(restoredFile!));
     if (restored.kind === 'refused') showStatus(restored.notice);
   }
 }

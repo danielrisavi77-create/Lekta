@@ -13,7 +13,7 @@ describe('side-by-side analyzer comparison artifact', () => {
     expect(html).toContain('<main data-demo-surface="analyzer-comparison"');
     expect(html).toContain('title="Live Lekta analyzer"');
     expect(html).toContain('title="Novi workspace demo"');
-    expect(html).toContain('src="/index.html#analyzer"');
+    expect(html).toContain('src="/rad/#analyzer"');
     expect(html).toContain('src="/prototype/analyzer-workspace-demo.html"');
     expect(css).toContain('@media (max-width: 900px)');
     expect(read('index.html')).not.toContain('analyzer-comparison');

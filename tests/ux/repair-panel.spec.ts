@@ -27,7 +27,7 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
     st.textContent = 'html,body,*{scroll-behavior:auto!important}';
     document.documentElement.appendChild(st);
   });
-  await page.goto('/');
+  await page.goto('/rad/');
   const uploadCta = page.locator('#uploadCtaBtn');
   if (await uploadCta.isVisible().catch(() => false)) await uploadCta.click();
   await page.locator('#fileInput').setInputFiles(fixture);
