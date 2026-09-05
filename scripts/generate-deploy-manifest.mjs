@@ -71,6 +71,7 @@ const DOMENA = {
   'source-check': ['analiza', 'provjera postojanja izvora ne radi; placeni dodatak'],
   'unsubscribe-reminder': ['rokovi', 'odjava s podsjetnika ne radi; pravna obveza'],
   'webhook-mor': ['naplata', 'placanja se ne knjize; kupac plati a ne dobije pravo'],
+  'withdraw-corpus-contribution': ['popravak', 'korisnik ne moze povuci privolu za prilog korpusu; pravna obveza'],
 };
 
 /**

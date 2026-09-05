@@ -412,9 +412,23 @@
       "impactIfDown": "placanja se ne knjize; kupac plati a ne dobije pravo",
       "intentionalExclusion": null,
       "reason": null
+    },
+    {
+      "function": "withdraw-corpus-contribution",
+      "verifyJwt": true,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "domain": "popravak",
+      "impactIfDown": "korisnik ne moze povuci privolu za prilog korpusu; pravna obveza",
+      "intentionalExclusion": null,
+      "reason": null
     }
   ],
-  "generatedAt": "2026-09-05T18:51:52.992Z",
-  "generatedFromCommit": "6d51d89480df0f3793f54fd6c1e3901a130502cc",
+  "generatedAt": "2026-09-05T18:57:51.778Z",
+  "generatedFromCommit": "602ae440e3b35b2c016dfd4f88521d6f43d8847c",
   "generator": "npm run deploy-manifest"
 }
