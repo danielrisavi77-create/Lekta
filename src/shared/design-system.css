@@ -10,7 +10,8 @@
  * (--display-serif), Inter Tight je glas sucelja/funkcionalni sloj (--ui; --sans je
  * njegov alias radi zateceni 81 poziv), IBM Plex Mono je PODATKOVNI glas i SAMO to
  * (--mono: brojevi, score, rule-kodovi, statusi, eyebrows), Caveat je rukopis korektora
- * (--font-hand). Source Serif ostaje ISKLJUCIVO glas dokument-pregleda (--ink-serif:
+ * (--font-hand: kurziv display serifa, vidi biljesku uz token). Source Serif ostaje
+ * ISKLJUCIVO glas dokument-pregleda (--ink-serif:
  * naslovnica/izjava/citat/literatura zrcale Word). Georgia (--font-doc) glumi tekst
  * "tudeg rada" u mockupima.
  *
@@ -91,7 +92,12 @@
   --ui: "Inter Tight Variable", "Inter Tight", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --sans: var(--ui); /* alias: glas sucelja je sada Inter Tight (bio IBM Plex Mono do 2026-07-18) */
   --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --font-hand: "Caveat", cursive;
+  /* Rukopis korektora vise NIJE zasebna obitelj. Caveat je uvozio jedino `src/ui/app.ts`
+     preko `src/main.ts`, a njega od reza ruta (2026-09-05) ne ucitava nijedna stranica, pa
+     je token uzivo padao na sustavni `cursive` (na Windowsu Comic Sans) na `/` i `/rad/`.
+     Biljeska korektora se sada pise KURZIVOM display serifa; "rukom pisano" nose nagib,
+     crvena i rotacija na mjestu upotrebe, ne peta obitelj. */
+  --font-hand: var(--display-serif);
   --font-doc: Georgia, "Times New Roman", serif;
 
   /* Radius: namjerno ostro (papirnati listovi) */

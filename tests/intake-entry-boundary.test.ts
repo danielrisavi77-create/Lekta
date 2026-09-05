@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { dirname, extname, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { collectStaticGraph, staticRuntimeImports } from './helpers/module-graph';
 
 /**
  * GRANICA CISTOG ULAZA `/` (rez naslovnice, 2026-09-05).
@@ -23,39 +24,8 @@ const INTAKE_CSS = resolve(ROOT, 'src/routes/intake/intake.css');
 
 const source = (path: string): string => readFileSync(path, 'utf8');
 
-function resolveRelativeImport(from: string, specifier: string): string | null {
-  if (!specifier.startsWith('.')) return null;
-  const base = resolve(dirname(from), specifier);
-  const candidates = extname(base)
-    ? [base]
-    : [base, `${base}.ts`, `${base}.tsx`, `${base}.css`, `${base}.json`, resolve(base, 'index.ts')];
-  return candidates.find((candidate) => existsSync(candidate)) ?? null;
-}
-
-function staticRuntimeImports(path: string): string[] {
-  if (!/\.(ts|tsx|mts|js)$/.test(path)) return [];
-  const code = source(path).replace(/^\s*import\s+type\b[\s\S]*?;\s*$/gm, '');
-  const imports: string[] = [];
-  const pattern = /^\s*import\s+(?!type\b)(?:[\s\S]*?\sfrom\s+)?['"]([^'"]+)['"]\s*;?/gm;
-  let match: RegExpExecArray | null;
-  while ((match = pattern.exec(code))) {
-    const resolved = resolveRelativeImport(path, match[1]);
-    if (resolved) imports.push(resolved);
-  }
-  return imports;
-}
-
-function collectStaticGraph(entry: string): Set<string> {
-  const seen = new Set<string>();
-  const queue = [entry];
-  while (queue.length) {
-    const path = queue.pop()!;
-    if (seen.has(path)) continue;
-    seen.add(path);
-    for (const imported of staticRuntimeImports(path)) queue.push(imported);
-  }
-  return seen;
-}
+// Obilazak grafa zivi u `helpers/module-graph.ts`, jer ga dijeli i `entry-fonts`. Ondje stoji i
+// biljeska o greedy `from` skupini koja je do 2026-09-05 gutala bare uvoze (5 nadjenih umjesto 19).
 
 describe('cisti ulaz /', () => {
   it('root je mali zaseban ulaz, bez skrivenog radnog prostora i bez prodajnog landinga', () => {

@@ -1,6 +1,7 @@
 // DOM glue za besplatni citat generator (citat.html). Logika formatiranja je u citation.ts
 // (opci stilovi), citations/faculty-styles.ts (vjeran po fakultetu) i citations/parse-reference.ts
 // (prepoznavanje zalijepljene literature); ovdje samo vezanje na formu i ispis. Bez mreze.
+import '../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
 import '../shared/ui-boot';
 import './tool-analytics';
 import { readFacultyContext, saveFacultyContext } from './faculty-context';

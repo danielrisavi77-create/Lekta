@@ -1,6 +1,5 @@
 import '@fontsource-variable/inter-tight';
 import '@fontsource-variable/newsreader/opsz.css';
-import '@fontsource/caveat/500.css';
 import './demo.css';
 import {
   advanceDemo,

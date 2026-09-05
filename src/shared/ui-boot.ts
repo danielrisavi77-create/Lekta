@@ -1,15 +1,14 @@
 // Zajednicki boot za sve stranice (index, citat, usporedba):
-//  1. self-hostani akademski serif (Source Serif 4, latin + latin-ext za hrvatski),
+//  1. dva glasa koja nosi SVAKA stranica (Newsreader + Inter Tight; vidi `fonts-core.ts`),
 //  2. Lucide ikone: zamjenjuje <i data-lucide="..."> jedinstvenim stroke setom.
 // Bez mreze prema trecim stranama; font se bundla lokalno (unicode-range skida
 // samo latin i latin-ext za hrvatski sadrzaj).
-import '@fontsource-variable/source-serif-4'; // dokument-pregledi (naslovnica/izjava/citat/literatura zrcale Word izlaz)
-import '@fontsource-variable/inter-tight'; // self-hostan UI/body sans (Tinta i papir); latin + latin-ext za hrvatski
-import '@fontsource-variable/newsreader/opsz.css'; // display serif s optical-size osi (naslovi)
-import '@fontsource-variable/newsreader/opsz-italic.css'; // italic za naglasne rijeci u naslovima
-import '@fontsource/ibm-plex-mono/400.css'; // podatkovni glas: brojevi, rule-code eyebrows, folio tagovi
-import '@fontsource/ibm-plex-mono/500.css';
-import '@fontsource/ibm-plex-mono/600.css';
+//
+// PODATKOVNI GLASOVI (Source Serif 4, IBM Plex Mono) OVDJE NAMJERNO VISE NISU: zive u
+// `fonts-document.ts` i uvozi ih stranica koja im ima mete. Do 2026-09-05 su stajali ovdje, pa
+// je i cisti ulaz `/` skidao mono koji na njemu nema nijednu metu. Stranice koje su ovaj modul
+// bootale IZRAVNO idu preko `page-boot.ts`, koji oba skupa spaja.
+import './fonts-core';
 import 'open-props/easings'; // samo easing krivulje (bez boja/sjena, da topla paleta ostane netaknuta)
 import './design-system.css'; // JEDINI izvor tokena (boje/tipografija/radius/sjene/fokus) za sve stranice
 import './tool-page.css'; // dijeljeni chrome (topbar/nav/gumbi/hero/card/footer/KS tema) za alat-stranice

@@ -2,6 +2,7 @@
 // title-page.ts (tipizirano, testabilno); ovdje samo vezanje forme, pregled i ispis. Bez mreze.
 // Kaskada ustanova -> fakultet -> studij puni se iz kataloga i bira predlozak fakulteta
 // (data/title-pages); tekstualna polja ostaju editabilna (kaskada ih samo auto-popunjava).
+import '../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
 import '../shared/ui-boot';
 import './tool-analytics';
 import { buildTitlePage, titlePageText, type TitlePageModel } from './title-page';

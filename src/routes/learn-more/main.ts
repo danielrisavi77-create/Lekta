@@ -1,6 +1,7 @@
 import { CHECK_ITEMS } from '../../config/config-loader';
 import { PRICING_TIERS } from '../../config/pricing-tiers';
 import { loadProductionConfig, paidOffersLive } from '../../config/production-config';
+import '../../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
 import '../../shared/ui-boot';
 import '../../shared/page-chrome.css';
 import '../../shared/page-app.css';

@@ -332,21 +332,39 @@ function bundleSizeGuard(devTools: boolean) {
 // hashirana pri buildu pa linkove moze ubaciti samo build (transformIndexHtml + sken bundlea).
 // crossorigin je OBAVEZAN i za same-origin (font fetch je uvijek CORS anonymous; bez atributa
 // preglednik preload ne bi uparivao s @font-face zahtjevom pa bi datoteku skinuo DVAPUT).
+// POPIS JE PO STRANICI, NE PO BUNDLEU. Do 2026-09-05 je plugin skenirao CIJELI bundle i ubacivao
+// isti popis u svaku stranicu, pa je cisti ulaz `/` preloadao IBM Plex Mono (15 kB) koji na njemu
+// nema nijednu metu, i to PRIJE fontova koje stvarno crta. Razdvajanje fontova po ruti
+// (`fonts-core` / `fonts-document`) samo po sebi to ne bi popravilo, jer datoteka i dalje postoji
+// u bundleu zbog `/rad/`. Zato se sada cita koje `.woff2` referenciraju CSS listovi TE stranice.
 function fontPreload() {
   const WANTED = [
     /newsreader-latin-opsz-normal/, /newsreader-latin-opsz-italic/,
-    /caveat-latin-600/, /inter-tight-latin-wght/, /ibm-plex-mono-latin-600/,
+    /inter-tight-latin-wght/, /ibm-plex-mono-latin-600/,
   ];
+  type Asset = { source?: string | Uint8Array };
   return {
     name: 'lekta-font-preload',
     apply: 'build' as const,
     transformIndexHtml: {
       order: 'post' as const,
-      handler(html: string, ctx: { bundle?: Record<string, unknown> }) {
+      handler(html: string, ctx: { bundle?: Record<string, Asset>; filename?: string }) {
         if (!ctx.bundle) return html;
-        const links = Object.keys(ctx.bundle)
-          .filter((f) => f.endsWith('.woff2') && WANTED.some((r) => r.test(f)))
-          .sort()
+        const cssHrefs = Array.from(html.matchAll(/href="\/([^"]+\.css)"/g), (m) => m[1]);
+        const vezani = new Set<string>();
+        for (const href of cssHrefs) {
+          const izvor = ctx.bundle[href]?.source;
+          const tekst = typeof izvor === 'string' ? izvor : izvor ? Buffer.from(izvor).toString('utf8') : '';
+          for (const m of tekst.matchAll(/url\(\s*["']?\/?([^"')]+\.woff2)/g)) vezani.add(m[1].replace(/^\//, ''));
+        }
+        const odabrani = [...vezani].filter((f) => WANTED.some((r) => r.test(f))).sort();
+        // SENTINEL: stranica koja ucitava CSS a nije nasla nijedan font znaci da je citanje
+        // bundlea puklo (promijenjen oblik `source`, druga staza), ne da fontova nema. Tihi
+        // preskok bi vratio FOUT na naslovima i nitko ga ne bi primijetio do vizualnog pregleda.
+        if (cssHrefs.length > 0 && odabrani.length === 0) {
+          throw new Error(`[lekta-font-preload] ${ctx.filename ?? 'stranica'} ucitava ${cssHrefs.length} CSS lista a nijedan font nije prepoznat`);
+        }
+        const links = odabrani
           .map((f) => `<link rel="preload" as="font" type="font/woff2" crossorigin href="/${f}">`)
           .join('');
         return links ? html.replace('</title>', '</title>' + links) : html;

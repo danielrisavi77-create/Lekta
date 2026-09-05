@@ -4,6 +4,7 @@ import { repairHistoryConfigFrom } from '../../report/repair-history-config';
 import { STORAGE_KEYS, safeStorageGet } from '../../shared/browser-storage';
 import { loadProductionConfig } from '../../config/production-config';
 import { accountView, localWorkView, type AccountView, type LocalWorkView } from './view-model';
+import '../../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
 import '../../shared/ui-boot';
 import '../../shared/page-chrome.css';
 import '../../shared/page-app.css';

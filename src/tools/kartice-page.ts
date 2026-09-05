@@ -1,6 +1,7 @@
 // DOM glue za besplatni brojac kartica (kartice.html). Sva logika je u counter.ts
 // (tipizirano, testabilno); ovdje samo vezanje textarea -> ispis. Bez mreze:
 // i .docx uvoz se raspakirava i cita LOKALNO (ZipReader + docx-text), nista se ne salje.
+import '../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
 import '../shared/ui-boot';
 import './tool-analytics';
 import { countText, karticeFrom, ZNAKOVA_PO_KARTICI, ZNAKOVA_PO_KARTICI_BEZ_RAZMAKA, type TextMetrics } from './counter';

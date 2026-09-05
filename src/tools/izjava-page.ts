@@ -1,5 +1,6 @@
 // DOM glue za besplatni generator Izjave o izvornosti (izjava.html). Logika je u
 // statement.ts (tipizirano, testabilno); ovdje samo vezanje forme, pregled i ispis. Bez mreze.
+import '../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
 import '../shared/ui-boot';
 import './tool-analytics';
 import { buildStatement, statementText } from './statement';

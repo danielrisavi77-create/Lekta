@@ -1,5 +1,6 @@
 // DOM glue za besplatno sredjivanje literature (literatura.html). Logika je u
 // bibliography.ts (tipizirano, testabilno); ovdje samo vezanje forme i ispis. Bez mreze.
+import '../shared/fonts-document'; // podatkovni glasovi (Source Serif 4 za dokument-preglede, IBM Plex Mono za brojke)
 import '../shared/ui-boot';
 import './tool-analytics';
 import { organizeBibliography, bibliographyText, type BibSortMode, type BibResult } from './bibliography';
