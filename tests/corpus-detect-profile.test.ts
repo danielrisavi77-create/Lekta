@@ -7,7 +7,7 @@
  * mijenjaju NIJEDNU vrstu. Najvazniji gard je negativan: "diplomski studij" je ime programa, ne vrsta rada.
  */
 import { describe, expect, it } from 'vitest';
-import { detectCorpusProfile, detectWorkType } from '../src/corpus/detect-profile';
+import { detectCorpusProfile, detectWorkType, detectWorkTypeWithSource, workTypeFromFileName } from '../src/corpus/detect-profile';
 
 const REGISTAR = [
   { id: 'fpzg-politologija-diplomski', unitId: 'fpzg', workTypes: ['graduate'] },
@@ -65,7 +65,7 @@ describe('detectWorkType', () => {
 describe('detectCorpusProfile', () => {
   it('spaja ustanovu i vrstu rada s profilom iz registra', () => {
     expect(detectCorpusProfile(FPZG + 'Naslov seminarskog rada: X. Kolegij: Y', REGISTAR)).toEqual({
-      profileId: 'fpzg-opci-akademski-rad', unitId: 'fpzg', workType: 'seminar',
+      profileId: 'fpzg-opci-akademski-rad', unitId: 'fpzg', workType: 'seminar', source: 'front',
     });
     expect(detectCorpusProfile(FPZG + 'DIPLOMSKI RAD', REGISTAR)?.profileId).toBe('fpzg-politologija-diplomski');
     expect(detectCorpusProfile('Ekonomski fakultet. Esej iz kolegija Marketing', REGISTAR)?.profileId).toBe('efzg-seminarski');
@@ -77,5 +77,39 @@ describe('detectCorpusProfile', () => {
 
   it('bez ustanove s popisa vraca null i kad je vrsta rada jasna', () => {
     expect(detectCorpusProfile('Sveučilište u Osijeku, Odjel za fiziku. Diplomski rad', REGISTAR)).toBeNull();
+  });
+});
+
+describe('rezerve iza naslovnice (2026-09-05: 17 od 32 rada bez profila)', () => {
+  const NASLOVNICA = 'Sveučilište u Zagrebu Fakultet političkih znanosti Naslov rada Ime Prezime Zagreb, 2025.';
+  const IZJAVA = 'Izjava o akademskoj čestitosti. Izjavljujem da sam ovaj diplomski rad izradio samostalno.';
+
+  it('izjava ili sazetak iza naslovnice imenuju rad kad naslovnica ne imenuje', () => {
+    expect(detectWorkTypeWithSource(NASLOVNICA, { extended: NASLOVNICA + ' ' + IZJAVA })).toEqual({ workType: 'graduate', source: 'lead' });
+    expect(detectWorkType(NASLOVNICA, { extended: 'Sažetak. Ovaj završni rad analizira ...' })).toBe('final');
+  });
+
+  it('naslovnica ima prednost pred prvim stranicama i imenom datoteke', () => {
+    expect(detectWorkTypeWithSource('Naslov seminarskog rada: X', { extended: IZJAVA, fileName: 'diplomski.docx' })).toEqual({ workType: 'seminar', source: 'front' });
+  });
+
+  it('u prvim stranicama vrijede samo doslovne fraze rada: esej, kolegij i ime programa ne', () => {
+    expect(detectWorkType(NASLOVNICA, { extended: NASLOVNICA + ' Diplomski studij politologije. Kolegij: Uvod. Esej.' })).toBeNull();
+  });
+
+  it('ime datoteke je zadnja rezerva; "diplomski_studij" u imenu je program', () => {
+    expect(detectWorkTypeWithSource(NASLOVNICA, { fileName: 'ZOU_seminar_ISPRAVLJENO_v4.docx' })).toEqual({ workType: 'seminar', source: 'file-name' });
+    expect(workTypeFromFileName('Petak_diplomski.docx')).toBe('graduate');
+    expect(workTypeFromFileName('zavrsni_rad_final.docx')).toBe('final');
+    expect(workTypeFromFileName('Esej_politicka_teorija.docx')).toBe('seminar');
+    expect(workTypeFromFileName('diplomski_studij_raspored.docx')).toBeNull();
+    expect(workTypeFromFileName('Naslov rada.docx')).toBeNull();
+    // izjava iza naslovnice ima prednost pred imenom datoteke
+    expect(detectWorkTypeWithSource(NASLOVNICA, { extended: IZJAVA, fileName: 'seminar.docx' })).toEqual({ workType: 'graduate', source: 'lead' });
+  });
+
+  it('profil nosi izvor odluke', () => {
+    const p = detectCorpusProfile(NASLOVNICA, REGISTAR, { fileName: 'seminar.docx' });
+    expect(p).toEqual({ profileId: 'fpzg-opci-akademski-rad', unitId: 'fpzg', workType: 'seminar', source: 'file-name' });
   });
 });

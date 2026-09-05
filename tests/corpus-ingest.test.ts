@@ -73,6 +73,22 @@ describe('pseudonymizeDocx', () => {
     expect(a.parts['docProps/core.xml']).not.toBe(c.parts['docProps/core.xml']);
   });
 
+  it('rucno potvrdjeni pojam (ingest --terms) ulazi u rjecnik SAMO ako doista stoji u dokumentu', () => {
+    const p = {
+      'docProps/core.xml': '<cp:coreProperties></cp:coreProperties>',
+      'word/document.xml': '<w:document><w:body><w:p><w:r><w:t>SVEUČILIŠTE U ZAGREBU</w:t></w:r></w:p><w:p><w:r><w:t>IVAN IVIĆ</w:t></w:r></w:p><w:p><w:r><w:t>ZAVRŠNI RAD</w:t></w:r></w:p></w:body></w:document>',
+    };
+    // Bez rucnog pojma: ime velikim slovima kao samostalan odlomak se namjerno ne pogadja.
+    expect(pseudonymizeDocx(p, { salt: 's' }).dictionarySize).toBe(0);
+    const r = pseudonymizeDocx(p, { salt: 's', extraTerms: ['IVAN IVIĆ', 'Nema Ga'] });
+    expect(r.carriersCleaned).toContain('manual.terms');
+    expect(Object.values(r.parts).join('\n')).not.toMatch(/IVAN IVIĆ/);
+    expect(r.leaks).toEqual([]);
+    // Pojam kojeg u dokumentu nema NE ulazi u rjecnik, nego se broji kao zanemaren.
+    expect(r.manualTermsIgnored).toBe(1);
+    expect(Object.keys(r.mapping)).not.toContain('Nema Ga');
+  });
+
   it('imenuje nositelje koje je ocistio', () => {
     const r = pseudonymizeDocx(parts(), { salt: 's1' });
     expect(r.carriersCleaned).toContain('core.creator');

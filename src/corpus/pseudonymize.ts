@@ -32,6 +32,8 @@ export interface PseudonymizeResult {
   leaks: string[];
   /** Mapa pojam -> pseudonim, za keyring IZVAN repozitorija. Nikad se ne commita. */
   mapping: Record<string, string>;
+  /** Rucno zadani pojmovi (`extraTerms`) koji NE stoje u dokumentu ili su prekratki; nisu usli u rjecnik. */
+  manualTermsIgnored: number;
 }
 
 /** Najkraci pojam koji se smije zamjenjivati. Krace bi razaralo obicne rijeci. */
@@ -163,7 +165,10 @@ function usableTerms(raw: Iterable<string>): string[] {
   return [...out].sort((a, b) => b.length - a.length);
 }
 
-export function pseudonymizeDocx(parts: DocxParts, options: { salt: string }): PseudonymizeResult {
+export function pseudonymizeDocx(
+  parts: DocxParts,
+  options: { salt: string; extraTerms?: readonly string[] },
+): PseudonymizeResult {
   const rawTerms = new Set<string>();
   /**
    * Nositelj -> vrijednosti koje je dao. Nositelj se broji kao OCISCEN tek ako je barem jedna
@@ -195,6 +200,19 @@ export function pseudonymizeDocx(parts: DocxParts, options: { salt: string }): P
   // tvrdnja o dokumentu koji na prvoj stranici i dalje pise ime studenta i mentora.
   const front = frontMatterNames(parts['word/document.xml'] ?? '');
   for (const name of front) note('document.frontMatter', name);
+
+  // Rucno potvrdjeni pojmovi (ingest `--terms`, npr. ime velikim slovima kao samostalan odlomak, koje se
+  // namjerno ne pogadja). Ulaze SAMO ako doista stoje u dokumentu: inace bi `applied: true` tvrdio zamjenu
+  // koje nije bilo. Nepostojeci se broje, ne presucuju.
+  let manualTermsIgnored = 0;
+  for (const term of options.extraTerms ?? []) {
+    const t = term.trim();
+    if (t.length < MIN_TERM_LENGTH || !Object.values(parts).some((xml) => xml.includes(t))) {
+      manualTermsIgnored += 1;
+      continue;
+    }
+    note('manual.terms', t);
+  }
 
   const terms = usableTerms(rawTerms);
   const mapping: Record<string, string> = {};
@@ -252,6 +270,7 @@ export function pseudonymizeDocx(parts: DocxParts, options: { salt: string }): P
     parts: out,
     carriersCleaned,
     dictionarySize: terms.length,
+    manualTermsIgnored,
     leaks,
     mapping,
   };

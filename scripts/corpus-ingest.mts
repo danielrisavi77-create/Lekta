@@ -22,9 +22,9 @@ import { fileURLToPath } from 'node:url';
 import { readZip, writeZip } from '../src/repair/zip-codec';
 import { pseudonymizeDocx } from '../src/corpus/pseudonymize';
 import { deriveDocxFeatures } from '../src/corpus/docx-features';
-import { frontText } from '../src/corpus/front-text';
+import { frontText, leadText } from '../src/corpus/front-text';
 import { VERIFIED_PROFILE_REGISTRY } from '../src/profiles/profile-registry';
-import { detectCorpusProfile, type RegistryProfileLike } from '../src/corpus/detect-profile';
+import { detectCorpusProfile, type DetectOptions, type RegistryProfileLike } from '../src/corpus/detect-profile';
 
 const ROOT = resolve(join(dirname(fileURLToPath(import.meta.url)), '..'));
 
@@ -65,7 +65,8 @@ function readConsent(path: string): ConsentRecord {
 
 // Detekcija profila zivi u `src/corpus/detect-profile.ts` (izdvojeno 2026-09-05 da se moze testirati; ovdje
 // se ne moze uvesti u test jer skripta na vrhu poziva `await main()`).
-const detectProfile = (front: string) => detectCorpusProfile(front, VERIFIED_PROFILE_REGISTRY as unknown as RegistryProfileLike[]);
+const detectProfile = (front: string, opts: DetectOptions) =>
+  detectCorpusProfile(front, VERIFIED_PROFILE_REGISTRY as unknown as RegistryProfileLike[], opts);
 
 async function main() {
   const inDir = arg('in');
@@ -73,6 +74,13 @@ async function main() {
   const consentPath = arg('consent');
   const limit = Number(arg('limit') ?? '0') || 0;
   const dryRun = has('dry-run');
+  // `--terms <json>`: { "<ime izvorne datoteke>": ["Ime Prezime", ...] }. Rucno potvrdjeni pojmovi za
+  // pseudonimizaciju, za slucajeve koje detektor namjerno ne pogadja (ime velikim slovima kao samostalan odlomak).
+  // Datoteka zivi IZVAN repozitorija, uz zapis o dopustenju; nikad se ne ispisuje.
+  const termsPath = arg('terms');
+  const manualTerms: Record<string, string[]> = termsPath
+    ? (JSON.parse(readFileSync(resolve(termsPath), 'utf8')) as Record<string, string[]>)
+    : {};
 
   if (!inDir || !outDir) {
     console.error('Obavezno: --in <izvor> --out <odrediste> --consent <zapis>');
@@ -154,7 +162,7 @@ async function main() {
     // Salt je PO DOKUMENTU: ista osoba u dva rada dobiva razlicite tokene, pa pseudonimizacija
     // sama ne gradi graf povezivanja.
     const salt = createHash('sha256').update(`${consent.consentId}:${sha}`).digest('hex');
-    const result = pseudonymizeDocx(parts, { salt });
+    const result = pseudonymizeDocx(parts, { salt, extraTerms: manualTerms[fileName] ?? [] });
 
     // Vrata: procurio pojam znaci da dokument NE izlazi.
     if (result.leaks.length) {
@@ -164,7 +172,9 @@ async function main() {
     }
 
     const features = deriveDocxFeatures(result.parts);
-    const profile = detectProfile(frontText(result.parts['word/document.xml'] ?? ''));
+    const docXml = result.parts['word/document.xml'] ?? '';
+    // Naslovnica prva; iza nje prve stranice (izjava, sazetak) i ime datoteke kao rezerve (detect-profile.ts).
+    const profile = detectProfile(frontText(docXml), { extended: leadText(docXml), fileName });
     if (!profile) noProfile += 1;
 
     if (!dryRun) {
@@ -179,12 +189,14 @@ async function main() {
             // v1 ugovor koji `discoverRealCorpus` cita; bez profila dokument namjerno NE sudjeluje.
             ...(profile ? { profileId: profile.profileId } : {}),
             sidecar: 2,
-            document: { id, workType: profile?.workType ?? null, origin: 'collected' },
+            document: { id, workType: profile?.workType ?? null, workTypeSource: profile?.source ?? null, origin: 'collected' },
             consent: { consentId: consent.consentId, scope: consent.scope, grantedAt: consent.grantedAt },
             pseudonymization: {
               applied: result.dictionarySize > 0,
               carriersCleaned: result.carriersCleaned,
               dictionarySize: result.dictionarySize,
+              manualTerms: (manualTerms[fileName] ?? []).length - result.manualTermsIgnored,
+              manualTermsIgnored: result.manualTermsIgnored,
               leaks: 0,
               /**
                * DOSEG, ne jamstvo. Uklonjeno je ono sto je prepoznato: imena iz metapodataka i

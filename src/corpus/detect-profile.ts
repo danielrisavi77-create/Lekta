@@ -27,10 +27,21 @@
  * Nad 115 radova koje su stara pravila prepoznala nova pravila daju ISTU vrstu (izmjereno, 0 promjena).
  */
 
+/** Odakle je vrsta rada procitana: naslovnica, prve stranice iza nje (izjava, sazetak) ili ime datoteke. */
+export type WorkTypeSource = 'front' | 'lead' | 'file-name';
+
 export interface DetectedCorpusProfile {
   profileId: string;
   unitId: string;
   workType: string;
+  source: WorkTypeSource;
+}
+
+export interface DetectOptions {
+  /** Tekst prvih stranica (`leadText`), gleda se tek kad naslovnica ne imenuje vrstu. */
+  extended?: string;
+  /** Ime izvorne datoteke; zadnja rezerva, jer ga je dao covjek koji rad poznaje. */
+  fileName?: string;
 }
 
 export interface RegistryProfileLike {
@@ -78,20 +89,63 @@ export const WORK_TYPE_PATTERNS: ReadonlyArray<readonly [RegExp, string]> = [
 /** Rad kolegija bez rijeci o vrsti: samo kad nijedna fraza rada ne stoji na naslovnici. */
 const COURSEWORK_HINT = /kolegij|\bpredmet\b|nositelj/i;
 
-export function detectWorkType(front: string): string | null {
-  for (const [re, workType] of WORK_TYPE_PATTERNS) if (re.test(front)) return workType;
-  if (COURSEWORK_HINT.test(front)) return 'seminar';
+/**
+ * Vrsta rada iz imena datoteke: "ZOU_seminar_v4.docx", "Petak_diplomski.docx". Zadnja rezerva. "diplomski_studij"
+ * u imenu je program, ne vrsta, pa se izuzima. Izmjereno 2026-09-05: nad 163 rada s vrstom s naslovnice ime
+ * datoteke se ne slaze s njom u 1 slucaju, pa NIKAD nema prednost; kao rezerva vraca 7 od 32 rada.
+ */
+export function workTypeFromFileName(fileName: string): string | null {
+  const n = fileName.toLowerCase();
+  if (/doktor|disertac/.test(n)) return 'doctoral';
+  if (/specijalist/.test(n)) return 'specialist';
+  if (/diplomsk(?!i[_ .-]?studij)/.test(n)) return 'graduate';
+  if (/zavr[šs]n|zavrsn/.test(n)) return 'final';
+  if (/seminar|esej/.test(n)) return 'seminar';
   return null;
+}
+
+/** Fraze koje IMENUJU rad, za prve stranice iza naslovnice: samo doslovne fraze, bez eseja i kolegija. */
+const LEAD_PATTERNS: ReadonlyArray<readonly [RegExp, string]> = [
+  [/doktorsk|disertacij/i, 'doctoral'],
+  [/specijalisti[čc]k/i, 'specialist'],
+  [THESIS_PHRASE.graduate, 'graduate'],
+  [THESIS_PHRASE.final, 'final'],
+  [THESIS_PHRASE.seminar, 'seminar'],
+];
+
+export function detectWorkTypeWithSource(front: string, opts: DetectOptions = {}): { workType: string; source: WorkTypeSource } | null {
+  for (const [re, workType] of WORK_TYPE_PATTERNS) if (re.test(front)) return { workType, source: 'front' };
+  if (COURSEWORK_HINT.test(front)) return { workType: 'seminar', source: 'front' };
+  // Rezerva 1: izjava o izvornosti ili sazetak odmah iza naslovnice ("Izjavljujem da sam ovaj diplomski rad ...").
+  // Izmjereno 2026-09-05: nad 163 rada s vrstom s naslovnice prve stranice se NE kose ni s jednom; kao rezerva
+  // vracaju 10 od 32 rada bez profila. Esej i kolegij se ovdje ne gledaju: preduboko u tekstu su previse labavi.
+  if (opts.extended) {
+    for (const [re, workType] of LEAD_PATTERNS) if (re.test(opts.extended)) return { workType, source: 'lead' };
+  }
+  // Rezerva 2: ime datoteke.
+  if (opts.fileName) {
+    const fromName = workTypeFromFileName(opts.fileName);
+    if (fromName) return { workType: fromName, source: 'file-name' };
+  }
+  return null;
+}
+
+export function detectWorkType(front: string, opts: DetectOptions = {}): string | null {
+  return detectWorkTypeWithSource(front, opts)?.workType ?? null;
 }
 
 export function detectUnit(front: string): string | null {
   return UNIT_PATTERNS.find(([re]) => re.test(front))?.[1] ?? null;
 }
 
-export function detectCorpusProfile(front: string, registry: readonly RegistryProfileLike[]): DetectedCorpusProfile | null {
+export function detectCorpusProfile(
+  front: string,
+  registry: readonly RegistryProfileLike[],
+  opts: DetectOptions = {},
+): DetectedCorpusProfile | null {
   const unitId = detectUnit(front);
-  const workType = detectWorkType(front);
-  if (!unitId || !workType) return null;
-  const match = registry.find((p) => p.unitId === unitId && (p.workTypes ?? []).includes(workType));
-  return match ? { profileId: match.id, unitId, workType } : null;
+  const detected = detectWorkTypeWithSource(front, opts);
+  if (!unitId || !detected) return null;
+  const match = registry.find((p) => p.unitId === unitId && (p.workTypes ?? []).includes(detected.workType));
+  return match ? { profileId: match.id, unitId, workType: detected.workType, source: detected.source } : null;
 }
