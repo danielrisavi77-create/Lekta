@@ -54,13 +54,37 @@ function missing(): string[] {
 }
 
 describe('npm skripte gadjaju commitane datoteke', () => {
+  /**
+   * PODSKUP, ne jednakost.
+   *
+   * Prva izvedba je tvrdila `toEqual(RATCHET)`, pa bi je oborio svaki commit koji stanje POPRAVI:
+   * cim netko commita `libreoffice.mjs`, `missing()` postaje prazan i jednakost pada. Ratchet koji
+   * puca kad se stvar popravi nije ratchet nego zamka za onoga tko radi ispravno, i to je isti
+   * asimetricni obrazac koji je danas vec dvaput nadjen drugdje (gard koji kaznjava mjerenje u
+   * izoliranom stablu, prag netrivijalnosti kojemu je istekla pretpostavka).
+   *
+   * Nalaz je dosao od druge sesije, koja je prije svog pusha pitala hoce li mi ga srusiti. Hoce.
+   */
   it('nijedna skripta ne pokazuje na necommitanu datoteku, osim zatecenih', () => {
-    expect(missing()).toEqual([...NECOMMITANE_RATCHET].sort());
+    const nove = missing().filter((p) => !NECOMMITANE_RATCHET.includes(p));
+    expect(nove, 'nova skripta gadja datoteku koje u gitu nema').toEqual([]);
   });
 
-  it('ratchet smije samo padati', () => {
+  it('ratchet ne smije rasti', () => {
     expect(NECOMMITANE_RATCHET.length).toBeLessThanOrEqual(1);
   });
+
+  /*
+   * NAMJERNO NEMA tvrdnje da ratchet ne nosi vec rijesena izuzeca.
+   *
+   * Napisao sam je, pa uklonio: pala bi tocno u trenutku kad druga sesija commita
+   * `libreoffice.mjs`, dakle kaznila bi onoga tko je kvar rijesio. To je isti asimetricni obrazac
+   * koji sam dva retka iznad opisao kao gresku, samo u drugom smjeru.
+   *
+   * Rizik koji time ostaje je uzak i imenovan: ako se ista staza ikad vrati kao necommitana, ovo
+   * izuzece bi je propustilo. Ciscenje suvisnog unosa je zato posao onoga tko ga primijeti, ne
+   * uvjet za zeleni gate.
+   */
 
   /** Mjeri se commitano stanje, ne disk; inace provjera prolazi vakuumski u svakom radnom stablu. */
   it('popis trackanih datoteka nije prazan', () => {
