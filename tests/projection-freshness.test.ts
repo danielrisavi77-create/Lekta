@@ -75,6 +75,7 @@ describe('svjezina pecenih projekcija', () => {
       'repair-gap',
       'repair-recipe',
       'scored-value-drift',
+      'site-stats',
       'worklist',
     ]);
     for (const p of PROJECTIONS as Array<{ artifacts: string[]; sources: string[]; regenerate: string }>) {

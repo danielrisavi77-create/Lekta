@@ -43,6 +43,20 @@
  */
 export const PROJECTIONS = [
   {
+    // Pecene brojke trake na `/` (rez naslovnice 2026-09-05): cisti ulaz ne smije vuci registar
+    // profila ni katalog, pa brojke pece generator istom formulom koju je naslovnica racunala zivo.
+    id: 'site-stats',
+    artifacts: ['data/coverage/site-stats.json'],
+    sources: [
+      'data/profiles/verified-profiles-index.json',
+      'data/catalog/zagreb-catalog.json',
+      'data/coverage/corpus-stats.json',
+      'src/coverage/site-stats.ts',
+      'scripts/gen-site-stats.mts',
+    ],
+    regenerate: 'npm run gen-site-stats',
+  },
+  {
     id: 'closed-loop',
     artifacts: ['docs/generated/closed-loop.json'],
     sources: ['src/repair', 'src/analysis', 'tests/helpers/violating-docx.ts', 'scripts/run-closed-loop.mts'],
