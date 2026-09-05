@@ -129,10 +129,14 @@ async function main() {
   let noProfile = 0;
   const rows: Array<Record<string, unknown>> = [];
 
-  for (const [index, fileName] of files.entries()) {
+  for (const fileName of files) {
     const bytes = new Uint8Array(readFileSync(join(src, fileName)));
     const sha = createHash('sha256').update(bytes).digest('hex');
-    const id = `corpus-${String(index + 1).padStart(4, '0')}-${sha.slice(0, 6)}`;
+    // ID je iz SADRZAJA izvorne datoteke, ne iz rednog broja u sortiranom popisu. Do 2026-09-05 je id nosio
+    // redni broj (`corpus-0001-...`), pa je svako premjestanje ili dodavanje datoteke u izvoru promijenilo id
+    // vecini radova, a stari izlaz ostao u odredistu kao duplikat (izmjereno: 362 sidecara za 200 izvora).
+    // Dvije byte-identicne kopije istog rada dobiju isti id i zadnja prepise prvu, sto je i zeljeno.
+    const id = `corpus-${sha.slice(0, 12)}`;
 
     // Vrata 2 po dokumentu: pokriva li ga zapis o dopustenju?
     const covered =
