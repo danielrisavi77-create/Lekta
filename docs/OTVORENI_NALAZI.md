@@ -165,15 +165,31 @@ kontrolu koje ostaju zelene. Pokusaj da se razmak podmetne POMICANJEM indeksa kr
 odbacen jer ne reproducira kvar: tada ni link-doi ne nadje metu, pa test prolazi i na neispravnom
 kodu.
 
-**DRUGA KLASA (8 radova) OSTAJE OTVORENA i odvojen je posao.** Ondje sidro ne valja ni kad fixer
-radi SAM nad netaknutim dokumentom, dakle analiza i fixer se ne slazu oko istog, nepromijenjenog
-dokumenta:
+**DRUGA KLASA (8 radova) JE ZATVORENA 2026-09-05.** Sidro nije valjalo ni nad netaknutim dokumentom
+jer `extractReferences` lijepi svaki odlomak koji ne izgleda kao nov zapis na prethodni (rucno
+oblikovane podnaslove popisa, "[n]" zapise, cijele zavrsne dijelove rada), a indeks ostaje prvi:
+sidro je hashirano nad tekstom koji NE pripada odlomku na koji indeks pokazuje. Sonda zapis po zapis:
+17 od 397 zapisa, u svih 17 fixerov tekst je prefiks analizinog; tabulator 0 od 17 (ta hipoteza je
+oborena).
 
-    local-15-rad, local-27-zavrsni, local-28-rad, local-31-zavrsni,
-    local-32-diplomski, local-33-diplomski, local-34-diplomski, local-36-diplomski
+    raskorak sidra na 8 radova      17 -> 0
+    stale-anchor u prvom krugu       9 -> 1   (ostaje heading-structure-universal na local-01)
+    bibliography-repair              8 -> 0
 
-Utvrdjeno bisekcijom po fixeru i po paru, uz `LEKTA_LOCAL_CORPUS=1` u izoliranom worktreeu.
-Sinteticki korpus ovaj razred ne moze pokazati: ondje su indeksi usklađeni, pa stariji test prolazi.
+Popravak u tri sloja (`author-year.ts` ne lijepi podnaslove i zavrsne dijelove, `bibliography-structure.ts`
+nosi sve obuhvacene odlomke, `repair-items.ts` ne nudi visodlomacne zapise), gard s mutacijom u
+`src/analysis/bibliography-structure.test.ts`.
+
+Cim je literatura opet radila, otkrio se i CETVRTI kvar istog korijena, dotad nedostizan: na
+`local-36-diplomski` je `reference.alphabetical` pao iz pass u warn NAKON popravka, jer je fixer
+sortirao po cijelom nizu (`fields.authors || rawText`, gdje `hr` kolacija zanemaruje zarez) a provjera
+sudi po PRVOM autoru iz `extractReferences`: "United Nations General Assembly, ..." je otisao ispred
+"United Nations, ...". Tri mjesta su imala tri kljuca (provjera, fixer, `alphabetical.expected` u
+analizi). Svedeno na jedan: `sortKey` na zapisu = kljuc provjere; popravak i analiza sortiraju po
+njemu. Dokaz: sa starim kljucem fixera provjera nakon popravka pada (inverzija na #21), s novim prolazi.
+
+Preostaje JEDAN stale-anchor na cijelom korpusu: `heading-structure-universal` na `local-01-diplomski`.
+Nije mjeren; tko ga uzme, isti postupak (sonda zapis po zapis) je u ovom nalazu.
 
 ---
 

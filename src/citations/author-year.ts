@@ -57,16 +57,40 @@ function referenceAuthor(before: any){
 function extractReferences(paragraphs: any,lang: any){
  const heads=lang==='en'?['references','bibliography']:['literatura','bibliografija','izvoriiliteratura','popisliterature'];let start=-1;
  for(let i=0;i<paragraphs.length;i++)if(heads.includes(sectionName(paragraphs[i].text))){start=i+1;break}if(start<0)return{start,entries:[]};
- const stopTerms=lang==='en'?['appendix','appendices','abstract','summary']:['prilozi','prilog','sazetak','summary','abstract','kljucnerijeci','keywords'];
+ // Zavrsni dijelovi iza literature (popisi tablica i slika, izjava o akademskoj cestitosti, zivotopis)
+ // NISU zapisi. Do 2026-09-05 ih nije bilo ovdje, pa su se ti odlomci LIJEPILI na zadnji zapis (vidi nize).
+ const stopTerms=lang==='en'?['appendix','appendices','abstract','summary','listoftables','listoffigures','declaration','curriculumvitae']:['prilozi','prilog','sazetak','summary','abstract','kljucnerijeci','keywords','popistablica','popisslika','popisgrafikona','popisilustracija','popiskratica','popisoznaka','izjava','zivotopis','biografija'];
  const entries: any[]=[];let current: any=null;
  for(let i=start;i<paragraphs.length;i++){const t=paragraphs[i].text.trim();if(!t)continue;const n=sectionName(t);if(stopTerms.some((x: any)=>n===x||n.startsWith(x)))break;
   if(bibliographySubheading(n)){current=null;continue}
   if(paragraphs[i].headingLevel&&entries.length)break;
-  const noDate=t.match(/\((?:b\.g\.|n\.d\.|bez\s+godine)\)/i),ym=noDate?noDate:t.match(/\b((?:18|19|20)\d{2}[a-z]?|\?)\b/i);const numbered=/^\s*\d+[.)]\s+/.test(t);const urlOnly=/^(?:https?:\/\/|www\.|doi:|pristupljen|pristupljeno|accessed|retrieved)/i.test(t);
+  // "(b.d.)" i "(s.a.)" su jednako cesti kao "(b.g.)"; bez njih zapis bez godine nije prepoznat kao NOV.
+  const noDate=t.match(/\((?:b\.g\.|b\.d\.|n\.d\.|s\.a\.|bez\s+godine|bez\s+datuma)\)/i),ym=noDate?noDate:t.match(/\b((?:18|19|20)\d{2}[a-z]?|\?)\b/i);
+  // Numeracija u uglatim zagradama ("[3] Steel Alliance...") je standardni IEEE zapis; bez nje se svaki takav zapis lijepio na prethodni.
+  const numbered=/^\s*(?:\d+[.)]|\[\d+\])\s+/.test(t);
+  const urlOnly=/^(?:https?:\/\/|www\.|doi:|pristupljen|pristupljeno|accessed|retrieved|dostupno|preuzeto|available)/i.test(t);
   const before=ym?t.slice(0,ym.index):t.slice(0,100);const author=ym?referenceAuthor(before):'';const startsNew=!!ym&&!!author&&!urlOnly;
-  if(startsNew||numbered){current={text:t,author,year:ym&&!noDate&&/^\d{4}/.test(ym[1])?ym[1].toLowerCase():'',p:i+1};entries.push(current)}
-  else if(current){current.text+=' '+t}
-  else if(t.length>20){current={text:t,author:'',year:'',p:i+1};entries.push(current)}
+  /**
+   * NASTAVAK ILI NOV ODLOMAK. Do 2026-09-05 se SVAKI odlomak koji nije izgledao kao nov zapis lijepio na
+   * prethodni, ukljucujuci rucno oblikovane podnaslove popisa ("Propisi i norme", "ZNANSTVENI I STRUCNI
+   * CLANCI") i cijele sekcije iza literature. Zapis je tada nosio tekst tudjih odlomaka, a sidro
+   * (`bibliographyAnchorFingerprint(paragraphIndices, rawText)`) hashiralo je taj spojeni tekst uz indeks
+   * SAMO prvog odlomka, pa ga fixer nad netaknutim dokumentom nije mogao potvrditi.
+   *
+   * IZMJERENO 2026-09-05 na 8 od 38 stvarnih radova: 17 zapisa spojenih s tudjim tekstom, a JEDAN takav
+   * zapis obara popravak CIJELE literature (`stale-anchor`). Na 7 commitanih fixtura: nula.
+   *
+   * Nastavak je vjerojatan dok prethodni zapis NIJE zavrsen (ne zavrsava tockom ili zagradom) ili dok
+   * novi odlomak pocinje malim slovom ili URL-om. Kratak odlomak bez znamenki iza zavrsenog zapisa je
+   * podnaslov popisa; dulji je nov (neprepoznat) zapis, isto kao i danas kad `current` ne postoji.
+   */
+  const zavrsen=!!current&&/[.)\]]\s*$/.test(current.text);
+  const podnaslov=zavrsen&&!ym&&/^\p{Lu}/u.test(t)&&!/\d/.test(t)&&t.length<=60&&!urlOnly;
+  if(podnaslov){current=null;continue}
+  const nastavak=!!current&&!(zavrsen&&/^\p{Lu}/u.test(t)&&!urlOnly);
+  if(startsNew||numbered){current={text:t,author,year:ym&&!noDate&&/^\d{4}/.test(ym[1])?ym[1].toLowerCase():'',p:i+1,ps:[i+1]};entries.push(current)}
+  else if(nastavak){current.text+=' '+t;current.ps.push(i+1)}
+  else if(t.length>20){current={text:t,author:'',year:'',p:i+1,ps:[i+1]};entries.push(current)}
  }
  return{start,entries}
 }
