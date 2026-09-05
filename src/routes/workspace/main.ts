@@ -7,7 +7,8 @@ import { initialContext, type WorkspaceContext } from './workspace-state';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { fileFromLocalDocumentSession } from '../../session/local-document-session';
 import '../../shared/ui-boot';
-import '../../shared/page.css';  // stil stranice; bez njega je ruta goli HTML
+import '../../shared/page-chrome.css';
+import '../../shared/page-app.css';  // stil stranice; bez njega je ruta goli HTML
 // Paritet s bivsom naslovnicom (2026-09-05): Katedra dolazni kontekst i CTA nakon nalaza, te demo
 // scena i sloj dubine radne povrsine. Do reza su zivjeli samo u `src/main.ts`, pa je `/rad/` imao
 // staticnu, neanimiranu demo scenu i nije razumio `?workType=`/`#handoff=` s Katedre.

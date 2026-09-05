@@ -5,7 +5,8 @@ import { STORAGE_KEYS, safeStorageGet } from '../../shared/browser-storage';
 import { loadProductionConfig } from '../../config/production-config';
 import { accountView, localWorkView, type AccountView, type LocalWorkView } from './view-model';
 import '../../shared/ui-boot';
-import '../../shared/page.css';
+import '../../shared/page-chrome.css';
+import '../../shared/page-app.css';
 
 /**
  * ULAZ RUTE `/moji-radovi/`.

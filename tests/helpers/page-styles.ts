@@ -24,7 +24,10 @@ export function inlineStyles(htmlPath: string): string {
 
 /** Sav CSS koji `/` isporucuje: inline blokovi stranice + izdvojeni dijeljeni list. */
 export function pageStyles(htmlPath = 'index.html'): string {
-  const shared = readFileSync(resolve(ROOT, 'src', 'shared', 'page.css'), 'utf8');
-  if (shared.trim().length === 0) throw new Error('src/shared/page.css je prazan; gard bi mjerio nista');
+  // Od 2026-09-05 je list PODIJELJEN (`page-chrome.css` + `page-app.css`, vidi mjerenje ondje).
+  // Pomocnik spaja OBA, jer i dalje odgovara na pitanje "sto stranica isporucuje", a ne "koja datoteka".
+  const shared = ['page-chrome.css', 'page-app.css']
+    .map((ime) => readFileSync(resolve(ROOT, 'src', 'shared', ime), 'utf8')).join('');
+  if (shared.trim().length === 0) throw new Error('dijeljeni stil je prazan; gard bi mjerio nista');
   return `${inlineStyles(htmlPath)}\n${shared}`;
 }

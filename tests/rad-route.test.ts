@@ -115,8 +115,12 @@ describe('ruta /rad/', () => {
     // `index.html`. Oba ulaza sada uvoze ISTU datoteku, pa razilazenje nije moguce.
     const workspace = readFileSync(resolve(ROOT, 'src', 'routes', 'workspace', 'main.ts'), 'utf8');
     const intake = readFileSync(resolve(ROOT, 'src', 'routes', 'intake', 'main.ts'), 'utf8');
-    expect(workspace, 'ruta bi bila goli HTML').toContain('shared/page.css');
-    expect(intake, 'ulaz bi bio goli HTML').toContain('shared/page.css');
+    // Ruta prikazuje analizator pa treba OBA lista; ulaz treba SAMO ljusku (79 posto lista ne moze
+    // pogoditi nijedan njegov element, izmjereno 2026-09-05).
+    expect(workspace, 'ruta bi bila goli HTML').toContain('shared/page-chrome.css');
+    expect(workspace, 'ruta treba i radnu povrsinu').toContain('shared/page-app.css');
+    expect(intake, 'ulaz bi bio goli HTML').toContain('shared/page-chrome.css');
+    expect(intake, 'ulaz NE SMIJE vuci stil radne povrsine').not.toContain('page-app.css');
     for (const [ime, html] of [['rad', RAD], ['index', INDEX]] as const) {
       expect(html, `${ime}: stil se vratio u inline blok`).not.toContain('<style');
     }

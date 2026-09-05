@@ -14,7 +14,8 @@ const ROOT = resolve(__dirname, '..');
 const STRANICA = readFileSync(resolve(ROOT, 'moji-radovi', 'index.html'), 'utf8');
 const ULAZ = readFileSync(resolve(ROOT, 'src', 'routes', 'my-work', 'main.ts'), 'utf8');
 const INDEX = readFileSync(resolve(ROOT, 'index.html'), 'utf8');
-const CSS = readFileSync(resolve(ROOT, 'src', 'shared', 'page.css'), 'utf8');
+const CSS = ['page-chrome.css', 'page-app.css']
+  .map((ime) => readFileSync(resolve(ROOT, 'src', 'shared', ime), 'utf8')).join('');
 const DIREKTORIJ = readFileSync(resolve(ROOT, 'src', 'routes', 'shared', 'public-route-directory.json'), 'utf8');
 
 describe('ruta /moji-radovi/', () => {

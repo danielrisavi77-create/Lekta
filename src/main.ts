@@ -2,7 +2,8 @@
 // framework-agnosticni engine moduli su u src/{docx,audits,citations,scoring,utils}.
 // Caveat (rukopisne korekture) treba samo landing, pa se uvozi ovdje, ne u ui-boot.
 import '@fontsource/caveat/500.css';
-import './shared/page.css';  // stil stranice; bez njega je ruta goli HTML
+import './shared/page-chrome.css';
+import './shared/page-app.css';  // stil stranice; bez njega je ruta goli HTML
 import '@fontsource/caveat/600.css';
 import '@fontsource/caveat/700.css';
 import './shared/ui-boot';

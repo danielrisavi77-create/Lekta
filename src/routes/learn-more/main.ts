@@ -2,7 +2,8 @@ import { CHECK_ITEMS } from '../../config/config-loader';
 import { PRICING_TIERS } from '../../config/pricing-tiers';
 import { loadProductionConfig, paidOffersLive } from '../../config/production-config';
 import '../../shared/ui-boot';
-import '../../shared/page.css';
+import '../../shared/page-chrome.css';
+import '../../shared/page-app.css';
 
 /**
  * ULAZ RUTE `/saznaj-vise/`.

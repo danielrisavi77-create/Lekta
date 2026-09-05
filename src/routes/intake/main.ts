@@ -5,7 +5,7 @@ import { mountIntakeController } from './intake-controller';
 import { playIntakeEntry } from './intake-motion';
 import SITE_STATS from '../../../data/coverage/site-stats.json';
 import '../../shared/ui-boot';
-import '../../shared/page.css';
+import '../../shared/page-chrome.css';  // ulaz NE uvozi radnu povrsinu: vidi mjerenje u tom listu
 import './intake.css';
 // Prazan stol pod lampom: postojeci sloj dubine (snop, prasina, sjene) BEZ demo dokumenta i bez
 // sekvence. Papir za ucitavanje je jedini predmet na stolu.
