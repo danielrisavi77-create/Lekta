@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "corpusFingerprint": "476c8339587b6082db25bd3f762c3ba9",
-  "measuredAt": "2026-09-05T03:02:04.897Z",
-  "measuredFromCommit": "b0071c868b6d21b868a22aeaf209f5c639dfacbb",
+  "measuredAt": "2026-09-05T11:32:02.830Z",
+  "measuredFromCommit": "6b50b437152dcbdd198c44ecfe8501d0176d3073",
   "oracles": [
     "scripts/repair-real-corpus.mts (harness + detectPassRegressions)"
   ],
   "signedBy": "Daniel Risavi",
-  "signedAt": "2026-09-05T10:09:14.481Z",
-  "signatureNote": "Potpisano na izricitu uputu vlasnika (2026-09-03: potpisi umjesto mene), nakon odluke vlasnika 2026-09-05 da dokaz vrijedi po paru jedinica x vrsta rada. Mjerenje je PONOVLJENO nad vrhom grane (commit u measuredFromCommit) jer je motor popravka od prethodne ovjere mijenjan; isti korpus (isti otisak, 45 radova), unosi grupirani po (jedinica, vrsta rada) s popisom profila iz kojih dokaz dolazi. Vrijeme i commit mjerenja citaju se iz artefakta mjerenja, ne iz trenutka pisanja ovjere. Potpis je stavljen NAKON mjerenja i pregrupiranja.",
+  "signedAt": "2026-09-05T11:32:56.930Z",
+  "signatureNote": "Potpisano na izricitu uputu vlasnika (2026-09-03: potpisi umjesto mene; 2026-09-05: push odobren). Mjerenje ponovljeno nad vrhom grane nakon tudjeg popravka literature (4f9ba2ea), jer dokaz mora biti o kodu koji se isporucuje; isti korpus od 45 radova, unosi po paru jedinica x vrsta rada. Vrijeme i commit mjerenja citaju se iz artefakta mjerenja. Potpis je stavljen NAKON mjerenja.",
   "entries": [
     {
       "unitId": "fer",
