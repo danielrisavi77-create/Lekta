@@ -179,3 +179,27 @@ Preostala dva pitanja rijesena na vlasnikovu rijec ("idemo to rijesiti"), commit
 - Preostalih 20 radova bez profila (od 195): nema traga vrste rada ni na naslovnici, ni u prvim stranicama, ni u
   imenu datoteke (2 bez ustanove s popisa). Ostaju u `03-ingest` i ne ulaze u mjerenje; dalje samo rucno.
 - Preostala 4 prazna rjecnika nisu greska: tri dokumenta nisu radovi (iskljuceni), jedan ima placeholder.
+
+### Cetvrti val: fakulteti koje korpus nema
+
+Vlasnik: "idemo na fakultete koji korpus nemaju". Izmjereno nad 391 docx (Downloads + izbaceni): 32 rada pripada
+ustanovama bez korpusa, a detektor ih je promasio 28 jer je znao samo 25 zagrebackih imena. Commiti `8e84e8d4`
+(ustanova iz kataloga, 134 jedinice, genericka imena razrjesava sveuciliste, najranije ime na naslovnici
+pobjedjuje, 0 promjena na 172 prepoznatih), `91df26d6` (id dokumenta iz sadrzaja izvorne datoteke, jer je redni
+broj mijenjao id vecini radova pri svakom premjestanju; 362 sidecara za 200 izvora), `237a6a9a` (spec Kanala A).
+
+| sto | brojka |
+|---|---|
+| radova s novih ustanova kopirano u izvor | 28 (HKS 15, ZVU 8, Libertas 3, FZS Rijeka 2) |
+| ingest (200 izvora, id po sadrzaju): sidecara / s profilom / vacuous | 187 (13 byte-identicnih kopija sazeto) / 187 / 1 |
+| korpus izgradjen ispocetka istim pravilima dedupea: lokalnih + commitanih | 127 + 7 = 134 |
+| mjerenje nad `91df26d6`: pass / review / fail / regresija | 7 / 125 / 0 / 0 |
+| ovjerenih parova jedinica x vrsta rada | 15 -> **18** (novi: hks x graduate, libertas x graduate, zvu x final) |
+| redaka na A / profila na A / jedinica na A | 33 -> **37** / 27 -> 31 / 7 -> 10 |
+
+- Prvi put je dokaz A dosao s ustanova izvan vlasnikove pocetne mreze (HKS, ZVU, Libertas), ali iz ISTOG izvora
+  (Downloads): granica ostaje ono sto vlasnik ima na disku. Dalje pomice samo Kanal A
+  (`docs/superpowers/specs/2026-09-05-kanal-a-privola-korpusa.md`), koji ceka vlasnikove odluke o tekstu privole,
+  roku cuvanja, anonimnim racunima i datumu ukljucivanja.
+- FZS Rijeka (2 rada) nije usao u mjerenje: oba su svedena na verzije vec prisutnih radova ili nemaju par u
+  registru; provjeriti pri sljedecem valu, ne pretpostavljati.
