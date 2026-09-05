@@ -15,6 +15,8 @@
     { "pattern": "public/**", "class": "PUBLIC", "bundle": "allowed" },
     { "pattern": "*.html", "class": "PUBLIC", "bundle": "allowed", "note": "Rollup entryji u korijenu (index.html i alatne stranice). Manifest * NE prelazi /, pa ovo hvata SAMO korijen; podstabla (prototype/, reference/) imaju vlastita pravila jer ih git pathspec *.html u testu pokrivenosti dovodi u opseg." },
     { "pattern": "rad/*.html", "class": "PUBLIC", "bundle": "allowed", "note": "Ruta radne povrsine. Manifest * NE prelazi /, pa je korijenski *.html ne hvata; bez ovog pravila je nerazvrstana i klasifikacijski gard pada (deny-by-default). Sadrzaj je javni HTML, isto kao index.html." },
+    { "pattern": "moji-radovi/*.html", "class": "PUBLIC", "bundle": "allowed", "note": "Ruta osobnog prostora (lokalni rad + popravci na racunu). Manifest * NE prelazi /, pa je korijenski *.html ne hvata." },
+    { "pattern": "saznaj-vise/*.html", "class": "PUBLIC", "bundle": "allowed", "note": "Ruta s landing sadrzajem. Manifest * NE prelazi /, pa je korijenski *.html ne hvata; bez pravila je nerazvrstana i gard pada (deny-by-default)." },
     { "pattern": "prototype/**", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Interni dizajn prototipovi." },
     { "pattern": "reference/**", "class": "PRIVATE-IP", "bundle": "forbidden", "note": "Interni referentni artefakti (coverage matrica, wireflow)." },
     { "pattern": "data/**", "class": "PROPRIETARY-DATA", "bundle": "forbidden" },

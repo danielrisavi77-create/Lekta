@@ -4,6 +4,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { pageStyles } from './helpers/page-styles';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import {
@@ -71,6 +72,6 @@ describe('napomena je stvarno ozicena u sucelje', () => {
   });
 
   it('stil oznake postoji', () => {
-    expect(read('index.html')).toContain('.scoring-change-note{');
+    expect(pageStyles()).toContain('.scoring-change-note{');
   });
 });

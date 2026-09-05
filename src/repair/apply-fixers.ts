@@ -260,22 +260,47 @@ const ANCHOR_SENSITIVE_FIXERS: ReadonlySet<string> = new Set<string>([
  * Sanacija parametara, ne izvodjenje pravila: server i dalje ne odlucuje STO treba popraviti, nego
  * samo odbija dvije izmjene istog odlomka u istom prolazu.
  */
-function withoutOverlappingLinkDoiOperations(requests: readonly FixerRequest[]): FixerRequest[] {
+export function withoutOverlappingLinkDoiOperations(requests: readonly FixerRequest[]): FixerRequest[] {
   const bibliography = requests.filter((request) => request.fixerId === 'bibliography-repair-fixer');
   const linkDoi = requests.filter((request) => request.fixerId === 'link-doi-fixer');
   if (!bibliography.length || !linkDoi.length) return [...requests];
 
   const ownedParagraphs = new Set<number>();
+  /**
+   * VLASNISTVO SE PREPOZNAJE PO TEKSTU, NE PO SIROVOM INDEKSU.
+   *
+   * Usporedba indeksa je do 2026-09-04 bila JEDINI kriterij i nikad nije nista izbacila, jer dvije
+   * strane broje odlomke po razlicitim osnovama: `link-doi-structure.ts` indeksira preko
+   * `extractBodyParagraphs`, a bibliografija preko parserovih odlomaka.
+   *
+   * Izmjereno na stvarnom radu (`local-06-diplomski`): link-doi salje indekse 204..240, a STVARNO
+   * mijenja odlomke 519..555 (konstantan pomak 315), dok literatura posjeduje 519..559. Filtar je
+   * prijavljivao NULA preklapanja, a stvarnih je bilo 22 od 22.
+   *
+   * Posljedica je tocno ona koju `tests/repair-anchor-collision.test.ts` u zaglavlju opisuje kao
+   * rijesenu: student s DOI-jem u popisu literature klikne "Popravi", bibliografija se TIHO ne
+   * popravi, a sucelje javi uspjeh jer je link-doi prosao. Pogadjalo je 4 od 38 stvarnih radova, a
+   * 0 od 7 commitanih: sinteticka fixtura ima usklađene indekse pa gornji test prolazi.
+   *
+   * Usporedba po tekstu je neovisna o osnovi. Oba zapisa nose normaliziran tekst CIJELOG odlomka
+   * (`normalizeAnchorText`), pa se podudaranje trazi tocno. Indeksna provjera OSTAJE uz nju: stariji
+   * klijenti ne salju `anchorText`, i tada se ponasanje ne mijenja.
+   */
+  const ownedTexts = new Set<string>();
   for (const request of bibliography) {
     const entries = (request.params as { entries?: unknown } | undefined)?.entries;
     if (!Array.isArray(entries)) continue;
     for (const entry of entries) {
       const indices = (entry as { paragraphIndices?: unknown })?.paragraphIndices;
-      if (!Array.isArray(indices)) continue;
-      for (const index of indices) if (Number.isInteger(index)) ownedParagraphs.add(Number(index));
+      if (Array.isArray(indices)) for (const index of indices) if (Number.isInteger(index)) ownedParagraphs.add(Number(index));
+      const anchorText = (entry as { anchorText?: unknown })?.anchorText;
+      if (typeof anchorText === 'string') {
+        const key = normalizeAnchorText(anchorText);
+        if (key) ownedTexts.add(key);
+      }
     }
   }
-  if (!ownedParagraphs.size) return [...requests];
+  if (!ownedParagraphs.size && !ownedTexts.size) return [...requests];
 
   return requests.map((request) => {
     if (request.fixerId !== 'link-doi-fixer') return request;
@@ -283,7 +308,13 @@ function withoutOverlappingLinkDoiOperations(requests: readonly FixerRequest[]):
     if (!Array.isArray(operations)) return request;
     const kept = operations.filter((operation) => {
       const index = (operation as { paragraphIndex?: unknown })?.paragraphIndex;
-      return !(Number.isInteger(index) && ownedParagraphs.has(Number(index)));
+      if (Number.isInteger(index) && ownedParagraphs.has(Number(index))) return false;
+      const anchorText = (operation as { anchorText?: unknown })?.anchorText;
+      if (typeof anchorText === 'string') {
+        const key = normalizeAnchorText(anchorText);
+        if (key && ownedTexts.has(key)) return false;
+      }
+      return true;
     });
     if (kept.length === operations.length) return request;
     return { ...request, params: { ...(request.params as Record<string, unknown>), operations: kept } };

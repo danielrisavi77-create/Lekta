@@ -6,6 +6,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { pageStyles } from './helpers/page-styles';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -308,11 +309,11 @@ describe('izjava: #st-hint debounce (AUD a11y #Izjava-hint)', () => {
  * `html:root[data-theme="light"]` za svijetlu), odvojen od `design-system.css`.
  */
 describe('korektorski stol: odabrano stanje prolazi AA u obje teme', () => {
-  const html = read('index.html');
+  const html = pageStyles();
 
   function inlineToken(ime: string, tema: 'dark' | 'light'): string {
     const granica = html.indexOf('html:root[data-theme="light"]');
-    expect(granica, 'index.html mora imati svijetli blok tokena').toBeGreaterThan(0);
+    expect(granica, 'isporuceni stil mora imati svijetli blok tokena').toBeGreaterThan(0);
     const blok = tema === 'dark' ? html.slice(0, granica) : html.slice(granica);
     const svi = [...blok.matchAll(new RegExp(`--${ime}\s*:\s*([^;]+);`, 'g'))];
     expect(svi.length, `token --${ime} (${tema}) nije nadjen`).toBeGreaterThan(0);

@@ -30,8 +30,12 @@ Bez Dena korak PADA, ne preskace se.
 Je li MASTER zelen, to je zasebno pitanje: `npm run master-ci`. Lokalni gate mjeri tvoje radno
 stablo, a master zna biti crven danima a da nitko ne gleda (2026-09-02: cetiri uzastopna crvena
 master commita). Tri ishoda: 0 zeleno, 1 CRVENO (uz broj uzastopnih padova), 2 NE ZNAM, koje nikad
-ne izlazi kao zeleno. Alat NE koristi `gh` (poceo visiti i na `gh auth status`, 439 s bez odgovora,
-dok je API odgovarao za 0,32 s) nego zove GitHub API izravno.
+ne izlazi kao zeleno. Alat NE koristi `gh` nego zove GitHub API izravno, i to je odluka o
+OVISNOSTI, ne o stanju alata: 2026-09-03 je `gh` visio i na `gh auth status` (439 s bez odgovora,
+API 0,32 s), a 2026-09-04 isti `gh` vraca za 0,3 s i njime su procitana dva CI loga koja API bez
+autentikacije ne daje. Vjesanje je bilo prolazno; gard ne smije ovisiti o alatu koji zna biti
+neprolazan. Za rucno citanje logova `gh` je ispravan alat, probaj ga s kratkim rokom umjesto da ga
+izbjegavas po sjecanju.
 
 Gate se mjeri na IZOLIRANOM stablu, nikad na dijeljenom: `npm run check` mjeri RADNO STABLO, ne
 HEAD, pa u dijeljenom stablu mjeri i tudje necommitane izmjene i laze u oba smjera. Izmjereno

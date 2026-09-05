@@ -26,7 +26,7 @@ import { dirname, join } from 'node:path';
 import { DOMParser } from '@xmldom/xmldom';
 import { parseXml } from '../src/docx/parser';
 import { readZip } from '../src/repair/zip-codec';
-import { scanXmlWellFormed } from '../src/repair/package-integrity';
+import { scanXmlWellFormed, checkSchemaInvalidContent } from '../src/repair/package-integrity';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const FIXTURE_DIR = join(here, 'fixtures', 'docx');
@@ -110,5 +110,60 @@ describe('A0: duplikat atributa na istom elementu', () => {
   it('isti atribut na RAZLICITIM elementima je uredan', () => {
     const xml = '<?xml version="1.0"?><w:body xmlns:w="urn:x"><w:p w:id="1"/><w:p w:id="1"/></w:body>';
     expect(scanXmlWellFormed(xml).ok).toBe(true);
+  });
+});
+
+/**
+ * DOBRO OBLIKOVAN, ALI SHEMOM NEVALJAN: razred koji je prosao kroz SVE automatske razine.
+ *
+ * Izmjereno 2026-09-03: `croatian-typography-fixer` je definicije tab-stopova zamjenjivao tekstom i
+ * proizvodio `<w:tabs><w:t xml:space="preserve"> </w:t></w:tabs>`. Word (14.0, `OpenAndRepair=false`)
+ * takav dokument ODBIJA otvoriti, a pogodjeno je bilo 6 od 38 stvarnih studentskih radova nakon
+ * ZADANOG popravka. Pritom je `scanXmlWellFormed` prolazio, `integrityFailure` je bio `null`, OPC
+ * provjere su prolazile i Tier 1 (`lxml`) je paket proglasavao ispravnim.
+ *
+ * Zato ovaj gard mora imati i dokaz da GRIZE i dokaz da ne vristi na ispravan ulaz: bez drugog bi
+ * "prolazio" i gard koji prijavljuje sve.
+ */
+const zipEntry = (name: string, xml: string) => ({ name, data: new TextEncoder().encode(xml) });
+const paragraphWithTabs = (inner: string) =>
+  `<?xml version="1.0"?><w:document xmlns:w="urn:x"><w:body><w:p><w:pPr><w:tabs>${inner}</w:tabs></w:pPr><w:r><w:tab/><w:t>Potpis</w:t></w:r></w:p></w:body></w:document>`;
+
+describe('checkSchemaInvalidContent: tekst u <w:tabs>', () => {
+  it('GRIZE: <w:t> unutar <w:tabs> se prijavljuje', () => {
+    const entries = [zipEntry('word/document.xml', paragraphWithTabs('<w:t xml:space="preserve"> </w:t>'))];
+    const issues = checkSchemaInvalidContent(entries);
+    expect(issues).toHaveLength(1);
+    expect(issues[0]?.kind).toBe('schema-invalid-content');
+    expect(issues[0]?.part).toBe('word/document.xml');
+    expect(issues[0]?.detail).toContain('w:t');
+  });
+
+  it('BASELINE: ispravne definicije tab-stopova ne proizvode nijedan nalaz', () => {
+    const entries = [zipEntry('word/document.xml', paragraphWithTabs('<w:tab w:val="right" w:leader="dot" w:pos="4536"/><w:tab w:val="left" w:pos="1134"/>'))];
+    expect(checkSchemaInvalidContent(entries)).toHaveLength(0);
+  });
+
+  it('BASELINE: prazan <w:tabs> nije nalaz', () => {
+    expect(checkSchemaInvalidContent([zipEntry('word/document.xml', paragraphWithTabs(''))])).toHaveLength(0);
+  });
+
+  it('NE VRISTI: <w:t> izvan <w:tabs> je posve uredan', () => {
+    const xml = '<?xml version="1.0"?><w:document xmlns:w="urn:x"><w:body><w:p><w:r><w:t>obican tekst</w:t></w:r></w:p></w:body></w:document>';
+    expect(checkSchemaInvalidContent([zipEntry('word/document.xml', xml)])).toHaveLength(0);
+  });
+
+  it('hvata i u fusnotama i u zaglavlju, jer i ondje popravak pise', () => {
+    const entries = [
+      zipEntry('word/footnotes.xml', paragraphWithTabs('<w:t> </w:t>')),
+      zipEntry('word/header1.xml', paragraphWithTabs('<w:t> </w:t>')),
+    ];
+    expect(checkSchemaInvalidContent(entries).map((i) => i.part).sort()).toEqual(['word/footnotes.xml', 'word/header1.xml']);
+  });
+
+  it('OPSEG JE NAMJERNO USKO: dio koji se ne skenira ne prijavljuje se', () => {
+    // styles.xml svoje <w:tabs> nosi u definiciji stila; popravak ondje ne pise tekst, pa se ne
+    // skenira. Tvrdnja stoji da opseg bude vidljiv, a ne da se slucajno prosiri.
+    expect(checkSchemaInvalidContent([zipEntry('word/styles.xml', paragraphWithTabs('<w:t> </w:t>'))])).toHaveLength(0);
   });
 });

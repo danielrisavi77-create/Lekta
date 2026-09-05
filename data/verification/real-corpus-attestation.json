@@ -7,8 +7,8 @@
     "scripts/repair-real-corpus.mts (harness + detectPassRegressions)"
   ],
   "signedBy": "Daniel Risavi",
-  "signedAt": "2026-09-03T21:50:42.798Z",
-  "signatureNote": "Potpisano na izricitu uputu vlasnika, koji je pregledao mjerenje i rekao da upisem umjesto njega; tekst i brojke nisu mijenjani nakon potpisa.",
+  "signedAt": "2026-09-03T23:31:46.353Z",
+  "signatureNote": "Potpisano na izricitu uputu vlasnika. VAZNO O NASTANKU: vlasnik je pregledao mjerenje od 2026-09-03T21:50 i tada dao uputu; mjerenje koje ova ovjera sada nosi izvedeno je POSLIJE toga (measuredAt 2026-09-03T23:04, nakon sto je zatvorena regresija structure.heading.hierarchy) i vlasnik ga NIJE zasebno pregledao, nego je izricito rekao da se potpis osvjezi. Prethodni potpis je bio stariji od mjerenja koje pokriva (74 min), sto je i bio razlog za ovaj upis.",
   "entries": [
     {
       "profileId": "fer-diplomski",

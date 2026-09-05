@@ -58,6 +58,24 @@ export function attestationProblems(a: CorpusAttestation | null | undefined): st
   if (!a.corpusFingerprint) p.push('nema otiska korpusa');
   if (!a.measuredFromCommit) p.push('nema commita nad kojim je mjereno');
   if (!Array.isArray(a.entries) || a.entries.length === 0) p.push('nema nijednog mjerenog profila');
+
+  // POTPIS NE SMIJE BITI STARIJI OD MJERENJA KOJE POKRIVA.
+  //
+  // Izmjereno 2026-09-04: ovjera je nosila potpis od 21:50 i mjerenje od 23:04, dakle 74 minute
+  // KASNIJE. Datoteka je time tvrdila da je covjek ovjerio brojke koje u trenutku potpisa nisu
+  // postojale. Nijedna postojeca provjera to nije vidjela: sve su gledale POSTOJI li potpis, nikad
+  // sto pokriva.
+  //
+  // Nastalo je bez ičije namjere, mehanicki: mjerenje je ponovljeno nakon sto je zatvorena
+  // regresija, a potpis je prenesen iz prethodne ovjere. Zato je i gard mehanicki.
+  if (a.signedAt && a.measuredAt) {
+    const potpis = Date.parse(a.signedAt);
+    const mjerenje = Date.parse(a.measuredAt);
+    if (Number.isFinite(potpis) && Number.isFinite(mjerenje) && potpis < mjerenje) {
+      p.push('potpis je stariji od mjerenja koje pokriva');
+    }
+  }
+
   return p;
 }
 

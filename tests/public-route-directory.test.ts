@@ -13,7 +13,7 @@
  * generator koji tu stazu pise i koji je ozicen u deploy lanac (netlify.toml).
  */
 import { describe, it, expect } from 'vitest';
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import publicRouteDirectory from '../src/routes/shared/public-route-directory.json';
 import {
@@ -33,16 +33,16 @@ const expectedDirectory = {
       id: 'your-work', label: 'Tvoj rad',
       destinations: [
         { id: 'intake', label: 'Nova provjera', href: '/', description: 'Učitaj Word dokument i pokreni novu lokalnu provjeru.', release: 'core' },
-        { id: 'my-work', label: 'Moji radovi', href: '/moji-radovi/', description: 'Otvori osobni prostor za lokalni rad i pristup računu.', release: 'personal-space' },
-        { id: 'account-repairs', label: 'Prijava i spremljeni popravci', href: '/moji-radovi/#racun', description: 'Prijavi se i upravljaj popravcima spremljenima na računu.', release: 'personal-space' },
+        { id: 'my-work', label: 'Moji radovi', href: '/moji-radovi/', description: 'Otvori osobni prostor za lokalni rad i pristup računu.', release: 'core' },
+        { id: 'account-repairs', label: 'Prijava i spremljeni popravci', href: '/moji-radovi/#racun', description: 'Prijavi se i upravljaj popravcima spremljenima na računu.', release: 'core' },
       ],
     },
     {
       id: 'rules-trust', label: 'Pravila i povjerenje',
       destinations: [
-        { id: 'learn-more', label: 'Kako radi', href: '/saznaj-vise/#how', description: 'Pogledaj tijek provjere i granice lokalne obrade.', release: 'content-hub' },
-        { id: 'checks', label: 'Što se provjerava', href: '/saznaj-vise/#checks', description: 'Saznaj koje dijelove forme Lekta može provjeriti.', release: 'content-hub' },
-        { id: 'trust-proof', label: 'Metodologija i dokazi', href: '/saznaj-vise/#trust-proof', description: 'Pogledaj kako nastaju pravila, mjerenja i dokazi.', release: 'content-hub' },
+        { id: 'learn-more', label: 'Kako radi', href: '/saznaj-vise/#how', description: 'Pogledaj tijek provjere i granice lokalne obrade.', release: 'core' },
+        { id: 'checks', label: 'Što se provjerava', href: '/saznaj-vise/#checks', description: 'Saznaj koje dijelove forme Lekta može provjeriti.', release: 'core' },
+        { id: 'trust-proof', label: 'Metodologija i dokazi', href: '/saznaj-vise/#trust-proof', description: 'Pogledaj kako nastaju pravila, mjerenja i dokazi.', release: 'core' },
         { id: 'faculty-rules', label: 'Pravila po fakultetu', href: '/fakulteti/', description: 'Pronađi dostupna pravila za fakultet i vrstu rada.', release: 'core' },
         { id: 'coverage', label: 'Pokrivenost profila', href: '/pokrivenost.html', description: 'Provjeri status pokrivenosti dostupnih profila.', release: 'core' },
         { id: 'document-processing', label: 'Privatnost obrade', href: '/obrada-dokumenata.html', description: 'Saznaj što ostaje lokalno, a kada dokument ide na server.', release: 'core' },
@@ -65,8 +65,8 @@ const expectedDirectory = {
       destinations: [
         { id: 'comparison', label: 'Usporedba', href: '/landing_usporedba.html', description: 'Usporedi Lektu s drugim načinima provjere rada.', release: 'core' },
         { id: 'benchmark', label: 'Benchmark', href: '/landing_benchmark.html', description: 'Pogledaj mjerljive rezultate javnog benchmarka.', release: 'core' },
-        { id: 'pricing', label: 'Paketi', href: '/saznaj-vise/#pricing', description: 'Pregledaj dostupne pakete i što svaki uključuje.', release: 'content-hub' },
-        { id: 'faq', label: 'Česta pitanja', href: '/saznaj-vise/#faq', description: 'Pronađi kratke odgovore na česta pitanja.', release: 'content-hub' },
+        { id: 'pricing', label: 'Paketi', href: '/saznaj-vise/#pricing', description: 'Pregledaj dostupne pakete i što svaki uključuje.', release: 'core' },
+        { id: 'faq', label: 'Česta pitanja', href: '/saznaj-vise/#faq', description: 'Pronađi kratke odgovore na česta pitanja.', release: 'core' },
         { id: 'guarantee', label: 'Garancija', href: '/garancija.html', description: 'Pročitaj uvjete garancije i granice pokrivenosti.', release: 'core' },
         { id: 'terms-refund', label: 'Uvjeti i povrat', href: '/uvjeti-koristenja.html', description: 'Pročitaj uvjete korištenja, otkaza i povrata.', release: 'core' },
       ],
@@ -96,17 +96,18 @@ describe('public route directory', () => {
     const releasedIds = releasedPublicRouteGroups.flatMap((group) => group.destinations.map((destination) => destination.id));
 
     // Popis je PRIKOVAN: prelazak u `core` mora biti svjesna izmjena ovog testa, uz stvarnu rutu.
-    expect(allRoutes.filter((destination) => destination.release !== 'core').map((destination) => destination.id)).toEqual([
-      'my-work',
-      'account-repairs',
-      'learn-more',
-      'checks',
-      'trust-proof',
-      'pricing',
-      'faq',
-    ]);
-    for (const id of ['my-work', 'account-repairs', 'learn-more', 'checks', 'trust-proof', 'pricing', 'faq']) {
-      expect(releasedIds, id).not.toContain(id);
+    // 2026-09-03: pet odredista (learn-more, checks, trust-proof, pricing, faq) preslo je u `core`,
+    // jer je ruta `/saznaj-vise/` stvarno nastala i sekcije su na njoj. Ostaju samo ona koja jos
+    // nemaju rutu.
+    // 2026-09-04: popis je PRAZAN, jer je i `/moji-radovi/` nastala.
+    //
+    // Prazan popis je opasan oblik: `toEqual([])` prolazi i kad direktorij nema NIJEDNO odrediste,
+    // dakle vakuumski. Zato se uz njega izricito tvrdi da odredista postoje i da su sva objavljena.
+    // Novo odrediste bez rute mora se vratiti u ovaj popis.
+    expect(allRoutes.length, 'prazan direktorij nije prolaz').toBeGreaterThan(20);
+    expect(allRoutes.filter((destination) => destination.release !== 'core').map((destination) => destination.id)).toEqual([]);
+    expect(releasedIds.length).toBe(allRoutes.length);
+    for (const id of ['my-work', 'account-repairs']) {
       expect(isPublicRouteId(id), id).toBe(true);
     }
     expect(isPublicRouteId('not-a-public-route')).toBe(false);
@@ -252,6 +253,22 @@ function routeEvidence(href: string): RouteEvidence | null {
     return { kind: 'vite-ulaz', detail: fileName };
   }
 
+  // Ruta u PODDIREKTORIJU (`/saznaj-vise/` -> `saznaj-vise/index.html`). Do 2026-09-03 su sve
+  // rute bile u korijenu, pa je razrjesivac takvu prijavljivao kao nepostojecu i odrediste je
+  // ostajalo neobjavljeno iako ruta postoji. Dokaz je isti kao za korijenske: datoteka postoji I
+  // stoji kao ulaz u `vite.config.ts`. Datoteka bez ulaza se ne gradi, pa ne bi bila objavljena.
+  if (pathname.endsWith('/') && pathname.length > 1) {
+    const dir = pathname.slice(1, -1);
+    const nested = `${dir}/index.html`;
+    // Ulaz se u `vite.config.ts` moze zapisati kao jedan niz ili kao odvojeni segmenti
+    // (`resolve(__dirname, 'saznaj-vise', 'index.html')`). Trazi se OBOJE: provjera koja poznaje
+    // samo jedan oblik javlja da postojeca ruta ne postoji, sto je gore od nikakve provjere.
+    const declared = viteConfig.includes(`'${nested}'`) || viteConfig.includes(`'${dir}', 'index.html'`);
+    if (existsSync(resolve(ROOT, nested)) && declared) {
+      return { kind: 'vite-ulaz', detail: nested };
+    }
+  }
+
   const slug = fileName.endsWith('.html') ? fileName.slice(0, -'.html'.length) : null;
   if (slug !== null && legalSlugs.has(slug)) {
     if (!runsInDeployChain('generate-legal-pages')) return null;
@@ -272,7 +289,8 @@ describe('public route directory: postojanje odredista', () => {
       .map((destination) => `${destination.id} -> ${destination.href}`);
 
     // Prazan skup bi "prosao" bez ijedne provjere; broj objavljenih odredista se tvrdi izrijekom.
-    expect(released.length).toBe(15);
+    // 15 -> 20 (2026-09-03): pet odredista `/saznaj-vise/#...` je objavljeno jer ruta postoji.
+    expect(released.length).toBe(22);  // 15 -> 20 (`/saznaj-vise/`) -> 22 (`/moji-radovi/`)
     expect(missing, `objavljena odredista bez dokaza o postojanju: ${missing.join(', ')}`).toEqual([]);
   });
 
@@ -289,14 +307,22 @@ describe('public route directory: postojanje odredista', () => {
     expect(broken, `objavljeni fragmenti bez sidra: ${broken.join(', ')}`).toEqual([]);
   });
 
-  it('NEOBJAVLJENA odredista: ruta ne postoji, i to je jedini razlog zasto se ne prikazuju', () => {
-    // Ovo je obrazlozenje presude, ne ukras. Sekcije naslovnice POSTOJE, ruta /saznaj-vise/ ne.
-    const index = readFileSync(resolve(ROOT, 'index.html'), 'utf8');
+  it('SVAKO odrediste ima rutu, pa nijedno vise nije zapisana namjera', () => {
+    // Ovo je obrazlozenje presude, ne ukras.
+    //
+    // PROMJENA 2026-09-03: `/saznaj-vise/` je do tada bila zapisana namjera, a sekcije su zivjele
+    // na naslovnici. Sada ruta POSTOJI i sekcije su na njoj, pa je pet odredista preslo u `core`,
+    // tocno po uputi koju direktorij sam nosi. `/moji-radovi/` je jos namjera i ostaje primjer.
     for (const anchor of ['how', 'checks', 'trust-proof', 'pricing', 'faq']) {
-      expect(index.includes(`id="${anchor}"`), `naslovnica nema sidro #${anchor}`).toBe(true);
+      const hub = readFileSync(resolve(ROOT, 'saznaj-vise', 'index.html'), 'utf8');
+      expect(hub.includes(`id="${anchor}"`), `/saznaj-vise/ nema sidro #${anchor}`).toBe(true);
     }
+    // Do 2026-09-04 je ovdje stajalo obrnuto: da `/moji-radovi/` NE postoji i da je to razlog
+    // skrivanja. Ruta je napravljena, pa tvrdnja mijenja smjer umjesto da se obrise.
+    const mojiRadovi = readFileSync(resolve(ROOT, 'moji-radovi', 'index.html'), 'utf8');
+    expect(mojiRadovi.includes('id="racun"'), '/moji-radovi/ nema sidro #racun').toBe(true);
     for (const href of ['/saznaj-vise/', '/moji-radovi/']) {
-      expect(routeEvidence(href), `ruta ${href} je u medjuvremenu nastala; prebaci odredista u core`).toBeNull();
+      expect(routeEvidence(href), `ruta ${href} nema dokaz o postojanju`).not.toBeNull();
     }
 
     const unreleased = allPublicRouteGroups

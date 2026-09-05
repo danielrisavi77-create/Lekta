@@ -116,6 +116,65 @@ trazi da se za svaku utvrde IZVORI; kriv popis izvora daje laznu sigurnost, pa s
 Poruka trazi `npm run repair-real-corpus-backlog`; ta skripta ne postoji. Citatelja salje u prazno.
 Drzi ga ratchet od jednog u istom testu.
 
+### B6. Popravak literature tiho izostane na stvarnim radovima  (PRVA KLASA ZATVORENA, druga otvorena)
+
+`bibliography-repair-fixer` vrati `stale-anchor` i popravak literature se NE dogodi, dok sucelje
+javlja uspjeh jer su ostali fixeri prosli. To je doslovno posljedica koju
+`tests/repair-anchor-collision.test.ts` u svom zaglavlju opisuje kao RIJESENU.
+
+    lokalni korpus (38 stvarnih radova)   13 ima barem jedan stale-anchor u PRVOM krugu
+        12x  bibliography-repair-assisted
+         1x  heading-structure-universal      (local-01-diplomski)
+         1x  link-doi-repair-assisted         (local-15-rad)
+    commitani korpus (7 sintetickih)       0
+
+Od tih 12, bisekcijom po fixeru:
+
+    4   sudar s `link-doi-fixer`   local-06-diplomski, local-07-diplomski, local-17-rad, local-35-zavrsni
+    8   sidro nevaljano i kad fixer radi SAM, bez ijednog drugog zahtjeva
+        local-15-rad, local-27-zavrsni, local-28-rad, local-31-zavrsni,
+        local-32-diplomski, local-33-diplomski, local-34-diplomski, local-36-diplomski
+
+**Zasto zastita ne grize (prva klasa).** `withoutOverlappingLinkDoiOperations`
+(`src/repair/apply-fixers.ts:263`) izbacuje link-doi operacije nad odlomcima koje literatura
+posjeduje, usporedbom SIROVIH indeksa. Ali dvije strane broje odlomke po razlicitim osnovama, pa
+usporedba nikad nista ne izbaci. Izmjereno na `local-06-diplomski`:
+
+    link-doi operacije, indeksi iz zahtjeva   204, 205, 207, ... 240
+    odlomci koje link-doi STVARNO promijeni   519, 520, 522, ... 555     (konstantan pomak 315)
+    literatura posjeduje                      519..559
+    filtar prijavi preklapanje                0        <- a stvarno preklapanje je 22 od 22
+
+Osnove su najmanje tri: `link-doi-structure.ts:109` indeksira preko `extractBodyParagraphs`,
+literatura preko parserovih odlomaka, a `paragraphTextsForAnchors` preko trece enumeracije
+(1199 odlomaka naspram 1198 kod brojanja parova `<w:p>...</w:p>`).
+
+**PRVA KLASA JE ZATVORENA.** Usporedba je premjestena s indeksa na TEKST: bibliografski zapis sada
+nosi normaliziran `anchorText` (`src/ui/repair-items.ts`), a filtar usporedjuje tekst s tekstom uz
+ZADRZANU indeksnu provjeru, pa stariji klijenti rade nepromijenjeno. Ne salje se nista sto server
+vec nema (popravak ionako prima cijeli dokument, a `link-doi` isti podatak salje odavno).
+
+    stale-anchor na stvarnim radovima   13 -> 9 radova
+    od toga bibliography-repair         12 -> 8
+    link-doi-repair                      1 -> 0
+    korpus                              pad 0, regresija 0, neidempotentnih 0, bodovi 29 -> 30 radova bolje
+
+Gard je UNIT test nad samim filtrom (`tests/repair-anchor-collision.test.ts`), s dokazom da grize:
+uz vracanje na usporedbu samo po indeksu pada tocno tvrdnja "GRIZE", uz baseline i negativnu
+kontrolu koje ostaju zelene. Pokusaj da se razmak podmetne POMICANJEM indeksa kroz `applyFixers` je
+odbacen jer ne reproducira kvar: tada ni link-doi ne nadje metu, pa test prolazi i na neispravnom
+kodu.
+
+**DRUGA KLASA (8 radova) OSTAJE OTVORENA i odvojen je posao.** Ondje sidro ne valja ni kad fixer
+radi SAM nad netaknutim dokumentom, dakle analiza i fixer se ne slazu oko istog, nepromijenjenog
+dokumenta:
+
+    local-15-rad, local-27-zavrsni, local-28-rad, local-31-zavrsni,
+    local-32-diplomski, local-33-diplomski, local-34-diplomski, local-36-diplomski
+
+Utvrdjeno bisekcijom po fixeru i po paru, uz `LEKTA_LOCAL_CORPUS=1` u izoliranom worktreeu.
+Sinteticki korpus ovaj razred ne moze pokazati: ondje su indeksi usklađeni, pa stariji test prolazi.
+
 ---
 
 ## C. Komercijalno, izvan koda
