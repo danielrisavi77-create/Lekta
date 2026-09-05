@@ -28,6 +28,31 @@ async function analyzeAndOpenSubmissionTab(page: Page) {
     document.documentElement.appendChild(st);
   });
   await page.goto('/rad/');
+  // TRAKA PRIVOLE SE ODBACUJE, kao sto to radi i stvaran korisnik jednim dodirom.
+  //
+  // Traka je `position:fixed` na dnu i na 375x667 visoka 169 px, dakle CETVRTINA zaslona.
+  // `scrollIntoView` skrola MINIMALNO, pa element sleti tocno ispod nje i klik presretne gumb
+  // "Samo nuzno". Izmjereno 2026-09-05 na mobile-chromium: `#tabbtn-submission` je vidljiv I
+  // stabilan, klik se ponovi 127 puta i kuka istekne na 300 s. Zbog toga je CI `check` bio
+  // crven SEDAM uzastopnih runova (13:06 do 18:35), a lokalni `npm run check` cijelo vrijeme
+  // zelen: Playwright je zaseban posao (`ux-gate`) i lokalni gate ga ne vrti.
+  //
+  // ZASTO SE RJESAVA OVDJE, A NE U CSS-u: invarijantu "traka ne smije zaklanjati" VEC CUVA
+  // `mobile-critical-path.spec.ts`, koji trazi da traka ostane gore i pada ako se preklapanje
+  // vrati; on prolazi, jer rezerva (`syncConsentBannerInset`) radi za kriticni put. Ovaj spec
+  // mjeri PANEL POPRAVKA, ne privolu, i jedini dolazi u stanje koje stvaran korisnik napusta
+  // prvim dodirom.
+  //
+  // Pokusano i odbaceno: `scroll-margin-bottom` vezan uz zivu visinu trake. Na svim
+  // interaktivnim elementima je popravio chromium a SRUSIO `browser-matrix` (firefox/webkit),
+  // dva puta zaredom, jer uz marginu od ~190 px `scrollIntoView` zna element prebaciti IZVAN
+  // vidnog polja, i te se izvedbe medju preglednicima razlikuju. Suzen na `[role="tab"]`,
+  // isti kvar se samo preselio na `.lekta-repair-trigger__btn`. Kvar je u harnessu, ne u CSS-u.
+  const odbij = page.locator('#analyticsDecline');
+  if (await odbij.isVisible().catch(() => false)) {
+    await odbij.click();
+    await expect(page.locator('#consentBanner')).toBeHidden();
+  }
   const uploadCta = page.locator('#uploadCtaBtn');
   if (await uploadCta.isVisible().catch(() => false)) await uploadCta.click();
   await page.locator('#fileInput').setInputFiles(fixture);
