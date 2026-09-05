@@ -463,6 +463,9 @@ verify_jwt = true
 [functions.repair-docx]
 verify_jwt = true
 
+[functions.withdraw-corpus-contribution]
+verify_jwt = true
+
 [functions.delete-repair-job]
 verify_jwt = true
 

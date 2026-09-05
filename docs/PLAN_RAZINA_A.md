@@ -203,3 +203,24 @@ broj mijenjao id vecini radova pri svakom premjestanju; 362 sidecara za 200 izvo
   roku cuvanja, anonimnim racunima i datumu ukljucivanja.
 - FZS Rijeka (2 rada) nije usao u mjerenje: oba su svedena na verzije vec prisutnih radova ili nemaju par u
   registru; provjeriti pri sljedecem valu, ne pretpostavljati.
+
+### Kanal A: izgradjen iza zastavice
+
+Vlasnik: "sam napravi dio za Kanal A". Odluke uzete kako je predlozeno u specu
+(`docs/superpowers/specs/2026-09-05-kanal-a-privola-korpusa.md`): tekst kucice, rok 36 mjeseci ili do povlacenja,
+anonimni racuni bez kucice, pohranjuje se izvorni dokument. Iskljuceno dok vlasnik ne prodje korake ukljucivanja iz
+speca (migracija 0102 kroz `supabase db push`, deploy dvije Edge funkcije, tajna `CORPUS_CONTRIBUTION_ENABLED=1`,
+`corpusContribution:true` u zadanoj konfiguraciji klijenta, staging smoke, pa `scripts/corpus-pull.mts`).
+
+| dio | gdje | dokaz |
+|---|---|---|
+| verzija i tekst privole, odluka o pohrani | `src/legal/corpus-consent.ts` | `tests/corpus-consent.test.ts` (pet ishoda, redoslijed, tekst bez crtica) |
+| pseudonimizirana kopija bez keyringa | `src/corpus/contribution.ts` | `tests/corpus-contribution.test.ts` (ime nigdje u bajtovima, slika identicna, sol) |
+| kucica ispod obvezne privole | `src/ui/corpus-consent-row.ts`, `app.ts` | `tests/corpus-consent-row.test.ts` (nudi se samo uz zastavicu i e-mail, zadano neoznacena) |
+| meta polje i pozadinska pohrana | `repair-client.ts`, `repair-docx` | `check:edge` zelen; odgovor nosi `corpusContribution`, `pending` se ne smije prikazati kao pohranjeno |
+| povlacenje | `withdraw-corpus-contribution`, `corpus-contribution-client.ts`, gumb u "Moji popravci" | `tests/corpus-contribution-client.test.ts`; brise kopiju PA oznacava redak |
+| pohrana i pravni tekst | migracija 0102 (bucket `corpus`, RLS), privatnost 1c | `tests/legal-content.test.ts` |
+| vlasnikov ulaz | `scripts/corpus-pull.mts` | rucno, uz `.env.corpus` |
+
+Nije izgradjeno: automatsko brisanje po roku kao zaseban posao (po uzoru na 0033). Do tada rok vrijedi kroz
+`expires_at`, a vlasnikov pull povucene priloge brise i lokalno.

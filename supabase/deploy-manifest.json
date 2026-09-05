@@ -327,6 +327,8 @@
       "declaredInConfig": true,
       "requiredSecrets": [
         "ALLOWED_ORIGIN",
+        "CORPUS_CONTRIBUTION_DAILY_CAP",
+        "CORPUS_CONTRIBUTION_ENABLED",
         "DAILY_CAP",
         "IP_HASH_SALT",
         "REPAIR_DISABLED",
@@ -410,9 +412,23 @@
       "impactIfDown": "placanja se ne knjize; kupac plati a ne dobije pravo",
       "intentionalExclusion": null,
       "reason": null
+    },
+    {
+      "function": "withdraw-corpus-contribution",
+      "verifyJwt": true,
+      "declaredInConfig": true,
+      "requiredSecrets": [
+        "ALLOWED_ORIGIN",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_URL"
+      ],
+      "domain": "popravak",
+      "impactIfDown": "korisnik ne moze povuci privolu za prilog korpusu; pravna obveza",
+      "intentionalExclusion": null,
+      "reason": null
     }
   ],
-  "generatedAt": "2026-09-03T18:28:00.094Z",
-  "generatedFromCommit": "3fefb47cbb3b5756c506d3ecf1e7fb6c2a79dcf0",
+  "generatedAt": "2026-09-05T18:57:51.778Z",
+  "generatedFromCommit": "602ae440e3b35b2c016dfd4f88521d6f43d8847c",
   "generator": "npm run deploy-manifest"
 }

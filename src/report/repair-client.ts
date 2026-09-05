@@ -11,6 +11,7 @@
 
 import { isReportWorkType, type ReportWorkType } from './pricing';
 import { TERMS_VERSION } from '../legal/terms-version';
+import { CORPUS_CONSENT_VERSION } from '../legal/corpus-consent';
 import { parseSourceCheck, type RepairSourceCheck } from './source-check-parse';
 export { REPAIR_MAX_REFERENCES } from './repair-contract';
 import { REPAIR_MAX_REFERENCES } from './repair-contract';
@@ -91,6 +92,12 @@ export interface RepairMeta {
    * budu novi, grana na serveru moze nestati.
    */
   sourceCheckSeparate?: boolean;
+  /**
+   * Kanal A: ZASEBNA, neobavezna privola da se pseudonimizirana kopija dokumenta zadrzi za mjerenje popravka.
+   * Nosi verziju teksta koji je korisnik vidio; server pohranu prihvaca samo za tekucu verziju i nikad zbog nje ne
+   * odbija popravak. Izostaje kad kucica nije ponudjena ili nije oznacena: nema polja, nema pohrane.
+   */
+  corpusConsent?: { version: string };
 }
 
 export interface RepairChange { ruleId: string; beforeLabel: string; afterLabel: string }
@@ -146,6 +153,8 @@ export function buildRepairMeta(input: {
   references?: RepairReference[] | null;
   /** Pozivatelj sam zove source-check usporedno; server tada preskace provjeru izvora. */
   sourceCheckSeparate?: boolean;
+  /** Kanal A: korisnik je oznacio zasebnu privolu za prilog korpusu. */
+  corpusConsent?: boolean;
 }): RepairMeta {
   const workType: ReportWorkType = isReportWorkType(input.workType) ? input.workType : 'zavrsni';
   const meta: RepairMeta = {
@@ -161,6 +170,7 @@ export function buildRepairMeta(input: {
   if (input.fileName != null) meta.fileName = input.fileName;
   if (input.confirmedMismatch) meta.confirmedMismatch = true;
   if (input.sourceCheckSeparate) meta.sourceCheckSeparate = true;
+  if (input.corpusConsent === true) meta.corpusConsent = { version: CORPUS_CONSENT_VERSION };
   // Reference bez naslova nemaju sto traziti u korpusu (kljuc je naslov), pa ispadaju ovdje umjesto
   // da putuju na server i tamo se tiho odbace. Prazan popis se izostavlja: nema polja, nema provjere.
   // Kad provjeru vodi zaseban poziv, popis literature se uz dokument NE salje uopce: server ga tada

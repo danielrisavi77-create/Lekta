@@ -1,7 +1,27 @@
 # Kanal A: prilog korpusu uz zasebnu privolu (nacrt, 2026-09-05)
 
-> Stanje: NACRT za vlasnika. Mehanika se moze graditi iza zastavice koja je iskljucena; nista od ovoga ne ide
-> uzivo dok vlasnik ne odobri tekst privole i rok cuvanja. Vidi "Odluke za vlasnika" na kraju.
+> Stanje 2026-09-05, kasno popodne: IZGRADJENO iza zastavice, iskljuceno. Vlasnik je delegirao odluke ("sam napravi dio
+> za Kanal A"), pa su uzete kako je predlozeno: tekst kucice iz ovog speca (`CORPUS_CONSENT_VERSION = 2026-09-05`),
+> rok 36 mjeseci ili do povlacenja, anonimni racuni bez kucice, pohranjuje se izvorni dokument. Vlasnik smije tekst
+> zamijeniti (nova verzija u `src/legal/corpus-consent.ts`).
+>
+> UKLJUCIVANJE, redom: (1) `supabase db push` s `0102_corpus_contributions.sql` (staging pa produkcija;
+> `npm run migration-identity`), (2) deploy Edge funkcija `repair-docx` i `withdraw-corpus-contribution`,
+> (3) tajna `CORPUS_CONTRIBUTION_ENABLED=1` na `repair-docx` (i po zelji `CORPUS_CONTRIBUTION_DAILY_CAP`, zadano 200),
+> (4) `corpusContribution:true` u `DEFAULT_PRODUCTION_CONFIG` (`src/config/production-config.ts`) i deploy klijenta,
+> (4a) `tests/ux/repair-panel.spec.ts:104` broji vidljive interaktivne elemente u panelu popravka (prag < 15);
+> kucica dodaje tocno jedan `input` kad je zastavica ukljucena, pa prag provjeriti i po potrebi pomaknuti uz datirani
+> razlog, ne tiho (nalaz druge sesije 2026-09-05; s iskljucenom zastavicom red se ne crta i test je nepromijenjen),
+> (5) staging smoke po tocki 6, (6) vlasnikov dohvat: `npx vite-node scripts/corpus-pull.mts -- --out
+> C:/Users/PC/Desktop/Lekta-korpus/04-prilozi --dry-run`, pa bez `--dry-run`.
+>
+> Sto je izgradjeno: `src/legal/corpus-consent.ts` (verzija, tekst, odluka), `src/corpus/contribution.ts`
+> (pseudonimizirana kopija bez keyringa), `src/ui/corpus-consent-row.ts` (kucica), `RepairMeta.corpusConsent`,
+> `repair-docx` (odluka, pozadinska pohrana, `corpusContribution` u odgovoru), `withdraw-corpus-contribution`,
+> `src/report/corpus-contribution-client.ts` + gumb u "Moji popravci", migracija 0102, privatnost 1c,
+> `scripts/corpus-pull.mts`; testovi za odluku, tekst, kopiju (doslovna pretraga bajtova), kucicu i klijent.
+> Nije izgradjeno: automatsko brisanje po roku (36 mjeseci) kao zaseban posao, po uzoru na 0033; do tada rok
+> vrijedi kroz `expires_at` i vlasnikov pull, koji povucene brise i lokalno.
 
 ## 1. Zasto
 
