@@ -2,6 +2,7 @@ import { uploadCapBytes } from '../../repair/docx-budget';
 import { IndexedDbDocumentSessionStore } from '../../session/indexeddb-document-session-store';
 import { createLocalDocumentSession, sessionFragment } from '../../session/local-document-session';
 import { mountIntakeController } from './intake-controller';
+import { playIntakeEntry } from './intake-motion';
 import SITE_STATS from '../../../data/coverage/site-stats.json';
 import '../../shared/ui-boot';
 import '../../shared/page.css';
@@ -113,6 +114,10 @@ function start(): void {
   const maxUploadBytes = uploadLimitForCurrentDevice();
   showUploadLimit(document, maxUploadBytes);
   renderStats(document);
+  // Sekvenca ide POSLIJE punjenja brojki, da se ne animira prazan element, i PRIJE montaze
+  // kontrolera samo po redoslijedu poziva: papir je klikabilan od prvog kadra jer se animiraju
+  // iskljucivo `opacity` i `transform`.
+  playIntakeEntry(document);
   const store = openStore();
 
   mountIntakeController(document, {

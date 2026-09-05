@@ -59,27 +59,30 @@
   </div>
 </header>
 <main id="top" class="intake-main">
-<section class="section section-soft intake-stage" id="intakeStage" data-intake-state="idle" aria-labelledby="intakeTitle">
-  <div class="shell">
+<section class="intake-stage" id="intakeStage" data-intake-state="idle" aria-labelledby="intakeTitle">
+  <div class="intake-shell">
     <div class="intake-desk" id="paperCover">
       <div class="intake-paper" id="intakeDropzone" role="button" tabindex="0" aria-controls="intakeFile" aria-describedby="intakeMeta" aria-busy="false">
-        <span class="intake-mark" aria-hidden="true"></span>
-        <h1 class="intake-title" id="intakeTitle">Ubaci rad. Provjera ostaje na tvom uređaju.</h1>
-        <p class="intake-lead">Odaberi ili ispusti Word dokument (.docx). Dokument se ne šalje nikamo; provjera radi u pregledniku.</p>
+        <span class="intake-kicker">lokalni korektorski stol</span>
+        <h1 class="intake-title" id="intakeTitle">Ubaci rad.<br>Ostaje na tvom <em class="intake-em">uređaju<svg viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M3 7 Q 30 2, 60 7 T 118 7 T 176 7 T 234 7 T 295 7"/></svg></em>.</h1>
+        <p class="intake-lead">Provjeravamo oblikovanje, strukturu, opseg i citiranje prema pravilima tvog fakulteta. Bez slanja dokumenta i bez registracije.</p>
+        <span class="intake-cta">Odaberi <b>.docx</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></span>
+        <span class="intake-hint">ili ispusti dokument na papir</span>
         <span class="intake-file-name" id="intakeFileName"></span>
-        <span class="btn btn-primary btn-lg intake-cta" aria-hidden="true">Odaberi .docx</span>
       </div>
       <input class="intake-file-input" id="intakeFile" type="file" tabindex="-1" aria-hidden="true" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
     </div>
-    <p class="intake-meta" id="intakeMeta">Word .docx do <strong data-upload-limit>dopuštene veličine</strong> · jedan dokument · bez registracije</p>
+
+    <p class="intake-meta" id="intakeMeta">Word .docx do <strong data-upload-limit>dopuštene veličine</strong> · jedan dokument · analiza radi u pregledniku</p>
     <p class="intake-status" id="intakeStatus" aria-live="polite" aria-atomic="true"></p>
     <p class="intake-error" id="intakeError" role="alert" hidden></p>
-    <button class="btn btn-secondary intake-memory-action" id="intakeMemoryAction" type="button" hidden>Otvori korektorski stol bez spremanja</button>
+    <button class="intake-memory-action" id="intakeMemoryAction" type="button" hidden>Otvori korektorski stol bez spremanja</button>
     <p class="intake-continue" id="intakeContinue" hidden></p>
-    <p class="intake-links"><a href="/saznaj-vise/#how">Želiš saznati više?</a> <a href="/moji-radovi/">Moji radovi</a></p>
+
+    <div class="intake-stats" id="intakeStats" aria-label="Pokrivenost"></div>
+    <p class="intake-links"><a href="/saznaj-vise/#how">Kako radi i što provjerava</a><a href="/moji-radovi/">Moji radovi</a></p>
   </div>
 </section>
-<div class="intake-stats" id="intakeStats" aria-label="Pokrivenost"></div>
 <section class="ks-marquee" aria-hidden="true">
   <div class="ks-tape"><div class="ks-tape-track">
     <span><b>●</b>&nbsp;&nbsp;CITATNICE</span><span><b>●</b>&nbsp;&nbsp;LITERATURA</span><span><b>●</b>&nbsp;&nbsp;STRUKTURA</span><span><b>●</b>&nbsp;&nbsp;OBLIKOVANJE</span><span><b>●</b>&nbsp;&nbsp;TABLICE I SLIKE</span><span><b>●</b>&nbsp;&nbsp;PREDAJNI PAKET</span><span><b>●</b>&nbsp;&nbsp;PRIVATNOST</span><span><b>●</b>&nbsp;&nbsp;FPZG · VERIFICIRANA PRAVILA</span><span><b>●</b>&nbsp;&nbsp;CITATNICE</span><span><b>●</b>&nbsp;&nbsp;LITERATURA</span><span><b>●</b>&nbsp;&nbsp;STRUKTURA</span><span><b>●</b>&nbsp;&nbsp;OBLIKOVANJE</span><span><b>●</b>&nbsp;&nbsp;TABLICE I SLIKE</span><span><b>●</b>&nbsp;&nbsp;PREDAJNI PAKET</span><span><b>●</b>&nbsp;&nbsp;PRIVATNOST</span><span><b>●</b>&nbsp;&nbsp;FPZG · VERIFICIRANA PRAVILA</span>

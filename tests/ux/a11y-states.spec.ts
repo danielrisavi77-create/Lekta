@@ -73,7 +73,7 @@ test.beforeAll(async ({ browser }) => {
   context = await browser.newContext();
   page = await context.newPage();
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await page.goto('/rad/', { waitUntil: 'domcontentloaded' });
 });
 
 test.afterAll(async () => {
