@@ -3,6 +3,7 @@ import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import { runRealCorpus } from '../tests/real-corpus/harness';
+import { withProvenance } from './lib/provenance.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outIndex = process.argv.indexOf('--out');
@@ -15,7 +16,15 @@ mkdirSync(join(root, 'docs', 'generated'), { recursive: true });
 // lokalne, necommitane radove ide u zaseban, gitignoriran izvjestaj: inace bi commitani artefakt
 // tvrdio brojke koje nitko osim vlasnika diska ne moze ponoviti.
 const reportPath = includeLocal ? 'repair-real-corpus.local.json' : 'repair-real-corpus.json';
-writeFileSync(join(root, 'docs', 'generated', reportPath), JSON.stringify(report, null, 2) + '\n');
+// Lokalni artefakt nosi provenijenciju (KADA i NAD KOJIM COMMITOM je mjereno), jer ovjera
+// (`scripts/attest-real-corpus.mjs`) iz njega cita vrijeme mjerenja. Do 2026-09-05 je ovjera upisivala
+// vrijeme VLASTITOG pokretanja, pa je `measuredAt` govorio kad je ovjera napisana, ne kad je mjereno.
+// Commitani izvjestaj ostaje BEZ pecata: `tests/real-corpus.test.ts` ga usporedjuje s vlastitim
+// pokretanjem i vremenski pecat bi tu usporedbu trajno rusio.
+const izlaz = includeLocal
+  ? withProvenance(report, 'LEKTA_LOCAL_CORPUS=1 vite-node scripts/repair-real-corpus.mts')
+  : report;
+writeFileSync(join(root, 'docs', 'generated', reportPath), JSON.stringify(izlaz, null, 2) + '\n');
 
 if (outputDir) {
   const reviewManifest = report.results
