@@ -7,7 +7,7 @@ const fixture = path.resolve('tests/fixtures/docx/fer-diplomski-prazni-odlomci.d
 for (const viewport of [{ width: 390, height: 844 }, { width: 375, height: 667 }]) {
   test(`mobilni upload stane u prvi ekran ${viewport.width}x${viewport.height}`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await page.goto('/');
+    await page.goto('/rad/');
     await expectInsideFold(page, '.lek-head-copy h1', viewport.height);
     await expectInsideFold(page, '.lek-top-lead', viewport.height);
     await expectInsideFold(page, '#dropzone', viewport.height);

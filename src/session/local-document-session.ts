@@ -280,10 +280,29 @@ export function sessionFragment(id: string): string {
   return `#session=${id}`;
 }
 
+/**
+ * Fragment se cita kao upit (`session=...&handoff=...`), ne kao cijeli niz.
+ *
+ * Do 2026-09-05 je regex trazio TOCNO `#session=<uuid>` i nista drugo, pa sesija i Katedrin
+ * `#handoff=<token>` (koji `katedra-entry.ts` isto cita kroz `URLSearchParams` nad fragmentom) nisu
+ * mogli dijeliti URL: dolazak s Katedre na `/rad/` bi ili izgubio sesiju ili handoff. Sada oba
+ * zive u istom fragmentu, a `sessionFragment(id)` i dalje proizvodi kanonski `#session=<id>`.
+ * Vrijednost se i dalje provjerava kao nasumican UUID; nista drugo ne prolazi.
+ */
 export function parseSessionFragment(fragment: string): string | null {
-  const match = /^#session=([0-9a-f-]+)$/.exec(fragment);
-  if (!match || !isLocalDocumentSessionId(match[1])) return null;
-  return match[1];
+  // Samo fragment se prihvaca: `session=X` i `?session=X` su upit ili goli niz, ne fragment.
+  if (!fragment.startsWith('#')) return null;
+  const raw = fragment.slice(1);
+  if (!raw) return null;
+  let values: string[];
+  try {
+    values = new URLSearchParams(raw).getAll('session');
+  } catch {
+    return null;
+  }
+  // Dva `session=` u istom fragmentu su dvosmislenost, ne izbor; ne pogadja se koji je pravi.
+  if (values.length !== 1) return null;
+  return isLocalDocumentSessionId(values[0]) ? values[0] : null;
 }
 
 export async function createLocalDocumentSession(

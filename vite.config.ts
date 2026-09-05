@@ -273,7 +273,11 @@ function bundleSizeGuard(devTools: boolean) {
    */
   const ENTRY_BUDGETS: Readonly<Record<string, number>> = {
     rad: 960 * 1024,
-    index: 960 * 1024,
+    // REZ NASLOVNICE (2026-09-05): `/` je cisti ulaz za dokument. Izmjereno na prvom buildu poslije
+    // reza: entry 6 KB + ui-boot + hero-depth + IndexedDB store, intake gate lijen. Budzet je
+    // namjerno tijesan: povratak analizatora na `/` (uvoz `src/ui/app.ts`) dodaje 687 KB i pada
+    // odmah, sto je cijela poanta ulaza koji ne vuce nista.
+    index: 160 * 1024,
     saznajVise: 128 * 1024,
     mojiRadovi: 128 * 1024,
   };

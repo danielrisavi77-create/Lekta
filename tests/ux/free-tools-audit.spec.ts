@@ -440,7 +440,7 @@ test('reduced-motion: skriveno stanje ne ovisi o tome je li setupReveal stigao',
  */
 const TRAKE = [
   { ruta: '/citat.html', vidljiva: '.lekta-consent-banner.is-visible', traka: '.lekta-consent-banner', odbij: '.lekta-consent-banner [data-consent="deny"]' },
-  { ruta: '/index.html', vidljiva: '#consentBanner:not(.hidden)', traka: '#consentBanner', odbij: '#analyticsDecline' },
+  { ruta: '/rad/', vidljiva: '#consentBanner:not(.hidden)', traka: '#consentBanner', odbij: '#analyticsDecline' },
 ];
 const SIRINE = [
   { ime: 'usko 375x667', width: 375, height: 667 },
@@ -556,7 +556,7 @@ for (const t of TRAKE) {
 for (const [sirina, visina] of [[360, 667], [393, 727], [393, 900], [430, 844]] as const) {
   test(`traka o privoli ne blokira navigaciju ni CTA (mobitel ${sirina}x${visina})`, async ({ page }) => {
     await page.setViewportSize({ width: sirina, height: visina });
-    await page.goto('/index.html');
+    await page.goto('/rad/');
     await page.waitForSelector('#consentBanner:not(.hidden)');
     // STVARNA datoteka, ne podmetnuta klasa: `has-file` ne prikazuje `#selectedFile` ni ne skriva
     // `#dropEmpty`, pa daje raspored koji nijedan korisnik ne vidi (izmjereno: preklop 0 umjesto 70 px).
@@ -655,10 +655,21 @@ for (const [ime, dataTheme, scheme] of [
  * `#C9C2B1`; tekst tocno na tocki bio bi do ~0,9 omjera losiji. Kontrast nad teksturom je i u
  * WCAG-u dvosmislen (zato axe i odustaje), pa ovaj gard NE tvrdi da ga pokriva.
  */
-for (const tema of ['light', 'dark'] as const) {
-  test(`naslovnica: iza gradijenta nema skrivenih kontrastnih krsenja (tema ${tema})`, async ({ page }) => {
+/**
+ * REZ NASLOVNICE (2026-09-05): `/` je cisti ulaz (35 axe cvorova), a stara naslovnica sa svim
+ * sadrzajem je sada `/rad/` (118 cvorova). Gard zato mjeri OBJE stranice, svaku sa vlastitim
+ * pragom netrivijalnosti izmjerenim na dan reza; jedan prag za obje bio bi ili nedostizan za ulaz
+ * ili vakuumski za radnu povrsinu.
+ */
+const KONTRAST_STRANICE = [
+  { ruta: '/rad/', prag: 90 },        // izmjereno 118 neutralizirano; tekstura u svijetloj temi ~65
+  { ruta: '/index.html', prag: 25 },  // izmjereno 35 i s teksturom i bez nje: ulaz nema teksta preko teksture,
+                                      // pa je prag ovdje samo provjera da stranica nije ostala prazna
+] as const;
+for (const { ruta, prag } of KONTRAST_STRANICE) for (const tema of ['light', 'dark'] as const) {
+  test(`${ruta}: iza gradijenta nema skrivenih kontrastnih krsenja (tema ${tema})`, async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await page.goto('/index.html');
+    await page.goto(ruta);
     await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), tema);
     // Neutralizacija teksture je JEDINI nacin da axe uopce izmjeri ove cvorove.
     await page.addStyleTag({ content: 'body{background-image:none!important}' });
@@ -684,7 +695,7 @@ for (const tema of ['light', 'dark'] as const) {
     // daje 65, a neutralizirana 102. U TAMNOJ temi tekstura axe uopce ne ometa (102 u oba stanja),
     // pa ondje prag radi samo kao provjera da stranica nije ostala prazna.
     expect(mjereno, `axe mora izmjeriti bitno vise cvorova nego s teksturom (${mjereno})`)
-      .toBeGreaterThan(90);
+      .toBeGreaterThan(prag);
 
     const nalazi = r.violations.filter((v) => v.id === 'color-contrast');
     const opis = nalazi.flatMap((v) => v.nodes.map((n) =>

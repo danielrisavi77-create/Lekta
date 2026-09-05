@@ -3,14 +3,15 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 /**
- * RUTA `/rad/`: kostur, ne klon.
+ * RUTA `/rad/`: RADNA POVRSINA U CIJELOSTI, a `/` je samo ulaz.
  *
- * Prethodni pokusaj intake-first arhitekture zalijepio je cijeli stari analizator u `rad/index.html`
- * (1862 retka). Dvije HTML datoteke koje moraju ostati usklađene su trajni generator razilazenja,
- * pa ovi gardovi cuvaju da se to ne ponovi: ruta nosi SAMO radnu povrsinu, a njezina kopija se
- * usporedjuje s izvorom pa razilazenje pada u CI-ju umjesto da tiho stoji.
+ * Do 2026-09-05 je vrijedilo obrnuto: `/` je nosio sve, a `/rad/` je bio kostur cija se kopija
+ * sekcije `#analyzer` usporedjivala s izvorom u `index.html`. Rez naslovnice je to okrenuo: `/` je
+ * postao cisti ulaz za dokument (bez analizatora, bez modala), a `/rad/` je jedino mjesto gdje
+ * analizator zivi. Nema vise dvije kopije, pa nema ni sto usporedjivati; umjesto toga se tvrdi da
+ * je podjela CISTA u oba smjera.
  *
- * TRI ZAMKE koje su izmjerene prije pisanja rute i sve tri su ovdje zakljucane:
+ * TRI ZAMKE koje su izmjerene prije pisanja rute i sve tri ostaju zakljucane:
  *
  * 1. KLASIFIKACIJA. Manifest `*` NE prelazi `/`, pa korijenski `*.html` ne hvata `rad/index.html`.
  *    Bez vlastitog pravila ruta je nerazvrstana i klasifikacijski gard pada (deny-by-default).
@@ -34,68 +35,71 @@ const MANIFEST = JSON.parse(readFileSync(resolve(ROOT, 'data', 'classification.j
 const INLINE_SCRIPT = /<script(?![^>]*\bsrc=)(?![^>]*type="application)[^>]*>[\s\S]*?<\/script>/;
 const PRODUCTION_ORIGIN = 'https://lektahr.netlify.app';
 
-/**
- * Zavrseci redaka se NORMALIZIRAJU prije usporedbe. Repo ima `core.autocrlf`, pa git pri
- * checkoutu mijenja CRLF/LF ovisno o datoteci i platformi; usporedba sirovih bajtova mjerila bi
- * konfiguraciju gita, ne razilazenje sadrzaja, i padala bi nasumicno po strojevima.
- */
 function eol(text: string): string {
   return text.split('\r\n').join('\n');
 }
 
-/** Sekcija radne povrsine iz dane stranice, s ugnijezdjenim `<section>` elementima. */
-function workspaceSection(html: string): string {
-  const start = html.indexOf('<section class="section section-soft" id="analyzer">');
-  if (start < 0) throw new Error('sekcija radne povrsine nije nadjena');
-  let depth = 0;
-  for (const m of html.slice(start).matchAll(/<section\b|<\/section\s*>/gi)) {
-    depth += m[0].startsWith('</') ? -1 : 1;
-    if (depth === 0) return html.slice(start, start + m.index! + m[0].length);
-  }
-  throw new Error('zatvarajuci </section> nije nadjen');
-}
+/**
+ * Sve sto analizator ozicuje izvan same sekcije `#analyzer`: modali, privola, Netlify forma. Do reza
+ * je zivjelo SAMO u `index.html`, pa je na `/rad/` prijava bila tihi no-op, povijest i pregled
+ * bacali su TypeError, a `openCheckoutConsent` je bez modala tiho potvrdjivao odricanje od prava na
+ * odustajanje. Popis je imenovan, ne prebrojan: novi modal koji zaboravi doci ovamo mora se vidjeti.
+ */
+const RADNA_POVRSINA_TREBA = [
+  'analyzer', 'dropzone', 'fileInput', 'analyzeBtn', 'resultCockpit',
+  'orderModal', 'historyModal', 'repairHistoryModal', 'reportModal', 'legalModal', 'previewModal',
+  'checkoutConsentModal', 'authModal', 'guaranteeModal', 'consentBanner', 'authEntry', 'themeBtn',
+  'mobileNav', 'toastWrap', 'workspace-status',
+];
 
 describe('ruta /rad/', () => {
-  it('je KOSTUR: nema cjenika ni provjera s landinga', () => {
-    for (const root of ['checkGrid', 'pricingGrid', 'orderModal', 'legalModal']) {
-      expect(RAD, `${root} ne smije biti na tankoj ruti`).not.toContain(`id="${root}"`);
+  it('nosi CIJELU radnu povrsinu: analizator, sve modale, privolu i Netlify formu', () => {
+    for (const id of RADNA_POVRSINA_TREBA) {
+      expect(RAD, `#${id} mora biti na /rad/, inace ozicenje iz app.ts nema metu`).toContain(`id="${id}"`);
     }
+    // Netlify skenira DEPLOYANI HTML za forme; forma koja nije ni na jednoj stranici ne postoji.
+    expect(RAD).toContain('name="lekta-orders"');
+    expect(RAD).toMatch(/data-netlify="true"/);
   });
 
-  it('nema nijednu landing sekciju, pa nije klon', () => {
-    // RANIJE je ovdje stajao omjer velicina (`RAD < INDEX * 0.25`). Ta je mjera prestala vrijediti
-    // kad je 203 KB inline CSS-a izdvojeno iz `index.html`: omjer je dotad mjerio CSS, ne markup,
-    // pa je "nije klon" prolazilo iz krivog razloga. Sada se mjeri ono sto tvrdnja imenuje.
+  it('nema nijednu landing sekciju: one zive na /saznaj-vise/', () => {
     for (const sekcija of ['privatnost', 'trust-proof', 'video', 'how', 'podcrta', 'provjere-popis', 'pricing', 'alati-sekcija', 'faq']) {
       expect(RAD, `landing sekcija ${sekcija} ne pripada radnoj povrsini`).not.toContain(`id="${sekcija}"`);
     }
-    expect(RAD.length).toBeLessThan(INDEX.length);
   });
 
-  it('nosi radnu povrsinu, i to BAJT-IDENTICNU izvoru', () => {
-    // Divergencija je jedini stvarni rizik duplikata. Dok analizator ne preseli ovamo u cijelosti
-    // (prijelaz), kopija se usporedjuje sa izvorom pa tiho razilazenje nije moguce.
-    expect(eol(workspaceSection(RAD))).toBe(eol(workspaceSection(INDEX)));
+  it('`/` je CISTI ULAZ: bez analizatora i bez ijednog modala', () => {
+    // Ovo je drugi smjer iste podjele. Da `/` zadrzi `#analyzer` i `#dropzone`, `hasLegacyPage` bi
+    // montirao cijeli analizator na ulaz cim ga netko uveze, i rez bi bio samo kozmetika.
+    for (const id of ['analyzer', 'orderModal', 'authModal', 'historyModal', 'previewModal', 'checkoutConsentModal', 'resultCockpit']) {
+      expect(INDEX, `#${id} ne pripada ulazu`).not.toContain(`id="${id}"`);
+    }
+    expect(INDEX).toContain('id="intakeDropzone"');
+    expect(INDEX).toContain('src="/src/routes/intake/main.ts"');
+    expect(INDEX).not.toContain('/src/main.ts');
+    expect(INDEX.length, 'ulaz je izgubio cijeli analizator, pa mora biti bitno manji od radne povrsine').toBeLessThan(RAD.length / 2);
   });
 
-  it('inline skripta teme je BAJT-IDENTICNA, pa joj CSP hash vrijedi', () => {
+  it('inline skripta teme je BAJT-IDENTICNA na obje stranice, pa joj CSP hash vrijedi', () => {
     const radScript = RAD.match(INLINE_SCRIPT)?.[0];
     const indexScript = INDEX.match(INLINE_SCRIPT)?.[0];
     expect(radScript).toBeTruthy();
     expect(eol(radScript || '')).toBe(eol(indexScript || ''));
   });
 
-  it('ima tocno JEDNU inline skriptu: svaka dodatna trazi nov CSP hash', () => {
-    const inline = [...RAD.matchAll(/<script(?![^>]*\bsrc=)(?![^>]*type="application)[^>]*>/g)];
-    expect(inline).toHaveLength(1);
+  it('svaka od dvije stranice ima tocno JEDNU inline skriptu: svaka dodatna trazi nov CSP hash', () => {
+    for (const [ime, html] of [['rad', RAD], ['index', INDEX]] as const) {
+      const inline = [...html.matchAll(/<script(?![^>]*\bsrc=)(?![^>]*type="application)[^>]*>/g)];
+      expect(inline, ime).toHaveLength(1);
+    }
   });
 
   it('canonical ide kroz produkcijski origin, ne kroz tvrdo upisanu domenu', () => {
     expect(RAD).toContain(`<link rel="canonical" href="${PRODUCTION_ORIGIN}/rad/">`);
+    expect(INDEX).toContain(`<link rel="canonical" href="${PRODUCTION_ORIGIN}/">`);
   });
 
   it('klasifikacijski manifest IMA pravilo za rutu', () => {
-    // `*` ne prelazi `/`, pa korijenski `*.html` ovu stranicu ne pokriva.
     const rule = MANIFEST.rules.find((r) => r.pattern === 'rad/*.html');
     expect(rule, 'nedostaje pravilo rad/*.html; gard je deny-by-default').toBeTruthy();
     expect(rule).toMatchObject({ class: 'PUBLIC', bundle: 'allowed' });
@@ -106,24 +110,23 @@ describe('ruta /rad/', () => {
     expect(RAD).not.toContain('/src/main.ts');
   });
 
-  it('RUTA IMA STIL: ulaz uvozi stil stranice', () => {
-    // Izmjereno 2026-09-03: ruta je bila NESTILIZIRANA. Montirala se, primala dokument i prolazila
-    // svaki test, a izgledala je kao goli HTML, jer je stil zivio kao inline `<style>` u
-    // `index.html` i nije imao odakle doci. Nijedan test to nije hvatao: svi su mjerili ponasanje,
-    // nijedan izgled.
-    //
-    // Provjerava se UVOZ u ulazu, ne izlaz builda: izlaz trazi `vite build`, a ovo pada u sekundi
-    // i imenuje uzrok umjesto simptoma.
-    const entry = readFileSync(resolve(ROOT, 'src', 'routes', 'workspace', 'main.ts'), 'utf8');
-    expect(entry, 'ruta bi bila goli HTML').toContain("shared/page.css");
+  it('RUTA IMA STIL i dijeli ga s ulazom, ne kopira', () => {
+    // Izmjereno 2026-09-03: ruta je bila NESTILIZIRANA, jer je stil zivio kao inline `<style>` u
+    // `index.html`. Oba ulaza sada uvoze ISTU datoteku, pa razilazenje nije moguce.
+    const workspace = readFileSync(resolve(ROOT, 'src', 'routes', 'workspace', 'main.ts'), 'utf8');
+    const intake = readFileSync(resolve(ROOT, 'src', 'routes', 'intake', 'main.ts'), 'utf8');
+    expect(workspace, 'ruta bi bila goli HTML').toContain('shared/page.css');
+    expect(intake, 'ulaz bi bio goli HTML').toContain('shared/page.css');
+    for (const [ime, html] of [['rad', RAD], ['index', INDEX]] as const) {
+      expect(html, `${ime}: stil se vratio u inline blok`).not.toContain('<style');
+    }
   });
 
-  it('stil je ZAJEDNICKI s index.html, ne kopija', () => {
-    // Dvije kopije istog stila razisle bi se isto kao dvije kopije markupa. Oba ulaza uvoze ISTU
-    // datoteku, pa razilazenje nije moguce.
-    const root = readFileSync(resolve(ROOT, 'src', 'main.ts'), 'utf8');
-    expect(root).toContain("shared/page.css");
-    expect(INDEX, 'stil se vratio u inline blok').not.toContain('<style');
+  it('radna povrsina razumije Katedrin dolazak i demo scenu, koje su do reza zivjele samo na /', () => {
+    const workspace = readFileSync(resolve(ROOT, 'src', 'routes', 'workspace', 'main.ts'), 'utf8');
+    for (const modul of ['integration/katedra-entry', 'integration/katedra-result-cta', 'ui/hero-demo', 'ui/hero-depth']) {
+      expect(workspace, `${modul} je do reza uvozio samo src/main.ts`).toContain(modul);
+    }
   });
 
   it('ima podrucje za posten status, i ono je skriveno dok nema sto reci', () => {

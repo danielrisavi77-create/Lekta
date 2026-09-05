@@ -127,8 +127,13 @@ describe('model lokalne dokumentne sesije', () => {
     expect(parseSessionFragment(`#session=${SESSION_ID}`)).toBe(SESSION_ID);
     expect(parseSessionFragment(`session=${SESSION_ID}`)).toBeNull();
     expect(parseSessionFragment(`?session=${SESSION_ID}`)).toBeNull();
-    expect(parseSessionFragment(`#session=${SESSION_ID}&profile=fpzg`)).toBeNull();
-    expect(parseSessionFragment(`#profile=fpzg&session=${SESSION_ID}`)).toBeNull();
+    // Od 2026-09-05 fragment je UPIT: sesija smije dijeliti fragment s Katedrinim `handoff=`
+    // (koji `katedra-entry.ts` isto cita kroz URLSearchParams), inace dolazak s Katedre na /rad/
+    // gubi ili sesiju ili handoff. Redoslijed parametara nije bitan; vrijednost i dalje mora biti UUID.
+    expect(parseSessionFragment(`#session=${SESSION_ID}&handoff=abc`)).toBe(SESSION_ID);
+    expect(parseSessionFragment(`#handoff=abc&session=${SESSION_ID}`)).toBe(SESSION_ID);
+    expect(parseSessionFragment(`#session=nije-uuid&handoff=abc`)).toBeNull();
+    expect(parseSessionFragment(`#handoff=abc`)).toBeNull();
     expect(parseSessionFragment(`#session=${SESSION_ID}&session=${SECOND_SESSION_ID}`)).toBeNull();
     expect(parseSessionFragment(`#session=${SESSION_ID.toUpperCase()}`)).toBeNull();
     expect(parseSessionFragment(`#session=${SESSION_ID}\n`)).toBeNull();

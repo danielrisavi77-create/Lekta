@@ -64,6 +64,7 @@
     "deploy-drift": "node scripts/deploy-drift.mjs",
     "orphan-scan": "node scripts/orphan-scan.mjs",
     "migration-identity": "node scripts/migration-identity.mjs",
+    "gen-site-stats": "vite-node scripts/gen-site-stats.mts",
     "gen-profile-rules-server": "vite-node scripts/gen-profile-rules-server.mts",
     "repair-recipe": "vite-node scripts/generate-repair-recipe.mts && vite-node scripts/gen-profile-rules-server.mts",
     "deploy:profile-rules": "node scripts/deploy-profile-rules.mjs",

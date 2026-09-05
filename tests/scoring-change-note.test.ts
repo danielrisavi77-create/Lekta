@@ -58,7 +58,7 @@ describe('napomena je stvarno ozicena u sucelje', () => {
   const read = (f: string) => readFileSync(join(root, f), 'utf8');
 
   it('index.html ima element i pocinje skriven', () => {
-    const html = read('index.html');
+    const html = read('rad/index.html');
     expect(html).toContain('id="scoringChangeNote"');
     // Bez `hidden` bi prazan element bio vidljiv prije prve analize.
     expect(html).toMatch(/class="[^"]*hidden[^"]*"\s+id="scoringChangeNote"/);

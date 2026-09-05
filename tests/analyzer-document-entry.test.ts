@@ -17,7 +17,7 @@ import { resolve } from 'node:path';
  */
 
 const ROOT = resolve(__dirname, '..');
-const INDEX = readFileSync(resolve(ROOT, 'index.html'), 'utf8');
+const INDEX = readFileSync(resolve(ROOT, 'rad', 'index.html'), 'utf8');
 
 function workspaceDoc(): Document {
   const parsed = document.implementation.createHTMLDocument('izvor');
