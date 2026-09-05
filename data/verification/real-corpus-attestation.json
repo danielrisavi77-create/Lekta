@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "corpusFingerprint": "34b45a73b41401bd469780d9890ffdee",
-  "measuredAt": "2026-09-05T15:01:06.208Z",
-  "measuredFromCommit": "fc66791fe5e094c95fae2eafba99e931aae9e00f",
+  "corpusFingerprint": "4a113e922475d3e6279bfa25bfb33a28",
+  "measuredAt": "2026-09-05T15:59:05.685Z",
+  "measuredFromCommit": "cf5fe841789d454af4087dd9ec51bf8510bc52d0",
   "oracles": [
     "scripts/repair-real-corpus.mts (harness + detectPassRegressions)"
   ],
   "signedBy": "Daniel Risavi",
-  "signedAt": "2026-09-05T15:02:04.716Z",
-  "signatureNote": "Potpisano na izricitu uputu vlasnika (2026-09-03: potpisi umjesto mene; 2026-09-05: izvedi ti to, idemo to rijesiti sada). Drugi val korpusa: detektor vrste rada s naslovnice prosiren (padezi, umetak, esej kao seminar, rad kolegija; gola rijec diplomski nije vrsta rada) i pseudonimizacija prosirena (uloge nositelj/voditelj, ime velikim slovima iza uloge), commit fc66791f; tri FKIT dokumenta koji nisu radovi (popis literature, plan i program) iskljuceni oznakom track not-a-thesis. Radovi iz Desktop/Lekta-korpus ingesta uz zapis o dopustenju (local-testing), verzije istog rada svedene na jednog predstavnika. Broj radova i parova je u ovoj ovjeri; vrijeme i commit mjerenja citaju se iz artefakta mjerenja. Potpis je stavljen NAKON mjerenja.",
+  "signedAt": "2026-09-05T15:59:50.083Z",
+  "signatureNote": "Potpisano na izricitu uputu vlasnika (2026-09-03: potpisi umjesto mene; 2026-09-05: izvedi ti to, idemo to rijesiti). Treci val korpusa: vrsta rada s naslovnice, uz REZERVE iza nje (izjava o izvornosti i sazetak u prvim stranicama, pa ime datoteke), esej kao seminar, rad kolegija; pseudonimizacija prosirena (uloge nositelj/voditelj, ime velikim slovima iza uloge) i rucno potvrdjeni pojmovi iz zapisa uz dopustenje; tri FKIT dokumenta koji nisu radovi iskljuceni oznakom track not-a-thesis. Radovi iz Desktop/Lekta-korpus ingesta uz zapis o dopustenju (local-testing), verzije istog rada svedene na jednog predstavnika. Broj radova i parova je u ovoj ovjeri; vrijeme i commit mjerenja citaju se iz artefakta mjerenja. Potpis je stavljen NAKON mjerenja.",
   "entries": [
     {
       "unitId": "efzg",
@@ -56,8 +56,8 @@
       "profileIds": [
         "fpzg-opci-akademski-rad"
       ],
-      "documentCount": 45,
-      "cleanCount": 45,
+      "documentCount": 47,
+      "cleanCount": 47,
       "regressedChecks": []
     },
     {
@@ -66,8 +66,8 @@
       "profileIds": [
         "fpzg-politologija-zavrsni"
       ],
-      "documentCount": 18,
-      "cleanCount": 18,
+      "documentCount": 19,
+      "cleanCount": 19,
       "regressedChecks": []
     },
     {
@@ -76,8 +76,8 @@
       "profileIds": [
         "fpzg-politologija-diplomski"
       ],
-      "documentCount": 27,
-      "cleanCount": 27,
+      "documentCount": 32,
+      "cleanCount": 32,
       "regressedChecks": []
     },
     {
@@ -86,8 +86,8 @@
       "profileIds": [
         "fpzg-opci-akademski-rad"
       ],
-      "documentCount": 45,
-      "cleanCount": 45,
+      "documentCount": 47,
+      "cleanCount": 47,
       "regressedChecks": []
     },
     {
@@ -96,8 +96,8 @@
       "profileIds": [
         "fpzg-opci-akademski-rad"
       ],
-      "documentCount": 45,
-      "cleanCount": 45,
+      "documentCount": 47,
+      "cleanCount": 47,
       "regressedChecks": []
     },
     {

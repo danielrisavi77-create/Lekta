@@ -158,3 +158,24 @@ Otvorena pitanja iz sekcije 8 rijesena su na vlasnikovu rijec ("idemo to rijesit
   radova nisu imena nego imena studija).
 - 32 rada i dalje bez profila: bez ikakva traga vrste rada na naslovnici (2 bez ustanove s popisa). Ostaju u
   `03-ingest` i ne ulaze u mjerenje.
+
+### Treci val, isti dan
+
+Preostala dva pitanja rijesena na vlasnikovu rijec ("idemo to rijesiti"), commit `cf5fe841`:
+
+| sto | brojka |
+|---|---|
+| vrsta rada: rezerve iza naslovnice (izjava/sazetak u prvim stranicama, pa ime datoteke): s profilom od 195 | 163 -> 175 |
+| izvor odluke o vrsti | naslovnica 163, prve stranice 10, ime datoteke 2 |
+| neslaganje rezervi s naslovnicom na 163 rada s vrstom (izmjereno prije ugradnje) | prve stranice 0, ime datoteke 1 (zato NIKAD nemaju prednost) |
+| pseudonimizacija: rucno potvrdjeni pojmovi (`--terms`), praznih rjecnika | 5 -> 4 (tri FKIT ne-rada i jedan placeholder) |
+| lokalni korpus dopusten u mjerenje (ukupno s 7 commitanih) | 112 -> 120 (127) |
+| mjerenje nad `cf5fe841`: pass / review / fail / regresija | 7 / 118 / 0 / 0 |
+| ovjerenih parova / redaka na A / profila na A | 15 / 33 / 27 (nepromijenjeno: novih 8 radova pada u vec dokazane parove) |
+
+- Rucno potvrdjen pojam ulazi u rjecnik SAMO ako doista stoji u dokumentu (`manualTermsIgnored` broji ostale):
+  ime iz naziva datoteke primijenjeno je na jednoj od dvije verzije istog rada, druga ga ne sadrzi, pa ondje
+  nije ni "zamijenjeno".
+- Preostalih 20 radova bez profila (od 195): nema traga vrste rada ni na naslovnici, ni u prvim stranicama, ni u
+  imenu datoteke (2 bez ustanove s popisa). Ostaju u `03-ingest` i ne ulaze u mjerenje; dalje samo rucno.
+- Preostala 4 prazna rjecnika nisu greska: tri dokumenta nisu radovi (iskljuceni), jedan ima placeholder.
