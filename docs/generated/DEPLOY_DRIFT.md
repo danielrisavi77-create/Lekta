@@ -7,7 +7,7 @@ Prazna tablica drifta je jedino prihvatljivo stanje prije deploya.
 
 ## produkcija (`zrrjttizjyfcxmcpgzml`)
 
-Repo: 21 funkcija. Deployano: 17.
+Repo: 22 funkcija. Deployano: 18.
 
 | Funkcija | Stanje |
 | --- | --- |
@@ -30,6 +30,7 @@ Repo: 21 funkcija. Deployano: 17.
 | `generate-report` | 7 | ACTIVE | true |
 | `health` | 8 | ACTIVE | false |
 | `katedra-agent-worker` | 1 | ACTIVE | true |
+| `profile-rules` | 1 | ACTIVE | false |
 | `record-completion-check` | 4 | ACTIVE | false |
 | `redeem-referral-signup` | 7 | ACTIVE | true |
 | `repair-docx` | 27 | ACTIVE | true |
@@ -42,7 +43,7 @@ Repo: 21 funkcija. Deployano: 17.
 
 ## staging (`bnyemcnsphlitjradrst`)
 
-Repo: 21 funkcija. Deployano: 3.
+Repo: 22 funkcija. Deployano: 5.
 
 | Funkcija | Stanje |
 | --- | --- |
@@ -64,12 +65,15 @@ Repo: 21 funkcija. Deployano: 3.
 | `send-reminders` | SAMO U REPOU (nije deployana) |
 | `unsubscribe-reminder` | SAMO U REPOU (nije deployana) |
 | `webhook-mor` | SAMO U REPOU (nije deployana) |
+| `cleanup-agent-payloads` | SAMO U PRODUKCIJI (nema je u repou) |
 
 <details><summary>Deployane verzije</summary>
 
 | Funkcija | Verzija | Status | verify_jwt |
 | --- | --- | --- | --- |
+| `cleanup-agent-payloads` | 1 | ACTIVE | false |
 | `delete-repair-job` | 3 | ACTIVE | true |
+| `profile-rules` | 1 | ACTIVE | false |
 | `repair-docx` | 3 | ACTIVE | true |
 | `source-check` | 3 | ACTIVE | true |
 

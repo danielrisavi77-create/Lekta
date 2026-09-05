@@ -6,6 +6,7 @@
   "workspace": {
     "packageJson": {
       "dependencies": [
+        "npm:@axe-core/playwright@^4.12.1",
         "npm:@fontsource-variable/inter-tight@^5.2.7",
         "npm:@fontsource-variable/newsreader@^5.2.10",
         "npm:@fontsource-variable/source-serif-4@^5.2.9",
@@ -26,7 +27,10 @@
         "npm:typescript@^7.0.2",
         "npm:vite@^8.1.4",
         "npm:vitest@^2.1.4"
-      ]
+      ],
+      "overrides": {
+        "nanoid": "^3.3.18"
+      }
     }
   }
 }
