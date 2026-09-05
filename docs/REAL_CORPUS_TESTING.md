@@ -58,6 +58,13 @@ vidi `changed === false` i zaključi `no-op`, a sve ostale tvrdnje (`outputReada
 neizmijenjenim originalom. Zato "0 fail" bez izričite tvrdnje `integrityFailure === null` nije
 dokaz da gate nije okinuo. Svaki novi harness mora tvrditi i to.
 
+**Deklarirano uklanjanje nije izgubljen zapis (2026-09-05).** `droppedEntryCount` broji samo zapise koje
+NITKO nije prijavio; dijelove koje je fixer uklonio i prijavio kroz `ApplyFixersResult.removedPackageParts`
+(danas samo `final-document-inspector-fixer`, npr. prazan `word/comments.xml` iz ne-Wordovih alata) harness
+imenuje u `removedByFixers`. Izmjereno na 95 stvarnih radova: 15 padova, svih 15 isti potpis, i nijedan nije
+bio gubitak. Gard: `tests/real-corpus-declared-removal.test.ts` (deklarirano se ne broji, nedeklarirano se i
+dalje broji).
+
 Zašto Tier 1 uz Tier 0: Tier 0 je naš vlastiti kod, pa dijeli pretpostavke s onim što provjerava.
 lxml je tuđi, stroži parser, a python-docx uz to čita OPC relacijski graf. Vrti se na ubuntuu, za
 razliku od Tier 2 koji je Windows-only.

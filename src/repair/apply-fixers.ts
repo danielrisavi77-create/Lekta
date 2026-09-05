@@ -137,6 +137,11 @@ export interface ApplyFixersResult {
    *  bit-identican, changelog je prazan i nista nije primijenjeno. Pozivatelj (UI, Edge funkcija)
    *  mora ovo razlikovati od "nema se sto popraviti", inace tvrdi neistinu. */
   integrityFailure?: IntegrityFailure;
+  /** Dijelovi paketa koje je neki fixer NAMJERNO uklonio (danas samo final-document-inspector, npr. prazan
+   *  `word/comments.xml` ili nereferenciran `customXml/`). Cisto ADITIVNO polje. Postoji da mjerenje razlikuje
+   *  deklarirano uklanjanje od tiho izgubljenog zapisa: harness stvarnog korpusa je do 2026-09-05 oba brojao kao
+   *  `droppedEntryCount` i 15 od 95 radova proglasio padom, a svih 15 je bilo isto deklarirano uklanjanje. */
+  removedPackageParts?: string[];
 }
 
 /**
@@ -1356,5 +1361,5 @@ export async function applyFixers(
 
   const newDocxBytes = await writeZip(newEntries);
 
-  return { docxBytes: newDocxBytes, changelog, skipped, skippedReasons };
+  return { docxBytes: newDocxBytes, changelog, skipped, skippedReasons, removedPackageParts: [...(parts.removedPackageParts ?? [])] };
 }

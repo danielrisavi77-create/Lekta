@@ -71,6 +71,7 @@
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "paper-size-fixer",
         "font-fixer",
@@ -124,6 +125,7 @@
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "paper-size-fixer",
         "font-fixer",
@@ -177,6 +179,7 @@
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "toc-field-fixer",
         "consistency-fixer"
@@ -232,6 +235,7 @@
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "section-insert-fixer",
         "toc-field-fixer",
@@ -289,6 +293,7 @@
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "line-spacing-fixer",
         "margins-fixer",
@@ -346,6 +351,7 @@
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "line-spacing-fixer",
         "margins-fixer",
@@ -404,6 +410,7 @@
       "beforeEntryCount": 4,
       "afterEntryCount": 4,
       "droppedEntryCount": 0,
+      "removedByFixers": [],
       "offeredFixerIds": [
         "toc-field-fixer",
         "consistency-fixer"

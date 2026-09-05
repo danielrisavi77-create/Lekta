@@ -76,6 +76,9 @@ export interface RealCorpusResult {
   beforeEntryCount: number;
   afterEntryCount: number;
   droppedEntryCount: number;
+  /** Zapisi koje je fixer DEKLARIRAO uklonjenima (ApplyFixersResult.removedPackageParts) i koji doista nisu u
+   *  izlazu. Imenovani, ne prebrojani: to nije gubitak nego popravak, i ne ulazi u droppedEntryCount. */
+  removedByFixers: string[];
   offeredFixerIds: string[];
   changedFixerIds: string[];
   /**
@@ -315,6 +318,24 @@ function textFingerprint(entries: Array<{ name: string; data: Uint8Array }>): st
   return createHash('sha256').update(text, 'utf8').digest('hex');
 }
 
+/**
+ * Zapisi iz ulaza kojih nema u izlazu, podijeljeni na DEKLARIRANE (fixer ih je prijavio kao uklonjene) i
+ * IZGUBLJENE (nitko ih nije prijavio). Samo drugo je kvar. Deklaracija bez stvarnog uklanjanja se ne broji
+ * nikamo: zapis je i dalje tu.
+ */
+export function classifyMissingEntries(
+  beforeNames: readonly string[],
+  afterNames: ReadonlySet<string>,
+  declaredRemoved: readonly string[],
+): { dropped: string[]; removedByFixers: string[] } {
+  const declared = new Set(declaredRemoved);
+  const missing = beforeNames.filter((name) => !afterNames.has(name));
+  return {
+    dropped: missing.filter((name) => !declared.has(name)),
+    removedByFixers: missing.filter((name) => declared.has(name)),
+  };
+}
+
 async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: string): Promise<RealCorpusResult> {
   const base = {
     documentId: entry.documentId,
@@ -326,6 +347,7 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     beforeEntryCount: 0,
     afterEntryCount: 0,
     droppedEntryCount: 0,
+    removedByFixers: [],
     offeredFixerIds: [],
     changedFixerIds: [],
     targetedCheckCount: 0,
@@ -379,7 +401,15 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
     const applied = await applyFixers(bytes, requests);
     const afterEntries = await readZip(applied.docxBytes);
     const afterNames = new Set(afterEntries.map((item) => item.name));
-    const droppedEntryCount = beforeEntries.filter((item) => !afterNames.has(item.name)).length;
+    // Deklarirano uklanjanje (removedPackageParts) NIJE izgubljen zapis. Izmjereno 2026-09-05 na 95 stvarnih
+    // radova: 15 padova, svih 15 isti potpis, prazan `word/comments.xml` koji je final-document-inspector
+    // uklonio i to prijavio; vrata integriteta i strukture su prosla. Mjera je brojala popravak kao gubitak.
+    const missing = classifyMissingEntries(
+      beforeEntries.map((item) => item.name),
+      afterNames,
+      applied.removedPackageParts ?? [],
+    );
+    const droppedEntryCount = missing.dropped.length;
     const outputReadable = afterEntries.some((item) => item.name === 'word/document.xml' && item.data.length > 0);
     const malformedParts = inspectDocxParts(afterEntries)
       .filter((part) => !part.ok)
@@ -464,6 +494,7 @@ async function runOne(entry: RealCorpusManifestEntry, root: string, outputDir?: 
       beforeEntryCount: beforeEntries.length,
       afterEntryCount: afterEntries.length,
       droppedEntryCount,
+      removedByFixers: missing.removedByFixers,
       offeredFixerIds: [...new Set(items.map((item) => item.fixerId))],
       changedFixerIds,
       targetedCheckCount: outcome.targeted.length,
