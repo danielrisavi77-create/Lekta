@@ -30,6 +30,20 @@ izmjerenim stanjem; brojke su iz `npm run migration-identity` i `npm run deploy-
 4. **Klijentska zastavica ne smije prije baze.** Da se kucica pojavi dok tablice nema, korisnik bi dao privolu, a
    pohrana bi tiho padala (fail-open). Zato `corpusContribution` ostaje `false` dok koraci 1 i 2 ne prodju.
 
+## Izvedeno 2026-09-05 (vlasnik: "napravi ti to sve")
+
+| korak | stanje |
+|---|---|
+| 2. funkcije na produkciji | IZVEDENO: `repair-docx` v27 -> v29 (nosi i tudje popravke motora s grane od 2026-08-23), `withdraw-corpus-contribution` v2; obje bootaju i dolaze do vlastite auth provjere (`{"error":"unauthorized"}` s anon kljucem), `deploy-drift` vise ne navodi `withdraw-corpus-contribution` |
+| 3. tajna na produkciji | IZVEDENO: `CORPUS_CONTRIBUTION_ENABLED=1` (`secrets set`, count 1). Bez ucinka dok klijent ne salje `corpusConsent`, a bez tablice bi pohrana tiho padala (fail-open), pa klijentska zastavica ceka korak 1 |
+| 1. migracija 0102 (i 0096 do 0101) | CEKA VLASNIKA: `db push` trazi lozinku baze. Predaja bez lijepljenja u razgovor: upisati `SUPABASE_DB_PASSWORD=...` u `.env` (gitignoriran, isti kao za token), pa sesija vrti `npx supabase db push --db-url` ili `link -p` + `db push`, s `--dry-run` prvo |
+| 4. klijentska zastavica | CEKA korak 1 |
+| 5. smoke | CEKA korake 1 i 4 |
+| 6. dohvat | CEKA prve priloge |
+
+Usput izmjereno: `health` na produkciji javlja `degraded`, `dependencies.database.ok: false, http_401`, i PRIJE ovog
+deploya (`health` je v8, nije diran). Nije istrazivano; zaseban nalaz.
+
 ## Redoslijed (tko sto radi)
 
 1. **Vlasnik, baza (produkcija):**
