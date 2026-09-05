@@ -281,16 +281,3 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
   body:has(#wizardView[data-step="1"] #dropzone.has-file):has(.consent-banner:not(.hidden)){padding-bottom:calc(206px + env(safe-area-inset-bottom))}
   .finding-actions .btn{min-height:44px;font-size:15px}
   .guide-cta .btn,.guide-cta .guide-more{width:100%;margin:0;min-height:46px}}
-/* SKROL MORA ZAOBICI TRAKU PRIVOLE.
-
-   Traka je `position:fixed` na dnu i na 375x667 je visoka 169 px, dakle CETVRTINA zaslona.
-   `padding-bottom` na body daje prostor za skrol, ali `scrollIntoView` skrola MINIMALNO, pa
-   element zavrsi tocno ispod trake i klik presretne gumb "Samo nuzno". Izmjereno 2026-09-05 na
-   mobile-chromium: `#tabbtn-submission` je vidljiv i stabilan, a klik se ponovio 127 puta pa
-   istekao. Isto pogadja i tipkovnicu: fokus bi inace skakao pod traku.
-
-   `--consent-h` postavlja `syncConsentBannerInset` u app.ts. Do sada ju nije trosio NIJEDAN
-   list, dakle bila je mrtva varijabla; sada je ovo njezin potrosac. */
-body.has-consent-banner :is(a,button,input,select,textarea,summary,[tabindex]:not([tabindex="-1"])){
-  scroll-margin-bottom:calc(var(--consent-h, 0px) + 24px)
-}
