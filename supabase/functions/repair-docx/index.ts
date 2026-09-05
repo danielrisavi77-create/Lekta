@@ -50,6 +50,8 @@ import { applyFixers, FIXER_IDS, type FixerRequest } from '../../../src/repair/a
 import { TERMS_VERSION } from '../../../src/legal/terms-version.ts';
 import { runCorpusCheck, corpusConfigFromEnv } from '../_shared/corpus-check.ts';
 import { ConcurrencyGate, storageQuotaExceeded } from '../../../src/report/repair-limits.ts';
+import { decideCorpusContribution } from '../../../src/legal/corpus-consent.ts';
+import { corpusObjectPath, prepareCorpusCopy } from '../../../src/corpus/contribution.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -610,6 +612,47 @@ Deno.serve(async (req: Request) => {
         console.error('[repair-docx] storeRepairJob threw', e instanceof Error ? e.message : e);
       }
     })() : null;
+    // Kanal A: prilog korpusu uz ZASEBNU privolu (src/legal/corpus-consent.ts, spec 2026-09-05). Nikad ne utjece na
+    // popravak ni na "Moji popravci": odluka govori samo hoce li se pseudonimizirana kopija IZVORNOG dokumenta pohraniti
+    // i sto odgovor kaze. Iskljuceno dok vlasnik ne postavi CORPUS_CONTRIBUTION_ENABLED=1.
+    const corpusEnabled = Deno.env.get('CORPUS_CONTRIBUTION_ENABLED') === '1';
+    const corpusDecision = decideCorpusContribution({
+      requested: meta.corpusConsent,
+      enabled: corpusEnabled,
+      anonymous: user.is_anonymous === true,
+    });
+    const corpusTask = corpusDecision === 'accepted' ? (async () => {
+      try {
+        // Dnevni strop, fail-open kao i za "Moji popravci": strop ne rusi popravak, samo preskace prilog.
+        const cap = Number(Deno.env.get('CORPUS_CONTRIBUTION_DAILY_CAP') ?? '200');
+        const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+        const { count } = await admin.from('corpus_contributions').select('id', { count: 'exact', head: true }).gte('created_at', since);
+        if (typeof count === 'number' && count >= cap) { console.warn('[repair-docx] corpus contribution skipped: daily cap'); return; }
+        // Sol je slucajna po prilogu i ne pohranjuje se: isti pojam u dva priloga dobiva razlicite pseudonime.
+        const copy = await prepareCorpusCopy(docxBytes, crypto.randomUUID());
+        // Procurio pojam = kopija ne izlazi. Ista granica kao u lokalnom ingestu.
+        if (copy.report.leaks > 0) { console.warn('[repair-docx] corpus contribution skipped: leaks'); return; }
+        // Veza na posao postoji samo ako je posao stvarno pohranjen (pohrana ide usporedno, pa se ceka).
+        if (storeTask) await storeTask;
+        const { data: job } = jobId ? await admin.from('repair_jobs').select('id').eq('id', jobId).maybeSingle() : { data: null };
+        const contributionId = crypto.randomUUID();
+        const path = corpusObjectPath(contributionId);
+        const up = await admin.storage.from('corpus').upload(path, copy.bytes, { contentType: DOCX_MIME, upsert: false });
+        if (up.error) { console.error('[repair-docx] corpus upload failed', up.error.message); return; }
+        const { error } = await admin.from('corpus_contributions').insert({
+          id: contributionId, user_id: user.id, repair_job_id: job?.id ?? null,
+          consent_version: String((meta.corpusConsent as { version: string }).version), work_type: workType,
+          profile_ref: meta.profileRef ? String(meta.profileRef).slice(0, 120) : null,
+          path, bytes: copy.bytes.length, pseudonymization: copy.report,
+        });
+        if (error) {
+          console.error('[repair-docx] corpus_contributions insert failed', error.message);
+          await admin.storage.from('corpus').remove([path]).catch(() => {});
+        }
+      } catch (e) {
+        console.error('[repair-docx] corpus contribution threw', e instanceof Error ? e.message : e);
+      }
+    })() : null;
     const bg = (globalThis as any).EdgeRuntime?.waitUntil;
     let msStore = 0;
     if (storeTask) {
@@ -637,6 +680,11 @@ Deno.serve(async (req: Request) => {
 
     // 9. Provjera izvora (naslijedjeni put) tek se sada preuzima. Za novog klijenta je ovo vec
     //    razrijesen null (provjeru vodi zaseban, usporedan poziv), pa se ne ceka nista.
+    // Prilog korpusu ide u pozadinu kao i pohrana; bez waitUntil-a se ceka, da se kopija ne izgubi s izolatom.
+    if (corpusTask) {
+      if (typeof bg === 'function') bg.call((globalThis as any).EdgeRuntime, corpusTask);
+      else await corpusTask;
+    }
     const tCorpus = performance.now();
     const sourceCheck = await corpusPromise;
     console.log(`[repair-docx] timings repair=${msRepair} store=${msStore} corpus=${ms(tCorpus)} total=${ms(t0)}`);
@@ -651,6 +699,8 @@ Deno.serve(async (req: Request) => {
       // nije vidljiv u "Moji popravci". Klijent zato ne smije tvrditi da je spremljeno. Kad je
       // jobId null (storage-kvota dosegnuta), pending je uvijek false: pohrana nije ni pokusana.
       slotId, jobId, storagePending: !!jobId && typeof bg === 'function', traceToken, fingerprint, sourceCheck,
+      // Kanal A: 'pending' znaci da pohrana JOS traje i sucelje ne smije tvrditi da je kopija pohranjena.
+      corpusContribution: corpusDecision === 'accepted' ? 'pending' : corpusDecision,
       // ruleId -> je li ciljanu vrijednost izveo SERVER iz profila ('profile') ili je preuzeta od
       // klijenta jer za to pravilo nema fakultetskog zapisa ('client'). Bez ovoga sucelje ne moze
       // posteno razlikovati "popravljeno prema pravilu tvog fakulteta" od "popravljeno prema

@@ -10,8 +10,8 @@
  * Cist modul: bez Deno i bez Node API-ja osim onoga sto `zip-codec` i `pseudonymize` vec traze
  * (`node:crypto` HMAC, koji Deno podrzava). Dijele ga Edge funkcija i testovi.
  */
-import { readZip, writeZip, type ZipEntry } from '../repair/zip-codec';
-import { pseudonymizeDocx } from './pseudonymize';
+import { readZip, writeZip, type ZipEntry } from '../repair/zip-codec.ts';
+import { pseudonymizeDocx } from './pseudonymize.ts';
 
 export interface CorpusCopyReport {
   /** Broj pojmova zamijenjenih pseudonimima (0 = `vacuous`: nista prepoznato, sto NIJE dokaz cistoce). */

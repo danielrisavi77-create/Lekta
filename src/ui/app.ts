@@ -93,6 +93,7 @@ import { cellCoverage, detectWaitlist } from '../waitlist/waitlist-detect';
 import { mountWaitlistBar } from '../waitlist/waitlist-bar';
 import { submitUnknownFaculty } from '../waitlist/waitlist-client';
 import { TERMS_VERSION } from '../legal/terms-version';
+import { buildCorpusConsentRow } from './corpus-consent-row';
 import { canonicalConsentText } from '../legal/consent-text';
 import type { PreflightPanel } from '../preflight/preflight-panel';
 import { academicYearFromDate } from '../profiles/academic-year';
@@ -2045,6 +2046,8 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  // btn.onclick nize provjerava privolu i jasno upozori + fokusira kucicu.
  const consentHint=document.createElement('p');consentHint.className='lekta-repair-panel__consent-hint';consentHint.hidden=true;consentHint.textContent='Prvo označi privolu iznad, pa klikni ponovno.';
  wrap.appendChild(consentHint);
+ // Kanal A: zasebna kucica, samo kad je znacajka ukljucena i racun ima e-mail (anonimni ne mogu povuci privolu).
+ const corpusRow=buildCorpusConsentRow({enabled:productionConfig?.corpusContribution===true,hasEmailAccount:!!authSessionActive()});if(corpusRow.row)wrap.appendChild(corpusRow.row);
  const btn=document.createElement('button');btn.type='button';btn.className='lekta-repair-panel__download';btn.textContent='Popravi sve jednim klikom';
  wrap.appendChild(btn);
  // RE-19: potvrdni korak za stavke koje traze potvrdu lokacije (K6 section-insert), isti obrazac
@@ -2103,7 +2106,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
      .catch((e: any)=>({kind:'unavailable',reason:e instanceof Error?e.message:'greska'}))
     :null;
    // Kad provjeru vodi zaseban poziv, popis literature se uz dokument ne salje i server ju preskace.
-   const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),sourceCheckSeparate,workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),requests,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch});
+   const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),sourceCheckSeparate,workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),requests,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch,corpusConsent:corpusRow.checked()});
    const bytes=new Uint8Array(await file.arrayBuffer());
    // Krajnji rok: bez njega zaglavljen zahtjev drzi gumb u "Saljem" bez izlaza. Prekid se u
    // repair-clientu prevodi u citljivu poruku, ne u "mreznu gresku".

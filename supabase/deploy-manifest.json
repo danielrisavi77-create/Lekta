@@ -327,6 +327,8 @@
       "declaredInConfig": true,
       "requiredSecrets": [
         "ALLOWED_ORIGIN",
+        "CORPUS_CONTRIBUTION_DAILY_CAP",
+        "CORPUS_CONTRIBUTION_ENABLED",
         "DAILY_CAP",
         "IP_HASH_SALT",
         "REPAIR_DISABLED",
@@ -412,7 +414,7 @@
       "reason": null
     }
   ],
-  "generatedAt": "2026-09-03T18:28:00.094Z",
-  "generatedFromCommit": "3fefb47cbb3b5756c506d3ecf1e7fb6c2a79dcf0",
+  "generatedAt": "2026-09-05T18:51:52.992Z",
+  "generatedFromCommit": "6d51d89480df0f3793f54fd6c1e3901a130502cc",
   "generator": "npm run deploy-manifest"
 }
