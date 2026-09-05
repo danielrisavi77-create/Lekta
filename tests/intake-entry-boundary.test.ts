@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, extname, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
@@ -147,6 +147,30 @@ describe('cisti ulaz /', () => {
     const controller = source(CONTROLLER);
     expect(controller).not.toMatch(/fetch\(|DOMParser/);
     expect(controller).toContain("WORKSPACE_WITHOUT_SESSION = '/rad/'");
+  });
+
+  it('nijedan UX spec ne trazi analizator na `/`: takav tok ide na `/rad/`', () => {
+    // OVO JE MOJ KVAR PRETVOREN U GARD (2026-09-05). Pri rezu sam sest tokova preusmjerio s `/` na
+    // `/rad/` grepom po `page.goto('/')`, i time PROMASIO dvije varijante s opcijama
+    // (`page.goto('/', { waitUntil: 'domcontentloaded' })`) u `parser-parity` i `a11y-states`.
+    // Oba speca su na CI-ju cekala `#fileInput` na stranici koja ga vise nema, pa je
+    // `browser-matrix` pao u Firefoxu i WebKitu s istekom od 600 s. Grep po jednom obliku poziva
+    // nije provjera; provjera je odnos "trazi analizator" -> "mora biti na /rad/".
+    const dir = resolve(ROOT, 'tests', 'ux');
+    const specs = readdirSync(dir).filter((f) => f.endsWith('.spec.ts'));
+    expect(specs.length, 'prazan skup specova nije prolaz').toBeGreaterThan(3);
+
+    const ANALIZATOR = /#fileInput|#analyzeBtn|#wizardView|#resultView|id="analyzer"|#resultCockpit/;
+    const krivi: string[] = [];
+    for (const spec of specs) {
+      const src = source(resolve(dir, spec));
+      if (!ANALIZATOR.test(src)) continue;
+      // Svaka navigacija na korijen, s opcijama ili bez njih, u tom specu je kriva meta.
+      for (const m of src.matchAll(/goto\(\s*['"`](\/(?:index\.html)?)['"`]/g)) {
+        krivi.push(`${spec}: goto('${m[1]}')`);
+      }
+    }
+    expect(krivi, 'spec koji trazi analizator mora ici na /rad/').toEqual([]);
   });
 
   it('taktilni vizual postuje reduced motion i nema beskonacne animacije ni slika', () => {

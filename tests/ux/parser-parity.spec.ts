@@ -50,7 +50,7 @@ async function analiziraj(page: Page, bezWorkera: boolean): Promise<Ishod> {
   // neimenovan. Korisnika ne dira, jer nijedan modul ne ceka na `load` (boot ide na
   // `DOMContentLoaded`, 3,7 s u WebKitu); dira samo alat, i objasnjava raniji istek
   // `page.goto` u `mobile-webkit` projektu.
-  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await page.goto('/rad/', { waitUntil: 'domcontentloaded' });
 
   if (bezWorkera) {
     expect(await page.evaluate(() => typeof Worker), 'Worker mora doista biti ugasen').toBe('undefined');
