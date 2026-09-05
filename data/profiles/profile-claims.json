@@ -10,10 +10,10 @@
   },
   "counts": {
     "E": 41,
-    "B": 296,
+    "B": 297,
     "D": 37,
     "C": 8,
-    "A": 28
+    "A": 27
   },
   "byProfile": {
     "adu-dramaturgija-diplomski": "E",
@@ -140,7 +140,7 @@
     "fizos-diplomski": "B",
     "fizri-diplomski": "B",
     "fizri-zavrsni": "B",
-    "fkit-diplomski": "A",
+    "fkit-diplomski": "B",
     "fkit-doktorski": "B",
     "fkit-zavrsni": "B",
     "fmtu-diplomski": "B",

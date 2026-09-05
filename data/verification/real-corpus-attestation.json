@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "corpusFingerprint": "bd8af2edac053512ec852f268e7c5a3d",
-  "measuredAt": "2026-09-05T13:05:35.717Z",
-  "measuredFromCommit": "ea15e9ce65bdd13532911ad818aca689b2ddf041",
+  "corpusFingerprint": "34b45a73b41401bd469780d9890ffdee",
+  "measuredAt": "2026-09-05T15:01:06.208Z",
+  "measuredFromCommit": "fc66791fe5e094c95fae2eafba99e931aae9e00f",
   "oracles": [
     "scripts/repair-real-corpus.mts (harness + detectPassRegressions)"
   ],
   "signedBy": "Daniel Risavi",
-  "signedAt": "2026-09-05T13:06:19.101Z",
-  "signatureNote": "Potpisano na izricitu uputu vlasnika (2026-09-03: potpisi umjesto mene; 2026-09-05: izvedi ti to). Korpus PROSIREN s 45 na 95 radova: 195 radova iz vlasnikovog Downloads kopirano u Desktop/Lekta-korpus/01-izvor, ingestirano s pseudonimizacijom uz zapis o dopustenju (scope local-testing), 115 s prepoznatim profilom, verzije istog rada svedene na jednog predstavnika (Jaccard 0.8 nad tijelom), 58 novih + 30 ranijih lokalnih + 7 commitanih. Mjereno nad vrhom grane; vrijeme i commit mjerenja citaju se iz artefakta. Potpis stavljen NAKON mjerenja.",
+  "signedAt": "2026-09-05T15:02:04.716Z",
+  "signatureNote": "Potpisano na izricitu uputu vlasnika (2026-09-03: potpisi umjesto mene; 2026-09-05: izvedi ti to, idemo to rijesiti sada). Drugi val korpusa: detektor vrste rada s naslovnice prosiren (padezi, umetak, esej kao seminar, rad kolegija; gola rijec diplomski nije vrsta rada) i pseudonimizacija prosirena (uloge nositelj/voditelj, ime velikim slovima iza uloge), commit fc66791f; tri FKIT dokumenta koji nisu radovi (popis literature, plan i program) iskljuceni oznakom track not-a-thesis. Radovi iz Desktop/Lekta-korpus ingesta uz zapis o dopustenju (local-testing), verzije istog rada svedene na jednog predstavnika. Broj radova i parova je u ovoj ovjeri; vrijeme i commit mjerenja citaju se iz artefakta mjerenja. Potpis je stavljen NAKON mjerenja.",
   "entries": [
     {
       "unitId": "efzg",
@@ -26,8 +26,8 @@
       "profileIds": [
         "efzg-seminarski"
       ],
-      "documentCount": 5,
-      "cleanCount": 5,
+      "documentCount": 7,
+      "cleanCount": 7,
       "regressedChecks": []
     },
     {
@@ -51,23 +51,13 @@
       "regressedChecks": []
     },
     {
-      "unitId": "fkit",
-      "workType": "graduate",
-      "profileIds": [
-        "fkit-diplomski"
-      ],
-      "documentCount": 2,
-      "cleanCount": 2,
-      "regressedChecks": []
-    },
-    {
       "unitId": "fpzg",
       "workType": "article",
       "profileIds": [
         "fpzg-opci-akademski-rad"
       ],
-      "documentCount": 25,
-      "cleanCount": 25,
+      "documentCount": 45,
+      "cleanCount": 45,
       "regressedChecks": []
     },
     {
@@ -76,8 +66,8 @@
       "profileIds": [
         "fpzg-politologija-zavrsni"
       ],
-      "documentCount": 14,
-      "cleanCount": 14,
+      "documentCount": 18,
+      "cleanCount": 18,
       "regressedChecks": []
     },
     {
@@ -96,8 +86,8 @@
       "profileIds": [
         "fpzg-opci-akademski-rad"
       ],
-      "documentCount": 25,
-      "cleanCount": 25,
+      "documentCount": 45,
+      "cleanCount": 45,
       "regressedChecks": []
     },
     {
@@ -106,8 +96,8 @@
       "profileIds": [
         "fpzg-opci-akademski-rad"
       ],
-      "documentCount": 25,
-      "cleanCount": 25,
+      "documentCount": 45,
+      "cleanCount": 45,
       "regressedChecks": []
     },
     {

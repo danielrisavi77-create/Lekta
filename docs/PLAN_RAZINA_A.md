@@ -134,3 +134,27 @@ odbija odrediste unutar njega). Izvedeno istog dana:
 - 80 radova bez profila su vecinom seminari i eseji cija naslovnica imenuje program ("diplomski studij"), a ne
   vrstu rada; sirenje detektora na golu rijec "diplomski" oznacilo bi ih kao diplomske radove. Treba odluka o
   mapiranju eseja i seminara na vrste rada, pa tek onda detektor.
+
+### Drugi val, isti dan
+
+Otvorena pitanja iz sekcije 8 rijesena su na vlasnikovu rijec ("idemo to rijesiti sada"), commit `fc66791f`:
+
+| sto | brojka |
+|---|---|
+| detektor vrste rada (padezi, umetak, esej = seminar, rad kolegija): s profilom od 195 | 115 -> 163 |
+| promjena vrste na vec prepoznatih 115 | 0 |
+| pseudonimizacija (uloge nositelj/voditelj, ime velikim slovima iza uloge): praznih rjecnika | 6 -> 5 |
+| lokalni korpus (dopusteno u mjerenje) | 88 -> 112, ukupno 119 |
+| mjerenje nad `fc66791f`: pass / review / fail / regresija | 7 / 110 / 0 / 0 |
+| ovjerenih parova jedinica x vrsta rada | 16 -> 15 |
+| redaka na A / profila na A | 34 -> 33 / 28 -> 27 |
+
+- A je PAO za jedan, i to je ispravak, ne gubitak: rucni pregled praznih rjecnika pokazao je da su tri FKIT
+  dokumenta popis literature i plan i program diplomskog rada, dakle nisu radovi. Nose `track: not-a-thesis` i
+  ne ulaze u mjerenje, pa par `fkit x graduate` vise nema dokaz. Dokaz koji je stajao na dokumentima koji nisu
+  radovi nije bio dokaz.
+- Preostalih 5 praznih rjecnika: 3 su ti FKIT dokumenti, 1 ima placeholder "IME PREZIME" (prazan s pravom), 1
+  ima ime velikim slovima kao samostalan odlomak, sto se namjerno ne hvata (26 od 42 takva kandidata na 195
+  radova nisu imena nego imena studija).
+- 32 rada i dalje bez profila: bez ikakva traga vrste rada na naslovnici (2 bez ustanove s popisa). Ostaju u
+  `03-ingest` i ne ulaze u mjerenje.
